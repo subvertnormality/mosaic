@@ -1,25 +1,46 @@
-import hashlib,tempfile,unittest
+import hashlib,struct,subprocess,tempfile,unittest
 from pathlib import Path
-from real_norns import Runner
+from unittest.mock import patch
+from real_norns import Maiden,OSC,Runner,export_head,osc_packet
+class Fn:
+ def __init__(self,call):self.call=call
+ def __call__(self,*a):return self.call(*a)
+class NN:
+ def __init__(self):self.sent=b'';self.options=[]
+ def socket(self,*a):return 7
+ def connect(self,*a):return 1
+ def setopt(self,fd,level,opt,*a):self.options.append((level,opt));return 0
+ def send(self,fd,buf,n,flags):self.sent=bytes(buf.raw[:n]);return n
+ def recv(self,fd,buf,n,flags):
+  value=b'answer '+self.sent.split(b"print('",1)[1].split(b"')",1)[0];buf[:len(value)]=value;return len(value)
+ def close(self,*a):return 0
+ def lib(self):
+  x=type('L',(),{})();x.nn_socket=Fn(self.socket);x.nn_connect=Fn(self.connect);x.nn_setsockopt=Fn(self.setopt);x.nn_send=Fn(self.send);x.nn_recv=Fn(self.recv);x.nn_close=Fn(self.close);return x
 class S:
- def __init__(self):self.scripts=[];self.synced=[]
- def run(self,x):self.scripts.append(x);return type('R',(),{'stdout':'/usr/bin/oscsend\nclient MIDI\n'})()
+ def __init__(self,events=None):self.scripts=[];self.synced=[];self.events=events
+ def run(self,x):self.scripts.append(x);self.events is not None and self.events.append('ssh');return type('R',(),{'stdout':'client MIDI\n'})()
  def rsync(self,a,b):self.synced.append((a,b))
- def fetch(self,a,b):b.write_bytes(b'png');self.fetched=(a,b)
+ def push(self,a,b):self.pushed=(a,b)
+ def fetch(self,a,b):b.write_bytes(b'\x89PNG\r\n\x1a\n'+b'0'*8+struct.pack('!II',640,384)+b'x');self.fetched=(a,b)
 class M:
- def __init__(self):self.commands=[]
- def eval(self,x):self.commands.append(x);return 'ok'
+ def __init__(self,events=None):self.commands=[];self.events=events
+ def eval(self,x):self.commands.append(x);self.events is not None and self.events.append('maiden');return 'ok'
+class O:
+ def send(self,*x):return {'args':x}
 class Tests(unittest.TestCase):
- def r(self):
-  t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);s=S();m=M();return Runner(s,m,Path(t.name),'safe-run'),s,m
- def test_backup_precedes_deploy_and_exact_load(self):
-  r,s,m=self.r();r.deploy(Path('/candidate'));self.assertIn('recovery required',s.scripts[0]);self.assertEqual(s.synced,[(Path('/candidate'),'/home/we/dust/code/.mosaic-safe-run.staging')]);self.assertEqual(m.commands[0],'norns.script.clear()');self.assertIn("/home/we/dust/code/mosaic/mosaic.lua",m.commands[1])
- def test_restore_requires_owner_and_restores_three_paths(self):
-  r,s,m=self.r();r.restore();x=s.scripts[-1];self.assertIn('cat /home/we/.cache/mosaic-real-norns/active',x);self.assertIn('code-mosaic /home/we/dust/code/mosaic',x);self.assertIn('data-mosaic /home/we/dust/data/mosaic',x);self.assertIn('system.state /home/we/dust/data/system.state',x);self.assertIn("dofile('/home/we/dust/data/system.state')",m.commands[-1])
- def test_only_stock_remote_key_encoder(self):
-  r,s,_=self.r();r.action('key',2,1);r.action('enc',1,-2);self.assertIn('/remote/key ii 2 1',s.scripts[-2]);self.assertIn('/remote/enc ii 1 -2',s.scripts[-1]);self.assertRaises(ValueError,r.action,'grid',1,1)
- def test_screenshot_public_export_and_digest(self):
-  r,s,m=self.r();x=r.screenshot('after-controls');self.assertIn('screen.export_screenshot',m.commands[0]);self.assertEqual(x['sha256'],hashlib.sha256(b'png').hexdigest())
- def test_probe_names_grid_limit(self):
-  r,_,_=self.r();x=r.probe();self.assertTrue(x['alsa_available']);self.assertIn('unsupported',x['grid_input'])
+ def r(self,events=None):t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);s=S(events);m=M(events);return Runner(s,m,O(),Path(t.name),'safe-run'),s,m
+ def test_osc_packet_padding_and_network_integers(self):
+  self.assertEqual(osc_packet('/remote/key',2,1),b'/remote/key\0,ii\0'+struct.pack('!ii',2,1));self.assertEqual(len(osc_packet('/remote/enc',1,-2))%4,0)
+ def test_nanobus_uses_bus_and_timeouts_and_waits_marker(self):
+  nn=NN()
+  with patch('real_norns.ctypes.CDLL',return_value=nn.lib()):self.assertIn('answer',Maiden('ws://norns:5555/').eval('print(1)'))
+  self.assertEqual(nn.options,[(0,5),(0,4)]);self.assertIn(b'print(1)',nn.sent)
+ def test_backup_is_before_clear_and_tracks_recovery(self):
+  events=[];r,s,m=self.r(events);r.backup();r.maiden.eval('norns.script.clear()');self.assertEqual(events[:2],['ssh','maiden']);self.assertIn('cp -a /home/we/dust/data/system.state',s.scripts[0])
+ def test_export_head_excludes_untracked(self):
+  t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);root=Path(t.name);subprocess.run(['git','init','-q'],cwd=root);(root/'tracked').write_text('yes');subprocess.run(['git','add','tracked'],cwd=root);subprocess.run(['git','-c','user.name=T','-c','user.email=t@t','commit','-qm','x'],cwd=root);(root/'untracked').write_text('no');hold,tree,manifest,rows=export_head(root);self.addCleanup(hold.cleanup);self.assertTrue((tree/'tracked').exists());self.assertFalse((tree/'untracked').exists());self.assertEqual(rows,[(hashlib.sha256(b'yes').hexdigest(),'tracked')])
+ def test_screenshot_exact_dimensions_and_restore_finalize(self):
+  r,s,m=self.r();shot=r.screenshot('before');self.assertEqual((shot['width'],shot['height']),(640,384));r.restore();self.assertIn('system.state',s.scripts[-1]);r.finalize();self.assertIn('kept_deployment', (r.out/'finalized.json').read_text())
+ def test_grid_is_explicit_synthetic_lua_only(self):
+  r,_,m=self.r();r.synthetic_grid(4,3,8,1);self.assertEqual(m.commands[-1],'_norns.grid.key(4,2,7,1)')
 if __name__=='__main__':unittest.main()
