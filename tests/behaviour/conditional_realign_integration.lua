@@ -20,6 +20,7 @@ for _,repeat_reset in ipairs({false,true}) do
  fn={constrain=function(n) return n end,generate_id=function() id=id+1;return id end}
  local clock={cancel_all_spread_actions=function() end,realign_sprockets=function() lattice:realign_eligable_sprockets() end,calculate_divisor=function() return 4 end,set_channel_division=function() end}
  include=function(path)
+  if path=="mosaic/lib/devices/param_slots" then return dofile("lib/devices/param_slots.lua") end
   if path=='mosaic/lib/devices/nrpn_codec' then return dofile('lib/devices/nrpn_codec.lua') end
   if path:match('^mosaic/lib/musical_resolution/') or path=='mosaic/lib/song_transition' then return dofile(path:gsub('^mosaic/', '')..'.lua') end
   if path=='mosaic/lib/clock/voice_lifetime' then return dofile('lib/clock/voice_lifetime.lua') end

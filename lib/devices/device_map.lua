@@ -1,3 +1,4 @@
+local param_slots = include("mosaic/lib/devices/param_slots")
 local device_map = {}
 device_map.params_cache = {}
 
@@ -216,7 +217,7 @@ function device_map.get_available_devices_for_channel(c)
   local prog = program.get()
   local prog_devices = prog.devices
 
-  for i = 1, 16 do
+  for i = 1, param_slots.CHANNEL_COUNT do
     if i ~= c then
       local device_map_id = prog_devices[i].device_map
       if device_map_id ~= "none" then
@@ -268,7 +269,7 @@ function device_map.get_available_params_for_channel(c, selected_param)
   local params_copy = fn.deep_copy(device_map.get_params(program.get().devices[channel.number].device_map))
 
   -- Populating active_params with ids from channels 1 through 10
-  for i = 1, 10 do
+  for i = 1, param_slots.LOCK_SLOT_COUNT do
     if selected_param ~= i and channel.trig_lock_params[i].id ~= "none" then
       table.insert(active_params, channel.trig_lock_params[i].id)
     end
@@ -293,7 +294,7 @@ end
 
 function device_map.validate_devices()
 
-  for i = 1, 16 do
+  for i = 1, param_slots.CHANNEL_COUNT do
     local device = device_map.get_device(program.get().devices[i].device_map)
 
     if device == nil then

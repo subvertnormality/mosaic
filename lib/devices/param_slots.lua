@@ -3,6 +3,7 @@ local param_slots = {
   SLOT_COUNT = 180,
   LOCK_SLOT_COUNT = 10,
   FIXED_NOTE_SLOT = 2,
+  QUANTISED_FIXED_NOTE_SLOT = 3,
   SLEW_SLOT = 40,
 }
 

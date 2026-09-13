@@ -1,3 +1,4 @@
+local param_slots = include("mosaic/lib/devices/param_slots")
 -- Registration owns its per-setup shared acceleration state.
 local mapping = {}
 
@@ -69,7 +70,7 @@ function mapping.setup()
 
   params:add_separator("CHANNEL MASKS")
 
-  for channel = 1, 16 do
+  for channel = 1, param_slots.CHANNEL_COUNT do
     for param = 1, 8 do
       params:add_control(
         "ch" .. channel .. "_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "chd1" or param == 6 and "chd2" or param == 7 and "chd3" or param == 8 and "chd4"),
@@ -126,7 +127,7 @@ function mapping.setup()
 
   params:add_separator("SELECTED CHANNEL TRIG PARAMS")
 
-  for param = 1, 10 do
+  for param = 1, param_slots.LOCK_SLOT_COUNT do
     params:add_control(
       "sel_ch_trig_param_" .. param,
       "Selected Ch. Trig Param " .. param,
@@ -167,8 +168,8 @@ function mapping.setup()
 
   params:add_separator("CHANNEL TRIG PARAMS")
 
-  for channel = 1, 16 do
-    for param = 1, 10 do
+  for channel = 1, param_slots.CHANNEL_COUNT do
+    for param = 1, param_slots.LOCK_SLOT_COUNT do
       params:add_control(
         "ch_" .. channel .. "_trig_param_" .. param,
         "Ch." .. channel .. " Trig Param " .. param,
@@ -245,7 +246,7 @@ function mapping.setup()
 
   params:add_separator("CHANNEL MEMORY")
 
-  for channel = 1, 16 do
+  for channel = 1, param_slots.CHANNEL_COUNT do
     params:add_control(
       "ch" .. channel .. "_memory",
       "Ch." .. channel .. " Memory",

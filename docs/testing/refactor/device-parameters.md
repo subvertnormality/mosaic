@@ -177,3 +177,27 @@ All 1,546 Lua tests and ten coverage/syntax checks pass. Controlled native passe
 R11 final inspection found remaining fixed-note/quantised-note slot literals in
 step.lua and generated control IDs in patch recall. Replace those using the
 existing slot definitions before claiming the card complete.
+
+## R11 completion (2026-09-13)
+
+Remaining R11 slot literals now use param_slots: fixed-note/quantised-note playback,
+patch recall IDs, device channel/lock iteration and mapping target iteration. UI
+mask/group cardinalities are deliberately not parameter-slot identities.
+
+Final slot change: 1,545/1,546 Lua cases passed on the full run; the existing massive
+concurrent automation timing case exceeded 2 ms and passed alone unchanged. Patch
+recall, 64 reset-decision and 16 real step/lattice cases, plus ten coverage/syntax
+checks pass. Controlled native passes: M-PARAM-036
+`d9c193ee23084103be6afedc99c970d7`, M-PATCH-052
+`f1cbd8cc9f1f428eb175ecd1fd1944a0`, M-MAP-003
+`e7d676aa24094a7ebf37a1240a09320d`.
+
+Card requirements are covered by the extracted descriptors/binding/assignment,
+wire serialization, input ownership, mapping registration and named slot paths.
+`test_real_param_manager_device_param_branches_on_a_fixture_device` proves an extra
+CC/NRPN descriptor uses the existing binding/output boundary without page/clock
+branches. Config fixtures prove arbitrary loading and invalidation; earlier native
+receipts above cover invalid configs, n.b. locks/switching and JF ownership.
+No further generic adapter or player-dispatch framework is needed for R11.
+R11 is complete at this scope; whole-refactor acceptance and known performance/
+external-clock qualifications remain outstanding. R12 page/edit simplification is next.

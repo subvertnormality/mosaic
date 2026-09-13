@@ -1,4 +1,4 @@
-function include(name) assert(name == "mosaic/lib/devices/nrpn_codec"); return dofile("lib/devices/nrpn_codec.lua") end
+function include(name) if name == "mosaic/lib/devices/param_slots" then return dofile("lib/devices/param_slots.lua") end assert(name == "mosaic/lib/devices/nrpn_codec"); return dofile("lib/devices/nrpn_codec.lua") end
 -- Focused routing contract; native behaviour tests separately prove the UI path.
 local recall=dofile("lib/devices/midi_patch_recall.lua")
 local devices={}

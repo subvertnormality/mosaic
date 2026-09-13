@@ -1,3 +1,4 @@
+local param_slots = include("mosaic/lib/devices/param_slots")
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local chord_order = include("mosaic/lib/musical_resolution/chord_order")
@@ -723,7 +724,7 @@ function step.handle(c, current_step)
     local quantised_fixed_note = step.process_stock_params(c, current_step, "quantised_fixed_note")
 
     if not quantised_fixed_note then
-      quantised_fixed_note = params:get("midi_device_params_channel_" .. channel.number .. "_3") -- TODO: fix this magic number
+      quantised_fixed_note = params:get(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
     end
 
     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
@@ -733,7 +734,7 @@ function step.handle(c, current_step)
     local fixed_note = step.process_stock_params(c, current_step, "fixed_note")
 
     if not fixed_note then
-      fixed_note = params:get("midi_device_params_channel_" .. channel.number .. "_2") -- TODO: fix this magic number
+      fixed_note = params:get(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
     end
 
     if fixed_note and fixed_note > -1 and fixed_note <= 127 then

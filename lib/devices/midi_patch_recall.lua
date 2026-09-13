@@ -1,15 +1,16 @@
+local param_slots = include("mosaic/lib/devices/param_slots")
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 -- Recall stored device controls independently of per-step lock assignments.
 local recall = {}
 function recall.send()
-  for channel=1,16 do
+  for channel=1,param_slots.CHANNEL_COUNT do
     local route = program.get().devices[channel]
     local device = device_map.get_device(route.device_map)
     if device and device.type == "midi" then
       local stock_count = #device_map.get_stock_params()
       for index,parameter in ipairs(device.params) do
         if parameter.id ~= "none" and parameter.param_type ~= "stock" then
-          local value = params:get("midi_device_params_channel_"..channel.."_"..(stock_count+index))
+          local value = params:get(param_slots.control_id(channel, stock_count+index))
           local off = parameter.off_value == nil and -1 or parameter.off_value
           if value ~= off then
             local midi_channel = parameter.channel or route.midi_channel
