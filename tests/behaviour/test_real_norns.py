@@ -40,11 +40,13 @@ class M:
 class O:
  def send(self,*x):return {'args':x}
 class T:
- def __init__(self):self.installed=0;self.removed=0;self.install_output='ok';self.remove_output='ok'
+ def __init__(self):self.installed=0;self.removed=0;self.install_output='ok';self.reset_output='ok';self.snapshot_output='ok';self.remove_output='ok'
  def install(self,**kwargs):self.installed+=1;return self.install_output
  def remove(self,**kwargs):self.removed+=1;return self.remove_output
- def reset_midi(self):pass
- def snapshot(self):return {'grid':[0]*128,'raw_grid':[0]*128,'midi':[]}
+ def reset_midi(self,**kwargs):return self.reset_output
+ def snapshot(self,**kwargs):
+  result={'grid':[0]*128,'raw_grid':[0]*128,'midi':[]}
+  return (result,self.snapshot_output) if kwargs.get('return_output') else result
 class ClockSSH:
  def __init__(self,stock):self.path='/home/we/norns/lua/core/clock.lua';self.files={self.path:stock};self.scripts=[]
  def run(self,script):
@@ -134,7 +136,7 @@ class Tests(unittest.TestCase):
   r,_,m=self.r();m.eval=lambda code:'__MOSAIC_GRID_ID__2\nmarker';self.assertEqual(r.grid_device(),2);self.assertEqual(r.grid_device(7),7)
  def test_output_trace_preserves_raw_signed_led_and_exposes_physical_nibble(self):
   rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['-4' if y==8 and x==1 else '2' for x in range(1,17)])) for y in range(1,9))
-  m=M();m.eval=lambda code:'__GRID_COUNTS__12,3\n'+rows+'\n__MIDI__1|12.250000000|userdata: 1|table|144,60,127\n'
+  m=M();m.eval=lambda code,**kwargs:'__GRID_COUNTS__12,3\n'+rows+'\n__MIDI__1|12.250000000|userdata: 1|table|144,60,127\n'
   value=OutputTrace(m).snapshot();self.assertEqual(value['raw_grid'][112],-4);self.assertEqual(value['grid'][112],12);self.assertEqual(value['midi'][0]['bytes'],[144,60,127])
  def test_output_trace_uses_persistent_globals_and_restores_c_binding(self):
   m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
@@ -184,14 +186,17 @@ class Tests(unittest.TestCase):
   with contextlib.redirect_stdout(io.StringIO()) as output:self.assertEqual(main(['applicability']),0)
   report=json.loads(output.getvalue());self.assertEqual(report['schema_version'],1);self.assertEqual(report['capabilities'],HARDWARE_DRIVER_CAPABILITIES)
  def test_clock_cancel_probe_requires_immediate_and_delayed_midi(self):
-  r,_,m=self.r();trace=T();trace.snapshot=lambda:{'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]}
+  r,_,m=self.r();trace=T();trace.snapshot=lambda **kwargs:({'grid':[0]*128,'raw_grid':[0]*128,'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]},'ok') if kwargs.get('return_output') else {}
   with patch('real_norns.OutputTrace',return_value=trace),patch('real_norns.time.sleep'):
    result=r.clock_cancel_probe('candidate')
   self.assertTrue(result['passed']);self.assertIn('pcall(clock.resume,99999999)',m.commands[0]);self.assertEqual(trace.removed,1)
  def test_clock_cancel_probe_drains_only_expected_trace_install_and_remove_errors(self):
-  r,_,_=self.r();trace=T();stale="bad argument #1 to 'resume' (thread expected, got nil)\nstack traceback:\n";trace.install_output=stale;trace.remove_output=stale;trace.snapshot=lambda:{'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]}
+  r,_,m=self.r();trace=T();stale="bad argument #1 to 'resume' (thread expected, got nil)\nstack traceback:\n";trace.install_output=stale;trace.reset_output=stale;trace.snapshot_output=stale;trace.remove_output=stale
+  trace.snapshot=lambda **kwargs:({'midi':[{'bytes':[176,77,1]},{'bytes':[176,78,1]}]},trace.snapshot_output) if kwargs.get('return_output') else {'midi':[]}
+  m.eval=lambda code,**kwargs:m.commands.append(code) or stale
   with patch('real_norns.OutputTrace',return_value=trace),patch('real_norns.time.sleep'):result=r.clock_cancel_probe('stock-baseline')
-  self.assertTrue(result['passed']);self.assertEqual([row['phase'] for row in r.clock_error_drains],['install-stock-baseline-trace','remove-stock-baseline-trace']);self.assertEqual(trace.removed,1)
+  self.assertFalse(result['passed']);self.assertEqual(result['expected_queued_resume_errors'],6);self.assertIn('Expected stock queued-resume',result['failure'])
+  self.assertEqual([row['phase'] for row in r.clock_error_drains],['install-stock-baseline-trace','reset-stock-baseline-trace','exercise-stock-baseline','settle-stock-baseline','snapshot-stock-baseline-trace','remove-stock-baseline-trace']);self.assertEqual(trace.removed,1)
   trace=T();trace.install_output='unrelated failure\nstack traceback:\n'
   with patch('real_norns.OutputTrace',return_value=trace):result=r.clock_cancel_probe('stock-baseline')
   self.assertFalse(result['passed']);self.assertIn('Unexpected Lua error',result['failure']);self.assertEqual(trace.removed,1)

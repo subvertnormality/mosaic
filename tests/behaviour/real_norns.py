@@ -108,10 +108,10 @@ class OutputTrace:
    try:self.remove(allow_lua_error=True)
    except Exception as cleanup_error:raise RuntimeError('Hardware trace installation failed and cleanup could not be confirmed: '+str(cleanup_error)) from install_error
    raise
- def reset_midi(self):self.maiden.eval('for i=#_MOSAIC_HW_MIDI,1,-1 do _MOSAIC_HW_MIDI[i]=nil end; _MOSAIC_HW_MIDI_REALTIME.count=0')
- def snapshot(self):
+ def reset_midi(self,allow_lua_error=False):return self.maiden.eval('for i=#_MOSAIC_HW_MIDI,1,-1 do _MOSAIC_HW_MIDI[i]=nil end; _MOSAIC_HW_MIDI_REALTIME.count=0',allow_lua_error=allow_lua_error)
+ def snapshot(self,allow_lua_error=False,return_output=False):
   code="print('__GRID_COUNTS__'.._MOSAIC_HW_GRID.writes..','.._MOSAIC_HW_GRID.refreshes); for y=1,8 do local row={} for x=1,16 do local value=_MOSAIC_HW_GRID.levels[x..','..y] if value==nil then value=_MOSAIC_HW_GRID.all end row[x]=value end print('__GRID_ROW__'..y..'|'..table.concat(row,',')) end; for i,e in ipairs(_MOSAIC_HW_MIDI) do print(string.format('__MIDI__%d|%.9f|%s|%s|%s',i,e.when,e.device,e.payload_type,table.concat(e.bytes,','))) end"
-  output=self.maiden.eval(code);counts=re.search(r'__GRID_COUNTS__(\d+),(\d+)',output)
+  output=self.maiden.eval(code,allow_lua_error=allow_lua_error);counts=re.search(r'__GRID_COUNTS__(\d+),(\d+)',output)
   if not counts:raise RuntimeError('Hardware grid trace missing')
   rows={int(y):[int(v) for v in values.split(',')] for y,values in re.findall(r'__GRID_ROW__(\d+)\|([-0-9,]+)',output)}
   if set(rows)!=set(range(1,9)) or any(len(row)!=16 for row in rows.values()):raise RuntimeError('Hardware grid trace incomplete: '+repr(output[-4000:]))
@@ -119,7 +119,8 @@ class OutputTrace:
   for index,when,device,payload_type,values in re.findall(r'__MIDI__(\d+)\|([0-9.]+)\|([^|]*)\|([^|]*)\|([0-9,]*)',output):
    midi.append({'index':int(index),'monotonic_seconds':float(when),'device':device,'payload_type':payload_type,'bytes':[int(v) for v in values.split(',') if v]})
   raw_grid=sum((rows[y] for y in range(1,9)),[]);physical_grid=[value&15 for value in raw_grid]
-  return {'grid':physical_grid,'raw_grid':raw_grid,'grid_writes':int(counts.group(1)),'grid_refreshes':int(counts.group(2)),'midi':midi}
+  result={'grid':physical_grid,'raw_grid':raw_grid,'grid_writes':int(counts.group(1)),'grid_refreshes':int(counts.group(2)),'midi':midi}
+  return (result,output) if return_output else result
  def remove(self,allow_lua_error=False):
   if not self.installed:return ''
   code="if _MOSAIC_HW_ORIG_MIDI then _norns.midi_send=_MOSAIC_HW_ORIG_MIDI end; if _MOSAIC_HW_ORIG_GRID_LED then _norns.grid_set_led=_MOSAIC_HW_ORIG_GRID_LED end; if _MOSAIC_HW_ORIG_GRID_ALL then _norns.grid_all_led=_MOSAIC_HW_ORIG_GRID_ALL end; if _MOSAIC_HW_ORIG_GRID_REFRESH then _norns.monome_refresh=_MOSAIC_HW_ORIG_GRID_REFRESH end; _MOSAIC_HW_ORIG_MIDI=nil; _MOSAIC_HW_ORIG_GRID_LED=nil; _MOSAIC_HW_ORIG_GRID_ALL=nil; _MOSAIC_HW_ORIG_GRID_REFRESH=nil; print('__TRACE_REMOVED__'..debug.getinfo(_norns.midi_send).what)"
@@ -213,24 +214,29 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
   if actual!=wanted:raise RuntimeError('Remote clock hash mismatch after '+label)
   return actual
  def clock_cancel_probe(self,label):
-  trace=OutputTrace(self.maiden);failure=None;snapshot=None
+  trace=OutputTrace(self.maiden);failure=None;snapshot=None;expected_errors=0
+  def drain(output,phase):
+   nonlocal expected_errors
+   self.validate_clock_output(output,phase);expected_errors+=output.count('stack traceback:');return output
   try:
-   try:self.validate_clock_output(trace.install(allow_lua_error=True),'install-'+label+'-trace')
+   try:drain(trace.install(allow_lua_error=True),'install-'+label+'-trace')
    except Exception as error:failure=type(error).__name__+': '+str(error)
    if failure is None:
-    trace.reset_midi()
-    code="for i=1,24 do local id=clock.run(function() clock.sleep(0.001); error('cancelled native clock resumed') end); local finish=util.time()+0.008; while util.time()<finish do end; clock.cancel(id) end; local ok=pcall(clock.resume,99999999); assert(not ok,'unknown clock identity was silently ignored'); clock.run(function() clock.sleep(0.05); _norns.midi_send(1,{176,78,1}) end); _norns.midi_send(1,{176,77,1})"
-    try:
-     output=self.maiden.eval(code,allow_lua_error=True);time.sleep(.2);output+=self.maiden.eval("print('__CLOCK_CANCEL_SETTLED__')",allow_lua_error=True)
-     if 'stack traceback:' in output:failure='Maiden Lua error: '+output[-2000:]
+    try:drain(trace.reset_midi(allow_lua_error=True),'reset-'+label+'-trace')
     except Exception as error:failure=type(error).__name__+': '+str(error)
-    try:snapshot=trace.snapshot()
-    except Exception as error:failure=failure or type(error).__name__+': '+str(error)
+   if failure is None:
+    code="for i=1,24 do local id=clock.run(function() clock.sleep(0.001); error('cancelled native clock resumed') end); local finish=util.time()+0.008; while util.time()<finish do end; clock.cancel(id) end; local ok=pcall(clock.resume,99999999); assert(not ok,'unknown clock identity was silently ignored'); clock.run(function() clock.sleep(0.05); _norns.midi_send(1,{176,78,1}) end); _norns.midi_send(1,{176,77,1})"
+    try:drain(self.maiden.eval(code,allow_lua_error=True),'exercise-'+label);time.sleep(.2);drain(self.maiden.eval("print('__CLOCK_CANCEL_SETTLED__')",allow_lua_error=True),'settle-'+label)
+    except Exception as error:failure=type(error).__name__+': '+str(error)
+   if failure is None:
+    try:snapshot,output=trace.snapshot(allow_lua_error=True,return_output=True);drain(output,'snapshot-'+label+'-trace')
+    except Exception as error:failure=type(error).__name__+': '+str(error)
   finally:
-   try:self.validate_clock_output(trace.remove(allow_lua_error=True),'remove-'+label+'-trace')
+   try:drain(trace.remove(allow_lua_error=True),'remove-'+label+'-trace')
    except Exception as error:failure=failure or type(error).__name__+': '+str(error)
+  if expected_errors:failure=failure or 'Expected stock queued-resume Lua errors observed: '+str(expected_errors)
   messages=[event['bytes'] for event in (snapshot or {}).get('midi',[])]
-  return {'label':label,'passed':failure is None and [176,77,1] in messages and [176,78,1] in messages,'failure':failure,'midi':messages}
+  return {'label':label,'passed':failure is None and expected_errors==0 and [176,77,1] in messages and [176,78,1] in messages,'failure':failure,'expected_queued_resume_errors':expected_errors,'midi':messages}
  def validate_clock_output(self,output,label):
   count=output.count('stack traceback:')
   for match in re.finditer(r'stack traceback:',output):
