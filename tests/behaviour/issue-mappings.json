@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "issues": [
+    {
+      "number": 84,
+      "title": "First beat doesn't always trigger",
+      "url": "https://github.com/subvertnormality/mosaic/issues/84",
+      "source": {
+        "body": "",
+        "comments": 0,
+        "scope_basis": "The open issue supplies only its title. Coverage therefore checks the two documented start routes without assigning an undocumented cause."
+      },
+      "manual": [
+        "README.md:222-224",
+        "README.md:308-310"
+      ],
+      "routes": [
+        {
+          "id": "internal-grid-play",
+          "cases": [
+            "M-PAT-001"
+          ],
+          "setup": "Create distinct notes on steps 1, 2, 3 and 4 through the grid, then press Play.",
+          "oracle": "The complete MIDI stream must begin 60,62 and continue 64,65 over three cycles plus the next step 1. Exact sequence equality rejects a missing or duplicated step 1 before step 2."
+        },
+        {
+          "id": "external-midi-start",
+          "cases": [
+            "M-SYNC-001",
+            "M-SYNC-006"
+          ],
+          "setup": "Select the MIDI clock source, warm its 24 PPQN estimator, then deliver Start before or with the next Clock; repeat Start during playback in the interaction case.",
+          "oracle": "M-SYNC-001 requires the step 1 note exactly at the first post-Start Clock and step 2 six pulses later across four Start phases. M-SYNC-006 requires the same single step 1 restart while already playing, after release of the held pre-restart note."
+        }
+      ],
+      "production_change": "none-required-if-existing-regressions-pass"
+    }
+  ]
+}
