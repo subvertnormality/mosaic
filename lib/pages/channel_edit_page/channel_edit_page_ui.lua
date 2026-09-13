@@ -135,9 +135,6 @@ channel_edit_clock_controls_controller = channel_edit_clock_controls.new(
 
 -- History controls
 local channel_edit_history_controller = channel_edit_history.new(memory_history_navigator, channel_edit_page_ui)
-local memory_controls = {
-  navigator = channel_edit_history_controller.navigator
-}
 
 local trig_lock_page
 local channel_page_to_index
@@ -151,8 +148,6 @@ local channel_edit_navigation_controller = channel_edit_navigation.new(
   {
     channel_pages = channel_pages,
     channel_page_to_index = channel_page_to_index,
-    scales_pages = scales_pages,
-    scales_page_to_index = scales_page_to_index,
     mask_selectors = mask_selectors,
     midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
     midi_channel_vertical_scroll_selector = midi_channel_vertical_scroll_selector,

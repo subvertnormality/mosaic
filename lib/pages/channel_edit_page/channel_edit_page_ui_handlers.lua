@@ -10,8 +10,6 @@ end
 function channel_edit_page_ui_handlers.handle_encoder_two_positive(pages, selectors, parameter_controller, clock_controls_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
-  local scales_pages = pages.scales_pages
-  local scales_page_to_index = pages.scales_page_to_index
 
   local mask_selectors = selectors.mask_selectors
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
@@ -69,8 +67,6 @@ end
 function channel_edit_page_ui_handlers.handle_encoder_two_negative(pages, selectors, parameter_controller, clock_controls_controller)
   local channel_pages = pages.channel_pages
   local channel_page_to_index = pages.channel_page_to_index
-  local scales_pages = pages.scales_pages
-  local scales_page_to_index = pages.scales_page_to_index
 
   local mask_selectors = selectors.mask_selectors
   local midi_device_vertical_scroll_selector = selectors.midi_device_vertical_scroll_selector
