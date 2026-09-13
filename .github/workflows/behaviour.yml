@@ -44,6 +44,9 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Trust the container-mounted checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
       - name: Check out the pinned monome emulator
         run: |
           git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git "$EMULATOR_ROOT"
