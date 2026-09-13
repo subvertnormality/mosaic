@@ -5,6 +5,12 @@ local function scenario(repeat_during, repeat_after, disconnected, background_jo
   local environment = setmetatable({include=function() return {} end,
     scheduler=assert(loadfile(root.."/lib/scheduler.lua"))(),
     midi={vports={1,2,3}}}, {__index=_G})
+  environment.include=function(name)
+    if name=='mosaic/lib/devices/midi_wire_output' or name=='mosaic/lib/devices/nrpn_codec' or name=='mosaic/lib/devices/midi_input' then
+      return assert(loadfile(root..'/'..name:gsub('^mosaic/', '')..'.lua','t',environment))()
+    end
+    return {}
+  end
   local implementation=assert(loadfile(root.."/lib/m_midi.lua","t",environment))()
   local sent={{},{},{}}
   for id=1,3 do

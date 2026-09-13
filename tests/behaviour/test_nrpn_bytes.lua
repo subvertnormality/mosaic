@@ -1,6 +1,6 @@
 -- Independent 14-bit reconstruction: CC6 holds bits7..13, CC38 bits0..6.
 -- https://midi.org/midi-1-0-control-change-messages
-function include(path) if path == "mosaic/lib/devices/midi_wire_output" then return dofile("lib/devices/midi_wire_output.lua") end if path == "mosaic/lib/devices/nrpn_codec" then return dofile("lib/devices/nrpn_codec.lua") end return {} end
+function include(path) if path == "mosaic/lib/devices/midi_input" then return dofile("lib/devices/midi_input.lua") end if path == "mosaic/lib/devices/midi_wire_output" then return dofile("lib/devices/midi_wire_output.lua") end if path == "mosaic/lib/devices/nrpn_codec" then return dofile("lib/devices/nrpn_codec.lua") end return {} end
 local midi=dofile("lib/m_midi.lua")
 local sent={}
 midi_devices[3]={cc=function(_,controller,value,channel)sent[#sent+1]={controller,value,channel} end}

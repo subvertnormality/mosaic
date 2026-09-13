@@ -131,3 +131,29 @@ Controlled native passes:
 - M-PATCH-038: `66a94a43a1524ef285ad33e0ac4398b9` (CC slide reassignment/output).
 
 MIDI ingress and mapping registration remain to separate in R11.
+
+## MIDI input ownership extraction (2026-09-13)
+
+`midi_input.new` owns source/channel/key release stacks, recording chord groups,
+white-key mapping and CC page-return timers. It captures the original local step,
+quantiser, divisions and owning MIDI module dependencies; other globals remain
+looked up at invocation. The global handler seam and init callback remain intact.
+Stop resets chords at the original point, retaining pending note releases.
+The handler body matches the prior implementation apart from name and whitespace.
+
+All 1,546 Lua tests, ten coverage/syntax checks, five panic scheduler scenarios,
+the live-note panic contract and exhaustive NRPN/invalid-input checks pass.
+The additional panic scheduler fixture now loads the real extracted dependencies;
+this repairs a loader omission from the preceding wire extraction, not an assertion.
+
+Native passes under the recorded evidence root:
+| Case | Lane | Run |
+| --- | --- | --- |
+| M-MIDI-002 | controlled | c64842d64b284d59b87518325926d152 |
+| M-MIDI-003 | controlled | fc31f1a532214131bf4c134865b73303 |
+| M-MIDI-004 | controlled | 8d5634715d814a86a189db73c0e4b8fc |
+| M-REC-026 | controlled | bb9776fb578d4bd3b4e422fe178cc563 |
+| M-KEYBOARD-STOP-001 | controlled | f003dc7a6bc448349f9856b6db551fb8 |
+| M-XA-003-JF-OWNERSHIP | real-time/crow-jf | ad1e0dcd3272442f9995aa37dba73c94 |
+
+MIDI mapping registration remains to separate before closing R11.

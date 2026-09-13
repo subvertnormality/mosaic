@@ -33,7 +33,7 @@
   "inventory_sha256": "440c46051f6d7aa3d071d57beb913854ce55597deab5b6150953887968541a78",
   "counts": {
     "requirements": 140,
-    "production_lua_modules": 86,
+    "production_lua_modules": 87,
     "unit_integration_files": 68,
     "domains": 15
   },
@@ -1584,6 +1584,7 @@
         "lib/clock/m_clock.lua",
         "lib/clock/midi_output_transport.lua",
         "lib/clock/transport_lifecycle.lua",
+        "lib/devices/midi_input.lua",
         "lib/devices/midi_wire_output.lua",
         "lib/m_midi.lua"
       ],
@@ -1691,6 +1692,7 @@
       ],
       "production_modules": [
         "lib/clock/m_clock.lua",
+        "lib/devices/midi_input.lua",
         "lib/devices/midi_wire_output.lua",
         "lib/m_midi.lua",
         "lib/memory.lua",
@@ -2036,6 +2038,7 @@
         "lib/clock/midi_output_transport.lua",
         "lib/devices/device_descriptors.lua",
         "lib/devices/device_map.lua",
+        "lib/devices/midi_input.lua",
         "lib/devices/midi_patch_recall.lua",
         "lib/devices/midi_value_domain.lua",
         "lib/devices/midi_wire_output.lua",
@@ -2221,6 +2224,7 @@
         "lib/controls/vertical_fader.lua",
         "lib/devices/device_descriptors.lua",
         "lib/devices/device_map.lua",
+        "lib/devices/midi_input.lua",
         "lib/devices/midi_patch_recall.lua",
         "lib/devices/midi_value_domain.lua",
         "lib/devices/midi_wire_output.lua",

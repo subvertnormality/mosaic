@@ -3,7 +3,7 @@ local environment=setmetatable({include=function() return {} end,
  scheduler=assert(loadfile(root..'/lib/scheduler.lua'))(),midi={vports={1}},
  fn=assert(loadfile(root..'/lib/helpers/functions.lua'))()},{__index=_G})
 environment.include=function(name)
- if name=='mosaic/lib/devices/midi_wire_output' or name=='mosaic/lib/devices/nrpn_codec' then
+ if name=='mosaic/lib/devices/midi_wire_output' or name=='mosaic/lib/devices/nrpn_codec' or name=='mosaic/lib/devices/midi_input' then
   return assert(loadfile(root..'/'..name:gsub('^mosaic/', '')..'.lua','t',environment))()
  end
  return {}
