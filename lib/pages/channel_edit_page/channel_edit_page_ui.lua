@@ -655,49 +655,7 @@ function channel_edit_page_ui.refresh_memory()
   return channel_edit_history_controller.refresh()
 end
 
-channel_edit_page_ui.refresh_channel_config = scheduler.debounce(function()
-  -- Initial checks
-  local channel = program.get_selected_channel()
-  
-  -- Cache program data to avoid repeated lookups
-  local program_data = program.get()
-  local channel_device = program_data.devices[channel.number]
-  
-  -- First batch: Basic device setup
-  device_map_vertical_scroll_selector:set_items(
-    device_map.get_available_devices_for_channel(program_data.selected_channel)
-  )
-  midi_channel_vertical_scroll_selector:set_selected_item(
-    channel_device.midi_channel
-  )
-  midi_device_vertical_scroll_selector:set_selected_item(
-    channel_device.midi_device
-  )
-  coroutine.yield()
-
-  -- Second batch: Complex device map lookup and setting
-  device_map_vertical_scroll_selector:set_selected_item(
-    fn.get_index_by_id(
-      device_map_vertical_scroll_selector:get_items(), 
-      channel_device.device_map
-    )
-  )
-  coroutine.yield()
-
-  -- Third batch: Complex param selection
-  param_select_vertical_scroll_selector:set_selected_item(
-    fn.get_index_by_id(
-      param_select_vertical_scroll_selector:get_items(),
-      channel.trig_lock_params[dials:get_selected_index()].id
-    ) or 1
-  )
-  coroutine.yield()
-
-  -- Final batch: Selection states
-  device_map_vertical_scroll_selector:select()
-  midi_channel_vertical_scroll_selector:deselect()
-  midi_device_vertical_scroll_selector:deselect()
-end)
+channel_edit_page_ui.refresh_channel_config = channel_edit_parameters_controller.create_config_refresh()
 
 
 function channel_edit_page_ui.refresh()
@@ -817,56 +775,11 @@ function channel_edit_page_ui.handle_clock_mods_page_decrement()
 end
 
 function channel_edit_page_ui.handle_midi_config_page_increment()
-  if midi_device_vertical_scroll_selector:is_selected() then
-    midi_device_vertical_scroll_selector:scroll_down()
-  elseif midi_channel_vertical_scroll_selector:is_selected() then
-    midi_channel_vertical_scroll_selector:scroll_down()
-  elseif device_map_vertical_scroll_selector:is_selected() then
-    device_map_vertical_scroll_selector:scroll_down()
-  end
-
-  local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
-
-  save_confirm.clear()
-
-  local channel = program.get_selected_channel()
-
-  save_confirm.set_save(function()
-    channel_edit_page_ui.update_channel_config()
-    program.clear_device_trig_locks_for_channel(channel)
-    param_manager.update_default_params(channel, device)
-    param_select_vertical_scroll_selector:set_selected_item(1)
-    channel_edit_page_ui.refresh_trig_locks()
-  end)
-  save_confirm.set_cancel(channel_edit_page_ui.refresh_channel_config)
+  return channel_edit_parameters_controller.handle_midi_config_page_increment()
 end
 
 function channel_edit_page_ui.handle_midi_config_page_decrement()
-  if midi_device_vertical_scroll_selector:is_selected() then
-    midi_device_vertical_scroll_selector:scroll_up()
-  elseif midi_channel_vertical_scroll_selector:is_selected() then
-    midi_channel_vertical_scroll_selector:scroll_up()
-  elseif device_map_vertical_scroll_selector:is_selected() then
-    device_map_vertical_scroll_selector:scroll_up()
-  end
-
-  local device = fn.get_by_id(device_map.get_devices(), device_map_vertical_scroll_selector:get_selected_item().id)
-
-  save_confirm.clear()
-
-  local channel = program.get_selected_channel()
-
-  save_confirm.set_save(function()
-    channel_edit_page_ui.update_channel_config()
-    program.clear_device_trig_locks_for_channel(channel)
-    param_manager.update_default_params(channel, device)
-    param_select_vertical_scroll_selector:set_selected_item(1)
-    channel_edit_page_ui.refresh_trig_locks()
-  end)
-
-  save_confirm.set_cancel(function()
-    channel_edit_page_ui.refresh_channel_config()
-  end)
+  return channel_edit_parameters_controller.handle_midi_config_page_decrement()
 end
 
 function channel_edit_page_ui.handle_encoder_one_positive()

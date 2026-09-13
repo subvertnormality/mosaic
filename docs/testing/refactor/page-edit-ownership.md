@@ -114,3 +114,21 @@ All 1,546 Lua tests and ten coverage/syntax checks pass. Native receipts:
 The combined controller is not finished: configuration +/- confirmation, debounced
 configuration refresh, assignment subpage/encoder-two navigation and drawing still
 need consolidation. Their original implementations remain active for this slice.
+
+### Configuration confirmation/refresh slice (2026-09-13)
+
+Configuration +/- callbacks and the three-yield refresh now belong to the parameter
+controller. UI creates the persistent debounce job at the former expression's
+position. Review confirmed original Save captures, direct-vs-dynamic Cancel,
+selector binding and batch order. Full Lua run: 1,545 pass, one existing massive-
+automation 2 ms failure; that test passed isolated, unchanged. Ten checks pass.
+
+Controlled native passes: M-SETUP-003 `8df6717e52cc4181a2b6e6cb0d978a32`,
+M-REC-PARAM-013 `8c07ab98920141e0b8fbb2380c45c4fe`, M-REC-PARAM-020
+`fbc3b9678ef847c79bed96648643cdfc`.
+First M-REC-PARAM-020 run `a746cbaee3f44fcbbd378ca0c7682091` passed recorded
+behavior assertions but failed in driver.finish/runtime.close when the /stop HTTP
+connection closed. The unchanged rerun passed; original evidence is retained.
+No shutdown fix or root-cause claim is made here.
+
+Assignment subpage, drawing and encoder-two integration remain outstanding.
