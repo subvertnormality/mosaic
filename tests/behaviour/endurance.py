@@ -37,6 +37,7 @@ def endurance_mixed(c,duration=DURATION):
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     plan=expected_stream(song);length=8 # two 4-step slots
     report=dict(kind='endurance',bpm=BPM,duration_seconds=duration,ports={})
+    timing_failures=[]
     for port,status in ((1,144),(2,145)):
         ons=[e for e in emitted if e['port']==port and e['bytes'][0]==status and e['bytes'][2]>0]
         offs=[e for e in emitted if e['port']==port and (e['bytes'][0]==status-16 or (e['bytes'][0]==status and e['bytes'][2]==0))]
@@ -51,7 +52,9 @@ def endurance_mixed(c,duration=DURATION):
         absolute=[abs(x) for x in errors]
         p99,maximum,final=nearest_rank(absolute,99),max(absolute),errors[-1]
         report['ports'][port]=dict(note_ons=len(ons),full_cycles=full_cycles,p99_ns=p99,max_ns=maximum,final_phase_ns=final)
-        assert p99<=10_000_000 and maximum<=50_000_000 and abs(final)<=20_000_000,('Central timing gates',port,report['ports'][port])
-    report['passed']=True
+        if not (p99<=10_000_000 and maximum<=50_000_000 and abs(final)<=20_000_000):
+            timing_failures.append(port)
+    report['passed']=not timing_failures
     results=json.loads((c.out/'results.json').read_text())+[report]
     (c.out/'results.json').write_text(json.dumps(results,indent=2)+'\n')
+    assert not timing_failures, ('Central timing gates', {port: report['ports'][port] for port in timing_failures})
