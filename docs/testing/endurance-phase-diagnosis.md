@@ -106,3 +106,25 @@ scheduler posting, or late matron dispatch. If no skip occurs, retain that
 negative result; if it does, the trace still identifies the runtime branch,
 not the cause of the deadline miss. Only a repeatable trace finding can justify
 an emulator/runtime candidate; none justifies a Mosaic change yet.
+
+## R13 forced-overlap oracle correction (2026-09-13)
+
+The earlier passing M-TIM-005 receipt above predates commit `80bca88`, which
+positioned the 42 ms Lua stall across a known onset deadline. Retaining an
+all-onsets 10 ms bound after that change made the blocked onset impossible to
+satisfy. Run `c23aba34875d4c318c6ae77117d52659` demonstrates the distinction:
+the blocked onset was 30.300 ms late, but the next onset recovered immediately.
+
+Commit `ca5bb99` measures exactly that blocked onset against the native stall
+completion acknowledgement, with a 10 ms response budget. Every other onset
+retains the original timeline and 10 ms bound, with no recovery rebase. Passing
+run `25497ea108aa47deb4b9a1a1439f09f4` recorded 3.436 ms blocked-onset response
+and 1.828 ms maximum unaffected phase error. The 42–100 ms fault-duration check
+is unchanged. This is a test-oracle correction, not a Mosaic clock fix.
+
+The separate R13 PERF-008 run at
+`/home/andy/projects/mosaic-behaviour-runs/r13-14e57fe-perf008-run1` remains failed:
+its output sequence falls approximately three steps behind elapsed musical time
+after CPU overload. No short-stall pass qualifies that workload. An isolated
+observation-only native clock trace is being prepared to identify whether the
+native skip-ahead path explains the persistent displacement.
