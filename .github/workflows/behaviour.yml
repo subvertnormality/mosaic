@@ -1,4 +1,4 @@
-name: Behaviour smoke
+name: Full behaviour suite
 
 on:
   pull_request:
@@ -11,99 +11,213 @@ permissions:
   contents: read
 
 concurrency:
-  group: behaviour-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: full-behaviour-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
+env:
+  EMULATOR_REVISION: b6728734b1c2201e508b06b98943bc4c88672263
+  EMULATOR_ROOT: /tmp/monome-emulator
+  MONOME_EMULATOR: /tmp/monome-emulator
+  DEBIAN_FRONTEND: noninteractive
+
 jobs:
-  emulator-behaviour-smoke:
-    name: Emulator behaviour smoke
+  base-midi:
+    name: Base MIDI shard ${{ matrix.shard }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 180
-    env:
-      EMULATOR_REVISION: b6728734b1c2201e508b06b98943bc4c88672263
-      EMULATOR_ROOT: /tmp/monome-emulator
-      MONOME_EMULATOR: /tmp/monome-emulator
-      BEHAVIOUR_OUTPUT: /tmp/mosaic-behaviour-smoke
-      DEBIAN_FRONTEND: noninteractive
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
     steps:
-      - name: Install native runtime dependencies
+      - &packages
+        name: Install native runtime dependencies
         run: |
           apt-get update
-          apt-get install -y --no-install-recommends \
-            build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 \
-            libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev \
-            libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev \
-            libsdl2-dev libsndfile1-dev libudev-dev supercollider-language \
-            supercollider-server zstd
-
-      - name: Check out Mosaic
+          apt-get install -y build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3             libasound2-dev libcairo2-dev libgpiod-dev libjack-jackd2-dev supercollider-language libavahi-client-dev libavahi-common-dev libevdev-dev libfreetype6-dev             libgl1-mesa-dev libgles2-mesa-dev liblo-dev liblua5.3-dev libnanomsg-dev libreadline-dev             libsdl2-dev libsndfile1-dev libudev-dev libusb-1.0-0-dev libx11-dev libxi-dev             libxinerama-dev libxrandr-dev supercollider-server zstd
+      - &checkout
         uses: actions/checkout@v4
         with:
           submodules: recursive
-
-      - name: Trust the container-mounted checkout
+      - name: Trust checkout
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-      - name: Check out the pinned monome emulator
+      - &emulator
+        name: Check out pinned emulator
         run: |
           git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git "$EMULATOR_ROOT"
           git -C "$EMULATOR_ROOT" checkout --detach "$EMULATOR_REVISION"
           test "$(git -C "$EMULATOR_ROOT" rev-parse HEAD)" = "$EMULATOR_REVISION"
-
-      - name: Restore native runtime cache
+      - &cache
+        name: Restore native runtime
         uses: actions/cache@v4
         with:
           path: /tmp/monome-emulator/.runtime
-          key: monome-emulator-ubuntu20-amd64-b672873-controlled-v2
-
-      - name: Build default and controlled-time runtimes
+          key: monome-emulator-ubuntu20-b672873-controlled-v3
+      - &build
+        name: Build native runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
-
-      - name: Verify generic native runtime
-        working-directory: /tmp/monome-emulator
-        run: python3 tests/native_smoke.py
-
-      - name: Run controlled-time musical smoke
+      - name: Verify CI partition and aggregation contracts
+        if: matrix.shard == 0
+        working-directory: tests/behaviour
+        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full
+      - name: Fetch output-profile fixtures for fast layers
+        if: matrix.shard == 0
         run: |
-          python3 tests/behaviour/suite.py run \
-            --output "$BEHAVIOUR_OUTPUT-controlled" \
-            --emulator "$EMULATOR_ROOT" \
-            --norns-source "$EMULATOR_ROOT/.runtime/deps/norns" \
-            --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json" \
-            --lanes controlled-experimental \
-            --profiles base-midi \
-            --case-pattern '^(M-LEN-001|M-TIME-001|M-SYNC-001)$' \
-            --controlled-workers 1 \
-            --case-timeout 900
-
-      - name: Run default real-time functional smoke
+          mkdir -p /tmp/mosaic-output-mods
+          git clone https://github.com/sixolet/matrix.git /tmp/mosaic-output-mods/matrix
+          git -C /tmp/mosaic-output-mods/matrix checkout --detach 41e11286bee8dbe48e8746e7a456400f93dc739a
+          git clone https://github.com/sixolet/toolkit.git /tmp/mosaic-output-mods/toolkit
+          git -C /tmp/mosaic-output-mods/toolkit checkout --detach 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
+          git clone https://github.com/sixolet/doubledecker.git /tmp/mosaic-output-mods/doubledecker
+          git -C /tmp/mosaic-output-mods/doubledecker checkout --detach 8729b9ceee71d2b07067e89fbef5d8b98d6a0c89
+          git clone https://github.com/sixolet/nb_jf.git /tmp/mosaic-output-mods/nb_jf
+          git -C /tmp/mosaic-output-mods/nb_jf checkout --detach fc0922feb5f8e91f7732602a3b99716bf7099e78
+      - name: Run exhaustive base-MIDI shard
         run: |
-          python3 tests/behaviour/suite.py run \
-            --output "$BEHAVIOUR_OUTPUT-real-time" \
-            --emulator "$EMULATOR_ROOT" \
-            --norns-source "$EMULATOR_ROOT/.runtime/deps/norns" \
-            --lanes real-time \
-            --profiles base-midi \
-            --case-pattern '^(M-PAT-001|M-SAVE-001|M-MAP-001)$' \
-            --real-time-workers 1 \
-            --case-timeout 900 \
-            --skip-fast-layers
-
-      - name: Verify smoke report
+          pattern="$(python3 tests/behaviour/ci/select-shard.py --profile base-midi --index ${{ matrix.shard }} --count 8)"
+          extra="--skip-fast-layers"
+          output_mod=""
+          if [ "${{ matrix.shard }}" = 0 ]; then
+            extra=""
+            output_mod="--output-mod-root /tmp/mosaic-output-mods"
+          fi
+          set +e
+          python3 tests/behaviour/suite.py run             --output "/tmp/mosaic-behaviour-base-${{ matrix.shard }}"             --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"             --lanes real-time,controlled-experimental --profiles base-midi             --case-pattern "$pattern" --real-time-workers 6 --controlled-workers 2             --case-timeout 3600 $extra $output_mod
+          status=$?
+          set -e
+          if [ $status -ne 0 ]; then
+            python3 tests/behaviour/suite.py rerun "/tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite.json"               --emulator "$EMULATOR_ROOT"               --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"
+          fi
+      - name: Upload shard report
         if: always()
-        run: |
-          python3 tests/behaviour/ci/verify-smoke.py \
-            "$BEHAVIOUR_OUTPUT-controlled/suite.json" \
-            "$BEHAVIOUR_OUTPUT-real-time/suite.json"
-
-      - name: Upload failure evidence
-        if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: mosaic-behaviour-smoke-${{ github.run_id }}
-          path: /tmp/mosaic-behaviour-smoke-*
-          retention-days: 3
+          name: behaviour-base-${{ matrix.shard }}
+          path: |
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite*.json
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/manifest.json
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/serial-rerun/**/manifest.json
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/logs/**
+          retention-days: 7
           compression-level: 9
+
+  midi-modulation:
+    name: MIDI modulation profiles
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 90
+    steps:
+      - *packages
+      - *checkout
+      - name: Trust checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - *emulator
+      - *cache
+      - *build
+      - name: Fetch pinned modulation fixtures
+        run: |
+          mkdir -p /tmp/mosaic-output-mods
+          git clone https://github.com/sixolet/matrix.git /tmp/mosaic-output-mods/matrix
+          git -C /tmp/mosaic-output-mods/matrix checkout --detach 41e11286bee8dbe48e8746e7a456400f93dc739a
+          git clone https://github.com/sixolet/toolkit.git /tmp/mosaic-output-mods/toolkit
+          git -C /tmp/mosaic-output-mods/toolkit checkout --detach 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
+      - name: Run every modulation case in both lanes
+        run: |
+          pattern="$(python3 tests/behaviour/ci/select-shard.py --profile midi-modulation)"
+          python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-modulation --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"             --lanes real-time,controlled-experimental --profiles midi-modulation             --mod-code-root midi-modulation=/tmp/mosaic-output-mods             --case-pattern "$pattern" --skip-fast-layers
+      - name: Upload modulation report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: behaviour-midi-modulation
+          path: |
+            /tmp/mosaic-behaviour-modulation/suite*.json
+            /tmp/mosaic-behaviour-modulation/runs/**/manifest.json
+            /tmp/mosaic-behaviour-modulation/logs/**
+          retention-days: 7
+          compression-level: 9
+
+  audio-crow:
+    name: Audio and Crow/JF profiles
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 120
+    steps:
+      - *packages
+      - *checkout
+      - name: Trust checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - *emulator
+      - *cache
+      - *build
+      - name: Fetch pinned output fixtures and Crow source
+        run: |
+          mkdir -p /tmp/mosaic-output-mods
+          git clone https://github.com/sixolet/doubledecker.git /tmp/mosaic-output-mods/doubledecker
+          git -C /tmp/mosaic-output-mods/doubledecker checkout --detach 8729b9ceee71d2b07067e89fbef5d8b98d6a0c89
+          git clone https://github.com/sixolet/nb_jf.git /tmp/mosaic-output-mods/nb_jf
+          git -C /tmp/mosaic-output-mods/nb_jf checkout --detach fc0922feb5f8e91f7732602a3b99716bf7099e78
+          git clone --recursive https://github.com/monome/crow.git /tmp/crow
+          git -C /tmp/crow checkout --detach b340579d94e57e2b43336611b2c4037cff74bb80
+          git -C /tmp/crow/submodules/lua checkout --detach 32ffee2104c3a19ad2122dbfc5d4a018c273afc7
+          git -C /tmp/crow/submodules/wrDsp checkout --detach e1eb9c533fbdec9d68438b22b5cdf179247fd02b
+          git -C /tmp/crow/submodules/wrLib checkout --detach c44e6b0ff9846ddf69e6f15f3357e2df638fb0f6
+      - name: Build identified audio and Crow runtime
+        working-directory: /tmp/monome-emulator
+        run: |
+          python3 scripts/build_crow_host.py --source /tmp/crow --output /tmp/ci-crow-generator
+          python3 scripts/build_crow_ii_host.py --generator-build /tmp/ci-crow-generator --output /tmp/ci-crow-ii
+          python3 scripts/build_crow_host.py --source /tmp/crow --ii-build /tmp/ci-crow-ii --output /tmp/ci-crow
+          python3 scripts/build_audio_candidate.py --output /tmp/ci-audio-crow             --crow-build /tmp/ci-crow --sdl-ownership --screen-worker-shutdown
+          python3 scripts/prepare_audio_monitor.py --install /tmp/ci-audio-crow/installation.json             --output /tmp/ci-audio-crow-tools
+      - name: Run every audio and Crow/JF case
+        run: |
+          pattern="^(?:M-XA-002-AUDIO|M-XA-005-NB-LOCK|M-XA-006-NB-CHORD-ACCEL|M-XA-001-JF|M-XA-003-JF-OWNERSHIP|M-XA-004-JF-OVERLAP|M-XA-007-NB-SWITCH-SLOTS)$"
+          python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-output --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT//tmp/ci-audio-crow-tools/installation.json"             --lanes real-time --profiles nb-audio,crow-jf             --mod-code-root nb-audio=/tmp/mosaic-output-mods             --mod-code-root crow-jf=/tmp/mosaic-output-mods             --case-pattern "$pattern" --skip-fast-layers
+      - name: Upload output-profile report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: behaviour-audio-crow
+          path: |
+            /tmp/mosaic-behaviour-output/suite*.json
+            /tmp/mosaic-behaviour-output/runs/**/manifest.json
+            /tmp/mosaic-behaviour-output/logs/**
+          retention-days: 7
+          compression-level: 9
+
+  complete:
+    name: Complete behaviour coverage
+    if: always()
+    needs: [base-midi, midi-modulation, audio-crow]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: behaviour-*
+          path: reports
+      - name: Verify exhaustive coverage
+        env:
+          MONOME_EMULATOR: /tmp/identity-only
+        run: |
+          mapfile -t suites < <(find reports -name suite.json -type f | sort)
+          test "${#suites[@]}" -eq 10
+          python3 tests/behaviour/ci/verify-full.py --output full-behaviour-report.json "${suites[@]}"
+          cat full-behaviour-report.json >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-behaviour-report
+          path: full-behaviour-report.json
+          retention-days: 14
