@@ -71,8 +71,9 @@ settles, and avoid duplicating expensive full-suite runs when focused evidence c
 small final change. Performance tests must distinguish Mosaic work from emulator or host
 scheduling, and may not claim physical-norns equivalence without device evidence.
 
-GitHub Actions behaviour smoke tests are a fast cross-platform gate, not the complete
-campaign. Their reports must state the selected cases and leave
-`complete_regression_run` false. Full-suite and real-norns evidence remain separately
-identified. The repository configuration-creator web page is outside the behaviour-test
-campaign unless explicitly requested.
+GitHub Actions runs the exhaustive behaviour campaign across sharded base-MIDI jobs and
+the required modulation, audio and Crow/JF profiles. Each shard report must identify its
+selected cases and leave `complete_regression_run` false; the aggregate coverage job must
+verify that the combined reports cover the complete required inventory without omissions.
+Real-norns evidence remains separately identified. The repository configuration-creator
+web page is outside the behaviour-test campaign unless explicitly requested.
