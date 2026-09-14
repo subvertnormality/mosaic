@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  EMULATOR_REVISION: 7668570d94d68e3185b222e53ee21375effc6c87
+  EMULATOR_REVISION: 05fe7a1743f8517eaabb9184f2541e8bd6586935
   EMULATOR_ROOT: /tmp/monome-emulator
   MONOME_EMULATOR: /tmp/monome-emulator
   DEBIAN_FRONTEND: noninteractive
@@ -56,7 +56,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/monome-emulator/.runtime
-          key: monome-emulator-ubuntu20-7668570-qualified-v8
+          key: monome-emulator-ubuntu20-05fe7a1-qualified-v9
       - &build
         name: Build native runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
@@ -210,6 +210,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: recursive
+      - name: Check out pinned emulator metadata
+        run: |
+          git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git /tmp/identity-only
+          git -C /tmp/identity-only checkout --detach "$EMULATOR_REVISION"
       - uses: actions/download-artifact@v4
         with:
           pattern: behaviour-*
