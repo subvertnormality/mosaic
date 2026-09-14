@@ -23,9 +23,17 @@ def song_repetition_domain(c):
         controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
         c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
         upper=c.logical_ns if controlled else time.monotonic_ns()
-        c.elapse(.06);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
-        notes=capture.note_ons();assert len(notes)==target
-        phrase=[(60,127),(62,117)]*repeats+[(72,127),(74,117),(60,127)]
+        # A real-time Stop may cross the next tick before its grid event is handled.
+        # Validate that concurrent continuation too, then require the stopped LED and quiescence.
+        c.elapse(.06)
+        stopped=c.wait(lambda state:capture.extend(state) and state['grid'][112]==2 and not state['midi_capture']['outstanding'])
+        stopped_count=len(capture.note_ons());c.elapse(.25);capture.extend(c.snapshot())
+        notes=capture.note_ons()
+        assert len(notes)==stopped_count,dict(repeats=repeats,late_onsets=len(notes)-stopped_count)
+        assert len(notes)>=target,dict(repeats=repeats,expected_prefix=target,actual=len(notes))
+        cycle=[(60,127),(62,117)]*repeats+[(72,127),(74,117)]
+        phrase=[cycle[i%len(cycle)] for i in range(len(notes))]
+        assert phrase[:target]==[(60,127),(62,117)]*repeats+[(72,127),(74,117),(60,127)]
         onsets=[(24*i,p,v) for i,(p,v) in enumerate(phrase)]
-        checks=assert_schedule(capture.events,onsets,[24]*target,field='logical_ns' if controlled else 'monotonic_ns',origin=notes[0]['logical_ns' if controlled else 'monotonic_ns'],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
-        c.results.append(dict(kind='song-repetition-domain',repeats=repeats,second_slot_repeats=1,transition_indices=[2*repeats,2*repeats+2],onsets=target,release_checks=len(checks),passed=True))
+        checks=assert_schedule(capture.events,onsets,[24]*len(notes),field='logical_ns' if controlled else 'monotonic_ns',origin=notes[0]['logical_ns' if controlled else 'monotonic_ns'],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
+        c.results.append(dict(kind='song-repetition-domain',repeats=repeats,second_slot_repeats=1,transition_indices=[2*repeats,2*repeats+2],onsets=target,observed_onsets=len(notes),release_checks=len(checks),stopped_led=stopped['grid'][112],passed=True))
