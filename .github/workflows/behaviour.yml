@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  EMULATOR_REVISION: 0fffafbfbed7b202c61d0f36c06a0e56ecaa951a
+  EMULATOR_REVISION: 7668570d94d68e3185b222e53ee21375effc6c87
   EMULATOR_ROOT: /tmp/monome-emulator
   MONOME_EMULATOR: /tmp/monome-emulator
   DEBIAN_FRONTEND: noninteractive
@@ -56,7 +56,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/monome-emulator/.runtime
-          key: monome-emulator-ubuntu20-0fffafb-qualified-v7
+          key: monome-emulator-ubuntu20-7668570-qualified-v8
       - &build
         name: Build native runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
