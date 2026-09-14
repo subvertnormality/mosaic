@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  EMULATOR_REVISION: 58ec399a512b43352b3d6cf6363e0ced8cd62f0c
+  EMULATOR_REVISION: 95cc101717905877f2f83d5151e814b4f04c0ac9
   EMULATOR_ROOT: /tmp/monome-emulator
   MONOME_EMULATOR: /tmp/monome-emulator
   DEBIAN_FRONTEND: noninteractive
@@ -56,7 +56,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/monome-emulator/.runtime
-          key: monome-emulator-ubuntu20-58ec399-controlled-v5
+          key: monome-emulator-ubuntu20-95cc101-qualified-v6
       - &build
         name: Build native runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
@@ -93,11 +93,11 @@ jobs:
             output_mod="--output-mod-root /tmp/mosaic-output-mods"
           fi
           set +e
-          runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py run             --output "/tmp/mosaic-behaviour-base-${{ matrix.shard }}"             --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"             --lanes real-time,controlled-experimental --profiles base-midi             --case-pattern "$pattern" --real-time-workers 1 --controlled-workers 1             --case-timeout 3600 $extra $output_mod
+          runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py run             --output "/tmp/mosaic-behaviour-base-${{ matrix.shard }}"             --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"             --lanes real-time,controlled-experimental --profiles base-midi             --case-pattern "$pattern" --real-time-workers 1 --controlled-workers 1             --case-timeout 3600 $extra $output_mod
           status=$?
           set -e
           if [ $status -ne 0 ]; then
-            runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py rerun "/tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite.json"               --emulator "$EMULATOR_ROOT"               --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"
+            runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py rerun "/tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite.json"               --emulator "$EMULATOR_ROOT"               --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"
           fi
       - name: Upload shard report
         if: always()
@@ -137,7 +137,7 @@ jobs:
       - name: Run every modulation case in both lanes
         run: |
           pattern="$(python3 tests/behaviour/ci/select-shard.py --profile midi-modulation)"
-          python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-modulation --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-controlled/installation.json"             --lanes real-time,controlled-experimental --profiles midi-modulation             --mod-code-root midi-modulation=/tmp/mosaic-output-mods             --mod-patches --case-pattern "$pattern" --skip-fast-layers
+          python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-modulation --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"             --lanes real-time,controlled-experimental --profiles midi-modulation             --mod-code-root midi-modulation=/tmp/mosaic-output-mods             --mod-patches --case-pattern "$pattern" --skip-fast-layers
       - name: Upload modulation report
         if: always()
         uses: actions/upload-artifact@v4
