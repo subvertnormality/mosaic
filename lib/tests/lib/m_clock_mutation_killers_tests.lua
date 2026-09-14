@@ -285,6 +285,35 @@ function test_mclk_stopped_start_reuses_the_prepared_lattice()
   end)
 end
 
+-- README 323-329: channel clock and shuffle settings may be edited before playback.
+-- Starting the already-prepared lattice must apply those final stopped settings.
+function test_mclk_stopped_start_refreshes_clock_and_shuffle_settings_in_place()
+  with_clock(function()
+    setup()
+    m_clock.init()
+    m_clock:stop()
+    local prepared = m_clock.get_clock_lattice()
+    local channel = program.get_channel(1, 1)
+    channel.clock_mods = m_clock.get_clock_divisions()[15] -- /2: 48 pulses
+    channel.swing_shuffle_type = 2
+    channel.shuffle_feel = 3
+    channel.shuffle_basis = 4
+    channel.shuffle_amount = 70
+
+    m_clock:start(true)
+
+    local channel_clock = m_clock.channel_1_clock
+    luaunit.assert_equals(m_clock.get_clock_lattice(), prepared)
+    luaunit.assert_equals(channel_clock.division, 1 / 8)
+    luaunit.assert_equals(channel_clock.swing_or_shuffle, 2)
+    luaunit.assert_equals(channel_clock.shuffle_feel, 3)
+    luaunit.assert_equals(channel_clock.shuffle_basis, 4)
+    luaunit.assert_equals(channel_clock.shuffle_amount, 0.7)
+    luaunit.assert_equals(channel_clock.end_of_clock_processor.division, 1 / 8)
+    m_clock:stop()
+  end)
+end
+
 -- The one-time boundary warning, the playing flag and the native boundary owner are
 -- module state; a fresh module is built for these cases.
 function test_mclk_a_new_module_is_stopped_until_start()

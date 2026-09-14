@@ -410,7 +410,22 @@ end
 -- every sprocket on the MIDI Start callback's first-clock deadline.
 function m_clock.prepare_start()
   if not clock_lattice then return m_clock.init() end
+  local song_pattern = program.get().selected_song_pattern
   clock_lattice.pattern_length = program.get_selected_song_pattern().global_pattern_length
+  for channel_number = 1, 17 do
+    local channel = program.get_channel(song_pattern, channel_number)
+    local division = 1 / (calculate_divisor(channel.clock_mods) * 4)
+    local shuffle = get_shuffle_values(channel)
+    local channel_clock = m_clock["channel_" .. channel_number .. "_clock"]
+    for _, sprocket in ipairs({channel_clock, channel_clock.end_of_clock_processor}) do
+      sprocket:set_division(division)
+      sprocket:set_swing(shuffle.swing or 0)
+      sprocket:set_swing_or_shuffle(shuffle.swing_or_shuffle or 1)
+      sprocket:set_shuffle_basis(shuffle.shuffle_basis or 0)
+      sprocket:set_shuffle_feel(shuffle.shuffle_feel or 0)
+      sprocket:set_shuffle_amount(shuffle.shuffle_amount or 0)
+    end
+  end
   clock_lattice:prepare_for_start()
   slides.reset()
 end
@@ -589,8 +604,6 @@ function m_clock.get_clock_lattice()
 end
 
 return m_clock
-
-
 
 
 
