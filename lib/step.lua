@@ -199,12 +199,9 @@ function step.process_params(channel, step)
   local recording_selected_channel = fn.param_value("record") == 2 and program_data.selected_channel == channel.number
 
   for i, param in ipairs(trig_lock_params) do
-    local off = param.off_value == nil and -1 or param.off_value
-
-    if should_process_param(param) then
-      if not param.param_id then
-        goto continue
-      end
+    -- Unassigned slots are the common case; test the cheapest condition first.
+    if param.param_id and should_process_param(param) then
+      local off = param.off_value == nil and -1 or param.off_value
 
       if recording_selected_channel and recorder.trig_lock_is_dirty(channel.number, i) then
         goto continue
