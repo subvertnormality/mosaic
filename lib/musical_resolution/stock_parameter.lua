@@ -18,7 +18,8 @@ local function resolve_slot(assignments, index, type, read_step_lock, read_assig
     return value
   end
 
-  return nil
+  -- Also report the stock value that was read, so a caller needing it need not reread it.
+  return nil, value
 end
 
 function stock_parameter.resolve(assignments, type, read_step_lock, read_assigned, read_fallback, context, current_step)
@@ -30,7 +31,7 @@ function stock_parameter.resolve(assignments, type, read_step_lock, read_assigne
       break
     end
   end
-  return resolve_slot(assignments, index, type, read_step_lock, read_assigned, read_fallback, context, current_step)
+  return (resolve_slot(assignments, index, type, read_step_lock, read_assigned, read_fallback, context, current_step))
 end
 
 -- Resolve several kinds for one step from a single scan of the assignment slots.

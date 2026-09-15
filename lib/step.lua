@@ -723,7 +723,11 @@ function step.handle(c, current_step)
                          (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                          (params:get("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
 
-    local fully_quantise_mask = stock("fully_quantise_mask")
+    -- Only note masks read the fully-quantise setting (see pitch_resolution).
+    local fully_quantise_mask = nil
+    if note_mask_value and note_mask_value > -1 then
+      fully_quantise_mask = stock("fully_quantise_mask")
+    end
     local note, relative_note_mask_value, octave_mod_offset, is_mask
     note, relative_note_mask_value, octave_mod_offset, is_mask, fully_quantise_mask = resolve_pitch(
       note_value,
@@ -739,20 +743,28 @@ function step.handle(c, current_step)
     local velocity_random_shift = fn.transform_random_value(stock("random_velocity") or 0)
     velocity_value = fn.constrain(0, 127, velocity_value + velocity_random_shift)
 
-    local quantised_fixed_note = stock("quantised_fixed_note")
+    -- An unset stock value falls back to the channel parameter, which the
+    -- resolver may already have read; reuse that read when it did.
+    local quantised_fixed_note, quantised_fixed_note_read = stock("quantised_fixed_note")
 
     if not quantised_fixed_note then
-      quantised_fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
+      quantised_fixed_note = quantised_fixed_note_read
+      if quantised_fixed_note == nil then
+        quantised_fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
+      end
     end
 
     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
       note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number, nil, true)
     end
 
-    local fixed_note = stock("fixed_note")
+    local fixed_note, fixed_note_read = stock("fixed_note")
 
     if not fixed_note then
-      fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
+      fixed_note = fixed_note_read
+      if fixed_note == nil then
+        fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
+      end
     end
 
     if fixed_note and fixed_note > -1 and fixed_note <= 127 then
