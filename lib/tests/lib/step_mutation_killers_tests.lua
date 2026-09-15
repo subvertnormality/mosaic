@@ -1290,3 +1290,35 @@ function test_step_hardening_probability_zero_rejects_root_and_all_four_delayed_
     luaunit.assert_equals(events_of(env, "off"), {})
   end)
 end
+
+-- Characterisation, not manual text: a norns control parameter's mapped value is
+-- reused between step reads while its raw value and mapping inputs are unchanged,
+-- and any change to them is read again.
+function test_step_killer_control_values_are_reread_when_their_mapping_changes()
+  local saved = params
+  local reads = 0
+  local spec = {minval = 0, maxval = 127, warp = "lin", step = 1}
+  local param = {t = 3, controlspec = spec, raw = 0.5, default = -1,
+    get = function(self) reads = reads + 1; return math.floor(self.raw * self.controlspec.maxval) end}
+  local id = fn.get_param_id_from_stock_id("trig_probability", 1)
+  params = {lookup = {[id] = 1}, params = {param}}
+  function params:get(key) return nil end
+  function params:lookup_param(key) return nil end
+  local ok, err = pcall(function()
+    program.init()
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 63)
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 63)
+    luaunit.assert_equals(reads, 1)
+    param.raw = 0.25
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 31)
+    luaunit.assert_equals(reads, 2)
+    spec.maxval = 64
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 16)
+    luaunit.assert_equals(reads, 3)
+    param.controlspec = {minval = 0, maxval = 64, warp = "lin", step = 1}
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 16)
+    luaunit.assert_equals(reads, 4)
+  end)
+  params = saved
+  if not ok then error(err, 0) end
+end
