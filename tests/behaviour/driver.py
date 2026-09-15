@@ -175,7 +175,7 @@ class Driver:
         events=[json.loads(line) for line in (self.out/'native/native-events.jsonl').read_text().splitlines()]
         native=[]
         for event in events:
-            if event['kind']!='input' or event['type'] not in (1,2,3,6,7,8,9,10,11,12,13):continue
+            if event['kind']!='input' or event['type'] not in (1,2,3,6,7,8,9,10,11,12,13,28):continue
             t=event['type'];a=event['args']
             if t==6:
                 native.append(dict(type='grid_connection',connected=bool(a[0])));continue
@@ -183,6 +183,8 @@ class Driver:
                 native.append(dict(type='midi_connection',port=a[0],connected=bool(a[1])));continue
             if t==13:
                 native.append(dict(type='runtime_stall',milliseconds=a[0]));continue
+            if t==28:
+                native.append(dict(type='runtime_lua_load',iterations=a[0]));continue
             if t in (9,10,11):
                 native.append(a[0]);continue
             if t==7:

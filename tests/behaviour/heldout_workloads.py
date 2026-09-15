@@ -70,15 +70,21 @@ def run_window(lane, spec):
     return {'started_ns': started, 'dispatched': rows, 'expected': expected, 'complete': len(rows) == expected}
 
 
-def recovery_oracle(events, channels, step_seconds):
+def recovery_oracle(events, channels, step_seconds, load_offset_seconds=2.0):
     """Overload recovery measured only from the MIDI stream (same clock as the notes).
 
-    The largest gap between consecutive onset groups marks the overload; recovery
-    uses perf_overload's unchanged phase gates after one bar.
+    The largest gap between consecutive onset groups that starts between 0.5 s
+    before and 2.5 s after the scheduled load (relative to the first onset)
+    marks the overload; recovery uses perf_overload's unchanged phase gates
+    after one bar.
     """
     groups = note_groups(events, channels)
     onsets = [min(row['monotonic_ns'] for row in group) for group in groups]
-    gaps = [(onsets[i + 1] - onsets[i], i) for i in range(len(onsets) - 1)]
+    low = onsets[0] + round((load_offset_seconds - 0.5) * 1e9)
+    high = onsets[0] + round((load_offset_seconds + 2.5) * 1e9)
+    gaps = [(onsets[i + 1] - onsets[i], i) for i in range(len(onsets) - 1) if low <= onsets[i] <= high]
+    if not gaps:
+        raise AssertionError(('no onset gap near the scheduled load', load_offset_seconds))
     gap_ns, index = max(gaps)
     step_ns = round(step_seconds * 1e9)
     result = assert_recovery(groups, onsets[index], onsets[index + 1], step_ns=step_ns, one_bar_ns=16 * step_ns, enforce=False)

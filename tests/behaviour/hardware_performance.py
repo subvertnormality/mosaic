@@ -176,7 +176,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             recovery=None
             try:
                 if spec.get('oracle')=='recovery':
-                    recovery=recovery_oracle(state['midi'],spec['channels'],driver.expected_step_seconds)
+                    recovery=recovery_oracle(state['midi'],spec['channels'],driver.expected_step_seconds,spec['loads'][0][0])
                     oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
                             'service':{'p99_ns':0},'skipped_deadlines':0,'gates':dict(recovery['gates']),'passed':recovery['passed'],'note_ons':recovery['groups']*spec['channels'],
                             'messages':len(state['midi']),'steps':recovery['groups'],'slide_cycles_checked':None}

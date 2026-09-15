@@ -74,7 +74,7 @@ def main():
         recovery=None
         try:
             if spec.get('oracle')=='recovery':
-                recovery=recovery_oracle(events,spec['channels'],step)
+                recovery=recovery_oracle(events,spec['channels'],step,spec['loads'][0][0])
                 oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
                         'service':{'p99_ns':0},'skipped_deadlines':0,'gates':dict(recovery['gates']),'passed':recovery['passed'],'note_ons':recovery['groups']*spec['channels'],
                         'messages':len(events),'steps':recovery['groups'],'slide_cycles_checked':None}

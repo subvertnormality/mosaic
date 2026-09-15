@@ -52,9 +52,9 @@ class Tests(unittest.TestCase):
         self.assertTrue(result['complete'])
 
     def test_recovery_from_midi_gap_passes_on_timeline_and_fails_when_phase_is_lost(self):
-        ok = recovery_oracle(groups(48, gap_after=12, gap_steps=6), 4, STEP / 1e9)
+        ok = recovery_oracle(groups(48, gap_after=12, gap_steps=6), 4, STEP / 1e9, 2.0)
         self.assertEqual(round(ok['overload_gap_steps']), 7)
-        lost = recovery_oracle(groups(48, gap_after=12, gap_steps=6, late_ns=40_000_000), 4, STEP / 1e9)
+        lost = recovery_oracle(groups(48, gap_after=12, gap_steps=6, late_ns=40_000_000), 4, STEP / 1e9, 2.0)
         self.assertFalse(lost['passed'])
 
 
