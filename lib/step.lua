@@ -191,7 +191,12 @@ function step.process_params(channel, step)
 
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-      value = read_stock_assigned(param.param_id)
+      -- A locked MIDI step sends its lock; only other paths use the assigned value.
+      if step_trig_lock == nil or param.type ~= "midi" then
+        value = read_stock_assigned(param.param_id)
+      else
+        value = nil
+      end
 
       local next_lock
       
