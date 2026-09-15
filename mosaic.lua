@@ -130,12 +130,19 @@ function init()
   )
 
 
+  -- A screen redraw is native-heavy and cannot be interrupted, so it must not
+  -- start just before a step's notes. Leave that slot to the next cycle.
+  local redraw_step_guard = 0.025
+
   redraw_clock = clock.run(
     function()
       while true do
         clock.sleep(1/30)
         if fn.dirty_screen() then
-          redraw()
+          local remaining = m_clock.seconds_to_next_step()
+          if not remaining or remaining > redraw_step_guard then
+            redraw()
+          end
         end
       end
     end

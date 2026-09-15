@@ -611,6 +611,20 @@ function m_clock.get_clock_lattice()
   return clock_lattice
 end
 
+-- Seconds until the next master step onset, or nil when not playing or unknown.
+-- Screen redraws use this to stay clear of a step's note processing.
+function m_clock.seconds_to_next_step()
+  if not (clock_lattice and clock_lattice.enabled and master_clock and master_clock.enabled) then return nil end
+  local period = master_clock.current_ppqn
+  local phase = master_clock.phase
+  if type(period) ~= "number" or type(phase) ~= "number" or period < 1 then return nil end
+  local tempo = clock.get_tempo()
+  if type(tempo) ~= "number" or tempo <= 0 then return nil end
+  local pulses = period - phase + 1
+  if pulses < 0 then pulses = 0 end
+  return pulses * 60 / (tempo * ppqn)
+end
+
 return m_clock
 
 

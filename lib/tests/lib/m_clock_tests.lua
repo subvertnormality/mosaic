@@ -1640,3 +1640,25 @@ function test_recording_global_wrap_preserves_midi_banks()
   recorder = previous_recorder
   if not ok then error(err) end
 end
+
+-- Characterisation, not manual text: the screen redraw loop asks how long is
+-- left before the next master step so a native-heavy redraw does not start in
+-- front of it. Stopped or unknown state reports nil, and the loop redraws.
+function test_seconds_to_next_step_counts_down_to_the_master_onset()
+  setup()
+  luaunit.assert_nil(m_clock.seconds_to_next_step())
+  clock_setup()
+  local pulse_seconds = 60 / (clock.get_tempo() * 96)
+  local first = m_clock.seconds_to_next_step()
+  local pulses = first / pulse_seconds
+  luaunit.assert_almost_equals(pulses, math.floor(pulses + 0.5), 1e-9)
+  luaunit.assert_true(pulses >= 1 and pulses <= 24)
+  progress_clock_by_pulses(1)
+  luaunit.assert_almost_equals(m_clock.seconds_to_next_step(), first - pulse_seconds, 1e-9)
+  progress_clock_by_pulses(math.floor(pulses + 0.5) - 2)
+  luaunit.assert_almost_equals(m_clock.seconds_to_next_step(), pulse_seconds, 1e-9)
+  progress_clock_by_pulses(1)
+  luaunit.assert_almost_equals(m_clock.seconds_to_next_step(), 24 * pulse_seconds, 1e-9)
+  m_clock.get_clock_lattice():stop()
+  luaunit.assert_nil(m_clock.seconds_to_next_step())
+end
