@@ -29,12 +29,14 @@ def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Driver:
-    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False,cost_profile=None):
+    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False,cost_profile=None,app_root=None,lua_profile_instructions=None):
         if Session is None:raise RuntimeError('MONOME_EMULATOR is required for the local emulator Driver')
         self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches,cost_profile=cost_profile)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
-        code=out/'code';code.mkdir();(code/'mosaic').symlink_to(REPO,target_is_directory=True)
+        # app_root runs another Mosaic tree (e.g. a campaign baseline) with this harness.
+        self.app_root=Path(app_root).resolve() if app_root else REPO
+        code=out/'code';code.mkdir();(code/'mosaic').symlink_to(self.app_root,target_is_directory=True)
         output_profiles=json.loads((REPO/'tests/behaviour/output-profiles.json').read_text())['profiles']
         if profile not in ('base-midi','midi-modulation') and profile not in output_profiles:raise ValueError('Unknown profile')
         if profile in output_profiles and clock_mode!='real-time':raise ValueError('Audio/Crow profiles require real time; DSP and Crow are not controlled-time sources')
@@ -74,7 +76,7 @@ class Driver:
             self.runtime=Session(script=code/'mosaic/mosaic.lua',code_root=code,
                 data=out/'data',data_seeds=([dict(source=str(project_seed),destination='mosaic')] if project_seed else [dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')]),
                 midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,enabled_mods=list(self.mod_revisions),
-                clock_mode=clock_mode,experimental_install=experimental_install,**({'cost_profile':cost_profile} if cost_profile else {}))
+                clock_mode=clock_mode,experimental_install=experimental_install,**({'cost_profile':cost_profile} if cost_profile else {}),**({'lua_profile_instructions':lua_profile_instructions} if lua_profile_instructions else {}))
         self.data_directory=Path(self.runtime.info['data'])/'mosaic'
         self.identity=self.runtime.info['application_identity']
         try:
@@ -85,7 +87,7 @@ class Driver:
                     if required not in supported:raise ValueError('Missing required output capability: '+required)
                 write(self.out/'output-capabilities.json',capability)
             entry=next(f for f in self.identity['files'] if f['path']=='mosaic/mosaic.lua')
-            assert entry['sha256']==digest(REPO/'mosaic.lua'),'Wrong application loaded'
+            assert entry['sha256']==digest(self.app_root/'mosaic.lua'),'Wrong application loaded'
             if clock_mode!='real-time':self.elapse(0)  # Drain native deferred init before user input.
         except Exception:
             self.runtime.close(self.out/'native')
