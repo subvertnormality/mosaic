@@ -521,7 +521,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_two = step_chord_masks and step_chord_masks[2] or channel.chord_two_mask
   local chord_three = step_chord_masks and step_chord_masks[3] or channel.chord_three_mask
   local chord_four = step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
-  local chord_notes = {chord_one, chord_two, chord_three, chord_four}
+  -- A chord slot sounds only with a non-zero note (see strum_descriptor).
+  local has_chord_notes = (chord_one and chord_one ~= 0) or (chord_two and chord_two ~= 0) or
+    (chord_three and chord_three ~= 0) or (chord_four and chord_four ~= 0)
   
   -- Cache params early
   local chord_strum_pattern = stock("chord_strum_pattern")
@@ -530,8 +532,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   -- Strum timing and chord velocity only shape arps, sounding chord notes and a
   -- delayed root; a plain single note never reads them.
   local chord_division, chord_velocity_mod, chord_spread, chord_acceleration = nil, nil, 0, 0
-  if arp_division or (chord_one and chord_one ~= 0) or (chord_two and chord_two ~= 0) or
-      (chord_three and chord_three ~= 0) or (chord_four and chord_four ~= 0) or
+  if arp_division or has_chord_notes or
       (not mute_root and (chord_strum_pattern == 2 or chord_strum_pattern == 4)) then
     local chord_strum = note_divisions[stock("chord_strum")]
     chord_division = chord_strum and chord_strum.value
@@ -562,6 +563,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     chord_spread = divisions.note_division_values[chord_spread]
   end
 
+  -- Plain single notes need no chord table or chord dashboard values.
+  local chord_notes = (arp_division or has_chord_notes) and {chord_one, chord_two, chord_three, chord_four} or nil
+
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, 
               chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func, process_func)
@@ -582,10 +586,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
 
-  local chord_note_dashboard_values = {}
-  chord_note_dashboard_values.chords = {}
+  local chord_note_dashboard_values
 
-  for i = 1, 4 do
+  for i = 1, has_chord_notes and 4 or 0 do
     local chord_number, delay, delay_multiplier = resolve_strum_chord(
       i,
       chord_notes,
@@ -595,6 +598,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       chord_acceleration
     )
     if chord_number then
+      chord_note_dashboard_values = chord_note_dashboard_values or {chords = {}}
       m_clock.delay_action(
         c,
         delay,
