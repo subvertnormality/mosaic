@@ -222,7 +222,9 @@ function Lattice:pulse()
           if not sprocket.shuffle_updated then
             sprocket:begin_cycle()
           end
-          sprocket:prepare_pending_clocks()
+          if sprocket._pending_clocks then
+            sprocket:prepare_pending_clocks()
+          end
           if sprocket._pending_clocks then
             for _, pending_id in ipairs(sprocket.delayed_action_order) do
               local pending = sprocket.delayed_actions[pending_id]
@@ -263,54 +265,56 @@ function Lattice:pulse()
             for _, timing in ipairs(sprocket._pending_clocks) do timing.phase = timing.phase + 1 end
           end
 
-          local to_remove = {}
-    
           -- Equal-deadline actions retain insertion order across Lua processes.
+          -- Most sprockets hold none on most pulses; skip the bookkeeping then.
           local pending_ids = sprocket.delayed_action_order
-          for index = 1, #pending_ids do
-            local id = pending_ids[index]
-            local delayed_action = sprocket.delayed_actions[id]
-            if delayed_action then
-              local timing = delayed_action.timing or sprocket
-              if delayed_action.length == 0 then
-                  sprocket:run_pending_action(delayed_action)
-                  if not self.enabled then return end
-                  table.insert(to_remove, id)
-                  if sprocket.cleanup_delayed_action then
-                    sprocket.cleanup_delayed_action(id)
-                  end
-              elseif delayed_action.length < 1 then
-                  -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
-                  if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
-                      sprocket:run_pending_action(delayed_action)
-                      if not self.enabled then return end
-                      table.insert(to_remove, id)
-                      if sprocket.cleanup_delayed_action then
-                        sprocket.cleanup_delayed_action(id)
-                      end
-                  elseif timing.phase > timing.current_ppqn then
-                      -- Fractions rounding to a full cycle fire at its next onset.
-                      delayed_action.length = 0
-                  end
-              elseif timing.phase > timing.current_ppqn then
-                  delayed_action.length = delayed_action.length - 1
+          if #pending_ids > 0 then
+            local to_remove = {}
+            for index = 1, #pending_ids do
+              local id = pending_ids[index]
+              local delayed_action = sprocket.delayed_actions[id]
+              if delayed_action then
+                local timing = delayed_action.timing or sprocket
+                if delayed_action.length == 0 then
+                    sprocket:run_pending_action(delayed_action)
+                    if not self.enabled then return end
+                    table.insert(to_remove, id)
+                    if sprocket.cleanup_delayed_action then
+                      sprocket.cleanup_delayed_action(id)
+                    end
+                elseif delayed_action.length < 1 then
+                    -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
+                    if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
+                        sprocket:run_pending_action(delayed_action)
+                        if not self.enabled then return end
+                        table.insert(to_remove, id)
+                        if sprocket.cleanup_delayed_action then
+                          sprocket.cleanup_delayed_action(id)
+                        end
+                    elseif timing.phase > timing.current_ppqn then
+                        -- Fractions rounding to a full cycle fire at its next onset.
+                        delayed_action.length = 0
+                    end
+                elseif timing.phase > timing.current_ppqn then
+                    delayed_action.length = delayed_action.length - 1
+                end
               end
             end
-          end
           
-          for _, id in ipairs(to_remove) do
-              sprocket.delayed_actions[id] = nil
-          end
-          -- Compact cancelled/completed entries without sorting or shifting.
-          local retained = 0
-          for index = 1, #pending_ids do
-            local id = pending_ids[index]
-            if sprocket.delayed_actions[id] then
-              retained = retained + 1
-              pending_ids[retained] = id
+            for _, id in ipairs(to_remove) do
+                sprocket.delayed_actions[id] = nil
             end
+            -- Compact cancelled/completed entries without sorting or shifting.
+            local retained = 0
+            for index = 1, #pending_ids do
+              local id = pending_ids[index]
+              if sprocket.delayed_actions[id] then
+                retained = retained + 1
+                pending_ids[retained] = id
+              end
+            end
+            for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
           end
-          for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
 
           if sprocket._pending_clocks then
             for _, timing in ipairs(sprocket._pending_clocks) do
