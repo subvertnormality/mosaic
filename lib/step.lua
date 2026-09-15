@@ -191,7 +191,7 @@ function step.process_params(channel, step)
 
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-      value = params:get(trig_lock_params[i].param_id)
+      value = read_stock_assigned(param.param_id)
 
       local next_lock
       

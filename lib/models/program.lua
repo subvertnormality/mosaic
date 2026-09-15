@@ -83,7 +83,9 @@ function program.set_channel_step_scale_number(c, step_scale_number)
 end
 
 function program.get_channel_step_scale_number(c)
-  return program.get_selected_song_pattern() and program.get_selected_song_pattern().channels[c] and program.get_selected_song_pattern().channels[c].step_scale_number or nil
+  local song_pattern = program.get_selected_song_pattern()
+  local channel = song_pattern and song_pattern.channels[c]
+  return channel and channel.step_scale_number or nil
 end
 
 function program.get()

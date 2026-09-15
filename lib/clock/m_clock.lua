@@ -92,16 +92,13 @@ local function execute_ids(c, ids)
   end
 end
 
+-- The three release lists are never reassigned (init replaces their channel entries).
+local release_id_lists = {delayed_ids_must_execute, destroy_at_note_end_ids, execute_at_note_end_ids}
+
 local function construct_remove_id_from_all_lists_for_channel(chan)
   local c = chan
   return function(id)
-    local lists = {
-      delayed_ids_must_execute,
-      destroy_at_note_end_ids,
-      execute_at_note_end_ids
-    }
-
-    for _, list in ipairs(lists) do
+    for _, list in ipairs(release_id_lists) do
       for i = #list[c], 1, -1 do
         if list[c][i] == id then
           table.remove(list[c], i)
