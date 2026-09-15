@@ -537,13 +537,14 @@ function program.get_scale(s)
   end
 
   -- Backwards compatibility
-  if not program.get_selected_song_pattern().scales then
+  local song_pattern = program.get_selected_song_pattern()
+  if not song_pattern.scales then
     if program_store.scales then
-      program.get_selected_song_pattern().scales = fn.deep_copy(program_store.scales)
+      song_pattern.scales = fn.deep_copy(program_store.scales)
     end
   end
 
-  return program.get_selected_song_pattern().scales[s]
+  return song_pattern.scales[s]
 end
 
 function program.set_scale(s, scale)

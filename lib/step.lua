@@ -509,9 +509,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   end, release_ids)
 end
 
-local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func, stock)
+local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func, stock, channel)
   local c = note_container.channel
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
   
   -- Check if root note should be muted
   local mute_root = stock("mute_root_note") == 1
@@ -577,7 +576,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     note_dashboard_values.note = note_container.note
     note_dashboard_values.velocity = note_container.velocity
     note_dashboard_values.length = note_container.length
-    if c == program.get().selected_channel then
+    if c == selected_channel then
       channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
   end
@@ -790,7 +789,8 @@ function step.handle(c, current_step)
             m_midi:note_on(chord_note, velocity, midi_channel, midi_device)
           end
         end,
-        stock
+        stock,
+        channel
       )
     end
   end
