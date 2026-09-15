@@ -14,6 +14,8 @@ CASES={
     'PERF-003-HW-8':{'workload':'slides','channels':8,'seconds':8},
     'PERF-003-HW-16':{'workload':'slides','channels':16,'seconds':8},
 }
+from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
+CASES.update(HELDOUT_CASES)
 TIMING_THRESHOLDS={'p99_ns':10_000_000,'maximum_ns':50_000_000,'final_phase_ns':20_000_000,'service_p99_deadline_fraction':.5,'service_maximum_deadline_fraction':1.0}
 
 def percentile(values,percent):
@@ -127,6 +129,18 @@ class ThreadSampler:
         if self.error:raise self.error
         return self.stdout
 
+class HardwareLane:
+    """Timed held-out stimuli through the same public controls as the emulator lane."""
+    def __init__(self,runner,driver):self.runner=runner;self.driver=driver
+    def gesture(self,kind,a,b):
+        if kind=='grid':
+            self.driver.action(type='grid',x=a,y=b,state=1);self.driver.action(type='grid',x=a,y=b,state=0)
+        else:self.driver.action(type='enc',n=a,delta=b)
+    def lua_load(self,iterations):
+        maiden=getattr(self.runner.maiden,'maiden',self.runner.maiden)
+        code='load(%s)(%d)'%(json.dumps(LUA_LOAD_SOURCE),int(iterations))
+        maiden._send((code+'\n').encode()+b'\0')
+
 def functional_preflight(runner,driver,trace,spec):
     """Short unmeasured playback proving every channel sounds (and slides) before timing windows."""
     trace.reset();driver.tap(1,8);driver.elapse(2.0);driver.tap(1,8);driver.elapse(.4);state=driver.snapshot()
@@ -144,21 +158,36 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     try:
-        build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1));driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
+        build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
+        if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
+        driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
         preflight=functional_preflight(runner,driver,trace,spec)
         for window in range(1,windows+1):
             recording=None;suffix='' if windows==1 else '-window-%d'%window
             trace.reset();sampler=OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
             if threads:threads.start()
             sampler.start();time.sleep(.25)
-            started_ns=time.monotonic_ns();driver.tap(1,8);driver.elapse(spec['seconds']);driver.tap(1,8);driver.elapse(.3);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+            started_ns=time.monotonic_ns();driver.tap(1,8)
+            stimulus=run_window(HardwareLane(runner,driver),spec) if (spec.get('render') or spec.get('loads')) else None
+            if stimulus is None:driver.elapse(spec['seconds'])
+            driver.tap(1,8);driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
             (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
             if threads:(runner.out/('thread-samples%s.jsonl'%suffix)).write_text(threads.stop())
-            try:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload']);failure=None
+            recovery=None
+            try:
+                if spec.get('oracle')=='recovery':
+                    recovery=recovery_oracle(state['midi'],spec['channels'],driver.expected_step_seconds)
+                    oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
+                            'service':{'p99_ns':0},'skipped_deadlines':0,'gates':dict(recovery['gates']),'passed':recovery['passed'],'note_ons':recovery['groups']*spec['channels'],
+                            'messages':len(state['midi']),'steps':recovery['groups'],'slide_cycles_checked':None}
+                else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'])
+                if stimulus is not None:
+                    oracle['gates']['stimulus_complete']=stimulus['complete'];oracle['passed']=oracle['passed'] and stimulus['complete']
+                failure=None
             except AssertionError as error:
                 if windows==1:raise
                 oracle=None;failure=repr(error)[:2000]
-            results.append({'window':window,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording),'resource_samples':recording['samples'],'runtime_identity':recording['identity'],'passed':bool(oracle and oracle['passed'])})
+            results.append({'window':window,'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording),'resource_samples':recording['samples'],'runtime_identity':recording['identity'],'passed':bool(oracle and oracle['passed'])})
             if window<windows:driver.elapse(2.0)
         first=results[0]
         (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
