@@ -649,10 +649,17 @@ function test_fnx_get_param_id_from_stock_id_repeated_lookups_stay_distinct()
   end
 end
 
-function test_fnx_generate_id_is_a_hex_address_string()
-  local id = fn.generate_id()
-  luaunit.assert_equals(type(id), "string")
-  luaunit.assert_str_matches(id, "0x%x+") -- characterisation (Lua 5.3 on Linux)
+function test_fnx_generate_id_is_a_unique_string()
+  local first = fn.generate_id()
+  local second = fn.generate_id()
+  luaunit.assert_equals(type(first), "string")
+  luaunit.assert_not_equals(first, second)
+  local seen = {}
+  for _ = 1, 1000 do
+    local id = fn.generate_id()
+    luaunit.assert_nil(seen[id])
+    seen[id] = true
+  end
 end
 
 -- random helpers (README.md:789 and README.md:793) ----------------------------

@@ -529,8 +529,13 @@ function fn.get_param_id_from_stock_id(stock_id, channel_number)
   return id
 end
 
+-- Ids are opaque keys for delayed actions; every note creates one, so count
+-- rather than allocating a table and formatting its address.
+local last_generated_id = 0
+
 function fn.generate_id()
-    return tostring({}):match('table: (.+)')
+    last_generated_id = last_generated_id + 1
+    return "id-" .. last_generated_id
 end
 
 
