@@ -1125,3 +1125,70 @@ function test_external_lattice_source_epoch_handoff()
   clock = saved_clock
   if not ok then error(message) end
 end
+
+-- README (MIDI clock): "The grid Play button starts Mosaic locally at the
+-- current clock phase", so later steps keep whole intervals from that phase.
+-- norns counts a coroutine's first sync from the current beat and later syncs
+-- from the previous target: pulses a slow first pulse overran are replayed
+-- before that first sync instead of being dropped from the grid.
+local function internal_pulse_trace(first_pulse_intervals)
+  local saved_clock = clock
+  local interval = 1 / 96
+  local origin = 3 + 0.4 * interval
+  local beat, count, syncs = origin, 0, {}
+  local candidate = l:new({ppqn = 96})
+  candidate.enabled = true
+  candidate.pulse = function()
+    count = count + 1
+    if count == 1 then beat = origin + first_pulse_intervals * interval end
+  end
+  clock = {
+    get_beats = function() return beat end,
+    sync = function(i, offset) return coroutine.yield(i, offset) end
+  }
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    local resumed, i, offset = coroutine.resume(job)
+    luaunit.assert_true(resumed, i)
+    luaunit.assert_equals(i, interval)
+    luaunit.assertAlmostEquals(offset, (origin % interval) - interval, 1e-12)
+    table.insert(syncs, count)
+    beat = origin + (math.floor(first_pulse_intervals) + 1) * interval
+    luaunit.assert_true(coroutine.resume(job))
+    table.insert(syncs, count)
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+  return syncs
+end
+
+function test_internal_lattice_fast_first_pulse_syncs_immediately()
+  luaunit.assert_equals(internal_pulse_trace(0.5), {1, 2})
+end
+
+function test_internal_lattice_first_pulse_overrun_keeps_its_phase()
+  luaunit.assert_equals(internal_pulse_trace(2.5), {3, 4})
+  luaunit.assert_equals(internal_pulse_trace(1), {2, 3})
+end
+
+function test_internal_lattice_stop_during_first_pulse_overrun_replays_nothing()
+  local saved_clock = clock
+  local count = 0
+  local beat = 1
+  local candidate = l:new({ppqn = 96})
+  candidate.enabled = true
+  candidate.pulse = function(self)
+    count = count + 1
+    beat = beat + 3 / 96
+    self.enabled = false
+  end
+  clock = {get_beats = function() return beat end,
+    sync = function(i, offset) return coroutine.yield(i, offset) end}
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    luaunit.assert_true(coroutine.resume(job))
+    luaunit.assert_equals(count, 1)
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+end

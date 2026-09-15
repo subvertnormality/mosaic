@@ -193,10 +193,20 @@ function Lattice.auto_pulse(s)
   end
   -- Preserve the immediate first pulse, then keep full intervals from its phase.
   -- A negative equivalent offset avoids skipping a pulse at a sync boundary.
-  local offset = (clock.get_beats() % interval) - interval
-  while true do
+  local origin = clock.get_beats()
+  local offset = (origin % interval) - interval
+  -- norns counts a coroutine's first sync from the current beat (later syncs
+  -- count from their previous target), so replay whole intervals a slow first
+  -- pulse overran instead of dropping them from the grid. The tolerance stays
+  -- below norns' FLT_EPSILON sync margin so no pulse can run twice.
+  local pulses = 0
+  repeat
     s:pulse()
+    pulses = pulses + 1
+  until not s.enabled or clock.get_beats() + 1e-7 < origin + pulses * interval
+  while true do
     clock.sync(interval, offset)
+    s:pulse()
   end
 end
 
