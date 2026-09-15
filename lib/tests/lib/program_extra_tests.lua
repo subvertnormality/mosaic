@@ -1049,3 +1049,25 @@ function test_program_extra_selected_channel_and_pattern_getters()
   program.get_channel(3, 9).working_pattern.trig_values[1] = 1
   luaunit.assert_true(program.step_has_trig(program.get_channel(3, 9), 1))
 end
+
+-- Characterisation, not manual text: scale 0 generates its chromatic note
+-- arrays once; each call still returns a fresh container with distinct arrays.
+function test_program_extra_get_scale_zero_generates_chromatic_notes_once()
+  program.init()
+  local generate = musicutil.generate_scale
+  local generated = 0
+  musicutil.generate_scale = function(...)
+    generated = generated + 1
+    return generate(...)
+  end
+  local ok, message = pcall(function()
+    local first, second = program.get_scale(0), program.get_scale(0)
+    program.get_scale(0)
+    luaunit.assert_false(rawequal(first, second))
+    luaunit.assert_false(rawequal(first.scale, first.pentatonic_scale))
+    luaunit.assert_equals(first, second)
+    luaunit.assert_true(generated <= 2)
+  end)
+  musicutil.generate_scale = generate
+  if not ok then error(message, 0) end
+end

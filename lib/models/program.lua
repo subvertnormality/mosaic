@@ -512,13 +512,21 @@ function program.clear_masks_for_channel(channel)
   channel.step_chord_masks = {}
 end
 
+-- Scale 0 is quantised on every note when the global scale is off. Generate its
+-- note arrays once; callers copy or read them and never modify them in place.
+local chromatic_scale, chromatic_pentatonic_scale
+
 function program.get_scale(s)
   if s == 0 then
+    if not chromatic_scale then
+      chromatic_scale = musicutil.generate_scale(0, "chromatic", 20)
+      chromatic_pentatonic_scale = musicutil.generate_scale(0, "chromatic", 20)
+    end
     return {
       name = "Chromatic",
       number = 0,
-      scale = musicutil.generate_scale(0, "chromatic", 20),
-      pentatonic_scale = musicutil.generate_scale(0, "chromatic", 20),
+      scale = chromatic_scale,
+      pentatonic_scale = chromatic_pentatonic_scale,
       romans = {},
       root_note = 0,
       chord = 1,
