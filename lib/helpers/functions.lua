@@ -513,6 +513,16 @@ local stock_id_to_param_id = {
   fully_quantise_mask = "midi_device_params_channel_%d_15",
 }
 
+-- Step playback reads the same settings on every note. Read them through the
+-- paramset's own id index, and fall back to the public call when it has none.
+function fn.param_value(id)
+  local lookup = params.lookup
+  local index = lookup and lookup[id]
+  local param = index and params.params[index]
+  if param then return param:get() end
+  return params:get(id)
+end
+
 -- Step playback resolves stock ids for every channel on every step; format each once.
 local stock_param_ids = {}
 

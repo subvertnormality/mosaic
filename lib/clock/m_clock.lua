@@ -307,7 +307,7 @@ function m_clock.init()
         program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
         -- This step's trig and the trigless-lock setting decide every branch below.
         local has_trig = channel.working_pattern.trig_values[current_step] == 1
-        local trigless_locks = not has_trig and params:get("trigless_locks") == 2
+        local trigless_locks = not has_trig and fn.param_value("trigless_locks") == 2
         -- Recording includes empty trigless steps as well as active trigs.
         if has_trig or trigless_locks then
           step.process_recording_params(channel)
@@ -323,7 +323,7 @@ function m_clock.init()
         end
 
         if has_trig or trigless_locks then
-          if params:get("record") == 2 and program.get_selected_channel() == channel then
+          if fn.param_value("record") == 2 and program.get_selected_channel() == channel then
             for i = 1, 10 do
               recorder.record_trig_event(channel_number, current_step, i, song_pattern)
             end
@@ -352,7 +352,7 @@ function m_clock.init()
           last_step = end_trig
         end
 
-        if params:get("record") == 2 and program.get_selected_channel() == channel then
+        if fn.param_value("record") == 2 and program.get_selected_channel() == channel then
           recorder.record_stored_note_mask_events(channel_number, last_step)
           scheduler.debounce(function()
             channel_edit_page_ui.refresh_memory()

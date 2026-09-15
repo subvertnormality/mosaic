@@ -166,7 +166,7 @@ end
 -- lock. Repeating it also restores sound after selection or mute pauses.
 function step.process_recording_params(channel)
   local data = program.get()
-  if channel.mute or params:get("record") ~= 2 or data.selected_channel ~= channel.number then return end
+  if channel.mute or fn.param_value("record") ~= 2 or data.selected_channel ~= channel.number then return end
   for i, param in ipairs(channel.trig_lock_params) do
     local dirty = recorder.trig_lock_is_dirty(channel.number, i)
     if dirty ~= nil and dirty ~= false and param.type == "midi" and param.param_id and
@@ -196,7 +196,7 @@ function step.process_params(channel, step)
     return
   end 
 
-  local recording_selected_channel = params:get("record") == 2 and program_data.selected_channel == channel.number
+  local recording_selected_channel = fn.param_value("record") == 2 and program_data.selected_channel == channel.number
 
   for i, param in ipairs(trig_lock_params) do
     local off = param.off_value == nil and -1 or param.off_value
@@ -738,7 +738,7 @@ function step.handle(c, current_step)
   end
 
   if random_outcome then
-    if params:get("quantiser_trig_lock_hold") == 1 then
+    if fn.param_value("quantiser_trig_lock_hold") == 1 then
       persistent_channel_step_scale_numbers[c] = nil
     end
   end
@@ -752,9 +752,9 @@ function step.handle(c, current_step)
     local random_shift = fn.transform_random_value(stock("bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(stock("twos_random_note") or 0)
                   
-    local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
-                         (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
-                         (params:get("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
+    local do_pentatonic = fn.param_value("all_scales_lock_to_pentatonic") == 2 or 
+                         (fn.param_value("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
+                         (fn.param_value("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
 
     -- Only note masks read the fully-quantise setting (see pitch_resolution).
     local fully_quantise_mask = nil
