@@ -40,8 +40,9 @@ class FakeDriver:
 
 class Tests(unittest.TestCase):
     def test_hardware_slide_parameter_selection_is_front_panel_only(self):
-        calls=[];driver=type('D',(),{'key':lambda self,n:calls.append(('key',n)),'enc':lambda self,n,v:calls.append(('enc',n,v))})()
-        select_fixture_parameter(driver,'CC 1');self.assertEqual(calls,[('key',2),('enc',3,-50),('key',3),('key',2)])
+        calls=[];maiden=type('M',(),{'eval':lambda self,code:calls.append(('query',code)) or '__MOSAIC_PARAM_POSITION__3/9'})()
+        driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})(),'key':lambda self,n:calls.append(('key',n)),'enc':lambda self,n,v:calls.append(('enc',n,v))})()
+        select_fixture_parameter(driver,'CC 1');self.assertEqual(calls[0][0],'query');self.assertIn("p.name=='CC 1'",calls[0][1]);self.assertEqual(calls[1:],[('key',2),('enc',3,-11),('enc',3,2),('key',3),('key',2)])
         with self.assertRaises(ValueError):select_fixture_parameter(driver,'not-fixture-parameter')
     def test_dense_oracle_reuses_complete_order_timing_release_and_skip_gates(self):
         value=dense_oracle(dense_events(2,4),2,1,.25,'dense')
@@ -57,7 +58,7 @@ class Tests(unittest.TestCase):
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
-        build.assert_called_once();self.assertEqual(build.call_args.args[1:3],(1,'dense'));self.assertIs(build.call_args.args[3],select_fixture_parameter);self.assertEqual(trace.resets,1);self.assertEqual((sampler.started,sampler.stopped),(1,1));self.assertTrue(value['passed']);self.assertTrue(value['trace_boundary']['reset_before_sampler_and_play']);self.assertEqual(value['source_identity']['mosaic_revision'],'abc')
+        build.assert_called_once();self.assertEqual(build.call_args.args[1:3],(1,'dense'));self.assertIs(build.call_args.args[3],select_fixture_parameter);self.assertEqual(trace.resets,2);self.assertEqual((sampler.started,sampler.stopped),(1,1));self.assertTrue(value['passed']);self.assertTrue(value['trace_boundary']['reset_before_sampler_and_play']);self.assertEqual(value['source_identity']['mosaic_revision'],'abc')
     def test_raw_performance_evidence_survives_oracle_failure(self):
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.dense_oracle',side_effect=AssertionError('timing oracle failed')),patch('hardware_performance.time.sleep'):

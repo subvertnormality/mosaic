@@ -98,10 +98,19 @@ def dense_oracle(events,channels,seconds,step_seconds,workload):
     intervals=[steps[i+1][0]['monotonic_ns']-steps[i][0]['monotonic_ns'] for i in range(len(steps)-1)];gates={'event_timing':timing['p99_ns']<=TIMING_THRESHOLDS['p99_ns'] and timing['maximum_ns']<=TIMING_THRESHOLDS['maximum_ns'] and abs(errors[-1])<=TIMING_THRESHOLDS['final_phase_ns'],'sustained_service':service_metrics['p99_deadline_fraction']<=TIMING_THRESHOLDS['service_p99_deadline_fraction'],'hard_service':service_metrics['maximum_deadline_fraction']<=TIMING_THRESHOLDS['service_maximum_deadline_fraction']}
     return {'passed':all(gates.values()),'steps':len(steps),'captured_steps':len(captured_steps),'note_ons':len(ons),'note_offs':len(offs),'messages':len(events),'slide_cycles_checked':slide_cycles,'timing':timing,'final_phase_error_ns':errors[-1],'service':service_metrics,'interval_jitter_ns':[value-step_ns for value in intervals],'skipped_deadlines':sum(value>step_ns*1.5 for value in intervals),'gates':gates,'thresholds':TIMING_THRESHOLDS}
 
+def parameter_position(runner,label):
+    """1-based position of a parameter in the selected channel's device parameter list (read-only query)."""
+    import re
+    output=runner.maiden.eval("local c=program.get_selected_channel(); for i,p in ipairs(device_map.get_params(program.get().devices[c.number].device_map)) do if p.name=="+repr(label)+" then print('__MOSAIC_PARAM_POSITION__'..i..'/'..#device_map.get_params(program.get().devices[c.number].device_map)) end end")
+    match=re.search(r'__MOSAIC_PARAM_POSITION__(\d+)/(\d+)',output)
+    if not match:raise RuntimeError('Parameter unavailable in selected device list: '+label)
+    return int(match.group(1)),int(match.group(2))
+
 def select_fixture_parameter(driver,label):
-    """Select the first opt-in fixture parameter using only front-panel gestures."""
+    """Select a fixture parameter with front-panel gestures; its list position is resolved first."""
     if label!='CC 1':raise ValueError('Hardware fixture selector only supports CC 1')
-    driver.key(2);driver.enc(3,-50);driver.key(3);driver.key(2)
+    position,count=parameter_position(driver.runner,label)
+    driver.key(2);driver.enc(3,-(count+2));driver.enc(3,position-1);driver.key(3);driver.key(2)
 
 class ThreadSampler:
     """Run an external per-thread schedstat sampler on the device for one window."""
@@ -118,11 +127,25 @@ class ThreadSampler:
         if self.error:raise self.error
         return self.stdout
 
+def functional_preflight(runner,driver,trace,spec):
+    """Short unmeasured playback proving every channel sounds (and slides) before timing windows."""
+    trace.reset();driver.tap(1,8);driver.elapse(2.0);driver.tap(1,8);driver.elapse(.4);state=driver.snapshot()
+    channels=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==144 and e['bytes'][2]>0 and e['port']==1})
+    cc1=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==1 and e['port']==1})
+    expected=list(range(spec['channels']))
+    value={'note_channels':channels,'cc1_channels':cc1,'messages':len(state['midi']),'passed':channels==expected and (spec['workload']!='slides' or cc1==expected)}
+    if not value['passed']:
+        dump=runner.maiden.eval("for ch=1,16 do local d=program.get().devices[ch]; print('__MOSAIC_CHANNEL__'..ch..'|'..tostring(d and d.device_map)..'|'..tostring(d and d.midi_channel)..'|'..tostring(d and d.midi_device)) end")
+        (runner.out/'preflight-failure.json').write_text(json.dumps({**value,'channel_dump':dump[-6000:],'midi_head':state['midi'][:80]},indent=2)+'\n')
+        raise AssertionError(('Functional preflight failed',value))
+    return value
+
 def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     try:
         build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1));driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
+        preflight=functional_preflight(runner,driver,trace,spec)
         for window in range(1,windows+1):
             recording=None;suffix='' if windows==1 else '-window-%d'%window
             trace.reset();sampler=OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
@@ -138,6 +161,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             results.append({'window':window,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording),'resource_samples':recording['samples'],'runtime_identity':recording['identity'],'passed':bool(oracle and oracle['passed'])})
             if window<windows:driver.elapse(2.0)
         first=results[0]
+        (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
         value={'schema_version':1,'case':case_id,'workload':spec['workload'],'channels':spec['channels'],'requested_window_seconds':spec['seconds'],'host_window_ns':first['host_window_ns'],'tempo_bpm':driver.tempo_bpm,'trace_boundary':{'reset_before_sampler_and_play':True,'midi_driver_boundary':'stock _norns.midi_send pass-through','grid_writes':first['grid_writes'],'grid_refreshes':first['grid_refreshes']},'oracle':first['oracle'],'resources':first['resources'],'resource_samples':first['resource_samples'],'runtime_identity':first['runtime_identity'],'source_identity':source_identity(source),'passed':all(r['passed'] for r in results),'limitations':['Resource figures are physical-device calibration measurements, not emulator-equivalence gates.','Grid activity is observed at the driver boundary; frame revision diagnostics are emulator-only.']}
         if windows>1:value['windows']=results
         return value
