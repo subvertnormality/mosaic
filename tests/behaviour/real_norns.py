@@ -253,11 +253,14 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
   if expected_errors:failure=failure or 'Expected stock queued-resume Lua errors observed: '+str(expected_errors)
   messages=[event['bytes'] for event in (snapshot or {}).get('midi',[])]
   return {'label':label,'passed':failure is None and expected_errors==0 and [176,77,1] in messages and [176,78,1] in messages,'failure':failure,'expected_queued_resume_errors':expected_errors,'midi':messages}
+ EXPECTED_CLOCK_ERROR="bad argument #1 to 'resume' (thread expected"
  def validate_clock_output(self,output,label):
   count=output.count('stack traceback:')
   for match in re.finditer(r'stack traceback:',output):
-   prefix=output[max(0,match.start()-1000):match.start()]
-   if "bad argument #1 to 'resume' (thread expected" not in prefix:
+   # Mods print verbosely between the error line and its traceback, so look at a
+   # wide window on both sides before treating a traceback as a new fault.
+   window=output[max(0,match.start()-4000):match.start()+400]
+   if self.EXPECTED_CLOCK_ERROR not in window:
     raise RuntimeError('Unexpected Lua error while '+label+': '+output[-2000:])
   if count:self.clock_error_drains.append({'phase':label,'expected_queued_resume_errors':count})
   return output
