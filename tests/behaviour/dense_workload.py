@@ -72,16 +72,23 @@ def check_slides(emitted,ons,channels):
     return checked
 
 def check_locks(emitted,ons,channels):
-    """Each channel sends every locks-workload CC once per step, in step order."""
-    checked=0
-    for channel in range(channels):
-        notes=[e for e in ons if e['bytes'][0]==144+channel]
-        for parameter in LOCK_PARAMETERS:
-            sent=[e['bytes'][2] for e in emitted if e['bytes'][:2]==[176+channel,parameter]]
-            expected=lock_values(parameter)
-            assert len(sent)>=len(notes)>=16,('Lock CC count',channel+1,parameter,len(sent),len(notes))
-            assert sent[:len(notes)]==[expected[i%16] for i in range(len(notes))],(channel+1,parameter,sent[:32])
-            checked+=len(notes)
+    """Before each note, a channel has sent every locks-workload CC with that step's value.
+
+    Play first recalls current parameter values (patch recall); later values in the
+    same step replace them, so only the last value sent before each note counts.
+    """
+    pending={channel:{} for channel in range(channels)};counts={channel:0 for channel in range(channels)};checked=0
+    for e in emitted:
+        status=e['bytes'][0]&240;channel=e['bytes'][0]&15
+        if channel>=channels or len(e['bytes'])<3:continue
+        if status==176 and e['bytes'][1] in LOCK_PARAMETERS:pending[channel][e['bytes'][1]]=e['bytes'][2]
+        elif status==144 and e['bytes'][2]>0:
+            step=counts[channel]%16
+            for parameter in LOCK_PARAMETERS:
+                assert pending[channel].get(parameter)==lock_values(parameter)[step],('Lock value',channel+1,parameter,step+1,pending[channel].get(parameter))
+                checked+=1
+            pending[channel]={};counts[channel]+=1
+    assert all(count>=16 for count in counts.values()),('Lock cycle incomplete',counts)
     return checked
 
 def validate_events(emitted,channels,workload):

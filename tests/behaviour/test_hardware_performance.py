@@ -50,6 +50,8 @@ class Tests(unittest.TestCase):
         from dense_workload import LOCK_PARAMETERS,lock_values
         def lock_events(channels,steps=20,corrupt=None):
             rows=[];index=0
+            for channel in range(channels):
+                for parameter in LOCK_PARAMETERS:index+=1;rows.append({'index':index,'monotonic_ns':900_000_000+index,'port':1,'bytes':[176+channel,parameter,lock_values(parameter)[5]]})
             for step in range(steps):
                 for channel in range(channels):
                     for parameter in LOCK_PARAMETERS:
@@ -63,7 +65,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(value['lock_values_checked'],2*4*20);self.assertIsNone(value['slide_cycles_checked'])
         self.assertIsNone(dense_oracle(dense_events(2,4),2,1,.25,'dense')['lock_values_checked'])
         with self.assertRaises(AssertionError):dense_oracle(lock_events(2,corrupt=(8,1,3)),2,4,.25,'locks')
-        with self.assertRaisesRegex(AssertionError,'Lock CC count'):dense_oracle(lock_events(1,steps=8),1,2,.25,'locks')
+        with self.assertRaisesRegex(AssertionError,'Lock cycle incomplete'):dense_oracle(lock_events(1,steps=8),1,2,.25,'locks')
     def test_dense_oracle_reuses_complete_order_timing_release_and_skip_gates(self):
         value=dense_oracle(dense_events(2,4),2,1,.25,'dense')
         self.assertTrue(value['passed']);self.assertEqual((value['steps'],value['note_ons'],value['note_offs']),(4,8,8));self.assertEqual(value['skipped_deadlines'],0);self.assertEqual(value['timing']['maximum_ns'],1000)
