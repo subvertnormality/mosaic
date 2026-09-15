@@ -69,6 +69,28 @@ def pin_factor(emulator, install, profile_parameters, out):
     return dict(session_factors=factors, pinned_lua_factor=pinned, cost_parameters=parameters)
 
 
+def normalise_location(key):
+    """Remove per-session runtime paths so the same function matches across trees."""
+    match = re.search(r'(?:^|/)code/(.+)$', key) or re.search(r'(?:^|/)(norns/lua/.+)$', key)
+    if match:
+        return match.group(1)
+    return re.sub(r'^\.\.\.[^/]*/(?:dust/)?', '', key)
+
+
+def merge_counts(rows):
+    merged = {}
+    for key, value in rows:
+        name = normalise_location(key)
+        merged[name] = merged.get(name, 0) + value
+    return merged
+
+
+def verdict(a, b, minimum=3):
+    if len(a) < minimum or len(b) < minimum:
+        return 'no-claim (fewer than %d repeats)' % minimum
+    return 'improved' if max(b) < min(a) else 'regressed' if min(b) > max(a) else 'no-claim (ranges overlap)'
+
+
 def window_metrics(document):
     rows = [w for w in document.get('windows', []) if w['window'] > 1 and w.get('oracle')]
     if not rows:
@@ -132,8 +154,7 @@ def main():
             b = [r['metrics'][metric] for r in entry['B'] if r['metrics']]
             if len(a) == args.repeats and len(b) == args.repeats:
                 change = (statistics.median(b) / statistics.median(a) - 1) if statistics.median(a) else None
-                verdict = 'improved' if max(b) < min(a) else 'regressed' if min(b) > max(a) else 'no-claim (ranges overlap)'
-                summary[metric] = dict(A=a, B=b, median_change=change, verdict=verdict)
+                summary[metric] = dict(A=a, B=b, median_change=change, verdict=verdict(a, b))
         entry['summary'] = summary
         entry['pass_counts'] = {label: [r['metrics']['passed'] if r['metrics'] else None for r in entry[label]] for label in 'AB'}
         if args.lua_profile:
@@ -145,12 +166,12 @@ def main():
                 path = output / 'lua-profile-windows.json'
                 profiles[label] = json.loads(path.read_text()) if path.exists() else None
             if profiles['A'] and profiles['B']:
-                a_functions, b_functions = dict(profiles['A']['functions']), dict(profiles['B']['functions'])
+                a_functions, b_functions = merge_counts(profiles['A']['functions']), merge_counts(profiles['B']['functions'])
                 keys = sorted(set(a_functions) | set(b_functions), key=lambda k: -max(a_functions.get(k, 0), b_functions.get(k, 0)))[:25]
                 entry['lua_profile'] = dict(instructions_per_sample=args.lua_profile, samples=dict(A=profiles['A']['samples'], B=profiles['B']['samples']),
                                             sample_change=profiles['B']['samples'] / profiles['A']['samples'] - 1 if profiles['A']['samples'] else None,
                                             hot_functions=[dict(function=k, A=a_functions.get(k, 0), B=b_functions.get(k, 0)) for k in keys],
-                                            hot_lines_B=profiles['B']['lines'][:25])
+                                            hot_lines_B=sorted(merge_counts(profiles['B']['lines']).items(), key=lambda kv: -kv[1])[:25])
     report['host_loadavg_after'] = os.getloadavg()
     (out / 'report.json').write_text(json.dumps(report, indent=2) + '\n')
     lines = ['# Performance campaign', '', 'Profile %s %s; pinned Lua factor %.3f (sessions %s).' % (report['profile_id'], report['profile_version'], pin['pinned_lua_factor'], pin['session_factors']),
