@@ -492,13 +492,21 @@ function m_clock.get_destroy_at_note_end_ids_length(channel)
   return #destroy_at_note_end_ids[channel]
 end
 
+-- Every note release is scheduled here; build each channel's clock key once.
+local delay_clock_keys = {}
+
 function m_clock.delay_action(c, length, type, func, before_onset, defer_zero)
   if (length == 0 or length == nil) and not defer_zero then
     func()
     return
   end
 
-  local id = m_clock["channel_" .. c .. "_clock"]:set_delayed_action(length, func, before_onset)
+  local key = delay_clock_keys[c]
+  if not key then
+    key = "channel_" .. c .. "_clock"
+    delay_clock_keys[c] = key
+  end
+  local id = m_clock[key]:set_delayed_action(length, func, before_onset)
 
   if type == "must_execute" then
     table.insert(delayed_ids_must_execute[c], id)
