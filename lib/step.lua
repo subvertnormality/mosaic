@@ -418,8 +418,9 @@ function step.manually_calculate_step_scale_number(c, step)
 end
 
 
-function step.calculate_step_transpose(c)
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
+-- The caller may already hold this channel; it is the same table this fetches.
+function step.calculate_step_transpose(c, known_channel)
+  local channel = known_channel or program.get_channel(program.get().selected_song_pattern, c)
   local current_scale_number = program.get_channel_step_scale_number(c)
   if not current_scale_number then
     current_scale_number = program.get_channel_step_scale_number(17)
@@ -577,8 +578,10 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     return
   end
 
+  -- The dashboard table is shared with the chord callbacks below; build it when
+  -- the root sounds now or a chord can sound.
   local note_dashboard_values = {}
-  
+
   local selected_channel = program.get().selected_channel
   if play_strum_root_now(chord_strum_pattern, mute_root) then
     play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
@@ -721,7 +724,7 @@ function step.handle(c, current_step)
 
   program.set_channel_step_scale_number(c, step.calculate_step_scale_number(c, current_step))
 
-  local transpose = step.calculate_step_transpose(c)
+  local transpose = step.calculate_step_transpose(c, channel)
 
   if random_outcome then
 
