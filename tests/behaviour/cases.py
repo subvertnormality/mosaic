@@ -1246,13 +1246,21 @@ def repeated_pattern_reset_policy(c,verify_pending=False):
         capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(24);capture.extend(c.snapshot())
         c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         reset=song_on and repeat_reset
-        expected=[]
-        for tick in range(3457):
+        def append_scheduled(expected,tick):
             origin=(tick//1536)*1536 if reset else 0
             if (tick-origin)%216==0:
                 step=((tick-origin)//216)%3
                 expected.append((tick,[144,[60,62,64][step],[127,117,107][step]]))
+        minimum=[]
+        for tick in range(3457):append_scheduled(minimum,tick)
         notes=capture.note_ons()
+        if c.clock_mode=='controlled-experimental':assert len(notes)==len(minimum),dict(reset=reset,actual=len(notes),expected=len(minimum))
+        else:assert len(notes)>=len(minimum),dict(reset=reset,actual=len(notes),minimum=len(minimum))
+        # Wall-clock sleep can return after a later musical boundary on a loaded host.
+        # Validate every such onset instead of treating a correct continuation as surplus.
+        expected=list(minimum);tick=3457
+        while len(expected)<len(notes):
+            append_scheduled(expected,tick);tick+=1
         assert [(m['port'],m['bytes']) for m in notes]==[(1,event) for tick,event in expected],dict(reset=reset,actual=[m['bytes'] for m in notes],expected=expected)
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
         errors=[(m[field]-notes[0][field])/1e9-tick/144 for m,(tick,event) in zip(notes,expected)]
