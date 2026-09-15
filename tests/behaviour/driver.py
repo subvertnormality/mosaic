@@ -2,9 +2,11 @@
 import hashlib,json,os,sys,time,uuid,subprocess,shutil
 from pathlib import Path
 REPO=Path(__file__).resolve().parents[2]
-EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve()
-sys.path.insert(0,str(EMULATOR_ROOT/'src'))
-from automation.client import Session
+EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve() if os.environ.get('MONOME_EMULATOR') else None
+if EMULATOR_ROOT:
+    sys.path.insert(0,str(EMULATOR_ROOT/'src'))
+    from automation.client import Session
+else:Session=None
 
 def startup_lock(timeout=300):
     import contextlib,fcntl
@@ -27,11 +29,14 @@ def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Driver:
-    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False):
-        self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches)
+    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False,cost_profile=None,app_root=None,lua_profile_instructions=None):
+        if Session is None:raise RuntimeError('MONOME_EMULATOR is required for the local emulator Driver')
+        self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches,cost_profile=cost_profile)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
-        code=out/'code';code.mkdir();(code/'mosaic').symlink_to(REPO,target_is_directory=True)
+        # app_root runs another Mosaic tree (e.g. a campaign baseline) with this harness.
+        self.app_root=Path(app_root).resolve() if app_root else REPO
+        code=out/'code';code.mkdir();(code/'mosaic').symlink_to(self.app_root,target_is_directory=True)
         output_profiles=json.loads((REPO/'tests/behaviour/output-profiles.json').read_text())['profiles']
         if profile not in ('base-midi','midi-modulation') and profile not in output_profiles:raise ValueError('Unknown profile')
         if profile in output_profiles and clock_mode!='real-time':raise ValueError('Audio/Crow profiles require real time; DSP and Crow are not controlled-time sources')
@@ -71,7 +76,7 @@ class Driver:
             self.runtime=Session(script=code/'mosaic/mosaic.lua',code_root=code,
                 data=out/'data',data_seeds=([dict(source=str(project_seed),destination='mosaic')] if project_seed else [dict(source=str(REPO/'tests/behaviour/config'),destination='mosaic/config',format='json-files')]),
                 midi_config=dict(ports=['Emulator MIDI','Second MIDI','Norns2sinfonion']),random_seed=42,enabled_mods=list(self.mod_revisions),
-                clock_mode=clock_mode,experimental_install=experimental_install)
+                clock_mode=clock_mode,experimental_install=experimental_install,**({'cost_profile':cost_profile} if cost_profile else {}),**({'lua_profile_instructions':lua_profile_instructions} if lua_profile_instructions else {}))
         self.data_directory=Path(self.runtime.info['data'])/'mosaic'
         self.identity=self.runtime.info['application_identity']
         try:
@@ -82,7 +87,7 @@ class Driver:
                     if required not in supported:raise ValueError('Missing required output capability: '+required)
                 write(self.out/'output-capabilities.json',capability)
             entry=next(f for f in self.identity['files'] if f['path']=='mosaic/mosaic.lua')
-            assert entry['sha256']==digest(REPO/'mosaic.lua'),'Wrong application loaded'
+            assert entry['sha256']==digest(self.app_root/'mosaic.lua'),'Wrong application loaded'
             if clock_mode!='real-time':self.elapse(0)  # Drain native deferred init before user input.
         except Exception:
             self.runtime.close(self.out/'native')
@@ -172,7 +177,7 @@ class Driver:
         events=[json.loads(line) for line in (self.out/'native/native-events.jsonl').read_text().splitlines()]
         native=[]
         for event in events:
-            if event['kind']!='input' or event['type'] not in (1,2,3,6,7,8,9,10,11,12,13):continue
+            if event['kind']!='input' or event['type'] not in (1,2,3,6,7,8,9,10,11,12,13,28):continue
             t=event['type'];a=event['args']
             if t==6:
                 native.append(dict(type='grid_connection',connected=bool(a[0])));continue
@@ -180,6 +185,8 @@ class Driver:
                 native.append(dict(type='midi_connection',port=a[0],connected=bool(a[1])));continue
             if t==13:
                 native.append(dict(type='runtime_stall',milliseconds=a[0]));continue
+            if t==28:
+                native.append(dict(type='runtime_lua_load',iterations=a[0]));continue
             if t in (9,10,11):
                 native.append(a[0]);continue
             if t==7:

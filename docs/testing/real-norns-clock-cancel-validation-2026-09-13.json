@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "kind": "stock-clock-cancel-queued-resume",
+  "clock_path": "/home/we/norns/lua/core/clock.lua",
+  "stock_sha256": "60791d2c61655a6bbb853a5e65134d3a45fb294eafc908424abd0a93333da19c",
+  "candidate_sha256": "d9ac8d5c8bc0e46d74f8ca82123dab44b9df57c8203d3dc9f9e443871a67d513",
+  "restored_sha256": "60791d2c61655a6bbb853a5e65134d3a45fb294eafc908424abd0a93333da19c",
+  "stock_restored": true,
+  "phases": [
+    {
+      "label": "stock-baseline",
+      "passed": false,
+      "failure": "Expected stock queued-resume Lua errors observed: 27",
+      "expected_queued_resume_errors": 27,
+      "midi": [
+        [
+          176,
+          77,
+          1
+        ],
+        [
+          176,
+          78,
+          1
+        ]
+      ]
+    },
+    {
+      "label": "temporary-candidate",
+      "passed": true,
+      "failure": null,
+      "expected_queued_resume_errors": 0,
+      "midi": [
+        [
+          176,
+          77,
+          1
+        ],
+        [
+          176,
+          78,
+          1
+        ]
+      ]
+    }
+  ],
+  "expected_error_drains": [
+    {
+      "phase": "load-stock-baseline",
+      "expected_queued_resume_errors": 3
+    },
+    {
+      "phase": "install-stock-baseline-trace",
+      "expected_queued_resume_errors": 1
+    },
+    {
+      "phase": "settle-stock-baseline",
+      "expected_queued_resume_errors": 26
+    }
+  ],
+  "no_reboot_or_jack_restart": true,
+  "active_script": "/home/we/dust/code/mosaic/mosaic.lua",
+  "active_script_reloaded": true,
+  "capabilities": {
+    "alsa_available": true,
+    "grid_input": "synthetic-lua-only-or-physical",
+    "grid_led_readback": "physical-not-available"
+  }
+}
