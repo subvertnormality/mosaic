@@ -27,7 +27,10 @@ class SSH:
  def __init__(self,host,options=()):self.host=host;self.options=list(options)
  def run(self,script):return subprocess.run(['ssh',*self.options,self.host,'bash','-s'],input=script,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,check=True)
  def rsync(self,source,dest):
-  import shlex;shell=' '.join(shlex.quote(x) for x in ['ssh',*self.options]);subprocess.run(['rsync','-a','--delete','-e',shell,str(source)+'/',self.host+':'+dest+'/'],check=True)
+  """Copy a local tree into an existing empty remote directory (tar stream; never deletes)."""
+  import io,shlex;buffer=io.BytesIO()
+  with tarfile.open(fileobj=buffer,mode='w') as archive:archive.add(str(source),arcname='.')
+  subprocess.run(['ssh',*self.options,self.host,'set -eu; test -d '+shlex.quote(dest)+'; test -z "$(ls -A '+shlex.quote(dest)+')"; tar -C '+shlex.quote(dest)+' -xf -'],input=buffer.getvalue(),stdout=subprocess.DEVNULL,check=True)
  def fetch(self,remote,local):local.parent.mkdir(parents=True,exist_ok=True);local.write_bytes(subprocess.check_output(['ssh',*self.options,self.host,'cat',remote]))
  def push(self,local,remote):subprocess.run(['ssh',*self.options,self.host,'tee',remote],input=Path(local).read_bytes(),stdout=subprocess.DEVNULL,check=True)
 class Maiden:
@@ -132,6 +135,13 @@ class OutputTrace:
   if '__TRACE_REMOVED__C' not in output:raise RuntimeError('Stock MIDI binding was not restored')
   self.installed=False
   return output
+class ExpectedClockErrorMaiden:
+ """Record stock queued-resume Lua errors instead of aborting; any other Lua error still raises."""
+ def __init__(self,maiden,runner,label):self.maiden=maiden;self.runner=runner;self.label=label
+ def eval(self,code,allow_lua_error=False):return self.runner.validate_clock_output(self.maiden.eval(code,allow_lua_error=True),self.label)
+ def send(self,code):return self.maiden.send(code)
+ def load(self,path,allow_lua_error=False):return self.runner.validate_clock_output(self.maiden.load(path,allow_lua_error=True),self.label+'-load')
+ def close(self):return self.maiden.close()
 def export_head(repo):
  temporary=tempfile.TemporaryDirectory();root=Path(temporary.name);archive=root/'head.tar';tree=root/'tree';tree.mkdir();subprocess.run(['git','archive','--format=tar','-o',str(archive),'HEAD'],cwd=repo,check=True)
  with tarfile.open(archive) as rows:rows.extractall(tree)
@@ -159,12 +169,14 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
 """);(self.out/'probe.log').write_text(r.stdout);return {'alsa_available':'UNAVAILABLE: aconnect' not in r.stdout,'grid_input':'synthetic-lua-only-or-physical','grid_led_readback':'physical-not-available'}
  def backup(self):
   r=self.remote;self.ssh.run(f"""set -eu; umask 077; mkdir -p {ROOT}; test ! -e {ROOT}/active || {{ echo 'recovery required'; exit 73; }}; mkdir {r}; echo {self.run_id} > {r}/run-id; echo {self.run_id} > {ROOT}/active.tmp; mv {ROOT}/active.tmp {ROOT}/active
-+if test -e /home/we/dust/code/mosaic; then cp -a /home/we/dust/code/mosaic {r}/code-mosaic; touch {r}/had-code; fi
-+if test -e /home/we/dust/data/mosaic; then cp -a /home/we/dust/data/mosaic {r}/data-mosaic; touch {r}/had-data; fi
++if test -e /home/we/dust/code/mosaic; then (cd /home/we/dust/code/mosaic && find . -type f -print0 | sort -z | xargs -0 sha256sum) > {r}/installed-before.sha256; touch {r}/had-code; fi
++if test -e /home/we/dust/data/mosaic; then mv /home/we/dust/data/mosaic {r}/data-mosaic; touch {r}/had-data; fi
 +if test -e /home/we/dust/data/system.state; then cp -a /home/we/dust/data/system.state {r}/system.state; touch {r}/had-state; fi
 +""".replace('\n+','\n'))
  def deploy(self,repo):
-  self.backup();self.maiden.eval('norns.script.clear()');self.ssh.run('rm -rf /home/we/dust/data/mosaic; mkdir -p /home/we/dust/data/mosaic');temp,tree,manifest,rows=export_head(repo);self._export=temp;staging='/home/we/dust/code/.mosaic-'+self.run_id+'.staging';self.ssh.run(f'rm -rf {staging}; mkdir -p {staging}');self.ssh.rsync(tree,staging);self.ssh.push(manifest,self.remote+'/source.sha256');self.ssh.run(f"set -eu; cd {staging}; sha256sum -c {self.remote}/source.sha256; rm -rf /home/we/dust/code/mosaic; mv {staging} /home/we/dust/code/mosaic");(self.out/'source.sha256').write_text(manifest.read_text());(self.out/'load.log').write_text(self.maiden.load('/home/we/dust/code/mosaic/mosaic.lua'));return rows
+  self.maiden.eval('norns.script.clear()');self.backup();self.ssh.run('set -eu; test ! -e /home/we/dust/data/mosaic; mkdir -p /home/we/dust/data/mosaic');temp,tree,manifest,rows=export_head(repo);self._export=temp;staging='/home/we/dust/code/.mosaic-'+self.run_id+'.staging';self.ssh.run(f'set -eu; test ! -e {staging}; mkdir -p {staging}');self.ssh.rsync(tree,staging);self.ssh.push(manifest,self.remote+'/source.sha256');self.ssh.run(f"set -eu; cd {staging}; sha256sum --quiet -c {self.remote}/source.sha256; if test -e /home/we/dust/code/mosaic; then mv /home/we/dust/code/mosaic {self.remote}/code-mosaic; fi; mv {staging} /home/we/dust/code/mosaic; cd /home/we/dust/code/mosaic; find . -type f -print0 | sort -z | xargs -0 sha256sum > {self.remote}/installed-after.sha256");self.ssh.fetch(self.remote+'/installed-after.sha256',self.out/'installed-after.sha256')
+  if self.ssh.run(f'test -e {self.remote}/installed-before.sha256 && cat {self.remote}/installed-before.sha256 || true').stdout:self.ssh.fetch(self.remote+'/installed-before.sha256',self.out/'installed-before.sha256')
+  (self.out/'source.sha256').write_text(manifest.read_text());(self.out/'load.log').write_text(self.maiden.load('/home/we/dust/code/mosaic/mosaic.lua',allow_lua_error=True));return rows
  def resume(self):
   r=self.remote;result=self.ssh.run(f"""set -eu
 +test "$(cat {ROOT}/active)" = {self.run_id}
@@ -187,9 +199,9 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
  def seed_config(self,source):
   source=Path(source).resolve()
   if not source.is_dir():raise ValueError('Missing hardware config source: '+str(source))
-  self.ssh.run('rm -rf /home/we/dust/data/mosaic/config; mkdir -p /home/we/dust/data/mosaic/config')
+  self.ssh.run('set -eu; test ! -e /home/we/dust/data/mosaic/config; mkdir -p /home/we/dust/data/mosaic/config')
   self.ssh.rsync(source,'/home/we/dust/data/mosaic/config')
-  self.maiden.send('norns.script.clear()');time.sleep(2);self.maiden.load('/home/we/dust/code/mosaic/mosaic.lua')
+  self.maiden.send('norns.script.clear()');time.sleep(2);self.maiden.load('/home/we/dust/code/mosaic/mosaic.lua',allow_lua_error=True)
  def device_map_index(self,device_id,channel=1):
   if not re.fullmatch(r'[A-Za-z0-9 _./-]+',device_id):raise ValueError('Unsafe device map ID')
   output=self.maiden.eval("for i,d in ipairs(device_map.get_available_devices_for_channel("+str(int(channel))+")) do if d.id=="+repr(device_id)+" then print('__MOSAIC_DEVICE_MAP_INDEX__'..i) end end")
@@ -277,10 +289,10 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
  def restore(self):
   try:self.maiden.eval('norns.script.clear()')
   except Exception as e:(self.out/'restore-warning.txt').write_text(str(e))
-  r=self.remote;self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; rm -rf /home/we/dust/code/mosaic /home/we/dust/data/mosaic; if test -e {r}/had-code; then mv {r}/code-mosaic /home/we/dust/code/mosaic; fi; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then mv {r}/system.state /home/we/dust/data/system.state; else rm -f /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; rm -rf {r}""");self.reload_saved()
+  r=self.remote;self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; K={ROOT}/kept-{self.run_id}; mkdir $K; if test -e /home/we/dust/data/mosaic; then mv /home/we/dust/data/mosaic $K/test-data; fi; if test -e {r}/code-mosaic; then mv /home/we/dust/code/mosaic $K/tested-code; mv {r}/code-mosaic /home/we/dust/code/mosaic; fi; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then mv {r}/system.state /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; mv {r} $K/recovery""");self.reload_saved()
  def finalize(self):
   self.maiden.eval('norns.script.clear()');r=self.remote
-  self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; rm -rf /home/we/dust/data/mosaic; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then cp -a {r}/system.state /home/we/dust/data/system.state; else rm -f /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; rm -rf {r}""")
+  self.ssh.run(f"""set -eu; test "$(cat {ROOT}/active)" = {self.run_id}; test "$(cat {r}/run-id)" = {self.run_id}; K={ROOT}/kept-{self.run_id}; mkdir $K; if test -e /home/we/dust/data/mosaic; then mv /home/we/dust/data/mosaic $K/test-data; fi; if test -e {r}/had-data; then mv {r}/data-mosaic /home/we/dust/data/mosaic; fi; if test -e {r}/had-state; then cp -a {r}/system.state /home/we/dust/data/system.state; fi; rm -f {ROOT}/active; mv {r} $K/recovery""")
   receipt={'run_id':self.run_id,'kept_deployment':True,'restored_user_data_and_state':True,'filesystem_finalized':True,'reload_complete':False};write(self.out/'finalized.json',receipt)
   self.reload_saved();receipt['reload_complete']=True;write(self.out/'finalized.json',receipt)
 def run_m_pat_001(r,grid_device,device_map_id):
@@ -299,6 +311,10 @@ def main(argv=None):
  p.add_argument('--synthetic-grid',action='store_true');p.add_argument('--grid-device-id',type=int,default=0,help='stock grid.devices ID; 0 auto-discovers the first connected grid')
  p.add_argument('--case',dest='case_id',choices=['M-PAT-001']);p.add_argument('--config-source');p.add_argument('--device-map-id',default='emu-test')
  p.add_argument('--performance-case',choices=sorted(HARDWARE_PERFORMANCE_CASES))
+ p.add_argument('--stock-clock-errors',choices=['fail','record'],default='fail',help='record: count stock queued-resume errors (clock.lua thread expected) instead of aborting')
+ p.add_argument('--tempo',type=float,help='set params clock_tempo for the run; system.state restoration returns the prior value')
+ p.add_argument('--thread-sampler',help='path to a per-thread schedstat sampler (monome-emulator scripts/calibration/thread_sampler.py)')
+ p.add_argument('--measured-windows',type=int,default=1,help='play/stop windows measured on one built project')
  p.add_argument('--clock-cancel-candidate',help='complete temporary replacement for /home/we/norns/lua/core/clock.lua')
  a=p.parse_args(argv)
  if a.command=='applicability':
@@ -325,9 +341,14 @@ def main(argv=None):
   elif a.command in ('workflow','resume','case','performance'):
    source_files=len(r.deploy(Path(a.source).resolve())) if a.command in ('workflow','performance') else r.resume()
    if a.command in ('case','performance'):
+    if a.stock_clock_errors=='record':r.maiden=ExpectedClockErrorMaiden(r.maiden,r,a.command)
     if a.config_source:r.seed_config(a.config_source)
-    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source)
+    if a.tempo:
+     before=r.maiden.eval("print('__TEMPO_BEFORE__'..clock.get_tempo())");r.maiden.eval('params:set("clock_tempo",%r)'%float(a.tempo));time.sleep(.5)
+     after=r.maiden.eval("print('__TEMPO_AFTER__'..clock.get_tempo())");write(out/'tempo.json',{'requested':a.tempo,'before':re.findall(r'__TEMPO_BEFORE__([0-9.]+)',before),'after':re.findall(r'__TEMPO_AFTER__([0-9.]+)',after)})
+    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source,thread_sampler=a.thread_sampler,windows=a.measured_windows)
     r.logs()
+    evidence['clock_error_drains']=r.clock_error_drains;evidence['stock_clock_errors_mode']=a.stock_clock_errors
     evidence.update({'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.source,text=True).strip(),'source_files':source_files,'resumed_after_interruption':True,'capabilities':caps,'campaign_complete':False})
     write(out/'performance.json' if a.command=='performance' else out/'evidence.json',evidence)
    else:

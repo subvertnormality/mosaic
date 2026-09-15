@@ -7,7 +7,11 @@ from hardware_driver import HardwareDriver
 
 CASES={
     'PERF-002-HW-1':{'workload':'dense','channels':1,'seconds':8},
+    'PERF-002-HW-4':{'workload':'dense','channels':4,'seconds':8},
+    'PERF-002-HW-8':{'workload':'dense','channels':8,'seconds':8},
     'PERF-002-HW-16':{'workload':'dense','channels':16,'seconds':8},
+    'PERF-003-HW-1':{'workload':'slides','channels':1,'seconds':8},
+    'PERF-003-HW-8':{'workload':'slides','channels':8,'seconds':8},
     'PERF-003-HW-16':{'workload':'slides','channels':16,'seconds':8},
 }
 TIMING_THRESHOLDS={'p99_ns':10_000_000,'maximum_ns':50_000_000,'final_phase_ns':20_000_000,'service_p99_deadline_fraction':.5,'service_maximum_deadline_fraction':1.0}
@@ -99,15 +103,44 @@ def select_fixture_parameter(driver,label):
     if label!='CC 1':raise ValueError('Hardware fixture selector only supports CC 1')
     driver.key(2);driver.enc(3,-50);driver.key(3);driver.key(2)
 
-def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None):
+class ThreadSampler:
+    """Run an external per-thread schedstat sampler on the device for one window."""
+    def __init__(self,ssh,path,seconds,period=.5):self.ssh=ssh;self.path=Path(path);self.seconds=seconds;self.period=period;self.stdout=None;self.error=None;self.thread=None
+    def start(self):
+        code=self.path.read_bytes().decode()
+        script="python3 - --seconds %s --period %s --system-every 4 <<'CALIBRATION_SAMPLER'\n%s\nCALIBRATION_SAMPLER\n"%(self.seconds,self.period,code)
+        def run():
+            try:self.stdout=self.ssh.run(script).stdout
+            except Exception as error:self.error=error
+        self.thread=threading.Thread(target=run,daemon=True);self.thread.start()
+    def stop(self):
+        self.thread.join(self.seconds+60)
+        if self.error:raise self.error
+        return self.stdout
+
+def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
-    spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None
+    spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     try:
-        build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1));driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16);trace.reset();sampler=sampler or OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5);sampler.start();time.sleep(.25)
-        started_ns=time.monotonic_ns();driver.tap(1,8);driver.elapse(spec['seconds']);driver.tap(1,8);driver.elapse(.3);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
-        (runner.out/'performance-raw.json').write_text(json.dumps(state,indent=2)+'\n')
-        oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'])
-        return {'schema_version':1,'case':case_id,'workload':spec['workload'],'channels':spec['channels'],'requested_window_seconds':spec['seconds'],'host_window_ns':ended_ns-started_ns,'tempo_bpm':driver.tempo_bpm,'trace_boundary':{'reset_before_sampler_and_play':True,'midi_driver_boundary':'stock _norns.midi_send pass-through','grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes']},'oracle':oracle,'resources':resource_metrics(recording),'resource_samples':recording['samples'],'runtime_identity':recording['identity'],'source_identity':source_identity(source),'passed':oracle['passed'],'limitations':['Resource figures are physical-device calibration measurements, not emulator-equivalence gates.','Grid activity is observed at the driver boundary; frame revision diagnostics are emulator-only.']}
+        build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1));driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
+        for window in range(1,windows+1):
+            recording=None;suffix='' if windows==1 else '-window-%d'%window
+            trace.reset();sampler=OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
+            if threads:threads.start()
+            sampler.start();time.sleep(.25)
+            started_ns=time.monotonic_ns();driver.tap(1,8);driver.elapse(spec['seconds']);driver.tap(1,8);driver.elapse(.3);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+            (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
+            if threads:(runner.out/('thread-samples%s.jsonl'%suffix)).write_text(threads.stop())
+            try:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload']);failure=None
+            except AssertionError as error:
+                if windows==1:raise
+                oracle=None;failure=repr(error)[:2000]
+            results.append({'window':window,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording),'resource_samples':recording['samples'],'runtime_identity':recording['identity'],'passed':bool(oracle and oracle['passed'])})
+            if window<windows:driver.elapse(2.0)
+        first=results[0]
+        value={'schema_version':1,'case':case_id,'workload':spec['workload'],'channels':spec['channels'],'requested_window_seconds':spec['seconds'],'host_window_ns':first['host_window_ns'],'tempo_bpm':driver.tempo_bpm,'trace_boundary':{'reset_before_sampler_and_play':True,'midi_driver_boundary':'stock _norns.midi_send pass-through','grid_writes':first['grid_writes'],'grid_refreshes':first['grid_refreshes']},'oracle':first['oracle'],'resources':first['resources'],'resource_samples':first['resource_samples'],'runtime_identity':first['runtime_identity'],'source_identity':source_identity(source),'passed':all(r['passed'] for r in results),'limitations':['Resource figures are physical-device calibration measurements, not emulator-equivalence gates.','Grid activity is observed at the driver boundary; frame revision diagnostics are emulator-only.']}
+        if windows>1:value['windows']=results
+        return value
     finally:
         if sampler and sampler.thread and recording is None:
             try:sampler.stop()

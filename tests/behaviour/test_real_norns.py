@@ -138,7 +138,16 @@ class Tests(unittest.TestCase):
   with self.assertRaises(RuntimeError):r.finalize()
   receipt=__import__('json').loads((r.out/'finalized.json').read_text());self.assertTrue(receipt['filesystem_finalized']);self.assertFalse(receipt['reload_complete'])
  def test_seed_config_is_explicit_isolated_data_and_reloads(self):
-  r,s,m=self.r();source=r.out/'config';source.mkdir();r.seed_config(source);self.assertIn('rm -rf /home/we/dust/data/mosaic/config',s.scripts[-1]);self.assertEqual(s.synced[-1][1],'/home/we/dust/data/mosaic/config');self.assertIn('norns.script.clear()',m.commands[-2]);self.assertIn('load /home/we/dust/code/mosaic/mosaic.lua',m.commands[-1])
+  r,s,m=self.r();source=r.out/'config';source.mkdir();r.seed_config(source);self.assertIn('test ! -e /home/we/dust/data/mosaic/config',s.scripts[-1]);self.assertNotIn('rm -rf',s.scripts[-1]);self.assertEqual(s.synced[-1][1],'/home/we/dust/data/mosaic/config');self.assertIn('norns.script.clear()',m.commands[-2]);self.assertIn('load /home/we/dust/code/mosaic/mosaic.lua',m.commands[-1])
+ def test_tree_transfer_is_tar_into_empty_directory_without_delete(self):
+  t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);root=Path(t.name);(root/'a.lua').write_text('x');ssh=SSH('we@norns',['-S','/tmp/control'])
+  with patch('real_norns.subprocess.run') as run:ssh.rsync(root,'/home/we/dust/code/.staging')
+  argv=run.call_args.args[0];self.assertEqual(argv[:4],['ssh','-S','/tmp/control','we@norns']);self.assertNotIn('--delete',' '.join(argv));self.assertIn('test -z',argv[-1]);self.assertIn('tar -C',argv[-1]);self.assertTrue(run.call_args.kwargs['input'])
+ def test_expected_clock_error_maiden_records_queued_resume_and_rejects_other_errors(self):
+  r,_,_=self.r();inner=type('M',(),{'eval':lambda self,code,allow_lua_error=False:self.out,'out':"lua: /home/we/norns/lua/core/clock.lua:62: bad argument #1 to 'resume' (thread expected)\nstack traceback:\n"})();wrapped=__import__('real_norns').ExpectedClockErrorMaiden(inner,r,'performance')
+  wrapped.eval('x');self.assertEqual(r.clock_error_drains,[{'phase':'performance','expected_queued_resume_errors':1}])
+  inner.out="lua: mosaic.lua:1: attempt to index a nil value\nstack traceback:\n"
+  with self.assertRaises(RuntimeError):wrapped.eval('y')
  def test_ssh_transfers_keep_ssh_control_options(self):
   t=tempfile.TemporaryDirectory();self.addCleanup(t.cleanup);root=Path(t.name);src=root/'in';dst=root/'out';src.write_bytes(b'abc');ssh=SSH('we@norns',['-S','/tmp/control'])
   with patch('real_norns.subprocess.run') as run:ssh.push(src,'/remote/file');self.assertEqual(run.call_args.args[0][:5],['ssh','-S','/tmp/control','we@norns','tee'])
