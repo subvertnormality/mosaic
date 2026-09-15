@@ -75,7 +75,12 @@ def main():
     except Exception as error:
         report['error']=repr(error)[:2000]
     finally:
-        d.finish()
+        try:
+            d.finish()
+        except Exception as error:
+            # A native teardown fault after the windows must be surfaced, but the
+            # exported native events still hold the measurements.
+            report['teardown_error']=repr(error)[:2000]
     rows=[json.loads(line) for line in (out/'native/native-events.jsonl').read_text().splitlines()] if (out/'native/native-events.jsonl').exists() else []
     emitted=[r for r in rows if 'index' in r and 'bytes' in r]
     step=15/90
@@ -107,6 +112,6 @@ def main():
     report['host_loadavg_after']=os.getloadavg();report['passed']=bool(report['windows']) and all(w['passed'] for w in report['windows']) and 'error' not in report
     first=next((w for w in report['windows'] if w['oracle']),None);report['oracle']=first and first['oracle']
     (out/'performance.json').write_text(json.dumps(report,indent=2)+'\n');print(out/'performance.json')
-    return 0 if 'error' not in report else 1
+    return 0 if 'error' not in report and 'teardown_error' not in report else 1
 
 if __name__=='__main__':sys.exit(main())
