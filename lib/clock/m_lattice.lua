@@ -221,6 +221,8 @@ function Lattice:pulse()
         if not self.enabled then return end
         local sprocket = sprockets[ordering[index]]
         if sprocket and sprocket.enabled then
+          -- Set when this pulse removes a delayed action, so the order list is compacted.
+          local removed = false
           if not sprocket.shuffle_updated then
             sprocket:begin_cycle()
           end
@@ -234,6 +236,7 @@ function Lattice:pulse()
               if timing and pending.before_onset and (pending.length == 0 or
                   (pending.length < 1 and timing.phase - 1 >= pending_deadline(timing.current_ppqn, pending.length))) then
                 sprocket.delayed_actions[pending_id] = nil
+                removed = true
                 sprocket:run_pending_action(pending)
                 if not self.enabled then return end
                 if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
@@ -249,6 +252,7 @@ function Lattice:pulse()
               local pending = sprocket.delayed_actions[pending_id]
               if pending and pending.before_onset and pending.length == 0 then
                 sprocket.delayed_actions[pending_id] = nil
+                removed = true
                 sprocket:run_pending_action(pending)
                 if not self.enabled then return end
                 if sprocket.cleanup_delayed_action then
@@ -271,7 +275,7 @@ function Lattice:pulse()
           -- Most sprockets hold none on most pulses; skip the bookkeeping then.
           local pending_ids = sprocket.delayed_action_order
           if #pending_ids > 0 then
-            local to_remove = {}
+            local to_remove
             for index = 1, #pending_ids do
               local id = pending_ids[index]
               local delayed_action = sprocket.delayed_actions[id]
@@ -280,6 +284,7 @@ function Lattice:pulse()
                 if delayed_action.length == 0 then
                     sprocket:run_pending_action(delayed_action)
                     if not self.enabled then return end
+                    to_remove = to_remove or {}
                     table.insert(to_remove, id)
                     if sprocket.cleanup_delayed_action then
                       sprocket.cleanup_delayed_action(id)
@@ -289,6 +294,7 @@ function Lattice:pulse()
                     if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
                         sprocket:run_pending_action(delayed_action)
                         if not self.enabled then return end
+                        to_remove = to_remove or {}
                         table.insert(to_remove, id)
                         if sprocket.cleanup_delayed_action then
                           sprocket.cleanup_delayed_action(id)
@@ -303,19 +309,27 @@ function Lattice:pulse()
               end
             end
           
-            for _, id in ipairs(to_remove) do
-                sprocket.delayed_actions[id] = nil
-            end
-            -- Compact cancelled/completed entries without sorting or shifting.
-            local retained = 0
-            for index = 1, #pending_ids do
-              local id = pending_ids[index]
-              if sprocket.delayed_actions[id] then
-                retained = retained + 1
-                pending_ids[retained] = id
+            if to_remove then
+              removed = true
+              for _, id in ipairs(to_remove) do
+                  sprocket.delayed_actions[id] = nil
               end
             end
-            for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
+            -- Compact cancelled/completed entries without sorting or shifting.
+            -- Every reader skips ids without an action, so compaction waits
+            -- until this pulse removes one; the size bound limits ids left by
+            -- cancellations made outside the pulse.
+            if removed or #pending_ids >= 32 then
+              local retained = 0
+              for index = 1, #pending_ids do
+                local id = pending_ids[index]
+                if sprocket.delayed_actions[id] then
+                  retained = retained + 1
+                  pending_ids[retained] = id
+                end
+              end
+              for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
+            end
           end
 
           if sprocket._pending_clocks then
