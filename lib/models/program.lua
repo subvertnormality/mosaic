@@ -114,6 +114,14 @@ function program.get()
 end
 
 function program.get_selected_channel()
+  -- Draws ask for the selected channel for every grid cell; read initialised
+  -- state directly and use the full accessors otherwise.
+  local store = program_store
+  local song_patterns = store and store.memory and store.song_patterns
+  local song_pattern = song_patterns and store.selected_song_pattern and song_patterns[store.selected_song_pattern]
+  if song_pattern then
+    return song_pattern.channels[store.selected_channel]
+  end
   return program.get_selected_song_pattern().channels[program.get().selected_channel]
 end
 
