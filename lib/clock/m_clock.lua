@@ -305,22 +305,24 @@ function m_clock.init()
         step.sinfonian_sync(current_step)
       else
         program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
+        -- This step's trig and the trigless-lock setting decide every branch below.
+        local has_trig = channel.working_pattern.trig_values[current_step] == 1
+        local trigless_locks = not has_trig and params:get("trigless_locks") == 2
         -- Recording includes empty trigless steps as well as active trigs.
-        if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
+        if has_trig or trigless_locks then
           step.process_recording_params(channel)
         end
         -- Resolve parameters for the same step as the note, including startup.
         -- A single dispatch site prevents duplicate first-step lock messages.
-        if channel.working_pattern.trig_values[current_step] == 1 or
-          (params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, current_step)) then
+        if has_trig or (trigless_locks and program.step_has_param_trig_lock(channel, current_step)) then
           step.process_params(channel, current_step)
         end
 
-        if channel.working_pattern.trig_values[current_step] == 1 then
+        if has_trig then
           step.handle(channel_number, current_step)
         end
 
-        if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
+        if has_trig or trigless_locks then
           if params:get("record") == 2 and program.get_selected_channel() == channel then
             for i = 1, 10 do
               recorder.record_trig_event(channel_number, current_step, i, song_pattern)
