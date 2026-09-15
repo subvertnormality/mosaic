@@ -183,7 +183,11 @@ function step.process_params(channel, step)
 
       local next_lock
       
-      if step_trig_lock then
+      -- The next lock only feeds a slide. Once both slide tables exist, reading
+      -- them has no side effects, so skip the search for locks that cannot slide.
+      local channel_slides, step_slides = channel.trig_lock_slides, channel.step_trig_lock_slides
+      if step_trig_lock and (not channel_slides or not step_slides or channel_slides[i] or
+          (step_slides[step] and step_slides[step][i])) then
         next_lock = program.get_next_trig_lock_step(channel, step, i, off)
       end
 

@@ -5272,3 +5272,58 @@ function test_chord_arp_without_chord_notes_applies_the_velocity_modifier()
   while #midi_note_on_events > 0 do table.insert(events, table.remove(midi_note_on_events, 1)) end
   luaunit.assert_equals(events, {{60, 100, 1, 1}, {60, 110, 1, 1}, {60, 120, 1, 1}, {60, 127, 1, 1}, {60, 127, 1, 1}})
 end
+
+local function cc_locked_channel()
+  setup()
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  params:add("lock_perf_param", {name = "name", val = -1})
+  for s = 1, 8 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get().selected_channel = 1
+  local channel = program.get_selected_channel()
+  local lock = channel.trig_lock_params[1]
+  lock.device_name, lock.type, lock.id, lock.param_id = "test", "midi", 1, "lock_perf_param"
+  lock.cc_msb, lock.cc_min_value, lock.cc_max_value = 2, -1, 127
+  program.add_step_param_trig_lock(1, 1, 10)
+  program.add_step_param_trig_lock(3, 1, 30)
+  program.add_step_param_trig_lock(5, 1, 50)
+  program.get_song_pattern(1).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(1).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+  local searches = 0
+  local search = program.get_next_trig_lock_step
+  program.get_next_trig_lock_step = function(...)
+    searches = searches + 1
+    return search(...)
+  end
+  return function() program.get_next_trig_lock_step = search; return searches end
+end
+
+-- README (Trig Param Locks, Param Slides): a lock sends its value on its step;
+-- only slide-enabled parameters move toward the next lock. Locks without a slide
+-- need no next-lock search once the channel's slide tables exist.
+function test_param_locks_without_slides_skip_the_next_lock_search()
+  local finish = cc_locked_channel()
+  local channel = program.get_selected_channel()
+  channel.trig_lock_slides, channel.step_trig_lock_slides = nil, nil
+  clock_setup()
+  local sent = {}
+  for _ = 1, 6 do
+    progress_clock_by_beats(1)
+    while #midi_cc_events > 0 do
+      local event = table.remove(midi_cc_events, 1)
+      table.insert(sent, {event[1], event[2]})
+    end
+  end
+  local searches = finish()
+  luaunit.assert_equals(sent, {{2, 10}, {2, 30}, {2, 50}})
+  -- The first lock searches as before and creates the slide tables it reads.
+  luaunit.assert_equals(searches, 1)
+  luaunit.assert_equals({channel.trig_lock_slides, channel.step_trig_lock_slides}, {{}, {}})
+end
+
