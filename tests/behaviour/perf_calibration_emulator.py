@@ -29,7 +29,8 @@ def preflight(d,spec):
     events=[e for e in state['midi'] if e.get('index',0)>marker] if state['midi'] and 'index' in state['midi'][0] else state['midi']
     channels=sorted({e['bytes'][0]&15 for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==144 and e['bytes'][2]>0 and e['port']==1})
     cc1=sorted({e['bytes'][0]&15 for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==1 and e['port']==1})
-    expected=list(range(spec['channels']));value=dict(note_channels=channels,cc1_channels=cc1,passed=channels==expected and (spec['workload']!='slides' or cc1==expected))
+    cc4=sorted({e['bytes'][0]&15 for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==4 and e['port']==1})
+    expected=list(range(spec['channels']));value=dict(note_channels=channels,cc1_channels=cc1,cc4_channels=cc4,passed=channels==expected and (spec['workload'] not in ('slides','locks') or cc1==expected) and (spec['workload']!='locks' or cc4==expected))
     if not value['passed']:raise AssertionError(('Functional preflight failed',value))
     return value
 

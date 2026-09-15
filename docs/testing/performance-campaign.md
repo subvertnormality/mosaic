@@ -67,6 +67,7 @@ Cases:
 | PERF-005-HW-1/4 | dense sequencing with UI rendering pressure |
 | PERF-008L-HW-4 | recovery after a fixed Lua overload |
 | MIX-HW-8 | slides, rendering and overload together |
+| PERF-009-HW-4/8/16 | dense sequencing with four CC trig parameters per channel: defaults sent on every step, locks on steps 1 and 9, no slides (not part of profile validation; needs its own device baseline) |
 
 ## 3. Confirm on hardware
 

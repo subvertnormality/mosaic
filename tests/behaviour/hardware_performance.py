@@ -13,6 +13,9 @@ CASES={
     'PERF-003-HW-1':{'workload':'slides','channels':1,'seconds':8},
     'PERF-003-HW-8':{'workload':'slides','channels':8,'seconds':8},
     'PERF-003-HW-16':{'workload':'slides','channels':16,'seconds':8},
+    'PERF-009-HW-4':{'workload':'locks','channels':4,'seconds':8},
+    'PERF-009-HW-8':{'workload':'locks','channels':8,'seconds':8},
+    'PERF-009-HW-16':{'workload':'locks','channels':16,'seconds':8},
 }
 from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
 CASES.update(HELDOUT_CASES)
@@ -93,12 +96,12 @@ def dense_oracle(events,channels,seconds,step_seconds,workload):
     measurement_end_ns=captured_steps[0][0]['monotonic_ns']+round(seconds*1e9)
     steps=[group for group in captured_steps if group[0]['monotonic_ns']<measurement_end_ns]
     expected_steps=int(seconds/step_seconds);assert abs(len(steps)-expected_steps)<=2,('Step count',len(steps),expected_steps,len(captured_steps))
-    slide_cycles=validated['slide_cycles'];origin=steps[0][0]['monotonic_ns'];step_ns=round(step_seconds*1e9)
+    slide_cycles=validated['slide_cycles'];lock_values_checked=validated['lock_values_checked'];origin=steps[0][0]['monotonic_ns'];step_ns=round(step_seconds*1e9)
     errors=[e['monotonic_ns']-(origin+k*step_ns) for k,group in enumerate(steps) for e in group];absolute=[abs(x) for x in errors];service=[group[-1]['monotonic_ns']-group[0]['monotonic_ns'] for group in steps]
     timing={name:percentile(absolute,p) for name,p in (('p50_ns',50),('p95_ns',95),('p99_ns',99),('maximum_ns',100))};service_metrics={name:percentile(service,p) for name,p in (('p50_ns',50),('p95_ns',95),('p99_ns',99),('maximum_ns',100))}
     service_metrics.update(p99_deadline_fraction=service_metrics['p99_ns']/step_ns,maximum_deadline_fraction=service_metrics['maximum_ns']/step_ns)
     intervals=[steps[i+1][0]['monotonic_ns']-steps[i][0]['monotonic_ns'] for i in range(len(steps)-1)];gates={'event_timing':timing['p99_ns']<=TIMING_THRESHOLDS['p99_ns'] and timing['maximum_ns']<=TIMING_THRESHOLDS['maximum_ns'] and abs(errors[-1])<=TIMING_THRESHOLDS['final_phase_ns'],'sustained_service':service_metrics['p99_deadline_fraction']<=TIMING_THRESHOLDS['service_p99_deadline_fraction'],'hard_service':service_metrics['maximum_deadline_fraction']<=TIMING_THRESHOLDS['service_maximum_deadline_fraction']}
-    return {'passed':all(gates.values()),'steps':len(steps),'captured_steps':len(captured_steps),'note_ons':len(ons),'note_offs':len(offs),'messages':len(events),'slide_cycles_checked':slide_cycles,'timing':timing,'final_phase_error_ns':errors[-1],'service':service_metrics,'interval_jitter_ns':[value-step_ns for value in intervals],'skipped_deadlines':sum(value>step_ns*1.5 for value in intervals),'gates':gates,'thresholds':TIMING_THRESHOLDS}
+    return {'passed':all(gates.values()),'steps':len(steps),'captured_steps':len(captured_steps),'note_ons':len(ons),'note_offs':len(offs),'messages':len(events),'slide_cycles_checked':slide_cycles,'lock_values_checked':lock_values_checked,'timing':timing,'final_phase_error_ns':errors[-1],'service':service_metrics,'interval_jitter_ns':[value-step_ns for value in intervals],'skipped_deadlines':sum(value>step_ns*1.5 for value in intervals),'gates':gates,'thresholds':TIMING_THRESHOLDS}
 
 def parameter_position(runner,label):
     """1-based position of a parameter in the selected channel's device parameter list (read-only query)."""
@@ -110,7 +113,7 @@ def parameter_position(runner,label):
 
 def select_fixture_parameter(driver,label):
     """Select a fixture parameter with front-panel gestures; its list position is resolved first."""
-    if label!='CC 1':raise ValueError('Hardware fixture selector only supports CC 1')
+    if label not in ('CC 1','CC 2','CC 3','CC 4'):raise ValueError('Hardware fixture selector only supports CC 1-4')
     position,count=parameter_position(driver.runner,label)
     driver.key(2);driver.enc(3,-(count+2));driver.enc(3,position-1);driver.key(3);driver.key(2)
 
@@ -147,7 +150,8 @@ def functional_preflight(runner,driver,trace,spec):
     channels=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==144 and e['bytes'][2]>0 and e['port']==1})
     cc1=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==1 and e['port']==1})
     expected=list(range(spec['channels']))
-    value={'note_channels':channels,'cc1_channels':cc1,'messages':len(state['midi']),'passed':channels==expected and (spec['workload']!='slides' or cc1==expected)}
+    cc4=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==4 and e['port']==1})
+    value={'note_channels':channels,'cc1_channels':cc1,'cc4_channels':cc4,'messages':len(state['midi']),'passed':channels==expected and (spec['workload'] not in ('slides','locks') or cc1==expected) and (spec['workload']!='locks' or cc4==expected)}
     if not value['passed']:
         dump=runner.maiden.eval("for ch=1,16 do local d=program.get().devices[ch]; print('__MOSAIC_CHANNEL__'..ch..'|'..tostring(d and d.device_map)..'|'..tostring(d and d.midi_channel)..'|'..tostring(d and d.midi_device)) end")
         (runner.out/'preflight-failure.json').write_text(json.dumps({**value,'channel_dump':dump[-6000:],'midi_head':state['midi'][:80]},indent=2)+'\n')
