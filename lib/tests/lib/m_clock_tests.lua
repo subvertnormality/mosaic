@@ -1646,6 +1646,8 @@ end
 -- front of it. Stopped or unknown state reports nil, and the loop redraws.
 function test_seconds_to_next_step_counts_down_to_the_master_onset()
   setup()
+  m_clock.init()
+  m_clock.get_clock_lattice():stop()
   luaunit.assert_nil(m_clock.seconds_to_next_step())
   clock_setup()
   local pulse_seconds = 60 / (clock.get_tempo() * 96)
