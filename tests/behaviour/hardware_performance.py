@@ -142,12 +142,16 @@ class TimingTrace:
              "local function wrap(tbl,key,kind) local orig=tbl and tbl[key]; if type(orig)~='function' then return end; T.orig[#T.orig+1]={tbl,key,orig}; "
              "tbl[key]=function(...) local s=now(); orig(...); local d=now()-s; if d>0.001 and T.n<T.limit then local a=...; T.n=T.n+1; T.events[T.n]={kind,s,d,type(a)=='number' and a or 0,collectgarbage('count')} end end end; "
              "wrap(_G,'redraw','redraw'); wrap(_norns,'screen_update','screen_update'); wrap(m_grid,'grid_redraw','grid_redraw'); wrap(scheduler,'update','scheduler'); wrap(clock,'resume','clock_resume'); "
+             "if _MOSAIC_TT_NATIVE then T.native={text=0,font_size=0,calls=0}; local function total(key,field) local orig=_norns[key]; if type(orig)~='function' then return end; T.orig[#T.orig+1]={_norns,key,orig}; "
+             "_norns[key]=function(...) local s=now(); orig(...); local n=T.native; n[field]=n[field]+now()-s; n.calls=n.calls+1 end end; total('screen_text','text'); total('screen_font_size','font_size'); "
+             "local draw=_G.redraw; _G.redraw=function(...) local n=T.native; local t0,f0,c0=n.text,n.font_size,n.calls; local s=now(); draw(...); local d=now()-s; "
+             "if d>0.001 and T.n<T.limit then T.n=T.n+1; T.events[T.n]={'redraw_native',s,n.text-t0,math.floor((n.font_size-f0)*1e6),n.calls-c0} end end; T.orig[#T.orig+1]={_G,'redraw',draw} end; "
              "_MOSAIC_TT=T; print('__TT_INSTALLED__'..#T.orig) end")
     REMOVE=("if _MOSAIC_TT then for i=#_MOSAIC_TT.orig,1,-1 do local o=_MOSAIC_TT.orig[i]; o[1][o[2]]=o[3] end; _MOSAIC_TT=nil end; print('__TT_REMOVED__')")
-    def __init__(self,maiden):self.maiden=maiden;self.installed=False
+    def __init__(self,maiden,native=False):self.maiden=maiden;self.installed=False;self.native=native
     def install(self):
         import re
-        output=self.maiden.eval(self.INSTALL,allow_lua_error=True);match=re.search(r'__TT_INSTALLED__(\d+)',output)
+        output=self.maiden.eval(('_MOSAIC_TT_NATIVE=true; ' if self.native else '_MOSAIC_TT_NATIVE=nil; ')+self.INSTALL,allow_lua_error=True);match=re.search(r'__TT_INSTALLED__(\d+)',output)
         if not match:raise RuntimeError('Timing trace not installed: '+output[-1000:])
         self.installed=True;return int(match.group(1))
     def reset(self):return self.maiden.eval('if _MOSAIC_TT then _MOSAIC_TT.events={}; _MOSAIC_TT.n=0 end',allow_lua_error=True)
@@ -190,7 +194,7 @@ def functional_preflight(runner,driver,trace,spec):
         raise AssertionError(('Functional preflight failed',value))
     return value
 
-def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True):
+def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     try:
@@ -198,7 +202,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
         driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
         preflight=functional_preflight(runner,driver,trace,spec)
-        timings=TimingTrace(runner.maiden) if timing_trace else None
+        timings=TimingTrace(runner.maiden,native=native_screen_trace) if timing_trace else None
         if timings:timings.install()
         for window in range(1,windows+1):
             recording=None;suffix='' if windows==1 else '-window-%d'%window
