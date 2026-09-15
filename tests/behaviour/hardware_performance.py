@@ -132,6 +132,38 @@ class ThreadSampler:
         if self.error:raise self.error
         return self.stdout
 
+class TimingTrace:
+    """Diagnostic: record Lua-thread calls longer than 1 ms (redraws, display update, grid redraw, scheduler, clock resumes).
+
+    Wrappers allocate only when a call exceeds the threshold, so observation adds little load.
+    Timestamps use util.time(), the same clock as the MIDI trace.
+    """
+    INSTALL=("if _MOSAIC_TT then error('timing trace already installed') end; do local T={events={},n=0,limit=4000,orig={}}; local now=util.time; "
+             "local function wrap(tbl,key,kind) local orig=tbl and tbl[key]; if type(orig)~='function' then return end; T.orig[#T.orig+1]={tbl,key,orig}; "
+             "tbl[key]=function(a,...) local s=now(); orig(a,...); local d=now()-s; if d>0.001 and T.n<T.limit then T.n=T.n+1; T.events[T.n]={kind,s,d,type(a)=='number' and a or 0,collectgarbage('count')} end end end; "
+             "wrap(_G,'redraw','redraw'); wrap(_norns,'screen_update','screen_update'); wrap(m_grid,'grid_redraw','grid_redraw'); wrap(scheduler,'update','scheduler'); wrap(clock,'resume','clock_resume'); "
+             "_MOSAIC_TT=T; print('__TT_INSTALLED__'..#T.orig) end")
+    REMOVE=("if _MOSAIC_TT then for i=#_MOSAIC_TT.orig,1,-1 do local o=_MOSAIC_TT.orig[i]; o[1][o[2]]=o[3] end; _MOSAIC_TT=nil end; print('__TT_REMOVED__')")
+    def __init__(self,maiden):self.maiden=maiden;self.installed=False
+    def install(self):
+        import re
+        output=self.maiden.eval(self.INSTALL,allow_lua_error=True);match=re.search(r'__TT_INSTALLED__(\d+)',output)
+        if not match:raise RuntimeError('Timing trace not installed: '+output[-1000:])
+        self.installed=True;return int(match.group(1))
+    def reset(self):return self.maiden.eval('if _MOSAIC_TT then _MOSAIC_TT.events={}; _MOSAIC_TT.n=0 end',allow_lua_error=True)
+    def snapshot(self):
+        import re
+        output=self.maiden.eval("for i=1,_MOSAIC_TT.n do local e=_MOSAIC_TT.events[i]; print(string.format('__TT__%s|%.6f|%.6f|%d|%.0f',e[1],e[2],e[3],e[4],e[5])) end",allow_lua_error=True)
+        return [{'kind':k,'start_seconds':float(a),'duration_ms':float(d)*1000,'argument':int(x),'lua_kb':float(kb)} for k,a,d,x,kb in re.findall(r'__TT__(\w+)\|([0-9.]+)\|([0-9.]+)\|(-?\d+)\|([0-9.]+)',output)]
+    def remove(self):
+        if self.installed:self.maiden.eval(self.REMOVE,allow_lua_error=True);self.installed=False
+
+class NoResourceSampler:
+    """Diagnostic: run without the on-device resource sampler."""
+    thread=None
+    def start(self):pass
+    def stop(self):return None
+
 class HardwareLane:
     """Timed held-out stimuli through the same public controls as the emulator lane."""
     def __init__(self,runner,driver):self.runner=runner;self.driver=driver
@@ -158,7 +190,7 @@ def functional_preflight(runner,driver,trace,spec):
         raise AssertionError(('Functional preflight failed',value))
     return value
 
-def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1):
+def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     try:
@@ -166,15 +198,18 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
         driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
         preflight=functional_preflight(runner,driver,trace,spec)
+        timings=TimingTrace(runner.maiden) if timing_trace else None
+        if timings:timings.install()
         for window in range(1,windows+1):
             recording=None;suffix='' if windows==1 else '-window-%d'%window
-            trace.reset();sampler=OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
+            trace.reset();sampler=(OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler()) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
             if threads:threads.start()
             sampler.start();time.sleep(.25)
             started_ns=time.monotonic_ns();driver.tap(1,8)
             stimulus=run_window(HardwareLane(runner,driver),spec) if (spec.get('render') or spec.get('loads')) else None
             if stimulus is None:driver.elapse(spec['seconds'])
             driver.tap(1,8);driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+            if timings:state['lua_timings']=timings.snapshot();timings.reset()
             (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
             if threads:(runner.out/('thread-samples%s.jsonl'%suffix)).write_text(threads.stop())
             recovery=None
@@ -191,7 +226,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             except AssertionError as error:
                 if windows==1:raise
                 oracle=None;failure=repr(error)[:2000]
-            results.append({'window':window,'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording),'resource_samples':recording['samples'],'runtime_identity':recording['identity'],'passed':bool(oracle and oracle['passed'])})
+            results.append({'window':window,'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording) if recording else None,'resource_samples':recording['samples'] if recording else None,'runtime_identity':recording['identity'] if recording else None,'lua_timings_recorded':len(state.get('lua_timings',[])) if timing_trace else None,'passed':bool(oracle and oracle['passed'])})
             if window<windows:driver.elapse(2.0)
         first=results[0]
         (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
@@ -201,5 +236,8 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
     finally:
         if sampler and sampler.thread and recording is None:
             try:sampler.stop()
+            except Exception:pass
+        if timing_trace and 'timings' in locals() and timings:
+            try:timings.remove()
             except Exception:pass
         driver.finish()
