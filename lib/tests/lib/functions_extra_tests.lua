@@ -638,6 +638,17 @@ function test_fnx_get_param_id_from_stock_id_all_fourteen_mappings()
   luaunit.assert_str_contains(error_of(fn.get_param_id_from_stock_id, "unknown", 1), "bad argument #1 to 'format'")
 end
 
+-- Characterisation, not manual text: repeated and interleaved lookups keep
+-- each stock kind and channel distinct; an unknown kind still raises each time.
+function test_fnx_get_param_id_from_stock_id_repeated_lookups_stay_distinct()
+  for _ = 1, 2 do
+    luaunit.assert_equals(fn.get_param_id_from_stock_id("chord_arp", 16), "midi_device_params_channel_16_9")
+    luaunit.assert_equals(fn.get_param_id_from_stock_id("chord_arp", 3), "midi_device_params_channel_3_9")
+    luaunit.assert_equals(fn.get_param_id_from_stock_id("fixed_note", 16), "midi_device_params_channel_16_2")
+    luaunit.assert_str_contains(error_of(fn.get_param_id_from_stock_id, "unknown", 1), "bad argument #1 to 'format'")
+  end
+end
+
 function test_fnx_generate_id_is_a_hex_address_string()
   local id = fn.generate_id()
   luaunit.assert_equals(type(id), "string")

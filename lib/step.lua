@@ -83,33 +83,27 @@ function step.process_stock_params(c, current_step, kind)
     read_stock_step_lock, read_stock_assigned, read_stock_fallback, channel, current_step)
 end
 
+-- Stock kinds resolved by step handling rather than sent as parameter locks.
+local skipped_lock_params = {
+  trig_probability = true,
+  quantised_fixed_note = true,
+  bipolar_random_note = true,
+  twos_random_note = true,
+  random_velocity = true,
+  chord_strum = true,
+  chord_arp = true,
+  chord_velocity_modifier = true,
+  chord_spread = true,
+  chord_acceleration = true,
+  chord_strum_pattern = true,
+  fixed_note = true,
+  mute_root_note = true,
+  fully_quantise_mask = true
+}
+
 local function should_process_param(param)
-  local skip_params = {
-      "trig_probability",
-      "quantised_fixed_note", 
-      "bipolar_random_note",
-      "twos_random_note",
-      "random_velocity",
-      "chord_strum",
-      "chord_arp",
-      "chord_velocity_modifier",
-      "chord_spread",
-      "chord_acceleration",
-      "chord_strum_pattern",
-      "fixed_note",
-      "mute_root_note",
-      "fully_quantise_mask"
-  }
-  
   if not param then return false end
-  
-  for _, skip_param in ipairs(skip_params) do
-      if param.id == skip_param then 
-          return false
-      end
-  end
-  
-  return true
+  return not skipped_lock_params[param.id]
 end
 
 local function process_midi_param(param, step_trig_lock, midi_channel, midi_device, mode)
@@ -169,6 +163,8 @@ function step.process_params(channel, step)
     return
   end 
 
+  local recording_selected_channel = params:get("record") == 2 and program_data.selected_channel == channel.number
+
   for i, param in ipairs(trig_lock_params) do
     local off = param.off_value == nil and -1 or param.off_value
 
@@ -177,8 +173,7 @@ function step.process_params(channel, step)
         goto continue
       end
 
-      if params:get("record") == 2 and program_data.selected_channel == channel.number and
-        recorder.trig_lock_is_dirty(channel.number, i) then
+      if recording_selected_channel and recorder.trig_lock_is_dirty(channel.number, i) then
         goto continue
       end
 
@@ -200,13 +195,8 @@ function step.process_params(channel, step)
           nrpn_mode = param.nrpn_lsb_mode or nrpn_codec.stored_mode(program_data, channel.number, param, device)
         end
 
-        local param_id = param.param_id
-        local p_value = nil
-        local p = nil
-        if param_id then
-          p = params:lookup_param(param_id)
-          p_value = params:get(param_id)
-        end
+        -- The assigned value was read above; param_id is always present here.
+        local p_value = value
 
         if param.channel then
           midi_channel = param.channel
@@ -503,12 +493,12 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   end, release_ids)
 end
 
-local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func)
+local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func, stock)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   
   -- Check if root note should be muted
-  local mute_root = step.process_stock_params(c, current_step, "mute_root_note") == 1
+  local mute_root = stock("mute_root_note") == 1
 
   -- Cache frequently accessed values
   local step_chord_masks = channel.step_chord_masks[current_step]
@@ -519,14 +509,14 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_notes = {chord_one, chord_two, chord_three, chord_four}
   
   -- Cache params early
-  local chord_division = note_divisions[step.process_stock_params(c, current_step, "chord_strum")] 
-                        and note_divisions[step.process_stock_params(c, current_step, "chord_strum")].value
-  local chord_velocity_mod = step.process_stock_params(c, current_step, "chord_velocity_modifier")
-  local chord_strum_pattern = step.process_stock_params(c, current_step, "chord_strum_pattern")
-  local chord_spread = step.process_stock_params(c, current_step, "chord_spread") or 0
-  local chord_acceleration = step.process_stock_params(c, current_step, "chord_acceleration") or 0
-  local arp_division = note_divisions[step.process_stock_params(c, current_step, "chord_arp")] 
-                      and note_divisions[step.process_stock_params(c, current_step, "chord_arp")].value
+  local chord_strum = note_divisions[stock("chord_strum")]
+  local chord_division = chord_strum and chord_strum.value
+  local chord_velocity_mod = stock("chord_velocity_modifier")
+  local chord_strum_pattern = stock("chord_strum_pattern")
+  local chord_spread = stock("chord_spread") or 0
+  local chord_acceleration = stock("chord_acceleration") or 0
+  local chord_arp = note_divisions[stock("chord_arp")]
+  local arp_division = chord_arp and chord_arp.value
   
   -- Cache note processing values
   local note_value = unprocessed_note_container.note_value
@@ -681,7 +671,11 @@ function step.handle(c, current_step)
     persistent_global_step_scale_number = nil
   end
 
-  local trig_prob = (step.process_stock_params(c, current_step, "trig_probability") == -1) and 100 or (step.process_stock_params(c, current_step, "trig_probability") or 100)
+  -- One assignment scan answers every stock kind this step reads.
+  local stock = stock_parameter.resolver(channel.trig_lock_params, read_stock_step_lock, read_stock_assigned,
+    read_stock_fallback, channel, current_step)
+  local trig_probability = stock("trig_probability")
+  local trig_prob = (trig_probability == -1) and 100 or (trig_probability or 100)
 
   local random_outcome = true
   if trig_prob < 100 then
@@ -700,14 +694,14 @@ function step.handle(c, current_step)
 
   if random_outcome then
 
-    local random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
-                         fn.transform_twos_random_value(step.process_stock_params(c, current_step, "twos_random_note") or 0)
+    local random_shift = fn.transform_random_value(stock("bipolar_random_note") or 0) +
+                         fn.transform_twos_random_value(stock("twos_random_note") or 0)
                   
     local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
                          (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                          (params:get("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
 
-    local fully_quantise_mask = step.process_stock_params(c, current_step, "fully_quantise_mask")
+    local fully_quantise_mask = stock("fully_quantise_mask")
     local note, relative_note_mask_value, octave_mod_offset, is_mask
     note, relative_note_mask_value, octave_mod_offset, is_mask, fully_quantise_mask = resolve_pitch(
       note_value,
@@ -720,10 +714,10 @@ function step.handle(c, current_step)
       fully_quantise_mask
     )
 
-    local velocity_random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "random_velocity") or 0)
+    local velocity_random_shift = fn.transform_random_value(stock("random_velocity") or 0)
     velocity_value = fn.constrain(0, 127, velocity_value + velocity_random_shift)
 
-    local quantised_fixed_note = step.process_stock_params(c, current_step, "quantised_fixed_note")
+    local quantised_fixed_note = stock("quantised_fixed_note")
 
     if not quantised_fixed_note then
       quantised_fixed_note = params:get(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
@@ -733,7 +727,7 @@ function step.handle(c, current_step)
       note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number, nil, true)
     end
 
-    local fixed_note = step.process_stock_params(c, current_step, "fixed_note")
+    local fixed_note = stock("fixed_note")
 
     if not fixed_note then
       fixed_note = params:get(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
@@ -772,7 +766,8 @@ function step.handle(c, current_step)
           elseif m_midi then
             m_midi:note_on(chord_note, velocity, midi_channel, midi_device)
           end
-        end
+        end,
+        stock
       )
     end
   end

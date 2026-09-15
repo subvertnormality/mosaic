@@ -513,8 +513,20 @@ local stock_id_to_param_id = {
   fully_quantise_mask = "midi_device_params_channel_%d_15",
 }
 
+-- Step playback resolves stock ids for every channel on every step; format each once.
+local stock_param_ids = {}
+
 function fn.get_param_id_from_stock_id(stock_id, channel_number)
-  return string.format(stock_id_to_param_id[stock_id], channel_number)
+  local ids = stock_param_ids[stock_id]
+  local id = ids and ids[channel_number]
+  if id then return id end
+  id = string.format(stock_id_to_param_id[stock_id], channel_number)
+  if not ids then
+    ids = {}
+    stock_param_ids[stock_id] = ids
+  end
+  ids[channel_number] = id
+  return id
 end
 
 function fn.generate_id()
