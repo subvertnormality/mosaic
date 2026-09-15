@@ -146,8 +146,8 @@ class TimingTrace:
              "_norns[key]=function(...) local s=now(); orig(...); local n=T.native; n[field]=n[field]+now()-s; n.calls=n.calls+1 end end; total('screen_text','text'); total('screen_font_size','font_size'); "
              "local draw=_G.redraw; _G.redraw=function(...) local n=T.native; local t0,f0,c0=n.text,n.font_size,n.calls; local s=now(); draw(...); local d=now()-s; "
              "if d>0.001 and T.n<T.limit then T.n=T.n+1; T.events[T.n]={'redraw_native',s,n.text-t0,math.floor((n.font_size-f0)*1e6),n.calls-c0} end end; T.orig[#T.orig+1]={_G,'redraw',draw} end; "
-             "if _MOSAIC_TT_COUNT then local draw=_G.redraw; _G.redraw=function(...) local c=0; local s=now(); debug.sethook(function() c=c+1 end,'',100); draw(...); debug.sethook(); local d=now()-s; "
-             "if T.n<T.limit then T.n=T.n+1; T.events[T.n]={'redraw_count',s,d,c,(program and program.get_blink_state and (program.get_blink_state() and 1 or 0) or -1)} end end; T.orig[#T.orig+1]={_G,'redraw',draw} end; "
+             "if _MOSAIC_TT_COUNT then local draw=_G.redraw; _G.redraw=function(...) local c=0; local cpu=os.clock(); local s=now(); debug.sethook(function() c=c+1 end,'',100); draw(...); debug.sethook(); local d=now()-s; "
+             "if T.n<T.limit then T.n=T.n+1; T.events[T.n]={'redraw_count',s,d,c,math.floor((os.clock()-cpu)*1e6)} end end; T.orig[#T.orig+1]={_G,'redraw',draw} end; "
              "_MOSAIC_TT=T; print('__TT_INSTALLED__'..#T.orig) end")
     REMOVE=("if _MOSAIC_TT then for i=#_MOSAIC_TT.orig,1,-1 do local o=_MOSAIC_TT.orig[i]; o[1][o[2]]=o[3] end; _MOSAIC_TT=nil end; print('__TT_REMOVED__')")
     def __init__(self,maiden,native=False,count=False):self.maiden=maiden;self.installed=False;self.native=native;self.count=count
