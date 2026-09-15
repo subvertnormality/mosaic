@@ -59,7 +59,17 @@ local function read_stock_step_lock(i, channel, current_step)
   return program.get_step_param_trig_lock(channel, current_step, i)
 end
 
+-- Per-note stock reads go straight through the paramset's id index. An id the
+-- index does not hold falls back to the public calls, which behave as before.
+local function indexed_param(param_id)
+  local lookup = params.lookup
+  local index = lookup and lookup[param_id]
+  return index and params.params[index]
+end
+
 local function read_stock_assigned(param_id)
+  local param = indexed_param(param_id)
+  if param then return param:get() end
   return params:get(param_id)
 end
 
@@ -70,8 +80,10 @@ end
 local function read_stock_fallback(kind, channel)
   local param_id = fn.get_param_id_from_stock_id(kind, channel.number)
   if param_id then
+    local param = indexed_param(param_id)
+    if param then return param:get(), read_stock_default, param end
     local value = params:get(param_id)
-    local param = params:lookup_param(param_id)
+    param = params:lookup_param(param_id)
     return value, read_stock_default, param
   end
   return nil, nil
@@ -731,7 +743,7 @@ function step.handle(c, current_step)
     local quantised_fixed_note = stock("quantised_fixed_note")
 
     if not quantised_fixed_note then
-      quantised_fixed_note = params:get(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
+      quantised_fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
     end
 
     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
@@ -741,7 +753,7 @@ function step.handle(c, current_step)
     local fixed_note = stock("fixed_note")
 
     if not fixed_note then
-      fixed_note = params:get(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
+      fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
     end
 
     if fixed_note and fixed_note > -1 and fixed_note <= 127 then

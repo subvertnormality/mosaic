@@ -30,3 +30,12 @@ end
 function params:lookup_param(id)
   return param_store[id]
 end
+-- Mirror ParamSet's id index over the store so indexed reads see the same values.
+params.lookup = setmetatable({}, {__index = function(_, id)
+  if param_store[id] ~= nil then return id end
+end})
+params.params = setmetatable({}, {__index = function(_, id)
+  local param = param_store[id]
+  if param == nil then return nil end
+  return {get = function() return param.val end, default = param.default}
+end})
