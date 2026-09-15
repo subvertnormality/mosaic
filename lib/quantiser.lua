@@ -229,6 +229,10 @@ local function hash_scale(scale)
   return hash
 end
 
+-- Scale note arrays are shared and never modified in place (edits install new
+-- arrays), so each array's hash is computed once rather than on every note.
+local scale_hashes = setmetatable({}, {__mode = "k"})
+
 local function make_cache_key(root_note, chord_rotation, scale_number, transpose, do_rotation, do_degree, do_transpose, do_pentatonic, scale_container)
   -- Use bit operations to pack booleans into a single number
   local flags = (do_rotation and 1 or 0) +
@@ -237,7 +241,12 @@ local function make_cache_key(root_note, chord_rotation, scale_number, transpose
                (do_pentatonic and 8 or 0)
   
   -- Hash the scale table
-  local scale_hash = hash_scale(scale_container.scale)
+  local notes = scale_container.scale
+  local scale_hash = scale_hashes[notes]
+  if not scale_hash then
+    scale_hash = hash_scale(notes)
+    scale_hashes[notes] = scale_hash
+  end
 
   -- Create a more efficient key using string format
   return string.format("%d:%d:%d:%d:%x:%d:%d:%d",
