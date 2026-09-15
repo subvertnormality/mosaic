@@ -153,7 +153,10 @@ function init()
       while true do
         clock.sleep(1/20)
         if fn.dirty_grid() then
-          m_grid.grid_redraw()
+          local remaining = m_clock.seconds_to_next_step()
+          if not remaining or remaining > redraw_step_guard then
+            m_grid.grid_redraw()
+          end
         end
       end
     end
