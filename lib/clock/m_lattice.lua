@@ -214,10 +214,12 @@ end
 function Lattice:pulse()
   if self.enabled then
     local flagged = false
+    local sprockets = self.sprockets
     for i = 1, 5 do
-      for _, id in ipairs(self.sprocket_ordering[i]) do
+      local ordering = self.sprocket_ordering[i]
+      for index = 1, #ordering do
         if not self.enabled then return end
-        local sprocket = self.sprockets[id]
+        local sprocket = sprockets[ordering[index]]
         if sprocket and sprocket.enabled then
           if not sprocket.shuffle_updated then
             sprocket:begin_cycle()
@@ -322,7 +324,8 @@ function Lattice:pulse()
               timing.transport = timing.transport + 1
             end
           end
-          sprocket:finish_cycle()
+          -- finish_cycle only acts at the end of a cycle; skip the call otherwise.
+          if sprocket.phase > sprocket.current_ppqn then sprocket:finish_cycle() end
           sprocket.last_processed_transport = self.transport
           sprocket.transport = sprocket.transport + 1
         elseif sprocket and sprocket.flag then
