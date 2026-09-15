@@ -1,0 +1,70 @@
+diff --git a/lib/clock/m_clock.lua b/lib/clock/m_clock.lua
+index 4c8e50d..2d9f478 100644
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -528,13 +528,13 @@ function m_clock.get_destroy_at_note_end_ids_length(channel)
+   return #destroy_at_note_end_ids[channel]
+ end
+ 
+-function m_clock.delay_action(c, length, type, func)
++function m_clock.delay_action(c, length, type, func, before_onset)
+   if length == 0 or length == nil then
+     func()
+     return
+   end
+ 
+-  local id = m_clock["channel_" .. c .. "_clock"]:set_delayed_action(length, func)
++  local id = m_clock["channel_" .. c .. "_clock"]:set_delayed_action(length, func, before_onset)
+ 
+   if type == "must_execute" then
+     table.insert(delayed_ids_must_execute[c], id)
+diff --git a/lib/clock/m_lattice.lua b/lib/clock/m_lattice.lua
+index 7d29ec4..5c72e60 100644
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -167,6 +167,20 @@ function Lattice:pulse()
+             sprocket.shuffle_updated = true
+           end
+           if sprocket.phase >= 1 and sprocket.phase < 2 then
++            -- Finish due note releases before a new step can retrigger
++            -- the same MIDI pitch. A late previous note-off cuts the new voice.
++            -- New zero-delay actions created by this onset still run below.
++            for index = 1, #sprocket.delayed_action_order do
++              local pending_id = sprocket.delayed_action_order[index]
++              local pending = sprocket.delayed_actions[pending_id]
++              if pending and pending.before_onset and pending.length == 0 then
++                sprocket.delayed_actions[pending_id] = nil
++                pending.action()
++                if sprocket.cleanup_delayed_action then
++                  sprocket.cleanup_delayed_action(pending_id)
++                end
++              end
++            end
+             sprocket.action(self.transport)
+           end
+ 
+@@ -385,9 +399,9 @@ function Sprocket:set_action(fn)
+   self.action = fn
+ end
+ 
+-function Sprocket:set_delayed_action(length, action)
++function Sprocket:set_delayed_action(length, action, before_onset)
+   local id = fn.generate_id()
+-  self.delayed_actions[id] = {length = length, action = action}
++  self.delayed_actions[id] = {length = length, action = action, before_onset = before_onset}
+   table.insert(self.delayed_action_order, id)
+   return id
+ end
+diff --git a/lib/step.lua b/lib/step.lua
+index 7d3505f..e70c0bc 100644
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -454,7 +454,7 @@ local function play_note_internal(note, note_container, velocity, division, note
+ 
+   m_clock.delay_action(c, division, action_flag, function()
+     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
+-  end)
++  end, true) -- Due releases precede the next onset; strum/scale actions do not.
+ 
+ end
+ 

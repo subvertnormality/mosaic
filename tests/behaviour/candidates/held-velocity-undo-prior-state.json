@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "e33d89f",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "7976cfc37bef54b9bcaa1ee7285f31f37db04a44724de1d2faad279d64a2420f",
+      "after_sha256": "c89f6c1066c393a933775e9b180898914a5a102e47136ba4321d247ed1415a3b"
+    }
+  ],
+  "patch": "0108-held-velocity-undo-prior-state.patch",
+  "patch_sha256": "8b87da0e26d60c3b52f27215e97b995d1266cd5eb5c1650b2bec8dd5850c3edc",
+  "regression": "M-MEMORY-008",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "92067452c0494f8f990c0d7840b9b620",
+      "case": "M-MEMORY-008",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "c63602694bddf8975f3633e34c7cec47938d0db11bec2b8398448a3bdf9ec39a",
+      "failure": "('velocity-undone', {'notes': [60, 62, 64, 65], 'velocities': [127, 50, 107, 97]})"
+    },
+    {
+      "run_id": "15fd65ba094342dfa53addc644e43d1f",
+      "case": "M-MEMORY-008",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "492e686f18ce9fb5085324d0197d611e2de5bfbf83d264661f95789aaa32deb5",
+      "failure": "('velocity-undone', {'notes': [60, 62, 64, 65], 'velocities': [127, 50, 107, 97]})"
+    }
+  ],
+  "rationale": "Remove the held velocity increment prewrite so release-time recording captures the previous mask before applying the new value.",
+  "oracle": "README Memory lines 697-702: retains mask and trig lock actions; E3 scrolls to past actions.",
+  "validation": [
+    {
+      "run_id": "9e9994a98532466fbe34ca3885441122",
+      "case": "M-MEMORY-008",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "432abdccac35277d9d0354448b27f03a4797b7badefcded6172593a5ce2cd42b",
+      "failure": null
+    },
+    {
+      "run_id": "a06457b270424acdb9d436cd165ebc63",
+      "case": "M-MEMORY-008",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "092e6b28646a2625ae8ebef30569bdf6bca6b1f354fbb7d76606d3db5e5307aa",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-32cb649ff4774ab3ac6b2c686ff52dda",
+      "case": "M-MEMORY-008",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "24ca66b466de876cbd002efcf52c9b4877d93aea816e7acbe05db539373753e2",
+      "failure": null,
+      "normalized_sha256": "01a2732628a07d01a25fca85ee6e66271e895a4b5512194f976919f2a07d6cd2"
+    }
+  ],
+  "collateral": "M-MEMORY-009 redo passes both lanes; 1546 Lua unit/integration tests pass; six inventory/name/syntax checks pass.",
+  "upstream_merged": false
+}

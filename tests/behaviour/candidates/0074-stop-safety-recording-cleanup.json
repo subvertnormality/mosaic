@@ -1,0 +1,11 @@
+{
+  "status": "scoped-candidate-validated",
+  "case": "M-REC-PARAM-022",
+  "baselines": {
+    "controlled": "5a763b5ce5d6478291beeb0425fbd363",
+    "real_time": "5d45c48d62a246a2adb93df8462d4158"
+  },
+  "setup_failure": "b01b58190c8646cc984aa2750ef3dcba",
+  "scope": "The long Stop Safety gesture clears all pending parameter recording exactly like ordinary grid Stop, retaining record arm and committed locks.",
+  "validation": "docs/testing/recording-stop-safety-validation.json"
+}

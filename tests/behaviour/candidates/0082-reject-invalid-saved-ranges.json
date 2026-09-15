@@ -1,0 +1,12 @@
+{
+  "candidate": "0082",
+  "status": "scoped-candidate-validated",
+  "base": "8c39d04a0bd188dff3b2450111a10cd8bec39a00",
+  "production": [
+    "mosaic.lua",
+    "lib/project_validation.lua"
+  ],
+  "patch": "0082-reject-invalid-saved-ranges.patch",
+  "validation": "docs/testing/saved-range-validation.json",
+  "full_campaign_complete": false
+}

@@ -1,0 +1,74 @@
+{
+  "scope": "Global transpose copied-song isolation, live boundaries, autosave and cold reload",
+  "source_revision": "ac2a09f9e2c6c31c100076068bf5c35a2ea922bc plus recorded working-tree diff",
+  "source_sha256": {
+    "tests/behaviour/cases.py": "b56c078352f4faac18449da9263175d0d4495bf107f125c153312abcc6350901",
+    "tests/behaviour/manual-inventory.json": "9f3dca40ae2dc2dba72ae9fb765587a14ec3d9ef1d308c8f7776287759f2282d"
+  },
+  "native_behavior": {
+    "M-TRANS-007-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/818140fa8b624953b8e9d83c10a9a8f7/manifest.json",
+      "sha256": "7fa48bf0af3ebdb77749f6f9ae145fcadf2b5dc3b067728c39133fbd6a268f3f",
+      "case": "M-TRANS-007",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-TRANS-007-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/f813c0cc00284c58a9c4821bcc2c124f/manifest.json",
+      "sha256": "d839f219150e01c59fdd73d7e26e9d8204d4c9f451771f2dcfa9c7e7981b86e0",
+      "case": "M-TRANS-007",
+      "clock_mode": "real-time"
+    },
+    "M-TRANS-008-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/dd1398a5519849519189072736be3396/manifest.json",
+      "sha256": "de130779e40385cdcf54b3ca9e04199624d5c3e362b68e7e33e5e77039780cba",
+      "case": "M-TRANS-008",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-TRANS-008-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/c4d17450041148c180b154dd6f71cee9/manifest.json",
+      "sha256": "ce34e2f454fd350177708ded866e098c1769663db52eb91e26398f6f425f0b24",
+      "case": "M-TRANS-008",
+      "clock_mode": "real-time"
+    }
+  },
+  "retained_oracle_corrections": {
+    "5e0406b16cb14434bf6f178dd67150d6": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/5e0406b16cb14434bf6f178dd67150d6/manifest.json",
+      "sha256": "723cbfbef220b9ff348dbe76f5f87cb3fad84924dec0cca65d8b42f8b687484e",
+      "failure": "Required observable output did not arrive"
+    },
+    "3e0771f1f2c44beba231d61dc5b3c666": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/3e0771f1f2c44beba231d61dc5b3c666/manifest.json",
+      "sha256": "9286c762488f8af89ccc08b4fc2a3b1e4f013bcf8e36eec283a621fa8e7f4bce",
+      "failure": "Required observable output did not arrive"
+    },
+    "c1f3ca2c33794b37ba82cb2816d19f67": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/c1f3ca2c33794b37ba82cb2816d19f67/manifest.json",
+      "sha256": "1c6124560f291006c044df10763b7b4d123e7a1a96fafd51a532226026c68d7c",
+      "failure": ""
+    },
+    "7e20f1d591d0434e915cf3aac43dd296": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/7e20f1d591d0434e915cf3aac43dd296/manifest.json",
+      "sha256": "b03b1a35ce8adb75655d4098174ddab8a70b46e433b216654f4a8c1756c6de8a",
+      "failure": ""
+    },
+    "2465370dd06d445b8a9ac59c40658f43": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/2465370dd06d445b8a9ac59c40658f43/manifest.json",
+      "sha256": "fa2afc02cc7ec9dc81e756de5be976211e962a00a7f7f3e95c3cc240fb1c44db",
+      "failure": ""
+    }
+  },
+  "unit_integration": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/transpose-song-lifecycle-final-20260910/mosaic",
+    "lua": "530/530",
+    "python_timing_oracles": "21/21"
+  },
+  "codex_findings_addressed": [
+    "Every program payload is exact and each four-message group is ordered after the prior onset and before its onset; controlled timestamps are identical and real-time capture delta is bounded to2ms.",
+    "Destination slot visibly selects and plays inherited +5 through public grid/MIDI before edit to -7 in both cases.",
+    "All four final manifests and the full-suite snapshot bind the same current cases.py and inventory hashes."
+  ],
+  "remaining": [
+    "global transpose live-edit timing"
+  ]
+}

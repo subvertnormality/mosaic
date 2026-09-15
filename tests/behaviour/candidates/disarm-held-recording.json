@@ -1,0 +1,42 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "0c19dac",
+  "file": "lib/m_midi.lua",
+  "before_sha256": "adcc9e3e9e1deab206f1f9f3652d51ea3ca80382b2ea4c3d4441b19475c1e5bf",
+  "after_sha256": "a524d522fd809e994cfc516bd023367aadcf8137543866c93fdf939428576404",
+  "patch": "0013-disarm-held-recording.patch",
+  "patch_sha256": "262e52fe23a436187411305d2f7093cc81240558282c2023dd5d3129dec4a0f7",
+  "regression": "M-REC-017",
+  "baseline_real_time": "ab7279ed7f7e4df09b93e6b023481174",
+  "decision": "User: Keep it; finish length on release.",
+  "limitations": "Chord release permutations, mixed armed/unarmed overlapping notes, tempo and song changes remain required.",
+  "upstream_merged": false,
+  "validation": [
+    {
+      "run_id": "e3193eea351746a487ef02e9260befa3",
+      "sha256": "bfc6a5d0d52a99279d89aaf403e0cef79d822311d117f5a882cbfeb795c2f418",
+      "passed": true,
+      "case": "M-REC-017",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "081ab04751db4ca08546702efe8189c8",
+      "sha256": "c9ac096c15e6ae6f197d0cda4dc79fe1b5f40f4bfe62f1b9cf7d80766fcbe611",
+      "passed": true,
+      "case": "M-REC-005",
+      "mode": "real-time"
+    },
+    {
+      "run_id": "repeat-c9807f9b50c34b9f888581d999394a6b",
+      "sha256": "e18fdd7c61ada8af3c2a80dcb83a247ee9295f5de6936d1144fe0c0f68e73413",
+      "passed": true,
+      "case": "M-REC-017",
+      "mode": "controlled-repeat"
+    }
+  ],
+  "units": {
+    "paired_baseline_and_candidate_passed": 474,
+    "artifact": "emulator:artifacts/c16/disarm-held-unit-comparison.json",
+    "initial_candidate_performance_failure": "emulator:artifacts/c16/disarm-held-units-isolated.json"
+  }
+}

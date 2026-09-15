@@ -1,0 +1,57 @@
+{
+  "status": "received-zero and forwarding checkpoint accepted; broader sync/manual/release work incomplete",
+  "candidate": "midi-clock-boundary-09",
+  "official_norns_revision": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+  "default_promoted": false,
+  "release_admitted": false,
+  "evidence": {
+    "candidate_install": {
+      "path": "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-09/installation.json",
+      "sha256": "91b7d25dbd8830747a5b014b741ff19d1d9b49a2420ec7d4751384f8443d57a9"
+    },
+    "native_contract": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/fd8323e3eceb4f0298ba40d47696e3fc/results.json",
+      "sha256": "68460edb0b91ec3b93729acdbfb8e0075431540a4e44048c905ab604d089fd4c"
+    },
+    "generic_controlled": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/c37246d3a88445469f9a13c905334f31/manifest.json",
+      "sha256": "19acace9f079593989dbdcab9c86757d87a7b46ec28019153ce71fdd0a8b5811"
+    },
+    "generic_real_time": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/f3aa734cc49f480994892744d8b8a55a/manifest.json",
+      "sha256": "003cb3d898870c49f70e68524ed536ae824e74d4a4e99aa56f50611fd7269860"
+    },
+    "acquisition": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/d71c60b545aa471081511534fc35fade/manifest.json",
+      "sha256": "047908419e2d59adcbefb2db859d2c7538cd0204d327dfd56965cacbfc3b4867"
+    },
+    "boundary_faults": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/60e9a91030f14abb98e1e33963735011/results.json",
+      "sha256": "088546ec7befd6e1f68c22bbc1349ab3da5e22a51bdfe3c877a6adeeaebc2b11"
+    },
+    "mosaic_matrix": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/midi-clock-regressions-09.json",
+      "sha256": "5277f835bfea4506ae33ed5df8968bc5c13ac0040291d000b886f8e192e90b37"
+    },
+    "mosaic_units": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-6e4632380e4d4a15b4e3d0ea7db46f3a/results.json",
+      "sha256": "a7c9fa9cfc980ff7be549e45e3bc4259c05e73b6ab069d6f8fffd00d127e308f"
+    },
+    "codex_review": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/midi-received-zero-review-02.json",
+      "sha256": "a37039f80dd1b2e4c40084eca880dcb1d754795282e87efeca66f67df0e9d0e6"
+    }
+  },
+  "checks": {
+    "generic_forwarding": [
+      "controlled",
+      "real-time"
+    ],
+    "mosaic_sync_cases": "M-SYNC-001..013 controlled and real-time, 26/26",
+    "mosaic_lua": "526/526",
+    "receiver_oracle_mutations": 3,
+    "codex_review_session": "01a08803-7a7a-7133-aab7-2b7b236169a8",
+    "review_confidence": "high"
+  },
+  "emulator_checkpoint": "../monome-emulator-midi-clock/docs/delivery/midi-received-zero-checkpoint.json"
+}

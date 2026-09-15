@@ -1,0 +1,46 @@
+diff --git a/lib/pages/channel_edit_page/channel_edit_page_ui.lua b/lib/pages/channel_edit_page/channel_edit_page_ui.lua
+index fce4c69..7b54094 100644
+--- a/lib/pages/channel_edit_page/channel_edit_page_ui.lua
++++ b/lib/pages/channel_edit_page/channel_edit_page_ui.lua
+@@ -199,6 +199,8 @@ configure_note_value_selector(note_displays.chords[1])
+ configure_note_value_selector(note_displays.chords[2])
+ configure_note_value_selector(note_displays.chords[3])
+ configure_note_value_selector(note_displays.chords[4])
++-- Chord slots start as "no note played" (X), not MIDI note 0 (bugs.json dashboard-chord-slots).
++for _, chord_display in ipairs(note_displays.chords) do chord_display.value = -1 end
+ configure_note_value_selector(mask_selectors.note)
+ configure_note_page_velocity_length_value_selector(mask_selectors.velocity)
+ configure_mask_length_selector(mask_selectors.length)
+@@ -1731,7 +1733,8 @@ function channel_edit_page_ui.set_note_dashboard_values(values)
+ 
+     for i = 1, 4 do
+       
+-      if values.chords[i] and values.chords[i] ~= 0 then
++      -- MIDI note 0 is a played chord voice, not "no chord" (bugs.json dashboard-chord-slots).
++      if values.chords[i] then
+         note_displays.chords[i]:set_value(values.chords[i])
+       elseif note_displays.chords[i]:get_value() ~= -1 then
+         note_displays.chords[i]:set_value(note_displays.chords[i]:get_value())
+diff --git a/lib/step.lua b/lib/step.lua
+index 3db2f9a..96a2f33 100644
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -585,7 +585,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
+       local note = process_func(note_to_play.note_value, note_to_play.octave_mod, note_to_play.transpose, channel.step_scale_number)
+       local release_id = play_arp_note(note, note_container, velocity, arp_division, note_on_func, onset_offset)
+       if release_id then table.insert(release_ids, release_id) end
+-      table.insert(note_dashboard_values.chords, note)
++      table.insert(note_dashboard_values.chords, note and fn_constrain(0, 127, note)) -- as sent (dashboard-chord-slots)
+     end
+     arp_note[c] = arp_note[c] % total_notes + 1
+     number_of_executions = number_of_executions + 1
+@@ -696,7 +696,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
+             if not note_dashboard_values.chords then
+               note_dashboard_values.chords = {}
+             end
+-            chord_note_dashboard_values.chords[chord_number] = processed_chord_note
++            -- Show the voice as sent: MIDI clamps it to 0..127 (bugs.json dashboard-chord-slots).
++            chord_note_dashboard_values.chords[chord_number] = fn_constrain(0, 127, processed_chord_note)
+ 
+             if c == program.get().selected_channel then
+               channel_edit_page_ui.set_note_dashboard_values(chord_note_dashboard_values)

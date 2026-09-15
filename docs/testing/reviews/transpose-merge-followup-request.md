@@ -1,0 +1,7 @@
+I addressed all three findings in M-TRANS-004. Please inspect the current worktree and the refreshed docs/testing/transpose-merge-validation.json, including both new manifests and their artifacts.
+
+1. The case now opens a loss-detecting MidiWindow at index zero, covering script-start output through physical Stop. note_pairs rejects unmatched, duplicate and missing releases. It requires exactly 13 ordered onsets and 13 matching releases with exact ports/status/pitch/velocity, validates the first 12 owned durations, causally brackets the boundary release by the physical Stop input, matches all 68 non-note events exactly (ten initialization Program Changes, three-port Start, four deterministic Program Changes for each of 13 steps, and three-port Stop), and asserts exactly 94 total events. Thus no extra MIDI event is permitted.
+2. The case description, inventory domain and progress now claim only the reset/persistence it distinguishes: the scale track resets at its loop and the step3 transpose persists into unlocked step4. M-TRANS-003 retains the separate unlocked transpose-wrap reset claim.
+3. Timing now compares every onset to first_onset + i/6, so accumulated phase is bounded.
+
+Fresh strengthened runs pass in controlled time at ecef6c54395a43978fad6010aae8d7ab and real time at 57b55a0ae6a94ff1bbd64f759f9df098. Return ACCEPTED or CHANGES REQUIRED, with concrete findings. Do not broaden this checkpoint.

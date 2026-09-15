@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "status": "scoped-pass-codex-accepted",
+  "date": "2026-09-10",
+  "case": "M-TRANS-006",
+  "base_revision": "d18f3fc13ad55d9587b890bfc0ef8dd9138fee04",
+  "production_changes": false,
+  "scope": "Every advertised global transpose value selected through physical scale-page fader input.",
+  "source_sha256": {
+    "tests/behaviour/cases.py": "850895ef9a69aa43a7f1c13c9fbf225ed503bf0e68a091a19075d1ac5b32d44b",
+    "tests/behaviour/manual-inventory.json": "1060f6a3e69c1f1ca0bfa73a591f1719c2747beb9976f1b7fd7f5cce2c9753fc"
+  },
+  "native_behavior": {
+    "controlled-experimental": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/ec14c20e956f4734bfecadf38dfb0ee2/manifest.json",
+      "sha256": "8b3b4292c6b6e16a9e1bf43dcdb727c38cfa2d3adebaad357e2f2a3ebd422fd6",
+      "passed": true,
+      "artifact_count": 15
+    },
+    "real-time": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/dcb496ce2aaf46a28c87f94d3ba127e4/manifest.json",
+      "sha256": "0f2cda717a2f60f5b22f589f467a924b2ada65f387fd3864f1734ded50b90d41",
+      "passed": true,
+      "artifact_count": 15
+    }
+  },
+  "retained_oracle_failure": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/c1ca4b886c6949c8b5ca1b2fd377b237/manifest.json",
+    "sha256": "b920b0a7d3afea56638ef799e6c9b06e77f90f8dd2cd4eb22238416ae75540cf",
+    "passed": false,
+    "artifact_count": 15,
+    "failure": {
+      "type": "AssertionError",
+      "message": "",
+      "traceback": "Traceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 53, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py\", line 698, in transpose_global_domain\n    assert [(event['port'],event['bytes']) for event in notes]==wanted\nAssertionError\n"
+    }
+  },
+  "independent_oracle": {
+    "values": [
+      -12,
+      -11,
+      -10,
+      -9,
+      -8,
+      -7,
+      -6,
+      -5,
+      -4,
+      -3,
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "base_pitches": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "rule": "expected pitch = base pitch + displayed global transpose",
+    "expected_first_pitches": [
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72
+    ]
+  },
+  "assertions": [
+    "physical left-endpoint selection then24 right-endpoint single increments",
+    "exact cyclic port/status/pitch/velocity for every observed onset",
+    "at least two complete four-note cycles plus a boundary onset",
+    "9..10 onsets depending bounded real-time observation overshoot",
+    "one release per onset including physical Stop boundary",
+    "all pre-boundary gates exactly one step",
+    "three-port Start/Stop and four ordered program channels per onset",
+    "all events accounted by dynamic 6*n+6 identity",
+    "accumulated one-sixth-second phase from first onset",
+    "ten script-start events explicitly checked then excluded"
+  ],
+  "regression_context": {
+    "prior_checkpoint": "docs/testing/midi-pitch-boundary-validation.json",
+    "lua": "530/530",
+    "python_oracles": "21/21",
+    "production_revision_unchanged": true
+  },
+  "remaining": "Global transpose song-copy/persistence and live-edit timing; other remaining transpose/merge/scale domains stay pending.",
+  "review": {
+    "status": "accepted",
+    "provider": "codex-only",
+    "path": "docs/testing/reviews/global-transpose-review.json",
+    "session": "01a089a7-38a5-7523-9949-49ffc1179da1",
+    "confidence": "high",
+    "limitation": "Tooltip text is not independently asserted; exact MIDI and complete grid-driven behavior are asserted."
+  },
+  "full_campaign_complete": false
+}

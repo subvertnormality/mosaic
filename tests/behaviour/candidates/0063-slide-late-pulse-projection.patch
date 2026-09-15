@@ -1,0 +1,37 @@
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -275,6 +275,7 @@
+             end
+           end
+           sprocket:finish_cycle()
++          sprocket.last_processed_transport = self.transport
+           sprocket.transport = sprocket.transport + 1
+         elseif sprocket and sprocket.flag then
+           self.sprockets[sprocket.id] = nil
+@@ -612,12 +613,15 @@
+   local remaining = occurrence - (self.onset_count or 0)
+   assert(remaining >= 1 and remaining <= 64 and remaining == math.floor(remaining), "Invalid future onset occurrence")
+   assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
++  -- Later callbacks in this lattice pulse see phase already advanced for
++  -- the next pulse. Their projection origin needs that one-pulse offset.
++  local offset = self.last_processed_transport == self.lattice.transport and 1 or 0
+   local projected = setmetatable({}, getmetatable(self))
+   for key,value in pairs(self) do projected[key] = value end
+   if not projected.shuffle_updated then projected:begin_cycle() end
+-  if projected.phase >= 1 and projected.phase < 2 and self.last_onset_transport ~= self.lattice.transport then
++  if projected.phase >= 1 and projected.phase < 2 and (offset == 1 or self.last_onset_transport ~= self.lattice.transport) then
+     remaining = remaining - 1
+-    if remaining == 0 then return 0 end
++    if remaining == 0 then return offset end
+   end
+   local elapsed = projected.current_ppqn - (projected.phase - 1)
+   for interval = 2, remaining do
+@@ -625,7 +629,7 @@
+     projected:finish_cycle();projected:begin_cycle()
+     elapsed = elapsed + projected.current_ppqn
+   end
+-  return elapsed
++  return elapsed + offset
+ end
+ 
+ function Sprocket:forward_pending_setting(method, value)

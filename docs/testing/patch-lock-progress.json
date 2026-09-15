@@ -1,0 +1,70 @@
+{
+  "status": "partial-domain",
+  "test": "M-PATCH-012",
+  "native_candidate_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d0420a4d31d54654ba89a06e15e970b2/manifest.json",
+      "sha256": "56570fd1fede92a69ad095c87cb583cb0138dc9c4a21b58140a69bdda4b57a28",
+      "case": "M-PATCH-012",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/14e4d3744e02430381e95f7e20330651/manifest.json",
+      "sha256": "2f06ffa40b35627c5cd3696272653c1155b6cc14dc353e5955f2cf6889fb5b5b",
+      "case": "M-PATCH-012",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a872d340234f4e62bf3ba0abecbfbdcd/manifest.json",
+      "sha256": "a3d3b368ba2962adda2cf99df1f23b2396f45d88fccde6acbf395d342cd18da5",
+      "case": "M-PATCH-005",
+      "clock_mode": "real-time"
+    }
+  ],
+  "baseline": "b725dfc96c9c4366beeab785facf0a5a",
+  "baseline_evidence": "CC63 sequence16; first NoteOn60 sequence21; MIDI Start22..24; first-step CC99 sequence25. Later cycle lock precedes its note. Stored63 readback passes.",
+  "cause": "clock_lattice:start can synchronously emit initial note before explicit first-step parameter loop",
+  "candidate": "0050-initial-lock-before-note",
+  "test_navigation_failure": "0ab78198024043cb9913d944f98a25c0: test reopened remembered params menu as if at root; fixed only input recipe.",
+  "full_campaign_complete": false,
+  "followup_candidate": "0051-parameters-at-resolved-onset",
+  "full_phrase_runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a3de4ba87a9e4aa2bdea7a7fd64a1aed/manifest.json",
+      "sha256": "be9a29c9ecb8f1bcd5935aab6d29762177ad8f1c7b1a245fe887edc43ddfc5c6",
+      "case": "M-PATCH-012",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/8073e9c3e7a84ae59201df41ce6e973c/manifest.json",
+      "sha256": "92b0c393b9130d82db87de2b09ae2838f10b1647e2dc697061f0d7f37d034f6a",
+      "case": "M-PATCH-013",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/622e4b3cba3649ce876eb15a55ce51ee/manifest.json",
+      "sha256": "adbc1ba967e643314f33d0ec0800a678ea353b4582460c37d9f37f61233f69e7",
+      "case": "M-PATCH-014",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/743edef0ced145169aa6108313363de2/manifest.json",
+      "sha256": "e9684212d751a62de973f7fa04c012f4f0d5461a9a2e6913c9cc1dfa0c608be6",
+      "case": "M-PATCH-012",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/10022709520e442ca49a0016839f99fd/manifest.json",
+      "sha256": "dacd9fbba898df71dd2f5e056f2bd887637e701340b1d5f0d2adfc730c0e4b46",
+      "case": "M-PATCH-013",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/debec4363f8e4fd7b08d2250de8fd55c/manifest.json",
+      "sha256": "ba22e98a515c7142ea282a178e6cab4445e726d8913429644766d8bc41e0eba3",
+      "case": "M-PATCH-014",
+      "clock_mode": "real-time"
+    }
+  ],
+  "remaining": "Slides, transitions, range/division/swing, recording and external clock discriminators; campaign incomplete"
+}

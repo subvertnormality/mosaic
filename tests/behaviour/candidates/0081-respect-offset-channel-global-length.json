@@ -1,0 +1,11 @@
+{
+  "candidate": "0081",
+  "status": "scoped-candidate-validated",
+  "base": "4f97fdbc26b4d0affc08c77aa1f09aca2bdc086b",
+  "production": [
+    "lib/clock/m_clock.lua"
+  ],
+  "patch": "0081-respect-offset-channel-global-length.patch",
+  "validation": "docs/testing/offset-global-range-validation.json",
+  "full_campaign_complete": false
+}

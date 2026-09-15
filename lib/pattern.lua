@@ -27,8 +27,36 @@ local default_note_values = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 local default_note_mask_values = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1}
 local default_velocity_values = {100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100}
 
-local function sync_pattern_values(merged_pattern, pattern, s)
-  merged_pattern.lengths[s] = pattern.lengths[s]
+local function effective_lengths(source)
+  local result = {unpack(source.lengths)}
+  local next_trig
+  for s = 1, 64 do
+    if source.trig_values[s] == 1 then
+      next_trig = s + 64
+      break
+    end
+  end
+  if not next_trig then return result end
+
+  -- Walking backwards gives every trig its nearest following trig, including
+  -- wraparound, without scanning each sustained note separately.
+  for s = 64, 1, -1 do
+    if source.trig_values[s] == 1 then
+      local length = result[s]
+      if length > 1 then
+        local distance = next_trig - s
+        -- The original search excludes a full-cycle self-interruption and
+        -- cuts only strictly inside the requested (possibly fractional) gate.
+        if distance <= 63 and distance < length then result[s] = distance end
+      end
+      next_trig = s
+    end
+  end
+  return result
+end
+
+local function sync_pattern_values(merged_pattern, pattern, s, source_lengths)
+  merged_pattern.lengths[s] = source_lengths[s]
   merged_pattern.velocity_values[s] = pattern.velocity_values[s]
   merged_pattern.note_values[s] = pattern.note_values[s]
   merged_pattern.note_mask_values[s] = pattern.note_mask_values[s]
@@ -43,8 +71,8 @@ local function extract_pattern_number(merge_mode)
   return nil
 end
 
-function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode)
-  local selected_song_pattern = program.get_selected_song_pattern()
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache)
+  local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
     lengths = {unpack(default_lengths)},
@@ -58,6 +86,11 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
 
   local pattern_channel = selected_song_pattern.channels[channel]
   local patterns = selected_song_pattern.patterns
+  local note_priority = note_merge_mode and extract_pattern_number(note_merge_mode)
+  local velocity_priority = velocity_merge_mode and extract_pattern_number(velocity_merge_mode)
+  local length_priority = length_merge_mode and extract_pattern_number(length_merge_mode)
+  local priority_lengths
+  local merge_step_trig_masks = program.get_step_trig_masks(channel)
 
   for i = 1, 64 do
     notes[i] = {}
@@ -65,8 +98,8 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     velocities[i] = {}
   end
 
-  local function do_moded_merge(pattern_number, is_pattern_trig_one, s, mode, values, merged_values, pushed_values)
-    if mode == "pattern_number_" .. pattern_number then
+  local function do_moded_merge(pattern_number, is_pattern_trig_one, s, mode, priority, values, merged_values, pushed_values)
+    if priority == pattern_number then
       merged_values[s] = values[s]
     elseif mode == "up" or mode == "down" or mode == "average" then
       if is_pattern_trig_one then
@@ -75,7 +108,11 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
   end
 
-  local patterns_to_process = pattern_channel.selected_patterns
+  -- Priority sources participate in merging without becoming channel assignments.
+  local patterns_to_process = {}
+  for number, enabled in pairs(pattern_channel.selected_patterns) do
+    patterns_to_process[number] = enabled
+  end
 
   local function process_merge_mode(merge_mode)
     if merge_mode then
@@ -92,13 +129,19 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
 
   for pattern_number, pattern_enabled in pairs(patterns_to_process) do
     local pattern = patterns[pattern_number]
+    local source_lengths = effective_lengths_cache and effective_lengths_cache[pattern_number]
+    if not source_lengths then
+      source_lengths = effective_lengths(pattern)
+      if effective_lengths_cache then effective_lengths_cache[pattern_number] = source_lengths end
+    end
+    if pattern_number == length_priority then priority_lengths = source_lengths end
 
     for s = 1, 64 do
       local is_pattern_trig_one = pattern.trig_values[s] == 1
       if pattern_enabled then
         if trig_merge_mode == "skip" then
           if is_pattern_trig_one and merged_pattern.trig_values[s] < 1 and skip_bits[s] < 1 then
-            merged_pattern = sync_pattern_values(merged_pattern, pattern, s)
+            merged_pattern = sync_pattern_values(merged_pattern, pattern, s, source_lengths)
             merged_pattern.trig_values[s] = 1
           elseif is_pattern_trig_one and merged_pattern.trig_values[s] == 1 then
             merged_pattern.trig_values[s] = 0
@@ -116,19 +159,19 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
         end
       end
 
-      local is_positive_step_trig_mask = program.get_step_trig_masks(channel) and program.get_step_trig_masks(channel)[s] == 1
-      local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (note_merge_mode and extract_pattern_number(note_merge_mode))
-      local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (velocity_merge_mode and extract_pattern_number(velocity_merge_mode))
-      local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or (length_merge_mode and extract_pattern_number(length_merge_mode))
+      local is_positive_step_trig_mask = merge_step_trig_masks and merge_step_trig_masks[s] == 1
+      local should_process_note_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or note_priority
+      local should_process_velocity_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or velocity_priority
+      local should_process_length_merge_mode = is_pattern_trig_one or is_positive_step_trig_mask or length_priority
 
       if should_process_note_merge_mode then
-        do_moded_merge(pattern_number, true, s, note_merge_mode, pattern.note_values, merged_pattern.note_values, notes)
+        do_moded_merge(pattern_number, pattern_enabled, s, note_merge_mode, note_priority, pattern.note_values, merged_pattern.note_values, notes)
       end
       if should_process_velocity_merge_mode then
-        do_moded_merge(pattern_number, true, s, velocity_merge_mode, pattern.velocity_values, merged_pattern.velocity_values, velocities)
+        do_moded_merge(pattern_number, pattern_enabled, s, velocity_merge_mode, velocity_priority, pattern.velocity_values, merged_pattern.velocity_values, velocities)
       end
       if should_process_length_merge_mode then
-        do_moded_merge(pattern_number, true, s, length_merge_mode, pattern.lengths, merged_pattern.lengths, lengths)
+        do_moded_merge(pattern_number, pattern_enabled, s, length_merge_mode, length_priority, source_lengths, merged_pattern.lengths, lengths)
       end
     end
   end
@@ -156,16 +199,23 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
   end
 
-  local step_trig_masks = program.get_step_trig_masks(channel)
-  local step_note_masks = program.get_step_note_masks(channel)
-  local step_velocity_masks = program.get_step_velocity_masks(channel)
-  local step_length_masks = program.get_step_length_masks(channel)
-  local channel_data = program.get_channel(program.get().selected_song_pattern, channel)
+  -- Trig collection may copy another pattern's values. Apply explicit priorities
+  -- after that collection so table iteration order cannot overwrite the choice.
+
+  local step_trig_masks = pattern_channel.step_trig_masks or {}
+  local step_note_masks = pattern_channel.step_note_masks or {}
+  local step_velocity_masks = pattern_channel.step_velocity_masks or {}
+  local step_length_masks = pattern_channel.step_length_masks or {}
+  local channel_data = pattern_channel
 
   for s = 1, 64 do
     do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)
     do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values)
     do_mode_calculation(length_merge_mode, s, lengths, merged_pattern.lengths)
+
+    if note_priority then merged_pattern.note_values[s] = patterns[note_priority].note_values[s] end
+    if velocity_priority then merged_pattern.velocity_values[s] = patterns[velocity_priority].velocity_values[s] end
+    if length_priority then merged_pattern.lengths[s] = priority_lengths[s] end
 
     if step_trig_masks[s] then
       merged_pattern.trig_values[s] = step_trig_masks[s]
@@ -195,23 +245,81 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   return merged_pattern
 end
 
-pattern.update_working_patterns = scheduler.debounce(function()
-  for c = 1, 16 do
-    pattern.update_working_pattern(c, program.get_selected_song_pattern())
-    coroutine.yield()
-  end
-end, throttle_time)
+local working_pattern_updates = setmetatable({}, {__mode = "k"})
 
-function pattern.update_working_pattern(c, song_pattern)
-
-  local channel_pattern = song_pattern.channels[c]
-  channel_pattern.working_pattern = pattern.get_and_merge_patterns(
+local function build_working_pattern(c, song_pattern, channel_pattern, effective_lengths_cache)
+  return pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,
     channel_pattern.note_merge_mode,
     channel_pattern.velocity_merge_mode,
-    channel_pattern.length_merge_mode
+    channel_pattern.length_merge_mode,
+    song_pattern,
+    effective_lengths_cache
   )
+end
+
+-- Revisions describe pending rebuild requests, not persisted source versions.
+-- Compound writers retain the all-channel facade; targeted requests are unioned
+-- so cancelling a partial sweep cannot discard another channel's pending edit.
+function pattern.update_working_patterns(song_pattern, affected_channels)
+  local target = song_pattern or program.get_selected_song_pattern()
+  local state = working_pattern_updates[target]
+  if not state then
+    state = {dirty = {}, revision = {}}
+    state.update = scheduler.debounce(function()
+      repeat
+        for c = 1, 16 do
+          if state.dirty[c] then
+            local revision = state.revision[c]
+            local channel = target.channels[c]
+            local result = build_working_pattern(c, target, channel, state.effective_lengths_cache)
+            if working_pattern_updates[target] == state
+              and state.revision[c] == revision and target.channels[c] == channel then
+              channel.working_pattern = result
+              state.dirty[c] = nil
+            end
+            coroutine.yield()
+          end
+        end
+      until next(state.dirty) == nil
+      state.effective_lengths_cache = nil
+    end, throttle_time)
+    working_pattern_updates[target] = state
+  end
+  -- At most the song's 16 source length arrays live for this request.
+  -- Any request invalidates them, including a no-op or mask-only request.
+  state.effective_lengths_cache = {}
+  local requested = false
+  for c = 1, 16 do
+    if not affected_channels or affected_channels[c] then
+      state.dirty[c] = true
+      state.revision[c] = (state.revision[c] or 0) + 1
+      requested = true
+    end
+  end
+  if requested then state.update() end
+end
+
+function pattern.update_source_working_patterns(song_pattern, source_number)
+  local affected = {}
+  for c = 1, 16 do
+    local channel = song_pattern.channels[c]
+    affected[c] = channel.selected_patterns[source_number] == true
+      or (channel.note_merge_mode and extract_pattern_number(channel.note_merge_mode) == source_number)
+      or (channel.velocity_merge_mode and extract_pattern_number(channel.velocity_merge_mode) == source_number)
+      or (channel.length_merge_mode and extract_pattern_number(channel.length_merge_mode) == source_number)
+  end
+  pattern.update_working_patterns(song_pattern, affected)
+end
+
+function pattern.update_working_pattern(c, song_pattern)
+  -- Legacy synchronous callers may have changed source arrays directly.
+  -- Do not let a pending sweep retain pre-edit lengths after this ingress.
+  local state = working_pattern_updates[song_pattern]
+  if state then state.effective_lengths_cache = {} end
+  local channel_pattern = song_pattern.channels[c]
+  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern)
 end
 
 return pattern

@@ -1,0 +1,28 @@
+{
+  "case": "M-SONG-SETTINGS-002",
+  "status": "failing-baseline",
+  "runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/563d50ddada04b66bfa54fe10bae7024/manifest.json",
+      "sha256": "b73fa2fda50fe3e56a52354d7d7ca5602bc2ddfaeb2a19986652ab994db72266",
+      "clock_mode": "controlled-experimental",
+      "failure": {
+        "type": "AssertionError",
+        "message": "('Release deadline', {'index': 23, 'device_id': 0, 'port': 1, 'port_name': 'Emulator MIDI', 'monotonic_ns': 67216724966884, 'bytes': [128, 60, 127], 'decoded': [{'type': 'note_off', 'channel': 1, 'data': [60, 127]}], 'logical_ns': 12413888889}, 0.5, 0.11388888900000005)",
+        "traceback": "Traceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 53, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/song_tempo.py\", line 33, in song_tempo_bounds\n    checks=assert_schedule(capture.events,onsets,[24]*len(notes),field=field,origin=notes[0][field],stop_bounds=(lower,upper),pulse_rate=bpm*96/60,tolerance=2e-9 if controlled else .01)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/note_schedule.py\", line 29, in assert_schedule\n    assert regular or truncated,('Release deadline',event,expected,phase)\nAssertionError: ('Release deadline', {'index': 23, 'device_id': 0, 'port': 1, 'port_name': 'Emulator MIDI', 'monotonic_ns': 67216724966884, 'bytes': [128, 60, 127], 'decoded': [{'type': 'note_off', 'channel': 1, 'data': [60, 127]}], 'logical_ns': 12413888889}, 0.5, 0.11388888900000005)\n"
+      }
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/489f4aa02e604df8996fd044b21599c5/manifest.json",
+      "sha256": "f3ca158858cfe962df3141375bba18f4720961d25a343eed50dba5e56b60870f",
+      "clock_mode": "real-time",
+      "failure": {
+        "type": "AssertionError",
+        "message": "('Release deadline', {'index': 23, 'device_id': 0, 'port': 1, 'port_name': 'Emulator MIDI', 'monotonic_ns': 67327313695736, 'bytes': [128, 60, 127], 'decoded': [{'type': 'note_off', 'channel': 1, 'data': [60, 127]}]}, 0.5, 0.11350283100000003)",
+        "traceback": "Traceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 53, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/song_tempo.py\", line 33, in song_tempo_bounds\n    checks=assert_schedule(capture.events,onsets,[24]*len(notes),field=field,origin=notes[0][field],stop_bounds=(lower,upper),pulse_rate=bpm*96/60,tolerance=2e-9 if controlled else .01)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/note_schedule.py\", line 29, in assert_schedule\n    assert regular or truncated,('Release deadline',event,expected,phase)\nAssertionError: ('Release deadline', {'index': 23, 'device_id': 0, 'port': 1, 'port_name': 'Emulator MIDI', 'monotonic_ns': 67327313695736, 'bytes': [128, 60, 127], 'decoded': [{'type': 'note_off', 'channel': 1, 'data': [60, 127]}]}, 0.5, 0.11350283100000003)\n"
+      }
+    }
+  ],
+  "review": "/home/andy/projects/mosaic-behaviour-runs/tempo-reference-review-02.json",
+  "correction_status": "not-implemented"
+}

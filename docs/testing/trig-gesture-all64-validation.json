@@ -1,0 +1,32 @@
+{
+  "status": "scoped-all64-trig-gesture-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-023",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9e4c975c44244caebf6650905bc7440f/manifest.json",
+      "sha256": "53d520024c1cd5ea5b795be1773cab7a9d7d7684328b2c3bfa646d1100b25bd9",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-023",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a83bd7bda004436bb1c79a48f5e7bdad/manifest.json",
+      "sha256": "bbb2f841a7f5b8da422f0954a1181aca59764aa9e08c5ada28c6a5d475744276",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "No assigned pattern; explicit channel note60 velocity100 length1 defaults",
+    "Shift-grid adds every one of64 trigs",
+    "Odd removal preserves evens; toggling all reverses the active set; restoring evens returns all64",
+    "Every grid cell checked for active/inactive brightness range",
+    "Exact MIDI count, velocity, release duration and timing across64-step wrap; no outstanding notes afterStop"
+  ],
+  "limitations": [
+    "Existing-pattern and missing-default combinations remain pending",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

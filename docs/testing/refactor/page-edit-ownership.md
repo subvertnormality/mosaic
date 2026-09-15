@@ -1,0 +1,259 @@
+# Page/edit ownership (R12)
+
+R12 is in progress. The first slice separates channel-mask operations from selector
+construction and rendering, keeping the eight existing behaviors explicit.
+Encoder and MIDI-map callers retain their shared public handler entry points.
+
+## Mask operation contracts
+
+Held sequencer rows 4–7 affect step locks only for the selected channel. A fixed
+mapping to another channel edits that channel's mask from its own value. The
+explicit target song survives delayed gesture release across a song transition.
+Held edits continue through recorder portions; they must not prewrite the value
+before history captures the old state. Preserve each handler's X/nil/zero semantics,
+chord working-pattern updates, selector identity and construction order.
+
+Existing coverage: channel_edit_mask_handler_tests, channel_edit_page_ui_delta_killers_tests,
+m_midi_input_tests, grid_controls_tests; native M-MAP-004, M-MEMORY-008/009,
+M-MASK-HELD-EXTRA-001, M-MASK-CHORD-X-001 and M-MASK-032.
+Do not generalize distinct mask semantics merely because the handlers look alike.
+R12's subsequent navigation/locks/device/history and view/gesture work remains.
+
+## Mask extraction receipt (2026-09-13)
+
+`channel_edit_masks.new` owns the eight handlers and page dispatch, receiving the
+original selectors, public UI table and captured divisions dependency. Public
+methods delegate; page dispatch still reads replaceable public handlers at invocation.
+Review found the initially missing divisions capture; it was corrected before tests.
+
+All 1,546 Lua tests and ten coverage/syntax checks pass. Controlled native manifests
+under `/home/andy/projects/mosaic-behaviour-runs/`:
+
+| Case | Run |
+| --- | --- |
+| M-MAP-004 | 9798ac4a74e8483dba8ebdaf38120d29 |
+| M-MEMORY-008 | d37f14ec126b434d9f4299427ad8f1c8 |
+| M-MEMORY-009 | a48a6833cac647f7b57f326bfaccce97 |
+| M-MASK-HELD-EXTRA-001 | abdacaafd9024d5ab1142a2ebae88548 |
+| M-MASK-CHORD-X-001 | 233794a09b8049328680dd4da40e950d |
+| M-MASK-032 | 2111fb0ef67e43678bf42717184743d1 |
+
+This completes the mask-operation extraction only, not all R12 page/visual acceptance.
+
+## History controller contract
+
+The Memory page controller owns one navigator and its event-window state, created
+at the existing selector-construction point. Rendering and encoder selection share
+that same navigator. Initialization attaches state, sets maximum/current counters,
+then selects it. Refresh uses the selected channel and the existing 25-event window.
+
+Navigation invokes redo for positive direction, undo otherwise. It updates visible
+history only for the selected channel, then always rebuilds the edited channel's
+working pattern. MIDI mapping and page encoders retain the public navigation method;
+page dispatch must continue observing replacements of that public method.
+Memory/program/pattern remain runtime lookups; moving code must not capture their
+current tables. Targeted evidence uses M-MEMORY-001/002/008/009 and M-MAP-003.
+
+## History extraction receipt (2026-09-13)
+
+`channel_edit_history` now owns navigator construction, event state, draw/init,
+refresh and navigation. Existing selector bundles share its navigator. Review
+corrected an initial extra recent-events fetch during init before validation.
+All 1,546 Lua tests and ten coverage/syntax checks pass. Controlled native passes:
+
+| Case | Run |
+| --- | --- |
+| M-MEMORY-001 | 2fefcb862d0448cd8605e09ea305ce30 |
+| M-MEMORY-002 | 5f9afad45f8d44cdb7a04cf6328b6936 |
+| M-MEMORY-008 | 8106551d5f3d4cbab51c9b039eca4037 |
+| M-MEMORY-009 | 0b2c9eaf681e4b6ebc3efc3f171eac84 |
+| M-MAP-003 | 35f30651e6cb485f926427074207ba63 |
+
+Next coherent controller is locks/device parameters together: shared dial and
+parameter selection, staged save callbacks, device binding and refresh ordering.
+Clock-mod controls and cross-page navigation remain later R12 responsibilities.
+Existing selector/page objects already provide view state; no additional generic
+view-model framework is justified without a concrete invalidation need.
+
+## Trig-lock/device controller contract
+
+Lock assignment and MIDI configuration share parameter/dial selection and staged
+confirmation, so they move together. Preserve the late device-map selector creation
+after device initialization, all other construction order, debounce yields, and
+existing refresher calls. Lock calculations retain temporary controlspec changes
+and restoration, held-step song targeting and dirty-recording ownership.
+
+Device +/- stages capture channel/device at the encoder action; the confirmation
+still invokes update_channel_config via the public table before clearing that
+captured channel and applying captured defaults. Assignment stages capture channel
+and dial index but read the parameter selector at confirmation. The increment
+cancel callback captures the refresh function, whereas decrement wraps a dynamic
+public lookup; preserve both. Keep module-local dependencies from their original
+owner when moving functions across UI and handler modules.
+
+### Parameter controller first slice (2026-09-13)
+
+The controller owns handler-param calculation, configuration application, lock-value
+edits and device/lock/list refresh operations. UI selectors retain construction
+order and the late device selector is explicitly bound at init. Original local
+domain/param-manager/refresher dependencies are injected. Review corrected bare
+selector references, numeric target selection and bulk-refresh public dispatch
+before native validation.
+
+All 1,546 Lua tests and ten coverage/syntax checks pass. Native receipts:
+
+| Case | Lane | Run |
+| --- | --- | --- |
+| M-PARAM-036 | controlled | 419a4d366b9a490ba008035910a7ba17 |
+| M-PATCH-038 | controlled | 07b15d120fbd468cbe2315329a21960e |
+| M-REC-PARAM-011 | controlled | 6014990d562f4d9c9b79e386ce4f7b47 |
+| M-REC-PARAM-012 | controlled | 32629430378449bcb22a8bd098e034d8 |
+| M-SETUP-003 | controlled | 9d59539557ee451ea3543af31eb746b5 |
+| M-XA-005-NB-LOCK | real-time/nb-audio | 2033b4be4ea64205b7e6783b006a3571 |
+
+The combined controller is not finished: configuration +/- confirmation, debounced
+configuration refresh, assignment subpage/encoder-two navigation and drawing still
+need consolidation. Their original implementations remain active for this slice.
+
+### Configuration confirmation/refresh slice (2026-09-13)
+
+Configuration +/- callbacks and the three-yield refresh now belong to the parameter
+controller. UI creates the persistent debounce job at the former expression's
+position. Review confirmed original Save captures, direct-vs-dynamic Cancel,
+selector binding and batch order. Full Lua run: 1,545 pass, one existing massive-
+automation 2 ms failure; that test passed isolated, unchanged. Ten checks pass.
+
+Controlled native passes: M-SETUP-003 `8df6717e52cc4181a2b6e6cb0d978a32`,
+M-REC-PARAM-013 `8c07ab98920141e0b8fbb2380c45c4fe`, M-REC-PARAM-020
+`fbc3b9678ef847c79bed96648643cdfc`.
+First M-REC-PARAM-020 run `a746cbaee3f44fcbbd378ca0c7682091` passed recorded
+behavior assertions but failed in driver.finish/runtime.close when the /stop HTTP
+connection closed. The unchanged rerun passed; original evidence is retained.
+No shutdown fix or root-cause claim is made here.
+
+Assignment subpage, drawing and encoder-two integration remain outstanding.
+
+### Assignment subpage contract
+
+The controller will own the single shared Trig Locks page's draw and assignment
+subpage flow. K2 prepares device/parameter lists only when opening, then always
+requests configuration refresh before toggling. Encoder-two dial navigation keeps
+its existing selection/refresh order. Assignment scrolling captures channel/dial
+before staging Save, but selection/meta are read when Save executes. The operation
+uses the original handler-local param_manager; callbacks formerly reading global
+channel_edit_page_ui must keep that dynamic lookup rather than capture the UI table.
+Generic mask/clock navigation and cross-page key routing remain separate.
+
+### Assignment/subpage extraction receipt (2026-09-13)
+
+The parameter controller now owns shared page binding, Trig Locks/subpage drawing,
+K2 preparation/toggle, dial navigation and assignment sequencing. The handler passes
+reused adapters preserving its local param_manager table and dynamic global UI
+lookups. These adapters are allocated once, not on each encoder event. Review
+confirmed deferred assignment/selector lookup timing and callback order.
+
+Final full Lua run: 1,544 passes and the two existing 2 ms timing failures (slide
+admission 2.052 ms and massive automation). Both passed isolated unchanged. Ten
+coverage/syntax checks pass. Controlled native passes: M-PARAM-036
+`e7c8709220394135bfc722327a08f822`, M-PATCH-038
+`e0c5b8f78e1441c8b883d978adb7adeb`, M-REC-PARAM-020
+`29276187c5f4407caa59bc1645ea3081`.
+
+R12 still includes clock controls, cross-page navigation and final visual/input
+acceptance. Encoder-two's obsolete dials/page arguments can be removed with the
+navigation cleanup; current production calls remain compatible.
+
+## Clock-controls contract
+
+Clock edits retain original selector construction and facade calls. Stopped edits
+apply immediately; playing edits queue at the existing pattern-change boundary,
+retaining the selected channel object and effective value/clock-mod table captured
+by the current code. Alignment functions still resolve the selected song when
+invoked. Existing X/sentinel behavior and inactive shuffle settings are preserved.
+
+Keep the exact staged save/cancel sequences: incrementing swing type registers
+five save/cancel operations, whereas decrementing registers only the type action.
+Draw/encoder navigation use the existing effective-mode fallback. Refresher jobs
+keep their dynamic global UI setter lookup. Focused native coverage reuses
+M-SHUFFLE-006/007 for live inherited/explicit transitions and M-TIME-001 for ratios;
+existing UI unit tests cover frame layouts, selector traversal and confirmation.
+
+### Clock controller receipt (2026-09-13)
+
+`channel_edit_clock_controls` owns effective-mode draw/navigation, initial values,
+updates/alignment, refresher delegation and staged confirmation for all six clock
+controls. Selectors remain constructed at their original points. Review confirmed
+lexical UI versus dynamic globals, exact init order, captured queued channel/values,
+deferred divisor calculation, fallback logic and asymmetric save/cancel ordering.
+All 1,546 Lua tests and ten coverage/syntax checks pass.
+
+| Case | Lane | Run |
+| --- | --- | --- |
+| M-SHUFFLE-006 | controlled | d5c2e2704c244ba8a7c9d90dc096a98d |
+| M-SHUFFLE-007 | controlled | e6b1b17f269c4111b9232cb0d33aa8a9 |
+| M-TIME-001 | controlled | c26e958088ad483d8776dd428dd0517c |
+| M-SHUFFLE-006 | real-time | 87d2bdd8a93f43b9a9af0eb116c5d204 |
+
+Cross-page navigation/gesture ownership remains. At the final R12 boundary use one
+controlled aggregate for the navigation/page/visual/browser/LED/tooltip/dashboard
+union, checking inclusion rather than separately rerunning included cases. Existing
+PERF-004 constrained-load failure remains R13 optimization work, not a new R12 blocker.
+
+## Navigation/gesture contract and final R12 validation
+
+Navigation owns E1/E2/E3 routing, page selection and K2/K3 gesture dispatch. Preserve
+press-only key behavior, held-step song targeting, clear/undo/redo/slide order,
+page-specific confirmation precedence and public UI callback lookup. Reuse stable
+selector/page bundles for encoder navigation with late device-selector binding;
+remove unused raw dial/page handler arguments and per-event clock getter wrappers.
+
+After final review/unit validation, freeze sources for one controlled aggregate:
+base-midi, two workers, the existing midi-schedule-capacity-12 installation and pinned
+norns source `/mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/.runtime/deps/norns`.
+Use the previous R10 report for duration ordering. Confirm included visual, gesture,
+mapping, tooltip and dashboard cases; only supplement profile-specific omissions.
+Do not claim a complete real-time or hardware qualification from this aggregate.
+
+### Navigation extraction pre-aggregate checkpoint (2026-09-13)
+
+Navigation now owns encoder/key routing and page selection with stable E2 bundles;
+handlers reuse the dynamic clock getter and no longer accept obsolete dial/page
+arguments. Late device/page objects are bound explicitly. Review caught a nil
+page-index capture; controller construction moved after index assignment. The
+legacy scales-page entry retains its former dynamic global lookup.
+
+All 1,546 Lua tests and ten coverage/syntax checks pass on the corrected source.
+Combined R12 native validation is pending under
+`/home/andy/projects/mosaic-behaviour-runs/r12-controlled-53aa1c1-20260913-run2/suite.json`.
+Do not treat this pre-aggregate checkpoint as R12 or full refactor completion.
+
+### R12 aggregate and follow-up (2026-09-13)
+
+The frozen controlled/base-MIDI aggregate completed 791 cases: 787 passed and four
+failed with native SIGXCPU exits. All 66 fast-layer items passed, including all
+1,546 Lua units; source identity remained stable. The original suite remains red.
+All four failed cases passed sequentially afterward on unchanged source:
+
+| Case | Passing follow-up manifest directory |
+| --- | --- |
+| M-RANGE-SAVED-005 | 2e605781fbd9456cb11374114acc41ec |
+| M-SYNC-012 | 130e51ab5d3142c0a8783e2d21024d4c |
+| M-CHORDSHAPE-125 | 9f6564a3412e49a9afbccfbf010c3b34 |
+| M-CHORDSHAPE-126 | 45cadb24b661420abaf3fb0b40d8785a |
+
+Evidence root: `/home/andy/projects/mosaic-behaviour-runs/`. The original failures
+span sclang shutdown, crone during capture, matron startup and JACK during execution.
+The signal sender remains unknown; no runtime exit policy or test oracle was relaxed.
+See `r12-sigxcpu-investigation.md` and the aggregate's `failure-triage.md`.
+
+The aggregate includes navigation, gestures, page/mapping, UI/browser, framebuffer,
+LED, tooltip/dashboard, flicker and mask regressions; `coverage-selection.json`
+records selection. Thirteen profile/real-time-specific cases were omitted, so this
+is not whole-refactor acceptance. Earlier R11/R12 profile-specific receipts remain
+applicable to their changes. Existing selector/page objects provide view state;
+no extra view-model framework was introduced. Shared public semantic edit paths
+remain available to encoder and MIDI-map callers.
+
+Navigation extraction is validated for this structural checkpoint. PERF-004 input/
+redraw measurement follows immediately in R13; it remains an outstanding R12
+performance qualification. R14 still owns final full required-profile/lane acceptance.

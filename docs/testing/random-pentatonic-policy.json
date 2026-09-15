@@ -1,0 +1,36 @@
+{
+  "status": "implemented-and-scoped-validated",
+  "baseline_revision": "4b5abefb71aa91f7b28b38ee8117e99258af1adb",
+  "review": "/home/andy/projects/mosaic-behaviour-runs/random-pentatonic-policy-review-02.json",
+  "review_sha256": "ad33fc6043af39ffeb1e29340212f34f8fc1a205e10726b4c5a738ff0b3cab02",
+  "session_ref": "01a0862a-8bf4-78b2-92d7-389f602c4ec4",
+  "baseline_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5859d0e1853845d68a7136cb7ac5a727/manifest.json",
+      "sha256": "466eff780b46f4ee3ebd3716616afc22e7d9b8c2134ea747a99e581bf0254b89",
+      "acceptance_pass": false
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d1e2732dbcd24d26bb0f55c700278d47/manifest.json",
+      "sha256": "7a27e314f8a64274ebd648674e8fd5a6e66b4ebd19e4251b341bfed94b4c3cb9",
+      "acceptance_pass": false
+    }
+  ],
+  "decision": "Apply random pentatonic option to nonzero summed random offset, regardless of sign. Keep zero sums including cancellation unchanged unless all/merged option applies independently.",
+  "boundaries": [
+    "Ordinary and fully-quantised masks only; preserve snap-only/raw mask chromatic offset handling",
+    "Preserve Fixed/Quantised Fixed overrides and separate chord/arp processing",
+    "Do not filter merely because a random parameter is enabled"
+  ],
+  "required_validation": [
+    "Native signed Random/Twos/composition/zero/cancellation in both clocks; retain037/038",
+    "Unit negative and positive nearest pitches, lower ties",
+    "Integration forced negative/positive/zero/disabled/cancellation, ordinary/full masks, random/all/merged switches, raw/snap and fixed overrides",
+    "Manual explicit nonzero sum and tie semantics; isolated candidate0083, units/integration and affected native evidence"
+  ],
+  "retry_diagnosis": "First review exit127: codex absent from non-login PATH. One diagnosed retry via bash login found /home/andy/.local/bin/codex and completed.",
+  "full_campaign_complete": false,
+  "validation": "docs/testing/random-pentatonic-validation.json"
+}

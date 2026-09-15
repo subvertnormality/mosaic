@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "date": "2026-09-13",
+  "device": {
+    "kind": "physical-norns",
+    "architecture": "armv7l",
+    "grid": "monome 128",
+    "grid_dimensions": [16, 8]
+  },
+  "mosaic": {
+    "revision": "6f4ac36942c5e24c817a71882bc68644d97a24a6",
+    "deployed_files_verified": 1061,
+    "installation": "/home/we/dust/code/mosaic"
+  },
+  "stock_norns": {
+    "clock_lua_sha256": "60791d2c61655a6bbb853a5e65134d3a45fb294eafc908424abd0a93333da19c",
+    "result": "known-runtime-failure",
+    "failure": "A native resume queued before clock.cancel can reach Lua after clock.threads[coro_id] has been removed; stock core/clock.lua then calls coroutine.resume(nil) and reports 'thread expected'.",
+    "transport_did_stop": true
+  },
+  "clock_candidate": {
+    "patch": "monome-emulator patches/norns/0011-clock-cancel-queued-resume.patch",
+    "patch_sha256": "40bb49162614d014a4b56f1189dcb9345991d0c1548a48fdf2518cdfea614499",
+    "patched_clock_lua_sha256": "d9ac8d5c8bc0e46d74f8ca82123dab44b9df57c8203d3dc9f9e443871a67d513",
+    "scope": "Ignore only absent positive integer IDs below the monotonic next-ID counter; arbitrary unknown IDs still fail.",
+    "restored_after_test": true
+  },
+  "m_pat_001": {
+    "result": "pass-with-clock-candidate",
+    "tempo_bpm": 122.0,
+    "expected_sixteenth_seconds": 0.12295081967213115,
+    "phrases": [
+      {
+        "expected_notes": [[144, 60, 127], [144, 62, 117], [144, 64, 107], [144, 65, 97]],
+        "captured_note_ons": 13,
+        "maximum_timing_error_ms": 4.012080489612019,
+        "grid_driver_writes": 6838,
+        "grid_driver_refreshes": 60
+      },
+      {
+        "expected_notes": [[144, 60, 127], [144, 62, 117], [144, 64, 107], [144, 67, 97]],
+        "captured_note_ons": 14,
+        "maximum_timing_error_ms": 4.526880920910442,
+        "grid_driver_writes": 8502,
+        "grid_driver_refreshes": 72
+      }
+    ],
+    "note_cleanup": "pass",
+    "configured_grid_led": "pass",
+    "edited_note_grid_led": "pass",
+    "selected_pattern_blink_levels": [2, 4],
+    "screens": [
+      {"name": "m-pat-001-authored.png", "sha256": "0dbbec383a24509652cab58d4f8b36c1f21f9f72f1f9689728dd81b4fe509c5d", "dimensions": [640, 384]},
+      {"name": "m-pat-001-finished.png", "sha256": "ef0720e0d7bb083f7c4a0e94ccaaec17800f7215dc55b8ae0d8433d08880a111", "dimensions": [640, 384]}
+    ]
+  },
+  "observation_boundaries": {
+    "norns_keys_and_encoders": "Mosaic script hardware callbacks after stock encoder processing",
+    "grid_input": "stock _norns.grid.key callback; serialosc/electrical ingress bypassed",
+    "grid_output": "pass-through stock driver calls with physical low-nibble LED conversion",
+    "midi_output": "pass-through _norns.midi_send with device monotonic timestamps",
+    "screen": "physical norns framebuffer export",
+    "physical_led_photons": "not observed"
+  },
+  "finalization": {
+    "active_marker_removed": true,
+    "recovery_directory_removed": true,
+    "tested_mosaic_source_kept": true,
+    "pre-run_mosaic_data_and_system_state_restored": true,
+    "stock_clock_restored": true,
+    "active_script": "/home/we/dust/code/mosaic/mosaic.lua",
+    "reload_receipt": "failed after file restoration because stock norns reproduced the queued-resume race",
+    "independent_backup_sha256": "21296aa723635cee2954ffc7ce3d72799c4670300a9cb7817453297ead453757"
+  },
+  "claim_limit": "This validates M-PAT-001 and the generic smoke on one physical device. It does not claim the full 805-case emulator suite, physical grid ingress, camera-observed LEDs, or stock-norns green status."
+}

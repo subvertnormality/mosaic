@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "b445dc6",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "6ebd279e6aab03b7517e3631841ca73b984ace868fdf062850479124d7b9d7ad",
+      "after_sha256": "e0ae89ad490782ed0a33a1ae185a53419fa06a96da2023d27fd19568297769d7"
+    }
+  ],
+  "patch": "0134-chord-mask-unset-start-x.patch",
+  "patch_sha256": "505729c861ff65b3b9e6b1b53d8d6a614725ffc652efc28d024d4a28abfa37a4",
+  "regression": "M-MASK-CHORD-X-001",
+  "unit_regression": "test_mask_handler_chord_one_unheld_increment_from_unset",
+  "baseline": [
+    {
+      "run_id": "1f1dd9d8a0194b54b3ee7f910844f551",
+      "case": "M-MASK-CHORD-X-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "e1c49abff06685224538e6ae272185a4b7e2280b0890a5b5a821ea77ca947bb7",
+      "failure": "('One turn from an unset chord mask', {'expected': ('2nd', '-7th'), 'shown': ('X', '-6th')})"
+    },
+    {
+      "run_id": "bf3a3f34bd764abd81bc7e48ae23b4ba",
+      "case": "M-MASK-CHORD-X-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "7105e012068e91b6865a091eaacfecb6660d80e5ad1ca649614cbf99990922f8",
+      "failure": "('One turn from an unset chord mask', {'expected': ('2nd', '-7th'), 'shown': ('X', '-6th')})"
+    }
+  ],
+  "rationale": "The four channel-wide chord mask handlers seeded an unset chord mask as -1, but for chords 0 is X and -1 is '-7th' (the refresher and display treat unset as 0). One turn up from unset therefore stayed on X and one turn down skipped -7th to -6th (baseline screen: ('X', '-6th')). The seed is now 0, so the first turn moves one chord step from X. Behaviour-helper cascade: cases that set channel chord masks counted turns from the old -1 seed; their turn counts drop by one (strum_reset_continuity, arp_basic_timing, spread_acceleration_contract, fractional_spread_contract, minimum_swung_gap_contract, muted_sparse_reverse_arp, arp_rest_live_scale, chord_shape_schedule, panic_pending_chord in cases.py; numeric_length_merge strum, mask_full_chord_inheritance, mask_clear_combined_chords and the mask_clear_attributes chord default), and the two explicit-Off chord slots (arp_rest_slots, arp_empty_muted_replacement), which were one turn from -1, are now one turn up and back. Expected notes are unchanged. The channel_edit_mask_handler characterisation units for unheld increment/decrement from unset now pin +1/-1 for the chord handlers.",
+  "oracle": "Human decision 2026-09-11 (S26): an unset chord mask should start from X. README 597 (a channel mask adds a chord note to every trigger) for the audible check; the chord labels are characterisation.",
+  "validation": [
+    {
+      "run_id": "622d670eb48a47a1b196c0dbf3b4ef57",
+      "case": "M-MASK-CHORD-X-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "e7f7110aa3de3342872847b1e8b6764b21acebb6a1f35fc9107db93651e5da7d",
+      "failure": null
+    },
+    {
+      "run_id": "536365f774e24e91a622e343d526ba51",
+      "case": "M-MASK-CHORD-X-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "e319d955efeb38c3a068b60d3d99def8dfe55062c4e2b2fb5034d1c1378ceb39",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-18abecbd8a2a4e1a8684311c9bb98afe",
+      "case": "M-MASK-CHORD-X-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "3587f103307a5f511f73ced12d05c4328d29e4dc3f7a9fbff4e5182c768d17f3",
+      "failure": null,
+      "normalized_sha256": "b45b6a33dba8717bcaadfa78caa62791ecbaefea3777b9dd007eb4b654cb1754"
+    }
+  ],
+  "collateral": "One case per edited or chord-mask helper in the controlled lane, all passed: M-TIME-012 bbffe270e12443d48af45b03395c7e8e, M-ARP-002 03c971a7649e40548e69f9fb14b7aa80, M-ARP-003 f73d6c3cf43342009a6f743d1b047763, M-SPREAD-017 ed56ed39301b4c54bc016f6de762de7a, M-ARP-008 7759df367b9f48f39d0fee4aec5b4644, M-ARP-009 edf3ca631d904a2eb5b0be53fbc08235, M-SPREAD-023 309a413678de459683cd7a0d0f7ee8b1, M-SPREAD-026 0e971188b23a485ba64306802cd03233, M-ARP-010 28332bbbca0f43b1a397638e42d5baab, M-ARP-012 de56f35891c44a3b989e610c0fa85706, M-ARP-014 66f7e62ecfa84175add5c4cfed029e03, M-CHORDSHAPE-001 5584888892e6402b9dbe997aa2b689e8, M-CHORDVEL-002 f06a6a28ac55416590560943c1541c16, M-DASHBOARD-001 e11698d62d654bd2b47626c5fc09438d, M-PANIC-007 f70c6981dba9487bb81ebf410e1cc272, M-MERGE-033 795f6e6474e64a3da33745d5819cbb4f, M-MASK-022 9e0956930d984e159657deb40505e495, M-MASK-016 bb1b58d463f34229a861f28ed34dda70, M-MASK-010 d917553b1cfb4d7187aea4aac6b811c7, M-MASK-006 8a07d7e7c9da40cfbebdde26bc12d178, M-ARP-006 8e7011ff5f1c474aa76053672da142d3. Full Lua units 1467/1467 OK; guards OK.",
+  "upstream_merged": false
+}

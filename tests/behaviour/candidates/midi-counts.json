@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "name": "midi-counts-and-mask-clearing",
+  "status": "isolated-candidate",
+  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
+  "baseline_failure": "artifacts/c08/a9eb66b7e7ef48d3a3b41e86691dd2c1/manifest.json",
+  "files": [
+    {
+      "kind": "patch",
+      "path": "fixtures/apps/mosaic-patches/0002-midi-balanced-note-offs.patch",
+      "sha256": "ded658be2df94c6abbb22634030a8d5bbaf6fceb57bcae220c3df233dfed83b2"
+    },
+    {
+      "kind": "patch",
+      "path": "fixtures/apps/mosaic-patches/0003-clear-channel-mask-defaults.patch",
+      "sha256": "0575c3ddc52cdaddd9fa530a7752d5ea7e2ca731ffc06ab552c711fe16319bcb"
+    },
+    {
+      "kind": "test",
+      "path": "fixtures/apps/mosaic-patches/channel-mask-clearing-tests.lua",
+      "sha256": "5a4c68ba7050585a0a559a95bc6b5aad870035a13264ade34dd76f9e91e9129c"
+    }
+  ],
+  "preparation_version": 2,
+  "baseline_failures": [
+    "artifacts/c08/a9eb66b7e7ef48d3a3b41e86691dd2c1/manifest.json",
+    "artifacts/c08/662d17b2bd704bd28733400bf09e87b1/manifest.json"
+  ]
+}

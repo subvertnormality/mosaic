@@ -237,7 +237,7 @@ local function make_cache_key(root_note, chord_rotation, scale_number, transpose
                (do_pentatonic and 8 or 0)
   
   -- Hash the scale table
-  scale_hash = hash_scale(scale_container.scale)
+  local scale_hash = hash_scale(scale_container.scale)
 
   -- Create a more efficient key using string format
   return string.format("%d:%d:%d:%d:%x:%d:%d:%d",
@@ -291,6 +291,15 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   else
     scale = fn.deep_copy(scale_container.scale)
     pentatonic = fn.deep_copy(scale_container.pentatonic_scale)
+    -- Include the preceding octave when the selection omits its tonic.
+    -- Otherwise low Lydian C has no B below it and snaps differently by octave.
+    local lower_octave = {}
+    for i = 1, math.min(5, #pentatonic) do
+      lower_octave[i] = pentatonic[i] - 12
+    end
+    for i = #lower_octave, 1, -1 do
+      table.insert(pentatonic, 1, lower_octave[i])
+    end
 
     if do_degree and chord_rotation > 0 then
       for _ = 1, chord_rotation do
@@ -316,7 +325,8 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
     -- Store processed scales in cache
     quantiser._scale_cache[cache_key] = {
       scale = scale,
-      pentatonic = pentatonic
+      pentatonic = pentatonic,
+      timestamp = os.time()  -- cleanup sorts every entry by timestamp
     }
     quantiser._scale_cache_size = quantiser._scale_cache_size + 1
 
@@ -414,13 +424,25 @@ function quantiser.process_with_mask_params(note_number, octave_mod, transpose, 
 end
 
 
-function quantiser.snap_to_scale(note_num, scale_number, transpose)
+function quantiser.snap_to_scale(note_num, scale_number, transpose, midi_only)
 
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
 
   scale = fn.transpose_scale(scale, root_note + (transpose or 0))
+
+  if midi_only then
+    -- A root shift can move the generated scale above MIDI127. Select from
+    -- playable scale notes, rather than clamping a result out of its scale.
+    local playable = {}
+    for _, pitch in ipairs(scale) do
+      if pitch >= 0 and pitch <= 127 then
+        playable[#playable + 1] = pitch
+      end
+    end
+    scale = playable
+  end
 
   if type(note_num) ~= "number" then return nil end
 

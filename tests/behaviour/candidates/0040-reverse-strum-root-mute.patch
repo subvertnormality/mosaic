@@ -1,0 +1,11 @@
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -697,7 +697,7 @@
+ 
+   end
+ 
+-  if chord_strum_pattern == 2 or chord_strum_pattern == 4 then
++  if not mute_root and (chord_strum_pattern == 2 or chord_strum_pattern == 4) then
+ 
+     local delay = chord_timing.delay(chord_division, chord_spread, chord_acceleration, #chord_notes)
+     if delay ~= nil then

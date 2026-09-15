@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "measured_date": "2026-09-13",
+  "status": "physical-calibration-partial-comparison-not-qualified",
+  "scope": "Exploratory PERF-002 sparse and 16-channel dense observations; one physical run per point and three unmatched emulator repeats per point",
+  "hardware": {
+    "candidate_clock_sha256": "d9ac8d5c8bc0e46d74f8ca82123dab44b9df57c8203d3dc9f9e443871a67d513",
+    "stock_clock_restored_sha256": "60791d2c61655a6bbb853a5e65134d3a45fb294eafc908424abd0a93333da19c",
+    "clean_matron_start_outside_measurement": true,
+    "runs": {
+      "PERF-002-HW-1": {
+        "artifact": "/home/andy/projects/mosaic-behaviour-runs/perf-002-hw-1-final-20260913/performance.json",
+        "artifact_sha256": "e711a5a7bf9242eab3f934013079a54da43cdfc5f250df1dd09df606f286b3c0",
+        "raw_artifact": "/home/andy/projects/mosaic-behaviour-runs/perf-002-hw-1-final-20260913/performance-raw.json",
+        "raw_artifact_sha256": "e6c23210397e2de5b6cb428b3d2dd707f2657521454dbc07be8a2c013fb64d8c",
+        "source_identity": {
+          "mosaic_revision": "40b1911fa3ffe0b162b9c4b6e4ff4f29123cfaae",
+          "dirty_patch_sha256": "18046637d9a95db0798b826a19fc31f70a74c30bd7575076ace932e2240b68eb"
+        },
+        "runtime_identity": {
+          "kind": "identity",
+          "uname": {
+            "system": "Linux",
+            "node": "norns",
+            "release": "5.10.92-18-g458e2253667a",
+            "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+            "machine": "armv7l"
+          },
+          "boot_id": "442fbf8e-03cd-4ba3-9c42-6854665d9e02",
+          "norns_revision": "42961b9cf7e986933663e8e084c924e6caee3132",
+          "clock_lua_sha256": "d9ac8d5c8bc0e46d74f8ca82123dab44b9df57c8203d3dc9f9e443871a67d513",
+          "matron_pid": 19185,
+          "matron_start_ticks": 1557170,
+          "matron_executable": "/home/we/norns/build/matron/matron",
+          "clock_ticks_per_second": 100,
+          "page_size": 4096
+        },
+        "tempo_bpm": 122.0,
+        "passed": true,
+        "measured_steps": 66,
+        "captured_steps": 68,
+        "note_ons": 68,
+        "note_offs": 68,
+        "messages": 408,
+        "p99_ns": 3527424,
+        "maximum_ns": 3527424,
+        "final_phase_error_ns": 215644,
+        "service_p99_ns": 0,
+        "skipped_deadlines": 0,
+        "failed_gates": [],
+        "matron_cpu_percent": 25.736338857493944,
+        "matron_peak_rss_bytes": 62652416,
+        "thermal_millicelsius_peak": 45622,
+        "throttled_flags_or": 0
+      },
+      "PERF-002-HW-16": {
+        "artifact": "/home/andy/projects/mosaic-behaviour-runs/perf-002-hw-16-final-20260913/performance.json",
+        "artifact_sha256": "ce0f4554e9ca0df744bbb4a28093fe7d232d55b26cf38c54f163a1ce26f2e096",
+        "raw_artifact": "/home/andy/projects/mosaic-behaviour-runs/perf-002-hw-16-final-20260913/performance-raw.json",
+        "raw_artifact_sha256": "5650fa258008122035f969dd76b4a7bf6542603d769315168bba1c93595d7d2e",
+        "source_identity": {
+          "mosaic_revision": "40b1911fa3ffe0b162b9c4b6e4ff4f29123cfaae",
+          "dirty_patch_sha256": "18046637d9a95db0798b826a19fc31f70a74c30bd7575076ace932e2240b68eb"
+        },
+        "runtime_identity": {
+          "kind": "identity",
+          "uname": {
+            "system": "Linux",
+            "node": "norns",
+            "release": "5.10.92-18-g458e2253667a",
+            "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+            "machine": "armv7l"
+          },
+          "boot_id": "442fbf8e-03cd-4ba3-9c42-6854665d9e02",
+          "norns_revision": "42961b9cf7e986933663e8e084c924e6caee3132",
+          "clock_lua_sha256": "d9ac8d5c8bc0e46d74f8ca82123dab44b9df57c8203d3dc9f9e443871a67d513",
+          "matron_pid": 19185,
+          "matron_start_ticks": 1557170,
+          "matron_executable": "/home/we/norns/build/matron/matron",
+          "clock_ticks_per_second": 100,
+          "page_size": 4096
+        },
+        "tempo_bpm": 122.0,
+        "passed": false,
+        "measured_steps": 65,
+        "captured_steps": 69,
+        "note_ons": 1104,
+        "note_offs": 1104,
+        "messages": 2484,
+        "p99_ns": 36124344,
+        "maximum_ns": 39975660,
+        "final_phase_error_ns": 39417344,
+        "service_p99_ns": 24142848,
+        "skipped_deadlines": 0,
+        "failed_gates": [
+          "event_timing"
+        ],
+        "matron_cpu_percent": 40.166066471051316,
+        "matron_peak_rss_bytes": 63033344,
+        "thermal_millicelsius_peak": 45622,
+        "throttled_flags_or": 0
+      }
+    },
+    "cleanup_verified": {
+      "stock_clock_restored": true,
+      "services_active": [
+        "norns-matron",
+        "norns-jack",
+        "norns-crone",
+        "norns-sclang",
+        "norns-maiden"
+      ],
+      "mosaic_source_present": true,
+      "recovery_marker_absent": true
+    }
+  },
+  "emulator": {
+    "artifact": "/home/andy/projects/mosaic-behaviour-runs/perf-dense-paired-hardware-20260913/result.json",
+    "artifact_sha256": "4ae0ceb1f41c137541bd7fa3bf3468c56c21cbc54969cf5ce02776fe7a1b0cb0",
+    "mosaic_revision": "40b1911fa3ffe0b162b9c4b6e4ff4f29123cfaae",
+    "dirty_patch_sha256": "18046637d9a95db0798b826a19fc31f70a74c30bd7575076ace932e2240b68eb",
+    "image": "monome-emulator:perf-recorder-02",
+    "image_id": "sha256:38b516ef4a8e7f85355da8d94d8f6f21c007b6a8d47fa829a8fc9039c01eea91",
+    "tempo_bpm": 90,
+    "limits": {
+      "cpus": 0.5,
+      "memory_bytes": 805306368,
+      "cpuset": "0"
+    },
+    "runs": {
+      "1": [
+        {
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "note_ons": 49,
+          "messages": 100,
+          "p99_ns": 3713404,
+          "maximum_ns": 3713404,
+          "final_phase_error_ns": 1129244,
+          "service_p99_ns": 0
+        },
+        {
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "note_ons": 49,
+          "messages": 100,
+          "p99_ns": 1362981,
+          "maximum_ns": 1362981,
+          "final_phase_error_ns": 1029698,
+          "service_p99_ns": 0
+        },
+        {
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "note_ons": 49,
+          "messages": 100,
+          "p99_ns": 1510603,
+          "maximum_ns": 1510603,
+          "final_phase_error_ns": 1073104,
+          "service_p99_ns": 0
+        }
+      ],
+      "16": [
+        {
+          "repeat": 1,
+          "passed": true,
+          "steps": 49,
+          "note_ons": 784,
+          "messages": 1570,
+          "p99_ns": 2875326,
+          "maximum_ns": 4073384,
+          "final_phase_error_ns": 2156806,
+          "service_p99_ns": 4073384
+        },
+        {
+          "repeat": 2,
+          "passed": true,
+          "steps": 49,
+          "note_ons": 784,
+          "messages": 1570,
+          "p99_ns": 3655493,
+          "maximum_ns": 4323356,
+          "final_phase_error_ns": 1477974,
+          "service_p99_ns": 4323356
+        },
+        {
+          "repeat": 3,
+          "passed": true,
+          "steps": 49,
+          "note_ons": 784,
+          "messages": 1570,
+          "p99_ns": 2841918,
+          "maximum_ns": 4347758,
+          "final_phase_error_ns": -1114438,
+          "service_p99_ns": 4347758
+        }
+      ]
+    }
+  },
+  "comparison": {
+    "hardware_sparse_p99_ns": 3527424,
+    "hardware_dense_p99_ns": 36124344,
+    "hardware_density_amplification": 10.240998530372305,
+    "emulator_sparse_median_p99_ns": 1511000,
+    "emulator_dense_median_p99_ns": 2875000,
+    "emulator_density_amplification": 1.9027134348113832,
+    "conclusion": "These observations suggest that the current emulator setup does not reproduce the physical run's density-dependent timing, but they do not identify a single cause or qualify a replacement performance profile. Tempo, event mix, port attribution and repeat count must be aligned before calibration.",
+    "qualification": "not-qualified-for-profile-selection",
+    "candidate_model": null
+  },
+  "limitations": [
+    "Only one physical run exists at each channel count; repeat variance is not measured.",
+    "The physical device inherited 122 BPM while the emulator fixture used 90 BPM, producing different event rates.",
+    "The physical trace contains four recurring Program Change messages per step that are absent from the emulator trace; their source port cannot be reconstructed from the retained userdata strings.",
+    "The original hardware runner inferred MIDI ports from userdata pointer suffixes. Raw bytes and timestamps remain valid, but historical port values are not trustworthy; future runs resolve ports through midi.vports.",
+    "Pooled event lateness includes both scheduler/step-head delay and within-step serialization; it does not establish that MIDI output alone is the bottleneck.",
+    "PERF-003-HW-16 remains unrun because hardware access was paused by the user.",
+    "Physical grid activity is observed at the driver boundary; LED photons are not read back."
+  ]
+}

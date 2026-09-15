@@ -155,6 +155,9 @@ function song_edit_page.register_press()
   press:register_dual(
     "song_edit_page",
     function(x, y, x2, y2)
+      -- README 903: the source is the slot pressed first, whichever key is released first
+      -- (arbitrated 2026-09-11, press-order-slot-copy-only).
+      if m_grid and m_grid.pressed_after and m_grid.pressed_after(x, y, x2, y2) then x, y, x2, y2 = x2, y2, x, y end
       local pattern = fn.calc_grid_count(x, y) + 48
       local target_pattern = fn.calc_grid_count(x2, y2) + 48
       if

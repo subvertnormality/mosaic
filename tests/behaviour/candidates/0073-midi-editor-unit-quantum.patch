@@ -1,0 +1,39 @@
+--- a/lib/devices/midi_value_domain.lua
++++ b/lib/devices/midi_value_domain.lua
+@@ -1,5 +1,12 @@
+ -- Native controls remain numeric, while off is a distinct selectable value.
+ local domain = {}
++-- A separate Off position is one selectable interval, including sparse ranges.
++function domain.unit_quantum(minimum, maximum, off)
++  off = off == nil and -1 or off
++  local intervals = maximum - minimum
++  if off < minimum or off > maximum then intervals = intervals + 1 end
++  return 1 / math.max(1, intervals)
++end
+ function domain.new(minimum, maximum, off, units)
+   off = off == nil and -1 or off
+   units = units or 1
+--- a/lib/pages/channel_edit_page/channel_edit_page_ui.lua
++++ b/lib/pages/channel_edit_page/channel_edit_page_ui.lua
+@@ -1,3 +1,4 @@
++local midi_value_domain = include("mosaic/lib/devices/midi_value_domain")
+ -- channel_edit_page_ui.lua
+ local channel_edit_page_ui = {}
+ 
+@@ -642,13 +643,13 @@
+     total_range = ((p.controlspec.maxval - p.controlspec.minval) / p.controlspec.quantum)
+ 
+     if trig_lock_param.nrpn_min_value and trig_lock_param.nrpn_max_value and trig_lock_param.nrpn_lsb and trig_lock_param.nrpn_msb then
+-      p.controlspec.quantum = 1 / (trig_lock_param.nrpn_max_value - trig_lock_param.nrpn_min_value) 
++      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.nrpn_min_value, trig_lock_param.nrpn_max_value, trig_lock_param.off_value)
+       total_range = p.controlspec.maxval - p.controlspec.minval
+     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.cc_msb then
+-      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
++      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.cc_min_value, trig_lock_param.cc_max_value, trig_lock_param.off_value)
+       total_range = p.controlspec.maxval - p.controlspec.minval
+     elseif trig_lock_param.cc_min_value and trig_lock_param.cc_max_value and trig_lock_param.type == "midi" then
+-      p.controlspec.quantum = 1 / (trig_lock_param.cc_max_value - trig_lock_param.cc_min_value)
++      p.controlspec.quantum = midi_value_domain.unit_quantum(trig_lock_param.cc_min_value, trig_lock_param.cc_max_value, trig_lock_param.off_value)
+       total_range = p.controlspec.maxval - p.controlspec.minval
+     end
+   elseif p.count then

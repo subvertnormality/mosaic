@@ -1,0 +1,105 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "b97d6bb",
+  "files": [
+    {
+      "file": "lib/m_midi.lua",
+      "before_sha256": "3e522bd5dc8fd17aa3dce5bcfbcfabdd1e7dd9e3b923e0a95e85d3b9f4098c23",
+      "after_sha256": "6990b843302a6ab86e0a55678799d8c78e369c6afa7f83729fc5fb80bc30d538"
+    }
+  ],
+  "patch": "0115-midi-release-song-ownership.patch",
+  "patch_sha256": "70482b2275c73e05ebfbde4e8f81a4707b8f2e700c206e58849fe250054feda3",
+  "regression": "M-REC-SONG-LENGTH-002",
+  "unit_regression": "test_midi_input_final_release_keeps_onset_song_and_clock_mods",
+  "baseline": [
+    {
+      "run_id": "4cf6f12c342545edacfff994750f5a4b",
+      "case": "M-REC-SONG-LENGTH-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "dcfac7d80f37047f32901417a310000974ab3117090888649dc87f89895f2add",
+      "failure": "{'pitch': 84, 'duration': 0.166666666, 'expected': 0.3333333333333333}"
+    },
+    {
+      "run_id": "2c92a9e5fa0f4a769888997ba355fbab",
+      "case": "M-REC-SONG-LENGTH-002",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "b4f4b6919b848e95f91ba137ec8274f1bfb37a14192a5d1bfaf03a94c1515fc3",
+      "failure": "{'pitch': 84, 'duration': 0.166666666, 'expected': 0.3333333333333333}"
+    },
+    {
+      "run_id": "222bbf65914341b082565d144412c90b",
+      "case": "M-REC-SONG-LENGTH-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "861ef6497bb192e08ef6ffc4a8e511b690dfc0e3af2adb114c55a94229ce3dd5",
+      "failure": "{'pitch': 84, 'duration': 0.166596113, 'expected': 0.3333333333333333}"
+    },
+    {
+      "run_id": "76f898fa2cc84cdb8cb80e5275589d8e",
+      "case": "M-REC-SONG-LENGTH-002",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "2e8fd29c378e84fe760bf0d0accad90403ecc5a7f24767d98b27c0680a1c5b9b",
+      "failure": "{'pitch': 84, 'duration': 0.167271584, 'expected': 0.3333333333333333}"
+    }
+  ],
+  "rationale": "A held MIDI note stored its channel and step but not its song. Release after an automatic song transition read the new song channel for length quantisation and queued the completed length into the new song. Store the onset song and use it for release lookup and event ownership. Final chord release still determines the shared length.",
+  "oracle": "README.md:239: recorded lengths and chords use the active onset step; shared chord length is first press to final release. A 300 ms hold at 100 BPM is two sixteenth steps, replaying as 1/3 second at 90 BPM. Both note and staggered chord cases assert MIDI note-on placement and note-off durations across three cycles. Cross-song ownership is characterisation, not manual text.",
+  "validation": [
+    {
+      "run_id": "bea4d201c76841b78e0bdb2cc963e4f2",
+      "case": "M-REC-SONG-LENGTH-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "664c2f2c35c6919f939daad901312fe02f99ba278402daf4644ace3010059339",
+      "failure": null
+    },
+    {
+      "run_id": "1aba77ab3b4f421181ba7961693f9d3b",
+      "case": "M-REC-SONG-LENGTH-002",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "5b908c0bae17b90b596ba4fb5c7ce4a795a018cc678384817a344d6cb27f8f65",
+      "failure": null
+    },
+    {
+      "run_id": "ae82725a214741e99de1f09c1cd6a6cf",
+      "case": "M-REC-SONG-LENGTH-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "50cb17923b84f5057768fec4ed96419478ab08080d3d2a043b57bb772c77aa31",
+      "failure": null
+    },
+    {
+      "run_id": "a51e5b17c4d849a7979b0ed58da0bd41",
+      "case": "M-REC-SONG-LENGTH-002",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "f47991c858236e01f8d6f62589dbe76e910744ad6d8492e4801a41b5925c9314",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-068b81ea01344c8caaa2da4b7d7ca8d9",
+      "case": "M-REC-SONG-LENGTH-002",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "3c962e5cf43f790dcfea9d3c9406005d85b53cea3ee4be6c9b8bafabad877246",
+      "failure": null,
+      "normalized_sha256": "3b7056507cdf0b6b4678823c5e0f287b86473cc6d8a72e0b3eb8a36c77c4fdb6"
+    },
+    {
+      "run_id": "repeat-72eca8649cf4480fa834dcf035e443dc",
+      "case": "M-REC-SONG-LENGTH-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "88bea1af53fffa78976c8c11371b1574c6622d7dd4c5d5519e9628ba6eacb27a",
+      "failure": null,
+      "normalized_sha256": "55eab34a94937a3c37319a5d91d6199438fddcce2e10df978037da04b6a8cd46"
+    }
+  ],
+  "collateral": "1535/1535 Lua unit/integration tests passed (26.037 s), six inventory/name/syntax guards passed. Existing M-TRIPLE-002/003 pass controlled 7cf5c3ec2f5e42fba753d5c7a1f8ec50 / ae7dbdcd1f034d87b5911d76041ff813 and real-time 955e46cf03b84c40b925fadc7b3d25aa / 72e710f55ec1462999ecae879e9d018d. Both new cases pass three deterministic fresh-process repeats. Sol static review found no actionable issue.",
+  "upstream_merged": false
+}

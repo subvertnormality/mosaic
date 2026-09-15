@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused follow-up to01a07fc7-92af-7850-99a4-1693a08c0693; do not edit files. Same explicitly authorised public repository/test evidence to Codex. All three requested native additions now implemented: M-ARP014 native65856bc19b8e4104b145b510beda2bec tests soundingroot0off432, empty-muted216 cancels old onset432, replacementroot432off864, oldgate648 cannot cut replacement, replacementchord864Stop972. M-ARP010/011 nativeb45c511234ff4c67a27cc9a3738695d7 and5134f58cea0148bc8c0aa5a0adbb28cd test onlymask4 populated, shapes2/4, rootmuted, onsets0/540/1080 with velocities50/100/127 and all releases. Controlled initialtrigger binding was subsequently tightened and is being rerun; do not assume that rerun passed. M-ARP012/013 native2de03c43ff2644cdb743f5f5f2fbeccd and29646a7561fd44d5a7dc77993e100819 test rootmuted masks1/3, dhalf,squarter,a1,velocity50+10ordinal; onsets162/648/1782pulses with60/80/110, pitch64/69/66 after Cmajor toDmajor scale change during rest. Both ordinary and fullyquantised C4 mask branches pass; origin is actual controlled trigger, no emittednote fitting. Prior all9 D arp boundary/rest cases passed; six real-time cases006/007/008/009/001/003 also passed, without claiming D20 absolute timing. Production code unchanged since original review0038. Review just adequacy/counterexamples for those three additions and whether any concrete blocker remains for scoped restcandidate acceptance. Fullmanual/release and strumshape behavior remain pending. Manifests under <native-runs>.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "3205e73886f38f68c899692524d7eee24b18c490d6f6f7a9b15451b7f84b60a6",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "The three additions are adequate for scoped rest-candidate acceptance; I found no concrete production blocker within that scope. I did not verify a completed tightened rerun, but independently checked that both original sparse-shape captures place their first note exactly at the controlled trigger.\n\n- **M-ARP-014:** The oracle checks cancellation at216, preserved release432, replacement release864 beyond old gate648, and Stop cleanup972 ([cases.py:2397](<mosaic-worktree>/tests/behaviour/cases.py:2397)). This matches onset-only cancellation and per-arp release ownership ([m_clock.lua:575](<mosaic-worktree>/lib/clock/m_clock.lua:575), [m_clock.lua:606](<mosaic-worktree>/lib/clock/m_clock.lua:606)); its supplied manifest records a pass.\n- **M-ARP-010/011:** Their recipes yield trigger times **34,740,000,000ns / 34,840,000,000ns**, exactly matching first Note Ons in the respective observations. Thus the old evidence itself excludes a uniformly shifted first onset. The oracle checks five-slot wrapping, velocities50/100/127, and every release ([cases.py:2336](<mosaic-worktree>/tests/behaviour/cases.py:2336)). With only mask4 sounding, these fixtures do **not** distinguish every permutation of the silent slots; that limits general shape coverage, not this rest regression.\n- **M-ARP-012/013:** Both supplied manifests pass. Expectations use the trigger origin and independently specified pulses162/648/1782, pitches64/69/66, and velocities60/80/110 ([cases.py:2359](<mosaic-worktree>/tests/behaviour/cases.py:2359)). Production advances ordinals through rests and resolves scale at each sounding slot ([step.lua:544](<mosaic-worktree>/lib/step.lua:544)).\n\n**CONFIDENCE: High** for this bounded conclusion; tightened-rerun completion remains unverified, and full release/manual acceptance, strum shapes, and D20 absolute real-time timing remain outside it.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07fd3-f6d0-7850-9eff-fc26c1fc2573` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "12c32b09382a9ac0c43d808be4af37a75d96a0b2b9eb23277e45691a4958dfc2",
+    "redaction": "Personal absolute paths replaced; complete raw response retained in ignored artifacts."
+  }
+}

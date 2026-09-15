@@ -1,0 +1,50 @@
+{
+  "started_at": "2026-09-10T03:01:09.824002+00:00",
+  "packet_sha256": "ef18aba4828980ee7588ea86ee26faa3ff2630413f242fe91f989f33c22408c9",
+  "files": [
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/step.lua",
+    "/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-lock-validation.json"
+  ],
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Transpose composition and live-clear review\n\nUse Codex only. Read-only local shell commands are allowed; do not edit files or launch tests or runtime processes.\n\nReview M-TRANS-002 and M-TRANS-003 in `/home/andy/projects/mosaic-behaviour-tests` as a scoped extension of the already accepted full-range transpose fix. Evidence is in `docs/testing/transpose-lock-validation.json`.\n\nChallenge whether M-TRANS-002 independently and correctly computes the literal MIDI phrase for step locks -12, explicit zero and +12 (persistent through step4 and reset at wrap), saved scale transpose +3, overridden song transpose +4, and channel octave +1. Check that repeated wraps and release/timing assertions establish the claimed composition rather than merely mirroring implementation.\n\nChallenge whether M-TRANS-003 really clears step1 during playback while step2 is sounding, proves that note's release ownership and one-step duration, observes global +4 at the next step1, retains step2's explicit-zero behavior, and checks complete MIDI accounting and phase. Look for race-prone waits, partial traces, ambiguous note matching, or stale capture.\n\nAssess the retained 527-test performance-threshold failure and immediate 527/527 rerun honestly: decide whether it is a blocker for these Python-only behavior additions or an appropriately retained timing flake. Return ACCEPTED or CHANGES REQUIRED with findings ordered by severity. Do not claim the remaining transpose or manual domains complete.\n",
+    "files": [
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/lib/step.lua",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-lock-validation.json",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/decisions.md",
+        "reason": "Findings and fixes"
+      }
+    ],
+    "web_search": false,
+    "effort": "medium"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**CHANGES REQUIRED.** The literal composition is correct and the retained runs support the intended behavior, but M-TRANS-003 can pass without establishing its claimed edit timing or release ownership.\n\n1. **Medium \u2014 Live-clear timing and note identity are not asserted.** [cases.py:749](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:749) waits for `>= 6` onsets; a delayed observation can arrive after step2 has released. `clear_lower/clear_upper` are recorded but never compared with that note\u2019s lifetime. Furthermore, `pairs[5]` selects the sixth **release**, because [note_accounting.py:16](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/note_accounting.py:16) appends in release order. Select the pair by the sixth onset\u2019s event index and assert `on <= clear_lower <= clear_upper < off`, then its one-step duration. The retained traces actually satisfy this: controlled time places the edit at 2.830\u20132.890 seconds inside 2.823333334\u20132.990000001; real time also brackets it correctly.\n\n2. **Medium \u2014 Live-clear validates only a prefix and omits expected-port checks.** [cases.py:753](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:753) and [cases.py:764](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:764) compare byte slices through onset 11. Additional regularly spaced, balanced notes can escape pitch validation; consistently wrong ports also pass. `MidiWindow` protects against stale or missing capture, and `note_pairs` checks balanced ownership, but neither makes these slices a complete expected trace. Validate every captured onset, including port and permitted count.\n\n3. **Low \u2014 M-TRANS-002 demonstrates repetition, not independently wrap reset.** Its literal arithmetic is correct: `(60,62,64,65) + 12 + 3 + (-12,0,12,12) = (63,77,91,92)`. The twelve duration checks and repeated phrase support composition and step4 persistence. However, step1\u2019s `-12` replacement masks removal of the reset at [step.lua:458](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:458). Attribute reset coverage to M-TRANS-003\u2019s unlocked step1 returning to global `+4`, or add an unlocked-wrap assertion to M-TRANS-002.\n\nThe retained **526/527 performance failure followed by 527/527 is nonblocking for these Python-only additions**: the failure is the existing maximum-pulse-time assertion at [m_clock_performance_tests.lua:271](/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/m_clock_performance_tests.lua:271). Retaining both outcomes appropriately documents a timing flake; the rerun does not prove its cause.\n\n**CONFIDENCE: High.** All four interaction manifests/artifacts and retained log hashes verified; corrected assertions would change the verdict. No tests were launched, and remaining transpose/manual domains remain incomplete.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08943-1a4e-7972-807c-38949db9c307` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "status": "returned",
+  "finished_at": "2026-09-10T03:03:08.998188+00:00"
+}

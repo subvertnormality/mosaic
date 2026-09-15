@@ -1,0 +1,72 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "901dbdd",
+  "files": [
+    {
+      "file": "lib/ui_components/tooltip.lua",
+      "before_sha256": "f3f5c9ed0940fd5012e95c6fef5f0ef612c39f2e3250684187ef4e062ceff632",
+      "after_sha256": "8aa8eb58660a386dfed8d5acdab5d2156bd91dc328a1929e563e932982e5663a"
+    }
+  ],
+  "patch": "0098-tooltip-metro-id.patch",
+  "patch_sha256": "6af0430acf4a821b5cc95476931014785e95a1f943cda6b59dd915dd76d37a80",
+  "regression": "M-TOOLTIP-002",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "696f2a66bc954c38b4b37f3d37fcd78a",
+      "case": "M-TOOLTIP-002",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "b54dc493b5b4ca9c1cd8c359acad58657d3565b0d911707d63472323e53cd95c",
+      "failure": "Required observable output did not arrive"
+    },
+    {
+      "run_id": "0925e3b248044de484aac6147b0c7a3a",
+      "case": "M-TOOLTIP-002",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "0012f6cab68a72ef352fb3652892780bd02f1e8db463fe5dfbda8f4cb90f2ad1",
+      "failure": "Required observable output did not arrive"
+    }
+  ],
+  "rationale": "tooltip:do_tip freed metro slot i (its position in the tooltip list, always 1) instead of the metro's own id. After the second tooltip, the tooltip timer reused the autosave metro's slot; do_autosave then stopped that shared metro, so the Autosaved tooltip never expired (and a tooltip in the 0.5 s before an autosave could cancel it). The tooltip now frees its own metro id.",
+  "oracle": "README Tooltips (306) and M-TOOLTIP-001 characterisation: a tooltip clears about 3 s after it appears.",
+  "validation": [
+    {
+      "run_id": "c7b89a46f9e34e9dad448fc038304b22",
+      "case": "M-TOOLTIP-002",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "1cc0f7fc2018fb155ad037613cf575b5f59b4bd4b5d440152fcddaad44231502",
+      "failure": null
+    },
+    {
+      "run_id": "9e8d4c87537d4150af9551d94dc66ef1",
+      "case": "M-TOOLTIP-002",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "15ab35b67fee1799abe74ff918a6c74ba6940ae00797cb099e95fa9e5d054f89",
+      "failure": null
+    },
+    {
+      "run_id": "d75a51dd35d4402b982b73a71520565a",
+      "case": "M-TOOLTIP-002",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "ac09323733b874e49ef675b51ea7c96db49c7d49fc69b57811db00366355069f",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-e98ad79e1ec3488ab62cee3e44876639",
+      "case": "M-TOOLTIP-002",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "07e95b81a5927a34561fd3ce80821141142a036470665679c16a10e95654a89b",
+      "failure": null,
+      "normalized_sha256": "d067cb81b04f6f467046caa4923aa9b9e6f3ea51efe175d3087334612e288ae3"
+    }
+  ],
+  "collateral": "M-TOOLTIP-001 passes with the fix; all Lua units pass.",
+  "upstream_merged": false
+}

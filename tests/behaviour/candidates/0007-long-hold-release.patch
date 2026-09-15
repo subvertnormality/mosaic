@@ -1,0 +1,12 @@
+diff --git a/lib/m_grid.lua b/lib/m_grid.lua
+index 306a8e7..6d81a7a 100644
+--- a/lib/m_grid.lua
++++ b/lib/m_grid.lua
+@@ -258,6 +258,7 @@ function m_grid.init()
+           dual_in_progress = false
+         end
+       end
++      if #pressed_keys == 0 then dual_in_progress = false end
+       m_grid.post_press(x, y)
+     end
+   end

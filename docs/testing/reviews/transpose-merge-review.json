@@ -1,0 +1,50 @@
+{
+  "started_at": "2026-09-10T03:22:27.097790+00:00",
+  "packet_sha256": "f51b018f8385c44d453181cda162f356be58e25bb57a2688c31ab930bf5a62f0",
+  "files": [
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py",
+    "/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-merge-validation.json"
+  ],
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Transpose, merge and scale-lock interaction review\n\nUse Codex only. Read-only local shell commands are allowed; do not edit files or launch tests or runtime processes.\n\nReview M-TRANS-004 in `/home/andy/projects/mosaic-behaviour-tests` and its evidence in `docs/testing/transpose-merge-validation.json`.\n\nChallenge the user recipe, independent arithmetic and complete MIDI oracle. The case authors two pattern degree streams, selects All trig merge and Average note merge, fixes velocity ownership to pattern1, edits scale slot2 to D natural minor/root D/transpose+3, shortens the independent global scale track to four steps, places its scale lock at step3, and authors step transpose locks -12/zero/+12. It expects three complete repetitions of MIDI pitches 50/65/85/82 with original velocities, owned one-step releases and one-sixth-second phase.\n\nCheck especially that the UI controls actually select the claimed modes, the averaging formula and scale-degree tables are independent and correct, scale and transpose persistence/reset points are genuinely exercised, every output is accounted for, and the adjacent M-MERGE-009/M-SCALE-002 reruns are relevant. The first failed recipe is described honestly but is not positive evidence.\n\nReturn ACCEPTED or CHANGES REQUIRED with findings ordered by severity. Do not broaden this checkpoint to other merge modes or remaining transpose/manual requirements.\n",
+    "files": [
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/transpose-merge-validation.json",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/decisions.md",
+        "reason": "Findings and fixes"
+      }
+    ],
+    "web_search": false,
+    "effort": "medium"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**CHANGES REQUIRED.** The corrected recipe and pitch arithmetic are sound, and the recorded runs pass, but the claimed complete oracle and reset coverage exceed what the assertions establish.\n\n1. **High \u2014 MIDI accounting is incomplete.** [driver.py:125](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/driver.py:125) compares only positive Note Ons, before Stop. [cases.py:85](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:85) finds a matching release for each requested duration; it does not reject duplicate/unmatched releases or validate the boundary note\u2019s release. Both captures contain **94 events: 26 note events, 62 Program Changes and six transport events**. Explicitly account for permitted non-note output and pair every note through Stop, rejecting extra events. Empty `outstanding` alone does not establish this.\n\n2. **Medium \u2014 transpose resets are masked by replacement locks.** The recipe places \u221212 at wrap step1 and +12 at scale-change step3 ([numeric_merging.py:145](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py:145)). Those fresh locks replace persistence whether the reset branches in [step.lua:458](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:458) work or not. Scale reset and step3\u21924 persistence are exercised; transpose reset is not distinguishable. Add an unlocked observation at each reset boundary, or explicitly narrow the coverage claim.\n\n3. **Medium \u2014 spacing is asserted, accumulated phase is not.** [numeric_merging.py:161](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py:161) checks adjacent intervals only. Repeated timing errors could accumulate beyond the stated phase tolerance. Compare each onset against `first_onset + i/6`. The existing captures satisfy that stronger check: maximum deviation is approximately **1 ns controlled / 1.114 ms real-time**.\n\nThe controls correctly select All, retain default Average, and assign pattern1 velocity ([channel_edit_page.lua:11](/home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page.lua:11), [line 490](/home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page.lua:490)). Independent means `[1,3,5,3]`, C-major intervals and D-natural-minor intervals yield **50/65/85/82** exactly.\n\nBoth source hashes, all six manifest hashes and every listed artifact hash match. M-MERGE-009 meaningfully checks merge arithmetic/velocity isolation; M-SCALE-002 checks scale lifetime and removal. Neither closes these gaps. The retained first failure is honestly acknowledged in [progress.md:1227](/home/andy/projects/mosaic-behaviour-tests/docs/testing/progress.md:1227), and is not positive evidence.\n\n**CONFIDENCE: High.** Stronger accounting/phase assertions and distinguishable reset observations would change the verdict; no tests or application runtimes were launched.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08956-97fc-7553-a504-13dce1e77774` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "status": "returned",
+  "finished_at": "2026-09-10T03:24:50.821176+00:00"
+}

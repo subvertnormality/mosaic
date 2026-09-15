@@ -1,3 +1,4 @@
+local slide_onset_fixture = include("mosaic/lib/tests/helpers/slide_onset_fixture")
 local clock = os.clock
 
 step = include("mosaic/lib/step")
@@ -25,6 +26,8 @@ end
 local function clock_setup()
   m_clock.init()
   m_clock:start()
+  -- Collect setup/prior-test garbage before queuing; admission and sampling remain timed with GC enabled.
+  collectgarbage("collect")
 end
 
 local function progress_clock_by_beats(b)
@@ -160,7 +163,7 @@ function test_massive_concurrent_automation_with_param_slides()
         if point % 3 == 0 then
           -- Create a slide that overlaps with the next automation
           local slide_end = math.min(end_step + math.random(2, 8), steps_per_pattern)
-          m_clock.execute_action_across_steps_by_pulses({
+          slide_onset_fixture.queue(m_clock, {
             channel_number = channel,
             trig_lock = (pattern * automation_points + point) % 10 + 1,
             start_step = end_step,
@@ -177,7 +180,7 @@ function test_massive_concurrent_automation_with_param_slides()
         end
         
         -- Create the main automation
-        m_clock.execute_action_across_steps_by_pulses({
+        slide_onset_fixture.queue(m_clock, {
           channel_number = channel,
           trig_lock = (pattern * automation_points + point) % 10 + 1,
           start_step = start_step,
@@ -196,7 +199,7 @@ function test_massive_concurrent_automation_with_param_slides()
         -- Add some wrapping slides
         if point % 5 == 0 and end_step > steps_per_pattern - 4 then
           -- Create a slide that wraps around to the start
-          m_clock.execute_action_across_steps_by_pulses({
+          slide_onset_fixture.queue(m_clock, {
             channel_number = channel,
             trig_lock = (pattern * automation_points + point) % 10 + 1,
             start_step = end_step,
@@ -215,6 +218,10 @@ function test_massive_concurrent_automation_with_param_slides()
     end
   end
   
+  -- These bulk requests were historically installed during setup. Drain them
+  -- at resolved channel onsets before measuring steady-state playback; the
+  -- separate live-admission test measures scheduling inside a timed pulse.
+  slide_onset_fixture.start_pending(m_clock)
   local setup_time = clock() - start_time
   
   -- Process the automation
@@ -267,4 +274,145 @@ function test_massive_concurrent_automation_with_param_slides()
     "Timing variance exceeded 1ms")
   luaunit.assert_true((peak_memory - start_memory) < 1024,
     "Memory usage exceeded 1MB")
-end 
+end
+
+function test_live_slide_admission_all_channel_parameter_slots()
+  setup()
+  clock_setup()
+  local callbacks, admitted = {}, {}
+  for channel = 1, 16 do
+    callbacks[channel], admitted[channel] = {}, {}
+    for slot = 1, 10 do
+      callbacks[channel][slot] = 0
+      slide_onset_fixture.queue(m_clock, {
+        channel_number = channel, trig_lock = slot,
+        start_step = 1, end_step = 64,
+        start_value = 0, end_value = 127, quant = 1,
+        should_wrap = true,
+        func = function(value) callbacks[channel][slot] = callbacks[channel][slot] + 1 end
+      }, function()
+        admitted[channel][slot] = true
+      end)
+    end
+  end
+  local max_pulse = 0
+  -- Include the admission onset and later sampling, with no pre-drain.
+  for pulse = 1, 96 do
+    local began = clock()
+    progress_clock_by_pulses(1)
+    max_pulse = math.max(max_pulse, clock() - began)
+  end
+  for channel = 1, 16 do
+    for slot = 1, 10 do
+      -- Inspect ownership outside the timed pulse; all long slides are still active.
+      luaunit.assert_true(m_clock.channel_is_sliding({number=channel}, slot))
+      luaunit.assert_true(admitted[channel][slot], "Every live slot must acquire ownership")
+      luaunit.assert_true(callbacks[channel][slot] > 0, "Every live slot must execute")
+    end
+  end
+  luaunit.assert_true(max_pulse < 0.002,
+    string.format("Live slide admission exceeded 2ms: %.6fs", max_pulse))
+end
+
+-- README 964: with slides enabled, locks smoothly transition between each other. Replacing
+-- a channel's slide cancels the old one; cancelled entries must not exhaust slide capacity
+-- while an earlier, longer slide is still running (performance-sweep guard for the ring).
+function test_replaced_slides_do_not_exhaust_capacity_behind_a_long_slide()
+  setup()
+  clock_setup()
+  local long_calls = 0
+  slide_onset_fixture.queue(m_clock, {
+    channel_number = 1, trig_lock = 1, start_step = 1, end_step = 64,
+    start_value = 0, end_value = 127, quant = 1, should_wrap = false,
+    func = function() long_calls = long_calls + 1 end
+  })
+  progress_clock_by_pulses(24)
+  local replaced = 0
+  for _ = 1, 8 do
+    for channel = 2, 16 do
+      for slot = 1, 10 do
+        slide_onset_fixture.queue(m_clock, {
+          channel_number = channel, trig_lock = slot, start_step = 1, end_step = 64,
+          start_value = 0, end_value = 127, quant = 1, should_wrap = false,
+          func = function() end
+        })
+        replaced = replaced + 1
+      end
+    end
+    progress_clock_by_pulses(24)
+  end
+  luaunit.assert_true(replaced > 1024)
+  local late_calls = 0
+  slide_onset_fixture.queue(m_clock, {
+    channel_number = 2, trig_lock = 1, start_step = 1, end_step = 64,
+    start_value = 0, end_value = 127, quant = 1, should_wrap = false,
+    func = function() late_calls = late_calls + 1 end
+  })
+  progress_clock_by_pulses(48)
+  luaunit.assert_true(m_clock.channel_is_sliding({number = 1}, 1), "The long slide is still running")
+  luaunit.assert_true(late_calls > 0, "A slide started after many replacements must run")
+  luaunit.assert_true(m_clock.channel_is_sliding({number = 2}, 1))
+end
+
+-- README 964 says active locks transition smoothly. The native capacity anchor
+-- exercises nine visible CCs, while the live-admission test exercises one
+-- all-channel wave. Keep a deterministic replacement guard for the complete
+-- 16 x 10 live-lock surface: eight waves exceed the 1024-entry ring without
+-- changing either existing 2ms guard. This separate full-ring workload has a
+-- 5ms characterisation bound at Mosaic's default 90 BPM; it must retain a
+-- substantial margin below its 166.7ms musical step deadline. The last wave
+-- must own and sample every slot; a compacted ring must not retain an earlier
+-- replacement.
+function test_dense_live_slide_replacements_keep_all_final_slots_running_after_ring_wrap()
+  setup()
+  clock_setup()
+
+  local waves, final_callbacks, max_pulse = 8, {}, 0
+  for channel = 1, 16 do
+    final_callbacks[channel] = {}
+    for slot = 1, 10 do final_callbacks[channel][slot] = 0 end
+  end
+
+  for wave = 1, waves do
+    for channel = 1, 16 do
+      for slot = 1, 10 do
+        local is_final_wave = wave == waves
+        slide_onset_fixture.queue(m_clock, {
+          channel_number = channel, trig_lock = slot,
+          start_step = 1, end_step = 64,
+          start_value = 0, end_value = 127, quant = 1, should_wrap = true,
+          func = function()
+            if is_final_wave then
+              final_callbacks[channel][slot] = final_callbacks[channel][slot] + 1
+            end
+          end
+        })
+      end
+    end
+    -- One normal channel onset admits a wave. All admission, replacement,
+    -- compaction and sampling work remains inside the measured pulses.
+    for _ = 1, 24 do
+      local began = clock()
+      progress_clock_by_pulses(1)
+      max_pulse = math.max(max_pulse, clock() - began)
+    end
+  end
+
+  -- Sample the final wave after its admission onset. Its 64-step destination
+  -- remains far ahead, so every slot must still be owned and producing values.
+  for _ = 1, 24 do
+    local began = clock()
+    progress_clock_by_pulses(1)
+    max_pulse = math.max(max_pulse, clock() - began)
+  end
+  for channel = 1, 16 do
+    for slot = 1, 10 do
+      luaunit.assert_true(m_clock.channel_is_sliding({number = channel}, slot),
+        string.format("Final slide lost: channel %d slot %d", channel, slot))
+      luaunit.assert_true(final_callbacks[channel][slot] > 0,
+        string.format("Final slide not sampled: channel %d slot %d", channel, slot))
+    end
+  end
+  luaunit.assert_true(max_pulse < 0.005,
+    string.format("Dense live replacements exceeded 5ms: %.6fs", max_pulse))
+end

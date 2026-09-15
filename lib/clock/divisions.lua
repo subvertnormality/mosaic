@@ -471,4 +471,16 @@ divisions.note_division_indexes = {
 }
 
 
+-- Saved projects hold lengths as floats written by tab.save (14 significant digits),
+-- so an exact table lookup misses 1/3, 5/6 and similar values after a reload.
+function divisions.note_division_index(value)
+  if type(value) ~= "number" then return nil end
+  local exact = divisions.note_division_indexes[value]
+  if exact then return exact end
+  for i, candidate in ipairs(divisions.note_division_values) do
+    if math.abs(candidate - value) <= 1e-9 * candidate then return i end
+  end
+  return nil
+end
+
 return divisions

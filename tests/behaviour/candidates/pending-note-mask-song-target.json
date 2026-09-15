@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "08abd38",
+  "files": [
+    {
+      "file": "lib/recorder.lua",
+      "before_sha256": "06be4394225e2a5043a7d1585389dfe55bef169528bdbdccb39675688b76ffbb",
+      "after_sha256": "0ae10a49545d2dcff98370ef0bc95ddbcbcd44a20385aa0b9426cac4f63a6bb0"
+    }
+  ],
+  "patch": "0114-pending-note-mask-song-target.patch",
+  "patch_sha256": "9818f1d77a2291d0574eb36053dce4854b2a82e7dd80f554179b6568c9a1769e",
+  "regression": "M-MASK-032",
+  "unit_regression": "test_recorder_extra_note_mask_commit_target_precedence_and_fallback",
+  "baseline": [
+    {
+      "run_id": "5ba79fc503d6463bb82acad075230db7",
+      "case": "M-MASK-032",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "cfd305ed430f23397e6e939855bb01591e917dc173f58fffaa42fbe472c1061d",
+      "failure": "('gesture-owner-song-a', [[144, 60, 127], [144, 62, 117], [144, 64, 107], [144, 65, 97]], [[144, 60, 127], [144, 62, 117], [144, 64, 107], [144, 0, 97]])"
+    },
+    {
+      "run_id": "6e2c992d039e482581c8660e6a6d19a4",
+      "case": "M-MASK-032",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "c2dbab111103427956e5707a55b72349dd6fddaffd6ab1718eead26fa1da7c9a",
+      "failure": "('gesture-owner-song-a', [[144, 60, 127], [144, 62, 117], [144, 64, 107], [144, 65, 97]], [[144, 60, 127], [144, 62, 117], [144, 64, 107], [144, 0, 97]])"
+    }
+  ],
+  "rationale": "The note-mask recorder discarded the top-level song captured by a held encoder edit and committed to the currently selected song after an automatic transition. Commit now prefers data.song_pattern, preserving MIDI onset ownership, then the captured event.song_pattern; events without either retain the legacy fallback.",
+  "oracle": "README.md:597 documents held-step mask editing; 696-707 documents Memory. Cross-transition ownership of an edit completed before the boundary is characterisation, not manual text. Both song MIDI fingerprints and original-song undo/redo are asserted.",
+  "validation": [
+    {
+      "run_id": "da47056b9c4540d6963696c962a690d7",
+      "case": "M-MASK-032",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "8b0115b50eced2618f083a318f5ffd008fdcb560f3af6a510d4d37823e67c201",
+      "failure": null
+    },
+    {
+      "run_id": "f1420a56fec84ca88f797cc48c27792a",
+      "case": "M-MASK-032",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "61aab9e7eb7b3e7a9824aa939aceaab24d596763fdde67e4314bfbc886827820",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-6c2a9b0eae734df79198110dbab1c05b",
+      "case": "M-MASK-032",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "8592a327e72a9eba7d4a8febd193f089b8e9814ff6cb800b72b7ba1538b4b18e",
+      "failure": null,
+      "normalized_sha256": "249329ebe7e1bfc6ff9450093802abb0128c114a515aa7ae31c0d96bbdc91c3b"
+    }
+  ],
+  "collateral": "1534 Lua unit/integration tests passed, 0 failures (26.420 s). All 6 inventory/name/syntax guards passed. M-TRIPLE-003 passed controlled 32dcf67933b1403a861a40c05b2ab79b and real-time 2dc45300afd4481b89e1a49d8f4ab3f0. Three fresh controlled runs produced identical normalized traces.",
+  "upstream_merged": false
+}

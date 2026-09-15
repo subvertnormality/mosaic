@@ -2617,7 +2617,7 @@ function test_memory_should_handle_clearing_individual_chord_degrees()
 end
 
 
-function test_memory_should_preserve_partial_chord_updates_after_reset()
+function test_memory_should_preserve_partial_chord_updates_after_reset_first_variant()
   memory.init()
   program.init()
   local channel = program.get_channel(1, 1)
@@ -2918,7 +2918,11 @@ function test_memory_should_handle_concurrent_step_modifications()
   
   -- Verify undo restores states in correct order
   memory.undo(channel_number)
-  luaunit.assert_equals(channel.step_length_masks[1], 2) -- Length remains unchanged as it's preserved
+  -- Undo restores the step's full prior state, so the length edit is reverted too
+  -- (bugs.json memory-undo-full-step-state; this line formerly pinned length 2).
+  luaunit.assert_equals(channel.step_length_masks[1], 1)
+  luaunit.assert_equals(channel.step_note_masks[1], 62)
+  luaunit.assert_equals(channel.step_velocity_masks[1], 90)
   
   memory.undo(channel_number)
   luaunit.assert_equals(channel.step_note_masks[1], 60)
@@ -3599,4 +3603,97 @@ function test_memory_redo_all_should_merge_events_correctly()
   -- Should have both note and length
   luaunit.assert_equals(channel.step_note_masks[1], 60)
   luaunit.assert_equals(channel.step_length_masks[1], 2)
+end
+-- README 698-707: memory keeps every mask and trig lock action in order; after moving
+-- back with E3, a new action continues from the displayed position. Wrapping the
+-- bounded history must not change that order.
+local function wrapped_history_notes(history)
+  local notes = {}
+  for i = 1, history:get_size() do notes[i] = history:get(i).data.event_data.note end
+  return notes
+end
+
+function test_memory_wrapped_history_edit_after_undo_keeps_logical_order()
+  memory.init()
+  program.init()
+  local original_max = memory.max_history_size
+  memory.max_history_size = 5
+  for i = 1, 8 do
+    memory.record_event(1, "note_mask", {step = i, note = 60 + i, velocity = 100, song_pattern = 1})
+  end
+  luaunit.assert_equals(wrapped_history_notes(memory.get_state(1).event_history), {64, 65, 66, 67, 68})
+  memory.undo(1); memory.undo(1); memory.undo(1)
+  memory.record_event(1, "note_mask", {step = 20, note = 99, velocity = 100, song_pattern = 1})
+  local state = memory.get_state(1)
+  memory.max_history_size = original_max
+  luaunit.assert_equals(state.current_event_index, 3)
+  luaunit.assert_equals(wrapped_history_notes(state.event_history), {64, 65, 99})
+  -- Recording continues to fill logically and wraps again without losing order.
+  memory.max_history_size = 5
+  for i = 1, 4 do
+    memory.record_event(1, "note_mask", {step = 30 + i, note = 100 + i, velocity = 100, song_pattern = 1})
+  end
+  memory.max_history_size = original_max
+  luaunit.assert_equals(wrapped_history_notes(memory.get_state(1).event_history), {99, 101, 102, 103, 104})
+end
+
+function test_memory_wrapped_history_survives_serialisation_in_order()
+  memory.init()
+  program.init()
+  local original_max = memory.max_history_size
+  memory.max_history_size = 5
+  for i = 1, 8 do
+    memory.record_event(1, "note_mask", {step = i, note = 60 + i, velocity = 100, song_pattern = 1})
+  end
+  memory.undo(1); memory.undo(1)
+  memory.record_event(1, "note_mask", {step = 20, note = 99, velocity = 100, song_pattern = 1})
+  local saved = memory.serialize_state()
+  memory.init()
+  memory.deserialize_state(saved)
+  memory.record_event(1, "note_mask", {step = 21, note = 98, velocity = 100, song_pattern = 1})
+  memory.max_history_size = original_max
+  local state = memory.get_state(1)
+  luaunit.assert_equals(wrapped_history_notes(state.event_history), {64, 65, 66, 99, 98})
+  luaunit.assert_equals(state.current_event_index, 5)
+end
+
+-- Human decision S24 (2026-09-11; bugs.json mask-off-stored-as-minus-one): turning a held
+-- step's trig mask or velocity lock back to X records -1, and -1 clears that lock (nil) exactly
+-- as if it had never been set. Other locks on the step are untouched; undo brings the lock back.
+local function assert_minus_one_clears(field, masks, value)
+  memory.init()
+  program.init()
+  local channel = program.get_channel(1, 1)
+  memory.record_event(1, "note_mask", {step = 2, note = 64, [field] = value, song_pattern = 1})
+  luaunit.assert_equals(channel[masks][2], value)
+  memory.record_event(1, "note_mask", {step = 2, [field] = -1, song_pattern = 1})
+  luaunit.assert_equals(memory.get_total_event_count(1), 2)
+  luaunit.assert_nil(channel[masks][2])
+  luaunit.assert_equals(channel.step_note_masks[2], 64)
+  memory.undo(1)
+  luaunit.assert_equals(channel[masks][2], value)
+  memory.redo(1)
+  luaunit.assert_nil(channel[masks][2])
+  memory.undo(1); memory.undo(1)
+  luaunit.assert_nil(channel[masks][2])
+  luaunit.assert_nil(channel.step_note_masks[2])
+end
+
+function test_memory_trig_minus_one_clears_the_step_trig_lock()
+  assert_minus_one_clears("trig", "step_trig_masks", 0)
+end
+
+function test_memory_velocity_minus_one_clears_the_step_velocity_lock()
+  assert_minus_one_clears("velocity", "step_velocity_masks", 50)
+end
+
+function test_memory_minus_one_on_an_unlocked_step_leaves_it_unlocked()
+  for _, pair in ipairs({{"trig", "step_trig_masks"}, {"velocity", "step_velocity_masks"}}) do
+    memory.init()
+    program.init()
+    local channel = program.get_channel(1, 1)
+    memory.record_event(1, "note_mask", {step = 5, [pair[1]] = -1, song_pattern = 1})
+    luaunit.assert_equals(memory.get_total_event_count(1), 1, pair[1])
+    luaunit.assert_nil(channel[pair[2]][5], pair[1])
+  end
 end

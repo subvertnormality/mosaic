@@ -1,0 +1,9 @@
+# Held-step parameter-lock domain review
+
+Use Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.
+
+Review M-PARAM-043/044, their registration and LOCK-PARAM-SET inventory mapping, the new program-model test, and `docs/testing/parameter-lock-domain-validation.json`.
+
+M-PARAM-043 creates locks through native held grid steps and E3 on every physical step1..64, distributing them round-robin across all ten independently assigned CC slots. It overwrites steps1/32/64 and sets step33 explicitly Off, observes both lock-LED blink phases for all64 cells, then requires the exact63 first-cycle CC dispatches plus wrapped step1, exact controller/value/order/deadlines, CC-before-note for audible steps, exact notes, completed gates and paired releases. M-PARAM-044 overwrites future step2 while step1 is sounding at /24, requires no immediate CC, preserves step1's complete four-second gate and applies the new49 CC before step2's note. Both pass controlled and real time. The direct production program API test stores, reads, isolates from song2, overwrites and rereads all640 step/slot cells. A source snapshot passes531 Lua and100 Python tests.
+
+Challenge whether the native inputs really address all64 steps and all10 slots; whether explicit Off could shift expected-event alignment; whether LED assertions prove lock presence; whether wrap/timing/CC-before-note and release accounting are complete; whether M-PARAM-044 distinguishes a stored future overwrite from a transient edit; whether the model cross-product uses the relevant production path and complements rather than substitutes for user-visible behavior; shared-helper or registry regressions; and whether inventory status/domain claims are conservative. Return ACCEPTED or CHANGES REQUIRED with concrete findings. Do not broaden this review to parameter clearing, slides, recording lifetime, or every parameter type already owned by separate requirements.

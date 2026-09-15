@@ -1,0 +1,69 @@
+{
+  "status": "scoped-regressions-validated",
+  "source_file": "lib/devices/device_map.lua",
+  "before_sha256": "ca31a65170ebd506ce21aa75313a0ee4d8a0944d509ce47ece51df65f9b21b20",
+  "after_sha256": "6f50de130996a137b44506384f91089b065cce43d2201da6b4670c0a41a38037",
+  "patch": "0036-parameter-division-bounds.patch",
+  "patch_sha256": "c839cc76b05ff52138a601c12a0a0c5d9675a95639d3295a4932fb8fc8e871c1",
+  "baselines": [
+    "bb7235b8fa514b7b8f8ac97ceacd95e4",
+    "f1f5b4f5259d468d9261c505f874e097",
+    "c04c0c8e365a415da5b8ffcf0b1987d5"
+  ],
+  "scope": "Strum, arp and spread maximum follows the89 supported divisions, excluding the leading Off label. Native controls previously allowed values90..92 and displayed blank labels.",
+  "limitations": "Native and unit validation pending. Test reverse endpoint corrected from the unrelated clock-selector101 label to the actual note-division120 label; all original failures occurred earlier at the valid128 upper-bound assertion.",
+  "validation": {
+    "status": "scoped-regressions-validated",
+    "source_sha256": "6f50de130996a137b44506384f91089b065cce43d2201da6b4670c0a41a38037",
+    "runs": [
+      {
+        "case": "M-PARAM-001",
+        "mode": "controlled-experimental",
+        "run_id": "f9a7e32c8b4d4ff4a430ac9a01cdd94d",
+        "manifest_sha256": "808a347e30f69e01dfb5fb87da528c5a87a30b090f3bc661eccf30e9fbb80e7a",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-002",
+        "mode": "controlled-experimental",
+        "run_id": "719cacebc1d84f388490d03b28439e87",
+        "manifest_sha256": "01f7f0eb35fab7335caa6c7fe661e894cf5db24819c366dc362639930e2b406b",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-003",
+        "mode": "controlled-experimental",
+        "run_id": "490d5004b9f84513bf48a78455931587",
+        "manifest_sha256": "5cffa74ffd8a00b6118b5489db66d60ab015459a043d20b4555c574547ec5da0",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-001",
+        "mode": "real-time",
+        "run_id": "310d4f6ab06b4a24922bc62524a39933",
+        "manifest_sha256": "941c837684176139ac05137209845e1e848ea80fd5fb88ff96965064ae974a1c",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-002",
+        "mode": "real-time",
+        "run_id": "34d5eba4d6274e588ee9359a9d956813",
+        "manifest_sha256": "bc78e863bd44ef46e080a16a6a177e0d2698ccb9dc6d1eb81fb6348a5f646b4f",
+        "passed": true
+      },
+      {
+        "case": "M-PARAM-003",
+        "mode": "real-time",
+        "run_id": "d47f0adb26294e7896fd9752c8a0aeaf",
+        "manifest_sha256": "410f541eb15ebc41d414959555e677eaa098be37edbd28259388506a913a250d",
+        "passed": true
+      }
+    ],
+    "units": {
+      "count": 474,
+      "evidence": "artifacts/c16/parameter-bounds-units.json",
+      "sha256": "ee0d429bebbb68af97fc93c1e25b87aa10f67de68dcb7c62a3a62f82490c8ada"
+    },
+    "limitations": "Selector bounds only; spread/acceleration musical semantics are a separate pending domain."
+  }
+}

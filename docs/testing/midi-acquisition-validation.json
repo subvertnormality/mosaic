@@ -1,0 +1,169 @@
+{
+  "status": "scoped-acquisition-and-handoff-validation",
+  "native_runs": [
+    {
+      "case": "M-TIM-004",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/76a54808b34b4e659ed650e2b6db0a80/manifest.json",
+      "sha256": "3d03e73f0bfdfa9dcdaffd803c725c0092135d6ff3ceeeff50892d12a4ec0193"
+    },
+    {
+      "case": "M-TIM-004",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a6c73be7a1914f1995723fa01315f7dd/manifest.json",
+      "sha256": "e670f76222f8709aeff5e90506442c31def32ebb7ef6785125a922b1941558c6"
+    },
+    {
+      "case": "M-SYNC-003",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/fe87cd1ad2ce4ea486c2a4aafeba51cd/manifest.json",
+      "sha256": "61d5b3343d65a4ae26cc259257a45200abcb07bd90448053ed26034b6569d2e6"
+    },
+    {
+      "case": "M-SYNC-003",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/9d0e7d53036948acbebfef5090bfb2a2/manifest.json",
+      "sha256": "fc4ff7f5bd5700c5965ecf8ba55e10ee2b2bb1ee765defa4cf3b80f25c672956"
+    },
+    {
+      "case": "M-SYNC-002",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/e203b86f96b049319e68efd14a5a60cf/manifest.json",
+      "sha256": "f68beae65fe5c384c407f2f19a31918891a12b7de87f3aeac5515d2e2f081bd3"
+    },
+    {
+      "case": "M-SYNC-002",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/8c10c8410dec46a7a82f0fc2d238c973/manifest.json",
+      "sha256": "a2623e8019d24b0cfb4a888601eaabf2c9b4f9e74c5d736efaf5102f65b03c36"
+    },
+    {
+      "case": "M-SYNC-004",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/f2199f7f978b4d1ebcb8ff8b9833d6e0/manifest.json",
+      "sha256": "649e31296d827f1f73c9b1daae4017dfa07fa740a5b0123a6e3b31a1423f2461"
+    },
+    {
+      "case": "M-SYNC-004",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/eafc1d5156e34fca95ae125df7fb8cb9/manifest.json",
+      "sha256": "05b2664b87e17f5456c7433917d2354bf0b4c82b2b29128125439a13f5a40716"
+    },
+    {
+      "case": "M-SYNC-001",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/595813b98d754e6d9d165775c7ab53b5/manifest.json",
+      "sha256": "1522fc58e2a1c05b6c8d5e151a7350a4608d711408f8775064015d8ae357337b"
+    },
+    {
+      "case": "M-SYNC-001",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/391fab40bc5a41219dd1542ddab67c4e/manifest.json",
+      "sha256": "49bf48bb1bb633afd91779a9b69a29ef8af0c7cb7d9cd33f0046c915fa07823e"
+    },
+    {
+      "case": "M-TIM-003",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/e0ea4d2dd2eb47819b278033de63d241/manifest.json",
+      "sha256": "3370138fa0552ba54dee4d23f0df675e65e1e0af5954109ba8273c683f41d7b5"
+    },
+    {
+      "case": "M-TIM-003",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/31cd25b2b0ac4d01a85d1a1191e598fb/manifest.json",
+      "sha256": "c16bbdcfa80ead0d5e2b657f891f7cb30f2de1255134746efbb14700dad51eee"
+    },
+    {
+      "case": "M-REC-001",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/da1a1afb807a47b3a3ea7651bb6a462b/manifest.json",
+      "sha256": "f3a4c6566b6392af3cf79c385969b58bfa64e3a6ed68c54a9fb7b3f5b3b65927"
+    },
+    {
+      "case": "M-REC-001",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/953a086b1cef483e936c6195fe41cb21/manifest.json",
+      "sha256": "fdbb21be90238ef6e1fd48be86c03283280f8bcdda6ede36968fa92809f192ac"
+    },
+    {
+      "case": "M-TIM-002",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/8234f4be547f4bc19bb19917872c7131/manifest.json",
+      "sha256": "dacb7dccbc70761b2884861ea6818831307ddc0d75d6da6ae072e544d916a405"
+    },
+    {
+      "case": "M-TIM-002",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/23c8d01271c2496e8545528e09ac308f/manifest.json",
+      "sha256": "0e88061ca71197f8213c1773d23052b8373146175f4d156192030a2c32d74b66"
+    },
+    {
+      "case": "M-SYNC-005",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/7a60b317c890442593413842b3f5bca0/manifest.json",
+      "sha256": "6ed5283a0f73edc85247649e3a7b4628b2aa134e8fb9733b6906404d393114c9"
+    },
+    {
+      "case": "M-SYNC-005",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/e3e582cb0df742b2962f975fbb89c602/manifest.json",
+      "sha256": "8891833be2af4f130d308bb6c4d2e2c0741eef0371261feb742d964df9bad8d6"
+    },
+    {
+      "case": "M-SYNC-003",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/9a4ea6b7f101489993fcb92eb4cb3ca5/manifest.json",
+      "sha256": "77aea6848cfe0ed079cd08f3766e5e3b26806a48c8010b524fa3e4f0b71a95d1"
+    },
+    {
+      "case": "M-SYNC-003",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/be6469f5b4da4a069728d053b72be09d/manifest.json",
+      "sha256": "59d5f90dc83c8515a6e3def256b7661dff80a669990c34d2e2a1b35922a4cbe3"
+    },
+    {
+      "case": "M-TIM-004",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/4611051feed74ce2aa8a27e9433d762d/manifest.json",
+      "sha256": "13b19de69c727abb94c32f0c1b76066613ea83d9ae8bff8373987405b6ce2cf1"
+    },
+    {
+      "case": "M-TIM-004",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/6d4e1fffd6af490fa9bb1a9662951d54/manifest.json",
+      "sha256": "8b31dbf81354899211d12743b1b29cc1eb67b37301c646f529539b056777fb5a"
+    }
+  ],
+  "scope_note": "16 earlier regressions plus6 fresh source-handoff/slow-start regressions. Preserve their actual identities; not a full current-source campaign or M5 admission.",
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-0a65d3be7a0c44faa3d6f50d30b05e5c/results.json",
+    "sha256": "959263c31e1d8d59dd0677f4a03c5a9c8fc248062862603a09a4ca5c9e4088a5",
+    "successes": 519
+  },
+  "runtime_install": {
+    "path": "/home/andy/projects/monome-runtime-candidates/midi-clock-start-03/installation.json",
+    "sha256": "1265cbfe390142974552b9ef47927d0c714c155cd486027f5291968b269018e6"
+  },
+  "generic_adapter": {
+    "baseline": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/c68489f869884c788b3acee64d51f888/manifest.json",
+    "candidate": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/03cdcad12fe8495a887422bc96b3bc52/manifest.json"
+  },
+  "native_boundary": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/8d427808cb62462185d7da867e007767/results.json",
+  "reviews": [
+    "/home/andy/projects/mosaic-behaviour-runs/midi-clock-candidate-review-01.json",
+    "/home/andy/projects/mosaic-behaviour-runs/midi-phase-residual-review-01.json"
+  ],
+  "baselines": [
+    "/home/andy/projects/mosaic-behaviour-runs/1a0e7f88a9ab42d99902336a759bdf7c/manifest.json",
+    "/home/andy/projects/mosaic-behaviour-runs/5442a508b9d94c65bb111fc9e74eedc7/manifest.json"
+  ],
+  "remaining": [
+    "Repeated incoming Start while already playing, with held-note release.",
+    "Stop during acquisition and short-gate/high-rate acquisition interactions.",
+    "Master MIDI output ordering and absolute receiver alignment.",
+    "Internal tempo discontinuity, remaining manual campaign and final unit/integration hardening.",
+    "Final combined Codex review, coherent controlled admission and emulator release/platform gates."
+  ],
+  "default_promoted": false,
+  "full_goal_complete": false
+}

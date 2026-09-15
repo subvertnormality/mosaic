@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only scoped review of Mosaic candidate0043 root-last dashboard fix. Read lib/step.lua diff, tests/behaviour/candidates/0043-root-last-dashboard.patch and json, chord_dashboard_display and optional dashboard branch of chord_shape_schedule in tests/behaviour/cases.py, and four new assert_root_dashboard integration tests at end of lib/tests/lib/integration_tests/param_tests.lua. Do not edit any files because native validation is active. Local MIDI development tool, proportionate review. Native baseline controls M-DASHBOARD001/003 pass while root-last002/004 fail the literal framebuffer root pitch/velocity assertion after exact MIDI passed. Baselines: fcf36522e3f94d83b31a01d27e024471,2bae9fe8c8454975953045eae0ba09f9,13333e2b2ad14611a3097e4631de5488,c98779de207040ccb191e697e150121d. Initial four failed tests used wrong octave label C4; pinned norns musicutil labels MIDI60 C3 (floor(note/12-2)); those original failures retained and corrected fresh baselines isolate defect. Fix replaces wrong-table root insertion with selected-channel dashboard note/actual clamped velocity/length; MIDI path unchanged. Isolated baseline units482:478success4newdashboardfail; candidate482success. Direct first unit invocation used wrong sibling checkout include layout and failed before tests; not counted. Established isolated snapshot named mosaic resolves that. Fresh four-shape D then R framebuffer/MIDI validation is active, artifact <emulator-worktree>/artifacts/c16/dashboard-candidate-native.json; unit evidence dashboard-isolated-baseline-units.json and dashboard-isolated-candidate-units.json in same folder. Previous finite256controlled chord matrix completed with verified artifacts, production hash before this UI-only change. Check actual display correctness, stale-field/selected-channel concerns, zero-velocity truthiness in Lua, MIDI invariance, and whether framebuffer oracle meaningfully proves root update; do not claim full dashboard coverage or release. CH-DASHBOARD explicitly partial: chord-slot freshness, arp/sparse/muted/channel switching/length rendered domains pending. Use only Codex, no broad refactor, no edits. Source/evidence review export authorised. Return concrete blockers and minimal remedies.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "0ceece35d10bac7b42e7f25a9237dd9c0ad205c22aa07d4d9ada7d7a68c27107",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "No code blocker found for candidate0043\u2019s scoped root-last dashboard fix. It updates the correct fields without changing MIDI scheduling; native validation remains incomplete at my last read.\n\n- **Correct update:** [lib/step.lua:696](<mosaic-worktree>/lib/step.lua:696) passes the same processed pitch, clamped velocity, and length to playback and the dashboard. The selected-channel check occurs inside the delayed callback, so another channel\u2019s root cannot overwrite the current display.\n- **Zero and stale fields:** [the UI setter:1683](<mosaic-worktree>/lib/pages/channel_edit_page/channel_edit_page_ui.lua:1683) accepts velocity `0` because zero is truthy in Lua. Omitting `chords` preserves existing slots. Existing chord-slot staleness and channel-switch freshness remain unresolved, consistent with partial CH-DASHBOARD scope.\n- **Meaningful oracle:** [cases.py:2431](<mosaic-worktree>/tests/behaviour/cases.py:2431) compares complete Note/Vel widget regions against independently rendered literals, after exact MIDI assertions. Corrected baseline002 records five checked onsets/releases before framebuffer failure. This supports the final root display update, but does not prove its timing or successive-note freshness. Pinned [musicutil.lua:619](<user-home>/projects/monome-runtime-candidates/device-queue-01/norns/lua/lib/musicutil.lua:619) confirms MIDI60 is `C3`.\n- **Unit evidence:** [param_tests.lua:5109](<mosaic-worktree>/lib/tests/lib/integration_tests/param_tests.lua:5109) checks `{60,127,6}` and `{60,0,6}` for both root-last shapes while retaining MIDI assertions. Isolated artifacts report baseline **478/482**, candidate **482/482**; source and patch hashes match. These tests intercept the setter, so they prove payloads, not rendered zero/length.\n- **Minimal remedies:** Finish real-time004 before claiming the planned validation complete: [native artifact](<emulator-worktree>/artifacts/c16/dashboard-candidate-native.json) last showed four controlled and three real-time passes, status `running`. Also clamp the optional dashboard expectation at [cases.py:2505](<mosaic-worktree>/tests/behaviour/cases.py:2505) before reusing it for velocity-bound cases; its current unclamped calculation is harmless for these four defaults.\n\n**CONFIDENCE: High** for the scoped fix. Remaining native results could change validation acceptance; arp, sparse/muted cases, channel switching, chord freshness, and rendered length remain unverified here.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08099-5e3a-7ba2-ad52-eb231fb21247` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "2072208eb83792bfd596a2aefbdb17a556d54dbc62117049168fb19f4ef4e4e2",
+    "redaction": "Personal absolute paths replaced; raw retained locally"
+  }
+}

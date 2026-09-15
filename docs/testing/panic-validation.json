@@ -1,0 +1,85 @@
+{
+  "status": "scoped-matrix-validated",
+  "source_sha256": {
+    "lib/m_grid.lua": "d9876a02c22a435ed3f279313f89c5e39a2e28298c689e92ec4564b76e0cfc5f",
+    "lib/m_midi.lua": "cb273b539faa2a2995bacbb5424b17412d7e2d7c4b801ee552a663b15ff2af69",
+    "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+    "tests/behaviour/cases.py": "96471451bf91dae1bc3addf5e7f3e6ef84c4bb2751139b95f49a3188eda7201b",
+    "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+    "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+    "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902"
+  },
+  "runs": [
+    {
+      "run_id": "d0f9524c57534bb281b2aeed9b4641bd",
+      "clock_mode": "controlled-experimental",
+      "manifest_sha256": "b39d6bb27d3abcc012f696c6b97ab2558ccca11d822fbe96f724291917cbac91",
+      "holds": 48,
+      "melody_checks": 24,
+      "full_stream_accounting": {
+        "kind": "panic-full-stream-accounting",
+        "note_events": 221616,
+        "windows": 72,
+        "unaccounted": 0,
+        "passed": true
+      },
+      "passed": true
+    },
+    {
+      "run_id": "ed7e196e6daf4a6d85d204a3dac7cd03",
+      "clock_mode": "real-time",
+      "manifest_sha256": "989f80739d723c4adf658ab93e07c5442d922a5298bbe28eaac8ce5ca323d48f",
+      "holds": 48,
+      "melody_checks": 24,
+      "full_stream_accounting": {
+        "kind": "panic-full-stream-accounting",
+        "note_events": 221718,
+        "windows": 72,
+        "unaccounted": 0,
+        "passed": true
+      },
+      "passed": true
+    }
+  ],
+  "preserved_failed_run": "081cb06ca7a4497da59c2c2a55d8ed55",
+  "limitation": "Stopped-state holds only. Live-note Stop overlap, pending/delayed notes, native mid-job repeat and hot reconnect remain incomplete. No controlled-time admission or full manual/release claim.",
+  "live_note_ownership": {
+    "candidate": "0047",
+    "baseline": "84d28dda904c489aa620179c27b92265",
+    "native_runs": [
+      {
+        "run_id": "3ac6ae608e474649ad1703b0bfe410b5",
+        "clock_mode": "controlled-experimental",
+        "manifest_sha256": "1a4432503a7d97eafc91aa7ebbc222101338bc0826d98f46b8f15605b5e4c6f6",
+        "passed": true
+      },
+      {
+        "run_id": "de0e722d78834386b2c7689400ea75af",
+        "clock_mode": "real-time",
+        "manifest_sha256": "d3801dc299642271ed3dc0f9c500a512e8e4d85d1972229e54d9babfbecd5a4b",
+        "passed": true
+      }
+    ],
+    "source_sha256": {
+      "lib/m_grid.lua": "d9876a02c22a435ed3f279313f89c5e39a2e28298c689e92ec4564b76e0cfc5f",
+      "lib/m_midi.lua": "c1a55ebd6dee7d488d620f9d23b0b1b014f430305f0b9e8fe0c148bb4ed938f8",
+      "lib/scheduler.lua": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+      "tests/behaviour/cases.py": "56ff91702a2503f86c6b744bea525a2def30c6cbe5836c34593e0937b391e18c",
+      "tests/behaviour/panic_scheduler_contract.lua": "09d3ff373594b306662cc066e536803941d3cfa75e71e0e939b90386afd72b52",
+      "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+      "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+      "tests/behaviour/panic_live_note_contract.lua": "690f83b031d2d40b72de0f50c2f35b0f1893599c72e82de0bc3ebf385372f018"
+    },
+    "unit_tests": 482,
+    "unit_artifact_sha256": "476e5b5b009c034044429deb2006cc7c0a604b6ff91d19a48d660aaa2a9bfb3f",
+    "contract": "tests/behaviour/panic_live_note_contract.lua"
+  },
+  "formatting_only_after_native": {
+    "file": "lib/m_grid.lua",
+    "before_sha256": "d9876a02c22a435ed3f279313f89c5e39a2e28298c689e92ec4564b76e0cfc5f",
+    "after_sha256": "0eef809fe312e58643115ab268f809af0f8d1c5a3c8392c3772aaeb3d9bcf006",
+    "reason": "Only strip trailing whitespace on changed line; retained native matrix records its actual earlier source hash."
+  },
+  "patch_chain_verified": true,
+  "review": "docs/testing/reviews/panic-new-gates-review.json"
+}

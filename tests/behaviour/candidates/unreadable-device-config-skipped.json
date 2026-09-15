@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "1e1a2cc",
+  "files": [
+    {
+      "file": "lib/devices/device_map.lua",
+      "before_sha256": "7652e09aae325e42831d558beb52464769a00cccf98f6265c24d75df442ce660",
+      "after_sha256": "aea47d02e8cf2b779a080e85642348b2ccc14568c808fb7a24d66bc5980c7975"
+    }
+  ],
+  "patch": "0140-unreadable-device-config-skipped.patch",
+  "patch_sha256": "50f41e64a0dd81806f81ae643bf1fd586ba6cc38d7eef5b532c94134245a0b07",
+  "regression": "M-SETUP-UNREADABLE-CONFIG-001",
+  "unit_regression": "test_real_device_map_unopenable_config_file_is_skipped",
+  "baseline": [
+    {
+      "run_id": "3ed69cfa82734b1b928ffb711b7024fe",
+      "case": "M-SETUP-UNREADABLE-CONFIG-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "19cd2c45bff81e4c5a764913f40fb5a08286250eaa74ed429891a09d9f8b62c1",
+      "failure": "...23e0df266ef0/dust/code/mosaic/lib/devices/device_map.lua:13: Cannot open file: /tmp/norns_emu_a4ce5bfb397a40c182ca23e0df266ef0/dust/data/mosaic/config/mm-missing.json\nstack traceback:\n\t[C]: in func"
+    },
+    {
+      "run_id": "cc6879b994eb42a191b39f8e6f8c6ea7",
+      "case": "M-SETUP-UNREADABLE-CONFIG-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "2e9c7a1cc82da9784a26c7db979c4a8682d868002c4e37fda8cf785ceff6a8d2",
+      "failure": "...ff9e3b104a84/dust/code/mosaic/lib/devices/device_map.lua:13: Cannot open file: /tmp/norns_emu_b6c5f9346e964508b805ff9e3b104a84/dust/data/mosaic/config/mm-missing.json\nstack traceback:\n\t[C]: in func"
+    }
+  ],
+  "rationale": "device_map read_json_file raised error('Cannot open file: ...') when io.open failed, so one config entry that cannot be opened (for example a broken symlink) aborted merge_devices and Mosaic's init, loading no devices at all, while invalid or empty files were already skipped. It now prints the open error and returns nil, so the entry is skipped like an invalid file and every other config still loads. The regression seeds a config folder whose listing names a .json entry that does not exist (a file name spanning a line break; the emulator's seed copy refuses dangling symlinks), between two valid configs.",
+  "oracle": "README 174-177: device configuration files copied into data > mosaic > config are loaded automatically and offered in the device picker. User decision 2026-09-11 on S7: skip an unreadable file and load the rest.",
+  "validation": [
+    {
+      "run_id": "bc248fde5d5c4d2b97f10caf03b66e26",
+      "case": "M-SETUP-UNREADABLE-CONFIG-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "e06a6dc330b0390ad7a6464e421384affa3a6246c5decdcada14dd7e004031fa",
+      "failure": null
+    },
+    {
+      "run_id": "b041c4a6a5c541e3bba2e25510fe1977",
+      "case": "M-SETUP-UNREADABLE-CONFIG-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "384b14d01b2d0d216907b935576066f9eb3cb66adc8192a93d50691826e39257",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-b2fe638c926b41dbbee76466c8eb5a1b",
+      "case": "M-SETUP-UNREADABLE-CONFIG-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "8c360ebdc32a48a74fa83b24a695cade90f49c2499aa6ebc36c3041af3a8b6c3",
+      "failure": null,
+      "normalized_sha256": "5ea38a0be0eeeef9a8f1353421f84901d03710ad559ed268314debcc8b9d0b78"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-SETUP-001 (2b03cc1334664851ab55062dcc4545ea), M-SETUP-002 (65471ad876444c6da66ac5ba898a561f), M-SETUP-003 (c014dc700ae94825a71196af592802ed), M-SETUP-DEVICE-NAMES-001 (882af2276df643a0a787646cbc165419), M-SETUP-SYNTAKT-PEDALS-001 (149bf4bd3531473db7377a148601c5d2) all passed. Full Lua units OK (1465); guards OK. The characterisation unit test_real_device_map_unopenable_config_file_aborts_init became test_real_device_map_unopenable_config_file_is_skipped.",
+  "upstream_merged": false
+}

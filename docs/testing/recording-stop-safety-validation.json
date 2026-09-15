@@ -1,0 +1,75 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0074",
+  "native_runs": [
+    {
+      "case": "M-REC-PARAM-022",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/235fecaf77bf45dc9edbfb23129324fb/manifest.json",
+      "sha256": "3e43be63e783e17b6018720798bba3183c515cd67c708a6f59f4da066155b4f1",
+      "passed": true,
+      "strengthened_arm_oracle": false
+    },
+    {
+      "case": "M-REC-PARAM-010",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c10c71e33f90495d999fbc8b34401c10/manifest.json",
+      "sha256": "a83e445a1f275f175912ac3b9603bf97fef4742c4cf87d143f6d4aadc2b3bb1f",
+      "passed": true,
+      "strengthened_arm_oracle": false
+    },
+    {
+      "case": "M-REC-PARAM-022",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9dead989cc0c4a909e1ac63027e4a527/manifest.json",
+      "sha256": "bb7b492413dbc33bdca75f3036dc6f18a9808de07c672509ba86ed0567792595",
+      "passed": true,
+      "strengthened_arm_oracle": false
+    },
+    {
+      "case": "M-REC-PARAM-010",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cc934e48fde847e69a71849655bf1445/manifest.json",
+      "sha256": "bf9422daa58504d731ba585a03e0c96937d303bba82951e461923239e63dc861",
+      "passed": true,
+      "strengthened_arm_oracle": false
+    },
+    {
+      "case": "M-REC-PARAM-022",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4d8768d94f02406d84d9afe85662592e/manifest.json",
+      "sha256": "8b9eb35b2bd4d3d2e0850f941146b3fd4f25698535ba3f6ce4c542f1568a739d",
+      "passed": true,
+      "strengthened_arm_oracle": true
+    },
+    {
+      "case": "M-REC-PARAM-022",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ba1fc14a5f444ef39507beebbf9c8b08/manifest.json",
+      "sha256": "2b56698c9055b7209c409cf2519cc8177e6af797b67b96c8b931fa9880dd1862",
+      "passed": true,
+      "strengthened_arm_oracle": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-d2896182bfdb4797979a0081e0bb2492/results.json",
+    "sha256": "41665ff6cc3cb5c9b518625babbb919db433913162453b2946934e0848ee820b",
+    "summary": "Ran 490 tests in 8.312 seconds, 490 successes, 0 failures",
+    "production_matches": true
+  },
+  "production_sha256": "e31f57011ea96f494bde74882713fe84ce06b0562aad73a61165984162445691",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/stop-safety-patch-42gie0k5",
+  "baselines": {
+    "controlled": "5a763b5ce5d6478291beeb0425fbd363",
+    "real_time": "5d45c48d62a246a2adb93df8462d4158"
+  },
+  "fixture_failure": "b01b58190c8646cc984aa2750ef3dcba",
+  "scope": "Long Stop clears pending recording, keeps existing locks and retains arm. Retained arm is proved by a new edit recorded after restart and replayed after disarming with a different default. Ordinary Stop regression passes in both modes.",
+  "review_disposition": "One-line cleanup matches existing ordinary Stop contract; proportional runbook does not require a new per-fix review. Previous recording checkpoint reviews retained.",
+  "limitations": [
+    "Targeted evidence only; full manual and emulator release remain incomplete.",
+    "Controlled mode remains diagnostic and unadmitted.",
+    "Full ten-slot, mute, song, undo, persistence, reset and exact-boundary recording interactions remain pending."
+  ],
+  "full_campaign_complete": false
+}

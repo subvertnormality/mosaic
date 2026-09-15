@@ -1,0 +1,215 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0081",
+  "native_runs": [
+    {
+      "case": "M-RANGE-GLOBAL-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/84a79a0311a14299ad085a25d3e13b6c/manifest.json",
+      "sha256": "9110a08c8192319f2bac00ee8cd7bfd0e495888aa641753b639c990e572c5ec4",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-GLOBAL-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9c739ae0d824438bb4b4f2a7cdf0d57a/manifest.json",
+      "sha256": "b2596b717e99093edf70f1aff002b0815f35a7b1ad619f4732bfb28f40c1e321",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-005",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ac892298c1b546e797802c483b83d0bd/manifest.json",
+      "sha256": "ec44c269124894c005a857564201a59ee1b1cc81f8bf8fd22b4cf09a4e71f5c4",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-GLOBAL-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6a5fdbe735b14706b152222cf4cf1e4a/manifest.json",
+      "sha256": "7b7fe7f0eb14df588c5caab5a749b6671dc80e1fad492492582b2bd129b3805b",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-GLOBAL-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8800665d638b4459a407e5c86bb77b4d/manifest.json",
+      "sha256": "9faed85ad78ea740aba42fe81e94e26addc5c993e85c07b1218295d7012b1559",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-REJECT-005",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1a0de389fe11431f8888ada8a36e1776/manifest.json",
+      "sha256": "0af843c2c78ab04d40a1ebffbcf57134ffd44c4ca2fd93ed49e91808f20e0dcf",
+      "passed": true
+    },
+    {
+      "case": "M-TIME-003",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7bd20596c815482bb08c4cb3bdb0801f/manifest.json",
+      "sha256": "0c66b0eccd21e96e4be0c908403e4c98c26de22010309736d897ce18a7b4946d",
+      "passed": true
+    },
+    {
+      "case": "M-TIME-009",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/037b28439c4c4bc9a5600de7e658261b/manifest.json",
+      "sha256": "62e5da1e1f90cb2520e4ede52ca086279c5f39b3e1e383b40e88e510f3b5f624",
+      "passed": true
+    },
+    {
+      "case": "M-PATCH-023",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/380fbd30b5d0458cb6ffc98ac6ad7220/manifest.json",
+      "sha256": "2ed494f8d6a417d7825c9f513e8cc7d4dbccc6b8679e72502fc55063c918bd63",
+      "passed": true
+    },
+    {
+      "case": "M-PATCH-026",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1f1fb37df07a45b2a92c876e3a210a55/manifest.json",
+      "sha256": "ff25989a489e7d48e6729806e7051f06cdf39a1ef5e2c9173b2af23cda6de12f",
+      "passed": true
+    },
+    {
+      "case": "M-PATCH-027",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2eefbc53e07f4eebb5da07bc7fc7964b/manifest.json",
+      "sha256": "271edae7600d38a4250ae61758b83d3703523f4424660227858fa98a2b53fa20",
+      "passed": true
+    },
+    {
+      "case": "M-REC-PARAM-019",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b834d3f1fdd14637af0a3d7fdd154ced/manifest.json",
+      "sha256": "8b51423b6594d3cd68fd41889c401e700ed6a3b0d71f7d625562299c3a00862f",
+      "passed": true
+    },
+    {
+      "case": "M-SCALE-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b847a623a77243d4a0acf602a360821a/manifest.json",
+      "sha256": "7299b26aef7b128503373c92b5ae28b4fd15d82f92c43d2d39f5eda7ae555823",
+      "passed": true
+    },
+    {
+      "case": "M-TIME-003",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a00524b077da4ea78d1565753ca8c4de/manifest.json",
+      "sha256": "90bf90d3553b7213ed48996bd2396e23e6e9fb7fc14d4e15aee3c8a240f0c40c",
+      "passed": true
+    },
+    {
+      "case": "M-TIME-009",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b138dd8b5a064b91923902af666a298b/manifest.json",
+      "sha256": "13ffac213261185b21f0430ace202c0b6c4efe2eb2f976262eae3553ab4bb7a9",
+      "passed": true
+    },
+    {
+      "case": "M-PATCH-023",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e9cde477071a448b8216989614098f28/manifest.json",
+      "sha256": "c797e7794692d6095ded9da7bd6320032959ec0ac47f797b9359941c6ef4d975",
+      "passed": true
+    },
+    {
+      "case": "M-PATCH-026",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/544b8b97acf0455488a83001b85567e8/manifest.json",
+      "sha256": "e202092105b0ce36de5e4a16eb286db3322a91e0f3f8096e3dc32bdc91de6576",
+      "passed": true
+    },
+    {
+      "case": "M-PATCH-027",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4b6decb88ed746b1bef5f92e8d62a75f/manifest.json",
+      "sha256": "edb79b989f551c86675a7cee8d31e7be8702e858d0b81291b77ba75658a7dc0c",
+      "passed": true
+    },
+    {
+      "case": "M-REC-PARAM-019",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1d25fd8896f94d099eca0c39b21f1553/manifest.json",
+      "sha256": "028005689e00980203ec3f138668a7e7135df5f9e8d86550a1152bbced3715fb",
+      "passed": true
+    },
+    {
+      "case": "M-SCALE-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f1270b1ae11b468bad2ac1ccf7c95a97/manifest.json",
+      "sha256": "c4c5d97b19822c3a006fc7dbf684263acf0137787e0d7f1ee476187e46198e7b",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-GLOBAL-003",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/347c1efc24d7409aaa4fb544ddf7abce/manifest.json",
+      "sha256": "1fbf8cb4cec8371a7fa513104f5850305bc0dcf675ad785041c10a58d2a5445b",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-GLOBAL-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1f396120489a44cea30e9d9b8fb1bde0/manifest.json",
+      "sha256": "2a89f96cc4181e7967a5fbd87eb465b3ef6ac1f0c7bbca07fc715608e9eb7c51",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-GLOBAL-003",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/996425bc834e4df296cda64a0d716ab8/manifest.json",
+      "sha256": "2d38a53fdd2f16a4fb9246aeb9371d339eb6dcf5dc58a0d9df3c4200b8e642ee",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-GLOBAL-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3356169729df47d9931bc2490e676e4e/manifest.json",
+      "sha256": "24e18b76df9551fef693d9355f5b698e33c9a87ffe67e30e3cb33b4db6133ca4",
+      "passed": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-fbdda8875d00418fa0b19b06cb694566/results.json",
+    "sha256": "3515482d8672e9421fd3b9e8e514fc47ecc1957fe4005bae28311180a04f6587",
+    "summary": "Ran 500 tests in 9.594 seconds, 500 successes, 0 failures",
+    "bounds_rate_combinations": 45
+  },
+  "production_sha256": {
+    "lib/clock/m_clock.lua": "e5746daa76172962c5e17172e522e4d89f23fded4739127faccfa4586eab117a"
+  },
+  "patch_sha256": "15aacc22803a0c351293c9874ef47c2f163896decb593b789bba04f3d522f8e3",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/offset-cap-patch-aqzo49jz",
+  "baseline": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/offset-range-baseline-01.json",
+    "sha256": "9ffd2e0b6934235b70d148109e942a3140c8a286d2ae686373315046b86e0f94",
+    "runs": [
+      {
+        "case": "M-RANGE-GLOBAL-002",
+        "mode": "controlled-experimental",
+        "exit_code": 1,
+        "stdout": "{\"case\": \"M-RANGE-GLOBAL-002\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/7f324bb49f0b4724880dd96a7069b072/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-RANGE-GLOBAL-002",
+        "mode": "real-time",
+        "exit_code": 1,
+        "stdout": "{\"case\": \"M-RANGE-GLOBAL-002\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/d15df5a589ef4540ad51052f9a8d457d/manifest.json\"}\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "review": "01a08583-7196-7f31-ad1a-08698f6d60da",
+  "scope": "Remove only redundant master absolute-step reset. Relative per-channel global cap and explicit song reset/phase handling remain.",
+  "limitations": [
+    "Initial matrix5f04580 expected stored rather than playable LED range; corrected active-range oracle before MIDI defect reproduction2cedffe.",
+    "Initial integration9d9857 omitted fourth mock MIDI port field; corrected tuple and all500passed.",
+    "Targeted accumulated evidence, not full same-tree manual release suite",
+    "Accepted live range/global transitions and persisted malformed data remain separate domains",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

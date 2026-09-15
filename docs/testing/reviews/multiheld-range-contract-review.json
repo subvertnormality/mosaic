@@ -1,0 +1,32 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Read-only scoped Codex semantic arbitration. Local musical tool, proportional review; no edits, agents, web or runtime launches. User says no routing questions and no standalone long-press action; one-step channel range remains unsupported. New native MASK030 presses step2 then4, enters keyboardC, releases2 while4 staysheld, entersG, releases4. Expected range2..4 was a test assumption; observed G-only playback. m_grid release dispatch uses remaining held key as start and released key as end, so releasing2 first requests4..2. Manual says hold start and press different end, does not promise release-order independence. Determine whether to preserve established release-driven semantics and separate mask-input isolation by explicitly restoring a valid2..4 range before replay, or whether there is a clear in-scope range bug requiring minimal fix. Inspect history/existing CH-RANGE evidence as needed, but do not generalise or change unrelated gesture semantics. Recommend precise regression and manual clarification; distinguish disputed assumption from confirmed defect. Do not waive reversed-range concern: if separate issue, record specific backlog obligation. Files: /home/andy/projects/mosaic-behaviour-tests/README.md, /home/andy/projects/mosaic-behaviour-tests/lib/m_grid.lua, /home/andy/projects/mosaic-behaviour-tests/lib/controls/sequencer.lua, /home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page.lua, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/mask_gestures.py, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/manual-inventory.json, /home/andy/projects/mosaic-behaviour-runs/19172d47f6904bdf84961d6470f8bbe1/manifest.json"
+  },
+  "input_sha256": {
+    "/home/andy/projects/mosaic-behaviour-tests/README.md": "5cc3997efcd19185beb232fe51c2f69ccc80c29b3ec3625899bb05d5f2d2106f",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/m_grid.lua": "e31f57011ea96f494bde74882713fe84ce06b0562aad73a61165984162445691",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/controls/sequencer.lua": "150fea600cf32a7507e4e83f708757290fd3a364425d82659cc0a4b051546796",
+    "/home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page.lua": "609de0ec5ef746ed3a813edc20b0113ee212a5e847060a676ced60dc0246b086",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/mask_gestures.py": "97f50c2d8b422b51c34f7f6be34483a591cb507c89b8b5e18d9d6f1847f9546b",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/manual-inventory.json": "69695f2139257d88fedb6d92b14512b10bd518a3747b05c954041682f0564c11",
+    "/home/andy/projects/mosaic-behaviour-runs/19172d47f6904bdf84961d6470f8bbe1/manifest.json": "f24f1f5d3e2c926d32aea14d26724af545387c098234241875d468ac53f9100d"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Preserve established release-driven semantics and explicitly restore 2..4 before testing mask playback.** MASK030\u2019s release-order-independent range expectation is unsupported; the reversed-range failure is real but does not justify changing endpoint selection in this scope.\n\n- **Established behavior:** [m_grid.lua:239](/home/andy/projects/mosaic-behaviour-tests/lib/m_grid.lua:239) removes the released key, then dispatches `dual_press(held\u2026, released\u2026)`. [sequencer.lua:174](/home/andy/projects/mosaic-behaviour-tests/lib/controls/sequencer.lua:174) stores those arguments directly as start/end. Thus releasing 2 while holding 4 selects **4..2**. Git blame traces this dispatch to `3b9ff54f` (2024) and endpoint assignment to `3c061c8b` (2023).\n- **Confirmed failure mechanism:** [m_clock.lua:340](/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua:340) computes length `2-4+1 = -1`; its boundary checks repeatedly reset playback to step 4. This explains the [manifest\u2019s G-only output](/home/andy/projects/mosaic-behaviour-runs/19172d47f6904bdf84961d6470f8bbe1/manifest.json:25), without proving mask corruption. Existing CH-RANGE tests explicitly leave reversed endpoints for separate investigation ([cases.py:1825](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:1825)).\n\n**Precise regression:** Keep both original input/release sequences and preview assertions. After both grid releases, call `c.hold_tap((2,4),(4,4))`, then verify range LEDs and replay three complete loops:\n\n- MASK030: `(72,90), (64,107), (79,55)`.\n- MASK031: `(79,55), (64,107), (65,97)`.\n\nThese distinguish first-held targeting, remaining-held targeting, and preservation of untouched steps. Check every completed note\u2019s duration and loop spacing; the current `[1]*6` checks only six durations despite requesting three three-note loops ([mask_gestures.py:88](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/mask_gestures.py:88)). Keep range-order characterization separate from this restored-range mask test.\n\n**Manual clarification:** Amend [README.md:716](/home/andy/projects/mosaic-behaviour-tests/README.md:716): \u201cHold the start step, press and release a different end step while still holding the start, then release the start. The range commits when the end is released.\u201d Retain unsupported one-step selection and inactive standalone long holds.\n\n**Specific backlog obligation:** Track accepted reversed endpoints producing negative length, repeated-start playback, and no matching active-range illumination. Preserve this failed artifact; reproduce 4..2 without MIDI using both release orders, specify rejection versus wrapping, and require matching LED/playback regressions plus recovery to 2..4. Keep CH-RANGE partial until resolved; do not silently normalize endpoints or treat G-only playback as approved semantics.\n\n**CONFIDENCE: High.** No runtime was launched; restored-range mask isolation remains unverified, and an explicit earlier reversed-range contract could change the required fix.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08561-1689-73c1-8dcc-dddf99453bca` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

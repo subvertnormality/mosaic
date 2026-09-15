@@ -1,0 +1,17 @@
+{
+  "status": "scoped-candidate-validated",
+  "baseline": "ee9bc731b72b4ebaad87bc76d95a0258",
+  "setup_failure": "ea8fa07a8feb44a9a603a5fee36c0a30",
+  "expected_live_values": [
+    64
+  ],
+  "baseline_live_values": [
+    64,
+    64,
+    96,
+    64
+  ],
+  "scope": "Use actual channel number and selected recording channel in dirty-value guard. Old locks cannot overwrite live edited value; unrelated slots/channels and disarmed playback remain active.",
+  "validation": "docs/testing/live-parameter-recording-validation.json",
+  "review": "01a08404-8475-7c82-be93-02d19cf99aa6"
+}

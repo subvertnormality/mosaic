@@ -33,6 +33,8 @@ local menu_buttons = {}
 
 
 local pressed_keys = {}
+-- Press order of held keys, so a two-key gesture can name its first-pressed key.
+local press_sequence, press_count = {}, 0
 local dual_in_progress = false
 
 local function sync_current_channel_state()
@@ -133,10 +135,10 @@ local function register_press()
       if (y == 8) then
         if (x == 1) then
           if not m_clock.is_playing() then
-            clock.transport:start()
+            m_clock:start()
             tooltip:show("Starting playback")
           else
-            local should_stop = params:get("stop_safety") ~= 2 or is_key3_down
+            local should_stop = params:get("stop_safety") ~= 2 or is_key1_down
             if should_stop then
               clock.transport:stop()
               tooltip:show("Stopping playback")
@@ -166,6 +168,7 @@ local function register_press()
         if (x == 1) then
           if params:get("stop_safety") == 2 then
             clock.transport:stop()
+            recorder.clear_all_trig_lock_dirty()
             tooltip:show("Stopping playback")
             m_grid.set_menu_button_state()
           end
@@ -178,7 +181,7 @@ local function register_press()
     function(x, y)
       if (y == 8) then
         if 
-          x >= pages.pages_to_grid_menu_button_mappings.trigger_edit_page and 
+          x >= pages.pages_to_grid_menu_button_mappings.channel_edit_page and
           x <= pages.pages_to_grid_menu_button_mappings.song_edit_page 
         then
           if pages.pages_to_grid_menu_button_mappings[pages.page_numbers_to_ids[program.get_selected_page()]] ~= x then
@@ -232,6 +235,8 @@ function m_grid.init()
 
     if z == 1 then
       table.insert(pressed_keys, {x, y})
+      press_count = press_count + 1
+      press_sequence[x .. "," .. y] = press_count
       m_grid.pre_press(x, y)
       m_grid.counter[x][y] = clock.run(m_grid.long_press, x, y)
     elseif z == 0 then -- otherwise, if a grid key is released...
@@ -258,12 +263,26 @@ function m_grid.init()
           dual_in_progress = false
         end
       end
+      if #pressed_keys == 0 then dual_in_progress = false end
       m_grid.post_press(x, y)
     end
   end
 
 
   function g.remove()
+    -- A disconnected grid sends no key-ups: forget its held keys and cancel their long-press
+    -- timers (bugs.json grid-disconnect-held-keys).
+    for _, key in ipairs(pressed_keys) do
+      local x, y = key[1], key[2]
+      if m_grid.counter[x][y] then
+        clock.cancel(m_grid.counter[x][y])
+      end
+      m_grid.long_press_active[x][y] = false
+    end
+    for i = #pressed_keys, 1, -1 do
+      pressed_keys[i] = nil
+    end
+    dual_in_progress = false
     m_grid.alert_disconnect()
   end
 
@@ -321,6 +340,12 @@ function m_grid.long_press(x, y)
   m_grid.long_press_active[x][y] = true
   press:handle_long(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
+end
+
+-- True when key (x, y) was pressed after key (x2, y2) during the current gesture.
+function m_grid.pressed_after(x, y, x2, y2)
+  local first, second = press_sequence[x .. "," .. y], press_sequence[x2 .. "," .. y2]
+  return first ~= nil and second ~= nil and first > second
 end
 
 function m_grid.dual_press(x, y, x2, y2)

@@ -1,0 +1,37 @@
+diff --git a/lib/pages/channel_edit_page/channel_edit_page_ui.lua b/lib/pages/channel_edit_page/channel_edit_page_ui.lua
+index 3a5b6f3..355414d 100644
+--- a/lib/pages/channel_edit_page/channel_edit_page_ui.lua
++++ b/lib/pages/channel_edit_page/channel_edit_page_ui.lua
+@@ -698,6 +698,7 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
+   end
+ 
+   if #pressed_keys > 0 and trig_lock_param and trig_lock_param.id then
++    local song_pattern = program.get().selected_song_pattern
+     for _, keys in ipairs(pressed_keys) do
+ 
+       local s = fn.calc_grid_count(keys[1], keys[2])
+@@ -714,6 +715,7 @@ function channel_edit_page_ui.handle_trig_lock_param_change_by_direction(directi
+       m_params[dial_index]:set_value(value)
+ 
+       recorder.add_trig_lock_event_portion(channel.number, s, {
++        song_pattern = song_pattern,
+         data = {
+           parameter = dial_index,
+           step = s,
+diff --git a/lib/recorder.lua b/lib/recorder.lua
+index 0406068..06a845e 100644
+--- a/lib/recorder.lua
++++ b/lib/recorder.lua
+@@ -62,7 +62,11 @@ function recorder.record_stored_trig_lock_events(c, step)
+       return
+     end
+ 
+-    memory.record_event(c, "trig_lock", event.data)
++    if event.song_pattern then
++      memory.record_event_for_target(event.song_pattern, c, "trig_lock", event.data)
++    else
++      memory.record_event(c, "trig_lock", event.data)
++    end
+     recorder.trig_lock_events[c][step] = nil
+ 
+   end

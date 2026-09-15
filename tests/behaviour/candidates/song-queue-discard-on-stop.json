@@ -1,0 +1,72 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "901dbdd",
+  "files": [
+    {
+      "file": "lib/step.lua",
+      "before_sha256": "07ce948db7f0bfb86e73c1bcf6cf944e8ceff733a4188b408040dbbe97e39291",
+      "after_sha256": "6edb759a31790dbe16ebc549381aecfe06b5969863de5e4db54d007303700b4b"
+    }
+  ],
+  "patch": "0099-song-queue-discard-on-stop.patch",
+  "patch_sha256": "b1f95183db27b53526d4f3dcb4f22af97afab9d1aee786683aa2b4cc6968ae3a",
+  "regression": "M-SONG-QUEUE-STOP-001",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "9299664e55f147f88007545c0f80756e",
+      "case": "M-SONG-QUEUE-STOP-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "3a496da648c00025fee84e3a3f3e927c7f45da443b1924f1d390718fa2cc502b",
+      "failure": "('queued-slot-discarded', [60, 62, 84, 86, 84, 86], [60, 62, 72, 74, 60, 62])"
+    },
+    {
+      "run_id": "b5ea519a87944d2caf8cba044d992618",
+      "case": "M-SONG-QUEUE-STOP-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "0e141261d390567a8c6163ecbdcb39e562838234fa3aaa604128bbc4da9389b0",
+      "failure": "('queued-slot-discarded', [60, 62, 84, 86, 84, 86], [60, 62, 72, 74, 60, 62])"
+    }
+  ],
+  "rationale": "step.reset (run on Stop) cancelled the pending-slot blink but kept the queued slot, its switch function and queued global-length changes, so the next Play switched slots at its first boundary with no indication, and a queued length overwrote later edits. Arbitrated SEM-015 (discard-on-stop): Stop now discards them and refreshes the length fader to the length that will play. Channel and scale edits queued for the running clock were already stored in the project and are rebuilt at the next Play.",
+  "oracle": "README Song Mode Operations (910) plus arbitrated SEM-015 for Stop before the boundary.",
+  "validation": [
+    {
+      "run_id": "233305a870c0416bb942fac28652eac6",
+      "case": "M-SONG-QUEUE-STOP-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "83aa543085ed113a8df539c74fd82e3b3472ebd70ccbb05f8fef3fd12759e438",
+      "failure": null
+    },
+    {
+      "run_id": "107513dbc4d147daa3747fd7fd9390fa",
+      "case": "M-SONG-QUEUE-STOP-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "d0e10721ead1ab84139b13c080d82973b28ee0890e240415fccc5be18ac0b884",
+      "failure": null
+    },
+    {
+      "run_id": "9596fb77aa1f42ee982ca882ebd29d9f",
+      "case": "M-SONG-QUEUE-STOP-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "766b016b7de129e7f2b1e0a6388a5c90ffa9a46b9665f509c597843e71887c3a",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-1a8faea90cdb4bcb9339e845bd12425b",
+      "case": "M-SONG-QUEUE-STOP-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "c04d0c060117e2b8379e7159f4be6c8561dcebc5be7bd9fed66ebf83475a20ac",
+      "failure": null,
+      "normalized_sha256": "c651c5862d9fa966185114dbc0125c62a6edaae4f0e10082fd820aa234de0c04"
+    }
+  ],
+  "collateral": "All Lua units pass; M-SONG-FLOW-001 (queued selections during playback) and the song-mode cases run in the full suite.",
+  "upstream_merged": false
+}

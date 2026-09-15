@@ -1,0 +1,24 @@
+diff --git a/lib/m_midi.lua b/lib/m_midi.lua
+index 0ae3d6a..70b1bb7 100644
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -115,7 +115,9 @@ function handle_midi_event_data(data, midi_device)
+       channel_number = channel.number,
+       midi_channel = midi_channel,
+       midi_device = device.midi_device,
+-      player = d.player
++      player = d.player,
++      -- A repeated Note On for a held key keeps the earlier onset's release.
++      previous = input_notes[data[2]]
+     }
+ 
+     if d.player then
+@@ -212,7 +214,7 @@ function handle_midi_event_data(data, midi_device)
+     end
+ 
+     
+-    input_notes[data[2]] = nil
++    input_notes[data[2]] = stored.previous
+   elseif (data[1] & 0xf0) == 176 then -- cc change on any MIDI channel
+     if data[2] >= 1 and data[2] <= 20 then
+ 

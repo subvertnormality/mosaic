@@ -1,0 +1,15 @@
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -699,5 +698,0 @@
+-          if not note_dashboard_values.chords then
+-            note_dashboard_values.chords = {}
+-          end
+-          table.insert(note_dashboard_values.chords, processed_note)
+-
+@@ -705 +700,5 @@
+-            channel_edit_page_ui.set_note_dashboard_values(chord_note_dashboard_values)
++            channel_edit_page_ui.set_note_dashboard_values({
++              note = processed_note,
++              velocity = velocity,
++              length = note_container.length
++            })

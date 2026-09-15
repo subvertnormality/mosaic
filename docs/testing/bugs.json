@@ -1,0 +1,1187 @@
+{
+  "schema_version": 1,
+  "status": "active-campaign",
+  "source_repository": "https://github.com/subvertnormality/monome-emulator",
+  "source_revision": "a0252d8",
+  "bugs": [
+    {
+      "id": "memory-preservation",
+      "status": "candidate-not-applied",
+      "candidate_manifest": "manifest.json"
+    },
+    {
+      "id": "midi-counts-and-mask-clearing",
+      "status": "note-release-patch-applied-and-verified; separate-mask-clearing-patch-not-applied",
+      "candidate_manifest": "midi-counts.json"
+    },
+    {
+      "id": "tresillo-bounds",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "tresillo.json",
+      "cases": [
+        "M-ALG-002",
+        "M-ALG-003",
+        "M-ALG-004"
+      ],
+      "validation": {
+        "status": "candidate-applied-and-validated",
+        "runs": [
+          {
+            "case": "M-ALG-002",
+            "mode": "controlled-experimental",
+            "run_id": "1651c543c3f6462ca22728208d1879e5",
+            "manifest_sha256": "d15b85fca4ee6afa7ca613929269d60777a73af267f870152a08e0844a198f5f",
+            "passed": true,
+            "lengths": [
+              8,
+              16,
+              24,
+              32,
+              40,
+              48,
+              56,
+              64
+            ],
+            "max_spacing_error_seconds": 1.333333221609223e-09
+          },
+          {
+            "case": "M-ALG-002",
+            "mode": "real-time",
+            "run_id": "0be512a759aa4a0883b8e68d12890895",
+            "manifest_sha256": "61b510a38dd5d37f97f8f83e7610afc0c482fb4251b982fda609f7574eb204ba",
+            "passed": true,
+            "lengths": [
+              8,
+              16,
+              24,
+              32,
+              40,
+              48,
+              56,
+              64
+            ],
+            "max_spacing_error_seconds": 0.0009976709999999223
+          },
+          {
+            "case": "M-ALG-003",
+            "mode": "controlled-experimental",
+            "run_id": "d68a3f264d2b4658b320aeacef403e1a",
+            "manifest_sha256": "9ec7add444b0393c95d60fb78472c12a4f911226c70f41941ffee4ba93cb6ceb",
+            "passed": true,
+            "lengths": [
+              64
+            ],
+            "max_spacing_error_seconds": 1.666666804567285e-09
+          },
+          {
+            "case": "M-ALG-003",
+            "mode": "real-time",
+            "run_id": "143bed2cea0c4144974f1e4ff018b10a",
+            "manifest_sha256": "fb8b6728eddd46ab278865a05c61eb32f6b2f2ef3b93e02ea11824e5fd9c9383",
+            "passed": true,
+            "lengths": [
+              64
+            ],
+            "max_spacing_error_seconds": 0.0008109863333332079
+          },
+          {
+            "case": "M-ALG-004",
+            "mode": "controlled-experimental",
+            "run_id": "18e0f6c3a605480e992fbf63892249a5",
+            "manifest_sha256": "48b8905d92d5ab4fa6da00b6ac6fa367f610102901100025027eec58b429369d",
+            "passed": true,
+            "checks": [
+              "drum-bank-1",
+              "drum-bank-2",
+              "drum-bank-3",
+              "drum-bank-4",
+              "drum-bank-5",
+              "empty-pattern",
+              "numeric-mask-1",
+              "numeric-mask-2",
+              "numeric-mask-3",
+              "numeric-mask-4"
+            ]
+          },
+          {
+            "case": "M-ALG-004",
+            "mode": "real-time",
+            "run_id": "f0cbe96d9a0d4d1a8333806deaae7f49",
+            "manifest_sha256": "c11bb103d1eff4229a0ddd8d2e34655bf28a375820b7be1a057da86e6a537b28",
+            "passed": true,
+            "checks": [
+              "drum-bank-1",
+              "drum-bank-2",
+              "drum-bank-3",
+              "drum-bank-4",
+              "drum-bank-5",
+              "empty-pattern",
+              "numeric-mask-1",
+              "numeric-mask-2",
+              "numeric-mask-3",
+              "numeric-mask-4"
+            ]
+          }
+        ],
+        "baseline_runs": [
+          {
+            "run_id": "7a7098a47b78474c89b03d7205865295",
+            "mode": "controlled-experimental",
+            "passed": false,
+            "manifest_sha256": "474d43baff48f7415cb61879f73f8e24cfd1998dd65fb156a3b839c77dcf3699"
+          },
+          {
+            "run_id": "4a3a8ceac3df450ea5d7779d7e1a7d41",
+            "mode": "real-time",
+            "passed": false,
+            "manifest_sha256": "c48264807c7b6c34bfddbf6abf96b42526a8e7d81f8bf8fe7209d92e6cbd1153"
+          }
+        ],
+        "source_file": "lib/helpers/drum_ops.lua",
+        "before_sha256": "0cdbd92a2fc73a21cfab3e36f102e6d869315af1496a31151c1fcd5cc649545f",
+        "after_sha256": "aa5be5e8d5ac70e7bd532319ee1183b996b5cb2ccf4c8af005aa1f9913804322",
+        "unit_tests": 474,
+        "algorithm_checks": 409600,
+        "scope": "All eight tresillo multipliers for literal bank1/pattern2 and the drum-bank 64-step boundary. Full64-cell paint/repaint, two complete MIDI cycles plus closing onset and every inter-onset gap including wraps. All five drum banks and four numeric masks at selected literal patterns, including empty-bank silence.",
+        "limitations": "Selected bank/pattern fixtures do not cover all fader values, all combinations or running edits. Full manual and release remain incomplete.",
+        "initial_porting_failure": "Four native attempts failed on a nonexistent driver send method before rhythm assertions; corrected to public action API and retained in local tresillo-porting-error evidence.",
+        "fix": "Apply previously isolated0004 candidate: wrap bit index at stored pattern length before byte lookup. Larger3m tresillo segments no longer read nil past16-bit drum data. Existing drum output is independently checked unchanged."
+      }
+    },
+    {
+      "id": "pattern-length-cutoff",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pattern-lengths.json",
+      "case": "M-LEN-001",
+      "evidence": {
+        "baseline_edit": {
+          "path": "../mosaic-behaviour-runs/747d1cb025fa4615a8f49f29e3a9be52/manifest.json",
+          "sha256": "a07cabc41a77d462c663848d37da949678e797f18491a8dc45eca8d2d746ecd7",
+          "passed": true
+        },
+        "baseline_length": {
+          "path": "../mosaic-behaviour-runs/a1af3001d1cb4e21ab7e264049999db4/manifest.json",
+          "sha256": "bde1a995dbab3b736bd1cab4bc87644a41c22be49aa27f9da8d8859044da4c18",
+          "passed": false
+        },
+        "corrected_length": {
+          "path": "../mosaic-behaviour-runs/f1721ab92443441bb6571c9913a3b689/manifest.json",
+          "sha256": "781c585e807d5bbee06763a7ab83ce8d160ccd26274cd3fe2ed092eeeb4bb5be",
+          "passed": true
+        },
+        "corrected_edit": {
+          "path": "../mosaic-behaviour-runs/0b3d9e5693694bac84666374323380d3/manifest.json",
+          "sha256": "2b541fb76f1d3f7f228598592c4ee42b403127d93b30ddf4ad3ccd5381027020",
+          "passed": true
+        },
+        "units": {
+          "path": "../mosaic-behaviour-runs/units-cf035b2bf9ee4bac80091cc5705c5517/results.json",
+          "sha256": "569d3ff806ad2f3b2aea37e38f80ddc490ee6899e49165a8f9f7625bd2068a0d",
+          "result": {
+            "passed": true,
+            "runtime_lock_sha256": "da993410f493edec1074ee100ed0770ef86fec0d440905405b290ba35367e239",
+            "runs": [
+              {
+                "name": "baseline",
+                "collected": 474,
+                "successes": 474,
+                "failures": 0,
+                "exit_code": 0,
+                "log": "../mosaic-behaviour-runs/units-cf035b2bf9ee4bac80091cc5705c5517/baseline.log",
+                "log_sha256": "cb4249488c5fef2f0ae4971b19c9a13a3b6d58f1ef4331ae3c1990f970d8d968"
+              },
+              {
+                "name": "candidate",
+                "collected": 474,
+                "successes": 474,
+                "failures": 0,
+                "exit_code": 0,
+                "log": "../mosaic-behaviour-runs/units-cf035b2bf9ee4bac80091cc5705c5517/candidate.log",
+                "log_sha256": "8f3eabbcd836980977e24e8bc64987eeebbb9e7e035dfbd96f737f499454eba1"
+              }
+            ]
+          }
+        }
+      },
+      "remaining": "Wrap, masks, merges and restoration remain campaign obligations; not full length-family certification.",
+      "additional_regressions": {
+        "M-LEN-003": {
+          "path": "../mosaic-behaviour-runs/04e6ee27860b4a1c98ac6c9d9272c24d/manifest.json",
+          "sha256": "5b262400137fba2a26800146e15121a2c724026004fe91291d0dc997b558221d"
+        },
+        "M-LEN-002": {
+          "path": "../mosaic-behaviour-runs/92b25d70a645400f854d3d712fe953ae/manifest.json",
+          "sha256": "cca112a615fef6825a0e517aabf373863e8cc8349c7879ed4dd08f0fe752c490"
+        }
+      }
+    },
+    {
+      "id": "stopped-scale-highlight",
+      "status": "known-baseline-needs-regression"
+    },
+    {
+      "id": "repeated-pitch-wrap-release",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "case": "M-MIDI-001",
+      "historical_case": "M-LEN-003 before separating distinct-pitch duration coverage",
+      "baseline": {
+        "path": "../mosaic-behaviour-runs/9c97dd5fe3a84aed94b07efe85977c1c/manifest.json",
+        "sha256": "63501d3e5f6cc802ed0c4814d75ffc92189c623e0e72d6e32c067ec3f0279cb1"
+      },
+      "failure": "Required stop drain times out: repeated pitch Note Ons have missing matching Note Offs.",
+      "candidate": "tests/behaviour/candidates/0002-midi-balanced-note-offs.patch",
+      "corrected": {
+        "path": "../mosaic-behaviour-runs/89a4f8adbf9f47d8b36b73bb6051ea29/manifest.json",
+        "sha256": "119dddbed5ea80d34b3d8af69a224ced1acae113a7268d341d1b150d155ea61b"
+      },
+      "emission_counts": {
+        "baseline": {
+          "note_on": 7,
+          "note_off": 4
+        },
+        "corrected": {
+          "note_on": 7,
+          "note_off": 7
+        }
+      },
+      "regressions": {
+        "M-MIDI-001": {
+          "path": "../mosaic-behaviour-runs/89a4f8adbf9f47d8b36b73bb6051ea29/manifest.json",
+          "sha256": "119dddbed5ea80d34b3d8af69a224ced1acae113a7268d341d1b150d155ea61b"
+        },
+        "M-LEN-003": {
+          "path": "../mosaic-behaviour-runs/04e6ee27860b4a1c98ac6c9d9272c24d/manifest.json",
+          "sha256": "5b262400137fba2a26800146e15121a2c724026004fe91291d0dc997b558221d"
+        },
+        "M-LEN-002": {
+          "path": "../mosaic-behaviour-runs/92b25d70a645400f854d3d712fe953ae/manifest.json",
+          "sha256": "cca112a615fef6825a0e517aabf373863e8cc8349c7879ed4dd08f0fe752c490"
+        },
+        "M-PAT-001": {
+          "path": "../mosaic-behaviour-runs/a1f98a7c965b49458b496a79546775ba/manifest.json",
+          "sha256": "1b1121ff3a483b59fe73dbd81e7f4517506871e27734c5810e86579d44856b54"
+        }
+      },
+      "units": {
+        "path": "../mosaic-behaviour-runs/units-f7b8b7b73ddc4695b514c6b475b566e1/results.json",
+        "sha256": "785c1f9edbb1bf150bde43cdd66d8e4131c0437378e0b3421140cf2569e7fdc5"
+      }
+    },
+    {
+      "id": "transport-start-phase",
+      "status": "isolated-candidate-applied; controlled-regressions-pass; real-time-failure-open",
+      "case": "M-LEN-001",
+      "finding": "First two-step note at90 BPM is328611113ns rather than333333333.333ns; subsequent durations agree within1ns. Generic native absolute-sync phase probe agrees with independent120BPM expectations. Immediate lattice pulse followed by absolute96PPQN sync is the suspected source. Do not waive or widen tolerance.",
+      "evidence": {
+        "controlled_edit": {
+          "path": "../mosaic-behaviour-runs/6891e8680f72402baaf888d427b5699d/manifest.json",
+          "sha256": "5e9ee65771d3978c584c9b1b26e91eb4369a0cc4d8e068930e4b00f30fc29dd2",
+          "passed": true
+        },
+        "controlled_length": {
+          "path": "../mosaic-behaviour-runs/962284ea4aa34ef6a714c67dc8ead1f8/manifest.json",
+          "sha256": "c2cd1013b0e578d97c79cb79a3b4c18f6190d202d49f81632f7f44327817d867",
+          "passed": false
+        },
+        "real_time_edit": {
+          "path": "../mosaic-behaviour-runs/870a845a87264d5fbe184f81509c1576/manifest.json",
+          "sha256": "02d54a043d1bb81225b6aed911daa5e5d48d7f6be16fb359f37abab702f8e2d3",
+          "passed": true
+        },
+        "real_time_length": {
+          "path": "../mosaic-behaviour-runs/d83c613c804b4cf0bc83f086434ec680/manifest.json",
+          "sha256": "f07bcaddd624faeb3a2f3e17a1d0cce35dc615be31c4d46f65dd49ba588a639d",
+          "passed": true
+        }
+      },
+      "candidate": "tests/behaviour/candidates/0003-transport-start-phase.patch",
+      "latest_evidence": {
+        "baseline_controlled": {
+          "path": "../mosaic-behaviour-runs/a6cedf6c624f44dda4daea4f508805b3/manifest.json",
+          "sha256": "ad7118d12fcc41b6069ce0de0d840c7fe57dedcd5dd19031182a431b1f91d961",
+          "passed": false
+        },
+        "candidate_controlled": {
+          "path": "../mosaic-behaviour-runs/c184cdb5ccb9422aa00b3c57c76e2dc7/manifest.json",
+          "sha256": "f418b99f1811a6c37c7f48479486c3d9962815359512240735f6926c568e2718",
+          "passed": true
+        },
+        "candidate_restart_controlled": {
+          "path": "../mosaic-behaviour-runs/fd3a68ff907b4be9a051493fcc9ab3d8/manifest.json",
+          "sha256": "6ba7705b986ab496121a04735e1cb50a7b259cd3776aa5c52ef4d3b690daafeb",
+          "passed": true
+        },
+        "candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/5c45def0995f4dd6b9c665b26a65eeda/manifest.json",
+          "sha256": "a62d19ab87b246eb90578946f905e3a7c6dd360a045cd44f1e993a6af262708e",
+          "passed": false
+        },
+        "units": {
+          "path": "../mosaic-behaviour-runs/units-d12ac17c58a940a0b7d1ec86bf43c207/results.json",
+          "sha256": "d8009ee8c2490b56cb99fd68c9431a8d56a4ea43b185897a1252ac1da4b2c606",
+          "passed": true
+        }
+      },
+      "remaining": "Five restart phase edges now pass controlled and real time. Clock-source transitions, fresh final-source3-repeat matrix and M5/P5 remain required. Historical intermittent timing failures are retained separately from the corrected first-pulse phase regression.",
+      "receiver_diagnostic_evidence": {
+        "real_time_diagnostic": {
+          "path": "../mosaic-behaviour-runs/472830eabb394150ae1144bbb08c9e4b/manifest.json",
+          "sha256": "c61527d0804d9a43d47732da727eed78b66fd127f426b2a7b1da7b46ac689ef8",
+          "passed": true
+        },
+        "controlled_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-639ebffcc6a247c995e19b529ad18a3e/manifest.json",
+          "sha256": "f2963671bbab7fb5dd396555a86456de4709e70c4a60755d6bf3d5c6ec4868c7",
+          "passed": false
+        },
+        "controlled_failed_child": {
+          "path": "../mosaic-behaviour-runs/bd4676fcad0f4a54974a6e49e04f3b33/manifest.json",
+          "sha256": "db2b2122d67c0fe0527ea75daa6e75cb219ce52e6adc9bce3ab032dd7432c53b",
+          "passed": false
+        }
+      },
+      "submission_diagnostic_evidence": {
+        "controlled_diagnostic": {
+          "path": "../mosaic-behaviour-runs/074828c929ce4c39b9f8a9e084d82740/manifest.json",
+          "sha256": "7223cb78d718fc1dd32531dab9e16c69661977f867daf7cb205ce901e169b0ef",
+          "passed": true
+        },
+        "controlled_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-e5e596679fbc41d4878fadd5eafcb1a0/manifest.json",
+          "sha256": "730b65bd56d031898df477df25c59369e1f01c5011749e725e8571d6bdba8528",
+          "passed": true
+        },
+        "real_time": {
+          "path": "../mosaic-behaviour-runs/d5fa2557a53844ecb997a956c6ceb82d/manifest.json",
+          "sha256": "3a5421e03c62037d02f9a01c7400afe2495a1e942c66dbb6bde976abf0eb038f",
+          "passed": false
+        }
+      },
+      "twenty_phrase_evidence": {
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/046a98f8c7ac4f14b84012b83c768129/manifest.json",
+          "sha256": "c706e27828cb8b799df98bafc334ebb009285b94950e5098223b2147848a3579",
+          "passed": true
+        },
+        "real_time": {
+          "path": "../mosaic-behaviour-runs/e3d81b0c466e48419d7dae50b3f72a9b/manifest.json",
+          "sha256": "1651fae26c76fdacec7e27628eb9ca249164fd3e8ef25900ff72704c4dfdd830",
+          "passed": false
+        }
+      },
+      "targeted_realtime_profiles": {
+        "matron_profile": {
+          "path": "../mosaic-behaviour-runs/7d0958915644404f8324aaf8b7684c5b/manifest.json",
+          "sha256": "8ffea75e660cbd7c46cae435e3263b54d1ebdedb9c45c7eabd29868c9ec97a23",
+          "passed": true
+        },
+        "stack_profile": {
+          "path": "../mosaic-behaviour-runs/3f0d6e0072514c2d9f91742a6405e620/manifest.json",
+          "sha256": "f6b45113feb56f6d75a5a3ad938b8b010fa12fe7e401ea90bb8026611c2a69ab",
+          "passed": true
+        }
+      },
+      "restart_phase_edges": {
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/d6ffb42b6d8b4f35bed8f0f5e66cc82e/manifest.json",
+          "sha256": "7040c6927c5137d7073a4e11ba098efbcb6362446a9a7b78cda6696efa214fb2",
+          "passed": true
+        },
+        "real_time": {
+          "path": "../mosaic-behaviour-runs/ee322cb6482b4d41bc60e21aa6aae341/manifest.json",
+          "sha256": "e9b9d448d1b51ac9a35f24f1a619b6333d510171cdf9653fd3bbb34762f57ca9",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "matrix-clear-depth",
+      "component": "sixolet/matrix dependency",
+      "status": "isolated-opt-in-candidate-verified; original-pinned-checkout-unchanged",
+      "case": "M-MOD-001",
+      "finding": "Clearing a route removes its menu depth but leaves the parameter modulation cache active. All notes remain127 rather than restoring60/62/64/65.",
+      "candidate": "tests/behaviour/mod-patches/manifest.json",
+      "evidence": {
+        "clear_baseline_controlled": {
+          "path": "../mosaic-behaviour-runs/87d8fe350096421b8be14a068ec90f34/manifest.json",
+          "sha256": "6dbeb56075797a82d3f5976c941db6046dfcaf9a761274823923365fb551c9ca",
+          "passed": false
+        },
+        "clear_baseline_real_time": {
+          "path": "../mosaic-behaviour-runs/66dfb654ea454650ab5a932ee2e71293/manifest.json",
+          "sha256": "e6b45246b4283d3b1895694340c426402c418d1d72e7234ac4de51dc72afeb42",
+          "passed": false
+        },
+        "clear_candidate_controlled": {
+          "path": "../mosaic-behaviour-runs/27927a98cceb44779a632fc45c4b630f/manifest.json",
+          "sha256": "99d1073c808f5a313760b67749a3bccd68fda7a4d76246269f124a8f0f154a0b",
+          "passed": true
+        },
+        "clear_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/fc595e4fdff54f55ae3368a17b760e9c/manifest.json",
+          "sha256": "0f6d80597aaa73614fcfe63779c85fc5ea2f812aa3e2751d9b7a4c9ff7fa6102",
+          "passed": true
+        },
+        "lfo_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/bf224097012c4732bc65d51db82f6fd9/manifest.json",
+          "sha256": "b552cb19645c2183e1a17eb1e02d380b70a78d637f881dd1c341dcc6f997fe77",
+          "passed": true
+        },
+        "lfo_candidate_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-98e437c855144a2c8321d40714a0db56/manifest.json",
+          "sha256": "9f2e59cbd05765bfe5c378f6a7d5ddd763f0b366e1808dfc8a19229232c39eb1",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "matrix-bind-held-source",
+      "component": "sixolet/matrix dependency",
+      "status": "isolated-opt-in-candidate-verified; original-pinned-checkout-unchanged",
+      "finding": "Rebinding depth1.00 to macro1 held at1 leaves original pitches60/62/64/65 instead of127. set_depth omitted the depth argument to nilmul. Baseline includes the earlier clear-cache fix to isolate this second defect.",
+      "case": "M-MOD-003",
+      "candidate": "tests/behaviour/mod-patches/manifest.json",
+      "evidence": {
+        "held_baseline_controlled": {
+          "path": "../mosaic-behaviour-runs/45e770d5ebb34facb0b8f800f0f619b5/manifest.json",
+          "sha256": "e6be5d46bc655ab6c5dcd5482226fbac692c905afcf6be961642ea1efebf5f74",
+          "passed": false
+        },
+        "held_baseline_real_time": {
+          "path": "../mosaic-behaviour-runs/c5ed90666aa743e5b61f5deb60640071/manifest.json",
+          "sha256": "0c81e222f213d6f04ad7dcb477267f59c2da49d73fff3d49e2902cbdbc151c9c",
+          "passed": false
+        },
+        "held_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/e6679ec529154c72b9730150ce4f5f62/manifest.json",
+          "sha256": "821ebd0d46a9da9a8def5d975598cff05464c5a9b35883f9b6cd3ac02abadccc",
+          "passed": true
+        },
+        "lfo_candidate_real_time": {
+          "path": "../mosaic-behaviour-runs/08bbd0b9072c41f9ae0a959026af2da1/manifest.json",
+          "sha256": "f26496bf5eadf85a9b33fb483cd33fdac168460485635d7f5c61124a6bce2404",
+          "passed": true
+        },
+        "held_candidate_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-a7eb0af16e8345d0b3ddde9f4219ea53/manifest.json",
+          "sha256": "090148132ffc90b87fdb34c29114b45d84dbfbabe515deaffef4caa88dca5469",
+          "passed": true
+        },
+        "lfo_candidate_repeats": {
+          "path": "../mosaic-behaviour-runs/repeat-0d3e9748636549a59bcfde6f6cf99b30/manifest.json",
+          "sha256": "da3077bb61282d5f890bc107d9dcd63be85b22a6ee09c4a56ae1aa09e9f21f45",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "continuous-midi-control-input",
+      "component": "emulator automation input scheduling",
+      "status": "fixed-by-native-queue-in-default; full-admission-pending",
+      "case": "M-TIM-004",
+      "finding": "Continuous25ms pulse schedule misses its next target while synchronous grid/snapshot actions complete. Real-time test fails before source selection; no Mosaic defect established. Do not shift the input clock timeline to obtain a pass.",
+      "evidence": {
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/939d8ae50960413bad48df5ef40952e4/manifest.json",
+          "sha256": "2575d12c714574d8e5b4e4e36ac66e483499bdc86156d94ec4fe34da5fe4804f",
+          "passed": true
+        },
+        "real_time": {
+          "path": "../mosaic-behaviour-runs/24c9a480f3f0457997434b3abe42af1e/manifest.json",
+          "sha256": "1b693a677aa3779d1339a83180d38ebe3d60092175783d976cff81c98a333b92",
+          "passed": false
+        }
+      }
+    },
+    {
+      "id": "handoff-snapshot-origin",
+      "component": "behaviour-test timing oracle",
+      "status": "fixed-with-native-applied-time-and-emitted-onset",
+      "case": "M-TIM-004",
+      "finding": "A pre-grid snapshot preceded audible onset by26.907ms and overcounted elapsed ticks. RT now uses the emitted onset and native applied-control acknowledgement, retaining the10ms bound. No Mosaic production defect established.",
+      "evidence": {
+        "failed_oracle": {
+          "path": "../mosaic-behaviour-runs/d0d302945a314c7b9946a50f6596be4d/manifest.json",
+          "sha256": "e6c9adac794f84bb6b0a14771d6903b45e62dc122c4bf19b7a53c61423e8c165",
+          "passed": false
+        },
+        "corrected_candidate": {
+          "path": "../mosaic-behaviour-runs/234790227daf49c8bc350c9b2dcb1d6c/manifest.json",
+          "sha256": "67747c57f2e942a2051e75401983e07e5d85cf3eeeebbca29d5a7d245148797c",
+          "passed": true
+        },
+        "default": {
+          "path": "../mosaic-behaviour-runs/c579bae284e246908c84ae872cb395ca/manifest.json",
+          "sha256": "3a1b60946e864953dd90708857d1099169600f18fbe03918efcff1c803fc5298",
+          "passed": true
+        },
+        "controlled": {
+          "path": "../mosaic-behaviour-runs/b5007ebc38304abe9ea494e4d6988cd7/manifest.json",
+          "sha256": "416c58c30a894ba038a72a41ac57ac317cd0b9968fd5e51cafa3d1dff871b684",
+          "passed": true
+        }
+      }
+    },
+    {
+      "id": "grid-viewer-stale-cells",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "grid-viewer-clear.json",
+      "case": "M-VIEW-001"
+    },
+    {
+      "id": "pattern-priority-order",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pattern-priority-order.json",
+      "cases": [
+        "M-MERGE-002",
+        "M-MERGE-003",
+        "M-MERGE-004",
+        "M-MERGE-005",
+        "M-MERGE-006",
+        "M-MERGE-007"
+      ]
+    },
+    {
+      "id": "priority-merge-modifier",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "priority-merge-modifier.json",
+      "cases": [
+        "M-MERGE-002",
+        "M-MERGE-003",
+        "M-MERGE-004",
+        "M-MERGE-005",
+        "M-MERGE-006",
+        "M-MERGE-007"
+      ]
+    },
+    {
+      "id": "priority-assignment-isolation",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "priority-assignment-isolation.json",
+      "cases": [
+        "M-MERGE-008"
+      ]
+    },
+    {
+      "id": "stop-safety-shift-k1",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "stop-safety-shift-k1.json",
+      "cases": [
+        "M-OPT-STOP-001"
+      ],
+      "summary": "Shift press to stop accepted K3, not the documented shift (K1), as the short-press stop modifier."
+    },
+    {
+      "id": "elektron-short-song-program-changes",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "cases": [
+        "M-OPT-ELEK-002",
+        "M-OPT-ELEK-003"
+      ],
+      "summary": "With Elektron program changes on, m_clock announces the next song slot when current_step == global_pattern_length - 1, before the slot switch. Global length 4 announces each transition once, two steps ahead (M-OPT-ELEK-001 passes). Length 2: at Play the current-slot change is followed at the same instant by the next-slot change, before slot 1 sounds, and each later announcement coincides with the boundary it names. Length 1: no transition is announced.",
+      "decision": "SEM-013",
+      "evidence": [
+        {
+          "run_id": "b019203f1be54c2f91495778ba10395e",
+          "case": "M-OPT-ELEK-002",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "87e6e00fefedcd51dcbfcb9d90582788673479a18dfb0f792767a96875255f12",
+          "failure": "('Play must name the playing slot last', [(156856869931441, 'pc', 1), (156856870171975, 'pc', 2), (156856870483290, 'slot', 1)])"
+        },
+        {
+          "run_id": "fc6942a665e64e51a3574494ec6b25e3",
+          "case": "M-OPT-ELEK-003",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "f23554a88bd9b472b1d1fc52c7d4b50c1258332acbd1018bbc0e2cca4e99d7d9",
+          "failure": "('One program change naming the incoming slot', 2, [])"
+        },
+        {
+          "run_id": "2cb5c14375d64675a7e3b6585a97f138",
+          "case": "M-OPT-ELEK-002",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "6af9aeb0740d76b08e35eb9a0f841cdc3d64595e4d96a1f99224d156c9177507",
+          "failure": "('Play must name the playing slot last', [(12510000000, 'pc', 1), (12510000000, 'pc', 2), (12510000000, 'slot', 1)])"
+        },
+        {
+          "run_id": "905a0566b19942d38afbd2a979535a82",
+          "case": "M-OPT-ELEK-003",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "1e34a229184a6060f4f64c5d363f31dfd040f3317a6723f6e28b4e84e1daa4db",
+          "failure": "('One program change naming the incoming slot', 2, [])"
+        },
+        {
+          "run_id": "f28740fff7b64f708b5937e5302c8461",
+          "case": "M-OPT-ELEK-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "f90801ec16584267e48e3c85c044c3eee4131422836d19388240acec45198340",
+          "failure": null
+        }
+      ],
+      "source_observation": "step.process_elektron_program_change sends one change per Elektron-device channel through devices[1].midi_device; multi-port and duplicate behaviour are not yet exercised.",
+      "candidate_manifest": "elektron-short-song-program-changes.json"
+    },
+    {
+      "id": "midi-map-neutral-default",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "midi-map-neutral-default.json",
+      "cases": [
+        "M-MAP-001"
+      ],
+      "summary": "Mapped relative increases were ignored after boot until a decrease fired, because mapping parameters defaulted to 1."
+    },
+    {
+      "id": "device-config-requires-id",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "device-config-requires-id.json",
+      "cases": [
+        "M-SETUP-002"
+      ],
+      "summary": "One device config entry without an id aborted Mosaic initialisation."
+    },
+    {
+      "id": "song-queue-after-manual-switch",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "song-queue-after-manual-switch.json",
+      "cases": [
+        "M-SONG-FLOW-001"
+      ],
+      "summary": "A slot selected while song mode was off stayed queued and redirected the first transition after song mode was re-enabled."
+    },
+    {
+      "id": "record-slot-at-first-press",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "record-slot-at-first-press.json",
+      "cases": [
+        "M-TRIPLE-003"
+      ],
+      "summary": "A live-recorded note held across a song transition was stored in the slot selected at release instead of the slot and step active at its first press."
+    },
+    {
+      "id": "memory-wrap-logical-slot",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "memory-wrap-logical-slot.json",
+      "cases": [
+        "M-MEMORY-004"
+      ],
+      "summary": "After the bounded memory history wrapped, a new action recorded after moving back was stored in the wrong slot, so undoing it reverted a different action."
+    },
+    {
+      "id": "quantiser-cache-timestamp",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "quantiser-cache-timestamp.json",
+      "cases": [
+        "M-SCALE-CACHE-001"
+      ],
+      "summary": "After about 100 saves of the playing scale in one session, pressing Play raised a Lua error in the quantiser cache cleanup and stopped the sequencer."
+    },
+    {
+      "id": "norns-param-lock-channel",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "norns-param-lock-channel.json",
+      "cases": [
+        "M-XA-005-NB-LOCK"
+      ],
+      "summary": "A step lock on an nb (norns-parameter) device parameter such as Doubledecker Shape 1 raised a Lua error at Play and stopped the sequencer."
+    },
+    {
+      "id": "length-index-after-reload",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "length-index-after-reload.json",
+      "cases": [
+        "M-SAVE-LENGTH-001"
+      ],
+      "summary": "After a save and reload, channel and step length masks of 1/24, 1/12, 1/6, 1/3, 2/3 or 5/6 were shown as X on the Note Masks page."
+    },
+    {
+      "id": "slide-ring-compaction",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "slide-ring-compaction.json",
+      "cases": [
+        "M-SLIDE-CAPACITY-001"
+      ],
+      "summary": "With one long slide running, busy slides on other parameters stopped moving after about 1000 replacements and only jumped between lock values until the long slide ended."
+    },
+    {
+      "id": "new-project-memory",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "new-project-memory.json",
+      "cases": [
+        "M-MEMORY-005"
+      ],
+      "summary": "After + New, the Memory page still showed the previous project's history and E3 could replay those actions onto the new project."
+    },
+    {
+      "id": "elektron-program-change-port",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "elektron-program-change-port.json",
+      "cases": [
+        "M-OPT-ELEK-004"
+      ],
+      "summary": "With Elektron program changes on, an Elektron device on a MIDI port other than channel 1's never received program changes, and channel 1's port received duplicates."
+    },
+    {
+      "id": "tooltip-metro-id",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "tooltip-metro-id.json",
+      "cases": [
+        "M-TOOLTIP-002"
+      ],
+      "summary": "After a few tooltips, the idle-autosave Autosaved tooltip stayed on screen until another tooltip replaced it."
+    },
+    {
+      "id": "song-queue-discard-on-stop",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "song-queue-discard-on-stop.json",
+      "cases": [
+        "M-SONG-QUEUE-STOP-001"
+      ],
+      "summary": "A song slot or global length queued during playback survived Stop invisibly and took effect at the first boundary of the next Play."
+    },
+    {
+      "id": "song-slot-copy-press-order",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "song-slot-copy-press-order.json",
+      "cases": [
+        "M-SONG-COPY-001"
+      ],
+      "summary": "Copying a song slot erased the source instead when the source key was released before the destination key."
+    },
+    {
+      "id": "pattern-edit-before-song-boundary",
+      "status": "fixed",
+      "cases": [
+        "M-PAT-BOUNDARY-001"
+      ],
+      "summary": "A complete pattern-note tap 30 ms before a song boundary was heard one pass late on channel 16 because the next slot rebuild cancelled the committed edit rebuild. Per-song debouncing preserves both slot sweeps while retaining same-slot coalescing.",
+      "evidence": [
+        {
+          "run_id": "cfd311a1f8b64dfbb3d0d54259cb78ae",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "f6905830d5766accc46f07f16a24fd66f3c6ef5526122ad4459ace5cf9d2e99d",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "cbf4cd3d5f1a41ad8ece0e99cbd94906",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "38868935960e317d8b4e9e27f38cb1abf47c6bef62dc9b508d3f7209cbfe4d12",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "abe5311436ab49098db1ba8bfa81b92f",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "723ab68c9a819838ec16218eb06becc1934013197ae3bd4af98f52e557bb51e1",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "e4fb4ff7551e46e985979c82cfdc5aef",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "40d48edc583f64d509c65fc9183391acd503a110a8480da264874c50e800b87f",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "65b4ba79c9f84d248a3d67941098a4f2",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "f19e507b964bdb41da818465e278ab9fe6efdbe4d75e0cf67b553f8ac6d04a21",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "cb9bc8311fec46c1ade317719a88ebdc",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "8b8b9c3b29a9ac5a04572400d08c319878c6da97b91a46668fef4354914e4c98",
+          "failure": "{'expected': [60, 62, 64, 65, 72, 74, 76, 77, 67, 62, 64, 65, 72], 'actual': [60, 62, 64, 65, 72, 74, 76, 77, 60, 62, 64, 65, 72], 'input_validity': {'kind': 'pattern-boundary-input-validity', 'lane':"
+        },
+        {
+          "run_id": "d32d78b49d7f45259faa65d2f846304d",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-experimental",
+          "passed": true,
+          "manifest_sha256": "f656bec7160541d1d9f9105d5c4b5f45037dd000b16bfd25299de2be7f7fbda4",
+          "failure": null
+        },
+        {
+          "run_id": "repeat-605f1c353df24692be4ddccee7e947a1",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "controlled-repeat",
+          "passed": true,
+          "manifest_sha256": "cbbd4eb8d04deb5aef63edf7bb0d49d5c2f3d2d402a3df5e84c165b38b4af6dc",
+          "failure": null,
+          "normalized_sha256": "100ebab1810b4474710f2a35151b9bf248bc1e730007b3e1ea9fda21c6656ca6"
+        },
+        {
+          "run_id": "0429d610e7b14e75a02b453bf44c8c98",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "268c1d8e7c12d0c98eeb2047a2b427323394c4653fb012fc6169f23e6209ebd7",
+          "failure": null
+        },
+        {
+          "run_id": "0019d702144e47acba88c2da8ec7fd39",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "2ae6493cf9dc3e1edd8538028eb70144ec7b8e145f8fb2caf7f305e168efadb5",
+          "failure": null
+        },
+        {
+          "run_id": "cd6775f2c3d04a559284f47469dcd8c4",
+          "case": "M-PAT-BOUNDARY-001",
+          "mode": "real-time",
+          "passed": true,
+          "manifest_sha256": "88df8dc4333c6f28d2c447b3cfb13e5cd273a7d8466f6da1c972e0a1c8780d1c",
+          "failure": null
+        }
+      ],
+      "note": "Qualified baseline: three real-time and three controlled runs failed with both callbacks completed before the boundary. Candidate: three fresh real-time runs and three normalized controlled repeats pass. The focused scheduler unit fails on unfixed 2eba587 and covers early/late channels, repeated same-slot edits, simultaneous other-slot work and song isolation.",
+      "candidate_manifest": "pattern-edit-before-song-boundary.json"
+    },
+    {
+      "id": "fixed-map-held-steps",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "fixed-map-held-steps.json",
+      "cases": [
+        "M-MAP-004"
+      ],
+      "summary": "With a step held, a fixed-channel mask map edited that channel's step masks from the selected channel's value, outside memory."
+    },
+    {
+      "id": "digitakt-2-config-name",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "digitakt-2-config-name.json",
+      "cases": [
+        "M-SETUP-DEVICE-NAMES-001"
+      ],
+      "summary": "The Digitakt 2 configuration was named \"Digitakt\"."
+    },
+    {
+      "id": "syntakt-pedal-params",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "syntakt-pedal-params.json",
+      "cases": [
+        "M-SETUP-SYNTAKT-PEDALS-001"
+      ],
+      "summary": "Syntakt Sustain and Sostenuto could not be set."
+    },
+    {
+      "id": "memory-redo-working-pattern",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "memory-redo-working-pattern.json",
+      "cases": [
+        "M-MEMORY-009"
+      ],
+      "summary": "Redo of an encoder-made held-step lock silenced the step until the next pattern rebuild."
+    },
+    {
+      "id": "paint-before-preview-settles",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "cases": [
+        "M-ALG-PAINT-RACE-001"
+      ],
+      "summary": "A paint press within the ~60 ms it takes the prime job to rebuild the paint pattern (18 scheduler ticks) saves a partial pattern and the job then re-shows the preview; the in-case control (paint after the preview settles) paints the full exclusive-or. README 424-428. Human decision 2026-09-11: fix now. Fixed (S16): Paint builds and saves the complete primed pattern, and a job overtaken by Paint or Cancel no longer re-shows the preview.",
+      "evidence": [
+        {
+          "run_id": "1942e27228f24d17a4f0618aea356203",
+          "case": "M-ALG-PAINT-RACE-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "276f022fe29060cb9d43896949ef275f0efdc1f28c026a5937ae02e622c289b6",
+          "failure": "('Paint 20 ms after prime differs from the primed pattern', [[1, 4, 7, 9, 12, 15, 17, 20, 23, 25, 28, 31, 33, 36, 39, 41, 44, 47, 49, 52, 55, 57, 60, 63], [1, 4, 7, 9, 12, 15, 17, 20], [1, 4, 7, 9, 12"
+        },
+        {
+          "run_id": "712497c98dee425d8b028b3be0814c61",
+          "case": "M-ALG-PAINT-RACE-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "8b7801187e11e89b5f4c5c9bf045cd7508f9eebf34d9606b38615e4a413854b1",
+          "failure": "('Paint 20 ms after prime differs from the primed pattern', [[23, 25, 28, 31, 33, 36, 39, 41, 44, 47, 49, 52, 55, 57, 60, 63], [1, 4, 7, 9, 12, 15, 17, 20, 23, 25, 28, 31, 33, 36, 39, 41, 44, 47, 49, "
+        }
+      ],
+      "candidate_manifest": "paint-before-preview-settles.json"
+    },
+    {
+      "id": "keyboard-chord-state-after-lost-release",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "cases": [
+        "M-KEYBOARD-STOP-001"
+      ],
+      "summary": "After a Note Off that never arrives (MIDI port disconnected while a key and a step are held), later single-key entries on that step add chord voices (72, then 72+76, then 72+76+79) instead of replacing the note; Stop and Panic do not clear it (they reset an unused module variable). Reproduced by probe_chord.py in the controlled lane (variants none, stop, panic). README 239 does not say which reset is intended. Human decision 2026-09-11: Stop resets keyboard chord state; fixed (M-KEYBOARD-STOP-001).",
+      "evidence": [],
+      "candidate_manifest": "keyboard-chord-state-after-lost-release.json"
+    },
+    {
+      "id": "dashboard-absent-velocity-length",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "dashboard-absent-velocity-length.json",
+      "cases": [
+        "M-DASHBOARD-SELECT-001"
+      ],
+      "summary": "Note Dashboard showed Vel -1 and Len -1.0 after a grid channel select; now X like the Note cell (S50)"
+    },
+    {
+      "id": "memory-undo-full-step-state",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "memory-undo-full-step-state.json",
+      "cases": [
+        "M-MEMORY-010"
+      ],
+      "summary": "Stepping memory back now restores the whole prior step state: unrelated fields, earlier chords and other trig-lock parameters no longer leak through an undo (S42-S44)"
+    },
+    {
+      "id": "chord-three-held-decrement-recorder",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "chord-three-held-decrement-recorder.json",
+      "cases": [
+        "M-MEMORY-011"
+      ],
+      "summary": "Chd3 up-then-down on a held step now sounds the selected chord note and is one memory action, like the other chord handlers (S25)"
+    },
+    {
+      "id": "cc-page-return-any-channel",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "cc-page-return-any-channel.json",
+      "cases": [
+        "M-MAP-PAGE-RETURN-001"
+      ],
+      "summary": "A mapped CC on MIDI channels 2-16 switched the channel editor page and never returned; the return now works on every channel (S10)"
+    },
+    {
+      "id": "repeated-note-on-stuck-note",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "repeated-note-on-stuck-note.json",
+      "cases": [
+        "M-MIDI-REPEAT-001"
+      ],
+      "summary": "A repeated Note On for a held key (merged keyboards) replaced its release record and left one output note stuck; each onset now keeps its own release (S8)"
+    },
+    {
+      "id": "same-key-two-sources-chord",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "same-key-two-sources-chord.json",
+      "cases": [
+        "M-REC-SOURCES-001",
+        "M-REC-SOURCES-002"
+      ],
+      "summary": "The same key held from two MIDI inputs shared one chord slot, so the first release ended the chord early; chord lengths now run to the final release (S9, S38)"
+    },
+    {
+      "id": "record-with-non-step-key-held",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "record-with-non-step-key-held.json",
+      "cases": [
+        "M-REC-PAGE-KEY-001"
+      ],
+      "summary": "With record armed, holding a page or menu key dropped live-recorded notes and committed a length-only mask; such holds now record normally (S32)"
+    },
+    {
+      "id": "unreadable-device-config-skipped",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "unreadable-device-config-skipped.json",
+      "cases": [
+        "M-SETUP-UNREADABLE-CONFIG-001"
+      ],
+      "summary": "One device config file that could not be opened (for example a broken symlink in the config folder) stopped Mosaic from starting, with no devices loaded; it is now skipped and the other configs load."
+    },
+    {
+      "id": "nb-chord-acceleration-lock",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "nb-chord-acceleration-lock.json",
+      "cases": [
+        "M-XA-006-NB-CHORD-ACCEL"
+      ],
+      "summary": "A Chord Accel Mod trig lock on a channel playing an n.b. device raised a Lua error at the locked step during playback; the lock is now handled by the sequencer like the other chord parameters."
+    },
+    {
+      "id": "nb-device-switch-clears-slots",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "nb-device-switch-clears-slots.json",
+      "cases": [
+        "M-XA-007-NB-SWITCH-SLOTS"
+      ],
+      "summary": "Switching a channel from a MIDI device to an n.b. device without params (for example Jf Kit) left the old device's parameters in the channel's norns params menu, still sending MIDI; they are now cleared."
+    },
+    {
+      "id": "realign-mid-step-length",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "realign-mid-step-length.json",
+      "cases": [
+        "M-TIME-014",
+        "M-SLIDE-RESET-001"
+      ],
+      "summary": "A reset in the middle of a channel step ran the restarted first step straight/unrounded: swing pairs shifted after a song transition, fractional clocks and their slides off by a pulse (S41, S53)"
+    },
+    {
+      "id": "undo-lock-clears-step-slide",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "undo-lock-clears-step-slide.json",
+      "cases": [
+        "M-MEMORY-012"
+      ],
+      "summary": "Memory undo of a step-slid lock left that parameter's step slide set when another lock remained on the step, so the outline stayed and a later lock there slid without K3 (S34)."
+    },
+    {
+      "id": "dial-off-display",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "dial-off-display.json",
+      "cases": [
+        "M-PARAM-DIAL-OFF-001"
+      ],
+      "summary": "Trig Locks dials show X at Off when Off lies below the range (off -1, min 0) and for MIDI device params without off_value (default -1), instead of an empty or half bar and a 0/-1 read-out"
+    },
+    {
+      "id": "dashboard-chord-slots",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "dashboard-chord-slots.json",
+      "cases": [
+        "M-DASHBOARD-CHORD-001"
+      ],
+      "summary": "Note Dashboard chord slots show the chord voices as sent (MIDI 0 and clamped voices below 0 show C-2) and X for slots that never played, instead of keeping the previous name, showing unclamped names, or C-2 on a fresh dashboard"
+    },
+    {
+      "id": "held-mask-extra-key",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "held-mask-extra-key.json",
+      "cases": [
+        "M-MASK-HELD-EXTRA-001"
+      ],
+      "summary": "A held pattern-row key made mask handlers record step -30 or, pressed first, turned a held-step edit into a channel-wide one; keys outside rows 4-7 are now ignored (S27)"
+    },
+    {
+      "id": "grid-disconnect-held-keys",
+      "status": "fixed-on-worktree-with-unit-regression-no-behaviour-reproduction-by-decision",
+      "candidate_manifest": "grid-disconnect-held-keys.json",
+      "cases": [],
+      "summary": "Grid disconnect kept held keys, their long-press timers and gesture state; disconnect now clears them (S29, defensive, no behaviour reproduction by decision). No behaviour reproduction exists, by decision: an emulator probe showed no user-visible effect; the human decided on 2026-09-11 to fix defensively, with Lua units that fail before the fix as the regression.",
+      "unit_regression": [
+        "test_grid_input_remove_clears_held_keys_and_cancels_their_timers",
+        "test_grid_input_remove_forgets_a_fired_long_press",
+        "test_grid_input_remove_ends_a_two_key_gesture_in_progress"
+      ]
+    },
+    {
+      "id": "redo-all-chord-merge",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "redo-all-chord-merge.json",
+      "cases": [
+        "M-MEMORY-013"
+      ],
+      "summary": "Redo-all (K3) kept only the later chord edit on a step; chord voices now merge per voice (S57)"
+    },
+    {
+      "id": "external-clock-stop-preempts-backlog",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "external-clock-stop-preempts-backlog.json",
+      "cases": [
+        "M-SYNC-023"
+      ],
+      "summary": "A severe external-clock callback backlog could replay stale notes after native MIDI Stop; catch-up now yields so queued transport preempts stale musical work."
+    },
+    {
+      "id": "memory-retained-floor",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "memory-retained-floor.json",
+      "cases": [
+        "M-MEMORY-014"
+      ],
+      "summary": "Preserve the correct undo floor after bounded memory history wraps."
+    },
+    {
+      "id": "editor-page-selected-pattern-flicker",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "editor-page-selected-pattern-flicker.json",
+      "cases": [
+        "M-EDIT-FLICKER-001"
+      ],
+      "summary": "On note/velocity editor step pages 2-4 the chosen pattern's top-row active LED did not flicker; it now does, as on page 1 (S18)"
+    },
+    {
+      "id": "chord-mask-unset-start-x",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "chord-mask-unset-start-x.json",
+      "cases": [
+        "M-MASK-CHORD-X-001"
+      ],
+      "summary": "An unset chord mask turned once showed X (up) or -6th (down); it now starts from X: 2nd up, -7th down (S26)"
+    },
+    {
+      "id": "mask-off-stored-as-minus-one",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "cases": [
+        "M-MASK-OFF-001"
+      ],
+      "summary": "S24 probe (M-MASK-OFF-001, both lanes): a channel velocity mask turned back to X plays as unset, but held-step masks turned back to X do not. Step 2's trig mask turned N then back to X stays silent (the handler stores trig -1 as a step lock, and pattern.lua applies any step trig lock, so -1 is not 1 and the step never plays). Step 3's velocity lock 50 turned back to X keeps velocity 50 (the -1 portion fails memory's validate_velocity, so the release commits nothing). Both survive an autosave restart; one Memory-page step back after the restart left the phrase unchanged (observation). README 570/597: a step without a mask lock uses the channel/pattern value. The fix (nil for X, or -1 treated as unset, per field; chord masks must keep -1 as '-7th') needs a human decision.",
+      "evidence": [
+        {
+          "run_id": "ffe79abad2ff4c8581475a1583f5c8a6",
+          "case": "M-MASK-OFF-001",
+          "mode": "controlled-experimental",
+          "passed": false,
+          "manifest_sha256": "7ac40f6028d665f1542382dbc8d3eae9170b55829c2ce78a26ee97ba5197d4f8",
+          "failure": "('Mask turned back to X does not play as unset', [('B step 2 trig back to X', {'expected': [(60, 127), (62, 117), (64, 107), (65, 97)], 'heard': [(60, 127), (64, 107), (65, 97)]}), ('C step 3 velocity"
+        },
+        {
+          "run_id": "7ce05f800c6b409290d757893d4b3095",
+          "case": "M-MASK-OFF-001",
+          "mode": "real-time",
+          "passed": false,
+          "manifest_sha256": "980e6260b33c29b39ae9b8c5384d256fca5def3f8130354263bad620b0d37733",
+          "failure": "('Mask turned back to X does not play as unset', [('B step 2 trig back to X', {'expected': [(60, 127), (62, 117), (64, 107), (65, 97)], 'heard': [(60, 127), (64, 107), (65, 97)]}), ('C step 3 velocity"
+        }
+      ],
+      "candidate_manifest": "mask-off-stored-as-minus-one.json"
+    },
+    {
+      "id": "pending-parameter-lock-song-target",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pending-parameter-lock-song-target.json",
+      "cases": [
+        "M-PARAM-047"
+      ],
+      "summary": "A held parameter-lock edit released after a song transition was committed to the newly selected slot; it now remains with the slot active when the edit was queued (S68)."
+    },
+    {
+      "id": "pending-note-mask-song-target",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "pending-note-mask-song-target.json",
+      "cases": [
+        "M-MASK-032"
+      ],
+      "summary": "Pending held note-mask edits retain their captured song across automatic song transitions."
+    },
+    {
+      "id": "midi-release-song-ownership",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "midi-release-song-ownership.json",
+      "cases": [
+        "M-REC-SONG-LENGTH-001",
+        "M-REC-SONG-LENGTH-002"
+      ],
+      "summary": "Held notes and chords released after a song transition retain full recorded length in their onset song."
+    },
+    {
+      "id": "held-velocity-undo-prior-state",
+      "status": "fixed-on-worktree-with-real-input-regression",
+      "candidate_manifest": "held-velocity-undo-prior-state.json",
+      "cases": [
+        "M-MEMORY-008"
+      ],
+      "summary": "Undo held-step velocity increments restores the previous velocity."
+    }
+  ]
+}

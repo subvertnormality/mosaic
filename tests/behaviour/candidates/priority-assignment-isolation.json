@@ -1,0 +1,80 @@
+{
+  "status": "validated",
+  "source_before": {
+    "lib/pattern.lua": "d44d362dc674aed3155c95d0522a5c935926ba7115d07bf379272588830dec4e",
+    "lib/pages/channel_edit_page/channel_edit_page.lua": "b2d8ffac1ae68c53d14122f1901ebbf4d20a58fe3ee28ffa78d61e3b516a480f"
+  },
+  "source_after": {
+    "lib/pattern.lua": "75b31e593c80b26d2a33272bd0dfb02b77791750b805686822fb0091c66d0a43",
+    "lib/pages/channel_edit_page/channel_edit_page.lua": "0e5f255f8de449c025a9d87a5863fb106b0bfc603798ed10490bb8f4c8d72c1d"
+  },
+  "patch_sha256": "3cf94bf0524c68230907801d0f8c36ff32153938db64331ae3b6a6905f23deb9",
+  "baseline_runs": [
+    "db06e292c9c548b5bff74a7bc6e81daa",
+    "0c6a2c61dbdb44f3b350fd12518c7faa"
+  ],
+  "diagnostic_run": "755e6921baab46959958bae4ed4ae79c",
+  "runs": [
+    {
+      "case": "M-MERGE-008",
+      "mode": "controlled-experimental",
+      "run_id": "b53563b939924ab0ba736993a452d669",
+      "manifest_sha256": "a73e137c18a4fe87a52c336d49182cf8d3b9bf688028aca9cb019452052a1368",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-008",
+      "mode": "real-time",
+      "run_id": "97e4f2d69050436a8974074850b32caa",
+      "manifest_sha256": "a76fd9650a870fe5962d870692378220c412e7e4165c8d5c4de00e382884bdac",
+      "passed": true
+    },
+    {
+      "case": "M-PAT-006",
+      "mode": "controlled-experimental",
+      "run_id": "6c962f634260444b8e393edaa25bf0b3",
+      "manifest_sha256": "8af36bb9abfc603bd9abd08117879c4d980be828ffa23286cda34fb07db85aa8",
+      "passed": true
+    },
+    {
+      "case": "M-PAT-006",
+      "mode": "real-time",
+      "run_id": "cfde28708a554586a89ed2c75e71b8ac",
+      "manifest_sha256": "fafd965b0553f6193326994c6b3ebb6d65eb5ba58d3bb88125a63ae56e3c8622",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "controlled-experimental",
+      "run_id": "94402a6aaeef407bb7c56d22fd0553ea",
+      "manifest_sha256": "d52ea8d98080815f55235f6dad31607e5a727dc92dd1fb16b34aa1bb8fab47ac",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-004",
+      "mode": "real-time",
+      "run_id": "3f8832c3200a4ad1bab11324ce1dc54f",
+      "manifest_sha256": "c187d6435d9994009383c0cb664e5ee15e207e99b403ddadc831816d2358db08",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "controlled-experimental",
+      "run_id": "34864b1e62414fadab9e36a5922105b7",
+      "manifest_sha256": "3eaadf221667e28ef4f1a998925216b65dfd9d045be69cbdffc66e7c63fd903f",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-006",
+      "mode": "real-time",
+      "run_id": "3fddeec15fef4898b633e6c722410a8e",
+      "manifest_sha256": "76d66f70b396ed48279c1a78cd7da23dbac85bf175f788d5eda77d20b949f4cb",
+      "passed": true
+    }
+  ],
+  "unit_tests": 474,
+  "merge_contract_checks": 830480,
+  "patch": "tests/behaviour/candidates/0025-priority-assignment-isolation.patch",
+  "fix": "Copy the assignment set before adding merge-only sources. Render only truthy assignments so legacy false entries stay unassigned.",
+  "limitations": "Native regression covers freshly created projects. Persisted legacy false-entry loading remains a lifecycle obligation."
+}

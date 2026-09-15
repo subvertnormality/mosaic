@@ -1167,10 +1167,6 @@
 
       "cc_min_value": -1,
       "cc_max_value": 127,
-      "nrpn_msb": -1,
-      "nrpn_lsb": -1,
-      "nrpn_min_value": -1,
-      "nrpn_max_value": -1,
       "off_value": -1
     },
     {
@@ -1182,10 +1178,6 @@
 
       "cc_min_value": -1,
       "cc_max_value": 127,
-      "nrpn_msb": -1,
-      "nrpn_lsb": -1,
-      "nrpn_min_value": -1,
-      "nrpn_max_value": -1,
       "off_value": -1
     }
   ]

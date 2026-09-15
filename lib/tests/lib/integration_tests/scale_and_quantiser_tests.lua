@@ -39,7 +39,7 @@ end
 
 
 
-function test_global_default_scale_setting_quantises_notes_properly()
+function test_global_default_scale_setting_quantises_notes_properly_first_variant()
     setup()
     local song_pattern = 1
     program.set_selected_song_pattern(1)
@@ -1472,6 +1472,22 @@ function test_global_transpose_applies_to_notes()
   luaunit.assert_equals(note_on_event[1], 62)
   luaunit.assert_equals(note_on_event[2], 100)
   luaunit.assert_equals(note_on_event[3], 1)
+end
+
+
+function test_step_transpose_preserves_full_scale_page_range()
+  setup()
+  program.get().selected_channel = 17
+
+  for value = -12, 12 do
+    program.add_step_transpose_trig_lock(1, value)
+    luaunit.assert_equals(program.get_step_transpose_trig_lock(1), value)
+  end
+
+  program.add_step_transpose_trig_lock(1, -13)
+  luaunit.assert_equals(program.get_step_transpose_trig_lock(1), -12)
+  program.add_step_transpose_trig_lock(1, 13)
+  luaunit.assert_equals(program.get_step_transpose_trig_lock(1), 12)
 end
 
 

@@ -1,0 +1,177 @@
+{
+  "status": "scoped-native-validation-and-codex-review-complete",
+  "emulator_branch": "codex/midi-hotplug",
+  "emulator_revision": "ae203883c0c2910d914609e1091df9e844a8ed00",
+  "production_mosaic_changed": false,
+  "mosaic_revision": "fe6240678b0c4ddd3f3dcf68fcb5ac81b6812f7b",
+  "full_campaign_complete": false,
+  "controlled_time_admitted": false,
+  "oracle_test_groups": 7,
+  "coverage": "Unplug before/during stopped panic, reconnect during/after sweep; native metadata proves intervals. Exact unaffected-port sweeps, connected prefix/suffix or absent-port silence, no replay, restored keyboard, fresh full panic, unchanged page LEDs and authored melody.",
+  "remaining": [
+    "Publish test-only branch changes",
+    "Every remaining manual requirement, interaction campaign, controlled-time admission and emulator release gates"
+  ],
+  "historical_pre_remedy_runs": [
+    {
+      "case": "M-PANIC-011",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4cfa019596f04230b13749665860ea5f/manifest.json",
+      "sha256": "11267e71ee8e7c9a70f0583d1510497b45a0f47687cdbe1cf0b5f1aba58b51f0",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-012",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7218b2ec074b4d94bc5dfd6290250937/manifest.json",
+      "sha256": "e61e4538ec604d10358a7d1cfc97222cf7d22816a5b60e35b4511ed24a0e2588",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-013",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a84825951b214f03b521b3e40c6de593/manifest.json",
+      "sha256": "720754e6eedd67b0a111f024bc2879758439ad5500e47fa7920b0d7a2da7eac5",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-014",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a449390483c34e279ed404c4b0ff3bf7/manifest.json",
+      "sha256": "0b599ee9612f5187a3a958f4222c2c7397ddb119379f0b4d1c5ada793b534711",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-011",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f46912acec42493ba27c1ecf26a0566d/manifest.json",
+      "sha256": "c92634d9d6ea5576ef282b9adbbedce9e944863a5fb98193ed698feac58d5823",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-012",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8318f81eca6f44e38d878d42b38b6c20/manifest.json",
+      "sha256": "65e63b6f8451b5eb69bc580e63b1f433070625ddc7d224ec414148194e5271a1",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-013",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e20a5b1386f249d88c8c6cf0294d28c8/manifest.json",
+      "sha256": "dea4575e79e1f399b60241371558b4df231f66ed79f74618083ef55ce6e119ff",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-014",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/25121074acbe4d618e0cc295729d3deb/manifest.json",
+      "sha256": "646fea3230d5f1d543141c9c993fa789babb70b0e2f4a9d36411961bf74f2799",
+      "passed": true
+    }
+  ],
+  "runs": [
+    {
+      "case": "M-PANIC-011",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4cfa019596f04230b13749665860ea5f/manifest.json",
+      "sha256": "11267e71ee8e7c9a70f0583d1510497b45a0f47687cdbe1cf0b5f1aba58b51f0",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-012",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7218b2ec074b4d94bc5dfd6290250937/manifest.json",
+      "sha256": "e61e4538ec604d10358a7d1cfc97222cf7d22816a5b60e35b4511ed24a0e2588",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-011",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f46912acec42493ba27c1ecf26a0566d/manifest.json",
+      "sha256": "c92634d9d6ea5576ef282b9adbbedce9e944863a5fb98193ed698feac58d5823",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-012",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8318f81eca6f44e38d878d42b38b6c20/manifest.json",
+      "sha256": "65e63b6f8451b5eb69bc580e63b1f433070625ddc7d224ec414148194e5271a1",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-013",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0abc95f9789a4a398c2b3fe37f019394/manifest.json",
+      "sha256": "f8ca3d0948c2d55e387bd19b4faf00a2ec6b872321ee8041127765277a78e68d",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-014",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/336b2259e0ca4c438c1a91b995efd32e/manifest.json",
+      "sha256": "f81ece119ada07ae54962b2e55dd886e7c798192a93a3cbb1dcf4d8da34cf6ef",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-013",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9a939d216fb3476f84e7f113bd1d873b/manifest.json",
+      "sha256": "14aef72bffd859d25d9072fd92d85c29408a64f5afbcc36d1b18600330d2bb85",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-014",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b0ffd82db4e54b05a350c2b0999d5d9d/manifest.json",
+      "sha256": "c8815e71865d5ecc49ab306dd24bbe81d999313088057bfe2c4d1b6597b26f81",
+      "passed": true
+    }
+  ],
+  "existing_regressions": [
+    {
+      "case": "M-PANIC-004",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c5bce313575f410e97b9c32a2c65dc4b/manifest.json",
+      "sha256": "f00498886070fa3d444830bd41b5e8634a6ecdd92c5d217a17477c531c43c29b",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-009",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ae3ef12733fd43fda0800d06956e453e/manifest.json",
+      "sha256": "e80db3b3c79d0af29a166e65aab526cc86d63dc8e73bb03d9440fa62355c5c2d",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-004",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ac58b47f18db4b9685ba77807c845d16/manifest.json",
+      "sha256": "b7f57431b8bb14273bb2620cd0322c93595906ea31f206c35198d9d28200e364",
+      "passed": true
+    },
+    {
+      "case": "M-PANIC-009",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ebee8753f4d0470ebd5fa8556913a4fb/manifest.json",
+      "sha256": "741e813baec22b0e578b255d88b8da916a888d8b0ab31d0ac60f6fbed6b2c6f3",
+      "passed": true
+    }
+  ],
+  "review_session": "01a08158-f66a-7f31-82f0-96988d1ea9d5",
+  "review_artifacts": [
+    {
+      "path": "docs/testing/reviews/hotplug-review.json",
+      "sha256": "0d7eebfa61cd91df363c5b75652eb198507fa92e21fed36234913584d34dffba"
+    },
+    {
+      "path": "docs/testing/reviews/hotplug-followup.json",
+      "sha256": "4beb6bec4ca4ea2f5fa15e88385c6fbd608fdc7b6e5bf6fef280e2b44e4dd276"
+    },
+    {
+      "path": "docs/testing/reviews/hotplug-oracle-baseline.json",
+      "sha256": "5f07f5e7b03fc40d296174e429daa78e018deaa58a06dfe54b87d81ff6bd5c88"
+    }
+  ],
+  "remedy": "Directional connected-prefix bound: port1 can lead port2 by0..16 messages but cannot trail it. New one/sixteen-message omission regressions fail baseline and pass fix; Codex closed the finding."
+}

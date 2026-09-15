@@ -1,0 +1,32 @@
+{
+  "status": "scoped-boundary-mask-clearing-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-017",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/027ab6233a1b4f83b85512a68e3ea7e4/manifest.json",
+      "sha256": "872efb551548cdd06af4618470877fdc3740bdfa9d9be47c308872a811e0e28e",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-017",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2bbe08d08f2a4311948efec37a1bf0be/manifest.json",
+      "sha256": "7c2a006cc48991f1e7b37abfd6516739027edcd227c02e707ca25f161a4981c8",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Steps63/64: exact note72/74 overrides, velocity100 and one-step duration",
+    "Held-step63 K2 restores note60 default while preserving step64 note74",
+    "Two-step channel range wraps with exact one-sixteenth timing",
+    "Channel K1+K2 clears step64 and preserves forced trig, note60, velocity100 and length1 defaults",
+    "Exact note ordering, musical step timing and balanced Stop"
+  ],
+  "limitations": [
+    "Recorded-mask clearing and additional attribute boundary combinations remain pending",
+    "Full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

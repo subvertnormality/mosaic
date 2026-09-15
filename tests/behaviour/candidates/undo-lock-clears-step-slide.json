@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "ce5e935",
+  "files": [
+    {
+      "file": "lib/models/program.lua",
+      "before_sha256": "d0399b22e263cfadadf28cbc5bd8bf70d11ce3142af02e536eb6e78216360bad",
+      "after_sha256": "841bb14ad06093c2f227f6c5f4d01cbcae28809d8fe82964e701c451a0f2faa9"
+    }
+  ],
+  "patch": "0151-undo-lock-clears-step-slide.patch",
+  "patch_sha256": "f69eeb433d628eb651bd749aea4e5e5f2f7572c0fbd0e144c4cf9826556ba3c5",
+  "regression": "M-MEMORY-012",
+  "unit_regression": "test_program_extra_clear_one_trig_lock_for_step_for_channel",
+  "baseline": [
+    {
+      "run_id": "dfcad4eca8f545ab8cda8f5af4d8e4f7",
+      "case": "M-MEMORY-012",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "933043f00b656fce3c7ce345000335be0750a2684d31277c1465867726dc25ec",
+      "failure": "[('S34-undo-clears-held-step-slide-outline', {'outline': True}), ('S34-new-lock-after-undo-does-not-slide', {'starts': [[40], [40], [40]], 'inner': [[48, 57, 65, 73, 82], [48, 57, 65, 73, 82], [48, 57"
+    },
+    {
+      "run_id": "4ff85d5e76b1493399394428754d8dd2",
+      "case": "M-MEMORY-012",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "b7f3b76ff4e8dfefd6ee7debf3571887389a8aaa1ad162bcc5c6a14da9be3800",
+      "failure": "[('S34-undo-clears-held-step-slide-outline', {'outline': True}), ('S34-new-lock-after-undo-does-not-slide', {'starts': [[40], [40], [40]], 'inner': [[48, 57, 65, 73, 82], [48, 57, 65, 73, 82], [48, 57"
+    }
+  ],
+  "rationale": "program.clear_trig_lock_for_step_for_channel removed the cleared parameter's slide flag only inside the branch where the step's lock table had just become empty (program.lua:589-599), so when Memory undo removed a step-slid lock while another lock remained on the step, the parameter's step slide stayed set: the slide outline stayed on the held step and a new lock set there later slid (40 -> 90) without K3. The slide flag for the cleared parameter is now removed whenever that parameter's lock is cleared, whether or not other locks remain; a slide set with hold + K3 on a step with no lock for that parameter is untouched when another parameter's lock is cleared.",
+  "oracle": "Human decision 2026-09-11 after the S34 probe (docs/testing/suspected-defects.md S34): fix; undoing a lock clears that lock's slide. Probe runs locks-s34-other-ctl-da9c8a636c, locks-s34-other-rt-aeff3801f3 vs locks-s34-alone-ctl-d0e2ecd702, locks-s34-alone-rt-a4376dbd23. README 698-707 (Memory): E3 explores past actions.",
+  "validation": [
+    {
+      "run_id": "13431e483ba6414e9dd46ffb5bd1b816",
+      "case": "M-MEMORY-012",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "6814640999e338ee65b29d695e66d26da405144c488544e45960d33d5316c839",
+      "failure": null
+    },
+    {
+      "run_id": "4af7661dc4cd443db8d7f6735901287d",
+      "case": "M-MEMORY-012",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "e9e68150e5c68e977a65529e1c6b5d393a1b930baea4b1a55df09584a501737d",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-2475842f160944898274bdf3bfbf76d6",
+      "case": "M-MEMORY-012",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "94b972195029ee83adeaab400d0aa9ece5e6d5e9f9d238ff39c5e9f85342b882",
+      "failure": null,
+      "normalized_sha256": "88a8f5c84e43106c34c7a904ea002568fc79ff67b6784891b38937bc6028b4a6"
+    }
+  ],
+  "collateral": "Controlled lane with the fix: M-MEMORY-001..011, M-SLIDE-CAPACITY-001, M-SLIDE-RESET-001, M-SLIDE-STEP-001, M-PATCH-033, M-PATCH-034, M-PATCH-037, M-PATCH-039, M-PATCH-064 all passed (M-MEMORY-001 628c2eb9e51d4b7db2dd14d1a3069f3b, M-MEMORY-002 69532997033c4e889c30dceb762a84f5, M-MEMORY-003 2295258021b7477282a2fc13c400a62b, M-MEMORY-004 99c0db374fb54126aae856fad2bae926, M-MEMORY-005 c1161856ccf849579d418f7156bf2231, M-MEMORY-006 0ec66b3109514fbeb5027a0c6d0eb5d5, M-MEMORY-007 1e3edacc79b14826b1b31fd75aea919b, M-MEMORY-008 4661acf6838f4227a64d18fc15fcd13d, M-MEMORY-009 13bac887680e4a12a150f2d2d1362eb9, M-MEMORY-010 a930c5a57c03406bb695a1a026283b30, M-MEMORY-011 73c8d653252a46ba97d7e0c0a08fea67, M-SLIDE-CAPACITY-001 8b8cef876e664d10b87f2bb79431fec3, M-SLIDE-RESET-001 5c8a4c5fb84847099e37066d15e60707, M-SLIDE-STEP-001 4b2e10a5333a414f9b08b1c319c0abdf, M-PATCH-033 fa19c874655b44439f92e90513178750, M-PATCH-034 d72214c0fed844279d6520db69ad07c0, M-PATCH-037 e67215f723fc4eaaaf5793dc06b22060, M-PATCH-039 ccc28c5559da46359a1c351f9da09eab, M-PATCH-064 5e21e60507ae420789eb1666ffb33188). Full Lua units OK (1465 tests) with the S34 characterisation in program_extra_tests.lua rewritten to pin the fixed behaviour and two added cases (a lock-less step slide survives clearing another parameter's lock; clearing an absent lock keeps the parameter's slide).",
+  "upstream_merged": false
+}

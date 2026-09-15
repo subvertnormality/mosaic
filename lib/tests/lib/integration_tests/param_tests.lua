@@ -221,7 +221,7 @@ function test_params_triggless_locks_are_not_processed_if_trigless_param_is_off(
 
   local midi_cc_event = table.remove(midi_cc_events)
 
-  luaunit.assert_not_equals(midi_cc_event[2], 111)
+  luaunit.assert_nil(midi_cc_event, "Disabled trigless lock must emit no CC on this silent fixture")
 
 end
 
@@ -396,7 +396,7 @@ function test_trig_probability_param_lock_set_to_one_hundred_fires()
 
 end
 
-function test_quantised_fixed_note_param_lock()
+function test_quantised_fixed_note_param_lock_snaps_tie_to_lower_pitch()
   setup()
   local song_pattern = 1
   program.set_selected_song_pattern(1)
@@ -404,7 +404,7 @@ function test_quantised_fixed_note_param_lock()
 
   local test_step = 8
   local cc_msb = 2
-  local note = 1
+  local note = 63 -- README 785: absolute pitch, nearest scale note; ties choose the lower (62 over 64)
   local c = 1
 
   test_pattern.note_values[test_step] = 0
@@ -2235,7 +2235,9 @@ function test_global_params_are_processed_at_all_steps()
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
   local midi_cc_event = table.remove(midi_cc_events)
-  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value, 1}) -- CC is fired at start of pattern to reset value to default
+  -- No configured MIDI device and no first-step trig in this fixture.
+  -- Stored-device startup recall is covered by native M-PATCH-003/008.
+  luaunit.assert_nil(midi_cc_event, "No predictive CC before the authored trig")
 
   progress_clock_by_beats(test_step - 1)
 
@@ -2338,7 +2340,9 @@ function test_global_params_are_processed_with_the_correct_value_across_song_pat
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
   local midi_cc_event = table.remove(midi_cc_events)
-  luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1}) -- CC is fired at start of pattern to reset value to default
+  -- No configured MIDI device and no first-step trig in this fixture.
+  -- Stored-device startup recall is covered by native M-PATCH-003/008.
+  luaunit.assert_nil(midi_cc_event, "No predictive CC before the authored trig")
 
   progress_clock_by_beats(test_step - 1)
 
@@ -3089,57 +3093,22 @@ function test_arp_with_velocity_swell_param_lock()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-
-  progress_clock_by_beats(test_step - 1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 80)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 90)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 69)
-  luaunit.assert_equals(note_on_event[2], 110)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 120)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
+  -- Decision01a07f50: muted and empty slots consume their full interval.
+  local expected = {{168,60,80}, {192,62,90}, {216,65,100}, {240,69,110}}
+  local next_event = 1
+  for pulse = 0, 288 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing rest-contract note at pulse " .. pulse)
+      luaunit.assert_equals({event[1],event[2],event[3]}, {wanted[2],wanted[3],1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events,0,"Unexpected note in slot at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event,#expected+1)
 end
-
 
 
 function test_arp_param_lock_with_backwards_strum_pattern()
@@ -3541,7 +3510,7 @@ end
 
 
 
-function test_rests_dont_apply_when_in_last_chord_slots()
+function test_rests_apply_when_in_last_chord_slots()
   setup()
   local song_pattern = 1
   program.set_selected_song_pattern(1)
@@ -3579,67 +3548,25 @@ function test_rests_dont_apply_when_in_last_chord_slots()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
+  -- Decision01a07f50: muted and empty slots consume their full interval.
+  local expected = {{0,60,100}, {24,62,100}, {48,64,100}, {72,65,100}, {120,60,100}}
+  local next_event = 1
+  for pulse = 0, 144 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing rest-contract note at pulse " .. pulse)
+      luaunit.assert_equals({event[1],event[2],event[3]}, {wanted[2],wanted[3],1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events,0,"Unexpected note in slot at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event,#expected+1)
 end
 
 
-
-function test_rests_dont_apply_when_in_last_chord_slots_multiple_slots()
+function test_rests_apply_when_in_last_chord_slots_multiple_slots()
   setup()
   local song_pattern = 1
   program.set_selected_song_pattern(1)
@@ -3675,63 +3602,21 @@ function test_rests_dont_apply_when_in_last_chord_slots_multiple_slots()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  -- progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-  progress_clock_by_pulses(12)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
+  -- Decision01a07f50: muted and empty slots consume their full interval.
+  local expected = {{0,60,100}, {24,62,100}, {120,60,100}}
+  local next_event = 1
+  for pulse = 0, 144 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing rest-contract note at pulse " .. pulse)
+      luaunit.assert_equals({event[1],event[2],event[3]}, {wanted[2],wanted[3],1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events,0,"Unexpected note in slot at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event,#expected+1)
 end
 
 
@@ -3777,92 +3662,23 @@ function test_chord_strum_param_lock_with_spread()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  -- progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60) -- 0!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1) -- 1
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1/4) -- 1.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62) -- 1.25!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1) -- 2.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event) -- 2.25
-
-  progress_clock_by_beats(1/4) -- 2.5
-  progress_clock_by_beats(1/4) -- 2.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64) -- 2.75!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1) -- 3.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)  -- 3.75
-
-  progress_clock_by_beats(1/4) -- 4
-  progress_clock_by_beats(1/4) -- 4.25
-  progress_clock_by_beats(1/4) -- 4.5
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)  -- 4.5!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)  -- 5.5
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1/4)  -- 5.75
-  progress_clock_by_beats(1/4)  -- 6
-  progress_clock_by_beats(1/4)  -- 6.25
-  progress_clock_by_beats(1/4)  -- 6.5
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 67) -- 6.5!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-  
-
-  progress_clock_by_beats(1) -- 7.5
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(2)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
+  -- Decision01a07f50: d=1, spread set above; these literal pulse deadlines
+  -- replace the historical acceleration contract. No timing is fitted to MIDI.
+  local expected = {{0,60}, {30,62}, {60,64}, {90,65}, {120,67}}
+  local next_event = 1
+  for pulse = 0, 240 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing note at pulse " .. pulse)
+      luaunit.assert_equals({event[1], event[2], event[3]}, {wanted[2],100,1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events, 0, "Unexpected note at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event, #expected + 1)
 end
-
 
 
 function test_chord_arp_param_lock_with_spread()
@@ -3907,136 +3723,23 @@ function test_chord_arp_param_lock_with_spread()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60) -- 0!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1) -- 1
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1/4) -- 1.25
-  progress_clock_by_pulses(1)
-
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62) -- 1.25!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1) -- 2.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event) -- 2.25
-
-  progress_clock_by_beats(1/2) -- 2.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64) -- 2.75!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1) -- 3.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)  -- 3.75
-
-  progress_clock_by_beats(1/2) -- 4
-  progress_clock_by_beats(1/4) -- 4.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)  -- 4.25!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)  -- 5.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1)  -- 6
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 67)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-  
-
-  progress_clock_by_beats(1) -- 7
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1)  -- 8
-  progress_clock_by_beats(1/4)  -- 8.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  
-  progress_clock_by_beats(1) -- 9.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1)  -- 10.25
-  progress_clock_by_beats(1/2)  -- 10.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  
-  progress_clock_by_beats(1) -- 11.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1)  -- 12.5
-  progress_clock_by_beats(3/4)  -- 13.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1) -- 14.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(2) 
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
+  -- Decision01a07f50: d=1, spread set above; these literal pulse deadlines
+  -- replace the historical acceleration contract. No timing is fitted to MIDI.
+  local expected = {{0,60}, {30,62}, {60,64}, {90,65}, {120,67}, {150,60}, {180,62}, {210,64}, {240,65}}
+  local next_event = 1
+  for pulse = 0, 240 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing note at pulse " .. pulse)
+      luaunit.assert_equals({event[1], event[2], event[3]}, {wanted[2],100,1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events, 0, "Unexpected note at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event, #expected + 1)
 end
-
 
 
 function test_chord_strum_param_lock_with_minus_one_acceleration()
@@ -4084,49 +3787,23 @@ function test_chord_strum_param_lock_with_minus_one_acceleration()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60) -- 0!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(3/4) -- 0.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62) -- 0.75!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(2/4) -- 1.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64) -- 1.25!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1/4) -- 1.5
-
-  -- Collect the actual events
-  local actual_events = {}
-  table.insert(actual_events, table.remove(midi_note_on_events, 1))
-  table.insert(actual_events, table.remove(midi_note_on_events, 1))
-
-  -- Define the expected events (without assuming any order)
-  local expected_event_1 = {65, 100, 1}  -- 1.5!
-  local expected_event_2 = {67, 100, 1}  -- 1.5!
-
-  -- Assert that both expected events are present in actual events
-  luaunit.assert_true(contains_event(actual_events, expected_event_1), "Expected event 1 not found")
-  luaunit.assert_true(contains_event(actual_events, expected_event_2), "Expected event 2 not found")
-
-
+  -- Decision01a07f50: d=1, spread set above; these literal pulse deadlines
+  -- replace the historical acceleration contract. No timing is fitted to MIDI.
+  local expected = {{0,60}, {30,62}, {54,64}, {72,65}, {84,67}}
+  local next_event = 1
+  for pulse = 0, 240 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing note at pulse " .. pulse)
+      luaunit.assert_equals({event[1], event[2], event[3]}, {wanted[2],100,1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events, 0, "Unexpected note at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event, #expected + 1)
 end
-
 
 
 function test_chord_strum_param_lock_with_minus_two_acceleration()
@@ -4174,50 +3851,23 @@ function test_chord_strum_param_lock_with_minus_two_acceleration()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60) -- 0!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(3/4) -- 0.75
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62) -- 0.75!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(2/4) -- 1.25
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64) -- 1.25!
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1/4) -- 1.5
-
-  -- Collect the actual events
-  local actual_events = {}
-  table.insert(actual_events, table.remove(midi_note_on_events, 1))
-  table.insert(actual_events, table.remove(midi_note_on_events, 1))
-
-  -- Define the expected events (without assuming any order)
-  local expected_event_1 = {65, 100, 1}  -- 1.5!
-  local expected_event_2 = {67, 100, 1}  -- 1.5!
-
-  -- Assert that both expected events are present in actual events
-  luaunit.assert_true(contains_event(actual_events, expected_event_1), "Expected event 1 not found")
-  luaunit.assert_true(contains_event(actual_events, expected_event_2), "Expected event 2 not found")
-
-
+  -- Decision01a07f50: d=1, spread set above; these literal pulse deadlines
+  -- replace the historical acceleration contract. No timing is fitted to MIDI.
+  local expected = {{0,60}, {27,62}, {48,64}, {63,65}, {72,67}}
+  local next_event = 1
+  for pulse = 0, 240 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing note at pulse " .. pulse)
+      luaunit.assert_equals({event[1], event[2], event[3]}, {wanted[2],100,1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events, 0, "Unexpected note at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event, #expected + 1)
 end
-
-
 
 
 function test_chord_strum_param_lock_with_four_acceleration()
@@ -4358,49 +4008,23 @@ function test_chord_arp_param_lock_with_minus_one_acceleration()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 60)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(3/4)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(2/4)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64) 
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1/4)
-
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1/4)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
+  -- Decision01a07f50: d=1, spread set above; these literal pulse deadlines
+  -- replace the historical acceleration contract. No timing is fitted to MIDI.
+  local expected = {{0,60}, {30,62}, {54,64}, {72,65}, {84,67}, {90,60}}
+  local next_event = 1
+  for pulse = 0, 240 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing note at pulse " .. pulse)
+      luaunit.assert_equals({event[1], event[2], event[3]}, {wanted[2],100,1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events, 0, "Unexpected note at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event, #expected + 1)
 end
-
-
 
 
 function test_chord_arp_param_lock_with_two_acceleration()
@@ -4623,76 +4247,23 @@ function test_chord_arp_with_root_note_muted()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-
-  progress_clock_by_beats(test_step - 1)
-
-  -- Should not get root note event
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 67)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 64)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_equals(note_on_event[1], 65)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-
-  luaunit.assert_nil(note_on_event)
-
+  -- Decision01a07f50: muted and empty slots consume their full interval.
+  local expected = {{192,62,100}, {216,64,100}, {240,65,100}, {264,67,100}, {312,62,100}, {336,64,100}}
+  local next_event = 1
+  for pulse = 0, 360 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing rest-contract note at pulse " .. pulse)
+      luaunit.assert_equals({event[1],event[2],event[3]}, {wanted[2],wanted[3],1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events,0,"Unexpected note in slot at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event,#expected+1)
 end
+
 
 function test_chord_strum_with_root_note_muted()
   setup()
@@ -4816,54 +4387,23 @@ function test_chord_strum_arp_with_root_note_muted()
 
   -- Reset and set up the clock and MIDI event tracking
   clock_setup()
-
-  progress_clock_by_pulses(1)
-  progress_clock_by_beats(test_step - 1)
-
-  -- Should not get root note event
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_nil(note_on_event)
-
-  progress_clock_by_beats(1)
-
-  -- First note should be the first chord note (E)
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-
-  -- Second note should be the second chord note (G)
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 64)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  progress_clock_by_beats(1)
-
-  -- Third note should be the third chord note (A)
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 65)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-
-  -- Should loop back to first chord note
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 62)
-  luaunit.assert_equals(note_on_event[2], 100)
-  luaunit.assert_equals(note_on_event[3], 1)
-
-  -- No more notes after pattern length
-  progress_clock_by_beats(1)
-
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_nil(note_on_event)
+  -- Decision01a07f50: muted and empty slots consume their full interval.
+  local expected = {{192,62,100}, {216,64,100}, {240,65,100}}
+  local next_event = 1
+  for pulse = 0, 288 do
+    if pulse > 0 then progress_clock_by_pulses(1) end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing rest-contract note at pulse " .. pulse)
+      luaunit.assert_equals({event[1],event[2],event[3]}, {wanted[2],wanted[3],1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events,0,"Unexpected note in slot at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event,#expected+1)
 end
+
 
 function test_chord_strum_with_root_note_muted_and_outside_in_pattern()
   setup()
@@ -5172,7 +4712,7 @@ function test_param_locks_fire_on_first_step_when_song_mode_off()
   luaunit.assert_items_equals(midi_cc_event, {cc_msb, cc_value_1, 1})
 end
 
-function test_param_locks_fire_on_first_step_with_pattern_repeats()
+function test_param_locks_fire_on_first_step_with_pattern_repeats_first_variant()
   setup()
   local song_pattern_1 = 1
   local song_pattern_2 = 2
@@ -5530,4 +5070,138 @@ function test_repeat_count_increments_correctly()
   progress_clock_by_beats(64)
   -- Should reset back to 1 for next pattern
   luaunit.assert_equals(program.get_repeat_count(), 1)
+end
+-- Real step and scheduler path: reverse roots share the same MIDI bounds as masks.
+local function assert_reverse_root_velocity(shape, base_velocity, modifier)
+  setup()
+  program.set_selected_song_pattern(1)
+  local p = program.initialise_default_pattern()
+  p.note_values[1]=0;p.trig_values[1]=1;p.lengths[1]=6;p.velocity_values[1]=base_velocity
+  program.get().selected_channel=1
+  local channel=program.get_selected_channel()
+  channel.step_chord_masks[1]={1,2,3,4}
+  channel.trig_lock_params[5].id='chord_strum'
+  channel.trig_lock_params[6].id='chord_strum_pattern'
+  channel.trig_lock_params[7].id='chord_velocity_modifier'
+  channel.trig_lock_params[7].cc_min_value=-40
+  program.add_step_param_trig_lock(1,5,14)
+  program.add_step_param_trig_lock(1,6,shape)
+  program.add_step_param_trig_lock(1,7,modifier)
+  program.get_song_pattern(1).patterns[1]=p
+  fn.add_to_set(channel.selected_patterns,1)
+  pattern.update_working_patterns()
+  clock_setup()
+  local pitches=shape==2 and {67,65,64,62,60} or {67,62,65,64,60}
+  local velocities=modifier>0 and {100,110,120,127,127} or {20,10,0,0,0}
+  for pulse=0,96 do
+    if pulse>0 then progress_clock_by_pulses(1) end
+    if pulse%24==0 then
+      local event=table.remove(midi_note_on_events,1)
+      local i=pulse//24+1
+      luaunit.assert_not_nil(event)
+      luaunit.assert_equals({event[1],event[2],event[3]},{pitches[i],velocities[i],1})
+    end
+    luaunit.assert_equals(#midi_note_on_events,0)
+  end
+end
+function test_reverse_root_velocity_upper_bound() assert_reverse_root_velocity(2,100,10) end
+function test_reverse_root_velocity_lower_bound() assert_reverse_root_velocity(2,20,-10) end
+function test_outside_in_root_velocity_upper_bound() assert_reverse_root_velocity(4,100,10) end
+function test_outside_in_root_velocity_lower_bound() assert_reverse_root_velocity(4,20,-10) end
+
+
+local function assert_root_dashboard(shape, base_velocity, modifier, expected_velocity)
+  local original = channel_edit_page_ui.set_note_dashboard_values
+  local observed
+  channel_edit_page_ui.set_note_dashboard_values = function(values)
+    if values and values.note then
+      observed = {values.note, values.velocity, values.length}
+    end
+  end
+  local ok, failure = pcall(function()
+    assert_reverse_root_velocity(shape, base_velocity, modifier)
+    luaunit.assert_equals(observed, {60, expected_velocity, 6})
+  end)
+  channel_edit_page_ui.set_note_dashboard_values = original
+  if not ok then error(failure) end
+end
+function test_reverse_root_dashboard_upper() assert_root_dashboard(2,100,10,127) end
+function test_reverse_root_dashboard_zero() assert_root_dashboard(2,20,-10,0) end
+function test_outside_in_root_dashboard_upper() assert_root_dashboard(4,100,10,127) end
+function test_outside_in_root_dashboard_zero() assert_root_dashboard(4,20,-10,0) end
+
+function test_signed_random_pentatonic_mask_and_option_integration()
+
+  -- Literal cases: raw PRNG draws are injected only at the randomness boundary.
+  -- Actual transforms, stock locks, scale processing and MIDI emission execute.
+  local cases={
+    {name="negative",degree=0,a=4,b=0,draws={-1},plain=59,pent=60,mask=59},
+    {name="positive",degree=2,a=4,b=0,draws={1},plain=65,pent=64,mask=65},
+    {name="negative_twos",degree=1,a=0,b=4,draws={1},plain=59,pent=60,mask=60},
+    {name="positive_twos",degree=1,a=0,b=4,draws={3},plain=65,pent=64,mask=64},
+    {name="sampled_zero",degree=3,a=4,b=0,draws={0},plain=65,pent=65,mask=65},
+    {name="disabled",degree=3,a=0,b=0,draws={},plain=65,pent=65,mask=65},
+    {name="cancel_positive",degree=3,a=4,b=4,draws={2,1},plain=65,pent=65,mask=65},
+    {name="cancel_negative",degree=3,a=4,b=4,draws={-2,3},plain=65,pent=65,mask=65}}
+  local original_random=random
+  local ok,err=pcall(function()
+    for _,case in ipairs(cases) do
+      for _,path in ipairs({"ordinary","full","snap","raw"}) do
+        for _,policy in ipairs({"off","on","all","merged","fixed","quantised_fixed"}) do
+          setup()
+          params:set("random_lock_to_pentatonic",policy=="off" and 1 or 2)
+          params:set("all_scales_lock_to_pentatonic",policy=="all" and 2 or 1)
+          params:set("merged_lock_to_pentatonic",policy=="merged" and 2 or 1)
+          local source=program.initialise_default_pattern()
+          source.note_values[1]=case.degree;source.lengths[1]=1
+          source.trig_values[1]=1;source.velocity_values[1]=100
+          program.get_song_pattern(1).patterns[1]=source
+          local channel=program.get_channel(1,1)
+          fn.add_to_set(channel.selected_patterns,1)
+          if policy=="merged" then
+            channel.trig_merge_mode="all"
+            local second=program.initialise_default_pattern()
+            second.note_values[1]=case.degree;second.lengths[1]=1
+            second.trig_values[1]=1;second.velocity_values[1]=100
+            program.get_song_pattern(1).patterns[2]=second
+            fn.add_to_set(channel.selected_patterns,2)
+          end
+          channel.trig_lock_params[1]={id="bipolar_random_note",param_id="test_random"}
+          channel.trig_lock_params[2]={id="twos_random_note",param_id="test_twos"}
+          program.add_step_param_trig_lock(1,1,case.a)
+          program.add_step_param_trig_lock(1,2,case.b)
+          if path~="ordinary" then
+            channel.note_mask=({60,62,64,65})[case.degree+1]
+            params:set("quantiser_fully_act_on_note_masks",path=="full" and 2 or 1)
+            params:set("quantiser_act_on_note_masks",path=="snap" and 2 or 1)
+          end
+          if policy=="fixed" or policy=="quantised_fixed" then
+            channel.trig_lock_params[3]={id=policy=="fixed" and "fixed_note" or "quantised_fixed_note",param_id="test_fixed"}
+            program.add_step_param_trig_lock(1,3,63)
+          end
+          pattern.update_working_patterns()
+          local cursor=0
+          random=function(low,high)
+            cursor=cursor+1;local value=case.draws[cursor]
+            luaunit.assert_not_nil(value,"Unexpected extra PRNG draw")
+            luaunit.assert_true(value>=low and value<=high,"Forced draw outside actual domain")
+            return value
+          end
+          clock_setup()
+          luaunit.assert_equals(cursor,#case.draws,case.name.."/"..path.."/"..policy)
+          local expected=(policy=="off") and case.plain or case.pent
+          if policy=="all" or policy=="merged" then
+            expected=case.pent==65 and 64 or case.pent
+          end
+          if path=="snap" or path=="raw" then expected=case.mask end
+          if policy=="fixed" then expected=63 end
+          if policy=="quantised_fixed" then expected=62 end
+          luaunit.assert_equals(#midi_note_on_events,1,case.name.."/"..path.."/"..policy)
+          luaunit.assert_equals(midi_note_on_events[1],{expected,100,1,1},case.name.."/"..path.."/"..policy)
+        end
+      end
+    end
+  end)
+  random=original_random
+  if not ok then error(err) end
 end

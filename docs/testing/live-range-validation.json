@@ -1,0 +1,40 @@
+{
+  "status": "scoped-validation-passed",
+  "native_runs": [
+    {
+      "case": "M-RANGE-LIVE-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8c53a47418a54899af769fa6753874bd/manifest.json",
+      "sha256": "fcea01d2314e193468f17d3fcb816c6ddf1a85efbdda20a7098925b2fbab9aa8",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-LIVE-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cbd2f98eac4c45e38d2c56bb63ad40ca/manifest.json",
+      "sha256": "8eeb073ec9c427e94df3b2ed74fab98bb2562b090991392b258a24188dc8c3e8",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-LIVE-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/312ef52c52734c18b921cca7dcf6e1aa/manifest.json",
+      "sha256": "67cb82a4bd375d61ce5217ed7eb7793e656b52cafec7d5936ee1d2f0aba3c007",
+      "passed": true
+    },
+    {
+      "case": "M-RANGE-LIVE-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/3d546ca85e8f4d3c80e15c0f75e7b2dc/manifest.json",
+      "sha256": "a1d01234f156f5efb4e0d30a4227b2fa48f74610f2ca9b25c0a34d084281b046",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "scope": "Accepted range edits at inside/below/above playheads and queued global4-to2-to3 on offset range; exact notes, phase, gates, queued tooltip and final LEDs.",
+  "limitations": [
+    "Base-rate straight-clock live cases; broader musical interactions remain",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

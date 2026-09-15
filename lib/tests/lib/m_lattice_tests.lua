@@ -1002,3 +1002,126 @@ function test_step_wrapping_simple()
   luaunit.assert_equals(steps[1], 1, "Should start at 1")
   luaunit.assert_equals(steps[pattern_length + 1], 1, "Should wrap back to 1")
 end
+
+local function external_pulse_trace(beats, expected)
+  local saved_clock = clock
+  local beat, count = beats[1], 0
+  local candidate = l:new({ppqn = 96, sync_to_external = true})
+  candidate.enabled = true
+  candidate.pulse = function() count = count + 1 end
+  clock = {
+    get_beats = function() return beat end,
+    sync = function(interval, offset) return coroutine.yield(interval, offset) end
+  }
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    for i, value in ipairs(beats) do
+      beat = value
+      local resumed, interval, offset = coroutine.resume(job)
+      luaunit.assert_true(resumed, interval)
+      luaunit.assert_equals(interval, 1 / 96)
+      luaunit.assert_equals(offset, 0)
+      luaunit.assert_equals(count, expected[i])
+    end
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+end
+
+function test_external_lattice_delayed_origin()
+  for _, phase in ipairs({0, 0.999999, 1, 1.000001, 4.2}) do
+    external_pulse_trace({phase / 96, 25 / 96, 25 / 96, 24 / 96, 26 / 96},
+      {math.floor(phase) + 1, 26, 26, 26, 27})
+  end
+end
+
+function test_external_lattice_acquisition_reconciles_once()
+  external_pulse_trace({0, 0, 4 / 96, 4 / 96, 24 / 96}, {1, 1, 5, 5, 25})
+end
+
+function test_external_lattice_large_backlog_yields_before_and_during_reconciliation()
+  local saved_clock = clock
+  local count = 0
+  local candidate = l:new({ppqn = 96, sync_to_external = true})
+  candidate.enabled = true
+  candidate.pulse = function() count = count + 1 end
+  clock = {
+    get_beats = function() return 2 end,
+    sleep = function(seconds) return coroutine.yield("sleep", seconds) end,
+    sync = function(interval, offset) return coroutine.yield("sync", interval, offset) end
+  }
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    local resumed, kind, seconds = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals({kind, seconds, count}, {"sleep", 0, 0})
+    resumed, kind, seconds = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals({kind, seconds, count}, {"sleep", 0, 48})
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+end
+
+-- Stop can arrive while the initial yield makes room for queued transport input.
+-- Keep Lattice:pulse real: the wrapper only counts calls into it after Stop.
+function test_external_lattice_stop_after_backlog_yield_preempts_stale_reconciliation()
+  local saved_clock = clock
+  local pulse_calls = 0
+  local candidate = l:new({ppqn = 96, sync_to_external = true,
+    external_clock_active = function() return true end})
+  candidate.enabled = true
+  local real_pulse = candidate.pulse
+  candidate.pulse = function(self)
+    pulse_calls = pulse_calls + 1
+    return real_pulse(self)
+  end
+  clock = {
+    get_beats = function() return 2 end,
+    sleep = function(seconds) return coroutine.yield("sleep", seconds) end,
+    sync = function(interval, offset) return coroutine.yield("sync", interval, offset) end
+  }
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    local resumed, kind, seconds = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals({kind, seconds, pulse_calls}, {"sleep", 0, 0})
+
+    candidate:stop()
+    resumed = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals(coroutine.status(job), "dead")
+    luaunit.assert_equals(pulse_calls, 0)
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+end
+
+
+
+function test_external_lattice_source_epoch_handoff()
+  local saved_clock = clock
+  local beat, count, external = 2 / 96, 0, true
+  local candidate = l:new({ppqn = 96, sync_to_external = true,
+    external_clock_active = function() return external end})
+  candidate.enabled = true
+  candidate.pulse = function() count = count + 1 end
+  clock = {get_beats = function() return beat end,
+    sync = function(interval, offset) return coroutine.yield(interval, offset) end}
+  local ok, message = pcall(function()
+    local job = coroutine.create(function() l.auto_pulse(candidate) end)
+    luaunit.assert_true(coroutine.resume(job))
+    luaunit.assert_equals(count, 3)
+    external, beat = false, 17.125
+    local resumed, interval, offset = coroutine.resume(job)
+    luaunit.assert_true(resumed)
+    luaunit.assert_equals(count, 4) -- one pending pulse, not17 beats of history
+    luaunit.assert_equals(interval, 1 / 96)
+    luaunit.assertAlmostEquals(offset, (beat % interval) - interval, 1e-12)
+    beat = beat + interval
+    luaunit.assert_true(coroutine.resume(job))
+    luaunit.assert_equals(count, 5)
+  end)
+  clock = saved_clock
+  if not ok then error(message) end
+end

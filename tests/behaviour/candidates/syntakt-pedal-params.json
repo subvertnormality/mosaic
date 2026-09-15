@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "2266c0c",
+  "files": [
+    {
+      "file": "lib/config/elektron_syntakt.json",
+      "before_sha256": "6da5e7314e6480c63811d0faa1ae184232c2c3537b6b39acc9293a971e7cf6f7",
+      "after_sha256": "62c57b65bf18a65525ed056304950f6ffd98a077ca2a8369ff83b95204cf5332"
+    }
+  ],
+  "patch": "0104-syntakt-pedal-params.patch",
+  "patch_sha256": "ae1229adfd6c6a792387cf756dbf30eb0e67aba147e341ede94e8de5ac31be98",
+  "regression": "M-SETUP-SYNTAKT-PEDALS-001",
+  "unit_regression": "test_real_param_manager_syntakt_pedals_are_cc_parameters",
+  "baseline": [
+    {
+      "run_id": "241f992f301442b7b950b63439153251",
+      "case": "M-SETUP-SYNTAKT-PEDALS-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "3689a5e20f2a902b39e31d1f0441a983e3ea078ae3fbbcd4c1dc4a6cca282161",
+      "failure": "('Sustain value did not change on screen', [])"
+    },
+    {
+      "run_id": "0269e018b50d48a4917bb15f9e8af47b",
+      "case": "M-SETUP-SYNTAKT-PEDALS-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "9060b2bdd90e2e65ac4665667dc140168ffd11a72bdad787eb034f9d80466cf8",
+      "failure": "('Sustain value did not change on screen', [])"
+    }
+  ],
+  "rationale": "Sustain and Sostenuto in the Syntakt configuration carried nrpn_msb/lsb/min/max = -1 placeholders. Lua treats -1 as present, so param_manager built an NRPN parameter whose range collapsed to the Off value -1: turning E3 changed nothing and no MIDI was sent. Removing the placeholders leaves them as the CC 64 / CC 66 parameters the configuration defines. Only the Syntakt configuration used -1 placeholders for NRPN numbers.",
+  "oracle": "README 546: all CC parameters are accessible for editing and any value other than Off is sent to the device; the configuration maps Sustain to CC 64 and Sostenuto to CC 66 (MIDI 1.0 pedal controllers).",
+  "validation": [
+    {
+      "run_id": "63139bcb010d4fecb1f341f6c8ae0ae6",
+      "case": "M-SETUP-SYNTAKT-PEDALS-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "635964fe883b17da869e2a1b0c3f34e2fe40beba910b25227174ae233fb69e19",
+      "failure": null
+    },
+    {
+      "run_id": "66f075428c254066aca9a64663ea78cd",
+      "case": "M-SETUP-SYNTAKT-PEDALS-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "cce75dbb1e920380c13c9719726d6902778f8fee7a896b6a277a0fa6cf308130",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-6ce055a014674a7aba6adc37d1fe1d43",
+      "case": "M-SETUP-SYNTAKT-PEDALS-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "43251103bd5f8fbd9ae6bb1562bccf1913aac6166df6bcf54553a3bae58e5265",
+      "failure": null,
+      "normalized_sha256": "1376f92d7bb5eeb53b5bd3480dabf8592fddfca3b5f09ef17d4790f28d22848e"
+    }
+  ],
+  "collateral": "All Lua units pass (the unit that pinned the collapsed range now pins the CC parameters and fails on the old configuration); Mute (NRPN) remains the in-case control.",
+  "upstream_merged": false
+}

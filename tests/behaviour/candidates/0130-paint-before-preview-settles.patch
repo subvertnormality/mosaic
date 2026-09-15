@@ -1,0 +1,93 @@
+diff --git a/lib/pages/trigger_edit_page/trigger_edit_page.lua b/lib/pages/trigger_edit_page/trigger_edit_page.lua
+index beeafe0..8c64bee 100644
+--- a/lib/pages/trigger_edit_page/trigger_edit_page.lua
++++ b/lib/pages/trigger_edit_page/trigger_edit_page.lua
+@@ -3,7 +3,6 @@ local drum_ops = include("mosaic/lib/helpers/drum_ops")
+ 
+ 
+ local trigger_edit_page = {}
+-local paint_pattern = {}
+ local shift = 0
+ 
+ local trigger_edit_page_pattern_select_fader = fader:new(1, 1, 16, 16)
+@@ -135,20 +134,18 @@ local function shift_table(tbl, n)
+   return res
+ end
+ 
+-local load_paint_pattern = scheduler.debounce(function()
+-  if (trigger_edit_page_paint_button:get_state() ~= 2) then
+-    return
+-  end
+- 
++-- Builds the complete paint pattern; `yield` is coroutine.yield in the preview job and a
++-- no-op when Paint needs the pattern at once (bugs.json paint-before-preview-settles).
++local function build_paint_pattern(yield)
+   -- Get all values up front
+   local algorithm = trigger_edit_page_algorithm_fader:get_value()
+   local pattern1 = trigger_edit_page_pattern1_fader:get_value()
+   local pattern2 = trigger_edit_page_pattern2_fader:get_value() 
+   local bank = trigger_edit_page_bankmask_fader:get_value()
+   local len = 64
+-  paint_pattern = {}
++  local paint_pattern = {}
+   
+-  coroutine.yield() -- Yield after getting values
++  yield() -- Yield after getting values
+   
+   -- Handle Euclidean rhythm case
+   if (algorithm == 3) then
+@@ -163,7 +160,7 @@ local load_paint_pattern = scheduler.debounce(function()
+           paint_pattern[index] = erpattern[(index - 1) % er_len + 1]
+         end
+       end
+-      coroutine.yield() -- Yield after each batch of 4
++      yield() -- Yield after each batch of 4
+     end
+   
+   -- Handle other algorithms
+@@ -182,17 +179,32 @@ local load_paint_pattern = scheduler.debounce(function()
+           end
+         end
+       end
+-      coroutine.yield() -- Yield after each batch of 4
++      yield() -- Yield after each batch of 4
+     end
+   end
+  
+-  coroutine.yield() -- Yield before shift operation
++  yield() -- Yield before shift operation
+   
+   if shift ~= 0 then
+     paint_pattern = shift_table(paint_pattern, shift)
+   end
+- 
+-  trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
++
++  return paint_pattern
++end
++
++local load_paint_pattern = scheduler.debounce(function()
++  if (trigger_edit_page_paint_button:get_state() ~= 2) then
++    return
++  end
++
++  local pattern = build_paint_pattern(coroutine.yield)
++
++  -- Painted or cancelled while this job was building: do not show the preview again.
++  if (trigger_edit_page_paint_button:get_state() ~= 2) then
++    return
++  end
++
++  trigger_edit_page_sequencer:show_unsaved_grid(pattern)
+  end, throttle_time)
+ 
+ local function save_paint_pattern(p)
+@@ -306,7 +318,7 @@ function trigger_edit_page.register_press()
+           trigger_edit_page_right_button:set_state(1)
+           trigger_edit_page_cancel_button:set_state(1)
+           trigger_edit_page_sequencer:hide_unsaved_grid()
+-          save_paint_pattern(paint_pattern)
++          save_paint_pattern(build_paint_pattern(function() end))
+           trigger_edit_page_paint_button:no_blink()
+           tooltip:show("Pattern painted")
+         end

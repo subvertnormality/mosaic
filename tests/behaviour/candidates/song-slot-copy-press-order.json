@@ -1,0 +1,77 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "901dbdd",
+  "files": [
+    {
+      "file": "lib/m_grid.lua",
+      "before_sha256": "22f980fdf916e10fe34816603405c573b5c14e6c94b2c95208988bbc04dd4bf6",
+      "after_sha256": "d47787d95ea4a040215152746c6bb8aebe6743edb1335585380f07e6cce31193"
+    },
+    {
+      "file": "lib/pages/song_edit_page/song_edit_page.lua",
+      "before_sha256": "fdecda64fb90f05faf460a1ca67ee610b5ddb973356f872ba3198b0a1ad6a4fd",
+      "after_sha256": "8735a1cc20dbdfc4393e140d7caaebf018b53820eafdc116fa2db9ff9f90d068"
+    }
+  ],
+  "patch": "0100-song-slot-copy-press-order.patch",
+  "patch_sha256": "185932b9dfa30dd7783180b0300be411de57df7f66728f4b0d416186e508600e",
+  "regression": "M-SONG-COPY-001",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "3e351e62cb2f4f96961dd885ed3467a9",
+      "case": "M-SONG-COPY-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "4e4aa9291033047bf8f7fed9b32adcd7fb827a6f7db908fa419aba69a99317ae",
+      "failure": "('copy-release-source-first', 3, [], [[144, 72, 127], [144, 74, 117], [144, 76, 107], [144, 77, 97]])"
+    },
+    {
+      "run_id": "44b5b1f50a50402dbd615756c2169e9c",
+      "case": "M-SONG-COPY-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "4231db2040c673278b9c77b677adf6cd948ec1d1dac75296029e84b91c3620b0",
+      "failure": "('copy-release-source-first', 3, [], [[144, 72, 127], [144, 74, 117], [144, 76, 107], [144, 77, 97]])"
+    }
+  ],
+  "rationale": "A two-key gesture is resolved at the first release with the still-held key as the first operand. Releasing the song slot pressed first therefore copied the destination over the source, erasing it without undo. Arbitrated SEM-016 (press-order-slot-copy-only): m_grid records press order and the song page swaps the operands when the released key was pressed first. Other gestures keep release order (an existing range oracle depends on it).",
+  "oracle": "README Interacting with Slots (903-904): press and hold the source slot, then the destination slot; copying an empty slot erases the target.",
+  "validation": [
+    {
+      "run_id": "2a00f91eaa504df5a6df10dd03bd312c",
+      "case": "M-SONG-COPY-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "b76eaf68f7d7135f795816196432e1fc27fc6336a62df59f015f7ed17354c4ef",
+      "failure": null
+    },
+    {
+      "run_id": "e8cc56898173453d8ff00faecf1202ff",
+      "case": "M-SONG-COPY-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "75c7cb57037dc5c872a4f5943039fd2cd048e7c237ce4f3a3fc33754d7e2c1c1",
+      "failure": null
+    },
+    {
+      "run_id": "619e8a2077474a6db347f7f1cf833e90",
+      "case": "M-SONG-COPY-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "11612479122160ffb5ae1378ac527651d211db9a4e7f3ed45323cb74332796ad",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-d7a79c0fb45240e2866d0e226bbbf544",
+      "case": "M-SONG-COPY-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "059d1f3cb6d174dae17d3a1b00605fedd57919a36c18edbbb3cefa9e73899616",
+      "failure": null,
+      "normalized_sha256": "524ed8aa3616237f5839e19a3286acb3074c309f1c1b2302f304bd97fc58b3c5"
+    }
+  ],
+  "collateral": "All Lua units pass; hold_tap-based song and range cases release the second key first and are unchanged.",
+  "upstream_merged": false
+}

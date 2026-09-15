@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only focused review of Mosaic candidates0040-reverse-strum-root-mute and0041-strum-sparse-slot-order. Do not edit files. User explicitly authorises public-source Codex reviews; local MIDI utility, proportionate review. Native24 full/sparse shape baselines found8 failures: muted reverse shapes2/4 emitted root; sparse masks lost onsets or compacted velocity/timing. Candidate0040 adds not mute_root to root-last branch.0041 traverses four fixed slots, maps shape before testing presence, and uses ordinal4 for finalroot spacing/velocity. Existing d+s recurrence and arp path unchanged. All24 native shape cases now pass;474 units pass unchanged. An empty reverse strum053 also passed. A finite256combination matrix now exists (16mask subsets x4shapes x2root states x2articulations); remaining231 D cases are running, no assumption of pass. Existing shape3/4 orders root+1/4/2/3 and4/1/3/2+root are documented. Source shape oracle checks every onset including silence between slots, velocity ordinal and release/Stop accounting through native inputs. No-mask arp is explicit root ratchet; no-mask strum retains ordered root slot. Review only candidate correctness/regressions in mapped presence, callback captures, rest/acceleration ordinals, root muting/velocity, root-last dashboard updates, disabled articulation and pending cleanup. Give concrete blockers and necessary minimal additional tests; do not prescribe broad refactor. Full manual/release and D20 R gate incomplete. Native source/evidence record references are in artifacts/c16/chord-shape-baselines.json and chord-shape-candidate-validation.json in emulator repo; do not modify running case tree.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "c8bbdebfe145fd39f1212799b652a0b232db3022e410f5f98f9872f847599976",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "0040 correctly guards the reverse root; 0041 correctly preserves mapped slots, timing and velocity ordinals. I would withhold approval pending a root-velocity boundary fix and a silence-oracle correction; the dashboard defect is pre-existing.\n\n- **Root velocity remains unbounded.** [step.lua:696](<mosaic-worktree>/lib/step.lua:696) computes `velocity + modifier * 4`, unlike the clamped mask calculation at line 655. Base 100, modifier +10 produces 140, passed unchanged through [m_midi.lua:297](<mosaic-worktree>/lib/m_midi.lua:297). History confirms the missing clamp predates these candidates, but 0041 extends ordinal four to sparse/empty cases. Minimal fix: use the existing clamp; test reverse-root upper and lower boundaries.\n\n- **The matrix cannot pass its silent cases as written.** [cases.py:2437](<mosaic-worktree>/tests/behaviour/cases.py:2437) passes empty expectations to [note_schedule.py:5](<mosaic-worktree>/tests/behaviour/note_schedule.py:5), which asserts `... and onsets`. I reproduced that failure directly. Permit empty expectations while still rejecting unexpected MIDI notes/releases; verify no-mask, muted-root strum and arp.\n\n- **Root-last dashboard updates are ineffective, but unchanged.** [step.lua:702](<mosaic-worktree>/lib/step.lua:702) inserts the root into `note_dashboard_values`, then publishes `chord_note_dashboard_values`. Neither supplies updated root note/velocity/length. This exists in HEAD (`20bd0ce`), so it is not a candidate regression.\n\nThe remaining implementation looks sound: [step.lua:634](<mosaic-worktree>/lib/step.lua:634) maps before checking presence, captures per-iteration locals, and uses fixed ordinals. Disabled articulation still returns zero delay; rests retain acceleration ordinals through [chord_timing.lua:10](<mosaic-worktree>/lib/clock/chord_timing.lua:10). Arp ownership and pending cleanup are unchanged.\n\nMinimal additional coverage beyond the matrix: one sparse reverse strum with nonzero spread/acceleration reaching a nonpositive gap; one disabled-articulation sparse reverse chord; and Stop before a pending final root, verifying cancellation and balanced releases. The current matrix stops after that root\u2019s nominal onset.\n\n**CONFIDENCE: High** on these code findings. The cited emulator artifacts were absent locally; I could not independently verify the reported 24/474 passes or completion of the remaining matrix and release gates.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07feb-b53b-7ec2-b44a-d573efb37f18` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "0ece6b48d26c7c25445431521f4d3dddfc05cd8781f29dfa41fc28ed83c3f5d5",
+    "redaction": "Personal absolute paths replaced; raw retained in ignored artifacts."
+  }
+}

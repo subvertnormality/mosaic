@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "clock_mode": "real-time",
+  "profiles": {
+    "nb-audio": {
+      "mods": {
+        "doubledecker": {
+          "url": "https://github.com/sixolet/doubledecker.git",
+          "commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89"
+        }
+      },
+      "capabilities": [
+        "SuperCollider",
+        "WAV capture"
+      ]
+    },
+    "crow-jf": {
+      "mods": {
+        "nb_jf": {
+          "url": "https://github.com/sixolet/nb_jf.git",
+          "commit": "fc0922feb5f8e91f7732602a3b99716bf7099e78"
+        }
+      },
+      "capabilities": [
+        "Just Friends"
+      ]
+    },
+    "mixed-outputs": {
+      "mods": {
+        "doubledecker": {
+          "url": "https://github.com/sixolet/doubledecker.git",
+          "commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89"
+        },
+        "nb_jf": {
+          "url": "https://github.com/sixolet/nb_jf.git",
+          "commit": "fc0922feb5f8e91f7732602a3b99716bf7099e78"
+        }
+      },
+      "capabilities": [
+        "SuperCollider",
+        "WAV capture",
+        "Just Friends"
+      ]
+    }
+  }
+}

@@ -1,0 +1,9 @@
+# Mixed CC/NRPN slide behavior review
+
+Use Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.
+
+Review M-PATCH-064, its SLIDE-GLOBAL/SLIDE-STEP/PARAM-SLOTS inventory mappings, the slide ledger entry, and `docs/testing/mixed-parameter-slide-validation.json`.
+
+The case configures Mosaic through native menus and assigns two trig-parameter slots on one channel. Slot1 receives CC locks24/96 and only held step1 has K3 local slide enabled. Slot2 receives standard-NRPN locks126/253 and K3 enables its channel-global slide. Two cycles must emit independent linear curves, exact CC1 bytes and standard four-message NRPN packets, explicit destinations before step3 notes, silence through step4, both source locks before the next cycle, exact note phase, complete gates and paired releases. It passes controlled and real time. Fresh adjacent M-PATCH-033/034/046/053 runs cover local-only/global roundtrip, all ten concurrent CC slots and a slow standard-NRPN rollover slide in both lanes. The immutable snapshot passes531 Lua and100 applicable Python tests. Production source is unchanged.
+
+Challenge whether the gestures really create local CC versus global NRPN state; whether event filtering or packet grouping could hide cross-slot interference, malformed/extra MIDI, or attribution errors; whether the trajectory/endpoints/cycle-restart and note lifetime checks are independent and complete; whether the adjacent runs bind current source; whether inventory wording remains conservative; and all source/manifest/artifact/snapshot hashes. Return ACCEPTED or CHANGES REQUIRED with concrete findings. Do not treat this as complete coverage of modulation, every parameter type, live lifecycle, wrap or song transitions. Do not generalize the Digitakt NRPN exception.

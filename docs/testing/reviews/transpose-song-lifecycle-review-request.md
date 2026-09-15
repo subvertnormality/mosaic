@@ -1,0 +1,9 @@
+# Copied-song global transpose lifecycle review
+
+Use Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.
+
+Review M-TRANS-007, M-TRANS-008, their manual-inventory mappings, and `docs/testing/transpose-song-lifecycle-validation.json`. M-TRANS-007 creates a four-note pattern through the grid, sets song slot1 global transpose +5, copies slot1 to2, changes only slot2 to -7, enables Song mode, then plays across two actual 1,536-pulse song boundaries. The note lane emits every24 pulses, so each slot contains64 onsets. It checks slot LEDs, the exact 128-note pitch cycle, velocities, ports, every release, one-step gates, four program changes per onset, three-port Start/Stop, total event identity, Stop release bracketing and accumulated phase in controlled and real time. M-TRANS-008 crosses the actual 60-second autosave deadline, launches a fresh native process from the saved project, selects both slots through grid inputs, and verifies exact restored +5/-7 MIDI phrases and slot LEDs in both clock modes.
+
+Challenge whether the copy/edit gestures actually isolate the two song slots, whether the 1,536/24 boundary model and cyclic pitch oracle are independent and correct, observation-count tolerance, complete event/release ownership, persistence source identity, and whether the inventory overclaims. The initial 4- and16-onset boundary assumptions failed and are retained as oracle-correction evidence. Production source is unchanged. A source-bound snapshot passes530 Lua tests and21 focused Python timing oracles. Broad unittest discovery is not a supported aggregate because four executable/helper modules require environment or argv at import; do not count those import errors as product regressions. Global-transpose live-edit timing remains explicitly pending.
+
+Return ACCEPTED or CHANGES REQUIRED with findings ordered by severity. Keep unrelated manual domains outside this scoped verdict.

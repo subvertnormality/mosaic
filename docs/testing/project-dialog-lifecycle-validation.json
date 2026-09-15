@@ -1,0 +1,74 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-PROJECT-LIVE-001",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9016a01fb0d244b7889bde8e726cdeb5/manifest.json",
+      "sha256": "44ecec170f8a21069c319405bace7da8318fb2337d1702c6a8b66dd441fded9a",
+      "passed": true
+    },
+    {
+      "case": "M-PROJECT-LIVE-002",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1e9e3004869c48a59ec0e816c61337af/manifest.json",
+      "sha256": "7934f4fc13eeca92758a52b9f4be076889cb3830029558ae6296e28d671e7042",
+      "passed": true
+    },
+    {
+      "case": "M-PROJECT-LIVE-003",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0e749f5d837a41e180891df91aefe32c/manifest.json",
+      "sha256": "a9740c76ad91f2bf6613f20232704034f6e010f6567435ec8d75965ca89eea81",
+      "passed": true
+    },
+    {
+      "case": "M-PROJECT-LIVE-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8fdebebeb1c7450c803ecb292092c88d/manifest.json",
+      "sha256": "e0a15edd1c57d497707d838c93febeb2c78a558034ca474ba1dcbea2e1926bc5",
+      "passed": true
+    },
+    {
+      "case": "M-PROJECT-LIVE-001",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/07e45e01421d473c85971140281ffacb/manifest.json",
+      "sha256": "a494ee656c097940e72ff947175f0f1ca9711932b421836a214eca0fa89de2d3",
+      "passed": true
+    },
+    {
+      "case": "M-PROJECT-LIVE-002",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4b4aa973cbb04b6091a597ba7b76d6cb/manifest.json",
+      "sha256": "a3c77c800dd239c0c19a0ee5d69b96222ac821cf8789ceeef557a9b90af70bd0",
+      "passed": true
+    },
+    {
+      "case": "M-PROJECT-LIVE-003",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/47ca462ed510416692459998f4ca6b57/manifest.json",
+      "sha256": "57eb384e5f6005bc897137e4ea2ccc51a49cdaa351efa57e321f64aa1575a932",
+      "passed": true
+    },
+    {
+      "case": "M-PROJECT-LIVE-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/eef0bb655a2c4024b554cead09dcc672/manifest.json",
+      "sha256": "6f21d456b42ec0bdee398ae0c0485d9eaf314733e65eb57c034b25f37ca45f6a",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Two independently routed MIDI phrases with active notes before the dialog action",
+    "New and accepted Save leave no old-project notes stranded and emit no further old phrase",
+    "Accepted Save produces project and parameter files",
+    "Cancel Save and Cancel Load retain exact two-route phrases, phase and complete note lengths"
+  ],
+  "limitations": [
+    "No claim that New stops the transport: its project becomes empty and old voices must release",
+    "No claim of transactional save or exhaustive filename/overwrite/failure coverage",
+    "Current controlled profile remains diagnostic; full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

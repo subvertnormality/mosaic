@@ -1,0 +1,238 @@
+{
+  "scope": "Toolkit macro modulation of a configured MIDI CC with step-lock precedence",
+  "source_revision": "2bf92cff3dfc13ffba092c7477e2c1d3231f19df plus recorded working-tree diff",
+  "source_sha256": {
+    "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+    "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+    "tests/behaviour/manual-inventory.json": "7e40c8c6094dad516a6b5903740017bb760b149439ab2b37c6ac55601d50884b",
+    "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c",
+    "tests/behaviour/config/emu-midi.json": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442"
+  },
+  "native_behavior": {
+    "M-MOD-004-controlled": {
+      "run_id": "adbd94f9609f40f58d834085952d329e",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/adbd94f9609f40f58d834085952d329e/manifest.json",
+      "sha256": "0e7739ab539bfab562a5d531aee508963ad121e3373f2c44dc65d2d149b1aba7",
+      "case": "M-MOD-004",
+      "clock_mode": "controlled-experimental",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    },
+    "M-MOD-004-real": {
+      "run_id": "34f6cec93b8e4fd398e89a2fccb5d90b",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/34f6cec93b8e4fd398e89a2fccb5d90b/manifest.json",
+      "sha256": "47bc81e00ed48a1b526297b4a82fe905105393c035a6b3ee0537a90dad5f0efe",
+      "case": "M-MOD-004",
+      "clock_mode": "real-time",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    },
+    "M-MOD-001-controlled": {
+      "run_id": "08a4e8ad6ac948d28a36ed64ff747e0f",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/08a4e8ad6ac948d28a36ed64ff747e0f/manifest.json",
+      "sha256": "bd0409b2599821b68b957dbee68198ae79ece84bcecdc6ce5fe3b889e9b08ec7",
+      "case": "M-MOD-001",
+      "clock_mode": "controlled-experimental",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    },
+    "M-MOD-002-controlled": {
+      "run_id": "6e66502b17bd47b8a4011d0327f08be8",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/6e66502b17bd47b8a4011d0327f08be8/manifest.json",
+      "sha256": "8c4c7602ed4abc756ac159a6d4a58a98ac905099a1a340752104d07d949d791f",
+      "case": "M-MOD-002",
+      "clock_mode": "controlled-experimental",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    },
+    "M-MOD-003-controlled": {
+      "run_id": "76476f27a6cf4cf898fc53c673e29ccd",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/76476f27a6cf4cf898fc53c673e29ccd/manifest.json",
+      "sha256": "f6664ecf20a796c7f06dd242d71cc9b7180fe8c3ba18df490b9f108a6ad53d68",
+      "case": "M-MOD-003",
+      "clock_mode": "controlled-experimental",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    },
+    "M-MOD-001-real": {
+      "run_id": "edcedf5a8e69401db51f215c20599800",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/edcedf5a8e69401db51f215c20599800/manifest.json",
+      "sha256": "b2ea8839484467e7e6dde75496fbf9d5c2ff9c61adfb02f07eaf825c6c363184",
+      "case": "M-MOD-001",
+      "clock_mode": "real-time",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    },
+    "M-MOD-002-real": {
+      "run_id": "470b9a57c3fb4f459a4d94b268cbca89",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/470b9a57c3fb4f459a4d94b268cbca89/manifest.json",
+      "sha256": "7a228232c3a8377155165a92a35858614fd59ee81740137e19f6491debb27357",
+      "case": "M-MOD-002",
+      "clock_mode": "real-time",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    },
+    "M-MOD-003-real": {
+      "run_id": "6a13c3cc422d4e5d9e45490f72dc63e4",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/6a13c3cc422d4e5d9e45490f72dc63e4/manifest.json",
+      "sha256": "2da76ed650d21597bf4120cd9ab7c392b1d9d7ba207fafb5ed66a43dbb244cba",
+      "case": "M-MOD-003",
+      "clock_mode": "real-time",
+      "profile": "midi-modulation",
+      "matrix_revision": "41e11286bee8dbe48e8746e7a456400f93dc739a",
+      "toolkit_revision": "2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7",
+      "matrix_patch_sha256": "e92f7a0cf8fecc774528de373db4de620673e5161470c0ee385ea58c93181482",
+      "behaviour_source_sha256": {
+        "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+        "tests/behaviour/cases.py": "569405a068ed5f24288eceade3847722fe1583c7a047fc38c650a20d18cb94ba",
+        "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c"
+      }
+    }
+  },
+  "unit_integration": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/modulated-cc-final4-20260910/mosaic",
+    "lua": "531/531",
+    "python_unit_oracles": "100/100",
+    "logs": {
+      "lua": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/modulated-cc-final4-20260910/lua-tests.log",
+        "sha256": "44506d4753c6e65f692cc1acf661986b8147fc5fd3868a8bd163ab8001da277b"
+      },
+      "python": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/modulated-cc-final4-20260910/python-tests.log",
+        "sha256": "28a22ff8907ec1effaed617ec2ecbf19a94b459e360cb046f80785db8c6c5b3d"
+      },
+      "initial_broad_discovery": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/modulated-cc-final-20260910/lua-tests.log",
+        "classification": "wrong snapshot directory shape; retained invocation failure, no source verdict"
+      }
+    }
+  },
+  "coverage": [
+    "native Matrix routing to configured Control 1 and toolkit macro source",
+    "exact 100-detent positive source-to-CC trajectory and 25-detent negative-depth trajectory",
+    "pre-input and post-settle complete captures plus exactly one CC within40ms before every following detent",
+    "positive, zero/cleared and negative depth, including held-source rebind",
+    "manual base edit while modulation remains active",
+    "explicit step-local parameter locks overriding the modulated default",
+    "exact patch recall and per-step CC ordering before each audible note",
+    "complete system-realtime classification with exact three-port Start/Stop order around note onsets",
+    "controlled and real-time phrase timing, complete gates and paired releases",
+    "history-safe user navigation between remembered Matrix, toolkit and Mosaic parameter groups",
+    "adjacent macro clear, held rebind and clocked pulse-LFO cases in both clock lanes"
+  ],
+  "retained_development_failures": [
+    {
+      "run_id": "1660b28da9bd42838939385c3c88185c",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "0f17b940336143ef9be8322614335406",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "b07c67d008b146f1a97670376ba34202",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "254ce806ac974e54b974f2fcc2ba1cba",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "b7b9e3da2fa74c4fa161e7b0892451a8",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "fb9a25e8736c4b0d8cc065a84fee988a",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "da2e080b6d2d4a42897999ba5af22e8a",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "28d7ae34a0e54a3db79e1e04115da15f",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "f33a0ecf36a04254abf9e852e8508d62",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "6ffc222e88e44e0bb2d18e5af298bd67",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    },
+    {
+      "run_id": "651be6ba823349bda25dc4de0ea396c0",
+      "classification": "oracle/navigation development evidence; no Mosaic production defect claimed"
+    }
+  ],
+  "production_change": false,
+  "remaining": "Toolkit/Matrix integration is deprioritized. Emulator-level input/output correlation and broader parameter types, LFO shapes/rates/phases, slides, recording, persistence and source combinations remain explicitly incomplete.",
+  "codex_review": {
+    "status": "changes-required; integration deprioritized by user",
+    "sessions": [
+      "01a08b0c-a324-70f3-9a4f-e1e32e900895",
+      "01a08b1f-a28a-7123-b07d-f332fea03d87",
+      "01a08b29-bb61-7281-a1fa-ed19613d3f52"
+    ],
+    "resolved": [
+      "complete CC transition capture",
+      "malformed/wrong-port CC rejection",
+      "per-detent pre-state and post-settle capture",
+      "complete ordered three-port Start/Stop classification",
+      "behavior-source hashes embedded in native manifests",
+      "configured0..127 mapping premise supplied"
+    ],
+    "deferred_gap": "Consecutive equal mapped values still need emulator-level input/output correlation to prove which detent caused each CC; deferred with Toolkit/Matrix integration work."
+  }
+}

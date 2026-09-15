@@ -1,0 +1,66 @@
+{
+  "status": "first-native-held-note-audition-passed",
+  "baseline": {
+    "tests": 12,
+    "failures": 3,
+    "source_sha256": "388cd98e6dc677b5bffe4c2ed75ac78f374492ad033c22e356f2e0c64a68578f",
+    "tool_output": "b3986d"
+  },
+  "diagnosis": "Classifier rejected transient boundary frames before declared exclusion bands could be applied. Keep unclassified sound distinct from silence; fail it at every non-excluded frame. Threshold and exclusion width unchanged.",
+  "native_audio_verified": true,
+  "tests": {
+    "collected": 14,
+    "passed": 14,
+    "pitch_subcases": 37,
+    "sample_rates": [
+      44100,
+      48000,
+      96000
+    ],
+    "tool_output": "90b03a"
+  },
+  "source_sha256": {
+    "pcm_oracle.py": "f5ce34d7701440e964f26d984db21c2bc07a968d12195cb7dd242c31f9e55d15",
+    "test_pcm_oracle.py": "92d1e9812c65c6925d7b271b660a243545379f7578a7de5888a11e4d1707b68a"
+  },
+  "contract": {
+    "window_seconds": 0.04,
+    "hop_seconds": 0.01,
+    "timing_tolerance_seconds": 0.01,
+    "boundary_exclusion_seconds": 0.03,
+    "silence_rms": 0.001,
+    "pitches": [
+      48,
+      84
+    ],
+    "polyphony": false,
+    "absolute_latency_verified": false
+  },
+  "next_action": "Held-note route ownership, sequenced audio and independently bounded sample-clock mapping; preserve failed capture evidence.",
+  "limitations": [
+    "Exact onset/duration and cross-clock latency remain unverified",
+    "Sequenced phrases, polyphony, velocity and ownership matrices remain pending",
+    "One fresh native pass after a rejected baseline capture with one JACK xrun; no continuous/dropout-free host claim"
+  ],
+  "full_campaign_complete": false,
+  "native_case": "M-XA-002-AUDIO",
+  "native_evidence": [
+    {
+      "run_id": "37e2849d643346c9935704639b0a13bb",
+      "passed": false,
+      "manifest_sha256": "ab74786a9b408a2bc2dfadbc83c14f2f60c25e08011894f79da9add94de10a41",
+      "failure": {
+        "type": "AssertionError",
+        "message": "{'job_id': '6d46d034464844b0b2ab97b408845dac', 'status': 'failed', 'seconds': 1, 'output': '/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/sessions/c6b39f64c37a4706ac04e80572bbbad7/audio-captures/6d46d034464844b0b2ab97b408845dac/output.wav', 'input_sha256': None, 'started': {'status': 'capturing', 'rate': 48000, 'block': 1024, 'start_monotonic': 2141901.254737105}, 'error': 'Native audio capture failed: {\"status\": \"finished\", \"frames\": 48000, \"expected_frames\": 48000, \"xruns\": 1, \"nonfinite\": 0, \"server_dead\": 0, \"end_monotonic\": 2141902.280362976}'}",
+        "traceback": "Traceback (most recent call last):\n  File \"tests/behaviour/run.py\", line 53, in main\n    try:c=Driver(out,clock_mode=args.clock_mode,experimental_install=args.experimental_install,profile=args.profile,mod_code_root=args.mod_code_root,mod_patches=args.mod_patches);CASES[name]['run'](c)\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/output_cases.py\", line 89, in doubledecker_audition\n    rate,channels=capture('stopped-baseline')\n  File \"/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/output_cases.py\", line 83, in capture\n    assert job['status']=='complete',job\nAssertionError: {'job_id': '6d46d034464844b0b2ab97b408845dac', 'status': 'failed', 'seconds': 1, 'output': '/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/sessions/c6b39f64c37a4706ac04e80572bbbad7/audio-captures/6d46d034464844b0b2ab97b408845dac/output.wav', 'input_sha256': None, 'started': {'status': 'capturing', 'rate': 48000, 'block': 1024, 'start_monotonic': 2141901.254737105}, 'error': 'Native audio capture failed: {\"status\": \"finished\", \"frames\": 48000, \"expected_frames\": 48000, \"xruns\": 1, \"nonfinite\": 0, \"server_dead\": 0, \"end_monotonic\": 2141902.280362976}'}\n"
+      }
+    },
+    {
+      "run_id": "fe61221c7a504f59ba52e2d351fb49b0",
+      "passed": true,
+      "manifest_sha256": "23e31f8b1b5a5903dd356f732161b2e5a565c93e9adba4bcac5842afef4a8399",
+      "failure": null
+    }
+  ],
+  "native_scope": "Stopped baseline, stereo sustained C4/E4/G4 and silence after six-second release bound; no output MIDI NoteOn leakage. Seven one-second PCM jobs. Strict zero-xrun acceptance retained."
+}

@@ -1,0 +1,45 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-012",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/37efbb5afe184f75bb5f8f377f225f10/manifest.json",
+      "sha256": "fc6375334beef057818f2c5ef139098ba3e2d8bb2acb4ed1a64d2732058c3074",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-011",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/45da52eb860a408aaadfddc32ca71195/manifest.json",
+      "sha256": "7ef66810c80d52da50836ddebccbe4b2d67a9f59feb36395d4590e0e6d439076",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-012",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b97d69ab600b4ec4b1765f6979cf9c74/manifest.json",
+      "sha256": "be7530cc337e9e404d59c4ad4df837a12c86cc6c57e0f78a0ce1048d917ed2f1",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-011",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8b65966f92e248a6a2bdef0021582a5d/manifest.json",
+      "sha256": "7b2d9bb00b423ac97a09e9f698ddeff6a4fdb8d86a5052d05d3a4b68949d48b8",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Selected channel1 forced-on trig masks clear through held-step K2 and K1+K2, restoring silent default zero",
+    "Channel2 on separate MIDI port/channel retains note79/velocity40/half-step defaults and step2 note81/velocity60/1.25-step overrides",
+    "Independent per-route complete MIDI phrases, release durations, step timing and onset alignment",
+    "No unexpected output route; all notes released after Stop"
+  ],
+  "limitations": [
+    "Remaining chord slots/boundaries and recorded-mask clearing remain pending",
+    "Full manual/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

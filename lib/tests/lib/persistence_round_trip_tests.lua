@@ -1,0 +1,154 @@
+-- README 1052-1054: saved and autosaved projects load again. These tests use the real
+-- program model, memory and norns tabutil serialiser (no stubs) so a refactor of the
+-- data model or its serialisation cannot silently change what a saved project restores.
+local tab = require("tabutil")
+local divisions = include("mosaic/lib/clock/divisions")
+local project_validation = include("mosaic/lib/project_validation")
+local quantiser = include("mosaic/lib/quantiser")
+
+local function close(a, b)
+  return math.abs(a - b) <= 1e-12 * math.max(1, math.abs(a), math.abs(b))
+end
+
+local function differences(a, b, path, out)
+  out = out or {}
+  if type(a) == "number" and type(b) == "number" then
+    if not close(a, b) then out[#out + 1] = path .. ": " .. tostring(a) .. " ~= " .. tostring(b) end
+  elseif type(a) == "table" and type(b) == "table" then
+    for k, v in pairs(a) do
+      if type(v) ~= "function" then differences(v, b[k], path .. "." .. tostring(k), out) end
+    end
+    for k, v in pairs(b) do
+      if a[k] == nil and type(v) ~= "function" then out[#out + 1] = path .. "." .. tostring(k) .. ": added" end
+    end
+  elseif a ~= b then
+    out[#out + 1] = path .. ": " .. tostring(a) .. " ~= " .. tostring(b)
+  end
+  return out
+end
+
+local function build_project()
+  program.init()
+  memory.init()
+  local major = quantiser.get_scales()[1]
+  program.set_scale(2, {number = 3, scale = quantiser.get_scales()[3].scale,
+    pentatonic_scale = quantiser.get_scales()[3].pentatonic_scale, chord = 2, root_note = 4, transpose = -3, chord_degree_rotation = 1})
+  program.get().selected_channel = 1
+  local channel = program.get_selected_channel()
+  channel.length_mask = 1/3
+  channel.clock_mods = divisions.clock_divisions[18]
+  program.add_step_param_trig_lock(5, 1, 99)
+  program.add_step_scale_trig_lock(3, 2)
+  memory.record_event(1, "note_mask", {step = 1, note = 72, velocity = 90, length = 5/6, song_pattern = 1})
+  memory.record_event(1, "note_mask", {step = 2, note = 76, velocity = 80, chord_degrees = {1, 3, 5}, song_pattern = 1})
+  program.get_song_pattern(2).repeats = 3
+end
+
+local function save_and_load(path)
+  tab.save({"round-trip", program.prepare_for_save()}, path)
+  local saved = tab.load(path)
+  local valid, reason = project_validation.check(saved)
+  luaunit.assert_true(valid, tostring(reason))
+  program.init()
+  program.set(saved[2])
+  return saved
+end
+
+function test_saved_project_round_trip_is_stable()
+  build_project()
+  local first_path, second_path = os.tmpname(), os.tmpname()
+  local first = save_and_load(first_path)
+  local second = save_and_load(second_path)
+  os.remove(first_path); os.remove(second_path)
+  luaunit.assert_equals(differences(first[2], second[2], "project"), {})
+end
+
+function test_saved_project_restores_locks_masks_scales_and_memory()
+  build_project()
+  local path = os.tmpname()
+  save_and_load(path)
+  os.remove(path)
+  local channel = program.get_channel(1, 1)
+  luaunit.assert_equals(program.get_step_param_trig_lock(channel, 5, 1), 99)
+  luaunit.assert_equals(program.get_step_scale_trig_lock(channel, 3), 2)
+  luaunit.assert_equals(divisions.note_division_index(channel.length_mask), 6)
+  luaunit.assert_equals(channel.clock_mods.name, divisions.clock_divisions[18].name)
+  local scale = program.get_scale(2)
+  luaunit.assert_equals({scale.number, scale.root_note, scale.chord, scale.transpose, scale.chord_degree_rotation}, {3, 4, 2, -3, 1})
+  luaunit.assert_equals(program.get_song_pattern(2).repeats, 3)
+  luaunit.assert_equals(channel.step_note_masks[1], 72)
+  luaunit.assert_equals(divisions.note_division_index(channel.step_length_masks[1]), 12)
+  luaunit.assert_equals(channel.step_note_masks[2], 76)
+  luaunit.assert_equals(memory.get_event_count(1), 2)
+  memory.undo(1)
+  luaunit.assert_nil(channel.step_note_masks[2])
+  luaunit.assert_equals(channel.step_note_masks[1], 72)
+end
+
+function test_project_replacement_rebinds_memory_to_the_new_store()
+  program.init()
+  memory.init()
+  local previous = program.get().memory
+  local replacement = {
+    nrpn_policy_version = 1,
+    song_patterns = {},
+    memory = {
+      serialized = {
+        channels = {},
+        current_indices = {[3] = 0},
+        original_states = {},
+        pattern_states = {}
+      }
+    }
+  }
+
+  program.set(replacement)
+  local bound = memory.get_state()
+  luaunit.assert_false(rawequal(program.get().memory, previous))
+  luaunit.assert_true(rawequal(bound.channels, program.get().memory.channels))
+  luaunit.assert_true(rawequal(bound.current_indices, program.get().memory.current_indices))
+  luaunit.assert_true(rawequal(bound.original_states, program.get().memory.original_states))
+  luaunit.assert_equals(memory.get_event_count(3), 0)
+end
+
+function test_hardening_all_ten_parameter_assignments_round_trip_on_highest_song_and_channel()
+  program.init()
+  memory.init()
+  local channel = program.get_channel(96, 16)
+  for slot = 1, 10 do
+    channel.trig_lock_params[slot] = {
+      id = "parameter-" .. slot,
+      param_id = "midi_device_params_channel_16_" .. (20 + slot),
+      type = "midi",
+      device_name = "Fixture " .. slot,
+      index = 20 + slot,
+      cc_msb = slot,
+      cc_min_value = 0,
+      cc_max_value = 127,
+      off_value = -1,
+      ui_labels = {"off-" .. slot, "on-" .. slot}
+    }
+    channel.step_trig_lock_banks[slot] = {[slot] = slot * 10}
+    channel.step_trig_lock_slides[slot] = {[slot] = slot % 2 == 0}
+  end
+  local path = os.tmpname()
+  save_and_load(path)
+  os.remove(path)
+  local restored = program.get_channel(96, 16)
+  for slot = 1, 10 do
+    local definition = restored.trig_lock_params[slot]
+    luaunit.assert_equals({definition.id, definition.param_id, definition.type,
+      definition.device_name, definition.index, definition.cc_msb,
+      definition.off_value, definition.ui_labels[2]},
+      {"parameter-" .. slot, "midi_device_params_channel_16_" .. (20 + slot),
+       "midi", "Fixture " .. slot, 20 + slot, slot, -1, "on-" .. slot},
+      "assignment round trip slot " .. slot) -- README 1052-1054: saved projects load again
+    luaunit.assert_equals(restored.step_trig_lock_banks[slot][slot], slot * 10,
+      "lock round trip slot " .. slot)
+    luaunit.assert_equals(restored.step_trig_lock_slides[slot][slot], slot % 2 == 0,
+      "slide round trip slot " .. slot)
+  end
+  restored.trig_lock_params[1].ui_labels[1] = "changed"
+  luaunit.assert_not_equals(restored.trig_lock_params[2].ui_labels[1], "changed",
+    "assignment labels alias across slots") -- characterisation
+end

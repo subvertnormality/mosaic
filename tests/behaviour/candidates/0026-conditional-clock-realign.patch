@@ -1,0 +1,33 @@
+diff --git a/lib/step.lua b/lib/step.lua
+index e70c0bc..81aacd9 100644
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -1036,12 +1036,11 @@ function step.process_song_song_patterns()
+         program.set_selected_song_pattern(next_song_pattern)
+         
+         -- Handle pattern reset based on settings
+-        if selected_song_pattern_number ~= next_song_pattern and params:get("reset_on_song_pattern_transition") == 2 then
++        local reset_channels = selected_song_pattern_number ~= next_song_pattern and
++          params:get("reset_on_song_pattern_transition") == 2 or
++          params:get("reset_on_end_of_pattern_repeat") == 2
++        if reset_channels then
+           step.reset_pattern()
+-        else
+-          if params:get("reset_on_end_of_pattern_repeat") == 2 then
+-            step.reset_pattern()
+-          end
+         end
+         
+         pattern.update_working_patterns()
+@@ -1070,7 +1069,10 @@ function step.process_song_song_patterns()
+           channel_edit_page.refresh()
+         end
+         
+-        m_clock.realign_sprockets()
++        -- Retain channel phase for evolving polyrhythms when resets are off.
++        if reset_channels then
++          m_clock.realign_sprockets()
++        end
+       end
+     else
+       -- Not at the end of all repeats yet, increment repeat count if needed

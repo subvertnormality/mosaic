@@ -1,0 +1,23 @@
+{
+  "candidate": "0078",
+  "status": "scoped-candidate-validated",
+  "base": "0668b4478ca19a6b501b9f04f957956ce3298f4e",
+  "production": "lib/step.lua",
+  "defect": "Negative delayed-strum release queued after fixed-bound action iteration slips one pulse, unlike zero and root notes",
+  "baseline": "f5902f8b42e54f8fbc9994a24b5cc3df",
+  "baseline_error_seconds": 0.006944444,
+  "baseline_units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-df2df373129e485598e79c47e7eae471/results.json",
+  "scope": "Normalize only ordinary playback duration to minimum zero; preserve stored arithmetic, positive durations and arp scheduling",
+  "full_campaign_complete": false,
+  "native_receipt": "/home/andy/projects/mosaic-behaviour-runs/nonpositive-strum-candidate-01.json",
+  "native_passes": 10,
+  "review": "/home/andy/projects/mosaic-behaviour-runs/negative-strum-candidate-review.json",
+  "review_session": "01a084eb-77db-7cb3-a406-236f22be8016",
+  "review_disposition": "No material defect; requested simultaneous distinct/same-pitch ordered step/lattice test implemented and passes, including subsequent pulses and Stop. Unit-only optional-service mocks restored after test.",
+  "latest_units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-4892f8349eda4a21986aae23a83aaf57/results.json",
+  "latest_unit_summary": "Ran 496 tests in 11.317 seconds, 496 successes, 0 failures",
+  "isolated_performance_comparison": "/home/andy/projects/mosaic-behaviour-runs/strum-performance-comparison-8580f1f434bc4268a6f7911b9e90ddfd/results.json",
+  "performance_finding": "Reviewed collected-start fixture adopted; exact uninstrumented496-test suite passes. Earlier failures retained; garbage provenance and elimination of flakiness are not claimed.",
+  "next_action": "Continue remaining fractional source and interaction coverage",
+  "validation": "docs/testing/negative-strum-validation.json"
+}

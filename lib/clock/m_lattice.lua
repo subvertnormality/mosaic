@@ -1,3 +1,15 @@
+-- Arithmetic on rational step fractions can land infinitesimally above an
+-- integer pulse. Normalize only floating-point residue, never musical offsets.
+local function normalize_integer(value, epsilon)
+  local nearest = math.floor(value + 0.5)
+  if math.abs(value - nearest) <= epsilon then return nearest end
+  return value
+end
+
+local function pending_deadline(period, length)
+  return normalize_integer(period * length, 1e-9)
+end
+
 -- @module Mosaic Lattice++
 -- @release v2.1
 -- @author byzero
@@ -63,6 +75,8 @@ function Lattice:new(args)
   args = args == nil and {} or args
   l.auto = args.auto == nil and true or args.auto
   l.ppqn = args.ppqn == nil and 96 or args.ppqn
+  l.sync_to_external = args.sync_to_external == true
+  l.external_clock_active = args.external_clock_active
   l.step = 1
   l.enabled = false
   l.transport = 1
@@ -144,9 +158,45 @@ end
 --- use the norns clock to pulse
 -- @tparam table s this lattice
 function Lattice.auto_pulse(s)
+  local interval = 1 / s.ppqn
+  if s.sync_to_external then
+    -- MIDI transport defines beat zero independently of callback latency.
+    -- Count each elapsed pulse once, including acquisition/callback catch-up.
+    -- Never reuse the callback's fractional phase as a permanent offset.
+    local next_pulse = 0
+    while not s.external_clock_active or s.external_clock_active() do
+      local due = math.floor(clock.get_beats() * s.ppqn + 1e-9)
+      -- A blocked Lua event thread can resume after native MIDI has already
+      -- received transport Stop. Give queued input callbacks priority before
+      -- replaying a musically stale pulse backlog, then bound each catch-up
+      -- slice so transport remains responsive throughout reconciliation.
+      local backlog = due - next_pulse + 1
+      if backlog > s.ppqn / 2 then
+        clock.sleep(0)
+        if not s.enabled then return end
+      end
+      local reconciled = 0
+      while next_pulse <= due do
+        s:pulse()
+        if not s.enabled then return end
+        next_pulse = next_pulse + 1
+        reconciled = reconciled + 1
+        if reconciled >= s.ppqn / 2 and next_pulse <= due then
+          clock.sleep(0)
+          if not s.enabled then return end
+          due = math.floor(clock.get_beats() * s.ppqn + 1e-9)
+          reconciled = 0
+        end
+      end
+      clock.sync(interval, 0)
+    end
+  end
+  -- Preserve the immediate first pulse, then keep full intervals from its phase.
+  -- A negative equivalent offset avoids skipping a pulse at a sync boundary.
+  local offset = (clock.get_beats() % interval) - interval
   while true do
     s:pulse()
-    clock.sync(1/s.ppqn)
+    clock.sync(interval, offset)
   end
 end
 
@@ -156,59 +206,112 @@ function Lattice:pulse()
     local flagged = false
     for i = 1, 5 do
       for _, id in ipairs(self.sprocket_ordering[i]) do
+        if not self.enabled then return end
         local sprocket = self.sprockets[id]
-        if sprocket.enabled then
+        if sprocket and sprocket.enabled then
           if not sprocket.shuffle_updated then
-            sprocket:update_shuffle(sprocket.step, sprocket.id)
-            sprocket.shuffle_updated = true
+            sprocket:begin_cycle()
+          end
+          sprocket:prepare_pending_clocks()
+          if sprocket._pending_clocks then
+            for _, pending_id in ipairs(sprocket.delayed_action_order) do
+              local pending = sprocket.delayed_actions[pending_id]
+              local timing = pending and pending.timing
+              if timing and pending.before_onset and (pending.length == 0 or
+                  (pending.length < 1 and timing.phase - 1 >= pending_deadline(timing.current_ppqn, pending.length))) then
+                sprocket.delayed_actions[pending_id] = nil
+                sprocket:run_pending_action(pending)
+                if not self.enabled then return end
+                if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
+              end
+            end
           end
           if sprocket.phase >= 1 and sprocket.phase < 2 then
+            -- Finish due note releases before a new step can retrigger
+            -- the same MIDI pitch. A late previous note-off cuts the new voice.
+            -- New zero-delay actions created by this onset still run below.
+            for index = 1, #sprocket.delayed_action_order do
+              local pending_id = sprocket.delayed_action_order[index]
+              local pending = sprocket.delayed_actions[pending_id]
+              if pending and pending.before_onset and pending.length == 0 then
+                sprocket.delayed_actions[pending_id] = nil
+                sprocket:run_pending_action(pending)
+                if not self.enabled then return end
+                if sprocket.cleanup_delayed_action then
+                  sprocket.cleanup_delayed_action(pending_id)
+                end
+              end
+            end
+            sprocket.onset_count = (sprocket.onset_count or 0) + 1
+            sprocket.last_onset_transport = self.transport
             sprocket.action(self.transport)
+            if not self.enabled then return end
           end
 
           sprocket.phase = sprocket.phase + 1
+          if sprocket._pending_clocks then
+            for _, timing in ipairs(sprocket._pending_clocks) do timing.phase = timing.phase + 1 end
+          end
 
           local to_remove = {}
     
-          for id, delayed_action in pairs(sprocket.delayed_actions) do
+          -- Equal-deadline actions retain insertion order across Lua processes.
+          local pending_ids = sprocket.delayed_action_order
+          for index = 1, #pending_ids do
+            local id = pending_ids[index]
+            local delayed_action = sprocket.delayed_actions[id]
+            if delayed_action then
+              local timing = delayed_action.timing or sprocket
               if delayed_action.length == 0 then
-                  delayed_action.action()
+                  sprocket:run_pending_action(delayed_action)
+                  if not self.enabled then return end
                   table.insert(to_remove, id)
                   if sprocket.cleanup_delayed_action then
                     sprocket.cleanup_delayed_action(id)
                   end
               elseif delayed_action.length < 1 then
-                  if sprocket.phase >= sprocket.current_ppqn * delayed_action.length then
-                      delayed_action.action()
+                  -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
+                  if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
+                      sprocket:run_pending_action(delayed_action)
+                      if not self.enabled then return end
                       table.insert(to_remove, id)
                       if sprocket.cleanup_delayed_action then
                         sprocket.cleanup_delayed_action(id)
                       end
+                  elseif timing.phase > timing.current_ppqn then
+                      -- Fractions rounding to a full cycle fire at its next onset.
+                      delayed_action.length = 0
                   end
-              elseif sprocket.phase > sprocket.current_ppqn then
+              elseif timing.phase > timing.current_ppqn then
                   delayed_action.length = delayed_action.length - 1
               end
+            end
           end
           
           for _, id in ipairs(to_remove) do
               sprocket.delayed_actions[id] = nil
           end
-
-          if sprocket.phase > sprocket.current_ppqn then
-            sprocket.phase = 1
-            sprocket.shuffle_updated = false
-            if sprocket.delay_new ~= nil then
-              sprocket.phase = sprocket.phase - (sprocket.current_ppqn * (sprocket.delay - sprocket.delay_new))
-              sprocket.delay = sprocket.delay_new
-              sprocket.delay_new = nil
-            end
-            sprocket.step = sprocket.step + 1
-            if sprocket.step > sprocket.lattice.pattern_length then
-              sprocket.step = 1
+          -- Compact cancelled/completed entries without sorting or shifting.
+          local retained = 0
+          for index = 1, #pending_ids do
+            local id = pending_ids[index]
+            if sprocket.delayed_actions[id] then
+              retained = retained + 1
+              pending_ids[retained] = id
             end
           end
+          for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
+
+          if sprocket._pending_clocks then
+            for _, timing in ipairs(sprocket._pending_clocks) do
+              timing:finish_cycle()
+              timing.transport = timing.transport + 1
+            end
+          end
+          sprocket:finish_cycle()
+          sprocket.last_processed_transport = self.transport
           sprocket.transport = sprocket.transport + 1
-        elseif sprocket.flag then
+        elseif sprocket and sprocket.flag then
           self.sprockets[sprocket.id] = nil
           flagged = true
         end
@@ -307,7 +410,9 @@ function Sprocket:new(args)
   p.lattice = args.lattice
   p.realign = args.realign
   p.delayed_actions = args.delayed_actions
+  p.delayed_action_order = {}
   p.cleanup_delayed_action = args.cleanup_delayed_action
+  p.division_for_cycle = args.division_for_cycle
   return p
 end
 
@@ -339,6 +444,8 @@ end
 --- set the division of the sprocket
 -- @tparam number n the division of the sprocket
 function Sprocket:set_division(n)
+  self:forward_pending_setting("set_division", n)
+  if self.division == n then return end
   local old_ppqn = self.current_ppqn
   local old_phase = self.phase
 
@@ -360,42 +467,59 @@ function Sprocket:set_action(fn)
   self.action = fn
 end
 
-function Sprocket:set_delayed_action(length, action)
+function Sprocket:set_delayed_action(length, action, before_onset)
+  length = normalize_integer(length, 1e-12)
   local id = fn.generate_id()
-  self.delayed_actions[id] = {length = length, action = action}
+  local timing = self._executing_pending_action and self._executing_pending_action.timing
+  self.delayed_actions[id] = {length = length, action = action, before_onset = before_onset, timing = timing}
+  table.insert(self.delayed_action_order, id)
   return id
 end
 
 --- set the delay for this sprocket
 -- @tparam fraction of the time between beats to delay (0-1)
 function Sprocket:set_delay(delay)
+  self:forward_pending_setting("set_delay", delay)
   self.delay_new = util.clamp(delay,0,1)
 end
 
 function Sprocket:set_swing_or_shuffle(swing_or_shuffle)
-  self.swing_or_shuffle = util.clamp(swing_or_shuffle, 1, 2)
+  self:forward_pending_setting("set_swing_or_shuffle", swing_or_shuffle)
+  local value = util.clamp(swing_or_shuffle, 1, 2)
+  if self.swing_or_shuffle == value then return end
+  self.swing_or_shuffle = value
   self:update_swing()
   self:update_shuffle(self.step)
 end
 
 function Sprocket:set_swing(swing)
+  self:forward_pending_setting("set_swing", swing)
   -- swing is expected to be a value between 0 (no swing) and 100 (maximum swing)
   self.swing = util.clamp(swing or 0, -50, 50)
   self:update_swing()
 end
 
 function Sprocket:set_shuffle_amount(shuffle_amount)
+  self:forward_pending_setting("set_shuffle_amount", shuffle_amount)
   self.shuffle_amount = util.clamp(shuffle_amount, 0, 100) / 100
 end
 
 function Sprocket:set_shuffle_basis(basis)
-  self.shuffle_basis = util.clamp(basis, 1, 6)
-  self:update_shuffle(self.step)
+  self:forward_pending_setting("set_shuffle_basis", basis)
+  local value = util.clamp(basis, 1, 6)
+  if self.shuffle_basis == value then return end
+  self.shuffle_basis = value
+  -- Store inactive shuffle preferences without consuming Swing rounding phase.
+  if self.swing_or_shuffle == 2 then self:update_shuffle(self.step) end
 end
 
 function Sprocket:set_shuffle_feel(feel)
-  self.shuffle_feel = util.clamp(feel, 1, 4)
-  self:update_shuffle(self.step)
+  self:forward_pending_setting("set_shuffle_feel", feel)
+  local value = util.clamp(feel, 1, 4)
+  if self.shuffle_feel == value then return end
+  self.shuffle_feel = value
+  -- Store inactive shuffle preferences without consuming Swing rounding phase.
+  if self.swing_or_shuffle == 2 then self:update_shuffle(self.step) end
 end
 
 function Sprocket:update_swing()
@@ -431,7 +555,9 @@ function Sprocket:calculate_shuffle_ppqn(step)
 end
 
 function Sprocket:update_shuffle(step)
-  local calculated_ppqn = self:calculate_shuffle_ppqn(step)
+  -- A positive swung interval must consume at least one native pulse.
+  -- Clamp before carry accumulation so sub-pulse gaps cannot create zero cycles.
+  local calculated_ppqn = math.max(1, self:calculate_shuffle_ppqn(step))
   local original_ppqn = self.current_ppqn
   local original_phase = self.phase
   
@@ -446,12 +572,147 @@ function Sprocket:update_shuffle(step)
   end
 end
 
+function Sprocket:run_pending_action(pending)
+  local previous = self._executing_pending_action
+  self._executing_pending_action = pending
+  local ok, err = pcall(pending.action)
+  self._executing_pending_action = previous
+  if not ok then error(err, 0) end
+end
+
+-- Select a varying interval before consuming this cycle's rounding carry.
+-- Changing it after update_shuffle would round the same cycle twice.
+function Sprocket:begin_cycle()
+  if self.division_for_cycle then
+    local division = self.division_for_cycle()
+    assert(type(division) == "number" and division > 0 and division < math.huge,
+      "Invalid cycle division")
+    self.division = math.max(division, 1 / (self.ppqn * 4))
+  end
+  self:update_shuffle(self.step)
+  self.shuffle_updated = true
+end
+
+function Sprocket:finish_cycle()
+  if self.phase > self.current_ppqn then
+    self.phase = 1
+    self.shuffle_updated = false
+    if self.delay_new ~= nil then
+      self.phase = self.phase - (self.current_ppqn * (self.delay - self.delay_new))
+      self.delay = self.delay_new
+      self.delay_new = nil
+    end
+    self.step = self.step + 1
+    if self.step > self.lattice.pattern_length then
+      self.step = 1
+    end
+  end
+end
+
+-- Project future onsets from the current channel onset without consuming live
+-- fractional carry or changing phase. Call after begin_cycle, inside action.
+-- Variable-division callbacks are not channel clocks and may have side effects.
+function Sprocket:project_onset_pulses(distance)
+  assert(type(distance) == "number" and distance >= 1 and distance <= 64 and distance == math.floor(distance), "Invalid onset distance")
+  assert(self.phase >= 1 and self.phase < 2 and self.shuffle_updated, "Projection requires a resolved channel onset")
+  assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
+  -- An integer straight interval preserves its carry on every future cycle.
+  -- This common case needs no per-step simulation. Fractional and modulated
+  -- clocks retain the exact recurrence below.
+  local base = self.division * self.ppqn * 4
+  local shuffle_active = self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0
+  if not shuffle_active and self.even_swing == 1 and self.odd_swing == 1 and
+      base >= 1 and base == math.floor(base) and
+      self.ppqn_error >= 0.01 and self.ppqn_error < 1.01 then
+    return self.current_ppqn + (distance - 1) * base
+  end
+  -- Only interval length and rounding carry affect future onset deadlines.
+  -- Advance those scalars without copying clocks or updating irrelevant phase
+  -- fields for every parameter. Keep update_shuffle's rounding recurrence.
+  local elapsed, carry, step = self.current_ppqn, self.ppqn_error, self.step
+  for interval = 2, distance do
+    step = step + 1
+    if step > self.lattice.pattern_length then step = 1 end
+    local calculated = math.max(1, self:calculate_shuffle_ppqn(step))
+    local rounded = math.floor(calculated + carry - 0.01)
+    carry = calculated + carry - rounded
+    elapsed = elapsed + rounded
+  end
+  return elapsed
+end
+
+-- Predict an identified future onset from the current phase, including the
+-- boundary between pulses where the next onset has not executed yet.
+function Sprocket:project_onset_occurrence(occurrence)
+  local remaining = occurrence - (self.onset_count or 0)
+  assert(remaining >= 1 and remaining <= 64 and remaining == math.floor(remaining), "Invalid future onset occurrence")
+  assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
+  -- Later callbacks in this lattice pulse see phase already advanced for
+  -- the next pulse. Their projection origin needs that one-pulse offset.
+  local offset = self.last_processed_transport == self.lattice.transport and 1 or 0
+  local projected = setmetatable({}, getmetatable(self))
+  for key,value in pairs(self) do projected[key] = value end
+  if not projected.shuffle_updated then projected:begin_cycle() end
+  if projected.phase >= 1 and projected.phase < 2 and (offset == 1 or self.last_onset_transport ~= self.lattice.transport) then
+    remaining = remaining - 1
+    if remaining == 0 then return offset end
+  end
+  local elapsed = projected.current_ppqn - (projected.phase - 1)
+  for interval = 2, remaining do
+    projected.phase = projected.current_ppqn + 1
+    projected:finish_cycle();projected:begin_cycle()
+    elapsed = elapsed + projected.current_ppqn
+  end
+  return elapsed + offset
+end
+
+function Sprocket:forward_pending_setting(method, value)
+  for _, timing in ipairs(self._pending_clocks or {}) do timing[method](timing, value) end
+end
+
+function Sprocket:prepare_pending_clocks()
+  if not self._pending_clocks then return end
+  local live = {}
+  for _, pending in pairs(self.delayed_actions) do
+    if pending.length == math.huge then pending.timing = nil end
+    if pending.timing then live[pending.timing] = true end
+  end
+  local retained = {}
+  for _, timing in ipairs(self._pending_clocks or {}) do
+    if live[timing] then
+      if not timing.shuffle_updated then timing:update_shuffle(timing.step);timing.shuffle_updated = true end
+      retained[#retained + 1] = timing
+    end
+  end
+  self._pending_clocks = #retained > 0 and retained or nil
+end
+
+function Sprocket:preserve_pending_timing()
+  local timing
+  local function preserve(pending)
+    if not pending.timing and pending.length < math.huge and
+        (pending.length > 0 or pending == self._executing_pending_action) then
+      if not timing then
+        timing = setmetatable({}, getmetatable(self))
+        for key, value in pairs(self) do timing[key] = value end
+        timing.delayed_actions = {};timing.delayed_action_order = {};timing._pending_clocks = nil
+        self._pending_clocks = self._pending_clocks or {}
+        self._pending_clocks[#self._pending_clocks + 1] = timing
+      end
+      pending.timing = timing
+    end
+  end
+  for _, pending in pairs(self.delayed_actions) do preserve(pending) end
+  if self._executing_pending_action then preserve(self._executing_pending_action) end
+end
+
 function Lattice:realign_eligable_sprockets()
 
   for i = 1, 5 do
     for _, id in ipairs(self.sprocket_ordering[i]) do
       local sprocket = self.sprockets[id]
       if sprocket.realign then
+        sprocket:preserve_pending_timing()
         sprocket.ppqn_error = 0.5
         sprocket.phase = 1
         sprocket.step = 1
@@ -459,9 +720,36 @@ function Lattice:realign_eligable_sprockets()
         sprocket:update_swing()
         sprocket:update_shuffle(1)  -- Passing 1 as we've reset to step 1
         sprocket.current_ppqn = sprocket.division * self.ppqn * 4
+        -- Restarted step 1 is resolved by begin_cycle, as at a step boundary,
+        -- also when the reset lands mid-step (defect realign-mid-step-length).
+        sprocket.shuffle_updated = false
       end
     end
   end
+end
+
+-- Normalize a stopped lattice as freshly constructed, while retaining its
+-- sprockets and callbacks. Unlike an in-song realignment, delayed processors
+-- must keep their constructor offset so they cannot fire at the first onset.
+function Lattice:prepare_for_start()
+  for order = 1, 5 do
+    for _, id in ipairs(self.sprocket_ordering[order]) do
+      local sprocket = self.sprockets[id]
+      if sprocket.realign then
+        local delay = sprocket.delay_new ~= nil and sprocket.delay_new or sprocket.delay
+        sprocket.delay = delay
+        sprocket.delay_new = nil
+        sprocket.ppqn_error = 0.5
+        sprocket.step = 1
+        sprocket.transport = 1
+        sprocket:update_swing()
+        sprocket:update_shuffle(1)
+        sprocket.phase = 1 - (sprocket.current_ppqn * delay)
+        sprocket.shuffle_updated = false
+      end
+    end
+  end
+  self.transport = 1
 end
 
 return Lattice

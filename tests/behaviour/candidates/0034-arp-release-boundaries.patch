@@ -1,0 +1,80 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -528,8 +528,8 @@
+   return #destroy_at_note_end_ids[channel]
+ end
+ 
+-function m_clock.delay_action(c, length, type, func, before_onset)
+-  if length == 0 or length == nil then
++function m_clock.delay_action(c, length, type, func, before_onset, defer_zero)
++  if (length == 0 or length == nil) and not defer_zero then
+     func()
+     return
+   end
+@@ -616,7 +616,10 @@
+     -- The parent order-2 channel has already consumed this pulse. Deferred
+     -- arp notes need a full duration from their own onset, not step start.
+     local parent = m_clock["channel_" .. c .. "_clock"]
+-    local onset_offset = math.max(0, (parent.phase - 2) / parent.current_ppqn)
++    -- After wrap, phase1 denotes the next cycle starting one pulse from
++    -- now. Retain that negative one-pulse offset; a zero target must queue
++    -- for the next parent pulse rather than execute in this callback.
++    local onset_offset = (parent.phase - 2) / parent.current_ppqn
+     func(div, onset_offset)
+ 
+     -- Check if the arp should stop
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -454,7 +454,7 @@
+ 
+   return m_clock.delay_action(c, division + (onset_offset or 0), action_flag, function()
+     note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
+-  end, true) -- Due releases precede the next onset; strum/scale actions do not.
++  end, true, onset_offset ~= nil) -- Off-phase arp releases always queue to the parent.
+ 
+ end
+ 
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -1,3 +1,15 @@
++-- Arithmetic on rational step fractions can land infinitesimally above an
++-- integer pulse. Normalize only floating-point residue, never musical offsets.
++local function normalize_integer(value, epsilon)
++  local nearest = math.floor(value + 0.5)
++  if math.abs(value - nearest) <= epsilon then return nearest end
++  return value
++end
++
++local function pending_deadline(period, length)
++  return normalize_integer(period * length, 1e-9)
++end
++
+ -- @module Mosaic Lattice++
+ -- @release v2.1
+ -- @author byzero
+@@ -172,7 +184,7 @@
+               local pending = sprocket.delayed_actions[pending_id]
+               local timing = pending and pending.timing
+               if timing and pending.before_onset and (pending.length == 0 or
+-                  (pending.length < 1 and timing.phase - 1 >= timing.current_ppqn * pending.length)) then
++                  (pending.length < 1 and timing.phase - 1 >= pending_deadline(timing.current_ppqn, pending.length))) then
+                 sprocket.delayed_actions[pending_id] = nil
+                 sprocket:run_pending_action(pending)
+                 if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
+@@ -219,7 +231,7 @@
+                   end
+               elseif delayed_action.length < 1 then
+                   -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
+-                  if timing.phase - 2 >= timing.current_ppqn * delayed_action.length then
++                  if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
+                       sprocket:run_pending_action(delayed_action)
+                       table.insert(to_remove, id)
+                       if sprocket.cleanup_delayed_action then
+@@ -413,6 +425,7 @@
+ end
+ 
+ function Sprocket:set_delayed_action(length, action, before_onset)
++  length = normalize_integer(length, 1e-12)
+   local id = fn.generate_id()
+   local timing = self._executing_pending_action and self._executing_pending_action.timing
+   self.delayed_actions[id] = {length = length, action = action, before_onset = before_onset, timing = timing}

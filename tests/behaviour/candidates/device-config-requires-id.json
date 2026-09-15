@@ -1,0 +1,59 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "f7cfc91",
+  "file": "lib/devices/device_map.lua",
+  "before_sha256": "6f50de130996a137b44506384f91089b065cce43d2201da6b4670c0a41a38037",
+  "after_sha256": "7652e09aae325e42831d558beb52464769a00cccf98f6265c24d75df442ce660",
+  "patch": "0088-device-config-requires-id.patch",
+  "patch_sha256": "d88d9494faaa78de71b60d4fae8f58b1350b95833a8c1a59442bd798047096c9",
+  "regression": "M-SETUP-002",
+  "baseline": [
+    {
+      "run_id": "cea2890fae7b4f1d982239109e72e5cf",
+      "case": "M-SETUP-002",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "a3e9f557ba6cb5608c0ace2cbc9af2da57cfaa062588fcde99f88c2a290cc69b",
+      "failure": "...90cc58899adb/dust/code/mosaic/lib/devices/device_map.lua:621: table index is nil\nstack traceback:\n\t...90cc58899adb/dust/code/mosaic/lib/devices/device_map.lu"
+    },
+    {
+      "run_id": "6cd736c9a5c041bc92b6cbb655a1a94e",
+      "case": "M-SETUP-002",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "30e52e7ea6605e7949014fd96ad888fa114659ea14d8890384fbda4ee468f332",
+      "failure": "...435dcfa8d619/dust/code/mosaic/lib/devices/device_map.lua:621: table index is nil\nstack traceback:\n\t...435dcfa8d619/dust/code/mosaic/lib/devices/device_map.lu"
+    }
+  ],
+  "rationale": "A device config entry without an id was inserted and then used as a table key, aborting Mosaic init with \"table index is nil\". Malformed JSON was already skipped; entries without a string id and name are now skipped the same way.",
+  "oracle": "README setup: user-created config files in data/mosaic/config; derived requirement SETUP-DEVICE-INVALID (an invalid file must not create a device; the valid device keeps working).",
+  "validation": [
+    {
+      "run_id": "59d76fc3103a40768c4e6f27739560a6",
+      "case": "M-SETUP-002",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "0348573328683dd02ff4b76271fe358ae0d62911b4bba82feec8e8e466fe0931",
+      "failure": null
+    },
+    {
+      "run_id": "5ff36b79d74b40d68e818b24274c0efa",
+      "case": "M-SETUP-002",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "4df7879817f90100554c2586d9cbf3beaa1c63e83cd682361cfde7e9a094f3b2",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-dd9bb8f878b747c1b5f563d31d4649e9",
+      "case": "M-SETUP-002",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "cced0def449800723c7bdb4a99437d3336efc177aca73bfcd250947faf1bd8fd",
+      "failure": null,
+      "normalized_sha256": "cf607f5d496ad3dbf76864be435a7cdcadcbca8c9a24c4a7a1624946df507f3b"
+    }
+  ],
+  "limitations": "Other wrong types (non-array params, bad bounds, duplicate ids/names) are not yet exercised.",
+  "upstream_merged": false
+}

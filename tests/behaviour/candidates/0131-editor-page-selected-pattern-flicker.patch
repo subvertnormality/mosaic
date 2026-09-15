@@ -1,0 +1,13 @@
+diff --git a/lib/controls/vertical_fader.lua b/lib/controls/vertical_fader.lua
+index f14cccc..e247491 100644
+--- a/lib/controls/vertical_fader.lua
++++ b/lib/controls/vertical_fader.lua
+@@ -58,7 +58,7 @@ function vertical_fader:draw()
+ 
+   local active_led = self.y + self.value - 1 - self.vertical_offset
+   if (self.value > 0 and active_led < 8) then
+-      if self.x == program.get().selected_pattern then
++      if x == program.get().selected_pattern then
+           if self.y == active_led then
+               bright_mod = shared_bright_mod
+           else

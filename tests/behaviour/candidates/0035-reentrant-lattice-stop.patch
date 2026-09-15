@@ -1,0 +1,61 @@
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -172,8 +172,9 @@
+     local flagged = false
+     for i = 1, 5 do
+       for _, id in ipairs(self.sprocket_ordering[i]) do
++        if not self.enabled then return end
+         local sprocket = self.sprockets[id]
+-        if sprocket.enabled then
++        if sprocket and sprocket.enabled then
+           if not sprocket.shuffle_updated then
+             sprocket:update_shuffle(sprocket.step, sprocket.id)
+             sprocket.shuffle_updated = true
+@@ -187,6 +188,7 @@
+                   (pending.length < 1 and timing.phase - 1 >= pending_deadline(timing.current_ppqn, pending.length))) then
+                 sprocket.delayed_actions[pending_id] = nil
+                 sprocket:run_pending_action(pending)
++                if not self.enabled then return end
+                 if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
+               end
+             end
+@@ -201,12 +203,14 @@
+               if pending and pending.before_onset and pending.length == 0 then
+                 sprocket.delayed_actions[pending_id] = nil
+                 sprocket:run_pending_action(pending)
++                if not self.enabled then return end
+                 if sprocket.cleanup_delayed_action then
+                   sprocket.cleanup_delayed_action(pending_id)
+                 end
+               end
+             end
+             sprocket.action(self.transport)
++            if not self.enabled then return end
+           end
+ 
+           sprocket.phase = sprocket.phase + 1
+@@ -225,6 +229,7 @@
+               local timing = delayed_action.timing or sprocket
+               if delayed_action.length == 0 then
+                   sprocket:run_pending_action(delayed_action)
++                  if not self.enabled then return end
+                   table.insert(to_remove, id)
+                   if sprocket.cleanup_delayed_action then
+                     sprocket.cleanup_delayed_action(id)
+@@ -233,6 +238,7 @@
+                   -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
+                   if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
+                       sprocket:run_pending_action(delayed_action)
++                      if not self.enabled then return end
+                       table.insert(to_remove, id)
+                       if sprocket.cleanup_delayed_action then
+                         sprocket.cleanup_delayed_action(id)
+@@ -269,7 +275,7 @@
+           end
+           sprocket:finish_cycle()
+           sprocket.transport = sprocket.transport + 1
+-        elseif sprocket.flag then
++        elseif sprocket and sprocket.flag then
+           self.sprockets[sprocket.id] = nil
+           flagged = true
+         end

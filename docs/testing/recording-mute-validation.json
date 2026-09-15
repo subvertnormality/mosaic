@@ -1,0 +1,31 @@
+{
+  "status": "scoped-interaction-validated",
+  "case": "M-REC-PARAM-023",
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f96a023f6be44ffcb81085a9f0c74441/manifest.json",
+      "sha256": "cb9d835910a1d85e491a86f09a0b2848f9cb593d50e21e73f900f54edcdf46eb",
+      "passed": true
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b77bf90eaf5a41558569521f75d55c69/manifest.json",
+      "sha256": "1242a39d510bd522f056d6042f8eed6530032a7f5f4d384a63f6852b9bbb8939",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "oracle": "Manual recording rule: subsequent eligible selected-channel steps record pending values. Mute suppresses output, not the clock or eligible-step recording. Four-second steps give a twelve-second first-to-fourth onset interval. Distinct-default disarmed replay proves locks were stored during mute.",
+  "assertions": [
+    "Muted grid level7 and unmuted15",
+    "No note-on or CC output through muted steps2/3; pending notes drain",
+    "Resumed step4 pitch65 velocity97 at12seconds from step1:2ns controlled/10ms real-time tolerance",
+    "Disarmed replay default65; recorded locks24,64,64,64 over two cycles plus closing onset; four-second CC deadlines"
+  ],
+  "limitations": [
+    "Scoped interaction, not full mute/recording domain or full campaign",
+    "Controlled mode remains diagnostic and unadmitted"
+  ],
+  "full_campaign_complete": false
+}

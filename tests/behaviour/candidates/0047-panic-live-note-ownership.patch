@@ -1,0 +1,11 @@
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -417,0 +418,6 @@
++          -- Forget only notes actually cleared by this sweep position.
++          -- Notes played behind it still need ownership for transport Stop.
++          local channels = m_midi.note_counts[id]
++          if channels and channels[channel] then
++            channels[channel][note] = nil
++          end
+@@ -421 +426,0 @@
+-      m_midi.note_counts[id] = nil

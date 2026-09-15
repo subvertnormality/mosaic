@@ -13,6 +13,14 @@ function grid_viewer:new(x, y)
 end
 
 function grid_viewer:draw()
+  -- The channel sequencer only writes cells inside its active range.
+  -- Clear the shared viewer cache so shorter/different ranges cannot retain dots.
+  for x = 1, 16 do
+    for y = 4, 7 do
+      grid_abstraction.seq(x, y, 0)
+    end
+  end
+
   screen_view_sequencer:draw(program.get_channel(program.get().selected_song_pattern, self.selected_channel), grid_abstraction.seq)
 
   local state = grid_abstraction.get_screen_state()

@@ -1,0 +1,11 @@
+{
+  "status": "projection-contracts-passed-slide-integration-pending",
+  "scope": "Read-only onset projection for resolved non-delayed channel clocks using current fractional carry and shared swing/shuffle interval calculations.",
+  "test": "tests/behaviour/test_slide_onset_projection.lua",
+  "log": "/home/andy/projects/mosaic-behaviour-runs/slide-onset-projection.log",
+  "patch_sha256": "a9381f9def2a0fc30500818dabcb7bc1d51477969244f8ecc899818cfffef996",
+  "before_sha256": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+  "after_sha256": "1d1d4c3774bab9dd0aed316ec018bc74843fc066b228c6c17d8a99fb194c3366",
+  "full_campaign_complete": false,
+  "remaining": "Integrate absolute slide anchors and resolved destination endpoint ownership, effective range lookup, live retiming and native musical regressions."
+}

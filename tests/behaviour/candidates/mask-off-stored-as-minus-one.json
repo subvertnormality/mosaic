@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "c3d9aba",
+  "files": [
+    {
+      "file": "lib/memory.lua",
+      "before_sha256": "757d2962b3ede21a4925c93d79e239ad548bfde799055aea204f8584deb0404a",
+      "after_sha256": "ff5de262437b8a58ddf9c2dec3677cbba19fc9f21658b881c8f3262df8c11af0"
+    }
+  ],
+  "patch": "0135-mask-off-clears-step-lock.patch",
+  "patch_sha256": "89c56c062ec859a88dbd659a6ef6a755bc2a9f2c3f53154aad09b2dda1159e53",
+  "regression": "M-MASK-OFF-001",
+  "unit_regression": "test_memory_trig_minus_one_clears_the_step_trig_lock, test_memory_velocity_minus_one_clears_the_step_velocity_lock, test_memory_minus_one_on_an_unlocked_step_leaves_it_unlocked",
+  "baseline": [
+    {
+      "run_id": "c09ae1352e074f288234596adba67fa2",
+      "case": "M-MASK-OFF-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "ebf9d296fae0a87d348a2e3ea9ed7991d89deff51066ffdbbc724256fbf2a310",
+      "failure": "('Mask turned back to X does not play as unset', [('B step 2 trig back to X', {'expected': [(60, 127), (62, 117), (64, 107), (65, 97)], 'heard': [(60, 127), (64, 107), (65, 97)]}), ('C step 3 velocity"
+    },
+    {
+      "run_id": "7894139927b640bab4c4fa5b05707a9e",
+      "case": "M-MASK-OFF-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "3f0d1af93709b70ef8fddfa01d0ade3df49c4a79c36511657e50b5993d3fb702",
+      "failure": "('Mask turned back to X does not play as unset', [('B step 2 trig back to X', {'expected': [(60, 127), (62, 117), (64, 107), (65, 97)], 'heard': [(60, 127), (64, 107), (65, 97)]}), ('C step 3 velocity"
+    }
+  ],
+  "rationale": "The mask handlers store \"off\" as -1 (`v == -1 and nil or v` always yields v), and memory applied that -1 as a step lock: a held step's trig mask turned back to X stayed silent, and a velocity lock turned back to X kept its value because validate_velocity rejected -1. memory.apply_event now treats -1 on trig and velocity as CLEAR and removes the lock, so the step plays its pattern values again. Chord masks are unchanged: -1 still means -7th.",
+  "oracle": "README 597: the default mask value applies to all steps without a specific mask lock; README 570: masks override pattern values. Human decision 2026-09-11 after the probe: fix both the trig and the velocity case.",
+  "validation": [
+    {
+      "run_id": "a6957bd511814d4ab7f14e1c9dc8a980",
+      "case": "M-MASK-OFF-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "73fe0f8be4b5febd23dc7890c48479e0cf6b81c28727b3597688597c7e60a133",
+      "failure": null
+    },
+    {
+      "run_id": "ecb70796afa14750b9aa1aef66156f52",
+      "case": "M-MASK-OFF-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "c66439444fb6e96711b6de78d44fa4db4e92101634b7489e31fa488dfeb0e162",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-f8f3b1538078415b9a540ef1dc408673",
+      "case": "M-MASK-OFF-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "ba42c52fa693207929e90a18b4f9507fa47c9ba1774e7bc25d11cb542c370433",
+      "failure": null,
+      "normalized_sha256": "d1595c7e9fa2b1619caf1beac8869b3abc149f3bfa64607d99e88b7338ea3b8f"
+    }
+  ],
+  "collateral": "All 1470 Lua units pass; M-MEMORY-009, M-MASK-006, M-MASK-CHORD-X-001 and M-MASK-HELD-EXTRA-001 pass in the controlled lane with the fix.",
+  "upstream_merged": false
+}

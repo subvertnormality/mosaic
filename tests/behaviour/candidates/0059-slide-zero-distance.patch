@@ -1,0 +1,12 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -654,6 +654,9 @@
+ 
+ function m_clock.execute_action_across_steps_by_pulses(args)
+   local distance = args.distance
++  -- Equal labels alone mean no movement. A next-loop occurrence carries
++  -- an explicit positive distance from the destination lookup.
++  if distance == nil and args.start_step == args.end_step then return end
+   if not distance then
+     local channel = program.get_channel(program.get().selected_song_pattern, args.channel_number)
+     local first, last = program.get_channel_step_bounds(channel)

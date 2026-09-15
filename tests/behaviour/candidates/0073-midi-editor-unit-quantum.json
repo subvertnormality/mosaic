@@ -1,0 +1,12 @@
+{
+  "status": "scoped-candidate-validated",
+  "baseline": "08dcfc71d3e54533ac196fa63cc0b526",
+  "baseline_detent": 64,
+  "expected_cc": 63,
+  "actual_cc": 64,
+  "case": "M-PARAM-026",
+  "scope": "Count the separate Off position when converting CC and fine-NRPN editor detents to normalized parameter increments. Preserve numeric values and existing coarse NRPN scaling.",
+  "secondary_reproducer": "65fb0407140a43548ace09209f10c310",
+  "dependency": "0071",
+  "validation": "docs/testing/recording-resume-validation.json"
+}

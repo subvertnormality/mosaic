@@ -1,0 +1,41 @@
+{
+  "started_at": "2026-09-10T04:23:20.110684+00:00",
+  "packet_sha256": "73696733ec92dc038d474c2595a7ed6f37e3ee3769a2c02a06e6b76d638bde81",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Final MIDI pitch-domain defect review\n\nUse Codex only. Read-only local shell commands are allowed; do not edit files or launch tests/runtime processes.\n\nReview the isolated M-TRANS-005 Mosaic defect fix and `docs/testing/midi-pitch-boundary-validation.json`. The physical recipe composes validated extreme Higher/Lower note merging with channel octave +/-2, saved scale transpose +/-12, a global scale lock and step transpose +/-12. Its independently derived unbounded phrases are 148/148/96/96 and -17/-17/0/0. MIDI must emit 127/127/96/96 and 0/0/0/0.\n\nThe exact c0e7c87 baseline with the finalized recipe fails because an out-of-range data byte corrupts the MIDI stream (`Status interrupted an incomplete message`). The candidate clamps note numbers in `m_midi.note_on` and `m_midi.note_off`, at the final MIDI-only boundary before ownership accounting and output. It intentionally does not alter non-MIDI `device.player` notes, NRPN/CC policies, merge arithmetic, quantiser values, or upstream norns.\n\nChallenge whether clamping rather than wrapping/dropping is the correct musical/API behavior; whether the location covers ordinary, chord, arp and safety-release paths without stranded notes or regressions; whether onset/release collisions at 0/127 remain owned; whether the behavior arithmetic and UI controls are accurate; and whether every event and accumulated timing is actually checked. Verify source/manifests/artifact/log hashes and relevance of fresh M-TRANS-002, M-TRANS-004 and M-MERGE-016 adjacent runs.\n\nReturn ACCEPTED or CHANGES REQUIRED with findings ordered by severity. Keep the review scoped to this defect and its guards; remaining manual coverage stays pending.",
+    "files": [
+      {
+        "path": "lib/m_midi.lua",
+        "reason": "Production MIDI boundary"
+      },
+      {
+        "path": "lib/tests/lib/m_midi_tests.lua",
+        "reason": "Ownership and clamp unit regression"
+      },
+      {
+        "path": "tests/behaviour/numeric_merging.py",
+        "reason": "Native user behavior oracle"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Case registry"
+      },
+      {
+        "path": "docs/testing/midi-pitch-boundary-validation.json",
+        "reason": "Source-bound evidence"
+      },
+      {
+        "path": "docs/testing/decisions.md",
+        "reason": "Scoped behavior decision"
+      }
+    ],
+    "web_search": false,
+    "effort": "high"
+  },
+  "result": "**CHANGES REQUIRED.** Clamping is appropriate for the documented endpoint policy, and the finalized pitch arithmetic is correct, but safety cleanup loses collision ownership and the evidence overstates complete verification.\n\n1. **High \u2014 safety cleanup collapses owned releases.** After `note_on(148,\u2026)` and `note_on(127,\u2026)`, endpoint 127 has count 2. Yet [lib/m_midi.lua:378](/home/andy/projects/mosaic-behaviour-tests/lib/m_midi.lua:378) sends **one** Note Off and deletes that count. `stop()` calls this cleanup. Held keyboard notes have no scheduled sequencer releases to compensate, so receivers requiring balanced releases can retain a voice. The [new unit regression:16](/home/andy/projects/mosaic-behaviour-tests/lib/tests/lib/m_midi_tests.lua:16) tests explicit individual releases only. Preserve every owned release during cleanup and add endpoint-collision cleanup guards.\n\n2. **Medium \u2014 every event is counted, but not fully checked.** [numeric_merging.py:263](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/numeric_merging.py:263) accepts any 36 two-byte program changes on port 3, regardless of channel, value, or order. Capture also begins after setup, excluding ten startup events. Assert the expected program sequence and explicitly delimit any excluded setup output. Note assertions are stronger: all nine onsets/releases, eight gates, Stop release, and accumulated onset phase are checked. Recorded maximum real-time phase errors are approximately **0.548 ms / 1.173 ms**.\n\n3. **Low \u2014 distinguish tested source from subsequent metadata edits.** [validation.json:24](/home/andy/projects/mosaic-behaviour-tests/docs/testing/midi-pitch-boundary-validation.json:24) records case-registry hash `b97b2217\u2026`; all eight passing run identities record `8e66adb5\u2026`, also present in the unit snapshot. The difference is the later addition of `LOCK-SCALE` to requirements. Document that delta instead of implying identical tested source; five files in each native source snapshot now differ from their captured identities.\n\nThe boundary placement otherwise covers ordinary, chord, and arp MIDI output and matching releases while preserving `device.player` routing ([step.lua:864](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:864)). Clamping preserves onset count and pitch ordering; wrapping introduces pitch jumps and dropping removes notes. The merge formulas and UI mappings yield the stated unbounded phrases and wire results.\n\nI verified all **nine manifest hashes, 135 artifact hashes/sizes, and both log hashes**. Baseline production matches `c0e7c87`, and its recorded recipe is an exact prefix of the finalized controlled run. Fresh adjacent runs use the candidate MIDI implementation and meaningfully guard transpose composition, scale-lock interaction, and extreme merge arithmetic.\n\n**CONFIDENCE: High.** Resolving cleanup ownership and the verification gaps would change the verdict; no tests/runtime were launched, and remaining manual coverage stays pending.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a0898e-559a-7ad1-885d-790eeb2e50d3` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T04:27:46.734154+00:00"
+}

@@ -1,0 +1,29 @@
+{
+  "started_at": "2026-09-10T04:50:31.995781+00:00",
+  "packet_sha256": "acc5c92bf913344f7d20e4ccd374b0ab366b947af8d99e2c03469d50961eeec3",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Global transpose full-domain review\n\nUse Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.\n\nReview M-TRANS-006 and `docs/testing/global-transpose-validation.json`. The case selects -12 at the scale-page fader's left inner cell, then advances one value with each of 24 physical right-endpoint taps. For every displayed value it expects literal base MIDI 60/62/64/65 plus that semitone value. It runs at least two complete phrases in controlled and real time.\n\nChallenge the physical fader mapping, whether this actually tests global rather than step transpose, all25 values and pitch arithmetic, the 9..10 real-time observation bound, complete onset/release/Stop ownership, duration and accumulated phase, program/transport classification and event-count identity. Check source/manifests/artifacts and that the retained failed strict oracle is described only as an oracle correction. Production is unchanged from accepted d18f3fc, whose checkpoint passes530 Lua and21 focused Python tests.\n\nReturn ACCEPTED or CHANGES REQUIRED with findings ordered by severity. Keep song persistence/live-edit and other pending domains out of this scoped verdict.",
+    "files": [
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "User recipe and oracle"
+      },
+      {
+        "path": "tests/behaviour/manual-inventory.json",
+        "reason": "Manual mapping"
+      },
+      {
+        "path": "docs/testing/global-transpose-validation.json",
+        "reason": "Evidence"
+      }
+    ],
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**ACCEPTED.** No blocking findings in the scoped global-transpose review.\n\n- **Physical mapping and global ownership:** The fader spans x=8..16 with 25 values. Its inner x=9 cell selects value 1, mapped to \u221212; x=16 increments once per tap ([fader.lua:114](/home/andy/projects/mosaic-behaviour-tests/lib/controls/fader.lua:114)). Unheld taps call `program.set_transpose(value-13)`; step locks use a separate dual-press handler ([scale_edit_page.lua:153](/home/andy/projects/mosaic-behaviour-tests/lib/pages/scale_edit_page/scale_edit_page.lua:153)). Both recipes contain the initial selection and exactly 24 increments.\n- **All values and timing:** Both captures contain all 25 literal `(60,62,64,65)+value` phrases. The oracle checks every onset, at least eight complete gates, and accumulated `i/6` phase ([cases.py:679](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:679)). Independently recomputed maximum phase errors were approximately **1 ns controlled** and **1.262 ms real-time**; real-time gate error stayed below **1.150 ms**.\n- **Complete MIDI ownership:** Ordered pairing, exact release bytes, physical Stop timing, program-channel classification, three-port Start/Stop, and `6*n+6` accounting cover each captured stage ([cases.py:700](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:700)). Native streams match observations: **1,510 controlled / 1,516 real-time events**, including ten checked startup events; no outstanding notes remain.\n- **Oracle correction and provenance:** The real-time pass and retained failure both contain a valid tenth onset at **+10**. The bounded oracle validates that onset and its release without truncation. The failure is described as an observation-oracle correction, with no production-fix claim ([progress.md:1237](/home/andy/projects/mosaic-behaviour-tests/docs/testing/progress.md:1237)). All three manifest hashes, **45 artifact hashes/sizes**, and passing source identities match. Production and the pinned submodule match `d18f3fc`; verified checkpoint logs record **530/530 Lua and 21/21 Python** passes.\n\n**CONFIDENCE: High.** Read-only verification of retained evidence; no tests/runtime launched, and displayed tooltip text is not independently asserted by this case.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a089a7-38a5-7523-9949-49ffc1179da1` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T04:54:21.898625+00:00"
+}

@@ -1,0 +1,8 @@
+{
+  "status": "lookup-contracts-passed-integration-pending",
+  "test": "tests/behaviour/test_slide_destination.lua",
+  "evidence": "/home/andy/projects/mosaic-behaviour-runs/slide-destination-range",
+  "patch_sha256": "2f289820f47b514f8d9a0eaaaa287c0717e53cdf3272f59c0da2ad07400e070f",
+  "full_campaign_complete": false,
+  "remaining": "Use occurrence distance in absolute-pulse slide scheduler; same-label next-loop support; repair old model fixtures with explicit trig eligibility; native shortened-range/Off/trigless validation and full unit campaign."
+}

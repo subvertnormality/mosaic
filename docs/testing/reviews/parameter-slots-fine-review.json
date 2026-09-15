@@ -1,0 +1,44 @@
+{
+  "started_at": "2026-09-10T08:53:38.193727+00:00",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Trig-parameter slot limits and fine-control semantic review\n\nUse Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.\n\nDecide the documented fine-control contract and review M-PARAM-045/046 using `docs/testing/parameter-slots-fine-validation.json`.\n\nThe repository conflicts: README line756 says hold K1 while E3 fine-tunes; cheat_sheet line947 says K3. Git blame shows the cheat wording entered in 064cc38b on 2024-11-03, then README was explicitly changed to K1 in 4f4084b5 on 2024-12-05. Current source scales wide-range values coarsely unless `is_key1_down`; K3 on the Trig Locks page toggles step/global parameter slides. M-PARAM-045 uses native key/encoder input on NRPN14: the same E3 detent changes Off(-1) to0 with K1, 0 to129 with neither, and129 to258 with K3. Exact standard NRPN bytes are asserted, then Play emits258 both as patch recall and step1 default before the note. It passes controlled and real time. Recommend preserving established K1 behavior and changing the cheat sheet from K3 to K1; changing K3 behavior would collide with documented/tested slides.\n\nM-PARAM-046 assigns CC1..10 through K2, turns E2 twenty positions beyond the upper and lower ends, sets held locks, and proves selection clamps to slot10/CC10 and slot1/CC1 through exact repeated MIDI, timing, CC-before-note, gates and releases in both clocks. Existing M-PARAM-033 covers per-song copy isolation and M-PARAM-036 covers reassignment with existing locks; M-PARAM-043/044 cover all64 steps, all10 slots and live overwrite.\n\nChallenge whether the K1/K3 evidence and history justify a manual correction rather than product change; whether K3 could plausibly be fine control without breaking slide behavior; NRPN oracle arithmetic and recall attribution; slot-limit proof; source bindings; and conservative inventory scope. Return a clear semantic decision plus ACCEPTED or CHANGES REQUIRED for these cases. Do not generalize the historical Digitakt NRPN compatibility exception.",
+    "files": [
+      {
+        "path": "README.md",
+        "reason": "Semantic and behavior evidence"
+      },
+      {
+        "path": "cheat_sheet.html",
+        "reason": "Semantic and behavior evidence"
+      },
+      {
+        "path": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+        "reason": "Semantic and behavior evidence"
+      },
+      {
+        "path": "tests/behaviour/parameter_lock_domain.py",
+        "reason": "Semantic and behavior evidence"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Semantic and behavior evidence"
+      },
+      {
+        "path": "tests/behaviour/manual-inventory.json",
+        "reason": "Semantic and behavior evidence"
+      },
+      {
+        "path": "docs/testing/parameter-slots-fine-validation.json",
+        "reason": "Semantic and behavior evidence"
+      }
+    ],
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**Preserve K1+E3 fine control and correct the cheat sheet\u2019s K3 wording to K1. M-PARAM-045 and M-PARAM-046: ACCEPTED for their stated scope; no product behavior change is justified.**\n\n- **Contract and history:** Git blame confirms cheat-sheet K3 entered in `064cc38b` (2024-11-03); `4f4084b5` (2024-12-05) explicitly changed README from K3 to K1. Current [README.md:756](/home/andy/projects/mosaic-behaviour-tests/README.md:756) and implementation agree: coarse scaling applies when `total_range > 126 and is_key1_down == false` ([channel_edit_page_ui.lua:666](/home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page_ui.lua:666)).\n\n- **K3 collision:** K3 immediately toggles held-step slides or, without held steps, global slides ([channel_edit_page_ui.lua:1605](/home/andy/projects/mosaic-behaviour-tests/lib/pages/channel_edit_page/channel_edit_page_ui.lua:1605)). Adding fine adjustment could technically coexist, but every such gesture would also toggle slides. Suppressing that effect would require changing gesture dispatch and established slide behavior. Neither interpretation supports treating K3 as the existing fine-control contract.\n\n- **M-PARAM-045:** The native gestures and oracle distinguish increments `+1`, `+129`, `+129`. The NRPN domain includes Off, giving `floor((16383\u2212(\u22121))/127)=129`. Address controllers are CC99=4 and CC98=5; captured CC6/38 pairs are `(0,0)`, `(1,1)`, `(2,2)`, decoding as `128\u00d7MSB+LSB`. Play asserts two exact 258 messages before the note ([parameter_lock_domain.py:152](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/parameter_lock_domain.py:152)). Attribution is supported independently: the capture places one before MIDI Start, matching [m_clock.lua:834](/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua:834), and the second follows step-parameter processing before the note. This is standard NRPN; the historical Digitakt compatibility exception does not extend to this fixture.\n\n- **M-PARAM-046:** Twenty repeated E2 inputs in each direction, followed by held-step edits, produce only the expected repeated CC10=0 and CC1=1 messages, with timing, ordering, gate and release checks ([parameter_lock_domain.py:120](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/parameter_lock_domain.py:120)). This proves observable endpoint clamping, corroborated by ten constructed dials and the selector\u2019s explicit bounds ([control_scroll_selector.lua:26](/home/andy/projects/mosaic-behaviour-tests/lib/ui_components/control_scroll_selector.lua:26)).\n\n- **Evidence and scope:** All six source hashes, four manifest hashes, their artifact hashes, and recorded application source bindings match [the validation file](/home/andy/projects/mosaic-behaviour-tests/docs/testing/parameter-slots-fine-validation.json:3). Both clocks record passes; controlled runs remain diagnostic-only. M-PARAM-033/036 provide complementary copy/reassignment coverage; 043 distributes 64 steps across ten slots, and 044 checks persistent live overwrite. These do not establish every step\u00d7slot combination or every fine-control class/order. Keeping inventory entries `in_progress` is appropriately conservative.\n\n**CONFIDENCE: High.** I inspected recorded evidence without rerunning tests; physical-device behavior and exhaustive gesture/class coverage remain unverified.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08a85-ce64-7a01-9624-71c0b506c667` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T08:56:14.780621+00:00"
+}

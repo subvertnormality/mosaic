@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "09f0e85",
+  "files": [
+    {
+      "file": "lib/memory.lua",
+      "before_sha256": "8f05bec3ed7fbcc73fce81cf4e4f2d582df55eb55933ebe461c6c7ff9cc3d354",
+      "after_sha256": "4771c4a157931690d7acef7d75bb2adae2649395c4ff9da3ed9fe53c01bcecd7"
+    }
+  ],
+  "patch": "0107-redo-all-chord-merge.patch",
+  "patch_sha256": "fc2a6d0b3d4cb2d19ebc86ef8f24383a4497ca25f505ddda44edd4879cdc6221",
+  "regression": "M-MEMORY-013",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "5438ff42ab6e4b48a6a2408b456feef7",
+      "case": "M-MEMORY-013",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "13c7db237abaf2ea4c219a83f5f2347adf3acb98459fa0bf118612d6861b8457",
+      "failure": "('K3 lost a chord voice', [60, 62, 69, 64], [60, 62, 64, 69])"
+    },
+    {
+      "run_id": "a8b16e90668242f49208257b6624b95f",
+      "case": "M-MEMORY-013",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "94083282a9e57f97e1c5a1aa6e6b1c050c9f8c33dfcfa42edbb13b249e604f63",
+      "failure": "('K3 lost a chord voice', [60, 62, 69, 64], [60, 62, 64, 69])"
+    }
+  ],
+  "rationale": "memory.redo_all combines the redo tail per step by copying each event's fields over the previous ones, so a later action's chord_degrees table replaced an earlier action's wholesale and its voices were lost. Chord degrees now merge voice by voice, as apply_event already does for partial chord updates.",
+  "oracle": "README 698-705: memory retains all mask actions, E3 explores past actions and K3 jumps to the latest action, so K3 must leave the step as the last action left it. README 597: a chord mask adds a chord note to every trigger.",
+  "validation": [
+    {
+      "run_id": "3f81729649394274a3d8a53ddd9c0fd7",
+      "case": "M-MEMORY-013",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "2d8d9e6cc8ce1d6f95864985872b26d09c20e1eb5ae609056161c1b4b852319d",
+      "failure": null
+    },
+    {
+      "run_id": "a8430009304042a096bb5560102590c5",
+      "case": "M-MEMORY-013",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "8d6bcef098865130bd3144623360d954a9c54efe4cd8de3e065a8c298be39099",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-aa939372d1dd4c16ab05acf3a9fc3db3",
+      "case": "M-MEMORY-013",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "0ea2b9e5d696b70d28f2bab32d0678c6613cfa588e830c412488df151a59174c",
+      "failure": null,
+      "normalized_sha256": "95820bf9d37f6d31e6f3f159fba7d50f7ec41e363d6432a7ac3466a3200461da"
+    }
+  ],
+  "collateral": "All 1472 Lua units pass; M-MEMORY-001..011 and M-MASK-006/010/013/018/024 pass in the controlled lane with the fix.",
+  "upstream_merged": false
+}

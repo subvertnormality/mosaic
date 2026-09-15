@@ -1,0 +1,52 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -700,21 +700,13 @@
+     local action = spread_ring[i]
+     if action.active and action.channel == channel_number then
+       if not trig_lock or action.trig_lock == trig_lock then
+-        if action.pulse_count > 0 then
+-          -- Execute final value if needed
+-          if use_end_value then
+-            action.func(action.end_value)
+-          else
+-            local progress = action.pulse_count / action.total_pulses
+-            local final_value = action.start_value + 
+-              (action.end_value - action.start_value) * progress
+-            if action.quant and action.quant > 0 then
+-              final_value = quantize_value(final_value, action.quant)
+-            end
+-            action.func(final_value)
+-          end
+-        end
++        -- Replacement is silent. Retire ownership before invoking an explicit
++        -- finish callback, which may itself cancel or schedule another action.
+         action.active = false
++        if use_end_value then
++          action.func(action.end_value, action.last_value)
++          action.last_value = action.end_value
++        end
+       end
+     end
+     i = (i % RING_BUFFER_SIZE) + 1
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -170,10 +170,10 @@
+             goto continue
+           end
+ 
++          m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
+           process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
+ 
+           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
+-            m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
+             m_clock.execute_action_across_steps_by_pulses({
+               channel_number = channel.number,
+               trig_lock = i,
+@@ -225,6 +225,7 @@
+             norns_param_state_handler.set_original_param_state(c, i, value, param.id)
+           end
+ 
++          m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, i)
+           params:set(param.id, step_trig_lock)
+           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
+             m_clock.execute_action_across_steps_by_pulses({
