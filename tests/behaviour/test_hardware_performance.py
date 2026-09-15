@@ -46,6 +46,18 @@ class Tests(unittest.TestCase):
         with self.assertRaises(ValueError):select_fixture_parameter(driver,'not-fixture-parameter')
         with self.assertRaises(ValueError):select_fixture_parameter(driver,'CC 5')
         calls.clear();select_fixture_parameter(driver,'CC 4');self.assertIn("p.name=='CC 4'",calls[0][1])
+    def test_timing_trace_wrappers_pass_arguments_through_exactly(self):
+        import shutil,subprocess
+        from hardware_performance import TimingTrace
+        lua=shutil.which('lua5.3')
+        if not lua:self.skipTest('lua5.3 unavailable')
+        check=("util={time=os.clock}; _norns={screen_update=function(...) if select('#',...)~=0 then error('requires 0 arguments') end end}; "
+               "local seen; clock={resume=function(...) seen={select('#',...),...} end}; m_grid={grid_redraw=function(...) assert(select('#',...)==0) end}; "
+               "scheduler={update=function(...) assert(select('#',...)==0) end}; function redraw(...) assert(select('#',...)==0) end; "
+               "assert(load(io.read('a')))(); _norns.screen_update(); m_grid.grid_redraw(); redraw(); scheduler.update(); clock.resume(7,1.5); "
+               "assert(seen[1]==2 and seen[2]==7 and seen[3]==1.5); assert(load("+repr(TimingTrace.REMOVE)+"))(); assert(_MOSAIC_TT==nil); print('ok')")
+        result=subprocess.run([lua,'-e',check],input=TimingTrace.INSTALL,capture_output=True,text=True)
+        self.assertEqual(result.returncode,0,result.stderr);self.assertIn('ok',result.stdout)
     def test_lock_oracle_checks_every_parameter_value_per_step(self):
         from dense_workload import LOCK_PARAMETERS,lock_values
         def lock_events(channels,steps=20,corrupt=None):

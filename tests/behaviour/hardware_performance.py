@@ -140,7 +140,7 @@ class TimingTrace:
     """
     INSTALL=("if _MOSAIC_TT then error('timing trace already installed') end; do local T={events={},n=0,limit=4000,orig={}}; local now=util.time; "
              "local function wrap(tbl,key,kind) local orig=tbl and tbl[key]; if type(orig)~='function' then return end; T.orig[#T.orig+1]={tbl,key,orig}; "
-             "tbl[key]=function(a,...) local s=now(); orig(a,...); local d=now()-s; if d>0.001 and T.n<T.limit then T.n=T.n+1; T.events[T.n]={kind,s,d,type(a)=='number' and a or 0,collectgarbage('count')} end end end; "
+             "tbl[key]=function(...) local s=now(); orig(...); local d=now()-s; if d>0.001 and T.n<T.limit then local a=...; T.n=T.n+1; T.events[T.n]={kind,s,d,type(a)=='number' and a or 0,collectgarbage('count')} end end end; "
              "wrap(_G,'redraw','redraw'); wrap(_norns,'screen_update','screen_update'); wrap(m_grid,'grid_redraw','grid_redraw'); wrap(scheduler,'update','scheduler'); wrap(clock,'resume','clock_resume'); "
              "_MOSAIC_TT=T; print('__TT_INSTALLED__'..#T.orig) end")
     REMOVE=("if _MOSAIC_TT then for i=#_MOSAIC_TT.orig,1,-1 do local o=_MOSAIC_TT.orig[i]; o[1][o[2]]=o[3] end; _MOSAIC_TT=nil end; print('__TT_REMOVED__')")
