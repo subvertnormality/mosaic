@@ -301,7 +301,7 @@ step.calculate_next_selected_song_pattern = song_transition.calculate_next_selec
 
 function step.calculate_step_scale_number(c, s)
   local program_data = program.get()
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
+  local channel = program.get_channel(program_data.selected_song_pattern, c)
   local channel_step_scale_number = program.get_step_scale_trig_lock(channel, s)
   local persistent_numbers = persistent_channel_step_scale_numbers
 
@@ -311,7 +311,8 @@ function step.calculate_step_scale_number(c, s)
   end
 
   local current_step_17 = program.get_current_step_for_channel(17)
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(program.get().selected_song_pattern, 17), current_step_17)
+  local channel_17 = program.get_channel(program_data.selected_song_pattern, 17)
+  local global_step_scale_number = program.get_step_scale_trig_lock(channel_17, current_step_17)
   local global_default_scale = program_data.default_scale
 
   local start_trig_c = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
@@ -319,8 +320,7 @@ function step.calculate_step_scale_number(c, s)
     persistent_numbers[c] = nil
   end
 
-  local start_trig_17 = fn.calc_grid_count(program.get_channel(program.get().selected_song_pattern, 17).start_trig[1], program.get_channel(program.get().selected_song_pattern, 17).start_trig[2])
-  if c == 17 and current_step_17 == start_trig_17 then
+  if c == 17 and current_step_17 == fn.calc_grid_count(channel_17.start_trig[1], channel_17.start_trig[2]) then
     persistent_global_step_scale_number = nil
   end
 
@@ -509,14 +509,21 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_notes = {chord_one, chord_two, chord_three, chord_four}
   
   -- Cache params early
-  local chord_strum = note_divisions[stock("chord_strum")]
-  local chord_division = chord_strum and chord_strum.value
-  local chord_velocity_mod = stock("chord_velocity_modifier")
   local chord_strum_pattern = stock("chord_strum_pattern")
-  local chord_spread = stock("chord_spread") or 0
-  local chord_acceleration = stock("chord_acceleration") or 0
   local chord_arp = note_divisions[stock("chord_arp")]
   local arp_division = chord_arp and chord_arp.value
+  -- Strum timing and chord velocity only shape arps, sounding chord notes and a
+  -- delayed root; a plain single note never reads them.
+  local chord_division, chord_velocity_mod, chord_spread, chord_acceleration = nil, nil, 0, 0
+  if arp_division or (chord_one and chord_one ~= 0) or (chord_two and chord_two ~= 0) or
+      (chord_three and chord_three ~= 0) or (chord_four and chord_four ~= 0) or
+      (not mute_root and (chord_strum_pattern == 2 or chord_strum_pattern == 4)) then
+    local chord_strum = note_divisions[stock("chord_strum")]
+    chord_division = chord_strum and chord_strum.value
+    chord_velocity_mod = stock("chord_velocity_modifier")
+    chord_spread = stock("chord_spread") or 0
+    chord_acceleration = stock("chord_acceleration") or 0
+  end
   
   -- Cache note processing values
   local note_value = unprocessed_note_container.note_value

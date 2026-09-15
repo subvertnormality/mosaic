@@ -259,13 +259,16 @@ function m_clock.init()
   for channel_number = 17, 1, -1 do
     local div = calculate_divisor(program.get_channel(program.get().selected_song_pattern, channel_number).clock_mods)
 
+    -- Build the clock's key once per channel instead of on every step.
+    local clock_key = "channel_" .. channel_number .. "_clock"
+
     local sprocket_action = function(t)
       local song_pattern = program.get().selected_song_pattern
       local channel = program.get_channel(song_pattern, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
       local pattern = channel.working_pattern
       local trig_values = pattern.trig_values
-      local clock = m_clock["channel_" .. channel_number .. "_clock"]
+      local clock = m_clock[clock_key]
       
       -- Cache frequently accessed values
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
@@ -277,7 +280,7 @@ function m_clock.init()
         end_trig = start_trig + program.get_selected_song_pattern().global_pattern_length - 1
       end
 
-      if not m_clock["channel_" .. channel_number .. "_clock"].first_run then
+      if not m_clock[clock_key].first_run then
         program.set_current_step_for_channel(channel_number, current_step + 1)
         current_step = current_step + 1
       end
@@ -329,8 +332,8 @@ function m_clock.init()
         end
       end
 
-      m_clock["channel_" .. channel_number .. "_clock"].first_run = false
-      m_clock["channel_" .. channel_number .. "_clock"].next_step = current_step
+      m_clock[clock_key].first_run = false
+      m_clock[clock_key].next_step = current_step
 
       if program_data.selected_channel == channel_number and (program_data.selected_page == channel_edit_page or program_data.selected_page == scale_edit_page)  then
         fn.dirty_grid(true)

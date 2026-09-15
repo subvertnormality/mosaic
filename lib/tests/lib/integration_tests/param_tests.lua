@@ -5205,3 +5205,70 @@ function test_signed_random_pentatonic_mask_and_option_integration()
   random=original_random
   if not ok then error(err) end
 end
+
+local function single_step_channel(note_masks)
+  setup()
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  test_pattern.note_values[1] = 0
+  test_pattern.lengths[1] = 1
+  test_pattern.trig_values[1] = 1
+  test_pattern.velocity_values[1] = 100
+  program.get().selected_channel = 1
+  local channel = program.get_selected_channel()
+  channel.trig_lock_params[4].id = "chord_velocity_modifier"
+  channel.trig_lock_params[5].id = "chord_strum"
+  channel.trig_lock_params[6].id = "chord_strum_pattern"
+  if note_masks then channel.step_chord_masks[1] = note_masks end
+  program.add_step_param_trig_lock(1, 4, -10)
+  program.add_step_param_trig_lock(1, 5, 14)
+  program.get_song_pattern(1).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(1).channels[1].selected_patterns, 1)
+  pattern.update_working_patterns()
+  return channel
+end
+
+-- Characterisation, not manual text: with no chord notes, a backwards strum
+-- still delays the root to the fourth strum slot.
+function test_chord_strum_backwards_pattern_without_chord_notes_delays_the_root()
+  single_step_channel(nil)
+  program.add_step_param_trig_lock(1, 6, 2)
+  clock_setup()
+  progress_clock_by_pulses(3)
+  luaunit.assert_nil(table.remove(midi_note_on_events, 1))
+  progress_clock_by_beats(4)
+  luaunit.assert_equals(table.remove(midi_note_on_events, 1), {60, 100, 1, 1})
+  luaunit.assert_nil(table.remove(midi_note_on_events, 1))
+end
+
+-- Characterisation, not manual text: a chord note held only in the fourth slot
+-- strums at the fourth slot's delay; the root still sounds at the onset.
+function test_chord_strum_with_only_the_fourth_chord_note_delays_that_note()
+  single_step_channel({[4] = 4})
+  clock_setup()
+  progress_clock_by_pulses(3)
+  luaunit.assert_equals(table.remove(midi_note_on_events, 1), {60, 100, 1, 1})
+  luaunit.assert_nil(table.remove(midi_note_on_events, 1))
+  progress_clock_by_beats(4)
+  luaunit.assert_equals(table.remove(midi_note_on_events, 1), {67, 100, 1, 1})
+  luaunit.assert_nil(table.remove(midi_note_on_events, 1))
+end
+
+-- Characterisation, not manual text: an arp with no chord notes repeats the
+-- root, changing velocity by the chord velocity modifier on each repeat.
+function test_chord_arp_without_chord_notes_applies_the_velocity_modifier()
+  local channel = single_step_channel(nil)
+  program.get_song_pattern(1).patterns[1].lengths[1] = 16
+  pattern.update_working_patterns()
+  channel.trig_lock_params[7].id = "chord_arp"
+  program.add_step_param_trig_lock(1, 4, 10)
+  program.add_step_param_trig_lock(1, 7, 14)
+  clock_setup()
+  progress_clock_by_pulses(1)
+  local events = {}
+  for _ = 1, 4 do
+    progress_clock_by_beats(1)
+  end
+  while #midi_note_on_events > 0 do table.insert(events, table.remove(midi_note_on_events, 1)) end
+  luaunit.assert_equals(events, {{60, 100, 1, 1}, {60, 110, 1, 1}, {60, 120, 1, 1}, {60, 127, 1, 1}, {60, 127, 1, 1}})
+end
