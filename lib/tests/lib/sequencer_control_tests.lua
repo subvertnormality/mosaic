@@ -435,6 +435,19 @@ function test_seqctl_draw_channel_mode_playhead()
   luaunit.assert_equals(run_draw(with({blink = true, playing = true, current_step = 14})), concat(background(5, 12, 2), {{14, 4, 10}}))
 end
 
+-- Characterisation, not manual text: a draw reads each step's trig-lock
+-- indicator at most once. Heads, tails and the playhead share that answer.
+function test_seqctl_draw_queries_each_step_lock_indicator_once()
+  local led, locks = run_draw({
+    mode = "channel", blink = false, start = 5, ["end"] = 12, current_step = 6, playing = true,
+    channel_trigs = {[5] = 3, [8] = 1}, locks = {[6] = true, [8] = true},
+  })
+  luaunit.assert_equals(led, concat(background(5, 12, 2, {[6] = 1, [8] = 1}),
+    {{5, 4, 15}, {6, 4, 4}, {7, 4, 5}, {6, 4, 7}, {8, 4, 12}}))
+  luaunit.assert_equals(#locks, #distinct_sorted(locks))
+  luaunit.assert_equals(distinct_sorted(locks), {5, 6, 7, 8, 9, 10, 11, 12})
+end
+
 function test_seqctl_draw_channel_mode_unsaved_is_drawn_outside_range()
   local led = run_draw({mode = "channel", blink = false, start = 5, ["end"] = 12, unsaved = {[3] = true, [8] = true}, channel_trigs = {[8] = 1}})
   -- characterisation

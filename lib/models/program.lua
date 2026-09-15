@@ -26,10 +26,14 @@ end
 
 function program.get_selected_song_pattern()
   local data = program.get()
-  if not data.selected_song_pattern then
-    data.selected_song_pattern = 1
+  local selected = data.selected_song_pattern
+  if not selected then
+    selected = 1
+    data.selected_song_pattern = selected
   end
-  return program.get_song_pattern(data.selected_song_pattern)
+  -- Screen and grid draws read the selected pattern per cell; skip the
+  -- creating lookup when it already exists.
+  return data.song_patterns[selected] or program.get_song_pattern(selected)
 end
 
 function program.set_selected_song_pattern(p)
@@ -83,6 +87,10 @@ function program.get_channel_step_scale_number(c)
 end
 
 function program.get()
+  local store = program_store
+  if store and store.song_patterns and store.memory then
+    return store
+  end
   -- Ensure program_store is initialized
   if not program_store then
     program_store = {}
