@@ -25,6 +25,14 @@ function program.is_song_pattern_active(p)
 end
 
 function program.get_selected_song_pattern()
+  -- The note and draw paths ask for this constantly; read initialised state
+  -- directly and fall back to the creating accessors otherwise.
+  local store = program_store
+  if store and store.memory and store.song_patterns then
+    local selected = store.selected_song_pattern
+    local song_pattern = selected and store.song_patterns[selected]
+    if song_pattern then return song_pattern end
+  end
   local data = program.get()
   local selected = data.selected_song_pattern
   if not selected then
@@ -130,6 +138,10 @@ function program.get_selected_pattern()
 end
 
 function program.get_channel(song_pattern, x)
+  local store = program_store
+  local song_patterns = store and store.song_patterns
+  local existing = song_patterns and song_patterns[song_pattern]
+  if existing then return existing.channels[x] end
   return program.get_song_pattern(song_pattern).channels[x]
 end
 
