@@ -1323,10 +1323,16 @@ function test_uicomp_grid_viewer_draw_clears_renders_channel_and_paints_screen_s
     expected[#expected + 1] = {"sequencer_draw", true, fakes.channel}
     -- One font size is in effect for all 128 cells; the label sets its own.
     expected[#expected + 1] = {"font_size", 35}
+    local current_level
     for x = 1, 16 do
       for y = 1, 8 do
+        local level = fakes.state[x][y]
         expected[#expected + 1] = {"move", 7 - 3 + x * 7, 9 - 5 + y * 7}
-        expected[#expected + 1] = {"level", fakes.state[x][y]}
+        -- The level is only re-sent when this cell differs from the last one.
+        if level ~= current_level then
+          expected[#expected + 1] = {"level", level}
+          current_level = level
+        end
         expected[#expected + 1] = {"text", "."}
       end
     end
@@ -1336,6 +1342,31 @@ function test_uicomp_grid_viewer_draw_clears_renders_channel_and_paints_screen_s
     expected[#expected + 1] = {"text", "Channel 1 grid viewer"}
     luaunit.assert_equals(log, expected)
     luaunit.assert_is(fakes.draw_func, fakes.seq)
+  end)
+end
+
+-- A viewer whose cells all share one brightness sets the level once, and every
+-- cell is still moved to and drawn.
+function test_uicomp_grid_viewer_draw_sets_one_level_for_a_uniform_grid()
+  with_grid_viewer(function(grid_viewer, log, fakes)
+    for x = 1, 16 do
+      for y = 1, 8 do fakes.state[x][y] = 6 end
+    end
+    local v = grid_viewer:new(7, 9)
+    for i = #log, 1, -1 do log[i] = nil end
+    v:draw()
+    local levels, moves, texts = {}, 0, 0
+    for _, call in ipairs(log) do
+      if call[1] == "level" then levels[#levels + 1] = call[2] end
+      if call[1] == "move" then moves = moves + 1 end
+      if call[1] == "text" and call[2] == "." then texts = texts + 1 end
+    end
+    -- Rows four to seven are cleared to zero before the sequencer draws, so the
+    -- grid is two levels: the cleared rows and the rest, then the label's own.
+    luaunit.assert_equals(levels, {6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0,
+      6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 0, 6, 10})
+    luaunit.assert_equals(moves, 129)
+    luaunit.assert_equals(texts, 128)
   end)
 end
 

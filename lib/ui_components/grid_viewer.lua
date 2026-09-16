@@ -30,11 +30,20 @@ function grid_viewer:draw()
   -- Every cell is drawn at the same size, and changing the font size is one of
   -- the more expensive native screen calls. Set it once for the whole grid.
   screen.font_size(35)
+  -- The screen keeps the level it was last given, so neighbouring cells of the
+  -- same brightness need only one of these calls.
+  local origin_x, origin_y = self.x - 3, self.y - 5
+  local current_level
   for x = 1, 16 do
     local column = state[x]
+    local cell_x = origin_x + (x * 7)
     for y = 1, 8 do
-      screen.move(self.x - 3 + (x * 7), self.y - 5 + (y * 7))
-      screen.level(column[y])
+      local level = column[y]
+      screen.move(cell_x, origin_y + (y * 7))
+      if level ~= current_level then
+        screen.level(level)
+        current_level = level
+      end
       screen.text(".")
     end
   end
