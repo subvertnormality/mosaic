@@ -144,3 +144,39 @@ function test_stock_parameter_resolver_answers_each_kind_from_one_scan()
   luaunit.assert_equals(resolve_kind("chord_arp"), 9)
   luaunit.assert_equals(reads, {"lock4", "first", "lock2", "velocity", "fallback:chord_arp"})
 end
+
+-- The resolver keeps its slot scan between steps, so a reassignment, a cleared
+-- slot and a new slot must all be picked up by the next resolver.
+function test_stock_parameter_resolver_follows_slot_reassignment()
+  local assignments = {{id = "trig_probability", param_id = "p1", off_value = -1}}
+  local reads = {}
+  local function read_step_lock() return nil end
+  local function read_assigned(param_id) reads[#reads + 1] = param_id; return 7 end
+  local function read_fallback() return nil, nil end
+
+  local resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_equals(resolve("trig_probability"), 7)
+  luaunit.assert_equals(reads, {"p1"})
+
+  -- Same slots again: the cached scan must still answer the same way.
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_equals(resolve("trig_probability"), 7)
+
+  -- Reassigned slot.
+  assignments[1] = {id = "random_velocity", param_id = "p2", off_value = -1}
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_nil(resolve("trig_probability"))
+  luaunit.assert_equals(resolve("random_velocity"), 7)
+  luaunit.assert_equals(reads[#reads], "p2")
+
+  -- A second slot assigned after the first scan.
+  assignments[2] = {id = "trig_probability", param_id = "p3", off_value = -1}
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_equals(resolve("trig_probability"), 7)
+  luaunit.assert_equals(reads[#reads], "p3")
+
+  -- Clearing a slot removes its kind again.
+  assignments[2] = nil
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_nil(resolve("trig_probability"))
+end
