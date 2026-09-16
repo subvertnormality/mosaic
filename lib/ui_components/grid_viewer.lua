@@ -25,11 +25,14 @@ function grid_viewer:draw()
 
   local state = grid_abstraction.get_screen_state()
 
+  -- Every cell is drawn at the same size, and changing the font size is one of
+  -- the more expensive native screen calls. Set it once for the whole grid.
+  screen.font_size(35)
   for x = 1, 16 do
+    local column = state[x]
     for y = 1, 8 do
       screen.move(self.x - 3 + (x * 7), self.y - 5 + (y * 7))
-      screen.level(state[x][y])
-      screen.font_size(35)
+      screen.level(column[y])
       screen.text(".")
     end
   end

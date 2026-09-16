@@ -1315,11 +1315,12 @@ function test_uicomp_grid_viewer_draw_clears_renders_channel_and_paints_screen_s
     end
     expected[#expected + 1] = {"get_channel", 3, 1}
     expected[#expected + 1] = {"sequencer_draw", true, fakes.channel}
+    -- One font size is in effect for all 128 cells; the label sets its own.
+    expected[#expected + 1] = {"font_size", 35}
     for x = 1, 16 do
       for y = 1, 8 do
         expected[#expected + 1] = {"move", 7 - 3 + x * 7, 9 - 5 + y * 7}
         expected[#expected + 1] = {"level", fakes.state[x][y]}
-        expected[#expected + 1] = {"font_size", 35}
         expected[#expected + 1] = {"text", "."}
       end
     end
