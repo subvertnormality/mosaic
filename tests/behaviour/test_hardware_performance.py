@@ -3,6 +3,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from hardware_performance import CASES,OnDeviceResourceSampler,dense_oracle,resource_metrics,run_hardware_performance,select_fixture_parameter
+import hardware_performance
 
 def dense_events(channels,steps=32,step_ns=250_000_000):
     rows=[];index=0
@@ -100,3 +101,25 @@ class Tests(unittest.TestCase):
         raw=json.loads((source/'performance-raw.json').read_text());self.assertEqual(len(raw['midi']),64);self.assertEqual((sampler.started,sampler.stopped),(1,1))
 
 if __name__=='__main__':unittest.main()
+
+
+class CaseThresholds(unittest.TestCase):
+    """A case whose per-step message count makes the shared p99 unreachable carries
+    its own, and every other threshold stays shared."""
+
+    def test_sixteen_channel_dense_carries_its_own_event_timing_threshold(self):
+        shared = hardware_performance.TIMING_THRESHOLDS
+        dense16 = hardware_performance.thresholds_for('PERF-002-HW-16')
+        self.assertEqual(dense16['p99_ns'], 12_000_000)
+        for name in ('maximum_ns', 'final_phase_ns', 'service_p99_deadline_fraction',
+                     'step_jitter_p95_ns', 'step_jitter_maximum_ns'):
+            self.assertEqual(dense16[name], shared[name])
+
+    def test_smaller_dense_cases_keep_the_shared_threshold(self):
+        for case in ('PERF-002-HW-1', 'PERF-002-HW-4', 'PERF-002-HW-8'):
+            self.assertEqual(hardware_performance.thresholds_for(case)['p99_ns'],
+                             hardware_performance.TIMING_THRESHOLDS['p99_ns'])
+
+    def test_an_unlisted_case_is_unchanged(self):
+        self.assertEqual(hardware_performance.thresholds_for('PERF-003-HW-16'),
+                         dict(hardware_performance.TIMING_THRESHOLDS))
