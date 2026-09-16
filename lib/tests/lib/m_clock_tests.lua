@@ -1749,3 +1749,53 @@ function test_end_of_clock_records_nothing_at_the_first_onset()
   recorder = previous_recorder
   if not ok then error(err) end
 end
+
+-- A step's releases and its notes are two bursts on one MIDI port. Every
+-- release that is already due when a step arrives must be sent before any of
+-- that step's notes, so the notes leave consecutively instead of each one
+-- waiting behind another channel's note-off.
+function test_step_sends_every_due_release_before_any_of_its_notes()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  for c = 1, 4 do
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+  end
+  pattern.update_working_patterns()
+  clock_setup()
+  progress_clock_by_pulses(24 * 3)
+
+  local events = {}
+  local previous_on, previous_off = m_midi.note_on, m_midi.note_off
+  m_midi.note_on = function(self, note, velocity, channel, device)
+    events[#events + 1] = "on"
+    return previous_on(self, note, velocity, channel, device)
+  end
+  m_midi.note_off = function(self, note, velocity, channel, device)
+    events[#events + 1] = "off"
+    return previous_off(self, note, velocity, channel, device)
+  end
+  local ok, err = pcall(progress_clock_by_pulses, 24)
+  m_midi.note_on, m_midi.note_off = previous_on, previous_off
+  if not ok then error(err) end
+
+  local offs, ons = 0, 0
+  for _, kind in ipairs(events) do
+    if kind == "off" then
+      luaunit.assert_equals(ons, 0, "A release followed one of this step's notes")
+      offs = offs + 1
+    else
+      ons = ons + 1
+    end
+  end
+  luaunit.assert_equals(offs, 4, "Each sounding channel releases its previous note")
+  luaunit.assert_equals(ons, 4, "Each sounding channel starts its next note")
+end

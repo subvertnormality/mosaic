@@ -213,8 +213,46 @@ function Lattice.auto_pulse(s)
 end
 
 
+-- Run the before-onset releases that are already due for every sprocket
+-- reaching an onset on this pulse, keeping the order a single pass would have
+-- used. Releases created later in the pulse are still run by the pulse itself.
+function Lattice:release_due_onset_actions()
+  for i = 1, 5 do
+    local ordering = self.sprocket_pulse_order[i]
+    for index = 1, #ordering do
+      local sprocket = ordering[index]
+      local phase = sprocket.phase
+      if sprocket.enabled and phase >= 1 and phase < 2 then
+        local pending_ids = sprocket.delayed_action_order
+        for order_index = 1, #pending_ids do
+          local pending_id = pending_ids[order_index]
+          local pending = sprocket.delayed_actions[pending_id]
+          if pending and pending.before_onset and pending.length == 0 then
+            sprocket.delayed_actions[pending_id] = nil
+            sprocket.released_before_onset = true
+            sprocket:run_pending_action(pending)
+            if not self.enabled then return end
+            if sprocket.cleanup_delayed_action then
+              sprocket.cleanup_delayed_action(pending_id)
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
 function Lattice:pulse()
   if self.enabled then
+    -- A step's note-offs and its note-ons are two bursts down one MIDI port. If
+    -- each sprocket released and then sounded in turn, every channel's note-on
+    -- would wait behind another channel's note-off, doubling how long a step's
+    -- notes take to leave. Run the releases that are due at this pulse's onsets
+    -- first, in the order those sprockets would have run them, so the onsets
+    -- that follow are consecutive. The same releases still happen before any
+    -- onset that could retrigger the pitch they belong to.
+    self:release_due_onset_actions()
+    if not self.enabled then return end
     local flagged = false
     for i = 1, 5 do
       local ordering = self.sprocket_pulse_order[i]
@@ -256,9 +294,13 @@ function Lattice:pulse()
               end
             end
           end
+          if sprocket.released_before_onset then
+            sprocket.released_before_onset = nil
+            removed = true
+          end
           if sprocket.phase >= 1 and sprocket.phase < 2 then
-            -- Finish due note releases before a new step can retrigger
-            -- the same MIDI pitch. A late previous note-off cuts the new voice.
+            -- Releases due when the pulse began have already run; this catches
+            -- any a preceding sprocket's onset created during this pulse.
             -- New zero-delay actions created by this onset still run below.
             for index = 1, #sprocket.delayed_action_order do
               local pending_id = sprocket.delayed_action_order[index]
