@@ -295,9 +295,6 @@ function Lattice:pulse()
     local flagged = false
     for i = 1, 5 do
       local ordering = self.sprocket_pulse_order[i]
-      -- Set when an onset in this group defers the part that emits its notes,
-      -- so a group with nothing deferred is not walked a second time.
-      local deferred = false
       for index = 1, #ordering do
         if not self.enabled then return end
         -- The order holds the sprockets themselves, so no entry is ever nil.
@@ -361,7 +358,6 @@ function Lattice:pulse()
             sprocket.last_onset_transport = self.transport
             sprocket.action(self.transport)
             if not self.enabled then return end
-            if sprocket.note_pending ~= nil then deferred = true end
           end
 
           sprocket.phase = sprocket.phase + 1
@@ -448,10 +444,8 @@ function Lattice:pulse()
           flagged = true
         end
       end
-      if deferred then
-        self:run_deferred_note_actions(ordering)
-        if not self.enabled then return end
-      end
+      self:run_deferred_note_actions(ordering)
+      if not self.enabled then return end
     end
     if flagged then
       self:order_sprockets()
