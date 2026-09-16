@@ -775,11 +775,13 @@ local note_stock_kinds = {
 -- sent, and a mod such as matrix makes each read dearer. The clock resolves
 -- them while it sends the step's parameter locks, so the step's notes can then
 -- leave back to back. Pass the result to step.handle for the same channel and
--- step in the same clock pulse, so nothing read can change in between. c is the
--- channel number, which is also the one handle reads the slots for.
+-- step in the same clock pulse, so nothing read can change in between; the
+-- next prepare for the channel reuses it. c is the channel number, which is
+-- also the one handle reads the slots for.
 -- A fixed note with no stock value set falls back to the channel's own slot;
 -- remember that read, with false standing for a slot that holds nothing.
 local function prepare_note_slot(prepared, c, kind, slot)
+  prepared.slots[slot] = nil
   local value, read = prepared.stock(kind)
   if value or read ~= nil then return end
   local slot_value = read_stock_assigned(param_slots.control_id(c, slot))
@@ -787,11 +789,21 @@ local function prepare_note_slot(prepared, c, kind, slot)
   prepared.slots[slot] = slot_value
 end
 
+-- One prepared note per channel, reused on every step.
+local prepared_notes = {}
+
 function step.prepare_note(c, current_step)
   local channel = program.get_channel(program.get().selected_song_pattern, c)
-  local stock = stock_parameter.remembering_resolver(channel.trig_lock_params, read_stock_step_lock,
-    read_stock_assigned, read_stock_fallback, channel, current_step, note_stock_kinds)
-  local prepared = {stock = stock, slots = {}}
+  local prepared = prepared_notes[c]
+  if not prepared then
+    local resolver = stock_parameter.new_remembering_resolver(read_stock_step_lock, read_stock_assigned,
+      read_stock_fallback)
+    prepared = {resolver = resolver, stock = resolver.stock, slots = {}}
+    prepared_notes[c] = prepared
+  end
+  prepared.resolver.reset(channel.trig_lock_params, channel, current_step)
+  local stock = prepared.stock
+  for i = 1, #note_stock_kinds do stock(note_stock_kinds[i]) end
   prepare_note_slot(prepared, c, "quantised_fixed_note", param_slots.QUANTISED_FIXED_NOTE_SLOT)
   prepare_note_slot(prepared, c, "fixed_note", param_slots.FIXED_NOTE_SLOT)
   return prepared
