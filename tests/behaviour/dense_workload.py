@@ -5,6 +5,8 @@
 # are sent on every unlocked step (README "Default Parameter Values"); locked
 # steps send their lock value (README "Trig Param Locks").
 LOCK_PARAMETERS = (1, 2, 3, 4)
+# The extreme probe sounds every other step, so its steps are this many apart.
+EXTREME_STEP_STRIDE = 2
 LOCK_DEFAULTS = {1: 20, 2: 40, 3: 60, 4: 80}
 LOCK_STEPS = {1: ((1, 101), (9, 11)), 2: ((1, 102), (9, 12)), 3: ((1, 103), (9, 13)), 4: ((1, 104), (9, 14))}
 
@@ -22,7 +24,8 @@ def set_step_value(d, step, value):
 
 def build_project(d,channels,workload='dense',select_parameter=None,select_device=None):
     d.tap(5,8);d.tap(1,1)
-    for x in range(1,17):d.tap(x,4)
+    # Every channel plays this one pattern; the extreme probe trigs every other step.
+    for x in range(1,17,EXTREME_STEP_STRIDE if workload=='extreme' else 1):d.tap(x,4)
     d.tap(3,8);d.enc(1,4)
     for channel in range(1,channels+1):
         d.tap(channel,1)
@@ -44,10 +47,13 @@ def build_project(d,channels,workload='dense',select_parameter=None,select_devic
                 d.elapse(.1)
             d.key(3);d.enc(1,3)
         if workload=='extreme':
-            # Everything at once: a four-note chord on every step, four locked CC
-            # parameters, and a sliding fifth. This is a stress probe, not a
-            # certified case: it exists to find where a busy project stops
-            # keeping time, so its oracle checks completeness, not exact notes.
+            # A busy project: a four-note chord on every other step of every
+            # channel, three locked CC parameters and a sliding fourth. A trig on
+            # every step of all sixteen channels is not a project anyone plays,
+            # and over DIN MIDI it asks for more messages than the wire carries.
+            # This is a stress probe, not a certified case: it exists to find
+            # where a busy project stops keeping time, so its oracle checks
+            # completeness, not exact notes.
             d.enc(1,-4)
             for index,turns in enumerate((2,4,5,7)):
                 d.enc(2,1);d.enc(3,turns)
@@ -130,7 +136,7 @@ def validate_events(emitted,channels,workload):
         # bursts and require every channel in every step rather than a fixed size.
         steps=[];current=[]
         for event in ons:
-            if current and event['monotonic_seconds']-current[-1]['monotonic_seconds']>0.02:steps.append(current);current=[]
+            if current and event['monotonic_ns']-current[-1]['monotonic_ns']>20_000_000:steps.append(current);current=[]
             current.append(event)
         if current:steps.append(current)
         steps=[g for g in steps if len(g)>=channels]

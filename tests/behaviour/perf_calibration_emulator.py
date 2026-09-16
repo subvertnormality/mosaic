@@ -62,7 +62,7 @@ def main():
         if tempo!=90:raise AssertionError(('Emulator lane expects the norns default 90 BPM',tempo))
         build_project(d,spec['channels'],spec['workload'])
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(d)
-        d.tap(5,8);d.tap(1,1);d.led_values([(x,4) for x in range(1,17)],[15]*16)
+        d.tap(5,8);d.tap(1,1);d.led_values([(x,4) for x in range(1,17,spec.get('step_stride',1))],[15]*len(range(1,17,spec.get('step_stride',1))))
         report['preflight']=preflight(d,spec)
         if a.lua_profile:profile_before=profile_snapshot()
         for window in range(1,a.windows+1):
@@ -95,7 +95,7 @@ def main():
                 oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
                         'service':{'p99_ns':0},'skipped_deadlines':0,'gates':dict(recovery['gates']),'passed':recovery['passed'],'note_ons':recovery['groups']*spec['channels'],
                         'messages':len(events),'steps':recovery['groups'],'slide_cycles_checked':None}
-            else:oracle=dense_oracle(events,spec['channels'],spec['seconds'],step,spec['workload'])
+            else:oracle=dense_oracle(events,spec['channels'],spec['seconds'],step,spec['workload'],step_stride=spec.get('step_stride',1))
             if stimulus is not None:
                 oracle['gates']['stimulus_complete']=stimulus['complete'];oracle['passed']=oracle['passed'] and stimulus['complete']
             failure=None

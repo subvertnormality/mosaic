@@ -2,7 +2,7 @@
 import hashlib,json,subprocess,threading,time
 from pathlib import Path
 
-from dense_workload import build_project,validate_events
+from dense_workload import EXTREME_STEP_STRIDE,build_project,validate_events
 from hardware_driver import HardwareDriver
 
 CASES={
@@ -16,8 +16,8 @@ CASES={
     'PERF-009-HW-4':{'workload':'locks','channels':4,'seconds':8},
     'PERF-009-HW-8':{'workload':'locks','channels':8,'seconds':8},
     'PERF-009-HW-16':{'workload':'locks','channels':16,'seconds':8},
-    # Stress probe: chords, locks and a slide on every channel and every step.
-    'PERF-EXT-HW-16':{'workload':'extreme','channels':16,'seconds':8},
+    # Stress probe: chords, locks and a slide on every channel, every other step.
+    'PERF-EXT-HW-16':{'workload':'extreme','channels':16,'seconds':8,'step_stride':EXTREME_STEP_STRIDE},
 }
 from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
 CASES.update(HELDOUT_CASES)
@@ -92,8 +92,10 @@ def resource_metrics(recording):
     flags=[row['throttled_flags'] for row in samples if row['throttled_flags'] is not None]
     return {'sample_count':len(samples),'matron_cpu_ticks_delta':cpu_ticks,'matron_cpu_percent':100*cpu_ticks/identity['clock_ticks_per_second']/(elapsed/1e9),'matron_peak_rss_bytes':max(row['matron_rss_bytes'] for row in samples),'load_peak_1m':max(row['load'][0] for row in samples),'thermal_millicelsius_peak':max([row['thermal_millicelsius_max'] for row in samples if row['thermal_millicelsius_max'] is not None] or [None]),'throttling_available':bool(flags),'throttled_flags_or':__import__('functools').reduce(lambda a,b:a|b,flags,0) if flags else None,'threshold_status':'calibration-only'}
 
-def dense_oracle(events,channels,seconds,step_seconds,workload,thresholds=None):
+def dense_oracle(events,channels,seconds,step_seconds,workload,thresholds=None,step_stride=1):
     thresholds=thresholds or TIMING_THRESHOLDS
+    # A workload that sounds every Nth step is timed against a grid N steps wide.
+    step_seconds=step_seconds*step_stride
     validated=validate_events(events,channels,workload);ons=validated['ons'];offs=validated['offs'];captured_steps=validated['steps']
     measurement_end_ns=captured_steps[0][0]['monotonic_ns']+round(seconds*1e9)
     steps=[group for group in captured_steps if group[0]['monotonic_ns']<measurement_end_ns]
@@ -208,8 +210,10 @@ def write_fixture_manifest(directory,case_id,spec,source):
     directory=Path(directory)
     files={name:hashlib.sha256((directory/name).read_bytes()).hexdigest() for name in ('autosave.ptn','autosave.pset')}
     revision=subprocess.run(['git','rev-parse','HEAD'],cwd=source,capture_output=True,text=True).stdout.strip()
-    (directory/'fixture.json').write_text(json.dumps({'case':case_id,'workload':spec['workload'],'channels':spec['channels'],
-        'built_from_revision':revision,'files':files,'lane':'cm3plus-norns'},indent=2)+'\n')
+    manifest={'case':case_id,'workload':spec['workload'],'channels':spec['channels']}
+    if spec.get('step_stride',1)!=1:manifest['step_stride']=spec['step_stride']
+    manifest.update(built_from_revision=revision,files=files,lane='cm3plus-norns')
+    (directory/'fixture.json').write_text(json.dumps(manifest,indent=2)+'\n')
 
 def check_project_fixture(directory,case_id):
     """A fixture must hold the project this case plays, exactly as it was saved.
@@ -222,6 +226,8 @@ def check_project_fixture(directory,case_id):
     manifest=json.loads(manifest_path.read_text())
     if (manifest.get('workload'),manifest.get('channels'))!=(spec['workload'],spec['channels']):
         raise ValueError('Project fixture %s holds %s/%s, but %s plays %s/%s'%(directory,manifest.get('workload'),manifest.get('channels'),case_id,spec['workload'],spec['channels']))
+    if manifest.get('step_stride',1)!=spec.get('step_stride',1):
+        raise ValueError('Project fixture %s has a trig every %s steps, but %s plays one every %s'%(directory,manifest.get('step_stride',1),case_id,spec.get('step_stride',1)))
     files=manifest.get('files') or {}
     for name in ('autosave.ptn','autosave.pset'):
         if name not in files:raise ValueError('Project fixture manifest does not record '+name+': '+str(directory))
@@ -246,7 +252,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                 runner.fetch_project(save_project_fixture)
                 write_fixture_manifest(save_project_fixture,case_id,spec,source)
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
-        driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
+        driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17,spec.get('step_stride',1))],[15]*len(range(1,17,spec.get('step_stride',1))))
         preflight=functional_preflight(runner,driver,trace,spec)
         timings=TimingTrace(runner.maiden,native=native_screen_trace,count=redraw_count_trace) if timing_trace else None
         if timings:timings.install()
@@ -269,7 +275,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                     oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
                             'service':{'p99_ns':0},'skipped_deadlines':0,'gates':dict(recovery['gates']),'passed':recovery['passed'],'note_ons':recovery['groups']*spec['channels'],
                             'messages':len(state['midi']),'steps':recovery['groups'],'slide_cycles_checked':None}
-                else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'])
+                else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'],step_stride=spec.get('step_stride',1))
                 if stimulus is not None:
                     oracle['gates']['stimulus_complete']=stimulus['complete'];oracle['passed']=oracle['passed'] and stimulus['complete']
                 failure=None

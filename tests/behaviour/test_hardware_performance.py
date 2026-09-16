@@ -87,6 +87,13 @@ class Tests(unittest.TestCase):
         self.assertIsNone(dense_oracle(dense_events(2,4),2,1,.25,'dense')['lock_values_checked'])
         with self.assertRaises(AssertionError):dense_oracle(lock_events(2,corrupt=(8,1,3)),2,4,.25,'locks')
         with self.assertRaisesRegex(AssertionError,'Lock cycle incomplete'):dense_oracle(lock_events(1,steps=8),1,2,.25,'locks')
+    def test_a_workload_sounding_every_other_step_is_timed_on_a_grid_twice_as_wide(self):
+        events=dense_events(2,steps=16,step_ns=500_000_000)
+        value=dense_oracle(events,2,8,.25,'extreme',step_stride=2)
+        self.assertEqual(value['steps'],16);self.assertTrue(value['gates']['event_timing'])
+        self.assertEqual(value['step_jitter']['maximum_ns'],0)
+        with self.assertRaisesRegex(AssertionError,'Step count'):dense_oracle(events,2,8,.25,'extreme')
+        self.assertEqual(CASES['PERF-EXT-HW-16']['step_stride'],2)
     def test_dense_oracle_reuses_complete_order_timing_release_and_skip_gates(self):
         value=dense_oracle(dense_events(2,4),2,1,.25,'dense')
         self.assertTrue(value['passed']);self.assertEqual((value['steps'],value['note_ons'],value['note_offs']),(4,8,8));self.assertEqual(value['skipped_deadlines'],0);self.assertEqual(value['timing']['maximum_ns'],1000)
@@ -122,6 +129,9 @@ class Tests(unittest.TestCase):
         self.assertEqual(hardware_performance.project_fixture_name('MIX-HW-8'),'slides-8')
         with self.assertRaisesRegex(ValueError,'holds dense/4'):hardware_performance.check_project_fixture(fixture,'PERF-002-HW-8')
         with self.assertRaisesRegex(ValueError,'holds dense/4'):hardware_performance.check_project_fixture(fixture,'PERF-009-HW-4')
+    def test_a_fixture_saved_with_another_trig_spacing_is_refused(self):
+        fixture=saved_fixture('extreme',16)
+        with self.assertRaisesRegex(ValueError,'trig every 1 steps'):hardware_performance.check_project_fixture(fixture,'PERF-EXT-HW-16')
     def test_a_fixture_whose_files_changed_since_saving_is_refused(self):
         fixture=saved_fixture('locks',8);(fixture/'autosave.ptn').write_text('edited')
         with self.assertRaisesRegex(ValueError,'does not match its manifest'):hardware_performance.check_project_fixture(fixture,'PERF-009-HW-8')
