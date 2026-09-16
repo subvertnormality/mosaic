@@ -1664,3 +1664,62 @@ function test_seconds_to_next_step_counts_down_to_the_master_onset()
   m_clock.get_clock_lattice():stop()
   luaunit.assert_nil(m_clock.seconds_to_next_step())
 end
+
+-- Characterisation: the end-of-clock processor consumes stored note-mask
+-- events only while the channel is both selected and recording, and a channel
+-- that has just wrapped to step 1 records its previous last step.
+function test_end_of_clock_records_note_masks_only_while_recording_selected()
+  setup()
+  local previous_recorder = recorder
+  recorder = include("mosaic/lib/recorder")
+  local ok, err = pcall(function()
+    memory.init()
+    program.get_selected_song_pattern().global_pattern_length = 4
+    program.get().selected_channel = 1
+    local function stored(step)
+      recorder.add_note_mask_event_portion(1, step, {data = {song_pattern = 1, trig = 1,
+        note = 60, velocity = 100, length = 1, step = step}})
+    end
+
+    params:set("record", 1)
+    stored(1)
+    clock_setup()
+    progress_clock_by_pulses(96)
+    luaunit.assert_not_nil(recorder.mask_events[1][1], "Not recording must leave the event stored")
+
+    params:set("record", 2)
+    program.get().selected_channel = 2
+    progress_clock_by_pulses(96)
+    luaunit.assert_not_nil(recorder.mask_events[1][1], "Another channel selected must leave the event stored")
+
+    program.get().selected_channel = 1
+    progress_clock_by_pulses(96)
+    luaunit.assert_nil(recorder.mask_events[1][1], "Recording the selected channel must consume the event")
+  end)
+  recorder = previous_recorder
+  if not ok then error(err) end
+end
+
+-- The wrap case: after the channel resets to step 1 the processor still has a
+-- previous step to record, which is the channel's end trig, not step 0.
+function test_end_of_clock_records_the_end_trig_after_a_wrap()
+  setup()
+  local previous_recorder = recorder
+  recorder = include("mosaic/lib/recorder")
+  local ok, err = pcall(function()
+    memory.init()
+    program.get_selected_song_pattern().global_pattern_length = 4
+    program.get().selected_channel = 1
+    params:set("record", 2)
+    local channel = program.get_channel(program.get().selected_song_pattern, 1)
+    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+    recorder.add_note_mask_event_portion(1, end_trig, {data = {song_pattern = 1, trig = 1,
+      note = 72, velocity = 90, length = 1, step = end_trig}})
+    clock_setup()
+    progress_clock_by_pulses(24 * 4 * 3)
+    luaunit.assert_nil(recorder.mask_events[1][end_trig],
+      "The step before a wrap must be recorded as the channel's end trig")
+  end)
+  recorder = previous_recorder
+  if not ok then error(err) end
+end

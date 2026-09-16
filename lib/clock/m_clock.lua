@@ -340,27 +340,24 @@ function m_clock.init()
 
     end
 
+    -- Only the recorder reads anything here, so test the cheapest conditions
+    -- first: the global scale channel has no bank, then the record setting,
+    -- then the selected channel. The end trig is only needed after a wrap.
     local end_of_clock_action = function(t)
+      if channel_number == 17 or fn.param_value("record") ~= 2 then return end
+
       local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
-      if channel_number ~= 17 then
+      if program.get_selected_channel() ~= channel then return end
 
-        local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-        local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
-
-        local last_step = program.get_current_step_for_channel(channel_number) - 1
-        if last_step < 1 then
-          last_step = end_trig
-        end
-
-        if fn.param_value("record") == 2 and program.get_selected_channel() == channel then
-          recorder.record_stored_note_mask_events(channel_number, last_step)
-          scheduler.debounce(function()
-            channel_edit_page_ui.refresh_memory()
-          end)()      
-        end
-
-
+      local last_step = program.get_current_step_for_channel(channel_number) - 1
+      if last_step < 1 then
+        last_step = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
       end
+
+      recorder.record_stored_note_mask_events(channel_number, last_step)
+      scheduler.debounce(function()
+        channel_edit_page_ui.refresh_memory()
+      end)()
     end
 
     local shuffle_values = get_shuffle_values(program.get_channel(program.get().selected_song_pattern, channel_number))
