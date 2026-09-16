@@ -67,25 +67,12 @@ local function indexed_param(param_id)
   return index and params.params[index]
 end
 
--- Mapping a norns control parameter rounds and warps its raw value on every
--- read. Step playback reads the same parameters many times per step, so keep
--- each mapped value while the raw value and the mapping inputs are unchanged;
--- any difference falls back to the parameter itself.
-local mapped_control_values = setmetatable({}, {__mode = "k"})
-
+-- A parameter's value cannot be cached against its raw value: a norns mod may
+-- wrap the getter so the value follows a modulation source while raw stands
+-- still (matrix does this), and a cache keyed on raw then serves the first
+-- reading to every note for the life of the project.
 local function control_value(param)
-  local spec = param.controlspec
-  local raw = param.raw
-  if param.t ~= 3 or spec == nil or raw == nil then return param:get() end
-  local cached = mapped_control_values[param]
-  if cached and cached.raw == raw and cached.spec == spec and cached.minval == spec.minval
-      and cached.maxval == spec.maxval and cached.warp == spec.warp and cached.step == spec.step then
-    return cached.value
-  end
-  local value = param:get()
-  mapped_control_values[param] = {raw = raw, spec = spec, minval = spec.minval, maxval = spec.maxval,
-    warp = spec.warp, step = spec.step, value = value}
-  return value
+  return param:get()
 end
 
 local function read_stock_assigned(param_id)
