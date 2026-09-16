@@ -51,14 +51,21 @@ class Maiden:
  def _send(self,payload):
   self._connect();buf=ctypes.create_string_buffer(payload)
   if self.nn.nn_send(self.fd,buf,len(payload),0)!=len(payload):raise RuntimeError('nn_send failed')
- def eval(self,code,allow_lua_error=False):
+ def eval(self,code,allow_lua_error=False,timeout_ms=None):
   marker='__MOSAIC_HW_'+hashlib.sha256((code+str(time.monotonic_ns())).encode()).hexdigest()[:16]+'__';payload=(code.rstrip()+"; print('"+marker+"')\n").encode()+b'\0';self._send(payload);output=[]
-  while True:
-   received=ctypes.create_string_buffer(65536);size=self.nn.nn_recv(self.fd,received,len(received),0)
-   if size<0:raise maiden_timeout(output)
-   chunk=received.raw[:size].decode(errors='replace');output.append(chunk)
-   if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
-   if marker in chunk:return ''.join(output)
+  if timeout_ms is not None:self._receive_timeout(timeout_ms)
+  try:
+   while True:
+    received=ctypes.create_string_buffer(65536);size=self.nn.nn_recv(self.fd,received,len(received),0)
+    if size<0:raise maiden_timeout(output)
+    chunk=received.raw[:size].decode(errors='replace');output.append(chunk)
+    if 'stack traceback:' in chunk and not allow_lua_error:raise RuntimeError('Maiden Lua error: '+''.join(output)[-2000:])
+    if marker in chunk:return ''.join(output)
+  finally:
+   if timeout_ms is not None:self._receive_timeout(self.timeout_ms)
+ def _receive_timeout(self,timeout_ms):
+  timeout=ctypes.c_int(int(timeout_ms))
+  if self.nn.nn_setsockopt(self.fd,0,5,ctypes.byref(timeout),ctypes.sizeof(timeout))<0:raise RuntimeError('nn_setsockopt RCVTIMEO failed')
  def send(self,code):self._send((code.rstrip()+'\n').encode()+b'\0');time.sleep(.25)
  def load(self,path,allow_lua_error=False):
   self.send("norns.script.load("+repr(path)+")");time.sleep(8);ready=self.eval("print('__MOSAIC_ACTIVE__'..(norns.state.script or ''))",allow_lua_error=allow_lua_error)
@@ -81,10 +88,11 @@ class WebSocketMaiden:
    from websockets.sync.client import connect
    self.connector=connect
   self.ws=self.connector(self.url,subprotocols=['bus.sp.nanomsg.org'],open_timeout=self.timeout,close_timeout=1)
- def eval(self,code,allow_lua_error=False):
+ def eval(self,code,allow_lua_error=False,timeout_ms=None):
   self._connect();marker='__MOSAIC_HW_'+hashlib.sha256((code+str(time.monotonic_ns())).encode()).hexdigest()[:16]+'__';self.ws.send(code.rstrip()+"; print('"+marker+"')\n");output=[]
+  timeout=self.timeout if timeout_ms is None else timeout_ms/1000
   while True:
-   try:chunk=self.ws.recv(timeout=self.timeout)
+   try:chunk=self.ws.recv(timeout=timeout)
    except TimeoutError:raise maiden_timeout(output)
    if isinstance(chunk,bytes):raise RuntimeError('Maiden returned binary data instead of text')
    output.append(chunk)
@@ -116,9 +124,39 @@ class OutputTrace:
    raise
  def reset_midi(self,allow_lua_error=False):return self.maiden.eval('for i=#_MOSAIC_HW_MIDI,1,-1 do _MOSAIC_HW_MIDI[i]=nil end; _MOSAIC_HW_MIDI_REALTIME.count=0; for k in pairs(_MOSAIC_HW_PORT_CACHE) do _MOSAIC_HW_PORT_CACHE[k]=nil end; for k in pairs(_MOSAIC_HW_NAME_CACHE) do _MOSAIC_HW_NAME_CACHE[k]=nil end',allow_lua_error=allow_lua_error)
  def reset(self,allow_lua_error=False):return self.maiden.eval('for i=#_MOSAIC_HW_MIDI,1,-1 do _MOSAIC_HW_MIDI[i]=nil end; _MOSAIC_HW_MIDI_REALTIME.count=0; for k in pairs(_MOSAIC_HW_PORT_CACHE) do _MOSAIC_HW_PORT_CACHE[k]=nil end; for k in pairs(_MOSAIC_HW_NAME_CACHE) do _MOSAIC_HW_NAME_CACHE[k]=nil end; _MOSAIC_HW_GRID.writes=0; _MOSAIC_HW_GRID.refreshes=0; _MOSAIC_HW_GRID.all=0; _MOSAIC_HW_GRID.levels={}',allow_lua_error=allow_lua_error)
+ # A window's capture runs to thousands of lines. Printed in one reply, its end
+ # marker has been lost on the CM3+ (twice, each when Mosaic's autosave wrote
+ # during the dump), leaving the run waiting for the whole Maiden timeout. Read
+ # it in chunks instead, each with a short timeout and retried: reading the
+ # capture does not change it.
+ SNAPSHOT_CHUNK=400;SNAPSHOT_CHUNK_TIMEOUT_MS=30000;SNAPSHOT_CHUNK_ATTEMPTS=3
+ def _eval_chunk(self,code,allow_lua_error):
+  import inspect
+  parameters=inspect.signature(self.maiden.eval).parameters
+  if 'timeout_ms' in parameters or any(p.kind==p.VAR_KEYWORD for p in parameters.values()):
+   return self.maiden.eval(code,allow_lua_error=allow_lua_error,timeout_ms=self.SNAPSHOT_CHUNK_TIMEOUT_MS)
+  return self.maiden.eval(code,allow_lua_error=allow_lua_error)
+ def _midi_lines(self,count,allow_lua_error):
+  lines={}
+  for first in range(1,count+1,self.SNAPSHOT_CHUNK):
+   last=min(count,first+self.SNAPSHOT_CHUNK-1)
+   code="for i=%d,%d do local e=_MOSAIC_HW_MIDI[i] print(string.format('__MIDI__%%d|%%.9f|%%d|%%s|%%s|%%s',i,e.when,e.port,e.device,e.payload_type,table.concat(e.bytes,','))) end"%(first,last)
+   for attempt in range(1,self.SNAPSHOT_CHUNK_ATTEMPTS+1):
+    try:output=self._eval_chunk(code,allow_lua_error)
+    except TimeoutError:
+     if attempt==self.SNAPSHOT_CHUNK_ATTEMPTS:raise
+     continue
+    # A late reply to an earlier attempt may arrive with this one; keep only this range.
+    chunk={int(m.group(1)):m.group(0) for m in re.finditer(r'__MIDI__(\d+)\|[0-9.]+\|\d+\|[^|\n]*\|[^|\n]*\|[0-9,]*',output) if first<=int(m.group(1))<=last}
+    if len(chunk)==last-first+1:lines.update(chunk);break
+    if attempt==self.SNAPSHOT_CHUNK_ATTEMPTS:raise RuntimeError('Hardware MIDI trace chunk %d-%d incomplete after %d attempts'%(first,last,attempt))
+  return '\n'.join(lines[i] for i in range(1,count+1))
  def snapshot(self,allow_lua_error=False,return_output=False):
-  code="print('__GRID_COUNTS__'.._MOSAIC_HW_GRID.writes..','.._MOSAIC_HW_GRID.refreshes); for y=1,8 do local row={} for x=1,16 do local value=_MOSAIC_HW_GRID.levels[x..','..y] if value==nil then value=_MOSAIC_HW_GRID.all end row[x]=value end print('__GRID_ROW__'..y..'|'..table.concat(row,',')) end; for i,e in ipairs(_MOSAIC_HW_MIDI) do print(string.format('__MIDI__%d|%.9f|%d|%s|%s|%s',i,e.when,e.port,e.device,e.payload_type,table.concat(e.bytes,','))) end"
+  code="print('__GRID_COUNTS__'.._MOSAIC_HW_GRID.writes..','.._MOSAIC_HW_GRID.refreshes); for y=1,8 do local row={} for x=1,16 do local value=_MOSAIC_HW_GRID.levels[x..','..y] if value==nil then value=_MOSAIC_HW_GRID.all end row[x]=value end print('__GRID_ROW__'..y..'|'..table.concat(row,',')) end; print('__MIDI_COUNT__'..#_MOSAIC_HW_MIDI)"
   output=self.maiden.eval(code,allow_lua_error=allow_lua_error);counts=re.search(r'__GRID_COUNTS__(\d+),(\d+)',output)
+  midi_count=re.search(r'__MIDI_COUNT__(\d+)',output)
+  if not midi_count:raise RuntimeError('Hardware MIDI trace count missing')
+  output=output+'\n'+self._midi_lines(int(midi_count.group(1)),allow_lua_error)
   if not counts:raise RuntimeError('Hardware grid trace missing')
   rows={int(y):[int(v) for v in values.split(',')] for y,values in re.findall(r'__GRID_ROW__(\d+)\|([-0-9,]+)',output)}
   if set(rows)!=set(range(1,9)) or any(len(row)!=16 for row in rows.values()):raise RuntimeError('Hardware grid trace incomplete: '+repr(output[-4000:]))
@@ -138,7 +176,7 @@ class OutputTrace:
 class ExpectedClockErrorMaiden:
  """Record stock queued-resume Lua errors instead of aborting; any other Lua error still raises."""
  def __init__(self,maiden,runner,label):self.maiden=maiden;self.runner=runner;self.label=label
- def eval(self,code,allow_lua_error=False):return self.runner.validate_clock_output(self.maiden.eval(code,allow_lua_error=True),self.label)
+ def eval(self,code,allow_lua_error=False,**kwargs):return self.runner.validate_clock_output(self.maiden.eval(code,allow_lua_error=True,**kwargs),self.label)
  def send(self,code):return self.maiden.send(code)
  def load(self,path,allow_lua_error=False):return self.runner.validate_clock_output(self.maiden.load(path,allow_lua_error=True),self.label+'-load')
  def close(self):return self.maiden.close()

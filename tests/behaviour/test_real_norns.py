@@ -1,4 +1,4 @@
-import contextlib,hashlib,io,json,struct,subprocess,tempfile,unittest
+import contextlib,hashlib,io,json,re,struct,subprocess,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
 from real_norns import Maiden,MaidenInput,OSC,OutputTrace,Runner,SSH,SSHOSC,WebSocketMaiden,export_head,main,osc_packet
@@ -162,8 +162,28 @@ class Tests(unittest.TestCase):
   r,_,m=self.r();m.eval=lambda code:'__MOSAIC_GRID_ID__2\nmarker';self.assertEqual(r.grid_device(),2);self.assertEqual(r.grid_device(7),7)
  def test_output_trace_preserves_raw_signed_led_and_exposes_physical_nibble(self):
   rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['-4' if y==8 and x==1 else '2' for x in range(1,17)])) for y in range(1,9))
-  m=M();m.eval=lambda code,**kwargs:'__GRID_COUNTS__12,3\n'+rows+'\n__MIDI__1|12.250000000|1|userdata: 0xabc|table|144,60,127\n'
+  m=M();m.eval=lambda code,**kwargs:('__GRID_COUNTS__12,3\n'+rows+'\n__MIDI_COUNT__1\n') if '__GRID_COUNTS__' in code else '__MIDI__1|12.250000000|1|userdata: 0xabc|table|144,60,127\n'
   value=OutputTrace(m).snapshot();self.assertEqual(value['raw_grid'][112],-4);self.assertEqual(value['grid'][112],12);self.assertEqual((value['midi'][0]['port'],value['midi'][0]['bytes']),(1,[144,60,127]))
+ def test_output_trace_reads_a_long_capture_in_chunks_and_retries_a_lost_reply(self):
+  rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['0']*16)) for y in range(1,9));calls=[];lost=[]
+  def event(i):return '__MIDI__%d|%d.000000000|1|userdata: 0xabc|table|176,1,%d'%(i,i,i%128)
+  def eval(code,allow_lua_error=False,timeout_ms=None):
+   calls.append((code,timeout_ms))
+   if '__GRID_COUNTS__' in code:return '__GRID_COUNTS__0,0\n'+rows+'\n__MIDI_COUNT__900\n'
+   first,last=[int(v) for v in re.search(r'for i=(\d+),(\d+)',code).groups()]
+   if first==401 and not lost:lost.append(first);raise TimeoutError('marker lost')
+   # A late reply from another range must not be taken for this one.
+   return event(1)+'\n'+'\n'.join(event(i) for i in range(first,last+1))+'\n'
+  m=M();m.eval=eval
+  value=OutputTrace(m).snapshot()
+  self.assertEqual([e['index'] for e in value['midi']],list(range(1,901)))
+  ranges=[re.search(r'for i=(\d+),(\d+)',code).groups() for code,_ in calls[1:]]
+  self.assertEqual(ranges,[('1','400'),('401','800'),('401','800'),('801','900')])
+  self.assertTrue(all(timeout==OutputTrace.SNAPSHOT_CHUNK_TIMEOUT_MS for _,timeout in calls[1:]))
+ def test_output_trace_gives_up_on_a_chunk_that_never_completes(self):
+  rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['0']*16)) for y in range(1,9))
+  m=M();m.eval=lambda code,**kwargs:('__GRID_COUNTS__0,0\n'+rows+'\n__MIDI_COUNT__2\n') if '__GRID_COUNTS__' in code else '__MIDI__1|1.0|1|d|table|144,60,1\n'
+  with self.assertRaisesRegex(RuntimeError,'chunk 1-2 incomplete'):OutputTrace(m).snapshot()
  def test_output_trace_uses_persistent_globals_and_restores_c_binding(self):
   m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
   trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload,...)',m.commands[0]);self.assertIn('return original_grid_all(dev,value,rel,...)',m.commands[0]);self.assertIn('return original_grid_led(dev,x,y,value,rel,...)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('v.device.dev==dev',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
