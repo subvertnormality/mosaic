@@ -188,7 +188,7 @@ class Tests(unittest.TestCase):
   m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
   trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload,...)',m.commands[0]);self.assertIn('return original_grid_all(dev,value,rel,...)',m.commands[0]);self.assertIn('return original_grid_led(dev,x,y,value,rel,...)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('v.device.dev==dev',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
  def test_output_trace_reset_mutates_the_table_captured_by_wrappers(self):
-  m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('for i=#_MOSAIC_HW_MIDI,1,-1',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
+  m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('_MOSAIC_HW_MIDI.n=0',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
  def test_output_trace_install_cleans_up_when_code_executes_then_eval_raises(self):
   m=ExecuteThenRaiseM();trace=OutputTrace(m)
   with self.assertRaisesRegex(RuntimeError,'marker response failed'):trace.install(allow_lua_error=True)
