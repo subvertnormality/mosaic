@@ -81,9 +81,12 @@ function sequencer:draw(channel, draw_func)
 
   local current_step = program_get_current_step_for_channel(channel.number)
 
+  -- A row's grid counts are consecutive, so the row's first count is all the
+  -- position each cell needs; the helper is still used off the row grid below.
   for y = self.y, self.y + 3 do
+    local row_base = fn_calc_grid_count(0, y)
     for x = 1, 16 do
-      local grid_count = fn_calc_grid_count(x, y)
+      local grid_count = row_base + x
       local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if mode == "channel" then
@@ -101,8 +104,9 @@ function sequencer:draw(channel, draw_func)
   end
 
   for y = self.y, self.y + 3 do
+    local row_base = fn_calc_grid_count(0, y)
     for x = 1, 16 do
-      local grid_count = fn_calc_grid_count(x, y)
+      local grid_count = row_base + x
       local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if unsaved_grid[grid_count] then
