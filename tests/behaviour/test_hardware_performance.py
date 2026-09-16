@@ -103,23 +103,16 @@ class Tests(unittest.TestCase):
 if __name__=='__main__':unittest.main()
 
 
-class CaseThresholds(unittest.TestCase):
-    """A case whose per-step message count makes the shared p99 unreachable carries
-    its own, and every other threshold stays shared."""
+class StepJitterGate(unittest.TestCase):
+    """Where a step starts is the tempo a player hears; how far its own notes
+    spread is a separate, ordered offset. They are gated separately."""
 
-    def test_sixteen_channel_dense_carries_its_own_event_timing_threshold(self):
+    def test_the_shared_thresholds_carry_a_step_jitter_gate(self):
         shared = hardware_performance.TIMING_THRESHOLDS
-        dense16 = hardware_performance.thresholds_for('PERF-002-HW-16')
-        self.assertEqual(dense16['p99_ns'], 12_000_000)
-        for name in ('maximum_ns', 'final_phase_ns', 'service_p99_deadline_fraction',
-                     'step_jitter_p95_ns', 'step_jitter_maximum_ns'):
-            self.assertEqual(dense16[name], shared[name])
+        self.assertEqual(shared['step_jitter_p95_ns'], 3_000_000)
+        self.assertEqual(shared['step_jitter_maximum_ns'], 8_000_000)
 
-    def test_smaller_dense_cases_keep_the_shared_threshold(self):
-        for case in ('PERF-002-HW-1', 'PERF-002-HW-4', 'PERF-002-HW-8'):
-            self.assertEqual(hardware_performance.thresholds_for(case)['p99_ns'],
-                             hardware_performance.TIMING_THRESHOLDS['p99_ns'])
-
-    def test_an_unlisted_case_is_unchanged(self):
-        self.assertEqual(hardware_performance.thresholds_for('PERF-003-HW-16'),
-                         dict(hardware_performance.TIMING_THRESHOLDS))
+    def test_every_case_shares_one_event_timing_threshold(self):
+        self.assertEqual(shared_p99 := hardware_performance.TIMING_THRESHOLDS['p99_ns'], 10_000_000)
+        self.assertFalse(hasattr(hardware_performance, 'CASE_TIMING_THRESHOLDS'),
+                         'A per-case relaxation would need its own hardware measurement')

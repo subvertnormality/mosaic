@@ -20,21 +20,6 @@ CASES={
 from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
 CASES.update(HELDOUT_CASES)
 TIMING_THRESHOLDS={'p99_ns':10_000_000,'maximum_ns':50_000_000,'final_phase_ns':20_000_000,'service_p99_deadline_fraction':.5,'service_maximum_deadline_fraction':1.0,'step_jitter_p95_ns':3_000_000,'step_jitter_maximum_ns':8_000_000}
-# A step's notes leave one MIDI port one after another, so the event timing a case
-# can reach is set by how many messages that step carries, not by how fast Mosaic
-# is: on a CM3+ a native send costs 134 us on average, so sixteen channels spend
-# about 2.1 ms emitting before any Mosaic work counts. Cases whose per-step message
-# count makes the default unreachable carry their own p99 here, with the hardware
-# measurement that justifies it. Every other threshold stays shared.
-CASE_TIMING_THRESHOLDS={
-    # Measured 2026-09-16 on the CM3+: note spread p50 6.07 ms, p95 7.55 ms across
-    # twelve windows; the 10 ms default leaves a sixteen-channel step no headroom.
-    'PERF-002-HW-16':{'p99_ns':12_000_000},
-}
-
-def thresholds_for(case):
-    merged=dict(TIMING_THRESHOLDS);merged.update(CASE_TIMING_THRESHOLDS.get(case,{}));return merged
-
 def percentile(values,percent):
     ordered=sorted(values);return ordered[(percent*len(ordered)+99)//100-1]
 
@@ -244,7 +229,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                     oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
                             'service':{'p99_ns':0},'skipped_deadlines':0,'gates':dict(recovery['gates']),'passed':recovery['passed'],'note_ons':recovery['groups']*spec['channels'],
                             'messages':len(state['midi']),'steps':recovery['groups'],'slide_cycles_checked':None}
-                else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'],thresholds_for(case_id))
+                else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'])
                 if stimulus is not None:
                     oracle['gates']['stimulus_complete']=stimulus['complete'];oracle['passed']=oracle['passed'] and stimulus['complete']
                 failure=None
