@@ -12,6 +12,14 @@ def dense_events(channels,steps=32,step_ns=250_000_000):
         for channel in range(channels):index+=1;rows.append({'index':index,'monotonic_ns':1_100_000_000+step*step_ns+channel*1000,'port':1,'bytes':[128+channel,60,0]})
     return rows
 
+def saved_fixture(workload,channels):
+    import hashlib
+    directory=Path(tempfile.mkdtemp())
+    (directory/'autosave.ptn').write_text('ptn');(directory/'autosave.pset').write_text('pset')
+    files={name:hashlib.sha256((directory/name).read_bytes()).hexdigest() for name in ('autosave.ptn','autosave.pset')}
+    (directory/'fixture.json').write_text(json.dumps({'case':'built','workload':workload,'channels':channels,'files':files}))
+    return directory
+
 class FakeSSH:
     def run(self,script):
         identity={'kind':'identity','clock_ticks_per_second':100,'matron_pid':12,'matron_start_ticks':3}
@@ -102,9 +110,29 @@ class Tests(unittest.TestCase):
 
     def test_a_loaded_project_fixture_skips_the_ui_build(self):
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
+        fixture=saved_fixture('dense',1)
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
-            run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,project_fixture=source)
+            run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,project_fixture=fixture)
         build.assert_not_called()
+    def test_a_fixture_is_matched_on_the_project_a_case_plays(self):
+        fixture=saved_fixture('dense',4)
+        for case_id in ('PERF-002-HW-4','PERF-005-HW-4','PERF-008L-HW-4'):
+            self.assertEqual(hardware_performance.check_project_fixture(fixture,case_id)['channels'],4)
+            self.assertEqual(hardware_performance.project_fixture_name(case_id),'dense-4')
+        self.assertEqual(hardware_performance.project_fixture_name('MIX-HW-8'),'slides-8')
+        with self.assertRaisesRegex(ValueError,'holds dense/4'):hardware_performance.check_project_fixture(fixture,'PERF-002-HW-8')
+        with self.assertRaisesRegex(ValueError,'holds dense/4'):hardware_performance.check_project_fixture(fixture,'PERF-009-HW-4')
+    def test_a_fixture_whose_files_changed_since_saving_is_refused(self):
+        fixture=saved_fixture('locks',8);(fixture/'autosave.ptn').write_text('edited')
+        with self.assertRaisesRegex(ValueError,'does not match its manifest'):hardware_performance.check_project_fixture(fixture,'PERF-009-HW-8')
+        missing=Path(tempfile.mkdtemp())
+        with self.assertRaisesRegex(ValueError,'no fixture.json'):hardware_performance.check_project_fixture(missing,'PERF-009-HW-8')
+    def test_every_checked_in_fixture_matches_its_manifest(self):
+        root=Path(__file__).resolve().parent/'fixtures'/'performance'/'cm3plus';cases={}
+        for case_id in CASES:cases.setdefault(hardware_performance.project_fixture_name(case_id),case_id)
+        for directory in sorted(p for p in root.iterdir() if p.is_dir()) if root.is_dir() else []:
+            self.assertIn(directory.name,cases,'Fixture for a project no case plays: '+directory.name)
+            hardware_performance.check_project_fixture(directory,cases[directory.name])
     def test_saving_a_project_fixture_builds_then_fetches_and_records_it(self):
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());saved=Path(tempfile.mkdtemp())/'fixture'
         fetched=[]

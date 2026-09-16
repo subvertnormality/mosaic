@@ -211,12 +211,35 @@ def write_fixture_manifest(directory,case_id,spec,source):
     (directory/'fixture.json').write_text(json.dumps({'case':case_id,'workload':spec['workload'],'channels':spec['channels'],
         'built_from_revision':revision,'files':files,'lane':'cm3plus-norns'},indent=2)+'\n')
 
+def check_project_fixture(directory,case_id):
+    """A fixture must hold the project this case plays, exactly as it was saved.
+
+    Several cases play the same project (every dense case with four channels, for
+    instance), so a fixture is matched on workload and channel count rather than
+    on the case that happened to build it."""
+    directory=Path(directory);spec=CASES[case_id];manifest_path=directory/'fixture.json'
+    if not manifest_path.is_file():raise ValueError('Project fixture has no fixture.json: '+str(directory))
+    manifest=json.loads(manifest_path.read_text())
+    if (manifest.get('workload'),manifest.get('channels'))!=(spec['workload'],spec['channels']):
+        raise ValueError('Project fixture %s holds %s/%s, but %s plays %s/%s'%(directory,manifest.get('workload'),manifest.get('channels'),case_id,spec['workload'],spec['channels']))
+    files=manifest.get('files') or {}
+    for name in ('autosave.ptn','autosave.pset'):
+        if name not in files:raise ValueError('Project fixture manifest does not record '+name+': '+str(directory))
+        if not (directory/name).is_file() or hashlib.sha256((directory/name).read_bytes()).hexdigest()!=files[name]:
+            raise ValueError('Project fixture file does not match its manifest: '+str(directory/name))
+    return manifest
+
+def project_fixture_name(case_id):
+    """The fixture directory name for the project a case plays."""
+    spec=CASES[case_id];return '%s-%d'%(spec['workload'],spec['channels'])
+
 def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     try:
         # A loaded project fixture already holds the workload; build it through the
         # UI only when there is none, and keep that build as a fixture if asked.
+        if project_fixture is not None:check_project_fixture(project_fixture,case_id)
         if project_fixture is None:
             build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
             if save_project_fixture:

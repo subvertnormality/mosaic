@@ -365,6 +365,8 @@ def main(argv=None):
    evidence=r.clock_cancel_comparison(a.clock_cancel_candidate);evidence['capabilities']=caps;write(out/'clock-cancel.json',evidence)
    if not evidence['stock_restored'] or not evidence['phases'][-1]['passed']:raise AssertionError('Clock candidate failed or stock clock was not restored')
   elif a.command in ('workflow','resume','case','performance'):
+   # Refuse a fixture for another project before anything is installed.
+   if a.command=='performance' and a.project_fixture:__import__('hardware_performance').check_project_fixture(a.project_fixture,a.performance_case)
    source_files=len(r.deploy(Path(a.source).resolve())) if a.command in ('workflow','performance') else r.resume()
    if a.command in ('case','performance'):
     if a.stock_clock_errors=='record':r.maiden=ExpectedClockErrorMaiden(r.maiden,r,a.command)
