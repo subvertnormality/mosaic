@@ -242,45 +242,6 @@ function Lattice:release_due_onset_actions()
   end
 end
 
--- A sprocket may defer the part of its onset that emits notes, so that every
--- sprocket in its order group has sent the messages that shape those notes
--- first. Run the deferred parts once the group's actions are done, in the same
--- order, and give each the zero-delay bookkeeping its onset would have had.
-function Lattice:run_deferred_note_actions(ordering)
-  for index = 1, #ordering do
-    local sprocket = ordering[index]
-    if sprocket.note_pending ~= nil then
-      sprocket:note_action(self.transport)
-      if not self.enabled then return end
-      -- Zero-delay actions this note created still run on its own pulse.
-      local pending_ids = sprocket.delayed_action_order
-      local removed = false
-      for order_index = 1, #pending_ids do
-        local id = pending_ids[order_index]
-        local delayed_action = sprocket.delayed_actions[id]
-        if delayed_action and delayed_action.length == 0 then
-          sprocket.delayed_actions[id] = nil
-          removed = true
-          sprocket:run_pending_action(delayed_action)
-          if not self.enabled then return end
-          if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(id) end
-        end
-      end
-      if removed then
-        local retained = 0
-        for order_index = 1, #pending_ids do
-          local id = pending_ids[order_index]
-          if sprocket.delayed_actions[id] then
-            retained = retained + 1
-            pending_ids[retained] = id
-          end
-        end
-        for order_index = #pending_ids, retained + 1, -1 do pending_ids[order_index] = nil end
-      end
-    end
-  end
-end
-
 function Lattice:pulse()
   if self.enabled then
     -- A step's note-offs and its note-ons are two bursts down one MIDI port. If
@@ -444,8 +405,6 @@ function Lattice:pulse()
           flagged = true
         end
       end
-      self:run_deferred_note_actions(ordering)
-      if not self.enabled then return end
     end
     if flagged then
       self:order_sprockets()

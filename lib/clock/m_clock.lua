@@ -321,11 +321,8 @@ function m_clock.init()
           step.process_params(channel, current_step)
         end
 
-        -- Emitting this channel's note is deferred until every channel has sent
-        -- the parameter locks that shape its own note, so a step's note-ons are
-        -- consecutive instead of each one waiting behind another channel's CCs.
         if has_trig then
-          clock.note_pending = current_step
+          step.handle(channel_number, current_step)
         end
 
         if has_trig or trigless_locks then
@@ -388,12 +385,6 @@ function m_clock.init()
       enabled = true,
       cleanup_delayed_action = construct_remove_id_from_all_lists_for_channel(channel_number)
     }
-
-    m_clock["channel_" .. channel_number .. "_clock"].note_action = function(sprocket, t)
-      local pending = sprocket.note_pending
-      sprocket.note_pending = nil
-      if pending then step.handle(channel_number, pending) end
-    end
 
     m_clock["channel_" .. channel_number .. "_clock"].first_run = true
 
