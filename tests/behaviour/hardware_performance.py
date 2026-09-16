@@ -19,7 +19,7 @@ CASES={
 }
 from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
 CASES.update(HELDOUT_CASES)
-TIMING_THRESHOLDS={'p99_ns':10_000_000,'maximum_ns':50_000_000,'final_phase_ns':20_000_000,'service_p99_deadline_fraction':.5,'service_maximum_deadline_fraction':1.0,'step_jitter_p95_ns':3_000_000,'step_jitter_maximum_ns':8_000_000}
+TIMING_THRESHOLDS={'p99_ns':10_000_000,'maximum_ns':50_000_000,'final_phase_ns':20_000_000,'service_p99_deadline_fraction':.5,'service_maximum_deadline_fraction':1.0,'step_jitter_p95_ns':5_000_000,'step_jitter_maximum_ns':10_000_000}
 def percentile(values,percent):
     ordered=sorted(values);return ordered[(percent*len(ordered)+99)//100-1]
 

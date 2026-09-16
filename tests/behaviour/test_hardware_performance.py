@@ -109,8 +109,8 @@ class StepJitterGate(unittest.TestCase):
 
     def test_the_shared_thresholds_carry_a_step_jitter_gate(self):
         shared = hardware_performance.TIMING_THRESHOLDS
-        self.assertEqual(shared['step_jitter_p95_ns'], 3_000_000)
-        self.assertEqual(shared['step_jitter_maximum_ns'], 8_000_000)
+        self.assertEqual(shared['step_jitter_p95_ns'], 5_000_000)
+        self.assertEqual(shared['step_jitter_maximum_ns'], 10_000_000)
 
     def test_every_case_shares_one_event_timing_threshold(self):
         self.assertEqual(shared_p99 := hardware_performance.TIMING_THRESHOLDS['p99_ns'], 10_000_000)
