@@ -67,12 +67,59 @@ local function indexed_param(param_id)
   return index and params.params[index]
 end
 
--- A parameter's value cannot be cached against its raw value: a norns mod may
--- wrap the getter so the value follows a modulation source while raw stands
--- still (matrix does this), and a cache keyed on raw then serves the first
--- reading to every note for the life of the project.
+-- Mapping a norns control parameter rounds and warps its raw value on every
+-- read, and step playback reads about ten of them for each note. The mapped
+-- value is a function of the raw value and the controlspec only while norns'
+-- own getter, value mapping and controlspec map are the ones in use. A mod may
+-- replace any of them (matrix replaces Control:get so the value follows a
+-- modulation source while raw stands still), so a parameter whose functions do
+-- not come from norns core is read every time.
+local core_sources = {
+  get = "core/params/control.lua",
+  map_value = "core/params/control.lua",
+  map = "core/controlspec.lua",
+}
+local core_function_verdicts = setmetatable({}, {__mode = "k"})
+
+local function is_core_function(fn_value, source)
+  local verdict = core_function_verdicts[fn_value]
+  if verdict == nil then
+    verdict = false
+    if type(fn_value) == "function" then
+      local info = debug.getinfo(fn_value, "S")
+      local defined = info and info.source or ""
+      verdict = defined:sub(-#source) == source
+    end
+    core_function_verdicts[fn_value] = verdict
+  end
+  return verdict
+end
+
+local mapped_control_values = setmetatable({}, {__mode = "k"})
+
 local function control_value(param)
-  return param:get()
+  local spec = param.controlspec
+  local raw = param.raw
+  if param.t ~= 3 or spec == nil or raw == nil
+      or not is_core_function(param.get, core_sources.get)
+      or not is_core_function(param.map_value, core_sources.map_value)
+      or not is_core_function(spec.map, core_sources.map) then
+    return param:get()
+  end
+  local cached = mapped_control_values[param]
+  if cached and cached.raw == raw and cached.spec == spec and cached.minval == spec.minval
+      and cached.maxval == spec.maxval and cached.warp == spec.warp and cached.step == spec.step then
+    return cached.value
+  end
+  local value = param:get()
+  if cached then
+    cached.raw, cached.spec, cached.minval, cached.maxval, cached.warp, cached.step, cached.value =
+      raw, spec, spec.minval, spec.maxval, spec.warp, spec.step, value
+  else
+    mapped_control_values[param] = {raw = raw, spec = spec, minval = spec.minval, maxval = spec.maxval,
+      warp = spec.warp, step = spec.step, value = value}
+  end
+  return value
 end
 
 local function read_stock_assigned(param_id)
