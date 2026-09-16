@@ -1723,3 +1723,29 @@ function test_end_of_clock_records_the_end_trig_after_a_wrap()
   recorder = previous_recorder
   if not ok then error(err) end
 end
+
+-- The end-of-clock work belongs to a step the channel has actually played, so
+-- the first onset after a start records nothing: there is no previous step yet.
+function test_end_of_clock_records_nothing_at_the_first_onset()
+  setup()
+  local previous_recorder = recorder
+  recorder = include("mosaic/lib/recorder")
+  local ok, err = pcall(function()
+    memory.init()
+    program.get().selected_channel = 1
+    params:set("record", 2)
+    local channel = program.get_channel(program.get().selected_song_pattern, 1)
+    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+    recorder.add_note_mask_event_portion(1, end_trig, {data = {song_pattern = 1, trig = 1,
+      note = 72, velocity = 90, length = 1, step = end_trig}})
+    clock_setup()
+    progress_clock_by_pulses(1)
+    luaunit.assert_not_nil(recorder.mask_events[1][end_trig],
+      "The first onset has no previous step and must record nothing")
+    progress_clock_by_pulses(24 * end_trig)
+    luaunit.assert_nil(recorder.mask_events[1][end_trig],
+      "Wrapping past the end trig must record it")
+  end)
+  recorder = previous_recorder
+  if not ok then error(err) end
+end

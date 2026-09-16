@@ -997,7 +997,7 @@ local function with_restart_sinks(body)
   if not ok then error(err) end
 end
 
-function test_stopped_shuffle_start_rebuilds_both_processors_only_when_stopped()
+function test_stopped_shuffle_start_rebuilds_the_channel_clock_only_when_stopped()
   with_restart_sinks(function()
     setup();m_clock.init();m_clock:stop()
     local channel = program.get_channel(1, 1)
@@ -1008,10 +1008,11 @@ function test_stopped_shuffle_start_rebuilds_both_processors_only_when_stopped()
     m_clock:start()
     local lattice=m_clock.get_clock_lattice()
     local on=m_clock.channel_1_clock
-    local off=on.end_of_clock_processor
+    -- The end-of-clock work runs in this clock's own action; no second
+    -- sprocket is built for it, so only this one carries the preview.
+    luaunit.assertNil(on.end_of_clock_processor)
     -- Fresh Drunk/5 preview: 38.4 + 0.5 -> 38, residual0.9.
     luaunit.assertAlmostEquals(on.ppqn_error,0.9,1e-10)
-    luaunit.assertAlmostEquals(off.ppqn_error,0.9,1e-10)
     progress_clock_by_pulses(5)
     local phase,carry=on.phase,on.ppqn_error
     m_clock:start() -- An already-playing Start must not rebuild or rewind.

@@ -259,6 +259,9 @@ function m_clock.init()
     -- Build the clock's key once per channel instead of on every step.
     local clock_key = "channel_" .. channel_number .. "_clock"
 
+    -- Declared before the channel action, which runs it at the next onset.
+    local end_of_clock_action
+
     local sprocket_action = function(t)
       local song_pattern = program.get().selected_song_pattern
       local channel = program.get_channel(song_pattern, channel_number)
@@ -331,6 +334,13 @@ function m_clock.init()
         end
       end
 
+      -- The end-of-clock work used to live in a second sprocket per channel,
+      -- delayed a whole cycle so that it ran at this onset, just after it.
+      -- Running it here instead removes seventeen sprockets from every pulse.
+      if not clock.first_run then
+        end_of_clock_action()
+      end
+
       m_clock[clock_key].first_run = false
       m_clock[clock_key].next_step = current_step
 
@@ -343,7 +353,7 @@ function m_clock.init()
     -- Only the recorder reads anything here, so test the cheapest conditions
     -- first: the global scale channel has no bank, then the record setting,
     -- then the selected channel. The end trig is only needed after a wrap.
-    local end_of_clock_action = function(t)
+    end_of_clock_action = function(t)
       if channel_number == 17 or fn.param_value("record") ~= 2 then return end
 
       local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
@@ -376,20 +386,6 @@ function m_clock.init()
       cleanup_delayed_action = construct_remove_id_from_all_lists_for_channel(channel_number)
     }
 
-    m_clock["channel_" .. channel_number .. "_clock"].end_of_clock_processor = clock_lattice:new_sprocket {
-      action = end_of_clock_action,
-      division = 1 / (div * 4),
-      swing = shuffle_values.swing,
-      swing_or_shuffle = shuffle_values.swing_or_shuffle,
-      shuffle_basis = shuffle_values.shuffle_basis,
-      shuffle_feel = shuffle_values.shuffle_feel,
-      shuffle_amount = shuffle_values.shuffle_amount,
-      delay = 1,
-      order = 3,
-      realign = true,
-      enabled = true
-    }
-
     m_clock["channel_" .. channel_number .. "_clock"].first_run = true
 
   end
@@ -416,7 +412,7 @@ function m_clock.prepare_start()
     local division = 1 / (calculate_divisor(channel.clock_mods) * 4)
     local shuffle = get_shuffle_values(channel)
     local channel_clock = m_clock["channel_" .. channel_number .. "_clock"]
-    for _, sprocket in ipairs({channel_clock, channel_clock.end_of_clock_processor}) do
+    for _, sprocket in ipairs({channel_clock}) do
       sprocket:set_division(division)
       sprocket:set_swing(shuffle.swing or 0)
       sprocket:set_swing_or_shuffle(shuffle.swing_or_shuffle or 1)
@@ -437,7 +433,6 @@ function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.swing_or_shuffle
   clock:set_swing_or_shuffle((swing_or_shuffle or 0))
-  clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 0))
   if clock.swing_or_shuffle ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -445,7 +440,6 @@ function m_clock.set_channel_swing(channel_number, swing)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.swing
   clock:set_swing(swing or 0)
-  clock.end_of_clock_processor:set_swing(swing or 0)
   if clock.swing ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -453,7 +447,6 @@ function m_clock.set_channel_shuffle_feel(channel_number, shuffle_feel)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_feel
   clock:set_shuffle_feel((shuffle_feel or 0))
-  clock.end_of_clock_processor:set_shuffle_feel((shuffle_feel or 0))
   if clock.shuffle_feel ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -461,7 +454,6 @@ function m_clock.set_channel_shuffle_basis(channel_number, shuffle_basis)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_basis
   clock:set_shuffle_basis((shuffle_basis or 0))
-  clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 0))
   if clock.shuffle_basis ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -469,7 +461,6 @@ function m_clock.set_channel_shuffle_amount(channel_number, shuffle_amount)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_amount
   clock:set_shuffle_amount(shuffle_amount or 0)
-  clock.end_of_clock_processor:set_shuffle_amount(shuffle_amount or 0)
   if clock.shuffle_amount ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -478,7 +469,6 @@ function m_clock.set_channel_division(channel_number, division)
   local previous = clock.division
   local div_value = 1 / (division * 4)
   clock:set_division(div_value)
-  clock.end_of_clock_processor:set_division(div_value)
   if clock.division ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
