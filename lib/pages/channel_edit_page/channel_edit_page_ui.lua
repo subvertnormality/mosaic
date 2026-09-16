@@ -141,6 +141,15 @@ local channel_page_to_index
 -- Page indices
 channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
 
+-- The step indicator asks which page is showing for every drawn step, so read
+-- these fixed indices once instead of looking each one up on every call.
+local MASKS_PAGE = channel_page_to_index["Masks"]
+local TRIG_LOCKS_PAGE = channel_page_to_index["Trig Locks"]
+local MEMORY_PAGE = channel_page_to_index["Memory"]
+local CLOCK_MODS_PAGE = channel_page_to_index["Clock Mods"]
+local MIDI_CONFIG_PAGE = channel_page_to_index["Midi Config"]
+local NOTE_DASHBOARD_PAGE = channel_page_to_index["Note Dashboard"]
+
 local channel_edit_navigation_controller = channel_edit_navigation.new(
   {
     channel_pages = channel_pages,
@@ -658,12 +667,12 @@ end
 function channel_edit_page_ui.should_show_step_has_trig_lock(channel, step)
 
   local current_page = channel_edit_page_ui.get_selected_page()
-  local is_trig_locks_page = current_page == channel_page_to_index["Trig Locks"]
-  local is_masks_page = current_page == channel_page_to_index["Masks"]
-  local is_memory_page = current_page == channel_page_to_index["Memory"]
-  local is_clock_mods_page = current_page == channel_page_to_index["Clock Mods"]
-  local is_midi_config_page = current_page == channel_page_to_index["Midi Config"]
-  local is_note_dashboard_page = current_page == channel_page_to_index["Note Dashboard"]
+  local is_trig_locks_page = current_page == TRIG_LOCKS_PAGE
+  local is_masks_page = current_page == MASKS_PAGE
+  local is_memory_page = current_page == MEMORY_PAGE
+  local is_clock_mods_page = current_page == CLOCK_MODS_PAGE
+  local is_midi_config_page = current_page == MIDI_CONFIG_PAGE
+  local is_note_dashboard_page = current_page == NOTE_DASHBOARD_PAGE
 
   -- Check trig locks page conditions
   if is_trig_locks_page then
