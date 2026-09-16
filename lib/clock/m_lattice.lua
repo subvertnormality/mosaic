@@ -338,9 +338,11 @@ function Lattice:pulse()
         end
       end
       if deferred_count > 0 then
+        -- The group's notes leave back to back, then each sprocket finishes its
+        -- step and moves past the onset. Every note is still sent before its
+        -- own sprocket advances, so its releases keep the phase they had.
         for index = 1, deferred_count do
           local sprocket = deferred[index]
-          deferred[index] = nil
           -- An earlier note in this group may have created a release that is
           -- due before this onset; it must still precede this sprocket's note.
           local removed = false
@@ -356,9 +358,16 @@ function Lattice:pulse()
               if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
             end
           end
+          sprocket.released_before_note = removed
           sprocket:note_action(self.transport)
           if not self.enabled then return end
-          if not self:advance_sprocket(sprocket, removed) then return end
+        end
+        for index = 1, deferred_count do
+          local sprocket = deferred[index]
+          deferred[index] = nil
+          sprocket:after_note_action(self.transport)
+          if not self.enabled then return end
+          if not self:advance_sprocket(sprocket, sprocket.released_before_note) then return end
         end
         deferred_count = 0
       end

@@ -325,9 +325,9 @@ function m_clock.init()
         end
 
         -- A step's parameter locks shape its note, so they must precede it, but
-        -- they need not wait behind another channel's note. The lattice finishes
-        -- this step, note first, once every channel on this pulse has sent its
-        -- locks, and before this channel's clock moves past the onset.
+        -- they need not wait behind another channel's note. The lattice sounds
+        -- this note once every channel on this pulse has sent its locks, then
+        -- finishes the step, before this channel's clock moves past the onset.
         if has_trig then
           clock.note_pending = current_step
           clock.pending_channel = channel
@@ -340,10 +340,6 @@ function m_clock.init()
     end
 
     finish_step = function(clock, channel, current_step, has_trig, trigless_locks, song_pattern)
-      if has_trig then
-        step.handle(channel_number, current_step)
-      end
-
       if has_trig or trigless_locks then
         if fn.param_value("record") == 2 and program.get_selected_channel() == channel then
           for i = 1, 10 do
@@ -404,6 +400,10 @@ function m_clock.init()
     }
 
     m_clock["channel_" .. channel_number .. "_clock"].note_action = function(sprocket)
+      step.handle(channel_number, sprocket.note_pending)
+    end
+
+    m_clock["channel_" .. channel_number .. "_clock"].after_note_action = function(sprocket)
       local current_step, channel, song_pattern = sprocket.note_pending, sprocket.pending_channel, sprocket.pending_song_pattern
       sprocket.note_pending, sprocket.pending_channel, sprocket.pending_song_pattern = nil, nil, nil
       finish_step(sprocket, channel, current_step, true, false, song_pattern)
