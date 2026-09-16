@@ -1309,10 +1309,16 @@ function test_uicomp_grid_viewer_draw_clears_renders_channel_and_paints_screen_s
     local v = grid_viewer:new(7, 9)
     for i = #log, 1, -1 do log[i] = nil end
     v:draw()
-    local expected = {}
+    -- Rows four to seven are cleared in the screen-state cache itself, so the
+    -- draw makes no seq calls of its own before handing seq to the sequencer.
     for x = 1, 16 do
-      for y = 4, 7 do expected[#expected + 1] = {"seq", x, y, 0} end
+      for y = 4, 7 do luaunit.assert_equals(fakes.state[x][y], 0) end
     end
+    for x = 1, 16 do
+      for y = 1, 3 do luaunit.assert_equals(fakes.state[x][y], (x * 3 + y) % 16) end
+      luaunit.assert_equals(fakes.state[x][8], (x * 3 + 8) % 16)
+    end
+    local expected = {}
     expected[#expected + 1] = {"get_channel", 3, 1}
     expected[#expected + 1] = {"sequencer_draw", true, fakes.channel}
     -- One font size is in effect for all 128 cells; the label sets its own.
@@ -1354,7 +1360,7 @@ function test_uicomp_grid_viewer_channel_navigation_clamps_and_marks_dirty()
     luaunit.assert_equals(v.selected_channel, 15)
     for i = #log, 1, -1 do log[i] = nil end
     v:draw()
-    luaunit.assert_equals(log[65], {"get_channel", 3, 15})
+    luaunit.assert_equals(log[1], {"get_channel", 3, 15})
     luaunit.assert_equals(log[#log], {"text", "Channel 15 grid viewer"})
   end)
 end
