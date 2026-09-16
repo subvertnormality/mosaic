@@ -261,6 +261,7 @@ function m_clock.init()
 
     -- Declared before the channel action, which runs it at the next onset.
     local end_of_clock_action
+    local finish_step
 
     local sprocket_action = function(t)
       local song_pattern = program.get().selected_song_pattern
@@ -302,6 +303,8 @@ function m_clock.init()
         end
       end
 
+      -- Only a track channel on an empty step can record trigless locks.
+      local trigless_locks = false
       if channel_number == 17 then
         program_data.current_scale_channel_step = current_step
         step.process_global_step_scale_trig_lock(current_step)
@@ -310,7 +313,7 @@ function m_clock.init()
         program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
         -- This step's trig and the trigless-lock setting decide every branch below.
         local has_trig = channel.working_pattern.trig_values[current_step] == 1
-        local trigless_locks = not has_trig and fn.param_value("trigless_locks") == 2
+        trigless_locks = not has_trig and fn.param_value("trigless_locks") == 2
         -- Recording includes empty trigless steps as well as active trigs.
         if has_trig or trigless_locks then
           step.process_recording_params(channel)
@@ -321,15 +324,30 @@ function m_clock.init()
           step.process_params(channel, current_step)
         end
 
+        -- A step's parameter locks shape its note, so they must precede it, but
+        -- they need not wait behind another channel's note. The lattice finishes
+        -- this step, note first, once every channel on this pulse has sent its
+        -- locks, and before this channel's clock moves past the onset.
         if has_trig then
-          step.handle(channel_number, current_step)
+          clock.note_pending = current_step
+          clock.pending_channel = channel
+          clock.pending_song_pattern = song_pattern
+          return
         end
+      end
 
-        if has_trig or trigless_locks then
-          if fn.param_value("record") == 2 and program.get_selected_channel() == channel then
-            for i = 1, 10 do
-              recorder.record_trig_event(channel_number, current_step, i, song_pattern)
-            end
+      finish_step(clock, channel, current_step, false, trigless_locks, song_pattern)
+    end
+
+    finish_step = function(clock, channel, current_step, has_trig, trigless_locks, song_pattern)
+      if has_trig then
+        step.handle(channel_number, current_step)
+      end
+
+      if has_trig or trigless_locks then
+        if fn.param_value("record") == 2 and program.get_selected_channel() == channel then
+          for i = 1, 10 do
+            recorder.record_trig_event(channel_number, current_step, i, song_pattern)
           end
         end
       end
@@ -341,13 +359,12 @@ function m_clock.init()
         end_of_clock_action()
       end
 
-      m_clock[clock_key].first_run = false
-      m_clock[clock_key].next_step = current_step
+      clock.first_run = false
+      clock.next_step = current_step
 
       if program_data.selected_channel == channel_number and (program_data.selected_page == channel_edit_page or program_data.selected_page == scale_edit_page)  then
         fn.dirty_grid(true)
       end
-
     end
 
     -- Only the recorder reads anything here, so test the cheapest conditions
@@ -385,6 +402,12 @@ function m_clock.init()
       enabled = true,
       cleanup_delayed_action = construct_remove_id_from_all_lists_for_channel(channel_number)
     }
+
+    m_clock["channel_" .. channel_number .. "_clock"].note_action = function(sprocket)
+      local current_step, channel, song_pattern = sprocket.note_pending, sprocket.pending_channel, sprocket.pending_song_pattern
+      sprocket.note_pending, sprocket.pending_channel, sprocket.pending_song_pattern = nil, nil, nil
+      finish_step(sprocket, channel, current_step, true, false, song_pattern)
+    end
 
     m_clock["channel_" .. channel_number .. "_clock"].first_run = true
 

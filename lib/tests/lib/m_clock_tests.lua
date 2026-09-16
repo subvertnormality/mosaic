@@ -1800,6 +1800,128 @@ function test_step_sends_every_due_release_before_any_of_its_notes()
   luaunit.assert_equals(ons, 4, "Each sounding channel starts its next note")
 end
 
+
+-- A parameter lock shapes the note it belongs to, so it must precede that
+-- note; it must not sit in front of another channel's note. Every channel's
+-- locks therefore leave before any of the step's notes.
+function test_step_sends_every_parameter_lock_before_any_of_its_notes()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  for c = 1, 4 do
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+    local channel = program.get_channel(song_pattern, c)
+    for slot = 1, 2 do
+      local id = "lock_order_" .. c .. "_" .. slot
+      channel.trig_lock_params[slot] = {type = "midi", param_id = id, cc_msb = slot, cc_min_value = 0, cc_max_value = 127, off_value = -1}
+      params:add(id, {action = function(value) end})
+      for s = 1, 16 do
+        program.add_step_param_trig_lock_to_channel(channel, s, slot, (s + slot) % 128)
+      end
+    end
+  end
+  pattern.update_working_patterns()
+  clock_setup()
+  progress_clock_by_pulses(24 * 3)
+
+  local events = {}
+  local previous_on, previous_cc = m_midi.note_on, m_midi.cc
+  m_midi.note_on = function(self, note, velocity, channel, device)
+    events[#events + 1] = "note"
+    return previous_on(self, note, velocity, channel, device)
+  end
+  m_midi.cc = function(msb, lsb, value, channel, device)
+    events[#events + 1] = "lock"
+    return previous_cc(msb, lsb, value, channel, device)
+  end
+  local ok, err = pcall(progress_clock_by_pulses, 24)
+  m_midi.note_on, m_midi.cc = previous_on, previous_cc
+  if not ok then error(err) end
+
+  local locks, notes = 0, 0
+  for _, kind in ipairs(events) do
+    if kind == "lock" then
+      luaunit.assert_equals(notes, 0, "A parameter lock followed one of this step's notes")
+      locks = locks + 1
+    else
+      notes = notes + 1
+    end
+  end
+  luaunit.assert_equals(locks, 8, "Each channel sends both of its locks")
+  luaunit.assert_equals(notes, 4, "Each channel sounds its note")
+end
+-- A note's release is scheduled from the pulse its note is sent on. Whatever
+-- order a step's messages leave in, each release must still land on the next
+-- onset, before that onset sounds the same pitch again, with or without swing.
+function test_step_releases_each_note_at_the_onset_that_retriggers_it()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  -- Each channel plays its own pitch, so a note can only be retriggered by the
+  -- channel that sounded it.
+  for c = 1, 4 do
+    local test_pattern = program.initialise_default_pattern()
+    for s = 1, 16 do
+      test_pattern.note_values[s] = c - 1
+      test_pattern.lengths[s] = 1
+      test_pattern.trig_values[s] = 1
+      test_pattern.velocity_values[s] = 100
+    end
+    program.get_song_pattern(song_pattern).patterns[c] = test_pattern
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, c)
+    local channel = program.get_channel(song_pattern, c)
+    channel.trig_lock_params[1] = {type = "midi", param_id = "release_order_" .. c, cc_msb = 1, cc_min_value = 0, cc_max_value = 127, off_value = -1}
+    params:add("release_order_" .. c, {action = function(value) end})
+    for s = 1, 16 do
+      program.add_step_param_trig_lock_to_channel(channel, s, 1, s)
+    end
+  end
+  program.get_channel(song_pattern, 2).swing = 30
+  program.get_channel(song_pattern, 3).swing = 15
+  pattern.update_working_patterns()
+  clock_setup()
+  progress_clock_by_pulses(24 * 3)
+
+  local lattice = m_clock.get_clock_lattice()
+  local sounding, releases, onsets = {}, {}, {}
+  local previous_on, previous_off = m_midi.note_on, m_midi.note_off
+  m_midi.note_on = function(self, note, velocity, channel, device)
+    local key = tostring(device) .. ":" .. tostring(channel) .. ":" .. tostring(note)
+    luaunit.assert_nil(sounding[key], "Note retriggered before its release: " .. key)
+    sounding[key] = true
+    onsets[key] = onsets[key] or {}
+    table.insert(onsets[key], lattice.transport)
+    return previous_on(self, note, velocity, channel, device)
+  end
+  m_midi.note_off = function(self, note, velocity, channel, device)
+    local key = tostring(device) .. ":" .. tostring(channel) .. ":" .. tostring(note)
+    sounding[key] = nil
+    releases[key] = releases[key] or {}
+    table.insert(releases[key], lattice.transport)
+    return previous_off(self, note, velocity, channel, device)
+  end
+  local ok, err = pcall(progress_clock_by_pulses, 24 * 8)
+  m_midi.note_on, m_midi.note_off = previous_on, previous_off
+  if not ok then error(err) end
+
+  local checked = 0
+  for key, times in pairs(onsets) do
+    for index = 2, #times do
+      luaunit.assert_equals(releases[key][index], times[index], "Release did not land on the onset that follows it: " .. key)
+      checked = checked + 1
+    end
+  end
+  luaunit.assert_true(checked > 0, "No retriggers were observed")
+end
+
 -- "Resend unchanged locks" off sends a slot's value only when it changes, so a
 -- held parameter stops repeating the same control change on every step. On, or
 -- absent, keeps the documented default of sending it every step.
