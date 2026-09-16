@@ -103,6 +103,7 @@ function arp_lifetime.new(get_clock, program, get_lattice, get_shuffle_values, c
       delay_offset = -1, -- Created inside order2; first processed next pulse.
       realign = false,
       order = 2,
+      follows = get_clock()["channel_" .. c .. "_clock"],
       step = get_clock()["channel_" .. c .. "_clock"]:get_step()
     }
     arp.shuffle_updated = true -- Constructor already rounded the startup gap.

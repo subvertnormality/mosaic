@@ -86,6 +86,7 @@ function Lattice:new(args)
   l.sprocket_ordering = {{}, {}, {}, {}, {}}
   l.sprocket_pulse_order = {{}, {}, {}, {}, {}}
   l.deferred_notes = {}
+  l.deferred_followers = {}
   l.pattern_length = args.pattern_length or 64
   return l
 end
@@ -243,6 +244,70 @@ function Lattice:release_due_onset_actions()
   end
 end
 
+-- Run one sprocket's pulse: pending releases, its onset action, then its
+-- advance. Returns false when an action stopped the lattice; otherwise true,
+-- and whether the onset left a note for the group's note stage, in which case
+-- the sprocket advances after that note.
+function Lattice:pulse_sprocket(sprocket)
+    -- Set when this pulse removes a delayed action, so the order list is compacted.
+    local removed = false
+    local note_deferred = false
+    if not sprocket.shuffle_updated then
+      sprocket:begin_cycle()
+    end
+    if sprocket._pending_clocks then
+      sprocket:prepare_pending_clocks()
+    end
+    if sprocket._pending_clocks then
+      for _, pending_id in ipairs(sprocket.delayed_action_order) do
+        local pending = sprocket.delayed_actions[pending_id]
+        local timing = pending and pending.timing
+        if timing and pending.before_onset and (pending.length == 0 or
+            (pending.length < 1 and timing.phase - 1 >= pending_deadline(timing.current_ppqn, pending.length))) then
+          sprocket.delayed_actions[pending_id] = nil
+          removed = true
+          sprocket:run_pending_action(pending)
+          if not self.enabled then return false end
+          if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
+        end
+      end
+    end
+    if sprocket.released_before_onset then
+      sprocket.released_before_onset = nil
+      removed = true
+    end
+    if sprocket.phase >= 1 and sprocket.phase < 2 then
+      -- Releases due when the pulse began have already run; this catches
+      -- any a preceding sprocket's onset created during this pulse.
+      -- New zero-delay actions created by this onset still run below.
+      for index = 1, #sprocket.delayed_action_order do
+        local pending_id = sprocket.delayed_action_order[index]
+        local pending = sprocket.delayed_actions[pending_id]
+        if pending and pending.before_onset and pending.length == 0 then
+          sprocket.delayed_actions[pending_id] = nil
+          removed = true
+          sprocket:run_pending_action(pending)
+          if not self.enabled then return false end
+          if sprocket.cleanup_delayed_action then
+            sprocket.cleanup_delayed_action(pending_id)
+          end
+        end
+      end
+      sprocket.onset_count = (sprocket.onset_count or 0) + 1
+      sprocket.last_onset_transport = self.transport
+      sprocket.action(self.transport)
+      if not self.enabled then return false end
+      if sprocket.note_pending ~= nil then
+        -- This onset's note waits until the rest of the order group has
+        -- sent its parameter locks; the sprocket advances after the note.
+        note_deferred = true
+      end
+    end
+
+    if not note_deferred and not self:advance_sprocket(sprocket, removed) then return false end
+    return true, note_deferred
+end
+
 function Lattice:pulse()
   if self.enabled then
     -- A step's note-offs and its note-ons are two bursts down one MIDI port. If
@@ -256,6 +321,7 @@ function Lattice:pulse()
     if not self.enabled then return end
     local flagged = false
     local deferred, deferred_count = self.deferred_notes, 0
+    local followers, follower_count = self.deferred_followers, 0
     for i = 1, 5 do
       local ordering = self.sprocket_pulse_order[i]
       for index = 1, #ordering do
@@ -273,65 +339,19 @@ function Lattice:pulse()
           sprocket.phase = phase + 1
           sprocket.last_processed_transport = self.transport
           sprocket.transport = sprocket.transport + 1
+        elseif sprocket.enabled and sprocket.follows ~= nil and sprocket.follows.note_pending ~= nil then
+          -- A sprocket that belongs to a channel (an arp) runs after that
+          -- channel's step, as it did when notes were sent inside the channel
+          -- action: the step's note may cancel it before this pulse's onset.
+          follower_count = follower_count + 1
+          followers[follower_count] = sprocket
         elseif sprocket.enabled then
-          -- Set when this pulse removes a delayed action, so the order list is compacted.
-          local removed = false
-          local note_deferred = false
-          if not sprocket.shuffle_updated then
-            sprocket:begin_cycle()
+          local running, note_deferred = self:pulse_sprocket(sprocket)
+          if not running then return end
+          if note_deferred then
+            deferred_count = deferred_count + 1
+            deferred[deferred_count] = sprocket
           end
-          if sprocket._pending_clocks then
-            sprocket:prepare_pending_clocks()
-          end
-          if sprocket._pending_clocks then
-            for _, pending_id in ipairs(sprocket.delayed_action_order) do
-              local pending = sprocket.delayed_actions[pending_id]
-              local timing = pending and pending.timing
-              if timing and pending.before_onset and (pending.length == 0 or
-                  (pending.length < 1 and timing.phase - 1 >= pending_deadline(timing.current_ppqn, pending.length))) then
-                sprocket.delayed_actions[pending_id] = nil
-                removed = true
-                sprocket:run_pending_action(pending)
-                if not self.enabled then return end
-                if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
-              end
-            end
-          end
-          if sprocket.released_before_onset then
-            sprocket.released_before_onset = nil
-            removed = true
-          end
-          if sprocket.phase >= 1 and sprocket.phase < 2 then
-            -- Releases due when the pulse began have already run; this catches
-            -- any a preceding sprocket's onset created during this pulse.
-            -- New zero-delay actions created by this onset still run below.
-            for index = 1, #sprocket.delayed_action_order do
-              local pending_id = sprocket.delayed_action_order[index]
-              local pending = sprocket.delayed_actions[pending_id]
-              if pending and pending.before_onset and pending.length == 0 then
-                sprocket.delayed_actions[pending_id] = nil
-                removed = true
-                sprocket:run_pending_action(pending)
-                if not self.enabled then return end
-                if sprocket.cleanup_delayed_action then
-                  sprocket.cleanup_delayed_action(pending_id)
-                end
-              end
-            end
-            sprocket.onset_count = (sprocket.onset_count or 0) + 1
-            sprocket.last_onset_transport = self.transport
-            sprocket.action(self.transport)
-            if not self.enabled then return end
-            if sprocket.note_pending ~= nil then
-              -- This onset's note waits until the rest of the order group has
-              -- sent its parameter locks; the sprocket advances after the note.
-              note_deferred = true
-              deferred_count = deferred_count + 1
-              deferred[deferred_count] = sprocket
-            end
-          end
-
-          if not note_deferred and not self:advance_sprocket(sprocket, removed) then return end
         elseif sprocket.flag then
           self.sprockets[sprocket.id] = nil
           flagged = true
@@ -371,6 +391,17 @@ function Lattice:pulse()
         end
         deferred_count = 0
       end
+      for index = 1, follower_count do
+        local sprocket = followers[index]
+        followers[index] = nil
+        if sprocket.enabled then
+          if not self:pulse_sprocket(sprocket) then return end
+        elseif sprocket.flag then
+          self.sprockets[sprocket.id] = nil
+          flagged = true
+        end
+      end
+      follower_count = 0
     end
     if flagged then
       self:order_sprockets()
@@ -559,6 +590,8 @@ function Sprocket:new(args)
   p.delayed_actions = args.delayed_actions
   p.delayed_action_order = {}
   p.cleanup_delayed_action = args.cleanup_delayed_action
+  -- The channel sprocket whose step this one waits for (see Lattice:pulse).
+  p.follows = args.follows
   p.division_for_cycle = args.division_for_cycle
   return p
 end
