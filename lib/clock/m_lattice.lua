@@ -84,6 +84,7 @@ function Lattice:new(args)
   l.sprocket_id_counter = 100
   l.sprockets = {}
   l.sprocket_ordering = {{}, {}, {}, {}, {}}
+  l.sprocket_pulse_order = {{}, {}, {}, {}, {}}
   l.pattern_length = args.pattern_length or 64
   return l
 end
@@ -144,6 +145,7 @@ function Lattice:destroy()
   end
   self.sprockets = {}
   self.sprocket_ordering = {}
+  self.sprocket_pulse_order = {{}, {}, {}, {}, {}}
 end
 
 --- set_meter is deprecated
@@ -214,12 +216,11 @@ end
 function Lattice:pulse()
   if self.enabled then
     local flagged = false
-    local sprockets = self.sprockets
     for i = 1, 5 do
-      local ordering = self.sprocket_ordering[i]
+      local ordering = self.sprocket_pulse_order[i]
       for index = 1, #ordering do
         if not self.enabled then return end
-        local sprocket = sprockets[ordering[index]]
+        local sprocket = ordering[index]
         if sprocket and sprocket.enabled and sprocket.delayed_action_order[1] == nil
             and sprocket._pending_clocks == nil and sprocket.shuffle_updated
             and (sprocket.phase < 1 or sprocket.phase >= 2)
@@ -424,9 +425,16 @@ function Lattice:order_sprockets()
   for id, sprocket in pairs(self.sprockets) do
     table.insert(self.sprocket_ordering[sprocket.order],id)
   end
+  -- The pulse walks the sprockets themselves; the ids stay for every other
+  -- reader, and both lists are rebuilt together whenever the set changes.
+  local pulse_order = {{}, {}, {}, {}, {}}
   for i = 1, 5 do
-    table.sort(self.sprocket_ordering[i])
+    local ids = self.sprocket_ordering[i]
+    table.sort(ids)
+    local ordered = pulse_order[i]
+    for index = 1, #ids do ordered[index] = self.sprockets[ids[index]] end
   end
+  self.sprocket_pulse_order = pulse_order
 end
 
 --- "private" method to instantiate a new sprocket, only called by Lattice:new_sprocket()
