@@ -1,0 +1,11 @@
+{
+  "case": "PERF-009-HW-4",
+  "workload": "locks",
+  "channels": 4,
+  "built_from_revision": "58089cea93b1086e48095a1a0b11c55e29eda751",
+  "files": {
+    "autosave.ptn": "9a6b01adb1acc1951df4346781689b1312ea9a36c00d748a9f82bcb6e78fb6d8",
+    "autosave.pset": "4b15c0e65836a66c6aea69f158a7e9727186bcbbd284ec84e2cb87c861063acb"
+  },
+  "lane": "cm3plus-norns"
+}
