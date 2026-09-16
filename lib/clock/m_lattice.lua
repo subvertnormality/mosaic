@@ -220,7 +220,17 @@ function Lattice:pulse()
       for index = 1, #ordering do
         if not self.enabled then return end
         local sprocket = sprockets[ordering[index]]
-        if sprocket and sprocket.enabled then
+        if sprocket and sprocket.enabled and sprocket.delayed_action_order[1] == nil
+            and sprocket._pending_clocks == nil and sprocket.shuffle_updated
+            and (sprocket.phase < 1 or sprocket.phase >= 2)
+            and sprocket.phase + 1 <= sprocket.current_ppqn then
+          -- A sprocket between onsets with nothing pending only advances. Most
+          -- sprockets are in this state on most pulses, and every branch the
+          -- full path below would take is excluded by the conditions above.
+          sprocket.phase = sprocket.phase + 1
+          sprocket.last_processed_transport = self.transport
+          sprocket.transport = sprocket.transport + 1
+        elseif sprocket and sprocket.enabled then
           -- Set when this pulse removes a delayed action, so the order list is compacted.
           local removed = false
           if not sprocket.shuffle_updated then
@@ -274,14 +284,17 @@ function Lattice:pulse()
           -- Equal-deadline actions retain insertion order across Lua processes.
           -- Most sprockets hold none on most pulses; skip the bookkeeping then.
           local pending_ids = sprocket.delayed_action_order
-          if #pending_ids > 0 then
+          local pending_count = #pending_ids
+          if pending_count > 0 then
             local to_remove
-            for index = 1, #pending_ids do
+            local delayed_actions = sprocket.delayed_actions
+            for index = 1, pending_count do
               local id = pending_ids[index]
-              local delayed_action = sprocket.delayed_actions[id]
+              local delayed_action = delayed_actions[id]
               if delayed_action then
                 local timing = delayed_action.timing or sprocket
-                if delayed_action.length == 0 then
+                local length = delayed_action.length
+                if length == 0 then
                     sprocket:run_pending_action(delayed_action)
                     if not self.enabled then return end
                     to_remove = to_remove or {}
@@ -289,9 +302,9 @@ function Lattice:pulse()
                     if sprocket.cleanup_delayed_action then
                       sprocket.cleanup_delayed_action(id)
                     end
-                elseif delayed_action.length < 1 then
+                elseif length < 1 then
                     -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
-                    if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
+                    if timing.phase - 2 >= pending_deadline(timing.current_ppqn, length) then
                         sprocket:run_pending_action(delayed_action)
                         if not self.enabled then return end
                         to_remove = to_remove or {}
@@ -304,7 +317,7 @@ function Lattice:pulse()
                         delayed_action.length = 0
                     end
                 elseif timing.phase > timing.current_ppqn then
-                    delayed_action.length = delayed_action.length - 1
+                    delayed_action.length = length - 1
                 end
               end
             end
