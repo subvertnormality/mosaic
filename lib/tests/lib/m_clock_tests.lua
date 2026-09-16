@@ -1857,3 +1857,57 @@ function test_step_sends_every_parameter_lock_before_any_of_its_notes()
   luaunit.assert_equals(locks, 8, "Each channel sends both of its locks")
   luaunit.assert_equals(notes, 4, "Each channel sounds its note")
 end
+
+-- "Resend unchanged locks" off sends a slot's value only when it changes, so a
+-- held parameter stops repeating the same control change on every step. On, or
+-- absent, keeps the documented default of sending it every step.
+local function count_locks_over_steps(steps, repeat_unchanged)
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  local channel = program.get_channel(song_pattern, 1)
+  local id = "held_lock_param"
+  channel.trig_lock_params[1] = {type = "midi", param_id = id, cc_msb = 7,
+    cc_min_value = 0, cc_max_value = 127, off_value = -1}
+  params:add(id, {action = function(value) end})
+  -- The same value on every step: nothing changes from one step to the next.
+  for s = 1, 16 do program.add_step_param_trig_lock_to_channel(channel, s, 1, 64) end
+  if repeat_unchanged ~= nil then params:set("repeat_unchanged_locks", repeat_unchanged) end
+  pattern.update_working_patterns()
+
+  local sent = 0
+  local previous_cc = m_midi.cc
+  m_midi.cc = function(msb, lsb, value, ch, device)
+    sent = sent + 1
+    return previous_cc(msb, lsb, value, ch, device)
+  end
+  -- Count from the start, so the step the transport itself plays is included.
+  local ok, err = pcall(function()
+    clock_setup()
+    progress_clock_by_pulses(24 * steps)
+  end)
+  m_midi.cc = previous_cc
+  if not ok then error(err) end
+  return sent
+end
+
+function test_unchanged_locks_repeat_every_step_by_default()
+  -- The transport plays a step of its own before the pulses below advance it.
+  luaunit.assert_equals(count_locks_over_steps(4, nil), 5)
+  luaunit.assert_equals(count_locks_over_steps(4, 2), 5)
+  luaunit.assert_equals(count_locks_over_steps(8, 2), 9)
+end
+
+function test_unchanged_locks_are_sent_once_when_the_repeat_is_off()
+  luaunit.assert_equals(count_locks_over_steps(4, 1), 1)
+  luaunit.assert_equals(count_locks_over_steps(8, 1), 1)
+end

@@ -432,6 +432,9 @@ function m_clock.prepare_start()
   end
   clock_lattice:prepare_for_start()
   slides.reset()
+  -- A device that was left holding a value while the transport was stopped may
+  -- have been changed by hand; start by sending each slot again.
+  step.forget_sent_lock_values()
 end
 
 

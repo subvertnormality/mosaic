@@ -161,6 +161,32 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
   end
 end
 
+-- README "Default Parameter Values": an unlocked step sends the channel's
+-- assigned value, so a parameter that is not being locked repeats the same
+-- message on every step. A sixteen-channel step can carry a hundred of them,
+-- and they all queue in front of that step's notes. When the player turns the
+-- repeat off, a value that has not changed since this slot last sent one is
+-- not sent again; the receiving device is already holding it.
+local last_sent_lock_values = {}
+
+function step.forget_sent_lock_values()
+  last_sent_lock_values = {}
+end
+
+local function send_midi_param(channel_number, slot, param, value, midi_channel, midi_device, mode)
+  -- Absent or On means resend, so the documented default behaviour is kept.
+  if fn.param_value("repeat_unchanged_locks") == 1 then
+    local per_channel = last_sent_lock_values[channel_number]
+    if per_channel == nil then
+      per_channel = {}
+      last_sent_lock_values[channel_number] = per_channel
+    end
+    if per_channel[slot] == value then return end
+    per_channel[slot] = value
+  end
+  process_midi_param(param, value, midi_channel, midi_device, mode)
+end
+
 
 -- Emit the value that this eligible step will record, not a stale playback
 -- lock. Repeating it also restores sound after selection or mute pauses.
@@ -246,7 +272,7 @@ function step.process_params(channel, step)
           end
 
           if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
-            process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+            send_midi_param(channel.number, i, param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
           end
 
           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
@@ -273,13 +299,13 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          send_midi_param(channel.number, i, param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
         elseif not m_clock.channel_is_sliding(channel, i) then
           if value == off then
             goto continue
           end
 
-          process_midi_param(param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          send_midi_param(channel.number, i, param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
 
