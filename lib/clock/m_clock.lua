@@ -92,16 +92,13 @@ local function execute_ids(c, ids)
   end
 end
 
+-- The three release lists are never reassigned (init replaces their channel entries).
+local release_id_lists = {delayed_ids_must_execute, destroy_at_note_end_ids, execute_at_note_end_ids}
+
 local function construct_remove_id_from_all_lists_for_channel(chan)
   local c = chan
   return function(id)
-    local lists = {
-      delayed_ids_must_execute,
-      destroy_at_note_end_ids,
-      execute_at_note_end_ids
-    }
-
-    for _, list in ipairs(lists) do
+    for _, list in ipairs(release_id_lists) do
       for i = #list[c], 1, -1 do
         if list[c][i] == id then
           table.remove(list[c], i)
@@ -259,13 +256,19 @@ function m_clock.init()
   for channel_number = 17, 1, -1 do
     local div = calculate_divisor(program.get_channel(program.get().selected_song_pattern, channel_number).clock_mods)
 
+    -- Build the clock's key once per channel instead of on every step.
+    local clock_key = "channel_" .. channel_number .. "_clock"
+
+    -- Declared before the channel action, which runs it at the next onset.
+    local end_of_clock_action
+
     local sprocket_action = function(t)
       local song_pattern = program.get().selected_song_pattern
       local channel = program.get_channel(song_pattern, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
       local pattern = channel.working_pattern
       local trig_values = pattern.trig_values
-      local clock = m_clock["channel_" .. channel_number .. "_clock"]
+      local clock = m_clock[clock_key]
       
       -- Cache frequently accessed values
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
@@ -277,7 +280,7 @@ function m_clock.init()
         end_trig = start_trig + program.get_selected_song_pattern().global_pattern_length - 1
       end
 
-      if not m_clock["channel_" .. channel_number .. "_clock"].first_run then
+      if not m_clock[clock_key].first_run then
         program.set_current_step_for_channel(channel_number, current_step + 1)
         current_step = current_step + 1
       end
@@ -305,23 +308,28 @@ function m_clock.init()
         step.sinfonian_sync(current_step)
       else
         program.set_channel_step_scale_number(channel_number, step.calculate_step_scale_number(channel_number, current_step))
+        -- This step's trig and the trigless-lock setting decide every branch below.
+        local has_trig = channel.working_pattern.trig_values[current_step] == 1
+        local trigless_locks = not has_trig and fn.param_value("trigless_locks") == 2
         -- Recording includes empty trigless steps as well as active trigs.
-        if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
+        if has_trig or trigless_locks then
           step.process_recording_params(channel)
         end
         -- Resolve parameters for the same step as the note, including startup.
         -- A single dispatch site prevents duplicate first-step lock messages.
-        if channel.working_pattern.trig_values[current_step] == 1 or
-          (params:get("trigless_locks") == 2 and program.step_has_param_trig_lock(channel, current_step)) then
+        if has_trig or (trigless_locks and program.step_has_param_trig_lock(channel, current_step)) then
           step.process_params(channel, current_step)
         end
 
-        if channel.working_pattern.trig_values[current_step] == 1 then
-          step.handle(channel_number, current_step)
+        -- Emitting this channel's note is deferred until every channel has sent
+        -- the parameter locks that shape its own note, so a step's note-ons are
+        -- consecutive instead of each one waiting behind another channel's CCs.
+        if has_trig then
+          clock.note_pending = current_step
         end
 
-        if channel.working_pattern.trig_values[current_step] == 1 or params:get("trigless_locks") == 2 then
-          if params:get("record") == 2 and program.get_selected_channel() == channel then
+        if has_trig or trigless_locks then
+          if fn.param_value("record") == 2 and program.get_selected_channel() == channel then
             for i = 1, 10 do
               recorder.record_trig_event(channel_number, current_step, i, song_pattern)
             end
@@ -329,8 +337,15 @@ function m_clock.init()
         end
       end
 
-      m_clock["channel_" .. channel_number .. "_clock"].first_run = false
-      m_clock["channel_" .. channel_number .. "_clock"].next_step = current_step
+      -- The end-of-clock work used to live in a second sprocket per channel,
+      -- delayed a whole cycle so that it ran at this onset, just after it.
+      -- Running it here instead removes seventeen sprockets from every pulse.
+      if not clock.first_run then
+        end_of_clock_action()
+      end
+
+      m_clock[clock_key].first_run = false
+      m_clock[clock_key].next_step = current_step
 
       if program_data.selected_channel == channel_number and (program_data.selected_page == channel_edit_page or program_data.selected_page == scale_edit_page)  then
         fn.dirty_grid(true)
@@ -338,27 +353,24 @@ function m_clock.init()
 
     end
 
-    local end_of_clock_action = function(t)
+    -- Only the recorder reads anything here, so test the cheapest conditions
+    -- first: the global scale channel has no bank, then the record setting,
+    -- then the selected channel. The end trig is only needed after a wrap.
+    end_of_clock_action = function(t)
+      if channel_number == 17 or fn.param_value("record") ~= 2 then return end
+
       local channel = program.get_channel(program.get().selected_song_pattern, channel_number)
-      if channel_number ~= 17 then
+      if program.get_selected_channel() ~= channel then return end
 
-        local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-        local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
-
-        local last_step = program.get_current_step_for_channel(channel_number) - 1
-        if last_step < 1 then
-          last_step = end_trig
-        end
-
-        if params:get("record") == 2 and program.get_selected_channel() == channel then
-          recorder.record_stored_note_mask_events(channel_number, last_step)
-          scheduler.debounce(function()
-            channel_edit_page_ui.refresh_memory()
-          end)()      
-        end
-
-
+      local last_step = program.get_current_step_for_channel(channel_number) - 1
+      if last_step < 1 then
+        last_step = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
       end
+
+      recorder.record_stored_note_mask_events(channel_number, last_step)
+      scheduler.debounce(function()
+        channel_edit_page_ui.refresh_memory()
+      end)()
     end
 
     local shuffle_values = get_shuffle_values(program.get_channel(program.get().selected_song_pattern, channel_number))
@@ -377,19 +389,11 @@ function m_clock.init()
       cleanup_delayed_action = construct_remove_id_from_all_lists_for_channel(channel_number)
     }
 
-    m_clock["channel_" .. channel_number .. "_clock"].end_of_clock_processor = clock_lattice:new_sprocket {
-      action = end_of_clock_action,
-      division = 1 / (div * 4),
-      swing = shuffle_values.swing,
-      swing_or_shuffle = shuffle_values.swing_or_shuffle,
-      shuffle_basis = shuffle_values.shuffle_basis,
-      shuffle_feel = shuffle_values.shuffle_feel,
-      shuffle_amount = shuffle_values.shuffle_amount,
-      delay = 1,
-      order = 3,
-      realign = true,
-      enabled = true
-    }
+    m_clock["channel_" .. channel_number .. "_clock"].note_action = function(sprocket, t)
+      local pending = sprocket.note_pending
+      sprocket.note_pending = nil
+      if pending then step.handle(channel_number, pending) end
+    end
 
     m_clock["channel_" .. channel_number .. "_clock"].first_run = true
 
@@ -417,7 +421,7 @@ function m_clock.prepare_start()
     local division = 1 / (calculate_divisor(channel.clock_mods) * 4)
     local shuffle = get_shuffle_values(channel)
     local channel_clock = m_clock["channel_" .. channel_number .. "_clock"]
-    for _, sprocket in ipairs({channel_clock, channel_clock.end_of_clock_processor}) do
+    for _, sprocket in ipairs({channel_clock}) do
       sprocket:set_division(division)
       sprocket:set_swing(shuffle.swing or 0)
       sprocket:set_swing_or_shuffle(shuffle.swing_or_shuffle or 1)
@@ -428,6 +432,9 @@ function m_clock.prepare_start()
   end
   clock_lattice:prepare_for_start()
   slides.reset()
+  -- A device that was left holding a value while the transport was stopped may
+  -- have been changed by hand; start by sending each slot again.
+  step.forget_sent_lock_values()
 end
 
 
@@ -438,7 +445,6 @@ function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.swing_or_shuffle
   clock:set_swing_or_shuffle((swing_or_shuffle or 0))
-  clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 0))
   if clock.swing_or_shuffle ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -446,7 +452,6 @@ function m_clock.set_channel_swing(channel_number, swing)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.swing
   clock:set_swing(swing or 0)
-  clock.end_of_clock_processor:set_swing(swing or 0)
   if clock.swing ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -454,7 +459,6 @@ function m_clock.set_channel_shuffle_feel(channel_number, shuffle_feel)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_feel
   clock:set_shuffle_feel((shuffle_feel or 0))
-  clock.end_of_clock_processor:set_shuffle_feel((shuffle_feel or 0))
   if clock.shuffle_feel ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -462,7 +466,6 @@ function m_clock.set_channel_shuffle_basis(channel_number, shuffle_basis)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_basis
   clock:set_shuffle_basis((shuffle_basis or 0))
-  clock.end_of_clock_processor:set_shuffle_basis((shuffle_basis or 0))
   if clock.shuffle_basis ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -470,7 +473,6 @@ function m_clock.set_channel_shuffle_amount(channel_number, shuffle_amount)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_amount
   clock:set_shuffle_amount(shuffle_amount or 0)
-  clock.end_of_clock_processor:set_shuffle_amount(shuffle_amount or 0)
   if clock.shuffle_amount ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -479,7 +481,6 @@ function m_clock.set_channel_division(channel_number, division)
   local previous = clock.division
   local div_value = 1 / (division * 4)
   clock:set_division(div_value)
-  clock.end_of_clock_processor:set_division(div_value)
   if clock.division ~= previous then retime_channel_slides(channel_number, clock) end
 end
 
@@ -492,13 +493,21 @@ function m_clock.get_destroy_at_note_end_ids_length(channel)
   return #destroy_at_note_end_ids[channel]
 end
 
+-- Every note release is scheduled here; build each channel's clock key once.
+local delay_clock_keys = {}
+
 function m_clock.delay_action(c, length, type, func, before_onset, defer_zero)
   if (length == 0 or length == nil) and not defer_zero then
     func()
     return
   end
 
-  local id = m_clock["channel_" .. c .. "_clock"]:set_delayed_action(length, func, before_onset)
+  local key = delay_clock_keys[c]
+  if not key then
+    key = "channel_" .. c .. "_clock"
+    delay_clock_keys[c] = key
+  end
+  local id = m_clock[key]:set_delayed_action(length, func, before_onset)
 
   if type == "must_execute" then
     table.insert(delayed_ids_must_execute[c], id)
@@ -601,6 +610,20 @@ end
 
 function m_clock.get_clock_lattice()
   return clock_lattice
+end
+
+-- Seconds until the next master step onset, or nil when not playing or unknown.
+-- Screen redraws use this to stay clear of a step's note processing.
+function m_clock.seconds_to_next_step()
+  if not (clock_lattice and clock_lattice.enabled and master_clock and master_clock.enabled) then return nil end
+  local period = master_clock.current_ppqn
+  local phase = master_clock.phase
+  if type(period) ~= "number" or type(phase) ~= "number" or period < 1 then return nil end
+  local tempo = clock.get_tempo()
+  if type(tempo) ~= "number" or tempo <= 0 then return nil end
+  local pulses = period - phase + 1
+  if pulses < 0 then pulses = 0 end
+  return pulses * 60 / (tempo * ppqn)
 end
 
 return m_clock

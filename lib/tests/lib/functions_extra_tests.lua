@@ -638,10 +638,28 @@ function test_fnx_get_param_id_from_stock_id_all_fourteen_mappings()
   luaunit.assert_str_contains(error_of(fn.get_param_id_from_stock_id, "unknown", 1), "bad argument #1 to 'format'")
 end
 
-function test_fnx_generate_id_is_a_hex_address_string()
-  local id = fn.generate_id()
-  luaunit.assert_equals(type(id), "string")
-  luaunit.assert_str_matches(id, "0x%x+") -- characterisation (Lua 5.3 on Linux)
+-- Characterisation, not manual text: repeated and interleaved lookups keep
+-- each stock kind and channel distinct; an unknown kind still raises each time.
+function test_fnx_get_param_id_from_stock_id_repeated_lookups_stay_distinct()
+  for _ = 1, 2 do
+    luaunit.assert_equals(fn.get_param_id_from_stock_id("chord_arp", 16), "midi_device_params_channel_16_9")
+    luaunit.assert_equals(fn.get_param_id_from_stock_id("chord_arp", 3), "midi_device_params_channel_3_9")
+    luaunit.assert_equals(fn.get_param_id_from_stock_id("fixed_note", 16), "midi_device_params_channel_16_2")
+    luaunit.assert_str_contains(error_of(fn.get_param_id_from_stock_id, "unknown", 1), "bad argument #1 to 'format'")
+  end
+end
+
+function test_fnx_generate_id_is_a_unique_string()
+  local first = fn.generate_id()
+  local second = fn.generate_id()
+  luaunit.assert_equals(type(first), "string")
+  luaunit.assert_not_equals(first, second)
+  local seen = {}
+  for _ = 1, 1000 do
+    local id = fn.generate_id()
+    luaunit.assert_nil(seen[id])
+    seen[id] = true
+  end
 end
 
 -- random helpers (README.md:789 and README.md:793) ----------------------------

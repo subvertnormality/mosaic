@@ -84,6 +84,7 @@ function Lattice:new(args)
   l.sprocket_id_counter = 100
   l.sprockets = {}
   l.sprocket_ordering = {{}, {}, {}, {}, {}}
+  l.sprocket_pulse_order = {{}, {}, {}, {}, {}}
   l.pattern_length = args.pattern_length or 64
   return l
 end
@@ -144,6 +145,7 @@ function Lattice:destroy()
   end
   self.sprockets = {}
   self.sprocket_ordering = {}
+  self.sprocket_pulse_order = {{}, {}, {}, {}, {}}
 end
 
 --- set_meter is deprecated
@@ -193,26 +195,133 @@ function Lattice.auto_pulse(s)
   end
   -- Preserve the immediate first pulse, then keep full intervals from its phase.
   -- A negative equivalent offset avoids skipping a pulse at a sync boundary.
-  local offset = (clock.get_beats() % interval) - interval
-  while true do
+  local origin = clock.get_beats()
+  local offset = (origin % interval) - interval
+  -- norns counts a coroutine's first sync from the current beat (later syncs
+  -- count from their previous target), so replay whole intervals a slow first
+  -- pulse overran instead of dropping them from the grid. The tolerance stays
+  -- below norns' FLT_EPSILON sync margin so no pulse can run twice.
+  local pulses = 0
+  repeat
     s:pulse()
+    pulses = pulses + 1
+  until not s.enabled or clock.get_beats() + 1e-7 < origin + pulses * interval
+  while true do
     clock.sync(interval, offset)
+    s:pulse()
   end
 end
 
 
+-- Run the before-onset releases that are already due for every sprocket
+-- reaching an onset on this pulse, keeping the order a single pass would have
+-- used. Releases created later in the pulse are still run by the pulse itself.
+function Lattice:release_due_onset_actions()
+  for i = 1, 5 do
+    local ordering = self.sprocket_pulse_order[i]
+    for index = 1, #ordering do
+      local sprocket = ordering[index]
+      local phase = sprocket.phase
+      if sprocket.enabled and phase >= 1 and phase < 2 then
+        local pending_ids = sprocket.delayed_action_order
+        for order_index = 1, #pending_ids do
+          local pending_id = pending_ids[order_index]
+          local pending = sprocket.delayed_actions[pending_id]
+          if pending and pending.before_onset and pending.length == 0 then
+            sprocket.delayed_actions[pending_id] = nil
+            sprocket.released_before_onset = true
+            sprocket:run_pending_action(pending)
+            if not self.enabled then return end
+            if sprocket.cleanup_delayed_action then
+              sprocket.cleanup_delayed_action(pending_id)
+            end
+          end
+        end
+      end
+    end
+  end
+end
+
+-- A sprocket may defer the part of its onset that emits notes, so that every
+-- sprocket in its order group has sent the messages that shape those notes
+-- first. Run the deferred parts once the group's actions are done, in the same
+-- order, and give each the zero-delay bookkeeping its onset would have had.
+function Lattice:run_deferred_note_actions(ordering)
+  for index = 1, #ordering do
+    local sprocket = ordering[index]
+    if sprocket.note_pending ~= nil then
+      sprocket:note_action(self.transport)
+      if not self.enabled then return end
+      -- Zero-delay actions this note created still run on its own pulse.
+      local pending_ids = sprocket.delayed_action_order
+      local removed = false
+      for order_index = 1, #pending_ids do
+        local id = pending_ids[order_index]
+        local delayed_action = sprocket.delayed_actions[id]
+        if delayed_action and delayed_action.length == 0 then
+          sprocket.delayed_actions[id] = nil
+          removed = true
+          sprocket:run_pending_action(delayed_action)
+          if not self.enabled then return end
+          if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(id) end
+        end
+      end
+      if removed then
+        local retained = 0
+        for order_index = 1, #pending_ids do
+          local id = pending_ids[order_index]
+          if sprocket.delayed_actions[id] then
+            retained = retained + 1
+            pending_ids[retained] = id
+          end
+        end
+        for order_index = #pending_ids, retained + 1, -1 do pending_ids[order_index] = nil end
+      end
+    end
+  end
+end
+
 function Lattice:pulse()
   if self.enabled then
+    -- A step's note-offs and its note-ons are two bursts down one MIDI port. If
+    -- each sprocket released and then sounded in turn, every channel's note-on
+    -- would wait behind another channel's note-off, doubling how long a step's
+    -- notes take to leave. Run the releases that are due at this pulse's onsets
+    -- first, in the order those sprockets would have run them, so the onsets
+    -- that follow are consecutive. The same releases still happen before any
+    -- onset that could retrigger the pitch they belong to.
+    self:release_due_onset_actions()
+    if not self.enabled then return end
     local flagged = false
     for i = 1, 5 do
-      for _, id in ipairs(self.sprocket_ordering[i]) do
+      local ordering = self.sprocket_pulse_order[i]
+      -- Set when an onset in this group defers the part that emits its notes,
+      -- so a group with nothing deferred is not walked a second time.
+      local deferred = false
+      for index = 1, #ordering do
         if not self.enabled then return end
-        local sprocket = self.sprockets[id]
-        if sprocket and sprocket.enabled then
+        -- The order holds the sprockets themselves, so no entry is ever nil.
+        local sprocket = ordering[index]
+        local phase = sprocket.phase
+        if sprocket.enabled and sprocket.delayed_action_order[1] == nil
+            and sprocket._pending_clocks == nil and sprocket.shuffle_updated
+            and (phase < 1 or phase >= 2)
+            and phase + 1 <= sprocket.current_ppqn then
+          -- A sprocket between onsets with nothing pending only advances. Most
+          -- sprockets are in this state on most pulses, and every branch the
+          -- full path below would take is excluded by the conditions above.
+          sprocket.phase = phase + 1
+          sprocket.last_processed_transport = self.transport
+          sprocket.transport = sprocket.transport + 1
+        elseif sprocket.enabled then
+          -- Set when this pulse removes a delayed action, so the order list is compacted.
+          local removed = false
           if not sprocket.shuffle_updated then
             sprocket:begin_cycle()
           end
-          sprocket:prepare_pending_clocks()
+          if sprocket._pending_clocks then
+            sprocket:prepare_pending_clocks()
+          end
           if sprocket._pending_clocks then
             for _, pending_id in ipairs(sprocket.delayed_action_order) do
               local pending = sprocket.delayed_actions[pending_id]
@@ -220,21 +329,27 @@ function Lattice:pulse()
               if timing and pending.before_onset and (pending.length == 0 or
                   (pending.length < 1 and timing.phase - 1 >= pending_deadline(timing.current_ppqn, pending.length))) then
                 sprocket.delayed_actions[pending_id] = nil
+                removed = true
                 sprocket:run_pending_action(pending)
                 if not self.enabled then return end
                 if sprocket.cleanup_delayed_action then sprocket.cleanup_delayed_action(pending_id) end
               end
             end
           end
+          if sprocket.released_before_onset then
+            sprocket.released_before_onset = nil
+            removed = true
+          end
           if sprocket.phase >= 1 and sprocket.phase < 2 then
-            -- Finish due note releases before a new step can retrigger
-            -- the same MIDI pitch. A late previous note-off cuts the new voice.
+            -- Releases due when the pulse began have already run; this catches
+            -- any a preceding sprocket's onset created during this pulse.
             -- New zero-delay actions created by this onset still run below.
             for index = 1, #sprocket.delayed_action_order do
               local pending_id = sprocket.delayed_action_order[index]
               local pending = sprocket.delayed_actions[pending_id]
               if pending and pending.before_onset and pending.length == 0 then
                 sprocket.delayed_actions[pending_id] = nil
+                removed = true
                 sprocket:run_pending_action(pending)
                 if not self.enabled then return end
                 if sprocket.cleanup_delayed_action then
@@ -246,6 +361,7 @@ function Lattice:pulse()
             sprocket.last_onset_transport = self.transport
             sprocket.action(self.transport)
             if not self.enabled then return end
+            if sprocket.note_pending ~= nil then deferred = true end
           end
 
           sprocket.phase = sprocket.phase + 1
@@ -253,54 +369,69 @@ function Lattice:pulse()
             for _, timing in ipairs(sprocket._pending_clocks) do timing.phase = timing.phase + 1 end
           end
 
-          local to_remove = {}
-    
           -- Equal-deadline actions retain insertion order across Lua processes.
+          -- Most sprockets hold none on most pulses; skip the bookkeeping then.
           local pending_ids = sprocket.delayed_action_order
-          for index = 1, #pending_ids do
-            local id = pending_ids[index]
-            local delayed_action = sprocket.delayed_actions[id]
-            if delayed_action then
-              local timing = delayed_action.timing or sprocket
-              if delayed_action.length == 0 then
-                  sprocket:run_pending_action(delayed_action)
-                  if not self.enabled then return end
-                  table.insert(to_remove, id)
-                  if sprocket.cleanup_delayed_action then
-                    sprocket.cleanup_delayed_action(id)
-                  end
-              elseif delayed_action.length < 1 then
-                  -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
-                  if timing.phase - 2 >= pending_deadline(timing.current_ppqn, delayed_action.length) then
-                      sprocket:run_pending_action(delayed_action)
-                      if not self.enabled then return end
-                      table.insert(to_remove, id)
-                      if sprocket.cleanup_delayed_action then
-                        sprocket.cleanup_delayed_action(id)
-                      end
-                  elseif timing.phase > timing.current_ppqn then
-                      -- Fractions rounding to a full cycle fire at its next onset.
-                      delayed_action.length = 0
-                  end
-              elseif timing.phase > timing.current_ppqn then
-                  delayed_action.length = delayed_action.length - 1
+          local pending_count = #pending_ids
+          if pending_count > 0 then
+            local to_remove
+            local delayed_actions = sprocket.delayed_actions
+            for index = 1, pending_count do
+              local id = pending_ids[index]
+              local delayed_action = delayed_actions[id]
+              if delayed_action then
+                local timing = delayed_action.timing or sprocket
+                local length = delayed_action.length
+                if length == 0 then
+                    sprocket:run_pending_action(delayed_action)
+                    if not self.enabled then return end
+                    to_remove = to_remove or {}
+                    table.insert(to_remove, id)
+                    if sprocket.cleanup_delayed_action then
+                      sprocket.cleanup_delayed_action(id)
+                    end
+                elseif length < 1 then
+                    -- Phase is1 at onset and was incremented above: elapsed ticks = phase-2.
+                    if timing.phase - 2 >= pending_deadline(timing.current_ppqn, length) then
+                        sprocket:run_pending_action(delayed_action)
+                        if not self.enabled then return end
+                        to_remove = to_remove or {}
+                        table.insert(to_remove, id)
+                        if sprocket.cleanup_delayed_action then
+                          sprocket.cleanup_delayed_action(id)
+                        end
+                    elseif timing.phase > timing.current_ppqn then
+                        -- Fractions rounding to a full cycle fire at its next onset.
+                        delayed_action.length = 0
+                    end
+                elseif timing.phase > timing.current_ppqn then
+                    delayed_action.length = length - 1
+                end
               end
             end
-          end
           
-          for _, id in ipairs(to_remove) do
-              sprocket.delayed_actions[id] = nil
-          end
-          -- Compact cancelled/completed entries without sorting or shifting.
-          local retained = 0
-          for index = 1, #pending_ids do
-            local id = pending_ids[index]
-            if sprocket.delayed_actions[id] then
-              retained = retained + 1
-              pending_ids[retained] = id
+            if to_remove then
+              removed = true
+              for _, id in ipairs(to_remove) do
+                  sprocket.delayed_actions[id] = nil
+              end
+            end
+            -- Compact cancelled/completed entries without sorting or shifting.
+            -- Every reader skips ids without an action, so compaction waits
+            -- until this pulse removes one; the size bound limits ids left by
+            -- cancellations made outside the pulse.
+            if removed or #pending_ids >= 32 then
+              local retained = 0
+              for index = 1, #pending_ids do
+                local id = pending_ids[index]
+                if sprocket.delayed_actions[id] then
+                  retained = retained + 1
+                  pending_ids[retained] = id
+                end
+              end
+              for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
             end
           end
-          for index = #pending_ids, retained + 1, -1 do pending_ids[index] = nil end
 
           if sprocket._pending_clocks then
             for _, timing in ipairs(sprocket._pending_clocks) do
@@ -308,13 +439,18 @@ function Lattice:pulse()
               timing.transport = timing.transport + 1
             end
           end
-          sprocket:finish_cycle()
+          -- finish_cycle only acts at the end of a cycle; skip the call otherwise.
+          if sprocket.phase > sprocket.current_ppqn then sprocket:finish_cycle() end
           sprocket.last_processed_transport = self.transport
           sprocket.transport = sprocket.transport + 1
-        elseif sprocket and sprocket.flag then
+        elseif sprocket.flag then
           self.sprockets[sprocket.id] = nil
           flagged = true
         end
+      end
+      if deferred then
+        self:run_deferred_note_actions(ordering)
+        if not self.enabled then return end
       end
     end
     if flagged then
@@ -380,9 +516,16 @@ function Lattice:order_sprockets()
   for id, sprocket in pairs(self.sprockets) do
     table.insert(self.sprocket_ordering[sprocket.order],id)
   end
+  -- The pulse walks the sprockets themselves; the ids stay for every other
+  -- reader, and both lists are rebuilt together whenever the set changes.
+  local pulse_order = {{}, {}, {}, {}, {}}
   for i = 1, 5 do
-    table.sort(self.sprocket_ordering[i])
+    local ids = self.sprocket_ordering[i]
+    table.sort(ids)
+    local ordered = pulse_order[i]
+    for index = 1, #ids do ordered[index] = self.sprockets[ids[index]] end
   end
+  self.sprocket_pulse_order = pulse_order
 end
 
 --- "private" method to instantiate a new sprocket, only called by Lattice:new_sprocket()

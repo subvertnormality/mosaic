@@ -88,6 +88,12 @@ function application_parameters.register(project_actions)
   params:add_number("elektron_program_change_channel", "Elektron p.change channel", 1, 16, 10, nil, false)
   params:add_separator("Parameter locks")
   params:add_option("trigless_locks", "Trigless locks", {"Off", "On"}, 2)
+  -- An unlocked step sends the channel's assigned value, so a parameter that is
+  -- not being locked repeats the same message every step. Turning the repeat off
+  -- sends a slot's value only when it changes, which is what a busy sixteen
+  -- channel project needs to keep its notes together.
+  params:add_option("repeat_unchanged_locks", "Resend unchanged locks", {"Off", "On"}, 2)
+  params:set_action("repeat_unchanged_locks", function() step.forget_sent_lock_values() end)
   params:add_separator("Quantiser")
   params:add_option("quantiser_act_on_note_masks", "Snap note masks to scale", {"Off", "On"}, 2)
   params:add_option("quantiser_fully_act_on_note_masks", "Quantise note masks", {"Off", "On"}, 1)

@@ -37,7 +37,18 @@ function sequencer:draw(channel, draw_func)
   local selected_pattern = program.get_selected_pattern()
   local program_get_selected_song_pattern = program.get_selected_song_pattern
   local program_get_current_step_for_channel = program.get_current_step_for_channel
-  local program_step_has_trig_lock = channel_edit_page_ui.should_show_step_has_trig_lock
+  local should_show_step_has_trig_lock = channel_edit_page_ui.should_show_step_has_trig_lock
+  -- Heads, tails and the playhead ask about the same steps; the indicator
+  -- cannot change during one draw, so query each step once.
+  local step_lock_shown = {}
+  local function program_step_has_trig_lock(step_channel, step)
+    local shown = step_lock_shown[step]
+    if shown == nil then
+      shown = should_show_step_has_trig_lock(step_channel, step) and true or false
+      step_lock_shown[step] = shown
+    end
+    return shown
+  end
 
   local m_clock_is_playing = m_clock.is_playing
   local fn_calc_grid_count = fn.calc_grid_count
@@ -70,9 +81,12 @@ function sequencer:draw(channel, draw_func)
 
   local current_step = program_get_current_step_for_channel(channel.number)
 
+  -- A row's grid counts are consecutive, so the row's first count is all the
+  -- position each cell needs; the helper is still used off the row grid below.
   for y = self.y, self.y + 3 do
+    local row_base = fn_calc_grid_count(0, y)
     for x = 1, 16 do
-      local grid_count = fn_calc_grid_count(x, y)
+      local grid_count = row_base + x
       local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if mode == "channel" then
@@ -90,8 +104,9 @@ function sequencer:draw(channel, draw_func)
   end
 
   for y = self.y, self.y + 3 do
+    local row_base = fn_calc_grid_count(0, y)
     for x = 1, 16 do
-      local grid_count = fn_calc_grid_count(x, y)
+      local grid_count = row_base + x
       local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if unsaved_grid[grid_count] then

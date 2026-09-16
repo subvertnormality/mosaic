@@ -1290,3 +1290,28 @@ function test_step_hardening_probability_zero_rejects_root_and_all_four_delayed_
     luaunit.assert_equals(events_of(env, "off"), {})
   end)
 end
+
+function test_step_killer_modulated_control_values_are_read_every_time()
+  local saved = params
+  local modulation = 0
+  local spec = {minval = 0, maxval = 127, warp = "lin", step = 1}
+  local param = {t = 3, controlspec = spec, raw = 0.5, default = -1,
+    get = function(self) return modulation end}
+  local id = fn.get_param_id_from_stock_id("trig_probability", 1)
+  params = {lookup = {[id] = 1}, params = {param}}
+  function params:get(key) return nil end
+  function params:lookup_param(key) return nil end
+  local ok, err = pcall(function()
+    program.init()
+    modulation = 10
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 10)
+    -- Same raw value, same controlspec, different modulated reading.
+    modulation = 90
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 90,
+      "A modulated parameter must not be served from a cache keyed on its raw value")
+    modulation = 45
+    luaunit.assert_equals(step_under_test.process_stock_params(1, 1, "trig_probability"), 45)
+  end)
+  params = saved
+  if not ok then error(err) end
+end

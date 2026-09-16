@@ -1,4 +1,24 @@
-"""Shared user-level PERF-002/003 workload and slide oracle."""
+"""Shared user-level PERF-002/003/009 workload and slide and parameter-lock oracles."""
+
+# PERF-009 parameter locks: every channel assigns four CC trig parameters with
+# distinct default values, and locks each on two steps without slides. Defaults
+# are sent on every unlocked step (README "Default Parameter Values"); locked
+# steps send their lock value (README "Trig Param Locks").
+LOCK_PARAMETERS = (1, 2, 3, 4)
+LOCK_DEFAULTS = {1: 20, 2: 40, 3: 60, 4: 80}
+LOCK_STEPS = {1: ((1, 101), (9, 11)), 2: ((1, 102), (9, 12)), 3: ((1, 103), (9, 13)), 4: ((1, 104), (9, 14))}
+
+def lock_values(parameter):
+    """Expected CC value on steps 1..16 of the locks workload."""
+    values = [LOCK_DEFAULTS[parameter]] * 16
+    for step, value in LOCK_STEPS[parameter]: values[step - 1] = value
+    return values
+
+def set_step_value(d, step, value):
+    d.action(type='grid', x=step, y=4, state=1)
+    try:d.elapse(.05);d.action(type='enc', n=3, delta=-126);d.elapse(.15);d.enc(3, value + 1)
+    finally:d.action(type='grid', x=step, y=4, state=0)
+    d.elapse(.1)
 
 def build_project(d,channels,workload='dense',select_parameter=None,select_device=None):
     d.tap(5,8);d.tap(1,1)
@@ -23,6 +43,18 @@ def build_project(d,channels,workload='dense',select_parameter=None,select_devic
                 finally:d.action(type='grid',x=step,y=4,state=0)
                 d.elapse(.1)
             d.key(3);d.enc(1,3)
+        if workload=='locks':
+            d.enc(1,-3)
+            for index,parameter in enumerate(LOCK_PARAMETERS):
+                if index:d.enc(2,1)
+                label='CC %d'%parameter
+                if select_parameter:select_parameter(d,label)
+                else:
+                    from cases import assign_trig_parameter
+                    assign_trig_parameter(d,label)
+                d.enc(3,LOCK_DEFAULTS[parameter]+1)
+                for step,value in LOCK_STEPS[parameter]:set_step_value(d,step,value)
+            d.enc(2,-(len(LOCK_PARAMETERS)-1));d.enc(1,3)
     d.tap(1,1)
 
 def check_slides(emitted,ons,channels):
@@ -39,6 +71,26 @@ def check_slides(emitted,ons,channels):
     assert checked>=channels,('No complete slide cycle',checked)
     return checked
 
+def check_locks(emitted,ons,channels):
+    """Before each note, a channel has sent every locks-workload CC with that step's value.
+
+    Play first recalls current parameter values (patch recall); later values in the
+    same step replace them, so only the last value sent before each note counts.
+    """
+    pending={channel:{} for channel in range(channels)};counts={channel:0 for channel in range(channels)};checked=0
+    for e in emitted:
+        status=e['bytes'][0]&240;channel=e['bytes'][0]&15
+        if channel>=channels or len(e['bytes'])<3:continue
+        if status==176 and e['bytes'][1] in LOCK_PARAMETERS:pending[channel][e['bytes'][1]]=e['bytes'][2]
+        elif status==144 and e['bytes'][2]>0:
+            step=counts[channel]%16
+            for parameter in LOCK_PARAMETERS:
+                assert pending[channel].get(parameter)==lock_values(parameter)[step],('Lock value',channel+1,parameter,step+1,pending[channel].get(parameter))
+                checked+=1
+            pending[channel]={};counts[channel]+=1
+    assert all(count>=16 for count in counts.values()),('Lock cycle incomplete',counts)
+    return checked
+
 def validate_events(emitted,channels,workload):
     """Shared completeness, ordering, byte, release, and slide oracle."""
     assert emitted and [e['index'] for e in emitted]==list(range(1,len(emitted)+1)),'Non-contiguous native export'
@@ -50,4 +102,5 @@ def validate_events(emitted,channels,workload):
         assert sorted(e['bytes'][0] for e in group)==[144+c for c in range(channels)],('Channels at step',index,[e['bytes'] for e in group])
         assert all(e['bytes'][1:]==[60,100] and e['port']==1 for e in group),('Bytes at step',index,[(e['port'],e['bytes']) for e in group])
     assert len(offs)==len(ons),('Unbalanced releases',len(ons),len(offs))
-    return {'ons':ons,'offs':offs,'steps':steps,'slide_cycles':check_slides(emitted,ons,channels) if workload=='slides' else None}
+    return {'ons':ons,'offs':offs,'steps':steps,'slide_cycles':check_slides(emitted,ons,channels) if workload=='slides' else None,
+            'lock_values_checked':check_locks(emitted,ons,channels) if workload=='locks' else None}

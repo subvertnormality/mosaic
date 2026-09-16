@@ -1640,3 +1640,274 @@ function test_recording_global_wrap_preserves_midi_banks()
   recorder = previous_recorder
   if not ok then error(err) end
 end
+
+-- Characterisation, not manual text: the screen redraw loop asks how long is
+-- left before the next master step so a native-heavy redraw does not start in
+-- front of it. Stopped or unknown state reports nil, and the loop redraws.
+function test_seconds_to_next_step_counts_down_to_the_master_onset()
+  setup()
+  m_clock.init()
+  m_clock.get_clock_lattice():stop()
+  luaunit.assert_nil(m_clock.seconds_to_next_step())
+  clock_setup()
+  local pulse_seconds = 60 / (clock.get_tempo() * 96)
+  local first = m_clock.seconds_to_next_step()
+  local pulses = first / pulse_seconds
+  luaunit.assert_almost_equals(pulses, math.floor(pulses + 0.5), 1e-9)
+  luaunit.assert_true(pulses >= 1 and pulses <= 24)
+  progress_clock_by_pulses(1)
+  luaunit.assert_almost_equals(m_clock.seconds_to_next_step(), first - pulse_seconds, 1e-9)
+  progress_clock_by_pulses(math.floor(pulses + 0.5) - 2)
+  luaunit.assert_almost_equals(m_clock.seconds_to_next_step(), pulse_seconds, 1e-9)
+  progress_clock_by_pulses(1)
+  luaunit.assert_almost_equals(m_clock.seconds_to_next_step(), 24 * pulse_seconds, 1e-9)
+  m_clock.get_clock_lattice():stop()
+  luaunit.assert_nil(m_clock.seconds_to_next_step())
+end
+
+-- Characterisation: the end-of-clock processor consumes stored note-mask
+-- events only while the channel is both selected and recording, and a channel
+-- that has just wrapped to step 1 records its previous last step.
+function test_end_of_clock_records_note_masks_only_while_recording_selected()
+  setup()
+  local previous_recorder = recorder
+  recorder = include("mosaic/lib/recorder")
+  local ok, err = pcall(function()
+    memory.init()
+    program.get_selected_song_pattern().global_pattern_length = 4
+    program.get().selected_channel = 1
+    local function stored(step)
+      recorder.add_note_mask_event_portion(1, step, {data = {song_pattern = 1, trig = 1,
+        note = 60, velocity = 100, length = 1, step = step}})
+    end
+
+    params:set("record", 1)
+    stored(1)
+    clock_setup()
+    progress_clock_by_pulses(96)
+    luaunit.assert_not_nil(recorder.mask_events[1][1], "Not recording must leave the event stored")
+
+    params:set("record", 2)
+    program.get().selected_channel = 2
+    progress_clock_by_pulses(96)
+    luaunit.assert_not_nil(recorder.mask_events[1][1], "Another channel selected must leave the event stored")
+
+    program.get().selected_channel = 1
+    progress_clock_by_pulses(96)
+    luaunit.assert_nil(recorder.mask_events[1][1], "Recording the selected channel must consume the event")
+  end)
+  recorder = previous_recorder
+  if not ok then error(err) end
+end
+
+-- The wrap case: after the channel resets to step 1 the processor still has a
+-- previous step to record, which is the channel's end trig, not step 0.
+function test_end_of_clock_records_the_end_trig_after_a_wrap()
+  setup()
+  local previous_recorder = recorder
+  recorder = include("mosaic/lib/recorder")
+  local ok, err = pcall(function()
+    memory.init()
+    program.get_selected_song_pattern().global_pattern_length = 4
+    program.get().selected_channel = 1
+    params:set("record", 2)
+    local channel = program.get_channel(program.get().selected_song_pattern, 1)
+    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+    recorder.add_note_mask_event_portion(1, end_trig, {data = {song_pattern = 1, trig = 1,
+      note = 72, velocity = 90, length = 1, step = end_trig}})
+    clock_setup()
+    progress_clock_by_pulses(24 * 4 * 3)
+    luaunit.assert_nil(recorder.mask_events[1][end_trig],
+      "The step before a wrap must be recorded as the channel's end trig")
+  end)
+  recorder = previous_recorder
+  if not ok then error(err) end
+end
+
+-- The end-of-clock work belongs to a step the channel has actually played, so
+-- the first onset after a start records nothing: there is no previous step yet.
+function test_end_of_clock_records_nothing_at_the_first_onset()
+  setup()
+  local previous_recorder = recorder
+  recorder = include("mosaic/lib/recorder")
+  local ok, err = pcall(function()
+    memory.init()
+    program.get().selected_channel = 1
+    params:set("record", 2)
+    local channel = program.get_channel(program.get().selected_song_pattern, 1)
+    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+    recorder.add_note_mask_event_portion(1, end_trig, {data = {song_pattern = 1, trig = 1,
+      note = 72, velocity = 90, length = 1, step = end_trig}})
+    clock_setup()
+    progress_clock_by_pulses(1)
+    luaunit.assert_not_nil(recorder.mask_events[1][end_trig],
+      "The first onset has no previous step and must record nothing")
+    progress_clock_by_pulses(24 * end_trig)
+    luaunit.assert_nil(recorder.mask_events[1][end_trig],
+      "Wrapping past the end trig must record it")
+  end)
+  recorder = previous_recorder
+  if not ok then error(err) end
+end
+
+-- A step's releases and its notes are two bursts on one MIDI port. Every
+-- release that is already due when a step arrives must be sent before any of
+-- that step's notes, so the notes leave consecutively instead of each one
+-- waiting behind another channel's note-off.
+function test_step_sends_every_due_release_before_any_of_its_notes()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  for c = 1, 4 do
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+  end
+  pattern.update_working_patterns()
+  clock_setup()
+  progress_clock_by_pulses(24 * 3)
+
+  local events = {}
+  local previous_on, previous_off = m_midi.note_on, m_midi.note_off
+  m_midi.note_on = function(self, note, velocity, channel, device)
+    events[#events + 1] = "on"
+    return previous_on(self, note, velocity, channel, device)
+  end
+  m_midi.note_off = function(self, note, velocity, channel, device)
+    events[#events + 1] = "off"
+    return previous_off(self, note, velocity, channel, device)
+  end
+  local ok, err = pcall(progress_clock_by_pulses, 24)
+  m_midi.note_on, m_midi.note_off = previous_on, previous_off
+  if not ok then error(err) end
+
+  local offs, ons = 0, 0
+  for _, kind in ipairs(events) do
+    if kind == "off" then
+      luaunit.assert_equals(ons, 0, "A release followed one of this step's notes")
+      offs = offs + 1
+    else
+      ons = ons + 1
+    end
+  end
+  luaunit.assert_equals(offs, 4, "Each sounding channel releases its previous note")
+  luaunit.assert_equals(ons, 4, "Each sounding channel starts its next note")
+end
+
+-- A parameter lock shapes the note it belongs to, so it must precede that
+-- note; it must not sit in front of another channel's note. Every channel's
+-- locks therefore leave before any of the step's notes.
+function test_step_sends_every_parameter_lock_before_any_of_its_notes()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  for c = 1, 4 do
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+    local channel = program.get_channel(song_pattern, c)
+    for slot = 1, 2 do
+      local id = "lock_order_" .. c .. "_" .. slot
+      channel.trig_lock_params[slot] = {type = "midi", param_id = id, cc_msb = slot, cc_min_value = 0, cc_max_value = 127, off_value = -1}
+      params:add(id, {action = function(value) end})
+      for s = 1, 16 do
+        program.add_step_param_trig_lock_to_channel(channel, s, slot, (s + slot) % 128)
+      end
+    end
+  end
+  pattern.update_working_patterns()
+  clock_setup()
+  progress_clock_by_pulses(24 * 3)
+
+  local events = {}
+  local previous_on, previous_cc = m_midi.note_on, m_midi.cc
+  m_midi.note_on = function(self, note, velocity, channel, device)
+    events[#events + 1] = "note"
+    return previous_on(self, note, velocity, channel, device)
+  end
+  m_midi.cc = function(msb, lsb, value, channel, device)
+    events[#events + 1] = "lock"
+    return previous_cc(msb, lsb, value, channel, device)
+  end
+  local ok, err = pcall(progress_clock_by_pulses, 24)
+  m_midi.note_on, m_midi.cc = previous_on, previous_cc
+  if not ok then error(err) end
+
+  local locks, notes = 0, 0
+  for _, kind in ipairs(events) do
+    if kind == "lock" then
+      luaunit.assert_equals(notes, 0, "A parameter lock followed one of this step's notes")
+      locks = locks + 1
+    else
+      notes = notes + 1
+    end
+  end
+  luaunit.assert_equals(locks, 8, "Each channel sends both of its locks")
+  luaunit.assert_equals(notes, 4, "Each channel sounds its note")
+end
+
+-- "Resend unchanged locks" off sends a slot's value only when it changes, so a
+-- held parameter stops repeating the same control change on every step. On, or
+-- absent, keeps the documented default of sending it every step.
+local function count_locks_over_steps(steps, repeat_unchanged)
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  fn.add_to_set(program.get_song_pattern(song_pattern).channels[1].selected_patterns, 1)
+  local channel = program.get_channel(song_pattern, 1)
+  local id = "held_lock_param"
+  channel.trig_lock_params[1] = {type = "midi", param_id = id, cc_msb = 7,
+    cc_min_value = 0, cc_max_value = 127, off_value = -1}
+  params:add(id, {action = function(value) end})
+  -- The same value on every step: nothing changes from one step to the next.
+  for s = 1, 16 do program.add_step_param_trig_lock_to_channel(channel, s, 1, 64) end
+  if repeat_unchanged ~= nil then params:set("repeat_unchanged_locks", repeat_unchanged) end
+  pattern.update_working_patterns()
+
+  local sent = 0
+  local previous_cc = m_midi.cc
+  m_midi.cc = function(msb, lsb, value, ch, device)
+    sent = sent + 1
+    return previous_cc(msb, lsb, value, ch, device)
+  end
+  -- Count from the start, so the step the transport itself plays is included.
+  local ok, err = pcall(function()
+    clock_setup()
+    progress_clock_by_pulses(24 * steps)
+  end)
+  m_midi.cc = previous_cc
+  if not ok then error(err) end
+  return sent
+end
+
+function test_unchanged_locks_repeat_every_step_by_default()
+  -- The transport plays a step of its own before the pulses below advance it.
+  luaunit.assert_equals(count_locks_over_steps(4, nil), 5)
+  luaunit.assert_equals(count_locks_over_steps(4, 2), 5)
+  luaunit.assert_equals(count_locks_over_steps(8, 2), 9)
+end
+
+function test_unchanged_locks_are_sent_once_when_the_repeat_is_off()
+  luaunit.assert_equals(count_locks_over_steps(4, 1), 1)
+  luaunit.assert_equals(count_locks_over_steps(8, 1), 1)
+end

@@ -787,8 +787,8 @@ function test_lattice_mk_initial_delay_with_carry_changed_first_step()
   -- (smooth basis 1: 107 then 106 pulses), update_shuffle rescales the negative
   -- pre-delay phase and clamps it to 1, so a delay of half a step is dropped
   -- and the first onset lands on pulse 1. Drunk basis 1 (128 exactly both
-  -- times) keeps its delay. m_clock's end_of_clock_processor uses delay = 1
-  -- with the channel's shuffle settings.
+  -- times) keeps its delay. A delayed sprocket with a channel's shuffle
+  -- settings is the general case this pins.
   luaunit.assert_equals(onsets({division = 1 / 4, delay = 0.5, swing_or_shuffle = 2,
     shuffle_feel = 1, shuffle_basis = 1, shuffle_amount = 100}, 2), {65, 193})
   luaunit.assert_equals(onsets({division = 1 / 4, delay = 0.5, swing_or_shuffle = 2,

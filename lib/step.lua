@@ -59,7 +59,25 @@ local function read_stock_step_lock(i, channel, current_step)
   return program.get_step_param_trig_lock(channel, current_step, i)
 end
 
+-- Per-note stock reads go straight through the paramset's id index. An id the
+-- index does not hold falls back to the public calls, which behave as before.
+local function indexed_param(param_id)
+  local lookup = params.lookup
+  local index = lookup and lookup[param_id]
+  return index and params.params[index]
+end
+
+-- A parameter's value cannot be cached against its raw value: a norns mod may
+-- wrap the getter so the value follows a modulation source while raw stands
+-- still (matrix does this), and a cache keyed on raw then serves the first
+-- reading to every note for the life of the project.
+local function control_value(param)
+  return param:get()
+end
+
 local function read_stock_assigned(param_id)
+  local param = indexed_param(param_id)
+  if param then return control_value(param) end
   return params:get(param_id)
 end
 
@@ -70,8 +88,10 @@ end
 local function read_stock_fallback(kind, channel)
   local param_id = fn.get_param_id_from_stock_id(kind, channel.number)
   if param_id then
+    local param = indexed_param(param_id)
+    if param then return control_value(param), read_stock_default, param end
     local value = params:get(param_id)
-    local param = params:lookup_param(param_id)
+    param = params:lookup_param(param_id)
     return value, read_stock_default, param
   end
   return nil, nil
@@ -83,33 +103,27 @@ function step.process_stock_params(c, current_step, kind)
     read_stock_step_lock, read_stock_assigned, read_stock_fallback, channel, current_step)
 end
 
+-- Stock kinds resolved by step handling rather than sent as parameter locks.
+local skipped_lock_params = {
+  trig_probability = true,
+  quantised_fixed_note = true,
+  bipolar_random_note = true,
+  twos_random_note = true,
+  random_velocity = true,
+  chord_strum = true,
+  chord_arp = true,
+  chord_velocity_modifier = true,
+  chord_spread = true,
+  chord_acceleration = true,
+  chord_strum_pattern = true,
+  fixed_note = true,
+  mute_root_note = true,
+  fully_quantise_mask = true
+}
+
 local function should_process_param(param)
-  local skip_params = {
-      "trig_probability",
-      "quantised_fixed_note", 
-      "bipolar_random_note",
-      "twos_random_note",
-      "random_velocity",
-      "chord_strum",
-      "chord_arp",
-      "chord_velocity_modifier",
-      "chord_spread",
-      "chord_acceleration",
-      "chord_strum_pattern",
-      "fixed_note",
-      "mute_root_note",
-      "fully_quantise_mask"
-  }
-  
   if not param then return false end
-  
-  for _, skip_param in ipairs(skip_params) do
-      if param.id == skip_param then 
-          return false
-      end
-  end
-  
-  return true
+  return not skipped_lock_params[param.id]
 end
 
 local function process_midi_param(param, step_trig_lock, midi_channel, midi_device, mode)
@@ -134,12 +148,38 @@ local function process_midi_param(param, step_trig_lock, midi_channel, midi_devi
   end
 end
 
+-- README "Default Parameter Values": an unlocked step sends the channel's
+-- assigned value, so a parameter that is not being locked repeats the same
+-- message on every step. A sixteen-channel step can carry a hundred of them,
+-- and they all queue in front of that step's notes. When the player turns the
+-- repeat off, a value that has not changed since this slot last sent one is
+-- not sent again; the receiving device is already holding it.
+local last_sent_lock_values = {}
+
+function step.forget_sent_lock_values()
+  last_sent_lock_values = {}
+end
+
+local function send_midi_param(channel_number, slot, param, value, midi_channel, midi_device, mode)
+  -- Absent or On means resend, so the documented default behaviour is kept.
+  if fn.param_value("repeat_unchanged_locks") == 1 then
+    local per_channel = last_sent_lock_values[channel_number]
+    if per_channel == nil then
+      per_channel = {}
+      last_sent_lock_values[channel_number] = per_channel
+    end
+    if per_channel[slot] == value then return end
+    per_channel[slot] = value
+  end
+  process_midi_param(param, value, midi_channel, midi_device, mode)
+end
+
 
 -- Emit the value that this eligible step will record, not a stale playback
 -- lock. Repeating it also restores sound after selection or mute pauses.
 function step.process_recording_params(channel)
   local data = program.get()
-  if channel.mute or params:get("record") ~= 2 or data.selected_channel ~= channel.number then return end
+  if channel.mute or fn.param_value("record") ~= 2 or data.selected_channel ~= channel.number then return end
   for i, param in ipairs(channel.trig_lock_params) do
     local dirty = recorder.trig_lock_is_dirty(channel.number, i)
     if dirty ~= nil and dirty ~= false and param.type == "midi" and param.param_id and
@@ -169,26 +209,33 @@ function step.process_params(channel, step)
     return
   end 
 
+  local recording_selected_channel = fn.param_value("record") == 2 and program_data.selected_channel == channel.number
+
   for i, param in ipairs(trig_lock_params) do
-    local off = param.off_value == nil and -1 or param.off_value
+    -- Unassigned slots are the common case; test the cheapest condition first.
+    if param.param_id and should_process_param(param) then
+      local off = param.off_value == nil and -1 or param.off_value
 
-    if should_process_param(param) then
-      if not param.param_id then
-        goto continue
-      end
-
-      if params:get("record") == 2 and program_data.selected_channel == channel.number and
-        recorder.trig_lock_is_dirty(channel.number, i) then
+      if recording_selected_channel and recorder.trig_lock_is_dirty(channel.number, i) then
         goto continue
       end
 
       local step_trig_lock = program.get_step_param_trig_lock(channel, step, i)
 
-      value = params:get(trig_lock_params[i].param_id)
+      -- A locked MIDI step sends its lock; only other paths use the assigned value.
+      if step_trig_lock == nil or param.type ~= "midi" then
+        value = read_stock_assigned(param.param_id)
+      else
+        value = nil
+      end
 
       local next_lock
       
-      if step_trig_lock then
+      -- The next lock only feeds a slide. Once both slide tables exist, reading
+      -- them has no side effects, so skip the search for locks that cannot slide.
+      local channel_slides, step_slides = channel.trig_lock_slides, channel.step_trig_lock_slides
+      if step_trig_lock and (not channel_slides or not step_slides or channel_slides[i] or
+          (step_slides[step] and step_slides[step][i])) then
         next_lock = program.get_next_trig_lock_step(channel, step, i, off)
       end
 
@@ -200,13 +247,8 @@ function step.process_params(channel, step)
           nrpn_mode = param.nrpn_lsb_mode or nrpn_codec.stored_mode(program_data, channel.number, param, device)
         end
 
-        local param_id = param.param_id
-        local p_value = nil
-        local p = nil
-        if param_id then
-          p = params:lookup_param(param_id)
-          p_value = params:get(param_id)
-        end
+        -- The assigned value was read above; param_id is always present here.
+        local p_value = value
 
         if param.channel then
           midi_channel = param.channel
@@ -217,7 +259,7 @@ function step.process_params(channel, step)
           end
 
           if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
-            process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+            send_midi_param(channel.number, i, param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
           end
 
           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
@@ -244,13 +286,13 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          send_midi_param(channel.number, i, param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
         elseif not m_clock.channel_is_sliding(channel, i) then
           if value == off then
             goto continue
           end
 
-          process_midi_param(param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          send_midi_param(channel.number, i, param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
 
@@ -311,7 +353,7 @@ step.calculate_next_selected_song_pattern = song_transition.calculate_next_selec
 
 function step.calculate_step_scale_number(c, s)
   local program_data = program.get()
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
+  local channel = program.get_channel(program_data.selected_song_pattern, c)
   local channel_step_scale_number = program.get_step_scale_trig_lock(channel, s)
   local persistent_numbers = persistent_channel_step_scale_numbers
 
@@ -321,7 +363,8 @@ function step.calculate_step_scale_number(c, s)
   end
 
   local current_step_17 = program.get_current_step_for_channel(17)
-  local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(program.get().selected_song_pattern, 17), current_step_17)
+  local channel_17 = program.get_channel(program_data.selected_song_pattern, 17)
+  local global_step_scale_number = program.get_step_scale_trig_lock(channel_17, current_step_17)
   local global_default_scale = program_data.default_scale
 
   local start_trig_c = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
@@ -329,8 +372,7 @@ function step.calculate_step_scale_number(c, s)
     persistent_numbers[c] = nil
   end
 
-  local start_trig_17 = fn.calc_grid_count(program.get_channel(program.get().selected_song_pattern, 17).start_trig[1], program.get_channel(program.get().selected_song_pattern, 17).start_trig[2])
-  if c == 17 and current_step_17 == start_trig_17 then
+  if c == 17 and current_step_17 == fn.calc_grid_count(channel_17.start_trig[1], channel_17.start_trig[2]) then
     persistent_global_step_scale_number = nil
   end
 
@@ -407,8 +449,9 @@ function step.manually_calculate_step_scale_number(c, step)
 end
 
 
-function step.calculate_step_transpose(c)
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
+-- The caller may already hold this channel; it is the same table this fetches.
+function step.calculate_step_transpose(c, known_channel)
+  local channel = known_channel or program.get_channel(program.get().selected_song_pattern, c)
   local current_scale_number = program.get_channel_step_scale_number(c)
   if not current_scale_number then
     current_scale_number = program.get_channel_step_scale_number(17)
@@ -503,12 +546,11 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   end, release_ids)
 end
 
-local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func)
+local function handle_note(device, current_step, note_container, unprocessed_note_container, note_on_func, stock, channel)
   local c = note_container.channel
-  local channel = program.get_channel(program.get().selected_song_pattern, c)
   
   -- Check if root note should be muted
-  local mute_root = step.process_stock_params(c, current_step, "mute_root_note") == 1
+  local mute_root = stock("mute_root_note") == 1
 
   -- Cache frequently accessed values
   local step_chord_masks = channel.step_chord_masks[current_step]
@@ -516,17 +558,25 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local chord_two = step_chord_masks and step_chord_masks[2] or channel.chord_two_mask
   local chord_three = step_chord_masks and step_chord_masks[3] or channel.chord_three_mask
   local chord_four = step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
-  local chord_notes = {chord_one, chord_two, chord_three, chord_four}
+  -- A chord slot sounds only with a non-zero note (see strum_descriptor).
+  local has_chord_notes = (chord_one and chord_one ~= 0) or (chord_two and chord_two ~= 0) or
+    (chord_three and chord_three ~= 0) or (chord_four and chord_four ~= 0)
   
   -- Cache params early
-  local chord_division = note_divisions[step.process_stock_params(c, current_step, "chord_strum")] 
-                        and note_divisions[step.process_stock_params(c, current_step, "chord_strum")].value
-  local chord_velocity_mod = step.process_stock_params(c, current_step, "chord_velocity_modifier")
-  local chord_strum_pattern = step.process_stock_params(c, current_step, "chord_strum_pattern")
-  local chord_spread = step.process_stock_params(c, current_step, "chord_spread") or 0
-  local chord_acceleration = step.process_stock_params(c, current_step, "chord_acceleration") or 0
-  local arp_division = note_divisions[step.process_stock_params(c, current_step, "chord_arp")] 
-                      and note_divisions[step.process_stock_params(c, current_step, "chord_arp")].value
+  local chord_strum_pattern = stock("chord_strum_pattern")
+  local chord_arp = note_divisions[stock("chord_arp")]
+  local arp_division = chord_arp and chord_arp.value
+  -- Strum timing and chord velocity only shape arps, sounding chord notes and a
+  -- delayed root; a plain single note never reads them.
+  local chord_division, chord_velocity_mod, chord_spread, chord_acceleration = nil, nil, 0, 0
+  if arp_division or has_chord_notes or
+      (not mute_root and (chord_strum_pattern == 2 or chord_strum_pattern == 4)) then
+    local chord_strum = note_divisions[stock("chord_strum")]
+    chord_division = chord_strum and chord_strum.value
+    chord_velocity_mod = stock("chord_velocity_modifier")
+    chord_spread = stock("chord_spread") or 0
+    chord_acceleration = stock("chord_acceleration") or 0
+  end
   
   -- Cache note processing values
   local note_value = unprocessed_note_container.note_value
@@ -550,30 +600,39 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     chord_spread = divisions.note_division_values[chord_spread]
   end
 
+  -- Plain single notes need no chord table or chord dashboard values.
+  local chord_notes = (arp_division or has_chord_notes) and {chord_one, chord_two, chord_three, chord_four} or nil
+
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, 
               chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func, process_func)
     return
   end
 
-  local note_dashboard_values = {}
-  
+  -- The dashboard table is shared with the chord callbacks below; build it when
+  -- the root sounds now or a chord can sound. Nothing reads it for an unshown
+  -- channel that sounds no chord, so that note builds none.
+  local note_dashboard_values
+
   local selected_channel = program.get().selected_channel
   if play_strum_root_now(chord_strum_pattern, mute_root) then
     play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
-    note_dashboard_values.note = note_container.note
-    note_dashboard_values.velocity = note_container.velocity
-    note_dashboard_values.length = note_container.length
-    if c == program.get().selected_channel then
-      channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
+    if c == selected_channel or has_chord_notes then
+      note_dashboard_values = {
+        note = note_container.note,
+        velocity = note_container.velocity,
+        length = note_container.length
+      }
+      if c == selected_channel then
+        channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
+      end
     end
   end
 
 
-  local chord_note_dashboard_values = {}
-  chord_note_dashboard_values.chords = {}
+  local chord_note_dashboard_values
 
-  for i = 1, 4 do
+  for i = 1, has_chord_notes and 4 or 0 do
     local chord_number, delay, delay_multiplier = resolve_strum_chord(
       i,
       chord_notes,
@@ -583,6 +642,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
       chord_acceleration
     )
     if chord_number then
+      chord_note_dashboard_values = chord_note_dashboard_values or {chords = {}}
       m_clock.delay_action(
         c,
         delay,
@@ -602,7 +662,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           if processed_chord_note then
             play_note(processed_chord_note, note_container, velocity, note_container.length, note_on_func)
 
-            if not note_dashboard_values.chords then
+            if note_dashboard_values and not note_dashboard_values.chords then
               note_dashboard_values.chords = {}
             end
             -- Show the voice as sent: MIDI clamps it to 0..127 (bugs.json dashboard-chord-slots).
@@ -681,7 +741,11 @@ function step.handle(c, current_step)
     persistent_global_step_scale_number = nil
   end
 
-  local trig_prob = (step.process_stock_params(c, current_step, "trig_probability") == -1) and 100 or (step.process_stock_params(c, current_step, "trig_probability") or 100)
+  -- One assignment scan answers every stock kind this step reads.
+  local stock = stock_parameter.resolver(channel.trig_lock_params, read_stock_step_lock, read_stock_assigned,
+    read_stock_fallback, channel, current_step)
+  local trig_probability = stock("trig_probability")
+  local trig_prob = (trig_probability == -1) and 100 or (trig_probability or 100)
 
   local random_outcome = true
   if trig_prob < 100 then
@@ -689,25 +753,29 @@ function step.handle(c, current_step)
   end
 
   if random_outcome then
-    if params:get("quantiser_trig_lock_hold") == 1 then
+    if fn.param_value("quantiser_trig_lock_hold") == 1 then
       persistent_channel_step_scale_numbers[c] = nil
     end
   end
 
   program.set_channel_step_scale_number(c, step.calculate_step_scale_number(c, current_step))
 
-  local transpose = step.calculate_step_transpose(c)
+  local transpose = step.calculate_step_transpose(c, channel)
 
   if random_outcome then
 
-    local random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "bipolar_random_note") or 0) +
-                         fn.transform_twos_random_value(step.process_stock_params(c, current_step, "twos_random_note") or 0)
+    local random_shift = fn.transform_random_value(stock("bipolar_random_note") or 0) +
+                         fn.transform_twos_random_value(stock("twos_random_note") or 0)
                   
-    local do_pentatonic = params:get("all_scales_lock_to_pentatonic") == 2 or 
-                         (params:get("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
-                         (params:get("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
+    local do_pentatonic = fn.param_value("all_scales_lock_to_pentatonic") == 2 or 
+                         (fn.param_value("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
+                         (fn.param_value("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
 
-    local fully_quantise_mask = step.process_stock_params(c, current_step, "fully_quantise_mask")
+    -- Only note masks read the fully-quantise setting (see pitch_resolution).
+    local fully_quantise_mask = nil
+    if note_mask_value and note_mask_value > -1 then
+      fully_quantise_mask = stock("fully_quantise_mask")
+    end
     local note, relative_note_mask_value, octave_mod_offset, is_mask
     note, relative_note_mask_value, octave_mod_offset, is_mask, fully_quantise_mask = resolve_pitch(
       note_value,
@@ -720,23 +788,31 @@ function step.handle(c, current_step)
       fully_quantise_mask
     )
 
-    local velocity_random_shift = fn.transform_random_value(step.process_stock_params(c, current_step, "random_velocity") or 0)
+    local velocity_random_shift = fn.transform_random_value(stock("random_velocity") or 0)
     velocity_value = fn.constrain(0, 127, velocity_value + velocity_random_shift)
 
-    local quantised_fixed_note = step.process_stock_params(c, current_step, "quantised_fixed_note")
+    -- An unset stock value falls back to the channel parameter, which the
+    -- resolver may already have read; reuse that read when it did.
+    local quantised_fixed_note, quantised_fixed_note_read = stock("quantised_fixed_note")
 
     if not quantised_fixed_note then
-      quantised_fixed_note = params:get(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
+      quantised_fixed_note = quantised_fixed_note_read
+      if quantised_fixed_note == nil then
+        quantised_fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
+      end
     end
 
     if quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127 then
       note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number, nil, true)
     end
 
-    local fixed_note = step.process_stock_params(c, current_step, "fixed_note")
+    local fixed_note, fixed_note_read = stock("fixed_note")
 
     if not fixed_note then
-      fixed_note = params:get(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
+      fixed_note = fixed_note_read
+      if fixed_note == nil then
+        fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
+      end
     end
 
     if fixed_note and fixed_note > -1 and fixed_note <= 127 then
@@ -772,7 +848,9 @@ function step.handle(c, current_step)
           elseif m_midi then
             m_midi:note_on(chord_note, velocity, midi_channel, midi_device)
           end
-        end
+        end,
+        stock,
+        channel
       )
     end
   end

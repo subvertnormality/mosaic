@@ -1,8 +1,8 @@
 local stock_parameter = include("mosaic/lib/musical_resolution/stock_parameter")
 
-local function resolve(options)
+local function resolve_with(options, resolve_type)
   local calls = {locks = {}, assigned = {}, fallback = 0, default = 0}
-  local value = stock_parameter.resolve(
+  local value = resolve_type(
     options.assignments or {},
     options.type or "fixed_note",
     function(i)
@@ -21,6 +21,18 @@ local function resolve(options)
       end
     end
   )
+  return value, calls
+end
+
+-- A step resolves several stock kinds from one assignment scan. Every fixture
+-- below also checks that path returns the same value through the same reads.
+local function resolve(options)
+  local value, calls = resolve_with(options, stock_parameter.resolve)
+  local scanned, scanned_calls = resolve_with(options, function(assignments, kind, ...)
+    return stock_parameter.resolver(assignments, ...)(kind)
+  end)
+  luaunit.assert_equals(scanned, value)
+  luaunit.assert_equals(scanned_calls, calls)
   return value, calls
 end
 
@@ -109,4 +121,62 @@ function test_stock_parameter_preserves_unassigned_fallback_rules()
     luaunit.assert_equals(calls.fallback, 1)
     luaunit.assert_equals(calls.default, case.value == nil and 0 or 1)
   end
+end
+
+-- Characterisation, not manual text: one resolver answers each kind by its own
+-- first matching slot among the first ten, ignoring empty and later slots.
+function test_stock_parameter_resolver_answers_each_kind_from_one_scan()
+  local assignments = {
+    {},
+    {id = "random_velocity", param_id = "velocity", off_value = -1},
+    nil,
+    {id = "fixed_note", param_id = "first", off_value = -1},
+    {id = "random_velocity", param_id = "shadowed", off_value = -1},
+  }
+  assignments[11] = {id = "chord_arp", param_id = "beyond", off_value = -1}
+  local reads = {}
+  local resolve_kind = stock_parameter.resolver(assignments,
+    function(i) table.insert(reads, "lock" .. i) end,
+    function(param_id) table.insert(reads, param_id); return param_id == "first" and 5 or 6 end,
+    function(kind) table.insert(reads, "fallback:" .. kind); return 9, function() return 0 end end)
+  luaunit.assert_equals(resolve_kind("fixed_note"), 5)
+  luaunit.assert_equals(resolve_kind("random_velocity"), 6)
+  luaunit.assert_equals(resolve_kind("chord_arp"), 9)
+  luaunit.assert_equals(reads, {"lock4", "first", "lock2", "velocity", "fallback:chord_arp"})
+end
+
+-- The resolver keeps its slot scan between steps, so a reassignment, a cleared
+-- slot and a new slot must all be picked up by the next resolver.
+function test_stock_parameter_resolver_follows_slot_reassignment()
+  local assignments = {{id = "trig_probability", param_id = "p1", off_value = -1}}
+  local reads = {}
+  local function read_step_lock() return nil end
+  local function read_assigned(param_id) reads[#reads + 1] = param_id; return 7 end
+  local function read_fallback() return nil, nil end
+
+  local resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_equals(resolve("trig_probability"), 7)
+  luaunit.assert_equals(reads, {"p1"})
+
+  -- Same slots again: the cached scan must still answer the same way.
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_equals(resolve("trig_probability"), 7)
+
+  -- Reassigned slot.
+  assignments[1] = {id = "random_velocity", param_id = "p2", off_value = -1}
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_nil(resolve("trig_probability"))
+  luaunit.assert_equals(resolve("random_velocity"), 7)
+  luaunit.assert_equals(reads[#reads], "p2")
+
+  -- A second slot assigned after the first scan.
+  assignments[2] = {id = "trig_probability", param_id = "p3", off_value = -1}
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_equals(resolve("trig_probability"), 7)
+  luaunit.assert_equals(reads[#reads], "p3")
+
+  -- Clearing a slot removes its kind again.
+  assignments[2] = nil
+  resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, {}, 1)
+  luaunit.assert_nil(resolve("trig_probability"))
 end

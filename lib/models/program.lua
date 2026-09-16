@@ -25,11 +25,23 @@ function program.is_song_pattern_active(p)
 end
 
 function program.get_selected_song_pattern()
-  local data = program.get()
-  if not data.selected_song_pattern then
-    data.selected_song_pattern = 1
+  -- The note and draw paths ask for this constantly; read initialised state
+  -- directly and fall back to the creating accessors otherwise.
+  local store = program_store
+  if store and store.memory and store.song_patterns then
+    local selected = store.selected_song_pattern
+    local song_pattern = selected and store.song_patterns[selected]
+    if song_pattern then return song_pattern end
   end
-  return program.get_song_pattern(data.selected_song_pattern)
+  local data = program.get()
+  local selected = data.selected_song_pattern
+  if not selected then
+    selected = 1
+    data.selected_song_pattern = selected
+  end
+  -- Screen and grid draws read the selected pattern per cell; skip the
+  -- creating lookup when it already exists.
+  return data.song_patterns[selected] or program.get_song_pattern(selected)
 end
 
 function program.set_selected_song_pattern(p)
@@ -79,10 +91,16 @@ function program.set_channel_step_scale_number(c, step_scale_number)
 end
 
 function program.get_channel_step_scale_number(c)
-  return program.get_selected_song_pattern() and program.get_selected_song_pattern().channels[c] and program.get_selected_song_pattern().channels[c].step_scale_number or nil
+  local song_pattern = program.get_selected_song_pattern()
+  local channel = song_pattern and song_pattern.channels[c]
+  return channel and channel.step_scale_number or nil
 end
 
 function program.get()
+  local store = program_store
+  if store and store.song_patterns and store.memory then
+    return store
+  end
   -- Ensure program_store is initialized
   if not program_store then
     program_store = {}
@@ -104,6 +122,14 @@ function program.get()
 end
 
 function program.get_selected_channel()
+  -- Draws ask for the selected channel for every grid cell; read initialised
+  -- state directly and use the full accessors otherwise.
+  local store = program_store
+  local song_patterns = store and store.memory and store.song_patterns
+  local song_pattern = song_patterns and store.selected_song_pattern and song_patterns[store.selected_song_pattern]
+  if song_pattern then
+    return song_pattern.channels[store.selected_channel]
+  end
   return program.get_selected_song_pattern().channels[program.get().selected_channel]
 end
 
@@ -112,6 +138,10 @@ function program.get_selected_pattern()
 end
 
 function program.get_channel(song_pattern, x)
+  local store = program_store
+  local song_patterns = store and store.song_patterns
+  local existing = song_patterns and song_patterns[song_pattern]
+  if existing then return existing.channels[x] end
   return program.get_song_pattern(song_pattern).channels[x]
 end
 
@@ -504,13 +534,21 @@ function program.clear_masks_for_channel(channel)
   channel.step_chord_masks = {}
 end
 
+-- Scale 0 is quantised on every note when the global scale is off. Generate its
+-- note arrays once; callers copy or read them and never modify them in place.
+local chromatic_scale, chromatic_pentatonic_scale
+
 function program.get_scale(s)
   if s == 0 then
+    if not chromatic_scale then
+      chromatic_scale = musicutil.generate_scale(0, "chromatic", 20)
+      chromatic_pentatonic_scale = musicutil.generate_scale(0, "chromatic", 20)
+    end
     return {
       name = "Chromatic",
       number = 0,
-      scale = musicutil.generate_scale(0, "chromatic", 20),
-      pentatonic_scale = musicutil.generate_scale(0, "chromatic", 20),
+      scale = chromatic_scale,
+      pentatonic_scale = chromatic_pentatonic_scale,
       romans = {},
       root_note = 0,
       chord = 1,
@@ -519,13 +557,14 @@ function program.get_scale(s)
   end
 
   -- Backwards compatibility
-  if not program.get_selected_song_pattern().scales then
+  local song_pattern = program.get_selected_song_pattern()
+  if not song_pattern.scales then
     if program_store.scales then
-      program.get_selected_song_pattern().scales = fn.deep_copy(program_store.scales)
+      song_pattern.scales = fn.deep_copy(program_store.scales)
     end
   end
 
-  return program.get_selected_song_pattern().scales[s]
+  return song_pattern.scales[s]
 end
 
 function program.set_scale(s, scale)
@@ -809,14 +848,26 @@ function program.get_next_trig_lock_step(channel, current_step, parameter, off_v
   if current_step < first or current_step > last then return nil end
   local wrap = params:get("wrap_param_slides") == 2 and
     (params:get("song_mode") ~= 2 or step.calculate_next_selected_song_pattern() == program.get().selected_song_pattern)
-  local limit = wrap and (last - first + 1) or (last - current_step)
+  -- Every note with a slide runs this search, so keep the loop to one bank
+  -- lookup and read the trigless setting at most once.
+  local span = last - first + 1
+  local origin = current_step - first
+  local limit = wrap and span or (last - current_step)
+  local trigless_locks
   for distance = 1, limit do
-    local candidate = first + ((current_step - first + distance) % (last - first + 1))
-    local value = banks[candidate] and banks[candidate][parameter]
-    if value ~= nil and value ~= off_value and
-        (program.step_has_trig(channel, candidate) or params:get("trigless_locks") == 2) then
-      return {step=candidate, value=value, distance=distance,
-        should_wrap=(current_step + distance > last) or nil}
+    local candidate = first + ((origin + distance) % span)
+    local bank = banks[candidate]
+    local value = bank and bank[parameter]
+    if value ~= nil and value ~= off_value then
+      local eligible = program.step_has_trig(channel, candidate)
+      if not eligible then
+        if trigless_locks == nil then trigless_locks = params:get("trigless_locks") == 2 end
+        eligible = trigless_locks
+      end
+      if eligible then
+        return {step=candidate, value=value, distance=distance,
+          should_wrap=(current_step + distance > last) or nil}
+      end
     end
   end
   return nil

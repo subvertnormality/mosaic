@@ -1262,3 +1262,25 @@ function test_scale_cache_beyond_its_bound_keeps_results_and_does_not_raise()
   end
   luaunit.assert_true(quantiser._scale_cache_size <= quantiser._scale_cache_max_size)
 end
+
+-- Characterisation, not manual text: the processed-scale cache distinguishes
+-- scale note arrays, so replacing a slot's notes without a version change
+-- still quantises with the new notes, and switching back reuses the old ones.
+function test_quantiser_cache_distinguishes_scale_note_arrays()
+  setup()
+  program.get_song_pattern(1).root_note = 0
+  local function install(index)
+    program.get_selected_song_pattern().scales[1] = {
+      number = 1, scale = quantiser.get_scales()[index].scale,
+      pentatonic_scale = quantiser.get_scales()[index].pentatonic_scale, chord = 1, root_note = 0
+    }
+  end
+  install(1)
+  local major_third = quantiser.process(2, 0, 0, 1)
+  install(3)
+  local other_third = quantiser.process(2, 0, 0, 1)
+  install(1)
+  luaunit.assert_equals(quantiser.process(2, 0, 0, 1), major_third)
+  luaunit.assert_equals(major_third, 64)
+  luaunit.assert_equals(other_third, 63)
+end

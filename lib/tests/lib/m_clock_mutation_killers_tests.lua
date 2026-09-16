@@ -309,7 +309,9 @@ function test_mclk_stopped_start_refreshes_clock_and_shuffle_settings_in_place()
     luaunit.assert_equals(channel_clock.shuffle_feel, 3)
     luaunit.assert_equals(channel_clock.shuffle_basis, 4)
     luaunit.assert_equals(channel_clock.shuffle_amount, 0.7)
-    luaunit.assert_equals(channel_clock.end_of_clock_processor.division, 1 / 8)
+    -- The end-of-clock work runs inside this clock's own action, so there is no
+    -- second sprocket whose settings have to be refreshed alongside it.
+    luaunit.assert_nil(channel_clock.end_of_clock_processor)
     m_clock:stop()
   end)
 end
