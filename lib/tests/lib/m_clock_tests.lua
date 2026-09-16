@@ -1799,3 +1799,61 @@ function test_step_sends_every_due_release_before_any_of_its_notes()
   luaunit.assert_equals(offs, 4, "Each sounding channel releases its previous note")
   luaunit.assert_equals(ons, 4, "Each sounding channel starts its next note")
 end
+
+-- A parameter lock shapes the note it belongs to, so it must precede that
+-- note; it must not sit in front of another channel's note. Every channel's
+-- locks therefore leave before any of the step's notes.
+function test_step_sends_every_parameter_lock_before_any_of_its_notes()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  for c = 1, 4 do
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+    local channel = program.get_channel(song_pattern, c)
+    for slot = 1, 2 do
+      local id = "lock_order_" .. c .. "_" .. slot
+      channel.trig_lock_params[slot] = {type = "midi", param_id = id, cc_msb = slot, cc_min_value = 0, cc_max_value = 127, off_value = -1}
+      params:add(id, {action = function(value) end})
+      for s = 1, 16 do
+        program.add_step_param_trig_lock_to_channel(channel, s, slot, (s + slot) % 128)
+      end
+    end
+  end
+  pattern.update_working_patterns()
+  clock_setup()
+  progress_clock_by_pulses(24 * 3)
+
+  local events = {}
+  local previous_on, previous_cc = m_midi.note_on, m_midi.cc
+  m_midi.note_on = function(self, note, velocity, channel, device)
+    events[#events + 1] = "note"
+    return previous_on(self, note, velocity, channel, device)
+  end
+  m_midi.cc = function(msb, lsb, value, channel, device)
+    events[#events + 1] = "lock"
+    return previous_cc(msb, lsb, value, channel, device)
+  end
+  local ok, err = pcall(progress_clock_by_pulses, 24)
+  m_midi.note_on, m_midi.cc = previous_on, previous_cc
+  if not ok then error(err) end
+
+  local locks, notes = 0, 0
+  for _, kind in ipairs(events) do
+    if kind == "lock" then
+      luaunit.assert_equals(notes, 0, "A parameter lock followed one of this step's notes")
+      locks = locks + 1
+    else
+      notes = notes + 1
+    end
+  end
+  luaunit.assert_equals(locks, 8, "Each channel sends both of its locks")
+  luaunit.assert_equals(notes, 4, "Each channel sounds its note")
+end
