@@ -220,18 +220,20 @@ function Lattice:pulse()
       local ordering = self.sprocket_pulse_order[i]
       for index = 1, #ordering do
         if not self.enabled then return end
+        -- The order holds the sprockets themselves, so no entry is ever nil.
         local sprocket = ordering[index]
-        if sprocket and sprocket.enabled and sprocket.delayed_action_order[1] == nil
+        local phase = sprocket.phase
+        if sprocket.enabled and sprocket.delayed_action_order[1] == nil
             and sprocket._pending_clocks == nil and sprocket.shuffle_updated
-            and (sprocket.phase < 1 or sprocket.phase >= 2)
-            and sprocket.phase + 1 <= sprocket.current_ppqn then
+            and (phase < 1 or phase >= 2)
+            and phase + 1 <= sprocket.current_ppqn then
           -- A sprocket between onsets with nothing pending only advances. Most
           -- sprockets are in this state on most pulses, and every branch the
           -- full path below would take is excluded by the conditions above.
-          sprocket.phase = sprocket.phase + 1
+          sprocket.phase = phase + 1
           sprocket.last_processed_transport = self.transport
           sprocket.transport = sprocket.transport + 1
-        elseif sprocket and sprocket.enabled then
+        elseif sprocket.enabled then
           -- Set when this pulse removes a delayed action, so the order list is compacted.
           local removed = false
           if not sprocket.shuffle_updated then
@@ -356,7 +358,7 @@ function Lattice:pulse()
           if sprocket.phase > sprocket.current_ppqn then sprocket:finish_cycle() end
           sprocket.last_processed_transport = self.transport
           sprocket.transport = sprocket.transport + 1
-        elseif sprocket and sprocket.flag then
+        elseif sprocket.flag then
           self.sprockets[sprocket.id] = nil
           flagged = true
         end
