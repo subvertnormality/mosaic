@@ -427,11 +427,15 @@ function Lattice:advance_sprocket(sprocket, removed)
   local pending_count = #pending_ids
   if pending_count > 0 then
     local to_remove
+    -- Set when an id's action is already gone, cancelled outside the pulse.
+    local stale = false
     local delayed_actions = sprocket.delayed_actions
     for index = 1, pending_count do
       local id = pending_ids[index]
       local delayed_action = delayed_actions[id]
-      if delayed_action then
+      if not delayed_action then
+        stale = true
+      else
         local timing = delayed_action.timing or sprocket
         local length = delayed_action.length
         if length == 0 then
@@ -469,10 +473,11 @@ function Lattice:advance_sprocket(sprocket, removed)
       end
     end
     -- Compact cancelled/completed entries without sorting or shifting.
-    -- Every reader skips ids without an action, so compaction waits
-    -- until this pulse removes one; the size bound limits ids left by
-    -- cancellations made outside the pulse.
-    if removed or #pending_ids >= 32 then
+    -- Every reader skips ids without an action, but each one left in the
+    -- list is walked again on every pulse, and a list holding only such ids
+    -- keeps the sprocket off the idle path. A note's releases are usually
+    -- cancelled rather than run, so compact as soon as a walk meets one.
+    if removed or stale then
       local retained = 0
       for index = 1, #pending_ids do
         local id = pending_ids[index]
