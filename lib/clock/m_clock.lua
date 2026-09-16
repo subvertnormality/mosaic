@@ -330,6 +330,7 @@ function m_clock.init()
         -- finishes the step, before this channel's clock moves past the onset.
         if has_trig then
           clock.note_pending = current_step
+          clock.pending_note = step.prepare_note(channel_number, current_step)
           clock.pending_channel = channel
           clock.pending_song_pattern = song_pattern
           return
@@ -400,7 +401,9 @@ function m_clock.init()
     }
 
     m_clock["channel_" .. channel_number .. "_clock"].note_action = function(sprocket)
-      step.handle(channel_number, sprocket.note_pending)
+      local prepared = sprocket.pending_note
+      sprocket.pending_note = nil
+      step.handle(channel_number, sprocket.note_pending, prepared)
     end
 
     m_clock["channel_" .. channel_number .. "_clock"].after_note_action = function(sprocket)

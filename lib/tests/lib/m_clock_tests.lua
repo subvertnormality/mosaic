@@ -1858,6 +1858,54 @@ function test_step_sends_every_parameter_lock_before_any_of_its_notes()
   luaunit.assert_equals(locks, 8, "Each channel sends both of its locks")
   luaunit.assert_equals(notes, 4, "Each channel sounds its note")
 end
+-- Every stock parameter a note reads is read while the step's parameter locks
+-- are sent, so nothing is read between the step's first note and its last.
+function test_step_reads_no_stock_parameter_between_its_notes()
+  setup()
+  local song_pattern = 1
+  program.set_selected_song_pattern(1)
+  local test_pattern = program.initialise_default_pattern()
+  for s = 1, 16 do
+    test_pattern.note_values[s] = 0
+    test_pattern.lengths[s] = 1
+    test_pattern.trig_values[s] = 1
+    test_pattern.velocity_values[s] = 100
+  end
+  program.get_song_pattern(song_pattern).patterns[1] = test_pattern
+  for c = 1, 4 do
+    fn.add_to_set(program.get_song_pattern(song_pattern).channels[c].selected_patterns, 1)
+  end
+  pattern.update_working_patterns()
+  clock_setup()
+  progress_clock_by_pulses(24 * 3)
+
+  local events = {}
+  local previous_on, previous_get = m_midi.note_on, params.get
+  m_midi.note_on = function(self, note, velocity, channel, device)
+    events[#events + 1] = "note"
+    return previous_on(self, note, velocity, channel, device)
+  end
+  params.get = function(self, id)
+    if type(id) == "string" and id:find("^midi_device_params_channel_") then events[#events + 1] = "read" end
+    return previous_get(self, id)
+  end
+  local ok, err = pcall(progress_clock_by_pulses, 24)
+  m_midi.note_on, params.get = previous_on, previous_get
+  if not ok then error(err) end
+
+  local notes, reads = 0, 0
+  for _, kind in ipairs(events) do
+    if kind == "note" then
+      notes = notes + 1
+    else
+      luaunit.assert_true(notes == 0 or notes == 4, "A stock parameter was read between this step's notes")
+      reads = reads + 1
+    end
+  end
+  luaunit.assert_equals(notes, 4, "Each channel sounds its note")
+  luaunit.assert_true(reads > 0, "The step read its stock parameters")
+end
+
 -- A note's release is scheduled from the pulse its note is sent on. Whatever
 -- order a step's messages leave in, each release must still land on the next
 -- onset, before that onset sounds the same pitch again, with or without swing.

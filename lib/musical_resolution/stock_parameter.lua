@@ -75,4 +75,24 @@ function stock_parameter.resolver(assignments, read_step_lock, read_assigned, re
   end
 end
 
+-- A resolver that answers each kind from its first resolution. kinds, when
+-- given, are resolved now, so their reads happen here rather than when the
+-- caller asks; the answers are the same as long as nothing they read changes
+-- in between.
+function stock_parameter.remembering_resolver(assignments, read_step_lock, read_assigned, read_fallback, context, current_step, kinds)
+  local resolve = stock_parameter.resolver(assignments, read_step_lock, read_assigned, read_fallback, context, current_step)
+  local resolved, values, reads = {}, {}, {}
+  local function remembered(type)
+    if not resolved[type] then
+      values[type], reads[type] = resolve(type)
+      resolved[type] = true
+    end
+    return values[type], reads[type]
+  end
+  if kinds then
+    for i = 1, #kinds do remembered(kinds[i]) end
+  end
+  return remembered
+end
+
 return stock_parameter
