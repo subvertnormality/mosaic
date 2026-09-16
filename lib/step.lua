@@ -597,17 +597,22 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   end
 
   -- The dashboard table is shared with the chord callbacks below; build it when
-  -- the root sounds now or a chord can sound.
-  local note_dashboard_values = {}
+  -- the root sounds now or a chord can sound. Nothing reads it for an unshown
+  -- channel that sounds no chord, so that note builds none.
+  local note_dashboard_values
 
   local selected_channel = program.get().selected_channel
   if play_strum_root_now(chord_strum_pattern, mute_root) then
     play_note(note_container.note, note_container, note_container.velocity, note_container.length, note_on_func)
-    note_dashboard_values.note = note_container.note
-    note_dashboard_values.velocity = note_container.velocity
-    note_dashboard_values.length = note_container.length
-    if c == selected_channel then
-      channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
+    if c == selected_channel or has_chord_notes then
+      note_dashboard_values = {
+        note = note_container.note,
+        velocity = note_container.velocity,
+        length = note_container.length
+      }
+      if c == selected_channel then
+        channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
+      end
     end
   end
 
@@ -644,7 +649,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           if processed_chord_note then
             play_note(processed_chord_note, note_container, velocity, note_container.length, note_on_func)
 
-            if not note_dashboard_values.chords then
+            if note_dashboard_values and not note_dashboard_values.chords then
               note_dashboard_values.chords = {}
             end
             -- Show the voice as sent: MIDI clamps it to 0..127 (bugs.json dashboard-chord-slots).
