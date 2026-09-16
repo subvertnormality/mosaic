@@ -848,14 +848,26 @@ function program.get_next_trig_lock_step(channel, current_step, parameter, off_v
   if current_step < first or current_step > last then return nil end
   local wrap = params:get("wrap_param_slides") == 2 and
     (params:get("song_mode") ~= 2 or step.calculate_next_selected_song_pattern() == program.get().selected_song_pattern)
-  local limit = wrap and (last - first + 1) or (last - current_step)
+  -- Every note with a slide runs this search, so keep the loop to one bank
+  -- lookup and read the trigless setting at most once.
+  local span = last - first + 1
+  local origin = current_step - first
+  local limit = wrap and span or (last - current_step)
+  local trigless_locks
   for distance = 1, limit do
-    local candidate = first + ((current_step - first + distance) % (last - first + 1))
-    local value = banks[candidate] and banks[candidate][parameter]
-    if value ~= nil and value ~= off_value and
-        (program.step_has_trig(channel, candidate) or params:get("trigless_locks") == 2) then
-      return {step=candidate, value=value, distance=distance,
-        should_wrap=(current_step + distance > last) or nil}
+    local candidate = first + ((origin + distance) % span)
+    local bank = banks[candidate]
+    local value = bank and bank[parameter]
+    if value ~= nil and value ~= off_value then
+      local eligible = program.step_has_trig(channel, candidate)
+      if not eligible then
+        if trigless_locks == nil then trigless_locks = params:get("trigless_locks") == 2 end
+        eligible = trigless_locks
+      end
+      if eligible then
+        return {step=candidate, value=value, distance=distance,
+          should_wrap=(current_step + distance > last) or nil}
+      end
     end
   end
   return nil
