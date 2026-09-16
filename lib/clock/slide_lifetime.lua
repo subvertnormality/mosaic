@@ -98,10 +98,12 @@ function slide_lifetime.new(get_clock, program, get_lattice)
   -- Process ring buffer in execute_spread_actions
   local function process_ring_buffer()
     local i = ring_start
+    -- Every action on this pulse is measured from the same transport position.
+    local transport = get_lattice().transport
     while i ~= ring_end do
       local action = spread_ring[i]
       if action.active then
-        local pulse_count = get_lattice().transport - action.start_pulse
+        local pulse_count = transport - action.start_pulse
         local total_pulses = action.total_pulses
   
         if pulse_count >= total_pulses then
