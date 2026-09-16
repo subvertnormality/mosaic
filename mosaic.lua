@@ -47,6 +47,7 @@ local screen_keep_alive = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
 m_clock = include("mosaic/lib/clock/m_clock")
+local redraw_guard = include("mosaic/lib/clock/redraw_guard")
 pattern = include("mosaic/lib/pattern")
 m_midi = include("mosaic/lib/m_midi")
 step = include("lib/step")
@@ -132,18 +133,14 @@ function init()
 
   -- A screen redraw is native-heavy and cannot be interrupted, so it must not
   -- start just before a step's notes. Leave that slot to the next cycle.
-  local redraw_step_guard = 0.025
+  local screen_guard = redraw_guard.new(m_clock.seconds_to_next_step, util.time)
+  local grid_guard = redraw_guard.new(m_clock.seconds_to_next_step, util.time)
 
   redraw_clock = clock.run(
     function()
       while true do
         clock.sleep(1/30)
-        if fn.dirty_screen() then
-          local remaining = m_clock.seconds_to_next_step()
-          if not remaining or remaining > redraw_step_guard then
-            redraw()
-          end
-        end
+        if fn.dirty_screen() then screen_guard.run(redraw) end
       end
     end
   )
@@ -152,12 +149,7 @@ function init()
     function()
       while true do
         clock.sleep(1/20)
-        if fn.dirty_grid() then
-          local remaining = m_clock.seconds_to_next_step()
-          if not remaining or remaining > redraw_step_guard then
-            m_grid.grid_redraw()
-          end
-        end
+        if fn.dirty_grid() then grid_guard.run(m_grid.grid_redraw) end
       end
     end
   )
