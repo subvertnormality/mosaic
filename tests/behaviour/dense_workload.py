@@ -43,6 +43,35 @@ def build_project(d,channels,workload='dense',select_parameter=None,select_devic
                 finally:d.action(type='grid',x=step,y=4,state=0)
                 d.elapse(.1)
             d.key(3);d.enc(1,3)
+        if workload=='extreme':
+            # Everything at once: a four-note chord on every step, four locked CC
+            # parameters, and a sliding fifth. This is a stress probe, not a
+            # certified case: it exists to find where a busy project stops
+            # keeping time, so its oracle checks completeness, not exact notes.
+            d.enc(1,-4)
+            for index,turns in enumerate((2,4,5,7)):
+                d.enc(2,1);d.enc(3,turns)
+            d.enc(2,-4);d.enc(1,4)
+            # The hardware fixture maps CC 1-4, so three locked parameters and a
+            # slide on the fourth.
+            locked=LOCK_PARAMETERS[:3]
+            d.enc(1,-3)
+            for index,parameter in enumerate(locked):
+                if index:d.enc(2,1)
+                label='CC %d'%parameter
+                if select_parameter:select_parameter(d,label)
+                else:
+                    from cases import assign_trig_parameter
+                    assign_trig_parameter(d,label)
+                d.enc(3,LOCK_DEFAULTS[parameter]+1)
+                for step,value in LOCK_STEPS[parameter]:set_step_value(d,step,value)
+            d.enc(2,1)
+            if select_parameter:select_parameter(d,'CC 4')
+            else:
+                from cases import assign_trig_parameter
+                assign_trig_parameter(d,'CC 4')
+            for step,value in ((1,0),(9,127)):set_step_value(d,step,value)
+            d.enc(2,-len(locked));d.enc(1,3)
         if workload=='locks':
             d.enc(1,-3)
             for index,parameter in enumerate(LOCK_PARAMETERS):
@@ -96,6 +125,21 @@ def validate_events(emitted,channels,workload):
     assert emitted and [e['index'] for e in emitted]==list(range(1,len(emitted)+1)),'Non-contiguous native export'
     ons=[e for e in emitted if e['bytes'][0]&240==144 and e['bytes'][2]>0]
     offs=[e for e in emitted if e['bytes'][0]&240==128 or (e['bytes'][0]&240==144 and e['bytes'][2]==0)]
+    if workload=='extreme':
+        # Chord voices make a step's note count vary, so group by the gap between
+        # bursts and require every channel in every step rather than a fixed size.
+        steps=[];current=[]
+        for event in ons:
+            if current and event['monotonic_seconds']-current[-1]['monotonic_seconds']>0.02:steps.append(current);current=[]
+            current.append(event)
+        if current:steps.append(current)
+        steps=[g for g in steps if len(g)>=channels]
+        assert len(steps)>=4,('Too few complete steps',len(steps))
+        for index,group in enumerate(steps):
+            present={e['bytes'][0]&15 for e in group}
+            assert present=={c for c in range(channels)},('Channels at step',index,sorted(present))
+        assert len(offs)>=len(ons)-channels*8,('Unbalanced releases',len(ons),len(offs))
+        return {'ons':ons,'offs':offs,'steps':steps,'slide_cycles':None,'lock_values_checked':None}
     assert ons and len(ons)%channels==0,('Incomplete step',len(ons))
     steps=[ons[i:i+channels] for i in range(0,len(ons),channels)]
     for index,group in enumerate(steps):

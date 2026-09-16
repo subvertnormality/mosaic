@@ -16,6 +16,8 @@ CASES={
     'PERF-009-HW-4':{'workload':'locks','channels':4,'seconds':8},
     'PERF-009-HW-8':{'workload':'locks','channels':8,'seconds':8},
     'PERF-009-HW-16':{'workload':'locks','channels':16,'seconds':8},
+    # Stress probe: chords, locks and a slide on every channel and every step.
+    'PERF-EXT-HW-16':{'workload':'extreme','channels':16,'seconds':8},
 }
 from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
 CASES.update(HELDOUT_CASES)
@@ -145,7 +147,7 @@ class TimingTrace:
     INSTALL=("if _MOSAIC_TT then error('timing trace already installed') end; do local T={events={},n=0,limit=4000,orig={}}; local now=util.time; "
              "local function wrap(tbl,key,kind) local orig=tbl and tbl[key]; if type(orig)~='function' then return end; T.orig[#T.orig+1]={tbl,key,orig}; "
              "tbl[key]=function(...) local s=now(); orig(...); local d=now()-s; if d>0.001 and T.n<T.limit then local a=...; T.n=T.n+1; T.events[T.n]={kind,s,d,type(a)=='number' and a or 0,collectgarbage('count')} end end end; "
-             "wrap(_G,'redraw','redraw'); wrap(_norns,'screen_update','screen_update'); wrap(m_grid,'grid_redraw','grid_redraw'); wrap(scheduler,'update','scheduler'); wrap(clock,'resume','clock_resume'); "
+             "wrap(_G,'redraw','redraw'); wrap(_norns,'screen_update','screen_update'); wrap(m_grid,'grid_redraw','grid_redraw'); wrap(scheduler,'update','scheduler'); wrap(clock,'resume','clock_resume'); wrap(_norns,'midi_send','midi_send'); "
              "if _MOSAIC_TT_NATIVE then T.native={text=0,font_size=0,calls=0}; local function total(key,field) local orig=_norns[key]; if type(orig)~='function' then return end; T.orig[#T.orig+1]={_norns,key,orig}; "
              "_norns[key]=function(...) local s=now(); orig(...); local n=T.native; n[field]=n[field]+now()-s; n.calls=n.calls+1 end end; total('screen_text','text'); total('screen_font_size','font_size'); "
              "local draw=_G.redraw; _G.redraw=function(...) local n=T.native; local t0,f0,c0=n.text,n.font_size,n.calls; local s=now(); draw(...); local d=now()-s; "
@@ -200,11 +202,26 @@ def functional_preflight(runner,driver,trace,spec):
         raise AssertionError(('Functional preflight failed',value))
     return value
 
-def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False):
+def write_fixture_manifest(directory,case_id,spec,source):
+    """Record what a saved project fixture holds and which build produced it."""
+    import hashlib,subprocess
+    directory=Path(directory)
+    files={name:hashlib.sha256((directory/name).read_bytes()).hexdigest() for name in ('autosave.ptn','autosave.pset')}
+    revision=subprocess.run(['git','rev-parse','HEAD'],cwd=source,capture_output=True,text=True).stdout.strip()
+    (directory/'fixture.json').write_text(json.dumps({'case':case_id,'workload':spec['workload'],'channels':spec['channels'],
+        'built_from_revision':revision,'files':files,'lane':'cm3plus-norns'},indent=2)+'\n')
+
+def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     try:
-        build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
+        # A loaded project fixture already holds the workload; build it through the
+        # UI only when there is none, and keep that build as a fixture if asked.
+        if project_fixture is None:
+            build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
+            if save_project_fixture:
+                runner.fetch_project(save_project_fixture)
+                write_fixture_manifest(save_project_fixture,case_id,spec,source)
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
         driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17)],[15]*16)
         preflight=functional_preflight(runner,driver,trace,spec)

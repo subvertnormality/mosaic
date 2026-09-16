@@ -196,12 +196,35 @@ echo '--- alsa'; if command -v aconnect >/dev/null; then aconnect -l; else echo 
   output=self.maiden.eval("print('__MOSAIC_SUBPAGE__'..channel_edit_page_ui.get_selected_page())");match=re.search(r'__MOSAIC_SUBPAGE__(\d+)',output)
   if not match:raise RuntimeError('Could not observe Mosaic channel subpage')
   return int(match.group(1))
- def seed_config(self,source):
+ def seed_config(self,source,project_fixture=None):
   source=Path(source).resolve()
   if not source.is_dir():raise ValueError('Missing hardware config source: '+str(source))
   self.ssh.run('set -eu; test ! -e /home/we/dust/data/mosaic/config; mkdir -p /home/we/dust/data/mosaic/config')
   self.ssh.rsync(source,'/home/we/dust/data/mosaic/config')
+  if project_fixture:self.seed_project(project_fixture)
   self.maiden.send('norns.script.clear()');time.sleep(2);self.maiden.load('/home/we/dust/code/mosaic/mosaic.lua',allow_lua_error=True)
+ # A performance project saved once through the UI. Mosaic loads autosave.ptn on
+ # start, so placing the pair in the data directory before the script reloads
+ # is the same as a player reopening the project.
+ def seed_project(self,fixture):
+  fixture=Path(fixture).resolve()
+  for name in ('autosave.ptn','autosave.pset'):
+   if not (fixture/name).is_file():raise ValueError('Project fixture is missing '+name+': '+str(fixture))
+  for name in ('autosave.ptn','autosave.pset'):self.ssh.push(fixture/name,'/home/we/dust/data/mosaic/'+name)
+  self.project_fixture=fixture
+ # Autosave is a one-shot timer that every gesture re-arms, so it writes once,
+ # a minute after the build's last gesture. Remove anything already there so the
+ # files fetched can only be that write of the finished project.
+ def fetch_project(self,destination,timeout=120):
+  destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
+  self.ssh.run('set -eu; rm -f /home/we/dust/data/mosaic/autosave.ptn /home/we/dust/data/mosaic/autosave.pset')
+  deadline=time.monotonic()+timeout
+  while time.monotonic()<deadline:
+   if subprocess.run(['ssh',*self.ssh.options,self.ssh.host,'test -s /home/we/dust/data/mosaic/autosave.ptn -a -s /home/we/dust/data/mosaic/autosave.pset'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0:break
+   time.sleep(2)
+  else:raise TimeoutError('Mosaic did not autosave the built project')
+  time.sleep(2)
+  for name in ('autosave.ptn','autosave.pset'):self.ssh.fetch('/home/we/dust/data/mosaic/'+name,destination/name)
  def device_map_index(self,device_id,channel=1):
   if not re.fullmatch(r'[A-Za-z0-9 _./-]+',device_id):raise ValueError('Unsafe device map ID')
   output=self.maiden.eval("for i,d in ipairs(device_map.get_available_devices_for_channel("+str(int(channel))+")) do if d.id=="+repr(device_id)+" then print('__MOSAIC_DEVICE_MAP_INDEX__'..i) end end")
@@ -317,7 +340,7 @@ def main(argv=None):
  p.add_argument('--stock-clock-errors',choices=['fail','record'],default='fail',help='record: count stock queued-resume errors (clock.lua thread expected) instead of aborting')
  p.add_argument('--tempo',type=float,help='set params clock_tempo for the run; system.state restoration returns the prior value')
  p.add_argument('--lua-timing-trace',action='store_true',help='diagnostic: record Lua redraw, display update, grid redraw, scheduler and clock resume calls over 1 ms');p.add_argument('--no-resource-sampler',action='store_true',help='diagnostic: omit the on-device resource sampler');p.add_argument('--native-screen-trace',action='store_true',help='diagnostic: with --lua-timing-trace, total native screen text and font-size time per redraw');p.add_argument('--redraw-count-trace',action='store_true',help='diagnostic: with --lua-timing-trace, count Lua VM instructions (per 100) in every redraw');p.add_argument('--thread-sampler',help='path to a per-thread schedstat sampler (monome-emulator scripts/calibration/thread_sampler.py)')
- p.add_argument('--measured-windows',type=int,default=1,help='play/stop windows measured on one built project')
+ p.add_argument('--project-fixture',help='Directory holding autosave.ptn/.pset for this performance case; skips the UI build');p.add_argument('--save-project-fixture',help='Build through the UI, then keep the autosaved project here');p.add_argument('--measured-windows',type=int,default=1,help='play/stop windows measured on one built project')
  p.add_argument('--clock-cancel-candidate',help='complete temporary replacement for /home/we/norns/lua/core/clock.lua')
  a=p.parse_args(argv)
  if a.command=='applicability':
@@ -345,11 +368,13 @@ def main(argv=None):
    source_files=len(r.deploy(Path(a.source).resolve())) if a.command in ('workflow','performance') else r.resume()
    if a.command in ('case','performance'):
     if a.stock_clock_errors=='record':r.maiden=ExpectedClockErrorMaiden(r.maiden,r,a.command)
-    if a.config_source:r.seed_config(a.config_source)
+    if a.project_fixture and a.save_project_fixture:raise SystemExit('--project-fixture and --save-project-fixture are exclusive')
+    if a.config_source:r.seed_config(a.config_source,a.project_fixture)
+    elif a.project_fixture:raise SystemExit('--project-fixture needs --config-source')
     if a.tempo:
      before=r.maiden.eval("print('__TEMPO_BEFORE__'..clock.get_tempo())");r.maiden.eval('params:set("clock_tempo",%r)'%float(a.tempo));time.sleep(.5)
      after=r.maiden.eval("print('__TEMPO_AFTER__'..clock.get_tempo())");write(out/'tempo.json',{'requested':a.tempo,'before':re.findall(r'__TEMPO_BEFORE__([0-9.]+)',before),'after':re.findall(r'__TEMPO_AFTER__([0-9.]+)',after)})
-    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source,thread_sampler=a.thread_sampler,windows=a.measured_windows,timing_trace=a.lua_timing_trace,resource_sampler=not a.no_resource_sampler,native_screen_trace=a.native_screen_trace,redraw_count_trace=a.redraw_count_trace)
+    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source,thread_sampler=a.thread_sampler,windows=a.measured_windows,timing_trace=a.lua_timing_trace,resource_sampler=not a.no_resource_sampler,native_screen_trace=a.native_screen_trace,redraw_count_trace=a.redraw_count_trace,project_fixture=a.project_fixture,save_project_fixture=a.save_project_fixture)
     r.logs()
     evidence['clock_error_drains']=r.clock_error_drains;evidence['stock_clock_errors_mode']=a.stock_clock_errors
     evidence.update({'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.source,text=True).strip(),'source_files':source_files,'resumed_after_interruption':True,'capabilities':caps,'campaign_complete':False})

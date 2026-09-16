@@ -89,7 +89,7 @@ class Tests(unittest.TestCase):
         sampler=OnDeviceResourceSampler(FakeSSH(),.01,.01);sampler.start();recording=sampler.stop();metrics=resource_metrics(recording)
         self.assertEqual(metrics['sample_count'],2);self.assertEqual(metrics['matron_peak_rss_bytes'],1200);self.assertEqual(metrics['thermal_millicelsius_peak'],42000);self.assertEqual(metrics['throttled_flags_or'],2);self.assertEqual(metrics['threshold_status'],'calibration-only')
     def test_three_calibration_cases_and_trace_start_boundary(self):
-        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16'})
+        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16'})
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
@@ -99,6 +99,25 @@ class Tests(unittest.TestCase):
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.dense_oracle',side_effect=AssertionError('timing oracle failed')),patch('hardware_performance.time.sleep'):
             with self.assertRaisesRegex(AssertionError,'timing oracle failed'):run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
         raw=json.loads((source/'performance-raw.json').read_text());self.assertEqual(len(raw['midi']),64);self.assertEqual((sampler.started,sampler.stopped),(1,1))
+
+    def test_a_loaded_project_fixture_skips_the_ui_build(self):
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
+        with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
+            run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,project_fixture=source)
+        build.assert_not_called()
+    def test_saving_a_project_fixture_builds_then_fetches_and_records_it(self):
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());saved=Path(tempfile.mkdtemp())/'fixture'
+        fetched=[]
+        def fetch(destination):
+            destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
+            (destination/'autosave.ptn').write_text('ptn');(destination/'autosave.pset').write_text('pset');fetched.append(destination)
+        runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source,'fetch_project':staticmethod(fetch)})()
+        with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
+            run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,save_project_fixture=saved)
+        build.assert_called_once();self.assertEqual(fetched,[saved])
+        manifest=json.loads((saved/'fixture.json').read_text())
+        self.assertEqual((manifest['case'],manifest['workload'],manifest['channels']),('PERF-002-HW-1','dense',1))
+        self.assertEqual(set(manifest['files']),{'autosave.ptn','autosave.pset'})
 
 if __name__=='__main__':unittest.main()
 
