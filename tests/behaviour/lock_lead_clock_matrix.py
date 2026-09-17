@@ -21,7 +21,10 @@ lead must, against the lead 0 reference of the same condition:
 - send the same CC 1 values in the same order;
 - sound every note with the same CC 1 value in force, which is also the step's
   documented value (11, 20, 33, 33);
-- place every note-on at its reference time plus the lead, with unchanged gates;
+- place every note-on at its reference time plus the lead, with gates unchanged
+  within a pulse: a delayed note leaves on a clock pulse, so the lead is counted
+  in whole pulses (rounded up, never shorter than the setting) and a gate can
+  lose the fraction of a pulse the reference note spent inside its own pulse;
 - send every value after the previous note-on, and at its documented time, measured
   from the reference step time x: max(x, midpoint between the previous note-on and
   x plus the lead), never before a value already queued on the channel. The lead
