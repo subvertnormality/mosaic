@@ -5,6 +5,29 @@ local divisions = include("mosaic/lib/clock/divisions")
 
 local m_midi = {}
 
+-- norns builds two tables for every message it sends: the message, then its
+-- bytes. A step sends a hundred messages, so write the bytes into one reused
+-- table and hand them to the port's device, which sends them as one write
+-- exactly as it would have. The table is read before send returns. A port
+-- without a norns MIDI device behind it (a test double, a disconnected port)
+-- keeps its own methods.
+local wire_bytes = {0, 0, 0}
+
+local function device_for_bytes(port)
+  local device = port.device
+  if device ~= nil and getmetatable(device) ~= nil and type(device.send) == "function" then
+    return device
+  end
+end
+
+function m_midi.send_three(port, status, data1, data2)
+  local device = device_for_bytes(port)
+  if not device then return false end
+  wire_bytes[1], wire_bytes[2], wire_bytes[3] = status, data1, data2
+  device:send(wire_bytes)
+  return true
+end
+
 midi_devices = {}
 m_midi.note_counts = {}  -- Initialize note counts table
 
@@ -78,7 +101,10 @@ function m_midi:note_on(note, velocity, channel, device)
     self.note_counts[device][channel][note] = self.note_counts[device][channel][note] + 1
 
     -- Send the Note On message
-    midi_devices[device]:note_on(note, velocity, channel)
+    local port = midi_devices[device]
+    if not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100) then
+      port:note_on(note, velocity, channel)
+    end
   end
 end
 
@@ -92,7 +118,10 @@ function m_midi:note_off(note, velocity, channel, device)
       self.note_counts[device][channel][note] = self.note_counts[device][channel][note] - 1
       -- Every emitted Note On owns a Note Off, including overlapping pitches.
       -- Retain counts for bookkeeping without collapsing receiver releases.
-      midi_devices[device]:note_off(note, velocity, channel)
+      local port = midi_devices[device]
+      if not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+        port:note_off(note, velocity, channel)
+      end
       if self.note_counts[device][channel][note] <= 0 then
         -- Remove the note from the table
         self.note_counts[device][channel][note] = nil
@@ -100,7 +129,10 @@ function m_midi:note_off(note, velocity, channel, device)
     else
       -- Note is not currently on, but we received a Note Off.
       -- For safety, send Note Off anyway
-      midi_devices[device]:note_off(note, velocity, channel)
+      local port = midi_devices[device]
+      if not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+        port:note_off(note, velocity, channel)
+      end
     end
   end
 end
