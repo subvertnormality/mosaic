@@ -39,7 +39,9 @@ def lock_lead_time(c):
             assert [v['bytes'][2] for v in locks]==[24,48]*4
             assert events.index(starts[0])<events.index(notes[0])
             assert not [v for v in events[events.index(stops[0])+1:] if v['bytes'][0]==144]
-            for index,(note,lock) in enumerate(zip(notes,locks)):
+            # The last note is drained by the Stop tap (README Lock lead time), so its
+            # lead is deliberately shortened; check the pairs before it.
+            for index,(note,lock) in enumerate(zip(notes[:-1],locks[:-1])):
                 assert events.index(lock)<events.index(note),('Lock order',lead,index)
                 assert abs(note[field]-lock[field]-lead*1_000_000)<=tolerance,('Lead',lead,index,note,lock)
                 assert abs((lock[field]-locks[0][field])-index*1e9/6)<=tolerance,('Lock cadence',index)
