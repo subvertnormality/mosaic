@@ -313,7 +313,13 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
     if not condition.get('slide'):
         # Each note's own step decides its value, whichever steps the range plays.
         wanted = [IN_FORCE[step] for step in run['steps']]
-        assert run['in_force'] == wanted, dict(rule='documented value in force', condition=name, lead_ms=lead_ms, steps=run['steps'][:40], run=run['in_force'][:40], wanted=wanted[:40])
+        if run['in_force'] != wanted:
+            # Report where it first parts company, with the notes either side.
+            at = next((i for i, (a, b) in enumerate(zip(run['in_force'], wanted)) if a != b), min(len(wanted), len(run['in_force'])))
+            lo, hi = max(0, at - 3), at + 4
+            raise AssertionError(dict(rule='documented value in force', condition=name, lead_ms=lead_ms,
+                                      note=at, of=len(wanted), steps=run['steps'][lo:hi],
+                                      run=run['in_force'][lo:hi], wanted=wanted[lo:hi]))
         # A live edit lands a pulse or so from the UI action, so the plays can differ
         # in how many notes precede it; compare the sequences up to that point.
         shared = min(len(run['timed_notes']), len(reference['timed_notes']), notes)
