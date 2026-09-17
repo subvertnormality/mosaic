@@ -30,9 +30,11 @@ lead must, against the lead 0 reference of the same condition:
 
 Slides are checked value by value with the same timing rule; the MIDI value in
 force at a delayed note is a later slide value by design, so that check is skipped.
-Controlled time is exact to 1 microsecond (deadlines are float seconds on the norns
-metro). Real time uses the existing 10 ms host tolerance, and after a live edit only
-compares notes before the edit because its host moment varies between runs.
+Controlled time is exact to 50 microseconds: the lead reaches the norns metro as
+float seconds, which moves a deadline by about a microsecond. Real time uses the
+existing 10 ms host tolerance, compares notes only up to a live edit (its host
+moment varies between runs), and does not time the stored value sent at Play,
+because the wait from Play to the first note varies by up to one clock pulse.
 """
 import json
 from device_configs import boot_with
@@ -225,7 +227,7 @@ def timeline(events, lead_ms, field, marker, stopped, controlled):
 
 
 def compare(name, condition, lead_ms, run, reference, field, controlled):
-    tolerance = 1000 if controlled else 10_000_000
+    tolerance = 50_000 if controlled else 10_000_000
     lead_ns = lead_ms * 1_000_000
     rel = lambda e, t: e[field] - t['origin']
     # Values in force: README Trig Param Locks, Default Parameter Values, Handling Off.
@@ -264,6 +266,8 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             # README Lock lead time: a value never changes the receiver before the previous note sounds.
             assert value['index'] > run_notes[previous]['index'], dict(rule='value after previous note', condition=name, lead_ms=lead_ms, value=value['bytes'][2], note=previous)
         if previous is None:
+            if not controlled:
+                continue  # Play to first note varies by up to a pulse in real time.
             expected = x
         else:
             # README Lock lead time: step time, or halfway between the previous
@@ -300,7 +304,9 @@ def lock_lead_clock_matrix(c, name):
     finally:
         e.finish()
     reference = runs[0]
-    notes = [n for n in reference['notes'] if reference['timed'](n)]
+    # Every note of the reference, including after a live edit: the feel checks
+    # below span the whole play, while the run comparisons stop at the edit.
+    notes = reference['notes']
     start = notes[0][field]
     # Straight steps fall on a grid of whole steps (step 5 has no trig, so some
     # gaps span two); swing and shuffle move notes off that grid by 18 ms or more
@@ -314,7 +320,7 @@ def lock_lead_clock_matrix(c, name):
                 gap = b[field] - a[field]
                 worst = max(worst, abs(gap - max(1, round(gap / step_ns)) * step_ns))
         return worst
-    straight = 1000 if controlled else 10_000_000
+    straight = 50_000 if controlled else 10_000_000
     felt = 12_000_000
     if condition.get('swing') is not None or condition.get('shuffle'):
         if not condition.get('toggle'):
