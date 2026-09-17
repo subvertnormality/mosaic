@@ -264,7 +264,8 @@ def timeline(events, lead_ms, field, marker, stopped, controlled):
         off = next((x for x in port if x['index'] > e['index'] and x['bytes'][0] == 128 and x['bytes'][1] == e['bytes'][1]), None)
         gates.append(None if off is None else off[field] - e[field])
     timed = lambda e: e['index'] <= limit
-    return dict(port=port, notes=notes, values=values, in_force=in_force, steps=steps, gates=gates,
+    return dict(port=port, notes=notes, timed_notes=[n for n in notes if timed(n)], values=values,
+                in_force=in_force, steps=steps, gates=gates,
                 origin=origin, timed=timed)
 
 
@@ -275,13 +276,13 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
     # Values in force: README Trig Param Locks, Default Parameter Values, Handling Off.
     notes = min(len(run['in_force']), len(reference['in_force']))
     if not condition.get('slide'):
-        # A slide keeps moving while a note waits for the lead, so the MIDI value
-        # in force at the delayed note is a later slide value by design; slides are
-        # held to the per-value timing rule below instead.
-        assert run['in_force'][:notes] == reference['in_force'][:notes], dict(rule='same value in force at each note', condition=name, lead_ms=lead_ms, run=run['in_force'][:notes], reference=reference['in_force'][:notes])
         # Each note's own step decides its value, whichever steps the range plays.
-        wanted = [IN_FORCE[step] for step in run['steps'][:notes]]
-        assert run['in_force'][:notes] == wanted, dict(rule='documented value in force', condition=name, lead_ms=lead_ms, steps=run['steps'][:notes], run=run['in_force'][:notes], wanted=wanted)
+        wanted = [IN_FORCE[step] for step in run['steps']]
+        assert run['in_force'] == wanted, dict(rule='documented value in force', condition=name, lead_ms=lead_ms, steps=run['steps'][:40], run=run['in_force'][:40], wanted=wanted[:40])
+        # A live edit lands a pulse or so from the UI action, so the plays can differ
+        # in how many notes precede it; compare the sequences up to that point.
+        shared = min(len(run['timed_notes']), len(reference['timed_notes']), notes)
+        assert run['in_force'][:shared] == reference['in_force'][:shared], dict(rule='same value in force at each note', condition=name, lead_ms=lead_ms, run=run['in_force'][:shared], reference=reference['in_force'][:shared])
     # Common timed prefix of notes and values.
     ref_notes = [n for n in reference['notes'] if reference['timed'](n)]
     run_notes = [n for n in run['notes'] if run['timed'](n)]
