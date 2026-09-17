@@ -122,6 +122,17 @@ function delay_line.new(deps)
     firing=false
   end
   function q:now() return deps.now() end
+  -- When a message pushed now with this lead would leave: the same whole pulses
+  -- the note itself will wait, so a value's gap is measured against the moment
+  -- its note is really heard.
+  function q:deadline(ms)
+    local from=self:time()
+    local wait=ms/1000
+    if pulse and pulse_interval then
+      wait=math.ceil(wait/pulse_interval-1e-9)*pulse_interval
+    end
+    return from+wait
+  end
   -- The time a pulse's delayed output is measured from: its first delayed
   -- message, or now outside a pulse. Values and notes of one step share it.
   function q:time()

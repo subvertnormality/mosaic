@@ -27,7 +27,8 @@ lead must, against the lead 0 reference of the same condition:
   lose the fraction of a pulse the reference note spent inside its own pulse;
 - send every value after the previous note-on, and at its documented time, measured
   from the reference step time x: max(x, midpoint between the previous note-on and
-  x plus the lead), never before a value already queued on the channel. The lead
+  x plus the lead, both taken at the pulses those notes wait for), never before a
+  value already queued on the channel. The lead
   covers the receiver's response time, so trigless, default and lock values follow
   the same rule.
 
@@ -349,10 +350,9 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         else:
             # README Lock lead time: step time, or halfway between the previous
             # note-on and this step's heard time when they are close.
-            # The midpoint is taken from the previous note's deadline, which is
-            # its counted pulses, and from this value's own note heard at the
-            # lead the player chose.
-            expected = max(x, (ref_note_times[previous] + lead_ns + x + lead_ms * 1_000_000) / 2)
+            # Both ends of the gap are the notes' own deadlines, which are their
+            # counted pulses: the previous note-on and this value's own note.
+            expected = max(x, (ref_note_times[previous] + lead_ns + x + lead_ns) / 2)
         if queued is not None and queued > expected:
             expected = queued
         queued = expected

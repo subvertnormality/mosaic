@@ -128,7 +128,7 @@ function m_midi.parameter_deadline(port, channel)
   local now = delay_queue:now()
   -- Measure from the step's pulse, as its note is: a stall inside the pulse
   -- must not move the value later than the note it belongs to.
-  local heard = delay_queue:time() + lead_time_ms / 1000
+  local heard = delay_queue:deadline(lead_time_ms)
   local due = now
   local notes = last_note_due[port]
   local previous = notes and notes[channel]
