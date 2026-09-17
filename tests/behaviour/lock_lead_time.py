@@ -3,6 +3,7 @@ Controlled time proves the exact shift; real time checks ordering, cadence and
 preserved gates within the existing 10 ms host scheduling tolerance.
 """
 import json
+import math
 from device_configs import boot_with
 from master_clock import configure_master_output
 from midi_window import MidiWindow
@@ -28,7 +29,12 @@ def lock_lead_time(c):
             e.action(type='grid',x=1,y=8,state=1);e.action(type='grid',x=1,y=8,state=0)
             e.elapse(.06);capture.extend(e.snapshot())
             field='logical_ns' if e.clock_mode=='controlled-experimental' else 'monotonic_ns'
-            tolerance=2 if e.clock_mode=='controlled-experimental' else 10_000_000
+            # A delayed note leaves on a clock pulse, so the lead it waits is whole
+            # pulses, rounded up (README Lock lead time). MIDI clock ticks are the
+            # same clock at 24 ppqn against the lattice's 96, so four ticks' spacing
+            # gives the pulse. Controlled time is then exact to 50 microseconds,
+            # which covers the arithmetic rather than any scheduling.
+            tolerance=50_000 if e.clock_mode=='controlled-experimental' else 10_000_000
             events=[v for v in capture.events if v['port']==1]
             notes=[v for v in events if v['bytes'][0]==144 and v['bytes'][2]>0]
             locks=[v for v in events if v['bytes'] in ([176,1,24],[176,1,48])]
@@ -41,12 +47,16 @@ def lock_lead_time(c):
             notes,locks=notes[:8],locks[:8]
             assert [v['bytes'][2] for v in locks]==[24,48]*4
             assert events.index(starts[0])<events.index(notes[0])
+            tick_gaps=sorted(clocks[i+1][field]-clocks[i][field] for i in range(len(clocks)-1))
+            assert tick_gaps,('No clock ticks',lead)
+            pulse=tick_gaps[len(tick_gaps)//2]/4
+            expected_lead=math.ceil(lead*1_000_000/pulse-1e-9)*pulse if lead else 0
             assert not [v for v in events[events.index(stops[0])+1:] if v['bytes'][0]==144]
             # The last note is drained by the Stop tap (README Lock lead time), so its
             # lead is deliberately shortened; check the pairs before it.
             for index,(note,lock) in enumerate(zip(notes[:-1],locks[:-1])):
                 assert events.index(lock)<events.index(note),('Lock order',lead,index)
-                assert abs(note[field]-lock[field]-lead*1_000_000)<=tolerance,('Lead',lead,index,note,lock)
+                assert abs(note[field]-lock[field]-expected_lead)<=tolerance,('Lead',lead,index,expected_lead,note,lock)
                 assert abs((lock[field]-locks[0][field])-index*1e9/6)<=tolerance,('Lock cadence',index)
                 assert min(abs(tick[field]-note[field]) for tick in clocks)<=tolerance,('Clock alignment',lead,index)
             # Exclude the gates the Stop tap shortens: it drains pending output, so
@@ -59,6 +69,8 @@ def lock_lead_time(c):
             observations.append(gates)
             e.results.append(dict(kind='lock-lead-time',lead_time_ms=lead,notes=len(notes),gates_ns=gates,passed=True))
         finally:e.finish()
-    tolerance=2 if c.clock_mode=='controlled-experimental' else 10_000_000
+    # A gate may lose the fraction of a pulse the undelayed note spent inside its
+    # own pulse, so gates match within a pulse rather than exactly.
+    tolerance=(50_000+pulse) if c.clock_mode=='controlled-experimental' else 10_000_000
     assert all(max(gates)-min(gates)<=tolerance for gates in zip(*observations)),('Gate lengths changed',observations)
     c.results.append(dict(kind='lock-lead-time-comparison',passed=True))
