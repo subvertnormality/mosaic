@@ -171,13 +171,14 @@ class SchedulingTests(unittest.TestCase):
             manifest.write_text(json.dumps(dict(passed=True)))
             result=SimpleNamespace(returncode=0,stdout=json.dumps(dict(case='M-MOD-001',manifest=str(manifest)))+chr(10),stderr='')
             base=dict(experimental_install=None,mod_code_root={'midi-modulation':'/mods'},case_timeout=1)
-            for enabled in (False,True):
+            for enabled,profile in ((False,'midi-modulation'),(True,'midi-modulation'),(True,'base-midi'),(True,'nb-audio'),(True,'crow-jf')):
+                base['mod_code_root'][profile]='/mods'
                 args=SimpleNamespace(mod_patches=enabled,**base)
                 with patch.object(suite.subprocess,'run',return_value=result) as launched:
-                    row=suite.run_case('M-MOD-001','real-time','midi-modulation',args,Path(tmp),{})
+                    row=suite.run_case('M-MOD-001','real-time',profile,args,Path(tmp),{})
                 self.assertTrue(row['passed'])
                 command=launched.call_args.args[0]
-                self.assertEqual('--mod-patches' in command,enabled)
+                self.assertEqual('--mod-patches' in command,enabled and profile=='midi-modulation')
 
     def test_lanes_run_concurrently_within_each_lane_budget(self):
         import threading,time

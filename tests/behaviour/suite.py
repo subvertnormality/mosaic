@@ -221,7 +221,7 @@ def run_case(case,lane,profile,args,artifacts,env,gate=None):
     command=[sys.executable,str(BEHAVIOUR/'run.py'),'--case',case,'--artifacts',str(artifacts),'--clock-mode',lane]
     if args.experimental_install:command+=['--experimental-install',args.experimental_install]
     if profile!='base-midi':command+=['--profile',profile,'--mod-code-root',args.mod_code_root[profile]]
-    if args.mod_patches:command+=['--mod-patches']
+    if args.mod_patches and profile=='midi-modulation':command+=['--mod-patches']
     started=time.monotonic()
     try:
         result=subprocess.run(command,cwd=REPO,env=env,capture_output=True,text=True,timeout=args.case_timeout)
