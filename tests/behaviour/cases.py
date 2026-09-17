@@ -130,6 +130,7 @@ from patch_params import patch_slide_live_division
 from patch_params import patch_slide_timing
 from patch_params import patch_adjacent_locks
 from patch_params import patch_lock_precedence
+from patch_params import patch_duplicate_slot_lock
 from patch_params import patch_sparse_range
 from patch_params import patch_restart
 from patch_params import patch_nrpn_bytes
@@ -3597,6 +3598,8 @@ CASES={
  'M-PATCH-016':dict(run=lambda c:patch_adjacent_locks(c,2),requirements=['CH-PATCH-RECALL','CH-RANGE'],description='Range2..4 starts with its own lock rather than step1 and wraps with distinct lock values before each musical onset'),
  'M-PATCH-013':dict(run=lambda c:patch_lock_precedence(c,63),requirements=['CH-PATCH-RECALL'],description='Equal stored and step-lock values preserve explicit recall and lock messages; verify full phrase ordering and stored value'),
  'M-PATCH-014':dict(run=lambda c:patch_lock_precedence(c,-1),requirements=['CH-PATCH-RECALL','CH-PATCH-SENTINEL'],description='First-step Off sends no lock CC and does not undo stored-patch recall; full phrases and menu readback'),
+ 'M-PATCH-065':dict(run=patch_duplicate_slot_lock,requirements=['LOCK-PARAM-SET','PARAM-SLOTS'],description='CC1 assigned to two trig parameter slots and locked on step1 through the first: the lock, not the other slot stored63, is in force at the step1 note on every phrase'),
+ 'M-PATCH-066':dict(run=lambda c:patch_duplicate_slot_lock(c,2),requirements=['LOCK-PARAM-SET','PARAM-SLOTS'],description='CC1 assigned to two trig parameter slots and locked on step1 through the second: the lock is in force at the step1 note and unlocked steps keep stored63'),
  'M-PATCH-012':dict(run=patch_lock_precedence,requirements=['CH-PATCH-RECALL'],description='Stored CC63 is recalled before first-step CC99 lock and note, while native menu readback retains stored63'),
  'M-PATCH-010':dict(run=patch_sparse_range,requirements=['CH-PATCH-SENTINEL'],description='All28 valid CC values100..127 with off-minus-one, no exposed/transmitted gap values, saturation and screen checks'),
  'M-PATCH-011':dict(run=lambda c:patch_sparse_range(c,True),requirements=['CH-PATCH-SENTINEL'],description='All28 valid CC values100..127 with custom Off200 above range, no gap values or Off MIDI transmission'),

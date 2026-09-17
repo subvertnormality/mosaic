@@ -188,6 +188,43 @@ def patch_lock_precedence(c,lock_value=99):
         c.results.append(dict(kind='patch-lock-complete-phrase-order',lock_value=lock_value,notes=ordinal,passed=True))
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
+def patch_duplicate_slot_lock(c,locked_slot=1):
+    """One CC assigned to two trig parameter slots, locked on step1 through one of them.
+
+    Both slots write the same MIDI address, so the device holds whichever value
+    arrives last. The lock must be the value in force at its note whichever slot
+    holds it, and the unlocked steps keep the stored value (user report 2026-09-17:
+    a Syntakt Filter frequency lock never arrived while a second slot also held it)."""
+    from cases import menu_value,assign_trig_parameter
+    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
+    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.enc(2,1);assign_trig_parameter(c,'CC 1')
+    if locked_slot==1:c.enc(2,-1)
+    c.action(type='grid',x=1,y=4,state=1)
+    try:
+        for _ in range(99-63):c.enc(3,1)
+    finally:c.action(type='grid',x=1,y=4,state=0)
+    before=c.snapshot()['midi_count']
+    c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
+    after=c.snapshot()['midi_count']
+    c.key(1);menu_value(c,'63');c.finish()
+    try:
+        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
+        midi=[e for e in events if e.get('kind') in (3,11)]
+        assert [e['sequence'] for e in midi]==list(range(1,len(midi)+1))
+        held=None;ordinal=0;seen=[]
+        for event in midi[before:after]:
+            packet=event['bytes'];kind=packet[0]&240
+            if kind==176 and packet[1]==1:held=packet[2]
+            elif kind==144 and packet[2]>0:
+                wanted=99 if ordinal%4==0 else 63
+                seen.append(held)
+                assert held==wanted,dict(note_ordinal=ordinal,expected_cc1_at_note=wanted,actual=held,cc1_before_notes=seen)
+                ordinal+=1
+        assert ordinal>=9,dict(note_count=ordinal)
+        c.results.append(dict(kind='duplicate-slot-lock-at-note',locked_slot=locked_slot,notes=ordinal,cc1_before_notes=seen,passed=True))
+    finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+
 def patch_adjacent_locks(c,start=1):
     from cases import menu_value,assign_trig_parameter
     open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
