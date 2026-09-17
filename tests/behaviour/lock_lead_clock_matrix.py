@@ -7,8 +7,9 @@ README "Trig Parameters" (Default Parameter Values, Handling Off Settings), "Tri
 Param Locks", "Trigless Locks", "Param Slides", "Resend unchanged locks" and "Clocks,
 Swing and Shuffle" define which value each step sends and when steps occur.
 
-Each case boots Mosaic three times with the same project built through the public
-controls: lead 0 (the reference), 25 ms and 50 ms. Channel 1 plays steps 1-5 with
+Each case boots Mosaic once, builds the project through the public controls, then
+plays it at lead 0 (the reference), 25 ms and 50 ms, selecting each lead in the
+settings menu between plays (which drains any pending output). Channel 1 plays steps 1-5 with
 trigs on steps 1-4 and CC 1 assigned with the default value 20:
 
   step 1 lock 11 | step 2 default 20 | step 3 lock 33 | step 4 lock Off | step 5 trigless lock 55
@@ -44,6 +45,9 @@ STEP_LOCKS = ((1, 11), (2, None), (3, 33), (4, 'off'), (5, 55))
 # Value in force at the notes of steps 1-4 (step 5 has no trig).
 IN_FORCE = (11, 20, 33, 33)
 LEADS = (0, 25, 50)
+GLOBAL_LENGTH = 8      # global steps between resets, where playing feel edits apply
+TOGGLE_ON_AT = .6      # seconds into playback
+TOGGLE_HOLD = 2.0      # seconds the feel stays on before switching back
 CLOCK_INDEX = {'/1': 13, 'x2': 10, 'x4': 7, 'x16': 1}
 
 CONDITIONS = {
@@ -86,6 +90,22 @@ def set_tempo(c, bpm):
     leave_menu_home(c)
 
 
+def set_global_length(c, length):
+    """Set the song's global pattern length from its grid fader, so a playing
+    swing or shuffle edit reaches its next reset in about a second."""
+    import base64
+    from frame_oracle import render
+    c.tap(6, 8); c.tap(2, 7)
+    for _ in range(length - 1):
+        c.tap(8, 7)
+    expected = render([(0, 62, 10, 'Global pattern length: ' + str(length))])
+    def feedback(state):
+        actual = base64.b64decode(state['frame']['pixels_base64'])
+        return all(actual[(y * 128 + x) * 4 + k] == expected[(y * 128 + x) * 4 + k] for y in range(55, 64) for x in range(128) for k in range(3))
+    c.wait(feedback)
+    c.tap(3, 8)
+
+
 def leave_menu_home(c):
     """From a parameter group, back out to the PARAMETERS list top and close the menu
     on the HOME page, as the lead-time setup does, so later menu paths start there."""
@@ -121,6 +141,8 @@ def build(c, condition):
             c.action(type='grid', x=step, y=4, state=0)
     if condition.get('slide'):
         c.key(3)  # README Param Slides: K3 toggles the selected parameter's global slide.
+    if condition.get('toggle'):
+        set_global_length(c, GLOBAL_LENGTH)
     c.enc(1, 2); open_clocks(c)
     clock = condition.get('clock')
     if clock:
@@ -160,23 +182,23 @@ def apply_feel(c, condition):
         c.enc(2, 1); c.enc(3, 100); c.key(3)  # full amount
 
 
-def play(c, condition, seconds=3.0):
+def play(c, condition, seconds=2.0):
+    import math
     capture = MidiWindow(c.snapshot()['midi_count'])
 
     def hold(duration):
-        for _ in range(int(round(duration / .25))):
+        for _ in range(max(1, int(round(duration / .25)))):
             c.elapse(.25); capture.extend(c.snapshot())
 
     c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
     marker = None
     if condition.get('toggle'):
-        # 64 global steps at /1: the reset where a playing edit applies.
-        cycle = 64 * 15 / condition['bpm']
-        hold(.5)
-        c.enc(3, toggle_turns(condition)); c.key(3)      # on at global step 64
-        hold(cycle + 1.5 - .5)
-        c.enc(3, -toggle_turns(condition)); c.key(3)     # off at global step 128
-        hold(cycle)
+        hold(TOGGLE_ON_AT)
+        c.enc(3, toggle_turns(condition)); c.key(3)      # applies at the next reset
+        hold(TOGGLE_HOLD)
+        c.enc(3, -toggle_turns(condition)); c.key(3)     # straight again at the reset after
+        cycle = GLOBAL_LENGTH * 15 / condition['bpm']
+        hold(math.ceil((TOGGLE_ON_AT + TOGGLE_HOLD) / cycle) * cycle + 1.0 - (TOGGLE_ON_AT + TOGGLE_HOLD))
     else:
         hold(seconds / 2)
         if condition.get('tempo_change'):
@@ -187,6 +209,8 @@ def play(c, condition, seconds=3.0):
     c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
     c.elapse(.2); capture.extend(c.snapshot())
     c.wait(lambda state: capture.extend(state) and not state['midi_capture']['outstanding'])
+    if condition.get('tempo_change'):
+        set_tempo(c, condition['bpm'])  # the next lead starts from the same tempo
     return capture.events, marker, stopped
 
 
@@ -274,17 +298,21 @@ def lock_lead_clock_matrix(c, name):
     field = 'logical_ns' if controlled else 'monotonic_ns'
     c.finish()
     runs = {}
-    for lead in LEADS:
-        e = boot_with(c, 'lead-%d' % lead, {}, midi_lead_time_ms=lead)
-        try:
-            set_tempo(e, condition['bpm'])
-            build(e, condition)
+    e = boot_with(c, 'leads', {}, midi_lead_time_ms=LEADS[0])
+    try:
+        set_tempo(e, condition['bpm'])
+        build(e, condition)
+        for lead in LEADS:
+            # One project, one boot: selecting a lead drains pending output, so each
+            # play starts from the same state (README Lock lead time).
+            if lead != LEADS[0]:
+                e._set_midi_lead_time(lead)
             events, marker, stopped = play(e, condition)
-            (e.out / 'lead-events.json').write_text(json.dumps(events) + '\n')
+            (e.out / ('lead-%d-events.json' % lead)).write_text(json.dumps(events) + '\n')
             runs[lead] = timeline(events, lead, field, marker, stopped, controlled)
             e.results.append(dict(kind='lock-lead-clock-run', condition=name, lead_ms=lead, notes=len(runs[lead]['notes']), values=len(runs[lead]['values']), passed=True))
-        finally:
-            e.finish()
+    finally:
+        e.finish()
     reference = runs[0]
     notes = [n for n in reference['notes'] if reference['timed'](n)]
     start = notes[0][field]
@@ -309,13 +337,16 @@ def lock_lead_clock_matrix(c, name):
     if condition.get('toggle'):
         # README Clocks, Swing and Shuffle: straight until global step 64, felt
         # until step 128, then straight again.
-        cycle_ns = 64 * 15 / condition['bpm'] * 1e9
-        before = off_grid(.25e9, cycle_ns - .25e9)
-        during = off_grid(cycle_ns + .25e9, 2 * cycle_ns - .25e9)
-        after = off_grid(2 * cycle_ns + .25e9)
-        assert before <= straight, dict(rule='straight before step 64', condition=name, off_grid_ns=before)
-        assert during > felt, dict(rule='feel applied at step 64', condition=name, off_grid_ns=during)
-        assert after <= straight, dict(rule='straight again after step 128', condition=name, off_grid_ns=after)
+        import math
+        cycle_ns = GLOBAL_LENGTH * 15 / condition['bpm'] * 1e9
+        on_at = math.ceil(TOGGLE_ON_AT * 1e9 / cycle_ns) * cycle_ns
+        off_at = math.ceil((TOGGLE_ON_AT + TOGGLE_HOLD) * 1e9 / cycle_ns) * cycle_ns
+        before = off_grid(.15e9, on_at - .15e9)
+        during = off_grid(on_at + .15e9, off_at - .15e9)
+        after = off_grid(off_at + .15e9)
+        assert before <= straight, dict(rule='straight before the reset', condition=name, off_grid_ns=before)
+        assert during > felt, dict(rule='feel applied at the reset', condition=name, off_grid_ns=during)
+        assert after <= straight, dict(rule='straight again after the next reset', condition=name, off_grid_ns=after)
     summary = {}
     for lead in LEADS[1:]:
         summary[str(lead)] = compare(name, condition, lead, runs[lead], runs[0], field, controlled)
