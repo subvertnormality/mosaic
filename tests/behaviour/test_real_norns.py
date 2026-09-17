@@ -1,7 +1,7 @@
 import contextlib,hashlib,io,json,re,struct,subprocess,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
-from real_norns import Maiden,MaidenInput,OSC,OutputTrace,Runner,SSH,SSHOSC,WebSocketMaiden,export_head,main,osc_packet
+from real_norns import check_repl_lines,Maiden,MaidenInput,OSC,OutputTrace,Runner,SSH,SSHOSC,WebSocketMaiden,export_head,main,osc_packet
 from hardware_driver import HARDWARE_DRIVER_CAPABILITIES,HARDWARE_PERFORMANCE_RECIPES,HardwareDriver,hardware_applicability,run_hardware_case
 from cases import CASES
 from driver import Driver
@@ -186,17 +186,33 @@ class Tests(unittest.TestCase):
   with self.assertRaisesRegex(RuntimeError,'chunk 1-2 incomplete'):OutputTrace(m).snapshot()
  def test_output_trace_uses_persistent_globals_and_restores_c_binding(self):
   m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
-  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload,...)',m.commands[0]);self.assertIn('return original_grid_all(dev,value,rel,...)',m.commands[0]);self.assertIn('return original_grid_led(dev,x,y,value,rel,...)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('v.device.dev==dev',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
+  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('__NOT_STOCK__',m.commands[0]);self.assertIn('local original_midi=_norns.midi_send',m.commands[1]);self.assertIn('return original_midi(dev,payload,...)',m.commands[1]);self.assertIn('return original_grid_all(dev,value,rel,...)',m.commands[1]);self.assertIn('return original_grid_led(dev,x,y,value,rel,...)',m.commands[1]);self.assertIn('grid_state.writes',m.commands[1]);self.assertIn('v.device.dev==dev',m.commands[1]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[2])
  def test_output_trace_refuses_to_wrap_a_binding_an_earlier_trace_left_wrapped(self):
-  m=M();OutputTrace(m).install();command=m.commands[0]
-  self.assertIn("for _,name in ipairs({'midi_send','grid_set_led','grid_all_led','monome_refresh'}) do if debug.getinfo(_norns[name]).what~='C' then error(",command)
-  self.assertLess(command.index("debug.getinfo(_norns[name]).what~='C'"),command.index('local original_midi=_norns.midi_send'))
+  class Wrapped(M):
+   def eval(self,x,**kwargs):self.commands.append(x);return '__NOT_STOCK__midi_send\n__NOT_STOCK__grid_set_led\n<ok>' if '__NOT_STOCK__' in x else 'ok'
+  m=Wrapped();trace=OutputTrace(m)
+  with self.assertRaisesRegex(RuntimeError,'_norns.midi_send, _norns.grid_set_led is not the stock binding'):trace.install()
+  self.assertEqual(len(m.commands),1);self.assertFalse(trace.installed)
+ def test_trace_commands_fit_matrons_repl_line_buffer(self):
+  class Removed(M):
+   def eval(self,x,**kwargs):self.commands.append(x);return '__TRACE_REMOVED__C'
+  m=Removed();trace=OutputTrace(m);trace.install();trace.reset_midi();trace.remove()
+  self.assertEqual(len(m.commands),4)
+  for command in m.commands:check_repl_lines(command.rstrip()+"; print('__MOSAIC_HW_0123456789abcdef__')\n")
+ def test_maiden_refuses_a_line_matron_cannot_read_without_sending_it(self):
+  sent=[]
+  class Socket:
+   def send(self,data):sent.append(data)
+  maiden=WebSocketMaiden('ws://example',connector=lambda url,timeout:Socket())
+  with self.assertRaisesRegex(ValueError,'exceeds the 4096-byte matron REPL buffer'):maiden.eval('x=1 '+'-'*4096)
+  with self.assertRaisesRegex(ValueError,'4096-byte'):maiden.send('y=2 '+'-'*4096)
+  self.assertEqual(sent,[]);check_repl_lines('z=3\n'+'-'*4094+'\n')
  def test_output_trace_reset_mutates_the_table_captured_by_wrappers(self):
   m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('_MOSAIC_HW_MIDI.n=0',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
  def test_output_trace_install_cleans_up_when_code_executes_then_eval_raises(self):
   m=ExecuteThenRaiseM();trace=OutputTrace(m)
   with self.assertRaisesRegex(RuntimeError,'marker response failed'):trace.install(allow_lua_error=True)
-  self.assertFalse(m.wrapped);self.assertFalse(trace.installed);self.assertEqual(len(m.commands),2);self.assertEqual(m.allow,[True,True]);self.assertIn('__TRACE_REMOVED__',m.commands[1])
+  self.assertFalse(m.wrapped);self.assertFalse(trace.installed);self.assertEqual(len(m.commands),3);self.assertEqual(m.allow,[True,True,True]);self.assertIn('__TRACE_REMOVED__',m.commands[2])
  def test_device_map_index_is_selected_by_id_not_fixed_offset(self):
   r,_,m=self.r();m.eval=lambda code:m.commands.append(code) or '__MOSAIC_DEVICE_MAP_INDEX__34\nmarker';self.assertEqual(r.device_map_index('emu-test'),34);self.assertIn("d.id=='emu-test'",m.commands[-1])
  def test_hardware_driver_exposes_the_recipe_surface_and_rejects_unknown_actions(self):
