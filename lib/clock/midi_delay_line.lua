@@ -140,10 +140,12 @@ function delay_line.new(deps)
     -- Count from the pulse itself, not from the moment inside it when the
     -- message happened to be made: a lead of exactly so many pulses must not
     -- become one more because the step spent a moment working first.
-    local from=pulse and last_pulse or anchor
-    -- A lead of exactly so many pulses must round to that many, so the epsilon
-    -- is a thousandth of a pulse rather than an absolute fraction of a second.
-    local pulses=math.ceil((from+wait-last_pulse)/pulse_interval-0.001)
+    -- Inside a pulse the wait is counted on its own. Adding it to the clock and
+    -- subtracting the pulse again would lose its last digits against a large
+    -- absolute time, and a lead of exactly so many pulses would then round to
+    -- one more. The epsilon is a thousandth of a pulse for the same reason.
+    local ahead=pulse and wait or (anchor+wait-last_pulse)
+    local pulses=math.ceil(ahead/pulse_interval-0.001)
     if pulses<1 then pulses=1 end
     return last_pulse+pulses*pulse_interval,pulse_count+pulses
   end

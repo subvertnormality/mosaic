@@ -50,7 +50,7 @@ def lock_lead_time(c):
             tick_gaps=sorted(clocks[i+1][field]-clocks[i][field] for i in range(len(clocks)-1))
             assert tick_gaps,('No clock ticks',lead)
             pulse=tick_gaps[len(tick_gaps)//2]/4
-            expected_lead=math.ceil(lead*1_000_000/pulse-1e-9)*pulse if lead else 0
+            expected_lead=math.ceil(lead*1_000_000/pulse-0.001)*pulse if lead else 0
             assert not [v for v in events[events.index(stops[0])+1:] if v['bytes'][0]==144]
             # The last note is drained by the Stop tap (README Lock lead time), so its
             # lead is deliberately shortened; check the pairs before it.

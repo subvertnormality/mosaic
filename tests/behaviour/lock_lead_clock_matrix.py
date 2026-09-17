@@ -268,7 +268,9 @@ def lead_ns_at(lead_ms, bpm):
     if lead <= 0:
         return 0.0
     pulse = pulse_ns(bpm)
-    return math.ceil(lead / pulse - 1e-9) * pulse
+    # A thousandth of a pulse, as the delay line rounds: a lead of exactly so
+    # many pulses must not become one more through float representation.
+    return math.ceil(lead / pulse - 0.001) * pulse
 
 
 def timeline(events, lead_ms, field, marker, stopped, controlled, bpm):
