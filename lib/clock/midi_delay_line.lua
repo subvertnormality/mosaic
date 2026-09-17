@@ -129,12 +129,15 @@ function delay_line.new(deps)
   local function schedule(anchor,ms)
     local wait=ms/1000
     local now=deps.now()
-    if not (pulse_interval and last_pulse and pulsing(now)) then return anchor+wait,nil end
+    -- Only what a pulse produces rides the pulse grid. A message made between
+    -- pulses is off the grid on purpose - a swung or strummed note, a note
+    -- played live - and moving it to a pulse would quantise the feel away, so
+    -- it keeps its exact deadline.
+    if not (pulse and pulse_interval and last_pulse and pulsing(now)) then return anchor+wait,nil end
     -- Count from the pulse itself, not from the moment inside it when the
     -- message happened to be made: a lead of exactly so many pulses must not
     -- become one more because the step spent a moment working first.
-    local base=pulse and last_pulse or now
-    local pulses=math.ceil((base+wait-last_pulse)/pulse_interval-1e-9)
+    local pulses=math.ceil(wait/pulse_interval-1e-9)
     if pulses<1 then pulses=1 end
     return last_pulse+pulses*pulse_interval,pulse_count+pulses
   end
