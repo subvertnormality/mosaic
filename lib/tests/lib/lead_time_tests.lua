@@ -32,20 +32,35 @@ function test_lead_time_zero_is_synchronous_without_timer_or_batch()
   luaunit.assert_equals(#timers,0)
   luaunit.assert_equals({counts()},{0,0})
 end
+-- The lattice pulses far more often than it steps, and delayed output leaves on
+-- one of those pulses. The tests below pulse on a 1 ms grid: a 5 ms lead is then
+-- five pulses, so each group still leaves exactly its lead after its own pulse.
+local function pulse_grid(q,advance)
+  local at=-.001
+  return function(limit,body)
+    while at<limit-1e-12 do
+      at=at+.001
+      advance(at);q:begin()
+      if body and at>=limit-1e-12 then body() end
+      q:finish()
+    end
+  end
+end
 function test_lead_time_groups_pulse_and_preserves_longer_than_pulse_gates()
   local q,sent,timers,advance,counts=fixture()
-  q:begin();q:push(5,"start");q:push(5,"clock");q:push(5,"on1");q:push(5,"on2");q:finish()
-  advance(.002)
-  q:begin();q:push(5,"off1");q:push(5,"off2");q:finish()
+  local pulse=pulse_grid(q,advance)
+  pulse(0,function() q:push(5,"start");q:push(5,"clock");q:push(5,"on1");q:push(5,"on2") end)
+  pulse(.002,function() q:push(5,"off1");q:push(5,"off2") end)
   luaunit.assert_equals(sent,{})
   luaunit.assert_equals(#timers,1)
-  luaunit.assert_equals(timers[1].starts,1)
-  advance(.005)
+  pulse(.005)
   luaunit.assert_equals(sent,{{.005,"start"},{.005,"clock"},{.005,"on1"},{.005,"on2"}})
-  advance(.007)
+  pulse(.007)
   luaunit.assert_equals(sent[5],{.007,"off1"})
   luaunit.assert_equals(sent[6],{.007,"off2"})
-  luaunit.assert_equals({counts()},{2,2})
+  -- The first group was pushed before any pulse interval was known and left on
+  -- its timer; the second counted pulses and left inside the pulse's own batch.
+  luaunit.assert_equals({counts()},{1,1})
 end
 function test_lead_time_drain_preserves_generation_order_across_leads_and_cancels()
   local q,sent,timers,advance=fixture()
@@ -116,18 +131,55 @@ local function with_midi_lead(run, fallback)
   m_clock=saved.m_clock;clock_lattice=saved.clock_lattice;handle_midi_event_data=saved.handle
   if not ok then error(err,0) end
 end
+-- The same 1 ms pulse grid, driven through the MIDI output's batch hooks: each
+-- pulse opens and closes a batch exactly as the lattice does.
+local function output_pulse_grid(out,timers,advance,interval)
+  interval=interval or .001
+  local at,clock_now=-interval,-interval
+  local function move(t)
+    if t<clock_now then t=clock_now end
+    clock_now=t;advance(t)
+  end
+  local pulse=function(limit,body)
+    while at<limit-1e-12 do
+      at=at+interval
+      -- Let any timer between two pulses fire at its own moment: the fake clock
+      -- only moves when the test moves it, but real time does not skip.
+      while true do
+        local next_due
+        for _,t in ipairs(timers) do
+          if t.due and t.due<at-1e-12 and (not next_due or t.due<next_due) then next_due=t.due end
+        end
+        if not next_due then break end
+        move(next_due)
+      end
+      move(at)
+      out.begin_output_batch()
+      if body and at>=limit-1e-12 then body() end
+      out.flush_output_batch(true)
+    end
+  end
+  -- A body that advances time itself (a stall inside a pulse) leaves the clock
+  -- ahead of the grid. The pulses it delayed still happen, bunched at the time
+  -- the stall ended, exactly as the lattice works through its backlog.
+  return pulse,function(t) clock_now=t end
+end
 function test_lead_time_midi_locks_immediate_notes_batched_and_gates_unchanged()
   with_midi_lead(function(out,writes,timers,advance)
-    out.begin_output_batch();out.cc(74,nil,90,1,1);out.flush_output_batch()
-    out:note_on(60,100,1,1,5);out:note_on(64,90,2,1,5);out.flush_output_batch(true)
+    local pulse=output_pulse_grid(out,timers,advance)
+    pulse(0,function()
+      out.cc(74,nil,90,1,1);out.flush_output_batch()
+      out:note_on(60,100,1,1,5);out:note_on(64,90,2,1,5)
+    end)
     luaunit.assert_equals(writes,{{0,{176,74,90}}})
     luaunit.assert_equals(#timers,1)
-    advance(.005)
-    luaunit.assert_equals(writes[2],{.005,{144,60,100,145,64,90}})
-    advance(.100)
-    out.begin_output_batch();out:note_off(60,100,1,1,5);out:note_off(64,90,2,1,5);out.flush_output_batch(true)
-    advance(.105)
-    luaunit.assert_equals(writes[3],{.105,{128,60,100,129,64,90}})
+    pulse(.005)
+    luaunit.assert_almost_equals(writes[2][1],.005,1e-9)
+    luaunit.assert_equals(writes[2][2],{144,60,100,145,64,90})
+    pulse(.100,function() out:note_off(60,100,1,1,5);out:note_off(64,90,2,1,5) end)
+    pulse(.105)
+    luaunit.assert_almost_equals(writes[3][1],.105,1e-9)
+    luaunit.assert_equals(writes[3][2],{128,60,100,129,64,90})
   end)
 end
 function test_lead_time_stop_drains_notes_before_releases_and_delayed_stop()
@@ -251,13 +303,22 @@ local function wire_order(writes)
 end
 local function near(a, b) return math.abs(a - b) < 1e-6 end
 
+local function grid_step(pulse, out, t, value, note, lead)
+  pulse(t, function()
+    out.cc(74, nil, value, 1, 1)
+    out.flush_output_batch()
+    out:note_on(note, 100, 1, 1, lead)
+  end)
+end
+
 function test_lead_time_values_leave_at_step_time_when_notes_are_far_apart()
   with_midi_lead(function(out, writes, timers, advance)
     out.set_lead_time(25)
-    lead_step(out, 0, advance, 10, 60, 25, timers)
-    run_until(timers, advance, .025)
-    lead_step(out, .115, advance, 20, 62, 25, timers)
-    run_until(timers, advance, .140)
+    local pulse = output_pulse_grid(out, timers, advance)
+    grid_step(pulse, out, 0, 10, 60, 25)
+    pulse(.025)
+    grid_step(pulse, out, .115, 20, 62, 25)
+    pulse(.140)
     local rows = wire_order(writes)
     luaunit.assert_equals(#rows, 4)
     luaunit.assert_equals({rows[1][2], rows[1][4]}, {176, 10}); luaunit.assert_true(near(rows[1][1], 0))
@@ -273,11 +334,13 @@ function test_lead_time_value_closer_than_the_lead_waits_for_the_gap_midpoint()
     -- 200 bpm with a x4 channel clock: steps 18.75 ms apart.
     local gap = .01875
     local values, notes = {10, 20, 30, 40}, {60, 62, 64, 65}
+    -- 1.25 ms pulses: 15 to a step and 20 to the lead, as the lattice divides a
+    -- beat far more finely than a step.
+    local pulse = output_pulse_grid(out, timers, advance, .00125)
     for i = 1, 4 do
-      local t = (i - 1) * gap
-      lead_step(out, t, advance, values[i], notes[i], 25, timers)
+      grid_step(pulse, out, (i - 1) * gap, values[i], notes[i], 25)
     end
-    run_until(timers, advance, 1)
+    pulse(.2)
     local rows = wire_order(writes)
     luaunit.assert_equals(#rows, 8)
     for i = 1, 4 do
@@ -295,14 +358,15 @@ end
 function test_lead_time_value_between_one_and_two_leads_waits_only_to_the_midpoint()
   with_midi_lead(function(out, writes, timers, advance)
     out.set_lead_time(25)
-    lead_step(out, 0, advance, 10, 60, 25, timers)
-    run_until(timers, advance, .025)
-    lead_step(out, .040, advance, 20, 62, 25, timers)
-    run_until(timers, advance, .044); luaunit.assert_equals(#wire_order(writes), 2)
-    run_until(timers, advance, .045)
+    local pulse = output_pulse_grid(out, timers, advance)
+    grid_step(pulse, out, 0, 10, 60, 25)
+    pulse(.025)
+    grid_step(pulse, out, .040, 20, 62, 25)
+    pulse(.044); luaunit.assert_equals(#wire_order(writes), 2)
+    pulse(.045)
     local rows = wire_order(writes)
     luaunit.assert_equals({rows[3][2], rows[3][4]}, {176, 20}); luaunit.assert_true(near(rows[3][1], .045))
-    run_until(timers, advance, .065)
+    pulse(.065)
     rows = wire_order(writes)
     luaunit.assert_equals({rows[4][2], rows[4][3]}, {144, 62}); luaunit.assert_true(near(rows[4][1], .065))
   end)
@@ -370,16 +434,17 @@ end
 function test_lead_time_value_midpoint_uses_the_pulse_time_after_a_stall()
   with_midi_lead(function(out, writes, timers, advance)
     out.set_lead_time(25)
-    lead_step(out, 0, advance, 10, 60, 25, timers)
-    run_until(timers, advance, .040)
-    out.begin_output_batch()
-    out:note_off(60, 100, 1, 1, 25)
-    advance(.042)
-    out.cc(74, nil, 20, 1, 1)
-    out.flush_output_batch()
-    out:note_on(62, 100, 1, 1, 25)
-    out.flush_output_batch(true)
-    run_until(timers, advance, 1)
+    local pulse, resume = output_pulse_grid(out, timers, advance)
+    grid_step(pulse, out, 0, 10, 60, 25)
+    pulse(.040, function()
+      out:note_off(60, 100, 1, 1, 25)
+      advance(.042)
+      out.cc(74, nil, 20, 1, 1)
+      out.flush_output_batch()
+      out:note_on(62, 100, 1, 1, 25)
+    end)
+    resume(.042)
+    pulse(.1)
     local rows = wire_order(writes)
     local value = rows[3]
     luaunit.assert_equals({value[2], value[4]}, {176, 20})

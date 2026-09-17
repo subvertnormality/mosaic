@@ -49,7 +49,10 @@ function delay_line.new(deps)
       lane.armed=true
       local now=deps.now()
       local wait=first.due-now
-      if pulsing(now) then wait=wait+pulse_interval*1.5 end
+      -- A group counting pulses is normally sent by its pulse, so its timer is
+      -- only the fallback for pulses that stop; a group waiting on a deadline
+      -- (a value held for the gap) keeps its exact timer.
+      if first.pulse_due and pulsing(now) then wait=wait+pulse_interval*1.5 end
       lane.timer:start(math.max(0.000001,wait))
     end
   end
