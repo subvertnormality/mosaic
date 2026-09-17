@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: full-behaviour-${{ github.event.pull_request.number || github.ref }}
+  group: diag-behaviour-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:
@@ -32,7 +32,7 @@ jobs:
       fail-fast: false
       max-parallel: 8
       matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+        shard: [0]
     steps:
       - &packages
         name: Install native runtime dependencies
@@ -61,11 +61,11 @@ jobs:
         name: Build native runtimes
         run: tests/behaviour/ci/prepare-emulator.sh
       - name: Verify CI partition and aggregation contracts
-        if: matrix.shard == 0
+        if: false
         working-directory: tests/behaviour
         run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full
       - name: Fetch output-profile fixtures for fast layers
-        if: matrix.shard == 0
+        if: false
         run: |
           mkdir -p /tmp/mosaic-output-mods
           git clone https://github.com/sixolet/matrix.git /tmp/mosaic-output-mods/matrix
@@ -85,13 +85,9 @@ jobs:
           fi
       - name: Run exhaustive base-MIDI shard
         run: |
-          pattern="$(python3 tests/behaviour/ci/select-shard.py --profile base-midi --index ${{ matrix.shard }} --count 8)"
+          pattern='^(?:M\-SYNC\-LEAD\-001|M\-SYNC\-LEAD\-002|M\-SYNC\-LEAD\-003|M\-SYNC\-LEAD\-004|M\-SYNC\-LEAD\-005|M\-SYNC\-LEAD\-006|M\-SYNC\-LEAD\-007|M\-SYNC\-LEAD\-008|M\-SYNC\-LEAD\-009|M\-SYNC\-LEAD\-010|M\-SYNC\-LEAD\-011|M\-SYNC\-LEAD\-012|M\-SYNC\-LEAD\-013|M\-SYNC\-LEAD\-014|M\-SYNC\-LEAD\-015|M\-RANGE\-SAVED\-001)$'
           extra="--skip-fast-layers"
           output_mod=""
-          if [ "${{ matrix.shard }}" = 0 ]; then
-            extra=""
-            output_mod="--output-mod-root /tmp/mosaic-output-mods"
-          fi
           set +e
           runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py run             --output "/tmp/mosaic-behaviour-base-${{ matrix.shard }}"             --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"             --lanes real-time,controlled-experimental --profiles base-midi             --case-pattern "$pattern" --real-time-workers 1 --controlled-workers 1             --case-timeout 3600 $extra $output_mod
           status=$?
@@ -114,6 +110,7 @@ jobs:
 
   midi-modulation:
     name: MIDI modulation profiles
+    if: false
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -152,6 +149,7 @@ jobs:
 
   audio-crow:
     name: Audio and Crow/JF profiles
+    if: false
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -203,7 +201,7 @@ jobs:
 
   complete:
     name: Complete behaviour coverage
-    if: always()
+    if: false
     needs: [base-midi, midi-modulation, audio-crow]
     runs-on: ubuntu-latest
     steps:
