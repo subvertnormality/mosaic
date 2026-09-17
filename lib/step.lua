@@ -100,25 +100,27 @@ local mapped_control_values = setmetatable({}, {__mode = "k"})
 local function control_value(param)
   local spec = param.controlspec
   local raw = param.raw
+  local cached = mapped_control_values[param]
+  -- The entry holds the functions it was mapped with, so a hit needs no
+  -- verdict lookups: any replaced getter, mapping or controlspec misses.
+  if cached and cached.raw == raw and cached.spec == spec and cached.get == param.get
+      and cached.map_value == param.map_value and cached.map == spec.map and cached.minval == spec.minval
+      and cached.maxval == spec.maxval and cached.warp == spec.warp and cached.step == spec.step then
+    return cached.value
+  end
   if param.t ~= 3 or spec == nil or raw == nil
       or not is_core_function(param.get, core_sources.get)
       or not is_core_function(param.map_value, core_sources.map_value)
       or not is_core_function(spec.map, core_sources.map) then
     return param:get()
   end
-  local cached = mapped_control_values[param]
-  if cached and cached.raw == raw and cached.spec == spec and cached.minval == spec.minval
-      and cached.maxval == spec.maxval and cached.warp == spec.warp and cached.step == spec.step then
-    return cached.value
-  end
   local value = param:get()
-  if cached then
-    cached.raw, cached.spec, cached.minval, cached.maxval, cached.warp, cached.step, cached.value =
-      raw, spec, spec.minval, spec.maxval, spec.warp, spec.step, value
-  else
-    mapped_control_values[param] = {raw = raw, spec = spec, minval = spec.minval, maxval = spec.maxval,
-      warp = spec.warp, step = spec.step, value = value}
+  if not cached then
+    cached = {}
+    mapped_control_values[param] = cached
   end
+  cached.raw, cached.spec, cached.get, cached.map_value, cached.map = raw, spec, param.get, param.map_value, spec.map
+  cached.minval, cached.maxval, cached.warp, cached.step, cached.value = spec.minval, spec.maxval, spec.warp, spec.step, value
   return value
 end
 
