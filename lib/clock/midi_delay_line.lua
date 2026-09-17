@@ -103,6 +103,14 @@ function delay_line.new(deps)
       for _,lane in pairs(lanes) do consider(lane) end
       if held then consider(held) end
       if not best then break end
+      -- A value held for a gap belongs before the note it leads. If that note
+      -- is going out now, the value goes with it even though its own deadline
+      -- has not quite arrived: a note must never be heard under the value it
+      -- was meant to replace.
+      while held and held.groups[held.head] and held.groups[held.head]~=first
+          and held.groups[held.head].due<first.due-resolution do
+        send_group(held)
+      end
       send_group(best)
     end
   end
