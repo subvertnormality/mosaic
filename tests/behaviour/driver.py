@@ -150,9 +150,10 @@ class Driver:
             def chunk(kind,data):return struct.pack('>I',len(data))+kind+data+struct.pack('>I',zlib.crc32(kind+data)&0xffffffff)
             raw=b''.join(b'\0'+rgba[y*128*4:(y+1)*128*4] for y in range(64))
             (self.out/'lock-lead-time.png').write_bytes(b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',128,64,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b''))
-        self.enc(3,-50);self.enc(3,value);menu_option_row(self,'Lock lead time (ms)',str(value),top=23)
+        self.action(type='enc',n=3,delta=-100);self.elapse(.15);self.enc(3,value);menu_option_row(self,'Lock lead time (ms)',str(value),top=23)
         self.results.append(dict(kind='global-lock-lead-setting',value_ms=value,default_checked=expected))
-        self.key(2);self.enc(2,-60);menu_label(self,'LEVELS >');self.key(2);self.key(1)
+        self.key(2);self.action(type='enc',n=2,delta=-120);self.elapse(.15);menu_label(self,'LEVELS >');self.key(2)
+        self.enc(1,-4);self.key(1)  # Restore startup HOME panel for existing recipes.
 
     def configure(self):
         self.tap(3,8);self.enc(1,4);self.enc(3,1);self.key(3);self.tap(5,8)
