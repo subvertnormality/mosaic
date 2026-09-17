@@ -340,8 +340,13 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         before = [i for i, n in enumerate(ref_notes[:count]) if n['index'] < ref_value['index']]
         previous = before[-1] if before else None
         if previous is not None:
-            # README Lock lead time: a value never changes the receiver before the previous note sounds.
-            assert value['index'] > run_notes[previous]['index'], dict(rule='value after previous note', condition=name, lead_ms=lead_ms, value=value['bytes'][2], note=previous)
+            # README Lock lead time: a value never changes the receiver before the
+            # previous note sounds. It is compared in time rather than in order,
+            # because a value whose gap midpoint falls on the next note's own
+            # deadline is sent with that note, just before it - which is what the
+            # lead is for - while without a lead it followed that note.
+            gap = rel(value, run) - rel(run_notes[previous], run)
+            assert gap >= -tolerance, dict(rule='value not before the previous note', condition=name, lead_ms=lead_ms, value=value['bytes'][2], note=previous, gap_ns=gap)
         if previous is None:
             # The stored value sent at Play is not timed: the wait from Play to the
             # first note is whatever is left of the clock pulse, and each play starts
