@@ -92,15 +92,23 @@ def build_project(d,channels,workload='dense',select_parameter=None,select_devic
             d.enc(2,-(len(LOCK_PARAMETERS)-1));d.enc(1,3)
     d.tap(1,1)
 
-def check_slides(emitted,ons,channels):
-    """Each channel has a complete ordered CC 1 ramp from step 1 to step 9."""
+def check_slides(emitted,ons,channels,lead_ms=0):
+    """Each channel has a complete ordered CC 1 ramp from step 1 to step 9.
+
+    A ramp value leaves at its step, and with a lock lead its note leaves later,
+    so the cycle's first value can precede its note by the lead and by every
+    other channel's messages in between. The cycle is therefore bounded by time
+    rather than by a count of messages."""
     checked=0
+    guard_ns=int(lead_ms*1e6)+10_000_000
     for channel in range(channels):
         cc=[e for e in emitted if e['bytes'][:2]==[176+channel,1]]
         notes=[e for e in ons if e['bytes'][0]==144+channel]
         for cycle in range(len(notes)//16):
             first,ninth=notes[16*cycle],notes[16*cycle+8]
-            ramp=[e['bytes'][2] for e in cc if first['index']-channels*2<e['index']<ninth['index']]
+            ramp=[e['bytes'][2] for e in cc
+                  if (first['index']-channels*2<e['index'] or e['monotonic_ns']>=first['monotonic_ns']-guard_ns)
+                  and e['index']<ninth['index']]
             assert ramp and ramp[0]==0 and ramp[-1]==127 and ramp==sorted(ramp) and len(set(ramp))>=4,(channel+1,cycle,ramp)
             checked+=1
     assert checked>=channels,('No complete slide cycle',checked)
@@ -126,7 +134,7 @@ def check_locks(emitted,ons,channels):
     assert all(count>=16 for count in counts.values()),('Lock cycle incomplete',counts)
     return checked
 
-def validate_events(emitted,channels,workload):
+def validate_events(emitted,channels,workload,lead_ms=0):
     """Shared completeness, ordering, byte, release, and slide oracle."""
     assert emitted and [e['index'] for e in emitted]==list(range(1,len(emitted)+1)),'Non-contiguous native export'
     ons=[e for e in emitted if e['bytes'][0]&240==144 and e['bytes'][2]>0]
@@ -152,5 +160,5 @@ def validate_events(emitted,channels,workload):
         assert sorted(e['bytes'][0] for e in group)==[144+c for c in range(channels)],('Channels at step',index,[e['bytes'] for e in group])
         assert all(e['bytes'][1:]==[60,100] and e['port']==1 for e in group),('Bytes at step',index,[(e['port'],e['bytes']) for e in group])
     assert len(offs)==len(ons),('Unbalanced releases',len(ons),len(offs))
-    return {'ons':ons,'offs':offs,'steps':steps,'slide_cycles':check_slides(emitted,ons,channels) if workload=='slides' else None,
+    return {'ons':ons,'offs':offs,'steps':steps,'slide_cycles':check_slides(emitted,ons,channels,lead_ms) if workload=='slides' else None,
             'lock_values_checked':check_locks(emitted,ons,channels) if workload=='locks' else None}

@@ -96,11 +96,11 @@ def resource_metrics(recording):
     flags=[row['throttled_flags'] for row in samples if row['throttled_flags'] is not None]
     return {'sample_count':len(samples),'matron_cpu_ticks_delta':cpu_ticks,'matron_cpu_percent':100*cpu_ticks/identity['clock_ticks_per_second']/(elapsed/1e9),'matron_peak_rss_bytes':max(row['matron_rss_bytes'] for row in samples),'load_peak_1m':max(row['load'][0] for row in samples),'thermal_millicelsius_peak':max([row['thermal_millicelsius_max'] for row in samples if row['thermal_millicelsius_max'] is not None] or [None]),'throttling_available':bool(flags),'throttled_flags_or':__import__('functools').reduce(lambda a,b:a|b,flags,0) if flags else None,'threshold_status':'calibration-only'}
 
-def dense_oracle(events,channels,seconds,step_seconds,workload,thresholds=None,step_stride=1):
+def dense_oracle(events,channels,seconds,step_seconds,workload,thresholds=None,step_stride=1,lead_ms=0):
     thresholds=thresholds or TIMING_THRESHOLDS
     # A workload that sounds every Nth step is timed against a grid N steps wide.
     step_seconds=step_seconds*step_stride
-    validated=validate_events(events,channels,workload);ons=validated['ons'];offs=validated['offs'];captured_steps=validated['steps']
+    validated=validate_events(events,channels,workload,lead_ms);ons=validated['ons'];offs=validated['offs'];captured_steps=validated['steps']
     measurement_end_ns=captured_steps[0][0]['monotonic_ns']+round(seconds*1e9)
     steps=[group for group in captured_steps if group[0]['monotonic_ns']<measurement_end_ns]
     expected_steps=int(seconds/step_seconds);assert abs(len(steps)-expected_steps)<=2,('Step count',len(steps),expected_steps,len(captured_steps))
@@ -310,7 +310,8 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
     try:
         # A loaded project fixture already holds the workload; build it through the
         # UI only when there is none, and keep that build as a fixture if asked.
-        if project_fixture is not None:check_project_fixture(project_fixture,case_id)
+        fixture_manifest=check_project_fixture(project_fixture,case_id) if project_fixture is not None else {}
+        lead_ms=fixture_manifest.get('midi_lock_lead_time') or 0
         if spec.get('tempo_bpm') is not None and abs(driver.tempo_bpm-spec['tempo_bpm'])>.01:
             raise AssertionError('%s runs at %s bpm but the norns clock is at %s'%(case_id,spec['tempo_bpm'],driver.tempo_bpm))
         if project_fixture is None:
@@ -346,7 +347,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                     oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
                             'service':{'p99_ns':0},'skipped_deadlines':0,'gates':dict(recovery['gates']),'passed':recovery['passed'],'note_ons':recovery['groups']*spec['channels'],
                             'messages':len(state['midi']),'steps':recovery['groups'],'slide_cycles_checked':None}
-                else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'],step_stride=spec.get('step_stride',1))
+                else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'],step_stride=spec.get('step_stride',1),lead_ms=lead_ms)
                 if stimulus is not None:
                     oracle['gates']['stimulus_complete']=stimulus['complete'];oracle['passed']=oracle['passed'] and stimulus['complete']
                 failure=None
