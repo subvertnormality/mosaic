@@ -245,6 +245,42 @@ function step.process_recording_params(channel)
   end
 end
 
+-- Two slots can hold the same device parameter: a device map can assign Filter
+-- frequency automatically and a player can assign it again by hand. Both write
+-- one MIDI address, and the device keeps whichever arrives last. A slot that is
+-- locked or sliding on this step claims its address, and other slots then do not
+-- send their assigned value to it. The claims are stamped with a per-call number
+-- rather than cleared, so a step without locks or slides allocates nothing.
+local claimed_addresses = {}
+local claim_stamp = 0
+
+local function midi_address(param, midi_channel)
+  if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
+    return (midi_channel * 2 + 1) * 16384 + param.nrpn_msb * 128 + param.nrpn_lsb
+  elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
+    return midi_channel * 2 * 16384 + param.cc_msb
+  end
+end
+
+local function claim_addresses(channel, step, trig_lock_params, device_midi_channel)
+  local bank = channel.step_trig_lock_banks[step]
+  local claimed = false
+  for i, param in ipairs(trig_lock_params) do
+    if param.param_id and param.type == "midi" then
+      local lock_value = bank and bank[i]
+      local off = param.off_value == nil and -1 or param.off_value
+      if (lock_value ~= nil and lock_value ~= off) or m_clock.channel_is_sliding(channel, i) then
+        local address = midi_address(param, param.channel or device_midi_channel)
+        if address then
+          if not claimed then claim_stamp = claim_stamp + 1; claimed = true end
+          claimed_addresses[address] = claim_stamp
+        end
+      end
+    end
+  end
+  return claimed
+end
+
 function step.process_params(channel, step)
   local program_data = program.get()
 
@@ -259,6 +295,7 @@ function step.process_params(channel, step)
   end 
 
   local recording_selected_channel = fn.param_value("record") == 2 and program_data.selected_channel == channel.number
+  local any_claimed = claim_addresses(channel, step, trig_lock_params, devices[channel.number].midi_channel)
 
   for i, param in ipairs(trig_lock_params) do
     -- Unassigned slots are the common case; test the cheapest condition first.
@@ -334,10 +371,16 @@ function step.process_params(channel, step)
           if p_value == off then
             goto continue
           end
+          if any_claimed and claimed_addresses[midi_address(param, midi_channel)] == claim_stamp then
+            goto continue
+          end
 
           send_midi_param(channel.number, i, param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
         elseif not m_clock.channel_is_sliding(channel, i) then
           if value == off then
+            goto continue
+          end
+          if any_claimed and claimed_addresses[midi_address(param, midi_channel)] == claim_stamp then
             goto continue
           end
 
