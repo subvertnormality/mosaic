@@ -135,8 +135,13 @@ function m_midi.install_clock_hooks()
   end
 end
 function m_midi.cleanup()
-  m_midi:all_notes_off()
-  if delay_queue then delay_queue:close();delay_queue=nil end
+  -- With zero lead the old script emitted nothing during unload. Only an
+  -- allocated delay line needs transport/release cleanup before core frees
+  -- script clocks and metros; restoring hooks itself must not send MIDI.
+  if delay_queue then
+    m_midi.stop()
+    delay_queue:close();delay_queue=nil
+  end
   for _,hook in ipairs(clock_hooks) do
     if hook.port[hook.name]==hook.wrapper then hook.port[hook.name]=hook.original end
   end

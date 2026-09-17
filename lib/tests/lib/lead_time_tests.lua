@@ -197,3 +197,22 @@ function test_lead_time_panic_drains_pending_onsets_before_sweep()
     scheduler=old;if not ok then error(err,0) end
   end)
 end
+
+function test_lead_time_zero_cleanup_preserves_legacy_output()
+  with_midi_lead(function(out,writes,_,_,port)
+    out.set_lead_time(0);out.install_clock_hooks();out:note_on(60,100,1,1)
+    out.cleanup()
+    luaunit.assert_equals(writes,{{0,{144,60,100}}})
+    out:reset_note_counts()
+  end)
+end
+function test_lead_time_cleanup_drains_delayed_notes_and_restores_hooks()
+  with_midi_lead(function(out,writes,_,advance,port)
+    local original=port.clock
+    out.install_clock_hooks();port:start();out:note_on(60,100,1,1)
+    out.cleanup()
+    luaunit.assert_equals(writes,{{0,{250}},{0,{144,60,100}},{0,{128,60,0}},{0,{252}}})
+    luaunit.assert_equals(port.clock,original)
+    advance(.050);luaunit.assert_equals(#writes,4)
+  end)
+end
