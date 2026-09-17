@@ -83,7 +83,13 @@ def set_tempo(c, bpm):
     c.enc(2, 1); menu_label(c, 'tempo')
     c.enc(3, -300); menu_value(c, '1')
     c.enc(3, bpm - 1); menu_value(c, str(bpm))
-    # Leave the menu the way the lead-time setup does, back on the HOME panel.
+    leave_menu_home(c)
+
+
+def leave_menu_home(c):
+    """From a parameter group, back out to the PARAMETERS list top and close the menu
+    on the HOME page, as the lead-time setup does, so later menu paths start there."""
+    from cases import menu_label
     c.key(2); c.action(type='enc', n=2, delta=-120); c.elapse(.15); menu_label(c, 'LEVELS >'); c.key(2)
     c.enc(1, -4); c.key(1)
 
@@ -97,7 +103,7 @@ def build(c, condition):
     """Channel 1 steps 1-5 with the documented value pattern and the condition's clock."""
     from cases import assign_trig_parameter, set_mosaic_options
     configure_master_output(c)
-    c.key(1)
+    leave_menu_home(c)  # configure_master_output leaves the menu inside CLOCK.
     if condition.get('resend') is False:
         set_mosaic_options(c, [('Resend unchanged locks', False)])
     c.hold_tap((1, 4), (5, 4))  # Channel range 1-5; step 5 has no trig.
@@ -280,21 +286,31 @@ def lock_lead_clock_matrix(c, name):
         finally:
             e.finish()
     reference = runs[0]
-    gaps = [b[field] - a[field] for a, b in zip(reference['notes'], reference['notes'][1:]) if reference['timed'](b)]
+    notes = [n for n in reference['notes'] if reference['timed'](n)]
+    start = notes[0][field]
+    # Step 5 has no trig, so the gap over it spans two steps; judge the feel from
+    # the one-step gaps (shorter than one and a half of the shortest gap).
+    def one_step_gaps(lo=0, hi=float('inf')):
+        pairs = [(b[field] - a[field], b[field] - start) for a, b in zip(notes, notes[1:])]
+        window = [g for g, t in pairs if lo <= t < hi]
+        shortest = min(window)
+        return [g for g in window if g < 1.5 * shortest]
+    tolerance = 1000 if controlled else 10_000_000
     if condition.get('swing') is not None or condition.get('shuffle'):
-        # The feel must actually move notes, or the case would test straight time.
-        assert max(gaps) - min(gaps) > .2 * min(gaps), dict(rule='feel audible in reference', condition=name, min_gap_ns=min(gaps), max_gap_ns=max(gaps))
+        if not condition.get('toggle'):
+            gaps = one_step_gaps()
+            # The feel must actually move notes, or the case would test straight time.
+            assert max(gaps) - min(gaps) > 10_000_000, dict(rule='feel audible in reference', condition=name, gaps_ns=gaps[:12])
     if condition.get('toggle'):
         # README Clocks, Swing and Shuffle: straight until global step 64, felt
         # until step 128, then straight again.
         cycle_ns = 64 * 15 / condition['bpm'] * 1e9
-        start = reference['notes'][0][field]
-        def spread(lo, hi):
-            window = [g for g, b in zip(gaps, reference['notes'][1:]) if lo + .25e9 < b[field] - start < hi - .25e9]
-            return max(window) - min(window)
-        tolerance = 1000 if controlled else 10_000_000
-        assert spread(0, cycle_ns) <= tolerance, ('Feel applied before its reset', name)
-        assert spread(cycle_ns, 2 * cycle_ns) > 10_000_000, ('Feel not applied at its reset', name)
+        before = one_step_gaps(.25e9, cycle_ns - .25e9)
+        during = one_step_gaps(cycle_ns + .25e9, 2 * cycle_ns - .25e9)
+        after = one_step_gaps(2 * cycle_ns + .25e9)
+        assert max(before) - min(before) <= tolerance, dict(rule='straight before step 64', condition=name, gaps_ns=before[:12])
+        assert max(during) - min(during) > 10_000_000, dict(rule='feel applied at step 64', condition=name, gaps_ns=during[:12])
+        assert max(after) - min(after) <= tolerance, dict(rule='straight again after step 128', condition=name, gaps_ns=after[:12])
     summary = {}
     for lead in LEADS[1:]:
         summary[str(lead)] = compare(name, condition, lead, runs[lead], runs[0], field, controlled)
