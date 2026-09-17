@@ -56,11 +56,20 @@ function delay_line.new(deps)
     local resolution=deps.resolution or 1e-9
     deps.begin()
     if held and held~=lane then
-      -- A late timer may find notes and held values both due: send them in
-      -- deadline order, a held value first when deadlines are equal.
+      -- Notes and held values due together go out in deadline order, and in
+      -- the order they were produced when deadlines are equal: a lock produced
+      -- before its note precedes it, a slide value produced after a note follows.
       while lane.head<=#lane.groups and lane.groups[lane.head].due<=now+resolution do
-        local due=lane.groups[lane.head].due
-        while held.head<=#held.groups and held.groups[held.head].due<=due+resolution do send_group(held) end
+        local group=lane.groups[lane.head]
+        while held.head<=#held.groups do
+          local value=held.groups[held.head]
+          if value.due<group.due-resolution or
+              (value.due<=group.due+resolution and value.items[1].serial<group.items[1].serial) then
+            send_group(held)
+          else
+            break
+          end
+        end
         send_group(lane)
       end
       send_due(held,now)

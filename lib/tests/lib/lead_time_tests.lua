@@ -388,3 +388,20 @@ function test_lead_time_value_midpoint_uses_the_pulse_time_after_a_stall()
     luaunit.assert_equals({rows[5][2], rows[5][3]}, {144, 62}); luaunit.assert_true(near(rows[5][1], .065))
   end)
 end
+
+-- A value produced after a note in the same pulse, and due at the same moment
+-- (a slide value right after the previous note), follows that note.
+function test_lead_time_equal_deadlines_keep_the_order_values_and_notes_were_produced()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    out.begin_output_batch()
+    out:note_on(62, 100, 1, 1, 25)
+    out.cc(74, nil, 20, 1, 1)
+    out.flush_output_batch(true)
+    run_until(timers, advance, 1)
+    local kinds = {}
+    for _, r in ipairs(wire_order(writes)) do kinds[#kinds + 1] = {r[2], r[3], r[4]} end
+    luaunit.assert_equals(kinds, {{176, 74, 10}, {144, 60, 100}, {144, 62, 100}, {176, 74, 20}})
+  end)
+end
