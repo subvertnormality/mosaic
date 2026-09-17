@@ -180,6 +180,7 @@ def play(c, condition, seconds=2.0):
     if condition.get('toggle'):
         cycle = GLOBAL_LENGTH * 15 / condition['bpm']
         hold(TOGGLE_ON_AT)
+        marker = capture.cursor
         c.enc(3, toggle_turns(condition)); c.key(3)      # applies at the next reset
         hold(cycle + 1.0 - TOGGLE_ON_AT)
         c.enc(3, -toggle_turns(condition)); c.key(3)     # straight again at the reset after
