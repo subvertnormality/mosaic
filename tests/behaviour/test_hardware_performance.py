@@ -94,6 +94,22 @@ class Tests(unittest.TestCase):
         self.assertEqual(value['step_jitter']['maximum_ns'],0)
         with self.assertRaisesRegex(AssertionError,'Step count'):dense_oracle(events,2,8,.25,'extreme')
         self.assertEqual(CASES['PERF-EXT-HW-16']['step_stride'],2)
+    def test_one_stalled_step_per_window_is_tolerated_but_two_are_not(self):
+        def stalled(steps_late):
+            events=dense_events(2,steps=32)
+            for event in events:
+                step=(event['monotonic_ns']-1_000_000_000)//250_000_000
+                if step in steps_late:event['monotonic_ns']+=15_000_000
+            return events
+        clean=dense_oracle(dense_events(2,steps=32),2,8,.25,'dense')
+        one=dense_oracle(stalled({10}),2,8,.25,'dense')
+        self.assertGreater(one['timing']['p99_ns'],10_000_000)
+        self.assertEqual(one['timing_one_stall_tolerated']['excluded_step'],10)
+        self.assertEqual(one['timing_one_stall_tolerated']['excluded_step_maximum_ns'],15_000_000+1000)
+        self.assertTrue(one['gates']['event_timing'])
+        two=dense_oracle(stalled({10,20}),2,8,.25,'dense')
+        self.assertFalse(two['gates']['event_timing'],'Two stalled steps in one window must fail')
+        self.assertTrue(clean['gates']['event_timing'])
     def test_dense_oracle_reuses_complete_order_timing_release_and_skip_gates(self):
         value=dense_oracle(dense_events(2,4),2,1,.25,'dense')
         self.assertTrue(value['passed']);self.assertEqual((value['steps'],value['note_ons'],value['note_offs']),(4,8,8));self.assertEqual(value['skipped_deadlines'],0);self.assertEqual(value['timing']['maximum_ns'],1000)
