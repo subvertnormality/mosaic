@@ -187,6 +187,10 @@ class Tests(unittest.TestCase):
  def test_output_trace_uses_persistent_globals_and_restores_c_binding(self):
   m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
   trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload,...)',m.commands[0]);self.assertIn('return original_grid_all(dev,value,rel,...)',m.commands[0]);self.assertIn('return original_grid_led(dev,x,y,value,rel,...)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('v.device.dev==dev',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
+ def test_output_trace_refuses_to_wrap_a_binding_an_earlier_trace_left_wrapped(self):
+  m=M();OutputTrace(m).install();command=m.commands[0]
+  self.assertIn("for _,name in ipairs({'midi_send','grid_set_led','grid_all_led','monome_refresh'}) do if debug.getinfo(_norns[name]).what~='C' then error(",command)
+  self.assertLess(command.index("debug.getinfo(_norns[name]).what~='C'"),command.index('local original_midi=_norns.midi_send'))
  def test_output_trace_reset_mutates_the_table_captured_by_wrappers(self):
   m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('_MOSAIC_HW_MIDI.n=0',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
  def test_output_trace_install_cleans_up_when_code_executes_then_eval_raises(self):
