@@ -239,6 +239,9 @@ def play(c, condition, seconds=2.0):
     c.wait(lambda state: capture.extend(state) and not state['midi_capture']['outstanding'])
     if condition.get('tempo_change'):
         set_tempo(c, condition['bpm'])  # the next lead starts from the same tempo
+    if condition.get('range_change'):
+        start, end = condition.get('range', (1, 5))
+        c.hold_tap((start, 4), (end, 4))  # restore the range for the next lead
     return capture.events, marker, stopped
 
 
