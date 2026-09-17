@@ -15,7 +15,9 @@ def rejected_saved_range(c):
     source=json.loads(Path(c.launch_options['experimental_install']).read_text())['source']
     subprocess.run(['lua5.3',str(script),source,str(seed/'autosave.ptn')],check=True)
     rejected={name:digest(seed/name) for name in original}
-    out=c.out/'rejected-load';out.mkdir();loaded=Driver(out,project_seed=seed,**c.launch_options)
+    # The rejection message is shown at boot. Skip the zero-lead menu setup, which
+    # would cover it; the loaded project already stores the lead set before saving.
+    out=c.out/'rejected-load';out.mkdir();loaded=Driver(out,project_seed=seed,**dict(c.launch_options,midi_lead_time_ms=None))
     try:
         expected=render([(0,62,10,'Slot 1 ch 1 reversed')])
         def feedback(state):
