@@ -28,11 +28,25 @@ end
 function delay_line.new(deps)
   local q = {}
   local lanes, pulse, pulse_time, serial = {}, false, nil, 0
+  -- While the transport runs, every clock pulse sends what has come due. A
+  -- timer callback waits behind whatever pulse is running, and on a busy step
+  -- that wait moved delayed notes several milliseconds off the beat; a pulse
+  -- carries them with the same steadiness as an undelayed note. The timer stays
+  -- as the fallback for output produced while no pulse is coming (MIDI thru
+  -- with the transport stopped), and is armed a pulse and a half late while
+  -- pulses are arriving so the pulse itself normally sends first.
+  local last_pulse, pulse_interval
+  local function pulsing(now)
+    return pulse_interval and last_pulse and (now-last_pulse) < pulse_interval*4
+  end
   local function arm(lane)
     local first=lane.groups[lane.head]
     if first and not lane.armed then
       lane.armed=true
-      lane.timer:start(math.max(0.000001,first.due-deps.now()))
+      local now=deps.now()
+      local wait=first.due-now
+      if pulsing(now) then wait=wait+pulse_interval*1.5 end
+      lane.timer:start(math.max(0.000001,wait))
     end
   end
   -- Parameter values held for a gap (push_at) have their own lane ordered by
@@ -58,11 +72,9 @@ function delay_line.new(deps)
     if lane.armed and not lane.groups[lane.head] then lane.timer:stop();lane.armed=false end
     arm(lane)
   end
-  local function fire(fired)
-    fired.armed=false
+  local function send_due()
     local now=deps.now()
     local resolution=deps.resolution or 1e-9
-    deps.begin()
     while true do
       local best,first
       local function consider(lane)
@@ -77,9 +89,23 @@ function delay_line.new(deps)
       if not best then break end
       send_group(best)
     end
-    deps.flush()
+  end
+  local function settle_all()
     for _,lane in pairs(lanes) do settle(lane) end
     if held then settle(held) end
+  end
+  local function fire(fired)
+    fired.armed=false
+    deps.begin()
+    send_due()
+    deps.flush()
+    settle_all()
+  end
+  -- Called by the pulse that has just opened an output batch: what is due joins
+  -- that pulse's write, ahead of anything the pulse itself produces.
+  function q:pump()
+    send_due()
+    settle_all()
   end
   function q:now() return deps.now() end
   -- The time a pulse's delayed output is measured from: its first delayed
@@ -106,7 +132,16 @@ function delay_line.new(deps)
     if index==held.head and held.armed then held.timer:stop();held.armed=false end
     arm(held)
   end
-  function q:begin() pulse=true;pulse_time=nil end
+  function q:begin()
+    local now=deps.now()
+    if last_pulse then
+      local gap=now-last_pulse
+      -- A plausible pulse: faster than four a second and not a repeated call.
+      if gap>0.0001 and gap<0.25 then pulse_interval=gap end
+    end
+    last_pulse=now
+    pulse=true;pulse_time=nil
+  end
   function q:finish()
     pulse=false;pulse_time=nil
     for _,lane in pairs(lanes) do lane.pulse_group=nil;arm(lane) end
