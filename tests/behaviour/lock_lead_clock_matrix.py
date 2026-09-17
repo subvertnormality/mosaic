@@ -27,8 +27,8 @@ lead must, against the lead 0 reference of the same condition:
   covers the receiver's response time, so trigless, default and lock values follow
   the same rule.
 
-Slides check value order, the value in force at each note and note timing; their
-intermediate values follow the same midpoint rule but are not individually timed.
+Slides are checked value by value with the same timing rule; the MIDI value in
+force at a delayed note is a later slide value by design, so that check is skipped.
 Controlled time is exact to 1 microsecond (deadlines are float seconds on the norns
 metro). Real time uses the existing 10 ms host tolerance, and after a live edit only
 compares notes before the edit because its host moment varies between runs.
@@ -208,8 +208,11 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
     rel = lambda e, t: e[field] - t['origin']
     # Values in force: README Trig Param Locks, Default Parameter Values, Handling Off.
     notes = min(len(run['in_force']), len(reference['in_force']))
-    assert run['in_force'][:notes] == reference['in_force'][:notes], dict(rule='same value in force at each note', condition=name, lead_ms=lead_ms, run=run['in_force'][:notes], reference=reference['in_force'][:notes])
     if not condition.get('slide'):
+        # A slide keeps moving while a note waits for the lead, so the MIDI value
+        # in force at the delayed note is a later slide value by design; slides are
+        # held to the per-value timing rule below instead.
+        assert run['in_force'][:notes] == reference['in_force'][:notes], dict(rule='same value in force at each note', condition=name, lead_ms=lead_ms, run=run['in_force'][:notes], reference=reference['in_force'][:notes])
         wanted = [IN_FORCE[i % 4] for i in range(notes)]
         assert run['in_force'][:notes] == wanted, dict(rule='documented value in force', condition=name, lead_ms=lead_ms, run=run['in_force'][:notes], wanted=wanted)
     # Common timed prefix of notes and values.
@@ -219,7 +222,7 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
     assert count >= 8, ('Too few timed notes', name, lead_ms, count)
     for i in range(count):
         # README Lock lead time: notes move later by the lead; gates unchanged.
-        drift = rel(run_notes[i], run) - rel(ref_notes[i], reference)
+        drift = rel(run_notes[i], run) - (rel(ref_notes[i], reference) + lead_ns)
         assert abs(drift) <= tolerance, dict(rule='note at reference time plus lead', condition=name, lead_ms=lead_ms, note=i, drift_ns=drift)
         if run['gates'][i] is not None and reference['gates'][i] is not None and i < count - 1:
             assert abs(run['gates'][i] - reference['gates'][i]) <= tolerance, dict(rule='gate unchanged', condition=name, lead_ms=lead_ms, note=i)
@@ -237,8 +240,6 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         if previous is not None:
             # README Lock lead time: a value never changes the receiver before the previous note sounds.
             assert value['index'] > run_notes[previous]['index'], dict(rule='value after previous note', condition=name, lead_ms=lead_ms, value=value['bytes'][2], note=previous)
-        if condition.get('slide'):
-            continue
         if previous is None:
             expected = x
         else:
