@@ -35,7 +35,10 @@ def lock_lead_time(c):
             clocks=[v for v in events if v['bytes']==[248]]
             starts=[v for v in events if v['bytes']==[250]]
             stops=[v for v in events if v['bytes']==[252]]
-            assert len(notes)==len(locks)==8 and len(starts)==len(stops)==1,(lead,len(notes),len(locks),len(starts),len(stops))
+            # Stop drains queued output, so a lead can add a note after the window's
+            # eight (README Lock lead time); check the eight the window plays.
+            assert len(notes)>=8 and len(locks)>=8 and len(starts)==len(stops)==1,(lead,len(notes),len(locks),len(starts),len(stops))
+            notes,locks=notes[:8],locks[:8]
             assert [v['bytes'][2] for v in locks]==[24,48]*4
             assert events.index(starts[0])<events.index(notes[0])
             assert not [v for v in events[events.index(stops[0])+1:] if v['bytes'][0]==144]

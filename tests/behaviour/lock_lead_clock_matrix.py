@@ -186,7 +186,7 @@ def play(c, condition, seconds=2.0):
         c.enc(3, toggle_turns(condition)); c.key(3)      # applies at the next reset
         hold(cycle + 1.0 - TOGGLE_ON_AT)
         c.enc(3, -toggle_turns(condition)); c.key(3)     # straight again at the reset after
-        hold(cycle)
+        hold(cycle + 1.5)  # leave straight notes after that reset to check
     else:
         hold(seconds / 2)
         if condition.get('tempo_change'):
@@ -328,18 +328,22 @@ def lock_lead_clock_matrix(c, name):
             # The feel must actually move notes, or the case would test straight time.
             assert off_grid() > felt, dict(rule='feel audible in reference', condition=name, off_grid_ns=off_grid())
     if condition.get('toggle'):
-        # README Clocks, Swing and Shuffle: straight until global step 64, felt
-        # until step 128, then straight again.
-        import math
-        cycle_ns = GLOBAL_LENGTH * 15 / condition['bpm'] * 1e9
-        on_at = cycle_ns
-        off_at = 2 * cycle_ns
-        before = off_grid(.15e9, on_at - .15e9)
-        during = off_grid(on_at + .15e9, off_at - .15e9)
-        after = off_grid(off_at + .15e9)
-        assert before <= straight, dict(rule='straight before the reset', condition=name, off_grid_ns=before)
-        assert during > felt, dict(rule='feel applied at the reset', condition=name, off_grid_ns=during)
-        assert after <= straight, dict(rule='straight again after the next reset', condition=name, off_grid_ns=after)
+        # README Clocks, Swing and Shuffle: a playing edit applies at the next reset
+        # of the global pattern. Find where the feel starts and stops in the
+        # reference rather than assuming which reset that is: the global step count
+        # carries across the plays of one boot.
+        marks = []
+        for a, b in zip(notes, notes[1:]):
+            gap = b[field] - a[field]
+            marks.append((b[field] - start, abs(gap - max(1, round(gap / step_ns)) * step_ns)))
+        felt_at = [t for t, o in marks if o > felt]
+        assert felt_at, dict(rule='feel applied at a reset', condition=name, worst_off_grid_ns=max(o for _, o in marks))
+        first, last = felt_at[0], felt_at[-1]
+        before = [o for t, o in marks if .25e9 < t < first]
+        after = [o for t, o in marks if t > last + .25e9]
+        assert before and max(before) <= straight, dict(rule='straight before the feel', condition=name, worst_off_grid_ns=max(before) if before else None)
+        assert len(felt_at) >= 8, dict(rule='feel lasts a section', condition=name, felt_gaps=len(felt_at))
+        assert after and max(after) <= straight, dict(rule='straight again after the feel', condition=name, worst_off_grid_ns=max(after) if after else None)
     summary = {}
     for lead in LEADS[1:]:
         summary[str(lead)] = compare(name, condition, lead, runs[lead], runs[0], field, controlled)
