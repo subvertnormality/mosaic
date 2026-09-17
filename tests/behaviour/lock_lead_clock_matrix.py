@@ -44,8 +44,11 @@ from midi_window import MidiWindow
 DEFAULT = 20
 # (step, lock) where None is no lock and 'off' an explicit Off lock.
 STEP_LOCKS = ((1, 11), (2, None), (3, 33), (4, 'off'), (5, 55))
-# Value in force at the notes of steps 1-4 (step 5 has no trig).
-IN_FORCE = (11, 20, 33, 33)
+# Value in force at the note of each step with a trig (step 5 has none): step 1
+# locks 11, step 2 sends the default, step 3 locks 33, step 4's Off lock keeps it.
+IN_FORCE = {1: 11, 2: 20, 3: 33, 4: 33}
+# Pitch and velocity of each step's note, from the project the driver configures.
+STEP_NOTES = {1: [60, 127], 2: [62, 117], 3: [64, 107], 4: [65, 97]}
 LEADS = (0, 25, 50)
 # A playing swing or shuffle edit applies at the next reset of the song's global
 # pattern, which is 64 steps by default. A shorter global length was tried and the
@@ -78,6 +81,14 @@ CONDITIONS = {
     'slides': dict(bpm=130, clock='x4', slide=True),
     # Tempo raised from 130 to 200 bpm during playback.
     'tempo-change': dict(bpm=130, clock='x2', tempo_change=200),
+    # README Locks with a channel range that does not start at step 1.
+    'range-late': dict(bpm=130, range=(2, 5), swing=40),
+    # README Param Slides: a slide wrapping from the range end to its start.
+    'range-wrap-slide': dict(bpm=130, range=(1, 5), slide=True, wrap=True),
+    # README Adjusting Song Sequence Length: a global length capping the range.
+    'global-cap': dict(bpm=130, range=(1, 5), global_length=3),
+    # README CH-RANGE: the range changed while locked steps play.
+    'range-live': dict(bpm=130, range=(1, 5), range_change=(2, 4)),
     # README Resend unchanged locks: Off sends only values that changed.
     'resend-off': dict(bpm=130, resend=False),
     'resend-off-x4-200': dict(bpm=200, clock='x4', resend=False),
@@ -93,6 +104,22 @@ def set_tempo(c, bpm):
     c.enc(3, -300); menu_value(c, '1')
     c.enc(3, bpm - 1); menu_value(c, str(bpm))
     leave_menu_home(c)
+
+
+def set_global_length(c, length):
+    """Set the song's global pattern length from its grid fader (README Adjusting
+    Song Sequence Length: it caps how much of a channel's range plays)."""
+    import base64
+    from frame_oracle import render
+    c.tap(6, 8); c.tap(2, 7)
+    for _ in range(length - 1):
+        c.tap(8, 7)
+    expected = render([(0, 62, 10, 'Global pattern length: ' + str(length))])
+    def feedback(state):
+        actual = base64.b64decode(state['frame']['pixels_base64'])
+        return all(actual[(y * 128 + x) * 4 + k] == expected[(y * 128 + x) * 4 + k] for y in range(55, 64) for x in range(128) for k in range(3))
+    c.wait(feedback)
+    c.tap(3, 8)
 
 
 def leave_menu_home(c):
@@ -113,9 +140,17 @@ def build(c, condition):
     from cases import assign_trig_parameter, set_mosaic_options
     configure_master_output(c)
     leave_menu_home(c)  # configure_master_output leaves the menu inside CLOCK.
+    options = []
     if condition.get('resend') is False:
-        set_mosaic_options(c, [('Resend unchanged locks', False)])
-    c.hold_tap((1, 4), (5, 4))  # Channel range 1-5; step 5 has no trig.
+        options.append(('Resend unchanged locks', False))
+    if condition.get('wrap'):
+        options.append(('Wrap param slides', True))
+    if options:
+        set_mosaic_options(c, options)
+    start, end = condition.get('range', (1, 5))
+    c.hold_tap((start, 4), (end, 4))  # Channel range; step 5 has no trig.
+    if condition.get('global_length'):
+        set_global_length(c, condition['global_length'])
     c.enc(1, -3); assign_trig_parameter(c, 'CC 1')
     c.enc(3, DEFAULT + 1)  # Default Parameter Values: from Off to 20.
     for step, value in STEP_LOCKS:
@@ -192,6 +227,11 @@ def play(c, condition, seconds=2.0):
         if condition.get('tempo_change'):
             marker = capture.cursor
             set_tempo(c, condition['tempo_change'])
+        if condition.get('range_change'):
+            marker = capture.cursor
+            start, end = condition['range_change']
+            c.hold_tap((start, 4), (end, 4))   # README CH-RANGE: a playing range edit
+            hold(seconds)
         hold(seconds / 2)
     capture.extend(c.snapshot()); stopped = capture.cursor
     c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
@@ -211,18 +251,20 @@ def timeline(events, lead_ms, field, marker, stopped, controlled):
     live = marker is not None
     limit = marker if live else stopped
     values = [e for e in port if e['bytes'][:2] == [176, 1]]
-    in_force = []; current = None; position = 0
+    in_force = []; steps = []; current = None
+    by_note = {tuple(v): k for k, v in STEP_NOTES.items()}
     for e in port:
         if e['bytes'][:2] == [176, 1]:
             current = e['bytes'][2]
         elif e['bytes'][0] == 144 and e['bytes'][2] > 0:
             in_force.append(current)
+            steps.append(by_note[tuple(e['bytes'][1:])])
     gates = []
     for e in notes:
         off = next((x for x in port if x['index'] > e['index'] and x['bytes'][0] == 128 and x['bytes'][1] == e['bytes'][1]), None)
         gates.append(None if off is None else off[field] - e[field])
     timed = lambda e: e['index'] <= limit
-    return dict(port=port, notes=notes, values=values, in_force=in_force, gates=gates,
+    return dict(port=port, notes=notes, values=values, in_force=in_force, steps=steps, gates=gates,
                 origin=origin, timed=timed)
 
 
@@ -237,8 +279,9 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         # in force at the delayed note is a later slide value by design; slides are
         # held to the per-value timing rule below instead.
         assert run['in_force'][:notes] == reference['in_force'][:notes], dict(rule='same value in force at each note', condition=name, lead_ms=lead_ms, run=run['in_force'][:notes], reference=reference['in_force'][:notes])
-        wanted = [IN_FORCE[i % 4] for i in range(notes)]
-        assert run['in_force'][:notes] == wanted, dict(rule='documented value in force', condition=name, lead_ms=lead_ms, run=run['in_force'][:notes], wanted=wanted)
+        # Each note's own step decides its value, whichever steps the range plays.
+        wanted = [IN_FORCE[step] for step in run['steps'][:notes]]
+        assert run['in_force'][:notes] == wanted, dict(rule='documented value in force', condition=name, lead_ms=lead_ms, steps=run['steps'][:notes], run=run['in_force'][:notes], wanted=wanted)
     # Common timed prefix of notes and values.
     ref_notes = [n for n in reference['notes'] if reference['timed'](n)]
     run_notes = [n for n in run['notes'] if run['timed'](n)]
