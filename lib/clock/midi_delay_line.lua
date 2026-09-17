@@ -35,7 +35,7 @@ function delay_line.new(deps)
   -- as the fallback for output produced while no pulse is coming (MIDI thru
   -- with the transport stopped), and is armed a pulse and a half late while
   -- pulses are arriving so the pulse itself normally sends first.
-  local last_pulse, pulse_interval
+  local last_pulse, pulse_interval, firing
   local function pulsing(now)
     return pulse_interval and last_pulse and (now-last_pulse) < pulse_interval*4
   end
@@ -96,16 +96,14 @@ function delay_line.new(deps)
   end
   local function fire(fired)
     fired.armed=false
+    -- Opening a batch calls back into begin(), which sends what is due; the
+    -- flag keeps that callback from being counted as a clock pulse.
+    firing=true
     deps.begin()
     send_due()
     deps.flush()
     settle_all()
-  end
-  -- Called by the pulse that has just opened an output batch: what is due joins
-  -- that pulse's write, ahead of anything the pulse itself produces.
-  function q:pump()
-    send_due()
-    settle_all()
+    firing=false
   end
   function q:now() return deps.now() end
   -- The time a pulse's delayed output is measured from: its first delayed
@@ -132,7 +130,12 @@ function delay_line.new(deps)
     if index==held.head and held.armed then held.timer:stop();held.armed=false end
     arm(held)
   end
+  -- A pulse is starting: send what has come due into its write, ahead of
+  -- anything the pulse itself produces (everything the pulse produces is due
+  -- later than now). A delayed note then leaves on the pulse grid, as steady as
+  -- an undelayed one, instead of on a timer callback queued behind a busy step.
   function q:begin()
+    if firing then pulse=true;pulse_time=nil;return end
     local now=deps.now()
     if last_pulse then
       local gap=now-last_pulse
@@ -141,6 +144,8 @@ function delay_line.new(deps)
     end
     last_pulse=now
     pulse=true;pulse_time=nil
+    send_due()
+    settle_all()
   end
   function q:finish()
     pulse=false;pulse_time=nil

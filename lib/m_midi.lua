@@ -34,13 +34,9 @@ local batch_devices = {}
 function m_midi.begin_output_batch()
   m_midi.flush_output_batch()
   batching = true
-  if delay_queue then
-    delay_queue:begin()
-    -- Whatever has come due leaves with this pulse's write, ahead of anything
-    -- the pulse produces: a delayed note then keeps the pulse's steadiness
-    -- instead of waiting for a timer callback behind a busy step.
-    delay_queue:pump()
-  end
+  -- begin() also sends whatever has come due, so a delayed note leaves with
+  -- this pulse's write and keeps the pulse's steadiness.
+  if delay_queue then delay_queue:begin() end
 end
 
 function m_midi.flush_output_batch(stop)
