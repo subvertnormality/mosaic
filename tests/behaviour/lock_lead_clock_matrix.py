@@ -51,7 +51,7 @@ LEADS = (0, 25, 50)
 # pattern, which is 64 steps by default. A shorter global length was tried and the
 # edit then never applied, so the cases keep the default and wait for its reset.
 GLOBAL_LENGTH = 64     # global steps between resets, where playing feel edits apply
-TOGGLE_ON_AT = .5      # seconds into playback
+TOGGLE_ON_AT = 1.5     # seconds into playback: enough notes before the edit to compare
 TOGGLE_HOLD = None     # set from the global reset interval
 CLOCK_INDEX = {'/1': 13, 'x2': 10, 'x4': 7, 'x16': 1}
 
