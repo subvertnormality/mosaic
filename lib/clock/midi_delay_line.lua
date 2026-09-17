@@ -28,14 +28,18 @@ end
 function delay_line.new(deps)
   local q = {}
   local lanes, pulse, pulse_time, serial = {}, false, nil, 0
-  -- While the transport runs, every clock pulse sends what has come due. A
-  -- timer callback waits behind whatever pulse is running, and on a busy step
-  -- that wait moved delayed notes several milliseconds off the beat; a pulse
-  -- carries them with the same steadiness as an undelayed note. The timer stays
-  -- as the fallback for output produced while no pulse is coming (MIDI thru
-  -- with the transport stopped), and is armed a pulse and a half late while
+  -- While the transport runs, a delayed message leaves on a clock pulse, a
+  -- counted number of pulses after the pulse that produced it. A timer callback
+  -- waits behind whatever pulse is running, and on a busy step that wait moved
+  -- delayed notes several milliseconds off the beat; comparing the deadline
+  -- against the clock instead moved them a whole pulse whenever the pulse ran
+  -- either side of it. Counting pulses gives a delayed note the same steadiness
+  -- as an undelayed one: both leave on a pulse, a fixed number of pulses apart.
+  -- The lead is rounded up to whole pulses, so it is never shorter than asked.
+  -- The timer stays as the fallback for output produced while no pulse is
+  -- coming (MIDI thru with the transport stopped), and is armed late while
   -- pulses are arriving so the pulse itself normally sends first.
-  local last_pulse, pulse_interval, firing
+  local last_pulse, pulse_interval, firing, pulse_count = nil, nil, nil, 0
   local function pulsing(now)
     return pulse_interval and last_pulse and (now-last_pulse) < pulse_interval*4
   end
@@ -72,6 +76,15 @@ function delay_line.new(deps)
     if lane.armed and not lane.groups[lane.head] then lane.timer:stop();lane.armed=false end
     arm(lane)
   end
+  -- A group counting pulses waits for its pulse, however the clock has drifted
+  -- against it; a group without one waits for its deadline.
+  local function ready(group,now,resolution)
+    -- While the clock still pulses, a counted group waits for its pulse. If the
+    -- pulses stop (the transport stopped, or an external clock went quiet) its
+    -- deadline releases it, so nothing is ever stranded.
+    if group.pulse_due and pulsing(now) then return pulse_count>=group.pulse_due end
+    return group.due<=now+resolution
+  end
   local function send_due()
     local now=deps.now()
     local resolution=deps.resolution or 1e-9
@@ -79,7 +92,7 @@ function delay_line.new(deps)
       local best,first
       local function consider(lane)
         local group=lane.groups[lane.head]
-        if group and group.due<=now+resolution and (not first or group.due<first.due-resolution or
+        if group and ready(group,now,resolution) and (not first or group.due<first.due-resolution or
             (group.due<=first.due+resolution and group.items[1].serial<first.items[1].serial)) then
           best,first=lane,group
         end
@@ -143,6 +156,7 @@ function delay_line.new(deps)
       if gap>0.0001 and gap<0.25 then pulse_interval=gap end
     end
     last_pulse=now
+    pulse_count=pulse_count+1
     pulse=true;pulse_time=nil
     send_due()
     settle_all()
@@ -162,7 +176,17 @@ function delay_line.new(deps)
     local group=pulse and lane.pulse_group
     if not group then
       if pulse and not pulse_time then pulse_time=deps.now() end
-      group={due=(pulse_time or deps.now())+ms/1000,items={}}
+      local from=pulse_time or deps.now()
+      local wait=ms/1000
+      local pulse_due
+      if pulse and pulse_interval then
+        -- Whole pulses, rounded up: the lead never shortens, and the message
+        -- leaves on a pulse of the same clock that produced it.
+        local pulses=math.ceil(wait/pulse_interval-1e-9)
+        pulse_due=pulse_count+pulses
+        wait=pulses*pulse_interval
+      end
+      group={due=from+wait,pulse_due=pulse_due,items={}}
       lane.groups[#lane.groups+1]=group
       if pulse then lane.pulse_group=group end
     end
