@@ -9,7 +9,7 @@ function voice_lifetime.new(m_clock)
     note_on_func(note, velocity, note_container.midi_channel, note_container.midi_device)
 
     return m_clock.delay_action(c, division + (onset_offset or 0), action_flag, function()
-      note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device)
+      note_container.player:note_off(note, velocity, note_container.midi_channel, note_container.midi_device, note_container.lead_time_ms)
     end, true, onset_offset ~= nil) -- Off-phase arp releases always queue to the parent.
 
   end

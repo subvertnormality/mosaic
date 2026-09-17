@@ -28,13 +28,13 @@
   },
   "base_revision": "7141f50",
   "manual": "README.md",
-  "manual_sha256": "0f5150be670ad5b48c40d545df4719289854da196bb6bcc7d62cd606bc3534a2",
+  "manual_sha256": "0d31a93b692fb67e8525ab2e8ae435f835bafdd70855f720238ad817ae875b20",
   "inventory": "tests/behaviour/manual-inventory.json",
-  "inventory_sha256": "50f4d415a6bf0a09ba1128cd8493048ceceed7a94e8a779ae427305821eb648e",
+  "inventory_sha256": "e699ebe17ec78abb4ad155f34295ba370b31f5e8a131463fb7f45f253c27593c",
   "counts": {
     "requirements": 140,
-    "production_lua_modules": 94,
-    "unit_integration_files": 70,
+    "production_lua_modules": 95,
+    "unit_integration_files": 71,
     "domains": 15
   },
   "coverage_language": {
@@ -1597,7 +1597,8 @@
         "lib/devices/midi_input.lua",
         "lib/devices/midi_mapping_params.lua",
         "lib/devices/midi_wire_output.lua",
-        "lib/m_midi.lua"
+        "lib/m_midi.lua",
+        "lib/clock/midi_delay_line.lua"
       ],
       "existing_unit_integration_files": [
         "lib/tests/lib/integration_tests/clock_tests.lua",
@@ -1605,7 +1606,8 @@
         "lib/tests/lib/m_clock_mutation_killers_tests.lua",
         "lib/tests/lib/m_clock_performance_tests.lua",
         "lib/tests/lib/m_clock_tests.lua",
-        "lib/tests/lib/midi_output_transport_mutation_killers_tests.lua"
+        "lib/tests/lib/midi_output_transport_mutation_killers_tests.lua",
+        "lib/tests/lib/lead_time_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-OPT-STOP-001",
@@ -1658,7 +1660,8 @@
         "M-TRIPLE-004",
         "M-UI-001",
         "M-UI-002",
-        "M-SYNC-023"
+        "M-SYNC-023",
+        "M-SYNC-LEAD-001"
       ],
       "status": "hardening-complete-with-known-defect"
     },

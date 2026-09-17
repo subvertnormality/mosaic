@@ -1,3 +1,4 @@
+from lock_lead_time import lock_lead_time
 from shuffle_matrix import shuffle_matrix
 from shuffle_first_bar_record import shuffle_first_bar_record
 from random_note_domains import random_note_domains
@@ -3397,6 +3398,7 @@ CASES={
  'M-SYNC-013':dict(run=warm_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Warmed external clock on port1; Mosaic and forwarded port2 receiver keep absolute input phase'),
  'M-SYNC-011':dict(run=master_multi_output,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Two clock outputs enabled through native menu: independent receiver note phase/count, disabled third port, no note-routing leakage'),
  'M-SYNC-010':dict(run=master_lifecycle,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Master pending/active Start cancellation at zero,1ms,25ms; clock continues, no late notes/Start, no held voices, independent restart phase'),
+ 'M-SYNC-LEAD-001':dict(run=lock_lead_time,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Global lock lead: 10 ms default, immediate locks, shifted notes and clock, preserved gates at 0, 5 and 10 ms'),
  'M-SYNC-009':dict(run=master_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Mosaic master: native clock-output menu, Start/Clock/note ordering and independent24PPQN receiver phase across four local start delays'),
  'M-SYNC-008':dict(run=fast_acquisition,requirements=['CLOCK-MIDI-TRANSPORT-001','CH-TEMPO','MIDI-RELEASE-001'],description='Cold20BPM MIDI at x8: reconcile the one unknowable pre-acquisition step at Clock2, preserve subsequent absolute deadlines and balanced gates'),
  'M-SYNC-007':dict(run=acquisition_stop,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Cold20BPM external Start then Stop before Clock2: timely first-note release and no restart as subsequent clocks acquire tempo'),

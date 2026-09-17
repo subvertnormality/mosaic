@@ -108,6 +108,7 @@ function midi_input.new(m_midi, step, quantiser, divisions)
         midi_channel = midi_channel,
         midi_device = device.midi_device,
         player = d.player,
+        lead_time_ms = m_midi.get_lead_time and m_midi.get_lead_time() or 0,
         -- A repeated Note On for a held key keeps the earlier onset's release.
         previous = input_notes[data[2]]
       }
@@ -115,7 +116,7 @@ function midi_input.new(m_midi, step, quantiser, divisions)
       if d.player then
         d.player:note_on(note, ((velocity - 1) / 126) or 0)
       else
-        m_midi:note_on(note, velocity, midi_channel, device.midi_device)
+        m_midi:note_on(note, velocity, midi_channel, device.midi_device, input_notes[data[2]].lead_time_ms)
       end
 
       -- The chord survives individual releases while another voice is held.
@@ -205,7 +206,7 @@ function midi_input.new(m_midi, step, quantiser, divisions)
       if stored.player then
         stored.player:note_off(stored.note)
       else
-        m_midi:note_off(stored.note, 0, stored.midi_channel, stored.midi_device)
+        m_midi:note_off(stored.note, 0, stored.midi_channel, stored.midi_device, stored.lead_time_ms)
       end
 
 

@@ -253,3 +253,9 @@ end
 --   p:report(outfile)
 --   outfile:close()
 -- end
+
+-- Restore script-owned vport hooks before norns loads another script.
+function cleanup()
+  m_clock:stop()
+  m_midi.cleanup()
+end

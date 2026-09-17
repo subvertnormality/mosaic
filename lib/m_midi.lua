@@ -26,6 +26,7 @@ end
 -- write is a system call on the CM3+, and a busy step made a hundred of them
 -- before its notes could leave. Any other send to a port first sends what is
 -- gathered, so the order of messages on a port never changes.
+local delay_queue
 local batching = false
 local batches = {}
 local batch_devices = {}
@@ -33,6 +34,7 @@ local batch_devices = {}
 function m_midi.begin_output_batch()
   m_midi.flush_output_batch()
   batching = true
+  if delay_queue then delay_queue:begin() end
 end
 
 function m_midi.flush_output_batch(stop)
@@ -43,7 +45,10 @@ function m_midi.flush_output_batch(stop)
     batch_devices[i] = nil
     device:send(bytes)
   end
-  if stop then batching = false end
+  if stop then
+    batching = false
+    if delay_queue then delay_queue:finish() end
+  end
 end
 
 function m_midi.send_three(port, status, data1, data2)
@@ -65,6 +70,79 @@ function m_midi.send_three(port, status, data1, data2)
   return true
 end
 
+-- Delayed messages capture the physical connection: reconnecting a vport must
+-- not send an old queued onset to a newly attached receiver.
+local delay_line = include("mosaic/lib/clock/midi_delay_line")
+local function emit(message)
+  local port=message.port
+  if port.device ~= message.device then return end
+  if message.method then
+    m_midi.flush_output_batch()
+    message.method(port,table.unpack(message.args))
+  elseif not m_midi.send_three(port,message.status,message.note,message.velocity) then
+    m_midi.flush_output_batch()
+    port[message.kind](port,message.note,message.velocity,message.channel)
+  end
+end
+local function queue(ms,message)
+  if not delay_queue then
+    -- Subtract the epoch before adding milliseconds: adding 0.005 to Unix
+    -- wall time loses fractions of a microsecond through float cancellation.
+    local origin=util.time()
+    delay_queue=delay_line.new({now=function() return util.time()-origin end,
+      resolution=0.000001,
+      begin=function() m_midi.begin_output_batch() end,
+      flush=function() m_midi.flush_output_batch(true) end,send=emit})
+    if batching then delay_queue:begin() end
+  end
+  delay_queue:push(ms,message)
+end
+local function delayed_note(ms,port,kind,note,velocity,channel)
+  if not ms or ms==0 then return false end
+  queue(ms,{port=port,device=port.device,kind=kind,note=note,velocity=velocity or 100,
+    channel=channel,status=(kind=="note_on" and 0x90 or 0x80)+(channel or 1)-1})
+  return true
+end
+function m_midi.drain_pending_output()
+  if delay_queue then delay_queue:drain() end
+end
+
+-- Cache the global setting through its params action; zero keeps the original
+-- send path and allocates no timer. Captured note containers retain gate timing.
+local lead_time_ms=0
+function m_midi.get_lead_time() return lead_time_ms end
+function m_midi.set_lead_time(value)
+  if delay_queue then delay_queue:close();delay_queue=nil end
+  lead_time_ms=value
+end
+local clock_hooks={}
+function m_midi.install_clock_hooks()
+  for id,port in ipairs(midi.vports) do
+    for _,name in ipairs({"clock","start","continue","stop","song_position"}) do
+      local original=port[name]
+      if type(original)=="function" then
+        local wrapper
+        wrapper=function(self,...)
+          local ms=lead_time_ms
+          if name=="stop" then m_midi.drain_pending_output() end
+          if ms==0 then return original(self,...) end
+          queue(ms,{port=self,device=self.device,method=original,args={...}})
+        end
+        clock_hooks[#clock_hooks+1]={port=port,name=name,original=original,wrapper=wrapper}
+        port[name]=wrapper
+      end
+    end
+  end
+end
+function m_midi.cleanup()
+  m_midi:all_notes_off()
+  if delay_queue then delay_queue:close();delay_queue=nil end
+  for _,hook in ipairs(clock_hooks) do
+    if hook.port[hook.name]==hook.wrapper then hook.port[hook.name]=hook.original end
+  end
+  clock_hooks={}
+end
+
 midi_devices = {}
 m_midi.note_counts = {}  -- Initialize note counts table
 
@@ -78,6 +156,7 @@ end
 
 
 function m_midi.init()
+  m_midi.install_clock_hooks()
   for i = 1, #midi.vports do
     midi_devices[i] = midi.connect(i)
     midi_devices[i].event = function(data) 
@@ -119,7 +198,8 @@ function m_midi:reset_note_counts()
 end
 
 
-function m_midi:note_on(note, velocity, channel, device)
+function m_midi:note_on(note, velocity, channel, device, lead_time_ms)
+  if lead_time_ms == nil then lead_time_ms=m_midi.get_lead_time() end
   if midi_devices[device] ~= nil then
     -- Composed scale/chord/merge/octave operations may exceed MIDI's
     -- seven-bit note domain. Normalize at the final MIDI-only boundary.
@@ -140,14 +220,15 @@ function m_midi:note_on(note, velocity, channel, device)
 
     -- Send the Note On message
     local port = midi_devices[device]
-    if not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100) then
+    if not delayed_note(lead_time_ms, port, "note_on", note, velocity, channel) and not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100) then
       m_midi.flush_output_batch()
       port:note_on(note, velocity, channel)
     end
   end
 end
 
-function m_midi:note_off(note, velocity, channel, device)
+function m_midi:note_off(note, velocity, channel, device, lead_time_ms)
+  if lead_time_ms == nil then lead_time_ms=m_midi.get_lead_time() end
   if midi_devices[device] ~= nil then
     -- Use the same normalized key as note_on so ownership cannot strand.
     note = fn.constrain(0, 127, note)
@@ -158,7 +239,7 @@ function m_midi:note_off(note, velocity, channel, device)
       -- Every emitted Note On owns a Note Off, including overlapping pitches.
       -- Retain counts for bookkeeping without collapsing receiver releases.
       local port = midi_devices[device]
-      if not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+      if not delayed_note(lead_time_ms, port, "note_off", note, velocity, channel) and not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
         m_midi.flush_output_batch()
         port:note_off(note, velocity, channel)
       end
@@ -170,7 +251,7 @@ function m_midi:note_off(note, velocity, channel, device)
       -- Note is not currently on, but we received a Note Off.
       -- For safety, send Note Off anyway
       local port = midi_devices[device]
-      if not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+      if not delayed_note(lead_time_ms, port, "note_off", note, velocity, channel) and not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
         m_midi.flush_output_batch()
         port:note_off(note, velocity, channel)
       end
@@ -199,6 +280,7 @@ function m_midi.start()
 end
 
 function m_midi:all_notes_off()
+  m_midi.drain_pending_output()
   for device, channels in pairs(self.note_counts) do
     if midi_devices[device] ~= nil then
       for channel, notes in pairs(channels) do
@@ -252,9 +334,11 @@ end
 
 local all_off_by_device = {}
 function m_midi.all_off(id)
+  m_midi.drain_pending_output()
   if not all_off_by_device[id] then
     all_off_by_device[id] = scheduler.debounce(function()
       for note = 0, 127 do
+        m_midi.drain_pending_output()
         for channel = 1, 16 do
           m_midi.flush_output_batch()
           midi_devices[id]:note_off(note, 0, channel)
@@ -274,6 +358,7 @@ function m_midi.all_off(id)
 end
 
 function m_midi.panic()
+  m_midi.drain_pending_output()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
       m_midi.all_off(id)

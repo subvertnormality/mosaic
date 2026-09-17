@@ -184,6 +184,28 @@ Once you've copied the stock device configuration files into the `data > mosaic 
 
 You can customise Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device's MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
 
+##### Lock lead time
+
+In the Norns params menu, open **MOSAIC → Parameter locks → Lock lead time (ms)**.
+This global setting accepts 0–50 ms and defaults to **10 ms**. It gives MIDI CC/NRPN
+parameter locks time to settle before the note attack, particularly on devices
+that smooth incoming controllers. Set it to **0** for the original output timing.
+The value is saved with Mosaic's project settings.
+
+Locks leave at their usual step time. Sequenced and live MIDI-thru note-ons and
+note-offs move later by the selected amount, preserving gate lengths. No step is
+looked ahead: probability, conditions, fills, random notes, slides, strum, arps and
+micro-timing still make their decisions at the same times. N.b. players are unaffected.
+
+Outgoing MIDI Clock, Start, Continue, Stop and song position receive the same delay
+on every port. Mosaic delays the existing output without changing saved system
+clock settings, and restores its output hooks on cleanup. Stop and panic drain
+queued notes before releasing held voices; stopping can therefore shorten a
+still-pending gate, ensuring no queued note sounds after Stop. Changing the lead
+also drains pending output; existing voices retain their captured release delay.
+
+![Global MIDI lock lead time on Norns](images/lock-lead-time.png)
+
 ##### Mods and Software Devices
 
 Mosaic can also use internal Norns sound sources and manage devices like Crow, Just Friends, and Ansible via i2c by installing [n.b.](https://github.com/sixolet/nb/) mods. These mods will appear in Mosaic's device list once installed and activated in the Norns settings menu. Ensure the n.b. mod is on the allow list to use with Mosaic. See [Norns sound sources with n.b.](#norns-sound-sources-with-nb) for more information.

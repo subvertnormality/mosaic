@@ -2,7 +2,7 @@
 local application_parameters = {}
 
 function application_parameters.register(project_actions)
-  params:add_group("mosaic", "MOSAIC", 35)
+  params:add_group("mosaic", "MOSAIC", 36)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -87,6 +87,8 @@ function application_parameters.register(project_actions)
   params:add_option("elektron_program_changes", "Elektron program changes", {"Off", "On"}, 1)
   params:add_number("elektron_program_change_channel", "Elektron p.change channel", 1, 16, 10, nil, false)
   params:add_separator("Parameter locks")
+  params:add_number("midi_lock_lead_time", "Lock lead time (ms)", 0, 50, 10)
+  params:set_action("midi_lock_lead_time", function(value) m_midi.set_lead_time(value) end)
   params:add_option("trigless_locks", "Trigless locks", {"Off", "On"}, 2)
   -- An unlocked step sends the channel's assigned value, so a parameter that is
   -- not being locked repeats the same message every step. Turning the repeat off

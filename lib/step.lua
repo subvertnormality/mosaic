@@ -935,6 +935,7 @@ function step.handle(c, current_step, prepared)
         midi_device = midi_device,
         steps_remaining = length_value,
         player = device.player or m_midi,
+        lead_time_ms = m_midi.get_lead_time and m_midi.get_lead_time() or 0,
         channel = c
       }
 
@@ -947,7 +948,7 @@ function step.handle(c, current_step, prepared)
           if device.player then
             device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)
           elseif m_midi then
-            m_midi:note_on(chord_note, velocity, midi_channel, midi_device)
+            m_midi:note_on(chord_note, velocity, midi_channel, midi_device, note_container.lead_time_ms)
           end
         end,
         stock,

@@ -24,12 +24,12 @@ def picker_names(e,candidates):
     e.key(2) # leave the pending device selection unconfirmed
     return seen
 
-def boot_with(c,label,files):
+def boot_with(c,label,files,**options):
     seed=c.out/(label+'-seed');(seed/'config').mkdir(parents=True)
     shutil.copy(REPO/'tests/behaviour/config/emu-midi.json',seed/'config/emu-midi.json')
     for name,text in files.items():(seed/'config'/name).write_text(text)
     out=c.out/label;out.mkdir()
-    return Driver(out,project_seed=seed,**c.launch_options)
+    return Driver(out,project_seed=seed,**dict(c.launch_options,**options))
 
 def invalid_device_configs(c,scenario):
     c.configure();c.finish()

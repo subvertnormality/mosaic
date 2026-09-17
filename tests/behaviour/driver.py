@@ -29,9 +29,9 @@ def write(path,value):path.write_text(json.dumps(value,indent=2)+'\n')
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 
 class Driver:
-    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False,cost_profile=None,app_root=None,lua_profile_instructions=None):
+    def __init__(self,out,clock_mode="real-time",experimental_install=None,profile="base-midi",mod_code_root=None,project_seed=None,mod_patches=False,cost_profile=None,app_root=None,lua_profile_instructions=None,midi_lead_time_ms=0):
         if Session is None:raise RuntimeError('MONOME_EMULATOR is required for the local emulator Driver')
-        self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches,cost_profile=cost_profile)
+        self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches,cost_profile=cost_profile,midi_lead_time_ms=midi_lead_time_ms)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
         # app_root runs another Mosaic tree (e.g. a campaign baseline) with this harness.
@@ -89,6 +89,8 @@ class Driver:
             entry=next(f for f in self.identity['files'] if f['path']=='mosaic/mosaic.lua')
             assert entry['sha256']==digest(self.app_root/'mosaic.lua'),'Wrong application loaded'
             if clock_mode!='real-time':self.elapse(0)  # Drain native deferred init before user input.
+            # Existing timing cases explicitly select zero; None tests the default.
+            if midi_lead_time_ms is not None:self._set_midi_lead_time(midi_lead_time_ms)
         except Exception:
             self.runtime.close(self.out/'native')
             raise
@@ -131,6 +133,27 @@ class Driver:
         from frame_oracle import header,matches
         expected=header(text,selected=selected);self.wait(lambda s:matches(s,expected))
         self.results.append(dict(kind='screen-header',expected=text,matched=True))
+    def _set_midi_lead_time(self,value,expected=None,capture=False):
+        from cases import menu_label,menu_option_row
+        from frame_oracle import selected_line
+        self.key(1);self.enc(1,4);self.key(3);menu_label(self,'LEVELS >')
+        position=next(i for i,row in enumerate(self.snapshot()['diagnostics']['parameter_roots']) if row['id']=='mosaic')
+        self.enc(2,position);self.key(3)
+        for _ in range(40):
+            if selected_line(self.snapshot(),'Lock lead time (ms)',top=23):break
+            self.enc(2,1)
+        else:raise AssertionError('Global lock lead setting not found')
+        if expected is not None:menu_option_row(self,'Lock lead time (ms)',str(expected),top=23)
+        if capture:
+            import base64,struct,zlib
+            state=self.snapshot();rgba=base64.b64decode(state['frame']['pixels_base64'])
+            def chunk(kind,data):return struct.pack('>I',len(data))+kind+data+struct.pack('>I',zlib.crc32(kind+data)&0xffffffff)
+            raw=b''.join(b'\0'+rgba[y*128*4:(y+1)*128*4] for y in range(64))
+            (self.out/'lock-lead-time.png').write_bytes(b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('>IIBBBBB',128,64,8,6,0,0,0))+chunk(b'IDAT',zlib.compress(raw))+chunk(b'IEND',b''))
+        self.enc(3,-50);self.enc(3,value);menu_option_row(self,'Lock lead time (ms)',str(value),top=23)
+        self.results.append(dict(kind='global-lock-lead-setting',value_ms=value,default_checked=expected))
+        self.key(2);self.enc(2,-60);menu_label(self,'LEVELS >');self.key(2);self.key(1)
+
     def configure(self):
         self.tap(3,8);self.enc(1,4);self.enc(3,1);self.key(3);self.tap(5,8)
         for x in range(1,5):self.tap(x,4)
