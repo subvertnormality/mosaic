@@ -76,7 +76,8 @@ class HardwareDriver:
     def action(self,**value):
         kind=value.get('type')
         if kind=='grid':
-            self.runner.synthetic_grid(self.grid_device,value['x'],value['y'],value['state']);row={**value,'transport':'norns-grid-key-callback'}
+            lower=time.monotonic_ns();self.runner.synthetic_grid(self.grid_device,value['x'],value['y'],value['state'])
+            row={**value,'transport':'norns-grid-key-callback','host_monotonic_ns':lower,'host_completion_ns':time.monotonic_ns()}
         elif kind in ('key','enc'):
             field='state' if kind=='key' else 'delta';row=self.runner.action(kind,value['n'],value[field])
         else:raise NotImplementedError('HardwareDriver action unsupported: '+str(kind))
@@ -103,7 +104,10 @@ class HardwareDriver:
             time.sleep(.08)
         raise AssertionError('Required observable output did not arrive')
     def tap(self,x,y):
-        self.action(type='grid',x=x,y=y,state=1);self.elapse(.04);self.action(type='grid',x=x,y=y,state=0);self.elapse(.12)
+        # Host times of both halves: a release handled a second after its press is a
+        # long press, which swallows the tap.
+        press=self.action(type='grid',x=x,y=y,state=1);self.elapse(.04);release=self.action(type='grid',x=x,y=y,state=0);self.elapse(.12)
+        return {'press':press,'release':release}
     def key(self,n):
         self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);self.elapse(.06)
     def enc(self,n,steps):

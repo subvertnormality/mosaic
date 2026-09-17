@@ -68,13 +68,20 @@ Cases:
 | PERF-008L-HW-4 | recovery after a fixed Lua overload |
 | MIX-HW-8 | slides, rendering and overload together |
 | PERF-009-HW-4/8/16 | dense sequencing with four CC trig parameters per channel: defaults sent on every step, locks on steps 1 and 9, no slides (not part of profile validation; needs its own device baseline) |
+| PERF-EXT-HW-16 | stress probe at any tempo: a four-note chord, three locked CCs and a sliding CC on every channel, every other step |
+| PERF-010-HW-16 | the PERF-EXT-HW-16 project at 200 bpm, gated: about 1,080 messages a second, the capacity of one MIDI 1.0 port. The capture times writes on the norns, not DIN delivery |
+
+The gated 16-channel cases fix their tempo: PERF-002-HW-16, PERF-003-HW-16 and
+PERF-009-HW-16 at 130 bpm, PERF-010-HW-16 at 200 bpm. The runner sets it and refuses a
+`--tempo` that differs. The smaller cases take `--tempo`, and calibrate against the
+emulator lane at the norns default of 90 bpm.
 
 ## 3. Confirm on hardware
 
 Run the same cases on the norns with `tests/behaviour/real_norns.py performance`
-(see `real-norns-runner.md`). Use `--device-map-id cc_device --tempo 90
---stock-clock-errors record --measured-windows 4`, and follow each case with
-`restore`.
+(see `real-norns-runner.md`). Use `--device-map-id cc_device --stock-clock-errors
+record --measured-windows 4` (and `--tempo 90` for the calibration cases), and follow
+each case with `restore`.
 
 ## Limits that affect interpretation
 

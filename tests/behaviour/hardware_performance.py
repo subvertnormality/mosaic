@@ -9,15 +9,19 @@ CASES={
     'PERF-002-HW-1':{'workload':'dense','channels':1,'seconds':8},
     'PERF-002-HW-4':{'workload':'dense','channels':4,'seconds':8},
     'PERF-002-HW-8':{'workload':'dense','channels':8,'seconds':8},
-    'PERF-002-HW-16':{'workload':'dense','channels':16,'seconds':8},
+    # The gated 16-channel cases play at 130 bpm, a representative working tempo
+    # (user, 2026-09-17); the smaller ones calibrate the emulator lane at 90.
+    'PERF-002-HW-16':{'workload':'dense','channels':16,'seconds':8,'tempo_bpm':130},
     'PERF-003-HW-1':{'workload':'slides','channels':1,'seconds':8},
     'PERF-003-HW-8':{'workload':'slides','channels':8,'seconds':8},
-    'PERF-003-HW-16':{'workload':'slides','channels':16,'seconds':8},
+    'PERF-003-HW-16':{'workload':'slides','channels':16,'seconds':8,'tempo_bpm':130},
     'PERF-009-HW-4':{'workload':'locks','channels':4,'seconds':8},
     'PERF-009-HW-8':{'workload':'locks','channels':8,'seconds':8},
-    'PERF-009-HW-16':{'workload':'locks','channels':16,'seconds':8},
-    # Stress probe: chords, locks and a slide on every channel, every other step.
+    'PERF-009-HW-16':{'workload':'locks','channels':16,'seconds':8,'tempo_bpm':130},
+    # Chords, locks and a slide on every channel, every other step: a stress probe at
+    # any tempo, and a gated case at 200 bpm, where one DIN port runs at capacity.
     'PERF-EXT-HW-16':{'workload':'extreme','channels':16,'seconds':8,'step_stride':EXTREME_STEP_STRIDE},
+    'PERF-010-HW-16':{'workload':'extreme','channels':16,'seconds':8,'step_stride':EXTREME_STEP_STRIDE,'tempo_bpm':200},
 }
 from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
 CASES.update(HELDOUT_CASES)
@@ -288,6 +292,14 @@ def check_project_fixture(directory,case_id):
             raise ValueError('Project fixture file does not match its manifest: '+str(directory/name))
     return manifest
 
+def case_tempo(case_id,requested=None):
+    """The tempo a case runs at: its own when it fixes one, which a different request may not override."""
+    fixed=CASES.get(case_id,{}).get('tempo_bpm')
+    if fixed is None:return requested
+    if requested is not None and float(requested)!=float(fixed):
+        raise ValueError('%s runs at %s bpm, not %s'%(case_id,fixed,requested))
+    return fixed
+
 def project_fixture_name(case_id):
     """The fixture directory name for the project a case plays."""
     spec=CASES[case_id];return '%s-%d'%(spec['workload'],spec['channels'])
@@ -299,6 +311,8 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         # A loaded project fixture already holds the workload; build it through the
         # UI only when there is none, and keep that build as a fixture if asked.
         if project_fixture is not None:check_project_fixture(project_fixture,case_id)
+        if spec.get('tempo_bpm') is not None and abs(driver.tempo_bpm-spec['tempo_bpm'])>.01:
+            raise AssertionError('%s runs at %s bpm but the norns clock is at %s'%(case_id,spec['tempo_bpm'],driver.tempo_bpm))
         if project_fixture is None:
             build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
             if save_project_fixture:
@@ -316,10 +330,10 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             trace.reset();sampler=(OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler()) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
             if threads:threads.start()
             sampler.start();time.sleep(.25)
-            started_ns=time.monotonic_ns();driver.tap(1,8)
+            started_ns=time.monotonic_ns();play_tap=driver.tap(1,8)
             stimulus=run_window(HardwareLane(runner,driver),spec) if (spec.get('render') or spec.get('loads')) else None
             if stimulus is None:driver.elapse(spec['seconds'])
-            driver.tap(1,8);driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+            stop_tap=driver.tap(1,8);driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
             if timings:state['lua_timings']=timings.snapshot();timings.reset()
             (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
             if threads:(runner.out/('thread-samples%s.jsonl'%suffix)).write_text(threads.stop())
@@ -343,7 +357,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                 except Exception as dump_error:(runner.out/('oracle-failure%s.json'%suffix)).write_text(json.dumps({'failure':repr(error)[:2000],'dump_error':repr(dump_error)})+'\n')
                 if windows==1:raise
                 oracle=None;failure=repr(error)[:2000]
-            results.append({'window':window,'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording) if recording else None,'resource_samples':recording['samples'] if recording else None,'runtime_identity':recording['identity'] if recording else None,'lua_timings_recorded':len(state.get('lua_timings',[])) if timing_trace else None,'passed':bool(oracle and oracle['passed'])})
+            results.append({'window':window,'transport_taps':{'play':play_tap,'stop':stop_tap},'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording) if recording else None,'resource_samples':recording['samples'] if recording else None,'runtime_identity':recording['identity'] if recording else None,'lua_timings_recorded':len(state.get('lua_timings',[])) if timing_trace else None,'passed':bool(oracle and oracle['passed'])})
             if window<windows:driver.elapse(2.0)
         first=results[0]
         (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
