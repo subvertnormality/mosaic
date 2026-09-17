@@ -173,6 +173,9 @@ function m_clock.init()
     enabled = false,
     ppqn = ppqn,
   })
+  if m_midi and m_midi.begin_output_batch then
+    clock_lattice.output = {begin = m_midi.begin_output_batch, flush = m_midi.flush_output_batch}
+  end
 
   if testing then
     clock_lattice.auto = false

@@ -308,7 +308,17 @@ function Lattice:pulse_sprocket(sprocket)
     return true, note_deferred
 end
 
+-- An output sink may gather what a pulse sends and write it at the pulse's
+-- marks: after its releases, before its notes, and when the pulse ends.
 function Lattice:pulse()
+  local output = self.output
+  if output == nil then return self:pulse_all() end
+  output.begin()
+  self:pulse_all()
+  output.flush(true)
+end
+
+function Lattice:pulse_all()
   if self.enabled then
     -- A step's note-offs and its note-ons are two bursts down one MIDI port. If
     -- each sprocket released and then sounded in turn, every channel's note-on
@@ -318,6 +328,7 @@ function Lattice:pulse()
     -- that follow are consecutive. The same releases still happen before any
     -- onset that could retrigger the pitch they belong to.
     self:release_due_onset_actions()
+    if self.output then self.output.flush() end
     if not self.enabled then return end
     local flagged = false
     local deferred, deferred_count = self.deferred_notes, 0
@@ -358,6 +369,7 @@ function Lattice:pulse()
         end
       end
       if deferred_count > 0 then
+        if self.output then self.output.flush() end
         -- The group's notes leave back to back, then each sprocket finishes its
         -- step and moves past the onset. Every note is still sent before its
         -- own sprocket advances, so its releases keep the phase they had.

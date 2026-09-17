@@ -11,12 +11,14 @@ function output.new(m_midi)
       -- Send MSB
       local cc_msb_value = cc_lsb and math.floor(value / 128) or value
       if not m_midi.send_three(port, status, cc_msb, cc_msb_value) then
+        m_midi.flush_output_batch()
         port:cc(cc_msb, cc_msb_value, channel)
       end
 
       -- Send LSB
       if cc_lsb ~= nil then
         if not m_midi.send_three(port, status, cc_lsb, value % 128) then
+          m_midi.flush_output_batch()
           port:cc(cc_lsb, value % 128, channel)
         end
       end

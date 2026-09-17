@@ -20,9 +20,46 @@ local function device_for_bytes(port)
   end
 end
 
+-- While the clock runs a pulse, messages for one device are gathered and sent
+-- as one write at the points the pulse marks (after its releases, after its
+-- parameter locks, and at its end), in the order they were produced. Every
+-- write is a system call on the CM3+, and a busy step made a hundred of them
+-- before its notes could leave. Any other send to a port first sends what is
+-- gathered, so the order of messages on a port never changes.
+local batching = false
+local batches = {}
+local batch_devices = {}
+
+function m_midi.begin_output_batch()
+  m_midi.flush_output_batch()
+  batching = true
+end
+
+function m_midi.flush_output_batch(stop)
+  for i = 1, #batch_devices do
+    local device = batch_devices[i]
+    local bytes = batches[device]
+    batches[device] = nil
+    batch_devices[i] = nil
+    device:send(bytes)
+  end
+  if stop then batching = false end
+end
+
 function m_midi.send_three(port, status, data1, data2)
   local device = device_for_bytes(port)
   if not device then return false end
+  if batching then
+    local bytes = batches[device]
+    if not bytes then
+      bytes = {}
+      batches[device] = bytes
+      batch_devices[#batch_devices + 1] = device
+    end
+    local n = #bytes
+    bytes[n + 1], bytes[n + 2], bytes[n + 3] = status, data1, data2
+    return true
+  end
   wire_bytes[1], wire_bytes[2], wire_bytes[3] = status, data1, data2
   device:send(wire_bytes)
   return true
@@ -69,6 +106,7 @@ function m_midi.send_to_sinfonion(command, value)
   for id = 1, #midi_devices do
 
     if midi_devices[id] and midi_devices[id].name == "Norns2sinfonion" then
+      m_midi.flush_output_batch()
       midi_devices[id]:program_change(value, command)
     end
   end
@@ -103,6 +141,7 @@ function m_midi:note_on(note, velocity, channel, device)
     -- Send the Note On message
     local port = midi_devices[device]
     if not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100) then
+      m_midi.flush_output_batch()
       port:note_on(note, velocity, channel)
     end
   end
@@ -120,6 +159,7 @@ function m_midi:note_off(note, velocity, channel, device)
       -- Retain counts for bookkeeping without collapsing receiver releases.
       local port = midi_devices[device]
       if not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+        m_midi.flush_output_batch()
         port:note_off(note, velocity, channel)
       end
       if self.note_counts[device][channel][note] <= 0 then
@@ -131,6 +171,7 @@ function m_midi:note_off(note, velocity, channel, device)
       -- For safety, send Note Off anyway
       local port = midi_devices[device]
       if not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+        m_midi.flush_output_batch()
         port:note_off(note, velocity, channel)
       end
     end
@@ -141,6 +182,7 @@ m_midi.cc, m_midi.nrpn = include("mosaic/lib/devices/midi_wire_output").new(m_mi
 
 function m_midi:program_change(program_id, channel, device)
   if midi_devices[device] ~= nil then
+    m_midi.flush_output_batch()
     midi_devices[device]:program_change(program_id, channel)
   end
 end
@@ -149,6 +191,7 @@ function m_midi.start()
 
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
+      m_midi.flush_output_batch()
       midi_devices[id]:start()
     end
   end
@@ -164,6 +207,7 @@ function m_midi:all_notes_off()
             -- Preserve one release for every owned onset, including distinct
             -- internal notes that clamp to the same MIDI endpoint.
             for _ = 1, count do
+              m_midi.flush_output_batch()
               midi_devices[device]:note_off(note, 0, channel)
             end
             self.note_counts[device][channel][note] = nil
@@ -192,6 +236,7 @@ function m_midi.stop(send_transport)
   if send_transport ~= false then
     for id = 1, #midi.vports do
       if midi_devices[id] and midi_devices[id].device ~= nil then
+        m_midi.flush_output_batch()
         midi_devices[id]:stop()
       end
     end
@@ -211,6 +256,7 @@ function m_midi.all_off(id)
     all_off_by_device[id] = scheduler.debounce(function()
       for note = 0, 127 do
         for channel = 1, 16 do
+          m_midi.flush_output_batch()
           midi_devices[id]:note_off(note, 0, channel)
           -- Forget only notes actually cleared by this sweep position.
           -- Notes played behind it still need ownership for transport Stop.
