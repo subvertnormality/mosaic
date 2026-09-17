@@ -12,6 +12,38 @@ def dense_events(channels,steps=32,step_ns=250_000_000):
         for channel in range(channels):index+=1;rows.append({'index':index,'monotonic_ns':1_100_000_000+step*step_ns+channel*1000,'port':1,'bytes':[128+channel,60,0]})
     return rows
 
+_transport_patch=None
+def setUpModule():
+    # Fake runners have no Maiden; their transport is always ready and stops when asked.
+    global _transport_patch
+    _transport_patch=patch('hardware_performance.transport_state',return_value=(False,[]));_transport_patch.start()
+def tearDownModule():
+    _transport_patch.stop()
+
+class TransportChecks(unittest.TestCase):
+    def test_a_window_starts_only_stopped_with_no_key_held(self):
+        actions=[];taps=[]
+        driver=type('D',(),{'action':lambda self,**k:actions.append(k),'elapse':lambda self,s:None,'tap':lambda self,x,y:taps.append((x,y))})()
+        states=iter([(True,[(3,5)]),(False,[])])
+        with patch('hardware_performance.transport_state',side_effect=lambda runner:next(states)):
+            log=[];hardware_performance.ready_to_play(object(),driver,log)
+        self.assertEqual(actions,[{'type':'grid','x':3,'y':5,'state':0}]);self.assertEqual(taps,[(1,8)])
+        self.assertEqual(log[0]['held_keys_released'],[(3,5)]);self.assertTrue(log[0]['was_playing'])
+        with patch('hardware_performance.transport_state',return_value=(True,[])):
+            with self.assertRaisesRegex(AssertionError,'Transport not ready'):hardware_performance.ready_to_play(object(),driver,[])
+    def test_a_transport_still_playing_after_the_window_is_reported(self):
+        with patch('hardware_performance.transport_state',return_value=(True,[(1,8)])):
+            log=[];self.assertFalse(hardware_performance.stopped_after_window(object(),log))
+        self.assertEqual(log,[{'stopped_after_window':False,'held_keys':[(1,8)]}])
+
+def saved_fixture(workload,channels):
+    import hashlib
+    directory=Path(tempfile.mkdtemp())
+    (directory/'autosave.ptn').write_text('ptn');(directory/'autosave.pset').write_text('pset')
+    files={name:hashlib.sha256((directory/name).read_bytes()).hexdigest() for name in ('autosave.ptn','autosave.pset')}
+    (directory/'fixture.json').write_text(json.dumps({'case':'built','workload':workload,'channels':channels,'files':files}))
+    return directory
+
 class FakeSSH:
     def run(self,script):
         identity={'kind':'identity','clock_ticks_per_second':100,'matron_pid':12,'matron_start_ticks':3}
@@ -79,6 +111,29 @@ class Tests(unittest.TestCase):
         self.assertIsNone(dense_oracle(dense_events(2,4),2,1,.25,'dense')['lock_values_checked'])
         with self.assertRaises(AssertionError):dense_oracle(lock_events(2,corrupt=(8,1,3)),2,4,.25,'locks')
         with self.assertRaisesRegex(AssertionError,'Lock cycle incomplete'):dense_oracle(lock_events(1,steps=8),1,2,.25,'locks')
+    def test_a_workload_sounding_every_other_step_is_timed_on_a_grid_twice_as_wide(self):
+        events=dense_events(2,steps=16,step_ns=500_000_000)
+        value=dense_oracle(events,2,8,.25,'extreme',step_stride=2)
+        self.assertEqual(value['steps'],16);self.assertTrue(value['gates']['event_timing'])
+        self.assertEqual(value['step_jitter']['maximum_ns'],0)
+        with self.assertRaisesRegex(AssertionError,'Step count'):dense_oracle(events,2,8,.25,'extreme')
+        self.assertEqual(CASES['PERF-EXT-HW-16']['step_stride'],2)
+    def test_one_stalled_step_per_window_is_tolerated_but_two_are_not(self):
+        def stalled(steps_late):
+            events=dense_events(2,steps=32)
+            for event in events:
+                step=(event['monotonic_ns']-1_000_000_000)//250_000_000
+                if step in steps_late:event['monotonic_ns']+=15_000_000
+            return events
+        clean=dense_oracle(dense_events(2,steps=32),2,8,.25,'dense')
+        one=dense_oracle(stalled({10}),2,8,.25,'dense')
+        self.assertGreater(one['timing']['p99_ns'],10_000_000)
+        self.assertEqual(one['timing_one_stall_tolerated']['excluded_step'],10)
+        self.assertEqual(one['timing_one_stall_tolerated']['excluded_step_maximum_ns'],15_000_000+1000)
+        self.assertTrue(one['gates']['event_timing'])
+        two=dense_oracle(stalled({10,20}),2,8,.25,'dense')
+        self.assertFalse(two['gates']['event_timing'],'Two stalled steps in one window must fail')
+        self.assertTrue(clean['gates']['event_timing'])
     def test_dense_oracle_reuses_complete_order_timing_release_and_skip_gates(self):
         value=dense_oracle(dense_events(2,4),2,1,.25,'dense')
         self.assertTrue(value['passed']);self.assertEqual((value['steps'],value['note_ons'],value['note_offs']),(4,8,8));self.assertEqual(value['skipped_deadlines'],0);self.assertEqual(value['timing']['maximum_ns'],1000)
@@ -88,8 +143,22 @@ class Tests(unittest.TestCase):
     def test_resource_sampler_and_metrics_report_matron_load_thermal_and_throttle(self):
         sampler=OnDeviceResourceSampler(FakeSSH(),.01,.01);sampler.start();recording=sampler.stop();metrics=resource_metrics(recording)
         self.assertEqual(metrics['sample_count'],2);self.assertEqual(metrics['matron_peak_rss_bytes'],1200);self.assertEqual(metrics['thermal_millicelsius_peak'],42000);self.assertEqual(metrics['throttled_flags_or'],2);self.assertEqual(metrics['threshold_status'],'calibration-only')
+    def test_gated_cases_fix_their_tempo_and_calibration_cases_take_the_requested_one(self):
+        self.assertEqual({case:CASES[case]['tempo_bpm'] for case in ('PERF-002-HW-16','PERF-003-HW-16','PERF-009-HW-16','PERF-010-HW-16')},
+                         {'PERF-002-HW-16':130,'PERF-003-HW-16':130,'PERF-009-HW-16':130,'PERF-010-HW-16':200})
+        self.assertEqual((CASES['PERF-010-HW-16']['workload'],CASES['PERF-010-HW-16']['step_stride']),('extreme',2))
+        self.assertEqual(hardware_performance.case_tempo('PERF-010-HW-16'),200)
+        self.assertEqual(hardware_performance.case_tempo('PERF-002-HW-16',130.0),130)
+        with self.assertRaisesRegex(ValueError,'PERF-009-HW-16 runs at 130 bpm, not 90'):hardware_performance.case_tempo('PERF-009-HW-16',90)
+        self.assertEqual(hardware_performance.case_tempo('PERF-002-HW-4',90),90);self.assertIsNone(hardware_performance.case_tempo('PERF-002-HW-1'))
+        self.assertEqual(hardware_performance.project_fixture_name('PERF-010-HW-16'),'extreme-16')
+    def test_a_fixed_tempo_case_refuses_a_norns_clock_at_another_tempo(self):
+        runner=type('R',(),{'maiden':object(),'ssh':object(),'out':Path(tempfile.mkdtemp())})()
+        with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.time.sleep'):
+            with self.assertRaisesRegex(AssertionError,'PERF-002-HW-16 runs at 130 bpm but the norns clock is at 60'):
+                run_hardware_performance(runner,'PERF-002-HW-16',2,'map',runner.out,FakeTrace(),FakeSampler())
     def test_three_calibration_cases_and_trace_start_boundary(self):
-        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16'})
+        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16','PERF-010-HW-16'})
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
@@ -99,6 +168,48 @@ class Tests(unittest.TestCase):
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.dense_oracle',side_effect=AssertionError('timing oracle failed')),patch('hardware_performance.time.sleep'):
             with self.assertRaisesRegex(AssertionError,'timing oracle failed'):run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
         raw=json.loads((source/'performance-raw.json').read_text());self.assertEqual(len(raw['midi']),64);self.assertEqual((sampler.started,sampler.stopped),(1,1))
+
+    def test_a_loaded_project_fixture_skips_the_ui_build(self):
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
+        fixture=saved_fixture('dense',1)
+        with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
+            run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,project_fixture=fixture)
+        build.assert_not_called()
+    def test_a_fixture_is_matched_on_the_project_a_case_plays(self):
+        fixture=saved_fixture('dense',4)
+        for case_id in ('PERF-002-HW-4','PERF-005-HW-4','PERF-008L-HW-4'):
+            self.assertEqual(hardware_performance.check_project_fixture(fixture,case_id)['channels'],4)
+            self.assertEqual(hardware_performance.project_fixture_name(case_id),'dense-4')
+        self.assertEqual(hardware_performance.project_fixture_name('MIX-HW-8'),'slides-8')
+        with self.assertRaisesRegex(ValueError,'holds dense/4'):hardware_performance.check_project_fixture(fixture,'PERF-002-HW-8')
+        with self.assertRaisesRegex(ValueError,'holds dense/4'):hardware_performance.check_project_fixture(fixture,'PERF-009-HW-4')
+    def test_a_fixture_saved_with_another_trig_spacing_is_refused(self):
+        fixture=saved_fixture('extreme',16)
+        with self.assertRaisesRegex(ValueError,'trig every 1 steps'):hardware_performance.check_project_fixture(fixture,'PERF-EXT-HW-16')
+    def test_a_fixture_whose_files_changed_since_saving_is_refused(self):
+        fixture=saved_fixture('locks',8);(fixture/'autosave.ptn').write_text('edited')
+        with self.assertRaisesRegex(ValueError,'does not match its manifest'):hardware_performance.check_project_fixture(fixture,'PERF-009-HW-8')
+        missing=Path(tempfile.mkdtemp())
+        with self.assertRaisesRegex(ValueError,'no fixture.json'):hardware_performance.check_project_fixture(missing,'PERF-009-HW-8')
+    def test_every_checked_in_fixture_matches_its_manifest(self):
+        root=Path(__file__).resolve().parent/'fixtures'/'performance'/'cm3plus';cases={}
+        for case_id in CASES:cases.setdefault(hardware_performance.project_fixture_name(case_id),case_id)
+        for directory in sorted(p for p in root.iterdir() if p.is_dir()) if root.is_dir() else []:
+            self.assertIn(directory.name,cases,'Fixture for a project no case plays: '+directory.name)
+            hardware_performance.check_project_fixture(directory,cases[directory.name])
+    def test_saving_a_project_fixture_builds_then_fetches_and_records_it(self):
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());saved=Path(tempfile.mkdtemp())/'fixture'
+        fetched=[]
+        def fetch(destination):
+            destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
+            (destination/'autosave.ptn').write_text('ptn');(destination/'autosave.pset').write_text('pset');fetched.append(destination)
+        runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source,'fetch_project':staticmethod(fetch)})()
+        with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
+            run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,save_project_fixture=saved)
+        build.assert_called_once();self.assertEqual(fetched,[saved])
+        manifest=json.loads((saved/'fixture.json').read_text())
+        self.assertEqual((manifest['case'],manifest['workload'],manifest['channels']),('PERF-002-HW-1','dense',1))
+        self.assertEqual(set(manifest['files']),{'autosave.ptn','autosave.pset'})
 
 if __name__=='__main__':unittest.main()
 

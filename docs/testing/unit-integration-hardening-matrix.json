@@ -33,8 +33,8 @@
   "inventory_sha256": "50f4d415a6bf0a09ba1128cd8493048ceceed7a94e8a779ae427305821eb648e",
   "counts": {
     "requirements": 140,
-    "production_lua_modules": 93,
-    "unit_integration_files": 68,
+    "production_lua_modules": 94,
+    "unit_integration_files": 70,
     "domains": 15
   },
   "coverage_language": {
@@ -1929,6 +1929,7 @@
         "lib/song_transition.lua"
       ],
       "existing_unit_integration_files": [
+        "lib/tests/lib/application_parameters_group_tests.lua",
         "lib/tests/lib/json_tests.lua",
         "lib/tests/lib/midi_program_sequencer_mutation_killers_tests.lua",
         "lib/tests/lib/persistence_round_trip_tests.lua",
@@ -2226,6 +2227,7 @@
         "lib/clock/m_clock.lua",
         "lib/clock/m_lattice.lua",
         "lib/clock/midi_output_transport.lua",
+        "lib/clock/redraw_guard.lua",
         "lib/clock/slide_lifetime.lua",
         "lib/clock/transport_lifecycle.lua",
         "lib/clock/voice_lifetime.lua",
@@ -2314,7 +2316,8 @@
         "lib/ui_components/vertical_scroll_selector.lua"
       ],
       "existing_unit_integration_files": [
-        "lib/tests/lib/m_clock_performance_tests.lua"
+        "lib/tests/lib/m_clock_performance_tests.lua",
+        "lib/tests/lib/redraw_guard_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-ENDURANCE-001",

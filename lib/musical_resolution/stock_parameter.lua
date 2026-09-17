@@ -75,4 +75,32 @@ function stock_parameter.resolver(assignments, read_step_lock, read_assigned, re
   end
 end
 
+-- A resolver that answers each kind from its first resolution, for a caller
+-- that resolves one step after another. reset starts a step; its answers are
+-- then remembered until the next reset, so a kind resolved early is not read
+-- again when the caller asks for it. It allocates only when first made, so a
+-- clock resolving every channel on every step leaves nothing to collect.
+function stock_parameter.new_remembering_resolver(read_step_lock, read_assigned, read_fallback)
+  local resolver = {}
+  local resolved, values, reads = {}, {}, {}
+  local generation = 0
+  local assignments, first, context, current_step
+
+  function resolver.reset(step_assignments, step_context, step)
+    assignments, first, context, current_step = step_assignments, first_slots(step_assignments), step_context, step
+    generation = generation + 1
+  end
+
+  function resolver.stock(type)
+    if resolved[type] ~= generation then
+      values[type], reads[type] = resolve_slot(assignments, first[type], type, read_step_lock, read_assigned,
+        read_fallback, context, current_step)
+      resolved[type] = generation
+    end
+    return values[type], reads[type]
+  end
+
+  return resolver
+end
+
 return stock_parameter

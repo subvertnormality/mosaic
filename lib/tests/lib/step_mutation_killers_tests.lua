@@ -1291,6 +1291,83 @@ function test_step_hardening_probability_zero_rejects_root_and_all_four_delayed_
   end)
 end
 
+-- Loads norns' own Control class, so these tests exercise the core getter,
+-- value mapping and controlspec map that step playback may reuse.
+local function norns_control(minval, maxval, default)
+  local saved_path = package.path
+  package.path = "./test_artefacts/norns_test_artefact/lua/?.lua;" .. package.path
+  local Control = require "core/params/control"
+  local ControlSpec = require "core/controlspec"
+  package.path = saved_path
+  local spec = ControlSpec.new(minval, maxval, "lin", 1, default)
+  return Control, Control.new("control_value_under_test", "control", spec)
+end
+
+local function with_stock_param(param, body)
+  local saved = params
+  local id = fn.get_param_id_from_stock_id("trig_probability", 1)
+  params = {lookup = {[id] = 1}, params = {param}}
+  function params:get(key) return nil end
+  function params:lookup_param(key) return nil end
+  local ok, err = pcall(function()
+    program.init()
+    body(function() return step_under_test.process_stock_params(1, 1, "trig_probability") end)
+  end)
+  params = saved
+  if not ok then error(err) end
+end
+
+function test_step_killer_core_control_values_follow_raw_and_controlspec()
+  local _, param = norns_control(0, 100, 50)
+  with_stock_param(param, function(read)
+    luaunit.assert_equals(read(), 50)
+    luaunit.assert_equals(read(), 50, "An unchanged parameter keeps its value")
+    param.raw = 0.25
+    luaunit.assert_equals(read(), 25, "A new raw value is mapped again")
+    param.controlspec.maxval = 200
+    luaunit.assert_equals(read(), 50, "A changed controlspec maps the value again")
+    local _, other = norns_control(0, 10, 0)
+    param.controlspec = other.controlspec
+    param.raw = 0.5
+    luaunit.assert_equals(read(), 5, "A replaced controlspec maps the value again")
+  end)
+end
+
+function test_step_killer_core_control_values_are_not_remapped_while_unchanged()
+  local _, param = norns_control(0, 100, 50)
+  with_stock_param(param, function(read)
+    read()
+    local warp = param.controlspec.warp
+    local maps = 0
+    local original = warp.map
+    warp.map = function(...) maps = maps + 1; return original(...) end
+    local ok, err = pcall(function()
+      for _ = 1, 5 do luaunit.assert_equals(read(), 50) end
+    end)
+    warp.map = original
+    if not ok then error(err) end
+    luaunit.assert_equals(maps, 0, "An unchanged core control parameter is not remapped on every read")
+  end)
+end
+
+-- matrix replaces Control:get on the class itself, so the value follows a
+-- modulation source while the parameter's raw value stands still.
+function test_step_killer_control_values_with_a_replaced_class_getter_are_read_every_time()
+  local Control, param = norns_control(0, 127, 0)
+  local modulation = 10
+  local core_get = Control.get
+  Control.get = function(self) return modulation end
+  local ok, err = pcall(with_stock_param, param, function(read)
+    luaunit.assert_equals(read(), 10)
+    modulation = 90
+    luaunit.assert_equals(read(), 90, "A modulated parameter must not be served from a cache keyed on its raw value")
+    modulation = 45
+    luaunit.assert_equals(read(), 45)
+  end)
+  Control.get = core_get
+  if not ok then error(err) end
+end
+
 function test_step_killer_modulated_control_values_are_read_every_time()
   local saved = params
   local modulation = 0

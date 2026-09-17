@@ -1,7 +1,7 @@
-import contextlib,hashlib,io,json,struct,subprocess,tempfile,unittest
+import contextlib,hashlib,io,json,re,struct,subprocess,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
-from real_norns import Maiden,MaidenInput,OSC,OutputTrace,Runner,SSH,SSHOSC,WebSocketMaiden,export_head,main,osc_packet
+from real_norns import check_repl_lines,Maiden,MaidenInput,OSC,OutputTrace,Runner,SSH,SSHOSC,WebSocketMaiden,export_head,main,osc_packet
 from hardware_driver import HARDWARE_DRIVER_CAPABILITIES,HARDWARE_PERFORMANCE_RECIPES,HardwareDriver,hardware_applicability,run_hardware_case
 from cases import CASES
 from driver import Driver
@@ -162,19 +162,65 @@ class Tests(unittest.TestCase):
   r,_,m=self.r();m.eval=lambda code:'__MOSAIC_GRID_ID__2\nmarker';self.assertEqual(r.grid_device(),2);self.assertEqual(r.grid_device(7),7)
  def test_output_trace_preserves_raw_signed_led_and_exposes_physical_nibble(self):
   rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['-4' if y==8 and x==1 else '2' for x in range(1,17)])) for y in range(1,9))
-  m=M();m.eval=lambda code,**kwargs:'__GRID_COUNTS__12,3\n'+rows+'\n__MIDI__1|12.250000000|1|userdata: 0xabc|table|144,60,127\n'
+  m=M();m.eval=lambda code,**kwargs:('__GRID_COUNTS__12,3\n'+rows+'\n__MIDI_COUNT__1\n') if '__GRID_COUNTS__' in code else '__MIDI__1|12.250000000|1|userdata: 0xabc|table|144,60,127\n'
   value=OutputTrace(m).snapshot();self.assertEqual(value['raw_grid'][112],-4);self.assertEqual(value['grid'][112],12);self.assertEqual((value['midi'][0]['port'],value['midi'][0]['bytes']),(1,[144,60,127]))
+ def test_output_trace_reads_a_long_capture_in_chunks_and_retries_a_lost_reply(self):
+  rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['0']*16)) for y in range(1,9));calls=[];lost=[]
+  def event(i):return '__MIDI__%d|%d.000000000|1|userdata: 0xabc|table|176,1,%d'%(i,i,i%128)
+  def eval(code,allow_lua_error=False,timeout_ms=None):
+   calls.append((code,timeout_ms))
+   if '__GRID_COUNTS__' in code:return '__GRID_COUNTS__0,0\n'+rows+'\n__MIDI_COUNT__900\n'
+   first,last=[int(v) for v in re.search(r'for i=(\d+),(\d+)',code).groups()]
+   if first==401 and not lost:lost.append(first);raise TimeoutError('marker lost')
+   # A late reply from another range must not be taken for this one.
+   return event(1)+'\n'+'\n'.join(event(i) for i in range(first,last+1))+'\n'
+  m=M();m.eval=eval
+  value=OutputTrace(m).snapshot()
+  self.assertEqual([e['index'] for e in value['midi']],list(range(1,901)))
+  ranges=[re.search(r'for i=(\d+),(\d+)',code).groups() for code,_ in calls[1:]]
+  self.assertEqual(ranges,[('1','400'),('401','800'),('401','800'),('801','900')])
+  self.assertTrue(all(timeout==OutputTrace.SNAPSHOT_CHUNK_TIMEOUT_MS for _,timeout in calls[1:]))
+ def test_output_trace_gives_up_on_a_chunk_that_never_completes(self):
+  rows='\n'.join('__GRID_ROW__%d|%s'%(y,','.join(['0']*16)) for y in range(1,9))
+  m=M();m.eval=lambda code,**kwargs:('__GRID_COUNTS__0,0\n'+rows+'\n__MIDI_COUNT__2\n') if '__GRID_COUNTS__' in code else '__MIDI__1|1.0|1|d|table|144,60,1\n'
+  with self.assertRaisesRegex(RuntimeError,'chunk 1-2 incomplete'):OutputTrace(m).snapshot()
  def test_output_trace_uses_persistent_globals_and_restores_c_binding(self):
   m=M();m.eval=lambda code,**kwargs:m.commands.append(code) or ('__TRACE_REMOVED__C' if '__TRACE_REMOVED__' in code else 'ok')
-  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('local original_midi=_norns.midi_send',m.commands[0]);self.assertIn('return original_midi(dev,payload,...)',m.commands[0]);self.assertIn('return original_grid_all(dev,value,rel,...)',m.commands[0]);self.assertIn('return original_grid_led(dev,x,y,value,rel,...)',m.commands[0]);self.assertIn('grid_state.writes',m.commands[0]);self.assertIn('v.device.dev==dev',m.commands[0]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[1])
+  trace=OutputTrace(m);trace.install();trace.remove();self.assertIn('__NOT_STOCK__',m.commands[0]);self.assertIn('local original_midi=_norns.midi_send',m.commands[1]);self.assertIn('return original_midi(dev,payload,...)',m.commands[1]);self.assertIn('return original_grid_all(dev,value,rel,...)',m.commands[1]);self.assertIn('return original_grid_led(dev,x,y,value,rel,...)',m.commands[1]);self.assertIn('grid_state.writes',m.commands[1]);self.assertIn('v.device.dev==dev',m.commands[1]);self.assertIn('_norns.midi_send=_MOSAIC_HW_ORIG_MIDI',m.commands[2])
+ def test_output_trace_refuses_to_wrap_a_binding_an_earlier_trace_left_wrapped(self):
+  class Wrapped(M):
+   def eval(self,x,**kwargs):self.commands.append(x);return '__NOT_STOCK__midi_send\n__NOT_STOCK__grid_set_led\n<ok>' if '__NOT_STOCK__' in x else 'ok'
+  m=Wrapped();trace=OutputTrace(m)
+  with self.assertRaisesRegex(RuntimeError,'_norns.midi_send, _norns.grid_set_led is not the stock binding'):trace.install()
+  self.assertEqual(len(m.commands),1);self.assertFalse(trace.installed)
+ def test_trace_commands_fit_matrons_repl_line_buffer(self):
+  class Removed(M):
+   def eval(self,x,**kwargs):self.commands.append(x);return '__TRACE_REMOVED__C'
+  m=Removed();trace=OutputTrace(m);trace.install();trace.reset_midi();trace.remove()
+  self.assertEqual(len(m.commands),4)
+  for command in m.commands:check_repl_lines(command.rstrip()+"; print('__MOSAIC_HW_0123456789abcdef__')\n")
+ def test_maiden_refuses_a_line_matron_cannot_read_without_sending_it(self):
+  sent=[]
+  class Socket:
+   def send(self,data):sent.append(data)
+  maiden=WebSocketMaiden('ws://example',connector=lambda url,timeout:Socket())
+  with self.assertRaisesRegex(ValueError,'exceeds the 4096-byte matron REPL buffer'):maiden.eval('x=1 '+'-'*4096)
+  with self.assertRaisesRegex(ValueError,'4096-byte'):maiden.send('y=2 '+'-'*4096)
+  self.assertEqual(sent,[]);check_repl_lines('z=3\n'+'-'*4094+'\n')
  def test_output_trace_reset_mutates_the_table_captured_by_wrappers(self):
-  m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('for i=#_MOSAIC_HW_MIDI,1,-1',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
+  m=M();trace=OutputTrace(m);trace.reset_midi();self.assertIn('_MOSAIC_HW_MIDI.n=0',m.commands[0]);self.assertIn('_MOSAIC_HW_MIDI_REALTIME.count=0',m.commands[0]);self.assertNotIn('_MOSAIC_HW_MIDI={}',m.commands[0])
  def test_output_trace_install_cleans_up_when_code_executes_then_eval_raises(self):
   m=ExecuteThenRaiseM();trace=OutputTrace(m)
   with self.assertRaisesRegex(RuntimeError,'marker response failed'):trace.install(allow_lua_error=True)
-  self.assertFalse(m.wrapped);self.assertFalse(trace.installed);self.assertEqual(len(m.commands),2);self.assertEqual(m.allow,[True,True]);self.assertIn('__TRACE_REMOVED__',m.commands[1])
+  self.assertFalse(m.wrapped);self.assertFalse(trace.installed);self.assertEqual(len(m.commands),3);self.assertEqual(m.allow,[True,True,True]);self.assertIn('__TRACE_REMOVED__',m.commands[2])
  def test_device_map_index_is_selected_by_id_not_fixed_offset(self):
   r,_,m=self.r();m.eval=lambda code:m.commands.append(code) or '__MOSAIC_DEVICE_MAP_INDEX__34\nmarker';self.assertEqual(r.device_map_index('emu-test'),34);self.assertIn("d.id=='emu-test'",m.commands[-1])
+ def test_a_grid_tap_reports_when_the_host_sent_and_finished_each_half(self):
+  r,_,m=self.r();m.eval=lambda code:m.commands.append(code) or "__MOSAIC_TEMPO__120\nmarker";driver=HardwareDriver(r,2,'emu-test',T())
+  with patch('hardware_driver.time.sleep'):tap=driver.tap(1,8)
+  self.assertEqual((tap['press']['state'],tap['release']['state']),(1,0))
+  self.assertTrue(tap['press']['host_monotonic_ns']<=tap['press']['host_completion_ns']<=tap['release']['host_monotonic_ns']<=tap['release']['host_completion_ns'])
+  self.assertIn('_norns.grid.key(2,1,8,1)',m.commands[-2]);self.assertIn('_norns.grid.key(2,1,8,0)',m.commands[-1])
  def test_hardware_driver_exposes_the_recipe_surface_and_rejects_unknown_actions(self):
   r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();driver=HardwareDriver(r,2,'emu-test',trace)
   public={name for name,value in Driver.__dict__.items() if not name.startswith('_') and callable(value)}

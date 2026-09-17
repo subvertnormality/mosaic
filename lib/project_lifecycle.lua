@@ -147,6 +147,14 @@ end
 
 local function do_autosave()
   if autosave_inhibited then return end
+  -- Saving stops and resets the transport. The save is primed only while
+  -- stopped, but runs half a second later; playback started in between must
+  -- keep playing, so leave the project unsaved and prime again later.
+  if m_clock.is_playing() then
+    as_metro:stop()
+    autosave_reset()
+    return
+  end
   set_splash(true)
   local saved = program ~= nil and save_project("autosave", true)
   set_splash(false)

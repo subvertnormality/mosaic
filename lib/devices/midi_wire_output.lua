@@ -5,14 +5,22 @@ local output = {}
 
 function output.new(m_midi)
   local function cc(cc_msb, cc_lsb, value, channel, device)
-    if midi_devices[device] ~= nil then
+    local port = midi_devices[device]
+    if port ~= nil then
+      local status = 0xB0 + (channel or 1) - 1
       -- Send MSB
       local cc_msb_value = cc_lsb and math.floor(value / 128) or value
-      midi_devices[device]:cc(cc_msb, cc_msb_value, channel)
+      if not m_midi.send_three(port, status, cc_msb, cc_msb_value) then
+        m_midi.flush_output_batch()
+        port:cc(cc_msb, cc_msb_value, channel)
+      end
 
       -- Send LSB
       if cc_lsb ~= nil then
-        midi_devices[device]:cc(cc_lsb, value % 128, channel)
+        if not m_midi.send_three(port, status, cc_lsb, value % 128) then
+          m_midi.flush_output_batch()
+          port:cc(cc_lsb, value % 128, channel)
+        end
       end
     end
   end

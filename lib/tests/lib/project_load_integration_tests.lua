@@ -123,6 +123,25 @@ function test_rejected_load_autosave_recovery_actions_and_failed_saves()
   end
 end
 
+-- An autosave is primed only while stopped and runs half a second later.
+-- Playback that starts in between must not be stopped or reset by the save;
+-- the save waits for another quiet minute instead.
+function test_autosave_primed_while_stopped_does_not_stop_playback_started_before_it_runs()
+  local c=load_context()
+  c.env.autosave_reset()
+  c.state.playing=false;c.prime()
+  local writes,stops,resets,timers=c.count.writes,c.count.stop,c.count.reset,#c.state.timers
+  c.state.playing=true
+  c.autosave()
+  luaunit.assert_equals(c.count.writes,writes,"The project was saved during playback")
+  luaunit.assert_equals(c.count.stop,stops,"Autosave stopped playback")
+  luaunit.assert_equals(c.count.reset,resets,"Autosave reset the transport during playback")
+  luaunit.assert_true(c.state.playing)
+  luaunit.assert_true(#c.state.timers>timers and c.state.timers[#c.state.timers].running,"Autosave was not primed again")
+  c.state.playing=false;c.prime();c.autosave()
+  luaunit.assert_equals(c.count.writes,writes+1,"A later quiet minute still saves")
+end
+
 function test_missing_startup_is_normal_but_unreadable_manual_load_is_rejected()
   local c=load_context();luaunit.assert_false(c.load("fixture/autosave.ptn",true))
   luaunit.assert_equals(#c.state.messages,0);luaunit.assert_equals(c.count.stop,0)

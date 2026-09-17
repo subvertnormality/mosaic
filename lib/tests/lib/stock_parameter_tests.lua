@@ -145,6 +145,32 @@ function test_stock_parameter_resolver_answers_each_kind_from_one_scan()
   luaunit.assert_equals(reads, {"lock4", "first", "lock2", "velocity", "fallback:chord_arp"})
 end
 
+-- A remembering resolver answers each kind from its first read until it is
+-- reset for another step, including the stock value reported beside an unset
+-- kind; after a reset every kind is read again.
+function test_stock_parameter_remembering_resolver_reads_each_kind_once_per_step()
+  local assignments = {{id = "fixed_note", param_id = "fixed", off_value = -1}}
+  local reads = {}
+  local assigned = 5
+  local resolver = stock_parameter.new_remembering_resolver(
+    function(i) table.insert(reads, "lock" .. i) end,
+    function(param_id) table.insert(reads, param_id); return assigned end,
+    function(kind) table.insert(reads, "fallback:" .. kind); return 0, function() return 0 end end)
+  resolver.reset(assignments, {}, 1)
+  luaunit.assert_equals(resolver.stock("fixed_note"), 5)
+  local value, read = resolver.stock("random_velocity")
+  luaunit.assert_nil(value)
+  luaunit.assert_equals(read, 0)
+  luaunit.assert_equals(resolver.stock("fixed_note"), 5)
+  resolver.stock("random_velocity")
+  luaunit.assert_equals(reads, {"lock1", "fixed", "fallback:random_velocity"}, "A kind is read once per step")
+
+  assigned = 7
+  resolver.reset(assignments, {}, 2)
+  luaunit.assert_equals(resolver.stock("fixed_note"), 7, "A reset reads the kind again")
+  luaunit.assert_equals(reads, {"lock1", "fixed", "fallback:random_velocity", "lock1", "fixed"})
+end
+
 -- The resolver keeps its slot scan between steps, so a reassignment, a cleared
 -- slot and a new slot must all be picked up by the next resolver.
 function test_stock_parameter_resolver_follows_slot_reassignment()

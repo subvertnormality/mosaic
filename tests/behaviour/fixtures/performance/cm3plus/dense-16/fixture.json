@@ -1,0 +1,11 @@
+{
+  "case": "PERF-002-HW-16",
+  "workload": "dense",
+  "channels": 16,
+  "built_from_revision": "9f03cf94059d30b6c4475373c0e859c84d4bd10b",
+  "files": {
+    "autosave.ptn": "ec5ddde16925b162b075ccbc21043da4e4014ef1f8e475d07c276b1ed269314e",
+    "autosave.pset": "e466ba6025a85ac7594f7d9ecc2a0b18a2231a35635d57922017905f5faff274"
+  },
+  "lane": "cm3plus-norns"
+}

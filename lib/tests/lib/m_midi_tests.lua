@@ -72,3 +72,63 @@ function test_cc_sends_seven_bit_values_and_splits_fourteen_bit_values_msb_first
   if not ok then error(err, 0) end
   luaunit.assert_equals(sent, {{74, 127, 3}, {1, 127, 2}, {33, 127, 2}, {1, 63, 2}, {33, 127, 2}, {7, 0, 16}, {39, 0, 16}})
 end
+
+-- A port with a norns MIDI device behind it receives each message as its
+-- three wire bytes in a single send, the same bytes norns' note_on, note_off
+-- and cc build; the byte table is reused, so each send is copied as it arrives.
+function test_midi_output_sends_wire_bytes_straight_to_a_norns_device()
+  local original_devices=midi_devices
+  local writes={}
+  local Device={}
+  Device.__index=Device
+  function Device:send(bytes) writes[#writes+1]={bytes[1],bytes[2],bytes[3],#bytes} end
+  local called={}
+  midi_devices={{device=setmetatable({},Device),
+    note_on=function() called[#called+1]="note_on" end,
+    note_off=function() called[#called+1]="note_off" end,
+    cc=function() called[#called+1]="cc" end}}
+  midi_output:reset_note_counts()
+  local ok,err=pcall(function()
+    midi_output:note_on(60,100,2,1)
+    midi_output:note_off(60,nil,2,1)
+    midi_output.cc(7,nil,64,16,1)
+    midi_output.cc(1,33,1000,1,1)
+  end)
+  midi_output:reset_note_counts();midi_devices=original_devices
+  if not ok then error(err,0) end
+  luaunit.assert_equals(writes,{{0x91,60,100,3},{0x81,60,100,3},{0xBF,7,64,3},{0xB0,1,7,3},{0xB0,33,1000%128,3}})
+  luaunit.assert_equals(called,{},"A norns device port is not sent through its message methods")
+end
+
+-- While a pulse gathers output, each device receives its messages as one
+-- write, in the order they were produced, at each flush. A send that bypasses
+-- the gathering first sends what is gathered, so order on a port never changes.
+function test_midi_output_gathers_a_pulse_into_one_write_per_device()
+  local original_devices=midi_devices
+  local writes={}
+  local Device={}
+  Device.__index=Device
+  function Device:send(bytes) local copy={} for i,v in ipairs(bytes) do copy[i]=v end writes[#writes+1]={self.name,copy} end
+  local first,second=setmetatable({name="a"},Device),setmetatable({name="b"},Device)
+  midi_devices={{device=first,program_change=function() writes[#writes+1]={"a","program_change"} end},{device=second}}
+  midi_output:reset_note_counts()
+  local ok,err=pcall(function()
+    midi_output.begin_output_batch()
+    midi_output:note_off(60,nil,1,1)
+    midi_output:note_off(61,nil,2,2)
+    midi_output.flush_output_batch()
+    midi_output.cc(1,nil,20,1,1)
+    midi_output.cc(2,nil,40,1,1)
+    midi_output:program_change(5,1,1)
+    midi_output:note_on(60,100,1,1)
+    midi_output.flush_output_batch(true)
+    midi_output:note_on(62,90,1,1)
+  end)
+  midi_output:reset_note_counts();midi_devices=original_devices
+  if not ok then error(err,0) end
+  luaunit.assert_equals(writes,{
+    {"a",{0x80,60,100}},{"b",{0x81,61,100}},
+    {"a",{0xB0,1,20,0xB0,2,40}},{"a","program_change"},
+    {"a",{0x90,60,100}},
+    {"a",{0x90,62,90}}})
+end

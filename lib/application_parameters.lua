@@ -2,7 +2,7 @@
 local application_parameters = {}
 
 function application_parameters.register(project_actions)
-  params:add_group("mosaic", "MOSAIC", 34)
+  params:add_group("mosaic", "MOSAIC", 35)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(

@@ -67,12 +67,61 @@ local function indexed_param(param_id)
   return index and params.params[index]
 end
 
--- A parameter's value cannot be cached against its raw value: a norns mod may
--- wrap the getter so the value follows a modulation source while raw stands
--- still (matrix does this), and a cache keyed on raw then serves the first
--- reading to every note for the life of the project.
+-- Mapping a norns control parameter rounds and warps its raw value on every
+-- read, and step playback reads about ten of them for each note. The mapped
+-- value is a function of the raw value and the controlspec only while norns'
+-- own getter, value mapping and controlspec map are the ones in use. A mod may
+-- replace any of them (matrix replaces Control:get so the value follows a
+-- modulation source while raw stands still), so a parameter whose functions do
+-- not come from norns core is read every time.
+local core_sources = {
+  get = "core/params/control.lua",
+  map_value = "core/params/control.lua",
+  map = "core/controlspec.lua",
+}
+local core_function_verdicts = setmetatable({}, {__mode = "k"})
+
+local function is_core_function(fn_value, source)
+  local verdict = core_function_verdicts[fn_value]
+  if verdict == nil then
+    verdict = false
+    if type(fn_value) == "function" then
+      local info = debug.getinfo(fn_value, "S")
+      local defined = info and info.source or ""
+      verdict = defined:sub(-#source) == source
+    end
+    core_function_verdicts[fn_value] = verdict
+  end
+  return verdict
+end
+
+local mapped_control_values = setmetatable({}, {__mode = "k"})
+
 local function control_value(param)
-  return param:get()
+  local spec = param.controlspec
+  local raw = param.raw
+  local cached = mapped_control_values[param]
+  -- The entry holds the functions it was mapped with, so a hit needs no
+  -- verdict lookups: any replaced getter, mapping or controlspec misses.
+  if cached and cached.raw == raw and cached.spec == spec and cached.get == param.get
+      and cached.map_value == param.map_value and cached.map == spec.map and cached.minval == spec.minval
+      and cached.maxval == spec.maxval and cached.warp == spec.warp and cached.step == spec.step then
+    return cached.value
+  end
+  if param.t ~= 3 or spec == nil or raw == nil
+      or not is_core_function(param.get, core_sources.get)
+      or not is_core_function(param.map_value, core_sources.map_value)
+      or not is_core_function(spec.map, core_sources.map) then
+    return param:get()
+  end
+  local value = param:get()
+  if not cached then
+    cached = {}
+    mapped_control_values[param] = cached
+  end
+  cached.raw, cached.spec, cached.get, cached.map_value, cached.map = raw, spec, param.get, param.map_value, spec.map
+  cached.minval, cached.maxval, cached.warp, cached.step, cached.value = spec.minval, spec.maxval, spec.warp, spec.step, value
+  return value
 end
 
 local function read_stock_assigned(param_id)
@@ -718,7 +767,59 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
 end
 
-function step.handle(c, current_step)
+-- The stock kinds every sounding step reads, whatever its chord settings.
+local note_stock_kinds = {
+  "trig_probability", "bipolar_random_note", "twos_random_note", "random_velocity",
+  "quantised_fixed_note", "fixed_note", "mute_root_note", "chord_strum_pattern", "chord_arp",
+}
+
+-- Reading a step's stock parameters is most of what a note costs before it is
+-- sent, and a mod such as matrix makes each read dearer. The clock resolves
+-- them while it sends the step's parameter locks, so the step's notes can then
+-- leave back to back. Pass the result to step.handle for the same channel and
+-- step in the same clock pulse, so nothing read can change in between; the
+-- next prepare for the channel reuses it. c is the channel number, which is
+-- also the one handle reads the slots for.
+-- A fixed note with no stock value set falls back to the channel's own slot;
+-- remember that read, with false standing for a slot that holds nothing.
+local function prepare_note_slot(prepared, c, kind, slot)
+  prepared.slots[slot] = nil
+  local value, read = prepared.stock(kind)
+  if value or read ~= nil then return end
+  local slot_value = read_stock_assigned(param_slots.control_id(c, slot))
+  if slot_value == nil then slot_value = false end
+  prepared.slots[slot] = slot_value
+end
+
+-- One prepared note per channel, reused on every step.
+local prepared_notes = {}
+
+function step.prepare_note(c, current_step)
+  local channel = program.get_channel(program.get().selected_song_pattern, c)
+  local prepared = prepared_notes[c]
+  if not prepared then
+    local resolver = stock_parameter.new_remembering_resolver(read_stock_step_lock, read_stock_assigned,
+      read_stock_fallback)
+    prepared = {resolver = resolver, stock = resolver.stock, slots = {}}
+    prepared_notes[c] = prepared
+  end
+  prepared.resolver.reset(channel.trig_lock_params, channel, current_step)
+  local stock = prepared.stock
+  for i = 1, #note_stock_kinds do stock(note_stock_kinds[i]) end
+  prepare_note_slot(prepared, c, "quantised_fixed_note", param_slots.QUANTISED_FIXED_NOTE_SLOT)
+  prepare_note_slot(prepared, c, "fixed_note", param_slots.FIXED_NOTE_SLOT)
+  return prepared
+end
+
+-- A slot value prepare_note already read, or a read now when it did not.
+local function read_note_slot(prepared, c, slot)
+  local value = prepared and prepared.slots[slot]
+  if value == false then return nil end
+  if value ~= nil then return value end
+  return read_stock_assigned(param_slots.control_id(c, slot))
+end
+
+function step.handle(c, current_step, prepared)
   local program_data = program.get()
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   local working_pattern = channel.working_pattern
@@ -742,8 +843,8 @@ function step.handle(c, current_step)
   end
 
   -- One assignment scan answers every stock kind this step reads.
-  local stock = stock_parameter.resolver(channel.trig_lock_params, read_stock_step_lock, read_stock_assigned,
-    read_stock_fallback, channel, current_step)
+  local stock = prepared and prepared.stock or stock_parameter.resolver(channel.trig_lock_params,
+    read_stock_step_lock, read_stock_assigned, read_stock_fallback, channel, current_step)
   local trig_probability = stock("trig_probability")
   local trig_prob = (trig_probability == -1) and 100 or (trig_probability or 100)
 
@@ -798,7 +899,7 @@ function step.handle(c, current_step)
     if not quantised_fixed_note then
       quantised_fixed_note = quantised_fixed_note_read
       if quantised_fixed_note == nil then
-        quantised_fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT))
+        quantised_fixed_note = read_note_slot(prepared, channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT)
       end
     end
 
@@ -811,7 +912,7 @@ function step.handle(c, current_step)
     if not fixed_note then
       fixed_note = fixed_note_read
       if fixed_note == nil then
-        fixed_note = read_stock_assigned(param_slots.control_id(channel.number, param_slots.FIXED_NOTE_SLOT))
+        fixed_note = read_note_slot(prepared, channel.number, param_slots.FIXED_NOTE_SLOT)
       end
     end
 
