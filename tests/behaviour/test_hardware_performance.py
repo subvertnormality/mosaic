@@ -143,8 +143,22 @@ class Tests(unittest.TestCase):
     def test_resource_sampler_and_metrics_report_matron_load_thermal_and_throttle(self):
         sampler=OnDeviceResourceSampler(FakeSSH(),.01,.01);sampler.start();recording=sampler.stop();metrics=resource_metrics(recording)
         self.assertEqual(metrics['sample_count'],2);self.assertEqual(metrics['matron_peak_rss_bytes'],1200);self.assertEqual(metrics['thermal_millicelsius_peak'],42000);self.assertEqual(metrics['throttled_flags_or'],2);self.assertEqual(metrics['threshold_status'],'calibration-only')
+    def test_gated_cases_fix_their_tempo_and_calibration_cases_take_the_requested_one(self):
+        self.assertEqual({case:CASES[case]['tempo_bpm'] for case in ('PERF-002-HW-16','PERF-003-HW-16','PERF-009-HW-16','PERF-010-HW-16')},
+                         {'PERF-002-HW-16':130,'PERF-003-HW-16':130,'PERF-009-HW-16':130,'PERF-010-HW-16':200})
+        self.assertEqual((CASES['PERF-010-HW-16']['workload'],CASES['PERF-010-HW-16']['step_stride']),('extreme',2))
+        self.assertEqual(hardware_performance.case_tempo('PERF-010-HW-16'),200)
+        self.assertEqual(hardware_performance.case_tempo('PERF-002-HW-16',130.0),130)
+        with self.assertRaisesRegex(ValueError,'PERF-009-HW-16 runs at 130 bpm, not 90'):hardware_performance.case_tempo('PERF-009-HW-16',90)
+        self.assertEqual(hardware_performance.case_tempo('PERF-002-HW-4',90),90);self.assertIsNone(hardware_performance.case_tempo('PERF-002-HW-1'))
+        self.assertEqual(hardware_performance.project_fixture_name('PERF-010-HW-16'),'extreme-16')
+    def test_a_fixed_tempo_case_refuses_a_norns_clock_at_another_tempo(self):
+        runner=type('R',(),{'maiden':object(),'ssh':object(),'out':Path(tempfile.mkdtemp())})()
+        with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.time.sleep'):
+            with self.assertRaisesRegex(AssertionError,'PERF-002-HW-16 runs at 130 bpm but the norns clock is at 60'):
+                run_hardware_performance(runner,'PERF-002-HW-16',2,'map',runner.out,FakeTrace(),FakeSampler())
     def test_three_calibration_cases_and_trace_start_boundary(self):
-        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16'})
+        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16','PERF-010-HW-16'})
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)

@@ -215,6 +215,12 @@ class Tests(unittest.TestCase):
   self.assertFalse(m.wrapped);self.assertFalse(trace.installed);self.assertEqual(len(m.commands),3);self.assertEqual(m.allow,[True,True,True]);self.assertIn('__TRACE_REMOVED__',m.commands[2])
  def test_device_map_index_is_selected_by_id_not_fixed_offset(self):
   r,_,m=self.r();m.eval=lambda code:m.commands.append(code) or '__MOSAIC_DEVICE_MAP_INDEX__34\nmarker';self.assertEqual(r.device_map_index('emu-test'),34);self.assertIn("d.id=='emu-test'",m.commands[-1])
+ def test_a_grid_tap_reports_when_the_host_sent_and_finished_each_half(self):
+  r,_,m=self.r();m.eval=lambda code:m.commands.append(code) or "__MOSAIC_TEMPO__120\nmarker";driver=HardwareDriver(r,2,'emu-test',T())
+  with patch('hardware_driver.time.sleep'):tap=driver.tap(1,8)
+  self.assertEqual((tap['press']['state'],tap['release']['state']),(1,0))
+  self.assertTrue(tap['press']['host_monotonic_ns']<=tap['press']['host_completion_ns']<=tap['release']['host_monotonic_ns']<=tap['release']['host_completion_ns'])
+  self.assertIn('_norns.grid.key(2,1,8,1)',m.commands[-2]);self.assertIn('_norns.grid.key(2,1,8,0)',m.commands[-1])
  def test_hardware_driver_exposes_the_recipe_surface_and_rejects_unknown_actions(self):
   r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();driver=HardwareDriver(r,2,'emu-test',trace)
   public={name for name,value in Driver.__dict__.items() if not name.startswith('_') and callable(value)}
