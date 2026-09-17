@@ -122,16 +122,24 @@ function delay_line.new(deps)
     firing=false
   end
   function q:now() return deps.now() end
-  -- When a message pushed now with this lead would leave: the same whole pulses
-  -- the note itself will wait, so a value's gap is measured against the moment
-  -- its note is really heard.
-  function q:deadline(ms)
-    local from=self:time()
+  -- The pulse a message anchored at this moment and delayed by ms leaves on,
+  -- and when that pulse falls. Everything delayed rides the same grid, whether
+  -- it was produced inside a pulse (a step's notes) or between pulses (MIDI
+  -- clock ticks), so a lead never moves one against another.
+  local function schedule(anchor,ms)
     local wait=ms/1000
-    if pulse and pulse_interval then
-      wait=math.ceil(wait/pulse_interval-1e-9)*pulse_interval
-    end
-    return from+wait
+    local now=deps.now()
+    if not (pulse_interval and last_pulse and pulsing(now)) then return anchor+wait,nil end
+    local pulses=math.ceil((anchor+wait-last_pulse)/pulse_interval-1e-9)
+    if pulses<1 then pulses=1 end
+    return last_pulse+pulses*pulse_interval,pulse_count+pulses
+  end
+  -- When a message pushed now with this lead would leave: the pulse the note
+  -- itself will wait for, so a value's gap is measured against the moment its
+  -- note is really heard.
+  function q:deadline(ms)
+    local due=schedule(self:time(),ms)
+    return due
   end
   -- The time a pulse's delayed output is measured from: its first delayed
   -- message, or now outside a pulse. Values and notes of one step share it.
@@ -189,17 +197,8 @@ function delay_line.new(deps)
     local group=pulse and lane.pulse_group
     if not group then
       if pulse and not pulse_time then pulse_time=deps.now() end
-      local from=pulse_time or deps.now()
-      local wait=ms/1000
-      local pulse_due
-      if pulse and pulse_interval then
-        -- Whole pulses, rounded up: the lead never shortens, and the message
-        -- leaves on a pulse of the same clock that produced it.
-        local pulses=math.ceil(wait/pulse_interval-1e-9)
-        pulse_due=pulse_count+pulses
-        wait=pulses*pulse_interval
-      end
-      group={due=from+wait,pulse_due=pulse_due,items={}}
+      local due,pulse_due=schedule(pulse_time or deps.now(),ms)
+      group={due=due,pulse_due=pulse_due,items={}}
       lane.groups[#lane.groups+1]=group
       if pulse then lane.pulse_group=group end
     end
