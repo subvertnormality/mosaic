@@ -121,14 +121,18 @@ def build(c, condition):
         c.enc(3, CLOCK_INDEX['/1'] - CLOCK_INDEX[clock]); c.key(3)
     apply_feel(c, condition)
     if condition.get('toggle'):
-        # Keep the feel's settings but start straight, with the type dial selected
-        # so a live toggle is a single E3 turn and K3 (README Clocks, Swing and
-        # Shuffle: playing edits apply at the next reset, global step 64).
-        type_dial(c); c.enc(3, -type_turns(condition)); c.key(3)
+        # Start straight with the toggled dial selected, so a live toggle is one E3
+        # turn and K3 (README Clocks, Swing and Shuffle: playing edits apply at the
+        # next reset, global step 64). Each dial inherits on its own: a local swing
+        # amount applies whatever the type dial shows, so swing toggles its amount
+        # (left selected by apply_feel), and shuffle toggles its local type.
+        if condition.get('swing') is None:
+            type_dial(c)
+        c.enc(3, -toggle_turns(condition)); c.key(3)
 
 
-def type_turns(condition):
-    return 1 if condition.get('swing') is not None else 2
+def toggle_turns(condition):
+    return condition['swing'] if condition.get('swing') is not None else 2
 
 
 def type_dial(c):
@@ -163,9 +167,9 @@ def play(c, condition, seconds=3.0):
         # 64 global steps at /1: the reset where a playing edit applies.
         cycle = 64 * 15 / condition['bpm']
         hold(.5)
-        c.enc(3, type_turns(condition)); c.key(3)        # on at global step 64
+        c.enc(3, toggle_turns(condition)); c.key(3)      # on at global step 64
         hold(cycle + 1.5 - .5)
-        c.enc(3, -type_turns(condition)); c.key(3)       # off at global step 128
+        c.enc(3, -toggle_turns(condition)); c.key(3)     # off at global step 128
         hold(cycle)
     else:
         hold(seconds / 2)

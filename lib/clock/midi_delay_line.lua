@@ -36,47 +36,16 @@ function delay_line.new(deps)
     end
   end
   -- Parameter values held for a gap (push_at) have their own lane ordered by
-  -- deadline. Any lane that fires sends due held values first, so a value due
-  -- at or before a note always leaves ahead of that note.
+  -- deadline. Whichever timer fires sends every due group from every lane, in
+  -- deadline order and, for equal deadlines, in the order they were produced: a
+  -- lock produced before its note precedes it, a slide value produced after a
+  -- note follows it, even when separate timers hold them.
   local held
-  local function send_due(lane,now)
-    while lane.head<=#lane.groups and lane.groups[lane.head].due<=now+(deps.resolution or 1e-9) do
-      local group=lane.groups[lane.head]
-      for _,item in ipairs(group.items) do deps.send(item.message) end
-      lane.head=lane.head+1
-    end
-  end
   local function send_group(lane)
     for _,item in ipairs(lane.groups[lane.head].items) do deps.send(item.message) end
     lane.head=lane.head+1
   end
-  local function fire(lane)
-    lane.armed=false
-    local now=deps.now()
-    local resolution=deps.resolution or 1e-9
-    deps.begin()
-    if held and held~=lane then
-      -- Notes and held values due together go out in deadline order, and in
-      -- the order they were produced when deadlines are equal: a lock produced
-      -- before its note precedes it, a slide value produced after a note follows.
-      while lane.head<=#lane.groups and lane.groups[lane.head].due<=now+resolution do
-        local group=lane.groups[lane.head]
-        while held.head<=#held.groups do
-          local value=held.groups[held.head]
-          if value.due<group.due-resolution or
-              (value.due<=group.due+resolution and value.items[1].serial<group.items[1].serial) then
-            send_group(held)
-          else
-            break
-          end
-        end
-        send_group(lane)
-      end
-      send_due(held,now)
-    else
-      send_due(lane,now)
-    end
-    deps.flush()
+  local function settle(lane)
     if lane.head>#lane.groups then
       lane.groups={};lane.head=1
     elseif lane.head>64 then
@@ -86,11 +55,31 @@ function delay_line.new(deps)
       for i=lane.head,#lane.groups do remaining[#remaining+1]=lane.groups[i] end
       lane.groups=remaining;lane.head=1
     end
+    if lane.armed and not lane.groups[lane.head] then lane.timer:stop();lane.armed=false end
     arm(lane)
-    if held and held~=lane then
-      if held.head>#held.groups then held.groups={};held.head=1 end
-      if held.armed and held.head>#held.groups then held.timer:stop();held.armed=false end
+  end
+  local function fire(fired)
+    fired.armed=false
+    local now=deps.now()
+    local resolution=deps.resolution or 1e-9
+    deps.begin()
+    while true do
+      local best,first
+      local function consider(lane)
+        local group=lane.groups[lane.head]
+        if group and group.due<=now+resolution and (not first or group.due<first.due-resolution or
+            (group.due<=first.due+resolution and group.items[1].serial<first.items[1].serial)) then
+          best,first=lane,group
+        end
+      end
+      for _,lane in pairs(lanes) do consider(lane) end
+      if held then consider(held) end
+      if not best then break end
+      send_group(best)
     end
+    deps.flush()
+    for _,lane in pairs(lanes) do settle(lane) end
+    if held then settle(held) end
   end
   function q:now() return deps.now() end
   -- The time a pulse's delayed output is measured from: its first delayed

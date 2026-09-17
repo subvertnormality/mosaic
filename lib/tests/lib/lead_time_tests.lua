@@ -405,3 +405,30 @@ function test_lead_time_equal_deadlines_keep_the_order_values_and_notes_were_pro
     luaunit.assert_equals(kinds, {{176, 74, 10}, {144, 60, 100}, {144, 62, 100}, {176, 74, 20}})
   end)
 end
+
+-- Separate timers may fire in either order for output due together; whichever
+-- fires first still sends it in production order.
+function test_lead_time_a_held_value_timer_firing_first_waits_for_the_note_produced_before_it()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    out.begin_output_batch()
+    out:note_on(62, 100, 1, 1, 25)
+    out.cc(74, nil, 20, 1, 1)
+    out.flush_output_batch(true)
+    -- Fire the held-value timer before the note timer at the shared deadline.
+    local armed = {}
+    for _, t in ipairs(timers) do if t.due then armed[#armed + 1] = t end end
+    luaunit.assert_equals(#armed, 2)
+    local note_timer, value_timer = armed[1], armed[2]
+    local due = value_timer.due
+    luaunit.assert_true(near(due, note_timer.due))
+    local saved = note_timer.due; note_timer.due = nil
+    advance(due)
+    note_timer.due = saved
+    advance(due)
+    local kinds = {}
+    for _, r in ipairs(wire_order(writes)) do kinds[#kinds + 1] = {r[2], r[3], r[4]} end
+    luaunit.assert_equals(kinds, {{176, 74, 10}, {144, 60, 100}, {144, 62, 100}, {176, 74, 20}})
+  end)
+end
