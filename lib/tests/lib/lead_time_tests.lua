@@ -1,10 +1,11 @@
 -- README: MIDI Device Configuration / Lock lead time. Inject time and timers;
 -- no wall-clock sleeps, so pulse grouping and preserved gate lengths are exact.
 local delay_line = include("mosaic/lib/clock/midi_delay_line")
-local function fixture()
+local function fixture(interval)
   local now, timers, sent, begins, flushes = 0, {}, {}, 0, 0
   local q = delay_line.new({
     now = function() return now end,
+    interval = interval and function() return interval end or nil,
     timer = function(callback)
       local t = {callback=callback, starts=0}
       function t:start(seconds) self.due=now+seconds;self.starts=self.starts+1 end
@@ -47,7 +48,8 @@ local function pulse_grid(q,advance)
   end
 end
 function test_lead_time_groups_pulse_and_preserves_longer_than_pulse_gates()
-  local q,sent,timers,advance,counts=fixture()
+  -- A clock that states 1 ms pulses: a 5 ms lead is five of them.
+  local q,sent,timers,advance,counts=fixture(.001)
   local pulse=pulse_grid(q,advance)
   pulse(0,function() q:push(5,"start");q:push(5,"clock");q:push(5,"on1");q:push(5,"on2") end)
   pulse(.002,function() q:push(5,"off1");q:push(5,"off2") end)

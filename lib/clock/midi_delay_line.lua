@@ -153,17 +153,10 @@ function delay_line.new(deps)
   function q:begin()
     if firing then pulse=true;pulse_time=nil;return end
     local now=deps.now()
-    if last_pulse then
-      local gap=now-last_pulse
-      -- A plausible pulse: faster than four a second and not a repeated call.
-      -- Follow the shortest gap and creep up from it, so a stalled pulse cannot
-      -- make the interval look long and count the lead out in too few pulses,
-      -- while a slower tempo is still followed within a fraction of a beat.
-      if gap>0.0001 and gap<0.25 then
-        if not pulse_interval or gap<pulse_interval then pulse_interval=gap
-        else pulse_interval=math.min(gap,pulse_interval*1.02) end
-      end
-    end
+    -- The clock states its own pulse spacing. Measuring it instead would read a
+    -- run of catch-up pulses as a much finer grid than the clock really has.
+    local stated=deps.interval and deps.interval()
+    if type(stated)=="number" and stated>0.0001 and stated<0.25 then pulse_interval=stated end
     last_pulse=now
     pulse_count=pulse_count+1
     pulse=true;pulse_time=nil

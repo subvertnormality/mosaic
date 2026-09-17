@@ -94,6 +94,8 @@ local function queue(ms,message)
     local origin=util.time()
     delay_queue=delay_line.new({now=function() return util.time()-origin end,
       resolution=0.000001,
+      -- The clock's own pulse spacing, so the delay counts real pulses.
+      interval=function() return m_clock and m_clock.pulse_seconds and m_clock.pulse_seconds() end,
       begin=function() m_midi.begin_output_batch() end,
       flush=function() m_midi.flush_output_batch(true) end,send=emit})
     if batching then delay_queue:begin() end
