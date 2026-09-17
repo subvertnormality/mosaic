@@ -130,7 +130,11 @@ function delay_line.new(deps)
     local wait=ms/1000
     local now=deps.now()
     if not (pulse_interval and last_pulse and pulsing(now)) then return anchor+wait,nil end
-    local pulses=math.ceil((anchor+wait-last_pulse)/pulse_interval-1e-9)
+    -- Count from the pulse itself, not from the moment inside it when the
+    -- message happened to be made: a lead of exactly so many pulses must not
+    -- become one more because the step spent a moment working first.
+    local base=pulse and last_pulse or now
+    local pulses=math.ceil((base+wait-last_pulse)/pulse_interval-1e-9)
     if pulses<1 then pulses=1 end
     return last_pulse+pulses*pulse_interval,pulse_count+pulses
   end
