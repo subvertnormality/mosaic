@@ -204,6 +204,18 @@ def functional_preflight(runner,driver,trace,spec):
         raise AssertionError(('Functional preflight failed',value))
     return value
 
+CHANNEL_STATE_LUA=("do local d=program.get(); local sp=d.selected_song_pattern; print('__STATE__selected_channel='..tostring(d.selected_channel)..' page='..tostring(d.selected_page)..' song_pattern='..tostring(sp)..' record='..tostring(params:get('record'))) "
+    "for c=1,2 do local ch=program.get_channel(sp,c); local wp=ch.working_pattern or {}; local notes={} local trigs={} for s=1,16 do notes[s]=tostring((wp.note_values or {})[s]) trigs[s]=tostring((wp.trig_values or {})[s]) end "
+    "local ids={} for i=1,10 do local p=ch.trig_lock_params[i] ids[i]=p and tostring(p.id or p.param_id) or '-' end "
+    "local locks=0 for _,slots in pairs(ch.step_trig_lock_banks or {}) do for _ in pairs(slots) do locks=locks+1 end end "
+    "print('__STATE__ch'..c..' octave='..tostring(ch.octave)..' transpose='..tostring(select(2,pcall(step.calculate_step_transpose,c)))..' mute='..tostring(ch.mute)..' step='..tostring(program.get_current_step_for_channel(c))..' notes='..table.concat(notes,',')..' trigs='..table.concat(trigs,',')..' lock_params='..table.concat(ids,',')..' step_lock_entries='..locks..' fixed='..tostring(params:get('midi_device_params_channel_'..c..'_2'))..' qfixed='..tostring(params:get('midi_device_params_channel_'..c..'_3'))) end end")
+
+def channel_state_dump(runner):
+    """Read-only: the selected channel, page and channels 1-2 settings that shape their notes and locks."""
+    import re
+    output=runner.maiden.eval(CHANNEL_STATE_LUA,allow_lua_error=True)
+    return re.findall(r'__STATE__([^\n]*)',output)
+
 def write_fixture_manifest(directory,case_id,spec,source):
     """Record what a saved project fixture holds and which build produced it."""
     import hashlib,subprocess
@@ -280,6 +292,10 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                     oracle['gates']['stimulus_complete']=stimulus['complete'];oracle['passed']=oracle['passed'] and stimulus['complete']
                 failure=None
             except AssertionError as error:
+                # Keep what the device held when a window's output was wrong, so an
+                # intermittent state change can be traced (see INCIDENTS.md 22:24).
+                try:(runner.out/('oracle-failure%s.json'%suffix)).write_text(json.dumps({'failure':repr(error)[:2000],'midi_input':state.get('midi_input'),'channel_state':channel_state_dump(runner)},indent=2)+'\n')
+                except Exception as dump_error:(runner.out/('oracle-failure%s.json'%suffix)).write_text(json.dumps({'failure':repr(error)[:2000],'dump_error':repr(dump_error)})+'\n')
                 if windows==1:raise
                 oracle=None;failure=repr(error)[:2000]
             results.append({'window':window,'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording) if recording else None,'resource_samples':recording['samples'] if recording else None,'runtime_identity':recording['identity'] if recording else None,'lua_timings_recorded':len(state.get('lua_timings',[])) if timing_trace else None,'passed':bool(oracle and oracle['passed'])})
