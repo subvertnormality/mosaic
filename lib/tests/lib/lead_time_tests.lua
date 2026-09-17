@@ -364,3 +364,27 @@ function test_lead_time_zero_never_holds_values_between_close_notes()
     luaunit.assert_equals(#timers, 0)
   end)
 end
+
+-- A value's gap midpoint is measured from its step's pulse, like its note. A
+-- stall between a pulse's releases and its locks must not push the value later.
+function test_lead_time_value_midpoint_uses_the_pulse_time_after_a_stall()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    run_until(timers, advance, .040)
+    out.begin_output_batch()
+    out:note_off(60, 100, 1, 1, 25)
+    advance(.042)
+    out.cc(74, nil, 20, 1, 1)
+    out.flush_output_batch()
+    out:note_on(62, 100, 1, 1, 25)
+    out.flush_output_batch(true)
+    run_until(timers, advance, 1)
+    local rows = wire_order(writes)
+    local value = rows[3]
+    luaunit.assert_equals({value[2], value[4]}, {176, 20})
+    luaunit.assert_true(near(value[1], .045), "value at " .. value[1])
+    luaunit.assert_equals({rows[4][2], rows[4][3]}, {128, 60}); luaunit.assert_true(near(rows[4][1], .065))
+    luaunit.assert_equals({rows[5][2], rows[5][3]}, {144, 62}); luaunit.assert_true(near(rows[5][1], .065))
+  end)
+end

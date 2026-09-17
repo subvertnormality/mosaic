@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "manual": "README.md",
-  "manual_sha256": "c4f5f7680c428ea3204ffeb5b31a568afccdc035dc2953db7e1dddfd5729c44b",
+  "manual_sha256": "9aaabac81e023367e6ce802946e22b756a0ada2c2a94a3215ed20831123b3178",
   "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
   "status": "incomplete",
   "sections": [
@@ -1522,7 +1522,7 @@
   "manual_sources": [
     {
       "path": "README.md",
-      "sha256": "c4f5f7680c428ea3204ffeb5b31a568afccdc035dc2953db7e1dddfd5729c44b"
+      "sha256": "9aaabac81e023367e6ce802946e22b756a0ada2c2a94a3215ed20831123b3178"
     },
     {
       "path": "cheat_sheet.html",
@@ -1829,7 +1829,9 @@
         "M-SYNC-LEAD-010",
         "M-SYNC-LEAD-011",
         "M-SYNC-LEAD-012",
-        "M-SYNC-LEAD-013"
+        "M-SYNC-LEAD-013",
+        "M-SYNC-LEAD-014",
+        "M-SYNC-LEAD-015"
       ],
       "status": "partial-domain-coverage",
       "domain": "Cold20/100/300BPM and warmed startup; repeated Start; release ordering; source handoff; pinned-norns Continue/SPP behavior; two-port input selection; alternating +/-5ms jitter; one missing or extra pulse; abrupt and gradual100-to150BPM changes; and500ms loss with explicit-Start recovery. Three-tick2ms burst with exact phase compensation; sixteen-bar1536-clock/256-onset accumulated phase; larger stochastic jitter, repeated burst corruption, loss without an explicit transport recovery, simultaneous source edits and remaining feature interactions are pending. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected. M-STARTUP-TRANSPORT-001 (E and D, 3 fresh D repeats): before any input a fresh start sends no MIDI transport and a start that loads the autosave sends one Stop to each connected port (README silent; arbitrated SEM-018, characterisation). M-SYNC-023 adds a real-time-only one-second Lua event-thread stall at 300 BPM: the native scheduler delivers Clock and Stop on deadline, and no reconciled stale note may sound after Stop (README external MIDI transport; post-Stop burst is characterized).",
@@ -5799,7 +5801,9 @@
         "M-SYNC-LEAD-010",
         "M-SYNC-LEAD-011",
         "M-SYNC-LEAD-012",
-        "M-SYNC-LEAD-013"
+        "M-SYNC-LEAD-013",
+        "M-SYNC-LEAD-014",
+        "M-SYNC-LEAD-015"
       ],
       "status": "in_progress",
       "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-XA-005-NB-LOCK (real time, nb-audio profile, 3 runs): a Doubledecker Shape 1 (norns parameter) step lock plays across the locked step without a Lua error; lock application and restoration are pinned by Lua units. The baseline raised at Play (defect norns-param-lock-channel, fixed).",

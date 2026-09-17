@@ -206,6 +206,11 @@ value settles in the second half. This applies to every CC and NRPN value on tha
 channel, including assigned values and slides. When notes are further apart,
 values leave at step time as above.
 
+The lead covers the time a receiver takes for a parameter change to take effect,
+so every value follows the same rule whether or not its step has a note: trigless
+locks, assigned values and slide values leave ahead of the step they belong to and
+take effect as that step is heard.
+
 Outgoing MIDI Clock, Start, Continue, Stop and song position receive the same delay
 on every port. Mosaic delays the existing output without changing saved system
 clock settings, and restores its output hooks on cleanup. Stop and panic drain

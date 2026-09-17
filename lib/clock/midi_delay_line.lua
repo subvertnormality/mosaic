@@ -84,6 +84,15 @@ function delay_line.new(deps)
     end
   end
   function q:now() return deps.now() end
+  -- The time a pulse's delayed output is measured from: its first delayed
+  -- message, or now outside a pulse. Values and notes of one step share it.
+  function q:time()
+    if pulse then
+      if not pulse_time then pulse_time=deps.now() end
+      return pulse_time
+    end
+    return deps.now()
+  end
   -- Send a message at an absolute deadline on this line's clock. Deadlines may
   -- arrive out of order across channels; equal deadlines keep push order.
   function q:push_at(due,message)

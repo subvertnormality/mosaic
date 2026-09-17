@@ -122,11 +122,14 @@ function m_midi.parameter_deadline(port, channel)
   if lead_time_ms == 0 or not delay_queue then return nil end
   channel = channel or 1
   local now = delay_queue:now()
+  -- Measure from the step's pulse, as its note is: a stall inside the pulse
+  -- must not move the value later than the note it belongs to.
+  local heard = delay_queue:time() + lead_time_ms / 1000
   local due = now
   local notes = last_note_due[port]
   local previous = notes and notes[channel]
   if previous then
-    local midpoint = (previous + now + lead_time_ms / 1000) / 2
+    local midpoint = (previous + heard) / 2
     if midpoint > due then due = midpoint end
   end
   -- A held value is never overtaken by a later one on the same channel.
