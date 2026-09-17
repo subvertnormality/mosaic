@@ -3809,7 +3809,9 @@
         "M-REC-PARAM-030",
         "M-REC-PARAM-029",
         "M-REC-PARAM-028",
-        "M-PARAM-DIAL-OFF-001"
+        "M-PARAM-DIAL-OFF-001",
+        "M-PATCH-065",
+        "M-PATCH-066"
       ],
       "status": "in_progress",
       "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -5770,7 +5772,9 @@
         "M-PARAM-047",
         "M-TRIPLE-005",
         "M-XA-005-NB-LOCK",
-        "M-XA-006-NB-CHORD-ACCEL"
+        "M-XA-006-NB-CHORD-ACCEL",
+        "M-PATCH-065",
+        "M-PATCH-066"
       ],
       "status": "in_progress",
       "domain": "All64 steps distributed across all10 slots through native held-step input, plus exhaustive64x10 model storage; sentinels, trig/trigless, overwrite, live future-step editing and song isolation. M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-XA-005-NB-LOCK (real time, nb-audio profile, 3 runs): a Doubledecker Shape 1 (norns parameter) step lock plays across the locked step without a Lua error; lock application and restoration are pinned by Lua units. The baseline raised at Play (defect norns-param-lock-channel, fixed).",

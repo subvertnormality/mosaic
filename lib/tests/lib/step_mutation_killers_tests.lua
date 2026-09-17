@@ -285,6 +285,113 @@ function test_step_killer_norns_parameter_without_off_value_treats_minus_one_as_
   end)
 end
 
+-- A device parameter can sit in two slots at once: the Syntakt device map assigns
+-- Filter frequency automatically and a player can also assign it by hand. Both
+-- slots write the same MIDI address, so whichever sends last is what the device
+-- holds. A lock on one slot must not be overwritten by the other slot's assigned
+-- value (user report 2026-09-17: a Filter frequency lock never reached the Syntakt).
+local function syntakt_filter_frequency(param_id)
+  return {
+    type = "midi", id = "filter_filter_frequency", param_id = param_id, off_value = -1,
+    cc_msb = 74, cc_min_value = -1, cc_max_value = 127,
+    nrpn_msb = 1, nrpn_lsb = 20, nrpn_min_value = -1, nrpn_max_value = 16383, nrpn_lsb_mode = "standard"
+  }
+end
+
+function test_step_killer_lock_is_not_overwritten_by_the_same_parameter_in_a_later_slot()
+  with_env(function(env)
+    local channel = working_pattern({1})
+    channel.trig_lock_params[1] = syntakt_filter_frequency("by_hand")
+    channel.trig_lock_params[2] = syntakt_filter_frequency("mapped")
+    env.set_param("by_hand", 11261)
+    env.set_param("mapped", 11261)
+    lock(channel, 1, 1, 7262)
+
+    step_under_test.process_params(channel, 1)
+
+    local sent = events_of(env, "nrpn")
+    luaunit.assert_equals(#sent, 1)
+    luaunit.assert_equals({sent[1].msb, sent[1].lsb, sent[1].value}, {1, 20, 7262})
+  end)
+end
+
+function test_step_killer_lock_is_not_preceded_by_the_same_parameter_in_an_earlier_slot()
+  with_env(function(env)
+    local channel = working_pattern({1})
+    channel.trig_lock_params[1] = syntakt_filter_frequency("mapped")
+    channel.trig_lock_params[2] = syntakt_filter_frequency("by_hand")
+    env.set_param("mapped", 11261)
+    env.set_param("by_hand", 11261)
+    lock(channel, 1, 2, 7262)
+
+    step_under_test.process_params(channel, 1)
+
+    local sent = events_of(env, "nrpn")
+    luaunit.assert_equals(#sent, 1)
+    luaunit.assert_equals(sent[1].value, 7262)
+  end)
+end
+
+function test_step_killer_a_lock_only_holds_back_slots_writing_the_same_address()
+  with_env(function(env)
+    local channel = working_pattern({1})
+    channel.trig_lock_params[1] = syntakt_filter_frequency("by_hand")
+    channel.trig_lock_params[2] = syntakt_filter_frequency("other_channel")
+    channel.trig_lock_params[2].channel = 9
+    channel.trig_lock_params[3] = {
+      type = "midi", id = "filter_resonance", param_id = "resonance", off_value = -1,
+      cc_msb = 75, cc_min_value = -1, cc_max_value = 127
+    }
+    env.set_param("by_hand", 11261)
+    env.set_param("other_channel", 500)
+    env.set_param("resonance", 40)
+    lock(channel, 1, 1, 7262)
+
+    step_under_test.process_params(channel, 1)
+
+    local nrpn = events_of(env, "nrpn")
+    luaunit.assert_equals(#nrpn, 2)
+    luaunit.assert_equals({nrpn[1].value, nrpn[1].channel}, {7262, midi_channel_of(1)})
+    luaunit.assert_equals({nrpn[2].value, nrpn[2].channel}, {500, 9})
+    luaunit.assert_equals(events_of(env, "cc")[1].value, 40)
+  end)
+end
+
+function test_step_killer_an_off_lock_leaves_the_same_parameter_in_another_slot_sending()
+  with_env(function(env)
+    local channel = working_pattern({1})
+    channel.trig_lock_params[1] = syntakt_filter_frequency("by_hand")
+    channel.trig_lock_params[2] = syntakt_filter_frequency("mapped")
+    env.set_param("by_hand", 11261)
+    env.set_param("mapped", 11261)
+    lock(channel, 1, 1, -1)
+
+    step_under_test.process_params(channel, 1)
+
+    local sent = events_of(env, "nrpn")
+    luaunit.assert_equals(#sent, 1)
+    luaunit.assert_equals(sent[1].value, 11261)
+  end)
+end
+
+function test_step_killer_a_slide_is_not_overwritten_by_the_same_parameter_in_another_slot()
+  with_env(function(env)
+    local channel = working_pattern({1, 2, 3})
+    channel.trig_lock_params[1] = syntakt_filter_frequency("by_hand")
+    channel.trig_lock_params[2] = syntakt_filter_frequency("mapped")
+    env.set_param("by_hand", 16000)
+    env.set_param("mapped", 16000)
+    lock(channel, 1, 1, 1000)
+    lock(channel, 3, 1, 9000)
+    program.toggle_step_param_slide(channel, 1, 1)
+
+    env.start()
+    pulse(40)
+
+    for _, e in ipairs(events_of(env, "nrpn")) do luaunit.assert_not_equals(e.value, 16000) end
+  end)
+end
+
 -- README.md:966-971 "Param Slides": a slide can be locked to a single step ("This
 -- locks the parameter slide to the selected step, causing it to transition smoothly
 -- to the next lock") without the channel-wide slide (README.md:964).
