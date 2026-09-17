@@ -208,7 +208,7 @@ def timeline(events, lead_ms, field, marker, stopped, controlled):
     notes = [e for e in port if e['bytes'][0] == 144 and e['bytes'][2] > 0]
     assert len(notes) >= 10, ('Too few notes', lead_ms, len(notes))
     origin = notes[0][field] - lead_ms * 1_000_000
-    live = marker is not None and not controlled
+    live = marker is not None
     limit = marker if live else stopped
     values = [e for e in port if e['bytes'][:2] == [176, 1]]
     in_force = []; current = None; position = 0
@@ -266,9 +266,10 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             # README Lock lead time: a value never changes the receiver before the previous note sounds.
             assert value['index'] > run_notes[previous]['index'], dict(rule='value after previous note', condition=name, lead_ms=lead_ms, value=value['bytes'][2], note=previous)
         if previous is None:
-            if not controlled:
-                continue  # Play to first note varies by up to a pulse in real time.
-            expected = x
+            # The stored value sent at Play is not timed: the wait from Play to the
+            # first note is whatever is left of the clock pulse, and each play starts
+            # at its own phase. Its order before the first note is still checked.
+            continue
         else:
             # README Lock lead time: step time, or halfway between the previous
             # note-on and this step's heard time when they are close.
