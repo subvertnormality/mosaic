@@ -288,29 +288,34 @@ def lock_lead_clock_matrix(c, name):
     reference = runs[0]
     notes = [n for n in reference['notes'] if reference['timed'](n)]
     start = notes[0][field]
-    # Step 5 has no trig, so the gap over it spans two steps; judge the feel from
-    # the one-step gaps (shorter than one and a half of the shortest gap).
-    def one_step_gaps(lo=0, hi=float('inf')):
-        pairs = [(b[field] - a[field], b[field] - start) for a, b in zip(notes, notes[1:])]
-        window = [g for g, t in pairs if lo <= t < hi]
-        shortest = min(window)
-        return [g for g in window if g < 1.5 * shortest]
-    tolerance = 1000 if controlled else 10_000_000
+    # Straight steps fall on a grid of whole steps (step 5 has no trig, so some
+    # gaps span two); swing and shuffle move notes off that grid by 18 ms or more
+    # here. Real time allows the existing 10 ms host jitter for straight timing.
+    factor = {'x2': 2, 'x4': 4, 'x16': 16}.get(condition.get('clock'), 1)
+    step_ns = 15 / condition['bpm'] * 1e9 / factor
+    def off_grid(lo=0, hi=float('inf')):
+        worst = 0
+        for a, b in zip(notes, notes[1:]):
+            if lo <= b[field] - start < hi:
+                gap = b[field] - a[field]
+                worst = max(worst, abs(gap - max(1, round(gap / step_ns)) * step_ns))
+        return worst
+    straight = 1000 if controlled else 10_000_000
+    felt = 12_000_000
     if condition.get('swing') is not None or condition.get('shuffle'):
         if not condition.get('toggle'):
-            gaps = one_step_gaps()
             # The feel must actually move notes, or the case would test straight time.
-            assert max(gaps) - min(gaps) > 10_000_000, dict(rule='feel audible in reference', condition=name, gaps_ns=gaps[:12])
+            assert off_grid() > felt, dict(rule='feel audible in reference', condition=name, off_grid_ns=off_grid())
     if condition.get('toggle'):
         # README Clocks, Swing and Shuffle: straight until global step 64, felt
         # until step 128, then straight again.
         cycle_ns = 64 * 15 / condition['bpm'] * 1e9
-        before = one_step_gaps(.25e9, cycle_ns - .25e9)
-        during = one_step_gaps(cycle_ns + .25e9, 2 * cycle_ns - .25e9)
-        after = one_step_gaps(2 * cycle_ns + .25e9)
-        assert max(before) - min(before) <= tolerance, dict(rule='straight before step 64', condition=name, gaps_ns=before[:12])
-        assert max(during) - min(during) > 10_000_000, dict(rule='feel applied at step 64', condition=name, gaps_ns=during[:12])
-        assert max(after) - min(after) <= tolerance, dict(rule='straight again after step 128', condition=name, gaps_ns=after[:12])
+        before = off_grid(.25e9, cycle_ns - .25e9)
+        during = off_grid(cycle_ns + .25e9, 2 * cycle_ns - .25e9)
+        after = off_grid(2 * cycle_ns + .25e9)
+        assert before <= straight, dict(rule='straight before step 64', condition=name, off_grid_ns=before)
+        assert during > felt, dict(rule='feel applied at step 64', condition=name, off_grid_ns=during)
+        assert after <= straight, dict(rule='straight again after step 128', condition=name, off_grid_ns=after)
     summary = {}
     for lead in LEADS[1:]:
         summary[str(lead)] = compare(name, condition, lead, runs[lead], runs[0], field, controlled)
