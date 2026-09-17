@@ -124,28 +124,30 @@ def build(c, condition):
         # Keep the feel's settings but start straight, with the type dial selected
         # so a live toggle is a single E3 turn and K3 (README Clocks, Swing and
         # Shuffle: playing edits apply at the next reset, global step 64).
-        c.enc(2, 1); c.enc(3, -type_turns(condition)); c.key(3)
+        type_dial(c); c.enc(3, -type_turns(condition)); c.key(3)
 
 
 def type_turns(condition):
     return 1 if condition.get('swing') is not None else 2
 
 
-def apply_feel(c, condition, on=True):
-    """Select the swing or shuffle dial from the clock rate dial and return to it."""
+def type_dial(c):
+    """Select the swing/shuffle type dial: dial selection stops at the first dial
+    (the clock rate), so move there first rather than counting from wherever a
+    previous edit left the selection."""
+    c.enc(2, -10); c.enc(2, 1)
+
+
+def apply_feel(c, condition):
+    """Set the condition's local swing or shuffle, starting from the type dial."""
     if condition.get('swing') is not None:
-        c.enc(2, 1); c.enc(3, 1 if on else -1); c.key(3)
-        if on:
-            c.enc(2, 1); c.enc(3, condition['swing'] + 51); c.key(3); c.enc(2, -1)
-        c.enc(2, -1)
+        type_dial(c); c.enc(3, 1); c.key(3)
+        c.enc(2, 1); c.enc(3, condition['swing'] + 51); c.key(3)
     elif condition.get('shuffle'):
-        c.enc(2, 1); c.enc(3, 2 if on else -2); c.key(3)
-        if on:
-            c.enc(2, 1); c.enc(3, 3); c.key(3)    # Heavy
-            c.enc(2, 1); c.enc(3, 4); c.key(3)    # basis 6
-            c.enc(2, 1); c.enc(3, 100); c.key(3)  # full amount
-            c.enc(2, -3)
-        c.enc(2, -1)
+        type_dial(c); c.enc(3, 2); c.key(3)
+        c.enc(2, 1); c.enc(3, 3); c.key(3)    # Heavy
+        c.enc(2, 1); c.enc(3, 4); c.key(3)    # basis 6
+        c.enc(2, 1); c.enc(3, 100); c.key(3)  # full amount
 
 
 def play(c, condition, seconds=3.0):
@@ -228,8 +230,9 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             assert abs(run['gates'][i] - reference['gates'][i]) <= tolerance, dict(rule='gate unchanged', condition=name, lead_ms=lead_ms, note=i)
     last_note = ref_notes[count - 1]['index']
     ref_values = [v for v in reference['values'] if v['index'] < last_note]
-    run_last = run_notes[count - 1]['index']
-    run_values = [v for v in run['values'] if v['index'] < run_last]
+    # Values sent while the last compared note waits for its lead may follow in
+    # the run window, so the reference values must be a prefix of the run's.
+    run_values = run['values'][:len(ref_values)]
     assert [v['bytes'][2] for v in run_values] == [v['bytes'][2] for v in ref_values], dict(rule='same values in the same order', condition=name, lead_ms=lead_ms, run=[v['bytes'][2] for v in run_values], reference=[v['bytes'][2] for v in ref_values])
     ref_note_times = [rel(n, reference) for n in ref_notes[:count]]
     queued = None; timed_values = 0
