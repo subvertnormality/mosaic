@@ -10,7 +10,7 @@ class Tests(unittest.TestCase):
         flat=[case for shard in shards for case in shard]
         self.assertEqual(len(flat),len(set(flat)))
         self.assertEqual(set(flat),set(module.select('base-midi',0,1)))
-        self.assertEqual(796,len(flat))
+        self.assertEqual(797,len(flat))
     def test_special_profiles_are_selected_exactly(self):
         self.assertEqual(4,len(module.select('midi-modulation',0,1)))
         self.assertEqual(3,len(module.select('nb-audio',0,1)))
