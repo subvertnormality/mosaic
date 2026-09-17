@@ -87,7 +87,7 @@ local function emit(message)
     port[message.kind](port,message.note,message.velocity,message.channel)
   end
 end
-local function queue(ms,message)
+local function queue(ms,message,gridded)
   if not delay_queue then
     -- Subtract the epoch before adding milliseconds: adding 0.005 to Unix
     -- wall time loses fractions of a microsecond through float cancellation.
@@ -100,7 +100,7 @@ local function queue(ms,message)
       flush=function() m_midi.flush_output_batch(true) end,send=emit})
     if batching then delay_queue:begin() end
   end
-  return delay_queue:push(ms,message)
+  return delay_queue:push(ms,message,gridded)
 end
 
 -- README Lock lead time: a parameter value normally leaves at its step time,
@@ -180,7 +180,9 @@ function m_midi.install_clock_hooks()
           local ms=lead_time_ms
           if name=="stop" then m_midi.drain_pending_output() end
           if ms==0 then return original(self,...) end
-          queue(ms,{port=self,device=self.device,method=original,args={...}})
+          -- The clock's own stream is on the pulse grid even though it is sent
+          -- between pulses, so it leaves on the same pulses the notes do.
+          queue(ms,{port=self,device=self.device,method=original,args={...}},true)
         end
         clock_hooks[#clock_hooks+1]={port=port,name=name,original=original,wrapper=wrapper}
         port[name]=wrapper

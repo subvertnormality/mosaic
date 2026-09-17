@@ -126,18 +126,22 @@ function delay_line.new(deps)
   -- and when that pulse falls. Everything delayed rides the same grid, whether
   -- it was produced inside a pulse (a step's notes) or between pulses (MIDI
   -- clock ticks), so a lead never moves one against another.
-  local function schedule(anchor,ms)
+  -- What a pulse produces rides the pulse grid, and so does the clock's own
+  -- stream, which is made between pulses but is on the grid by nature. Anything
+  -- else made between pulses is off the grid on purpose - a swung or strummed
+  -- note, a note played live - and moving it to a pulse would quantise the feel
+  -- away, so it keeps its exact deadline.
+  local function schedule(anchor,ms,gridded)
     local wait=ms/1000
     local now=deps.now()
-    -- Only what a pulse produces rides the pulse grid. A message made between
-    -- pulses is off the grid on purpose - a swung or strummed note, a note
-    -- played live - and moving it to a pulse would quantise the feel away, so
-    -- it keeps its exact deadline.
-    if not (pulse and pulse_interval and last_pulse and pulsing(now)) then return anchor+wait,nil end
+    if not ((pulse or gridded) and pulse_interval and last_pulse and pulsing(now)) then
+      return anchor+wait,nil
+    end
     -- Count from the pulse itself, not from the moment inside it when the
     -- message happened to be made: a lead of exactly so many pulses must not
     -- become one more because the step spent a moment working first.
-    local pulses=math.ceil(wait/pulse_interval-1e-9)
+    local from=pulse and last_pulse or anchor
+    local pulses=math.ceil((from+wait-last_pulse)/pulse_interval-1e-9)
     if pulses<1 then pulses=1 end
     return last_pulse+pulses*pulse_interval,pulse_count+pulses
   end
@@ -193,7 +197,7 @@ function delay_line.new(deps)
     pulse=false;pulse_time=nil
     for _,lane in pairs(lanes) do lane.pulse_group=nil;arm(lane) end
   end
-  function q:push(ms,message)
+  function q:push(ms,message,gridded)
     if not ms or ms==0 then deps.send(message);return end
     local lane=lanes[ms]
     if not lane then
@@ -204,7 +208,7 @@ function delay_line.new(deps)
     local group=pulse and lane.pulse_group
     if not group then
       if pulse and not pulse_time then pulse_time=deps.now() end
-      local due,pulse_due=schedule(pulse_time or deps.now(),ms)
+      local due,pulse_due=schedule(pulse_time or deps.now(),ms,gridded)
       group={due=due,pulse_due=pulse_due,items={}}
       lane.groups[#lane.groups+1]=group
       if pulse then lane.pulse_group=group end
