@@ -193,9 +193,14 @@ that smooth incoming controllers. Set it to **0** for the original output timing
 The value is saved with Mosaic's project settings.
 
 Locks leave at their usual step time. Sequenced and live MIDI-thru note-ons and
-note-offs move later by the selected amount, preserving gate lengths. No step is
-looked ahead: probability, conditions, fills, random notes, slides, strum, arps and
-micro-timing still make their decisions at the same times. N.b. players are unaffected.
+note-offs move later by the selected amount, preserving gate lengths. A delayed
+note leaves on one of Mosaic's own clock pulses, a counted number of pulses after
+the step that produced it, so it stays exactly as steady as an undelayed note.
+That rounds the wait up to whole pulses: at 130 bpm a pulse is 4.8 ms, so a 25 ms
+lead is six pulses, 28.8 ms. The lead is therefore never shorter than the setting,
+and never more than one pulse longer. No step is looked ahead: probability,
+conditions, fills, random notes, slides, strum, arps and micro-timing still make
+their decisions at the same times. N.b. players are unaffected.
 
 Every note sounds with its own step's values. When two notes on the same MIDI
 channel are less than twice the lead apart (a fast tempo, a fast channel clock,
