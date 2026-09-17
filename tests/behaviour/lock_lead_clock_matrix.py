@@ -45,9 +45,12 @@ STEP_LOCKS = ((1, 11), (2, None), (3, 33), (4, 'off'), (5, 55))
 # Value in force at the notes of steps 1-4 (step 5 has no trig).
 IN_FORCE = (11, 20, 33, 33)
 LEADS = (0, 25, 50)
-GLOBAL_LENGTH = 8      # global steps between resets, where playing feel edits apply
-TOGGLE_ON_AT = .6      # seconds into playback
-TOGGLE_HOLD = 2.0      # seconds the feel stays on before switching back
+# A playing swing or shuffle edit applies at the next reset of the song's global
+# pattern, which is 64 steps by default. A shorter global length was tried and the
+# edit then never applied, so the cases keep the default and wait for its reset.
+GLOBAL_LENGTH = 64     # global steps between resets, where playing feel edits apply
+TOGGLE_ON_AT = .5      # seconds into playback
+TOGGLE_HOLD = None     # set from the global reset interval
 CLOCK_INDEX = {'/1': 13, 'x2': 10, 'x4': 7, 'x16': 1}
 
 CONDITIONS = {
@@ -90,22 +93,6 @@ def set_tempo(c, bpm):
     leave_menu_home(c)
 
 
-def set_global_length(c, length):
-    """Set the song's global pattern length from its grid fader, so a playing
-    swing or shuffle edit reaches its next reset in about a second."""
-    import base64
-    from frame_oracle import render
-    c.tap(6, 8); c.tap(2, 7)
-    for _ in range(length - 1):
-        c.tap(8, 7)
-    expected = render([(0, 62, 10, 'Global pattern length: ' + str(length))])
-    def feedback(state):
-        actual = base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[(y * 128 + x) * 4 + k] == expected[(y * 128 + x) * 4 + k] for y in range(55, 64) for x in range(128) for k in range(3))
-    c.wait(feedback)
-    c.tap(3, 8)
-
-
 def leave_menu_home(c):
     """From a parameter group, back out to the PARAMETERS list top and close the menu
     on the HOME page, as the lead-time setup does, so later menu paths start there."""
@@ -141,8 +128,6 @@ def build(c, condition):
             c.action(type='grid', x=step, y=4, state=0)
     if condition.get('slide'):
         c.key(3)  # README Param Slides: K3 toggles the selected parameter's global slide.
-    if condition.get('toggle'):
-        set_global_length(c, GLOBAL_LENGTH)
     c.enc(1, 2); open_clocks(c)
     clock = condition.get('clock')
     if clock:
@@ -193,12 +178,12 @@ def play(c, condition, seconds=2.0):
     c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
     marker = None
     if condition.get('toggle'):
+        cycle = GLOBAL_LENGTH * 15 / condition['bpm']
         hold(TOGGLE_ON_AT)
         c.enc(3, toggle_turns(condition)); c.key(3)      # applies at the next reset
-        hold(TOGGLE_HOLD)
+        hold(cycle + 1.0 - TOGGLE_ON_AT)
         c.enc(3, -toggle_turns(condition)); c.key(3)     # straight again at the reset after
-        cycle = GLOBAL_LENGTH * 15 / condition['bpm']
-        hold(math.ceil((TOGGLE_ON_AT + TOGGLE_HOLD) / cycle) * cycle + 1.0 - (TOGGLE_ON_AT + TOGGLE_HOLD))
+        hold(cycle)
     else:
         hold(seconds / 2)
         if condition.get('tempo_change'):
@@ -339,8 +324,8 @@ def lock_lead_clock_matrix(c, name):
         # until step 128, then straight again.
         import math
         cycle_ns = GLOBAL_LENGTH * 15 / condition['bpm'] * 1e9
-        on_at = math.ceil(TOGGLE_ON_AT * 1e9 / cycle_ns) * cycle_ns
-        off_at = math.ceil((TOGGLE_ON_AT + TOGGLE_HOLD) * 1e9 / cycle_ns) * cycle_ns
+        on_at = cycle_ns
+        off_at = 2 * cycle_ns
         before = off_grid(.15e9, on_at - .15e9)
         during = off_grid(on_at + .15e9, off_at - .15e9)
         after = off_grid(off_at + .15e9)
