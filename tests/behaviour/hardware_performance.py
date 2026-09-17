@@ -200,9 +200,37 @@ class HardwareLane:
         code='load(%s)(%d)'%(json.dumps(LUA_LOAD_SOURCE),int(iterations))
         maiden._send((code+'\n').encode()+b'\0')
 
+TRANSPORT_STATE_LUA="do local keys={} for _,k in ipairs(m_grid.get_pressed_keys()) do keys[#keys+1]=k[1]..','..k[2] end print('__TRANSPORT__'..tostring(m_clock.is_playing())..'|'..table.concat(keys,';')) end"
+
+def transport_state(runner):
+    """Read-only, between windows: whether the transport plays, and which grid keys Mosaic holds pressed."""
+    import re
+    match=re.search(r'__TRANSPORT__(true|false)\|([0-9,;]*)',runner.maiden.eval(TRANSPORT_STATE_LUA,allow_lua_error=True))
+    if not match:raise RuntimeError('Transport state unavailable')
+    return match.group(1)=='true',[tuple(int(v) for v in key.split(',')) for key in match.group(2).split(';') if key]
+
+def ready_to_play(runner,driver,log):
+    """Before a window: the transport must be stopped with no grid key held.
+
+    The play button toggles, and a key Mosaic still holds turns the next tap
+    into a two-key press, so either would invert or swallow the window's play.
+    Release held keys and stop a running transport here, outside the window."""
+    playing,held=transport_state(runner)
+    for x,y in held:driver.action(type='grid',x=x,y=y,state=0);driver.elapse(.05)
+    if playing:driver.tap(1,8);driver.elapse(.3)
+    playing_after,held_after=transport_state(runner)
+    log.append({'held_keys_released':held,'was_playing':playing,'playing_after':playing_after,'held_after':held_after})
+    if playing_after or held_after:raise AssertionError(('Transport not ready for a window',log[-1]))
+
+def stopped_after_window(runner,log):
+    """After a window's stop tap: a transport still playing means its taps were swallowed or inverted."""
+    playing,held=transport_state(runner)
+    log.append({'stopped_after_window':not playing,'held_keys':held})
+    return not playing
+
 def functional_preflight(runner,driver,trace,spec):
     """Short unmeasured playback proving every channel sounds (and slides) before timing windows."""
-    trace.reset();driver.tap(1,8);driver.elapse(2.0);driver.tap(1,8);driver.elapse(.4);state=driver.snapshot()
+    ready_to_play(runner,driver,[]);trace.reset();driver.tap(1,8);driver.elapse(2.0);driver.tap(1,8);driver.elapse(.4);state=driver.snapshot()
     channels=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==144 and e['bytes'][2]>0 and e['port']==1})
     cc1=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==1 and e['port']==1})
     expected=list(range(spec['channels']))
@@ -281,8 +309,10 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         preflight=functional_preflight(runner,driver,trace,spec)
         timings=TimingTrace(runner.maiden,native=native_screen_trace,count=redraw_count_trace) if timing_trace else None
         if timings:timings.install()
+        transport_log=[]
         for window in range(1,windows+1):
             recording=None;suffix='' if windows==1 else '-window-%d'%window
+            ready_to_play(runner,driver,transport_log)
             trace.reset();sampler=(OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler()) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
             if threads:threads.start()
             sampler.start();time.sleep(.25)
@@ -294,7 +324,9 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
             if threads:(runner.out/('thread-samples%s.jsonl'%suffix)).write_text(threads.stop())
             recovery=None
+            window_stopped=stopped_after_window(runner,transport_log)
             try:
+                if not window_stopped:raise AssertionError(('Transport still playing after the window stop tap: its play and stop taps were swallowed or inverted',transport_log[-2:]))
                 if spec.get('oracle')=='recovery':
                     recovery=recovery_oracle(state['midi'],spec['channels'],driver.expected_step_seconds,spec['loads'][0][0])
                     oracle={'timing':{'p99_ns':recovery['recovered_p99_ns'],'maximum_ns':recovery['recovered_max_ns']},'final_phase_error_ns':recovery['final_phase_error_ns'],
@@ -307,7 +339,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             except AssertionError as error:
                 # Keep what the device held when a window's output was wrong, so an
                 # intermittent state change can be traced (see INCIDENTS.md 22:24).
-                try:(runner.out/('oracle-failure%s.json'%suffix)).write_text(json.dumps({'failure':repr(error)[:2000],'midi_input':state.get('midi_input'),'channel_state':channel_state_dump(runner)},indent=2)+'\n')
+                try:(runner.out/('oracle-failure%s.json'%suffix)).write_text(json.dumps({'failure':repr(error)[:2000],'midi_input':state.get('midi_input'),'channel_state':channel_state_dump(runner),'transport':transport_log[-2:]},indent=2)+'\n')
                 except Exception as dump_error:(runner.out/('oracle-failure%s.json'%suffix)).write_text(json.dumps({'failure':repr(error)[:2000],'dump_error':repr(dump_error)})+'\n')
                 if windows==1:raise
                 oracle=None;failure=repr(error)[:2000]
@@ -316,6 +348,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         first=results[0]
         (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
         value={'schema_version':1,'case':case_id,'workload':spec['workload'],'channels':spec['channels'],'requested_window_seconds':spec['seconds'],'host_window_ns':first['host_window_ns'],'tempo_bpm':driver.tempo_bpm,'trace_boundary':{'reset_before_sampler_and_play':True,'midi_driver_boundary':'stock _norns.midi_send pass-through','grid_writes':first['grid_writes'],'grid_refreshes':first['grid_refreshes']},'oracle':first['oracle'],'resources':first['resources'],'resource_samples':first['resource_samples'],'runtime_identity':first['runtime_identity'],'source_identity':source_identity(source),'passed':all(r['passed'] for r in results),'limitations':['Resource figures are physical-device calibration measurements, not emulator-equivalence gates.','Grid activity is observed at the driver boundary; frame revision diagnostics are emulator-only.']}
+        value['transport_checks']=transport_log
         if windows>1:value['windows']=results
         return value
     finally:

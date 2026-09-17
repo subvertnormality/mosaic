@@ -12,6 +12,30 @@ def dense_events(channels,steps=32,step_ns=250_000_000):
         for channel in range(channels):index+=1;rows.append({'index':index,'monotonic_ns':1_100_000_000+step*step_ns+channel*1000,'port':1,'bytes':[128+channel,60,0]})
     return rows
 
+_transport_patch=None
+def setUpModule():
+    # Fake runners have no Maiden; their transport is always ready and stops when asked.
+    global _transport_patch
+    _transport_patch=patch('hardware_performance.transport_state',return_value=(False,[]));_transport_patch.start()
+def tearDownModule():
+    _transport_patch.stop()
+
+class TransportChecks(unittest.TestCase):
+    def test_a_window_starts_only_stopped_with_no_key_held(self):
+        actions=[];taps=[]
+        driver=type('D',(),{'action':lambda self,**k:actions.append(k),'elapse':lambda self,s:None,'tap':lambda self,x,y:taps.append((x,y))})()
+        states=iter([(True,[(3,5)]),(False,[])])
+        with patch('hardware_performance.transport_state',side_effect=lambda runner:next(states)):
+            log=[];hardware_performance.ready_to_play(object(),driver,log)
+        self.assertEqual(actions,[{'type':'grid','x':3,'y':5,'state':0}]);self.assertEqual(taps,[(1,8)])
+        self.assertEqual(log[0]['held_keys_released'],[(3,5)]);self.assertTrue(log[0]['was_playing'])
+        with patch('hardware_performance.transport_state',return_value=(True,[])):
+            with self.assertRaisesRegex(AssertionError,'Transport not ready'):hardware_performance.ready_to_play(object(),driver,[])
+    def test_a_transport_still_playing_after_the_window_is_reported(self):
+        with patch('hardware_performance.transport_state',return_value=(True,[(1,8)])):
+            log=[];self.assertFalse(hardware_performance.stopped_after_window(object(),log))
+        self.assertEqual(log,[{'stopped_after_window':False,'held_keys':[(1,8)]}])
+
 def saved_fixture(workload,channels):
     import hashlib
     directory=Path(tempfile.mkdtemp())
