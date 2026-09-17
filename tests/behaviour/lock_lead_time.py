@@ -46,9 +46,11 @@ def lock_lead_time(c):
                 assert abs(note[field]-lock[field]-lead*1_000_000)<=tolerance,('Lead',lead,index,note,lock)
                 assert abs((lock[field]-locks[0][field])-index*1e9/6)<=tolerance,('Lock cadence',index)
                 assert min(abs(tick[field]-note[field]) for tick in clocks)<=tolerance,('Clock alignment',lead,index)
-            # Exclude the last, deliberately shortened Stop gate.
+            # Exclude the gates the Stop tap shortens: it drains pending output, so
+            # with a lead the last sounding note is released early (README Lock lead
+            # time). A 25 ms lead reaches the gate before the final one.
             gates=[]
-            for note in notes[:-1]:
+            for note in notes[:-2]:
                 release=next(v for v in events if v['bytes'][0]==128 and v['bytes'][1]==note['bytes'][1] and v['index']>note['index'])
                 gates.append(release[field]-note[field])
             observations.append(gates)
