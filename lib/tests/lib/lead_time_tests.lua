@@ -216,3 +216,151 @@ function test_lead_time_cleanup_drains_delayed_notes_and_restores_hooks()
     advance(.050);luaunit.assert_equals(#writes,4)
   end)
 end
+
+-- README Lock lead time: when two notes on one MIDI channel are closer together
+-- than twice the lead, a parameter value waits until halfway between the previous
+-- note-on and its own note-on. Each note then sounds with its own step's value,
+-- keeps half the gap before the next value moves the receiver, and the next value
+-- gets the other half to settle. Farther apart, values leave at step time.
+-- Advance through every timer deadline up to limit, firing each exactly on time.
+local function run_until(timers, advance, limit)
+  while true do
+    local next_due
+    for _, t in ipairs(timers) do
+      if t.due and (not next_due or t.due < next_due) then next_due = t.due end
+    end
+    if not next_due or next_due > limit + 1e-12 then advance(limit); return end
+    advance(next_due)
+  end
+end
+local function lead_step(out, t, advance, value, note, lead, timers)
+  if timers then run_until(timers, advance, t) else advance(t) end
+  out.begin_output_batch()
+  out.cc(74, nil, value, 1, 1)
+  out.flush_output_batch()
+  out:note_on(note, 100, 1, 1, lead)
+  out.flush_output_batch(true)
+end
+local function wire_order(writes)
+  local rows = {}
+  for _, w in ipairs(writes) do
+    local b = w[2]
+    for i = 1, #b, 3 do rows[#rows + 1] = {w[1], b[i], b[i + 1], b[i + 2]} end
+  end
+  return rows
+end
+local function near(a, b) return math.abs(a - b) < 1e-6 end
+
+function test_lead_time_values_leave_at_step_time_when_notes_are_far_apart()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    run_until(timers, advance, .025)
+    lead_step(out, .115, advance, 20, 62, 25, timers)
+    run_until(timers, advance, .140)
+    local rows = wire_order(writes)
+    luaunit.assert_equals(#rows, 4)
+    luaunit.assert_equals({rows[1][2], rows[1][4]}, {176, 10}); luaunit.assert_true(near(rows[1][1], 0))
+    luaunit.assert_equals({rows[2][2], rows[2][3]}, {144, 60}); luaunit.assert_true(near(rows[2][1], .025))
+    luaunit.assert_equals({rows[3][2], rows[3][4]}, {176, 20}); luaunit.assert_true(near(rows[3][1], .115))
+    luaunit.assert_equals({rows[4][2], rows[4][3]}, {144, 62}); luaunit.assert_true(near(rows[4][1], .140))
+  end)
+end
+
+function test_lead_time_value_closer_than_the_lead_waits_for_the_gap_midpoint()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    -- 200 bpm with a x4 channel clock: steps 18.75 ms apart.
+    local gap = .01875
+    local values, notes = {10, 20, 30, 40}, {60, 62, 64, 65}
+    for i = 1, 4 do
+      local t = (i - 1) * gap
+      lead_step(out, t, advance, values[i], notes[i], 25, timers)
+    end
+    run_until(timers, advance, 1)
+    local rows = wire_order(writes)
+    luaunit.assert_equals(#rows, 8)
+    for i = 1, 4 do
+      local lock, note = rows[2 * i - 1], rows[2 * i]
+      luaunit.assert_equals({lock[2], lock[4]}, {176, values[i]}, "value " .. i)
+      luaunit.assert_equals({note[2], note[3]}, {144, notes[i]}, "note " .. i)
+      local t = (i - 1) * gap
+      luaunit.assert_true(near(note[1], t + .025), "note " .. i .. " at " .. note[1])
+      local expected = i == 1 and 0 or t + .025 - gap / 2
+      luaunit.assert_true(near(lock[1], expected), "value " .. i .. " at " .. lock[1] .. " not " .. expected)
+    end
+  end)
+end
+
+function test_lead_time_value_between_one_and_two_leads_waits_only_to_the_midpoint()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    run_until(timers, advance, .025)
+    lead_step(out, .040, advance, 20, 62, 25, timers)
+    run_until(timers, advance, .044); luaunit.assert_equals(#wire_order(writes), 2)
+    run_until(timers, advance, .045)
+    local rows = wire_order(writes)
+    luaunit.assert_equals({rows[3][2], rows[3][4]}, {176, 20}); luaunit.assert_true(near(rows[3][1], .045))
+    run_until(timers, advance, .065)
+    rows = wire_order(writes)
+    luaunit.assert_equals({rows[4][2], rows[4][3]}, {144, 62}); luaunit.assert_true(near(rows[4][1], .065))
+  end)
+end
+
+function test_lead_time_held_values_keep_their_order_and_nrpn_stays_whole()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    run_until(timers, advance, .010)
+    out.nrpn(1, 20, 7262, 1, 1, "standard")
+    out.cc(74, nil, 11, 1, 1)
+    run_until(timers, advance, .011); out.cc(74, nil, 12, 1, 1)
+    run_until(timers, advance, 1)
+    local after_rows = nil
+    local rows = wire_order(writes)
+    local after = {}
+    for i = 3, #rows do after[#after + 1] = {rows[i][3], rows[i][4]} end
+    luaunit.assert_equals({rows[2][2], rows[2][3]}, {144, 60})
+    luaunit.assert_equals(after, {{99, 1}, {98, 20}, {6, 56}, {38, 94}, {74, 11}, {74, 12}})
+    for i = 4, #rows do luaunit.assert_true(rows[i][1] >= rows[i - 1][1]) end
+  end)
+end
+
+function test_lead_time_other_channels_and_ports_are_not_held()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    run_until(timers, advance, .005); out.cc(74, nil, 50, 2, 1)
+    local rows = wire_order(writes)
+    luaunit.assert_equals(#rows, 2)
+    luaunit.assert_equals({rows[2][2], rows[2][4]}, {177, 50}); luaunit.assert_true(near(rows[2][1], .005))
+  end)
+end
+
+function test_lead_time_stop_sends_held_values_in_order_before_releases()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(25)
+    lead_step(out, 0, advance, 10, 60, 25, timers)
+    lead_step(out, .010, advance, 20, 62, 25, timers)
+    out.stop(false)
+    local rows = wire_order(writes)
+    local kinds = {}
+    for _, r in ipairs(rows) do kinds[#kinds + 1] = {r[2], r[3]} end
+    luaunit.assert_equals(kinds, {{176, 74}, {144, 60}, {176, 74}, {144, 62}, {128, 60}, {128, 62}})
+    local count = #writes; run_until(timers, advance, 1); luaunit.assert_equals(#writes, count)
+  end)
+end
+
+function test_lead_time_zero_never_holds_values_between_close_notes()
+  with_midi_lead(function(out, writes, timers, advance)
+    out.set_lead_time(0)
+    for i = 0, 3 do lead_step(out, i * .005, advance, 10 + i, 60 + i, 0) end
+    local rows = wire_order(writes)
+    luaunit.assert_equals(#rows, 8)
+    for i = 0, 3 do
+      luaunit.assert_true(near(rows[2 * i + 1][1], i * .005)); luaunit.assert_true(near(rows[2 * i + 2][1], i * .005))
+    end
+    luaunit.assert_equals(#timers, 0)
+  end)
+end

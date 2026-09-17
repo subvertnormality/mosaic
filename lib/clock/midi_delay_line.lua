@@ -35,14 +35,37 @@ function delay_line.new(deps)
       lane.timer:start(math.max(0.000001,first.due-deps.now()))
     end
   end
-  local function fire(lane)
-    lane.armed=false
-    local now=deps.now()
-    deps.begin()
+  -- Parameter values held for a gap (push_at) have their own lane ordered by
+  -- deadline. Any lane that fires sends due held values first, so a value due
+  -- at or before a note always leaves ahead of that note.
+  local held
+  local function send_due(lane,now)
     while lane.head<=#lane.groups and lane.groups[lane.head].due<=now+(deps.resolution or 1e-9) do
       local group=lane.groups[lane.head]
       for _,item in ipairs(group.items) do deps.send(item.message) end
       lane.head=lane.head+1
+    end
+  end
+  local function send_group(lane)
+    for _,item in ipairs(lane.groups[lane.head].items) do deps.send(item.message) end
+    lane.head=lane.head+1
+  end
+  local function fire(lane)
+    lane.armed=false
+    local now=deps.now()
+    local resolution=deps.resolution or 1e-9
+    deps.begin()
+    if held and held~=lane then
+      -- A late timer may find notes and held values both due: send them in
+      -- deadline order, a held value first when deadlines are equal.
+      while lane.head<=#lane.groups and lane.groups[lane.head].due<=now+resolution do
+        local due=lane.groups[lane.head].due
+        while held.head<=#held.groups and held.groups[held.head].due<=due+resolution do send_group(held) end
+        send_group(lane)
+      end
+      send_due(held,now)
+    else
+      send_due(lane,now)
     end
     deps.flush()
     if lane.head>#lane.groups then
@@ -55,6 +78,26 @@ function delay_line.new(deps)
       lane.groups=remaining;lane.head=1
     end
     arm(lane)
+    if held and held~=lane then
+      if held.head>#held.groups then held.groups={};held.head=1 end
+      if held.armed and held.head>#held.groups then held.timer:stop();held.armed=false end
+    end
+  end
+  function q:now() return deps.now() end
+  -- Send a message at an absolute deadline on this line's clock. Deadlines may
+  -- arrive out of order across channels; equal deadlines keep push order.
+  function q:push_at(due,message)
+    if not held then
+      held={groups={},head=1}
+      held.timer=(deps.timer or delay_line.timer)(function() fire(held) end)
+    end
+    local groups=held.groups
+    local index=#groups+1
+    while index>held.head and groups[index-1].due>due do index=index-1 end
+    serial=serial+1
+    table.insert(groups,index,{due=due,items={{message=message,serial=serial}}})
+    if index==held.head and held.armed then held.timer:stop();held.armed=false end
+    arm(held)
   end
   function q:begin() pulse=true;pulse_time=nil end
   function q:finish()
@@ -79,16 +122,19 @@ function delay_line.new(deps)
     serial=serial+1
     group.items[#group.items+1]={message=message,serial=serial}
     if not pulse then arm(lane) end
+    return group.due
   end
   function q:drain()
     local pending={}
-    for _,lane in pairs(lanes) do
+    local function take(lane)
       lane.timer:stop();lane.armed=false
       for i=lane.head,#lane.groups do
         for _,item in ipairs(lane.groups[i].items) do pending[#pending+1]=item end
       end
       lane.groups={};lane.head=1;lane.pulse_group=nil
     end
+    for _,lane in pairs(lanes) do take(lane) end
+    if held then take(held) end
     table.sort(pending,function(a,b) return a.serial<b.serial end)
     if #pending>0 then
       deps.begin()
@@ -99,6 +145,7 @@ function delay_line.new(deps)
   function q:close()
     self:drain()
     for _,lane in pairs(lanes) do lane.timer:free() end
+    if held then held.timer:free();held=nil end
     lanes={}
   end
   return q

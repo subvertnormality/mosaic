@@ -1072,6 +1072,6 @@
      }
    });
  </script>
-<p>MIDI lock lead: Norns params → MOSAIC → Parameter locks → Lock lead time (ms). Global, 0–50 ms, default 10 ms. Locks stay immediate; notes and MIDI clock are delayed.</p>
+<p>MIDI lock lead: Norns params → MOSAIC → Parameter locks → Lock lead time (ms). Global, 0–50 ms, default 25 ms. Locks stay immediate; notes and MIDI clock are delayed. When notes on a channel are less than twice the lead apart, values wait until halfway between notes, so every note keeps its own lock.</p>
 </body>
 </html>

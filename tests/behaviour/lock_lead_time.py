@@ -12,10 +12,10 @@ def lock_lead_time(c):
     from patch_params import turn
     c.finish()
     observations=[]
-    for lead in (0,5,10):
+    for lead in (0,5,10,25):
         e=boot_with(c,'lead-'+str(lead),{},midi_lead_time_ms=None)
         try:
-            e._set_midi_lead_time(lead,expected=10,capture=lead==10)
+            e._set_midi_lead_time(lead,expected=25,capture=lead==25)
             configure_master_output(e)
             e.key(1);e.enc(1,-3);assign_trig_parameter(e,'CC 1')
             for step,value in ((1,24),(2,48),(3,24),(4,48)):

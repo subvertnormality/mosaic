@@ -73,6 +73,7 @@ end
 -- Delayed messages capture the physical connection: reconnecting a vport must
 -- not send an old queued onset to a newly attached receiver.
 local delay_line = include("mosaic/lib/clock/midi_delay_line")
+local lead_time_ms=0
 local function emit(message)
   local port=message.port
   if port.device ~= message.device then return end
@@ -95,24 +96,70 @@ local function queue(ms,message)
       flush=function() m_midi.flush_output_batch(true) end,send=emit})
     if batching then delay_queue:begin() end
   end
-  delay_queue:push(ms,message)
+  return delay_queue:push(ms,message)
 end
+
+-- README Lock lead time: a parameter value normally leaves at its step time,
+-- lead ms ahead of its note. When notes on one MIDI channel are closer together
+-- than twice the lead, a value sent at step time would change the receiver
+-- during the previous note's attack, or before that note even sounds. The value
+-- then waits until halfway between the previous note-on and its own note-on, so
+-- each note keeps its own value for half the gap and the next value settles in
+-- the other half. Only times already known are used: the previous note's
+-- deadline and this value's own note deadline (now plus the lead).
+local last_note_due = {}
+local last_held_due = {}
+local function forget_note_deadlines()
+  last_note_due = {}
+  last_held_due = {}
+end
+local function remember(by_port, port, channel, due)
+  local channels = by_port[port]
+  if not channels then channels = {}; by_port[port] = channels end
+  channels[channel] = due
+end
+function m_midi.parameter_deadline(port, channel)
+  if lead_time_ms == 0 or not delay_queue then return nil end
+  channel = channel or 1
+  local now = delay_queue:now()
+  local due = now
+  local notes = last_note_due[port]
+  local previous = notes and notes[channel]
+  if previous then
+    local midpoint = (previous + now + lead_time_ms / 1000) / 2
+    if midpoint > due then due = midpoint end
+  end
+  -- A held value is never overtaken by a later one on the same channel.
+  local held = last_held_due[port]
+  held = held and held[channel]
+  if held and held > due then due = held end
+  if due <= now + 0.000001 then return nil end
+  remember(last_held_due, port, channel, due)
+  return due
+end
+function m_midi.hold_parameter(due, port, status, data1, data2, channel)
+  delay_queue:push_at(due, {port=port, device=port.device, kind="cc", note=data1,
+    velocity=data2, channel=channel, status=status})
+end
+
 local function delayed_note(ms,port,kind,note,velocity,channel)
   if not ms or ms==0 then return false end
-  queue(ms,{port=port,device=port.device,kind=kind,note=note,velocity=velocity or 100,
+  local due=queue(ms,{port=port,device=port.device,kind=kind,note=note,velocity=velocity or 100,
     channel=channel,status=(kind=="note_on" and 0x90 or 0x80)+(channel or 1)-1})
+  if kind=="note_on" then remember(last_note_due, port, channel or 1, due) end
   return true
 end
 function m_midi.drain_pending_output()
   if delay_queue then delay_queue:drain() end
+  forget_note_deadlines()
 end
 
 -- Cache the global setting through its params action; zero keeps the original
 -- send path and allocates no timer. Captured note containers retain gate timing.
-local lead_time_ms=0
 function m_midi.get_lead_time() return lead_time_ms end
 function m_midi.set_lead_time(value)
   if delay_queue then delay_queue:close();delay_queue=nil end
+  forget_note_deadlines()
   lead_time_ms=value
 end
 local clock_hooks={}
@@ -141,6 +188,7 @@ function m_midi.cleanup()
   if delay_queue then
     m_midi.stop()
     delay_queue:close();delay_queue=nil
+    forget_note_deadlines()
   end
   for _,hook in ipairs(clock_hooks) do
     if hook.port[hook.name]==hook.wrapper then hook.port[hook.name]=hook.original end
