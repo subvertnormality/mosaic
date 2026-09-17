@@ -632,7 +632,6 @@ function m_clock.get_clock_lattice()
   return clock_lattice
 end
 
--- Seconds until the next master step onset, or nil when not playing or unknown.
 -- The time between clock pulses at the current tempo: the grid delayed output
 -- leaves on. Taken from the tempo rather than measured, so a run of catch-up
 -- pulses cannot make the grid look finer than it is.
@@ -643,6 +642,7 @@ function m_clock.pulse_seconds()
   return 60 / (tempo * ppqn)
 end
 
+-- Seconds until the next master step onset, or nil when not playing or unknown.
 -- Screen redraws use this to stay clear of a step's note processing.
 function m_clock.seconds_to_next_step()
   if not (clock_lattice and clock_lattice.enabled and master_clock and master_clock.enabled) then return nil end
