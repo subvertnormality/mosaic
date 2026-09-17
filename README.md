@@ -187,7 +187,7 @@ You can customise Mosaic to perfectly align with your studio setup by configurin
 ##### Lock lead time
 
 In the Norns params menu, open **MOSAIC → Parameter locks → Lock lead time (ms)**.
-This global setting accepts 0–50 ms and defaults to **10 ms**. It gives MIDI CC/NRPN
+This global setting accepts 0–50 ms and defaults to **25 ms**. It gives MIDI CC/NRPN
 parameter locks time to settle before the note attack, particularly on devices
 that smooth incoming controllers. Set it to **0** for the original output timing.
 The value is saved with Mosaic's project settings.
@@ -196,6 +196,20 @@ Locks leave at their usual step time. Sequenced and live MIDI-thru note-ons and
 note-offs move later by the selected amount, preserving gate lengths. No step is
 looked ahead: probability, conditions, fills, random notes, slides, strum, arps and
 micro-timing still make their decisions at the same times. N.b. players are unaffected.
+
+Every note sounds with its own step's values. When two notes on the same MIDI
+channel are less than twice the lead apart (a fast tempo, a fast channel clock,
+or swing and shuffle bringing steps together), a parameter value does not leave at
+its step time: it waits until halfway between the previous note and its own note.
+The previous note keeps its value through the first half of the gap, and the new
+value settles in the second half. This applies to every CC and NRPN value on that
+channel, including assigned values and slides. When notes are further apart,
+values leave at step time as above.
+
+The lead covers the time a receiver takes for a parameter change to take effect,
+so every value follows the same rule whether or not its step has a note: trigless
+locks, assigned values and slide values leave ahead of the step they belong to and
+take effect as that step is heard.
 
 Outgoing MIDI Clock, Start, Continue, Stop and song position receive the same delay
 on every port. Mosaic delays the existing output without changing saved system

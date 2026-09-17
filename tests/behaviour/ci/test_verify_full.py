@@ -34,8 +34,8 @@ class Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);paths=self.reports(root);out=root/'out.json'
             result=module.verify(paths,out)
-            self.assertEqual(808,result['registered_cases'])
-            self.assertEqual(1601,result['applicable_case_lane_runs'])
+            self.assertEqual(822,result['registered_cases'])
+            self.assertEqual(1629,result['applicable_case_lane_runs'])
             self.assertTrue(result['complete_behaviour_run'])
     def test_rejects_missing_pair(self):
         with tempfile.TemporaryDirectory() as d:

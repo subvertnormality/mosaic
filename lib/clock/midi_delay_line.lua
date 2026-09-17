@@ -35,16 +35,17 @@ function delay_line.new(deps)
       lane.timer:start(math.max(0.000001,first.due-deps.now()))
     end
   end
-  local function fire(lane)
-    lane.armed=false
-    local now=deps.now()
-    deps.begin()
-    while lane.head<=#lane.groups and lane.groups[lane.head].due<=now+(deps.resolution or 1e-9) do
-      local group=lane.groups[lane.head]
-      for _,item in ipairs(group.items) do deps.send(item.message) end
-      lane.head=lane.head+1
-    end
-    deps.flush()
+  -- Parameter values held for a gap (push_at) have their own lane ordered by
+  -- deadline. Whichever timer fires sends every due group from every lane, in
+  -- deadline order and, for equal deadlines, in the order they were produced: a
+  -- lock produced before its note precedes it, a slide value produced after a
+  -- note follows it, even when separate timers hold them.
+  local held
+  local function send_group(lane)
+    for _,item in ipairs(lane.groups[lane.head].items) do deps.send(item.message) end
+    lane.head=lane.head+1
+  end
+  local function settle(lane)
     if lane.head>#lane.groups then
       lane.groups={};lane.head=1
     elseif lane.head>64 then
@@ -54,7 +55,56 @@ function delay_line.new(deps)
       for i=lane.head,#lane.groups do remaining[#remaining+1]=lane.groups[i] end
       lane.groups=remaining;lane.head=1
     end
+    if lane.armed and not lane.groups[lane.head] then lane.timer:stop();lane.armed=false end
     arm(lane)
+  end
+  local function fire(fired)
+    fired.armed=false
+    local now=deps.now()
+    local resolution=deps.resolution or 1e-9
+    deps.begin()
+    while true do
+      local best,first
+      local function consider(lane)
+        local group=lane.groups[lane.head]
+        if group and group.due<=now+resolution and (not first or group.due<first.due-resolution or
+            (group.due<=first.due+resolution and group.items[1].serial<first.items[1].serial)) then
+          best,first=lane,group
+        end
+      end
+      for _,lane in pairs(lanes) do consider(lane) end
+      if held then consider(held) end
+      if not best then break end
+      send_group(best)
+    end
+    deps.flush()
+    for _,lane in pairs(lanes) do settle(lane) end
+    if held then settle(held) end
+  end
+  function q:now() return deps.now() end
+  -- The time a pulse's delayed output is measured from: its first delayed
+  -- message, or now outside a pulse. Values and notes of one step share it.
+  function q:time()
+    if pulse then
+      if not pulse_time then pulse_time=deps.now() end
+      return pulse_time
+    end
+    return deps.now()
+  end
+  -- Send a message at an absolute deadline on this line's clock. Deadlines may
+  -- arrive out of order across channels; equal deadlines keep push order.
+  function q:push_at(due,message)
+    if not held then
+      held={groups={},head=1}
+      held.timer=(deps.timer or delay_line.timer)(function() fire(held) end)
+    end
+    local groups=held.groups
+    local index=#groups+1
+    while index>held.head and groups[index-1].due>due do index=index-1 end
+    serial=serial+1
+    table.insert(groups,index,{due=due,items={{message=message,serial=serial}}})
+    if index==held.head and held.armed then held.timer:stop();held.armed=false end
+    arm(held)
   end
   function q:begin() pulse=true;pulse_time=nil end
   function q:finish()
@@ -79,16 +129,19 @@ function delay_line.new(deps)
     serial=serial+1
     group.items[#group.items+1]={message=message,serial=serial}
     if not pulse then arm(lane) end
+    return group.due
   end
   function q:drain()
     local pending={}
-    for _,lane in pairs(lanes) do
+    local function take(lane)
       lane.timer:stop();lane.armed=false
       for i=lane.head,#lane.groups do
         for _,item in ipairs(lane.groups[i].items) do pending[#pending+1]=item end
       end
       lane.groups={};lane.head=1;lane.pulse_group=nil
     end
+    for _,lane in pairs(lanes) do take(lane) end
+    if held then take(held) end
     table.sort(pending,function(a,b) return a.serial<b.serial end)
     if #pending>0 then
       deps.begin()
@@ -99,6 +152,7 @@ function delay_line.new(deps)
   function q:close()
     self:drain()
     for _,lane in pairs(lanes) do lane.timer:free() end
+    if held then held.timer:free();held=nil end
     lanes={}
   end
   return q

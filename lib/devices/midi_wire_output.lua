@@ -8,8 +8,15 @@ function output.new(m_midi)
     local port = midi_devices[device]
     if port ~= nil then
       local status = 0xB0 + (channel or 1) - 1
-      -- Send MSB
       local cc_msb_value = cc_lsb and math.floor(value / 128) or value
+      -- A value too close after a delayed note waits for the gap between notes.
+      local due = m_midi.parameter_deadline and m_midi.parameter_deadline(port, channel)
+      if due then
+        m_midi.hold_parameter(due, port, status, cc_msb, cc_msb_value, channel)
+        if cc_lsb ~= nil then m_midi.hold_parameter(due, port, status, cc_lsb, value % 128, channel) end
+        return
+      end
+      -- Send MSB
       if not m_midi.send_three(port, status, cc_msb, cc_msb_value) then
         m_midi.flush_output_batch()
         port:cc(cc_msb, cc_msb_value, channel)
