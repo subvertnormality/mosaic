@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "kind": "offline_post_run_analysis",
+  "run_directory": "/home/andy/projects/mosaic-behaviour-runs/probe-overhead-cc051cc-locks25-20260918-attempt3",
+  "analysis_scope": "Read-only inspection of completed local artifacts. No device, SSH, production-code, gate, tolerance, or sample exclusion changes were made.",
+  "source_identity": {
+    "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+    "dirty_patch_sha256": null,
+    "lead_ms": 25,
+    "timing_contract": "legacy-delay-v1",
+    "fixture_id": "PERF-009-HW-16",
+    "workload": "locks",
+    "channels": 16,
+    "measured_steps": 80,
+    "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+    "stock_clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+    "boot_id": "52df8878-bdab-460f-91de-65462240f773"
+  },
+  "qualification": {
+    "overhead_passed": false,
+    "restoration_verified": true,
+    "conclusion": "Failed; this run provides no qualification claim."
+  },
+  "window_failures": [
+    {
+      "window": 5,
+      "mode": "off",
+      "seed": 1727549882,
+      "failed_gates": ["step_jitter"],
+      "step_jitter_p95_ms": 7.090137,
+      "step_jitter_max_ms": 9.292505,
+      "event_timing_p95_ms": 5.280956,
+      "event_timing_max_ms": 7.928547,
+      "final_phase_error_ms": -1.831984
+    },
+    {
+      "window": 9,
+      "mode": "pulse-core-v1",
+      "seed": 1838328610,
+      "failed_gates": ["step_jitter"],
+      "step_jitter_p95_ms": 4.056281,
+      "step_jitter_max_ms": 10.660569,
+      "event_timing_p95_ms": 1.099137,
+      "event_timing_max_ms": 9.78885,
+      "final_phase_error_ms": -0.74936
+    },
+    {
+      "window": 11,
+      "mode": "off",
+      "seed": 96524362,
+      "failed_gates": ["step_jitter"],
+      "step_jitter_p95_ms": 3.286567,
+      "step_jitter_max_ms": 10.259417,
+      "event_timing_p95_ms": 4.198722,
+      "event_timing_max_ms": 10.049719,
+      "final_phase_error_ms": -0.556336
+    },
+    {
+      "window": 12,
+      "mode": "pulse-core-v1",
+      "seed": 96524362,
+      "failed_gates": ["step_jitter"],
+      "step_jitter_p95_ms": 6.100775,
+      "step_jitter_max_ms": 9.774553,
+      "event_timing_p95_ms": 4.124804,
+      "event_timing_max_ms": 7.70362,
+      "final_phase_error_ms": -1.218352
+    },
+    {
+      "window": 13,
+      "mode": "off",
+      "seed": 100852846,
+      "failed_gates": ["event_timing", "step_jitter"],
+      "step_jitter_p95_ms": 6.597593,
+      "step_jitter_max_ms": 9.350361,
+      "event_timing_p95_ms": 10.30649,
+      "event_timing_max_ms": 12.751053,
+      "final_phase_error_ms": 3.418359
+    }
+  ],
+  "off_control_comparison": {
+    "off_windows": [1, 3, 5, 8, 10, 11, 13, 16, 18, 19],
+    "passing_off_windows": [1, 3, 8, 10, 16, 18, 19],
+    "failing_off_windows": [5, 11, 13],
+    "finding": "Three failures occur with the probe fully off. Instrumentation therefore is not necessary for the observed stalls."
+  },
+  "raw_midi": {
+    "every_window_messages": 8264,
+    "every_window_note_ons": 1312,
+    "every_window_note_offs": 1312,
+    "every_window_lock_values_checked": 5248,
+    "every_window_capture_outstanding": 0,
+    "per_channel_result": "All 16-channel status-count distributions are identical in failed and passing sampled windows; no channel-specific omission, stuck note, or output-loss signature was found.",
+    "finding": "The output oracle's content and completion counts hold even in failed windows."
+  },
+  "timing_pattern": {
+    "classification": "Recovered scheduler stalls, not cumulative phase drift.",
+    "evidence": [
+      "All failing windows retain final phase within absolute 3.419 ms, below the 20 ms phase threshold.",
+      "Failing interval-jitter sequences contain a late positive excursion followed by compensating negative intervals; for example window 5 includes +7.158 ms, then -2.470 ms, -1.968 ms, and -2.123 ms.",
+      "Windows 9 and 11 fail their 10 ms maximum-jitter bound; windows 5, 12, and 13 fail the 5 ms p95 bound, with window 13 also failing event timing."
+    ]
+  },
+  "probe_structure": {
+    "enabled_windows": [2, 4, 6, 7, 9, 12, 14, 15, 17, 20],
+    "capacity": 65536,
+    "dropped_records": 0,
+    "pulse_records": "1958 or 1959 in each enabled window",
+    "failed_window_9": {
+      "records": 5876,
+      "pulse_p99_ms": 11.171,
+      "pulse_max_ms": 21.477,
+      "delay_callback_lateness_p99_ms": 17.464,
+      "delay_callback_lateness_max_ms": 289.386
+    },
+    "failed_window_12": {
+      "records": 6120,
+      "pulse_p99_ms": 11.867,
+      "pulse_max_ms": 13.677,
+      "delay_callback_lateness_p99_ms": 12.322,
+      "delay_callback_lateness_max_ms": 286.568
+    },
+    "correlation_limit": "The callback report explicitly classifies these as callback-level association rather than a musical-occurrence identity. In both failing enabled windows, the largest callback lateness is classified between pulses; it cannot establish probe causation."
+  },
+  "resources": {
+    "throttled_flags_or": 0,
+    "thermal_peak_celsius": 50.464,
+    "matron_cpu_percent_range": [35.021, 39.317],
+    "load_peak_1m_range": [0.37, 0.96],
+    "finding": "No thermal-throttle flag appeared. Failures cluster in windows 5, 9, 11, 12, and 13, yet later higher-load windows 16 and 17 pass, so these samples do not support a monotonic thermal or load explanation."
+  },
+  "next_target": {
+    "test": "Run a restore-guarded, probe-off-only replication using the same fixture, lead 25, workload, channel count, seeds 1727549882, 96524362, and 100852846, with enough repeated windows to estimate the baseline stall rate before another paired-overhead campaign.",
+    "production_hypothesis": "The common suspect is an intermittent stock-clock/matron scheduling stall during the existing synchronous 16-channel parameter-lock burst, rather than loss of a channel or persistent phase error. Do not alter scheduling or timing tolerances from this run alone.",
+    "diagnostic_follow_up": "If the off-only replication reproduces, add a diagnostic-only occurrence/group identity shared by callback and MIDI-write probe rows, then test whether a late callback precedes the affected 16-channel write burst. The current callback correlation lacks that identity and cannot establish causation."
+  }
+}
