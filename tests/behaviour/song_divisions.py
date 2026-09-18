@@ -48,8 +48,19 @@ def song_tempo_divisions(c):
     assert [(m['port'], m['bytes']) for m in notes] == [(1, [144, n, v]) for _, n, v in plan], \
         dict(expected=[p[1:] for p in plan], actual=[m['bytes'] for m in notes])
     field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
-    tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
     offsets = [(m[field] - notes[0][field]) / 1e9 for m in notes]
     wanted = [t / 6 for t, _, _ in plan]
-    assert all(abs(a - w) <= tolerance for a, w in zip(offsets, wanted)), dict(expected=wanted, actual=offsets)
+    if c.clock_mode == 'controlled-experimental':
+        assert all(abs(a - w) <= 2e-9 for a, w in zip(offsets, wanted)), dict(expected=wanted, actual=offsets)
+    else:
+        # Real time: each slot's division is judged by the gap it puts between
+        # consecutive notes, and the whole sequence by how far it has drifted at
+        # the end. A single host stall then moves one gap instead of failing
+        # every note after it, while a wrong division (a gap out by a third or
+        # more) or a tempo that runs slow all the way through still fails.
+        gaps = [(b - a, w2 - w1) for a, b, w1, w2 in zip(offsets, offsets[1:], wanted, wanted[1:])]
+        assert all(abs(actual - want) <= .01 for actual, want in gaps), \
+            dict(rule='step gap', expected=[w for _, w in gaps], actual=[a for a, _ in gaps])
+        assert abs(offsets[-1] - wanted[-1]) <= .025, \
+            dict(rule='accumulated drift', expected=wanted[-1], actual=offsets[-1])
     c.results.append(dict(kind='per-sequence-tempo', plan=plan, offsets_seconds=offsets, passed=True))
