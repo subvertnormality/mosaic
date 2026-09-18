@@ -21,14 +21,10 @@ lead must, against the lead 0 reference of the same condition:
 - send the same CC 1 values in the same order;
 - sound every note with the same CC 1 value in force, which is also the step's
   documented value (11, 20, 33, 33);
-- place every note-on at its reference time plus the lead, with gates unchanged
-  within a pulse: a delayed note leaves on a clock pulse, so the lead is counted
-  in whole pulses (rounded up, never shorter than the setting) and a gate can
-  lose the fraction of a pulse the reference note spent inside its own pulse;
+- place every note-on at its reference time plus the lead, with unchanged gates;
 - send every value after the previous note-on, and at its documented time, measured
   from the reference step time x: max(x, midpoint between the previous note-on and
-  x plus the lead, both taken at the pulses those notes wait for), never before a
-  value already queued on the channel. The lead
+  x plus the lead), never before a value already queued on the channel. The lead
   covers the receiver's response time, so trigless, default and lock values follow
   the same rule.
 
@@ -40,7 +36,6 @@ existing 10 ms host tolerance, compares notes only up to a live edit (its host
 moment varies between runs), and does not time the stored value sent at Play,
 because the wait from Play to the first note varies by up to one clock pulse.
 """
-import math
 import json
 from device_configs import boot_with
 from master_clock import configure_master_output
@@ -250,35 +245,12 @@ def play(c, condition, seconds=2.0):
     return capture.events, marker, stopped
 
 
-PPQN = 96  # lattice pulses per quarter note (lib/clock/m_clock.lua)
-
-
-def pulse_ns(bpm):
-    """The spacing of the clock pulses delayed output leaves on."""
-    return 60.0 / bpm / PPQN * 1_000_000_000
-
-
-def lead_ns_at(lead_ms, bpm):
-    """The lead a note actually waits: whole pulses, rounded up, never shorter.
-
-    README "Lock lead time": a delayed note leaves on a clock pulse, so its lead
-    is counted in pulses. At 130 bpm a pulse is 4.81 ms and a 25 ms lead is six
-    of them, 28.85 ms."""
-    lead = lead_ms * 1_000_000
-    if lead <= 0:
-        return 0.0
-    pulse = pulse_ns(bpm)
-    # A thousandth of a pulse, as the delay line rounds: a lead of exactly so
-    # many pulses must not become one more through float representation.
-    return math.ceil(lead / pulse - 0.001) * pulse
-
-
-def timeline(events, lead_ms, field, marker, stopped, controlled, bpm):
+def timeline(events, lead_ms, field, marker, stopped, controlled):
     """Notes and CC 1 values on port 1, timed from the first step (first note minus lead)."""
     port = [e for e in events if e['port'] == 1]
     notes = [e for e in port if e['bytes'][0] == 144 and e['bytes'][2] > 0]
     assert len(notes) >= 10, ('Too few notes', lead_ms, len(notes))
-    origin = notes[0][field] - lead_ns_at(lead_ms, bpm)
+    origin = notes[0][field] - lead_ms * 1_000_000
     live = marker is not None
     limit = marker if live else stopped
     values = [e for e in port if e['bytes'][:2] == [176, 1]]
@@ -302,11 +274,7 @@ def timeline(events, lead_ms, field, marker, stopped, controlled, bpm):
 
 def compare(name, condition, lead_ms, run, reference, field, controlled):
     tolerance = 50_000 if controlled else 10_000_000
-    # A delayed note leaves on a pulse, so the lead is whole pulses; a gate may
-    # also lose the fraction of a pulse the reference spent inside its own pulse.
-    lead_ns = lead_ns_at(lead_ms, condition['bpm'])
-    pulse = pulse_ns(condition['bpm'])
-    gate_tolerance = tolerance + (pulse if lead_ms else 0)
+    lead_ns = lead_ms * 1_000_000
     rel = lambda e, t: e[field] - t['origin']
     # Values in force: README Trig Param Locks, Default Parameter Values, Handling Off.
     notes = min(len(run['in_force']), len(reference['in_force']))
@@ -334,7 +302,7 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         drift = rel(run_notes[i], run) - (rel(ref_notes[i], reference) + lead_ns)
         assert abs(drift) <= tolerance, dict(rule='note at reference time plus lead', condition=name, lead_ms=lead_ms, note=i, drift_ns=drift)
         if run['gates'][i] is not None and reference['gates'][i] is not None and i < count - 1:
-            assert abs(run['gates'][i] - reference['gates'][i]) <= gate_tolerance, dict(rule='gate unchanged within a pulse', condition=name, lead_ms=lead_ms, note=i, run_ns=run['gates'][i], reference_ns=reference['gates'][i])
+            assert abs(run['gates'][i] - reference['gates'][i]) <= tolerance, dict(rule='gate unchanged', condition=name, lead_ms=lead_ms, note=i, run_ns=run['gates'][i], reference_ns=reference['gates'][i])
     last_note = ref_notes[count - 1]['index']
     ref_values = [v for v in reference['values'] if v['index'] < last_note]
     # Values sent while the last compared note waits for its lead may follow in
@@ -363,8 +331,6 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         else:
             # README Lock lead time: step time, or halfway between the previous
             # note-on and this step's heard time when they are close.
-            # Both ends of the gap are the notes' own deadlines, which are their
-            # counted pulses: the previous note-on and this value's own note.
             expected = max(x, (ref_note_times[previous] + lead_ns + x + lead_ns) / 2)
         if queued is not None and queued > expected:
             expected = queued
@@ -392,7 +358,7 @@ def lock_lead_clock_matrix(c, name):
                 e._set_midi_lead_time(lead)
             events, marker, stopped = play(e, condition)
             (e.out / ('lead-%d-events.json' % lead)).write_text(json.dumps(events) + '\n')
-            runs[lead] = timeline(events, lead, field, marker, stopped, controlled, condition['bpm'])
+            runs[lead] = timeline(events, lead, field, marker, stopped, controlled)
             e.results.append(dict(kind='lock-lead-clock-run', condition=name, lead_ms=lead, notes=len(runs[lead]['notes']), values=len(runs[lead]['values']), passed=True))
     finally:
         e.finish()

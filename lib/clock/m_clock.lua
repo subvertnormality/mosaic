@@ -632,16 +632,6 @@ function m_clock.get_clock_lattice()
   return clock_lattice
 end
 
--- The time between clock pulses at the current tempo: the grid delayed output
--- leaves on. Taken from the tempo rather than measured, so a run of catch-up
--- pulses cannot make the grid look finer than it is.
-function m_clock.pulse_seconds()
-  if not (clock and type(clock.get_tempo) == "function") then return nil end
-  local tempo = clock.get_tempo()
-  if type(tempo) ~= "number" or tempo <= 0 then return nil end
-  return 60 / (tempo * ppqn)
-end
-
 -- Seconds until the next master step onset, or nil when not playing or unknown.
 -- Screen redraws use this to stay clear of a step's note processing.
 function m_clock.seconds_to_next_step()

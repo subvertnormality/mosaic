@@ -87,20 +87,18 @@ local function emit(message)
     port[message.kind](port,message.note,message.velocity,message.channel)
   end
 end
-local function queue(ms,message,gridded)
+local function queue(ms,message)
   if not delay_queue then
     -- Subtract the epoch before adding milliseconds: adding 0.005 to Unix
     -- wall time loses fractions of a microsecond through float cancellation.
     local origin=util.time()
     delay_queue=delay_line.new({now=function() return util.time()-origin end,
       resolution=0.000001,
-      -- The clock's own pulse spacing, so the delay counts real pulses.
-      interval=function() return m_clock and m_clock.pulse_seconds and m_clock.pulse_seconds() end,
       begin=function() m_midi.begin_output_batch() end,
       flush=function() m_midi.flush_output_batch(true) end,send=emit})
     if batching then delay_queue:begin() end
   end
-  return delay_queue:push(ms,message,gridded)
+  return delay_queue:push(ms,message)
 end
 
 -- README Lock lead time: a parameter value normally leaves at its step time,
@@ -128,7 +126,7 @@ function m_midi.parameter_deadline(port, channel)
   local now = delay_queue:now()
   -- Measure from the step's pulse, as its note is: a stall inside the pulse
   -- must not move the value later than the note it belongs to.
-  local heard = delay_queue:deadline(lead_time_ms)
+  local heard = delay_queue:time() + lead_time_ms / 1000
   local due = now
   local notes = last_note_due[port]
   local previous = notes and notes[channel]
@@ -180,9 +178,7 @@ function m_midi.install_clock_hooks()
           local ms=lead_time_ms
           if name=="stop" then m_midi.drain_pending_output() end
           if ms==0 then return original(self,...) end
-          -- The clock's own stream is on the pulse grid even though it is sent
-          -- between pulses, so it leaves on the same pulses the notes do.
-          queue(ms,{port=self,device=self.device,method=original,args={...}},true)
+          queue(ms,{port=self,device=self.device,method=original,args={...}})
         end
         clock_hooks[#clock_hooks+1]={port=port,name=name,original=original,wrapper=wrapper}
         port[name]=wrapper

@@ -28,18 +28,14 @@ end
 function delay_line.new(deps)
   local q = {}
   local lanes, pulse, pulse_time, serial = {}, false, nil, 0
-  -- While the transport runs, a delayed message leaves on a clock pulse, a
-  -- counted number of pulses after the pulse that produced it. A timer callback
-  -- waits behind whatever pulse is running, and on a busy step that wait moved
-  -- delayed notes several milliseconds off the beat; comparing the deadline
-  -- against the clock instead moved them a whole pulse whenever the pulse ran
-  -- either side of it. Counting pulses gives a delayed note the same steadiness
-  -- as an undelayed one: both leave on a pulse, a fixed number of pulses apart.
-  -- The lead is rounded up to whole pulses, so it is never shorter than asked.
-  -- The timer stays as the fallback for output produced while no pulse is
-  -- coming (MIDI thru with the transport stopped), and is armed late while
+  -- While the transport runs, every clock pulse sends what has come due. A
+  -- timer callback waits behind whatever pulse is running, and on a busy step
+  -- that wait moved delayed notes several milliseconds off the beat; a pulse
+  -- carries them with the same steadiness as an undelayed note. The timer stays
+  -- as the fallback for output produced while no pulse is coming (MIDI thru
+  -- with the transport stopped), and is armed a pulse and a half late while
   -- pulses are arriving so the pulse itself normally sends first.
-  local last_pulse, pulse_interval, firing, pulse_count = nil, nil, nil, 0
+  local last_pulse, pulse_interval, firing
   local function pulsing(now)
     return pulse_interval and last_pulse and (now-last_pulse) < pulse_interval*4
   end
@@ -49,10 +45,11 @@ function delay_line.new(deps)
       lane.armed=true
       local now=deps.now()
       local wait=first.due-now
-      -- A group counting pulses is normally sent by its pulse, so its timer is
-      -- only the fallback for pulses that stop; a group waiting on a deadline
-      -- (a value held for the gap) keeps its exact timer.
-      if first.pulse_due and pulsing(now) then wait=wait+pulse_interval*1.5 end
+      -- A lane of delayed notes is normally sent by the pulse that finds it due,
+      -- so its timer is armed late and only covers pulses that stop. A value
+      -- held for a gap keeps its exact timer: it is due between pulses by
+      -- design, and waiting for one would move it off the gap's midpoint.
+      if not lane.exact and pulsing(now) then wait=wait+pulse_interval*1.5 end
       lane.timer:start(math.max(0.000001,wait))
     end
   end
@@ -79,15 +76,6 @@ function delay_line.new(deps)
     if lane.armed and not lane.groups[lane.head] then lane.timer:stop();lane.armed=false end
     arm(lane)
   end
-  -- A group counting pulses waits for its pulse, however the clock has drifted
-  -- against it; a group without one waits for its deadline.
-  local function ready(group,now,resolution)
-    -- While the clock still pulses, a counted group waits for its pulse. If the
-    -- pulses stop (the transport stopped, or an external clock went quiet) its
-    -- deadline releases it, so nothing is ever stranded.
-    if group.pulse_due and pulsing(now) then return pulse_count>=group.pulse_due end
-    return group.due<=now+resolution
-  end
   local function send_due()
     local now=deps.now()
     local resolution=deps.resolution or 1e-9
@@ -95,7 +83,7 @@ function delay_line.new(deps)
       local best,first
       local function consider(lane)
         local group=lane.groups[lane.head]
-        if group and ready(group,now,resolution) and (not first or group.due<first.due-resolution or
+        if group and group.due<=now+resolution and (not first or group.due<first.due-resolution or
             (group.due<=first.due+resolution and group.items[1].serial<first.items[1].serial)) then
           best,first=lane,group
         end
@@ -103,10 +91,10 @@ function delay_line.new(deps)
       for _,lane in pairs(lanes) do consider(lane) end
       if held then consider(held) end
       if not best then break end
-      -- A value held for a gap belongs before the note it leads. If that note
-      -- is going out now, the value goes with it even though its own deadline
-      -- has not quite arrived: a note must never be heard under the value it
-      -- was meant to replace.
+      -- A value held for a gap belongs before the note it leads. If that note is
+      -- going out now, the value goes with it even though its own deadline has
+      -- not quite arrived: a note must never be heard under the value it was
+      -- meant to replace.
       while held and held.groups[held.head] and held.groups[held.head]~=first
           and held.groups[held.head].due<first.due-resolution do
         send_group(held)
@@ -130,40 +118,6 @@ function delay_line.new(deps)
     firing=false
   end
   function q:now() return deps.now() end
-  -- The pulse a message anchored at this moment and delayed by ms leaves on,
-  -- and when that pulse falls. Everything delayed rides the same grid, whether
-  -- it was produced inside a pulse (a step's notes) or between pulses (MIDI
-  -- clock ticks), so a lead never moves one against another.
-  -- What a pulse produces rides the pulse grid, and so does the clock's own
-  -- stream, which is made between pulses but is on the grid by nature. Anything
-  -- else made between pulses is off the grid on purpose - a swung or strummed
-  -- note, a note played live - and moving it to a pulse would quantise the feel
-  -- away, so it keeps its exact deadline.
-  local function schedule(anchor,ms,gridded)
-    local wait=ms/1000
-    local now=deps.now()
-    if not ((pulse or gridded) and pulse_interval and last_pulse and pulsing(now)) then
-      return anchor+wait,nil
-    end
-    -- Count from the pulse itself, not from the moment inside it when the
-    -- message happened to be made: a lead of exactly so many pulses must not
-    -- become one more because the step spent a moment working first.
-    -- Inside a pulse the wait is counted on its own. Adding it to the clock and
-    -- subtracting the pulse again would lose its last digits against a large
-    -- absolute time, and a lead of exactly so many pulses would then round to
-    -- one more. The epsilon is a thousandth of a pulse for the same reason.
-    local ahead=pulse and wait or (anchor+wait-last_pulse)
-    local pulses=math.ceil(ahead/pulse_interval-0.001)
-    if pulses<1 then pulses=1 end
-    return last_pulse+pulses*pulse_interval,pulse_count+pulses
-  end
-  -- When a message pushed now with this lead would leave: the pulse the note
-  -- itself will wait for, so a value's gap is measured against the moment its
-  -- note is really heard.
-  function q:deadline(ms)
-    local due=schedule(self:time(),ms)
-    return due
-  end
   -- The time a pulse's delayed output is measured from: its first delayed
   -- message, or now outside a pulse. Values and notes of one step share it.
   function q:time()
@@ -177,7 +131,7 @@ function delay_line.new(deps)
   -- arrive out of order across channels; equal deadlines keep push order.
   function q:push_at(due,message)
     if not held then
-      held={groups={},head=1}
+      held={groups={},head=1,exact=true}
       held.timer=(deps.timer or delay_line.timer)(function() fire(held) end)
     end
     local groups=held.groups
@@ -195,17 +149,12 @@ function delay_line.new(deps)
   function q:begin()
     if firing then pulse=true;pulse_time=nil;return end
     local now=deps.now()
-    -- The clock states its own pulse spacing. Measuring it instead would read a
-    -- run of catch-up pulses as a much finer grid than the clock really has.
-    local stated=deps.interval and deps.interval()
-    if type(stated)=="number" and stated>0.0001 and stated<0.25 then pulse_interval=stated end
-    -- One pulse may open its output more than once. Counting those as separate
-    -- pulses would make everything waiting on a count wait a pulse too long, so
-    -- an opening that follows the last within half a pulse is the same pulse.
-    if not (pulse_interval and last_pulse and now-last_pulse<pulse_interval*0.5) then
-      last_pulse=now
-      pulse_count=pulse_count+1
+    if last_pulse then
+      local gap=now-last_pulse
+      -- A plausible pulse: faster than four a second and not a repeated call.
+      if gap>0.0001 and gap<0.25 then pulse_interval=gap end
     end
+    last_pulse=now
     pulse=true;pulse_time=nil
     send_due()
     settle_all()
@@ -214,7 +163,7 @@ function delay_line.new(deps)
     pulse=false;pulse_time=nil
     for _,lane in pairs(lanes) do lane.pulse_group=nil;arm(lane) end
   end
-  function q:push(ms,message,gridded)
+  function q:push(ms,message)
     if not ms or ms==0 then deps.send(message);return end
     local lane=lanes[ms]
     if not lane then
@@ -225,8 +174,7 @@ function delay_line.new(deps)
     local group=pulse and lane.pulse_group
     if not group then
       if pulse and not pulse_time then pulse_time=deps.now() end
-      local due,pulse_due=schedule(pulse_time or deps.now(),ms,gridded)
-      group={due=due,pulse_due=pulse_due,items={}}
+      group={due=(pulse_time or deps.now())+ms/1000,items={}}
       lane.groups[#lane.groups+1]=group
       if pulse then lane.pulse_group=group end
     end
