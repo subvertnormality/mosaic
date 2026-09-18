@@ -192,8 +192,15 @@ function sequencer:dual_press(x, y, x2, y2, song_pattern, pattern_number)
       if fn.calc_grid_count(x2, y2) <= fn.calc_grid_count(x, y) then
         return false
       end
-      program.get_selected_channel().start_trig = {x, y}
-      program.get_selected_channel().end_trig = {x2, y2}
+      local channel = program.get_selected_channel()
+      channel.start_trig = {x, y}
+      channel.end_trig = {x2, y2}
+      -- The next step is chosen from the range at its onset, so a value already
+      -- resolved for the step the old range would have played next must not
+      -- leave: the new range may never play that step. What has left stays
+      -- sent; its record names a step, so it cannot speak for another.
+      local scheduler = m_clock and m_clock.get_lock_lookahead and m_clock.get_lock_lookahead()
+      if scheduler then scheduler:cancel_channel(channel.number) end
       return true
     elseif self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)

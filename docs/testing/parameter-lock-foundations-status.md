@@ -79,8 +79,34 @@ Checkpoint A remains incomplete: controlled probe identity coverage, calibrated
 input/receiver capture integration, interleaved hardware diagnostics and probe
 overhead qualification are still required. The pure parameter preview,
 occurrence/generation ledger, cancellable value queue and lookahead
-arbitration are not implemented. Neither are Timing feedback, product migration,
-the complete behaviour matrix or release hardware qualification.
+arbitration are not implemented. Neither are product migration, the complete
+behaviour matrix or release hardware qualification. The Timing page is not
+outstanding: it was decided against (see Decisions below).
+
+## Decisions
+
+### No Channel Editor Timing page (decided 2026-09-18)
+
+Section 6 of the plan calls for a read-only Channel Editor Timing page showing
+the requested lead, the last effective scheduled lead, the last dispatch lateness
+and sticky reason flags. That page will not be built. This is a product decision,
+not an omission, and the feature is not incomplete for its absence.
+
+The page was specified when the design was an exact-millisecond lead with several
+ways to fall short silently: startup, a pattern boundary, spacing, a late edit, a
+clock change, a conflict or the horizon limit could each shorten the lead, and a
+player had no way to tell which one had applied without a diagnostic view.
+
+The delivered contract is simpler. The lead is the setting rounded up to the next
+whole clock pulse, so at a given tempo it is one known figure. The cases where it
+does not apply are deterministic and documented in the README: the first step
+after Play, a slot that is mid-slide, and an address more than one slot writes.
+Nothing else silently reduces it, so there is no hidden state for a page to
+reveal. A diagnostic reporting "28.8 ms, spacing" on a 128x64 screen would not
+earn its place in the page navigation, and the scheduler's own lateness counter
+is not a receiver measurement in any case. The volatile statistics remain
+available through `m_clock.get_lock_lookahead():stats()` for diagnosis from the
+harness.
 
 The user confirmed on 2026-09-18 that no calibrated receiver capture rig exists.
 The hardware shim timestamps in Lua immediately before `_norns.midi_send` calls

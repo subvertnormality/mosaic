@@ -215,7 +215,12 @@ or swing and shuffle bringing steps together), a value does not take the whole
 lead: it waits until halfway between the previous sounding note and its own step.
 The previous note keeps its value through the first half of the gap, and the new
 value settles in the second half. A trigless step sounds nothing, so it is not
-the note a later value waits behind.
+the note a later value waits behind. A strummed chord's later voices are sounding
+notes, so the next step's values wait behind the last of them.
+
+An address that more than one slot writes, whether two slots of one channel or
+two channels addressing one device parameter, is not sent early: its values leave
+at their own step, in the order the step would send them at a lead of 0.
 
 Two cases give no lead at all. The first step after Play resolves its lock on the
 transport's own first pulse, so there is no earlier pulse for its values to leave

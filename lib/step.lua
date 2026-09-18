@@ -822,6 +822,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
 
   local chord_note_dashboard_values
+  -- The latest voice this strum schedules, announced once below so the lock
+  -- lookahead keeps the next step's values behind it.
+  local latest_voice
 
   for i = 1, has_chord_notes and 4 or 0 do
     local chord_number, delay, delay_multiplier = resolve_strum_chord(
@@ -834,6 +837,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     )
     if chord_number then
       chord_note_dashboard_values = chord_note_dashboard_values or {chords = {}}
+      if latest_voice == nil or delay > latest_voice then latest_voice = delay end
       m_clock.delay_action(
         c,
         delay,
@@ -878,6 +882,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     chord_acceleration
   )
   if delayed_root_delay ~= nil then
+    if latest_voice == nil or delayed_root_delay > latest_voice then latest_voice = delayed_root_delay end
     m_clock.delay_action(
       c,
       delayed_root_delay,
@@ -907,6 +912,9 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     )
   end
 
+  if latest_voice and latest_voice > 0 and m_clock.hold_voice_onset then
+    m_clock.hold_voice_onset(c, latest_voice)
+  end
 end
 
 -- The stock kinds every sounding step reads, whatever its chord settings.

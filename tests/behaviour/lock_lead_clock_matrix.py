@@ -73,6 +73,10 @@ GLOBAL_LENGTH = 64     # global steps between resets, where playing feel edits a
 TOGGLE_ON_AT = 1.5     # seconds into playback: enough notes before the edit to compare
 TOGGLE_HOLD = None     # set from the global reset interval
 CLOCK_INDEX = {'/1': 13, 'x2': 10, 'x4': 7, 'x16': 1}
+# Seconds from Play to 20 ms after the twelfth onset at 130 bpm (16th steps are
+# 60 / 130 / 4 s apart): step 2 of the third pass through the range 1-5, with
+# ten notes before it for the timed comparison and step 3's value still pending.
+EDIT_AT_STEP_2 = 11 * 60 / 130 / 4 + .020
 
 CONDITIONS = {
     # 130 bpm steps are 115 ms apart: values leave at step time for every lead.
@@ -105,6 +109,15 @@ CONDITIONS = {
     'global-cap': dict(bpm=130, range=(1, 5), global_length=3),
     # README CH-RANGE: the range changed while locked steps play.
     'range-live': dict(bpm=130, range=(1, 5), range_change=(2, 4)),
+    # README CH-RANGE with the incoming step's lock Off: the range is changed to
+    # 4-5 a moment after step 2 sounds, while step 3's lock has been resolved but
+    # has not left. Step 3 never plays now, so its value must never be heard: at
+    # lead 0 step 4's Off lock keeps step 2's value, and every lead must agree.
+    # The edit lands at an exact time after Play, 15-20 ms after step 2's onset
+    # (the transport starts within one pulse of Play), so it precedes the
+    # dispatch of step 3's value at either lead. That makes every play's step
+    # sequence identical in controlled time, where the whole play is compared.
+    'range-live-off': dict(bpm=130, range=(1, 5), range_change=(4, 5), edit_at=EDIT_AT_STEP_2, full_sequence=True),
     # README Resend unchanged locks: Off sends only values that changed.
     'resend-off': dict(bpm=130, resend=False),
     'resend-off-x4-200': dict(bpm=200, clock='x4', resend=False),
@@ -245,6 +258,14 @@ def play(c, condition, seconds=2.0):
         for _ in range(max(1, int(round(duration / .25)))):
             c.elapse(.25); capture.extend(c.snapshot())
 
+    def hold_exactly(duration):
+        """Hold for exactly this long, observing often enough to lose nothing."""
+        whole, remainder = divmod(duration, .25)
+        for _ in range(int(whole)):
+            c.elapse(.25); capture.extend(c.snapshot())
+        if remainder > 0:
+            c.elapse(remainder); capture.extend(c.snapshot())
+
     c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
     marker = None
     if condition.get('toggle'):
@@ -256,7 +277,10 @@ def play(c, condition, seconds=2.0):
         c.enc(3, -toggle_turns(condition)); c.key(3)     # straight again at the reset after
         hold(cycle + 1.5)  # leave straight notes after that reset to check
     else:
-        hold(seconds / 2)
+        if condition.get('edit_at'):
+            hold_exactly(condition['edit_at'])
+        else:
+            hold(seconds / 2)
         if condition.get('tempo_change'):
             marker = capture.cursor
             set_tempo(c, condition['tempo_change'])
@@ -287,6 +311,14 @@ def timeline(events, lead_ms, field, marker, stopped, controlled):
     # every play. Subtracting the lead here would be the old contract's origin,
     # where that note had been moved later by it.
     origin = notes[0][field]
+    # An anchor outside the notes themselves. Transport is not delayed under this
+    # contract, so the wait from Start to the first note must be the same at every
+    # lead; if a lead ever moved notes again without moving transport, or moved
+    # transport without the notes, this changes while every comparison measured
+    # from the first note stays still. It cannot see a delay applied uniformly to
+    # everything including transport, which no wire-only capture can.
+    starts = [e for e in port if e['bytes'] == [250]]
+    start_to_first_note = notes[0][field] - starts[0][field] if starts else None
     live = marker is not None
     limit = marker if live else stopped
     values = [e for e in port if e['bytes'][:2] == [176, 1]]
@@ -305,18 +337,57 @@ def timeline(events, lead_ms, field, marker, stopped, controlled):
     timed = lambda e: e['index'] <= limit
     return dict(port=port, notes=notes, timed_notes=[n for n in notes if timed(n)], values=values,
                 in_force=in_force, steps=steps, gates=gates,
-                origin=origin, timed=timed)
+                origin=origin, timed=timed, start_to_first_note=start_to_first_note)
+
+
+def documented_in_force(steps):
+    """The value in force at each note, from the steps that played (README Trig
+    Param Locks, Default Parameter Values, Handling Off Settings, Trigless Locks).
+
+    A step's lock, or the default where it has none, is in force at its note; an
+    Off lock keeps whatever was in force before. Step 5 is trigless, so it sounds
+    no note, but its lock still changes the value: it played between two notes
+    exactly when the range wrapped between them, which is when the second note's
+    step is not after the first's. A range that excludes a trig step never shows
+    that step's note, so that step's value never enters here.
+    """
+    values = dict(STEP_LOCKS); values[2] = DEFAULT
+    current = None; result = []
+    for previous, step in zip([None] + steps, steps):
+        if previous is not None and step <= previous:
+            current = values[5]
+        if values[step] != 'off':
+            current = values[step]
+        result.append(current)
+    return result
 
 
 def compare(name, condition, lead_ms, run, reference, field, controlled):
     tolerance = 50_000 if controlled else 10_000_000
     lead_ns = lead_ms * 1_000_000
     rel = lambda e, t: e[field] - t['origin']
+    # Every other comparison here is measured from each play's own first note, so
+    # a delay common to the whole play cancels and cannot be seen. Transport is
+    # the one thing this contract does not move, so the wait from Start to the
+    # first note pins the notes against something outside themselves: it must be
+    # the same at every lead. A delay applied uniformly to transport as well
+    # remains invisible, which no capture taken only from the wire can detect.
+    if run.get('start_to_first_note') is not None and reference.get('start_to_first_note') is not None:
+        drift = run['start_to_first_note'] - reference['start_to_first_note']
+        assert abs(drift) <= tolerance, dict(rule='first note the same wait after Start', condition=name,
+                                             lead_ms=lead_ms, drift_ns=drift,
+                                             run_ns=run['start_to_first_note'],
+                                             reference_ns=reference['start_to_first_note'])
     # Values in force: README Trig Param Locks, Default Parameter Values, Handling Off.
     notes = min(len(run['in_force']), len(reference['in_force']))
     if not condition.get('slide'):
         # Each note's own step decides its value, whichever steps the range plays.
-        wanted = [IN_FORCE[step] for step in run['steps']]
+        # A range that can exclude the step before a note leaves that note's
+        # value to the steps that did play, so it is modelled from them.
+        if condition.get('full_sequence'):
+            wanted = documented_in_force(run['steps'])
+        else:
+            wanted = [IN_FORCE[step] for step in run['steps']]
         if run['in_force'] != wanted:
             # Report where it first parts company, with the notes either side.
             at = next((i for i, (a, b) in enumerate(zip(run['in_force'], wanted)) if a != b), min(len(wanted), len(run['in_force'])))
@@ -328,6 +399,18 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         # in how many notes precede it; compare the sequences up to that point.
         shared = min(len(run['timed_notes']), len(reference['timed_notes']), notes)
         assert run['in_force'][:shared] == reference['in_force'][:shared], dict(rule='same value in force at each note', condition=name, lead_ms=lead_ms, run=run['in_force'][:shared], reference=reference['in_force'][:shared])
+        if controlled and condition.get('full_sequence'):
+            # README CH-RANGE and Lock lead time: after the edit the new range
+            # decides which steps play, and a value resolved for a step it excludes
+            # must not be heard. Compared over the whole play, not only up to the
+            # edit: in controlled time the edit lands at the same musical moment
+            # in every play, so the notes after it correspond one to one. The
+            # stop lands the same way, so the run may have sent at most the one
+            # value it resolved ahead of a step the reference never reached.
+            assert run['in_force'] == reference['in_force'], dict(rule='same value in force at every note, including after the edit', condition=name, lead_ms=lead_ms, run=run['in_force'], reference=reference['in_force'])
+            run_all = [v['bytes'][2] for v in run['values']]
+            ref_all = [v['bytes'][2] for v in reference['values']]
+            assert run_all[:len(ref_all)] == ref_all and len(run_all) <= len(ref_all) + 1, dict(rule='same values in the same order over the whole play', condition=name, lead_ms=lead_ms, run=run_all, reference=ref_all)
     # Common timed prefix of notes and values.
     ref_notes = [n for n in reference['notes'] if reference['timed'](n)]
     run_notes = [n for n in run['notes'] if run['timed'](n)]
@@ -515,6 +598,15 @@ def lock_lead_clock_matrix(c, name):
     finally:
         e.finish()
     reference = runs[0]
+    if condition.get('full_sequence'):
+        # The edit was designed to land just after step 2 sounds, with step 3's
+        # value resolved but not sent, and to leave the range at 4-5. Check that
+        # in the reference, or the whole-play comparison would be testing some
+        # other moment. Every play's transport starts within one pulse of Play,
+        # so the same holds for the runs the reference is compared with.
+        steps = reference['steps']
+        assert steps[:10] == [1, 2, 3, 4, 1, 2, 3, 4, 1, 2], dict(rule='edit lands after step 2 of the third pass', condition=name, steps=steps[:12])
+        assert len(steps) >= 18 and all(step == 4 for step in steps[10:]), dict(rule='only step 4 sounds after the edit', condition=name, steps=steps)
     # Every note of the reference, including after a live edit: the feel checks
     # below span the whole play, while the run comparisons stop at the edit.
     notes = reference['notes']

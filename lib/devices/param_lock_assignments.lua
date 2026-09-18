@@ -88,6 +88,14 @@ function assignments.update_default_params(channel, meta_device)
     params:set(param_slots.assignment_id(channel.number or 0, param_slots.FIXED_NOTE_SLOT), meta_device.fixed_note)
   end
 
+  -- Every slot has just been replaced without passing through update_param. A
+  -- value resolved for the old slots addresses controls they no longer hold,
+  -- and which addresses this track shares with the others follows from the new
+  -- ones, so both are reported once here rather than once per slot.
+  local scheduler = m_clock.get_lock_lookahead and m_clock.get_lock_lookahead()
+  if scheduler then scheduler:invalidate(channel.number, nil, nil) end
+  if m_clock.forget_shared_addresses then m_clock.forget_shared_addresses() end
+
   channel_edit_page_ui.refresh_trig_lock_values()
 end
 

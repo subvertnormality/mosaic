@@ -661,6 +661,13 @@ function Sprocket:set_action(fn)
   self.action = fn
 end
 
+-- Pulses from this onset until a delayed action of this length runs, for a
+-- length inside the current cycle. It mirrors the deadline test advance_sprocket
+-- applies, so what it answers is the pulse the action will actually run in.
+function Sprocket:pulses_until(length)
+  return math.ceil(pending_deadline(self.current_ppqn, length))
+end
+
 function Sprocket:set_delayed_action(length, action, before_onset)
   length = normalize_integer(length, 1e-12)
   local id = fn.generate_id()

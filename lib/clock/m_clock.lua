@@ -125,10 +125,14 @@ function m_clock.discard_lookahead()
   local scheduler = m_clock.lookahead_scheduler
   if scheduler then scheduler:cancel_all() end
   m_clock.receiver_anchors = {}
+  m_clock.receiver_voices = {}
   m_clock.shared_addresses = nil
   for channel_number = 1, 17 do
     local channel_clock = m_clock["channel_" .. channel_number .. "_clock"]
-    if type(channel_clock) == "table" then channel_clock.last_anchor_pulse = nil end
+    if type(channel_clock) == "table" then
+      channel_clock.last_anchor_pulse = nil
+      channel_clock.voice_pulse = nil
+    end
   end
 end
 
@@ -140,11 +144,44 @@ end
 -- the wrong value.
 m_clock.receiver_anchors = m_clock.receiver_anchors or {}
 
--- A physical address that more than one track writes cannot be advanced safely.
+local receiver_key
+
+-- A strum spreads a step's voices over the pulses after its root, and each of
+-- them is a note that sounds. A value for the next step has to stay behind the
+-- last of them just as it stays behind the root: with the root alone as the
+-- anchor it could leave between the voices, and the late ones would sound with
+-- the next step's value. A voice is registered when it is scheduled, because
+-- that is when its pulse becomes known; nothing is promised for a note that has
+-- not been announced. It is kept per track and per receiver like the anchor,
+-- and is only ever a pulse ahead of the anchor, so schedule_lookahead takes
+-- whichever of the two is later.
+m_clock.receiver_voices = m_clock.receiver_voices or {}
+
+function m_clock.hold_voice_onset(channel_number, length)
+  -- A voice a whole step or more away sounds at or after the next onset, so it
+  -- is nothing that onset's values need to wait for.
+  if m_clock.lookahead_scheduler == nil or length >= 1 then return end
+  local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  if type(clock) ~= "table" or clock.pulses_until == nil then return end
+  local pulse = clock_lattice.transport + clock:pulses_until(length)
+  if clock.voice_pulse == nil or pulse > clock.voice_pulse then clock.voice_pulse = pulse end
+  local key = receiver_key(channel_number)
+  if key then
+    local held = m_clock.receiver_voices[key]
+    if held == nil or pulse > held then m_clock.receiver_voices[key] = pulse end
+  end
+end
+
+-- A physical address that more than one slot writes cannot be advanced safely.
 -- Sending one track's value early can land it between another track's value and
 -- that track's note, where at lead 0 that track's own value would have been the
--- last thing the receiver heard before it sounded. Those addresses keep lead-0
--- timing: their values leave at their own step. The set is rebuilt only when
+-- last thing the receiver heard before it sounded. Two slots of one track that
+-- write one address are no better: the record of what left early holds a value
+-- per slot, but the receiver holds one per address, so once both have left, an
+-- edit that releases the later slot leaves the earlier slot's record describing
+-- a value the receiver is no longer holding, and the step would send nothing.
+-- Those addresses keep lead-0 timing: their values leave at their own step,
+-- where the step's own claim rules order them. The set is rebuilt only when
 -- assignments change, not per onset.
 m_clock.shared_addresses = nil
 
@@ -166,10 +203,9 @@ local function shared_addresses()
             local address = parameter_preview.midi_address(param, param.channel or device.midi_channel)
             local key = parameter_preview.destination(device.midi_device, address)
             if key then
-              local owner = owners[key]
-              if owner == nil then
+              if owners[key] == nil then
                 owners[key] = channel_number
-              elseif owner ~= channel_number then
+              else
                 shared[key] = true
               end
             end
@@ -192,7 +228,7 @@ function m_clock.forget_shared_addresses()
   if scheduler then scheduler:cancel_destinations(shared_addresses()) end
 end
 
-local function receiver_key(channel_number)
+receiver_key = function(channel_number)
   local devices = program.get().devices
   local device = devices and devices[channel_number]
   if device == nil then return nil end
@@ -240,6 +276,13 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
   local shared = key and m_clock.receiver_anchors[key]
   if shared and (anchor == nil or shared > anchor) then anchor = shared end
   if anchor == nil then anchor = transport end
+  -- A strum voice still to sound on this receiver is a sounding note too, as
+  -- long as it comes before the onset these values belong to; a voice at or
+  -- after that onset hears them at lead 0 as well.
+  local voice = clock.voice_pulse
+  local shared_voice = key and m_clock.receiver_voices[key]
+  if shared_voice and (voice == nil or shared_voice > voice) then voice = shared_voice end
+  if voice and voice < next_onset and voice > anchor then anchor = voice end
   local midpoint = anchor + math.ceil((next_onset - anchor) / 2)
   if send_pulse < midpoint then send_pulse = midpoint end
   -- This pulse is still running and is served again once its work is done, so a
@@ -752,7 +795,10 @@ local function discard_channel_lookahead(channel_number)
   local scheduler = m_clock.lookahead_scheduler
   if scheduler then scheduler:invalidate(channel_number, nil, nil) end
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
-  if type(clock) == "table" then clock.last_anchor_pulse = nil end
+  if type(clock) == "table" then
+    clock.last_anchor_pulse = nil
+    clock.voice_pulse = nil
+  end
 end
 
 local function retime_channel(channel_number, clock)
