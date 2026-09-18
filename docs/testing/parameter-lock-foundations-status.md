@@ -120,6 +120,16 @@ on its earlier isolated `cc051cc` source and does not measure this extraction.
 The full-trace offline `correlate_deadlines()` helper classifies delayed-group
 deadlines by recorded pulse occupancy; it explicitly makes no causal inference.
 
+The first complete interleaved core-probe cell (`cc051cc`, locks-16, lead 25,
+ten pairs of 80-step windows) failed. Five of twenty windows failed step jitter,
+including three probe-off windows; one also failed event timing. Every pair
+failed combined overhead qualification. No thresholds were changed or windows
+excluded. All ten core snapshots had zero drops, but the unqualified probe cannot
+support causal conclusions. Device restoration was verified after the campaign.
+The compact result and raw-file hashes are `hardware-core-campaign-cc051cc*.json`
+in the checkpoint evidence directory. This does not qualify the complete workload
+matrix, the subsequent projection extraction or working nonzero lookahead.
+
 Follow the test runbook before device work, restore after each run and preserve all
 failed evidence. The runner in this checkout uses `git archive HEAD` for deployment;
 uncommitted files are **not deployed**, unlike the runner variant described in the

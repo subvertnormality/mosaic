@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-18",
+  "profile": "Hotspot",
+  "previous_configured_channel": 0,
+  "previous_active_channel": 1,
+  "scan_completed": true,
+  "observed_channels": [1, 2, 9],
+  "signal_weighted_overlap_scores": {"6": 337, "11": 57},
+  "persistent_band": "bg",
+  "persistent_channel": 11,
+  "verified_radio_frequency_mhz": 2462,
+  "verified_radio_width_mhz": 20,
+  "hotspot_reactivation_passed": true,
+  "paced_upload_passed": false,
+  "paced_upload_outcome": "Stalled after channel change; diagnostic processes terminated. No timing measurement started.",
+  "device_raw_report": "/home/we/.cache/mosaic-hotspot-channel-20260918.json",
+  "limitation": "Least observed overlap among channels 6 and 11; not a guarantee of no interference."
+}
