@@ -138,7 +138,11 @@ class HardwareRunOptionsTests(unittest.TestCase):
                                   'resource_sampler': True, 'native_screen_trace': False,
                                   'redraw_count_trace': False, 'project_fixture': None,
                                   'save_project_fixture': None, 'lead_ms': None, 'probe_mode': 'pulse-core-v1',
-                                  'seed': 0, 'measured_steps': 80}])
+                                  'seed': 0, 'measured_steps': 80,
+                                  # A run states which lock lead contract it measured, and
+                                  # defaults to the superseded one so an existing command
+                                  # line still means what it did.
+                                  'timing_contract': 'legacy-delay-v1'}])
 
     def test_cli_refuses_both_probe_modes_before_remote_construction(self):
         with patch('real_norns.SSH') as ssh:

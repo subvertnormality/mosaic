@@ -4,6 +4,13 @@ from pathlib import Path
 from unittest.mock import patch
 import driver
 
+# These need a checkout of the nb_jf output mod, which suite.py supplies through
+# MOSAIC_OUTPUT_MOD_ROOT and records as not-run when it is absent. Reading it at
+# setUp raised KeyError instead, so a plain unittest run reported eight errors for
+# a missing input rather than saying the input was missing. Skipping states that,
+# and the tests still run in full wherever the root is supplied.
+@unittest.skipUnless(os.environ.get('MOSAIC_OUTPUT_MOD_ROOT'),
+                     'MOSAIC_OUTPUT_MOD_ROOT not supplied; see tests/behaviour/suite.py')
 class OutputProfiles(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup)
