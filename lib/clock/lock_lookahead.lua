@@ -38,9 +38,17 @@ function Scheduler:schedule(pulse, bundle)
   local key = target_key(bundle)
   local existing = self.pending_by_target[key]
   if existing and not existing.sent then
-    existing.bundle = bundle
-    existing.pulse = pulse
-    return true
+    if existing.pulse == pulse then
+      existing.bundle = bundle
+      return true
+    end
+    -- A different pulse means a different bucket. Rewriting the field alone
+    -- would leave the entry in the bucket it was first filed under, so it would
+    -- fire at the old time; retire it here and file the replacement below.
+    existing.cancelled = true
+    self.cancelled_count = self.cancelled_count + 1
+    self.pending = self.pending - 1
+    self.pending_by_target[key] = nil
   end
   if self.pending >= self.capacity then
     self.horizon_limited = self.horizon_limited + 1
@@ -71,8 +79,12 @@ local function dispatch(self, entry, pulse)
   if self.pending_by_target[entry.key] == entry then
     self.pending_by_target[entry.key] = nil
   end
-  commits_for(self, bundle.channel, bundle.step).slots[bundle.slot] = true
-  self.send(bundle)
+  -- The send decides again whether this value is still wanted. A refusal is not
+  -- a failure: the slot stays uncommitted so its own step sends what is then in
+  -- force, rather than a value the player has since overruled.
+  if self.send(bundle) ~= false then
+    commits_for(self, bundle.channel, bundle.step).slots[bundle.slot] = true
+  end
 end
 
 -- Send everything owed at or before this pulse, in the order it was scheduled.
@@ -111,10 +123,34 @@ end
 -- time: nothing can unsend what the receiver already heard, and the correction
 -- costs that value its lead rather than leaving a stale value in force.
 function Scheduler:invalidate(channel, step, slot)
+  if step == nil or slot == nil then
+    -- Clearing a whole step or a whole channel invalidates every value that
+    -- came from it, not just one slot.
+    for _, bucket in pairs(self.buckets) do
+      for index = 1, #bucket do
+        local entry = bucket[index]
+        local bundle = entry.bundle
+        if not entry.cancelled and not entry.sent and bundle.channel == channel
+            and (step == nil or bundle.step == step)
+            and (slot == nil or bundle.slot == slot) then
+          entry.cancelled = true
+          self.cancelled_count = self.cancelled_count + 1
+          self.pending = self.pending - 1
+          if self.pending_by_target[entry.key] == entry then
+            self.pending_by_target[entry.key] = nil
+          end
+        end
+      end
+    end
+    local commits = self.commits[channel]
+    if commits and (step == nil or commits.step == step) then self.commits[channel] = nil end
+    return
+  end
   local key = target_key({channel = channel, step = step, slot = slot})
   local entry = self.pending_by_target[key]
   if entry and not entry.sent and not entry.cancelled then
     entry.cancelled = true
+    self.cancelled_count = self.cancelled_count + 1
     self.pending = self.pending - 1
     self.pending_by_target[key] = nil
   end
@@ -122,11 +158,17 @@ function Scheduler:invalidate(channel, step, slot)
   if commits and commits.step == step then commits.slots[slot] = nil end
 end
 
--- A global pattern reset discards every speculative value at once.
+-- A transport or pattern boundary discards every speculative value at once, and
+-- the record of what was already sent with it. Keeping that record would let a
+-- value resolved from the outgoing pattern suppress the incoming pattern's lock
+-- for the same step, and would survive a stop and restart where patch recall has
+-- since replaced the value on the receiver.
 function Scheduler:cancel_all()
   self.buckets = {}
   self.pending_by_target = {}
   self.pending = 0
+  self.cancelled_count = 0
+  self.commits = {}
 end
 
 function Scheduler:cancel_channel(channel)
@@ -135,6 +177,7 @@ function Scheduler:cancel_channel(channel)
       local entry = bucket[position]
       if not entry.cancelled and not entry.sent and entry.bundle.channel == channel then
         entry.cancelled = true
+        self.cancelled_count = self.cancelled_count + 1
         self.pending = self.pending - 1
         if self.pending_by_target[entry.key] == entry then
           self.pending_by_target[entry.key] = nil
@@ -147,14 +190,14 @@ end
 function Scheduler:stats()
   return {pending = self.pending, max_pending = self.max_pending,
           late = self.late, horizon_limited = self.horizon_limited,
-          capacity = self.capacity}
+          cancelled = self.cancelled_count, capacity = self.capacity}
 end
 
 function lookahead.new(deps)
   return setmetatable({send = deps.send, capacity = deps.capacity or 10240,
                        buckets = {}, pending_by_target = {}, commits = {},
                        pending = 0, max_pending = 0, late = 0, horizon_limited = 0,
-                       earliest = math.huge}, Scheduler)
+                       cancelled_count = 0, earliest = math.huge}, Scheduler)
 end
 
 return lookahead

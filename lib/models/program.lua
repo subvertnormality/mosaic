@@ -181,12 +181,19 @@ function program.set(p)
 end
 
 -- Lock lookahead installs this to learn that a stored lock changed, so a value
--- it resolved ahead of time does not go out stale. With no listener a lock edit
--- behaves exactly as it always has.
+-- it resolved ahead of time does not go out stale. Clearing a lock is as much a
+-- change as setting one: a value already resolved from the old lock must not
+-- leave, and the step has to send its assigned value instead. A nil parameter
+-- means every slot of that step, and a nil step means the whole channel.
+-- With no listener a lock edit behaves exactly as it always has.
 local on_lock_edit = nil
 
 function program.set_lock_edit_listener(listener)
   on_lock_edit = listener
+end
+
+local function notify_lock_edit(channel, step, parameter)
+  if on_lock_edit then on_lock_edit(channel, step, parameter) end
 end
 
 function program.add_step_param_trig_lock_to_channel(channel, step, parameter, trig_lock)
@@ -211,7 +218,7 @@ function program.add_step_param_trig_lock_to_channel(channel, step, parameter, t
 
   step_trig_lock_banks[step][parameter] = trig_lock
 
-  if on_lock_edit then on_lock_edit(channel, step, parameter) end
+  notify_lock_edit(channel, step, parameter)
 
 end
 
@@ -462,6 +469,7 @@ function program.get_trig_lock_calculator_id(channel, parameter)
 end
 
 function program.clear_trig_locks_for_step_for_channel(channel, step)
+  notify_lock_edit(channel, step, nil)
   channel.step_scale_trig_lock_banks[step] = nil
 
   if channel.number ~= 17 then
@@ -485,6 +493,7 @@ function program.clear_trig_locks_for_step(step)
 end
 
 function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
+  notify_lock_edit(channel, step, parameter)
   if channel.number ~= 17 then
     if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] and channel.step_trig_lock_banks[step][parameter] then
       channel.step_trig_lock_banks[step][parameter] = nil
@@ -508,6 +517,7 @@ function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
 end
 
 function program.clear_trig_locks_for_channel(channel)
+  notify_lock_edit(channel, nil, nil)
   channel.step_trig_lock_banks = {}
   channel.step_octave_trig_lock_banks = {}
   channel.step_scale_trig_lock_banks = {}
@@ -515,6 +525,7 @@ function program.clear_trig_locks_for_channel(channel)
 end
 
 function program.clear_device_trig_locks_for_channel(channel)
+  notify_lock_edit(channel, nil, nil)
   channel.step_trig_lock_banks = {}
 end
 

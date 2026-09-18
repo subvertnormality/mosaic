@@ -64,6 +64,36 @@ function m_clock.get_lock_lookahead()
   return m_clock.lookahead_scheduler
 end
 
+-- Discard every value resolved before this point, and the record of what was
+-- already sent. A value resolved from the outgoing pattern must not leave after
+-- the reset, and its commit must not suppress the incoming pattern's lock for
+-- the same step. The same applies across a stop and restart, where patch recall
+-- may have replaced what the receiver is holding.
+function m_clock.discard_lookahead()
+  local scheduler = m_clock.lookahead_scheduler
+  if scheduler then scheduler:cancel_all() end
+  m_clock.receiver_anchors = {}
+  for channel_number = 1, 17 do
+    local channel_clock = m_clock["channel_" .. channel_number .. "_clock"]
+    if type(channel_clock) == "table" then channel_clock.last_anchor_pulse = nil end
+  end
+end
+
+-- A value must not cross the note before it on the receiver that hears it, and
+-- two Mosaic channels can address one MIDI device and channel. The anchor is
+-- therefore kept per receiver, not per track: with a per-track anchor a slow
+-- track's value could be sent over a fast track's value on the same port and
+-- channel, and the fast track would then suppress its own resend and sound with
+-- the wrong value.
+m_clock.receiver_anchors = m_clock.receiver_anchors or {}
+
+local function receiver_key(channel_number)
+  local devices = program.get().devices
+  local device = devices and devices[channel_number]
+  if device == nil then return nil end
+  return tostring(device.midi_device) .. ":" .. tostring(device.midi_channel)
+end
+
 -- Whole pulses of lead at this tempo, rounded up so the value is never sent
 -- with less lead than was asked for. Cached because the tempo rarely changes.
 local function lead_in_pulses(tempo, lead_ms)
@@ -104,6 +134,15 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
   -- keeps the timing it already has.
   local tempo, lead_ms = params:get("clock_tempo"), m_midi.get_lead_time()
   if type(tempo) ~= "number" or type(lead_ms) ~= "number" or lead_ms <= 0 then return end
+  -- A pending value's pulse deadline was worked out at the tempo in force when
+  -- it was resolved. At a different tempo those pulses are worth a different
+  -- amount of time, so what is already queued is discarded and each step sends
+  -- its own values instead. Tempo is a system parameter with no hook to listen
+  -- to, so the change is noticed here, where the lead is converted to pulses.
+  if cached_tempo ~= nil and tempo ~= cached_tempo then
+    local scheduler = m_clock.lookahead_scheduler
+    if scheduler then scheduler:cancel_all() end
+  end
 
   local ahead = clock:project_onset_pulses(1)
   local transport = clock_lattice.transport
@@ -114,7 +153,12 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
   -- actually carried a trig: a trigless step sounds nothing, so it cannot be the
   -- note a value has to stay behind, and treating it as one would hold every
   -- value later than the documented rule allows.
-  local anchor = clock.last_anchor_pulse or transport
+  -- The latest sounding onset on this receiver, whichever track produced it.
+  local key = receiver_key(channel_number)
+  local anchor = clock.last_anchor_pulse
+  local shared = key and m_clock.receiver_anchors[key]
+  if shared and (anchor == nil or shared > anchor) then anchor = shared end
+  if anchor == nil then anchor = transport end
   local midpoint = anchor + math.ceil((next_onset - anchor) / 2)
   if send_pulse < midpoint then send_pulse = midpoint end
   -- This pulse is still running and is served again once its work is done, so a
@@ -491,7 +535,16 @@ function m_clock.init()
 
       -- A step that sounds is the note later values must stay behind. A trigless
       -- step is not, so it does not become the anchor.
-      if has_trig then clock.last_anchor_pulse = clock_lattice.transport end
+      if has_trig then
+        clock.last_anchor_pulse = clock_lattice.transport
+        local key = receiver_key(channel_number)
+        if key then
+          local held = m_clock.receiver_anchors[key]
+          if held == nil or clock_lattice.transport > held then
+            m_clock.receiver_anchors[key] = clock_lattice.transport
+          end
+        end
+      end
 
       -- This step is finished and its note has gone. Resolve the next step's
       -- values now so they can leave in an earlier pulse than their own.
@@ -565,6 +618,7 @@ function m_clock.init()
   }
 
   slides.reset()
+  m_clock.discard_lookahead()
 end
 
 -- Apply the final stopped timing settings to the clean lattice prepared by
@@ -590,6 +644,7 @@ function m_clock.prepare_start()
   end
   clock_lattice:prepare_for_start()
   slides.reset()
+  m_clock.discard_lookahead()
   -- A device that was left holding a value while the transport was stopped may
   -- have been changed by hand; start by sending each slot again.
   step.forget_sent_lock_values()
@@ -599,39 +654,57 @@ end
 
 local retime_channel_slides = slides.retime
 
+-- A pending value holds a pulse deadline that was worked out from the timing in
+-- force when it was resolved. Changing that timing invalidates the deadline: the
+-- step can now arrive before its own value, or the pulses can be worth a
+-- different amount of time. The channel's pending values are discarded so its
+-- steps send them at their own time, and its anchor is forgotten because the
+-- onset it referred to no longer means what it did.
+local function discard_channel_lookahead(channel_number)
+  local scheduler = m_clock.lookahead_scheduler
+  if scheduler then scheduler:invalidate(channel_number, nil, nil) end
+  local clock = m_clock["channel_" .. channel_number .. "_clock"]
+  if type(clock) == "table" then clock.last_anchor_pulse = nil end
+end
+
+local function retime_channel(channel_number, clock)
+  retime_channel_slides(channel_number, clock)
+  discard_channel_lookahead(channel_number)
+end
+
 function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.swing_or_shuffle
   clock:set_swing_or_shuffle((swing_or_shuffle or 0))
-  if clock.swing_or_shuffle ~= previous then retime_channel_slides(channel_number, clock) end
+  if clock.swing_or_shuffle ~= previous then retime_channel(channel_number, clock) end
 end
 
 function m_clock.set_channel_swing(channel_number, swing)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.swing
   clock:set_swing(swing or 0)
-  if clock.swing ~= previous then retime_channel_slides(channel_number, clock) end
+  if clock.swing ~= previous then retime_channel(channel_number, clock) end
 end
 
 function m_clock.set_channel_shuffle_feel(channel_number, shuffle_feel)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_feel
   clock:set_shuffle_feel((shuffle_feel or 0))
-  if clock.shuffle_feel ~= previous then retime_channel_slides(channel_number, clock) end
+  if clock.shuffle_feel ~= previous then retime_channel(channel_number, clock) end
 end
 
 function m_clock.set_channel_shuffle_basis(channel_number, shuffle_basis)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_basis
   clock:set_shuffle_basis((shuffle_basis or 0))
-  if clock.shuffle_basis ~= previous then retime_channel_slides(channel_number, clock) end
+  if clock.shuffle_basis ~= previous then retime_channel(channel_number, clock) end
 end
 
 function m_clock.set_channel_shuffle_amount(channel_number, shuffle_amount)
   local clock = m_clock["channel_" .. channel_number .. "_clock"]
   local previous = clock.shuffle_amount
   clock:set_shuffle_amount(shuffle_amount or 0)
-  if clock.shuffle_amount ~= previous then retime_channel_slides(channel_number, clock) end
+  if clock.shuffle_amount ~= previous then retime_channel(channel_number, clock) end
 end
 
 function m_clock.set_channel_division(channel_number, division)
@@ -639,7 +712,7 @@ function m_clock.set_channel_division(channel_number, division)
   local previous = clock.division
   local div_value = 1 / (division * 4)
   clock:set_division(div_value)
-  if clock.division ~= previous then retime_channel_slides(channel_number, clock) end
+  if clock.division ~= previous then retime_channel(channel_number, clock) end
 end
 
 function m_clock.get_channel_division(channel_number)

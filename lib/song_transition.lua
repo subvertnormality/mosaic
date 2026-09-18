@@ -162,6 +162,9 @@ function transition.process_song_song_patterns()
 
         -- Switch to the next pattern
         program.set_selected_song_pattern(next_song_pattern)
+        -- Every global pattern reset ends the horizon, including a repeat of the
+        -- same pattern: no value resolved before the reset may leave after it.
+        m_clock.discard_lookahead()
         if selected_song_pattern_number ~= next_song_pattern then
           -- Slides never cross song patterns; a same-pattern repeat may wrap.
           m_clock.cancel_all_spread_actions()

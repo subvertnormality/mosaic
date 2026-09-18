@@ -417,22 +417,39 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             # rounded up to a whole pulse because it leaves on one, and never
             # earlier than halfway between the previous note-on and its step.
             # Notes are not moved, so the midpoint is between the two step times.
-            quantised = math.ceil(lead_ns / pulse_ns) * pulse_ns if lead_ns else 0
-            expected = max(x - quantised, (ref_note_times[previous] + x) / 2)
-            if available is not None and available > expected:
-                expected = available
-            if expected > x:
-                expected = x
+            # Everything here lands on the pulse grid, because a value leaves
+            # inside a pulse and every onset is a pulse. Working in pulses gives
+            # one exact expected time rather than a window: the lead rounded up,
+            # the midpoint from the last sounding note, and the onset that
+            # resolved the value, whichever of the three is latest.
+            def at(ns):
+                return int(round(ns / pulse_ns))
+            lead_pulses = math.ceil(lead_ns / pulse_ns) if lead_ns else 0
+            onset_pulse = at(x)
+            anchor_pulse = at(ref_note_times[previous])
+            send = onset_pulse - lead_pulses
+            midpoint = anchor_pulse + -(-(onset_pulse - anchor_pulse) // 2)
+            if send < midpoint:
+                send = midpoint
+            if available is not None and send < at(available):
+                send = at(available)
+            if send > onset_pulse:
+                send = onset_pulse
+            expected = send * pulse_ns
             if condition.get('slide'):
                 # A slot that is mid-slide keeps its wire until the slide's
-                # destination step, so its lock is not advanced. The value is
-                # still held to the midpoint and to its own step, which is what
-                # is checked here; which of the two it takes depends on whether
-                # that slot was sliding at the time and is not asserted.
-                assert (ref_note_times[previous] + x) / 2 - tolerance - pulse_ns <= rel(value, run) <= x + tolerance, dict(
-                    rule='sliding value between the midpoint and its step', condition=name,
-                    lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x, actual_ns=rel(value, run))
+                # destination step, so its lock is not advanced, while a lock
+                # that starts a slide is. Which of the two applies depends on
+                # slide state the capture does not name, so both exact times are
+                # allowed and nothing between or beyond them is.
+                actual_now = rel(value, run)
+                allowed = (expected, onset_pulse * pulse_ns)
+                assert any(abs(actual_now - option) <= tolerance for option in allowed), dict(
+                    rule='sliding value at its send pulse or at its step', condition=name,
+                    lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x,
+                    actual_ns=actual_now, allowed_ns=list(allowed))
                 queued = max(queued, expected) if queued is not None else expected
+                available = x
                 timed_values += 1
                 continue
         if queued is not None and queued > expected:
@@ -440,9 +457,10 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         queued = expected
         available = x
         actual = rel(value, run)
-        # One pulse of slack in each direction: the value lands on the pulse grid,
-        # and which pulse the midpoint floor falls on is a whole-pulse decision.
-        assert abs(actual - expected) <= tolerance + pulse_ns, dict(rule='value at its documented time', condition=name, lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x, expected_ns=expected, actual_ns=actual)
+        # The expectation is an exact pulse, so this is the plain measurement
+        # tolerance. Widening it by a pulse here would accept a value that left
+        # one pulse late, which is less lead than was asked for.
+        assert abs(actual - expected) <= tolerance, dict(rule='value at its documented time', condition=name, lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x, expected_ns=expected, actual_ns=actual, pulse_ns=pulse_ns)
         timed_values += 1
     return dict(notes=count, values=len(run_values), timed_values=timed_values)
 

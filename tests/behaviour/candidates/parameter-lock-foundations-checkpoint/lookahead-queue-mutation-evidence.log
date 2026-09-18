@@ -1,8 +1,0 @@
-# lock_lookahead_queue: evidence the tests detect a broken implementation
-# 2026-09-18T16:32:21+01:00; lua Lua 5.3.3  Copyright (C) 1994-2016 Lua.org, PUC-Rio
-# Each mutation was applied to lib/clock/lock_lookahead_queue.lua alone and reverted after.
-
-M1  less() ignores ordinal (ties lose insertion order)   -> 14 successes, 1 failure
-M2  push() never refuses at capacity                     -> 13 successes, 2 failures
-M3  settle() never drops cancelled roots                 -> 13 successes, 2 failures
-unmutated                                               -> 15 successes, 0 failures

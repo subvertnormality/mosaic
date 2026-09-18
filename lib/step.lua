@@ -315,9 +315,29 @@ end
 
 -- Send a previewed value down the same path playback uses, so the resend cache
 -- is committed here and in no other place.
+--
+-- The value was resolved at the previous onset, and the player can act in the
+-- interval: muting the channel, or turning the assigned control, or recording
+-- over the slot. Those are decided again here, against the state as it is now,
+-- because sending a value the player has since overruled is worse than sending
+-- it late. Returning false leaves the slot uncommitted, so its own step sends
+-- whatever is then in force.
 function step.send_preview_bundle(bundle)
+  local program_data = program.get()
+  local channel = program.get_channel(program_data.selected_song_pattern, bundle.channel)
+  if channel == nil or channel.mute then return false end
+  if fn.param_value("record") == 2 and program_data.selected_channel == bundle.channel
+      and recorder.trig_lock_is_dirty(bundle.channel, bundle.slot) then
+    return false
+  end
+  -- An assigned value that the player has since changed is not resent from a
+  -- stale preview; only a step's own lock is fixed at the time it was resolved.
+  if bundle.kind == "assigned" and read_stock_assigned(bundle.param.param_id) ~= bundle.value then
+    return false
+  end
   send_midi_param(bundle.channel, bundle.slot, bundle.param, bundle.value,
                   bundle.midi_channel, bundle.midi_device, bundle.nrpn_mode)
+  return true
 end
 
 function step.process_params(channel, step)

@@ -115,6 +115,12 @@ def check_slides(emitted,ons,channels,lead_ms=0):
             floor=notes[16*cycle-1]['index'] if cycle else -1
             ramp=[e['bytes'][2] for e in cc if floor<e['index']<ninth['index']]
             assert ramp and ramp[0]==0 and ramp[-1]==127 and ramp==sorted(ramp) and len(set(ramp))>=4,(channel+1,cycle,ramp)
+            # The ramp is a glide across the cycle, not a burst before it. Its
+            # samples are produced as the steps play, so most of them land after
+            # the cycle's first note, and its destination arrives with the ninth.
+            after=[e for e in cc if first['index']<e['index']<ninth['index']]
+            assert len(after)>=len(ramp)-2,('Ramp bunched before its cycle',channel+1,cycle,len(after),len(ramp))
+            assert after and after[-1]['bytes'][2]==127,('Ramp does not reach its destination in the cycle',channel+1,cycle)
             checked+=1
     assert checked>=channels,('No complete slide cycle',checked)
     return checked

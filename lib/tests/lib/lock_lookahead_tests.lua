@@ -204,3 +204,63 @@ function test_lock_lookahead_invalidating_an_unknown_target_changes_nothing()
   scheduler:serve(10)
   luaunit.assert_equals(#sent, 1)
 end
+
+function test_lock_lookahead_moves_a_rescheduled_value_to_its_new_pulse()
+  -- Rewriting the pulse without moving the entry would fire it at the old time.
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 1})
+  scheduler:schedule(20, {channel = 1, step = 5, slot = 1, value = 2})
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 0, "the value must not leave at the pulse it no longer holds")
+  scheduler:serve(20)
+  luaunit.assert_equals(#sent, 1)
+  luaunit.assert_equals(sent[1].value, 2)
+end
+
+function test_lock_lookahead_moves_a_rescheduled_value_earlier_too()
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(20, {channel = 1, step = 5, slot = 1, value = 1})
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 2})
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 1)
+  luaunit.assert_equals(sent[1].value, 2)
+  scheduler:serve(20)
+  luaunit.assert_equals(#sent, 1, "the retired entry must not fire again")
+end
+
+function test_lock_lookahead_invalidates_a_whole_step_when_its_locks_are_cleared()
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 1})
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 2, value = 2})
+  scheduler:schedule(10, {channel = 1, step = 6, slot = 1, value = 3})
+  scheduler:invalidate(1, 5, nil)
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 1)
+  luaunit.assert_equals(sent[1].step, 6)
+end
+
+function test_lock_lookahead_invalidates_a_whole_channel_when_its_locks_are_cleared()
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 1})
+  scheduler:schedule(10, {channel = 2, step = 5, slot = 1, value = 2})
+  scheduler:invalidate(1, nil, nil)
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 1)
+  luaunit.assert_equals(sent[1].channel, 2)
+end
+
+function test_lock_lookahead_forgets_what_it_sent_at_a_boundary()
+  -- A value resolved from the outgoing pattern must not suppress the incoming
+  -- pattern's lock for the same step, and must not survive a stop and restart.
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 1, slot = 1, value = 64})
+  scheduler:serve(10)
+  luaunit.assert_true(scheduler:was_sent(1, 1, 1))
+  scheduler:cancel_all()
+  luaunit.assert_false(scheduler:was_sent(1, 1, 1))
+end
