@@ -21,49 +21,7 @@ local Lattice, Sprocket = {}, {}
 
 
 
-local drunk_map = {
-  {2/9, 3/9, 2/9, 2/9, 2/9, 3/9, 2/9, 2/9},
-  {2/7, 2/7, 2/7, 1/7, 2/7, 2/7, 2/7, 1/7},
-  {1/5, 2/5, 1/5, 1/5, 1/5, 2/5, 1/5, 1/5},
-  {1/6, 3/6, 1/6, 1/6, 1/6, 3/6, 1/6, 1/6},
-  {1/8, 4/8, 2/8, 1/8, 1/8, 4/8, 2/8, 1/8},
-  {1/9, 5/9, 2/9, 1/9, 1/9, 5/9, 2/9, 1/9},
-}
-
-local smooth_map = {
-  {5/18, 5/18, 4/18, 4/18, 5/18, 5/18, 4/18, 4/18},
-  {4/14, 4/14, 3/14, 3/14, 4/14, 4/14, 3/14, 3/14},
-  {3/10, 3/10, 2/10, 2/10, 3/10, 3/10, 2/10, 2/10},
-  {2/6, 2/6, 1/6, 1/6, 2/6, 2/6, 1/6, 1/6},
-  {5/16, 5/16, 3/16, 3/16, 5/16, 5/16, 3/16, 3/16},
-  {6/18, 7/18, 3/18, 2/18, 6/18, 7/18, 3/18, 2/18},
-}
-
-local heavy_map = {
-  {4/9, 2/9, 2/9, 1/9, 4/9, 2/9, 2/9, 1/9},
-  {3/7, 1/7, 2/7, 1/7, 3/7, 1/7, 2/7, 1/7},
-  {2/5, 1/5, 1/5, 1/5, 2/5, 1/5, 1/5, 1/5},
-  {3/6, 1/6, 1/6, 1/6, 3/6, 1/6, 1/6, 1/6},
-  {4/8, 1/8, 2/8, 1/8, 4/8, 1/8, 2/8, 1/8},
-  {5/9, 1/9, 2/9, 1/9, 5/9, 1/9, 2/9, 1/9},
-}
-
-local clave_map = {
-  {2/9, 3/9, 2/9, 2/9, 3/9, 2/9, 2/9, 2/9},
-  {2/7, 2/7, 1/7, 2/7, 2/7, 1/7, 2/7, 2/7},
-  {1/5, 2/5, 1/5, 1/5, 2/5, 1/5, 1/5, 1/5},
-  {3/12, 4/12, 2/12, 3/12, 4/12, 2/12, 3/12, 3/12},
-  {3/16, 6/16, 3/16, 4/16, 5/16, 3/16, 4/16, 4/16},
-  {4/18, 7/18, 3/18, 4/18, 7/18, 2/18, 5/18, 4/18},
-}
-
-local shuffle_feels = {
-  drunk_map,
-  smooth_map,
-  heavy_map,
-  clave_map
-}
-
+local onset_projection = include("mosaic/lib/clock/onset_projection")
 
 --- instantiate a new lattice
 -- @tparam[opt] table args optional named attributes are:
@@ -753,36 +711,15 @@ function Sprocket:update_swing()
 end
 
 function Sprocket:calculate_shuffle_ppqn(step)
-  local ppc = self.ppqn * 4
-  local pattern_length = self.lattice.pattern_length
-  local step_mod = ((step - 1) % pattern_length) + 1
-  
-  if self.swing_or_shuffle == 2 and self.shuffle_feel > 0 and self.shuffle_basis > 0 then
-    local feel_map = shuffle_feels[self.shuffle_feel]
-    local playpos_mod = (step_mod % 8) + 1
-    local base_multiplier = 0.25 
-    local multiplier = feel_map[self.shuffle_basis][playpos_mod]
-    local adjusted_multiplier = base_multiplier + self.shuffle_amount * (multiplier - base_multiplier)
-    return ((self.division * 4) * ppc) * adjusted_multiplier
-  else
-    if (pattern_length % 2 == 1) and step_mod % pattern_length == 0 then
-      return self.division * ppc
-    else
-      return (self.division * ppc) * (step_mod % 2 == 1 and self.even_swing or self.odd_swing)
-    end
-  end
+  return onset_projection.calculate(self, self.lattice.pattern_length, step)
 end
 
 function Sprocket:update_shuffle(step)
   -- A positive swung interval must consume at least one native pulse.
   -- Clamp before carry accumulation so sub-pulse gaps cannot create zero cycles.
-  local calculated_ppqn = math.max(1, self:calculate_shuffle_ppqn(step))
   local original_ppqn = self.current_ppqn
   local original_phase = self.phase
-  
-  local rounded_ppqn = math.floor(calculated_ppqn + self.ppqn_error - 0.01)
-  self.ppqn_error = (calculated_ppqn + self.ppqn_error) - rounded_ppqn
-  self.current_ppqn = rounded_ppqn
+  self.current_ppqn, self.ppqn_error = onset_projection.interval(self, self.lattice.pattern_length, step, self.ppqn_error)
 
   if self.current_ppqn ~= original_ppqn then
     local cycle_progress = (original_phase - 1) / original_ppqn
@@ -848,16 +785,8 @@ function Sprocket:project_onset_pulses(distance)
   -- Only interval length and rounding carry affect future onset deadlines.
   -- Advance those scalars without copying clocks or updating irrelevant phase
   -- fields for every parameter. Keep update_shuffle's rounding recurrence.
-  local elapsed, carry, step = self.current_ppqn, self.ppqn_error, self.step
-  for interval = 2, distance do
-    step = step + 1
-    if step > self.lattice.pattern_length then step = 1 end
-    local calculated = math.max(1, self:calculate_shuffle_ppqn(step))
-    local rounded = math.floor(calculated + carry - 0.01)
-    carry = calculated + carry - rounded
-    elapsed = elapsed + rounded
-  end
-  return elapsed
+  return onset_projection.project_pulses(self, self.lattice.pattern_length,
+    self.current_ppqn, self.ppqn_error, self.step, distance)
 end
 
 -- Predict an identified future onset from the current phase, including the
@@ -868,21 +797,7 @@ function Sprocket:project_onset_occurrence(occurrence)
   assert(not self.division_for_cycle and self.delay == 0 and not self.delay_new, "Unsupported variable or delayed projection")
   -- Later callbacks in this lattice pulse see phase already advanced for
   -- the next pulse. Their projection origin needs that one-pulse offset.
-  local offset = self.last_processed_transport == self.lattice.transport and 1 or 0
-  local projected = setmetatable({}, getmetatable(self))
-  for key,value in pairs(self) do projected[key] = value end
-  if not projected.shuffle_updated then projected:begin_cycle() end
-  if projected.phase >= 1 and projected.phase < 2 and (offset == 1 or self.last_onset_transport ~= self.lattice.transport) then
-    remaining = remaining - 1
-    if remaining == 0 then return offset end
-  end
-  local elapsed = projected.current_ppqn - (projected.phase - 1)
-  for interval = 2, remaining do
-    projected.phase = projected.current_ppqn + 1
-    projected:finish_cycle();projected:begin_cycle()
-    elapsed = elapsed + projected.current_ppqn
-  end
-  return elapsed + offset
+  return onset_projection.project_occurrence(self, self.lattice.pattern_length, self.lattice.transport, occurrence)
 end
 
 function Sprocket:forward_pending_setting(method, value)

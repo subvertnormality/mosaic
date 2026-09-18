@@ -1,0 +1,12 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+### MISSING INCLUDE: mosaic/lib/clock/onset_projection
+lua: .///lib/onset_projection_tests.lua:3: MISSING INCLUDE: mosaic/lib/clock/onset_projection
+stack traceback:
+	[C]: in global 'error'
+	./run_tests.lua:84: in global 'include'
+	.///lib/onset_projection_tests.lua:3: in main chunk
+	[C]: in global 'require'
+	./run_tests.lua:99: in global 'require_all_files_in_folder'
+	./run_tests.lua:125: in main chunk
+	[C]: in ?

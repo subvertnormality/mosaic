@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "case": "M-SYNC-LEAD-007",
+  "requirements": [
+    "LOCK-PARAM-SET",
+    "CLOCK-MIDI-TRANSPORT-001"
+  ],
+  "expansion_families": [],
+  "passed": true,
+  "campaign_complete": false,
+  "clock_mode": "controlled-experimental",
+  "diagnostic_only": true,
+  "controlled_time_admitted": false,
+  "profile": "base-midi",
+  "mod_revisions": {},
+  "mod_patches": {},
+  "seed": 42,
+  "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+  "wall_elapsed_seconds": 25.31887342099799,
+  "logical_advanced_seconds": 76.73,
+  "manual_sha256": "12c49946ac554bcb71bc4ec9c65c18d626335e231878b8c4e5c574a0a3b746c6",
+  "behaviour_source_sha256": {
+    "tests/behaviour/acquisition_stop.py": "6d8921180845dc83c434d6dd95cf4f5de0c7c710c139de3964ead0c01f6cbe42",
+    "tests/behaviour/autosave_failure.py": "5cd61e5e2f45db7a1948416fc864272bac7a94a56a1cb0aacf0de8c0445b9563",
+    "tests/behaviour/autosave_idle.py": "d684ae148cafc2efca80fcea480c6af026fbdef5f6e88d1fc608acb9de1330bc",
+    "tests/behaviour/cases.py": "0770fea87171faeca0d3280099bd2cd20eb8cb8d31afd322a172d1a293dfcf88",
+    "tests/behaviour/channel_scale_display.py": "cc7b7ca7e786fe29ecaf843545f87f869aaf5dc8cb765db72b5529a1b2bba7f3",
+    "tests/behaviour/chord_mask_start_x.py": "ec5a995a5573b61f33694d11da19e9b7e3ff6e565f658609ba9eb81ab18c9b3b",
+    "tests/behaviour/composition_workflow.py": "0ad1f6c70560d7499e313e7596a01281739cfa77de629f0ba8f27156ff1379f8",
+    "tests/behaviour/continue_spp.py": "ceb85f81548969f41a374243e14345448e8b19af63292273ff8ff10fa0f09911",
+    "tests/behaviour/dashboard_channel_select.py": "c5f3e021b4270527dd690f8b39daf1fdea00dcb3f348a6cf325c74195147370d",
+    "tests/behaviour/dashboard_chord_slots.py": "952b6960abc51f5aa4bfe9b6b2c11a33bceac26401267dbc3ba7ead897dc863d",
+    "tests/behaviour/dense_workload.py": "159e133ef802e8ca3915e9cf970b1e2f1fd63700deead003145503ca474aa977",
+    "tests/behaviour/device_configs.py": "3ccd8be75902e53d882141cd7a6d652a860cf1ef0cd4a4243949a8161bd9d098",
+    "tests/behaviour/device_picker_names.py": "21ca0077653f420c9d106055e277f36235eebbc59029a95cf245ea0d8a2a5763",
+    "tests/behaviour/dial_off_display.py": "37b9da37a7351c1528ccf8bd2d257e0cd7bc61a91bf3ab9e75dd82ec2ac0428a",
+    "tests/behaviour/driver.py": "0eb7a82db1b68409f71f09e3e112f3bc773f4486da6c0a8de3f7da890a8a4769",
+    "tests/behaviour/editor_pattern_flicker.py": "64fef174fb5c6b0866ed5130ad39c48e1bd1c95bb5ad0e2c742b0db6ca290391",
+    "tests/behaviour/elektron_program_changes.py": "dbd1c95558e5f1e4c5ecc3a4475633ab7f6b6796a82f6e3915a7452d04b45567",
+    "tests/behaviour/elektron_two_ports.py": "915f5cad4fea6b4a0b499632bc6060acf00eee34a152d097674048e066660568",
+    "tests/behaviour/endurance.py": "07145e6e9de0007e3a99a808d1666e504c194e04c6cd380ac842860090c86cf8",
+    "tests/behaviour/external_clock_backlog.py": "430acd32267de059890510e917703c7701ba61f2b5f681fc84f3b441aca93940",
+    "tests/behaviour/external_clock_faults.py": "7865d2980d309f979486ac5ec5952cbd359d85320e5f4e0eaf191bb37fb9b310",
+    "tests/behaviour/external_clock_long.py": "3b8709806db9ec26fd60900ae207391aca7c3eecdbfc5fe7e163830b14241d5d",
+    "tests/behaviour/external_cold_start.py": "a81336fc1440dafc8ba5b0eb94b51d23873c68ec34ac65549980fcf04c3df277",
+    "tests/behaviour/external_start_phase.py": "0341696fb4ee19de26de80c2bb77b40fcc7eee5ea58348a3ad17f32c83543a34",
+    "tests/behaviour/external_started_handoff.py": "21c3cdd81c5cb186d17a413ac6dfc92557db7a60ba7a9b3aa75af552b96b9cfb",
+    "tests/behaviour/fast_acquisition.py": "21fcd5a3a635b7d8c56238658b93de00049fd390f211ccc7920b59ef15c06b61",
+    "tests/behaviour/forwarded_clock.py": "757135e66a8e0c3bbe9ccaf2e499ecc57d912cc88616389fa15b564dc5ca95fb",
+    "tests/behaviour/fractional_deadline_contract.py": "c7b3a84381875dea4fba2d3ab63f39c202b64eb82a74c2a52e720260c9e4834b",
+    "tests/behaviour/fractional_deadlines.py": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e",
+    "tests/behaviour/frame_oracle.py": "22a37ea7fe9f4e41131a95ed79255d23d6d955218c4e2d429ed569ab69a366b4",
+    "tests/behaviour/gesture_release_order.py": "9e370a1ce0460ebcd994f9a1790e885146719bf3f4f33cb13a2e4650bb886492",
+    "tests/behaviour/grid_hot_disconnect.py": "24c77a51b81ccaec245f0a3b4b24dc07c8e34e3367f98d2f57575f17d1f601a8",
+    "tests/behaviour/hardware_driver.py": "c0c2e83cf74dd88481c3603a353f2dbe69472103a305ff6f255863b73e1aad40",
+    "tests/behaviour/hardware_performance.py": "e6d33127e3aef9b3f71f4452867b35e90370f27e5788f659c0f4f856cdd24111",
+    "tests/behaviour/held_mask_extra_key.py": "eba111a25d3dc118f72193896b9222cc270d7293c6adfffc845ec22af82781c8",
+    "tests/behaviour/heldout_workloads.py": "43ce8c06c1a70b5756866042b8ff0ece69a4f22b33ba0640f2d98ac03d06bdb1",
+    "tests/behaviour/internal_clock_stall_phase.py": "b8e93bfe9d8a457e15aafc367e74c4956993d2fcd6b3bb3a1ae184d1eabdbb49",
+    "tests/behaviour/jf_oracle.py": "2d0e51a2fb9702cd43344826b727c94e6ee287ca9492dc595cde68c4c30dd2ab",
+    "tests/behaviour/keyboard_chord_after_stop.py": "f3e528059fa06117471c0f47e4d2dc1201d37505b17e7688b134091b20204906",
+    "tests/behaviour/keyboard_options.py": "d1bf79977d98ec138513ef210b7437849306baf2145683ed371d4aee43e9f339",
+    "tests/behaviour/keyboard_repeated_note_on.py": "54ad7a2bc85fb6a69a9c680f16acc6f5376c8531223df65ec8bd15d6d36f46ab",
+    "tests/behaviour/lead_timing_oracle.py": "b2a74e81434560c9791aeb30aa77cef378fdfedd4a140241abedbf3e591db16a",
+    "tests/behaviour/length_persistence.py": "6d0a65f8d718df6512c1e25ef5795a178a15c896a242d1b0559f3c2a3b2b626b",
+    "tests/behaviour/lifecycle_cycles.py": "73d26fd8e9b44c6cc3bd5318a51fc550e7af4a98811cde8fec3909a084b13067",
+    "tests/behaviour/lock_lead_clock_matrix.py": "d19fb2716a2bd4ee712f7c600b61ef7a738cfcc37977fb49b6d4fbb0fb5205b6",
+    "tests/behaviour/lock_lead_time.py": "9a271900e71d51622cf140cf247e899733070c3d4b42176bd4f99163085a5313",
+    "tests/behaviour/mask_clearing.py": "f12ea32c873dafdb5e09a37912fdb73bb2706da05ac69257675a8d5684eaf21a",
+    "tests/behaviour/mask_gestures.py": "9f0c1a6fff88b99a50a3f7e805bfadf2fb25649eb2cb657935ccb3a181a60538",
+    "tests/behaviour/mask_off_probe.py": "f081e85072360751a2110854f562a199b232ce732ab9504f771ba2b4ce9dc418",
+    "tests/behaviour/mask_quantisation.py": "97f4a33c05de157a4e68868e226286643d2d5a8f1811be65c70c566fd96329fb",
+    "tests/behaviour/master_clock.py": "4853bb58b9fac2c6f3b67c903774b446bef4b37444d7d300338c82fdc3730a42",
+    "tests/behaviour/master_lifecycle.py": "d355cc56cc66787cda8a5e6ad9aa13c5d2c55eac5dc63712eb577ad4b3715782",
+    "tests/behaviour/master_multi_output.py": "c9b04294117c0588a349d90978da3f870a50411d44977917be2db938f234e187",
+    "tests/behaviour/memory_chord_three_held.py": "99faf59650b87ca4e51501aeabe01c2773218be480355ca979e9652e88e271af",
+    "tests/behaviour/memory_held_velocity.py": "d23d17d843b746d7f4b35108ba9ab81731c9f88da5854f99bdf49e66dc79e85e",
+    "tests/behaviour/memory_lock_slide_undo.py": "5078fe736346d1811260c383f59f6dc6aad8811a73de9b50e2ac9bad7abd4939",
+    "tests/behaviour/memory_new_project.py": "83a451502f05c00970a7b25b5db441b0003219b3615a21334bafceee4db8a220",
+    "tests/behaviour/memory_persistence.py": "2faac932ee79775dca66257969d7b5864cfdf203587334cae494d9b17341f5c8",
+    "tests/behaviour/memory_redo_chord_merge.py": "34b40a1978dd7fe3240f658d5e7ba0797e0ed8297a3f1559fef9e13e30bb0230",
+    "tests/behaviour/memory_redo_encoder_lock.py": "34eb5b5f21efc75fb3b007e035d4a4a05c56fe643bbf04c84b6b5f8ac6987c85",
+    "tests/behaviour/memory_scale_lock_display.py": "5396f4f48f466daf4279e42105da70167573f764e832146f4df61653742c5472",
+    "tests/behaviour/memory_step_undo.py": "03683f884f69e808f9468da28e5476f135217f390ef91a05891a0e1ced329b2a",
+    "tests/behaviour/memory_truncate.py": "a00095d5b246a0f490cbcc60ac8eff4fc811569515d60e7302e0ebd0872f6fa2",
+    "tests/behaviour/memory_truncate_isolation.py": "1b6bd6a3bc719abae2ae13003d2c34d9894c450865ed4f9d590c6767b5f5daa2",
+    "tests/behaviour/memory_wrap.py": "f6acabfe225bfd48362e63ca466afd96f7e7112758668bf6be753d8918872d8b",
+    "tests/behaviour/merge_lock_random.py": "567d49e476c4a0674ef9cffd7064ab5ec2b474f6ee5f02437a0049c99c5c09ac",
+    "tests/behaviour/midi_cc_page_return.py": "706120f5c370bd60c8d2e20cdf4c0cee3f2cf2cb51bec4189d76eea9c81a7520",
+    "tests/behaviour/midi_mapping.py": "57761e0e87cddb588c27cc0bc73f853011c0847a1fd496543abd8426ae295381",
+    "tests/behaviour/midi_mapping_held_step.py": "47b3b6ed6f3cc8a6dc2bae6fc7c5fcbde9b176973d0ba485eda7bdf2e09f7f27",
+    "tests/behaviour/midi_mapping_targets.py": "7ab5ebe9019bf6225b7a137629cea462447b077ad271a93b73bb3b8ac43ef0a8",
+    "tests/behaviour/midi_window.py": "2868b6531f303c59947224ab67ed5a1ed202b0f59e3343e3a6b14c32f08d5ced",
+    "tests/behaviour/modulation_interactions.py": "5bb260c124f5a964e0ac17ce9fc5c7929d5f6b120ee1dd905ec0fa76d7be9d57",
+    "tests/behaviour/named_save.py": "33a614bcd63037ebb9c387f9268955cfac84b1f2662a4f4b9196fb297ab7ce7f",
+    "tests/behaviour/nb_chord_acceleration_lock.py": "7de4e4ae1dc01f44415794ae943c683fb527128797d47aff8156aaf1f2201378",
+    "tests/behaviour/nb_device_switch_slots.py": "25a8806378140662dab829c878e9ba96d635329c46792d272b5639bc53316a20",
+    "tests/behaviour/nb_param_lock.py": "0a75cab2d7b05d9b0d30a71af7e85a98fa5866fa954728921af0680ab8ae2e70",
+    "tests/behaviour/note_accounting.py": "914558572e798cf7f8b4f86d255d6495b4310a2fb200bdf21f443d7c1e6d1b51",
+    "tests/behaviour/note_schedule.py": "540652e676b844828a4e2701270cc73903315c977a15bad35616bc511122477a",
+    "tests/behaviour/numeric_merging.py": "3601482e40aa166c3f49a10003fe4a8cc9c1be0de94926147f373abd288abd69",
+    "tests/behaviour/oracle_contract.py": "85bf1be1001b9e5e658ca5ea1cc8336ed8be2099c6e1ad22efc337e2bf5c9388",
+    "tests/behaviour/output_cases.py": "60fe296579bafacc2b097a38b953a6727f9038ad45764bf58d1140ead5a1464f",
+    "tests/behaviour/paint_race.py": "85b38e77c5a9386d5471ef0bb1525a82162b89abcc4012ffc12f6af40e8889bf",
+    "tests/behaviour/panic_hotplug.py": "3572ca109a0eb8bb99a2fabaa2acc2d4b312d87a01899b44c4d8d0c361e1716e",
+    "tests/behaviour/panic_hotplug_trace.py": "d9f2efb877974f3f85fa2862985859cf586151908623ffb5d80a58aeae6eed5e",
+    "tests/behaviour/panic_repeat_trace.py": "612beebac9c4442aac8cf782d117df99e40f807dc7ab3f6e84d263f0dbd47dd4",
+    "tests/behaviour/panic_trace.py": "810c2b841b7c376276a24c7344a34f312f394ab765bc3e5c5203e911fd9806b5",
+    "tests/behaviour/panic_transport.py": "a43bcd93cdf6a6f968c2cdb0f38129f4bdb65e3dffbd7a9eaa0dfab48c1e5e95",
+    "tests/behaviour/parameter_lock_domain.py": "dfd2ea92599f50315305da09fcca44ab4e0f4115be15336718b321819c34bdae",
+    "tests/behaviour/patch_matrix.py": "3ea1f1b0f653deff94ff2edc997bbc06dc395861cb2be3829ed202e42abfc8df",
+    "tests/behaviour/patch_params.py": "b0415ccd85fbdc39ed4cd7a41dc98e60e6e137fe3eea0d30752526d5fec4d195",
+    "tests/behaviour/pattern_boundary_edit.py": "076748b015c5ddecd3b3d05fa8e8b89807bfd36fb93dfd9219572a3067d02e18",
+    "tests/behaviour/pcm_oracle.py": "f5ce34d7701440e964f26d984db21c2bc07a968d12195cb7dd242c31f9e55d15",
+    "tests/behaviour/pending_note_mask_song_transition.py": "aa5efe2d9060bd3952e99cc1de7e8b8ea854373242abd454acd5bbaae2552dd8",
+    "tests/behaviour/pentatonic_options.py": "4a702fea06f7e22e759450e045917a9301716698382ed1a451f02c2004f19a83",
+    "tests/behaviour/perf_calibration_emulator.py": "87925134c4099085fa4b35c913656c7a162d870d2f61a1395805d6ce0af61cbb",
+    "tests/behaviour/perf_campaign.py": "9c9ad64946b9d6df6dac24d7c848103ca7ef6dd15dc31bf07afc6bcbcb523b4a",
+    "tests/behaviour/perf_dense.py": "dd1a48123e921175e303220e1552eb357cb149e7177752cc17de63ecb60d5c6a",
+    "tests/behaviour/perf_input.py": "e517f22046163015e93bf7e7265c2de0c6f8d0fc0603f204e271a8852c15eeba",
+    "tests/behaviour/perf_overload.py": "03650be3f6d209bf160ed3d1e98f49d8306697da2e7b463719b190e25fca9629",
+    "tests/behaviour/perf_storage.py": "7b4bbba6d9f5d7bdf9a70e77e080b2db3a3a4529828fa78cd9f7a4e6f11f2ce0",
+    "tests/behaviour/persisted_fixture.py": "5e4d4233a9668a637d2a6d1d6e85adf4fecaa212e40b1253feb02fc0fbcb587b",
+    "tests/behaviour/persisted_fixture_builder.py": "09729a34863634a7952eaac2cebc5fc38ae14281881ee54ee903ba9771db9fc7",
+    "tests/behaviour/persisted_ranges.py": "12c66e4bda882a42f2db237d8c27589aa758da2e5a7e5bb001750ed923d3be5e",
+    "tests/behaviour/pitch_lock_isolation.py": "d4388db2dc6b4dfe9f7dd05005f0e911d9ab5f87a3cfdb30fd1b74f7c81be072",
+    "tests/behaviour/probe_overhead.py": "82a90c0e786a541f5cc37d6533e773ff9f4fc0004131f3d2e8d729f7accee3c0",
+    "tests/behaviour/project_dialog_lifecycle.py": "a148efccdd75e8dc74c2c32549b03261941bec1f9706ee7edda7cdf280c41747",
+    "tests/behaviour/pulse_probe.py": "a8f66909892aac7a7521ec3f6051f28ebf0f08c1dcd03511b63cdc71fa9bb439",
+    "tests/behaviour/random_note_domains.py": "52ab27808cc9e72afe31db2fbbd017ac2469558d9e938154f099769bb47202f6",
+    "tests/behaviour/range_rejection.py": "5477f9f2df300839ab8ae9ad6fc173500380dd225d98e9e8b24f86eda0cc0ff5",
+    "tests/behaviour/real_norns.py": "5dc589226d51156c5ebac51fb2a6051fb50efe9b710b17f0a88d18336b4c531d",
+    "tests/behaviour/recorded_note_page_key_held.py": "fbedf1cd53991c98e33afa6dcdc0aa46bc5ebda6bfc187307375acca7a8c124c",
+    "tests/behaviour/recorded_same_key_sources.py": "bb3a17458d911eca1fa06ff67cc5aa4e58188279903efd937a570b07f761a4c2",
+    "tests/behaviour/recording_lifetimes.py": "962f6a2280d1147f9e727c59d443fc43cd31214455c4cda57430c4700758dd47",
+    "tests/behaviour/recording_lock_song.py": "e33df49c50502a0fadbeff412b7c582f1f97e32100a39098c02fae477132b306",
+    "tests/behaviour/recording_song_transition.py": "a425252ccb94449fb5c8c7de1ba793590c4ecf69ffdd2164ebaae98a81bb14db",
+    "tests/behaviour/repeat.py": "6efe472cf0494d6814032207dd0acd7a7079e3ad38b300147ca8c7a87d569779",
+    "tests/behaviour/repeated_external_start.py": "1b486af4b5030f5ffc8cc76b7135d79673af10386ff4b759bd888a78153cb6ca",
+    "tests/behaviour/reset_pending_voice.py": "ca6d6ebd6cf083b46d870f490eb761c2015e45b02a7bcdfa861ba47b184939c1",
+    "tests/behaviour/run.py": "3d6c2049d0027bd741e070685611532deae60e2e6c6cd941f508a209fe38f92c",
+    "tests/behaviour/scale_cache.py": "f066913ea83ae7f39d2822c1a9347158b99c98cada5dc2191f5268b03bff4600",
+    "tests/behaviour/scale_lock_order.py": "0fd2e4e0a4b870811c6afb90acdd35839b2925eb83baa9c12ad28f416bc0d7a4",
+    "tests/behaviour/scale_lock_precedence.py": "ad89ae1fc226ffd615db507e3436de3d601a779e1bbae5bfc40b87c3e032e856",
+    "tests/behaviour/scale_slot_matrix.py": "c6d48a8d2e10e86690a6b1f6dbd615d6113a4cef0f2344143f327f835fce391a",
+    "tests/behaviour/shuffle_field_inheritance.py": "674d493914647fd7e35396266111de769b58698e28fc19fd6871c1edaf0a7814",
+    "tests/behaviour/shuffle_first_bar_record.py": "d8a1acce41c2360d984a945c7a40526d9b024c70f8db4804face9823bb0c299a",
+    "tests/behaviour/shuffle_inheritance.py": "793b13b8f4a01eceabdfd5c1bdfd17fceb0fd1c7693084187cd9e3d95925c7d8",
+    "tests/behaviour/shuffle_matrix.py": "1f2c76002eec38b10e9df6f91e7d1adfab7e4e9b9dba6a1a9c2b4e04212f28cb",
+    "tests/behaviour/shuffle_mixed_channels.py": "d9667bd08584790759ad4d894d26a0d0122e13be2dea920b6eed5f87f26b3c9c",
+    "tests/behaviour/sinfonion_software.py": "ec34033a7adfdaac6b1b8bd968a79df3673d9eb4f2b5e4e247cc3abe31d6ffc1",
+    "tests/behaviour/slide_capacity.py": "8a790138994fb0bee8f340a25ff7905900b715f471d117e2db0220f63996c188",
+    "tests/behaviour/slide_reset_mid_step.py": "d44f4a10c60ecd2358025578844b685511659b4c18875fd85c37e1f64da3c0fd",
+    "tests/behaviour/song_divisions.py": "4739578b85a3bbb5893c43b2ee230aeabe46f03006438030c6273e9fa942be48",
+    "tests/behaviour/song_length_domain.py": "57a46fb8264fc4cf468be1a3f3ef64aa3c1cf45051b3049241ac6cf2e124d26d",
+    "tests/behaviour/song_length_sparse.py": "bf90b9f6d64658a03932581131d265c6fffb61f11db69645ed423fb5f67be6d6",
+    "tests/behaviour/song_mode_flow.py": "d97268df8865dc588b759a2c52489344e12fcded6cd2994644cb4be188556ee5",
+    "tests/behaviour/song_queue_stop.py": "6875802ba81129170d5b83c8e5bfb726d567666f416b44944808432ea261cac6",
+    "tests/behaviour/song_repetitions.py": "f90e228c0959c2e050d40d24397cc57094538e464d8e2db548de502a39fb6557",
+    "tests/behaviour/song_slot_copy.py": "6c3503649b3f8a9d4b05b7d5b7acf7dbd88fb294b048858c00d65c45f92a9c3d",
+    "tests/behaviour/song_tempo.py": "9f1af46219eb7c61a1be9624e43d16dab0d0992ad6f4f42d90e5e63decd11a0c",
+    "tests/behaviour/startup_transport.py": "abb97cb27c94e555728de334638a69c8b33c0f4c948531ab1bd339d52e8bb395",
+    "tests/behaviour/step_slides.py": "2043e5b8f8f0ab38f91461426a4cd97e0f50c13ddec8d3eef9210c57304f622a",
+    "tests/behaviour/stop_safety.py": "c94ee39d133ebe4f85985f3e7bc78bd4efdd24d5b612a25ace9cac2e9a8b2b38",
+    "tests/behaviour/suite.py": "18331d6ef922bbb5a1e4eee0d69ffe6aa67fccc40274a699f24ce8e2e14b41ef",
+    "tests/behaviour/swing_reset_mid_step.py": "539b6e5b8a61aef9bb6f180f3aac9f8ee29917d5e02aebe5b07960c21e2d3597",
+    "tests/behaviour/syntakt_pedal_params.py": "a839881dc150360a14dbd2d617efa8a1c6fb6f5c848f336d5ce7aa910632a7c1",
+    "tests/behaviour/test_acquisition_oracle.py": "0576c72b3479e52271dee80d56bd2980588028f867e246f30bb11af66094fe14",
+    "tests/behaviour/test_collection.py": "c54d24d6f260a424512523dde0907fd46350473a70a6c1772cfd564f8c149b12",
+    "tests/behaviour/test_duration_routes.py": "f76e029a3329210e0e78050ed8d33366c007f6d9318c7122fd01c24e5d9f9b54",
+    "tests/behaviour/test_external_clock_fault_oracle.py": "dd2d33645d73df8bf8950dcf9c653e50d6ce2c7e13778247888805ffe3f50943",
+    "tests/behaviour/test_fixture_migration.py": "0379d847a8813a85749eb66ca37e2400fd4ba3c3d870fbb579223fc629419362",
+    "tests/behaviour/test_forwarded_clock_oracle.py": "41c02c0e08524c400770cf2f21f95c4e3b5bba0c54ab135c2b96f5e7d5b9d0bb",
+    "tests/behaviour/test_fractional_stop_boundary.py": "a9085993265ec15880f64a6380cdb0b136cf6f6d38528c8f50c060c0592e58f6",
+    "tests/behaviour/test_hardening_matrix.py": "c6fda0baadaf5ced43b85710120ee6c5b009d7c7efab208f0c9bb9ac9b6741af",
+    "tests/behaviour/test_hardware_performance.py": "a225a9dcf1b3b45c4911545b123bc16f624e3b3550178a2aeca925fb80459ae1",
+    "tests/behaviour/test_hardware_run_options.py": "604c73cb6204a2047139dd4d7b2f3dc24db113f66cd09126c7b75c3301e354e0",
+    "tests/behaviour/test_heldout_workloads.py": "ab82769ca2c00ea3ed3321ca83b117823d67fa116c4e2ceb8963f676f29ea88b",
+    "tests/behaviour/test_inventory.py": "0f1b27401b16d97ce3e232e7c719435666640d5c82c1752c48ac36b6798d4cfc",
+    "tests/behaviour/test_jf_oracle.py": "6b9ba9ce7e9950ef6c570fb96d05d71e3e4d0bbd2b4ec5d3d64299c8194249f4",
+    "tests/behaviour/test_lead_timing_oracle.py": "4c4b065becafc8f1ed91d12a90c724d21e31060e0ef804a5cb21046a8c36a36d",
+    "tests/behaviour/test_lua_syntax.py": "f28de4377ea3c14d3549ebd5ef866c38985411125f553e74a594cebfe4e4c2b7",
+    "tests/behaviour/test_lua_test_names.py": "b882eca345dac609c4d9303e30a8424133884e3f72d9db848b9edb7b76102b82",
+    "tests/behaviour/test_master_clock_oracle.py": "62f0bc409da3ed2e40ac57dcebbccd782f3370d81427a3a238850cb7fd143d82",
+    "tests/behaviour/test_midi_window.py": "39ec2d1111d4e84c080820366497798813921966747e548826f9cea842bad5bb",
+    "tests/behaviour/test_note_accounting.py": "1cbd65cd65abfcc4f757930aec3bb5c05845de556cdc68a4fb1d912429952516",
+    "tests/behaviour/test_note_schedule.py": "669a197d51016e05d99b90604ef13c870ed5f4cc87a84a600529fc2039bb18ec",
+    "tests/behaviour/test_nrpn_legacy_serializer.py": "6c68c60504873a58742828ade77e2ff7ec059c9e5e0efd89d3f74eb0c7ac048a",
+    "tests/behaviour/test_output_profiles.py": "8f3abe967efccbf931d48e19a6a87c83364c48282a4dfc3d4ae8806daa99982a",
+    "tests/behaviour/test_panic_hotplug_trace.py": "f36e94908e841f065b0344d16995405fe974cca3313b45063c360dc4ea241f84",
+    "tests/behaviour/test_panic_repeat_trace.py": "710bfa61646a06e29787e59e76f6a56b1e0f5e3cd258df4d6da7a0291cc48ecd",
+    "tests/behaviour/test_panic_trace.py": "adebb5a705fadc707793bdec701adf7254716bea5e9131e62abe18c0020a9902",
+    "tests/behaviour/test_panic_transport.py": "b9f3ffa30ade9eb7a12eb9bd3e555e567712454d95ffc2d7b05645888ef07a0c",
+    "tests/behaviour/test_pcm_oracle.py": "92d1e9812c65c6925d7b271b660a243545379f7578a7de5888a11e4d1707b68a",
+    "tests/behaviour/test_perf_campaign.py": "50adf23f4a16efc18399454e6ca39a2f3127ca07d471f1755705cc87262c9ad4",
+    "tests/behaviour/test_perf_input.py": "59afb404d40e5ee73d0253259e7d995cd4f0dda1b731f18fc4e3474432073569",
+    "tests/behaviour/test_perf_overload.py": "99ff706889295d4013d847be1b99dadcb061fc74afa48232fa534561e031153d",
+    "tests/behaviour/test_probe_overhead.py": "66471e6a729d94bfbfef15a6e00f6eeccc5832fd2329b27d60898d609e1d2e96",
+    "tests/behaviour/test_pulse_probe.py": "3183812ea7d7c12f29492aedb9f3ad5397530ef73476c503743014945f7bc8f5",
+    "tests/behaviour/test_real_norns.py": "abe95c7837c7ea3eff7f2f556803fb12028f6eb819b73644b8639793300d01e8",
+    "tests/behaviour/test_suite.py": "f2c4ce7fe4e9d171bb814ed15c70fa92a4ecb2785eeaf3a7a47a130d645be6f7",
+    "tests/behaviour/tooltip_autosave.py": "6ea54e80a7f1be8ce2294defb48e4bedc027abf8e9710ada4a37f42a6f4ee829",
+    "tests/behaviour/tooltips.py": "c9753bdf30f7e2249fa8dff5306bac03d51ed1d4f62146804be69fecc8bb9c91",
+    "tests/behaviour/trig_note_merge.py": "3f8417a65f72c4c918d0da13a620400ac05564fc53a21438b8272e5ee47671df",
+    "tests/behaviour/trig_parameter_interactions.py": "b8ab0e8cc5fdaba2d20c58e1c6d9806010f72f00d5f854b02fe3d4bad3176fb1",
+    "tests/behaviour/trigless_slide_clock.py": "d58cdf25ede0c80fe2c9a16ffdff6a5ae4df057287b0b033888132df9b4b8b30",
+    "tests/behaviour/unreadable_device_config.py": "0fc7a3aeee655b7321702322b168f3265c2e62362b1e6c3c70cdab70983a7f06"
+  },
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.29",
+  "failure": null,
+  "artifacts": [
+    {
+      "path": "leads/lead-0-events.json",
+      "sha256": "8f97559ed7751672716e6ff6625470ec51a3971a8032925b54a3f5dad4466d9f",
+      "size": 56602
+    },
+    {
+      "path": "leads/lead-25-events.json",
+      "sha256": "341626c8c052110edabe256f364d159849ebe3a940c0da9f9c29ead0d3fe1dff",
+      "size": 57358
+    },
+    {
+      "path": "leads/lead-50-events.json",
+      "sha256": "e19a67132ea57bd518bb3cf5a45ca9a77d2be582b84c921343d73ef1a99fd3f3",
+      "size": 57575
+    },
+    {
+      "path": "leads/native/actions.jsonl",
+      "sha256": "0b6b8cbcae40413aed4748d92cd95d886444c620a55df45d2f5b4a0d16881556",
+      "size": 1019338
+    },
+    {
+      "path": "leads/native/cleanup.json",
+      "sha256": "d5b0db03c596f46d827dce43bcdb5920b4d2babd4bd1a04f00b45383004dfc45",
+      "size": 436
+    },
+    {
+      "path": "leads/native/crone.log",
+      "sha256": "e4434bd640d39694ff63378e5c757f47983cdb8180f0d4df799457b8636beccc",
+      "size": 3261
+    },
+    {
+      "path": "leads/native/frame.bgra",
+      "sha256": "76fbdcede8669edabdd6fa40e0eab43d49b8e828dc88c29bf5730deb0f34605c",
+      "size": 32768
+    },
+    {
+      "path": "leads/native/identity.json",
+      "sha256": "155d484882643ee1f9e5efc282379a23a9ff8f1aff3dca5825174c38a82cda1e",
+      "size": 366878
+    },
+    {
+      "path": "leads/native/jack.log",
+      "sha256": "388eba0e0ccfd7164a4122229f994b7236f09a9668087a8e1253a5d993267af8",
+      "size": 480
+    },
+    {
+      "path": "leads/native/matron.log",
+      "sha256": "a3c8f0e6de3486871168f35bbd9273abca642c5c9e3c20270bd3f2695061522e",
+      "size": 31796
+    },
+    {
+      "path": "leads/native/native-config.json",
+      "sha256": "6b5f305e434ef17c0e8a951186deac9e7ef6331c0afb2d6bcaba5a1ce8dbd51d",
+      "size": 1062
+    },
+    {
+      "path": "leads/native/native-events.jsonl",
+      "sha256": "5769fb21a4795b3faef8eb378499b163dfa79004755625e90555db296d43aed5",
+      "size": 2625700
+    },
+    {
+      "path": "leads/native/sclang.log",
+      "sha256": "02a007ba63fb1337a29c1c16c7af9f742f39cef5cd0d2245daea5d37fb69177c",
+      "size": 2571
+    },
+    {
+      "path": "leads/native/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "leads/native/stopped.json",
+      "sha256": "c4d507603c003bb3244720f1f4521311bed8f32c999eaf8bcf17138a3659b216",
+      "size": 89
+    },
+    {
+      "path": "leads/observations.json",
+      "sha256": "07266297a30a07e4e5dfa56eb789a7012213264c2994ad3546762d125e970933",
+      "size": 60020185
+    },
+    {
+      "path": "leads/recipe.json",
+      "sha256": "378e6f7b18020204f7911eb895fbaf0d61a3b0e74944555202923d29b9e69a05",
+      "size": 127637
+    },
+    {
+      "path": "leads/results.json",
+      "sha256": "24982700415b5fa438fadbbc6908141c6e518ddcd18db2ba9b0d08041468a35b",
+      "size": 2480
+    },
+    {
+      "path": "leads-seed/config/emu-midi.json",
+      "sha256": "eb128841e2c3fb16fcd309b715fae7501f573f6a2887c76c3864f254ac007442",
+      "size": 6883
+    },
+    {
+      "path": "native/actions.jsonl",
+      "sha256": "5a7e711b231f36c4967792bce701581b099dba5257fcf667dfb4afcc66828fe7",
+      "size": 44644
+    },
+    {
+      "path": "native/cleanup.json",
+      "sha256": "ad643176834bac58e546046268428610a2e692d7497b03c02bce2b2836b96794",
+      "size": 436
+    },
+    {
+      "path": "native/crone.log",
+      "sha256": "e4434bd640d39694ff63378e5c757f47983cdb8180f0d4df799457b8636beccc",
+      "size": 3261
+    },
+    {
+      "path": "native/frame.bgra",
+      "sha256": "d3ed45ac36c46246b917a79b6d712d797b98d8c8ce54941433dcf7dd73203a92",
+      "size": 32768
+    },
+    {
+      "path": "native/identity.json",
+      "sha256": "5e564b31e63eb983145758c4eb936306ab5e6b6e47e6ecb1fca2b4eca8509a02",
+      "size": 361178
+    },
+    {
+      "path": "native/jack.log",
+      "sha256": "388eba0e0ccfd7164a4122229f994b7236f09a9668087a8e1253a5d993267af8",
+      "size": 480
+    },
+    {
+      "path": "native/matron.log",
+      "sha256": "b06f9516c9c3c64df562851ac95989fccea424aec690cbceb653a5d79912b28b",
+      "size": 31142
+    },
+    {
+      "path": "native/native-config.json",
+      "sha256": "53db28a288afb9bceab20146931f6f7f9834ac67a6975f089c885936b163448d",
+      "size": 1050
+    },
+    {
+      "path": "native/native-events.jsonl",
+      "sha256": "20d59621b571c456a5dde61cc7f4074d9c524c98f67a87cd86df727fa4e6b9d5",
+      "size": 123062
+    },
+    {
+      "path": "native/sclang.log",
+      "sha256": "6cc59203ca6d3a20d48af73304a00df93c9460cbc128074d126056094426afad",
+      "size": 2571
+    },
+    {
+      "path": "native/server.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0
+    },
+    {
+      "path": "native/stopped.json",
+      "sha256": "c690b361cd6e03cbec435270bfc300c9c468fc842020996113c23831bd034f67",
+      "size": 89
+    },
+    {
+      "path": "observations.json",
+      "sha256": "58cf3a5bf451d4eb5b0e978f76c7c2bfe13a6b546074344099fb3a4b54778ec7",
+      "size": 1078755
+    },
+    {
+      "path": "recipe.json",
+      "sha256": "d25d9a5bef977a2617e808f103e798acea92e11b0171289a7013097b76171390",
+      "size": 5636
+    },
+    {
+      "path": "results.json",
+      "sha256": "62a7209405a054409fd25e3215233158bf5684eccd1f0b65c7fa2c650d93e5fd",
+      "size": 707
+    }
+  ]
+}

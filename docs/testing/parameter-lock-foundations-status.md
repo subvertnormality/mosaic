@@ -77,8 +77,8 @@ after every run, even a failed one. Exit status alone is never a passing gate.
 
 Checkpoint A remains incomplete: controlled probe identity coverage, calibrated
 input/receiver capture integration, interleaved hardware diagnostics and probe
-overhead qualification are still required. The pure parameter preview, base onset
-projection, occurrence/generation ledger, cancellable value queue and lookahead
+overhead qualification are still required. The pure parameter preview,
+occurrence/generation ledger, cancellable value queue and lookahead
 arbitration are not implemented. Neither are Timing feedback, product migration,
 the complete behaviour matrix or release hardware qualification.
 
@@ -107,6 +107,16 @@ delay callback spans; kinds 1/4/5). It suppresses per-channel and per-group cloc
 reads/records. Use the same flag when preparing its fixture. It cannot be combined
 with `--pulse-probe`, and its reduced scope is recorded in run identity. It still
 requires hardware overhead qualification before using it as causal evidence.
+
+The base-onset recurrence is now extracted into `lib/clock/onset_projection.lua`.
+It reads a timing view without allocating a copied clock or changing live carry.
+The existing public projection restrictions and straight-clock fast path remain.
+The exact candidate bytes passed five focused tests, the full 1,634-test Lua
+suite, and M-SYNC-LEAD-007/009/012 in both controlled and real-time emulator lanes.
+The source byte manifest and red/green evidence use the `onset-projection-` prefix
+in the checkpoint evidence directory. This is a pure extraction, not lookahead
+implementation or hardware qualification. The current hardware campaign remains
+on its earlier isolated `cc051cc` source and does not measure this extraction.
 The full-trace offline `correlate_deadlines()` helper classifies delayed-group
 deadlines by recorded pulse occupancy; it explicitly makes no causal inference.
 
