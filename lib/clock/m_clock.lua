@@ -40,12 +40,18 @@ function m_clock.set_lock_contract(contract)
     local scheduler = lock_lookahead.new{send = function(bundle) step.send_preview_bundle(bundle) end}
     m_clock.set_lock_lookahead(scheduler)
     step.set_lock_lookahead(scheduler)
+    -- An edited lock must not be heard as the value the preview resolved before
+    -- the edit, so every stored lock change reaches the scheduler.
+    program.set_lock_edit_listener(function(channel, step_number, slot)
+      scheduler:invalidate(channel.number, step_number, slot)
+    end)
     if clock_lattice then
       clock_lattice.advance = function(pulse) scheduler:serve(pulse) end
     end
   else
     m_clock.set_lock_lookahead(nil)
     step.set_lock_lookahead(nil)
+    program.set_lock_edit_listener(nil)
     if clock_lattice then clock_lattice.advance = nil end
   end
 end

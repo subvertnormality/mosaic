@@ -180,6 +180,15 @@ function program.set(p)
   end
 end
 
+-- Lock lookahead installs this to learn that a stored lock changed, so a value
+-- it resolved ahead of time does not go out stale. With no listener a lock edit
+-- behaves exactly as it always has.
+local on_lock_edit = nil
+
+function program.set_lock_edit_listener(listener)
+  on_lock_edit = listener
+end
+
 function program.add_step_param_trig_lock_to_channel(channel, step, parameter, trig_lock)
 
   if not parameter then
@@ -201,6 +210,8 @@ function program.add_step_param_trig_lock_to_channel(channel, step, parameter, t
   end
 
   step_trig_lock_banks[step][parameter] = trig_lock
+
+  if on_lock_edit then on_lock_edit(channel, step, parameter) end
 
 end
 

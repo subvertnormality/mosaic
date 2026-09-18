@@ -105,6 +105,23 @@ function Scheduler:clear_commit(channel, step)
   if commits and commits.step == step then self.commits[channel] = nil end
 end
 
+-- An edit to a value that has not left yet simply removes it, because the step
+-- will resolve the new value itself. An edit to one that has already left clears
+-- the record of it instead, so the step sends the corrected value at its own
+-- time: nothing can unsend what the receiver already heard, and the correction
+-- costs that value its lead rather than leaving a stale value in force.
+function Scheduler:invalidate(channel, step, slot)
+  local key = target_key({channel = channel, step = step, slot = slot})
+  local entry = self.pending_by_target[key]
+  if entry and not entry.sent and not entry.cancelled then
+    entry.cancelled = true
+    self.pending = self.pending - 1
+    self.pending_by_target[key] = nil
+  end
+  local commits = self.commits[channel]
+  if commits and commits.step == step then commits.slots[slot] = nil end
+end
+
 -- A global pattern reset discards every speculative value at once.
 function Scheduler:cancel_all()
   self.buckets = {}

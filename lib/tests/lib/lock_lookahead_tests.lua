@@ -159,3 +159,48 @@ function test_lock_lookahead_remembers_only_the_latest_step_sent_for_a_channel()
   luaunit.assert_true(scheduler:was_sent(1, 6, 1))
   luaunit.assert_false(scheduler:was_sent(1, 5, 1))
 end
+
+function test_lock_lookahead_drops_a_value_that_is_edited_before_it_leaves()
+  -- The step will resolve the new value itself, so the stale one must not go.
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64})
+  scheduler:invalidate(1, 5, 1)
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 0)
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1))
+  luaunit.assert_equals(scheduler:stats().pending, 0)
+end
+
+function test_lock_lookahead_lets_the_step_resend_a_value_that_was_edited_after_it_left()
+  -- Nothing can unsend what the receiver already heard, so the correction is
+  -- that the step sends the new value at its own time, losing only the lead.
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64})
+  scheduler:serve(10)
+  luaunit.assert_true(scheduler:was_sent(1, 5, 1))
+  scheduler:invalidate(1, 5, 1)
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1))
+end
+
+function test_lock_lookahead_invalidation_leaves_other_slots_and_steps_alone()
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 1})
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 2, value = 2})
+  scheduler:schedule(10, {channel = 2, step = 5, slot = 1, value = 3})
+  scheduler:invalidate(1, 5, 1)
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 2)
+  luaunit.assert_equals({sent[1].value, sent[2].value}, {2, 3})
+end
+
+function test_lock_lookahead_invalidating_an_unknown_target_changes_nothing()
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64})
+  scheduler:invalidate(3, 9, 4)
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 1)
+end
