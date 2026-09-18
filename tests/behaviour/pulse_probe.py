@@ -127,6 +127,81 @@ def correlate_deadlines(snapshot):
             'limitation': 'Overlap is association only; probe overhead and dispatch-to-wire delay are not removed.'}
 
 
+def correlate_callback_deadlines(snapshot):
+    """Describe core-profile callback deadlines and enclosed write durations.
+
+    The callback records only its first due group deadline.  This remains a
+    callback-level dispatch observation, never a group or musical-occurrence
+    identity and never evidence that pulse overlap caused lateness.
+    """
+    from bisect import bisect_right
+    summarize_snapshot(snapshot)
+    if any(row[1] not in (1, 4, 5) for row in snapshot['records']):
+        raise ValueError('callback correlation requires pulse-core-v1 kinds')
+    stack, spans, callbacks = [], [], []
+    for row in snapshot['records']:
+        if row[5] == 1:
+            stack.append({'row': row, 'write_durations': []})
+        else:
+            entry = stack.pop()  # summarize_snapshot already checked pairing.
+            began = entry['row']
+            span = {'kind': row[1], 'began': began[0], 'ended': row[0],
+                    'deadline': began[4], 'duration': row[0] - began[0]}
+            spans.append(span)
+            if span['kind'] == 4:
+                # Timestamps may be equal after capture rounding. The record
+                # stack preserves the actual nesting and gives a write to only
+                # its innermost callback, even if callbacks nest.
+                for parent in reversed(stack):
+                    if parent['row'][1] == 5:
+                        parent['write_durations'].append(span['duration'])
+                        break
+            elif span['kind'] == 5:
+                span['write_durations'] = entry['write_durations']
+                callbacks.append(span)
+    pulses = [(span['began'], span['ended']) for span in spans
+              if span['kind'] == 1 and span['began'] < span['ended']]
+    occupied = []
+    for first, last in sorted(pulses):
+        if occupied and first <= occupied[-1][1]:
+            occupied[-1] = (occupied[-1][0], max(last, occupied[-1][1]))
+        else:
+            occupied.append((first, last))
+    starts = [span[0] for span in occupied]
+    coverage = (snapshot['records'][0][0], snapshot['records'][-1][0])
+    classes = {name: {'lateness': [], 'write_durations': []}
+               for name in ('during_pulse_work', 'between_pulses', 'outside_capture')}
+    unavailable = {'count': 0, 'write_durations': []}
+    for callback in callbacks:
+        enclosed_writes = callback['write_durations']
+        deadline = callback['deadline']
+        if deadline == 0:
+            unavailable['count'] += 1
+            unavailable['write_durations'].extend(enclosed_writes)
+            continue
+        index = bisect_right(starts, deadline) - 1
+        if not coverage[0] <= deadline <= coverage[1]:
+            name = 'outside_capture'
+        elif index >= 0 and deadline < occupied[index][1]:
+            name = 'during_pulse_work'
+        else:
+            name = 'between_pulses'
+        classes[name]['lateness'].append(callback['began'] - deadline)
+        classes[name]['write_durations'].extend(enclosed_writes)
+    result_classes = {
+        name: {'count': len(values['lateness']),
+               'callback_lateness_seconds': _distribution(values['lateness']) if values['lateness'] else None,
+               'write_duration_seconds': _distribution(values['write_durations']) if values['write_durations'] else None}
+        for name, values in classes.items()
+    }
+    result_classes['deadline_unavailable'] = {
+        'count': unavailable['count'], 'callback_lateness_seconds': None,
+        'write_duration_seconds': _distribution(unavailable['write_durations']) if unavailable['write_durations'] else None,
+    }
+    return {'diagnostic_only': True, 'classes': result_classes,
+            'limitation': 'This is callback-level association only, not a group or musical-occurrence identity; overlap does not establish causation.'}
+
+
 class PulseProbe:
     def __init__(self, maiden, capacity=65536, mode='pulse-v1'):
         if type(capacity) is not int or not 1 <= capacity <= 262144:

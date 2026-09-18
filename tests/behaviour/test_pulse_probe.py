@@ -2,7 +2,7 @@
 import unittest
 import math
 
-from pulse_probe import PulseProbe, correlate_deadlines, summarize_snapshot
+from pulse_probe import PulseProbe, correlate_callback_deadlines, correlate_deadlines, summarize_snapshot
 
 
 class FakeMaiden:
@@ -19,6 +19,59 @@ class FakeMaiden:
 
 
 class PulseProbeLifecycle(unittest.TestCase):
+    def test_core_callback_correlation_classifies_earliest_deadlines_and_write_durations_without_causal_claim(self):
+        snapshot = {'schema_version': 1, 'capacity': 16, 'count': 16, 'dropped': 0,
+                    'records': [
+                        [10, 1, 1, 0, 0, 1, 0, 0],
+                        [12, 5, 1, 0, 15, 1, 0, 0], [13, 4, 1, 1, 0, 1, 3, 1],
+                        [14, 4, 1, 1, 0, 2, 3, 1], [16, 5, 1, 0, 15, 2, 0, 0], [20, 1, 1, 0, 0, 2, 0, 0],
+                        [21, 5, 2, 0, 20, 1, 0, 0], [21.5, 4, 2, 1, 0, 1, 3, 1],
+                        [22, 4, 2, 1, 0, 2, 3, 1], [23, 5, 2, 0, 20, 2, 0, 0],
+                        [30, 1, 3, 0, 0, 1, 0, 0], [40, 1, 3, 0, 0, 2, 0, 0],
+                        [45, 5, 3, 0, 60, 1, 0, 0], [47, 5, 3, 0, 60, 2, 0, 0],
+                        [48, 5, 4, 0, 0, 1, 0, 0], [49, 5, 4, 0, 0, 2, 0, 0],
+                    ]}
+        result = correlate_callback_deadlines(snapshot)
+        self.assertTrue(result['diagnostic_only'])
+        self.assertEqual({name: value['count'] for name, value in result['classes'].items()},
+                         {'during_pulse_work': 1, 'between_pulses': 1,
+                          'outside_capture': 1, 'deadline_unavailable': 1})
+        self.assertEqual(result['classes']['during_pulse_work']['callback_lateness_seconds']['maximum'], -3)
+        self.assertEqual(result['classes']['during_pulse_work']['write_duration_seconds']['maximum'], 1)
+        self.assertEqual(result['classes']['between_pulses']['callback_lateness_seconds']['maximum'], 1)
+        self.assertEqual(result['classes']['between_pulses']['write_duration_seconds']['maximum'], .5)
+        self.assertIsNone(result['classes']['outside_capture']['write_duration_seconds'])
+        self.assertIsNone(result['classes']['deadline_unavailable']['callback_lateness_seconds'])
+        self.assertIn('callback-level', result['limitation'])
+        self.assertIn('not a group', result['limitation'])
+
+    def test_core_callback_correlation_reuses_validation_and_rejects_noncore_kinds(self):
+        invalid = {
+            'drops': {'schema_version': 1, 'capacity': 2, 'count': 2, 'dropped': 1,
+                      'records': [[1, 1, 1, 0, 0, 1, 0, 0], [2, 1, 1, 0, 0, 2, 0, 0]]},
+            'noncore': {'schema_version': 1, 'capacity': 4, 'count': 4, 'dropped': 0,
+                        'records': [[1, 1, 1, 0, 0, 1, 0, 0], [2, 1, 1, 0, 0, 2, 0, 0],
+                                    [3, 6, 1, 1, 0, 1, 0, 0], [4, 6, 1, 1, 0, 2, 0, 0]]},
+        }
+        for name, snapshot in invalid.items():
+            with self.subTest(name=name), self.assertRaises(ValueError):
+                correlate_callback_deadlines(snapshot)
+
+    def test_core_callback_correlation_uses_recorded_nesting_not_equal_timestamp_inclusion(self):
+        snapshot = {'schema_version': 1, 'capacity': 8, 'count': 8, 'dropped': 0,
+                    'records': [
+                        [10, 1, 1, 0, 0, 1, 0, 0],
+                        # This pulse write finishes before the callback begins at
+                        # the same rounded timestamp and must not be attributed.
+                        [12, 4, 1, 9, 0, 1, 3, 1], [12, 4, 1, 9, 0, 2, 3, 1],
+                        [12, 5, 1, 0, 11, 1, 0, 0], [13, 4, 1, 1, 0, 1, 3, 1],
+                        [14, 4, 1, 1, 0, 2, 3, 1], [15, 5, 1, 0, 11, 2, 0, 0],
+                        [20, 1, 1, 0, 0, 2, 0, 0],
+                    ]}
+        writes = correlate_callback_deadlines(snapshot)['classes']['during_pulse_work']['write_duration_seconds']
+        self.assertEqual(writes['count'], 1)
+        self.assertEqual(writes['maximum'], 1)
+
     def test_deadline_correlation_classifies_half_open_pulse_occupancy_without_causality_claims(self):
         snapshot = {
             'schema_version': 1, 'capacity': 32, 'count': 18, 'dropped': 0,

@@ -1,0 +1,5 @@
+command: python -m unittest -v test_pulse_probe
+test_core_callback_correlation_uses_recorded_nesting_not_equal_timestamp_inclusion ... FAIL
+AssertionError: 2 != 1
+Ran 14 tests in 0.003s
+FAILED (failures=1)

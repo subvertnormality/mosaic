@@ -1,0 +1,18 @@
+test_context_removes_the_probe_when_capture_raises (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_core_callback_correlation_classifies_earliest_deadlines_and_write_durations_without_causal_claim (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_core_callback_correlation_reuses_validation_and_rejects_noncore_kinds (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_deadline_correlation_classifies_half_open_pulse_occupancy_without_causality_claims (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_deadline_correlation_keeps_negative_lateness_and_merges_nested_pulse_spans (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_deadline_correlation_rejects_invalid_probe_snapshots (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_install_reset_snapshot_and_remove_use_single_line_bounded_maiden_operations (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_pulse_core_mode_installs_only_pulse_write_and_callback_kind_mask (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_snapshot_preserves_a_drop_count_for_the_campaign_to_invalidate (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_snapshot_rejects_discarded_or_corrupt_rows (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_summary_rejects_drops_and_invalid_or_mispaired_records (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_summary_requires_a_real_pulse_span_and_strict_finite_numeric_rows (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_summary_validates_complete_ordered_boundary_spans_and_reports_diagnostics (test_pulse_probe.PulseProbeLifecycle) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.004s
+
+OK
