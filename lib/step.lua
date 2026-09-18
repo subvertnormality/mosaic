@@ -342,11 +342,11 @@ function step.process_params(channel, step)
     if param.param_id and should_process_param(param) then
       local off = param.off_value == nil and -1 or param.off_value
 
-      -- Under lock lookahead this slot's value already left in an earlier pulse.
-      -- Sending it again here would double every locked value on the wire.
-      if scheduler and scheduler:was_sent(channel.number, step, i) then
-        goto continue
-      end
+      -- Under lock lookahead this slot's value already left in an earlier pulse,
+      -- so this step must not send it again. It must still do everything else
+      -- the step does: a slide starts here, and skipping the branch outright
+      -- would leave the slide never running at all.
+      local already_sent = scheduler ~= nil and scheduler:was_sent(channel.number, step, i)
 
       if recording_selected_channel and recorder.trig_lock_is_dirty(channel.number, i) then
         goto continue
@@ -390,7 +390,10 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
+          -- The handoff still runs when the value has already gone: it retires
+          -- the slide that owned this slot, which is not a send.
+          local handed = m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock, already_sent)
+          if not handed and not already_sent then
             send_midi_param(channel.number, i, param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
           end
 
@@ -421,7 +424,9 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          send_midi_param(channel.number, i, param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          if not already_sent then
+            send_midi_param(channel.number, i, param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          end
         elseif not m_clock.channel_is_sliding(channel, i) then
           if value == off then
             goto continue
@@ -430,7 +435,9 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          send_midi_param(channel.number, i, param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          if not already_sent then
+            send_midi_param(channel.number, i, param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+          end
         end
       elseif param.type == "norns" and param.id == "nb_slew" then
 

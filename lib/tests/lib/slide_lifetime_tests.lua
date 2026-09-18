@@ -75,3 +75,13 @@ function test_would_handoff_rejects_a_slide_that_has_not_reached_its_destination
   -- The real handoff agrees, and retires the unfinished action without emitting.
   luaunit.assert_false(slides.handoff(1, 1, 3, 100))
 end
+
+function test_handoff_retires_the_slide_without_rewriting_a_value_lookahead_already_sent()
+  -- Lock lookahead put the destination value on the wire in an earlier pulse.
+  -- The slide still has to be retired here, but writing the same value again
+  -- would send it twice.
+  local slides, emitted = handoff_fixture(10)
+  luaunit.assert_true(slides.handoff(1, 1, 3, 100, true))
+  luaunit.assert_equals(emitted, {})
+  luaunit.assert_false(slides.is_active({number = 1}, 1))
+end

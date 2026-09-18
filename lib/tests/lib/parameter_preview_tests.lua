@@ -251,3 +251,15 @@ function test_parameter_preview_takes_no_side_effects_on_the_view_it_is_given()
   luaunit.assert_equals(#sent(first), #sent(second))
   luaunit.assert_equals(sent(first)[1].value, sent(second)[1].value)
 end
+
+function test_parameter_preview_does_not_send_a_lock_early_while_its_slot_is_sliding()
+  -- The slide is still emitting samples toward this value. Sending it early
+  -- would place the destination before those samples, so the receiver would
+  -- jump to the target and then glide back to it.
+  local bundles = preview.midi_bundles(view({
+    params = {cc_param("p1", 74)},
+    step_lock = function() return 100 end,
+    is_sliding = function() return true end}), 4)
+  luaunit.assert_equals(#sent(bundles), 0)
+  luaunit.assert_equals(reasons(bundles), {"sliding"})
+end

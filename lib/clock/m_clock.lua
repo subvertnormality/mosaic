@@ -97,12 +97,19 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
   local transport = clock_lattice.transport
   local next_onset = transport + ahead
   local send_pulse = next_onset - lead_in_pulses(tempo, lead_ms)
-  -- A value may not cross the note before it, so halfway between this onset and
-  -- the next is the earliest it may leave. At fast divisions this is what
-  -- shortens the lead rather than letting the ordering break.
-  local midpoint = transport + math.ceil(ahead / 2)
+  -- A value may not cross the note before it, so halfway between that note and
+  -- its own step is the earliest it may leave. The anchor is the last onset that
+  -- actually carried a trig: a trigless step sounds nothing, so it cannot be the
+  -- note a value has to stay behind, and treating it as one would hold every
+  -- value later than the documented rule allows.
+  local anchor = clock.last_anchor_pulse or transport
+  local midpoint = anchor + math.ceil((next_onset - anchor) / 2)
   if send_pulse < midpoint then send_pulse = midpoint end
-  if send_pulse <= transport or send_pulse >= next_onset then return end
+  -- This pulse has already served its values, so the earliest one still to come
+  -- is the next. A send time that has passed becomes that pulse rather than
+  -- being abandoned, which keeps the value ahead of its step.
+  if send_pulse <= transport then send_pulse = transport + 1 end
+  if send_pulse >= next_onset then return end
 
   local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
   local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
@@ -469,6 +476,10 @@ function m_clock.init()
 
       clock.first_run = false
       clock.next_step = current_step
+
+      -- A step that sounds is the note later values must stay behind. A trigless
+      -- step is not, so it does not become the anchor.
+      if has_trig then clock.last_anchor_pulse = clock_lattice.transport end
 
       -- This step is finished and its note has gone. Resolve the next step's
       -- values now so they can leave in an earlier pulse than their own.

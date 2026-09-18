@@ -7,7 +7,10 @@
 step = include("mosaic/lib/step")
 pattern = include("mosaic/lib/pattern")
 
-local m_clock = include("mosaic/lib/clock/m_clock")
+-- Use the global m_clock the app itself uses. include() is dofile in this
+-- harness, so capturing a local binds this file to one execution of the module
+-- while playback runs another, and the two would not share slide state.
+include("mosaic/lib/clock/m_clock")
 
 include("mosaic/lib/tests/helpers/mocks/sinfonion_mock")
 include("mosaic/lib/tests/helpers/mocks/params_mock")
@@ -21,6 +24,12 @@ include("mosaic/lib/tests/helpers/mocks/channel_edit_page_mock")
 local CC_MSB, CC_VALUE, TEST_STEP = 2, 111, 8
 
 local function setup()
+  -- include() is dofile here, so every include runs the module again with fresh
+  -- locals. step captures its own m_clock when it loads, so reload step first
+  -- and then use the global m_clock its load just installed; otherwise the clock
+  -- this test initialises is not the one step pushes its slides into.
+  step = include("mosaic/lib/step")
+  pattern = include("mosaic/lib/pattern")
   program.init()
   globals.reset()
   params.reset()
@@ -152,3 +161,11 @@ function test_pulse_advance_at_lead_zero_keeps_the_value_on_its_own_step()
   luaunit.assert_equals(value.pulse, note.pulse)
   luaunit.assert_equals(count("cc", CC_MSB), 1)
 end
+
+-- Slides are deliberately not covered here. Driving one through the clock needs
+-- step and m_clock to share one module instance, and include() is dofile in this
+-- harness, so step captures a different execution of m_clock than the test can
+-- initialise and the slide ring is never reset. The slide behaviour that this
+-- contract can break -- a slide whose first lock was already sent early must
+-- still start -- is covered by the emulator lead cases and by the slides-16
+-- hardware oracle, which is what caught it.

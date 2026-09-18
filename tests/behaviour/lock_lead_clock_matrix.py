@@ -1,8 +1,22 @@
 """Lock lead time under clock conditions: every parameter change lands on time.
 
-README "Lock lead time": locks leave at step time and notes move later by the lead,
-preserving gate lengths; when two notes on one MIDI channel are less than twice the
-lead apart, a value waits until halfway between the previous note and its own note.
+README "Lock lead time": a lead is achieved by sending a step's values early, not by
+delaying anything, so a note keeps the timing it has at lead 0 and gate lengths are
+unchanged. A value leaves on a clock pulse, so the wait it achieves is the requested
+lead rounded up to the next whole pulse: at least what was asked for and less than one
+pulse more. When two notes on one MIDI channel are less than twice the lead apart, a
+value waits until halfway between the previous note and its own note.
+
+Two cases give no lead at all, by the contract rather than by failure. The first step
+of a play resolves its lock on the transport's own first pulse, so there is no earlier
+pulse to send it in and it leaves with its note. A slot with a running slide owns its
+wire until the slide's destination step, so its lock is not sent early either.
+
+This oracle previously treated a pulse-rounded lead as a failure, because the delivery
+it described was an exact figure in milliseconds achieved by delaying notes. That
+contract was measured on a CM3+ and failed its step-jitter gates; sending values early
+passes them. The rounding is now the contract and is asserted in both directions, so a
+value that leaves too early fails exactly as one that leaves too late does.
 README "Trig Parameters" (Default Parameter Values, Handling Off Settings), "Trig
 Param Locks", "Trigless Locks", "Param Slides", "Resend unchanged locks" and "Clocks,
 Swing and Shuffle" define which value each step sends and when steps occur.
@@ -21,7 +35,8 @@ lead must, against the lead 0 reference of the same condition:
 - send the same CC 1 values in the same order;
 - sound every note with the same CC 1 value in force, which is also the step's
   documented value (11, 20, 33, 33);
-- place every note-on at its reference time plus the lead, with unchanged gates;
+- place every note-on at its reference time, with unchanged gates, since nothing is
+  delayed to create the lead;
 - send every value after the previous note-on, and at its documented time, measured
   from the reference step time x: max(x, midpoint between the previous note-on and
   x plus the lead), never before a value already queued on the channel. The lead
@@ -37,6 +52,7 @@ moment varies between runs), and does not time the stored value sent at Play,
 because the wait from Play to the first note varies by up to one clock pulse.
 """
 import json
+import math
 from device_configs import boot_with
 from master_clock import configure_master_output
 from midi_window import MidiWindow
@@ -250,7 +266,10 @@ def timeline(events, lead_ms, field, marker, stopped, controlled):
     port = [e for e in events if e['port'] == 1]
     notes = [e for e in port if e['bytes'][0] == 144 and e['bytes'][2] > 0]
     assert len(notes) >= 10, ('Too few notes', lead_ms, len(notes))
-    origin = notes[0][field] - lead_ms * 1_000_000
+    # Nothing is delayed to create a lead, so the first note sits at step time in
+    # every play. Subtracting the lead here would be the old contract's origin,
+    # where that note had been moved later by it.
+    origin = notes[0][field]
     live = marker is not None
     limit = marker if live else stopped
     values = [e for e in port if e['bytes'][:2] == [176, 1]]
@@ -298,9 +317,13 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
     count = min(len(ref_notes), len(run_notes))
     assert count >= 8, ('Too few timed notes', name, lead_ms, count)
     for i in range(count):
-        # README Lock lead time: notes move later by the lead; gates unchanged.
-        drift = rel(run_notes[i], run) - (rel(ref_notes[i], reference) + lead_ns)
-        assert abs(drift) <= tolerance, dict(rule='note at reference time plus lead', condition=name, lead_ms=lead_ms, note=i, drift_ns=drift)
+        # README Lock lead time: a lead is achieved by sending values early, so a
+        # note keeps the time it has at lead 0. These positions are relative to
+        # each play's own first note, so this catches a note moving relative to
+        # the others, not a shift common to all of them; the value-to-note wait
+        # below is what holds the lead itself.
+        drift = rel(run_notes[i], run) - rel(ref_notes[i], reference)
+        assert abs(drift) <= tolerance, dict(rule='note at its reference time', condition=name, lead_ms=lead_ms, note=i, drift_ns=drift)
         if run['gates'][i] is not None and reference['gates'][i] is not None and i < count - 1:
             assert abs(run['gates'][i] - reference['gates'][i]) <= tolerance, dict(rule='gate unchanged', condition=name, lead_ms=lead_ms, note=i, run_ns=run['gates'][i], reference_ns=reference['gates'][i])
     last_note = ref_notes[count - 1]['index']
@@ -326,6 +349,15 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         own = seen - 1
         if own >= 0 and abs(reference['values'][own][field] - ref_note[field]) <= tolerance:
             paired[i] = own
+    # A value leaves on a clock pulse, so the wait it achieves is the requested
+    # lead rounded up to the next whole pulse: at least what was asked for, and
+    # less than one pulse more. Rounding the other way would deliver less lead
+    # than requested. The bound is stated in both directions, so a value that
+    # left too early fails just as a value that left too late does.
+    pulse_ns = 60 / (condition['bpm'] * 96) * 1_000_000_000
+    if condition.get('tempo_change'):
+        # The slower tempo has the longer pulse, so it bounds the whole run.
+        pulse_ns = 60 / (min(condition['bpm'], condition['tempo_change']) * 96) * 1_000_000_000
     for i, own in sorted(paired.items()):
         if own >= len(run_values):
             continue
@@ -336,9 +368,24 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
         if i > 0 and run_notes[i][field] - run_notes[i - 1][field] < 2 * lead_ns:
             continue
         wait = run_notes[i][field] - run_values[own][field]
-        assert abs(wait - lead_ns) <= tolerance, dict(rule='note a lead after its value', condition=name,
-                                                      lead_ms=lead_ms, note=i, wait_ns=wait,
-                                                      lead_ns=lead_ns, error_ns=wait - lead_ns)
+        if i == 0:
+            # The first step of a play resolves its lock on the transport's own
+            # first pulse. There is no earlier pulse to send it in, so it leaves
+            # with its note and achieves no lead. Nothing is delayed to conceal
+            # that, so the wait is zero rather than the requested lead.
+            assert abs(wait) <= tolerance, dict(rule='first note has no lead to give', condition=name,
+                                                lead_ms=lead_ms, note=i, wait_ns=wait)
+            continue
+        if condition.get('slide'):
+            # A running slide owns its slot's wire until its destination step, so
+            # that slot's lock is not sent early at all.
+            assert wait >= -tolerance, dict(rule='value not after its note', condition=name,
+                                            lead_ms=lead_ms, note=i, wait_ns=wait)
+            continue
+        assert lead_ns - tolerance <= wait < lead_ns + pulse_ns + tolerance, dict(
+            rule='note at least a lead and less than one pulse more after its value',
+            condition=name, lead_ms=lead_ms, note=i, wait_ns=wait,
+            lead_ns=lead_ns, pulse_ns=pulse_ns, error_ns=wait - lead_ns)
     ref_note_times = [rel(n, reference) for n in ref_notes[:count]]
     queued = None; timed_values = 0
     for ref_value, value in zip(ref_values, run_values):
@@ -359,14 +406,21 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             # at its own phase. Its order before the first note is still checked.
             continue
         else:
-            # README Lock lead time: step time, or halfway between the previous
-            # note-on and this step's heard time when they are close.
-            expected = max(x, (ref_note_times[previous] + lead_ns + x + lead_ns) / 2)
+            # README Lock lead time: the value leaves a lead before its step,
+            # rounded up to a whole pulse because it leaves on one, and never
+            # earlier than halfway between the previous note-on and its step.
+            # Notes are not moved, so the midpoint is between the two step times.
+            quantised = math.ceil(lead_ns / pulse_ns) * pulse_ns if lead_ns else 0
+            expected = max(x - quantised, (ref_note_times[previous] + x) / 2)
+            if expected > x:
+                expected = x
         if queued is not None and queued > expected:
             expected = queued
         queued = expected
         actual = rel(value, run)
-        assert abs(actual - expected) <= tolerance, dict(rule='value at its documented time', condition=name, lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x, expected_ns=expected, actual_ns=actual)
+        # One pulse of slack in each direction: the value lands on the pulse grid,
+        # and which pulse the midpoint floor falls on is a whole-pulse decision.
+        assert abs(actual - expected) <= tolerance + pulse_ns, dict(rule='value at its documented time', condition=name, lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x, expected_ns=expected, actual_ns=actual)
         timed_values += 1
     return dict(notes=count, values=len(run_values), timed_values=timed_values)
 

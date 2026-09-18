@@ -194,7 +194,10 @@ function slide_lifetime.new(get_clock, program, get_lattice)
 
   -- Resolve incoming ownership before a non-Off lock and its note are sent.
   -- A matching scheduled endpoint shares one write with that destination lock.
-  function slides.handoff(channel_number, trig_lock, step_number, value)
+  -- already_sent means lock lookahead has already put this value on the wire.
+  -- The slide that owned the slot must still be retired, but writing its
+  -- destination again would send the same value twice.
+  function slides.handoff(channel_number, trig_lock, step_number, value, already_sent)
     local applied = false
     local i, stop = ring_start, ring_end
     while i ~= stop do
@@ -205,7 +208,7 @@ function slide_lifetime.new(get_clock, program, get_lattice)
             get_lattice().transport >= action.start_pulse + action.total_pulses then
           -- This is the explicit destination lock, not an intermediate sample.
           -- Retain its write even if earlier interpolation rounded to the target.
-          action.func(action.end_value)
+          if not already_sent then action.func(action.end_value) end
           action.last_value = action.end_value
           applied = true
         end

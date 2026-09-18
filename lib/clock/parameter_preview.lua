@@ -101,9 +101,15 @@ local function bundle_for(view, step, slot, param, claims, any_claimed)
       bundle.reason = "off"
       return bundle
     end
-    -- A running slide whose explicit destination is this lock consumes it. The
-    -- predicate only reports that; retiring the slide stays with playback.
-    if view.would_handoff(slot, step, step_lock) then
+    -- A running slide owns this slot's wire until its destination step. Sending
+    -- the destination early would land it before the samples still gliding
+    -- toward it, so the receiver would jump to the target and then back. The
+    -- lock leaves at its own step instead, where the handoff gives it one write.
+    if view.is_sliding(slot) then
+      bundle.reason = "sliding"
+    elseif view.would_handoff(slot, step, step_lock) then
+      -- A slide whose explicit destination is this lock consumes it. The
+      -- predicate only reports that; retiring the slide stays with playback.
       bundle.reason = "handoff"
     else
       bundle.send = true

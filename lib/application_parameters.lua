@@ -88,7 +88,13 @@ function application_parameters.register(project_actions)
   params:add_number("elektron_program_change_channel", "Elektron p.change channel", 1, 16, 10, nil, false)
   params:add_separator("Parameter locks")
   params:add_number("midi_lock_lead_time", "Lock lead time (ms)", 0, 50, 25)
-  params:set_action("midi_lock_lead_time", function(value) m_midi.set_lead_time(value) end)
+  -- A lead is delivered by sending locks early, so the lookahead is installed
+  -- whenever the setting is non-zero and removed at zero, which keeps the
+  -- original output path untouched.
+  params:set_action("midi_lock_lead_time", function(value)
+    m_midi.set_lead_time(value)
+    m_clock.set_lock_contract("pulse-advance")
+  end)
   params:add_option("trigless_locks", "Trigless locks", {"Off", "On"}, 2)
   -- An unlocked step sends the channel's assigned value, so a parameter that is
   -- not being locked repeats the same message every step. Turning the repeat off

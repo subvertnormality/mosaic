@@ -90,11 +90,10 @@ end
 -- not send an old queued onset to a newly attached receiver.
 local delay_line = include("mosaic/lib/clock/midi_delay_line")
 local lead_time_ms=0
--- Which lock lead contract is in force. Under "legacy-delay-v1" a lead is
--- achieved by delaying notes, clock and transport behind the locks. Under
--- "pulse-advance" nothing is delayed at all: the lead comes from sending the
--- locks early, inside an earlier pulse, so this path behaves exactly as lead 0.
-local lock_contract="legacy-delay-v1"
+-- Lock lead is achieved by sending the locks early, never by delaying anything.
+-- The delaying path remains only so a measurement can run the old behaviour as a
+-- control; it is not a product setting and nothing in the app selects it.
+local lock_contract="pulse-advance"
 function m_midi.get_lock_contract() return lock_contract end
 function m_midi.set_lock_contract(value)
   if value~="legacy-delay-v1" and value~="pulse-advance" then
@@ -149,6 +148,10 @@ local function remember(by_port, port, channel, due)
   channels[channel] = due
 end
 function m_midi.parameter_deadline(port, channel)
+  -- Under pulse-advance a value's lead comes from leaving in an earlier pulse,
+  -- so nothing is held back here. This spacing rule belongs to the old contract
+  -- and applies only when that is being measured as a control.
+  if lock_contract == "pulse-advance" then return nil end
   if lead_time_ms == 0 or not delay_queue then return nil end
   channel = channel or 1
   local now = delay_queue:now()

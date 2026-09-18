@@ -1,5 +1,10 @@
--- README: MIDI Device Configuration / Lock lead time. Inject time and timers;
--- no wall-clock sleeps, so pulse grouping and preserved gate lengths are exact.
+-- Characterisation of the superseded legacy-delay-v1 lock lead contract, which
+-- delayed notes, clock and transport behind the locks. Lock lead no longer works
+-- that way; values are sent early instead and nothing is delayed. This path is
+-- retained only so a hardware measurement can run the old behaviour as a
+-- control, and these results describe that control, not shipped timing.
+-- Inject time and timers; no wall-clock sleeps, so pulse grouping and preserved
+-- gate lengths are exact.
 local delay_line = include("mosaic/lib/clock/midi_delay_line")
 local function fixture(interval)
   local now, timers, sent, begins, flushes = 0, {}, {}, 0, 0
@@ -120,6 +125,12 @@ local function with_midi_lead(run, fallback)
   function port:song_position(a,b) self.device:send({242,a,b}) end
   midi={vports={port}}
   local output=include("mosaic/lib/m_midi")
+  -- These cases characterise the superseded delaying contract, where a lead was
+  -- achieved by holding notes, clock and transport behind the locks. That is no
+  -- longer how lock lead works: a lead now comes from sending the locks early.
+  -- The path survives so a hardware measurement can still run the old behaviour
+  -- as a control, so its behaviour is still pinned here, under its own name.
+  output.set_lock_contract("legacy-delay-v1")
   midi_devices={port}
   output.set_lead_time(5)
   local function advance(t)
