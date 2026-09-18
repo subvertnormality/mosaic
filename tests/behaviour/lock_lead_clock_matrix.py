@@ -329,6 +329,12 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
     for i, own in sorted(paired.items()):
         if own >= len(run_values):
             continue
+        # A note less than two leads after the one before it has its value held
+        # to the gap's midpoint instead, so it waits less than a lead by design.
+        # Those are timed against that midpoint by the check below; the lead
+        # itself is only claimed where the gap leaves room for all of it.
+        if i > 0 and run_notes[i][field] - run_notes[i - 1][field] < 2 * lead_ns:
+            continue
         wait = run_notes[i][field] - run_values[own][field]
         assert abs(wait - lead_ns) <= tolerance, dict(rule='note a lead after its value', condition=name,
                                                       lead_ms=lead_ms, note=i, wait_ns=wait,
