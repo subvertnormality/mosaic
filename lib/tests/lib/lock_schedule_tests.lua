@@ -114,3 +114,87 @@ function test_lock_schedule_is_not_late_when_the_send_is_still_ahead_of_now()
   luaunit.assert_false(plan.late)
   luaunit.assert_almost_equals(plan.send, 9.975, 1e-9)
 end
+
+-- The separate pulse-advance contract. The exact-millisecond rule above decides
+-- the desired send time; this maps it onto the pulse train, so a value leaves
+-- inside a pulse the sequencer was already running rather than from a timer
+-- firing part way through a step. The lead is then quantised to the pulse grid:
+-- less accurate against a requested figure, but consistent between events.
+local function pulses(interval)
+  return function(index) return index * interval end
+end
+
+function test_pulse_advance_uses_the_latest_pulse_at_or_before_the_desired_send()
+  -- Pulses every 5 ms, value intended at 100 ms with a 25 ms lead: the desired
+  -- send is 75 ms, which is exactly pulse 15.
+  local plan = schedule.pulse_plan{intended = 0.100, send = 0.075, intended_pulse = 20,
+                                   pulse_time = pulses(0.005)}
+  luaunit.assert_equals(plan.pulse, 15)
+  luaunit.assert_almost_equals(plan.send, 0.075, 1e-9)
+  luaunit.assert_almost_equals(plan.effective_lead, 0.025, 1e-9)
+end
+
+function test_pulse_advance_takes_the_latest_pulse_at_or_before_the_desired_send()
+  -- Desired send 73 ms falls between pulses. The latest pulse at or before it is
+  -- 14 at 70 ms, so the lead rounds up to 30 ms. Rounding the other way would
+  -- deliver less lead than asked for and could cross the permitted floor.
+  local plan = schedule.pulse_plan{intended = 0.100, send = 0.073, intended_pulse = 20,
+                                   pulse_time = pulses(0.005)}
+  luaunit.assert_equals(plan.pulse, 14)
+  luaunit.assert_almost_equals(plan.send, 0.070, 1e-9)
+  luaunit.assert_almost_equals(plan.effective_lead, 0.030, 1e-9)
+end
+
+function test_pulse_advance_never_sends_before_its_floor()
+  -- The midpoint or epoch floor binds: no pulse earlier than it may be used.
+  local plan = schedule.pulse_plan{intended = 0.100, send = 0.075, floor = 0.082,
+                                   intended_pulse = 20, pulse_time = pulses(0.005)}
+  luaunit.assert_equals(plan.pulse, 17)
+  luaunit.assert_almost_equals(plan.send, 0.085, 1e-9)
+  luaunit.assert_true(plan.send >= 0.082)
+end
+
+function test_pulse_advance_falls_back_to_the_value_s_own_pulse_when_no_earlier_one_is_legal()
+  -- The floor sits above every earlier pulse, so the value leaves with its step
+  -- and honestly reports no lead rather than being sent too early.
+  local plan = schedule.pulse_plan{intended = 0.100, send = 0.075, floor = 0.099,
+                                   intended_pulse = 20, pulse_time = pulses(0.005)}
+  luaunit.assert_equals(plan.pulse, 20)
+  luaunit.assert_equals(plan.effective_lead, 0)
+end
+
+function test_pulse_advance_never_moves_a_value_past_its_own_intended_pulse()
+  local plan = schedule.pulse_plan{intended = 0.100, send = 0.140, intended_pulse = 20,
+                                   pulse_time = pulses(0.005)}
+  luaunit.assert_equals(plan.pulse, 20)
+  luaunit.assert_equals(plan.effective_lead, 0)
+end
+
+function test_pulse_advance_gives_every_value_of_one_step_the_same_pulse()
+  -- Consistency between events is the property this contract buys: two values
+  -- intended together leave together, whatever their requested lead rounds to.
+  local a = schedule.pulse_plan{intended = 0.100, send = 0.075, intended_pulse = 20,
+                                pulse_time = pulses(0.005)}
+  local b = schedule.pulse_plan{intended = 0.100, send = 0.0755, intended_pulse = 20,
+                                pulse_time = pulses(0.005)}
+  luaunit.assert_equals(a.pulse, b.pulse)
+  luaunit.assert_equals(a.send, b.send)
+end
+
+function test_pulse_advance_reports_the_quantisation_it_applied()
+  local plan = schedule.pulse_plan{intended = 0.100, send = 0.073, intended_pulse = 20,
+                                   pulse_time = pulses(0.005)}
+  luaunit.assert_equals(plan.contract, "pulse-advance")
+  luaunit.assert_almost_equals(plan.quantisation_error, 0.003, 1e-9)
+end
+
+function test_pulse_advance_bounds_its_search_instead_of_scanning_the_whole_run()
+  -- An out-of-contract desired send must not walk back through every pulse of
+  -- the performance; the search stops at its bound and keeps that pulse.
+  local visited = 0
+  local counted = function(index) visited = visited + 1; return index * 0.005 end
+  local plan = schedule.pulse_plan{intended = 5.000, send = 0.0, intended_pulse = 1000,
+                                   pulse_time = counted, max_pulses = 8}
+  luaunit.assert_equals(plan.pulse, 992)
+  luaunit.assert_true(visited <= 16, "search visited " .. visited .. " pulses")
+end
