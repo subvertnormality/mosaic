@@ -105,10 +105,10 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
   local anchor = clock.last_anchor_pulse or transport
   local midpoint = anchor + math.ceil((next_onset - anchor) / 2)
   if send_pulse < midpoint then send_pulse = midpoint end
-  -- This pulse has already served its values, so the earliest one still to come
-  -- is the next. A send time that has passed becomes that pulse rather than
-  -- being abandoned, which keeps the value ahead of its step.
-  if send_pulse <= transport then send_pulse = transport + 1 end
+  -- This pulse is still running and is served again once its work is done, so a
+  -- value owed now can still leave in it, after this step's note and ahead of
+  -- the step it belongs to. Only a time that has genuinely passed moves forward.
+  if send_pulse < transport then send_pulse = transport end
   if send_pulse >= next_onset then return end
 
   local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])

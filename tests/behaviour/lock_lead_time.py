@@ -65,7 +65,13 @@ def lock_lead_time(c):
                     assert abs(wait)<=tolerance,('First note lead',lead,index,note,lock)
                 else:
                     assert lead*1_000_000-tolerance<=wait<lead*1_000_000+pulse_ns+tolerance,('Lead',lead,index,wait,note,lock)
-                assert abs((lock[field]-locks[0][field])-index*1e9/6)<=tolerance,('Lock cadence',index)
+                # The first lock leaves with its note and the rest leave a lead
+                # early, so the first interval is shorter by exactly that lead and
+                # every interval after it is a step. Measuring from the second
+                # lock keeps the cadence exact instead of absorbing the startup.
+                if index>=1:
+                    expected_lead=0 if lead==0 else -(-lead*1_000_000//pulse_ns)*pulse_ns
+                    assert abs((lock[field]-locks[0][field])-(index*1e9/6-expected_lead))<=tolerance,('Lock cadence',lead,index,lock[field]-locks[0][field])
                 assert min(abs(tick[field]-note[field]) for tick in clocks)<=tolerance,('Clock alignment',lead,index)
             # Exclude the gates the Stop tap shortens: it drains pending output, so
             # with a lead the last sounding note is released early (README Lock lead

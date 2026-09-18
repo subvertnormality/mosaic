@@ -403,6 +403,12 @@ function Lattice:pulse_all()
     if flagged then
       self:order_sprockets()
     end
+    -- A step resolves the next step's values as it finishes, and one of them can
+    -- be owed in this very pulse. Serve again before the transport moves on, so
+    -- that value leaves in the pulse it belongs to rather than a pulse later
+    -- with less lead than was asked for. It follows this step's note, and still
+    -- precedes the step it was resolved for.
+    if advance then advance(self.transport) end
     self.transport = self.transport + 1
     if self.transport % (self.ppqn / 4) == 0 then
       self.step = self.step + 1
