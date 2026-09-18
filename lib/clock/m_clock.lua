@@ -75,6 +75,7 @@ function m_clock.discard_lookahead()
   local scheduler = m_clock.lookahead_scheduler
   if scheduler then scheduler:cancel_all() end
   m_clock.receiver_anchors = {}
+  m_clock.shared_addresses = nil
   for channel_number = 1, 17 do
     local channel_clock = m_clock["channel_" .. channel_number .. "_clock"]
     if type(channel_clock) == "table" then channel_clock.last_anchor_pulse = nil end
@@ -88,6 +89,52 @@ end
 -- channel, and the fast track would then suppress its own resend and sound with
 -- the wrong value.
 m_clock.receiver_anchors = m_clock.receiver_anchors or {}
+
+-- A physical address that more than one track writes cannot be advanced safely.
+-- Sending one track's value early can land it between another track's value and
+-- that track's note, where at lead 0 that track's own value would have been the
+-- last thing the receiver heard before it sounded. Those addresses keep lead-0
+-- timing: their values leave at their own step. The set is rebuilt only when
+-- assignments change, not per onset.
+m_clock.shared_addresses = nil
+
+function m_clock.forget_shared_addresses()
+  m_clock.shared_addresses = nil
+end
+
+local function shared_addresses()
+  local shared = m_clock.shared_addresses
+  if shared then return shared end
+  shared = {}
+  local owners = {}
+  local data = program.get()
+  local devices = data and data.devices
+  local song_pattern = data and data.selected_song_pattern
+  if devices and song_pattern then
+    for channel_number = 1, 16 do
+      local device = devices[channel_number]
+      local channel = program.get_channel(song_pattern, channel_number)
+      if device and channel and channel.trig_lock_params then
+        for _, param in ipairs(channel.trig_lock_params) do
+          if param and param.param_id and param.type == "midi" then
+            local address = parameter_preview.midi_address(param, param.channel or device.midi_channel)
+            if address then
+              local key = tostring(device.midi_device) .. ":" .. address
+              local owner = owners[key]
+              if owner == nil then
+                owners[key] = channel_number
+              elseif owner ~= channel_number then
+                shared[key] = true
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+  m_clock.shared_addresses = shared
+  return shared
+end
 
 local function receiver_key(channel_number)
   local devices = program.get().devices
@@ -174,9 +221,15 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
   end
 
   local bundles = parameter_preview.midi_bundles(step.preview_view(channel), next_step)
+  local shared = shared_addresses()
+  local device_id = tostring(program.get().devices[channel_number].midi_device)
   for index = 1, #bundles do
     local bundle = bundles[index]
-    if bundle.send then lookahead_scheduler:schedule(send_pulse, bundle) end
+    -- An address another track also writes keeps lead-0 timing, so that track's
+    -- own value is still the last thing the receiver hears before its note.
+    if bundle.send and not (bundle.address and shared[device_id .. ":" .. bundle.address]) then
+      lookahead_scheduler:schedule(send_pulse, bundle)
+    end
   end
 end
 

@@ -38,6 +38,8 @@ function assignments.update_param(index, channel, param, meta_device)
     -- step resolves the new assignment instead of being suppressed by the old.
     local scheduler = m_clock.get_lock_lookahead and m_clock.get_lock_lookahead()
     if scheduler then scheduler:invalidate(channel.number, nil, index) end
+    -- Which addresses two tracks share depends on the assignments themselves.
+    if m_clock.forget_shared_addresses then m_clock.forget_shared_addresses() end
   end
 end
 
