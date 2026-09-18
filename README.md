@@ -189,36 +189,49 @@ You can customise Mosaic to perfectly align with your studio setup by configurin
 In the Norns params menu, open **MOSAIC → Parameter locks → Lock lead time (ms)**.
 This global setting accepts 0–50 ms and defaults to **25 ms**. It gives MIDI CC/NRPN
 parameter locks time to settle before the note attack, particularly on devices
-that smooth incoming controllers. Set it to **0** for the original output timing.
-The value is saved with Mosaic's project settings.
+that smooth incoming controllers. Set it to **0** to send each value at its own
+step, which is the original output timing. The value is saved with Mosaic's
+project settings.
 
-Locks leave at their usual step time. Sequenced and live MIDI-thru note-ons and
-note-offs move later by the selected amount, preserving gate lengths. Delayed
-output leaves on its own timer, and any clock pulse that finds it already due
-sends it, so a busy step cannot hold a note behind it. No step is looked ahead:
-probability, conditions, fills, random notes, slides, strum, arps and micro-timing
-still make their decisions at the same times. N.b. players are unaffected.
+A step's parameter values leave ahead of the step, in an earlier clock pulse.
+Nothing is delayed to achieve this: note-ons, note-offs, live MIDI-thru, outgoing
+MIDI Clock, Start, Continue, Stop and song position all keep the timing they have
+at a lead of 0, and gate lengths are unchanged. N.b. players are unaffected.
+
+Because a value leaves on a clock pulse, the wait it achieves is the setting
+rounded **up** to the next whole pulse, so a value never leaves with less lead
+than was asked for. At 130 bpm a pulse is about 4.8 ms, so a 25 ms setting
+delivers about 28.8 ms; at 200 bpm it delivers 25 ms exactly. The figure follows
+the tempo, and every value of a step leaves on the same pulse, so what you hear
+stays consistent between events rather than fixed to the number in the menu.
+
+No step is looked ahead musically: probability, conditions, fills, random notes,
+strum, arps and micro-timing still make their decisions at their own times. Only
+the parameter values a step will send are resolved early.
 
 Every note sounds with its own step's values. When two notes on the same MIDI
 channel are less than twice the lead apart (a fast tempo, a fast channel clock,
-or swing and shuffle bringing steps together), a parameter value does not leave at
-its step time: it waits until halfway between the previous note and its own note.
+or swing and shuffle bringing steps together), a value does not take the whole
+lead: it waits until halfway between the previous sounding note and its own step.
 The previous note keeps its value through the first half of the gap, and the new
-value settles in the second half. This applies to every CC and NRPN value on that
-channel, including assigned values and slides. When notes are further apart,
-values leave at step time as above.
+value settles in the second half. A trigless step sounds nothing, so it is not
+the note a later value waits behind.
+
+Two cases give no lead at all. The first step after Play resolves its lock on the
+transport's own first pulse, so there is no earlier pulse for its values to leave
+in and they leave with the note. A parameter that is mid-slide keeps its slide
+until the slide's destination step, so that step's lock arrives with the step
+rather than before it. Nothing is delayed to hide either case.
 
 The lead covers the time a receiver takes for a parameter change to take effect,
 so every value follows the same rule whether or not its step has a note: trigless
 locks, assigned values and slide values leave ahead of the step they belong to and
 take effect as that step is heard.
 
-Outgoing MIDI Clock, Start, Continue, Stop and song position receive the same delay
-on every port. Mosaic delays the existing output without changing saved system
-clock settings, and restores its output hooks on cleanup. Stop and panic drain
-queued notes before releasing held voices; stopping can therefore shorten a
-still-pending gate, ensuring no queued note sounds after Stop. Changing the lead
-also drains pending output; existing voices retain their captured release delay.
+Editing a lock that has already left changes what the next pass sends, and the
+edited value is sent again at its own step, so the receiver is corrected rather
+than left holding the superseded value. Mosaic restores its output hooks on
+cleanup; stop and panic release held voices without leaving queued output behind.
 
 ![Global MIDI lock lead time on Norns](images/lock-lead-time.png)
 
