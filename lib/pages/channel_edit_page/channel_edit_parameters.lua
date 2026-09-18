@@ -50,6 +50,13 @@ function channel_edit_parameters.new(controls, public_ui, refreshers, dependenci
     program.get().devices[channel.number].midi_channel = midi_channel and midi_channel.value or nil
     program.get().devices[channel.number].device_map = device_m and device_m.id or nil
 
+    -- Rerouting a channel changes which physical address its values reach, so a
+    -- value already resolved for the old route must not leave, and which
+    -- addresses two tracks share has to be worked out again.
+    local scheduler = m_clock.get_lock_lookahead and m_clock.get_lock_lookahead()
+    if scheduler then scheduler:invalidate(channel.number, nil, nil) end
+    if m_clock.forget_shared_addresses then m_clock.forget_shared_addresses() end
+
     local device = device_map.get_device(program.get().devices[channel.number].device_map)
     if device.default_midi_channel then
       program.get().devices[channel.number].midi_channel = device.default_midi_channel
