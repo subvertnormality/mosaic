@@ -95,20 +95,25 @@ def build_project(d,channels,workload='dense',select_parameter=None,select_devic
 def check_slides(emitted,ons,channels,lead_ms=0):
     """Each channel has a complete ordered CC 1 ramp from step 1 to step 9.
 
-    A ramp value leaves at its step, and with a lock lead its note leaves later,
-    so the cycle's first value can precede its note by the lead and by every
-    other channel's messages in between. The cycle is therefore bounded by time
-    rather than by a count of messages."""
+    With a lock lead a ramp value leaves before the step it belongs to, so the
+    cycle's first value precedes its own note. How far ahead is not a fixed
+    figure: the value leaves on a clock pulse a lead before the step's pulse,
+    while the note is dispatched once that step's channels have all been
+    resolved, so a busy step widens the gap beyond the lead itself.
+
+    The cycle is therefore bounded by the notes around it rather than by a time
+    guard. A value for this cycle cannot precede the previous note, because the
+    scheduling rule holds it to at least halfway between that note and its own
+    step, and it cannot follow the ninth. That bound is exact at any lead and any
+    step occupancy, where a time guard has to be guessed and then widened."""
     checked=0
-    guard_ns=int(lead_ms*1e6)+10_000_000
     for channel in range(channels):
         cc=[e for e in emitted if e['bytes'][:2]==[176+channel,1]]
         notes=[e for e in ons if e['bytes'][0]==144+channel]
         for cycle in range(len(notes)//16):
             first,ninth=notes[16*cycle],notes[16*cycle+8]
-            ramp=[e['bytes'][2] for e in cc
-                  if (first['index']-channels*2<e['index'] or e['monotonic_ns']>=first['monotonic_ns']-guard_ns)
-                  and e['index']<ninth['index']]
+            floor=notes[16*cycle-1]['index'] if cycle else -1
+            ramp=[e['bytes'][2] for e in cc if floor<e['index']<ninth['index']]
             assert ramp and ramp[0]==0 and ramp[-1]==127 and ramp==sorted(ramp) and len(set(ramp))>=4,(channel+1,cycle,ramp)
             checked+=1
     assert checked>=channels,('No complete slide cycle',checked)
