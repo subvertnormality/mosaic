@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "diagnostic_only": true,
+  "receiver_qualification_eligible": false,
+  "gates": {
+    "dispatch_only_probe_overhead": false
+  },
+  "passed": false,
+  "failures": [
+    "window 2: existing oracle did not pass",
+    "window 2: an existing oracle gate is absent or false",
+    "window 4: existing oracle did not pass",
+    "window 4: an existing oracle gate is absent or false",
+    "window 8: existing oracle did not pass",
+    "window 8: an existing oracle gate is absent or false",
+    "window 9: existing oracle did not pass",
+    "window 9: an existing oracle gate is absent or false",
+    "window 10: existing oracle did not pass",
+    "window 10: an existing oracle gate is absent or false",
+    "window 12: existing oracle did not pass",
+    "window 12: an existing oracle gate is absent or false",
+    "window 18: existing oracle did not pass",
+    "window 18: an existing oracle gate is absent or false",
+    "pair 0: paired p95 jitter delta exceeds 0.25 ms",
+    "pair 1: window 2 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 2: window 4 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 3: paired p95 jitter delta exceeds 0.25 ms",
+    "pair 4: window 8 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 4: window 9 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 5: window 10 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 6: window 12 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 7: paired CPU delta exceeds 2 percentage points",
+    "pair 8: paired p95 jitter delta exceeds 0.25 ms",
+    "pair 9: window 18 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+  ],
+  "pairs": [
+    {
+      "pair": 0,
+      "orders": [
+        0,
+        1
+      ],
+      "passed": false,
+      "failures": [
+        "paired p95 jitter delta exceeds 0.25 ms"
+      ],
+      "jitter_p95_delta_ns": 879950,
+      "cpu_delta_percentage_points": 0.25904090177854755
+    },
+    {
+      "pair": 1,
+      "orders": [
+        2,
+        3
+      ],
+      "passed": false,
+      "failures": [
+        "window 2 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 2,
+      "orders": [
+        4,
+        5
+      ],
+      "passed": false,
+      "failures": [
+        "window 4 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 3,
+      "orders": [
+        6,
+        7
+      ],
+      "passed": false,
+      "failures": [
+        "paired p95 jitter delta exceeds 0.25 ms"
+      ],
+      "jitter_p95_delta_ns": -915278,
+      "cpu_delta_percentage_points": 1.5576670491789173
+    },
+    {
+      "pair": 4,
+      "orders": [
+        8,
+        9
+      ],
+      "passed": false,
+      "failures": [
+        "window 8 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+        "window 9 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 5,
+      "orders": [
+        10,
+        11
+      ],
+      "passed": false,
+      "failures": [
+        "window 10 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 6,
+      "orders": [
+        12,
+        13
+      ],
+      "passed": false,
+      "failures": [
+        "window 12 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 7,
+      "orders": [
+        14,
+        15
+      ],
+      "passed": false,
+      "failures": [
+        "paired CPU delta exceeds 2 percentage points"
+      ],
+      "jitter_p95_delta_ns": -40626,
+      "cpu_delta_percentage_points": 2.033236840052247
+    },
+    {
+      "pair": 8,
+      "orders": [
+        16,
+        17
+      ],
+      "passed": false,
+      "failures": [
+        "paired p95 jitter delta exceeds 0.25 ms"
+      ],
+      "jitter_p95_delta_ns": -1531470,
+      "cpu_delta_percentage_points": -0.591441724730899
+    },
+    {
+      "pair": 9,
+      "orders": [
+        18,
+        19
+      ],
+      "passed": false,
+      "failures": [
+        "window 18 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    }
+  ]
+}

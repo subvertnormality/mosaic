@@ -133,6 +133,29 @@ The compact result and raw-file hashes are `hardware-core-campaign-cc051cc*.json
 in the checkpoint evidence directory. This does not qualify the complete workload
 matrix, the subsequent projection extraction or working nonzero lookahead.
 
+The 16,384-row capacity cell repeated that cell exactly: same deployed `cc051cc`,
+case `PERF-009-HW-16`, lead 25, campaign seed 20260919 and predeclared window
+order, with the controller frozen at `93a0fcc`. It also failed. Seven of twenty
+windows failed step jitter (1-based windows 3, 5, 9, 10, 11, 13 and 19), and all
+ten pairs again failed combined overhead qualification. Raw evidence is under
+`tests/behaviour/artifacts/lock-lead/cc051cc/legacy-delay-v1/core16k-locks25-20260918`
+with the compact result and hashes in `hardware-core16k-campaign-cc051cc*.json`.
+Restoration was verified. Note that `evaluate_campaign` labels failures by the
+0-based predeclared order, so its window numbers are one lower than these.
+
+Reducing the ring did not fix the timing failures; the count rose from five to
+seven, which one cell per configuration cannot distinguish from noise. The
+oversized-allocation hypothesis is not supported by this comparison and is not
+refuted by it either.
+
+The result that does carry weight is which windows failed: six of the seven had
+the probe **off**. Uninstrumented windows running stock `cc051cc` at lead 25 fail
+the existing step-jitter gate on this device. Probe overhead therefore cannot be
+the explanation for those failures, and the failures belong to the deployed
+legacy delayed-note lead contract rather than to the diagnostic tooling. This is
+an observation about where the failures occur, not a demonstration of the
+mechanism that produces them.
+
 Follow the test runbook before device work, restore after each run and preserve all
 failed evidence. The runner in this checkout uses `git archive HEAD` for deployment;
 uncommitted files are **not deployed**, unlike the runner variant described in the

@@ -1,0 +1,12 @@
+{
+  "script_sha256": "76c342103c4a89da2fe21446798d3967febae282b193df75fde9f643fd9523be",
+  "case": "PERF-009-HW-16",
+  "source": "/tmp/mosaic-foundations-cc051cc/mosaic",
+  "controller": "/tmp/mosaic-controller-93a0fcc/mosaic",
+  "controller_identity": {
+    "mosaic_revision": "93a0fcc996a72e2e7adfca56da10d0151c0d88ab",
+    "dirty_patch_sha256": null
+  },
+  "capture_boundary": "Lua immediately before original _norns.midi_send",
+  "receiver_qualification_eligible": false
+}

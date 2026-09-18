@@ -1,0 +1,449 @@
+{
+  "restoration": {
+    "restoration_verified": true,
+    "failure": null
+  },
+  "overhead_passed": false,
+  "failures": [
+    "window 2: existing oracle did not pass",
+    "window 2: an existing oracle gate is absent or false",
+    "window 4: existing oracle did not pass",
+    "window 4: an existing oracle gate is absent or false",
+    "window 8: existing oracle did not pass",
+    "window 8: an existing oracle gate is absent or false",
+    "window 9: existing oracle did not pass",
+    "window 9: an existing oracle gate is absent or false",
+    "window 10: existing oracle did not pass",
+    "window 10: an existing oracle gate is absent or false",
+    "window 12: existing oracle did not pass",
+    "window 12: an existing oracle gate is absent or false",
+    "window 18: existing oracle did not pass",
+    "window 18: an existing oracle gate is absent or false",
+    "pair 0: paired p95 jitter delta exceeds 0.25 ms",
+    "pair 1: window 2 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 2: window 4 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 3: paired p95 jitter delta exceeds 0.25 ms",
+    "pair 4: window 8 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 4: window 9 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 5: window 10 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 6: window 12 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+    "pair 7: paired CPU delta exceeds 2 percentage points",
+    "pair 8: paired p95 jitter delta exceeds 0.25 ms",
+    "pair 9: window 18 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+  ],
+  "pairs": [
+    {
+      "pair": 0,
+      "orders": [
+        0,
+        1
+      ],
+      "passed": false,
+      "failures": [
+        "paired p95 jitter delta exceeds 0.25 ms"
+      ],
+      "jitter_p95_delta_ns": 879950,
+      "cpu_delta_percentage_points": 0.25904090177854755
+    },
+    {
+      "pair": 1,
+      "orders": [
+        2,
+        3
+      ],
+      "passed": false,
+      "failures": [
+        "window 2 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 2,
+      "orders": [
+        4,
+        5
+      ],
+      "passed": false,
+      "failures": [
+        "window 4 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 3,
+      "orders": [
+        6,
+        7
+      ],
+      "passed": false,
+      "failures": [
+        "paired p95 jitter delta exceeds 0.25 ms"
+      ],
+      "jitter_p95_delta_ns": -915278,
+      "cpu_delta_percentage_points": 1.5576670491789173
+    },
+    {
+      "pair": 4,
+      "orders": [
+        8,
+        9
+      ],
+      "passed": false,
+      "failures": [
+        "window 8 failed: existing oracle did not pass, an existing oracle gate is absent or false",
+        "window 9 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 5,
+      "orders": [
+        10,
+        11
+      ],
+      "passed": false,
+      "failures": [
+        "window 10 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 6,
+      "orders": [
+        12,
+        13
+      ],
+      "passed": false,
+      "failures": [
+        "window 12 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    },
+    {
+      "pair": 7,
+      "orders": [
+        14,
+        15
+      ],
+      "passed": false,
+      "failures": [
+        "paired CPU delta exceeds 2 percentage points"
+      ],
+      "jitter_p95_delta_ns": -40626,
+      "cpu_delta_percentage_points": 2.033236840052247
+    },
+    {
+      "pair": 8,
+      "orders": [
+        16,
+        17
+      ],
+      "passed": false,
+      "failures": [
+        "paired p95 jitter delta exceeds 0.25 ms"
+      ],
+      "jitter_p95_delta_ns": -1531470,
+      "cpu_delta_percentage_points": -0.591441724730899
+    },
+    {
+      "pair": 9,
+      "orders": [
+        18,
+        19
+      ],
+      "passed": false,
+      "failures": [
+        "window 18 failed: existing oracle did not pass, an existing oracle gate is absent or false"
+      ],
+      "jitter_p95_delta_ns": null,
+      "cpu_delta_percentage_points": null
+    }
+  ],
+  "windows": [
+    {
+      "window": 1,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true
+      },
+      "jitter_p95_ms": 1.153497,
+      "jitter_max_ms": 2.278439,
+      "cpu_percent": 37.18950749632498
+    },
+    {
+      "window": 2,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 2.033447,
+      "jitter_max_ms": 5.904345,
+      "cpu_percent": 37.448548398103526
+    },
+    {
+      "window": 3,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": false
+      },
+      "jitter_p95_ms": 3.346727,
+      "jitter_max_ms": 11.024601,
+      "cpu_percent": 34.66587930350747
+    },
+    {
+      "window": 4,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 2.053415,
+      "jitter_max_ms": 6.399449,
+      "cpu_percent": 38.58341294155058
+    },
+    {
+      "window": 5,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": false
+      },
+      "jitter_p95_ms": 5.883687,
+      "jitter_max_ms": 9.437401,
+      "cpu_percent": 37.92346526537838
+    },
+    {
+      "window": 6,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 4.324569,
+      "jitter_max_ms": 8.808743,
+      "cpu_percent": 36.917741190976926
+    },
+    {
+      "window": 7,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 1.724377,
+      "jitter_max_ms": 7.434791,
+      "cpu_percent": 39.01528438896924
+    },
+    {
+      "window": 8,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true
+      },
+      "jitter_p95_ms": 2.639655,
+      "jitter_max_ms": 7.652313,
+      "cpu_percent": 37.457617339790325
+    },
+    {
+      "window": 9,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": false,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 6.909735,
+      "jitter_max_ms": 8.962265,
+      "cpu_percent": 37.741682714824634
+    },
+    {
+      "window": 10,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": false
+      },
+      "jitter_p95_ms": 5.247705,
+      "jitter_max_ms": 8.588249,
+      "cpu_percent": 37.0334486134329
+    },
+    {
+      "window": 11,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": false
+      },
+      "jitter_p95_ms": 2.309081,
+      "jitter_max_ms": 10.136281,
+      "cpu_percent": 35.214802638475796
+    },
+    {
+      "window": 12,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 1.389607,
+      "jitter_max_ms": 6.412249,
+      "cpu_percent": 37.57438712455009
+    },
+    {
+      "window": 13,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": false
+      },
+      "jitter_p95_ms": 1.203673,
+      "jitter_max_ms": 11.697703,
+      "cpu_percent": 36.772451844885474
+    },
+    {
+      "window": 14,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 1.446439,
+      "jitter_max_ms": 7.076057,
+      "cpu_percent": 38.331121093541555
+    },
+    {
+      "window": 15,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 1.304615,
+      "jitter_max_ms": 1.834457,
+      "cpu_percent": 38.30462460760529
+    },
+    {
+      "window": 16,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true
+      },
+      "jitter_p95_ms": 1.345241,
+      "jitter_max_ms": 1.736743,
+      "cpu_percent": 36.271387767553044
+    },
+    {
+      "window": 17,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 1.276121,
+      "jitter_max_ms": 6.519513,
+      "cpu_percent": 36.744748890611724
+    },
+    {
+      "window": 18,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true
+      },
+      "jitter_p95_ms": 2.807591,
+      "jitter_max_ms": 6.185689,
+      "cpu_percent": 37.33619061534262
+    },
+    {
+      "window": 19,
+      "mode": "off",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": false
+      },
+      "jitter_p95_ms": 1.187289,
+      "jitter_max_ms": 10.142759,
+      "cpu_percent": 37.72782321154948
+    },
+    {
+      "window": 20,
+      "mode": "pulse-core-v1",
+      "gates": {
+        "event_timing": true,
+        "sustained_service": true,
+        "hard_service": true,
+        "step_jitter": true,
+        "probe_complete": true
+      },
+      "jitter_p95_ms": 3.337433,
+      "jitter_max_ms": 8.039385,
+      "cpu_percent": 37.06816107061498
+    }
+  ],
+  "source_identity": {
+    "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+    "dirty_patch_sha256": null,
+    "fixture_files": {
+      "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+      "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+    }
+  },
+  "analysis_source_sha256": "980582f4618660757e8daa3f37200697cdcf121d18568e0cfc417c54c9cf907a",
+  "analysis_module_sha256": "9a95889a81637969fd9fc6379fe85ab1e7b54f0a77b6e70dcb775779be059d34"
+}

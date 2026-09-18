@@ -1,0 +1,451 @@
+{
+  "schema_version": 2,
+  "campaign_seed": 20260919,
+  "workload": "locks",
+  "lead_ms": 25,
+  "measured_steps": 80,
+  "probe_capacity": 16384,
+  "source_identity": {
+    "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+    "dirty_patch_sha256": null,
+    "fixture_files": {
+      "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+      "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+    }
+  },
+  "pairs": [
+    {
+      "pair": 0,
+      "orders": [
+        0,
+        1
+      ],
+      "seed": 422443259,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "off",
+        "pulse-core-v1"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 1,
+      "orders": [
+        2,
+        3
+      ],
+      "seed": 598775174,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "off",
+        "pulse-core-v1"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 2,
+      "orders": [
+        4,
+        5
+      ],
+      "seed": 1727549882,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "off",
+        "pulse-core-v1"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 3,
+      "orders": [
+        6,
+        7
+      ],
+      "seed": 238119131,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "pulse-core-v1",
+        "off"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 4,
+      "orders": [
+        8,
+        9
+      ],
+      "seed": 1838328610,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "pulse-core-v1",
+        "off"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 5,
+      "orders": [
+        10,
+        11
+      ],
+      "seed": 96524362,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "off",
+        "pulse-core-v1"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 6,
+      "orders": [
+        12,
+        13
+      ],
+      "seed": 100852846,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "off",
+        "pulse-core-v1"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 7,
+      "orders": [
+        14,
+        15
+      ],
+      "seed": 16297475,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "pulse-core-v1",
+        "off"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 8,
+      "orders": [
+        16,
+        17
+      ],
+      "seed": 2147176926,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "pulse-core-v1",
+        "off"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    },
+    {
+      "pair": 9,
+      "orders": [
+        18,
+        19
+      ],
+      "seed": 101174960,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_modes": [
+        "off",
+        "pulse-core-v1"
+      ],
+      "source_identity": {
+        "mosaic_revision": "cc051cc454f5a55034d2a23f28f8c48408999dc7",
+        "dirty_patch_sha256": null,
+        "fixture_files": {
+          "autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+          "autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5"
+        }
+      }
+    }
+  ],
+  "windows": [
+    {
+      "order": 0,
+      "pair": 0,
+      "seed": 422443259,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 1,
+      "pair": 0,
+      "seed": 422443259,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 2,
+      "pair": 1,
+      "seed": 598775174,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 3,
+      "pair": 1,
+      "seed": 598775174,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 4,
+      "pair": 2,
+      "seed": 1727549882,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 5,
+      "pair": 2,
+      "seed": 1727549882,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 6,
+      "pair": 3,
+      "seed": 238119131,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 7,
+      "pair": 3,
+      "seed": 238119131,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 8,
+      "pair": 4,
+      "seed": 1838328610,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 9,
+      "pair": 4,
+      "seed": 1838328610,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 10,
+      "pair": 5,
+      "seed": 96524362,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 11,
+      "pair": 5,
+      "seed": 96524362,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 12,
+      "pair": 6,
+      "seed": 100852846,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 13,
+      "pair": 6,
+      "seed": 100852846,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 14,
+      "pair": 7,
+      "seed": 16297475,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 15,
+      "pair": 7,
+      "seed": 16297475,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 16,
+      "pair": 8,
+      "seed": 2147176926,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    },
+    {
+      "order": 17,
+      "pair": 8,
+      "seed": 2147176926,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 18,
+      "pair": 9,
+      "seed": 101174960,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "off",
+      "probe_capacity": null
+    },
+    {
+      "order": 19,
+      "pair": 9,
+      "seed": 101174960,
+      "workload": "locks",
+      "lead_ms": 25,
+      "measured_steps": 80,
+      "probe_mode": "pulse-core-v1",
+      "probe_capacity": 16384
+    }
+  ],
+  "receiver_qualification_eligible": false
+}
