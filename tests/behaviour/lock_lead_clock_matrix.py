@@ -376,18 +376,25 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             assert abs(wait) <= tolerance, dict(rule='first note has no lead to give', condition=name,
                                                 lead_ms=lead_ms, note=i, wait_ns=wait)
             continue
-        if condition.get('slide'):
-            # A running slide owns its slot's wire until its destination step, so
-            # that slot's lock is not sent early at all.
-            assert wait >= -tolerance, dict(rule='value not after its note', condition=name,
-                                            lead_ms=lead_ms, note=i, wait_ns=wait)
-            continue
-        assert lead_ns - tolerance <= wait < lead_ns + pulse_ns + tolerance, dict(
-            rule='note at least a lead and less than one pulse more after its value',
+        # How much lead a value actually gets is decided by the midpoint rule
+        # against the previous sounding note, which the documented-time check
+        # below models exactly, including swing and shuffle moving notes around.
+        # Restating it here in terms of the requested lead got it wrong wherever
+        # the gap was uneven, so this holds only the bound that does not depend
+        # on the gap: a value never waits longer than the lead it asked for,
+        # rounded up to the pulse it leaves on, and never follows its own note.
+        assert -tolerance <= wait < lead_ns + pulse_ns + tolerance, dict(
+            rule='value no earlier than its lead and never after its note',
             condition=name, lead_ms=lead_ms, note=i, wait_ns=wait,
             lead_ns=lead_ns, pulse_ns=pulse_ns, error_ns=wait - lead_ns)
     ref_note_times = [rel(n, reference) for n in ref_notes[:count]]
     queued = None; timed_values = 0
+    # A value is resolved at the onset before its own, so it cannot leave earlier
+    # than that onset however much lead is asked for. In the lead 0 reference each
+    # value leaves at its step, so the previous value's time is that onset. Where
+    # the previous onset is closer than the lead, on the short side of a swung
+    # pair, this is what shortens the lead rather than the spacing rule.
+    available = None
     for ref_value, value in zip(ref_values, run_values):
         x = rel(ref_value, reference)
         before = [i for i, n in enumerate(ref_notes[:count]) if n['index'] < ref_value['index']]
@@ -412,11 +419,26 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             # Notes are not moved, so the midpoint is between the two step times.
             quantised = math.ceil(lead_ns / pulse_ns) * pulse_ns if lead_ns else 0
             expected = max(x - quantised, (ref_note_times[previous] + x) / 2)
+            if available is not None and available > expected:
+                expected = available
             if expected > x:
                 expected = x
+            if condition.get('slide'):
+                # A slot that is mid-slide keeps its wire until the slide's
+                # destination step, so its lock is not advanced. The value is
+                # still held to the midpoint and to its own step, which is what
+                # is checked here; which of the two it takes depends on whether
+                # that slot was sliding at the time and is not asserted.
+                assert (ref_note_times[previous] + x) / 2 - tolerance - pulse_ns <= rel(value, run) <= x + tolerance, dict(
+                    rule='sliding value between the midpoint and its step', condition=name,
+                    lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x, actual_ns=rel(value, run))
+                queued = max(queued, expected) if queued is not None else expected
+                timed_values += 1
+                continue
         if queued is not None and queued > expected:
             expected = queued
         queued = expected
+        available = x
         actual = rel(value, run)
         # One pulse of slack in each direction: the value lands on the pulse grid,
         # and which pulse the midpoint floor falls on is a whole-pulse decision.

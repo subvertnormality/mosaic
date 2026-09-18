@@ -79,6 +79,18 @@ end
 -- note. The conditions the projection asserts are tested first rather than
 -- caught, so an unsupported clock costs a few comparisons and simply keeps the
 -- existing timing for that channel.
+-- Resolve the next step's MIDI values now and hold them against the pulse that
+-- will send them. Called once a step's note has gone out, so previewing never
+-- delays a note. The conditions the projection asserts are tested first rather
+-- than caught, so an unsupported clock costs a few comparisons and simply keeps
+-- the existing timing for that channel.
+--
+-- Only the next onset is resolved. Looking further would let a later step's
+-- value leave before the values of the steps between it and now, which reorders
+-- what the receiver hears. The cost is that a value cannot leave earlier than
+-- the onset that resolved it, so where the previous onset is closer than the
+-- lead -- the short side of a swung pair -- the value takes the room it has.
+-- That is the same shortening the spacing rule already describes.
 local function schedule_lookahead(clock, channel, channel_number, current_step)
   local lookahead_scheduler = m_clock.lookahead_scheduler
   if lookahead_scheduler == nil or channel_number == 17 or channel.mute then return end
