@@ -33,9 +33,10 @@ function test_lead_time_zero_is_synchronous_without_timer_or_batch()
   luaunit.assert_equals(#timers,0)
   luaunit.assert_equals({counts()},{0,0})
 end
--- The lattice pulses far more often than it steps, and delayed output leaves on
--- one of those pulses. The tests below pulse on a 1 ms grid: a 5 ms lead is then
--- five pulses, so each group still leaves exactly its lead after its own pulse.
+-- The lattice pulses far more often than it steps. The tests below pulse on a
+-- 1 ms grid to show that a group leaves exactly its lead after its own pulse
+-- whether or not a pulse falls on its deadline: the deadline sends it, and a
+-- pulse only carries what is already overdue.
 local function pulse_grid(q,advance)
   local at=-.001
   return function(limit,body)
@@ -47,7 +48,7 @@ local function pulse_grid(q,advance)
     end
   end
 end
-function test_lead_time_groups_pulse_and_preserves_longer_than_pulse_gates()
+function test_lead_time_sends_each_group_on_its_deadline_and_preserves_longer_than_pulse_gates()
   -- A clock that states 1 ms pulses: a 5 ms lead is five of them.
   local q,sent,timers,advance,counts=fixture(.001)
   local pulse=pulse_grid(q,advance)
@@ -60,9 +61,10 @@ function test_lead_time_groups_pulse_and_preserves_longer_than_pulse_gates()
   pulse(.007)
   luaunit.assert_equals(sent[5],{.007,"off1"})
   luaunit.assert_equals(sent[6],{.007,"off2"})
-  -- The first group was pushed before any pulse interval was known and left on
-  -- its timer; the second counted pulses and left inside the pulse's own batch.
-  luaunit.assert_equals({counts()},{1,1})
+  -- Each group left on its own deadline, in its own batch, though a pulse fell
+  -- on both of those deadlines and could have carried them. Waiting for a pulse
+  -- is what rounded a lead up to the next one.
+  luaunit.assert_equals({counts()},{2,2})
 end
 function test_lead_time_drain_preserves_generation_order_across_leads_and_cancels()
   local q,sent,timers,advance=fixture()

@@ -309,6 +309,30 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
     # the run window, so the reference values must be a prefix of the run's.
     run_values = run['values'][:len(ref_values)]
     assert [v['bytes'][2] for v in run_values] == [v['bytes'][2] for v in ref_values], dict(rule='same values in the same order', condition=name, lead_ms=lead_ms, run=[v['bytes'][2] for v in run_values], reference=[v['bytes'][2] for v in ref_values])
+    # README Lock lead time: the lead is the wait between a value and the note it
+    # shapes. Every comparison above is relative to an origin taken from the
+    # first note, so a delay common to every note cancels and cannot be seen
+    # there. This measures each note against its own value, which the lead never
+    # moves, and so holds the lead to the milliseconds it asks for rather than to
+    # whatever the clock rounds them to. Notes and values are paired by their
+    # order in the reference, where a value and its note are sent together: a
+    # lead longer than a step puts other values between them, so their positions
+    # in the stream cannot pair them. A step that sends no value of its own has
+    # no pair and is left out.
+    paired, seen = {}, 0
+    for i, ref_note in enumerate(ref_notes[:count]):
+        while seen < len(reference['values']) and reference['values'][seen]['index'] < ref_note['index']:
+            seen += 1
+        own = seen - 1
+        if own >= 0 and abs(reference['values'][own][field] - ref_note[field]) <= tolerance:
+            paired[i] = own
+    for i, own in sorted(paired.items()):
+        if own >= len(run_values):
+            continue
+        wait = run_notes[i][field] - run_values[own][field]
+        assert abs(wait - lead_ns) <= tolerance, dict(rule='note a lead after its value', condition=name,
+                                                      lead_ms=lead_ms, note=i, wait_ns=wait,
+                                                      lead_ns=lead_ns, error_ns=wait - lead_ns)
     ref_note_times = [rel(n, reference) for n in ref_notes[:count]]
     queued = None; timed_values = 0
     for ref_value, value in zip(ref_values, run_values):

@@ -28,29 +28,21 @@ end
 function delay_line.new(deps)
   local q = {}
   local lanes, pulse, pulse_time, serial = {}, false, nil, 0
-  -- While the transport runs, every clock pulse sends what has come due. A
-  -- timer callback waits behind whatever pulse is running, and on a busy step
-  -- that wait moved delayed notes several milliseconds off the beat; a pulse
-  -- carries them with the same steadiness as an undelayed note. The timer stays
-  -- as the fallback for output produced while no pulse is coming (MIDI thru
-  -- with the transport stopped), and is armed a pulse and a half late while
-  -- pulses are arriving so the pulse itself normally sends first.
-  local last_pulse, pulse_interval, firing
-  local function pulsing(now)
-    return pulse_interval and last_pulse and (now-last_pulse) < pulse_interval*4
-  end
+  -- Everything waits for its own deadline. Letting a clock pulse carry delayed
+  -- output instead looks steadier, because a pulse is steadier than a timer
+  -- callback queued behind one, but it rounds every wait up to the next pulse:
+  -- a 25 ms lead at 130 bpm is 5.2 pulses and was heard as 6, and at 200 bpm,
+  -- where it is exactly 8, it was heard correctly. A lead measured in
+  -- milliseconds has to be those milliseconds at every tempo, so the pulse is
+  -- only a rescue for output already overdue, and the clock's own steadiness has
+  -- to come from the deadline being reachable rather than from waiting for a
+  -- pulse.
+  local firing
   local function arm(lane)
     local first=lane.groups[lane.head]
     if first and not lane.armed then
       lane.armed=true
-      local now=deps.now()
-      local wait=first.due-now
-      -- A lane of delayed notes is normally sent by the pulse that finds it due,
-      -- so its timer is armed late and only covers pulses that stop. A value
-      -- held for a gap keeps its exact timer: it is due between pulses by
-      -- design, and waiting for one would move it off the gap's midpoint.
-      if not lane.exact and pulsing(now) then wait=wait+pulse_interval*1.5 end
-      lane.timer:start(math.max(0.000001,wait))
+      lane.timer:start(math.max(0.000001,first.due-deps.now()))
     end
   end
   -- Parameter values held for a gap (push_at) have their own lane ordered by
@@ -131,7 +123,7 @@ function delay_line.new(deps)
   -- arrive out of order across channels; equal deadlines keep push order.
   function q:push_at(due,message)
     if not held then
-      held={groups={},head=1,exact=true}
+      held={groups={},head=1}
       held.timer=(deps.timer or delay_line.timer)(function() fire(held) end)
     end
     local groups=held.groups
@@ -142,19 +134,12 @@ function delay_line.new(deps)
     if index==held.head and held.armed then held.timer:stop();held.armed=false end
     arm(held)
   end
-  -- A pulse is starting: send what has come due into its write, ahead of
-  -- anything the pulse itself produces (everything the pulse produces is due
-  -- later than now). A delayed note then leaves on the pulse grid, as steady as
-  -- an undelayed one, instead of on a timer callback queued behind a busy step.
+  -- A pulse is starting: send anything already overdue into its write, ahead of
+  -- what the pulse itself produces, which is always due later than now. This is
+  -- the rescue for a deadline that has passed unserved, never the way output is
+  -- meant to leave: waiting for a pulse is what rounded the lead up to one.
   function q:begin()
     if firing then pulse=true;pulse_time=nil;return end
-    local now=deps.now()
-    if last_pulse then
-      local gap=now-last_pulse
-      -- A plausible pulse: faster than four a second and not a repeated call.
-      if gap>0.0001 and gap<0.25 then pulse_interval=gap end
-    end
-    last_pulse=now
     pulse=true;pulse_time=nil
     send_due()
     settle_all()
