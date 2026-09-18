@@ -259,6 +259,67 @@ local function claim_addresses(channel, step, trig_lock_params, device_midi_chan
   return claimed
 end
 
+-- Lock lookahead installs its scheduler here. With none installed, playback is
+-- exactly as it was: every value is resolved and sent at its own step.
+local lock_lookahead_scheduler = nil
+
+function step.set_lock_lookahead(scheduler)
+  lock_lookahead_scheduler = scheduler
+end
+
+function step.get_lock_lookahead()
+  return lock_lookahead_scheduler
+end
+
+-- Build the read-only view the pure preview needs out of live project state.
+-- Every field is a read; nothing here can send, claim or cancel anything.
+function step.preview_view(channel)
+  local program_data = program.get()
+  local devices = program_data.devices
+  local device = device_map.get_device(devices[channel.number].device_map)
+  local channel_number = channel.number
+  return {
+    channel = channel_number,
+    params = channel.trig_lock_params,
+    mute = channel.mute,
+    midi_channel = devices[channel_number].midi_channel,
+    midi_device = devices[channel_number].midi_device,
+    recording_selected = fn.param_value("record") == 2 and
+      program_data.selected_channel == channel_number,
+    recording_dirty = function(slot) return recorder.trig_lock_is_dirty(channel_number, slot) end,
+    step_lock = function(slot, step_number)
+      return program.get_step_param_trig_lock(channel, step_number, slot)
+    end,
+    assigned = function(param_id) return read_stock_assigned(param_id) end,
+    is_sliding = function(slot) return m_clock.channel_is_sliding(channel, slot) end,
+    would_handoff = function(slot, step_number, value)
+      return m_clock.spread_lock_would_handoff(channel_number, slot, step_number, value)
+    end,
+    next_lock = function(slot, step_number, off)
+      return program.get_next_trig_lock_step(channel, step_number, slot, off)
+    end,
+    channel_slide = function(slot) return program.get_channel_param_slide(channel, slot) end,
+    step_slide = function(slot, step_number)
+      return program.get_step_param_slide(channel, step_number, slot)
+    end,
+    nrpn_mode = function(param)
+      return param.nrpn_lsb_mode or nrpn_codec.stored_mode(program_data, channel_number, param, device)
+    end,
+    resend_unchanged = fn.param_value("repeat_unchanged_locks") ~= 1,
+    last_sent = function(slot)
+      local per_channel = last_sent_lock_values[channel_number]
+      return per_channel and per_channel[slot]
+    end,
+  }
+end
+
+-- Send a previewed value down the same path playback uses, so the resend cache
+-- is committed here and in no other place.
+function step.send_preview_bundle(bundle)
+  send_midi_param(bundle.channel, bundle.slot, bundle.param, bundle.value,
+                  bundle.midi_channel, bundle.midi_device, bundle.nrpn_mode)
+end
+
 function step.process_params(channel, step)
   local program_data = program.get()
 
@@ -275,10 +336,17 @@ function step.process_params(channel, step)
   local recording_selected_channel = fn.param_value("record") == 2 and program_data.selected_channel == channel.number
   local any_claimed = claim_addresses(channel, step, trig_lock_params, devices[channel.number].midi_channel)
 
+  local scheduler = lock_lookahead_scheduler
   for i, param in ipairs(trig_lock_params) do
     -- Unassigned slots are the common case; test the cheapest condition first.
     if param.param_id and should_process_param(param) then
       local off = param.off_value == nil and -1 or param.off_value
+
+      -- Under lock lookahead this slot's value already left in an earlier pulse.
+      -- Sending it again here would double every locked value on the wire.
+      if scheduler and scheduler:was_sent(channel.number, step, i) then
+        goto continue
+      end
 
       if recording_selected_channel and recorder.trig_lock_is_dirty(channel.number, i) then
         goto continue

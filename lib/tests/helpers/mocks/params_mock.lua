@@ -3,6 +3,9 @@ param_store = {}
 
 function params.reset()
   param_store = {}
+  -- norns supplies clock_tempo as a system parameter; the mock has to as well,
+  -- or anything that converts a time into pulses reads nil here.
+  param_store["clock_tempo"] = {val = 120}
 end
 
 function params:add(id, param)

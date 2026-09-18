@@ -287,6 +287,11 @@ end
 
 function Lattice:pulse_all()
   if self.enabled then
+    -- Parameter values resolved ahead of their own step leave here, inside a
+    -- pulse the sequencer was already running and before this pulse's own work.
+    -- No timer is involved, so nothing is dispatched part way through a step.
+    local advance = self.advance
+    if advance then advance(self.transport) end
     -- A step's note-offs and its note-ons are two bursts down one MIDI port. If
     -- each sprocket released and then sounded in turn, every channel's note-on
     -- would wait behind another channel's note-off, doubling how long a step's

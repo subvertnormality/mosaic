@@ -3,6 +3,7 @@ local chord_timing = include("mosaic/lib/clock/chord_timing")
 local lattice = include("mosaic/lib/clock/m_lattice")
 local midi_output_transport = include("mosaic/lib/clock/midi_output_transport")
 local step_cursor = include("mosaic/lib/clock/step_cursor")
+local parameter_preview = include("mosaic/lib/clock/parameter_preview")
 
 m_clock = {}
 clock_lattice = {}
@@ -12,6 +13,110 @@ local midi_clock_init
 local first_run = true
 
 local ppqn = 96
+
+-- Lock lookahead. With no scheduler installed none of this runs and playback is
+-- exactly as it was. The lead is expressed in whole pulses, because a value that
+-- leaves inside a pulse the sequencer was already running costs no timer and no
+-- work part way through a step.
+local lock_lookahead = include("mosaic/lib/clock/lock_lookahead")
+local cached_tempo, cached_lead_ms, cached_lead_pulses
+
+-- The scheduler lives on the shared m_clock table rather than in a file local.
+-- include() is dofile in the test harness, so a module can be executed more than
+-- once and each execution gets its own locals; state that playback and the
+-- installer must agree on has to live somewhere they both see.
+function m_clock.set_lock_lookahead(scheduler)
+  m_clock.lookahead_scheduler = scheduler
+  cached_tempo, cached_lead_ms, cached_lead_pulses = nil, nil, nil
+end
+
+-- Select which lock lead contract is in force. "legacy-delay-v1" is the existing
+-- behaviour, where a lead comes from delaying notes, clock and transport behind
+-- the locks. "pulse-advance" delays nothing and sends the locks early instead.
+-- Switching contracts rebuilds the scheduler, so nothing is left in flight.
+function m_clock.set_lock_contract(contract)
+  m_midi.set_lock_contract(contract)
+  if contract == "pulse-advance" then
+    local scheduler = lock_lookahead.new{send = function(bundle) step.send_preview_bundle(bundle) end}
+    m_clock.set_lock_lookahead(scheduler)
+    step.set_lock_lookahead(scheduler)
+    if clock_lattice then
+      clock_lattice.advance = function(pulse) scheduler:serve(pulse) end
+    end
+  else
+    m_clock.set_lock_lookahead(nil)
+    step.set_lock_lookahead(nil)
+    if clock_lattice then clock_lattice.advance = nil end
+  end
+end
+
+function m_clock.get_lock_contract()
+  return m_midi.get_lock_contract()
+end
+
+function m_clock.get_lock_lookahead()
+  return m_clock.lookahead_scheduler
+end
+
+-- Whole pulses of lead at this tempo, rounded up so the value is never sent
+-- with less lead than was asked for. Cached because the tempo rarely changes.
+local function lead_in_pulses(tempo, lead_ms)
+  if tempo ~= cached_tempo or lead_ms ~= cached_lead_ms then
+    cached_tempo, cached_lead_ms = tempo, lead_ms
+    cached_lead_pulses = math.ceil(lead_ms * tempo * ppqn / 60000)
+  end
+  return cached_lead_pulses
+end
+
+-- Resolve the next step's MIDI values now and hold them against an earlier
+-- pulse. Called once a step's note has gone out, so previewing never delays a
+-- note. The conditions the projection asserts are tested first rather than
+-- caught, so an unsupported clock costs a few comparisons and simply keeps the
+-- existing timing for that channel.
+local function schedule_lookahead(clock, channel, channel_number, current_step)
+  local lookahead_scheduler = m_clock.lookahead_scheduler
+  if lookahead_scheduler == nil or channel_number == 17 or channel.mute then return end
+  if not (clock.phase >= 1 and clock.phase < 2 and clock.shuffle_updated and
+      not clock.division_for_cycle and clock.delay == 0 and not clock.delay_new) then
+    return
+  end
+
+  -- Without a tempo there is no way to say how many pulses a lead is worth, and
+  -- at lead zero there is nothing to advance. Either way the channel simply
+  -- keeps the timing it already has.
+  local tempo, lead_ms = params:get("clock_tempo"), m_midi.get_lead_time()
+  if type(tempo) ~= "number" or type(lead_ms) ~= "number" or lead_ms <= 0 then return end
+
+  local ahead = clock:project_onset_pulses(1)
+  local transport = clock_lattice.transport
+  local next_onset = transport + ahead
+  local send_pulse = next_onset - lead_in_pulses(tempo, lead_ms)
+  -- A value may not cross the note before it, so halfway between this onset and
+  -- the next is the earliest it may leave. At fast divisions this is what
+  -- shortens the lead rather than letting the ordering break.
+  local midpoint = transport + math.ceil(ahead / 2)
+  if send_pulse < midpoint then send_pulse = midpoint end
+  if send_pulse <= transport or send_pulse >= next_onset then return end
+
+  local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+  local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+  local next_step = step_cursor.next(current_step, false, start_trig, end_trig,
+    program.get_selected_song_pattern().global_pattern_length)
+
+  -- Only a step that would resolve parameters is previewed, so the lookahead
+  -- never speaks for a step that playback would pass over.
+  local has_trig = channel.working_pattern.trig_values[next_step] == 1
+  local trigless = not has_trig and fn.param_value("trigless_locks") == 2
+  if not (has_trig or (trigless and program.step_has_param_trig_lock(channel, next_step))) then
+    return
+  end
+
+  local bundles = parameter_preview.midi_bundles(step.preview_view(channel), next_step)
+  for index = 1, #bundles do
+    local bundle = bundles[index]
+    if bundle.send then lookahead_scheduler:schedule(send_pulse, bundle) end
+  end
+end
 
 local delayed_ids_must_execute = {[0] = {}}
 for i = 1, 16 do delayed_ids_must_execute[i] = {} end
@@ -177,6 +282,9 @@ function m_clock.init()
   if m_midi and m_midi.begin_output_batch then
     clock_lattice.output = {begin = m_midi.begin_output_batch, flush = m_midi.flush_output_batch,
                             serve = m_midi.serve_delayed}
+  end
+  if m_clock.lookahead_scheduler then
+    clock_lattice.advance = function(pulse) m_clock.lookahead_scheduler:serve(pulse) end
   end
 
   if testing then
@@ -355,6 +463,13 @@ function m_clock.init()
 
       clock.first_run = false
       clock.next_step = current_step
+
+      -- This step is finished and its note has gone. Resolve the next step's
+      -- values now so they can leave in an earlier pulse than their own.
+      if m_clock.lookahead_scheduler then
+        m_clock.lookahead_scheduler:clear_commit(channel_number, current_step)
+        schedule_lookahead(clock, channel, channel_number, current_step)
+      end
 
       if program_data.selected_channel == channel_number and (program_data.selected_page == channel_edit_page or program_data.selected_page == scale_edit_page)  then
         fn.dirty_grid(true)

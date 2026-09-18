@@ -90,6 +90,19 @@ end
 -- not send an old queued onset to a newly attached receiver.
 local delay_line = include("mosaic/lib/clock/midi_delay_line")
 local lead_time_ms=0
+-- Which lock lead contract is in force. Under "legacy-delay-v1" a lead is
+-- achieved by delaying notes, clock and transport behind the locks. Under
+-- "pulse-advance" nothing is delayed at all: the lead comes from sending the
+-- locks early, inside an earlier pulse, so this path behaves exactly as lead 0.
+local lock_contract="legacy-delay-v1"
+function m_midi.get_lock_contract() return lock_contract end
+function m_midi.set_lock_contract(value)
+  if value~="legacy-delay-v1" and value~="pulse-advance" then
+    error("Unsupported lock lead contract: "..tostring(value))
+  end
+  if delay_queue then delay_queue:drain() end
+  lock_contract=value
+end
 local function emit(message)
   local port=message.port
   if port.device ~= message.device then return end
@@ -163,7 +176,9 @@ function m_midi.hold_parameter(due, port, status, data1, data2, channel)
 end
 
 local function delayed_note(ms,port,kind,note,velocity,channel)
-  if not ms or ms==0 then return false end
+  -- Under pulse-advance a note is never delayed: its lead comes from the locks
+  -- having left earlier, so the note keeps the timing it has at lead 0.
+  if not ms or ms==0 or lock_contract=="pulse-advance" then return false end
   local due=queue(ms,{port=port,device=port.device,kind=kind,note=note,velocity=velocity or 100,
     channel=channel,status=(kind=="note_on" and 0x90 or 0x80)+(channel or 1)-1})
   if kind=="note_on" then remember(last_note_due, port, channel or 1, due) end
@@ -192,7 +207,8 @@ function m_midi.install_clock_hooks()
         wrapper=function(self,...)
           local ms=lead_time_ms
           if name=="stop" then m_midi.drain_pending_output() end
-          if ms==0 then return original(self,...) end
+          -- Pulse-advance adds no latency to clock or transport either.
+          if ms==0 or lock_contract=="pulse-advance" then return original(self,...) end
           queue(ms,{port=self,device=self.device,method=original,args={...}})
         end
         clock_hooks[#clock_hooks+1]={port=port,name=name,original=original,wrapper=wrapper}

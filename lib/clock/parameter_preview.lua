@@ -79,8 +79,9 @@ local function bundle_for(view, step, slot, param, claims, any_claimed)
   local off = param.off_value == nil and -1 or param.off_value
   local midi_channel = param.channel or view.midi_channel
   local address = preview.midi_address(param, midi_channel)
-  local bundle = {slot = slot, param = param, step = step, midi_channel = midi_channel,
-                  midi_device = view.midi_device, address = address, send = false}
+  local bundle = {slot = slot, param = param, step = step, channel = view.channel,
+                  midi_channel = midi_channel, midi_device = view.midi_device,
+                  address = address, send = false}
   if param.nrpn_msb ~= nil then bundle.nrpn_mode = view.nrpn_mode(param) end
 
   -- A dirty recording lock owns the slot on the selected channel; playback does
@@ -109,11 +110,15 @@ local function bundle_for(view, step, slot, param, claims, any_claimed)
     end
     -- The trajectory is attached whether or not the lock itself is sent, because
     -- the handoff retires the old slide and this lock still starts the next one.
-    local next_lock = view.next_lock(slot, step, off)
-    if next_lock and (view.channel_slide(slot) or view.step_slide(slot, step)) then
-      bundle.slide = {start_step = step, end_step = next_lock.step, distance = next_lock.distance,
-                      start_value = step_lock, end_value = next_lock.value,
-                      should_wrap = next_lock.should_wrap}
+    -- The slide flags are tested first: they are cheap, and a slot that is not
+    -- sliding never needs the search for its next lock.
+    if view.channel_slide(slot) or view.step_slide(slot, step) then
+      local next_lock = view.next_lock(slot, step, off)
+      if next_lock then
+        bundle.slide = {start_step = step, end_step = next_lock.step, distance = next_lock.distance,
+                        start_value = step_lock, end_value = next_lock.value,
+                        should_wrap = next_lock.should_wrap}
+      end
     end
   else
     bundle.kind, bundle.value = "assigned", assigned
