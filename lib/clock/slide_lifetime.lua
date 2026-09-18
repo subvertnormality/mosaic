@@ -215,6 +215,23 @@ function slide_lifetime.new(get_clock, program, get_lattice)
     return applied
   end
 
+  -- Read-only counterpart of slides.handoff for the lock preview. It answers the
+  -- same question and does nothing else: no retirement, no write. A preview may
+  -- run repeatedly before the step it predicts, so it cannot consume the slide.
+  function slides.would_handoff(channel_number, trig_lock, step_number, value)
+    local i, stop = ring_start, ring_end
+    while i ~= stop do
+      local action = spread_ring[i]
+      if action.active and action.channel == channel_number and action.trig_lock == trig_lock and
+          action.end_step == step_number and action.end_value == value and
+          get_lattice().transport >= action.start_pulse + action.total_pulses then
+        return true
+      end
+      i = (i % RING_BUFFER_SIZE) + 1
+    end
+    return false
+  end
+
   function slides.cancel(channel_number, trig_lock, use_end_value)
     local i, stop = ring_start, ring_end
     while i ~= stop do

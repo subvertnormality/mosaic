@@ -605,6 +605,8 @@ function m_clock.execute_action_across_steps_by_pulses(args)
 end
 
 m_clock.handoff_spread_lock = slides.handoff
+-- Read-only: reports what handoff would do, for the lock preview.
+m_clock.spread_lock_would_handoff = slides.would_handoff
 m_clock.cancel_spread_actions_for_channel_trig_lock = slides.cancel
 m_clock.channel_is_sliding = slides.is_active
 
