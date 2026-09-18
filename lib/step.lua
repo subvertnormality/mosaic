@@ -1,4 +1,5 @@
 local param_slots = include("mosaic/lib/devices/param_slots")
+local parameter_preview = include("mosaic/lib/clock/parameter_preview")
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local chord_order = include("mosaic/lib/musical_resolution/chord_order")
@@ -153,27 +154,9 @@ function step.process_stock_params(c, current_step, kind)
 end
 
 -- Stock kinds resolved by step handling rather than sent as parameter locks.
-local skipped_lock_params = {
-  trig_probability = true,
-  quantised_fixed_note = true,
-  bipolar_random_note = true,
-  twos_random_note = true,
-  random_velocity = true,
-  chord_strum = true,
-  chord_arp = true,
-  chord_velocity_modifier = true,
-  chord_spread = true,
-  chord_acceleration = true,
-  chord_strum_pattern = true,
-  fixed_note = true,
-  mute_root_note = true,
-  fully_quantise_mask = true
-}
-
-local function should_process_param(param)
-  if not param then return false end
-  return not skipped_lock_params[param.id]
-end
+-- The list and the eligibility test live with the read-only preview so playback
+-- and a lock preview cannot disagree about which slots are parameter sends.
+local should_process_param = parameter_preview.should_process_param
 
 local function process_midi_param(param, step_trig_lock, midi_channel, midi_device, mode)
 
@@ -254,13 +237,8 @@ end
 local claimed_addresses = {}
 local claim_stamp = 0
 
-local function midi_address(param, midi_channel)
-  if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
-    return (midi_channel * 2 + 1) * 16384 + param.nrpn_msb * 128 + param.nrpn_lsb
-  elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
-    return midi_channel * 2 * 16384 + param.cc_msb
-  end
-end
+-- Shared with the read-only preview so a claim means the same address in both.
+local midi_address = parameter_preview.midi_address
 
 local function claim_addresses(channel, step, trig_lock_params, device_midi_channel)
   local bank = channel.step_trig_lock_banks[step]
