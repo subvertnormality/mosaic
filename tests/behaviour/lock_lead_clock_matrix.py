@@ -111,6 +111,23 @@ CONDITIONS = {
 }
 
 
+def advanced_slide_locks(condition):
+    """Lock values that start a slide from an idle slot, and so are sent early.
+
+    README Param Slides: with the slide on, each lock glides to the next lock,
+    so 11 (step 1) slides to 33 (step 3) and 33 to 55 (step 5); the Off lock on
+    step 4 is skipped. A lock the slide is gliding towards is sent by the slide's
+    handoff at its own onset, since the slot is still sliding when the previous
+    onset resolves it: 33 and 55 always, and 11 too when "Wrap param slides" is
+    on, because 55 then slides on to 11. Without wrapping the chain ends at
+    step 5, the slot is idle when step 1 is resolved, and 11 is advanced.
+    """
+    if condition.get('wrap'):
+        return set()
+    locks = [value for _, value in STEP_LOCKS if value not in (None, 'off')]
+    return {locks[0]}
+
+
 def set_tempo(c, bpm):
     from cases import menu_label, menu_value
     c.key(1); c.enc(1, 4); c.key(3); menu_label(c, 'LEVELS >')
@@ -438,17 +455,28 @@ def compare(name, condition, lead_ms, run, reference, field, controlled):
             expected = send * pulse_ns
             if condition.get('slide'):
                 # A slot that is mid-slide keeps its wire until the slide's
-                # destination step, so its lock is not advanced, while a lock
-                # that starts a slide is. Which of the two applies depends on
-                # slide state the capture does not name, so both exact times are
-                # allowed and nothing between or beyond them is.
+                # destination step, so a lock the slide is gliding towards is
+                # owed at its own onset, and so is every sample of the slide.
+                # A lock that starts a slide from an idle slot is advanced like
+                # any other value. Which locks are which follows from the
+                # project the case builds, so each value gets one exact time:
+                # allowing either would also accept a lookahead that never
+                # advanced anything.
                 actual_now = rel(value, run)
-                allowed = (expected, onset_pulse * pulse_ns)
-                assert any(abs(actual_now - option) <= tolerance for option in allowed), dict(
-                    rule='sliding value at its send pulse or at its step', condition=name,
-                    lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x,
-                    actual_ns=actual_now, allowed_ns=list(allowed))
-                queued = max(queued, expected) if queued is not None else expected
+                if value['bytes'][2] in advanced_slide_locks(condition):
+                    if queued is not None and queued > expected:
+                        expected = queued
+                    assert abs(actual_now - expected) <= tolerance, dict(
+                        rule='slide-starting lock at its documented time', condition=name,
+                        lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x,
+                        expected_ns=expected, actual_ns=actual_now, pulse_ns=pulse_ns)
+                    queued = max(queued, expected) if queued is not None else expected
+                else:
+                    assert abs(actual_now - x) <= tolerance, dict(
+                        rule='slide destination or sample at its step', condition=name,
+                        lead_ms=lead_ms, value=value['bytes'][2], reference_ns=x,
+                        actual_ns=actual_now, pulse_ns=pulse_ns)
+                    queued = max(queued, x) if queued is not None else x
                 available = x
                 timed_values += 1
                 continue

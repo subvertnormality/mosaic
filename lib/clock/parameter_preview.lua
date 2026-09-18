@@ -42,13 +42,31 @@ end
 
 -- Two slots can address one device parameter. The address identifies where a
 -- value lands, so a claim by a locked or sliding slot suppresses another slot's
--- assigned value for the same address.
+-- assigned value for the same address. The MIDI write path names its writes
+-- with the same numbers, so what it wrote and what a slot claims compare equal.
+function preview.cc_address(midi_channel, cc_msb)
+  return midi_channel * 2 * 16384 + cc_msb
+end
+
+function preview.nrpn_address(midi_channel, nrpn_msb, nrpn_lsb)
+  return (midi_channel * 2 + 1) * 16384 + nrpn_msb * 128 + nrpn_lsb
+end
+
 function preview.midi_address(param, midi_channel)
   if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
-    return (midi_channel * 2 + 1) * 16384 + param.nrpn_msb * 128 + param.nrpn_lsb
+    return preview.nrpn_address(midi_channel, param.nrpn_msb, param.nrpn_lsb)
   elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
-    return midi_channel * 2 * 16384 + param.cc_msb
+    return preview.cc_address(midi_channel, param.cc_msb)
   end
+end
+
+-- One physical destination: an address on a port. The receiver behind it holds
+-- one value, whichever track or control wrote it. An address is below 2^20, so
+-- the port index above it keeps the key a plain integer with no string built
+-- per write.
+function preview.destination(midi_device, address)
+  if address == nil then return nil end
+  return (tonumber(midi_device) or 0) * 1048576 + address
 end
 
 local function is_midi_slot(param)
@@ -81,7 +99,8 @@ local function bundle_for(view, step, slot, param, claims, any_claimed)
   local address = preview.midi_address(param, midi_channel)
   local bundle = {slot = slot, param = param, step = step, channel = view.channel,
                   midi_channel = midi_channel, midi_device = view.midi_device,
-                  address = address, send = false}
+                  address = address, destination = preview.destination(view.midi_device, address),
+                  send = false}
   if param.nrpn_msb ~= nil then bundle.nrpn_mode = view.nrpn_mode(param) end
 
   -- A dirty recording lock owns the slot on the selected channel; playback does

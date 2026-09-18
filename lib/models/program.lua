@@ -64,8 +64,21 @@ function program.get_song_pattern(p)
   return data.song_patterns[p]
 end
 
+-- Defined with the lock edit listener below; declared here because the song
+-- sequence copy above it also reports edits.
+local notify_lock_edit
+
 function program.set_song_pattern(p, pattern)
   program_store.song_patterns[pattern] = fn.deep_copy(program.get_song_pattern(p))
+  -- Copying over the sequence that is playing replaces every channel's locks
+  -- and assignments at once. Each channel is reported as wholly edited, so a
+  -- value resolved from the old sequence is not heard, and what the new
+  -- sequence's assignments share is worked out afresh.
+  if pattern == program_store.selected_song_pattern then
+    for _, channel in pairs(program_store.song_patterns[pattern].channels) do
+      notify_lock_edit(channel, nil, nil)
+    end
+  end
 end
 
 function program.get_current_step_for_channel(c)
@@ -192,7 +205,7 @@ function program.set_lock_edit_listener(listener)
   on_lock_edit = listener
 end
 
-local function notify_lock_edit(channel, step, parameter)
+notify_lock_edit = function(channel, step, parameter)
   if on_lock_edit then on_lock_edit(channel, step, parameter) end
 end
 

@@ -192,6 +192,15 @@ function m_midi.drain_pending_output()
   forget_note_deadlines()
 end
 
+-- Told of every parameter write as it reaches the wire: kind ("cc" or "nrpn"),
+-- port, MIDI channel and the CC number or NRPN address. Lock lookahead installs
+-- it so a write from anywhere else can retire a value it sent early; with none
+-- installed a write costs one nil test.
+m_midi.parameter_write_listener = nil
+function m_midi.set_parameter_write_listener(listener)
+  m_midi.parameter_write_listener = listener
+end
+
 -- Cache the global setting through its params action; zero keeps the original
 -- send path and allocates no timer. Captured note containers retain gate timing.
 function m_midi.get_lead_time() return lead_time_ms end

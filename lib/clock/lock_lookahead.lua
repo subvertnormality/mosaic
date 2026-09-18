@@ -19,17 +19,44 @@ local function target_key(bundle)
   return (bundle.channel or 0) .. ":" .. (bundle.step or 0) .. ":" .. (bundle.slot or 0)
 end
 
--- The record holds the value that was actually put on the wire, not merely that
--- something was. A step then suppresses its own send only when it would send the
--- identical value, so an edit, a pattern change or anything else that alters what
--- the step resolves is corrected at the step instead of being swallowed by a
--- stale commitment. It is held per channel, because one channel has one step's
--- values in flight, and keying it by step as well would grow without bound
--- whenever a scheduled step was never played.
+-- The record holds the value that was actually put on the wire and the physical
+-- address it went to, not merely that something was sent. A step then
+-- suppresses its own send only when it would send the identical value to the
+-- identical address, so an edit, a pattern change that puts another control in
+-- the slot, or anything else that alters what the step resolves is corrected at
+-- the step instead of being swallowed by a stale commitment. It is held per
+-- channel, because one channel has one step's values in flight, and keying it
+-- by step as well would grow without bound whenever a scheduled step was never
+-- played.
+--
+-- The address is also indexed the other way, so a write to it from anywhere
+-- else (a live control, a slide, another track) can find the commit it has just
+-- made untrue. The receiver holds one value per address, and after that write
+-- it is no longer holding the one recorded here.
+local function release_slot(self, commits, slot)
+  local destination = commits.destinations[slot]
+  if destination ~= nil and self.owner_channel[destination] == commits.channel
+      and self.owner_slot[destination] == slot then
+    self.owner_channel[destination] = nil
+    self.owner_slot[destination] = nil
+  end
+  commits.slots[slot] = nil
+  commits.destinations[slot] = nil
+end
+
+local function drop_commits(self, channel)
+  local commits = self.commits[channel]
+  if commits then
+    for slot in pairs(commits.destinations) do release_slot(self, commits, slot) end
+    self.commits[channel] = nil
+  end
+end
+
 local function commits_for(self, channel, step)
   local commits = self.commits[channel]
   if commits == nil or commits.step ~= step then
-    commits = {step = step, slots = {}}
+    drop_commits(self, channel)
+    commits = {channel = channel, step = step, slots = {}, destinations = {}}
     self.commits[channel] = commits
   end
   return commits
@@ -84,9 +111,22 @@ local function dispatch(self, entry, pulse)
   end
   -- The send decides again whether this value is still wanted. A refusal is not
   -- a failure: nothing is recorded, so the slot's own step sends what is then in
-  -- force rather than a value the player has since overruled.
-  if self.send(bundle) ~= false then
-    commits_for(self, bundle.channel, bundle.step).slots[bundle.slot] = bundle.value
+  -- force rather than a value the player has since overruled. The send reaches
+  -- the wire through the same path every other write takes, and that path
+  -- reports back here; while this flag is up the report is of this send itself.
+  self.dispatching = true
+  local accepted = self.send(bundle) ~= false
+  self.dispatching = false
+  if accepted then
+    local commits = commits_for(self, bundle.channel, bundle.step)
+    local slot, destination = bundle.slot, bundle.destination
+    release_slot(self, commits, slot)
+    commits.slots[slot] = bundle.value
+    commits.destinations[slot] = destination
+    if destination ~= nil then
+      self.owner_channel[destination] = bundle.channel
+      self.owner_slot[destination] = slot
+    end
   end
 end
 
@@ -110,18 +150,33 @@ function Scheduler:serve(pulse)
   self.earliest = pulse
 end
 
--- True only when this exact value already left for this exact step and slot.
--- Anything else -- a different value, a different step, nothing recorded -- means
--- the step must send, so a correction is never lost.
-function Scheduler:was_sent(channel, step, slot, value)
+-- True only when this exact value already left for this exact step and slot,
+-- to this exact address. Anything else -- a different value, a different
+-- address, a different step, nothing recorded -- means the step must send, so a
+-- correction is never lost.
+function Scheduler:was_sent(channel, step, slot, value, destination)
   local commits = self.commits[channel]
   return commits ~= nil and commits.step == step and commits.slots[slot] ~= nil
-    and commits.slots[slot] == value
+    and commits.slots[slot] == value and commits.destinations[slot] == destination
+end
+
+-- Something other than this scheduler has written an address. Whatever commit
+-- claimed that address no longer describes what the receiver holds, so it is
+-- forgotten and the slot's own step sends its value again. The resend cache is
+-- told as well, because it too believes the receiver still holds the old value.
+function Scheduler:observe_write(destination)
+  if self.dispatching or destination == nil then return end
+  local channel = self.owner_channel[destination]
+  if channel == nil then return end
+  local slot = self.owner_slot[destination]
+  local commits = self.commits[channel]
+  if commits then release_slot(self, commits, slot) end
+  if self.on_override then self.on_override(channel, slot) end
 end
 
 function Scheduler:clear_commit(channel, step)
   local commits = self.commits[channel]
-  if commits and commits.step == step then self.commits[channel] = nil end
+  if commits and commits.step == step then drop_commits(self, channel) end
 end
 
 -- An edit to a value that has not left yet simply removes it, because the step
@@ -150,7 +205,7 @@ function Scheduler:invalidate(channel, step, slot)
       end
     end
     local commits = self.commits[channel]
-    if commits and (step == nil or commits.step == step) then self.commits[channel] = nil end
+    if commits and (step == nil or commits.step == step) then drop_commits(self, channel) end
     return
   end
   local key = target_key({channel = channel, step = step, slot = slot})
@@ -162,14 +217,15 @@ function Scheduler:invalidate(channel, step, slot)
     self.pending_by_target[key] = nil
   end
   local commits = self.commits[channel]
-  if commits and commits.step == step then commits.slots[slot] = nil end
+  if commits and commits.step == step then release_slot(self, commits, slot) end
 end
 
 -- A transport or pattern boundary discards every value that has not left yet.
 -- What has already left is kept: forgetting it would make the step send the same
 -- value a second time, and it cannot suppress an incoming pattern's lock because
--- a differing value no longer matches. A stop clears it separately, since patch
--- recall can replace what the receiver holds while the transport is stopped.
+-- a differing value, or the same value at a different address, no longer
+-- matches. A stop clears it separately, since patch recall can replace what the
+-- receiver holds while the transport is stopped.
 function Scheduler:cancel_all()
   self.buckets = {}
   self.pending_by_target = {}
@@ -182,13 +238,15 @@ end
 -- have changed it in the meantime.
 function Scheduler:forget_commits()
   self.commits = {}
+  self.owner_channel = {}
+  self.owner_slot = {}
 end
 
-function Scheduler:cancel_channel(channel)
+local function cancel_unless(self, keep)
   for _, bucket in pairs(self.buckets) do
     for position = 1, #bucket do
       local entry = bucket[position]
-      if not entry.cancelled and not entry.sent and entry.bundle.channel == channel then
+      if not entry.cancelled and not entry.sent and not keep(entry.bundle) then
         entry.cancelled = true
         self.cancelled_count = self.cancelled_count + 1
         self.pending = self.pending - 1
@@ -200,6 +258,18 @@ function Scheduler:cancel_channel(channel)
   end
 end
 
+function Scheduler:cancel_channel(channel)
+  cancel_unless(self, function(bundle) return bundle.channel ~= channel end)
+end
+
+-- An address that has just become shared between tracks keeps lead-0 timing
+-- from now on, so a value already resolved for it leaves at its own step.
+function Scheduler:cancel_destinations(destinations)
+  cancel_unless(self, function(bundle)
+    return bundle.destination == nil or not destinations[bundle.destination]
+  end)
+end
+
 function Scheduler:stats()
   return {pending = self.pending, max_pending = self.max_pending,
           late = self.late, horizon_limited = self.horizon_limited,
@@ -207,8 +277,10 @@ function Scheduler:stats()
 end
 
 function lookahead.new(deps)
-  return setmetatable({send = deps.send, capacity = deps.capacity or 10240,
+  return setmetatable({send = deps.send, on_override = deps.on_override,
+                       capacity = deps.capacity or 10240,
                        buckets = {}, pending_by_target = {}, commits = {},
+                       owner_channel = {}, owner_slot = {}, dispatching = false,
                        pending = 0, max_pending = 0, late = 0, horizon_limited = 0,
                        cancelled_count = 0, earliest = math.huge}, Scheduler)
 end

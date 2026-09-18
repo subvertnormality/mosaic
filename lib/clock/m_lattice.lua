@@ -379,6 +379,12 @@ function Lattice:pulse_all()
           if probe then probe:record(3, self.transport, sprocket.id, 0, 2) end
           if not self.enabled then return end
         end
+        -- m_midi only appends a note to the pulse's batch; it reaches the wire
+        -- at a flush. Finishing a step under lookahead resolves the next step's
+        -- values, which reads and allocates, so the group's notes are written
+        -- first rather than waiting behind that work. Without lookahead nothing
+        -- runs between here and the pulse's own flush, and no write is added.
+        if advance and self.output then self.output.flush() end
         for index = 1, deferred_count do
           local sprocket = deferred[index]
           deferred[index] = nil

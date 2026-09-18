@@ -192,6 +192,14 @@ function step.forget_sent_lock_values()
   last_sent_lock_values = {}
 end
 
+-- Something else has written this slot's address since it last sent. The
+-- receiver no longer holds what the cache says, so the next send must go even
+-- when its value is the one last sent from here.
+function step.forget_sent_lock_value(channel_number, slot)
+  local per_channel = last_sent_lock_values[channel_number]
+  if per_channel then per_channel[slot] = nil end
+end
+
 local function send_midi_param(channel_number, slot, param, value, midi_channel, midi_device, mode)
   -- Absent or On means resend, so the documented default behaviour is kept.
   if fn.param_value("repeat_unchanged_locks") == 1 then
@@ -367,14 +375,15 @@ function step.process_params(channel, step)
       local off = param.off_value == nil and -1 or param.off_value
 
       -- Under lock lookahead this slot's value may already have left in an
-      -- earlier pulse. Only the identical value is suppressed: anything that
-      -- changed what this step resolves is sent here and corrects the receiver,
-      -- and a value that never left is never suppressed. Everything else the
-      -- step does still happens, because a slide starts here and skipping the
-      -- branch outright would leave it never running.
+      -- earlier pulse. Only the identical value to the identical address is
+      -- suppressed: anything that changed what this step resolves, or where it
+      -- goes, is sent here and corrects the receiver, and a value that never
+      -- left is never suppressed. Everything else the step does still happens,
+      -- because a slide starts here and skipping the branch outright would
+      -- leave it never running.
       local sent_slot = i
-      local function already_sent_value(value)
-        return scheduler ~= nil and scheduler:was_sent(channel.number, step, sent_slot, value)
+      local function already_sent_value(value, destination)
+        return scheduler ~= nil and scheduler:was_sent(channel.number, step, sent_slot, value, destination)
       end
 
       if recording_selected_channel and recorder.trig_lock_is_dirty(channel.number, i) then
@@ -414,6 +423,13 @@ function step.process_params(channel, step)
         if param.channel then
           midi_channel = param.channel
         end
+        -- Where this slot's value lands, for the lookahead's record of what it
+        -- already sent there. Nothing is looked up without a scheduler.
+        local destination
+        if scheduler ~= nil then
+          destination = parameter_preview.destination(devices[channel.number].midi_device,
+                                                      midi_address(param, midi_channel))
+        end
         if step_trig_lock then
           if step_trig_lock == off then
             goto continue
@@ -421,7 +437,7 @@ function step.process_params(channel, step)
 
           -- The handoff still runs when the value has already gone: it retires
           -- the slide that owned this slot, which is not a send.
-          local already_sent = already_sent_value(step_trig_lock)
+          local already_sent = already_sent_value(step_trig_lock, destination)
           local handed = m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock, already_sent)
           if not handed and not already_sent then
             send_midi_param(channel.number, i, param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
@@ -454,7 +470,7 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          if not already_sent_value(p_value) then
+          if not already_sent_value(p_value, destination) then
             send_midi_param(channel.number, i, param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
           end
         elseif not m_clock.channel_is_sliding(channel, i) then
@@ -465,7 +481,7 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          if not already_sent_value(value) then
+          if not already_sent_value(value, destination) then
             send_midi_param(channel.number, i, param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
           end
         end

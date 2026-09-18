@@ -4,11 +4,21 @@ local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
 local output = {}
 
 function output.new(m_midi)
+  -- An NRPN is four CCs on the wire but one parameter to the receiver, so the
+  -- listener hears it once, as an NRPN, and not as four CC writes.
+  local inside_nrpn = false
+
   local function cc(cc_msb, cc_lsb, value, channel, device)
     local port = midi_devices[device]
     if port ~= nil then
       local status = 0xB0 + (channel or 1) - 1
       local cc_msb_value = cc_lsb and math.floor(value / 128) or value
+      -- Every parameter write passes here, whoever produced it: a step, a
+      -- slide, a live control, the lock lookahead itself. Reporting it from
+      -- this one place is what lets the lookahead know when something else has
+      -- changed what the receiver holds, without a hook in every caller.
+      local listener = m_midi.parameter_write_listener
+      if listener and not inside_nrpn then listener("cc", device, channel or 1, cc_msb) end
       -- A value too close after a delayed note waits for the gap between notes.
       local due = m_midi.parameter_deadline and m_midi.parameter_deadline(port, channel)
       if due then
@@ -42,10 +52,14 @@ function output.new(m_midi)
     assert(nrpn_msb ~= nil and nrpn_lsb ~= nil, "NRPN address is required")
     assert(type(channel) == "number" and channel % 1 == 0 and channel >= 1 and channel <= 16,
       "NRPN channel must be from 1 to 16")
+    local listener = m_midi.parameter_write_listener
+    if listener and midi_devices[device] ~= nil then listener("nrpn", device, channel, nrpn_msb, nrpn_lsb) end
+    inside_nrpn = true
     m_midi.cc(99, nil, nrpn_msb, channel, device)
     m_midi.cc(98, nil, nrpn_lsb, channel, device)
     m_midi.cc(6, nil, msb, channel, device)
     m_midi.cc(38, nil, lsb, channel, device)
+    inside_nrpn = false
   end
 
 

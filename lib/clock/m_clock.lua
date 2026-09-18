@@ -30,30 +30,80 @@ function m_clock.set_lock_lookahead(scheduler)
   cached_tempo, cached_lead_ms, cached_lead_pulses = nil, nil, nil
 end
 
+-- Whole pulses of lead at this tempo, rounded up so the value is never sent
+-- with less lead than was asked for. Cached because the tempo rarely changes.
+local function lead_in_pulses(tempo, lead_ms)
+  if tempo ~= cached_tempo or lead_ms ~= cached_lead_ms then
+    cached_tempo, cached_lead_ms = tempo, lead_ms
+    cached_lead_pulses = math.ceil(lead_ms * tempo * ppqn / 60000)
+  end
+  return cached_lead_pulses
+end
+
+-- The lattice's per-pulse hook. A pending deadline counts pulses, and at another
+-- tempo those pulses are worth a different amount of time. The change has to be
+-- noticed before the pulse serves, or the stale deadline fires first; and the
+-- cached pulse count has to go with it, or the next value is resolved with the
+-- old tempo's count under the new tempo's name.
+local function serve_lookahead(pulse)
+  local scheduler = m_clock.lookahead_scheduler
+  local tempo = params:get("clock_tempo")
+  if type(tempo) == "number" and cached_tempo ~= nil and tempo ~= cached_tempo then
+    scheduler:cancel_all()
+    cached_tempo, cached_lead_ms, cached_lead_pulses = nil, nil, nil
+  end
+  scheduler:serve(pulse)
+end
+
 -- Select which lock lead contract is in force. "legacy-delay-v1" is the existing
 -- behaviour, where a lead comes from delaying notes, clock and transport behind
 -- the locks. "pulse-advance" delays nothing and sends the locks early instead.
 -- Switching contracts rebuilds the scheduler, so nothing is left in flight.
+--
+-- At lead zero there is nothing to send early, so nothing is installed and
+-- playback runs the path it always has: no scheduler consulted by the step, no
+-- write listener, no per-pulse hook.
 function m_clock.set_lock_contract(contract)
   m_midi.set_lock_contract(contract)
-  if contract == "pulse-advance" then
+  if contract == "pulse-advance" and (m_midi.get_lead_time() or 0) > 0 then
     -- The return value carries the send's refusal, so it must be passed through:
     -- swallowing it would record a commit for a value that never left.
-    local scheduler = lock_lookahead.new{send = function(bundle) return step.send_preview_bundle(bundle) end}
+    local scheduler = lock_lookahead.new{
+      send = function(bundle) return step.send_preview_bundle(bundle) end,
+      -- A write from elsewhere has replaced what the receiver holds, so the
+      -- resend cache must not skip the slot's next send as unchanged either.
+      on_override = function(channel_number, slot) step.forget_sent_lock_value(channel_number, slot) end,
+    }
     m_clock.set_lock_lookahead(scheduler)
     step.set_lock_lookahead(scheduler)
     -- An edited lock must not be heard as the value the preview resolved before
-    -- the edit, so every stored lock change reaches the scheduler.
+    -- the edit, so every stored lock change reaches the scheduler. A whole
+    -- channel reported at once may have had its assignments replaced as well,
+    -- which changes what the tracks share.
     program.set_lock_edit_listener(function(channel, step_number, slot)
       scheduler:invalidate(channel.number, step_number, slot)
+      if step_number == nil then m_clock.forget_shared_addresses() end
     end)
-    if clock_lattice then
-      clock_lattice.advance = function(pulse) scheduler:serve(pulse) end
+    -- Every parameter write, from a step, a slide, a live control or the
+    -- scheduler's own send, is reported from the one place they all pass. The
+    -- scheduler recognises its own and retires its record for the others.
+    if m_midi.set_parameter_write_listener then
+      m_midi.set_parameter_write_listener(function(kind, device, midi_channel, msb, lsb)
+        local address
+        if kind == "nrpn" then
+          address = parameter_preview.nrpn_address(midi_channel, msb, lsb)
+        else
+          address = parameter_preview.cc_address(midi_channel, msb)
+        end
+        scheduler:observe_write(parameter_preview.destination(device, address))
+      end)
     end
+    if clock_lattice then clock_lattice.advance = serve_lookahead end
   else
     m_clock.set_lock_lookahead(nil)
     step.set_lock_lookahead(nil)
     program.set_lock_edit_listener(nil)
+    if m_midi.set_parameter_write_listener then m_midi.set_parameter_write_listener(nil) end
     if clock_lattice then clock_lattice.advance = nil end
   end
 end
@@ -98,10 +148,6 @@ m_clock.receiver_anchors = m_clock.receiver_anchors or {}
 -- assignments change, not per onset.
 m_clock.shared_addresses = nil
 
-function m_clock.forget_shared_addresses()
-  m_clock.shared_addresses = nil
-end
-
 local function shared_addresses()
   local shared = m_clock.shared_addresses
   if shared then return shared end
@@ -118,8 +164,8 @@ local function shared_addresses()
         for _, param in ipairs(channel.trig_lock_params) do
           if param and param.param_id and param.type == "midi" then
             local address = parameter_preview.midi_address(param, param.channel or device.midi_channel)
-            if address then
-              local key = tostring(device.midi_device) .. ":" .. address
+            local key = parameter_preview.destination(device.midi_device, address)
+            if key then
               local owner = owners[key]
               if owner == nil then
                 owners[key] = channel_number
@@ -136,6 +182,16 @@ local function shared_addresses()
   return shared
 end
 
+-- Assignments or routing have changed. The set is worked out again at once,
+-- because a value already resolved for an address that has just become shared
+-- would otherwise still leave early: sharing is only consulted when a value is
+-- scheduled, and that value was scheduled before the address was shared.
+function m_clock.forget_shared_addresses()
+  m_clock.shared_addresses = nil
+  local scheduler = m_clock.lookahead_scheduler
+  if scheduler then scheduler:cancel_destinations(shared_addresses()) end
+end
+
 local function receiver_key(channel_number)
   local devices = program.get().devices
   local device = devices and devices[channel_number]
@@ -143,21 +199,6 @@ local function receiver_key(channel_number)
   return tostring(device.midi_device) .. ":" .. tostring(device.midi_channel)
 end
 
--- Whole pulses of lead at this tempo, rounded up so the value is never sent
--- with less lead than was asked for. Cached because the tempo rarely changes.
-local function lead_in_pulses(tempo, lead_ms)
-  if tempo ~= cached_tempo or lead_ms ~= cached_lead_ms then
-    cached_tempo, cached_lead_ms = tempo, lead_ms
-    cached_lead_pulses = math.ceil(lead_ms * tempo * ppqn / 60000)
-  end
-  return cached_lead_pulses
-end
-
--- Resolve the next step's MIDI values now and hold them against an earlier
--- pulse. Called once a step's note has gone out, so previewing never delays a
--- note. The conditions the projection asserts are tested first rather than
--- caught, so an unsupported clock costs a few comparisons and simply keeps the
--- existing timing for that channel.
 -- Resolve the next step's MIDI values now and hold them against the pulse that
 -- will send them. Called once a step's note has gone out, so previewing never
 -- delays a note. The conditions the projection asserts are tested first rather
@@ -222,12 +263,11 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
 
   local bundles = parameter_preview.midi_bundles(step.preview_view(channel), next_step)
   local shared = shared_addresses()
-  local device_id = tostring(program.get().devices[channel_number].midi_device)
   for index = 1, #bundles do
     local bundle = bundles[index]
     -- An address another track also writes keeps lead-0 timing, so that track's
     -- own value is still the last thing the receiver hears before its note.
-    if bundle.send and not (bundle.address and shared[device_id .. ":" .. bundle.address]) then
+    if bundle.send and not (bundle.destination and shared[bundle.destination]) then
       lookahead_scheduler:schedule(send_pulse, bundle)
     end
   end
@@ -399,17 +439,7 @@ function m_clock.init()
                             serve = m_midi.serve_delayed}
   end
   if m_clock.lookahead_scheduler then
-    clock_lattice.advance = function(pulse)
-      -- A pending deadline counts pulses, and at another tempo those pulses are
-      -- worth a different amount of time. The change has to be noticed before
-      -- the pulse serves, or the stale deadline fires first.
-      local tempo = params:get("clock_tempo")
-      if type(tempo) == "number" and cached_tempo ~= nil and tempo ~= cached_tempo then
-        m_clock.lookahead_scheduler:cancel_all()
-        cached_tempo = tempo
-      end
-      m_clock.lookahead_scheduler:serve(pulse)
-    end
+    clock_lattice.advance = serve_lookahead
   end
 
   if testing then

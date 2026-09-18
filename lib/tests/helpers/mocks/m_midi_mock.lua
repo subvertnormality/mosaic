@@ -28,7 +28,16 @@ function m_midi:note_off(note, velocity, channel, device)
   table.insert(midi_note_off_events, {note, velocity, channel, device})
 end
 
+-- The production write path reports every parameter write to this listener;
+-- the mock answers the same way so lookahead sees a control turned in a test.
+m_midi.parameter_write_listener = nil
+function m_midi.set_parameter_write_listener(listener)
+  m_midi.parameter_write_listener = listener
+end
+
 function m_midi.cc(cc_msb, cc_lsb, value, channel, device)
   table.insert(midi_cc_events, {cc_msb, value, channel})
   log("cc", cc_msb, value, channel)
+  local listener = m_midi.parameter_write_listener
+  if listener then listener("cc", device, channel or 1, cc_msb) end
 end

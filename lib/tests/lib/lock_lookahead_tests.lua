@@ -272,3 +272,90 @@ function test_lock_lookahead_forgets_what_it_sent_at_a_boundary()
   scheduler:forget_commits()
   luaunit.assert_false(scheduler:was_sent(1, 1, 1, 64))
 end
+
+-- A commit names where the value landed, not only which slot produced it. The
+-- receiver holds one value per physical address, so only a write to that same
+-- address can be the write the step would otherwise repeat.
+function test_lock_lookahead_does_not_mistake_an_equal_value_at_another_address_for_its_commit()
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 1, slot = 1, value = 64, destination = 501})
+  scheduler:serve(10)
+  luaunit.assert_true(scheduler:was_sent(1, 1, 1, 64, 501))
+  -- The same slot and value, addressed elsewhere: nothing was sent there.
+  luaunit.assert_false(scheduler:was_sent(1, 1, 1, 64, 502))
+end
+
+function test_lock_lookahead_forgets_a_commit_when_something_else_writes_its_address()
+  -- A live control turned after the early send puts a different value on the
+  -- receiver. The commit no longer describes what the receiver holds, so the
+  -- step must send its lock again; the resend cache is told the same.
+  local sent, send = recorder()
+  local overridden = {}
+  local scheduler = lookahead.new{send = send,
+    on_override = function(channel, slot) overridden[#overridden + 1] = channel .. ":" .. slot end}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64, destination = 501})
+  scheduler:serve(10)
+  luaunit.assert_true(scheduler:was_sent(1, 5, 1, 64, 501))
+  scheduler:observe_write(501)
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1, 64, 501))
+  luaunit.assert_equals(overridden, {"1:1"})
+  -- A write to some other address leaves other commits alone.
+  scheduler:schedule(11, {channel = 2, step = 5, slot = 3, value = 9, destination = 777})
+  scheduler:serve(11)
+  scheduler:observe_write(123)
+  luaunit.assert_true(scheduler:was_sent(2, 5, 3, 9, 777))
+  luaunit.assert_equals(#overridden, 1)
+end
+
+function test_lock_lookahead_keeps_the_commit_for_its_own_write()
+  -- The early send itself goes through the same MIDI write path as everything
+  -- else. It must be recognised as the commit, not as an override of it.
+  local scheduler
+  local overridden = 0
+  scheduler = lookahead.new{
+    send = function(bundle) scheduler:observe_write(bundle.destination) end,
+    on_override = function() overridden = overridden + 1 end}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64, destination = 501})
+  scheduler:serve(10)
+  luaunit.assert_true(scheduler:was_sent(1, 5, 1, 64, 501))
+  luaunit.assert_equals(overridden, 0)
+end
+
+function test_lock_lookahead_stops_watching_an_address_once_its_step_has_played()
+  -- The record is released with the step, so a later write to that address is
+  -- not reported as overriding a value the step has already dealt with.
+  local sent, send = recorder()
+  local overridden = 0
+  local scheduler = lookahead.new{send = send, on_override = function() overridden = overridden + 1 end}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64, destination = 501})
+  scheduler:serve(10)
+  scheduler:clear_commit(1, 5)
+  scheduler:observe_write(501)
+  luaunit.assert_equals(overridden, 0)
+  -- The same after the channel's record is invalidated or forgotten.
+  scheduler:schedule(11, {channel = 1, step = 6, slot = 1, value = 64, destination = 501})
+  scheduler:serve(11)
+  scheduler:invalidate(1, 6, 1)
+  scheduler:observe_write(501)
+  luaunit.assert_equals(overridden, 0)
+  scheduler:schedule(12, {channel = 1, step = 7, slot = 1, value = 64, destination = 501})
+  scheduler:serve(12)
+  scheduler:forget_commits()
+  scheduler:observe_write(501)
+  luaunit.assert_equals(overridden, 0)
+end
+
+function test_lock_lookahead_cancels_pending_values_for_addresses_that_became_shared()
+  -- An address another track has just been assigned keeps lead-0 timing, so a
+  -- value already resolved for it must leave at its own step, not early.
+  local sent, send = recorder()
+  local scheduler = lookahead.new{send = send}
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64, destination = 501})
+  scheduler:schedule(10, {channel = 1, step = 5, slot = 2, value = 65, destination = 502})
+  scheduler:cancel_destinations({[501] = true})
+  scheduler:serve(10)
+  luaunit.assert_equals(#sent, 1)
+  luaunit.assert_equals(sent[1].value, 65)
+  luaunit.assert_equals(scheduler:stats().pending, 0)
+end
