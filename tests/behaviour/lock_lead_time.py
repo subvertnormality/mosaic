@@ -1,6 +1,15 @@
 """README Lock lead time: public UI, configured device, raw MIDI timestamps.
-Controlled time proves the exact shift; real time checks ordering, cadence and
-preserved gates within the existing 10 ms host scheduling tolerance.
+
+A lead is achieved by sending a step's values early, not by delaying anything, so
+notes, clock and gates keep the timing they have at lead 0 and the wait between a
+lock and its note is the lead. A value leaves on a clock pulse, so that wait is
+the setting rounded up to a whole pulse: at least what was asked for and less than
+one pulse more. The first note of a play is the exception, and gets no lead at
+all, because its lock resolves on the transport's own first pulse and there is no
+earlier pulse for it to leave in.
+
+Controlled time proves those bounds exactly; real time checks ordering, cadence
+and preserved gates within the existing 10 ms host scheduling tolerance.
 """
 import json
 from device_configs import boot_with
@@ -44,9 +53,18 @@ def lock_lead_time(c):
             assert not [v for v in events[events.index(stops[0])+1:] if v['bytes'][0]==144]
             # The last note is drained by the Stop tap (README Lock lead time), so its
             # lead is deliberately shortened; check the pairs before it.
+            # A 1/16 step is 24 pulses at 96 PPQN, so the step cadence the locks
+            # already prove gives the pulse the values leave on.
+            pulse_ns=(1e9/6)/24
             for index,(note,lock) in enumerate(zip(notes[:-1],locks[:-1])):
                 assert events.index(lock)<events.index(note),('Lock order',lead,index)
-                assert abs(note[field]-lock[field]-lead*1_000_000)<=tolerance,('Lead',lead,index,note,lock)
+                wait=note[field]-lock[field]
+                if index==0:
+                    # Nothing is delayed to give the first step a lead it cannot
+                    # have, so its value leaves with its note.
+                    assert abs(wait)<=tolerance,('First note lead',lead,index,note,lock)
+                else:
+                    assert lead*1_000_000-tolerance<=wait<lead*1_000_000+pulse_ns+tolerance,('Lead',lead,index,wait,note,lock)
                 assert abs((lock[field]-locks[0][field])-index*1e9/6)<=tolerance,('Lock cadence',index)
                 assert min(abs(tick[field]-note[field]) for tick in clocks)<=tolerance,('Clock alignment',lead,index)
             # Exclude the gates the Stop tap shortens: it drains pending output, so
