@@ -362,10 +362,18 @@ def project_fixture_name(case_id):
     """The fixture directory name for the project a case plays."""
     spec=CASES[case_id];return '%s-%d'%(spec['workload'],spec['channels'])
 
-def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None,lead_ms=None,probe_mode='off',seed=0,measured_steps=None):
+def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None,lead_ms=None,probe_mode='off',seed=0,measured_steps=None,probe_schedule=None,seed_schedule=None):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     if type(windows) is not int or windows < 1:raise ValueError('windows must be positive')
     if measured_steps is not None and (type(measured_steps) is not int or measured_steps < 1):raise ValueError('measured_steps must be positive')
+    if probe_schedule is not None:
+        if type(probe_schedule) is not list or len(probe_schedule) != windows or any(mode not in ('off','pulse-v1','pulse-core-v1') for mode in probe_schedule):
+            raise ValueError('probe_schedule must be a list of valid modes matching windows')
+        probe_schedule=list(probe_schedule)
+    if seed_schedule is not None:
+        if type(seed_schedule) is not list or len(seed_schedule) != windows or any(type(value) is not int or not 0 <= value <= 2**31-1 for value in seed_schedule):
+            raise ValueError('seed_schedule must be a list of 31-bit seeds matching windows')
+        seed_schedule=list(seed_schedule)
     spec=dict(CASES[case_id]);trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
     if measured_steps is not None:spec['seconds']=measured_steps*driver.expected_step_seconds*spec.get('step_stride',1)
     try:
@@ -374,15 +382,17 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         fixture_manifest=check_project_fixture(project_fixture,case_id) if project_fixture is not None else {}
         if lead_ms is None:lead_ms=fixture_manifest['midi_lock_lead_time'] if fixture_manifest else 0
         identity=_lead_identity(lead_ms, 'legacy-delay-v1', seed, probe_mode)
-        identity.update(fixture_id=case_id, fixture_files=fixture_manifest.get('files'), clock_source='internal', port=1,
+        identity.update(fixture_id=case_id, workload=spec['workload'], fixture_files=fixture_manifest.get('files'), clock_source='internal', port=1,
                         capture_backend='stock-norns-output-trace', requested_window_seconds=spec['seconds'])
         if measured_steps is not None:identity['measured_steps']=measured_steps
+        if probe_schedule is not None:identity['probe_schedule']=probe_schedule
+        if seed_schedule is not None:identity['seed_schedule']=seed_schedule
         if spec.get('tempo_bpm') is not None and abs(driver.tempo_bpm-spec['tempo_bpm'])>.01:
             raise AssertionError('%s runs at %s bpm but the norns clock is at %s'%(case_id,spec['tempo_bpm'],driver.tempo_bpm))
         if project_fixture is None:
             build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
         set_lock_lead(driver, lead_ms)
-        runner.maiden.eval('math.randomseed(%d)' % seed)
+        if seed_schedule is None:runner.maiden.eval('math.randomseed(%d)' % seed)
         if project_fixture is None:
             if save_project_fixture:
                 runner.fetch_project(save_project_fixture)
@@ -393,16 +403,23 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         timings=TimingTrace(runner.maiden,native=native_screen_trace,count=redraw_count_trace) if timing_trace else None
         if timings:timings.install()
         from pulse_probe import PulseProbe, summarize_snapshot
-        pulse_probe=PulseProbe(runner.maiden,mode=probe_mode) if probe_mode!='off' else None
-        if pulse_probe:
-            identity.update(probe_schema_version=1, probe_capacity=pulse_probe.capacity,
-                            probe_kinds=[1,4,5] if probe_mode=='pulse-core-v1' else [1,2,3,4,5,6])
-            pulse_probe.install()
+        pulse_probe=None
         transport_log=[]
         for window in range(1,windows+1):
             recording=None;suffix='' if windows==1 else '-window-%d'%window
+            pulse_probe=None;probe_cleaned=False
+            window_mode=probe_schedule[window-1] if probe_schedule is not None else probe_mode
+            window_seed=seed_schedule[window-1] if seed_schedule is not None else seed
+            window_identity=dict(identity,probe_mode=window_mode,seed=window_seed)
+            pulse_probe=PulseProbe(runner.maiden,mode=window_mode) if window_mode!='off' else None
+            if pulse_probe:
+                window_identity.update(probe_schema_version=1,probe_capacity=pulse_probe.capacity,
+                                       probe_kinds=[1,4,5] if window_mode=='pulse-core-v1' else [1,2,3,4,5,6])
+                if probe_schedule is None:identity.update(window_identity)
+                pulse_probe.install()
             ready_to_play(runner,driver,transport_log)
             observed_lead=set_lock_lead(driver, lead_ms)
+            if seed_schedule is not None:runner.maiden.eval('math.randomseed(%d)' % window_seed)
             if pulse_probe:pulse_probe.reset()
             trace.reset();sampler=(OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler()) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
             if threads:threads.start()
@@ -412,12 +429,17 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             if stimulus is None:driver.elapse(spec['seconds'])
             stop_tap=driver.tap(1,8);driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
             if timings:state['lua_timings']=timings.snapshot();timings.reset()
-            state['run_identity']=dict(identity, observed_lead_ms=observed_lead, window=window)
+            state['run_identity']=dict(window_identity, observed_lead_ms=observed_lead, window=window)
             (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
             if pulse_probe:
-                state['pulse_probe']=pulse_probe.snapshot()
-                state['pulse_probe_summary']=summarize_snapshot(state['pulse_probe'])
-                (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
+                try:
+                    state['pulse_probe']=pulse_probe.snapshot()
+                    state['pulse_probe_summary']=summarize_snapshot(state['pulse_probe'])
+                    (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
+                finally:
+                    try:
+                        pulse_probe.remove();probe_cleaned=True
+                    finally:(runner.out/('pulse-probe-replies%s.json'%suffix)).write_text(json.dumps(pulse_probe.raw_replies,indent=2)+'\n')
             if threads:(runner.out/('thread-samples%s.jsonl'%suffix)).write_text(threads.stop())
             recovery=None
             window_stopped=stopped_after_window(runner,transport_log)
@@ -442,7 +464,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                 except Exception as dump_error:(runner.out/('oracle-failure%s.json'%suffix)).write_text(json.dumps({'failure':repr(error)[:2000],'dump_error':repr(dump_error)})+'\n')
                 if windows==1:raise
                 oracle=None;failure=repr(error)[:2000]
-            results.append({'window':window,'transport_taps':{'play':play_tap,'stop':stop_tap},'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording) if recording else None,'resource_samples':recording['samples'] if recording else None,'runtime_identity':recording['identity'] if recording else None,'lua_timings_recorded':len(state.get('lua_timings',[])) if timing_trace else None,'passed':bool(oracle and oracle['passed'])})
+            results.append({'window':window,'seed':window_seed,'probe_mode':window_mode,'run_identity':state['run_identity'],'transport_taps':{'play':play_tap,'stop':stop_tap},'stimulus':stimulus,'recovery':recovery,'host_window_ns':ended_ns-started_ns,'grid_writes':state['grid_writes'],'grid_refreshes':state['grid_refreshes'],'oracle':oracle,'oracle_failure':failure,'resources':resource_metrics(recording) if recording else None,'resource_samples':recording['samples'] if recording else None,'runtime_identity':recording['identity'] if recording else None,'lua_timings_recorded':len(state.get('lua_timings',[])) if timing_trace else None,'passed':bool(oracle and oracle['passed'])})
             if window<windows:driver.elapse(2.0)
         first=results[0]
         (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
@@ -457,9 +479,9 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         return value
     finally:
         try:
-            if 'pulse_probe' in locals() and pulse_probe:
+            if 'pulse_probe' in locals() and pulse_probe and not probe_cleaned:
                 try:pulse_probe.remove()
-                finally:(runner.out/'pulse-probe-replies.json').write_text(json.dumps(pulse_probe.raw_replies,indent=2)+'\n')
+                finally:(runner.out/('pulse-probe-replies%s.json'%suffix)).write_text(json.dumps(pulse_probe.raw_replies,indent=2)+'\n')
         finally:
             if sampler and sampler.thread and recording is None:
                 try:sampler.stop()

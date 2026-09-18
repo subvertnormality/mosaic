@@ -1,0 +1,50 @@
+test_cli_forwards_measured_steps_without_opening_a_real_device_session (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+test_cli_refuses_both_probe_modes_before_remote_construction (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+test_core_probe_profile_records_the_active_kind_mask_in_run_identity (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+test_invalid_cli_options_fail_before_constructing_a_remote_transport (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+test_invalid_measured_steps_are_rejected_before_driver_construction (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+test_measured_steps_controls_duration_and_is_reported_without_relaxing_thresholds (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+test_probe_schedule_is_validated_before_constructing_a_driver (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+test_probe_schedule_preserves_raw_replies_when_snapshot_or_install_fails (test_hardware_run_options.HardwareRunOptionsTests) ... FAIL
+test_probe_schedule_uses_a_fresh_probe_only_for_enabled_windows (test_hardware_run_options.HardwareRunOptionsTests) ... FAIL
+test_probe_snapshot_failure_keeps_raw_midi_and_replies_then_cleans_up (test_hardware_run_options.HardwareRunOptionsTests) ... ok
+
+======================================================================
+FAIL: test_probe_schedule_preserves_raw_replies_when_snapshot_or_install_fails (test_hardware_run_options.HardwareRunOptionsTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\Documents\ChatGPT\mosaic\tests\behaviour\test_hardware_run_options.py", line 329, in test_probe_schedule_preserves_raw_replies_when_snapshot_or_install_fails
+    self.assertEqual(FailingProbe.instances[0].calls, ['install', 'reset', 'snapshot', 'remove'])
+AssertionError: Lists differ: ['install', 'reset', 'snapshot', 'remove', 'remove'] != ['install', 'reset', 'snapshot', 'remove']
+
+First list contains 1 additional elements.
+First extra element 4:
+'remove'
+
+- ['install', 'reset', 'snapshot', 'remove', 'remove']
+?                                  ----------
+
++ ['install', 'reset', 'snapshot', 'remove']
+
+======================================================================
+FAIL: test_probe_schedule_uses_a_fresh_probe_only_for_enabled_windows (test_hardware_run_options.HardwareRunOptionsTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\Documents\ChatGPT\mosaic\tests\behaviour\test_hardware_run_options.py", line 276, in test_probe_schedule_uses_a_fresh_probe_only_for_enabled_windows
+    self.assertEqual([probe.calls for probe in ScheduledProbe.instances],
+AssertionError: Lists differ: [['in[30 chars]remove'], ['install', 'reset', 'snapshot', 'remove', 'remove']] != [['in[30 chars]remove'], ['install', 'reset', 'snapshot', 'remove']]
+
+First differing element 1:
+['install', 'reset', 'snapshot', 'remove', 'remove']
+['install', 'reset', 'snapshot', 'remove']
+
+  [['install', 'reset', 'snapshot', 'remove'],
+-  ['install', 'reset', 'snapshot', 'remove', 'remove']]
+?                                   ----------
+
++  ['install', 'reset', 'snapshot', 'remove']]
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.242s
+
+FAILED (failures=2)

@@ -223,6 +223,169 @@ class HardwareRunOptionsTests(unittest.TestCase):
         self.assertTrue(BrokenProbe.instance.removed)
         self.assertTrue(Driver.instance.finished)
 
+    def test_probe_schedule_is_validated_before_constructing_a_driver(self):
+        runner = type('Runner', (), {'maiden': object()})()
+        for schedule in (['off'], ['unknown'], ('off',), 'off', [None]):
+            with self.subTest(schedule=schedule), patch('hardware_performance.HardwareDriver') as driver:
+                with self.assertRaisesRegex(ValueError, 'probe_schedule'):
+                    hardware_performance.run_hardware_performance(
+                        runner, 'PERF-002-HW-1', 1, 'map', '.', windows=2,
+                        probe_schedule=schedule)
+                driver.assert_not_called()
+
+    def test_probe_schedule_uses_a_fresh_probe_only_for_enabled_windows(self):
+        class ScheduledProbe:
+            instances = []
+            def __init__(self, maiden, mode='pulse-v1'):
+                self.capacity = 8
+                self.mode = mode
+                self.calls = []
+                self.raw_replies = ['created:' + mode]
+                type(self).instances.append(self)
+            def install(self):
+                self.calls.append('install')
+                self.raw_replies.append('installed')
+                return self
+            def reset(self):
+                self.calls.append('reset')
+            def snapshot(self):
+                self.calls.append('snapshot')
+                self.raw_replies.append('snapshot')
+                return {'schema_version': 1, 'capacity': 8, 'count': 2, 'dropped': 0,
+                        'records': [[1, 1, 1, 0, 0, 1, 0, 0], [2, 1, 1, 0, 0, 2, 0, 0]]}
+            def remove(self):
+                self.calls.append('remove')
+                self.raw_replies.append('removed')
+        runner = type('Runner', (), {
+            'maiden': type('Maiden', (), {'eval': lambda self, source: ''})(),
+            'ssh': object(), 'out': Path(tempfile.mkdtemp()),
+            'device_map_index': staticmethod(lambda device, channel: 1),
+        })()
+        with patch('hardware_performance.HardwareDriver', Driver), \
+             patch('hardware_performance.build_project'), patch('hardware_performance.set_lock_lead', return_value=0), \
+             patch('hardware_performance.functional_preflight', return_value={}), \
+             patch('hardware_performance.ready_to_play'), patch('hardware_performance.stopped_after_window', return_value=True), \
+             patch('hardware_performance.dense_oracle', return_value={'passed': True, 'gates': {}}), \
+             patch('hardware_performance.resource_metrics', return_value={}), \
+             patch('hardware_performance.source_identity', return_value={'mosaic_revision': 'test'}), \
+             patch('hardware_performance.time.sleep'), patch('pulse_probe.PulseProbe', ScheduledProbe):
+            result = hardware_performance.run_hardware_performance(
+                runner, 'PERF-002-HW-1', 1, 'map', runner.out, Trace(), Sampler(), windows=3,
+                resource_sampler=False, probe_schedule=['off', 'pulse-v1', 'pulse-core-v1'])
+        self.assertEqual([probe.mode for probe in ScheduledProbe.instances], ['pulse-v1', 'pulse-core-v1'])
+        self.assertEqual([probe.calls for probe in ScheduledProbe.instances],
+                         [['install', 'reset', 'snapshot', 'remove'], ['install', 'reset', 'snapshot', 'remove']])
+        self.assertEqual([window['probe_mode'] for window in result['windows']],
+                         ['off', 'pulse-v1', 'pulse-core-v1'])
+        for window, mode in enumerate(['off', 'pulse-v1', 'pulse-core-v1'], 1):
+            raw = json.loads((runner.out / ('performance-raw-window-%d.json' % window)).read_text())
+            self.assertEqual(raw['run_identity']['probe_mode'], mode)
+        self.assertFalse((runner.out / 'pulse-probe-replies-window-1.json').exists())
+        self.assertEqual(json.loads((runner.out / 'pulse-probe-replies-window-2.json').read_text()),
+                         ['created:pulse-v1', 'installed', 'snapshot', 'removed'])
+        self.assertEqual(json.loads((runner.out / 'pulse-probe-replies-window-3.json').read_text()),
+                         ['created:pulse-core-v1', 'installed', 'snapshot', 'removed'])
+
+    def test_probe_schedule_preserves_raw_replies_when_snapshot_or_install_fails(self):
+        class FailingProbe:
+            instances = []
+            def __init__(self, maiden, mode='pulse-v1'):
+                self.capacity = 8
+                self.mode = mode
+                self.calls = []
+                self.raw_replies = ['created:' + mode]
+                type(self).instances.append(self)
+            def install(self):
+                self.calls.append('install')
+                self.raw_replies.append('installed')
+                if self.mode == 'pulse-core-v1':
+                    raise RuntimeError('install failed')
+                return self
+            def reset(self):
+                self.calls.append('reset')
+            def snapshot(self):
+                self.calls.append('snapshot')
+                self.raw_replies.append('snapshot failed')
+                raise RuntimeError('snapshot failed')
+            def remove(self):
+                self.calls.append('remove')
+                self.raw_replies.append('removed')
+        runner = type('Runner', (), {
+            'maiden': type('Maiden', (), {'eval': lambda self, source: ''})(),
+            'ssh': object(), 'out': Path(tempfile.mkdtemp()),
+            'device_map_index': staticmethod(lambda device, channel: 1),
+        })()
+        common = [patch('hardware_performance.HardwareDriver', Driver), patch('hardware_performance.build_project'),
+                  patch('hardware_performance.set_lock_lead', return_value=0),
+                  patch('hardware_performance.functional_preflight', return_value={}),
+                  patch('hardware_performance.ready_to_play'), patch('hardware_performance.stopped_after_window', return_value=True),
+                  patch('hardware_performance.resource_metrics', return_value={}), patch('hardware_performance.time.sleep'),
+                  patch('pulse_probe.PulseProbe', FailingProbe)]
+        with common[0], common[1], common[2], common[3], common[4], common[5], common[6], common[7], common[8]:
+            with self.assertRaisesRegex(RuntimeError, 'snapshot failed'):
+                hardware_performance.run_hardware_performance(
+                    runner, 'PERF-002-HW-1', 1, 'map', runner.out, Trace(), Sampler(),
+                    probe_schedule=['pulse-v1'])
+        self.assertEqual(FailingProbe.instances[0].calls, ['install', 'reset', 'snapshot', 'remove'])
+        self.assertEqual(json.loads((runner.out / 'pulse-probe-replies.json').read_text()),
+                         ['created:pulse-v1', 'installed', 'snapshot failed', 'removed'])
+        self.assertTrue((runner.out / 'performance-raw.json').exists())
+
+        install_runner = type('Runner', (), {
+            'maiden': type('Maiden', (), {'eval': lambda self, source: ''})(),
+            'ssh': object(), 'out': Path(tempfile.mkdtemp()),
+            'device_map_index': staticmethod(lambda device, channel: 1),
+        })()
+        with common[0], common[1], common[2], common[3], common[4], common[5], common[6], common[7], common[8]:
+            with self.assertRaisesRegex(RuntimeError, 'install failed'):
+                hardware_performance.run_hardware_performance(
+                    install_runner, 'PERF-002-HW-1', 1, 'map', install_runner.out, Trace(), Sampler(),
+                    probe_schedule=['pulse-core-v1'])
+        self.assertEqual(FailingProbe.instances[1].calls, ['install', 'remove'])
+        self.assertEqual(json.loads((install_runner.out / 'pulse-probe-replies.json').read_text()),
+                         ['created:pulse-core-v1', 'installed', 'removed'])
+        self.assertTrue(Driver.instance.finished)
+
+    def test_seed_schedule_is_validated_before_constructing_a_driver(self):
+        runner = type('Runner', (), {'maiden': object()})()
+        for schedule in ([1], [1, -1], [1, 2 ** 31], [1, 1.0], [True, 1], (1, 2), '1,2'):
+            with self.subTest(schedule=schedule), patch('hardware_performance.HardwareDriver') as driver:
+                with self.assertRaisesRegex(ValueError, 'seed_schedule'):
+                    hardware_performance.run_hardware_performance(
+                        runner, 'PERF-002-HW-1', 1, 'map', '.', windows=2,
+                        seed_schedule=schedule)
+                driver.assert_not_called()
+
+    def test_seed_schedule_reseeds_each_window_and_records_its_actual_seed(self):
+        class Maiden:
+            def __init__(self):
+                self.evaluations = []
+            def eval(self, source):
+                self.evaluations.append(source)
+                return ''
+        maiden = Maiden()
+        runner = type('Runner', (), {
+            'maiden': maiden, 'ssh': object(), 'out': Path(tempfile.mkdtemp()),
+            'device_map_index': staticmethod(lambda device, channel: 1),
+        })()
+        with patch('hardware_performance.HardwareDriver', Driver), \
+             patch('hardware_performance.build_project'), patch('hardware_performance.set_lock_lead', return_value=0), \
+             patch('hardware_performance.functional_preflight', return_value={}), \
+             patch('hardware_performance.ready_to_play'), patch('hardware_performance.stopped_after_window', return_value=True), \
+             patch('hardware_performance.dense_oracle', return_value={'passed': True, 'gates': {}}), \
+             patch('hardware_performance.resource_metrics', return_value={}), \
+             patch('hardware_performance.source_identity', return_value={'mosaic_revision': 'test'}), \
+             patch('hardware_performance.time.sleep'):
+            result = hardware_performance.run_hardware_performance(
+                runner, 'PERF-002-HW-1', 1, 'map', runner.out, Trace(), Sampler(), windows=2,
+                resource_sampler=False, seed_schedule=[7, 11])
+        self.assertEqual(maiden.evaluations, ['math.randomseed(7)', 'math.randomseed(11)'])
+        self.assertEqual([window['seed'] for window in result['windows']], [7, 11])
+        self.assertEqual([window['run_identity']['seed'] for window in result['windows']], [7, 11])
+        for window, seed in enumerate([7, 11], 1):
+            raw = json.loads((runner.out / ('performance-raw-window-%d.json' % window)).read_text())
+            self.assertEqual(raw['run_identity']['seed'], seed)
+
 
 if __name__ == '__main__':
     unittest.main()
