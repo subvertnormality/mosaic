@@ -1,0 +1,104 @@
+test_context_removes_the_probe_when_capture_raises (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_core_callback_correlation_classifies_earliest_deadlines_and_write_durations_without_causal_claim (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_core_callback_correlation_reuses_validation_and_rejects_noncore_kinds (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_core_callback_correlation_uses_recorded_nesting_not_equal_timestamp_inclusion (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_deadline_correlation_classifies_half_open_pulse_occupancy_without_causality_claims (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_deadline_correlation_keeps_negative_lateness_and_merges_nested_pulse_spans (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_deadline_correlation_rejects_invalid_probe_snapshots (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_install_reset_snapshot_and_remove_use_single_line_bounded_maiden_operations (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_probe_mode_selects_a_bounded_core_capacity_without_overriding_explicit_capacity (test_pulse_probe.PulseProbeLifecycle) ... ERROR
+test_pulse_core_mode_installs_only_pulse_write_and_callback_kind_mask (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_snapshot_preserves_a_drop_count_for_the_campaign_to_invalidate (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_snapshot_rejects_discarded_or_corrupt_rows (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_summary_rejects_drops_and_invalid_or_mispaired_records (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_summary_requires_a_real_pulse_span_and_strict_finite_numeric_rows (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_summary_validates_complete_ordered_boundary_spans_and_reports_diagnostics (test_pulse_probe.PulseProbeLifecycle) ... ok
+test_campaign_predeclares_a_deterministic_randomized_order_for_ten_complete_pairs (test_probe_overhead.ProbeOverheadCampaignTests) ... ERROR
+test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity (test_probe_overhead.ProbeOverheadCampaignTests) ... FAIL
+test_complete_matching_windows_pass_the_dispatch_only_overhead_gate_but_never_receiver_qualify (test_probe_overhead.ProbeOverheadCampaignTests) ... ok
+test_core_capacity_is_predeclared_and_actual_core_identity_must_match_it (test_probe_overhead.ProbeOverheadCampaignTests) ... ERROR
+test_each_pair_rejects_jitter_or_cpu_delta_above_the_unrelaxed_limits_without_exclusion (test_probe_overhead.ProbeOverheadCampaignTests) ... ok
+test_existing_oracle_failure_or_core_probe_drop_or_incomplete_fails_the_pair (test_probe_overhead.ProbeOverheadCampaignTests) ... ok
+test_invalid_campaign_input_and_missing_metric_values_fail_closed (test_probe_overhead.ProbeOverheadCampaignTests) ... ok
+test_manifest_validation_requires_strict_schema_contiguous_windows_and_a_complete_pair_partition (test_probe_overhead.ProbeOverheadCampaignTests) ... ok
+test_missing_duplicate_out_of_order_config_or_source_mismatch_fails_closed (test_probe_overhead.ProbeOverheadCampaignTests) ... ok
+test_required_existing_gate_names_and_strict_nonnegative_core_metrics_cannot_be_weakened (test_probe_overhead.ProbeOverheadCampaignTests) ... ok
+
+======================================================================
+ERROR: test_probe_mode_selects_a_bounded_core_capacity_without_overriding_explicit_capacity (test_pulse_probe.PulseProbeLifecycle)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_pulse_probe.py", line 207, in test_probe_mode_selects_a_bounded_core_capacity_without_overriding_explicit_capacity
+    self.assertEqual(PulseProbe(FakeMaiden(), capacity=None, mode='pulse-core-v1').capacity, 16_384)
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\pulse_probe.py", line 208, in __init__
+    raise ValueError('Probe capacity must be an integer in 1..262144')
+ValueError: Probe capacity must be an integer in 1..262144
+
+======================================================================
+ERROR: test_campaign_predeclares_a_deterministic_randomized_order_for_ten_complete_pairs (test_probe_overhead.ProbeOverheadCampaignTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 43, in test_campaign_predeclares_a_deterministic_randomized_order_for_ten_complete_pairs
+    self.assertEqual(first['probe_capacity'], 16_384)
+KeyError: 'probe_capacity'
+
+======================================================================
+ERROR: test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity (test_probe_overhead.ProbeOverheadCampaignTests) (capacity=0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 164, in test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity
+    build_campaign(seed=79, workload='locks-16', lead_ms=25, source_identity=SOURCE,
+TypeError: build_campaign() got an unexpected keyword argument 'probe_capacity'
+
+======================================================================
+ERROR: test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity (test_probe_overhead.ProbeOverheadCampaignTests) (capacity=-1)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 164, in test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity
+    build_campaign(seed=79, workload='locks-16', lead_ms=25, source_identity=SOURCE,
+TypeError: build_campaign() got an unexpected keyword argument 'probe_capacity'
+
+======================================================================
+ERROR: test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity (test_probe_overhead.ProbeOverheadCampaignTests) (capacity=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 164, in test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity
+    build_campaign(seed=79, workload='locks-16', lead_ms=25, source_identity=SOURCE,
+TypeError: build_campaign() got an unexpected keyword argument 'probe_capacity'
+
+======================================================================
+ERROR: test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity (test_probe_overhead.ProbeOverheadCampaignTests) (capacity=1.0)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 164, in test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity
+    build_campaign(seed=79, workload='locks-16', lead_ms=25, source_identity=SOURCE,
+TypeError: build_campaign() got an unexpected keyword argument 'probe_capacity'
+
+======================================================================
+ERROR: test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity (test_probe_overhead.ProbeOverheadCampaignTests) (capacity=262145)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 164, in test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity
+    build_campaign(seed=79, workload='locks-16', lead_ms=25, source_identity=SOURCE,
+TypeError: build_campaign() got an unexpected keyword argument 'probe_capacity'
+
+======================================================================
+ERROR: test_core_capacity_is_predeclared_and_actual_core_identity_must_match_it (test_probe_overhead.ProbeOverheadCampaignTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 144, in test_core_capacity_is_predeclared_and_actual_core_identity_must_match_it
+    campaign = build_campaign(seed=78, workload='locks-16', lead_ms=25, source_identity=SOURCE, probe_capacity=8192)
+TypeError: build_campaign() got an unexpected keyword argument 'probe_capacity'
+
+======================================================================
+FAIL: test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity (test_probe_overhead.ProbeOverheadCampaignTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\andy\AppData\Local\Temp\mosaic-capacity-red-2b404a2\tests\behaviour\test_probe_overhead.py", line 169, in test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity
+    with self.assertRaises(ValueError):
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 25 tests in 0.013s
+
+FAILED (failures=1, errors=8)

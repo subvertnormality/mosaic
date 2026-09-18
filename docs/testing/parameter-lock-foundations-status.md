@@ -103,7 +103,10 @@ the checkpoint evidence directory; raw artifacts are under
 `tests/behaviour/artifacts/lock-lead/e7edad3/legacy-delay-v1/smoke-20260918`.
 
 `--pulse-probe-core` selects a reduced experimental scope (pulse, MIDI write and
-delay callback spans; kinds 1/4/5). It suppresses per-channel and per-group clock
+delay callback spans; kinds 1/4/5). Its default buffer is now 16,384 rows; full
+capture retains 65,536. Overhead campaign schema 2 declares capacity in advance
+and rejects mismatched run identity or raw snapshot capacity. Overflow remains
+fatal. It suppresses per-channel and per-group clock
 reads/records. Use the same flag when preparing its fixture. It cannot be combined
 with `--pulse-probe`, and its reduced scope is recorded in run identity. It still
 requires hardware overhead qualification before using it as causal evidence.

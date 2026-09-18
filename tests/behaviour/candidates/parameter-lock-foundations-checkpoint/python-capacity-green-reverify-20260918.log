@@ -1,0 +1,15 @@
+# Independent re-verification of the uncommitted capacity change before commit
+# host: WSL Ubuntu, Python 3.11.9, 2026-09-18T16:02:20+01:00
+# workspace: /mnt/c/Users/andy/Documents/ChatGPT/mosaic, branch codex/behaviour-validation, HEAD d910b30 + uncommitted capacity change
+
+$ cd tests/behaviour && python3 -m unittest test_pulse_probe test_probe_overhead
+----------------------------------------------------------------------
+Ran 25 tests in 0.021s
+
+OK
+
+$ cd tests/behaviour && python3 -m unittest test_pulse_probe test_probe_overhead test_hardware_performance test_real_norns
+----------------------------------------------------------------------
+Ran 94 tests in 2.809s
+
+OK

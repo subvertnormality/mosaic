@@ -203,6 +203,12 @@ class PulseProbeLifecycle(unittest.TestCase):
         with self.assertRaises(ValueError):
             PulseProbe(FakeMaiden(), mode='unknown')
 
+    def test_probe_mode_selects_a_bounded_core_capacity_without_overriding_explicit_capacity(self):
+        self.assertEqual(PulseProbe(FakeMaiden(), capacity=None, mode='pulse-core-v1').capacity, 16_384)
+        self.assertEqual(PulseProbe(FakeMaiden(), capacity=None, mode='pulse-v1').capacity, 65_536)
+        self.assertEqual(PulseProbe(FakeMaiden(), capacity=17, mode='pulse-core-v1').capacity, 17)
+        self.assertEqual(PulseProbe(FakeMaiden(), capacity=19, mode='pulse-v1').capacity, 19)
+
     def test_snapshot_rejects_discarded_or_corrupt_rows(self):
         missing=PulseProbe(FakeMaiden(rows='__MOSAIC_PULSE_PROBE_ROW__1250000|1|7|41|1500000|1|3|4'),capacity=2)
         missing.install()

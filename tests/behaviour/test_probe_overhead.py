@@ -22,8 +22,10 @@ def reports_for(campaign, *, jitter_delta_ns=100_000, cpu_delta=1.0):
                        **({'probe_complete': True} if core else {})},
                        'step_jitter': {'p95_ns': 1_000_000 + (jitter_delta_ns if core else 0)}},
             'resources': {'matron_cpu_percent': 40.0 + (cpu_delta if core else 0)},
-            **({'pulse_probe': {'dropped': 0}} if core else {}),
+            **({'pulse_probe': {'dropped': 0, 'capacity': expected.get('probe_capacity')}} if core else {}),
         })
+        if core and expected.get('probe_capacity') is not None:
+            reports[-1]['run_identity']['probe_capacity'] = expected['probe_capacity']
     return reports
 
 
@@ -38,11 +40,14 @@ class ProbeOverheadCampaignTests(unittest.TestCase):
         self.assertEqual({row['measured_steps'] for row in first['windows']}, {80})
         self.assertEqual({row['workload'] for row in first['windows']}, {'locks-16'})
         self.assertEqual({row['lead_ms'] for row in first['windows']}, {25})
+        self.assertEqual(first['probe_capacity'], 16_384)
         for pair in first['pairs']:
             rows = [first['windows'][index] for index in pair['orders']]
             self.assertEqual({row['probe_mode'] for row in rows}, {'off', 'pulse-core-v1'})
             self.assertEqual(len({row['seed'] for row in rows}), 1)
             self.assertEqual(pair['source_identity'], SOURCE)
+        self.assertEqual({row['probe_capacity'] for row in first['windows'] if row['probe_mode'] == 'pulse-core-v1'}, {16_384})
+        self.assertEqual({row['probe_capacity'] for row in first['windows'] if row['probe_mode'] == 'off'}, {None})
 
     def test_complete_matching_windows_pass_the_dispatch_only_overhead_gate_but_never_receiver_qualify(self):
         campaign = build_campaign(seed=71, workload='dense-16', lead_ms=50, source_identity=SOURCE)
@@ -125,6 +130,7 @@ class ProbeOverheadCampaignTests(unittest.TestCase):
             'pair-seed': lambda value: value['pairs'][0].__setitem__('seed', value['pairs'][0]['seed'] + 1),
             'pair-mode': lambda value: value['pairs'][0].__setitem__('probe_modes', ['off', 'off']),
             'pair-config': lambda value: value['pairs'][0].__setitem__('lead_ms', 26),
+            'core-capacity': lambda value: next(row for row in value['windows'] if row['probe_mode'] == 'pulse-core-v1').__setitem__('probe_capacity', 8192),
         }
         self.assertEqual(validate_campaign(campaign), campaign)
         for name, mutate in mutations.items():
@@ -133,6 +139,41 @@ class ProbeOverheadCampaignTests(unittest.TestCase):
                 mutate(bad)
                 with self.assertRaises(ValueError):
                     validate_campaign(bad)
+
+    def test_core_capacity_is_predeclared_and_actual_core_identity_must_match_it(self):
+        campaign = build_campaign(seed=78, workload='locks-16', lead_ms=25, source_identity=SOURCE, probe_capacity=8192)
+        self.assertEqual(campaign['probe_capacity'], 8192)
+        core_window = next(row for row in campaign['windows'] if row['probe_mode'] == 'pulse-core-v1')
+        self.assertEqual(core_window['probe_capacity'], 8192)
+        rows = reports_for(campaign)
+        core_report = next(row for row in rows if row['run_identity']['probe_mode'] == 'pulse-core-v1')
+        for value in (None, 16_384):
+            with self.subTest(value=value):
+                changed = copy.deepcopy(rows)
+                changed_core = next(row for row in changed if row['run_identity']['probe_mode'] == 'pulse-core-v1')
+                if value is None:
+                    changed_core['run_identity'].pop('probe_capacity')
+                else:
+                    changed_core['run_identity']['probe_capacity'] = value
+                self.assertFalse(evaluate_campaign(campaign, changed)['passed'])
+        self.assertEqual(core_report['run_identity']['probe_capacity'], 8192)
+
+    def test_capacity_schema_is_strict_and_raw_core_snapshot_must_match_the_declared_identity(self):
+        for capacity in (0, -1, True, 1.0, 262_145):
+            with self.subTest(capacity=capacity), self.assertRaises(ValueError):
+                build_campaign(seed=79, workload='locks-16', lead_ms=25, source_identity=SOURCE,
+                               probe_capacity=capacity)
+        campaign = build_campaign(seed=79, workload='locks-16', lead_ms=25, source_identity=SOURCE)
+        old_schema = copy.deepcopy(campaign)
+        old_schema['schema_version'] = 1
+        with self.assertRaises(ValueError):
+            validate_campaign(old_schema)
+        rows = reports_for(campaign)
+        core = next(row for row in rows if row['run_identity']['probe_mode'] == 'pulse-core-v1')
+        core['pulse_probe']['capacity'] = campaign['probe_capacity'] - 1
+        result = evaluate_campaign(campaign, rows)
+        self.assertFalse(result['passed'])
+        self.assertIn('raw probe capacity', ' '.join(result['failures']))
 
     def test_required_existing_gate_names_and_strict_nonnegative_core_metrics_cannot_be_weakened(self):
         campaign = build_campaign(seed=77, workload='locks-16', lead_ms=25, source_identity=SOURCE)

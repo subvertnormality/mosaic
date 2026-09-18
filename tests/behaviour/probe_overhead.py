@@ -17,7 +17,7 @@ def _integer(value, name, minimum=0):
         raise ValueError('%s must be an integer at least %d' % (name, minimum))
 
 
-def build_campaign(*, seed, workload, lead_ms, source_identity):
+def build_campaign(*, seed, workload, lead_ms, source_identity, probe_capacity=16384):
     """Return the complete manifest before any dispatch-only run starts."""
     _integer(seed, 'seed')
     if seed >= 2 ** 31:
@@ -29,6 +29,9 @@ def build_campaign(*, seed, workload, lead_ms, source_identity):
         raise ValueError('lead_ms must be in 0..50')
     if not isinstance(source_identity, dict) or not source_identity:
         raise ValueError('source_identity must be a non-empty dict')
+    _integer(probe_capacity, 'probe_capacity', 1)
+    if probe_capacity > 262144:
+        raise ValueError('probe_capacity must be at most 262144')
     generator = random.Random(seed)
     windows, pairs = [], []
     for pair in range(PAIR_COUNT):
@@ -41,12 +44,14 @@ def build_campaign(*, seed, workload, lead_ms, source_identity):
             orders.append(order)
             windows.append({'order': order, 'pair': pair, 'seed': pair_seed,
                             'workload': workload, 'lead_ms': lead_ms,
-                            'measured_steps': MEASURED_STEPS, 'probe_mode': mode})
+                            'measured_steps': MEASURED_STEPS, 'probe_mode': mode,
+                            'probe_capacity': probe_capacity if mode == 'pulse-core-v1' else None})
         pairs.append({'pair': pair, 'orders': orders, 'seed': pair_seed,
                       'workload': workload, 'lead_ms': lead_ms, 'measured_steps': MEASURED_STEPS,
                       'probe_modes': modes, 'source_identity': copy.deepcopy(source_identity)})
-    campaign = {'schema_version': 1, 'campaign_seed': seed, 'workload': workload,
+    campaign = {'schema_version': 2, 'campaign_seed': seed, 'workload': workload,
             'lead_ms': lead_ms, 'measured_steps': MEASURED_STEPS,
+            'probe_capacity': probe_capacity,
             'source_identity': copy.deepcopy(source_identity), 'pairs': pairs,
             'windows': windows, 'receiver_qualification_eligible': False}
     validate_campaign(campaign)
@@ -56,11 +61,14 @@ def build_campaign(*, seed, workload, lead_ms, source_identity):
 def validate_campaign(campaign):
     """Reject a malformed or incomplete predeclared campaign before remote use."""
     root_keys = {'schema_version', 'campaign_seed', 'workload', 'lead_ms', 'measured_steps',
-                 'source_identity', 'pairs', 'windows', 'receiver_qualification_eligible'}
-    window_keys = {'order', 'pair', 'seed', 'workload', 'lead_ms', 'measured_steps', 'probe_mode'}
+                 'source_identity', 'pairs', 'windows', 'receiver_qualification_eligible', 'probe_capacity'}
+    window_keys = {'order', 'pair', 'seed', 'workload', 'lead_ms', 'measured_steps', 'probe_mode', 'probe_capacity'}
     pair_keys = {'pair', 'orders', 'seed', 'workload', 'lead_ms', 'measured_steps', 'probe_modes', 'source_identity'}
-    if not isinstance(campaign, dict) or set(campaign) != root_keys or type(campaign['schema_version']) is not int or campaign['schema_version'] != 1:
+    if not isinstance(campaign, dict) or set(campaign) != root_keys or type(campaign['schema_version']) is not int or campaign['schema_version'] != 2:
         raise ValueError('unknown or malformed overhead campaign schema')
+    _integer(campaign['probe_capacity'], 'probe_capacity', 1)
+    if campaign['probe_capacity'] > 262144:
+        raise ValueError('probe_capacity must be at most 262144')
     _integer(campaign['campaign_seed'], 'campaign_seed')
     if campaign['campaign_seed'] >= 2 ** 31 or not isinstance(campaign['workload'], str) or not campaign['workload']:
         raise ValueError('invalid campaign seed or workload')
@@ -77,6 +85,11 @@ def validate_campaign(campaign):
             raise ValueError('windows must have unique contiguous orders 0..19')
         if type(window['pair']) is not int or not 0 <= window['pair'] < PAIR_COUNT or window['probe_mode'] not in MODES:
             raise ValueError('invalid window pair or mode')
+        if window['probe_mode'] == 'pulse-core-v1':
+            if type(window['probe_capacity']) is not int or window['probe_capacity'] != campaign['probe_capacity']:
+                raise ValueError('window probe capacity differs from campaign')
+        elif window['probe_capacity'] is not None:
+            raise ValueError('off window must not specify probe capacity')
         _integer(window['seed'], 'window seed')
         if (window['seed'] >= 2 ** 31 or not isinstance(window['workload'], str)
                 or type(window['lead_ms']) is not int or type(window['measured_steps']) is not int
@@ -128,6 +141,9 @@ def _report_failure(report, expected, source_identity):
                         probe_mode=expected['probe_mode'])
         if any(identity.get(name) != value for name, value in required.items()):
             failures.append('run configuration does not match its predeclared window')
+        if expected['probe_mode'] == 'pulse-core-v1' and (
+                type(identity.get('probe_capacity')) is not int or identity['probe_capacity'] != expected['probe_capacity']):
+            failures.append('core probe capacity does not match its predeclared window')
     if report.get('source_identity') != source_identity:
         failures.append('source identity does not match campaign manifest')
     oracle = report.get('oracle')
@@ -151,6 +167,8 @@ def _report_failure(report, expected, source_identity):
         probe = report.get('pulse_probe')
         if not isinstance(probe, dict) or type(probe.get('dropped')) is not int or probe.get('dropped') != 0:
             failures.append('core probe is missing or dropped records')
+        if not isinstance(probe, dict) or type(probe.get('capacity')) is not int or probe['capacity'] != expected['probe_capacity']:
+            failures.append('raw probe capacity does not match its predeclared window')
         if not isinstance(gates, dict) or gates.get('probe_complete') is not True:
             failures.append('core probe is incomplete')
     return failures, metrics

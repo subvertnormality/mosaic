@@ -203,7 +203,9 @@ def correlate_callback_deadlines(snapshot):
 
 
 class PulseProbe:
-    def __init__(self, maiden, capacity=65536, mode='pulse-v1'):
+    def __init__(self, maiden, capacity=None, mode='pulse-v1'):
+        if capacity is None:
+            capacity = 16384 if mode == 'pulse-core-v1' else 65536
         if type(capacity) is not int or not 1 <= capacity <= 262144:
             raise ValueError('Probe capacity must be an integer in 1..262144')
         if mode not in ('pulse-v1', 'pulse-core-v1'):
