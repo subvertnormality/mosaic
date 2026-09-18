@@ -1,0 +1,11 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+.F...
+Failed tests:
+-------------
+1) test_timing_probe_optional_kind_filter_skips_clock_count_and_drop_changes
+.///lib/timing_probe_tests.lua:46: expected: 0, actual: 1
+stack traceback:
+	.///lib/timing_probe_tests.lua:46: in upvalue 'test_timing_probe_optional_kind_filter_skips_clock_count_and_drop_changes'
+
+Ran 5 tests in 0.001 seconds, 4 successes, 1 failure, 1624 non-selected

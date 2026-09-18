@@ -11,12 +11,13 @@ function timing_probe.new(options)
   for i = 1, capacity do rows[i] = {0, 0, 0, 0, 0, 0, 0, 0} end
   local next_row, count, dropped = 1, 0, 0
   local probe = {pulse = 0, enabled = true}
+  local kinds = options.kinds
 
   -- kind: 1 pulse, 2 step parameter resolution, 3 note production,
   -- 4 output write, 5 delay callback, 6 delayed group dispatch.
   -- marker: 1 begin, 2 end. Deadlines use the same seconds epoch as now().
   function probe:record(kind, pulse, occurrence, deadline, marker, bytes, batches)
-    if not self.enabled then return end
+    if not self.enabled or (kinds and not kinds[kind]) then return end
     local row = rows[next_row]
     row[1], row[2], row[3], row[4] = options.now(), kind, pulse or 0, occurrence or 0
     row[5], row[6], row[7], row[8] = deadline or 0, marker or 0, bytes or 0, batches or 0

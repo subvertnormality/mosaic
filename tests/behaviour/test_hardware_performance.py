@@ -1,4 +1,4 @@
-import json,tempfile,unittest
+import hashlib,json,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
 
@@ -237,6 +237,11 @@ class Tests(unittest.TestCase):
             # These are historical source artifacts. Their hashes must remain
             # valid, but they deliberately lack a lead identity and may never
             # be silently reinterpreted as a lead-zero fixture.
+            manifest=json.loads((directory/'fixture.json').read_text())
+            self.assertEqual(set(manifest['files']), {'autosave.ptn', 'autosave.pset'})
+            for name, expected_hash in manifest['files'].items():
+                self.assertEqual(hashlib.sha256((directory/name).read_bytes()).hexdigest(), expected_hash,
+                                 'Historical fixture hash changed: '+str(directory/name))
             with self.assertRaisesRegex(ValueError,'missing midi_lock_lead_time'):
                 hardware_performance.check_project_fixture(directory,cases[directory.name])
     def test_saving_a_project_fixture_builds_then_fetches_and_records_it(self):

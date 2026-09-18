@@ -1,4 +1,4 @@
-"""Bounded hardware-run option validation and 80-step window accounting."""
+"""Characterisation outside the manual: bounded hardware-run options and windows."""
 import io
 import json
 import tempfile
@@ -131,19 +131,66 @@ class HardwareRunOptionsTests(unittest.TestCase):
                 'performance', '--host', 'test-host', '--maiden-url', 'ws://test', '--osc-host', '127.0.0.1',
                 '--artifacts', str(Path(temporary) / 'artifacts'), '--run-id', 'test-run',
                 '--performance-case', 'PERF-002-HW-1', '--config-source', temporary,
-                '--maiden-input', '--synthetic-grid', '--measured-steps', '80',
+                '--maiden-input', '--synthetic-grid', '--measured-steps', '80', '--pulse-probe-core',
             ])
         self.assertEqual(status, 0)
         self.assertEqual(calls, [{'thread_sampler': None, 'windows': 1, 'timing_trace': False,
                                   'resource_sampler': True, 'native_screen_trace': False,
                                   'redraw_count_trace': False, 'project_fixture': None,
-                                  'save_project_fixture': None, 'lead_ms': None, 'probe_mode': 'off',
+                                  'save_project_fixture': None, 'lead_ms': None, 'probe_mode': 'pulse-core-v1',
                                   'seed': 0, 'measured_steps': 80}])
+
+    def test_cli_refuses_both_probe_modes_before_remote_construction(self):
+        with patch('real_norns.SSH') as ssh:
+            stderr = io.StringIO()
+            with redirect_stderr(stderr), self.assertRaises(SystemExit):
+                real_norns_main(['performance', '--pulse-probe', '--pulse-probe-core'])
+            self.assertIn('not allowed with argument', stderr.getvalue())
+            ssh.assert_not_called()
+
+    def test_core_probe_profile_records_the_active_kind_mask_in_run_identity(self):
+        class CoreProbe:
+            instance = None
+            def __init__(self, maiden, mode='pulse-v1'):
+                type(self).instance = self
+                self.capacity = 8
+                self.mode = mode
+                self.raw_replies = []
+                self.removed = False
+            def install(self):
+                return self
+            def reset(self):
+                pass
+            def snapshot(self):
+                return {'schema_version': 1, 'capacity': 8, 'count': 2, 'dropped': 0,
+                        'records': [[1, 1, 1, 0, 0, 1, 0, 0], [2, 1, 1, 0, 0, 2, 0, 0]]}
+            def remove(self):
+                self.removed = True
+        runner = type('Runner', (), {
+            'maiden': type('Maiden', (), {'eval': lambda self, source: ''})(),
+            'ssh': object(), 'out': Path(tempfile.mkdtemp()),
+            'device_map_index': staticmethod(lambda device, channel: 1),
+        })()
+        with patch('hardware_performance.HardwareDriver', Driver), \
+             patch('hardware_performance.build_project'), patch('hardware_performance.set_lock_lead', return_value=0), \
+             patch('hardware_performance.functional_preflight', return_value={}), \
+             patch('hardware_performance.ready_to_play'), patch('hardware_performance.stopped_after_window', return_value=True), \
+             patch('hardware_performance.dense_oracle', return_value={'passed': True, 'gates': {}}), \
+             patch('hardware_performance.resource_metrics', return_value={}), \
+             patch('hardware_performance.source_identity', return_value={'mosaic_revision': 'test'}), \
+             patch('hardware_performance.time.sleep'), patch('pulse_probe.PulseProbe', CoreProbe):
+            result = hardware_performance.run_hardware_performance(
+                runner, 'PERF-002-HW-1', 1, 'map', runner.out, Trace(), Sampler(), probe_mode='pulse-core-v1')
+        self.assertEqual(CoreProbe.instance.mode, 'pulse-core-v1')
+        self.assertEqual(result['run_identity']['probe_kinds'], [1, 4, 5])
+        self.assertEqual(result['source_identity']['probe_kinds'], [1, 4, 5])
+        self.assertTrue(result['oracle']['gates']['probe_complete'])
+        self.assertTrue(CoreProbe.instance.removed)
 
     def test_probe_snapshot_failure_keeps_raw_midi_and_replies_then_cleans_up(self):
         class BrokenProbe:
             instance = None
-            def __init__(self, maiden):
+            def __init__(self, maiden, mode='pulse-v1'):
                 type(self).instance = self; self.capacity = 1; self.raw_replies = ['install reply']; self.removed = False
             def install(self):
                 return self

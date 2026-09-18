@@ -39,6 +39,26 @@ function test_timing_probe_reset_reuses_its_fixed_capacity_and_clears_drops()
   luaunit.assert_equals(calls, 2)
 end
 
+function test_timing_probe_optional_kind_filter_skips_clock_count_and_drop_changes()
+  local calls = 0
+  local probe = timing_probe.new({capacity = 1, kinds = {[1] = true, [4] = true, [5] = true}, now = function() calls = calls + 1; return calls end})
+  probe:record(2, 1, 1, 0, 1, 0, 0)
+  luaunit.assert_equals(calls, 0)
+  luaunit.assert_equals(probe:snapshot().count, 0)
+  probe:record(1, 1, 1, 0, 1, 0, 0)
+  luaunit.assert_equals(calls, 1)
+  luaunit.assert_equals(probe:snapshot().count, 1)
+  probe:record(6, 1, 1, 0, 1, 0, 0)
+  luaunit.assert_equals(calls, 1)
+  luaunit.assert_equals(probe:snapshot().dropped, 0)
+end
+
+function test_timing_probe_without_kind_filter_keeps_full_capture()
+  local probe = timing_probe.new({capacity = 2, now = function() return 1 end})
+  probe:record(2, 1, 1, 0, 1, 0, 0)
+  luaunit.assert_equals(probe:snapshot().count, 1)
+end
+
 function test_timing_probe_records_paired_boundaries_as_independent_numeric_rows()
   local now = 100
   local probe = timing_probe.new({capacity = 4, now = function() now = now + 1; return now end})

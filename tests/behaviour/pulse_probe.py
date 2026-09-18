@@ -79,11 +79,62 @@ def summarize_snapshot(snapshot):
     }
 
 
+def correlate_deadlines(snapshot):
+    """Describe deadline overlap with recorded pulse work; never infer causation.
+
+    Pulse occupancy is half-open. Coverage is the inclusive capture extent; zero
+    deadlines are the schema's unavailable sentinel. This is offline analysis.
+    """
+    from bisect import bisect_right
+    summarize_snapshot(snapshot)
+    stack, pulses, dispatches = [], [], []
+    for row in snapshot['records']:
+        if row[5] == 1:
+            stack.append(row)
+        else:
+            began = stack.pop()  # Pair integrity was checked above.
+            if row[1] == 1 and began[0] < row[0]:
+                pulses.append((began[0], row[0]))
+            elif row[1] == 6:
+                dispatches.append((began[0], began[4]))
+    # Merge possible nested/adjacent pulse spans before binary-searching them.
+    occupied = []
+    for first, last in sorted(pulses):
+        if occupied and first <= occupied[-1][1]:
+            occupied[-1] = (occupied[-1][0], max(last, occupied[-1][1]))
+        else:
+            occupied.append((first, last))
+    starts = [span[0] for span in occupied]
+    coverage = (snapshot['records'][0][0], snapshot['records'][-1][0])
+    groups = {name: [] for name in ('during_pulse_work', 'between_pulses', 'outside_capture')}
+    unavailable = 0
+    for sent, deadline in dispatches:
+        if deadline == 0:
+            unavailable += 1
+            continue
+        index = bisect_right(starts, deadline) - 1
+        if not coverage[0] <= deadline <= coverage[1]:
+            name = 'outside_capture'
+        elif index >= 0 and deadline < occupied[index][1]:
+            name = 'during_pulse_work'
+        else:
+            name = 'between_pulses'
+        groups[name].append(sent - deadline)
+    classes = {name: {'count': len(values), 'lateness_seconds': _distribution(values) if values else None}
+               for name, values in groups.items()}
+    classes['deadline_unavailable'] = {'count': unavailable, 'lateness_seconds': None}
+    return {'diagnostic_only': True, 'classes': classes,
+            'limitation': 'Overlap is association only; probe overhead and dispatch-to-wire delay are not removed.'}
+
+
 class PulseProbe:
-    def __init__(self, maiden, capacity=65536):
+    def __init__(self, maiden, capacity=65536, mode='pulse-v1'):
         if type(capacity) is not int or not 1 <= capacity <= 262144:
             raise ValueError('Probe capacity must be an integer in 1..262144')
+        if mode not in ('pulse-v1', 'pulse-core-v1'):
+            raise ValueError('Unknown pulse probe mode')
         self.maiden, self.capacity, self.installed = maiden, capacity, False
+        self.mode = mode
         self.owner = uuid.uuid4().hex
         self.raw_replies = []
 
@@ -96,9 +147,10 @@ class PulseProbe:
         # Arm ownership before eval: a lost reply must still trigger cleanup.
         self.installed = True
         try:
+            kinds = ',kinds={[1]=true,[4]=true,[5]=true}' if self.mode == 'pulse-core-v1' else ''
             self._eval("assert(not _G.mosaic_pulse_probe,'pulse probe already installed'); "
-                             "_G.mosaic_pulse_probe=include('mosaic/lib/clock/timing_probe').new({capacity=%d,now=util.time}); "
-                             "_G.mosaic_pulse_probe.owner='%s'" % (self.capacity, self.owner))
+                             "_G.mosaic_pulse_probe=include('mosaic/lib/clock/timing_probe').new({capacity=%d,now=util.time%s}); "
+                             "_G.mosaic_pulse_probe.owner='%s'" % (self.capacity, kinds, self.owner))
         except Exception:
             # Also handles a lost response after installation; never remove another owner.
             self.remove()

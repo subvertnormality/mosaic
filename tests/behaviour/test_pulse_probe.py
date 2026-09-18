@@ -1,7 +1,8 @@
+"""Characterisation outside the manual: checkpoint-A diagnostic probe contract."""
 import unittest
 import math
 
-from pulse_probe import PulseProbe, summarize_snapshot
+from pulse_probe import PulseProbe, correlate_deadlines, summarize_snapshot
 
 
 class FakeMaiden:
@@ -18,6 +19,63 @@ class FakeMaiden:
 
 
 class PulseProbeLifecycle(unittest.TestCase):
+    def test_deadline_correlation_classifies_half_open_pulse_occupancy_without_causality_claims(self):
+        snapshot = {
+            'schema_version': 1, 'capacity': 32, 'count': 18, 'dropped': 0,
+            'records': [
+                [10, 1, 1, 0, 0, 1, 0, 0], [20, 1, 1, 0, 0, 2, 0, 0],
+                [30, 1, 2, 0, 0, 1, 0, 0],
+                [31, 6, 2, 1, 10, 1, 0, 1], [31, 6, 2, 1, 10, 2, 0, 1],
+                [32, 6, 2, 2, 15, 1, 0, 1], [32, 6, 2, 2, 15, 2, 0, 1],
+                [33, 6, 2, 3, 20, 1, 0, 1], [33, 6, 2, 3, 20, 2, 0, 1],
+                [34, 6, 2, 4, 25, 1, 0, 1], [34, 6, 2, 4, 25, 2, 0, 1],
+                [35, 6, 2, 5, 5, 1, 0, 1], [35, 6, 2, 5, 5, 2, 0, 1],
+                [36, 6, 2, 6, 0, 1, 0, 1], [36, 6, 2, 6, 0, 2, 0, 1],
+                [40, 1, 2, 0, 0, 2, 0, 0],
+                [50, 1, 3, 0, 0, 1, 0, 0], [50, 1, 3, 0, 0, 2, 0, 0],
+            ],
+        }
+        # Add a group after the zero-duration pulse: deadline 50 remains between
+        # pulses because pulse occupancy is [begin,end), so [50,50) is empty.
+        snapshot['records'].extend([[51, 6, 3, 7, 50, 1, 0, 1], [51, 6, 3, 7, 50, 2, 0, 1]])
+        snapshot['count'] = len(snapshot['records'])
+        correlation = correlate_deadlines(snapshot)
+        self.assertTrue(correlation['diagnostic_only'])
+        classes = correlation['classes']
+        self.assertEqual({name: classes[name]['count'] for name in classes}, {
+            'during_pulse_work': 2, 'between_pulses': 3,
+            'outside_capture': 1, 'deadline_unavailable': 1,
+        })
+        self.assertEqual(classes['deadline_unavailable']['lateness_seconds'], None)
+        self.assertEqual(classes['during_pulse_work']['lateness_seconds']['count'], 2)
+        self.assertEqual(classes['during_pulse_work']['lateness_seconds']['maximum'], 21)
+        self.assertEqual(classes['between_pulses']['lateness_seconds']['maximum'], 13)
+        self.assertEqual(classes['outside_capture']['lateness_seconds']['maximum'], 30)
+
+    def test_deadline_correlation_rejects_invalid_probe_snapshots(self):
+        with self.assertRaises(ValueError):
+            correlate_deadlines({'schema_version': 1, 'capacity': 1, 'count': 1, 'dropped': 0,
+                                 'records': [[1, 6, 1, 1, 0, 1, 0, 1]]})
+
+    def test_deadline_correlation_keeps_negative_lateness_and_merges_nested_pulse_spans(self):
+        snapshot = {'schema_version': 1, 'capacity': 16, 'count': 14, 'dropped': 0,
+                    'records': [
+                        [10, 1, 1, 0, 0, 1, 0, 0], [12, 1, 2, 0, 0, 1, 0, 0],
+                        [13, 6, 2, 1, 11, 1, 0, 1], [13, 6, 2, 1, 11, 2, 0, 1],
+                        [14, 6, 2, 2, 14, 1, 0, 1], [14, 6, 2, 2, 14, 2, 0, 1],
+                        [15, 1, 2, 0, 0, 2, 0, 0], [16, 6, 1, 3, 12, 1, 0, 1],
+                        [16, 6, 1, 3, 12, 2, 0, 1], [20, 1, 1, 0, 0, 2, 0, 0],
+                        # A deadline after the capture end remains signed-negative
+                        # latency; a deadline equal to the final captured timestamp
+                        # remains inside capture coverage.
+                        [21, 6, 3, 4, 30, 1, 0, 1], [21, 6, 3, 4, 30, 2, 0, 1],
+                        [22, 6, 3, 5, 22, 1, 0, 1], [22, 6, 3, 5, 22, 2, 0, 1],
+                    ]}
+        classes = correlate_deadlines(snapshot)['classes']
+        self.assertEqual(classes['during_pulse_work']['count'], 3)
+        self.assertEqual(classes['during_pulse_work']['lateness_seconds']['p50'], 2)
+        self.assertEqual(classes['outside_capture']['lateness_seconds']['maximum'], -9)
+        self.assertEqual(classes['between_pulses']['lateness_seconds']['maximum'], 0)
     def test_summary_validates_complete_ordered_boundary_spans_and_reports_diagnostics(self):
         snapshot = {
             'schema_version': 1, 'capacity': 8, 'count': 4, 'dropped': 0,
@@ -82,6 +140,15 @@ class PulseProbeLifecycle(unittest.TestCase):
         self.assertIn('snapshot(1,128)',maiden.calls[3][0])
         self.assertIn('mosaic_pulse_probe=nil',maiden.calls[4][0])
         self.assertEqual(probe.raw_replies,[maiden.meta,maiden.rows])
+
+    def test_pulse_core_mode_installs_only_pulse_write_and_callback_kind_mask(self):
+        core_maiden = FakeMaiden(); core = PulseProbe(core_maiden, capacity=2, mode='pulse-core-v1')
+        core.install()
+        self.assertIn('kinds={[1]=true,[4]=true,[5]=true}', core_maiden.calls[0][0])
+        full_maiden = FakeMaiden(); PulseProbe(full_maiden, capacity=2).install()
+        self.assertNotIn('kinds=', full_maiden.calls[0][0])
+        with self.assertRaises(ValueError):
+            PulseProbe(FakeMaiden(), mode='unknown')
 
     def test_snapshot_rejects_discarded_or_corrupt_rows(self):
         missing=PulseProbe(FakeMaiden(rows='__MOSAIC_PULSE_PROBE_ROW__1250000|1|7|41|1500000|1|3|4'),capacity=2)

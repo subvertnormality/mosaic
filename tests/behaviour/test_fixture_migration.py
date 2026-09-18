@@ -1,4 +1,4 @@
-"""Fixture lead-identity migration contract (proposed foundations delivery)."""
+"""Characterisation outside the manual: proposed fixture lead-identity migration."""
 import hashlib
 import io
 import json
@@ -71,6 +71,13 @@ class FixtureMigrationTests(unittest.TestCase):
             lines = (destination / 'autosave.pset').read_text().splitlines()
             self.assertEqual([line for line in lines if line.strip().startswith('"midi_lock_lead_time"')],
                              ['"midi_lock_lead_time": 50'])
+
+    def test_migration_preserves_the_reduced_probe_identity(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary = Path(temporary); source = temporary / 'legacy'; destination = temporary / 'core-probe'
+            make_fixture(source)
+            manifest = prepare_fixture(source, destination, probe_mode='pulse-core-v1')
+            self.assertEqual(manifest['probe_mode'], 'pulse-core-v1')
 
     def test_source_integrity_and_destination_boundaries_fail_closed(self):
         with tempfile.TemporaryDirectory() as temporary:

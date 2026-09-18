@@ -268,7 +268,7 @@ def _lead_identity(lead_ms, timing_contract, seed, probe_mode):
         raise ValueError('Unsupported timing_contract (lookahead is not implemented)')
     if type(seed) is not int or not 0 <= seed <= 2**31-1:
         raise ValueError('seed must be a nonnegative 31-bit integer')
-    if probe_mode not in ('off', 'pulse-v1'):
+    if probe_mode not in ('off', 'pulse-v1', 'pulse-core-v1'):
         raise ValueError('Unsupported probe_mode')
     return dict(midi_lock_lead_time=lead_ms, timing_contract=timing_contract, seed=seed, probe_mode=probe_mode)
 
@@ -393,9 +393,10 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         timings=TimingTrace(runner.maiden,native=native_screen_trace,count=redraw_count_trace) if timing_trace else None
         if timings:timings.install()
         from pulse_probe import PulseProbe, summarize_snapshot
-        pulse_probe=PulseProbe(runner.maiden) if probe_mode=='pulse-v1' else None
+        pulse_probe=PulseProbe(runner.maiden,mode=probe_mode) if probe_mode!='off' else None
         if pulse_probe:
-            identity.update(probe_schema_version=1, probe_capacity=pulse_probe.capacity)
+            identity.update(probe_schema_version=1, probe_capacity=pulse_probe.capacity,
+                            probe_kinds=[1,4,5] if probe_mode=='pulse-core-v1' else [1,2,3,4,5,6])
             pulse_probe.install()
         transport_log=[]
         for window in range(1,windows+1):
