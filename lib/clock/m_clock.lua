@@ -174,7 +174,8 @@ function m_clock.init()
     ppqn = ppqn,
   })
   if m_midi and m_midi.begin_output_batch then
-    clock_lattice.output = {begin = m_midi.begin_output_batch, flush = m_midi.flush_output_batch}
+    clock_lattice.output = {begin = m_midi.begin_output_batch, flush = m_midi.flush_output_batch,
+                            serve = m_midi.serve_delayed}
   end
 
   if testing then

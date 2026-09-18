@@ -71,6 +71,7 @@ function delay_line.new(deps)
   local function send_due()
     local now=deps.now()
     local resolution=deps.resolution or 1e-9
+    local any=false
     while true do
       local best,first
       local function consider(lane)
@@ -90,9 +91,12 @@ function delay_line.new(deps)
       while held and held.groups[held.head] and held.groups[held.head]~=first
           and held.groups[held.head].due<first.due-resolution do
         send_group(held)
+        any=true
       end
       send_group(best)
+      any=true
     end
+    return any
   end
   local function settle_all()
     for _,lane in pairs(lanes) do settle(lane) end
@@ -133,6 +137,18 @@ function delay_line.new(deps)
     table.insert(groups,index,{due=due,items={{message=message,serial=serial}}})
     if index==held.head and held.armed then held.timer:stop();held.armed=false end
     arm(held)
+  end
+  -- Send whatever is due right now, without touching the pulse's anchor. A step
+  -- with sixteen channels holds the only thread for milliseconds, so a deadline
+  -- that falls inside that work would otherwise wait for the pulse after it, and
+  -- that pulse is itself late by however long the work ran. Called at the seams
+  -- inside a pulse, this serves the deadline within one channel's work instead.
+  -- It reports whether anything left, so a caller only pays for a write when
+  -- there was something to write.
+  function q:serve()
+    local sent=send_due()
+    if sent then settle_all() end
+    return sent
   end
   -- A pulse is starting: send anything already overdue into its write, ahead of
   -- what the pulse itself produces, which is always due later than now. This is

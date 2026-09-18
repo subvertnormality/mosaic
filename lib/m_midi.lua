@@ -34,9 +34,17 @@ local batch_devices = {}
 function m_midi.begin_output_batch()
   m_midi.flush_output_batch()
   batching = true
-  -- begin() also sends whatever has come due, so a delayed note leaves with
-  -- this pulse's write and keeps the pulse's steadiness.
+  -- begin() also sends anything already overdue, ahead of what this pulse
+  -- produces: the rescue for a deadline that passed unserved.
   if delay_queue then delay_queue:begin() end
+end
+
+-- Serve deadlines that fall inside a pulse's work, at the seams between its
+-- channels. What is sent only leaves on a write, so write it: holding it for
+-- the batch at the end of the pulse is the wait this exists to avoid. A seam
+-- with nothing due costs one comparison and no write.
+function m_midi.serve_delayed()
+  if delay_queue and delay_queue:serve() then m_midi.flush_output_batch() end
 end
 
 function m_midi.flush_output_batch(stop)

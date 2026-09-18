@@ -330,6 +330,12 @@ function Lattice:pulse_all()
     self:release_due_onset_actions()
     if self.output then self.output.flush() end
     if not self.enabled then return end
+    -- The seams of a pulse's work. A step holding the only thread for
+    -- milliseconds is what puts a delayed note off the beat, so between the
+    -- channels of that step anything whose deadline has arrived is sent, rather
+    -- than waiting for the pulse after the work, which the work has itself
+    -- delayed. A seam with nothing due costs a comparison.
+    local serve = self.output and self.output.serve
     local flagged = false
     local deferred, deferred_count = self.deferred_notes, 0
     local followers, follower_count = self.deferred_followers, 0
@@ -363,12 +369,16 @@ function Lattice:pulse_all()
             deferred_count = deferred_count + 1
             deferred[deferred_count] = sprocket
           end
+          if serve then serve() end
         elseif sprocket.flag then
           self.sprockets[sprocket.id] = nil
           flagged = true
         end
       end
       if deferred_count > 0 then
+        -- Last seam before this group's notes: a deadline already passed is
+        -- served here rather than behind the notes that follow it.
+        if serve then serve() end
         if self.output then self.output.flush() end
         -- The group's notes leave back to back, then each sprocket finishes its
         -- step and moves past the onset. Every note is still sent before its
