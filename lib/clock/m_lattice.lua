@@ -311,11 +311,20 @@ end
 -- An output sink may gather what a pulse sends and write it at the pulse's
 -- marks: after its releases, before its notes, and when the pulse ends.
 function Lattice:pulse()
+  local probe = _G.mosaic_pulse_probe
+  if probe then
+    probe.pulse = self.transport
+    probe:record(1, self.transport, 0, 0, 1)
+  end
   local output = self.output
-  if output == nil then return self:pulse_all() end
-  output.begin()
-  self:pulse_all()
-  output.flush(true)
+  if output == nil then
+    self:pulse_all()
+  else
+    output.begin()
+    self:pulse_all()
+    output.flush(true)
+  end
+  if probe then probe:record(1, probe.pulse, 0, 0, 2) end
 end
 
 function Lattice:pulse_all()
@@ -401,7 +410,10 @@ function Lattice:pulse_all()
             end
           end
           sprocket.released_before_note = removed
+          local probe = _G.mosaic_pulse_probe
+          if probe then probe:record(3, self.transport, sprocket.id, 0, 1) end
           sprocket:note_action(self.transport)
+          if probe then probe:record(3, self.transport, sprocket.id, 0, 2) end
           if not self.enabled then return end
         end
         for index = 1, deferred_count do

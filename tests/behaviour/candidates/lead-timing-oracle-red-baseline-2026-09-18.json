@@ -1,0 +1,14 @@
+{
+  "kind": "red-regression-baseline",
+  "contract": "docs/parameter-lock-lead-foundations-plan.md section 3 proposed-contract characterisation",
+  "source_identity": {
+    "mosaic_revision": "b5901c1b72f81dfc80f638526a493e4c307a6495",
+    "test_file": "tests/behaviour/test_lead_timing_oracle.py",
+    "test_sha256": "fe7979e478a058be412dd11e495e449382bd8ade6a72bbd127909bf88f4f47d9"
+  },
+  "command": "python -m unittest tests/behaviour/test_lead_timing_oracle.py",
+  "exit_code": 1,
+  "tests_collected": 0,
+  "failure": "ModuleNotFoundError: No module named 'lead_timing_oracle'",
+  "stdout_stderr": "E\n======================================================================\nERROR: test_lead_timing_oracle (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_lead_timing_oracle\nTraceback (most recent call last):\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 154, in loadTestsFromName\n    module = __import__(module_name)\n  File \"C:\\Users\\andy\\Documents\\ChatGPT\\mosaic\\tests\\behaviour\\test_lead_timing_oracle.py\", line 9, in <module>\n    from lead_timing_oracle import evaluate\nModuleNotFoundError: No module named 'lead_timing_oracle'\n\n\n----------------------------------------------------------------------\nRan 0 tests in 0.000s\n\nFAILED (errors=1)"
+}

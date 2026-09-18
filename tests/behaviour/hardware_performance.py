@@ -261,16 +261,70 @@ def channel_state_dump(runner):
     output=runner.maiden.eval(CHANNEL_STATE_LUA,allow_lua_error=True)
     return re.findall(r'__STATE__([^\n]*)',output)
 
-def write_fixture_manifest(directory,case_id,spec,source):
+def _lead_identity(lead_ms, timing_contract, seed, probe_mode):
+    if type(lead_ms) is not int or not 0 <= lead_ms <= 50:
+        raise ValueError('midi_lock_lead_time must be an integer in 0..50')
+    if timing_contract != 'legacy-delay-v1':
+        raise ValueError('Unsupported timing_contract (lookahead is not implemented)')
+    if type(seed) is not int or not 0 <= seed <= 2**31-1:
+        raise ValueError('seed must be a nonnegative 31-bit integer')
+    if probe_mode not in ('off', 'pulse-v1'):
+        raise ValueError('Unsupported probe_mode')
+    return dict(midi_lock_lead_time=lead_ms, timing_contract=timing_contract, seed=seed, probe_mode=probe_mode)
+
+
+def set_lock_lead(driver, lead_ms):
+    """Set through stock Norns params (same public API as the tempo control)."""
+    import re
+    _lead_identity(lead_ms, 'legacy-delay-v1', 0, 'off')
+    output = driver.runner.maiden.eval("params:set('midi_lock_lead_time',%d); print('__MOSAIC_LOCK_LEAD__'..params:get('midi_lock_lead_time'))" % lead_ms)
+    found = re.search(r'__MOSAIC_LOCK_LEAD__([0-9.]+)', output)
+    if not found or float(found.group(1)) != lead_ms:
+        raise AssertionError('Lock lead readback mismatch: requested %s, observed %s' % (lead_ms, found.group(1) if found else 'missing'))
+    return lead_ms
+
+
+def write_fixture_manifest(directory,case_id,spec,source,*,lead_ms=0,timing_contract='legacy-delay-v1',seed=0,probe_mode='off'):
     """Record what a saved project fixture holds and which build produced it."""
     import hashlib,subprocess
     directory=Path(directory)
     files={name:hashlib.sha256((directory/name).read_bytes()).hexdigest() for name in ('autosave.ptn','autosave.pset')}
     revision=subprocess.run(['git','rev-parse','HEAD'],cwd=source,capture_output=True,text=True).stdout.strip()
     manifest={'case':case_id,'workload':spec['workload'],'channels':spec['channels']}
+    manifest.update(_lead_identity(lead_ms, timing_contract, seed, probe_mode), fixture_id=case_id)
     if spec.get('step_stride',1)!=1:manifest['step_stride']=spec['step_stride']
     manifest.update(built_from_revision=revision,files=files,lane='cm3plus-norns')
     (directory/'fixture.json').write_text(json.dumps(manifest,indent=2)+'\n')
+
+
+def prepare_fixture(source_dir, destination_dir, *, lead_ms=0, seed=0, probe_mode='off'):
+    """Create an explicitly identified variant, never relabel historical evidence."""
+    import re
+    source, destination = Path(source_dir).resolve(), Path(destination_dir).resolve()
+    identity = _lead_identity(lead_ms, 'legacy-delay-v1', seed, probe_mode)
+    if destination == source or source in destination.parents:
+        raise ValueError('Destination must be outside source fixture')
+    if destination.exists():
+        raise FileExistsError('Fixture destination already exists: '+str(destination))
+    original = json.loads((source/'fixture.json').read_text())
+    content = {}
+    for name in ('autosave.ptn', 'autosave.pset'):
+        if not (source/name).is_file():
+            raise ValueError('Missing fixture file: '+name)
+        content[name] = (source/name).read_bytes()
+        if hashlib.sha256(content[name]).hexdigest() != original.get('files', {}).get(name):
+            raise ValueError('Fixture hash mismatch: '+name)
+    text = content['autosave.pset'].decode('utf-8')
+    lines = [line for line in text.splitlines() if not re.match(r'^\s*"midi_lock_lead_time"\s*:', line)]
+    content['autosave.pset'] = ('\n'.join(lines)+'\n"midi_lock_lead_time": '+str(lead_ms)+'\n').encode('utf-8')
+    manifest = {key:value for key,value in original.items() if key != 'migrated_from'}
+    manifest.update(identity, fixture_id=original.get('case'), migrated_from=original,
+                    files={name:hashlib.sha256(value).hexdigest() for name,value in content.items()})
+    destination.mkdir(parents=True, exist_ok=False)
+    for name, value in content.items():
+        (destination/name).write_bytes(value)
+    (destination/'fixture.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    return manifest
 
 def check_project_fixture(directory,case_id):
     """A fixture must hold the project this case plays, exactly as it was saved.
@@ -281,6 +335,10 @@ def check_project_fixture(directory,case_id):
     directory=Path(directory);spec=CASES[case_id];manifest_path=directory/'fixture.json'
     if not manifest_path.is_file():raise ValueError('Project fixture has no fixture.json: '+str(directory))
     manifest=json.loads(manifest_path.read_text())
+    for field in ('midi_lock_lead_time', 'timing_contract', 'seed', 'probe_mode'):
+        if field not in manifest:
+            raise ValueError('Project fixture missing '+field+': '+str(directory))
+    _lead_identity(manifest['midi_lock_lead_time'], manifest['timing_contract'], manifest['seed'], manifest['probe_mode'])
     if (manifest.get('workload'),manifest.get('channels'))!=(spec['workload'],spec['channels']):
         raise ValueError('Project fixture %s holds %s/%s, but %s plays %s/%s'%(directory,manifest.get('workload'),manifest.get('channels'),case_id,spec['workload'],spec['channels']))
     if manifest.get('step_stride',1)!=spec.get('step_stride',1):
@@ -304,30 +362,47 @@ def project_fixture_name(case_id):
     """The fixture directory name for the project a case plays."""
     spec=CASES[case_id];return '%s-%d'%(spec['workload'],spec['channels'])
 
-def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None):
+def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None,lead_ms=None,probe_mode='off',seed=0,measured_steps=None):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
-    spec=CASES[case_id];trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
+    if type(windows) is not int or windows < 1:raise ValueError('windows must be positive')
+    if measured_steps is not None and (type(measured_steps) is not int or measured_steps < 1):raise ValueError('measured_steps must be positive')
+    spec=dict(CASES[case_id]);trace=trace or __import__('real_norns').OutputTrace(runner.maiden);driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());recording=None;results=[]
+    if measured_steps is not None:spec['seconds']=measured_steps*driver.expected_step_seconds*spec.get('step_stride',1)
     try:
         # A loaded project fixture already holds the workload; build it through the
         # UI only when there is none, and keep that build as a fixture if asked.
         fixture_manifest=check_project_fixture(project_fixture,case_id) if project_fixture is not None else {}
-        lead_ms=fixture_manifest.get('midi_lock_lead_time') or 0
+        if lead_ms is None:lead_ms=fixture_manifest['midi_lock_lead_time'] if fixture_manifest else 0
+        identity=_lead_identity(lead_ms, 'legacy-delay-v1', seed, probe_mode)
+        identity.update(fixture_id=case_id, fixture_files=fixture_manifest.get('files'), clock_source='internal', port=1,
+                        capture_backend='stock-norns-output-trace', requested_window_seconds=spec['seconds'])
+        if measured_steps is not None:identity['measured_steps']=measured_steps
         if spec.get('tempo_bpm') is not None and abs(driver.tempo_bpm-spec['tempo_bpm'])>.01:
             raise AssertionError('%s runs at %s bpm but the norns clock is at %s'%(case_id,spec['tempo_bpm'],driver.tempo_bpm))
         if project_fixture is None:
             build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
+        set_lock_lead(driver, lead_ms)
+        runner.maiden.eval('math.randomseed(%d)' % seed)
+        if project_fixture is None:
             if save_project_fixture:
                 runner.fetch_project(save_project_fixture)
-                write_fixture_manifest(save_project_fixture,case_id,spec,source)
+                write_fixture_manifest(save_project_fixture,case_id,spec,source,lead_ms=lead_ms,seed=seed,probe_mode=probe_mode)
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
         driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17,spec.get('step_stride',1))],[15]*len(range(1,17,spec.get('step_stride',1))))
         preflight=functional_preflight(runner,driver,trace,spec)
         timings=TimingTrace(runner.maiden,native=native_screen_trace,count=redraw_count_trace) if timing_trace else None
         if timings:timings.install()
+        from pulse_probe import PulseProbe, summarize_snapshot
+        pulse_probe=PulseProbe(runner.maiden) if probe_mode=='pulse-v1' else None
+        if pulse_probe:
+            identity.update(probe_schema_version=1, probe_capacity=pulse_probe.capacity)
+            pulse_probe.install()
         transport_log=[]
         for window in range(1,windows+1):
             recording=None;suffix='' if windows==1 else '-window-%d'%window
             ready_to_play(runner,driver,transport_log)
+            observed_lead=set_lock_lead(driver, lead_ms)
+            if pulse_probe:pulse_probe.reset()
             trace.reset();sampler=(OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler()) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
             if threads:threads.start()
             sampler.start();time.sleep(.25)
@@ -336,7 +411,12 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             if stimulus is None:driver.elapse(spec['seconds'])
             stop_tap=driver.tap(1,8);driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
             if timings:state['lua_timings']=timings.snapshot();timings.reset()
+            state['run_identity']=dict(identity, observed_lead_ms=observed_lead, window=window)
             (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
+            if pulse_probe:
+                state['pulse_probe']=pulse_probe.snapshot()
+                state['pulse_probe_summary']=summarize_snapshot(state['pulse_probe'])
+                (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')
             if threads:(runner.out/('thread-samples%s.jsonl'%suffix)).write_text(threads.stop())
             recovery=None
             window_stopped=stopped_after_window(runner,transport_log)
@@ -350,6 +430,9 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                 else:oracle=dense_oracle(state['midi'],spec['channels'],spec['seconds'],driver.expected_step_seconds,spec['workload'],step_stride=spec.get('step_stride',1),lead_ms=lead_ms)
                 if stimulus is not None:
                     oracle['gates']['stimulus_complete']=stimulus['complete'];oracle['passed']=oracle['passed'] and stimulus['complete']
+                if pulse_probe:
+                    oracle['probe_diagnostics']=state['pulse_probe_summary']
+                    oracle['gates']['probe_complete']=True
                 failure=None
             except AssertionError as error:
                 # Keep what the device held when a window's output was wrong, so an
@@ -364,13 +447,23 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
         value={'schema_version':1,'case':case_id,'workload':spec['workload'],'channels':spec['channels'],'requested_window_seconds':spec['seconds'],'host_window_ns':first['host_window_ns'],'tempo_bpm':driver.tempo_bpm,'trace_boundary':{'reset_before_sampler_and_play':True,'midi_driver_boundary':'stock _norns.midi_send pass-through','grid_writes':first['grid_writes'],'grid_refreshes':first['grid_refreshes']},'oracle':first['oracle'],'resources':first['resources'],'resource_samples':first['resource_samples'],'runtime_identity':first['runtime_identity'],'source_identity':source_identity(source),'passed':all(r['passed'] for r in results),'limitations':['Resource figures are physical-device calibration measurements, not emulator-equivalence gates.','Grid activity is observed at the driver boundary; frame revision diagnostics are emulator-only.']}
         value['transport_checks']=transport_log
+        value['run_identity']=identity
+        value['source_identity'].update(identity)
+        # The current trace measures Lua driver dispatch, not receiver capture.
+        value['qualification_eligible']=False
+        value['limitations'].append('Diagnostic only: receiver-capture calibration, absolute input anchoring and the foundation acceptance campaign remain required.')
         if windows>1:value['windows']=results
         return value
     finally:
-        if sampler and sampler.thread and recording is None:
-            try:sampler.stop()
-            except Exception:pass
-        if timing_trace and 'timings' in locals() and timings:
-            try:timings.remove()
-            except Exception:pass
-        driver.finish()
+        try:
+            if 'pulse_probe' in locals() and pulse_probe:
+                try:pulse_probe.remove()
+                finally:(runner.out/'pulse-probe-replies.json').write_text(json.dumps(pulse_probe.raw_replies,indent=2)+'\n')
+        finally:
+            if sampler and sampler.thread and recording is None:
+                try:sampler.stop()
+                except Exception:pass
+            if timing_trace and 'timings' in locals() and timings:
+                try:timings.remove()
+                except Exception:pass
+            driver.finish()

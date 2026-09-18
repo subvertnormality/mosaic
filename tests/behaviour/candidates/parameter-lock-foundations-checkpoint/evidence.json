@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "baseline": {
+    "source_revision": "b5901c1b72f81dfc80f638526a493e4c307a6495",
+    "label": "immutable git-archive baseline",
+    "lua_suite": {"tests": 1618, "successes": 1618, "failures": 0, "log": "baseline-lua-test-output.log"}
+  },
+  "candidate": {
+    "label": "isolated local copy with checkpoint files and pinned lib/nb 503be3ae9a7f4368a8bc35d6081795e0a130cadf",
+    "runtime_lua_sha256": "candidate-runtime-lua.sha256",
+    "lua_suite": {"tests": 1627, "successes": 1627, "failures": 0, "log": "candidate-lua-test-output.log"}
+  },
+  "emulator": {
+    "case": "M-SYNC-LEAD-002",
+    "installation": "/home/andy/projects/emu-multimsg/.runtime/ci-qualified/runtime/installation.json",
+    "controlled": {"passed": true, "manifest": "lead-002-controlled-manifest.json", "diagnostic_only": true},
+    "real_time": {"passed": true, "manifest": "lead-002-realtime-manifest.json", "diagnostic_only": true},
+    "initial_setup_failure": {"manifest": "lead-002-controlled-nb-setup-failure-manifest.json", "reason": "isolated copy initially lacked the pinned lib/nb submodule; retained separately"}
+  }
+}

@@ -2,7 +2,7 @@ import json,tempfile,unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from hardware_performance import CASES,OnDeviceResourceSampler,dense_oracle,resource_metrics,run_hardware_performance,select_fixture_parameter
+from hardware_performance import CASES,OnDeviceResourceSampler,dense_oracle,resource_metrics,run_hardware_performance,select_fixture_parameter,write_fixture_manifest
 import hardware_performance
 
 def dense_events(channels,steps=32,step_ns=250_000_000):
@@ -41,7 +41,8 @@ def saved_fixture(workload,channels):
     directory=Path(tempfile.mkdtemp())
     (directory/'autosave.ptn').write_text('ptn');(directory/'autosave.pset').write_text('pset')
     files={name:hashlib.sha256((directory/name).read_bytes()).hexdigest() for name in ('autosave.ptn','autosave.pset')}
-    (directory/'fixture.json').write_text(json.dumps({'case':'built','workload':workload,'channels':channels,'files':files}))
+    (directory/'fixture.json').write_text(json.dumps({'case':'built','workload':workload,'channels':channels,'files':files,
+        'midi_lock_lead_time':0,'timing_contract':'legacy-delay-v1','seed':0,'probe_mode':'off'}))
     return directory
 
 class FakeSSH:
@@ -61,8 +62,14 @@ class FakeTrace:
     def __init__(self):self.resets=0
     def reset(self):self.resets+=1
 
+class FakeMaiden:
+    def eval(self,source):
+        return '__MOSAIC_LOCK_LEAD__0' if '__MOSAIC_LOCK_LEAD__' in source else ''
+
 class FakeDriver:
-    def __init__(self,*args,**kwargs):self.expected_step_seconds=.25;self.tempo_bpm=60;self.finished=0
+    def __init__(self,*args,**kwargs):
+        self.expected_step_seconds=.25;self.tempo_bpm=60;self.finished=0
+        self.runner=type('R',(),{'maiden':type('M',(),{'eval':lambda self,source:'__MOSAIC_LOCK_LEAD__0'})()})()
     def tap(self,*args):pass
     def key(self,*args):pass
     def enc(self,*args):pass
@@ -72,6 +79,37 @@ class FakeDriver:
     def finish(self):self.finished+=1
 
 class Tests(unittest.TestCase):
+    def test_fixture_manifest_carries_explicit_lead_probe_and_timing_identity(self):
+        source=Path(tempfile.mkdtemp());fixture=Path(tempfile.mkdtemp())
+        (fixture/'autosave.ptn').write_text('ptn');(fixture/'autosave.pset').write_text('pset')
+        write_fixture_manifest(fixture,'PERF-002-HW-1',CASES['PERF-002-HW-1'],source,lead_ms=25,timing_contract='legacy-delay-v1',seed=871,probe_mode='pulse-v1')
+        manifest=json.loads((fixture/'fixture.json').read_text())
+        self.assertEqual(manifest['midi_lock_lead_time'],25)
+        self.assertEqual(manifest['timing_contract'],'legacy-delay-v1')
+        self.assertEqual(manifest['seed'],871)
+        self.assertEqual(manifest['probe_mode'],'pulse-v1')
+
+    def test_loaded_fixture_rejects_missing_lead_identity_instead_of_defaulting_to_zero(self):
+        fixture=saved_fixture('dense',1)
+        manifest=json.loads((fixture/'fixture.json').read_text());del manifest['midi_lock_lead_time'];(fixture/'fixture.json').write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError,'midi_lock_lead_time'):
+            hardware_performance.check_project_fixture(fixture,'PERF-002-HW-1')
+
+    def test_preflight_sets_and_reads_back_the_requested_public_lock_lead(self):
+        calls=[]
+        maiden=type('M',(),{'eval':lambda self,source:calls.append(source) or '__MOSAIC_LOCK_LEAD__25'})()
+        driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})()})()
+        self.assertEqual(hardware_performance.set_lock_lead(driver,25),25)
+        self.assertEqual(len(calls),1)
+        self.assertIn("params:set('midi_lock_lead_time',25)",calls[0])
+        self.assertIn("params:get('midi_lock_lead_time')",calls[0])
+
+    def test_preflight_rejects_a_lock_lead_readback_mismatch_before_play(self):
+        maiden=type('M',(),{'eval':lambda self,source:'__MOSAIC_LOCK_LEAD__24'})()
+        driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})()})()
+        with self.assertRaisesRegex(AssertionError,'requested 25.*observed 24'):
+            hardware_performance.set_lock_lead(driver,25)
+
     def test_hardware_slide_parameter_selection_is_front_panel_only(self):
         calls=[];maiden=type('M',(),{'eval':lambda self,code:calls.append(('query',code)) or '__MOSAIC_PARAM_POSITION__3/9'})()
         driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})(),'key':lambda self,n:calls.append(('key',n)),'enc':lambda self,n,v:calls.append(('enc',n,v))})()
@@ -153,24 +191,24 @@ class Tests(unittest.TestCase):
         self.assertEqual(hardware_performance.case_tempo('PERF-002-HW-4',90),90);self.assertIsNone(hardware_performance.case_tempo('PERF-002-HW-1'))
         self.assertEqual(hardware_performance.project_fixture_name('PERF-010-HW-16'),'extreme-16')
     def test_a_fixed_tempo_case_refuses_a_norns_clock_at_another_tempo(self):
-        runner=type('R',(),{'maiden':object(),'ssh':object(),'out':Path(tempfile.mkdtemp())})()
+        runner=type('R',(),{'maiden':FakeMaiden(),'ssh':object(),'out':Path(tempfile.mkdtemp())})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.time.sleep'):
             with self.assertRaisesRegex(AssertionError,'PERF-002-HW-16 runs at 130 bpm but the norns clock is at 60'):
                 run_hardware_performance(runner,'PERF-002-HW-16',2,'map',runner.out,FakeTrace(),FakeSampler())
     def test_three_calibration_cases_and_trace_start_boundary(self):
         self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16','PERF-010-HW-16'})
-        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':FakeMaiden(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
         build.assert_called_once();self.assertEqual(build.call_args.args[1:3],(1,'dense'));self.assertIs(build.call_args.args[3],select_fixture_parameter);self.assertEqual(trace.resets,2);self.assertEqual((sampler.started,sampler.stopped),(1,1));self.assertTrue(value['passed']);self.assertTrue(value['trace_boundary']['reset_before_sampler_and_play']);self.assertEqual(value['source_identity']['mosaic_revision'],'abc')
     def test_raw_performance_evidence_survives_oracle_failure(self):
-        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':FakeMaiden(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.dense_oracle',side_effect=AssertionError('timing oracle failed')),patch('hardware_performance.time.sleep'):
             with self.assertRaisesRegex(AssertionError,'timing oracle failed'):run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
         raw=json.loads((source/'performance-raw.json').read_text());self.assertEqual(len(raw['midi']),64);self.assertEqual((sampler.started,sampler.stopped),(1,1))
 
     def test_a_loaded_project_fixture_skips_the_ui_build(self):
-        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source})()
+        trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':FakeMaiden(),'ssh':object(),'out':source})()
         fixture=saved_fixture('dense',1)
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,project_fixture=fixture)
@@ -196,14 +234,18 @@ class Tests(unittest.TestCase):
         for case_id in CASES:cases.setdefault(hardware_performance.project_fixture_name(case_id),case_id)
         for directory in sorted(p for p in root.iterdir() if p.is_dir()) if root.is_dir() else []:
             self.assertIn(directory.name,cases,'Fixture for a project no case plays: '+directory.name)
-            hardware_performance.check_project_fixture(directory,cases[directory.name])
+            # These are historical source artifacts. Their hashes must remain
+            # valid, but they deliberately lack a lead identity and may never
+            # be silently reinterpreted as a lead-zero fixture.
+            with self.assertRaisesRegex(ValueError,'missing midi_lock_lead_time'):
+                hardware_performance.check_project_fixture(directory,cases[directory.name])
     def test_saving_a_project_fixture_builds_then_fetches_and_records_it(self):
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());saved=Path(tempfile.mkdtemp())/'fixture'
         fetched=[]
         def fetch(destination):
             destination=Path(destination);destination.mkdir(parents=True,exist_ok=True)
             (destination/'autosave.ptn').write_text('ptn');(destination/'autosave.pset').write_text('pset');fetched.append(destination)
-        runner=type('R',(),{'maiden':object(),'ssh':object(),'out':source,'fetch_project':staticmethod(fetch)})()
+        runner=type('R',(),{'maiden':FakeMaiden(),'ssh':object(),'out':source,'fetch_project':staticmethod(fetch)})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler,save_project_fixture=saved)
         build.assert_called_once();self.assertEqual(fetched,[saved])

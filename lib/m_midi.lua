@@ -53,7 +53,10 @@ function m_midi.flush_output_batch(stop)
     local bytes = batches[device]
     batches[device] = nil
     batch_devices[i] = nil
+    local probe = _G.mosaic_pulse_probe
+    if probe then probe:record(4, probe.pulse, i, 0, 1, #bytes, 1) end
     device:send(bytes)
+    if probe then probe:record(4, probe.pulse, i, 0, 2, #bytes, 1) end
   end
   if stop then
     batching = false
@@ -76,7 +79,10 @@ function m_midi.send_three(port, status, data1, data2)
     return true
   end
   wire_bytes[1], wire_bytes[2], wire_bytes[3] = status, data1, data2
+  local probe = _G.mosaic_pulse_probe
+  if probe then probe:record(4, probe.pulse, 0, 0, 1, 3, 1) end
   device:send(wire_bytes)
+  if probe then probe:record(4, probe.pulse, 0, 0, 2, 3, 1) end
   return true
 end
 
@@ -101,6 +107,7 @@ local function queue(ms,message)
     -- wall time loses fractions of a microsecond through float cancellation.
     local origin=util.time()
     delay_queue=delay_line.new({now=function() return util.time()-origin end,
+      probe_deadline=function(due) return origin + due end,
       resolution=0.000001,
       begin=function() m_midi.begin_output_batch() end,
       flush=function() m_midi.flush_output_batch(true) end,send=emit})

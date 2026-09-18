@@ -52,7 +52,12 @@ function delay_line.new(deps)
   -- note follows it, even when separate timers hold them.
   local held
   local function send_group(lane)
-    for _,item in ipairs(lane.groups[lane.head].items) do deps.send(item.message) end
+    local group = lane.groups[lane.head]
+    local probe = _G.mosaic_pulse_probe
+    local deadline = probe and deps.probe_deadline and deps.probe_deadline(group.due) or 0
+    if probe then probe:record(6, probe.pulse, group.items[1].serial, deadline, 1, 0, #group.items) end
+    for _,item in ipairs(group.items) do deps.send(item.message) end
+    if probe then probe:record(6, probe.pulse, group.items[1].serial, deadline, 2, 0, #group.items) end
     lane.head=lane.head+1
   end
   local function settle(lane)
@@ -103,6 +108,10 @@ function delay_line.new(deps)
     if held then settle(held) end
   end
   local function fire(fired)
+    local probe = _G.mosaic_pulse_probe
+    local first = fired.groups[fired.head]
+    local deadline = probe and first and deps.probe_deadline and deps.probe_deadline(first.due) or 0
+    if probe then probe:record(5, probe.pulse, 0, deadline, 1) end
     fired.armed=false
     -- Opening a batch calls back into begin(), which sends what is due; the
     -- flag keeps that callback from being counted as a clock pulse.
@@ -112,6 +121,7 @@ function delay_line.new(deps)
     deps.flush()
     settle_all()
     firing=false
+    if probe then probe:record(5, probe.pulse, 0, deadline, 2) end
   end
   function q:now() return deps.now() end
   -- The time a pulse's delayed output is measured from: its first delayed

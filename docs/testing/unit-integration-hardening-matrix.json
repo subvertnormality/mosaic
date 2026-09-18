@@ -33,8 +33,8 @@
   "inventory_sha256": "f8096c178b1c7a2b2ad9da9e8672ff76f32164de05401bbdcac08035f5602f4e",
   "counts": {
     "requirements": 140,
-    "production_lua_modules": 95,
-    "unit_integration_files": 71,
+    "production_lua_modules": 97,
+    "unit_integration_files": 73,
     "domains": 15
   },
   "coverage_language": {
@@ -1444,11 +1444,13 @@
       ],
       "production_modules": [
         "lib/clock/chord_timing.lua",
+        "lib/clock/step_cursor.lua",
         "lib/clock/divisions.lua",
         "lib/clock/m_clock.lua",
         "lib/clock/m_lattice.lua",
         "lib/clock/midi_output_transport.lua",
         "lib/clock/slide_lifetime.lua",
+        "lib/clock/timing_probe.lua",
         "lib/scheduler.lua"
       ],
       "existing_unit_integration_files": [
@@ -2320,10 +2322,15 @@
       ],
       "existing_unit_integration_files": [
         "lib/tests/lib/m_clock_performance_tests.lua",
-        "lib/tests/lib/redraw_guard_tests.lua"
+        "lib/tests/lib/redraw_guard_tests.lua",
+        "lib/tests/lib/step_cursor_tests.lua",
+        "lib/tests/lib/timing_probe_tests.lua"
       ],
       "linked_behaviour_cases": [
         "M-ENDURANCE-001",
+        "M-SYNC-LEAD-002",
+        "M-SYNC-LEAD-016",
+        "M-SYNC-LEAD-018",
         "M-SLIDE-CAPACITY-001",
         "M-WORKFLOW-001"
       ],

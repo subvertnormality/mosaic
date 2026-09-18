@@ -379,7 +379,7 @@ def run_m_pat_001(r,grid_device,device_map_id):
  return run_hardware_case(r,'M-PAT-001',grid_device,device_map_id,OutputTrace(r.maiden))
 def main(argv=None):
  p=argparse.ArgumentParser()
- p.add_argument('command',choices=['applicability','probe','workflow','resume','case','performance','clock-cancel','restore','finalize'])
+ p.add_argument('command',choices=['applicability','prepare-fixture','probe','workflow','resume','case','performance','clock-cancel','restore','finalize'])
  p.add_argument('--host');p.add_argument('--ssh-option',action='append',default=[])
  p.add_argument('--maiden-url');p.add_argument('--nanomsg-library',default='libnanomsg.so.5')
  p.add_argument('--websocket-wheel',help='path to a pinned websockets wheel; selects official Maiden WebSocket framing')
@@ -395,10 +395,23 @@ def main(argv=None):
  p.add_argument('--lua-timing-trace',action='store_true',help='diagnostic: record Lua redraw, display update, grid redraw, scheduler and clock resume calls over 1 ms');p.add_argument('--no-resource-sampler',action='store_true',help='diagnostic: omit the on-device resource sampler');p.add_argument('--native-screen-trace',action='store_true',help='diagnostic: with --lua-timing-trace, total native screen text and font-size time per redraw');p.add_argument('--redraw-count-trace',action='store_true',help='diagnostic: with --lua-timing-trace, count Lua VM instructions (per 100) in every redraw');p.add_argument('--thread-sampler',help='path to a per-thread schedstat sampler (monome-emulator scripts/calibration/thread_sampler.py)')
  p.add_argument('--project-fixture',help='Directory holding autosave.ptn/.pset for this performance case; skips the UI build');p.add_argument('--save-project-fixture',help='Build through the UI, then keep the autosaved project here');p.add_argument('--measured-windows',type=int,default=1,help='play/stop windows measured on one built project')
  p.add_argument('--clock-cancel-candidate',help='complete temporary replacement for /home/we/norns/lua/core/clock.lua')
+ p.add_argument('--lock-lead-ms',type=int,choices=range(51),help='explicit global MIDI lock lead; otherwise require fixture identity or use 0 for a new fixture')
+ p.add_argument('--pulse-probe',action='store_true',help='diagnostic: preallocated default-off Mosaic pulse/write/deadline trace')
+ p.add_argument('--seed',type=int,default=0,help='explicit deterministic workload seed')
+ p.add_argument('--fixture-destination',help='new output directory for prepare-fixture; original fixture is preserved')
+ p.add_argument('--measured-steps',type=int,help='measure this many workload steps without changing acceptance thresholds')
  a=p.parse_args(argv)
+ if not 0 <= a.seed <= 2**31-1:p.error('seed must be a nonnegative 31-bit integer')
+ if a.measured_windows < 1:p.error('measured-windows must be positive')
+ if a.measured_steps is not None and a.measured_steps < 1:p.error('measured-steps must be positive')
  if a.command=='applicability':
   from cases import CASES
   print(json.dumps(hardware_applicability(CASES),indent=2));return 0
+ if a.command=='prepare-fixture':
+  if not a.project_fixture or not a.fixture_destination or a.lock_lead_ms is None:
+   p.error('prepare-fixture requires --project-fixture, --fixture-destination and --lock-lead-ms')
+  value=__import__('hardware_performance').prepare_fixture(a.project_fixture,a.fixture_destination,lead_ms=a.lock_lead_ms,seed=a.seed,probe_mode='pulse-v1' if a.pulse_probe else 'off')
+  print(json.dumps(value,indent=2));return 0
  required=('host','maiden_url','artifacts','run_id') if a.command=='clock-cancel' else ('host','maiden_url','osc_host','artifacts','run_id')
  missing=[name for name in required if not getattr(a,name)]
  if missing:p.error('required for hardware commands: '+', '.join('--'+name.replace('_','-') for name in missing))
@@ -432,7 +445,7 @@ def main(argv=None):
     if a.tempo:
      before=r.maiden.eval("print('__TEMPO_BEFORE__'..clock.get_tempo())");r.maiden.eval('params:set("clock_tempo",%r)'%float(a.tempo));time.sleep(.5)
      after=r.maiden.eval("print('__TEMPO_AFTER__'..clock.get_tempo())");write(out/'tempo.json',{'requested':a.tempo,'before':re.findall(r'__TEMPO_BEFORE__([0-9.]+)',before),'after':re.findall(r'__TEMPO_AFTER__([0-9.]+)',after)})
-    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source,thread_sampler=a.thread_sampler,windows=a.measured_windows,timing_trace=a.lua_timing_trace,resource_sampler=not a.no_resource_sampler,native_screen_trace=a.native_screen_trace,redraw_count_trace=a.redraw_count_trace,project_fixture=a.project_fixture,save_project_fixture=a.save_project_fixture)
+    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source,thread_sampler=a.thread_sampler,windows=a.measured_windows,timing_trace=a.lua_timing_trace,resource_sampler=not a.no_resource_sampler,native_screen_trace=a.native_screen_trace,redraw_count_trace=a.redraw_count_trace,project_fixture=a.project_fixture,save_project_fixture=a.save_project_fixture,lead_ms=a.lock_lead_ms,probe_mode='pulse-v1' if a.pulse_probe else 'off',seed=a.seed,measured_steps=a.measured_steps)
     r.logs()
     evidence['clock_error_drains']=r.clock_error_drains;evidence['stock_clock_errors_mode']=a.stock_clock_errors
     evidence.update({'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.source,text=True).strip(),'source_files':source_files,'resumed_after_interruption':True,'capabilities':caps,'campaign_complete':False})

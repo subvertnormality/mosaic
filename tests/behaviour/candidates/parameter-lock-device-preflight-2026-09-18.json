@@ -1,0 +1,22 @@
+{
+  "purpose": "Read-only preflight; no deployment or hardware acceptance run",
+  "device": "we@10.42.0.1",
+  "active_test_marker_absent": true,
+  "services": {
+    "norns-jack.service": "active",
+    "norns-matron.service": "active",
+    "norns-crone.service": "active",
+    "norns-maiden.service": "active"
+  },
+  "user_code_directory_mtime": 1789654247,
+  "user_mosaic_lua_sha256": "ec614a5072c1015d8ad51b72aadf653a1a617f0d4cccc89d4ed18de76c386978",
+  "binding_probe": [
+    "__B__midi_send C [C]:-1 []",
+    "__B__grid_set_led C [C]:-1 []",
+    "__B__grid_all_led C [C]:-1 []",
+    "__B__monome_refresh C [C]:-1 []",
+    "__B__midi.event Lua /home/we/norns/lua/core/midi.lua:461 [Midi:table,_ENV:table]"
+  ],
+  "qualification_eligible": false,
+  "persistent_device_changes": []
+}

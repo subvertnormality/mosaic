@@ -2,6 +2,7 @@ local midi_patch_recall = include("mosaic/lib/devices/midi_patch_recall")
 local chord_timing = include("mosaic/lib/clock/chord_timing")
 local lattice = include("mosaic/lib/clock/m_lattice")
 local midi_output_transport = include("mosaic/lib/clock/midi_output_transport")
+local step_cursor = include("mosaic/lib/clock/step_cursor")
 
 m_clock = {}
 clock_lattice = {}
@@ -279,25 +280,14 @@ function m_clock.init()
       local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
       local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
       
-      local channel_length = end_trig - start_trig + 1
-
-      if channel_length > program.get_selected_song_pattern().global_pattern_length then
-        end_trig = start_trig + program.get_selected_song_pattern().global_pattern_length - 1
+      local selected_step, wrapped = step_cursor.next(current_step, m_clock[clock_key].first_run,
+        start_trig, end_trig, program.get_selected_song_pattern().global_pattern_length)
+      if selected_step ~= current_step or not m_clock[clock_key].first_run then
+        program.set_current_step_for_channel(channel_number, selected_step)
       end
+      current_step = selected_step
 
-      if not m_clock[clock_key].first_run then
-        program.set_current_step_for_channel(channel_number, current_step + 1)
-        current_step = current_step + 1
-      end
-
-      if current_step < start_trig then
-        program.set_current_step_for_channel(channel_number, start_trig)
-        current_step = start_trig
-      end
-
-      if current_step > end_trig then
-        program.set_current_step_for_channel(channel_number, start_trig)
-        current_step = start_trig
+      if wrapped then
         
         -- The global scale channel has no MIDI parameter recorder bank.
         if channel_number ~= 17 and params:get("record") == 2 and program.get_selected_channel() == channel then
@@ -325,7 +315,10 @@ function m_clock.init()
         -- Resolve parameters for the same step as the note, including startup.
         -- A single dispatch site prevents duplicate first-step lock messages.
         if has_trig or (trigless_locks and program.step_has_param_trig_lock(channel, current_step)) then
+          local probe = _G.mosaic_pulse_probe
+          if probe then probe:record(2, probe.pulse, channel_number, 0, 1) end
           step.process_params(channel, current_step)
+          if probe then probe:record(2, probe.pulse, channel_number, 0, 2) end
         end
 
         -- A step's parameter locks shape its note, so they must precede it, but
@@ -648,8 +641,6 @@ function m_clock.seconds_to_next_step()
 end
 
 return m_clock
-
-
 
 
 
