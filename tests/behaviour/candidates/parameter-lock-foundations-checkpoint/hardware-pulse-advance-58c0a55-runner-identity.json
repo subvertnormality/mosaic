@@ -1,0 +1,17 @@
+{
+  "script_sha256": "197a59aab2d7fa7dd4b50846aa3a56583cff7c6e66d0575839e836a16ec2746d",
+  "case": "PERF-009-HW-16",
+  "source": "/tmp/mosaic-contract-58c0a55/mosaic",
+  "controller": "/tmp/mosaic-contract-58c0a55/mosaic",
+  "controller_identity": {
+    "mosaic_revision": "58c0a5543a1a47c39dae4e00d5349ff5242286ce",
+    "dirty_patch_sha256": null
+  },
+  "timing_contract": "pulse-advance",
+  "lead_ms": 25,
+  "seed": 20260919,
+  "windows": 6,
+  "probe_mode": "off",
+  "capture_boundary": "Lua immediately before original _norns.midi_send",
+  "receiver_qualification_eligible": false
+}
