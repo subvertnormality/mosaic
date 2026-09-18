@@ -19,10 +19,13 @@ local function target_key(bundle)
   return (bundle.channel or 0) .. ":" .. (bundle.step or 0) .. ":" .. (bundle.slot or 0)
 end
 
--- One channel can only have one step's values in flight, so the record of what
--- was sent early is held per channel rather than per channel and step. Keying it
--- by step as well would grow without bound whenever a step was scheduled and
--- then never played, which a pattern change can do at any time.
+-- The record holds the value that was actually put on the wire, not merely that
+-- something was. A step then suppresses its own send only when it would send the
+-- identical value, so an edit, a pattern change or anything else that alters what
+-- the step resolves is corrected at the step instead of being swallowed by a
+-- stale commitment. It is held per channel, because one channel has one step's
+-- values in flight, and keying it by step as well would grow without bound
+-- whenever a scheduled step was never played.
 local function commits_for(self, channel, step)
   local commits = self.commits[channel]
   if commits == nil or commits.step ~= step then
@@ -80,20 +83,20 @@ local function dispatch(self, entry, pulse)
     self.pending_by_target[entry.key] = nil
   end
   -- The send decides again whether this value is still wanted. A refusal is not
-  -- a failure: the slot stays uncommitted so its own step sends what is then in
-  -- force, rather than a value the player has since overruled.
+  -- a failure: nothing is recorded, so the slot's own step sends what is then in
+  -- force rather than a value the player has since overruled.
   if self.send(bundle) ~= false then
-    commits_for(self, bundle.channel, bundle.step).slots[bundle.slot] = true
+    commits_for(self, bundle.channel, bundle.step).slots[bundle.slot] = bundle.value
   end
 end
 
 -- Send everything owed at or before this pulse, in the order it was scheduled.
 -- Runs inside the sequencer's pulse; there is no timer.
 function Scheduler:serve(pulse)
-  if self.pending == 0 then
-    self.earliest = pulse
-    return
-  end
+  -- Buckets are released even with nothing pending: cancelling the only value in
+  -- one leaves it behind, and a scan that never revisits it would keep those
+  -- bundles for the rest of the performance and make channel invalidation walk
+  -- the whole history.
   for index = self.earliest, pulse do
     local bucket = self.buckets[index]
     if bucket then
@@ -107,9 +110,13 @@ function Scheduler:serve(pulse)
   self.earliest = pulse
 end
 
-function Scheduler:was_sent(channel, step, slot)
+-- True only when this exact value already left for this exact step and slot.
+-- Anything else -- a different value, a different step, nothing recorded -- means
+-- the step must send, so a correction is never lost.
+function Scheduler:was_sent(channel, step, slot, value)
   local commits = self.commits[channel]
-  return commits ~= nil and commits.step == step and commits.slots[slot] == true
+  return commits ~= nil and commits.step == step and commits.slots[slot] ~= nil
+    and commits.slots[slot] == value
 end
 
 function Scheduler:clear_commit(channel, step)
@@ -158,16 +165,22 @@ function Scheduler:invalidate(channel, step, slot)
   if commits and commits.step == step then commits.slots[slot] = nil end
 end
 
--- A transport or pattern boundary discards every speculative value at once, and
--- the record of what was already sent with it. Keeping that record would let a
--- value resolved from the outgoing pattern suppress the incoming pattern's lock
--- for the same step, and would survive a stop and restart where patch recall has
--- since replaced the value on the receiver.
+-- A transport or pattern boundary discards every value that has not left yet.
+-- What has already left is kept: forgetting it would make the step send the same
+-- value a second time, and it cannot suppress an incoming pattern's lock because
+-- a differing value no longer matches. A stop clears it separately, since patch
+-- recall can replace what the receiver holds while the transport is stopped.
 function Scheduler:cancel_all()
   self.buckets = {}
   self.pending_by_target = {}
   self.pending = 0
   self.cancelled_count = 0
+  self.earliest = math.huge
+end
+
+-- Forget what the receiver was last told, for a restart where something else may
+-- have changed it in the meantime.
+function Scheduler:forget_commits()
   self.commits = {}
 end
 

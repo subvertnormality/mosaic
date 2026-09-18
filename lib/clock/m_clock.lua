@@ -37,7 +37,9 @@ end
 function m_clock.set_lock_contract(contract)
   m_midi.set_lock_contract(contract)
   if contract == "pulse-advance" then
-    local scheduler = lock_lookahead.new{send = function(bundle) step.send_preview_bundle(bundle) end}
+    -- The return value carries the send's refusal, so it must be passed through:
+    -- swallowing it would record a commit for a value that never left.
+    local scheduler = lock_lookahead.new{send = function(bundle) return step.send_preview_bundle(bundle) end}
     m_clock.set_lock_lookahead(scheduler)
     step.set_lock_lookahead(scheduler)
     -- An edited lock must not be heard as the value the preview resolved before
@@ -134,15 +136,6 @@ local function schedule_lookahead(clock, channel, channel_number, current_step)
   -- keeps the timing it already has.
   local tempo, lead_ms = params:get("clock_tempo"), m_midi.get_lead_time()
   if type(tempo) ~= "number" or type(lead_ms) ~= "number" or lead_ms <= 0 then return end
-  -- A pending value's pulse deadline was worked out at the tempo in force when
-  -- it was resolved. At a different tempo those pulses are worth a different
-  -- amount of time, so what is already queued is discarded and each step sends
-  -- its own values instead. Tempo is a system parameter with no hook to listen
-  -- to, so the change is noticed here, where the lead is converted to pulses.
-  if cached_tempo ~= nil and tempo ~= cached_tempo then
-    local scheduler = m_clock.lookahead_scheduler
-    if scheduler then scheduler:cancel_all() end
-  end
 
   local ahead = clock:project_onset_pulses(1)
   local transport = clock_lattice.transport
@@ -353,7 +346,17 @@ function m_clock.init()
                             serve = m_midi.serve_delayed}
   end
   if m_clock.lookahead_scheduler then
-    clock_lattice.advance = function(pulse) m_clock.lookahead_scheduler:serve(pulse) end
+    clock_lattice.advance = function(pulse)
+      -- A pending deadline counts pulses, and at another tempo those pulses are
+      -- worth a different amount of time. The change has to be noticed before
+      -- the pulse serves, or the stale deadline fires first.
+      local tempo = params:get("clock_tempo")
+      if type(tempo) == "number" and cached_tempo ~= nil and tempo ~= cached_tempo then
+        m_clock.lookahead_scheduler:cancel_all()
+        cached_tempo = tempo
+      end
+      m_clock.lookahead_scheduler:serve(pulse)
+    end
   end
 
   if testing then
@@ -645,6 +648,8 @@ function m_clock.prepare_start()
   clock_lattice:prepare_for_start()
   slides.reset()
   m_clock.discard_lookahead()
+  local scheduler = m_clock.lookahead_scheduler
+  if scheduler then scheduler:forget_commits() end
   -- A device that was left holding a value while the transport was stopped may
   -- have been changed by hand; start by sending each slot again.
   step.forget_sent_lock_values()

@@ -33,6 +33,11 @@ function assignments.update_param(index, channel, param, meta_device)
       previous.nrpn_lsb_mode ~= assigned.nrpn_lsb_mode then
     m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, index)
     recorder.clear_trig_lock_dirty(channel.number, index)
+    -- A value resolved for the slot's previous assignment addresses a parameter
+    -- the slot no longer holds. Drop it, and forget that it was sent, so the
+    -- step resolves the new assignment instead of being suppressed by the old.
+    local scheduler = m_clock.get_lock_lookahead and m_clock.get_lock_lookahead()
+    if scheduler then scheduler:invalidate(channel.number, nil, index) end
   end
 end
 

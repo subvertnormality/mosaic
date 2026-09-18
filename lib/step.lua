@@ -335,6 +335,10 @@ function step.send_preview_bundle(bundle)
   if bundle.kind == "assigned" and read_stock_assigned(bundle.param.param_id) ~= bundle.value then
     return false
   end
+  -- The slot may have been reassigned to a different parameter since. Sending
+  -- the old one would address a control this slot no longer holds.
+  local assigned_now = channel.trig_lock_params[bundle.slot]
+  if assigned_now == nil or assigned_now.param_id ~= bundle.param.param_id then return false end
   send_midi_param(bundle.channel, bundle.slot, bundle.param, bundle.value,
                   bundle.midi_channel, bundle.midi_device, bundle.nrpn_mode)
   return true
@@ -362,11 +366,16 @@ function step.process_params(channel, step)
     if param.param_id and should_process_param(param) then
       local off = param.off_value == nil and -1 or param.off_value
 
-      -- Under lock lookahead this slot's value already left in an earlier pulse,
-      -- so this step must not send it again. It must still do everything else
-      -- the step does: a slide starts here, and skipping the branch outright
-      -- would leave the slide never running at all.
-      local already_sent = scheduler ~= nil and scheduler:was_sent(channel.number, step, i)
+      -- Under lock lookahead this slot's value may already have left in an
+      -- earlier pulse. Only the identical value is suppressed: anything that
+      -- changed what this step resolves is sent here and corrects the receiver,
+      -- and a value that never left is never suppressed. Everything else the
+      -- step does still happens, because a slide starts here and skipping the
+      -- branch outright would leave it never running.
+      local sent_slot = i
+      local function already_sent_value(value)
+        return scheduler ~= nil and scheduler:was_sent(channel.number, step, sent_slot, value)
+      end
 
       if recording_selected_channel and recorder.trig_lock_is_dirty(channel.number, i) then
         goto continue
@@ -412,6 +421,7 @@ function step.process_params(channel, step)
 
           -- The handoff still runs when the value has already gone: it retires
           -- the slide that owned this slot, which is not a send.
+          local already_sent = already_sent_value(step_trig_lock)
           local handed = m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock, already_sent)
           if not handed and not already_sent then
             send_midi_param(channel.number, i, param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
@@ -444,7 +454,7 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          if not already_sent then
+          if not already_sent_value(p_value) then
             send_midi_param(channel.number, i, param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
           end
         elseif not m_clock.channel_is_sliding(channel, i) then
@@ -455,7 +465,7 @@ function step.process_params(channel, step)
             goto continue
           end
 
-          if not already_sent then
+          if not already_sent_value(value) then
             send_midi_param(channel.number, i, param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
           end
         end

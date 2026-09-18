@@ -58,11 +58,13 @@ function test_lock_lookahead_records_what_it_sent_so_the_step_does_not_repeat_it
   local sent, send = recorder()
   local scheduler = lookahead.new{send = send}
   scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64})
-  luaunit.assert_false(scheduler:was_sent(1, 5, 1))
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1, 64))
   scheduler:serve(10)
-  luaunit.assert_true(scheduler:was_sent(1, 5, 1))
-  luaunit.assert_false(scheduler:was_sent(1, 5, 2))
-  luaunit.assert_false(scheduler:was_sent(2, 5, 1))
+  luaunit.assert_true(scheduler:was_sent(1, 5, 1, 64))
+  -- Only the identical value is suppressed; a changed one must still be sent.
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1, 65))
+  luaunit.assert_false(scheduler:was_sent(1, 5, 2, 64))
+  luaunit.assert_false(scheduler:was_sent(2, 5, 1, 64))
 end
 
 function test_lock_lookahead_forgets_a_commit_once_its_step_has_been_played()
@@ -72,9 +74,9 @@ function test_lock_lookahead_forgets_a_commit_once_its_step_has_been_played()
   local scheduler = lookahead.new{send = send}
   scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64})
   scheduler:serve(10)
-  luaunit.assert_true(scheduler:was_sent(1, 5, 1))
+  luaunit.assert_true(scheduler:was_sent(1, 5, 1, 64))
   scheduler:clear_commit(1, 5)
-  luaunit.assert_false(scheduler:was_sent(1, 5, 1))
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1, 64))
 end
 
 function test_lock_lookahead_discards_everything_pending_at_a_pattern_boundary()
@@ -156,8 +158,8 @@ function test_lock_lookahead_remembers_only_the_latest_step_sent_for_a_channel()
   scheduler:serve(10)
   scheduler:schedule(11, {channel = 1, step = 6, slot = 1, value = 2})
   scheduler:serve(11)
-  luaunit.assert_true(scheduler:was_sent(1, 6, 1))
-  luaunit.assert_false(scheduler:was_sent(1, 5, 1))
+  luaunit.assert_true(scheduler:was_sent(1, 6, 1, 2))
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1, 1))
 end
 
 function test_lock_lookahead_drops_a_value_that_is_edited_before_it_leaves()
@@ -179,9 +181,9 @@ function test_lock_lookahead_lets_the_step_resend_a_value_that_was_edited_after_
   local scheduler = lookahead.new{send = send}
   scheduler:schedule(10, {channel = 1, step = 5, slot = 1, value = 64})
   scheduler:serve(10)
-  luaunit.assert_true(scheduler:was_sent(1, 5, 1))
+  luaunit.assert_true(scheduler:was_sent(1, 5, 1, 64))
   scheduler:invalidate(1, 5, 1)
-  luaunit.assert_false(scheduler:was_sent(1, 5, 1))
+  luaunit.assert_false(scheduler:was_sent(1, 5, 1, 64))
 end
 
 function test_lock_lookahead_invalidation_leaves_other_slots_and_steps_alone()
@@ -260,7 +262,13 @@ function test_lock_lookahead_forgets_what_it_sent_at_a_boundary()
   local scheduler = lookahead.new{send = send}
   scheduler:schedule(10, {channel = 1, step = 1, slot = 1, value = 64})
   scheduler:serve(10)
-  luaunit.assert_true(scheduler:was_sent(1, 1, 1))
+  luaunit.assert_true(scheduler:was_sent(1, 1, 1, 64))
+  -- A boundary keeps what already left, so the step does not send it twice, and
+  -- an incoming pattern whose value differs is not suppressed by it.
   scheduler:cancel_all()
-  luaunit.assert_false(scheduler:was_sent(1, 1, 1))
+  luaunit.assert_true(scheduler:was_sent(1, 1, 1, 64))
+  luaunit.assert_false(scheduler:was_sent(1, 1, 1, 90))
+  -- A restart forgets it, because patch recall may have replaced it.
+  scheduler:forget_commits()
+  luaunit.assert_false(scheduler:was_sent(1, 1, 1, 64))
 end

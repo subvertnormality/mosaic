@@ -70,6 +70,9 @@ function song_edit_page.register_press()
         local do_func = function()
           channel_pattern_buttons["step" .. s .. "_song_pattern_button"]:set_state(3)
           program.get().selected_song_pattern = s
+          -- Selecting a sequence by hand is a global pattern change like any
+          -- other: nothing resolved from the outgoing pattern may still leave.
+          if m_clock and m_clock.discard_lookahead then m_clock.discard_lookahead() end
           tooltip:show("Song sequence " .. s .. " selected")
           
           for channel_number = 1, 17 do
