@@ -264,8 +264,11 @@ def channel_state_dump(runner):
 def _lead_identity(lead_ms, timing_contract, seed, probe_mode):
     if type(lead_ms) is not int or not 0 <= lead_ms <= 50:
         raise ValueError('midi_lock_lead_time must be an integer in 0..50')
-    if timing_contract != 'legacy-delay-v1':
-        raise ValueError('Unsupported timing_contract (lookahead is not implemented)')
+    # 'legacy-delay-v1' delays notes, clock and transport behind the locks.
+    # 'pulse-advance' delays nothing and sends the locks early instead. They are
+    # different contracts, not settings of one, and each result says which it is.
+    if timing_contract not in ('legacy-delay-v1', 'pulse-advance'):
+        raise ValueError('Unsupported timing_contract: %r' % (timing_contract,))
     if type(seed) is not int or not 0 <= seed <= 2**31-1:
         raise ValueError('seed must be a nonnegative 31-bit integer')
     if probe_mode not in ('off', 'pulse-v1', 'pulse-core-v1'):
@@ -273,14 +276,24 @@ def _lead_identity(lead_ms, timing_contract, seed, probe_mode):
     return dict(midi_lock_lead_time=lead_ms, timing_contract=timing_contract, seed=seed, probe_mode=probe_mode)
 
 
-def set_lock_lead(driver, lead_ms):
-    """Set through stock Norns params (same public API as the tempo control)."""
+def set_lock_lead(driver, lead_ms, timing_contract='legacy-delay-v1'):
+    """Set through stock Norns params (same public API as the tempo control).
+
+    The contract is selected and read back the same way, so a run cannot silently
+    measure a different contract from the one its manifest claims.
+    """
     import re
-    _lead_identity(lead_ms, 'legacy-delay-v1', 0, 'off')
+    _lead_identity(lead_ms, timing_contract, 0, 'off')
     output = driver.runner.maiden.eval("params:set('midi_lock_lead_time',%d); print('__MOSAIC_LOCK_LEAD__'..params:get('midi_lock_lead_time'))" % lead_ms)
     found = re.search(r'__MOSAIC_LOCK_LEAD__([0-9.]+)', output)
     if not found or float(found.group(1)) != lead_ms:
         raise AssertionError('Lock lead readback mismatch: requested %s, observed %s' % (lead_ms, found.group(1) if found else 'missing'))
+    reply = driver.runner.maiden.eval(
+        "m_clock.set_lock_contract('%s'); print('__MOSAIC_LOCK_CONTRACT__'..m_clock.get_lock_contract())" % timing_contract)
+    seen = re.search(r'__MOSAIC_LOCK_CONTRACT__(\S+)', reply)
+    if not seen or seen.group(1) != timing_contract:
+        raise AssertionError('Lock contract readback mismatch: requested %s, observed %s'
+                             % (timing_contract, seen.group(1) if seen else 'missing'))
     return lead_ms
 
 
@@ -297,11 +310,12 @@ def write_fixture_manifest(directory,case_id,spec,source,*,lead_ms=0,timing_cont
     (directory/'fixture.json').write_text(json.dumps(manifest,indent=2)+'\n')
 
 
-def prepare_fixture(source_dir, destination_dir, *, lead_ms=0, seed=0, probe_mode='off'):
+def prepare_fixture(source_dir, destination_dir, *, lead_ms=0, seed=0, probe_mode='off',
+                    timing_contract='legacy-delay-v1'):
     """Create an explicitly identified variant, never relabel historical evidence."""
     import re
     source, destination = Path(source_dir).resolve(), Path(destination_dir).resolve()
-    identity = _lead_identity(lead_ms, 'legacy-delay-v1', seed, probe_mode)
+    identity = _lead_identity(lead_ms, timing_contract, seed, probe_mode)
     if destination == source or source in destination.parents:
         raise ValueError('Destination must be outside source fixture')
     if destination.exists():
@@ -362,7 +376,7 @@ def project_fixture_name(case_id):
     """The fixture directory name for the project a case plays."""
     spec=CASES[case_id];return '%s-%d'%(spec['workload'],spec['channels'])
 
-def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None,lead_ms=None,probe_mode='off',seed=0,measured_steps=None,probe_schedule=None,seed_schedule=None):
+def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None,lead_ms=None,probe_mode='off',seed=0,measured_steps=None,probe_schedule=None,seed_schedule=None,timing_contract='legacy-delay-v1'):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
     if type(windows) is not int or windows < 1:raise ValueError('windows must be positive')
     if measured_steps is not None and (type(measured_steps) is not int or measured_steps < 1):raise ValueError('measured_steps must be positive')
@@ -381,7 +395,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         # UI only when there is none, and keep that build as a fixture if asked.
         fixture_manifest=check_project_fixture(project_fixture,case_id) if project_fixture is not None else {}
         if lead_ms is None:lead_ms=fixture_manifest['midi_lock_lead_time'] if fixture_manifest else 0
-        identity=_lead_identity(lead_ms, 'legacy-delay-v1', seed, probe_mode)
+        identity=_lead_identity(lead_ms, timing_contract, seed, probe_mode)
         identity.update(fixture_id=case_id, workload=spec['workload'], fixture_files=fixture_manifest.get('files'), clock_source='internal', port=1,
                         capture_backend='stock-norns-output-trace', requested_window_seconds=spec['seconds'])
         if measured_steps is not None:identity['measured_steps']=measured_steps
@@ -396,7 +410,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         if project_fixture is None:
             if save_project_fixture:
                 runner.fetch_project(save_project_fixture)
-                write_fixture_manifest(save_project_fixture,case_id,spec,source,lead_ms=lead_ms,seed=seed,probe_mode=probe_mode)
+                write_fixture_manifest(save_project_fixture,case_id,spec,source,lead_ms=lead_ms,seed=seed,probe_mode=probe_mode,timing_contract=timing_contract)
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
         driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17,spec.get('step_stride',1))],[15]*len(range(1,17,spec.get('step_stride',1))))
         preflight=functional_preflight(runner,driver,trace,spec)
@@ -418,7 +432,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                 if probe_schedule is None:identity.update(window_identity)
                 pulse_probe.install()
             ready_to_play(runner,driver,transport_log)
-            observed_lead=set_lock_lead(driver, lead_ms)
+            observed_lead=set_lock_lead(driver, lead_ms, timing_contract)
             if seed_schedule is not None:runner.maiden.eval('math.randomseed(%d)' % window_seed)
             if pulse_probe:pulse_probe.reset()
             trace.reset();sampler=(OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler()) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None

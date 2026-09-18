@@ -62,14 +62,20 @@ class FakeTrace:
     def __init__(self):self.resets=0
     def reset(self):self.resets+=1
 
+def preflight_reply(source, lead=0, contract='legacy-delay-v1'):
+    """Answer the two preflight reads the way the device would."""
+    if '__MOSAIC_LOCK_LEAD__' in source: return '__MOSAIC_LOCK_LEAD__%s' % lead
+    if '__MOSAIC_LOCK_CONTRACT__' in source: return '__MOSAIC_LOCK_CONTRACT__%s' % contract
+    return ''
+
 class FakeMaiden:
     def eval(self,source):
-        return '__MOSAIC_LOCK_LEAD__0' if '__MOSAIC_LOCK_LEAD__' in source else ''
+        return preflight_reply(source)
 
 class FakeDriver:
     def __init__(self,*args,**kwargs):
         self.expected_step_seconds=.25;self.tempo_bpm=60;self.finished=0
-        self.runner=type('R',(),{'maiden':type('M',(),{'eval':lambda self,source:'__MOSAIC_LOCK_LEAD__0'})()})()
+        self.runner=type('R',(),{'maiden':type('M',(),{'eval':lambda self,source:preflight_reply(source)})()})()
     def tap(self,*args):pass
     def key(self,*args):pass
     def enc(self,*args):pass
@@ -97,18 +103,40 @@ class Tests(unittest.TestCase):
 
     def test_preflight_sets_and_reads_back_the_requested_public_lock_lead(self):
         calls=[]
-        maiden=type('M',(),{'eval':lambda self,source:calls.append(source) or '__MOSAIC_LOCK_LEAD__25'})()
+        maiden=type('M',(),{'eval':lambda self,source:calls.append(source) or preflight_reply(source,25)})()
         driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})()})()
         self.assertEqual(hardware_performance.set_lock_lead(driver,25),25)
-        self.assertEqual(len(calls),1)
+        self.assertEqual(len(calls),2)
         self.assertIn("params:set('midi_lock_lead_time',25)",calls[0])
         self.assertIn("params:get('midi_lock_lead_time')",calls[0])
 
     def test_preflight_rejects_a_lock_lead_readback_mismatch_before_play(self):
-        maiden=type('M',(),{'eval':lambda self,source:'__MOSAIC_LOCK_LEAD__24'})()
+        maiden=type('M',(),{'eval':lambda self,source:preflight_reply(source,24)})()
         driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})()})()
         with self.assertRaisesRegex(AssertionError,'requested 25.*observed 24'):
             hardware_performance.set_lock_lead(driver,25)
+
+    def test_preflight_sets_and_reads_back_the_requested_timing_contract(self):
+        calls=[]
+        maiden=type('M',(),{'eval':lambda self,source:calls.append(source) or preflight_reply(source,25,'pulse-advance')})()
+        driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})()})()
+        self.assertEqual(hardware_performance.set_lock_lead(driver,25,'pulse-advance'),25)
+        self.assertIn("m_clock.set_lock_contract('pulse-advance')",calls[1])
+        self.assertIn('m_clock.get_lock_contract()',calls[1])
+
+    def test_preflight_rejects_a_timing_contract_readback_mismatch_before_play(self):
+        # A run must never measure a different contract from the one it claims.
+        maiden=type('M',(),{'eval':lambda self,source:preflight_reply(source,25,'legacy-delay-v1')})()
+        driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})()})()
+        with self.assertRaisesRegex(AssertionError,'requested pulse-advance.*observed legacy-delay-v1'):
+            hardware_performance.set_lock_lead(driver,25,'pulse-advance')
+
+    def test_timing_contract_identity_accepts_both_contracts_and_rejects_anything_else(self):
+        for contract in ('legacy-delay-v1','pulse-advance'):
+            self.assertEqual(hardware_performance._lead_identity(25,contract,0,'off')['timing_contract'],contract)
+        for bad in ('lookahead','pulse_advance','',None):
+            with self.assertRaises(ValueError):
+                hardware_performance._lead_identity(25,bad,0,'off')
 
     def test_hardware_slide_parameter_selection_is_front_panel_only(self):
         calls=[];maiden=type('M',(),{'eval':lambda self,code:calls.append(('query',code)) or '__MOSAIC_PARAM_POSITION__3/9'})()

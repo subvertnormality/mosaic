@@ -396,6 +396,7 @@ def main(argv=None):
  p.add_argument('--project-fixture',help='Directory holding autosave.ptn/.pset for this performance case; skips the UI build');p.add_argument('--save-project-fixture',help='Build through the UI, then keep the autosaved project here');p.add_argument('--measured-windows',type=int,default=1,help='play/stop windows measured on one built project')
  p.add_argument('--clock-cancel-candidate',help='complete temporary replacement for /home/we/norns/lua/core/clock.lua')
  p.add_argument('--lock-lead-ms',type=int,choices=range(51),help='explicit global MIDI lock lead; otherwise require fixture identity or use 0 for a new fixture')
+ p.add_argument('--timing-contract',choices=('legacy-delay-v1','pulse-advance'),default='legacy-delay-v1',help='which lock lead contract to measure; legacy-delay-v1 delays notes behind the locks, pulse-advance sends the locks early and delays nothing')
  probe_flags=p.add_mutually_exclusive_group()
  probe_flags.add_argument('--pulse-probe',action='store_true',help='diagnostic: full pulse/parameter/note/write/deadline trace; overhead not qualified')
  probe_flags.add_argument('--pulse-probe-core',action='store_true',help='diagnostic: reduced pulse/write/callback trace; overhead must be measured')
@@ -413,7 +414,7 @@ def main(argv=None):
  if a.command=='prepare-fixture':
   if not a.project_fixture or not a.fixture_destination or a.lock_lead_ms is None:
    p.error('prepare-fixture requires --project-fixture, --fixture-destination and --lock-lead-ms')
-  value=__import__('hardware_performance').prepare_fixture(a.project_fixture,a.fixture_destination,lead_ms=a.lock_lead_ms,seed=a.seed,probe_mode=probe_mode)
+  value=__import__('hardware_performance').prepare_fixture(a.project_fixture,a.fixture_destination,lead_ms=a.lock_lead_ms,seed=a.seed,probe_mode=probe_mode,timing_contract=a.timing_contract)
   print(json.dumps(value,indent=2));return 0
  required=('host','maiden_url','artifacts','run_id') if a.command=='clock-cancel' else ('host','maiden_url','osc_host','artifacts','run_id')
  missing=[name for name in required if not getattr(a,name)]
@@ -448,7 +449,7 @@ def main(argv=None):
     if a.tempo:
      before=r.maiden.eval("print('__TEMPO_BEFORE__'..clock.get_tempo())");r.maiden.eval('params:set("clock_tempo",%r)'%float(a.tempo));time.sleep(.5)
      after=r.maiden.eval("print('__TEMPO_AFTER__'..clock.get_tempo())");write(out/'tempo.json',{'requested':a.tempo,'before':re.findall(r'__TEMPO_BEFORE__([0-9.]+)',before),'after':re.findall(r'__TEMPO_AFTER__([0-9.]+)',after)})
-    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source,thread_sampler=a.thread_sampler,windows=a.measured_windows,timing_trace=a.lua_timing_trace,resource_sampler=not a.no_resource_sampler,native_screen_trace=a.native_screen_trace,redraw_count_trace=a.redraw_count_trace,project_fixture=a.project_fixture,save_project_fixture=a.save_project_fixture,lead_ms=a.lock_lead_ms,probe_mode=probe_mode,seed=a.seed,measured_steps=a.measured_steps)
+    evidence=run_hardware_case(r,a.case_id,r.grid_device(a.grid_device_id),a.device_map_id,OutputTrace(r.maiden)) if a.command=='case' else run_hardware_performance(r,a.performance_case,r.grid_device(a.grid_device_id),a.device_map_id,a.source,thread_sampler=a.thread_sampler,windows=a.measured_windows,timing_trace=a.lua_timing_trace,resource_sampler=not a.no_resource_sampler,native_screen_trace=a.native_screen_trace,redraw_count_trace=a.redraw_count_trace,project_fixture=a.project_fixture,save_project_fixture=a.save_project_fixture,lead_ms=a.lock_lead_ms,probe_mode=probe_mode,seed=a.seed,measured_steps=a.measured_steps,timing_contract=a.timing_contract)
     r.logs()
     evidence['clock_error_drains']=r.clock_error_drains;evidence['stock_clock_errors_mode']=a.stock_clock_errors
     evidence.update({'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=a.source,text=True).strip(),'source_files':source_files,'resumed_after_interruption':True,'capabilities':caps,'campaign_complete':False})
