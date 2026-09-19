@@ -14,13 +14,58 @@ import random
 import tarfile
 import io
 
+import mido
 import numpy as np
 import soundfile as sf
+import yaml
 from scipy.signal import resample_poly
 
 LANES = ('BD', 'SD', 'CHH', 'OHH', 'BASS')
 RATE = 16000
 SEED = 2026091901
+
+
+def serialized_relative_time(elapsed, start, duration):
+    relative = round(elapsed-start, 9)
+    return relative if relative < duration else None
+
+
+def active_source_events(root, track, start, duration):
+    """Read independent BabySlakh MIDI into the active five-lane schema.
+
+    Pedal hi-hat (GM 44) and tom/cymbal notes are deliberate non-target
+    interference.  They must not be relabelled as closed or open hats.
+    """
+    metadata_path = root/'slakh/babyslakh-meta/babyslakh_16k'/track/'metadata.yaml'
+    midi_root = root/'slakh/babyslakh-selected/babyslakh_16k'/track/'MIDI'
+    metadata = yaml.safe_load(metadata_path.read_text(encoding='utf-8'))
+    events = {lane: [] for lane in LANES}
+    drum_notes = {35: 'BD', 36: 'BD', 37: 'SD', 38: 'SD', 40: 'SD',
+                  42: 'CHH', 46: 'OHH'}
+    for stem, details in metadata['stems'].items():
+        kind = 'DRUM' if details.get('is_drum') else (
+            'BASS' if details.get('inst_class') == 'Bass' else None)
+        if kind is None:
+            continue
+        midi_path = midi_root/(stem+'.mid')
+        if not midi_path.is_file():
+            raise FileNotFoundError(f'missing declared {kind.lower()} MIDI: {midi_path}')
+        elapsed = 0.0
+        for message in mido.MidiFile(midi_path):
+            elapsed += message.time
+            if message.type != 'note_on' or not message.velocity or not start <= elapsed < start+duration:
+                continue
+            lane = 'BASS' if kind == 'BASS' else drum_notes.get(message.note)
+            if lane:
+                relative = serialized_relative_time(elapsed, start, duration)
+                # Decimal serialization can round a source event just below the
+                # half-open crop boundary up to the exact clip duration.
+                if relative is not None:
+                    events[lane].append(dict(
+                        time_seconds=relative, velocity=message.velocity))
+    for lane in LANES:
+        events[lane].sort(key=lambda event: event['time_seconds'])
+    return events, metadata
 
 
 def digest(path):
@@ -29,6 +74,16 @@ def digest(path):
         for block in iter(lambda: stream.read(1024 * 1024), b''):
             h.update(block)
     return h.hexdigest()
+
+
+def deterministic_tar(path, base, members):
+    """Freeze exactly the source bytes named by a rendered corpus recipe."""
+    with tarfile.open(path, 'w') as tar:
+        for source in members:
+            data = source.read_bytes()
+            entry = tarfile.TarInfo(source.relative_to(base).as_posix())
+            entry.size, entry.mtime, entry.mode = len(data), 0, 0o644
+            tar.addfile(entry, io.BytesIO(data))
 
 
 def verified_open_hat_asset(root, kit_directory):
@@ -64,7 +119,28 @@ class Renderer:
         base = json.loads((self.root/'rd02-preliminary-v7/manifest.json').read_text())
         self.manifest = dict(schema_version=2, corpus_id='rd02-scheduled-v12',
                              sources=[s for s in base['sources'] if s['id'] != 'avp-lvt-v1'],
-                             clips=[c for c in base['clips'] if c['split'] == 'development'])
+                             clips=[])
+        for legacy in (c for c in base['clips'] if c['split'] == 'development'):
+            recipe_path = self.root/legacy['render']['recipe']['path']
+            recipe = json.loads(recipe_path.read_text(encoding='utf-8'))
+            events, metadata = active_source_events(
+                self.root, recipe['source_track'], legacy['source_start_seconds'],
+                legacy['duration_seconds'])
+            clip = copy.deepcopy(legacy)
+            clip['annotation'] = self.write_json('annotations', clip['id'], dict(
+                reference_origin='independent_render_metadata',
+                annotator_id='babyslakh-midi-active-v2', events=events))
+            clip['timbres'] = {lane: 'unverified' for lane in LANES}
+            drum_kit = next(details.get('plugin_name') for details in metadata['stems'].values()
+                            if details.get('is_drum'))
+            if drum_kit != clip['kit_id']:
+                raise ValueError(f"{clip['id']} drum kit disagrees with source metadata")
+            clip['timbre_evidence'] = self.write_json('timbres', clip['id'], dict(lanes={
+                lane: dict(timbre='unverified', basis='source_patch_metadata',
+                           source=f"{recipe['source_track']}/metadata.yaml; no acoustic/electronic classification frozen")
+                for lane in LANES
+            }))
+            self.manifest['clips'].append(clip)
         assert len(self.manifest['clips']) == 40
         self.assets = [
             dict(BD='hydrogen/gm/Kick-Med.wav', SD='hydrogen/gm/Snare-Med.wav',
@@ -77,17 +153,21 @@ class Renderer:
                         for kit in self.assets]
         self.source_ids = [('hydrogen-gmrock', 'freepats-electric-bass-YR'),
                            ('hydrogen-tr808', 'freepats-synth-bass-2')]
+        hydrogen_license = self.root/'hydrogen/COPYING'
+        for kit in (0, 1):
+            source = next(s for s in self.manifest['sources'] if s['id'] == self.source_ids[kit][0])
+            archive = self.out/'sources'/(self.source_ids[kit][0]+'.tar')
+            members = [self.root/path for lane, path in self.assets[kit].items() if lane != 'BASS']
+            members.append(hydrogen_license)
+            deterministic_tar(archive, self.root/'hydrogen', members)
+            source['archive'] = self.desc(archive)
+            source['license_evidence'] = self.desc(hydrogen_license)
         for kit, folder in enumerate(('electric-bass-YR', 'synth-bass-2')):
             source = next(s for s in self.manifest['sources'] if s['id'] == self.source_ids[kit][1])
             archive = self.out/'sources'/(folder+'.tar')
             members = [self.root/self.assets[kit]['BASS'], self.root/'freepats'/folder/'README.txt',
                        self.root/'freepats'/folder/'LICENSE.txt']
-            with tarfile.open(archive, 'w') as tar:
-                for path in members:
-                    data = path.read_bytes()
-                    entry = tarfile.TarInfo(path.relative_to(self.root/'freepats'/folder).as_posix())
-                    entry.size, entry.mtime, entry.mode = len(data), 0, 0o644
-                    tar.addfile(entry, io.BytesIO(data))
+            deterministic_tar(archive, self.root/'freepats'/folder, members)
             source['archive'] = self.desc(archive)
             source['license'] = dict(spdx='CC0-1.0', url='https://creativecommons.org/publicdomain/zero/1.0/')
             source['license_evidence'] = self.desc(members[-1])

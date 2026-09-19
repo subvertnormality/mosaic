@@ -151,7 +151,28 @@ do not label a selected clip `electronic` until the specific patch/sound identit
 is pinned in its timbre evidence. Retain the source-specific map and render-domain
 record beside every selected clip.
 
-## Current frozen inventory (v11)
+## Current frozen inventory (v12)
+
+`rd02-scheduled-v12/manifest.json` in the external cache has SHA-256
+`b7a804939e53f64858296c1073a8060bd14c9a36967f758438936474bb04dbdf`.
+It is the active schema-v2 corpus: 40 BabySlakh development clips, 66 scheduled
+held clips and seven 45-second acquisition fixtures. Original BabySlakh MIDI
+supplies independent BD, SD, CHH, OHH and BASS development references. Pedal
+hi-hat, tom and other cymbal notes remain audible interference and are not
+relabeled. The held partition uses separately frozen closed- and open-hat
+samples from two Hydrogen kits. Its 42 full-mixture/control renders have
+distinct audio hashes.
+
+The independent validator passes every source, licence, partition, active-lane,
+stratum, timbre and control requirement. Held positives are 49 BD, 48 SD, 48
+CHH, 48 OHH and 49 BASS clips, containing 550, 531, 1,588, 557 and 732 events
+respectively. Each deterministic source archive contains every sample, README
+and licence byte used by its recipes. The durable inventory and PCM results are
+`evidence/v12-corpus-inventory.json` and `evidence/v12-rendered-audit.json`.
+This establishes eligibility for frozen scoring; it is not transcription
+quality evidence.
+
+## Superseded frozen inventory (v11)
 
 `rd02-scheduled-v11/manifest.json` in the external cache has SHA-256
 `1cd3dc6e86461e78330ea0c885880d3f01131b572183da5a84b3da101a8e5e6b`.
@@ -163,6 +184,11 @@ and absent-lane negatives. Sampled electric bass is recorded physical strings;
 this does not claim upright acoustic bass. The held mixtures are a rendered
 music domain, not field recordings of bands. Its limited two-kit diversity must
 remain visible in any quality report.
+
+The v11 annotations aggregate hats as `HH`, and every scheduled HH source asset
+is a closed hat. Most mixtures also contain audible TOM events. It therefore
+cannot be relabeled into the active CHH/OHH schema and remains historical
+evidence only.
 
 `tools/rhythm_doctor_corpus/build_scheduled.py` creates a new directory only,
 using pinned Hydrogen and FreePats source samples and an independent seeded
