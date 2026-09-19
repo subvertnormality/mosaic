@@ -469,7 +469,7 @@ Craft unique rhythms using a variety of built-in algorithms. The algorithm is se
 ##### Rhythm Doctor
 
 Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
-It keeps one captured five-lane bank per project and lets you preview a 64-step
+It keeps one captured four-lane bank per project and lets you preview a 64-step
 window from one selected lane before painting it into the selected pattern. The
 lanes are grid row 2, columns 3–6: **BD** (bass drum), **SD** (snare drum),
 **CYM** (hi-hats and cymbals), and **BASS** (pitched low attacks). BASS paints
@@ -517,12 +517,14 @@ policy; Add and Replace are selectable on the Rhythm Doctor screen. Painting
 does not alter the captured bank.
 
 **Availability:** Mosaic starts a local capture helper when this mode opens,
-but this build does not configure the required pretrained analysis executable.
-After a capture completes, analysis therefore fails closed with
-`ANALYSIS_BACKEND_UNAVAILABLE` instead of producing a ready bank. There is no
-user-facing backend configuration in Mosaic. A delivery profile must provide a
+but this build does not configure an analysis executable. After a capture
+completes, analysis therefore fails closed with `ANALYSIS_BACKEND_UNAVAILABLE`
+instead of producing a ready bank. There is no user-facing backend
+configuration in Mosaic. A delivery profile must point the analysis worker at a
 local executable that accepts the worker request/result protocol and returns
-all five lanes before capture-to-paint can be used. No detector quality,
+all four lanes before capture-to-paint can be used. Mosaic ships one such
+backend, a model-free classical-DSP detector that needs no downloads; a profile
+must still supply its path and digests explicitly. No detector quality,
 transcription accuracy, or timing performance is claimed here.
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.

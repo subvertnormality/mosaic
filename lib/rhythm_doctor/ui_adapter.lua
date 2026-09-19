@@ -123,7 +123,7 @@ local function modal_copy(token)
   if not token then return nil end
   local operation = token.operation
   local text = {
-    clear = { title = "CLEAR CAPTURE BANK?", detail = "ALL 5 LANES", note = "PAINTED PATTERNS KEPT" },
+    clear = { title = "CLEAR CAPTURE BANK?", detail = "ALL 4 LANES", note = "PAINTED PATTERNS KEPT" },
     cancel_capture = { title = "CANCEL CAPTURE?" },
     cancel_correction = { title = "CANCEL CORRECTION?" },
   }

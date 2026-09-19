@@ -339,7 +339,8 @@ def main() -> int:
     signal.signal(signal.SIGTERM, stop)
     if hasattr(signal, "SIGHUP"): signal.signal(signal.SIGHUP, stop)
     signal.signal(signal.SIGINT, stop)
-    worker=Worker(args.runtime, args.backend, args.backend_sha256, args.drum_artifact_sha256, args.bass_artifact_sha256)
+    worker=Worker(args.runtime, args.backend, args.backend_sha256, args.drum_artifact_sha256,
+                  args.bass_artifact_sha256, args.template_sha256)
     try: return worker.run()
     finally: worker.close()
 

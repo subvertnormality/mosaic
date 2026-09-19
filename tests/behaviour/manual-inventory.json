@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "981c4f027c95c241a954d88fc49392764b6416f0a74ab32d99987b91d37101c4",
+ "manual_sha256": "90f199b214e057cc25cc945a5111e109836b756aa6d69932593626db48bd239a",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1522,11 +1522,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "981c4f027c95c241a954d88fc49392764b6416f0a74ab32d99987b91d37101c4"
+   "sha256": "90f199b214e057cc25cc945a5111e109836b756aa6d69932593626db48bd239a"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "712379881af89f84f03aa875604dfe2b65e94cda921f171a0f7ddd02af666a4c"
+   "sha256": "407039545bcc86ad185d86ffdecef166c34922f36cec237db1a575cecad689ec"
   },
   {
    "url": "https://t.ly/h-Wsw",

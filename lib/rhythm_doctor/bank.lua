@@ -13,6 +13,10 @@ local Bank = {
   -- The tempo the detector reports when it cannot measure one; the Finish
   -- gate needs a tempo before any analysis exists.
   DEFAULT_BPM = 120,
+  -- The slowest tempo the detector will report. A capture long enough for a
+  -- window at this tempo is long enough at every tempo it can report, so it
+  -- is the only span Finish can promise before a tempo has been measured.
+  SLOWEST_SUPPORTED_BPM = 40,
   MAX_BPM = 240,
 }
 

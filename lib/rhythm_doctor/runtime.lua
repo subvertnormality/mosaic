@@ -180,16 +180,25 @@ end
 -- stayed empty, enough_audio was never true, and K3 Finish could never
 -- complete a recording.
 function Runtime:capture_progress()
-  local started = self.capture_started_at
-  if not started then return { enough_audio = false, captured_seconds = 0 } end
-  local elapsed = (self.now() or started) - started
-  local needed = Bank.minimum_capture_seconds(Bank.DEFAULT_BPM or 120) or 8
-  return { enough_audio = elapsed >= needed, captured_seconds = elapsed,
+  local needed = Bank.minimum_capture_seconds(Bank.SLOWEST_SUPPORTED_BPM) or 24
+  local started = self.capture_acquiring_at
+  if not started then
+    return { enough_audio = false, captured_seconds = 0, required_seconds = needed }
+  end
+  local captured = (self.now() or started) - started
+  return { enough_audio = captured >= needed, captured_seconds = captured,
            required_seconds = needed }
 end
 
+-- The recorder has reported that it is acquiring audio. Only from here does
+-- captured time accrue: worker launch and JACK preflight precede it and record
+-- nothing.
+function Runtime:capture_acquiring()
+  self.capture_acquiring_at = self.now()
+end
+
 function Runtime:_capture_start(mode, token)
-  self.capture_started_at = self.now()
+  self.capture_started_at, self.capture_acquiring_at = self.now(), nil
   local started = self.controller and self.controller:begin(mode, token, self.seconds)
   if not started or started.code ~= "PREFLIGHTING" then
     self.machine:capture_failed(token, "CAPTURE_PREFLIGHT_UNAVAILABLE")
@@ -371,6 +380,7 @@ function Runtime:poll()
     self:_open_analysis_worker()
   end
   local event = self.controller and self.controller:poll() or result("NO_EVENT")
+  if event.code == "STARTED" then self:capture_acquiring() end
   local analysis_event = self.analysis_controller and self.analysis_controller:poll() or result("NO_EVENT")
   self:_close_if_released()
   return event.code ~= "NO_EVENT" and event or analysis_event

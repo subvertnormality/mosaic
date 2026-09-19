@@ -59,6 +59,22 @@ local function read_limited(path)
   if not value or #value > MAX_RESULT then return nil end
   return value
 end
+local function digest(value)
+  return type(value) == "string" and #value == 64 and value:match("^[%x]+$") ~= nil
+end
+-- Two detector identities are supported, and a result must carry exactly one
+-- of them whole. The shipped classical-DSP backend pins its own source and the
+-- template table it reads; a pretrained chain pins its model artifacts. Half a
+-- shape, or both at once, is a configuration error and pins nothing reliably.
+local function supported_detector(detector)
+  if type(detector) ~= "table" or type(detector.backend_id) ~= "string" or detector.backend_id == "" or
+      not digest(detector.backend_sha256) then return false end
+  local dsp = digest(detector.template_sha256) and detector.drum_artifact_sha256 == nil and
+    detector.bass_artifact_sha256 == nil
+  local pretrained = digest(detector.drum_artifact_sha256) and digest(detector.bass_artifact_sha256) and
+    detector.template_sha256 == nil
+  return (dsp or pretrained) and not (dsp and pretrained)
+end
 local function complete_lane_gates(value)
   if type(value) ~= "table" then return false end
   for _, lane in ipairs(Bank.LANES) do
@@ -114,12 +130,7 @@ function Transport:_completed(message)
   local ok, stored = pcall(json.decode, text)
   if not ok or type(stored) ~= "table" or not same_identity(message, stored) or stored.command ~= "ANALYSE" or
       stored.status ~= "COMPLETED" or not safe_asset(stored) or type(stored.analysis) ~= "table" or
-      type(stored.analysis.detector) ~= "table" or type(stored.analysis.detector.backend_id) ~= "string" or
-      stored.analysis.detector.backend_id == "" or type(stored.analysis.detector.backend_sha256) ~= "string" or
-      #stored.analysis.detector.backend_sha256 ~= 64 or not stored.analysis.detector.backend_sha256:match("^[%x]+$") or
-      type(stored.analysis.detector.drum_artifact_sha256) ~= "string" or #stored.analysis.detector.drum_artifact_sha256 ~= 64 or
-      not stored.analysis.detector.drum_artifact_sha256:match("^[%x]+$") or type(stored.analysis.detector.bass_artifact_sha256) ~= "string" or
-      #stored.analysis.detector.bass_artifact_sha256 ~= 64 or not stored.analysis.detector.bass_artifact_sha256:match("^[%x]+$") or
+      not supported_detector(stored.analysis.detector) or
       not complete_lane_gates(stored.analysis.lane_onset_gates) then
     return failure(message, "ANALYSIS_PROTOCOL_ERROR")
   end

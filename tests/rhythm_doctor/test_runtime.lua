@@ -155,7 +155,8 @@ test('a recording becomes finishable once it is long enough for a bank window', 
   check(runtime:enter().ok)
   runtime:start_capture('manual')
   runtime:_capture_start('manual', runtime.machine.token)
-  local needed = Bank.minimum_capture_seconds(Bank.DEFAULT_BPM)
+  runtime:capture_acquiring()
+  local needed = Bank.minimum_capture_seconds(Bank.SLOWEST_SUPPORTED_BPM)
   check(type(needed) == 'number' and needed > 0, 'bank must state the capture length it needs')
 
   clock = needed / 2
@@ -171,6 +172,73 @@ test('the bank states the capture length its own window rule requires', function
   check(Bank.minimum_capture_seconds(60) > Bank.minimum_capture_seconds(120))
   equal(Bank.minimum_capture_seconds(0), nil, 'an out-of-range tempo has no answer')
   equal(Bank.minimum_capture_seconds('x'), nil)
+end)
+
+test('finish is offered only once a bank is buildable at any supported tempo', function()
+  -- Eligibility used the assumed 120 BPM, so Finish lit at eight seconds. A
+  -- recording of slower music then failed NOT_ENOUGH_ALIGNED_AUDIO after the
+  -- user had already committed, losing the take.
+  local Bank = require('rhythm_doctor.bank')
+  local clock = 0
+  local socket, worker = transport(), {}
+  function worker:open() return socket end
+  function worker:close() end
+  local runtime = Runtime.new({ project_id = 'project-slow', worker = worker,
+    now = function() return clock end, transport_stopped = function() return true end })
+  check(runtime:enter().ok)
+  runtime:start_capture('manual')
+  runtime:_capture_start('manual', runtime.machine.token)
+  runtime:capture_acquiring()
+
+  local slowest = Bank.minimum_capture_seconds(Bank.SLOWEST_SUPPORTED_BPM)
+  check(type(slowest) == 'number', 'the bank must state its slowest supported tempo')
+  check(slowest > Bank.minimum_capture_seconds(Bank.DEFAULT_BPM),
+    'the slowest supported tempo must need more audio than the assumed one')
+
+  clock = Bank.minimum_capture_seconds(Bank.DEFAULT_BPM)
+  equal(runtime:capture_progress().enough_audio, false,
+    'audio sufficient only at the assumed tempo must not offer Finish')
+  clock = slowest
+  equal(runtime:capture_progress().enough_audio, true,
+    'audio sufficient at every supported tempo must offer Finish')
+
+  -- A bank really does build from exactly that span at the slowest tempo.
+  local bank = Bank.build({ project_id = 'project-slow', generation = 1, analysis_revision = 1,
+    sample_rate = 44100, capture_start_sample = 0,
+    capture_end_sample = math.floor(44100 * slowest), origin_sample = 0,
+    bpm = Bank.SLOWEST_SUPPORTED_BPM, tempo_mode = 'AUTOMATIC',
+    sensitivities = {}, candidates = {},
+    detector = { backend_id = 'x', backend_sha256 = string.rep('a', 64),
+                 template_sha256 = string.rep('b', 64) } })
+  check(bank ~= nil, 'the advertised span must actually build a bank')
+end)
+
+test('preflight time is not counted as captured audio', function()
+  -- The clock started when Record was pressed, so worker launch and JACK
+  -- preflight were credited as recorded audio and Finish was offered before
+  -- that much sound had been acquired.
+  local Bank = require('rhythm_doctor.bank')
+  local clock = 0
+  local socket, worker = transport(), {}
+  function worker:open() return socket end
+  function worker:close() end
+  local runtime = Runtime.new({ project_id = 'project-preflight', worker = worker,
+    now = function() return clock end, transport_stopped = function() return true end })
+  check(runtime:enter().ok)
+  runtime:start_capture('manual')
+  runtime:_capture_start('manual', runtime.machine.token)
+
+  local needed = Bank.minimum_capture_seconds(Bank.SLOWEST_SUPPORTED_BPM)
+  clock = 5  -- five seconds spent in preflight, no audio acquired yet
+  equal(runtime:capture_progress().captured_seconds, 0,
+    'no audio is captured before the recorder reports it started')
+  runtime:capture_acquiring()
+  clock = 5 + needed / 2
+  equal(runtime:capture_progress().captured_seconds, needed / 2,
+    'captured audio is measured from the moment acquisition began')
+  equal(runtime:capture_progress().enough_audio, false)
+  clock = 5 + needed
+  equal(runtime:capture_progress().enough_audio, true)
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end

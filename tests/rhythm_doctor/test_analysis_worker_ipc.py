@@ -246,4 +246,40 @@ class DspBackendConfigurationTests(unittest.TestCase):
         self.assertIn("incomplete analysis backend configuration", (runtime / "error").read_text())
 
 
+    def test_the_cli_pins_the_template_digest_it_was_configured_with(self):
+        """main() validated --template-sha256 and then dropped it.
+
+        The worker was left pinning only its backend source, so an accidentally
+        mismatched template table installed next to it would have been accepted
+        and its detections attributed to the configured detector.
+        """
+        backend, digest = self._backend()
+        captured = {}
+        original = rd_analysis_worker.Worker
+
+        class Recording(original):
+            def __init__(self, *args, **kwargs):
+                captured["identity"] = self_identity = dict(
+                    zip(("runtime", "backend", "backend_sha256", "drum_artifact_sha256",
+                         "bass_artifact_sha256", "template_sha256"), args))
+                self_identity.update(kwargs)
+                super().__init__(*args, **kwargs)
+
+            def run(self):
+                return 0
+
+        runtime = self.root / "rt-cli-pin"
+        rd_analysis_worker.Worker = Recording
+        saved = sys.argv
+        try:
+            sys.argv = ["rd_analysis_worker.py", "--runtime", str(runtime), "--backend", str(backend),
+                        "--backend-sha256", digest, "--template-sha256", "b" * 64]
+            rd_analysis_worker.main()
+        finally:
+            rd_analysis_worker.Worker, sys.argv = original, saved
+        self.assertEqual(captured["identity"].get("template_sha256"), "b" * 64,
+                         "the configured template digest never reached the worker")
+        self.assertEqual(captured["identity"].get("backend_sha256"), digest)
+
+
 if __name__ == "__main__": unittest.main()

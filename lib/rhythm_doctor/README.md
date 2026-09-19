@@ -6,7 +6,7 @@ Mosaic pattern, or save projects. RD-02 remains the empirical tempo/classifier
 gate; callers pass already-detected candidates to `bank.build`.
 
 `bank.build(args)` accepts authoritative `sample_rate`, capture/origin sample
-indices, 40â€“240 BPM and five-lane candidates with `sample_index`, `velocity` and
+indices, 40â€“240 BPM and four-lane candidates with `sample_index`, `velocity` and
 `confidence`. It returns a serializable bank with retained candidates and one
 quantised timeline cell per candidate. `bank.with_sensitivity`, `window`,
 `move_window` and `with_window_start` are copy-returning view operations. A view
@@ -19,7 +19,7 @@ sparse `cells` table.
 `replace_project` and `cleanup`. It returns result tables with stable `code`
 values. `finish_capture` requires a confirmed `enough_audio` flag. Pass the
 actual stopped status into stopped-only entry points. Worker responses must echo
-`job_token()` exactly and include `bank.valid_ready`'s complete five-lane schema.
+`job_token()` exactly and include `bank.valid_ready`'s complete four-lane schema.
 Resource release is asynchronous: `on_release` only starts bounded cleanup; the
 host must call `resources_released(owner_token, transport_stopped)` before one
 deferred autosave can run. Callbacks are optional and injected:

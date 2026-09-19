@@ -109,6 +109,15 @@ missing lane, or an identity mismatch fails closed. The adapter installs,
 downloads, trains, and fine-tunes nothing; the operator must supply every frozen
 local artifact and its runtime sessions explicitly.
 
+The shipped model-free backend, `tools/rhythm_doctor/dsp_drum_backend.py`, uses
+the second supported identity shape: it has no model artifacts, so it pins its
+own source through `RHYTHM_DOCTOR_ANALYSIS_BACKEND_SHA256` and the published
+NMF template table it reads through `RHYTHM_DOCTOR_TEMPLATE_SHA256`, alongside
+`RHYTHM_DOCTOR_ANALYSIS_BACKEND`. A configuration must supply exactly one
+complete shape: a template digest together with either model artifact digest is
+rejected, as is half of either shape. Like the pretrained profile it is
+unconfigured by default and downloads nothing.
+
 `tools/rhythm_doctor/pretrained_bass_runtime.py` supplies the concrete pinned
 desktop UMXHQ and Basic Pitch ONNX loaders used by that factory boundary. It
 uses the UMXHQ centred-Hann STFT, magnitude mask and mixture-phase inverse STFT,
