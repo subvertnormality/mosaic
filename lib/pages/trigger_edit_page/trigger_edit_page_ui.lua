@@ -46,6 +46,16 @@ function trigger_edit_page_ui.register_ui_draws()
   draw:register_ui(
     "trigger_edit_page",
     function()
+      if trigger_edit_page and trigger_edit_page.get_algorithm and trigger_edit_page.get_algorithm() == 5 then
+        screen.level(10)
+        screen.move(0, 9)
+        screen.text("RHYTHM DOCTOR")
+        screen.move(120, 9)
+        screen.text("m")
+        screen.move(0, 22)
+        screen.text((trigger_edit_page.get_rhythm_doctor_lane and trigger_edit_page.get_rhythm_doctor_lane() or "BD") .. " / NOT READY")
+        return
+      end
       pages:draw()
     end
   )

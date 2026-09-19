@@ -4,12 +4,14 @@ local drum_ops = include("mosaic/lib/helpers/drum_ops")
 
 local trigger_edit_page = {}
 local shift = 0
+local rhythm_doctor = nil
+local rhythm_doctor_lane = "BD"
 
 local trigger_edit_page_pattern_select_fader = fader:new(1, 1, 16, 16)
 local trigger_edit_page_sequencer = sequencer:new(4, "pattern")
 local trigger_edit_page_pattern1_fader = fader:new(1, 2, 10, 100)
 local trigger_edit_page_pattern2_fader = fader:new(1, 3, 10, 100)
-local trigger_edit_page_algorithm_fader = fader:new(12, 2, 4, 4)
+local trigger_edit_page_algorithm_fader = fader:new(12, 2, 5, 5)
 local trigger_edit_page_bankmask_fader = fader:new(12, 3, 5, 5)
 local trigger_edit_page_paint_button = button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
 local trigger_edit_page_cancel_button = button:new(14, 8, {{"Inactive", 3}, {"Cancel", 15}})
@@ -40,13 +42,13 @@ function trigger_edit_page.register_draws()
   draw:register_grid(
     "trigger_edit_page",
     function()
-      return trigger_edit_page_pattern1_fader:draw()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return trigger_edit_page_pattern1_fader:draw() end
     end
   )
   draw:register_grid(
     "trigger_edit_page",
     function()
-      return trigger_edit_page_pattern2_fader:draw()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return trigger_edit_page_pattern2_fader:draw() end
     end
   )
   draw:register_grid(
@@ -58,7 +60,7 @@ function trigger_edit_page.register_draws()
   draw:register_grid(
     "trigger_edit_page",
     function()
-      return trigger_edit_page_bankmask_fader:draw()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return trigger_edit_page_bankmask_fader:draw() end
     end
   )
   draw:register_grid(
@@ -91,6 +93,16 @@ function trigger_edit_page.register_draws()
       return trigger_edit_page_right_button:draw()
     end
   )
+  draw:register_grid(
+    "trigger_edit_page",
+    function()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
+      grid_abstraction.led(1, 2, rhythm_doctor and 15 or 4)
+      local lanes = {"BD", "SD", "HH", "TOM", "BASS"}
+      for index, lane in ipairs(lanes) do grid_abstraction.led(index + 2, 2, lane == rhythm_doctor_lane and 15 or 4) end
+      grid_abstraction.led(2, 2, 0) -- reserved: never an old fader side effect
+    end
+  )
 end
 
 local function get_bank_name(id)
@@ -120,6 +132,8 @@ local function get_algorithm_name(id)
     return "Euclidean algorithm"
   elseif (id == 4) then
     return "Numeric repetitor"
+  elseif (id == 5) then
+    return "Rhythm Doctor"
   end
 end
 
@@ -254,6 +268,7 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_pattern1_fader:is_this(x, y) then
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then return end
         trigger_edit_page_pattern1_fader:press(x, y)
         load_paint_pattern()
         if (trigger_edit_page_algorithm_fader:get_value() == 3) then
@@ -268,6 +283,7 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_pattern2_fader:is_this(x, y) then
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then return end
         trigger_edit_page_pattern2_fader:press(x, y)
         load_paint_pattern()
         if (trigger_edit_page_algorithm_fader:get_value() == 3) then
@@ -281,10 +297,14 @@ function trigger_edit_page.register_press()
   press:register(
     "trigger_edit_page",
     function(x, y)
+      local previous = trigger_edit_page_algorithm_fader:get_value()
       trigger_edit_page_algorithm_fader:press(x, y)
       if trigger_edit_page_algorithm_fader:is_this(x, y) then
+        local selected = trigger_edit_page_algorithm_fader:get_value()
+        if previous ~= 5 and selected == 5 and rhythm_doctor and rhythm_doctor.enter then rhythm_doctor:enter() end
+        if previous == 5 and selected ~= 5 and rhythm_doctor and rhythm_doctor.leave then rhythm_doctor:leave() end
         trigger_edit_page.refresh_trigger_edit_page_ui()
-        tooltip:show(get_algorithm_name(trigger_edit_page_algorithm_fader:get_value()) .. " selected")
+        tooltip:show(get_algorithm_name(selected) .. " selected")
         load_paint_pattern()
       end
     end
@@ -293,10 +313,38 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       local algorithm = trigger_edit_page_algorithm_fader:get_value()
-      if trigger_edit_page_bankmask_fader:is_this(x, y) and algorithm ~= 3 then
+      if trigger_edit_page_bankmask_fader:is_this(x, y) and algorithm ~= 3 and algorithm ~= 5 then
         trigger_edit_page_bankmask_fader:press(x, y)
         load_paint_pattern()
         tooltip:show(get_bank_name(trigger_edit_page_bankmask_fader:get_value()) .. " selected")
+      end
+    end
+  )
+  press:register_pre(
+    "trigger_edit_page",
+    function(x, y)
+      if trigger_edit_page_algorithm_fader:get_value() == 5 and x == 1 and y == 2 then
+        if rhythm_doctor and rhythm_doctor.record_pressed then rhythm_doctor:record_pressed() end
+        return true
+      end
+      return false
+    end
+  )
+  press:register_post(
+    "trigger_edit_page",
+    function(x, y)
+      if trigger_edit_page_algorithm_fader:get_value() == 5 and x == 1 and y == 2 and rhythm_doctor and rhythm_doctor.record_released then
+        rhythm_doctor:record_released()
+      end
+    end
+  )
+  press:register(
+    "trigger_edit_page",
+    function(x, y)
+      if trigger_edit_page_algorithm_fader:get_value() == 5 and y == 2 and x >= 3 and x <= 7 then
+        rhythm_doctor_lane = ({"BD", "SD", "HH", "TOM", "BASS"})[x - 2]
+        if rhythm_doctor and rhythm_doctor.select_lane then rhythm_doctor:select_lane(rhythm_doctor_lane) end
+        tooltip:show(rhythm_doctor_lane .. " selected")
       end
     end
   )
@@ -425,6 +473,7 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
   local algorithm = trigger_edit_page_algorithm_fader:get_value()
 
   if (algorithm == 1) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:enabled()
     trigger_edit_page_bankmask_fader:set_size(5)
     trigger_edit_page_bankmask_fader:set_length(5)
@@ -432,6 +481,7 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
     trigger_edit_page_pattern2_fader:set_size(128)
     trigger_edit_page_pattern2_fader:disabled()
   elseif (algorithm == 2) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:enabled()
     trigger_edit_page_bankmask_fader:set_size(5)
     trigger_edit_page_bankmask_fader:set_length(5)
@@ -439,6 +489,7 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
     trigger_edit_page_pattern2_fader:set_size(128)
     trigger_edit_page_pattern2_fader:enabled()
   elseif (algorithm == 3) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:disabled()
     trigger_edit_page_bankmask_fader:set_size(5)
     trigger_edit_page_bankmask_fader:set_length(5)
@@ -446,18 +497,27 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
     trigger_edit_page_pattern1_fader:set_size(32)
     trigger_edit_page_pattern2_fader:set_size(32)
   elseif (algorithm == 4) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:enabled()
     trigger_edit_page_bankmask_fader:set_size(4)
     trigger_edit_page_bankmask_fader:set_length(4)
     trigger_edit_page_pattern1_fader:set_size(32)
     trigger_edit_page_pattern2_fader:set_size(16)
     trigger_edit_page_pattern2_fader:enabled()
+  elseif (algorithm == 5) then
+    trigger_edit_page_bankmask_fader:disabled()
+    trigger_edit_page_pattern1_fader:disabled()
+    trigger_edit_page_pattern2_fader:disabled()
   end
 
   trigger_edit_page_pattern_select_fader:set_value(program.get().selected_pattern)
 
   fn.dirty_grid(true)
 end
+
+function trigger_edit_page.get_algorithm() return trigger_edit_page_algorithm_fader:get_value() end
+function trigger_edit_page.get_rhythm_doctor_lane() return rhythm_doctor_lane end
+function trigger_edit_page.set_rhythm_doctor(value) rhythm_doctor = value end
 
 function trigger_edit_page.refresh()
   trigger_edit_page.refresh_trigger_edit_page_ui()

@@ -86,11 +86,13 @@ local function with_revision_editor(name, body)
     draw = {register_grid=function() end}
     grid_abstraction = {led=function() end}
     is_key1_down = false
-    local handlers = {short={}, dual={}, long={}}
+    local handlers = {short={}, dual={}, long={}, pre={}, post={}}
     press = {
       register=function(_, _, callback) table.insert(handlers.short, callback) end,
       register_dual=function(_, _, callback) table.insert(handlers.dual, callback) end,
       register_long=function(_, _, callback) table.insert(handlers.long, callback) end,
+      register_pre=function(_, _, callback) table.insert(handlers.pre, callback) end,
+      register_post=function(_, _, callback) table.insert(handlers.post, callback) end,
     }
     local page = include('mosaic/lib/pages/' .. name .. '/' .. name)
     page.init()

@@ -1094,6 +1094,33 @@ function test_grid_input_real_press_dispatches_tap_to_page_handlers_in_order()
   end)
 end
 
+function test_grid_input_claimed_key_down_owns_release_long_and_dual_gesture()
+  local function register_claim(env, name)
+    if name ~= "trigger_edit_page" then return end
+    local function rec(label) return function(...) env.record(label, ...) end end
+    press:register_pre("trigger_edit_page", function(x, y)
+      env.record("claim.pre", x, y)
+      return x == 1 and y == 2
+    end)
+    press:register("trigger_edit_page", rec("short"))
+    press:register_long("trigger_edit_page", rec("long"))
+    press:register_dual("trigger_edit_page", rec("dual"))
+    press:register_post("trigger_edit_page", rec("post"))
+  end
+  with_grid({real_press = true, on_register_press = register_claim}, function(env)
+    key(env, 1, 2, 1)
+    luaunit.assert_equals(take_log(env), {"claim.pre(1,2)", "fn.dirty_grid(true)", "fn.dirty_screen(true)"})
+    key(env, 1, 2, 1) -- held repeats cannot retrigger
+    luaunit.assert_equals(take_log(env), {})
+    key(env, 8, 2, 1); take_log(env)
+    key(env, 8, 2, 0)
+    luaunit.assert_equals(take_log(env), {"clock.cancel(1)", "short(8,2)", "save_confirm.cancel()", "autosave_reset()",
+      "fn.dirty_grid(true)", "fn.dirty_screen(true)", "post(8,2)", "fn.dirty_grid(true)", "fn.dirty_screen(true)"})
+    key(env, 1, 2, 0)
+    luaunit.assert_equals(take_log(env), {"post(1,2)", "fn.dirty_grid(true)", "fn.dirty_screen(true)"})
+  end)
+end
+
 function test_grid_input_real_press_dispatches_long_and_dual()
   with_grid({real_press = true, on_register_press = register_trig_handlers}, function(env)
     key(env, 3, 2, 1)
