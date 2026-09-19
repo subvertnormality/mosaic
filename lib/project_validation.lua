@@ -1,5 +1,10 @@
 -- Validate range-bearing saved data without changing the current project.
 local validation = {}
+local function dependency(name, path)
+  if type(include) == "function" then return include(path) end
+  return require(name)
+end
+local rhythm_doctor_persistence = dependency("rhythm_doctor.bank_persistence", "mosaic/lib/rhythm_doctor/bank_persistence")
 
 local function integer(value, low, high)
   return type(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -39,6 +44,8 @@ function validation.check(saved)
       if first > last then return nil, label .. " reversed" end
     end
   end
+  local rhythm_ok, rhythm_reason = rhythm_doctor_persistence.validate(data.rhythm_doctor)
+  if not rhythm_ok then return nil, rhythm_reason == "UNKNOWN_BANK_SCHEMA" and "Unknown Rhythm Doctor bank" or "Invalid Rhythm Doctor bank" end
   return true
 end
 

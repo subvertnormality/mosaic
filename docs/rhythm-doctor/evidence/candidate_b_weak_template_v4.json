@@ -1,0 +1,31 @@
+{
+  "kind": "candidate_b_weak_template_fixed_nmf_pilot",
+  "acceptance_claimed": false,
+  "artifact": "tests/rhythm_doctor/artifacts/nmf-template-pilot-v4/report.json",
+  "source_sha256": "b0a6f9def0d356f8ac159130f6f502cd9f5de2251bafdce20ae9387ec3aadf8c",
+  "development_tracks": [3, 4, 5, 7, 10, 12, 13, 17, 18],
+  "held_tracks": [1, 2, 6, 8, 9, 11, 14, 15, 16, 19, 20],
+  "analysis_seconds_per_track": 60,
+  "selection": {
+    "other_lane_radius_seconds": 0.15,
+    "preceding_tail_gap_seconds": 0.1,
+    "labels": "literal source MIDI and metadata only"
+  },
+  "held_onset_f1": {
+    "BD": 0.5925925925925926,
+    "SD": 0.22666666666666666,
+    "HH": 0.3840260041792431,
+    "TOM": 0.007989347536617843,
+    "BASS": 0.2783603431839847
+  },
+  "measurement": {
+    "wall_seconds": 13.234620600007474,
+    "peak_process_working_set_bytes": 283553792
+  },
+  "interpretation": "This weak aggregate-stem template diagnostic missed every required onset gate. The 283553792-byte figure is total Windows process working set, not incremental RSS and not an ARM measurement, so it cannot prove failure of the plan's <=256 MiB incremental-RSS target. It does not establish that other model-based architectures are infeasible.",
+  "limitations": [
+    "The aggregate DRUM stem is weak MIDI-window supervision, not per-lane isolated audio.",
+    "Track00017 development BASS source MIDI was absent and excluded rather than inferred from audio.",
+    "The preliminary corpus is not the required acceptance corpus and no grid F1 was measured."
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "source_sha256": "dfc3c0da84ca9dec8eea5563bde64e027f635ea9dd9899e6ae17a23a91ea4edb",
+  "test_sha256": "c4e94b54b42e2b0b8a15ead0fdc345049a85c423555203a96c19af0ac2fa8fbf",
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "lua: tests/rhythm_doctor/test_journal.lua:14: new paint after ordinary edit retained stale older paint history\nstack traceback:\n\t[C]: in function 'assert'\n\ttests/rhythm_doctor/test_journal.lua:14: in main chunk\n\t[C]: in ?\n"
+}

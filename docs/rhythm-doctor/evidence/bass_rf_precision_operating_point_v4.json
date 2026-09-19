@@ -1,0 +1,255 @@
+{
+  "artifact": {
+    "development_results": "tests/rhythm_doctor/artifacts/bass-rf-precision-operating-point-v4-20260919/results-development-only.json",
+    "development_results_sha256": "2cd991e03af0a5db739b6626bd376f8743739ea2a67dc64a8b47296474ce700c",
+    "directory": "tests/rhythm_doctor/artifacts/bass-rf-precision-operating-point-v4-20260919",
+    "held_results": "tests/rhythm_doctor/artifacts/bass-rf-precision-operating-point-v4-20260919/results-held-once.json",
+    "held_results_sha256": "f3f88cc7d6214ba77596b6167ac611d38e281a254fbc1e408da8ce0b109ec169",
+    "model": "tests/rhythm_doctor/artifacts/bass-rf-precision-operating-point-v4-20260919/bass_rf_precision_operating_point_rf64_depth10.pkl",
+    "model_sha256": "59efac24748736dd7d027f648222f4d542fd6b0bf0f47c1989b9d933119259df"
+  },
+  "decision": "The predeclared aggregate-validation precision constraint reduced held false positives to 181, but recall fell to 0.7011 and held F1 0.7404 remains below the PLAN BASS gate of 0.80. The candidate is rejected.",
+  "development_selection": {
+    "aggregate_50ms_one_to_one": {
+      "f1": 0.782435129740519,
+      "fn": 88,
+      "fp": 21,
+      "macro_track_f1": 0.7463461538461538,
+      "precision": 0.9032258064516129,
+      "recall": 0.6901408450704225,
+      "tp": 196
+    },
+    "frozen_choice_before_held": {
+      "constraint": {
+        "absent_prediction_count": 0,
+        "aggregate_precision_at_least_0_90": true,
+        "known_absent_track_count": 0,
+        "zero_predictions_on_known_development_absent_bass": true
+      },
+      "threshold": 0.4500000000000001
+    }
+  },
+  "held_once_after_freeze": {
+    "aggregate_50ms_one_to_one": {
+      "f1": 0.7404494382022472,
+      "fn": 281,
+      "fp": 181,
+      "macro_track_f1": 0.7517743837869556,
+      "precision": 0.7845238095238095,
+      "recall": 0.701063829787234,
+      "tp": 659
+    },
+    "per_track_counts": [
+      {
+        "prediction_count": 48,
+        "reference_count": 77,
+        "score_50ms_one_to_one": {
+          "f1": 0.768,
+          "fn": 29,
+          "fp": 0,
+          "tp": 48
+        },
+        "track": "Track00001"
+      },
+      {
+        "prediction_count": 115,
+        "reference_count": 79,
+        "score_50ms_one_to_one": {
+          "f1": 0.5876288659793815,
+          "fn": 22,
+          "fp": 58,
+          "tp": 57
+        },
+        "track": "Track00002"
+      },
+      {
+        "prediction_count": 48,
+        "reference_count": 56,
+        "score_50ms_one_to_one": {
+          "f1": 0.7692307692307693,
+          "fn": 16,
+          "fp": 8,
+          "tp": 40
+        },
+        "track": "Track00006"
+      },
+      {
+        "prediction_count": 40,
+        "reference_count": 42,
+        "score_50ms_one_to_one": {
+          "f1": 0.9024390243902439,
+          "fn": 5,
+          "fp": 3,
+          "tp": 37
+        },
+        "track": "Track00008"
+      },
+      {
+        "prediction_count": 81,
+        "reference_count": 98,
+        "score_50ms_one_to_one": {
+          "f1": 0.7821229050279329,
+          "fn": 28,
+          "fp": 11,
+          "tp": 70
+        },
+        "track": "Track00009"
+      },
+      {
+        "prediction_count": 195,
+        "reference_count": 155,
+        "score_50ms_one_to_one": {
+          "f1": 0.7485714285714286,
+          "fn": 24,
+          "fp": 64,
+          "tp": 131
+        },
+        "track": "Track00011"
+      },
+      {
+        "prediction_count": 28,
+        "reference_count": 39,
+        "score_50ms_one_to_one": {
+          "f1": 0.835820895522388,
+          "fn": 11,
+          "fp": 0,
+          "tp": 28
+        },
+        "track": "Track00014"
+      },
+      {
+        "prediction_count": 39,
+        "reference_count": 64,
+        "score_50ms_one_to_one": {
+          "f1": 0.7378640776699029,
+          "fn": 26,
+          "fp": 1,
+          "tp": 38
+        },
+        "track": "Track00015"
+      },
+      {
+        "prediction_count": 61,
+        "reference_count": 99,
+        "score_50ms_one_to_one": {
+          "f1": 0.4875,
+          "fn": 60,
+          "fp": 22,
+          "tp": 39
+        },
+        "track": "Track00016"
+      },
+      {
+        "prediction_count": 128,
+        "reference_count": 175,
+        "score_50ms_one_to_one": {
+          "f1": 0.8184818481848185,
+          "fn": 51,
+          "fp": 4,
+          "tp": 124
+        },
+        "track": "Track00019"
+      },
+      {
+        "prediction_count": 57,
+        "reference_count": 56,
+        "score_50ms_one_to_one": {
+          "f1": 0.831858407079646,
+          "fn": 9,
+          "fp": 10,
+          "tp": 47
+        },
+        "track": "Track00020"
+      }
+    ]
+  },
+  "schema_version": 1,
+  "scope": "BASS-only cached 60-second operating-point diagnostic. No clean acceptance corpus, Norns, ARM, latency, or product claim.",
+  "source_hashes": {
+    "corpus_archive_sha256": "6490dc83d8b59ccbe7e9e0304023af8e585d2065f9a5f5921952a273fac4a9b0",
+    "detector_py_sha256": "51e88fc27d926cc7479aea6d9ec0d967a31445782ad38020b9af7031d4387ebf",
+    "quality_py_sha256": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b",
+    "script_sha256": "e58de2f6f1c1a96ba2a70f3c03eab0589c8a4a20fba81453cecf7f4c9abd604a"
+  },
+  "split_and_rule": {
+    "absent_negative_constraint_note": "No known development clip had an absent BASS lane; the required zero-prediction check is explicitly recorded as vacuously satisfied, rather than claimed as empirical absent-lane evidence.",
+    "held_once": [
+      "Track00001",
+      "Track00002",
+      "Track00006",
+      "Track00008",
+      "Track00009",
+      "Track00011",
+      "Track00014",
+      "Track00015",
+      "Track00016",
+      "Track00019",
+      "Track00020"
+    ],
+    "known_development_absent_bass": [],
+    "scorer": "tests/rhythm_doctor/quality.py onset_score, one-to-one 50ms",
+    "seconds": 60.0,
+    "selection_rule": {
+      "constraints": {
+        "known_development_absent_bass_prediction_count": 0,
+        "minimum_aggregate_precision": 0.9
+      },
+      "maximize": "aggregate validation recall",
+      "thresholds": [
+        0.05,
+        0.07500000000000001,
+        0.10000000000000002,
+        0.12500000000000003,
+        0.15000000000000002,
+        0.17500000000000004,
+        0.20000000000000007,
+        0.22500000000000003,
+        0.25000000000000006,
+        0.2750000000000001,
+        0.3000000000000001,
+        0.32500000000000007,
+        0.3500000000000001,
+        0.3750000000000001,
+        0.4000000000000001,
+        0.4250000000000001,
+        0.4500000000000001,
+        0.47500000000000014,
+        0.5000000000000002,
+        0.5250000000000001,
+        0.5500000000000003,
+        0.5750000000000002,
+        0.6000000000000002,
+        0.6250000000000002,
+        0.6500000000000002,
+        0.6750000000000003,
+        0.7000000000000003,
+        0.7250000000000003,
+        0.7500000000000002,
+        0.7750000000000002,
+        0.8000000000000003,
+        0.8250000000000003,
+        0.8500000000000003,
+        0.8750000000000003,
+        0.9000000000000004,
+        0.9250000000000004,
+        0.9500000000000004
+      ]
+    },
+    "train": [
+      "Track00003",
+      "Track00004",
+      "Track00007",
+      "Track00010",
+      "Track00012",
+      "Track00018"
+    ],
+    "unknown_excluded_missing_declared_bass_midi": [
+      "Track00017"
+    ],
+    "validation_only": [
+      "Track00005",
+      "Track00013"
+    ]
+  },
+  "status": "diagnostic_rejected_below_plan_held_bass_f1_gate"
+}

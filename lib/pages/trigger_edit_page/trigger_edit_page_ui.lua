@@ -46,6 +46,57 @@ function trigger_edit_page_ui.register_ui_draws()
   draw:register_ui(
     "trigger_edit_page",
     function()
+      if trigger_edit_page and trigger_edit_page.get_algorithm and trigger_edit_page.get_algorithm() == 5 then
+        local model = trigger_edit_page.get_rhythm_doctor_model and trigger_edit_page.get_rhythm_doctor_model() or nil
+        local lane = model and model.lane or (trigger_edit_page.get_rhythm_doctor_lane and trigger_edit_page.get_rhythm_doctor_lane() or "BD")
+        screen.level(10)
+        screen.move(0, 9)
+        screen.text("RHYTHM DOCTOR")
+        screen.move(120, 9)
+        screen.text("m")
+        screen.move(0, 22)
+        if model and model.alignment and model.alignment.active then
+          screen.text("ALIGNMENT / " .. tostring(model.alignment.field))
+        elseif model and model.setup and model.setup.active then
+          screen.text("SETUP / " .. tostring(model.setup.field))
+        else
+          screen.text(lane .. " / " .. (model and model.status or "NOT READY"))
+        end
+        if model then
+          if model.alignment and model.alignment.active then
+            screen.move(0, 34)
+            screen.text((model.alignment.field == "HALF TEMPO" and ">" or " ") .. "HALF " .. tostring(model.alignment.bpm or "") .. " BPM")
+            screen.move(0, 46)
+            screen.text((model.alignment.field == "DOUBLE TEMPO" and ">" or " ") .. "DOUBLE / START " .. tostring(model.alignment.start_beat or ""))
+            screen.move(0, 58)
+            screen.text((model.alignment.field == "FINE START" and ">" or " ") .. "FINE " .. tostring(model.alignment.fine_start_ms or 0) .. "ms")
+          elseif model.setup and model.setup.active then
+            screen.move(0, 34)
+            screen.text((model.setup.field == "TEMPO" and ">" or " ") .. "TEMPO " .. string.upper(tostring(model.capture_mode or "auto")))
+            screen.move(0, 46)
+            screen.text((model.setup.field == "MANUAL BPM" and ">" or " ") .. "MANUAL BPM " .. tostring(model.manual_bpm or ""))
+            screen.move(0, 58)
+            screen.text((model.setup.field == "INPUT" and ">" or " ") .. "INPUT " .. tostring(model.input_source or "STEREO"))
+          else
+            screen.move(0, 34)
+            screen.text("HITS " .. tostring(model.hit_count or 0) .. " / " .. tostring(model.state or "EMPTY"))
+            screen.move(0, 46)
+            if model.tempo then screen.text(string.format("%.1f BPM / %s", model.tempo, tostring(model.tempo_source or "")))
+            elseif model.acquired_beats then screen.text(tostring(model.acquired_beats) .. " BEATS") end
+            if model.ready and model.ready.active then
+              screen.move(0, 58)
+              local window = model.window_start_label and ("START " .. model.window_start_label .. "-" .. tostring(model.window_end_label)) or ""
+              screen.text((model.ready.field == "SENSITIVITY" and "SENS " .. tostring(model.sensitivity or "") or
+                model.ready.field == "PAINT POLICY" and "PAINT " .. string.upper(tostring(model.paint_policy or "toggle")) or window))
+            end
+          end
+          if model.modal then
+            screen.move(0, 58)
+            screen.text(model.modal.detail or "K2 NO / K3 YES")
+          end
+        end
+        return
+      end
       pages:draw()
     end
   )
@@ -60,6 +111,11 @@ function trigger_edit_page_ui.init()
 end
 
 function trigger_edit_page_ui.enc(n, d)
+  if trigger_edit_page and trigger_edit_page.get_algorithm and trigger_edit_page.get_algorithm() == 5 then
+    local value = trigger_edit_page.handle_rhythm_doctor_encoder and trigger_edit_page.handle_rhythm_doctor_encoder(n, d)
+    fn.dirty_screen(true); fn.dirty_grid(true)
+    return value and value.code ~= "UNCLAIMED"
+  end
   if n == 2 then
     for i = 1, math.abs(d) do
       if d > 0 then
@@ -97,6 +153,13 @@ function trigger_edit_page_ui.enc(n, d)
       end
     end
   end
+end
+
+function trigger_edit_page_ui.key(n, z)
+  if not trigger_edit_page or not trigger_edit_page.get_algorithm or trigger_edit_page.get_algorithm() ~= 5 then return false end
+  local value = trigger_edit_page.handle_rhythm_doctor_key and trigger_edit_page.handle_rhythm_doctor_key(n, z)
+  fn.dirty_screen(true); fn.dirty_grid(true)
+  return value and value.code ~= "UNCLAIMED"
 end
 
 function trigger_edit_page_ui.update_tresillo()

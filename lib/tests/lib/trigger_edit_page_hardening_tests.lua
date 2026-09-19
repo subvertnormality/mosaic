@@ -32,7 +32,9 @@ local function with_editor(body)
         env.handlers[#env.handlers + 1] = handler
       end,
       register_dual = function() end,
-      register_long = function() end
+      register_long = function() end,
+      register_pre = function() end,
+      register_post = function() end
     }
     draw = {register_grid = function() end}
     grid_abstraction = {led = function() end}
@@ -50,7 +52,7 @@ local function with_editor(body)
     program.init()
     local page = dofile("../../lib/pages/trigger_edit_page/trigger_edit_page.lua")
     page.register_press()
-    luaunit.assert_equals(#env.handlers, 11)
+    luaunit.assert_equals(#env.handlers, 12)
     body(env)
   end)
 

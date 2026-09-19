@@ -1,0 +1,16 @@
+test_any_audio_or_transport_failure_is_fatal (test_performance.PerformanceTests) ... ok
+test_both_duration_classes_need_measurements (test_performance.PerformanceTests) ... ok
+test_complete_device_evidence (test_performance.PerformanceTests) ... ok
+test_desktop_is_never_hardware_evidence (test_performance.PerformanceTests) ... ok
+test_duration_classes_cannot_hide_each_others_tail_failures (test_performance.PerformanceTests) ... ok
+test_forty_five_second_limits (test_performance.PerformanceTests) ... ok
+test_missing_observation_cannot_default_to_success (test_performance.PerformanceTests) ... ok
+test_missing_repeats_tempo_coverage_and_duplicate_evidence (test_performance.PerformanceTests) ... ok
+test_nonfinite_numbers_are_not_measurements (test_performance.PerformanceTests) ... ok
+test_short_buffer_cannot_claim_all_five_lanes_ready (test_performance.PerformanceTests) ... ok
+test_warm_p95_and_cold_max_are_separate (test_performance.PerformanceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.010s
+
+OK

@@ -1,0 +1,7 @@
+{
+  "source_sha256": "f1b940a2dec731ecfb9dfb5ab4d3cd9534b04ad0d43e7ac99ca49007ef1bcfe5",
+  "test_sha256": "7393c03da977f0ab203edbbc8b0147d3f6f2cc84effa0c64bf2a4870c09e8374",
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "terminal saves wait for asynchronous release: tests/rhythm_doctor/test_lifecycle.lua:11: SAVE_NOW ~= DEFERRED\nproject replacement preserves in-flight release owner: tests/rhythm_doctor/test_lifecycle.lua:11: 2 ~= 1\nidle cleanup does not invent a resource lease: tests/rhythm_doctor/test_lifecycle.lua:11: 1 ~= 0\ndestructive modal requires explicit stopped transport: tests/rhythm_doctor/test_lifecycle.lua:11: OK ~= STOP_SEQUENCER\n"
+}

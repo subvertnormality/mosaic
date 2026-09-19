@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "baseline_revision": "6dff846",
+  "source_sha256": {
+    "lib/rhythm_doctor/paint_journal.lua": "db4ae73cc1fafcf7d780438e502c99463c9c35dd9f54938108fca80858367a0d",
+    "tests/rhythm_doctor/test_journal.lua": "1ecbdac4dcdeedbb35249189b165b7a16f32b248c1d3579c0fac87fd3304c2a2"
+  },
+  "failure": "test_journal.lua:28: journal retained more entries than its global bound",
+  "scope": "pure component regression; not UI acceptance"
+}

@@ -1,4 +1,5 @@
 local pattern = {}
+local source_revisions = include("mosaic/lib/source_pattern_revision").new()
 
 local quantiser = include("mosaic/lib/quantiser")
 local m_clock = include("mosaic/lib/clock/m_clock")
@@ -301,7 +302,12 @@ function pattern.update_working_patterns(song_pattern, affected_channels)
   if requested then state.update() end
 end
 
+function pattern.get_source_revision(song_pattern, source_number)
+  return source_revisions:get(song_pattern, source_number)
+end
+
 function pattern.update_source_working_patterns(song_pattern, source_number)
+  source_revisions:edited(song_pattern, source_number)
   local affected = {}
   for c = 1, 16 do
     local channel = song_pattern.channels[c]
