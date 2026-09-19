@@ -9,15 +9,15 @@
     "exclusion_reason": "MM-08+ is explicitly gated as later design work and was not requested for this implementation."
   },
   "source": {
-    "revision": "61af7d9dda0b1e6ccfeb6bde5c2bfedf2053a72a",
+    "revision": "76eefa49296e4b24925c83d0ed040807f76896de",
     "dirty_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tree_sha256": "3d12091118a8713910f5049d1da15e39dd0f7901baf6ea2a33962231bb3d6d6d",
-    "file_count": 1256
+    "git_tree": "f81d1a25ee4cab53ce403f947f44448f9d7db150",
+    "file_count": 1246
   },
   "automated_tests": {
     "lua_unit_and_integration": {
       "passed": true,
-      "tests": 1846,
+      "tests": 1850,
       "failures": 0,
       "command": "cd lib/tests && lua run_tests.lua"
     },
@@ -53,10 +53,17 @@
         "range, crossing, inversion, coverage and lifecycle failures"
       ],
       "measured_cost": {
-        "fixture": "test_harmony_voicing_five_voice_preset_reports_measured_bounded_cost",
+        "command": "lua5.3 tools/benchmark_harmony_solver.lua .",
+        "scope": "Reference-host pure-solver CPU evidence only; this is not a physical-norns scheduling or deadline claim.",
+        "runs_per_preset": 100,
         "voices": 5,
-        "nodes": 9040,
+        "nodes_per_solve": 17244,
         "node_budget": 200000,
+        "results": {
+          "smooth_cpu_ms_per_solve": 23.726430,
+          "compact_cpu_ms_per_solve": 23.188240,
+          "independent_cpu_ms_per_solve": 22.448870
+        },
         "status": "ok"
       }
     },
@@ -64,27 +71,84 @@
       "covered_by_full_lua_suite": true,
       "tests": [
         "test_harmony_playback_revoice_cache_distinguishes_equal_pitch_absolute_pin",
-        "test_harmony_playback_delayed_first_arp_voice_commits_on_admission",
+        "test_harmony_playback_delayed_first_arp_voice_commits_at_first_reached_onset",
         "test_harmony_playback_zero_gate_silent_arp_does_not_commit_history",
         "test_harmony_playback_gate_before_first_voiced_arp_slot_does_not_commit_history",
         "test_harmony_playback_terminating_interval_before_first_voiced_arp_slot_does_not_commit_history",
+        "test_harmony_playback_swung_gate_before_first_voiced_arp_slot_does_not_commit_history",
         "test_harmony_context_pentatonic_policy_is_material_and_revision_identity",
         "test_harmony_inspection_retains_actual_event_source_and_emitted_pitch",
         "test_harmony_inspection_keeps_authored_source_distinct_from_note_mask_merge_pitch",
+        "test_harmony_inspection_keeps_delayed_stages_with_their_event_and_selected_step",
+        "test_harmony_inspection_replaces_a_steps_old_event_without_accepting_its_late_callback",
         "test_midi_note_on_reports_the_normalized_emitted_pitch",
         "test_harmony_result_prefers_active_event_bypass_without_a_solver_result",
-        "test_harmony_failure_details_use_active_event_not_unapplied_draft"
+        "test_harmony_failure_details_use_active_event_not_unapplied_draft",
+        "test_harmony_result_step_selector_reads_one_coherent_event_chain"
       ]
-    }
+    },
+    "plan_requirement_matrix": [
+      {
+        "family": "Legacy Off path, source semantics, precedence and immutable authored data",
+        "unit_integration": ["foundation_planner_tests.lua", "musical_merge_pattern_integration_tests.lua", "harmony_playback_integration_tests.lua"],
+        "behaviour": ["M-MERGE-FOUNDATION-001", "M-HARMONY-REVOICE-001", "M-HARMONY-HELD-001"]
+      },
+      {
+        "family": "Foundation anchors, additions, provenance, gap, amount, accent, deterministic ranking and finite boundaries",
+        "unit_integration": ["foundation_planner_tests.lua", "musical_merge_config_tests.lua", "musical_merge_pattern_integration_tests.lua"],
+        "behaviour": ["M-MERGE-FOUNDATION-001"]
+      },
+      {
+        "family": "Phrase cycles, shapes, fixed/per-phrase variation, activation boundaries, transport and polymetric lifecycle",
+        "unit_integration": ["musical_merge_state_tests.lua", "musical_merge_pattern_integration_tests.lua"],
+        "behaviour": ["M-MERGE-PHRASE-001"]
+      },
+      {
+        "family": "Structural pitch targets, anchor pitch, scale inventory, masks, fixed/random precedence and Pattern binding identity",
+        "unit_integration": ["musical_merge_pitch_target_tests.lua", "harmony_context_tests.lua", "harmony_pattern_tests.lua", "harmony_playback_integration_tests.lua"],
+        "behaviour": ["M-HARMONY-PATTERN-001"]
+      },
+      {
+        "family": "Deterministic voicing, material preservation, common tones, identity, inversion, register, spacing, bass, entry and score tie-breaks",
+        "unit_integration": ["harmony_voicing_tests.lua", "harmony_config_tests.lua", "harmony_context_tests.lua", "harmony_state_tests.lua"],
+        "behaviour": ["M-HARMONY-REVOICE-001", "M-HARMONY-ENSEMBLE-001"]
+      },
+      {
+        "family": "No-solution, invalid/budget outcomes, strict silence, explicit legacy fallback and visible explanations",
+        "unit_integration": ["harmony_voicing_tests.lua", "harmony_playback_integration_tests.lua", "harmony_inspection_tests.lua", "channel_feature_editor_tests.lua"],
+        "behaviour": ["M-HARMONY-FAILURE-001"]
+      },
+      {
+        "family": "Ensemble membership, stable channel roles, group source, local-scale bypass, rhythm preservation and atomic edits",
+        "unit_integration": ["harmony_config_state_tests.lua", "harmony_context_tests.lua", "harmony_playback_integration_tests.lua", "channel_feature_editor_tests.lua"],
+        "behaviour": ["M-HARMONY-ENSEMBLE-001"]
+      },
+      {
+        "family": "Scheduler articulation, retrigger/gate/note ownership, swing-aware arp admission and committed-history lifecycle",
+        "unit_integration": ["harmony_playback_integration_tests.lua", "voice_lifetime_tests.lua"],
+        "behaviour": ["M-HARMONY-REVOICE-001", "M-MERGE-PHRASE-001"]
+      },
+      {
+        "family": "Existing Channel UI navigation, drafts/queue/active state, held-step precedence, projection and coherent event inspection",
+        "unit_integration": ["channel_feature_editor_tests.lua", "harmony_inspection_tests.lua", "musical_merge_pattern_integration_tests.lua"],
+        "behaviour": ["M-MERGE-FOUNDATION-001", "M-MERGE-PHRASE-001", "M-HARMONY-FAILURE-001", "M-HARMONY-HELD-001"]
+      },
+      {
+        "family": "Persistence, copy/migration defaults, transient-history exclusion and cold-load replay",
+        "unit_integration": ["optional_config_persistence_tests.lua", "harmony_config_state_tests.lua", "musical_merge_config_tests.lua"],
+        "behaviour": ["M-HARMONY-PERSIST-001"]
+      }
+    ],
+    "coverage_qualification": "Finite planner/solver axes and boundary classes are exercised exhaustively in pure tests where practical; cross-module contracts use integration tests; player-visible controls, MIDI, grid, screen and persistence use the public emulator input/output path. The named 16-run campaign is feature acceptance, not the exhaustive repository behavior campaign, physical-norns evidence, or a hardware deadline claim."
   },
   "emulator_behaviour": {
     "passed": true,
     "complete_regression_run": false,
     "reason_not_complete": "Feature acceptance selection; exhaustive repository campaign remains sharded CI scope.",
-    "started": "2026-09-19T23:39:02+0100",
-    "finished": "2026-09-19T23:47:09+0100",
+    "started": "2026-09-20T00:32:42+0100",
+    "finished": "2026-09-20T00:47:29+0100",
     "suite_sha256": [
-      "040440c14bad78e4c5766b7057a21752ff04df75079f36c98ff2ea98b5bbaeba"
+      "a0e6ee7182179884d2f39bda16ba95507fc9620454ac84159e6d13559846ed99"
     ],
     "suite_partition": "One exact-commit run covers the complete named eight-case acceptance inventory in both lanes on the same clean source identity.",
     "case_runs": 16,
@@ -102,24 +166,24 @@
     ],
     "manifest_sha256": {
       "real-time": {
-        "M-HARMONY-ENSEMBLE-001": "cfe3e6c295fe711319bd9bdb1919f093fc70580c53aa851fcfd8003d06daadd4",
-        "M-HARMONY-FAILURE-001": "7897c59092da9f62bd0601bbe1dcd667f211c77073bda9fa759f6d86574d2bda",
-        "M-HARMONY-HELD-001": "248f1ee22aaf39b5bb5310df3b24920f32be63eb451be481070ea301a747aee1",
-        "M-HARMONY-PATTERN-001": "d9b19f03590ecc72f1f30f15524470ad10d08460132cf4256dc5e2319684128d",
-        "M-HARMONY-PERSIST-001": "2a1c78e568d86258914e6ee49dc69197d3224c34a210be81060d46b0d7a460f2",
-        "M-HARMONY-REVOICE-001": "589e39c9d3a330c462558fed318528e56d7dfca6ddc62421c884db1bbd17247f",
-        "M-MERGE-FOUNDATION-001": "1d00fad70366537c8792948d7de4f6fa0606c68419dab89bdd4591cf7f86d078",
-        "M-MERGE-PHRASE-001": "2b91cfd028d20cb7c76abab99f3dac9019c6bc2743eb220213ac8e6235b09dec"
+        "M-HARMONY-ENSEMBLE-001": "4a60482e6a933d6e4e280d8e18f2e6b6583d2c6cefe46d3df5cc284947f2854f",
+        "M-HARMONY-FAILURE-001": "7b6f6048d076687e4af0798789a490d0931a90cd72f0e90e98f9c77f8b5ccf87",
+        "M-HARMONY-HELD-001": "47d48cd9370a899c209bc899e7844fc633a0e65d98344017075b3f5adb121d65",
+        "M-HARMONY-PATTERN-001": "32b8a72fd9049c77cccab745245d7d5680656f8febae748d9d60736bf7a0338f",
+        "M-HARMONY-PERSIST-001": "9e252e14cc00ef67e906c8aef25206d5fc4d62345612066bdd2b820cbe445e47",
+        "M-HARMONY-REVOICE-001": "99594349256894001d87618763b905b46e2ed9e1323171a3c8af4c6b8c464040",
+        "M-MERGE-FOUNDATION-001": "8604631f3a0773309218948087a25e403bece5923f0ea27f86db99548734dd75",
+        "M-MERGE-PHRASE-001": "3041371aa72355d8a7872f90237176dba94cb3a680ae2401543376e59eb4dc8a"
       },
       "controlled-experimental": {
-        "M-HARMONY-ENSEMBLE-001": "2751dc31a3f47e1c503164891d662d469a3155340723851169019b383905dcb5",
-        "M-HARMONY-FAILURE-001": "6b95fc26e24421c235f061e9881a43078be98a6baab7135b6abeb5346673d13e",
-        "M-HARMONY-HELD-001": "c2d63d28098370fe1efc1c519cc7d28643807f8e0b9c2160e57250582deb3b06",
-        "M-HARMONY-PATTERN-001": "54b6f5546e2dd36e62b2f7df43c14125349716d4597fb023a229dca5a4f9997a",
-        "M-HARMONY-PERSIST-001": "974d79f88666d8005f77308ec5e520101365e937d7dc6526b80f51b53ae1c2bd",
-        "M-HARMONY-REVOICE-001": "438ac28153d72fb38f5f65ed698cd7771918dc6538fea1f9f579fbe9876d8ea0",
-        "M-MERGE-FOUNDATION-001": "4a9be481d84197154946a00540488e62fe0d061b071c3d69cf0597eb81104e3d",
-        "M-MERGE-PHRASE-001": "f181dd57162b19201876bdde693587a42d2720dd54965f46401268b585c0aec4"
+        "M-HARMONY-ENSEMBLE-001": "4d1f033f6f1dca217c4dd4ca28b0fc1a4a1707751543ae5a5270d09b564327b2",
+        "M-HARMONY-FAILURE-001": "7b0eee0b6be094add0019146ea515ba7537c359dbd5d7ac9c9ec7ca6b1245ab6",
+        "M-HARMONY-HELD-001": "4282e67b95631dca8f1bcd7a56926ffa42bdb2e53e4b1ac612e50dbf69f6eb34",
+        "M-HARMONY-PATTERN-001": "522f8dfbc78c49daf24b8900768f5621835f333d2ae9b5e49bacd0f16724ffe5",
+        "M-HARMONY-PERSIST-001": "772df73241ad8721eadd111a7a1dddb3040fa0fd5e085afa77001aeea928f696",
+        "M-HARMONY-REVOICE-001": "06fd47cf6f3f1203ffb87e449a8bed3a389068b81b6af042bbe52872c3d98537",
+        "M-MERGE-FOUNDATION-001": "1ad7443ca7159cf856d1aaa6b5e0c84c02876f142ba9ef32b92b1b4679dcd00b",
+        "M-MERGE-PHRASE-001": "8ab6ec3d5c7668976f490c682cd2650b215c3549347781c31f78d4dcf68f1796"
       }
     }
   },
