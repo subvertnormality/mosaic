@@ -451,6 +451,15 @@ end
 
 local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local harmony_state = include("mosaic/lib/harmony/state")
+local function settle_optional_state_on_stop()
+  local affected=merge_state.stop_all();harmony_config_state.stop_all();harmony_state.reset()
+  for song,channels in pairs(affected)do for channel in pairs(channels)do
+    if type(song)=="table"and type(song.patterns)=="table"and type(song.channels)=="table"and
+      type(song.channels[channel])=="table"and type(song.channels[channel].selected_patterns)=="table"then
+      pattern.update_working_pattern(channel,song)
+    end
+  end end
+end
 local transport = include("mosaic/lib/clock/transport_lifecycle").new {
   get_clock = function() return m_clock end,
   get_lattice = function() return clock_lattice end,
@@ -469,8 +478,8 @@ local transport = include("mosaic/lib/clock/transport_lifecycle").new {
       end
     end
   end,
-  on_stop = function() merge_state.stop_all(); harmony_config_state.stop_all(); harmony_state.reset() end,
-  on_reset = function() merge_state.stop_all(); harmony_config_state.stop_all(); harmony_state.reset() end,
+  on_stop = settle_optional_state_on_stop,
+  on_reset = settle_optional_state_on_stop,
 }
 
 function m_clock.init()

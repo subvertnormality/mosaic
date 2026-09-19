@@ -43,6 +43,16 @@ function test_harmony_pattern_alias_conflict_fails_closed_without_touching_raw()
   luaunit.assert_equals(result.status, "alias_conflict")
   luaunit.assert_nil(runtime.pitch_for(result, 0, 60))
   luaunit.assert_equals(runtime.pitch_for(result, 9, 81), 81)
+  luaunit.assert_equals(result.mapped,{[0]="bass",[7]="bass"})
+end
+
+function test_harmony_pattern_without_bass_does_not_apply_bass_constraints_to_inner_role()
+  local c=channel();c.roles.v1.enabled=false
+  c.pattern_maps.b={schema_version=1,revision=1,assignments={["2"]="inner1"}}
+  c.bass.mode="inversion";c.bass.tone_id="missing"
+  local result=runtime.prepare({},1,"source","b",{[2]=64},c)
+  luaunit.assert_equals(result.status,"ok")
+  luaunit.assert_not_nil(result.role_pitches.inner1)
 end
 
 function test_harmony_pattern_binding_includes_foundation_pitch_identity()

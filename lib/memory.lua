@@ -177,7 +177,7 @@ function memory.undo(channel_number)
   local normal_sequence=normal_event and runtime_history().event_sequences[normal_event]or-1
   if feature and feature.sequence>normal_sequence then
     local song=program.get_song_pattern(feature.song_pattern)
-    local ok=optional_config_transaction.apply(song,feature.before,m_clock and m_clock.is_playing and m_clock.is_playing()or false,feature.boundary)
+    local ok=optional_config_transaction.apply_transition(song,feature.after,feature.before,m_clock and m_clock.is_playing and m_clock.is_playing()or false,feature.boundary)
     if ok then feature.applied=false end;return ok
   end
   if not state.channels[channel_number] then return end
@@ -218,7 +218,7 @@ function memory.redo(channel_number)
   local normal_sequence=normal_event and runtime_history().event_sequences[normal_event]or math.huge
   if feature and feature.sequence<normal_sequence then
     local song=program.get_song_pattern(feature.song_pattern)
-    local ok=optional_config_transaction.apply(song,feature.after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,feature.boundary)
+    local ok=optional_config_transaction.apply_transition(song,feature.before,feature.after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,feature.boundary)
     if ok then feature.applied=true end;return ok
   end
   if not state.channels[channel_number] then return end
@@ -352,7 +352,7 @@ function memory.record_optional_config(song_pattern,affected,before,after,bounda
   end
   local transaction={type="optional_config",song_pattern=song_pattern,affected=affected_set,
     before=fn.deep_copy(before),after=fn.deep_copy(after),boundary=boundary or"channel",sequence=next_sequence(),applied=false}
-  ok,reason=optional_config_transaction.apply(song,after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,transaction.boundary)
+  ok,reason=optional_config_transaction.apply_transition(song,before,after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,transaction.boundary)
   if not ok then return nil,reason end
   transaction.applied=true;runtime_history().transactions[#runtime_history().transactions+1]=transaction
   return true

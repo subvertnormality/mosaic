@@ -149,7 +149,8 @@ function test_harmony_playback_missing_ensemble_group_obeys_explicit_fallback()
   local channel=song.channels[1];channel.voicing=harmony_config.new_channel("ensemble");channel.voicing.group_id=1
   song.voicing={schema_version=1,groups={}}
   luaunit.assert_equals(harmony_config_state.effective_channel(song,1,channel.voicing).mode,"ensemble")
-  luaunit.assert_equals(#midi_note_on_events,0)
+  local pitches={};for _,event in ipairs(midi_note_on_events)do pitches[#pitches+1]=event[1]end
+  luaunit.assert_equals(pitches,{})
   step.handle(1,1);luaunit.assert_equals(#midi_note_on_events,0)
 
   channel.voicing.fallback="legacy"
@@ -175,4 +176,57 @@ function test_musical_merge_structural_target_changes_only_foundation_addition()
   step.handle(1, 2)
   luaunit.assert_equals({midi_note_on_events[1][1],midi_note_on_events[2][1]}, {60,60})
   luaunit.assert_equals(song.patterns[2].note_values[2], 3)
+end
+
+
+function test_harmony_failed_revoice_arp_is_strictly_silent()
+  local song=setup();source(song,1,{[1]=0},{1});local channel=song.channels[1]
+  channel.chord_one_mask=2;channel.voicing=harmony_config.new_channel("revoice")
+  channel.voicing.roles.v1=exact_role(49);channel.voicing.roles.v2=exact_role(53)
+  channel.trig_lock_params[1]={id="chord_arp",param_id="chord_arp_1"}
+  program.add_step_param_trig_lock(1,1,4);assign(song,1,1)
+  luaunit.assert_equals(harmony_config_state.effective_channel(song,1,channel.voicing).mode,"revoice")
+  step.handle(1,1);progress(3)
+  luaunit.assert_equals(harmony_runtime_state.snapshot(song).channels[1].prepared.status,"no_solution")
+  local pitches={};for _,event in ipairs(midi_note_on_events)do pitches[#pitches+1]=event[1]end
+  luaunit.assert_equals(pitches,{})
+  luaunit.assert_nil(harmony_runtime_state.snapshot(song).channels[1].consumed)
+end
+
+function test_harmony_pattern_source_edit_invalidates_prepared_frame()
+  local song=setup();source(song,1,{[1]=0},{1});local channel=song.channels[1]
+  channel.voicing=harmony_config.new_channel("pattern");channel.voicing.roles.v1=exact_role(48)
+  assign(song,1,1);local binding=pattern_harmony.binding_key(channel)
+  channel.voicing.pattern_maps[binding]={schema_version=1,revision=1,assignments={["0"]="bass",["1"]="bass"}}
+  step.handle(1,1);luaunit.assert_equals(midi_note_on_events[1][1],48)
+  song.patterns[1].note_values[1]=1;pattern_model.update_working_pattern(1,song)
+  luaunit.assert_equals(channel.working_pattern.note_values[1],1)
+  luaunit.assert_equals(pattern_harmony.binding_key(channel),binding)
+  step.handle(1,1)
+  luaunit.assert_equals(#midi_note_on_events,1)
+  luaunit.assert_equals(harmony_inspection.snapshot(song,1).planned.status,"alias_conflict")
+end
+
+function test_harmony_ensemble_absolute_mask_is_visible_legacy_bypass()
+  local song=setup();source(song,1,{[1]=0},{1})
+  local group=harmony_config.new_group(1);group.enabled=true;group.roles.bass=exact_role(48)
+  song.voicing={schema_version=1,groups={[1]=group}}
+  local channel=song.channels[1];channel.voicing=harmony_config.new_channel("ensemble");channel.voicing.group_id=1
+  channel.step_note_masks[1]=60;assign(song,1,1)
+  step.handle(1,1)
+  luaunit.assert_equals(midi_note_on_events[1][1],60)
+  luaunit.assert_equals(harmony_inspection.snapshot(song,1).planned.bypass,"note_mask")
+  luaunit.assert_nil(harmony_runtime_state.snapshot(song).groups[1])
+end
+
+function test_pattern_harmony_uses_post_foundation_structural_pitch_once()
+  local song=setup();source(song,1,{[1]=0},{1});source(song,2,{[2]=3},{2})
+  local channel=song.channels[1];fn.add_to_set(channel.selected_patterns,1);fn.add_to_set(channel.selected_patterns,2)
+  channel.trig_merge_mode="skip";channel.musical_merge=merge_config.new();channel.musical_merge.mode="foundation"
+  channel.musical_merge.anchor=1;channel.musical_merge.target={kind="degrees",degrees={1}}
+  channel.voicing=harmony_config.new_channel("pattern");channel.voicing.roles.v1=exact_role(60)
+  pattern_model.update_working_pattern(1,song);local binding=pattern_harmony.binding_key(channel)
+  channel.voicing.pattern_maps[binding]={schema_version=1,revision=1,assignments={["3"]="bass"}}
+  step.handle(1,2)
+  luaunit.assert_equals(midi_note_on_events[1][1],60)
 end

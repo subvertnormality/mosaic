@@ -125,3 +125,13 @@ function test_harmony_runtime_state_is_shared_across_norns_include_callers()
   reader.consume_revoice(song,3,frame)
   luaunit.assert_equals(writer.snapshot(song).channels[3].consumed_count,1)
 end
+
+
+function test_harmony_state_delayed_older_frame_cannot_roll_consumed_history_back()
+  harmony_state.reset();local song={};local channel=config.new_channel("revoice")
+  local older=harmony_state.prepare_revoice(song,1,"older",material({{"root",0}}),channel)
+  local newer=harmony_state.prepare_revoice(song,1,"newer",material({{"root",4}}),channel)
+  luaunit.assert_true(harmony_state.consume_revoice(song,1,newer))
+  luaunit.assert_false(harmony_state.consume_revoice(song,1,older))
+  luaunit.assert_equals(harmony_state.snapshot(song).channels[1].consumed_revision,"newer")
+end

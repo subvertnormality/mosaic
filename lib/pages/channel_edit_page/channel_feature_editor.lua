@@ -3,6 +3,8 @@ local merge_state = include("mosaic/lib/musical_merge/state")
 local harmony_config = include("mosaic/lib/harmony/config")
 local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local harmony_state = include("mosaic/lib/harmony/state")
+local harmony_inspection=include("mosaic/lib/harmony/inspection")
+local harmony_context = include("mosaic/lib/harmony/context")
 local pattern_harmony = include("mosaic/lib/harmony/pattern")
 local optional_transaction=include("mosaic/lib/optional_config_transaction")
 
@@ -77,6 +79,16 @@ local function assigned_patterns(channel)
   table.sort(result); return result
 end
 
+local function degree_inventory(channel)
+  if type(program.get_scale)~="function"then return{}end
+  local scale_number=channel.step_scale_number or program.get().default_scale or 1
+  return harmony_context.scale_pitch_classes(scale_number,0)
+end
+
+local function degree_source_key(channel)
+  return table.concat(degree_inventory(channel),",")
+end
+
 function editor.new(kind)
   local self = {kind=kind, screen=kind=="merge"and"M01"or"H01", selected=1,
     stack={}, dirty=false, status="", selected_step=1, selected_group=1, selected_role=1}
@@ -94,7 +106,7 @@ function editor.new(kind)
   end
   local function back()
     local parent=table.remove(self.stack)
-    if parent then self.screen,self.selected=parent.screen,parent.selected end
+    if parent then self.screen,self.selected=parent.screen,parent.selected;if parent.screen=="H01"then self.context_group=false end end
     return parent~=nil
   end
 
@@ -120,7 +132,7 @@ function editor.new(kind)
           value.cycles=v;if value.shape~="custom"then value.percentages=merge_config.curve(value.shape,v)else
             local p={};for i=1,v do p[i]=value.percentages[i]or 100 end;value.percentages=p end
         end,{values={1,2,4,8}}),
-        editable("Shape",function()return value.shape end,function(v)value.shape=v;value.percentages=merge_config.curve(v,value.cycles)end,
+        editable("Shape",function()return value.shape end,function(v)value.shape=v;if v~="custom"then value.percentages=merge_config.curve(v,value.cycles)end end,
           {values={"flat","build","answer","fill","custom"}})}
       for index=1,value.cycles do fields[#fields+1]=editable("Cycle "..index,function()return value.percentages[index]end,
         function(v)value.percentages[index]=v;value.shape="custom"end,{min=0,max=100})end
@@ -133,9 +145,10 @@ function editor.new(kind)
       action("Target setup","M06"),action("Voice leading","HARMONY_LINK")}
     elseif self.screen=="M06"then
       if value.target.kind=="degrees"then
+        local inventory=harmony_context.scale_pitch_classes(self.channel.step_scale_number or program.get().default_scale or 1,0)
         local selected={};for _,v in ipairs(value.target.degrees or{})do selected[v]=true end
-        local fields={};for degree=1,12 do fields[#fields+1]=editable("Degree "..degree,function()return selected[degree]or false end,
-          function(on)selected[degree]=on;local d={};for i=1,12 do if selected[i]then d[#d+1]=i end end;value.target.degrees=d end,{boolean=true})end
+        local fields={};for degree=1,#inventory do fields[#fields+1]=editable("Degree "..degree,function()return selected[degree]or false end,
+          function(on)selected[degree]=on;local d={};for i=1,#inventory do if selected[i]then d[#d+1]=i end end;value.target.degrees=d end,{boolean=true})end
         return fields
       elseif value.target.kind=="chord"then
         local ids={};for id,g in pairs((self.song.voicing and self.song.voicing.groups)or{})do if g.enabled then ids[#ids+1]=id end end;table.sort(ids)
@@ -145,14 +158,14 @@ function editor.new(kind)
     elseif self.screen=="M07"then
       local f=self.channel.working_pattern and self.channel.working_pattern.foundation
       return{editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{min=1,max=64}),
-        readonly("Role",function()return f and f.roles[self.selected_step]or"EMPTY"end),
-        readonly("Decision",function()return f and f.reasons[self.selected_step]or"PLAYED"end),action("Reason","M08")}
+        readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end),
+        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"PLAYED"end),action("Reason","M08")}
     elseif self.screen=="M08"then
       local f=self.channel.working_pattern and self.channel.working_pattern.foundation
-      return{readonly("Step",function()return self.selected_step end),readonly("Role",function()return f and f.roles[self.selected_step]or"EMPTY"end),
-        readonly("Sources",function()local s=f and f.sources[self.selected_step];return s and table.concat(s,",")or"NONE"end),
-        readonly("Decision",function()return f and f.reasons[self.selected_step]or"ADMITTED"end),
-        readonly("Velocity",function()return f and f.velocities[self.selected_step]end),readonly("Pitch target",function()return value.target.kind end)}
+      return{readonly("Step",function()return self.selected_step end),readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end),
+        readonly("Sources",function()local s=f and f.sources and f.sources[self.selected_step];return s and table.concat(s,",")or"NONE"end),
+        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"ADMITTED"end),
+        readonly("Velocity",function()return f and f.velocities and f.velocities[self.selected_step]end),readonly("Pitch target",function()return value.target.kind end)}
     elseif self.screen=="M09"then return{readonly("Merge gesture",function()return self.gesture or"NONE"end),
       readonly("Shape",function()return value.mode=="foundation"and"FOUNDATION ACTIVE"or"LEGACY"end)}end
     return{}
@@ -195,7 +208,8 @@ function editor.new(kind)
       end
       return{
         editable("Mode",function()return bass.mode end,function(v)bass.mode=v end,{values={"root","inversion","smooth","pedal"}}),
-        editable("Tone",function()return bass.tone_id end,function(v)bass.tone_id=v end,{values={"root","tone1","tone2","tone3","tone4","tone5"}}),
+        editable("Tone",function()return bass.tone_id end,function(v)bass.tone_id=v end,
+          {values=self.context_group and {"tone1","tone2","tone3","tone4","tone5"}or{"root","chord1","chord2","chord3","chord4"}}),
         editable("Direction",function()return bass.direction end,function(v)bass.direction=v end,{values={"nearest","ascending","descending"}}),
         editable("Strict direction",function()return bass.strict_direction end,function(v)bass.strict_direction=v end,{boolean=true}),
         editable("Pedal pitch",function()return bass.pedal end,function(v)bass.pedal=v end,{min=0,max=127}),
@@ -211,6 +225,8 @@ function editor.new(kind)
         fields[#fields+1]=action("Members","H07",{before=function()self.context_group=true end})
         fields[#fields+1]=action("Source","H10",{before=function()self.context_group=true end})
         fields[#fields+1]=action("Policies","H08",{before=function()self.context_group=true end})
+        fields[#fields+1]=action("Entry","H09",{before=function()self.context_group=true end})
+        fields[#fields+1]=action("Result","H05",{before=function()self.context_group=true end})
         fields[#fields+1]=action("Delete group","H04_DELETE")
       end;return fields
     elseif self.screen=="H04_DELETE"then
@@ -238,11 +254,12 @@ function editor.new(kind)
         editable("Common tones",function()return policy.common_tone_priority end,function(v)policy.common_tone_priority=v end,{boolean=true}),
         editable("Upper spacing",function()return policy.upper_spacing or 12 end,function(v)policy.upper_spacing=v end,{min=0,max=127}),
         editable("Bass separation",function()return policy.bass_separation or 5 end,function(v)policy.bass_separation=v end,{min=0,max=127}),action("Coverage","H10")}
-    elseif self.screen=="H09"then return{readonly("Start",function()return"ANCHOR"end),
-      editable("Song transition",function()return value.transition end,function(v)value.transition=v end,{values={"anchor","continue"}}),
-      editable("Same-slot repeat",function()return value.repeat_policy end,function(v)value.repeat_policy=v end,{values={"continue","anchor"}}),
-      editable("Failure fallback",function()return value.fallback end,function(v)value.fallback=v end,{values={"silence","legacy"}}),
-      editable("Absolute pitch",function()return value.absolute_pitch_policy end,function(v)value.absolute_pitch_policy=v end,{values={"pin","allow_octave_move"}})}
+    elseif self.screen=="H09"then local policy=self.context_group and group()or value;local fields={readonly("Start",function()return"ANCHOR"end),
+      editable("Song transition",function()return policy.transition end,function(v)policy.transition=v end,{values={"anchor","continue"}}),
+      editable("Same-slot repeat",function()return policy.repeat_policy end,function(v)policy.repeat_policy=v end,{values={"continue","anchor"}}),
+      editable("Failure fallback",function()return policy.fallback end,function(v)policy.fallback=v end,{values={"silence","legacy"}})}
+      if not self.context_group then fields[#fields+1]=editable("Absolute pitch",function()return value.absolute_pitch_policy end,function(v)value.absolute_pitch_policy=v end,{values={"pin","allow_octave_move"}})end
+      return fields
     elseif self.screen=="H10"then
       local g=group();if not g then return{readonly("Source",function()return"NO GROUP"end)}end
       local fields={editable("Source kind",function()return g.source.kind end,function(v)g.source.kind=v;if v=="scale_slot"then g.source.scale_slot=g.source.scale_slot or 1 end end,{values={"global_effective","scale_slot"}})}
@@ -270,15 +287,19 @@ function editor.new(kind)
           mark_dirty();back()
         end})}
     elseif self.screen=="H05"then
-      local snapshot=harmony_state.snapshot(self.song);local result=(snapshot.channels[self.channel_number]or{}).prepared
+      local snapshot=harmony_state.snapshot(self.song);local result=self.context_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
+      local trace=harmony_inspection.snapshot(self.song,self.channel_number)
       local fields={readonly("Status",function()
+        if trace.planned and trace.planned.bypass then return"BYPASS "..tostring(trace.planned.bypass)end
         if not result then return"NO RESULT"end
         return result.status=="ok"and"OK"or"NO VOICING"
       end)}
       if result and result.role_pitches then for role,pitch in pairs(result.role_pitches)do local p=pitch;fields[#fields+1]=readonly(role,function()return p end)end end
+      fields[#fields+1]=readonly("Planned",function()return trace.planned and trace.planned.output end)
+      fields[#fields+1]=readonly("Last",function()return trace.emitted and trace.emitted.pitch end)
       if result and result.status~="ok"then fields[#fields+1]=action("Failure details","H06")end;return fields
     elseif self.screen=="H06"then
-      local snapshot=harmony_state.snapshot(self.song);local result=(snapshot.channels[self.channel_number]or{}).prepared
+      local snapshot=harmony_state.snapshot(self.song);local result=self.context_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
       return{readonly("Reason",function()return result and result.reason or"NO VOICING"end),readonly("Fallback",function()return value.fallback end),action("Settings","H02")}
     end;return{}
   end
@@ -298,7 +319,7 @@ function editor.new(kind)
         if self.merge_drafts[number]then merge_state.effective(song,number,self.merge_drafts[number])end
       end
       self.draft=self.channel_drafts[self.channel_number]
-    end;self.before_snapshot=optional_transaction.snapshot(song);self.dirty=false
+    end;self.before_snapshot=optional_transaction.snapshot(song);self.degree_source_key=degree_source_key(channel);self.dirty=false
   end
   function self:enter()self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;self.stack={};self.context_group=false;self.status="";self:reload()end
   function self:get_fields()return self.kind=="merge"and merge_fields()or harmony_fields()end
@@ -315,6 +336,11 @@ function editor.new(kind)
     if not optional_transaction.equivalent(live,self.before_snapshot)then self.status="INVALID STALE DRAFT";return false end
     if self.kind=="merge"then
       local ok,reason=merge_config.validate(self.draft)
+      if ok and self.draft.target.kind=="degrees"then
+        local inventory=degree_inventory(channel)
+        if degree_source_key(channel)~=self.degree_source_key then ok,reason=nil,"degree source changed"
+        else for _,degree in ipairs(self.draft.target.degrees or{})do if inventory[degree]==nil then ok,reason=nil,"degree unavailable"break end end end
+      end
       if ok and self.draft.mode=="foundation"and not channel.selected_patterns[self.draft.anchor]then ok,reason=nil,"anchor not assigned"end
       if ok and self.draft.target.kind=="chord"then local g=song.voicing and song.voicing.groups[self.draft.target.group_id];if not(g and g.enabled)then ok,reason=nil,"chord source unavailable"end end
       if not ok then self.status="INVALID "..tostring(reason);return false end
@@ -339,18 +365,18 @@ function editor.new(kind)
   end
   function self:key(n)
     if n==2 then if self.dirty then self:reload();self.status="DRAFT CANCELLED"end;if #self.stack>0 then back()end;return true
-    elseif n==3 then local field=self:get_fields()[self.selected];if field and field.action then if field.before then field.before()end;if field.invoke then field.invoke()elseif field.route=="HARMONY_LINK"then self.status="OPEN HARMONY"elseif field.route then open(field.route)end;return true end;return self:apply()end
+    elseif n==3 then local field=self:get_fields()[self.selected];if field and field.action then if field.before then field.before()end;if field.invoke then field.invoke()elseif field.route=="HARMONY_LINK"then self:reload();if channel_edit_page_ui and channel_edit_page_ui.select_harmony_page then channel_edit_page_ui.select_harmony_page()end elseif field.route then open(field.route)end;return true end;return self:apply()end
   end
   function self:encoder_one()
-    if self.dirty then self:reload();self.status="DRAFT CANCELLED";self.stack={};self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;return true end
-    if #self.stack>0 then self.stack={};self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;return true end;return false
+    if self.dirty then self:reload();self.status="DRAFT CANCELLED";self.stack={};self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;self.context_group=false;return true end
+    if #self.stack>0 then self.stack={};self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;self.context_group=false;return true end;return false
   end
   function self:cancel_for_grid()
     if self.dirty then self:reload()end
-    self.stack={};self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;self.status="DRAFT CANCELLED"
+    self.stack={};self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;self.context_group=false;self.status="DRAFT CANCELLED"
   end
-  function self:show_merge_gesture(label)if self.kind=="merge"then self.return_screen,self.return_selected=self.screen,self.selected;self.gesture=label;self.screen,self.selected="M09",1 end end
-  function self:hide_merge_gesture()if self.screen=="M09"then self.screen,self.selected=self.return_screen or"M01",self.return_selected or 1 end end
+  function self:show_merge_gesture(label)if self.kind=="merge"then if not self.gesture_depth or self.gesture_depth==0 then self.return_screen,self.return_selected=self.screen,self.selected end;self.gesture_depth=(self.gesture_depth or 0)+1;self.gesture=label;self.screen,self.selected="M09",1 end end
+  function self:hide_merge_gesture()if self.screen=="M09"then self.gesture_depth=math.max(0,(self.gesture_depth or 1)-1);if self.gesture_depth==0 then self.screen,self.selected=self.return_screen or"M01",self.return_selected or 1;self.gesture=nil end end end
   function self:draw()
     if not self.draft then self:enter()end;local fields=self:get_fields();self.selected=clamp(self.selected,1,math.max(1,#fields));local first=math.max(1,math.min(self.selected-1,math.max(1,#fields-3)))
     screen.level(6);screen.move(2,17);screen.text(self.screen)

@@ -236,9 +236,12 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     local cycle = merge_runtime.cycle or 1
     local cycle_percentage = merge_settings.percentages and merge_settings.percentages[cycle] or 100
     local effective_amount = foundation.round_half_up((merge_settings.amount or 100) * cycle_percentage / 100)
+    local effective_start=fn.calc_grid_count(pattern_channel.start_trig[1],pattern_channel.start_trig[2])
+    local effective_end=fn.calc_grid_count(pattern_channel.end_trig[1],pattern_channel.end_trig[2])
+    effective_end=math.min(effective_end,effective_start+(selected_song_pattern.global_pattern_length or 64)-1)
     foundation_result = foundation.plan({
-      start_step = fn.calc_grid_count(pattern_channel.start_trig[1], pattern_channel.start_trig[2]),
-      end_step = fn.calc_grid_count(pattern_channel.end_trig[1], pattern_channel.end_trig[2]),
+      start_step = effective_start,
+      end_step = effective_end,
       anchor = merge_settings.anchor,
       source_trigs = source_trigs,
       source_velocities = source_velocities,

@@ -16,7 +16,8 @@ function pitch_target.resolve(pitch, options)
     pitch_classes = {}
     local inventory = options.scale_pitch_classes or {}
     for _, degree in ipairs(config.degrees or {}) do
-      if inventory[degree] ~= nil then pitch_classes[#pitch_classes + 1] = inventory[degree] end
+      if inventory[degree] == nil then return pitch, "source_missing" end
+      pitch_classes[#pitch_classes + 1] = inventory[degree]
     end
   elseif config.kind == "chord" then
     if not options.chord_material then return pitch, "source_missing" end

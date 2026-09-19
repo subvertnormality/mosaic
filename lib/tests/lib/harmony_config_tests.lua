@@ -79,7 +79,7 @@ function test_harmony_config_pattern_map_accepts_inactive_aliases_and_rejects_in
   song.channels[4].voicing.pattern_maps["p1|average"].assignments["3"] = "third"
   luaunit.assert_equals(({config.validate_song(song)})[2], "channel 4 pattern map role")
   song.channels[4].voicing.pattern_maps["p1|average"].assignments["3"]="inner2"
-  song.channels[4].voicing.pattern_maps["p1|average"].assignments["14"]="top"
+  song.channels[4].voicing.pattern_maps["p1|average"].assignments["not-a-number"]="top"
   luaunit.assert_equals(({config.validate_song(song)})[2],"channel 4 pattern map value")
 end
 

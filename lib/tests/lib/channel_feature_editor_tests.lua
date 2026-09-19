@@ -263,3 +263,31 @@ function test_feature_editor_draw_keeps_context_body_and_footer_out_of_page_head
   luaunit.assert_equals({calls[3].y,calls[4].y,calls[5].y,calls[6].y},{27,36,45,54})
   luaunit.assert_equals(calls[#calls].y,63)
 end
+
+
+function test_merge_selecting_custom_preserves_existing_cycle_percentages()
+  local _,channel=setup();channel.selected_patterns[1]=true
+  local value=feature_editor.new("merge");value:enter();value.draft.cycles=2
+  value.draft.shape="fill";value.draft.percentages={25,100}
+  open_label(value,"Phrase");select_label(value,"Shape")
+  value:enc(3,1)
+  luaunit.assert_equals(value.draft.shape,"custom")
+  luaunit.assert_equals(value.draft.percentages,{25,100})
+end
+
+function test_harmony_revoice_bass_tones_are_actual_source_ids()
+  setup();local value=feature_editor.new("harmony");value:enter();value.draft.mode="revoice"
+  open_label(value,"Bass");select_label(value,"Tone")
+  local field=value:get_fields()[value.selected]
+  luaunit.assert_equals(field.values,{"root","chord1","chord2","chord3","chord4"})
+end
+
+function test_optional_config_undo_preserves_later_independent_channel_edit()
+  local song=setup();song.channels[1].selected_patterns[1]=true;song.channels[2].selected_patterns[1]=true
+  local one=feature_editor.new("merge");one:enter();one.draft.mode="foundation";one.draft.anchor=1;one.dirty=true;one:apply()
+  program.get().selected_channel=2
+  local two=feature_editor.new("merge");two:enter();two.draft.mode="foundation";two.draft.anchor=1;two.draft.amount=42;two.dirty=true;two:apply()
+  memory.undo(1)
+  luaunit.assert_nil(song.channels[1].musical_merge)
+  luaunit.assert_equals(song.channels[2].musical_merge.amount,42)
+end

@@ -215,7 +215,10 @@ local function validate_channel(number, channel, groups)
     end
     for source, assigned_role in pairs(map.assignments) do
       local number_value = tonumber(source)
-      if not integer(number_value, -7, 13) then return nil, prefix .. " pattern map value" end
+      if type(number_value)~="number"or number_value~=number_value or
+        number_value==math.huge or number_value==-math.huge then
+        return nil, prefix .. " pattern map value"
+      end
       if not pattern_roles[assigned_role] then return nil, prefix .. " pattern map role" end
     end
   end

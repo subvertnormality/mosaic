@@ -65,6 +65,8 @@ local function solve(record, revision, frame, cache_key)
   local result = voicing.solve(frame)
   result.revision = revision
   result.cache_key = cache_key or revision
+  record.next_generation=(record.next_generation or 0)+1
+  result.generation=record.next_generation
   if result.status == "ok" then
     result.role_pitches = {}
     for index, role in ipairs(frame.roles) do result.role_pitches[role.id] = result.pitches[index] end
@@ -77,6 +79,8 @@ function harmony_state.prepare_revoice(song, channel_number, revision, material,
   local state = state_for(song)
   local record = state.channels[channel_number] or {consumed_count = 0}
   state.channels[channel_number] = record
+  local cache_key=revision .. "|" .. fingerprint(channel)
+  if record.prepared and record.prepared.cache_key==cache_key then return record.prepared end
   return solve(record, revision, {
     policy_version = 1,
     mode = "revoice",
@@ -91,7 +95,7 @@ function harmony_state.prepare_revoice(song, channel_number, revision, material,
     bass_separation = channel.bass_separation,
     node_budget = channel.node_budget,
     pins = deep_copy(pins)
-  }, revision .. "|" .. fingerprint(channel))
+  }, cache_key)
 end
 
 function harmony_state.prepare_group(song, group_id, revision, material, group)
@@ -129,7 +133,7 @@ function harmony_state.prepare_group(song, group_id, revision, material, group)
   }, cache_key)
 end
 
-function harmony_state.prepare_pattern(song, channel_number, revision, material, roles, channel, entry_previous)
+function harmony_state.prepare_pattern(song, channel_number, revision, material, roles, channel, entry_previous, has_bass)
   local state = state_for(song)
   local record = state.channels[channel_number] or {consumed_count = 0}
   state.channels[channel_number] = record
@@ -146,7 +150,8 @@ function harmony_state.prepare_pattern(song, channel_number, revision, material,
     common_tone_priority = channel.common_tone_priority,
     upper_spacing = channel.upper_spacing,
     bass_separation = channel.bass_separation,
-    bass = deep_copy(channel.bass),
+    bass = has_bass and deep_copy(channel.bass) or nil,
+    has_bass = has_bass == true,
     entry_previous = deep_copy(entry_previous),
     doubling = false,
     node_budget = channel.node_budget
@@ -156,9 +161,11 @@ end
 local function consume(record, result)
   if not record or not result or result.status ~= "ok" then return false end
   if record.consumed_key == result.cache_key then return false end
+  if record.consumed_generation and (result.generation or 0)<record.consumed_generation then return false end
   record.consumed = deep_copy(result)
   record.consumed_revision = result.revision
   record.consumed_key = result.cache_key
+  record.consumed_generation=result.generation or record.consumed_generation
   record.consumed_count = (record.consumed_count or 0) + 1
   return true
 end

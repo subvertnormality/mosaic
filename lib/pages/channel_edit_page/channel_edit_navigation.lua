@@ -103,6 +103,12 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
     local selected_page = controls.channel_pages:get_selected_page()
     local feature = selected_page == controls.channel_page_to_index["Merge Shape"] and feature_editors.merge or
       selected_page == controls.channel_page_to_index["Harmony"] and feature_editors.harmony
+    -- A grid step held before K2/K3 owns the gesture.  Restore its last legacy
+    -- workspace before dispatch so feature Apply/Cancel cannot steal the key.
+    if feature and z==1 and(n==2 or n==3)and #m_grid.get_pressed_keys()>0 then
+      controller.leave_feature_editor_for_grid()
+      feature=nil
+    end
     if feature and z == 1 and (n == 2 or n == 3) then feature:key(n); return end
     if n == 2 and z == 1 then
       public_ui.handle_key_two_pressed()

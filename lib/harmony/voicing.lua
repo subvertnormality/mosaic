@@ -75,6 +75,7 @@ local function exact_previous_is_available(frame, role_index, pitch)
 end
 
 local function direction_violation(frame, pitches)
+  if frame.has_bass == false then return 0 end
   local bass = frame.bass or {}
   local previous = frame.previous and frame.previous[frame.roles[1].id]
   if not previous or bass.direction == nil or bass.direction == "nearest" then return 0 end
@@ -109,7 +110,7 @@ local function score(frame, pitches, assignments, ranks)
   local spacing = 0
   local upper_spacing = frame.upper_spacing == nil and 12 or frame.upper_spacing
   local bass_separation = frame.bass_separation == nil and 5 or frame.bass_separation
-  if #pitches > 1 and bass_separation > 0 then
+  if frame.has_bass ~= false and #pitches > 1 and bass_separation > 0 then
     spacing = spacing + math.max(0, bass_separation - (pitches[2] - pitches[1]))
   end
   if upper_spacing > 0 then
@@ -156,7 +157,7 @@ local function hard_legal(frame, pitches, assignments, by_id)
       return false, "crossing"
     end
   end
-  if #pitches > 1 then
+  if frame.has_bass ~= false and #pitches > 1 then
     for index = 2, #pitches do
       if pitches[index] < pitches[1] then return false, "inversion" end
     end
@@ -164,7 +165,7 @@ local function hard_legal(frame, pitches, assignments, by_id)
 
   local bass = frame.bass or {}
   local previous_bass = frame.previous and frame.previous[frame.roles[1].id]
-  if bass.strict_direction and previous_bass then
+  if frame.has_bass ~= false and bass.strict_direction and previous_bass then
     if bass.direction == "ascending" and pitches[1] < previous_bass then
       return false, "strict_direction"
     end

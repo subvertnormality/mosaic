@@ -12,11 +12,13 @@ local function channel(song,number)
 end
 
 function inspection.plan(song,number,value)channel(song,number).planned=copy(value)end
-function inspection.scheduled(song,number,pitch,source)
-  local state=channel(song,number);state.scheduled={pitch=pitch,source=source,step=state.planned and state.planned.step}
+function inspection.scheduled(song,number,pitch,source,context)
+  local state=channel(song,number);local event=context or state.planned
+  state.scheduled={pitch=pitch,source=source,step=event and event.step,status=event and event.status,bypass=event and event.bypass}
 end
-function inspection.emitted(song,number,pitch,source)
-  local state=channel(song,number);state.emitted={pitch=pitch,source=source,step=state.planned and state.planned.step}
+function inspection.emitted(song,number,pitch,source,context)
+  local state=channel(song,number);local event=context or state.planned
+  state.emitted={pitch=pitch,source=source,step=event and event.step,status=event and event.status,bypass=event and event.bypass}
 end
 function inspection.snapshot(song,number)return copy(channel(song,number))end
 function inspection.reset_song(song)registry.songs[song]=nil end

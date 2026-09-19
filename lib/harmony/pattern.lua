@@ -4,7 +4,7 @@ local pattern_harmony = {}
 local role_order = {bass=1, inner1=2, inner2=3, inner3=4, top=5}
 
 local function target_identity(merge)
-  if not merge then return "off" end
+  if not merge or merge.mode=="off" then return "off" end
   local target = merge.target or {kind="legacy"}
   local parts = {tostring(merge.keep_anchor_pitch == true), target.kind or "legacy"}
   if target.kind == "degrees" then
@@ -15,7 +15,7 @@ local function target_identity(merge)
   return table.concat(parts, ",")
 end
 
-function pattern_harmony.binding_key(channel)
+function pattern_harmony.binding_key(channel, effective_merge)
   local patterns = {}
   for number, enabled in pairs(channel.selected_patterns or {}) do
     if enabled then patterns[#patterns + 1] = number end
@@ -25,7 +25,7 @@ function pattern_harmony.binding_key(channel)
     "pattern-binding-v1",
     table.concat(patterns, ","),
     channel.note_merge_mode or "average",
-    target_identity(channel.musical_merge)
+    target_identity(effective_merge or channel.musical_merge)
   }, "|")
 end
 
@@ -42,21 +42,20 @@ end
 function pattern_harmony.prepare(song, channel_number, source_revision, binding, resolved, channel)
   local map = channel.pattern_maps and channel.pattern_maps[binding]
   if not map then return {status="raw", binding=binding, mapped={}} end
-  local per_role, mapped = {}, {}
+  local per_role, mapped, alias_conflict = {}, {}, false
   for source, role in pairs(map.assignments or {}) do
     local numeric = tonumber(source)
     local pitch = resolved[numeric]
     if pitch ~= nil then
       local pc = ((pitch % 12) + 12) % 12
       mapped[numeric] = role
-      if per_role[role] and per_role[role].pc ~= pc then
-        return {status="alias_conflict", binding=binding, mapped=mapped,
-          fallback=channel.fallback}
-      end
+      if per_role[role] and per_role[role].pc ~= pc then alias_conflict=true end
       per_role[role] = per_role[role] or {pc=pc, sources={}}
       per_role[role].sources[#per_role[role].sources + 1] = numeric
     end
   end
+  if alias_conflict then return {status="alias_conflict",binding=binding,mapped=mapped,
+    fallback=channel.fallback} end
   local material, roles, entry_previous = {}, {}, {}
   for _, role in ipairs({"bass","inner1","inner2","inner3","top"}) do
     local entry = per_role[role]
@@ -73,7 +72,8 @@ function pattern_harmony.prepare(song, channel_number, source_revision, binding,
       mapped=mapped, fallback=channel.fallback}
   end
   local revision = table.concat({binding, map.revision or 0, source_revision}, "|")
-  local result = harmony_state.prepare_pattern(song, channel_number, revision, material, roles, channel,entry_previous)
+  local result = harmony_state.prepare_pattern(song, channel_number, revision, material, roles, channel,entry_previous,
+    per_role.bass ~= nil)
   result.binding, result.mapped, result.fallback = binding, mapped, channel.fallback
   result.role_pitches = result.role_pitches or {}
   return result

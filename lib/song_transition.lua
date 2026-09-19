@@ -123,7 +123,8 @@ function transition.process_song_song_patterns()
   if global_step_accumulator > 0 and 
      global_step_accumulator % selected_song_pattern.global_pattern_length == 0 then
     harmony_config_state.on_pattern_boundary(selected_song_pattern)
-    merge_state.on_pattern_boundary(selected_song_pattern)
+    local merge_affected=merge_state.on_pattern_boundary(selected_song_pattern)
+    for channel in pairs(merge_affected)do pattern.update_working_pattern(channel,selected_song_pattern)end
     
     switch_to_next_song_pattern_func()
     local manually_selected_number = program.get().selected_song_pattern

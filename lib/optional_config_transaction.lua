@@ -42,6 +42,21 @@ local function changed(left,right)
 end
 transaction.equivalent=function(left,right)return not changed(left,right)end
 
+-- Apply only the paths this transaction originally changed.  A later edit on
+-- another channel (or another field in the same group) is therefore not
+-- replaced by an older channel-local undo.  Diverged overlapping values are
+-- retained; validation below still makes the combined result atomic.
+local function transition_value(current,expected,target)
+  if not changed(current,expected)then return copy(target)end
+  if type(expected)~="table"or type(target)~="table"or type(current)~="table"then return copy(current)end
+  local result=copy(current);local keys={}
+  for key in pairs(expected)do keys[key]=true end;for key in pairs(target)do keys[key]=true end
+  for key in pairs(keys)do if changed(expected[key],target[key])then
+    result[key]=transition_value(current[key],expected[key],target[key])
+  end end
+  return result
+end
+
 function transaction.apply(song,snapshot,playing,boundary)
   local ok,reason=transaction.validate(song,snapshot);if not ok then return nil,reason end
   local before=transaction.snapshot(song)
@@ -58,6 +73,13 @@ function transaction.apply(song,snapshot,playing,boundary)
     end
   end
   return true
+end
+
+
+function transaction.apply_transition(song,expected,target,playing,boundary)
+  local live=transaction.snapshot(song)
+  local patched=transition_value(live,expected,target)
+  return transaction.apply(song,patched,playing,boundary)
 end
 
 transaction.copy=copy

@@ -89,12 +89,14 @@ function state.request_global(song, channel, requested, playing)
 end
 
 function state.on_pattern_boundary(song)
-  local values=songs[song];if not values then return end
-  for _,record in pairs(values)do if record.global_queued then
+  local values=songs[song];local affected={};if not values then return affected end
+  for channel,record in pairs(values)do if record.global_queued then
     local restart=starts_new_epoch(record.active,record.global_queued)
     record.active=record.global_queued;record.global_queued=nil;record.queued=nil
     if restart then record.cycle,record.phrase=1,0 end
+    affected[channel]=true
   end end
+  return affected
 end
 
 function state.on_cycle_boundary(song, channel, requested)
@@ -125,18 +127,21 @@ end
 
 function state.stop(song)
   local values = songs[song]
-  if not values then return end
-  for _, record in pairs(values) do
+  if not values then return {} end
+  local affected={}
+  for channel, record in pairs(values) do
     if record.global_queued or record.queued then
       record.active = record.global_queued or record.queued
       record.queued,record.global_queued = nil,nil
     end
     record.cycle, record.phrase = 1, 0
+    affected[channel]=true
   end
+  return affected
 end
 
 function state.stop_all()
-  for song in pairs(songs) do state.stop(song) end
+  local affected={};for song in pairs(songs)do affected[song]=state.stop(song)end;return affected
 end
 
 return state
