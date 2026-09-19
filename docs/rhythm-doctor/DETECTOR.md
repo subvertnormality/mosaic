@@ -234,9 +234,15 @@ share the limitation. Their raw artifacts remain unchanged.
 
 The explicit pitch/time adapter now has three passing regressions; its
 missing-module baseline, authoritative wheel hash and defect details are in
-`evidence/basic-pitch-adapter-red.json`. A fresh corrected diagnostic is in
-progress using cached full-range posteriors, independent one-to-one scoring,
-and development-only configuration selection. No improved score is yet claimed.
+`evidence/basic-pitch-adapter-red.json`. The corrected cached-posterior diagnostic uses independent one-to-one scoring
+and development-only configuration selection. Old diagnostic-held F1 is 0.482
+for raw onset (112 TP, 163 FP, 78 FN) and 0.402 for the official decoder
+(70 TP, 88 FP, 120 FN), still below the bass requirement. See
+`evidence/basic_pitch_adapter_corrected_v2.json`. The corrected direct true-Bass
+DEV-only oracle at those fixed settings reaches F1 0.558/raw and 0.523/decoder;
+`evidence/basic_pitch_direct_oracle_corrected_v3.json` preserves all eight tracks,
+including empty predictions. These measurements supersede the adapter-invalid
+conclusions below; no clean-corpus or device result is claimed.
 
 Historical configuration, retained for traceability:
 

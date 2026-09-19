@@ -19,7 +19,7 @@ function Machine.new(deps)
   deps = deps or {}
   assert(type(deps.project_id) == "string" and deps.project_id ~= "", "project_id is required")
   return setmetatable({ project_id = deps.project_id, state = Machine.EMPTY, generation = 0,
-    analysis_revision = 0, deps = deps, pending_save = false, bank = nil, modal = nil,
+    analysis_revision = 0, deps = deps, pending_save = false, pending_project_change = nil, bank = nil, modal = nil,
     modal_nonce = 0, previous_ready = nil, resources_are_released = true, release_token = nil, last_message = nil }, { __index = Machine })
 end
 
@@ -38,8 +38,35 @@ function Machine:_request_resource_release(owner_token)
   self.release_token = owner_token or self:job_token()
   invoke(self.deps.on_release, self.release_token)
 end
+function Machine:_service_project_change()
+  local request = self.pending_project_change
+  if request and request.ready and self.resources_are_released and not self:is_active() then
+    self.pending_project_change = nil
+    self.pending_save = false -- requests made while waiting still belong to the old project
+    request.callback()
+  end
+end
+function Machine:prepare_project_change(callback)
+  assert(type(callback) == "function", "project continuation is required")
+  local completed, value = false, nil
+  local request = { ready = false, callback = function()
+    completed = true
+    value = callback()
+  end }
+  -- Install ownership before cancellation: callbacks may release synchronously.
+  -- A newer request/cleanup replaces this table and invalidates this continuation.
+  self.pending_project_change = request
+  self:_cancel_job(true)
+  if self.pending_project_change ~= request then return result("STALE_REQUEST") end
+  self.bank, self.previous_ready = nil, nil
+  self:_set_state(Machine.EMPTY)
+  if self.pending_project_change ~= request then return result("STALE_REQUEST") end
+  request.ready = true
+  self:_service_project_change()
+  return result(completed and "OK" or "DEFERRED", { value = value })
+end
 function Machine:_service_pending_save(transport_stopped)
-  if self.pending_save and transport_stopped and self.resources_are_released and not self:is_active() then
+  if self.pending_save and not self.pending_project_change and transport_stopped and self.resources_are_released and not self:is_active() then
     self.pending_save = false
     invoke(self.deps.on_deferred_save, self.project_id)
   end
@@ -49,6 +76,7 @@ function Machine:resources_released(token, transport_stopped)
   if not owner or type(token) ~= "table" or token.project_id ~= owner.project_id or token.generation ~= owner.generation or
       token.analysis_revision ~= owner.analysis_revision then return result("STALE_RELEASE") end
   self.resources_are_released, self.release_token = true, nil
+  self:_service_project_change()
   self:_service_pending_save(transport_stopped == true)
   return result("OK")
 end
@@ -68,6 +96,7 @@ function Machine:_cancel_job(discard_deferred)
 end
 
 function Machine:start_capture(mode, transport_stopped)
+  if self.pending_project_change then return result("PROJECT_CHANGING") end
   if not transport_stopped then return result("STOP_SEQUENCER") end
   if not self.resources_are_released then return result("RESOURCE_RELEASING") end
   if self.state ~= Machine.EMPTY and self.state ~= Machine.FAILED then return result("BUSY") end
@@ -89,6 +118,7 @@ function Machine:finish_capture(transport_stopped, enough_audio)
 end
 
 function Machine:begin_reanalysis(transport_stopped)
+  if self.pending_project_change then return result("PROJECT_CHANGING") end
   if not transport_stopped then return result("STOP_SEQUENCER") end
   if not self.resources_are_released then return result("RESOURCE_RELEASING") end
   if self.state ~= Machine.READY then return result("NOT_READY") end
@@ -154,11 +184,11 @@ function Machine:confirm_modal(token, accepted, transport_stopped)
 end
 
 function Machine:autosave()
-  if self:is_active() or not self.resources_are_released then self.pending_save = true; return result("DEFERRED") end
+  if self.pending_project_change or self:is_active() or not self.resources_are_released then self.pending_save = true; return result("DEFERRED") end
   return result("SAVE_NOW")
 end
 function Machine:manual_save()
-  if self:is_active() or not self.resources_are_released then return result("CAPTURE_ACTIVE") end
+  if self.pending_project_change or self:is_active() or not self.resources_are_released then return result("CAPTURE_ACTIVE") end
   return result("SAVE_NOW")
 end
 function Machine:transport_started()
@@ -175,10 +205,12 @@ function Machine:transport_stopped()
 end
 function Machine:replace_project(project_id)
   assert(type(project_id) == "string" and project_id ~= "", "project_id is required")
+  self.pending_project_change = nil
   self:_cancel_job(true); self.project_id, self.bank, self.previous_ready = project_id, nil, nil
   self.analysis_revision = 0; self:_set_state(Machine.EMPTY)
 end
 function Machine:cleanup()
+  self.pending_project_change = nil
   self:_cancel_job(true); self.bank, self.previous_ready = nil, nil; self:_set_state(Machine.EMPTY)
 end
 

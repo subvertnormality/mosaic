@@ -210,7 +210,8 @@ coalesced requests until asynchronous release, release during playback, and
 old-project deferred-request discard. Transport and IO are observed test doubles;
 this is not sounding-n.b., contiguous-PCM, or public-input acceptance. The
 application controller still needs to supply this guard and wire release/Stop
-callbacks. Project load/new waiting for release is still unimplemented.
+callbacks. The following checkpoint extends the optional guard to load/new;
+production controller wiring and project identity assignment remain outstanding.
 
 The failing pre-hook source and test hashes and actual output are preserved in
 `evidence/project-save-inhibition-red.json`; the three focused regressions pass
@@ -222,3 +223,24 @@ all tracked Lua source hashes and confirms no source changed during the run.
 An earlier run printed 1,713 passes but its shell wrapper lost the exit status;
 it is not counted as a successful command. The direct subprocess rerun fixes
 that evidence gap. Seven quality-profile and four NMF-isolation tests also pass.
+
+## Project replacement release checkpoint
+
+The optional lifecycle guard now validates a load before cancelling capture,
+then defers load/new side effects until owned resources are released. It keeps
+only the latest valid replacement request, discards the old project's deferred
+autosave, and drops the continuation on cleanup. Synchronous release and
+reentrant state/release callbacks cannot run an obsolete continuation; throwing
+continuations are removed before invocation and cannot replay.
+
+Three actual-lifecycle integration regressions demonstrate these boundaries;
+`evidence/project-replace-release-red.json` preserves two expected pre-fix
+failures and the already-passing invalid-load case. The complete local Lua suite
+passes 1,716 tests with exit code 0 and unchanged source hashes
+(`evidence/full-lua-project-release-v1.json`). All six pure core groups pass on
+physical Norns, including seven lifecycle cases
+(`evidence/hardware-core-project-release-v1.json`); deployed hashes match and
+runner cleanup completed. This evidence covers the protocol, not public PCM/UI
+acceptance. `mosaic.lua` does not yet construct a capture controller or supply
+this guard. Controller wiring, release timeout handling and new/loaded project
+identity assignment remain required before RD-03 can be accepted.

@@ -288,3 +288,56 @@ function test_rhythm_doctor_project_save_discards_old_project_deferred_request()
   luaunit.assert_equals(c.count.writes, 0)
   luaunit.assert_equals(c.count.stop, 0)
 end
+
+-- Characterisation outside README: PLAN.md Bank lifecycle requires validated
+-- load/new to await resource release, while rejection keeps the live capture.
+function test_rhythm_doctor_project_replace_waits_before_transport_and_model_mutation()
+  for _,operation in ipairs({"load", "new"}) do
+    local c,m = rhythm_doctor_save_context("RECORDING")
+    c.state.files["fixture/good.ptn"] = load_fixture()
+    c.autosave()
+    local owner = m:job_token()
+    if operation == "load" then c.load("fixture/good.ptn") else c.new() end
+    for _,field in ipairs({"stop","reset","init","set","writes","memory_init"}) do
+      luaunit.assert_equals(c.count[field], 0, operation .. "/" .. field)
+    end
+    luaunit.assert_is(c.state.store, c.original)
+    luaunit.assert_false(m.pending_save)
+    luaunit.assert_equals(c.state.messages[#c.state.messages], "RELEASING CAPTURE")
+    m:resources_released(owner, true)
+    luaunit.assert_equals(c.count.init, 1, operation)
+    luaunit.assert_equals(c.count.writes, 0, "Old autosave was discarded")
+    luaunit.assert_not_equals(c.state.store, c.original)
+    luaunit.assert_equals(c.count.set, operation == "load" and 1 or 0)
+    luaunit.assert_equals(c.count.memory_init, operation == "new" and 1 or 0)
+    m:transport_stopped()
+    luaunit.assert_equals(c.count.writes, 0)
+  end
+end
+
+function test_rhythm_doctor_project_replace_invalid_load_keeps_capture_running()
+  local c,m = rhythm_doctor_save_context("RECORDING")
+  c.state.files["fixture/bad.ptn"] = {false}
+  local generation = m.generation
+  luaunit.assert_false(c.load("fixture/bad.ptn"))
+  luaunit.assert_equals(m.state, "RECORDING")
+  luaunit.assert_equals(m.generation, generation)
+  luaunit.assert_nil(m.release_token)
+  luaunit.assert_equals(c.count.init, 0)
+  luaunit.assert_equals(c.count.stop, 0)
+end
+
+function test_rhythm_doctor_project_replace_latest_request_wins_and_cleanup_discards_it()
+  for _,cleanup in ipairs({false, true}) do
+    local c,m = rhythm_doctor_save_context("ANALYSING")
+    c.state.files["fixture/good.ptn"] = load_fixture()
+    local owner = m:job_token()
+    c.load("fixture/good.ptn");c.new()
+    luaunit.assert_equals(c.count.init, 0)
+    if cleanup then m:cleanup() end
+    m:resources_released(owner, true)
+    luaunit.assert_equals(c.count.set, 0, "Superseded load must never run")
+    luaunit.assert_equals(c.count.init, cleanup and 0 or 1)
+    luaunit.assert_equals(c.count.memory_init, cleanup and 0 or 1)
+  end
+end

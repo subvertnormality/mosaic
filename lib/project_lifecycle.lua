@@ -20,6 +20,17 @@ local function resume_autosave()
   autosave_reset()
 end
 
+local function after_capture_release(continuation)
+  if not capture_guard then return continuation() end
+  local decision = capture_guard:prepare_project_change(continuation)
+  if decision.code == "DEFERRED" then
+    tooltip:show("RELEASING CAPTURE")
+    fn.dirty_screen(true)
+    return false, "DEFERRED"
+  end
+  return decision.value, decision.code
+end
+
 local function load_project(pth, allow_missing)
   if type(pth) ~= "string" or not pth:match("%.ptn$") then return false end
   local file, _, code = io.open(pth, "r")
@@ -33,30 +44,32 @@ local function load_project(pth, allow_missing)
   local valid, reason = project_validation.check(saved)
   if not valid then return reject_project(reason) end
 
-  -- Rejection must leave the live project, transport and pending notes intact.
-  m_clock:stop()
-  print("Loading project " .. pth)
-  program.init()
-  program.set(saved[2])
-  clock.tempo_change_handler = function(x)
-    song_edit_page_ui.refresh_tempo()
-  end
-  param_manager.init()
-  for i = 1, 16 do
-    param_manager.add_device_params(
-      i,
-      device_map.get_device(program.get().devices[i].device_map),
-      program.get().devices[i].midi_channel,
-      program.get().devices[i].midi_device,
-      false
-    )
-  end
-  if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset", true) end
-  m_clock:reset()
-  ui.refresh()
-  fn.dirty_grid(true)
-  resume_autosave()
-  return true
+  -- Validate first: rejection must not cancel a live capture or transport.
+  return after_capture_release(function()
+    m_clock:stop()
+    print("Loading project " .. pth)
+    program.init()
+    program.set(saved[2])
+    clock.tempo_change_handler = function(x)
+      song_edit_page_ui.refresh_tempo()
+    end
+    param_manager.init()
+    for i = 1, 16 do
+      param_manager.add_device_params(
+        i,
+        device_map.get_device(program.get().devices[i].device_map),
+        program.get().devices[i].midi_channel,
+        program.get().devices[i].midi_device,
+        false
+      )
+    end
+    if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset", true) end
+    m_clock:reset()
+    ui.refresh()
+    fn.dirty_grid(true)
+    resume_autosave()
+    return true
+  end)
 end
 
 -- The norns serializers ignore some write/close return values. Observe those
@@ -141,20 +154,23 @@ local function save_project(txt, automatic)
 end
 
 local function load_new_project()
-  program.init()
-  memory.init() -- bind memory to the new project; the old history must not carry over
-  for i = 1, 16 do
-    param_manager.add_device_params(
-      i,
-      device_map.get_device(program.get().devices[i].device_map),
-      program.get().devices[i].midi_channel,
-      program.get().devices[i].midi_device,
-      true
-    )
-  end
-  m_grid.refresh()
-  ui.refresh()
-  resume_autosave()
+  return after_capture_release(function()
+    program.init()
+    memory.init() -- bind memory to the new project; the old history must not carry over
+    for i = 1, 16 do
+      param_manager.add_device_params(
+        i,
+        device_map.get_device(program.get().devices[i].device_map),
+        program.get().devices[i].midi_channel,
+        program.get().devices[i].midi_device,
+        true
+      )
+    end
+    m_grid.refresh()
+    ui.refresh()
+    resume_autosave()
+    return true
+  end)
 end
 
 local function do_autosave()
