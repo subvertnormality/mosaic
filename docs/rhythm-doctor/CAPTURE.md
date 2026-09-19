@@ -31,7 +31,7 @@ host bridge:
 
 | Call | Contract |
 | --- | --- |
-| `rd_capture_preflight(seconds)` | Opens only the already-selected JACK server (`JackNoStartServer`), registers `input_l` and `input_r`, allocates zeroed stereo float PCM, and writes every PCM page through a volatile access before activation. Valid capacity is 1â€“45 seconds at an 8â€“192 kHz server rate. A null result is NOT READY, including an absent server, allocation failure, unsupported rate, or non-lock-free 32-bit atomics. |
+| `rd_capture_preflight(seconds)` | Opens only the already-selected JACK server (`JackNoStartServer`), registers `input_l` and `input_r`, allocates zeroed stereo float PCM, and writes every PCM page through a volatile access before activation. Valid capacity is 1–45 seconds at an 8–192 kHz server rate. A null result is NOT READY, including an absent server, allocation failure, unsupported rate, or non-lock-free 32-bit atomics. |
 | `rd_capture_start()` | Arms exactly one capture. The first JACK callback that wins the arm transition records the authoritative JACK frame origin and starts copying that callback's PCM. |
 | `rd_capture_stop()` | Requests completion. The next callback uses a compare-and-swap to publish COMPLETED without copying a later block; a concurrent cancel or failure wins instead. |
 | `rd_capture_cancel()` | Cancels an active capture. Canceled and failed captures cannot be restarted or published. A host destroys the capture only after JACK deactivation, so callbacks cannot retain freed PCM. |
@@ -72,7 +72,7 @@ capacity completion through a test-only adapter that calls the same PCM copy
 function as JACK.
 
 `test_capture_native.py` launches its own uniquely named
-`jackd --name rd-capture-â€¦ -d dummy` server and sets `JACK_DEFAULT_SERVER` for
+`jackd --name rd-capture-… -d dummy` server and sets `JACK_DEFAULT_SERVER` for
 only that test process and its child tools. Cleanup handlers are registered as
 each resource is acquired, including setup failures. It compiles the native
 client and a tiny independent JACK source, connects the source only to that

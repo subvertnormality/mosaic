@@ -79,16 +79,16 @@ evidence; the release campaign must verify that separately.
 The frozen native capture passed three physical-Norns owned-JACK-injection
 trials; see evidence/hardware-capture-mosaic-rd-probe-d02976ca26f44569a0a6d2f22ab752e6.json.
 Each preserved stereo sample continuity and the original JACK routing. PCM buffers
-were memory-locked. Native preflight cost 148ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“163 ms (mode-entry work); arm to first
-observed PCM was 1.26ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“1.49 ms using polling, not a grid-key timestamp. ADC ingress,
+were memory-locked. Native preflight cost 148–163 ms (mode-entry work); arm to first
+observed PCM was 1.26–1.49 ms using polling, not a grid-key timestamp. ADC ingress,
 Mosaic UI integration, transcription, and full-feature performance are untested.
 The measured process peak RSS includes Python/JACK/shared runtime overhead and
 is not the feature's incremental-RSS acceptance measurement.
 
 The optimized immutable-bank scroll benchmark was also run on physical Norns:
 22,500 candidates, 720 timeline cells, 100 five-lane scrolls per trial. Across three
-trials, CPU p95 was 3.97ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“4.39 ms; maximum 14.78ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“15.47 ms. Building that largest bank
-cost 653ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“662 ms of Lua CPU, so app integration must not call it synchronously on
+trials, CPU p95 was 3.97–4.39 ms; maximum 14.78–15.47 ms. Building that largest bank
+cost 653–662 ms of Lua CPU, so app integration must not call it synchronously on
 the UI event thread. These timings do not measure screen response or model work.
 
 The source revision module and its integration into `pattern.lua` have 6 passing
@@ -142,7 +142,7 @@ short for four bars and requires both short/full-buffer measurements, scoring
 latency percentiles separately so one duration class cannot hide another's failure.
 
 The full-development spectral classifier pilot used all nine development songs
-(182ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“314 seconds each) with 420 TOM references, then fixed 60-second diagnostic
+(182–314 seconds each) with 420 TOM references, then fixed 60-second diagnostic
 holdouts. F1 was BD 0.7283, SD 0.5457, HH 0.7034, TOM 0, BASS 0.5610. All fail the
 0.80 onset gate. This is evidence against that frozen candidate, not proof that
 all possible local architectures fail. It is not pristine final acceptance data.
@@ -178,3 +178,13 @@ three errors, retained with actual source hashes and raw output in
 16 complete intervals, full-span beat phase, control failures, explicit eligible
 identities, uncertainty labels and numeric bounds. It is an independent scoring
 component, not measured acquisition success.
+
+
+Draft PR #97 is open against `codex/behaviour-validation`. At commit `5b4bf10`,
+local full Lua tests pass (1,710 tests, zero failures); CI run 35418429234 also
+passes all 1,710 Lua tests and 19 component/native groups. The application feature
+remains incomplete. A repeat physical-Norns capture probe verifies the committed
+native source bytes, three contiguous stereo acquisitions, restored routing and
+successful cleanup (`hardware-capture-checkpoint-5b4bf10-v2.json`). The first new
+launcher attempt failed because relative library paths were resolved incorrectly;
+its failed report is preserved, and it is not capture-quality evidence.

@@ -64,7 +64,7 @@ and use its full sample-index contract.
 
 The first implementation was invalid: it required three **consecutive** beat
 callbacks to span four seconds, which cannot happen from valid regular beats at
-the supported 40â€“240 BPM envelope. It also used 15 intervals for four bars,
+the supported 40–240 BPM envelope. It also used 15 intervals for four bars,
 returned after its first failed phase fit, and averaged phase error. Its prior
 all-uncertain observation is retained only as `INVALID_CANDIDATE_LOGIC`, not as
 evidence about aubio.
@@ -88,7 +88,7 @@ separate onset-strength/autocorrelation experiment are reported separately:
 | Silence | no beat callbacks; reported about 40.69 BPM at zero confidence | `UNCERTAIN / insufficient-beats` |
 | 40 s half/double stress pattern, `energy` | reported about 121.73 BPM; 30 callbacks | `UNCERTAIN / phase-fit` |
 | 40 s syncopated pulse pattern, `energy` | reported about 121.95 BPM; 26 callbacks | `UNCERTAIN / phase-fit` |
-| 24 s 100â†’145 BPM drift | 4 callbacks; final reported about 140.72 BPM | `UNCERTAIN / insufficient-beats` |
+| 24 s 100→145 BPM drift | 4 callbacks; final reported about 140.72 BPM | `UNCERTAIN / insufficient-beats` |
 
 The direct aubio `default`, `energy`, and `specdiff` callbacks did not produce
 an in-bounds, full-four-bar candidate for this PCM; `energy` had enough
@@ -130,7 +130,7 @@ available and a standard-MIDI fallback reader only on this local host, where
 `mido` is absent. Audio never supplies the expected BPM.
 
 Thirteen tracks had one finite MIDI tempo in the measured window's source:
-00001, 00002, 00003, 00004, 00009, 00012â€“00017, 00019, and 00020. `onset-ac`
+00001, 00002, 00003, 00004, 00009, 00012–00017, 00019, and 00020. `onset-ac`
 returned `READY` for 0/13. The failures were eight
 `UNCERTAIN / unstable-estimates` and five `UNCERTAIN / phase-fit`; no failure
 was converted into an eligible result. For example, the fixed source hashes in
@@ -171,13 +171,13 @@ were quantitative rather than a retained-window shortage: `default` had seven
 `phase-fit` and two `unstable-estimates`; `energy` five and four; `specdiff`
 seven and two; and `onset-ac` two and seven. Every source window retained 45
 seconds and each diagnostic reports that 16 intervals at its first MIDI tempo
-fit within that duration. Direct aubio methods returned 28â€“49 callbacks over
-37.2â€“42.1 seconds, so none failed for too few positions. `onset-ac` returned
-27â€“78 peaks over 26.1â€“44.7 seconds; its `unstable-estimates` results are
+fit within that duration. Direct aubio methods returned 28–49 callbacks over
+37.2–42.1 seconds, so none failed for too few positions. `onset-ac` returned
+27–78 peaks over 26.1–44.7 seconds; its `unstable-estimates` results are
 preserved rather than coerced into a grid.
 
 For the five tracks with one tick-zero MIDI tempo, direct aubio reports were
-roughly 0.26â€“0.74 of that tempo, and their maximum MIDI-grid phase errors ranged
+roughly 0.26–0.74 of that tempo, and their maximum MIDI-grid phase errors ranged
 from 76.7 to 317.4 ms. That exposes octave/subdivision choices and jitter rather
 than a claim of acquisition. `onset-ac` Track00017 had a 27.0 ms maximum error
 to the MIDI grid but reported 50.93 BPM against 103.00 BPM; it still failed its
@@ -207,7 +207,7 @@ python3 tools/rhythm_doctor_tempo/scan_babyslakh_dev_methods.py /tmp/rd-tempo-wa
   tools/rhythm_doctor_tempo/babyslakh_dev_methods_2026-09-19.json
 ```
 
-## Grid-support phase experiment â€” not a viable candidate
+## Grid-support phase experiment — not a viable candidate
 
 The prior all-onset fit was structurally wrong for syncopated music: the plan's
 50 ms requirement is a beat-grid phase requirement, not a demand that hats,
@@ -216,7 +216,7 @@ flams, or other subdivisions land on the beat. The source and earlier
 replacement experiment added literal unit regressions for 16th-note
 syncopation and half-time ambiguity before changing the candidate. It records
 `grid_support`, `offbeat_residual`, and main/half/double grid scores; unavailable
-alternatives use score `-1` when outside 40â€“240 BPM.
+alternatives use score `-1` when outside 40–240 BPM.
 
 The candidate uses only supported grid positions for phase, preserves residual
 offbeats, still requires eight supports, the original 50 ms maximum, three
@@ -232,8 +232,8 @@ contains MIDI references and binary/C/scanner/WAV/MIDI hashes. It produced five
 `READY` candidates out of 36, all wrong against the independent MIDI tempo:
 Track00004 `default`/`specdiff` reported about 59 against 115 BPM,
 Track00013 `default`/`specdiff` about 66 against 128 BPM, and Track00018
-`energy` about 70 against 137 BPM. Their main grid scores (0.56â€“0.73) beat the
-reported double-grid scores (0.77â€“0.86), so this raw beat stream provides no
+`energy` about 70 against 137 BPM. Their main grid scores (0.56–0.73) beat the
+reported double-grid scores (0.77–0.86), so this raw beat stream provides no
 internal evidence to reject the false half-tempo lock. That is a detector
 failure, not a reason to weaken ambiguity or phase rules.
 
@@ -254,3 +254,19 @@ python3 -m unittest tests/rhythm_doctor/test_tempo_corpus.py
 same tests. Controlled musical time is inapplicable to this wall-clock-free PCM
 streaming detector; the fixtures have exact sample origins, while the unresolved
 native callback/input timing belongs to the separate RD-01 hardware evidence.
+
+## UMXHQ BASS onset diagnostic - rejected
+
+This is not a tempo candidate. A desktop-only comparison separated the mixture
+with the official UMXHQ BASS weight and scored magnitude spectral-flux peaks
+against source BASS MIDI at one-to-one 50 ms. The threshold was selected only on
+eight valid old BabySlakh development tracks. The eleven diagnostic-held tracks
+then produced precision 0.512545, recall 0.752632, and F1 0.609808. This fails
+the BASS gate and is not selected for delivery.
+
+Track00017 was excluded rather than counted as a zero-BASS negative: its source
+metadata declares BASS stem S04, but S04.mid is absent from the selected source
+MIDI inventory. The result has no ARM, norns latency, memory, waveform, or clean
+held-corpus claim. Exact runner, model, source, input and raw-flux identities,
+including the separately retained invalid v1 reproduction, are in
+`docs/rhythm-doctor/evidence/umxhq_bass_pilot_v2.json`.

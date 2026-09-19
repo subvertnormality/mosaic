@@ -23,7 +23,7 @@ auditable instead of silently relabelling a stem. Each clip also has
 an SHA-256-pinned annotation JSON. Annotation JSON has exactly the five lanes
 `BD`, `SD`, `HH`, `TOM`, and `BASS`; each onset carries `time_seconds` in the
 half-open crop interval `[0, duration_seconds)` and a
-1Ã¢â‚¬â€œ127 MIDI reference velocity. Its `reference_origin` is either
+1–127 MIDI reference velocity. Its `reference_origin` is either
 `independent_human` or `independent_render_metadata`, and it identifies the
 annotator or frozen rendering metadata. `detector_output` is rejected.
 Every acoustic/electronic lane label has a separately SHA-256-pinned timbre
@@ -35,7 +35,7 @@ An exploratory manifest may use `unverified` for a lane whose source cannot
 support either timbre claim. It remains structurally auditable, but the held-out
 timbre gate will fail and it must never be reported as an accepted corpus.
 
-The validator enforces the planÃ¢â‚¬â„¢s structural gates: 40 development and 40
+The validator enforces the plan’s structural gates: 40 development and 40
 held-out exact-four-bar clips, song and kit separation across those partitions,
 held-out positive/event/stratum/timbre counts for every lane, absent-lane
 negatives, three genuine silence clips, the clipping/phase-inverted/kick+bass

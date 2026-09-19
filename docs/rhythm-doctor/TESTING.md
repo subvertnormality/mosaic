@@ -44,7 +44,11 @@ temporary directory, verifies deployed hashes and removes its files. It does not
 replace or load the user's script. Supply `--host`, `--control-path` and a new
 `--output` report path. Pure component passes are not full-feature device evidence.
 
-The capture probe in `tests/behaviour/rhythm_doctor_capture_hardware.py` verifies
+`tests/rhythm_doctor/run_hardware_capture.py` deploys and hash-verifies the capture
+probe and native sources in an isolated device directory, runs three trials,
+and removes exactly its own files even on failure. Supply the same connection
+arguments and a new output path. The probe in
+`tests/behaviour/rhythm_doctor_capture_hardware.py` verifies
 owned JACK injection/capture continuity and route restoration. It is not an ADC,
 physical grid or classifier test. Bank benchmarks report Lua CPU, not UI latency.
 
