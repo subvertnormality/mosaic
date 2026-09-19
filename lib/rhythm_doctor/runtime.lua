@@ -210,8 +210,15 @@ function Runtime:_capture_start(mode, token)
     self.machine:capture_failed(token, "CAPTURE_PREFLIGHT_UNAVAILABLE")
   end
 end
+-- A reanalysis reuses the capture the recorder still retains. After a reload
+-- or a Save As no capture job survives, so the dispatch is stale and nothing
+-- will ever answer it. Discarding that outcome left the bank in REANALYSING
+-- for good; fail the lease instead, which restores the previous ready bank.
 function Runtime:_analyse(token)
-  if self.controller then self.controller:analyse(token) end
+  local outcome = self.controller and self.controller:analyse(token)
+  if outcome and outcome.code ~= "STALE_JOB" then return end
+  self.machine:receive_analysis({ project_id = token.project_id, generation = token.generation,
+    analysis_revision = token.analysis_revision, error = "CAPTURE_AUDIO_UNAVAILABLE" })
 end
 function Runtime:_analysis_ready(asset, token)
   if not self.analysis_controller and self.analysis_worker then self:_open_analysis_worker() end
@@ -268,7 +275,14 @@ function Runtime:apply_alignment(alignment)
   if self.transport_stopped() ~= true then return result("STOP_SEQUENCER") end
   if self.machine.state ~= Machine.READY then return result("NOT_READY") end
   self.alignment = copy(alignment)
-  return self.machine:begin_reanalysis(true)
+  local outcome = self.machine:begin_reanalysis(true)
+  -- The dispatch can fail while begin_reanalysis is still running, which leaves
+  -- the machine out of REANALYSING again. Report that as a failure so the
+  -- player keeps their draft rather than being told a correction was applied.
+  if outcome and outcome.ok and self.machine.state ~= Machine.REANALYSING then
+    return result(self.machine.last_message or "CAPTURE_AUDIO_UNAVAILABLE")
+  end
+  return outcome
 end
 function Runtime:transport_started()
   return self.machine:transport_started()

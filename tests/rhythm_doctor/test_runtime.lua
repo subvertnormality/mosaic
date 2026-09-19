@@ -110,9 +110,15 @@ test('READY controls clamp the shared window, rebuild one lane sensitivity, and 
   equal(runtime.machine.bank.window_start, 16, 'longest 64-cell view is retained')
   equal(runtime:set_sensitivity('BD', .4).code, 'SENSITIVITY_UPDATED')
   equal(runtime.machine.bank.sensitivities.BD, .4); equal(runtime.machine.bank.sensitivities.SD, .2)
+  -- No capture job backs this hand-built bank, so the reanalysis cannot be
+  -- dispatched. It must say so and keep the ready bank rather than parking in
+  -- REANALYSING waiting for a reply that can never come. The dispatched path
+  -- is covered by test_capture_controller's reanalysis lease case.
   local value = runtime:apply_alignment({ bpm = 60, start_beat = 1, fine_start_ms = 0, origin_sample = 0 })
-  check(value.ok); equal(runtime.machine.state, 'REANALYSING')
-  equal(runtime.machine.analysis_revision, 1)
+  check(not value.ok, 'an undispatchable correction must not report success')
+  equal(runtime.machine.state, 'READY')
+  check(runtime.machine.bank ~= nil, 'the ready bank must survive')
+  equal(runtime.machine.analysis_revision, 1, 'the attempted lease still consumed a revision')
 end)
 
 test('runtime answers the complete project-lifecycle capture-guard interface', function()
@@ -269,6 +275,34 @@ test('an autosave deferred during capture runs once the capture releases', funct
   -- Releasing again must not save a second time.
   runtime.machine:resources_released(token, true)
   equal(#saves, 1, 'the deferred save ran more than once')
+end)
+
+test('a correction with no retained capture fails instead of hanging', function()
+  -- After a reload or Save As the bank is READY but no capture job survives,
+  -- so the reanalysis dispatch is stale and nothing will ever answer. The
+  -- dispatch result was discarded, leaving the bank stuck in REANALYSING with
+  -- no way back.
+  local Bank = require('rhythm_doctor.bank')
+  local Machine = require('rhythm_doctor.state_machine')
+  local clock = 0
+  local socket, worker = transport(), {}
+  function worker:open() return socket end
+  function worker:close() end
+  local runtime = Runtime.new({ project_id = 'project-reload', worker = worker,
+    now = function() return clock end, transport_stopped = function() return true end })
+  check(runtime:enter().ok)
+
+  local bank = assert(Bank.build{ project_id = runtime.machine.project_id, generation = 1,
+    analysis_revision = 1, sample_rate = 8000, capture_start_sample = 0,
+    capture_end_sample = 64000, origin_sample = 0, bpm = 120 })
+  check(runtime.machine:restore_ready_bank(bank).ok, 'the saved bank must restore')
+  equal(runtime.machine.state, Machine.READY)
+
+  local outcome = runtime:apply_alignment({ bpm = 90, start_beat = 1, fine_start_ms = 0 })
+  check(not outcome.ok, 'a correction that cannot be dispatched must not report success')
+  check(runtime.machine.state ~= Machine.REANALYSING,
+    'the bank was left stuck in REANALYSING with no pending analysis')
+  check(runtime.machine.bank ~= nil, 'the ready bank must survive a failed correction')
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end
