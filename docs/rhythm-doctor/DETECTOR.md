@@ -527,3 +527,43 @@ failure is partly a gate calibrated for the wrong domain. Whether CHH is
 recoverable with domain-appropriate gating or fundamentally confuses cymbals is
 a separate question, and answering it must not become tuning on the evaluation
 set.
+
+## The closed-hat lane cannot be fixed with more templates (2026-09-19)
+
+CHH is the weakest lane for **both** architectures, and they fail in the same
+direction: the pinned pretrained chain scores 0.459 F1 on real music with 0.976
+recall and 0.300 precision, and the classical-DSP backend scores 0.4374 with
+0.8337 recall and 0.2965 precision. Recall is high; precision is the problem.
+Ride and crash cymbals activate the hat lane.
+
+The literature's recommended mitigation is a decoy template, so those events
+compete for a column of their own. It was tried, using ride and crash samples
+extracted from the corpus's own pinned Hydrogen commit, and it is **marginal**:
+CHH precision moves from 0.4748 to 0.4935 and F1 from 0.6049 to 0.6144 on the
+development half, while slightly costing BD. Full numbers in
+`evidence/chh-cymbal-decoy-2026-09-19.json`.
+
+The reason is physical, and it also explains why BD is the strongest lane.
+
+A bass string vibrates in integer ratios and a kick membrane in Bessel ratios,
+so one is harmonic and the other is not. Partially fixed NMF exploits exactly
+that asymmetry: the freely adapting harmonic dictionary absorbs the bass stack
+while the fixed inharmonic template keeps the kick. Kick and bass are different
+kinds of vibration, so they separate.
+
+A hi-hat and a ride are the same kind of object — inharmonic metal plates with
+dense, overlapping energy from roughly 5 to 15 kHz. There is no harmonic
+asymmetry to exploit, so a template can only separate them by spectral shape,
+and their shapes are genuinely alike. The one property that does separate them
+is decay time, and decay stops discriminating in a full mix: sweeping the hat
+decay gate from 0.06 s to 0.60 s moved F1 by 0.02, because guitars, vocals and
+other cymbals keep that band energised so nothing decays cleanly.
+
+Two unrelated architectures failing identically, in the same direction, is
+evidence about the problem rather than about either implementation. The
+literature records no published rule separating closed hat from ride on full
+mixes, and the researcher looked for one specifically.
+
+**Consequence.** CHH cannot be made shippable by adding templates. The options
+are to descope it as OHH and TOM were descoped, or to ship it at roughly 0.30
+precision and make that visible to the player rather than silent.
