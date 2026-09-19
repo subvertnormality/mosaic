@@ -303,6 +303,56 @@ test('a correction with no retained capture fails instead of hanging', function(
   check(runtime.machine.state ~= Machine.REANALYSING,
     'the bank was left stuck in REANALYSING with no pending analysis')
   check(runtime.machine.bank ~= nil, 'the ready bank must survive a failed correction')
+  -- No capture job holds this lease, so nothing will ever acknowledge its
+  -- release. Leaving it outstanding blocks saves, the next capture and any
+  -- project change just as surely as the REANALYSING hang did.
+  check(runtime.machine.resources_are_released,
+    'the undispatchable correction left its lease unreleased')
+  equal(runtime:autosave().code, 'SAVE_NOW', 'saving must be possible again')
+end)
+
+test('a correction does not leak its tempo into later captures or other projects', function()
+  -- The confirmed alignment was stored once and never cleared, and the
+  -- analysis controller sends it with every ANALYSE. Once the backend began
+  -- honouring it, a correction made on one capture silently forced its tempo
+  -- and origin onto every capture recorded afterwards, in any project.
+  local clock = 0
+  local socket, worker = transport(), {}
+  function worker:open() return socket end
+  function worker:close() end
+  local runtime = Runtime.new({ project_id = 'project-leak', worker = worker,
+    now = function() return clock end, transport_stopped = function() return true end })
+  check(runtime:enter().ok)
+
+  local bank = assert(Bank.build{ project_id = runtime.machine.project_id, generation = 0,
+    analysis_revision = 0, sample_rate = 8000, capture_start_sample = 0,
+    capture_end_sample = 64000, origin_sample = 0, bpm = 120 })
+  runtime.machine.state, runtime.machine.bank = 'READY', bank
+  runtime:apply_alignment({ bpm = 77, start_beat = 1, fine_start_ms = 0, origin_sample = 4410 })
+  check(runtime.alignment ~= nil, 'the correction must be held for its own lease')
+
+  -- A brand new capture has its own musical timing and must be analysed on
+  -- its own terms.
+  runtime:start_capture('manual')
+  runtime:_capture_start('manual', runtime.machine:job_token())
+  equal(runtime.alignment, nil, "a new capture inherited the previous capture's correction")
+end)
+
+test('a correction does not survive loading another project', function()
+  local clock = 0
+  local socket, worker = transport(), {}
+  function worker:open() return socket end
+  function worker:close() end
+  local runtime = Runtime.new({ project_id = 'project-one', worker = worker,
+    now = function() return clock end, transport_stopped = function() return true end })
+  check(runtime:enter().ok)
+  local bank = assert(Bank.build{ project_id = runtime.machine.project_id, generation = 0,
+    analysis_revision = 0, sample_rate = 8000, capture_start_sample = 0,
+    capture_end_sample = 64000, origin_sample = 0, bpm = 120 })
+  runtime.machine.state, runtime.machine.bank = 'READY', bank
+  runtime:apply_alignment({ bpm = 77, start_beat = 1, fine_start_ms = 0, origin_sample = 4410 })
+  runtime:project_loaded('/data/another.ptn')
+  equal(runtime.alignment, nil, "another project inherited the first project's correction")
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end

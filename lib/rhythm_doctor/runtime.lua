@@ -204,6 +204,10 @@ function Runtime:capture_acquiring()
 end
 
 function Runtime:_capture_start(mode, token)
+  -- A confirmed correction belongs to the capture it was made on. New audio has
+  -- its own musical timing, so carrying the old alignment forward would force
+  -- the previous capture's tempo and origin onto it.
+  self.alignment = nil
   self.capture_started_at, self.capture_acquiring_at = self.now(), nil
   local started = self.controller and self.controller:begin(mode, token, self.seconds)
   if not started or started.code ~= "PREFLIGHTING" then
@@ -241,8 +245,13 @@ function Runtime:_cancel(token)
   if self.analysis_controller then self.analysis_controller:cancel(token) end
 end
 function Runtime:_release(token)
-  if self.controller then self.controller:release(token)
-  else self.machine:resources_released(token, self.transport_stopped() == true) end
+  local outcome = self.controller and self.controller:release(token)
+  if outcome and outcome.code ~= "STALE_RELEASE" then return end
+  -- No capture job holds this lease - a reload or Save As left none behind, or
+  -- a correction was never dispatched - so nothing will ever acknowledge it.
+  -- Leaving it outstanding blocks saves, the next capture and project changes
+  -- exactly as a stuck analysis would.
+  self.machine:resources_released(token, self.transport_stopped() == true)
 end
 
 function Runtime:record_action()
@@ -312,6 +321,7 @@ end
 function Runtime:project_loaded(project_id)
   assert(type(project_id) == "string" and project_id ~= "", "project_id is required")
   local identity = project_identity(project_id)
+  self.alignment = nil
   self.machine:replace_project(identity)
   if self.paint_transactions then self.paint_transactions:project_loaded(identity) end
   return result("OK")

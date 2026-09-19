@@ -133,6 +133,12 @@ do
     analysis_revision = correction.analysis_revision, error = "model error" }).ok)
   equal(m.state, Machine.READY, "failed correction retains READY snapshot")
   equal(m.bank.project_id, "project-b")
+  -- The restored snapshot was stamped with the lease it was analysed under,
+  -- while the machine had already moved to the correction's lease. Every
+  -- identity-checked use of the bank - painting above all - then failed
+  -- INVALID_BANK, so a failed correction quietly bricked the bank.
+  check(Bank.valid_ready(m.bank, m:job_token()),
+    "the restored bank must be usable under the current lease")
   check(m:resources_released(correction, true).ok, "failed reanalysis releases before later lifecycle work")
 end
 

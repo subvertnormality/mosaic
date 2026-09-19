@@ -174,7 +174,15 @@ function Machine:receive_analysis(response)
   if not response.error and not Bank.valid_ready(response.bank, self:job_token()) then response.error = "INVALID_BANK" end
   if response.error then
     if self.state == Machine.REANALYSING and self.previous_ready then
-      self.bank, self.previous_ready = self.previous_ready, nil; self:_set_state(Machine.READY)
+      -- The snapshot was stamped with the lease it was analysed under, but the
+      -- machine has moved to the correction's lease. Rebind it, or every
+      -- identity-checked use of the restored bank - painting above all - fails
+      -- INVALID_BANK and the failed correction quietly bricks the bank. The
+      -- revision itself is not rolled back: a late result from the abandoned
+      -- lease must still be rejected as stale.
+      local restored = self.previous_ready
+      restored.analysis_revision = self.analysis_revision
+      self.bank, self.previous_ready = restored, nil; self:_set_state(Machine.READY)
       self.last_message = "CORRECTION_FAILED"
     else
       self:_set_state(Machine.FAILED); self.last_message = response.error

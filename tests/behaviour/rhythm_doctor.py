@@ -41,21 +41,21 @@ def fifth_algorithm(c):
     # Four lanes at x3..x6. x2 stays reserved and x7 is inert: it carried a
     # lane before the set shrank, so it must go dark rather than leave a lane
     # the player can see but not select.
-    c.led_values([(2, 2), (3, 2), (4, 2), (5, 2), (6, 2)],
-                 [0, 15, 4, 4, 4])
+    c.led_values([(2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2)],
+                 [0, 15, 4, 4, 4, 0])
     c.results.append(dict(kind="rhythm-doctor-lanes", selected="BD", selected_coordinate=[3, 2],
                           reserved_coordinate=[2, 2],
                           contract="README: x2 reserved; x3..6 select BD/SD/CYM/BASS"))
     c.tap(5, 2)
-    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2)], [4, 4, 15, 4])
+    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 15, 4, 0])
     c.results.append(dict(kind="rhythm-doctor-lane-selection", selected="CYM",
                           coordinate=[5, 2], contract="README: CYM is native x5,y2"))
     c.tap(6, 2)
-    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2)], [4, 4, 4, 15])
+    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 4, 15, 0])
     c.results.append(dict(kind="rhythm-doctor-lane-selection", selected="BASS",
                           coordinate=[6, 2], contract="README: BASS is native x6,y2"))
     c.tap(7, 2)
-    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2)], [4, 4, 4, 15])
+    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 4, 15, 0])
     c.results.append(dict(kind="rhythm-doctor-retired-column", coordinate=[7, 2],
                           retained_lane="BASS",
                           contract="README: column 7 is inert"))
