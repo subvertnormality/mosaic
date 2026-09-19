@@ -92,3 +92,34 @@ function test_saved_range_validation_all_96_song_slots()
     luaunit.assert_nil(range_validation.check(saved))
   end
 end
+
+function test_saved_optional_harmony_and_merge_schemas_are_validated_without_mutation()
+  local harmony=include("mosaic/lib/harmony/config")
+  local merge=include("mosaic/lib/musical_merge/config")
+  local saved=range_saved_fixture();local song=saved[2].song_patterns[1]
+  song.voicing={schema_version=1,groups={[1]=harmony.new_group(2)}}
+  song.channels[2].voicing=harmony.new_channel("ensemble")
+  song.channels[2].voicing.group_id=1
+  song.channels[2].musical_merge=merge.new()
+  luaunit.assert_true(range_validation.check(saved))
+
+  local before=song.channels[2].musical_merge
+  song.channels[2].musical_merge.schema_version=99
+  local valid,reason=range_validation.check(saved)
+  luaunit.assert_nil(valid);luaunit.assert_equals(reason,"Slot 1 merge schema version")
+  luaunit.assert_is(song.channels[2].musical_merge,before)
+
+  song.channels[2].musical_merge=merge.new()
+  song.voicing.schema_version=99
+  valid,reason=range_validation.check(saved)
+  luaunit.assert_nil(valid);luaunit.assert_equals(reason,"Slot 1 voicing schema version")
+end
+
+function test_saved_chord_target_rejects_a_dangling_harmony_material_source()
+  local merge=include("mosaic/lib/musical_merge/config")
+  local saved=range_saved_fixture();local song=saved[2].song_patterns[1]
+  song.channels[1].musical_merge=merge.new()
+  song.channels[1].musical_merge.target={kind="chord",group_id=4}
+  local valid,reason=range_validation.check(saved)
+  luaunit.assert_nil(valid);luaunit.assert_equals(reason,"Slot 1 ch 1 merge target group missing")
+end

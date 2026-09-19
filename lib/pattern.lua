@@ -1,8 +1,8 @@
 local pattern = {}
 
 local quantiser = include("mosaic/lib/quantiser")
-local m_clock = include("mosaic/lib/clock/m_clock")
-local divisions = include("mosaic/lib/clock/divisions")
+local foundation = include("mosaic/lib/musical_merge/foundation")
+local merge_state = include("mosaic/lib/musical_merge/state")
 
 local program = program
 
@@ -216,6 +216,57 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if note_priority then merged_pattern.note_values[s] = patterns[note_priority].note_values[s] end
     if velocity_priority then merged_pattern.velocity_values[s] = patterns[velocity_priority].velocity_values[s] end
     if length_priority then merged_pattern.lengths[s] = priority_lengths[s] end
+  end
+
+  local requested_merge_settings = pattern_channel.musical_merge
+  local merge_runtime = requested_merge_settings and
+    merge_state.effective(selected_song_pattern, channel, requested_merge_settings) or nil
+  local merge_settings = merge_runtime and merge_runtime.config
+  local foundation_result
+  if merge_settings and merge_settings.schema_version == 1 and merge_settings.mode == "foundation" then
+    local source_trigs, source_velocities, binding_parts = {}, {}, {}
+    for pattern_number, enabled in pairs(pattern_channel.selected_patterns) do
+      if enabled then
+        source_trigs[pattern_number] = patterns[pattern_number].trig_values
+        source_velocities[pattern_number] = patterns[pattern_number].velocity_values
+        binding_parts[#binding_parts + 1] = pattern_number
+      end
+    end
+    table.sort(binding_parts)
+    local cycle = merge_runtime.cycle or 1
+    local cycle_percentage = merge_settings.percentages and merge_settings.percentages[cycle] or 100
+    local effective_amount = foundation.round_half_up((merge_settings.amount or 100) * cycle_percentage / 100)
+    foundation_result = foundation.plan({
+      start_step = fn.calc_grid_count(pattern_channel.start_trig[1], pattern_channel.start_trig[2]),
+      end_step = fn.calc_grid_count(pattern_channel.end_trig[1], pattern_channel.end_trig[2]),
+      anchor = merge_settings.anchor,
+      source_trigs = source_trigs,
+      source_velocities = source_velocities,
+      merged_velocities = merged_pattern.velocity_values,
+      amount = effective_amount,
+      accent = merge_settings.accent,
+      gap = merge_settings.gap,
+      seed = merge_settings.seed,
+      song_slot = selected_song_pattern.number or program.get().selected_song_pattern or 1,
+      channel = channel,
+      binding = table.concat(binding_parts, ",") .. "|" .. tostring(note_merge_mode) .. "|" ..
+        tostring(velocity_merge_mode) .. "|" .. tostring(length_merge_mode),
+      phrase = merge_runtime.ranking_phrase or 0,
+      ranking_version = merge_settings.ranking_version
+    })
+    foundation_result.cycle = cycle
+    foundation_result.cycles = merge_settings.cycles or 1
+    foundation_result.phrase = merge_runtime.phrase or 0
+    merged_pattern.foundation = foundation_result
+  end
+
+  for s = 1, 64 do
+    if foundation_result and foundation_result.status == "ok" then
+      merged_pattern.trig_values[s] = foundation_result.trigs[s]
+      if foundation_result.velocities[s] ~= nil then
+        merged_pattern.velocity_values[s] = foundation_result.velocities[s]
+      end
+    end
 
     if step_trig_masks[s] then
       merged_pattern.trig_values[s] = step_trig_masks[s]

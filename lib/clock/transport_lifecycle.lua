@@ -59,6 +59,7 @@ function transport_lifecycle.new(deps)
 
     playing = false
     deps.reset_first_run()
+    if deps.on_stop then deps.on_stop() end
 
     deps.drain_releases()
 
@@ -89,6 +90,7 @@ function transport_lifecycle.new(deps)
     -- old callbacks cannot retain a replaced lattice or its held voices.
     if cancel_midi_output_transport then deps.get_clock():stop(); return end
     local program_data = deps.program.get()
+    if deps.on_reset then deps.on_reset() end
     for _, pattern in ipairs(program_data.song_patterns) do
       for i = 1, 17 do
         deps.program.set_current_step_for_channel(i, 1)

@@ -4,6 +4,8 @@ local lattice = include("mosaic/lib/clock/m_lattice")
 local midi_output_transport = include("mosaic/lib/clock/midi_output_transport")
 local step_cursor = include("mosaic/lib/clock/step_cursor")
 local parameter_preview = include("mosaic/lib/clock/parameter_preview")
+local merge_state = include("mosaic/lib/musical_merge/state")
+local pattern_model = include("mosaic/lib/pattern")
 
 m_clock = {}
 clock_lattice = {}
@@ -466,6 +468,8 @@ local transport = include("mosaic/lib/clock/transport_lifecycle").new {
       end
     end
   end,
+  on_stop = function() merge_state.stop_all() end,
+  on_reset = function() merge_state.stop_all() end,
 }
 
 function m_clock.init()
@@ -594,6 +598,14 @@ function m_clock.init()
       current_step = selected_step
 
       if wrapped then
+        if channel_number ~= 17 and channel.musical_merge then
+          merge_state.on_cycle_boundary(song_pattern, channel_number, channel.musical_merge)
+          local scheduler = m_clock.lookahead_scheduler
+          if scheduler then scheduler:invalidate(channel_number, current_step, nil) end
+          pattern_model.update_working_pattern(channel_number, song_pattern)
+          pattern = channel.working_pattern
+          trig_values = pattern.trig_values
+        end
         
         -- The global scale channel has no MIDI parameter recorder bank.
         if channel_number ~= 17 and params:get("record") == 2 and program.get_selected_channel() == channel then
@@ -994,6 +1006,5 @@ function m_clock.seconds_to_next_step()
 end
 
 return m_clock
-
 
 
