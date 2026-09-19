@@ -14,7 +14,11 @@ import uuid
 ROOT = Path(__file__).resolve().parents[2]
 FILES = ["lib/rhythm_doctor/" + name + ".lua" for name in
          ("bank", "state_machine", "paint", "paint_journal", "paint_transactions", "assets", "capture_controller", "analysis_controller",
-          "runtime", "ui_adapter", "worker_host", "bank_persistence", "analysis_worker_host")]
+          "runtime", "ui_adapter", "worker_host", "bank_persistence", "analysis_worker_host",
+          "analysis_transport")]
+# analysis_transport decodes the worker's result file, so its JSON helper has
+# to be deployed alongside it.
+FILES.append("lib/helpers/json.lua")
 FILES.append("lib/project_lifecycle.lua")
 FILES.append("lib/ui.lua")
 FILES.extend(("lib/pages/trigger_edit_page/trigger_edit_page.lua",
@@ -22,7 +26,8 @@ FILES.extend(("lib/pages/trigger_edit_page/trigger_edit_page.lua",
 TESTS = ["tests/rhythm_doctor/test_" + name + ".lua" for name in
          ("core", "integration", "lifecycle", "journal", "bank_schema", "paint_boundaries", "paint_transactions",
           "capture_transitions", "assets", "capture_controller", "analysis_controller", "analysis_runtime", "runtime",
-          "project_lifecycle_runtime", "ui_adapter", "worker_host", "app_surface")]
+          "project_lifecycle_runtime", "ui_adapter", "worker_host", "app_surface",
+          "analysis_transport")]
 
 
 def isolated_lua_command(remote, relative):
@@ -52,6 +57,7 @@ def main():
     checked("test ! -e /home/we/.cache/mosaic-real-norns/active")
     device = checked("uname -sm; lua -v 2>&1")
     checked("mkdir -p " + shlex.quote(remote + "/lib/rhythm_doctor") + " " +
+            shlex.quote(remote + "/lib/helpers") + " " +
             shlex.quote(remote + "/lib/pages/trigger_edit_page") + " " +
             shlex.quote(remote + "/tests/rhythm_doctor"))
     identities, results = {}, []
@@ -77,7 +83,7 @@ def main():
         for relative in FILES + TESTS:
             checked("rm -f " + shlex.quote(remote + "/" + relative))
         checked("rmdir " + " ".join(shlex.quote(remote + suffix) for suffix in
-                ("/lib/rhythm_doctor", "/lib/pages/trigger_edit_page", "/lib/pages",
+                ("/lib/rhythm_doctor", "/lib/helpers", "/lib/pages/trigger_edit_page", "/lib/pages",
                  "/tests/rhythm_doctor", "/lib", "/tests", "")))
     report = dict(run_id=run_id, profile="physical-norns", device=device,
                   source_sha256=identities, tests=results,
