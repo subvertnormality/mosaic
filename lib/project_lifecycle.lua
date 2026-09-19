@@ -4,6 +4,7 @@ local project_lifecycle = {}
 function project_lifecycle.new(as_metro, autosave_timer, param_manager, project_validation, set_splash, capture_guard)
   local autosave_inhibited = false
   local autosave_reset
+  local new_project_sequence = 0
 
 local function reject_project(reason)
   autosave_inhibited = true
@@ -66,6 +67,7 @@ local function load_project(pth, allow_missing)
     if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset", true) end
     m_clock:reset()
     ui.refresh()
+    if capture_guard and capture_guard.project_loaded then capture_guard:project_loaded(pth) end
     fn.dirty_grid(true)
     resume_autosave()
     return true
@@ -168,6 +170,8 @@ local function load_new_project()
     end
     m_grid.refresh()
     ui.refresh()
+    new_project_sequence = new_project_sequence + 1
+    if capture_guard and capture_guard.project_loaded then capture_guard:project_loaded("new:" .. tostring(new_project_sequence)) end
     resume_autosave()
     return true
   end)
@@ -220,7 +224,10 @@ end
     new = load_new_project,
     reset_autosave = autosave_reset,
     prime_autosave = prime_autosave,
-    autosave = do_autosave
+    autosave = do_autosave,
+    set_capture_guard = function(guard)
+      capture_guard = guard
+    end
   }
 end
 
