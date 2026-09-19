@@ -462,6 +462,22 @@ function test_feature_pages_restore_last_legacy_workspace_for_a_grid_gesture()
   end)
 end
 
+-- README.md held-step editing: a held grid gesture stays owned by its legacy
+-- workspace; feature editors cannot capture it part-way through the press.
+function test_held_grid_key_blocks_direct_and_encoder_entry_to_feature_pages()
+  isolated(function(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    env.pressed={{x=1,y=1}}
+    luaunit.assert_false(env.ui.select_merge_shape_page())
+    luaunit.assert_equals(env.ui.get_selected_page(),6)
+    turn(env,1,1)
+    luaunit.assert_equals(env.ui.get_selected_page(),6)
+    luaunit.assert_false(env.ui.select_harmony_page())
+    luaunit.assert_equals(env.ui.get_selected_page(),6)
+  end)
+end
+
 function test_merge_gesture_feedback_is_transient_and_returns_to_original_editor()
   isolated(function(env)
     start(env);env.ui.select_merge_shape_page()

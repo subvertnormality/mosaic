@@ -71,7 +71,7 @@ end
 function test_harmony_voicing_root_and_inversion_bass_are_hard_constraints()
   local material = {{id = "root", pc = 0}, {id = "third", pc = 4}, {id = "fifth", pc = 7}}
   local roles = {role("v1", 36, 59, 48), role("v2", 48, 72, 60), role("v3", 55, 84, 67)}
-  local root = solve(material, roles, {bass = {mode = "root", tone_id = "root", direction = "nearest"}})
+  local root = solve(material, roles, {bass = {mode = "root", tone_id = "third", direction = "nearest"}})
   local first = solve(material, roles, {bass = {mode = "inversion", tone_id = "third", direction = "nearest"}})
   luaunit.assert_equals(root.assignments.v1, "root")
   luaunit.assert_equals(first.assignments.v1, "third")

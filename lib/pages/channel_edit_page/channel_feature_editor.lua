@@ -180,15 +180,42 @@ function editor.new(kind)
     local name="v"..self.selected_role;return name,value.roles[name]
   end
   local function selected_bass()return self.context_group and group()and group().bass or channel_config().bass end
+  local function select_ensemble_group(value)
+    if value.mode=="ensemble"and value.group_id and groups()[value.group_id]then
+      self.selected_group=value.group_id;self.context_group=true
+    else self.context_group=false end
+  end
+  local function tone_values(value)
+    if self.context_group then
+      local values={};for index=1,#((group()and group().template.offsets)or{})do values[index]="tone"..index end
+      return values
+    end
+    local values={"root"};local masks={self.channel.chord_one_mask,self.channel.chord_two_mask,
+      self.channel.chord_three_mask,self.channel.chord_four_mask}
+    for index=1,4 do local offset=masks[index];if offset and offset~=0 then values[#values+1]="chord"..index end end
+    return values
+  end
 
   local function harmony_fields()
     local value=channel_config()
-    if self.screen=="H01"then return{
+    if self.screen=="H01"then
+      local ensemble=value.mode=="ensemble"and value.group_id and groups()[value.group_id]
+      local function in_owner(action_options)
+        action_options=action_options or{};action_options.before=function()select_ensemble_group(value)end;return action_options
+      end
+      local fields={
       editable("Mode",function()return value.mode end,function(v)local prior=value.mode;value.mode=v;if v=="pattern"then if prior=="off"then value.crossing=true end;value.bass.mode="smooth";value.bass.non_chord_pedal=false end end,{values={"off","revoice","pattern","ensemble"}}),
       editable("Group",function()return value.group_id or 0 end,function(v)value.group_id=v==0 and nil or v end,{min=0,max=16}),
-      editable("Preset",function()return value.preset end,function(v)value.preset=v end,{values={"smooth","compact","independent"}}),
-      action("Tone Map","TONE_MAP"),action("Register","H02"),action("Bass","H03"),action("Groups","H04"),
-      action("Rules","H08"),action("Entry","H09"),action("Result","H05")}
+      editable("Preset",function()return ensemble and ensemble.preset or value.preset end,
+        function(v)if ensemble then ensemble.preset=v else value.preset=v end end,{values={"smooth","compact","independent"}})}
+      if value.mode=="pattern"then fields[#fields+1]=action("Tone Map","TONE_MAP")end
+      fields[#fields+1]=action("Register","H02",in_owner())
+      fields[#fields+1]=action("Bass","H03",in_owner())
+      fields[#fields+1]=action("Groups","H04")
+      fields[#fields+1]=action("Rules","H08",in_owner())
+      fields[#fields+1]=action("Entry","H09",in_owner())
+      fields[#fields+1]=action("Result","H05",in_owner())
+      return fields
     elseif self.screen=="H02"then
       local names=self.context_group and group()and harmony_config.member_roles(#group().members)or{"v1","v2","v3","v4","v5"}
       local name,role=selected_role()
@@ -206,15 +233,16 @@ function editor.new(kind)
         editable("Strict direction",function()return bass.strict_direction end,function(v)bass.strict_direction=v end,{boolean=true}),
         action("Bass register","H02",{before=function()self.selected_role=1 end})}
       end
-      return{
+      local fields={
         editable("Mode",function()return bass.mode end,function(v)bass.mode=v end,{values={"root","inversion","smooth","pedal"}}),
-        editable("Tone",function()return bass.tone_id end,function(v)bass.tone_id=v end,
-          {values=self.context_group and {"tone1","tone2","tone3","tone4","tone5"}or{"root","chord1","chord2","chord3","chord4"}}),
         editable("Direction",function()return bass.direction end,function(v)bass.direction=v end,{values={"nearest","ascending","descending"}}),
         editable("Strict direction",function()return bass.strict_direction end,function(v)bass.strict_direction=v end,{boolean=true}),
         editable("Pedal pitch",function()return bass.pedal end,function(v)bass.pedal=v end,{min=0,max=127}),
         editable("Non-chord pedal",function()return bass.non_chord_pedal end,function(v)bass.non_chord_pedal=v end,{boolean=true}),
         action("Bass register","H02",{before=function()self.selected_role=1 end})}
+      if bass.mode=="inversion"then table.insert(fields,2,editable("Tone",function()return bass.tone_id end,
+        function(v)bass.tone_id=v end,{values=tone_values(value)}))end
+      return fields
     elseif self.screen=="H04"then
       local ids={};for id in pairs(groups())do ids[#ids+1]=id end;table.sort(ids)
       local fields={editable("Group",function()return self.selected_group end,function(v)self.selected_group=v;self.context_group=true end,{values=ids}),
@@ -287,8 +315,11 @@ function editor.new(kind)
           mark_dirty();back()
         end})}
     elseif self.screen=="H05"then
-      local snapshot=harmony_state.snapshot(self.song);local result=self.context_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
-      local trace=harmony_inspection.snapshot(self.song,self.channel_number)
+      local snapshot=harmony_state.snapshot(self.song);local selected_group=self.context_group and group()
+      local result=selected_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
+      local inspection_channel=self.channel_number
+      if selected_group and selected_group.members and selected_group.members[1]then inspection_channel=selected_group.members[1].channel end
+      local trace=harmony_inspection.snapshot(self.song,inspection_channel)
       local fields={readonly("Status",function()
         if trace.planned and trace.planned.bypass then return"BYPASS "..tostring(trace.planned.bypass)end
         if not result then return"NO RESULT"end
@@ -299,8 +330,10 @@ function editor.new(kind)
       fields[#fields+1]=readonly("Last",function()return trace.emitted and trace.emitted.pitch end)
       if result and result.status~="ok"then fields[#fields+1]=action("Failure details","H06")end;return fields
     elseif self.screen=="H06"then
-      local snapshot=harmony_state.snapshot(self.song);local result=self.context_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
-      return{readonly("Reason",function()return result and result.reason or"NO VOICING"end),readonly("Fallback",function()return value.fallback end),action("Settings","H02")}
+      local snapshot=harmony_state.snapshot(self.song);local selected_group=self.context_group and group()
+      local result=selected_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
+      return{readonly("Reason",function()return result and result.reason or"NO VOICING"end),
+        readonly("Fallback",function()return selected_group and selected_group.fallback or value.fallback end),action("Settings","H02")}
     end;return{}
   end
 

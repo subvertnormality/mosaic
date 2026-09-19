@@ -125,6 +125,8 @@ function state.effective(song, channel, requested)
   }
 end
 
+function state.has(song,channel)return songs[song]and songs[song][channel]~=nil end
+
 function state.stop(song)
   local values = songs[song]
   if not values then return {} end

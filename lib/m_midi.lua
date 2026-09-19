@@ -325,7 +325,9 @@ function m_midi:note_on(note, velocity, channel, device, lead_time_ms)
       m_midi.flush_output_batch()
       port:note_on(note, velocity, channel)
     end
+    return true
   end
+  return false
 end
 
 function m_midi:note_off(note, velocity, channel, device, lead_time_ms)

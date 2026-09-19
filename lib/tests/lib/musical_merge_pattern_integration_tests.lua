@@ -3,6 +3,7 @@
 
 local pattern_under_test = include("mosaic/lib/pattern")
 local merge_config = include("mosaic/lib/musical_merge/config")
+local merge_state = include("mosaic/lib/musical_merge/state")
 
 local function setup()
   program.init()
@@ -104,3 +105,16 @@ function test_musical_merge_missing_anchor_bypasses_to_saved_legacy_mode_visibly
   luaunit.assert_equals(result.foundation.reason, "anchor_missing")
 end
 
+function test_musical_merge_projection_keeps_queued_removal_active_until_wrap()
+  local song,channel=setup();merge_state.reset()
+  song.patterns[1].trig_values[1]=1;song.patterns[2].trig_values[3]=1
+  local active=enable(channel)
+  local first=pattern_under_test.get_and_merge_patterns(1,"skip","average","average","average",song)
+  luaunit.assert_not_nil(first.foundation)
+  local removed=merge_config.new();merge_state.request(song,1,removed,true);channel.musical_merge=nil
+  local queued=pattern_under_test.get_and_merge_patterns(1,"skip","average","average","average",song)
+  luaunit.assert_equals(queued.foundation.config.mode,active.mode)
+  merge_state.on_cycle_boundary(song,1,removed)
+  local promoted=pattern_under_test.get_and_merge_patterns(1,"skip","average","average","average",song)
+  luaunit.assert_nil(promoted.foundation)
+end

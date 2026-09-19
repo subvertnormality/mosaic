@@ -108,3 +108,13 @@ function test_musical_merge_global_transaction_waits_for_pattern_not_channel_bou
   local active=state.effective(song,2,old)
   luaunit.assert_equals({active.config.cycles,active.cycle,active.phrase},{2,1,0})
 end
+
+function test_musical_merge_queued_removal_stays_active_until_cycle_boundary()
+  state.reset();local song,active={},value(2,"fixed")
+  state.effective(song,3,active)
+  local removed=config.new()
+  state.request(song,3,removed,true)
+  luaunit.assert_equals(state.effective(song,3,removed).config.mode,"foundation")
+  state.on_cycle_boundary(song,3,removed)
+  luaunit.assert_equals(state.effective(song,3,removed).config.mode,"off")
+end

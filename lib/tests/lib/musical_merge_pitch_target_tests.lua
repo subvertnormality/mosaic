@@ -22,15 +22,15 @@ end
 function test_merge_pitch_target_empty_or_missing_explicit_source_is_visible_legacy()
   luaunit.assert_equals({target.resolve(60, {eligible=true,
     config={kind="degrees",degrees={9}}, scale_pitch_classes={0,2,4}})},
-    {60,"source_missing"})
+    {60,"target_empty"})
   luaunit.assert_equals({target.resolve(60, {eligible=true,
     config={kind="chord",group_id=2}})}, {60,"source_missing"})
 end
 
-function test_merge_pitch_target_rejects_partially_nonexistent_degree_sets()
+function test_merge_pitch_target_uses_surviving_degrees_after_runtime_source_change()
   luaunit.assert_equals({target.resolve(60,{eligible=true,
     config={kind="degrees",degrees={1,9}},scale_pitch_classes={0,2,4}})},
-    {60,"source_missing"})
+    {60,"targeted"})
 end
 
 function test_merge_pitch_target_explicit_chord_consumes_material_not_voiced_pitches()

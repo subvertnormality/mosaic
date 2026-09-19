@@ -47,7 +47,10 @@ local function assignment_options(frame, role_index, by_id)
   if role.material_id then return by_id[role.material_id] and {role.material_id} or {} end
   if role_index == 1 then
     local bass = frame.bass or {}
-    if bass.mode == "root" or bass.mode == "inversion" then
+    if bass.mode == "root" then
+      local root_id = by_id.root and "root" or by_id.tone1 and "tone1"
+      return root_id and {root_id} or {}
+    elseif bass.mode == "inversion" then
       return by_id[bass.tone_id] and {bass.tone_id} or {}
     elseif bass.mode == "pedal" then
       local result = {}

@@ -15,6 +15,10 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   local feature_editors = controls.feature_editors or {}
   local last_legacy_page = controls.channel_page_to_index["Masks"]
 
+  local function grid_key_is_held()
+    return m_grid and m_grid.get_pressed_keys and #m_grid.get_pressed_keys() > 0
+  end
+
   local function remember_legacy_page(page)
     -- Held-step gestures belong to the two editable legacy workspaces. Page
     -- traversal through Memory/Clock/Device/Dashboard must not replace that
@@ -278,13 +282,17 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.select_merge_shape_page()
+    if grid_key_is_held() then return false end
     if feature_editors.merge then feature_editors.merge:enter() end
     controls.channel_pages:select_page(controls.channel_page_to_index["Merge Shape"])
+    return true
   end
 
   function controller.select_harmony_page()
+    if grid_key_is_held() then return false end
     if feature_editors.harmony then feature_editors.harmony:enter() end
     controls.channel_pages:select_page(controls.channel_page_to_index["Harmony"])
+    return true
   end
 
   function controller.leave_feature_editor_for_grid()
@@ -312,6 +320,10 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.select_channel_page_by_index(index)
+    if (index == controls.channel_page_to_index["Merge Shape"] or
+        index == controls.channel_page_to_index["Harmony"]) and grid_key_is_held() then
+      return false
+    end
     if index == 1 then
       public_ui.select_mask_page()
     elseif index == 2 then
@@ -329,6 +341,7 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
     elseif index == 8 then
       public_ui.select_harmony_page()
     end
+    return true
   end
 
   function controller.refresh()

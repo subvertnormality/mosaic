@@ -3,6 +3,7 @@ local pattern = {}
 local quantiser = include("mosaic/lib/quantiser")
 local foundation = include("mosaic/lib/musical_merge/foundation")
 local merge_state = include("mosaic/lib/musical_merge/state")
+local merge_config = include("mosaic/lib/musical_merge/config")
 
 local program = program
 
@@ -218,9 +219,8 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if length_priority then merged_pattern.lengths[s] = priority_lengths[s] end
   end
 
-  local requested_merge_settings = pattern_channel.musical_merge
-  local merge_runtime = requested_merge_settings and
-    merge_state.effective(selected_song_pattern, channel, requested_merge_settings) or nil
+  local requested_merge_settings = pattern_channel.musical_merge or merge_config.new()
+  local merge_runtime = merge_state.effective(selected_song_pattern, channel, requested_merge_settings)
   local merge_settings = merge_runtime and merge_runtime.config
   local foundation_result
   if merge_settings and merge_settings.schema_version == 1 and merge_settings.mode == "foundation" then

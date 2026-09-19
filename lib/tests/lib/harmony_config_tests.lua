@@ -103,3 +103,12 @@ function test_harmony_config_non_chord_pedal_is_ensemble_only_and_rule_ranges_ar
   song.channels[1].voicing.upper_spacing=128
   luaunit.assert_equals(({config.validate_song(song)})[2],"channel 1 voicing policy")
 end
+
+function test_harmony_config_inversion_accepts_only_material_that_can_exist()
+  local song={channels={}};for channel=1,17 do song.channels[channel]={number=channel}end
+  local value=config.new_channel("revoice");value.bass.mode="inversion";value.bass.tone_id="chord3"
+  song.channels[1].voicing=value
+  luaunit.assert_equals(({config.validate_song(song)})[2],"channel 1 bass tone")
+  song.channels[1].chord_three_mask=7
+  luaunit.assert_true(config.validate_song(song))
+end

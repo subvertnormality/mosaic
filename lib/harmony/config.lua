@@ -156,6 +156,10 @@ local function validate_group(id, group)
       return nil, prefix .. " pedal range"
     end
   end
+  if group.bass.mode == "inversion" then
+    local tone = type(group.bass.tone_id)=="string"and tonumber(group.bass.tone_id:match("^tone(%d+)$"))
+    if not tone or tone < 1 or tone > #group.template.offsets then return nil, prefix .. " bass tone" end
+  end
   if type(group.crossing) ~= "boolean" or type(group.pitch_class_doubling) ~= "boolean" or
     type(group.exact_unison) ~= "boolean" or type(group.common_tone_priority) ~= "boolean" or
     not integer(group.upper_spacing, 0, 127) or not integer(group.bass_separation, 0, 127) or
@@ -206,6 +210,12 @@ local function validate_channel(number, channel, groups)
     if value.bass.pedal < bass_role.min or value.bass.pedal > bass_role.max then
       return nil, prefix .. " pedal range"
     end
+  end
+  if value.bass.mode == "inversion" then
+    local tone=value.bass.tone_id
+    local index=type(tone)=="string"and tonumber(tone:match("^chord(%d+)$"))
+    local masks={channel.chord_one_mask,channel.chord_two_mask,channel.chord_three_mask,channel.chord_four_mask}
+    if tone~="root"and(not index or not masks[index]or masks[index]==0)then return nil,prefix.." bass tone"end
   end
   if type(value.pattern_maps) ~= "table" then return nil, prefix .. " pattern maps" end
   for binding, map in pairs(value.pattern_maps) do

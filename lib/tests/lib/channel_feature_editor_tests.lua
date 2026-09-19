@@ -118,9 +118,12 @@ function test_harmony_editor_routes_h01_children_and_tone_map_open_is_read_only(
   local song,channel=setup();channel.selected_patterns[1]=true
   song.patterns[1].note_values[1]=0;channel.working_pattern.note_values[1]=0
   local value=feature_editor.new("harmony");value:enter()
-  for label,route in pairs({["Tone Map"]="TONE_MAP",Register="H02",Bass="H03",Groups="H04",Rules="H08",Entry="H09",Result="H05"})do
+  value.draft.mode="pattern"
+  open_label(value,"Tone Map");luaunit.assert_equals(value:get_screen(),"TONE_MAP")
+  luaunit.assert_equals(value.draft.pattern_maps,{})
+  value:encoder_one();luaunit.assert_equals(value:get_screen(),"H01")
+  for label,route in pairs({Register="H02",Bass="H03",Groups="H04",Rules="H08",Entry="H09",Result="H05"})do
     open_label(value,label);luaunit.assert_equals(value:get_screen(),route)
-    if label=="Tone Map"then luaunit.assert_equals(value.draft.pattern_maps,{})end
     value:encoder_one();luaunit.assert_equals(value:get_screen(),"H01")
   end
 end
@@ -128,7 +131,7 @@ end
 function test_harmony_tone_map_is_per_binding_staged_and_cancelled_without_source_mutation()
   local song,channel=setup();channel.selected_patterns[1]=true
   song.patterns[1].note_values[1]=-7;channel.working_pattern.note_values[1]=-7
-  local value=feature_editor.new("harmony");value:enter();open_label(value,"Tone Map")
+  local value=feature_editor.new("harmony");value:enter();value.draft.mode="pattern";open_label(value,"Tone Map")
   select_label(value,"Tone -7");value:enc(3,1)
   luaunit.assert_true(value.dirty);value:key(2)
   luaunit.assert_equals(value:get_screen(),"H01")
@@ -139,7 +142,7 @@ end
 function test_harmony_tone_map_reset_requires_explicit_confirmation()
   local song,channel=setup();channel.selected_patterns[1]=true
   song.patterns[1].note_values[1]=0;channel.working_pattern.note_values[1]=0
-  local value=feature_editor.new("harmony");value:enter();open_label(value,"Tone Map")
+  local value=feature_editor.new("harmony");value:enter();value.draft.mode="pattern";open_label(value,"Tone Map")
   select_label(value,"Tone 0");value:enc(3,1)
   luaunit.assert_true(value:apply())
   value:enter();open_label(value,"Tone Map")
@@ -276,10 +279,11 @@ function test_merge_selecting_custom_preserves_existing_cycle_percentages()
 end
 
 function test_harmony_revoice_bass_tones_are_actual_source_ids()
-  setup();local value=feature_editor.new("harmony");value:enter();value.draft.mode="revoice"
+  local _,channel=setup();channel.chord_one_mask=4;channel.chord_three_mask=7
+  local value=feature_editor.new("harmony");value:enter();value.draft.mode="revoice";value.draft.bass.mode="inversion"
   open_label(value,"Bass");select_label(value,"Tone")
   local field=value:get_fields()[value.selected]
-  luaunit.assert_equals(field.values,{"root","chord1","chord2","chord3","chord4"})
+  luaunit.assert_equals(field.values,{"root","chord1","chord3"})
 end
 
 function test_optional_config_undo_preserves_later_independent_channel_edit()
