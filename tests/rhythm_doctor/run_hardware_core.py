@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 FILES = ["lib/rhythm_doctor/" + name + ".lua" for name in
          ("bank", "state_machine", "paint", "paint_journal")]
 TESTS = ["tests/rhythm_doctor/test_" + name + ".lua" for name in
-         ("core", "integration", "lifecycle", "journal", "bank_schema", "paint_boundaries")]
+         ("core", "integration", "lifecycle", "journal", "bank_schema", "paint_boundaries", "capture_transitions")]
 
 
 def main():

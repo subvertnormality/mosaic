@@ -1,0 +1,111 @@
+{
+  "schema": "rhythm-doctor-capture-ipc-controller-proposal-v1",
+  "status": "Design only. No production Lua or native bridge has been added.",
+  "observed_current_boundary": {
+    "c_file": "tools/rhythm_doctor/rd_capture.c",
+    "c_api": [
+      "rd_capture_preflight",
+      "rd_capture_start",
+      "rd_capture_stop",
+      "rd_capture_cancel",
+      "rd_capture_state/error/getters",
+      "rd_capture_publish_wav",
+      "rd_capture_destroy"
+    ],
+    "finding": "The spike exposes an in-process C pointer ABI only. It does not open a socket/FIFO, serialize commands, retain a Lua job identity, or implement a release deadline.",
+    "relevant_lines": {
+      "preflight": 162,
+      "destroy": 184,
+      "start": 197,
+      "stop": 203,
+      "cancel": 212,
+      "getters": 222,
+      "publish": 250
+    }
+  },
+  "existing_lua_anchors": {
+    "lib/rhythm_doctor/state_machine.lua": {
+      "job_token": "lines 27-29: project_id + generation + analysis_revision",
+      "start_callback": "lines 98-108: on_capture_start(mode, token)",
+      "analysis_callback": "lines 111-117: on_analyse(token)",
+      "cancel_then_release": "lines 87-96: invalidate token, on_cancel(old token), then nonblocking on_release(owner token)",
+      "release_ack": "lines 74-81: resources_released validates owner token before pending project work continues"
+    },
+    "lib/project_lifecycle.lua": {
+      "project_transition": "lines 23-30 waits on capture_guard:prepare_project_change and shows RELEASING CAPTURE when deferred",
+      "gap": "There is no controller bridge or timeout; a release acknowledgement is currently injected by tests/host code."
+    },
+    "mosaic.lua": "No state-machine construction or native capture bridge is wired in this checkout; integration must first add a dedicated owner rather than placing blocking I/O in grid/key callbacks.",
+    "planned_terminal_transitions": "Root is adding state_machine:capture_failed(token,error) and state_machine:capture_timeout(token,valid_span). The controller must call them only for an exact active full identity; it does not edit the machine."
+  },
+  "proposed_controller": {
+    "new_file": "lib/rhythm_doctor/capture_controller.lua",
+    "construction": "capture_controller.new({ transport_stopped, now_monotonic, schedule_once, unschedule, native_client, machine, report_status })",
+    "responsibility": "The controller alone performs nonblocking bridge I/O and owns one native-capture job. State-machine callbacks only call controller methods; the JACK callback and Lua event thread never wait for each other.",
+    "job_identity": "Mint opaque job_id on every preflight/start. Every request and reply carries {protocol_version, job_id, project_id, generation, analysis_revision}. Reject a reply unless all five fields equal the controller active job and the state-machine token. A superseded token can never release or publish a newer job.",
+    "callback_wiring": [
+      "on_capture_start(mode, token): require an already successful preflight for token; send START with the full identity. If it is rejected, report NOT READY and call capture_failed only for that exact token.",
+      "on_analyse(token): for an ordinary Finish, send STOP then poll until COMPLETED and PUBLISH. Start the analysis worker only after a matching PUBLISHED reply validates frame count, rate, start/end frames and identity. For a timeout-valid capture, reuse its already-published asset; never stop or publish a different job.",
+      "terminal native failure: on a matching FAILED state/error, call machine:capture_failed(token,error). That method owns FAILED/release behavior; the controller must not manufacture resources_released.",
+      "automatic 45-second completion: publish the completed capture, obtain valid_span only from the separate acquisition result for the same identity, then call machine:capture_timeout(token,valid_span). An invalid span retains the published audio for alignment; a valid span lets the machine enter ANALYSING and invoke on_analyse.",
+      "on_cancel(old_token): send CANCEL once for that exact identity; ignore all later completion/publish replies for it.",
+      "on_release(owner_token): send RELEASE once. On a matching RELEASED reply, call machine:resources_released(owner_token, transport_stopped()) exactly once. Never acknowledge release from a bare socket close or mismatched identity."
+    ],
+    "bridge_protocol": {
+      "transport": "A private local Unix-domain sequenced-message socket owned by a small native helper that owns rd_capture pointers. Lua sends length-bounded JSON or line-delimited JSON; no FIFO because cancellation/reply association and backpressure need framed bidirectional messages.",
+      "commands": [
+        "PREFLIGHT",
+        "START",
+        "POLL",
+        "STOP",
+        "CANCEL",
+        "PUBLISH",
+        "RELEASE"
+      ],
+      "required_reply_fields": [
+        "protocol_version",
+        "job_id",
+        "project_id",
+        "generation",
+        "analysis_revision",
+        "command",
+        "status",
+        "capture_state",
+        "capture_error"
+      ],
+      "completion_fields": [
+        "sample_rate",
+        "frames",
+        "start_frame",
+        "end_frame",
+        "pcm_locked"
+      ],
+      "publish_fields": [
+        "wav_path",
+        "wav_sha256",
+        "frames",
+        "sample_rate"
+      ],
+      "rule": "The helper maps job_id to its rd_capture pointer and destroys it only after C-level cancellation/deactivation has completed. It must refuse a duplicate job_id and an operation whose identity differs from the mapped job."
+    },
+    "bounded_release_timeout": {
+      "deadline_ms": 2000,
+      "start": "When on_release dispatches RELEASE, schedule one monotonic 2-second deadline tied to that exact full identity.",
+      "success": "Only a matching RELEASED reply cancels the deadline and calls resources_released.",
+      "timeout": "Show CAPTURE RELEASE TIMEOUT, retain the pending project transition and resource lease, and offer retry/diagnostic. Do not call resources_released and do not load/save a project while ownership is unproven. This bounds Lua waiting without falsely claiming a live JACK callback or worker is gone.",
+      "late_reply": "A matching later RELEASED reply may complete release; a stale/mismatched reply is recorded and ignored."
+    },
+    "required_red_green_coverage_before_wiring": [
+      "State-machine/controller test: stale START, COMPLETED, PUBLISHED and RELEASED replies cannot mutate a replacement project or generation.",
+      "Release deadline test: project continuation remains deferred at 2 seconds and no resources_released call occurs; matching later release completes once.",
+      "Cancel-vs-stop and transport-start tests: cancellation invalidates identity before bridge I/O; a late completion cannot launch analysis.",
+      "Protocol test with an independent fake helper: bounded frame size, malformed reply rejection, duplicate job rejection, and exactly-once release acknowledgement.",
+      "Native integration test: helper command sequence exercises the existing C API without altering pre-existing JACK graph state."
+    ],
+    "terminal_event_ordering": {
+      "timeout_valid": "C capacity COMPLETED -> PUBLISH -> matching acquisition valid_span=true -> capture_timeout(token,true) -> on_analyse(token) using the same asset.",
+      "timeout_invalid": "C capacity COMPLETED -> PUBLISH -> matching acquisition valid_span=false -> capture_timeout(token,false); retained asset is available to Alignment and normal release proceeds only through on_release.",
+      "failed": "C FAILED/error -> controller identity check -> capture_failed(token,error) -> machine on_release -> RELEASED -> resources_released."
+    }
+  }
+}

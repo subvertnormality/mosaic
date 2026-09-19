@@ -108,10 +108,46 @@ function Machine:start_capture(mode, transport_stopped)
   return result("OK", self:job_token())
 end
 
+local function owns_capture(self, token)
+  return type(token) == "table" and token.project_id == self.project_id and
+    token.generation == self.generation and token.analysis_revision == self.analysis_revision and
+    (self.state == Machine.LISTENING or self.state == Machine.RECORDING)
+end
+
+function Machine:capture_failed(token, message)
+  if not owns_capture(self, token) then return result("STALE_RESULT") end
+  self:_invalidate_modal()
+  self.last_message = type(message) == "string" and message ~= "" and message or "CAPTURE_FAILED"
+  self:_set_state(Machine.FAILED)
+  self:_request_resource_release(token)
+  return result("OK")
+end
+
+-- Host calls only after the contiguous input buffer has stopped. Audio retention
+-- belongs to the host; releasing the capture lease must not discard that asset.
+function Machine:capture_timeout(token, valid_span)
+  if not owns_capture(self, token) then return result("STALE_RESULT") end
+  self:_invalidate_modal()
+  if valid_span == true then
+    self:_set_state(Machine.ANALYSING)
+    if self.state == Machine.ANALYSING and token.project_id == self.project_id and
+        token.generation == self.generation and token.analysis_revision == self.analysis_revision then
+      invoke(self.deps.on_analyse, token)
+    end
+  else
+    self.last_message = "TEMPO_UNCERTAIN"
+    self:_set_state(Machine.ALIGNMENT_REQUIRED)
+    self:_request_resource_release(token)
+  end
+  return result("OK")
+end
+
 function Machine:finish_capture(transport_stopped, enough_audio)
   if not transport_stopped then return result("STOP_SEQUENCER") end
   if self.state ~= Machine.LISTENING and self.state ~= Machine.RECORDING and self.state ~= Machine.ALIGNMENT_REQUIRED then return result("NOT_CAPTURING") end
   if enough_audio ~= true then return result("MORE_AUDIO_NEEDED") end
+  if self.release_token then return result("RESOURCE_RELEASING") end
+  self.resources_are_released = false
   self:_invalidate_modal(); self:_set_state(Machine.ANALYSING)
   invoke(self.deps.on_analyse, self:job_token())
   return result("OK", self:job_token())

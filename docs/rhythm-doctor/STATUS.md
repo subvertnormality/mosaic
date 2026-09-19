@@ -244,3 +244,35 @@ runner cleanup completed. This evidence covers the protocol, not public PCM/UI
 acceptance. `mosaic.lua` does not yet construct a capture controller or supply
 this guard. Controller wiring, release timeout handling and new/loaded project
 identity assignment remain required before RD-03 can be accepted.
+
+
+## Priority-lane and compatibility checkpoint
+
+BD, SD, HH and BASS remain required; TOM is optional. The corrected BASS
+random-forest diagnostic excludes declared stems whose MIDI is missing instead
+of labelling them as negatives. Its validation-only threshold achieved 0.8469
+validation onset F1 and 0.7511 on the reused diagnostic held set, below the 0.80
+gate. These are not final corpus or device acceptance results. The prior models
+remain identified as trained with incomplete label provenance.
+
+At commit 6176544, CI run 35421547048 passed. The actual application pattern
+boundary regression also passed in real time and controlled time on a frozen
+6176544 source snapshot, with literal emitted MIDI expectations, unchanged
+source hashes and successful session cleanup. See
+`evidence/project-release-boundary-checkpoint.json`. This is compatibility
+evidence; it does not exercise the unfinished Rhythm Doctor interface.
+
+
+## Capture completion protocol checkpoint
+
+The state machine now rejects stale capture failure/timeout notifications,
+invalidates pending modals, and moves failed acquisitions to FAILED while
+waiting for actual resource release. A timeout without a valid span enters
+ALIGNMENT_REQUIRED; later analysis waits for release and takes a new resource
+lease. A valid timeout starts analysis only while its original token still
+owns the state, including when a state callback synchronously starts transport.
+Nine focused cases and all seven pure Lua groups pass on physical Norns with
+matching source hashes (`evidence/hardware-capture-transitions-v1.json`).
+The missing-method and reentrant-cancellation failures are preserved separately.
+These transitions still require the asynchronous controller and actual capture
+worker integration; they are not end-to-end audio acceptance.

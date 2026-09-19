@@ -36,18 +36,30 @@ def stem_kinds(metadata):
     return kinds
 
 def labels(track, meta_root, start, end):
+    """Return per-lane references; None means declared source MIDI is incomplete."""
     out={lane:[] for lane in LANES}; kinds=stem_kinds(meta_root/track.name/"metadata.yaml")
     note_map={"BD":(35,36),"SD":(37,38,40),"HH":(42,44,46),"TOM":(41,43,45,47,48,50)}
+    missing={stem for stem in kinds if not (track/"MIDI"/(stem+".mid")).exists()}
+    # Missing declared source material is unknown, never a negative. A missing
+    # drum stem makes every mapped drum lane unscorable because its notes could
+    # belong to any of those lanes; no declared Bass remains a known empty lane.
+    for stem in missing:
+        if kinds[stem] == "BASS": out["BASS"]=None
+        elif kinds[stem] == "DRUM":
+            for lane in note_map: out[lane]=None
     for stem,kind in kinds.items():
         midi=track/"MIDI"/(stem+".mid")
-        if not midi.exists(): continue
+        if stem in missing: continue
         for onset,note in midi_onsets(midi):
             if not start <= onset < end: continue
-            if kind == "BASS": out["BASS"].append(onset-start)
+            if kind == "BASS" and out["BASS"] is not None: out["BASS"].append(onset-start)
             elif kind == "DRUM":
                 for lane,notes in note_map.items():
-                    if note in notes: out[lane].append(onset-start)
+                    if out[lane] is not None and note in notes: out[lane].append(onset-start)
     return out
+
+def lane_is_scorable(reference_by_lane, lane):
+    return reference_by_lane[lane] is not None
 
 def features(audio, sr, times):
     """Stereo magnitude energy (phase-inversion invariant), flux and harmonic bass support."""
@@ -109,41 +121,44 @@ def main():
     parser=argparse.ArgumentParser(); parser.add_argument("--corpus",type=Path,required=True); parser.add_argument("--meta",type=Path,required=True); parser.add_argument("--out",type=Path,required=True); parser.add_argument("--dev-seconds",type=float,default=0.); parser.add_argument("--held-seconds",type=float,default=60.)
     args=parser.parse_args(); available={p.name:p for p in args.corpus.glob("Track*") if (p/"mix.wav").exists()}
     if any(name not in available for name in DEV+HELD): raise SystemExit("frozen manifest is not materialized")
-    x=[]; y=[]; dev_refs={}; dev_features={}; dev_times={}; durations={}
+    dev_refs={}; dev_features={}; dev_times={}; durations={}
     for name in DEV:
-        audio,sr,duration=load_track(available[name],args.dev_seconds); times=np.arange(.1,duration,HOP); ref=labels(available[name],args.meta,0,duration); durations[name]=duration; dev_refs[name]=ref; dev_times[name]=times
-        dev_features[name]=features(audio,sr,times); x.append(dev_features[name]); y.append(np.array([[any(abs(time-event)<=TOLERANCE for event in ref[lane]) for lane in LANES] for time in times]))
-    x=np.vstack(x); y=np.vstack(y)
-    # Keep all event-neighbour frames and deterministically subsample empty
-    # frames, bounding development memory without discarding rare TOM examples.
-    if len(x)>60000:
-        rng=np.random.default_rng(SEED); positive=np.any(y,axis=1); negative=np.flatnonzero(~positive)
-        keep=np.r_[np.flatnonzero(positive), rng.choice(negative,60000-int(positive.sum()),replace=False)]; keep.sort(); x,y=x[keep],y[keep]
-    models=[]; thresholds=[]; development_diagnostics={}
+        audio,sr,duration=load_track(available[name],args.dev_seconds); times=np.arange(.1,duration,HOP); ref=labels(available[name],args.meta,0,duration)
+        durations[name]=duration; dev_refs[name]=ref; dev_times[name]=times; dev_features[name]=features(audio,sr,times)
+    models=[]; thresholds=[]; development_diagnostics={}; provenance={lane:{"development_unknown_tracks":[],"held_unknown_tracks":[]} for lane in LANES}
     for lane_index,lane in enumerate(LANES):
-        model=RandomForestClassifier(n_estimators=64,max_depth=10,min_samples_leaf=2,max_features="sqrt",random_state=SEED+lane_index,n_jobs=1,class_weight="balanced_subsample").fit(x,y[:,lane_index]); models.append(model)
-        examples=[]
-        for name in DEV:
-            examples.append((model.predict_proba(dev_features[name])[:,1] if len(model.classes_)==2 else np.zeros(len(dev_times[name])),dev_times[name],dev_refs[name][lane]))
+        scorable_dev=[name for name in DEV if lane_is_scorable(dev_refs[name],lane)]
+        provenance[lane]["development_unknown_tracks"]=[name for name in DEV if name not in scorable_dev]
+        x=np.vstack([dev_features[name] for name in scorable_dev])
+        y=np.concatenate([np.array([any(abs(time-event)<=TOLERANCE for event in dev_refs[name][lane]) for time in dev_times[name]]) for name in scorable_dev])
+        # Keep all event-neighbour frames and deterministically subsample empty
+        # frames per lane. Unknown-reference rows never reach fit or tuning.
+        if len(x)>60000:
+            rng=np.random.default_rng(SEED+lane_index); positive=y.astype(bool); negative=np.flatnonzero(~positive)
+            keep=np.r_[np.flatnonzero(positive), rng.choice(negative,60000-int(positive.sum()),replace=False)]; keep.sort(); x,y=x[keep],y[keep]
+        model=RandomForestClassifier(n_estimators=64,max_depth=10,min_samples_leaf=2,max_features="sqrt",random_state=SEED+lane_index,n_jobs=1,class_weight="balanced_subsample").fit(x,y); models.append(model)
+        examples=[(model.predict_proba(dev_features[name])[:,1] if len(model.classes_)==2 else np.zeros(len(dev_times[name])),dev_times[name],dev_refs[name][lane]) for name in scorable_dev]
         threshold=tune_threshold(examples); thresholds.append(threshold)
         predicted=[peak_times(probability,times,threshold) for probability,times,_ in examples]
         offsets=[offset for (_,_,reference),guess in zip(examples,predicted) for offset in matched_offsets(reference,guess)]
-        scores=[onset_score(reference,guess,TOLERANCE) for (_,_,reference),guess in zip(examples,predicted)]
-        tp,fp,fn=(sum(score[key] for score in scores) for key in ("tp","fp","fn"))
-        development_diagnostics[lane]={"tp":tp,"fp":fp,"fn":fn,"precision":tp/(tp+fp) if tp+fp else 0.,"recall":tp/(tp+fn) if tp+fn else 0.,"matched_offset_mean_ms":float(np.mean(offsets)*1000) if offsets else None,"matched_offset_p95_abs_ms":float(np.percentile(abs(np.asarray(offsets)),95)*1000) if offsets else None}
+        values=[onset_score(reference,guess,TOLERANCE) for (_,_,reference),guess in zip(examples,predicted)]
+        tp,fp,fn=(sum(score[key] for score in values) for key in ("tp","fp","fn"))
+        development_diagnostics[lane]={"tp":tp,"fp":fp,"fn":fn,"precision":tp/(tp+fp) if tp+fp else 0.,"recall":tp/(tp+fn) if tp+fn else 0.,"scorable_tracks":scorable_dev,"unknown_tracks":provenance[lane]["development_unknown_tracks"],"matched_offset_mean_ms":float(np.mean(offsets)*1000) if offsets else None,"matched_offset_p95_abs_ms":float(np.percentile(abs(np.asarray(offsets)),95)*1000) if offsets else None}
     raw={}; scores={lane:[] for lane in LANES}
     for name in HELD:
         audio,sr,duration=load_track(available[name],args.held_seconds); times=np.arange(.1,duration,HOP); durations[name]=duration; matrix=features(audio,sr,times); refs=labels(available[name],args.meta,0,duration); raw[name]={}
         for index,lane in enumerate(LANES):
-            probabilities=models[index].predict_proba(matrix)[:,1] if len(models[index].classes_)==2 else np.zeros(len(times)); predicted=peak_times(probabilities,times,thresholds[index]); raw[name][lane]=predicted; scores[lane].append(onset_score(refs[lane],predicted,TOLERANCE))
+            probabilities=models[index].predict_proba(matrix)[:,1] if len(models[index].classes_)==2 else np.zeros(len(times)); predicted=peak_times(probabilities,times,thresholds[index]); raw[name][lane]=predicted
+            if lane_is_scorable(refs,lane): scores[lane].append(onset_score(refs[lane],predicted,TOLERANCE))
+            else: provenance[lane]["held_unknown_tracks"].append(name)
     summary={}
     for lane,values in scores.items():
         tp,fp,fn=(sum(score[key] for score in values) for key in ("tp","fp","fn"))
-        summary[lane]={"f1":2*tp/(2*tp+fp+fn) if 2*tp+fp+fn else 1.,"macro_track_f1":float(np.mean([score["f1"] for score in values])),"tp":tp,"fp":fp,"fn":fn}
+        summary[lane]={"f1":2*tp/(2*tp+fp+fn) if 2*tp+fp+fn else 1.,"macro_track_f1":float(np.mean([score["f1"] for score in values])) if values else None,"tp":tp,"fp":fp,"fn":fn,"scorable_track_count":len(values),"unknown_track_count":len(provenance[lane]["held_unknown_tracks"])}
     args.out.mkdir(parents=True,exist_ok=True); pickle.dump(models,open(args.out/"candidate_a.pkl","wb")); (args.out/"predictions.json").write_text(json.dumps(raw))
     archive=args.corpus.parent.parent/"babyslakh_16k.tar.gz"
-    counts={lane:{"development_reference_events":sum(len(dev_refs[name][lane]) for name in DEV),"held_reference_events":sum(summary[lane][key] for key in ("tp","fn")),"held_predicted_peaks":sum(summary[lane][key] for key in ("tp","fp"))} for lane in LANES}
-    report={"acceptance_claimed":False,"status":"DIAGNOSTIC_INCOMPLETE_CORPUS_STRATA","seed":SEED,"development":DEV,"heldout":HELD,"development_seconds":"full_source", "held_seconds":args.held_seconds,"durations_seconds":durations,"onset_tolerance_s":TOLERANCE,"refractory_s":REFRACTORY,"thresholds_tuned_development_only":dict(zip(LANES,thresholds)),"development_diagnostics":development_diagnostics,"per_lane":summary,"quality_counts":counts,"source_hashes":{"archive":sha256(archive),"model":sha256(args.out/"candidate_a.pkl")},"limitations":["This preliminary corpus lacks required source/kit and isolated/sparse/full-mixture held-out strata; no grid F1 or acceptance gate is reported."]}
+    counts={lane:{"development_reference_events":sum(len(dev_refs[name][lane]) for name in DEV if lane_is_scorable(dev_refs[name],lane)),"development_scorable_tracks":len(development_diagnostics[lane]["scorable_tracks"]),"development_unknown_tracks":development_diagnostics[lane]["unknown_tracks"],"held_reference_events":sum(summary[lane][key] for key in ("tp","fn")),"held_predicted_peaks":sum(summary[lane][key] for key in ("tp","fp")),"held_scorable_tracks":summary[lane]["scorable_track_count"],"held_unknown_tracks":provenance[lane]["held_unknown_tracks"]} for lane in LANES}
+    report={"acceptance_claimed":False,"status":"DIAGNOSTIC_INCOMPLETE_CORPUS_STRATA","seed":SEED,"development":DEV,"heldout":HELD,"development_seconds":"full_source", "held_seconds":args.held_seconds,"durations_seconds":durations,"onset_tolerance_s":TOLERANCE,"refractory_s":REFRACTORY,"thresholds_tuned_development_only":dict(zip(LANES,thresholds)),"development_diagnostics":development_diagnostics,"per_lane":summary,"quality_counts":counts,"label_provenance":provenance,"source_hashes":{"archive":sha256(archive),"model":sha256(args.out/"candidate_a.pkl")},"limitations":["This preliminary corpus lacks required source/kit and isolated/sparse/full-mixture held-out strata; no grid F1 or acceptance gate is reported.","Declared stems with missing MIDI are unknown and excluded from fitting, threshold tuning, scoring, and counts; prior RF reports that treated them as empty negatives are measured-tainted configuration evidence, not architecture failure."]}
     (args.out/"report.json").write_text(json.dumps(report,indent=2)); print(json.dumps(report))
 
 if __name__=="__main__": main()

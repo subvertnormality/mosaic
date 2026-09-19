@@ -12,7 +12,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries')
+LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries', 'capture_transitions')
 PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit', 'acquisition_quality')
 NATIVE_TESTS = ('capture_contract', 'capture_native', 'tempo_candidate', 'tempo_native')
 
@@ -36,7 +36,7 @@ def main():
     commands = [(name, ['lua', 'tests/rhythm_doctor/test_' + name + '.lua']) for name in LUA_TESTS]
     selected = list(PYTHON_TESTS) + (list(NATIVE_TESTS) if args.native else [])
     if args.detector:
-        selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter'))
+        selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
     commands += [(name, [sys.executable, '-m', 'unittest', 'discover', '-s',

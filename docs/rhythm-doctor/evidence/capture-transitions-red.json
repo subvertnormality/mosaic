@@ -1,0 +1,7 @@
+{
+  "scope": "Characterisation outside README; PLAN capture failure/timeout protocol",
+  "source_sha256": "3e2c756063a351d755fcf90d50ab4c7902355b83f092471da5e8c8d6b961a582",
+  "test_sha256": "1545c1cacf27a2db4b701630c09ce8b08556b0d7de646a7a92363694cd24048a",
+  "exit_code": 1,
+  "output": "lua: tests/rhythm_doctor/test_capture_transitions.lua:16: attempt to call a nil value (method 'capture_failed')\nstack traceback:\n\ttests/rhythm_doctor/test_capture_transitions.lua:16: in main chunk\n\t[C]: in ?\n"
+}

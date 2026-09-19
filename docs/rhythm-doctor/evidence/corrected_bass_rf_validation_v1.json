@@ -1,0 +1,706 @@
+{
+  "artifact": {
+    "directory": "tests/rhythm_doctor/artifacts/detector-bass-rf-validation-v1-20260919",
+    "model": "tests/rhythm_doctor/artifacts/detector-bass-rf-validation-v1-20260919/bass_rf_64_depth10_seed20260919.pkl",
+    "model_sha256": "8c50cca97b985e093f4f1fbf89b87aef76a63290b810d3879316b8d19c7a41dd",
+    "results": "tests/rhythm_doctor/artifacts/detector-bass-rf-validation-v1-20260919/results.json",
+    "results_sha256": "fe3783d7dc423e98a3b01860259ba1a99563e89f0d04096d402a8d15ce7a8188"
+  },
+  "diagnostic_held_once_after_frozen_choice": {
+    "aggregate_50ms_one_to_one": {
+      "f1": 0.751084128360798,
+      "fn": 74,
+      "fp": 500,
+      "macro_track_f1": 0.7746635570942106,
+      "precision": 0.6339677891654466,
+      "recall": 0.9212765957446809,
+      "tp": 866
+    },
+    "per_track_counts": [
+      {
+        "prediction_count": 80,
+        "reference_count": 77,
+        "score_50ms_one_to_one": {
+          "f1": 0.9426751592356688,
+          "fn": 3,
+          "fp": 6,
+          "tp": 74
+        },
+        "track": "Track00001"
+      },
+      {
+        "prediction_count": 185,
+        "reference_count": 79,
+        "score_50ms_one_to_one": {
+          "f1": 0.5833333333333334,
+          "fn": 2,
+          "fp": 108,
+          "tp": 77
+        },
+        "track": "Track00002"
+      },
+      {
+        "prediction_count": 83,
+        "reference_count": 56,
+        "score_50ms_one_to_one": {
+          "f1": 0.7482014388489209,
+          "fn": 4,
+          "fp": 31,
+          "tp": 52
+        },
+        "track": "Track00006"
+      },
+      {
+        "prediction_count": 50,
+        "reference_count": 42,
+        "score_50ms_one_to_one": {
+          "f1": 0.9130434782608695,
+          "fn": 0,
+          "fp": 8,
+          "tp": 42
+        },
+        "track": "Track00008"
+      },
+      {
+        "prediction_count": 109,
+        "reference_count": 98,
+        "score_50ms_one_to_one": {
+          "f1": 0.9178743961352657,
+          "fn": 3,
+          "fp": 14,
+          "tp": 95
+        },
+        "track": "Track00009"
+      },
+      {
+        "prediction_count": 313,
+        "reference_count": 155,
+        "score_50ms_one_to_one": {
+          "f1": 0.6581196581196581,
+          "fn": 1,
+          "fp": 159,
+          "tp": 154
+        },
+        "track": "Track00011"
+      },
+      {
+        "prediction_count": 45,
+        "reference_count": 39,
+        "score_50ms_one_to_one": {
+          "f1": 0.8333333333333334,
+          "fn": 4,
+          "fp": 10,
+          "tp": 35
+        },
+        "track": "Track00014"
+      },
+      {
+        "prediction_count": 62,
+        "reference_count": 64,
+        "score_50ms_one_to_one": {
+          "f1": 0.6507936507936508,
+          "fn": 23,
+          "fp": 21,
+          "tp": 41
+        },
+        "track": "Track00015"
+      },
+      {
+        "prediction_count": 156,
+        "reference_count": 99,
+        "score_50ms_one_to_one": {
+          "f1": 0.611764705882353,
+          "fn": 21,
+          "fp": 78,
+          "tp": 78
+        },
+        "track": "Track00016"
+      },
+      {
+        "prediction_count": 211,
+        "reference_count": 175,
+        "score_50ms_one_to_one": {
+          "f1": 0.8652849740932642,
+          "fn": 8,
+          "fp": 44,
+          "tp": 167
+        },
+        "track": "Track00019"
+      },
+      {
+        "prediction_count": 72,
+        "reference_count": 56,
+        "score_50ms_one_to_one": {
+          "f1": 0.796875,
+          "fn": 5,
+          "fp": 21,
+          "tp": 51
+        },
+        "track": "Track00020"
+      }
+    ]
+  },
+  "input_hashes": {
+    "Track00001": {
+      "declared_bass_stems": [
+        "S03"
+      ],
+      "metadata_sha256": "64c905f62b1ea2dd5cf8048442e0d415552a2da40f85fa50628821818ecb4ade",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "e6590a50b9c4d6aa84d67e03368b42e0d79d56ba4b1244c26c5b9d6ecab89f34",
+      "present_bass_midi_sha256": {
+        "S03": "cea8d708eb483f77b7a98db0dfa6991c67014b60d150bd4680ccfec1e251ba7e"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00002": {
+      "declared_bass_stems": [
+        "S01"
+      ],
+      "metadata_sha256": "d8ce65e81c0d09c6445e4ff2a497647290ef5d0b8270401c830c58a12807182e",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "06de7810c57fab9be8ace4e2fe05e24c267696993e0bddad5c1985df1ccde6a4",
+      "present_bass_midi_sha256": {
+        "S01": "9295015ab7ca81c217fd1e01e0f475a7a87c66083756826f5272c860d841e046"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00003": {
+      "declared_bass_stems": [
+        "S01"
+      ],
+      "metadata_sha256": "d564dba9eb33864eae796c736ad45a3f29e4f6db7e099cb4356590ec13713cc5",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "c628dbf30b818417c30941fccd2fa6ee8a5ad941a45fc8eb85f2d758a1922def",
+      "present_bass_midi_sha256": {
+        "S01": "bcf885afeb0e724df84f63b7e390e3e753c468cca5b4c67628e1229b12f051ae"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00004": {
+      "declared_bass_stems": [
+        "S01"
+      ],
+      "metadata_sha256": "b0743aa8f5060c1e92f581447fc864e65313f5dfeeb9a68ec41ebe766b189067",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "d4c1c15491a38a3e2831880a3bcdbedac0b61c1f5064901b6b246017fc32fabe",
+      "present_bass_midi_sha256": {
+        "S01": "a71aebe31ab23e0d9fbde0b1342d0262b7d927f30f12f69516f7fdb6fa035edc"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00005": {
+      "declared_bass_stems": [
+        "S04"
+      ],
+      "metadata_sha256": "6c8e5c2a07069c1fb4b1567bd0bc84b987406daf93159953f22bd526545686b8",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "2ada57d35631b349283bde7e6fa8339091520c956d5cd5f9920651280d63919f",
+      "present_bass_midi_sha256": {
+        "S04": "4f13fae1fbf06f4db549daf8fadb9f65de9478b184e821ba4e5dc630cf1aaaff"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00006": {
+      "declared_bass_stems": [
+        "S03"
+      ],
+      "metadata_sha256": "8fbae0bf919ff5b1178a20f4d02eeb1fba1eb63ff620fa5e2b2fa50cc372a09e",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "46c959fd4ff102aa0eac6b2b3f998a70dcfbe3c980de4eb3452e45b21de9440d",
+      "present_bass_midi_sha256": {
+        "S03": "9c8f3099b45be72453a05053e9eb63c5e1ae328e2c280f576fe646aee3addafa"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00007": {
+      "declared_bass_stems": [
+        "S02"
+      ],
+      "metadata_sha256": "6b382b588dcc334f12af3bc618fb7b228601e3dc2e55d88bb4eec311b17841cc",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "91c0142ad5373c2383499dd323feeb3bac86936c02455446cbaf23f685cf57e8",
+      "present_bass_midi_sha256": {
+        "S02": "d5a1ed8d83d9e72c35634fda2eb6477d1bcc232b1d8e39b5048aeb2a1ee1f089"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00008": {
+      "declared_bass_stems": [
+        "S00"
+      ],
+      "metadata_sha256": "a48043921c33ce133b9f893761a345dd1a895adc5ba2b466cbed04ae036b7f6b",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "a771ddc3a0d2d92d3dfc0ed9b93838be253781279a1231b59244d8b1369abcde",
+      "present_bass_midi_sha256": {
+        "S00": "a337b21f693ae8015d3da429e1fa31d965204220103d5dc3f18a7e4583fd5859"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00009": {
+      "declared_bass_stems": [
+        "S06"
+      ],
+      "metadata_sha256": "ecd1ab36b66e7cddcbe010b669f48e074166f7596cf0951e5ea7c87129792785",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "0ca93ceaf8222984bd9391b9e6df80d29572b564c4ca174da4fab2aff1b4c3fd",
+      "present_bass_midi_sha256": {
+        "S06": "f6648cc86efe5befa803c8ee2f783f01f39e4b3d073b9568222745df1ee86199"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00010": {
+      "declared_bass_stems": [
+        "S00"
+      ],
+      "metadata_sha256": "fe5b1959bbf39241ce339ba9b1e7d94b5cfad42e095667c0a7cac848da723501",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "6cd939f61c3c44895ac6d00e945cb6d0ff07b23c2f77815e346d9c48ff0f28bb",
+      "present_bass_midi_sha256": {
+        "S00": "1906ef682a4e660a05df3a09c2521f731cdea0882383a93a332261c57899c38b"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00011": {
+      "declared_bass_stems": [
+        "S01"
+      ],
+      "metadata_sha256": "48329a8443a51a5dfcfaf785998b8240ca944e8af768553010f727a8fe857040",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "adb9b52c1ecb28b047fd5de6f7eb886586c4bc6c7dc0bd21b4c99ee045daf111",
+      "present_bass_midi_sha256": {
+        "S01": "ceb4b4ad16db20e8e8839b7d9f0aefc538c49ff5ed67ff0ca61f88524a056316"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00012": {
+      "declared_bass_stems": [
+        "S05",
+        "S10"
+      ],
+      "metadata_sha256": "4341765e7ced9664f7d297b8db41a20a71083407b0b6d77b871317b80a685bff",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "2b5d03c3f9795985cfd85002decd28014c10e2a0044042235321262510dcc597",
+      "present_bass_midi_sha256": {
+        "S05": "7c8287587e3aaaeb065d7840f38953df89757c191db174a998eb6f1a00398296",
+        "S10": "0fd53012d10e796da8354064b1e91870ab7c5f7ab85a24c5d744f4eeddb767c2"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00013": {
+      "declared_bass_stems": [
+        "S00",
+        "S01"
+      ],
+      "metadata_sha256": "da19c192e8caa7b51132c6e19eb5dead2df68004002d4a7f56c7a76f6cb203d5",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "29e2f1cb9e806077b97e4d39d0cc5c7fb5491276498196021f5e92d57320c5c0",
+      "present_bass_midi_sha256": {
+        "S00": "0b318d357f083e2395f7372aa1d55cfab734ac0a55be71a3dcf101e6a6884393",
+        "S01": "9e912f7a6be90d49b392b3d8c960b10664b23bdafda20c13dd35c309ac4b9e9d"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00014": {
+      "declared_bass_stems": [
+        "S01"
+      ],
+      "metadata_sha256": "c7fa8c2f76c076776ac9e6f6e3a22f5f876c2d4b403fe5dd04e8ce731378722c",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "3e92fc90f7e7cf999b459246dff2a43bd20e67c5f3d78b74129bc82c3bf7f410",
+      "present_bass_midi_sha256": {
+        "S01": "290682027497e35f3036785e2785918881ab8d03e998eb2dcf0a4dbe3ecf5e9f"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00015": {
+      "declared_bass_stems": [
+        "S04"
+      ],
+      "metadata_sha256": "a3bb84ea4d7c78fec625bbc0a648c10985bcf7d6dbfbf2fdae9ac7faed339d2c",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "3fdfb90022f17933810dc9fe06e0c05cec2c6c982a459b7c140c226a13913c04",
+      "present_bass_midi_sha256": {
+        "S04": "6dc79ec4e25215fd15f59e6bddba1327321aee1943be46455c7aee1c90291178"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00016": {
+      "declared_bass_stems": [
+        "S01"
+      ],
+      "metadata_sha256": "da4b76ac2c6b42de022a3b6f0339b649b85fef7445f59f9a2b89f43b7ecc3b4d",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "750a138e0f11ce9b9f2e8f0a9b0e91cb95adaf586176c7c5ee0b173c8bd4dfa9",
+      "present_bass_midi_sha256": {
+        "S01": "1ea4681e3b664179e23b00653e5eb5e1b27bc0bed6b89fc5b46633bd6f6638b3"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00017": {
+      "declared_bass_stems": [
+        "S04"
+      ],
+      "metadata_sha256": "43aed91db127a03be6118c80a7778cad16fde013d784e631c125182fb476e195",
+      "missing_declared_bass_midi": [
+        "S04"
+      ],
+      "mix_wav_sha256": "43b3cabb5dc423894dda1cbd4c33dc40a424b13742ebc4213ca977b99ea8b0b9",
+      "present_bass_midi_sha256": {},
+      "reference_status": "unknown_missing_declared_bass_midi"
+    },
+    "Track00018": {
+      "declared_bass_stems": [
+        "S15",
+        "S16"
+      ],
+      "metadata_sha256": "e4861c7c50ab4c0a7ad9417e35c9a9c49dc1f36103c69cdbe2d816b8c60ac2ba",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "696378bfb0d3abc76ea09485a69661e2a6a86d79f00e67af114e405dd03ad6cb",
+      "present_bass_midi_sha256": {
+        "S15": "458c3b7e9811607778dda7e27423eda815c3c4fa383fa45a2b7193fa833683c5",
+        "S16": "7c2bd3e47e0e25a43fb891c7bc46c3ad0278d5c7d07b21b61cc2cb5c7a27c092"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00019": {
+      "declared_bass_stems": [
+        "S08"
+      ],
+      "metadata_sha256": "5f9f426f14e8fced9973887da1e44f79a5b4be95190625ca7c8545e8ef1afde8",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "c870751da492e28d0deeb90765224ef9bd346ae85c1cb41e6b5dea84b1e8fb49",
+      "present_bass_midi_sha256": {
+        "S08": "3ebe7e0c9ed491fb872c762cc5e220779fee5135f77747b8e65c8809b81b892c"
+      },
+      "reference_status": "scorable"
+    },
+    "Track00020": {
+      "declared_bass_stems": [
+        "S01"
+      ],
+      "metadata_sha256": "d3bb44bc06e0afeb698dc29ddf873839418616e09ecda6c271edb1a5b7f1a1e7",
+      "missing_declared_bass_midi": [],
+      "mix_wav_sha256": "ace79e02353e22d068ac8f869c38e6c03f4e88824a70728785493e1f8df58ea3",
+      "present_bass_midi_sha256": {
+        "S01": "195d3a0b73728636af63d481f90cad1ac2cc12c54cce74e3b108bbef0906d4e7"
+      },
+      "reference_status": "scorable"
+    }
+  },
+  "kind": "Corrected BASS RF 60-second fixed-validation diagnostic",
+  "label_provenance": "Any missing declared Bass MIDI makes BASS unscorable and is excluded from fitting, threshold selection, scoring and counts. No declared Bass remains a known empty negative.",
+  "limitations": [
+    "Validation tracks are a fixed reused diagnostic split, not pristine held-out evidence.",
+    "No architecture, ARM, latency, real-time, physical-norns, or production-readiness claim is made."
+  ],
+  "model": {
+    "class_weight": "balanced_subsample",
+    "estimator": "RandomForestClassifier",
+    "max_depth": 10,
+    "max_features": "sqrt",
+    "min_samples_leaf": 2,
+    "model_file": "bass_rf_64_depth10_seed20260919.pkl",
+    "n_estimators": 64,
+    "positive_rows": 2575,
+    "random_state": 20260923,
+    "training_rows": 17970
+  },
+  "predeclared_split": {
+    "diagnostic_held_once": [
+      "Track00001",
+      "Track00002",
+      "Track00006",
+      "Track00008",
+      "Track00009",
+      "Track00011",
+      "Track00014",
+      "Track00015",
+      "Track00016",
+      "Track00019",
+      "Track00020"
+    ],
+    "excluded_unknown": [
+      "Track00017"
+    ],
+    "seconds_per_track": 60.0,
+    "train": [
+      "Track00003",
+      "Track00004",
+      "Track00007",
+      "Track00010",
+      "Track00012",
+      "Track00018"
+    ],
+    "validation_only": [
+      "Track00005",
+      "Track00013"
+    ]
+  },
+  "prior_reports": "Earlier RF reports silently treated missing declared MIDI as empty labels; preserve them as measured-tainted configuration evidence, not architecture failure.",
+  "red_regression_evidence": "docs/rhythm-doctor/evidence/detector_missing_declared_midi_red_v1.json",
+  "schema_version": 1,
+  "source_hashes": {
+    "corpus_archive_sha256": "6490dc83d8b59ccbe7e9e0304023af8e585d2065f9a5f5921952a273fac4a9b0",
+    "detector_py_sha256": "a2a48aec20c1cd783b122a267b0b4d8a65fc982766cc798e89bfbe068d29c6ef",
+    "model_sha256": "8c50cca97b985e093f4f1fbf89b87aef76a63290b810d3879316b8d19c7a41dd",
+    "quality_py_sha256": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b",
+    "script_sha256": "e718611c1695b22c3d41d2e030080213fb381aa4099ae7767e3e8295f8af4515"
+  },
+  "status": "completed_diagnostic_only",
+  "threshold_selection_validation_only": {
+    "frozen_choice_before_held": {
+      "threshold": 0.3500000000000001,
+      "validation_only": {
+        "f1": 0.8469055374592834,
+        "fn": 24,
+        "fp": 70,
+        "macro_track_f1": 0.8278795811518325,
+        "precision": 0.7878787878787878,
+        "recall": 0.9154929577464789,
+        "tp": 260
+      }
+    },
+    "grid": [
+      {
+        "threshold": 0.1,
+        "validation_only": {
+          "f1": 0.6876513317191283,
+          "fn": 0,
+          "fp": 258,
+          "macro_track_f1": 0.6780289827674821,
+          "precision": 0.5239852398523985,
+          "recall": 1.0,
+          "tp": 284
+        }
+      },
+      {
+        "threshold": 0.15000000000000002,
+        "validation_only": {
+          "f1": 0.7696476964769647,
+          "fn": 0,
+          "fp": 170,
+          "macro_track_f1": 0.7580388745575619,
+          "precision": 0.6255506607929515,
+          "recall": 1.0,
+          "tp": 284
+        }
+      },
+      {
+        "threshold": 0.20000000000000004,
+        "validation_only": {
+          "f1": 0.7971223021582734,
+          "fn": 7,
+          "fp": 134,
+          "macro_track_f1": 0.7834081180050545,
+          "precision": 0.6739659367396593,
+          "recall": 0.9753521126760564,
+          "tp": 277
+        }
+      },
+      {
+        "threshold": 0.25000000000000006,
+        "validation_only": {
+          "f1": 0.8173652694610778,
+          "fn": 11,
+          "fp": 111,
+          "macro_track_f1": 0.802372804873463,
+          "precision": 0.7109375,
+          "recall": 0.9612676056338029,
+          "tp": 273
+        }
+      },
+      {
+        "threshold": 0.30000000000000004,
+        "validation_only": {
+          "f1": 0.8367029548989113,
+          "fn": 15,
+          "fp": 90,
+          "macro_track_f1": 0.8198371501272265,
+          "precision": 0.7493036211699164,
+          "recall": 0.9471830985915493,
+          "tp": 269
+        }
+      },
+      {
+        "threshold": 0.3500000000000001,
+        "validation_only": {
+          "f1": 0.8469055374592834,
+          "fn": 24,
+          "fp": 70,
+          "macro_track_f1": 0.8278795811518325,
+          "precision": 0.7878787878787878,
+          "recall": 0.9154929577464789,
+          "tp": 260
+        }
+      },
+      {
+        "threshold": 0.40000000000000013,
+        "validation_only": {
+          "f1": 0.8440677966101695,
+          "fn": 35,
+          "fp": 57,
+          "macro_track_f1": 0.8249608303956131,
+          "precision": 0.8137254901960784,
+          "recall": 0.8767605633802817,
+          "tp": 249
+        }
+      },
+      {
+        "threshold": 0.45000000000000007,
+        "validation_only": {
+          "f1": 0.8400702987697716,
+          "fn": 45,
+          "fp": 46,
+          "macro_track_f1": 0.8169081610909865,
+          "precision": 0.8385964912280702,
+          "recall": 0.8415492957746479,
+          "tp": 239
+        }
+      },
+      {
+        "threshold": 0.5000000000000001,
+        "validation_only": {
+          "f1": 0.829981718464351,
+          "fn": 57,
+          "fp": 36,
+          "macro_track_f1": 0.8021832664689807,
+          "precision": 0.8631178707224335,
+          "recall": 0.7992957746478874,
+          "tp": 227
+        }
+      },
+      {
+        "threshold": 0.5500000000000002,
+        "validation_only": {
+          "f1": 0.822429906542056,
+          "fn": 64,
+          "fp": 31,
+          "macro_track_f1": 0.7950224732750243,
+          "precision": 0.8764940239043825,
+          "recall": 0.7746478873239436,
+          "tp": 220
+        }
+      },
+      {
+        "threshold": 0.6000000000000002,
+        "validation_only": {
+          "f1": 0.7992277992277992,
+          "fn": 77,
+          "fp": 27,
+          "macro_track_f1": 0.7705705705705705,
+          "precision": 0.8846153846153846,
+          "recall": 0.7288732394366197,
+          "tp": 207
+        }
+      },
+      {
+        "threshold": 0.6500000000000001,
+        "validation_only": {
+          "f1": 0.7729083665338645,
+          "fn": 90,
+          "fp": 24,
+          "macro_track_f1": 0.7489371955732259,
+          "precision": 0.8899082568807339,
+          "recall": 0.6830985915492958,
+          "tp": 194
+        }
+      },
+      {
+        "threshold": 0.7000000000000002,
+        "validation_only": {
+          "f1": 0.7329192546583851,
+          "fn": 107,
+          "fp": 22,
+          "macro_track_f1": 0.7089129218720865,
+          "precision": 0.8894472361809045,
+          "recall": 0.6232394366197183,
+          "tp": 177
+        }
+      },
+      {
+        "threshold": 0.7500000000000002,
+        "validation_only": {
+          "f1": 0.6943231441048034,
+          "fn": 125,
+          "fp": 15,
+          "macro_track_f1": 0.6776915916847657,
+          "precision": 0.9137931034482759,
+          "recall": 0.5598591549295775,
+          "tp": 159
+        }
+      },
+      {
+        "threshold": 0.8000000000000002,
+        "validation_only": {
+          "f1": 0.6023529411764705,
+          "fn": 156,
+          "fp": 13,
+          "macro_track_f1": 0.5825862733757471,
+          "precision": 0.9078014184397163,
+          "recall": 0.4507042253521127,
+          "tp": 128
+        }
+      },
+      {
+        "threshold": 0.8500000000000002,
+        "validation_only": {
+          "f1": 0.527363184079602,
+          "fn": 178,
+          "fp": 12,
+          "macro_track_f1": 0.511183647260274,
+          "precision": 0.8983050847457628,
+          "recall": 0.3732394366197183,
+          "tp": 106
+        }
+      },
+      {
+        "threshold": 0.9000000000000002,
+        "validation_only": {
+          "f1": 0.3791208791208791,
+          "fn": 215,
+          "fp": 11,
+          "macro_track_f1": 0.37087203302373584,
+          "precision": 0.8625,
+          "recall": 0.24295774647887325,
+          "tp": 69
+        }
+      }
+    ]
+  },
+  "validation_after_frozen_choice": {
+    "aggregate_50ms_one_to_one": {
+      "f1": 0.8469055374592834,
+      "fn": 24,
+      "fp": 70,
+      "macro_track_f1": 0.8278795811518325,
+      "precision": 0.7878787878787878,
+      "recall": 0.9154929577464789,
+      "tp": 260
+    },
+    "per_track_counts": [
+      {
+        "prediction_count": 125,
+        "reference_count": 107,
+        "score_50ms_one_to_one": {
+          "f1": 0.75,
+          "fn": 20,
+          "fp": 38,
+          "tp": 87
+        },
+        "track": "Track00005"
+      },
+      {
+        "prediction_count": 205,
+        "reference_count": 177,
+        "score_50ms_one_to_one": {
+          "f1": 0.9057591623036649,
+          "fn": 4,
+          "fp": 32,
+          "tp": 173
+        },
+        "track": "Track00013"
+      }
+    ]
+  }
+}
