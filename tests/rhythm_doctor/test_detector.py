@@ -40,6 +40,16 @@ class Detector(unittest.TestCase):
    classes_=np.array([False])
    def predict_proba(self, matrix): return np.ones((len(matrix),1))
   self.assertEqual(detector.classifier_probabilities(OneClass(),np.zeros((2,2))).tolist(),[0.,0.])
+ def test_onset_frame_targets_marks_only_nearest_frames(self):
+  import numpy as np
+  targets=detector.onset_frame_targets(np.array([.10,.12,.14,.16]),[.101,.139],.05)
+  self.assertEqual(targets.tolist(),[True,False,True,False])
+ def test_onset_frame_targets_is_linear_sized_for_dense_reference_lists(self):
+  import numpy as np
+  times=np.arange(0.,120.,.02); references=np.arange(.001,120.,.02)
+  targets=detector.onset_frame_targets(times,references,.05)
+  self.assertEqual(targets.shape,(len(times),))
+  self.assertEqual(int(targets.sum()),len(times))
  def test_probability_selects_the_explicit_positive_class_column(self):
   import numpy as np
   class TwoClass:

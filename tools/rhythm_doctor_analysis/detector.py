@@ -116,6 +116,24 @@ def classifier_probabilities(model, feature_rows):
     if probabilities.ndim != 2 or probabilities.shape[0] != len(feature_rows) or probabilities.shape[1] != len(classes):
         raise ValueError("invalid classifier probabilities")
     return probabilities[:,positive[0]]
+def onset_frame_targets(times, reference, tolerance=TOLERANCE):
+    """Assign each reference to its nearest analysis frame within tolerance.
+
+    Unlike the old +/- tolerance training mask, one bass attack cannot turn five
+    neighbouring frames into positive examples.  The output remains one boolean
+    per input frame and permits normal peak selection at inference time.
+    """
+    moments=np.asarray(times,dtype=float)
+    events=np.asarray(reference,dtype=float)
+    targets=np.zeros(len(moments),dtype=bool)
+    if not len(moments) or not len(events):
+        return targets
+    right=np.searchsorted(moments,events,side="left")
+    left=np.maximum(right-1,0); right=np.minimum(right,len(moments)-1)
+    nearest=np.where(np.abs(events-moments[left]) <= np.abs(moments[right]-events),left,right)
+    accepted=np.abs(moments[nearest]-events) <= tolerance
+    targets[nearest[accepted]]=True
+    return targets
 def peak_times(probabilities, times, threshold):
     out=[]; last=-1e9
     for index,value in enumerate(probabilities):
