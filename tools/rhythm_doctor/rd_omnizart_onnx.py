@@ -77,23 +77,24 @@ def _merge(batch_predictions: list[np.ndarray], pad: int, source_frames: int) ->
         raise TensorContractError("OMNIZART_OUTPUT_TENSOR_INVALID")
     values = np.transpose(values, (0, 1, 3, 2, 4))
     batch_count, batch_size = values.shape[:2]
-    merged = np.zeros((batch_count * batch_size + MINI_BEATS_PER_SEGMENT - 1, RAW_HEADS), dtype=np.float32)
-    for batch_index, batch in enumerate(values):
-        for step_index, step in enumerate(batch):
-            start = batch_index * batch_size + step_index
-            merged[start:start + MINI_BEATS_PER_SEGMENT] += step.squeeze(axis=-1)
+    real_windows = batch_count * batch_size - pad
+    merged = np.zeros((real_windows + MINI_BEATS_PER_SEGMENT - 1, RAW_HEADS), dtype=np.float32)
+    flat = values.reshape(batch_count * batch_size, MINI_BEATS_PER_SEGMENT, RAW_HEADS, 1)
+    # Model biases make padded zero-window predictions non-zero. Exclude those
+    # windows before overlap-add so they cannot contaminate the real tail or
+    # make results depend on the selected inference batch size.
+    for window_index, step in enumerate(flat[:real_windows]):
+        merged[window_index:window_index + MINI_BEATS_PER_SEGMENT] += step.squeeze(axis=-1)
     overlap = min(MINI_BEATS_PER_SEGMENT - 1, len(merged) - MINI_BEATS_PER_SEGMENT)
     if overlap > 0:
         merged[overlap:-overlap] /= overlap + 1
         for index in range(overlap):
             merged[index] /= index + 1
             merged[-1 - index] /= index + 1
-    if pad:
-        merged = merged[:-pad]
     return merged[:source_frames]
 
 
-def predict_raw_heads(session: Any, features: Any, batch_size: int = 32) -> np.ndarray:
+def predict_raw_heads(session: Any, features: Any, batch_size: int = 1) -> np.ndarray:
     """Run one already-constructed session with strict upstream input/output shapes."""
     try:
         inputs = session.get_inputs()

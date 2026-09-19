@@ -34,6 +34,14 @@ class FakeSession:
         return [self.output]
 
 
+class BiasSession:
+    def get_inputs(self):
+        return [_Input()]
+
+    def run(self, names, feed):
+        return [np.ones((len(feed["patches"]), 13, 4, 1), dtype=np.float32)]
+
+
 class OmnizartOnnxTests(unittest.TestCase):
     def test_pinned_artifact_sha_mismatch_fails_before_session_construction(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -54,6 +62,12 @@ class OmnizartOnnxTests(unittest.TestCase):
             np.zeros((1, 120, 120), dtype=np.float32), batch_size=1,
         )
         self.assertEqual(raw.shape, (1, 13))
+
+    def test_padded_batch_predictions_cannot_contaminate_real_tail_frames(self):
+        features = np.zeros((5, 120, 120), dtype=np.float32)
+        batched = omnizart.predict_raw_heads(BiasSession(), features, batch_size=32)
+        unpadded = omnizart.predict_raw_heads(BiasSession(), features, batch_size=1)
+        np.testing.assert_array_equal(batched, unpadded)
 
     def test_fake_session_uses_upstream_patch_shape_and_preserves_each_hat_head(self):
         features = np.zeros((5, 120, 120), dtype=np.float32)
@@ -105,13 +119,12 @@ class OmnizartOnnxTests(unittest.TestCase):
             model = Path(temporary) / "drum.onnx"
             model.write_bytes(b"published-model-bytes")
             digest = hashlib.sha256(model.read_bytes()).hexdigest()
-            output = np.zeros((32, 13, 4, 1), dtype=np.float32)
-            for batch_index, step_index in ((2, 3), (3, 2), (4, 1), (5, 0)):
-                output[batch_index, 4, step_index, 0] = .75
+            output = np.zeros((1, 13, 4, 1), dtype=np.float32)
+            output[0, 4, 1, 0] = .75
             result = omnizart.analyse_features(
                 session=FakeSession(output), model_path=model, expected_sha256=digest,
-                features=np.zeros((35, 120, 120), dtype=np.float32),
-                mini_beats=np.arange(35) / 10, sample_rate=8000,
+                features=np.zeros((4, 120, 120), dtype=np.float32),
+                mini_beats=np.arange(4) / 10, sample_rate=8000,
                 gates={"BD": .5, "SD": .5, "CHH": .5, "OHH": .5}, bpm=120,
                 origin_sample=0,
             )
@@ -120,7 +133,7 @@ class OmnizartOnnxTests(unittest.TestCase):
         self.assertEqual(result["lane_onset_gates"], {"BD": .5, "SD": .5, "CHH": .5, "OHH": .5})
         self.assertEqual(len(result["candidates"]), 1)
         self.assertEqual(result["candidates"][0]["lane"], "CHH")
-        self.assertEqual(result["candidates"][0]["sample_index"], 4000)
+        self.assertEqual(result["candidates"][0]["sample_index"], 800)
         self.assertGreater(result["candidates"][0]["confidence"], .5)
         self.assertLessEqual(result["candidates"][0]["velocity"], 127)
 

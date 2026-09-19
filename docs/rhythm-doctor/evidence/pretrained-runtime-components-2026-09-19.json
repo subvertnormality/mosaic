@@ -52,12 +52,12 @@
     "tests/rhythm_doctor/test_hardware_launch_worker_runner.py": "181d2565e333acc107b15999e7cece2ebc80ff4aa7da118c28b9c0a87eff92ca",
     "tests/rhythm_doctor/test_native_transport.py": "88f797da61afcb2d80746e4d5c6da512cd5c4aaf5b09798628208ed4e587b9b3",
     "tests/rhythm_doctor/test_nmf_template.py": "9da618286b914a000729884c439a347074394b67a918ee832f970274d4d0e7be",
-    "tests/rhythm_doctor/test_omnizart_onnx.py": "86257b7e9fd5c9b5b2bb201809fa2b32f9492d1035b2c3dd0c1c7dc465acbd95",
+    "tests/rhythm_doctor/test_omnizart_onnx.py": "4338bfcc94af7a8ccc62bcad60602aed57ee9ad2eda70bf6a520fc2c1b0f7150",
     "tests/rhythm_doctor/test_omnizart_onnx_backend.py": "01d6cb80d3deb584befcef3ac4775820df4794897310a961af01144a281bd089",
     "tests/rhythm_doctor/test_performance.py": "71411af840c7a7c1e7cbaead0e7911cb61f5edfce184508f319ff13092f0f1ad",
     "tests/rhythm_doctor/test_pretrained_bass_backend.py": "0fb2d98dad2d70c53da5b67fc12335d5912f031e53689c2268cb2f9b618929a1",
     "tests/rhythm_doctor/test_pretrained_bass_runtime.py": "94564255f73c6d0036d7e57cfcfa84b29bdad9b1075c346cbc997149483bee92",
-    "tests/rhythm_doctor/test_pretrained_composite_backend.py": "da52d435e4053b58d676b841c27ae10658090f72b8fec8e208dceafa4b7482d3",
+    "tests/rhythm_doctor/test_pretrained_composite_backend.py": "997daed35a5813ef27594e7cd8d775ceb629b50e6540917960d9a9286a6b79e5",
     "tests/rhythm_doctor/test_pretrained_runtime_factory.py": "182e3f612e8d4776a44d64c499b0d1b905ab9b606d11a5a9e09fa1d49f26bcd1",
     "tests/rhythm_doctor/test_quality.py": "bc7ffcbe632d61b4819933d027ebc0900d1e5103a95f58a59e34ee5a5a8eaf1e",
     "tests/rhythm_doctor/test_quality_report.py": "7f510b12d8c15c804725bf0ea45e1cce2335bb83890b0aeaf325de9620b8dd5a",
@@ -100,7 +100,7 @@
     "tools/rhythm_doctor/rd_analysis_worker.py": "394624eb1c05dc9171095f56e713ab0e3835dd2e043b7af3931ff60690ec6800",
     "tools/rhythm_doctor/rd_capture.c": "6b613f9e8640c8bbce6a9cab0b6cb376e85204c820288c4d78a8070ed35d3bf3",
     "tools/rhythm_doctor/rd_capture_worker.c": "dc26a792133346b0c7c735317b6ddc6576ec823af4054484643cd805c618c24b",
-    "tools/rhythm_doctor/rd_omnizart_onnx.py": "7f8d430a813d8969bbf48916fe58241be85dc76350706e46e89f0d8654740822",
+    "tools/rhythm_doctor/rd_omnizart_onnx.py": "02a97dd452d59b811857997b1068e43dfea4c7c98bfea951ad258b4fb478c951",
     "tools/rhythm_doctor/rd_omnizart_onnx_backend.py": "a77d60bf4fa1c6f1326c9e9ecb6e0ef1e3477b096329cc53db3cb8bfcc87bf3c",
     "tools/rhythm_doctor_tempo/AUBIO_LOCAL_LOCK.txt": "1453459e1534d519181a9a254f2be544d1e59cf596eb739ba27b51a429341495",
     "tools/rhythm_doctor_tempo/babyslakh_dev_grid_candidate_2026-09-19.json": "8f438d612f857369212d646353bf93e5a761465468286e542b23c95adc1874c6",
@@ -133,7 +133,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.0284291870011657,
+      "elapsed_seconds": 0.026434776998939924,
       "passed": true
     },
     {
@@ -144,7 +144,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.022005303000696586,
+      "elapsed_seconds": 0.02137460199992347,
       "passed": true
     },
     {
@@ -155,7 +155,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.017501726000773488,
+      "elapsed_seconds": 0.01904526900034398,
       "passed": true
     },
     {
@@ -166,7 +166,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.01251343300100416,
+      "elapsed_seconds": 0.012170509000497987,
       "passed": true
     },
     {
@@ -177,7 +177,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.013002182000491302,
+      "elapsed_seconds": 0.01234106999982032,
       "passed": true
     },
     {
@@ -188,7 +188,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.021811717999298708,
+      "elapsed_seconds": 0.020924107000610093,
       "passed": true
     },
     {
@@ -199,7 +199,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.026693520998378517,
+      "elapsed_seconds": 0.02539821100072004,
       "passed": true
     },
     {
@@ -210,7 +210,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.017652567999903113,
+      "elapsed_seconds": 0.016717036000045482,
       "passed": true
     },
     {
@@ -221,7 +221,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.039276166000490775,
+      "elapsed_seconds": 0.038118796999697224,
       "passed": true
     },
     {
@@ -232,7 +232,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.02314269999988028,
+      "elapsed_seconds": 0.02250246900075581,
       "passed": true
     },
     {
@@ -243,7 +243,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.022321287000522716,
+      "elapsed_seconds": 0.021689938999770675,
       "passed": true
     },
     {
@@ -254,7 +254,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.048241806998703396,
+      "elapsed_seconds": 0.04677676399842312,
       "passed": true
     },
     {
@@ -265,7 +265,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.04804933400009759,
+      "elapsed_seconds": 0.04612313500001619,
       "passed": true
     },
     {
@@ -276,7 +276,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.049615486999755376,
+      "elapsed_seconds": 0.04726463199949649,
       "passed": true
     },
     {
@@ -287,7 +287,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.04863052300061099,
+      "elapsed_seconds": 0.04720756999995501,
       "passed": true
     },
     {
@@ -298,7 +298,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.016679874001056305,
+      "elapsed_seconds": 0.016740334998758044,
       "passed": true
     },
     {
@@ -309,7 +309,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.010226110000076005,
+      "elapsed_seconds": 0.010483484000360477,
       "passed": true
     },
     {
@@ -320,7 +320,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.013928914000644,
+      "elapsed_seconds": 0.013691897998796776,
       "passed": true
     },
     {
@@ -331,7 +331,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.01564285899985407,
+      "elapsed_seconds": 0.015605169999616919,
       "passed": true
     },
     {
@@ -342,7 +342,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.07290139900032955,
+      "elapsed_seconds": 0.07530866199886077,
       "passed": true
     },
     {
@@ -360,7 +360,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.2145060940001713,
+      "elapsed_seconds": 0.21923003699885157,
       "passed": true
     },
     {
@@ -378,7 +378,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.21417112900053326,
+      "elapsed_seconds": 0.2107139340005233,
       "passed": true
     },
     {
@@ -396,7 +396,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.21754020700063847,
+      "elapsed_seconds": 0.2193850499988912,
       "passed": true
     },
     {
@@ -414,7 +414,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 1.4061426499993104,
+      "elapsed_seconds": 1.4646312210006727,
       "passed": true
     },
     {
@@ -432,7 +432,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.3954197950006346,
+      "elapsed_seconds": 0.4086146390000067,
       "passed": true
     },
     {
@@ -450,7 +450,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.2111687750002602,
+      "elapsed_seconds": 0.21630257400101982,
       "passed": true
     },
     {
@@ -468,7 +468,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.2094474990008166,
+      "elapsed_seconds": 0.21942390100048215,
       "passed": true
     },
     {
@@ -486,7 +486,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.2553131119984755,
+      "elapsed_seconds": 0.2723447859989392,
       "passed": true
     },
     {
@@ -504,7 +504,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 1.1589691150002182,
+      "elapsed_seconds": 1.1444431569998414,
       "passed": true
     },
     {
@@ -522,7 +522,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.34512432900010026,
+      "elapsed_seconds": 0.3470458690007945,
       "passed": true
     },
     {
@@ -540,7 +540,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.2610914659999253,
+      "elapsed_seconds": 0.26608176400077355,
       "passed": true
     },
     {
@@ -558,7 +558,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.22863142200003495,
+      "elapsed_seconds": 0.2310487410013593,
       "passed": true
     },
     {
@@ -576,7 +576,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.4826877039995452,
+      "elapsed_seconds": 0.3574832410013187,
       "passed": true
     },
     {
@@ -594,7 +594,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 1.605543874000432,
+      "elapsed_seconds": 1.5326693679999153,
       "passed": true
     },
     {
@@ -612,7 +612,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.9110618120012077,
+      "elapsed_seconds": 0.7585638679993281,
       "passed": true
     },
     {
@@ -630,7 +630,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 2.592042501000833,
+      "elapsed_seconds": 2.5437132840015693,
       "passed": true
     },
     {
@@ -648,7 +648,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.7791061459993216,
+      "elapsed_seconds": 0.8009830980008701,
       "passed": true
     },
     {
@@ -666,7 +666,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.8071332780000375,
+      "elapsed_seconds": 0.778317958000116,
       "passed": true
     },
     {
@@ -684,7 +684,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.3783789879998949,
+      "elapsed_seconds": 0.3923306100004993,
       "passed": true
     },
     {
@@ -702,7 +702,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.22205119300087972,
+      "elapsed_seconds": 0.22959094899852062,
       "passed": true
     },
     {
@@ -720,7 +720,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.34068027600005735,
+      "elapsed_seconds": 0.35481889199945726,
       "passed": true
     },
     {
@@ -738,7 +738,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 2.7058364119984617,
+      "elapsed_seconds": 2.695939711999017,
       "passed": true
     },
     {
@@ -756,7 +756,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.33245528400038893,
+      "elapsed_seconds": 0.38535495300129696,
       "passed": true
     },
     {
@@ -774,7 +774,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.8631387700006599,
+      "elapsed_seconds": 0.8958835469984479,
       "passed": true
     },
     {
@@ -792,7 +792,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.8143297239985259,
+      "elapsed_seconds": 0.7830598370001098,
       "passed": true
     },
     {
@@ -810,7 +810,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.4363962610004819,
+      "elapsed_seconds": 0.39751800900012313,
       "passed": true
     },
     {
@@ -828,7 +828,7 @@
       ],
       "exit_code": 0,
       "skipped": false,
-      "elapsed_seconds": 0.6257729070002824,
+      "elapsed_seconds": 0.6211731690000306,
       "passed": true
     }
   ],

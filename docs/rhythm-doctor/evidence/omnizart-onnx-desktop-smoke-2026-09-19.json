@@ -36,16 +36,17 @@
     "raw_shape": [129, 13],
     "raw_min": -19.948965072631836,
     "raw_max": 88.8570556640625,
-    "event_counts_at_nonaccepted_smoke_gates": {"BD": 14, "SD": 16, "CHH": 31, "OHH": 43},
-    "frontend_seconds": 3.814560844999505,
-    "inference_seconds": 4.789610239000467,
-    "max_rss_kib": 858416,
+    "event_counts_at_nonaccepted_smoke_gates": {"BD": 16, "SD": 16, "CHH": 31, "OHH": 47},
+    "frontend_seconds": 3.9056644030006282,
+    "inference_seconds": 2.8971942460011633,
+    "max_rss_kib": 383268,
     "onnx_session": {
       "cpu_memory_arena": false,
       "memory_pattern": false,
       "execution": "sequential",
       "intra_op_threads": 1,
-      "inter_op_threads": 1
+      "inter_op_threads": 1,
+      "inference_batch_size": 1
     }
   },
   "memory_comparison_kib": {
@@ -53,12 +54,14 @@
     "isolated_frontend": 271196,
     "isolated_default_inference": 980072,
     "isolated_bounded_inference": 651416,
-    "bounded_combined_frontend_and_inference": 858416
+    "isolated_bounded_batch_one_inference": 147036,
+    "bounded_batch_one_combined_frontend_and_inference": 383268
   },
   "findings": [
     "The published graph executes with the exact source frontend and produces the documented 13-head tensor.",
     "Raw activations are unbounded; treating them as probabilities is incorrect. The adapter now applies the source decoder's per-head z-normalisation and a monotonic normal-CDF mapping to its required 0..1 confidence ABI.",
     "The source scipy peak decoder excludes endpoints; the adapter now does the same.",
-    "Disabling ONNX CPU arenas and memory patterns and using one sequential thread reduced combined peak RSS from 1,216,540 KiB to 858,416 KiB while preserving the exact raw tensor. This remains desktop x86 evidence and leaves ARMv7 availability, device headroom, 45-second scaling and cancellation unproved."
+    "Padded zero-window predictions have non-zero model bias. Excluding them before overlap-add removed three contaminated tail frames and made batch-one and batch-32 raw tensors bit-identical.",
+    "Disabling ONNX CPU arenas and memory patterns, using one sequential thread and one inference window per call reduced combined peak RSS from 1,216,540 KiB to 383,268 KiB while preserving the corrected raw tensor. This remains desktop x86 evidence and leaves ARMv7 runtime availability, device headroom, 45-second scaling and cancellation unproved."
   ]
 }

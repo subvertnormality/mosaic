@@ -113,13 +113,13 @@ class CompositeBackendTests(unittest.TestCase):
         self.assertEqual(self.drum.calls, [])
         self.assertEqual(self.separator.calls, [])
 
-    def test_fixed_four_frame_window_uses_one_drum_batch_and_one_bass_inference_each(self):
+    def test_fixed_four_frame_window_uses_one_bounded_drum_window_and_one_bass_inference(self):
         composite.compose(self.request, self.runtime)
         self.assertEqual(len(self.features.calls), 1)
         self.assertEqual(len(self.drum.calls), 1)
         self.assertEqual(len(self.separator.calls), 1)
         self.assertEqual(len(self.onsets.calls), 1)
-        self.assertEqual(self.drum.calls[0].shape, (32, 120, 120, 4))
+        self.assertEqual(self.drum.calls[0].shape, (1, 120, 120, 4))
 
     def test_executable_cli_writes_only_the_complete_result(self):
         request = self.root / "request.json"; result = self.root / "result.json"
