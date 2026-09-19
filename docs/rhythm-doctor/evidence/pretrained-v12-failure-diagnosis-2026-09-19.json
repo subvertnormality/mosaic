@@ -1,0 +1,202 @@
+{
+  "scope": "Diagnosis of the held-out RD-02 quality failure recorded in pretrained-v12-quality-2026-09-19.json. Quality only; no corpus, provenance or device claim.",
+  "date": "2026-09-19",
+  "verdict": "The pinned pretrained candidate FAILS RD-02. 14 of 15 lane/stratum domains miss both the 0.80 onset and 0.85 quantized-cell gates. Only CHH/full_mix passes, at onset F1 0.8874.",
+  "corpus": {
+    "manifest_sha256": "b7a804939e53f64858296c1073a8060bd14c9a36967f758438936474bb04dbdf",
+    "splits": {
+      "development": 40,
+      "held_out": 66,
+      "acquisition": 7
+    },
+    "note": "Development clips selected the gates; held-out was aggregated once with those gates frozen."
+  },
+  "frozen_development_thresholds": {
+    "BD": 0.9431,
+    "SD": 0.9277,
+    "CHH": 0.4004,
+    "OHH": 0.8308,
+    "BASS": 0.1655
+  },
+  "held_out_onset_f1_by_domain": {
+    "BD": {
+      "isolated": 0.4058,
+      "sparse": 0.4968,
+      "full_mix": 0.7017
+    },
+    "SD": {
+      "isolated": 0.3043,
+      "sparse": 0.4604,
+      "full_mix": 0.6871
+    },
+    "CHH": {
+      "isolated": 0.1407,
+      "sparse": 0.5612,
+      "full_mix": 0.8874
+    },
+    "OHH": {
+      "isolated": 0.1739,
+      "sparse": 0.1156,
+      "full_mix": 0.2574
+    },
+    "BASS": {
+      "isolated": 0.359,
+      "sparse": 0.5943,
+      "full_mix": 0.3504
+    }
+  },
+  "held_out_event_counts": {
+    "BD": {
+      "tp": 367,
+      "fp_lane_present": 112,
+      "fn": 183,
+      "fp_lane_absent": 92,
+      "absent_clips": 17
+    },
+    "SD": {
+      "tp": 349,
+      "fp_lane_present": 118,
+      "fn": 182,
+      "fp_lane_absent": 115,
+      "absent_clips": 18
+    },
+    "CHH": {
+      "tp": 1428,
+      "fp_lane_present": 203,
+      "fn": 160,
+      "fp_lane_absent": 332,
+      "absent_clips": 18
+    },
+    "OHH": {
+      "tp": 189,
+      "fp_lane_present": 697,
+      "fn": 368,
+      "fp_lane_absent": 187,
+      "absent_clips": 18
+    },
+    "BASS": {
+      "tp": 230,
+      "fp_lane_present": 226,
+      "fn": 502,
+      "fp_lane_absent": 2,
+      "absent_clips": 17
+    }
+  },
+  "derived_recall_and_precision": {
+    "BD": {
+      "recall": 0.667,
+      "precision": 0.643
+    },
+    "SD": {
+      "recall": 0.657,
+      "precision": 0.6
+    },
+    "CHH": {
+      "recall": 0.899,
+      "precision": 0.727
+    },
+    "OHH": {
+      "recall": 0.339,
+      "precision": 0.176
+    },
+    "BASS": {
+      "recall": 0.314,
+      "precision": 0.502
+    }
+  },
+  "oracle_threshold_upper_bound": {
+    "status": "DIAGNOSTIC ONLY. These thresholds were fitted directly on held-out data and are NOT deployable and were NOT used to produce any reported score. They exist solely to prove the failure is not an artefact of development gate selection.",
+    "per_lane": {
+      "BD": {
+        "frozen_dev_f1": 0.6548,
+        "oracle_best_f1": 0.6684,
+        "oracle_threshold": 0.9088,
+        "clears_0_80": false
+      },
+      "SD": {
+        "frozen_dev_f1": 0.6271,
+        "oracle_best_f1": 0.6367,
+        "oracle_threshold": 0.869,
+        "clears_0_80": false
+      },
+      "CHH": {
+        "frozen_dev_f1": 0.8043,
+        "oracle_best_f1": 0.8403,
+        "oracle_threshold": 0.54,
+        "clears_0_80": true
+      },
+      "OHH": {
+        "frozen_dev_f1": 0.2319,
+        "oracle_best_f1": 0.2886,
+        "oracle_threshold": 0.5093,
+        "clears_0_80": false
+      },
+      "BASS": {
+        "frozen_dev_f1": 0.3866,
+        "oracle_best_f1": 0.4863,
+        "oracle_threshold": 0.1524,
+        "clears_0_80": false
+      }
+    },
+    "conclusion": "Even with an unattainable oracle gate only CHH clears 0.80. No threshold choice can make this candidate pass, so the failure is in the detections themselves, not in gate selection."
+  },
+  "root_causes": [
+    {
+      "cause": "OHH collapse",
+      "evidence": "189 true positives against 884 false positives; precision 0.176, recall 0.339.",
+      "reading": "Omnizart raw head 6 / GM 46 does not separate open hats from the rest of the hat family on this corpus. It is the single worst lane and fails by the widest margin."
+    },
+    {
+      "cause": "Cross-lane leakage",
+      "evidence": "Share of all false positives arising on clips where the lane is absent: CHH 62.1%, SD 49.4%, BD 45.1%, OHH 21.2%, BASS 0.9%.",
+      "reading": "The drum heads fire on the wrong lane's material. This is why the isolated stratum scores far WORSE than full_mix: in an isolated single-lane clip every cross-fire is an unambiguous false positive, whereas in a full mix it can coincide with a real event of that lane. The inversion is a lane-discrimination failure, not a timing or alignment defect."
+    },
+    {
+      "cause": "BASS recall",
+      "evidence": "230 true positives against 502 false negatives; recall 0.314. Only 2 of 228 BASS false positives occur on BASS-absent clips.",
+      "reading": "The UMXHQ to Basic Pitch chain is clean about not inventing bass where none exists, but misses roughly two thirds of real bass onsets."
+    }
+  ],
+  "examined_and_excluded_as_causes": [
+    {
+      "hypothesis": "Systematic timing offset",
+      "finding": "On v12-isolated-0-BD the references are at 0.0,1.0,...,7.0 s and the predictions at 0.99,1.99,...,6.99 s, a -10 ms offset that is well inside the 50 ms one-to-one tolerance and matches successfully.",
+      "conclusion": "Not a cause of the failure."
+    },
+    {
+      "hypothesis": "Development gate selection was poor",
+      "finding": "See oracle_threshold_upper_bound.",
+      "conclusion": "Not a cause of the failure."
+    },
+    {
+      "hypothesis": "Evaluator defect",
+      "finding": "The onset matcher, gate selection and held-out isolation were reviewed and their 6 focused regressions pass; the observed per-clip predictions are consistent with the aggregated counts.",
+      "conclusion": "No evaluator defect demonstrated."
+    },
+    {
+      "hypothesis": "Omnizart is beat-synchronous, so sparse material could break madmom beat tracking and misalign its CQT patches, which would explain scores ordering by event density.",
+      "finding": "Refuted by measurement. Comparing each held-out clip's derived bpm against its manifest bpm (octave-tolerant, 4%): isolated 10/10 correct, full_mix 41/41 correct, sparse 9/11 correct (v12-sparse-0-OHH derived 89.0 against 120, v12-unison derived 79.2 against 120).",
+      "conclusion": "Not a cause. Beat tracking is sound on the strata that score worst, so the density ordering is explained by cross-lane leakage rather than frontend misalignment."
+    },
+    {
+      "hypothesis": "Omnizart emits onsets on a beat-synchronous mini-beat grid, so quantization error could exceed the 50 ms matching tolerance and cap achievable F1.",
+      "finding": "Partly real but not binding. Observed consecutive-candidate spacing is dominated by 0.250 s and 0.125 s, and quantization error is at most half a grid step. Matched-pair timing error is median 0.0 ms, p90 10.0 ms, p99 44.4 ms, max 48.4 ms. Sweeping the matching tolerance to 75/100/125/200 ms raises held-out onset F1 only to BD 0.6798, SD 0.6918, CHH 0.8122, OHH 0.4920, BASS 0.4807 at 200 ms.",
+      "conclusion": "Not a cause of the failure. No lane except CHH approaches 0.80 even at a musically implausible 200 ms tolerance, so the candidate fails on detection quality rather than timing. Sub-finding worth carrying forward: OHH F1 nearly doubles between 50 ms and 125 ms (0.2319 to 0.4528), indicating OHH predictions are systematically mistimed, most likely tracking the open-hat decay rather than its attack."
+    }
+  ],
+  "known_candidate_limitation_recorded_separately": {
+    "phase_inverted_stereo": "The pinned Omnizart frontend loads audio with mono=True, so held-out clip v12-phase (interleaved peak 7964, mono downmix exactly zero) can only ever contribute false negatives. Across all 113 clips exactly four are affected: the three silence controls and v12-phase, all held out. This depresses the held-out full-mix stratum slightly and is a genuine weakness of a mono-downmix drum chain, not an evaluation artefact."
+  },
+  "actions_not_taken": [
+    "No gate or tolerance was weakened.",
+    "No class was relabelled.",
+    "No threshold was tuned on held-out data for any reported score.",
+    "No model was trained, fine-tuned or replaced."
+  ],
+  "consequence": "RD-02 is not met by the pinned Omnizart + Open-Unmix/Basic Pitch candidate. Integrating it as a shipping detector is not justified on this evidence. A different pretrained-only candidate would have to improve open-hat discrimination, drum lane separation and bass recall simultaneously.",
+  "provenance": {
+    "report_source": "Produced by a full cold recomputation of all 106 development and held-out clips into an empty cache; no seeded or relabelled prediction contributed to it.",
+    "seeded_run_note": "An earlier resumed run reused predictions from a prior backend revision. Its scores were byte-identical to this clean run (thresholds, held rows, scores and errors all compared equal), but it was discarded as the reported artifact because those cached predictions carried the previous backend's provenance stamp.",
+    "determinism": "The pipeline was confirmed deterministic: the same clip composed twice in one process produced identical output."
+  }
+}

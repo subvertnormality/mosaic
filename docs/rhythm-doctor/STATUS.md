@@ -322,3 +322,74 @@ content address, project binding and complete 45-second bound. It uses exclusive
 staging/publication and file/parent durability barriers, rejects partial or
 corrupt assets, and never resumes a partial capture. The production filesystem
 adapter and lifecycle serialization wiring remain required.
+
+## Frozen v12 pretrained quality result (2026-09-19)
+
+Branch rebased onto `main` (`5384d0b`); the previous base `codex/behaviour-validation`
+`8c08cb93` merged through PR #94 and `origin/main` has a byte-identical tree, so the
+rebase changed no file content. PR #97 already targets `main`.
+
+**The pinned pretrained candidate fails RD-02 and is not a shipping detector.**
+Fourteen of fifteen lane/stratum domains miss both the 0.80 onset and 0.85
+quantized-cell gates; only CHH/full_mix passes at 0.8874. Velocity MAE fails for
+every lane and the gain ladders are not monotonic. See
+`evidence/pretrained-v12-quality-2026-09-19.json` and
+`evidence/pretrained-v12-failure-diagnosis-2026-09-19.json`, and DETECTOR.md for
+the per-domain table.
+
+Held-out recall/precision: BD 0.667/0.643, SD 0.657/0.600, CHH 0.899/0.727,
+OHH 0.339/0.176, BASS 0.314/0.502. The dominant cause is cross-lane leakage:
+the share of false positives arising on clips where the lane is absent is
+CHH 62.1%, SD 49.4%, BD 45.1%, OHH 21.2%, BASS 0.9%. OHH collapses outright at
+189 true positives against 884 false positives.
+
+Three alternative explanations were tested and rejected, so the failure is not
+an evaluation artefact. There is no systematic timing offset (a -10 ms
+difference well inside the 50 ms tolerance). Gate selection is not at fault: an
+oracle threshold fitted directly on held-out data, used only as a diagnostic and
+never for a reported score, still leaves BD at 0.6684, SD 0.6367, OHH 0.2886 and
+BASS 0.4863. Beat tracking is not degraded on the worst strata either: derived
+bpm is correct on 10/10 isolated and 41/41 full-mix held-out clips.
+
+No gate was weakened, no class relabelled, no held-out tuning fed a reported
+score, and no model was trained or replaced.
+
+### Production defects found and fixed by this evaluation
+
+The run aborted twice on real defects, each fixed red-green with a preserved
+failing regression.
+
+1. A digitally silent capture crashed the drum frontend. madmom's tempo estimate
+   degenerates on an all-zero buffer, escaping as `OMNIZART_FRONTEND_FAILED` and
+   leaving the absent-lane controls unscorable.
+2. The guard then had to move from the interleaved buffer to the mono downmix,
+   because the frontend loads audio with `mono=True` and an exactly
+   phase-inverted stereo capture cancels to silence. Held-out clip `v12-phase`
+   peaks at 7964 interleaved and is exactly zero in mono.
+
+Across all 113 clips exactly four take the silent path — the three silence
+controls and `v12-phase`, all held out — so development gate selection is
+unaffected and no audible mono signal is suppressed. The pinned drum weight is
+still verified on that path so silence cannot bypass the artifact pin.
+
+### Physical Norns
+
+All 17 Lua component groups pass on the device at the rebased commit with
+verified deployed hashes (`evidence/hardware-core-silence-guard-892a3ad.json`).
+
+The device cannot currently run the pretrained chain at all. It has no numpy,
+no pip, no onnxruntime and no torch, and no internet: its only route is an
+isolated 10.42.0.0/24 hotspot, so every dependency must be staged from a host.
+numpy 1.19.5 from the official Debian armhf package and an UNOFFICIAL community
+armv7l onnxruntime 1.16.0 wheel were both loaded from a removable /tmp tree, the
+latter reporting `CPUExecutionProvider`. That is the first direct evidence an
+ONNX Runtime binary loads on this Norns; it is not evidence that any pinned
+graph runs. See `evidence/norns-onnxruntime-runtime-probe-2026-09-19.json` and
+`evidence/armv7-onnxruntime-availability-2026-09-19.json`.
+
+Microsoft has never published an armv7l ONNX Runtime binary for any version, and
+cp39 wheels stop at 1.19.2. Desktop peak RSS was 383,268 KiB for eight seconds of
+audio and 891,800 KiB for the corpus process, against roughly 469 MB available
+and zero swap on the device for a 45-second target. Norns inference memory,
+latency, xruns and cancellation remain UNMEASURED and must not be inferred from
+x86 numbers.

@@ -182,16 +182,16 @@ class Worker:
         assert self.request is not None and self.process is not None and self.result_path is not None
         request, process, path = self.request, self.process, self.result_path
         if process.returncode != 0 or not path.is_file() or path.stat().st_size > MAX_RESULT_BYTES:
-            self.send(failed(request, "ANALYSIS_BACKEND_FAILED")); self.remove_job_files(True); self.clear_job(); return
+            self.remove_job_files(True); self.clear_job(); self.send(failed(request, "ANALYSIS_BACKEND_FAILED")); return
         try:
             analysis = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError):
-            self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); self.remove_job_files(True); self.clear_job(); return
+            self.remove_job_files(True); self.clear_job(); self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); return
         if isinstance(analysis, dict) and set(analysis) == {"backend_error"} and isinstance(analysis["backend_error"], str) and SAFE_BACKEND_ERROR.fullmatch(analysis["backend_error"]):
-            self.send(failed(request, analysis["backend_error"])); self.remove_job_files(True); self.clear_job(); return
+            self.remove_job_files(True); self.clear_job(); self.send(failed(request, analysis["backend_error"])); return
         if not analysis_is_pretrained(analysis, self.backend_sha256, self.drum_artifact_sha256, self.bass_artifact_sha256) or \
                 any(candidate["sample_index"] >= request["frames"] for candidate in analysis["candidates"]):
-            self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); self.remove_job_files(True); self.clear_job(); return
+            self.remove_job_files(True); self.clear_job(); self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); return
         stored = response(request, "COMPLETED", wav_path=request["wav_path"], wav_sha256=request["wav_sha256"],
             frames=request["frames"], sample_rate=request["sample_rate"], analysis=analysis)
         temporary = path.with_suffix(".published")

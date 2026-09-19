@@ -65,3 +65,45 @@ and render recipes. BabySlakh material used to select prototype architectures is
 explicitly validation-pilot data, not a pristine final test partition. Synthesized
 or sampled isolated fixtures cannot replace full-mixture evidence. A passing
 metric validator cannot authenticate source provenance or a device measurement.
+
+## Pretrained corpus evaluation
+
+`tools/rhythm_doctor_analysis/pretrained_corpus_evaluate.py` scores a pinned
+runtime against a validated schema-v2 corpus. It never trains, downloads or
+changes a model. Supply `--manifest`, `--corpus-root`, `--cache-dir` and a
+`--report` path; `--corpus-root` is separate because manifest descriptors are
+relative to the external cache root, not to the manifest directory. Gates are
+selected from development clips only and held-out data is aggregated once with
+those gates frozen.
+
+The resume cache is keyed by model identity, corpus identity and each clip's
+audio and annotation digests, so changing the backend correctly invalidates it.
+A full cold run over 106 clips took roughly 26–40 minutes on x86 with peak RSS
+891,800 KiB. Model paths come from `RHYTHM_DOCTOR_OMNIZART_SOURCE`,
+`RHYTHM_DOCTOR_OMNIZART_ONNX`, `RHYTHM_DOCTOR_UMXHQ_BASS` and
+`RHYTHM_DOCTOR_BASIC_PITCH_ONNX`.
+
+A green report is quality only. It does not establish corpus provenance,
+redistribution rights, ARM inference or device acceptance, and it sets
+`complete_rd02_acceptance` false.
+
+## Component campaign
+
+`tests/rhythm_doctor/run_components.py --output <new dir>` runs the component
+groups and requires a directory that does not already exist. With `--native`
+and `--detector` it selects 49 groups: 20 Lua, 12 Python, 4 native and 13
+detector. `--analysis-python` must point at an interpreter carrying the pinned
+detector dependencies; the default interpreter will not satisfy the detector
+groups. `--native` additionally needs GCC, JACK and aubio.
+
+## Physical Norns dependencies
+
+The device has no internet. Its only route is an isolated 10.42.0.0/24 hotspot,
+so `apt` cannot run there and every dependency must be staged from a host and
+copied across. The device also ships no numpy and no pip.
+
+Install nothing into device system directories for a test. Unpack dependencies
+into a directory under `/tmp` and reach them through `PYTHONPATH` and
+`LD_LIBRARY_PATH`, so cleanup is removing one directory. Debian's numpy needs
+the BLAS and LAPACK alternatives subdirectories on `LD_LIBRARY_PATH` because the
+alternatives symlinks are not unpacked.

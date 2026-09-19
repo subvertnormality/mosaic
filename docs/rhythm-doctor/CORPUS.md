@@ -205,3 +205,36 @@ v10 is preserved with its one-LSB phase-inversion failure; v11 quantizes once
 before making the opposite integer channel. This is fixture qualification only.
 Neither the final transcription nor acquisition quality gate has been measured
 on this frozen partition. Keep it separate from reused BabySlakh diagnostics.
+
+## First scored use of the frozen v12 partition (2026-09-19)
+
+v12 has now been used once for a held-out RD-02 score. Development clips
+selected the per-lane gates and the 66 held-out clips were aggregated once with
+those gates frozen. The pinned pretrained candidate failed; the corpus itself
+behaved as designed. See DETECTOR.md and
+`evidence/pretrained-v12-quality-2026-09-19.json`.
+
+Two partition properties proved load-bearing and should be kept.
+
+The absent-lane controls did their job. Measuring false positives on clips where
+a lane is absent is what exposed cross-lane leakage as the dominant failure
+(CHH 62.1%, SD 49.4%, BD 45.1% of all false positives). Aggregate scoring alone
+would have hidden this.
+
+The isolated stratum is the harshest on a leaky detector, because every
+cross-fire there is an unambiguous false positive while in a full mix it may
+coincide with a real event of that lane. That is why isolated scored worse than
+full_mix. This ordering is a property of the detector, not a corpus defect: beat
+tracking was verified correct on 10/10 isolated and 41/41 full-mix held-out
+clips, so the strata are not mistracked.
+
+`v12-phase`, the phase-inverted stereo control, is only meaningful against a
+detector that preserves stereo. Its mono downmix is exactly zero while its
+interleaved buffer peaks at 7964, so any mono-downmix chain can only score
+false negatives on it. Keep the clip: that is a real property to test for, but
+read its contribution as a statement about the candidate rather than about the
+corpus.
+
+The rendered-domain limitation still stands. Held material comes from two kits
+and synthesized or sampled timbres, so a failure here is strong evidence against
+a candidate while a pass would still not establish field-recording performance.

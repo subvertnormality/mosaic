@@ -376,3 +376,100 @@ selected windows excluded other drum attacks was too strong. A literal MIDI
 regression (kick at 0.50 s, crash at 0.55 s) failed before the fix. The selector
 now retains non-output percussion for collision rejection while excluding it
 from five-lane score references. No corrected NMF quality rerun is claimed yet.
+
+## Frozen v12 held-out result for the pinned pretrained candidate (2026-09-19)
+
+The pinned Omnizart raw-head plus Open-Unmix/Basic Pitch candidate was scored
+once against the frozen v12 corpus. **It fails RD-02.** Fourteen of the fifteen
+lane/stratum domains miss both the 0.80 onset gate and the 0.85 quantized-cell
+gate. Only CHH/full_mix passes, at onset F1 0.8874. The full report is
+`evidence/pretrained-v12-quality-2026-09-19.json` and the diagnosis is
+`evidence/pretrained-v12-failure-diagnosis-2026-09-19.json`.
+
+Held-out onset F1, gates selected from development clips only and then frozen:
+
+| lane | isolated | sparse | full_mix |
+| ---- | -------- | ------ | -------- |
+| BD   | 0.4058 | 0.4968 | 0.7017 |
+| SD   | 0.3043 | 0.4604 | 0.6871 |
+| CHH  | 0.1407 | 0.5612 | 0.8874 |
+| OHH  | 0.1739 | 0.1156 | 0.2574 |
+| BASS | 0.3590 | 0.5943 | 0.3504 |
+
+Per-lane held-out recall/precision: BD 0.667/0.643, SD 0.657/0.600,
+CHH 0.899/0.727, OHH 0.339/0.176, BASS 0.314/0.502. Velocity MAE fails for
+every lane and the gain ladders are not monotonic.
+
+Three findings explain the failure.
+
+1. **OHH collapses.** 189 true positives against 884 false positives. Raw head
+   6 / GM 46 does not separate open hats from the rest of the hat family here.
+2. **The drum heads leak across lanes.** Of all false positives, the share
+   occurring on clips where that lane is absent is CHH 62.1%, SD 49.4%,
+   BD 45.1%, OHH 21.2%, BASS 0.9%. This is why the isolated stratum scores
+   *worse* than full_mix: in a single-lane clip every cross-fire is an
+   unambiguous false positive, while in a full mix it can coincide with a real
+   event. The inversion is a lane-discrimination failure, not a timing defect.
+3. **BASS misses most onsets.** Recall 0.314, with almost no invention on
+   BASS-absent clips (2 of 228 false positives).
+
+Two hypotheses were examined and excluded. There is no systematic timing
+offset: on `v12-isolated-0-BD` references sit at 0.0,1.0,...,7.0 s and
+predictions at 0.99,1.99,...,6.99 s, a -10 ms difference well inside the 50 ms
+tolerance that matches successfully. Gate selection is also not the cause: an
+oracle threshold fitted directly on held-out data — a deliberately
+non-deployable diagnostic, never used for any reported score — raises BD only
+to 0.6684, SD to 0.6367, OHH to 0.2886 and BASS to 0.4863. Only CHH clears
+0.80. No threshold choice makes this candidate pass.
+
+No gate was weakened, no class relabelled, no threshold tuned on held-out data
+for a reported score, and no model trained or replaced. A replacement
+pretrained-only candidate would have to improve open-hat discrimination, drum
+lane separation and bass recall at the same time.
+
+### Mono downmix blindness to phase-inverted stereo
+
+The pinned frontend loads audio with `mono=True`, so an exactly phase-inverted
+stereo capture cancels to digital silence before the model sees it. Held-out
+clip `v12-phase` has an interleaved peak of 7964 and a mono downmix of exactly
+zero. Previously this crashed madmom's tempo estimator and aborted the whole
+evaluation; the backend now stops before the frontend and paints nothing.
+Across all 113 clips exactly four take that path — the three silence controls
+and `v12-phase`, all held out — so no development clip and no audible mono
+signal is affected. This is a real weakness of a mono-downmix drum chain and
+`v12-phase` can only ever contribute false negatives.
+
+## Licence test every candidate must pass
+
+Mosaic is licensed GPL-3.0 (`LICENSE`, and README "released under the GNU
+license"). That sets a harder constraint on pretrained models than a permissive
+licence would, and it is the test to apply before spending evaluation effort on
+any new candidate.
+
+Assess the **code licence and the published weights licence separately**. They
+frequently differ, and the weights are usually the restricted half. Omnizart is
+the standing example: MIT source, with separately hosted checkpoints carrying no
+explicit licence at all.
+
+GPL-3 compatible: MIT, BSD, Apache-2.0 (compatible with GPLv3 specifically, not
+GPLv2), LGPL, GPL-3, CC0.
+
+Not compatible: any non-commercial or research-only restriction — CC BY-NC,
+CC BY-NC-SA, "research use only", bespoke academic terms. GPL-3 forbids adding
+use restrictions downstream, so a non-commercially licensed model cannot be a
+dependency of this project. ADTOF was already excluded on exactly this ground:
+its research material is CC BY-NC-SA 4.0, which is both non-commercial and a
+conflicting copyleft.
+
+That Mosaic is not operated commercially does not relax this. GPL-3 grants every
+downstream recipient the right to use the program commercially, so depending on
+a non-commercial model would contradict the licence the project itself grants.
+
+Note which risk actually binds. Mosaic never redistributes weights — they are
+gitignored and staged locally — so the weaker risk is redistribution. The
+sharper risk is a **use restriction**, which binds even though nothing is
+redistributed. Academic music-information-retrieval releases are the usual
+source of such restrictions, so any separation-first candidate drawn from that
+literature must have its weights licence established before evaluation, not
+after. Treat an unverified or absent weights licence as a blocker to record, not
+an unknown to set aside.
