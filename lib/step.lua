@@ -790,23 +790,10 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   if c == program.get().selected_channel then
     channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
   end
-  local future_voice=false
-  local elapsed,interval,index=0,1,arp_note[c]
-  local gate=math.max(0,note_container.length or 0)
-  -- Mirror the scheduler's positive-gap progression just far enough to prove
-  -- that a voiced slot is reachable before the gate closes. Leading rests,
-  -- a nonpositive terminating interval, and a zero gate admit no history.
-  while elapsed < gate do
-    local gap=chord_timing.gap(arp_division,chord_spread,chord_acceleration,interval)
-    if not gap then break end
-    elapsed=elapsed+gap
-    if elapsed>=gate then break end
-    if sequenced_chord_notes[index] and(not frozen_sequence or frozen_sequence[index])then
-      future_voice=true;break
-    end
-    index=index%total_notes+1;interval=interval+1
-  end
-  local admitted=m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div, onset_offset)
+  -- Delayed arp history is committed by the first accepted voiced callback
+  -- below, never by a parallel prediction. The lattice owns swing, shuffle,
+  -- pulse rounding, gate expiry and nonpositive-interval termination.
+  m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div, onset_offset)
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
     local note_to_play = sequenced_chord_notes[arp_note[c]]
     -- Every slot consumes time and acceleration, including trailing rests.
@@ -829,7 +816,6 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
       channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
   end, release_ids)
-  if admitted and future_voice and route_available and consume_harmony then consume_harmony()end
 end
 
 local function harmony_revision(prefix, channel, unprocessed, sources)
@@ -1097,8 +1083,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     structural_status=unprocessed_note_container.structural_status,
     -- A failed solve is the feature's strict-silence result, not a bypass.
     -- Reserve BYPASS for frames that deliberately use the ordinary pitch path.
-    bypass=(harmony and harmony.status~="ok" and harmony.status~="no_solution" and
-      harmony.status~="budget_exceeded" and harmony.status~="invalid" and harmony.status)or
+    bypass=(harmony and({chord_mask=true,note_mask=true,random=true,quantised_fixed=true,
+      fixed=true,local_scale_bypass=true,missing_output=true})[harmony.status]and harmony.status)or
       (unprocessed_note_container.structural_status and
        unprocessed_note_container.structural_status~="targeted" and
        unprocessed_note_container.structural_status~="legacy" and

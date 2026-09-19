@@ -263,15 +263,22 @@ def no_voicing_fallback_workflow(c):
     # made a documentation frame depend on which real-time step crossed capture.
     c.playback(silent_mapped, cycles=2, timeout=6)
     c.enc(1, 1); c.enc(2, 9); c.key(3)  # Result
-    expected = render([(2, 27, 15, 'Status NO VOICING')])
-    indexes = [(y*128+x)*4+k for y in range(19, 29) for x in range(2, 108) for k in range(3)]
+    expected = render([(2, 36, 4, 'Status NO VOICING')])
+    indexes = [(y*128+x)*4+k for y in range(29, 38) for x in range(2, 108) for k in range(3)]
     c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == expected[i]
                              for i in indexes))
     c.results.append(dict(kind='no-voicing-visible', reason='range', passed=True))
     # Playback is stopped, so both the semantic status and last-emitted rows are
     # stable in real and controlled time.
-    documentation_frame(c, '80bfe90b571d61b3310cab4fcc565983dfa98151434cc42168d3eaee20ddfd24',
+    documentation_frame(c, 'c2610b1c809c22a78a7101010d91fb439dd6b63c440baf6312b2b820f0379b2a',
                         'images/harmony-no-voicing.png', stable_rows=55)
+    c.enc(3, 1)  # H05 Step 2: select one coherent event chain.
+    selected = render([(2, 27, 15, 'Step 2'), (2, 45, 4, 'CH1 planned 62')])
+    selected_indexes = ([(y*128+x)*4+k for y in range(19, 29) for x in range(2, 42) for k in range(3)] +
+                        [(y*128+x)*4+k for y in range(37, 47) for x in range(2, 92) for k in range(3)])
+    c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == selected[i]
+                             for i in selected_indexes))
+    c.enc(3, -1)
     c.enc(1, 1); c.enc(2, 8); c.key(3)   # Entry / Failure
     c.enc(2, 3); c.enc(3, 1); c.key(3)   # Fallback Legacy
     legacy = [(1, [144, note, velocity]) for note, velocity in
@@ -281,6 +288,8 @@ def no_voicing_fallback_workflow(c):
 
 
 def held_step_precedence_workflow(c):
+    import base64
+    from frame_oracle import render
     c.configure()
     c.enc(1, -20); c.screen_header('Ch. 1 Note Masks')
     c.enc(1, 7); c.screen_header('Ch. 1 Harmony')
@@ -295,5 +304,15 @@ def held_step_precedence_workflow(c):
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((72, 90), (62, 117), (64, 107), (65, 97))]
     c.playback(expected, cycles=2, timeout=6)
+    c.enc(1, 4); c.screen_header('Ch. 1 Note Dashboard')
+    c.action(type='grid', x=2, y=4, state=1)
+    try:
+        expected_frame = render([(2, 63, 4, 'P62 S62 E62')])
+        indexes = [(y*128+x)*4+k for y in range(55, 64) for x in range(2, 72) for k in range(3)]
+        c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == expected_frame[i]
+                                 for i in indexes))
+    finally:
+        c.action(type='grid', x=2, y=4, state=0)
     c.results.append(dict(kind='held-step-precedence',
-                          draft_cancelled=True, gesture_routed_once=True, passed=True))
+                          draft_cancelled=True, gesture_routed_once=True,
+                          selected_event_chain='step2:P62/S62/E62', passed=True))

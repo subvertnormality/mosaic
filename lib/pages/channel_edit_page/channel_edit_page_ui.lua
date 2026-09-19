@@ -256,7 +256,13 @@ local notes_page = page:new("Note Dashboard", function()
   note_displays.note:draw()
   note_displays.velocity:draw()
   note_displays.length:draw()
-  local snapshot=harmony_inspection.snapshot(program.get_selected_song_pattern(),program.get().selected_channel)
+  local inspected_step
+  if m_grid and m_grid.get_pressed_keys then
+    for _,held in ipairs(m_grid.get_pressed_keys())do
+      if held[2]>=4 and held[2]<=7 then inspected_step=fn.calc_grid_count(held[1],held[2]);break end
+    end
+  end
+  local snapshot=harmony_inspection.snapshot(program.get_selected_song_pattern(),program.get().selected_channel,inspected_step)
   if snapshot.planned then
     local function pitch(stage)return stage and stage.pitch or "-"end
     screen.level(3);screen.move(2,54)

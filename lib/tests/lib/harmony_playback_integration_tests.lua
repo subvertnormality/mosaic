@@ -138,7 +138,7 @@ function test_harmony_playback_revoice_arp_uses_frozen_solved_bundle()
   luaunit.assert_equals({midi_note_on_events[2][1],midi_note_on_events[3][1]}, {52,55})
 end
 
-function test_harmony_playback_delayed_first_arp_voice_commits_on_admission()
+function test_harmony_playback_delayed_first_arp_voice_commits_at_first_reached_onset()
   local song=setup();source(song,1,{[1]=0},{1})
   local channel=song.channels[1];channel.chord_one_mask=2
   channel.voicing=harmony_config.new_channel("revoice")
@@ -149,11 +149,16 @@ function test_harmony_playback_delayed_first_arp_voice_commits_on_admission()
   assign(song,1,1);step.handle(1,1)
   luaunit.assert_equals(#midi_note_on_events,0)
   local runtime=harmony_runtime_state.snapshot(song).channels[1]
+  luaunit.assert_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,0)
+  progress(1);progress(1);progress(1);progress(1)
+  runtime=harmony_runtime_state.snapshot(song).channels[1]
+  luaunit.assert_true(#midi_note_on_events>0)
   luaunit.assert_not_nil(runtime.consumed)
   luaunit.assert_equals(runtime.consumed_count,1)
 end
 
-local function delayed_first_arp(song,length,spread,acceleration)
+local function delayed_first_arp(song,length,spread,acceleration,mute_root)
   local channel=song.channels[1];channel.chord_one_mask=2
   channel.voicing=harmony_config.new_channel("revoice")
   channel.trig_lock_params[1]={id="chord_arp",param_id="chord_arp_1"}
@@ -167,6 +172,10 @@ local function delayed_first_arp(song,length,spread,acceleration)
   if acceleration then
     channel.trig_lock_params[4]={id="chord_acceleration",param_id="chord_acceleration_1",cc_min_value=-5}
     program.add_step_param_trig_lock(1,4,acceleration)
+  end
+  if mute_root then
+    channel.trig_lock_params[5]={id="mute_root_note",param_id="mute_root_note_1"}
+    program.add_step_param_trig_lock(1,5,1)
   end
   song.patterns[1].lengths[1]=length
   assign(song,1,1);step.handle(1,1)
@@ -192,6 +201,19 @@ function test_harmony_playback_terminating_interval_before_first_voiced_arp_slot
   -- arp 1/6 + spread 1/12 is positive once; acceleration -5 terminates
   -- interval two while the reverse sequence is still on leading rests.
   local runtime=delayed_first_arp(song,2,2,-5)
+  luaunit.assert_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,0)
+end
+
+function test_harmony_playback_swung_gate_before_first_voiced_arp_slot_does_not_commit_history()
+  local song=setup();source(song,1,{[1]=0},{1})
+  local channel=song.channels[1];channel.swing_shuffle_type=1;channel.swing=50
+  channel.start_trig={1,4};channel.end_trig={1,4}
+  m_clock.set_swing_shuffle_type(1,1);m_clock.set_channel_swing(1,50)
+  local runtime=delayed_first_arp(song,0.55,nil,nil,true)
+  progress(2)
+  runtime=harmony_runtime_state.snapshot(song).channels[1]
+  luaunit.assert_equals(#midi_note_on_events,0)
   luaunit.assert_nil(runtime.consumed)
   luaunit.assert_equals(runtime.consumed_count,0)
 end
@@ -321,7 +343,16 @@ function test_harmony_pattern_source_edit_invalidates_prepared_frame()
   luaunit.assert_equals(pattern_harmony.binding_key(channel),binding)
   step.handle(1,1)
   luaunit.assert_equals(#midi_note_on_events,1)
-  luaunit.assert_equals(harmony_inspection.snapshot(song,1).planned.status,"alias_conflict")
+  local inspection=harmony_inspection.snapshot(song,1)
+  luaunit.assert_equals(inspection.planned.status,"alias_conflict")
+  luaunit.assert_nil(inspection.planned.bypass)
+
+  channel.voicing.fallback="legacy";harmony_config_state.reset_song(song)
+  step.handle(1,1);inspection=harmony_inspection.snapshot(song,1)
+  luaunit.assert_equals(#midi_note_on_events,2)
+  luaunit.assert_equals(inspection.planned.status,"alias_conflict")
+  luaunit.assert_equals(inspection.planned.fallback,"legacy")
+  luaunit.assert_nil(inspection.planned.bypass)
 end
 
 function test_harmony_ensemble_absolute_mask_is_visible_legacy_bypass()

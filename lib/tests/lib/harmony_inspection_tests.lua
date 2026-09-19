@@ -32,6 +32,32 @@ function test_harmony_inspection_retains_actual_event_source_and_emitted_pitch()
   writer.scheduled(song,1,52,"chord1")
   writer.emitted(song,1,55,"chord1")
   local value=writer.snapshot(song,1)
-  luaunit.assert_equals(value.scheduled,{pitch=52,source="chord1",step=4,status="ok",bypass="random"})
-  luaunit.assert_equals(value.emitted,{pitch=55,source="chord1",step=4,status="ok",bypass="random"})
+  luaunit.assert_equals(value.scheduled,{pitch=52,source="chord1",step=4,status="ok",bypass="random",event_id=1})
+  luaunit.assert_equals(value.emitted,{pitch=55,source="chord1",step=4,status="ok",bypass="random",event_id=1})
+end
+
+function test_harmony_inspection_keeps_delayed_stages_with_their_event_and_selected_step()
+  writer.reset();local song={}
+  local first={step=1,source=0,output=60,status="ok"};writer.plan(song,1,first)
+  writer.scheduled(song,1,60,"root",first)
+  local second={step=2,source=1,output=62,status="no_solution",fallback="silence"};writer.plan(song,1,second)
+  writer.scheduled(song,1,62,"root",second);writer.emitted(song,1,62,"root",second)
+  writer.emitted(song,1,60,"root",first)
+  local latest=reader.snapshot(song,1)
+  luaunit.assert_equals(latest.planned.step,2)
+  luaunit.assert_equals(latest.emitted.event_id,second.event_id)
+  local selected=reader.snapshot(song,1,1)
+  luaunit.assert_equals(selected.planned.step,1)
+  luaunit.assert_equals(selected.scheduled.event_id,first.event_id)
+  luaunit.assert_equals(selected.emitted.event_id,first.event_id)
+end
+
+function test_harmony_inspection_replaces_a_steps_old_event_without_accepting_its_late_callback()
+  writer.reset();local song={}
+  local old={step=3,source=0,output=60,status="ok"};writer.plan(song,1,old)
+  local current={step=3,source=2,output=64,status="ok"};writer.plan(song,1,current)
+  writer.emitted(song,1,60,"root",old)
+  local selected=reader.snapshot(song,1,3)
+  luaunit.assert_equals(selected.planned.output,64)
+  luaunit.assert_nil(selected.emitted)
 end

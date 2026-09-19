@@ -146,6 +146,17 @@ function test_harmony_failure_details_use_active_event_not_unapplied_draft()
   luaunit.assert_equals(select_label(value,"Fallback").get(),"legacy")
 end
 
+function test_harmony_result_step_selector_reads_one_coherent_event_chain()
+  local song=setup();local first={step=1,status="ok",output=60};local second={step=2,status="ok",output=62}
+  harmony_inspection.plan(song,1,first);harmony_inspection.scheduled(song,1,60,"root",first);harmony_inspection.emitted(song,1,60,"root",first)
+  harmony_inspection.plan(song,1,second);harmony_inspection.scheduled(song,1,62,"root",second);harmony_inspection.emitted(song,1,62,"root",second)
+  local value=feature_editor.new("harmony");value:enter();open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"CH1 planned").get(),60)
+  select_label(value,"Step").set(2)
+  luaunit.assert_equals(select_label(value,"CH1 planned").get(),62)
+  luaunit.assert_equals(select_label(value,"CH1 emitted").get(),62)
+end
+
 function test_harmony_tone_map_is_per_binding_staged_and_cancelled_without_source_mutation()
   local song,channel=setup();channel.selected_patterns[1]=true
   song.patterns[1].note_values[1]=-7;channel.working_pattern.note_values[1]=-7

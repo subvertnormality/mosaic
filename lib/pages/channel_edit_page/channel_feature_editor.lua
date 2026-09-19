@@ -334,10 +334,10 @@ function editor.new(kind)
       local selected_group=self.context_group and active_song.groups[self.selected_group]
       local result;if self.context_group then result=(snapshot.groups[self.selected_group]or{}).prepared
       else result=(snapshot.channels[self.channel_number]or{}).prepared end
-      local traces={};if selected_group then for _,member in ipairs(selected_group.members or{})do traces[#traces+1]={channel=member.channel,role=member.role,trace=harmony_inspection.snapshot(self.song,member.channel)}end
-      else traces[1]={channel=self.channel_number,trace=harmony_inspection.snapshot(self.song,self.channel_number)}end
+      local traces={};if selected_group then for _,member in ipairs(selected_group.members or{})do traces[#traces+1]={channel=member.channel,role=member.role,trace=harmony_inspection.snapshot(self.song,member.channel,self.selected_step)}end
+      else traces[1]={channel=self.channel_number,trace=harmony_inspection.snapshot(self.song,self.channel_number,self.selected_step)}end
       local active_plan;for _,entry in ipairs(traces)do if entry.trace.planned then active_plan=entry.trace.planned break end end
-      local fields={readonly("Status",function()
+      local fields={editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{min=1,max=64}),readonly("Status",function()
         for _,entry in ipairs(traces)do if entry.trace.planned and entry.trace.planned.bypass then return"BYPASS "..tostring(entry.trace.planned.bypass)end end
         for _,entry in ipairs(traces)do local status=entry.trace.planned and entry.trace.planned.status
           if status and status~="ok"and status~="off"then return"NO VOICING"end end
@@ -357,11 +357,12 @@ function editor.new(kind)
       local selected_group=self.context_group and active_song.groups[self.selected_group]
       local result;if self.context_group then result=(snapshot.groups[self.selected_group]or{}).prepared
       else result=(snapshot.channels[self.channel_number]or{}).prepared end
-      local trace=not self.context_group and harmony_inspection.snapshot(self.song,self.channel_number)or nil
+      local trace=not self.context_group and harmony_inspection.snapshot(self.song,self.channel_number,self.selected_step)or nil
       local effective=not self.context_group and harmony_config_state.effective_channel(self.song,self.channel_number,
         self.channel.voicing or harmony_config.new_channel())or nil
-      return{readonly("Reason",function()return(result and result.reason)or
-          (trace and trace.planned and(trace.planned.reason or trace.planned.status))or"NO VOICING"end),
+      return{readonly("Reason",function()return
+          (trace and trace.planned and(trace.planned.reason or trace.planned.status))or
+          (result and result.reason)or"NO VOICING"end),
         readonly("Fallback",function()return(trace and trace.planned and trace.planned.fallback)or
           (selected_group and selected_group.fallback)or(effective and effective.fallback)or"silence"end),action("Settings","H02")}
     end;return{}

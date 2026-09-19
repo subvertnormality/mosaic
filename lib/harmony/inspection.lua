@@ -8,19 +8,40 @@ local function copy(value,seen)
 end
 local function channel(song,number)
   local state=registry.songs[song];if not state then state={};registry.songs[song]=state end
-  state[number]=state[number]or{};return state[number]
+  state[number]=state[number]or{next_id=0,events={},by_step={}};return state[number]
 end
 
-function inspection.plan(song,number,value)channel(song,number).planned=copy(value)end
+function inspection.plan(song,number,value)
+  local state=channel(song,number);state.next_id=state.next_id+1
+  local previous=value.step~=nil and state.by_step[value.step]or nil
+  if previous then state.events[previous]=nil end
+  value.event_id=state.next_id
+  local event={planned=copy(value)}
+  state.events[value.event_id]=event
+  if value.step~=nil then state.by_step[value.step]=value.event_id end
+  state.latest_id=value.event_id
+end
 function inspection.scheduled(song,number,pitch,source,context)
-  local state=channel(song,number);local event=context or state.planned
-  state.scheduled={pitch=pitch,source=source,step=event and event.step,status=event and event.status,bypass=event and event.bypass}
+  local state=channel(song,number);local latest=state.latest_id and state.events[state.latest_id]
+  local event=context or(latest and latest.planned)
+  local stage={pitch=pitch,source=source,step=event and event.step,status=event and event.status,
+    bypass=event and event.bypass,event_id=event and event.event_id}
+  local record=event and event.event_id and state.events[event.event_id]
+  if record then record.scheduled=stage end
 end
 function inspection.emitted(song,number,pitch,source,context)
-  local state=channel(song,number);local event=context or state.planned
-  state.emitted={pitch=pitch,source=source,step=event and event.step,status=event and event.status,bypass=event and event.bypass}
+  local state=channel(song,number);local latest=state.latest_id and state.events[state.latest_id]
+  local event=context or(latest and latest.planned)
+  local stage={pitch=pitch,source=source,step=event and event.step,status=event and event.status,
+    bypass=event and event.bypass,event_id=event and event.event_id}
+  local record=event and event.event_id and state.events[event.event_id]
+  if record then record.emitted=stage end
 end
-function inspection.snapshot(song,number)return copy(channel(song,number))end
+function inspection.snapshot(song,number,step)
+  local state=channel(song,number)
+  local id=step~=nil and state.by_step[step]or state.latest_id
+  return copy(id and state.events[id]or{})
+end
 function inspection.reset_song(song)registry.songs[song]=nil end
 function inspection.reset()for song in pairs(registry.songs)do registry.songs[song]=nil end end
 return inspection

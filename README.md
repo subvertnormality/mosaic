@@ -1293,7 +1293,9 @@ at their onset, and Note Off always releases the pitch and route actually sent.
 The Channel grid remains the chronological trig/mask surface. Foundation anchors
 and additions therefore appear as active steps there. Final Harmony pitches are
 shown on Note Dashboard/context inspection as planned, scheduled and last-emitted
-values; the projection never writes back into a shared pattern. Copy/save stores
+values. H05 Result uses its Step row to select one coherent event chain; on Note
+Dashboard, holding a grid step temporarily inspects that step instead of combining
+it with a later delayed event. The projection never writes back into a shared pattern. Copy/save stores
 versioned configuration, not running solver or phrase history. Missing optional
 configuration loads as Off; unknown schema versions reject the project before it
 replaces the active project.
