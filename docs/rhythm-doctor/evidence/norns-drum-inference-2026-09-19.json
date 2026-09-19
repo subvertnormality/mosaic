@@ -1,0 +1,34 @@
+{
+  "scope": "First real on-device execution of the pinned drum graph on physical Norns. Inference throughput and memory only. NOT end-to-end analysis, not quality, not xrun or cancellation behaviour.",
+  "date": "2026-09-19",
+  "device": {"host": "we@10.42.0.1", "arch": "armv7l", "cores": 4, "model": "ARMv7 Processor rev 4 (v7l)", "python": "3.9.2", "mem_total_mb": 976},
+  "runtime": {
+    "onnxruntime": "1.16.0, UNOFFICIAL community armv7l cp39 wheel (see norns-onnxruntime-runtime-probe-2026-09-19.json)",
+    "numpy": "1.19.5, official Debian bullseye armhf package",
+    "install": "unpacked under /tmp and reached through PYTHONPATH and LD_LIBRARY_PATH; nothing installed into system directories",
+    "session_options": "enable_cpu_mem_arena False, enable_mem_pattern False, ORT_SEQUENTIAL, intra_op_num_threads 1, inter_op_num_threads 1"
+  },
+  "model": {"path": "drum_keras@model.onnx", "sha256_prefix_verified_on_device": "b6a2fd48850b3ef94fec3e2c97277ded",
+            "input": "input_tensor [N, 120, 120, 4] float32", "output": "tf_op_layer_Reshape_5 [N, 13, 4, 1]"},
+  "measurement": {
+    "session_load_seconds": 0.69,
+    "rss_after_load_mb": 83,
+    "windows": 720,
+    "windows_rationale": "720 mini-beat windows is what one 45-second capture at 120 BPM produces, at mini_beat_div_n 32 per bar over about 22.5 bars. This is one full-length capture, not a synthetic stress test.",
+    "total_seconds": 815.9,
+    "per_window_ms": 1133.2,
+    "peak_rss_mb": 83
+  },
+  "findings": [
+    "MEMORY IS A NON-ISSUE. Peak RSS was 83 MB against roughly 470 MB available. The earlier x86 figure of 147 MB isolated and 383 MB combined overstated the device requirement; 32-bit pointers and the bounded session options help.",
+    "THROUGHPUT IS THE BINDING CONSTRAINT. 815.9 s, about 13.6 minutes, for the drum graph alone on a single 45-second capture.",
+    "That is roughly 50x slower than x86, where the same graph cost 2.897 s for 8 s of audio, scaling to about 16 s for 45 s.",
+    "The drum graph is only one component. The Omnizart CQT and madmom beat frontend cost 3.906 s for 8 s on x86, and the UMXHQ plus Basic Pitch bass chain is heavier still, so a realistic standalone analysis would exceed 30 minutes per capture."
+  ],
+  "not_yet_measured": [
+    "Batching and multithreading. Batch size one was chosen to bound memory, and memory is now known to be ample; the device also has 4 cores while this run used a single thread. Both are untested headroom.",
+    "The Omnizart frontend has not been run on the device at all. It needs madmom, librosa and scipy on armv7, which is a substantially harder dependency problem than onnxruntime and numpy.",
+    "No xrun, cancellation, routing or transport behaviour was exercised. Rhythm Doctor runs only with the sequencer stopped, which reduces but does not remove audio-contention risk."
+  ],
+  "consequence": "Standalone on-device analysis is blocked on CPU throughput, not on memory. This inverts the working assumption. A viable standalone design needs a model roughly an order of magnitude cheaper, or must recover a large factor from batching, threading and a coarser mini-beat grid."
+}
