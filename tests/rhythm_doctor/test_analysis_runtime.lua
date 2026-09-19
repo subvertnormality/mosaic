@@ -18,11 +18,14 @@ local function reply(request, status, extra)
 end
 local capture, analysis = transport(), transport()
 local worker={open=function() return capture end}
+local analysis_opens=0
+local analysis_worker={open=function() analysis_opens=analysis_opens+1; return analysis end}
 local legacy_dispatches=0
-local runtime=Runtime.new({project_id='analysis-project',worker=worker,analysis_transport=analysis,now=function() return 0 end,
+local runtime=Runtime.new({project_id='analysis-project',worker=worker,analysis_worker=analysis_worker,now=function() return 0 end,
   transport_stopped=function() return true end,
   on_analysis_ready=function() legacy_dispatches=legacy_dispatches+1 end})
 assert(runtime:start_capture('manual').ok)
+assert(analysis_opens==1,'mode entry preflights the owned analysis worker')
 local preflight=capture.sent[#capture.sent]; capture.replies[#capture.replies+1]=reply(preflight,'READY'); runtime:poll()
 local start=capture.sent[#capture.sent]; capture.replies[#capture.replies+1]=reply(start,'STARTED'); runtime:poll()
 assert(runtime:finish(true).ok)
@@ -32,6 +35,7 @@ capture.replies[#capture.replies+1]=reply(publish,'PUBLISHED',{wav_path='/tmp/in
 runtime:poll()
 local request=analysis.sent[#analysis.sent]
 assert(request.command=='ANALYSE' and request.result_schema_version==Bank.VERSION and request.max_candidates==Bank.MAX_CANDIDATES)
+assert(analysis_opens==1,'capture publication reuses the preflighted analysis worker')
 assert(legacy_dispatches==0,'injected analysis transport exclusively owns dispatch')
 local bank=assert(Bank.build({project_id=request.project_id,generation=request.generation,analysis_revision=request.analysis_revision,
   sample_rate=8000,capture_start_sample=0,capture_end_sample=200000,origin_sample=8000,bpm=100,
@@ -42,4 +46,9 @@ assert(runtime.machine.state=='READY' and runtime.machine.bank==bank,'only a mat
 local release=capture.sent[#capture.sent]; assert(release.command=='RELEASE')
 capture.replies[#capture.replies+1]=reply(release,'RELEASED'); runtime:poll()
 assert(runtime.machine.resources_are_released)
+assert(runtime:apply_alignment({bpm=50,start_beat=1,fine_start_ms=0,origin_sample=8000}).ok)
+local corrected=analysis.sent[#analysis.sent]
+assert(corrected.command=='ANALYSE' and corrected.analysis_revision==1)
+assert(corrected.alignment.bpm==50 and corrected.alignment.origin_sample==8000,
+  'a correction carries its frozen alignment to the new analysis lease')
 print('rhythm_doctor analysis_runtime: 1 test passed')

@@ -55,13 +55,22 @@ function trigger_edit_page_ui.register_ui_draws()
         screen.move(120, 9)
         screen.text("m")
         screen.move(0, 22)
-        if model and model.setup and model.setup.active then
+        if model and model.alignment and model.alignment.active then
+          screen.text("ALIGNMENT / " .. tostring(model.alignment.field))
+        elseif model and model.setup and model.setup.active then
           screen.text("SETUP / " .. tostring(model.setup.field))
         else
           screen.text(lane .. " / " .. (model and model.status or "NOT READY"))
         end
         if model then
-          if model.setup and model.setup.active then
+          if model.alignment and model.alignment.active then
+            screen.move(0, 34)
+            screen.text((model.alignment.field == "HALF TEMPO" and ">" or " ") .. "HALF " .. tostring(model.alignment.bpm or "") .. " BPM")
+            screen.move(0, 46)
+            screen.text((model.alignment.field == "DOUBLE TEMPO" and ">" or " ") .. "DOUBLE / START " .. tostring(model.alignment.start_beat or ""))
+            screen.move(0, 58)
+            screen.text((model.alignment.field == "FINE START" and ">" or " ") .. "FINE " .. tostring(model.alignment.fine_start_ms or 0) .. "ms")
+          elseif model.setup and model.setup.active then
             screen.move(0, 34)
             screen.text((model.setup.field == "TEMPO" and ">" or " ") .. "TEMPO " .. string.upper(tostring(model.capture_mode or "auto")))
             screen.move(0, 46)
@@ -74,6 +83,12 @@ function trigger_edit_page_ui.register_ui_draws()
             screen.move(0, 46)
             if model.tempo then screen.text(string.format("%.1f BPM / %s", model.tempo, tostring(model.tempo_source or "")))
             elseif model.acquired_beats then screen.text(tostring(model.acquired_beats) .. " BEATS") end
+            if model.ready and model.ready.active then
+              screen.move(0, 58)
+              local window = model.window_start_label and ("START " .. model.window_start_label .. "-" .. tostring(model.window_end_label)) or ""
+              screen.text((model.ready.field == "SENSITIVITY" and "SENS " .. tostring(model.sensitivity or "") or
+                model.ready.field == "PAINT POLICY" and "PAINT " .. string.upper(tostring(model.paint_policy or "toggle")) or window))
+            end
           end
           if model.modal then
             screen.move(0, 58)

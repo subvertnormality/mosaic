@@ -44,6 +44,21 @@ local function context()
   function runtime:transport_started() calls[#calls + 1] = { "transport_started" }; self.machine.state = "EMPTY"; return reply("OK") end
   function runtime:transport_stopped_event() calls[#calls + 1] = { "transport_stopped" }; return reply("OK") end
   function runtime:poll() calls[#calls + 1] = { "poll" }; return reply("NO_EVENT") end
+  function runtime:set_window_start(start)
+    calls[#calls + 1] = { "window", start }
+    self.machine.bank.window_start = math.max(0, math.min(self.machine.bank.timeline_cells - 64, start))
+    return reply("WINDOW_MOVED", { window_start = self.machine.bank.window_start })
+  end
+  function runtime:set_sensitivity(lane, value)
+    calls[#calls + 1] = { "sensitivity", lane, value }
+    self.machine.bank.sensitivities[lane] = value
+    return reply("SENSITIVITY_UPDATED", { sensitivity = value })
+  end
+  function runtime:apply_alignment(draft)
+    calls[#calls + 1] = { "alignment", draft }
+    self.machine.state = "REANALYSING"
+    return reply("OK")
+  end
   local adapter = Adapter.new({ runtime = runtime, transport_stopped = function() return stopped end, mode = "manual" })
   return { adapter = adapter, runtime = runtime, calls = calls, set_stopped = function(value) stopped = value end }
 end
@@ -176,6 +191,51 @@ test("screen model is a read-only summary of status, selected-lane hits and capt
   equal(model.hit_count, 2); equal(model.tempo, 137); equal(model.tempo_source, "auto")
   equal(model.total_steps, 97); equal(model.total_bars, 6); equal(model.status, "READY")
   equal(model.listening_confidence, .8); equal(model.acquired_beats, 19); equal(model.analysis_progress, .25)
+end)
+
+test("READY browser moves one shared nonwrapping window by bars or steps", function()
+  local c = context(); c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = { bpm = 120, timeline_cells = 97, window_start = 0,
+    sensitivities = { BD = 0, SD = 0, CHH = 0, OHH = 0, BASS = 0 }, lanes = { BD = {}, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
+  equal(c.adapter:screen_model().ready.field, "WINDOW BAR")
+  equal(c.adapter:enc(3, 1).code, "WINDOW_MOVED"); equal(c.calls[#c.calls][2], 16)
+  equal(c.adapter:enc(2, 1).field, "WINDOW STEP")
+  equal(c.adapter:enc(3, 100).code, "WINDOW_MOVED"); equal(c.adapter:screen_model().window_start, 33)
+  local model = c.adapter:screen_model()
+  equal(model.window_end, 96); equal(model.window_start_label, "3.1.2")
+  check(model.at_window_end, "window view reports its bounded end")
+end)
+
+test("READY editor applies selected-lane sensitivity and cycles paint policy without changing other lanes", function()
+  local c = context(); c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = { bpm = 120, timeline_cells = 64, window_start = 0,
+    sensitivities = { BD = .5, SD = .2, CHH = .3, OHH = .4, BASS = .1 }, lanes = { BD = {}, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
+  c.adapter:enc(2, 1); c.adapter:enc(2, 1) -- sensitivity
+  equal(c.adapter:screen_model().ready.field, "SENSITIVITY")
+  equal(c.adapter:enc(3, 1).code, "SENSITIVITY_UPDATED")
+  equal(c.runtime.machine.bank.sensitivities.BD, .55); equal(c.runtime.machine.bank.sensitivities.SD, .2)
+  c.adapter:enc(2, 1)
+  equal(c.adapter:enc(3, 1).code, "PAINT_POLICY_UPDATED")
+  equal(c.adapter:screen_model().paint_policy, "add")
+  equal(c.adapter:shift_paint(-1).code, "PAINT_SHIFTED")
+  equal(c.adapter:paint_context().shift, -1)
+  equal(c.adapter:reset_paint_shift().code, "PAINT_SHIFT_RESET")
+  equal(c.adapter:paint_context().shift, 0)
+end)
+
+test("alignment is a K3-applied draft with explicit half/double actions and K2 cancellation", function()
+  local c = context(); c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = { bpm = 120, timeline_cells = 96, window_start = 0, capture_start_sample = 10,
+    capture_end_sample = 1000, origin_sample = 100, sample_rate = 100, source = { beat_positions = { 100, 200, 300 } },
+    sensitivities = { BD = 0, SD = 0, CHH = 0, OHH = 0, BASS = 0 }, lanes = { BD = {}, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
+  for _ = 1, 4 do c.adapter:enc(2, 1) end
+  equal(c.adapter:enc(3, 1).code, "ALIGNMENT_OPENED")
+  equal(c.adapter:screen_model().alignment.field, "HALF TEMPO")
+  equal(c.adapter:key(3, 1).code, "OK")
+  equal(c.calls[#c.calls][1], "alignment"); equal(c.calls[#c.calls][2].bpm, 60)
+  c.runtime.machine.state = "READY"
+  c.adapter:enc(3, 1); c.adapter:enc(3, 1)
+  equal(c.adapter:key(2, 1).code, "ALIGNMENT_CANCELLED")
 end)
 
 test("worker readiness, poll and transport-start invalidation have explicit adapter hooks", function()

@@ -1,6 +1,7 @@
 -- Runtime bridge integration checks, characterisation outside README.
 package.path = './lib/?.lua;' .. package.path
 local Runtime = require('rhythm_doctor.runtime')
+local Bank = require('rhythm_doctor.bank')
 
 local failures, count = {}, 0
 local function test(name, body)
@@ -95,6 +96,22 @@ test('project replacement is deferred by the machine then receives the new ident
   check(called)
   check(runtime:project_loaded('project-b').ok)
   equal(runtime.machine.project_id, Runtime.project_identity('project-b'))
+end)
+
+test('READY controls clamp the shared window, rebuild one lane sensitivity, and start alignment reanalysis', function()
+  local runtime = select(1, context())
+  local bank = assert(Bank.build({ project_id = runtime.machine.project_id, generation = 0, analysis_revision = 0,
+    sample_rate = 100, capture_start_sample = 0, capture_end_sample = 1000, origin_sample = 0, bpm = 120,
+    sensitivities = { BD = .2, SD = .2, CHH = .2, OHH = .2, BASS = .2 },
+    candidates = { { lane = 'BD', sample_index = 10, velocity = 80, confidence = .3 } } }))
+  runtime.machine.state, runtime.machine.bank = 'READY', bank
+  equal(runtime:set_window_start(999).code, 'WINDOW_MOVED')
+  equal(runtime.machine.bank.window_start, 16, 'longest 64-cell view is retained')
+  equal(runtime:set_sensitivity('BD', .4).code, 'SENSITIVITY_UPDATED')
+  equal(runtime.machine.bank.sensitivities.BD, .4); equal(runtime.machine.bank.sensitivities.SD, .2)
+  local value = runtime:apply_alignment({ bpm = 60, start_beat = 1, fine_start_ms = 0, origin_sample = 0 })
+  check(value.ok); equal(runtime.machine.state, 'REANALYSING')
+  equal(runtime.machine.analysis_revision, 1)
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end

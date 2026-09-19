@@ -57,7 +57,7 @@ function Transactions.new(deps)
   end
   local limit = deps.journal_limit or 32
   local self = setmetatable({ context = deps.context, bank = deps.bank, transport_stopped = deps.transport_stopped,
-    read_source = deps.read_source, write_source = deps.write_source, reproject = deps.reproject,
+    read_source = deps.read_source, write_source = deps.write_source, reproject = deps.reproject, adapter = deps.adapter,
     journal_limit = limit, journal = Journal.new(limit), project_id = nil }, Transactions)
   local view = self.context()
   if view_is_ready(view) then self.project_id = view.project_id end
@@ -153,7 +153,7 @@ function Transactions:commit(preview, replace_confirmed)
   if preview.target.revision ~= source.revision then return nil, result("PATTERN_CHANGED") end
   if not Paint.valid_preview(preview, spec) then return nil, result("STALE_PREVIEW") end
   if preview.requires_replace_confirmation and replace_confirmed ~= true then return nil, result("REPLACE_CONFIRMATION_REQUIRED") end
-  local after, paint_problem = Paint.apply(source, preview)
+  local after, paint_problem = Paint.apply(source, preview, self.adapter)
   if not after then return nil, paint_problem or result("INVALID_PAINT") end
   -- Toggle/Add on an empty lane, and any already-identical result, must not
   -- manufacture a source revision or an undo entry.  In particular, an empty

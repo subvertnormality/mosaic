@@ -30,6 +30,12 @@ end
 local function same_asset(message, asset)
   return message.wav_sha256 == asset.wav_sha256 and message.frames == asset.frames and message.sample_rate == asset.sample_rate
 end
+local function copy(value)
+  if type(value) ~= 'table' then return value end
+  local out = {}
+  for key, item in pairs(value) do out[key] = copy(item) end
+  return out
+end
 
 function Controller.new(deps)
   assert(type(deps) == 'table', 'dependencies are required')
@@ -38,7 +44,8 @@ function Controller.new(deps)
   assert(type(deps.transport) == 'table' and type(deps.transport.send) == 'function' and type(deps.transport.poll) == 'function',
     'nonblocking analysis transport is required')
   local self = setmetatable({ machine = deps.machine, transport = deps.transport, protocol_version = deps.protocol_version or 1,
-    job_prefix = deps.job_prefix or 'rhythm-doctor-analysis', nonce = 0, job = nil, on_status = deps.on_status }, Controller)
+    job_prefix = deps.job_prefix or 'rhythm-doctor-analysis', nonce = 0, job = nil, on_status = deps.on_status,
+    alignment = deps.alignment }, Controller)
   assert(finite_integer(self.protocol_version, 1, math.huge), 'protocol version is required')
   return self
 end
@@ -55,6 +62,7 @@ function Controller:_send(job, command)
     message.wav_path, message.wav_sha256, message.frames, message.sample_rate = job.asset.wav_path, job.asset.wav_sha256,
       job.asset.frames, job.asset.sample_rate
     message.result_schema_version, message.max_candidates = Bank.VERSION, Bank.MAX_CANDIDATES
+    if type(self.alignment) == 'function' then message.alignment = copy(self.alignment()) end
   end
   local ok, sent, reason = pcall(self.transport.send, self.transport, message)
   if not ok or sent ~= true then

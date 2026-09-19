@@ -1,0 +1,45 @@
+-- Starts the optional local analysis backend away from the norns Lua thread.
+local Host = {}; Host.__index = Host
+local function shell_quote(value)
+  assert(type(value) == "string" and not value:find("%z"), "safe shell value required")
+  return "'" .. value:gsub("'", "'\\''") .. "'"
+end
+local function read_line(path)
+  local handle=io.open(path, "r"); if not handle then return nil end
+  local value=handle:read("*l"); handle:close(); return value
+end
+local function code_root()
+  local source=debug.getinfo(1, "S").source
+  return source:match("^@(.+)/lib/rhythm_doctor/analysis_worker_host%.lua$")
+end
+function Host.new(deps)
+  deps=deps or {}; local root=deps.code_root or code_root()
+  assert(type(root)=="string" and root~="", "Mosaic code root is required")
+  assert(type(deps.runtime_root)=="string" and deps.runtime_root:sub(1,1)=="/", "absolute runtime root is required")
+  return setmetatable({code_root=root, runtime_root=deps.runtime_root, backend=deps.backend,
+    execute=deps.execute or os.execute, read_line=deps.read_line or read_line,
+    transport_factory=assert(deps.transport_factory, "transport factory is required"), launched=false, closed=false}, Host)
+end
+function Host:open()
+  if self.closed then return nil, "analysis worker host closed" end
+  if not self.launched then
+    self.launched=true
+    local command="mkdir -p "..shell_quote(self.runtime_root).." && rm -f "..shell_quote(self.runtime_root.."/cancel")..
+      " && python3 "..shell_quote(self.code_root.."/tools/rhythm_doctor/launch_analysis_worker.py")..
+      " --runtime "..shell_quote(self.runtime_root)
+    if self.backend then command=command.." --backend "..shell_quote(self.backend) end
+    command=command.." >/dev/null 2>&1 &"
+    local ok=self.execute(command); if ok~=true and ok~=0 then return nil, "analysis worker launcher failed" end
+    return nil, "analysis worker starting"
+  end
+  local problem=self.read_line(self.runtime_root.."/error"); if problem then return nil,problem end
+  local socket=self.read_line(self.runtime_root.."/socket"); if socket then return self.transport_factory(socket, self.runtime_root.."/results") end
+  return nil,"analysis worker starting"
+end
+function Host:close()
+  self.closed=true
+  self.execute("mkdir -p "..shell_quote(self.runtime_root).." && : > "..shell_quote(self.runtime_root.."/cancel"))
+  local pid=self.read_line(self.runtime_root.."/pid"); if pid and pid:match("^[0-9]+$") then self.execute("kill "..pid.." 2>/dev/null") end
+end
+Host.shell_quote=shell_quote
+return Host

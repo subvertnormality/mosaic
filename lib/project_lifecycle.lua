@@ -68,6 +68,10 @@ local function load_project(pth, allow_missing)
     m_clock:reset()
     ui.refresh()
     if capture_guard and capture_guard.project_loaded then capture_guard:project_loaded(pth) end
+    if capture_guard and capture_guard.restore_project then
+      local restored = capture_guard:restore_project(program.get(), pth)
+      if not restored or restored.ok ~= true then return reject_project("Invalid Rhythm Doctor bank") end
+    end
     fn.dirty_grid(true)
     resume_autosave()
     return true
@@ -121,7 +125,17 @@ local function save_project(txt, automatic)
   m_clock:stop()
   m_clock:reset()
   print("Saving project as " .. txt)
-  local ok, err = checked_table_save({txt, program.prepare_for_save()}, norns.state.data .. txt .. ".ptn")
+  local project_data = program.prepare_for_save()
+  local project_path = norns.state.data .. txt .. ".ptn"
+  if capture_guard and capture_guard.serialize_project then
+    local serialized = capture_guard:serialize_project(project_data, project_path)
+    if not serialized or serialized.ok ~= true then
+      tooltip:show("Rhythm Doctor save failed")
+      fn.dirty_screen(true)
+      return false
+    end
+  end
+  local ok, err = checked_table_save({txt, project_data}, project_path)
   -- ParamSet:write returns nil even when opening the file fails. Its write
   -- callback is reached after attempting the write. Check IO return values as
   -- well, so silent write/close failures cannot release autosave inhibition.

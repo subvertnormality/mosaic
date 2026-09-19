@@ -6,6 +6,7 @@ local trigger_edit_page = {}
 local shift = 0
 local rhythm_doctor = nil
 local rhythm_doctor_lane = "BD"
+local rhythm_doctor_paint_preview = nil
 
 local trigger_edit_page_pattern_select_fader = fader:new(1, 1, 16, 16)
 local trigger_edit_page_sequencer = sequencer:new(4, "pattern")
@@ -243,6 +244,32 @@ local function save_paint_pattern(p)
   selected_song_pattern.active = true
 end
 
+local function rhythm_doctor_target()
+  local data = program.get()
+  return { song_slot = data.selected_song_pattern, pattern_id = data.selected_pattern }
+end
+
+local function rhythm_doctor_preview_grid(preview)
+  local grid = {}
+  for step = 1, 64 do grid[step] = preview.shifted_cells and preview.shifted_cells[step] ~= nil end
+  return grid
+end
+
+local function preview_rhythm_doctor_paint()
+  if not rhythm_doctor or type(rhythm_doctor.paint_preview) ~= "function" then return nil, { code = "PAINT_UNAVAILABLE" } end
+  local preview, problem = rhythm_doctor:paint_preview(rhythm_doctor_target())
+  if not preview then return nil, problem end
+  rhythm_doctor_paint_preview = preview
+  trigger_edit_page_sequencer:show_unsaved_grid(rhythm_doctor_preview_grid(preview))
+  return preview
+end
+
+local function cancel_rhythm_doctor_paint()
+  rhythm_doctor_paint_preview = nil
+  trigger_edit_page_sequencer:hide_unsaved_grid()
+  if rhythm_doctor and type(rhythm_doctor.invalidate_paint_preview) == "function" then rhythm_doctor:invalidate_paint_preview() end
+end
+
 function trigger_edit_page.register_press()
   press:register(
     "trigger_edit_page",
@@ -348,6 +375,10 @@ function trigger_edit_page.register_press()
         if not accepted or accepted.code == "LANE_SELECTED" then
           rhythm_doctor_lane = selected
           tooltip:show(rhythm_doctor_lane .. " selected")
+          if trigger_edit_page_paint_button:get_state() == 2 then
+            local preview, problem = preview_rhythm_doctor_paint()
+            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+          end
         elseif accepted.code == "STOP_SEQUENCER" then tooltip:show("STOP SEQUENCER") end
       end
     end
@@ -358,6 +389,44 @@ function trigger_edit_page.register_press()
       trigger_edit_page_paint_button:press(x, y)
 
       if trigger_edit_page_paint_button:is_this(x, y) then
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          if trigger_edit_page_paint_button:get_state() == 2 then
+            local preview, problem = preview_rhythm_doctor_paint()
+            if not preview then
+              trigger_edit_page_paint_button:set_state(1)
+              tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE")
+              return
+            end
+            trigger_edit_page_cancel_button:set_state(2)
+            trigger_edit_page_left_button:set_state(2)
+            trigger_edit_page_centre_button:set_state(2)
+            trigger_edit_page_right_button:set_state(2)
+            trigger_edit_page_paint_button:blink()
+            tooltip:show("Painting Rhythm Doctor")
+            return
+          end
+          local preview = rhythm_doctor_paint_preview
+          local saved, problem
+          if rhythm_doctor and type(rhythm_doctor.paint_commit) == "function" then
+            saved, problem = rhythm_doctor:paint_commit(preview, preview and preview.requires_replace_confirmation == true)
+          else
+            problem = { code = "PAINT_UNAVAILABLE" }
+          end
+          if not saved then
+            trigger_edit_page_paint_button:set_state(2)
+            tooltip:show((problem and problem.code) or "PAINT FAILED")
+            return
+          end
+          rhythm_doctor_paint_preview = nil
+          trigger_edit_page_left_button:set_state(1)
+          trigger_edit_page_centre_button:set_state(1)
+          trigger_edit_page_right_button:set_state(1)
+          trigger_edit_page_cancel_button:set_state(1)
+          trigger_edit_page_sequencer:hide_unsaved_grid()
+          trigger_edit_page_paint_button:no_blink()
+          tooltip:show("Pattern painted")
+          return
+        end
         if (trigger_edit_page_paint_button:get_state() == 2) then
           trigger_edit_page_cancel_button:set_state(2)
           trigger_edit_page_left_button:set_state(2)
@@ -386,7 +455,7 @@ function trigger_edit_page.register_press()
 
       if trigger_edit_page_cancel_button:is_this(x, y) then
         if (trigger_edit_page_paint_button:get_state() == 2) then
-          trigger_edit_page_sequencer:hide_unsaved_grid()
+          if trigger_edit_page_algorithm_fader:get_value() == 5 then cancel_rhythm_doctor_paint() else trigger_edit_page_sequencer:hide_unsaved_grid() end
           trigger_edit_page_paint_button:set_state(1)
           trigger_edit_page_paint_button:no_blink()
           trigger_edit_page_cancel_button:no_blink()
@@ -405,6 +474,13 @@ function trigger_edit_page.register_press()
     function(x, y)
       if trigger_edit_page_left_button:is_this(x, y) then
         if (trigger_edit_page_left_button:get_state() == 2) then
+          if trigger_edit_page_algorithm_fader:get_value() == 5 then
+            local changed = rhythm_doctor and rhythm_doctor.shift_paint and rhythm_doctor:shift_paint(-1)
+            local preview, problem
+            if changed then preview, problem = preview_rhythm_doctor_paint() else problem = { code = "PAINT_UNAVAILABLE" } end
+            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+            return
+          end
           shift = shift - 1
 
           load_paint_pattern()
@@ -421,6 +497,13 @@ function trigger_edit_page.register_press()
     function(x, y)
       if trigger_edit_page_centre_button:is_this(x, y) then
         if (trigger_edit_page_centre_button:get_state() == 2) then
+          if trigger_edit_page_algorithm_fader:get_value() == 5 then
+            local changed = rhythm_doctor and rhythm_doctor.reset_paint_shift and rhythm_doctor:reset_paint_shift()
+            local preview, problem
+            if changed then preview, problem = preview_rhythm_doctor_paint() else problem = { code = "PAINT_UNAVAILABLE" } end
+            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+            return
+          end
           shift = 0
           load_paint_pattern()
           trigger_edit_page_centre_button:set_state(2)
@@ -436,6 +519,13 @@ function trigger_edit_page.register_press()
     function(x, y)
       if trigger_edit_page_right_button:is_this(x, y) then
         if (trigger_edit_page_right_button:get_state() == 2) then
+          if trigger_edit_page_algorithm_fader:get_value() == 5 then
+            local changed = rhythm_doctor and rhythm_doctor.shift_paint and rhythm_doctor:shift_paint(1)
+            local preview, problem
+            if changed then preview, problem = preview_rhythm_doctor_paint() else problem = { code = "PAINT_UNAVAILABLE" } end
+            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+            return
+          end
           shift = shift + 1
 
           trigger_edit_page_right_button:set_state(2)

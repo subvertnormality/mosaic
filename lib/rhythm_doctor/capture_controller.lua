@@ -10,6 +10,9 @@ local function same_token(a, b)
   return type(a) == 'table' and type(b) == 'table' and a.project_id == b.project_id and
     a.generation == b.generation and a.analysis_revision == b.analysis_revision
 end
+local function same_capture(a, b)
+  return type(a) == 'table' and type(b) == 'table' and a.project_id == b.project_id and a.generation == b.generation
+end
 local function same_identity(job, message, version)
   return type(message) == 'table' and message.protocol_version == version and message.job_id == job.job_id and same_token(job.token, message)
 end
@@ -124,6 +127,19 @@ end
 -- callback owns analysis and must explicitly call Machine:receive_analysis later.
 function Controller:analyse(token)
   local job = self:_lookup(token)
+  -- Reanalysis deliberately keeps the retained WAV but receives a new analysis
+  -- revision.  Adopt that lease before dispatching so the analysis controller,
+  -- release acknowledgement and all later replies share the new token.
+  if not job then
+    job = self.job
+    if not job or not same_capture(job.token, token) or type(token.analysis_revision) ~= 'number' or
+        token.analysis_revision <= job.token.analysis_revision or not job.asset then return result('STALE_JOB') end
+    job.token = { project_id = token.project_id, generation = token.generation, analysis_revision = token.analysis_revision }
+    job.asset = { wav_path = job.asset.wav_path, wav_sha256 = job.asset.wav_sha256, frames = job.asset.frames,
+      sample_rate = job.asset.sample_rate, job_id = job.asset.job_id, project_id = token.project_id,
+      generation = token.generation, analysis_revision = token.analysis_revision }
+    job.analysis_dispatched, job.analysis_requested = false, false
+  end
   if not job or not self:_owns(job) then return result('STALE_JOB') end
   job.analysis_requested = true
   if job.asset then

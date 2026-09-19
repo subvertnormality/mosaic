@@ -11,6 +11,9 @@ end
 local Machine = dependency("rhythm_doctor.state_machine", "mosaic/lib/rhythm_doctor/state_machine")
 local Controller = dependency("rhythm_doctor.capture_controller", "mosaic/lib/rhythm_doctor/capture_controller")
 local AnalysisController = dependency("rhythm_doctor.analysis_controller", "mosaic/lib/rhythm_doctor/analysis_controller")
+local Transactions = dependency("rhythm_doctor.paint_transactions", "mosaic/lib/rhythm_doctor/paint_transactions")
+local Persistence = dependency("rhythm_doctor.bank_persistence", "mosaic/lib/rhythm_doctor/bank_persistence")
+local Bank = dependency("rhythm_doctor.bank", "mosaic/lib/rhythm_doctor/bank")
 
 local Runtime = {}
 Runtime.__index = Runtime
@@ -21,8 +24,23 @@ local function result(code, extra)
   return extra
 end
 
+local function copy(value)
+  if type(value) ~= "table" then return value end
+  local out = {}
+  for key, item in pairs(value) do out[key] = copy(item) end
+  return out
+end
+
 local function valid_transport(value)
   return type(value) == "table" and type(value.send) == "function" and type(value.poll) == "function"
+end
+
+local function valid_alignment(value)
+  return type(value) == "table" and type(value.bpm) == "number" and value.bpm == value.bpm and
+    value.bpm >= Bank.MIN_BPM and value.bpm <= Bank.MAX_BPM and type(value.start_beat) == "number" and
+    value.start_beat == math.floor(value.start_beat) and type(value.fine_start_ms) == "number" and
+    value.fine_start_ms == value.fine_start_ms and value.fine_start_ms ~= math.huge and value.fine_start_ms ~= -math.huge and
+    (value.origin_sample == nil or type(value.origin_sample) == "number")
 end
 
 -- Worker protocol IDs cannot contain paths. Keep loaded projects distinct while
@@ -47,10 +65,23 @@ function Runtime.new(deps)
   if deps.analysis_transport ~= nil then
     assert(valid_transport(deps.analysis_transport), "nonblocking analysis_transport is required")
   end
+  if deps.analysis_worker ~= nil then
+    assert(type(deps.analysis_worker) == "table" and type(deps.analysis_worker.open) == "function",
+      "nonblocking analysis_worker.open is required")
+  end
+  assert(not (deps.analysis_transport and deps.analysis_worker), "choose one analysis transport source")
+  if deps.paint ~= nil then
+    assert(type(deps.paint) == "table", "paint integration must be a table")
+    for _, name in ipairs({ "read_source", "write_source", "reproject" }) do
+      assert(type(deps.paint[name]) == "function", "paint." .. name .. " is required")
+    end
+  end
   local self = setmetatable({ worker = deps.worker, now = deps.now, transport_stopped = deps.transport_stopped,
     on_status = deps.on_status, on_capture_saved = deps.on_capture_saved, on_analysis_ready = deps.on_analysis_ready,
     seconds = deps.seconds or 45, controller = nil, transport = nil, closing = false,
-    worker_closed = false, enter_requested = false, analysis_transport = deps.analysis_transport, analysis_controller = nil }, Runtime)
+    worker_closed = false, enter_requested = false, analysis_transport = deps.analysis_transport,
+    analysis_worker = deps.analysis_worker, analysis_worker_closed = false, analysis_controller = nil,
+    paint_context = nil, paint_transactions = nil, alignment = nil }, Runtime)
   assert(type(self.seconds) == "number" and self.seconds % 1 == 0 and self.seconds >= 1 and self.seconds <= 45,
     "capture seconds must be 1..45")
   self.machine = Machine.new({ project_id = project_identity(deps.project_id),
@@ -61,6 +92,18 @@ function Runtime.new(deps)
     on_release = function(token) self:_release(token) end,
     on_state = function(state, token) if self.on_status then self.on_status(state, token) end end,
   })
+  if deps.paint then
+    self.paint_transactions = Transactions.new({
+      context = function() return self.paint_context end,
+      bank = function() return self.machine.bank end,
+      transport_stopped = self.transport_stopped,
+      read_source = deps.paint.read_source,
+      write_source = deps.paint.write_source,
+      reproject = deps.paint.reproject,
+      adapter = deps.paint.adapter,
+      journal_limit = deps.paint.journal_limit,
+    })
+  end
   return self
 end
 
@@ -83,12 +126,35 @@ function Runtime:_open()
     on_capture_saved = function(asset, token) if self.on_capture_saved then self.on_capture_saved(asset, token) end end,
     on_analysis_ready = function(asset, token) self:_analysis_ready(asset, token) end,
   })
-  if self.analysis_transport then
-    self.analysis_controller = AnalysisController.new({ machine=self.machine, transport=self.analysis_transport,
-      on_status=function(code, detail) self:_status(code, detail) end })
-  end
+  if self.analysis_transport then self:_open_analysis_transport(self.analysis_transport) end
+  -- Preflight the detached inference worker while the editor becomes visible.
+  -- A published capture must not spend its first analysis poll launching Python
+  -- or discovering a missing pinned artifact.
+  if self.analysis_worker then self:_open_analysis_worker() end
   self:_status("CAPTURE_WORKER_READY")
   return result("OK")
+end
+
+function Runtime:_open_analysis_transport(transport)
+  if self.analysis_controller then return result("OK") end
+  if not valid_transport(transport) then return result("ANALYSIS_WORKER_UNAVAILABLE") end
+  self.analysis_transport = transport
+  self.analysis_controller = AnalysisController.new({ machine=self.machine, transport=transport,
+    on_status=function(code, detail) self:_status(code, detail) end,
+    alignment=function() return copy(self.alignment) end })
+  self:_status("ANALYSIS_WORKER_READY")
+  return result("OK")
+end
+
+function Runtime:_open_analysis_worker()
+  if self.analysis_controller then return result("OK") end
+  if not self.analysis_worker or self.closing then return result("ANALYSIS_WORKER_UNAVAILABLE") end
+  local ok, transport, problem = pcall(self.analysis_worker.open, self.analysis_worker)
+  if not ok or not valid_transport(transport) then
+    self:_status("ANALYSIS_WORKER_UNAVAILABLE", ok and problem or transport)
+    return result("ANALYSIS_WORKER_UNAVAILABLE")
+  end
+  return self:_open_analysis_transport(transport)
 end
 
 -- Called when the fifth algorithm becomes visible. It starts only the host
@@ -114,6 +180,7 @@ function Runtime:_analyse(token)
   if self.controller then self.controller:analyse(token) end
 end
 function Runtime:_analysis_ready(asset, token)
+  if not self.analysis_controller and self.analysis_worker then self:_open_analysis_worker() end
   if self.analysis_controller then
     local dispatched = self.analysis_controller:dispatch(asset, token)
     if dispatched.code ~= "DISPATCHED" then
@@ -125,7 +192,7 @@ function Runtime:_analysis_ready(asset, token)
     end
     return result("OK")
   end
-  if self.on_analysis_ready then self.on_analysis_ready(asset, token) end
+  if self.on_analysis_ready then self.on_analysis_ready(asset, token, copy(self.alignment)) end
   return result("OK")
 end
 function Runtime:_cancel(token)
@@ -146,6 +213,29 @@ end
 function Runtime:finish(enough_audio)
   return self.machine:finish_capture(self.transport_stopped() == true, enough_audio == true)
 end
+function Runtime:set_window_start(desired_start)
+  if self.transport_stopped() ~= true then return result("STOP_SEQUENCER") end
+  if self.machine.state ~= Machine.READY or type(self.machine.bank) ~= "table" then return result("NOT_READY") end
+  local bank, problem = Bank.with_window_start(self.machine.bank, desired_start)
+  if not bank then return problem or result("INVALID_WINDOW_START") end
+  self.machine.bank = bank
+  return result("WINDOW_MOVED", { window_start = bank.window_start })
+end
+function Runtime:set_sensitivity(lane, sensitivity)
+  if self.transport_stopped() ~= true then return result("STOP_SEQUENCER") end
+  if self.machine.state ~= Machine.READY or type(self.machine.bank) ~= "table" then return result("NOT_READY") end
+  local bank, problem = Bank.with_sensitivity(self.machine.bank, lane, sensitivity)
+  if not bank then return problem or result("INVALID_SENSITIVITY") end
+  self.machine.bank = bank
+  return result("SENSITIVITY_UPDATED", { lane = lane, sensitivity = sensitivity })
+end
+function Runtime:apply_alignment(alignment)
+  if not valid_alignment(alignment) then return result("INVALID_ALIGNMENT") end
+  if self.transport_stopped() ~= true then return result("STOP_SEQUENCER") end
+  if self.machine.state ~= Machine.READY then return result("NOT_READY") end
+  self.alignment = copy(alignment)
+  return self.machine:begin_reanalysis(true)
+end
 function Runtime:transport_started()
   return self.machine:transport_started()
 end
@@ -160,8 +250,69 @@ function Runtime:prepare_project_change(continuation)
 end
 function Runtime:project_loaded(project_id)
   assert(type(project_id) == "string" and project_id ~= "", "project_id is required")
-  self.machine:replace_project(project_identity(project_id))
+  local identity = project_identity(project_id)
+  self.machine:replace_project(identity)
+  if self.paint_transactions then self.paint_transactions:project_loaded(identity) end
   return result("OK")
+end
+
+-- Project lifecycle calls this only after its capture-save gate returns
+-- SAVE_NOW.  Active jobs therefore cannot leak a partial bank into tab.save.
+function Runtime:serialize_project(data, project_path)
+  if type(data) ~= "table" then return result("INVALID_PROJECT") end
+  if self.machine.state ~= Machine.READY or not self.machine.bank then
+    data.rhythm_doctor = nil
+    return result("OK")
+  end
+  local identity = type(project_path) == "string" and project_identity(project_path) or self.machine.project_id
+  local bank = copy(self.machine.bank)
+  bank.project_id = identity
+  if not Persistence.encode(bank) then return result("INVALID_BANK") end
+  self.machine.project_id, self.machine.bank = identity, bank
+  if self.paint_transactions then self.paint_transactions:project_loaded(identity) end
+  data.rhythm_doctor = assert(Persistence.encode(bank))
+  return result("OK")
+end
+
+-- The project validator has already rejected unknown/malformed envelopes before
+-- model replacement.  Rebinding the saved bank to this project path gives a
+-- loaded copy its own generation/identity and prevents cross-project callbacks.
+function Runtime:restore_project(data, project_path)
+  if type(data) ~= "table" then return result("INVALID_PROJECT") end
+  local bank, problem = Persistence.decode(data.rhythm_doctor)
+  if not bank and problem and problem.code == "EMPTY" then return result("OK") end
+  if not bank then return result(problem and problem.code or "INVALID_BANK") end
+  local identity = project_identity(project_path)
+  bank.project_id = identity
+  local restored = self.machine:restore_ready_bank(bank)
+  if restored.ok and self.paint_transactions then self.paint_transactions:project_loaded(identity) end
+  return restored
+end
+
+-- The UI owns the currently displayed lane/window/policy values.  It passes a
+-- fresh immutable-looking context for each operation; keeping it only for the
+-- synchronous transaction prevents a delayed preview from following later UI
+-- selection changes.
+function Runtime:_with_paint_context(context, operation)
+  if not self.paint_transactions then return nil, result("PAINT_UNAVAILABLE") end
+  if type(context) ~= "table" then return nil, result("INVALID_CONTEXT") end
+  self.paint_context = context
+  local values = table.pack(operation(self.paint_transactions))
+  self.paint_context = nil
+  return table.unpack(values, 1, values.n)
+end
+
+function Runtime:paint_preview(context, target)
+  return self:_with_paint_context(context, function(transactions) return transactions:preview(target) end)
+end
+function Runtime:paint_commit(context, preview, replace_confirmed)
+  return self:_with_paint_context(context, function(transactions) return transactions:commit(preview, replace_confirmed) end)
+end
+function Runtime:paint_undo(context, target)
+  return self:_with_paint_context(context, function(transactions) return transactions:undo(target) end)
+end
+function Runtime:paint_redo(context, target)
+  return self:_with_paint_context(context, function(transactions) return transactions:redo(target) end)
 end
 
 function Runtime:_close_if_released()
@@ -169,6 +320,9 @@ function Runtime:_close_if_released()
   self.worker_closed = true
   if self.transport and type(self.transport.close) == "function" then self.transport:close() end
   if type(self.worker.close) == "function" then self.worker:close() end
+  if self.analysis_worker and not self.analysis_worker_closed and type(self.analysis_worker.close) == "function" then
+    self.analysis_worker_closed = true; self.analysis_worker:close()
+  end
   self:_status("CAPTURE_WORKER_CLOSED")
 end
 
@@ -176,6 +330,7 @@ end
 -- helper, since pretending a native release succeeded could race a project load.
 function Runtime:poll()
   if self.enter_requested and not self.controller and not self.closing then self:_open() end
+  if self.enter_requested and self.analysis_worker and not self.analysis_controller and not self.closing then self:_open_analysis_worker() end
   local event = self.controller and self.controller:poll() or result("NO_EVENT")
   local analysis_event = self.analysis_controller and self.analysis_controller:poll() or result("NO_EVENT")
   self:_close_if_released()

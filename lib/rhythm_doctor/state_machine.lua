@@ -245,6 +245,16 @@ function Machine:replace_project(project_id)
   self:_cancel_job(true); self.project_id, self.bank, self.previous_ready = project_id, nil, nil
   self.analysis_revision = 0; self:_set_state(Machine.EMPTY)
 end
+
+-- A project file can restore only a fully validated, completed bank.  Workers,
+-- release leases, modals and deferred saves never cross that boundary.
+function Machine:restore_ready_bank(bank)
+  if self:is_active() or not self.resources_are_released or not Bank.valid_ready(bank) then return result("INVALID_BANK") end
+  self.generation, self.analysis_revision = bank.generation, bank.analysis_revision
+  self.bank, self.previous_ready, self.pending_save, self.pending_project_change = bank, nil, false, nil
+  self:_invalidate_modal(); self.last_message = nil; self:_set_state(Machine.READY)
+  return result("OK")
+end
 function Machine:cleanup()
   self.pending_project_change = nil
   self:_cancel_job(true); self.bank, self.previous_ready = nil, nil; self:_set_state(Machine.EMPTY)
