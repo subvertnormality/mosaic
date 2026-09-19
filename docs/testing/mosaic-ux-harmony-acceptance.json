@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "subject": "Mosaic UX Harmony and Musical Merge MM-01 through MM-07",
+  "scope": {
+    "harmony_plan": "C:/Users/andy/Documents/ChatGPT/monome-emulator/docs/proposals/mosaic-ux-harmony/HARMONY-PLAN.md",
+    "musical_merge_plan": "C:/Users/andy/Documents/ChatGPT/monome-emulator/docs/proposals/mosaic-ux-harmony/MUSICAL-MERGE-PLAN.md",
+    "included_cards": ["MM-01", "MM-02", "MM-03", "MM-04", "MM-05", "MM-06", "MM-07"],
+    "excluded_cards": ["MM-08+ Interlock / fragments"],
+    "exclusion_reason": "MM-08+ is explicitly gated as later design work and was not requested for this implementation."
+  },
+  "source": {
+    "revision": "97c65c5fcceeea5592b069256253716f9049e730",
+    "dirty_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tree_sha256": "14805ea50150138d6836aa1047e04f58e020ae45f47cf74be215a73d72a4a521",
+    "file_count": 1253
+  },
+  "automated_tests": {
+    "lua_unit_and_integration": {
+      "passed": true,
+      "tests": 1834,
+      "failures": 0,
+      "command": "cd lib/tests && lua run_tests.lua"
+    },
+    "python_inventory_and_ci_guards": {
+      "passed": true,
+      "tests": 18,
+      "failures": 0,
+      "modules": [
+        "tests.behaviour.test_collection",
+        "tests.behaviour.test_inventory",
+        "tests.behaviour.test_hardening_matrix",
+        "tests.behaviour.test_lua_syntax",
+        "tests.behaviour.test_lua_test_names",
+        "tests.behaviour.ci.test_select_shard",
+        "tests.behaviour.ci.test_verify_full"
+      ]
+    },
+    "solver_evidence": {
+      "covered_by_full_lua_suite": true,
+      "properties": [
+        "deterministic lexicographic choice",
+        "small-case brute-force agreement",
+        "five-voice bounded search",
+        "budget-exceeded fail-closed result",
+        "range, crossing, inversion, coverage and lifecycle failures"
+      ]
+    }
+  },
+  "emulator_behaviour": {
+    "passed": true,
+    "complete_regression_run": false,
+    "reason_not_complete": "Feature acceptance selection; exhaustive repository campaign remains sharded CI scope.",
+    "started": "2026-09-19T22:18:57+0100",
+    "finished": "2026-09-19T22:26:14+0100",
+    "suite_sha256": "459a476c884ff9746b59c480dd59f4ad3554fc7b1aaedd4f161a2c4403658c31",
+    "case_runs": 16,
+    "failed_case_runs": 0,
+    "lanes": ["real-time", "controlled-experimental"],
+    "cases": [
+      "M-MERGE-FOUNDATION-001",
+      "M-MERGE-PHRASE-001",
+      "M-HARMONY-REVOICE-001",
+      "M-HARMONY-PATTERN-001",
+      "M-HARMONY-ENSEMBLE-001",
+      "M-HARMONY-PERSIST-001",
+      "M-HARMONY-FAILURE-001",
+      "M-HARMONY-HELD-001"
+    ],
+    "manifest_sha256": {
+      "real-time": {
+        "M-HARMONY-ENSEMBLE-001": "9a394976571b1ebeb40dcf29c61f05f4c4de326062ca523672d755fc1adf3c7f",
+        "M-HARMONY-FAILURE-001": "33ae93d7cefb23dad4f0216aa5c8097c6954bb36b197ca61b48670d8f0d4028c",
+        "M-HARMONY-HELD-001": "c841f9db31b5769d764d88b517baf66650daaa63fbbd3f218257abd690e6852b",
+        "M-HARMONY-PATTERN-001": "713e1d446802c0a7d51818a376caf8c2540d2fb51bdf75f683b68a9cc891b31e",
+        "M-HARMONY-PERSIST-001": "974673fc543513767bf333a22990036af844e0baaf3f126ad100de76fb92ae5d",
+        "M-HARMONY-REVOICE-001": "c2cab4b5df6983b1886b3d1eb8a6a6c55dcceeadd10a5654a8f637fe3c22a7e9",
+        "M-MERGE-FOUNDATION-001": "552457c671d8643817917e5d5aaed92ccbea02d497f109e8736ad0917261aeb0",
+        "M-MERGE-PHRASE-001": "a98dd3586c811a6a4e6f428814bc68ac3c72e8afab98c441f59a13dcdb56372a"
+      },
+      "controlled-experimental": {
+        "M-HARMONY-ENSEMBLE-001": "eb2708500f908c78b1fe5670c86bb7435d92da6e0e747b6f2692c9819249f2fa",
+        "M-HARMONY-FAILURE-001": "13bd6ff40cee5617c93140165eb3c10d9989090286c2b7662eb9e78e49c112ff",
+        "M-HARMONY-HELD-001": "3e9f2d51bf4918c37d610ab491256caf294594bbdff2296af8f6ddb649e02f31",
+        "M-HARMONY-PATTERN-001": "6d197fef83c53bdce1a861169322316ef49945cdcc77201ab6b9a2fb2dfa5c8c",
+        "M-HARMONY-PERSIST-001": "afe9e79e87cfc26dca6a49debb5812e583d1c0af343bf618f8a4c6e18897883c",
+        "M-HARMONY-REVOICE-001": "9d1843a6180476ed65a77f061f5a47b2f291c7ac911c6a7c033dac419ae804bb",
+        "M-MERGE-FOUNDATION-001": "25037f9da51d13fbe7dbe184450f770586468556fa262071895139f0fd884bfe",
+        "M-MERGE-PHRASE-001": "3a928a0b08c836ece631081d4b999e2c2c9b6fdbfededf8a80225bae1ec31ac7"
+      }
+    }
+  },
+  "result": "accepted"
+}
