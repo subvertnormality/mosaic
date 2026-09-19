@@ -1,0 +1,20 @@
+{
+  "scope": "Development-split-only experiment on the v12 corpus, which is the only corpus here carrying BASS annotations. v12 is RENDERED audio, so this tests whether the mechanism works at all, not whether it transfers to real music. No production change was made.",
+  "date": "2026-09-19",
+  "hypothesis": "Partially fixed NMF already keeps bass out of the drum lanes by absorbing it into the freely adapting harmonic dictionary. If that dictionary holds the bass, bass onsets should be readable from its activations, at no extra inference cost.",
+  "verdict": "REFUTED, and the premise was wrong. PFNMF separates drums from not-drums; it does not separate bass from other harmonic content.",
+  "attempts": [
+    {"method": "select harmonic columns whose spectral mass sits in 40-260 Hz, take their weighted activation sum",
+     "best_f1": 0.0424, "recall": 0.0232, "precision": 0.2469},
+    {"method": "reconstruct the harmonic part, band-limit to 40-260 Hz, take half-wave-rectified flux of its energy",
+     "best_f1": 0.2132, "recall": 0.2097, "precision": 0.2168}
+  ],
+  "decisive_diagnostic": {
+    "measure": "number of harmonic dictionary columns carrying at least half their spectral mass in 40-260 Hz",
+    "result": "mean 0.1 of 10 columns",
+    "reading": "Essentially no column is bass-specific. With ten freely adapting columns on a full mix, KL divergence is minimised by broad spectral patterns, not by instrument-shaped parts. The harmonic dictionary is a catch-all holding bass, guitar, keys and vocals together."
+  },
+  "why_BD_works_and_BASS_does_not": "A kick presents the same spectrum on every hit, so a fixed template matches it and the drum/harmonic split does the rest. A bass note presents a different spectrum at every pitch, so no fixed template can match it. Template specificity is exactly what the drum lanes rely on and exactly what bass denies. This is why the literature transcribes bass with pitch tracking rather than template matching, and why a GPL-3 NMF drum dictionary exists while no bass equivalent does.",
+  "comparison": "The pinned UMXHQ plus Basic Pitch chain scores 0.3866 on the same rendered corpus, so the harmonic-residual route is materially worse as well as unprincipled.",
+  "consequence": "Bass needs a pitch-salience front end, not a template. The strongest licence-clean candidate found is jakobabesser/walking_bass_transcription_dnn: MIT, about 13,000 parameters in 64 KB, a four-layer MLP over a 200-dimensional stacked-CQT input, deployable on armv7 with a hand-written forward pass. It outputs salience rather than onsets, so it suits gating candidate onsets as bass-or-not rather than producing them."
+}
