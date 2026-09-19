@@ -100,7 +100,10 @@ class CompositeBackendTests(unittest.TestCase):
         value = composite.compose(self.request, self.runtime)
         self.assertEqual(set(value["lane_onset_gates"]), {"BD", "SD", "CHH", "OHH", "BASS"})
         self.assertEqual(value["detector"], {"backend_id": composite.BACKEND_ID, **self.request["pretrained"]})
-        self.assertTrue(rd_analysis_worker.analysis_is_pretrained(value, **self.request["pretrained"]))
+        # This backend is retained as evidence of a measured-and-rejected
+        # candidate, not as the shipping detector. It emits the CHH/OHH/BASS
+        # taxonomy, which the worker no longer carries, so worker
+        # compatibility is deliberately not asserted here.
         self.assertEqual([candidate["lane"] for candidate in value["candidates"]], ["BD", "SD", "CHH", "OHH", "BASS"])
         self.assertTrue(all(candidate["sample_index"] == 7 for candidate in value["candidates"]))
         self.assertEqual(value["candidates"][-1], {"lane": "BASS", "sample_index": 7, "velocity": 64, "confidence": .7})
@@ -138,7 +141,6 @@ class CompositeBackendTests(unittest.TestCase):
         # already stops on digital silence.
         self.assertEqual([c for c in value["candidates"] if c["lane"] in composite.DRUM_LANES], [])
         self.assertEqual(set(value["lane_onset_gates"]), {"BD", "SD", "CHH", "OHH", "BASS"})
-        self.assertTrue(rd_analysis_worker.analysis_is_pretrained(value, **request["pretrained"]))
         # The tempo is not measurable from silence; the component records that
         # rather than presenting its bank-contract placeholder as a detected tempo.
         component = runtime.analyse_drums(composite.read_pcm_wav(str(silent)),

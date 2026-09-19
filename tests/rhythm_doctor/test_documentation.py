@@ -14,9 +14,10 @@ class RhythmDoctorDocumentationTests(unittest.TestCase):
             self.assertIn("Rhythm Doctor", document)
             self.assertIn("BD", document)
             self.assertIn("SD", document)
-            self.assertIn("CHH", document)
-            self.assertIn("OHH", document)
+            self.assertIn("CYM", document)
             self.assertIn("BASS", document)
+            # OHH and TOM have no lane. The manual must not advertise one.
+            self.assertNotIn("OHH", document)
             self.assertIn("stopped", document.lower())
 
     def test_both_documents_state_the_unconfigured_analysis_backend(self):
