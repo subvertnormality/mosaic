@@ -6,6 +6,7 @@ the GPL-3 partially-fixed NMF drum dictionary published with Wu & Lerch
 Schedl (ISMIR 2012). See tools/rhythm_doctor/data/NMF_TEMPLATES_PROVENANCE.md.
 """
 import json
+import struct
 import subprocess
 import sys
 import tempfile
@@ -296,6 +297,99 @@ class WorkerIntegrationTests(unittest.TestCase):
         self.assertFalse(rd_analysis_worker.analysis_matches_detector(
             dsp.analyse_request(path), {}))
         os.unlink(path)
+
+
+def _riff(path, samples, sample_rate=44100, tag=3, bits=32, channels=2):
+    """Write a WAV exactly as rd_capture.c does when tag/bits are left default."""
+    mono = np.asarray(samples, dtype=np.float32)
+    inter = np.repeat(mono[:, None], channels, axis=1).ravel() if channels == 2 else mono
+    if tag == 3:
+        body = inter.astype("<f4").tobytes()
+    else:
+        body = (np.clip(inter, -1, 1) * 32767).astype("<i2").tobytes()
+    block = channels * bits // 8
+    head = (b"RIFF" + struct.pack("<I", 36 + len(body)) + b"WAVEfmt " + struct.pack("<I", 16)
+            + struct.pack("<H", tag) + struct.pack("<H", channels) + struct.pack("<I", sample_rate)
+            + struct.pack("<I", sample_rate * block) + struct.pack("<H", block)
+            + struct.pack("<H", bits) + b"data" + struct.pack("<I", len(body)))
+    Path(path).write_bytes(head + body)
+    return len(body) // block
+
+
+class CaptureFormatTests(unittest.TestCase):
+    """The native recorder publishes IEEE float, which `wave` refuses.
+
+    Fixtures were 16-bit, so the whole backend passed its tests while being
+    unable to read a single real capture. These pin the actual published format.
+    """
+
+    def _tmp(self):
+        handle = tempfile.NamedTemporaryFile(suffix=".wav", delete=False); handle.close()
+        return handle.name
+
+    def test_reads_the_float32_stereo_format_the_recorder_publishes(self):
+        path = self._tmp()
+        frames = _riff(path, click_train([0.5, 1.0, 1.5], kind="bd"), tag=3, bits=32)
+        mono, rate, count = dsp.read_capture_wav(path)
+        self.assertEqual(rate, 44100)
+        self.assertEqual(count, frames)
+        self.assertTrue(np.isfinite(mono).all())
+        self.assertGreater(np.abs(mono).max(), 0.0)
+        os.unlink(path)
+
+    def test_a_float32_capture_produces_a_worker_valid_analysis(self):
+        path = self._tmp()
+        _riff(path, click_train([0.5, 1.0, 1.5, 2.0], kind="bd"), tag=3, bits=32)
+        value = dsp.analyse_request(path)
+        d = value["detector"]
+        self.assertTrue(rd_analysis_worker.analysis_is_dsp(
+            value, d["backend_sha256"], d["template_sha256"]))
+        os.unlink(path)
+
+    def test_the_worker_accepts_a_float32_capture_asset(self):
+        import hashlib
+        path = self._tmp()
+        frames = _riff(path, click_train([0.5], kind="bd"), tag=3, bits=32)
+        digest = hashlib.sha256(Path(path).read_bytes()).hexdigest()
+        self.assertTrue(rd_analysis_worker.asset_is_exact(
+            {"wav_path": path, "wav_sha256": digest, "frames": frames, "sample_rate": 44100}))
+        os.unlink(path)
+
+    def test_integer_pcm_still_reads(self):
+        path = self._tmp()
+        _riff(path, click_train([0.5, 1.0], kind="bd"), tag=1, bits=16)
+        mono, rate, _ = dsp.read_capture_wav(path)
+        self.assertEqual(rate, 44100)
+        self.assertGreater(np.abs(mono).max(), 0.0)
+        os.unlink(path)
+
+    def test_an_unsupported_encoding_is_refused_rather_than_misread(self):
+        path = self._tmp()
+        _riff(path, click_train([0.5], kind="bd"), tag=1, bits=8, channels=1)
+        with self.assertRaises(ValueError):
+            dsp.read_capture_wav(path)
+        os.unlink(path)
+
+
+class SampleRateTests(unittest.TestCase):
+    def test_onsets_land_at_the_same_time_at_44k1_and_48k(self):
+        """Frames come from the resampled signal, so timing must use the
+        analysis rate. Using the source rate read a 48 kHz capture ~8.8% fast,
+        corrupting tempo and quantisation."""
+        times = [0.5, 1.0, 1.5, 2.0, 2.5]
+        got = {}
+        for rate in (44100, 48000):
+            handle = tempfile.NamedTemporaryFile(suffix=".wav", delete=False); handle.close()
+            x = click_train(times, sr=rate, kind="bd")
+            _riff(handle.name, x, sample_rate=rate, tag=3, bits=32)
+            value = dsp.analyse_request(handle.name)
+            got[rate] = sorted(c["sample_index"] / rate for c in value["candidates"]
+                               if c["lane"] == "BD")
+            os.unlink(handle.name)
+        self.assertTrue(got[44100] and got[48000], f"no BD onsets: {got}")
+        for a in got[44100]:
+            nearest = min(abs(a - b) for b in got[48000])
+            self.assertLess(nearest, 0.05, f"44.1k onset {a:.3f}s unmatched at 48k: {got[48000]}")
 
 
 if __name__ == "__main__":

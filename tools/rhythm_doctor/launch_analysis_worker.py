@@ -40,6 +40,7 @@ def main() -> int:
     parser.add_argument("--backend-sha256")
     parser.add_argument("--drum-artifact-sha256")
     parser.add_argument("--bass-artifact-sha256")
+    parser.add_argument("--template-sha256")
     args = parser.parse_args()
     args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
     os.chmod(args.runtime, 0o700)
@@ -47,9 +48,16 @@ def main() -> int:
         (args.runtime / name).unlink(missing_ok=True)
     if (args.runtime / "cancel").exists():
         return 0
-    configured = (args.backend, args.backend_sha256, args.drum_artifact_sha256, args.bass_artifact_sha256)
-    if any(value is not None for value in configured) and (args.backend is None or not all(sha256(value) for value in configured[1:])):
-        atomic_text(args.runtime / "error", "incomplete pretrained analysis backend configuration\n")
+    # Either a model-free DSP identity (source + templates) or a pretrained
+    # identity (source + model artifacts). Exactly one, completely.
+    supplied = (args.backend, args.backend_sha256, args.drum_artifact_sha256,
+                args.bass_artifact_sha256, args.template_sha256)
+    is_dsp = args.backend is not None and sha256(args.backend_sha256) and sha256(args.template_sha256) \
+        and args.drum_artifact_sha256 is None and args.bass_artifact_sha256 is None
+    is_pretrained = args.backend is not None and all(sha256(v) for v in (
+        args.backend_sha256, args.drum_artifact_sha256, args.bass_artifact_sha256)) and args.template_sha256 is None
+    if any(value is not None for value in supplied) and not (is_dsp or is_pretrained):
+        atomic_text(args.runtime / "error", "incomplete analysis backend configuration\n")
         return 1
     backend = args.backend.resolve() if args.backend else None
     if backend:
@@ -58,15 +66,16 @@ def main() -> int:
         except OSError:
             backend_valid = False
         if not backend_valid:
-            atomic_text(args.runtime / "error", "invalid pretrained analysis backend\n")
+            atomic_text(args.runtime / "error", "invalid analysis backend\n")
             return 1
     try:
         worker = Path(__file__).with_name("rd_analysis_worker.py")
         process = subprocess.Popen(
             [sys.executable, str(worker), "--runtime", str(args.runtime)] +
-            (["--backend", str(backend), "--backend-sha256", args.backend_sha256,
-              "--drum-artifact-sha256", args.drum_artifact_sha256,
-              "--bass-artifact-sha256", args.bass_artifact_sha256] if backend else []),
+            (["--backend", str(backend), "--backend-sha256", args.backend_sha256] +
+             (["--template-sha256", args.template_sha256] if is_dsp else
+              ["--drum-artifact-sha256", args.drum_artifact_sha256,
+               "--bass-artifact-sha256", args.bass_artifact_sha256]) if backend else []),
             stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
             close_fds=True,
         )

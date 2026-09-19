@@ -209,6 +209,51 @@ def _bass_from_low_onsets(mono, low_onsets, sample_rate):
     return bass
 
 
+# --- capture WAV ------------------------------------------------------------
+
+def read_capture_wav(path):
+    """Read a capture as (mono float32, sample_rate, frames).
+
+    The native recorder publishes WAVE_FORMAT_IEEE_FLOAT (tag 3), 32-bit,
+    stereo. Python's `wave` module rejects tag 3 outright, so parsing the RIFF
+    chunks directly is what lets a real capture be analysed at all. Integer PCM
+    is accepted too, because fixtures and imported material use it.
+    """
+    raw = Path(path).read_bytes()
+    if len(raw) < 12 or raw[:4] != b"RIFF" or raw[8:12] != b"WAVE":
+        raise ValueError("not a RIFF/WAVE file")
+    import struct
+    pos, fmt, data = 12, None, None
+    while pos + 8 <= len(raw):
+        cid, size = raw[pos:pos+4], struct.unpack_from("<I", raw, pos+4)[0]
+        body = raw[pos+8:pos+8+size]
+        if cid == b"fmt " and len(body) >= 16:
+            tag, channels, rate, _, _, bits = struct.unpack_from("<HHIIHH", body, 0)
+            fmt = (tag, channels, rate, bits)
+        elif cid == b"data":
+            data = body
+        pos += 8 + size + (size & 1)
+    if fmt is None or data is None:
+        raise ValueError("missing fmt or data chunk")
+    tag, channels, rate, bits = fmt
+    if channels not in (1, 2) or rate <= 0:
+        raise ValueError("unsupported channel count or sample rate")
+    if tag == 3 and bits == 32:
+        samples = np.frombuffer(data, dtype="<f4").astype(np.float32)
+    elif tag == 1 and bits == 16:
+        samples = np.frombuffer(data, dtype="<i2").astype(np.float32) / 32768.0
+    elif tag == 1 and bits == 32:
+        samples = np.frombuffer(data, dtype="<i4").astype(np.float32) / 2147483648.0
+    else:
+        raise ValueError("unsupported WAV encoding: tag %d, %d bits" % (tag, bits))
+    usable = (samples.size // channels) * channels
+    samples = samples[:usable]
+    if not np.isfinite(samples).all():
+        raise ValueError("capture contains non-finite samples")
+    mono = samples.reshape(-1, channels).mean(axis=1) if channels == 2 else samples
+    return mono.astype(np.float32), int(rate), int(mono.size)
+
+
 # --- tempo -----------------------------------------------------------------
 
 BPM_MIN, BPM_MAX = 40.0, 240.0
@@ -284,52 +329,53 @@ def _sha256_file(path):
 
 def analyse_request(wav_path, deltas=None):
     """Produce one worker-valid analysis result from a captured WAV."""
-    import sys as _sys
-    _sys.path.insert(0, str(Path(__file__).resolve().parent))
-    from pretrained_bass_backend import read_pcm_wav
-    pcm = read_pcm_wav(str(wav_path))
-    mono = _mono_float(pcm)
+    mono, source_rate, _ = read_capture_wav(wav_path)
     deltas = dict(DEFAULT_DELTA if deltas is None else deltas)
     lanes, B_D, geom = load_templates()
-    fps = pcm.sample_rate / float(HOP)
     empty_gates = {lane: float(deltas[lane]) for lane in LANES}
     identity = {"backend_id": BACKEND_ID,
                 "backend_sha256": _sha256_file(Path(__file__).resolve()),
                 "template_sha256": _sha256_file(_TEMPLATES)}
+    empty = {"bpm": DEFAULT_BPM, "tempo_detected": False, "origin_sample": 0,
+             "detector": identity, "lane_onset_gates": empty_gates, "candidates": []}
     if not mono.size or not np.any(mono):
-        return {"bpm": DEFAULT_BPM, "tempo_detected": False, "origin_sample": 0,
-                "detector": identity, "lane_onset_gates": empty_gates, "candidates": []}
-    V = stft_magnitude(mono if pcm.sample_rate == SR else _resample(mono, pcm.sample_rate, SR))
+        return empty
+    analysis = mono if source_rate == SR else _resample(mono, source_rate, SR)
+    V = stft_magnitude(analysis)
     if V.shape[1] < 5:
-        return {"bpm": DEFAULT_BPM, "tempo_detected": False, "origin_sample": 0,
-                "detector": identity, "lane_onset_gates": empty_gates, "candidates": []}
+        return empty
     G_D = pfnmf(V, B_D)
+    # Frames are produced from the RESAMPLED signal, so frame timing is in
+    # analysis-rate terms. Using the source rate here would read a 48 kHz
+    # capture about 8.8% fast and corrupt both tempo and quantisation.
+    fps = SR / float(HOP)
     column = {"BD": "BD", "SD": "SD", "CYM": "CHH"}
     candidates, envelope = [], np.zeros(G_D.shape[1], dtype=np.float64)
-    low_frames = []
+    low_frames, low_row = [], None
+
+    def source_index(frame):
+        """Frame -> sample index in the ORIGINAL capture's coordinates."""
+        return int(round(frame * HOP * source_rate / float(SR)))
+
     for lane in ("BD", "SD", "CYM"):
         row = G_D[lanes.index(column[lane])]
         envelope += row / (row.max() + EPS)
         frames = pick_peaks(row, deltas[lane])
         if lane == "BD":
-            low_frames = list(frames)
-            low_row = row
+            low_frames, low_row = list(frames), row
         for frame, velocity in zip(frames, velocities(row, frames, fps)):
-            candidates.append({"lane": lane,
-                               "sample_index": int(round(frame * HOP * pcm.sample_rate / SR)),
+            candidates.append({"lane": lane, "sample_index": source_index(frame),
                                "velocity": int(velocity),
                                "confidence": float(min(1.0, row[frame] / (row.max() + EPS)))})
-    # BASS reclassifies pitched low-band onsets; the lanes are not exclusive.
-    span = int(PITCH_WINDOW_SECONDS * pcm.sample_rate)
+    span = int(PITCH_WINDOW_SECONDS * source_rate)
     bass_frames = [f for f in low_frames
-                   if pitch_confidence(mono[int(round(f * HOP * pcm.sample_rate / SR)):
-                                            int(round(f * HOP * pcm.sample_rate / SR)) + span],
-                                       pcm.sample_rate) >= PITCH_CONFIDENCE_CUT]
-    for frame, velocity in zip(bass_frames, velocities(low_row, bass_frames, fps)):
-        candidates.append({"lane": "BASS",
-                           "sample_index": int(round(frame * HOP * pcm.sample_rate / SR)),
-                           "velocity": int(velocity),
-                           "confidence": float(min(1.0, low_row[frame] / (low_row.max() + EPS)))})
+                   if pitch_confidence(mono[source_index(f):source_index(f) + span],
+                                       source_rate) >= PITCH_CONFIDENCE_CUT]
+    if low_row is not None:
+        for frame, velocity in zip(bass_frames, velocities(low_row, bass_frames, fps)):
+            candidates.append({"lane": "BASS", "sample_index": source_index(frame),
+                               "velocity": int(velocity),
+                               "confidence": float(min(1.0, low_row[frame] / (low_row.max() + EPS)))})
     candidates.sort(key=lambda c: (c["sample_index"], LANES.index(c["lane"])))
     bpm, detected = estimate_bpm(envelope, fps)
     return {"bpm": float(bpm), "tempo_detected": bool(detected), "origin_sample": 0,

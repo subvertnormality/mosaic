@@ -31,5 +31,25 @@ assert(analysis_calls[1]:find("--bass-artifact-sha256 '"..string.rep('c',64).."'
 local incomplete = AnalysisHost.new({ code_root='/code/mosaic', runtime_root='/data/analysis incomplete', backend='/opt/rd-analysis',
   execute=function() error('partial configuration must not launch') end, read_line=function() end,
   transport_factory=function() error('partial configuration must not connect') end })
-assert(select(2,incomplete:open())=='invalid pretrained analysis backend configuration')
-print('rhythm_doctor worker_host: 1 test passed')
+assert(select(2,incomplete:open())=='invalid analysis backend configuration')
+
+-- The shipped classical-DSP backend pins its source and template table rather
+-- than model artifacts. Demanding model digests it does not have made the
+-- detector that ships impossible to launch.
+local dsp_calls = {}
+local dsp = AnalysisHost.new({ code_root='/code/mosaic', runtime_root='/data/analysis dsp',
+  backend='/opt/rd-dsp', backend_sha256=string.rep('d',64), template_sha256=string.rep('e',64),
+  execute=function(command) dsp_calls[#dsp_calls+1]=command; return true end, read_line=function() end,
+  transport_factory=function(path) return {socket=path,send=function() end,poll=function() end} end })
+assert(select(2,dsp:open())=='analysis worker starting')
+assert(dsp_calls[1]:find("--template-sha256 '"..string.rep('e',64).."'",1,true))
+assert(not dsp_calls[1]:find("--drum-artifact-sha256",1,true), 'DSP launch must not claim model artifacts')
+
+-- Mixing the two identity shapes pins less than it claims, so it fails closed.
+local mixed = AnalysisHost.new({ code_root='/code/mosaic', runtime_root='/data/analysis mixed',
+  backend='/opt/rd-dsp', backend_sha256=string.rep('d',64), template_sha256=string.rep('e',64),
+  drum_artifact_sha256=string.rep('f',64),
+  execute=function() error('mixed configuration must not launch') end, read_line=function() end,
+  transport_factory=function() error('mixed configuration must not connect') end })
+assert(select(2,mixed:open())=='invalid analysis backend configuration')
+print('rhythm_doctor worker_host: 3 tests passed')

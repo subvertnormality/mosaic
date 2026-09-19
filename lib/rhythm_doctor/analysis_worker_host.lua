@@ -19,26 +19,40 @@ function Host.new(deps)
   deps=deps or {}; local root=deps.code_root or code_root()
   assert(type(root)=="string" and root~="", "Mosaic code root is required")
   assert(type(deps.runtime_root)=="string" and deps.runtime_root:sub(1,1)=="/", "absolute runtime root is required")
-  local configured=deps.backend ~= nil or deps.backend_sha256 ~= nil or deps.drum_artifact_sha256 ~= nil or deps.bass_artifact_sha256 ~= nil
-  local valid=not configured or (type(deps.backend)=="string" and deps.backend:sub(1,1)=="/" and sha256(deps.backend_sha256) and
-    sha256(deps.drum_artifact_sha256) and sha256(deps.bass_artifact_sha256))
+  -- Two identity shapes. A model-free DSP backend pins its source and its
+  -- template table; a pretrained chain pins its model artifacts. Exactly one
+  -- must be supplied completely: half a set fails closed rather than pinning
+  -- less than it claims.
+  local configured=deps.backend ~= nil or deps.backend_sha256 ~= nil or deps.drum_artifact_sha256 ~= nil
+    or deps.bass_artifact_sha256 ~= nil or deps.template_sha256 ~= nil
+  local located=type(deps.backend)=="string" and deps.backend:sub(1,1)=="/" and sha256(deps.backend_sha256)
+  local dsp=located and sha256(deps.template_sha256) and deps.drum_artifact_sha256==nil and deps.bass_artifact_sha256==nil
+  local pretrained=located and sha256(deps.drum_artifact_sha256) and sha256(deps.bass_artifact_sha256)
+    and deps.template_sha256==nil
+  local valid=not configured or dsp or pretrained
   return setmetatable({code_root=root, runtime_root=deps.runtime_root, backend=deps.backend,
     backend_sha256=deps.backend_sha256, drum_artifact_sha256=deps.drum_artifact_sha256,
-    bass_artifact_sha256=deps.bass_artifact_sha256, configuration_error=not valid,
+    bass_artifact_sha256=deps.bass_artifact_sha256, template_sha256=deps.template_sha256,
+    configuration_error=not valid,
     execute=deps.execute or os.execute, read_line=deps.read_line or read_line,
     transport_factory=assert(deps.transport_factory, "transport factory is required"), launched=false, closed=false}, Host)
 end
 function Host:open()
   if self.closed then return nil, "analysis worker host closed" end
-  if self.configuration_error then return nil, "invalid pretrained analysis backend configuration" end
+  if self.configuration_error then return nil, "invalid analysis backend configuration" end
   if not self.launched then
     self.launched=true
     local command="mkdir -p "..shell_quote(self.runtime_root).." && rm -f "..shell_quote(self.runtime_root.."/cancel")..
       " && python3 "..shell_quote(self.code_root.."/tools/rhythm_doctor/launch_analysis_worker.py")..
       " --runtime "..shell_quote(self.runtime_root)
     if self.backend then
-      command=command.." --backend "..shell_quote(self.backend).." --backend-sha256 "..shell_quote(self.backend_sha256)..
-        " --drum-artifact-sha256 "..shell_quote(self.drum_artifact_sha256).." --bass-artifact-sha256 "..shell_quote(self.bass_artifact_sha256)
+      command=command.." --backend "..shell_quote(self.backend).." --backend-sha256 "..shell_quote(self.backend_sha256)
+      if self.template_sha256 then
+        command=command.." --template-sha256 "..shell_quote(self.template_sha256)
+      else
+        command=command.." --drum-artifact-sha256 "..shell_quote(self.drum_artifact_sha256)..
+          " --bass-artifact-sha256 "..shell_quote(self.bass_artifact_sha256)
+      end
     end
     command=command.." >/dev/null 2>&1 &"
     local ok=self.execute(command); if ok~=true and ok~=0 then return nil, "analysis worker launcher failed" end

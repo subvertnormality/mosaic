@@ -83,6 +83,9 @@ local function init_rhythm_doctor()
     backend_sha256 = os.getenv("RHYTHM_DOCTOR_ANALYSIS_BACKEND_SHA256"),
     drum_artifact_sha256 = os.getenv("RHYTHM_DOCTOR_DRUM_ARTIFACT_SHA256"),
     bass_artifact_sha256 = os.getenv("RHYTHM_DOCTOR_BASS_ARTIFACT_SHA256"),
+    -- The shipped classical-DSP backend pins its own source and template
+    -- table instead of model artifacts, and needs no downloads.
+    template_sha256 = os.getenv("RHYTHM_DOCTOR_TEMPLATE_SHA256"),
     transport_factory = function(socket_path, result_root)
       return include("mosaic/lib/rhythm_doctor/analysis_transport").new(socket_path, result_root)
     end,

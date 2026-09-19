@@ -66,12 +66,12 @@ class AnalysisWorkerValidation(unittest.TestCase):
             partial = subprocess.run([sys.executable, str(LAUNCHER), "--runtime", str(runtime), "--backend", str(backend)],
                                      text=True, capture_output=True, timeout=3)
             self.assertNotEqual(partial.returncode, 0)
-            self.assertIn("incomplete pretrained analysis backend configuration", (runtime / "error").read_text())
+            self.assertIn("incomplete analysis backend configuration", (runtime / "error").read_text())
             changed = subprocess.run([sys.executable, str(LAUNCHER), "--runtime", str(runtime), "--backend", str(backend),
                                        "--backend-sha256", "0" * 64, "--drum-artifact-sha256", DRUM_HASH,
                                        "--bass-artifact-sha256", BASS_HASH], text=True, capture_output=True, timeout=3)
             self.assertNotEqual(changed.returncode, 0)
-            self.assertIn("invalid pretrained analysis backend", (runtime / "error").read_text())
+            self.assertIn("invalid analysis backend", (runtime / "error").read_text())
 
 
 @unittest.skipUnless(hasattr(socket, "AF_UNIX") and hasattr(socket, "SOCK_SEQPACKET"), "requires AF_UNIX SOCK_SEQPACKET")
@@ -197,6 +197,53 @@ pathlib.Path(%r).write_text('completed')
             self.assertFalse(any((self.runtime / "results").glob("*.json")))
         finally:
             self.stop(process, peer)
+
+
+
+class DspBackendConfigurationTests(unittest.TestCase):
+    """The launcher must be able to configure the shipped DSP backend.
+
+    It previously demanded model-artifact digests that a model-free backend
+    does not have, so the detector that ships could not be launched at all.
+    """
+
+    def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory(prefix="rd-dspcfg-")
+        self.root = Path(self.temporary.name)
+
+    def tearDown(self):
+        self.temporary.cleanup()
+
+    def _backend(self):
+        path = self.root / "backend.py"
+        path.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+        path.chmod(0o700)
+        return path, hashlib.sha256(path.read_bytes()).hexdigest()
+
+    def _launch(self, runtime, *extra):
+        return subprocess.call([sys.executable, str(LAUNCHER), "--runtime", str(runtime), *extra],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    def test_a_template_identity_is_accepted(self):
+        runtime = self.root / "rt-ok"
+        backend, digest = self._backend()
+        code = self._launch(runtime, "--backend", str(backend), "--backend-sha256", digest,
+                            "--template-sha256", "b" * 64)
+        self.assertNotEqual((runtime / "error").exists() and (runtime / "error").read_text(), 
+                            "incomplete analysis backend configuration\n")
+
+    def test_mixing_the_two_identity_shapes_is_refused(self):
+        runtime = self.root / "rt-mixed"
+        backend, digest = self._backend()
+        self._launch(runtime, "--backend", str(backend), "--backend-sha256", digest,
+                     "--template-sha256", "b" * 64, "--drum-artifact-sha256", "c" * 64)
+        self.assertIn("incomplete analysis backend configuration", (runtime / "error").read_text())
+
+    def test_a_template_identity_missing_its_digest_is_refused(self):
+        runtime = self.root / "rt-partial"
+        backend, digest = self._backend()
+        self._launch(runtime, "--backend", str(backend), "--backend-sha256", digest)
+        self.assertIn("incomplete analysis backend configuration", (runtime / "error").read_text())
 
 
 if __name__ == "__main__": unittest.main()

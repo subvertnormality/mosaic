@@ -73,14 +73,58 @@ def capture_is_bounded(request: dict[str, Any]) -> bool:
     return type(frames) is int and type(rate) is int and 8000 <= rate <= 192000 and 0 <= frames <= 45 * rate
 
 
+def wav_geometry(path: str) -> tuple[int, int]:
+    """Return (frames, sample_rate) for a capture WAV.
+
+    The native recorder publishes WAVE_FORMAT_IEEE_FLOAT (tag 3), which
+    Python's `wave` module refuses, so the RIFF chunks are parsed directly.
+    Integer PCM still goes through `wave`, which validates it more strictly.
+    """
+    with open(path, "rb") as source:
+        head = source.read(12)
+        if len(head) < 12 or head[:4] != b"RIFF" or head[8:12] != b"WAVE":
+            raise wave.Error("not a RIFF/WAVE file")
+        fmt = None
+        data_bytes = None
+        while True:
+            header = source.read(8)
+            if len(header) < 8:
+                break
+            cid, size = header[:4], int.from_bytes(header[4:8], "little")
+            if cid == b"fmt ":
+                body = source.read(size)
+                if len(body) < 16:
+                    raise wave.Error("short fmt chunk")
+                tag = int.from_bytes(body[0:2], "little")
+                channels = int.from_bytes(body[2:4], "little")
+                rate = int.from_bytes(body[4:8], "little")
+                bits = int.from_bytes(body[14:16], "little")
+                fmt = (tag, channels, rate, bits)
+            elif cid == b"data":
+                data_bytes = size
+                source.seek(size + (size & 1), 1)
+            else:
+                source.seek(size + (size & 1), 1)
+    if fmt is None or data_bytes is None:
+        raise wave.Error("missing fmt or data chunk")
+    tag, channels, rate, bits = fmt
+    if channels not in (1, 2) or rate <= 0 or bits % 8 or bits == 0:
+        raise wave.Error("unsupported WAV geometry")
+    if tag not in (1, 3):
+        raise wave.Error("unsupported WAV encoding")
+    block = channels * (bits // 8)
+    if block <= 0:
+        raise wave.Error("unsupported WAV block alignment")
+    return data_bytes // block, rate
+
+
 def asset_is_exact(request: dict[str, Any]) -> bool:
     path = request.get("wav_path")
     digest = request.get("wav_sha256")
     if not isinstance(path, str) or not path.startswith("/") or "\x00" in path or not isinstance(digest, str) or not re.fullmatch(r"[0-9a-fA-F]{64}", digest):
         return False
     try:
-        with wave.open(path, "rb") as source:
-            frames, rate = source.getnframes(), source.getframerate()
+        frames, rate = wav_geometry(path)
         h = hashlib.sha256()
         with open(path, "rb") as source:
             for chunk in iter(lambda: source.read(1 << 20), b""):
@@ -272,10 +316,24 @@ class Worker:
 def main() -> int:
     parser=argparse.ArgumentParser(); parser.add_argument("--runtime", type=Path, required=True); parser.add_argument("--backend", type=Path)
     parser.add_argument("--backend-sha256"); parser.add_argument("--drum-artifact-sha256"); parser.add_argument("--bass-artifact-sha256")
+    parser.add_argument("--template-sha256")
     args=parser.parse_args(); args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
-    configured = (args.backend, args.backend_sha256, args.drum_artifact_sha256, args.bass_artifact_sha256)
-    if any(value is not None for value in configured) and (args.backend is None or not all(isinstance(value, str) and SHA256.fullmatch(value) for value in configured[1:])):
-        parser.error("backend and all three pinned SHA-256 values are required together")
+    # Two identity shapes are supported, and a backend must supply exactly one
+    # of them completely. A model-free DSP backend pins its source and template
+    # table; a pretrained chain pins its model artifacts. Half a set is a
+    # configuration error rather than a weaker pin.
+    supplied = (args.backend, args.backend_sha256, args.drum_artifact_sha256,
+                args.bass_artifact_sha256, args.template_sha256)
+    def pinned(*values):
+        return all(isinstance(v, str) and SHA256.fullmatch(v) for v in values)
+    if any(value is not None for value in supplied):
+        dsp = args.backend is not None and pinned(args.backend_sha256, args.template_sha256) \
+            and args.drum_artifact_sha256 is None and args.bass_artifact_sha256 is None
+        pretrained = args.backend is not None and pinned(args.backend_sha256, args.drum_artifact_sha256,
+                                                         args.bass_artifact_sha256) and args.template_sha256 is None
+        if not (dsp or pretrained):
+            parser.error("configure a backend with either --template-sha256 or both model artifact digests, "
+                         "alongside --backend and --backend-sha256")
     if args.backend and (not args.backend.is_file() or not os.access(args.backend, os.X_OK)):
         parser.error("backend must be an executable local file")
     signal.signal(signal.SIGTERM, stop)
