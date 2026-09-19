@@ -59,7 +59,7 @@ identity check, not model training.
 
 | Component | Pretrained artifact and labels | Published size | License/provenance | Runtime and selection |
 | --- | --- | ---: | --- | --- |
-| Omnizart `drum_keras` | The source Keras model has 13 raw drum heads; source heads 0/1/4/6 map to BD/SD/CHH/OHH. The release also supplies an ONNX serialization, whose tensor order must be proven equivalent before applying that mapping. | `drum_keras@model.onnx`: 31,048,009 bytes; alternative TF variable-data shard: 31,090,686 bytes. They are alternative serializations, not additive model size. The release supplies no checksum digest. | Source is MIT. The separately hosted checkpoint artifacts have no explicit licence or checksum digest, so source terms do not establish redistribution rights for the weights. | **Best drum research candidate; blocked.** Prefer the release ONNX graph for portability, but first prove Keras/ONNX activation parity, then an ARMv7 runtime. The CQT/beat frontend, peak decoder, RSS and latency remain unmeasured. |
+| Omnizart `drum_keras` | The source Keras model has 13 raw drum heads; source heads 0/1/4/6 map to BD/SD/CHH/OHH. The release also supplies an ONNX serialization, whose tensor order must be proven equivalent before applying that mapping. | `drum_keras@model.onnx`: 31,048,009 bytes; downloaded SHA-256 `b6a2fd48850b3ef94fec3e2c97277ded6e3d366e7807a8ed2f0119b3da6e2d3f`. The alternative TF variable-data shard is 31,090,686 bytes. They are alternative serializations, not additive model size. The release supplies no checksum digest. | Source is MIT. The separately hosted checkpoint artifacts have no explicit licence or checksum digest, so source terms do not establish redistribution rights for the weights. | **Best drum research candidate; blocked.** The exact v0.4.2 CQT/beat frontend and ONNX graph executed on an eight-second desktop fixture in 3.746 s + 1.138 s, with 1,216,540 KiB peak RSS. This proves the graph/frontend path, not Keras parity or quality, and the desktop memory result does not support ARMv7 norns feasibility. |
 | ADTOF-PyTorch | BD, SD and one HH class only; no separate CHH/OHH and no BASS. | 3,617,805 bytes. | The upstream ADTOF material is CC BY-NC-SA 4.0; the port/weight has no recorded compatible licence. | Rejected for active lanes and delivery.  Its executed old-corpus diagnostic also missed the quality gate; it remains useful only as historical evidence. |
 | Open-Unmix UMXHQ BASS | Stereo bass stem, followed by a separate onset model; it does not create drum gates. | 35,637,796 bytes. | Open-Unmix source is MIT and the official Zenodo weight record declares MIT (`evidence/umxhq-official-license.json`). | **Pinned bass-separation candidate only.** The published `.pth` uses Torch/torchaudio and a three-layer bidirectional LSTM, so it is offline analysis and has no ARMv7/RSS/latency proof. Its separate magnitude-flux diagnostic F1 was 0.6098, below the gate; that is not a Basic Pitch-chain score. |
 | Spotify Basic Pitch `nmp.tflite` | Instrument-agnostic pitched-note/onset activations; constrain its decoder to the declared bass range after separation, then retain onsets only. | 204,448 bytes. | The Basic Pitch repository is Apache-2.0 and distributes TF, TFLite and ONNX serializations together. | **Pinned BASS-onset candidate only.** It works best on one instrument at a time, so a mixture must not be sent directly to it. Existing corrected diagnostics concern the separately recorded 0.4.0 wheel/ONNX path and do not validate this TFLite serialization; no TFLite ARMv7 result exists. |
@@ -108,6 +108,30 @@ artifact identities through `RHYTHM_DOCTOR_ANALYSIS_BACKEND`,
 missing lane, or an identity mismatch fails closed. The adapter installs,
 downloads, trains, and fine-tunes nothing; the operator must supply every frozen
 local artifact and its runtime sessions explicitly.
+
+`tools/rhythm_doctor/pretrained_bass_runtime.py` supplies the concrete pinned
+desktop UMXHQ and Basic Pitch ONNX loaders used by that factory boundary. It
+uses the UMXHQ centred-Hann STFT, magnitude mask and mixture-phase inverse STFT,
+then Basic Pitch's mono polyphase-resampled frontend and published overlapping
+ONNX windows. Basic Pitch's 88 output columns are mapped from MIDI offset 21,
+so the BASS range MIDI 28..60 is columns 7..39. The executable model smoke and
+resource result is recorded in
+`evidence/omnizart-onnx-desktop-smoke-2026-09-19.json`; its synthetic fixture
+and provisional gates are deliberately excluded from quality acceptance.
+The concrete UMXHQ-to-Basic-Pitch execution smoke is separately recorded in
+`evidence/pretrained-bass-desktop-smoke-2026-09-19.json`. Its sustained-sine
+result proves the pinned sessions connect; it also confirms the decoder settings
+still need the frozen five-lane corpus before they can become release gates.
+
+The ready-to-inject factory is
+`tools/rhythm_doctor/pretrained_runtime_factory.py:make`. In addition to the
+worker's existing backend and factory pins, it requires local paths in
+`RHYTHM_DOCTOR_OMNIZART_SOURCE`, `RHYTHM_DOCTOR_OMNIZART_ONNX`,
+`RHYTHM_DOCTOR_UMXHQ_BASS`, and `RHYTHM_DOCTOR_BASIC_PITCH_ONNX`. It verifies
+Omnizart source commit `0779fd5699be6605b9944ab3c5013af3c49f65df` and all
+three artifact hashes before constructing sessions. Its named provisional
+decoder gates exist for research execution only and cannot become release
+defaults until the independent active-lane corpus passes.
 
 The completed corrected 20-second pilot is immutable at
 `tests/rhythm_doctor/artifacts/detector-pilot-corrected-v2/`, with raw

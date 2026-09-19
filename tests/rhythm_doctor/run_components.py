@@ -44,12 +44,14 @@ def main():
     selected = list(PYTHON_TESTS) + (list(NATIVE_TESTS) if args.native else [])
     if args.detector:
         selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter',
-                         'audio_frontend', 'capture_worker_ipc', 'omnizart_onnx',
-                         'omnizart_onnx_backend', 'pretrained_composite_backend'))
+                        'audio_frontend', 'capture_worker_ipc', 'omnizart_onnx',
+                         'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
+                         'pretrained_composite_backend'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
     detector_tests = {'detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend',
-                      'omnizart_onnx', 'omnizart_onnx_backend', 'pretrained_composite_backend'}
+                      'omnizart_onnx', 'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
+                      'pretrained_composite_backend'}
     commands += [(name, [args.analysis_python if name in detector_tests else sys.executable,
                          '-m', 'unittest', 'discover', '-s',
                         'tests/rhythm_doctor', '-p', 'test_' + name + '.py', '-v'])

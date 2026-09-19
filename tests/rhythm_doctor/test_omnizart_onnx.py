@@ -58,12 +58,8 @@ class OmnizartOnnxTests(unittest.TestCase):
     def test_fake_session_uses_upstream_patch_shape_and_preserves_each_hat_head(self):
         features = np.zeros((5, 120, 120), dtype=np.float32)
         output = np.zeros((2, 13, 4, 1), dtype=np.float32)
-        output[0, 0, 0, 0] = .90  # BD
-        output[0, 1, 1, 0] = .80  # SD
-        output[1, 1, 0, 0] = .80
-        output[0, 4, 2, 0] = .70  # CHH / GM 42
-        output[1, 4, 1, 0] = .70
-        output[1, 6, 3, 0] = .60  # OHH / GM 46
+        for head, strength in ((0, .90), (1, .80), (4, .70), (6, .60)):
+            output[0, head, 2, 0] = strength
         session = FakeSession(output)
 
         raw = omnizart.predict_raw_heads(session, features, batch_size=2)
@@ -77,6 +73,32 @@ class OmnizartOnnxTests(unittest.TestCase):
         )
         self.assertEqual({event["lane"] for event in events}, {"BD", "SD", "CHH", "OHH"})
         self.assertNotIn("HH", {event["lane"] for event in events})
+
+    def test_unbounded_onnx_activations_are_normalized_to_bounded_confidence(self):
+        raw = np.full((7, 13), 30.0, dtype=np.float32)
+        raw[:, 0] = [30, 31, 40, 32, 31, 30, 29]
+        raw[:, 4] = [25, 26, 27, 42, 26, 25, 24]
+        events = omnizart.decode_drum_heads(
+            raw, np.arange(7) / 10, 8000,
+            {"BD": .75, "SD": .75, "CHH": .75, "OHH": .75},
+        )
+        self.assertEqual([event["lane"] for event in events], ["BD", "CHH"])
+        self.assertTrue(all(0.0 <= event["confidence"] <= 1.0 for event in events))
+        self.assertTrue(all(1 <= event["velocity"] <= 127 for event in events))
+
+    def test_source_z_score_gates_have_an_explicit_bounded_equivalent(self):
+        self.assertAlmostEqual(omnizart.z_score_gate_to_confidence(.85), .802337, places=6)
+        self.assertAlmostEqual(omnizart.z_score_gate_to_confidence(1.2), .884930, places=6)
+        self.assertAlmostEqual(omnizart.z_score_gate_to_confidence(.17), .567495, places=6)
+
+    def test_endpoints_are_not_peaks_matching_the_source_scipy_decoder(self):
+        raw = np.zeros((5, 13), dtype=np.float32)
+        raw[:, 0] = [20, 0, 40, 0, 30]
+        events = omnizart.decode_drum_heads(
+            raw, np.arange(5) / 10, 8000,
+            {"BD": .5, "SD": .5, "CHH": .5, "OHH": .5},
+        )
+        self.assertEqual([(event["lane"], event["sample_index"]) for event in events], [("BD", 1600)])
 
     def test_backend_result_carries_verified_artifact_and_four_distinct_gates(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -96,7 +118,11 @@ class OmnizartOnnxTests(unittest.TestCase):
         self.assertEqual(result["drum_component"]["drum_artifact_sha256"], digest)
         self.assertEqual(result["drum_component"]["backend_id"], "omnizart-onnx-raw-heads-v1")
         self.assertEqual(result["lane_onset_gates"], {"BD": .5, "SD": .5, "CHH": .5, "OHH": .5})
-        self.assertEqual(result["candidates"], [{"lane": "CHH", "sample_index": 4000, "velocity": 96, "confidence": .75}])
+        self.assertEqual(len(result["candidates"]), 1)
+        self.assertEqual(result["candidates"][0]["lane"], "CHH")
+        self.assertEqual(result["candidates"][0]["sample_index"], 4000)
+        self.assertGreater(result["candidates"][0]["confidence"], .5)
+        self.assertLessEqual(result["candidates"][0]["velocity"], 127)
 
 
 if __name__ == "__main__":

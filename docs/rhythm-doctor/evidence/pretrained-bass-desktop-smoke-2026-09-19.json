@@ -1,0 +1,26 @@
+{
+  "acceptance_claimed": false,
+  "scope": "Windows x86_64 desktop execution smoke on a generated one-second 55 Hz sine; no corpus-quality, silence, ARMv7, norns, or latency acceptance claim",
+  "artifacts": {
+    "open_unmix_umxhq_sha256": "8d85a5bd3f996a8867fca0e8442e077e5a3f5ec747a6112742452a8f347b39c8",
+    "basic_pitch_onnx_sha256": "2c3c1d144bfa61ad236e92e169c13535c880469a12a047d4e73451f2c059a0ec"
+  },
+  "input": {
+    "kind": "generated stereo 55 Hz sine",
+    "sample_rate": 44100,
+    "seconds": 1,
+    "amplitude_pcm16": 4000
+  },
+  "result": {
+    "load_seconds": 1.1636127000674605,
+    "inference_seconds": 0.6896475000539795,
+    "bass_candidate_count": 3,
+    "candidate_sample_indices": [8192, 34304, 41984]
+  },
+  "findings": [
+    "The concrete UMXHQ magnitude-mask and mixture-phase inverse-STFT loader executes and feeds the pinned Basic Pitch ONNX graph.",
+    "The Basic Pitch MIDI offset regression maps its 88 columns from MIDI 21 and limits BASS to MIDI 28..60.",
+    "A separate executable regression makes digital silence return no BASS candidates before model execution; this sine smoke is intentionally not a musical-onset quality oracle.",
+    "The three candidates on a sustained sine show that development-selected threshold/refractory settings still require the frozen active-lane corpus gate."
+  ]
+}

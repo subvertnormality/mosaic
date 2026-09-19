@@ -11,6 +11,7 @@ parity before this adapter is enabled.
 from __future__ import annotations
 
 import hashlib
+import math
 from pathlib import Path
 import re
 from typing import Any
@@ -125,6 +126,39 @@ def _validate_gates(gates: Any) -> dict[str, float]:
     return result
 
 
+def _bounded_head_confidences(activations: np.ndarray) -> np.ndarray:
+    """Match Omnizart's per-head z-normalization, then bound it as a percentile.
+
+    The published ONNX emits unbounded activation scores and upstream inference
+    standardizes each selected head before peak finding.  A standard-normal CDF
+    preserves that ordering and expresses the fixed decoder gate on the worker's
+    required 0..1 confidence scale.  A constant head contains no evidence and is
+    left at zero rather than producing NaNs or a synthetic peak.
+    """
+    if not np.isfinite(activations).all():
+        raise TensorContractError("OMNIZART_DECODE_TENSOR_INVALID")
+    bounded = np.zeros_like(activations, dtype=np.float32)
+    root_two = math.sqrt(2.0)
+    for head in DRUM_HEADS.values():
+        values = activations[:, head].astype(np.float64)
+        deviation = float(np.std(values))
+        if deviation <= np.finfo(np.float32).eps:
+            continue
+        z_scores = (values - float(np.mean(values))) / deviation
+        bounded[:, head] = np.fromiter(
+            (0.5 * (1.0 + math.erf(float(value) / root_two)) for value in z_scores),
+            dtype=np.float32, count=len(z_scores),
+        )
+    return bounded
+
+
+def z_score_gate_to_confidence(value: float) -> float:
+    """Convert one source-decoder z-score threshold to the bounded ABI scale."""
+    if not isinstance(value, (int, float)) or isinstance(value, bool) or not math.isfinite(value):
+        raise TensorContractError("OMNIZART_DRUM_GATES_INVALID")
+    return 0.5 * (1.0 + math.erf(float(value) / math.sqrt(2.0)))
+
+
 def decode_drum_heads(raw: Any, mini_beats: Any, sample_rate: int, gates: Any) -> list[dict[str, Any]]:
     """Peak-decode four independent raw heads; CHH and OHH are never combined."""
     activations = np.asarray(raw, dtype=np.float32)
@@ -134,12 +168,16 @@ def decode_drum_heads(raw: Any, mini_beats: Any, sample_rate: int, gates: Any) -
         raise TensorContractError("OMNIZART_DECODE_TENSOR_INVALID")
     if not isinstance(sample_rate, int) or sample_rate < 8000 or not np.isfinite(positions).all() or np.any(positions < 0):
         raise TensorContractError("OMNIZART_DECODE_TIMING_INVALID")
+    confidences = _bounded_head_confidences(activations)
     candidates: list[dict[str, Any]] = []
     for lane, head in DRUM_HEADS.items():
-        values = activations[:, head]
-        for index, confidence in enumerate(values):
-            before = values[index - 1] if index else -np.inf
-            after = values[index + 1] if index + 1 < len(values) else -np.inf
+        values = confidences[:, head]
+        # scipy.signal.find_peaks, used by the source decoder, does not treat
+        # either endpoint as a peak because it lacks two neighbours.
+        for index in range(1, len(values) - 1):
+            confidence = values[index]
+            before = values[index - 1]
+            after = values[index + 1]
             if confidence >= selected_gates[lane] and confidence >= before and confidence > after:
                 candidates.append({"lane": lane, "sample_index": int(round(float(positions[index]) * sample_rate)),
                                    "velocity": int(round(1 + 126 * float(confidence))), "confidence": float(confidence)})

@@ -1,4 +1,5 @@
 """Executable protocol checks for the fail-closed Omnizart drum component."""
+from __future__ import annotations
 import hashlib
 import json
 import os

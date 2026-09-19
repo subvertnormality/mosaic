@@ -40,7 +40,7 @@ class DrumSession(object):
         self.calls.append(feed["patches"])
         output = np.zeros((len(feed["patches"]), 13, 4, 1), dtype=np.float32)
         for head in (0, 1, 4, 6):
-            output[0, head, 0, 0] = .9
+            output[0, head, 1, 0] = .9
         return [output]
 
 
@@ -51,7 +51,7 @@ class Features(object):
     def extract(self, pcm):
         self.calls.append(pcm)
         return {"features": np.zeros((4, 120, 120), dtype=np.float32),
-                "mini_beats": np.asarray((0., .1, .2, .3)), "bpm": 120., "origin_sample": 7}
+                "mini_beats": np.asarray((0., 0., 0., 0.)), "bpm": 120., "origin_sample": 7}
 
 
 class Separator(object):
@@ -147,10 +147,10 @@ class D:
  def get_inputs(self): return [I()]
  def run(self, names, feed):
   result=np.zeros((len(feed['patches']),13,4,1),dtype=np.float32)
-  for head in (0,1,4,6): result[0,head,0,0]=.9
+  for head in (0,1,4,6): result[0,head,1,0]=.9
   return [result]
 class F:
- def extract(self, pcm): return {'features':np.zeros((4,120,120),dtype=np.float32),'mini_beats':np.asarray((0.,.1,.2,.3)),'bpm':120.,'origin_sample':7}
+ def extract(self, pcm): return {'features':np.zeros((4,120,120),dtype=np.float32),'mini_beats':np.asarray((0.,0.,0.,0.)),'bpm':120.,'origin_sample':7}
 class S:
  def separate(self, pcm): return PCM(b'\\0\\0'*pcm.frames,pcm.sample_rate,1,2,pcm.frames)
 class O:

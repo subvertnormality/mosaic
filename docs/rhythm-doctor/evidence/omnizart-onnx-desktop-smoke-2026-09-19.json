@@ -1,0 +1,50 @@
+{
+  "acceptance_claimed": false,
+  "scope": "x86_64 WSL desktop smoke only; exact checkpoint-era frontend and published ONNX; synthetic eight-second fixture; no Keras parity, corpus-quality, ARMv7, norns, licence, or redistribution claim",
+  "source": {
+    "repository": "https://github.com/Music-and-Culture-Technology-Lab/omnizart.git",
+    "commit": "0779fd5699be6605b9944ab3c5013af3c49f65df",
+    "release_tag": "checkpoints-20211001",
+    "frontend": "omnizart.feature.wrapper_func.extract_patch_cqt",
+    "audio_loader_compatibility": "the source's intended librosa fallback was selected explicitly because evaluating adapter.SpleeterError re-imports an absent optional Spleeter package"
+  },
+  "artifact": {
+    "name": "drum_keras@model.onnx",
+    "bytes": 31048009,
+    "sha256": "b6a2fd48850b3ef94fec3e2c97277ded6e3d366e7807a8ed2f0119b3da6e2d3f",
+    "published_sha256_available": false,
+    "checkpoint_licence_statement_available": false
+  },
+  "fixture": {
+    "name": "v11-clipped.wav",
+    "sha256": "96515571a4ee6e8b9034b48fb836599f879a067d2976fdb0620324f56617c605",
+    "sample_rate": 16000,
+    "seconds": 8,
+    "purpose": "execution and resource smoke only; not active five-lane quality evidence"
+  },
+  "runtime": {
+    "python": "3.8.5",
+    "numpy": "1.23.5",
+    "scipy": "1.10.1",
+    "librosa": "0.8.1",
+    "madmom": "0.16.1",
+    "pillow": "8.3.2",
+    "onnxruntime": "1.16.3 CPUExecutionProvider"
+  },
+  "result": {
+    "feature_shape": [129, 120, 120],
+    "raw_shape": [129, 13],
+    "raw_min": -19.948965072631836,
+    "raw_max": 88.8570556640625,
+    "event_counts_at_nonaccepted_smoke_gates": {"BD": 14, "SD": 16, "CHH": 31, "OHH": 43},
+    "frontend_seconds": 3.7459250530000645,
+    "inference_seconds": 1.1376097439997466,
+    "max_rss_kib": 1216540
+  },
+  "findings": [
+    "The published graph executes with the exact source frontend and produces the documented 13-head tensor.",
+    "Raw activations are unbounded; treating them as probabilities is incorrect. The adapter now applies the source decoder's per-head z-normalisation and a monotonic normal-CDF mapping to its required 0..1 confidence ABI.",
+    "The source scipy peak decoder excludes endpoints; the adapter now does the same.",
+    "Peak RSS exceeded 1.1 GiB on x86_64 desktop, so this measurement does not support local-norns feasibility and strengthens the ARMv7 blocker."
+  ]
+}

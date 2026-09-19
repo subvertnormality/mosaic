@@ -43,8 +43,15 @@ class CompositeRuntime(object):
                  bass_pipeline, bass_gate):
         if not callable(getattr(feature_provider, "extract", None)):
             raise ValueError("feature_provider.extract is required")
-        if not isinstance(bass_pipeline, BassPipeline):
-            raise ValueError("BassPipeline is required")
+        # The concrete UMXHQ -> Basic Pitch session is intentionally not a
+        # ``BassPipeline``: its PCM hand-off is 44.1 kHz stereo and its
+        # published Basic Pitch decoder runs at 22.05 kHz. Keep the worker
+        # boundary structural so it can accept that concrete session while
+        # retaining the same pin and analysis contract as the legacy adapter.
+        if (not callable(getattr(bass_pipeline, "analyse", None)) or
+                not isinstance(getattr(bass_pipeline, "artifact_sha256", None), str) or
+                not SHA256.fullmatch(bass_pipeline.artifact_sha256)):
+            raise ValueError("pinned bass pipeline is required")
         self.drum_session = drum_session
         self.drum_model_path = Path(drum_model_path)
         self.feature_provider = feature_provider
