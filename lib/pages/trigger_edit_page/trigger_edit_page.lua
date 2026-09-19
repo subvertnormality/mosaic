@@ -529,6 +529,10 @@ function trigger_edit_page.handle_rhythm_doctor_key(n, z)
   if not rhythm_doctor or not rhythm_doctor.key then return nil end
   return rhythm_doctor:key(n, z)
 end
+function trigger_edit_page.handle_rhythm_doctor_encoder(n, d)
+  if not rhythm_doctor or not rhythm_doctor.enc then return nil end
+  return rhythm_doctor:enc(n, d)
+end
 function trigger_edit_page.disconnect_rhythm_doctor()
   if rhythm_doctor and rhythm_doctor.disconnect then rhythm_doctor:disconnect() end
 end

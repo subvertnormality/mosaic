@@ -12,8 +12,8 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries',
-             'capture_transitions', 'assets', 'capture_controller', 'runtime',
+LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries', 'paint_transactions',
+             'capture_transitions', 'assets', 'capture_controller', 'analysis_controller', 'analysis_runtime', 'runtime',
              'project_lifecycle_runtime', 'ui_adapter', 'worker_host', 'app_surface')
 PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit',
                 'acquisition_quality', 'grid_quality', 'native_transport')

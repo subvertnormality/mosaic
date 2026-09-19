@@ -10,6 +10,9 @@ local Adapter = {}
 Adapter.__index = Adapter
 
 Adapter.LANES = { "BD", "SD", "HH", "TOM", "BASS" }
+Adapter.SETUP_FIELDS = { "TEMPO", "MANUAL BPM", "INPUT" }
+Adapter.MIN_BPM, Adapter.MAX_BPM = 40, 240
+Adapter.INPUT_SOURCES = { "stereo", "left", "right" }
 local capture_states = { LISTENING = true, RECORDING = true }
 local function outcome(code, extra)
   extra = extra or {}
@@ -28,6 +31,36 @@ end
 
 local function stopped(self)
   return not self.transport_running and self.is_transport_stopped() == true
+end
+
+local function bounded_bpm(value)
+  value = math.floor(tonumber(value) or 120)
+  return math.max(Adapter.MIN_BPM, math.min(Adapter.MAX_BPM, value))
+end
+
+local function source_label(source)
+  if source == "left" then return "L" end
+  if source == "right" then return "R" end
+  return "STEREO"
+end
+
+local function setup_available(self)
+  local state = state_of(self)
+  return state == "EMPTY" or state == "FAILED" or state == "READY"
+end
+
+local function setup_values(self)
+  return self.setup_draft or {
+    capture_mode = self.capture_mode, manual_bpm = self.manual_bpm, input_source = self.input_source,
+  }
+end
+
+local function begin_setup(self)
+  if not self.setup_draft then
+    self.setup_draft = {
+      capture_mode = self.capture_mode, manual_bpm = self.manual_bpm, input_source = self.input_source,
+    }
+  end
 end
 
 local function modal_copy(token)
@@ -68,16 +101,65 @@ function Adapter.new(deps)
   assert(type(deps.transport_stopped) == "function", "transport_stopped is required")
   local mode = deps.mode or "auto"
   assert(mode == "auto" or mode == "manual", "mode must be auto or manual")
+  local input_source = deps.input_source or "stereo"
+  assert(input_source == "stereo" or input_source == "left" or input_source == "right", "input_source must be stereo, left, or right")
   return setmetatable({ runtime = deps.runtime, is_transport_stopped = deps.transport_stopped,
     capture_mode = mode, lane = "BD", record_held = false, modal = nil,
+    manual_bpm = bounded_bpm(deps.manual_bpm), input_source = input_source, setup_field = 1, setup_draft = nil,
     worker_ready = false, transport_running = false, progress = {}, feedback = nil }, Adapter)
 end
 
 function Adapter:set_capture_mode(mode)
   if mode ~= "auto" and mode ~= "manual" then return outcome("INVALID_MODE") end
   if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  if not setup_available(self) then return outcome("SETUP_UNAVAILABLE") end
   self.capture_mode = mode
+  self.setup_draft = nil
   return outcome("OK")
+end
+
+-- Tempo and input selection are intentionally local UI configuration.  This
+-- adapter does not assert that a capture/analysis backend consumes BPM or
+-- input routing; the existing runtime continues to receive only auto/manual.
+function Adapter:enc(n, d)
+  if n ~= 2 and n ~= 3 then return outcome("UNCLAIMED") end
+  if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  if not setup_available(self) then return outcome("SETUP_UNAVAILABLE") end
+  if type(d) ~= "number" or d == 0 then return outcome("UNCLAIMED") end
+  begin_setup(self)
+  if n == 2 then
+    local direction = d > 0 and 1 or -1
+    self.setup_field = ((self.setup_field - 1 + direction * math.abs(d)) % #Adapter.SETUP_FIELDS) + 1
+    return outcome("SETUP_FIELD_SELECTED", { field = Adapter.SETUP_FIELDS[self.setup_field] })
+  end
+  local draft, field = self.setup_draft, Adapter.SETUP_FIELDS[self.setup_field]
+  if field == "TEMPO" then
+    if math.abs(d) % 2 == 1 then draft.capture_mode = draft.capture_mode == "auto" and "manual" or "auto" end
+  elseif field == "MANUAL BPM" then
+    draft.manual_bpm = bounded_bpm(draft.manual_bpm + d)
+  elseif field == "INPUT" then
+    local index = 1
+    for candidate, source in ipairs(Adapter.INPUT_SOURCES) do if source == draft.input_source then index = candidate end end
+    local direction = d > 0 and 1 or -1
+    index = ((index - 1 + direction * math.abs(d)) % #Adapter.INPUT_SOURCES) + 1
+    draft.input_source = Adapter.INPUT_SOURCES[index]
+  end
+  return outcome("SETUP_EDITED", { field = field })
+end
+
+function Adapter:confirm_setup()
+  if not self.setup_draft then return outcome("UNCLAIMED") end
+  self.capture_mode = self.setup_draft.capture_mode
+  self.manual_bpm = self.setup_draft.manual_bpm
+  self.input_source = self.setup_draft.input_source
+  self.setup_draft = nil
+  return outcome("SETUP_CONFIRMED")
+end
+
+function Adapter:cancel_setup()
+  if not self.setup_draft then return outcome("UNCLAIMED") end
+  self.setup_draft = nil
+  return outcome("SETUP_CANCELLED")
 end
 
 function Adapter:select_lane(lane)
@@ -115,6 +197,7 @@ end
 function Adapter:record_pressed()
   if self.record_held then return outcome("HELD_RECORD") end
   if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  if self.setup_draft then return outcome("SETUP_ACTIVE") end
   self.record_held = true
   local state = state_of(self)
   local value
@@ -162,6 +245,10 @@ function Adapter:key(n, z)
     self.feedback = value and value.code
     return value or outcome("STALE_REQUEST")
   end
+  if self.setup_draft then
+    if n == 2 then return self:cancel_setup() end
+    return self:confirm_setup()
+  end
   if n == 3 and capture_states[state_of(self)] then
     if self.progress.enough_audio ~= true then return outcome("MORE_AUDIO_NEEDED") end
     local value = self.runtime:finish(true)
@@ -175,7 +262,7 @@ end
 -- over modal input and makes the controller gate subsequent capture gestures
 -- until a matching Stop notification arrives.
 function Adapter:transport_started()
-  self.transport_running, self.record_held, self.modal = true, false, nil
+  self.transport_running, self.record_held, self.modal, self.setup_draft = true, false, nil, nil
   if type(self.runtime.transport_started) ~= "function" then return outcome("UNSUPPORTED") end
   return self.runtime:transport_started()
 end
@@ -204,12 +291,15 @@ function Adapter:screen_model()
   local total_steps = type(bank) == "table" and bank.timeline_cells or nil
   local tempo = type(bank) == "table" and bank.bpm or self.progress.tempo
   local tempo_source = type(bank) == "table" and bank.tempo_mode or self.progress.source
+  local setup = setup_values(self)
   local model = { title = "RHYTHM DOCTOR", state = state, lane = self.lane,
     hit_count = hit_count(bank, self.lane), tempo = tempo, tempo_source = tempo_source,
     listening_confidence = self.progress.listening_confidence, acquired_beats = self.progress.acquired_beats,
     analysis_progress = self.progress.analysis_progress, total_steps = total_steps,
     total_bars = type(total_steps) == "number" and math.floor(total_steps / 16) or nil,
-    capture_mode = self.capture_mode, modal = modal_copy(self.modal), finish_enabled = false,
+    capture_mode = setup.capture_mode, manual_bpm = setup.manual_bpm, input_source = source_label(setup.input_source),
+    setup = { active = self.setup_draft ~= nil, field = Adapter.SETUP_FIELDS[self.setup_field] },
+    modal = modal_copy(self.modal), finish_enabled = false,
     worker_ready = self.worker_ready }
   if not stopped(self) then model.status = "STOP SEQUENCER"
   elseif self.modal then model.status = model.modal.title

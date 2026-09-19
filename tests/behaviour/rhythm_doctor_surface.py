@@ -13,13 +13,54 @@ import time
 import traceback
 
 from driver import Driver
+from frame_oracle import render, matches
 from rhythm_doctor import fifth_algorithm
+
+
+def setup_frame(c, field, mode, bpm, input_source):
+    expected = render([
+        (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
+        (0, 22, 10, "SETUP / " + field),
+        (0, 34, 10, (">" if field == "TEMPO" else " ") + "TEMPO " + mode.upper()),
+        (0, 46, 10, (">" if field == "MANUAL BPM" else " ") + "MANUAL BPM " + str(bpm)),
+        (0, 58, 10, (">" if field == "INPUT" else " ") + "INPUT " + input_source),
+    ])
+    c.wait(lambda state: matches(state, expected))
+
+
+def stopped_setup_controls(c):
+    # E2/E3 edit a draft. K2 must discard every field together.
+    c.action(type="enc", n=2, delta=-1); c.elapse(.06)
+    setup_frame(c, "INPUT", "auto", 120, "STEREO")
+    c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    setup_frame(c, "INPUT", "auto", 120, "L")
+    c.action(type="enc", n=2, delta=-1); c.action(type="enc", n=3, delta=7); c.elapse(.06)
+    setup_frame(c, "MANUAL BPM", "auto", 127, "L")
+    c.action(type="enc", n=2, delta=-1); c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    setup_frame(c, "TEMPO", "manual", 127, "L")
+    c.action(type="key", n=2, state=1); c.action(type="key", n=2, state=0); c.elapse(.06)
+
+    # Reopen the draft from the unchanged Auto/120/Stereo values, then commit a
+    # manual configuration and prove the committed values seed the next draft.
+    c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    setup_frame(c, "TEMPO", "manual", 120, "STEREO")
+    c.action(type="enc", n=2, delta=1); c.action(type="enc", n=3, delta=7); c.elapse(.06)
+    setup_frame(c, "MANUAL BPM", "manual", 127, "STEREO")
+    c.action(type="enc", n=2, delta=1); c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    setup_frame(c, "INPUT", "manual", 127, "L")
+    c.action(type="key", n=3, state=1); c.action(type="key", n=3, state=0); c.elapse(.06)
+    c.action(type="enc", n=2, delta=-1); c.elapse(.06)
+    setup_frame(c, "MANUAL BPM", "manual", 127, "L")
+    c.action(type="key", n=2, state=1); c.action(type="key", n=2, state=0); c.elapse(.06)
+    c.results.append(dict(kind="rhythm-doctor-setup", tempo="manual", manual_bpm=127,
+                          input="L", contract="PLAN.md stopped-only setup draft, K2 discard and K3 commit"))
 
 
 def owned_input_and_transport_gate(c):
     fifth_algorithm(c)  # enters algorithm five and selects BASS at x7,y2
     bass = [(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)]
     c.led_values(bass, [4, 4, 4, 4, 15])
+    stopped_setup_controls(c)
 
     # Record is an x1/y2 key-down claim.  Its owned key-up must not turn this
     # gesture into the legacy Pattern 1 fader action or lose lane selection.

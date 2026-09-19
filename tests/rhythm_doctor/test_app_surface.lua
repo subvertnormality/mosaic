@@ -102,6 +102,7 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
     record_pressed = function() calls[#calls + 1] = "record_down" end,
     record_released = function() calls[#calls + 1] = "record_up" end,
     select_lane = function(_, lane) calls[#calls + 1] = "lane:" .. lane; return {code = "LANE_SELECTED"} end,
+    enc = function(_, n, d) calls[#calls + 1] = "enc:" .. n .. "," .. d; return {code = "SETUP_EDITED"} end,
     screen_model = function() return {worker_ready = true} end,
   }
   page.set_rhythm_doctor(doctor); page.register_draws(); page.register_press()
@@ -120,6 +121,8 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
   equal(calls[#calls], "record_up")
   invoke(observed.normal, 7, 2)
   equal(page.get_rhythm_doctor_lane(), "BASS"); equal(calls[#calls], "lane:BASS")
+  equal(page.handle_rhythm_doctor_encoder(2, 1).code, "SETUP_EDITED")
+  equal(calls[#calls], "enc:2,1")
   invoke(observed.normal, 15, 2)
   equal(calls[#calls], "leave", "leaving algorithm five disconnects the adapter")
 end)
@@ -140,7 +143,7 @@ test("transport-gated lane selection leaves the displayed lane unchanged", funct
 end)
 
 test("K2 and K3 reach Rhythm Doctor only while algorithm five is selected", function()
-  local calls, dirty = {}, 0
+  local calls, dirty, texts, ui_draw = {}, 0, {}, nil
   local old_include = include
   local pages_component = { new = function() return {add_page = function() end, select_page = function() end, draw = function() end, next_page = function() end, previous_page = function() end, get_selected_page = function() return 1 end} end }
   local page_component = { new = function() return {} end }
@@ -155,13 +158,19 @@ test("K2 and K3 reach Rhythm Doctor only while algorithm five is selected", func
     }
     return assert(modules[path], path)
   end
-  draw = {register_ui = function() end}; screen = {level = function() end, move = function() end, text = function() end}
+  draw = {register_ui = function(_, _, fn) ui_draw = fn end}
+  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end}
   fn = {dirty_screen = function() dirty = dirty + 1 end, dirty_grid = function() dirty = dirty + 1 end}
   params = {get = function() return 1 end, set = function() end}
   local algorithm = 4
   trigger_edit_page = {
     get_algorithm = function() return algorithm end,
     handle_rhythm_doctor_key = function(n, z) calls[#calls + 1] = {n, z}; return {code = "OK"} end,
+    handle_rhythm_doctor_encoder = function(n, d) calls[#calls + 1] = {n, d}; return {code = "SETUP_EDITED"} end,
+    get_rhythm_doctor_model = function()
+      return { lane = "BD", status = "EMPTY", hit_count = 0, state = "EMPTY", worker_ready = true,
+        setup = {active = true, field = "MANUAL BPM"}, capture_mode = "manual", manual_bpm = 127, input_source = "L" }
+    end,
   }
   local ui = dofile(root .. "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua")
   include = old_include
@@ -169,6 +178,11 @@ test("K2 and K3 reach Rhythm Doctor only while algorithm five is selected", func
   algorithm = 5
   check(ui.key(2, 1)); check(ui.key(3, 1)); equal(#calls, 2)
   equal(calls[1][1], 2); equal(calls[2][1], 3); check(dirty >= 4)
+  ui.enc(2, 1); equal(#calls, 3); equal(calls[3][1], 2); equal(calls[3][2], 1)
+  ui.register_ui_draws(); ui_draw()
+  check(table.concat(texts, " "):find("TEMPO MANUAL", 1, true))
+  check(table.concat(texts, " "):find("MANUAL BPM 127", 1, true))
+  check(table.concat(texts, " "):find("INPUT L", 1, true))
 end)
 
 test("cleanup closes a worker that was still starting and never retries it", function()

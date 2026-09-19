@@ -10,6 +10,7 @@ local function dependency(name, path)
 end
 local Machine = dependency("rhythm_doctor.state_machine", "mosaic/lib/rhythm_doctor/state_machine")
 local Controller = dependency("rhythm_doctor.capture_controller", "mosaic/lib/rhythm_doctor/capture_controller")
+local AnalysisController = dependency("rhythm_doctor.analysis_controller", "mosaic/lib/rhythm_doctor/analysis_controller")
 
 local Runtime = {}
 Runtime.__index = Runtime
@@ -43,10 +44,13 @@ function Runtime.new(deps)
   assert(type(deps.worker) == "table" and type(deps.worker.open) == "function", "nonblocking worker.open is required")
   assert(type(deps.now) == "function", "monotonic now is required")
   assert(type(deps.transport_stopped) == "function", "transport_stopped is required")
+  if deps.analysis_transport ~= nil then
+    assert(valid_transport(deps.analysis_transport), "nonblocking analysis_transport is required")
+  end
   local self = setmetatable({ worker = deps.worker, now = deps.now, transport_stopped = deps.transport_stopped,
     on_status = deps.on_status, on_capture_saved = deps.on_capture_saved, on_analysis_ready = deps.on_analysis_ready,
     seconds = deps.seconds or 45, controller = nil, transport = nil, closing = false,
-    worker_closed = false, enter_requested = false }, Runtime)
+    worker_closed = false, enter_requested = false, analysis_transport = deps.analysis_transport, analysis_controller = nil }, Runtime)
   assert(type(self.seconds) == "number" and self.seconds % 1 == 0 and self.seconds >= 1 and self.seconds <= 45,
     "capture seconds must be 1..45")
   self.machine = Machine.new({ project_id = project_identity(deps.project_id),
@@ -77,8 +81,12 @@ function Runtime:_open()
     transport_stopped = self.transport_stopped, seconds = self.seconds,
     on_status = function(code, detail) self:_status(code, detail) end,
     on_capture_saved = function(asset, token) if self.on_capture_saved then self.on_capture_saved(asset, token) end end,
-    on_analysis_ready = function(asset, token) if self.on_analysis_ready then self.on_analysis_ready(asset, token) end end,
+    on_analysis_ready = function(asset, token) self:_analysis_ready(asset, token) end,
   })
+  if self.analysis_transport then
+    self.analysis_controller = AnalysisController.new({ machine=self.machine, transport=self.analysis_transport,
+      on_status=function(code, detail) self:_status(code, detail) end })
+  end
   self:_status("CAPTURE_WORKER_READY")
   return result("OK")
 end
@@ -105,8 +113,24 @@ end
 function Runtime:_analyse(token)
   if self.controller then self.controller:analyse(token) end
 end
+function Runtime:_analysis_ready(asset, token)
+  if self.analysis_controller then
+    local dispatched = self.analysis_controller:dispatch(asset, token)
+    if dispatched.code ~= "DISPATCHED" then
+      -- A missing or malformed invocation is terminal evidence, never a reason
+      -- to retain the prior ANALYSING label or manufacture a READY bank.
+      self.machine:receive_analysis({ project_id=token.project_id, generation=token.generation,
+        analysis_revision=token.analysis_revision, error="ANALYSIS_DISPATCH_FAILED" })
+      return dispatched
+    end
+    return result("OK")
+  end
+  if self.on_analysis_ready then self.on_analysis_ready(asset, token) end
+  return result("OK")
+end
 function Runtime:_cancel(token)
   if self.controller then self.controller:cancel(token) end
+  if self.analysis_controller then self.analysis_controller:cancel(token) end
 end
 function Runtime:_release(token)
   if self.controller then self.controller:release(token)
@@ -153,8 +177,9 @@ end
 function Runtime:poll()
   if self.enter_requested and not self.controller and not self.closing then self:_open() end
   local event = self.controller and self.controller:poll() or result("NO_EVENT")
+  local analysis_event = self.analysis_controller and self.analysis_controller:poll() or result("NO_EVENT")
   self:_close_if_released()
-  return event
+  return event.code ~= "NO_EVENT" and event or analysis_event
 end
 
 function Runtime:cleanup()
