@@ -1204,6 +1204,100 @@ You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device call
 _Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.
 
 
+## Musical Merge and Voice Leading
+
+Mosaic can reshape a channel's merged rhythm and place its notes into stable
+registers without rewriting any source pattern. Both features are optional and
+default to Off, so an older project keeps its original MIDI, timing and random
+behaviour.
+
+On the Channel page, turn E1 through the existing pages in this order: Masks,
+Trig Locks, Memory, Clock Mods, MIDI Config, Note Dashboard, Merge Shape, then
+Harmony. The ends clamp. On Merge Shape and Harmony, E2 selects a row, E3 changes
+a staged value, K3 validates and applies the whole draft, and K2 discards the
+draft. A stopped edit applies immediately. During playback, Merge Shape displays
+`NEXT CYCLE` and activates before the next channel-cycle onset; Harmony displays
+`NEXT PATTERN` and activates at the next global pattern boundary. Stop makes the
+latest applied request active for the next start.
+
+### Merge Shape
+
+![Merge Shape Foundation rhythm settings on Norns](images/merge-shape-foundation.png)
+
+Mode Off uses the saved legacy Skip, Only or All trig merge. Foundation selects
+one assigned pattern as the protected Anchor. Other assigned trig patterns offer
+candidate additions at non-anchor steps; overlaps remain one anchor. Amount
+admits a deterministic, seed-ranked subset, Accent scales addition velocity, and
+Gap suppresses additions within 0–8 circular channel steps of an anchor. Anchor
+velocity remains authored. Explicit channel/step masks still win, probability
+can still reject an onset, and source patterns are never flattened or changed.
+
+Phrase Cycles can be 1, 2, 4 or 8. Flat, Build, Answer and Fill are stored as
+visible per-cycle percentages; changing a percentage makes a Custom curve.
+Fixed repeats the same ranked additions. Per phrase changes ranking only after a
+complete phrase. Each channel loop advances its own CYCLE counter—even with
+polymetric ranges, swing or mute—and Stop restarts at cycle 1.
+
+Keep anchor pitch uses the anchor pattern's relative note on anchor steps before
+normal scale conversion. Addition Target can be Legacy, the full effective
+scale, selected effective degree indices, or the immutable material of an enabled
+Harmony Ensemble group. Targets affect admitted additions only. Note masks,
+random shifts and fixed-note operations keep their existing precedence and show
+a bypass rather than being quantised twice. Nearest-note ties choose the lower
+pitch. A missing/empty target visibly falls back to the legacy pitch.
+
+Foundation ranking is repeatable for the saved seed and grows as a nested set:
+raising Amount cannot remove an already selected addition while source, gap,
+seed and phrase are unchanged. Interlock, phrase fragments, passing-note freedom
+and silence-aware interlock are later MM-08+ designs and are not part of this
+release.
+
+### Harmony
+
+![Harmony Pattern Tone Map on Norns](images/harmony-tone-map.png)
+
+Harmony offers four mutually exclusive channel modes:
+
+- Off follows the ordinary Mosaic pitch path exactly.
+- Revoice takes the actual root and enabled chord-mask voices after Mosaic's
+  pitch-class decisions, preserving their pitch classes and sounding count while
+  choosing legal octaves and assignments.
+- Pattern maps explicit effective relative values in the current merge binding
+  to Bass, Inner1–3 or Top. Repeated mapped values reuse one pitch for the entire
+  harmonic frame; unmapped values remain Raw. Random, fixed, absolute-mask and
+  chord-mask events visibly bypass Pattern. Conflicting aliases fail closed.
+- Ensemble assigns Bass/Inner/Top roles to one to five explicit monophonic
+  channels. Each member retains its own rhythm, velocity, gate, clock and route,
+  but its pitch is replaced by the shared frame. A conflicting local scale lock
+  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`).
+
+Register rows set inclusive MIDI Low/High, Centre and Preferred leap for every
+role. Smooth prioritises literal common tones and economical movement; Compact
+prioritises register centre/spacing; Independent prioritises movement without a
+common-tone score. Hard options cover crossing, exact unison, strict leap and
+strict bass direction. Bass can be Root, an explicit Inversion tone, Smooth or
+an exact Pedal. Revoice pedals must already be in its input material; only an
+Ensemble group can explicitly allow a non-chord pedal.
+
+The deterministic solver searches every legal pitch-class placement inside the
+configured ranges (up to five voices) and never clamps an illegal result. A frame
+with no solution silences affected mapped voices by default; Legacy fallback is
+explicit. A bounded search reports `BUDGET EXCEEDED` rather than emitting a
+partial answer. Preparing a frame does not change voice history: the first real
+scheduled onset consumes it, while redraws, rests, failed probability, mute and
+missing output do not. Delayed strums and arpeggios keep the pitch snapshot made
+at their onset, and Note Off always releases the pitch and route actually sent.
+
+![Harmony NO VOICING result on Norns](images/harmony-no-voicing.png)
+
+The Channel grid remains the chronological trig/mask surface. Foundation anchors
+and additions therefore appear as active steps there. Final Harmony pitches are
+shown on Note Dashboard/context inspection as planned, scheduled and last-emitted
+values; the projection never writes back into a shared pattern. Copy/save stores
+versioned configuration, not running solver or phrase history. Missing optional
+configuration loads as Off; unknown schema versions reject the project before it
+replaces the active project.
+
 ## Performance Management
 
 _Mosaic_ gives you a lot of control, but it can also be resource intensive. Pushing the sequencer to its limits can cause slow down and lead to an instable external clock. Performance should be fine under normal usage, but more enhancements are planned for future releases. Here are some tips for managing performance:

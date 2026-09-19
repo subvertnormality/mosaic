@@ -40,6 +40,10 @@ function config.new_channel(mode)
     crossing = mode == "pattern",
     exact_unison = false,
     common_tone_priority = true,
+    upper_spacing = 12,
+    bass_separation = 5,
+    bass = {mode = "root", tone_id = "root", direction = "nearest",
+      strict_direction = false, pedal = 48, non_chord_pedal = false},
     roles = {
       v1 = role(24, 60, 48, 12), v2 = role(36, 72, 55, 7),
       v3 = role(43, 79, 62, 7), v4 = role(48, 84, 67, 7),
@@ -124,6 +128,7 @@ local function validate_group(id, group)
     if type(group.template.required[index]) ~= "boolean" then return nil, prefix .. " required mask" end
     if group.template.required[index] then required = required + 1 end
   end
+  if group.template.offsets[1] ~= 0 then return nil, prefix .. " root offset" end
   if required < 1 then return nil, prefix .. " required mask" end
   if type(group.members) ~= "table" or #group.members < 1 or #group.members > 5 then
     return nil, prefix .. " members"
@@ -144,6 +149,12 @@ local function validate_group(id, group)
     not directions[group.bass.direction] or type(group.bass.strict_direction) ~= "boolean" or
     not integer(group.bass.pedal, 0, 127) or type(group.bass.non_chord_pedal) ~= "boolean" then
     return nil, prefix .. " bass"
+  end
+  if group.bass.mode == "pedal" then
+    local bass_role = group.roles and group.roles.bass
+    if not bass_role or group.bass.pedal < bass_role.min or group.bass.pedal > bass_role.max then
+      return nil, prefix .. " pedal range"
+    end
   end
   if type(group.crossing) ~= "boolean" or type(group.pitch_class_doubling) ~= "boolean" or
     type(group.exact_unison) ~= "boolean" or type(group.common_tone_priority) ~= "boolean" or
@@ -166,7 +177,8 @@ local function validate_channel(number, channel, groups)
     not transitions[value.transition] or not transitions[value.repeat_policy] or
     (value.absolute_pitch_policy ~= "pin" and value.absolute_pitch_policy ~= "allow_octave_move") or
     type(value.crossing) ~= "boolean" or type(value.exact_unison) ~= "boolean" or
-    type(value.common_tone_priority) ~= "boolean" then
+    type(value.common_tone_priority) ~= "boolean" or not integer(value.upper_spacing,0,127) or
+    not integer(value.bass_separation,0,127) then
     return nil, prefix .. " voicing policy"
   end
   if value.mode == "ensemble" then
@@ -184,6 +196,17 @@ local function validate_channel(number, channel, groups)
     local ok, reason = validate_role(value.roles["v" .. index], prefix .. " v" .. index)
     if not ok then return nil, reason end
   end
+  if type(value.bass) ~= "table" or not bass_modes[value.bass.mode] or
+    not directions[value.bass.direction] or type(value.bass.strict_direction) ~= "boolean" or
+    not integer(value.bass.pedal, 0, 127) or value.bass.non_chord_pedal ~= false then
+    return nil, prefix .. " bass"
+  end
+  if value.bass.mode == "pedal" then
+    local bass_role = value.roles.v1
+    if value.bass.pedal < bass_role.min or value.bass.pedal > bass_role.max then
+      return nil, prefix .. " pedal range"
+    end
+  end
   if type(value.pattern_maps) ~= "table" then return nil, prefix .. " pattern maps" end
   for binding, map in pairs(value.pattern_maps) do
     if type(binding) ~= "string" or type(map) ~= "table" or map.schema_version ~= 1 or
@@ -192,7 +215,7 @@ local function validate_channel(number, channel, groups)
     end
     for source, assigned_role in pairs(map.assignments) do
       local number_value = tonumber(source)
-      if not integer(number_value, -127, 127) then return nil, prefix .. " pattern map value" end
+      if not integer(number_value, -7, 13) then return nil, prefix .. " pattern map value" end
       if not pattern_roles[assigned_role] then return nil, prefix .. " pattern map role" end
     end
   end

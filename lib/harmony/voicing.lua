@@ -19,9 +19,13 @@ local function lex_less(left, right)
   return false
 end
 
-local function legal_pitches(material_pc, role)
+local function legal_pitches(material_pc, role, pinned)
   local result = {}
   local low, high = role.min, role.max
+  if pinned ~= nil then
+    if pinned >= low and pinned <= high and pc(pinned) == pc(material_pc) then result[1] = pinned end
+    return result
+  end
   local first = low + ((material_pc - low) % 12)
   for pitch = first, high, 12 do result[#result + 1] = pitch end
   return result
@@ -45,6 +49,13 @@ local function assignment_options(frame, role_index, by_id)
     local bass = frame.bass or {}
     if bass.mode == "root" or bass.mode == "inversion" then
       return by_id[bass.tone_id] and {bass.tone_id} or {}
+    elseif bass.mode == "pedal" then
+      local result = {}
+      for id, item in pairs(by_id) do
+        if pc(item.pc) == pc(bass.pedal) then result[#result + 1] = id end
+      end
+      table.sort(result)
+      return result
     end
   end
   local options = {}
@@ -107,6 +118,7 @@ local function score(frame, pitches, assignments, ranks)
     end
   end
 
+  if frame.common_tone_priority == false then common_moved = 0 end
   local values = {direction_violation(frame, pitches)}
   local preset = frame.preset or "smooth"
   if preset == "compact" then
@@ -137,8 +149,8 @@ end
 
 local function hard_legal(frame, pitches, assignments, by_id)
   for index = 2, #pitches do
-    if frame.exact_unison == false and pitches[index] == pitches[index - 1] then
-      return false, "crossing"
+    if frame.exact_unison == false then
+      for earlier=1,index-1 do if pitches[index]==pitches[earlier]then return false,"crossing"end end
     end
     if frame.crossing == false and pitches[index] <= pitches[index - 1] then
       return false, "crossing"
@@ -227,7 +239,8 @@ function voicing.solve(frame)
       local may_reuse = frame.mode == "ensemble" and frame.doubling ~= false
       if may_reuse or not used[id] then
         local item = by_id[id]
-        local candidates = legal_pitches(pc(item.pc), frame.roles[role_index])
+        local candidates = legal_pitches(pc(item.pc), frame.roles[role_index],
+          frame.pins and frame.pins[id])
         if #candidates == 0 then failure.range = true end
         for _, pitch in ipairs(candidates) do
           nodes = nodes + 1
@@ -235,10 +248,23 @@ function voicing.solve(frame)
             exceeded = true
             return
           end
-          if frame.crossing == false and role_index > 1 and pitch <= pitches[role_index - 1] then
+          if role_index == 1 and frame.bass and frame.bass.mode == "pedal" and
+            pitch ~= frame.bass.pedal then
+            failure.range = true
+          elseif frame.crossing == false and role_index > 1 and pitch <= pitches[role_index - 1] then
             failure.crossing = true
-          elseif frame.exact_unison == false and role_index > 1 and pitch == pitches[role_index - 1] then
-            failure.crossing = true
+          elseif frame.exact_unison == false and role_index > 1 then
+            local duplicate=false;for earlier=1,role_index-1 do if pitch==pitches[earlier]then duplicate=true break end end
+            if duplicate then failure.crossing=true else
+              assignments[role_index] = id
+              pitches[role_index] = pitch
+              local was_used = used[id]
+              used[id] = true
+              visit(role_index + 1)
+              used[id] = was_used
+              assignments[role_index] = nil
+              pitches[role_index] = nil
+            end
           else
             assignments[role_index] = id
             pitches[role_index] = pitch

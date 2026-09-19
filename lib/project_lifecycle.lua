@@ -1,5 +1,13 @@
 -- Project operations and autosave share one inhibition state and timer owner.
 local project_lifecycle = {}
+local merge_state=include("mosaic/lib/musical_merge/state")
+local harmony_config_state=include("mosaic/lib/harmony/config_state")
+local harmony_state=include("mosaic/lib/harmony/state")
+local harmony_inspection=include("mosaic/lib/harmony/inspection")
+
+local function reset_optional_feature_transients()
+  merge_state.reset();harmony_config_state.reset();harmony_state.reset();harmony_inspection.reset()
+end
 
 function project_lifecycle.new(as_metro, autosave_timer, param_manager, project_validation, set_splash)
   local autosave_inhibited = false
@@ -35,6 +43,7 @@ local function load_project(pth, allow_missing)
 
   -- Rejection must leave the live project, transport and pending notes intact.
   m_clock:stop()
+  reset_optional_feature_transients()
   print("Loading project " .. pth)
   program.init()
   program.set(saved[2])
@@ -129,6 +138,7 @@ local function save_project(txt, automatic)
 end
 
 local function load_new_project()
+  reset_optional_feature_transients()
   program.init()
   memory.init() -- bind memory to the new project; the old history must not carry over
   for i = 1, 16 do

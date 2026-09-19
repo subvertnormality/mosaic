@@ -78,5 +78,28 @@ function test_harmony_config_pattern_map_accepts_inactive_aliases_and_rejects_in
   luaunit.assert_true(config.validate_song(song))
   song.channels[4].voicing.pattern_maps["p1|average"].assignments["3"] = "third"
   luaunit.assert_equals(({config.validate_song(song)})[2], "channel 4 pattern map role")
+  song.channels[4].voicing.pattern_maps["p1|average"].assignments["3"]="inner2"
+  song.channels[4].voicing.pattern_maps["p1|average"].assignments["14"]="top"
+  luaunit.assert_equals(({config.validate_song(song)})[2],"channel 4 pattern map value")
 end
 
+function test_harmony_config_rejects_nonzero_root_and_pedals_outside_bass_register()
+  local song={channels={}}
+  for channel=1,17 do song.channels[channel]={number=channel}end
+  local group=config.new_group(2);group.template.offsets[1]=1
+  song.voicing={schema_version=1,groups={[1]=group}}
+  luaunit.assert_equals(({config.validate_song(song)})[2],"group 1 root offset")
+  group.template.offsets[1]=0;group.bass.mode="pedal";group.bass.pedal=80
+  luaunit.assert_equals(({config.validate_song(song)})[2],"group 1 pedal range")
+end
+
+function test_harmony_config_non_chord_pedal_is_ensemble_only_and_rule_ranges_are_validated()
+  local song={channels={}}
+  for channel=1,17 do song.channels[channel]={number=channel}end
+  song.channels[1].voicing=config.new_channel("revoice")
+  song.channels[1].voicing.bass.non_chord_pedal=true
+  luaunit.assert_equals(({config.validate_song(song)})[2],"channel 1 bass")
+  song.channels[1].voicing.bass.non_chord_pedal=false
+  song.channels[1].voicing.upper_spacing=128
+  luaunit.assert_equals(({config.validate_song(song)})[2],"channel 1 voicing policy")
+end

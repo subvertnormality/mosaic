@@ -17,6 +17,8 @@ function test_harmony_pattern_binding_is_source_configuration_not_contents_or_ui
   local b = {selected_patterns={[2]=true,[4]=true}, note_merge_mode="average",
     velocity_merge_mode="up", length_merge_mode="down"}
   luaunit.assert_equals(runtime.binding_key(a), runtime.binding_key(b))
+  b.velocity_merge_mode,b.length_merge_mode="down","up"
+  luaunit.assert_equals(runtime.binding_key(a),runtime.binding_key(b))
   b.note_merge_mode = "pattern_number_7"
   luaunit.assert_not_equals(runtime.binding_key(a), runtime.binding_key(b))
 end

@@ -25,8 +25,6 @@ function pattern_harmony.binding_key(channel)
     "pattern-binding-v1",
     table.concat(patterns, ","),
     channel.note_merge_mode or "average",
-    channel.velocity_merge_mode or "average",
-    channel.length_merge_mode or "average",
     target_identity(channel.musical_merge)
   }, "|")
 end
@@ -59,14 +57,14 @@ function pattern_harmony.prepare(song, channel_number, source_revision, binding,
       per_role[role].sources[#per_role[role].sources + 1] = numeric
     end
   end
-  local material, roles = {}, {}
+  local material, roles, entry_previous = {}, {}, {}
   for _, role in ipairs({"bass","inner1","inner2","inner3","top"}) do
     local entry = per_role[role]
     if entry then
       local id = "pattern:" .. role
       material[#material + 1] = {id=id, pc=entry.pc, required=true}
       local configured = role_config(channel, role, id)
-      if configured then roles[#roles + 1] = configured end
+      if configured then roles[#roles + 1] = configured;entry_previous[role]=resolved[entry.sources[1]] end
     end
   end
   if #material == 0 then return {status="raw", binding=binding, mapped={}} end
@@ -75,7 +73,7 @@ function pattern_harmony.prepare(song, channel_number, source_revision, binding,
       mapped=mapped, fallback=channel.fallback}
   end
   local revision = table.concat({binding, map.revision or 0, source_revision}, "|")
-  local result = harmony_state.prepare_pattern(song, channel_number, revision, material, roles, channel)
+  local result = harmony_state.prepare_pattern(song, channel_number, revision, material, roles, channel,entry_previous)
   result.binding, result.mapped, result.fallback = binding, mapped, channel.fallback
   result.role_pitches = result.role_pitches or {}
   return result

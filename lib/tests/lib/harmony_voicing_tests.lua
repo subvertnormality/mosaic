@@ -131,6 +131,41 @@ function test_harmony_voicing_ensemble_covers_required_material_and_allows_doubl
   luaunit.assert_true(covered.root and covered.third and covered.fifth)
 end
 
+function test_harmony_voicing_pedal_is_exact_and_revoice_cannot_invent_its_pitch_class()
+  local roles = {role("v1", 36, 60, 48), role("v2", 48, 72, 60)}
+  local exact = voicing.solve({mode="revoice",policy_version=1,
+    material={{id="root",pc=0},{id="third",pc=4}},roles=roles,
+    crossing=false,exact_unison=false,preset="smooth",node_budget=200000,
+    bass={mode="pedal",pedal=48,direction="nearest"}})
+  luaunit.assert_equals(exact.status, "ok")
+  luaunit.assert_equals(exact.pitches[1], 48)
+  local absent = voicing.solve({mode="revoice",policy_version=1,
+    material={{id="root",pc=2},{id="third",pc=6}},roles=roles,
+    crossing=false,exact_unison=false,preset="smooth",node_budget=200000,
+    bass={mode="pedal",pedal=48,direction="nearest"}})
+  luaunit.assert_equals(absent.status, "no_solution")
+end
+
+function test_harmony_voicing_absolute_pin_is_exact_or_fails_without_clamping()
+  local roles = {role("v1", 48, 60, 54), role("v2", 55, 72, 63)}
+  local exact = solve({{id="root",pc=0},{id="third",pc=4}}, roles,
+    {pins={root=60},bass={mode="smooth",direction="nearest"}})
+  luaunit.assert_equals(exact.status, "ok")
+  luaunit.assert_equals(exact.source_pitches.root, 60)
+
+  local outside = solve({{id="root",pc=0},{id="third",pc=4}}, roles,
+    {pins={root=84},bass={mode="smooth",direction="nearest"}})
+  luaunit.assert_equals(outside.status, "no_solution")
+  luaunit.assert_equals(outside.reason, "range")
+end
+
+function test_harmony_voicing_exact_unison_checks_all_roles_when_crossing_is_allowed()
+  local result = solve({{id="a",pc=0},{id="b",pc=4},{id="c",pc=0}},
+    {role("v1",60,60,60),role("v2",64,64,64),role("v3",60,60,60)},
+    {crossing=true,exact_unison=false})
+  luaunit.assert_equals(result.status, "no_solution")
+end
+
 local function independent_less(left, right)
   if not right then return true end
   for index = 1, #left do

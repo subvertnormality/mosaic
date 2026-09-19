@@ -85,6 +85,10 @@ function transport_lifecycle.new(deps)
     playing = true
   end
 
+  function lifecycle.set_stopped()
+    playing = false
+  end
+
   function lifecycle.reset()
     -- Stop clears the native subscription before re-entering reset/init, so the
     -- old callbacks cannot retain a replaced lattice or its held voices.

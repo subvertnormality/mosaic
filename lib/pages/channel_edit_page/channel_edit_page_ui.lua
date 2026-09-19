@@ -24,6 +24,8 @@ local channel_edit_history = include("mosaic/lib/pages/channel_edit_page/channel
 local channel_edit_parameters = include("mosaic/lib/pages/channel_edit_page/channel_edit_parameters")
 local channel_edit_clock_controls = include("mosaic/lib/pages/channel_edit_page/channel_edit_clock_controls")
 local channel_edit_navigation = include("mosaic/lib/pages/channel_edit_page/channel_edit_navigation")
+local channel_feature_editor = include("mosaic/lib/pages/channel_edit_page/channel_feature_editor")
+local harmony_inspection = include("mosaic/lib/harmony/inspection")
 
 -- UI components
 local channel_pages = pages:new()
@@ -137,9 +139,13 @@ local channel_edit_history_controller = channel_edit_history.new(memory_history_
 
 local trig_lock_page
 local channel_page_to_index
+local merge_feature_editor = channel_feature_editor.new("merge")
+local harmony_feature_editor = channel_feature_editor.new("harmony")
 
 -- Page indices
-channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
+channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3,
+  ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6,
+  ["Merge Shape"] = 7, ["Harmony"] = 8}
 
 -- The step indicator asks which page is showing for every drawn step, so read
 -- these fixed indices once instead of looking each one up on every call.
@@ -162,6 +168,7 @@ local channel_edit_navigation_controller = channel_edit_navigation.new(
     trig_lock_page = trig_lock_page,
     parameter_controller = channel_edit_parameters_controller,
     clock_controls_controller = channel_edit_clock_controls_controller
+    ,feature_editors = {merge=merge_feature_editor, harmony=harmony_feature_editor}
   },
   channel_edit_page_ui,
   channel_edit_page_ui_handlers
@@ -249,6 +256,15 @@ local notes_page = page:new("Note Dashboard", function()
   note_displays.note:draw()
   note_displays.velocity:draw()
   note_displays.length:draw()
+  local snapshot=harmony_inspection.snapshot(program.get_selected_song_pattern(),program.get().selected_channel)
+  if snapshot.planned then
+    local function pitch(stage)return stage and stage.pitch or "-"end
+    screen.level(3);screen.move(2,54)
+    screen.text("SRC"..tostring(snapshot.planned.source or "-").." M"..tostring(snapshot.planned.merge or "-")..
+      " S"..tostring(snapshot.planned.scale or "-").." H"..tostring(snapshot.planned.harmony or "-"))
+    screen.level(4);screen.move(2,63)
+    screen.text("P"..tostring(snapshot.planned.output or "-").." S"..tostring(pitch(snapshot.scheduled)).." E"..tostring(pitch(snapshot.emitted)))
+  end
 end)
 
 
@@ -296,6 +312,9 @@ end)
 trig_lock_page = page:new("Trig Locks", function()
   channel_edit_parameters_controller.draw_trig_locks()
 end)
+
+local merge_shape_page = page:new("Merge Shape", function() merge_feature_editor:draw() end)
+local harmony_page = page:new("Harmony", function() harmony_feature_editor:draw() end)
 
 -- Initialization function
 function channel_edit_page_ui.init()
@@ -370,6 +389,8 @@ function channel_edit_page_ui.init()
   set_sub_name_func(trig_lock_page, function()
     return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
+  set_sub_name_func(merge_shape_page, function() return "Ch. " .. program.get().selected_channel .. " " end)
+  set_sub_name_func(harmony_page, function() return "Ch. " .. program.get().selected_channel .. " " end)
 
   trig_lock_page:set_sub_page_draw_func(function()
     channel_edit_parameters_controller.draw_assignment_subpage()
@@ -381,6 +402,8 @@ function channel_edit_page_ui.init()
   channel_pages:add_page(clock_mods_page)
   channel_pages:add_page(channel_edit_page)
   channel_pages:add_page(notes_page)
+  channel_pages:add_page(merge_shape_page)
+  channel_pages:add_page(harmony_page)
 
 
   channel_edit_page_ui.select_mask_page()
@@ -627,6 +650,26 @@ function channel_edit_page_ui.select_note_dashboard_page()
   return channel_edit_navigation_controller.select_note_dashboard_page()
 end
 
+function channel_edit_page_ui.select_merge_shape_page()
+  return channel_edit_navigation_controller.select_merge_shape_page()
+end
+
+function channel_edit_page_ui.select_harmony_page()
+  return channel_edit_navigation_controller.select_harmony_page()
+end
+
+function channel_edit_page_ui.leave_feature_editor_for_grid()
+  return channel_edit_navigation_controller.leave_feature_editor_for_grid()
+end
+
+function channel_edit_page_ui.show_merge_gesture(label)
+  return channel_edit_navigation_controller.show_merge_gesture(label)
+end
+
+function channel_edit_page_ui.hide_merge_gesture()
+  return channel_edit_navigation_controller.hide_merge_gesture()
+end
+
 function channel_edit_page_ui.select_scales_quantizer_page()
   return channel_edit_navigation_controller.select_scales_quantizer_page()
 end
@@ -767,4 +810,3 @@ end
 
 
 return channel_edit_page_ui
-

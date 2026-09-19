@@ -9,8 +9,10 @@ local arp_descriptor = include("mosaic/lib/musical_resolution/arp_descriptor")
 local strum_descriptor = include("mosaic/lib/musical_resolution/strum_descriptor")
 local quantiser = include("mosaic/lib/quantiser")
 local harmony_state = include("mosaic/lib/harmony/state")
+local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local harmony_context = include("mosaic/lib/harmony/context")
 local pattern_harmony = include("mosaic/lib/harmony/pattern")
+local harmony_inspection = include("mosaic/lib/harmony/inspection")
 local merge_pitch_target = include("mosaic/lib/musical_merge/pitch_target")
 local m_clock = include("mosaic/lib/clock/m_clock")
 local play_note, play_arp_note = include("mosaic/lib/clock/voice_lifetime").new(m_clock)
@@ -817,9 +819,10 @@ end
 
 local function prepare_harmony(current_step, note_container, unprocessed, channel,
                                chord_notes, process_func)
-  local config = channel.voicing
-  if not config or config.mode == "off" then return nil end
   local song = program.get_selected_song_pattern()
+  local config = channel.voicing and
+    harmony_config_state.effective_channel(song, channel.number, channel.voicing) or nil
+  if not config or config.mode == "off" then return nil end
   local legacy = {root=note_container.note}
   local sources = {{id="root", pitch=note_container.note}}
   for index = 1, 4 do
@@ -840,8 +843,9 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     for _, source in ipairs(sources) do
       material[#material + 1] = {id=source.id, pc=source.pitch % 12, required=true}
     end
+    local pins = unprocessed.pin_root and {root=note_container.note} or nil
     frame = harmony_state.prepare_revoice(song, channel.number,
-      harmony_revision("revoice", channel, unprocessed, sources), material, config)
+      harmony_revision("revoice", channel, unprocessed, sources), material, config, pins)
     if frame.status == "ok" then pitches = frame.source_pitches end
     consume = function() harmony_state.consume_revoice(song, channel.number, frame) end
   elseif config.mode == "pattern" then
@@ -861,9 +865,13 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     pitches = {root=pattern_harmony.pitch_for(frame, unprocessed.note_value, note_container.note)}
     consume = function() harmony_state.consume_revoice(song, channel.number, frame) end
   elseif config.mode == "ensemble" then
-    local groups = song.voicing and song.voicing.groups or {}
+    local active_song_voicing = harmony_config_state.effective_song(song,
+      song.voicing or {schema_version=1, groups={}})
+    local groups = active_song_voicing and active_song_voicing.groups or {}
     local group = groups[config.group_id]
-    if not group or not group.enabled then return {pitches=legacy,status="group_missing"} end
+    if not group or not group.enabled then
+      return {pitches=config.fallback=="legacy"and legacy or{},status="group_missing"}
+    end
     local source_scale = group.source.kind == "scale_slot" and group.source.scale_slot or
       (program.get_channel_step_scale_number(17) or program.get().default_scale or 1)
     if source_scale ~= channel.step_scale_number then
@@ -949,6 +957,24 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     channel, chord_notes, process_func)
   local harmony_pitches = harmony and harmony.pitches
   local consume_harmony = harmony and harmony.consume
+  local planned_root = harmony_pitches and harmony_pitches.root
+  if harmony_pitches == nil then planned_root = note_container.note end
+  harmony_inspection.plan(program.get_selected_song_pattern(), c, {
+    step=current_step,
+    source=unprocessed_note_container.note_value,
+    merge=unprocessed_note_container.note_value,
+    scale=note_container.note,
+    harmony=planned_root,
+    output=planned_root,
+    status=harmony and harmony.status or "off",
+    structural_status=unprocessed_note_container.structural_status
+  })
+  local emit_note_on = note_on_func
+  note_on_func = function(pitch, velocity, midi_channel, midi_device)
+    harmony_inspection.scheduled(program.get_selected_song_pattern(), c, pitch, "voice")
+    emit_note_on(pitch, velocity, midi_channel, midi_device)
+    harmony_inspection.emitted(program.get_selected_song_pattern(), c, pitch, "voice")
+  end
 
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, 
@@ -964,7 +990,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
   local selected_channel = program.get().selected_channel
   if play_strum_root_now(chord_strum_pattern, mute_root) then
-    local root_pitch = harmony_pitches ~= nil and harmony_pitches.root or note_container.note
+    local root_pitch = harmony_pitches and harmony_pitches.root
+    if harmony_pitches == nil then root_pitch = note_container.note end
     if root_pitch then
       if consume_harmony then consume_harmony() end
       play_note(root_pitch, note_container, note_container.velocity, note_container.length, note_on_func)
@@ -1249,10 +1276,14 @@ function step.handle(c, current_step, prepared)
         used_quantised_fixed and "quantised_fixed" or used_fixed and "fixed" or nil
       local chord_material
       if merge_config.target and merge_config.target.kind == "chord" then
-        local group = program.get_selected_song_pattern().voicing and
-          program.get_selected_song_pattern().voicing.groups[merge_config.target.group_id]
+        local song=program.get_selected_song_pattern()
+        local active_song_voicing=harmony_config_state.effective_song(song,
+          song.voicing or {schema_version=1,groups={}})
+        local group = active_song_voicing and active_song_voicing.groups[merge_config.target.group_id]
         if group and group.enabled then
-          chord_material = harmony_context.group_material(group, channel.step_scale_number, transpose).pitch_classes
+          local source_scale=group.source.kind=="scale_slot"and group.source.scale_slot or
+            (program.get_channel_step_scale_number(17)or program.get().default_scale or 1)
+          chord_material = harmony_context.group_material(group,source_scale,transpose).pitch_classes
         end
       end
       note, structural_status = merge_pitch_target.resolve(note, {
@@ -1292,7 +1323,9 @@ function step.handle(c, current_step, prepared)
           fully_quantise_mask = fully_quantise_mask, do_pentatonic = do_pentatonic,
           structural_status = structural_status,
           pattern_bypass = is_mask and "note_mask" or random_shift ~= 0 and "random" or
-            used_quantised_fixed and "quantised_fixed" or used_fixed and "fixed" or nil},
+            used_quantised_fixed and "quantised_fixed" or used_fixed and "fixed" or nil,
+          pin_root = (is_mask and ((channel.voicing and channel.voicing.absolute_pitch_policy) or "pin") == "pin") or
+            used_quantised_fixed or used_fixed},
         function(chord_note, velocity, midi_channel, midi_device)
           if device.player then
             device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)

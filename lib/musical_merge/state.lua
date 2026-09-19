@@ -1,6 +1,11 @@
 local state = {}
 
-local songs = setmetatable({}, {__mode = "k"})
+local registry = rawget(_G, "__mosaic_merge_runtime_state")
+if not registry then
+  registry = {songs=setmetatable({}, {__mode="k"})}
+  rawset(_G, "__mosaic_merge_runtime_state", registry)
+end
+local songs = registry.songs
 
 local function deep_copy(value, seen)
   if type(value) ~= "table" then return value end
@@ -55,8 +60,10 @@ local function advance(record)
 end
 
 function state.reset()
-  songs = setmetatable({}, {__mode = "k"})
+  for song in pairs(songs) do songs[song]=nil end
 end
+
+function state.reset_song(song) songs[song]=nil end
 
 function state.request(song, channel, requested, playing)
   local record = record_for(song, channel, requested)
@@ -69,6 +76,25 @@ function state.request(song, channel, requested, playing)
   record.queued = nil
   if restart then record.cycle, record.phrase = 1, 0 end
   return "applied"
+end
+
+-- Cross-feature transactions (for example deleting a referenced Harmony group)
+-- activate with the shared song-pattern snapshot, not an earlier channel wrap.
+function state.request_global(song, channel, requested, playing)
+  local record=record_for(song,channel,requested)
+  if playing then record.global_queued=deep_copy(requested);return "queued"end
+  local restart=starts_new_epoch(record.active,requested);record.active=deep_copy(requested)
+  record.queued,record.global_queued=nil,nil;if restart then record.cycle,record.phrase=1,0 end
+  return "applied"
+end
+
+function state.on_pattern_boundary(song)
+  local values=songs[song];if not values then return end
+  for _,record in pairs(values)do if record.global_queued then
+    local restart=starts_new_epoch(record.active,record.global_queued)
+    record.active=record.global_queued;record.global_queued=nil;record.queued=nil
+    if restart then record.cycle,record.phrase=1,0 end
+  end end
 end
 
 function state.on_cycle_boundary(song, channel, requested)
@@ -101,9 +127,9 @@ function state.stop(song)
   local values = songs[song]
   if not values then return end
   for _, record in pairs(values) do
-    if record.queued then
-      record.active = record.queued
-      record.queued = nil
+    if record.global_queued or record.queued then
+      record.active = record.global_queued or record.queued
+      record.queued,record.global_queued = nil,nil
     end
     record.cycle, record.phrase = 1, 0
   end

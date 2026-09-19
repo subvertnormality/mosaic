@@ -4,6 +4,9 @@
 local step = include("mosaic/lib/step")
 local pattern_model = include("mosaic/lib/pattern")
 local harmony_config = include("mosaic/lib/harmony/config")
+local harmony_config_state = include("mosaic/lib/harmony/config_state")
+local harmony_runtime_state = include("mosaic/lib/harmony/state")
+local harmony_inspection = include("mosaic/lib/harmony/inspection")
 local pattern_harmony = include("mosaic/lib/harmony/pattern")
 local merge_config = include("mosaic/lib/musical_merge/config")
 
@@ -18,6 +21,9 @@ local function setup()
   globals.reset()
   params.reset()
   m_clock.init()
+  harmony_config_state.reset()
+  harmony_runtime_state.reset()
+  harmony_inspection.reset()
   m_clock:start()
   program.set_selected_song_pattern(1)
   local song = program.get_song_pattern(1)
@@ -59,6 +65,22 @@ function test_harmony_playback_revoice_places_complete_chord_bundle()
   luaunit.assert_equals({midi_note_on_events[1][1],midi_note_on_events[2][1],midi_note_on_events[3][1]},
     {48,52,55})
   luaunit.assert_equals(song.patterns[1].note_values[1], 0)
+  local shown=harmony_inspection.snapshot(song,1)
+  luaunit.assert_equals(shown.planned.status,"ok")
+  luaunit.assert_equals(shown.planned.source,0)
+  luaunit.assert_not_nil(shown.scheduled.pitch)
+  luaunit.assert_not_nil(shown.emitted.pitch)
+end
+
+function test_harmony_playback_revoice_pins_absolute_note_mask_without_rewriting_it()
+  local song=setup();source(song,1,{[1]=0},{1})
+  local channel=song.channels[1];channel.step_note_masks[1]=60;channel.chord_one_mask=2
+  channel.voicing=harmony_config.new_channel("revoice")
+  channel.voicing.roles.v1={min=48,max=72,centre=72,preferred_leap=127,strict_leap=false,enabled=true}
+  channel.voicing.roles.v2={min=52,max=79,centre=76,preferred_leap=127,strict_leap=false,enabled=true}
+  assign(song,1,1);step.handle(1,1)
+  luaunit.assert_equals(midi_note_on_events[1][1],60)
+  luaunit.assert_equals(channel.step_note_masks[1],60)
 end
 
 function test_harmony_playback_revoice_arp_uses_frozen_solved_bundle()
@@ -120,6 +142,19 @@ function test_harmony_playback_ensemble_replaces_each_member_with_explicit_role(
   step.handle(1, 1)
   step.handle(2, 1)
   luaunit.assert_equals({midi_note_on_events[1][1],midi_note_on_events[2][1]}, {48,55})
+end
+
+function test_harmony_playback_missing_ensemble_group_obeys_explicit_fallback()
+  local song=setup();source(song,1,{[1]=0},{1});assign(song,1,1)
+  local channel=song.channels[1];channel.voicing=harmony_config.new_channel("ensemble");channel.voicing.group_id=1
+  song.voicing={schema_version=1,groups={}}
+  luaunit.assert_equals(harmony_config_state.effective_channel(song,1,channel.voicing).mode,"ensemble")
+  luaunit.assert_equals(#midi_note_on_events,0)
+  step.handle(1,1);luaunit.assert_equals(#midi_note_on_events,0)
+
+  channel.voicing.fallback="legacy"
+  harmony_config_state.reset_song(song)
+  step.handle(1,1);luaunit.assert_equals(midi_note_on_events[1][1],60)
 end
 
 function test_musical_merge_structural_target_changes_only_foundation_addition()

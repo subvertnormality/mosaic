@@ -86,3 +86,25 @@ function test_musical_merge_state_stop_promotes_requested_and_resets_each_channe
   luaunit.assert_equals(state.effective(song, 2, requested).cycle, 1)
 end
 
+function test_musical_merge_state_is_shared_across_norns_include_callers()
+  local writer=include("mosaic/lib/musical_merge/state")
+  local reader=include("mosaic/lib/musical_merge/state")
+  writer.reset();local song,requested={},value(4,"fixed")
+  reader.effective(song,6,requested)
+  local changed=value(2,"per_phrase")
+  writer.request(song,6,changed,true)
+  luaunit.assert_equals(reader.effective(song,6,requested).config.cycles,4)
+  reader.on_cycle_boundary(song,6,requested)
+  luaunit.assert_equals(writer.effective(song,6,requested).config.cycles,2)
+end
+
+function test_musical_merge_global_transaction_waits_for_pattern_not_channel_boundary()
+  state.reset();local song,old={},value(4,"fixed")
+  state.effective(song,2,old);local replacement=value(2,"per_phrase")
+  state.request_global(song,2,replacement,true)
+  state.on_cycle_boundary(song,2,old)
+  luaunit.assert_equals(state.effective(song,2,old).config.cycles,4)
+  state.on_pattern_boundary(song)
+  local active=state.effective(song,2,old)
+  luaunit.assert_equals({active.config.cycles,active.cycle,active.phrase},{2,1,0})
+end

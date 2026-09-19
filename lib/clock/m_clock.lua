@@ -5,7 +5,6 @@ local midi_output_transport = include("mosaic/lib/clock/midi_output_transport")
 local step_cursor = include("mosaic/lib/clock/step_cursor")
 local parameter_preview = include("mosaic/lib/clock/parameter_preview")
 local merge_state = include("mosaic/lib/musical_merge/state")
-local pattern_model = include("mosaic/lib/pattern")
 
 m_clock = {}
 clock_lattice = {}
@@ -450,6 +449,8 @@ local function count_active_actions(action)
   return count
 end
 
+local harmony_config_state = include("mosaic/lib/harmony/config_state")
+local harmony_state = include("mosaic/lib/harmony/state")
 local transport = include("mosaic/lib/clock/transport_lifecycle").new {
   get_clock = function() return m_clock end,
   get_lattice = function() return clock_lattice end,
@@ -468,11 +469,12 @@ local transport = include("mosaic/lib/clock/transport_lifecycle").new {
       end
     end
   end,
-  on_stop = function() merge_state.stop_all() end,
-  on_reset = function() merge_state.stop_all() end,
+  on_stop = function() merge_state.stop_all(); harmony_config_state.stop_all(); harmony_state.reset() end,
+  on_reset = function() merge_state.stop_all(); harmony_config_state.stop_all(); harmony_state.reset() end,
 }
 
 function m_clock.init()
+  transport.set_stopped()
   -- Stop clears the native subscription before re-entering reset/init, so the
   -- old callbacks cannot retain a replaced lattice or its held voices.
   if transport.stop_if_subscribed() then return end
@@ -579,11 +581,10 @@ function m_clock.init()
     local finish_step
 
     local sprocket_action = function(t)
-      local song_pattern = program.get().selected_song_pattern
-      local channel = program.get_channel(song_pattern, channel_number)
+      local song_pattern_number = program.get().selected_song_pattern
+      local song_pattern = program.get_song_pattern(song_pattern_number)
+      local channel = program.get_channel(song_pattern_number, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
-      local pattern = channel.working_pattern
-      local trig_values = pattern.trig_values
       local clock = m_clock[clock_key]
       
       -- Cache frequently accessed values
@@ -602,9 +603,7 @@ function m_clock.init()
           merge_state.on_cycle_boundary(song_pattern, channel_number, channel.musical_merge)
           local scheduler = m_clock.lookahead_scheduler
           if scheduler then scheduler:invalidate(channel_number, current_step, nil) end
-          pattern_model.update_working_pattern(channel_number, song_pattern)
-          pattern = channel.working_pattern
-          trig_values = pattern.trig_values
+          pattern.update_working_pattern(channel_number, song_pattern)
         end
         
         -- The global scale channel has no MIDI parameter recorder bank.
@@ -647,12 +646,12 @@ function m_clock.init()
           clock.note_pending = current_step
           clock.pending_note = step.prepare_note(channel_number, current_step)
           clock.pending_channel = channel
-          clock.pending_song_pattern = song_pattern
+          clock.pending_song_pattern = song_pattern_number
           return
         end
       end
 
-      finish_step(clock, channel, current_step, false, trigless_locks, song_pattern)
+      finish_step(clock, channel, current_step, false, trigless_locks, song_pattern_number)
     end
 
     finish_step = function(clock, channel, current_step, has_trig, trigless_locks, song_pattern)
@@ -1006,5 +1005,3 @@ function m_clock.seconds_to_next_step()
 end
 
 return m_clock
-
-

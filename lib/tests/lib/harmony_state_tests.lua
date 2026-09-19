@@ -82,3 +82,46 @@ function test_harmony_state_groups_and_channels_are_independent_and_resettable()
   luaunit.assert_equals(harmony_state.snapshot(song), {groups = {}, channels = {}})
 end
 
+function test_harmony_state_config_change_invalidates_frame_without_relabelling_source_revision()
+  harmony_state.reset()
+  local song, group = {}, config.new_group(2)
+  group.enabled = true
+  local tones = material({{"tone1",0,true}})
+  local first = harmony_state.prepare_group(song, 1, "source-a", tones, group)
+  group.roles.bass.min, group.roles.bass.max, group.roles.bass.centre = 48, 48, 48
+  local changed = harmony_state.prepare_group(song, 1, "source-a", tones, group)
+  luaunit.assert_not_is(first, changed)
+  luaunit.assert_equals(changed.revision, "source-a")
+  luaunit.assert_equals(changed.pitches, {48})
+end
+
+function test_harmony_state_anchor_and_continue_song_entry_are_explicit()
+  harmony_state.reset()
+  local previous={channels={},voicing={schema_version=1,groups={}}}
+  local next_song={channels={},voicing={schema_version=1,groups={}}}
+  for number=1,16 do previous.channels[number]={};next_song.channels[number]={} end
+  local prior_config=config.new_channel("revoice")
+  local frame=harmony_state.prepare_revoice(previous,1,"a",material({{"root",0}}),prior_config)
+  harmony_state.consume_revoice(previous,1,frame)
+
+  next_song.channels[1].voicing=config.new_channel("revoice")
+  next_song.channels[1].voicing.transition="continue"
+  next_song.channels[2].voicing=config.new_channel("revoice")
+  next_song.channels[2].voicing.transition="anchor"
+  harmony_state.enter_song(previous,next_song,false)
+  luaunit.assert_not_nil(harmony_state.snapshot(next_song).channels[1].consumed)
+  luaunit.assert_nil(harmony_state.snapshot(next_song).channels[2])
+
+  next_song.channels[1].voicing.repeat_policy="anchor"
+  harmony_state.enter_song(next_song,next_song,true)
+  luaunit.assert_nil(harmony_state.snapshot(next_song).channels[1])
+end
+
+function test_harmony_runtime_state_is_shared_across_norns_include_callers()
+  local writer=include("mosaic/lib/harmony/state")
+  local reader=include("mosaic/lib/harmony/state")
+  writer.reset();local song={};local channel=config.new_channel("revoice")
+  local frame=writer.prepare_revoice(song,3,"shared",material({{"root",0}}),channel)
+  reader.consume_revoice(song,3,frame)
+  luaunit.assert_equals(writer.snapshot(song).channels[3].consumed_count,1)
+end

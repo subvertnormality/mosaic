@@ -213,8 +213,9 @@ local function calls_named(env, prefix)
 end
 
 
--- The row of page tabs pages:draw puts at y = 1: one per page, six pages.
-local TABS = {"0,1 _", "10,1 _", "20,1 _", "30,1 _", "40,1 _", "50,1 _"}
+-- The row of page tabs pages:draw puts at y = 1: one per page, including the
+-- appended Merge Shape and Harmony pages.
+local TABS = {"0,1 _", "10,1 _", "20,1 _", "30,1 _", "40,1 _", "50,1 _", "60,1 _", "70,1 _"}
 
 local function with_tabs(entries)
   local all = {}
@@ -433,7 +434,8 @@ function test_w3c_page_selectors_select_their_page()
     local expected = {
       {"select_mask_page", 1, "Note Masks"}, {"select_trig_page", 2, "Trig Locks"},
       {"select_memory_page", 3, "Memory"}, {"select_clock_mods_page", 4, "Clocks"},
-      {"select_midi_config_page", 5, "Device Config"}, {"select_note_dashboard_page", 6, "Note Dashboard"}
+      {"select_midi_config_page", 5, "Device Config"}, {"select_note_dashboard_page", 6, "Note Dashboard"},
+      {"select_merge_shape_page", 7, "Merge Shape"}, {"select_harmony_page", 8, "Harmony"}
     }
     for _, e in ipairs(expected) do
       env.ui[e[1]]()
@@ -444,6 +446,29 @@ function test_w3c_page_selectors_select_their_page()
       end
       luaunit.assert_equals(titles, {"Ch. 2 " .. e[3]}, e[1])
     end
+  end)
+end
+
+function test_feature_pages_restore_last_legacy_workspace_for_a_grid_gesture()
+  isolated(function(env)
+    start(env)
+    env.ui.select_trig_page()
+    env.ui.select_memory_page() -- Merely visiting a read-only page does not steal the workspace.
+    env.ui.select_harmony_page()
+    turn(env,3,1)
+    luaunit.assert_true(env.ui.leave_feature_editor_for_grid())
+    luaunit.assert_equals(env.ui.get_selected_page(),2)
+    luaunit.assert_false(env.ui.leave_feature_editor_for_grid())
+  end)
+end
+
+function test_merge_gesture_feedback_is_transient_and_returns_to_original_editor()
+  isolated(function(env)
+    start(env);env.ui.select_merge_shape_page()
+    luaunit.assert_true(env.ui.show_merge_gesture("TRIG SKIP"))
+    local shown=frame(env);local found=false;for _,v in ipairs(shown)do if v=="2,17 M09"then found=true end end;luaunit.assert_true(found)
+    env.ui.hide_merge_gesture()
+    local restored=frame(env);found=false;for _,v in ipairs(restored)do if v=="2,17 M01"then found=true end end;luaunit.assert_true(found)
   end)
 end
 
