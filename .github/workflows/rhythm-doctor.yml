@@ -17,7 +17,7 @@ jobs:
       - name: Install component test dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends gcc lua5.3 jackd2 libjack-jackd2-dev libaubio-dev pkg-config
+          sudo apt-get install -y --no-install-recommends gcc lua5.3 luajit jackd2 libjack-jackd2-dev libaubio-dev pkg-config
           python3 -m pip install -r tools/rhythm_doctor_analysis/requirements.txt
       - name: Run existing full Lua regression suite
         run: bash test.sh

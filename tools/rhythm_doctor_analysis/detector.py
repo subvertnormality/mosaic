@@ -81,10 +81,41 @@ def features(audio, sr, times):
         row += [float(max(harmonic)/(new.sum()+1e-9)), float(np.sqrt(np.mean(after*after)))]
         rows.append(row)
     base=np.asarray(rows)
-    # Explicit ±1 frame context carries local attack shape without a recurrent
+    # Explicit +/-1 frame context carries local attack shape without a recurrent
     # model; edge padding makes every input frame deterministic.
     return np.concatenate((np.vstack((base[0],base[:-1])),base,np.vstack((base[1:],base[-1]))),axis=1)
 
+def balanced_training_rows(feature_rows, labels, max_rows=60000, rng=None):
+    """Keep every positive frame; cap only empty frames without negative sizes."""
+    x=np.asarray(feature_rows); y=np.asarray(labels,dtype=bool)
+    if x.ndim < 1 or x.shape[0] != y.shape[0] or max_rows < 1:
+        raise ValueError("invalid training rows")
+    if len(x) <= max_rows:
+        return x,y
+    positives=np.flatnonzero(y); negatives=np.flatnonzero(~y)
+    negative_budget=max(0,max_rows-len(positives))
+    if negative_budget == 0:
+        keep=positives
+    elif negative_budget >= len(negatives):
+        keep=np.r_[positives,negatives]
+    else:
+        chooser=rng if rng is not None else np.random.default_rng(SEED)
+        keep=np.r_[positives,chooser.choice(negatives,negative_budget,replace=False)]
+    keep.sort()
+    return x[keep],y[keep]
+
+def classifier_probabilities(model, feature_rows):
+    """Return the probability of label True, including one-class fitted models."""
+    classes=np.asarray(model.classes_)
+    if len(classes) == 1:
+        return np.full(len(feature_rows),1. if classes[0] == 1 else 0.)
+    positive=np.flatnonzero(classes == 1)
+    if len(positive) != 1:
+        raise ValueError("classifier has no unique positive class")
+    probabilities=np.asarray(model.predict_proba(feature_rows))
+    if probabilities.ndim != 2 or probabilities.shape[0] != len(feature_rows) or probabilities.shape[1] != len(classes):
+        raise ValueError("invalid classifier probabilities")
+    return probabilities[:,positive[0]]
 def peak_times(probabilities, times, threshold):
     out=[]; last=-1e9
     for index,value in enumerate(probabilities):
@@ -133,11 +164,9 @@ def main():
         y=np.concatenate([np.array([any(abs(time-event)<=TOLERANCE for event in dev_refs[name][lane]) for time in dev_times[name]]) for name in scorable_dev])
         # Keep all event-neighbour frames and deterministically subsample empty
         # frames per lane. Unknown-reference rows never reach fit or tuning.
-        if len(x)>60000:
-            rng=np.random.default_rng(SEED+lane_index); positive=y.astype(bool); negative=np.flatnonzero(~positive)
-            keep=np.r_[np.flatnonzero(positive), rng.choice(negative,60000-int(positive.sum()),replace=False)]; keep.sort(); x,y=x[keep],y[keep]
+        x,y=balanced_training_rows(x,y,max_rows=60000,rng=np.random.default_rng(SEED+lane_index))
         model=RandomForestClassifier(n_estimators=64,max_depth=10,min_samples_leaf=2,max_features="sqrt",random_state=SEED+lane_index,n_jobs=1,class_weight="balanced_subsample").fit(x,y); models.append(model)
-        examples=[(model.predict_proba(dev_features[name])[:,1] if len(model.classes_)==2 else np.zeros(len(dev_times[name])),dev_times[name],dev_refs[name][lane]) for name in scorable_dev]
+        examples=[(classifier_probabilities(model,dev_features[name]),dev_times[name],dev_refs[name][lane]) for name in scorable_dev]
         threshold=tune_threshold(examples); thresholds.append(threshold)
         predicted=[peak_times(probability,times,threshold) for probability,times,_ in examples]
         offsets=[offset for (_,_,reference),guess in zip(examples,predicted) for offset in matched_offsets(reference,guess)]
@@ -148,7 +177,7 @@ def main():
     for name in HELD:
         audio,sr,duration=load_track(available[name],args.held_seconds); times=np.arange(.1,duration,HOP); durations[name]=duration; matrix=features(audio,sr,times); refs=labels(available[name],args.meta,0,duration); raw[name]={}
         for index,lane in enumerate(LANES):
-            probabilities=models[index].predict_proba(matrix)[:,1] if len(models[index].classes_)==2 else np.zeros(len(times)); predicted=peak_times(probabilities,times,thresholds[index]); raw[name][lane]=predicted
+            probabilities=classifier_probabilities(models[index],matrix); predicted=peak_times(probabilities,times,thresholds[index]); raw[name][lane]=predicted
             if lane_is_scorable(refs,lane): scores[lane].append(onset_score(refs[lane],predicted,TOLERANCE))
             else: provenance[lane]["held_unknown_tracks"].append(name)
     summary={}

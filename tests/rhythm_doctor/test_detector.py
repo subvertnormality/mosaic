@@ -22,6 +22,30 @@ class Detector(unittest.TestCase):
    found=detector.labels(track,root/'meta',0,1)
    self.assertIsNone(found['BASS'])
    for lane in ('BD','SD','HH','TOM'): self.assertIsNone(found[lane])
+ def test_subsample_keeps_all_positive_rows_when_positive_count_exceeds_cap(self):
+  import numpy as np
+  features=np.arange(20).reshape(10,2); labels=np.array([True]*7+[False]*3)
+  kept_features,kept_labels=detector.balanced_training_rows(features,labels,max_rows=5,rng=np.random.default_rng(1))
+  self.assertEqual(kept_features.tolist(),features[:7].tolist())
+  self.assertEqual(kept_labels.tolist(),[True]*7)
+ def test_single_class_probability_uses_the_observed_positive_class(self):
+  import numpy as np
+  class OneClass:
+   classes_=np.array([True])
+   def predict_proba(self, matrix): return np.ones((len(matrix),1))
+  self.assertEqual(detector.classifier_probabilities(OneClass(),np.zeros((3,2))).tolist(),[1.,1.,1.])
+ def test_single_negative_class_probability_is_zero(self):
+  import numpy as np
+  class OneClass:
+   classes_=np.array([False])
+   def predict_proba(self, matrix): return np.ones((len(matrix),1))
+  self.assertEqual(detector.classifier_probabilities(OneClass(),np.zeros((2,2))).tolist(),[0.,0.])
+ def test_probability_selects_the_explicit_positive_class_column(self):
+  import numpy as np
+  class TwoClass:
+   classes_=np.array([True,False])
+   def predict_proba(self, matrix): return np.array([[.8,.2],[.7,.3]])
+  self.assertEqual(detector.classifier_probabilities(TwoClass(),np.zeros((2,2))).tolist(),[.8,.7])
  def test_no_declared_bass_is_a_known_empty_negative(self):
   with tempfile.TemporaryDirectory() as temporary:
    root=Path(temporary); track=root/'selected'/'Track00001'; meta=root/'meta'/'Track00001'

@@ -12,8 +12,10 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[2]
-LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries', 'capture_transitions')
-PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit', 'acquisition_quality')
+LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries',
+             'capture_transitions', 'assets', 'capture_controller')
+PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit',
+                'acquisition_quality', 'grid_quality', 'native_transport')
 NATIVE_TESTS = ('capture_contract', 'capture_native', 'tempo_candidate', 'tempo_native')
 
 
@@ -22,6 +24,8 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--native', action='store_true')
     parser.add_argument('--detector', action='store_true')
+    parser.add_argument('--analysis-python', default=sys.executable,
+                        help='interpreter with pinned detector dependencies')
     parser.add_argument('--tempo-corpus', action='store_true')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
@@ -36,10 +40,13 @@ def main():
     commands = [(name, ['lua', 'tests/rhythm_doctor/test_' + name + '.lua']) for name in LUA_TESTS]
     selected = list(PYTHON_TESTS) + (list(NATIVE_TESTS) if args.native else [])
     if args.detector:
-        selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend'))
+        selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter',
+                         'audio_frontend', 'capture_worker_ipc'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
-    commands += [(name, [sys.executable, '-m', 'unittest', 'discover', '-s',
+    detector_tests = {'detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend'}
+    commands += [(name, [args.analysis_python if name in detector_tests else sys.executable,
+                         '-m', 'unittest', 'discover', '-s',
                         'tests/rhythm_doctor', '-p', 'test_' + name + '.py', '-v'])
                  for name in selected]
     results = []

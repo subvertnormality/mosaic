@@ -276,3 +276,31 @@ matching source hashes (`evidence/hardware-capture-transitions-v1.json`).
 The missing-method and reentrant-cancellation failures are preserved separately.
 These transitions still require the asynchronous controller and actual capture
 worker integration; they are not end-to-end audio acceptance.
+
+## Owned capture worker and first clean held evaluation
+
+The controller now uses complete project/generation/analysis identities and a
+nonblocking transport contract. A native worker owns its private Unix seqpacket
+socket and JACK input ports, rejects malformed or stale commands, publishes a
+fixed owned WAV name atomically, acknowledges release only after destroying the
+capture client, and removes its exact temporary root on disconnect or exit. An
+isolated JACK integration executes the real state machine, LuaJIT transport,
+controller and worker from Manual capture through contiguous stereo PCM,
+publish, injected analysis failure, resource release and cleanup. This is host
+integration evidence; `mosaic.lua` still needs to launch and schedule the
+controller, bind controls, and persist the worker WAV as a project asset.
+
+The first untouched v11 held evaluation froze its development-selected epoch,
+thresholds and phase-safe frontend before opening the 66 held clips. Independent
+hash-checked scoring reports onset F1 of 0.499 BD, 0.469 SD and 0.774 HH; grid F1
+is 0.499, 0.469 and 0.775 respectively. All miss the required gates except the
+silence controls, which emit zero false positives. The corrected audit is
+`evidence/candidate_b_adtof_v11_independent_v3.json`. Earlier v1/v2 grid
+derivations are identified as invalid or unverified configurations and are not
+acceptance evidence. No held threshold tuning was performed.
+
+Project-owned WAV storage now validates the native float32-stereo format,
+content address, project binding and complete 45-second bound. It uses exclusive
+staging/publication and file/parent durability barriers, rejects partial or
+corrupt assets, and never resumes a partial capture. The production filesystem
+adapter and lifecycle serialization wiring remain required.
