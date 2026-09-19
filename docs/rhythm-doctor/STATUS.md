@@ -450,3 +450,33 @@ with an annotated drum onset and 60.5% with nothing annotated. Note that v12
 deliberately leaves toms and pedal hats audible but unlabelled, and toms are low
 and pitched, so some of those are scored as BASS errors by construction. See
 `evidence/bass-lane-ceiling-analysis-2026-09-19.json`.
+
+### Segment-bounded Demucs is refuted by measurement (2026-09-19)
+
+The preceding section proposed measuring segment-bounded Demucs as the most
+direct route to the required BASS lane, on the reasoning that peak memory should
+scale with segment length rather than capture length. **That reasoning is wrong
+and the measurement refutes it.** See
+`evidence/demucs-segment-memory-2026-09-19.json`.
+
+On a 45-second capture with htdemucs, reducing the segment eightfold from 7.8 s
+to 1 s did not reduce peak RSS at all. Peak stayed between 1,379 and 1,490 MB
+and was highest at the smallest segment, while elapsed time rose more than
+fivefold. Loading the PyTorch runtime and the model alone costs 483 MB, which
+already exceeds the roughly 470 MB available on the device before a single
+activation is allocated. Peak is about three times the whole device budget.
+
+Time was never the constraint: 27.1 s for a 45 s capture on one desktop thread,
+against a workflow that tolerates minutes.
+
+Two qualifications keep this from being absolute. The 483 MB floor includes the
+PyTorch runtime, which a purpose-built ONNX implementation would not carry, and
+the weights alone are 167.9 MB fp32 or about 84 MB fp16. But roughly 900 MB of
+activation memory did not respond to segment length, so the reference
+implementation does not stream, and making it fit would take a bespoke streaming
+ONNX implementation with an uncertain outcome. This is also an x86_64
+measurement of algorithmic scale, not ARMv7 behaviour; PyTorch is unavailable on
+armv7l so the deployed path could never be this one.
+
+Separation-first is therefore blocked on device footprint under the standalone
+requirement — not on quality and not on licence.
