@@ -214,6 +214,68 @@ class WorkerContractTests(unittest.TestCase):
         for f in (path, req.name, res.name): os.unlink(f)
 
 
+class AlignmentTests(unittest.TestCase):
+    """A correction the player accepted must survive reanalysis.
+
+    The backend read only wav_path from the request, so the confirmed tempo and
+    origin were discarded and the bank came back with the automatic estimate and
+    a zero origin - the correction silently undone.
+    """
+
+    def _capture(self, samples, sr=44100):
+        handle = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+        handle.close()
+        frames = (np.clip(np.asarray(samples, dtype=np.float32), -1, 1) * 32767).astype("<i2")
+        with wave.open(handle.name, "wb") as out:
+            out.setnchannels(1); out.setsampwidth(2); out.setframerate(sr)
+            out.writeframes(frames.tobytes())
+        return handle.name
+
+    def test_a_confirmed_alignment_overrides_the_automatic_estimate(self):
+        path = self._capture(click_train([0.5, 1.0, 1.5, 2.0, 2.5, 3.0], kind="bd"))
+        automatic = dsp.analyse_request(path)
+        alignment = {"bpm": 77.0, "start_beat": 1, "fine_start_ms": 0.0,
+                     "origin_sample": 12345}
+        corrected = dsp.analyse_request(path, alignment=alignment)
+        self.assertEqual(corrected["bpm"], 77.0,
+                         "the confirmed tempo was discarded")
+        self.assertEqual(corrected["origin_sample"], 12345,
+                         "the confirmed origin was discarded")
+        self.assertTrue(corrected["tempo_detected"],
+                        "a confirmed tempo is known, not guessed")
+        self.assertEqual(corrected.get("tempo_mode"), "manual")
+        # Onsets are absolute positions in the capture and must not move.
+        self.assertEqual([c["sample_index"] for c in corrected["candidates"]],
+                         [c["sample_index"] for c in automatic["candidates"]])
+        os.unlink(path)
+
+    def test_an_out_of_range_or_malformed_alignment_is_ignored(self):
+        path = self._capture(click_train([0.5, 1.0, 1.5], kind="bd"))
+        automatic = dsp.analyse_request(path)
+        for bad in ({"bpm": 5.0, "origin_sample": 0}, {"bpm": 9000.0, "origin_sample": 0},
+                    {"bpm": "fast", "origin_sample": 0}, {"bpm": 120.0, "origin_sample": -1},
+                    {"bpm": float("nan"), "origin_sample": 0}, "not-a-table", None):
+            value = dsp.analyse_request(path, alignment=bad)
+            self.assertEqual(value["bpm"], automatic["bpm"], repr(bad))
+            self.assertEqual(value["origin_sample"], automatic["origin_sample"], repr(bad))
+        os.unlink(path)
+
+    def test_the_cli_passes_the_requested_alignment_to_the_detector(self):
+        path = self._capture(click_train([0.5, 1.0, 1.5, 2.0], kind="bd"))
+        with tempfile.TemporaryDirectory() as folder:
+            request = Path(folder) / "request.json"
+            result = Path(folder) / "result.json"
+            request.write_text(json.dumps({"wav_path": path,
+                                           "alignment": {"bpm": 88.0, "start_beat": 1,
+                                                         "fine_start_ms": 0.0,
+                                                         "origin_sample": 4410}}))
+            self.assertEqual(dsp.main(["--request", str(request), "--result", str(result)]), 0)
+            value = json.loads(result.read_text())
+        self.assertEqual(value["bpm"], 88.0, "the CLI never forwarded the alignment")
+        self.assertEqual(value["origin_sample"], 4410)
+        os.unlink(path)
+
+
 class BassLaneTests(unittest.TestCase):
     """BASS reclassifies pitched low-band onsets rather than detecting afresh."""
 

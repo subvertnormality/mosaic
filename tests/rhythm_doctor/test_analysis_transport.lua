@@ -75,4 +75,17 @@ local malformed = stored_with({ backend_id='x', backend_sha256=SHA, template_sha
 assert(transport_reading(malformed):_completed(envelope()).analysis_error == 'ANALYSIS_PROTOCOL_ERROR',
   'a malformed template digest was accepted')
 
-print('test_analysis_transport: 6 tests passed')
+-- A correction the player confirmed comes back as a manual tempo, and must
+-- build a bank at that tempo rather than being rejected or silently reset.
+local corrected = stored_with({ backend_id='nmf-pfnmf-drums-v1', backend_sha256=SHA,
+  template_sha256=string.rep('c', 64) })
+corrected.analysis.bpm = 77.0
+corrected.analysis.tempo_mode = 'manual'
+corrected.analysis.origin_sample = 12345
+local built = transport_reading(corrected):_completed(envelope())
+assert(built.status == 'COMPLETED',
+  'a confirmed correction was rejected: ' .. tostring(built.analysis_error))
+assert(built.bank.bpm == 77.0, 'the bank did not keep the confirmed tempo')
+assert(built.bank.tempo_mode == 'manual', 'the bank did not record a manual tempo')
+
+print('test_analysis_transport: 9 tests passed')

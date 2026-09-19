@@ -327,7 +327,31 @@ def _sha256_file(path):
     return digest.hexdigest()
 
 
-def analyse_request(wav_path, deltas=None):
+def confirmed_alignment(value):
+    """A correction the player accepted, or None if it cannot be honoured.
+
+    An alignment arrives only from a reanalysis the player asked for, so it
+    outranks the automatic estimate. A malformed or out-of-range one is ignored
+    rather than trusted: falling back to the estimate is wrong, but writing an
+    unusable tempo into the bank is worse.
+    """
+    if not isinstance(value, dict):
+        return None
+    bpm, origin = value.get("bpm"), value.get("origin_sample", 0)
+    if isinstance(bpm, bool) or not isinstance(bpm, (int, float)):
+        return None
+    bpm = float(bpm)
+    if bpm != bpm or not (BPM_MIN <= bpm <= BPM_MAX):
+        return None
+    if isinstance(origin, bool) or not isinstance(origin, (int, float)):
+        return None
+    origin = int(round(float(origin)))
+    if origin < 0:
+        return None
+    return {"bpm": bpm, "origin_sample": origin}
+
+
+def analyse_request(wav_path, deltas=None, alignment=None):
     """Produce one worker-valid analysis result from a captured WAV."""
     mono, source_rate, _ = read_capture_wav(wav_path)
     deltas = dict(DEFAULT_DELTA if deltas is None else deltas)
@@ -336,8 +360,13 @@ def analyse_request(wav_path, deltas=None):
     identity = {"backend_id": BACKEND_ID,
                 "backend_sha256": _sha256_file(Path(__file__).resolve()),
                 "template_sha256": _sha256_file(_TEMPLATES)}
+    confirmed = confirmed_alignment(alignment)
     empty = {"bpm": DEFAULT_BPM, "tempo_detected": False, "origin_sample": 0,
-             "detector": identity, "lane_onset_gates": empty_gates, "candidates": []}
+             "tempo_mode": "auto", "detector": identity,
+             "lane_onset_gates": empty_gates, "candidates": []}
+    if confirmed:
+        empty.update({"bpm": confirmed["bpm"], "tempo_detected": True,
+                      "origin_sample": confirmed["origin_sample"], "tempo_mode": "manual"})
     if not mono.size or not np.any(mono):
         return empty
     analysis = mono if source_rate == SR else _resample(mono, source_rate, SR)
@@ -378,8 +407,15 @@ def analyse_request(wav_path, deltas=None):
                                "confidence": float(min(1.0, low_row[frame] / (low_row.max() + EPS)))})
     candidates.sort(key=lambda c: (c["sample_index"], LANES.index(c["lane"])))
     bpm, detected = estimate_bpm(envelope, fps)
-    return {"bpm": float(bpm), "tempo_detected": bool(detected), "origin_sample": 0,
-            "detector": identity, "lane_onset_gates": empty_gates, "candidates": candidates}
+    origin, mode = 0, "auto"
+    if confirmed:
+        # The player corrected this capture and asked for it to be reanalysed;
+        # their tempo and origin stand, and onset positions are absolute, so
+        # they do not move.
+        bpm, detected, origin, mode = confirmed["bpm"], True, confirmed["origin_sample"], "manual"
+    return {"bpm": float(bpm), "tempo_detected": bool(detected), "origin_sample": int(origin),
+            "tempo_mode": mode, "detector": identity, "lane_onset_gates": empty_gates,
+            "candidates": candidates}
 
 
 def _mono_float(pcm):
@@ -408,8 +444,9 @@ def main(argv=None):
         wav = request.get("wav_path")
         if not isinstance(wav, str) or not wav:
             raise ValueError("wav_path is required")
-        args.result.write_text(json.dumps(analyse_request(wav), separators=(",", ":")),
-                               encoding="utf-8")
+        args.result.write_text(
+            json.dumps(analyse_request(wav, alignment=request.get("alignment")),
+                       separators=(",", ":")), encoding="utf-8")
         return 0
     except Exception:
         return 2
