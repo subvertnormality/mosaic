@@ -1,0 +1,180 @@
+# Rhythm Doctor implementation checkpoint
+
+Base: `codex/behaviour-validation`, `8c08cb93d9f5a4cc36488e90517043531446a4f7`.
+Work branch: `codex/rhythm-doctor`.
+The user authorized implementation on 2026-09-19, superseding the planning-only
+status in the preserved proposal. PLAN.md is an unchanged copy of the proposal
+from the adjacent monome-emulator workspace.
+
+## Status
+
+RD-01/RD-02 in progress. No delivery card is complete. No product UI or standalone
+transcription capability is claimed. Source bank foundations can be developed
+independently but must not bypass the RD-02 empirical gate for integration.
+
+The baseline full Lua suite completed with 1,701 successes, zero failures, in
+27.589 seconds. Its log is evidence/lua-baseline.log. The surrounding shell
+wrapper returned 1 because its exit-status forwarding was empty; this is a
+harness error after the Lua runner printed OK, not a Lua test failure. Do not
+present the wrapper as a successful command. Later runs must use reliable exit
+propagation. No production changes existed at this baseline.
+
+## Source integration map (RD-01 audit, not acceptance)
+
+- `lib/pages/trigger_edit_page/trigger_edit_page.lua`: four algorithm IDs use
+  fader x=12..15,y=2. Add a separate enum-5 button at x=16,y=2; expanding the
+  proportional fader would change existing IDs. Existing paint writes trigs and
+  lengths but no velocities; source update fans out to referencing channels.
+- `lib/m_grid.lua`: key-down registers the held key and long-press timer;
+  ordinary short presses dispatch on release. Claim only RD Record before this
+  path, keep release ownership across page changes, and clear ownership on
+  disconnect. Transport controls remain outside RD modal ownership.
+- `lib/ui.lua`: trigger UI receives encoders but its key dispatch is commented
+  out. RD K2/K3 dispatch requires explicit routing while preserving K1 semantics.
+- `lib/project_lifecycle.lua`: save stops and resets transport before serialization.
+  Capture inhibition must occur before this call; autosave needs one deferred
+  flag and project replacement must discard the old flag.
+- `lib/pattern.lua`: `update_source_working_patterns` propagates source data.
+  Journal revisions must cover all source edits, including note/velocity edits,
+  copies and history, not only this trig editor.
+- `lib/clock/m_clock.lua`: transport preparation is the synchronous invalidation
+  boundary; worker cleanup must not block Start.
+
+## Environment and hardware observations
+
+Ubuntu-20.04 WSL has Lua, Python, GCC, JACK and libsndfile; Ubuntu is a separate,
+less-equipped distribution. Norns was reachable through an existing authenticated
+SSH control socket. Its architecture is armv7l; JACK 1.9.17 and libsndfile 1.0.31
+are installed. No active test ownership marker was observed. A read-only JACK
+port inspection found physical capture_1/2 connected to crone input_1/2. No
+connections, scripts, device files or runtime settings were changed by this audit.
+An independent input-only client will be tested before selecting capture ownership.
+
+Device observations are not capture performance or transcription-quality evidence.
+
+## Native UI baseline evidence
+
+`RD-UI-001` starts the actual frozen Mosaic base, presses the four existing
+algorithm positions and then (16,2), and requires the literal RHYTHM DOCTOR
+framebuffer header. Both real-time and controlled-time baseline runs failed at
+that missing user-visible output. Both completed cleanup without an error.
+Source identities and recipe hashes are preserved in:
+
+- evidence/mosaic-rhythm-doctor-ui-red-realtime-02.json
+- evidence/mosaic-rhythm-doctor-ui-red-controlled.json
+
+The first real-time attempt had an oracle setup KeyError because the shared
+header helper recognizes only existing titles. It remains separately preserved
+at /tmp/mosaic-rhythm-doctor-ui-red-realtime and is not counted as feature-red
+acceptance. The corrected recipe renders the proposed literal title directly
+using the independent norns font primitive. No oracle was weakened.
+
+Current pure metric tests: 6 onset/velocity, 8 performance, 5 per-domain quality.
+Their green results prove the evaluators, not transcription quality or hardware
+performance. The performance report explicitly does not authenticate raw device
+evidence; the release campaign must verify that separately.
+
+## Component hardware results and source-revision integration
+
+The frozen native capture passed three physical-Norns owned-JACK-injection
+trials; see evidence/hardware-capture-mosaic-rd-probe-d02976ca26f44569a0a6d2f22ab752e6.json.
+Each preserved stereo sample continuity and the original JACK routing. PCM buffers
+were memory-locked. Native preflight cost 148ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“163 ms (mode-entry work); arm to first
+observed PCM was 1.26ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“1.49 ms using polling, not a grid-key timestamp. ADC ingress,
+Mosaic UI integration, transcription, and full-feature performance are untested.
+The measured process peak RSS includes Python/JACK/shared runtime overhead and
+is not the feature's incremental-RSS acceptance measurement.
+
+The optimized immutable-bank scroll benchmark was also run on physical Norns:
+22,500 candidates, 720 timeline cells, 100 five-lane scrolls per trial. Across three
+trials, CPU p95 was 3.97ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“4.39 ms; maximum 14.78ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“15.47 ms. Building that largest bank
+cost 653ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“662 ms of Lua CPU, so app integration must not call it synchronously on
+the UI event thread. These timings do not measure screen response or model work.
+
+The source revision module and its integration into `pattern.lua` have 6 passing
+new unit/integration tests, with missing-module/missing-hook failures preserved.
+The complete Lua suite after this production hook passes: 1,707 successes,
+zero failures, 31.485 seconds. Evidence: lua-source-revision-candidate.log.
+Revisions are session-only, do not alter saved project fields, and change on
+explicit source edits and replacement source/song identity. Full input-path
+coverage for every editor remains required before paint integration.
+
+## Feasibility review cautions
+
+The first detector pilot result is not reliable quality evidence: it compared
+20-second predictions with whole-song references and emitted framewise positives
+as duplicate onsets. It must remain labelled an invalid evaluation harness;
+corrected runs must retain separate identities. It does not establish that the
+architecture fails the quality gates.
+
+The first tempo pilot candidate logic similarly cannot establish detector
+feasibility: it incorrectly required three consecutive beat callbacks to span
+four seconds and treated 15 beat intervals as a 16-beat region. Corrections need
+acceptance fixtures for valid acquisition as well as uncertainty cases. Passing
+characterisation tests of an always-uncertain prototype are not Auto acceptance.
+
+## Further component checks (2026-09-19)
+
+All four legacy algorithm tooltips now have exact actual-framebuffer assertions
+before the fifth-mode assertion. Both time lanes passed the legacy checks and
+failed at the expected missing fifth title; cleanup succeeded. The separate
+`mosaic-rhythm-doctor-ui-red-legacy-*` manifests preserve these runs.
+
+Nine focused source-revision tests now cover actual trigger tap/length/legacy
+paint, note and velocity editor callbacks, including parallel edits, plus copy
+and identity boundaries. Source-revision-only tests do not substitute for the
+future undo UI/MIDI acceptance.
+
+The resource lifecycle now inhibits saves until release acknowledgement, preserves
+an in-flight release token through project replacement, and refuses destructive
+modal confirmation without explicit stopped transport. Four failing regressions
+were preserved before the fix. Pure core/integration/lifecycle tests also passed
+on physical Norns with deployed hashes in hardware-core-lifecycle-v1.json. That
+report predates the subsequent journal/schema/paint hardening; it does not certify
+those later changes.
+
+The journal now starts a fresh stack when ordinary editing occurred before a new
+paint, preventing a second Undo from jumping over that edit. Fourteen malformed
+bank cases are rejected before READY. The paint matrix checks each of 64 cells,
+all policies, numeric/boolean adapters and shifts; its current measured result is
+5,433 assertions. Independent performance validation now rejects buffers too
+short for four bars and requires both short/full-buffer measurements, scoring
+latency percentiles separately so one duration class cannot hide another's failure.
+
+The full-development spectral classifier pilot used all nine development songs
+(182ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“314 seconds each) with 420 TOM references, then fixed 60-second diagnostic
+holdouts. F1 was BD 0.7283, SD 0.5457, HH 0.7034, TOM 0, BASS 0.5610. All fail the
+0.80 onset gate. This is evidence against that frozen candidate, not proof that
+all possible local architectures fail. It is not pristine final acceptance data.
+No UI, persistence, standalone transcription or complete release is claimed.
+
+
+The global paint-history bound is now enforced across all targets, with a
+session-wide token generation preventing reuse after eviction. The new regression
+failed before the change; all six pure suites pass on physical Norns in
+`hardware-core-global-journal-v4.json`. The actual-application existing
+`M-PAT-BOUNDARY-001` passes in both timing lanes on frozen commit `6dff846`;
+this covers the source-revision hook without claiming a Rhythm Doctor UI pass.
+
+The corrected frozen corpus v11 passes inventory/provenance and independent PCM
+fixture audits (40 development, 66 held, seven acquisition clips). No detector
+has been scored on it. Two diagnostic transcription candidates miss the quality
+gates; pretrained drum/bass architectures are still under investigation. Total
+Windows process working set is not incremental RSS or ARM device evidence.
+
+
+Checkpoint component runner: 16 selected groups pass, with unchanged source hashes
+through the run (`component-checkpoint-v2.json`). Detector unit tests are separate
+Windows checks: three classifier tests, three NMF selection tests and one ADTOF
+label-adapter test pass. The ADTOF and UMXHQ pretrained diagnostics remain in
+progress and are not shipping classifiers. The official UMXHQ Zenodo weight
+record explicitly declares MIT (`umxhq-official-license.json`), resolving the
+earlier research note's license uncertainty.
+
+The original acquisition evaluator draft's abbreviated red/green report is not
+reliable acceptance evidence. Independent audit reproduced four failures and
+three errors, retained with actual source hashes and raw output in
+`acquisition-independent-audit-red.json`. The corrected ten-test evaluator checks
+16 complete intervals, full-span beat phase, control failures, explicit eligible
+identities, uncertainty labels and numeric bounds. It is an independent scoring
+component, not measured acquisition success.

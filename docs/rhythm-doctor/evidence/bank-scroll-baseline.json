@@ -1,0 +1,17 @@
+{
+  "source_sha256": "42CA3F3C2E99A6E18BB428F38C9D5876DAA841F6974A5F8873CA1B05F8242883",
+  "measurement": {
+    "scope": "Lua bank CPU only; no UI/hardware latency claim",
+    "candidates": 22500,
+    "timeline_cells": 720,
+    "samples": 100,
+    "build_cpu_ms": 57.0,
+    "scroll_five_lanes_cpu_p95_ms": 56.0,
+    "scroll_five_lanes_cpu_max_ms": 86.0,
+    "lua_heap_growth_kib": 56936.623047,
+    "semantic_assertions_passed": true
+  },
+  "platform": "Windows desktop",
+  "hardware_claim": false,
+  "benchmark_sha256": "61D24C8719E575BF7706643D9B860F4F2B6FCF80E78356FAFE42FDA6B4A88974"
+}

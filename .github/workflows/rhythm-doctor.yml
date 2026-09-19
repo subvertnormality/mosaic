@@ -1,0 +1,37 @@
+name: Rhythm Doctor components
+on:
+  pull_request:
+    branches: [main, codex/behaviour-validation]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  components:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      RD_TEMPO_SYSTEM_AUBIO: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install component test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc lua5.3 jackd2 libjack-jackd2-dev libaubio-dev pkg-config
+          python3 -m pip install -r tools/rhythm_doctor_analysis/requirements.txt
+      - name: Run existing full Lua regression suite
+        run: bash test.sh
+      - name: Record dependency versions
+        run: |
+          mkdir -p /tmp/rd-dependencies
+          python3 -m pip freeze > /tmp/rd-dependencies/python.txt
+          dpkg-query -W > /tmp/rd-dependencies/debian.txt
+      - name: Run component contracts and native PCM tests
+        run: python3 tests/rhythm_doctor/run_components.py --native --detector --output /tmp/rd-component-report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rhythm-doctor-components
+          path: |
+            /tmp/rd-component-report
+            /tmp/rd-dependencies

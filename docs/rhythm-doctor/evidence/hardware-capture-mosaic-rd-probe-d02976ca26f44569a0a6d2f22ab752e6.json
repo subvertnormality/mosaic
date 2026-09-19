@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "scope": "RD-01 native capture spike only",
+  "profile": "physical-norns-owned-JACK-injection",
+  "physical_adc_tested": false,
+  "grid_latency_tested": false,
+  "analysis_performance_tested": false,
+  "library_sha256": "d5049a3d8cf14c22f5afdd30b9384a14022e61758c16956693f65350aa5de8d0",
+  "injector_sha256": "f89e13cfa838a66107365f0b6e9c92f3d2f0504600c0a25e8c960d52f2b590db",
+  "architecture": "armv7l",
+  "trials": [
+    {
+      "trial": 0,
+      "passed": true,
+      "preflight_ms": 163.08401,
+      "native_preflight_ms": 162.985625,
+      "pcm_locked": true,
+      "arm_to_first_observed_pcm_ms": 1.27125,
+      "frames": 12032,
+      "start_frame": 3874662272,
+      "end_frame": 3874674304,
+      "wav_sha256": "c9618324d42c7ed3a0fdc5fa7eeb07ddb644a6e2af7c8db8c59a37facee9e28d",
+      "injector_stderr": "",
+      "routing_restored": true
+    },
+    {
+      "trial": 1,
+      "passed": true,
+      "preflight_ms": 148.337187,
+      "native_preflight_ms": 148.240313,
+      "pcm_locked": true,
+      "arm_to_first_observed_pcm_ms": 1.491614,
+      "frames": 12032,
+      "start_frame": 3874737280,
+      "end_frame": 3874749312,
+      "wav_sha256": "b51fda108bffa54d0d432bd7fa9291fc95754e2ae2028c1d39736f129f25db15",
+      "injector_stderr": "",
+      "routing_restored": true
+    },
+    {
+      "trial": 2,
+      "passed": true,
+      "preflight_ms": 156.957135,
+      "native_preflight_ms": 156.847032,
+      "pcm_locked": true,
+      "arm_to_first_observed_pcm_ms": 1.255469,
+      "frames": 12160,
+      "start_frame": 3874814208,
+      "end_frame": 3874826368,
+      "wav_sha256": "815325e383ab6a03564317b44675fd4f366422acab2970462acbad3dc1b9837b",
+      "injector_stderr": "",
+      "routing_restored": true
+    }
+  ],
+  "process_peak_rss_kib": 136692,
+  "routing_restored": true,
+  "passed": true,
+  "source_sha256": {
+    "tools/rhythm_doctor/rd_capture.c": "6b613f9e8640c8bbce6a9cab0b6cb376e85204c820288c4d78a8070ed35d3bf3",
+    "tests/rhythm_doctor/test_capture_injector.c": "7fc977c01a0cb47eb1bebb08c4cf93acd8341a9b7c3d60cc94c56ddd5b69a0b9",
+    "tests/behaviour/rhythm_doctor_capture_hardware.py": "8a1d90d1bc27d55b03ceda4250b40e01eb2fd12a86f8d126db321be7d34086c6"
+  },
+  "run_id": "mosaic-rd-probe-d02976ca26f44569a0a6d2f22ab752e6",
+  "ssh_command_exit_code": 0
+}

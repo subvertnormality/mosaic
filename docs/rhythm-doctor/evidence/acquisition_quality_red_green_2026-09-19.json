@@ -1,0 +1,7 @@
+{
+  "source_identity": "tests/rhythm_doctor/test_acquisition_quality.py",
+  "red_output_before_fix": "Ran 4 tests: short 7-second interval was incorrectly accepted because the required 16-beat span used 15/bpm*16 instead of 15*60/bpm; duplicate beat timestamps were accepted.",
+  "green_command": "python tests/rhythm_doctor/test_acquisition_quality.py",
+  "green_output": "Ran 4 tests: OK",
+  "scope": "independent literal acquisition evidence evaluator; not a detector result or complete RD02 claim"
+}

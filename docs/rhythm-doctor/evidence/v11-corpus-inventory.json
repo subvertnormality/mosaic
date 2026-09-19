@@ -1,0 +1,23 @@
+{
+  "development_clips": 40,
+  "held_out_clips": 66,
+  "acquisition_clips": 7,
+  "held_out_positive_clips": {
+    "BD": 49,
+    "SD": 48,
+    "HH": 48,
+    "TOM": 48,
+    "BASS": 49
+  },
+  "held_out_events": {
+    "BD": 558,
+    "SD": 536,
+    "HH": 1603,
+    "TOM": 387,
+    "BASS": 734
+  },
+  "manifest_sha256": "1cd3dc6e86461e78330ea0c885880d3f01131b572183da5a84b3da101a8e5e6b",
+  "passed": true,
+  "scope": "corpus inventory and provenance only",
+  "full_quality_acceptance": false
+}

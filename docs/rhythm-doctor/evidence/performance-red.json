@@ -1,0 +1,7 @@
+{
+  "exit_code": 0,
+  "output": "test_performance (unittest.loader._FailedTest) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_performance (unittest.loader._FailedTest)\r\n----------------------------------------------------------------------\r\nImportError: Failed to import test module: test_performance\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 436, in _find_test_path\r\n    module = self._get_module_from_name(name)\r\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 377, in _get_module_from_name\r\n    __import__(name)\r\n  File \"C:\\Users\\andy\\Documents\\ChatGPT\\mosaic\\.worktrees\\rhythm-doctor\\mosaic\\tests\\rhythm_doctor\\test_performance.py\", line 5, in <module>\r\n    from performance import evaluate\r\nModuleNotFoundError: No module named 'performance'\r\n\r\n\r\n----------------------------------------------------------------------\r\nRan 1 test in 0.000s\r\n\r\nFAILED (errors=1)\r\n",
+  "expected_failure": "ModuleNotFoundError: No module named performance",
+  "test_sha256": "4A5DB7C87707C958DA2A66D7C96A368C0BA4ABA277F5D9CE39BCA85BB435E278",
+  "source_revision": "8c08cb93d9f5a4cc36488e90517043531446a4f7"
+}

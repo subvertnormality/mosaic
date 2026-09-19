@@ -1,0 +1,44 @@
+{
+  "profile": "physical-norns",
+  "source_sha256": {
+    "lib/rhythm_doctor/bank.lua": "7b0007c99d21c6e641f7f31b0afb269a0b9a8b5acb4e9ac4a04a1629dcd42e1f",
+    "tests/rhythm_doctor/benchmark_bank.lua": "61d24c8719e575bf7706643d9b860f4f2b6fcf80e78356fafe42fda6b4a88974"
+  },
+  "trials": [
+    {
+      "scope": "Lua bank CPU only; no UI/hardware latency claim",
+      "candidates": 22500,
+      "timeline_cells": 720,
+      "samples": 100,
+      "build_cpu_ms": 652.787,
+      "scroll_five_lanes_cpu_p95_ms": 4.385,
+      "scroll_five_lanes_cpu_max_ms": 14.777,
+      "lua_heap_growth_kib": 13074.961914,
+      "semantic_assertions_passed": true
+    },
+    {
+      "scope": "Lua bank CPU only; no UI/hardware latency claim",
+      "candidates": 22500,
+      "timeline_cells": 720,
+      "samples": 100,
+      "build_cpu_ms": 660.216,
+      "scroll_five_lanes_cpu_p95_ms": 3.968,
+      "scroll_five_lanes_cpu_max_ms": 15.215,
+      "lua_heap_growth_kib": 13074.961914,
+      "semantic_assertions_passed": true
+    },
+    {
+      "scope": "Lua bank CPU only; no UI/hardware latency claim",
+      "candidates": 22500,
+      "timeline_cells": 720,
+      "samples": 100,
+      "build_cpu_ms": 662.466,
+      "scroll_five_lanes_cpu_p95_ms": 4.037,
+      "scroll_five_lanes_cpu_max_ms": 15.469,
+      "lua_heap_growth_kib": 13074.961914,
+      "semantic_assertions_passed": true
+    }
+  ],
+  "scope": "bank slicing CPU cost only; excludes UI/event scheduling, capture and model inference",
+  "full_feature_performance_verified": false
+}
