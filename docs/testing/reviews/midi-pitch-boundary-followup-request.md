@@ -1,0 +1,7 @@
+All three findings are addressed in the current worktree and refreshed `docs/testing/midi-pitch-boundary-validation.json`.
+
+1. `m_midi.all_notes_off` now emits `count` Note Off messages before clearing each owned endpoint. The new unit test authors -17 and 0 concurrently at endpoint0 plus 148 and127 concurrently at endpoint127, invokes actual all_notes_off, and requires four releases with empty bookkeeping. Explicit release collisions and unmatched clamped safety release remain covered. Full suite now passes530/530.
+2. M-TRANS-005 now requires the exact ordered four-message program group repeated nine times in each stage, including channel/status/value: higher ends CC-program channel4 value88 and lower value40. It explicitly checks the exact ten script-start program events and asserts their exclusion boundary before the first stage. Each scoped stage still accounts for exactly60 events.
+3. After the LOCK-SCALE registry metadata edit and oracle/cleanup changes, I reran the finalized unclamped baseline, both M-TRANS-005 lanes and all six adjacent lanes. The refreshed validation hashes the current four candidate files and points only to these final runs. The immutable final3 snapshot contains current source and passes530 Lua plus21 focused Python tests.
+
+Fresh run IDs: baseline9a5bd982; candidate fb8cf886/f5701344; M-TRANS-002 84022bee/079e868a; M-TRANS-004 fbde67b1/d7e0ba69; M-MERGE-016 d0f61cac/dfa6cb19. Please verify the fixes and evidence, then return ACCEPTED or CHANGES REQUIRED without broadening scope.

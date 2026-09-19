@@ -1,0 +1,124 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0083",
+  "base": "4b5abefb71aa91f7b28b38ee8117e99258af1adb",
+  "production_patch_sha256": "67496164b2fdc930b0d2813be3ab587fdf53803345bc23f94a24e471715ac94d",
+  "native_runs": [
+    {
+      "case": "M-PARAM-039",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/2bb789a894e440d0b6f7a23e00e9033d/manifest.json",
+      "sha256": "2b06e27fe45d280e7871bfb2b3f86308b9c6fa8c93df63da495e7d7e76d3b9fb",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-040",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/325a3e28b2b04e92b878c9db747ca43b/manifest.json",
+      "sha256": "547e0f97519f983fef3e15e3a3901aa56c3812f53d06fbbc5842e15b10a3e1df",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-041",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e68934161a754d9ca4bb727144df303e/manifest.json",
+      "sha256": "95814f5114804d53020482b16e88d893f1f29aeb067d8ff4c771194b48bdc5c0",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-042",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b05e4ee87ad84004b932aba9de8b4732/manifest.json",
+      "sha256": "8161bf812df9e87e35cbaeeb8c59be1ae2987d1667cf5492d4fae2318c779593",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-037",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/077c646a708b497bb46d272855db8de5/manifest.json",
+      "sha256": "4df2b10709bdffee52abebac4362b45c991d9406a449bd03a789bc7de98b1df6",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-038",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/241b1141063c4d5c930ef7b4377b69ce/manifest.json",
+      "sha256": "31a8a9cdff794419c387ca289cf4175644359e1beabf06845f191e3c07ce3d36",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-004",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5b114e9d14524d9d9b3eedcfda98d7fe/manifest.json",
+      "sha256": "908b33c6a4188fbf303b5d79de7b362dcefa4be7ddb11b4a076926452231ae51",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-039",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9e5d9617e57040ae838abeb60f9551a6/manifest.json",
+      "sha256": "76dfcf3e8c882a6bd01170914a44cff137e606844e3de592a477e3db7de737ac",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-040",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7ed5fa34b42b47548c0c35308df4b69c/manifest.json",
+      "sha256": "cc726c57a55046fbd58c0a8123efe1d178d8e2c0052c3e489765b0fed31eb4e1",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-041",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ed0cd545041441e88dee377977a4b286/manifest.json",
+      "sha256": "8e880b638cefaa97b754cdfc4093898478c8b9ac19a40d161570d69766380d18",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-042",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/202602e6b5f847ec8a2dac4031a35c77/manifest.json",
+      "sha256": "c0bd35357b0fd53c693985006488037fb1ef51f0d1b99e0f9954f286109a271f",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-037",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/22486a586ad64263b6d13049029a3962/manifest.json",
+      "sha256": "d4181e2850889e66d7b515934e62b1de04ee0512b50814e0435b8829afa875f7",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-038",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/18e0e27f84974ae088a2e4476e806a77/manifest.json",
+      "sha256": "c5355389bf2ba5616ceebaa0c2b5a4b3542fb881c42785332dd4694d9f7d127f",
+      "passed": true
+    },
+    {
+      "case": "M-PARAM-004",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0d58f2e7ea294f5ba0f2ef2c8f9a3b67/manifest.json",
+      "sha256": "1117193aaa946b2cb79b5376ad6e6f5faeddfb266c77861ce9d0a310906dc5ac",
+      "passed": true
+    }
+  ],
+  "unit_integration": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-39e6149cc5be431cba8d506e8a0eeb70/results.json",
+    "sha256": "bcafbda0a5c2d089e0650ca998462bb5ba435341a3b9ab03488efaeb84af3063",
+    "summary": "Ran 511 tests in 10.644 seconds, 511 successes, 0 failures"
+  },
+  "decision": "Random pentatonic applies to nonzero sum regardless of sign; zero/cancellation unchanged unless other pentatonic options apply independently.",
+  "assertions": [
+    "Negative and positive offsets, sampled zero and actual cancelling -2/+2 on F65 in exact seeded native output",
+    "Random and Twos separately and combined; ordinary/full/snap/raw masks; original option-off domains and fixed override regressions",
+    "16 direct production-step combinations and192 production-scheduler integration combinations across all/merged/fixed policies; both cancellation directions forced at PRNG boundary",
+    "Existing modal quantiser unit matrix retained for lower ties, signed degrees, roots, octaves and cached processing"
+  ],
+  "limitations": [
+    "Intentional change to previously unfiltered negative-offset melodies",
+    "Other random legal values and lifecycle combinations remain; sampled native composition is not full exhaustive domain",
+    "Current controlled profile remains unadmitted; full manual/emulator/final hardening gates remain incomplete"
+  ],
+  "full_campaign_complete": false
+}

@@ -1,3 +1,41 @@
+## 1.3.0
+
+### Timing, transport and recording
+
+- Improved internal and external MIDI clock synchronisation, including repeated Start,
+  Stop, Continue, Song Position Pointer, clock forwarding, tempo, division and shuffle.
+- Quantised live MIDI recording to the step active when a note begins and measured
+  recorded note and chord length through the final key release.
+- Fixed overlapping, repeated and same-pitch input ownership so releases do not leave
+  stuck notes across MIDI ports or channels.
+- Hardened voice, arpeggio, strum, slide, panic and restart lifecycles.
+
+### Sequencing and editing
+
+- Expanded and corrected parameter locks, trigless locks, slides, trig parameters,
+  probability, undo/redo and live-recording interactions.
+- Corrected scale selection and locks, quantisation inheritance, masks, chord behaviour,
+  pitch rounding, octave crossings and pentatonic pattern merging.
+- Hardened all 16 pattern slots, channel ranges and lengths, song queueing, repeats,
+  transitions, copy and clear operations.
+
+### Devices, projects and interface
+
+- Improved MIDI device configuration, mapping, NRPN encoding, patch recall and malformed
+  or unreadable configuration handling.
+- Added project validation and safer new, save, load and autosave behaviour so invalid
+  projects do not replace the current project.
+- Fixed stale parameter slots and several grid and screen display inconsistencies.
+
+### Maintenance
+
+- Split transport, MIDI, device, parameter, project, history, musical-resolution and
+  channel-editor responsibilities into smaller modules.
+- Reduced repeated pattern rebuilding and parameter lookup work in playback paths.
+- Added emulator-backed real-time and controlled-time behaviour coverage plus expanded
+  Lua unit and integration coverage.
+- Updated the manual and cheat sheet to describe the validated behaviour.
+
 ## 1.2.12
 
 - Fixed regression where norns devices wouldn't initiate due to lack of prexisting state

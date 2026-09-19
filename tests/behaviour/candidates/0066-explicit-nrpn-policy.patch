@@ -1,0 +1,458 @@
+--- a/lib/models/program.lua
++++ b/lib/models/program.lua
+@@ -2,6 +2,7 @@
+ 
+ local quantiser = include("mosaic/lib/quantiser")
+ 
++local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+ local program = {}
+ local program_store = {}
+ 
+@@ -28,7 +29,7 @@
+     end
+   end
+   
+-  return data
++  return nrpn_codec.migrate(data, device_map and device_map.get_device)
+ end
+ 
+ 
+@@ -148,6 +149,8 @@
+ function program.init()
+   local root_note = 0
+   program_store = {
++    nrpn_policy_version = 1,
++    nrpn_stored_modes = {},
+     selected_page = pages.pages.channel_edit_page,
+     selected_song_pattern = 1,
+     selected_pattern = 1,
+--- a/lib/m_midi.lua
++++ b/lib/m_midi.lua
+@@ -3,6 +3,7 @@
+ local quantiser = include("mosaic/lib/quantiser")
+ local divisions = include("mosaic/lib/clock/divisions")
+ 
++local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+ local m_midi = {}
+ 
+ midi_devices = {}
+@@ -332,20 +333,20 @@
+   end
+ end
+ 
+-function m_midi.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
+-  -- Select NRPN (LSB and MSB)
++function m_midi.nrpn(nrpn_msb, nrpn_lsb, value, channel, device, mode)
++  -- Validate the whole message before selecting a receiver parameter.
++  local msb, lsb = nrpn_codec.encode(value, mode)
++  for _,address in ipairs({nrpn_msb, nrpn_lsb}) do
++    assert(type(address) == "number" and address % 1 == 0 and address >= 0 and address <= 127,
++      "NRPN address must contain two 7-bit integers")
++  end
++  assert(nrpn_msb ~= nil and nrpn_lsb ~= nil, "NRPN address is required")
++  assert(type(channel) == "number" and channel % 1 == 0 and channel >= 1 and channel <= 16,
++    "NRPN channel must be from 1 to 16")
+   m_midi.cc(99, nil, nrpn_msb, channel, device)
+   m_midi.cc(98, nil, nrpn_lsb, channel, device)
+-
+-
+-  -- Calculate MSB and LSB from value
+-  local msb_value = math.floor(value / 128) -- MSB
+-  local lsb_value = value % 128  -- LSB
+-
+-  -- Send MSB and LSB values
+-  m_midi.cc(6, nil, msb_value, channel, device)
+-  m_midi.cc(38, nil, lsb_value/2, channel, device)
+-
++  m_midi.cc(6, nil, msb, channel, device)
++  m_midi.cc(38, nil, lsb, channel, device)
+ end
+ 
+ 
+--- a/lib/devices/param_manager.lua
++++ b/lib/devices/param_manager.lua
+@@ -1,3 +1,4 @@
++local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+ 
+ 
+ local param_manager = {}
+@@ -138,11 +139,12 @@
+         params:set_action(
+           "midi_device_params_channel_" .. channel_id .. "_" .. i,
+           function(x)
+-            if x ~= val.off_value then
++            if x ~= (val.off_value == nil and -1 or val.off_value) then
+               if val.nrpn_max_value and val.nrpn_lsb and val.nrpn_msb then
+-                m_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, c, midi_device)
++                m_midi.nrpn(val.nrpn_msb, val.nrpn_lsb, x, val.channel or c, midi_device,
++                  nrpn_codec.stored_mode(program.get(), channel_id, val, device))
+               elseif val.cc_msb and val.cc_max_value then
+-                m_midi.cc(val.cc_msb, val.cc_lsb or nil, x, c, midi_device)
++                m_midi.cc(val.cc_msb, val.cc_lsb or nil, x, val.channel or c, midi_device)
+               end
+               channel_edit_page_ui.refresh_trig_lock_values()
+             end
+@@ -200,8 +202,12 @@
+ 
+   end
+   local assigned = channel.trig_lock_params[index]
++  if assigned.nrpn_msb ~= nil and assigned.nrpn_lsb ~= nil then
++    assigned.nrpn_lsb_mode = nrpn_codec.stored_mode(program.get(), channel.number, param, meta_device)
++  end
+   if previous.id ~= assigned.id or previous.param_id ~= assigned.param_id or
+-      previous.type ~= assigned.type or previous.device_name ~= assigned.device_name then
++      previous.type ~= assigned.type or previous.device_name ~= assigned.device_name or
++      previous.nrpn_lsb_mode ~= assigned.nrpn_lsb_mode then
+     -- An active callback belongs to its original parameter, not just the slot.
+     -- Retire silently so it cannot consume the new parameter's destination lock.
+     m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, index)
+@@ -232,6 +238,9 @@
+     param_copy.param_id = string.format("midi_device_params_channel_%d_%d", channel.number, param_copy.index)
+   end
+   
++  if param_copy.nrpn_msb ~= nil and param_copy.nrpn_lsb ~= nil then
++    param_copy.nrpn_lsb_mode = nrpn_codec.stored_mode(program.get(), channel.number, param, meta_device)
++  end
+   -- Assign the cloned and modified param
+   channel.trig_lock_params[index] = param_copy
+ end
+--- a/lib/devices/midi_patch_recall.lua
++++ b/lib/devices/midi_patch_recall.lua
+@@ -1,3 +1,4 @@
++local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+ -- Recall stored device controls independently of per-step lock assignments.
+ local recall = {}
+ function recall.send()
+@@ -13,7 +14,8 @@
+           if value ~= off then
+             local midi_channel = parameter.channel or route.midi_channel
+             if parameter.nrpn_max_value and parameter.nrpn_msb and parameter.nrpn_lsb then
+-              m_midi.nrpn(parameter.nrpn_msb,parameter.nrpn_lsb,value,midi_channel,route.midi_device)
++              m_midi.nrpn(parameter.nrpn_msb,parameter.nrpn_lsb,value,midi_channel,route.midi_device,
++                nrpn_codec.stored_mode(program.get(), channel, parameter, device))
+             elseif parameter.cc_msb and parameter.cc_max_value then
+               m_midi.cc(parameter.cc_msb,parameter.cc_lsb,value,midi_channel,route.midi_device)
+             end
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -1,3 +1,4 @@
++local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+ local chord_timing = include("mosaic/lib/clock/chord_timing")
+ local quantiser = include("mosaic/lib/quantiser")
+ local m_clock = include("mosaic/lib/clock/m_clock")
+@@ -94,7 +95,7 @@
+   return true
+ end
+ 
+-local function process_midi_param(param, step_trig_lock, midi_channel, midi_device)
++local function process_midi_param(param, step_trig_lock, midi_channel, midi_device, mode)
+ 
+   if param.nrpn_min_value and param.nrpn_max_value and param.nrpn_lsb and param.nrpn_msb then
+       m_midi.nrpn(
+@@ -102,7 +103,8 @@
+           param.nrpn_lsb, 
+           step_trig_lock or value,
+           midi_channel,
+-          midi_device
++          midi_device,
++          mode
+       )
+   elseif param.cc_min_value and param.cc_max_value and param.cc_msb then
+       m_midi.cc(
+@@ -152,7 +154,11 @@
+ 
+       if param.type == "midi" and (param.cc_msb or param.nrpn_msb) then
+ 
+-        local midi_channel = devices[channel.number].midi_channel
++        local midi_channel = param.channel or devices[channel.number].midi_channel
++        local nrpn_mode
++        if param.nrpn_msb ~= nil then
++          nrpn_mode = param.nrpn_lsb_mode or nrpn_codec.stored_mode(program_data, channel.number, param, device)
++        end
+ 
+         local param_id = param.param_id
+         local p_value = nil
+@@ -171,7 +177,7 @@
+           end
+ 
+           if not m_clock.handoff_spread_lock(channel.number, i, step, step_trig_lock) then
+-            process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device)
++            process_midi_param(param, step_trig_lock, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+           end
+ 
+           if next_lock and (program.get_channel_param_slide(channel, i) or program.get_step_param_slide(channel, step, i)) then
+@@ -187,7 +193,7 @@
+               quant = 1,
+               func = function(value, last_value)
+                 if last_value ~= value then
+-                  process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
++                  process_midi_param(param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+                 end
+               end
+             })
+@@ -198,13 +204,13 @@
+             goto continue
+           end
+ 
+-          process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device)
++          process_midi_param(param, p_value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+         elseif not m_clock.channel_is_sliding(channel, i) then
+           if value == param.off_value then
+             goto continue
+           end
+ 
+-          process_midi_param(param, value, midi_channel, devices[channel.number].midi_device)
++          process_midi_param(param, value, midi_channel, devices[channel.number].midi_device, nrpn_mode)
+         end
+       elseif param.type == "norns" and param.id == "nb_slew" then
+ 
+--- a/tests/behaviour/config/emu-midi.json
++++ b/tests/behaviour/config/emu-midi.json
+@@ -1 +1,57 @@
+-[{"name":"Emulator test device","id":"emu-test","type":"midi","polyphonic":true,"map_params_automatically":false,"params":[{"id":"emu_cc","param_id":"emu_cc","name":"Control 1","cc_msb":1,"cc_min_value":0,"cc_max_value":127,"off_value":-1,"short_descriptor_1":"CC","short_descriptor_2":"1"},{"id":"emu_nrpn","param_id":"emu_nrpn","name":"NRPN14","nrpn_msb":4,"nrpn_lsb":5,"nrpn_min_value":0,"nrpn_max_value":16383,"off_value":-1,"short_descriptor_1":"NR","short_descriptor_2":"14"},{"id":"SparseLow","param_id":"SparseLow","name":"SparseLow","cc_msb":2,"cc_min_value":100,"cc_max_value":127,"off_value":-1,"short_descriptor_1":"SP","short_descriptor_2":"2"},{"id":"SparseHigh","param_id":"SparseHigh","name":"SparseHigh","cc_msb":3,"cc_min_value":100,"cc_max_value":127,"off_value":200,"short_descriptor_1":"SP","short_descriptor_2":"3"}]}]
++[
++  {
++    "name": "Emulator test device",
++    "id": "emu-test",
++    "type": "midi",
++    "polyphonic": true,
++    "map_params_automatically": false,
++    "params": [
++      {
++        "id": "emu_cc",
++        "param_id": "emu_cc",
++        "name": "Control 1",
++        "cc_msb": 1,
++        "cc_min_value": 0,
++        "cc_max_value": 127,
++        "off_value": -1,
++        "short_descriptor_1": "CC",
++        "short_descriptor_2": "1"
++      },
++      {
++        "id": "emu_nrpn",
++        "param_id": "emu_nrpn",
++        "name": "NRPN14",
++        "nrpn_msb": 4,
++        "nrpn_lsb": 5,
++        "nrpn_min_value": 0,
++        "nrpn_max_value": 16383,
++        "off_value": -1,
++        "short_descriptor_1": "NR",
++        "short_descriptor_2": "14"
++      },
++      {
++        "id": "SparseLow",
++        "param_id": "SparseLow",
++        "name": "SparseLow",
++        "cc_msb": 2,
++        "cc_min_value": 100,
++        "cc_max_value": 127,
++        "off_value": -1,
++        "short_descriptor_1": "SP",
++        "short_descriptor_2": "2"
++      },
++      {
++        "id": "SparseHigh",
++        "param_id": "SparseHigh",
++        "name": "SparseHigh",
++        "cc_msb": 3,
++        "cc_min_value": 100,
++        "cc_max_value": 127,
++        "off_value": 200,
++        "short_descriptor_1": "SP",
++        "short_descriptor_2": "3"
++      }
++    ],
++    "nrpn_lsb_mode": "standard"
++  }
++]
+--- a/tests/behaviour/test_nrpn_bytes.lua
++++ b/tests/behaviour/test_nrpn_bytes.lua
+@@ -1,6 +1,6 @@
+ -- Independent 14-bit reconstruction: CC6 holds bits7..13, CC38 bits0..6.
+ -- https://midi.org/midi-1-0-control-change-messages
+-function include(_)return {} end
++function include(path) if path == "mosaic/lib/devices/nrpn_codec" then return dofile("lib/devices/nrpn_codec.lua") end return {} end
+ local midi=dofile("lib/m_midi.lua")
+ local sent={}
+ midi_devices[3]={cc=function(_,controller,value,channel)sent[#sent+1]={controller,value,channel} end}
+--- a/lib/config/elektron_digitakt_2.json
++++ b/lib/config/elektron_digitakt_2.json
+@@ -15,6 +15,7 @@
+   ],
+   "polyphonic": false,
+   "id": "digitakt2",
++  "nrpn_lsb_mode": "legacy-half",
+   "params": [
+     {
+       "cc_max_value": 127,
+--- /dev/null
++++ b/lib/devices/nrpn_codec.lua
+@@ -0,0 +1,115 @@
++-- Numeric NRPN transport policy. Receiver scaling belongs in device maps.
++local codec = {}
++
++function codec.resolve(override, parameter, device)
++  local mode = override
++  if mode == nil and parameter then mode = parameter.nrpn_lsb_mode end
++  if mode == nil and device then mode = device.nrpn_lsb_mode end
++  if mode == nil then mode = "standard" end
++  assert(mode == "standard" or mode == "legacy-half", "Unknown NRPN LSB mode: "..tostring(mode))
++  return mode
++end
++
++function codec.encode(value, mode)
++  mode = codec.resolve(mode)
++  assert(type(value) == "number" and value >= 0 and value <= 16383 and value % 1 == 0,
++    "NRPN value must be an integer from 0 to 16383")
++  local msb, lsb = math.floor(value / 128), value % 128
++  if mode == "legacy-half" then
++    -- Historical Mosaic divided ONLY the low byte by two. The pinned norns
++    -- Lua5.3 serializer converts fractional numbers to zero, not to floor.
++    -- Preserve those historical bytes explicitly; this is not numeric scaling
++    -- or a claim about any physical receiver's response.
++    lsb = lsb % 2 == 0 and lsb / 2 or 0
++  end
++  return msb, lsb
++end
++
++-- Persist the mode independently of a lock slot: unassigned stored controls
++-- are also recalled on Play. Device/parameter identity prevents switch leakage.
++function codec.stored_mode(data, channel, parameter, device)
++  local by_channel = data.nrpn_stored_modes and data.nrpn_stored_modes[channel]
++  local by_device = by_channel and device and by_channel[device.id]
++  local override = by_device and by_device[parameter.id]
++  if override == nil and by_device then override = by_device["*"] end
++  return codec.resolve(override, parameter, device)
++end
++
++function codec.migrate(data, get_device)
++  if data.nrpn_policy_version ~= nil then
++    assert(data.nrpn_policy_version == 1, "Unsupported NRPN policy version")
++    return data
++  end
++  -- Include serialized undo/redo and copied song/channel state. Visit each table
++  -- once because in-memory snapshots can share tables or contain cycles.
++  local seen = {}
++  local function migrate_assignments(value)
++    if type(value) ~= "table" or seen[value] then return end
++    seen[value] = true
++    if value.nrpn_msb ~= nil and value.nrpn_lsb ~= nil then
++      if value.nrpn_lsb_mode == nil then value.nrpn_lsb_mode = "legacy-half" end
++      codec.resolve(value.nrpn_lsb_mode)
++    end
++    for _,child in pairs(value) do migrate_assignments(child) end
++  end
++  migrate_assignments(data)
++  data.nrpn_stored_modes = data.nrpn_stored_modes or {}
++  for channel,route in pairs(data.devices or {}) do
++    local device = get_device and get_device(route.device_map)
++    if device and device.type == "midi" then
++      local channel_modes = data.nrpn_stored_modes[channel] or {}
++      data.nrpn_stored_modes[channel] = channel_modes
++      local modes = channel_modes[device.id] or {}
++      channel_modes[device.id] = modes
++      for _,parameter in ipairs(device.params or {}) do
++        if parameter.nrpn_msb ~= nil and parameter.nrpn_lsb ~= nil then
++          if modes[parameter.id] == nil then modes[parameter.id] = "legacy-half" end
++          codec.resolve(modes[parameter.id])
++        end
++      end
++    elseif not device and route.device_map and route.device_map ~= "none" then
++      -- A temporarily missing map cannot enumerate historical stored controls.
++      -- Keep a device-scoped history fallback, never a generic receiver rule.
++      local channel_modes = data.nrpn_stored_modes[channel] or {}
++      data.nrpn_stored_modes[channel] = channel_modes
++      local modes = channel_modes[route.device_map] or {}
++      channel_modes[route.device_map] = modes
++      if modes["*"] == nil then modes["*"] = "legacy-half" end
++      codec.resolve(modes["*"])
++    end
++  end
++  data.nrpn_policy_version = 1
++  return data
++end
++
++-- Explicit whole-project conversion changes metadata only. The CLI writes a
++-- new project/PSET pair; it never replaces the input project.
++function codec.convert(data, mode)
++  assert(mode ~= nil, "An explicit NRPN mode is required")
++  mode = codec.resolve(mode)
++  assert(data.nrpn_policy_version == nil or data.nrpn_policy_version == 1,
++    "Unsupported NRPN policy version")
++  local seen = {}
++  local function convert_assignments(value)
++    if type(value) ~= "table" or seen[value] then return end
++    seen[value] = true
++    if value.nrpn_msb ~= nil and value.nrpn_lsb ~= nil then value.nrpn_lsb_mode = mode end
++    for _,child in pairs(value) do convert_assignments(child) end
++  end
++  convert_assignments(data)
++  data.nrpn_stored_modes = data.nrpn_stored_modes or {}
++  for _,devices in pairs(data.nrpn_stored_modes) do
++    for id in pairs(devices) do devices[id] = {["*"]=mode} end
++  end
++  for channel,route in pairs(data.devices or {}) do
++    if route.device_map and route.device_map ~= "none" then
++      local devices = data.nrpn_stored_modes[channel] or {}
++      data.nrpn_stored_modes[channel] = devices
++      devices[route.device_map] = {["*"]=mode}
++    end
++  end
++  data.nrpn_policy_version = 1
++  return data
++end
++
++return codec
+--- /dev/null
++++ b/tools/nrpn-project-mode.py
+@@ -0,0 +1,48 @@
++#!/usr/bin/env python3
++"""Write a new Mosaic project/PSET pair with explicit NRPN encoding metadata."""
++import argparse
++from pathlib import Path
++import subprocess
++import tempfile
++
++parser=argparse.ArgumentParser(description=__doc__)
++parser.add_argument('--norns-source',type=Path,required=True)
++parser.add_argument('--project',type=Path,required=True)
++parser.add_argument('--output',type=Path,required=True)
++parser.add_argument('--mode',choices=['standard','legacy-half'],required=True)
++args=parser.parse_args()
++source=args.project.resolve();target=args.output.resolve()
++if source.suffix!='.ptn' or target.suffix!='.ptn':parser.error('Project and output must be .ptn files')
++if target.exists() or target.with_suffix('.pset').exists():parser.error('Output project/PSET already exists; choose a new output')
++if not target.parent.is_dir():parser.error('Output directory must already exist')
++codec=Path(__file__).resolve().parents[1]/'lib/devices/nrpn_codec.lua'
++script=r"""
++local root,source,target,mode,codec_path,operation=table.unpack(arg)
++local tab=dofile(root..'/lua/lib/tabutil.lua')
++local saved=assert(tab.load(source))
++assert(type(saved[1])=='string' and type(saved[2])=='table','Invalid Mosaic project')
++if operation=='inspect' then io.write(saved[1]);return end
++local codec=dofile(codec_path)
++codec.convert(saved[2],mode)
++saved[1]=assert(target:match('([^/]+)%.ptn$'))
++assert(tab.save(saved,target)==nil,'Could not write converted project')
++"""
++with tempfile.TemporaryDirectory(prefix='mosaic-nrpn-convert-') as temporary:
++    lua=Path(temporary)/'convert.lua';lua.write_text(script)
++    command=['lua5.3',str(lua),str(args.norns_source.resolve()),str(source),str(target),args.mode,str(codec)]
++    name=subprocess.check_output(command+['inspect'],text=True)
++    if not name or Path(name).name!=name or name in ('.','..'):parser.error('Invalid project PSET name')
++    pset=source.parent/(name+'.pset')
++    pset_data=pset.read_bytes()
++    # Reserve both new names exclusively. No existing file may be overwritten.
++    with target.open('xb'):
++        pass
++    try:
++        with target.with_suffix('.pset').open('xb') as stream:stream.write(pset_data)
++    except BaseException:
++        target.unlink();raise
++    try:
++        subprocess.run(command+['convert'],check=True)
++    except BaseException:
++        target.unlink();target.with_suffix('.pset').unlink();raise
++print(str(target))

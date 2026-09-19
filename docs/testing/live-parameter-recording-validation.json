@@ -1,0 +1,76 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0070",
+  "baseline": "ee9bc731b72b4ebaad87bc76d95a0258",
+  "baseline_live_values": [
+    64,
+    64,
+    96,
+    64
+  ],
+  "candidate_live_values": [
+    64
+  ],
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c7cf0e02dd7a43e3a6e09427f9bb3b04/manifest.json",
+      "sha256": "0ce717c0c647a4a102b9f0e01f578c717867e12407ff3fec3b294c1b0258f294",
+      "replay": {
+        "kind": "recorded-parameter-disarmed-replay",
+        "values": [
+          24,
+          64,
+          64,
+          64,
+          24,
+          64,
+          64,
+          64,
+          24
+        ],
+        "distinct_patch_default": 65,
+        "passed": true
+      }
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6ae79e1e7cd14ff3bbd33b07320416dd/manifest.json",
+      "sha256": "ced528df978d0afb9682dc8607d2956b1ac1a427b15550d77176cc7b08f05b7d",
+      "replay": {
+        "kind": "recorded-parameter-disarmed-replay",
+        "values": [
+          24,
+          64,
+          64,
+          64,
+          24,
+          64,
+          64,
+          64,
+          24
+        ],
+        "distinct_patch_default": 65,
+        "passed": true
+      }
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-57e06b8234bf4cca944f55ff57c67a23/results.json",
+    "summary": "Ran 488 tests in 7.995 seconds, 488 successes, 0 failures",
+    "new_guard_test_tier": "Focused unit with fake recorder; selection/slot/disarm suppression policy, not native switch recording"
+  },
+  "review": "01a08404-8475-7c82-be93-02d19cf99aa6",
+  "review_resolution": "No confirmed narrow-guard blocker. Removed replay ambiguity by changing patch default to65 before expecting recorded64. Future-step/channel-wrap wording clarified from historical behavior. Native switch-return and wider recording domains remain open.",
+  "failed_review_attempt": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/live-parameter-recording-review.json",
+    "cause": "Codex executable absent from direct WSL PATH; no review ran. One diagnosed retry used existing ~/.local/bin/codex."
+  },
+  "remaining": [
+    "Native channel-switch/return and retained dirty-value restoration",
+    "Wrap/restart, stop/disarm/rearm and recording edits at exact boundaries",
+    "CC/NRPN/trigless/slide/mask/merge interactions and full10-slot recording",
+    "Undo/redo, song isolation and persistence"
+  ],
+  "full_campaign_complete": false
+}

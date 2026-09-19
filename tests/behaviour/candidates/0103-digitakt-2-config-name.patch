@@ -1,0 +1,11 @@
+diff --git a/lib/config/elektron_digitakt_2.json b/lib/config/elektron_digitakt_2.json
+index 5e0c04e..43c1047 100644
+--- a/lib/config/elektron_digitakt_2.json
++++ b/lib/config/elektron_digitakt_2.json
+@@ -1,5 +1,5 @@
+ [{
+-  "name": "Digitakt",
++  "name": "Digitakt 2",
+   "type": "midi",
+   "map_params_automatically": [
+     "source_parameters_source_tune",

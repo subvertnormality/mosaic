@@ -1,0 +1,4747 @@
+{
+  "schema_version": 1,
+  "case": "PERF-003-HW-16",
+  "workload": "slides",
+  "channels": 16,
+  "requested_window_seconds": 9.230769230769232,
+  "host_window_ns": 10968690012,
+  "tempo_bpm": 130.0,
+  "trace_boundary": {
+    "reset_before_sampler_and_play": true,
+    "midi_driver_boundary": "stock _norns.midi_send pass-through",
+    "grid_writes": 3886,
+    "grid_refreshes": 29
+  },
+  "oracle": null,
+  "resources": {
+    "sample_count": 43,
+    "matron_cpu_ticks_delta": 348,
+    "matron_cpu_percent": 31.85789412380314,
+    "matron_peak_rss_bytes": 85188608,
+    "load_peak_1m": 0.69,
+    "thermal_millicelsius_peak": 47236,
+    "throttling_available": true,
+    "throttled_flags_or": 0,
+    "threshold_status": "calibration-only"
+  },
+  "resource_samples": [
+    {
+      "kind": "sample",
+      "monotonic_ns": 49372954494237,
+      "matron_cpu_ticks": 89673,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49373215846164,
+      "matron_cpu_ticks": 89684,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49373476562466,
+      "matron_cpu_ticks": 89691,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49373735955278,
+      "matron_cpu_ticks": 89698,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49373996197622,
+      "matron_cpu_ticks": 89707,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49374255612622,
+      "matron_cpu_ticks": 89713,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49374514758924,
+      "matron_cpu_ticks": 89721,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49374773903767,
+      "matron_cpu_ticks": 89728,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49375033892517,
+      "matron_cpu_ticks": 89736,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49375293963767,
+      "matron_cpu_ticks": 89743,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49375553376840,
+      "matron_cpu_ticks": 89751,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49375812627777,
+      "matron_cpu_ticks": 89760,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49376073149340,
+      "matron_cpu_ticks": 89769,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49376332674027,
+      "matron_cpu_ticks": 89776,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49376595589600,
+      "matron_cpu_ticks": 89783,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49376854870746,
+      "matron_cpu_ticks": 89791,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49377114848714,
+      "matron_cpu_ticks": 89800,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49377374491162,
+      "matron_cpu_ticks": 89807,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49377634071006,
+      "matron_cpu_ticks": 89815,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49377893780641,
+      "matron_cpu_ticks": 89822,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49378154036006,
+      "matron_cpu_ticks": 89830,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49378413494964,
+      "matron_cpu_ticks": 89837,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.53,
+        0.4,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49378673216370,
+      "matron_cpu_ticks": 89844,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49378932894808,
+      "matron_cpu_ticks": 89852,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49379193188297,
+      "matron_cpu_ticks": 89861,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49379452932568,
+      "matron_cpu_ticks": 89868,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49379713158661,
+      "matron_cpu_ticks": 89876,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49379973279755,
+      "matron_cpu_ticks": 89885,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49380233629547,
+      "matron_cpu_ticks": 89894,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49380493658713,
+      "matron_cpu_ticks": 89902,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49380753431005,
+      "matron_cpu_ticks": 89910,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49381014061734,
+      "matron_cpu_ticks": 89918,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49381274650952,
+      "matron_cpu_ticks": 89926,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49381534316942,
+      "matron_cpu_ticks": 89934,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49381797445588,
+      "matron_cpu_ticks": 89943,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49382057279858,
+      "matron_cpu_ticks": 89951,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49382317123712,
+      "matron_cpu_ticks": 89959,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49382576503817,
+      "matron_cpu_ticks": 89975,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49382836967462,
+      "matron_cpu_ticks": 89987,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46698,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49383096786108,
+      "matron_cpu_ticks": 89989,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49383356589025,
+      "matron_cpu_ticks": 89999,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 46160,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49383616337410,
+      "matron_cpu_ticks": 90009,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.49,
+        0.39,
+        0.31
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    },
+    {
+      "kind": "sample",
+      "monotonic_ns": 49383878003451,
+      "matron_cpu_ticks": 90021,
+      "matron_rss_bytes": 85188608,
+      "load": [
+        0.69,
+        0.44,
+        0.33
+      ],
+      "thermal_millicelsius_max": 47236,
+      "throttled_flags": 0
+    }
+  ],
+  "runtime_identity": {
+    "kind": "identity",
+    "uname": {
+      "system": "Linux",
+      "node": "norns",
+      "release": "5.10.92-18-g458e2253667a",
+      "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+      "machine": "armv7l"
+    },
+    "boot_id": "52df8878-bdab-460f-91de-65462240f773",
+    "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+    "clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+    "matron_pid": 22958,
+    "matron_start_ticks": 3844874,
+    "matron_executable": "/home/we/norns/build/matron/matron",
+    "clock_ticks_per_second": 100,
+    "page_size": 4096
+  },
+  "source_identity": {
+    "mosaic_revision": "68f8917b752ee818e5313fc81a9da041e0cd2739",
+    "dirty_patch_sha256": null,
+    "midi_lock_lead_time": 25,
+    "timing_contract": "pulse-advance",
+    "seed": 20260919,
+    "probe_mode": "off",
+    "fixture_id": "PERF-003-HW-16",
+    "workload": "slides",
+    "fixture_files": {
+      "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+      "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+    },
+    "clock_source": "internal",
+    "port": 1,
+    "capture_backend": "stock-norns-output-trace",
+    "requested_window_seconds": 9.230769230769232,
+    "measured_steps": 80
+  },
+  "passed": false,
+  "limitations": [
+    "Resource figures are physical-device calibration measurements, not emulator-equivalence gates.",
+    "Grid activity is observed at the driver boundary; frame revision diagnostics are emulator-only.",
+    "Diagnostic only: receiver-capture calibration, absolute input anchoring and the foundation acceptance campaign remain required."
+  ],
+  "transport_checks": [
+    {
+      "held_keys_released": [],
+      "was_playing": false,
+      "playing_after": false,
+      "held_after": []
+    },
+    {
+      "stopped_after_window": true,
+      "held_keys": []
+    },
+    {
+      "held_keys_released": [],
+      "was_playing": false,
+      "playing_after": false,
+      "held_after": []
+    },
+    {
+      "stopped_after_window": true,
+      "held_keys": []
+    },
+    {
+      "held_keys_released": [],
+      "was_playing": false,
+      "playing_after": false,
+      "held_after": []
+    },
+    {
+      "stopped_after_window": true,
+      "held_keys": []
+    },
+    {
+      "held_keys_released": [],
+      "was_playing": false,
+      "playing_after": false,
+      "held_after": []
+    },
+    {
+      "stopped_after_window": true,
+      "held_keys": []
+    },
+    {
+      "held_keys_released": [],
+      "was_playing": false,
+      "playing_after": false,
+      "held_after": []
+    },
+    {
+      "stopped_after_window": true,
+      "held_keys": []
+    },
+    {
+      "held_keys_released": [],
+      "was_playing": false,
+      "playing_after": false,
+      "held_after": []
+    },
+    {
+      "stopped_after_window": true,
+      "held_keys": []
+    }
+  ],
+  "run_identity": {
+    "midi_lock_lead_time": 25,
+    "timing_contract": "pulse-advance",
+    "seed": 20260919,
+    "probe_mode": "off",
+    "fixture_id": "PERF-003-HW-16",
+    "workload": "slides",
+    "fixture_files": {
+      "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+      "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+    },
+    "clock_source": "internal",
+    "port": 1,
+    "capture_backend": "stock-norns-output-trace",
+    "requested_window_seconds": 9.230769230769232,
+    "measured_steps": 80
+  },
+  "qualification_eligible": false,
+  "windows": [
+    {
+      "window": 1,
+      "seed": 20260919,
+      "probe_mode": "off",
+      "run_identity": {
+        "midi_lock_lead_time": 25,
+        "timing_contract": "pulse-advance",
+        "seed": 20260919,
+        "probe_mode": "off",
+        "fixture_id": "PERF-003-HW-16",
+        "workload": "slides",
+        "fixture_files": {
+          "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+          "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+        },
+        "clock_source": "internal",
+        "port": 1,
+        "capture_backend": "stock-norns-output-trace",
+        "requested_window_seconds": 9.230769230769232,
+        "measured_steps": 80,
+        "observed_lead_ms": 25,
+        "window": 1
+      },
+      "transport_taps": {
+        "play": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103125650894411,
+            "host_completion_ns": 103125653553517
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103125693678977,
+            "host_completion_ns": 103125754388400
+          }
+        },
+        "stop": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103135105373000,
+            "host_completion_ns": 103135107439341
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103135147562977,
+            "host_completion_ns": 103135385792140
+          }
+        }
+      },
+      "stimulus": null,
+      "recovery": null,
+      "host_window_ns": 10968690012,
+      "grid_writes": 3886,
+      "grid_refreshes": 29,
+      "oracle": null,
+      "oracle_failure": "AssertionError((1, 1, [5, 11, 16, 21, 26, 32, 37, 42, 48, 53, 58, 64, 69, 74, 79, 85, 90, 95, 101, 106, 111, 116, 122, 127]))",
+      "resources": {
+        "sample_count": 43,
+        "matron_cpu_ticks_delta": 348,
+        "matron_cpu_percent": 31.85789412380314,
+        "matron_peak_rss_bytes": 85188608,
+        "load_peak_1m": 0.69,
+        "thermal_millicelsius_peak": 47236,
+        "throttling_available": true,
+        "throttled_flags_or": 0,
+        "threshold_status": "calibration-only"
+      },
+      "resource_samples": [
+        {
+          "kind": "sample",
+          "monotonic_ns": 49372954494237,
+          "matron_cpu_ticks": 89673,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49373215846164,
+          "matron_cpu_ticks": 89684,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49373476562466,
+          "matron_cpu_ticks": 89691,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49373735955278,
+          "matron_cpu_ticks": 89698,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49373996197622,
+          "matron_cpu_ticks": 89707,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49374255612622,
+          "matron_cpu_ticks": 89713,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49374514758924,
+          "matron_cpu_ticks": 89721,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49374773903767,
+          "matron_cpu_ticks": 89728,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49375033892517,
+          "matron_cpu_ticks": 89736,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49375293963767,
+          "matron_cpu_ticks": 89743,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49375553376840,
+          "matron_cpu_ticks": 89751,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49375812627777,
+          "matron_cpu_ticks": 89760,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49376073149340,
+          "matron_cpu_ticks": 89769,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49376332674027,
+          "matron_cpu_ticks": 89776,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49376595589600,
+          "matron_cpu_ticks": 89783,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49376854870746,
+          "matron_cpu_ticks": 89791,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49377114848714,
+          "matron_cpu_ticks": 89800,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49377374491162,
+          "matron_cpu_ticks": 89807,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49377634071006,
+          "matron_cpu_ticks": 89815,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49377893780641,
+          "matron_cpu_ticks": 89822,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49378154036006,
+          "matron_cpu_ticks": 89830,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49378413494964,
+          "matron_cpu_ticks": 89837,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.4,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49378673216370,
+          "matron_cpu_ticks": 89844,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49378932894808,
+          "matron_cpu_ticks": 89852,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49379193188297,
+          "matron_cpu_ticks": 89861,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49379452932568,
+          "matron_cpu_ticks": 89868,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49379713158661,
+          "matron_cpu_ticks": 89876,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49379973279755,
+          "matron_cpu_ticks": 89885,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49380233629547,
+          "matron_cpu_ticks": 89894,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49380493658713,
+          "matron_cpu_ticks": 89902,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49380753431005,
+          "matron_cpu_ticks": 89910,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49381014061734,
+          "matron_cpu_ticks": 89918,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49381274650952,
+          "matron_cpu_ticks": 89926,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49381534316942,
+          "matron_cpu_ticks": 89934,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49381797445588,
+          "matron_cpu_ticks": 89943,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49382057279858,
+          "matron_cpu_ticks": 89951,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49382317123712,
+          "matron_cpu_ticks": 89959,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49382576503817,
+          "matron_cpu_ticks": 89975,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49382836967462,
+          "matron_cpu_ticks": 89987,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49383096786108,
+          "matron_cpu_ticks": 89989,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49383356589025,
+          "matron_cpu_ticks": 89999,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49383616337410,
+          "matron_cpu_ticks": 90009,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.39,
+            0.31
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49383878003451,
+          "matron_cpu_ticks": 90021,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        }
+      ],
+      "runtime_identity": {
+        "kind": "identity",
+        "uname": {
+          "system": "Linux",
+          "node": "norns",
+          "release": "5.10.92-18-g458e2253667a",
+          "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+          "machine": "armv7l"
+        },
+        "boot_id": "52df8878-bdab-460f-91de-65462240f773",
+        "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+        "clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+        "matron_pid": 22958,
+        "matron_start_ticks": 3844874,
+        "matron_executable": "/home/we/norns/build/matron/matron",
+        "clock_ticks_per_second": 100,
+        "page_size": 4096
+      },
+      "lua_timings_recorded": null,
+      "passed": false
+    },
+    {
+      "window": 2,
+      "seed": 20260919,
+      "probe_mode": "off",
+      "run_identity": {
+        "midi_lock_lead_time": 25,
+        "timing_contract": "pulse-advance",
+        "seed": 20260919,
+        "probe_mode": "off",
+        "fixture_id": "PERF-003-HW-16",
+        "workload": "slides",
+        "fixture_files": {
+          "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+          "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+        },
+        "clock_source": "internal",
+        "port": 1,
+        "capture_backend": "stock-norns-output-trace",
+        "requested_window_seconds": 9.230769230769232,
+        "measured_steps": 80,
+        "observed_lead_ms": 25,
+        "window": 2
+      },
+      "transport_taps": {
+        "play": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103139069994852,
+            "host_completion_ns": 103139072234156
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103139112343442,
+            "host_completion_ns": 103139172264394
+          }
+        },
+        "stop": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103148523661529,
+            "host_completion_ns": 103148528019726
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103148568139209,
+            "host_completion_ns": 103148777942476
+          }
+        }
+      },
+      "stimulus": null,
+      "recovery": null,
+      "host_window_ns": 10433109759,
+      "grid_writes": 3886,
+      "grid_refreshes": 29,
+      "oracle": null,
+      "oracle_failure": "AssertionError((1, 1, [5, 11, 16, 21, 26, 32, 37, 42, 48, 53, 58, 64, 69, 74, 79, 85, 90, 95, 101, 106, 111, 116, 122, 127]))",
+      "resources": {
+        "sample_count": 43,
+        "matron_cpu_ticks_delta": 337,
+        "matron_cpu_percent": 30.81753618023259,
+        "matron_peak_rss_bytes": 85188608,
+        "load_peak_1m": 0.72,
+        "thermal_millicelsius_peak": 47774,
+        "throttling_available": true,
+        "throttled_flags_or": 0,
+        "threshold_status": "calibration-only"
+      },
+      "resource_samples": [
+        {
+          "kind": "sample",
+          "monotonic_ns": 49386371529180,
+          "matron_cpu_ticks": 90043,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49386633568086,
+          "matron_cpu_ticks": 90055,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49386896346263,
+          "matron_cpu_ticks": 90062,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49387155667617,
+          "matron_cpu_ticks": 90069,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49387415680221,
+          "matron_cpu_ticks": 90077,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49387675208554,
+          "matron_cpu_ticks": 90084,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49387934468189,
+          "matron_cpu_ticks": 90089,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49388194475064,
+          "matron_cpu_ticks": 90096,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49388454226523,
+          "matron_cpu_ticks": 90104,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.69,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49388714953293,
+          "matron_cpu_ticks": 90112,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49388974296783,
+          "matron_cpu_ticks": 90119,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49389233771887,
+          "matron_cpu_ticks": 90127,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49389493669074,
+          "matron_cpu_ticks": 90135,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49389753263137,
+          "matron_cpu_ticks": 90142,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49390012673189,
+          "matron_cpu_ticks": 90149,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49390271970376,
+          "matron_cpu_ticks": 90157,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49390532176938,
+          "matron_cpu_ticks": 90164,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49390792129959,
+          "matron_cpu_ticks": 90172,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49391051795792,
+          "matron_cpu_ticks": 90179,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49391311246938,
+          "matron_cpu_ticks": 90187,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49391571377094,
+          "matron_cpu_ticks": 90196,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49391831369855,
+          "matron_cpu_ticks": 90203,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49392094314698,
+          "matron_cpu_ticks": 90210,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49392354129907,
+          "matron_cpu_ticks": 90218,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49392614173448,
+          "matron_cpu_ticks": 90225,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49392873855583,
+          "matron_cpu_ticks": 90232,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49393133099177,
+          "matron_cpu_ticks": 90240,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49393393238239,
+          "matron_cpu_ticks": 90248,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49393652906781,
+          "matron_cpu_ticks": 90256,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.72,
+            0.45,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49393912881885,
+          "matron_cpu_ticks": 90264,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49394173652510,
+          "matron_cpu_ticks": 90273,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49394433303552,
+          "matron_cpu_ticks": 90281,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49394692656312,
+          "matron_cpu_ticks": 90288,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49394952725583,
+          "matron_cpu_ticks": 90297,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49395212551728,
+          "matron_cpu_ticks": 90305,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49395472535999,
+          "matron_cpu_ticks": 90313,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49395733575218,
+          "matron_cpu_ticks": 90323,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49395993170530,
+          "matron_cpu_ticks": 90340,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49396253875270,
+          "matron_cpu_ticks": 90352,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49396513577874,
+          "matron_cpu_ticks": 90354,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49396776022665,
+          "matron_cpu_ticks": 90374,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49397041073134,
+          "matron_cpu_ticks": 90378,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49397306861519,
+          "matron_cpu_ticks": 90380,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.66,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        }
+      ],
+      "runtime_identity": {
+        "kind": "identity",
+        "uname": {
+          "system": "Linux",
+          "node": "norns",
+          "release": "5.10.92-18-g458e2253667a",
+          "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+          "machine": "armv7l"
+        },
+        "boot_id": "52df8878-bdab-460f-91de-65462240f773",
+        "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+        "clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+        "matron_pid": 22958,
+        "matron_start_ticks": 3844874,
+        "matron_executable": "/home/we/norns/build/matron/matron",
+        "clock_ticks_per_second": 100,
+        "page_size": 4096
+      },
+      "lua_timings_recorded": null,
+      "passed": false
+    },
+    {
+      "window": 3,
+      "seed": 20260919,
+      "probe_mode": "off",
+      "run_identity": {
+        "midi_lock_lead_time": 25,
+        "timing_contract": "pulse-advance",
+        "seed": 20260919,
+        "probe_mode": "off",
+        "fixture_id": "PERF-003-HW-16",
+        "workload": "slides",
+        "fixture_files": {
+          "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+          "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+        },
+        "clock_source": "internal",
+        "port": 1,
+        "capture_backend": "stock-norns-output-trace",
+        "requested_window_seconds": 9.230769230769232,
+        "measured_steps": 80,
+        "observed_lead_ms": 25,
+        "window": 3
+      },
+      "transport_taps": {
+        "play": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103157883064019,
+            "host_completion_ns": 103157885776357
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103157925881530,
+            "host_completion_ns": 103157983425880
+          }
+        },
+        "stop": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103167334413436,
+            "host_completion_ns": 103167336734106
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103167376831272,
+            "host_completion_ns": 103167598289100
+          }
+        }
+      },
+      "stimulus": null,
+      "recovery": null,
+      "host_window_ns": 10490172276,
+      "grid_writes": 3886,
+      "grid_refreshes": 29,
+      "oracle": null,
+      "oracle_failure": "AssertionError((1, 1, [5, 11, 16, 21, 26, 32, 37, 42, 48, 53, 58, 64, 69, 74, 79, 85, 90, 95, 101, 106, 111, 116, 122, 127]))",
+      "resources": {
+        "sample_count": 43,
+        "matron_cpu_ticks_delta": 346,
+        "matron_cpu_percent": 31.62025205521524,
+        "matron_peak_rss_bytes": 85188608,
+        "load_peak_1m": 0.59,
+        "thermal_millicelsius_peak": 47774,
+        "throttling_available": true,
+        "throttled_flags_or": 0,
+        "threshold_status": "calibration-only"
+      },
+      "resource_samples": [
+        {
+          "kind": "sample",
+          "monotonic_ns": 49405183760787,
+          "matron_cpu_ticks": 90445,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49405449020266,
+          "matron_cpu_ticks": 90458,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49405708895006,
+          "matron_cpu_ticks": 90465,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49405968418860,
+          "matron_cpu_ticks": 90474,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49406229290474,
+          "matron_cpu_ticks": 90484,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49406489410787,
+          "matron_cpu_ticks": 90491,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49406749251464,
+          "matron_cpu_ticks": 90498,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49407008947818,
+          "matron_cpu_ticks": 90508,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49407269421099,
+          "matron_cpu_ticks": 90517,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49407529096567,
+          "matron_cpu_ticks": 90526,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49407788958494,
+          "matron_cpu_ticks": 90533,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49408048408807,
+          "matron_cpu_ticks": 90542,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49408309384848,
+          "matron_cpu_ticks": 90550,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49408569897192,
+          "matron_cpu_ticks": 90559,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.56,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49408829757609,
+          "matron_cpu_ticks": 90566,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49409089535421,
+          "matron_cpu_ticks": 90575,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49409350068129,
+          "matron_cpu_ticks": 90584,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49409609665369,
+          "matron_cpu_ticks": 90591,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49409869650004,
+          "matron_cpu_ticks": 90599,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49410129420994,
+          "matron_cpu_ticks": 90607,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49410389369796,
+          "matron_cpu_ticks": 90614,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49410652881462,
+          "matron_cpu_ticks": 90622,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49410912653337,
+          "matron_cpu_ticks": 90629,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49411173075889,
+          "matron_cpu_ticks": 90638,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49411432983076,
+          "matron_cpu_ticks": 90645,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49411693152243,
+          "matron_cpu_ticks": 90652,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49411953238337,
+          "matron_cpu_ticks": 90659,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49412213180732,
+          "matron_cpu_ticks": 90668,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49412472911357,
+          "matron_cpu_ticks": 90673,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49412732763961,
+          "matron_cpu_ticks": 90681,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49412992143649,
+          "matron_cpu_ticks": 90689,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49413252514794,
+          "matron_cpu_ticks": 90697,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49413512546513,
+          "matron_cpu_ticks": 90705,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.59,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49413772177190,
+          "matron_cpu_ticks": 90711,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49414032423023,
+          "matron_cpu_ticks": 90718,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49414292795002,
+          "matron_cpu_ticks": 90726,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49414552228127,
+          "matron_cpu_ticks": 90732,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49414812266408,
+          "matron_cpu_ticks": 90749,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49415073264690,
+          "matron_cpu_ticks": 90762,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49415333343179,
+          "matron_cpu_ticks": 90764,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49415597550523,
+          "matron_cpu_ticks": 90782,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49415865075210,
+          "matron_cpu_ticks": 90788,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49416126115054,
+          "matron_cpu_ticks": 90791,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        }
+      ],
+      "runtime_identity": {
+        "kind": "identity",
+        "uname": {
+          "system": "Linux",
+          "node": "norns",
+          "release": "5.10.92-18-g458e2253667a",
+          "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+          "machine": "armv7l"
+        },
+        "boot_id": "52df8878-bdab-460f-91de-65462240f773",
+        "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+        "clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+        "matron_pid": 22958,
+        "matron_start_ticks": 3844874,
+        "matron_executable": "/home/we/norns/build/matron/matron",
+        "clock_ticks_per_second": 100,
+        "page_size": 4096
+      },
+      "lua_timings_recorded": null,
+      "passed": false
+    },
+    {
+      "window": 4,
+      "seed": 20260919,
+      "probe_mode": "off",
+      "run_identity": {
+        "midi_lock_lead_time": 25,
+        "timing_contract": "pulse-advance",
+        "seed": 20260919,
+        "probe_mode": "off",
+        "fixture_id": "PERF-003-HW-16",
+        "workload": "slides",
+        "fixture_files": {
+          "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+          "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+        },
+        "clock_source": "internal",
+        "port": 1,
+        "capture_backend": "stock-norns-output-trace",
+        "requested_window_seconds": 9.230769230769232,
+        "measured_steps": 80,
+        "observed_lead_ms": 25,
+        "window": 4
+      },
+      "transport_taps": {
+        "play": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103171318203452,
+            "host_completion_ns": 103171320868461
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103171360990188,
+            "host_completion_ns": 103171419355621
+          }
+        },
+        "stop": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103180770364029,
+            "host_completion_ns": 103180772313958
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103180812434149,
+            "host_completion_ns": 103181045116774
+          }
+        }
+      },
+      "stimulus": null,
+      "recovery": null,
+      "host_window_ns": 10503345567,
+      "grid_writes": 3886,
+      "grid_refreshes": 29,
+      "oracle": null,
+      "oracle_failure": "AssertionError((1, 1, [5, 11, 16, 21, 26, 32, 37, 42, 48, 53, 58, 64, 69, 74, 79, 85, 90, 95, 101, 106, 111, 116, 122, 127]))",
+      "resources": {
+        "sample_count": 43,
+        "matron_cpu_ticks_delta": 340,
+        "matron_cpu_percent": 31.102193867377427,
+        "matron_peak_rss_bytes": 85188608,
+        "load_peak_1m": 0.58,
+        "thermal_millicelsius_peak": 47774,
+        "throttling_available": true,
+        "throttled_flags_or": 0,
+        "threshold_status": "calibration-only"
+      },
+      "resource_samples": [
+        {
+          "kind": "sample",
+          "monotonic_ns": 49418633039011,
+          "matron_cpu_ticks": 90813,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.54,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49418894165521,
+          "matron_cpu_ticks": 90825,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49419154011667,
+          "matron_cpu_ticks": 90833,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49419413499948,
+          "matron_cpu_ticks": 90843,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49419672881198,
+          "matron_cpu_ticks": 90852,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49419933109636,
+          "matron_cpu_ticks": 90860,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49420192520469,
+          "matron_cpu_ticks": 90867,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49420451914531,
+          "matron_cpu_ticks": 90876,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49420711828021,
+          "matron_cpu_ticks": 90884,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49420974807448,
+          "matron_cpu_ticks": 90890,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49421234512864,
+          "matron_cpu_ticks": 90898,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49421494413385,
+          "matron_cpu_ticks": 90907,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49421755323750,
+          "matron_cpu_ticks": 90915,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49422014713958,
+          "matron_cpu_ticks": 90922,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49422274230208,
+          "matron_cpu_ticks": 90929,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49422533469687,
+          "matron_cpu_ticks": 90937,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49422793216145,
+          "matron_cpu_ticks": 90947,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49423053418697,
+          "matron_cpu_ticks": 90954,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49423313552916,
+          "matron_cpu_ticks": 90960,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49423573366249,
+          "matron_cpu_ticks": 90968,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.58,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49423833075155,
+          "matron_cpu_ticks": 90976,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49424093214113,
+          "matron_cpu_ticks": 90982,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49424352987499,
+          "matron_cpu_ticks": 90990,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49424613161144,
+          "matron_cpu_ticks": 90999,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49424872791613,
+          "matron_cpu_ticks": 91006,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49425132869321,
+          "matron_cpu_ticks": 91016,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49425392320519,
+          "matron_cpu_ticks": 91022,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49425652193696,
+          "matron_cpu_ticks": 91031,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49425912927863,
+          "matron_cpu_ticks": 91039,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49426176292706,
+          "matron_cpu_ticks": 91047,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49426437318644,
+          "matron_cpu_ticks": 91054,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49426697041560,
+          "matron_cpu_ticks": 91062,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49426957409945,
+          "matron_cpu_ticks": 91070,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49427217547289,
+          "matron_cpu_ticks": 91077,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49427477417601,
+          "matron_cpu_ticks": 91083,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49427737191664,
+          "matron_cpu_ticks": 91090,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49427997826664,
+          "matron_cpu_ticks": 91097,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49428257291299,
+          "matron_cpu_ticks": 91114,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49428517610309,
+          "matron_cpu_ticks": 91125,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49428777932705,
+          "matron_cpu_ticks": 91128,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49429043752028,
+          "matron_cpu_ticks": 91148,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49429304556820,
+          "matron_cpu_ticks": 91151,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49429564743747,
+          "matron_cpu_ticks": 91153,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.49,
+            0.42,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        }
+      ],
+      "runtime_identity": {
+        "kind": "identity",
+        "uname": {
+          "system": "Linux",
+          "node": "norns",
+          "release": "5.10.92-18-g458e2253667a",
+          "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+          "machine": "armv7l"
+        },
+        "boot_id": "52df8878-bdab-460f-91de-65462240f773",
+        "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+        "clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+        "matron_pid": 22958,
+        "matron_start_ticks": 3844874,
+        "matron_executable": "/home/we/norns/build/matron/matron",
+        "clock_ticks_per_second": 100,
+        "page_size": 4096
+      },
+      "lua_timings_recorded": null,
+      "passed": false
+    },
+    {
+      "window": 5,
+      "seed": 20260919,
+      "probe_mode": "off",
+      "run_identity": {
+        "midi_lock_lead_time": 25,
+        "timing_contract": "pulse-advance",
+        "seed": 20260919,
+        "probe_mode": "off",
+        "fixture_id": "PERF-003-HW-16",
+        "workload": "slides",
+        "fixture_files": {
+          "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+          "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+        },
+        "clock_source": "internal",
+        "port": 1,
+        "capture_backend": "stock-norns-output-trace",
+        "requested_window_seconds": 9.230769230769232,
+        "measured_steps": 80,
+        "observed_lead_ms": 25,
+        "window": 5
+      },
+      "transport_taps": {
+        "play": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103190827718414,
+            "host_completion_ns": 103190830373856
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103190870508299,
+            "host_completion_ns": 103190927281038
+          }
+        },
+        "stop": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103200278285700,
+            "host_completion_ns": 103200283990610
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103200324078301,
+            "host_completion_ns": 103200553171177
+          }
+        }
+      },
+      "stimulus": null,
+      "recovery": null,
+      "host_window_ns": 10495595615,
+      "grid_writes": 3886,
+      "grid_refreshes": 29,
+      "oracle": null,
+      "oracle_failure": "AssertionError((1, 1, [5, 11, 16, 21, 26, 32, 37, 42, 48, 53, 58, 64, 69, 74, 79, 85, 90, 95, 101, 106, 111, 116, 122, 127]))",
+      "resources": {
+        "sample_count": 43,
+        "matron_cpu_ticks_delta": 345,
+        "matron_cpu_percent": 31.52335860464656,
+        "matron_peak_rss_bytes": 85188608,
+        "load_peak_1m": 0.71,
+        "thermal_millicelsius_peak": 47774,
+        "throttling_available": true,
+        "throttled_flags_or": 0,
+        "threshold_status": "calibration-only"
+      },
+      "resource_samples": [
+        {
+          "kind": "sample",
+          "monotonic_ns": 49438142655045,
+          "matron_cpu_ticks": 91222,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49438404169941,
+          "matron_cpu_ticks": 91235,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49438664721035,
+          "matron_cpu_ticks": 91243,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.53,
+            0.43,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49438925505149,
+          "matron_cpu_ticks": 91253,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49439186653743,
+          "matron_cpu_ticks": 91262,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49439446996191,
+          "matron_cpu_ticks": 91270,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49439707146607,
+          "matron_cpu_ticks": 91277,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49439967424159,
+          "matron_cpu_ticks": 91286,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49440227169524,
+          "matron_cpu_ticks": 91294,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49440487415982,
+          "matron_cpu_ticks": 91302,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49440747174159,
+          "matron_cpu_ticks": 91310,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49441006874159,
+          "matron_cpu_ticks": 91319,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49441267209263,
+          "matron_cpu_ticks": 91328,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49441530697596,
+          "matron_cpu_ticks": 91336,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49441790474159,
+          "matron_cpu_ticks": 91344,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49442051315877,
+          "matron_cpu_ticks": 91355,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46160,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49442311729367,
+          "matron_cpu_ticks": 91363,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49442571933377,
+          "matron_cpu_ticks": 91371,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49442832199575,
+          "matron_cpu_ticks": 91378,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49443092373637,
+          "matron_cpu_ticks": 91386,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49443352196554,
+          "matron_cpu_ticks": 91392,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49443611418220,
+          "matron_cpu_ticks": 91399,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.57,
+            0.44,
+            0.33
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49443872116189,
+          "matron_cpu_ticks": 91406,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49444133479210,
+          "matron_cpu_ticks": 91414,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49444394085980,
+          "matron_cpu_ticks": 91421,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49444654956762,
+          "matron_cpu_ticks": 91429,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49444915506553,
+          "matron_cpu_ticks": 91436,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49445176319574,
+          "matron_cpu_ticks": 91443,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49445436732907,
+          "matron_cpu_ticks": 91449,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49445697109730,
+          "matron_cpu_ticks": 91457,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49445957743219,
+          "matron_cpu_ticks": 91465,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49446217137490,
+          "matron_cpu_ticks": 91472,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49446476783428,
+          "matron_cpu_ticks": 91479,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49446741431552,
+          "matron_cpu_ticks": 91486,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49447002249938,
+          "matron_cpu_ticks": 91493,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49447261768896,
+          "matron_cpu_ticks": 91499,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49447521552854,
+          "matron_cpu_ticks": 91507,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49447781479833,
+          "matron_cpu_ticks": 91527,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49448042052750,
+          "matron_cpu_ticks": 91538,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49448301900406,
+          "matron_cpu_ticks": 91542,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49448565104052,
+          "matron_cpu_ticks": 91558,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.47,
+            0.34
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49448826871343,
+          "matron_cpu_ticks": 91563,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49449086920354,
+          "matron_cpu_ticks": 91567,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        }
+      ],
+      "runtime_identity": {
+        "kind": "identity",
+        "uname": {
+          "system": "Linux",
+          "node": "norns",
+          "release": "5.10.92-18-g458e2253667a",
+          "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+          "machine": "armv7l"
+        },
+        "boot_id": "52df8878-bdab-460f-91de-65462240f773",
+        "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+        "clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+        "matron_pid": 22958,
+        "matron_start_ticks": 3844874,
+        "matron_executable": "/home/we/norns/build/matron/matron",
+        "clock_ticks_per_second": 100,
+        "page_size": 4096
+      },
+      "lua_timings_recorded": null,
+      "passed": false
+    },
+    {
+      "window": 6,
+      "seed": 20260919,
+      "probe_mode": "off",
+      "run_identity": {
+        "midi_lock_lead_time": 25,
+        "timing_contract": "pulse-advance",
+        "seed": 20260919,
+        "probe_mode": "off",
+        "fixture_id": "PERF-003-HW-16",
+        "workload": "slides",
+        "fixture_files": {
+          "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+          "autosave.pset": "a46195b30fe156a74e1eed0a6683b7467a2540d92c8affdb5426b606a37de27b"
+        },
+        "clock_source": "internal",
+        "port": 1,
+        "capture_backend": "stock-norns-output-trace",
+        "requested_window_seconds": 9.230769230769232,
+        "measured_steps": 80,
+        "observed_lead_ms": 25,
+        "window": 6
+      },
+      "transport_taps": {
+        "play": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103204278141074,
+            "host_completion_ns": 103204280855294
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103204320958303,
+            "host_completion_ns": 103204378859523
+          }
+        },
+        "stop": {
+          "press": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 1,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103213729880795,
+            "host_completion_ns": 103213732061849
+          },
+          "release": {
+            "type": "grid",
+            "x": 1,
+            "y": 8,
+            "state": 0,
+            "transport": "norns-grid-key-callback",
+            "host_monotonic_ns": 103213772186533,
+            "host_completion_ns": 103213983973348
+          }
+        }
+      },
+      "stimulus": null,
+      "recovery": null,
+      "host_window_ns": 10439659273,
+      "grid_writes": 3752,
+      "grid_refreshes": 28,
+      "oracle": null,
+      "oracle_failure": "AssertionError((1, 1, [5, 11, 16, 21, 26, 32, 37, 42, 48, 53, 58, 64, 69, 74, 79, 85, 90, 95, 101, 106, 111, 116, 122, 127]))",
+      "resources": {
+        "sample_count": 43,
+        "matron_cpu_ticks_delta": 331,
+        "matron_cpu_percent": 30.243316371377265,
+        "matron_peak_rss_bytes": 85188608,
+        "load_peak_1m": 0.71,
+        "thermal_millicelsius_peak": 47774,
+        "throttling_available": true,
+        "throttled_flags_or": 0,
+        "threshold_status": "calibration-only"
+      },
+      "resource_samples": [
+        {
+          "kind": "sample",
+          "monotonic_ns": 49451616853478,
+          "matron_cpu_ticks": 91590,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49451882946030,
+          "matron_cpu_ticks": 91601,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49452142151863,
+          "matron_cpu_ticks": 91610,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49452401821759,
+          "matron_cpu_ticks": 91617,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49452662172592,
+          "matron_cpu_ticks": 91624,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49452922753008,
+          "matron_cpu_ticks": 91631,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49453182889727,
+          "matron_cpu_ticks": 91638,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49453442459310,
+          "matron_cpu_ticks": 91646,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49453701729935,
+          "matron_cpu_ticks": 91653,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.71,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49453961421810,
+          "matron_cpu_ticks": 91661,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49454221705560,
+          "matron_cpu_ticks": 91669,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49454481160143,
+          "matron_cpu_ticks": 91676,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49454740871185,
+          "matron_cpu_ticks": 91683,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49455000598841,
+          "matron_cpu_ticks": 91689,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49455260132591,
+          "matron_cpu_ticks": 91697,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49455520411341,
+          "matron_cpu_ticks": 91703,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49455780084570,
+          "matron_cpu_ticks": 91710,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49456040049882,
+          "matron_cpu_ticks": 91718,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 46698,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49456300347486,
+          "matron_cpu_ticks": 91727,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49456560245611,
+          "matron_cpu_ticks": 91735,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49456820373997,
+          "matron_cpu_ticks": 91741,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49457084481340,
+          "matron_cpu_ticks": 91748,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49457344805246,
+          "matron_cpu_ticks": 91757,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49457604913788,
+          "matron_cpu_ticks": 91764,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49457865266496,
+          "matron_cpu_ticks": 91771,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49458125208631,
+          "matron_cpu_ticks": 91778,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49458386259100,
+          "matron_cpu_ticks": 91787,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49458645855142,
+          "matron_cpu_ticks": 91793,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.65,
+            0.47,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49458906204204,
+          "matron_cpu_ticks": 91801,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49459165906964,
+          "matron_cpu_ticks": 91810,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49459425858579,
+          "matron_cpu_ticks": 91820,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49459685804673,
+          "matron_cpu_ticks": 91829,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49459945537954,
+          "matron_cpu_ticks": 91836,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49460205350193,
+          "matron_cpu_ticks": 91843,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49460466180974,
+          "matron_cpu_ticks": 91851,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49460726820037,
+          "matron_cpu_ticks": 91859,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49460986954516,
+          "matron_cpu_ticks": 91866,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49461247284568,
+          "matron_cpu_ticks": 91886,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49461512819203,
+          "matron_cpu_ticks": 91894,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49461772413005,
+          "matron_cpu_ticks": 91900,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49462035256442,
+          "matron_cpu_ticks": 91917,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49462300632224,
+          "matron_cpu_ticks": 91919,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47774,
+          "throttled_flags": 0
+        },
+        {
+          "kind": "sample",
+          "monotonic_ns": 49462561420401,
+          "matron_cpu_ticks": 91921,
+          "matron_rss_bytes": 85188608,
+          "load": [
+            0.68,
+            0.48,
+            0.35
+          ],
+          "thermal_millicelsius_max": 47236,
+          "throttled_flags": 0
+        }
+      ],
+      "runtime_identity": {
+        "kind": "identity",
+        "uname": {
+          "system": "Linux",
+          "node": "norns",
+          "release": "5.10.92-18-g458e2253667a",
+          "version": "#1 SMP PREEMPT Mon Feb 28 07:05:12 UTC 2022",
+          "machine": "armv7l"
+        },
+        "boot_id": "52df8878-bdab-460f-91de-65462240f773",
+        "norns_revision": "f9fa0c5ce5883ec7f185765ffdf8b3750061289e",
+        "clock_lua_sha256": "39b6c3ac44de704df1cc10ca33a0641ce478e412e8aec5aa5429ade3626a64da",
+        "matron_pid": 22958,
+        "matron_start_ticks": 3844874,
+        "matron_executable": "/home/we/norns/build/matron/matron",
+        "clock_ticks_per_second": 100,
+        "page_size": 4096
+      },
+      "lua_timings_recorded": null,
+      "passed": false
+    }
+  ],
+  "clock_error_drains": [
+    {
+      "phase": "performance-load",
+      "expected_queued_resume_errors": 3
+    },
+    {
+      "phase": "performance",
+      "expected_queued_resume_errors": 1
+    },
+    {
+      "phase": "performance",
+      "expected_queued_resume_errors": 1
+    },
+    {
+      "phase": "performance",
+      "expected_queued_resume_errors": 1
+    },
+    {
+      "phase": "performance",
+      "expected_queued_resume_errors": 1
+    },
+    {
+      "phase": "performance",
+      "expected_queued_resume_errors": 1
+    },
+    {
+      "phase": "performance",
+      "expected_queued_resume_errors": 1
+    },
+    {
+      "phase": "performance",
+      "expected_queued_resume_errors": 1
+    }
+  ],
+  "stock_clock_errors_mode": "record",
+  "source_revision": "68f8917b752ee818e5313fc81a9da041e0cd2739",
+  "source_files": 1209,
+  "resumed_after_interruption": true,
+  "capabilities": {
+    "alsa_available": true,
+    "grid_input": "synthetic-lua-only-or-physical",
+    "grid_led_readback": "physical-not-available"
+  },
+  "campaign_complete": false
+}

@@ -1,0 +1,33 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/monome-emulator-behaviour-audio-crow",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Focused read-only follow-up to Codex review 01a08270-4401-77f0-9af2-6ac01e7bd3bc, raw response artifacts/behaviour-expansion/output-integration-review.json. Resolve only its two material findings, not a cold whole-repository review. Stakes: local music development emulator; proportional correctness/reliability review. No edits, native launches, extra reviewer agents, or enterprise governance. User authorises Codex source/evidence review. Finding 1: optional screen-worker shutdown patch now closes queue, drains and joins after w_deinit before config_deinit. Actual-source baseline screen-shutdown-20260908-205344/report.json reproduces display destruction during blocked real SDL paint; candidate screen-shutdown-20260908-211851/report.json passes; strengthened burst8 probe screen-shutdown-20260908-212017/report.json counts completed paints before destruction. All paths under artifacts/behaviour-expansion. New candidate build recorded screen-worker-candidate.json; generic, MIDI hotplug, ASan SDL ownership and all3 affected Mosaic JF validations at screen-worker-validation.json. Inspect actual results, never assume running entries pass. Check teardown ordering, deadlocks/ownership, bounded harness and meaningful coverage. Finding2: Mosaic jf_oracle verify_unplayed and verify_session_export now reject unexpected packets in setup, selection and final cleanup; full independent unit faults and 3 native cases previously passed, documented Mosaic docs/testing/output-integration-progress.json. Inspect fixes only for material unresolved issues. Neither these checks nor publication admits X00/full campaign, audio absolute timing or refactor. Default runtime is unchanged. Return concise disposition for each prior finding and concrete remaining blockers if any. Files: /home/andy/projects/monome-emulator-behaviour-audio-crow/patches/norns/experimental-screen-worker-shutdown.patch, /home/andy/projects/monome-emulator-behaviour-audio-crow/patches/norns/experimental-sdl-ownership.patch, /home/andy/projects/monome-emulator-behaviour-audio-crow/scripts/build_audio_candidate.py, /home/andy/projects/monome-emulator-behaviour-audio-crow/tests/screen_shutdown_barrier.c, /home/andy/projects/monome-emulator-behaviour-audio-crow/tests/screen_shutdown_native.py, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/output_cases.py, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/jf_oracle.py, /home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_jf_oracle.py"
+  },
+  "input_sha256": {
+    "/home/andy/projects/monome-emulator-behaviour-audio-crow/patches/norns/experimental-screen-worker-shutdown.patch": "c1c37479f6f9b37a0faab389e5366e4320a631939e8a93dcbf9545bde4caf2c9",
+    "/home/andy/projects/monome-emulator-behaviour-audio-crow/patches/norns/experimental-sdl-ownership.patch": "ecf6a8bb238338ee1c6d829112726c5eb09939f27bf00c08b3940ad380b31e47",
+    "/home/andy/projects/monome-emulator-behaviour-audio-crow/scripts/build_audio_candidate.py": "94e0fb779aceb18be3918e499b26fc496fcc9ed040a3ea5054f84d10d78e0375",
+    "/home/andy/projects/monome-emulator-behaviour-audio-crow/tests/screen_shutdown_barrier.c": "81f26fad5ca97502321506cbd76b4860c9ddd12b2171342f34a2146ef7570f58",
+    "/home/andy/projects/monome-emulator-behaviour-audio-crow/tests/screen_shutdown_native.py": "f31aa1745ec922dde798c11688cbc1ee7ccdc977d8fe1d57b0c1a685e7899dc0",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/output_cases.py": "60fe296579bafacc2b097a38b953a6727f9038ad45764bf58d1140ead5a1464f",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/jf_oracle.py": "2d0e51a2fb9702cd43344826b727c94e6ee287ca9492dc595cde68c4c30dd2ab",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_jf_oracle.py": "6b9ba9ce7e9950ef6c570fb96d05d71e3e4d0bbd2b4ec5d3d64299c8194249f4"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "Both prior findings are resolved for this scoped checkpoint. No material blocker remains; the candidate validation completed during inspection.\n\n- **Finding 1 \u2014 resolved.** [Teardown ordering](/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/screen-shutdown-01/norns/matron/src/main.c:47) closes Lua, drains/joins the screen worker, then destroys display and result resources. The [worker](/home/andy/projects/monome-emulator-behaviour-audio-crow/.runtime/screen-shutdown-01/norns/matron/src/screen_events.c:49) releases its queue lock before joining and exits only after draining; I found no introduced ownership or deadlock issue. The baseline records destruction during blocked paint; the [burst8 candidate](/home/andy/projects/monome-emulator-behaviour-audio-crow/artifacts/behaviour-expansion/screen-shutdown-20260908-212017/report.json) records **16 completed paints before destruction**, clean exit and no timeout. The harness has explicit barrier/request/process deadlines. [Validation](/home/andy/projects/monome-emulator-behaviour-audio-crow/artifacts/behaviour-expansion/screen-worker-validation.json:2) now reports `passed-scoped-native-checks`: generic, hotplug, ASan ownership and all three JF cases passed; their candidate matron exits were clean.\n\n- **Finding 2 \u2014 resolved.** [Quiet-interval and export checks](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/jf_oracle.py:21) restrict startup/selection to mode setup/reset and exported cleanup to reset only. [Scenario wiring](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/output_cases.py:155) accounts for previously discarded intervals. [Negative tests](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_jf_oracle.py:39) inject valid-metadata transition/final packets and require rejection. Recorded evidence reports 9/9 unit tests; I verified the referenced native manifest hashes and successful exits.\n\n**CONFIDENCE: High.** Read-only source/evidence review; no tests launched. This establishes the bounded fixes, not exclusive crash causality, X00/full-campaign admission, absolute audio timing or refactor readiness.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a082af-b7d1-70e2-b7fc-814dd8c5cc91` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

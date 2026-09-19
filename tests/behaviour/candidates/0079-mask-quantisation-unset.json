@@ -1,0 +1,10 @@
+{
+  "candidate": "0079",
+  "status": "scoped-candidate-validated",
+  "base": "9d368fbf0bbf090fb495843180bfcbc80743147d",
+  "production": "lib/step.lua",
+  "patch": "0079-mask-quantisation-unset.patch",
+  "validation": "docs/testing/mask-unset-validation.json",
+  "baseline": "6dae16456cc943e8a5ff19c749834399",
+  "full_campaign_complete": false
+}

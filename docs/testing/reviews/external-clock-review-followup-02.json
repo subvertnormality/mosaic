@@ -1,0 +1,60 @@
+{
+  "started_at": "2026-09-10T02:18:10.463458+00:00",
+  "packet_sha256": "893a261e98c2139daf95b641f02fe1c236a5856ba32852c82c011f7f1bbf97e5",
+  "files": [
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py",
+    "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_external_clock_fault_oracle.py",
+    "/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py",
+    "/home/andy/projects/monome-emulator-midi-clock/tests/test_external_midi_fault_output.py",
+    "/home/andy/projects/mosaic-behaviour-tests/docs/testing/external-clock-fault-validation.json"
+  ],
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# External MIDI clock causal-bound closure review\n\nUse Codex only. Read-only local shell commands are allowed for inspecting files, manifests, logs, and Git diffs. Do not edit files or launch tests or runtime processes.\n\nReview the corrected external MIDI clock slice in `/home/andy/projects/mosaic-behaviour-tests` and `/home/andy/projects/monome-emulator-midi-clock`. The previous follow-up is `docs/testing/reviews/external-clock-review-followup.json`, session `01a0890a-adf0-7311-876a-0137f7a6b8e6`; it found only that scheduled deadlines were still used where actual transport delivery timestamps were required.\n\nConfirm that this remaining finding is closed. Both runners now identify the unique delivered Stop or beat-zero Clock record by MIDI bytes and intended timestamp, take its `actual_logical_ns` or `actual_monotonic_ns`, and use that actual timestamp as the causal lower bound. Transport-specific upper tolerances remain separate. Mosaic has distinct mutations for release before actual Stop and release before actual restart Clock; the generic runner has lower- and upper-bound mutations.\n\nUse `docs/testing/external-clock-fault-validation.json` for current immutable manifests and logs. Inspect the changed tests, relevant retained evidence, and both repository diffs. Report any remaining correctness blocker in this scoped slice. Clearly return either ACCEPTED or CHANGES REQUIRED, with concrete findings ordered by severity.\n",
+    "files": [
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_external_clock_fault_oracle.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/monome-emulator-midi-clock/tests/test_external_midi_fault_output.py",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/external-clock-fault-validation.json",
+        "reason": "Updated delivery contract"
+      },
+      {
+        "path": "/home/andy/projects/mosaic-behaviour-tests/docs/testing/decisions.md",
+        "reason": "Findings and fixes"
+      }
+    ],
+    "web_search": false,
+    "effort": "medium"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**ACCEPTED.** The remaining causal-bound finding is closed; I found no correctness blocker in this scoped slice.\n\n- **Mosaic:** Delivery lookup requires a unique match on MIDI bytes and intended timestamp, then returns `actual_logical_ns` or `actual_monotonic_ns` ([lookup:82](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:82)). Stop and restart pass those actual timestamps into the release lower-bound assertion, with separate transport tolerances ([Stop:133](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:133), [restart:173](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:173), [assertions:67](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/external_clock_faults.py:67)).\n- **Generic runner:** The same unique-delivery lookup feeds explicit lower and upper bounds for Stop and recovery Clock ([helpers:60](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:60), [recovery:173](/home/andy/projects/monome-emulator-midi-clock/tests/external_midi_faults_native.py:173)).\n- **Mutations:** Mosaic separately rejects release before actual Stop and restart Clock ([tests:62](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_external_clock_fault_oracle.py:62)); generic tests reject both early and excessively late output ([tests:29](/home/andy/projects/monome-emulator-midi-clock/tests/test_external_midi_fault_output.py:29)).\n\nBoth repository diffs and recent history were inspected. All 14 referenced manifest hashes, 180 Mosaic artifact hashes, and checked mutation/unit-log hashes matched. Retained Mosaic traces show nonnegative causal release delays in both modes; real-time recovery released 32,790 ns after its actual Clock delivery.\n\n**CONFIDENCE: High.** Assessment uses inspected code and retained evidence; no tests or runtime processes were launched.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a0891b-bf33-7800-9fd4-ee6d30cd41e5` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "status": "returned",
+  "finished_at": "2026-09-10T02:20:09.534053+00:00"
+}

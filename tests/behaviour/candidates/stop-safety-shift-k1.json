@@ -1,0 +1,54 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "7a442fb",
+  "file": "lib/m_grid.lua",
+  "before_sha256": "aa89c1e35b9403516c0bf34f3573b25ab7bf6cb3ee440c909ee3e4ea5bbdaf4d",
+  "after_sha256": "22f980fdf916e10fe34816603405c573b5c14e6c94b2c95208988bbc04dd4bf6",
+  "patch": "0086-stop-safety-shift-k1.patch",
+  "patch_sha256": "1d71854dbcf197d9bac84dd60c22c267dde96c95e34d8d7a2c884671bda3fc1a",
+  "regression": "M-OPT-STOP-001",
+  "baseline": [
+    {
+      "run_id": "1a3f0920796142b39831f28b8df1b75c",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "40269e09b55dc2f8af6a692288c09c5e684ccb3e03d50a51c9d068fcee9ad0f4",
+      "failure": "Required observable output did not arrive"
+    },
+    {
+      "run_id": "29036af70e024f3b8350029724918a75",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "a0838a9c1056316687b25b26d342d31c9668503a84651155ea52cd6b7bac8538",
+      "failure": "Required observable output did not arrive"
+    }
+  ],
+  "rationale": "README Shift press to stop: with the option on, the play button stops only on a long press or while shift (K1) is held. The short-press path tested is_key3_down; every other shift gesture in Mosaic uses is_key1_down. K3 no longer stops, per the manual's \"only\".",
+  "oracle": "README lines 1062-1066 and consistent \"shift (K1)\" usage; norns KEY1_HOLD_TIME 0.25 s delivers K1 to scripts after the menu threshold.",
+  "validation": [
+    {
+      "run_id": "e338246922244a02bd963e06f69711b0",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "756a90819b7627acb0b623aea8e0b07be5753dd38c1f4dc4c31171cb589f6483",
+      "failure": null
+    },
+    {
+      "run_id": "1f944e6d249f41b592911147b45278da",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "3f40c8200718a7c527bca2e41d9d38dbe27b88c7ca2e4ffeb6b76de2e6a193d1",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-5f0852c058cd4c3cbb04c70d3d5c1534",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "2275be7cc7204dd44e2164470b33650238d8b0baaa42b08975eb75f14b8715a5",
+      "failure": null,
+      "normalized_sha256": "0a84cfab2c42e02598fdb90d933d9b78ed3f00a3570bf154902d549df9fcf858"
+    }
+  ],
+  "limitations": "Long-press with the option Off (no action) and long press while stopped (no start) are characterised by source only.",
+  "upstream_merged": false
+}

@@ -1,0 +1,26 @@
+{
+  "status": "scoped-regressions-validated",
+  "before_sha256": {
+    "lib/clock/m_clock.lua": "89dd746f9384c2432c0b66f9a838d6035fb640ab9eb607df507ee44c3590542e",
+    "lib/step.lua": "7e7a308e8900277aab4001709b36386ac40f04e42a6d08e174a0a21fc2375e79"
+  },
+  "after_sha256": {
+    "lib/clock/m_clock.lua": "59b539a2364c98eb1d972e30387aa1d2e67ec9b989d484cb63b6cec21a845963",
+    "lib/step.lua": "044e09551b7feee9ac9bebe759d99d8bb943c3752ce5a04f17fff21571796012"
+  },
+  "patch": "0033-arp-release-ownership.patch",
+  "patch_sha256": "3e698c18af8c4e42e6611d25c4789fffba4fbf3415dc2ed7a247808b9982abfb",
+  "baseline": "328fccc1b8f84731b1fbfcf06197b8f3",
+  "scope": "Each arp root/callback registers its own release IDs before the old gate can finish. Termination releases only that generation and destroys only its own onset clock. Stop retains the global release registry.",
+  "limitations": "Specific reproduced release/Stop findings resolved. Nonzero spread/acceleration and mid-interval channel-rate changes, remaining arp finite domains/interaction histories and full campaign remain open. D is still experimental pending emulator admission. Real-time fractional metric D20 needs deadline/origin instrumentation and fresh acceptance; historical failures remain failed. C12 ten-minute and remaining emulator/platform gates are not complete.",
+  "scoped_validation": {
+    "reference": "docs/testing/state.json:pending_arp_validation",
+    "review": "01a07f42-e03d-7ab3-b2cb-d9425be14605",
+    "current_source_sha256": {
+      "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+      "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+      "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9",
+      "lib/pages/channel_edit_page/channel_edit_page_ui.lua": "5cf0b306b9f43a9a22c388e43ceefa146e7c71e1983d7921847b0a8a522fcb8d"
+    }
+  }
+}

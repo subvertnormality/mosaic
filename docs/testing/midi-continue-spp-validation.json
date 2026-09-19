@@ -1,0 +1,49 @@
+{
+  "status": "scoped Continue/SPP checkpoint accepted; broader external sync and delivery work incomplete",
+  "candidate": "midi-clock-boundary-09",
+  "official_norns_revision": "14bbeae8646c6717f6bb44c8cd60250bf94b6042",
+  "contract": {
+    "continue": "delivered to the normal Lua MIDI event callback; does not start or resume norns clock transport",
+    "song_position_pointer": "delivered to the normal Lua MIDI event callback with lsb/msb; does not reposition norns clock transport",
+    "mosaic": "remains stopped through Continue, SPP and subsequent clocks; a later Start restarts at step 1"
+  },
+  "evidence": {
+    "candidate_install": {
+      "path": "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-09/installation.json",
+      "sha256": "91b7d25dbd8830747a5b014b741ff19d1d9b49a2420ec7d4751384f8443d57a9"
+    },
+    "generic_controlled": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/b6f6875f4daa4864901262466281a657/manifest.json",
+      "sha256": "aa030c09fe0c5f88fd61f9a0e78fb3ca25564e9ecb3890052ac2da8050290474"
+    },
+    "generic_real_time": {
+      "path": "/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/d8a346a166b94663917ef6355bf091f9/manifest.json",
+      "sha256": "82c702c6ae1d270bbe98e11c2f8e39857a03fbbb186ea35da7485e7f38ef1547"
+    },
+    "mosaic_controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/160495b5e401429498862eb7757c9af7/manifest.json",
+      "sha256": "3f0fff1070dde720ae1a198affc81944da8ce551c7d4bbb3bdd2aa8e24dcc318"
+    },
+    "mosaic_real_time": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/bed2e96d1d2c46afa26d623d1abf2711/manifest.json",
+      "sha256": "861e5b2a8262eb058c6b507b765d3d5b33d84c5a4482d8fd39e7f2d324004678"
+    },
+    "codex_review": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/continue-spp-codex-review-07.json",
+      "sha256": "3b009457a6e76d390bcb4465b12f485eba81faae3d397d594459895199c25348",
+      "session_ref": "01a08845-36e0-7132-9c57-3eafe08c2bea"
+    }
+  },
+  "checks": {
+    "generic": "fresh transport, Continue and SPP sessions in controlled and real time; literal ordered output, zero drops, contiguous capture and all six phase identities",
+    "mosaic": "M-SYNC-014 controlled and real time; exact notes/releases, complete unsupported-output silence, main-screen Play LED/frame after each of 26 inputs, later Start from step 1",
+    "harness_units": "32/32 registry, MIDI-window and clock-oracle unit tests",
+    "review": "Codex-only; high confidence in classification and closed association/capture gaps; source labels qualified and full campaign remains incomplete"
+  },
+  "manual": {
+    "section": "MAN-114 External MIDI Transport",
+    "requirement": "CLOCK-MIDI-TRANSPORT-001",
+    "case": "M-SYNC-014",
+    "coverage_status": "partial-domain-coverage"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "ce5e935",
+  "files": [
+    {
+      "file": "lib/ui_components/dial.lua",
+      "before_sha256": "5de540f9680dfb4d508c9261f5a25ae57175a8f84aa09c58e3d6e0ca9c02813c",
+      "after_sha256": "6744db7d3c9c468300603af316a43c14064a569bba6965cea0265e736fe97f41"
+    },
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua",
+      "before_sha256": "1a42be709413f647b0d1a73e27764808b3842251d37a448bf11f966f34d2f103",
+      "after_sha256": "4d29c5aafc271747c7f46abc25465e5d25a69954cdc3806ae481efb3c706b3ae"
+    }
+  ],
+  "patch": "0170-dial-off-display.patch",
+  "patch_sha256": "f26fe58b698392d256069fb42312358aab2875bc8d5a3ded9ab4fe7490ed9891",
+  "regression": "M-PARAM-DIAL-OFF-001",
+  "unit_regression": "test_uicomp_dial_draw_shows_x_at_off_value_below_min, test_w3c_trig_lock_dials_show_x_at_off_outside_range_and_midi_default_off",
+  "baseline": [
+    {
+      "run_id": "540418e0c3a746e5a536e5ef01a1453b",
+      "case": "M-PARAM-DIAL-OFF-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "17479de507cd997e2b6f005ff9fe0272bf776b192098ac90e905e886630b048e",
+      "failure": "('Dial at Off', [{'label': 'Control 1 assigned at Off', 'actual': '', 'expected': 'X', 'cite': 'README 546 + human decision S20', 'passed': False}, {'label': 'Control 1 read-out after turning to Off',"
+    },
+    {
+      "run_id": "fdfcd241e13a4962b234f6b56e4bb4d8",
+      "case": "M-PARAM-DIAL-OFF-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "24b8d1cea0e3cea6449672fbbbed381507df6f4217a2c29c6150167c66765ca6",
+      "failure": "('Dial at Off', [{'label': 'Control 1 assigned at Off', 'actual': '', 'expected': 'X', 'cite': 'README 546 + human decision S20', 'passed': False}, {'label': 'Control 1 read-out after turning to Off',"
+    }
+  ],
+  "rationale": "S20: dial:draw() clamped self.value into [min, max] before comparing it with off_value, so a Trig Locks param whose Off (-1) lies below its range (off -1, min 0: Control 1 in the seeded config, 54 stock Digitakt params) drew an empty bar at Off, identical to value 0, and the 2-second read-out after turning to Off showed \"0\" while no CC was sent; the clamp also overwrote the dial's copy of the value with 0. draw() now clamps a local display copy, shows X when either the raw or the clamped value is Off, and never writes the copy back. S62: a MIDI device-config param without off_value (Off defaults to -1, README 546, param_manager.lua) reached the dial with off_value nil, so draw() treated 0 as the centre and -1 as a value: a half bar at Off and \"-1\" in the read-out. refresh_trig_locks now passes -1 for a MIDI param without off_value. n.b. (norns) params without off_value keep nil and are unchanged. The parameter values themselves were never changed; the regression shows no CC is sent at Off.",
+  "oracle": "README 546: 'Setting a MIDI parameter to its configured Off value (default -1) ensures that the current setting on the device remains unchanged.' README 761: an Off lock sends no value. Human decision 2026-09-11 (S20/S62): the dial shows X at Off, a missing off_value meaning -1; Trig Probability (Off inside its range) and the norns params menu already show X.",
+  "validation": [
+    {
+      "run_id": "2f523141876e43178b276c505765b975",
+      "case": "M-PARAM-DIAL-OFF-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "728ef7fa15d56606214f157479ad68af6ee08c15eade894269befc239ac16efa",
+      "failure": null
+    },
+    {
+      "run_id": "09ba73514c4d4cea81ba6bbedd8e80da",
+      "case": "M-PARAM-DIAL-OFF-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "05664c696f0d0cbf675318d6fd5f979744870f2082c4ef72185e47b8f5019508",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-e2d225f3d4284f779bcceeed2ae846ff",
+      "case": "M-PARAM-DIAL-OFF-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "6d32124435227367ebf8717f796e3399cbdf57cd3befc7eae26d969888828467",
+      "failure": null,
+      "normalized_sha256": "ec5334a71ffa5fd3025c83d88add224bd771c0813b15c533bcd5a6e30b081213"
+    }
+  ],
+  "collateral": "Controlled lane, all passed with the fix: M-PARAM-001..046, M-PATCH-028, -036, -057, -058, -060..063, M-REC-PARAM-015..018, M-SETUP-001..003, M-SETUP-DEVICE-NAMES-001, M-SETUP-SYNTAKT-PEDALS-001, M-SETUP-UNREADABLE-CONFIG-001 (every M-PARAM-*, M-SETUP-* and every case requiring PARAM-OFF). Full Lua units OK (1466); guards OK. Units updated: ui_components_tests test_uicomp_dial_draw_shows_x_at_off_value_below_min (replaces the characterisation of the old empty bar) and test_uicomp_dial_draw_clamps_value_above_max (value no longer written back); new channel_edit_page_ui_mutation_killers_tests test_w3c_trig_lock_dials_show_x_at_off_outside_range_and_midi_default_off.",
+  "upstream_merged": false
+}

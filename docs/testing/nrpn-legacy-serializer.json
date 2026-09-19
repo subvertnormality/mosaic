@@ -1,0 +1,12 @@
+{
+  "exit_code": 0,
+  "cases": 32768,
+  "scope": "official Lua plus extracted native serializer; no runtime/device acceptance",
+  "sources": {
+    "/home/andy/projects/monome-runtime-candidates/midi-hotplug-controlled-locked-01/norns/lua/core/midi.lua": "de4d9e26f39b0de1ffc76d24b094af86f5ce4416860c56bfdb017e914e1f6ab8",
+    "/home/andy/projects/monome-runtime-candidates/midi-hotplug-controlled-locked-01/norns/matron/src/weaver.c": "a249a548c568054fe103b67b39a90c8a30c298ec2e23475104eba40bd1f1a79b"
+  },
+  "serializer_sha256": "65336bcaa3f1b9c28bc24f115a96ed3c89c602adbc4b80004a54882541785d33",
+  "stdout": "PASS 16384 historical and 16384 standard low-byte conversions; odd historical values serialize to zero\n",
+  "stderr": ""
+}

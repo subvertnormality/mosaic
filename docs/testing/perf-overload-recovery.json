@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "workload": "PERF-008",
+  "status": "retained-failure",
+  "interpretation": "The clean constrained x86 proxy run preserved complete MIDI ownership, visual response, service, memory and queue recovery, but failed the unchanged musical phase gate after overload. This is a refactor blocker and is not physical-norns evidence.",
+  "mosaic_revision": "a7bf17cbe0298640c5f5aa53d110d773e540caa1",
+  "runner_sha256": "6e9feba6dd085a6d30419e4484b858e521a3da1a7e8284675e39f62f5471f3da",
+  "source_status": [],
+  "image": "monome-emulator:perf-recorder-02",
+  "image_id": "sha256:38b516ef4a8e7f85355da8d94d8f6f21c007b6a8d47fa829a8fc9039c01eea91",
+  "evidence_directory": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07",
+  "artifacts": {
+    "report.json": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/report.json",
+      "sha256": "151032d1c2068cb29028292c9f7889f66904d216365189602beb016b874ac75f"
+    },
+    "result.json": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/result.json",
+      "sha256": "5e7b236aa6b3feac2d058c6075006685e680b34e4eda2c8cf0a0f0e3b5d0b058"
+    },
+    "samples.json": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/samples.json",
+      "sha256": "5eb513257255260f3a03f006df61852b694ba7b10c38bd77f6810a8235a5bfba"
+    },
+    "native-events.jsonl": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/native-events.jsonl",
+      "sha256": "dc70f6752ea2eefedb2a21fddde90dd54b27b2b24b77f0f5ed32500dc7faed3d"
+    },
+    "container.log": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/perf-overload-recovery-20260912-07/container.log",
+      "sha256": "1ceea3b558060dc65aa1a3ff6168acc104b861e9d4634789b78d52af84b3af08"
+    }
+  },
+  "observations": {
+    "onset_groups": 47,
+    "midi_messages": 1506,
+    "balanced_release_ownership": true,
+    "overload_elapsed_ns": 1767120847,
+    "overload_throttled_periods": 16,
+    "overload_throttled_ns": 794040805,
+    "post_recovery_timing": {
+      "p50_ns": 68682490,
+      "p95_ns": 69791435,
+      "p99_ns": 69791435,
+      "maximum_ns": 69791435
+    },
+    "final_phase_error_ns": 67756407,
+    "queue_recovery_ns": 7062230,
+    "peak_rss_bytes": 421167104,
+    "service": {
+      "p50_ns": 1439446,
+      "p95_ns": 3204848,
+      "p99_ns": 3843932,
+      "maximum_ns": 3843932,
+      "p99_deadline_fraction": 0.023063591953872815,
+      "maximum_deadline_fraction": 0.023063591953872815
+    },
+    "visual_recovery": {
+      "grid_revisions": [
+        172,
+        173
+      ],
+      "frame_revisions": [
+        456,
+        458
+      ],
+      "frame_hashes": [
+        "a836967aa3502d4388ea10c7bfac403e4f1f1101a77856474783e9e04b62d418",
+        "c7d55fe207bc32e2373c0724b323ef4b0e0ee46701d502be9bbd7608ff10825b"
+      ]
+    },
+    "gates": {
+      "event_timing": false,
+      "memory_peak": true,
+      "memory_slope": null,
+      "sustained_service": true,
+      "hard_service": true,
+      "queue_recovery": true
+    },
+    "temporary_data_removed": true
+  }
+}

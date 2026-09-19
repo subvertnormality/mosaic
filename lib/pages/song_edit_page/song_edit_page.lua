@@ -70,6 +70,9 @@ function song_edit_page.register_press()
         local do_func = function()
           channel_pattern_buttons["step" .. s .. "_song_pattern_button"]:set_state(3)
           program.get().selected_song_pattern = s
+          -- Selecting a sequence by hand is a global pattern change like any
+          -- other: nothing resolved from the outgoing pattern may still leave.
+          if m_clock and m_clock.discard_lookahead then m_clock.discard_lookahead() end
           tooltip:show("Song sequence " .. s .. " selected")
           
           for channel_number = 1, 17 do
@@ -155,6 +158,9 @@ function song_edit_page.register_press()
   press:register_dual(
     "song_edit_page",
     function(x, y, x2, y2)
+      -- README 903: the source is the slot pressed first, whichever key is released first
+      -- (arbitrated 2026-09-11, press-order-slot-copy-only).
+      if m_grid and m_grid.pressed_after and m_grid.pressed_after(x, y, x2, y2) then x, y, x2, y2 = x2, y2, x, y end
       local pattern = fn.calc_grid_count(x, y) + 48
       local target_pattern = fn.calc_grid_count(x2, y2) + 48
       if

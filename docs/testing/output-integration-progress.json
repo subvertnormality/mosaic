@@ -1,0 +1,86 @@
+{
+  "status": "scoped-native-regressions-and-codex-review-complete",
+  "review": "01a08270-4401-77f0-9af2-6ac01e7bd3bc",
+  "findings": [
+    {
+      "id": 1,
+      "status": "fixed-native-validated",
+      "issue": "Screen worker traverses/paints IO while teardown frees it",
+      "next_action": "Generic active/queued paint shutdown regression and stop/wake/join before resource teardown",
+      "resolution": "Explicit optional runtime patch closes screen queue, drains and joins before display destruction. Generic active/queued paint baseline fails; candidate passes, including sixteen completed paints before teardown."
+    },
+    {
+      "id": 2,
+      "status": "fixed-native-validated",
+      "issue": "JF setup/final-export intervals accepted unexpected packets",
+      "resolution": "Quiet startup/selection allow music-mode setup and all-voice reset only; cleanup permits reset only. Targeted valid-metadata transition/final fault fixtures fail intended assertions; all three affected native cases pass."
+    }
+  ],
+  "native": [
+    {
+      "run_id": "6f7adcc6a23248dea30db26c0be2a790",
+      "case": "M-XA-004-JF-OVERLAP",
+      "passed": true,
+      "manifest_sha256": "6142991a7325d83d8a95dbd8fe0e2f976b96a85dd7a172a0660d19f94214bed0"
+    },
+    {
+      "run_id": "90cafa5c845240d086cbf3343665fb37",
+      "case": "M-XA-004-JF-OVERLAP",
+      "passed": true,
+      "manifest_sha256": "3dbdfb8b805af20a223f7a1d34a4378deb859c0f0184a2b0d77f6bc770c713e5"
+    },
+    {
+      "run_id": "52854f567f5843e3b1fbe67b21cab1ec",
+      "case": "M-XA-004-JF-OVERLAP",
+      "passed": true,
+      "manifest_sha256": "575f22849ab844bf0e55f5a0ef0c66446d8bde6e12285f41a000ae29c970c0aa"
+    },
+    {
+      "run_id": "c7b740f68bc54ce09e688060f801c5bb",
+      "case": "M-XA-003-JF-OWNERSHIP",
+      "passed": true,
+      "manifest_sha256": "a214ae6818f6e9f5310dd1dbde91b223a1cb40b2d0df67ed3870db3dc14a8d78"
+    },
+    {
+      "run_id": "208479dade774f8bbca736e3b178b34c",
+      "case": "M-XA-004-JF-OVERLAP",
+      "passed": true,
+      "manifest_sha256": "22aed316644d3591de294b7ee3b2a4f5695e706c6689f652ef54096d0f71fd08"
+    },
+    {
+      "run_id": "7e56976a703e4eef896d750d4d1d8c6e",
+      "case": "M-XA-001-JF",
+      "passed": true,
+      "manifest_sha256": "584e3997502a8cbed4529d0fee32e9c9fd5a1fe0ebc7923d3e0c68d9f044cfd0"
+    },
+    {
+      "run_id": "5a62d4b2b41c41c881d937fc7279c4b4",
+      "case": "M-XA-001-JF",
+      "passed": true,
+      "manifest_sha256": "eb80366a5cf5b720c70b1cc7f9f560e99702ed43fc8c1df91778a9fa80ffd9d3"
+    },
+    {
+      "run_id": "3c8f4c988bcd411698e85d58f93ce89b",
+      "case": "M-XA-003-JF-OWNERSHIP",
+      "passed": true,
+      "manifest_sha256": "743e866b2c0b82ada500d405c3b35407cc97bdd3030fe77489f959bf8944eb39"
+    },
+    {
+      "run_id": "ca4608be26cb4c0db8a2e960a06370db",
+      "case": "M-XA-004-JF-OVERLAP",
+      "passed": true,
+      "manifest_sha256": "0a0f8c1e61446f28e036058a3b7c4ffdd4ab433ee0039e1a877126643e6a5693"
+    }
+  ],
+  "JF_oracle_tests": {
+    "collected": 9,
+    "passed": 9,
+    "tool_output": "b1d41b"
+  },
+  "sanitizer_baseline": "artifacts/behaviour-expansion/sdl-regression-20260908-201117/report.json",
+  "sanitizer_candidate": "artifacts/behaviour-expansion/sdl-regression-20260908-201118/report.json",
+  "limitations": "Scoped native output evidence was collected against the recorded dirty Mosaic candidate, including pending MIDI/slide edits. It does not establish equivalence to the clean published baseline. Absolute audio timing, remaining expanded families, original locks/slides/trig/scale interactions and full admission remain incomplete.",
+  "full_campaign_complete": false,
+  "review_followup": "01a082af-b7d1-70e2-b7fc-814dd8c5cc91",
+  "emulator_revision": "889282dcfad27ec9c3ae469a712ae6eb52b510cd"
+}

@@ -1,0 +1,6 @@
+# lock_lookahead: evidence the tests detect a broken implementation
+# 2026-09-18T16:45:04+01:00
+M1  serve() only drains the current pulse (skipped pulses dropped) -> 12 successes, 1 failure
+M2  dispatch() never records the commit                           -> 10 successes, 3 failures
+M3  schedule() queues a second value instead of replacing         -> 12 successes, 1 failure
+unmutated                                                        -> 13 successes, 0 failures

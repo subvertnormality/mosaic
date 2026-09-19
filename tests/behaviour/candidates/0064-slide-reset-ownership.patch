@@ -1,0 +1,53 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -683,6 +683,37 @@
+ 
+ function m_clock.realign_sprockets()
+   clock_lattice:realign_eligable_sprockets()
++  local now = clock_lattice.transport
++  local i = ring_start
++  while i ~= ring_end do
++    local action = spread_ring[i]
++    local clock = m_clock["channel_" .. action.channel .. "_clock"]
++    if action.active and clock and clock.realign then
++      local channel = program.get_channel(program.get().selected_song_pattern, action.channel)
++      local first, last = program.get_channel_step_bounds(channel)
++      if action.end_step < first or action.end_step > last then
++        action.active = false
++      else
++        -- Reset makes the next onset the channel's first step. Retain the
++        -- destination's step identity, not its old occurrence ordinal.
++        local progress = action.total_pulses > 0 and math.min(1,math.max(0,(now-action.start_pulse)/action.total_pulses)) or 1
++        local value = action.start_value + (action.end_value-action.start_value)*progress
++        action.end_occurrence = (clock.onset_count or 0) + 1 + action.end_step - first
++        action.total_pulses = clock:project_onset_occurrence(action.end_occurrence)
++        action.start_pulse = now
++        action.start_value = value
++      end
++    end
++    i = (i % RING_BUFFER_SIZE) + 1
++  end
++end
++
++function m_clock.cancel_all_spread_actions()
++  local i = ring_start
++  while i ~= ring_end do
++    spread_ring[i].active = false
++    i = (i % RING_BUFFER_SIZE) + 1
++  end
+ end
+ 
+ function m_clock.execute_action_across_steps_by_pulses(args)
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -952,6 +952,10 @@
+ 
+         -- Switch to the next pattern
+         program.set_selected_song_pattern(next_song_pattern)
++        if selected_song_pattern_number ~= next_song_pattern then
++          -- Slides never cross song patterns; a same-pattern repeat may wrap.
++          m_clock.cancel_all_spread_actions()
++        end
+         
+         -- Handle pattern reset based on settings
+         local reset_channels = selected_song_pattern_number ~= next_song_pattern and

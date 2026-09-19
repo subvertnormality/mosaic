@@ -1,0 +1,29 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "session_ref": "01a08158-f66a-7f31-82f0-96988d1ea9d5",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "rebuttal": "Focused read-only follow-up to the one connected-prefix tolerance false green. User authorises Codex source/docs/evidence export. Native affected-case runs active: do not edit files.\nAdded test_missing_one_or_sixteen_prefix_tail_messages to tests/behaviour/test_panic_hotplug_trace.py, both one- and sixteen-event removals at the end of a connected prefix. They both failed against the original oracle with AssertionError not raised; saved baseline hash/source and outcome in /home/andy/projects/monome-emulator-midi-hotplug/artifacts/hotplug/mosaic-edge-oracle-baseline.json and .py. Changed only the removal bound in panic_hotplug_trace.py from abs(prefix-reference)<=16 to 0<=prefix-reference<=16, exactly your scheduler-order reasoning. Seven unit groups now pass. Testing plan explains directional bound. Production Mosaic unchanged.\nFresh M-PANIC013/014 D then R are running against reviewed emulator branch and rebuilt locked/controlled runtimes, so results pending unless present in /home/andy/projects/mosaic-behaviour-runs. Initial all8hotplug D/R passed but recorded as pre-remedy for affectedcases; no relabelling. Four existing native regressions on new runtime alreadypassed: M-PANIC004 D c5bce313575f410e97b9c32a2c65dc4b andR ac58b47f18db4b9685ba77807c845d16, M-PANIC009 D ae3ef12733fd43fda0800d06956e453e andR ebee8753f4d0470ebd5fa8556913a4fb. They cover live-note ownership on Stop and active/pending arpeggio timing.\nPlease check the minimal remedy and whether this closes your finding. No cold broad review, no whole panic/manual/campaign claim; remaining interaction domains stay pending."
+  },
+  "input_sha256": "ee14983efb957acccd149ea0f369c8010519302c49b37cfaf177fe9f40fb63b5",
+  "source_sha256": {
+    "tests/behaviour/panic_hotplug_trace.py": "d9f2efb877974f3f85fa2862985859cf586151908623ffb5d80a58aeae6eed5e",
+    "tests/behaviour/test_panic_hotplug_trace.py": "f36e94908e841f065b0344d16995405fe974cca3313b45063c360dc4ea241f84"
+  },
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**CONCEDE \u2014 the finding is now fixed.** The original finding applied to the previous oracle; the supplied remedy closes it.\n\n[panic_hotplug_trace.py:24](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/panic_hotplug_trace.py:24) now requires `0<=len(prefix)-len(reference)<=16`, rejecting the unsupported trailing prefix. [test_panic_hotplug_trace.py:32](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/test_panic_hotplug_trace.py:32) explicitly tests deletion of both 1 and 16 prefix-tail messages. I reran all seven test groups; they pass.\n\nThis closes the specific oracle finding. I have not verified the fresh native rerun outcomes.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08158-f66a-7f31-82f0-96988d1ea9d5` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

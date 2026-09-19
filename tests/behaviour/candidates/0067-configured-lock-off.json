@@ -1,0 +1,8 @@
+{
+  "status": "candidate-validation-pending",
+  "baselines": [
+    "698693f462184e009cae61626e28f6e7",
+    "0603d458042a4431818b455c8798c64b"
+  ],
+  "scope": "Preserve a configured Off sentinel outside the active lock range; ordinary active values remain clamped. Independent of NRPN encoding and device compatibility."
+}

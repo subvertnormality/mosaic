@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "baseline": {
+    "source_revision": "b5901c1b72f81dfc80f638526a493e4c307a6495",
+    "label": "immutable git-archive baseline",
+    "lua_suite": {"tests": 1618, "successes": 1618, "failures": 0, "log": "baseline-lua-test-output.log"}
+  },
+  "candidate": {
+    "label": "isolated local copy with checkpoint files and pinned lib/nb 503be3ae9a7f4368a8bc35d6081795e0a130cadf",
+    "runtime_lua_sha256": "candidate-runtime-lua.sha256",
+    "lua_suite": {"tests": 1627, "successes": 1627, "failures": 0, "log": "candidate-lua-test-output.log"}
+  },
+  "emulator": {
+    "case": "M-SYNC-LEAD-002",
+    "installation": "/home/andy/projects/emu-multimsg/.runtime/ci-qualified/runtime/installation.json",
+    "controlled": {"passed": true, "manifest": "lead-002-controlled-manifest.json", "diagnostic_only": true},
+    "real_time": {"passed": true, "manifest": "lead-002-realtime-manifest.json", "diagnostic_only": true},
+    "initial_setup_failure": {"manifest": "lead-002-controlled-nb-setup-failure-manifest.json", "reason": "isolated copy initially lacked the pinned lib/nb submodule; retained separately"}
+  },
+  "committed_checkpoint": {
+    "revision": "e7edad3",
+    "python_unit_suite": {"tests": 252, "failures": 0, "not_run": ["test_output_profiles: optional output-mod root unavailable"], "log": "python-unit-suite-e7edad3.log"},
+    "cursor_behaviour": {
+      "M-SYNC-LEAD-016": {"controlled": "lead-016-controlled-manifest.json", "real_time": "lead-016-realtime-manifest.json", "passed": true},
+      "M-SYNC-LEAD-018": {"controlled": "lead-018-controlled-manifest.json", "real_time": "lead-018-realtime-manifest.json", "passed": true}
+    }
+  },
+  "probe_kind_filter": {
+    "red": {"selected_tests": 5, "successes": 4, "failures": 1, "log": "timing-probe-filter-red.log"},
+    "green": {"selected_tests": 5, "successes": 5, "failures": 0, "log": "timing-probe-filter-green.log"},
+    "full_lua": {"tests": 1629, "successes": 1629, "failures": 0, "log": "timing-probe-filter-full-lua-green.log"}
+  },
+  "final_python_focused": {
+    "command": "python -m unittest -v test_pulse_probe test_hardware_run_options test_hardware_performance test_fixture_migration test_lead_timing_oracle",
+    "tests_run": 66,
+    "successes": 65,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 1,
+    "skip_reason": "test_timing_trace_wrappers_pass_arguments_through_exactly: lua5.3 unavailable",
+    "log": "python-focused-pulse-core-green.log",
+    "source_sha256": {
+      "tests/behaviour/test_pulse_probe.py": "3183812ea7d7c12f29492aedb9f3ad5397530ef73476c503743014945f7bc8f5",
+      "tests/behaviour/test_hardware_run_options.py": "af02afa15850771d205e00f96d356675eaa59bde18cb0e2df1df83340175dde3",
+      "tests/behaviour/test_hardware_performance.py": "a225a9dcf1b3b45c4911545b123bc16f624e3b3550178a2aeca925fb80459ae1",
+      "tests/behaviour/test_fixture_migration.py": "0379d847a8813a85749eb66ca37e2400fd4ba3c3d870fbb579223fc629419362",
+      "tests/behaviour/test_lead_timing_oracle.py": "4c4b065becafc8f1ed91d12a90c724d21e31060e0ef804a5cb21046a8c36a36d"
+    }
+  }
+}

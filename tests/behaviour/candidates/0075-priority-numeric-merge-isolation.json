@@ -1,0 +1,9 @@
+{
+  "status": "scoped-candidate-validated",
+  "scope": "Only assigned patterns contribute numeric note/velocity/length values; unassigned priority sources remain usable for their explicitly selected fields.",
+  "baseline_controlled": "b461c87fc40e431e967de8054e4bc80c",
+  "baseline_real_time": "d479f6a857e14bc796082f504a85ff56",
+  "baseline_units": "slide-deadline-units-c4c8582b9e2b49368e057b20850748e1",
+  "fixture_failure": "25017ac3790e46af9d6c2e9958faea04",
+  "validation": "docs/testing/numeric-merge-validation.json"
+}

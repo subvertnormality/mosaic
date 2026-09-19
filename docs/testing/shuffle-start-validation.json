@@ -1,0 +1,386 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0084",
+  "base": "45c1b6d5854c02a0c30c216e978f8fff0a2331e4",
+  "production_patch_sha256": "dca521193a2a57a521af7af4407f4a7cee9ee2d7e2556db92d183e57789b005a",
+  "native_runs": [
+    {
+      "case": "M-SHUFFLE-001",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/dfe001e4bdd04151b2e5cd14cd62d709/manifest.json",
+      "sha256": "9dc68c0608fbe6971d3646d20486d2e3e0b41d563e43469e7875bc15d3b621a5",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-002",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/69c36360f2274c0d831c92f483f25e8c/manifest.json",
+      "sha256": "3a72d0172ae212ac79acd27a9cb92f428ac0ff399610805bb4aec6fef2d05ff3",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-003",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cd791005e35c41e0bd416968af77e7ae/manifest.json",
+      "sha256": "9337dc155153882158a303a8f65e586b2a712712598d1cdaa0f3381fdfb73f5c",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-004",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/375e4c1739a54fe0963a0422d4cd7964/manifest.json",
+      "sha256": "0d2969eeb073f27efc12893c06178c26cc1ecb5f5b87df7d7cfd873b23a590c6",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIME-004",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/05d7549603a94e06b799f872b18440ce/manifest.json",
+      "sha256": "ddb0e2664bcac855d53de866e34a487b588db72b87b132c5804bb5fccfc719f2",
+      "passed": true,
+      "source_differences": []
+    },
+    {
+      "case": "M-TIM-002",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c95db483020247fb89138f5f8a1dcb0b/manifest.json",
+      "sha256": "f4774bd8702bc881752727b2ef86f0abb7a4571035c26065937f7cdbea3c67b4",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIM-003",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/bee77241b6274c39a32819d897c80a24/manifest.json",
+      "sha256": "6bf63cef86a4f8d2584db8530de8bb99361dbff4aa52e0a56571dcecbb8a754c",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIME-006",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/18c9ccbbdfb34b6d981b9260a4fcc955/manifest.json",
+      "sha256": "3f6dd45ec5ef3317c662259140eb3cce23f8ac0a741fb4c0dc55857a5530b36e",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIME-007",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c598c557eac345c5b442054575ecbdfa/manifest.json",
+      "sha256": "2cc8db250fc2c8f586a1f8a3f71d86b6f21eca3363330287c9b886b773f54c1d",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-PATCH-020",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/af989bb53e1c436fb37df4b42c710c30/manifest.json",
+      "sha256": "c55e701f545a43daf586587ee8da8d407e5bc922a1e639e0ed748ec868538679",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-PATCH-023",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/61f8f0bdd16840d6a428d9b1cef6e6e4/manifest.json",
+      "sha256": "f09ee7f97d244366ef5c5a6e6e589fc45be785669a6986aa80eb8037a9ce1d08",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-PATCH-031",
+      "clock_mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4f917b3a5fa743cebc9c340fef7ab973/manifest.json",
+      "sha256": "25299e4f27bb5c9c85d2624593b28d38bdcb9e2512ca31ac91d1be3383ef464f",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-001",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ca75555e384e4f3f9041a11753fb858c/manifest.json",
+      "sha256": "f0df2fe331418f8a6e335f1c37b873f666a2f8df659bcb35a98e047412b39feb",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-002",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/142441d4a5aa406c82748852ca6d5144/manifest.json",
+      "sha256": "69f046a1f792c1413cc2c1cc2d18cc24c092310992a3b57870d04380bfd3be43",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-003",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e7102c0d107e4a1694bc9e3e3d4660b0/manifest.json",
+      "sha256": "1ab7e5bc58e74f2a5704800738c9bf60b4125803877ca523f4c4607e6beb73f6",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-SHUFFLE-004",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8a07ff1df7f8416498738f5f74a721fb/manifest.json",
+      "sha256": "7d4fe8616d13fd565a85e638e1c0a149918b3d0929764693002d55ab8eacda80",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIM-002",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/fafbc4fb3f9244b7af35b900da8e4966/manifest.json",
+      "sha256": "83dc7df87b67dd847bd4a5a994c67cdf42a0876e159969203ca8c78f29cb77b9",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIM-003",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6af320d2a1e34b219fc714dda6edb9e3/manifest.json",
+      "sha256": "074637252edf3f10bb48f16dfba6a604bb9a9923879849efcfd8a0c0be9ce8f0",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIME-006",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ffaa19cd75d04b2e989d0d635f35fa07/manifest.json",
+      "sha256": "7fa5153d86b06fd9b0943761b9320a859de539627b48a56b9bc86c0ae2fc304d",
+      "passed": true,
+      "source_differences": [
+        {
+          "path": "mosaic/tests/behaviour/fractional_deadlines.py",
+          "recorded": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+          "current": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e"
+        }
+      ]
+    },
+    {
+      "case": "M-TIME-004",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/df33973b92124b609b1d3b13e6e3eb78/manifest.json",
+      "sha256": "54dd4a2d680c869f253eacab974684eb94a34b55bdd5719a10269ccf5e223001",
+      "passed": true,
+      "source_differences": []
+    },
+    {
+      "case": "M-TIME-007",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c31963f5c2b84803a12beb26fdf27998/manifest.json",
+      "sha256": "cb253526af091650f76bb882b2fd6d1b77e7d7ab86f735f21bd2ae549f5dbabb",
+      "passed": true,
+      "source_differences": []
+    },
+    {
+      "case": "M-PATCH-020",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/33642394bce146349a5a5f15955bc8c5/manifest.json",
+      "sha256": "edbc13f668e7cbe6d471399ef175193ae9f17a3b5ec035c8d95eea58ce34c506",
+      "passed": true,
+      "source_differences": []
+    },
+    {
+      "case": "M-PATCH-023",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f4ebe80dec184fc0a210780e59c5beb7/manifest.json",
+      "sha256": "1a406b2f39d4e90d12244ee76577f838389c7d5c54bae56803c6b6637d43bd8e",
+      "passed": true,
+      "source_differences": []
+    },
+    {
+      "case": "M-PATCH-031",
+      "clock_mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d25316f97a294fec8735bf45f0ed238a/manifest.json",
+      "sha256": "bbacd1c2aa18cafd06ca4a59d6987895f6290fd9d609d66986679af973469115",
+      "passed": true,
+      "source_differences": []
+    }
+  ],
+  "retained_failed_runs": [
+    {
+      "batch": "shuffle-candidate-02.json",
+      "case": "M-TIME-004",
+      "clock_mode": "real-time",
+      "exit_code": 1,
+      "stdout": "{\"case\": \"M-TIME-004\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/6962b6d2099b4eebbac9640db10fdf6c/manifest.json\"}\n",
+      "stderr": ""
+    },
+    {
+      "batch": "shuffle-remaining-realtime-01.json",
+      "case": "M-TIME-007",
+      "clock_mode": "real-time",
+      "exit_code": 1,
+      "stdout": "{\"case\": \"M-TIME-007\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/db126aeb67904333b8e3c11e947197ce/manifest.json\"}\n",
+      "stderr": ""
+    }
+  ],
+  "source_scope": {
+    "strict_current_source_M5": false,
+    "unchanged_shared_functions": [
+      "note_plan",
+      "quantised_pulse",
+      "preview_residual",
+      "reconcile_note_stream"
+    ],
+    "old_oracle_sha256": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747",
+    "current_oracle_sha256": "85e22d9c61f133bef0076817d0a3ee519a8f0dd86360d373dae694b6d316d39e",
+    "explanation": "Only the fractional Stop oracle changed between native batches. Both affected TIME004 modes were rerun. Other native case code and production files match their original identities. The added oracle unit-test file does not execute in those native cases."
+  },
+  "unit_integration": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-8e29d35d04c6499bbc2c4440741b9e5c/results.json",
+    "sha256": "c953a2d3ad5fa57f70fab9928fa9c2f8d85fb5a2d208aece17a8b642f0e5b1c5",
+    "summary": "Ran 513 tests in 11.595 seconds, 513 successes, 0 failures"
+  },
+  "baselines": [
+    "/home/andy/projects/mosaic-behaviour-runs/1661e0c9003e41a580b30da4b7dc269b/manifest.json",
+    "/home/andy/projects/mosaic-behaviour-runs/shuffle-restart-355e0ef498fc481799055370a229c1ec/diagnostic.json",
+    "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-8af3c5624d1e4864ade5e811d0849c32/results.json"
+  ],
+  "review": {
+    "engine": "codex",
+    "path": "/home/andy/projects/mosaic-behaviour-runs/shuffle-restart-review-01.json",
+    "sha256": "1227683acf2ee1812ceb38ec609a37cfbfccc7e5d34c1c9e3161c6acaf2d15c4",
+    "session": "01a08677-d992-7052-a12a-a62f22608ce6"
+  },
+  "decision": "Rebuild only stopped-to-playing clock state from final effective settings, with canonical constructor preview; preserve step state and live clocks. Use self.init to retain the receiver module and slide sampler ownership.",
+  "transport_expectation_change": "M-TIME-004 previously encoded preceding stopped-period preview carry. It now requires canonical half-pulse seed at each Start. Lower-level carry-history contracts remain unchanged.",
+  "coverage": [
+    "All24 feel/basis pairs at100percent and amount1/50/99/0/restored100 on basis9 for eachfeel,44 stages per clock mode",
+    "Exact controlled pulses and bounded real-time phase, note data and complete gates; final Stop releases checked natively",
+    "Both processors restart with canonical carry; fresh/edited/replayed settings yield same MIDI pulse schedule; repeated Start while playing retains lattice and phase",
+    "Fractional continuity, restart boundaries, MIDI transport, inactive shuffle transitions and fractional/shuffled slides retain native regression guards"
+  ],
+  "limitations": [
+    "Real-time10ms tolerance exceeds one96PPQN pulse at90BPM; controlled timing is essential for the one-pulse regression",
+    "Relative shuffle onset assertions do not establish absolute startup latency",
+    "Global/local inheritance, cross-channel/live-boundary interactions and remaining amount values need further coverage",
+    "Full manual, emulator release and final unit/integration hardening remain incomplete"
+  ],
+  "full_campaign_complete": false,
+  "stop_boundary_review": {
+    "engine": "codex",
+    "path": "/home/andy/projects/mosaic-behaviour-runs/shuffle-stop-boundary-review-01.json",
+    "sha256": "17421c62286a13a24f999dd85a39e82e1835de97164086f66c243a08c3ed89b4",
+    "session": "01a086a4-5820-7cd1-8642-392a2bf04b04"
+  },
+  "oracle_evidence": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/fractional-stop-contracts-01.json",
+      "sha256": "0c92d7277cebabccbd8e9c3820a0168347c8807332b52dd594b10669d9ce2de9"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/fractional-stop-retained-replay-01.json",
+      "sha256": "673f0e9b51b665ab5503e325e4952d86907bfe77896d1c899c75cc642a45349f"
+    }
+  ],
+  "stop_boundary_policy": "Real-time only: all canonical onset deadlines plus existing 50ms maximum strictly before Stop are required; only a contiguous Stop-overlap suffix may cancel. Emitted notes retain exact MIDI ordering and values, release accounting, absolute Start origin, and existing p99/max/final timing limits. Controlled counts and timing remain exact. Retained replay never changes original failed manifests."
+}

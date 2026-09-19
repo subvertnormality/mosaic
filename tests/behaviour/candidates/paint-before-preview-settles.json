@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "1e1a2cc",
+  "files": [
+    {
+      "file": "lib/pages/trigger_edit_page/trigger_edit_page.lua",
+      "before_sha256": "9af905ffd5ef58aeb67613a97e0ce36f3ac176e0e96b8428db8386a06dc3b809",
+      "after_sha256": "65d0391e5ce56f4baf6a551dc20b98abc11ba6e864b4e57ef8d79aac95699d5a"
+    }
+  ],
+  "patch": "0130-paint-before-preview-settles.patch",
+  "patch_sha256": "3a9bc01c982dbeb8dcd9b4b5cff0746d0a3c808a9cd15cc0a87767ba0f4eed23",
+  "regression": "M-ALG-PAINT-RACE-001",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "97616b6e56484f55a3620b5c8158664f",
+      "case": "M-ALG-PAINT-RACE-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "e21dad4bb01a9358450c87dc129d870f2377e704224f1a0844dcacb12184ad94",
+      "failure": "('Paint 20 ms after prime differs from the primed pattern', [[1, 4, 7, 9, 12, 15, 17, 20, 23, 25, 28, 31, 33, 36, 39, 41, 44, 47, 49, 52, 55, 57, 60, 63], [1, 4, 7, 9, 12, 15, 17, 20, 23], [1, 4, 7, 9"
+    },
+    {
+      "run_id": "6b56fbfe278245a49cdbaaf6c0830acf",
+      "case": "M-ALG-PAINT-RACE-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "784d2d1b6cc77caa3ceedf1d05d5dc1a6ae6bc197010f13f02a2d39ed3edb0db",
+      "failure": "('Paint 20 ms after prime differs from the primed pattern', [[1, 4, 7, 9, 12, 15, 17, 20, 23, 25, 28, 31, 33, 36, 39, 41, 44, 47, 49, 52, 55, 57, 60, 63], [1, 4, 7, 9, 12, 15, 17, 20], [1, 4, 7, 9, 12"
+    }
+  ],
+  "rationale": "The prime job (scheduler.debounce coroutine) rebuilt the shared paint_pattern from empty over about 18 scheduler ticks, and Paint saved whatever was built so far; the still-pending job then called show_unsaved_grid again, re-showing the preview after the paint. The build is now a function returning a fresh table: the preview job calls it with coroutine.yield, and Paint calls it with a no-op yield so it always saves the complete primed pattern (same fader values and shift). The job also re-checks that the prime is still armed before showing the preview, so a job overtaken by Paint (or Cancel) no longer re-shows it. The scheduler is unchanged.",
+  "oracle": "README 424 (prime shows the algorithm's potential steps; painting deactivates the dimly blinking overlaps) and README 428 (pressing prime again paints your edits): a paint must apply the full primed exclusive-or on all 64 cells and the preview must not return.",
+  "validation": [
+    {
+      "run_id": "9ad2328d9de242d29ce2c3854ba53116",
+      "case": "M-ALG-PAINT-RACE-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "a9aa8357bcce4719830df97a95df9c202c8ef89c3b0c94422644cd9335242964",
+      "failure": null
+    },
+    {
+      "run_id": "0a2a5446c1bd4b9ba3192e30b47961b8",
+      "case": "M-ALG-PAINT-RACE-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "b3c6fa50a49f0721757e18e12843486ecf96a6b0753b85ccdffcd43bb3e7035d",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-dcfbe116a9114301919b60325e45606e",
+      "case": "M-ALG-PAINT-RACE-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "d4d75ef2c986830a62f80ee29c760022734e6b2f3bf5e3b436f8704a8bae7947",
+      "failure": null,
+      "normalized_sha256": "507a46fffb534665a25607dca0414bd82394e951da21d9f6eda5c297c3152ef4"
+    }
+  ],
+  "collateral": "M-ALG-001, M-ALG-002, M-ALG-003, M-ALG-004 in the controlled lane (829dd89a3ae34c3b90e61a02e455189b, 7f878a5ceb42492388bc7c9b88bbf500, 13044bccd8a54fdcb439793f4834a4be, 61711f131bc24028a05bb0686bc1eff2), all passed; full Lua units 1465/1465 OK; guards OK.",
+  "upstream_merged": false
+}

@@ -1,0 +1,111 @@
+diff --git a/lib/memory.lua b/lib/memory.lua
+index dfe9d20..c2057d6 100644
+--- a/lib/memory.lua
++++ b/lib/memory.lua
+@@ -364,6 +364,18 @@ function memory.record_event(channel_number, event_type, data)
+   if not state.original_states[channel_number][state_key] then
+     state.original_states[channel_number][state_key] = handler.capture_state(channel, data)
+   end
++
++  -- Prefer the logical post-state of the preceding retained event for this key. This
++  -- repairs externally corrupted current tables in the same way as historical replay,
++  -- while still retaining the exact floor after older events roll out of the ring.
++  local prior_state = handler.capture_state(channel, data)
++  for i = state.current_indices[channel_number], 1, -1 do
++    local previous = state.channels[channel_number]:get(i)
++    if previous and previous.type == event_type and previous.data.step_key == state_key then
++      if previous.data.result_state ~= nil then prior_state = fn.deep_copy(previous.data.result_state) end
++      break
++    end
++  end
+   
+   local event = {
+     type = event_type,
+@@ -372,7 +384,11 @@ function memory.record_event(channel_number, event_type, data)
+       step_key = state_key,
+       event_data = data,
+       song_pattern = song_pattern,
+-      original_state = state.original_states[channel_number][state_key]
++      original_state = state.original_states[channel_number][state_key],
++      -- The state immediately before this retained event is the undo floor if older
++      -- history rolls out of the bounded ring. It also makes ordinary undo exact and
++      -- constant-time. `original_state` remains for loading older serialized histories.
++      prior_state = prior_state
+     }
+   }
+   
+@@ -381,6 +397,7 @@ function memory.record_event(channel_number, event_type, data)
+   state.current_indices[channel_number] = new_size
+   
+   handler.apply_event(channel, data.step, data, "record")
++  event.data.result_state = handler.capture_state(channel, data)
+ end
+ 
+ function memory.undo(channel_number)
+@@ -396,14 +413,17 @@ function memory.undo(channel_number)
+     local channel = program.get_channel(event.data.song_pattern, channel_number)
+     local handler = event_handlers[event.type]
+     
+-    -- Restore the full prior state of this event's step (or step trig lock parameter): the
+-    -- state before its first remembered edit, then every earlier edit of the same kind and
+-    -- key in order (bugs.json memory-undo-full-step-state).
+-    handler.restore_state(channel, event.data, event.data.original_state)
+-    for i = 1, current_index - 1 do
+-      local candidate = channel_events:get(i)
+-      if candidate and candidate.type == event.type and candidate.data.step_key == event.data.step_key then
+-        handler.apply_event(channel, candidate.data.step, candidate.data.event_data, "redo")
++    -- New histories carry the exact state before each event. Legacy serialized histories
++    -- fall back to replaying from their saved original state.
++    if event.data.prior_state ~= nil then
++      handler.restore_state(channel, event.data, event.data.prior_state)
++    else
++      handler.restore_state(channel, event.data, event.data.original_state)
++      for i = 1, current_index - 1 do
++        local candidate = channel_events:get(i)
++        if candidate and candidate.type == event.type and candidate.data.step_key == event.data.step_key then
++          handler.apply_event(channel, candidate.data.step, candidate.data.event_data, "redo")
++        end
+       end
+     end
+     
+@@ -430,33 +450,24 @@ function memory.undo_all(channel_number)
+   
+   local channel_events = state.channels[channel_number]
+   local current_index = state.current_indices[channel_number]
+-  
+-  -- Track already restored states for each pattern and step
+   local restored_states = {}
+-  
+-  -- Go through events in reverse order to get the latest state for each step
+-  for i = current_index, 1, -1 do
++
++  -- Restore the state immediately before each key's oldest retained event. For legacy
++  -- histories every event has the same first-ever original state, so the fallback keeps
++  -- their prior behavior.
++  for i = 1, current_index do
+     local event = channel_events:get(i)
+     if event then
+-      -- Create key that includes parameter for trig_locks
+       local event_key
+       if event.type == "trig_lock" then
+         event_key = string.format("%d:%d:%s", event.data.song_pattern, event.data.step, event.data.event_data.parameter)
+-      else  
++      else
+         event_key = event.data.step_key
+       end
+-      
+       if not restored_states[event_key] then
+         local channel = program.get_channel(event.data.song_pattern, channel_number)
+         local handler = event_handlers[event.type]
+-        local original_state = event.data.original_state
+-        
+-        if original_state then
+-          handler.restore_state(channel, event.data, original_state)
+-        else
+-          handler.restore_state(channel, event.data, nil)
+-        end
+-        
++        handler.restore_state(channel, event.data, event.data.prior_state or event.data.original_state)
+         restored_states[event_key] = true
+       end
+     end

@@ -1,0 +1,36 @@
+diff --git a/lib/memory.lua b/lib/memory.lua
+index 54b7308..922622a 100644
+--- a/lib/memory.lua
++++ b/lib/memory.lua
+@@ -396,24 +396,17 @@ function memory.undo(channel_number)
+     local channel = program.get_channel(event.data.song_pattern, channel_number)
+     local handler = event_handlers[event.type]
+     
+-    -- Find previous event for same step & pattern
+-    local prev_event = nil
+-    for i = current_index - 1, 1, -1 do
++    -- Restore the full prior state of this event's step (or step trig lock parameter): the
++    -- state before its first remembered edit, then every earlier edit of the same kind and
++    -- key in order (bugs.json memory-undo-full-step-state).
++    handler.restore_state(channel, event.data, event.data.original_state)
++    for i = 1, current_index - 1 do
+       local candidate = channel_events:get(i)
+-      if candidate and 
+-         candidate.data.song_pattern == event.data.song_pattern and 
+-         candidate.data.step == event.data.step then
+-        prev_event = candidate
+-        break
++      if candidate and candidate.type == event.type and candidate.data.step_key == event.data.step_key then
++        handler.apply_event(channel, candidate.data.step, candidate.data.event_data, "redo")
+       end
+     end
+     
+-    if prev_event then
+-      handler.apply_event(channel, event.data.step, prev_event.data.event_data, "undo")
+-    else
+-      handler.restore_state(channel, event.data, event.data.original_state)
+-    end
+-    
+     state.current_indices[channel_number] = current_index - 1
+   end
+ end

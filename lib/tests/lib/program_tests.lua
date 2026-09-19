@@ -119,6 +119,9 @@ end
 
 function test_get_next_trig_lock_step_basic_wrap_when_enabled()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks at steps 5 and 10
@@ -137,6 +140,9 @@ end
 
 function test_get_next_trig_lock_step_no_wrap_when_disabled()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks at steps 5 and 10
@@ -154,6 +160,9 @@ end
 
 function test_get_next_trig_lock_step_no_cross_pattern_in_song_mode()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   
   -- Set up current pattern trig locks
   local c1_song_pattern_1 = program.get_channel(1, 1)
@@ -180,6 +189,9 @@ end
 
 function test_get_next_trig_lock_step_returns_value()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig lock with specific value
@@ -193,6 +205,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_from_last_step()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig lock at step 5
@@ -210,6 +225,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_with_single_trig_lock()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up single trig lock at step 5
@@ -231,6 +249,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_with_multiple_parameters()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks for different parameters
@@ -254,6 +275,9 @@ end
 
 function test_get_next_trig_lock_step_wrap_at_step_one()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig lock at last step
@@ -271,6 +295,9 @@ end
 
 function test_get_next_trig_lock_step_empty_steps_between_locks()
   setup()
+  -- These lookup fixtures contain locks without note trigs. Enable their
+  -- actual playback mode explicitly; inactive-lock rejection is tested separately.
+  params:set("trigless_locks", 2)
   local channel = program.get_channel(1, 1)
   
   -- Set up trig locks with gaps
@@ -288,4 +315,105 @@ function test_get_next_trig_lock_step_empty_steps_between_locks()
   local result2 = program.get_next_trig_lock_step(channel, 51, 1)
   luaunit.assert_equals(result2.step, 5)
   luaunit.assert_equals(result2.should_wrap, true)
+end
+
+function test_step_parameter_lock_preserves_off_outside_active_range()
+  setup()
+  local channel = program.get_channel(1, 1)
+  for _,definition in ipairs({
+    {nrpn_min_value=0,nrpn_max_value=16383,off_value=-1},
+    {cc_min_value=100,cc_max_value=127,off_value=200},
+    {cc_min_value=100,cc_max_value=127,off_value=-1},
+    {cc_min_value=-1,cc_max_value=127},
+    {nrpn_min_value=0,nrpn_max_value=16383}
+  }) do
+    channel.trig_lock_params[1] = definition
+    local minimum=definition.nrpn_min_value or definition.cc_min_value
+    local maximum=definition.nrpn_max_value or definition.cc_max_value
+    local off=definition.off_value == nil and -1 or definition.off_value
+    for _,pair in ipairs({{off,off},{minimum,minimum},
+      {maximum,maximum},{-100,minimum},{20000,maximum}}) do
+      program.add_step_param_trig_lock_to_channel(channel,1,1,pair[1])
+      luaunit.assert_equals(channel.step_trig_lock_banks[1][1],pair[2])
+    end
+  end
+end
+
+function test_clock_type_all_legal_inheritance_pairs()
+  setup()
+  local channel = program.get_channel(1, 1)
+  for global_type = 1, 2 do
+    params:set("global_swing_shuffle_type", global_type)
+    channel.swing_shuffle_type = nil
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(channel), global_type)
+    luaunit.assert_nil(channel.swing_shuffle_type)
+    for local_type = 0, 2 do
+      channel.swing_shuffle_type = local_type
+      local expected = local_type == 0 and global_type or local_type
+      luaunit.assert_equals(program.get_effective_swing_shuffle_type(channel), expected)
+      luaunit.assert_equals(channel.swing_shuffle_type, local_type)
+    end
+  end
+end
+
+function test_clock_type_inheritance_tracks_global_changes_without_mutation()
+  setup()
+  local channel = program.get_channel(1, 1)
+  channel.swing_shuffle_type = 0
+  for _, global_type in ipairs({2, 1, 2}) do
+    params:set("global_swing_shuffle_type", global_type)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(channel), global_type)
+    luaunit.assert_equals(channel.swing_shuffle_type, 0)
+  end
+end
+
+function test_clock_type_overrides_are_isolated_across_channels_and_songs()
+  setup()
+  local a = program.get_channel(1, 1)
+  local b = program.get_channel(1, 2)
+  local c = program.get_channel(2, 1)
+  a.swing_shuffle_type, b.swing_shuffle_type, c.swing_shuffle_type = 0, 1, 2
+  for global_type = 1, 2 do
+    params:set("global_swing_shuffle_type", global_type)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(a), global_type)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(b), 1)
+    luaunit.assert_equals(program.get_effective_swing_shuffle_type(c), 2)
+  end
+end
+
+
+function test_program_parameter_lock_full_64_by_10_cross_product()
+  setup()
+  local channel = program.get_channel(1, 1)
+  local other_song = program.get_channel(2, 1)
+  for slot = 1, 10 do
+    channel.trig_lock_params[slot] = {
+      id = "cc_" .. slot, param_id = "cc_" .. slot,
+      type = "midi", cc_msb = slot,
+      cc_min_value = 0, cc_max_value = 127, off_value = -1
+    }
+  end
+  local expected = {}
+  for step = 1, 64 do
+    expected[step] = {}
+    for slot = 1, 10 do
+      local value = (step * 17 + slot * 13) % 128
+      expected[step][slot] = value
+      program.add_step_param_trig_lock_to_channel(channel, step, slot, value)
+    end
+  end
+  for step = 1, 64 do
+    luaunit.assert_true(program.step_has_param_trig_lock(channel, step))
+    for slot = 1, 10 do
+      luaunit.assert_equals(program.get_step_param_trig_lock(channel, step, slot), expected[step][slot])
+      luaunit.assert_nil(program.get_step_param_trig_lock(other_song, step, slot))
+    end
+  end
+  for step = 1, 64 do
+    for slot = 1, 10 do
+      local replacement = 127 - expected[step][slot]
+      program.add_step_param_trig_lock_to_channel(channel, step, slot, replacement)
+      luaunit.assert_equals(program.get_step_param_trig_lock(channel, step, slot), replacement)
+    end
+  end
 end

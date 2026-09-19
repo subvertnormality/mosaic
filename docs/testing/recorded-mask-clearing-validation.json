@@ -1,0 +1,32 @@
+{
+  "status": "scoped-recorded-mask-clearing-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-018",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0d1b2beeed2f412b9708bcf45f810839/manifest.json",
+      "sha256": "7c650d7c6ea52a6f69ef0c9d8d74871590c2449bc59daec4ed148d709fe15a4a",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-018",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/6dd3698f35e042dc8ea63b3aa33c70f2/manifest.json",
+      "sha256": "7aefc775c60615b93c77734e03dd5ed10ada199c93b98c0b5319b69f261c678c",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Actual scheduled keyboard C/E/G recording and shared three-step release length verified before clearing",
+    "Held-step1 K2 restores source note60 velocity127 and one-step length, removes recorded chord voices and preserves step2 override74",
+    "Four-step phrase wraps with exact one-sixteenth timing and balanced note releases",
+    "Channel K1+K2 restores original four-note source pattern",
+    "Exact note ordering, musical step timing and balanced Stop"
+  ],
+  "limitations": [
+    "Clearing while keyboard voices remain held, additional attribute boundary combinations and UI indicators remain pending",
+    "Full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

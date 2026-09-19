@@ -1,0 +1,32 @@
+[
+  {
+    "file": "plan-followup-raw.json",
+    "sha256": "f598a5ac65edaa2ac55134aa79b559393af0e7fc1568e877a9df49ccf166dcdc",
+    "retention": "Local only; excluded from public commit"
+  },
+  {
+    "file": "plan-followup-raw.stderr.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retention": "Local only; excluded from public commit"
+  },
+  {
+    "file": "plan-raw.json",
+    "sha256": "5ad66893b3a5282f0f93defa41f6b709f75a58bc6eff833f20648eda21c14f5a",
+    "retention": "Local only; excluded from public commit"
+  },
+  {
+    "file": "plan-raw.stderr.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retention": "Local only; excluded from public commit"
+  },
+  {
+    "file": "plan-retry-raw.json",
+    "sha256": "c22fce1c81c3f6faa04713e393ddea9ebab6083ddf546f43aee216fff4facd0e",
+    "retention": "Local only; excluded from public commit"
+  },
+  {
+    "file": "plan-retry-raw.stderr.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "retention": "Local only; excluded from public commit"
+  }
+]

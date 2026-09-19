@@ -1,0 +1,46 @@
+{
+  "status": "scoped-acquisition-edges-passed",
+  "runs": [
+    {
+      "case": "M-SYNC-007",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/880f68ae6e0f44bd8c7ccda31aa1d4ac/manifest.json",
+      "sha256": "fa3f9fc8561dcce719a4d7459dadf57748ef45be8e53f372e3a73578636ebfe0"
+    },
+    {
+      "case": "M-SYNC-007",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d1ebec37157849488950754693ac55f1/manifest.json",
+      "sha256": "207fddf244df4658d4c63e06fcee27cb6be5aa2b55266a8f412745545f9ed0c6"
+    },
+    {
+      "case": "M-SYNC-008",
+      "clock_mode": "controlled-experimental",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/d1b262c54d4e4706bb8f1c20eb0818f6/manifest.json",
+      "sha256": "432af5a3ce1114ebffefdd2a3a7edab1233e53311910c4ebe01f1f48e17df5b0"
+    },
+    {
+      "case": "M-SYNC-008",
+      "clock_mode": "real-time",
+      "path": "/home/andy/projects/mosaic-behaviour-runs/062170718bd14ee5a2a31b93e5d3687a/manifest.json",
+      "sha256": "12a36b7ea8e14ed008fe184cd6bf639c02050e58ba6f7e4739d1667d74c367ef"
+    }
+  ],
+  "oracle_tests": 3,
+  "review": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/combined-midi-sync-review-01.json",
+    "sha256": "d7e5c422fa89e4367d942ff828d0ed07748c8d56e1d6edb47e9758d1bf6a5e37",
+    "session": "01a08750-93e8-7213-a7d0-c7607971ab6d"
+  },
+  "triage": {
+    "release_order": "Resolved: explicit cross-pitch capture-index ordering plus swapped-order and wrong-port negative tests; fresh D/R passes.",
+    "catchup_budget": "Open targeted unit/integration and native responsiveness follow-up; no blocker reproduced by review."
+  },
+  "manual_reconciliation": {
+    "section": "MAN-114",
+    "section_hashes": 114,
+    "readme_quotations": 121,
+    "meaning": "Source mapping only, not exhaustive workflow completion."
+  },
+  "full_goal_complete": false
+}

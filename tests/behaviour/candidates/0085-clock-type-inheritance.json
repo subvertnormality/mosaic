@@ -1,0 +1,13 @@
+{
+  "candidate": "0085",
+  "status": "scoped-candidate-validated",
+  "base": "adb94019740b0376c3a1741e4db1391c71bdc0ec",
+  "production": [
+    "lib/models/program.lua"
+  ],
+  "patch": "0085-clock-type-inheritance.patch",
+  "native_baseline": "/home/andy/projects/mosaic-behaviour-runs/66bdce67f8cb459e8597ce1a1f882719/manifest.json",
+  "unit_baseline": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-503a8cd72429408d8cb8287b1d10c9f4/results.json",
+  "full_campaign_complete": false,
+  "validation": "docs/testing/shuffle-inheritance-validation.json"
+}

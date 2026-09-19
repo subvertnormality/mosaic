@@ -1,0 +1,68 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0079",
+  "native_runs": [
+    {
+      "case": "M-MASK-021",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1513036b237341c18bc2f29a6da1dd9a/manifest.json",
+      "sha256": "ee56b78db06ebe97d772a5a43766ea3e802129c0c344ffebdfe04c7e314c4fab",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-022",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/600abf4b5a9c4cc0a32dab673f7dc4f1/manifest.json",
+      "sha256": "ec8a9191aee2e24eac2b142bf9cc692071bfcf00bf2a3b988d6c27a27c465613",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-025",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f11a17b8a0794587a533abf006612ee4/manifest.json",
+      "sha256": "4dd3a9d8795b9dbd44ccfd54f9f8c336adbcec0a1cc3881880643a6bf26d696c",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-021",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0c1fb276967a44ad834b38d6bea3a504/manifest.json",
+      "sha256": "266d3a1637cb9caa5b0b171d844b7a334997ea31bca2d7f88817c973dd631d76",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-022",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c394fa172bca4032a41a89a0710182fc/manifest.json",
+      "sha256": "ef2a80e613eba4d06123b64fdf8502e85b60976d2f5034736c49686861df2862",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-025",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/5ded7ef9928541678c533e7e8748609f/manifest.json",
+      "sha256": "4504f377cf11be581aa1e4be5bd8359e033bb45dc9f97aee49d8e0c404b0a3a4",
+      "passed": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-b79c0720acb04df29dba721c555eb1ae/results.json",
+    "sha256": "794df60a9732ec74e8567077d4f2405609272b6718d997e98c106053827decde",
+    "summary": "Ran 497 tests in 8.982 seconds, 497 successes, 0 failures",
+    "matrix_combinations": 24
+  },
+  "production_sha256": "afb18e7f1896eeb8dff4bc7e8f4db78aff7888ea64bf81749084f9521cdc3fba",
+  "patch_sha256": "3c4448b2185907e00ec76f1fe91bd0251d6126a4d363bacc21ae4aa9be626718",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/mask-unset-patch-xzuze231",
+  "baseline": "6dae16456cc943e8a5ff19c749834399",
+  "baseline_units": "slide-deadline-units-060d0052b4234f41a5a1fe411bf38712/results.json",
+  "review": "01a08543-a3a5-7902-bc8b-7ca2ee11428f",
+  "scope": "Assigned channel X0 inherits global full quantisation, consistently for masked root/chord; explicit stepX retains global bypass and clearing restores channel.",
+  "limitations": [
+    "Baseline unit run also failed massive concurrent slide max2ms; candidate497 suite passed without performance code changes. Variability is not claimed resolved.",
+    "Initial candidate native fixture c450c1085a7a4a69aed171bc3d53c864 failed later Off selection because held editor inherited last-played value; explicit selector reset fixes input, oracle unchanged.",
+    "Targeted accumulated evidence, not same-tree full manual campaign; current controlled profile remains diagnostic.",
+    "Broader scales and masked arp/lifecycle cases, full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

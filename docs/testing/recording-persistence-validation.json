@@ -1,0 +1,33 @@
+{
+  "status": "scoped-interaction-validated",
+  "case": "M-REC-PARAM-027",
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/74b3902117474dbf8e8f70baed617b75/manifest.json",
+      "sha256": "267edb14e86d4ccdb50252da2f5d075fe3913fda2aae262c54ec0e3ca791ecca",
+      "passed": true
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/bdcb94594c7a40aab1fddcb2383e0e55/manifest.json",
+      "sha256": "e24a6a578b663344df3299b4da20ec0c057f14b66c20d358ffe35b10b8929ec0",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "oracle": "Recorded locks and memory survive autosave. Fresh process1 replays24/64/64/64, then undo restores unbound step4 to distinct default65. Saving this undone state and starting fresh process2 preserves24/64/64/65; redo restores step4=64.",
+  "assertions": [
+    "Two actual new native processes per clock mode",
+    "Actual Memory screen header in both fresh processes",
+    "Two complete phrase cycles plus closing onset at each restored/undo/redo stage",
+    "Exact MIDI routes/order/count and one-second CC deadlines",
+    "Autosave project/PSET hashes retained with nested input/output evidence"
+  ],
+  "limitations": [
+    "Scoped autosave/restart and undone-position persistence; explicit save/load, reset and song recording domains remain pending",
+    "Current experimental controlled profile remains unadmitted; real-time acceptance retained",
+    "Full manual and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

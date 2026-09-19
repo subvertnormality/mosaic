@@ -1,0 +1,82 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "64e15c9",
+  "files": [
+    {
+      "file": "lib/clock/divisions.lua",
+      "before_sha256": "66efa7b528afcba8721a90d0c373c11afb7bb665b3389367c59cef40f461746c",
+      "after_sha256": "600e905986d25abc5487b47ef5b69474a849d3b8d7199750b51a4e0fe0d68116"
+    },
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "891699e4f417f8eecbab663993e91ef404eb5452b0f370556e66d3a5674ef462",
+      "after_sha256": "e9108ab8821d91a47369f2eac8f2fe22dca4d572fe61641eed4a2e312961332b"
+    },
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui_refreshers.lua",
+      "before_sha256": "1b44d33682e9d27007e38381fc51695dde8b3e9482aab2c67490b600b532a2a9",
+      "after_sha256": "1a42be709413f647b0d1a73e27764808b3842251d37a448bf11f966f34d2f103"
+    }
+  ],
+  "patch": "0094-length-index-after-reload.patch",
+  "patch_sha256": "dcbeb08c3dfb47c46f45669774af018ff77976c740affe2476434b913f7e3f72",
+  "regression": "M-SAVE-LENGTH-001",
+  "unit_regression": "divisions_tests.lua test_note_division_index_finds_values_after_a_tab_save_round_trip",
+  "baseline": [
+    {
+      "run_id": "16e1f94e772c443da918082a97c84158",
+      "case": "M-SAVE-LENGTH-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "030ba75ee6892365b9523243b27b1e6350e2ee7cf873395665266999f1198b90",
+      "failure": "Required observable output did not arrive"
+    },
+    {
+      "run_id": "df9c510a812c4c49963e9b5f95d0d452",
+      "case": "M-SAVE-LENGTH-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "c02b9b71f0506267ca55f33860843d71a7f094d36156e08fe8d0f042e2462dbe",
+      "failure": "Required observable output did not arrive"
+    }
+  ],
+  "rationale": "norns tabutil saves numbers with tostring (14 significant digits), so 1/24, 1/12, 1/6, 1/3, 2/3 and 5/6 reload as nearby floats. The length selectors looked the value up by exact float key and showed X after a reload; a turn then started from index 0. A tolerant divisions.note_division_index finds the saved value.",
+  "oracle": "README 1054: the autosave is loaded when Mosaic starts again; the restored project shows and plays its length masks.",
+  "validation": [
+    {
+      "run_id": "e2d51fb190284c7b8a02a11be1751ad0",
+      "case": "M-SAVE-LENGTH-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "4b2152a3d7738b09e51079e2dc806048357fd811111c48c49ed8f846c8cc4ed8",
+      "failure": null
+    },
+    {
+      "run_id": "42464f6f375f4269aac488ec644d8774",
+      "case": "M-SAVE-LENGTH-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "97e3a21cbf0e660e82287033b4b92bbd5e2030877bd256b0b07e7bea37548357",
+      "failure": null
+    },
+    {
+      "run_id": "2768ef2bf96640bababaa8a9ba064d19",
+      "case": "M-SAVE-LENGTH-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "e2092d88e439cdb803b91fab1304bda9b03b545fb5d28224e4867aba80c7444a",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-3dc1f4378073454f8694281413d9cc2c",
+      "case": "M-SAVE-LENGTH-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "e99388316d1f2b83714f4dadb2eedf43ac485579ceacd2370c4ed174ab9b7e46",
+      "failure": null,
+      "normalized_sha256": "b02fbe13cd09c84ee42bdd1350d3add6ed2f26d0436c62309421521128801580"
+    }
+  ],
+  "collateral": "All Lua units pass; playback durations were already correct (the value itself survived).",
+  "upstream_merged": false
+}

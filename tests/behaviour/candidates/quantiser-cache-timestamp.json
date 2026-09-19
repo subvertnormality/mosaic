@@ -1,0 +1,72 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "64e15c9",
+  "files": [
+    {
+      "file": "lib/quantiser.lua",
+      "before_sha256": "eaa9e1267838e4248b061e723f8d96e826caf6c7f86edecded0e36654b480f8a",
+      "after_sha256": "229bff60c873890455bf2e1a5a1f10a3e615fe0c372455a98f3d53c35d9253ae"
+    }
+  ],
+  "patch": "0092-quantiser-cache-timestamp.patch",
+  "patch_sha256": "a648206171ee5433bee548415b23cbd588c458522ece53736d47ffc62ef1095b",
+  "regression": "M-SCALE-CACHE-001",
+  "unit_regression": "quantiser_tests.lua test_scale_cache_beyond_its_bound_keeps_results_and_does_not_raise",
+  "baseline": [
+    {
+      "run_id": "d55c84a6701748bc82c7e58258bc5ca3",
+      "case": "M-SCALE-CACHE-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "2fb5bedf9d68d3b3cc9e768dec81e61e7c02635cc2bc8df2f6e8d30c050b91da",
+      "failure": "...4532f9942c141c5b8ec50f78e3c1182/norns/lua/core/clock.lua:74: ...141c5b8ec50f78e3c1182/dust/code/mosaic/lib/quantiser.lua:210: attempt to compare nil with number\nstack traceback:\n\t[C]: in function '"
+    },
+    {
+      "run_id": "1400cff5dfe24b259282569f7ae851ba",
+      "case": "M-SCALE-CACHE-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "46aa27a3ddc778f2f5e53beb042db2c734477c1b8f80250d084e65c20a7b9905",
+      "failure": "...6a2134ceb014e12a4e89f4c8db6a3d5/norns/lua/core/clock.lua:74: ...14e12a4e89f4c8db6a3d5/dust/code/mosaic/lib/quantiser.lua:210: attempt to compare number with nil\nstack traceback:\n\t[C]: in function '"
+    }
+  ],
+  "rationale": "New scale-cache entries had no timestamp; only a cache hit set one. When the 101st distinct key triggered cleanup, sorting compared nil timestamps and raised inside the clock coroutine, stopping playback. Entries now get a timestamp when stored.",
+  "oracle": "README Scale editor (850-854): saving the scale used by playback changes that scale; playback continues. The cache is an optimisation and must not change or stop quantisation.",
+  "validation": [
+    {
+      "run_id": "2a7c05e4b3374adeb3f438fab1225098",
+      "case": "M-SCALE-CACHE-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "85aa632c4ea4b6ae41d6fcedef28c0eb48b66c363c74bfb5fafdd068f4c819b1",
+      "failure": null
+    },
+    {
+      "run_id": "a922fb6941cb4955b64cf591e82acce5",
+      "case": "M-SCALE-CACHE-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "cc3302e3a6936310618a0af4070b37f830a6dbcc82a3a2e957dab8be8c1609f3",
+      "failure": null
+    },
+    {
+      "run_id": "188079e17c7940f89fb00f42f9c39efe",
+      "case": "M-SCALE-CACHE-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "3a09f0ddf2d2c62ae014a2381adec7ade0e7205934ce871b674bcb8abe26283c",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-2e925dc39c924ea78f32510732f1d093",
+      "case": "M-SCALE-CACHE-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "1b36649573df59d40275e2f3b5bd434451cc7c254fc05080244ca96dba2a72d7",
+      "failure": null,
+      "normalized_sha256": "5ed088044e219abb152cdc57d23bf818b043fd02649fe5ac31c2ea29c1959093"
+    }
+  ],
+  "collateral": "All Lua units pass; the scale/merge/quantiser behaviour cases are unaffected (fast layers).",
+  "upstream_merged": false
+}

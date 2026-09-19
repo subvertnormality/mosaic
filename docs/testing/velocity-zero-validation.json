@@ -1,0 +1,66 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-024",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ae6ce685437d49b6bf4364695b40224c/manifest.json",
+      "sha256": "b0cfdbfe08f8d920e678d8874150f3c14009bf4159201821a93770240d3c7eb0",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-024",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/56e8aa9b0383401298b981dfb4b9df69/manifest.json",
+      "sha256": "291441bdd9c738379d3e458b203078f1d22a145d4be663bc1a6b01505dcc4cae",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "source_velocities": [
+    [
+      0,
+      0,
+      19,
+      58
+    ],
+    [
+      127,
+      0,
+      58,
+      58
+    ]
+  ],
+  "expected": {
+    "average": [
+      64,
+      0,
+      39,
+      58
+    ],
+    "higher": [
+      127,
+      0,
+      78,
+      58
+    ],
+    "lower": [
+      0,
+      0,
+      0,
+      58
+    ]
+  },
+  "assertions": [
+    "Raw MIDI includes zero-velocity Note On as releases",
+    "Negative Lower results -64 and -1 clamp to zero rather than wrapping",
+    "All numeric modes and return to Average",
+    "Two complete cycles and closing onset; exact MIDI route, pitches, velocities and spacing; positive-note release timing; no outstanding notes after Stop"
+  ],
+  "retained_fixture_failure": "2641662f5e3a4df2a702f9a65d6fec39: fourth pitch F snapped to E under enabled pentatonic lock; corrected physical fixture edit to G, unchanged velocity oracle",
+  "limitations": [
+    "Broader velocity mask, recording and lifecycle combinations remain separate obligations",
+    "Full manual, experimental clock admission and emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

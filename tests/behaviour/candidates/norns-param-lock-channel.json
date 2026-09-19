@@ -1,0 +1,56 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "64e15c9",
+  "files": [
+    {
+      "file": "lib/step.lua",
+      "before_sha256": "9913f83e1ff2566ee9b9fc4165e07015394ced3ec1c33cd120c3b55e1c532382",
+      "after_sha256": "07ce948db7f0bfb86e73c1bcf6cf944e8ceff733a4188b408040dbbe97e39291"
+    }
+  ],
+  "patch": "0093-norns-param-lock-channel.patch",
+  "patch_sha256": "ad99e87c94e76f2517e462e26a3c3018f75dde1c1819b307443e0920bdd65a7c",
+  "regression": "M-XA-005-NB-LOCK",
+  "unit_regression": "norns_param_lock_tests.lua",
+  "baseline": [
+    {
+      "run_id": "133a0d96ec584c87ac5c34f9385ee654",
+      "case": "M-XA-005-NB-LOCK",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "36b4b3329c42ba52fd2f33091d0c58642a3065fb2d39418a25a078beb3630571",
+      "failure": "...a69db7a3ed3426e95f90cc3fd779454/norns/lua/core/clock.lua:73: ...a3ed3426e95f90cc3fd779454/dust/code/mosaic//lib/step.lua:255: attempt to index a nil value\nstack traceback:\n\t[C]: in function 'error'"
+    }
+  ],
+  "rationale": "The norns/nb parameter branch of step.process_params used an undefined global c for the channel, so get_original_param_state(nil, i).value raised at the first step carrying a lock. It now uses channel.number, so the norns parameter is set on its step and restored on later unlocked steps.",
+  "oracle": "README Trig Parameters: a trig lock overrides the parameter's default on its step; unlocked steps use the default.",
+  "validation": [
+    {
+      "run_id": "29187088a5f94239a684ed764fba99c9",
+      "case": "M-XA-005-NB-LOCK",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "cd1e4944440fa96e7a4a38f7166ec91ec56441da112bc6526140424ffc21e0f8",
+      "failure": null
+    },
+    {
+      "run_id": "f6916c8af2494f899515a743ec8808b9",
+      "case": "M-XA-005-NB-LOCK",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "4d25a0241bccce6e57bb7a66f35c0f0a7cb647eef20abb9446150f85c64bec8f",
+      "failure": null
+    },
+    {
+      "run_id": "a842754443324e29939ea6058dc68f94",
+      "case": "M-XA-005-NB-LOCK",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "9c4f281c7051f75da4a17a530688c1e8cd1eb215fdfcd5f383a6d61b847174ca",
+      "failure": null
+    }
+  ],
+  "collateral": "All Lua units pass, including two new norns-parameter lock tests; audio profiles need the audio-crow runtime, so they are not part of the capacity-12 suite run.",
+  "upstream_merged": false,
+  "runtime": "MONOME_EMULATOR=/home/andy/projects/monome-emulator-behaviour-audio-crow with --experimental-install .runtime/combined-audio-crow-tools-01 and --profile nb-audio --mod-code-root /home/andy/projects/mosaic-output-mods (real time only)"
+}

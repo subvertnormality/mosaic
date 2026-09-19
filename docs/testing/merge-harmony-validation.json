@@ -1,0 +1,46 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-043",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/60fa543faa3e49db97b957582b6b0d13/manifest.json",
+      "sha256": "c3bece504b54c362245b9ee613da6c6cb981a85cc17ad87c00638dc2e77e6ee8",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-044",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/07474993d6ab4cad881c27e24dccfb57/manifest.json",
+      "sha256": "914dd255bc72391ce8694c9bc52db0a0d1dc85b5a01525d18f7133b5d32c16d9",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-043",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d03d792501f342d394b93b507f1692eb/manifest.json",
+      "sha256": "aa2301e40e92f4b4d8f2e11d324a21e79504420db2dc3299454a339e09003aa9",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-044",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/77984e1cf3a44c8caf8858fe57b7b423/manifest.json",
+      "sha256": "fe3c404abe22f3d69ae4477c0403ec949ba781fa96e9e025cc32c58beb153913",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "assertions": [
+    "Higher/Lower/Average exact MIDI with pentatonic filtering enabled and disabled",
+    "Degree II, rotation two, D root and restored C-major in one session expose stale transformation caches",
+    "Signed negative degrees and positive octave crossings retain their octave",
+    "Foreign velocity source remains 100; eight full gates and two-cycle phase per stage; merge-mode grid LEDs"
+  ],
+  "limitations": [
+    "Initial c4f2e561 run exposed a test-table negative-degree octave error; corrected independently from degree -3 = preceding-octave A57, no production change",
+    "Selected high-value harmonic interactions, not exhaustive roots/degrees/rotations; exhaustive affordable matrices belong to final hardening",
+    "Controlled profile remains experimental and unadmitted; complete manual and emulator release gates remain pending"
+  ],
+  "full_campaign_complete": false
+}

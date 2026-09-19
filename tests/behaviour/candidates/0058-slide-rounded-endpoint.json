@@ -1,0 +1,44 @@
+{
+  "status": "576-phase-contracts-and-native-regressions-passed",
+  "depends_on": [
+    "0057-slide-absolute-pulses"
+  ],
+  "test": "tests/behaviour/test_slide_endpoint_phases.lua",
+  "collected": 576,
+  "baseline_failed": 175,
+  "candidate_log": "/home/andy/projects/mosaic-behaviour-runs/slide-endpoint-phases-candidate.log",
+  "patch_sha256": "2fc03e35cdc436d9cf3de804d14986f96f6d391762f391d139893d7a53c6e7c3",
+  "before_sha256": "be54ea3edc9c0a7664226420c0e7a6c061956c637075a63caec0af2eb602db39",
+  "after_sha256": "8a5270176a223c120fd4816949f1906b8e5f1bb9624c80db23b1ebfef46a3a7e",
+  "full_campaign_complete": false,
+  "native_runs": [
+    {
+      "run_id": "07a8ae1d47894e5aa01f5c8f116652e4",
+      "case": "M-PATCH-019",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "186ff7d844626d67e06f04d82bae64fbfb2a506b36110b1746e01c6c5bbac5af"
+    },
+    {
+      "run_id": "663c10b26f91447587d25915f525e5d1",
+      "case": "M-PATCH-019",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "2aaaec91bf772b40d41e8747acc335f37c11fcb45319031579e5b8c2d0146a95"
+    },
+    {
+      "run_id": "8c6149c7a51a4cb0a104e964988ffaae",
+      "case": "M-PATCH-019",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "a8913e8ba700568db2f0e6130f61020eba80eb0f18c41a58dcce5d0f9ed0af7a"
+    },
+    {
+      "run_id": "19be7d0afa5d405388ec7224c415a68b",
+      "case": "M-PATCH-017",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "ec382873bea44129919363fbd3046dcf3718811ede695cf40b61ac87548e7540"
+    }
+  ]
+}

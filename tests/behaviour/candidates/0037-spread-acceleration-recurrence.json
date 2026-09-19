@@ -1,0 +1,23 @@
+{
+  "status": "scoped-regressions-validated",
+  "before_sha256": {
+    "lib/clock/chord_timing.lua": null,
+    "lib/clock/m_lattice.lua": "f7d333605cccf2d3c7043a06c94b50f7975accb96fc9328ff0db802a3a9529e8",
+    "lib/clock/m_clock.lua": "7932003b7ee42144aa751ce35f7c3be690b6950366cae7e8a8d290f6500fd4c4",
+    "lib/step.lua": "04cc23d5708f4edd409cc911153cc503c94e4210bbffcff7b6373b0fbac355e9"
+  },
+  "after_sha256": {
+    "lib/clock/chord_timing.lua": "fa445db36d877ea606727d01723538faa537540b69789b1a0fc54fdd250733ab",
+    "lib/clock/m_lattice.lua": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+    "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+    "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+  },
+  "patch": "0037-spread-acceleration-recurrence.patch",
+  "patch_sha256": "f38008afbdb38833ea40745729026516a27d8ea70162d31ff563e4d0aaf6f9f4",
+  "decision": "01a07f50-06ce-76f2-86f5-76414bd23074",
+  "baselines": "artifacts/c16/spread-contract-baselines.json plus recorded fractional/explicit-Off runs",
+  "scope": "Shared channel-step recurrence; Off means zero acceleration; nonpositive gaps stop future onsets. Arp selects each interval before one rounding decision. Rest/muted-loop semantics remain a separate pending candidate.",
+  "limitations": "Intentional semantic amendment. Native/unit/integration and focused review pending; full campaign incomplete.",
+  "validation_note": "174 existing scheduler contracts passed before removal of obsolete reverse-strum accumulator. Fractional native03871a9323e043cab27a0173e606bfa3 passed all onset assertions then rejected original-velocity Stop release; corrected oracle requires release at captured Stop bounds and original or zero velocity. Native rerun pending.",
+  "validation": "docs/testing/spacing-rest-validation.json"
+}

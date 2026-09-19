@@ -320,9 +320,10 @@ function scale_edit_page_ui.handle_key_two_pressed()
   if #pressed_keys < 1 then
     save_confirm.cancel()
   elseif #pressed_keys > 0 then
+    local channel = program.get_selected_channel()
     for _, keys in ipairs(pressed_keys) do
       local s = fn.calc_grid_count(keys[1], keys[2])
-      program.clear_trig_locks_for_step(s)
+      program.clear_trig_locks_for_step_for_channel(channel, s)
       tooltip:show("Scale locks for step " .. s .. " cleared")
     end
   end

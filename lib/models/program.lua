@@ -2,177 +2,22 @@ local musicutil = require("musicutil")
 
 local quantiser = include("mosaic/lib/quantiser")
 
+local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+local model_defaults = include("mosaic/lib/models/model_defaults").new(quantiser, nrpn_codec)
 local program = {}
 local program_store = {}
 
--- Add this function at the top level of the program module
-local function migrate_legacy_data(data)
-  if not data then return end
-  
-  -- Migrate sequencer_patterns to song_patterns if needed
-  if data.sequencer_patterns and not data.song_patterns then
-    data.song_patterns = data.sequencer_patterns
-    data.sequencer_patterns = nil
-  end
-  
-  -- Ensure song_patterns exists
-  if not data.song_patterns then
-    data.song_patterns = {}
-  end
-  
-  -- Migrate any nested data structures if needed
-  for i, pattern in pairs(data.song_patterns) do
-    if pattern.sequencer_patterns then
-      pattern.song_patterns = pattern.sequencer_patterns
-      pattern.sequencer_patterns = nil
-    end
-  end
-  
-  return data
-end
-
-
-local function initialise_default_channels()
-  local channels = {}
-
-  for i = 1, 17 do
-    channels[i] = {
-      number = i,
-      trig_lock_params = {{}, {}, {}, {}, {}, {}, {}, {}, {}, {}},
-      trig_lock_calculator_ids = {},
-      step_trig_lock_banks = {},
-      trig_lock_slides = {false, false, false, false, false, false, false, false, false, false},
-      step_trig_lock_slides = {},
-      step_octave_trig_lock_banks = {},
-      step_scale_trig_lock_banks = {},
-      step_trig_masks = {},
-      step_note_masks = {},
-      step_velocity_masks = {},
-      step_length_masks = {},
-      step_micro_time_masks = {},
-      step_chord_masks = {},
-      working_pattern = {
-        trig_values = program.initialise_64_table(0),
-        lengths = program.initialise_64_table(1),
-        note_values = program.initialise_64_table(0),
-        velocity_values = program.initialise_64_table(100),
-        note_mask_values = {},
-      },
-      start_trig = {1, 4},
-      end_trig = {16, 7},
-      selected_patterns = {},
-      default_scale = 1,
-      step_scale_number = 1,
-      root_note = 0,
-      chord = 1,
-      trig_merge_mode = "skip",
-      note_merge_mode = "average",
-      velocity_merge_mode = "average",
-      length_merge_mode = "average",
-      octave = 0,
-      clock_mods = {name = "/1", value = 1, type = "clock_division"},
-      current_step = 1,
-      mute = false,
-      swing_shuffle_type = nil, -- 1 for Swing, 2 for Shuffle, nil to use global
-      swing = nil,              -- -50 to 50, nil to use global
-      shuffle_feel = nil,       -- 1 to 4, nil to use global
-      shuffle_basis = nil,      -- 1 to 6, nil to use global
-      shuffle_amount = nil
-    }
-  end
-
-  return channels
-end
-
-local function initialise_default_patterns()
-  local patterns = {}
-  for i = 1, 16 do
-    patterns[i] = program.initialise_default_pattern()
-  end
-  return patterns
-end
-
-local function initialise_default_song_pattern()
-  local song_pattern = {}
-  local root_note = 0
-
-  local c_major = quantiser.get_scale(1)
-
-  local function create_scale()
-    return {
-      number = 1,
-      scale = c_major.scale,
-      pentatonic_scale = c_major.pentatonic_scale,
-      root_note = root_note,
-      chord = 1,
-      chord_degree_rotation = 0,
-      version = 1
-    }
-  end
-
-  song_pattern = {
-    active = false,
-    global_pattern_length = 64,
-    scale = 0,
-    repeats = 1,
-    patterns = initialise_default_patterns(),
-    channels = initialise_default_channels(),
-    scales = {}
-  }
-
-  for i = 1, 16 do
-    table.insert(song_pattern.scales, create_scale())
-  end
-
-  return song_pattern
-end
-
-function program.initialise_64_table(d)
-  local table_64 = {}
-  for i = 1, 64 do
-    table_64[i] = d
-  end
-  return table_64
+function program.initialise_64_table(value)
+  return model_defaults.table_64(value)
 end
 
 function program.initialise_default_pattern()
-  return {
-    trig_values = program.initialise_64_table(0),
-    lengths = program.initialise_64_table(1),
-    note_values = program.initialise_64_table(0),
-    note_mask_values = program.initialise_64_table(-1),
-    velocity_values = program.initialise_64_table(100)
-  }
+  return model_defaults.pattern()
 end
 
 function program.init()
-  local root_note = 0
-  program_store = {
-    selected_page = pages.pages.channel_edit_page,
-    selected_song_pattern = 1,
-    selected_pattern = 1,
-    selected_channel = 1,
-    selected_scale = 1,
-    root_note = root_note,
-    chord = 1,
-    default_scale = 1,
-    current_step = 1,
-    current_channel_step = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    song_patterns = {},
-    global_step_accumulator = 0,
-    devices = {},
-    blink_state = false,
-    memory = {  -- Initialize memory structure
-      channels = {},
-      current_indices = {},
-      original_states = {},
-      pattern_states = {}
-    }
-  }
-
-  for i = 1, 16 do
-    table.insert(program_store.devices, {midi_channel = 1, midi_device = 1, device_map = "none"})
-  end
+  program_store = model_defaults.program(pages.pages.channel_edit_page)
+  if memory and memory.bind_project then memory.bind_project(program_store.memory) end
 end
 
 function program.is_song_pattern_active(p)
@@ -180,11 +25,23 @@ function program.is_song_pattern_active(p)
 end
 
 function program.get_selected_song_pattern()
-  local data = program.get()
-  if not data.selected_song_pattern then
-    data.selected_song_pattern = 1
+  -- The note and draw paths ask for this constantly; read initialised state
+  -- directly and fall back to the creating accessors otherwise.
+  local store = program_store
+  if store and store.memory and store.song_patterns then
+    local selected = store.selected_song_pattern
+    local song_pattern = selected and store.song_patterns[selected]
+    if song_pattern then return song_pattern end
   end
-  return program.get_song_pattern(data.selected_song_pattern)
+  local data = program.get()
+  local selected = data.selected_song_pattern
+  if not selected then
+    selected = 1
+    data.selected_song_pattern = selected
+  end
+  -- Screen and grid draws read the selected pattern per cell; skip the
+  -- creating lookup when it already exists.
+  return data.song_patterns[selected] or program.get_song_pattern(selected)
 end
 
 function program.set_selected_song_pattern(p)
@@ -202,13 +59,26 @@ end
 function program.get_song_pattern(p)
   local data = program_store
   if not data.song_patterns[p] then
-    data.song_patterns[p] = initialise_default_song_pattern()
+    data.song_patterns[p] = model_defaults.song_pattern()
   end
   return data.song_patterns[p]
 end
 
+-- Defined with the lock edit listener below; declared here because the song
+-- sequence copy above it also reports edits.
+local notify_lock_edit
+
 function program.set_song_pattern(p, pattern)
   program_store.song_patterns[pattern] = fn.deep_copy(program.get_song_pattern(p))
+  -- Copying over the sequence that is playing replaces every channel's locks
+  -- and assignments at once. Each channel is reported as wholly edited, so a
+  -- value resolved from the old sequence is not heard, and what the new
+  -- sequence's assignments share is worked out afresh.
+  if pattern == program_store.selected_song_pattern then
+    for _, channel in pairs(program_store.song_patterns[pattern].channels) do
+      notify_lock_edit(channel, nil, nil)
+    end
+  end
 end
 
 function program.get_current_step_for_channel(c)
@@ -234,10 +104,16 @@ function program.set_channel_step_scale_number(c, step_scale_number)
 end
 
 function program.get_channel_step_scale_number(c)
-  return program.get_selected_song_pattern() and program.get_selected_song_pattern().channels[c] and program.get_selected_song_pattern().channels[c].step_scale_number or nil
+  local song_pattern = program.get_selected_song_pattern()
+  local channel = song_pattern and song_pattern.channels[c]
+  return channel and channel.step_scale_number or nil
 end
 
 function program.get()
+  local store = program_store
+  if store and store.song_patterns and store.memory then
+    return store
+  end
   -- Ensure program_store is initialized
   if not program_store then
     program_store = {}
@@ -259,6 +135,14 @@ function program.get()
 end
 
 function program.get_selected_channel()
+  -- Draws ask for the selected channel for every grid cell; read initialised
+  -- state directly and use the full accessors otherwise.
+  local store = program_store
+  local song_patterns = store and store.memory and store.song_patterns
+  local song_pattern = song_patterns and store.selected_song_pattern and song_patterns[store.selected_song_pattern]
+  if song_pattern then
+    return song_pattern.channels[store.selected_channel]
+  end
   return program.get_selected_song_pattern().channels[program.get().selected_channel]
 end
 
@@ -267,11 +151,27 @@ function program.get_selected_pattern()
 end
 
 function program.get_channel(song_pattern, x)
+  local store = program_store
+  local song_patterns = store and store.song_patterns
+  local existing = song_patterns and song_patterns[song_pattern]
+  if existing then return existing.channels[x] end
   return program.get_song_pattern(song_pattern).channels[x]
 end
 
+local function get_channel_target_for_selected_song(channel_number)
+  local data = program.get()
+  return program.get_channel(data.selected_song_pattern, channel_number)
+end
+
+local function get_selected_channel_target()
+  local data = program.get()
+  local song_pattern = data.selected_song_pattern or 1
+  if not data.selected_song_pattern then data.selected_song_pattern = song_pattern end
+  return program.get_channel(song_pattern, data.selected_channel)
+end
+
 function program.set(p)
-  program_store = migrate_legacy_data(p) or {}
+  program_store = model_defaults.migrate(p, device_map and device_map.get_device) or {}
   
   -- Ensure memory structure exists after loading
   if not program_store.memory then
@@ -283,11 +183,30 @@ function program.set(p)
     }
   end
   
+  -- Bind history ownership to the replacement project before restoring it.
+  if memory and memory.bind_project then memory.bind_project(program_store.memory) end
+
   -- Deserialize the memory state if it exists
   if program_store.memory.serialized then
     memory.deserialize_state(program_store.memory.serialized)
     program_store.memory = program.get().memory -- Update with deserialized state
   end
+end
+
+-- Lock lookahead installs this to learn that a stored lock changed, so a value
+-- it resolved ahead of time does not go out stale. Clearing a lock is as much a
+-- change as setting one: a value already resolved from the old lock must not
+-- leave, and the step has to send its assigned value instead. A nil parameter
+-- means every slot of that step, and a nil step means the whole channel.
+-- With no listener a lock edit behaves exactly as it always has.
+local on_lock_edit = nil
+
+function program.set_lock_edit_listener(listener)
+  on_lock_edit = listener
+end
+
+notify_lock_edit = function(channel, step, parameter)
+  if on_lock_edit then on_lock_edit(channel, step, parameter) end
 end
 
 function program.add_step_param_trig_lock_to_channel(channel, step, parameter, trig_lock)
@@ -303,10 +222,16 @@ function program.add_step_param_trig_lock_to_channel(channel, step, parameter, t
     step_trig_lock_banks[step] = {}
   end
 
-  trig_lock = math.max(trig_lock, trig_lock_params[parameter].nrpn_min_value or trig_lock_params[parameter].cc_min_value or 0)
-  trig_lock = math.min(trig_lock, trig_lock_params[parameter].nrpn_max_value or trig_lock_params[parameter].cc_max_value or 127)
+  local definition = trig_lock_params[parameter]
+  local off = definition.off_value == nil and -1 or definition.off_value
+  if trig_lock ~= off then
+    trig_lock = math.max(trig_lock, definition.nrpn_min_value or definition.cc_min_value or 0)
+    trig_lock = math.min(trig_lock, definition.nrpn_max_value or definition.cc_max_value or 127)
+  end
 
   step_trig_lock_banks[step][parameter] = trig_lock
+
+  notify_lock_edit(channel, step, parameter)
 
 end
 
@@ -381,7 +306,7 @@ function program.add_step_transpose_trig_lock(step, trig_lock)
   local channel = program.get_channel(program.get().selected_song_pattern, 17)
 
   if trig_lock ~= nil then
-    trig_lock = math.max(math.min(trig_lock, 7), -7) or nil
+    trig_lock = math.max(math.min(trig_lock, 12), -12) or nil
   end
 
   if not channel.step_transpose_trig_lock_banks then 
@@ -556,39 +481,48 @@ function program.get_trig_lock_calculator_id(channel, parameter)
   return channel.trig_lock_calculator_ids[parameter]
 end
 
-function program.clear_trig_locks_for_step(step)
-  local channel = program.get_selected_channel()
-  program.add_step_scale_trig_lock(step, nil)
+function program.clear_trig_locks_for_step_for_channel(channel, step)
+  notify_lock_edit(channel, step, nil)
+  channel.step_scale_trig_lock_banks[step] = nil
 
   if channel.number ~= 17 then
     if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] then
       channel.step_trig_lock_banks[step] = nil
     end
-    program.add_step_octave_trig_lock(step, nil)
+    channel.step_octave_trig_lock_banks[step] = nil
     if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
       channel.step_trig_lock_slides[step] = nil
     end
   else
-    program.add_step_transpose_trig_lock(step, nil)
+    if not channel.step_transpose_trig_lock_banks then
+      channel.step_transpose_trig_lock_banks = {}
+    end
+    channel.step_transpose_trig_lock_banks[step] = nil
   end
 end
 
+function program.clear_trig_locks_for_step(step)
+  program.clear_trig_locks_for_step_for_channel(get_selected_channel_target(), step)
+end
+
 function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
+  notify_lock_edit(channel, step, parameter)
   if channel.number ~= 17 then
     if channel.step_trig_lock_banks and channel.step_trig_lock_banks[step] and channel.step_trig_lock_banks[step][parameter] then
       channel.step_trig_lock_banks[step][parameter] = nil
-      
+
       -- If step table is empty, remove it
       if next(channel.step_trig_lock_banks[step]) == nil then
         channel.step_trig_lock_banks[step] = nil
-      -- Clear slide params for this step and parameter
-        if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
-          channel.step_trig_lock_slides[step][parameter] = nil
-          
-          -- If step slide table is empty, remove it
-          if next(channel.step_trig_lock_slides[step]) == nil then
-            channel.step_trig_lock_slides[step] = nil
-          end
+      end
+      -- Clear the cleared lock's slide, even while other locks remain on the step
+      -- (bugs.json undo-lock-clears-step-slide)
+      if channel.step_trig_lock_slides and channel.step_trig_lock_slides[step] then
+        channel.step_trig_lock_slides[step][parameter] = nil
+
+        -- If step slide table is empty, remove it
+        if next(channel.step_trig_lock_slides[step]) == nil then
+          channel.step_trig_lock_slides[step] = nil
         end
       end
     end
@@ -596,6 +530,7 @@ function program.clear_trig_lock_for_step_for_channel(channel, step, parameter)
 end
 
 function program.clear_trig_locks_for_channel(channel)
+  notify_lock_edit(channel, nil, nil)
   channel.step_trig_lock_banks = {}
   channel.step_octave_trig_lock_banks = {}
   channel.step_scale_trig_lock_banks = {}
@@ -603,20 +538,25 @@ function program.clear_trig_locks_for_channel(channel)
 end
 
 function program.clear_device_trig_locks_for_channel(channel)
+  notify_lock_edit(channel, nil, nil)
   channel.step_trig_lock_banks = {}
 end
 
+function program.clear_masks_for_step_for_channel(channel, step)
+  channel.step_trig_masks[step] = nil
+  channel.step_note_masks[step] = nil
+  channel.step_velocity_masks[step] = nil
+  channel.step_length_masks[step] = nil
+  channel.step_micro_time_masks[step] = nil
+  if channel.step_chord_masks and channel.step_chord_masks[step] then
+    for chord_index = 1, 4 do
+      channel.step_chord_masks[step][chord_index] = nil
+    end
+  end
+end
+
 function program.clear_masks_for_step(step)
-  local channel = program.get().selected_channel
-  program.clear_step_trig_mask(channel, step)
-  program.clear_step_note_mask(channel, step)
-  program.clear_step_velocity_mask(channel, step)
-  program.clear_step_length_mask(channel, step)
-  program.clear_step_micro_time_mask(channel, step)
-  program.clear_step_chord_1_mask(channel, step)
-  program.clear_step_chord_2_mask(channel, step)
-  program.clear_step_chord_3_mask(channel, step)
-  program.clear_step_chord_4_mask(channel, step)
+  program.clear_masks_for_step_for_channel(get_selected_channel_target(), step)
 end
 
 
@@ -629,13 +569,21 @@ function program.clear_masks_for_channel(channel)
   channel.step_chord_masks = {}
 end
 
+-- Scale 0 is quantised on every note when the global scale is off. Generate its
+-- note arrays once; callers copy or read them and never modify them in place.
+local chromatic_scale, chromatic_pentatonic_scale
+
 function program.get_scale(s)
   if s == 0 then
+    if not chromatic_scale then
+      chromatic_scale = musicutil.generate_scale(0, "chromatic", 20)
+      chromatic_pentatonic_scale = musicutil.generate_scale(0, "chromatic", 20)
+    end
     return {
       name = "Chromatic",
       number = 0,
-      scale = musicutil.generate_scale(0, "chromatic", 20),
-      pentatonic_scale = musicutil.generate_scale(0, "chromatic", 20),
+      scale = chromatic_scale,
+      pentatonic_scale = chromatic_pentatonic_scale,
       romans = {},
       root_note = 0,
       chord = 1,
@@ -644,13 +592,14 @@ function program.get_scale(s)
   end
 
   -- Backwards compatibility
-  if not program.get_selected_song_pattern().scales then
+  local song_pattern = program.get_selected_song_pattern()
+  if not song_pattern.scales then
     if program_store.scales then
-      program.get_selected_song_pattern().scales = fn.deep_copy(program_store.scales)
+      song_pattern.scales = fn.deep_copy(program_store.scales)
     end
   end
 
-  return program.get_selected_song_pattern().scales[s]
+  return song_pattern.scales[s]
 end
 
 function program.set_scale(s, scale)
@@ -748,7 +697,7 @@ function program.set_chord_four_mask(channel, mask)
 end
 
 function program.get_effective_swing_shuffle_type(channel)
-  if channel.swing_shuffle_type ~= nil then
+  if channel.swing_shuffle_type ~= nil and channel.swing_shuffle_type > 0 then
     return channel.swing_shuffle_type
   else
     return params:get("global_swing_shuffle_type")
@@ -795,19 +744,29 @@ function program.get_effective_shuffle_amount(channel)
   end
 end
 
-function program.toggle_step_trig_mask(channel, step)
-  ensure_step_masks(channel)
+function program.toggle_step_trig_mask_for_channel(channel, step)
+  if not channel.step_trig_masks then
+    channel.step_trig_masks = {}
+  end
 
-  local trig_values = program.get_channel(program.get().selected_song_pattern, channel).working_pattern.trig_values
+  local trig_values = channel.working_pattern.trig_values
   if trig_values[step] == 0 then
-    program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = 1
+    channel.step_trig_masks[step] = 1
   elseif trig_values[step] == 1 then
-    program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = 0
+    channel.step_trig_masks[step] = 0
   end
 end
 
-function program.clear_step_trig_mask(channel, step)
-  program.get_channel(program.get().selected_song_pattern, channel).step_trig_masks[step] = nil
+function program.toggle_step_trig_mask(channel_number, step)
+  program.toggle_step_trig_mask_for_channel(get_channel_target_for_selected_song(channel_number), step)
+end
+
+function program.clear_step_trig_mask_for_channel(channel, step)
+  channel.step_trig_masks[step] = nil
+end
+
+function program.clear_step_trig_mask(channel_number, step)
+  program.clear_step_trig_mask_for_channel(get_channel_target_for_selected_song(channel_number), step)
 end
 
 function program.clear_step_note_mask(channel, step)
@@ -909,38 +868,43 @@ function program.clear_working_pattern_for_step(channel, step)
   channel.working_pattern.lengths[step] = 1 -- Default length
 end
 
--- Replace the existing get_next_trig_lock_step function with this version
-function program.get_next_trig_lock_step(channel, current_step, parameter)
-  local program_data = program.get()
-  local current_song_pattern = program_data.selected_song_pattern
-  local step_trig_lock_banks = channel.step_trig_lock_banks
-  if not step_trig_lock_banks then return nil end
-  -- First check steps after current position in current pattern
-  for step = current_step + 1, 64 do
-    if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
-      return {
-        step = step,
-        value = step_trig_lock_banks[step][parameter]
-      }
-    end
-  end
+-- Playback and slide destinations share the effective channel traversal.
+function program.get_channel_step_bounds(channel)
+  local first = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+  local last = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
+  last = math.min(last, first + program.get_selected_song_pattern().global_pattern_length - 1)
+  return first, last
+end
 
-  if params:get("wrap_param_slides") == 2 then
-    local next_song_pattern = step.calculate_next_selected_song_pattern()
-
-    if next_song_pattern == current_song_pattern or params:get("song_mode") ~= 2 then
-      for step = 1, current_step do
-        if step_trig_lock_banks[step] and step_trig_lock_banks[step][parameter] then
-          return {
-            step = step,
-            value = step_trig_lock_banks[step][parameter],
-            should_wrap = true
-          }
-        end
+function program.get_next_trig_lock_step(channel, current_step, parameter, off_value)
+  local banks = channel.step_trig_lock_banks
+  if not banks then return nil end
+  local first, last = program.get_channel_step_bounds(channel)
+  if current_step < first or current_step > last then return nil end
+  local wrap = params:get("wrap_param_slides") == 2 and
+    (params:get("song_mode") ~= 2 or step.calculate_next_selected_song_pattern() == program.get().selected_song_pattern)
+  -- Every note with a slide runs this search, so keep the loop to one bank
+  -- lookup and read the trigless setting at most once.
+  local span = last - first + 1
+  local origin = current_step - first
+  local limit = wrap and span or (last - current_step)
+  local trigless_locks
+  for distance = 1, limit do
+    local candidate = first + ((origin + distance) % span)
+    local bank = banks[candidate]
+    local value = bank and bank[parameter]
+    if value ~= nil and value ~= off_value then
+      local eligible = program.step_has_trig(channel, candidate)
+      if not eligible then
+        if trigless_locks == nil then trigless_locks = params:get("trigless_locks") == 2 end
+        eligible = trigless_locks
+      end
+      if eligible then
+        return {step=candidate, value=value, distance=distance,
+          should_wrap=(current_step + distance > last) or nil}
       end
     end
   end
-
   return nil
 end
 

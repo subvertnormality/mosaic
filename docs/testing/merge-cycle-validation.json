@@ -1,0 +1,71 @@
+{
+  "status": "scoped-candidate-validated",
+  "candidate": "0076",
+  "native_runs": [
+    {
+      "case": "M-MERGE-011",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/c4d9a663dbab457299ad01c432213e72/manifest.json",
+      "sha256": "839a1d25b69a2cc2685e8e7225a2738f039f14df9e4136463d12118a5fe61ae4",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-012",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7941511505c54ce49ad0460865deeb6c/manifest.json",
+      "sha256": "135cef586289bce963b941fd3c9a9f458c46710f07ebf63e1ad87f3e9999a03d",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-013",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/62e056ade2d44befba5164e4f370061d/manifest.json",
+      "sha256": "6c5592f9dddef23dd371b811ce6600fc42eef418fec1a880c36fc5f5594d046d",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-011",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ca22660b029e41ca916affa1c425efd3/manifest.json",
+      "sha256": "203c8b8f3ce867c2e8d390b1a6e2adc83fe199016b58741d5fe375613570d307",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-012",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/64cee37c39d342fea04fd0e75786cdcb/manifest.json",
+      "sha256": "727d0a0cd960a14207bf4adfb314b921ed74c07283a046c4fa7dd1c57b192136",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-013",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/980d33cad142472aa3ce4b5f7abd78fd/manifest.json",
+      "sha256": "4a24ab4371adcd789cadf9dfa315046bd8166ef09371205713a218d6812a2464",
+      "passed": true
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-b4b6730845524a9eb0002664fdd6e437/results.json",
+    "sha256": "12df82435c1c42514dfb84765323f17f83f54cd0f57c1a009aa226b3f89b51ae",
+    "summary": "Ran 492 tests in 7.780 seconds, 492 successes, 0 failures",
+    "production_matches": true
+  },
+  "production_sha256": "609de0ec5ef746ed3a813edc20b0113ee212a5e847060a676ced60dc0246b086",
+  "patch_reconstruction": "/home/andy/projects/mosaic-behaviour-runs/merge-cycle-patch-1gm4m27r",
+  "scope": "Returning from Lower/Shorter to Average updates stored note/velocity/length modes as well as indicator and tooltip. Native011 also validates C-major/D-major/D-minor pentatonic merge and restored scale cache behavior.",
+  "baselines": {
+    "note_D": "145309d64efe4628b3628dc801113720",
+    "note_R": "b3b402d8d13c4d209c41c77997a944c5",
+    "velocity_D": "6dd9144bf7394c878d1ca236ec07c104",
+    "length_D": "93295ac817304fb58e7369e7d4b9ef7a"
+  },
+  "semantic_review": "01a0849f-a7c3-7102-98e4-8d69d14e6ffe",
+  "review_scope": "Arithmetic/manual semantic decision; no claim that this is an implementation review of0076. Three missing assignments have direct native baseline and candidate evidence; proportional runbook does not mandate another per-fix review.",
+  "limitations": [
+    "Manual clarification followed native runs; production and scenario inputs unchanged. Targeted accumulated evidence, not full campaign.",
+    "Fractional/negative/Lower arithmetic native acceptance and broader scale domains remain incomplete.",
+    "Current controlled profile admission and emulator release remain incomplete."
+  ],
+  "full_campaign_complete": false
+}

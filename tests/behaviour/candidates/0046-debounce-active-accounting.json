@@ -1,0 +1,14 @@
+{
+  "status": "scoped-regressions-validated",
+  "scope": "Only decrement scheduler active count when replacing an active coroutine; retained completed entries must not decrement again.",
+  "before_sha256": "500784c729933fbb2aca13fe9825e7a1ff120b51352971ecfb4dd44e3efb1cf7",
+  "after_sha256": "aecd4c812ea21b3fd848c00cb6ce305d13e19f64bcbe2b75c747fa388a44ecad",
+  "patch_sha256": "81eb1dfb969869ee152d3a8b7a26e5c89b1d9c1c03b413eee8f40099a4043674",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "review": "01a080b4-5813-7d92-ac3e-58df57b1dbbb",
+  "baseline": "artifacts/c16/scheduler-accounting-baseline.json",
+  "validation": "docs/testing/panic-validation.json",
+  "limitation": "Full panic/manual coverage and release incomplete; native runs retain exact source hashes."
+}

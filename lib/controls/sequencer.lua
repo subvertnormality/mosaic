@@ -37,7 +37,18 @@ function sequencer:draw(channel, draw_func)
   local selected_pattern = program.get_selected_pattern()
   local program_get_selected_song_pattern = program.get_selected_song_pattern
   local program_get_current_step_for_channel = program.get_current_step_for_channel
-  local program_step_has_trig_lock = channel_edit_page_ui.should_show_step_has_trig_lock
+  local should_show_step_has_trig_lock = channel_edit_page_ui.should_show_step_has_trig_lock
+  -- Heads, tails and the playhead ask about the same steps; the indicator
+  -- cannot change during one draw, so query each step once.
+  local step_lock_shown = {}
+  local function program_step_has_trig_lock(step_channel, step)
+    local shown = step_lock_shown[step]
+    if shown == nil then
+      shown = should_show_step_has_trig_lock(step_channel, step) and true or false
+      step_lock_shown[step] = shown
+    end
+    return shown
+  end
 
   local m_clock_is_playing = m_clock.is_playing
   local fn_calc_grid_count = fn.calc_grid_count
@@ -70,9 +81,12 @@ function sequencer:draw(channel, draw_func)
 
   local current_step = program_get_current_step_for_channel(channel.number)
 
+  -- A row's grid counts are consecutive, so the row's first count is all the
+  -- position each cell needs; the helper is still used off the row grid below.
   for y = self.y, self.y + 3 do
+    local row_base = fn_calc_grid_count(0, y)
     for x = 1, 16 do
-      local grid_count = fn_calc_grid_count(x, y)
+      local grid_count = row_base + x
       local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if mode == "channel" then
@@ -90,8 +104,9 @@ function sequencer:draw(channel, draw_func)
   end
 
   for y = self.y, self.y + 3 do
+    local row_base = fn_calc_grid_count(0, y)
     for x = 1, 16 do
-      local grid_count = fn_calc_grid_count(x, y)
+      local grid_count = row_base + x
       local in_step_length = start_step <= grid_count and end_step >= grid_count
 
       if unsaved_grid[grid_count] then
@@ -157,42 +172,62 @@ function sequencer:draw(channel, draw_func)
   end
 end
 
-function sequencer:press(x, y)
+function sequencer:press(x, y, song_pattern, pattern_number)
   if y >= self.y and y <= self.y + 3 then
     if self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)
-      local selected_pattern = program.get_selected_pattern()
+      local selected_pattern = song_pattern and song_pattern.patterns[pattern_number] or program.get_selected_pattern()
       selected_pattern.trig_values[grid_count] = 1 - selected_pattern.trig_values[grid_count]
-      program.get_selected_song_pattern().active = true
+      local target_song = song_pattern or program.get_selected_song_pattern()
+      target_song.active = true
     end
   end
 end
 
-function sequencer:dual_press(x, y, x2, y2)
+function sequencer:dual_press(x, y, x2, y2, song_pattern, pattern_number)
   if y >= self.y and y <= self.y + 3 and y2 >= self.y and y2 <= self.y + 3 then
     if self.mode == "channel" then
-      program.get_selected_channel().start_trig = {x, y}
-      program.get_selected_channel().end_trig = {x2, y2}
+      -- Channel ranges are ascending and need distinct endpoints. Reject the
+      -- gesture before changing either endpoint; pattern lengths may wrap.
+      if fn.calc_grid_count(x2, y2) <= fn.calc_grid_count(x, y) then
+        return false
+      end
+      local channel = program.get_selected_channel()
+      channel.start_trig = {x, y}
+      channel.end_trig = {x2, y2}
+      -- The next step is chosen from the range at its onset, so a value already
+      -- resolved for the step the old range would have played next must not
+      -- leave: the new range may never play that step. What has left stays
+      -- sent; its record names a step, so it cannot speak for another.
+      local scheduler = m_clock and m_clock.get_lock_lookahead and m_clock.get_lock_lookahead()
+      -- A step edited out of the range never arrives to correct a value that
+      -- already left for it, so withdraw those sends and put back what they
+      -- displaced. Without this the receiver keeps an excluded step's value,
+      -- which is a difference from lead 0 that the player never asked for.
+      if scheduler then scheduler:revert_channel(channel.number, step.restore_lock_value) end
+      return true
     elseif self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)
-      if program.get_selected_pattern().trig_values[grid_count] == 1 then
+      local selected_pattern = song_pattern and song_pattern.patterns[pattern_number] or program.get_selected_pattern()
+      if selected_pattern.trig_values[grid_count] == 1 then
         local length = fn.calc_grid_count(x2, y2) - grid_count
         if length > 0 then
-          program.get_selected_pattern().lengths[grid_count] = length + 1
+          selected_pattern.lengths[grid_count] = length + 1
         else
-          program.get_selected_pattern().lengths[grid_count] = (64 - grid_count) + fn.calc_grid_count(x2, y2) + 1
+          selected_pattern.lengths[grid_count] = (64 - grid_count) + fn.calc_grid_count(x2, y2) + 1
         end
       end
     end
   end
 end
 
-function sequencer:long_press(x, y)
+function sequencer:long_press(x, y, song_pattern, pattern_number)
   if y >= self.y and y <= self.y + 3 then
     if self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)
-      if program.get_selected_pattern().trig_values[grid_count] == 1 then
-        program.get_selected_pattern().lengths[grid_count] = 1
+      local selected_pattern = song_pattern and song_pattern.patterns[pattern_number] or program.get_selected_pattern()
+      if selected_pattern.trig_values[grid_count] == 1 then
+        selected_pattern.lengths[grid_count] = 1
       end
     end
   end

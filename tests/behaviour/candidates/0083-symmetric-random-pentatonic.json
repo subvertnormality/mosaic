@@ -1,0 +1,11 @@
+{
+  "candidate": "0083",
+  "status": "scoped-candidate-validated",
+  "base": "4b5abefb71aa91f7b28b38ee8117e99258af1adb",
+  "production": [
+    "lib/step.lua"
+  ],
+  "patch": "0083-symmetric-random-pentatonic.patch",
+  "validation": "docs/testing/random-pentatonic-validation.json",
+  "full_campaign_complete": false
+}

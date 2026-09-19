@@ -1,0 +1,61 @@
+{
+  "status": "source-reviewed-links-reconciled",
+  "new_native_runs": false,
+  "scope": "Six previously unlinked manual requirements now reference inspected existing case implementations; full requirement completion is not claimed.",
+  "mappings": {
+    "PAT-SCALE-RELATIVE": {
+      "cases": [
+        "M-MERGE-016",
+        "M-MERGE-019",
+        "M-MERGE-043",
+        "M-MERGE-044"
+      ],
+      "remaining": "Signed and extreme degrees, all ten scales and selected root/degree/rotation interactions; all channel assignments and full discrete harmony domains remain."
+    },
+    "SCALE-PRECEDENCE": {
+      "cases": [
+        "M-SCALE-002",
+        "M-SCALE-004"
+      ],
+      "remaining": "Channel/global lifetime and highest-slot override/clear tested; staggered coprime rate/length timelines and every lock slot remain."
+    },
+    "OPT-MASK-SNAP": {
+      "cases": [
+        "M-MASK-019",
+        "M-MASK-020",
+        "M-MASK-021"
+      ],
+      "remaining": "All ten scales at C and D roots, snap off/on restoration and degree/rotation independence; remaining roots, pitch boundaries and interacting masks remain."
+    },
+    "OPT-MASK-QUANTISE": {
+      "cases": [
+        "M-MASK-021"
+      ],
+      "remaining": "Global/channel/step Off/On/X precedence and clearing under degree/rotation tested; other harmony domains and combinations remain."
+    },
+    "OPT-PENTATONIC-MERGED": {
+      "cases": [
+        "M-MERGE-011",
+        "M-MERGE-019",
+        "M-MERGE-023",
+        "M-MERGE-043",
+        "M-MERGE-044"
+      ],
+      "remaining": "All ten pentatonic selections and numeric merge modes plus selected harmony restoration; all-pentatonic interaction, single-source and priority combinations remain."
+    },
+    "MERGE-CONTROL": {
+      "cases": [
+        "M-MERGE-012",
+        "M-MERGE-013"
+      ],
+      "remaining": "Repeated velocity and shifted-length mode cycles tested; full trig/note cross-mode isolation and K1 release-order matrix remain."
+    }
+  },
+  "inspected_sources": {
+    "tests/behaviour/numeric_merging.py": "62d0506396a6239c1a46efe8f4407c50854b3f39515de229e7a410a7ee8c4115",
+    "tests/behaviour/mask_quantisation.py": "5da8c492ba2354b5633cd7ecbe1387f08136c2f2fca4d0822815f506bacb37b3",
+    "tests/behaviour/scale_slot_matrix.py": "c6d48a8d2e10e86690a6b1f6dbd615d6113a4cef0f2344143f327f835fce391a"
+  },
+  "test_logic_unchanged_ast_verified": true,
+  "full_campaign_complete": false
+}

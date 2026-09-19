@@ -1,0 +1,719 @@
+{
+  "status": "scoped-seven-rate-controlled-and-realtime-validation",
+  "case": "M-TIME-004",
+  "source_sha256": {
+    "lib/step.lua": "ded0e802ed0bde7b8ffcfe068b1192392a63b5763bdfd889f1c46a3210a920e9",
+    "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+    "lib/clock/m_lattice.lua": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+    "tests/behaviour/cases.py": "2401400f007e3687ba16a92631b9dfc3a83192481bd71a85a840c5117d02dced",
+    "tests/behaviour/fractional_deadlines.py": "fee7dfe68a7c81fffd0ee38f91fa4a22092898925e416bc246725076ac3ae747"
+  },
+  "origin": "Identified backend grid RELEASE submission: Mosaic short Play/Stop executes at release. Includes subsequent dispatch latency; never fitted to MIDI.",
+  "quantisation": "Exact rational period with rounding carry determined from preceding stopped clock and committed rate edit.",
+  "thresholds": {
+    "controlled_allowance_ns": 2,
+    "realtime_p99_ns": 10000000,
+    "realtime_max_ns": 50000000,
+    "realtime_final_ns": 20000000
+  },
+  "runs": [
+    {
+      "run_id": "686a1b059edc4635815d868f75061640",
+      "clock_mode": "controlled-experimental",
+      "manifest_sha256": "dd57ffa1493514bd82dd338bc524d1adcc2bff7fabf9136f54b367254a7a1f0f",
+      "identity_sha256": "4361ecbd4bbb8ce6447382ee2806a1a12da6b6a0f65bdfd42b1e46cccf055fa9",
+      "accounting": {
+        "kind": "fractional-full-stream-accounting",
+        "note_events": 16644,
+        "capture_windows": 7,
+        "unaccounted_note_events": 0,
+        "passed": true
+      },
+      "segments": [
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            3,
+            2
+          ],
+          "preview_seed": [
+            1,
+            2
+          ],
+          "onsets": 4326,
+          "scheduled_note_events": 8651,
+          "forced_stop_releases": 1,
+          "origin_ns": 18190000000,
+          "stop_ns": 63250000000,
+          "stop_applied_ns": 63250000000,
+          "deadline_domain": "logical",
+          "maximum_quantisation_offset_ns": 3472223,
+          "complete_ratio_windows": 4324,
+          "maximum_window_residual_ns": 1.3333333333333333,
+          "release_order_checks": 4325,
+          "metrics": {
+            "count": 8651,
+            "maximum_absolute_error_ns": 2
+          },
+          "passed": true,
+          "label": "x16",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "4d2ff23acdc942f9b92d00763e9ac282",
+            "native_sequence": 633,
+            "origin_ns": 2113266250121046,
+            "applied_ns": 2113266251053460,
+            "input_to_applied_ns": 932414,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "a0e08e29565e483d8a912325d4822958",
+            "native_sequence": 816,
+            "origin_ns": 2113271566018100,
+            "applied_ns": 2113271585685453,
+            "input_to_applied_ns": 19667353,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            240,
+            53
+          ],
+          "preview_seed": [
+            1,
+            1
+          ],
+          "onsets": 1433,
+          "scheduled_note_events": 2865,
+          "forced_stop_releases": 1,
+          "origin_ns": 63660000000,
+          "stop_ns": 108720000000,
+          "stop_applied_ns": 108720000000,
+          "deadline_domain": "logical",
+          "maximum_quantisation_offset_ns": 3537736,
+          "complete_ratio_windows": 1380,
+          "maximum_window_residual_ns": 1.3333333333333333,
+          "release_order_checks": 1432,
+          "metrics": {
+            "count": 2865,
+            "maximum_absolute_error_ns": 1
+          },
+          "passed": true,
+          "label": "x5.3",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "479e20c4d70c40cab5f986b424f80b9f",
+            "native_sequence": 832,
+            "origin_ns": 2113271677584671,
+            "applied_ns": 2113271678600967,
+            "input_to_applied_ns": 1016296,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "46997eb3d04c47d1b1b11236d8170816",
+            "native_sequence": 1015,
+            "origin_ns": 2113277360894127,
+            "applied_ns": 2113277378548789,
+            "input_to_applied_ns": 17654662,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            24,
+            5
+          ],
+          "preview_seed": [
+            3,
+            106
+          ],
+          "onsets": 1352,
+          "scheduled_note_events": 2703,
+          "forced_stop_releases": 1,
+          "origin_ns": 108980000000,
+          "stop_ns": 154040000000,
+          "stop_applied_ns": 154040000000,
+          "deadline_domain": "logical",
+          "maximum_quantisation_offset_ns": 5555556,
+          "complete_ratio_windows": 1347,
+          "maximum_window_residual_ns": 1.3333333333333333,
+          "release_order_checks": 1351,
+          "metrics": {
+            "count": 2703,
+            "maximum_absolute_error_ns": 2
+          },
+          "passed": true,
+          "label": "x5",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "23cf1623973e42f68ef6981b69591136",
+            "native_sequence": 1025,
+            "origin_ns": 2113277451440520,
+            "applied_ns": 2113277452319533,
+            "input_to_applied_ns": 879013,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "e627edeaf3634e5cb9c7372acbdd0587",
+            "native_sequence": 1208,
+            "origin_ns": 2113283782817173,
+            "applied_ns": 2113283800511247,
+            "input_to_applied_ns": 17694074,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            120,
+            13
+          ],
+          "preview_seed": [
+            3,
+            10
+          ],
+          "onsets": 703,
+          "scheduled_note_events": 1405,
+          "forced_stop_releases": 1,
+          "origin_ns": 154400000000,
+          "stop_ns": 199460000000,
+          "stop_applied_ns": 199460000000,
+          "deadline_domain": "logical",
+          "maximum_quantisation_offset_ns": 3205129,
+          "complete_ratio_windows": 690,
+          "maximum_window_residual_ns": 0.6666666666666666,
+          "release_order_checks": 702,
+          "metrics": {
+            "count": 1405,
+            "maximum_absolute_error_ns": 1
+          },
+          "passed": true,
+          "label": "x2.6",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "1d7abc2a19a0402588fc73159dd66287",
+            "native_sequence": 1222,
+            "origin_ns": 2113283884780817,
+            "applied_ns": 2113283885765949,
+            "input_to_applied_ns": 985132,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "7a01ae3e70d541cc942639c5202d145d",
+            "native_sequence": 1405,
+            "origin_ns": 2113289592246903,
+            "applied_ns": 2113289604090167,
+            "input_to_applied_ns": 11843264,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            240,
+            13
+          ],
+          "preview_seed": [
+            19,
+            26
+          ],
+          "onsets": 352,
+          "scheduled_note_events": 703,
+          "forced_stop_releases": 1,
+          "origin_ns": 199820000000,
+          "stop_ns": 244880000000,
+          "stop_applied_ns": 244880000000,
+          "deadline_domain": "logical",
+          "maximum_quantisation_offset_ns": 5341881,
+          "complete_ratio_windows": 339,
+          "maximum_window_residual_ns": 0.6666666666666666,
+          "release_order_checks": 351,
+          "metrics": {
+            "count": 703,
+            "maximum_absolute_error_ns": 1
+          },
+          "passed": true,
+          "label": "x1.3",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "b92de278d9eb4521931ac2ed1136a841",
+            "native_sequence": 1419,
+            "origin_ns": 2113289848644136,
+            "applied_ns": 2113289849478170,
+            "input_to_applied_ns": 834034,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "38a75035781848f28739f061e87293be",
+            "native_sequence": 1602,
+            "origin_ns": 2113295051147096,
+            "applied_ns": 2113295060100004,
+            "input_to_applied_ns": 8952908,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            312,
+            5
+          ],
+          "preview_seed": [
+            25,
+            26
+          ],
+          "onsets": 104,
+          "scheduled_note_events": 207,
+          "forced_stop_releases": 1,
+          "origin_ns": 245290000000,
+          "stop_ns": 290350000000,
+          "stop_applied_ns": 290350000000,
+          "deadline_domain": "logical",
+          "maximum_quantisation_offset_ns": 4166667,
+          "complete_ratio_windows": 99,
+          "maximum_window_residual_ns": 0.6666666666666666,
+          "release_order_checks": 103,
+          "metrics": {
+            "count": 207,
+            "maximum_absolute_error_ns": 1
+          },
+          "passed": true,
+          "label": "/2.6",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "eccf050b5845417bb26937d4db67c0b7",
+            "native_sequence": 1618,
+            "origin_ns": 2113295313802854,
+            "applied_ns": 2113295314601527,
+            "input_to_applied_ns": 798673,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "ca7ac43dacfc48f4977dfdab9e0dd892",
+            "native_sequence": 1801,
+            "origin_ns": 2113300511994947,
+            "applied_ns": 2113300517811906,
+            "input_to_applied_ns": 5816959,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            636,
+            5
+          ],
+          "preview_seed": [
+            9,
+            10
+          ],
+          "onsets": 52,
+          "scheduled_note_events": 103,
+          "forced_stop_releases": 1,
+          "origin_ns": 290760000000,
+          "stop_ns": 335820000000,
+          "stop_applied_ns": 335820000000,
+          "deadline_domain": "logical",
+          "maximum_quantisation_offset_ns": 5555556,
+          "complete_ratio_windows": 47,
+          "maximum_window_residual_ns": 1.3333333333333333,
+          "release_order_checks": 51,
+          "metrics": {
+            "count": 103,
+            "maximum_absolute_error_ns": 1
+          },
+          "passed": true,
+          "label": "/5.3",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "e32d710362c047e686930c2206111bc4",
+            "native_sequence": 1817,
+            "origin_ns": 2113300607358993,
+            "applied_ns": 2113300608342728,
+            "input_to_applied_ns": 983735,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "3755740eab1c412f880d59e099b148c3",
+            "native_sequence": 2000,
+            "origin_ns": 2113305780236421,
+            "applied_ns": 2113305788125700,
+            "input_to_applied_ns": 7889279,
+            "boundary": "backend-input-submission"
+          }
+        }
+      ],
+      "passed": true
+    },
+    {
+      "run_id": "419286ddbe0a45e3900ed71ac64cf119",
+      "clock_mode": "real-time",
+      "manifest_sha256": "24aba0b1b14fc7fd5bef438a5b544cf376660f441bf6547e37d7e1974ab76f30",
+      "identity_sha256": "4cc88c9d1b47bb0bab70d0d631e133b428ce6eb84fb5114e8e1f0de6e05b4e2f",
+      "accounting": {
+        "kind": "fractional-full-stream-accounting",
+        "note_events": 17882,
+        "capture_windows": 7,
+        "unaccounted_note_events": 0,
+        "passed": true
+      },
+      "segments": [
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            3,
+            2
+          ],
+          "preview_seed": [
+            1,
+            2
+          ],
+          "onsets": 4563,
+          "scheduled_note_events": 9125,
+          "forced_stop_releases": 1,
+          "origin_ns": 2113335109553169,
+          "stop_ns": 2113382636207329,
+          "stop_applied_ns": 2113382652878782,
+          "deadline_domain": "monotonic",
+          "maximum_quantisation_offset_ns": 3472223,
+          "complete_ratio_windows": 4561,
+          "maximum_window_residual_ns": 2463655.3333333335,
+          "release_order_checks": 4562,
+          "metrics": {
+            "count": 9125,
+            "nearest_rank": 9034,
+            "p99_absolute_error_ns": 1544831,
+            "maximum_absolute_error_ns": 3151597,
+            "final_phase_error_ns": 412983,
+            "within_event_profile": true
+          },
+          "passed": true,
+          "label": "x16",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "e163c7501f5c4649ae8149acedc9faa6",
+            "native_sequence": 335,
+            "origin_ns": 2113335109553169,
+            "applied_ns": 2113335111179634,
+            "input_to_applied_ns": 1626465,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "9880d7a0ca2e4b9c8245c470fd056490",
+            "native_sequence": 427,
+            "origin_ns": 2113382636207329,
+            "applied_ns": 2113382652878782,
+            "input_to_applied_ns": 16671453,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            240,
+            53
+          ],
+          "preview_seed": [
+            1,
+            1
+          ],
+          "onsets": 1562,
+          "scheduled_note_events": 3123,
+          "forced_stop_releases": 1,
+          "origin_ns": 2113383138208197,
+          "stop_ns": 2113432239928722,
+          "stop_applied_ns": 2113432257994350,
+          "deadline_domain": "monotonic",
+          "maximum_quantisation_offset_ns": 3537736,
+          "complete_ratio_windows": 1509,
+          "maximum_window_residual_ns": 1104777.6666666667,
+          "release_order_checks": 1561,
+          "metrics": {
+            "count": 3123,
+            "nearest_rank": 3092,
+            "p99_absolute_error_ns": 1499402,
+            "maximum_absolute_error_ns": 1909856,
+            "final_phase_error_ns": 1338932,
+            "within_event_profile": true
+          },
+          "passed": true,
+          "label": "x5.3",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "48b740674cea44beba43e38ecc58217e",
+            "native_sequence": 437,
+            "origin_ns": 2113383138208197,
+            "applied_ns": 2113383139114202,
+            "input_to_applied_ns": 906005,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "9c2b985e4577471cacbc26dea113de83",
+            "native_sequence": 529,
+            "origin_ns": 2113432239928722,
+            "applied_ns": 2113432257994350,
+            "input_to_applied_ns": 18065628,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            24,
+            5
+          ],
+          "preview_seed": [
+            3,
+            106
+          ],
+          "onsets": 1488,
+          "scheduled_note_events": 2975,
+          "forced_stop_releases": 1,
+          "origin_ns": 2113432582078098,
+          "stop_ns": 2113482162292846,
+          "stop_applied_ns": 2113482178124309,
+          "deadline_domain": "monotonic",
+          "maximum_quantisation_offset_ns": 5555556,
+          "complete_ratio_windows": 1483,
+          "maximum_window_residual_ns": 1146913.6666666667,
+          "release_order_checks": 1487,
+          "metrics": {
+            "count": 2975,
+            "nearest_rank": 2946,
+            "p99_absolute_error_ns": 1536655,
+            "maximum_absolute_error_ns": 1736569,
+            "final_phase_error_ns": 728460,
+            "within_event_profile": true
+          },
+          "passed": true,
+          "label": "x5",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "6ba7f1fc40b043e78653b5553b245918",
+            "native_sequence": 536,
+            "origin_ns": 2113432582078098,
+            "applied_ns": 2113432582979282,
+            "input_to_applied_ns": 901184,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "36d8639187f14b28af594625e97d68b0",
+            "native_sequence": 628,
+            "origin_ns": 2113482162292846,
+            "applied_ns": 2113482178124309,
+            "input_to_applied_ns": 15831463,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            120,
+            13
+          ],
+          "preview_seed": [
+            3,
+            10
+          ],
+          "onsets": 771,
+          "scheduled_note_events": 1541,
+          "forced_stop_releases": 1,
+          "origin_ns": 2113482609742303,
+          "stop_ns": 2113532019752393,
+          "stop_applied_ns": 2113532035285260,
+          "deadline_domain": "monotonic",
+          "maximum_quantisation_offset_ns": 3205129,
+          "complete_ratio_windows": 758,
+          "maximum_window_residual_ns": 3582850.6666666665,
+          "release_order_checks": 770,
+          "metrics": {
+            "count": 1541,
+            "nearest_rank": 1526,
+            "p99_absolute_error_ns": 1498414,
+            "maximum_absolute_error_ns": 4374914,
+            "final_phase_error_ns": 1057653,
+            "within_event_profile": true
+          },
+          "passed": true,
+          "label": "x2.6",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "4a53b4e9066b4560baeae0f658db7ec5",
+            "native_sequence": 637,
+            "origin_ns": 2113482609742303,
+            "applied_ns": 2113482610668541,
+            "input_to_applied_ns": 926238,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "77baf36245af43ab990c68a09dae1a22",
+            "native_sequence": 729,
+            "origin_ns": 2113532019752393,
+            "applied_ns": 2113532035285260,
+            "input_to_applied_ns": 15532867,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            240,
+            13
+          ],
+          "preview_seed": [
+            19,
+            26
+          ],
+          "onsets": 386,
+          "scheduled_note_events": 771,
+          "forced_stop_releases": 1,
+          "origin_ns": 2113532463580739,
+          "stop_ns": 2113581865444302,
+          "stop_applied_ns": 2113581874068691,
+          "deadline_domain": "monotonic",
+          "maximum_quantisation_offset_ns": 5341881,
+          "complete_ratio_windows": 373,
+          "maximum_window_residual_ns": 1096911.6666666667,
+          "release_order_checks": 385,
+          "metrics": {
+            "count": 771,
+            "nearest_rank": 764,
+            "p99_absolute_error_ns": 1464147,
+            "maximum_absolute_error_ns": 1602537,
+            "final_phase_error_ns": 579261,
+            "within_event_profile": true
+          },
+          "passed": true,
+          "label": "x1.3",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "a9f151f47ef749cd85329184e139d19f",
+            "native_sequence": 738,
+            "origin_ns": 2113532463580739,
+            "applied_ns": 2113532464465936,
+            "input_to_applied_ns": 885197,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "dab6161841d440f1b05cd647a0ca4e6f",
+            "native_sequence": 830,
+            "origin_ns": 2113581865444302,
+            "applied_ns": 2113581874068691,
+            "input_to_applied_ns": 8624389,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            312,
+            5
+          ],
+          "preview_seed": [
+            25,
+            26
+          ],
+          "onsets": 115,
+          "scheduled_note_events": 229,
+          "forced_stop_releases": 1,
+          "origin_ns": 2113582358367474,
+          "stop_ns": 2113631764545089,
+          "stop_applied_ns": 2113631771749629,
+          "deadline_domain": "monotonic",
+          "maximum_quantisation_offset_ns": 4166667,
+          "complete_ratio_windows": 110,
+          "maximum_window_residual_ns": 997780.6666666666,
+          "release_order_checks": 114,
+          "metrics": {
+            "count": 229,
+            "nearest_rank": 227,
+            "p99_absolute_error_ns": 1585526,
+            "maximum_absolute_error_ns": 1651109,
+            "final_phase_error_ns": 756323,
+            "within_event_profile": true
+          },
+          "passed": true,
+          "label": "/2.6",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "d98b4f9b1c8444729c77357d65d07062",
+            "native_sequence": 840,
+            "origin_ns": 2113582358367474,
+            "applied_ns": 2113582359238909,
+            "input_to_applied_ns": 871435,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "58760426d32645b4aee05efd6d12037f",
+            "native_sequence": 932,
+            "origin_ns": 2113631764545089,
+            "applied_ns": 2113631771749629,
+            "input_to_applied_ns": 7204540,
+            "boundary": "backend-input-submission"
+          }
+        },
+        {
+          "kind": "fractional-clock-continuity",
+          "pulse_ratio": [
+            636,
+            5
+          ],
+          "preview_seed": [
+            9,
+            10
+          ],
+          "onsets": 56,
+          "scheduled_note_events": 111,
+          "forced_stop_releases": 1,
+          "origin_ns": 2113632439858330,
+          "stop_ns": 2113681616497258,
+          "stop_applied_ns": 2113681624867048,
+          "deadline_domain": "monotonic",
+          "maximum_quantisation_offset_ns": 5555556,
+          "complete_ratio_windows": 51,
+          "maximum_window_residual_ns": 1140712.6666666667,
+          "release_order_checks": 55,
+          "metrics": {
+            "count": 111,
+            "nearest_rank": 110,
+            "p99_absolute_error_ns": 1617493,
+            "maximum_absolute_error_ns": 1662397,
+            "final_phase_error_ns": 1047454,
+            "within_event_profile": true
+          },
+          "passed": true,
+          "label": "/5.3",
+          "global_boundaries_crossed": 4,
+          "start_input": {
+            "action_id": "99b1850d601e4a0396c21f043cda9578",
+            "native_sequence": 942,
+            "origin_ns": 2113632439858330,
+            "applied_ns": 2113632440966517,
+            "input_to_applied_ns": 1108187,
+            "boundary": "backend-input-submission"
+          },
+          "stop_input": {
+            "action_id": "2e1d67c5471145c6852ba00cc73b1fbe",
+            "native_sequence": 1034,
+            "origin_ns": 2113681616497258,
+            "applied_ns": 2113681624867048,
+            "input_to_applied_ns": 8369790,
+            "boundary": "backend-input-submission"
+          }
+        }
+      ],
+      "passed": true
+    }
+  ],
+  "contract_tests": 5,
+  "lattice_positions_checked": 1400,
+  "retained_failed_runs": [
+    "67c6b42a5ebc4613b2396c90831d36a5",
+    "9b0093bf28c94e5d921c43aab17d955d"
+  ],
+  "limitations": "One fresh process per lane. Controlled repeat admission, ten-minute C12, other real-time timing scenarios, full manual and emulator release remain incomplete. No refactor prerequisite claim.",
+  "review_artifact": "reviews/fractional-deadline-followup.json"
+}

@@ -1,0 +1,239 @@
+{
+  "status": "scoped fault cleanup validated; full sync matrix incomplete",
+  "emulator_revision": "28f2922b21ee43b055426c092caf1a9f56f115e5",
+  "install": "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json",
+  "source_sha256": {
+    "lib/clock/midi_output_transport.lua": "0cef3a241fb8c712fb72415cbef01ba865cee2aa19e0b5eaab1b5026baa0d409",
+    "lib/clock/m_clock.lua": "579f3fa0f577247f342913f27c805de4b3a7b98457d7ff0f6790cb7cae514156"
+  },
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-1c4dd43fff62475d9e36ff528b8ea8fa/results.json",
+    "sha256": "7af9eb6e6987475cb99b91da6be3323fb6e43c846e651e86181ac586a64991ec",
+    "result": {
+      "exit_code": 0,
+      "summary": "Ran 520 tests in 13.605 seconds, 520 successes, 0 failures",
+      "failure_names": [],
+      "log_sha256": "c95d5a95f38c614ad1cb795881f2fb04672d39e0ee0279cc70072d4dbc01e671",
+      "source_sha256": {
+        "lib/clock/m_clock.lua": "579f3fa0f577247f342913f27c805de4b3a7b98457d7ff0f6790cb7cae514156",
+        "lib/clock/m_lattice.lua": "166a0a691fa9cf506cbddde7c45e15b6a3de84f01c54a6659560b72184b313ec",
+        "lib/models/program.lua": "c4e57c831206a55485d042bc8ff0fda1c9d422841c1ecea97b13ad7d49000556",
+        "lib/step.lua": "f0ce6b9a7d88d7fb56e2062978541e4bd2a9d2805aba68cde786bb9d54d6951e"
+      },
+      "full_campaign_complete": false
+    }
+  },
+  "adapter_scenarios": 7,
+  "candidate07_checks": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/midi-boundary-final-checks-07.json",
+    "sha256": "481675ff8acdd32a752134580075114577441899ec05fc1abfdfbe8b97e7f170",
+    "result": {
+      "status": "passed",
+      "rows": [
+        {
+          "repo": "/home/andy/projects/monome-emulator-midi-clock",
+          "command": [
+            "python3",
+            "tests/midi_output_error_object_native.py",
+            "--install",
+            "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json",
+            "--clock-mode",
+            "controlled-experimental"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"path\": \"/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/59fd0bd8aa8044ffbb934ccd60d1d693/manifest.json\", \"passed\": true, \"failure\": null, \"clock_mode\": \"controlled-experimental\", \"install\": \"/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json\", \"scope\": \"Native unprintable subscriber/handler error isolation; not full admission\"}\n",
+          "stderr": ""
+        },
+        {
+          "repo": "/home/andy/projects/monome-emulator-midi-clock",
+          "command": [
+            "python3",
+            "tests/midi_output_error_object_native.py",
+            "--install",
+            "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json",
+            "--clock-mode",
+            "real-time"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"path\": \"/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/83b966dc9c954972a41f3f09a9d77594/manifest.json\", \"passed\": true, \"failure\": null, \"clock_mode\": \"real-time\", \"install\": \"/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json\", \"scope\": \"Native unprintable subscriber/handler error isolation; not full admission\"}\n",
+          "stderr": ""
+        },
+        {
+          "repo": "/home/andy/projects/mosaic-behaviour-tests",
+          "command": [
+            "python3",
+            "tests/behaviour/run.py",
+            "--case",
+            "M-SYNC-009",
+            "--clock-mode",
+            "controlled-experimental",
+            "--experimental-install",
+            "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/ece3b82c4111446880bff2c3d4e5502a/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "repo": "/home/andy/projects/mosaic-behaviour-tests",
+          "command": [
+            "python3",
+            "tests/behaviour/run.py",
+            "--case",
+            "M-SYNC-009",
+            "--clock-mode",
+            "real-time",
+            "--experimental-install",
+            "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/6ff72b9c09774f2db9efdc2beb78cf5e/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "repo": "/home/andy/projects/mosaic-behaviour-tests",
+          "command": [
+            "python3",
+            "tests/behaviour/run.py",
+            "--case",
+            "M-SYNC-006",
+            "--clock-mode",
+            "controlled-experimental",
+            "--experimental-install",
+            "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/27fb0440e65f49d095bcb3aa2a8626a3/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "repo": "/home/andy/projects/mosaic-behaviour-tests",
+          "command": [
+            "python3",
+            "tests/behaviour/run.py",
+            "--case",
+            "M-SYNC-006",
+            "--clock-mode",
+            "real-time",
+            "--experimental-install",
+            "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/installation.json"
+          ],
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/8e9cddef35ea46d49175a77841a6759d/manifest.json\"}\n",
+          "stderr": ""
+        }
+      ],
+      "full_goal_complete": false
+    }
+  },
+  "candidate06_prior_matrix": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/midi-boundary-regressions-02.json",
+    "sha256": "0d690cb43d06c419b601c7045f531587fd0491623c22af4b786055aa518d9593",
+    "result": {
+      "status": "passed",
+      "runs": [
+        {
+          "case": "M-SYNC-009",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/c0e6ef34c46d4f768f88728404ccded6/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-009",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/2eeec10d4ac349e3a9ecc4463706cb90/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-006",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/ec34279b61f441eb897dcf0f1e905f62/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-006",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/ab5d0df69da0442d8e6acac4b64d419a/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-008",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-008\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/fcbda35df7ad4e809f4188f230eb6fef/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-008",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-008\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/764a6d6473be44ea865ee6f9461d130b/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-005",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-005\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/1a0590cb94f94870b2d2d39decdfb7ca/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-005",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-005\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/c7ed2cfdca324ddcbef1e2722bb47941/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-TIM-002",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-TIM-002\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/f315b565221c4b5091219257b7a6dd58/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-TIM-002",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-TIM-002\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/c581bbf0e5b148cb9d6ba21fed779ef4/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-TIM-003",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-TIM-003\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/652762431acf4d60835b18c3ce8f55bb/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-TIM-003",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-TIM-003\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/402a10b37ecd4d85a3a3debb4633a0fe/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-REC-001",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-REC-001\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/4f330b29f8254a71a73c4ae15d4e9169/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-REC-001",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-REC-001\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/53ba335402bc42b08d0785905b3c1315/manifest.json\"}\n",
+          "stderr": ""
+        }
+      ],
+      "full_goal_complete": false
+    }
+  },
+  "native_review_fixes": "monome-emulator docs/delivery/midi-boundary-fixes-validation.json",
+  "full_goal_complete": false
+}

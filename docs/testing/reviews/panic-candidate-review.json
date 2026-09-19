@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only scoped review of Mosaic candidates0044 and0045. Do not edit source: native tests active. Read lib/m_grid.lua and lib/m_midi.lua diffs, lib/scheduler.lua, tests/behaviour/panic_scheduler_contract.lua, panic_navigation in cases.py and candidate0044/0045 records. Manual README MIDI Panic promises holding a non-selected navigation button clears notes on all devices/channels. Native baseline1e63ddf3385b45e88ffea29fde655207: hold channel button3 from song emits zero on all3ports. Baseline13099fdf86ae490e92c941bf633d84c6: hold pattern5 emits2048offs only on port3, none on1/2. Fix0044 broadens navigation range from5..6 to3..6 while preserving selected-button exclusion and short gesture dispatch. Fix0045 keeps separate debounce wrappers per port; original shared wrapper cancelled earlier ports. Real scheduler/MIDI contract checks full2048ordered offs per port, repeat mid-job, repeat after completion and disconnected port; baseline fails port1zero, candidate4scenarios pass. All482 existing units/integration pass in established isolated snapshot named mosaic. Native test polls100ms chunks to stay under4096snapshot tail, checks complete note0..127/channel1..16/port1..3 off data/order and unchanged navigation, plus no early output before0.9s. Stopped-state fixture only: active/pending notes and full selected-page/button matrix remain explicit obligations. Native candidate artifact /mnt/c/Users/andy/Documents/ChatGPT/monome-emulator/artifacts/c16/panic-candidate-native.json is active D then R; scheduler and full unit evidence in panic-scheduler-candidate.json and panic-full-units.json. Prior36navigation transitions D/R passed. Stakes local MIDI developer utility, proportionate review. Check concrete regressions, per-port cancellation lifetime, scheduler counts, device reconnect references, input/capture false greens and whether fixes fulfill scoped claims. Do not expand into broad refactor or claim full panic/manual release coverage. User explicitly approved sending repository source/delivery/test evidence to external Codex and requested Codex-only Paranoia. Return concrete blockers/minimal remedies.",
+    "files": [
+      {
+        "path": "lib/m_grid.lua",
+        "reason": "Scoped panic fix and regression"
+      },
+      {
+        "path": "lib/m_midi.lua",
+        "reason": "Scoped panic fix and regression"
+      },
+      {
+        "path": "lib/scheduler.lua",
+        "reason": "Scoped panic fix and regression"
+      },
+      {
+        "path": "tests/behaviour/panic_scheduler_contract.lua",
+        "reason": "Scoped panic fix and regression"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Scoped panic fix and regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Scoped panic fix and regression"
+      }
+    ]
+  },
+  "input_sha256": "c490867723aac23ae8ae2f510e2b6eab4b5a58331e2c2d69e46d0b63d2e2dda8",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**0044/0045 fix the two demonstrated panic failures; I found no blocker to those narrow fixes. I reproduced a pre-existing scheduler accounting defect that limits the repeat-completion claim.**\n\n- **Gesture fix is sound:** [m_grid.lua:181](/home/andy/projects/mosaic-behaviour-tests/lib/m_grid.lua:181) expands the range to buttons 3\u20136 and retains selected-button exclusion. Short dispatch is unchanged; long-hold release suppresses it at line 246.\n- **Port isolation is sound:** [m_midi.lua:411](/home/andy/projects/mosaic-behaviour-tests/lib/m_midi.lua:411) retains one debounce closure per port, so restarting one port cannot cancel another. Closures capture the port ID and resolve `midi_devices[id]` on each send; they do not retain an obsolete device object. The disconnected-port test does **not** establish mid-job disconnect/reconnect behavior.\n- **Concrete accounting defect:** [scheduler.lua:94](/home/andy/projects/mosaic-behaviour-tests/lib/scheduler.lua:94) decrements `active_count` even when the previous coroutine is already inactive but awaits cleanup. With four persistent background jobs, I reproduced: first panic completes **4/4 reported/actual**, repeat starts **4/7**, repeat completes **1/4**. This predates these candidates; update dispatch uses `.active`, so this demonstrates inaccurate accounting, not lost MIDI output. Minimal remedy: decrement only when the retained entry is active, and add this background-job scenario to [panic_scheduler_contract.lua:24](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/panic_scheduler_contract.lua:24).\n- **Evidence supports scoped acceptance:** native evidence has now finished\u2014all four controlled/real-time runs passed, with 2048 offs per port. Baseline records confirm `0/0/0` and `0/0/2048`. Source hashes match native and 482-test evidence; I independently reran the four scheduler scenarios successfully. [cases.py:2550](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:2550) checks exact bytes/order, and [midi_window.py:8](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/midi_window.py:8) rejects capture gaps. No concrete input/capture false green found.\n\n**CONFIDENCE: High** for these scoped fixes; active/pending notes, hot reconnect, and the full selected-page/button hold matrix remain unverified, so this is not full manual panic coverage.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a080b4-5813-7d92-ac3e-58df57b1dbbb` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  }
+}

@@ -1,0 +1,26 @@
+diff --git a/lib/config/elektron_syntakt.json b/lib/config/elektron_syntakt.json
+index 133dc73..5750eef 100644
+--- a/lib/config/elektron_syntakt.json
++++ b/lib/config/elektron_syntakt.json
+@@ -1167,10 +1167,6 @@
+ 
+       "cc_min_value": -1,
+       "cc_max_value": 127,
+-      "nrpn_msb": -1,
+-      "nrpn_lsb": -1,
+-      "nrpn_min_value": -1,
+-      "nrpn_max_value": -1,
+       "off_value": -1
+     },
+     {
+@@ -1182,10 +1178,6 @@
+ 
+       "cc_min_value": -1,
+       "cc_max_value": 127,
+-      "nrpn_msb": -1,
+-      "nrpn_lsb": -1,
+-      "nrpn_min_value": -1,
+-      "nrpn_max_value": -1,
+       "off_value": -1
+     }
+   ]

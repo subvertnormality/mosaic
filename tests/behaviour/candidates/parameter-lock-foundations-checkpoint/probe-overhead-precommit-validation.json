@@ -1,0 +1,25 @@
+{
+  "source_revision": "910490d11693569603b193654fea93a518198dac",
+  "dirty_patch_sha256": "a49e90960ec2f042a94bca37d5ecfbb0c1bda9cb76dafcd8119137d0e65b5f77",
+  "command": "python -m unittest -v test_hardware_run_options test_pulse_probe test_hardware_performance test_fixture_migration test_lead_timing_oracle test_probe_overhead",
+  "result": {
+    "ran": 79,
+    "passed": 78,
+    "skipped": 1,
+    "skip_reason": "lua5.3 unavailable"
+  },
+  "suite_collection": {
+    "lua_files": 40,
+    "python_modules": 34,
+    "probe_overhead_registered": true
+  },
+  "file_sha256": {
+    "tests/behaviour/hardware_performance.py": "ee9addea963648d9478f5e92319cce6d39b22389ef5cae09617cd9621c81ad56",
+    "tests/behaviour/real_norns.py": "5913184a6d70ecfebf60148d6c622ae7dcdcef21b96c734d8692413737a434e4",
+    "tests/behaviour/probe_overhead.py": "82a90c0e786a541f5cc37d6533e773ff9f4fc0004131f3d2e8d729f7accee3c0",
+    "tests/behaviour/test_hardware_run_options.py": "604c73cb6204a2047139dd4d7b2f3dc24db113f66cd09126c7b75c3301e354e0",
+    "tests/behaviour/test_probe_overhead.py": "66471e6a729d94bfbfef15a6e00f6eeccc5832fd2329b27d60898d609e1d2e96",
+    "tests/behaviour/suite.py": "18331d6ef922bbb5a1e4eee0d69ffe6aa67fccc40274a699f24ce8e2e14b41ef",
+    ".paranoia-input/run-probe-overhead.py": "a9dd75af1eb075ca537bd7c3084598507803054afaa1327890b676bbe71262a4"
+  }
+}

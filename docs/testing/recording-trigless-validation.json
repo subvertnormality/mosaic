@@ -1,0 +1,128 @@
+{
+  "scope": "Recording eligibility under Trigless Locks",
+  "source_revision": "38859e3 plus recorded working-tree diff",
+  "source_sha256": {
+    "tests/behaviour/cases.py": "12e68de0b9a77d3713e850aae6cb6cfd27fdb26045b7636824f02a226e85d3e2",
+    "tests/behaviour/trig_parameter_interactions.py": "a8bfee36e3b657ac4f8a24007411731048b008b5b0ebf93912657dc5fa16bc56",
+    "tests/behaviour/recording_lifetimes.py": "962f6a2280d1147f9e727c59d443fc43cd31214455c4cda57430c4700758dd47",
+    "tests/behaviour/manual-inventory.json": "9f479142124defc8983c3645259a36629fcbc3b06016fc0d5e8d9cb537b49f48"
+  },
+  "native_behavior": {
+    "M-REC-PARAM-003-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/c447bc31e37d41eb8c63acdd68f9a00f/manifest.json",
+      "sha256": "be61b8478eb3bdb59d3a6e09dac5439864e870fc56ce3f925f189ed3ebd9d769",
+      "case": "M-REC-PARAM-003",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-REC-PARAM-003-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/4be915d034bd427ea416f6ca4f293ff7/manifest.json",
+      "sha256": "00921b25b46cf56858cb525859bb5835dc445f4065f9e35e2e70019e344be840",
+      "case": "M-REC-PARAM-003",
+      "clock_mode": "real-time"
+    },
+    "M-REC-PARAM-028-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/1cff322a2f0b4426b9911a19cf28bd0d/manifest.json",
+      "sha256": "7b93e4bd368a5ed7a7d034abf07ac245aa823920cbc13dbe8f42a3ddda9bba31",
+      "case": "M-REC-PARAM-028",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-REC-PARAM-028-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/70277533690c46498073d0bc534b5310/manifest.json",
+      "sha256": "07b326173100b2e7b4be15aed8a04a033da85a3f5c6c6e98a699f748340fc1ee",
+      "case": "M-REC-PARAM-028",
+      "clock_mode": "real-time"
+    },
+    "M-REC-PARAM-029-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/0f70f87f6a8a44b58fd369cae6a04fd8/manifest.json",
+      "sha256": "7c16080904fc98e5aa2da756f859f72f1ea0d81c4c9b305d8898321752580555",
+      "case": "M-REC-PARAM-029",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-REC-PARAM-029-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/bd93ad3e93664eeba63c270a5192ce1e/manifest.json",
+      "sha256": "3386bc0332bef930a04cc83d8b50b3a0fe886595595392c5cac785aa898b8102",
+      "case": "M-REC-PARAM-029",
+      "clock_mode": "real-time"
+    },
+    "M-REC-PARAM-030-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/5b9b50bd58464969bc15dcae86db1f2b/manifest.json",
+      "sha256": "f2b8b77625985b594b78deb76f80b0dcf630fc3a7327c8a4ee7c87f0d45896c8",
+      "case": "M-REC-PARAM-030",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-REC-PARAM-030-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/32a6d846efc44b2ea93ee3996d3b5a16/manifest.json",
+      "sha256": "493f1bd503182bfbfc8831dd12cd4973af8ca06631a3ef14c88b1d576bbe07b8",
+      "case": "M-REC-PARAM-030",
+      "clock_mode": "real-time"
+    },
+    "M-REC-PARAM-031-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/5bced921c2e94d1da04e1b229b0e3e23/manifest.json",
+      "sha256": "ebe44963d42d6b46054a1486bfc562c05a824c89d467fac829aa26e03ea48ba0",
+      "case": "M-REC-PARAM-031",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-REC-PARAM-031-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/c3cd27fbc2754fa6b71b6b407ecb050f/manifest.json",
+      "sha256": "2ad0991b7422b77f444ac40a9f80e92c8d4f6c944d92ac625989fa11dd0fe792",
+      "case": "M-REC-PARAM-031",
+      "clock_mode": "real-time"
+    },
+    "M-REC-PARAM-005-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/9b4cbd0d3cd34a5f83eace9a24bea4ee/manifest.json",
+      "sha256": "2a38529a5e41b906c2c5804b61c14c46c0e2958dfd061a6d47b5fb4951c60b05",
+      "case": "M-REC-PARAM-005",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-REC-PARAM-005-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/a9cf96ab61e744ef957efed92b6a6128/manifest.json",
+      "sha256": "f3296fc54ca09e1c842dbb44ac43e03736e043ef19d38e2d8b4649a4a5251990",
+      "case": "M-REC-PARAM-005",
+      "clock_mode": "real-time"
+    },
+    "M-REC-PARAM-006-controlled": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/e4ca7eff9cda4bcc85fcdbbcc8c9e795/manifest.json",
+      "sha256": "6961b23cb7c2d5f773987501f1c4483c4183928340537212531a2d0641defe2d",
+      "case": "M-REC-PARAM-006",
+      "clock_mode": "controlled-experimental"
+    },
+    "M-REC-PARAM-006-real": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/3d906c527922458090708ef4f161722e/manifest.json",
+      "sha256": "47c5b5064ab439efebf60a09f5990e9e2f63125bca4f338607e46d8698ab5c6c",
+      "case": "M-REC-PARAM-006",
+      "clock_mode": "real-time"
+    }
+  },
+  "unit_integration": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/recording-trigless-final3-20260910/mosaic",
+    "lua": "530/530",
+    "python_unit_oracles": "100/100",
+    "logs": {
+      "lua": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/recording-trigless-final3-20260910/lua-tests.log",
+        "sha256": "b433d331da9a5b0d3339799ec9e5a13258f9c0f4354d3785c822e674fa1fbc5c"
+      },
+      "python": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/recording-trigless-final3-20260910/python-tests.log",
+        "sha256": "ffb945459d106c43230ccb13d27cd2ce9415ccdb67ab7eaf67a9f434d264e972"
+      },
+      "source_hashes": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/recording-trigless-final3-20260910/source-hashes.json",
+        "sha256": "ec63954c31a39a4d6786d80049371782fb1c2fc024dc9a6997909ecf546db175"
+      }
+    }
+  },
+  "production_change": false,
+  "coverage": [
+    "enabled removed rest records",
+    "disabled removed rest preserves old lock",
+    "disabled probability-zero authored trig records",
+    "Off/On/Off changes during recording",
+    "all ten slots on one rest"
+  ],
+  "shared_helper_regressions": [
+    "zero recording exact input timing",
+    "Off recording emits no immediate or boundary CC"
+  ],
+  "retained_failures": "Recipe, runner, menu, value and timing corrections remain in prior run/log artifacts; no product failure inferred."
+}

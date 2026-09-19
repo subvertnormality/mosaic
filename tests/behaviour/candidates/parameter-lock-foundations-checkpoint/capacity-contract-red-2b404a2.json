@@ -1,0 +1,15 @@
+{
+  "source_revision": "2b404a2",
+  "isolated_worktree": "C:/Users/andy/AppData/Local/Temp/mosaic-capacity-red-2b404a2",
+  "command": "python -m unittest -v test_pulse_probe test_probe_overhead",
+  "log": "capacity-contract-red-2b404a2.log",
+  "tests_run": 25,
+  "failures": 1,
+  "errors": 8,
+  "source_sha256": {
+    "tests/behaviour/pulse_probe.py": "d479d734540e0559070d26ae27813b2236108898246cf5a8a0fbcd7911f102fe",
+    "tests/behaviour/probe_overhead.py": "82a90c0e786a541f5cc37d6533e773ff9f4fc0004131f3d2e8d729f7accee3c0",
+    "tests/behaviour/test_pulse_probe.py": "e3d3850b580782894524df492718bdeda38bd9cfd43ab6637c1930f5c41f76cf",
+    "tests/behaviour/test_probe_overhead.py": "5eda0dccbdd03307597371936136a356ee23014f4dc33e4e910fc2f63d805ad6"
+  }
+}

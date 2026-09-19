@@ -1,0 +1,8 @@
+{
+  "status": "zero-distance-unit-and864-phase-cases-passed",
+  "scope": "Preserve zero-distance no-op; only explicit positive occurrence distance enables a same-label next-loop slide",
+  "patch_sha256": "53dcc22e6588b8ac4f6a73e185853e082d7461b112fb3192d130ed86e441f19d",
+  "full_campaign_complete": false,
+  "phase_log": "/home/andy/projects/mosaic-behaviour-runs/slide-explicit-occurrence-phases.log",
+  "unit_artifact": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-0e004e9dd35d43a6a91906e712c6ac75/results.json"
+}

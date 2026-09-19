@@ -1521,7 +1521,7 @@ function test_note_merge_modes_average()
 end
 
 
-function test_velocity_merge_modes_up()
+function test_velocity_merge_modes_up_first_variant()
   setup()
   local song_pattern = 1
   program.set_selected_song_pattern(1)
@@ -1661,7 +1661,7 @@ function test_velocity_merge_modes_up()
 end
 
 
-function test_velocity_merge_modes_up()
+function test_velocity_merge_modes_up_second_variant()
   setup()
   local song_pattern = 1
   program.set_selected_song_pattern(1)

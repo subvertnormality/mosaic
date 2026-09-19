@@ -1,0 +1,97 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-007",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0e032ffe9c8c440980a9eac39d35925c/manifest.json",
+      "sha256": "2460807b922d602792558b4d3663804adaafd66f57fab9d3c84159fb356bad96",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-008",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7e6988f2765744d480a6b873925ca168/manifest.json",
+      "sha256": "f6bc356d4beae9a08a1a0e38189d423cea070fe4cd12f15ef1dd382353b0bc47",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-009",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/0f34adda729744208dba35f628f62033/manifest.json",
+      "sha256": "c1ba48987cdf6b7d8e2ab3e6f8a091283f06bc4eb09281fbe901f52ab18a7e77",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-010",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/44559881ee2a4cc7942e83947c3a5185/manifest.json",
+      "sha256": "cb0413eef9c7456b5c6b24a36c91b075b5afb469a7f19c616771eb4bf6eeac0d",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-006",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/8424fe43e14e472ebd78dd8f32a48e63/manifest.json",
+      "sha256": "4d89c2e23f1ea0ecf6e5ea5b75e9e6afb76959dc0553659906e4953bc58b806f",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-007",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/a9afd17a9fe8432986aa5aa4945d7340/manifest.json",
+      "sha256": "3a0e6dece87b9d01272c37bc305520749761618594c325380e1ea968b1b99cbc",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-008",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/b6f0d28b3cd14eebaa65937b553944c3/manifest.json",
+      "sha256": "56b8fadc8c048bcaa56e9e468d846a49fb6fa6608edffce3b2e38e36572b4cc7",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-009",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e5b91a2745564628bb05e26708734eb7/manifest.json",
+      "sha256": "23f0b977a4cf6f694cf1fca3080e497a2b30246ff7b848fc85fff6a88aedcc28",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-010",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/29334e8398f14c4db6368fdc00f2665f/manifest.json",
+      "sha256": "6b1aaeb81f81c348589e07b5ccde26dc007a692274b4debca6062e768906e089",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-006",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/9db29397f58a48318646000f86e37f75/manifest.json",
+      "sha256": "3263d1e2fab1680fd599ef9f96b43a12e583432a86b4189ed0d97d496504eabe",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "review_basis": "01a08515-bc01-76e1-ba40-aebd4c68adb7",
+  "defaults": {
+    "note": 67,
+    "velocity": 50,
+    "length": 2,
+    "chord_offset": 2
+  },
+  "assertions": [
+    "Nonempty channel defaults survive held-step K2 and channel K1+K2",
+    "Conflicting adjacent-step overrides clear independently",
+    "Held-step shift-clear preserves neighbouring override",
+    "Exact MIDI pitches, velocities, chord voices, durations and phrase spacing",
+    "Three captured cycles allow first two complete duration cycles even with overlapping long defaults",
+    "Existing empty-default chord case remains unchanged"
+  ],
+  "limitations": [
+    "Trig-default silence and second-channel isolation remain pending",
+    "Other chord slots, boundary steps and recorded masks remain separate",
+    "Full manual/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

@@ -1,0 +1,367 @@
+{
+  "purpose": "diagnostic smoke only, not the interleaved qualification campaign",
+  "capture_boundary": "Lua before original _norns.midi_send",
+  "source": "e7edad3c81e43ed74146cab65f1f36d55960a6ae",
+  "qualification_eligible": false,
+  "probe_overhead_qualified": false,
+  "restoration_verified": true,
+  "windows": [
+    {
+      "probe_mode": "off",
+      "window": 1,
+      "passed_existing_dispatch_gates": true,
+      "step_jitter": {
+        "p50_ns": 311513,
+        "p95_ns": 873511,
+        "p99_ns": 7784231,
+        "maximum_ns": 7784231
+      },
+      "timing": {
+        "p50_ns": 1112154,
+        "p95_ns": 1664270,
+        "p99_ns": 6422314,
+        "maximum_ns": 6422314
+      },
+      "cpu_percent": 33.644605147279236
+    },
+    {
+      "probe_mode": "off",
+      "window": 2,
+      "passed_existing_dispatch_gates": true,
+      "step_jitter": {
+        "p50_ns": 377305,
+        "p95_ns": 1206233,
+        "p99_ns": 7952679,
+        "maximum_ns": 7952679
+      },
+      "timing": {
+        "p50_ns": 2936666,
+        "p95_ns": 3549742,
+        "p99_ns": 4739221,
+        "maximum_ns": 4739221
+      },
+      "cpu_percent": 34.31580630649025
+    },
+    {
+      "probe_mode": "pulse-v1",
+      "window": 1,
+      "passed_existing_dispatch_gates": true,
+      "step_jitter": {
+        "p50_ns": 541735,
+        "p95_ns": 2518489,
+        "p99_ns": 6028505,
+        "maximum_ns": 6028505
+      },
+      "timing": {
+        "p50_ns": 1056195,
+        "p95_ns": 1892627,
+        "p99_ns": 4135878,
+        "maximum_ns": 4135878
+      },
+      "cpu_percent": 39.17596651070355,
+      "probe": {
+        "schema_version": 1,
+        "capacity": 65536,
+        "count": 27322,
+        "span_counts": {
+          "delayed_group_dispatch": 7963,
+          "delay_callback": 765,
+          "midi_write": 348,
+          "parameter_resolution": 1312,
+          "note_production": 1312,
+          "pulse": 1961
+        },
+        "duration_seconds": {
+          "delayed_group_dispatch": {
+            "count": 7963,
+            "p50": 4.482269287109375e-05,
+            "p95": 0.00010514259338378906,
+            "p99": 0.00023484230041503906,
+            "maximum": 0.0004940032958984375
+          },
+          "delay_callback": {
+            "count": 765,
+            "p50": 0.0009579658508300781,
+            "p95": 0.0013728141784667969,
+            "p99": 0.0016720294952392578,
+            "maximum": 0.0023920536041259766
+          },
+          "midi_write": {
+            "count": 348,
+            "p50": 0.0001480579376220703,
+            "p95": 0.0004341602325439453,
+            "p99": 0.0005731582641601562,
+            "maximum": 0.000659942626953125
+          },
+          "parameter_resolution": {
+            "count": 1312,
+            "p50": 0.000164031982421875,
+            "p95": 0.0002570152282714844,
+            "p99": 0.00043201446533203125,
+            "maximum": 0.000553131103515625
+          },
+          "note_production": {
+            "count": 1312,
+            "p50": 0.00015687942504882812,
+            "p95": 0.0002779960632324219,
+            "p99": 0.00043201446533203125,
+            "maximum": 0.0015110969543457031
+          },
+          "pulse": {
+            "count": 1961,
+            "p50": 0.00038909912109375,
+            "p95": 0.0013070106506347656,
+            "p99": 0.013004064559936523,
+            "maximum": 0.01544189453125
+          }
+        },
+        "lateness_seconds": {
+          "delayed_group_dispatch": {
+            "count": 7963,
+            "p50": 0.0006639957427978516,
+            "p95": 0.0027430057525634766,
+            "p99": 0.01047205924987793,
+            "maximum": 0.260390043258667
+          },
+          "delay_callback": {
+            "count": 765,
+            "p50": 0.00023818016052246094,
+            "p95": 0.0011980533599853516,
+            "p99": 0.009490966796875,
+            "maximum": 0.2603471279144287
+          }
+        }
+      },
+      "deadline_correlation": {
+        "diagnostic_only": true,
+        "classes": {
+          "during_pulse_work": {
+            "count": 1206,
+            "lateness_seconds": {
+              "count": 1206,
+              "p50": 0.0006630420684814453,
+              "p95": 0.0012459754943847656,
+              "p99": 0.0014297962188720703,
+              "maximum": 0.0017290115356445312
+            }
+          },
+          "between_pulses": {
+            "count": 6744,
+            "lateness_seconds": {
+              "count": 6744,
+              "p50": 0.0006639957427978516,
+              "p95": 0.003834962844848633,
+              "p99": 0.012423992156982422,
+              "maximum": 0.260390043258667
+            }
+          },
+          "outside_capture": {
+            "count": 13,
+            "lateness_seconds": {
+              "count": 13,
+              "p50": 0.0008401870727539062,
+              "p95": 0.0011739730834960938,
+              "p99": 0.0011739730834960938,
+              "maximum": 0.0011739730834960938
+            }
+          },
+          "deadline_unavailable": {
+            "count": 0,
+            "lateness_seconds": null
+          }
+        },
+        "limitation": "Overlap is association only; probe overhead and dispatch-to-wire delay are not removed."
+      }
+    },
+    {
+      "probe_mode": "pulse-v1",
+      "window": 2,
+      "passed_existing_dispatch_gates": true,
+      "step_jitter": {
+        "p50_ns": 501287,
+        "p95_ns": 2477273,
+        "p99_ns": 4468441,
+        "maximum_ns": 4468441
+      },
+      "timing": {
+        "p50_ns": 335758,
+        "p95_ns": 813093,
+        "p99_ns": 4033266,
+        "maximum_ns": 4033266
+      },
+      "cpu_percent": 36.1695559369659,
+      "probe": {
+        "schema_version": 1,
+        "capacity": 65536,
+        "count": 29990,
+        "span_counts": {
+          "delayed_group_dispatch": 9224,
+          "delay_callback": 827,
+          "midi_write": 359,
+          "parameter_resolution": 1312,
+          "note_production": 1312,
+          "pulse": 1961
+        },
+        "duration_seconds": {
+          "delayed_group_dispatch": {
+            "count": 9224,
+            "p50": 4.410743713378906e-05,
+            "p95": 0.00010418891906738281,
+            "p99": 0.00032806396484375,
+            "maximum": 0.0007078647613525391
+          },
+          "delay_callback": {
+            "count": 827,
+            "p50": 0.0009720325469970703,
+            "p95": 0.0014200210571289062,
+            "p99": 0.0017440319061279297,
+            "maximum": 0.007941007614135742
+          },
+          "midi_write": {
+            "count": 359,
+            "p50": 0.00016999244689941406,
+            "p95": 0.0003638267517089844,
+            "p99": 0.0005860328674316406,
+            "maximum": 0.0006449222564697266
+          },
+          "parameter_resolution": {
+            "count": 1312,
+            "p50": 0.00016188621520996094,
+            "p95": 0.00026702880859375,
+            "p99": 0.00045299530029296875,
+            "maximum": 0.0005850791931152344
+          },
+          "note_production": {
+            "count": 1312,
+            "p50": 0.00015091896057128906,
+            "p95": 0.00026702880859375,
+            "p99": 0.0004589557647705078,
+            "maximum": 0.0006439685821533203
+          },
+          "pulse": {
+            "count": 1961,
+            "p50": 0.00037789344787597656,
+            "p95": 0.001645803451538086,
+            "p99": 0.012797832489013672,
+            "maximum": 0.016474008560180664
+          }
+        },
+        "lateness_seconds": {
+          "delayed_group_dispatch": {
+            "count": 9224,
+            "p50": 0.0006542205810546875,
+            "p95": 0.004247903823852539,
+            "p99": 0.015271902084350586,
+            "maximum": 0.3830411434173584
+          },
+          "delay_callback": {
+            "count": 827,
+            "p50": 0.00023794174194335938,
+            "p95": 0.0012259483337402344,
+            "p99": 0.0114898681640625,
+            "maximum": 0.3829970359802246
+          }
+        }
+      },
+      "deadline_correlation": {
+        "diagnostic_only": true,
+        "classes": {
+          "during_pulse_work": {
+            "count": 2130,
+            "lateness_seconds": {
+              "count": 2130,
+              "p50": 0.0006389617919921875,
+              "p95": 0.0014460086822509766,
+              "p99": 0.0016739368438720703,
+              "maximum": 0.0020170211791992188
+            }
+          },
+          "between_pulses": {
+            "count": 7081,
+            "lateness_seconds": {
+              "count": 7081,
+              "p50": 0.0006589889526367188,
+              "p95": 0.007855892181396484,
+              "p99": 0.017200946807861328,
+              "maximum": 0.3830411434173584
+            }
+          },
+          "outside_capture": {
+            "count": 13,
+            "lateness_seconds": {
+              "count": 13,
+              "p50": 0.0005810260772705078,
+              "p95": 0.0008330345153808594,
+              "p99": 0.0008330345153808594,
+              "maximum": 0.0008330345153808594
+            }
+          },
+          "deadline_unavailable": {
+            "count": 0,
+            "lateness_seconds": null
+          }
+        },
+        "limitation": "Overlap is association only; probe overhead and dispatch-to-wire delay are not removed."
+      }
+    }
+  ],
+  "analysis_source_sha256": "a8f66909892aac7a7521ec3f6051f28ebf0f08c1dcd03511b63cdc71fa9bb439",
+  "limitations": [
+    "Two windows per mode, ordered off/off/on/on: not randomized/interleaved or the ten-window campaign.",
+    "Observed p95 jitter changes exceed 0.25 ms; no causal interpretation of instrumented traces.",
+    "Captured startup/stop tails remain in raw diagnostic distributions; no post-hoc exclusions.",
+    "No receiver-side capture or calibration exists."
+  ],
+  "raw_artifact_root": "tests/behaviour/artifacts/lock-lead/e7edad3/legacy-delay-v1/smoke-20260918",
+  "raw_artifact_sha256": {
+    "DONE": "f439a4d2bfc58021085346c2e6ccf4bd5728c7b62672430c93af5aea6ff4665f",
+    "fixture-off/autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5",
+    "fixture-off/autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+    "fixture-off/fixture.json": "2b5400a44c3f0010df073802ed7ae859a8043d7371db5ab673308e460c1bfc85",
+    "fixture-pulse-v1/autosave.pset": "9176e820672c5148ac1e66f7b99641370ac96c6c8cba81334e3118638c0954a5",
+    "fixture-pulse-v1/autosave.ptn": "06e92459a61994a0dcac98366253d5586cd9a4388ee4b45cfc03d8289199fad0",
+    "fixture-pulse-v1/fixture.json": "4077583d6582e5613a51320d7bb725a05e6d461d234a6062f709f52365f6fe9a",
+    "manifest.json": "4b2ee10d8b3be91da2666a237b93dd55b26d027dad7152590d5fdf1b9090270b",
+    "off/installed-after.sha256": "1e19e8465bcf606b6ae00f65b1ce3c841feea6cd09e9cbb969274d677d8cd860",
+    "off/installed-before.sha256": "33709443e2d811b6885c15d2732137798b63409afcffabfeebaee63bf789e8eb",
+    "off/load.log": "2a298cff597120c511ee18e8aa248ee9f8c21c537fe78b577679c3f9f1b17931",
+    "off/performance-raw-window-1.json": "96c32a56c7caffd69694338b5a4c112813f550adbfa90e4023eaba4690eb1d36",
+    "off/performance-raw-window-2.json": "96495d0fc9a8cf970ba2547a39c3933e3026b124bca7c93fe606be657c56277a",
+    "off/performance.json": "84e27a96c762173c81836df843721fcced12e4be0b56cf055b826eeb3b55f1bc",
+    "off/preflight.json": "6f360926c3e2e8669e89dfd581b94d956e8b4890869827f1643af907053fa915",
+    "off/probe.log": "c2a48372cf648fd3b4dc0131f54f1af9ea8fe3b7e622fe15d2470267342b289b",
+    "off/run.json": "5a26945cebc9bd6ce53835d206e4d54e8766a964ff4507d06cf9fabbf8454be3",
+    "off/runtime.log": "2da632244f85c931832b0177396f5d00d55232ba02eb933f61f8ed7736cfb4ac",
+    "off/source.sha256": "15859de2b074fd2196b5e398b9cff6e7624f3af225a69693d27db5250772fe51",
+    "off/tempo.json": "76e166d5f47ad4b9a2f9a7d29bb7cc80fe626ff7b6cf159dd920becac4aeb30e",
+    "off-restore/probe.log": "c2a48372cf648fd3b4dc0131f54f1af9ea8fe3b7e622fe15d2470267342b289b",
+    "off-restore/run.json": "e88d3e014be5b58324487b4284f3532d06b79e04f99d07776f79e5f7c1d48d02",
+    "off-restore/stock-clock-errors.json": "4eed9e803c8b85e413bafca781a056d9821501f8aa646a127648efa68aeeba26",
+    "off-restore.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "off-restored-bindings.txt": "8bb0ff6a7c3a99ab38c4fba761d640ffd1da2afe2aa193546c000470249c9a05",
+    "off-restored-state.txt": "1eb4617521468f1537080753df53b6d416e70918dcef559f4f7666c088b6c42a",
+    "off-summary.json": "eb94b7c7be07eb5db28c9ceedb5bb74a6d15447db59ea80482346b28b1d7515a",
+    "off.log": "bc7cc8b4da5052d06e588968607a36038473bf2f19cf6101962c6233d8aa97c7",
+    "pulse-v1/installed-after.sha256": "1e19e8465bcf606b6ae00f65b1ce3c841feea6cd09e9cbb969274d677d8cd860",
+    "pulse-v1/installed-before.sha256": "33709443e2d811b6885c15d2732137798b63409afcffabfeebaee63bf789e8eb",
+    "pulse-v1/load.log": "3f491497e5a928d28dbdde1425d0d62ff0c56d4b397c87e2dcae9a2e46d26708",
+    "pulse-v1/performance-raw-window-1.json": "8df93fde666547be645bc2230c685a0708b339297189412d30e555324a0bd07c",
+    "pulse-v1/performance-raw-window-2.json": "c8208912a251995175325f9490635fe0d5b3be9752eb283b55ff5e12d3531aab",
+    "pulse-v1/performance.json": "c56b2fcf5d941fff8ac6fa6eeb2d39dfbaa8a71ddb8de97ee0bc74f254363b27",
+    "pulse-v1/preflight.json": "6f360926c3e2e8669e89dfd581b94d956e8b4890869827f1643af907053fa915",
+    "pulse-v1/probe.log": "c2a48372cf648fd3b4dc0131f54f1af9ea8fe3b7e622fe15d2470267342b289b",
+    "pulse-v1/pulse-probe-replies.json": "fd3ca5e7b2f8d7938c4d34b34843801a08163999943730b00ff8077ad5901993",
+    "pulse-v1/run.json": "5ecbd5b9021b617884d6bd80374a548b4f93d0039df750b35b75a45dd0179099",
+    "pulse-v1/runtime.log": "1fe92235f84825a9cdb521a18d41084d3866a67900453714a73d6b1a908d15ae",
+    "pulse-v1/source.sha256": "15859de2b074fd2196b5e398b9cff6e7624f3af225a69693d27db5250772fe51",
+    "pulse-v1/tempo.json": "76e166d5f47ad4b9a2f9a7d29bb7cc80fe626ff7b6cf159dd920becac4aeb30e",
+    "pulse-v1-restore/probe.log": "c2a48372cf648fd3b4dc0131f54f1af9ea8fe3b7e622fe15d2470267342b289b",
+    "pulse-v1-restore/run.json": "9616e30f7e1a5fa84c7c5704401892fc77fb7bfb7a6d227dee694f4591f841d4",
+    "pulse-v1-restore/stock-clock-errors.json": "839a8d1bb7b009d69838b1e9fc52ef065aa510467e3ad56851b58653bc17d41c",
+    "pulse-v1-restore.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "pulse-v1-restored-bindings.txt": "3514ad2acd17193835f51eeb61b3cb83cae7153a34f13f03a9caa5534700d9b5",
+    "pulse-v1-restored-state.txt": "1eb4617521468f1537080753df53b6d416e70918dcef559f4f7666c088b6c42a",
+    "pulse-v1-summary.json": "eb94b7c7be07eb5db28c9ceedb5bb74a6d15447db59ea80482346b28b1d7515a",
+    "pulse-v1.log": "60d0b96a4267029917c22da2ea9f07a78ccad4ed797e0b3d824faa11887c2dc4"
+  }
+}

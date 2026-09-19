@@ -1,0 +1,14 @@
+{
+  "baseline_failure": "artifacts/c08/b5dd3ad8de1a4edbb5b45bb4378b2433/manifest.json",
+  "status": "isolated-candidate",
+  "files": [
+    {
+      "path": "fixtures/apps/mosaic-patches/0005-pattern-length-cutoff.patch",
+      "sha256": "24085f213aa56adc5e9fd8c57bcda8fd3ea9b5a3440167c1dd215183797066a5",
+      "kind": "patch"
+    }
+  ],
+  "name": "pattern-length-cutoff",
+  "schema_version": 1,
+  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff"
+}

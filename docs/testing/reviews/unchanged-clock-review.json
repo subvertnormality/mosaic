@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Focused follow-up to Codex review01a07e84-1d22-7121-af6d-0eea2375fa81. Trusted local MIDI development tool, no hardware/manual acceptance or financial-critical stakes. Use Codex only and do not edit source.\n\nCandidate0026 now passes474 existing units,64 actual-step reset-decision cases and16 actual-step/lattice integration cases (simultaneous /9,/17 clocks over three boundaries). Native integer ratios through /16 pass both modes. Slow controlled ratios now pass through /128 after correcting a test snapshot-tail collection bug; original failures retained. Native reset-menu combinations pass controlled time. Real-time reset/collector reruns, actual song transitions and fuller pending-voice validation remain required.\n\nYour fractional-clock concern revealed a second isolated defect. Actual sequence-end alignment reapplies unchanged swing/shuffle type, feel and basis. These setters call update_shuffle and consume ppqn_error even without a value change. M-TIME-004 at x16 fails controlled native run8c4deebf728c40c6bb4a535d0c6c042b: a two-step rational window differs by one pulse at a boundary. A real lattice contract reproduces this with unchanged setters; its no-setter control passes. Candidate0027 makes unchanged normalized type/feel/basis and unchanged division return early. Changed values retain the existing path. All42 ratio/setter traces now pass. Both production patches remain separately recorded.\n\nFractional oracle: at96PPQN each step is24 pulses times the selected rate ratio. For each fractional period N/D, every inter-onset interval must be floor(N/D) or ceil(N/D) native pulses; every rolling D-interval window must total N pulses; overall ideal phase stays within one pulse plus the existing lane tolerance. This does not derive rounding phase or expected MIDI from the implementation. It tests all seven fractional ratios, same-pitch C60 retriggers with four distinct velocities, first through post-fourth global boundary notes, one-step releases coincident with the next onset and strictly ordered before same-pitch retrigger. Controlled tolerance remains2ns; real-time remains10ms. Controlled native runbd2fdff74e014f5295f303c8d29aa191 passes all seven ratios.\n\nThe prior real-time fractional runb35b8162bf434ceeb69e79acc17a7783 also has a29.7ms gap at0.884s, before the first boundary. Its cause is unproven and retained as a separate reliability follow-up; do not attribute it to0027 or claim it fixed. The test collector now gathers bounded snapshots incrementally and rejects index gaps, order changes, dropped counts and backwards counts; seven targeted collector tests pass. Complete raw MIDI remains in native logs.\n\nIs candidate0027 the correct minimal unchanged-setting fix, and is this rational-window oracle sound and sufficiently independent for the declared MIDI clock behavior? Identify concrete substantive gaps or unintended consequences, especially setters that change an inactive modulation field, transition phase and delayed-note ordering. Distinguish acceptance-blocking defects in these candidates/oracles from the still-required campaign tests. Do not request a broad new governance campaign or waive outstanding tests. Give cited reasoning and confidence.",
+    "files": [
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Unchanged-setting guards and fractional rounding state"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Sequence boundary alignment and reset predicate"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Independent native timing oracles"
+      },
+      {
+        "path": "tests/behaviour/unchanged_clock_contract.lua",
+        "reason": "Real lattice rational-window contract"
+      },
+      {
+        "path": "tests/behaviour/midi_window.py",
+        "reason": "Loss-detecting public-snapshot collection"
+      }
+    ]
+  },
+  "input_sha256": "4acbf1a602e8002c414d7dcfa7d783e111d92a6d7e251faa8a4f1ce06d352745",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**Yes\u20140027 is a correct minimal fix for reapplying identical normalized settings. The rational-window oracle is sound and independent for steady, unmodulated fractional clocks, but it does not establish complete transition or delayed-voice correctness.** I found one reproducible remaining timing defect and one substantive release-oracle blind spot.\n\n- **The guards address the actual cause.** `update_shuffle()` advances `ppqn_error` and can rescale phase every time it runs ([m_lattice.lua:480](<mosaic-worktree>/lib/clock/m_lattice.lua:480)). The new equality guards prevent those side effects; changed values retain their previous paths. Unchanged swing and amount need no equivalent guard because their setters do not call `update_shuffle()` ([m_lattice.lua:424](<mosaic-worktree>/lib/clock/m_lattice.lua:424)). I reran all 42 lattice traces, 64 reset-decision cases, 16 integration cases and seven collector tests successfully.\n\n- **Changing an inactive field still breaks timing.** At x16, with swing mode active, I changed only shuffle feel from 1 to 2 at pulse 1536. Onsets at **1535, 1536, 1537** produce a two-interval window of **2 pulses instead of 3**; changing basis reproduces it, while the no-setter control passes. These setters still call `update_shuffle()` even though swing mode ignores both fields ([m_lattice.lua:434](<mosaic-worktree>/lib/clock/m_lattice.lua:434), [m_lattice.lua:464](<mosaic-worktree>/lib/clock/m_lattice.lua:464)). Actual song transitions apply those fields ([step.lua:1052](<mosaic-worktree>/lib/step.lua:1052)). This is a **retained defect, not a regression introduced by 0027**: it blocks claiming continuity when only inactive settings differ, but does not invalidate the narrow unchanged-setting patch.\n\n- **The timing oracle is sufficiently independent within its scope.** It specifies rational pulse periods directly and checks adjacent floor/ceiling intervals, every denominator-sized window and bounded cumulative phase; it never reads the implementation\u2019s accumulator or rounding decisions ([cases.py:785](<mosaic-worktree>/tests/behaviour/cases.py:785)). This permits different rounding phases while detecting boundary corruption. Its phase origin is the first observed onset, so it does **not** verify absolute transport-start alignment. Also, 10ms exceeds one native pulse here (6.94ms): real-time passes establish the declared tolerance, not exact pulse allocation.\n\n- **The release oracle can miss a voice-cutting extra note-off.** It finds one matching release per onset and checks that release precedes the next retrigger, but never rejects additional releases ([cases.py:807](<mosaic-worktree>/tests/behaviour/cases.py:807)). An otherwise correct trace with an extra C60 note-off immediately *after* retrigger can pass. Require complete release accounting and voice-state ordering before accepting the oracle as proof of same-pitch release correctness. This is an **oracle acceptance gap**, not evidence that 0027 generates extra releases.\n\n- **Transition and broader pending-note tests remain required.** The integration harness stubs division changes and all modulation alignment; pending callbacks are exercised only with resets disabled ([conditional_realign_integration.lua:21](<mosaic-worktree>/tests/behaviour/conditional_realign_integration.lua:21), [line 44](<mosaic-worktree>/tests/behaviour/conditional_realign_integration.lua:44)). Changed divisions rescale phase, and resets explicitly replace phase and rounding state. Constant-period windows must therefore be segmented using an explicit transition expectation. Actual song transitions, reset-path pending voices, delayed onsets and real-time collector/reset reruns remain campaign work. Git history places release-before-onset handling in `16a1c74`, predating these candidates.\n\n**Confidence: High** on the patch and reproduced gaps; I did not independently replay the cited native runs or verify the cause of the retained 29.7ms gap, which remains unresolved and cannot be credited to 0027.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07eb3-dbf1-7eb1-aa0c-f11c4d4594e0` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "ff4582e678352b9f5c620d321e52250c53b8561269214f5ea1d813e2ca773db5",
+    "redaction": "Local absolute paths replaced with symbolic workspace names; complete original retained in local evidence."
+  }
+}

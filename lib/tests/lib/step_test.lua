@@ -574,21 +574,23 @@ function test_random_notes_with_arp_and_strum_pattern()
   
   m_clock.init()
   m_clock:start()
-  
-  -- Should play highest note first
-  local note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 69) -- A (fifth)
-  
-  progress_clock_by_beats(1)
-  
-  note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 65) -- F (third)
-  
-  progress_clock_by_beats(1)
-
-  note_on_event = table.remove(midi_note_on_events, 1)
-  luaunit.assert_equals(note_on_event[1], 62) -- D (root)
+  -- Decision01a07f50: muted and empty slots consume their full interval.
+  local expected = {{8,69,100}, {12,65,100}, {16,62,100}}
+  local next_event = 1
+  for pulse = 0, 24 do
+    if pulse > 0 then m_clock.get_clock_lattice():pulse() end
+    local wanted = expected[next_event]
+    if wanted and wanted[1] == pulse then
+      local event = table.remove(midi_note_on_events, 1)
+      luaunit.assert_not_nil(event, "Missing rest-contract note at pulse " .. pulse)
+      luaunit.assert_equals({event[1],event[2],event[3]}, {wanted[2],wanted[3],1})
+      next_event = next_event + 1
+    end
+    luaunit.assert_equals(#midi_note_on_events,0,"Unexpected note in slot at pulse " .. pulse)
+  end
+  luaunit.assert_equals(next_event,#expected+1)
 end
+
 
 function test_random_notes_with_note_mask_and_chords()
   setup()
@@ -1318,20 +1320,19 @@ function test_step_param_processing_on_sequencer_start()
       local current_step = program.get_current_step_for_channel(1)
       for _, event in ipairs(midi_cc_events) do
 
-        -- Check wrap behavior (step 64 should fire step 1's CC)
-        if current_step == 64 and event[2] == 64 then
-          found_wrap = true
-        end
-        -- Check look-ahead behavior (step 1 should fire step 2's CC)
+        -- Parameter values belong to the resolved step, including wrap.
         if current_step == 1 then
-          luaunit.assert_equals(event[2], 100, "Step 1 should fire step 2's CC (100)")
+          luaunit.assert_equals(event[2], 64, "Step 1 must apply its own CC (64)")
+          found_wrap = true
+        elseif current_step == 2 then
+          luaunit.assert_equals(event[2], 100, "Step 2 must apply its own CC (100)")
         end
       end
       midi_cc_events = {}
     end
   end
   
-  luaunit.assert_true(found_wrap, "Should see step 1's CC (64) at step 64 during wrap")
+  luaunit.assert_true(found_wrap, "Should see step 1's CC (64) on returning to step 1")
 end
 
 function test_note_mask_with_chords_no_scale_degree_effect()
@@ -1685,4 +1686,407 @@ function test_note_mask_with_chords_and_arp_no_scale_degree_effect_due_to_param_
 
   note_on_event = table.remove(midi_note_on_events, 1)
   luaunit.assert_equals(note_on_event[1], 67) -- G4 (C4 + 7 semitones)
+end
+
+
+function test_quantised_fixed_note_upper_boundary_through_step()
+  setup()
+  local scale = quantiser.get_scales()[4]
+  program.set_scale(1, {number=4, scale=scale.scale,
+    pentatonic_scale=scale.pentatonic_scale, chord=1, root_note=9})
+  local p = program.initialise_default_pattern()
+  p.note_values[1]=0; p.lengths[1]=1; p.trig_values[1]=1; p.velocity_values[1]=100
+  program.get_song_pattern(1).patterns[1]=p
+  fn.add_to_set(program.get_song_pattern(1).channels[1].selected_patterns,1)
+  params:set("midi_device_params_channel_1_3",127)
+  pattern.update_working_patterns()
+  step.handle(1,1)
+  local event=table.remove(midi_note_on_events,1)
+  luaunit.assert_equals(event[1],125)
+  luaunit.assert_equals(event[2],100)
+  luaunit.assert_equals(event[3],1)
+end
+
+function test_quantised_fixed_legal_pitch_domain_independent_intervals()
+  setup()
+  -- Explicit music-theory intervals; neither expected scales nor nearest-note
+  -- selection use the implementation under test or captured MIDI.
+  local intervals={
+    {0,2,4,5,7,9,11},{0,2,4,5,7,8,11},{0,2,3,5,7,8,10},
+    {0,2,3,5,7,8,11},{0,2,3,5,7,9,11},{0,2,3,5,7,9,10},
+    {0,1,3,5,7,8,10},{0,2,4,6,7,9,11},{0,2,4,5,7,9,10},
+    {0,1,3,5,6,8,10}}
+  for index, degrees in ipairs(intervals) do
+    for root=0,11 do
+      local scale=quantiser.get_scales()[index]
+      program.set_scale(1,{number=index,scale=scale.scale,
+        pentatonic_scale=scale.pentatonic_scale,chord=1,root_note=root})
+      local legal={}
+      for octave=0,10 do
+        for _,degree in ipairs(degrees) do
+          local pitch=root+12*octave+degree
+          if pitch<=127 then legal[#legal+1]=pitch end
+        end
+      end
+      for input=0,127 do
+        local expected=legal[1]
+        for _,pitch in ipairs(legal) do
+          if math.abs(pitch-input)<math.abs(expected-input) then expected=pitch end
+        end
+        luaunit.assert_equals(quantiser.snap_to_scale(input,1,nil,true),expected)
+      end
+    end
+  end
+end
+
+
+function test_live_parameter_recording_guard_channel_and_slot_isolation()
+  setup()
+  local old_recorder=recorder
+  recorder={trig_lock_is_dirty=function(channel,slot)
+    return (channel==1 or channel==2) and slot==1
+  end}
+  local ok,err=pcall(function()
+    for c=1,2 do
+      local channel=program.get_channel(1,c)
+      channel.trig_lock_params={}
+      program.get().devices[c].midi_channel=c
+      for slot=1,(c==1 and 2 or 1) do
+        local id="record_guard_"..c.."_"..slot
+        channel.trig_lock_params[slot]={id=id,param_id=id,type="midi",cc_msb=slot,cc_min_value=0,cc_max_value=127,off_value=-1}
+        params:set(id,64)
+        program.add_step_param_trig_lock_to_channel(channel,1,slot,c==1 and slot*24 or 96)
+      end
+    end
+    local one=program.get_channel(1,1)
+    local two=program.get_channel(1,2)
+    program.get().selected_channel=1;params:set("record",2)
+    midi_cc_events={};step.process_params(one,1);step.process_params(two,1)
+    luaunit.assert_equals(midi_cc_events,{{2,48,1},{1,96,2}})
+    -- Dirty flags retained on another channel must not suppress its playback.
+    program.get().selected_channel=2
+    midi_cc_events={};step.process_params(one,1);step.process_params(two,1)
+    luaunit.assert_equals(midi_cc_events,{{1,24,1},{2,48,1}})
+    params:set("record",1)
+    midi_cc_events={};step.process_params(one,1);step.process_params(two,1)
+    luaunit.assert_equals(midi_cc_events,{{1,24,1},{2,48,1},{1,96,2}})
+  end)
+  recorder=old_recorder
+  if not ok then error(err) end
+end
+
+
+function test_recorded_midi_output_uses_dirty_action_and_preserves_off_slide()
+  setup()
+  -- Test includes create distinct modules; spy on the actual clock dependency.
+  local dependency_clock
+  for i=1,20 do
+    local name,value=debug.getupvalue(step.process_recording_params,i)
+    if name=="m_clock" then dependency_clock=value;break end
+  end
+  assert(dependency_clock)
+  local old_recorder,old_cancel=recorder,dependency_clock.cancel_spread_actions_for_channel_trig_lock
+  local dirty={[1]=0,[2]=-1,[3]=253,[4]=false,[5]=64,[6]=200}
+  recorder={trig_lock_is_dirty=function(_,slot)return dirty[slot] end}
+  local sent,cancelled={},{}
+  dependency_clock.cancel_spread_actions_for_channel_trig_lock=function(c,slot)
+    cancelled[#cancelled+1]={c,slot}
+  end
+  local ok,err=pcall(function()
+    local channel=program.get_channel(1,1)
+    channel.trig_lock_params={
+      {type="midi",param_id="out1",cc_msb=1,off_value=-1},
+      {type="midi",param_id="out2",cc_msb=2},
+      {type="midi",param_id="out3",nrpn_msb=4,nrpn_lsb=5},
+      {type="midi",param_id="out4",cc_msb=4},
+      {type="midi",param_id="out5",id="fixed_note"},
+      {type="midi",param_id="out6",cc_msb=6,off_value=200}}
+    for i=1,6 do
+      local slot=i;params:set("out"..i,65)
+      params:lookup_param("out"..i).action=function(value)sent[#sent+1]={slot,value} end
+    end
+    program.get().selected_channel=1;params:set("record",2)
+    step.process_recording_params(channel)
+    luaunit.assert_equals(sent,{{1,0},{3,253}})
+    luaunit.assert_equals(cancelled,{{1,1},{1,3}})
+    for i=1,6 do luaunit.assert_equals(params:get("out"..i),65) end
+    sent={};cancelled={};channel.mute=true;step.process_recording_params(channel)
+    channel.mute=false;program.get().selected_channel=2;step.process_recording_params(channel)
+    program.get().selected_channel=1;params:set("record",1);step.process_recording_params(channel)
+    luaunit.assert_equals(sent,{});luaunit.assert_equals(cancelled,{})
+  end)
+  recorder=old_recorder;dependency_clock.cancel_spread_actions_for_channel_trig_lock=old_cancel
+  if not ok then error(err) end
+end
+
+
+
+-- Characterisation, supported by README.md:800-813 scale locks and chord timing. A voice
+-- delayed inside one strum is pitched from the scale active at its own onset, matching the
+-- native live-scale arp cases M-ARP-012/013. Output ownership is captured when the parent
+-- chord starts so device reassignment cannot split a delayed note-on from its release.
+function test_delayed_strum_uses_live_scale_but_parent_output_device()
+  setup()
+  local source = program.initialise_default_pattern()
+  source.note_values[1] = 0
+  source.lengths[1] = 1
+  source.trig_values[1] = 1
+  source.velocity_values[1] = 100
+  program.get_song_pattern(1).patterns[1] = source
+  local channel = program.get_channel(1, 1)
+  fn.add_to_set(channel.selected_patterns, 1)
+  channel.chord_one_mask = 2
+  channel.trig_lock_params[1] = {id = "chord_strum", param_id = "chord_strum_1"}
+  program.add_step_param_trig_lock(1, 1, 8)
+
+  local major = quantiser.get_scales()[1]
+  program.set_scale(1, {number = 1, scale = major.scale, pentatonic_scale = major.pentatonic_scale,
+    chord = 1, root_note = 0, chord_degree_rotation = 0, transpose = 0})
+  program.set_scale(2, {number = 1, scale = major.scale, pentatonic_scale = major.pentatonic_scale,
+    chord = 1, root_note = 2, chord_degree_rotation = 0, transpose = 0})
+  channel.step_scale_number = 1
+  pattern.update_working_patterns()
+
+  local parent_device = {name = "parent"}
+  local reassigned_device = {name = "reassigned"}
+  program.get().devices[1].midi_device = parent_device
+  m_clock.init()
+  m_clock:start()
+
+  local root = table.remove(midi_note_on_events, 1)
+  luaunit.assert_equals({root[1], root[2], root[3], root[4]}, {60, 100, 1, parent_device})
+  channel.step_scale_number = 2
+  program.get().devices[1].midi_device = reassigned_device
+
+  local delayed
+  for _ = 1, 96 do
+    m_clock.get_clock_lattice():pulse()
+    if #midi_note_on_events > 0 then delayed = table.remove(midi_note_on_events, 1); break end
+  end
+  luaunit.assert_not_nil(delayed, "delayed strum voice")
+  luaunit.assert_equals({delayed[1], delayed[2], delayed[3], delayed[4]},
+    {66, 100, 1, parent_device})
+
+  local delayed_release
+  for _ = 1, 96 do
+    m_clock.get_clock_lattice():pulse()
+    for i, event in ipairs(midi_note_off_events) do
+      if event[1] == 66 then delayed_release = table.remove(midi_note_off_events, i); break end
+    end
+    if delayed_release then break end
+  end
+  luaunit.assert_not_nil(delayed_release, "delayed strum release")
+  luaunit.assert_equals(delayed_release[4], parent_device)
+end
+
+function test_nonpositive_strum_releases_in_onset_pulse()
+  for _, length in ipairs({0, -1}) do
+    setup()
+    local source = program.initialise_default_pattern()
+    source.note_values[1] = 0
+    source.lengths[1] = length
+    source.trig_values[1] = 1
+    source.velocity_values[1] = 100
+    program.get_song_pattern(1).patterns[1] = source
+    local channel = program.get_channel(1, 1)
+    fn.add_to_set(channel.selected_patterns, 1)
+    channel.chord_one_mask = 2
+    channel.trig_lock_params[1] = {id = "chord_strum", param_id = "chord_strum_1"}
+    program.add_step_param_trig_lock(1, 1, 8)
+    pattern.update_working_patterns()
+    m_clock.init()
+    m_clock:start()
+    local count = 0
+    for pulse = 1, 128 do
+      m_clock.get_clock_lattice():pulse()
+      -- Actual step and lattice execute nested strum callbacks. Every note
+      -- with a nonpositive gate must release within its own onset pulse.
+      luaunit.assert_equals(#midi_note_off_events, #midi_note_on_events,
+        "Unreleased nonpositive strum length " .. length .. " at pulse " .. pulse)
+      while #midi_note_on_events > 0 do
+        local on = table.remove(midi_note_on_events, 1)
+        local off = table.remove(midi_note_off_events, 1)
+        luaunit.assert_equals(off, on)
+        count = count + 1
+      end
+    end
+    luaunit.assert_true(count >= 2, "Root and delayed chord must actually play")
+  end
+end
+
+
+function test_nonpositive_simultaneous_note_order()
+  for _, length in ipairs({0, -1}) do
+    for _, same_pitch in ipairs({false, true}) do
+      setup()
+      params:set("all_scales_lock_to_pentatonic", 2)
+      local source = program.initialise_default_pattern()
+      source.note_values[1] = same_pitch and -2 or 0
+      source.lengths[1] = length
+      source.trig_values[1] = 1
+      source.velocity_values[1] = 100
+      program.get_song_pattern(1).patterns[1] = source
+      local channel = program.get_channel(1, 1)
+      fn.add_to_set(channel.selected_patterns, 1)
+      -- Fixed root C and source degree -2 plus chord offset2 both yield C.
+      channel.chord_one_mask = 2
+      if same_pitch then
+        channel.trig_lock_params[1] = {id = "fixed_note", param_id = "fixed_note_1"}
+        program.add_step_param_trig_lock(1, 1, 60)
+      end
+      pattern.update_working_patterns()
+      m_clock.init()
+      m_clock:start()
+      local midi = _G.m_midi
+      local original_on, original_off = midi.note_on, midi.note_off
+      local original_nb, original_stop = _G.nb, midi.stop
+      local original_param_state = _G.norns_param_state_handler
+      _G.norns_param_state_handler = original_param_state or {flush_norns_original_param_trig_lock_store = function() end}
+      -- This MIDI-only unit fixture has no nb service or transport stop mock.
+      _G.nb = original_nb or {stop_all = function() end}
+      midi.stop = original_stop or function() end
+      local events = {}
+      local function record(kind, note, velocity, channel_number, device)
+        events[#events + 1] = {kind, note, velocity, channel_number, device,
+          m_clock.get_clock_lattice().transport}
+      end
+      midi.note_on = function(_, ...) record("on", ...) end
+      midi.note_off = function(_, ...) record("off", ...) end
+      local ok, err = pcall(function()
+        step.handle(1, 1) -- Disabled strum: root and chord are simultaneous.
+        luaunit.assert_equals(#events, 4)
+        local root = 60
+        local chord = same_pitch and 60 or 64
+        local tick = events[1][6]
+        luaunit.assert_equals(events, {
+          {"on",root,100,1,1,tick}, {"off",root,100,1,1,tick},
+          {"on",chord,100,1,1,tick}, {"off",chord,100,1,1,tick}})
+        -- Suppress new sequencer trigs, without discarding pending releases.
+        channel.working_pattern.trig_values[1] = 0
+        for pulse = 1, 48 do m_clock.get_clock_lattice():pulse() end
+        luaunit.assert_equals(#events, 4, "No late or duplicate releases")
+        m_clock:stop()
+        luaunit.assert_equals(#events, 4, "Stop must not duplicate releases")
+      end)
+      midi.note_on, midi.note_off = original_on, original_off
+      _G.nb, midi.stop = original_nb, original_stop
+      _G.norns_param_state_handler = original_param_state
+      if not ok then error(err, 0) end
+    end
+  end
+end
+
+
+function test_full_mask_quantisation_assigned_default_and_step_precedence()
+  for global_value = 1, 2 do
+    for default_value = 0, 2 do
+      for local_value = -1, 2 do
+        setup()
+        local test_pattern = program.initialise_default_pattern()
+        test_pattern.note_values[1] = 0
+        test_pattern.note_mask_values[1] = 60
+        test_pattern.lengths[1] = 1
+        test_pattern.trig_values[1] = 1
+        test_pattern.velocity_values[1] = 100
+        program.get_song_pattern(1).patterns[1] = test_pattern
+        local channel = program.get_channel(1, 1)
+        fn.add_to_set(channel.selected_patterns, 1)
+        channel.trig_lock_params[1] = {id='fully_quantise_mask', param_id='test_full_mask', off_value=0}
+        params:set('test_full_mask', default_value)
+        params:set('quantiser_fully_act_on_note_masks', global_value)
+        params:set('quantiser_act_on_note_masks', 2)
+        params:set('merged_lock_to_pentatonic', 1)
+        if local_value >= 0 then program.add_step_param_trig_lock(1, 1, local_value) end
+        pattern.update_working_patterns()
+        program.get().default_scale = 1
+        local scale = program.get_scale(1)
+        scale.root_note = 0
+        scale.chord = 2 -- C major, degreeII: fully processed C becomes D.
+        scale.chord_degree_rotation = 0
+        scale.transpose = 0
+        local selected = local_value >= 0 and local_value or default_value
+        local full = selected == 2 or (selected == 0 and global_value == 2)
+        step.handle(1, 1)
+        luaunit.assert_equals(#midi_note_on_events, 1)
+        luaunit.assert_equals(midi_note_on_events[1][1], full and 62 or 60,
+          'global='..global_value..' default='..default_value..' step='..local_value)
+        luaunit.assert_equals(midi_note_on_events[1][2], 100)
+      end
+    end
+  end
+end
+
+function test_signed_random_pentatonic_step_outcomes()
+
+  -- Literal cases: raw PRNG draws are injected only at the randomness boundary.
+  -- Actual transforms, stock locks, scale processing and MIDI emission execute.
+  local cases={
+    {name="negative",degree=0,a=4,b=0,draws={-1},plain=59,pent=60,mask=59},
+    {name="positive",degree=2,a=4,b=0,draws={1},plain=65,pent=64,mask=65},
+    {name="negative_twos",degree=1,a=0,b=4,draws={1},plain=59,pent=60,mask=60},
+    {name="positive_twos",degree=1,a=0,b=4,draws={3},plain=65,pent=64,mask=64},
+    {name="sampled_zero",degree=3,a=4,b=0,draws={0},plain=65,pent=65,mask=65},
+    {name="disabled",degree=3,a=0,b=0,draws={},plain=65,pent=65,mask=65},
+    {name="cancel_positive",degree=3,a=4,b=4,draws={2,1},plain=65,pent=65,mask=65},
+    {name="cancel_negative",degree=3,a=4,b=4,draws={-2,3},plain=65,pent=65,mask=65}}
+  local original_random=random
+  local ok,err=pcall(function()
+    for _,case in ipairs(cases) do
+      for _,path in ipairs({"ordinary"}) do
+        for _,policy in ipairs({"off","on"}) do
+          setup()
+          params:set("random_lock_to_pentatonic",policy=="off" and 1 or 2)
+          params:set("all_scales_lock_to_pentatonic",policy=="all" and 2 or 1)
+          params:set("merged_lock_to_pentatonic",policy=="merged" and 2 or 1)
+          local source=program.initialise_default_pattern()
+          source.note_values[1]=case.degree;source.lengths[1]=1
+          source.trig_values[1]=1;source.velocity_values[1]=100
+          program.get_song_pattern(1).patterns[1]=source
+          local channel=program.get_channel(1,1)
+          fn.add_to_set(channel.selected_patterns,1)
+          if policy=="merged" then
+            local second=program.initialise_default_pattern()
+            second.note_values[1]=case.degree;second.lengths[1]=1
+            second.trig_values[1]=1;second.velocity_values[1]=100
+            program.get_song_pattern(1).patterns[2]=second
+            fn.add_to_set(channel.selected_patterns,2)
+          end
+          channel.trig_lock_params[1]={id="bipolar_random_note",param_id="test_random"}
+          channel.trig_lock_params[2]={id="twos_random_note",param_id="test_twos"}
+          program.add_step_param_trig_lock(1,1,case.a)
+          program.add_step_param_trig_lock(1,2,case.b)
+          if path~="ordinary" then
+            channel.note_mask=({60,62,64,65})[case.degree+1]
+            params:set("quantiser_fully_act_on_note_masks",path=="full" and 2 or 1)
+            params:set("quantiser_act_on_note_masks",path=="snap" and 2 or 1)
+          end
+          if policy=="fixed" or policy=="quantised_fixed" then
+            channel.trig_lock_params[3]={id=policy=="fixed" and "fixed_note" or "quantised_fixed_note",param_id="test_fixed"}
+            program.add_step_param_trig_lock(1,3,63)
+          end
+          pattern.update_working_patterns()
+          local cursor=0
+          random=function(low,high)
+            cursor=cursor+1;local value=case.draws[cursor]
+            luaunit.assert_not_nil(value,"Unexpected extra PRNG draw")
+            luaunit.assert_true(value>=low and value<=high,"Forced draw outside actual domain")
+            return value
+          end
+          step.handle(1,1)
+          luaunit.assert_equals(cursor,#case.draws)
+          local expected=(policy=="off") and case.plain or case.pent
+          if policy=="all" or policy=="merged" then
+            expected=case.pent==65 and 64 or case.pent
+          end
+          if path=="snap" or path=="raw" then expected=case.mask end
+          if policy=="fixed" then expected=63 end
+          if policy=="quantised_fixed" then expected=62 end
+          luaunit.assert_equals(#midi_note_on_events,1,case.name.."/"..path.."/"..policy)
+          luaunit.assert_equals(midi_note_on_events[1],{expected,100,1,1},case.name.."/"..path.."/"..policy)
+        end
+      end
+    end
+  end)
+  random=original_random
+  if not ok then error(err) end
 end

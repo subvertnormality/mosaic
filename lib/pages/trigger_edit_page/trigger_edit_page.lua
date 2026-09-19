@@ -3,7 +3,6 @@ local drum_ops = include("mosaic/lib/helpers/drum_ops")
 
 
 local trigger_edit_page = {}
-local paint_pattern = {}
 local shift = 0
 
 local trigger_edit_page_pattern_select_fader = fader:new(1, 1, 16, 16)
@@ -135,20 +134,18 @@ local function shift_table(tbl, n)
   return res
 end
 
-local load_paint_pattern = scheduler.debounce(function()
-  if (trigger_edit_page_paint_button:get_state() ~= 2) then
-    return
-  end
- 
+-- Builds the complete paint pattern; `yield` is coroutine.yield in the preview job and a
+-- no-op when Paint needs the pattern at once (bugs.json paint-before-preview-settles).
+local function build_paint_pattern(yield)
   -- Get all values up front
   local algorithm = trigger_edit_page_algorithm_fader:get_value()
   local pattern1 = trigger_edit_page_pattern1_fader:get_value()
   local pattern2 = trigger_edit_page_pattern2_fader:get_value() 
   local bank = trigger_edit_page_bankmask_fader:get_value()
   local len = 64
-  paint_pattern = {}
+  local paint_pattern = {}
   
-  coroutine.yield() -- Yield after getting values
+  yield() -- Yield after getting values
   
   -- Handle Euclidean rhythm case
   if (algorithm == 3) then
@@ -163,7 +160,7 @@ local load_paint_pattern = scheduler.debounce(function()
           paint_pattern[index] = erpattern[(index - 1) % er_len + 1]
         end
       end
-      coroutine.yield() -- Yield after each batch of 4
+      yield() -- Yield after each batch of 4
     end
   
   -- Handle other algorithms
@@ -182,24 +179,39 @@ local load_paint_pattern = scheduler.debounce(function()
           end
         end
       end
-      coroutine.yield() -- Yield after each batch of 4
+      yield() -- Yield after each batch of 4
     end
   end
  
-  coroutine.yield() -- Yield before shift operation
+  yield() -- Yield before shift operation
   
   if shift ~= 0 then
     paint_pattern = shift_table(paint_pattern, shift)
   end
- 
-  trigger_edit_page_sequencer:show_unsaved_grid(paint_pattern)
+
+  return paint_pattern
+end
+
+local load_paint_pattern = scheduler.debounce(function()
+  if (trigger_edit_page_paint_button:get_state() ~= 2) then
+    return
+  end
+
+  local pattern = build_paint_pattern(coroutine.yield)
+
+  -- Painted or cancelled while this job was building: do not show the preview again.
+  if (trigger_edit_page_paint_button:get_state() ~= 2) then
+    return
+  end
+
+  trigger_edit_page_sequencer:show_unsaved_grid(pattern)
  end, throttle_time)
 
 local function save_paint_pattern(p)
-  local selected_song_pattern = program.get().selected_song_pattern
+  local selected_song_pattern = program.get_selected_song_pattern()
   local selected_pattern = program.get().selected_pattern
-  local trigs = program.get_selected_song_pattern().patterns[selected_pattern].trig_values
-  local lengths = program.get_selected_song_pattern().patterns[selected_pattern].lengths
+  local trigs = selected_song_pattern.patterns[selected_pattern].trig_values
+  local lengths = selected_song_pattern.patterns[selected_pattern].lengths
 
   for x = 1, 64 do
     if (trigs[x] < 1) and p[x] then
@@ -210,10 +222,10 @@ local function save_paint_pattern(p)
       lengths[x] = 0
     end
   end
-  program.get_selected_song_pattern().patterns[selected_pattern].trig_values = trigs
-  program.get_selected_song_pattern().patterns[selected_pattern].lengths = lengths
-  pattern.update_working_patterns()
-  program.get_selected_song_pattern().active = true
+  selected_song_pattern.patterns[selected_pattern].trig_values = trigs
+  selected_song_pattern.patterns[selected_pattern].lengths = lengths
+  pattern.update_source_working_patterns(selected_song_pattern, selected_pattern)
+  selected_song_pattern.active = true
 end
 
 function trigger_edit_page.register_press()
@@ -231,8 +243,10 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_sequencer:is_this(x, y) then
-        trigger_edit_page_sequencer:press(x, y)
-        pattern.update_working_patterns()
+        local song = program.get_selected_song_pattern()
+        local source = program.get().selected_pattern
+        trigger_edit_page_sequencer:press(x, y, song, source)
+        pattern.update_source_working_patterns(song, source)
       end
     end
   )
@@ -306,7 +320,7 @@ function trigger_edit_page.register_press()
           trigger_edit_page_right_button:set_state(1)
           trigger_edit_page_cancel_button:set_state(1)
           trigger_edit_page_sequencer:hide_unsaved_grid()
-          save_paint_pattern(paint_pattern)
+          save_paint_pattern(build_paint_pattern(function() end))
           trigger_edit_page_paint_button:no_blink()
           tooltip:show("Pattern painted")
         end
@@ -384,9 +398,11 @@ function trigger_edit_page.register_press()
   press:register_dual(
     "trigger_edit_page",
     function(x, y, x2, y2)
-      trigger_edit_page_sequencer:dual_press(x, y, x2, y2)
+      local song = program.get_selected_song_pattern()
+      local source = program.get().selected_pattern
+      trigger_edit_page_sequencer:dual_press(x, y, x2, y2, song, source)
       if trigger_edit_page_sequencer:is_this(x2, y2) then
-        pattern.update_working_patterns()
+        pattern.update_source_working_patterns(song, source)
         tooltip:show("Note length set")
       end
     end
@@ -395,8 +411,10 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_sequencer:is_this(x, y) then
-        trigger_edit_page_sequencer:long_press(x, y)
-        pattern.update_working_patterns()
+        local song = program.get_selected_song_pattern()
+        local source = program.get().selected_pattern
+        trigger_edit_page_sequencer:long_press(x, y, song, source)
+        pattern.update_source_working_patterns(song, source)
         tooltip:show("Note length reset")
       end
     end

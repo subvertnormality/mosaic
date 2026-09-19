@@ -1,0 +1,15 @@
+diff --git a/lib/devices/device_map.lua b/lib/devices/device_map.lua
+index b007de1..5181eea 100644
+--- a/lib/devices/device_map.lua
++++ b/lib/devices/device_map.lua
+@@ -9,8 +9,9 @@ local device_map_keyed_by_id = {}
+ local function read_json_file(file_path)
+   local file, err = io.open(file_path, "r")
+   if not file then
++      -- Skip a file that cannot be opened, as invalid or empty ones are skipped.
+       print("Error opening file:", err)
+-      error("Cannot open file: " .. file_path)
++      return nil
+   else
+       local content = file:read("*a")
+       file:close()

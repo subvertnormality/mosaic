@@ -1,0 +1,20 @@
+{
+  "status": "scoped-regressions-validated",
+  "before_sha256": {
+    "lib/clock/m_clock.lua": "3f0e3da67eb81741a82cd306652bde1d1ff5f1dca6e46a4c2346881f7ea2d252",
+    "lib/step.lua": "dc2fc88d42e831b932f0854d2db2cbbb914af55fe738e33af924c74d04c996e2"
+  },
+  "after_sha256": {
+    "lib/clock/m_clock.lua": "8e958bf6938f9dc887e4d8c383e8d37359cd5a49ac66ba8791903df507d603d9",
+    "lib/step.lua": "7c5fa22d2f60332e28cb0020b60e71f19645c489213384ae6795cc07441e50e9"
+  },
+  "patch_sha256": "94fbcb45acf099eca75e428250f79079f7608934e14d500a22ecff94fdea67f9",
+  "decision": "01a07f50-06ce-76f2-86f5-76414bd23074",
+  "baselines": {
+    "empty_muted": "175cc439c13e4e818f7608051f692cd9",
+    "internal_rests": "f489a82541174aabab52ce9974e04984",
+    "trailing_rests": "137acac81a624e198eca7f79aa81ccb2"
+  },
+  "scope": "Bounded arp slot traversal with explicit muted-root/rest positions; no-mask ratchet special case; cancel prior onset clocks without cutting release tails. Strum shape/rest behavior is separate pending validation.",
+  "validation": "docs/testing/spacing-rest-validation.json"
+}

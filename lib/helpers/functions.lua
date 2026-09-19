@@ -513,12 +513,39 @@ local stock_id_to_param_id = {
   fully_quantise_mask = "midi_device_params_channel_%d_15",
 }
 
-function fn.get_param_id_from_stock_id(stock_id, channel_number)
-  return string.format(stock_id_to_param_id[stock_id], channel_number)
+-- Step playback reads the same settings on every note. Read them through the
+-- paramset's own id index, and fall back to the public call when it has none.
+function fn.param_value(id)
+  local lookup = params.lookup
+  local index = lookup and lookup[id]
+  local param = index and params.params[index]
+  if param then return param:get() end
+  return params:get(id)
 end
 
+-- Step playback resolves stock ids for every channel on every step; format each once.
+local stock_param_ids = {}
+
+function fn.get_param_id_from_stock_id(stock_id, channel_number)
+  local ids = stock_param_ids[stock_id]
+  local id = ids and ids[channel_number]
+  if id then return id end
+  id = string.format(stock_id_to_param_id[stock_id], channel_number)
+  if not ids then
+    ids = {}
+    stock_param_ids[stock_id] = ids
+  end
+  ids[channel_number] = id
+  return id
+end
+
+-- Ids are opaque keys for delayed actions; every note creates one, so count
+-- rather than allocating a table and formatting its address.
+local last_generated_id = 0
+
 function fn.generate_id()
-    return tostring({}):match('table: (.+)')
+    last_generated_id = last_generated_id + 1
+    return "id-" .. last_generated_id
 end
 
 

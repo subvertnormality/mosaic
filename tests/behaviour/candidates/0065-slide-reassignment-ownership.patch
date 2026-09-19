@@ -1,0 +1,24 @@
+--- a/lib/devices/param_manager.lua
++++ b/lib/devices/param_manager.lua
+@@ -179,6 +179,7 @@
+ 
+ 
+ function param_manager.update_param(index, channel, param, meta_device)
++  local previous = channel.trig_lock_params[index] or {}
+   if param.id == "none" then
+     channel.trig_lock_params[index] = {}
+   else
+@@ -198,6 +199,13 @@
+     end
+ 
+   end
++  local assigned = channel.trig_lock_params[index]
++  if previous.id ~= assigned.id or previous.param_id ~= assigned.param_id or
++      previous.type ~= assigned.type or previous.device_name ~= assigned.device_name then
++    -- An active callback belongs to its original parameter, not just the slot.
++    -- Retire silently so it cannot consume the new parameter's destination lock.
++    m_clock.cancel_spread_actions_for_channel_trig_lock(channel.number, index)
++  end
+ end
+ 
+ local function safe_set_param(channel, index, param, meta_device)

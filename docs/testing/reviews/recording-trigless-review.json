@@ -1,0 +1,37 @@
+{
+  "started_at": "2026-09-10T07:33:47.311728+00:00",
+  "packet_sha256": "f53c49eb2496bc4e298888a55525d0ad10e0358b37248fdda3ac92bb36e648eb",
+  "tool": "query",
+  "request": {
+    "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+    "engine": "codex",
+    "question": "# Recording Trigless Locks review\n\nUse Codex only. Read-only local commands are allowed; do not edit or launch tests/runtime processes.\n\nReview M-REC-PARAM-003 and028..031, shared helper changes, inventory mapping, and `docs/testing/recording-trigless-validation.json`. The native user-input matrix establishes: enabled recording writes an empty rest; disabled recording skips the rest and preserves its old96 lock, revealed only after re-enable; an authored probability-zero trig remains eligible while its note is silent; Off\u2192On\u2192Off changes while recording apply at exact /48 rest/rest/active boundaries and replay24/48/65/65; all ten CC slots record zero on one enabled rest while step1/3/4 retain1/3/4. Cases use Norns menus, grid, encoder, transport and record-arm inputs. Oracles now separate immediate encoder timing from exact musical boundaries, check CC-before-note ordering, pair every release, and measure every naturally completed live/replay gate under both controlled and real clocks. All ten final manifests bind current source. A source-bound snapshot and hashed logs prove530/530 Lua and100/100 Python unit/oracle tests. Production is unchanged.\n\nChallenge active-trigger versus audible-note interpretation, whether Off/on transitions are positioned unambiguously, whether pre-transport recall and live encoder messages could be confused with recorded step locks, whether the disabled-rest oracle truly proves non-overwrite, whether probability-zero and ten-slot cases prove their claims, release/timing completeness, regressions in the shared live_parameter_recording helper, and inventory status. Return ACCEPTED or CHANGES REQUIRED with concrete findings. Keep broader REC-PARAM-AUTOMATION lifetime combinations outside this scoped verdict.",
+    "files": [
+      {
+        "path": "tests/behaviour/trig_parameter_interactions.py",
+        "reason": "Eligibility and live transition cases"
+      },
+      {
+        "path": "tests/behaviour/recording_lifetimes.py",
+        "reason": "Ten-slot rest case"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "Registry and shared helpers"
+      },
+      {
+        "path": "tests/behaviour/manual-inventory.json",
+        "reason": "Manual mapping"
+      },
+      {
+        "path": "docs/testing/recording-trigless-validation.json",
+        "reason": "Bound evidence"
+      }
+    ],
+    "effort": "high",
+    "web_search": false
+  },
+  "result": "**CHANGES REQUIRED.** The five scoped cases have valid bound evidence, but the shared helper introduces deterministic failures in existing M-REC-PARAM-005 and -006.\n\n1. **Off recording now fails unconditionally.** M-REC-PARAM-006 passes `edit_value=-1` ([cases.py:3321](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/cases.py:3321)). The helper correctly expects `wanted=[]`, then unconditionally constructs `expected_offsets=[.61]+boundary_offsets` and asserts equal lengths: **0 versus 4** ([trig_parameter_interactions.py:356](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:356), [line 369](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:369)). Skip emission timing assertions for Off while retaining silence, storage, and release checks.\n\n2. **Zero recording uses the wrong encoder deadline.** M-REC-PARAM-005 takes the saturation path, which adds `.15` seconds before turning Off to zero ([trig_parameter_interactions.py:339](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:339)). With the driver\u2019s `.06` transport settling and `.05` encoder delay, its controlled-clock emission occurs at **.76 seconds**, whereas the new assertion requires **.61 seconds** within two nanoseconds ([driver.py:89](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/driver.py:89), [trig_parameter_interactions.py:372](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:372)). Make immediate timing depend on the actual input path.\n\nThe scoped eligibility interpretation is sound: recording eligibility checks authored `trig_values` before note handling; probability rejection happens separately ([m_clock.lua:375](/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua:375), [step.lua:776](/home/andy/projects/mosaic-behaviour-tests/lib/step.lua:776)). Disabled-rest replay explicitly re-enables trigless and requires the preserved **96** against default **65**. Live transitions occur after the 8- and 16-second boundaries, establishing Off/On/Off at successive rest/rest/active opportunities ([trig_parameter_interactions.py:406](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:406), [line 480](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/trig_parameter_interactions.py:480)). Ten-slot replay distinguishes default recall from **1/0/3/4** locks and checks boundary timing and CC-before-note ordering; release accounting covers all notes and duration checks cover naturally completed gates ([recording_lifetimes.py:367](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/recording_lifetimes.py:367)).\n\nI verified all ten manifest hashes, their artifact hashes and current-source bindings, plus snapshot hashes and logs reporting **530/530 Lua and 100/100 Python**. Those passes do not cover the two broken helper variants. Git shows no production changes; inventory remains conservatively `partial-domain-coverage`. Broader lifetime combinations do not affect this verdict.\n\n**CONFIDENCE: High.** Correcting both helper regressions and providing refreshed bound validation would change the verdict; no tests or runtime processes were launched.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a08a3c-b321-7a71-ad86-e6e546012ca1` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+  "status": "returned",
+  "finished_at": "2026-09-10T07:36:02.350986+00:00"
+}

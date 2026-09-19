@@ -1,0 +1,136 @@
+{
+  "status": "scoped-behaviour-validated",
+  "base": "bf6712dd51ebedccb56f3136c57ba2693b0ffd48",
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/e3e8abf447544ba6b10231392b75b569/manifest.json",
+      "sha256": "76f02d149a5620cb5871d307ae38e92cd9874b70bb5d40e98922704ff0eabc99",
+      "stages": [
+        {
+          "kind": "mixed-channel-shuffle-inheritance",
+          "stage": "global-Shuffle",
+          "lanes": [
+            {
+              "port": 1,
+              "onsets": 17,
+              "shuffled": true
+            },
+            {
+              "port": 2,
+              "onsets": 17,
+              "shuffled": false
+            }
+          ],
+          "release_pairs": 34,
+          "passed": true
+        },
+        {
+          "kind": "mixed-channel-shuffle-inheritance",
+          "stage": "global-Swing",
+          "lanes": [
+            {
+              "port": 1,
+              "onsets": 17,
+              "shuffled": false
+            },
+            {
+              "port": 2,
+              "onsets": 17,
+              "shuffled": false
+            }
+          ],
+          "release_pairs": 34,
+          "passed": true
+        },
+        {
+          "kind": "mixed-channel-shuffle-inheritance",
+          "stage": "restored-global-Shuffle",
+          "lanes": [
+            {
+              "port": 1,
+              "onsets": 17,
+              "shuffled": true
+            },
+            {
+              "port": 2,
+              "onsets": 17,
+              "shuffled": false
+            }
+          ],
+          "release_pairs": 34,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f4104450c92640e69472f6a3c5473847/manifest.json",
+      "sha256": "ff9557af251c47ac32cc63b31993ed8571a48d6e11dfffd043db9c8e4d04b13a",
+      "stages": [
+        {
+          "kind": "mixed-channel-shuffle-inheritance",
+          "stage": "global-Shuffle",
+          "lanes": [
+            {
+              "port": 1,
+              "onsets": 17,
+              "shuffled": true
+            },
+            {
+              "port": 2,
+              "onsets": 17,
+              "shuffled": false
+            }
+          ],
+          "release_pairs": 34,
+          "passed": true
+        },
+        {
+          "kind": "mixed-channel-shuffle-inheritance",
+          "stage": "global-Swing",
+          "lanes": [
+            {
+              "port": 1,
+              "onsets": 17,
+              "shuffled": false
+            },
+            {
+              "port": 2,
+              "onsets": 17,
+              "shuffled": false
+            }
+          ],
+          "release_pairs": 34,
+          "passed": true
+        },
+        {
+          "kind": "mixed-channel-shuffle-inheritance",
+          "stage": "restored-global-Shuffle",
+          "lanes": [
+            {
+              "port": 1,
+              "onsets": 17,
+              "shuffled": true
+            },
+            {
+              "port": 2,
+              "onsets": 17,
+              "shuffled": false
+            }
+          ],
+          "release_pairs": 34,
+          "passed": true
+        }
+      ]
+    }
+  ],
+  "production_changed": false,
+  "scope": "Two simultaneous MIDI lanes across stopped global Shuffle/Swing/Shuffle changes; inherited channel1 follows global mode, explicit Swing channel2 stays straight. Exact pitch/velocity/port, phase, simultaneous start, complete gates and Stop releases.",
+  "limitations": [
+    "Live global edits with mixed overrides remain",
+    "Other inherited fields and boundary-adjacent confirmations remain",
+    "Full manual, emulator release and final hardening incomplete"
+  ],
+  "full_campaign_complete": false
+}

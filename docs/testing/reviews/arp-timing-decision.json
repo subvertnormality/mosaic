@@ -1,0 +1,50 @@
+{
+  "status": "returned",
+  "request": {
+    "repo_path": "<mosaic-worktree>",
+    "engine": "codex",
+    "effort": "medium",
+    "web_search": false,
+    "question": "Codex-only bounded engineering arbitration. Do not edit files. User authorizes autonomous defect fixes and proportionate review, no manual testing, no scope reduction. Native controlled M-ARP-001 run40212af74fa44af6973f5f8d104677ce confirms first half-step chord onset is55pulses after root instead of108 (90BPM,/9 channel, half-step arp, two-step gate, spread0). Musical onset error is-368.055555ms. This is a new independent native test, not yet a patch. Current pending reset candidate0029 is unrelated; no reset occurs in this fixture.\n\nInspect new_arp_sprocket and lattice phase rules. Constructor delay is a fraction of its OWN division, whereas arp passes channel-relative division+spread, multiplying the intended first gap twice. New order2 sprocket created inside order2 callback begins processing next pulse, adding another pulse. Arp division changes update phase during callback; avoid introducing another spacing error. Manual says selected division with optional spread/acceleration, loops within root gate. Propose the narrowest defensible correction, with concrete initial gap, subsequent spacing and termination boundary expectations for zero spread, then identify whether nonzero spread/acceleration has an unambiguous formula or needs separate documented decision. Don't silently redefine broad musical semantics just to pass the first regression.\n\nAlso assess lifecycle risk: replacing existing arp destroys old arp but leaves its must_execute termination callback; that callback flushes channel-wide execute_at_note_end_ids, potentially truncating replacement voices. Previous accepted reset contract preserves consumed gate time. Specify a scoped ownership approach if needed that preserves old tails until their original deadline, replacement cancellation of future old onsets, exact releases and Stop behavior. Distinguish proven first-gap defect from untested hypotheses. Recommend a bounded actual m_clock+lattice integration matrix and user-input MIDI cases sufficient for this slice. Do not call full arp coverage complete.",
+    "files": [
+      {
+        "path": "lib/clock/m_clock.lua",
+        "reason": "Actual arp creation and ownership"
+      },
+      {
+        "path": "lib/clock/m_lattice.lua",
+        "reason": "Native phase and pending timing"
+      },
+      {
+        "path": "lib/step.lua",
+        "reason": "Arp note creation and release"
+      },
+      {
+        "path": "tests/behaviour/cases.py",
+        "reason": "New native arp regression"
+      },
+      {
+        "path": "README.md",
+        "reason": "Musical contract"
+      }
+    ]
+  },
+  "input_sha256": "6b0940c1cf9f20b1f08e8572495becd0b33b0ed88715cb20208debd5703b6006",
+  "result": {
+    "meta": null,
+    "content": [
+      {
+        "type": "text",
+        "text": "**The first-gap defect is proven; correct the arp\u2019s initial phase locally, without changing lattice-wide timing or inventing new spread semantics. Replacement also needs generation-scoped ownership: its old termination callback can currently release replacement notes.**\n\n- **Timing evidence.** [m_clock.lua:639](<mosaic-worktree>/lib/clock/m_clock.lua:639) creates an arp period of `division * channel.division` at zero spread, then supplies `delay = division + chord_spread`. The constructor computes `phase = 1 - current_ppqn * delay - delay_offset` ([m_lattice.lua:310](<mosaic-worktree>/lib/clock/m_lattice.lua:310)). Both channel and arp use order 2; rebuilding ordering does not extend the list already being traversed, so the new arp starts processing next pulse ([m_lattice.lua:162](<mosaic-worktree>/lib/clock/m_lattice.lua:162), [m_lattice.lua:324](<mosaic-worktree>/lib/clock/m_lattice.lua:324)). Thus `216 \u00d7 0.5 \u00d7 0.5 + 1 = 55`, versus 108 intended: \u221253 pulses, or \u2212368.055556 ms at 90 BPM. Git blame traces these constructor arguments to `3b9ff54f`, independently of candidate0029.\n\n- **Narrow correction.** For this zero-spread, unswung, order-2 creation path, initialize the arp at `phase = 2 - P`, where `P` is its pulse period. Existing constructor arguments `delay = 1, delay_offset = -1` express that compensation. Apply it once, at creation; simply changing delay to 1 produces 109 pulses. An in-memory probe using actual `m_clock.new_arp_sprocket` and lattice, with program settings stubbed, produced **55,163,271,379** before and **108,216,324** with those initial arguments. No files were changed. Keep callback division updates at onset phase 1: `set_division` already rescales phase, and lattice increments it afterward ([m_lattice.lua:391](<mosaic-worktree>/lib/clock/m_lattice.lua:391)). Reapplying startup compensation there would damage subsequent spacing.\n\n- **Concrete contract.** With root at pulse 0, channel period 216, half-step arp, gate length 2, zero spread and no swing: onsets are **0,108,216,324**; releases are **108,216,324,432**; **no onset at 432**. A shorter final interval ends at the root gate deadline. Due releases precede coincident retriggers. This matches the independent table in [cases.py:1022](<mosaic-worktree>/tests/behaviour/cases.py:1022). The probe verifies callback cadence and termination, **not MIDI releases**. Those need particular scrutiny: arp releases are registered on the parent channel clock, whose fractional threshold uses channel phase rather than an explicit onset-relative timestamp ([step.lua:455](<mosaic-worktree>/lib/step.lua:455), [m_lattice.lua:222](<mosaic-worktree>/lib/clock/m_lattice.lua:222)). Off-phase note-duration errors remain a separate, untested hypothesis.\n\n**Nonzero spread/acceleration requires a documented decision.** The manual promises spacing modification and progressive acceleration, but gives no unique recurrence ([README.md:795](<mosaic-worktree>/README.md:795), [README.md:799](<mosaic-worktree>/README.md:799), [README.md:803](<mosaic-worktree>/README.md:803)). Existing code uses constructor period `d+s*a`, delay `clamp(d+s,0,1)`, and subsequent periods `d+2*s*a`, `d+3*s*a`, \u2026; note durations still use `arp_division` ([m_clock.lua:625](<mosaic-worktree>/lib/clock/m_clock.lua:625), [step.lua:610](<mosaic-worktree>/lib/step.lua:610)). Decide first-gap units, interval indexing, acceleration recurrence, nonpositive intervals, and duration-versus-spacing explicitly. The zero-spread regression cannot justify those choices.\n\n**Ownership correction:** replacement destroys old sprockets but retains their `must_execute` callbacks, which flush channel-wide release and cancellation lists ([m_clock.lua:581](<mosaic-worktree>/lib/clock/m_clock.lua:581), [m_clock.lua:655](<mosaic-worktree>/lib/clock/m_clock.lua:655)). Give each arp generation its own onset handles, release IDs, and termination handle. Establish ownership **before the initial root is emitted**, currently before `new_arp_sprocket` ([step.lua:544](<mosaic-worktree>/lib/step.lua:544)). Replacement cancels future old onsets immediately; already sounding old voices retain their individual deadlines, capped by their original gate. Old termination touches only old ownership. Preserve consumed timing through reset; do not recreate full-length timers. Make release cleanup idempotent, retain due-off-before-on ordering, and make Stop drain all generations exactly once and cancel all future work. Same-pitch MIDI overlap must retain existing wire behavior, without silently introducing voice stealing. The cross-generation flush is code-proven; audible truncation is not reproduced here.\n\nA bounded validation matrix should include:\n\n- Actual m_clock+lattice creation inside order 2: channel periods 24,216,408; arp divisions \u00bc,\u00bd,1,2; fractional-period cases; gates shorter than, equal to, and longer than an interval.\n- Replacement before/on/after release and gate deadlines; different and repeated pitches; chained replacements; two channels; exact release accounting.\n- Reset before/on/after deadlines, including repeated reset; unchanged versus actual rate changes; Stop during initial delay, sounding tails, and replacement.\n- Automated native grid/key/encoder-driven MIDI cases: M-ARP-001, fractional final gate, long-gate replacement, replacement across reset, and Stop/restart. Assert ordered onsets, releases, routing, and post-Stop silence\u2014not counts alone.\n\n**CONFIDENCE: High** on the first-gap mechanism and ownership hazard; the cited native capture was not independently located, and release, replacement, swing, and spread behavior still require the bounded tests above\u2014this is not complete arp coverage.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a07f21-248b-7013-99e8-ee8dd26fe412` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+        "annotations": null,
+        "meta": null
+      }
+    ],
+    "structuredContent": null,
+    "isError": false
+  },
+  "public_export": {
+    "raw_sha256": "aded159bdd9a464732dad1be3587c30011443ba0f188d224bc0758ba489213f5",
+    "redaction": "Personal absolute paths replaced; complete unredacted response retained in ignored local artifacts."
+  }
+}

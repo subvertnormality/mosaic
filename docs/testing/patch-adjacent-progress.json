@@ -1,0 +1,36 @@
+{
+  "status": "partial-domain",
+  "runs": [
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/19f2e7fc88fb4aa9accd058876794e3f/manifest.json",
+      "sha256": "48363daa662a17c1d513aadf2cb9ef1b6b2f2db151ee6ffe010619ef7a10f686",
+      "case": "M-PATCH-015",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/373361e675964f7aa6b8bebffc0a993f/manifest.json",
+      "sha256": "ae0a355389f41eb7df4d596dcf5c5add03d64e2da4cd3e10e7ab49f02b223cb7",
+      "case": "M-PATCH-016",
+      "clock_mode": "controlled-experimental"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/88934bb2040d46aa99fde8b5aa806ef8/manifest.json",
+      "sha256": "64cd0a8d17a77ee9b5d28a85b26fb92408f32a4f0e6a21f5e24a096faeac0f87",
+      "case": "M-PATCH-015",
+      "clock_mode": "real-time"
+    },
+    {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/715f5bba91624a71b75715c69fe1c3dc/manifest.json",
+      "sha256": "c9bc9bd07b7bb0a2d3d13aa29eb8c8727f157526264eeead975d84f30b1979cd",
+      "case": "M-PATCH-016",
+      "clock_mode": "real-time"
+    }
+  ],
+  "scope": "Distinct CC64/65/66/67 before matching notes through three complete wraps; ranges1..4 and2..4; storedCC63 unchanged; 90BPM onset schedule checked with2ns controlled and10ms real-time bounds",
+  "setup_failures": [
+    "c039b89465514dd1bece1b5a34449720",
+    "8a07e79a1f21421e87092c0ceb8128e0"
+  ],
+  "setup_correction": "Native lock calculator retains prior edited value; author each exact value by clamping to Off with a bounded raw encoder action then stepping to literal target. Expected CC values unchanged.",
+  "full_campaign_complete": false
+}

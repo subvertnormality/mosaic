@@ -1,0 +1,73 @@
+{
+  "status": "scoped-interaction-validated",
+  "native_runs": [
+    {
+      "case": "M-MERGE-035",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f8da98df58c2473c9b2dc64f946fa845/manifest.json",
+      "sha256": "c613d7dc17864927afcef789b677142bf25a2856187308246d5b176cea2c2e0b",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-036",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4ae417ba64fe4a5b909bab3464d5065a/manifest.json",
+      "sha256": "b6aad837d0569c7845eba0e32c1a45838302f418a838df4f95a9b8c533581499",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-037",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/1cd8000b740a44c99fabdc4c701f4cb8/manifest.json",
+      "sha256": "ea47012c67ce1c0615469d530f7d6bb4eeff32a48e5f76725baf0cb58b74d8a1",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-038",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/ea60dceeba544adc9e0b9a56ab940e93/manifest.json",
+      "sha256": "cd52bb51898a1428b8c8cc5c4ecfbdf55fd73253d7fe0d57179f1901a0231739",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-035",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/f04f2004c8dd4edaaec487325fc4756a/manifest.json",
+      "sha256": "6430a888fd142e28687053caf1839435810a928d5096a9d048d25bf6517bad6a",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-036",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/cf6f37b20ed54ec0aede1b5ad2af4e50/manifest.json",
+      "sha256": "6a6f551c00cdc5e6dc33bdd62b03d31bf299a45aa753a8a630e2c5ad3cb92616",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-037",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/7ca7ea1c764f467aa5db653b5d8d5328/manifest.json",
+      "sha256": "33c40f4c6b698871b2d01288dcdc0dd3774a4a55b795c915cc64ba65ac1c2d72",
+      "passed": true
+    },
+    {
+      "case": "M-MERGE-038",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/99550b0ba4ea4323b85699b4faf80f26/manifest.json",
+      "sha256": "551210036c5aee5699c81ff6e9c68578ebd3a26b6251d7aa59912f3cf364dfdf",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "review_basis": "01a084eb-77db-7cb3-a406-236f22be8016",
+  "assertions": [
+    "Zero and negative merged gates with disabled strum (simultaneous voices)",
+    "Distinct C/E and identical E/E pitches using actual Fixed Note parameter inputs",
+    "Exact interleaved On/Off messages, route, pitch, velocity and scheduler timestamps",
+    "Two full cycles plus closing onset, repeated transport, no delayed or duplicate releases after Stop"
+  ],
+  "limitations": [
+    "Fractional lengths, broader overlapping positive voices and remaining manual/emulator gates incomplete"
+  ],
+  "full_campaign_complete": false
+}

@@ -1,0 +1,52 @@
+{
+  "status": "straight-and-shortened-wrap-native-passed-broader-validation-pending",
+  "depends_on": [
+    "0054-slide-silent-replacement",
+    "0055-slide-onset-projection",
+    "0056-slide-effective-destination"
+  ],
+  "scope": "Projected channel-onset deadlines and actual elapsed lattice pulses; matching endpoint handoff precedes lock/note; next-loop occurrence distance; cancellation does not consume reentrant replacements.",
+  "patch_sha256": "3a07ec5d6814a81a0c6ab23d1a0ffbf806c7ff472ccc861b5cb7b6a6beb7e817",
+  "files": {
+    "lib/clock/m_clock.lua": {
+      "before_sha256": "09a0999232cb26ab36e39cb81274704cf26fda9e6fd9cec3f470b5b52dc8030a",
+      "after_sha256": "be54ea3edc9c0a7664226420c0e7a6c061956c637075a63caec0af2eb602db39"
+    },
+    "lib/step.lua": {
+      "before_sha256": "316a87d8fb85f8caeaa815813b1f247411bc81ab4686e9a071abe6f27a95b18e",
+      "after_sha256": "4d040204b0f765e80f9a742cb09735c3016f9e642f6b4a0ea088fbad5906b334"
+    }
+  },
+  "full_campaign_complete": false,
+  "remaining": "Native straight/wrapped timing; direct pulse-phase endpoint contracts and old unit fixture conversion; live retiming, destination editing, song lifecycle and all interaction gates.",
+  "native_runs": [
+    {
+      "run_id": "1a99281cffca4bdfb0dbb51bc0c2f693",
+      "case": "M-PATCH-017",
+      "mode": "controlled-experimental",
+      "manifest_sha256": "8c33ec36ccc47e538e5009266b7054c328184295ddce63f8f656d37bf6af9870",
+      "passed": true
+    },
+    {
+      "run_id": "887d9f40e2c044e88910e875ee3e18da",
+      "case": "M-PATCH-018",
+      "mode": "controlled-experimental",
+      "manifest_sha256": "b3f86146eea556903d16d8305e50b24e338fcd9306c0055ee7a1360049673c98",
+      "passed": true
+    },
+    {
+      "run_id": "9db76d99d8294ad1b0fadd5c96b02e01",
+      "case": "M-PATCH-017",
+      "mode": "real-time",
+      "manifest_sha256": "d0f4c800f002aaf46794a2f12f7aeb0856ad3a5cf15cdf28d4eecc4f1c437dfb",
+      "passed": true
+    },
+    {
+      "run_id": "4c17a0c9d5374bf380fd6447e4411d94",
+      "case": "M-PATCH-018",
+      "mode": "real-time",
+      "manifest_sha256": "ccc09c38d5bf678ebd5de7eb6bfe8e544b22411d8dad887290e534c4a14ab83c",
+      "passed": true
+    }
+  ]
+}

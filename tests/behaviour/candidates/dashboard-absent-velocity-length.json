@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "9f7bebb",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "d10d0e95cc046325dcd852d2a5e9cd42dac67ee7ffafcffaf717ba3b324b7762",
+      "after_sha256": "07a77e9919f8001437837d9de35787a64de3ef0a14207d16b3f681da3a27fdcf"
+    }
+  ],
+  "patch": "0106-dashboard-absent-velocity-length.patch",
+  "patch_sha256": "541dd5b50df6f15512636600e48eba8ca70730b030895fe56cb6ba4ae4cf6b88",
+  "regression": "M-DASHBOARD-SELECT-001",
+  "unit_regression": "test_w4c_unset_masks_and_dashboard_notes_show_x",
+  "baseline": [
+    {
+      "run_id": "43697a12c89843c693f4776d72c223c1",
+      "case": "M-DASHBOARD-SELECT-001",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "5ae367a1349f32382688c66b184c9418f7cf2adb4d40432cf18237bcad6ad648",
+      "failure": "('Dashboard after selecting channel 2', {'labels': True, 'Note': 'X', 'Vel': '-1', 'Len': '-1.0'})"
+    },
+    {
+      "run_id": "2aad8398ebbd4143859525e48b959507",
+      "case": "M-DASHBOARD-SELECT-001",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "ca8eafecc32b89f1a73d8c78d18414fc0c6d432edf8859d9f413137711a53d24",
+      "failure": "('Dashboard after selecting channel 2', {'labels': True, 'Note': 'X', 'Vel': '-1', 'Len': '-1.0'})"
+    }
+  ],
+  "rationale": "Selecting a channel on the grid resets the Note Dashboard with -1 (channel_edit_page.lua:203-208). The Note and chord cells render -1 as X, but the Vel and Len cells were never given the X transform: line 196 passed note_displays.length to configure_mask_length_selector, which ignores its argument and re-configures the mask length selector. The dashboard read 'Vel -1' and 'Len -1.0'. The Vel and Len cells now get configure_note_page_velocity_length_value_selector; played values render unchanged.",
+  "oracle": "README Note Dashboard 679: the first channel page shows the last played notes on the selected channel; no note has velocity or length -1. The absence marker X is the one the Note cell already shows (characterisation of the marker).",
+  "validation": [
+    {
+      "run_id": "99d428f36fdf41bea5f6f9398bdad8c3",
+      "case": "M-DASHBOARD-SELECT-001",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "49dd66ff985501a369582cba6930794e6cdca91a169bf8a5e12a52e10df6663e",
+      "failure": null
+    },
+    {
+      "run_id": "552e17e2814e4fa8b994bf289893bb67",
+      "case": "M-DASHBOARD-SELECT-001",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "8dc53a570bc30fbfd254d593ba44462cb764fb6229a37f1fa40159e27fcf8746",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-d3a26ba99162495a820f19b6e10842d6",
+      "case": "M-DASHBOARD-SELECT-001",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "5961b2fd4c0ed9343d77a68680206eed0ab61b6d5cf7c291339b99136090fc9a",
+      "failure": null,
+      "normalized_sha256": "b1ff8592a66e59a3e9f8a8c9840e2905d8c2f0719cb7b7542506dc67056daddd"
+    }
+  ],
+  "collateral": "All Lua units pass (the delta killer unit that pinned the -1 display was updated to X); M-DASHBOARD-001..008 pass in the controlled lane with the fix.",
+  "upstream_merged": false
+}

@@ -36,7 +36,12 @@ function recorder.record_stored_note_mask_events(c, step)
       return
     end
 
-    memory.record_event(c, "note_mask", event.data)
+    local song_pattern = event.data.song_pattern or event.song_pattern
+    if song_pattern then
+      memory.record_event_for_target(song_pattern, c, "note_mask", event.data)
+    else
+      memory.record_event(c, "note_mask", event.data)
+    end
     recorder.mask_events[c][step] = nil
 
   end
@@ -62,17 +67,23 @@ function recorder.record_stored_trig_lock_events(c, step)
       return
     end
 
-    memory.record_event(c, "trig_lock", event.data)
+    if event.song_pattern then
+      memory.record_event_for_target(event.song_pattern, c, "trig_lock", event.data)
+    else
+      memory.record_event(c, "trig_lock", event.data)
+    end
     recorder.trig_lock_events[c][step] = nil
 
   end
 end
 
 function recorder.handle_note_midi_message(note, velocity, chord_number, chord_degree)
+  -- memory.record_event stores into data.song_pattern: capture the slot at first press.
   local pressed_keys = m_grid.get_pressed_keys()
   local channel = program.get_selected_channel()
-  if #pressed_keys > 0 then
-    if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+  -- Only a held step (rows 4-7) is step entry; any other held key records normally.
+  if #pressed_keys > 0 and (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
+    do
 
       local s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
       if chord_number == 1 then
@@ -82,6 +93,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               trig = 1,
               note = note,
               velocity = velocity,
@@ -100,6 +112,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               step = s,
               chord_degrees = chord
             }
@@ -117,6 +130,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               trig = 1,
               note = note,
               velocity = velocity,
@@ -135,6 +149,7 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
           {
             song_pattern = program.get().selected_song_pattern,
             data = {
+              song_pattern = program.get().selected_song_pattern,
               step = s,
               chord_degrees = chord
             }
@@ -144,13 +159,18 @@ function recorder.handle_note_midi_message(note, velocity, chord_number, chord_d
   end
 end
 
-function recorder.record_trig_event(c, step, parameter)
+function recorder.record_trig_event(c, step, parameter, song_pattern)
   if recorder.trig_lock_dirty[c] and recorder.trig_lock_dirty[c][parameter] then
-    memory.record_event(c, "trig_lock", {
-      parameter = parameter, 
+    local data = {
+      parameter = parameter,
       step = step,
       value = recorder.trig_lock_dirty[c][parameter]
-    })
+    }
+    if song_pattern then
+      memory.record_event_for_target(song_pattern, c, "trig_lock", data)
+    else
+      memory.record_event(c, "trig_lock", data)
+    end
   end
 end
 

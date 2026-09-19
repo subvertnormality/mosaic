@@ -1,0 +1,11 @@
+{
+  "case": "PERF-003-HW-16",
+  "workload": "slides",
+  "channels": 16,
+  "built_from_revision": "072e3ca17827b2210239daa8c342e02e78f5c3fb",
+  "files": {
+    "autosave.ptn": "7d47ce9dba70b7070708dedce1e1235f6a766abf642219933dcf485d1de3b15f",
+    "autosave.pset": "11706ff2e28d68794c8c27121ceb72767f8f559356e162942e4e605dd0c5eee7"
+  },
+  "lane": "cm3plus-norns"
+}

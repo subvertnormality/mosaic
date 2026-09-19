@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-18",
+  "scope": "read-only Windows PC network diagnosis; no PC network, driver, power, norns, or SSH changes made by this diagnostic",
+  "norns_path": {
+    "adapter_name": "WiFi 7",
+    "interface_description": "802.11n USB Wireless LAN Card",
+    "pnp_device_id": "USB\\VID_148F&PID_5370\\1.0",
+    "driver": {
+      "file": "netr28ux.sys",
+      "provider": "Microsoft",
+      "date": "2007-08-14",
+      "version": "5.1.22.0",
+      "ndis": "6.70"
+    },
+    "network": {
+      "ssid": "norns",
+      "band": "2.4 GHz",
+      "channel": 11,
+      "radio_type": "802.11n",
+      "ipv4": "10.42.0.144/24",
+      "gateway": "10.42.0.1",
+      "direct_route": "10.42.0.0/24 via WiFi 7",
+      "mtu": 1500
+    },
+    "driver_properties": {
+      "wireless_mode": "BGN (registry value 9)",
+      "wmm_enabled": true,
+      "tx_burst_enabled": true,
+      "selective_suspend": "enabled; idle timeout 5 seconds"
+    }
+  },
+  "wsl_path": {
+    "route_to_norns": "via Hyper-V NAT gateway 172.28.80.1 on eth0",
+    "eth0_mtu": 1500,
+    "eth0_counters_at_observation": {
+      "rx_errors": 0,
+      "rx_dropped": 0,
+      "tx_errors": 0,
+      "tx_dropped": 0
+    }
+  },
+  "observations": [
+    "Windows wlan and adapter link-rate reports varied during the read-only inspection: transmit was observed at 1 Mbps and later 26 Mbps; adapter LinkSpeed was observed at 1, 13, and 26 Mbps. These values are dynamic driver reports and are not treated as throughput measurements.",
+    "Historical WLAN AutoConfig events included a driver disconnect while associating (2026-09-18 04:48) and a dynamic key-exchange timeout (2026-09-17). They do not establish the cause of this transfer incident.",
+    "The installed INF exposes no supported fixed transmit-rate setting. No undocumented registry property was changed."
+  ],
+  "post_placement_result_reported_by_parent": {
+    "change": "antennas separated slightly",
+    "norns_signal_change": "approximately -35 dBm to -55 dBm",
+    "pc_uplink_report": "13 Mbps",
+    "windows_1400_byte_ping": "improved from 3/8 replies to 8/8 replies at 1-2 ms",
+    "paced_1_mib_upload": "passed in 20.662 seconds; test pacing intentionally throttled transfer"
+  },
+  "interpretation": "The placement comparison improves bidirectional connectivity evidence. It would be inappropriate to attribute the incident causally to the old driver or to PC power settings from this data."
+}

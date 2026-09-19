@@ -1,0 +1,10 @@
+{
+  "status": "scoped-regressions-validated",
+  "before_sha256": "9b884a3551326a8c8313be50848ae9a711bf6470f7910b32e314442a79c2f7e3",
+  "after_sha256": "897dc6f72c26ffa824be27b80d973118d8fc974f07f3d85513db108fe5d239fb",
+  "patch_sha256": "0485d1f9d313032639a1e6c6be6ee32b91dafd616cd60d951b14b3802cb9ba52",
+  "review": "01a07fb0-e236-72e1-bd91-01db91b83b35",
+  "baseline": "arp_minimum_gap_contract.lua: negative50 callbacks1,4,6; expected1,4,5,6. Positive50 control4,5,6,7 passed.",
+  "scope": "Clamp effective swung interval to one pulse before rounding/carry; native regression and full affected checks pending.",
+  "validation": "docs/testing/spacing-rest-validation.json"
+}

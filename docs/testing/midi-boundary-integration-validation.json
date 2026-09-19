@@ -1,0 +1,138 @@
+{
+  "status": "startup candidate validated; native review blockers remain",
+  "native_regressions": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/midi-boundary-regressions-01.json",
+    "sha256": "cf736fe3560436de1ffc5c4bf8f18cf7427ae2405f398958a3d8690f08962ca7",
+    "runs": [
+      {
+        "case": "M-SYNC-009",
+        "clock_mode": "controlled-experimental",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/a11450b5a5784ea78fac170bde23ef64/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-SYNC-009",
+        "clock_mode": "real-time",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/8aa747fc24b740439795649334281b79/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-SYNC-006",
+        "clock_mode": "controlled-experimental",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/0e0b54405f974904a7393cf06af2afcc/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-SYNC-006",
+        "clock_mode": "real-time",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-006\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/fffc4cbe7cd34d8ca86ee3d48bde8c5c/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-SYNC-008",
+        "clock_mode": "controlled-experimental",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-008\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/2a679330c3bc47b1ac7c80be69aff79b/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-SYNC-008",
+        "clock_mode": "real-time",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-008\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/72c5d3b315434d13802e6653707905bd/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-SYNC-005",
+        "clock_mode": "controlled-experimental",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-005\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/8014f1a3386a48208597b0e1905eb504/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-SYNC-005",
+        "clock_mode": "real-time",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-SYNC-005\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/ac125db8cad3472fb9ab7947b05e32ff/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-TIM-002",
+        "clock_mode": "controlled-experimental",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-TIM-002\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/f00ec6799452440f81a0399403be3a4b/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-TIM-002",
+        "clock_mode": "real-time",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-TIM-002\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/0a759aeaa050449eb2e454c5a4d29514/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-TIM-003",
+        "clock_mode": "controlled-experimental",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-TIM-003\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/7f214c94f5e84a60b574089e00e5affc/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-TIM-003",
+        "clock_mode": "real-time",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-TIM-003\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/4634498b3ae0401dba17e3175703a418/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-REC-001",
+        "clock_mode": "controlled-experimental",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-REC-001\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/a440490791194f71a3cc2c90fc2e71e0/manifest.json\"}\n",
+        "stderr": ""
+      },
+      {
+        "case": "M-REC-001",
+        "clock_mode": "real-time",
+        "exit_code": 0,
+        "stdout": "{\"case\": \"M-REC-001\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/03a6c5024ada4e9f8ce5d99c8ef92d32/manifest.json\"}\n",
+        "stderr": ""
+      }
+    ]
+  },
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-5102cfd50601451da2c190e4108a5251/results.json",
+    "sha256": "b885fd1f213614516b06e9ac546f4805403f6072bad8abf1e6480a57d89a3d56",
+    "summary": "Ran 520 tests in 11.478 seconds, 520 successes, 0 failures"
+  },
+  "adapter_tests": {
+    "command": "lua5.3 tests/behaviour/test_midi_output_transport.lua",
+    "scenarios_passed": 6
+  },
+  "source_sha256": {
+    "lib/clock/m_clock.lua": "6a12a4d77736bb3e723e720a2440fb8d27de9e3765f06f1a24c8b5f88c654b06",
+    "lib/clock/midi_output_transport.lua": "334db266f5c5b12af5da2a6efb3b828386b546ecfa3022c47a6dbbc9f7a83532"
+  },
+  "review": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/midi-boundary-integration-review-01.json",
+    "sha256": "f8e7b4eed8c31dff34da81d02630f4c8584250241af1f4b722ea0759bacc7054",
+    "session": "01a08785-156e-7a81-bc0b-03fed3a76d2e"
+  },
+  "native_install": "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-04/installation.json",
+  "blockers": [
+    "A failing subscriber can terminate shared MIDI output; isolate failure with visible reporting and continued fanout.",
+    "Queued pre-reset sync continuation retains obsolete deadline; C regression reproduced100.5beat target after resetting to0."
+  ],
+  "remaining": [
+    "Incoming Start forwarding",
+    "Multi-output physical remapping contract",
+    "Rapid native lifecycle and direct reset/init cancellation",
+    "Later gate/wrap/tempo matrices",
+    "Full emulator/manual/final hardening gates"
+  ],
+  "full_goal_complete": false
+}

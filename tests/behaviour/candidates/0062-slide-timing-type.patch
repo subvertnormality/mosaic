@@ -1,0 +1,30 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -468,11 +468,7 @@
+   ring_end = 1
+ end
+ 
+-function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
+-  local clock = m_clock["channel_" .. channel_number .. "_clock"]
+-  clock:set_swing_or_shuffle((swing_or_shuffle or 0))
+-  clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 0))
+-end
++
+ 
+ local function retime_channel_slides(channel_number, channel_clock)
+   local now = clock_lattice.transport
+@@ -490,6 +486,14 @@
+     end
+     i = (i % RING_BUFFER_SIZE) + 1
+   end
++end
++
++function m_clock.set_swing_shuffle_type(channel_number, swing_or_shuffle)
++  local clock = m_clock["channel_" .. channel_number .. "_clock"]
++  local previous = clock.swing_or_shuffle
++  clock:set_swing_or_shuffle((swing_or_shuffle or 0))
++  clock.end_of_clock_processor:set_swing_or_shuffle((swing_or_shuffle or 0))
++  if clock.swing_or_shuffle ~= previous then retime_channel_slides(channel_number, clock) end
+ end
+ 
+ function m_clock.set_channel_swing(channel_number, swing)

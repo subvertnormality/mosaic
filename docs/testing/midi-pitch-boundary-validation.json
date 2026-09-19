@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "status": "candidate-pass-codex-accepted",
+  "date": "2026-09-10",
+  "case": "M-TRANS-005",
+  "base_revision": "c0e7c8767e90f91720d71374564d44a8295bb2d3",
+  "defect": "Composed pitches outside0..127 were passed to norns as MIDI data bytes and corrupted the byte stream.",
+  "baseline": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/9a5bd9821d40400ab6b0e63488232012/manifest.json",
+    "sha256": "d565d76a7dacfaea5728a3e97e7d0c778015f00d4a6d55800fa5bc95b6583304",
+    "passed": false,
+    "artifact_count": 15,
+    "failure": {
+      "type": "ContractError",
+      "message": "Status interrupted an incomplete message"
+    }
+  },
+  "candidate": {
+    "change": "Clamp note numbers in m_midi.note_on/note_off at the final MIDI-only boundary; use the normalized note for ownership bookkeeping, emit every owned release during safety cleanup, and clamp unmatched safety releases.",
+    "source_sha256": {
+      "lib/m_midi.lua": "bf339dc7fbbae4dba3d655f20cdeee3a0d3472ce8636a7b44a37052be7db281e",
+      "lib/tests/lib/m_midi_tests.lua": "256570ec855f19feda16d5c06cf6418c551449f6ffe9d302a87e808831ce9a66",
+      "tests/behaviour/numeric_merging.py": "7fad194b239ec2e47fbe79c4e8327c59968716736ba199ff307f05592d376f4d",
+      "tests/behaviour/cases.py": "b97b2217eab836f03d76c03a128b1d8bb1087723a5c017f4be24dc3aa71c1aaa"
+    }
+  },
+  "native_behavior": {
+    "controlled-experimental": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/fb8cf88607f543d8ad41d9c3d29e96f4/manifest.json",
+      "sha256": "aa04fd643f73e38ba2af5aebed796bb2fb3e995603950d9b664cd1985532b516",
+      "passed": true,
+      "artifact_count": 15
+    },
+    "real-time": {
+      "path": "/home/andy/projects/mosaic-behaviour-runs/f570134455944765ae84f7693d359d88/manifest.json",
+      "sha256": "f5a243be1de7bbcf78742388e3f55d78e3c79d18905daa6738c8976e2e6d457e",
+      "passed": true,
+      "artifact_count": 15
+    }
+  },
+  "adjacent_regressions": {
+    "M-TRANS-002": {
+      "controlled-experimental": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/84022bee21854adea4aa06e1b6849bb8/manifest.json",
+        "sha256": "08e0c056dc99f9e66c7bf130376554bd59669ae875470c513881c972afdef2bb",
+        "passed": true,
+        "artifact_count": 15
+      },
+      "real-time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/079e868aff684eeeb7a0c541c27cc2f9/manifest.json",
+        "sha256": "c5ec5cdb4fc29ead5d9504bee802cc405e70c9536f39b2349c1289f6985ea73c",
+        "passed": true,
+        "artifact_count": 15
+      }
+    },
+    "M-TRANS-004": {
+      "controlled-experimental": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/fbde67b1f94a46e2b038d91050b0a183/manifest.json",
+        "sha256": "bd7ff16523eb0792d690d0a33d6fdc6c9218e08d9cffc50ada9f270288f55492",
+        "passed": true,
+        "artifact_count": 15
+      },
+      "real-time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/d7e0ba69a5714c26bd35b5fa5a85abd7/manifest.json",
+        "sha256": "b93e3ff3b4199f6a45ac51b3614abd7684306799d80e9bb3e091e09bc6846a4f",
+        "passed": true,
+        "artifact_count": 15
+      }
+    },
+    "M-MERGE-016": {
+      "controlled-experimental": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/d0f61cac024d48fca6238184be286b05/manifest.json",
+        "sha256": "ecf7d018a5093167122fda1c50cd87881b29d408d319510641eea9f60f1b5ecc",
+        "passed": true,
+        "artifact_count": 15
+      },
+      "real-time": {
+        "path": "/home/andy/projects/mosaic-behaviour-runs/dfa6cb1961b2411aa90199a089c5057e/manifest.json",
+        "sha256": "d95932cdba35dfb5a98f8cb9c2ed177cc6344e427c53b8eed0b7f1ad6ddb0f2a",
+        "passed": true,
+        "artifact_count": 15
+      }
+    }
+  },
+  "independent_oracle": {
+    "sources": [
+      [
+        -7,
+        13,
+        -7,
+        -7
+      ],
+      [
+        13,
+        -7,
+        -7,
+        -7
+      ]
+    ],
+    "higher_degrees": [
+      23,
+      23,
+      -7,
+      -7
+    ],
+    "higher_base_midi": [
+      100,
+      100,
+      48,
+      48
+    ],
+    "higher_composition": "+24 octave +12 scale +12 step",
+    "higher_unbounded": [
+      148,
+      148,
+      96,
+      96
+    ],
+    "higher_wire": [
+      127,
+      127,
+      96,
+      96
+    ],
+    "lower_degrees": [
+      -17,
+      -17,
+      -7,
+      -7
+    ],
+    "lower_base_midi": [
+      31,
+      31,
+      48,
+      48
+    ],
+    "lower_composition": "-24 octave -12 scale -12 step",
+    "lower_unbounded": [
+      -17,
+      -17,
+      0,
+      0
+    ],
+    "lower_wire": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "complete_stream_assertions": [
+    "9 exact onsets and9 matching releases per stage",
+    "8 one-step owned gates plus Stop boundary release",
+    "exact ordered36 program changes and6 transport events per stage",
+    "60 total events per stage; no extra event",
+    "accumulated phase from first onset",
+    "loss-detecting public capture",
+    "ten exact script-start events explicitly checked outside the stage capture"
+  ],
+  "unit_integration": {
+    "snapshot": "/home/andy/projects/mosaic-behaviour-runs/midi-pitch-boundary-final3-20260910/mosaic",
+    "unit_log": "/home/andy/projects/mosaic-behaviour-runs/midi-pitch-boundary-final3-20260910/unit.log",
+    "unit_log_sha256": "a2af0b4cf5dfc14ed6e6d274fe1edbf09e765acaa46b4d9acfa948c8e1b5c580",
+    "unit_summary": "Ran 530 tests in 13.679 seconds, 530 successes, 0 failures",
+    "oracle_log": "/home/andy/projects/mosaic-behaviour-runs/midi-pitch-boundary-final3-20260910/python-oracles.log",
+    "oracle_log_sha256": "d3f3c300d6f9d2b40e90e2b6aa67d0a1c70870bdbae0e57437fd7467dd1e5689",
+    "oracle_summary": "21 focused integration/oracle tests passed"
+  },
+  "scope_limits": [
+    "No change to NRPN or other MIDI parameter value policies.",
+    "Non-MIDI device.player note values are unchanged.",
+    "Further chord/arp native cross-feature combinations remain in their own manual domains."
+  ],
+  "review": {
+    "status": "accepted",
+    "provider": "codex-only",
+    "initial": "docs/testing/reviews/midi-pitch-boundary-review.json",
+    "session": "01a0898e-559a-7ad1-885d-790eeb2e50d3",
+    "followup": "docs/testing/reviews/midi-pitch-boundary-followup.json",
+    "disposition": "CONCEDE: all three findings resolved; scoped fix accepted"
+  },
+  "full_campaign_complete": false
+}

@@ -1,0 +1,72 @@
+diff --git a/lib/clock/m_clock.lua b/lib/clock/m_clock.lua
+index fed71b9..9ce5e45 100644
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -8,6 +8,7 @@ clock_lattice = {}
+ local playing = false
+ local master_clock
+ local midi_clock_init
++local pending_master_start
+ local first_run = true
+ 
+ local ppqn = 96
+@@ -829,13 +830,35 @@ function m_clock:start(from_external_transport)
+   -- against an already-running MIDI clock retains its own starting phase.
+   clock_lattice.sync_to_external = from_external_transport == true
+   clock_lattice.external_clock_active = function() return params:get("clock_source") == 2 end
+-  -- The onset callback prepares the resolved first step before its note.
+-  clock_lattice:start()
++  -- Start must reach receivers before the first note. When forwarding the
++  -- native clock, begin on its next 24-PPQN edge instead of the button phase.
+   m_midi.start()
++  local sends_clock = false
++  for port = 1, #midi.vports do
++    if params:get("clock_midi_out_" .. port) == 1 then sends_clock = true end
++  end
++  if sends_clock and not from_external_transport and not clock_lattice.enabled then
++    local target_lattice = clock_lattice
++    local origin = (math.floor(clock.get_beats() * 24) + 1) / 24
++    pending_master_start = clock.run(function()
++      clock.sync(1 / 24)
++      pending_master_start = nil
++      if playing and clock_lattice == target_lattice then
++        target_lattice.sync_origin = origin
++        target_lattice:start()
++      end
++    end)
++  else
++    clock_lattice:start()
++  end
+        
+ end
+ 
+ function m_clock:stop(send_transport)
++  if pending_master_start then
++    clock.cancel(pending_master_start)
++    pending_master_start = nil
++  end
+ 
+   playing = false
+   first_run = true
+diff --git a/lib/clock/m_lattice.lua b/lib/clock/m_lattice.lua
+index 91014a3..0ceefa4 100644
+--- a/lib/clock/m_lattice.lua
++++ b/lib/clock/m_lattice.lua
+@@ -159,13 +159,14 @@ end
+ -- @tparam table s this lattice
+ function Lattice.auto_pulse(s)
+   local interval = 1 / s.ppqn
+-  if s.sync_to_external then
++  if s.sync_to_external or s.sync_origin then
+     -- MIDI transport defines beat zero independently of callback latency.
+     -- Count each elapsed pulse once, including acquisition/callback catch-up.
+     -- Never reuse the callback's fractional phase as a permanent offset.
+     local next_pulse = 0
+-    while not s.external_clock_active or s.external_clock_active() do
+-      local due = math.floor(clock.get_beats() * s.ppqn + 1e-9)
++    local origin = s.sync_origin or 0
++    while s.sync_origin or not s.external_clock_active or s.external_clock_active() do
++      local due = math.floor((clock.get_beats() - origin) * s.ppqn + 1e-9)
+       while next_pulse <= due do
+         s:pulse()
+         next_pulse = next_pulse + 1

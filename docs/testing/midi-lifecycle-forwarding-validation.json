@@ -1,0 +1,247 @@
+{
+  "status": "lifecycle/multi-output guards pass; forwarding remains failing",
+  "unit_baseline": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-1c32d5c5c4134fd48c59d36ff51ff89b/results.json",
+    "sha256": "8298b44320047aaad7a074c0dd31d0ee2552e47e74f92a3acb0312f2756aec03",
+    "result": {
+      "exit_code": 4,
+      "summary": "Ran 524 tests in 13.480 seconds, 520 successes, 4 failures",
+      "failure_names": [
+        "test_boundary_active_direct_init_cleans_transport",
+        "test_boundary_active_direct_reset_cleans_transport",
+        "test_boundary_pending_direct_init_cleans_transport",
+        "test_boundary_pending_direct_reset_cleans_transport"
+      ],
+      "log_sha256": "23b583967c5e6203270dff7a765f9273f199dc2d91bf4bfa1dd333cdc3b15e48",
+      "source_sha256": {
+        "lib/clock/m_clock.lua": "579f3fa0f577247f342913f27c805de4b3a7b98457d7ff0f6790cb7cae514156",
+        "lib/clock/m_lattice.lua": "166a0a691fa9cf506cbddde7c45e15b6a3de84f01c54a6659560b72184b313ec",
+        "lib/models/program.lua": "c4e57c831206a55485d042bc8ff0fda1c9d422841c1ecea97b13ad7d49000556",
+        "lib/step.lua": "f0ce6b9a7d88d7fb56e2062978541e4bd2a9d2805aba68cde786bb9d54d6951e"
+      },
+      "full_campaign_complete": false
+    }
+  },
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-04bc95dfec9741009cd8ce134703f781/results.json",
+    "sha256": "e540c39c4593025b549fd3bf32c654c2d1a4ca324257a16c27710c6b7fadbb7f",
+    "result": {
+      "exit_code": 0,
+      "summary": "Ran 524 tests in 11.855 seconds, 524 successes, 0 failures",
+      "failure_names": [],
+      "log_sha256": "1f7a2656eabc7eec2bd85d1c6ebcda002a8ead9650563110d012085e9f9d2751",
+      "source_sha256": {
+        "lib/clock/m_clock.lua": "0f4bb012bf85b72fcd539199d848737208d2e7fc7a957cecf7f2d02ba955c7bb",
+        "lib/clock/m_lattice.lua": "166a0a691fa9cf506cbddde7c45e15b6a3de84f01c54a6659560b72184b313ec",
+        "lib/models/program.lua": "c4e57c831206a55485d042bc8ff0fda1c9d422841c1ecea97b13ad7d49000556",
+        "lib/step.lua": "f0ce6b9a7d88d7fb56e2062978541e4bd2a9d2805aba68cde786bb9d54d6951e"
+      },
+      "full_campaign_complete": false
+    }
+  },
+  "native_lifecycle_multi": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/master-lifecycle-multi-01.json",
+    "sha256": "0e109ad300c701d94dbe798a42c3561dda5454c6fcfbcecea47b3ef5a86f79b2",
+    "result": {
+      "status": "passed",
+      "runs": [
+        {
+          "case": "M-SYNC-011",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-011\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/326dc7b6be294a8281c477c076ec1bdb/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-011",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-011\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/a911ec1b41be40a680e58069d57bc4bc/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-010",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-010\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/45e411c9b39b4184a08c32cdbe2a6c00/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-010",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-010\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/227b0faa4cf64990aff1ba0417caf311/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-009",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/40cecbe6b2964879896080f18c7bdbc1/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-009",
+          "clock_mode": "real-time",
+          "exit_code": 0,
+          "stdout": "{\"case\": \"M-SYNC-009\", \"passed\": true, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/d1961a2dff214f0d894fabe0ad7eec3c/manifest.json\"}\n",
+          "stderr": ""
+        }
+      ],
+      "full_goal_complete": false
+    }
+  },
+  "forwarding_baselines": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/forwarded-clock-baselines-01.json",
+    "sha256": "44d9dfcfc6163885d443229244a9a5a9bbd851579a702660f095d5d7acdffec3",
+    "result": {
+      "status": "baseline_runs_complete",
+      "rows": [
+        {
+          "case": "M-SYNC-012",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 1,
+          "stdout": "{\"case\": \"M-SYNC-012\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/99bc86182d1f4923a804e9d99eff87be/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-012",
+          "clock_mode": "real-time",
+          "exit_code": 1,
+          "stdout": "{\"case\": \"M-SYNC-012\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/c18c146648a9418582c983b7573821ce/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-013",
+          "clock_mode": "controlled-experimental",
+          "exit_code": 1,
+          "stdout": "{\"case\": \"M-SYNC-013\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/bc814ef558f84113ae9931a4a0217bc3/manifest.json\"}\n",
+          "stderr": ""
+        },
+        {
+          "case": "M-SYNC-013",
+          "clock_mode": "real-time",
+          "exit_code": 1,
+          "stdout": "{\"case\": \"M-SYNC-013\", \"passed\": false, \"manifest\": \"/home/andy/projects/mosaic-behaviour-runs/b838bf1d0568421aae474dc393d5e4d7/manifest.json\"}\n",
+          "stderr": ""
+        }
+      ],
+      "all_passed": false,
+      "full_goal_complete": false
+    }
+  },
+  "arbitration": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/midi-forwarding-arbitration-01.json",
+    "sha256": "86911411da771ff045748d07299fee5b4b4eb4d51104ed1ebdf5615ef07fd7d2",
+    "result": {
+      "status": "returned",
+      "request": {
+        "repo_path": "/home/andy/projects/mosaic-behaviour-tests",
+        "engine": "codex",
+        "effort": "medium",
+        "web_search": false,
+        "question": "New bounded musical forwarding arbitration, Codex only. Read only; no edits/subagents/native runs/web. Candidate07 optional pinnedofficial14bbeae with acquisition/no speculative preClock2 beat, exact schedulerdeadline/epochs/queuedresumeclaim, before/F8/after genericcallbacks. Masterstartup/lifecycle/tworeceivers passD/R;524units afterdirectinit/reset Stopcleanup. NEW Mosaic M-SYNC012cold and013warm external100BPM inputport1 ->clockoutputport2 viarealmenus. All4D/Rfail firstnote seesreceiver tick=-1 despiteFAalreadyreceived. ColdD firstinputClock4105000000, Start outputsallports+NoteOn atsameinstant, firstF8port2 at4130000000, secondF8 at4130000001 then25mscadence. Existing source-anchored noteon/offschedule passes beforeforwardreceiverassert. Generic native NO Mosaic samecoldfixture failsD firstF8 offset25ms, R25.486193ms (tests/midi_forwarding_native.py); thus native forwarding/acquisition separate from Mosaic incomingStart bypass ofnewboundaryadapter. clock_midi_get_beat frozenat0 untilsecondclock toavoid fictitioustempo/subdivision; scheduler syncstrictgreaterthan meansresetdue0cannotfireatfirstreceivedtick; secondtickcatches2deadlines. Need upstream-compatible correction preserving no speculative preClock2subdivisions and absoluteinputnotephase, notdelayMosaicfirstnote25ms or widenoracle. Assess minimal design: allow exact received zero boundary on MIDIStart evenunacquired; ensure sourceStart eventqueuedbefore firstclockresume/fanout atomically relative scheduler (current reset unlocks beforeclock.c postsStart). Then route Mosaic incomingStart through boundaryAPI onlyifneeded withknownsourceepochorigin, persistentcoincidentpulseownership. Alternative exactinputclockforward ownership versus interpolatedcore output? Do not prescribe resettinginputclock or replacingofficialcorewithMosaic logic. Need explicitcold/warm/repeatedStart/sourcehandoff/Stop/cancellation/forwarding/24PPQNordering, forwardingnoinputclockecho, latergate/intermediate timing. Recommend a concrete bounded correction and regression contract, identify unavoidableunknowninterval limits vs realbugs. Existing schedulerlegacyparity deliberatelystrictsync; any changed semantics mustbeexplicitoptionalpatchwithbaseline notsilentemulatorworkaround. Review proportional to developer musicutility, no cyber/governance escalation. Fullgoal remains incomplete."
+      },
+      "input_sha256": {
+        "/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/forwarded_clock.py": "98f8a84ba088a76c73031ad0b49b5f5dfa1b30799fc59c5e1073486d1a17bb60",
+        "/home/andy/projects/mosaic-behaviour-tests/lib/clock/midi_output_transport.lua": "0cef3a241fb8c712fb72415cbef01ba865cee2aa19e0b5eaab1b5026baa0d409",
+        "/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua": "0f4bb012bf85b72fcd539199d848737208d2e7fc7a957cecf7f2d02ba955c7bb",
+        "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/matron/src/clocks/clock_midi.c": "04b73770a7475d55906c6bbab911305810d52fc740aabb4a5efb1c545c2721f5",
+        "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/matron/src/clocks/clock_scheduler.c": "e94768da49bdf06276a2430f28ef718a635f37221ab617d24c15fae4e05663bd",
+        "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/matron/src/clock.c": "35de92c2ed43dde2f6cf8ef76e501b4c6dd5eb1906dec97a1a4965ed51923a76",
+        "/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/lua/core/clock.lua": "e2e6d52c988a6a02c3eec9bdff355a7bcab413e94437305f94cd97e5e08778cb"
+      },
+      "query_schema": {
+        "name": "query",
+        "title": null,
+        "description": "Quick adversarial double-check of a single fact or point \u2014 NOT a full review, no five-section scaffold, lower reasoning effort. The reviewer reads the repo (if given) and returns a direct answer with citations and a stated confidence level.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "question": {
+              "type": "string",
+              "description": "The specific question to double-check."
+            },
+            "repo_path": {
+              "type": "string",
+              "description": "Absolute path to the git repo to ground the answer (optional)."
+            },
+            "files": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "path": {
+                    "type": "string"
+                  },
+                  "reason": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "path"
+                ]
+              },
+              "description": "Optional files to suggest the reviewer look at first (hints, not a payload \u2014 it can read anything)."
+            },
+            "focus": {
+              "type": "string",
+              "description": "Extra framing for the question."
+            },
+            "engine": {
+              "type": "string",
+              "enum": [
+                "codex",
+                "claude"
+              ],
+              "description": "Override which local engine reviews (default: the server's configured engine; rebut uses known session ownership and requires an explicit engine when unknown)."
+            },
+            "model": {
+              "type": "string",
+              "description": "Override the reviewer model (default: the engine's strongest \u2014 gpt-6-astra / claude-fable-5-1)."
+            },
+            "effort": {
+              "type": "string",
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ],
+              "description": "Reasoning effort. Reviews default to high; query defaults to medium."
+            },
+            "web_search": {
+              "type": "boolean",
+              "description": "Use the selected reviewer's built-in web search (default true). For critique_plan this is required while claim verification is enabled; there is no custom search endpoint or API-key integration."
+            }
+          },
+          "required": [
+            "question"
+          ]
+        },
+        "outputSchema": null,
+        "icons": null,
+        "annotations": null,
+        "meta": null,
+        "execution": null
+      },
+      "result": {
+        "meta": null,
+        "content": [
+          {
+            "type": "text",
+            "text": "**Recommend an explicit optional native received-zero-boundary patch, followed by a source-origin-aware Mosaic adapter change.** The evidence supports two separate defects; allowing zero alone will not guarantee forwarding order, and routing Mosaic through the current adapter alone would preserve the native 25 ms error.\n\n- **Native defect:** candidate07\u2019s [clock_midi.c:85](/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/matron/src/clocks/clock_midi.c:85) correctly suppresses interpolation before acquisition. But [clock_scheduler.c:110](/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/matron/src/clocks/clock_scheduler.c:110) requires `clock_beat > event->sync_clock_beat`, while reset assigns deadline zero. The generic, Mosaic-free manifests independently record first-F8 offsets of [25 ms controlled](/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/3a7a3b924a624fad8345ed95a9e86da8/manifest.json:5) and [25.486193 ms real-time](/home/andy/projects/monome-emulator-midi-clock/artifacts/midi-clock/d6fd1ed3e0464679923b843883d8a986/manifest.json:5).\n- **Application defect:** [m_clock.lua:844](/home/andy/projects/mosaic-behaviour-tests/lib/clock/m_clock.lua:844) explicitly excludes external Start from boundary coordination. Commit `1d68914` introduced that exclusion. All four recorded forwarding cases fail with receiver state `(0, -1, True)`; the cold [capture:180](/home/andy/projects/mosaic-behaviour-runs/99bc86182d1f4923a804e9d99eff87be/results.json:180) confirms NoteOn at `4105000000`, followed by F8 at `4130000000` and `4130000001`. The source-anchored note/gate assertion executes **before** the failing receiver assertion ([forwarded_clock.py:33](/home/andy/projects/mosaic-behaviour-tests/tests/behaviour/forwarded_clock.py:33)).\n\nThe bounded correction should be:\n\n1. **Recognize a received boundary independently of tempo acquisition.** On the first F8 following FA, publish source beat zero with its epoch and receipt timestamp, and allow the core output waiter to consume that boundary exactly once. FA alone must not manufacture F8. Keep beat interpolation frozen until a valid interval exists; advance the consumed output deadline to `1/24`, preventing zero from being replayed at clock two. Prefer a narrowly tagged output-boundary exception over changing every `clock.sync` comparison to `>=`.\n\n2. **Make source-start publication and scheduler visibility one transaction.** Currently [clock.c:118](/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/matron/src/clock.c:118) resets, then posts Start; reset has already unlocked at [clock_scheduler.c:313](/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/matron/src/clocks/clock_scheduler.c:313). Queue the epoch-bearing Start before exposing its boundary resumes, with consistent synchronization around source-reference publication too. Preserve queued-resume claims and stale-epoch rejection. Do not execute Lua callbacks under that lock.\n\n3. **Use the boundary adapter for incoming Start when forwarding is enabled.** Supply the known source origin\u2014zero in the new Start epoch\u2014not the first callback\u2019s observed time or an arbitrarily late output deadline. The current [adapter:56](/home/andy/projects/mosaic-behaviour-tests/lib/clock/midi_output_transport.lua:56) adopts its first deadline as origin. Preserve permanent after-F8 ownership of coincident pulses and single ownership of intermediates. The existing generic [dispatch:248](/home/andy/projects/monome-runtime-candidates/midi-clock-boundary-07/norns/lua/core/clock.lua:248) already provides before \u2192 all selected F8 outputs \u2192 after.\n\nThe regression contract must cover cold and warm acquisition, repeated Start, queued Start/Stop/Start, cancellation before delivery, direct init/reset, subscriber faults, and source handoff in both modes. Repeated external Start resets receiver phase with cleanup but no echoed Stop; source handoff without Start preserves receiver progression and rejects obsolete work. Require FA before first F8 before NoteOn, receiver ticks `0,6,12\u2026`, exactly 24 F8 per quarter, unchanged absolute note/gate deadlines, and no F8 on disabled/input-only ports. Include later gates, intermediate subdivisions, wraps, tempo changes, and delayed dispatch\u2014not merely startup.\n\nExact-input-clock forwarding is a valid **separate explicit mode** if literal input-edge tracking is required: it must exclusively own F8 while selected, suppress interpolated duplicates, and retain generic fanout callbacks. It is broader than the minimal repair and unnecessary to establish the current constant-tempo contract.\n\nBefore clock two, an unknown fractional interval cannot be scheduled accurately without prediction; catch-up cannot recover elapsed wall time. **The already-received zero boundary is known**, so its missing F8 is a real bug. Retain strict legacy parity ([native_scheduler_step.c:45](/home/andy/projects/monome-emulator-midi-clock/tests/native_scheduler_step.c:45)) and negative baselines; record the exception as an optional upstream patch, never a silent emulator adjustment.\n\n**CONFIDENCE: High** on diagnosis; the proposed correction remains unverified without implementation and D/R regressions. No runs were performed; the full goal remains incomplete.\n\n---\n_paranoia-local \u00b7 engine=codex \u00b7 session_ref=`01a087b2-c56f-7d50-8699-ea5b325ede1d` \u2014 to dispute a finding, call `rebut` with this session_ref and your counter-evidence._",
+            "annotations": null,
+            "meta": null
+          }
+        ],
+        "structuredContent": null,
+        "isError": false
+      }
+    }
+  },
+  "source_sha256": {
+    "lib/clock/m_clock.lua": "0f4bb012bf85b72fcd539199d848737208d2e7fc7a957cecf7f2d02ba955c7bb",
+    "lib/clock/midi_output_transport.lua": "0cef3a241fb8c712fb72415cbef01ba865cee2aa19e0b5eaab1b5026baa0d409"
+  },
+  "full_goal_complete": false
+}

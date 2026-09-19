@@ -1,0 +1,14 @@
+diff --git a/lib/step.lua b/lib/step.lua
+index ccc6574..b852d9f 100644
+--- a/lib/step.lua
++++ b/lib/step.lua
+@@ -139,7 +139,8 @@ function step.process_params(channel, step)
+         goto continue
+       end
+ 
+-      if params:get("record") == 2 and recorder.trig_lock_is_dirty(c, i) then
++      if params:get("record") == 2 and program_data.selected_channel == channel.number and
++        recorder.trig_lock_is_dirty(channel.number, i) then
+         goto continue
+       end
+ 

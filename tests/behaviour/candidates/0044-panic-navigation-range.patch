@@ -1,0 +1,5 @@
+--- a/lib/m_grid.lua
++++ b/lib/m_grid.lua
+@@ -181 +181 @@
+-          x >= pages.pages_to_grid_menu_button_mappings.trigger_edit_page and 
++          x >= pages.pages_to_grid_menu_button_mappings.channel_edit_page and

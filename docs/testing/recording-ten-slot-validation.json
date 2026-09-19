@@ -1,0 +1,32 @@
+{
+  "status": "scoped-interaction-validated",
+  "case": "M-REC-PARAM-024",
+  "native_runs": [
+    {
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/96923dde7c4849ecaa833b8da76bc7c7/manifest.json",
+      "sha256": "accec57e13676f1e6f9b02c35ce9de6df06630f274270eced0224c6c6fc958ab",
+      "passed": true
+    },
+    {
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4b4f7f4303464ece98c15a9deb0ec20d/manifest.json",
+      "sha256": "1bdc9044592236f603e1ef4cb0b6d7be99400fe59ebfab27742864b4ec481f76",
+      "passed": true
+    }
+  ],
+  "production_changes": false,
+  "oracle": "Only edited slots record on subsequent eligible steps; existing processed locks remain unchanged. Literal ten-slot tables use odd-slot zero edits before step2 and even-slot one edits before step3, with patch defaults changed to2 before disarmed replay.",
+  "assertions": [
+    "All ten original step1 locks preserved",
+    "Untouched even slots emit nothing on step2 while odd slots emit zero",
+    "All ten slots emit correct values before steps3/4 notes",
+    "Four-second onset and CC deadlines,2ns controlled and10ms real-time tolerance",
+    "Two complete disarmed replay cycles plus closing onset distinguish stored locks from every patch default"
+  ],
+  "limitations": [
+    "Scoped ten-slot interaction; full recording and manual campaigns remain incomplete",
+    "Controlled mode remains diagnostic and unadmitted"
+  ],
+  "full_campaign_complete": false
+}

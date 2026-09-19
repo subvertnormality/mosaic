@@ -1,0 +1,21 @@
+diff --git a/lib/clock/m_clock.lua b/lib/clock/m_clock.lua
+index 3a3f834..97b4076 100644
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -289,14 +289,8 @@ function m_clock.init()
+       if not first_run then
+         step.process_song_song_patterns(program_data.current_step)
+         selected_song_pattern = program_data.song_patterns[program_data.selected_song_pattern]
+-        for i = 1, 17 do
+-          if ((program.get_current_step_for_channel(i) - 1) % selected_song_pattern.global_pattern_length) + 1 == selected_song_pattern.global_pattern_length then
+-            local channel = program.get_channel(program.get().selected_song_pattern, i)
+-            if (fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2]) - fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2]) + 1) > selected_song_pattern.global_pattern_length then
+-              program.set_current_step_for_channel(i, 99)
+-            end
+-          end
+-        end
++        -- Each channel applies the global length cap relative to its own start
++        -- on its own clock. Absolute-step resets here truncate offset ranges.
+       end
+ 
+       program_data.current_step = program_data.current_step + 1

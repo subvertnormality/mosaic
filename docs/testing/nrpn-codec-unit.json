@@ -1,0 +1,9 @@
+{
+  "exit_code": 0,
+  "stdout": "PASS 32768 codec encodings, literal boundaries, invalid values, override precedence and A/B/A mode isolation\n",
+  "stderr": "",
+  "sha256": {
+    "lib/devices/nrpn_codec.lua": "9018aa6dd056809c44a1656aff052474890960d0d6dd5f8774ea97b33d204178",
+    "tests/behaviour/test_nrpn_codec.lua": "c3425c44a73b69d571e23f6b617d367226773d32976911b8159acbd61281d578"
+  }
+}

@@ -1,0 +1,30 @@
+diff --git a/lib/pages/channel_edit_page/channel_edit_page.lua b/lib/pages/channel_edit_page/channel_edit_page.lua
+index c6ef244..f7d2b00 100644
+--- a/lib/pages/channel_edit_page/channel_edit_page.lua
++++ b/lib/pages/channel_edit_page/channel_edit_page.lua
+@@ -608,7 +608,7 @@ function channel_edit_page.refresh_step_buttons()
+   local selected_song_pattern = program.get().selected_song_pattern
+   for s = 1, 16 do
+     if pattern_buttons["step" .. s .. "_pattern_button"] then
+-      if channel.selected_patterns[s] ~= nil then
++      if channel.selected_patterns[s] then
+         pattern_buttons["step" .. s .. "_pattern_button"]:set_state(2)
+       else
+         pattern_buttons["step" .. s .. "_pattern_button"]:set_state(1)
+diff --git a/lib/pattern.lua b/lib/pattern.lua
+index 5f1905b..0749fbd 100644
+--- a/lib/pattern.lua
++++ b/lib/pattern.lua
+@@ -90,7 +90,11 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
+     end
+   end
+ 
+-  local patterns_to_process = pattern_channel.selected_patterns
++  -- Priority sources participate in merging without becoming channel assignments.
++  local patterns_to_process = {}
++  for number, enabled in pairs(pattern_channel.selected_patterns) do
++    patterns_to_process[number] = enabled
++  end
+ 
+   local function process_merge_mode(merge_mode)
+     if merge_mode then

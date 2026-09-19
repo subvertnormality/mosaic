@@ -1,0 +1,47 @@
+{
+  "status": "native-straight-span-passed-unit-regressions-unresolved",
+  "depends_on": [
+    "0051-parameters-at-resolved-onset"
+  ],
+  "scope": "Interpolate across onset distance rather than inclusive step count; suppress duplicate first value and stop stale slide writes at destination",
+  "files": [
+    {
+      "path": "lib/clock/m_clock.lua",
+      "before_sha256": "365ae46529b7b0d35d6ffa296b5e8ceca891c1342659ec1760e88b4f952e78e0",
+      "after_sha256": "3395510beb830471fde333aeda0798ebd4cd14a6dd4decbca339d5b62b8e662d"
+    }
+  ],
+  "patch_sha256": "3df72989a2dcd30ea9d13eaab628512c7f4a3b38c10c4e2fe81bfcbfc38e1136",
+  "apply_args": [
+    "--unidiff-zero"
+  ],
+  "baseline_runs": [
+    "c9ffb3ac24424d2b9e2972871a9f2eb9",
+    "6712219742ec4024894c2b1658ecbb8c"
+  ],
+  "test": "M-PATCH-017",
+  "remaining": "Fractional division, swing, non-aligned update phase, active-range wrap and Off-target semantics require explicit tests; candidate not release-admitted",
+  "full_campaign_complete": false,
+  "native_runs": [
+    {
+      "run_id": "de75ac7807c14b28b9ee0dc17a3756c7",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "9167768be198be86e5a16db8672f77b414d305c007e0840d4436776adf7be3dc"
+    },
+    {
+      "run_id": "01a040112ebf45f8907c218484da4862",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "9a07e44e01f183b0891594a8f0cd1d3f24b5466d0909e708aeec08c7ac630411"
+    }
+  ],
+  "units": {
+    "path": "/home/andy/projects/mosaic-behaviour-runs/patch-domain-units-222d73bb7b4146238f90d53201e674df/results.json",
+    "sha256": "e25da823dffd36839e4b6f8e721e161a5a48020c430660bcd80126ee446a8a44",
+    "collected": 482,
+    "successes": 467,
+    "failures": 15
+  },
+  "next_action": "Classify all 15 slide unit failures against independent onset-distance, endpoint and wrap contracts. Do not rewrite expectations simply to match candidate. Add native fractional-rate, swing/phase, wrap and Off-target cases before acceptance."
+}

@@ -5,227 +5,259 @@ local divisions = include("mosaic/lib/clock/divisions")
 
 local m_midi = {}
 
+-- norns builds two tables for every message it sends: the message, then its
+-- bytes. A step sends a hundred messages, so write the bytes into one reused
+-- table and hand them to the port's device, which sends them as one write
+-- exactly as it would have. The table is read before send returns. A port
+-- without a norns MIDI device behind it (a test double, a disconnected port)
+-- keeps its own methods.
+local wire_bytes = {0, 0, 0}
+
+local function device_for_bytes(port)
+  local device = port.device
+  if device ~= nil and getmetatable(device) ~= nil and type(device.send) == "function" then
+    return device
+  end
+end
+
+-- While the clock runs a pulse, messages for one device are gathered and sent
+-- as one write at the points the pulse marks (after its releases, after its
+-- parameter locks, and at its end), in the order they were produced. Every
+-- write is a system call on the CM3+, and a busy step made a hundred of them
+-- before its notes could leave. Any other send to a port first sends what is
+-- gathered, so the order of messages on a port never changes.
+local delay_queue
+local batching = false
+local batches = {}
+local batch_devices = {}
+
+function m_midi.begin_output_batch()
+  m_midi.flush_output_batch()
+  batching = true
+  -- begin() also sends anything already overdue, ahead of what this pulse
+  -- produces: the rescue for a deadline that passed unserved.
+  if delay_queue then delay_queue:begin() end
+end
+
+-- Serve deadlines that fall inside a pulse's work, at the seams between its
+-- channels. What is sent only leaves on a write, so write it: holding it for
+-- the batch at the end of the pulse is the wait this exists to avoid. A seam
+-- with nothing due costs one comparison and no write.
+function m_midi.serve_delayed()
+  if delay_queue and delay_queue:serve() then m_midi.flush_output_batch() end
+end
+
+function m_midi.flush_output_batch(stop)
+  for i = 1, #batch_devices do
+    local device = batch_devices[i]
+    local bytes = batches[device]
+    batches[device] = nil
+    batch_devices[i] = nil
+    local probe = _G.mosaic_pulse_probe
+    if probe then probe:record(4, probe.pulse, i, 0, 1, #bytes, 1) end
+    device:send(bytes)
+    if probe then probe:record(4, probe.pulse, i, 0, 2, #bytes, 1) end
+  end
+  if stop then
+    batching = false
+    if delay_queue then delay_queue:finish() end
+  end
+end
+
+function m_midi.send_three(port, status, data1, data2)
+  local device = device_for_bytes(port)
+  if not device then return false end
+  if batching then
+    local bytes = batches[device]
+    if not bytes then
+      bytes = {}
+      batches[device] = bytes
+      batch_devices[#batch_devices + 1] = device
+    end
+    local n = #bytes
+    bytes[n + 1], bytes[n + 2], bytes[n + 3] = status, data1, data2
+    return true
+  end
+  wire_bytes[1], wire_bytes[2], wire_bytes[3] = status, data1, data2
+  local probe = _G.mosaic_pulse_probe
+  if probe then probe:record(4, probe.pulse, 0, 0, 1, 3, 1) end
+  device:send(wire_bytes)
+  if probe then probe:record(4, probe.pulse, 0, 0, 2, 3, 1) end
+  return true
+end
+
+-- Delayed messages capture the physical connection: reconnecting a vport must
+-- not send an old queued onset to a newly attached receiver.
+local delay_line = include("mosaic/lib/clock/midi_delay_line")
+local lead_time_ms=0
+-- Lock lead is achieved by sending the locks early, never by delaying anything.
+-- The delaying path remains only so a measurement can run the old behaviour as a
+-- control; it is not a product setting and nothing in the app selects it.
+local lock_contract="pulse-advance"
+function m_midi.get_lock_contract() return lock_contract end
+function m_midi.set_lock_contract(value)
+  if value~="legacy-delay-v1" and value~="pulse-advance" then
+    error("Unsupported lock lead contract: "..tostring(value))
+  end
+  if delay_queue then delay_queue:drain() end
+  lock_contract=value
+end
+local function emit(message)
+  local port=message.port
+  if port.device ~= message.device then return end
+  if message.method then
+    m_midi.flush_output_batch()
+    message.method(port,table.unpack(message.args))
+  elseif not m_midi.send_three(port,message.status,message.note,message.velocity) then
+    m_midi.flush_output_batch()
+    port[message.kind](port,message.note,message.velocity,message.channel)
+  end
+end
+local function queue(ms,message)
+  if not delay_queue then
+    -- Subtract the epoch before adding milliseconds: adding 0.005 to Unix
+    -- wall time loses fractions of a microsecond through float cancellation.
+    local origin=util.time()
+    delay_queue=delay_line.new({now=function() return util.time()-origin end,
+      probe_deadline=function(due) return origin + due end,
+      resolution=0.000001,
+      begin=function() m_midi.begin_output_batch() end,
+      flush=function() m_midi.flush_output_batch(true) end,send=emit})
+    if batching then delay_queue:begin() end
+  end
+  return delay_queue:push(ms,message)
+end
+
+-- README Lock lead time: a parameter value normally leaves at its step time,
+-- lead ms ahead of its note. When notes on one MIDI channel are closer together
+-- than twice the lead, a value sent at step time would change the receiver
+-- during the previous note's attack, or before that note even sounds. The value
+-- then waits until halfway between the previous note-on and its own note-on, so
+-- each note keeps its own value for half the gap and the next value settles in
+-- the other half. Only times already known are used: the previous note's
+-- deadline and this value's own note deadline (now plus the lead).
+local last_note_due = {}
+local last_held_due = {}
+local function forget_note_deadlines()
+  last_note_due = {}
+  last_held_due = {}
+end
+local function remember(by_port, port, channel, due)
+  local channels = by_port[port]
+  if not channels then channels = {}; by_port[port] = channels end
+  channels[channel] = due
+end
+function m_midi.parameter_deadline(port, channel)
+  -- Under pulse-advance a value's lead comes from leaving in an earlier pulse,
+  -- so nothing is held back here. This spacing rule belongs to the old contract
+  -- and applies only when that is being measured as a control.
+  if lock_contract == "pulse-advance" then return nil end
+  if lead_time_ms == 0 or not delay_queue then return nil end
+  channel = channel or 1
+  local now = delay_queue:now()
+  -- Measure from the step's pulse, as its note is: a stall inside the pulse
+  -- must not move the value later than the note it belongs to.
+  local heard = delay_queue:time() + lead_time_ms / 1000
+  local due = now
+  local notes = last_note_due[port]
+  local previous = notes and notes[channel]
+  if previous then
+    local midpoint = (previous + heard) / 2
+    if midpoint > due then due = midpoint end
+  end
+  -- A held value is never overtaken by a later one on the same channel.
+  local held = last_held_due[port]
+  held = held and held[channel]
+  if held and held > due then due = held end
+  if due <= now + 0.000001 then return nil end
+  remember(last_held_due, port, channel, due)
+  return due
+end
+function m_midi.hold_parameter(due, port, status, data1, data2, channel)
+  delay_queue:push_at(due, {port=port, device=port.device, kind="cc", note=data1,
+    velocity=data2, channel=channel, status=status})
+end
+
+local function delayed_note(ms,port,kind,note,velocity,channel)
+  -- Under pulse-advance a note is never delayed: its lead comes from the locks
+  -- having left earlier, so the note keeps the timing it has at lead 0.
+  if not ms or ms==0 or lock_contract=="pulse-advance" then return false end
+  local due=queue(ms,{port=port,device=port.device,kind=kind,note=note,velocity=velocity or 100,
+    channel=channel,status=(kind=="note_on" and 0x90 or 0x80)+(channel or 1)-1})
+  if kind=="note_on" then remember(last_note_due, port, channel or 1, due) end
+  return true
+end
+function m_midi.drain_pending_output()
+  if delay_queue then delay_queue:drain() end
+  forget_note_deadlines()
+end
+
+-- Told of every parameter write as it reaches the wire: kind ("cc" or "nrpn"),
+-- port, MIDI channel and the CC number or NRPN address. Lock lookahead installs
+-- it so a write from anywhere else can retire a value it sent early; with none
+-- installed a write costs one nil test.
+m_midi.parameter_write_listener = nil
+function m_midi.set_parameter_write_listener(listener)
+  m_midi.parameter_write_listener = listener
+end
+
+-- Cache the global setting through its params action; zero keeps the original
+-- send path and allocates no timer. Captured note containers retain gate timing.
+function m_midi.get_lead_time() return lead_time_ms end
+function m_midi.set_lead_time(value)
+  if delay_queue then delay_queue:close();delay_queue=nil end
+  forget_note_deadlines()
+  lead_time_ms=value
+end
+local clock_hooks={}
+function m_midi.install_clock_hooks()
+  for id,port in ipairs(midi.vports) do
+    for _,name in ipairs({"clock","start","continue","stop","song_position"}) do
+      local original=port[name]
+      if type(original)=="function" then
+        local wrapper
+        wrapper=function(self,...)
+          local ms=lead_time_ms
+          if name=="stop" then m_midi.drain_pending_output() end
+          -- Pulse-advance adds no latency to clock or transport either.
+          if ms==0 or lock_contract=="pulse-advance" then return original(self,...) end
+          queue(ms,{port=self,device=self.device,method=original,args={...}})
+        end
+        clock_hooks[#clock_hooks+1]={port=port,name=name,original=original,wrapper=wrapper}
+        port[name]=wrapper
+      end
+    end
+  end
+end
+function m_midi.cleanup()
+  -- With zero lead the old script emitted nothing during unload. Only an
+  -- allocated delay line needs transport/release cleanup before core frees
+  -- script clocks and metros; restoring hooks itself must not send MIDI.
+  if delay_queue then
+    m_midi.stop()
+    delay_queue:close();delay_queue=nil
+    forget_note_deadlines()
+  end
+  for _,hook in ipairs(clock_hooks) do
+    if hook.port[hook.name]==hook.wrapper then hook.port[hook.name]=hook.original end
+  end
+  clock_hooks={}
+end
+
 midi_devices = {}
 m_midi.note_counts = {}  -- Initialize note counts table
 
-local midi_note_mappings = {
-  [1] = 1, [2] = 2, [3] = 2, [4] = 3, [5] = 3,
-  [6] = 4, [7] = 5, [8] = 5, [9] = 6, [10] = 6,
-  [11] = 7, [12] = 7
-}
-
-local midi_tables = {}
-local midi_off_store = {}
 local chord_number = 0
-local chord_one_note = nil
-local chord_states = {}
+local midi_input = include("mosaic/lib/devices/midi_input")
+local midi_ingress = midi_input.new(m_midi, step, quantiser, divisions)
 
-local page_change_clock = nil
-local previous_page = nil
-
-for i = 0, 127 do
-  local note_value = midi_note_mappings[(i % 12) + 1] or 0
-  local octave_value = math.floor(i / 12) - 5
-
-  midi_tables[i + 1] = {note_value-1, octave_value}
+handle_midi_event_data = function(data, midi_device)
+  return midi_ingress.handle(data, midi_device)
 end
 
-function handle_midi_event_data(data, midi_device)
-
-
-  local channel = program.get_selected_channel()
-
-  if channel.number == 17 then 
-    return 
-  end
-
-  local transpose = step.calculate_step_transpose(channel.number)
-  local device = program.get().devices[channel.number]
-  local d = device_map.get_device(device.device_map)
-  local midi_channel = device.midi_channel
-  local velocity = data[3]
-
-  if data[1] == 144 then -- note on
-    if midi_tables[data[2]] == nil then
-      return
-    end
-
-    local step_scale_number = channel.step_scale_number
-    local pressed_keys = m_grid.get_pressed_keys()
-
-    local start_trig = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
-    local end_trig = fn.calc_grid_count(channel.end_trig[1], channel.end_trig[2])
-
-    local s = program.get_current_step_for_channel(channel.number)
-
-    if #pressed_keys > 0 then
-      if (pressed_keys[1][2] > 3 and pressed_keys[1][2] < 8) then
-        s = fn.calc_grid_count(pressed_keys[1][1], pressed_keys[1][2])
-        step_scale_number = step.manually_calculate_step_scale_number(channel.number, s)
-      end
-    else
-      step_scale_number = step.calculate_step_scale_number(channel.number, s)
-    end
-
-    local note = quantiser.process_with_global_params(midi_tables[data[2] + 1][1], midi_tables[data[2] + 1][2], transpose, step_scale_number)
-    if params:get("midi_scale_mapped_to_white_keys") == 1 then
-      note = data[2]
-    end
-
-    if not chord_states[s] then
-      chord_states[s] = {
-        chord_one_note = nil,
-        chord_number = 0,
-        notes = {},
-        length_recorded = false
-      }
-    end
-
-    local chord_state = chord_states[s]
-
-    midi_off_store[data[2]] = {
-      note = note,
-      step = s,
-      start_time = util.time()
-    }
-
-    if d.player then
-      d.player:note_on(note, ((velocity - 1) / 126) or 0)
-    else
-      m_midi:note_on(note, velocity, midi_channel, device.midi_device)
-    end
-
-    -- Handle chord state for this step
-    if chord_state.chord_number == 0 then
-      chord_state.chord_one_note = data[2]
-      chord_state.chord_number = 1
-      chord_state.length_recorded = false
-    else
-        if midi_off_store[chord_state.chord_one_note] and 
-          midi_off_store[chord_state.chord_one_note].step == s then
-            chord_state.chord_number = chord_state.chord_number + 1
-        else
-            -- New step or root note released, start new chord
-            chord_state.chord_one_note = data[2]
-            chord_state.chord_number = 1
-            chord_state.length_recorded = false
-        end
-    end
-    
-    -- Store this note
-    chord_state.notes[data[2]] = true
-
-    local chord_degree = nil
-    if chord_state.chord_one_note and 
-      midi_off_store[chord_state.chord_one_note] and 
-      midi_off_store[chord_state.chord_one_note].step == s then
-        chord_degree = quantiser.get_chord_degree(note, midi_off_store[chord_state.chord_one_note].note, step_scale_number)
-        if chord_degree < -14 or chord_degree > 14 then
-            chord_degree = nil
-        end
-    end
-
-    -- If we're on same step as chord root, send as part of chord
-    -- Otherwise send as new note
-    if chord_state.chord_one_note and midi_off_store[chord_state.chord_one_note] and midi_off_store[chord_state.chord_one_note].step == s then
-      recorder.handle_note_midi_message(note, velocity, chord_state.chord_number, chord_degree)
-    else
-      recorder.handle_note_midi_message(note, velocity, 1, nil)
-    end
-  elseif data[1] == 128 then -- note off
-    local stored = midi_off_store[data[2]]
-    if stored == nil then return end
-  
-    local chord_state = chord_states[stored.step]
-    if chord_state then
-      chord_state.notes[data[2]] = nil
-      chord_state.chord_number = chord_state.chord_number - 1
-          
-      -- If root note released or no more notes, clear chord state
-      if data[2] == chord_state.chord_one_note or chord_state.chord_number <= 0 then
-        chord_state.chord_one_note = nil
-        chord_state.chord_number = 0
-      end
-  
-      -- Only process the length when we're on the last note of the chord
-      if chord_state.chord_number <= 0 and not chord_state.length_recorded then
-        chord_state.length_recorded = true
-        local duration = util.time() - stored.start_time
-        local beats_per_second = clock.get_tempo() / 60
-  
-        local channel = program.get_selected_channel()
-        local clock_mods = channel.clock_mods
-        local channel_divisor = m_clock.calculate_divisor(clock_mods)
-        local channel_division = 1 / (channel_divisor)
-        local duration_in_beats = (duration * beats_per_second) / channel_division
-  
-        -- Find closest note division value
-        local closest_division = divisions.note_division_values[1]
-        local smallest_diff = math.abs(duration_in_beats - closest_division)
-              
-        for _, div in ipairs(divisions.note_division_values) do
-          local diff = math.abs(duration_in_beats - div)
-          if diff < smallest_diff then
-            smallest_diff = diff
-            closest_division = div
-          end
-        end
-  
-        if stored.step and params:get("record") == 2 then
-          recorder.add_note_mask_event_portion(
-            channel.number,
-            stored.step,
-            {
-              song_pattern = program.get().selected_song_pattern,
-              data = {
-                step = stored.step,
-                length = closest_division
-              }
-            }
-          )
-          recorder.record_stored_note_mask_events(channel.number, stored.step)
-        end
-      end
-  
-      -- Clean up if no more notes
-      if next(chord_state.notes) == nil then
-        chord_states[stored.step] = nil
-      end
-    end
-  
-    if d.player then
-      d.player:note_off(stored.note)
-    else
-      m_midi:note_off(stored.note, 0, midi_channel, device.midi_device)
-    end
-
-    
-    midi_off_store[data[2]] = nil
-  elseif data[1] == 176 then -- cc change
-    if data[2] >= 1 and data[2] <= 20 then
-
-      if (program.get_selected_page() == 2) then
-        if not previous_page then
-          previous_page = channel_edit_page_ui.get_selected_page()
-        end
-        if (page_change_clock) then
-          clock.cancel(page_change_clock)
-        end
-        page_change_clock = clock.run(function()
-          clock.sleep(2)
-          if previous_page then
-            channel_edit_page_ui.select_page(previous_page)
-            previous_page = nil
-            page_change_clock = nil
-          end
-        end)
-      end
-
-    end
-  end 
-end
 
 function m_midi.init()
+  m_midi.install_clock_hooks()
   for i = 1, #midi.vports do
     midi_devices[i] = midi.connect(i)
     midi_devices[i].event = function(data) 
@@ -254,6 +286,7 @@ function m_midi.send_to_sinfonion(command, value)
   for id = 1, #midi_devices do
 
     if midi_devices[id] and midi_devices[id].name == "Norns2sinfonion" then
+      m_midi.flush_output_batch()
       midi_devices[id]:program_change(value, command)
     end
   end
@@ -266,8 +299,12 @@ function m_midi:reset_note_counts()
 end
 
 
-function m_midi:note_on(note, velocity, channel, device)
+function m_midi:note_on(note, velocity, channel, device, lead_time_ms)
+  if lead_time_ms == nil then lead_time_ms=m_midi.get_lead_time() end
   if midi_devices[device] ~= nil then
+    -- Composed scale/chord/merge/octave operations may exceed MIDI's
+    -- seven-bit note domain. Normalize at the final MIDI-only boundary.
+    note = fn.constrain(0, 127, note)
     -- Initialize tables if necessary
     if not self.note_counts[device] then
       self.note_counts[device] = {}
@@ -283,62 +320,51 @@ function m_midi:note_on(note, velocity, channel, device)
     self.note_counts[device][channel][note] = self.note_counts[device][channel][note] + 1
 
     -- Send the Note On message
-    midi_devices[device]:note_on(note, velocity, channel)
+    local port = midi_devices[device]
+    if not delayed_note(lead_time_ms, port, "note_on", note, velocity, channel) and not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100) then
+      m_midi.flush_output_batch()
+      port:note_on(note, velocity, channel)
+    end
   end
 end
 
-function m_midi:note_off(note, velocity, channel, device)
+function m_midi:note_off(note, velocity, channel, device, lead_time_ms)
+  if lead_time_ms == nil then lead_time_ms=m_midi.get_lead_time() end
   if midi_devices[device] ~= nil then
+    -- Use the same normalized key as note_on so ownership cannot strand.
+    note = fn.constrain(0, 127, note)
     -- Check if the note is currently on
     if self.note_counts[device] and self.note_counts[device][channel] and self.note_counts[device][channel][note] then
       -- Decrement the note count
       self.note_counts[device][channel][note] = self.note_counts[device][channel][note] - 1
+      -- Every emitted Note On owns a Note Off, including overlapping pitches.
+      -- Retain counts for bookkeeping without collapsing receiver releases.
+      local port = midi_devices[device]
+      if not delayed_note(lead_time_ms, port, "note_off", note, velocity, channel) and not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+        m_midi.flush_output_batch()
+        port:note_off(note, velocity, channel)
+      end
       if self.note_counts[device][channel][note] <= 0 then
-        -- Send Note Off only when count reaches zero
-        midi_devices[device]:note_off(note, velocity, channel)
         -- Remove the note from the table
         self.note_counts[device][channel][note] = nil
       end
     else
       -- Note is not currently on, but we received a Note Off.
       -- For safety, send Note Off anyway
-      midi_devices[device]:note_off(note, velocity, channel)
+      local port = midi_devices[device]
+      if not delayed_note(lead_time_ms, port, "note_off", note, velocity, channel) and not m_midi.send_three(port, 0x80 + (channel or 1) - 1, note, velocity or 100) then
+        m_midi.flush_output_batch()
+        port:note_off(note, velocity, channel)
+      end
     end
   end
 end
 
-function m_midi.cc(cc_msb, cc_lsb, value, channel, device)
-  if midi_devices[device] ~= nil then
-    -- Send MSB
-    local cc_msb_value = cc_lsb and math.floor(value / 128) or value
-    midi_devices[device]:cc(cc_msb, cc_msb_value, channel)
-
-    -- Send LSB
-    if cc_lsb ~= nil then
-      midi_devices[device]:cc(cc_lsb, value % 128, channel)
-    end
-  end
-end
-
-function m_midi.nrpn(nrpn_msb, nrpn_lsb, value, channel, device)
-  -- Select NRPN (LSB and MSB)
-  m_midi.cc(99, nil, nrpn_msb, channel, device)
-  m_midi.cc(98, nil, nrpn_lsb, channel, device)
-
-
-  -- Calculate MSB and LSB from value
-  local msb_value = math.floor(value / 128) -- MSB
-  local lsb_value = value % 128  -- LSB
-
-  -- Send MSB and LSB values
-  m_midi.cc(6, nil, msb_value, channel, device)
-  m_midi.cc(38, nil, lsb_value/2, channel, device)
-
-end
-
+m_midi.cc, m_midi.nrpn = include("mosaic/lib/devices/midi_wire_output").new(m_midi)
 
 function m_midi:program_change(program_id, channel, device)
   if midi_devices[device] ~= nil then
+    m_midi.flush_output_batch()
     midi_devices[device]:program_change(program_id, channel)
   end
 end
@@ -347,6 +373,7 @@ function m_midi.start()
 
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
+      m_midi.flush_output_batch()
       midi_devices[id]:start()
     end
   end
@@ -354,14 +381,18 @@ function m_midi.start()
 end
 
 function m_midi:all_notes_off()
+  m_midi.drain_pending_output()
   for device, channels in pairs(self.note_counts) do
     if midi_devices[device] ~= nil then
       for channel, notes in pairs(channels) do
         for note, count in pairs(notes) do
           if count > 0 then
-            -- Send Note Off for the active note
-            midi_devices[device]:note_off(note, 0, channel)
-            -- Reset the note count for this note
+            -- Preserve one release for every owned onset, including distinct
+            -- internal notes that clamp to the same MIDI endpoint.
+            for _ = 1, count do
+              m_midi.flush_output_batch()
+              midi_devices[device]:note_off(note, 0, channel)
+            end
             self.note_counts[device][channel][note] = nil
           end
         end
@@ -379,36 +410,56 @@ function m_midi:all_notes_off()
 end
 
 -- Modify the stop function
-function m_midi.stop()
+function m_midi.stop(send_transport)
   -- Turn off all active notes
   m_midi:all_notes_off()
 
-  -- Stop MIDI devices
-  for id = 1, #midi.vports do
-    if midi_devices[id] and midi_devices[id].device ~= nil then
-      midi_devices[id]:stop()
+  -- Restart cleanup releases voices without sending Stop back to the clock
+  -- source. Ordinary Stop retains its transport output on every device.
+  if send_transport ~= false then
+    for id = 1, #midi.vports do
+      if midi_devices[id] and midi_devices[id].device ~= nil then
+        m_midi.flush_output_batch()
+        midi_devices[id]:stop()
+      end
     end
   end
 
   -- Reset note counts
   m_midi.note_counts = {}
-  chord_number = 0
+  -- Transport Stop also resets keyboard chord state, so a key whose Note Off
+  -- never arrived cannot keep a step's chord open.
+  midi_ingress.reset_chords()
 end
 
 
-m_midi.all_off = scheduler.debounce(function (id)
-  for note = 0, 127 do
-    for channel = 1, 16 do
-      midi_devices[id]:note_off(note, 0, channel)
-    end
-    coroutine.yield()
+local all_off_by_device = {}
+function m_midi.all_off(id)
+  m_midi.drain_pending_output()
+  if not all_off_by_device[id] then
+    all_off_by_device[id] = scheduler.debounce(function()
+      for note = 0, 127 do
+        m_midi.drain_pending_output()
+        for channel = 1, 16 do
+          m_midi.flush_output_batch()
+          midi_devices[id]:note_off(note, 0, channel)
+          -- Forget only notes actually cleared by this sweep position.
+          -- Notes played behind it still need ownership for transport Stop.
+          local channels = m_midi.note_counts[id]
+          if channels and channels[channel] then
+            channels[channel][note] = nil
+          end
+        end
+        coroutine.yield()
+      end
+      chord_number = 0
+    end)
   end
-  -- Reset note counts for this device
-  m_midi.note_counts[id] = nil
-  chord_number = 0
-end)
+  all_off_by_device[id]()
+end
 
 function m_midi.panic()
+  m_midi.drain_pending_output()
   for id = 1, #midi.vports do
     if midi_devices[id].device ~= nil then
       m_midi.all_off(id)
@@ -430,280 +481,7 @@ end
 
 
 function m_midi.set_up_midi_mapping_params()
-  local last_action_time = 0
-  local action_count = 0
-  local scaling_factor = 1
-  local MIN_TIME_BETWEEN_ACTIONS = 0.15 -- 100ms threshold for fast scrolling
-
-
-  params:add_separator("MOSAIC MIDI MAPPING")
-  
-  params:add_group("mosaic_mask_midi_maps", "MASK MIDI MAPS", 138)
-  params:add_separator("SELECTED CHANNEL MASKS")
-
-  for param = 1, 8 do
-    params:add_control(
-      "sel_ch_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "ch1" or param == 6 and "ch2" or param == 7 and "ch3" or param == 8 and "ch4"),
-      "Selected Ch. " .. (param == 1 and "Trig" or param == 2 and "Note" or param == 3 and "Velocity" or param == 4 and "Length" or param == 5 and "Chord 1" or param == 6 and "Chord 2" or param == 7 and "Chord 3" or param == 8 and "Chord 4"),
-      controlspec.new(-1,1, 'lin', 1, 1, '', 1, false), 
-      function() return "MAP" end
-    )
-    params:set_action(
-      "sel_ch_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "ch1" or param == 6 and "ch2" or param == 7 and "ch3" or param == 8 and "ch4"),
-      function(d)
-        local current_time = util.time()
-        local time_diff = current_time - last_action_time
-        
-        if time_diff > MIN_TIME_BETWEEN_ACTIONS then
-          action_count = 0
-          scaling_factor = 1
-        else
-          action_count = action_count + 1
-          if action_count > 3 then
-            scaling_factor = math.min(10, 1 + ((action_count - 3) * 0.5))
-          end
-        end
-
-        local scaled_d = d * scaling_factor
-        if param == 1 then
-          channel_edit_page_ui.handle_trig_mask_change(program.get_selected_channel(), scaled_d)
-        elseif param == 2 then
-          channel_edit_page_ui.handle_note_mask_change(program.get_selected_channel(), scaled_d)
-        elseif param == 3 then
-          channel_edit_page_ui.handle_velocity_mask_change(program.get_selected_channel(), scaled_d)
-        elseif param == 4 then
-          channel_edit_page_ui.handle_length_mask_change(program.get_selected_channel(), scaled_d)
-        elseif param == 5 then
-          channel_edit_page_ui.handle_chord_mask_one_change(program.get_selected_channel(), scaled_d)
-        elseif param == 6 then
-          channel_edit_page_ui.handle_chord_mask_two_change(program.get_selected_channel(), scaled_d)
-        elseif param == 7 then
-          channel_edit_page_ui.handle_chord_mask_three_change(program.get_selected_channel(), scaled_d)
-        elseif param == 8 then
-          channel_edit_page_ui.handle_chord_mask_four_change(program.get_selected_channel(), scaled_d)
-        end
-        params:set("sel_ch_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "ch1" or param == 6 and "ch2" or param == 7 and "ch3" or param == 8 and "ch4"), 0, true)
-
-        if (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 1) then  
-          channel_edit_page_ui.select_mask_page()
-        end
-        
-        last_action_time = current_time
-      end
-    )
-  end
-
-  params:add_separator("CHANNEL MASKS")
-
-  for channel = 1, 16 do
-    for param = 1, 8 do
-      params:add_control(
-        "ch" .. channel .. "_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "chd1" or param == 6 and "chd2" or param == 7 and "chd3" or param == 8 and "chd4"),
-        "Ch." .. channel .. " " .. (param == 1 and "Trig" or param == 2 and "Note" or param == 3 and "Vel" or param == 4 and "Len" or param == 5 and "Chd 1" or param == 6 and "Chd 2" or param == 7 and "Chd 3" or param == 8 and "Chd 4") .. " Mask",
-        controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
-        function() return "MAP" end
-      )
-      params:set_action(
-        "ch" .. channel .. "_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "chd1" or param == 6 and "chd2" or param == 7 and "chd3" or param == 8 and "chd4"),
-        function(d)
-          local current_time = util.time()
-          local time_diff = current_time - last_action_time
-          
-          if time_diff > MIN_TIME_BETWEEN_ACTIONS then
-            action_count = 0
-            scaling_factor = 1
-          else
-            action_count = action_count + 1
-            if action_count > 3 then
-              scaling_factor = math.min(10, 1 + ((action_count - 3) * 0.5))
-            end
-          end
-
-          local scaled_d = d * scaling_factor
-          if param == 1 then
-            channel_edit_page_ui.handle_trig_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          elseif param == 2 then
-            channel_edit_page_ui.handle_note_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          elseif param == 3 then
-            channel_edit_page_ui.handle_velocity_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          elseif param == 4 then
-            channel_edit_page_ui.handle_length_mask_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          elseif param == 5 then
-            channel_edit_page_ui.handle_chord_mask_one_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          elseif param == 6 then
-            channel_edit_page_ui.handle_chord_mask_two_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          elseif param == 7 then
-            channel_edit_page_ui.handle_chord_mask_three_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          elseif param == 8 then
-            channel_edit_page_ui.handle_chord_mask_four_change(program.get_channel(program.get().selected_song_pattern, channel), scaled_d)
-          end
-          params:set("ch" .. channel .. "_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "chd1" or param == 6 and "chd2" or param == 7 and "chd3" or param == 8 and "chd4"), 0, true)
-          
-          last_action_time = current_time
-        end
-      )
-    end
-  end
-
-
-  params:add_group("mosaic_trig_param_midi_maps", "TRIG PARAM MIDI MAPS", 172)
-
-  params:add_separator("SELECTED CHANNEL TRIG PARAMS")
-
-  for param = 1, 10 do
-    params:add_control(
-      "sel_ch_trig_param_" .. param,
-      "Selected Ch. Trig Param " .. param, 
-      controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
-      function() return "MAP" end
-    )
-    params:set_action(
-      "sel_ch_trig_param_" .. param,
-      function(d)
-        local current_time = util.time()
-        local time_diff = current_time - last_action_time
-        
-        -- Reset counter if more than threshold between actions
-        if time_diff > MIN_TIME_BETWEEN_ACTIONS then
-          action_count = 0
-          scaling_factor = 1
-        else
-          -- Only increment counter for rapid movements
-          action_count = action_count + 1
-          -- Scale up more gradually, starting after several quick movements
-          if action_count > 3 then
-            scaling_factor = math.min(10, 1 + ((action_count - 3) * 0.5))
-          end
-        end
-
-        if (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 2) then
-          channel_edit_page_ui.select_trig_page()
-        end
-
-        local scaled_d = d * scaling_factor
-        channel_edit_page_ui.handle_trig_lock_param_change_by_direction(scaled_d, program.get_selected_channel(), param)
-        params:set("sel_ch_trig_param_" .. param, 0, true)
-        
-        last_action_time = current_time
-      end
-    )
-  end
-
-  params:add_separator("CHANNEL TRIG PARAMS")
-
-  for channel = 1, 16 do
-    for param = 1, 10 do
-      params:add_control(
-        "ch_" .. channel .. "_trig_param_" .. param,
-        "Ch." .. channel .. " Trig Param " .. param, 
-        controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
-        function() return "MAP" end
-      )
-      params:set_action(
-        "ch_" .. channel .. "_trig_param_" .. param,
-        function(d)
-          local current_time = util.time()
-          local time_diff = current_time - last_action_time
-          
-          -- Reset counter if more than threshold between actions
-          if time_diff > MIN_TIME_BETWEEN_ACTIONS then
-            action_count = 0
-            scaling_factor = 1
-          else
-            -- Only increment counter for rapid movements
-            action_count = action_count + 1
-            -- Scale up more gradually, starting after several quick movements
-            if action_count > 3 then
-              scaling_factor = math.min(10, 1 + ((action_count - 3) * 0.5))
-            end
-          end
-
-          local scaled_d = d * scaling_factor
-          channel_edit_page_ui.handle_trig_lock_param_change_by_direction(scaled_d, program.get_channel(program.get().selected_song_pattern, channel), param)
-          params:set("ch_" .. channel .. "_trig_param_" .. param, 0, true)          
-          last_action_time = current_time
-        end
-      )
-    end
-  end
-
-
-  params:add_group("mosaic_recorder_midi_maps", "MEMORY MIDI MAPS", 19)
-
-  params:add_separator("SELECTED CHANNEL MEMORY")
-
-  -- Add memory navigation parameter
-  params:add_control(
-    "sel_ch_memory",
-    "Selected Ch. Memory",
-    controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
-    function() return "MAP" end
-  )
-  params:set_action(
-    "sel_ch_memory",
-    function(d)
-      local current_time = util.time()
-      local time_diff = current_time - last_action_time
-      
-      if time_diff > MIN_TIME_BETWEEN_ACTIONS then
-        action_count = 0
-        scaling_factor = 1
-      else
-        action_count = action_count + 1
-        if action_count > 3 then
-          scaling_factor = math.min(10, 1 + ((action_count - 3) * 0.5))
-        end
-      end
-
-      if (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 3) then
-        channel_edit_page_ui.select_memory_page()
-      end
-
-      local scaled_d = d * scaling_factor
-      channel_edit_page_ui.handle_memory_navigator(program.get_selected_channel().number, scaled_d)
-      params:set("sel_ch_memory", 0, true)
-      
-      last_action_time = current_time
-    end
-  )
-
-  params:add_separator("CHANNEL MEMORY")
-  
-  for channel = 1, 16 do
-    params:add_control(
-      "ch" .. channel .. "_memory",
-      "Ch." .. channel .. " Memory",
-      controlspec.new(-1,1, 'lin', 1, 1, '', 1, false),
-      function() return "MAP" end
-    )
-    params:set_action(
-      "ch" .. channel .. "_memory",
-      function(d)
-        local current_time = util.time()
-        local time_diff = current_time - last_action_time
-        
-        if time_diff > MIN_TIME_BETWEEN_ACTIONS then
-          action_count = 0
-          scaling_factor = 1
-        else
-          action_count = action_count + 1
-          if action_count > 3 then
-            scaling_factor = math.min(10, 1 + ((action_count - 3) * 0.5))
-          end
-        end
-
-        local scaled_d = d * scaling_factor
-        channel_edit_page_ui.handle_memory_navigator(channel, scaled_d)
-        params:set("ch" .. channel .. "_memory", 0, true)
-        
-        last_action_time = current_time
-      end
-    )
-  end
-  
-
-
+  return include("mosaic/lib/devices/midi_mapping_params").setup()
 end
-
 
 return m_midi

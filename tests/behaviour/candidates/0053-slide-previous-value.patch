@@ -1,0 +1,4 @@
+--- a/lib/clock/m_clock.lua
++++ b/lib/clock/m_clock.lua
+@@ -101,0 +102 @@
++  slot.last_value = action.last_value

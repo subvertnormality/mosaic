@@ -184,6 +184,62 @@ Once you've copied the stock device configuration files into the `data > mosaic 
 
 You can customise Mosaic to perfectly align with your studio setup by configuring it to work seamlessly with your specific devices. If your device is not included in the standard configuration, create a .json file named after your device in the `dust > mosaic > config` folder. Populate this file using a config file customised to match your device's MIDI specifications. You can create, load and edit midi device config files using the [Mosaic Config Creator](https://subvertnormality.github.io/mosaic/config_creator.html).
 
+##### Lock lead time
+
+In the Norns params menu, open **MOSAIC → Parameter locks → Lock lead time (ms)**.
+This global setting accepts 0–50 ms and defaults to **25 ms**. It gives MIDI CC/NRPN
+parameter locks time to settle before the note attack, particularly on devices
+that smooth incoming controllers. Set it to **0** to send each value at its own
+step, which is the original output timing. The value is saved with Mosaic's
+project settings.
+
+A step's parameter values leave ahead of the step, in an earlier clock pulse.
+Nothing is delayed to achieve this: note-ons, note-offs, live MIDI-thru, outgoing
+MIDI Clock, Start, Continue, Stop and song position all keep the timing they have
+at a lead of 0, and gate lengths are unchanged. N.b. players are unaffected.
+
+Because a value leaves on a clock pulse, the wait it achieves is the setting
+rounded **up** to the next whole pulse, so a value never leaves with less lead
+than was asked for. At 130 bpm a pulse is about 4.8 ms, so a 25 ms setting
+delivers about 28.8 ms; at 200 bpm it delivers 25 ms exactly. The figure follows
+the tempo, and every value of a step leaves on the same pulse, so what you hear
+stays consistent between events rather than fixed to the number in the menu.
+
+No step is looked ahead musically: probability, conditions, fills, random notes,
+strum, arps and micro-timing still make their decisions at their own times. Only
+the parameter values a step will send are resolved early.
+
+Every note sounds with its own step's values. When two notes on the same MIDI
+channel are less than twice the lead apart (a fast tempo, a fast channel clock,
+or swing and shuffle bringing steps together), a value does not take the whole
+lead: it waits until halfway between the previous sounding note and its own step.
+The previous note keeps its value through the first half of the gap, and the new
+value settles in the second half. A trigless step sounds nothing, so it is not
+the note a later value waits behind. A strummed chord's later voices are sounding
+notes, so the next step's values wait behind the last of them.
+
+An address that more than one slot writes, whether two slots of one channel or
+two channels addressing one device parameter, is not sent early: its values leave
+at their own step, in the order the step would send them at a lead of 0.
+
+Two cases give no lead at all. The first step after Play resolves its lock on the
+transport's own first pulse, so there is no earlier pulse for its values to leave
+in and they leave with the note. A parameter that is mid-slide keeps its slide
+until the slide's destination step, so that step's lock arrives with the step
+rather than before it. Nothing is delayed to hide either case.
+
+The lead covers the time a receiver takes for a parameter change to take effect,
+so every value follows the same rule whether or not its step has a note: trigless
+locks, assigned values and slide values leave ahead of the step they belong to and
+take effect as that step is heard.
+
+Editing a lock that has already left changes what the next pass sends, and the
+edited value is sent again at its own step, so the receiver is corrected rather
+than left holding the superseded value. Mosaic restores its output hooks on
+cleanup; stop and panic release held voices without leaving queued output behind.
+
+![Global MIDI lock lead time on Norns](images/lock-lead-time.png)
+
 ##### Mods and Software Devices
 
 Mosaic can also use internal Norns sound sources and manage devices like Crow, Just Friends, and Ansible via i2c by installing [n.b.](https://github.com/sixolet/nb/) mods. These mods will appear in Mosaic's device list once installed and activated in the Norns settings menu. Ensure the n.b. mod is on the allow list to use with Mosaic. See [Norns sound sources with n.b.](#norns-sound-sources-with-nb) for more information.
@@ -192,7 +248,7 @@ Mosaic can also use internal Norns sound sources and manage devices like Crow, J
 
 You can input notes, velocity, and chords using a MIDI keyboard. You can do this live, using live record, or by holding down a step and pressing the keys on your keyboard. When setting on a per step basis, the length of these inputs requires manual selection. To do this, ensure you have your desired channel selected on _Mosaic_. Then, while holding the desired step, press the corresponding key on your keyboard. If you are on the mask page of your Norns, the values you input will display as locks.
 
-By default, the keyboard maps the steps to the currently selected scale on the white keys, with the root note of your selected scale starting from C. You can adjust this mapping in the settings of Mosaic to better suit your musical preferences or project requirements.
+By default, the keyboard plays the keys you press. Enable "Map scale to white keys" in the settings of Mosaic to map the currently selected scale to the white keys, with the root note of your selected scale starting from C, to better suit your musical preferences or project requirements.
 
 
 ##### MIDI Controller Mapping
@@ -236,11 +292,11 @@ To start the sequencer, press the lowest left hand button on the grid. To stop t
 
 To enable record mode, press the second button from the left on the grid.
 
-When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step.
+When record mode is active, any notes played on a MIDI keyboard will be captured as note masks on the currently selected channel. This includes note lengths and chords. All recordings are quantised to align with the current step: the step active when Mosaic processes the note-on, rather than the nearest step. An incoming MIDI clock pulse and a sequencer step transition are separate events; a note processed before the transition still belongs to the preceding active step. A recorded chord has one shared note length, measured from the first key press to the final key release and quantised to the nearest supported note length. This applies even when the chord keys are pressed or released at different times. Disarming recording prevents new notes from being recorded. Notes that began while recording was armed are kept, and their full note lengths are measured and committed when you release them, even if recording has since been disarmed.
 
-Changes to trig parameters are also recorded on the active channel. Recording begins the first time a trig parameter is modified. During recording, all parameter values are saved as trig locks, overwriting existing locks until the end of the current song pattern. Recording resumes automatically when a trig parameter is adjusted again using the encoder.
+While recording is armed, editing a trig parameter starts recording that parameter’s value on subsequent eligible steps processed for the selected channel. Already-processed steps are unchanged. Only edited parameters are recorded, overwriting their existing locks through the channel’s final step; recording clears before its next starting step is processed while the channel remains selected. Further encoder edits update or restart recording. Grid Stop or disarm clears pending parameter recording. Active MIDI values are sent again before each eligible step’s note, even when the value has not changed. Selecting another channel or the Scale Editor pauses this parameter recording; returning resumes on the next eligible step unless that step clears recording at the selected channel’s wrap. Wraps while the channel is not selected leave its pending values intact. An active recorded value cancels that slot’s existing slide at the next eligible step. Off sends nothing and leaves an existing slide running. Changing a parameter assignment clears its pending recording; confirming the same assignment preserves it. Applying a MIDI device, channel or port change resets the device locks, assignments, defaults and pending parameter recording. Unconfirmed changes and cancellation leave the original recording intact.
 
-By default, trig locks are recorded only on active steps. However, if the Trigless Param setting is enabled, parameter values will be recorded on every step.
+With Trigless Locks off, parameter values are recorded only on active steps. When it is on, every step is eligible. Trigless Locks is enabled by default.
 
 <img alt="Mosaic grid record button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/grid-record-button.svg" width="300" />
 
@@ -305,9 +361,15 @@ For a detailed reference on the layout of your Norns device, consult the officia
 
 Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip.
 
+### External MIDI Transport
+
+With the norns clock source set to MIDI, external MIDI Clock drives Mosaic at 24 pulses per quarter note. Norns receives clock from all connected MIDI devices by default; use **CLOCK > midi clock in** to select one input when other devices also send transport or clock. Mosaic follows received pulse order: a missing pulse delays later step boundaries and an extra pulse advances them; norns estimates timing between received pulses from recent intervals. If clock pulses disappear without Stop, norns continues at its last acquired tempo and does not infer Stop. A later external Start marks the next Clock as beat zero. When that Clock arrives, Mosaic releases held notes and resets to step 1, including when it is already playing. Restart cleanup does not send a MIDI Stop back to connected devices; an ordinary Stop still releases notes and sends Stop. The grid Play button starts Mosaic locally at the current clock phase.
+
+Pinned norns does not interpret MIDI Continue or Song Position Pointer as clock-transport commands. Mosaic therefore remains stopped when it receives them and does not reposition; send MIDI Start to begin again from step 1. The messages remain available to scripts through the normal MIDI event API.
+
 ### MIDI Panic
 
-Should your MIDI output devices become unresponsive, you can clear all MIDI-on events by holding down the navigation button of a non-selected page. This action will send a stop signal to all devices, on all channels, for all notes.
+Should your MIDI output devices become unresponsive, hold the navigation button of a non-selected page to send Note Off messages for every note on every MIDI channel and connected device. Panic clears sounding notes with a short sweep; it does not stop the sequencer or cancel scheduled strum or arpeggio voices. Playback and scheduled voices continue, so new notes can sound during or after the sweep. Use the Play/Stop control to stop playback. Holding the selected page button does not trigger panic, and releasing a panic hold does not change pages.
 
 ### Cheat Sheet
 
@@ -478,7 +540,7 @@ On the Norns screen, you'll find the channel grid visualizer. Use E2 to select t
 
 Now let's look at the velocity editor, which functions similarly to the note page. Access it by pressing the third button in the global menu cluster again when already in the pattern note editor.
 
-The velocity editor spans two vertical pages: the first displays velocities from 127 down to 67, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
+The velocity editor spans two vertical pages: the first displays velocities from 127 down to 68, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
 
 On the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.
 
@@ -537,7 +599,7 @@ n.b. devices are picked up automatically. Simply install the desired mod, and pi
 
 #### Device Parameters
 
-MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to a value of -1 ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly.
+MIDI devices can be configured to load a stored patch through the Norns' params menu. For devices that are configured, all CC parameters are accessible for editing. Setting a MIDI parameter to its configured Off value (default -1) ensures that the current setting on the device remains unchanged. Any other value entered will send that MIDI value directly to your MIDI device. When you load a Mosaic script or press play, these stored MIDI param values are transmitted to your MIDI device, effectively loading a patch. These settings will remain consistent across different song patterns, allowing you to preserve all your sound's patch data within your Mosaic patch. This feature is especially useful for devices that have limited MIDI parameters or interfaces that are less user-friendly. NRPN encoding is explicit: new generic configurations use standard 14-bit values, while existing projects preserve their historical output. See [NRPN encoding and project conversion](docs/testing/NRPN_COMPATIBILITY.md) for device settings and deliberate conversion without rewriting numeric values.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -598,7 +660,7 @@ Additionally, take advantage of the chord trig params to enhance your musical ex
 
 ##### Removing Masks
 
-To remove a mask from a step, navigate to the mask page in the channel editor with your desired channel selected, hold down the step with the mask-to-be-removed, and press K2. To remove all masks on a channel, hold shift (K1) and press K2.
+On the Masks page, hold a step and press K2 to clear its step-mask overrides. With no grid keys held, hold K1 and press K2 to clear all step-mask overrides on the selected channel. Both actions preserve channel mask defaults, which apply wherever an explicit step override is absent. Held steps take precedence even while K1 is down. Other channels are unaffected.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -635,9 +697,9 @@ These modes define how trigs are applied when there are overlapping steps across
 
 These modes determine how note values are handled when steps overlap:
 
-* **Average**: The note value for overlapping steps is the average of those steps' values in each pattern, subsequently quantised.
-* **Higher**: The highest note value from overlapping steps is used after calculating the average and adjusting by subtracting the lowest and adding the highest note value, followed by quantization.
-* **Lower**: The lowest note value is used after calculating the average and subtracting the lowest note value from the average, followed by quantization.
+* **Average**: Average the contributing note values and round to the nearest integer, choosing the greater integer at an exact half (1.5 becomes 2; -1.5 becomes -1; -0.5 becomes 0). One contributor passes through unchanged. The result then uses the configured scale and pentatonic processing.
+* **Higher**: Add the difference between the highest and lowest contributing note values to their rounded average. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.
+* **Lower**: Subtract the rounded average from twice the lowest contributing note value: `2 * lowest - rounded_average`. One contributor passes through unchanged; the result then uses the configured scale and pentatonic processing.
 * **Pattern**: To prioritise a specific pattern's note values during conflicts, hold the note merge button and select the desired pattern. You can even select patterns that aren't current asigned to the active channel.
 
 By default, notes will snap to the pentatonic version of the currently active scale to assist with avoiding unpleasant harmonic interactions. This can be disabled in _Mosaic_'s settings.
@@ -648,9 +710,9 @@ By default, notes will snap to the pentatonic version of the currently active sc
 
 These settings affect how velocity values are calculated for overlapping steps:
 
-* **Average**: The velocity is the average of the velocities from overlapping steps in each pattern.
-* **Higher**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and adding the highest velocity.
-* **Lower**: The velocity is calculated by taking the average of each step's velocity, subtracting the lowest velocity, and not adding the highest value back.
+* **Average**: Average the contributing velocities and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged.
+* **Higher**: Add the difference between the highest and lowest contributing velocities to their rounded average.
+* **Lower**: Subtract the rounded average from twice the lowest contributing velocity: `2 * lowest - rounded_average`.
 * **Pattern**: To use a specific pattern's velocity values, hold the velocity merge button and press the pattern's select button.
 
 <img alt="Channel editor velocity merge mode button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg" width="300" />
@@ -659,12 +721,12 @@ These settings affect how velocity values are calculated for overlapping steps:
 
 These modes dictate how the duration of notes is calculated for overlapping steps:
 
-* **Average**: The length is the average of the lengths from overlapping steps in each pattern.
-* **Longer**: The length is determined by taking the average length, subtracting the shortest length, and adding the longest length.
-* **Shorter**: The length is calculated by subtracting the shortest length from the average of each step's length minus the shortest length.
+* **Average**: Average the contributing lengths and round to the nearest integer, choosing the greater integer at an exact half. One contributor passes through unchanged. Source lengths account for interruption by the next trig in that pattern.
+* **Longer**: Add the difference between the longest and shortest contributing lengths to their rounded average. One contributor passes through unchanged.
+* **Shorter**: Subtract the rounded average from twice the shortest contributing length: `2 * shortest - rounded_average`. One contributor passes through unchanged. Only the mean is rounded at this stage, so fractional source lengths can still produce fractional Longer or Shorter results.
 * **Pattern**: To apply a specific pattern's length values, hold the length merge button and press the pattern's select button.
 
-Length merge modes are set by holding shift (K1) and pressing the velocity merge mode button.
+Length merge modes are set by holding shift (K1) and pressing the velocity merge mode button. Numeric merging retains zero and negative length results. For ordinary note playback, including delayed strums, a nonpositive effective length sends Note On followed by Note Off in the same scheduler pulse, without advancing musical time. This describes MIDI event order, not the sound or response of a connected instrument.
 
 <img alt="Channel editor length merge mode button (with shift key held)" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg" width="300" />
 
@@ -678,7 +740,7 @@ You can easily adjust the tempo of your entire composition directly from the son
 
 Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echoes' excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a "feel" and a "basis". Each channel can have an independent setting, giving endless possibilities. 
 
-Note: If a channel's swing/shuffle settings are not set ("X"), they will take the global setting which is set on the song editor page global settings page. Clock, swing and shuffle settings apply when the sequencer resets if the sequencer is currently playing.
+Note: If a channel's swing/shuffle settings are not set ("X"), they will take the global setting which is set on the song editor page global settings page. Selecting "X" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -711,9 +773,9 @@ To jump to the latest action and erase all subsequent memory, hold shift (K1) an
 
 #### Channel Length
 
-Channels in your sequencer can be customised to range from 1 to 64 steps in length, and each channel can be adjusted independently, including the global scale pattern. This feature allows for intricate layering and timing variations within your compositions.
+Channels can be adjusted independently, including the global scale pattern, within the 64-step sequence. This feature allows for intricate layering and timing variations within your compositions.
 
-To adjust the length of a channel, you need to specify the start and end points. Hold down the button corresponding to the start step in the channel editor. While holding it, press the button for the desired end step. The active range of the channel will be indicated by buttons that appear slightly brighter than the others.
+To adjust the length of a channel, hold down the start step in the channel editor, press and release a different end step while still holding the start, then release the start. The range commits when the end step is released. The active range is indicated by brighter buttons. Selecting a one-step channel range with this gesture is unsupported. Holding a step for a long time does nothing by itself: the held step remains available for combinations with other buttons, including a subsequent end-step press. This prevents an unintended action while preparing another combination. The end must be after the start. Reversed selections are rejected with a message, leaving the previous range unchanged; channel ranges do not wrap from the final step back to the first. The same rule applies to the Scale Editor range. Pattern note-length wrapping is unchanged.
 
 <img alt="Channel editor step and length selector buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg" width="300" />
 
@@ -750,8 +812,8 @@ In the second user interface page of the channel editor on the Norns screen, you
 * **Changing Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3. To fine tune, rotate E3 whilst holding K1.
 * **Activating Parameters**: To activate a different parameter within the same slot, press K2.
 * **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create "trig locks" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.
-* **Default Parameter Values**: By default, a pre-set parameter value is transmitted to your selected device on steps without a trig lock. If a parameter's trig lock is set to "off," the mosaic will not send any value to your device for that parameter.
-* **Handling Off Settings**: If you set a trig lock to "off" on a step, the system will continue to send the last trig locked value instead of reverting to the default parameter value.
+* **Default Parameter Values**: A pre-set parameter value is transmitted to your selected device on steps without a trig lock, unless the value is off or a parameter slide is active.
+* **Handling Off Settings**: An explicit MIDI parameter lock set to "off" sends no value for that parameter on that step. It does not resend the previous lock or restore the default, so the device keeps its last received value. An off lock does not itself cancel a parameter slide that is already running; that slide may continue sending values.
 
 These controls offer flexibility and precision in shaping the behavior of each sequence, ensuring that your musical creativity can be fully realised through the Norns system.
 
@@ -776,11 +838,11 @@ Use this trig param to fix your channel to any MIDI note. The value represents a
 
 ##### Quantised Fixed Note
 
-You can use this trig param to manually select a note in the currently selected scale at any step. The value represents note number, where 0 is the root and higher numbers represent notes in the quantised scale. This overrides the note data coming in from the patterns. This will override random note values.
+Quantised Fixed Note supplies an absolute MIDI pitch, 0–127, and selects the nearest playable note in the active scale at its configured root (or the song root when unset). Equally close notes select the lower pitch. The number includes its octave; channel/step octave, transposition, chord degree/rotation and pentatonic switches do not modify this override. It replaces pattern, note-mask and random pitch calculations for the ordinary root voice; separately generated chord/arp voices have their own processing. Fixed Note takes precedence. A step lock set to Off inherits the channel value; when both are Off, ordinary pitch processing resumes. Off does not silence the trig.
 
 ##### Random Note
 
-This trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings.
+This trig param introduces an element of random to your selected notes. A value of 0 will leave the note unchanged. A value of 1 will randomly give your existing note or the note one higher in the scale. A value of 2 will randomly give your existing note, the note one higher in your selected scale, or the note one lower. A value of 3 will randomly select notes -1, 0, 1 or 2. A value of 4 will randomly select notes -2, -1, 0, 1 or 2. And so on. Use trig locks to really spice things up. These can be combined with random twos note trig param. By default, random notes are quantised to the pentatonic version of the currently selected scale to reduce the chance of dissonant harmonic interactions. This can be disabled in _Mosaic_'s param settings. With Lock random to pent. enabled, a nonzero sum of Random Note and Random Twos offsets triggers nearest-pentatonic snapping for ordinary notes and fully quantised note masks, in either direction. Zero sums, including cancellation, do not trigger this option; other applicable pentatonic options still apply. Equal-distance pitches choose the lower note. Snap-only and unquantised masks retain their chromatic random-offset behaviour. Fixed Note and Quantised Fixed Note retain their override precedence.
 
 ##### Random Twos Note
 
@@ -788,19 +850,38 @@ Similar to random note, this trig param introduces an element of random to your 
 
 ##### Chord Strum
 
-The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantised to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once.
+The Chord Strum param dynamically spaces selected chord masks using the selected step division, ensuring they align rhythmically with the channel's settings. Notes are quantised to the current scale, adjusting in real-time if the scale changes mid-strum, guaranteeing each note stays harmonious and in tune, regardless of strum duration. Each chord note is played once. Empty mask slots keep their positions in the selected chord shape and consume spacing and acceleration ordinals, including trailing empty slots.
 
 ##### Chord Arpeggio
 
 The Chord Arp param is similar to Chord Strum, but chord masks are looped at the current step division for the length of the current step. Notes are quantised to the current scale. Empty chord masks are treated as rests, allowing for rhymic patterns. Arpeggios also honour the Chord Velocity and Chord Shape modifiers. The Chord Arpeggio param overrules the chord strum param. Chord arpeggios can also be used as ratchets if no chord masks are set.
 
+With Chord Spread at zero, the first arp interval is one full selected division of the channel step. For example, a half-step arp on a two-step note advances through its slots at 0, 1/2, 1 and 1 1/2 steps; it does not start another note at the two-step endpoint. Each arp note lasts one selected division from its own onset, shortened when necessary to finish at the original note's endpoint.
+
+Starting another arp on the same channel cancels the old arp's future notes. Notes already sounding keep their remaining duration, capped by their original endpoint; the old arp's endpoint does not cut notes from its replacement. Pattern resets likewise preserve the remaining duration of sounding notes. Stop releases sounding notes and cancels future arp notes. Overlapping notes of the same MIDI pitch still send a corresponding Note Off for each Note On; how a receiving instrument handles overlapping voices is unchanged.
+
+Chord Shape orders the root and four chord-mask slots. An empty mask slot, or a muted root slot, is a rest and keeps its position, including at the end of the sequence. Rest slots consume the same time and acceleration ordinal as sounding slots. If no chord masks are populated, an unmuted root instead forms a one-slot ratchet; if the root is also muted, the result is silence.
+
 ##### Chord Acceleration
 
-The Chord Acceleration param is a modifier for the Chord Strum and Chord Arpeggio params, to be used alongside the Chord Spread param, and it doesn't function on it's own. When set, the chord spread alters in the direction of the acceleration over time. With a positive value of acceleration, the spread value will increase by multiples of the acceleration value for each note of the chord or arp. With a negative value, the spread value will decrease by multiples of the acceleration value. With this, you can create flams and bouncing ball type effects. 
+Chord Acceleration modifies the spacing of an enabled Strum or Arpeggio together with Chord Spread. Off (0) means no progressive change: every gap is the selected division plus Spread. A positive value lengthens each following gap; a negative value shortens it. With Spread at zero, Acceleration has no effect.
+
+In channel-step units, let `d` be the Strum or Arp division, `s` be Spread, and `a` be Acceleration (zero when off). The gap before slot `k`, counting the first gap as 1, is `d + s * (1 + (k - 1) * a)`. The first slot occurs at trigger time; later slot times are the sums of these gaps. A new trigger restarts the ordinal. Wrapping an arp's slots does not restart it. These are the nominal musical times before swing and clock-pulse quantisation. An arp interval occupies at least one scheduler pulse, including after swing. At fast channel rates, this limits the resolution of very short gaps.
+
+For a division of 1/2 and Spread of 1/4:
+
+| Acceleration | Successive gaps | Slot times from the trigger |
+|---|---|---|
+| Off | 3/4, 3/4, 3/4, 3/4 | 0, 3/4, 3/2, 9/4, 3 |
+| +1 | 3/4, 1, 5/4, 3/2 | 0, 3/4, 7/4, 3, 9/2 |
+| +2 | 3/4, 5/4, 7/4, 9/4 | 0, 3/4, 2, 15/4, 6 |
+| -1 | 3/4, 1/2, 1/4, then 0 | 0, 3/4, 5/4, 3/2, then stop |
+
+When the next gap is zero or negative, scheduling ends before that slot. There is no extra simultaneous note or reversed time; notes already sounding retain their releases. Empty slots, including trailing rests, advance the same ordinal in both strums and arps.
 
 ##### Chord Spread
 
-The Chord Spread param is a modifier for the Chord Strum and Chord Arpeggio params. It alters the spacing between notes in these functions by the value of the param.
+Chord Spread adds a duration to the selected Strum or Arp division, measured in channel steps. For example, a half-step division with quarter-step Spread starts with a three-quarter-step gap. With Acceleration off, all gaps stay at that value. With Acceleration enabled, each following gap changes by Spread multiplied by Acceleration, as above. Spacing modifiers act only when Strum or Arpeggio is enabled and do not change the selected note length. Arp notes remain limited by their original note endpoint.
 
 ##### Chord Velocity Modifier
 
@@ -816,19 +897,19 @@ The Mute Root Note param allows you to silence the root note of a chord while al
 
 ##### Fully Quantise Mask
 
-The Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes.
+The Fully Quantise Mask param controls whether note masks on a step are fully quantised to the current scale, including scale degree and rotation adjustments. When enabled, note masks will be quantised to match the current scale's settings exactly. This can be used to override the global quantization settings on a per-channel or per-step basis, allowing for more precise control over how note masks interact with scale changes. Channel X uses the global Quantise note masks setting; explicit Off and On override it. An explicit step X uses the global setting directly, bypassing the channel value. Clearing that step lock instead restores the channel value (and therefore the global setting if the channel is X).
 
 ### Scale Editor
 
 Access the scale editor by pressing the second global menu button.
 
-When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
+When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
 
 <img alt="Scale editor scale slot select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="300" />
 
-A long or shift press (hold K1) on a scale button selects a scale for editing without applying it to the currently playing pattern, indicated by a dimly lit scale button. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock.
+A shift press (hold K1) selects a scale slot for editing without changing the global scale selection. A long press on a different editing slot does the same. A long press on the slot already selected for editing turns the global scale off and clears the editing selection. Selecting a slot for editing does not switch playback to it; however, saving changes to a scale already used by playback changes that scale. The editing selection has a dim indicator when it differs from the applied scale.
 
-[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step and persisting until the end of the pattern. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
+[Scale locks](#scale-locks) can be set to apply a scale globally or to a single channel, activating at a designated step. Global locks persist until another global lock or the global scale track wraps. Channel-lock duration follows the Scales Lock Until Pattern End option. To set a scale lock, hold a step and press the desired scale slot button. On the scale page, this applies globally to all channels without an active channel scale trig lock; on a channel's page, it applies as a channel scale trig lock, affecting only that channel. Channel-specific scale locks override global scales and locks.
 
 <img alt="Scale editor step select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg" width="300" />
 
@@ -856,7 +937,7 @@ As well as setting a transposition value per scale, you can transpose your entir
 
 ### Song Editor
 
-The Song Editor features a grid layout consisting of 90 slots. Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.
+The Song Editor features a grid layout consisting of 96 slots (six rows of 16). Each slot represents a unique opportunity to blend patterns, channels, rhythms, scales, and other elements into your compositions, making each Song Sequence a distinct musical creation.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -889,7 +970,7 @@ When "song mode" is activated, the sequencer automatically progresses to the nex
 The song sequence's length can be adjusted using the fader located at the lower left of the song editor page.
 
 * The global length can be set anywhere from 1 step to 64 step, offering a wide range of possibilities.
-* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length.
+* Channel start and end steps can be outside of the range of the global length, but channels length cannot exceed overal global length. The cap counts steps from the channel start: a channel set to steps 2–4 with global length 2 plays steps 2 and 3 repeatedly. Increasing the global length restores the remaining selected steps. This also applies to the scale track and follows each track’s clock rate; explicit song reset options still apply.
 
 <img alt="Song editor global length select fader" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-slot-pattern-length-fader.svg" width="300" />
 
@@ -907,7 +988,7 @@ The song sequence's length can be adjusted using the fader located at the lower 
 
 ## Locks
 
-Trig param values, masks, and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. When a value is locked to a step, it applies for the duration of that step. This includes trig params, scales, and octave settings on the channel page, as well as global scale and transpose settings on the global scale page. Locks are set on the channel edit page. Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
+Trig param values, masks, and various grid functions can be fixed to specific steps on both the channel and global scale pages of Mosaic. A lock takes effect at its designated step. Its duration depends on the lock type: parameter and octave locks affect that step, while scale locks follow the persistence rules below. See the relevant lock section for transposition behaviour. Locks are set on the channel edit page. Trig locks enhance your control over the sequencing process, allowing for precise adjustments and modifications at any step of your sequence.
 
 ### Trig Param Locks
 
@@ -979,7 +1060,7 @@ To clear all mask trig locks from a channel:
 
 ### Scale Locks
 
-Scales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks on set on steps in the Channel Editor take prescedence over global scale locks. Scales persist until the end of the pattern unless another scale lock is encountered. To set a scale lock:
+Scales can be set on a per-step basis. They can be set globally across all channels on the Scale Editor, or per channel oin the Channel Editor. Scale locks set on steps in the Channel Editor take precedence over global scale locks. With Scales Lock Until Pattern End on, a channel scale lock persists until that channel wraps to its start, unless another channel scale lock replaces it. With the option off, it persists until the next active trig that passes its probability check; a probability-rejected trig does not clear it. A scale lock on that next trig applies in place of the old lock. Global scale-track locks are independent of this option: they persist until another global lock replaces them or the global scale track wraps. To set a scale lock:
 
 1. Hold down the step you want to modify on the channel page sequencer.
 2. Press the desired scale slot.
@@ -1026,7 +1107,7 @@ To clear an octave trig lock:
 
 You can save and load your creations using the param menu. When you choose to save, you'll be prompted to enter a name for your creation. Remember to use a descriptive name so you can easily find and manage your projects.
 
-The sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name "autosave" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave.
+The sequencer features an autosave function when it is not actively playing. If left idle, it will automatically save your work under the name "autosave" after 60 seconds. When you start Mosaic again, it automatically loads this most recent autosave. Before replacing the current project, Mosaic checks saved song slots, global lengths, and channel and scale-track ranges. If a check fails, the screen identifies the problem and the current project and playback are retained. Autosaving is then suspended to protect the rejected file; editing, playing or cancelling a dialog does not resume it. Successfully loading a valid project, saving a named project, or choosing New resumes the normal idle autosave interval. A failed save leaves autosaving suspended. Valid saved one-step ranges remain supported, without adding a one-step range gesture. These checks cover the saved range structure, not every possible corrupted project field.
 
 To ensure the longevity of your work, it's important to save your creations into named slots. This prevents them from being overwritten by the autosave feature, allowing you to keep your songs indefinitely.
 
@@ -1082,7 +1163,7 @@ The "Elektron program change channel" setting determines which MIDI channel to s
 
 ##### Scales Lock Until Pattern End
 
-The "Scales lock until ptn end" option, when enabled, ensures scale locks persist until the end of the channel's length. If disabled, scale locks continue only until the next trig.
+The "Scales lock until ptn end" option is on by default and controls channel scale locks. When on, a lock persists until the channel wraps to its start, unless another channel scale lock replaces it. When off, the next active trig that passes its probability check clears the previous lock; probability-rejected trigs do not clear it. A new lock on that trig takes effect normally. Global scale-track locks do not use this option: they persist until replacement or global-track wrap.
 
 ##### Lock All to Pentatonic
 
@@ -1094,7 +1175,7 @@ The "Scales lock until ptn end" option, when enabled, ensures scale locks persis
 
 ##### Lock Merged to Pentatonic
 
-Similarly, "Lock merged to pent." is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale.
+Similarly, "Lock merged to pent." is on by default and ensures notes modified by merge modes stick to the pentatonic version of the currently selected scale. Mosaic uses these application-specific five-note selections (one-based degrees of each named seven-note scale): Major and Harmonic Major 1/2/3/5/6; Minor, Harmonic Minor and Melodic Minor 1/3/4/5/7; Dorian 1/2/4/5/7; Phrygian 1/3/4/6/7; Lydian 2/3/5/6/7; Mixolydian 1/2/4/5/6; Locrian 2/3/4/6/7. The named scale’s alterations apply; these selections do not always retain the tonic or avoid semitones. Merged values remain seven-note scale degrees, not five-note indices. Their scale pitches snap to the nearest selected pitch repeated across octaves, choosing the lower pitch on an exact tie; snapping may cross an octave boundary. For example, Lydian C snaps to the B below it, while Melodic Minor A snaps down to G rather than equally distant B. The scale root is used when set, otherwise the song root, with the effective octave offset applied afterward.
 
 #### MIDI Controller Options
 

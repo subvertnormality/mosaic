@@ -1,0 +1,11 @@
+Read-only socket diagnostic from test agent; not a device-state conclusion.
+
+Command:
+wsl -d Ubuntu-20.04 -- bash -lc 'set -o pipefail; socket=/tmp/mosaic-foundations-active.sock; ssh -S "$socket" -O check we@10.42.0.1; ssh -S "$socket" -o BatchMode=yes -o ConnectTimeout=5 we@10.42.0.1 "test ! -e /home/we/.cache/mosaic-real-norns/active && echo active-marker-absent; systemctl is-active norns-jack norns-crone norns-matron norns-maiden; stat -c \"user-copy-mtime=%Y\" /home/we/dust/code/mosaic; id -un"'
+
+Output:
+Control socket connect(): Connection refused
+Control socket connect(): Connection refused
+we@10.42.0.1: Permission denied (publickey,password).
+
+No fallback connection, credential use, or device mutation was attempted.

@@ -1,0 +1,17 @@
+{
+  "status": "candidate rejected; production restored to 43343cc",
+  "review": "/home/andy/projects/mosaic-behaviour-runs/master-clock-race-review-01.json",
+  "review_sha256": "ac0d213fb636587282d8aebce3d48fa8b92498bb5b24946e110a1337a0bd5ae0",
+  "session": "01a0876c-f9b2-7c63-95b0-8afea1324d1f",
+  "candidate_patch": "docs/testing/candidates/master-independent-sync-rejected.patch",
+  "controlled_manifest": "/home/andy/projects/mosaic-behaviour-runs/b76bd6cac10844f7aff99508185cbca5/manifest.json",
+  "real_time_manifest": "/home/andy/projects/mosaic-behaviour-runs/d63009cb7e574b789abfa4e94bdfcdbd/manifest.json",
+  "units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-54b9080f80834ed291421c8922e343e1/results.json",
+  "verdict": "Controlled four phases pass; real-time first note follows receiver tick1 rather than0. Unit errors248 from missing midi global in harness. Neither failure waived.",
+  "oracle_units": {
+    "command": "python3 -m unittest test_master_clock_oracle -v",
+    "passed": 7
+  },
+  "next_card": "docs/testing/NATIVE-MIDI-BOUNDARY.md",
+  "full_goal_complete": false
+}

@@ -1,0 +1,52 @@
+{
+  "status": "scoped-mask-scale-snap-validated",
+  "native_runs": [
+    {
+      "case": "M-MASK-019",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/4871056f7b6644abb02e94c07d362e10/manifest.json",
+      "sha256": "6c3adfb6cefa63c50d785a014bb61d39cda91c6dc7eef79b4c98ab40875db59a",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-020",
+      "mode": "controlled-experimental",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/25514eb6dbff4729908e61d1ac8daca8/manifest.json",
+      "sha256": "7f428e5b0d7a3196d710eaa3f96d295b1e887c684f7def7590347dd1566e9680",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-019",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/157d232cb87c4f32b6457b2255b4ba39/manifest.json",
+      "sha256": "643dd2ce010402dc33712e77b68f79cf1e4aea0652dd1631c855cf36e0895f50",
+      "passed": true
+    },
+    {
+      "case": "M-MASK-020",
+      "mode": "real-time",
+      "manifest": "/home/andy/projects/mosaic-behaviour-runs/d01c79ec9362405da5286f2af8dd3706/manifest.json",
+      "sha256": "ba993401bc7d3e2d7dd088d890aacf5575d448b1b043636d6846a18cd80e41ab",
+      "passed": true
+    }
+  ],
+  "phases_per_run": 30,
+  "production_changes": false,
+  "assertions": [
+    "All ten scales at roots C and D",
+    "Explicit accidental note masks snapped to independent literal interval fixtures with lower-note ties",
+    "Snap Off retains exact raw note masks, subsequent On restores snapping across each scale",
+    "Original velocities and one-step lengths preserved; exact step timing and balanced Stop",
+    "Native parameter menu option labels and values asserted from framebuffer"
+  ],
+  "fixture_correction": {
+    "failed_manifest": "/home/andy/projects/mosaic-behaviour-runs/2587eac2752b4800a3a0fe25069553de/manifest.json",
+    "cause": "Quantiser separator draws at row22 above first option; helper now excludes that separator pixel row exactly as for Trigless locks, with option glyph/value checks intact"
+  },
+  "limitations": [
+    "Full quantisation degree/rotation and global/channel/step precedence remain pending",
+    "Pitch endpoints, other roots and live changes remain pending",
+    "Full manual/current controlled admission/emulator release incomplete"
+  ],
+  "full_campaign_complete": false
+}

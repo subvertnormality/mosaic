@@ -1,0 +1,4 @@
+command: python -m unittest -v test_pulse_probe
+result: ImportError: cannot import name 'correlate_callback_deadlines' from 'pulse_probe'
+Ran 1 test in 0.001s
+FAILED (errors=1)

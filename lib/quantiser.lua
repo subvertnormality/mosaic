@@ -195,6 +195,10 @@ quantiser._scale_cache = {}
 quantiser._scale_cache_size = 0
 quantiser._scale_cache_max_size = 100
 
+-- Cache entries are ordered by use for eviction; count uses instead of reading
+-- the wall clock on every quantised note.
+local cache_use_counter = 0
+
 local function cleanup_old_cache_entries()
   -- Convert cache to array of {key, timestamp} pairs
   local cache_entries = {}
@@ -229,6 +233,10 @@ local function hash_scale(scale)
   return hash
 end
 
+-- Scale note arrays are shared and never modified in place (edits install new
+-- arrays), so each array's hash is computed once rather than on every note.
+local scale_hashes = setmetatable({}, {__mode = "k"})
+
 local function make_cache_key(root_note, chord_rotation, scale_number, transpose, do_rotation, do_degree, do_transpose, do_pentatonic, scale_container)
   -- Use bit operations to pack booleans into a single number
   local flags = (do_rotation and 1 or 0) +
@@ -237,7 +245,12 @@ local function make_cache_key(root_note, chord_rotation, scale_number, transpose
                (do_pentatonic and 8 or 0)
   
   -- Hash the scale table
-  scale_hash = hash_scale(scale_container.scale)
+  local notes = scale_container.scale
+  local scale_hash = scale_hashes[notes]
+  if not scale_hash then
+    scale_hash = hash_scale(notes)
+    scale_hashes[notes] = scale_hash
+  end
 
   -- Create a more efficient key using string format
   return string.format("%d:%d:%d:%d:%x:%d:%d:%d",
@@ -281,16 +294,26 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
   )
 
 
+  cache_use_counter = cache_use_counter + 1
   local cache_entry = quantiser._scale_cache[cache_key]
   local scale, pentatonic
 
   if cache_entry then
-    cache_entry.timestamp = os.time()  -- Update timestamp on access
+    cache_entry.timestamp = cache_use_counter  -- least recently used is evicted first
     scale = cache_entry.scale
     pentatonic = cache_entry.pentatonic
   else
     scale = fn.deep_copy(scale_container.scale)
     pentatonic = fn.deep_copy(scale_container.pentatonic_scale)
+    -- Include the preceding octave when the selection omits its tonic.
+    -- Otherwise low Lydian C has no B below it and snaps differently by octave.
+    local lower_octave = {}
+    for i = 1, math.min(5, #pentatonic) do
+      lower_octave[i] = pentatonic[i] - 12
+    end
+    for i = #lower_octave, 1, -1 do
+      table.insert(pentatonic, 1, lower_octave[i])
+    end
 
     if do_degree and chord_rotation > 0 then
       for _ = 1, chord_rotation do
@@ -316,7 +339,8 @@ local function process_handler(note_number, octave_mod, transpose, scale_number,
     -- Store processed scales in cache
     quantiser._scale_cache[cache_key] = {
       scale = scale,
-      pentatonic = pentatonic
+      pentatonic = pentatonic,
+      timestamp = cache_use_counter  -- cleanup sorts every entry by use order, newest last
     }
     quantiser._scale_cache_size = quantiser._scale_cache_size + 1
 
@@ -414,13 +438,25 @@ function quantiser.process_with_mask_params(note_number, octave_mod, transpose, 
 end
 
 
-function quantiser.snap_to_scale(note_num, scale_number, transpose)
+function quantiser.snap_to_scale(note_num, scale_number, transpose, midi_only)
 
   local scale_container = program.get_scale(scale_number)
   local scale = fn.deep_copy(scale_container.scale)
   local root_note = scale_container.root_note > -1 and scale_container.root_note or program.get().root_note
 
   scale = fn.transpose_scale(scale, root_note + (transpose or 0))
+
+  if midi_only then
+    -- A root shift can move the generated scale above MIDI127. Select from
+    -- playable scale notes, rather than clamping a result out of its scale.
+    local playable = {}
+    for _, pitch in ipairs(scale) do
+      if pitch >= 0 and pitch <= 127 then
+        playable[#playable + 1] = pitch
+      end
+    end
+    scale = playable
+  end
 
   if type(note_num) ~= "number" then return nil end
 

@@ -1,0 +1,64 @@
+{
+  "status": "isolated-candidate-focused-validated",
+  "base_revision": "2266c0c",
+  "files": [
+    {
+      "file": "lib/pages/channel_edit_page/channel_edit_page_ui.lua",
+      "before_sha256": "45072c77493bcb0bc521ae8220f68411d51c307e766532f0f1ba00f463c03fdb",
+      "after_sha256": "d10d0e95cc046325dcd852d2a5e9cd42dac67ee7ffafcffaf717ba3b324b7762"
+    }
+  ],
+  "patch": "0105-memory-redo-working-pattern.patch",
+  "patch_sha256": "cf438261ea2ef40e21c3f9f5c984bbe5d514e0a8cc5403c85a015f6fafe25343",
+  "regression": "M-MEMORY-009",
+  "unit_regression": null,
+  "baseline": [
+    {
+      "run_id": "35f4bdcd7b7a4d369bccf2692c423693",
+      "case": "M-MEMORY-009",
+      "mode": "real-time",
+      "passed": false,
+      "manifest_sha256": "a4515ec5acc88749cbe902d938ceb81d4368c9b01f60032e6c2c099190f16284",
+      "failure": "('Redo differs from the locked state', {'notes': [60, 64, 65, 60], 'velocities': [127, 107, 97, 127]}, {'notes': [60, 4, 64, 65], 'velocities': [127, 117, 107, 97]})"
+    },
+    {
+      "run_id": "0639095baa714cba878c483ec041cb00",
+      "case": "M-MEMORY-009",
+      "mode": "controlled-experimental",
+      "passed": false,
+      "manifest_sha256": "ca1660c1865b82ff3840829c8592f3ac884605e3eed86cf6aa9d8fca6b1b7142",
+      "failure": "('Redo differs from the locked state', {'notes': [60, 64, 65, 60], 'velocities': [127, 107, 97, 127]}, {'notes': [60, 4, 64, 65], 'velocities': [127, 117, 107, 97]})"
+    }
+  ],
+  "rationale": "memory.apply_event re-applies only an event's own fields and fills the rest of the step's working pattern with fallbacks (trig 0, velocity 100, note 0, length 1); edits rebuild the working pattern from the masks afterwards, but memory navigation did not. After undo then redo of an encoder-made held-step note or velocity lock the step went silent until some later edit rebuilt the pattern (probe: correct after a rebuild). The channel edit page now rebuilds the channel's working pattern after every memory step, undo-all and redo-all, as every edit path does.",
+  "oracle": "README Memory 697-702: memory retains mask actions and E3 scrolls to past and more recent actions, so redo returns to the state after the action.",
+  "validation": [
+    {
+      "run_id": "7dfd771f4adc4bb9980b08404ec66cae",
+      "case": "M-MEMORY-009",
+      "mode": "real-time",
+      "passed": true,
+      "manifest_sha256": "098ebd1838e4a7a2d2fd8931712cf9c821223264e1fc53aa51ab5230827decea",
+      "failure": null
+    },
+    {
+      "run_id": "482569e90003455084a5ee10b4949c4e",
+      "case": "M-MEMORY-009",
+      "mode": "controlled-experimental",
+      "passed": true,
+      "manifest_sha256": "477d839564de7d863c8ba18d8923a0b4eeaff7e9c8aefc42f60631e590ac2ed4",
+      "failure": null
+    },
+    {
+      "run_id": "repeat-ca07e7b922334b1b9d0377f968b4e2c2",
+      "case": "M-MEMORY-009",
+      "mode": "controlled-repeat",
+      "passed": true,
+      "manifest_sha256": "36c5e6a43ac3d80e04cd77233a5d42d37a8f3c291a46c261f6e2881474b50faf",
+      "failure": null,
+      "normalized_sha256": "5432210677addc7e87f17e661661bf6219bfaf93d090776978074e6e8fbd4b5f"
+    }
+  ],
+  "collateral": "All Lua units pass; M-MAP-003, M-MEMORY-001..008, M-PARAM-034/035 and M-REC-PARAM-025..027 pass in both lanes with the fix.",
+  "upstream_merged": false
+}

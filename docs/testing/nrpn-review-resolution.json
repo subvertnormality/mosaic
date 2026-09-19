@@ -1,0 +1,53 @@
+{
+  "status": "scoped-review-finding-resolved",
+  "review": "01a083ab-fbb9-78b0-9fcc-68da8aec97c1",
+  "candidate": "0068",
+  "finding": "Missing off_value defaulted to-1 in storage but remained nil in playback/destination checks.",
+  "baselines": [
+    "07470f8d52e74302b10716611839db59",
+    "5ba78873129741169a81a5b6e6b9d343"
+  ],
+  "baseline_effects": [
+    "CC emitted byte255 and was rejected by MIDI framing",
+    "NRPN validation correctly raised instead of emitting negative data"
+  ],
+  "resolution": "Normalize default-1 for playback, next destination and display. Off remains silent and does not cancel an active slide.",
+  "native": [
+    {
+      "run_id": "53224ffa35fe4ab581bbbf2ed2386f34",
+      "manifest_sha256": "3984cc12febea50d0de804dc858d066dfa9690f2723c6ba084f01c52e8c3d81f"
+    },
+    {
+      "run_id": "3a391362312d44e78e2e43eec0f87989",
+      "manifest_sha256": "4d33ea6269957080629f9214383ea53f39a5be1a9fa6d717535d8bfad6843add"
+    },
+    {
+      "run_id": "8eba7b19cc6e4cee82d7453adeb1435c",
+      "manifest_sha256": "3b469ac785535d379e4b1780bbb34932d030a45be7d00d98c7b22ceb5e1610d9"
+    },
+    {
+      "run_id": "104c541557dc4d4fade719ae27964620",
+      "manifest_sha256": "94d7151bffd99a08d0bfeac6a7fa37d45d23b6da0276873c4673730fccdd5d50"
+    },
+    {
+      "run_id": "4b3c49b6c4204d9ca366082671ece904",
+      "manifest_sha256": "ad4aa9aba055d0e39497657f2d3efcef8a5c5f05d5988d23824de9cf7baa0ffc"
+    },
+    {
+      "run_id": "e922b4954f8749518d6ca1098a848a26",
+      "manifest_sha256": "93f22a42d95fb814fec4ae3df9de30fa4e040a204a2ec9411d41a20eab2a9abf"
+    },
+    {
+      "run_id": "c359622677534f1089dbb92dccfcfb22",
+      "manifest_sha256": "b4559fc6195e349cd60129044e27a040c3e6d6eb5b2935e5eb78f5ff3ed5affe"
+    },
+    {
+      "run_id": "e71b21c50e0d47ab853bacf8e4b5aad6",
+      "manifest_sha256": "fb4a00fe98dee42172120e615c05420472f96ad0276d191781344c8bfe918342"
+    }
+  ],
+  "full_units": "/home/andy/projects/mosaic-behaviour-runs/slide-deadline-units-f6b77732c2844e118374a8fd41721856/results.json",
+  "unit_successes": 485,
+  "review_limits": "The actual Codex review inspected0066/0067 and found this issue.0068 is the focused remedy, validated with independent native baselines, both timing lanes and units; no second whole-review certification claimed.",
+  "full_campaign_complete": false
+}
