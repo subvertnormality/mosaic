@@ -62,15 +62,18 @@ def stopped_setup_controls(c):
 
 def owned_input_and_transport_gate(c):
     fifth_algorithm(c)  # enters algorithm five and selects BASS at x6,y2
+    # Four lanes occupy columns 3-6 and the retired fifth column is inert, so
+    # the selected lane is BASS at column 6 and column 7 must stay dark.
     active_lanes = [(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)]
-    c.led_values(active_lanes, [4, 4, 4, 4, 15])
+    lanes_with_bass = [4, 4, 4, 15, 0]
+    c.led_values(active_lanes, lanes_with_bass)
     stopped_setup_controls(c)
 
     # Record is an x1/y2 key-down claim.  Its owned key-up must not turn this
     # gesture into the legacy Pattern 1 fader action or lose lane selection.
     c.action(type="grid", x=1, y=2, state=1); c.elapse(.08)
     c.action(type="grid", x=1, y=2, state=0); c.elapse(.08)
-    c.led_values(active_lanes, [4, 4, 4, 4, 15])
+    c.led_values(active_lanes, lanes_with_bass)
     c.results.append(dict(kind="rhythm-doctor-record-ownership", cell=[1, 2],
                           selected_lane="BASS", contract="PLAN.md Record key-down ownership"))
 
@@ -80,7 +83,7 @@ def owned_input_and_transport_gate(c):
     for key in (2, 3):
         c.action(type="key", n=key, state=1); c.elapse(.04)
         c.action(type="key", n=key, state=0); c.elapse(.06)
-        c.led_values(active_lanes, [4, 4, 4, 4, 15])
+        c.led_values(active_lanes, lanes_with_bass)
     c.results.append(dict(kind="rhythm-doctor-norns-keys", keys=[2, 3],
                           selected_lane="BASS", contract="PLAN.md K2/K3 routing"))
 
@@ -88,7 +91,7 @@ def owned_input_and_transport_gate(c):
     # received by the app, but must retain BASS until transport has stopped.
     c.tap(1, 8); c.elapse(.1)
     c.tap(5, 2)
-    c.led_values(active_lanes, [4, 4, 4, 4, 15])
+    c.led_values(active_lanes, lanes_with_bass)
     c.tap(1, 8); c.elapse(.1)
     c.results.append(dict(kind="rhythm-doctor-transport-gate", attempted_lane="CYM",
                           retained_lane="BASS", contract="PLAN.md capture transport gate"))

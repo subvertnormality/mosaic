@@ -96,6 +96,11 @@ local function init_rhythm_doctor()
     now = util.time,
     transport_stopped = function() return not m_clock.is_playing() end,
     analysis_worker = analysis_worker,
+    -- A save asked for during a capture is deferred rather than refused, and
+    -- declining it stops the autosave timers. Re-prime them once the capture
+    -- has released so the save runs through the ordinary path, with its
+    -- transport, inhibition and project-ownership checks intact.
+    on_deferred_save = function() project.prime_autosave() end,
     paint = {
       adapter = { trig_field = "trig_values", velocity_field = "velocity_values", length_field = "lengths", on = 1, off = 0 },
       read_source = function(target)

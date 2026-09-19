@@ -241,5 +241,35 @@ test('preflight time is not counted as captured audio', function()
   equal(runtime:capture_progress().enough_audio, true)
 end)
 
+test('an autosave deferred during capture runs once the capture releases', function()
+  -- The state machine recorded the deferred save and invoked on_deferred_save
+  -- when resources were released, but nothing in the application ever supplied
+  -- that callback. The autosave timers had already been stopped, so the save
+  -- was simply lost until some later edit primed them again.
+  local clock, saves = 0, {}
+  local socket, worker = transport(), {}
+  function worker:open() return socket end
+  function worker:close() end
+  local runtime = Runtime.new({ project_id = 'project-save', worker = worker,
+    now = function() return clock end, transport_stopped = function() return true end,
+    on_deferred_save = function(project_id) saves[#saves + 1] = project_id end })
+  check(runtime:enter().ok)
+  runtime:start_capture('manual')
+  runtime:_capture_start('manual', runtime.machine.token)
+
+  local decision = runtime:autosave()
+  check(decision.code ~= 'SAVE_NOW', 'a save must not run while a capture is active')
+  equal(#saves, 0, 'the deferred save must not run before the capture releases')
+
+  local token = runtime.machine:job_token()
+  runtime.machine:capture_failed(token, 'CAPTURE_FAILED')
+  runtime.machine:resources_released(token, true)
+  equal(#saves, 1, 'the deferred save was lost when the capture released')
+
+  -- Releasing again must not save a second time.
+  runtime.machine:resources_released(token, true)
+  equal(#saves, 1, 'the deferred save ran more than once')
+end)
+
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end
 print('rhythm_doctor runtime: ' .. count .. ' tests passed')

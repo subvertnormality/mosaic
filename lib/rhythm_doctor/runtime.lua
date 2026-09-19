@@ -92,6 +92,12 @@ function Runtime.new(deps)
     on_cancel = function(token) self:_cancel(token) end,
     on_release = function(token) self:_release(token) end,
     on_state = function(state, token) if self.on_status then self.on_status(state, token) end end,
+    -- A save asked for during a capture is deferred, not refused: the autosave
+    -- timers stop once it is declined, so without this the save is lost until
+    -- some later edit primes them again.
+    on_deferred_save = function(project_id)
+      if deps.on_deferred_save then deps.on_deferred_save(project_id) end
+    end,
   })
   if deps.paint then
     self.paint_transactions = Transactions.new({
