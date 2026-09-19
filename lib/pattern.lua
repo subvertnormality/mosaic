@@ -257,6 +257,9 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     foundation_result.cycle = cycle
     foundation_result.cycles = merge_settings.cycles or 1
     foundation_result.phrase = merge_runtime.phrase or 0
+    foundation_result.config = merge_settings
+    foundation_result.anchor_notes = patterns[merge_settings.anchor] and
+      patterns[merge_settings.anchor].note_values or nil
     merged_pattern.foundation = foundation_result
   end
 

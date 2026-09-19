@@ -95,6 +95,24 @@ function harmony_state.prepare_group(song, group_id, revision, material, group)
   })
 end
 
+function harmony_state.prepare_pattern(song, channel_number, revision, material, roles, channel)
+  local state = state_for(song)
+  local record = state.channels[channel_number] or {consumed_count = 0}
+  state.channels[channel_number] = record
+  if record.prepared and record.prepared.revision == revision then return record.prepared end
+  return solve(record, revision, {
+    policy_version = 1,
+    mode = "ensemble",
+    material = material,
+    roles = roles,
+    preset = channel.preset,
+    crossing = channel.crossing,
+    exact_unison = channel.exact_unison,
+    doubling = false,
+    node_budget = channel.node_budget
+  })
+end
+
 local function consume(record, result)
   if not record or not result or result.status ~= "ok" then return false end
   if record.consumed_revision == result.revision then return false end
