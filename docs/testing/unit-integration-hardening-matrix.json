@@ -34,7 +34,7 @@
  "counts": {
   "requirements": 148,
   "production_lua_modules": 113,
-  "unit_integration_files": 93,
+  "unit_integration_files": 94,
   "domains": 16
  },
  "coverage_language": {
@@ -84,7 +84,7 @@
     "lib/tests/lib/harmony_voicing_tests.lua", "lib/tests/lib/musical_merge_config_tests.lua",
     "lib/tests/lib/harmony_inspection_tests.lua", "lib/tests/lib/musical_merge_pattern_integration_tests.lua",
     "lib/tests/lib/musical_merge_pitch_target_tests.lua", "lib/tests/lib/musical_merge_state_tests.lua"
-    , "lib/tests/lib/optional_config_persistence_tests.lua"
+    , "lib/tests/lib/optional_config_persistence_tests.lua", "lib/tests/lib/voice_lifetime_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-MERGE-FOUNDATION-001", "M-MERGE-PHRASE-001", "M-HARMONY-REVOICE-001",
