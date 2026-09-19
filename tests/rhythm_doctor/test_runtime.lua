@@ -115,5 +115,27 @@ test('READY controls clamp the shared window, rebuild one lane sensitivity, and 
   equal(runtime.machine.analysis_revision, 1)
 end)
 
+test('runtime answers the complete project-lifecycle capture-guard interface', function()
+  -- project_lifecycle.save_project calls capture_guard:autosave() or
+  -- capture_guard:manual_save() UNCONDITIONALLY once a guard is installed,
+  -- unlike every other guard hook, which it probes with `and guard.method`.
+  -- mosaic.lua installs this runtime as that guard, so a runtime missing
+  -- either method makes every project save raise
+  -- "attempt to call a nil value" at project_lifecycle.lua:116.
+  -- Reproduced by behaviour cases M-MEMORY-007 and M-SAVE-LENGTH-001 in both
+  -- timing lanes.
+  local runtime = context()
+  for _, method in ipairs({ 'autosave', 'manual_save', 'prepare_project_change',
+                            'project_loaded', 'serialize_project', 'restore_project' }) do
+    check(type(runtime[method]) == 'function', 'runtime must implement guard method ' .. method)
+  end
+  local auto = runtime:autosave()
+  check(type(auto) == 'table', 'autosave must return a decision table')
+  equal(auto.code, 'SAVE_NOW', 'an idle runtime must permit autosave')
+  local manual = runtime:manual_save()
+  check(type(manual) == 'table', 'manual_save must return a decision table')
+  equal(manual.code, 'SAVE_NOW', 'an idle runtime must permit a manual save')
+end)
+
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end
 print('rhythm_doctor runtime: ' .. count .. ' tests passed')

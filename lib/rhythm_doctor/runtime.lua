@@ -252,6 +252,19 @@ end
 function Runtime:prepare_project_change(continuation)
   return self.machine:prepare_project_change(continuation)
 end
+-- project_lifecycle.save_project calls these two unconditionally once a guard
+-- is installed, unlike its other guard hooks, which it probes first. The
+-- capture state machine owns the actual permission decision; the runtime only
+-- forwards, so an active capture still blocks a save from stopping transport
+-- or serializing a partial bank.
+function Runtime:autosave()
+  return self.machine:autosave()
+end
+
+function Runtime:manual_save()
+  return self.machine:manual_save()
+end
+
 function Runtime:project_loaded(project_id)
   assert(type(project_id) == "string" and project_id ~= "", "project_id is required")
   local identity = project_identity(project_id)
