@@ -200,7 +200,11 @@ function sequencer:dual_press(x, y, x2, y2, song_pattern, pattern_number)
       -- leave: the new range may never play that step. What has left stays
       -- sent; its record names a step, so it cannot speak for another.
       local scheduler = m_clock and m_clock.get_lock_lookahead and m_clock.get_lock_lookahead()
-      if scheduler then scheduler:cancel_channel(channel.number) end
+      -- A step edited out of the range never arrives to correct a value that
+      -- already left for it, so withdraw those sends and put back what they
+      -- displaced. Without this the receiver keeps an excluded step's value,
+      -- which is a difference from lead 0 that the player never asked for.
+      if scheduler then scheduler:revert_channel(channel.number, step.restore_lock_value) end
       return true
     elseif self.mode == "pattern" then
       local grid_count = fn.calc_grid_count(x, y)

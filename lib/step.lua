@@ -200,6 +200,25 @@ function step.forget_sent_lock_value(channel_number, slot)
   if per_channel then per_channel[slot] = nil end
 end
 
+-- Lock lookahead installs its scheduler here. Declared before the send path
+-- because that path checks it; the installer below assigns this same local.
+local lock_lookahead_scheduler = nil
+
+-- The last value each slot actually put on the wire, kept only while lock
+-- lookahead is installed. The resend cache above cannot serve this: it is only
+-- written when the player turns the repeat off, and the value a withdrawn early
+-- send has to put back is needed whatever that setting says.
+local in_force_lock_values = {}
+
+function step.forget_in_force_lock_values()
+  in_force_lock_values = {}
+end
+
+function step.last_sent_lock_value(channel_number, slot)
+  local per_channel = in_force_lock_values[channel_number]
+  return per_channel and per_channel[slot]
+end
+
 local function send_midi_param(channel_number, slot, param, value, midi_channel, midi_device, mode)
   -- Absent or On means resend, so the documented default behaviour is kept.
   if fn.param_value("repeat_unchanged_locks") == 1 then
@@ -210,6 +229,14 @@ local function send_midi_param(channel_number, slot, param, value, midi_channel,
     end
     if per_channel[slot] == value then return end
     per_channel[slot] = value
+  end
+  if lock_lookahead_scheduler then
+    local held = in_force_lock_values[channel_number]
+    if held == nil then
+      held = {}
+      in_force_lock_values[channel_number] = held
+    end
+    held[slot] = value
   end
   process_midi_param(param, value, midi_channel, midi_device, mode)
 end
@@ -269,8 +296,6 @@ end
 
 -- Lock lookahead installs its scheduler here. With none installed, playback is
 -- exactly as it was: every value is resolved and sent at its own step.
-local lock_lookahead_scheduler = nil
-
 function step.set_lock_lookahead(scheduler)
   lock_lookahead_scheduler = scheduler
 end
@@ -330,6 +355,24 @@ end
 -- because sending a value the player has since overruled is worse than sending
 -- it late. Returning false leaves the slot uncommitted, so its own step sends
 -- whatever is then in force.
+-- Put back the value a withdrawn early send displaced. Sent through the same
+-- path as any other parameter write, so the resend cache and the lookahead's
+-- own write observer both see it.
+function step.restore_lock_value(channel_number, slot, value)
+  if value == nil then return end
+  local program_data = program.get()
+  local channel = program.get_channel(program_data.selected_song_pattern, channel_number)
+  local param = channel and channel.trig_lock_params[slot]
+  if param == nil or param.param_id == nil or param.type ~= "midi" then return end
+  local devices = program_data.devices
+  local midi_channel = param.channel or devices[channel_number].midi_channel
+  local nrpn_mode
+  if param.nrpn_msb ~= nil then
+    nrpn_mode = param.nrpn_lsb_mode or nrpn_codec.stored_mode(program_data, channel_number, param, device_map.get_device(devices[channel_number].device_map))
+  end
+  send_midi_param(channel_number, slot, param, value, midi_channel, devices[channel_number].midi_device, nrpn_mode)
+end
+
 function step.send_preview_bundle(bundle)
   local program_data = program.get()
   local channel = program.get_channel(program_data.selected_song_pattern, bundle.channel)
@@ -347,6 +390,7 @@ function step.send_preview_bundle(bundle)
   -- the old one would address a control this slot no longer holds.
   local assigned_now = channel.trig_lock_params[bundle.slot]
   if assigned_now == nil or assigned_now.param_id ~= bundle.param.param_id then return false end
+  bundle.displaced = step.last_sent_lock_value(bundle.channel, bundle.slot)
   send_midi_param(bundle.channel, bundle.slot, bundle.param, bundle.value,
                   bundle.midi_channel, bundle.midi_device, bundle.nrpn_mode)
   return true

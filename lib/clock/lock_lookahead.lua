@@ -123,6 +123,11 @@ local function dispatch(self, entry, pulse)
     release_slot(self, commits, slot)
     commits.slots[slot] = bundle.value
     commits.destinations[slot] = destination
+    -- What this send displaced on the receiver. A step edited out of the playing
+    -- range never arrives to correct its own early value, so this is the only
+    -- route back to what would have been in force without the lead.
+    commits.displaced = commits.displaced or {}
+    commits.displaced[slot] = bundle.displaced
     if destination ~= nil then
       self.owner_channel[destination] = bundle.channel
       self.owner_slot[destination] = slot
@@ -256,6 +261,25 @@ local function cancel_unless(self, keep)
       end
     end
   end
+end
+
+-- Withdraw this channel's early sends: cancel what has not left, and put back
+-- what the sent values displaced, because the steps they belonged to may never
+-- arrive to correct themselves. Nothing can unsend what the receiver already
+-- heard; restoring the displaced value is what returns it to the value that
+-- would have been in force without the lead.
+function Scheduler:revert_channel(channel, restore)
+  self:cancel_channel(channel)
+  local commits = self.commits[channel]
+  if commits == nil then return end
+  if restore and commits.displaced then
+    for slot, value in pairs(commits.displaced) do
+      if value ~= nil and commits.slots[slot] ~= nil and commits.slots[slot] ~= value then
+        restore(channel, slot, value)
+      end
+    end
+  end
+  self.commits[channel] = nil
 end
 
 function Scheduler:cancel_channel(channel)

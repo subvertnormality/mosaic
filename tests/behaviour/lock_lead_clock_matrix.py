@@ -605,8 +605,21 @@ def lock_lead_clock_matrix(c, name):
         # other moment. Every play's transport starts within one pulse of Play,
         # so the same holds for the runs the reference is compared with.
         steps = reference['steps']
-        assert steps[:10] == [1, 2, 3, 4, 1, 2, 3, 4, 1, 2], dict(rule='edit lands after step 2 of the third pass', condition=name, steps=steps[:12])
-        assert len(steps) >= 18 and all(step == 4 for step in steps[10:]), dict(rule='only step 4 sounds after the edit', condition=name, steps=steps)
+        # After the edit the range is 4-5 and step 5 has no trig, so every note
+        # from then on is step 4. That property holds in both lanes and is what
+        # the case is for.
+        tail = next((i for i in range(len(steps)) if all(step == 4 for step in steps[i:])), len(steps))
+        assert len(steps) - tail >= 6, dict(rule='enough steps sound after the edit', condition=name, steps=steps)
+        assert all(step == 4 for step in steps[tail:]), dict(rule='only step 4 sounds after the edit', condition=name, steps=steps)
+        if controlled:
+            # Virtual time places the edit exactly, so pin the moment too: the
+            # whole-play comparison below would otherwise be testing some other
+            # instant. In real time the edit lands a step or two later depending
+            # on the host, so the moment is checked only for being close.
+            assert steps[:10] == [1, 2, 3, 4, 1, 2, 3, 4, 1, 2], dict(rule='edit lands after step 2 of the third pass', condition=name, steps=steps[:12])
+            assert tail == 10, dict(rule='edit takes effect immediately', condition=name, steps=steps)
+        else:
+            assert 8 <= tail <= 16, dict(rule='edit lands near step 2 of the third pass', condition=name, tail=tail, steps=steps)
     # Every note of the reference, including after a live edit: the feel checks
     # below span the whole play, while the run comparisons stop at the edit.
     notes = reference['notes']

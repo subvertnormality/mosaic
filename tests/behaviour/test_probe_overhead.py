@@ -14,8 +14,10 @@ def reports_for(campaign, *, jitter_delta_ns=100_000, cpu_delta=1.0):
         core = expected['probe_mode'] == 'pulse-core-v1'
         reports.append({
             'order': expected['order'],
-            'run_identity': {name: expected[name] for name in ('seed', 'workload', 'measured_steps', 'probe_mode')}
-                            | {'midi_lock_lead_time': expected['lead_ms']},
+            # Spread rather than dict | dict, which needs Python 3.9 and is not
+            # available on the interpreter CI runs this suite with.
+            'run_identity': {**{name: expected[name] for name in ('seed', 'workload', 'measured_steps', 'probe_mode')},
+                             'midi_lock_lead_time': expected['lead_ms']},
             'source_identity': copy.deepcopy(SOURCE),
             'oracle': {'passed': True, 'gates': {'event_timing': True, 'step_jitter': True,
                        'sustained_service': True, 'hard_service': True,

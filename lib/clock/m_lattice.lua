@@ -21,7 +21,18 @@ local Lattice, Sprocket = {}, {}
 
 
 
-local onset_projection = include("mosaic/lib/clock/onset_projection")
+-- norns and the Lua test harness both provide include(). The standalone contract
+-- scripts under tests/behaviour load this file with a bare dofile and have no
+-- such global, so resolve the sibling module by its own path when it is absent.
+-- Without this every contract that loads the lattice dies before its first
+-- assertion, which is how twenty-one of them came to be silently dead.
+local onset_projection
+if include then
+  onset_projection = include("mosaic/lib/clock/onset_projection")
+else
+  local here = debug.getinfo(1, 'S').source:match('^@(.*)m_lattice%.lua$') or 'lib/clock/'
+  onset_projection = dofile(here .. 'onset_projection.lua')
+end
 
 --- instantiate a new lattice
 -- @tparam[opt] table args optional named attributes are:
