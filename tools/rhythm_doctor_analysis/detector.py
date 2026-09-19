@@ -8,7 +8,7 @@ ROOT = Path(__file__).parents[2]
 sys.path.insert(0, str(ROOT / "tests" / "rhythm_doctor"))
 from quality import onset_score
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 DEV = ("Track00003","Track00004","Track00005","Track00007","Track00010","Track00012","Track00013","Track00017","Track00018")
 HELD = ("Track00001","Track00002","Track00006","Track00008","Track00009","Track00011","Track00014","Track00015","Track00016","Track00019","Track00020")
 TOLERANCE = .050; HOP = .020; REFRACTORY = .060; SEED = 20260919
@@ -38,7 +38,7 @@ def stem_kinds(metadata):
 def labels(track, meta_root, start, end):
     """Return per-lane references; None means declared source MIDI is incomplete."""
     out={lane:[] for lane in LANES}; kinds=stem_kinds(meta_root/track.name/"metadata.yaml")
-    note_map={"BD":(35,36),"SD":(37,38,40),"HH":(42,44,46),"TOM":(41,43,45,47,48,50)}
+    note_map={"BD":(35,36),"SD":(37,38,40),"CHH":(42,44),"OHH":(46,)}
     missing={stem for stem in kinds if not (track/"MIDI"/(stem+".mid")).exists()}
     # Missing declared source material is unknown, never a negative. A missing
     # drum stem makes every mapped drum lane unscorable because its notes could

@@ -4,7 +4,7 @@ This produces v4 alongside, never in place of, a preliminary BabySlakh corpus.
 The AVP material is a recorded vocal-percussion source.  Its published per-class
 recordings and CSV annotations identify kick, snare, and closed hi-hat gestures;
 the four-bar references below are the frozen render schedules, not detector output.
-It deliberately does not manufacture a TOM label or an acoustic/electronic label.
+It deliberately does not manufacture open-hat or acoustic/electronic labels.
 """
 import argparse
 import audioop
@@ -13,7 +13,8 @@ import json
 import wave
 from pathlib import Path
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+SCHEMA_VERSION = 2
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 
 
 def sha(path):
@@ -57,10 +58,12 @@ def schedule(source, onset, target):
 
 
 def main(root, v3, v4):
+    manifest = json.loads((v3 / "manifest.json").read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != SCHEMA_VERSION:
+        raise ValueError("legacy schema v1 corpus is immutable; regenerate a schema v2 corpus first")
     v4.mkdir(parents=True, exist_ok=True)
     for part in ("audio", "annotations", "recipes", "timbres"):
         (v4 / part).mkdir(exist_ok=True)
-    manifest = json.loads((v3 / "manifest.json").read_text(encoding="utf-8"))
     # v2/v3 controls reused a source interval verbatim.  Retain their immutable
     # directories for investigation, but do not carry that overlap into v4's
     # acceptance candidate.  New controls below have their own source recording.
@@ -95,7 +98,7 @@ def main(root, v3, v4):
     })
     avp = root / "avp" / "unpacked" / "AVP-LVT_Dataset" / "AVP_Dataset" / "Personal"
     specs = (("BD", "Kick", 1), ("BD", "Kick", 2), ("SD", "Snare", 3),
-             ("SD", "Snare", 4), ("HH", "HHclosed", 5), ("HH", "HHclosed", 6))
+             ("SD", "Snare", 4), ("CHH", "HHclosed", 5), ("CHH", "HHclosed", 6))
     created = []
     for index, (lane, label, participant) in enumerate(specs):
         folder = avp / f"Participant_{participant}"
@@ -178,18 +181,18 @@ def main(root, v3, v4):
         recipe.write_text(json.dumps({"kind":"frozen_submix","operation":"8 seconds of zero PCM; no source audio"},sort_keys=True)+"\n")
         evidence_path.write_text(json.dumps({"lanes":{name:{"timbre":"unverified","basis":"source_render_spec","source":"zero PCM control has no instrument timbre"} for name in LANES}},sort_keys=True)+"\n")
         created.append({"id":clip_id,"split":"held_out","source_id":"avp-lvt-v1","source_song_id":f"silence-control-{index}","kit_id":f"silence-control-{index}","source_start_seconds":0.0,"render":{"kind":"frozen_submix","recipe":desc(root,recipe)},"audio":desc(root,audio),"annotation":desc(root,annotation),"timbre_evidence":desc(root,evidence_path),"duration_seconds":8.0,"bpm":120.0,"stratum":"full_mix","timbres":{name:"unverified" for name in LANES},"tags":["preliminary","silence"]})
-    manifest["corpus_id"] = "rd02-babyslakh-avp-preliminary-v4"
+    manifest["corpus_id"] = "rd02-babyslakh-avp-preliminary-schema-v2"
     manifest["clips"] += created
     (v4 / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     report = {
         "accepted": False,
-        "created": {"held_isolated_BD": 2, "held_isolated_SD": 2, "held_isolated_HH": 2,
+        "created": {"held_isolated_BD": 2, "held_isolated_SD": 2, "held_isolated_CHH": 2,
                     "disjoint_clipping_phase_silence_controls": 5,
                     "v1_to_v3_endpoint_annotation_corrections": corrected,
                     "excluded_overlapping_v2_v3_variants": len(excluded_overlap)},
         "truth": "CC-BY AVP original recorded vocal-percussion gestures with published class CSVs and frozen independent render schedules",
         "unresolved": [
-            "no TOM source or isolated TOM fixture", "AVP is vocal percussion, not an acoustic/electronic drum timbre assertion",
+            "no OHH source or isolated OHH fixture", "AVP is vocal percussion, not an acoustic/electronic drum timbre assertion",
             "all corpus timbres remain unverified", "long acquisition fixtures and complete lane-negative inventory absent",
             "these isolated renders do not establish mixed-music quality",
         ],

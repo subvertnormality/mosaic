@@ -2,7 +2,8 @@
 import argparse, audioop, hashlib, json, shutil, struct, wave
 from pathlib import Path
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+SCHEMA_VERSION = 2
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 
 def sha(path):
     h = hashlib.sha256()
@@ -24,10 +25,12 @@ def empty_annotation(path):
     path.write_text(json.dumps({"reference_origin":"independent_render_metadata","annotator_id":"frozen-control-render-v1","events":{lane:[] for lane in LANES}}, sort_keys=True) + "\n")
 
 def main(root, v1, v2):
+    manifest = json.loads((v1 / "manifest.json").read_text())
+    if manifest.get("schema_version") != SCHEMA_VERSION:
+        raise ValueError("legacy schema v1 corpus is immutable; regenerate a schema v2 corpus first")
     v2.mkdir(parents=True, exist_ok=True)
     for directory in ("audio", "annotations", "recipes", "timbres"):
         (v2 / directory).mkdir(exist_ok=True)
-    manifest = json.loads((v1 / "manifest.json").read_text())
     base = manifest["clips"][0]
     source = root / base["audio"]["path"]
     controls = []
@@ -62,10 +65,10 @@ def main(root, v1, v2):
     unison = [clip for clip in manifest["clips"] if simultaneous(clip)]
     if unison:
         unison[0]["tags"] = sorted(set(unison[0]["tags"] + ["kick_bass_unison"]))
-    manifest["corpus_id"] = "rd02-babyslakh-preliminary-v2-controls"
+    manifest["corpus_id"] = "rd02-babyslakh-preliminary-schema-v2-controls"
     manifest["clips"] += controls
     (v2 / "manifest.json").write_text(json.dumps(manifest, indent=2, sort_keys=True)+"\n")
-    report = {"accepted":False,"created_controls":[clip["id"] for clip in controls],"kick_bass_unison_found":bool(unison),"missing_gates":["source-backed acoustic/electronic timbre labels","sparse mixtures from original stems","isolated per-lane BD/SD/HH/TOM/BASS audio","independently annotated long acquisition fixtures","full negative-lane inventory","real recorded-music domain evidence"]}
+    report = {"accepted":False,"created_controls":[clip["id"] for clip in controls],"kick_bass_unison_found":bool(unison),"missing_gates":["source-backed acoustic/electronic timbre labels","sparse mixtures from original stems","isolated per-lane BD/SD/CHH/OHH/BASS audio","independently annotated long acquisition fixtures","full negative-lane inventory","real recorded-music domain evidence"]}
     (v2 / "gate-report.json").write_text(json.dumps(report, indent=2)+"\n")
     print(v2 / "manifest.json")
 

@@ -18,7 +18,7 @@ import numpy as np
 import soundfile as sf
 from scipy.signal import resample_poly
 
-LANES = ('BD', 'SD', 'HH', 'TOM', 'BASS')
+LANES = ('BD', 'SD', 'CHH', 'OHH', 'BASS')
 RATE = 16000
 SEED = 2026091901
 
@@ -31,6 +31,30 @@ def digest(path):
     return h.hexdigest()
 
 
+def verified_open_hat_asset(root, kit_directory):
+    """Return the sole existing open-hat sample for a scheduled kit.
+
+    A v2 corpus must label open hats independently.  Do not guess a filename:
+    cache layouts vary, and a guessed asset would make the source recipe false.
+    """
+    directory = root / kit_directory
+    if not directory.is_dir():
+        raise FileNotFoundError(
+            f"scheduled v2 corpus requires a verified open-hat asset, but {directory} is absent"
+        )
+    candidates = sorted(
+        path for path in directory.rglob('*')
+        if path.is_file() and path.suffix.lower() in {'.wav', '.flac'}
+        and 'open' in path.stem.lower() and 'hat' in path.stem.lower()
+    )
+    if len(candidates) != 1:
+        found = ', '.join(path.relative_to(root).as_posix() for path in candidates) or 'none'
+        raise FileNotFoundError(
+            f"scheduled v2 corpus requires exactly one verified open-hat asset under {directory}; found {found}. Refusing to invent a path."
+        )
+    return candidates[0].relative_to(root).as_posix()
+
+
 class Renderer:
     def __init__(self, cache, output):
         self.root, self.out = cache.resolve(), output.resolve()
@@ -38,16 +62,16 @@ class Renderer:
         for name in ('audio', 'annotations', 'recipes', 'timbres', 'sources'):
             (self.out/name).mkdir()
         base = json.loads((self.root/'rd02-preliminary-v7/manifest.json').read_text())
-        self.manifest = dict(schema_version=1, corpus_id='rd02-scheduled-v11',
+        self.manifest = dict(schema_version=2, corpus_id='rd02-scheduled-v12',
                              sources=[s for s in base['sources'] if s['id'] != 'avp-lvt-v1'],
                              clips=[c for c in base['clips'] if c['split'] == 'development'])
         assert len(self.manifest['clips']) == 40
         self.assets = [
             dict(BD='hydrogen/gm/Kick-Med.wav', SD='hydrogen/gm/Snare-Med.wav',
-                 HH='hydrogen/gm/HatClosed-Med.wav', TOM='hydrogen/gm/Tom1-Med.wav',
+                 CHH='hydrogen/gm/HatClosed-Med.wav', OHH=verified_open_hat_asset(self.root, 'hydrogen/gm'),
                  BASS='freepats/electric-bass-YR/samples/finger/E.flac'),
             dict(BD='hydrogen/tr808/808_Kick_Short.flac', SD='hydrogen/tr808/808_Snare_1.flac',
-                 HH='hydrogen/tr808/808_Hat_Closed.flac', TOM='hydrogen/tr808/808_Tom_Hi.flac',
+                 CHH='hydrogen/tr808/808_Hat_Closed.flac', OHH=verified_open_hat_asset(self.root, 'hydrogen/tr808'),
                  BASS='freepats/synth-bass-2/samples/C2.flac')]
         self.samples = [{lane: self.read_sample(self.root/path) for lane, path in kit.items()}
                         for kit in self.assets]
@@ -101,8 +125,8 @@ class Renderer:
                 if ladder:
                     hit = step % 8 == 0
                 else:
-                    anchors = {'BD': (0, 8), 'SD': (4, 12), 'HH': tuple(range(0,16,2)),
-                               'TOM': (14,), 'BASS': (0, 6, 10)}[lane]
+                    anchors = {'BD': (0, 8), 'SD': (4, 12), 'CHH': tuple(range(0,16,2)),
+                               'OHH': (3, 11), 'BASS': (0, 6, 10)}[lane]
                     hit = step % 16 in anchors or rng.random() < .065
                 if hit and when >= 0:
                     velocity = min(120, 24+16*(step//8)) if ladder else rng.randint(48, 120)
@@ -153,7 +177,7 @@ class Renderer:
                                 source=(source+': recorded strings/Pearl DX' if kit == 0 else source+': FM/basic-wave synthesis')
                                 if lane in active else 'absent by render schedule')
         annotation = self.write_json('annotations', name, dict(reference_origin='independent_render_metadata',
-                           annotator_id='frozen-sample-schedule-v11', events=events))
+                           annotator_id='frozen-sample-schedule-v12', events=events))
         recipe = self.write_json('recipes', name, dict(kind=kind, seed=seed, sample_rate=RATE,
             source_assets={lane: self.desc(self.root/self.assets[kit][lane]) for lane in active},
             source_ids=self.source_ids[kit], events=events, intro_seconds=intro, record_phase_seconds=phase,
@@ -179,26 +203,26 @@ def main():
     args = parser.parse_args()
     r = Renderer(args.cache_root, args.output)
     for n in range(40):
-        r.clip('v11-full-%02d'%n, n%2, seed=SEED+n, tags=['clean_held','straight_sixteenth'])
+        r.clip('v12-full-%02d'%n, n%2, seed=SEED+n, tags=['clean_held','straight_sixteenth'])
     for kit in (0,1):
         for index, lane in enumerate(LANES):
-            r.clip('v11-isolated-%d-%s'%(kit,lane), kit, active=(lane,), stratum='isolated',
+            r.clip('v12-isolated-%d-%s'%(kit,lane), kit, active=(lane,), stratum='isolated',
                    seed=SEED+100+kit*10+index, ladder=True, tags=['gain_ladder','independent_velocity'])
             pair = (lane, LANES[(index+1)%len(LANES)])
-            r.clip('v11-sparse-%d-%s'%(kit,lane), kit, active=pair, stratum='sparse',
+            r.clip('v12-sparse-%d-%s'%(kit,lane), kit, active=pair, stratum='sparse',
                    seed=SEED+200+kit*10+index, tags=['straight_sixteenth'])
     for n,bpm in enumerate((40,60,120)):
-        r.clip('v11-silence-%d'%n, 0, bpm=bpm, active=(), stratum='isolated', tags=['silence'])
-    r.clip('v11-clipped',0,seed=SEED+300,clipped=True,tags=['clipping'])
-    r.clip('v11-phase',1,seed=SEED+301,inverted=True,tags=['phase_inverted_stereo'])
-    r.clip('v11-unison',0,seed=SEED+302,active=('BD','BASS'),stratum='sparse',tags=['kick_bass_unison'])
+        r.clip('v12-silence-%d'%n, 0, bpm=bpm, active=(), stratum='isolated', tags=['silence'])
+    r.clip('v12-clipped',0,seed=SEED+300,clipped=True,tags=['clipping'])
+    r.clip('v12-phase',1,seed=SEED+301,inverted=True,tags=['phase_inverted_stereo'])
+    r.clip('v12-unison',0,seed=SEED+302,active=('BD','BASS'),stratum='sparse',tags=['kick_bass_unison'])
     for n,bpm in enumerate((40,60,120,180,240)):
-        r.clip('v11-acquisition-%d'%bpm,n%2,bpm=bpm,duration=45,split='acquisition',
+        r.clip('v12-acquisition-%d'%bpm,n%2,bpm=bpm,duration=45,split='acquisition',
                seed=SEED+400+n,intro=2.1,phase=.137,tags=['random_record_phase','silence_or_intro','syncopation'])
-    r.clip('v11-acquisition-drift',0,bpm=120,duration=45,split='acquisition',seed=SEED+410,
+    r.clip('v12-acquisition-drift',0,bpm=120,duration=45,split='acquisition',seed=SEED+410,
            changing=True,tags=['changing_tempo'])
-    r.clip('v11-acquisition-ambiguous',1,bpm=60,duration=45,split='acquisition',seed=SEED+411,
-           active=('HH',),stratum='isolated',tags=['half_double_ambiguous','uncertain_downbeat'])
+    r.clip('v12-acquisition-ambiguous',1,bpm=60,duration=45,split='acquisition',seed=SEED+411,
+           active=('CHH',),stratum='isolated',tags=['half_double_ambiguous','uncertain_downbeat'])
     r.write_json('.', 'manifest', r.manifest)
     r.write_json('.', 'build-identity', dict(renderer_sha256=digest(Path(__file__)), seed=SEED,
         unique_audio_hashes=len(r.hashes), output_clips=len(r.manifest['clips']),

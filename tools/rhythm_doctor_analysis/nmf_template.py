@@ -24,11 +24,11 @@ ROOT = next(parent for parent in Path(__file__).resolve().parents if (parent / "
 sys.path.insert(0, str(ROOT / "tests" / "rhythm_doctor"))
 from quality import onset_score
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 DEV = (3, 4, 5, 7, 10, 12, 13, 17, 18)
 HELD = (1, 2, 6, 8, 9, 11, 14, 15, 16, 19, 20)
-NOTES = {"BD": (35, 36), "SD": (37, 38, 40), "HH": (42, 44, 46),
-         "TOM": (41, 43, 45, 47, 48, 50)}
+NOTES = {"BD": (35, 36), "SD": (37, 38, 40), "CHH": (42, 44),
+         "OHH": (46,)}
 HOP, TOLERANCE, WINDOW = .020, .050, 1024
 
 

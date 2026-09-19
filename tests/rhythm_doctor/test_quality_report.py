@@ -2,7 +2,7 @@
 import unittest
 from quality_report import evaluate
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 STRATA = ("isolated", "sparse", "full_mix")
 
 def rows():
@@ -12,18 +12,25 @@ def rows():
                  velocity_monotonic=True) for lane in LANES for stratum in STRATA]
 
 class QualityReportTests(unittest.TestCase):
-    # User scope amendment in docs/rhythm-doctor/STATUS.md, outside README.
-    def test_priority_profile_requires_all_four_lanes_and_names_scope(self):
-        samples = [r for r in rows() if r['lane'] != 'TOM']
-        result = evaluate(samples, profile='priority_four')
+    def test_schema_v2_requires_every_active_lane_and_names_scope(self):
+        samples = rows()
+        result = evaluate(samples)
         self.assertTrue(result['passed'])
-        self.assertEqual(result['required_lanes'], ['BD', 'SD', 'HH', 'BASS'])
-        self.assertFalse(evaluate(samples)['passed'])
-        for lane in ('BD', 'SD', 'HH', 'BASS'):
-            self.assertFalse(evaluate([r for r in samples if r['lane'] != lane],
-                                      profile='priority_four')['passed'])
+        self.assertEqual(result['schema_version'], 2)
+        self.assertEqual(result['required_lanes'], ['BD', 'SD', 'CHH', 'OHH', 'BASS'])
+        for lane in LANES:
+            result = evaluate([row for row in samples if row['lane'] != lane])
+            self.assertFalse(result['passed'])
         samples[-1]['onset_tp'] = 0
-        self.assertFalse(evaluate(samples, profile='priority_four')['passed'])
+        self.assertFalse(evaluate(samples)['passed'])
+
+    def test_legacy_hat_and_tom_labels_are_rejected(self):
+        samples = rows()
+        samples[0]['lane'] = 'HH'
+        self.assertFalse(evaluate(samples)['passed'])
+        samples = rows()
+        samples[0]['lane'] = 'TOM'
+        self.assertFalse(evaluate(samples)['passed'])
 
     def test_unknown_profile_fails_closed(self):
         self.assertFalse(evaluate(rows(), profile='bd_only')['passed'])

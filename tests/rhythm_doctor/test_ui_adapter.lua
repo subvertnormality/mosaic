@@ -100,9 +100,9 @@ test("K3 Finish is available only after enough audio and only while capturing", 
   equal(c.calls[#c.calls][1], "finish"); check(c.calls[#c.calls][2])
 end)
 
-test("lane keys select all five lanes and ignore their releases", function()
+test("lane keys select BD, SD, closed hat, open hat and bass, and ignore their releases", function()
   local c = context()
-  for index, lane in ipairs({ "BD", "SD", "HH", "TOM", "BASS" }) do
+  for index, lane in ipairs({ "BD", "SD", "CHH", "OHH", "BASS" }) do
     equal(c.adapter:grid_key(index + 2, 2, 1).code, "LANE_SELECTED")
     equal(c.adapter:screen_model().lane, lane)
     equal(c.adapter:grid_key(index + 2, 2, 0).code, "UNCLAIMED")
@@ -169,7 +169,7 @@ end)
 test("screen model is a read-only summary of status, selected-lane hits and capture diagnostics", function()
   local c = context(); c.runtime.machine.state = "READY"
   c.runtime.machine.bank = { bpm = 137, tempo_mode = "auto", timeline_cells = 97,
-    lanes = { BD = { [1] = {}, [2] = {} }, SD = {}, HH = {}, TOM = {}, BASS = {} } }
+    lanes = { BD = { [1] = {}, [2] = {} }, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
   c.adapter:set_capture_progress({ listening_confidence = .8, acquired_beats = 19, analysis_progress = .25, source = "stereo" })
   local model = c.adapter:screen_model()
   equal(model.title, "RHYTHM DOCTOR"); equal(model.state, "READY"); equal(model.lane, "BD")

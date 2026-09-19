@@ -1,5 +1,26 @@
 # Rhythm Doctor RD-02 corpus
 
+## Active-scope amendment — 2026-09-19
+
+The acceptance corpus now targets **BD, SD, CHH, OHH and BASS**. CHH (closed
+hi-hat) and OHH (open hi-hat) must be separately annotated; combined `HH` is not
+an active acceptance label, and `TOM` is outside the active feature scope. The
+validator's active schema is `BD`/`SD`/`CHH`/`OHH`/`BASS`; the frozen manifests
+described below retain the historical `BD`/`SD`/`HH`/`TOM`/`BASS` schema. Those
+immutable diagnostic and provenance records cannot qualify the amended feature.
+A newly frozen source-disjoint corpus must validate the active schema.
+
+The amended corpus must apply every existing structural and quality requirement
+to each active lane independently: 40 development and 40 held-out exact-four-bar
+clips; at least 10 held positive clips and 50 held events; at least 5
+full-mixture, 2 sparse and 2 isolated positives; electronic and acoustic timbre
+evidence; at least 5 absent-lane negatives; held onset F1 >=0.80 in each lane
+and stratum and quantised-cell F1 >=0.85; zero default-threshold events on
+negatives; and the
+stated velocity gates. A combined-HH score, a TOM score, or a macro average
+cannot substitute for either hat articulation. Schema-v2 tooling emits and
+validates only the amended lane set; it never rewrites frozen evidence JSON.
+
 The RD-02 corpus is external to this Git repository. Audio, source archives,
 annotations, and provenance records must never be replaced with generated toy
 audio or detector output. Run the validator before tuning or accepting a detector:

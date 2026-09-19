@@ -16,7 +16,8 @@ from pathlib import Path
 
 import yaml
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+SCHEMA_VERSION = 2
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 DEV = (3, 4, 5, 7, 10, 12, 13, 17, 18)
 HELD = (1, 2, 6, 8, 9, 11, 14, 15, 16, 19, 20)
 
@@ -97,8 +98,8 @@ def midi_events(path: Path) -> tuple[list[tuple[float, int, int]], float]:
 def drum_lane(note: int) -> str | None:
     if note in (35, 36): return "BD"
     if note in (37, 38, 40): return "SD"
-    if note in (42, 44, 46): return "HH"
-    if note in (41, 43, 45, 47, 48, 50): return "TOM"
+    if note in (42, 44): return "CHH"
+    if note == 46: return "OHH"
     return None
 
 
@@ -180,7 +181,7 @@ def materialize(cache: Path, output: Path) -> Path:
 
     clips = [write("development", index, fixture) for index, fixture in enumerate(select(DEV, 40))]
     clips += [write("held_out", index, fixture) for index, fixture in enumerate(select(HELD, 40))]
-    manifest = {"schema_version":1,"corpus_id":"rd02-babyslakh-preliminary-v1","sources":[{"id":"babyslakh-v2","record_url":"https://zenodo.org/records/4603870","license":{"spdx":"CC-BY-4.0","url":"https://creativecommons.org/licenses/by/4.0/"},"archive":descriptor(cache / "slakh/babyslakh_16k.tar.gz"),"license_evidence":descriptor(cache / "slakh/zenodo-4603870-record.json"),"domain":"rendered"}],"clips":clips}
+    manifest = {"schema_version":SCHEMA_VERSION,"corpus_id":"rd02-babyslakh-preliminary-schema-v2","sources":[{"id":"babyslakh-v2","record_url":"https://zenodo.org/records/4603870","license":{"spdx":"CC-BY-4.0","url":"https://creativecommons.org/licenses/by/4.0/"},"archive":descriptor(cache / "slakh/babyslakh_16k.tar.gz"),"license_evidence":descriptor(cache / "slakh/zenodo-4603870-record.json"),"domain":"rendered"}],"clips":clips}
     manifest_path = output / "manifest.json"
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     (output / "gate-report.json").write_text(json.dumps({"accepted":False,"structural_gaps":["all clips are full_mix", "all lane timbres are unverified", "no silence/clipping/phase-inverted/kick+bass controls", "no acquisition fixtures", "rendered-domain only"],"manifest":str(manifest_path)}, indent=2) + "\n")

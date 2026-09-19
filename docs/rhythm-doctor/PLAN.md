@@ -12,11 +12,27 @@ this amendment; see the review record for its exact coverage.
 Review evidence and dispositions: `evidence/rhythm-doctor/` and
 [RHYTHM-DOCTOR-REVIEW.md](RHYTHM-DOCTOR-REVIEW.md).
 
+## Scope amendment — 2026-09-19
+
+The active Rhythm Doctor lanes are **BD, SD, CHH, OHH and BASS**: bass drum,
+snare drum, closed hi-hat, open hi-hat and pitched bass attacks. This amendment
+supersedes every unqualified earlier PLAN lane list and coordinate assignment.
+`HH` is no longer an acceptance lane: it may appear only in preserved historical
+evidence or diagnostics. `TOM` is out of the active feature scope. No combined-hat
+result, TOM result, macro average, or remapping of historical labels can stand in
+for an independently labelled and scored CHH or OHH result.
+
+The active lane coordinates are fixed: BD `x=3,y=2`, SD `x=4,y=2`, CHH
+`x=5,y=2`, OHH `x=6,y=2`, and BASS `x=7,y=2`. RD-01/RD-04 must exercise these
+exact controls through the public grid path. RD-02/RD-06 acceptance requires all
+five active lanes to meet every per-lane, per-stratum, negative-control,
+quantised-cell and velocity gate below; a missing CHH or OHH gate blocks release.
+
 ## Feasibility and evidence
 
 Capturing audio and painting 64 steps are feasible engineering tasks. Accurate,
-fast classification of kick, snare, hi-hat, tom and bass attacks from arbitrary
-mixed music on norns is an unverified premise, not a shipped capability. Bass
+fast classification of kick, snare, closed hi-hat, open hi-hat and bass attacks
+from arbitrary mixed music on norns is an unverified premise, not a shipped capability. Bass
 means pitched bass-instrument attacks, distinct from bass drum. Pitch transcription
 is outside this request. Velocity is estimated attack strength; compression,
 mixing and overlapping instruments prevent exact original MIDI-velocity recovery.
@@ -43,7 +59,7 @@ does not itself identify meter or the first beat of a bar; four-beat grouping
 remains an explicit 4/4 interpretation with user-correctable start position.
 
 Expected practical distinction: isolated or sparse rhythmic sources are easier
-than mastered full mixes. Kick versus bass, tom versus low snare, hats versus
+than mastered full mixes. Kick versus bass, closed versus open hats, hats versus
 other noisy material, and simultaneous events need explicit error measurement.
 Five frequency-band threshold detectors alone cannot establish instrument identity.
 All five lanes remain required; no three-lane fallback may be labelled complete.
@@ -76,8 +92,8 @@ Native grid callbacks use **x=column,y=row**; never transpose this silently.
 | 2,2 | 2,2 | Reserved, no action; never an old numeric-fader side effect |
 | 2,3 | 3,2 | Select BD (bass drum) |
 | 2,4 | 4,2 | Select SD (snare drum) |
-| 2,5 | 5,2 | Select HH (combined open/closed hi-hat) |
-| 2,6 | 6,2 | Select TOM (combined toms) |
+| 2,5 | 5,2 | Select CHH (closed hi-hat) |
+| 2,6 | 6,2 | Select OHH (open hi-hat) |
 | 2,7 | 7,2 | Select BASS (pitched bass attacks, no pitch extraction) |
 | 8,16 | 16,8 | Existing Paint: first press previews, second commits |
 | 8,14 | 14,8 | Existing Cancel: discard paint preview |
@@ -349,7 +365,7 @@ No delayed analysis callback may commit a pattern. Shift applies to trigs
 and velocities together modulo 64, only in the preview; bank timings remain intact.
 Scrolling selects different source events and does not wrap at the bank ends;
 Shift rotates events inside the selected 64-step window. All five lanes share
-one window start so switching BD/SD/HH/TOM/BASS keeps the same musical passage.
+one window start so switching BD/SD/CHH/OHH/BASS keeps the same musical passage.
 Successive windows can be painted into different patterns; selecting a destination
 does not move the window. A window can start on any sixteenth, with bar jumps
 as a convenience. Require 64 complete cells, clamp scrolling to [0,N-64], and
@@ -420,8 +436,8 @@ unverified claim, never inferred from throttled desktop runs.
 RD-02 freezes a licensed, independently labelled corpus before detector tuning:
 at least 40 development and 40 held-out four-bar clips, with source songs/kits
 disjoint (never adjacent segments of one recording). In the held-out partition,
-each of the five lanes must have at least 10 positive clips and 50 annotated
-events, including at least 5 full-mixture clips, 2 sparse-mixture clips and 2
+each active lane (BD, SD, CHH, OHH and BASS) must have at least 10 positive
+clips and 50 annotated events, including at least 5 full-mixture clips, 2 sparse-mixture clips and 2
 isolated clips; the remaining positive clip may be any of those strata. Counts
 can overlap across lanes. Each lane must span electronic and acoustic timbres.
 Also include at least 5 absent-lane negatives per lane, 3 silence clips, and
@@ -430,7 +446,7 @@ quality separately per lane and per isolated/sparse/full-mixture stratum;
 missing strata cannot pass by an overall score. Each such lane/stratum must
 meet the same onset gate. Require held-out per-lane onset F1 >=0.80 at
 one-to-one 50 ms matching and quantised-cell F1 >=0.85 on straight-sixteenth
-aligned fixtures; no macro average can conceal a missing bass/tom lane. Negative
+aligned fixtures; no macro average can conceal a missing active lane. Negative
 controls must have zero painted events at default threshold. On labelled controlled
 gain ladders, relative velocity must be monotonic; on independently rendered
 velocity fixtures report per-lane MAE with initial gate <=16 MIDI units. Real mixes
@@ -477,7 +493,7 @@ RD-06. No manually operated hardware or listening certification is introduced.
 | Card | Work and dependencies | Exit evidence |
 |---|---|---|
 | RD-01 Source and capture spike | Freeze live code hashes, native coordinates/dispatch, paint/history, clock/sample alignment, official capture route and resource ownership. | PCM injected and captured intact without disturbing engine/softcut/tape; fifth-button mapping and all four legacy algorithm baselines; exact insertion table. |
-| RD-02 Tempo and five-lane feasibility | RD-01; freeze independent acquisition/transcription corpora; benchmark tempo stability/confidence, half/double candidates and region selection alongside classifier/separation choices; verify licenses/build architectures and pin artifacts. | Tempo/phase/uncertainty gates, all five per-lane quality results, listening/tail/RSS benchmarks and supported platform envelope; failed norns premise blocks standalone claim. |
+| RD-02 Tempo and five-lane feasibility | RD-01; freeze independent acquisition/transcription corpora for BD/SD/CHH/OHH/BASS; benchmark tempo stability/confidence, half/double candidates and region selection alongside classifier/separation choices; verify licenses/build architectures and pin artifacts. | Tempo/phase/uncertainty gates, all five active per-lane quality results, listening/tail/RSS benchmarks and supported platform envelope; failed norns premise blocks standalone claim. |
 | RD-03 Capture bank | RD-01/02; implement bounded audio/timeline storage, Finish eligibility, bank schema, state machine, save inhibition/deferred autosave, project assets/save/load and late-result rejection. | No input, silence, full/disk error, 45-second cap, overflow, cancel/clear, duplicate press, manual/autosave under active jobs with sounding n.b. and contiguous PCM, project switch/reload and interrupted-save tests; asset references safe. |
 | RD-04 Fifth algorithm UI | RD-03; native grid/norns controls, Auto/Manual listening, Finish, timeout/alignment editor, half/double/start correction, shared window scrolling, lane selection, confirmed clear and stopped-only operation; preserve algorithms 1..4. | Every mapping/modal, transport gate/Start cancellation, in-bounds correction/reanalysis, nonwrapping bar/step scrolling, release ownership and all 64 displayed cells; no redraw mutations. |
 | RD-05 Paint and velocities | RD-04; versioned window preview, shifts, Toggle/Add/Replace, source-paint journal and complete source revision checks. | Five lanes and multiple distinct/overlapping windows painted to disposable patterns, exact trig/velocity/length MIDI expectations; reachable undo/redo, stale refusal, shared-channel playback, save/reload window/values and journal reset. |

@@ -1,4 +1,5 @@
 import sys, unittest, tempfile
+import mido
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parents[2] / 'tools' / 'rhythm_doctor_analysis'))
 import detector
@@ -21,7 +22,21 @@ class Detector(unittest.TestCase):
    mido.MidiFile().save(track/'MIDI'/'S01.mid')
    found=detector.labels(track,root/'meta',0,1)
    self.assertIsNone(found['BASS'])
-   for lane in ('BD','SD','HH','TOM'): self.assertIsNone(found[lane])
+   for lane in ('BD','SD','CHH','OHH'): self.assertIsNone(found[lane])
+ def test_general_midi_hats_are_labeled_as_closed_or_open(self):
+  with tempfile.TemporaryDirectory() as temporary:
+   root=Path(temporary); track=root/'selected'/'Track00017'; meta=root/'meta'/'Track00017'
+   (track/'MIDI').mkdir(parents=True); meta.mkdir(parents=True)
+   (meta/'metadata.yaml').write_text('stems:\n  S07:\n    is_drum: true\n',encoding='utf-8')
+   midi=mido.MidiFile(ticks_per_beat=480); notes=mido.MidiTrack(); midi.tracks.append(notes)
+   notes.append(mido.Message('note_on', channel=9, note=42, velocity=100, time=480))
+   notes.append(mido.Message('note_on', channel=9, note=44, velocity=100, time=480))
+   notes.append(mido.Message('note_on', channel=9, note=46, velocity=100, time=480))
+   midi.save(track/'MIDI'/'S07.mid')
+   found=detector.labels(track,root/'meta',0,2)
+   self.assertEqual(found['CHH'],[.5,1.])
+   self.assertEqual(found['OHH'],[1.5])
+   self.assertEqual(set(found),set(('BD','SD','CHH','OHH','BASS')))
  def test_subsample_keeps_all_positive_rows_when_positive_count_exceeds_cap(self):
   import numpy as np
   features=np.arange(20).reshape(10,2); labels=np.array([True]*7+[False]*3)

@@ -2,8 +2,8 @@
 -- UI dependency belongs here.  `sample_index` is authoritative for every event.
 -- See docs/rhythm-doctor/PLAN.md, "Four bars, clock and quantisation".
 local Bank = {
-  VERSION = 1,
-  LANES = { "BD", "SD", "HH", "TOM", "BASS" },
+  VERSION = 2,
+  LANES = { "BD", "SD", "CHH", "OHH", "BASS" },
   WINDOW_CELLS = 64,
   -- 45 seconds × an explicit 100 retained candidates/second/lane × 5 lanes.
   -- A worker exceeding this contract is rejected before allocating bank copies.

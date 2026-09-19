@@ -2,7 +2,8 @@
 import argparse,audioop,hashlib,json,shutil,wave
 from pathlib import Path
 import yaml
-LANES=("BD","SD","HH","TOM","BASS")
+SCHEMA_VERSION=2
+LANES=("BD","SD","CHH","OHH","BASS")
 def sha(path):
  h=hashlib.sha256()
  with open(path,"rb")as f:
@@ -14,9 +15,11 @@ def crop(source,target,start,duration):
   rate=a.getframerate();a.setpos(round(start*rate));raw=a.readframes(round(duration*rate));params=a.getparams()
  with wave.open(str(target),"wb")as b:b.setparams(params);b.writeframes(raw)
 def main(root,v2,v3):
+ manifest=json.loads((v2/"manifest.json").read_text())
+ if manifest.get("schema_version") != SCHEMA_VERSION: raise ValueError("legacy schema v1 corpus is immutable; regenerate a schema v2 corpus first")
  v3.mkdir(parents=True,exist_ok=True)
  for part in ("audio","annotations","recipes","timbres"):(v3/part).mkdir(exist_ok=True)
- manifest=json.loads((v2/"manifest.json").read_text()); new=[]
+ new=[]
  for index,base in enumerate([x for x in manifest["clips"] if x["split"]=="held_out"][:5]):
   recipe=json.loads((root/base["render"]["recipe"]["path"]).read_text());track=recipe["source_track"]
   meta=yaml.safe_load((root/"slakh/babyslakh-meta/babyslakh_16k"/track/"metadata.yaml").read_text())
@@ -36,7 +39,7 @@ def main(root,v2,v3):
    rec=v3/"recipes"/f"{ident}.json";rec.write_text(json.dumps({"kind":render_kind,"original_stems":[f"{track}/stems/{drum}.wav",f"{track}/stems/{bass}.wav"],"operation":"frozen PCM crop; no model separation"},sort_keys=True)+"\n")
    ev=v3/"timbres"/f"{ident}.json";ev.write_text(json.dumps({"lanes":{x:{"timbre":"unverified","basis":"source_patch_metadata","source":"original Slakh stem; timbre unresolved"}for x in LANES}},sort_keys=True)+"\n")
    clip=dict(base);clip.update({"id":ident,"audio":desc(root,audio),"annotation":desc(root,ann),"render":{"kind":render_kind,"recipe":desc(root,rec)},"timbre_evidence":desc(root,ev),"stratum":stratum,"timbres":{x:"unverified"for x in LANES},"tags":["preliminary","rendered_domain","original_stems"]});new.append(clip)
- manifest["corpus_id"]="rd02-babyslakh-preliminary-v3-stems";manifest["clips"]+=new;(v3/"manifest.json").write_text(json.dumps(manifest,indent=2,sort_keys=True)+"\n")
- (v3/"gate-report.json").write_text(json.dumps({"accepted":False,"created":{"isolated_BASS":5,"sparse_drum_bass":5},"truth":"original stems plus frozen MIDI; no model separation","unresolved":["BD/SD/HH/TOM isolated fixtures unavailable: aggregate drum stem is not relabelled","all timbres unverified","long acquisition fixtures and lane-negative inventory absent"]},indent=2)+"\n");print(v3/"manifest.json")
+ manifest["corpus_id"]="rd02-babyslakh-preliminary-schema-v2-stems";manifest["clips"]+=new;(v3/"manifest.json").write_text(json.dumps(manifest,indent=2,sort_keys=True)+"\n")
+ (v3/"gate-report.json").write_text(json.dumps({"accepted":False,"created":{"isolated_BASS":5,"sparse_drum_bass":5},"truth":"original stems plus frozen MIDI; no model separation","unresolved":["BD/SD/CHH/OHH isolated fixtures unavailable: aggregate drum stem is not relabelled","all timbres unverified","long acquisition fixtures and lane-negative inventory absent"]},indent=2)+"\n");print(v3/"manifest.json")
 if __name__=="__main__":
  p=argparse.ArgumentParser();p.add_argument("root",type=Path);p.add_argument("v2",type=Path);p.add_argument("v3",type=Path);a=p.parse_args();main(a.root,a.v2,a.v3)

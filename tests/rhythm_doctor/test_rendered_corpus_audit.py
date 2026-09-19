@@ -2,7 +2,7 @@ import hashlib,json,tempfile,unittest,wave,subprocess,sys
 from pathlib import Path
 from audit_rendered_corpus import main
 
-LANES=("BD","SD","HH","TOM","BASS")
+LANES=("BD","SD","CHH","OHH","BASS")
 def digest(p): return hashlib.sha256(p.read_bytes()).hexdigest()
 class RenderedAuditTests(unittest.TestCase):
  def setUp(self): self.t=tempfile.TemporaryDirectory();self.addCleanup(self.t.cleanup);self.r=Path(self.t.name);self.clips=[]

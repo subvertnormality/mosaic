@@ -5,16 +5,17 @@ A green score report alone is not full RD-02 acceptance.
 """
 import math
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+SCHEMA_VERSION = 2
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 STRATA = ("isolated", "sparse", "full_mix")
 COUNTS = ("onset_tp", "onset_fp", "onset_fn", "cell_tp", "cell_fp", "cell_fn",
           "negative_control_painted_events", "negative_control_clips")
 
 
-def evaluate(measurements, profile="original_five"):
-    profiles = {"original_five": LANES, "priority_four": ("BD", "SD", "HH", "BASS")}
+def evaluate(measurements, profile="schema_v2"):
+    profiles = {"schema_v2": LANES}
     if not isinstance(profile, str) or profile not in profiles:
-        return {"passed": False, "errors": ["unknown quality profile"], "scores": [],
+        return {"schema_version": SCHEMA_VERSION, "passed": False, "errors": ["unknown quality profile"], "scores": [],
                 "required_lanes": [], "complete_rd02_acceptance": False}
     lanes = profiles[profile]
     errors, domains, scores = [], set(), []
@@ -62,6 +63,6 @@ def evaluate(measurements, profile="original_five"):
         values = lane_velocity[lane]
         if not values or sum(values) / len(values) > 16:
             errors.append("missing or failing per-lane velocity MAE for " + lane)
-    return {"profile": profile, "required_lanes": list(lanes), "passed": not errors, "errors": errors, "scores": scores,
+    return {"schema_version": SCHEMA_VERSION, "profile": profile, "required_lanes": list(lanes), "passed": not errors, "errors": errors, "scores": scores,
             "complete_rd02_acceptance": False,
             "scope": "quality metrics only; corpus and provenance gates remain separate"}

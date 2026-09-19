@@ -9,7 +9,7 @@
 local Adapter = {}
 Adapter.__index = Adapter
 
-Adapter.LANES = { "BD", "SD", "HH", "TOM", "BASS" }
+Adapter.LANES = { "BD", "SD", "CHH", "OHH", "BASS" }
 Adapter.SETUP_FIELDS = { "TEMPO", "MANUAL BPM", "INPUT" }
 Adapter.MIN_BPM, Adapter.MAX_BPM = 40, 240
 Adapter.INPUT_SOURCES = { "stereo", "left", "right" }

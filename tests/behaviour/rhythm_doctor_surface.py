@@ -58,15 +58,15 @@ def stopped_setup_controls(c):
 
 def owned_input_and_transport_gate(c):
     fifth_algorithm(c)  # enters algorithm five and selects BASS at x7,y2
-    bass = [(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)]
-    c.led_values(bass, [4, 4, 4, 4, 15])
+    active_lanes = [(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)]
+    c.led_values(active_lanes, [4, 4, 4, 4, 15])
     stopped_setup_controls(c)
 
     # Record is an x1/y2 key-down claim.  Its owned key-up must not turn this
     # gesture into the legacy Pattern 1 fader action or lose lane selection.
     c.action(type="grid", x=1, y=2, state=1); c.elapse(.08)
     c.action(type="grid", x=1, y=2, state=0); c.elapse(.08)
-    c.led_values(bass, [4, 4, 4, 4, 15])
+    c.led_values(active_lanes, [4, 4, 4, 4, 15])
     c.results.append(dict(kind="rhythm-doctor-record-ownership", cell=[1, 2],
                           selected_lane="BASS", contract="PLAN.md Record key-down ownership"))
 
@@ -76,17 +76,17 @@ def owned_input_and_transport_gate(c):
     for key in (2, 3):
         c.action(type="key", n=key, state=1); c.elapse(.04)
         c.action(type="key", n=key, state=0); c.elapse(.06)
-        c.led_values(bass, [4, 4, 4, 4, 15])
+        c.led_values(active_lanes, [4, 4, 4, 4, 15])
     c.results.append(dict(kind="rhythm-doctor-norns-keys", keys=[2, 3],
                           selected_lane="BASS", contract="PLAN.md K2/K3 routing"))
 
     # Starting Mosaic transport gates capture controls.  A lane tap is still
     # received by the app, but must retain BASS until transport has stopped.
     c.tap(1, 8); c.elapse(.1)
-    c.tap(3, 2)
-    c.led_values(bass, [4, 4, 4, 4, 15])
+    c.tap(5, 2)
+    c.led_values(active_lanes, [4, 4, 4, 4, 15])
     c.tap(1, 8); c.elapse(.1)
-    c.results.append(dict(kind="rhythm-doctor-transport-gate", attempted_lane="BD",
+    c.results.append(dict(kind="rhythm-doctor-transport-gate", attempted_lane="CHH",
                           retained_lane="BASS", contract="PLAN.md capture transport gate"))
 
 

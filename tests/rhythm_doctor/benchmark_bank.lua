@@ -3,7 +3,7 @@
 -- os.clock measures Lua CPU only: this DOES NOT certify UI wall-clock latency.
 package.path = './?.lua;' .. package.path
 local Bank = require('lib.rhythm_doctor.bank')
-local lanes = {'BD', 'SD', 'HH', 'TOM', 'BASS'}
+local lanes = {'BD', 'SD', 'CHH', 'OHH', 'BASS'}
 local candidates = {}
 for _, lane in ipairs(lanes) do
   for sample = 0, 2160000 - 480, 480 do

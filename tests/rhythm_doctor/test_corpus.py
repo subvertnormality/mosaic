@@ -6,9 +6,10 @@ import unittest
 from pathlib import Path
 
 from corpus import CorpusValidationError, validate_manifest
+from corpus_materialize import drum_lane
 
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 
 
 def digest(path):
@@ -70,7 +71,7 @@ def complete_manifest(root):
     for index, (bpm, tag) in enumerate(scenarios):
         clips.append(fixture(root, f"acq-{index}", "acquisition", index, bpm=bpm, tags=[tag]))
     return {
-        "schema_version": 1, "corpus_id": "rd02-test-corpus", "sources": [{
+        "schema_version": 2, "corpus_id": "rd02-test-corpus-schema-v2", "sources": [{
             "id": "slakh", "record_url": "https://zenodo.org/records/4603870",
             "license": {"spdx": "CC-BY-4.0", "url": "https://creativecommons.org/licenses/by/4.0/"},
             "archive": archive, "license_evidence": evidence, "domain": "rendered",
@@ -89,12 +90,24 @@ class CorpusManifestTests(unittest.TestCase):
     def test_complete_independent_corpus_proves_every_structural_gate(self):
         report = self.validate()
         self.assertEqual((report["development_clips"], report["held_out_clips"]), (40, 40))
+        self.assertEqual(report["schema_version"], 2)
         self.assertEqual(report["held_out_events"], {lane: 150 for lane in LANES})
+
+    def test_general_midi_hat_notes_are_split_into_closed_and_open_lanes(self):
+        self.assertEqual(drum_lane(42), "CHH")
+        self.assertEqual(drum_lane(44), "CHH")
+        self.assertEqual(drum_lane(46), "OHH")
+        self.assertIsNone(drum_lane(47))
 
     def test_pinned_gpl_source_is_licensed_corpus_evidence(self):
         self.manifest["sources"][0]["license"]["spdx"] = "GPL-2.0"
         self.manifest["sources"][0]["license"]["url"] = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.html"
         self.assertEqual(self.validate()["development_clips"], 40)
+
+    def test_legacy_schema_v1_manifest_is_rejected(self):
+        self.manifest["schema_version"] = 1
+        with self.assertRaisesRegex(CorpusValidationError, "unsupported"):
+            self.validate()
 
     def test_hash_checked_annotations_cannot_be_replaced_after_manifest_freeze(self):
         self.manifest["clips"][0]["annotation"]["sha256"] = "0" * 64

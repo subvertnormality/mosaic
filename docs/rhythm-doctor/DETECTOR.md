@@ -13,10 +13,14 @@ conversion, stereo magnitude features (phase-inversion invariant), and explicit
 low-frequency harmonic bass support. Raw labels come from MIDI note maps plus
 metadata `inst_class: Bass`, never predictions.
 
-The current feature priority is BD, SD, HH, and BASS. TOM is optional when it
-cannot be made reliable; it is excluded explicitly from later three-drum
-experiments instead of being silently counted as a success. Every priority lane
-still needs its stated gates before an acceptance claim.
+## Current scope — 2026-09-19
+
+The active feature scope is BD, SD, CHH, OHH and BASS. CHH and OHH require
+separate labels, predictions and all acceptance gates; historical combined `HH`
+does not satisfy either. TOM is no longer an active lane. The measurements below
+retain their original HH/TOM names and values because they are historical
+diagnostics, not evidence for the amended scope. They must not be relabelled,
+split, or aggregated into a current acceptance claim.
 
 `rd02-preliminary-v1` is a 80-crop full-mixture pilot only. Its missing
 isolated/sparse/source-kit strata mean no result is acceptance evidence and the

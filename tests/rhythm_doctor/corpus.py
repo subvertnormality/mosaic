@@ -15,7 +15,8 @@ from pathlib import Path, PureWindowsPath
 from typing import Any
 
 
-LANES = ("BD", "SD", "HH", "TOM", "BASS")
+SCHEMA_VERSION = 2
+LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 FOUR_BAR_STRATA = ("isolated", "sparse", "full_mix")
 REFERENCE_ORIGINS = ("independent_human", "independent_render_metadata")
 REQUIRED_ACQUISITION_TAGS = {
@@ -190,7 +191,8 @@ def validate_manifest(manifest_path: str | Path, corpus_root: str | Path | None 
     if not isinstance(manifest, dict):
         raise CorpusValidationError("manifest must be an object")
     _require_keys(manifest, {"schema_version", "corpus_id", "sources", "clips"}, "manifest")
-    if manifest["schema_version"] != 1 or not isinstance(manifest["corpus_id"], str) or not manifest["corpus_id"]:
+    if (manifest["schema_version"] != SCHEMA_VERSION
+            or not isinstance(manifest["corpus_id"], str) or not manifest["corpus_id"]):
         raise CorpusValidationError("unsupported or anonymous corpus manifest")
     if not isinstance(manifest["sources"], list) or not manifest["sources"]:
         raise CorpusValidationError("manifest needs at least one licensed source")
@@ -292,6 +294,7 @@ def validate_manifest(manifest_path: str | Path, corpus_root: str | Path | None 
     if not REQUIRED_ACQUISITION_BPM <= acquisition_bpms:
         raise CorpusValidationError("acquisition fixtures miss required BPM envelope")
     return {
+        "schema_version": SCHEMA_VERSION,
         "development_clips": len(partitions["development"]),
         "held_out_clips": len(partitions["held_out"]),
         "acquisition_clips": len(partitions["acquisition"]),
