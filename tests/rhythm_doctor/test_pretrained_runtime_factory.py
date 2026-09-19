@@ -48,6 +48,30 @@ class PretrainedRuntimeFactoryTests(unittest.TestCase):
         self.assertEqual((numpy_stub.complex, numpy_stub.float, numpy_stub.int),
                          ("complex128", "float64", "int64"))
 
+    def test_drum_onnx_session_disables_arenas_and_threads_for_bounded_memory(self):
+        captured = {}
+
+        class Options(object):
+            pass
+
+        def session(path, sess_options, providers):
+            captured.update(path=path, options=sess_options, providers=providers)
+            return "session"
+
+        fake = types.SimpleNamespace(
+            SessionOptions=Options,
+            ExecutionMode=types.SimpleNamespace(ORT_SEQUENTIAL="sequential"),
+            InferenceSession=session,
+        )
+        with mock.patch.dict(sys.modules, {"onnxruntime": fake}):
+            self.assertEqual(factory.load_drum_onnx(self.root / "drum.onnx"), "session")
+        options = captured["options"]
+        self.assertFalse(options.enable_cpu_mem_arena)
+        self.assertFalse(options.enable_mem_pattern)
+        self.assertEqual(options.execution_mode, "sequential")
+        self.assertEqual((options.intra_op_num_threads, options.inter_op_num_threads), (1, 1))
+        self.assertEqual(captured["providers"], ["CPUExecutionProvider"])
+
     def test_exact_frontend_receives_a_temporary_pcm_wav_derives_bpm_from_eight_mini_beats_and_cleans_up(self):
         observed = {}
 

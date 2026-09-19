@@ -187,10 +187,17 @@ class OmnizartFeatureProvider(object):
 
 
 def load_drum_onnx(path):
-    """Create the CPU-only session for an already verified drum graph."""
+    """Create a bounded, sequential CPU session for the verified drum graph."""
     try:
         import onnxruntime
-        return onnxruntime.InferenceSession(str(path), providers=["CPUExecutionProvider"])
+        options = onnxruntime.SessionOptions()
+        options.enable_cpu_mem_arena = False
+        options.enable_mem_pattern = False
+        options.execution_mode = onnxruntime.ExecutionMode.ORT_SEQUENTIAL
+        options.intra_op_num_threads = 1
+        options.inter_op_num_threads = 1
+        return onnxruntime.InferenceSession(str(path), sess_options=options,
+                                            providers=["CPUExecutionProvider"])
     except Exception as error:
         raise RuntimeFactoryError("OMNIZART_ONNX_RUNTIME_UNAVAILABLE") from error
 

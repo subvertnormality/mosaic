@@ -37,14 +37,28 @@
     "raw_min": -19.948965072631836,
     "raw_max": 88.8570556640625,
     "event_counts_at_nonaccepted_smoke_gates": {"BD": 14, "SD": 16, "CHH": 31, "OHH": 43},
-    "frontend_seconds": 3.7459250530000645,
-    "inference_seconds": 1.1376097439997466,
-    "max_rss_kib": 1216540
+    "frontend_seconds": 3.814560844999505,
+    "inference_seconds": 4.789610239000467,
+    "max_rss_kib": 858416,
+    "onnx_session": {
+      "cpu_memory_arena": false,
+      "memory_pattern": false,
+      "execution": "sequential",
+      "intra_op_threads": 1,
+      "inter_op_threads": 1
+    }
+  },
+  "memory_comparison_kib": {
+    "default_combined_frontend_and_inference": 1216540,
+    "isolated_frontend": 271196,
+    "isolated_default_inference": 980072,
+    "isolated_bounded_inference": 651416,
+    "bounded_combined_frontend_and_inference": 858416
   },
   "findings": [
     "The published graph executes with the exact source frontend and produces the documented 13-head tensor.",
     "Raw activations are unbounded; treating them as probabilities is incorrect. The adapter now applies the source decoder's per-head z-normalisation and a monotonic normal-CDF mapping to its required 0..1 confidence ABI.",
     "The source scipy peak decoder excludes endpoints; the adapter now does the same.",
-    "Peak RSS exceeded 1.1 GiB on x86_64 desktop, so this measurement does not support local-norns feasibility and strengthens the ARMv7 blocker."
+    "Disabling ONNX CPU arenas and memory patterns and using one sequential thread reduced combined peak RSS from 1,216,540 KiB to 858,416 KiB while preserving the exact raw tensor. This remains desktop x86 evidence and leaves ARMv7 availability, device headroom, 45-second scaling and cancellation unproved."
   ]
 }
