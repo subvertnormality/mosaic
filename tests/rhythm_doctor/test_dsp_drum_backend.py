@@ -75,10 +75,26 @@ class PeakPickerTests(unittest.TestCase):
         self.assertEqual(dsp.pick_peaks(np.zeros(500, dtype=np.float32), delta=0.1), [])
 
 
+class LaneScopeTests(unittest.TestCase):
+    def test_the_third_lane_is_cymbals_not_closed_hi_hat(self):
+        """The lane is CYM by design, and the distinction is load bearing.
+
+        The hat template has high recall for metal but cannot separate a hat
+        from a ride. Scored as closed-hat-only the same detector output reaches
+        0.4374 F1 at 0.2965 precision on held-out real music; scored as CYM it
+        reaches 0.7165 at 0.7006. Renaming this lane back to CHH would silently
+        turn real cymbal detections into errors.
+        """
+        self.assertEqual(dsp.LANES, ("BD", "SD", "CYM"))
+        self.assertEqual(set(dsp.DEFAULT_DELTA), {"BD", "SD", "CYM"})
+        out = dsp.analyse(click_train([0.5, 1.0], kind="chh"))
+        self.assertEqual(set(out), {"BD", "SD", "CYM"})
+
+
 class BackendTests(unittest.TestCase):
     def test_digital_silence_paints_nothing_on_every_lane(self):
         out = dsp.analyse(np.zeros(44100 * 2, dtype=np.float32))
-        self.assertEqual(set(out), {"BD", "SD", "CHH"})
+        self.assertEqual(set(out), {"BD", "SD", "CYM"})
         self.assertTrue(all(v == [] for v in out.values()))
 
     def test_repeated_analysis_is_deterministic(self):

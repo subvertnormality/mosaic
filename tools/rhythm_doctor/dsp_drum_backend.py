@@ -19,9 +19,19 @@ is Wu & Lerch's (ISMIR 2015), redistributed under GPL-3 with attribution; see
 data/NMF_TEMPLATES_PROVENANCE.md. The peak-picking constants are Boeck, Krebs &
 Schedl's (ISMIR 2012), grid-searched over 25,966 onsets.
 
-Scope. Drum lanes only. BASS is not detected here: no corpus with human
-verified bass onsets on real full-mix music exists, so a BASS lane could not be
-honestly measured (see CORPUS.md).
+Lane scope. BD, SD and CYM. The third lane is deliberately CYM, hats AND
+cymbals together, not closed hi-hat alone. The hat template has high recall for
+metal but cannot separate a hat from a ride: both are inharmonic plates with
+overlapping 5-15 kHz energy, and the one property that distinguishes them,
+decay, is destroyed by a full mix. Scored as CHH-only the lane reaches 0.4374
+F1 at 0.2965 precision; scored as CYM, with the SAME detector output, it
+reaches 0.7165 at 0.7006 on held-out real music. The detector was never wrong,
+the lane definition was, and the events it finds are real cymbal hits a player
+may want. Adding ride and crash decoy templates was tried and gains only 0.02;
+summing their activations into the lane costs 0.08.
+
+BASS is not detected here. No corpus with human-verified bass onsets on real
+full-mix music exists, so the lane cannot be honestly measured (see CORPUS.md).
 """
 from __future__ import annotations
 
@@ -31,7 +41,7 @@ import numpy as np
 
 SR = 44100
 NFFT, HOP = 2048, 512
-LANES = ("BD", "SD", "CHH")
+LANES = ("BD", "SD", "CYM")
 EPS = 1e-10
 
 # Harmonic rank. The shipped toolbox default is 50; a sweep on real-music
@@ -125,7 +135,7 @@ def pick_peaks(curve, delta, w1=W1, w2=W2, w3=W3, w4=W4, w5=W5):
 
 
 # Selected on the development half of the real-music corpus only.
-DEFAULT_DELTA = {"BD": 0.40, "SD": 0.35, "CHH": 0.15}
+DEFAULT_DELTA = {"BD": 0.40, "SD": 0.35, "CYM": 0.15}
 
 
 def analyse(mono, deltas=None, sample_rate=SR):
@@ -151,5 +161,8 @@ def analyse(mono, deltas=None, sample_rate=SR):
         return empty
     G_D = pfnmf(V, B_D)
     fps = sample_rate / float(HOP)
-    return {lane: [i / fps for i in pick_peaks(G_D[lanes.index(lane)], deltas[lane])]
+    # The dictionary's third column is a closed-hat template, but the lane it
+    # feeds is CYM: see the lane-scope note in the module docstring.
+    column = {"BD": "BD", "SD": "SD", "CYM": "CHH"}
+    return {lane: [i / fps for i in pick_peaks(G_D[lanes.index(column[lane])], deltas[lane])]
             for lane in LANES}
