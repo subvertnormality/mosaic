@@ -282,3 +282,56 @@ ENST-Drums and RBMA are therefore usable as measuring sticks even where they are
 closed as training data. Keep v12 for what it is good at — exact provenance,
 deterministic renders, absent-lane controls and gain ladders — and stop treating
 it as the sole acceptance gate.
+
+## Selected real-music evaluation corpus (2026-09-19)
+
+The domain-mismatch section above required a real-music evaluation set before the
+next candidate decision. **MDB-Drums** is selected for BD/SD/CHH. Full survey and
+independent verification in
+`evidence/real-music-evaluation-corpus-survey-2026-09-19.json`.
+
+MDB-Drums is 23 real full-mix excerpts from MedleyDB — real bands with vocals,
+guitars, keys and real rooms — totalling about 21.8 minutes, roughly 1,539 BD,
+2,644 SD and 1,847 CHH events. Its audio ships inside the git repository, so
+there is no request form or login: 268 WAV files totalling 2.01 GB, of which 23
+are full mixes and 23 are drum-only. It is CC BY-NC-SA 4.0, which is fine for
+evaluation because measuring distributes nothing, and unusable for training
+weights that would be shipped.
+
+Its decisive property is that the `subclass` annotations **separate closed from
+open hi-hat**, which almost no corpus does. **Use `subclass`, not `class`**: the
+6-class `class` files collapse CHH, OHH and pedal hat into a single `HH` label,
+so scoring the CHH lane against them measures closed-hat precision wrongly.
+Exclude OHH (269) and PHH (523). MDB-Drums carries no velocity annotations, so
+velocity MAE cannot be measured against it.
+
+ENST-Drums is the recommended second axis — three professional drummers on their
+own kits with sticks, rods, brushes and mallets, plus a minus-one accompaniment
+set so the drums-to-backing ratio is controllable. That is the test of whether
+two sampled kits generalise to arbitrary real kits. IDMT-SMT-Drums and STAR
+Drums are rejected for gap measurement because their drum audio is itself
+rendered or re-synthesized, and ADTOF because its ground truth carries a stated
+50 ms inaccuracy, identical to the matching tolerance.
+
+### Real-music BASS ground truth does not exist
+
+No corpus provides human-verified bass note onsets on real full-mix music.
+MUSDB18 and MUSDB18-HQ ship isolated bass stems with no annotations at all;
+MedleyDB has no bass note annotations; Slakh2100 is synthesized; FiloBass is
+upright jazz bass on stems only; the Jazz Trio Database's human subset was
+annotated on source-separated audio and so systematically omits onsets the
+separator dropped.
+
+The tempting shortcut is a trap and must not be taken. Deriving bass onsets from
+an isolated stem with an onset detector, then scoring a bass detector against
+them, measures agreement between two onset detectors rather than accuracy, and
+inherits the reference detector's systematic errors on soft attacks, legato and
+ghost notes — precisely the BASS failure modes that need measuring.
+
+The recommended path is to hand-annotate the 23 MDB-Drums bass stems. They are
+isolated, bleed-free and sample-aligned to the same mixes the drum ground truth
+refers to, and 18 of the 23 are electric bass, matching the product. That is
+about 21.8 minutes of audio and roughly a day of careful work, and it is the only
+route to BD, SD, CHH and BASS on identical real audio. Bootstrap with a detector
+on the stem and then correct every onset by hand; the correction pass is what
+breaks the circularity. Annotate from the stem, score against the mix.
