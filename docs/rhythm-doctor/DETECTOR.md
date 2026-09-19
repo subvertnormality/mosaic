@@ -473,3 +473,57 @@ source of such restrictions, so any separation-first candidate drawn from that
 literature must have its weights licence established before evaluation, not
 after. Treat an unverified or absent weights licence as a blocker to record, not
 an unknown to set aside.
+
+## Real-music transfer of the frozen candidate (2026-09-19)
+
+The frozen pinned candidate was scored against MDB-Drums full mixes with the v12
+**development** thresholds applied verbatim, so nothing was tuned on the new
+corpus. Drum lanes only: MDB-Drums carries no bass and no velocity annotations.
+Full report in `evidence/real-music-transfer-2026-09-19.json`.
+
+| lane | real-music F1 | recall | precision | v12 full_mix F1 |
+| ---- | ------------- | ------ | --------- | --------------- |
+| BD   | 0.7973 | 0.8434 | 0.7560 | 0.7017 |
+| SD   | 0.5688 | 0.4246 | 0.8610 | 0.6871 |
+| CHH  | 0.4590 | 0.9762 | 0.3000 | 0.8874 |
+| OHH  | 0.1693 | 0.8550 | 0.0940 | 0.2574 |
+
+**The rendered corpus was misleading in both directions**, which is what the
+domain-mismatch section of CORPUS.md warned about.
+
+BD *improves* on real music, from 0.7017 to 0.7973, essentially at the 0.80
+gate. Real records have consistent, well-produced kicks, and v12 was
+understating the lane.
+
+CHH *collapses*, from 0.8874 to 0.4590. Recall is near-perfect at 0.9762 but
+precision is 0.3000 across 4,206 false positives. MDB-Drums contains 835 ride
+and 126 crash onsets that are not CHH references, and the hat head answers
+cymbals generally. v12's sparse two-kit material never exposed this. Painting a
+ride hit into the closed-hat lane is a genuine product failure, not a scoring
+artefact.
+
+SD is precision-strong at 0.8610 and recall-poor at 0.4246, and the deficit is
+almost entirely jazz brushwork.
+
+### Performance is strongly genre-dependent
+
+Recall only; per-track false positives were not retained, and CHH's precision
+problem is present in both groups.
+
+| group | tracks | BD | SD | CHH |
+| ----- | ------ | -- | -- | --- |
+| rock/pop/other | 15 | 0.8901 | 0.7639 | 0.9828 |
+| jazz | 8 | 0.7790 | 0.2900 | 0.9386 |
+
+Jazz supplies 1,900 of the 2,654 SD references and scores 0.2900 recall against
+0.7639 for everything else, so it dominates the aggregate. Brushed and ghosted
+jazz snare behaves as a different instrument. If the realistic capture is a
+groove or break from rock, pop, funk or disco, the drum lanes are materially
+better than the headline suggests.
+
+One caveat must stay attached to these numbers. The thresholds are v12-selected,
+which is what makes this an honest transfer test, but it means CHH's precision
+failure is partly a gate calibrated for the wrong domain. Whether CHH is
+recoverable with domain-appropriate gating or fundamentally confuses cymbals is
+a separate question, and answering it must not become tuning on the evaluation
+set.
