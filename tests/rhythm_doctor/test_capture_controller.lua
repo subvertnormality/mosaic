@@ -50,6 +50,7 @@ local function controller_context()
     project_id = 'project-a',
     on_capture_start = function(mode, token) controller:begin(mode, token, 45) end,
     on_analyse = function(token) controller:analyse(token) end,
+    on_reanalyse = function(token) controller:analyse(token) end,
     on_cancel = function(token) controller:cancel(token) end,
     on_release = function(token) controller:release(token) end,
   }
@@ -259,6 +260,74 @@ test('late publish after cancellation cannot invoke save or analysis callbacks',
   equal(#c.saved, 0)
   equal(#c.analysed, 0)
 end)
+test('a reanalysis lease releases under the recorder identity, not the new revision', function()
+  -- The recorder adopts one identity at PREFLIGHT and compares every later
+  -- command against it, revision included. A confirmed alignment advances the
+  -- analysis revision, so RELEASE was sent under an identity the recorder had
+  -- never adopted: it answered STALE_JOB, the release was never acknowledged,
+  -- and the capture lease, saves and project changes stayed blocked.
+  local Bank = require('rhythm_doctor.bank')
+  local c = controller_context()
+  local token, started = start_ready(c)
+  local preflight_revision = c.transport.sent[1].analysis_revision
+  equal(c.transport.sent[1].command, 'PREFLIGHT')
+
+  c.transport.replies[#c.transport.replies + 1] = reply(started, 'COMPLETED')
+  c.controller:poll(); c.controller:timeout(token, false)
+  local publish = c.transport.sent[#c.transport.sent]
+  c.transport.replies[#c.transport.replies + 1] = reply(publish, 'PUBLISHED',
+    { wav_path = '/tmp/r2.wav', wav_sha256 = string.rep('f', 64), frames = 64000, sample_rate = 8000 })
+  c.controller:poll()
+  local release = c.transport.sent[#c.transport.sent]
+  equal(release.command, 'RELEASE')
+  c.transport.replies[#c.transport.replies + 1] = reply(release, 'RELEASED')
+  c.controller:poll()
+
+  check(c.machine:finish_capture(true, true).ok)
+  local bank = assert(Bank.build{ project_id = token.project_id, generation = token.generation,
+    analysis_revision = token.analysis_revision, sample_rate = 8000, capture_start_sample = 0,
+    capture_end_sample = 64000, origin_sample = 0, bpm = 120 })
+  check(c.machine:receive_analysis({ project_id = token.project_id, generation = token.generation,
+    analysis_revision = token.analysis_revision, bank = bank }).ok)
+  equal(c.machine.state, 'READY')
+  -- Acknowledge the release this lease asked for, through the controller, so
+  -- the recorder is not still holding an unanswered request.
+  local ready_release = c.transport.sent[#c.transport.sent]
+  equal(ready_release.command, 'RELEASE')
+  c.transport.replies[#c.transport.replies + 1] = reply(ready_release, 'RELEASED')
+  c.controller:poll()
+  check(c.machine.resources_are_released)
+
+  -- A confirmed alignment asks for the same audio under a new analysis lease.
+  check(c.machine:begin_reanalysis(true).ok)
+  local advanced = c.machine:job_token()
+  check(advanced.analysis_revision > preflight_revision,
+    'reanalysis must advance the analysis revision')
+
+  -- The controller adopts the new lease for the reanalysis dispatch.
+  equal(c.controller:analyse(advanced).code, 'ANALYSIS_READY')
+  equal(c.analysed[#c.analysed].analysis_revision, advanced.analysis_revision,
+    'the analysis lease must carry the new revision')
+
+  -- Failing that reanalysis makes the machine release the lease. The release
+  -- must still address the recorder by the identity it adopted at PREFLIGHT,
+  -- or it answers STALE_JOB and never lets go of its input.
+  local sent_before = #c.transport.sent
+  c.machine:receive_analysis({ project_id = advanced.project_id, generation = advanced.generation,
+    analysis_revision = advanced.analysis_revision, error = 'analysis failed' })
+  check(#c.transport.sent > sent_before, 'the failed reanalysis never asked for a release')
+  local reanalysis_release = c.transport.sent[#c.transport.sent]
+  equal(reanalysis_release.command, 'RELEASE')
+  equal(reanalysis_release.analysis_revision, preflight_revision,
+    'RELEASE was sent under a revision the recorder never adopted')
+
+  -- The recorder echoes the identity it adopted; that reply must be accepted
+  -- and must release the machine's current lease.
+  c.transport.replies[#c.transport.replies + 1] = reply(reanalysis_release, 'RELEASED')
+  equal(c.controller:poll().code, 'RELEASED')
+  check(c.machine.resources_are_released, 'the lease was never released')
+end)
+
 if #errors > 0 then
   io.stderr:write(table.concat(errors, '\n') .. '\n')
   os.exit(1)

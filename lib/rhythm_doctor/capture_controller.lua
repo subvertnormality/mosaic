@@ -13,12 +13,22 @@ end
 local function same_capture(a, b)
   return type(a) == 'table' and type(b) == 'table' and a.project_id == b.project_id and a.generation == b.generation
 end
+-- The recorder adopts one identity at PREFLIGHT and compares every later
+-- command against it, analysis revision included. A reanalysis advances the
+-- analysis lease over the same retained audio, so the two identities diverge:
+-- the recorder must keep being addressed as the identity it adopted, or it
+-- answers STALE_JOB and never releases its input.
+local function recorder_identity(job)
+  return job.capture_token or job.token
+end
 local function same_identity(job, message, version)
-  return type(message) == 'table' and message.protocol_version == version and message.job_id == job.job_id and same_token(job.token, message)
+  return type(message) == 'table' and message.protocol_version == version and message.job_id == job.job_id and
+    same_token(recorder_identity(job), message)
 end
 local function copy_identity(job, command)
-  return { protocol_version = job.protocol_version, job_id = job.job_id, project_id = job.token.project_id,
-    generation = job.token.generation, analysis_revision = job.token.analysis_revision, command = command }
+  local owner = recorder_identity(job)
+  return { protocol_version = job.protocol_version, job_id = job.job_id, project_id = owner.project_id,
+    generation = owner.generation, analysis_revision = owner.analysis_revision, command = command }
 end
 local function finite_integer(value, minimum, maximum)
   return type(value) == 'number' and value == value and value ~= math.huge and value ~= -math.huge and
@@ -87,6 +97,7 @@ function Controller:begin(mode, token, seconds)
   if not same_token(token, self.machine:job_token()) then return result('STALE_JOB') end
   self.nonce = self.nonce + 1
   local job = { token = { project_id = token.project_id, generation = token.generation, analysis_revision = token.analysis_revision },
+    capture_token = { project_id = token.project_id, generation = token.generation, analysis_revision = token.analysis_revision },
     protocol_version = self.protocol_version, job_id = self.job_prefix .. '-' .. tostring(self.nonce), mode = mode, seconds = seconds,
     phase = 'PREFLIGHTING', started = false, completed = false, publishing = false, analysis_requested = false,
     analysis_dispatched = false, timeout_valid_span = nil, cancel_sent = false, release_sent = false, release_acked = false,
