@@ -53,6 +53,24 @@ propagation. No production changes existed at this baseline.
 
 ## Environment and hardware observations
 
+Commit `eb979ec` was exercised on physical Norns (`Linux armv7l`, Lua 5.1.5).
+The first isolated core run preserved a red report after exposing dependencies
+omitted by the hardware runner. After adding those files and disabling the
+device-global `include` path for isolated tests, all 17 component groups passed
+with exact deployed hashes in `hardware-core-eb979ec-v2.json`. The production
+capture launcher/AF_UNIX transport and the three-trial JACK capture probe also
+passed with cleanup and route restoration in
+`hardware-launch-worker-eb979ec-v2.json` and
+`hardware-capture-eb979ec.json`. The first launcher attempt remains in
+`hardware-launch-worker-eb979ec.json`: the long-running JACK process had lost
+its shared-memory socket. Restarting JACK and its dependent norns services
+restored client connectivity before the passing retry. These runs do not supply
+pretrained-model quality, latency, RSS, or full-feature acceptance.
+
+The same production revision passed the basic and ownership/setup application
+recipes in both real-time and controlled emulator lanes. Their four manifests
+are named `mosaic-rhythm-doctor-{ui,surface}-eb979ec-{realtime,controlled}.json`.
+
 Ubuntu-20.04 WSL has Lua, Python, GCC, JACK and libsndfile; Ubuntu is a separate,
 less-equipped distribution. Norns was reachable through an existing authenticated
 SSH control socket. Its architecture is armv7l; JACK 1.9.17 and libsndfile 1.0.31
