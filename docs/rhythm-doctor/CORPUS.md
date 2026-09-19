@@ -238,3 +238,47 @@ corpus.
 The rendered-domain limitation still stands. Held material comes from two kits
 and synthesized or sampled timbres, so a failure here is strong evidence against
 a candidate while a pass would still not establish field-recording performance.
+
+## Domain mismatch: v12 is not a valid acceptance gate for real music
+
+The user confirmed on 2026-09-19 that Rhythm Doctor is intended to capture
+**real music**, not isolated drum parts, drum-machine patterns or sample
+one-shots. That makes the corpus domain the largest open risk in RD-02, larger
+than any individual detector candidate.
+
+v12 is a rendered corpus built from two drum kits (Hydrogen GMRockKit and
+TR808) plus sampled and synthesized bass, with BabySlakh development material.
+It contains no vocals, guitars or keys, no real room or mastering chain, and no
+kit diversity beyond those two. A pass or a failure on v12 therefore transfers
+weakly to the intended domain, and the transfer is unreliable in **both**
+directions:
+
+- It may be unfairly harsh on a model trained on real recordings, because the
+  rendered material is out of that model's training distribution. This is an
+  unexcluded confound in the v12 failure of the pinned candidate, which was
+  trained on real music.
+- It would be unfairly generous to a model trained on rendered material, which
+  would match the corpus domain without demonstrating anything about real music.
+
+The published literature supports treating this as severe rather than
+theoretical. Vogl et al.'s 18-class drum transcriber scores open hi-hat around
+F 0.69 on in-set cross-validation but collapses to F 0.12 when trained on RBMA
+and evaluated on MDB. Cross-dataset generalisation is the known failure mode of
+automatic drum transcription, not an edge case.
+
+Two consequences follow.
+
+**Training on rendered material is contraindicated.** StemGMD is attractive on
+licence (CC-BY 4.0) and is the only permissively licensed source found with
+genuinely separate closed and open hi-hat stems, but it is Groove MIDI rendered
+through sampled kits. Training on it and validating on v12 would measure
+rendered-drum performance twice and establish nothing about real music.
+
+**A real-music evaluation set is required before the next candidate decision.**
+Licence constraints are substantially weaker for evaluation than for training:
+measuring privately against a non-commercially licensed corpus distributes
+nothing, whereas shipping weights derived from it does. Sets such as MDB-Drums,
+ENST-Drums and RBMA are therefore usable as measuring sticks even where they are
+closed as training data. Keep v12 for what it is good at — exact provenance,
+deterministic renders, absent-lane controls and gain ladders — and stop treating
+it as the sole acceptance gate.

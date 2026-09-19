@@ -393,3 +393,60 @@ audio and 891,800 KiB for the corpus process, against roughly 469 MB available
 and zero swap on the device for a 45-second target. Norns inference memory,
 latency, xruns and cancellation remain UNMEASURED and must not be inferred from
 x86 numbers.
+
+## Scope and constraint decisions (2026-09-19)
+
+The user set these after reading the v12 result. They change what RD-02 must
+deliver and should be treated as current scope.
+
+**Norns must work standalone.** Off-device or host-assisted analysis is
+rejected. Analysis must run on the device, within roughly 470 MB of available
+RAM and no swap, on armv7l.
+
+**OHH is descoped**, following TOM. BASS is explicitly a higher priority than
+OHH and is required.
+
+**BD 0.702, SD 0.687 and CHH 0.887 are acceptable** as measured on the held-out
+full-mix stratum, which is the stratum that resembles a real capture. Better is
+wanted, but these do not block delivery. This is a user scope decision, not a
+weakened gate: `quality_report.py` still applies 0.80/0.85 and still reports the
+candidate as failing.
+
+**Training is permitted** if it beats the pretrained alternatives. It remains
+contraindicated on currently available rendered data — see CORPUS.md.
+
+**Rhythm Doctor targets real music**, not isolated drum parts or drum-machine
+patterns. See the domain-mismatch section in CORPUS.md: v12 is not a sufficient
+acceptance gate for that target, and a real-music evaluation set is required
+before the next candidate decision.
+
+### Consequence for the architecture
+
+Separation-first was the natural answer to the measured cross-lane leakage, and
+for real music it remains the right architecture. It is blocked on device
+footprint rather than on quality or licence: every drum separator found is
+320–562 MB of weights before runtime, and LarsNet is additionally unusable
+(CC BY-NC 4.0 weights, and no licence file at all on the code).
+
+One avenue was dismissed too early and is not yet measured. Demucs is MIT,
+including its weights, and is materially stronger than UMXHQ on bass. Its widely
+quoted 3–7 GB requirement is for whole-track processing, but it processes in
+segments and the hybrid-transformer models cap the segment at 7.8 s, so peak
+memory should scale with segment length rather than capture length. On a Norns,
+analysis time is cheap and memory is not: a 45-second capture may take minutes
+without harming a stop-transport capture-and-paint workflow. **Measuring peak
+RSS for segment-bounded Demucs is therefore the next experiment**, and it is the
+most direct route to the required BASS lane.
+
+### BASS is recoverable
+
+The lane fails on discrimination, not blindness. With the decoder floor at zero,
+596 of 732 held-out BASS references are matched, a recall ceiling of 0.8142
+against an actual 0.314, while the detector offers 2842 candidates — roughly
+fourfold over-generation whose confidence does not separate true from false.
+
+Kick bleed is not the dominant cause: of 3041 false positives, 39.5% coincide
+with an annotated drum onset and 60.5% with nothing annotated. Note that v12
+deliberately leaves toms and pedal hats audible but unlabelled, and toms are low
+and pitched, so some of those are scored as BASS errors by construction. See
+`evidence/bass-lane-ceiling-analysis-2026-09-19.json`.
