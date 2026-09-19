@@ -70,3 +70,12 @@ function test_harmony_context_revision_changes_with_source_or_template_not_ui_se
   luaunit.assert_not_equals(context.group_material(group, 1, 0).revision, prior)
 end
 
+function test_harmony_context_pentatonic_policy_is_material_and_revision_identity()
+  setup()
+  local group=harmony_config.new_group(1)
+  group.template={offsets={0,3},required={true,true}}
+  local full=context.group_material(group,1,0,false)
+  local pentatonic=context.group_material(group,1,0,true)
+  luaunit.assert_not_equals(pentatonic.revision,full.revision)
+  luaunit.assert_not_equals(pentatonic.pitch_classes,full.pitch_classes)
+end

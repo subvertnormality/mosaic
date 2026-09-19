@@ -108,6 +108,14 @@ function test_harmony_playback_revoice_pins_absolute_note_mask_without_rewriting
   luaunit.assert_equals(channel.step_note_masks[1],60)
 end
 
+function test_harmony_playback_revoice_cache_distinguishes_equal_pitch_absolute_pin()
+  local song=setup();source(song,1,{[1]=0,[2]=0},{1,2})
+  local channel=song.channels[1];channel.step_note_masks[2]=60
+  channel.voicing=harmony_config.new_channel("revoice");assign(song,1,1)
+  step.handle(1,1);step.handle(1,2)
+  luaunit.assert_equals({midi_note_on_events[1][1],midi_note_on_events[2][1]},{48,60})
+end
+
 function test_harmony_playback_revoice_arp_uses_frozen_solved_bundle()
   local song = setup()
   source(song, 1, {[1]=0}, {1})
@@ -128,6 +136,21 @@ function test_harmony_playback_revoice_arp_uses_frozen_solved_bundle()
   progress(1)
   progress(1)
   luaunit.assert_equals({midi_note_on_events[2][1],midi_note_on_events[3][1]}, {52,55})
+end
+
+function test_harmony_playback_delayed_first_arp_voice_commits_on_admission()
+  local song=setup();source(song,1,{[1]=0},{1})
+  local channel=song.channels[1];channel.chord_one_mask=2
+  channel.voicing=harmony_config.new_channel("revoice")
+  channel.trig_lock_params[1]={id="chord_arp",param_id="chord_arp_1"}
+  channel.trig_lock_params[2]={id="chord_strum_pattern",param_id="chord_strum_pattern_1"}
+  program.add_step_param_trig_lock(1,1,4)
+  program.add_step_param_trig_lock(1,2,2) -- reverse: empty chord4 is the first slot
+  assign(song,1,1);step.handle(1,1)
+  luaunit.assert_equals(#midi_note_on_events,0)
+  local runtime=harmony_runtime_state.snapshot(song).channels[1]
+  luaunit.assert_not_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,1)
 end
 
 function test_harmony_playback_pattern_reuses_mapped_identity_and_leaves_raw_exact()

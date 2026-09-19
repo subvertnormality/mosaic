@@ -43,17 +43,16 @@ function pattern_harmony.prepare(song, channel_number, source_revision, binding,
   local map = channel.pattern_maps and channel.pattern_maps[binding]
   if not map then return {status="raw", binding=binding, mapped={}} end
   local per_role, mapped, alias_conflict = {}, {}, false
+  for source, role in pairs(map.assignments or {}) do mapped[tonumber(source)] = role end
   for source, role in pairs(map.assignments or {}) do
     local numeric = tonumber(source)
     local pitch = resolved[numeric]
     if conflicts and conflicts[numeric] then
-      mapped[numeric]=role
       return {status="source_conflict",reason="source_conflict",binding=binding,mapped=mapped,
         fallback=channel.fallback}
     end
     if pitch ~= nil then
       local pc = ((pitch % 12) + 12) % 12
-      mapped[numeric] = role
       if per_role[role] and per_role[role].pc ~= pc then alias_conflict=true end
       per_role[role] = per_role[role] or {pc=pc, sources={}}
       per_role[role].sources[#per_role[role].sources + 1] = numeric

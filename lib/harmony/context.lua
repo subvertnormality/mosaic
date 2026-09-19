@@ -10,7 +10,7 @@ local function append(parts, value)
   parts[#parts + 1] = tostring(value)
 end
 
-local function source_revision(group, scale_number, transpose, scale)
+local function source_revision(group, scale_number, transpose, scale, pentatonic)
   local parts = {"harmony-context-v1"}
   append(parts, scale_number)
   append(parts, transpose)
@@ -18,6 +18,7 @@ local function source_revision(group, scale_number, transpose, scale)
   append(parts, scale and scale.root_note or -1)
   append(parts, scale and scale.chord or -1)
   append(parts, scale and scale.chord_degree_rotation or 0)
+  append(parts, pentatonic == true)
   for _, value in ipairs(scale and scale.scale or {}) do append(parts, value) end
   for index, offset in ipairs(group.template.offsets) do
     append(parts, offset)
@@ -26,16 +27,16 @@ local function source_revision(group, scale_number, transpose, scale)
   return table.concat(parts, ":")
 end
 
-function context.group_material(group, scale_number, transpose)
+function context.group_material(group, scale_number, transpose, pentatonic)
   local scale = program.get_scale(scale_number)
   local result = {
     material = {},
     pitch_classes = {},
-    revision = source_revision(group, scale_number, transpose, scale)
+    revision = source_revision(group, scale_number, transpose, scale, pentatonic)
   }
   if not scale then return result end
   for index, offset in ipairs(group.template.offsets) do
-    local pitch = quantiser.process(offset, 0, transpose or 0, scale_number, false)
+    local pitch = quantiser.process(offset, 0, transpose or 0, scale_number, pentatonic == true)
     local pc = pitch_class(pitch)
     if pc ~= nil then
       result.pitch_classes[#result.pitch_classes + 1] = pc

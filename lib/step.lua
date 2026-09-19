@@ -740,7 +740,7 @@ end
 
 
 
-local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_func, process_func, frozen_pitches, consume_harmony)
+local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_for_source, process_func, frozen_pitches, consume_harmony, route_available)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   local release_ids = {}
@@ -776,7 +776,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
       note=process_func(initial.note_value,initial.octave_mod,initial.transpose,channel.step_scale_number)
     end
     if note then
-      local release_id = play_arp_note(note, note_container, note_container.velocity, arp_division, note_on_func)
+      local release_id = play_arp_note(note, note_container, note_container.velocity, arp_division,
+        note_on_for_source(initial.source_id))
       if release_id and consume_harmony then consume_harmony() end
       if release_id then table.insert(release_ids, release_id) end
     end
@@ -789,7 +790,13 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   if c == program.get().selected_channel then
     channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
   end
-  m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div, onset_offset)
+  local future_voice=false
+  for index=arp_note[c],total_notes do
+    if sequenced_chord_notes[index] and (not frozen_sequence or frozen_sequence[index]) then
+      future_voice=true;break
+    end
+  end
+  local admitted=m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div, onset_offset)
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
     local note_to_play = sequenced_chord_notes[arp_note[c]]
     -- Every slot consumes time and acceleration, including trailing rests.
@@ -799,7 +806,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
         note=process_func(note_to_play.note_value,note_to_play.octave_mod,note_to_play.transpose,channel.step_scale_number)
       end
       if note then
-        local release_id=play_arp_note(note,note_container,velocity,arp_division,note_on_func,onset_offset)
+        local release_id=play_arp_note(note,note_container,velocity,arp_division,
+          note_on_for_source(note_to_play.source_id),onset_offset)
         if release_id and consume_harmony then consume_harmony()end
         if release_id then table.insert(release_ids,release_id)end
       end
@@ -811,6 +819,7 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
       channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
     end
   end, release_ids)
+  if admitted and future_voice and route_available and consume_harmony then consume_harmony()end
 end
 
 local function harmony_revision(prefix, channel, unprocessed, sources)
@@ -838,7 +847,8 @@ local function ensemble_source_context(group, song_number)
     transpose=transpose-((global_value and global_value.transpose)or 0)+
       ((source_value and source_value.transpose)or 0)
   end
-  return source_scale,transpose,harmony_context.group_material(group,source_scale,transpose)
+  local pentatonic=fn.param_value("all_scales_lock_to_pentatonic")==2
+  return source_scale,transpose,harmony_context.group_material(group,source_scale,transpose,pentatonic)
 end
 
 local function structural_target_context(target,scale_number,transpose,song)
@@ -950,14 +960,15 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
       if resolved[raw]~=nil and pitch~=nil and resolved[raw]%12~=pitch%12 then conflicts[raw]=true
       elseif resolved[raw]==nil then resolved[raw]=pitch end
     end
-    if resolved[unprocessed.note_value]==nil then resolved[unprocessed.note_value]=note_container.note end
+    local mapping_value=unprocessed.source_note_value or unprocessed.note_value
+    if resolved[mapping_value]==nil then resolved[mapping_value]=note_container.note end
     local resolved_sources={};for raw,pitch in pairs(resolved)do resolved_sources[#resolved_sources+1]={id=tostring(raw),pitch=pitch}end
     table.sort(resolved_sources,function(a,b)return a.id<b.id end)
     local binding = pattern_harmony.binding_key(channel,active_merge)
     frame = pattern_harmony.prepare(song, channel.number,
       harmony_revision("pattern", channel, unprocessed,resolved_sources), binding, resolved, config,conflicts)
-    local mapped = frame.mapped and frame.mapped[unprocessed.note_value]
-    pitches = {root=pattern_harmony.pitch_for(frame, unprocessed.note_value, note_container.note)}
+    local mapped = frame.mapped and frame.mapped[mapping_value]
+    pitches = {root=pattern_harmony.pitch_for(frame, mapping_value, note_container.note)}
     if mapped then consume = function() harmony_state.consume_revoice(song, channel.number, frame) end end
   elseif config.mode == "ensemble" then
     local has_local_chord=false;for _,offset in ipairs(chord_notes or{})do if offset and offset~=0 then has_local_chord=true break end end
@@ -1078,24 +1089,24 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   }
   harmony_inspection.plan(event_song, c, inspection_context)
   local emit_note_on = note_on_func
-  note_on_func = function(pitch, velocity, midi_channel, midi_device)
+  local function note_on_for_source(source_id)return function(pitch, velocity, midi_channel, midi_device)
     local scheduled,actually_emitted=false,false
     local function on_emitted()
       actually_emitted=true
-      if scheduled then harmony_inspection.emitted(event_song,c,pitch,"voice",inspection_context)end
+      if scheduled then harmony_inspection.emitted(event_song,c,pitch,source_id,inspection_context)end
     end
     local accepted = emit_note_on(pitch, velocity, midi_channel, midi_device,on_emitted)
     if accepted == false then return false end
-    harmony_inspection.scheduled(event_song, c, pitch, "voice",inspection_context)
+    harmony_inspection.scheduled(event_song, c, pitch, source_id,inspection_context)
     scheduled=true
-    if actually_emitted then harmony_inspection.emitted(event_song,c,pitch,"voice",inspection_context)end
+    if actually_emitted then harmony_inspection.emitted(event_song,c,pitch,source_id,inspection_context)end
     return true
-  end
+  end end
 
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, 
               chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root,
-              note_on_func, process_func, harmony_pitches, consume_harmony)
+              note_on_for_source, process_func, harmony_pitches, consume_harmony, route_available)
     return
   end
 
@@ -1109,7 +1120,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     local root_pitch = harmony_pitches and harmony_pitches.root
     if harmony_pitches == nil then root_pitch = note_container.note end
     if root_pitch then
-      local accepted = play_note(root_pitch, note_container, note_container.velocity, note_container.length, note_on_func)
+      local accepted = play_note(root_pitch, note_container, note_container.velocity, note_container.length,
+        note_on_for_source("root"))
       if accepted and consume_harmony then consume_harmony() end
     end
     if c == selected_channel or has_chord_notes then
@@ -1158,7 +1170,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * delay_multiplier))
 
           if processed_chord_note then
-            local accepted = play_note(processed_chord_note, note_container, velocity, note_container.length, note_on_func)
+            local accepted = play_note(processed_chord_note, note_container, velocity, note_container.length,
+              note_on_for_source("chord"..chord_number))
             if accepted and consume_harmony then consume_harmony() end
 
             if note_dashboard_values and not note_dashboard_values.chords then
@@ -1206,7 +1219,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
 
         if processed_note then
           local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * 4))
-          local accepted = play_note(processed_note, note_container, velocity, note_container.length, note_on_func)
+          local accepted = play_note(processed_note, note_container, velocity, note_container.length,
+            note_on_for_source("root"))
           if accepted and consume_harmony then consume_harmony() end
 
           if c == program.get().selected_channel then
@@ -1286,6 +1300,7 @@ function step.handle(c, current_step, prepared)
   local devices = program_data.devices[channel.number]
 
   local note_value = working_pattern.note_values[current_step]
+  local source_note_value = note_value
   local note_mask_value = working_pattern.note_mask_values[current_step]
   local velocity_value = working_pattern.velocity_values[current_step]
   local length_value = working_pattern.lengths[current_step]
@@ -1335,11 +1350,31 @@ function step.handle(c, current_step, prepared)
 
     local random_shift = fn.transform_random_value(stock("bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(stock("twos_random_note") or 0)
+
+    -- Establish explicit-instruction bypasses before choosing the upstream
+    -- pitch policy. Bypassed additions must retain the complete legacy path.
+    local quantised_fixed_note, quantised_fixed_note_read = stock("quantised_fixed_note")
+    if not quantised_fixed_note then
+      quantised_fixed_note = quantised_fixed_note_read
+      if quantised_fixed_note == nil then
+        quantised_fixed_note = read_note_slot(prepared, channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT)
+      end
+    end
+    local used_quantised_fixed = quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127
+    local fixed_note, fixed_note_read = stock("fixed_note")
+    if not fixed_note then
+      fixed_note = fixed_note_read
+      if fixed_note == nil then fixed_note = read_note_slot(prepared, channel.number, param_slots.FIXED_NOTE_SLOT) end
+    end
+    local used_fixed = fixed_note and fixed_note > -1 and fixed_note <= 127
+    local structural_bypass = note_mask_value and note_mask_value > -1 and "note_mask" or
+      random_shift ~= 0 and "random" or used_quantised_fixed and "quantised_fixed" or
+      used_fixed and "fixed" or nil
                   
     local target_available,target_scale_pitches,target_chord_material=structural_target_context(
       merge_config and merge_config.target,channel.step_scale_number,transpose,program.get_selected_song_pattern())
     local structural_target = foundation_role == "addition" and merge_config and merge_config.target and
-      merge_config.target.kind ~= "legacy"and target_available
+      merge_config.target.kind ~= "legacy"and target_available and not structural_bypass
     local do_pentatonic = fn.param_value("all_scales_lock_to_pentatonic") == 2 or 
                          (not structural_target and fn.param_value("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                          (fn.param_value("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
@@ -1364,43 +1399,18 @@ function step.handle(c, current_step, prepared)
     local velocity_random_shift = fn.transform_random_value(stock("random_velocity") or 0)
     velocity_value = fn.constrain(0, 127, velocity_value + velocity_random_shift)
 
-    -- An unset stock value falls back to the channel parameter, which the
-    -- resolver may already have read; reuse that read when it did.
-    local quantised_fixed_note, quantised_fixed_note_read = stock("quantised_fixed_note")
-
-    if not quantised_fixed_note then
-      quantised_fixed_note = quantised_fixed_note_read
-      if quantised_fixed_note == nil then
-        quantised_fixed_note = read_note_slot(prepared, channel.number, param_slots.QUANTISED_FIXED_NOTE_SLOT)
-      end
-    end
-
-    local used_quantised_fixed = quantised_fixed_note and quantised_fixed_note > -1 and quantised_fixed_note <= 127
     if used_quantised_fixed then
       note = quantiser.snap_to_scale(quantised_fixed_note, channel.step_scale_number, nil, true)
     end
-
-    local fixed_note, fixed_note_read = stock("fixed_note")
-
-    if not fixed_note then
-      fixed_note = fixed_note_read
-      if fixed_note == nil then
-        fixed_note = read_note_slot(prepared, channel.number, param_slots.FIXED_NOTE_SLOT)
-      end
-    end
-
-    local used_fixed = fixed_note and fixed_note > -1 and fixed_note <= 127
     if used_fixed then
       note = fixed_note
     end
 
     local structural_status
     if merge_config and foundation_role == "addition" then
-      local bypass = is_mask and "note_mask" or random_shift ~= 0 and "random" or
-        used_quantised_fixed and "quantised_fixed" or used_fixed and "fixed" or nil
       note, structural_status = merge_pitch_target.resolve(note, {
         eligible=true,
-        bypass=bypass,
+        bypass=structural_bypass,
         config=merge_config.target,
         scale_pitch_classes=target_scale_pitches,
         chord_material=target_chord_material
@@ -1431,7 +1441,8 @@ function step.handle(c, current_step, prepared)
         device,
         current_step,
         note_container,
-        {note_value = relative_note_mask_value or note_value, octave_mod = octave_mod + octave_mod_offset,
+        {note_value = relative_note_mask_value or note_value, source_note_value=source_note_value,
+          octave_mod = octave_mod + octave_mod_offset,
           transpose = transpose, random_shift = random_shift, is_mask = is_mask,
           fully_quantise_mask = fully_quantise_mask, do_pentatonic = do_pentatonic,
           structural_status = structural_status,

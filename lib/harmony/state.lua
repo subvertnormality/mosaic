@@ -79,7 +79,7 @@ function harmony_state.prepare_revoice(song, channel_number, revision, material,
   local state = state_for(song)
   local record = state.channels[channel_number] or {consumed_count = 0}
   state.channels[channel_number] = record
-  local cache_key=revision .. "|" .. fingerprint(channel)
+  local cache_key=revision .. "|" .. fingerprint(channel) .. "|pins=" .. fingerprint(pins or {})
   if record.prepared and record.prepared.cache_key==cache_key then return record.prepared end
   return solve(record, revision, {
     policy_version = 1,

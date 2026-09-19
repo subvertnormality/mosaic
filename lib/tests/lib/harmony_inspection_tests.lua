@@ -25,3 +25,13 @@ function test_harmony_inspection_reset_is_project_scoped()
   luaunit.assert_nil(writer.snapshot(a,1).planned)
   luaunit.assert_equals(writer.snapshot(b,1).planned.output,72)
 end
+
+function test_harmony_inspection_retains_actual_event_source_and_emitted_pitch()
+  writer.reset();local song={}
+  writer.plan(song,1,{step=4,source=0,output=48,status="ok",bypass="random"})
+  writer.scheduled(song,1,52,"chord1")
+  writer.emitted(song,1,55,"chord1")
+  local value=writer.snapshot(song,1)
+  luaunit.assert_equals(value.scheduled,{pitch=52,source="chord1",step=4,status="ok",bypass="random"})
+  luaunit.assert_equals(value.emitted,{pitch=55,source="chord1",step=4,status="ok",bypass="random"})
+end
