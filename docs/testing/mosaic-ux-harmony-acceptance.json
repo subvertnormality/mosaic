@@ -9,15 +9,15 @@
     "exclusion_reason": "MM-08+ is explicitly gated as later design work and was not requested for this implementation."
   },
   "source": {
-    "revision": "97c65c5fcceeea5592b069256253716f9049e730",
+    "revision": "6ca936a113f7cf22ee03a597b39233da7bfbf27b",
     "dirty_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "tree_sha256": "14805ea50150138d6836aa1047e04f58e020ae45f47cf74be215a73d72a4a521",
-    "file_count": 1253
+    "tree_sha256": "a209dd274888a6e9ff1acb51574f72e9891156f6b9849eafffbd21b839d485e4",
+    "file_count": 1254
   },
   "automated_tests": {
     "lua_unit_and_integration": {
       "passed": true,
-      "tests": 1834,
+      "tests": 1838,
       "failures": 0,
       "command": "cd lib/tests && lua run_tests.lua"
     },
@@ -37,6 +37,13 @@
     },
     "solver_evidence": {
       "covered_by_full_lua_suite": true,
+      "independent_oracles": [
+        "test_harmony_voicing_matches_independent_small_bruteforce_oracle",
+        "test_harmony_voicing_reports_budget_instead_of_partial_optimum",
+        "test_harmony_voicing_range_beats_common_tone_and_never_clamps",
+        "test_harmony_voicing_root_and_inversion_bass_are_hard_constraints",
+        "test_harmony_voicing_is_deterministic_and_preserves_duplicate_sources"
+      ],
       "properties": [
         "deterministic lexicographic choice",
         "small-case brute-force agreement",
@@ -44,15 +51,28 @@
         "budget-exceeded fail-closed result",
         "range, crossing, inversion, coverage and lifecycle failures"
       ]
+    },
+    "final_review_regressions": {
+      "covered_by_full_lua_suite": true,
+      "tests": [
+        "test_harmony_playback_revoice_cache_distinguishes_equal_pitch_absolute_pin",
+        "test_harmony_playback_delayed_first_arp_voice_commits_on_admission",
+        "test_harmony_context_pentatonic_policy_is_material_and_revision_identity",
+        "test_harmony_inspection_retains_actual_event_source_and_emitted_pitch"
+      ]
     }
   },
   "emulator_behaviour": {
     "passed": true,
     "complete_regression_run": false,
     "reason_not_complete": "Feature acceptance selection; exhaustive repository campaign remains sharded CI scope.",
-    "started": "2026-09-19T22:18:57+0100",
-    "finished": "2026-09-19T22:26:14+0100",
-    "suite_sha256": "459a476c884ff9746b59c480dd59f4ad3554fc7b1aaedd4f161a2c4403658c31",
+    "started": "2026-09-19T22:44:08+0100",
+    "finished": "2026-09-19T22:52:57+0100",
+    "suite_sha256": [
+      "4cf8ec22111475337b58efd7863c0db844473b7cdff1c57be82b649ed20a6dc5",
+      "54ab34bf57f90a204cc074fe7d67f12e96a99dc35ac875663728be39fc53491b"
+    ],
+    "suite_partition": "Two disjoint four-case selections; together they cover the complete named eight-case acceptance inventory in both lanes on the same clean source identity.",
     "case_runs": 16,
     "failed_case_runs": 0,
     "lanes": ["real-time", "controlled-experimental"],
@@ -68,24 +88,24 @@
     ],
     "manifest_sha256": {
       "real-time": {
-        "M-HARMONY-ENSEMBLE-001": "9a394976571b1ebeb40dcf29c61f05f4c4de326062ca523672d755fc1adf3c7f",
-        "M-HARMONY-FAILURE-001": "33ae93d7cefb23dad4f0216aa5c8097c6954bb36b197ca61b48670d8f0d4028c",
-        "M-HARMONY-HELD-001": "c841f9db31b5769d764d88b517baf66650daaa63fbbd3f218257abd690e6852b",
-        "M-HARMONY-PATTERN-001": "713e1d446802c0a7d51818a376caf8c2540d2fb51bdf75f683b68a9cc891b31e",
-        "M-HARMONY-PERSIST-001": "974673fc543513767bf333a22990036af844e0baaf3f126ad100de76fb92ae5d",
-        "M-HARMONY-REVOICE-001": "c2cab4b5df6983b1886b3d1eb8a6a6c55dcceeadd10a5654a8f637fe3c22a7e9",
-        "M-MERGE-FOUNDATION-001": "552457c671d8643817917e5d5aaed92ccbea02d497f109e8736ad0917261aeb0",
-        "M-MERGE-PHRASE-001": "a98dd3586c811a6a4e6f428814bc68ac3c72e8afab98c441f59a13dcdb56372a"
+        "M-HARMONY-ENSEMBLE-001": "cf0ad6c11ec1e075298a1c4e637be3dd291e26da576c219285a45bff90f028be",
+        "M-HARMONY-FAILURE-001": "cd4ad6647bb927248bcbd0281f8c35ae1d98406842cde737997855bea3424c3d",
+        "M-HARMONY-HELD-001": "49aff93a8b7b112a6a6ee728ab4d642ed8613ec155dd57fea6ec2644bd7a6712",
+        "M-HARMONY-PATTERN-001": "c273669f430a5700bfa8f178616d2b63ab6d789f5e574341aa4d2eaf01fae784",
+        "M-HARMONY-PERSIST-001": "d53c27585547ad4ec9e3c4b7a4796c219913288422e3eae82021a6bf21449e48",
+        "M-HARMONY-REVOICE-001": "982097e7e3fbcd5edf62ebd47c5c99ac3384cfa0d8a7be1efd60d0bad6fb0dfa",
+        "M-MERGE-FOUNDATION-001": "febc9e4df0b7ee5a2b6aab3da90c7c5dd15f51a6168e2db69f9d6e841133872c",
+        "M-MERGE-PHRASE-001": "582cb26128477f5c431b6509803ff22997fdbbb5c1c99f5d8bbdc8282372cba6"
       },
       "controlled-experimental": {
-        "M-HARMONY-ENSEMBLE-001": "eb2708500f908c78b1fe5670c86bb7435d92da6e0e747b6f2692c9819249f2fa",
-        "M-HARMONY-FAILURE-001": "13bd6ff40cee5617c93140165eb3c10d9989090286c2b7662eb9e78e49c112ff",
-        "M-HARMONY-HELD-001": "3e9f2d51bf4918c37d610ab491256caf294594bbdff2296af8f6ddb649e02f31",
-        "M-HARMONY-PATTERN-001": "6d197fef83c53bdce1a861169322316ef49945cdcc77201ab6b9a2fb2dfa5c8c",
-        "M-HARMONY-PERSIST-001": "afe9e79e87cfc26dca6a49debb5812e583d1c0af343bf618f8a4c6e18897883c",
-        "M-HARMONY-REVOICE-001": "9d1843a6180476ed65a77f061f5a47b2f291c7ac911c6a7c033dac419ae804bb",
-        "M-MERGE-FOUNDATION-001": "25037f9da51d13fbe7dbe184450f770586468556fa262071895139f0fd884bfe",
-        "M-MERGE-PHRASE-001": "3a928a0b08c836ece631081d4b999e2c2c9b6fdbfededf8a80225bae1ec31ac7"
+        "M-HARMONY-ENSEMBLE-001": "51b7815731983dd0fbe2bc3e7bcfcc25c02186667bf770f31d94a92973c38f3f",
+        "M-HARMONY-FAILURE-001": "26c63f0b094349df4c9dbd506abbbade6af837b5a8106bbfa814e413d932e14f",
+        "M-HARMONY-HELD-001": "6db402e613f013299a0fb30265125c6996cb18858128e80683dd3ec780a1ece7",
+        "M-HARMONY-PATTERN-001": "e7d261a5c4b98d680f39c302c4ebf8d1a3f925e2c1d0f8d9575bb7747e715769",
+        "M-HARMONY-PERSIST-001": "9528ae8a16b12dce12633cf886a4fdc39f27d6beb27a215cf27a8b1d8a7a5860",
+        "M-HARMONY-REVOICE-001": "90e0f910e6a553cbe474adace278ebc0cbef0a47957d5bb094d4ca3856ae5972",
+        "M-MERGE-FOUNDATION-001": "73c00215c9900ece5644a3d0ae81a4aa99b0273f7111e04489b08f4fe859627d",
+        "M-MERGE-PHRASE-001": "8d4dcf08b6e0a27600535f045e377a740d8c4ee3b6a487cf889ae8c41ab7b316"
       }
     }
   },
