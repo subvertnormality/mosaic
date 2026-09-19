@@ -73,6 +73,30 @@ function test_harmony_playback_revoice_places_complete_chord_bundle()
   luaunit.assert_not_nil(shown.emitted.pitch)
 end
 
+function test_harmony_playback_revoice_rebuilds_for_each_changed_pitch_bundle()
+  local song = setup()
+  source(song, 1, {[1]=0,[2]=1,[3]=2}, {1,2,3})
+  local channel = song.channels[1]
+  channel.chord_one_mask = 1
+  channel.voicing = harmony_config.new_channel("revoice")
+  assign(song, 1, 1)
+
+  step.handle(1, 1)
+  local first_revision = harmony_runtime_state.snapshot(song).channels[1].prepared.revision
+  step.handle(1, 2)
+  local second_revision = harmony_runtime_state.snapshot(song).channels[1].prepared.revision
+  step.handle(1, 3)
+  local third_revision = harmony_runtime_state.snapshot(song).channels[1].prepared.revision
+
+  local pitches = {}
+  for _, event in ipairs(midi_note_on_events) do pitches[#pitches + 1] = event[1] end
+  luaunit.assert_equals({first_revision,second_revision,third_revision}, {
+    "revoice|1|1|0|0|0|root|60|chord1|62",
+    "revoice|1|1|0|0|0|root|62|chord1|64",
+    "revoice|1|1|0|0|0|root|64|chord1|65"})
+  luaunit.assert_equals(pitches, {48,50,50,52,52,53})
+end
+
 function test_harmony_playback_revoice_pins_absolute_note_mask_without_rewriting_it()
   local song=setup();source(song,1,{[1]=0},{1})
   local channel=song.channels[1];channel.step_note_masks[1]=60;channel.chord_one_mask=2

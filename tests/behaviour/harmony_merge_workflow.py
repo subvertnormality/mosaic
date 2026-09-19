@@ -58,8 +58,10 @@ def setup_foundation(c):
 
 def foundation_workflow(c):
     setup_foundation(c)
-    documentation_frame(c, '24e3e734da02005809266f6bb9cfb8ac02949c33fb139e47351b2bc9dc575b2c',
-                        'images/merge-shape-foundation.png')
+    # The transport tooltip occupies the bottom rows in real time. Bind the
+    # stable editor body; MIDI below separately proves the active result.
+    documentation_frame(c, 'aa0964b5b48635be2942ef896c3508bb7e2dc28607e4aaee4522e20d6c42e8f6',
+                        'images/merge-shape-foundation.png', stable_rows=55)
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (62, 117), (64, 107), (65, 97), (60, 70), (60, 70))]
     c.playback(expected, cycles=2, timeout=7)
@@ -184,7 +186,7 @@ def ensemble_polyrhythm_workflow(c):
 
     # Create a four-part group and assign its four explicit channel roles.
     c.tap(1, 1); c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
-    c.enc(2, 6); c.key(3)       # Groups
+    c.enc(2, 5); c.key(3)       # Groups
     c.enc(2, 1); c.key(3)       # Create group 1
     c.enc(2, 1); c.key(3)       # Four-part smooth
     c.enc(2, 1); c.key(3)       # Members
@@ -196,10 +198,11 @@ def ensemble_polyrhythm_workflow(c):
     c.enc(1, 1)
     for channel in range(1, 5):
         if channel > 1: c.tap(channel, 1)
+        c.enc(2, -20)
         c.enc(3, 3); c.enc(2, 1); c.enc(3, 1); c.key(3)
 
     # Enable the now-valid group atomically from channel 4.
-    c.enc(2, 5); c.key(3)
+    c.enc(2, 4); c.key(3)
     c.enc(2, 3); c.key(3)
     c.enc(2, 5); c.enc(3, 1); c.key(3)
 
@@ -271,7 +274,7 @@ def no_voicing_fallback_workflow(c):
     c.results.append(dict(kind='no-voicing-visible', reason='range', passed=True))
     # The bottom status line is transient while transport runs; bind every
     # stable UI row and separately assert the semantic NO VOICING glyphs above.
-    documentation_frame(c, 'e5b99a1cb1589f183efa736e0de7591a0f3d632faa7681aa926bf91e22c80e00',
+    documentation_frame(c, '355e76b9a69a873e5c34c453ca7657519eb1b34025605303f250403dcb1dc62e',
                         'images/harmony-no-voicing.png', stable_rows=55)
     c.tap(1, 8); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
     c.enc(1, 1); c.enc(2, 8); c.key(3)   # Entry / Failure

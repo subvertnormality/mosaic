@@ -818,7 +818,8 @@ local function harmony_revision(prefix, channel, unprocessed, sources)
   local parts = {prefix, channel.step_scale_number, scale and scale.version or 0,
     unprocessed.octave_mod, unprocessed.transpose, unprocessed.do_pentatonic and 1 or 0}
   for _, source in ipairs(sources or {}) do
-    parts[#parts + 1], parts[#parts + 1] = source.id, source.pitch
+    parts[#parts + 1] = source.id
+    parts[#parts + 1] = source.pitch
   end
   return table.concat(parts, "|")
 end
@@ -1070,7 +1071,10 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     output=planned_root,
     status=harmony and harmony.status or "off",
     structural_status=unprocessed_note_container.structural_status,
-    bypass=harmony and harmony.status~="ok"and harmony.status or nil
+    -- A failed solve is the feature's strict-silence result, not a bypass.
+    -- Reserve BYPASS for frames that deliberately use the ordinary pitch path.
+    bypass=harmony and harmony.status~="ok" and harmony.status~="no_solution" and
+      harmony.status~="budget_exceeded" and harmony.status~="invalid" and harmony.status or nil
   }
   harmony_inspection.plan(event_song, c, inspection_context)
   local emit_note_on = note_on_func
