@@ -19,7 +19,8 @@ import re
 import sys
 
 from pretrained_bass_backend import BassPipeline, PCM, PipelineError, pinned_profile, read_pcm_wav
-from rd_omnizart_onnx import TensorContractError, analyse_features
+from rd_omnizart_onnx import BACKEND_ID as DRUM_BACKEND_ID
+from rd_omnizart_onnx import TensorContractError, analyse_features, verify_artifact
 
 if __name__ == "__main__":
     sys.modules.setdefault("pretrained_composite_backend", sys.modules[__name__])
@@ -29,6 +30,10 @@ DRUM_LANES = ("BD", "SD", "CHH", "OHH")
 LANES = DRUM_LANES + ("BASS",)
 LANE_ORDER = dict((lane, index) for index, lane in enumerate(LANES))
 BACKEND_ID = "omnizart-onnx-raw-heads-v1+open-unmix-basic-pitch-v1"
+# Digital silence carries no tempo. The composed result still has to satisfy
+# the 40..240 bank contract, so publish this placeholder and record that it
+# was not measured through ``drum_component["tempo_detected"]``.
+SILENT_INPUT_BPM = 120.0
 SHA256 = re.compile(r"^[0-9a-fA-F]{64}$")
 
 
@@ -59,8 +64,35 @@ class CompositeRuntime(object):
         self.bass_pipeline = bass_pipeline
         self.bass_gate = bass_gate
 
+    def _silent_drum_component(self, profile):
+        """Return an empty, pin-verified component for a digitally silent buffer.
+
+        The pinned Omnizart frontend delegates beat tracking to madmom, whose
+        tempo estimate degenerates on an all-zero buffer and raises
+        ValueError("arange: cannot compute length"); that escaped as
+        OMNIZART_FRONTEND_FAILED on held-out corpus clip v12-silence-0, leaving
+        the RD-02 absent-lane controls unscorable. Digital silence has no
+        attributable attack, so stop before the frontend exactly as the pinned
+        BASS pipeline already does. The pinned weight is still verified here so
+        a silent capture cannot become a route around the artifact pin.
+        """
+        if not isinstance(self.drum_gates, dict) or set(self.drum_gates) != set(DRUM_LANES):
+            raise CompositeError("OMNIZART_GATES_INVALID")
+        try:
+            digest = verify_artifact(self.drum_model_path, profile["drum_artifact_sha256"])
+        except (TensorContractError, ValueError) as error:
+            raise CompositeError(str(error)) from error
+        return {"bpm": SILENT_INPUT_BPM, "origin_sample": 0,
+                "drum_component": {"backend_id": DRUM_BACKEND_ID, "drum_artifact_sha256": digest,
+                                   "tempo_detected": False},
+                "lane_onset_gates": dict(self.drum_gates), "candidates": []}
+
     def analyse_drums(self, pcm, profile):
         """Run the raw four-head adapter after validating its exact pinned weight."""
+        # Only an exactly all-zero buffer takes this route, so no audible
+        # capture can be suppressed by it.
+        if pcm.data.count(0) == len(pcm.data):
+            return self._silent_drum_component(profile)
         try:
             source = self.feature_provider.extract(pcm)
         except Exception as error:

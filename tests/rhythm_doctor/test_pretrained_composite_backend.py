@@ -79,7 +79,10 @@ class CompositeBackendTests(unittest.TestCase):
         self.root = Path(self.temporary.name)
         self.wav = self.root / "capture.wav"
         with wave.open(str(self.wav), "wb") as output:
-            output.setnchannels(1); output.setsampwidth(2); output.setframerate(22050); output.writeframes(b"\0\0" * 22050)
+            output.setnchannels(1); output.setsampwidth(2); output.setframerate(22050)
+            # Audible PCM: an exactly silent capture is short-circuited before the
+            # frontend, so composition must be exercised on a buffer that carries signal.
+            output.writeframes(b"\x00\x20" * 22050)
         self.drum_model = self.root / "drum.onnx"; self.drum_model.write_bytes(b"drum")
         self.drum_sha = hashlib.sha256(self.drum_model.read_bytes()).hexdigest()
         self.drum = DrumSession(); self.features = Features(); self.separator = Separator(); self.onsets = Onsets()
@@ -100,6 +103,59 @@ class CompositeBackendTests(unittest.TestCase):
         self.assertEqual([candidate["lane"] for candidate in value["candidates"]], ["BD", "SD", "CHH", "OHH", "BASS"])
         self.assertTrue(all(candidate["sample_index"] == 7 for candidate in value["candidates"]))
         self.assertEqual(value["candidates"][-1], {"lane": "BASS", "sample_index": 7, "velocity": 64, "confidence": .7})
+
+    def test_digital_silence_paints_no_drum_events_without_running_the_omnizart_frontend(self):
+        """A silent capture must be analysable and paint nothing, not fail closed.
+
+        Characterisation outside README: the pinned Omnizart frontend delegates
+        beat tracking to madmom, whose tempo estimate degenerates for digital
+        silence and raises ValueError("arange: cannot compute length"). That
+        escaped as OMNIZART_FRONTEND_FAILED on held-out corpus clip
+        v12-silence-0, so the RD-02 absent-lane controls could not be scored at
+        all. Digital silence has no attributable attack, so stop before the
+        frontend exactly as the pinned BASS pipeline already does.
+        """
+        class DegenerateFrontend(object):
+            def __init__(self): self.calls = []
+            def extract(self, pcm):
+                self.calls.append(pcm)
+                raise ValueError("arange: cannot compute length")
+
+        frontend = DegenerateFrontend()
+        runtime = composite.CompositeRuntime(self.drum, self.drum_model, frontend,
+                                             {"BD": .5, "SD": .5, "CHH": .5, "OHH": .5}, self.bass, .4)
+        silent = self.root / "silence.wav"
+        with wave.open(str(silent), "wb") as output:
+            output.setnchannels(1); output.setsampwidth(2); output.setframerate(22050)
+            output.writeframes(b"\x00\x00" * 22050)
+        request = dict(self.request, wav_path=str(silent))
+        value = composite.compose(request, runtime)
+        self.assertEqual(frontend.calls, [], "silence must not reach the Omnizart frontend")
+        self.assertEqual(self.drum.calls, [], "silence must not reach the drum session")
+        # Only the drum lanes are in scope here: this suite injects a BASS double
+        # that answers any buffer, whereas the production pinned BASS runtime
+        # already stops on digital silence.
+        self.assertEqual([c for c in value["candidates"] if c["lane"] in composite.DRUM_LANES], [])
+        self.assertEqual(set(value["lane_onset_gates"]), {"BD", "SD", "CHH", "OHH", "BASS"})
+        self.assertTrue(rd_analysis_worker.analysis_is_pretrained(value, **request["pretrained"]))
+        # The tempo is not measurable from silence; the component records that
+        # rather than presenting its bank-contract placeholder as a detected tempo.
+        component = runtime.analyse_drums(composite.read_pcm_wav(str(silent)),
+                                          composite.pinned_profile(request))
+        self.assertEqual(component["candidates"], [])
+        self.assertIs(component["drum_component"]["tempo_detected"], False)
+        self.assertEqual(component["drum_component"]["drum_artifact_sha256"], self.drum_sha)
+
+    def test_digital_silence_still_fails_closed_on_a_changed_drum_weight(self):
+        """Silence must not become a route around the pinned-artifact check."""
+        silent = self.root / "silence-pin.wav"
+        with wave.open(str(silent), "wb") as output:
+            output.setnchannels(1); output.setsampwidth(2); output.setframerate(22050)
+            output.writeframes(b"\x00\x00" * 22050)
+        self.drum_model.write_bytes(b"changed")
+        with self.assertRaises(composite.CompositeError):
+            composite.compose(dict(self.request, wav_path=str(silent)), self.runtime)
+        self.assertEqual(self.drum.calls, [])
 
     def test_pin_mismatch_fails_closed_without_returning_a_four_lane_fallback(self):
         self.request["pretrained"]["bass_artifact_sha256"] = "0" * 64
