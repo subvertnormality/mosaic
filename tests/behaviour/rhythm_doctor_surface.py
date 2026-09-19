@@ -61,7 +61,7 @@ def stopped_setup_controls(c):
 
 
 def owned_input_and_transport_gate(c):
-    fifth_algorithm(c)  # enters algorithm five and selects BASS at x7,y2
+    fifth_algorithm(c)  # enters algorithm five and selects BASS at x6,y2
     active_lanes = [(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)]
     c.led_values(active_lanes, [4, 4, 4, 4, 15])
     stopped_setup_controls(c)
@@ -90,7 +90,7 @@ def owned_input_and_transport_gate(c):
     c.tap(5, 2)
     c.led_values(active_lanes, [4, 4, 4, 4, 15])
     c.tap(1, 8); c.elapse(.1)
-    c.results.append(dict(kind="rhythm-doctor-transport-gate", attempted_lane="CHH",
+    c.results.append(dict(kind="rhythm-doctor-transport-gate", attempted_lane="CYM",
                           retained_lane="BASS", contract="PLAN.md capture transport gate"))
 
 
