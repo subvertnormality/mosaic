@@ -261,12 +261,17 @@ test("a rejected correction says so instead of looking unchanged", function()
   equal(c.adapter:key(3, 1).code, "CAPTURE_AUDIO_UNAVAILABLE")
   local after = c.adapter:screen_model()
   check(after.alignment.active, "a refused correction keeps the draft to edit or cancel")
+  -- The screen renderer draws the alignment sub-model, not the status line, so
+  -- the refusal has to reach it there or it never reaches the player.
+  equal(after.alignment.error, "CAPTURE AUDIO UNAVAILABLE",
+    "the refusal must reach the sub-model the screen actually draws")
   check(after.status ~= before, "a refused correction must change what the screen says")
   equal(after.status, "CAPTURE AUDIO UNAVAILABLE")
 
   -- Editing the draft is a fresh attempt, so the refusal stops being shown.
   c.adapter:enc(3, 1)
   equal(c.adapter:screen_model().status, "ALIGNMENT / " .. c.adapter:screen_model().alignment.field)
+  equal(c.adapter:screen_model().alignment.error, nil, "editing the draft clears the refusal")
 end)
 
 test("worker readiness, poll and transport-start invalidation have explicit adapter hooks", function()

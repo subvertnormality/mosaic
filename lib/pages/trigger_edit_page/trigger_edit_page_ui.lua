@@ -56,7 +56,11 @@ function trigger_edit_page_ui.register_ui_draws()
         screen.text("m")
         screen.move(0, 22)
         if model and model.alignment and model.alignment.active then
-          screen.text("ALIGNMENT / " .. tostring(model.alignment.field))
+          -- A refused correction keeps its draft, so without this the screen
+          -- reads exactly as it did before the player pressed K3 and the
+          -- refusal is invisible.
+          screen.text(model.alignment.error and tostring(model.alignment.error)
+            or ("ALIGNMENT / " .. tostring(model.alignment.field)))
         elseif model and model.setup and model.setup.active then
           screen.text("SETUP / " .. tostring(model.setup.field))
         else

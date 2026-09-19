@@ -196,6 +196,61 @@ test("K2 and K3 reach Rhythm Doctor only while algorithm five is selected", func
   check(table.concat(texts, " "):find("INPUT L", 1, true))
 end)
 
+test("the screen shows a refused correction rather than the ordinary alignment label", function()
+  -- The adapter records the refusal, but this renderer drew
+  -- "ALIGNMENT / <field>" straight from the sub-model and never consulted
+  -- status, so the refusal never reached the framebuffer: the player pressed
+  -- K3, the screen was unchanged, and nothing appeared to happen.
+  local texts, ui_draw = {}, nil
+  local old_include = include
+  local pages_component = { new = function() return {add_page = function() end, select_page = function() end, draw = function() end, next_page = function() end, previous_page = function() end, get_selected_page = function() return 1 end} end }
+  local page_component = { new = function() return {} end }
+  local viewer = { new = function() return {draw = function() end, next_channel = function() end, prev_channel = function() end} end }
+  local selector = { new = function() return {select = function() end, draw = function() end, increment = function() end, decrement = function() end, get_selected = function() return {id = 1} end, set_selected_value = function() end} end }
+  include = function(path)
+    local modules = {
+      ["mosaic/lib/ui_components/pages"] = pages_component,
+      ["mosaic/lib/ui_components/page"] = page_component,
+      ["mosaic/lib/ui_components/grid_viewer"] = viewer,
+      ["mosaic/lib/ui_components/list_selector"] = selector,
+    }
+    return assert(modules[path], path)
+  end
+  draw = {register_ui = function(_, _, fn) ui_draw = fn end}
+  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end}
+  fn = {dirty_screen = function() end, dirty_grid = function() end}
+  params = {get = function() return 1 end, set = function() end}
+  local alignment = {active = true, field = "HALF TEMPO", bpm = 120, start_beat = 1, fine_start_ms = 0}
+  trigger_edit_page = {
+    get_algorithm = function() return 5 end,
+    handle_rhythm_doctor_key = function() return {code = "OK"} end,
+    handle_rhythm_doctor_encoder = function() return {code = "OK"} end,
+    get_rhythm_doctor_model = function()
+      return { lane = "BD", status = "CAPTURE AUDIO UNAVAILABLE", hit_count = 0, state = "READY",
+        worker_ready = true, alignment = alignment }
+    end,
+  }
+  local ui = dofile(root .. "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua")
+  include = old_include
+  ui.register_ui_draws()
+
+  -- Refused: the screen must say so.
+  alignment.error = "CAPTURE AUDIO UNAVAILABLE"
+  texts = {}; ui_draw()
+  local drawn = table.concat(texts, " ")
+  check(drawn:find("CAPTURE AUDIO UNAVAILABLE", 1, true),
+    "the refusal never reached the screen: " .. drawn)
+  check(not drawn:find("ALIGNMENT / HALF TEMPO", 1, true),
+    "the refusal must replace the ordinary alignment label, not sit beside it")
+  -- The draft is kept, so its editable fields stay on screen.
+  check(drawn:find("HALF 120 BPM", 1, true), "the draft must remain editable")
+
+  -- Not refused: the ordinary label is shown.
+  alignment.error = nil
+  texts = {}; ui_draw()
+  check(table.concat(texts, " "):find("ALIGNMENT / HALF TEMPO", 1, true))
+end)
+
 test("the application encoder route opens stopped setup from Rhythm Doctor", function()
   -- This covers the same public norns route as `enc(2, -1)`: application UI,
   -- Trigger Editor UI, Trigger Editor ownership, then the adapter.  The exact

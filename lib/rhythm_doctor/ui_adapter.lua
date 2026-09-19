@@ -542,6 +542,7 @@ function Adapter:screen_model()
     setup = { active = self.setup_draft ~= nil, field = Adapter.SETUP_FIELDS[self.setup_field] },
     ready = { active = state == "READY" and self.alignment_draft == nil, field = Adapter.READY_FIELDS[self.ready_field] },
     alignment = self.alignment_draft and { active = true, field = Adapter.ALIGNMENT_FIELDS[self.alignment_field],
+      error = self.alignment_error and self.alignment_error:gsub("_", " ") or nil,
       bpm = self.alignment_draft.bpm, start_beat = self.alignment_draft.start_beat,
       fine_start_ms = self.alignment_draft.fine_start_ms, capture_start_sample = self.alignment_draft.capture_start_sample,
       capture_end_sample = self.alignment_draft.capture_end_sample } or { active = false },
