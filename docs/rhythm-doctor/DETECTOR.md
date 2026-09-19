@@ -94,6 +94,21 @@ preserved in `evidence/candidate_b_pretrained_research_2026-09-19.json`,
 `evidence/umxhq-official-license.json`, and
 `evidence/basic_pitch_adapter_corrected_v2.json`.
 
+The implemented research-worker adapter is
+`tools/rhythm_doctor/pretrained_composite_backend.py`. It accepts the standard
+`--request` and `--result` worker arguments and requires a local runtime factory
+through `RHYTHM_DOCTOR_PRETRAINED_RUNTIME_FACTORY`, formatted as
+`/absolute/factory.py:callable`. The factory file is independently pinned by
+`RHYTHM_DOCTOR_PRETRAINED_RUNTIME_FACTORY_SHA256`. Mosaic also requires the
+backend executable, Omnizart drum artifact, and Open-Unmix/Basic Pitch bass
+artifact identities through `RHYTHM_DOCTOR_ANALYSIS_BACKEND`,
+`RHYTHM_DOCTOR_ANALYSIS_BACKEND_SHA256`,
+`RHYTHM_DOCTOR_DRUM_ARTIFACT_SHA256`, and
+`RHYTHM_DOCTOR_BASS_ARTIFACT_SHA256`. Partial configuration, a changed file, a
+missing lane, or an identity mismatch fails closed. The adapter installs,
+downloads, trains, and fine-tunes nothing; the operator must supply every frozen
+local artifact and its runtime sessions explicitly.
+
 The completed corrected 20-second pilot is immutable at
 `tests/rhythm_doctor/artifacts/detector-pilot-corrected-v2/`, with raw
 predictions and model SHA-256

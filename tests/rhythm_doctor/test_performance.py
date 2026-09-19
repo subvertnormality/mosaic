@@ -13,6 +13,7 @@ def windows():
                  xruns=0, routing_changed=False, transport_start_delayed=False,
                  playback_regressed=False, all_five_lanes_ready=True,
                  source_sha256="a" * 64, device_id="fixture-device",
+                 backend_sha256="b" * 64, drum_artifact_sha256="c" * 64, bass_artifact_sha256="d" * 64,
                  raw_evidence_sha256=str(i).zfill(64)) for i in range(70)]
 
 class PerformanceTests(unittest.TestCase):
@@ -86,6 +87,14 @@ class PerformanceTests(unittest.TestCase):
             rows = windows()
             rows[0]["analysis_tail_ms"] = value
             self.assertFalse(evaluate(rows)["passed"])
+
+    def test_pinned_backend_and_both_artifacts_are_required_and_stable(self):
+        for field in ("backend_sha256", "drum_artifact_sha256", "bass_artifact_sha256"):
+            rows = windows(); del rows[0][field]
+            with self.subTest(field=field):
+                self.assertFalse(evaluate(rows)["passed"])
+        rows = windows(); rows[1]["drum_artifact_sha256"] = "e" * 64
+        self.assertFalse(evaluate(rows)["passed"])
 
 if __name__ == "__main__":
     unittest.main()

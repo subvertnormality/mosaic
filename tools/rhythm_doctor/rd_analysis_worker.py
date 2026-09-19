@@ -27,6 +27,8 @@ LANES = ("BD", "SD", "CHH", "OHH", "BASS")
 MAX_CANDIDATES = 22_500
 MAX_RESULT_BYTES = 4 * 1024 * 1024
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
+SAFE_BACKEND_ERROR = re.compile(r"^OMNIZART_[A-Z0-9_]{1,128}$")
+SHA256 = re.compile(r"^[0-9a-fA-F]{64}$")
 STOP = False
 
 
@@ -58,6 +60,19 @@ def failed(request: dict[str, Any], code: str) -> dict[str, Any]:
     return response(request, "FAILED", analysis_error=code[:160])
 
 
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def capture_is_bounded(request: dict[str, Any]) -> bool:
+    frames, rate = request.get("frames"), request.get("sample_rate")
+    return type(frames) is int and type(rate) is int and 8000 <= rate <= 192000 and 0 <= frames <= 45 * rate
+
+
 def asset_is_exact(request: dict[str, Any]) -> bool:
     path = request.get("wav_path")
     digest = request.get("wav_sha256")
@@ -75,7 +90,7 @@ def asset_is_exact(request: dict[str, Any]) -> bool:
         return False
 
 
-def analysis_is_pretrained(value: Any) -> bool:
+def analysis_is_pretrained(value: Any, backend_sha256: str, drum_artifact_sha256: str, bass_artifact_sha256: str) -> bool:
     if not isinstance(value, dict) or not isinstance(value.get("bpm"), (int, float)) or not 40 <= value["bpm"] <= 240:
         return False
     if not isinstance(value.get("origin_sample"), int) or value["origin_sample"] < 0:
@@ -83,7 +98,12 @@ def analysis_is_pretrained(value: Any) -> bool:
     detector, gates = value.get("detector"), value.get("lane_onset_gates")
     if not isinstance(detector, dict) or not isinstance(detector.get("backend_id"), str) or not detector["backend_id"]:
         return False
-    if not isinstance(detector.get("artifact_sha256"), str) or not re.fullmatch(r"[0-9a-fA-F]{64}", detector["artifact_sha256"]):
+    if any(not isinstance(detector.get(name), str) or not SHA256.fullmatch(detector[name]) for name in
+           ("backend_sha256", "drum_artifact_sha256", "bass_artifact_sha256")):
+        return False
+    if detector["backend_sha256"].lower() != backend_sha256.lower() or \
+            detector["drum_artifact_sha256"].lower() != drum_artifact_sha256.lower() or \
+            detector["bass_artifact_sha256"].lower() != bass_artifact_sha256.lower():
         return False
     if not isinstance(gates, dict) or set(gates) != set(LANES) or any(not isinstance(gates[lane], (int, float)) or not 0 <= gates[lane] <= 1 for lane in LANES):
         return False
@@ -99,8 +119,12 @@ def analysis_is_pretrained(value: Any) -> bool:
 
 
 class Worker:
-    def __init__(self, runtime: Path, backend: Path | None) -> None:
+    def __init__(self, runtime: Path, backend: Path | None, backend_sha256: str | None = None,
+                 drum_artifact_sha256: str | None = None, bass_artifact_sha256: str | None = None) -> None:
         self.runtime, self.backend = runtime, backend
+        self.backend_sha256 = backend_sha256
+        self.drum_artifact_sha256 = drum_artifact_sha256
+        self.bass_artifact_sha256 = bass_artifact_sha256
         self.results = runtime / "results"; self.results.mkdir(mode=0o700, exist_ok=True)
         self.socket_path = runtime / "analysis.sock"; self.socket_path.unlink(missing_ok=True)
         self.server = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
@@ -115,19 +139,40 @@ class Worker:
     def clear_job(self) -> None:
         if self.process and self.process.poll() is None:
             self.process.terminate()
+            try:
+                self.process.wait(timeout=1)
+            except subprocess.TimeoutExpired:
+                self.process.kill(); self.process.wait(timeout=1)
         self.process = None; self.request = None; self.request_path = None; self.result_path = None
+
+    def remove_job_files(self, remove_result: bool) -> None:
+        for path in (self.request_path, self.result_path if remove_result else None):
+            if path is not None:
+                path.unlink(missing_ok=True)
 
     def start(self, request: dict[str, Any]) -> None:
         if self.request is not None:
             self.send(failed(request, "ANALYSIS_BUSY")); return
         if not asset_is_exact(request):
             self.send(failed(request, "ANALYSIS_ASSET_MISMATCH")); return
+        if not capture_is_bounded(request):
+            self.send(failed(request, "ANALYSIS_CAPTURE_BOUNDS")); return
         if self.backend is None:
             self.send(failed(request, "ANALYSIS_BACKEND_UNAVAILABLE")); return
+        try:
+            backend_matches = sha256_file(self.backend).lower() == self.backend_sha256.lower()
+        except OSError:
+            backend_matches = False
+        if not backend_matches:
+            self.send(failed(request, "ANALYSIS_BACKEND_MISMATCH")); return
         token = request["job_id"]
         self.request_path = self.results / (token + ".request.json")
         self.result_path = self.results / (token + ".json")
-        self.request_path.write_text(json.dumps(request, separators=(",", ":")), encoding="utf-8")
+        backend_request = dict(request)
+        backend_request["pretrained"] = {"backend_sha256": self.backend_sha256,
+                                         "drum_artifact_sha256": self.drum_artifact_sha256,
+                                         "bass_artifact_sha256": self.bass_artifact_sha256}
+        self.request_path.write_text(json.dumps(backend_request, separators=(",", ":")), encoding="utf-8")
         self.result_path.unlink(missing_ok=True)
         self.request = request
         self.process = subprocess.Popen([str(self.backend), "--request", str(self.request_path), "--result", str(self.result_path)],
@@ -137,13 +182,16 @@ class Worker:
         assert self.request is not None and self.process is not None and self.result_path is not None
         request, process, path = self.request, self.process, self.result_path
         if process.returncode != 0 or not path.is_file() or path.stat().st_size > MAX_RESULT_BYTES:
-            self.send(failed(request, "ANALYSIS_BACKEND_FAILED")); self.clear_job(); return
+            self.send(failed(request, "ANALYSIS_BACKEND_FAILED")); self.remove_job_files(True); self.clear_job(); return
         try:
             analysis = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, UnicodeDecodeError, json.JSONDecodeError):
-            self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); self.clear_job(); return
-        if not analysis_is_pretrained(analysis):
-            self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); self.clear_job(); return
+            self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); self.remove_job_files(True); self.clear_job(); return
+        if isinstance(analysis, dict) and set(analysis) == {"backend_error"} and isinstance(analysis["backend_error"], str) and SAFE_BACKEND_ERROR.fullmatch(analysis["backend_error"]):
+            self.send(failed(request, analysis["backend_error"])); self.remove_job_files(True); self.clear_job(); return
+        if not analysis_is_pretrained(analysis, self.backend_sha256, self.drum_artifact_sha256, self.bass_artifact_sha256) or \
+                any(candidate["sample_index"] >= request["frames"] for candidate in analysis["candidates"]):
+            self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); self.remove_job_files(True); self.clear_job(); return
         stored = response(request, "COMPLETED", wav_path=request["wav_path"], wav_sha256=request["wav_sha256"],
             frames=request["frames"], sample_rate=request["sample_rate"], analysis=analysis)
         temporary = path.with_suffix(".published")
@@ -151,6 +199,7 @@ class Worker:
             json.dump(stored, output, separators=(",", ":")); output.flush(); os.fsync(output.fileno())
         os.replace(temporary, path)
         self.send(response(request, "COMPLETED", result_path=str(path)))
+        self.remove_job_files(False)
         self.clear_job()
 
     def run(self) -> int:
@@ -169,7 +218,7 @@ class Worker:
             if not identity(message): continue
             if message.get("command") == "CANCEL":
                 if self.request and same_identity(self.request, message):
-                    self.clear_job(); self.send(response(message, "CANCELLED", command="CANCEL"))
+                    self.remove_job_files(True); self.clear_job(); self.send(response(message, "CANCELLED", command="CANCEL"))
                 else: self.send(failed(message, "ANALYSIS_STALE_CANCEL"))
             elif message.get("command") == "ANALYSE": self.start(message)
             else: self.send(failed(message, "ANALYSIS_PROTOCOL_ERROR"))
@@ -183,11 +232,17 @@ class Worker:
 
 def main() -> int:
     parser=argparse.ArgumentParser(); parser.add_argument("--runtime", type=Path, required=True); parser.add_argument("--backend", type=Path)
+    parser.add_argument("--backend-sha256"); parser.add_argument("--drum-artifact-sha256"); parser.add_argument("--bass-artifact-sha256")
     args=parser.parse_args(); args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
+    configured = (args.backend, args.backend_sha256, args.drum_artifact_sha256, args.bass_artifact_sha256)
+    if any(value is not None for value in configured) and (args.backend is None or not all(isinstance(value, str) and SHA256.fullmatch(value) for value in configured[1:])):
+        parser.error("backend and all three pinned SHA-256 values are required together")
+    if args.backend and (not args.backend.is_file() or not os.access(args.backend, os.X_OK)):
+        parser.error("backend must be an executable local file")
     signal.signal(signal.SIGTERM, stop)
     if hasattr(signal, "SIGHUP"): signal.signal(signal.SIGHUP, stop)
     signal.signal(signal.SIGINT, stop)
-    worker=Worker(args.runtime, args.backend)
+    worker=Worker(args.runtime, args.backend, args.backend_sha256, args.drum_artifact_sha256, args.bass_artifact_sha256)
     try: return worker.run()
     finally: worker.close()
 

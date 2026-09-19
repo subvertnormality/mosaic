@@ -19,6 +19,9 @@ def evaluate(measurements):
     identities = set()
     revisions = set()
     devices = set()
+    backend_hashes = set()
+    drum_hashes = set()
+    bass_hashes = set()
     groups = {"warm": [], "cold": []}
     for index, row in enumerate(rows):
         prefix = "measurement %d: " % index
@@ -35,7 +38,7 @@ def evaluate(measurements):
             if type(row.get(name)) is not bool:
                 errors.append(prefix + "missing/invalid " + name)
                 invalid = True
-        for name in ("source_sha256", "raw_evidence_sha256"):
+        for name in ("source_sha256", "raw_evidence_sha256", "backend_sha256", "drum_artifact_sha256", "bass_artifact_sha256"):
             if not isinstance(row.get(name), str) or not HASH.fullmatch(row[name]):
                 errors.append(prefix + "missing/invalid " + name)
                 invalid = True
@@ -51,6 +54,9 @@ def evaluate(measurements):
             errors.append(prefix + "duplicate evidence")
         identities.add(identity)
         revisions.add(row["source_sha256"].lower())
+        backend_hashes.add(row["backend_sha256"].lower())
+        drum_hashes.add(row["drum_artifact_sha256"].lower())
+        bass_hashes.add(row["bass_artifact_sha256"].lower())
         devices.add(row.get("device_id"))
         if not 40 <= row["bpm"] <= 240 or not 960 / row["bpm"] <= row["duration_seconds"] <= 45:
             errors.append(prefix + "unsupported capture envelope")
@@ -64,8 +70,8 @@ def evaluate(measurements):
         full = row["duration_seconds"] == 45
         limit = (5000 if full else 2000) if row["temperature"] == "warm" else (10000 if full else 5000)
         groups[row["temperature"]].append((row, row["analysis_tail_ms"] / limit))
-    if len(revisions) != 1 or len(devices) != 1:
-        errors.append("measurement source and device must each have one identity")
+    if len(revisions) != 1 or len(devices) != 1 or len(backend_hashes) != 1 or len(drum_hashes) != 1 or len(bass_hashes) != 1:
+        errors.append("measurement source, device, backend and pretrained artifacts must each have one identity")
     for temperature, minimum in (("warm", 30), ("cold", 5)):
         group = groups[temperature]
         if len(group) < minimum:

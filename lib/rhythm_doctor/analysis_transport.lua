@@ -115,8 +115,12 @@ function Transport:_completed(message)
   if not ok or type(stored) ~= "table" or not same_identity(message, stored) or stored.command ~= "ANALYSE" or
       stored.status ~= "COMPLETED" or not safe_asset(stored) or type(stored.analysis) ~= "table" or
       type(stored.analysis.detector) ~= "table" or type(stored.analysis.detector.backend_id) ~= "string" or
-      type(stored.analysis.detector.artifact_sha256) ~= "string" or #stored.analysis.detector.artifact_sha256 ~= 64 or
-      not stored.analysis.detector.artifact_sha256:match("^[%x]+$") or not complete_lane_gates(stored.analysis.lane_onset_gates) then
+      stored.analysis.detector.backend_id == "" or type(stored.analysis.detector.backend_sha256) ~= "string" or
+      #stored.analysis.detector.backend_sha256 ~= 64 or not stored.analysis.detector.backend_sha256:match("^[%x]+$") or
+      type(stored.analysis.detector.drum_artifact_sha256) ~= "string" or #stored.analysis.detector.drum_artifact_sha256 ~= 64 or
+      not stored.analysis.detector.drum_artifact_sha256:match("^[%x]+$") or type(stored.analysis.detector.bass_artifact_sha256) ~= "string" or
+      #stored.analysis.detector.bass_artifact_sha256 ~= 64 or not stored.analysis.detector.bass_artifact_sha256:match("^[%x]+$") or
+      not complete_lane_gates(stored.analysis.lane_onset_gates) then
     return failure(message, "ANALYSIS_PROTOCOL_ERROR")
   end
   local analysis=stored.analysis

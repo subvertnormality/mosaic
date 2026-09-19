@@ -17,7 +17,8 @@ LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'pain
              'runtime_paint', 'runtime_persistence', 'bank_persistence', 'project_lifecycle_runtime',
              'ui_adapter', 'worker_host', 'app_surface')
 PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit',
-                'acquisition_quality', 'grid_quality', 'native_transport', 'analysis_worker_ipc', 'documentation')
+                'acquisition_quality', 'grid_quality', 'native_transport', 'analysis_worker_ipc',
+                'pretrained_bass_backend', 'documentation')
 NATIVE_TESTS = ('capture_contract', 'capture_native', 'tempo_candidate', 'tempo_native')
 
 
@@ -43,10 +44,12 @@ def main():
     selected = list(PYTHON_TESTS) + (list(NATIVE_TESTS) if args.native else [])
     if args.detector:
         selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter',
-                         'audio_frontend', 'capture_worker_ipc'))
+                         'audio_frontend', 'capture_worker_ipc', 'omnizart_onnx',
+                         'omnizart_onnx_backend', 'pretrained_composite_backend'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
-    detector_tests = {'detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend'}
+    detector_tests = {'detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend',
+                      'omnizart_onnx', 'omnizart_onnx_backend', 'pretrained_composite_backend'}
     commands += [(name, [args.analysis_python if name in detector_tests else sys.executable,
                          '-m', 'unittest', 'discover', '-s',
                         'tests/rhythm_doctor', '-p', 'test_' + name + '.py', '-v'])

@@ -76,6 +76,13 @@ local function init_rhythm_doctor()
   })
   local analysis_worker = rhythm_doctor_analysis_worker_host.new({
     runtime_root = norns.state.data .. "rhythm-doctor-analysis-runtime",
+    -- This optional local-computer profile is deliberately unconfigured by
+    -- default.  A deployment must provide every immutable identity below;
+    -- missing or partial values fail closed and never trigger a download.
+    backend = os.getenv("RHYTHM_DOCTOR_ANALYSIS_BACKEND"),
+    backend_sha256 = os.getenv("RHYTHM_DOCTOR_ANALYSIS_BACKEND_SHA256"),
+    drum_artifact_sha256 = os.getenv("RHYTHM_DOCTOR_DRUM_ARTIFACT_SHA256"),
+    bass_artifact_sha256 = os.getenv("RHYTHM_DOCTOR_BASS_ARTIFACT_SHA256"),
     transport_factory = function(socket_path, result_root)
       return include("mosaic/lib/rhythm_doctor/analysis_transport").new(socket_path, result_root)
     end,
