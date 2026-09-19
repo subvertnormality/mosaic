@@ -29,27 +29,31 @@ def setup_frame(c, field, mode, bpm, input_source):
 
 
 def stopped_setup_controls(c):
+    # The emulator public input is the native raw-detent path. Norns applies
+    # Mosaic's default encoder sensitivity of 2 before calling the script, so
+    # two raw detents are one logical encoder step at this boundary.
+    detent = 2
     # E2/E3 edit a draft. K2 must discard every field together.
-    c.action(type="enc", n=2, delta=-1); c.elapse(.06)
+    c.action(type="enc", n=2, delta=-detent); c.elapse(.06)
     setup_frame(c, "INPUT", "auto", 120, "STEREO")
-    c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    c.action(type="enc", n=3, delta=detent); c.elapse(.06)
     setup_frame(c, "INPUT", "auto", 120, "L")
-    c.action(type="enc", n=2, delta=-1); c.action(type="enc", n=3, delta=7); c.elapse(.06)
+    c.action(type="enc", n=2, delta=-detent); c.action(type="enc", n=3, delta=7 * detent); c.elapse(.06)
     setup_frame(c, "MANUAL BPM", "auto", 127, "L")
-    c.action(type="enc", n=2, delta=-1); c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    c.action(type="enc", n=2, delta=-detent); c.action(type="enc", n=3, delta=detent); c.elapse(.06)
     setup_frame(c, "TEMPO", "manual", 127, "L")
     c.action(type="key", n=2, state=1); c.action(type="key", n=2, state=0); c.elapse(.06)
 
     # Reopen the draft from the unchanged Auto/120/Stereo values, then commit a
     # manual configuration and prove the committed values seed the next draft.
-    c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    c.action(type="enc", n=3, delta=detent); c.elapse(.06)
     setup_frame(c, "TEMPO", "manual", 120, "STEREO")
-    c.action(type="enc", n=2, delta=1); c.action(type="enc", n=3, delta=7); c.elapse(.06)
+    c.action(type="enc", n=2, delta=detent); c.action(type="enc", n=3, delta=7 * detent); c.elapse(.06)
     setup_frame(c, "MANUAL BPM", "manual", 127, "STEREO")
-    c.action(type="enc", n=2, delta=1); c.action(type="enc", n=3, delta=1); c.elapse(.06)
+    c.action(type="enc", n=2, delta=detent); c.action(type="enc", n=3, delta=detent); c.elapse(.06)
     setup_frame(c, "INPUT", "manual", 127, "L")
     c.action(type="key", n=3, state=1); c.action(type="key", n=3, state=0); c.elapse(.06)
-    c.action(type="enc", n=2, delta=-1); c.elapse(.06)
+    c.action(type="enc", n=2, delta=-detent); c.elapse(.06)
     setup_frame(c, "MANUAL BPM", "manual", 127, "L")
     c.action(type="key", n=2, state=1); c.action(type="key", n=2, state=0); c.elapse(.06)
     c.results.append(dict(kind="rhythm-doctor-setup", tempo="manual", manual_bpm=127,
