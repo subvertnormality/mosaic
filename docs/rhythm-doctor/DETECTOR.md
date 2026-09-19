@@ -13,6 +13,11 @@ conversion, stereo magnitude features (phase-inversion invariant), and explicit
 low-frequency harmonic bass support. Raw labels come from MIDI note maps plus
 metadata `inst_class: Bass`, never predictions.
 
+The current feature priority is BD, SD, HH, and BASS. TOM is optional when it
+cannot be made reliable; it is excluded explicitly from later three-drum
+experiments instead of being silently counted as a success. Every priority lane
+still needs its stated gates before an acceptance claim.
+
 `rd02-preliminary-v1` is a 80-crop full-mixture pilot only. Its missing
 isolated/sparse/source-kit strata mean no result is acceptance evidence and the
 harness reports `acceptance_claimed: false`; it does not report a grid-F1 gate.
@@ -130,6 +135,50 @@ tom. The audit supports a frozen model/domain failure rather than a discovered
 mapping or universal timing error, while retaining its limitations. See
 `docs/rhythm-doctor/evidence/candidate_b_adtof_tom_audit_v2.json`.
 
+### ADTOF output-head transfer diagnostic
+
+One bounded CPU-only transfer pass trained only the ADTOF output head (605
+parameters) on all nine development songs. The backbone and original
+3,617,805-byte checkpoint remained frozen. It used deterministic 10-second
+development intervals, class-balanced binary cross entropy including TOM
+positives, and development-only peak thresholds. The full run took 386.36
+seconds, under its 600-second cap. The raw runner, input manifest, base weight,
+tuned head, predictions, environment, and report are frozen under
+`tests/rhythm_doctor/artifacts/adtof-transfer-v2/`.
+
+This did not resolve TOM. Development F1 was BD 0.9141, SD 0.7141, HH 0.7227,
+and TOM 0.0984. On the prior 11-track, 60-second diagnostic, whose data had
+already been observed in earlier feasibility work, F1 was BD 0.8255, SD 0.5709,
+HH 0.6390, and TOM 0.0290 (9 TP, 567 FP, 36 FN). The run did not use held
+labels, thresholds, or intervals for training, but that old diagnostic is not
+an untouched acceptance set. No BASS, grid-F1, ARM, incremental-RSS, latency,
+or shipping-license claim follows. The hashes and exact limits are in
+`docs/rhythm-doctor/evidence/candidate_b_adtof_transfer_v2.json`.
+
+### ADTOF full-backbone priority-lane transfer diagnostic
+
+A separate frozen run made all 449,741 ADTOF parameters trainable, but assigned
+loss only to BD, SD, and HH. TOM and cymbal loss weights were zero, and TOM was
+also absent from labels, thresholds, and metrics. The fixed epoch completed all
+222 development intervals: 70.56 seconds of development frontend work and
+363.87 seconds of training compute, below the 600-second cap. The full wall
+time of 722.07 seconds includes the development and then fixed held evaluation.
+
+On the old 11-track, 60-second diagnostic, BD reached F1 0.8170 (so it clears
+the 0.80 onset threshold), SD reached 0.6083, and HH reached 0.7405. SD and HH
+therefore miss the threshold, and this runner has no BASS or grid result, so it
+does not establish the priority profile. The held set was already observed by
+earlier feasibility work and is not an untouched acceptance set. Compact frozen
+hashes, count tables, and limits are in
+`docs/rhythm-doctor/evidence/candidate_b_adtof_fullbackbone_priority_v5.json`.
+
+The development-to-held gap is largest for SD (0.7570 to 0.6083), while HH is
+closer (0.7822 to 0.7405). A next development-only step should use a
+predeclared song-level validation partition and fixed checkpoint schedule to
+choose early stopping or regularization for SD generalization before another
+longer full-backbone pass. It must not use the old held diagnostic to choose the
+training configuration.
+
 The bounded weak-template experiment has now completed as a separate Candidate-B
 diagnostic. It selected development-only template windows from the original
 aggregate `DRUM` stem only when source MIDI had no other drum lane within
@@ -172,3 +221,40 @@ reference would fabricate a negative. This test establishes neither ARM nor
 norns performance, memory, latency, waveform reconstruction, or clean-corpus
 quality. The compact result and frozen identities are in
 `docs/rhythm-doctor/evidence/umxhq_bass_pilot_v2.json`.
+
+### Basic Pitch decoder audit - adapter-invalid historical results
+
+A subsequent independent upstream-wheel audit found three adapter errors:
+raw pitch selection used MIDI 49..81 columns while claiming 28..60; both
+paths omitted the upstream accumulating timestamp correction (over 100 ms
+by frame 1720); and the official decoder's exclusive upper bound omitted
+MIDI 60. Consequently these historical scores cannot reject Basic Pitch as
+a bass architecture. The true-stem diagnostics reused these adapters and
+share the limitation. Their raw artifacts remain unchanged.
+
+The explicit pitch/time adapter now has three passing regressions; its
+missing-module baseline, authoritative wheel hash and defect details are in
+`evidence/basic-pitch-adapter-red.json`. A fresh corrected diagnostic is in
+progress using cached full-range posteriors, independent one-to-one scoring,
+and development-only configuration selection. No improved score is yet claimed.
+
+Historical configuration, retained for traceability:
+
+Basic Pitch was evaluated only after UMXHQ produced an estimated-BASS waveform
+from mixture magnitude and mixture phase. The raw-onset peak configuration and
+the upstream `output_to_notes_polyphonic` decoder configuration were both
+tuned on valid DEV tracks only and both failed the old diagnostic-held BASS
+score. The official decoder was worse: 39 TP, 572 FP and 151 FN (F1 0.097378).
+Track00017 remains unscored because its declared BASS MIDI is missing. These
+results do not cover phase-inverted stereo input, ARM, norns timing, memory, or
+the clean corpus. See
+`docs/rhythm-doctor/evidence/basic_pitch_bass_decoder_pilot.json`.
+
+
+A subsequent independent audit found that the NMF template selector discarded
+unmapped percussion notes (crash, ride, etc.) before testing isolation. Its v4
+results remain a real measurement of that configuration, but the claim that all
+selected windows excluded other drum attacks was too strong. A literal MIDI
+regression (kick at 0.50 s, crash at 0.55 s) failed before the fix. The selector
+now retains non-output percussion for collision rejection while excluding it
+from five-lane score references. No corrected NMF quality rerun is claimed yet.

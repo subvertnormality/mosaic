@@ -1,0 +1,46 @@
+{
+  "kind": "ADTOF-PyTorch full-backbone priority-lane transfer diagnostic",
+  "acceptance_claimed": false,
+  "artifact": "tests/rhythm_doctor/artifacts/adtof-fullbackbone-priority-v5/report.json",
+  "report_sha256": "6ece879668d9396ac3445d3f2d9c14e90dec9efa24c8c9cec661966a9d14e2b9",
+  "frozen_runner_sha256": "af3438993a851df4aa784fd85f980627f868e53c1cf597c7e328916569a4c1aa",
+  "frozen_inputs_sha256": "371f291886e0e6ddfc956c714efb606d5f70a978a67c328ebb73d97bbb6fb62c",
+  "base_weight_sha256": "1bc986e596ec47ba0b44916f87cd4a39f0b2bec23596df3fb5d0e87749217320",
+  "fine_tuned_model_sha256": "efc5a68973e2ab5e0b8a51f5fc27446810bcbd06738f610734a61d9da880bf80",
+  "predictions_sha256": "a7be2200e3ed9f1ab7be9b7e7363e571c7ca5e426ba1826e7fbbc72fe63abb3a",
+  "intervals_sha256": "299fbbc2546005ec75863efd638b607ac6637ef1c2d9b931dccf7d9ebbac4bf0",
+  "environment_sha256": "eecbb3e168febcd632bbee6bf8f2011ef83164dc58940c9eb23aef355813aa96",
+  "priority_lanes": ["BD", "SD", "HH", "BASS"],
+  "evaluated_lanes": ["BD", "SD", "HH"],
+  "optional_lane_excluded": "TOM",
+  "unimplemented_priority_lane": "BASS",
+  "seed": 20260919,
+  "learning_rate": 0.0001,
+  "development_tracks": [3, 4, 5, 7, 10, 12, 13, 17, 18],
+  "held_diagnostic_tracks": [1, 2, 6, 8, 9, 11, 14, 15, 16, 19, 20],
+  "training": {
+    "all_parameters_trainable": 449741,
+    "loss": "class-balanced binary cross entropy for BD, SD, and HH only; TOM and cymbal weights were zero",
+    "intervals": 222,
+    "interval_frames": 1000,
+    "frontend_development_seconds": 70.55882769997697,
+    "training_compute_seconds": 363.8737526999321,
+    "training_time_cap_seconds": 600.0,
+    "full_wall_seconds_including_fixed_evaluation": 722.0664575999836
+  },
+  "onset_metric": "independent source MIDI, one-to-one 50 ms matching; thresholds selected on development only",
+  "development_f1": {"BD": 0.8805755395683453, "SD": 0.7570322824240135, "HH": 0.7821574037577191},
+  "held_f1": {"BD": 0.8170391061452514, "SD": 0.6083086053412463, "HH": 0.7405320813771518},
+  "held_counts": {
+    "BD": {"tp": 585, "fp": 187, "fn": 75},
+    "SD": {"tp": 410, "fp": 436, "fn": 92},
+    "HH": {"tp": 1183, "fp": 513, "fn": 316}
+  },
+  "limitations": [
+    "The 11-track held set is the old preliminary BabySlakh diagnostic and has been observed by earlier feasibility work; it is not an untouched acceptance set.",
+    "BD clears the 0.80 onset threshold on this diagnostic, while SD and HH do not. BASS and grid F1 are absent, so the priority profile is not accepted.",
+    "No BASS model, grid F1, ARM latency, incremental RSS, or shipping-license claim is made.",
+    "The ADTOF port and base weight remain unresolved for shipment licensing."
+  ],
+  "interpretation": "A full-backbone development-only transfer pass improves old-held BD and HH relative to the frozen head-only transfer, but leaves SD and HH below the 0.80 onset gate. SD has the largest development-to-held gap (0.149), suggesting that a future development-only validation/regularization experiment should diagnose generalization before another longer full-backbone epoch."
+}

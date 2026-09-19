@@ -69,7 +69,7 @@ def features(audio, sr, times):
         row += [float(max(harmonic)/(new.sum()+1e-9)), float(np.sqrt(np.mean(after*after)))]
         rows.append(row)
     base=np.asarray(rows)
-    # Explicit Â±1 frame context carries local attack shape without a recurrent
+    # Explicit ±1 frame context carries local attack shape without a recurrent
     # model; edge padding makes every input frame deterministic.
     return np.concatenate((np.vstack((base[0],base[:-1])),base,np.vstack((base[1:],base[-1]))),axis=1)
 

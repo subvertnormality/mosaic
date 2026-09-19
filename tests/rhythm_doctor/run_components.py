@@ -36,7 +36,7 @@ def main():
     commands = [(name, ['lua', 'tests/rhythm_doctor/test_' + name + '.lua']) for name in LUA_TESTS]
     selected = list(PYTHON_TESTS) + (list(NATIVE_TESTS) if args.native else [])
     if args.detector:
-        selected.extend(('detector', 'nmf_template', 'adtof_evaluate'))
+        selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
     commands += [(name, [sys.executable, '-m', 'unittest', 'discover', '-s',

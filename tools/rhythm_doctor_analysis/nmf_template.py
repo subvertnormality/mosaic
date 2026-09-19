@@ -67,8 +67,9 @@ def midi_events(path, role):
             continue
         if role == "DRUM":
             lane = next((name for name, notes in NOTES.items() if message.note in notes), None)
-            if lane:
-                output.append((float(seconds), lane))
+            # Crash/ride/clap/etc. are not output lanes, but their attacks
+            # still contaminate a supposedly isolated aggregate-DRUM window.
+            output.append((float(seconds), lane or "OTHER_DRUM"))
         elif role == "BASS":
             output.append((float(seconds), "BASS"))
     return output
@@ -178,7 +179,7 @@ def references(selected, meta, number, seconds):
     for role, stem_names in stem_roles(meta / track / "metadata.yaml").items():
         for stem in available_stems(selected, track, stem_names):
             for moment, lane in midi_events(selected / track / "MIDI" / (stem + ".mid"), role):
-                if moment < seconds:
+                if moment < seconds and lane in result:
                     result[lane].append(moment)
     return result
 
