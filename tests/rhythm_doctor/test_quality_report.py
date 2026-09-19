@@ -12,6 +12,22 @@ def rows():
                  velocity_monotonic=True) for lane in LANES for stratum in STRATA]
 
 class QualityReportTests(unittest.TestCase):
+    # User scope amendment in docs/rhythm-doctor/STATUS.md, outside README.
+    def test_priority_profile_requires_all_four_lanes_and_names_scope(self):
+        samples = [r for r in rows() if r['lane'] != 'TOM']
+        result = evaluate(samples, profile='priority_four')
+        self.assertTrue(result['passed'])
+        self.assertEqual(result['required_lanes'], ['BD', 'SD', 'HH', 'BASS'])
+        self.assertFalse(evaluate(samples)['passed'])
+        for lane in ('BD', 'SD', 'HH', 'BASS'):
+            self.assertFalse(evaluate([r for r in samples if r['lane'] != lane],
+                                      profile='priority_four')['passed'])
+        samples[-1]['onset_tp'] = 0
+        self.assertFalse(evaluate(samples, profile='priority_four')['passed'])
+
+    def test_unknown_profile_fails_closed(self):
+        self.assertFalse(evaluate(rows(), profile='bd_only')['passed'])
+
     def test_all_fifteen_domains_must_pass(self):
         self.assertTrue(evaluate(rows())["passed"])
         samples = rows()

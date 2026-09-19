@@ -11,16 +11,21 @@ COUNTS = ("onset_tp", "onset_fp", "onset_fn", "cell_tp", "cell_fp", "cell_fn",
           "negative_control_painted_events", "negative_control_clips")
 
 
-def evaluate(measurements):
+def evaluate(measurements, profile="original_five"):
+    profiles = {"original_five": LANES, "priority_four": ("BD", "SD", "HH", "BASS")}
+    if not isinstance(profile, str) or profile not in profiles:
+        return {"passed": False, "errors": ["unknown quality profile"], "scores": [],
+                "required_lanes": [], "complete_rd02_acceptance": False}
+    lanes = profiles[profile]
     errors, domains, scores = [], set(), []
-    lane_velocity = {lane: [] for lane in LANES}
-    lane_negatives = {lane: 0 for lane in LANES}
+    lane_velocity = {lane: [] for lane in lanes}
+    lane_negatives = {lane: 0 for lane in lanes}
     for index, row in enumerate(measurements):
         if not isinstance(row, dict):
             errors.append("invalid measurement %d" % index)
             continue
         domain = (row.get("lane"), row.get("stratum"))
-        if domain[0] not in LANES or domain[1] not in STRATA or domain in domains:
+        if domain[0] not in lanes or domain[1] not in STRATA or domain in domains:
             errors.append("unknown or repeated lane/stratum %r" % (domain,))
             continue
         domains.add(domain)
@@ -48,7 +53,7 @@ def evaluate(measurements):
             if f1 < gate:
                 errors.append("%s F1 below %.2f for %r" % (prefix, gate, domain))
         scores.append(score)
-    for lane in LANES:
+    for lane in lanes:
         for stratum in STRATA:
             if (lane, stratum) not in domains:
                 errors.append("missing domain %s/%s" % (lane, stratum))
@@ -57,6 +62,6 @@ def evaluate(measurements):
         values = lane_velocity[lane]
         if not values or sum(values) / len(values) > 16:
             errors.append("missing or failing per-lane velocity MAE for " + lane)
-    return {"passed": not errors, "errors": errors, "scores": scores,
+    return {"profile": profile, "required_lanes": list(lanes), "passed": not errors, "errors": errors, "scores": scores,
             "complete_rd02_acceptance": False,
             "scope": "quality metrics only; corpus and provenance gates remain separate"}

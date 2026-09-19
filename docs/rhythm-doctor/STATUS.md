@@ -6,6 +6,17 @@ The user authorized implementation on 2026-09-19, superseding the planning-only
 status in the preserved proposal. PLAN.md is an unchanged copy of the proposal
 from the adjacent monome-emulator workspace.
 
+## User scope amendment (2026-09-19)
+
+The user prioritised BD, SD, HH and BASS and explicitly allowed TOM to be
+deprioritised if it is not working. These four lanes are required for this
+implementation; TOM is optional and must not block their delivery. An unreliable
+TOM detector must not be presented as a working lane. The preserved PLAN.md and
+historical five-lane reports remain unchanged. The four required lanes retain
+every existing accuracy, negative-control, velocity, timing, persistence and
+physical-Norns acceptance requirement. Dropping TOM alone does not make the
+current candidates pass. New score reports must explicitly name their scope.
+
 ## Status
 
 RD-01/RD-02 in progress. No delivery card is complete. No product UI or standalone
@@ -188,3 +199,26 @@ native source bytes, three contiguous stereo acquisitions, restored routing and
 successful cleanup (`hardware-capture-checkpoint-5b4bf10-v2.json`). The first new
 launcher attempt failed because relative library paths were resolved incorrectly;
 its failed report is preserved, and it is not capture-quality evidence.
+
+## Project-save guard integration groundwork
+
+`project_lifecycle.new` now accepts an optional capture-machine guard. It checks
+manual/autosave permission before ordinary save can stop/reset transport or
+serialize the project. Three integration regressions execute the actual Mosaic
+entrypoint closures with the real capture state machine: all four active states,
+coalesced requests until asynchronous release, release during playback, and
+old-project deferred-request discard. Transport and IO are observed test doubles;
+this is not sounding-n.b., contiguous-PCM, or public-input acceptance. The
+application controller still needs to supply this guard and wire release/Stop
+callbacks. Project load/new waiting for release is still unimplemented.
+
+The failing pre-hook source and test hashes and actual output are preserved in
+`evidence/project-save-inhibition-red.json`; the three focused regressions pass
+after the hook. This does not complete RD-03.
+
+The complete local Lua suite now passes 1,713 tests with zero failures and an
+observed subprocess exit code of 0. `evidence/full-lua-lifecycle-v2.json` freezes
+all tracked Lua source hashes and confirms no source changed during the run.
+An earlier run printed 1,713 passes but its shell wrapper lost the exit status;
+it is not counted as a successful command. The direct subprocess rerun fixes
+that evidence gap. Seven quality-profile and four NMF-isolation tests also pass.

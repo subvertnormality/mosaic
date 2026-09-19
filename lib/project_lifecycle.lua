@@ -1,7 +1,7 @@
 -- Project operations and autosave share one inhibition state and timer owner.
 local project_lifecycle = {}
 
-function project_lifecycle.new(as_metro, autosave_timer, param_manager, project_validation, set_splash)
+function project_lifecycle.new(as_metro, autosave_timer, param_manager, project_validation, set_splash, capture_guard)
   local autosave_inhibited = false
   local autosave_reset
 
@@ -91,6 +91,18 @@ end
 
 local function save_project(txt, automatic)
   if not txt then return false end
+  -- The guard owns coalescing and resource-release timing. Ask before stop/reset
+  -- or serialization: ordinary project saves also silence n.b. voices.
+  if capture_guard then
+    local decision = automatic and capture_guard:autosave() or capture_guard:manual_save()
+    if decision.code ~= "SAVE_NOW" then
+      if not automatic then
+        tooltip:show("CAPTURE ACTIVE / FINISH OR CANCEL")
+        fn.dirty_screen(true)
+      end
+      return false
+    end
+  end
   m_clock:stop()
   m_clock:reset()
   print("Saving project as " .. txt)
