@@ -258,25 +258,20 @@ def no_voicing_fallback_workflow(c):
     c.enc(3, 1); c.key(3)      # Map written tone 0 to Bass.
     silent_mapped = [(1, [144, note, velocity]) for note, velocity in
                      ((62, 117), (64, 107), (65, 97))]
-    before = c.snapshot()['midi_count']; c.tap(1, 8)
-    def ons(state):
-        return [m for m in state['midi'] if m['index'] > before and
-                m['bytes'][0] == 144 and m['bytes'][2] > 0]
-    state = c.wait(lambda value: len(ons(value)) >= 7, timeout=6)
-    actual = [(m['port'], m['bytes']) for m in ons(state)]
-    wanted = [silent_mapped[i % len(silent_mapped)] for i in range(len(actual))]
-    assert actual == wanted, dict(expected=wanted, actual=actual)
+    # Stop at an exact completed output cycle before opening the inspector.
+    # H05 deliberately shows the last emitted event; leaving transport running
+    # made a documentation frame depend on which real-time step crossed capture.
+    c.playback(silent_mapped, cycles=2, timeout=6)
     c.enc(1, 1); c.enc(2, 9); c.key(3)  # Result
     expected = render([(2, 27, 15, 'Status NO VOICING')])
     indexes = [(y*128+x)*4+k for y in range(19, 29) for x in range(2, 108) for k in range(3)]
     c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == expected[i]
                              for i in indexes))
     c.results.append(dict(kind='no-voicing-visible', reason='range', passed=True))
-    # The bottom status line is transient while transport runs; bind every
-    # stable UI row and separately assert the semantic NO VOICING glyphs above.
-    documentation_frame(c, '355e76b9a69a873e5c34c453ca7657519eb1b34025605303f250403dcb1dc62e',
+    # Playback is stopped, so both the semantic status and last-emitted rows are
+    # stable in real and controlled time.
+    documentation_frame(c, '80bfe90b571d61b3310cab4fcc565983dfa98151434cc42168d3eaee20ddfd24',
                         'images/harmony-no-voicing.png', stable_rows=55)
-    c.tap(1, 8); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
     c.enc(1, 1); c.enc(2, 8); c.key(3)   # Entry / Failure
     c.enc(2, 3); c.enc(3, 1); c.key(3)   # Fallback Legacy
     legacy = [(1, [144, note, velocity]) for note, velocity in
