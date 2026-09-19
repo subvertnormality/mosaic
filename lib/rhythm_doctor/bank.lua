@@ -10,6 +10,9 @@ local Bank = {
   MAX_CANDIDATES = 22500,
   MAX_CAPTURE_SECONDS = 45,
   MIN_BPM = 40,
+  -- The tempo the detector reports when it cannot measure one; the Finish
+  -- gate needs a tempo before any analysis exists.
+  DEFAULT_BPM = 120,
   MAX_BPM = 240,
 }
 
@@ -108,6 +111,15 @@ end
 -- Build validates an already-retained capture and candidate list.  Candidates are
 -- retained with their first quantised `cell` so changing sensitivity never moves a
 -- hit.  The returned value has no metatable and is safe to serialize.
+-- A bank needs at least WINDOW_CELLS cells, and a cell spans
+-- sample_rate * 15 / bpm samples, so the capture must run this long before an
+-- analysis can produce a browsable window. Tying the Finish gate to this rather
+-- than a fixed number keeps the UI and the bank rule from drifting apart.
+function Bank.minimum_capture_seconds(bpm)
+  if type(bpm) ~= "number" or bpm ~= bpm or bpm < Bank.MIN_BPM or bpm > Bank.MAX_BPM then return nil end
+  return Bank.WINDOW_CELLS * 15 / bpm
+end
+
 function Bank.build(args)
   args = args or {}
   if type(args.project_id) ~= "string" or args.project_id == "" then return failure("INVALID_PROJECT") end

@@ -137,5 +137,41 @@ test('runtime answers the complete project-lifecycle capture-guard interface', f
   equal(manual.code, 'SAVE_NOW', 'an idle runtime must permit a manual save')
 end)
 
+test('a recording becomes finishable once it is long enough for a bank window', function()
+  -- Nothing in the application ever called set_capture_progress, so
+  -- enough_audio was permanently nil: K3 Finish always answered
+  -- MORE_AUDIO_NEEDED and no recording could reach analysis.
+  local Bank = require('rhythm_doctor.bank')
+  local clock = 0
+  local socket, worker = transport(), { opens = 0, closes = 0 }
+  function worker:open() self.opens = self.opens + 1; return socket end
+  function worker:close() self.closes = self.closes + 1 end
+  local runtime = Runtime.new({ project_id = 'project-a', worker = worker,
+    now = function() return clock end, transport_stopped = function() return true end })
+  local idle = runtime:capture_progress()
+  check(type(idle) == 'table', 'capture progress must always be a table')
+  equal(idle.enough_audio, false, 'an unstarted capture is not finishable')
+
+  check(runtime:enter().ok)
+  runtime:start_capture('manual')
+  runtime:_capture_start('manual', runtime.machine.token)
+  local needed = Bank.minimum_capture_seconds(Bank.DEFAULT_BPM)
+  check(type(needed) == 'number' and needed > 0, 'bank must state the capture length it needs')
+
+  clock = needed / 2
+  equal(runtime:capture_progress().enough_audio, false, 'half a window is not enough audio')
+  clock = needed
+  equal(runtime:capture_progress().enough_audio, true, 'a full window is enough audio')
+end)
+
+test('the bank states the capture length its own window rule requires', function()
+  local Bank = require('rhythm_doctor.bank')
+  equal(Bank.minimum_capture_seconds(120), Bank.WINDOW_CELLS * 15 / 120)
+  -- A slower tempo needs a longer capture for the same number of cells.
+  check(Bank.minimum_capture_seconds(60) > Bank.minimum_capture_seconds(120))
+  equal(Bank.minimum_capture_seconds(0), nil, 'an out-of-range tempo has no answer')
+  equal(Bank.minimum_capture_seconds('x'), nil)
+end)
+
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end
 print('rhythm_doctor runtime: ' .. count .. ' tests passed')

@@ -389,6 +389,20 @@ function Adapter:set_capture_progress(value)
   end
 end
 
+-- Explicit progress wins when a host supplies it; otherwise the runtime is
+-- asked directly. Nothing in the application ever called
+-- set_capture_progress, so relying on it alone left Finish permanently
+-- disabled and a recording could never reach analysis.
+function Adapter:finish_eligible()
+  if self.progress.enough_audio ~= nil then return self.progress.enough_audio == true end
+  local runtime = self.runtime
+  if type(runtime) == "table" and type(runtime.capture_progress) == "function" then
+    local value = runtime:capture_progress()
+    return type(value) == "table" and value.enough_audio == true
+  end
+  return false
+end
+
 function Adapter:set_status(code, detail)
   self.feedback = code
   if code == "CAPTURE_WORKER_READY" then self.worker_ready = true
@@ -464,7 +478,7 @@ function Adapter:key(n, z)
     return self:confirm_setup()
   end
   if n == 3 and capture_states[state_of(self)] then
-    if self.progress.enough_audio ~= true then return outcome("MORE_AUDIO_NEEDED") end
+    if self:finish_eligible() ~= true then return outcome("MORE_AUDIO_NEEDED") end
     local value = self.runtime:finish(true)
     self.feedback = value and value.code
     return value or outcome("NOT_CAPTURING")
@@ -535,7 +549,7 @@ function Adapter:screen_model()
   elseif self.alignment_draft then model.status = "ALIGNMENT / " .. Adapter.ALIGNMENT_FIELDS[self.alignment_field]
   elseif not self.worker_ready and (state == "EMPTY" or state == "FAILED") then model.status = "NOT READY"
   elseif capture_states[state] then
-    model.finish_enabled = self.progress.enough_audio == true
+    model.finish_enabled = self:finish_eligible() == true
     model.status = model.finish_enabled and "ENOUGH AUDIO / K3 FINISH" or "MORE AUDIO NEEDED"
   elseif state == "FAILED" then model.status = machine.last_message or "FAILED"
   else model.status = state end

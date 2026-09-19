@@ -174,7 +174,22 @@ function Runtime:start_capture(mode)
   return self.machine:start_capture(mode, self.transport_stopped() == true)
 end
 
+-- Finish eligibility is observed, not guessed: the capture's elapsed time is
+-- compared against the length a bank actually needs at the tempo the detector
+-- assumes when it has not measured one. Without this the adapter's progress
+-- stayed empty, enough_audio was never true, and K3 Finish could never
+-- complete a recording.
+function Runtime:capture_progress()
+  local started = self.capture_started_at
+  if not started then return { enough_audio = false, captured_seconds = 0 } end
+  local elapsed = (self.now() or started) - started
+  local needed = Bank.minimum_capture_seconds(Bank.DEFAULT_BPM or 120) or 8
+  return { enough_audio = elapsed >= needed, captured_seconds = elapsed,
+           required_seconds = needed }
+end
+
 function Runtime:_capture_start(mode, token)
+  self.capture_started_at = self.now()
   local started = self.controller and self.controller:begin(mode, token, self.seconds)
   if not started or started.code ~= "PREFLIGHTING" then
     self.machine:capture_failed(token, "CAPTURE_PREFLIGHT_UNAVAILABLE")
