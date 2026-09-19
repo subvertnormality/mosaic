@@ -7,6 +7,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import struct
 import subprocess
 import sys
 import tempfile
@@ -145,6 +146,40 @@ class CompositeBackendTests(unittest.TestCase):
         self.assertEqual(component["candidates"], [])
         self.assertIs(component["drum_component"]["tempo_detected"], False)
         self.assertEqual(component["drum_component"]["drum_artifact_sha256"], self.drum_sha)
+
+    def test_phase_inverted_stereo_paints_no_drum_events_without_running_the_frontend(self):
+        """An exactly inverted stereo pair cancels to silence in the mono downmix.
+
+        Characterisation outside README: the pinned Omnizart frontend loads
+        audio with mono=True, so a phase-inverted capture reaches madmom as
+        digital silence and degenerates its tempo estimate exactly as an
+        all-zero buffer does. Reproduced on held-out corpus clip v12-phase,
+        whose interleaved buffer peaks at 7964 while its mono downmix is
+        exactly zero. The guard must therefore test the signal the frontend
+        actually analyses, not the interleaved buffer.
+        """
+        class DegenerateFrontend(object):
+            def __init__(self): self.calls = []
+            def extract(self, pcm):
+                self.calls.append(pcm)
+                raise ValueError("arange: cannot compute length")
+
+        inverted = self.root / "phase.wav"
+        with wave.open(str(inverted), "wb") as output:
+            output.setnchannels(2); output.setsampwidth(2); output.setframerate(22050)
+            frames = b"".join(struct.pack("<hh", value, -value)
+                              for value in (1000, -2000, 3000, -4000) * 2000)
+            output.writeframes(frames)
+        frontend = DegenerateFrontend()
+        runtime = composite.CompositeRuntime(self.drum, self.drum_model, frontend,
+                                             {"BD": .5, "SD": .5, "CHH": .5, "OHH": .5}, self.bass, .4)
+        request = dict(self.request, wav_path=str(inverted))
+        value = composite.compose(request, runtime)
+        self.assertEqual(frontend.calls, [], "a cancelling mix must not reach the Omnizart frontend")
+        self.assertEqual([c for c in value["candidates"] if c["lane"] in composite.DRUM_LANES], [])
+        component = runtime.analyse_drums(composite.read_pcm_wav(str(inverted)),
+                                          composite.pinned_profile(request))
+        self.assertIs(component["drum_component"]["tempo_detected"], False)
 
     def test_digital_silence_still_fails_closed_on_a_changed_drum_weight(self):
         """Silence must not become a route around the pinned-artifact check."""

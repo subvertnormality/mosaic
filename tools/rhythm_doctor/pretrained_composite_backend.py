@@ -9,6 +9,10 @@ model downloader, trainer, fallback classifier, or implicit runtime.
 from __future__ import print_function
 
 import argparse
+try:  # removed in Python 3.13; the analysis runtime is 3.8/3.9
+    import audioop as _audioop
+except ImportError:  # pragma: no cover - platform dependent
+    _audioop = None
 import hashlib
 import importlib.util
 import json
@@ -89,9 +93,7 @@ class CompositeRuntime(object):
 
     def analyse_drums(self, pcm, profile):
         """Run the raw four-head adapter after validating its exact pinned weight."""
-        # Only an exactly all-zero buffer takes this route, so no audible
-        # capture can be suppressed by it.
-        if pcm.data.count(0) == len(pcm.data):
+        if _analysed_signal_is_silent(pcm):
             return self._silent_drum_component(profile)
         try:
             source = self.feature_provider.extract(pcm)
@@ -106,6 +108,31 @@ class CompositeRuntime(object):
                                     gates=self.drum_gates, bpm=source["bpm"], origin_sample=source["origin_sample"])
         except (TensorContractError, ValueError) as error:
             raise CompositeError(str(error)) from error
+
+
+def _analysed_signal_is_silent(pcm):
+    """True when the mono signal the drum frontend analyses carries no energy.
+
+    The pinned Omnizart frontend loads audio with ``mono=True``, so an exactly
+    phase-inverted stereo pair cancels to digital silence even though its
+    interleaved buffer does not: held-out clip v12-phase peaks at 7964 yet its
+    mono downmix is exactly zero. An all-zero capture and a cancelling one both
+    degenerate madmom's tempo estimate, so both must stop before the frontend.
+
+    Only an exactly zero downmix takes this route, so no audible mono signal
+    can be suppressed by it. ``read_pcm_wav`` yields integer PCM, which is what
+    ``audioop`` interprets; anything it cannot measure keeps the previous
+    behaviour of letting the frontend decide.
+    """
+    if pcm.data.count(0) == len(pcm.data):
+        return True
+    if _audioop is None:
+        return False
+    try:
+        mono = _audioop.tomono(pcm.data, pcm.sample_width, .5, .5) if pcm.channels == 2 else pcm.data
+        return _audioop.max(mono, pcm.sample_width) == 0
+    except Exception:
+        return False
 
 
 def _number(value):
