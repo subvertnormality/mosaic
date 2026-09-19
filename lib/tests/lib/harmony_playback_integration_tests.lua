@@ -153,6 +153,63 @@ function test_harmony_playback_delayed_first_arp_voice_commits_on_admission()
   luaunit.assert_equals(runtime.consumed_count,1)
 end
 
+local function delayed_first_arp(song,length,spread,acceleration)
+  local channel=song.channels[1];channel.chord_one_mask=2
+  channel.voicing=harmony_config.new_channel("revoice")
+  channel.trig_lock_params[1]={id="chord_arp",param_id="chord_arp_1"}
+  channel.trig_lock_params[2]={id="chord_strum_pattern",param_id="chord_strum_pattern_1"}
+  program.add_step_param_trig_lock(1,1,4)
+  program.add_step_param_trig_lock(1,2,2) -- reverse: three empty slots precede chord1
+  if spread then
+    channel.trig_lock_params[3]={id="chord_spread",param_id="chord_spread_1"}
+    program.add_step_param_trig_lock(1,3,spread)
+  end
+  if acceleration then
+    channel.trig_lock_params[4]={id="chord_acceleration",param_id="chord_acceleration_1",cc_min_value=-5}
+    program.add_step_param_trig_lock(1,4,acceleration)
+  end
+  song.patterns[1].lengths[1]=length
+  assign(song,1,1);step.handle(1,1)
+  return harmony_runtime_state.snapshot(song).channels[1]
+end
+
+function test_harmony_playback_zero_gate_silent_arp_does_not_commit_history()
+  local song=setup();source(song,1,{[1]=0},{1})
+  local runtime=delayed_first_arp(song,0)
+  luaunit.assert_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,0)
+end
+
+function test_harmony_playback_gate_before_first_voiced_arp_slot_does_not_commit_history()
+  local song=setup();source(song,1,{[1]=0},{1})
+  local runtime=delayed_first_arp(song,0.5)
+  luaunit.assert_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,0)
+end
+
+function test_harmony_playback_terminating_interval_before_first_voiced_arp_slot_does_not_commit_history()
+  local song=setup();source(song,1,{[1]=0},{1})
+  -- arp 1/6 + spread 1/12 is positive once; acceleration -5 terminates
+  -- interval two while the reverse sequence is still on leading rests.
+  local runtime=delayed_first_arp(song,2,2,-5)
+  luaunit.assert_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,0)
+end
+
+function test_harmony_inspection_keeps_authored_source_distinct_from_note_mask_merge_pitch()
+  local song=setup();source(song,1,{[1]=0},{1});source(song,2,{[2]=3},{2})
+  local channel=song.channels[1]
+  fn.add_to_set(channel.selected_patterns,1);fn.add_to_set(channel.selected_patterns,2)
+  channel.trig_merge_mode="skip";channel.step_note_masks[2]=60
+  channel.musical_merge=merge_config.new();channel.musical_merge.mode="foundation"
+  channel.musical_merge.anchor=1;channel.musical_merge.target={kind="degrees",degrees={1}}
+  pattern_model.update_working_pattern(1,song);step.handle(1,2)
+  local shown=harmony_inspection.snapshot(song,1)
+  luaunit.assert_equals(shown.planned.source,3)
+  luaunit.assert_not_equals(shown.planned.merge,shown.planned.source)
+  luaunit.assert_equals(shown.planned.bypass,"note_mask")
+end
+
 function test_harmony_playback_pattern_reuses_mapped_identity_and_leaves_raw_exact()
   local song = setup()
   source(song, 1, {[1]=0,[2]=7}, {1,2})

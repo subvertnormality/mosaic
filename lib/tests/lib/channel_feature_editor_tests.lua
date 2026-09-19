@@ -5,6 +5,7 @@ local feature_editor = include("mosaic/lib/pages/channel_edit_page/channel_featu
 local merge_state = include("mosaic/lib/musical_merge/state")
 local harmony_state = include("mosaic/lib/harmony/config_state")
 local harmony_config = include("mosaic/lib/harmony/config")
+local harmony_inspection = include("mosaic/lib/harmony/inspection")
 
 local function setup()
   program.init(); globals.reset(); params.reset()
@@ -126,6 +127,23 @@ function test_harmony_editor_routes_h01_children_and_tone_map_open_is_read_only(
     open_label(value,label);luaunit.assert_equals(value:get_screen(),route)
     value:encoder_one();luaunit.assert_equals(value:get_screen(),"H01")
   end
+end
+
+function test_harmony_result_prefers_active_event_bypass_without_a_solver_result()
+  local song=setup();harmony_inspection.plan(song,1,{status="ok",bypass="note_mask",output=65})
+  local value=feature_editor.new("harmony");value:enter();open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"BYPASS note_mask")
+end
+
+function test_harmony_failure_details_use_active_event_not_unapplied_draft()
+  local song=setup();local value=feature_editor.new("harmony");value:enter()
+  harmony_inspection.plan(song,1,{status="group_missing",fallback="legacy",output=nil})
+  value.draft.fallback="silence"
+  open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"NO VOICING")
+  open_label(value,"Failure details")
+  luaunit.assert_equals(select_label(value,"Reason").get(),"group_missing")
+  luaunit.assert_equals(select_label(value,"Fallback").get(),"legacy")
 end
 
 function test_harmony_tone_map_is_per_binding_staged_and_cancelled_without_source_mutation()

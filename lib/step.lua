@@ -791,10 +791,20 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     channel_edit_page_ui.set_note_dashboard_values(note_dashboard_values)
   end
   local future_voice=false
-  for index=arp_note[c],total_notes do
-    if sequenced_chord_notes[index] and (not frozen_sequence or frozen_sequence[index]) then
+  local elapsed,interval,index=0,1,arp_note[c]
+  local gate=math.max(0,note_container.length or 0)
+  -- Mirror the scheduler's positive-gap progression just far enough to prove
+  -- that a voiced slot is reachable before the gate closes. Leading rests,
+  -- a nonpositive terminating interval, and a zero gate admit no history.
+  while elapsed < gate do
+    local gap=chord_timing.gap(arp_division,chord_spread,chord_acceleration,interval)
+    if not gap then break end
+    elapsed=elapsed+gap
+    if elapsed>=gate then break end
+    if sequenced_chord_notes[index] and(not frozen_sequence or frozen_sequence[index])then
       future_voice=true;break
     end
+    index=index%total_notes+1;interval=interval+1
   end
   local admitted=m_clock.new_arp_sprocket(c, arp_division, chord_spread, chord_acceleration, note_container.length, function(div, onset_offset)
     local velocity = fn.constrain(0, 127, note_container.velocity + ((chord_velocity_mod or 0) * number_of_executions))
@@ -922,6 +932,7 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
   end
 
   local frame, pitches, consume
+  local active_fallback=config.fallback
   if config.mode == "revoice" then
     local material = {}
     for _, source in ipairs(sources) do
@@ -934,7 +945,7 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     consume = function() harmony_state.consume_revoice(song, channel.number, frame) end
   elseif config.mode == "pattern" then
     if chord_notes or unprocessed.pattern_bypass then
-      return {pitches=legacy, status=unprocessed.pattern_bypass or "chord_mask"}
+      return {pitches=legacy, status=unprocessed.pattern_bypass or "chord_mask",fallback=active_fallback}
     end
     local active_merge=musical_merge_state.effective(song,channel.number,
       channel.musical_merge or musical_merge_config.new()).config
@@ -973,19 +984,20 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
   elseif config.mode == "ensemble" then
     local has_local_chord=false;for _,offset in ipairs(chord_notes or{})do if offset and offset~=0 then has_local_chord=true break end end
     if has_local_chord or unprocessed.pattern_bypass or unprocessed.ensemble_bypass then
-      return {pitches=legacy,status=unprocessed.pattern_bypass or unprocessed.ensemble_bypass or"chord_mask"}
+      return {pitches=legacy,status=unprocessed.pattern_bypass or unprocessed.ensemble_bypass or"chord_mask",fallback=active_fallback}
     end
     local active_song_voicing = harmony_config_state.effective_song(song,
       song.voicing or {schema_version=1, groups={}})
     local groups = active_song_voicing and active_song_voicing.groups or {}
     local group = groups[config.group_id]
     if not group or not group.enabled then
-      return {pitches=config.fallback=="legacy"and legacy or{},status="group_missing"}
+      return {pitches=config.fallback=="legacy"and legacy or{},status="group_missing",fallback=active_fallback}
     end
+    active_fallback=group.fallback
     local local_scale=step.get_local_scale_override(channel.number)
     local source_scale,_,context=ensemble_source_context(group,program.get().selected_song_pattern)
     if local_scale and source_scale ~= local_scale then
-      return {pitches=legacy,status="local_scale_bypass"}
+      return {pitches=legacy,status="local_scale_bypass",fallback=active_fallback}
     end
     frame = active_group_frames and active_group_frames[song] and
       active_group_frames[song][config.group_id] or harmony_state.prepare_group(song,
@@ -1002,6 +1014,7 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
   local consumed = false
   return {
     pitches=pitches or {}, frame=frame, status=frame and frame.status or "no_solution",
+    fallback=active_fallback,
     consume=consume and function()
       if not consumed and frame and frame.status == "ok" then consumed=true consume() end
     end or nil
@@ -1075,7 +1088,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   if harmony_pitches == nil then planned_root = note_container.note end
   local inspection_context={
     step=current_step,
-    source=unprocessed_note_container.note_value,
+    source=unprocessed_note_container.source_note_value or unprocessed_note_container.note_value,
     merge=unprocessed_note_container.note_value,
     scale=note_container.note,
     harmony=planned_root,
@@ -1084,22 +1097,29 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     structural_status=unprocessed_note_container.structural_status,
     -- A failed solve is the feature's strict-silence result, not a bypass.
     -- Reserve BYPASS for frames that deliberately use the ordinary pitch path.
-    bypass=harmony and harmony.status~="ok" and harmony.status~="no_solution" and
-      harmony.status~="budget_exceeded" and harmony.status~="invalid" and harmony.status or nil
+    bypass=(harmony and harmony.status~="ok" and harmony.status~="no_solution" and
+      harmony.status~="budget_exceeded" and harmony.status~="invalid" and harmony.status)or
+      (unprocessed_note_container.structural_status and
+       unprocessed_note_container.structural_status~="targeted" and
+       unprocessed_note_container.structural_status~="legacy" and
+       unprocessed_note_container.structural_status~="ineligible" and
+       unprocessed_note_container.structural_status)or nil,
+    fallback=harmony and harmony.fallback or nil
   }
   harmony_inspection.plan(event_song, c, inspection_context)
   local emit_note_on = note_on_func
   local function note_on_for_source(source_id)return function(pitch, velocity, midi_channel, midi_device)
-    local scheduled,actually_emitted=false,false
-    local function on_emitted()
+    local scheduled,actually_emitted,actual_pitch=false,false,nil
+    local function on_emitted(emitted_pitch)
       actually_emitted=true
-      if scheduled then harmony_inspection.emitted(event_song,c,pitch,source_id,inspection_context)end
+      actual_pitch=emitted_pitch or pitch
+      if scheduled then harmony_inspection.emitted(event_song,c,actual_pitch,source_id,inspection_context)end
     end
     local accepted = emit_note_on(pitch, velocity, midi_channel, midi_device,on_emitted)
     if accepted == false then return false end
     harmony_inspection.scheduled(event_song, c, pitch, source_id,inspection_context)
     scheduled=true
-    if actually_emitted then harmony_inspection.emitted(event_song,c,pitch,source_id,inspection_context)end
+    if actually_emitted then harmony_inspection.emitted(event_song,c,actual_pitch,source_id,inspection_context)end
     return true
   end end
 

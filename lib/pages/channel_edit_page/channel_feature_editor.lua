@@ -336,8 +336,11 @@ function editor.new(kind)
       else result=(snapshot.channels[self.channel_number]or{}).prepared end
       local traces={};if selected_group then for _,member in ipairs(selected_group.members or{})do traces[#traces+1]={channel=member.channel,role=member.role,trace=harmony_inspection.snapshot(self.song,member.channel)}end
       else traces[1]={channel=self.channel_number,trace=harmony_inspection.snapshot(self.song,self.channel_number)}end
+      local active_plan;for _,entry in ipairs(traces)do if entry.trace.planned then active_plan=entry.trace.planned break end end
       local fields={readonly("Status",function()
         for _,entry in ipairs(traces)do if entry.trace.planned and entry.trace.planned.bypass then return"BYPASS "..tostring(entry.trace.planned.bypass)end end
+        for _,entry in ipairs(traces)do local status=entry.trace.planned and entry.trace.planned.status
+          if status and status~="ok"and status~="off"then return"NO VOICING"end end
         if not result then return"NO RESULT"end
         return result.status=="ok"and"OK"or"NO VOICING"
       end)}
@@ -346,14 +349,21 @@ function editor.new(kind)
         fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." planned",function()return item.trace.planned and item.trace.planned.output end)
         fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." emitted",function()return item.trace.emitted and item.trace.emitted.pitch end)
       end
-      if result and result.status~="ok"then fields[#fields+1]=action("Failure details","H06")end;return fields
+      if(result and result.status~="ok")or(active_plan and active_plan.status~="ok")then
+        fields[#fields+1]=action("Failure details","H06")
+      end;return fields
     elseif self.screen=="H06"then
       local snapshot=harmony_state.snapshot(self.song);local active_song=harmony_config_state.effective_song(self.song,self.song.voicing or{schema_version=1,groups={}})
       local selected_group=self.context_group and active_song.groups[self.selected_group]
       local result;if self.context_group then result=(snapshot.groups[self.selected_group]or{}).prepared
       else result=(snapshot.channels[self.channel_number]or{}).prepared end
-      return{readonly("Reason",function()return result and result.reason or"NO VOICING"end),
-        readonly("Fallback",function()return selected_group and selected_group.fallback or value.fallback end),action("Settings","H02")}
+      local trace=not self.context_group and harmony_inspection.snapshot(self.song,self.channel_number)or nil
+      local effective=not self.context_group and harmony_config_state.effective_channel(self.song,self.channel_number,
+        self.channel.voicing or harmony_config.new_channel())or nil
+      return{readonly("Reason",function()return(result and result.reason)or
+          (trace and trace.planned and(trace.planned.reason or trace.planned.status))or"NO VOICING"end),
+        readonly("Fallback",function()return(trace and trace.planned and trace.planned.fallback)or
+          (selected_group and selected_group.fallback)or(effective and effective.fallback)or"silence"end),action("Settings","H02")}
     end;return{}
   end
 

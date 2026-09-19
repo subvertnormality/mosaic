@@ -114,6 +114,18 @@ function test_harmony_voicing_reports_budget_instead_of_partial_optimum()
   luaunit.assert_nil(result.pitches)
 end
 
+function test_harmony_voicing_five_voice_preset_reports_measured_bounded_cost()
+  local roles,material={},{}
+  for i=1,5 do
+    roles[i]=role("v"..i,36+(i-1)*5,72+(i-1)*5,48+(i-1)*7)
+    material[i]={id="s"..i,pc=({0,4,7,11,2})[i],required=true}
+  end
+  local result=solve(material,roles,{node_budget=200000})
+  luaunit.assert_equals(result.status,"ok")
+  luaunit.assert_true(result.nodes>0)
+  luaunit.assert_true(result.nodes<=200000)
+end
+
 function test_harmony_voicing_ensemble_covers_required_material_and_allows_doubling()
   local result = voicing.solve({
     mode = "ensemble",

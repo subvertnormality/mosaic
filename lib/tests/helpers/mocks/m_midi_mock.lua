@@ -23,7 +23,7 @@ end
 function m_midi:note_on(note, velocity, channel, device, _, on_emitted)
   table.insert(midi_note_on_events, {note, velocity, channel, device})
   log("note_on", note, velocity, channel)
-  if on_emitted then on_emitted()end
+  if on_emitted then on_emitted(note)end
   return true
 end
 

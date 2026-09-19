@@ -331,10 +331,11 @@ function m_midi:note_on(note, velocity, channel, device, lead_time_ms, on_emitte
 
     -- Send the Note On message
     local port = midi_devices[device]
-    if not delayed_note(lead_time_ms, port, "note_on", note, velocity, channel,on_emitted) and not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100,on_emitted) then
+    local emitted_callback=on_emitted and function()on_emitted(note)end or nil
+    if not delayed_note(lead_time_ms, port, "note_on", note, velocity, channel,emitted_callback) and not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100,emitted_callback) then
       m_midi.flush_output_batch()
       port:note_on(note, velocity, channel)
-      if on_emitted then on_emitted()end
+      if emitted_callback then emitted_callback()end
     end
     return true
   end
