@@ -647,6 +647,10 @@ function step.calculate_step_scale_number(c, s)
   return 0
 end
 
+function step.get_local_scale_override(c)
+  return persistent_channel_step_scale_numbers[c]
+end
+
 function step.manually_calculate_step_scale_number(c, step)
   local program_data = program.get()
   local channel = program.get_channel(program.get().selected_song_pattern, c)
@@ -823,6 +827,38 @@ end
 -- group's source material before any member callback can mutate playback state.
 local active_group_frames
 
+local function ensemble_source_context(group, song_number)
+  local global_scale = program.get_channel_step_scale_number(17) or program.get().default_scale or 1
+  local source_scale = group.source.kind == "scale_slot" and group.source.scale_slot or global_scale
+  local global_channel = program.get_channel(song_number or program.get().selected_song_pattern, 17)
+  local transpose = step.calculate_step_transpose(17, global_channel)
+  if group.source.kind == "scale_slot" then
+    local global_value,source_value=program.get_scale(global_scale),program.get_scale(source_scale)
+    transpose=transpose-((global_value and global_value.transpose)or 0)+
+      ((source_value and source_value.transpose)or 0)
+  end
+  return source_scale,transpose,harmony_context.group_material(group,source_scale,transpose)
+end
+
+local function structural_target_context(target,scale_number,transpose,song)
+  local scale_pitches=harmony_context.scale_pitch_classes(scale_number,transpose)
+  if not target or target.kind=="legacy"then return false,scale_pitches end
+  if target.kind=="scale"then return #scale_pitches>0,scale_pitches end
+  if target.kind=="degrees"then
+    for _,degree in ipairs(target.degrees or{})do if scale_pitches[degree]~=nil then return true,scale_pitches end end
+    return false,scale_pitches
+  end
+  if target.kind=="chord"then
+    local song_voicing=harmony_config_state.effective_song(song,song.voicing or{schema_version=1,groups={}})
+    local group=song_voicing.groups[target.group_id]
+    if group and group.enabled then
+      local _,_,context=ensemble_source_context(group,program.get().selected_song_pattern)
+      return #context.pitch_classes>0,scale_pitches,context.pitch_classes
+    end
+  end
+  return false,scale_pitches
+end
+
 function step.prepare_harmony_group_frames(deferred, count)
   local prepared = setmetatable({}, {__mode="k"})
   active_group_frames = prepared
@@ -841,11 +877,7 @@ function step.prepare_harmony_group_frames(deferred, count)
           song.voicing or {schema_version=1, groups={}})
         local group = song_config and song_config.groups[group_id]
         if group and group.enabled then
-          local source_scale = group.source.kind == "scale_slot" and group.source.scale_slot or
-            (program.get_channel_step_scale_number(17) or program.get().default_scale or 1)
-          local global_channel = program.get_channel(song_number, 17)
-          local transpose = step.calculate_step_transpose(17, global_channel)
-          local context = harmony_context.group_material(group, source_scale, transpose)
+          local _,_,context=ensemble_source_context(group,song_number)
           prepared[song][group_id] = harmony_state.prepare_group(song, group_id,
             context.revision, context.material, group)
         end
@@ -893,26 +925,39 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     if chord_notes or unprocessed.pattern_bypass then
       return {pitches=legacy, status=unprocessed.pattern_bypass or "chord_mask"}
     end
-    local resolved = {}
-    for _, raw in ipairs(channel.working_pattern.note_values or {}) do
-      if resolved[raw] == nil then
-        resolved[raw] = quantiser.process(raw, unprocessed.octave_mod, unprocessed.transpose,
-          channel.step_scale_number, unprocessed.do_pentatonic)
-      end
-    end
-    -- The current event already passed masks, fixed notes and Foundation's
-    -- structural target.  Non-bypassed structural output is authoritative for
-    -- this raw identity and must not be reconstructed from upstream inputs.
-    resolved[unprocessed.note_value]=note_container.note
-    local resolved_sources={};for raw,pitch in pairs(resolved)do resolved_sources[#resolved_sources+1]={id=tostring(raw),pitch=pitch}end
-    table.sort(resolved_sources,function(a,b)return a.id<b.id end)
     local active_merge=musical_merge_state.effective(song,channel.number,
       channel.musical_merge or musical_merge_config.new()).config
+    local foundation=channel.working_pattern.foundation
+    local target=active_merge and active_merge.target or{kind="legacy"}
+    local target_available,scale_pitch_classes,chord_material=structural_target_context(target,
+      channel.step_scale_number,unprocessed.transpose,song)
+    local resolved,conflicts={},{ }
+    local all_pentatonic=fn.param_value("all_scales_lock_to_pentatonic")==2
+    local merged_pentatonic=fn.param_value("merged_lock_to_pentatonic")==2
+    for step_number,raw in ipairs(channel.working_pattern.note_values or{})do
+      local role=foundation and foundation.roles and foundation.roles[step_number]
+      local structural=role=="addition"and target.kind~="legacy"
+      local source_raw=role=="anchor"and active_merge and active_merge.keep_anchor_pitch and
+        foundation.anchor_notes and foundation.anchor_notes[step_number]or raw
+      local pentatonic=all_pentatonic or(not(structural and target_available)and merged_pentatonic and
+        (channel.working_pattern.merged_notes or{})[step_number])
+      local pitch=quantiser.process(source_raw,unprocessed.octave_mod,unprocessed.transpose,
+        channel.step_scale_number,pentatonic)
+      if structural then pitch=merge_pitch_target.resolve(pitch,{eligible=true,config=target,
+        scale_pitch_classes=scale_pitch_classes,
+        chord_material=chord_material})end
+      if resolved[raw]~=nil and pitch~=nil and resolved[raw]%12~=pitch%12 then conflicts[raw]=true
+      elseif resolved[raw]==nil then resolved[raw]=pitch end
+    end
+    if resolved[unprocessed.note_value]==nil then resolved[unprocessed.note_value]=note_container.note end
+    local resolved_sources={};for raw,pitch in pairs(resolved)do resolved_sources[#resolved_sources+1]={id=tostring(raw),pitch=pitch}end
+    table.sort(resolved_sources,function(a,b)return a.id<b.id end)
     local binding = pattern_harmony.binding_key(channel,active_merge)
     frame = pattern_harmony.prepare(song, channel.number,
-      harmony_revision("pattern", channel, unprocessed,resolved_sources), binding, resolved, config)
+      harmony_revision("pattern", channel, unprocessed,resolved_sources), binding, resolved, config,conflicts)
+    local mapped = frame.mapped and frame.mapped[unprocessed.note_value]
     pitches = {root=pattern_harmony.pitch_for(frame, unprocessed.note_value, note_container.note)}
-    consume = function() harmony_state.consume_revoice(song, channel.number, frame) end
+    if mapped then consume = function() harmony_state.consume_revoice(song, channel.number, frame) end end
   elseif config.mode == "ensemble" then
     local has_local_chord=false;for _,offset in ipairs(chord_notes or{})do if offset and offset~=0 then has_local_chord=true break end end
     if has_local_chord or unprocessed.pattern_bypass or unprocessed.ensemble_bypass then
@@ -925,14 +970,11 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     if not group or not group.enabled then
       return {pitches=config.fallback=="legacy"and legacy or{},status="group_missing"}
     end
-    local source_scale = group.source.kind == "scale_slot" and group.source.scale_slot or
-      (program.get_channel_step_scale_number(17) or program.get().default_scale or 1)
-    if source_scale ~= channel.step_scale_number then
+    local local_scale=step.get_local_scale_override(channel.number)
+    local source_scale,_,context=ensemble_source_context(group,program.get().selected_song_pattern)
+    if local_scale and source_scale ~= local_scale then
       return {pitches=legacy,status="local_scale_bypass"}
     end
-    local global_channel=program.get_channel(program.get().selected_song_pattern,17)
-    local global_transpose=step.calculate_step_transpose(17,global_channel)
-    local context = harmony_context.group_material(group, source_scale, global_transpose)
     frame = active_group_frames and active_group_frames[song] and
       active_group_frames[song][config.group_id] or harmony_state.prepare_group(song,
         config.group_id, context.revision, context.material, group)
@@ -942,15 +984,15 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     end
     if frame.status == "ok" and role then pitches = {root=frame.role_pitches[role]} end
     if not pitches and group.fallback=="legacy"then pitches=legacy end
-    consume = function() harmony_state.consume_group(song, config.group_id, frame) end
+    if role then consume = function() harmony_state.consume_group(song, config.group_id, frame) end end
   end
-  if not pitches and config.fallback == "legacy" then pitches = legacy end
+  if not pitches and config.mode ~= "ensemble" and config.fallback == "legacy" then pitches = legacy end
   local consumed = false
   return {
     pitches=pitches or {}, frame=frame, status=frame and frame.status or "no_solution",
-    consume=function()
+    consume=consume and function()
       if not consumed and frame and frame.status == "ok" then consumed=true consume() end
-    end
+    end or nil
   }
 end
 
@@ -1015,6 +1057,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     channel, chord_notes, process_func)
   local harmony_pitches = harmony and harmony.pitches
   local consume_harmony = harmony and harmony.consume
+  local route_available=device.player~=nil or(m_midi and m_midi.has_device and
+    m_midi.has_device(note_container.midi_device))
   local planned_root = harmony_pitches and harmony_pitches.root
   if harmony_pitches == nil then planned_root = note_container.note end
   local inspection_context={
@@ -1031,10 +1075,16 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   harmony_inspection.plan(event_song, c, inspection_context)
   local emit_note_on = note_on_func
   note_on_func = function(pitch, velocity, midi_channel, midi_device)
-    local accepted = emit_note_on(pitch, velocity, midi_channel, midi_device)
+    local scheduled,actually_emitted=false,false
+    local function on_emitted()
+      actually_emitted=true
+      if scheduled then harmony_inspection.emitted(event_song,c,pitch,"voice",inspection_context)end
+    end
+    local accepted = emit_note_on(pitch, velocity, midi_channel, midi_device,on_emitted)
     if accepted == false then return false end
     harmony_inspection.scheduled(event_song, c, pitch, "voice",inspection_context)
-    harmony_inspection.emitted(event_song, c, pitch, "voice",inspection_context)
+    scheduled=true
+    if actually_emitted then harmony_inspection.emitted(event_song,c,pitch,"voice",inspection_context)end
     return true
   end
 
@@ -1088,7 +1138,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     if chord_number then
       chord_note_dashboard_values = chord_note_dashboard_values or {chords = {}}
       if latest_voice == nil or delay > latest_voice then latest_voice = delay end
-      m_clock.delay_action(
+      local frozen_harmony_pitch=harmony_pitches and harmony_pitches["chord"..chord_number]
+      local scheduled_id=m_clock.delay_action(
         c,
         delay,
         false,
@@ -1118,6 +1169,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
           end
         end
       )
+      if scheduled_id and frozen_harmony_pitch and route_available and consume_harmony then consume_harmony()end
 
     end
 
@@ -1132,7 +1184,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   )
   if delayed_root_delay ~= nil then
     if latest_voice == nil or delayed_root_delay > latest_voice then latest_voice = delayed_root_delay end
-    m_clock.delay_action(
+    local frozen_harmony_pitch=harmony_pitches and harmony_pitches.root
+    local scheduled_id=m_clock.delay_action(
       c,
       delayed_root_delay,
       false,
@@ -1162,6 +1215,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         end
       end
     )
+    if scheduled_id and frozen_harmony_pitch and route_available and consume_harmony then consume_harmony()end
   end
 
   if latest_voice and latest_voice > 0 and m_clock.hold_voice_onset then
@@ -1278,8 +1332,10 @@ function step.handle(c, current_step, prepared)
     local random_shift = fn.transform_random_value(stock("bipolar_random_note") or 0) +
                          fn.transform_twos_random_value(stock("twos_random_note") or 0)
                   
+    local target_available,target_scale_pitches,target_chord_material=structural_target_context(
+      merge_config and merge_config.target,channel.step_scale_number,transpose,program.get_selected_song_pattern())
     local structural_target = foundation_role == "addition" and merge_config and merge_config.target and
-      merge_config.target.kind ~= "legacy"
+      merge_config.target.kind ~= "legacy"and target_available
     local do_pentatonic = fn.param_value("all_scales_lock_to_pentatonic") == 2 or 
                          (not structural_target and fn.param_value("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                          (fn.param_value("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
@@ -1338,24 +1394,12 @@ function step.handle(c, current_step, prepared)
     if merge_config and foundation_role == "addition" then
       local bypass = is_mask and "note_mask" or random_shift ~= 0 and "random" or
         used_quantised_fixed and "quantised_fixed" or used_fixed and "fixed" or nil
-      local chord_material
-      if merge_config.target and merge_config.target.kind == "chord" then
-        local song=program.get_selected_song_pattern()
-        local active_song_voicing=harmony_config_state.effective_song(song,
-          song.voicing or {schema_version=1,groups={}})
-        local group = active_song_voicing and active_song_voicing.groups[merge_config.target.group_id]
-        if group and group.enabled then
-          local source_scale=group.source.kind=="scale_slot"and group.source.scale_slot or
-            (program.get_channel_step_scale_number(17)or program.get().default_scale or 1)
-          chord_material = harmony_context.group_material(group,source_scale,transpose).pitch_classes
-        end
-      end
       note, structural_status = merge_pitch_target.resolve(note, {
         eligible=true,
         bypass=bypass,
         config=merge_config.target,
-        scale_pitch_classes=harmony_context.scale_pitch_classes(channel.step_scale_number, transpose),
-        chord_material=chord_material
+        scale_pitch_classes=target_scale_pitches,
+        chord_material=target_chord_material
       })
     end
 
@@ -1391,12 +1435,14 @@ function step.handle(c, current_step, prepared)
             used_quantised_fixed and "quantised_fixed" or used_fixed and "fixed" or nil,
           ensemble_bypass = octave_mod ~= 0 and "local_octave" or nil,
           absolute_pitch = is_mask or used_quantised_fixed or used_fixed},
-        function(chord_note, velocity, midi_channel, midi_device)
+        function(chord_note, velocity, midi_channel, midi_device,on_emitted)
           if device.player then
             device.player:note_on(chord_note, (127 > 1) and ((velocity - 1) / 126) or 0)
+            if on_emitted then on_emitted()end
             return true
           elseif m_midi then
-            return m_midi:note_on(chord_note, velocity, midi_channel, midi_device, note_container.lead_time_ms)
+            return m_midi:note_on(chord_note, velocity, midi_channel, midi_device,
+              note_container.lead_time_ms,on_emitted)
           end
           return false
         end,

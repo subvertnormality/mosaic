@@ -9,6 +9,7 @@ local harmony_runtime_state = include("mosaic/lib/harmony/state")
 local harmony_inspection = include("mosaic/lib/harmony/inspection")
 local pattern_harmony = include("mosaic/lib/harmony/pattern")
 local merge_config = include("mosaic/lib/musical_merge/config")
+local quantiser = include("mosaic/lib/quantiser")
 
 include("mosaic/lib/tests/helpers/mocks/device_map_mock")
 include("mosaic/lib/tests/helpers/mocks/channel_edit_page_ui_mock")
@@ -142,6 +143,18 @@ function test_harmony_playback_ensemble_replaces_each_member_with_explicit_role(
   step.handle(1, 1)
   step.handle(2, 1)
   luaunit.assert_equals({midi_note_on_events[1][1],midi_note_on_events[2][1]}, {48,55})
+end
+
+function test_harmony_playback_explicit_group_scale_does_not_treat_global_inheritance_as_local_override()
+  local song=setup();source(song,1,{[1]=0},{1});assign(song,1,1)
+  local base=quantiser.get_scales()[1]
+  program.set_scale(2,{number=1,scale=base.scale,pentatonic_scale=base.pentatonic_scale,
+    chord=1,root_note=2,transpose=0,chord_degree_rotation=0,version=1})
+  local group=harmony_config.new_group(1);group.enabled=true;group.source={kind="scale_slot",scale_slot=2}
+  group.roles.bass=exact_role(50);song.voicing={schema_version=1,groups={[1]=group}}
+  song.channels[1].voicing=harmony_config.new_channel("ensemble");song.channels[1].voicing.group_id=1
+  step.handle(1,1)
+  luaunit.assert_equals(midi_note_on_events[1][1],50)
 end
 
 function test_harmony_playback_missing_ensemble_group_obeys_explicit_fallback()

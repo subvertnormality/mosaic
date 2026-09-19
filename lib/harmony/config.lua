@@ -8,6 +8,16 @@ local bass_modes = {root = true, inversion = true, smooth = true, pedal = true}
 local directions = {nearest = true, ascending = true, descending = true}
 local pattern_roles = {bass = true, inner1 = true, inner2 = true, inner3 = true, top = true}
 
+local function channel_has_chord_source(channel,index)
+  local names={"chord_one_mask","chord_two_mask","chord_three_mask","chord_four_mask"}
+  local value=channel[names[index]]
+  if value and value~=0 then return true end
+  for _,masks in pairs(channel.step_chord_masks or{})do
+    if masks[index]and masks[index]~=0 then return true end
+  end
+  return false
+end
+
 local function integer(value, low, high)
   return type(value) == "number" and value == value and value % 1 == 0 and
     value >= low and value <= high
@@ -214,8 +224,7 @@ local function validate_channel(number, channel, groups)
   if value.bass.mode == "inversion" then
     local tone=value.bass.tone_id
     local index=type(tone)=="string"and tonumber(tone:match("^chord(%d+)$"))
-    local masks={channel.chord_one_mask,channel.chord_two_mask,channel.chord_three_mask,channel.chord_four_mask}
-    if tone~="root"and(not index or not masks[index]or masks[index]==0)then return nil,prefix.." bass tone"end
+    if tone~="root"and(not index or not channel_has_chord_source(channel,index))then return nil,prefix.." bass tone"end
   end
   if type(value.pattern_maps) ~= "table" then return nil, prefix .. " pattern maps" end
   for binding, map in pairs(value.pattern_maps) do

@@ -95,6 +95,15 @@ function test_harmony_state_config_change_invalidates_frame_without_relabelling_
   luaunit.assert_equals(changed.pitches, {48})
 end
 
+function test_harmony_state_delayed_old_generation_cannot_rollback_latest_prepared_frame()
+  harmony_state.reset();local song={};local channel=config.new_channel("revoice")
+  local old=harmony_state.prepare_revoice(song,1,"old",material({{"root",0}}),channel)
+  local latest=harmony_state.prepare_revoice(song,1,"latest",material({{"root",2}}),channel)
+  luaunit.assert_false(harmony_state.consume_revoice(song,1,old))
+  luaunit.assert_true(harmony_state.consume_revoice(song,1,latest))
+  luaunit.assert_equals(harmony_state.snapshot(song).channels[1].consumed_revision,"latest")
+end
+
 function test_harmony_state_anchor_and_continue_song_entry_are_explicit()
   harmony_state.reset()
   local previous={channels={},voicing={schema_version=1,groups={}}}

@@ -30,6 +30,7 @@ local delay_queue
 local batching = false
 local batches = {}
 local batch_devices = {}
+local batch_callbacks = {}
 
 function m_midi.begin_output_batch()
   m_midi.flush_output_batch()
@@ -56,6 +57,8 @@ function m_midi.flush_output_batch(stop)
     local probe = _G.mosaic_pulse_probe
     if probe then probe:record(4, probe.pulse, i, 0, 1, #bytes, 1) end
     device:send(bytes)
+    local callbacks=batch_callbacks[device];batch_callbacks[device]=nil
+    for _,callback in ipairs(callbacks or{})do callback()end
     if probe then probe:record(4, probe.pulse, i, 0, 2, #bytes, 1) end
   end
   if stop then
@@ -64,7 +67,7 @@ function m_midi.flush_output_batch(stop)
   end
 end
 
-function m_midi.send_three(port, status, data1, data2)
+function m_midi.send_three(port, status, data1, data2, on_emitted)
   local device = device_for_bytes(port)
   if not device then return false end
   if batching then
@@ -76,12 +79,17 @@ function m_midi.send_three(port, status, data1, data2)
     end
     local n = #bytes
     bytes[n + 1], bytes[n + 2], bytes[n + 3] = status, data1, data2
+    if on_emitted then
+      batch_callbacks[device]=batch_callbacks[device]or{}
+      batch_callbacks[device][#batch_callbacks[device]+1]=on_emitted
+    end
     return true
   end
   wire_bytes[1], wire_bytes[2], wire_bytes[3] = status, data1, data2
   local probe = _G.mosaic_pulse_probe
   if probe then probe:record(4, probe.pulse, 0, 0, 1, 3, 1) end
   device:send(wire_bytes)
+  if on_emitted then on_emitted() end
   if probe then probe:record(4, probe.pulse, 0, 0, 2, 3, 1) end
   return true
 end
@@ -107,10 +115,11 @@ local function emit(message)
   if port.device ~= message.device then return end
   if message.method then
     m_midi.flush_output_batch()
-    message.method(port,table.unpack(message.args))
-  elseif not m_midi.send_three(port,message.status,message.note,message.velocity) then
+    message.method(port,table.unpack(message.args));if message.on_emitted then message.on_emitted()end
+  elseif not m_midi.send_three(port,message.status,message.note,message.velocity,message.on_emitted) then
     m_midi.flush_output_batch()
     port[message.kind](port,message.note,message.velocity,message.channel)
+    if message.on_emitted then message.on_emitted()end
   end
 end
 local function queue(ms,message)
@@ -178,12 +187,12 @@ function m_midi.hold_parameter(due, port, status, data1, data2, channel)
     velocity=data2, channel=channel, status=status})
 end
 
-local function delayed_note(ms,port,kind,note,velocity,channel)
+local function delayed_note(ms,port,kind,note,velocity,channel,on_emitted)
   -- Under pulse-advance a note is never delayed: its lead comes from the locks
   -- having left earlier, so the note keeps the timing it has at lead 0.
   if not ms or ms==0 or lock_contract=="pulse-advance" then return false end
   local due=queue(ms,{port=port,device=port.device,kind=kind,note=note,velocity=velocity or 100,
-    channel=channel,status=(kind=="note_on" and 0x90 or 0x80)+(channel or 1)-1})
+    channel=channel,status=(kind=="note_on" and 0x90 or 0x80)+(channel or 1)-1,on_emitted=on_emitted})
   if kind=="note_on" then remember(last_note_due, port, channel or 1, due) end
   return true
 end
@@ -245,6 +254,7 @@ function m_midi.cleanup()
 end
 
 midi_devices = {}
+function m_midi.has_device(device)return midi_devices[device]~=nil end
 m_midi.note_counts = {}  -- Initialize note counts table
 
 local chord_number = 0
@@ -299,7 +309,7 @@ function m_midi:reset_note_counts()
 end
 
 
-function m_midi:note_on(note, velocity, channel, device, lead_time_ms)
+function m_midi:note_on(note, velocity, channel, device, lead_time_ms, on_emitted)
   if lead_time_ms == nil then lead_time_ms=m_midi.get_lead_time() end
   if midi_devices[device] ~= nil then
     -- Composed scale/chord/merge/octave operations may exceed MIDI's
@@ -321,9 +331,10 @@ function m_midi:note_on(note, velocity, channel, device, lead_time_ms)
 
     -- Send the Note On message
     local port = midi_devices[device]
-    if not delayed_note(lead_time_ms, port, "note_on", note, velocity, channel) and not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100) then
+    if not delayed_note(lead_time_ms, port, "note_on", note, velocity, channel,on_emitted) and not m_midi.send_three(port, 0x90 + (channel or 1) - 1, note, velocity or 100,on_emitted) then
       m_midi.flush_output_batch()
       port:note_on(note, velocity, channel)
+      if on_emitted then on_emitted()end
     end
     return true
   end

@@ -63,3 +63,10 @@ function test_harmony_pattern_binding_includes_foundation_pitch_identity()
   c.musical_merge.target.degrees = {1,4,5}
   luaunit.assert_not_equals(runtime.binding_key(c), first)
 end
+
+function test_harmony_pattern_same_identity_with_conflicting_upstream_pitch_fails_closed()
+  local c=channel();c.pattern_maps.b={schema_version=1,revision=1,assignments={["0"]="bass"}}
+  local result=runtime.prepare({},1,"source","b",{[0]=60},c,{[0]=true})
+  luaunit.assert_equals(result.status,"source_conflict")
+  luaunit.assert_nil(runtime.pitch_for(result,0,60))
+end

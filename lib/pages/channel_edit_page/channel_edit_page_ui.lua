@@ -263,7 +263,8 @@ local notes_page = page:new("Note Dashboard", function()
     screen.text("SRC"..tostring(snapshot.planned.source or "-").." M"..tostring(snapshot.planned.merge or "-")..
       " S"..tostring(snapshot.planned.scale or "-").." H"..tostring(snapshot.planned.harmony or "-"))
     screen.level(4);screen.move(2,63)
-    screen.text("P"..tostring(snapshot.planned.output or "-").." S"..tostring(pitch(snapshot.scheduled)).." E"..tostring(pitch(snapshot.emitted)))
+    local bypass=snapshot.planned.bypass and(" B:"..tostring(snapshot.planned.bypass))or""
+    screen.text("P"..tostring(snapshot.planned.output or "-").." S"..tostring(pitch(snapshot.scheduled)).." E"..tostring(pitch(snapshot.emitted))..bypass)
   end
 end)
 

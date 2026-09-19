@@ -109,6 +109,6 @@ function test_harmony_config_inversion_accepts_only_material_that_can_exist()
   local value=config.new_channel("revoice");value.bass.mode="inversion";value.bass.tone_id="chord3"
   song.channels[1].voicing=value
   luaunit.assert_equals(({config.validate_song(song)})[2],"channel 1 bass tone")
-  song.channels[1].chord_three_mask=7
+  song.channels[1].step_chord_masks={[4]={[3]=7}}
   luaunit.assert_true(config.validate_song(song))
 end

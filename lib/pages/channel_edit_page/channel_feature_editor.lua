@@ -159,7 +159,7 @@ function editor.new(kind)
       local f=self.channel.working_pattern and self.channel.working_pattern.foundation
       return{editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{min=1,max=64}),
         readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end),
-        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"PLAYED"end),action("Reason","M08")}
+        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"LEGACY"end),action("Reason","M08")}
     elseif self.screen=="M08"then
       local f=self.channel.working_pattern and self.channel.working_pattern.foundation
       return{readonly("Step",function()return self.selected_step end),readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end),
@@ -192,7 +192,13 @@ function editor.new(kind)
     end
     local values={"root"};local masks={self.channel.chord_one_mask,self.channel.chord_two_mask,
       self.channel.chord_three_mask,self.channel.chord_four_mask}
-    for index=1,4 do local offset=masks[index];if offset and offset~=0 then values[#values+1]="chord"..index end end
+    for index=1,4 do
+      local present=masks[index]and masks[index]~=0
+      for _,step_masks in pairs(self.channel.step_chord_masks or{})do
+        if step_masks[index]and step_masks[index]~=0 then present=true break end
+      end
+      if present then values[#values+1]="chord"..index end
+    end
     return values
   end
 
@@ -203,11 +209,13 @@ function editor.new(kind)
       local function in_owner(action_options)
         action_options=action_options or{};action_options.before=function()select_ensemble_group(value)end;return action_options
       end
-      local fields={
-      editable("Mode",function()return value.mode end,function(v)local prior=value.mode;value.mode=v;if v=="pattern"then if prior=="off"then value.crossing=true end;value.bass.mode="smooth";value.bass.non_chord_pedal=false end end,{values={"off","revoice","pattern","ensemble"}}),
-      editable("Group",function()return value.group_id or 0 end,function(v)value.group_id=v==0 and nil or v end,{min=0,max=16}),
-      editable("Preset",function()return ensemble and ensemble.preset or value.preset end,
-        function(v)if ensemble then ensemble.preset=v else value.preset=v end end,{values={"smooth","compact","independent"}})}
+      local fields={editable("Mode",function()return value.mode end,function(v)local prior=value.mode;value.mode=v;if v=="pattern"then if prior=="off"then value.crossing=true end;value.bass.mode="smooth";value.bass.non_chord_pedal=false end end,{values={"off","revoice","pattern","ensemble"}})}
+      if value.mode=="ensemble"then
+        fields[#fields+1]=editable("Group",function()return value.group_id or 0 end,function(v)value.group_id=v==0 and nil or v end,{min=0,max=16})
+      else fields[#fields+1]=readonly("Group",function()return"NOT USED"end)end
+      if value.mode=="off"then fields[#fields+1]=readonly("Preset",function()return"NOT USED"end)
+      else fields[#fields+1]=editable("Preset",function()return ensemble and ensemble.preset or value.preset end,
+        function(v)if ensemble then ensemble.preset=v else value.preset=v end end,{values={"smooth","compact","independent"}})end
       if value.mode=="pattern"then fields[#fields+1]=action("Tone Map","TONE_MAP")end
       fields[#fields+1]=action("Register","H02",in_owner())
       fields[#fields+1]=action("Bass","H03",in_owner())
@@ -275,13 +283,19 @@ function editor.new(kind)
       for _,member in ipairs(g.members)do fields[#fields+1]=editable(member.role,function()return member.channel or 0 end,function(v)member.channel=v==0 and nil or v end,{min=0,max=16})end
       fields[#fields+1]=editable("Group enabled",function()return g.enabled end,function(v)g.enabled=v end,{boolean=true});return fields
     elseif self.screen=="H08"then
-      local policy=self.context_group and group()or value;return{
-        editable("Crossing",function()return policy.crossing end,function(v)policy.crossing=v end,{boolean=true}),
-        editable("Pitch-class doubling",function()return policy.pitch_class_doubling~=false end,function(v)policy.pitch_class_doubling=v end,{boolean=true}),
+      local policy=self.context_group and group()or value;local fields={
+        editable("Crossing",function()return policy.crossing end,function(v)policy.crossing=v end,{boolean=true})}
+      if self.context_group then fields[#fields+1]=editable("Pitch-class doubling",function()return policy.pitch_class_doubling~=false end,function(v)policy.pitch_class_doubling=v end,{boolean=true})
+      else fields[#fields+1]=readonly("Pitch-class doubling",function()return"FIXED INPUT"end)end
+      local tail={
         editable("Exact unison",function()return policy.exact_unison end,function(v)policy.exact_unison=v end,{boolean=true}),
         editable("Common tones",function()return policy.common_tone_priority end,function(v)policy.common_tone_priority=v end,{boolean=true}),
         editable("Upper spacing",function()return policy.upper_spacing or 12 end,function(v)policy.upper_spacing=v end,{min=0,max=127}),
-        editable("Bass separation",function()return policy.bass_separation or 5 end,function(v)policy.bass_separation=v end,{min=0,max=127}),action("Coverage","H10")}
+        editable("Bass separation",function()return policy.bass_separation or 5 end,function(v)policy.bass_separation=v end,{min=0,max=127})}
+      for _,field in ipairs(tail)do fields[#fields+1]=field end
+      if self.context_group then fields[#fields+1]=action("Coverage","H10")
+      else fields[#fields+1]=readonly("Coverage",function()return"FIXED INPUT"end)end
+      return fields
     elseif self.screen=="H09"then local policy=self.context_group and group()or value;local fields={readonly("Start",function()return"ANCHOR"end),
       editable("Song transition",function()return policy.transition end,function(v)policy.transition=v end,{values={"anchor","continue"}}),
       editable("Same-slot repeat",function()return policy.repeat_policy end,function(v)policy.repeat_policy=v end,{values={"continue","anchor"}}),
@@ -315,23 +329,29 @@ function editor.new(kind)
           mark_dirty();back()
         end})}
     elseif self.screen=="H05"then
-      local snapshot=harmony_state.snapshot(self.song);local selected_group=self.context_group and group()
-      local result=selected_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
-      local inspection_channel=self.channel_number
-      if selected_group and selected_group.members and selected_group.members[1]then inspection_channel=selected_group.members[1].channel end
-      local trace=harmony_inspection.snapshot(self.song,inspection_channel)
+      local snapshot=harmony_state.snapshot(self.song)
+      local active_song=harmony_config_state.effective_song(self.song,self.song.voicing or{schema_version=1,groups={}})
+      local selected_group=self.context_group and active_song.groups[self.selected_group]
+      local result;if self.context_group then result=(snapshot.groups[self.selected_group]or{}).prepared
+      else result=(snapshot.channels[self.channel_number]or{}).prepared end
+      local traces={};if selected_group then for _,member in ipairs(selected_group.members or{})do traces[#traces+1]={channel=member.channel,role=member.role,trace=harmony_inspection.snapshot(self.song,member.channel)}end
+      else traces[1]={channel=self.channel_number,trace=harmony_inspection.snapshot(self.song,self.channel_number)}end
       local fields={readonly("Status",function()
-        if trace.planned and trace.planned.bypass then return"BYPASS "..tostring(trace.planned.bypass)end
+        for _,entry in ipairs(traces)do if entry.trace.planned and entry.trace.planned.bypass then return"BYPASS "..tostring(entry.trace.planned.bypass)end end
         if not result then return"NO RESULT"end
         return result.status=="ok"and"OK"or"NO VOICING"
       end)}
       if result and result.role_pitches then for role,pitch in pairs(result.role_pitches)do local p=pitch;fields[#fields+1]=readonly(role,function()return p end)end end
-      fields[#fields+1]=readonly("Planned",function()return trace.planned and trace.planned.output end)
-      fields[#fields+1]=readonly("Last",function()return trace.emitted and trace.emitted.pitch end)
+      for _,entry in ipairs(traces)do local item=entry
+        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." planned",function()return item.trace.planned and item.trace.planned.output end)
+        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." emitted",function()return item.trace.emitted and item.trace.emitted.pitch end)
+      end
       if result and result.status~="ok"then fields[#fields+1]=action("Failure details","H06")end;return fields
     elseif self.screen=="H06"then
-      local snapshot=harmony_state.snapshot(self.song);local selected_group=self.context_group and group()
-      local result=selected_group and (snapshot.groups[self.selected_group]or{}).prepared or(snapshot.channels[self.channel_number]or{}).prepared
+      local snapshot=harmony_state.snapshot(self.song);local active_song=harmony_config_state.effective_song(self.song,self.song.voicing or{schema_version=1,groups={}})
+      local selected_group=self.context_group and active_song.groups[self.selected_group]
+      local result;if self.context_group then result=(snapshot.groups[self.selected_group]or{}).prepared
+      else result=(snapshot.channels[self.channel_number]or{}).prepared end
       return{readonly("Reason",function()return result and result.reason or"NO VOICING"end),
         readonly("Fallback",function()return selected_group and selected_group.fallback or value.fallback end),action("Settings","H02")}
     end;return{}

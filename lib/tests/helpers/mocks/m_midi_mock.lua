@@ -1,5 +1,6 @@
 m_midi = {}
 m_midi.start = function() end
+m_midi.has_device = function() return true end
 
 -- The lock lead contract and lead time, so tests can exercise lookahead. The
 -- production module owns these; the mock only has to answer the same questions.
@@ -19,9 +20,11 @@ local function log(kind, a, b, c)
   table.insert(midi_event_log, {kind = kind, a = a, b = b, c = c, pulse = transport})
 end
 
-function m_midi:note_on(note, velocity, channel, device)
+function m_midi:note_on(note, velocity, channel, device, _, on_emitted)
   table.insert(midi_note_on_events, {note, velocity, channel, device})
   log("note_on", note, velocity, channel)
+  if on_emitted then on_emitted()end
+  return true
 end
 
 function m_midi:note_off(note, velocity, channel, device)

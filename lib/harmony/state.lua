@@ -160,6 +160,7 @@ end
 
 local function consume(record, result)
   if not record or not result or result.status ~= "ok" then return false end
+  if record.prepared and result.generation ~= record.prepared.generation then return false end
   if record.consumed_key == result.cache_key then return false end
   if record.consumed_generation and (result.generation or 0)<record.consumed_generation then return false end
   record.consumed = deep_copy(result)

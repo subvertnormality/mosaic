@@ -279,7 +279,7 @@ function test_merge_selecting_custom_preserves_existing_cycle_percentages()
 end
 
 function test_harmony_revoice_bass_tones_are_actual_source_ids()
-  local _,channel=setup();channel.chord_one_mask=4;channel.chord_three_mask=7
+  local _,channel=setup();channel.chord_one_mask=4;channel.step_chord_masks[9]={[3]=7}
   local value=feature_editor.new("harmony");value:enter();value.draft.mode="revoice";value.draft.bass.mode="inversion"
   open_label(value,"Bass");select_label(value,"Tone")
   local field=value:get_fields()[value.selected]
