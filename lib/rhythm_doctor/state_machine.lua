@@ -1,6 +1,6 @@
 -- Job ownership and lifecycle only.  Host capture/worker/save actions are
 -- injected callbacks so UI integration can keep this module deterministic.
-local Bank = require("rhythm_doctor.bank")
+local Bank = type(include) == "function" and include("mosaic/lib/rhythm_doctor/bank") or require("rhythm_doctor.bank")
 local Machine = {
   EMPTY = "EMPTY", LISTENING = "LISTENING", RECORDING = "RECORDING",
   ANALYSING = "ANALYSING", ALIGNMENT_REQUIRED = "ALIGNMENT_REQUIRED",

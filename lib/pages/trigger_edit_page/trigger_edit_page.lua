@@ -97,7 +97,8 @@ function trigger_edit_page.register_draws()
     "trigger_edit_page",
     function()
       if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
-      grid_abstraction.led(1, 2, rhythm_doctor and 15 or 4)
+      local model = rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
+      grid_abstraction.led(1, 2, model and model.worker_ready and 15 or 4)
       local lanes = {"BD", "SD", "HH", "TOM", "BASS"}
       for index, lane in ipairs(lanes) do grid_abstraction.led(index + 2, 2, lane == rhythm_doctor_lane and 15 or 4) end
       grid_abstraction.led(2, 2, 0) -- reserved: never an old fader side effect
@@ -342,9 +343,12 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_algorithm_fader:get_value() == 5 and y == 2 and x >= 3 and x <= 7 then
-        rhythm_doctor_lane = ({"BD", "SD", "HH", "TOM", "BASS"})[x - 2]
-        if rhythm_doctor and rhythm_doctor.select_lane then rhythm_doctor:select_lane(rhythm_doctor_lane) end
-        tooltip:show(rhythm_doctor_lane .. " selected")
+        local selected = ({"BD", "SD", "HH", "TOM", "BASS"})[x - 2]
+        local accepted = not rhythm_doctor or not rhythm_doctor.select_lane or rhythm_doctor:select_lane(selected)
+        if not accepted or accepted.code == "LANE_SELECTED" then
+          rhythm_doctor_lane = selected
+          tooltip:show(rhythm_doctor_lane .. " selected")
+        elseif accepted.code == "STOP_SEQUENCER" then tooltip:show("STOP SEQUENCER") end
       end
     end
   )
@@ -517,7 +521,17 @@ end
 
 function trigger_edit_page.get_algorithm() return trigger_edit_page_algorithm_fader:get_value() end
 function trigger_edit_page.get_rhythm_doctor_lane() return rhythm_doctor_lane end
+function trigger_edit_page.get_rhythm_doctor_model()
+  return rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
+end
 function trigger_edit_page.set_rhythm_doctor(value) rhythm_doctor = value end
+function trigger_edit_page.handle_rhythm_doctor_key(n, z)
+  if not rhythm_doctor or not rhythm_doctor.key then return nil end
+  return rhythm_doctor:key(n, z)
+end
+function trigger_edit_page.disconnect_rhythm_doctor()
+  if rhythm_doctor and rhythm_doctor.disconnect then rhythm_doctor:disconnect() end
+end
 
 function trigger_edit_page.refresh()
   trigger_edit_page.refresh_trigger_edit_page_ui()

@@ -44,9 +44,15 @@ local redraw_clock = nil
 local grid_redraw_clock = nil
 local scheduler_clock = nil
 local screen_keep_alive = nil
+local rhythm_doctor_poll_clock = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
 m_clock = include("mosaic/lib/clock/m_clock")
+local rhythm_doctor_runtime_module = include("mosaic/lib/rhythm_doctor/runtime")
+local rhythm_doctor_worker_host = include("mosaic/lib/rhythm_doctor/worker_host")
+local rhythm_doctor_ui_module = include("mosaic/lib/rhythm_doctor/ui_adapter")
+local rhythm_doctor_runtime = nil
+local rhythm_doctor_ui = nil
 local redraw_guard = include("mosaic/lib/clock/redraw_guard")
 pattern = include("mosaic/lib/pattern")
 m_midi = include("mosaic/lib/m_midi")
@@ -58,6 +64,40 @@ g = grid.connect()
 
 local function post_splash_init()
 
+end
+
+local function init_rhythm_doctor()
+  local worker = rhythm_doctor_worker_host.new({
+    runtime_root = norns.state.data .. "rhythm-doctor-runtime",
+    transport_factory = function(socket_path)
+      return include("mosaic/lib/rhythm_doctor/native_transport").new(socket_path)
+    end
+  })
+  rhythm_doctor_runtime = rhythm_doctor_runtime_module.new({
+    project_id = norns.state.data .. "autosave.ptn",
+    worker = worker,
+    now = util.time,
+    transport_stopped = function() return not m_clock.is_playing() end,
+    on_analysis_ready = function(_, token)
+      rhythm_doctor_runtime.machine:receive_analysis({ project_id = token.project_id,
+        generation = token.generation, analysis_revision = token.analysis_revision,
+        error = "ANALYSIS NOT INSTALLED" })
+    end
+  })
+  rhythm_doctor_ui = rhythm_doctor_ui_module.new({ runtime = rhythm_doctor_runtime,
+    transport_stopped = function() return not m_clock.is_playing() end })
+  rhythm_doctor_runtime.on_status = function(code, detail)
+    rhythm_doctor_ui:set_status(code, detail)
+    fn.dirty_grid(true); fn.dirty_screen(true)
+  end
+  trigger_edit_page.set_rhythm_doctor(rhythm_doctor_ui)
+  project.set_capture_guard(rhythm_doctor_runtime)
+  rhythm_doctor_poll_clock = clock.run(function()
+    while true do
+      clock.sleep(1/30)
+      rhythm_doctor_ui:poll()
+    end
+  end)
 end
 
 function redraw()
@@ -96,6 +136,7 @@ function init()
   math.randomseed(os.time())
   program.init()
   m_midi.init()
+  init_rhythm_doctor()
   
   grid_connected = g.device~= nil and true or false
   
@@ -211,11 +252,13 @@ function autosave_reset()
 end
 
 function clock.transport:start()
+  if rhythm_doctor_ui then rhythm_doctor_ui:transport_started() end
   m_clock:start(params:get("clock_source") == 2)
 end
 
 function clock.transport:stop()
   m_clock:stop()
+  if rhythm_doctor_ui then rhythm_doctor_ui:transport_stopped() end
 end
 
 -- -- Debug
@@ -256,5 +299,6 @@ end
 
 -- Restore script-owned vport hooks before norns loads another script.
 function cleanup()
+  if rhythm_doctor_runtime then rhythm_doctor_runtime:cleanup() end
   m_midi.cleanup()
 end

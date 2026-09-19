@@ -4,8 +4,12 @@
 -- send/poll; it is intentionally injected because spawning a local helper is
 -- host-specific.  `worker:close()` is called only after the native RELEASE
 -- acknowledgement has reached the state machine.
-local Machine = require("rhythm_doctor.state_machine")
-local Controller = require("rhythm_doctor.capture_controller")
+local function dependency(name, path)
+  if type(include) == "function" then return include(path) end
+  return require(name)
+end
+local Machine = dependency("rhythm_doctor.state_machine", "mosaic/lib/rhythm_doctor/state_machine")
+local Controller = dependency("rhythm_doctor.capture_controller", "mosaic/lib/rhythm_doctor/capture_controller")
 
 local Runtime = {}
 Runtime.__index = Runtime
@@ -41,7 +45,8 @@ function Runtime.new(deps)
   assert(type(deps.transport_stopped) == "function", "transport_stopped is required")
   local self = setmetatable({ worker = deps.worker, now = deps.now, transport_stopped = deps.transport_stopped,
     on_status = deps.on_status, on_capture_saved = deps.on_capture_saved, on_analysis_ready = deps.on_analysis_ready,
-    seconds = deps.seconds or 45, controller = nil, transport = nil, closing = false, worker_closed = false }, Runtime)
+    seconds = deps.seconds or 45, controller = nil, transport = nil, closing = false,
+    worker_closed = false, enter_requested = false }, Runtime)
   assert(type(self.seconds) == "number" and self.seconds % 1 == 0 and self.seconds >= 1 and self.seconds <= 45,
     "capture seconds must be 1..45")
   self.machine = Machine.new({ project_id = project_identity(deps.project_id),
@@ -81,6 +86,7 @@ end
 -- Called when the fifth algorithm becomes visible. It starts only the host
 -- helper connection; actual JACK preflight remains owned by begin/Record.
 function Runtime:enter()
+  self.enter_requested = true
   return self:_open()
 end
 
@@ -145,6 +151,7 @@ end
 -- One controller poll only. A release timeout deliberately does not kill the
 -- helper, since pretending a native release succeeded could race a project load.
 function Runtime:poll()
+  if self.enter_requested and not self.controller and not self.closing then self:_open() end
   local event = self.controller and self.controller:poll() or result("NO_EVENT")
   self:_close_if_released()
   return event

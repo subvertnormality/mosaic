@@ -3,6 +3,7 @@ import hashlib
 import os
 import pathlib
 import shutil
+import signal
 import socket
 import struct
 import subprocess
@@ -84,6 +85,22 @@ class CaptureWorkerIPC(unittest.TestCase):
         reply = self.exchange("RD1\tj\tp\t0\t0\tPREFLIGHT\t1,manual")
         self.assertEqual(reply[1:6], ["j", "p", "0", "0", "PREFLIGHT"])
         self.assertEqual(reply[6], "FAILED")  # no named JACK server; fail visibly without auto-start
+
+    def test_overlong_socket_path_removes_the_acquired_private_root(self):
+        parent = self.root / ("x" * 90); parent.mkdir()
+        template = str(parent / "owned-XXXXXX")
+        result = subprocess.run([str(self.binary), template, "missing:left", "missing:right"],
+                                text=True, capture_output=True, timeout=3)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("File name too long", result.stderr)
+        self.assertEqual(list(parent.glob("owned-*")), [])
+
+    def test_session_hangup_removes_socket_and_private_root(self):
+        socket_path, owned = self.launch_worker()
+        self.process.send_signal(signal.SIGHUP)
+        self.process.wait(timeout=3)
+        self.assertFalse(pathlib.Path(socket_path).exists())
+        self.assertFalse(owned.exists())
 
     def test_real_jack_pcm_publish_identity_release_and_cleanup(self):
         self.start_jack()

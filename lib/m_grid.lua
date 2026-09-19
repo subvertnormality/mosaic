@@ -299,6 +299,7 @@ function m_grid.init()
       claimed_keys[key_id] = nil
       press:handle_post(program.get_selected_page(), key[1], key[2])
     end
+    if trigger_edit_page and trigger_edit_page.disconnect_rhythm_doctor then trigger_edit_page.disconnect_rhythm_doctor() end
     dual_in_progress = false
     m_grid.alert_disconnect()
   end

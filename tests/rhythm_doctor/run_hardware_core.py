@@ -13,10 +13,15 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[2]
 FILES = ["lib/rhythm_doctor/" + name + ".lua" for name in
-         ("bank", "state_machine", "paint", "paint_journal", "assets", "capture_controller")]
+         ("bank", "state_machine", "paint", "paint_journal", "assets", "capture_controller",
+          "runtime", "ui_adapter", "worker_host")]
+FILES.append("lib/project_lifecycle.lua")
+FILES.extend(("lib/pages/trigger_edit_page/trigger_edit_page.lua",
+              "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua"))
 TESTS = ["tests/rhythm_doctor/test_" + name + ".lua" for name in
          ("core", "integration", "lifecycle", "journal", "bank_schema", "paint_boundaries",
-          "capture_transitions", "assets", "capture_controller")]
+          "capture_transitions", "assets", "capture_controller", "runtime",
+          "project_lifecycle_runtime", "ui_adapter", "worker_host", "app_surface")]
 
 
 def main():
@@ -41,6 +46,7 @@ def main():
     checked("test ! -e /home/we/.cache/mosaic-real-norns/active")
     device = checked("uname -sm; lua -v 2>&1")
     checked("mkdir -p " + shlex.quote(remote + "/lib/rhythm_doctor") + " " +
+            shlex.quote(remote + "/lib/pages/trigger_edit_page") + " " +
             shlex.quote(remote + "/tests/rhythm_doctor"))
     identities, results = {}, []
     try:
@@ -65,7 +71,8 @@ def main():
         for relative in FILES + TESTS:
             checked("rm -f " + shlex.quote(remote + "/" + relative))
         checked("rmdir " + " ".join(shlex.quote(remote + suffix) for suffix in
-                ("/lib/rhythm_doctor", "/tests/rhythm_doctor", "/lib", "/tests", "")))
+                ("/lib/rhythm_doctor", "/lib/pages/trigger_edit_page", "/lib/pages",
+                 "/tests/rhythm_doctor", "/lib", "/tests", "")))
     report = dict(run_id=run_id, profile="physical-norns", device=device,
                   source_sha256=identities, tests=results,
                   passed=len(results) == len(TESTS) and all(r["exit_code"] == 0 for r in results),

@@ -50,6 +50,21 @@ test('failed worker startup cannot put the machine into a capture state', functi
   equal(runtime.machine.state, 'EMPTY')
 end)
 
+test('mode entry retries a background worker from bounded polls', function()
+  local socket, opens = transport(), 0
+  local worker = { open = function()
+    opens = opens + 1
+    if opens < 3 then return nil, 'worker starting' end
+    return socket
+  end }
+  local runtime = Runtime.new({ project_id = 'project-a', worker = worker, now = function() return 0 end,
+    transport_stopped = function() return true end })
+  equal(runtime:enter().code, 'WORKER_UNAVAILABLE')
+  runtime:poll(); equal(runtime.machine.state, 'EMPTY')
+  runtime:poll(); equal(opens, 3)
+  check(runtime:start_capture('manual').ok)
+end)
+
 test('cleanup waits for native release acknowledgement before closing worker', function()
   local runtime, socket, worker = context()
   runtime:start_capture('manual')

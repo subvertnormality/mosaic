@@ -1,0 +1,9 @@
+test_keeps_single_class_event_with_no_nearby_drum_onset (test_nmf_template.NmfTemplateTests) ... ok
+test_rejects_other_lane_inside_symmetric_isolation_window (test_nmf_template.NmfTemplateTests) ... ok
+test_requires_preceding_tail_gap_but_preserves_same_lane_when_clear (test_nmf_template.NmfTemplateTests) ... ok
+test_unmapped_drum_onsets_cannot_make_a_template_isolated (test_nmf_template.NmfTemplateTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+OK

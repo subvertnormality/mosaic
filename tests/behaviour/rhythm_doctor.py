@@ -38,6 +38,14 @@ def fifth_algorithm(c):
         raise AssertionError("RD-04: fifth algorithm button must display RHYTHM DOCTOR") from error
     c.results.append(dict(kind="screen-header", expected="RHYTHM DOCTOR", matched=True,
                           contract="PLAN.md User contract and coordinate convention"))
+    c.led_values([(2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2)],
+                 [0, 15, 4, 4, 4, 4])
+    c.results.append(dict(kind="rhythm-doctor-lanes", selected="BD", reserved_column=0,
+                          contract="PLAN.md: x2 reserved; x3..7 select BD/SD/HH/TOM/BASS"))
+    c.tap(7, 2)
+    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 4, 4, 15])
+    c.results.append(dict(kind="rhythm-doctor-lane-selection", selected="BASS",
+                          contract="PLAN.md: BASS is native x7,y2"))
 
 
 def main():

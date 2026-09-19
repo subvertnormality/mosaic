@@ -179,12 +179,19 @@ static int report_terminal(struct worker *worker) {
 }
 static int setup_server(struct worker *worker, char *root_template) {
   char *root = mkdtemp(root_template); if (!root || chmod(root, 0700)) return -1;
-  if (strlen(root) + 13 >= sizeof(worker->socket_path)) return -1;
+  if (strlen(root) + 13 >= sizeof(worker->socket_path)) { errno = ENAMETOOLONG; goto fail; }
   strcpy(worker->root, root); snprintf(worker->socket_path, sizeof(worker->socket_path), "%s/worker.sock", root);
-  worker->server = socket(AF_UNIX, SOCK_SEQPACKET, 0); if (worker->server < 0) return -1;
+  worker->server = socket(AF_UNIX, SOCK_SEQPACKET, 0); if (worker->server < 0) goto fail;
   struct sockaddr_un address; memset(&address, 0, sizeof(address)); address.sun_family = AF_UNIX; strcpy(address.sun_path, worker->socket_path);
-  if (bind(worker->server, (struct sockaddr *)&address, sizeof(address)) || chmod(worker->socket_path, 0600) || listen(worker->server, 1)) return -1;
+  if (bind(worker->server, (struct sockaddr *)&address, sizeof(address)) || chmod(worker->socket_path, 0600) || listen(worker->server, 1)) goto fail;
   printf("%s\n", worker->socket_path); fflush(stdout); return 0;
+fail: {
+    int problem = errno;
+    if (*worker->socket_path) unlink(worker->socket_path);
+    if (worker->server >= 0) { close(worker->server); worker->server = -1; }
+    rmdir(root); worker->root[0] = worker->socket_path[0] = '\0';
+    errno = problem; return -1;
+  }
 }
 int main(int argc, char **argv) {
   if (argc != 4 || strlen(argv[2]) >= sizeof(((struct worker *)0)->left_source) || strlen(argv[3]) >= sizeof(((struct worker *)0)->right_source)) {
@@ -192,7 +199,7 @@ int main(int argc, char **argv) {
   }
   struct worker worker; memset(&worker, 0, sizeof(worker)); worker.server = worker.peer = -1; worker.running = 1;
   strcpy(worker.left_source, argv[2]); strcpy(worker.right_source, argv[3]);
-  signal(SIGINT, on_signal); signal(SIGTERM, on_signal); signal(SIGPIPE, SIG_IGN);
+  signal(SIGINT, on_signal); signal(SIGTERM, on_signal); signal(SIGHUP, on_signal); signal(SIGPIPE, SIG_IGN);
   if (setup_server(&worker, argv[1])) { perror("worker setup"); return 1; }
   worker.peer = accept(worker.server, NULL, NULL); if (worker.peer < 0) worker.running = 0;
   while (worker.running && !interrupted) {
