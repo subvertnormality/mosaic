@@ -6,7 +6,7 @@ Mosaic pattern, or save projects. RD-02 remains the empirical tempo/classifier
 gate; callers pass already-detected candidates to `bank.build`.
 
 `bank.build(args)` accepts authoritative `sample_rate`, capture/origin sample
-indices, 40–240 BPM and five-lane candidates with `sample_index`, `velocity` and
+indices, 40â€“240 BPM and five-lane candidates with `sample_index`, `velocity` and
 `confidence`. It returns a serializable bank with retained candidates and one
 quantised timeline cell per candidate. `bank.with_sensitivity`, `window`,
 `move_window` and `with_window_start` are copy-returning view operations. A view
@@ -43,3 +43,7 @@ returns `PATTERN_CHANGED` and never overwrites the source.
 
 `with_window_start` returns a new small bank header that shares immutable
 candidate/timeline storage with the prior bank. Do not mutate those shared arrays.
+
+The journal limit is global across all source targets. When a new transaction
+exceeds it, the least recently changed other target history is evicted. Pending
+tokens retain a session-wide generation and cannot act on recreated histories.

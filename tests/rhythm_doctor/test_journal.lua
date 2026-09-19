@@ -16,3 +16,23 @@ assert(Journal.prepare_undo(journal, target, 4).code == 'NO_UNDO',
 local redo = Journal.prepare_redo(journal, target, 4)
 assert(redo.snapshot.v == 10)
 print('rhythm_doctor journal: intervening-edit transaction passed')
+
+-- PLAN.md bounded session journal: the bound applies across source targets,
+-- not independently to every pattern ever visited. Oldest target is evicted.
+local bounded = Journal.new(2)
+local targets = {}
+for id=1,3 do
+  targets[id] = {project_id='p', song_slot=1, pattern_id=id}
+  assert(Journal.record(bounded, targets[id], {v=0}, {v=id}, id, 0))
+end
+assert(Journal.prepare_undo(bounded, targets[1], 1).code == 'NO_UNDO',
+       'journal retained more entries than its global bound')
+assert(Journal.prepare_undo(bounded, targets[2], 2).snapshot.v == 0)
+assert(Journal.prepare_undo(bounded, targets[3], 3).snapshot.v == 0)
+-- An evicted and recreated stream must not reuse a token generation.
+local pending = Journal.prepare_undo(bounded, targets[2], 2)
+assert(Journal.record(bounded, targets[1], {v=3}, {v=4}, 4, 3))
+assert(Journal.record(bounded, targets[2], {v=4}, {v=5}, 5, 4))
+local accepted, err = Journal.complete_undo(bounded, pending, 6)
+assert(not accepted and err.code == 'STALE_JOURNAL', 'eviction reused pending token')
+print('rhythm_doctor journal: global bound and token generation passed')
