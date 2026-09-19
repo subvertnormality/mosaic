@@ -81,7 +81,8 @@ function Runtime.new(deps)
     seconds = deps.seconds or 45, controller = nil, transport = nil, closing = false,
     worker_closed = false, enter_requested = false, analysis_transport = deps.analysis_transport,
     analysis_worker = deps.analysis_worker, analysis_worker_closed = false, analysis_controller = nil,
-    paint_context = nil, paint_transactions = nil, alignment = nil }, Runtime)
+    paint_context = nil, paint_transactions = nil, alignment = nil,
+    retry_seconds = deps.retry_seconds or .25, worker_retry_at = 0, analysis_retry_at = 0 }, Runtime)
   assert(type(self.seconds) == "number" and self.seconds % 1 == 0 and self.seconds >= 1 and self.seconds <= 45,
     "capture seconds must be 1..45")
   self.machine = Machine.new({ project_id = project_identity(deps.project_id),
@@ -161,7 +162,10 @@ end
 -- helper connection; actual JACK preflight remains owned by begin/Record.
 function Runtime:enter()
   self.enter_requested = true
-  return self:_open()
+  local value = self:_open()
+  local now = self.now()
+  self.worker_retry_at, self.analysis_retry_at = now + self.retry_seconds, now + self.retry_seconds
+  return value
 end
 
 function Runtime:start_capture(mode)
@@ -329,8 +333,15 @@ end
 -- One controller poll only. A release timeout deliberately does not kill the
 -- helper, since pretending a native release succeeded could race a project load.
 function Runtime:poll()
-  if self.enter_requested and not self.controller and not self.closing then self:_open() end
-  if self.enter_requested and self.analysis_worker and not self.analysis_controller and not self.closing then self:_open_analysis_worker() end
+  local now = self.now()
+  if self.enter_requested and not self.controller and not self.closing and now >= self.worker_retry_at then
+    self.worker_retry_at = now + self.retry_seconds
+    self:_open()
+  end
+  if self.enter_requested and self.analysis_worker and not self.analysis_controller and not self.closing and now >= self.analysis_retry_at then
+    self.analysis_retry_at = now + self.retry_seconds
+    self:_open_analysis_worker()
+  end
   local event = self.controller and self.controller:poll() or result("NO_EVENT")
   local analysis_event = self.analysis_controller and self.analysis_controller:poll() or result("NO_EVENT")
   self:_close_if_released()

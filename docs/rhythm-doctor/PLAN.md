@@ -48,9 +48,10 @@ the requested bass-instrument lane. [Demucs](https://github.com/facebookresearch
 offers drum/bass separation but requires independent latency/memory validation.
 [Basic Pitch](https://github.com/spotify/basic-pitch) is a candidate for pitched
 onsets on an isolated bass signal, not an assumed mixed-audio instrument classifier.
-These are alternatives to benchmark; no package/model is yet selected or licensed
-for redistribution by this plan. Freeze code, weights, licenses and dependencies
-before any installation in a delivery candidate.
+The proposed pretrained chain is described in `DETECTOR.md`: Omnizart raw heads
+for BD/SD/CHH/OHH and Open-Unmix plus Basic Pitch for BASS. It remains
+gate-blocked rather than delivery-selected: freeze the exact checkpoint manifests,
+hashes, licences and dependencies before any installation or redistribution.
 
 [Aubio's tempo interface](https://aubio.org/doc/0.4.4/tempo_8h.html) provides
 streaming beat positions, BPM and confidence and is a candidate for the acquisition
@@ -269,16 +270,29 @@ cheap percussion features improve acquisition without requiring that separation.
 Stereo preprocessing uses per-channel features or energy combination; avoid
 blind L+R cancellation of opposite-phase inputs.
 
-Benchmark two approaches: (A) lightweight multiband/onset features plus a compact
-multilabel classifier and dedicated harmonic bass-onset detector; (B) model-based
-drum transcription and bass separation/onset analysis. Overlapping instruments
+Use a pretrained-first architecture.  Do not train, fine-tune, transfer-learn or
+learn a classifier/output head for Rhythm Doctor.  The candidate worker takes
+immutable captured PCM and runs the published Omnizart `drum_keras` ONNX
+candidate. Its raw heads may map 0/1/4/6 to BD/SD/CHH/OHH only after a fixed-audio
+parity test establishes that its tensor order matches the source Keras model;
+the stock writer's combined-HH output is insufficient. A separate frozen
+Open-Unmix UMXHQ BASS separator feeds frozen Basic Pitch TFLite, constrained to
+the bass range, for BASS attacks. This has a source-defined target label mapping
+but is not yet a standalone-norns selection: the drum checkpoint's licence/hash,
+Keras/ONNX parity and every ARM runtime measurement remain release blockers.
+`DETECTOR.md` records the exact model comparison, source links, sizes, licence
+status, adapter mapping and gates.
+
+Run all model work in a bounded owned worker after capture; Lua's UI/event thread
+and audio callback only manage bounded PCM and state. Overlapping instruments
 require multilabel output. Detector probabilities are not velocities. Estimate
 velocity from attributed attack energy using a versioned mapping to 1..127,
 calibrated across the capture/lane rather than normalised independently per window;
 keep confidence separate. Silence produces empty lanes without invented hits.
 Clipping/no input and uncertain results are visible. Per-lane sensitivity changes
 filter retained candidates and regenerate previews without recapturing; thresholds
-and velocity mapping are frozen after validation, not tuned on acceptance clips.
+and velocity mapping are selected on development data then frozen before held-out
+acceptance; they may not be retuned per capture or on acceptance clips.
 
 Local norns operation is the primary product objective. A local-computer worker
 is a separately named optional profile if useful: explicitly paired, opt-in,
@@ -493,7 +507,7 @@ RD-06. No manually operated hardware or listening certification is introduced.
 | Card | Work and dependencies | Exit evidence |
 |---|---|---|
 | RD-01 Source and capture spike | Freeze live code hashes, native coordinates/dispatch, paint/history, clock/sample alignment, official capture route and resource ownership. | PCM injected and captured intact without disturbing engine/softcut/tape; fifth-button mapping and all four legacy algorithm baselines; exact insertion table. |
-| RD-02 Tempo and five-lane feasibility | RD-01; freeze independent acquisition/transcription corpora for BD/SD/CHH/OHH/BASS; benchmark tempo stability/confidence, half/double candidates and region selection alongside classifier/separation choices; verify licenses/build architectures and pin artifacts. | Tempo/phase/uncertainty gates, all five active per-lane quality results, listening/tail/RSS benchmarks and supported platform envelope; failed norns premise blocks standalone claim. |
+| RD-02 Tempo and five-lane feasibility | RD-01; freeze independent acquisition/transcription corpora for BD/SD/CHH/OHH/BASS; evaluate the pinned pretrained-only raw-head drum and BASS-separation/onset worker, tempo stability/confidence, half/double candidates and region selection; record code, checkpoint manifests, hashes, licences and runtime artifacts. No training or fine-tuning. | Tempo/phase/uncertainty gates, all five active per-lane quality results, listening/tail/RSS benchmarks and supported platform envelope; missing exact checkpoint terms, a combined-HH result, failed BASS chain, or failed norns premise blocks standalone claim. |
 | RD-03 Capture bank | RD-01/02; implement bounded audio/timeline storage, Finish eligibility, bank schema, state machine, save inhibition/deferred autosave, project assets/save/load and late-result rejection. | No input, silence, full/disk error, 45-second cap, overflow, cancel/clear, duplicate press, manual/autosave under active jobs with sounding n.b. and contiguous PCM, project switch/reload and interrupted-save tests; asset references safe. |
 | RD-04 Fifth algorithm UI | RD-03; native grid/norns controls, Auto/Manual listening, Finish, timeout/alignment editor, half/double/start correction, shared window scrolling, lane selection, confirmed clear and stopped-only operation; preserve algorithms 1..4. | Every mapping/modal, transport gate/Start cancellation, in-bounds correction/reanalysis, nonwrapping bar/step scrolling, release ownership and all 64 displayed cells; no redraw mutations. |
 | RD-05 Paint and velocities | RD-04; versioned window preview, shifts, Toggle/Add/Replace, source-paint journal and complete source revision checks. | Five lanes and multiple distinct/overlapping windows painted to disposable patterns, exact trig/velocity/length MIDI expectations; reachable undo/redo, stale refusal, shared-channel playback, save/reload window/values and journal reset. |

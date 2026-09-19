@@ -28,6 +28,72 @@ harness reports `acceptance_claimed: false`; it does not report a grid-F1 gate.
 Frozen BabySlakh archive SHA-256 is
 `6490dc83d8b59ccbe7e9e0304023af8e585d2065f9a5f5921952a273fac4a9b0`.
 
+## Pretrained-first decision — 2026-09-19
+
+Rhythm Doctor must use frozen pretrained inference weights.  It must not train,
+fine-tune, transfer-learn, or learn an output head as part of the product
+architecture.  A development split may select fixed peak thresholds and the
+versioned event/velocity decoder; the held partition remains untouched until
+that configuration and every artifact hash are frozen.  The earlier Candidate-A
+and ADTOF transfer experiments below are diagnostics, not the selected product
+path.
+
+The closest complete *label* fit is the published Omnizart drum checkpoint plus
+the already-published Open-Unmix and Basic Pitch bass chain.  It is a concrete
+research-worker architecture, not yet a standalone-norns selection.  In
+particular, Omnizart's normal MIDI writer merges its three hat heads before
+emitting one hi-hat lane.  The Mosaic adapter must consume the raw 13-head
+activation tensor instead: output 0 is BD, 1 is SD, 4 is CHH (GM 42), and 6 is
+OHH (GM 46).  Pedal HH (head 5 / GM 44) is discarded, never merged into either
+required lane.  This is a frozen output adapter, not retraining.  The mapping is
+defined in the upstream [label code](https://github.com/Music-and-Culture-Technology-Lab/omnizart/blob/main/omnizart/drum/labels.py);
+the stock [inference code](https://github.com/Music-and-Culture-Technology-Lab/omnizart/blob/main/omnizart/drum/inference.py)
+shows why its default three-lane MIDI output is insufficient.
+
+The source mapping establishes the Keras checkpoint's label order; it does not
+yet establish the tensor order of the separately published ONNX serialization.
+The release includes `drum_keras@model.onnx`, which is the preferred portable
+runtime candidate, but it must first pass a fixed-audio activation-parity test
+against the source-defined heads before it supplies gates.  This is a conversion
+identity check, not model training.
+
+| Component | Pretrained artifact and labels | Published size | License/provenance | Runtime and selection |
+| --- | --- | ---: | --- | --- |
+| Omnizart `drum_keras` | The source Keras model has 13 raw drum heads; source heads 0/1/4/6 map to BD/SD/CHH/OHH. The release also supplies an ONNX serialization, whose tensor order must be proven equivalent before applying that mapping. | `drum_keras@model.onnx`: 31,048,009 bytes; alternative TF variable-data shard: 31,090,686 bytes. They are alternative serializations, not additive model size. The release supplies no checksum digest. | Source is MIT. The separately hosted checkpoint artifacts have no explicit licence or checksum digest, so source terms do not establish redistribution rights for the weights. | **Best drum research candidate; blocked.** Prefer the release ONNX graph for portability, but first prove Keras/ONNX activation parity, then an ARMv7 runtime. The CQT/beat frontend, peak decoder, RSS and latency remain unmeasured. |
+| ADTOF-PyTorch | BD, SD and one HH class only; no separate CHH/OHH and no BASS. | 3,617,805 bytes. | The upstream ADTOF material is CC BY-NC-SA 4.0; the port/weight has no recorded compatible licence. | Rejected for active lanes and delivery.  Its executed old-corpus diagnostic also missed the quality gate; it remains useful only as historical evidence. |
+| Open-Unmix UMXHQ BASS | Stereo bass stem, followed by a separate onset model; it does not create drum gates. | 35,637,796 bytes. | Open-Unmix source is MIT and the official Zenodo weight record declares MIT (`evidence/umxhq-official-license.json`). | **Pinned bass-separation candidate only.** The published `.pth` uses Torch/torchaudio and a three-layer bidirectional LSTM, so it is offline analysis and has no ARMv7/RSS/latency proof. Its separate magnitude-flux diagnostic F1 was 0.6098, below the gate; that is not a Basic Pitch-chain score. |
+| Spotify Basic Pitch `nmp.tflite` | Instrument-agnostic pitched-note/onset activations; constrain its decoder to the declared bass range after separation, then retain onsets only. | 204,448 bytes. | The Basic Pitch repository is Apache-2.0 and distributes TF, TFLite and ONNX serializations together. | **Pinned BASS-onset candidate only.** It works best on one instrument at a time, so a mixture must not be sent directly to it. Existing corrected diagnostics concern the separately recorded 0.4.0 wheel/ONNX path and do not validate this TFLite serialization; no TFLite ARMv7 result exists. |
+| DrumSep/MDX and Demucs families | Separation can yield BD/SD/HH-like stems, but no cited checkpoint supplies distinct CHH/OHH gates or BASS onset. | Not adopted. | The accessible DrumSep checkpoint has no original weight licence; Demucs does not supply the required five labels. | Rejected: adding separator(s) still leaves an instrument/onset classifier and exceeds the current norns evidence budget. |
+
+The planned fixed pipeline is therefore: stereo capture -> immutable PCM ->
+the release Omnizart ONNX candidate, after its Keras-head parity gate ->
+independent BD/SD/CHH/OHH peak decoders, in parallel with Open-Unmix BASS
+separation -> Basic Pitch TFLite bass-range onsets -> the common
+timestamp/velocity/quantisation bank. No model result may be treated as a
+velocity; a versioned attack-energy mapping supplies velocity after the gates.
+All model calls occur after capture in an owned worker, never on the Lua UI or
+audio callback.
+
+This architecture has four release blockers. First, obtain a licence statement
+and SHA-256 for the exact Omnizart ONNX asset; without them there is no
+selectable legal drum weight. Second, prove Keras/ONNX raw-head parity and run
+the adapter on the frozen v11 corpus, meeting every separate
+BD/SD/CHH/OHH/BASS and stratum gate; an aggregate or combined-HH score cannot
+substitute. Third, prove an ARMv7 norns worker with model/frontend parity,
+cold/warm tail, incremental RSS and cancellation behavior. Neither
+Python/TensorFlow/Torch nor a desktop measurement is such proof. Fourth, if
+the UMXHQ/Basic-Pitch configuration misses the BASS gate, keep it as a failed
+pretrained comparison; do not replace it with a newly trained native bass model
+under this product decision.
+
+Until those gates pass, expose this only as a separately named, opt-in local
+computer research-worker profile with the same bank schema, never as local
+norns transcription.  It must not upload audio or silently fall back to a
+different model.  The primary-source observations and earlier identities are
+preserved in `evidence/candidate_b_pretrained_research_2026-09-19.json`,
+`evidence/umxhq-official-license.json`, and
+`evidence/basic_pitch_adapter_corrected_v2.json`.
+
 The completed corrected 20-second pilot is immutable at
 `tests/rhythm_doctor/artifacts/detector-pilot-corrected-v2/`, with raw
 predictions and model SHA-256
@@ -55,11 +121,13 @@ not a claim that temporal offset is the cause. The completed report predated
 the new development-offset instrumentation, so it contains no valid offset mode;
 the next bounded run must emit that diagnostic before changing feature alignment.
 
-## Candidate B comparison
+## Historical Candidate B comparison
 
-Candidate B is unproven for the bounded local norns profile; no Candidate-B
-weights were downloaded or executed. This is a gap in evidence, not a conclusion
-that model-based transcription cannot work.
+This is the original metadata-only screen, retained to preserve its decision
+context. Its statement that no Candidate-B weights were downloaded/executed was
+true at that point only; later ADTOF, Open-Unmix and Basic Pitch diagnostics are
+recorded below. It is superseded for architecture selection by the
+pretrained-first decision above.
 
 | Candidate | Evidence and fit | Decision |
 | --- | --- | --- |
@@ -84,25 +152,26 @@ residual, then send its bass waveform to [Basic Pitch's 204,448-byte TFLite
 model](https://github.com/spotify/basic-pitch), constrained to bass frequencies.
 Basic Pitch's source is Apache-2.0 and its documentation says it works best on
 one instrument at a time, which is why it follows separation. The combined
-published weights total 39,460,049 bytes; none was downloaded.
+published weights total 39,460,049 bytes. This historical note predates later
+diagnostic downloads and must not be read as current asset state.
 
 This is usable as a sharply defined next benchmark, not a standalone-norns
 architecture yet. ADTOF-PyTorch has no LICENSE file in the inspected repository;
 the upstream ADTOF repository is CC BY-NC-SA 4.0, so the port and its weight need
-explicit compatible licensing before delivery. Open-Unmix source is MIT, but the
-inspected documentation did not state a separate redistribution licence for the
-UMXHQ bass weight. Both ADTOF-PyTorch and Open-Unmix require Python/Torch, while
+explicit compatible licensing before delivery. The earlier Open-Unmix weight
+licence uncertainty is superseded: the official Zenodo record declares MIT
+(`evidence/umxhq-official-license.json`). Both ADTOF-PyTorch and Open-Unmix require Python/Torch, while
 the Basic Pitch Linux path requires TensorFlow Lite; no ARMv7 native worker,
 incremental-RSS measurement or device latency measurement has been made. The
 ADTOF and Open-Unmix networks are bidirectional, so this profile is final
 offline analysis after capture rather than streaming inference.
 
 RD-02's stop criterion therefore applies: do not call a five-lane standalone
-feature feasible until a compatible licensed replacement or permission is
-frozen, all three components are cross-built into a bounded local norns worker,
-and the clean frozen corpus meets every per-lane and stratum F1/grid/negative
-gate. The detailed URLs, HEAD byte counts, output mapping and unresolved
-conditions are retained in
+feature feasible until the selected Omnizart raw-head drum checkpoint has
+compatible frozen terms, the Omnizart/Open-Unmix/Basic-Pitch chain has a bounded
+local norns worker, and the clean frozen corpus meets every per-lane and stratum
+F1/grid/negative gate. The detailed URLs, HEAD byte counts, output mapping and
+historical conditions are retained in
 `docs/rhythm-doctor/evidence/candidate_b_pretrained_research_2026-09-19.json`.
 
 ### ADTOF-PyTorch executable diagnostic

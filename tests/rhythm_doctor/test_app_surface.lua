@@ -189,6 +189,78 @@ test("K2 and K3 reach Rhythm Doctor only while algorithm five is selected", func
   check(table.concat(texts, " "):find("INPUT L", 1, true))
 end)
 
+test("the application encoder route opens stopped setup from Rhythm Doctor", function()
+  -- This covers the same public norns route as `enc(2, -1)`: application UI,
+  -- Trigger Editor UI, Trigger Editor ownership, then the adapter.  The exact
+  -- negative delta selects INPUT from the initial TEMPO field.
+  local page, observed = trigger_page_context()
+  trigger_edit_page = page
+  package.path = "./lib/?.lua;" .. package.path
+  local Adapter = require("rhythm_doctor.ui_adapter")
+  local runtime = {
+    machine = { state = "EMPTY" },
+    start_capture = function() return {code = "OK"} end,
+    record_action = function() return {code = "OK"} end,
+    confirm_modal = function() return {code = "OK"} end,
+    finish = function() return {code = "OK"} end,
+    enter = function() return {ok = true, code = "CAPTURE_WORKER_READY"} end,
+  }
+  local doctor = Adapter.new({ runtime = runtime, transport_stopped = function() return true end })
+  page.set_rhythm_doctor(doctor)
+  page.register_press()
+  invoke(observed.normal, 16, 2)
+  equal(page.get_algorithm(), 5)
+
+  local old_include = include
+  local pages_component = { new = function()
+    return {add_page = function() end, select_page = function() end, draw = function() end,
+      next_page = function() end, previous_page = function() end, get_selected_page = function() return 1 end}
+  end }
+  local page_component = { new = function() return {} end }
+  local viewer = { new = function()
+    return {draw = function() end, next_channel = function() end, prev_channel = function() end}
+  end }
+  local selector = { new = function()
+    return {select = function() end, draw = function() end, increment = function() end,
+      decrement = function() end, get_selected = function() return {id = 1} end,
+      set_selected_value = function() end}
+  end }
+  include = function(path)
+    local modules = {
+      ["mosaic/lib/ui_components/pages"] = pages_component,
+      ["mosaic/lib/ui_components/page"] = page_component,
+      ["mosaic/lib/ui_components/grid_viewer"] = viewer,
+      ["mosaic/lib/ui_components/list_selector"] = selector,
+    }
+    return assert(modules[path], path)
+  end
+  fn.dirty_screen = function() observed.dirty = observed.dirty + 1 end
+  local trigger_ui = dofile(root .. "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua")
+  pages = { pages = {channel_edit_page = 2, scale_edit_page = 3, trigger_edit_page = 4,
+    note_edit_page = 5, velocity_edit_page = 6, song_edit_page = 7} }
+  program.get_selected_page = function() return pages.pages.trigger_edit_page end
+  include = function(path)
+    local modules = {
+      ["mosaic/lib/pages/channel_edit_page/channel_edit_page_ui"] = {},
+      ["mosaic/lib/pages/scale_edit_page/scale_edit_page_ui"] = {},
+      ["mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui"] = {},
+      ["mosaic/lib/pages/note_edit_page/note_edit_page_ui"] = {},
+      ["mosaic/lib/pages/trigger_edit_page/trigger_edit_page_ui"] = trigger_ui,
+      ["mosaic/lib/pages/song_edit_page/song_edit_page_ui"] = {},
+      ["mosaic/lib/ui_components/tooltip"] = {},
+      ["mosaic/lib/ui_components/save_confirm"] = {},
+    }
+    return assert(modules[path], path)
+  end
+  local application_ui = dofile(root .. "lib/ui.lua")
+  include = old_include
+
+  application_ui.enc(2, -1)
+  local model = doctor:screen_model()
+  check(model.setup.active, "public encoder input must open the setup draft")
+  equal(model.setup.field, "INPUT")
+end)
+
 test("cleanup closes a worker that was still starting and never retries it", function()
   package.path = "./lib/?.lua;" .. package.path
   local Runtime = require("rhythm_doctor.runtime")

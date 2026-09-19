@@ -52,17 +52,18 @@ test('failed worker startup cannot put the machine into a capture state', functi
 end)
 
 test('mode entry retries a background worker from bounded polls', function()
-  local socket, opens = transport(), 0
+  local socket, opens, now = transport(), 0, 0
   local worker = { open = function()
     opens = opens + 1
     if opens < 3 then return nil, 'worker starting' end
     return socket
   end }
-  local runtime = Runtime.new({ project_id = 'project-a', worker = worker, now = function() return 0 end,
+  local runtime = Runtime.new({ project_id = 'project-a', worker = worker, now = function() return now end,
     transport_stopped = function() return true end })
   equal(runtime:enter().code, 'WORKER_UNAVAILABLE')
-  runtime:poll(); equal(runtime.machine.state, 'EMPTY')
-  runtime:poll(); equal(opens, 3)
+  runtime:poll(); equal(opens, 1, 'rapid polls do not thrash worker connection setup')
+  now = .25; runtime:poll(); equal(runtime.machine.state, 'EMPTY')
+  now = .50; runtime:poll(); equal(opens, 3)
   check(runtime:start_capture('manual').ok)
 end)
 

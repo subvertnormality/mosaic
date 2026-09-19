@@ -17,7 +17,7 @@ LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'pain
              'runtime_paint', 'runtime_persistence', 'bank_persistence', 'project_lifecycle_runtime',
              'ui_adapter', 'worker_host', 'app_surface')
 PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit',
-                'acquisition_quality', 'grid_quality', 'native_transport', 'analysis_worker_ipc')
+                'acquisition_quality', 'grid_quality', 'native_transport', 'analysis_worker_ipc', 'documentation')
 NATIVE_TESTS = ('capture_contract', 'capture_native', 'tempo_candidate', 'tempo_native')
 
 
