@@ -163,7 +163,8 @@ function Adapter.new(deps)
     capture_mode = mode, lane = "BD", record_held = false, modal = nil,
     manual_bpm = bounded_bpm(deps.manual_bpm), input_source = input_source, setup_field = 1, setup_draft = nil,
     ready_field = 1, alignment_field = 1, alignment_draft = nil, paint_policy = "toggle", paint_shift = 0, window_revision = 0,
-    worker_ready = false, transport_running = false, progress = {}, feedback = nil }, Adapter)
+    worker_ready = false, transport_running = false, progress = {}, feedback = nil,
+    alignment_error = nil }, Adapter)
 end
 
 function Adapter:set_capture_mode(mode)
@@ -184,9 +185,11 @@ function Adapter:enc(n, d)
   if self.alignment_draft then
     if type(d) ~= "number" or d == 0 then return outcome("UNCLAIMED") end
     if n == 2 then
+      self.alignment_error = nil
       self.alignment_field = select_index(self.alignment_field, d, #Adapter.ALIGNMENT_FIELDS)
       return outcome("ALIGNMENT_FIELD_SELECTED", { field = Adapter.ALIGNMENT_FIELDS[self.alignment_field] })
     end
+    self.alignment_error = nil
     local draft, field = self.alignment_draft, Adapter.ALIGNMENT_FIELDS[self.alignment_field]
     if field == "EXACT BPM" then draft.bpm = bounded_bpm(draft.bpm + d)
     elseif field == "START BEAT" and #draft.beat_positions > 0 then
@@ -284,13 +287,19 @@ function Adapter:confirm_alignment()
   if type(apply) ~= "function" then return outcome("UNSUPPORTED") end
   local value = apply(self.runtime, payload)
   self.feedback = value and value.code
-  if value and value.ok then self.alignment_draft = nil end
+  if value and value.ok then self.alignment_draft = nil
+  else
+    -- The draft is kept so the player can edit or cancel it, which means the
+    -- screen would otherwise read exactly as it did before they pressed K3.
+    -- Remember the refusal so it can be shown instead.
+    self.alignment_error = (value and value.code) or "ALIGNMENT_FAILED"
+  end
   return value or outcome("ALIGNMENT_FAILED")
 end
 
 function Adapter:cancel_alignment()
   if not self.alignment_draft then return outcome("UNCLAIMED") end
-  self.alignment_draft = nil
+  self.alignment_draft, self.alignment_error = nil, nil
   return outcome("ALIGNMENT_CANCELLED")
 end
 
@@ -491,6 +500,7 @@ end
 -- until a matching Stop notification arrives.
 function Adapter:transport_started()
   self.transport_running, self.record_held, self.modal, self.setup_draft, self.alignment_draft = true, false, nil, nil, nil
+  self.alignment_error = nil
   self.active_paint_preview = nil
   if type(self.runtime.transport_started) ~= "function" then return outcome("UNSUPPORTED") end
   return self.runtime:transport_started()
@@ -546,7 +556,9 @@ function Adapter:screen_model()
     worker_ready = self.worker_ready }
   if not stopped(self) then model.status = "STOP SEQUENCER"
   elseif self.modal then model.status = model.modal.title
-  elseif self.alignment_draft then model.status = "ALIGNMENT / " .. Adapter.ALIGNMENT_FIELDS[self.alignment_field]
+  elseif self.alignment_draft then
+    model.status = self.alignment_error and self.alignment_error:gsub("_", " ")
+      or ("ALIGNMENT / " .. Adapter.ALIGNMENT_FIELDS[self.alignment_field])
   elseif not self.worker_ready and (state == "EMPTY" or state == "FAILED") then model.status = "NOT READY"
   elseif capture_states[state] then
     model.finish_enabled = self:finish_eligible() == true

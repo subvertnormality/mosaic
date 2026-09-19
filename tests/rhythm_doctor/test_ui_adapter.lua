@@ -242,6 +242,33 @@ test("alignment is a K3-applied draft with explicit half/double actions and K2 c
   equal(c.adapter:key(2, 1).code, "ALIGNMENT_CANCELLED")
 end)
 
+test("a rejected correction says so instead of looking unchanged", function()
+  -- apply_alignment can refuse - the retained audio is gone after a reload or
+  -- Save As, for one - and the draft is deliberately kept so the player does
+  -- not lose their work. The screen went on reading ALIGNMENT / <field>
+  -- exactly as before the attempt, so the refusal was invisible: the player
+  -- pressed K3 and nothing appeared to happen.
+  local c = context(); c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = { bpm = 120, timeline_cells = 96, window_start = 0, capture_start_sample = 10,
+    capture_end_sample = 1000, origin_sample = 100, sample_rate = 100, source = { beat_positions = { 100, 200, 300 } },
+    sensitivities = { BD = 0, SD = 0, CYM = 0 }, lanes = { BD = {}, SD = {}, CYM = {}, BASS = {} } }
+  function c.runtime:apply_alignment(draft)
+    return { code = "CAPTURE_AUDIO_UNAVAILABLE", ok = false }
+  end
+  for _ = 1, 4 do c.adapter:enc(2, 1) end
+  equal(c.adapter:enc(3, 1).code, "ALIGNMENT_OPENED")
+  local before = c.adapter:screen_model().status
+  equal(c.adapter:key(3, 1).code, "CAPTURE_AUDIO_UNAVAILABLE")
+  local after = c.adapter:screen_model()
+  check(after.alignment.active, "a refused correction keeps the draft to edit or cancel")
+  check(after.status ~= before, "a refused correction must change what the screen says")
+  equal(after.status, "CAPTURE AUDIO UNAVAILABLE")
+
+  -- Editing the draft is a fresh attempt, so the refusal stops being shown.
+  c.adapter:enc(3, 1)
+  equal(c.adapter:screen_model().status, "ALIGNMENT / " .. c.adapter:screen_model().alignment.field)
+end)
+
 test("worker readiness, poll and transport-start invalidation have explicit adapter hooks", function()
   local c = context()
   equal(c.adapter:screen_model().status, "NOT READY")

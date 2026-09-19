@@ -140,6 +140,30 @@ do
   check(Bank.valid_ready(m.bank, m:job_token()),
     "the restored bank must be usable under the current lease")
   check(m:resources_released(correction, true).ok, "failed reanalysis releases before later lifecycle work")
+
+  -- Cancelling a correction restores the same snapshot, and cancellation also
+  -- advances the generation, so the restored bank was stale in both fields and
+  -- every later paint failed INVALID_BANK.
+  local cancelled = assert(m:begin_reanalysis(true))
+  equal(m.state, Machine.REANALYSING)
+  local modal = m:request_record_action(true)
+  equal(modal.operation, "cancel_correction")
+  check(m:confirm_modal(modal, true, true).ok)
+  equal(m.state, Machine.READY, "a cancelled correction returns to READY")
+  check(Bank.valid_ready(m.bank, m:job_token()),
+    "a cancelled correction must leave a bank usable under the current lease")
+  check(m.release_token ~= nil or m.resources_are_released,
+    "the cancelled correction must release its lease")
+  check(m:resources_released(m.release_token, true).ok,
+    "the release the cancellation asked for must be acknowledgeable")
+
+  -- Starting the sequencer during a correction abandons it the same way.
+  local interrupted = assert(m:begin_reanalysis(true))
+  equal(m.state, Machine.REANALYSING)
+  check(m:transport_started().ok)
+  equal(m.state, Machine.READY, "transport start restores the ready snapshot")
+  check(Bank.valid_ready(m.bank, m:job_token()),
+    "a transport-interrupted correction must leave a usable bank")
 end
 
 -- FINISH needs confirmed sufficient audio and a response cannot publish a partial

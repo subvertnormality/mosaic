@@ -65,6 +65,20 @@ function Machine:prepare_project_change(callback)
   self:_service_project_change()
   return result(completed and "OK" or "DEFERRED", { value = value })
 end
+-- A correction that ends without a new bank restores the snapshot taken before
+-- it began. That snapshot carries the lease it was analysed under, while the
+-- machine has since advanced - cancellation bumps the generation as well as the
+-- revision. Rebind it, or every identity-checked use of the restored bank,
+-- painting above all, fails INVALID_BANK and the abandoned correction quietly
+-- bricks the bank. The machine's own identity is never rolled back, so a late
+-- result from the abandoned lease is still rejected as stale.
+function Machine:_restore_ready_snapshot()
+  local restored = self.previous_ready
+  if not restored then return nil end
+  restored.generation, restored.analysis_revision = self.generation, self.analysis_revision
+  self.previous_ready = nil
+  return restored
+end
 function Machine:_service_pending_save(transport_stopped)
   if self.pending_save and not self.pending_project_change and transport_stopped and self.resources_are_released and not self:is_active() then
     self.pending_save = false
@@ -180,9 +194,7 @@ function Machine:receive_analysis(response)
       -- INVALID_BANK and the failed correction quietly bricks the bank. The
       -- revision itself is not rolled back: a late result from the abandoned
       -- lease must still be rejected as stale.
-      local restored = self.previous_ready
-      restored.analysis_revision = self.analysis_revision
-      self.bank, self.previous_ready = restored, nil; self:_set_state(Machine.READY)
+      self.bank = self:_restore_ready_snapshot(); self:_set_state(Machine.READY)
       self.last_message = "CORRECTION_FAILED"
     else
       self:_set_state(Machine.FAILED); self.last_message = response.error
@@ -220,7 +232,7 @@ function Machine:confirm_modal(token, accepted, transport_stopped)
   if token.operation == "clear" then
     self:_cancel_job(false); self.bank = nil; self:_set_state(Machine.EMPTY); self:_service_pending_save(true); return result("OK")
   elseif token.operation == "cancel_correction" then
-    self:_cancel_job(false); self.bank, self.previous_ready = self.previous_ready, nil; self:_set_state(Machine.READY); self:_service_pending_save(true); return result("OK")
+    self:_cancel_job(false); self.bank = self:_restore_ready_snapshot(); self:_set_state(Machine.READY); self:_service_pending_save(true); return result("OK")
   elseif token.operation == "cancel_capture" then
     self:_cancel_job(false); self.bank = nil; self:_set_state(Machine.EMPTY); self:_service_pending_save(true); return result("OK")
   end
@@ -237,9 +249,10 @@ function Machine:manual_save()
 end
 function Machine:transport_started()
   if self:is_active() then
-    local restore = self.state == Machine.REANALYSING and self.previous_ready or nil
-    self:_cancel_job(false); self.bank, self.previous_ready = restore, nil
-    self:_set_state(restore and Machine.READY or Machine.EMPTY)
+    local correcting = self.state == Machine.REANALYSING and self.previous_ready ~= nil
+    self:_cancel_job(false)
+    self.bank, self.previous_ready = correcting and self:_restore_ready_snapshot() or nil, nil
+    self:_set_state(self.bank and Machine.READY or Machine.EMPTY)
   else self:_invalidate_modal() end
   return result("OK")
 end
