@@ -9,7 +9,7 @@
 local Adapter = {}
 Adapter.__index = Adapter
 
-Adapter.LANES = { "BD", "SD", "CHH", "OHH", "BASS" }
+Adapter.LANES = { "BD", "SD", "CYM", "BASS" }
 Adapter.SETUP_FIELDS = { "TEMPO", "MANUAL BPM", "INPUT" }
 Adapter.READY_FIELDS = { "WINDOW BAR", "WINDOW STEP", "SENSITIVITY", "PAINT POLICY", "ALIGNMENT" }
 Adapter.ALIGNMENT_FIELDS = { "HALF TEMPO", "DOUBLE TEMPO", "EXACT BPM", "START BEAT", "FINE START" }
@@ -436,7 +436,7 @@ function Adapter:grid_key(x, y, z)
     if z == 0 then return self:record_released() end
     return outcome("UNCLAIMED")
   end
-  if y == 2 and x >= 3 and x <= 7 then
+  if y == 2 and x >= 3 and x <= 2 + #Adapter.LANES then
     if z ~= 1 then return outcome("UNCLAIMED") end
     return self:select_lane(Adapter.LANES[x - 2])
   end

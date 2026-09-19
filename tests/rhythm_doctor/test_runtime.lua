@@ -103,7 +103,7 @@ test('READY controls clamp the shared window, rebuild one lane sensitivity, and 
   local runtime = select(1, context())
   local bank = assert(Bank.build({ project_id = runtime.machine.project_id, generation = 0, analysis_revision = 0,
     sample_rate = 100, capture_start_sample = 0, capture_end_sample = 1000, origin_sample = 0, bpm = 120,
-    sensitivities = { BD = .2, SD = .2, CHH = .2, OHH = .2, BASS = .2 },
+    sensitivities = { BD = .2, SD = .2, CYM = .2 },
     candidates = { { lane = 'BD', sample_index = 10, velocity = 80, confidence = .3 } } }))
   runtime.machine.state, runtime.machine.bank = 'READY', bank
   equal(runtime:set_window_start(999).code, 'WINDOW_MOVED')

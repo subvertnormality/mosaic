@@ -28,11 +28,11 @@ local cases = {
 }
 assert(Bank.valid_ready(fresh()))
 assert(Bank.VERSION == 2, "schema migration must publish version 2")
-assert(table.concat(Bank.LANES, ",") == "BD,SD,CHH,OHH,BASS", "schema lane order distinguishes closed and open hats")
+assert(table.concat(Bank.LANES, ",") == "BD,SD,CYM,BASS", "schema lane order is the four shipped lanes")
 do
   local args = { project_id = "p", sample_rate = 48000, capture_start_sample = 0, capture_end_sample = 480000,
-    origin_sample = 0, bpm = 120, candidates = {{lane = "CHH", sample_index = 0, velocity = 80, confidence = .9},
-      {lane = "OHH", sample_index = 1, velocity = 80, confidence = .9}} }
+    origin_sample = 0, bpm = 120, candidates = {{lane = "CYM", sample_index = 0, velocity = 80, confidence = .9},
+      {lane = "CYM", sample_index = 1, velocity = 80, confidence = .9}} }
   assert(Bank.build(args), "closed and open hat candidates must be accepted")
   args.candidates[1].lane = "HH"
   assert(not Bank.build(args), "combined legacy hat candidates must be rejected")

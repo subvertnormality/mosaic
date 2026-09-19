@@ -42,11 +42,11 @@ local runtime = Runtime.new({
 local project_id = Runtime.project_identity("fixture.ptn")
 local bank = assert(Bank.build({ project_id = project_id, generation = 4, analysis_revision = 2,
   sample_rate = 100, capture_start_sample = 0, capture_end_sample = 1000, origin_sample = 0, bpm = 120,
-  candidates = { { lane = "CHH", sample_index = 0, velocity = 81, confidence = 1 } },
+  candidates = { { lane = "CYM", sample_index = 0, velocity = 81, confidence = 1 } },
 }))
 runtime.machine.project_id, runtime.machine.generation, runtime.machine.analysis_revision = project_id, 4, 2
 runtime.machine.state, runtime.machine.bank = "READY", bank
-local context = { project_id = project_id, generation = 4, analysis_revision = 2, state = "READY", lane = "CHH",
+local context = { project_id = project_id, generation = 4, analysis_revision = 2, state = "READY", lane = "CYM",
   window_start = 0, window_revision = 1, policy = "add", shift = 0, thresholds = bank.sensitivities }
 local target = { project_id = project_id, song_slot = 1, pattern_id = 2 }
 

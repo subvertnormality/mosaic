@@ -23,7 +23,7 @@ import tempfile
 from typing import Any
 import wave
 
-LANES = ("BD", "SD", "CHH", "OHH", "BASS")
+LANES = ("BD", "SD", "CYM", "BASS")
 MAX_CANDIDATES = 22_500
 MAX_RESULT_BYTES = 4 * 1024 * 1024
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
@@ -90,7 +90,15 @@ def asset_is_exact(request: dict[str, Any]) -> bool:
         return False
 
 
-def analysis_is_pretrained(value: Any, backend_sha256: str, drum_artifact_sha256: str, bass_artifact_sha256: str) -> bool:
+def analysis_matches_detector(value: Any, expected: dict[str, str]) -> bool:
+    """Validate a backend result against an explicit detector identity.
+
+    The identity fields differ by backend: a pretrained chain pins its model
+    artifacts, a model-free DSP backend pins its own source and template table.
+    Requiring a fixed set of field names would force one backend to invent
+    digests it does not have, so the expected identity is supplied instead and
+    every one of its entries must match exactly.
+    """
     if not isinstance(value, dict) or not isinstance(value.get("bpm"), (int, float)) or not 40 <= value["bpm"] <= 240:
         return False
     if not isinstance(value.get("origin_sample"), int) or value["origin_sample"] < 0:
@@ -98,13 +106,12 @@ def analysis_is_pretrained(value: Any, backend_sha256: str, drum_artifact_sha256
     detector, gates = value.get("detector"), value.get("lane_onset_gates")
     if not isinstance(detector, dict) or not isinstance(detector.get("backend_id"), str) or not detector["backend_id"]:
         return False
-    if any(not isinstance(detector.get(name), str) or not SHA256.fullmatch(detector[name]) for name in
-           ("backend_sha256", "drum_artifact_sha256", "bass_artifact_sha256")):
+    if not expected:
         return False
-    if detector["backend_sha256"].lower() != backend_sha256.lower() or \
-            detector["drum_artifact_sha256"].lower() != drum_artifact_sha256.lower() or \
-            detector["bass_artifact_sha256"].lower() != bass_artifact_sha256.lower():
-        return False
+    for name, digest in expected.items():
+        actual = detector.get(name)
+        if not isinstance(actual, str) or not SHA256.fullmatch(actual) or actual.lower() != str(digest).lower():
+            return False
     if not isinstance(gates, dict) or set(gates) != set(LANES) or any(not isinstance(gates[lane], (int, float)) or not 0 <= gates[lane] <= 1 for lane in LANES):
         return False
     candidates = value.get("candidates", [])
@@ -118,19 +125,51 @@ def analysis_is_pretrained(value: Any, backend_sha256: str, drum_artifact_sha256
     return True
 
 
+def analysis_is_pretrained(value: Any, backend_sha256: str, drum_artifact_sha256: str, bass_artifact_sha256: str) -> bool:
+    """Pretrained-chain identity, expressed through the generic validator."""
+    return analysis_matches_detector(value, {"backend_sha256": backend_sha256,
+                                             "drum_artifact_sha256": drum_artifact_sha256,
+                                             "bass_artifact_sha256": bass_artifact_sha256})
+
+
+def analysis_is_dsp(value: Any, backend_sha256: str, template_sha256: str) -> bool:
+    """Model-free DSP backend identity: its own source plus its template table."""
+    return analysis_matches_detector(value, {"backend_sha256": backend_sha256,
+                                             "template_sha256": template_sha256})
+
+
 class Worker:
     def __init__(self, runtime: Path, backend: Path | None, backend_sha256: str | None = None,
-                 drum_artifact_sha256: str | None = None, bass_artifact_sha256: str | None = None) -> None:
+                 drum_artifact_sha256: str | None = None, bass_artifact_sha256: str | None = None,
+                 template_sha256: str | None = None) -> None:
         self.runtime, self.backend = runtime, backend
         self.backend_sha256 = backend_sha256
         self.drum_artifact_sha256 = drum_artifact_sha256
         self.bass_artifact_sha256 = bass_artifact_sha256
+        self.template_sha256 = template_sha256
         self.results = runtime / "results"; self.results.mkdir(mode=0o700, exist_ok=True)
         self.socket_path = runtime / "analysis.sock"; self.socket_path.unlink(missing_ok=True)
         self.server = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
         self.server.bind(str(self.socket_path)); os.chmod(self.socket_path, 0o600); self.server.listen(1)
         self.peer: socket.socket | None = None; self.request: dict[str, Any] | None = None
         self.process: subprocess.Popen[bytes] | None = None; self.request_path: Path | None = None; self.result_path: Path | None = None
+
+    def expected_detector(self) -> dict[str, str]:
+        """The identity this worker will accept, keyed by how it was configured.
+
+        A model-free backend pins its source and templates; a pretrained chain
+        pins its model artifacts. Configuring neither accepts nothing.
+        """
+        identity: dict[str, str] = {}
+        if self.backend_sha256:
+            identity["backend_sha256"] = self.backend_sha256
+        if self.template_sha256:
+            identity["template_sha256"] = self.template_sha256
+        if self.drum_artifact_sha256:
+            identity["drum_artifact_sha256"] = self.drum_artifact_sha256
+        if self.bass_artifact_sha256:
+            identity["bass_artifact_sha256"] = self.bass_artifact_sha256
+        return identity
 
     def send(self, value: dict[str, Any]) -> None:
         assert self.peer is not None
@@ -189,7 +228,7 @@ class Worker:
             self.remove_job_files(True); self.clear_job(); self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); return
         if isinstance(analysis, dict) and set(analysis) == {"backend_error"} and isinstance(analysis["backend_error"], str) and SAFE_BACKEND_ERROR.fullmatch(analysis["backend_error"]):
             self.remove_job_files(True); self.clear_job(); self.send(failed(request, analysis["backend_error"])); return
-        if not analysis_is_pretrained(analysis, self.backend_sha256, self.drum_artifact_sha256, self.bass_artifact_sha256) or \
+        if not analysis_matches_detector(analysis, self.expected_detector()) or \
                 any(candidate["sample_index"] >= request["frames"] for candidate in analysis["candidates"]):
             self.remove_job_files(True); self.clear_job(); self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); return
         stored = response(request, "COMPLETED", wav_path=request["wav_path"], wav_sha256=request["wav_sha256"],

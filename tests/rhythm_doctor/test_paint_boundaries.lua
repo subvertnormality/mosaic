@@ -43,8 +43,8 @@ do
  end end end
 end
 do
- local closed=preview("add",0,{}); closed.lane="CHH"; ok(Paint.preview(closed),"closed hat lane accepted")
- local open=preview("add",0,{}); open.lane="OHH"; ok(Paint.preview(open),"open hat lane accepted")
+ local closed=preview("add",0,{}); closed.lane="CYM"; ok(Paint.preview(closed),"closed hat lane accepted")
+ local open=preview("add",0,{}); open.lane="CYM"; ok(Paint.preview(open),"open hat lane accepted")
  local legacy=preview("add",0,{}); legacy.lane="HH"; ok(not Paint.preview(legacy),"combined legacy hat lane rejected")
  local tom=preview("add",0,{}); tom.lane="TOM"; ok(not Paint.preview(tom),"removed tom lane rejected")
  local bad=preview("add",0/0,{}); ok(not Paint.preview(bad),"nan shift rejected")

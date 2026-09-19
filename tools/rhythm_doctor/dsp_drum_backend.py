@@ -41,7 +41,7 @@ import numpy as np
 
 SR = 44100
 NFFT, HOP = 2048, 512
-LANES = ("BD", "SD", "CYM")
+LANES = ("BD", "SD", "CYM", "BASS")
 EPS = 1e-10
 
 # Harmonic rank. The shipped toolbox default is 50; a sweep on real-music
@@ -135,7 +135,35 @@ def pick_peaks(curve, delta, w1=W1, w2=W2, w3=W3, w4=W4, w5=W5):
 
 
 # Selected on the development half of the real-music corpus only.
-DEFAULT_DELTA = {"BD": 0.40, "SD": 0.35, "CYM": 0.15}
+DEFAULT_DELTA = {"BD": 0.40, "SD": 0.35, "CYM": 0.15, "BASS": 0.40}
+
+# BASS is not detected independently. It reclassifies low-band onsets that hold
+# a stable pitch after the attack, which is the one drum/instrument distinction
+# that is physically reliable: a membrane vibrates in inharmonic Bessel ratios
+# and decays fast, a string in integer ratios and sustains. The lanes are NOT
+# exclusive, because a kick and a bass note routinely land together.
+PITCH_CONFIDENCE_CUT = 0.15
+PITCH_WINDOW_SECONDS = 0.080
+BASS_F0_MIN, BASS_F0_MAX = 35.0, 300.0
+
+
+def pitch_confidence(segment, sample_rate, f0_min=BASS_F0_MIN, f0_max=BASS_F0_MAX):
+    """Normalised autocorrelation peak in the bass register.
+
+    High for a sustained string tone, low for an inharmonic membrane strike.
+    """
+    seg = np.asarray(segment, dtype=np.float64)
+    if seg.size < 64 or not np.any(seg):
+        return 0.0
+    seg = seg - seg.mean()
+    ac = np.correlate(seg, seg, mode="full")[seg.size - 1:]
+    if ac.size < 4 or ac[0] <= 0:
+        return 0.0
+    ac = ac / ac[0]
+    lo, hi = int(sample_rate / f0_max), min(len(ac) - 1, int(sample_rate / f0_min))
+    if hi <= lo:
+        return 0.0
+    return float(np.max(ac[lo:hi + 1]))
 
 
 def analyse(mono, deltas=None, sample_rate=SR):
@@ -164,5 +192,182 @@ def analyse(mono, deltas=None, sample_rate=SR):
     # The dictionary's third column is a closed-hat template, but the lane it
     # feeds is CYM: see the lane-scope note in the module docstring.
     column = {"BD": "BD", "SD": "SD", "CYM": "CHH"}
-    return {lane: [i / fps for i in pick_peaks(G_D[lanes.index(column[lane])], deltas[lane])]
-            for lane in LANES}
+    out = {lane: [i / fps for i in pick_peaks(G_D[lanes.index(column[lane])], deltas[lane])]
+           for lane in ("BD", "SD", "CYM")}
+    out["BASS"] = _bass_from_low_onsets(x, out["BD"], sample_rate)
+    return out
+
+
+def _bass_from_low_onsets(mono, low_onsets, sample_rate):
+    """Low-band onsets that hold a stable pitch are also BASS candidates."""
+    span = int(PITCH_WINDOW_SECONDS * sample_rate)
+    bass = []
+    for t in low_onsets:
+        start = int(t * sample_rate)
+        if pitch_confidence(mono[start:start + span], sample_rate) >= PITCH_CONFIDENCE_CUT:
+            bass.append(t)
+    return bass
+
+
+# --- tempo -----------------------------------------------------------------
+
+BPM_MIN, BPM_MAX = 40.0, 240.0
+DEFAULT_BPM = 120.0
+
+
+def estimate_bpm(onset_envelope, fps, bpm_min=BPM_MIN, bpm_max=BPM_MAX):
+    """Autocorrelation tempo estimate over the summed onset envelope.
+
+    Returns (bpm, detected). When no periodicity is found the caller still
+    needs a value inside the bank's 40..240 contract, so a placeholder is
+    returned with detected False rather than presenting a guess as measured.
+    The player can correct it through the existing alignment controls.
+    """
+    env = np.asarray(onset_envelope, dtype=np.float64)
+    if env.size < 8 or not np.any(env > 0):
+        return DEFAULT_BPM, False
+    env = env - env.mean()
+    ac = np.correlate(env, env, mode="full")[len(env) - 1:]
+    if ac.size < 4 or ac[0] <= 0:
+        return DEFAULT_BPM, False
+    ac = ac / ac[0]
+    lo = max(1, int(round(60.0 * fps / bpm_max)))
+    hi = min(len(ac) - 1, int(round(60.0 * fps / bpm_min)))
+    if hi <= lo:
+        return DEFAULT_BPM, False
+    window = ac[lo:hi + 1]
+    best = int(np.argmax(window)) + lo
+    if window.max() <= 0.1:                       # no usable periodicity
+        return DEFAULT_BPM, False
+    bpm = 60.0 * fps / best
+    while bpm < bpm_min: bpm *= 2.0
+    while bpm > bpm_max: bpm /= 2.0
+    if not (bpm_min <= bpm <= bpm_max):
+        return DEFAULT_BPM, False
+    return float(bpm), True
+
+
+# --- velocity --------------------------------------------------------------
+
+def velocities(activation, frames, fps, window_seconds=0.025):
+    """Peak activation in a window around each onset, scaled to MIDI 1..127.
+
+    Normalised within the capture, so a quiet recording is not flattened to
+    nothing and a loud one is not clipped to uniform 127.
+    """
+    if not frames:
+        return []
+    half = max(1, int(round(window_seconds * fps)))
+    peaks = []
+    for i in frames:
+        lo, hi = max(0, i - half), min(len(activation), i + half + 1)
+        peaks.append(float(activation[lo:hi].max()) if hi > lo else 0.0)
+    top = max(peaks)
+    if top <= 0:
+        return [64] * len(frames)
+    return [int(min(127, max(1, round(1 + 126 * (p / top))))) for p in peaks]
+
+
+# --- worker backend --------------------------------------------------------
+
+BACKEND_ID = "nmf-pfnmf-drums-v1"
+
+
+def _sha256_file(path):
+    import hashlib
+    digest = hashlib.sha256()
+    with open(path, "rb") as source:
+        for block in iter(lambda: source.read(1 << 20), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def analyse_request(wav_path, deltas=None):
+    """Produce one worker-valid analysis result from a captured WAV."""
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from pretrained_bass_backend import read_pcm_wav
+    pcm = read_pcm_wav(str(wav_path))
+    mono = _mono_float(pcm)
+    deltas = dict(DEFAULT_DELTA if deltas is None else deltas)
+    lanes, B_D, geom = load_templates()
+    fps = pcm.sample_rate / float(HOP)
+    empty_gates = {lane: float(deltas[lane]) for lane in LANES}
+    identity = {"backend_id": BACKEND_ID,
+                "backend_sha256": _sha256_file(Path(__file__).resolve()),
+                "template_sha256": _sha256_file(_TEMPLATES)}
+    if not mono.size or not np.any(mono):
+        return {"bpm": DEFAULT_BPM, "tempo_detected": False, "origin_sample": 0,
+                "detector": identity, "lane_onset_gates": empty_gates, "candidates": []}
+    V = stft_magnitude(mono if pcm.sample_rate == SR else _resample(mono, pcm.sample_rate, SR))
+    if V.shape[1] < 5:
+        return {"bpm": DEFAULT_BPM, "tempo_detected": False, "origin_sample": 0,
+                "detector": identity, "lane_onset_gates": empty_gates, "candidates": []}
+    G_D = pfnmf(V, B_D)
+    column = {"BD": "BD", "SD": "SD", "CYM": "CHH"}
+    candidates, envelope = [], np.zeros(G_D.shape[1], dtype=np.float64)
+    low_frames = []
+    for lane in ("BD", "SD", "CYM"):
+        row = G_D[lanes.index(column[lane])]
+        envelope += row / (row.max() + EPS)
+        frames = pick_peaks(row, deltas[lane])
+        if lane == "BD":
+            low_frames = list(frames)
+            low_row = row
+        for frame, velocity in zip(frames, velocities(row, frames, fps)):
+            candidates.append({"lane": lane,
+                               "sample_index": int(round(frame * HOP * pcm.sample_rate / SR)),
+                               "velocity": int(velocity),
+                               "confidence": float(min(1.0, row[frame] / (row.max() + EPS)))})
+    # BASS reclassifies pitched low-band onsets; the lanes are not exclusive.
+    span = int(PITCH_WINDOW_SECONDS * pcm.sample_rate)
+    bass_frames = [f for f in low_frames
+                   if pitch_confidence(mono[int(round(f * HOP * pcm.sample_rate / SR)):
+                                            int(round(f * HOP * pcm.sample_rate / SR)) + span],
+                                       pcm.sample_rate) >= PITCH_CONFIDENCE_CUT]
+    for frame, velocity in zip(bass_frames, velocities(low_row, bass_frames, fps)):
+        candidates.append({"lane": "BASS",
+                           "sample_index": int(round(frame * HOP * pcm.sample_rate / SR)),
+                           "velocity": int(velocity),
+                           "confidence": float(min(1.0, low_row[frame] / (low_row.max() + EPS)))})
+    candidates.sort(key=lambda c: (c["sample_index"], LANES.index(c["lane"])))
+    bpm, detected = estimate_bpm(envelope, fps)
+    return {"bpm": float(bpm), "tempo_detected": bool(detected), "origin_sample": 0,
+            "detector": identity, "lane_onset_gates": empty_gates, "candidates": candidates}
+
+
+def _mono_float(pcm):
+    width, channels = pcm.sample_width, pcm.channels
+    if width != 2:
+        raise ValueError("only 16-bit PCM is supported by this backend")
+    x = np.frombuffer(pcm.data, dtype="<i2").astype(np.float32) / 32768.0
+    return x.reshape(-1, channels).mean(axis=1) if channels == 2 else x
+
+
+def _resample(x, src, dst):
+    if src == dst:
+        return x
+    index = np.linspace(0, len(x) - 1, int(round(len(x) * dst / float(src))))
+    return np.interp(index, np.arange(len(x)), x).astype(np.float32)
+
+
+def main(argv=None):
+    import argparse, json
+    parser = argparse.ArgumentParser(description="classical-DSP drum backend")
+    parser.add_argument("--request", type=Path, required=True)
+    parser.add_argument("--result", type=Path, required=True)
+    args = parser.parse_args(argv)
+    try:
+        request = json.loads(args.request.read_text(encoding="utf-8"))
+        wav = request.get("wav_path")
+        if not isinstance(wav, str) or not wav:
+            raise ValueError("wav_path is required")
+        args.result.write_text(json.dumps(analyse_request(wav), separators=(",", ":")),
+                               encoding="utf-8")
+        return 0
+    except Exception:
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

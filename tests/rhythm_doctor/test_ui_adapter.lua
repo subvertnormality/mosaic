@@ -115,14 +115,18 @@ test("K3 Finish is available only after enough audio and only while capturing", 
   equal(c.calls[#c.calls][1], "finish"); check(c.calls[#c.calls][2])
 end)
 
-test("lane keys select BD, SD, closed hat, open hat and bass, and ignore their releases", function()
+test("lane keys select BD, SD, CYM and BASS, ignore their releases, and leave the retired column inert", function()
   local c = context()
-  for index, lane in ipairs({ "BD", "SD", "CHH", "OHH", "BASS" }) do
+  for index, lane in ipairs({ "BD", "SD", "CYM", "BASS" }) do
     equal(c.adapter:grid_key(index + 2, 2, 1).code, "LANE_SELECTED")
     equal(c.adapter:screen_model().lane, lane)
     equal(c.adapter:grid_key(index + 2, 2, 0).code, "UNCLAIMED")
   end
   equal(c.adapter:grid_key(2, 2, 1).code, "UNCLAIMED", "reserved column has no legacy fader effect")
+  -- Columns 6 and 7 carried OHH and BASS before those lanes were withdrawn.
+  -- They must not silently select a lane now, or a player pressing where a
+  -- lane used to be would get an unrelated one.
+  equal(c.adapter:grid_key(7, 2, 1).code, "UNCLAIMED", "retired lane column stays inert")
 end)
 
 test("stopped setup drafts Auto/Manual, manual BPM and input, then commits only with K3", function()
@@ -184,7 +188,7 @@ end)
 test("screen model is a read-only summary of status, selected-lane hits and capture diagnostics", function()
   local c = context(); c.runtime.machine.state = "READY"
   c.runtime.machine.bank = { bpm = 137, tempo_mode = "auto", timeline_cells = 97,
-    lanes = { BD = { [1] = {}, [2] = {} }, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
+    lanes = { BD = { [1] = {}, [2] = {} }, SD = {}, CYM = {}, BASS = {} } }
   c.adapter:set_capture_progress({ listening_confidence = .8, acquired_beats = 19, analysis_progress = .25, source = "stereo" })
   local model = c.adapter:screen_model()
   equal(model.title, "RHYTHM DOCTOR"); equal(model.state, "READY"); equal(model.lane, "BD")
@@ -196,7 +200,7 @@ end)
 test("READY browser moves one shared nonwrapping window by bars or steps", function()
   local c = context(); c.runtime.machine.state = "READY"
   c.runtime.machine.bank = { bpm = 120, timeline_cells = 97, window_start = 0,
-    sensitivities = { BD = 0, SD = 0, CHH = 0, OHH = 0, BASS = 0 }, lanes = { BD = {}, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
+    sensitivities = { BD = 0, SD = 0, CYM = 0 }, lanes = { BD = {}, SD = {}, CYM = {}, CYM = {}, BD = {} } }
   equal(c.adapter:screen_model().ready.field, "WINDOW BAR")
   equal(c.adapter:enc(3, 1).code, "WINDOW_MOVED"); equal(c.calls[#c.calls][2], 16)
   equal(c.adapter:enc(2, 1).field, "WINDOW STEP")
@@ -209,7 +213,7 @@ end)
 test("READY editor applies selected-lane sensitivity and cycles paint policy without changing other lanes", function()
   local c = context(); c.runtime.machine.state = "READY"
   c.runtime.machine.bank = { bpm = 120, timeline_cells = 64, window_start = 0,
-    sensitivities = { BD = .5, SD = .2, CHH = .3, OHH = .4, BASS = .1 }, lanes = { BD = {}, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
+    sensitivities = { BD = .5, SD = .2, CYM = .3 }, lanes = { BD = {}, SD = {}, CYM = {}, CYM = {}, BD = {} } }
   c.adapter:enc(2, 1); c.adapter:enc(2, 1) -- sensitivity
   equal(c.adapter:screen_model().ready.field, "SENSITIVITY")
   equal(c.adapter:enc(3, 1).code, "SENSITIVITY_UPDATED")
@@ -227,7 +231,7 @@ test("alignment is a K3-applied draft with explicit half/double actions and K2 c
   local c = context(); c.runtime.machine.state = "READY"
   c.runtime.machine.bank = { bpm = 120, timeline_cells = 96, window_start = 0, capture_start_sample = 10,
     capture_end_sample = 1000, origin_sample = 100, sample_rate = 100, source = { beat_positions = { 100, 200, 300 } },
-    sensitivities = { BD = 0, SD = 0, CHH = 0, OHH = 0, BASS = 0 }, lanes = { BD = {}, SD = {}, CHH = {}, OHH = {}, BASS = {} } }
+    sensitivities = { BD = 0, SD = 0, CYM = 0 }, lanes = { BD = {}, SD = {}, CYM = {}, CYM = {}, BD = {} } }
   for _ = 1, 4 do c.adapter:enc(2, 1) end
   equal(c.adapter:enc(3, 1).code, "ALIGNMENT_OPENED")
   equal(c.adapter:screen_model().alignment.field, "HALF TEMPO")

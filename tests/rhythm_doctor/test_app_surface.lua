@@ -110,7 +110,10 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
   equal(page.get_algorithm(), 5); equal(calls[1], "enter")
   for _, draw_fn in ipairs(observed.draw) do draw_fn() end
   equal(observed.leds["1,2"], 15); equal(observed.leds["2,2"], 0)
-  equal(observed.leds["3,2"], 15); equal(observed.leds["7,2"], 4)
+  equal(observed.leds["3,2"], 15); equal(observed.leds["6,2"], 4)
+  -- Column 7 lit a lane LED before the lane set shrank to four. It must go
+  -- dark rather than leave a lane the player cannot select.
+  equal(observed.leds["7,2"], nil)
   local claimed = false
   for _, pre in ipairs(observed.pre) do claimed = pre(1, 2) or claimed end
   check(claimed, "Record must be claimed before normal/long/dual dispatch")
@@ -119,12 +122,16 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
   -- ownership boundary preventing the old Pattern 1 fader from changing.
   for _, post in ipairs(observed.post) do post(1, 2) end
   equal(calls[#calls], "record_up")
-  invoke(observed.normal, 7, 2)
-  equal(page.get_rhythm_doctor_lane(), "BASS"); equal(calls[#calls], "lane:BASS")
+  invoke(observed.normal, 4, 2)
+  equal(page.get_rhythm_doctor_lane(), "SD"); equal(calls[#calls], "lane:SD")
   invoke(observed.normal, 5, 2)
-  equal(page.get_rhythm_doctor_lane(), "CHH"); equal(calls[#calls], "lane:CHH", "x5 selects closed hi-hat")
+  equal(page.get_rhythm_doctor_lane(), "CYM"); equal(calls[#calls], "lane:CYM", "x5 selects the cymbal lane")
+  -- x6 and x7 held OHH and BASS before those lanes were withdrawn; pressing
+  -- there must leave the selection alone rather than pick a neighbour.
   invoke(observed.normal, 6, 2)
-  equal(page.get_rhythm_doctor_lane(), "OHH"); equal(calls[#calls], "lane:OHH", "x6 selects open hi-hat")
+  equal(page.get_rhythm_doctor_lane(), "BASS"); equal(calls[#calls], "lane:BASS", "x6 selects the bass lane")
+  invoke(observed.normal, 7, 2)
+  equal(page.get_rhythm_doctor_lane(), "BASS", "retired lane column does not change the selection")
   equal(page.handle_rhythm_doctor_encoder(2, 1).code, "SETUP_EDITED")
   equal(calls[#calls], "enc:2,1")
   invoke(observed.normal, 15, 2)
@@ -140,8 +147,8 @@ test("transport-gated lane selection leaves the displayed lane unchanged", funct
     screen_model = function() return {worker_ready = false} end,
   })
   page.register_press(); invoke(observed.normal, 16, 2)
-  invoke(observed.normal, 7, 2)
-  equal(selected, "BASS", "adapter must receive the attempted lane for transport gating")
+  invoke(observed.normal, 5, 2)
+  equal(selected, "CYM", "adapter must receive the attempted lane for transport gating")
   equal(page.get_rhythm_doctor_lane(), "BD", "gated lane must not alter player-visible selection")
   equal(observed.tips[#observed.tips], "STOP SEQUENCER")
 end)

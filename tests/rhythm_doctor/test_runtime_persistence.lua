@@ -18,7 +18,7 @@ runtime.machine.project_id, runtime.machine.generation, runtime.machine.analysis
 runtime.machine.state = "READY"
 runtime.machine.bank = assert(Bank.build({project_id=source_identity,generation=3,analysis_revision=1,
   sample_rate=100,capture_start_sample=0,capture_end_sample=1000,origin_sample=0,bpm=120,
-  candidates={{lane="BASS",sample_index=0,velocity=76,confidence=1}}}))
+  candidates={{lane="BD",sample_index=0,velocity=76,confidence=1}}}))
 local data = {song_patterns={}}
 check(runtime:serialize_project(data, save_path).ok, "ready bank serializes with project")
 check(data.rhythm_doctor and data.rhythm_doctor.version == 1, "versioned bank stored in project data")
@@ -28,7 +28,7 @@ local loaded = new_runtime("data/other.ptn")
 check(loaded:project_loaded(save_path).ok)
 check(loaded:restore_project(data, save_path).ok, "completed bank restores after project replacement")
 equal(loaded.machine.state, "READY", "reload reaches ready, never capture")
-equal(loaded.machine.bank.lanes.BASS[1].velocity, 76, "restored bank retains derived lane data")
+equal(loaded.machine.bank.lanes.BD[1].velocity, 76, "restored bank retains derived lane data")
 equal(loaded.machine.project_id, Runtime.project_identity(save_path), "restored callbacks use loaded project identity")
 
 local legacy = new_runtime("data/legacy.ptn")

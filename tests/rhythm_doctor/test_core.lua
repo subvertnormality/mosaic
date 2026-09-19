@@ -36,7 +36,7 @@ local function bank_args()
       { lane = "BD", sample_index = 106, velocity = 40, confidence = .2 },
       { lane = "SD", sample_index = 1099, velocity = 71, confidence = .9 },
     },
-    sensitivities = { BD = .5, SD = 0, CHH = 0, OHH = 0, BASS = 0 },
+    sensitivities = { BD = .5, SD = 0, CYM = 0 },
   }
 end
 
@@ -73,7 +73,7 @@ end
 do
   local args = bank_args()
   args.capture_end_sample = 2500
-  args.candidates[#args.candidates + 1] = { lane = "CHH", sample_index = 1100, velocity = 64, confidence = 1 }
+  args.candidates[#args.candidates + 1] = { lane = "CYM", sample_index = 1100, velocity = 64, confidence = 1 }
   local bank = assert(Bank.build(args))
   equal(bank.timeline_cells, 240)
   local end_start, _, at_end = Bank.move_window(bank, 10000)
@@ -86,7 +86,7 @@ do
   equal(scrolled.window_start, 64, "scroll returns a new window header")
   equal(bank.window_start, 0, "scroll does not change the original bank header")
   check(scrolled.candidates == bank.candidates and scrolled.lanes == bank.lanes, "scroll shares immutable timeline storage")
-  local view = assert(Bank.window(bank, "CHH", 80))
+  local view = assert(Bank.window(bank, "CYM", 80))
   equal(view.cell_count, 64)
   equal(view.cells[21].velocity, 64, "view maps source cell 100 to display step 21")
 end

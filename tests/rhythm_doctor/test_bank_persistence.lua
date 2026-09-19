@@ -10,14 +10,14 @@ local function equal(actual, expected, message) check(actual == expected, (messa
 
 local bank = assert(Bank.build({ project_id="project-a", generation=4, analysis_revision=2,
   sample_rate=100, capture_start_sample=0, capture_end_sample=1000, origin_sample=0, bpm=120,
-  candidates={{lane="OHH", sample_index=15, velocity=91, confidence=1}} }))
+  candidates={{lane="CYM", sample_index=15, velocity=91, confidence=1}} }))
 local saved = assert(Persistence.encode(bank))
 equal(saved.version, Persistence.VERSION, "versioned envelope")
 local restored = assert(Persistence.decode(saved, {project_id="project-a", generation=4, analysis_revision=2}))
 check(restored ~= bank and restored.lanes ~= bank.lanes, "project data cannot retain mutable bank aliases")
-equal(restored.lanes.OHH[2].velocity, 91, "all active lanes retain their detected velocities")
-saved.bank.lanes.OHH[2].velocity = 1
-equal(restored.lanes.OHH[2].velocity, 91, "restored data is independent of serialized table")
+equal(restored.lanes.CYM[2].velocity, 91, "all active lanes retain their detected velocities")
+saved.bank.lanes.CYM[2].velocity = 1
+equal(restored.lanes.CYM[2].velocity, 91, "restored data is independent of serialized table")
 
 local value, problem = Persistence.decode({version=999, bank=bank})
 check(value == nil and problem.code == "UNKNOWN_BANK_SCHEMA", "unknown schema rejected")
