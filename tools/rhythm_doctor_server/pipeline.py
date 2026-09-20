@@ -45,12 +45,19 @@ class BeatTracker(Protocol):
 @dataclass
 class Models:
     separate: Separator
-    separate_drums: DrumSeparator
     track_beats: BeatTracker
+    # Optional: LarsNet's checkpoints are CC BY-NC 4.0 and are a separate
+    # download, so a server may legitimately run without them. Without it the
+    # drums stem becomes one DRUMS lane instead of five.
+    separate_drums: DrumSeparator | None = None
     identity: dict[str, str] = field(default_factory=dict)
 
+    def lane_names(self) -> tuple[str, ...]:
+        return lanes.lane_set(self.separate_drums is not None)
 
-def bar_activity(candidates: list[dict], downbeats: list[int]) -> np.ndarray:
+
+def bar_activity(candidates: list[dict], downbeats: list[int],
+                 names: tuple[str, ...] = lanes.LANES) -> np.ndarray:
     """One row per bar: how much each lane played in it, weighted by velocity.
 
     Velocity rather than a plain count, because a bar where the kit is struck
@@ -58,9 +65,9 @@ def bar_activity(candidates: list[dict], downbeats: list[int]) -> np.ndarray:
     boundaries tend to fall where that changes.
     """
     if len(downbeats) < 2:
-        return np.zeros((0, len(lanes.LANES)))
-    rows = np.zeros((len(downbeats) - 1, len(lanes.LANES)))
-    index = {name: position for position, name in enumerate(lanes.LANES)}
+        return np.zeros((0, len(names)))
+    rows = np.zeros((len(downbeats) - 1, len(names)))
+    index = {name: position for position, name in enumerate(names)}
     for candidate in candidates:
         at = int(candidate["sample_index"])
         for bar in range(len(downbeats) - 1):
@@ -74,8 +81,9 @@ def analyse(mono: np.ndarray, sample_rate: int, models: Models,
             gates: dict[str, float] | None = None,
             alignment: dict | None = None) -> dict:
     """One capture in, one worker-shaped analysis out."""
-    gates = dict(gates or lanes.DEFAULT_GATE)
-    if set(gates) != set(lanes.LANES):
+    names = models.lane_names()
+    gates = dict(gates or lanes.gates_for(names))
+    if set(gates) != set(names):
         raise ValueError("a gate is required for every lane, and only for lanes")
     mono = np.asarray(mono, dtype=np.float32)
     empty = {
@@ -93,15 +101,18 @@ def analyse(mono: np.ndarray, sample_rate: int, models: Models,
 
     stems = models.separate(mono, sample_rate)
     drums = stems.get("drums")
-    pieces = models.separate_drums(drums, sample_rate) if drums is not None else {}
-
     candidates: list[dict] = []
-    for lane in lanes.DRUM_LANES:
-        piece = pieces.get(lane.lower())
-        if piece is None:
-            continue
-        for found in onsets.analyse_stem(piece, sample_rate, gates[lane]):
-            candidates.append({"lane": lane, **found})
+    if drums is not None and models.separate_drums is not None:
+        pieces = models.separate_drums(drums, sample_rate)
+        for lane in lanes.DRUM_LANES:
+            piece = pieces.get(lane.lower())
+            if piece is None:
+                continue
+            for found in onsets.analyse_stem(piece, sample_rate, gates[lane]):
+                candidates.append({"lane": lane, **found})
+    elif drums is not None:
+        for found in onsets.analyse_stem(drums, sample_rate, gates["DRUMS"]):
+            candidates.append({"lane": "DRUMS", **found})
     for lane in lanes.MELODIC_LANES:
         stem = stems.get(lanes.STEM_FOR_LANE[lane])
         if stem is None:
@@ -109,7 +120,7 @@ def analyse(mono: np.ndarray, sample_rate: int, models: Models,
         for found in onsets.analyse_stem(stem, sample_rate, gates[lane]):
             candidates.append({"lane": lane, **found})
 
-    order = {name: index for index, name in enumerate(lanes.LANES)}
+    order = {name: index for index, name in enumerate(names)}
     candidates.sort(key=lambda c: (c["sample_index"], order[c["lane"]]))
     for candidate in candidates:
         candidate["sample_index"] = min(int(candidate["sample_index"]), int(mono.size) - 1)
@@ -120,7 +131,7 @@ def analyse(mono: np.ndarray, sample_rate: int, models: Models,
     # rows measures -- and far more informative than downbeat spacing, which is
     # constant at a fixed tempo and so carries no structure at all.
     aligned = phrase.align(beats, downbeats, sample_rate, mono.size, alignment,
-                           features=bar_activity(candidates, downbeats))
+                           features=bar_activity(candidates, downbeats, names))
     value = dict(empty)
     value.update(aligned)
     value["candidates"] = candidates

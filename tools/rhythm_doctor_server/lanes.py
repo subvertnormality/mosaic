@@ -19,7 +19,23 @@ DRUM_LANES = ("KICK", "SNARE", "TOMS", "HIHAT", "CYMBALS")
 # the five named stems did not claim, which in practice is synths and pads.
 MELODIC_LANES = ("BASS", "GUITAR", "PIANO", "VOCALS", "OTHER")
 
+# Without LarsNet the drums stem stays whole. That is a worse result -- one
+# lane where there could be five -- but it is still six lanes against the
+# device's three, and it keeps the server usable for anyone who cannot accept
+# the CC BY-NC 4.0 licence on LarsNet's checkpoints.
+UNSPLIT_DRUM_LANES = ("DRUMS",)
+
 LANES = DRUM_LANES + MELODIC_LANES
+
+
+def lane_set(drum_split: bool = True):
+    """The lanes this server produces, given whether the kit can be split."""
+    return (DRUM_LANES if drum_split else UNSPLIT_DRUM_LANES) + MELODIC_LANES
+
+
+def gates_for(names) -> dict:
+    """Default onset gates for a lane set."""
+    return {lane: DEFAULT_GATE.get(lane, 0.30) for lane in names}
 
 # htdemucs_6s stem names, in the order the model emits them.
 DEMUCS_STEMS = ("drums", "bass", "other", "vocals", "guitar", "piano")
@@ -33,8 +49,12 @@ STEM_FOR_LANE = {"BASS": "bass", "GUITAR": "guitar", "PIANO": "piano",
 # from a stem that sustains between attacks, so they need more evidence before
 # a gate is claimed.
 DEFAULT_GATE = dict(
-    [(lane, 0.30) for lane in DRUM_LANES] + [(lane, 0.45) for lane in MELODIC_LANES])
+    [(lane, 0.30) for lane in DRUM_LANES] + [(lane, 0.45) for lane in MELODIC_LANES]
+    + [(lane, 0.30) for lane in UNSPLIT_DRUM_LANES])
 
-assert set(DEFAULT_GATE) == set(LANES), "every lane needs exactly one gate"
+# Every lane the server can ever emit, split or unsplit, needs exactly one gate.
+ALL_LANES = DRUM_LANES + UNSPLIT_DRUM_LANES + MELODIC_LANES
+assert set(DEFAULT_GATE) == set(ALL_LANES), "every lane needs exactly one gate"
+assert len(set(ALL_LANES)) == len(ALL_LANES), "lane names must be unique"
 assert set(STEM_FOR_LANE) == set(MELODIC_LANES), "every melodic lane needs a stem"
 assert set(STEM_FOR_LANE.values()) <= set(DEMUCS_STEMS), "stems must exist in htdemucs_6s"

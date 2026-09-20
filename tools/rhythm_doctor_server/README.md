@@ -47,6 +47,35 @@ pip install -r requirements.txt
 python3 server.py --host 0.0.0.0 --port 8420
 ```
 
+Demucs and Beat This! fetch their own weights on first use, from their
+libraries' own versioned homes — Hugging Face and the authors' server — and
+cache them. Nothing to do.
+
+LarsNet does not. Its checkpoints are a 562 MB zip on Google Drive and nowhere
+else, which is neither durable nor verifiable: the link can change, the file
+can be replaced, and a quota-limited error page downloads with a 200 status
+and looks like a file. So:
+
+```
+git clone https://github.com/polimi-ispl/larsnet
+python3 fetch_models.py --larsnet-root ./larsnet
+export LARSNET_ROOT=$PWD/larsnet
+```
+
+`fetch_models.py` prints the archive's SHA-256; pass it back as `--sha256` to
+pin the download, and `--url` to fetch from your own mirror instead. The
+archive published in December 2023 is:
+
+```
+dd785d77f66413c5acbd3a4cedac02951578c838496d059930c43f159647c907
+```
+
+**Running without LarsNet is supported.** `--no-drum-split`, or simply not
+setting `LARSNET_ROOT`, keeps the drums stem whole: six lanes instead of ten,
+still twice what the device produces. The server logs the reason and says so
+on `/v1/health`. Refusing to start over the optional half would let a licence
+decide whether the feature exists at all.
+
 `--allow-missing-models` starts anyway and reports the fault on `/v1/health`,
 which is useful for checking connectivity from the norns before the models are
 in place.
@@ -77,7 +106,13 @@ memory.
 | --- | --- |
 | htdemucs_6s (Demucs) | MIT |
 | Beat This! | MIT — code and published weights |
-| LarsNet | check before redistributing |
+| LarsNet checkpoints | **CC BY-NC 4.0 — non-commercial** |
+| LarsNet code | no licence file in the repository |
+
+The LarsNet weights are the drum-splitting half of this server and are
+licensed for non-commercial use only; its repository carries no licence file
+for the code at all. Read both before building anything commercial on this.
+Everything else here is MIT, and the server runs without LarsNet.
 
 Beat This! is used rather than madmom deliberately. madmom's code is BSD but
 its model files are CC BY-NC-SA, so commercial use is conditional on permission

@@ -79,6 +79,9 @@ class Service:
     def ready(self) -> bool:
         return self.models is not None
 
+    def lane_names(self) -> tuple[str, ...]:
+        return self.models.lane_names() if self.models else lanes.LANES
+
     def analyse(self, mono: np.ndarray, rate: int, alignment: dict | None) -> dict:
         if self.models is None:
             raise RuntimeError(self.load_error or "models are not loaded")
@@ -109,8 +112,8 @@ class Handler(BaseHTTPRequestHandler):
             "protocol_version": PROTOCOL_VERSION,
             "ready": self.service.ready(),
             "error": None if self.service.ready() else self.service.load_error,
-            "lanes": list(lanes.LANES),
-            "lane_onset_gates": lanes.DEFAULT_GATE,
+            "lanes": list(self.service.lane_names()),
+            "lane_onset_gates": lanes.gates_for(self.service.lane_names()),
             "max_capture_seconds": MAX_CAPTURE_SECONDS,
             "detector": dict(self.service.models.identity) if self.service.ready() else {},
         })
@@ -159,15 +162,29 @@ class Handler(BaseHTTPRequestHandler):
         self._send(200, analysis)
 
 
-def build_models() -> tuple[pipeline.Models | None, str | None]:
+def build_models(drum_split: bool = True) -> tuple[pipeline.Models | None, str | None]:
+    """Load what is installed. Separation and beat tracking are required.
+
+    The drum splitter is not. LarsNet's checkpoints are CC BY-NC 4.0 and are a
+    separate download, so a server legitimately runs without them -- and one
+    lane of drums alongside five melodic lanes is still twice what the device
+    produces. Refusing to start over the optional half would make the licence
+    decide whether the feature exists at all.
+    """
     import models as adapters
     try:
         separate, separator_identity = adapters.load_demucs()
-        separate_drums, drum_identity = adapters.load_larsnet()
         track_beats, tracker_identity = adapters.load_beat_this()
     except adapters.ModelUnavailable as error:
         return None, str(error)
-    identity = {"backend_id": "remote-htdemucs6s-larsnet-v1"}
+    separate_drums, drum_identity = None, {"drum_separator": "none"}
+    if drum_split:
+        try:
+            separate_drums, drum_identity = adapters.load_larsnet()
+        except adapters.ModelUnavailable as error:
+            log.warning("drum splitting unavailable, drums stay one lane: %s", error)
+            drum_identity = {"drum_separator": "none"}
+    identity = {"backend_id": "remote-htdemucs6s-larsnet-v1" if separate_drums else "remote-htdemucs6s-v1"}
     identity.update(separator_identity); identity.update(drum_identity); identity.update(tracker_identity)
     return pipeline.Models(separate=separate, separate_drums=separate_drums,
                            track_beats=track_beats, identity=identity), None
@@ -184,11 +201,13 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Rhythm Doctor remote analysis server")
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8420)
+    parser.add_argument("--no-drum-split", action="store_true",
+                        help="skip LarsNet; the drums stem stays a single lane")
     parser.add_argument("--allow-missing-models", action="store_true",
                         help="start and report the fault on /v1/health instead of exiting")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    models, error = build_models()
+    models, error = build_models(drum_split=not args.no_drum_split)
     if models is None and not args.allow_missing_models:
         print("models unavailable: %s" % error, file=sys.stderr)
         return 2

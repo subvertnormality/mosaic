@@ -111,10 +111,29 @@ class LaneTableTests(unittest.TestCase):
         self.assertEqual(len(set(lanes.LANES)), len(lanes.LANES), "lane names must be unique")
 
     def test_every_lane_has_a_gate_and_every_melodic_lane_has_a_stem(self):
-        self.assertEqual(set(lanes.DEFAULT_GATE), set(lanes.LANES))
+        # Every lane the server can emit, split or unsplit. DRUMS only appears
+        # when LarsNet is absent, and still needs a gate.
+        self.assertEqual(set(lanes.DEFAULT_GATE), set(lanes.ALL_LANES))
         self.assertEqual(set(lanes.STEM_FOR_LANE), set(lanes.MELODIC_LANES))
         for stem in lanes.STEM_FOR_LANE.values():
             self.assertIn(stem, lanes.DEMUCS_STEMS)
+
+    def test_the_lane_set_degrades_without_the_drum_splitter(self):
+        """LarsNet's checkpoints are CC BY-NC 4.0 and a separate 562MB
+        download, so a server legitimately runs without them. One drums lane
+        beside five melodic ones is still twice what the device produces, and
+        refusing to start would let the licence decide whether the feature
+        exists at all."""
+        split = lanes.lane_set(True)
+        whole = lanes.lane_set(False)
+        self.assertEqual(len(split), 10)
+        self.assertEqual(len(whole), 6)
+        self.assertIn("DRUMS", whole)
+        self.assertNotIn("DRUMS", split)
+        self.assertNotIn("KICK", whole)
+        for names in (split, whole):
+            self.assertEqual(set(lanes.gates_for(names)), set(names))
+            self.assertGreater(len(names), 3, "the point is more lanes than the device")
 
 
 if __name__ == "__main__":
