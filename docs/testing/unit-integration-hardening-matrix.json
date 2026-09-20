@@ -30,7 +30,7 @@
  "manual": "README.md",
  "manual_sha256": "a36d893408f874ecde40049e7a5211378d7dc10502f1926d44c09d202feac491",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "213bfefeb5590202a1ee6ca0b4363d8dd65a6bbbaf319c1e74a110bf3cabe874",
+ "inventory_sha256": "62de787245fb6ed04c01559dc91e24f0bb70da7d8fddb932354167dcd32d9a12",
  "counts": {
   "requirements": 148,
   "production_lua_modules": 114,
@@ -90,7 +90,8 @@
    ],
    "linked_behaviour_cases": [
     "M-MERGE-FOUNDATION-001", "M-MERGE-PHRASE-001", "M-HARMONY-REVOICE-001",
-    "M-HARMONY-PATTERN-001", "M-HARMONY-ENSEMBLE-001", "M-HARMONY-PERSIST-001",
+    "M-HARMONY-PATTERN-001", "M-HARMONY-PATTERN-CLOCKS-001", "M-HARMONY-PATTERN-BYPASS-001",
+    "M-HARMONY-ENSEMBLE-001", "M-HARMONY-PERSIST-001",
     "M-HARMONY-FAILURE-001", "M-HARMONY-HELD-001"
    ],
    "status": "implemented"

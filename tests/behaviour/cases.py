@@ -68,7 +68,7 @@ from device_picker_names import device_picker_names
 from syntakt_pedal_params import syntakt_pedal_params
 from dashboard_channel_select import dashboard_channel_select
 from dashboard_chord_slots import dashboard_chord_slots
-from harmony_merge_workflow import foundation_workflow,phrase_build_workflow,revoice_workflow,pattern_harmony_workflow,pattern_harmony_persistence_workflow,ensemble_polyrhythm_workflow,no_voicing_fallback_workflow,held_step_precedence_workflow
+from harmony_merge_workflow import foundation_workflow,phrase_build_workflow,revoice_workflow,pattern_harmony_workflow,pattern_harmony_persistence_workflow,pattern_harmony_independent_clocks_workflow,pattern_harmony_delayed_bypass_workflow,ensemble_polyrhythm_workflow,no_voicing_fallback_workflow,held_step_precedence_workflow
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
 from midi_cc_page_return import midi_cc_page_return
@@ -3321,6 +3321,8 @@ CASES={
  'M-MERGE-PHRASE-001':dict(run=phrase_build_workflow,requirements=['MERGE-PHRASE'],description='Physical Merge Shape workflow applies a two-cycle Build phrase with exact alternating onset sets and exact loop-relative timing over two full phrases'),
  'M-HARMONY-REVOICE-001':dict(run=revoice_workflow,requirements=['HARMONY-REVOICE'],description='Physical Masks and Harmony workflow enables Revoice and emits literal two-voice smooth placements over two complete loops'),
  'M-HARMONY-PATTERN-001':dict(run=pattern_harmony_workflow,requirements=['HARMONY-PATTERN'],description='Physical A-B-C-B broken-chord and scale-progression workflow maps three recurring identities without chord masks; proves literal pitches, onsets, gates and owned releases through active/Off/re-enable, rest/recovery, probability rejection/recovery, output disconnect/reconnect and copied-song entry; and verifies effective Note-grid projection with source-owned editing'),
+ 'M-HARMONY-PATTERN-CLOCKS-001':dict(run=pattern_harmony_independent_clocks_workflow,requirements=['HARMONY-PATTERN','CH-TEMPO'],description='Two public Pattern Harmony channels at /1 and /2 retain independent C frames in distinct registers with exact MIDI channels, pitches, onset intervals, gates and Stop cleanup'),
+ 'M-HARMONY-PATTERN-BYPASS-001':dict(run=pattern_harmony_delayed_bypass_workflow,requirements=['HARMONY-PATTERN','CHORD-ARP','PARAM-SLOTS'],description='Public reverse arpeggio with leading empty chord slots bypasses Pattern Harmony at the chord-mask boundary with exact legacy pitch, delayed onset, gate and release timing'),
  'M-HARMONY-ENSEMBLE-001':dict(run=ensemble_polyrhythm_workflow,requirements=['HARMONY-ENSEMBLE'],description='Physical four-channel Harmony workflow preserves independent masked rhythms and literal roles, then proves local scale and octave bypass with exact ordinary MIDI plus visible reason-specific status'),
  'M-HARMONY-PERSIST-001':dict(run=pattern_harmony_persistence_workflow,requirements=['HARMONY-PERSISTENCE'],description='UI-created Pattern Harmony configuration autosaves and a fresh native process cold-loads the same anchored literal output without serializing transient solver history'),
  'M-HARMONY-FAILURE-001':dict(run=no_voicing_fallback_workflow,requirements=['HARMONY-FAILURE'],description='A valid but infeasible Pattern register visibly reports NO VOICING and silences only the mapped tone; explicit Legacy fallback restores the unchanged ordinary phrase'),

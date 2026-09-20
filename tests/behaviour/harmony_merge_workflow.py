@@ -174,6 +174,161 @@ def assert_pattern_progression_timing(c, notes, stage,
                           tolerance_seconds=tolerance, passed=True))
 
 
+def expanded_midi_messages(events):
+    """Expand native packets so simultaneous channels/messages remain observable."""
+    expanded = []
+    for packet in events:
+        for message in packet.get('decoded', []):
+            if message['type'] not in ('note_on', 'note_off'): continue
+            event = dict(packet)
+            event['packet_index'] = packet['index']
+            event['index'] = len(expanded) + 1
+            status = ((144 if message['type'] == 'note_on' else 128)
+                      + message['channel'] - 1)
+            event['bytes'] = [status] + message['data']
+            expanded.append(event)
+    return expanded
+
+
+def pattern_harmony_independent_clocks_workflow(c):
+    """PATTERN-HARMONY PH-03: independent public Pattern clocks stay independent."""
+    import time
+    from cases import assert_durations
+    from midi_window import MidiWindow
+
+    c.configure()
+    # Leave one public trigger in Pattern 1. Pattern 2 gets its own C source at
+    # the same lattice position; a public register edit makes both MIDI channel
+    # and pitch identify its independent frame.
+    c.tap(5, 8)
+    for step in (2, 3, 4): c.tap(step, 4)
+    c.tap(2, 1); c.tap(1, 4); c.tap(3, 8)
+
+    # Route Channel 2 to MIDI channel 2, select Pattern 2, and set its public
+    # channel clock from /1 to /2. Channel 1 remains /1.
+    c.tap(2, 1); c.screen_header('Ch. 2 Device Config', selected=5)
+    c.enc(3, 1); c.enc(2, 1); c.enc(3, 1); c.key(3)
+    c.tap(2, 2); c.hold_tap((1, 4), (4, 4))
+    c.enc(1, -1); c.screen_header('Ch. 2 Clocks', selected=4)
+    c.enc(3, -2); c.key(3)
+
+    # Each channel enters Pattern mode and maps its sole written identity to
+    # Bass through the real Harmony editor. Defaults place C at 48 and F at 53.
+    c.enc(1, 4); c.screen_header('Ch. 2 Harmony', selected=8)
+    c.enc(3, 2); c.enc(2, 3); c.key(3); c.enc(3, 1); c.key(3)
+    c.enc(1, -1); c.enc(2, 4); c.key(3)
+    c.enc(2, 2); c.enc(3, -5); c.key(3)
+    c.enc(1, -1); c.screen_header('Ch. 2 Harmony', selected=8)
+    c.tap(1, 1); c.screen_header('Ch. 1 Harmony')
+    c.enc(3, 2); c.enc(2, 3); c.key(3); c.enc(3, 1); c.key(3)
+
+    capture = MidiWindow(c.snapshot()['midi_count'])
+    c.tap(1, 8); c.elapse(3.0); capture.extend(c.snapshot())
+    controlled = c.clock_mode == 'controlled-experimental'
+    lower = c.logical_ns if controlled else time.monotonic_ns()
+    c.action(type='grid', x=1, y=8, state=1)
+    c.action(type='grid', x=1, y=8, state=0)
+    upper = c.logical_ns if controlled else time.monotonic_ns()
+    c.elapse(.5); capture.extend(c.snapshot())
+    c.wait(lambda state: not state['midi_capture']['outstanding'])
+
+    field = 'logical_ns' if controlled else 'monotonic_ns'
+    tolerance = 2e-9 if controlled else .01
+    messages = expanded_midi_messages(capture.events)
+    by_channel = {
+        1: [event for event in messages
+            if event['bytes'][0] == 144 and event['bytes'][2] > 0],
+        2: [event for event in messages
+            if event['bytes'][0] == 145 and event['bytes'][2] > 0],
+    }
+    expected = {1: (60, 2/3, 1, 127), 2: (48, 4/3, 2, 100)}
+    traces = {}
+    for channel, (pitch, interval, gate_steps, velocity) in expected.items():
+        notes = by_channel[channel]
+        assert len(notes) >= (5 if channel == 1 else 3), (channel, notes)
+        assert all(note['bytes'][1:] == [pitch, velocity] for note in notes), notes
+        origin = notes[0][field]
+        errors = [(note[field] - origin)/1e9 - index*interval
+                  for index, note in enumerate(notes)]
+        assert all(abs(error) <= tolerance for error in errors), (channel, errors)
+        assert_durations(c, notes, [gate_steps] * len(notes), events=messages)
+        traces[channel] = dict(pitch=pitch, interval_seconds=interval,
+                               gate_seconds=gate_steps/6,
+                               onset_count=len(notes), max_phase_error_seconds=max(
+                                   abs(error) for error in errors))
+    c.results.append(dict(kind='pattern-harmony-independent-public-clocks',
+                          channels=traces, clock_labels={'1': '/1', '2': '/2'},
+                          stop_bounds=[lower, upper], passed=True))
+
+
+def pattern_harmony_delayed_bypass_workflow(c):
+    """PATTERN-HARMONY PH-03: delayed reverse arp is a timed legacy bypass."""
+    import time
+    from cases import assign_trig_parameter
+    from midi_window import MidiWindow
+    from note_schedule import assert_schedule
+
+    c.configure()
+    c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
+    c.enc(3, 2); c.enc(2, 3); c.key(3)
+    c.enc(3, 1); c.key(3)
+    c.screen_header('Ch. 1 Harmony')
+    # Isolate step 1, author a two-step gate and a third chord mask through the
+    # public Pattern and Note Masks pages, then select a 1/6-step reverse arp.
+    c.tap(5, 8)
+    for step in (2, 3, 4): c.tap(step, 4)
+    c.tap(3, 8); c.enc(1, -20); c.screen_header('Ch. 1 Note Masks')
+    c.enc(2, 2); c.enc(3, 18)
+    c.enc(2, 1); c.enc(3, 2)
+    c.enc(1, 1); c.screen_header('Ch. 1 Trig Locks')
+    assign_trig_parameter(c, 'Chord Note Arpeggio'); c.enc(3, 4)
+    c.enc(2, 1); assign_trig_parameter(c, 'Chord Pattern'); c.enc(3, 2)
+
+    capture = MidiWindow(c.snapshot()['midi_count'])
+    controlled = c.clock_mode == 'controlled-experimental'
+    field = 'logical_ns' if controlled else 'monotonic_ns'
+    trigger = c.logical_ns if controlled else time.monotonic_ns()
+    c.action(type='grid', x=1, y=8, state=1)
+    c.action(type='grid', x=1, y=8, state=0)
+    # Two complete four-note arp phrases finish before the next Pattern cycle;
+    # stop in that quiet interval so host input latency cannot admit cycle 3.
+    c.elapse(1.3); capture.extend(c.snapshot())
+    lower = c.logical_ns if controlled else time.monotonic_ns()
+    c.action(type='grid', x=1, y=8, state=1)
+    c.action(type='grid', x=1, y=8, state=0)
+    upper = c.logical_ns if controlled else time.monotonic_ns()
+    c.elapse(.5); capture.extend(c.snapshot())
+    c.wait(lambda state: not state['midi_capture']['outstanding'])
+
+    # Reverse five-slot order retains three leading empty slots: the audible
+    # third begins at pulse 12, root at 16, and the four-step pattern repeats
+    # every 96 pulses. Pattern Harmony must bypass both notes to legacy 64/60.
+    expected = [(cycle*96 + offset, pitch, 127)
+                for cycle in range(2)
+                for offset, pitch in ((12, 64), (16, 60),
+                                      (32, 64), (36, 60))]
+    messages = expanded_midi_messages(capture.events)
+    note_ons = [event for event in messages
+                if event['bytes'][0] == 144 and event['bytes'][2] > 0]
+    assert note_ons, messages
+    # Controlled time can bind the three leading rests to the public Start
+    # input exactly. In real time the host's transport-start scheduling phase
+    # is outside Mosaic's musical clock contract, so bind the complete audible
+    # schedule to the first onset while retaining the same 10 ms event bound.
+    origin = trigger if controlled else note_ons[0][field] - round(12/144*1e9)
+    rows = assert_schedule(
+        messages, expected, [4] * len(expected), field=field,
+        origin=origin, stop_bounds=(lower, upper),
+        tolerance=2e-9 if controlled else .01)
+    c.results.append(dict(kind='pattern-harmony-delayed-public-bypass',
+                          status='CHORD MASK BYPASS', shape='reverse',
+                          leading_rest_pulses=12, interval_pulses=4,
+                          arpeggio_repeat_pulses=20,
+                          cycle_pulses=96, pitches=[64, 60],
+                          absolute_start_delay=controlled,
+                          onsets=len(expected), releases=len(rows), passed=True))
+
+
 def pattern_harmony_workflow(c):
     # Author the user's explicit broken-chord key case A-B-C-B through the
     # existing Pattern Note faders.  These are shared source cells; Harmony is

@@ -54,6 +54,22 @@
         ]
       },
       {
+        "case": "M-HARMONY-PATTERN-CLOCKS-001",
+        "covers": [
+          "two Pattern Harmony channels configured through public grid and norns inputs",
+          "unequal /1 and /2 channel clocks with independent C source frames in distinct registers",
+          "literal MIDI channels, pitches, onset intervals, gates and Stop cleanup in real-time and controlled-time lanes"
+        ]
+      },
+      {
+        "case": "M-HARMONY-PATTERN-BYPASS-001",
+        "covers": [
+          "public Pattern, Note Masks and Trig Locks authoring of a reverse arpeggio with leading empty chord slots",
+          "literal legacy third/root pitch order at the chord-mask bypass boundary",
+          "exact controlled-time leading delay plus exact event-relative inter-note spacing, gate duration, cycle spacing and release ownership in controlled and applicable real-time lanes"
+        ]
+      },
+      {
         "case": "M-HARMONY-PERSIST-001",
         "covers": [
           "public Pattern map creation",
@@ -141,7 +157,7 @@
       "test_harmony_grid_projection_rejects_stale_events_and_names_out_of_range",
       "test_harmony_grid_projection_inverts_only_exact_native_grid_positions"
     ],
-    "public_behaviour": "M-HARMONY-PATTERN-001 asserts exact active, Off and re-enabled grid/MIDI results plus literal onset/gate timing, rests, probability rejection, output loss/recovery, repeated transport starts and song entry through public grid, key, encoder and native connection input in both timing lanes."
+    "public_behaviour": "M-HARMONY-PATTERN-001 asserts exact active, Off and re-enabled grid/MIDI results plus literal onset/gate timing, rests, probability rejection, output loss/recovery, repeated transport starts and song entry. M-HARMONY-PATTERN-CLOCKS-001 adds independent /1 and /2 public channels; M-HARMONY-PATTERN-BYPASS-001 adds the delayed reverse-arpeggio chord-mask bypass. All use public grid, key, encoder and native connection input in controlled and applicable real-time lanes."
   },
   "qualification": "The named Harmony/Musical Merge campaign is feature acceptance rather than the repository's exhaustive sharded behaviour campaign or physical-norns timing evidence. MM-08+ is intentionally outside the user-authorized first package; this matrix makes no claim to deliver those later designs."
 }
