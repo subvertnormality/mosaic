@@ -347,13 +347,31 @@ print("rhythm_doctor ui adapter: " .. count .. " tests passed")
 do
   local Adapter = require('rhythm_doctor.ui_adapter')
   local function check(condition, message) assert(condition, message) end
-  check(Adapter.readable("AUDIO_SERVER_UNAVAILABLE") == "NO AUDIO / RESTART",
-    "an unreachable audio server must tell the player to restart")
-  check(#Adapter.readable("AUDIO_SERVER_UNAVAILABLE") < #"AUDIO_SERVER_UNAVAILABLE",
+  check(Adapter.readable("BUSY") == "ALREADY CAPTURING",
+    "pressing Record during a capture must say what is going on")
+  check(Adapter.readable("PUBLISH_TIMEOUT") == "SAVE TIMED OUT",
+    "a capture that never lands must say so in words")
+  check(#Adapter.readable("INPUT_RESOURCE_BUSY") < #"INPUT_RESOURCE_BUSY",
     "the message must be shorter than the code it replaces")
   for code, text in pairs(Adapter.MESSAGES) do
     check(#text <= 18, code .. " is too wide for the status row: " .. text)
     check(text:match("^[A-Z0-9 /]+$") ~= nil, code .. " must stay in the screen's own vocabulary")
+  end
+
+  -- The map is only worth having if it covers what the recorder can actually
+  -- say. It was written for a JACK worker that no longer exists, so almost
+  -- every real failure fell through to its raw protocol code.
+  local source = assert(io.open("./lib/rhythm_doctor/softcut_recorder.lua")):read("*a")
+  local emitted = {}
+  for code in source:gmatch("capture_error = '([A-Z_]+)'") do emitted[code] = true end
+  check(next(emitted) ~= nil, "the recorder must emit some failure codes to check against")
+  for code in pairs(emitted) do
+    check(Adapter.MESSAGES[code] ~= nil,
+      "the recorder can report " .. code .. " and the screen has no words for it")
+  end
+  for code in pairs(Adapter.MESSAGES) do
+    check(emitted[code] ~= nil,
+      "nothing can report " .. code .. " any more; the phrasing is for a worker that is gone")
   end
   -- An unmapped code stays visible rather than being swallowed.
   check(Adapter.readable("SOME_NEW_PROBLEM") == "SOME NEW PROBLEM", "unknown codes are opened out")

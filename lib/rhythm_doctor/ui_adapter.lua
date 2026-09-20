@@ -417,11 +417,13 @@ end
 -- with its underscores opened out rather than hidden, so a new one is visible
 -- rather than silently swallowed.
 Adapter.MESSAGES = {
-  AUDIO_SERVER_UNAVAILABLE = "NO AUDIO / RESTART",
-  INPUT_RESOURCE_BUSY = "INPUT IN USE",
-  INPUT_ROUTE_FAILED = "NO INPUT ROUTE",
-  UNSUPPORTED_SAMPLE_RATE = "BAD SAMPLE RATE",
-  CAPTURE_OUT_OF_MEMORY = "OUT OF MEMORY",
+  BUSY = "ALREADY CAPTURING",
+  BAD_STATE = "WRONG STATE",
+  INPUT_RESOURCE_BUSY = "INPUT UNAVAILABLE",
+  INVALID_DURATION = "BAD LENGTH",
+  PUBLISH_FAILED = "SAVE FAILED",
+  PUBLISH_TIMEOUT = "SAVE TIMED OUT",
+  STALE_JOB = "STALE CAPTURE",
 }
 
 function Adapter.readable(code)

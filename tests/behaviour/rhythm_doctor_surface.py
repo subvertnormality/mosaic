@@ -7,7 +7,6 @@ claim that audio capture or inference works in controlled time.
 import argparse
 import hashlib
 import json
-import re
 import shutil
 from pathlib import Path
 import time
@@ -118,9 +117,11 @@ def main():
         if c is not None:
             try:
                 c.finish()
-                runtime = c.data_directory / "rhythm-doctor-runtime"
+                # Capture runs through softcut inside crone, so it starts no
+                # process and owns no private directory. Analysis is still a
+                # detached worker, and is the one thing left to tear down.
+                runtime = c.data_directory / "rhythm-doctor-analysis-runtime"
                 pid = int((runtime / "pid").read_text()) if (runtime / "pid").is_file() else None
-                mailbox_root = (runtime / "mailbox").read_text().strip() if (runtime / "mailbox").is_file() else None
                 # Teardown is asynchronous, and a process that has exited but not
                 # been reaped keeps its /proc entry as a zombie. Neither means the
                 # helper is still running, so wait long enough for a loaded CI
@@ -136,19 +137,19 @@ def main():
                 deadline = time.monotonic() + 30
                 while still_running(pid) and time.monotonic() < deadline:
                     time.sleep(.1)
+                strays = sorted(str(path) for path in Path("/tmp").glob("mosaic-rd-*"))
                 runtime_cleanup = dict(cancel=(runtime / "cancel").is_file(),
-                                       status_mailbox=(runtime / "mailbox").exists(), status_pid=(runtime / "pid").exists(),
-                                       process_alive=still_running(pid),
-                                       owned_mailbox_alive=bool(mailbox_root and Path(mailbox_root).exists()))
-                assert not runtime_cleanup["process_alive"], runtime_cleanup
-                # The emulator tears down its native process group without the
-                # norns script-switch cleanup callback. Remove only that dead
-                # session's verified private mailbox directory; physical-norns
-                # cleanup is exercised by the hardware runner.
-                if runtime_cleanup["owned_mailbox_alive"]:
-                    owned_root = Path(mailbox_root)
-                    assert re.fullmatch(r"mosaic-rd-[0-9]+-[A-Za-z0-9]+", owned_root.name), owned_root
-                    shutil.rmtree(owned_root)
+                                       analysis_pid=(runtime / "pid").exists(),
+                                       analysis_process_alive=still_running(pid),
+                                       capture_runtime=(c.data_directory / "rhythm-doctor-runtime").exists(),
+                                       private_capture_roots=strays)
+                assert not runtime_cleanup["analysis_process_alive"], runtime_cleanup
+                # The capture worker and its owned /tmp root were removed with
+                # the JACK path; nothing may quietly bring them back.
+                assert not runtime_cleanup["capture_runtime"], runtime_cleanup
+                assert strays == [], runtime_cleanup
+                if runtime_cleanup["analysis_pid"]:
+                    shutil.rmtree(runtime / "ipc", ignore_errors=True)
                     runtime_cleanup["harness_removed_dead_mailbox"] = True
             except Exception:
                 cleanup_failure = traceback.format_exc()
