@@ -236,7 +236,18 @@ end
 
 function memory.undo_all(channel_number)
   if not channel_number then return end
-  if latest_feature_undo(channel_number)then while memory.get_event_count(channel_number)>0 do memory.undo(channel_number)end;return end
+  -- A feature undo only decrements the count when its transition is applied.
+  -- A refusal therefore left this loop running forever, and with it the Lua
+  -- thread: no screen, no grid, no clock. Stop on refusal or on no progress,
+  -- and report the failure rather than a silent success.
+  if latest_feature_undo(channel_number) then
+    while memory.get_event_count(channel_number) > 0 do
+      local before = memory.get_event_count(channel_number)
+      if memory.undo(channel_number) == false then return false end
+      if memory.get_event_count(channel_number) >= before then return false end
+    end
+    return true
+  end
   if not state.channels[channel_number] then return end
   
   local channel_events = state.channels[channel_number]
@@ -269,7 +280,14 @@ end
 
 function memory.redo_all(channel_number)
   if not channel_number then return end
-  if next_feature_redo(channel_number)then while memory.get_event_count(channel_number)<memory.get_total_event_count(channel_number)do memory.redo(channel_number)end;return end
+  if next_feature_redo(channel_number) then
+    while memory.get_event_count(channel_number) < memory.get_total_event_count(channel_number) do
+      local before = memory.get_event_count(channel_number)
+      if memory.redo(channel_number) == false then return false end
+      if memory.get_event_count(channel_number) <= before then return false end
+    end
+    return true
+  end
   if not state.channels[channel_number] then return end
   
   local channel_events = state.channels[channel_number]

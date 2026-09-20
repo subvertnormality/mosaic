@@ -366,3 +366,33 @@ function test_optional_config_undo_preserves_later_independent_channel_edit()
   luaunit.assert_nil(song.channels[1].musical_merge)
   luaunit.assert_equals(song.channels[2].musical_merge.amount,42)
 end
+
+-- A refused restoration used to leave bulk undo spinning. undo_all loops while
+-- the event count is above zero, and a feature undo only decrements it when
+-- the transition is applied, so a refusal meant the loop never ended and the
+-- Lua thread stopped answering: no screen, no grid, no clock. The guard is
+-- progress, not the particular reason a restoration was refused.
+function test_optional_config_bulk_undo_reports_refusal_instead_of_retrying()
+  local song = setup(); song.channels[1].selected_patterns[1] = true
+  local editor = feature_editor.new("merge"); editor:enter()
+  editor.draft.mode = "foundation"; editor.draft.anchor = 1; editor.dirty = true; editor:apply()
+  luaunit.assert_true(memory.get_event_count(1) > 0, "the edit is undoable to begin with")
+
+  -- Undo the only feature event, then ask again: there is nothing left to
+  -- undo, so a second bulk undo must return rather than loop.
+  luaunit.assert_true(memory.undo_all(1) ~= false, "the first bulk undo completes")
+  luaunit.assert_equals(memory.get_event_count(1), 0, "and empties the channel history")
+  memory.undo_all(1)
+  luaunit.assert_equals(memory.get_event_count(1), 0, "a bulk undo with nothing to undo is a no-op")
+end
+
+function test_optional_config_bulk_redo_reports_refusal_instead_of_retrying()
+  local song = setup(); song.channels[1].selected_patterns[1] = true
+  local editor = feature_editor.new("merge"); editor:enter()
+  editor.draft.mode = "foundation"; editor.draft.anchor = 1; editor.dirty = true; editor:apply()
+  memory.undo_all(1)
+  luaunit.assert_true(memory.redo_all(1) ~= false, "the redo completes")
+  memory.redo_all(1)
+  luaunit.assert_equals(memory.get_event_count(1), memory.get_total_event_count(1),
+    "a bulk redo with nothing left to redo is a no-op")
+end
