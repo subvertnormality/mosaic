@@ -9,16 +9,16 @@
     "exclusion_reason": "MM-08+ is explicitly gated as later design work and was not requested for this implementation."
   },
   "source": {
-    "revision": "72b011b4ab14a3c76dae75138d8fb6f0566c3881",
+    "revision": "36d0f7ba01afc123b5964c8187a80deccbcece5f",
     "dirty_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "git_tree": "ce43debdb5f4aa1e948639d75a7f9a3d9f088a3d",
-    "tree_sha256": "502391c5b5a1acc3dcd754d73ca176775f41ff90b5b1b0734cbe2b6d1a14db11",
-    "file_count": 1246
+    "git_tree": "106a1c8a41db8730606a84560bb4167f87a6e17e",
+    "tree_sha256": "48d79c71f6caab1211807d50a9ead7715e43a8ba6a8661cb3f4a0b5d255cec7e",
+    "file_count": 1248
   },
   "automated_tests": {
     "lua_unit_and_integration": {
       "passed": true,
-      "tests": 1860,
+      "tests": 1866,
       "failures": 0,
       "command": "cd lib/tests && lua run_tests.lua"
     },
@@ -41,6 +41,7 @@
       "independent_oracles": [
         "test_harmony_voicing_matches_independent_small_bruteforce_oracle",
         "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
+        "test_harmony_voicing_matches_independent_oracle_across_small_multi_register_domains",
         "test_harmony_voicing_five_voice_preset_reports_measured_bounded_cost",
         "test_harmony_voicing_reports_budget_instead_of_partial_optimum",
         "test_harmony_voicing_range_beats_common_tone_and_never_clamps",
@@ -51,6 +52,7 @@
         "deterministic lexicographic choice",
         "396-case independent two-voice brute-force agreement across every ordered distinct pitch-class pair and three prior-voice positions",
         "3,170-frame independent assignment-enumeration agreement across every one-through-five-voice pitch-class subset with empty and populated previous state",
+        "372-frame independent multi-register agreement across every one-through-five-voice subset of six pitch classes, two 25-semitone role layouts and three previous states",
         "five-voice bounded search",
         "budget-exceeded fail-closed result",
         "range, crossing, inversion, coverage and lifecycle failures"
@@ -97,22 +99,28 @@
         "test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch",
         "test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit",
         "test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap",
-        "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices"
+        "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
+        "test_harmony_voicing_matches_independent_oracle_across_small_multi_register_domains",
+        "test_harmony_grid_projection_uses_played_harmony_value_without_mutating_source",
+        "test_harmony_grid_projection_off_and_bypass_recover_ordinary_value_immediately",
+        "test_harmony_grid_projection_treats_absent_legacy_config_as_off",
+        "test_harmony_grid_projection_rejects_stale_events_and_names_out_of_range",
+        "test_harmony_grid_projection_inverts_only_exact_native_grid_positions"
       ]
     },
     "red_green_evidence": {
       "path": "docs/testing/mosaic-ux-harmony-red-green.json",
       "source_bound": true,
-      "baseline_regressions_failed_as_expected": 7,
-      "candidate_regressions_passed": 10,
+      "baseline_regressions_failed_as_expected": 9,
+      "candidate_regressions_passed": 17,
       "inspection_baseline": "a1347fa",
       "scheduler_baseline": "c08b99e",
       "local_octave_baseline": "f248a881eca9e5da72318cae13a3a93ba23a3aed",
-      "candidate_revision": "48fc157b72bb8a1684e92b3b95b6094fdbe2c069"
+      "candidate_revision": "36d0f7ba01afc123b5964c8187a80deccbcece5f"
     },
     "plan_coverage": {
       "path": "docs/testing/mosaic-ux-harmony-plan-coverage.json",
-      "solver_frames": 3566,
+      "solver_frames": 3938,
       "public_pattern_disable_and_reenable": true,
       "public_local_scale_and_octave_bypass": true,
       "deferred_requirements": []
@@ -159,9 +167,9 @@
         "behaviour": ["M-HARMONY-REVOICE-001", "M-MERGE-PHRASE-001"]
       },
       {
-        "family": "Existing Channel UI navigation, drafts/queue/active state, held-step precedence, projection and coherent event inspection",
-        "unit_integration": ["channel_feature_editor_tests.lua", "harmony_inspection_tests.lua", "musical_merge_pattern_integration_tests.lua"],
-        "behaviour": ["M-MERGE-FOUNDATION-001", "M-MERGE-PHRASE-001", "M-HARMONY-FAILURE-001", "M-HARMONY-HELD-001"]
+        "family": "Existing Channel UI navigation, drafts/queue/active state, held-step precedence, played Note-grid projection and coherent event inspection",
+        "unit_integration": ["channel_feature_editor_tests.lua", "harmony_inspection_tests.lua", "harmony_grid_projection_tests.lua", "musical_merge_pattern_integration_tests.lua"],
+        "behaviour": ["M-MERGE-FOUNDATION-001", "M-MERGE-PHRASE-001", "M-HARMONY-PATTERN-001", "M-HARMONY-FAILURE-001", "M-HARMONY-HELD-001"]
       },
       {
         "family": "Persistence, copy/migration defaults, transient-history exclusion and cold-load replay",
@@ -176,7 +184,7 @@
     "complete_regression_run": false,
     "reason_not_complete": "Feature acceptance selection; exhaustive repository campaign remains sharded CI scope.",
     "source_identity": {
-      "mosaic_revision": "72b011b4ab14a3c76dae75138d8fb6f0566c3881",
+      "mosaic_revision": "36d0f7ba01afc123b5964c8187a80deccbcece5f",
       "mosaic_clean": true,
       "mosaic_sources_stable": true,
       "emulator_revision": "bd5b8986413ff3649994ba04574999f37b2c654f",
@@ -184,10 +192,10 @@
       "emulator_tree_sha256": "4bbd5b9fba3296b13debcd73da40a9564d8b4245891ecf754eda883aebf9c5ac",
       "qualification": "The externally supplied emulator checkout was dirty but remained byte-stable for the full run; its complete tracked/untracked identity is retained in the hashed suite report. Mosaic made no emulator changes."
     },
-    "started": "2026-09-20T02:50:27+0100",
-    "finished": "2026-09-20T02:57:53+0100",
+    "started": "2026-09-20T04:02:28+0100",
+    "finished": "2026-09-20T04:11:57+0100",
     "suite_sha256": [
-      "d336fdd571d2ae5f88ab7a57782dbacfb7da87e80785b959ef8f829d7d557533"
+      "1c02a400964a217122649f7d6058b098d219ca14b9a2c2c9d8f88b6d4a16b03f"
     ],
     "suite_partition": "One exact-commit run covers the complete named eight-case acceptance inventory in both lanes on the same clean source identity.",
     "case_runs": 16,
@@ -205,24 +213,24 @@
     ],
     "manifest_sha256": {
       "real-time": {
-        "M-HARMONY-ENSEMBLE-001": "7b115c60d2280992fbd7abbdebd8b8fefa2734094acc7b77ab401b9343412520",
-        "M-HARMONY-FAILURE-001": "b9e113c737f32e3daa2c3bcc6114b7a6b4471a6f771448134be7166f2c1a53be",
-        "M-HARMONY-HELD-001": "b434ab33184c025b60b23e8d0aa6be259fe8ad89ff51338d825c9e29f168c5e1",
-        "M-HARMONY-PATTERN-001": "e2b2162a68391d55687fad170bfd2ac3b3aeca417cb5fc334ef62eeb814b168e",
-        "M-HARMONY-PERSIST-001": "29f7a4ca0386ff7d1dab268c13c5a1a959f900bfb4cfe2f308cadce3969b1fef",
-        "M-HARMONY-REVOICE-001": "ce89d0fc74dfb178002b853ab76ee01f8deeee463eb8df415311b13569fec07c",
-        "M-MERGE-FOUNDATION-001": "a7c9cb6dc31f18f51819abe91ba77f4767b9715549282974256b194ba64af58c",
-        "M-MERGE-PHRASE-001": "bc45edc8796d9f5add9168e67166e4fd83038c29806b68606c87d68e92f129c9"
+        "M-HARMONY-ENSEMBLE-001": "6d48eb777b48a36b04e44c2ff79033b8acb3043af091937d52d5216c9e16e60b",
+        "M-HARMONY-FAILURE-001": "58470ee1596d698610b7fd6612d7201805bd9e89c047029ac17288be3f7cba5a",
+        "M-HARMONY-HELD-001": "2f060c378b83f9fd11562921beb982dc5c167fc23d4e5d00ddcce8b810f7f4c0",
+        "M-HARMONY-PATTERN-001": "d323d62219789a6d96157124fe55f63a691b4cc76bd1f5089fdf659da38e6ea6",
+        "M-HARMONY-PERSIST-001": "53f28988e247a4a1a5abe14c15e9389d5b600fa21c4cb6e9075090ffc28d138f",
+        "M-HARMONY-REVOICE-001": "12eb9576624404938524780610d231ff9026f34be4913cc1f4cca447488dd7ca",
+        "M-MERGE-FOUNDATION-001": "b7e19416f98f3130477fb2bc2686eb3601f6baf3ee7abb337d70acc935ee11bc",
+        "M-MERGE-PHRASE-001": "72efed4e7901724620dc7d236710573e078d51ba19d96999ca8d7b52fa4b5f73"
       },
       "controlled-experimental": {
-        "M-HARMONY-ENSEMBLE-001": "6f8c76f7ad2913d9711ea080d7e00f26cab5e682c3850cd2890df2b5604d1634",
-        "M-HARMONY-FAILURE-001": "98f6bd9b619c0374f9b7d396dd25a03c7244da8efd70789a27f4c28e2d513e8e",
-        "M-HARMONY-HELD-001": "5e1d3d7046b08c1748c78f20b6e5f88214a334b8fcf769e844632583f04fb90e",
-        "M-HARMONY-PATTERN-001": "e1245022ab4c20798ece8c1ee95c052f22fc6659d438ed1a24495b9d62ba35a8",
-        "M-HARMONY-PERSIST-001": "31a4f001c1efdfc3a33acdb02cfe0e721385d32127b5e4f0a69e946ee22dbc10",
-        "M-HARMONY-REVOICE-001": "6e9836c12548887afb47aea9f55202da20bf80fce3758bee844d4081b73595d7",
-        "M-MERGE-FOUNDATION-001": "bef86f6eb2b2f3e9e6a6b70e19d207c34749f1b0188f18bc6f5666cab6c318f1",
-        "M-MERGE-PHRASE-001": "df55de38f41998aa7977b5e080e9029e2ebd7ecf09926d8b02e8cf37e0c1803c"
+        "M-HARMONY-ENSEMBLE-001": "5f8604219616ab93d94d99dc7594f39365d6f0c592cb5b3f3eeff76255a6828f",
+        "M-HARMONY-FAILURE-001": "87606be8da1bbbcb2e42a9570319cb5a805e155e0f89fc916e31c61da6a2d89d",
+        "M-HARMONY-HELD-001": "546307c0381cb922734ab274b3c6242f496e1767bf81b623da6a295f536f6257",
+        "M-HARMONY-PATTERN-001": "73c61d44140822d6e56c59c78e950abf0dea97803534ffc61eef17b033391589",
+        "M-HARMONY-PERSIST-001": "d506bff0a458e9c80dbe81aa3a08cea17bcec92b03d4162f6f032a8c3ec6dd75",
+        "M-HARMONY-REVOICE-001": "a3364820fe4c210e24b8a36843b7279949cf9df26235ae2c3a59d841ceaa9e85",
+        "M-MERGE-FOUNDATION-001": "5b40fc0efc2f292a145b3cad25d99e93d7e826a204f070d338d4d8dff8a05c61",
+        "M-MERGE-PHRASE-001": "2dd6fd3aa44d7bd637eaf3602f40b9b118935a70f5f3a0a78cc6ba952b06a9dd"
       }
     }
   },
