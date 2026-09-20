@@ -9,10 +9,10 @@
     "exclusion_reason": "MM-08+ is explicitly gated as later design work and was not requested for this implementation."
   },
   "source": {
-    "revision": "6ee805d1a5ffc677fb67972bada500d5e669197d",
+    "revision": "87752639fd9959837c1e386ed4db677480c96419",
     "dirty_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-    "git_tree": "73ebee28db4e75c4fbcdcbe26e6f70b15dfdff28",
-    "tree_sha256": "88d7d961b8b4ffb560b4cd0c7b6ceae2dd1a540f1f029b5dad825cf277500049",
+    "git_tree": "209d391310cd16451eda4b17c6eed9b9214951eb",
+    "tree_sha256": "bb0fe228f0ad8bd83bfcfa5417842b157b6c08fb6f632379be022a6f0ce0db3a",
     "file_count": 1248
   },
   "automated_tests": {
@@ -118,12 +118,14 @@
       "inspection_baseline": "a1347fa",
       "scheduler_baseline": "c08b99e",
       "local_octave_baseline": "f248a881eca9e5da72318cae13a3a93ba23a3aed",
-      "candidate_revision": "6ee805d1a5ffc677fb67972bada500d5e669197d"
+      "candidate_revision": "87752639fd9959837c1e386ed4db677480c96419"
     },
     "plan_coverage": {
       "path": "docs/testing/mosaic-ux-harmony-plan-coverage.json",
       "solver_frames": 3938,
       "public_pattern_disable_and_reenable": true,
+      "public_pattern_unequal_clocks": true,
+      "public_pattern_delayed_chord_bypass": true,
       "public_local_scale_and_octave_bypass": true,
       "deferred_requirements": []
     },
@@ -146,7 +148,7 @@
       {
         "family": "Structural pitch targets, anchor pitch, scale inventory, masks, fixed/random precedence and Pattern binding identity",
         "unit_integration": ["musical_merge_pitch_target_tests.lua", "harmony_context_tests.lua", "harmony_pattern_tests.lua", "harmony_playback_integration_tests.lua"],
-        "behaviour": ["M-HARMONY-PATTERN-001"]
+        "behaviour": ["M-HARMONY-PATTERN-001", "M-HARMONY-PATTERN-CLOCKS-001"]
       },
       {
         "family": "Deterministic voicing, material preservation, common tones, identity, inversion, register, spacing, bass, entry and score tie-breaks",
@@ -166,7 +168,7 @@
       {
         "family": "Scheduler articulation, retrigger/gate/note ownership, swing-aware arp admission and committed-history lifecycle",
         "unit_integration": ["harmony_playback_integration_tests.lua", "voice_lifetime_tests.lua"],
-        "behaviour": ["M-HARMONY-REVOICE-001", "M-HARMONY-PATTERN-001", "M-MERGE-PHRASE-001"]
+        "behaviour": ["M-HARMONY-REVOICE-001", "M-HARMONY-PATTERN-001", "M-HARMONY-PATTERN-CLOCKS-001", "M-HARMONY-PATTERN-BYPASS-001", "M-MERGE-PHRASE-001"]
       },
       {
         "family": "Existing Channel UI navigation, drafts/queue/active state, held-step precedence, played Note-grid projection and coherent event inspection",
@@ -179,14 +181,14 @@
         "behaviour": ["M-HARMONY-PERSIST-001"]
       }
     ],
-    "coverage_qualification": "Finite planner/solver axes and boundary classes are exercised exhaustively in pure tests where practical; cross-module contracts use integration tests; player-visible controls, MIDI, grid, screen and persistence use the public emulator input/output path. Pattern PH-03 acceptance includes literal onset/gate/release timing, rest and probability rejection, output disconnect/reconnect, repeated Stop/Start, copied-song entry and independent staggered-channel coverage. The named 16-run campaign is feature acceptance, not the exhaustive repository behavior campaign, physical-norns evidence, or a hardware deadline claim."
+    "coverage_qualification": "Finite planner/solver axes and boundary classes are exercised exhaustively in pure tests where practical; cross-module contracts use integration tests; player-visible controls, MIDI, grid, screen and persistence use the public emulator input/output path. Pattern PH-03 acceptance includes literal onset/gate/release timing, rest and probability rejection, output disconnect/reconnect, repeated Stop/Start, copied-song entry, independent unequal-clock public channels and delayed reverse-arpeggio chord-mask bypass. The named 20-run campaign is feature acceptance, not the exhaustive repository behavior campaign, physical-norns evidence, or a hardware deadline claim."
   },
   "emulator_behaviour": {
     "passed": true,
     "complete_regression_run": false,
     "reason_not_complete": "Feature acceptance selection; exhaustive repository campaign remains sharded CI scope.",
     "source_identity": {
-      "mosaic_revision": "6ee805d1a5ffc677fb67972bada500d5e669197d",
+      "mosaic_revision": "87752639fd9959837c1e386ed4db677480c96419",
       "mosaic_clean": true,
       "mosaic_sources_stable": true,
       "emulator_revision": "bd5b8986413ff3649994ba04574999f37b2c654f",
@@ -194,20 +196,24 @@
       "emulator_tree_sha256": "4bbd5b9fba3296b13debcd73da40a9564d8b4245891ecf754eda883aebf9c5ac",
       "qualification": "The externally supplied emulator checkout was dirty but remained byte-stable for the full run; its complete tracked/untracked identity is retained in the hashed suite report. Mosaic made no emulator changes."
     },
-    "started": "2026-09-20T04:51:29+0100",
-    "finished": "2026-09-20T05:01:11+0100",
+    "started": "2026-09-20T05:32:42+0100",
+    "finished": "2026-09-20T05:44:13+0100",
     "suite_sha256": [
-      "1e4c35bc29f402850e45e248df5df6e21166a0322775b73195ea4d285821ad3f"
+      "7140ec139435c0db476e7237692037bc4c80c73296e3b9f1cf773dfd15d6bbb5",
+      "fbd2645a9f0342026966d4eb18f51afc996a055e8b3208b9f7c871cc46fdd4be"
     ],
-    "suite_partition": "One exact-commit run covers the complete named eight-case acceptance inventory in both lanes on the same clean source identity.",
-    "case_runs": 16,
+    "suite_partition": "One exact-commit run covers the complete named ten-case acceptance inventory in both lanes on the same clean source identity. The original report preserves one concurrent real-time documentation-frame mismatch in persistence; the suite-supported serial rerun passed on the identical source and the hashed effective report records it as load-sensitive.",
+    "case_runs": 20,
     "failed_case_runs": 0,
+    "load_sensitive_serial_reruns": ["real-time/M-HARMONY-PERSIST-001"],
     "lanes": ["real-time", "controlled-experimental"],
     "cases": [
       "M-MERGE-FOUNDATION-001",
       "M-MERGE-PHRASE-001",
       "M-HARMONY-REVOICE-001",
       "M-HARMONY-PATTERN-001",
+      "M-HARMONY-PATTERN-CLOCKS-001",
+      "M-HARMONY-PATTERN-BYPASS-001",
       "M-HARMONY-ENSEMBLE-001",
       "M-HARMONY-PERSIST-001",
       "M-HARMONY-FAILURE-001",
@@ -215,24 +221,28 @@
     ],
     "manifest_sha256": {
       "real-time": {
-        "M-HARMONY-ENSEMBLE-001": "a483c3224ee7479c7ce9e0141771af1ad200c7f75ff9df5a20ddb6d9d80025e6",
-        "M-HARMONY-FAILURE-001": "7a3e82d530639ad381ec7a1c7c433aa26086ba68c1631fd4727d8683109bd4e1",
-        "M-HARMONY-HELD-001": "8dd7d0b25a3909ec0c87f74de3d21521f532a330094828e1c2d2aab7d13434f4",
-        "M-HARMONY-PATTERN-001": "4f0e417110f5cc1597e92d3c3c37cedb2889ad39bd219f7cceb1b94a9914ed77",
-        "M-HARMONY-PERSIST-001": "716cb3ced4a6dd2cb9da7e135a81b778e9c6b3dcab89eee253db56c37875e281",
-        "M-HARMONY-REVOICE-001": "c96f61c0a91adf4bcaed840695a6f6925f9041d1f347a8e73583f4c112183436",
-        "M-MERGE-FOUNDATION-001": "3078aed77bcb60af5522dce485445b0ba903daa0b667ef04f5ecb34f518c755b",
-        "M-MERGE-PHRASE-001": "540259856080b84cc8c40d316df54da3cb3bbdb6d30bfe72743603ca34e3849e"
+        "M-HARMONY-ENSEMBLE-001": "5a46a642e48b2026f1c2929bf3233944d43be7aac61b4ebc8e7d14724d7b466e",
+        "M-HARMONY-FAILURE-001": "cea95b7228338ec462b875a69f37975a78b5d6876e15b62b53a04d93988c8dbf",
+        "M-HARMONY-HELD-001": "e2ec1a7144423fda1a1ed11f98f8820583e4068d6948025619200df1fc201a7c",
+        "M-HARMONY-PATTERN-001": "1dc467dfc5ff66ebe8a3816723f23e7d080147bbffcf0d8fd1292bd9590bb9d7",
+        "M-HARMONY-PATTERN-BYPASS-001": "8e2f6e282e2564a023147d7ae613ef9fbca37f3202f51b76059580acc57a2b63",
+        "M-HARMONY-PATTERN-CLOCKS-001": "ccb2a68f289977504331b241c3b55eda0f59ba1d69874627df4ba5701e7c1996",
+        "M-HARMONY-PERSIST-001": "0d8abafd4321b7cfceca2e1a42b11a76b98983f58a0c6e32b5ff0a112b6bc106",
+        "M-HARMONY-REVOICE-001": "a2f384760dda2776b63088cc28818e49b483c3e4a2d16dff75a3cc66aafddf0d",
+        "M-MERGE-FOUNDATION-001": "9df42a78cd203b3f607f8b29c38e2ca1135491075b789ecaf15706d263723e54",
+        "M-MERGE-PHRASE-001": "ecdaef8465a4ddac10860dec9e5fb2b5dff9faa44a2c0fbe1d79d1eb0c420a9e"
       },
       "controlled-experimental": {
-        "M-HARMONY-ENSEMBLE-001": "786387b620ec0ee051d0530cc186e07d28c366a5da56a5d72947d6a57f045741",
-        "M-HARMONY-FAILURE-001": "6cae41598bea76e62b595e4edafe8489af1a172c93aa762ce1674a96ae4c311c",
-        "M-HARMONY-HELD-001": "e9b9028ca67005ec3ae23dbb17ffa83f28d25f5700da4b7806e41bccacd8dfa3",
-        "M-HARMONY-PATTERN-001": "897f37f92499a2e43e7551ccc7f3a31cd48c8c42f4d51c52611ea0722822055a",
-        "M-HARMONY-PERSIST-001": "11d99ff1721e76aee9b3cc51038b0ff63562fa4002cdeb4b8c0762c809c0b56e",
-        "M-HARMONY-REVOICE-001": "1b067ed8c1abdf93cdadcc18f6a5b33ba0205ffa1a50b0dcdef88da32c0c1c89",
-        "M-MERGE-FOUNDATION-001": "b82572aae7966cf0dc0126c7cb39aafeb070a03f0a9d0a6103f028c2b9a1c941",
-        "M-MERGE-PHRASE-001": "526f9adf4ab2816ca888c2d0d3727a895041215b7ac7291d15391134a4c4d1ef"
+        "M-HARMONY-ENSEMBLE-001": "d0e07574407ad82ff5ba1ef8f54faf13ce76202fcaebc1a03171e95e6b269f80",
+        "M-HARMONY-FAILURE-001": "51dd112a0876f569f912eb47a1b506b5cfc00d5e08a904cb223d1543987ff26d",
+        "M-HARMONY-HELD-001": "592ae7850d8878a004c94c717a08254c8f8e6293d8a6c026d6fd684b11dd5440",
+        "M-HARMONY-PATTERN-001": "58c54ac9671a88106a41f8e9b333f172abbb1a959d2271ae0f77d34cf719ed70",
+        "M-HARMONY-PATTERN-BYPASS-001": "587006c290627f07dc8cdefe004f83c4601bf5f781c2f940bb36fee1e4ab8368",
+        "M-HARMONY-PATTERN-CLOCKS-001": "cad49e5ce94700950a0cede45e8eaf602c1b2641c1b6ca8fc1fb1846b8cc518b",
+        "M-HARMONY-PERSIST-001": "fff9fdab9e5522b4ce430364ca6458e2b45c925222860111e525b70a724b1087",
+        "M-HARMONY-REVOICE-001": "96cfae64a2fed2b8616224bf672722ce7bfe5faf98bfd72ac548134ac3046c49",
+        "M-MERGE-FOUNDATION-001": "d7a0db8413edace764993bb750e0e12fc2eeebbfeb90138a3a8ee042b8f0f514",
+        "M-MERGE-PHRASE-001": "ce6dfafebe429b7960c94f5c4044375a24c67b49c810c9fc3ad16af29fb93160"
       }
     }
   },
