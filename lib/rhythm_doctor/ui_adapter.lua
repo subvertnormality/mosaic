@@ -15,6 +15,10 @@ Adapter.READY_FIELDS = { "WINDOW BAR", "WINDOW STEP", "SENSITIVITY", "PAINT POLI
 Adapter.ALIGNMENT_FIELDS = { "HALF TEMPO", "DOUBLE TEMPO", "EXACT BPM", "START BEAT", "FINE START" }
 Adapter.PAINT_POLICIES = { "toggle", "add", "replace" }
 Adapter.MIN_BPM, Adapter.MAX_BPM = 40, 240
+-- Mirrors Bank.WINDOW_CELLS. The displayed window is one four-bar phrase, so
+-- paging by this width keeps every reachable position aligned with the phrase
+-- the centre button returns to.
+Adapter.WINDOW_CELLS = 64
 Adapter.INPUT_SOURCES = { "stereo", "left", "right" }
 local capture_states = { LISTENING = true, RECORDING = true }
 local function outcome(code, extra)
@@ -94,13 +98,30 @@ local function touch_window(self)
   self.active_paint_preview = nil
 end
 
+-- Which entry of the beat grid holds the detected phrase start. The editor
+-- opens there rather than on beat one, so a player who opens it to check the
+-- alignment and confirms without editing keeps the detector's answer instead
+-- of silently replacing it with the first beat of the capture.
+local function phrase_beat_index(bank, beats)
+  if type(beats) ~= "table" or #beats == 0 then return 1 end
+  local cell, spacing = bank.phrase_start_cell, bank.samples_per_cell
+  if type(cell) ~= "number" or type(spacing) ~= "number" or type(bank.origin_sample) ~= "number" then return 1 end
+  local target, best, distance = bank.origin_sample + cell * spacing, 1, nil
+  for index, beat in ipairs(beats) do
+    local gap = math.abs(beat - target)
+    if distance == nil or gap < distance then best, distance = index, gap end
+  end
+  return best
+end
+
 local function begin_alignment(self)
   local bank = bank_of(self)
   if type(bank) ~= "table" or type(bank.bpm) ~= "number" then return nil end
   local beats = bank.source and bank.source.beat_positions
+  beats = type(beats) == "table" and beats or {}
   self.alignment_draft = {
-    bpm = bounded_bpm(bank.bpm), start_beat = 1, fine_start_ms = 0,
-    beat_positions = type(beats) == "table" and beats or {},
+    bpm = bounded_bpm(bank.bpm), start_beat = phrase_beat_index(bank, beats), fine_start_ms = 0,
+    beat_positions = beats,
     capture_start_sample = bank.capture_start_sample, capture_end_sample = bank.capture_end_sample,
     sample_rate = bank.sample_rate, origin_sample = bank.origin_sample,
   }
@@ -322,6 +343,41 @@ function Adapter:paint_context()
     window_start = bank.window_start or 0, window_revision = self.window_revision,
     policy = self.paint_policy, shift = self.paint_shift, thresholds = bank.sensitivities or {},
   }
+end
+
+-- Phrase navigation. Neither of these clamps: Runtime already routes every
+-- window move through the bank's own bounds, and a second copy of that rule
+-- here could only ever disagree with it.
+function Adapter:jump_to_phrase_start()
+  if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  local bank = bank_of(self)
+  if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
+  if type(self.runtime.set_window_start) ~= "function" then return outcome("UNSUPPORTED") end
+  local target = bank.phrase_start_cell
+  if type(target) ~= "number" then return outcome("WINDOW_UNAVAILABLE") end
+  -- Runtime clamps through Bank.with_window_start, so a phrase start with no
+  -- room for a whole window behind it lands on the last valid position here
+  -- without this module needing its own copy of the window rule.
+  local value = self.runtime:set_window_start(target)
+  if value and (value.ok or value.code == "WINDOW_MOVED") then touch_window(self) end
+  self.feedback = value and value.code
+  return value or outcome("WINDOW_UNAVAILABLE")
+end
+
+-- One press moves a whole four-bar phrase, which is exactly the width of the
+-- window, so every position reachable by paging stays aligned with the phrase
+-- the centre button returns to. The encoders remain the way to move by a
+-- single bar or step.
+function Adapter:page_window(delta)
+  if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  local bank = bank_of(self)
+  if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
+  if type(delta) ~= "number" or delta ~= delta or math.floor(delta) ~= delta then return outcome("INVALID_SHIFT") end
+  if type(self.runtime.set_window_start) ~= "function" then return outcome("UNSUPPORTED") end
+  local value = self.runtime:set_window_start((bank.window_start or 0) + delta * Adapter.WINDOW_CELLS)
+  if value and (value.ok or value.code == "WINDOW_MOVED") then touch_window(self) end
+  self.feedback = value and value.code
+  return value or outcome("WINDOW_UNAVAILABLE")
 end
 
 function Adapter:invalidate_paint_preview()

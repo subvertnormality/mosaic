@@ -28,8 +28,12 @@ end
 function Persistence.decode(value, expected)
   if value == nil then return nil, { code = "EMPTY" } end
   if not exact_keys(value) or value.version ~= Persistence.VERSION then return result("UNKNOWN_BANK_SCHEMA") end
-  if not Bank.valid_ready(value.bank, expected) then return result("INVALID_BANK") end
-  return copy(value.bank)
+  -- A bank written by an older Mosaic is brought up to the current schema
+  -- before it is validated. The envelope version does not move for this: the
+  -- envelope is unchanged, only the bank inside it, and Bank owns that shape.
+  local bank = Bank.upgrade(value.bank)
+  if not bank or not Bank.valid_ready(bank, expected) then return result("INVALID_BANK") end
+  return copy(bank)
 end
 
 function Persistence.encode(bank)

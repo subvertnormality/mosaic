@@ -68,3 +68,17 @@ local rejected, why = Persistence.decode(wrong)
 check(rejected == nil and why.code == "INVALID_BANK", "a genuinely wrong spacing is still rejected")
 
 print("rhythm_doctor bank persistence: " .. checks .. " checks")
+
+-- A project saved before phrase alignment must still open. Rejecting the
+-- player's existing captures to publish a schema number would destroy work.
+do
+  local legacy = assert(Bank.build{project_id='p', generation=1, analysis_revision=2,
+    sample_rate=48000, capture_start_sample=0, capture_end_sample=480000,
+    origin_sample=0, bpm=120, candidates={}})
+  legacy.version = 2
+  legacy.phrase_start_cell, legacy.phrase_confidence = nil, nil
+  local decoded, problem = Persistence.decode({ version = Persistence.VERSION, bank = legacy })
+  assert(decoded, "a legacy bank must decode, got " .. tostring(problem and problem.code))
+  assert(decoded.version == Bank.VERSION and decoded.phrase_start_cell == 0,
+    "a decoded legacy bank is upgraded rather than left at the old schema")
+end

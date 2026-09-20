@@ -633,6 +633,31 @@ class PhraseAlignmentTests(unittest.TestCase):
         self.assertEqual(value["phrase_start_sample"], 12345,
                          "a corrected origin is the phrase start the player chose")
 
+    def test_the_beat_grid_is_reported_so_the_player_can_move_the_start(self):
+        """The alignment editor's START BEAT control steps through
+        bank.source.beat_positions. Nothing ever emitted that list, so the
+        control was inert and the only manual alignment left was nudging
+        milliseconds from sample zero with no reference to where the beats are.
+        """
+        mono, downbeats = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        value = self._analysed(mono)
+        beats = value["beat_positions"]
+        self.assertGreater(len(beats), 8)
+        self.assertEqual(beats, sorted(beats))
+        self.assertTrue(all(isinstance(b, int) and b >= 0 for b in beats))
+        spacing = self.SR * 60.0 / value["bpm"]
+        gaps = [b - a for a, b in zip(beats, beats[1:])]
+        self.assertAlmostEqual(min(gaps), spacing, delta=2.0)
+        self.assertAlmostEqual(max(gaps), spacing, delta=2.0)
+
+    def test_the_detected_phrase_start_is_one_of_the_reported_beats(self):
+        """The centre button jumps to the phrase start and START BEAT steps
+        between beats. If the phrase start is not itself a beat the player
+        cannot return to it after moving away."""
+        mono, _ = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        value = self._analysed(mono)
+        self.assertIn(value["phrase_start_sample"], value["beat_positions"])
+
     def test_silence_reports_no_phrase_rather_than_guessing(self):
         value = self._analysed(np.zeros(int(6 * self.SR), dtype=np.float32))
         self.assertEqual(value["phrase_start_sample"], value["origin_sample"])

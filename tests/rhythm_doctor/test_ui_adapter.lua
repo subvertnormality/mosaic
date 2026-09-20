@@ -379,3 +379,54 @@ do
   check(Adapter.readable(nil) == "FAILED", "a missing code still says something")
   print('ui_adapter readable status: 5 tests passed')
 end
+
+-- Phrase navigation. The centre button returns to the calculated start of the
+-- four-bar phrase and the side buttons page through the recording from there.
+do
+  local c = context()
+  local bank = {
+    version = 3, project_id = "p", bpm = 120, sample_rate = 48000,
+    -- Five phrases of recording, so paging has somewhere to go: a timeline
+    -- only one window longer than the window itself clamps on the first press
+    -- and proves nothing about the step size.
+    capture_start_sample = 0, capture_end_sample = 1920000, origin_sample = 0,
+    timeline_cells = 320, samples_per_cell = 6000, window_start = 0,
+    phrase_start_cell = 8, phrase_confidence = .75,
+    sensitivities = { BD = 0, SD = 0, CYM = 0 }, lanes = { BD = {}, SD = {}, CYM = {} },
+    candidates = {}, source = { beat_positions = { 0, 24000, 48000, 72000 } },
+  }
+  c.runtime.machine.state, c.runtime.machine.bank = "READY", bank
+  local moved = nil
+  -- Mirrors Runtime, which routes every window move through the bank's bounds.
+  -- A stub that simply recorded the request would let the adapter appear to
+  -- scroll off the end of the timeline and the test would never notice.
+  local Bank = require('rhythm_doctor.bank')
+  c.runtime.set_window_start = function(_, value)
+    local low, high = Bank.window_bounds(bank)
+    moved = math.max(low, math.min(high, math.floor(value)))
+    bank.window_start = moved
+    return { ok = true, code = "WINDOW_MOVED" }
+  end
+
+  equal(c.adapter:jump_to_phrase_start().code, "WINDOW_MOVED", "the centre button moves the window")
+  equal(moved, 8, "the centre button lands on the calculated phrase start")
+
+  c.adapter:page_window(1)
+  equal(moved, 72, "paging forward advances a whole four-bar phrase")
+  c.adapter:page_window(-1)
+  equal(moved, 8, "paging back returns by the same phrase")
+
+  -- The window rule is the bank's, so paging cannot leave the timeline.
+  for _ = 1, 10 do c.adapter:page_window(1) end
+  equal(moved, 256, "paging forward stops at the last whole window")
+  for _ = 1, 10 do c.adapter:page_window(-1) end
+  equal(moved, 0, "paging back stops at the timeline start")
+
+  -- The alignment editor opens on the detected phrase start rather than on the
+  -- first beat of the capture, so confirming without editing keeps the
+  -- detector's answer instead of silently replacing it with beat one.
+  c.adapter.ready_field = 5
+  c.adapter:enc(3, 1)
+  equal(c.adapter.alignment_draft ~= nil, true, "the alignment editor opens")
+  equal(c.adapter.alignment_draft.start_beat, 3, "START BEAT opens on the beat holding the phrase start")
+end

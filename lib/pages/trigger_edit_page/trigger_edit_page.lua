@@ -275,6 +275,46 @@ local function rhythm_doctor_preview_grid(preview)
   return grid
 end
 
+-- The left/centre/right buttons browse the recording while algorithm 5 is
+-- selected: centre returns to the calculated start of the four-bar phrase and
+-- the sides page a whole phrase either way. For every other algorithm they
+-- keep shifting the paint pattern, which is why these run only inside the
+-- algorithm-5 branches of the press handlers.
+local function rhythm_doctor_window_feedback(value)
+  if value and (value.ok or value.code == "WINDOW_MOVED") then
+    trigger_edit_page_sequencer:hide_unsaved_grid()
+    return true
+  end
+  tooltip:show((value and value.code) or "WINDOW UNAVAILABLE")
+  return false
+end
+
+function rhythm_doctor_jump_to_phrase_start()
+  if not rhythm_doctor or type(rhythm_doctor.jump_to_phrase_start) ~= "function" then
+    tooltip:show("WINDOW UNAVAILABLE")
+    return false
+  end
+  -- A paint preview describes the window it was taken from, so it cannot
+  -- survive the window moving underneath it.
+  cancel_rhythm_doctor_paint()
+  local value = rhythm_doctor:jump_to_phrase_start()
+  if rhythm_doctor_window_feedback(value) then tooltip:show("Phrase start") end
+  return value ~= nil
+end
+
+function rhythm_doctor_page_window(delta)
+  if not rhythm_doctor or type(rhythm_doctor.page_window) ~= "function" then
+    tooltip:show("WINDOW UNAVAILABLE")
+    return false
+  end
+  cancel_rhythm_doctor_paint()
+  local value = rhythm_doctor:page_window(delta)
+  if rhythm_doctor_window_feedback(value) then
+    tooltip:show(delta < 0 and "Previous phrase" or "Next phrase")
+  end
+  return value ~= nil
+end
+
 local function preview_rhythm_doctor_paint()
   if not rhythm_doctor or type(rhythm_doctor.paint_preview) ~= "function" then return nil, { code = "PAINT_UNAVAILABLE" } end
   local preview, problem = rhythm_doctor:paint_preview(rhythm_doctor_target())
@@ -506,10 +546,7 @@ function trigger_edit_page.register_press()
       if trigger_edit_page_left_button:is_this(x, y) then
         if (trigger_edit_page_left_button:get_state() == 2) then
           if trigger_edit_page_algorithm_fader:get_value() == 5 then
-            local changed = rhythm_doctor and rhythm_doctor.shift_paint and rhythm_doctor:shift_paint(-1)
-            local preview, problem
-            if changed then preview, problem = preview_rhythm_doctor_paint() else problem = { code = "PAINT_UNAVAILABLE" } end
-            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+            rhythm_doctor_page_window(-1)
             return
           end
           shift = shift - 1
@@ -529,10 +566,7 @@ function trigger_edit_page.register_press()
       if trigger_edit_page_centre_button:is_this(x, y) then
         if (trigger_edit_page_centre_button:get_state() == 2) then
           if trigger_edit_page_algorithm_fader:get_value() == 5 then
-            local changed = rhythm_doctor and rhythm_doctor.reset_paint_shift and rhythm_doctor:reset_paint_shift()
-            local preview, problem
-            if changed then preview, problem = preview_rhythm_doctor_paint() else problem = { code = "PAINT_UNAVAILABLE" } end
-            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+            rhythm_doctor_jump_to_phrase_start()
             return
           end
           shift = 0
@@ -551,10 +585,7 @@ function trigger_edit_page.register_press()
       if trigger_edit_page_right_button:is_this(x, y) then
         if (trigger_edit_page_right_button:get_state() == 2) then
           if trigger_edit_page_algorithm_fader:get_value() == 5 then
-            local changed = rhythm_doctor and rhythm_doctor.shift_paint and rhythm_doctor:shift_paint(1)
-            local preview, problem
-            if changed then preview, problem = preview_rhythm_doctor_paint() else problem = { code = "PAINT_UNAVAILABLE" } end
-            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+            rhythm_doctor_page_window(1)
             return
           end
           shift = shift + 1

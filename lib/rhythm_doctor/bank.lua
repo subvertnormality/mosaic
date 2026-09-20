@@ -2,7 +2,7 @@
 -- UI dependency belongs here.  `sample_index` is authoritative for every event.
 -- See docs/rhythm-doctor/PLAN.md, "Four bars, clock and quantisation".
 local Bank = {
-  VERSION = 2,
+  VERSION = 3,
   LANES = { "BD", "SD", "CYM" },
   WINDOW_CELLS = 64,
   -- 45 seconds × an explicit 100 retained candidates/second/lane × 5 lanes.
@@ -73,6 +73,16 @@ local function normalized_sensitivities(values)
     out[lane] = value
   end
   return out
+end
+
+-- The cell the phrase start occupies, clamped to a window start the UI can
+-- actually adopt. A phrase beginning three bars from the end of the capture is
+-- a real detection, but jumping there would show a view running off the end of
+-- the timeline, which reads as a fault rather than as the end of the take.
+local function phrase_cell(sample, origin_sample, samples_per_cell, cells)
+  if not number(sample) or sample < origin_sample then return 0 end
+  local cell = math.floor((sample - origin_sample) / samples_per_cell + .5)
+  return math.max(0, math.min(cell, cells - 1))
 end
 
 local function quantize_candidate(candidate, origin_sample, samples_per_cell, cells)
@@ -175,12 +185,16 @@ function Bank.build(args)
     -- Only an explicit false means the tempo was not detected: a bank that
     -- says nothing predates the flag and must not be relabelled as a guess.
     tempo_detected = args.tempo_detected ~= false,
-    meter = args.meter or "4/4", source = copy(args.source or {}),
+    meter = args.meter or "4/4",
+    source = copy(args.source or (args.beat_positions and { beat_positions = args.beat_positions }) or {}),
     capture_start_sample = args.capture_start_sample, capture_end_sample = args.capture_end_sample,
     origin_sample = args.origin_sample, sample_rate = args.sample_rate,
     samples_per_cell = samples_per_cell, timeline_cells = cells,
     timeline_end_sample = args.origin_sample + cells * samples_per_cell,
     window_start = 0, sensitivities = sensitivities, candidates = candidates,
+    phrase_start_cell = phrase_cell(args.phrase_start_sample, args.origin_sample, samples_per_cell, cells),
+    phrase_confidence = number(args.phrase_confidence) and
+      math.max(0, math.min(1, args.phrase_confidence)) or 0,
     detector = copy(args.detector or {}), quality_warnings = copy(args.quality_warnings or {}),
   }
   return rebuild(bank)
@@ -206,6 +220,10 @@ function Bank.valid_ready(bank, expected)
       not integer(bank.window_start) or bank.window_start > cells - Bank.WINDOW_CELLS then return invalid() end
   if type(expected) == "table" and (bank.project_id ~= expected.project_id or bank.generation ~= expected.generation or
       bank.analysis_revision ~= expected.analysis_revision) then return invalid() end
+  if not integer(bank.phrase_start_cell) or bank.phrase_start_cell >= cells or
+      not number(bank.phrase_confidence) or bank.phrase_confidence < 0 or bank.phrase_confidence > 1 then
+    return invalid()
+  end
   if bank.meter ~= "4/4" or (bank.tempo_mode ~= "auto" and bank.tempo_mode ~= "manual") or
       type(bank.sensitivities) ~= "table" or type(bank.lanes) ~= "table" or
       type(bank.candidates) ~= "table" or #bank.candidates > Bank.MAX_CANDIDATES then return invalid() end
@@ -239,6 +257,28 @@ function Bank.with_sensitivity(bank, lane, sensitivity)
   local changed = copy(bank)
   changed.sensitivities[lane] = sensitivity
   return rebuild(changed)
+end
+
+-- Where the window must sit to show the phrase. Kept here rather than in the
+-- UI so that the clamp and the bank's own window rule cannot disagree.
+function Bank.phrase_window_start(bank)
+  local low, high = Bank.window_bounds(bank)
+  if low == nil then return nil, high end
+  return math.max(low, math.min(high, bank.phrase_start_cell or 0))
+end
+
+-- Bring a bank written before phrase alignment up to the current schema. A
+-- player's saved captures predate this feature and must keep loading; the
+-- upgraded bank claims no phrase, which is true, rather than inventing one.
+function Bank.upgrade(bank)
+  if type(bank) ~= "table" then return nil end
+  if bank.version == Bank.VERSION then return bank end
+  if bank.version ~= 2 then return nil end
+  local changed = copy(bank)
+  changed.version = Bank.VERSION
+  changed.phrase_start_cell, changed.phrase_confidence = 0, 0
+  changed.source = type(changed.source) == "table" and changed.source or {}
+  return changed
 end
 
 function Bank.window_bounds(bank)

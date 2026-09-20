@@ -124,6 +124,12 @@ function Transport:_completed(message)
     -- tempo. Dropping that here is how a default reached the screen looking
     -- exactly like a measurement.
     tempo_detected=analysis.tempo_detected,
+    -- Where the backend believes the four-bar phrase begins, and the beat grid
+    -- the alignment editor steps through when the player disagrees. Neither
+    -- reached the bank before, so the editor's START BEAT control had an empty
+    -- list to step through and did nothing.
+    phrase_start_sample=analysis.phrase_start_sample, phrase_confidence=analysis.phrase_confidence,
+    beat_positions=analysis.beat_positions,
     sensitivities=analysis.sensitivities, candidates=analysis.candidates, detector=analysis.detector,
     quality_warnings=analysis.quality_warnings })
   if not bank then return failure(message, problem and problem.code or "ANALYSIS_PROTOCOL_ERROR") end
