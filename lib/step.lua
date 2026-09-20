@@ -1088,7 +1088,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     -- A failed solve is the feature's strict-silence result, not a bypass.
     -- Reserve BYPASS for frames that deliberately use the ordinary pitch path.
     bypass=(harmony and({chord_mask=true,note_mask=true,random=true,quantised_fixed=true,
-      fixed=true,local_scale_bypass=true,missing_output=true})[harmony.status]and harmony.status)or
+      fixed=true,local_scale_bypass=true,local_octave=true,missing_output=true})[harmony.status]and harmony.status)or
       (unprocessed_note_container.structural_status and
        unprocessed_note_container.structural_status~="targeted" and
        unprocessed_note_container.structural_status~="legacy" and

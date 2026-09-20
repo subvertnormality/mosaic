@@ -292,6 +292,24 @@ function test_harmony_playback_ensemble_replaces_each_member_with_explicit_role(
   luaunit.assert_equals({midi_note_on_events[1][1],midi_note_on_events[2][1]}, {48,55})
 end
 
+function test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch()
+  local song=setup();source(song,1,{[1]=0},{1});assign(song,1,1)
+  local group=harmony_config.new_group(1);group.enabled=true
+  group.members={{role="bass",channel=1}};group.roles={bass=exact_role(48)}
+  song.voicing={schema_version=1,groups={[1]=group}}
+  local channel=song.channels[1];channel.voicing=harmony_config.new_channel("ensemble")
+  channel.voicing.group_id=1
+  program.add_step_octave_trig_lock(1,1)
+
+  step.handle(1,1)
+  luaunit.assert_equals(midi_note_on_events[1][1],72)
+  local shown=harmony_inspection.snapshot(song,1,1)
+  luaunit.assert_equals(shown.planned.status,"local_octave")
+  luaunit.assert_equals(shown.planned.bypass,"local_octave")
+  luaunit.assert_equals(shown.planned.output,72)
+  luaunit.assert_equals(shown.emitted.pitch,72)
+end
+
 function test_harmony_playback_explicit_group_scale_does_not_treat_global_inheritance_as_local_override()
   local song=setup();source(song,1,{[1]=0},{1});assign(song,1,1)
   local base=quantiser.get_scales()[1]
@@ -374,6 +392,29 @@ function test_harmony_pattern_source_edit_invalidates_prepared_frame()
   luaunit.assert_equals(inspection.planned.status,"alias_conflict")
   luaunit.assert_equals(inspection.planned.fallback,"legacy")
   luaunit.assert_nil(inspection.planned.bypass)
+end
+
+function test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit()
+  local song=setup();source(song,1,{[1]=0},{1});local channel=song.channels[1]
+  channel.voicing=harmony_config.new_channel("pattern");channel.voicing.roles.v1=exact_role(48)
+  assign(song,1,1);local binding=pattern_harmony.binding_key(channel)
+  channel.voicing.pattern_maps[binding]={schema_version=1,revision=1,
+    assignments={["0"]="bass",["1"]="bass"}}
+  step.handle(1,1)
+  local valid=harmony_runtime_state.snapshot(song).channels[1].consumed
+  luaunit.assert_equals(midi_note_on_events[1][1],48)
+
+  song.patterns[1].note_values[1]=1;pattern_model.update_working_pattern(1,song)
+  step.handle(1,1)
+  luaunit.assert_equals(#midi_note_on_events,1)
+  luaunit.assert_equals(harmony_inspection.snapshot(song,1,1).planned.status,"alias_conflict")
+  luaunit.assert_equals(harmony_runtime_state.snapshot(song).channels[1].consumed,valid)
+
+  song.patterns[1].note_values[1]=0;pattern_model.update_working_pattern(1,song)
+  step.handle(1,1)
+  luaunit.assert_equals(midi_note_on_events[2][1],48)
+  luaunit.assert_equals(harmony_inspection.snapshot(song,1,1).planned.status,"ok")
+  luaunit.assert_not_nil(harmony_runtime_state.snapshot(song).channels[1].consumed)
 end
 
 function test_harmony_ensemble_absolute_mask_is_visible_legacy_bypass()

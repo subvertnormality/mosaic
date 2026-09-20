@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "b7909529a13f2e5b0f1e7a447a4b7eb9a9ac0f9bf107e1fd5de80fd2e29fdfea",
+ "manual_sha256": "4f1fa9c35d4fecebfe1d4eef7a6ad3521d7eff298d837625f643c106b9ca3581",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1522,11 +1522,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "b7909529a13f2e5b0f1e7a447a4b7eb9a9ac0f9bf107e1fd5de80fd2e29fdfea"
+   "sha256": "4f1fa9c35d4fecebfe1d4eef7a6ad3521d7eff298d837625f643c106b9ca3581"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "2a1426db7d573971ad804addef3f77d5443cc1894519b06b25260d47010d8038"
+   "sha256": "efe7cfe1a7459aa324bd4b1e75dc27f7816977f6c7dd96664d2364a8402a6553"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -7462,8 +7462,8 @@
    "statement": "Pattern Harmony maps recurring authored relative values to stable voice roles while leaving Raw values on the legacy pitch path.",
    "cases": ["M-HARMONY-PATTERN-001"],
    "status": "partial-domain-coverage",
-   "domain": "Physical Harmony and Tone Map controls map one authored tone and prove mapped placement plus unchanged Raw tones; unit and integration coverage adds binding identity, alias conflict and fallback.",
-   "oracles": ["Public norns page", "literal MIDI pitches", "complete repeated loops", "balanced releases"],
+   "domain": "Physical Harmony and Tone Map controls map one authored tone, prove mapped placement plus unchanged Raw tones, reveal exact ordinary MIDI when disabled, and recover the saved mapping when re-enabled; unit and integration coverage adds binding identity, runtime alias-conflict recovery and fallback.",
+   "oracles": ["Public norns page", "literal mapped and Raw MIDI pitches", "literal Off recovery MIDI", "mapping recovery after re-enable", "complete repeated loops", "balanced releases"],
    "lanes": ["E", "D"],
    "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Pattern Harmony Tone Map contract"}
   },
@@ -7473,8 +7473,8 @@
    "statement": "Ensemble assigns stable group roles to explicit channels while retaining every member's independent rhythm, velocity and route.",
    "cases": ["M-HARMONY-ENSEMBLE-001"],
    "status": "partial-domain-coverage",
-   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. A conflicting local scale lock proves ordinary member pitch plus visible LOCAL SCALE BYPASS. Unit/integration coverage adds frame revision, callback order, rests and failure.",
-   "oracles": ["literal per-channel MIDI pitches", "independent rhythmic intervals", "source velocities", "visible local-scale-bypass status", "balanced releases"],
+   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure.",
+   "oracles": ["literal per-channel MIDI pitches", "independent rhythmic intervals", "source velocities", "visible local scale/octave bypass status", "balanced releases"],
    "lanes": ["E", "D"],
    "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Ensemble groups and independent-channel contract"}
   },

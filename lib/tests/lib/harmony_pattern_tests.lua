@@ -35,6 +35,13 @@ function test_harmony_pattern_repeated_identity_reuses_one_pitch_and_raw_is_lega
   luaunit.assert_equals(runtime.pitch_for(result, 7, 79), 79)
 end
 
+function test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap()
+  local c=channel();c.pattern_maps.b={schema_version=1,revision=1,assignments={["0"]="bass"}}
+  local result=runtime.prepare({},1,"source","b",{[0]=60,[2]=38,[31]=91},c)
+  luaunit.assert_equals(result.status,"ok")
+  luaunit.assert_equals({runtime.pitch_for(result,2,38),runtime.pitch_for(result,31,91)},{38,91})
+end
+
 function test_harmony_pattern_alias_conflict_fails_closed_without_touching_raw()
   local c = channel()
   c.pattern_maps.b = {schema_version=1, revision=2,

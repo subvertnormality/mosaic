@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "subject": "HARMONY / Pattern Harmony plan acceptance coverage",
+  "scope": "H-01 through H-07 and PH-01 through PH-04; MM-08+ remains outside this delivery",
+  "layer_policy": "Player-visible controls, MIDI, screen, grid and persistence use the emulator public input/output path. Finite solver spaces and high-cardinality interaction products use independent unit or integration oracles where repeating the same state through thousands of UI gestures would add runtime rather than confidence.",
+  "solver": {
+    "independent_oracles": [
+      {
+        "test": "test_harmony_voicing_matches_independent_small_bruteforce_oracle",
+        "domain": "396 ordered two-voice frames: every distinct ordered pitch-class pair crossed with three prior-bass positions and multi-placement role ranges"
+      },
+      {
+        "test": "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
+        "domain": "3,170 frames: every one-through-five-voice subset of the twelve pitch classes (1,585 sets), each with empty and populated previous state; independent assignment enumeration"
+      }
+    ],
+    "hard_constraints": [
+      "test_harmony_voicing_range_beats_common_tone_and_never_clamps",
+      "test_harmony_voicing_root_and_inversion_bass_are_hard_constraints",
+      "test_harmony_voicing_strict_direction_and_exact_unison_fail_closed",
+      "test_harmony_voicing_ensemble_covers_required_material_and_allows_doubling",
+      "test_harmony_voicing_pedal_is_exact_and_revoice_cannot_invent_its_pitch_class",
+      "test_harmony_voicing_absolute_pin_is_exact_or_fails_without_clamping"
+    ],
+    "budget_and_cost": [
+      "test_harmony_voicing_reports_budget_instead_of_partial_optimum",
+      "test_harmony_voicing_five_voice_preset_reports_measured_bounded_cost",
+      "tools/benchmark_harmony_solver.lua"
+    ]
+  },
+  "pattern_harmony": {
+    "public_behaviour": [
+      {
+        "case": "M-HARMONY-PATTERN-001",
+        "covers": [
+          "Harmony and Tone Map entry through norns encoders/keys",
+          "mapped role placement and unchanged Raw tones with literal MIDI",
+          "complete repeated loops and balanced releases",
+          "exact ordinary merge/scale MIDI recovery when Off becomes active",
+          "saved mapping recovery when Pattern is re-enabled",
+          "actual emulator framebuffer documentation capture"
+        ]
+      },
+      {
+        "case": "M-HARMONY-PERSIST-001",
+        "covers": [
+          "public Pattern map creation",
+          "native autosave",
+          "fresh-process reload",
+          "literal cold replay without serialized transient history"
+        ]
+      },
+      {
+        "case": "M-HARMONY-FAILURE-001",
+        "covers": [
+          "public range conflict",
+          "reason-specific NO VOICING",
+          "strict mapped-tone silence while Raw events continue",
+          "explicit reason-specific Legacy fallback",
+          "unrecorded selected-step NO EVENT"
+        ]
+      },
+      {
+        "case": "M-HARMONY-HELD-001",
+        "covers": [
+          "held-grid ownership while Harmony is active",
+          "draft cancellation and source-layer edit",
+          "unchanged Off replay"
+        ]
+      }
+    ],
+    "integration_products": [
+      {
+        "dimension": "identity, Raw passing tones, immutable sources and post-Foundation pitch",
+        "tests": [
+          "test_harmony_playback_pattern_reuses_mapped_identity_and_leaves_raw_exact",
+          "test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap",
+          "test_pattern_harmony_uses_post_foundation_structural_pitch_once",
+          "test_harmony_inspection_keeps_authored_source_distinct_from_note_mask_merge_pitch"
+        ]
+      },
+      {
+        "dimension": "source revisions, alias conflict, consumed-history preservation and automatic recovery",
+        "tests": [
+          "test_harmony_pattern_source_edit_invalidates_prepared_frame",
+          "test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit",
+          "test_harmony_pattern_same_identity_with_conflicting_upstream_pitch_fails_closed"
+        ]
+      },
+      {
+        "dimension": "binding identity, repeated values and merge configuration",
+        "tests": [
+          "test_harmony_pattern_binding_is_source_configuration_not_contents_or_ui",
+          "test_harmony_pattern_binding_includes_foundation_pitch_identity",
+          "test_harmony_tone_map_is_per_binding_staged_and_cancelled_without_source_mutation",
+          "musical_merge_pattern_integration_tests.lua"
+        ]
+      },
+      {
+        "dimension": "delayed scheduling, gates, swing, mute-root termination and actual-onset history",
+        "tests": [
+          "test_harmony_playback_delayed_first_arp_voice_commits_at_first_reached_onset",
+          "test_harmony_playback_zero_gate_silent_arp_does_not_commit_history",
+          "test_harmony_playback_gate_before_first_voiced_arp_slot_does_not_commit_history",
+          "test_harmony_playback_terminating_interval_before_first_voiced_arp_slot_does_not_commit_history",
+          "test_harmony_playback_swung_gate_before_first_voiced_arp_slot_does_not_commit_history",
+          "test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset"
+        ]
+      }
+    ]
+  },
+  "ensemble_bypass_inventory": [
+    {"trigger": "absolute/fixed/random/pinned or chord-mask pitch", "result": "ordinary pitch path", "evidence": "test_harmony_ensemble_absolute_mask_is_visible_legacy_bypass"},
+    {"trigger": "conflicting local scale", "result": "LOCAL SCALE BYPASS plus literal ordinary MIDI", "evidence": "M-HARMONY-ENSEMBLE-001 in both lanes"},
+    {"trigger": "channel or step octave override", "result": "LOCAL OCTAVE BYPASS plus literal ordinary MIDI", "evidence": "test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch and M-HARMONY-ENSEMBLE-001 in both lanes"},
+    {"trigger": "missing output", "result": "visible missing_output bypass and no scheduled/emitted note", "evidence": "test_voice_lifetime_rejected_output_does_not_schedule_or_report_acceptance"}
+  ],
+  "qualification": "The 16-run Harmony/Musical Merge campaign is the named feature acceptance selection, not the repository's exhaustive sharded behaviour campaign or physical-norns timing evidence. No plan requirement is deferred by this qualification."
+}

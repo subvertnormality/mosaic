@@ -340,6 +340,7 @@ function editor.new(kind)
       local fields={editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{min=1,max=64}),readonly("Status",function()
         if not active_plan then return"NO EVENT"end
         if active_plan.status=="local_scale_bypass"then return"LOCAL SCALE BYPASS"end
+        if active_plan.status=="local_octave"then return"LOCAL OCTAVE BYPASS"end
         if active_plan.fallback=="legacy"and active_plan.status~="ok"and active_plan.status~="off"then
           return"LEGACY "..tostring(active_plan.reason or active_plan.status)end
         if active_plan.bypass then return"BYPASS "..tostring(active_plan.bypass)end

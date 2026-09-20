@@ -1269,7 +1269,8 @@ Harmony offers four mutually exclusive channel modes:
 - Ensemble assigns Bass/Inner/Top roles to one to five explicit monophonic
   channels. Each member retains its own rhythm, velocity, gate, clock and route,
   but its pitch is replaced by the shared frame. A conflicting local scale lock
-  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`).
+  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`); a channel or
+  step octave override does the same (`LOCAL OCTAVE BYPASS`).
 
 Register rows set inclusive MIDI Low/High, Centre and Preferred leap for every
 role. Smooth prioritises literal common tones and economical movement; Compact
@@ -1297,8 +1298,8 @@ values. H05 Result uses its Step row to select one coherent event chain; on Note
 Dashboard, holding a grid step temporarily inspects that step instead of combining
 it with a later delayed event. A step with no recorded event says `NO EVENT` and
 shows no planned or emitted pitch; it never borrows the latest event from another
-step. Result status names local-scale bypasses, explicit Legacy fallback and the
-specific no-voicing reason. For an Ensemble group, any member bypass or failure is
+step. Result status names local scale/octave bypasses, explicit Legacy fallback
+and the specific no-voicing reason. For an Ensemble group, any member bypass or failure is
 surfaced even when another member has a valid voicing. The projection never writes
 back into a shared pattern. Copy/save stores
 versioned configuration, not running solver or phrase history. Missing optional

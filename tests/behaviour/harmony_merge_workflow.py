@@ -143,10 +143,20 @@ def pattern_harmony_workflow(c):
     setup_pattern_harmony(c)
     documentation_frame(c, '86194708548c7adb76d64ed25e3e59b8ef093e938b3a636da7b1b3c818c29836',
                         'images/harmony-tone-map.png')
-    expected = [(1, [144, note, velocity]) for note, velocity in
-                ((60, 127), (86, 117), (88, 107), (89, 97))]
-    c.playback(expected, cycles=2, timeout=6)
-    c.results.append(dict(kind='pattern-harmony-physical-workflow', passed=True))
+    mapped = [(1, [144, note, velocity]) for note, velocity in
+              ((60, 127), (86, 117), (88, 107), (89, 97))]
+    c.playback(mapped, cycles=2, timeout=6)
+    # Turning Harmony Off through the same public Mode field must reveal the
+    # untouched ordinary octave/scale result, including the formerly mapped
+    # first tone. Re-enabling Pattern must recover the saved mapping.
+    c.enc(3, -2); c.key(3)
+    ordinary = [(1, [144, note, velocity]) for note, velocity in
+                ((84, 127), (86, 117), (88, 107), (89, 97))]
+    c.playback(ordinary, cycles=2, timeout=6)
+    c.enc(3, 2); c.key(3)
+    c.playback(mapped, cycles=2, timeout=6)
+    c.results.append(dict(kind='pattern-harmony-physical-workflow', mapped=mapped,
+                          ordinary_after_disable=ordinary, recovered=True, passed=True))
 
 
 def pattern_harmony_persistence_workflow(c):
@@ -267,6 +277,27 @@ def ensemble_polyrhythm_workflow(c):
                              for i in indexes))
     c.results.append(dict(kind='local-scale-bypass', channel=2,
                           pitches=local_pitches, status='LOCAL SCALE BYPASS', passed=True))
+
+    # A member-local octave setting is another explicit Ensemble conflict.
+    # Channel 3 must use its ordinary +1-octave pitch instead of the shared
+    # role, and H05 must name the exact bypass.
+    c.enc(1, 1); c.enc(1, -3); c.tap(3, 1)
+    c.tap(11, 8); c.elapse(.1)
+    marker = c.snapshot()['midi_count']; c.tap(1, 8)
+    def octave_member(state):
+        return [m for m in state['midi'] if m['index'] > marker and
+                m['bytes'][0] == 146 and m['bytes'][2] > 0]
+    state = c.wait(lambda value: len(octave_member(value)) >= 6, timeout=8)
+    octave_pitches = [m['bytes'][1] for m in octave_member(state)]
+    assert octave_pitches == [72, 72, 72, 72, 72, 72], octave_pitches
+    c.tap(1, 8); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
+    c.enc(1, 3); c.screen_header('Ch. 3 Harmony', selected=8)
+    c.enc(2, 9); c.key(3); c.enc(3, 1)
+    octave_bypass = render([(2, 36, 4, 'Status LOCAL OCTAVE BYPASS')])
+    c.wait(lambda value: all(base64.b64decode(value['frame']['pixels_base64'])[i] == octave_bypass[i]
+                             for i in indexes))
+    c.results.append(dict(kind='local-octave-bypass', channel=3, inspected_step=2,
+                          pitches=octave_pitches, status='LOCAL OCTAVE BYPASS', passed=True))
 
 
 def no_voicing_fallback_workflow(c):

@@ -251,3 +251,94 @@ function test_harmony_voicing_matches_independent_small_bruteforce_oracle()
     end
   end
 end
+
+local function independent_assignment_oracle(frame)
+  local ids,ranks,by_id={},{},{}
+  for _,item in ipairs(frame.material)do ids[#ids+1]=item.id;by_id[item.id]=item end
+  table.sort(ids);for index,id in ipairs(ids)do ranks[id]=index end
+  local best,best_score,order={},nil,{}
+  local function score(pitches)
+    local common_moved,movement,max_upper,excess,centre=0,0,0,0,0
+    for index,role_value in ipairs(frame.roles)do
+      local previous=frame.previous and frame.previous[role_value.id]
+      if previous then
+        local available=previous>=role_value.min and previous<=role_value.max
+        local wanted=previous%12;local material_has=false
+        for _,item in ipairs(frame.material)do if item.pc%12==wanted then material_has=true break end end
+        if available and material_has and pitches[index]~=previous then common_moved=common_moved+1 end
+        local leap=math.abs(pitches[index]-previous)
+        movement=movement+leap*(index==1 and 2 or 1)
+        if index>1 and leap>max_upper then max_upper=leap end
+        excess=excess+math.max(0,leap-(role_value.preferred_leap or 127))
+      end
+      centre=centre+math.abs(pitches[index]-(role_value.centre or pitches[index]))
+    end
+    local spacing=0
+    if #pitches>1 then spacing=spacing+math.max(0,5-(pitches[2]-pitches[1]))end
+    for index=2,#pitches-1 do spacing=spacing+math.max(0,pitches[index+1]-pitches[index]-12)end
+    local values={0,common_moved,movement,max_upper,excess,centre,spacing}
+    for _,pitch in ipairs(pitches)do values[#values+1]=pitch end
+    for _,id in ipairs(order)do values[#values+1]=ranks[id]end
+    return values
+  end
+  local function visit(index,used,pitches)
+    if index>#frame.roles then
+      local candidate=score(pitches)
+      if independent_less(candidate,best_score)then
+        best_score={};for i,v in ipairs(candidate)do best_score[i]=v end
+        best={};for i,v in ipairs(pitches)do best[i]=v end
+      end
+      return
+    end
+    local role_value=frame.roles[index]
+    for _,id in ipairs(ids)do if not used[id]then
+      local pitch=role_value.min+((by_id[id].pc-role_value.min)%12)
+      if index==1 or pitch>pitches[index-1]then
+        used[id]=true;order[index]=id;pitches[index]=pitch
+        visit(index+1,used,pitches)
+        used[id]=nil;order[index]=nil;pitches[index]=nil
+      end
+    end end
+  end
+  visit(1,{},{});return best
+end
+
+function test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices()
+  local checked=0
+  for voice_count=1,5 do
+    local selected={}
+    local function visit(next_pc)
+      if #selected==voice_count then
+        local material,roles={},{}
+        for index,pitch_class in ipairs(selected)do
+          material[index]={id="tone"..index,pc=pitch_class}
+          local low=36+(index-1)*12
+          roles[index]=role("v"..index,low,low+11,low+5,12)
+        end
+        for previous_case=1,2 do
+          local previous={}
+          if previous_case==2 then
+            for index,role_value in ipairs(roles)do
+              previous[role_value.id]=role_value.min+((material[index].pc-role_value.min)%12)
+            end
+          end
+          local frame={mode="revoice",material=material,roles=roles,previous=previous,
+            crossing=false,exact_unison=false,preset="smooth",policy_version=1,node_budget=200000,
+            bass={mode="smooth",direction="nearest"}}
+          local expected=independent_assignment_oracle(frame)
+          local actual=voicing.solve(frame)
+          luaunit.assert_equals(actual.status,"ok")
+          luaunit.assert_equals(actual.pitches,expected,
+            string.format("voices %d set %s previous %d",voice_count,table.concat(selected,","),previous_case))
+          checked=checked+1
+        end
+        return
+      end
+      for pitch_class=next_pc,11 do
+        selected[#selected+1]=pitch_class;visit(pitch_class+1);selected[#selected]=nil
+      end
+    end
+    visit(0)
+  end
+  luaunit.assert_equals(checked,3170)
+end

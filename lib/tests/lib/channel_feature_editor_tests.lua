@@ -169,6 +169,14 @@ function test_harmony_result_distinguishes_local_scale_bypass_and_specific_failu
   luaunit.assert_equals(select_label(value,"Reason").get(),"range")
 end
 
+function test_harmony_result_names_local_octave_bypass_instead_of_no_voicing()
+  local song=setup();local value=feature_editor.new("harmony");value:enter()
+  harmony_inspection.plan(song,1,{step=1,status="local_octave",bypass="local_octave",output=72})
+  open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"LOCAL OCTAVE BYPASS")
+  luaunit.assert_error(function()select_label(value,"Failure details")end)
+end
+
 function test_harmony_group_result_surfaces_a_members_local_scale_bypass()
   local song=setup();local group=harmony_config.four_part_smooth(1,{1,2,3,4});group.enabled=true
   song.voicing={schema_version=1,groups={[1]=group}}
