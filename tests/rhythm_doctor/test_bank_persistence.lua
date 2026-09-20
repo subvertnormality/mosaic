@@ -27,4 +27,44 @@ value, problem = Persistence.decode(saved, {project_id="project-b", generation=4
 check(value == nil and problem.code == "INVALID_BANK", "cross-project bank rejected")
 value, problem = Persistence.decode(nil)
 check(value == nil and problem.code == "EMPTY", "legacy project restores empty")
+
+-- A project file is text. Lua writes a float with fourteen significant digits,
+-- so a bank that comes back from disk is not bit-identical to the one written:
+-- a real capture stored samples_per_cell as 15046.530612245 where the double
+-- was 15046.530612244898. Demanding equality of derived geometry rejected the
+-- bank, and project_lifecycle then rejected the entire project, so a whole
+-- session of painting was lost on reload.
+local function through_text(value)
+  -- Exactly what tabutil.save and tabutil.load do to a number.
+  if type(value) == "number" then return tonumber(tostring(value)) end
+  if type(value) ~= "table" then return value end
+  local out = {}
+  for key, item in pairs(value) do out[through_text(key)] = through_text(item) end
+  return out
+end
+
+-- A tempo whose cell spacing does not terminate in decimal, as most do not.
+local awkward = assert(Bank.build({ project_id="project-b", generation=1, analysis_revision=1,
+  sample_rate=48000, capture_start_sample=0, capture_end_sample=1354187, origin_sample=0,
+  bpm=47.8515625,
+  candidates={{lane="BD", sample_index=15046, velocity=100, confidence=0.9}} }))
+check(tostring(awkward.samples_per_cell) ~= string.format("%.17g", awkward.samples_per_cell),
+  "this tempo must actually lose precision in text, or the test proves nothing")
+
+local written = assert(Persistence.encode(awkward))
+local reread = through_text(written)
+check(reread.bank.samples_per_cell ~= awkward.samples_per_cell,
+  "the round trip must really change the stored double")
+local recovered, problem = Persistence.decode(reread)
+check(recovered ~= nil, "a bank must survive being written to a project file and read back: "
+  .. tostring(problem and problem.code))
+equal(recovered.timeline_cells, awkward.timeline_cells, "with the same timeline")
+equal(#recovered.candidates, #awkward.candidates, "and the same candidates")
+
+-- Tolerance is for the text round trip, not for a bank that disagrees with itself.
+local wrong = through_text(assert(Persistence.encode(awkward)))
+wrong.bank.samples_per_cell = wrong.bank.samples_per_cell * 1.01
+local rejected, why = Persistence.decode(wrong)
+check(rejected == nil and why.code == "INVALID_BANK", "a genuinely wrong spacing is still rejected")
+
 print("rhythm_doctor bank persistence: " .. checks .. " checks")

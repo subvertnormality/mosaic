@@ -41,6 +41,19 @@ local function failure(code, detail)
   return nil, { code = code, detail = detail }
 end
 
+-- Derived geometry is a float and a project file is text: Lua writes fourteen
+-- significant digits, so a bank read back from disk is close to the one that
+-- was written rather than identical to it. A real capture stored 15046.530612245
+-- where the double was 15046.530612244898, and demanding equality rejected the
+-- bank -- and with it the whole project. This is tight enough that a spacing
+-- which disagrees with the tempo is still caught, and loose enough to survive
+-- being written down.
+local function same_measure(actual, expected)
+  if type(actual) ~= "number" or actual ~= actual or type(expected) ~= "number" then return false end
+  local scale = math.abs(expected)
+  return math.abs(actual - expected) <= 1e-9 * (scale > 1 and scale or 1)
+end
+
 local function timeline_length(args)
   local samples_per_cell = args.sample_rate * 15 / args.bpm
   return math.floor((args.capture_end_sample - args.origin_sample) / samples_per_cell), samples_per_cell
@@ -187,8 +200,9 @@ function Bank.valid_ready(bank, expected)
   if bank.origin_sample < bank.capture_start_sample or bank.capture_end_sample < bank.origin_sample or
       bank.capture_end_sample - bank.capture_start_sample > bank.sample_rate * Bank.MAX_CAPTURE_SECONDS then return invalid() end
   local cells, spacing = timeline_length(bank)
-  if cells < Bank.WINDOW_CELLS or bank.timeline_cells ~= cells or bank.samples_per_cell ~= spacing or
-      bank.timeline_end_sample ~= bank.origin_sample + cells * spacing or
+  if cells < Bank.WINDOW_CELLS or bank.timeline_cells ~= cells or
+      not same_measure(bank.samples_per_cell, spacing) or
+      not same_measure(bank.timeline_end_sample, bank.origin_sample + cells * spacing) or
       not integer(bank.window_start) or bank.window_start > cells - Bank.WINDOW_CELLS then return invalid() end
   if type(expected) == "table" and (bank.project_id ~= expected.project_id or bank.generation ~= expected.generation or
       bank.analysis_revision ~= expected.analysis_revision) then return invalid() end
