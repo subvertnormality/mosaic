@@ -486,6 +486,17 @@ static float *read_capture_wav(const char *path, size_t *count, int *rate) {
     samples = xalloc(total * sizeof(float));
     for (size_t i = 0; i < total; i++)
       samples[i] = (float)(int16_t)rd_u16(data + i * 2) / 32768.0f;
+  } else if (tag == 1 && bits == 24) {
+    /* What softcut writes. Three little-endian bytes, sign-extended by hand
+       because there is no 24-bit integer to widen from. */
+    total = data_size / 3;
+    samples = xalloc(total * sizeof(float));
+    for (size_t i = 0; i < total; i++) {
+      const unsigned char *at = data + i * 3;
+      int32_t value = (int32_t)((uint32_t)at[0] | ((uint32_t)at[1] << 8) | ((uint32_t)at[2] << 16));
+      if (value & 0x800000) value -= 0x1000000;
+      samples[i] = (float)value / 8388608.0f;
+    }
   } else if (tag == 1 && bits == 32) {
     total = data_size / 4;
     samples = xalloc(total * sizeof(float));

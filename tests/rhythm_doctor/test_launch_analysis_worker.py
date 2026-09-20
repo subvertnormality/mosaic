@@ -85,18 +85,25 @@ class LaunchAnalysisWorker(unittest.TestCase):
 
 
 
-def capture_wav(path, seconds=3.0, rate=44100):
-    """A short stereo capture with clear transients on a steady pulse."""
+def capture_wav(path, seconds=3.0, rate=44100, bits=16):
+    """A short stereo capture with clear transients on a steady pulse.
+
+    softcut's buffer_write_stereo produces 24-bit PCM, which Python's `wave`
+    module cannot write, so the bytes are laid out here.
+    """
     frames = int(seconds * rate)
     period = int(rate * 0.5)                      # 120 BPM
+    width = bits // 8
+    peak = (1 << (bits - 1)) - 1
     body = bytearray()
     for i in range(frames):
         phase = i % period
         envelope = math.exp(-phase / (rate * 0.02)) if phase < rate * 0.2 else 0.0
-        value = int(20000 * envelope * math.sin(2 * math.pi * 110 * i / rate))
-        body += struct.pack("<hh", value, value)
+        value = int(0.6 * peak * envelope * math.sin(2 * math.pi * 110 * i / rate))
+        body += (value & ((1 << bits) - 1)).to_bytes(width, "little") * 2
+    block = 2 * width
     head = b"RIFF" + struct.pack("<I", 36 + len(body)) + b"WAVEfmt " + \
-        struct.pack("<IHHIIHH", 16, 1, 2, rate, rate * 4, 4, 16) + \
+        struct.pack("<IHHIIHH", 16, 1, 2, rate, rate * block, block, bits) + \
         b"data" + struct.pack("<I", len(body))
     path.write_bytes(head + bytes(body))
     return frames, rate
@@ -121,15 +128,15 @@ class NativeBackendEndToEnd(LaunchAnalysisWorker):
              "--templates", str(tools / "data" / "nmf_drum_templates.bin")],
             capture_output=True, text=True, timeout=900)
 
-    def test_the_native_backend_analyses_a_capture(self):
+    def analyse_a_capture(self, bits, rate=44100):
         result = self.launch()
         problem = self.runtime / "error"
         self.assertFalse(problem.is_file(), problem.read_text() if problem.is_file() else "")
         self.assertEqual(result.returncode, 0, result.stderr)
         self.addCleanup(self.stop)
         root = Path((self.runtime / "mailbox").read_text().strip())
-        wav = self.root / "capture.wav"
-        frames, rate = capture_wav(wav)
+        wav = self.root / ("capture-%d.wav" % bits)
+        frames, rate = capture_wav(wav, rate=rate, bits=bits)
         peer = MailboxClient(root)
         peer.send(json.dumps({
             "protocol_version": 1, "job_id": "j", "project_id": "p",
@@ -151,6 +158,20 @@ class NativeBackendEndToEnd(LaunchAnalysisWorker):
         self.assertEqual(detector["template_sha256"],
                          hashlib.sha256((tools / "data" / "nmf_drum_templates.bin").read_bytes()).hexdigest())
         self.assertGreater(stored["analysis"]["bpm"], 0)
+        return stored
+
+    def test_the_native_backend_analyses_a_capture(self):
+        self.analyse_a_capture(16)
+
+    def test_it_reads_the_24_bit_captures_softcut_writes(self):
+        """Capture runs through softcut now, and softcut writes 24-bit PCM.
+
+        The backend read 16-bit, 32-bit and float, which covered the native
+        JACK worker but not the engine that is actually available, so every
+        real capture would have been unreadable.
+        """
+        stored = self.analyse_a_capture(24, rate=48000)
+        self.assertEqual(stored["sample_rate"], 48000)
 
 
 if __name__ == "__main__":
