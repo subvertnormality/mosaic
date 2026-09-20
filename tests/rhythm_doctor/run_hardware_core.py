@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[2]
 FILES = ["lib/rhythm_doctor/" + name + ".lua" for name in
          ("bank", "state_machine", "paint", "paint_journal", "paint_transactions", "assets", "capture_controller", "analysis_controller",
           "runtime", "ui_adapter", "worker_host", "bank_persistence", "analysis_worker_host",
-          "analysis_transport", "file_mailbox", "dancing_doctor")]
+          "analysis_transport", "file_mailbox", "dancing_doctor", "softcut_recorder")]
 # analysis_transport decodes the worker's result file, so its JSON helper has
 # to be deployed alongside it, and it reaches the worker through file_mailbox.
 FILES.append("lib/helpers/json.lua")
@@ -27,7 +27,7 @@ TESTS = ["tests/rhythm_doctor/test_" + name + ".lua" for name in
          ("core", "integration", "lifecycle", "journal", "bank_schema", "paint_boundaries", "paint_transactions",
           "capture_transitions", "assets", "capture_controller", "analysis_controller", "analysis_runtime", "runtime",
           "project_lifecycle_runtime", "ui_adapter", "worker_host", "app_surface",
-          "analysis_transport", "file_mailbox", "dancing_doctor")]
+          "analysis_transport", "file_mailbox", "dancing_doctor", "softcut_recorder")]
 
 
 def isolated_lua_command(remote, relative):

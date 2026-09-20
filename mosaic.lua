@@ -49,7 +49,7 @@ local rhythm_doctor_poll_clock = nil
 nb = require("mosaic/lib/nb/lib/nb")
 m_clock = include("mosaic/lib/clock/m_clock")
 local rhythm_doctor_runtime_module = include("mosaic/lib/rhythm_doctor/runtime")
-local rhythm_doctor_worker_host = include("mosaic/lib/rhythm_doctor/worker_host")
+local rhythm_doctor_recorder = include("mosaic/lib/rhythm_doctor/softcut_recorder")
 local rhythm_doctor_analysis_worker_host = include("mosaic/lib/rhythm_doctor/analysis_worker_host")
 local rhythm_doctor_ui_module = include("mosaic/lib/rhythm_doctor/ui_adapter")
 local rhythm_doctor_runtime = nil
@@ -68,11 +68,13 @@ local function post_splash_init()
 end
 
 local function init_rhythm_doctor()
-  local worker = rhythm_doctor_worker_host.new({
-    runtime_root = norns.state.data .. "rhythm-doctor-runtime",
-    transport_factory = function(mailbox_root)
-      return include("mosaic/lib/rhythm_doctor/native_transport").new(mailbox_root)
-    end
+  -- Capture runs through softcut, which lives inside crone and is therefore
+  -- already connected to JACK. Opening a JACK client of our own is the one
+  -- thing a norns cannot be relied on to allow: systemd removes the user's
+  -- shared memory when their last login session ends, and JACK's registry goes
+  -- with it, so nothing new can join the graph until jackd restarts.
+  local worker = rhythm_doctor_recorder.host({
+    directory = norns.state.data .. "rhythm-doctor-captures",
   })
   local analysis_worker = rhythm_doctor_analysis_worker_host.new({
     runtime_root = norns.state.data .. "rhythm-doctor-analysis-runtime",
