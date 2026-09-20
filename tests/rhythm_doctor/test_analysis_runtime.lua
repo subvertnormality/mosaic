@@ -52,3 +52,50 @@ assert(corrected.command=='ANALYSE' and corrected.analysis_revision==1)
 assert(corrected.alignment.bpm==50 and corrected.alignment.origin_sample==8000,
   'a correction carries its frozen alignment to the new analysis lease')
 print('rhythm_doctor analysis_runtime: 1 test passed')
+
+-- A capture can finish before the analysis worker is ready. The worker builds
+-- its backend on first use, which takes tens of seconds on a device, and the
+-- publication used to be dropped on the floor: no controller existed yet, so
+-- nothing was dispatched and the bank sat in ANALYSING with nothing coming.
+do
+  local late_capture, late_analysis = transport(), transport()
+  local ready = false
+  local opens = 0
+  local late = Runtime.new({ project_id = 'late-worker', worker = { open = function() return late_capture end },
+    analysis_worker = { open = function()
+      opens = opens + 1
+      if not ready then return nil, 'analysis worker starting' end
+      return late_analysis
+    end },
+    now = function() return 0 end, transport_stopped = function() return true end })
+
+  late:enter()   -- entering the page is what preflights the analysis worker
+  assert(late:start_capture('manual').ok)
+  local pre = late_capture.sent[#late_capture.sent]
+  late_capture.replies[#late_capture.replies + 1] = reply(pre, 'READY'); late:poll()
+  local started = late_capture.sent[#late_capture.sent]
+  late_capture.replies[#late_capture.replies + 1] = reply(started, 'STARTED'); late:poll()
+  assert(late:finish(true).ok)
+  local stopped = late_capture.sent[#late_capture.sent]
+  late_capture.replies[#late_capture.replies + 1] = reply(stopped, 'COMPLETED'); late:poll()
+  local published = late_capture.sent[#late_capture.sent]
+  late_capture.replies[#late_capture.replies + 1] = reply(published, 'PUBLISHED',
+    { wav_path = '/tmp/late.wav', wav_sha256 = string.rep('c', 64), frames = 200000, sample_rate = 8000 })
+  late:poll()
+  assert(#late_analysis.sent == 0, 'nothing can be dispatched before the worker exists')
+  assert(late.machine.state == 'ANALYSING', 'the capture is waiting on analysis')
+
+  -- The worker comes up. The retained request must be dispatched, exactly once.
+  ready = true
+  late.analysis_retry_at = 0
+  late:poll()
+  assert(#late_analysis.sent == 1,
+    'the publication held while the worker started must be dispatched when it is ready, got ' .. #late_analysis.sent)
+  local held = late_analysis.sent[1]
+  assert(held.command == 'ANALYSE' and held.wav_sha256 == string.rep('c', 64), 'and it must be the capture that was published')
+  late.analysis_retry_at = 0
+  late:poll()
+  assert(#late_analysis.sent == 1, 'and dispatched once, not again on every later poll')
+end
+
+print('analysis runtime: late worker readiness covered')

@@ -242,9 +242,27 @@ function Runtime:_analysis_ready(asset, token)
     return result("OK")
   end
   if self.on_analysis_ready then self.on_analysis_ready(asset, token, copy(self.alignment)) end
+  -- No controller yet, and one is expected: the worker builds its backend on
+  -- first use, which takes tens of seconds on a device. Hold the publication
+  -- rather than drop it, or the bank waits in ANALYSING for a dispatch that
+  -- was never made.
+  if self.analysis_worker then self.pending_analysis = { asset = asset, token = token } end
   return result("OK")
 end
+
+-- Dispatch a publication that arrived before the worker did, once.
+function Runtime:_dispatch_pending_analysis()
+  local pending = self.pending_analysis
+  if not pending or not self.analysis_controller then return end
+  self.pending_analysis = nil
+  local dispatched = self.analysis_controller:dispatch(pending.asset, pending.token)
+  if dispatched.code ~= "DISPATCHED" then
+    self.machine:receive_analysis({ project_id = pending.token.project_id, generation = pending.token.generation,
+      analysis_revision = pending.token.analysis_revision, error = "ANALYSIS_DISPATCH_FAILED" })
+  end
+end
 function Runtime:_cancel(token)
+  self.pending_analysis = nil
   if self.controller then self.controller:cancel(token) end
   if self.analysis_controller then self.analysis_controller:cancel(token) end
 end
@@ -414,6 +432,7 @@ function Runtime:poll()
     self.analysis_retry_at = now + self.retry_seconds
     self:_open_analysis_worker()
   end
+  self:_dispatch_pending_analysis()
   local event = self.controller and self.controller:poll() or result("NO_EVENT")
   if event.code == "STARTED" then self:capture_acquiring() end
   local analysis_event = self.analysis_controller and self.analysis_controller:poll() or result("NO_EVENT")
