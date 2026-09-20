@@ -42,7 +42,12 @@
           "three stable mapped identities, constrained Bass/Inner movement and legal Top common-tone retention with literal MIDI",
           "every final played Harmony position across the native lower and centred Note-grid banks",
           "source-owned edit while the projection is visible without flattening played output into the pattern",
-          "complete repeated loops and balanced releases",
+          "literal one-sixth-second onset phase and one-sixth-second owned gates for all eight events in two complete A-B-C-B loops, with two-nanosecond controlled-time and ten-millisecond applicable real-time tolerances",
+          "the same exact onset/gate oracle while active, Off, re-enabled, after rest restoration, after output reconnection, after probability restoration and on copied/source song entry",
+          "public step-4 rest insertion with exact sparse wrap timing and frame recovery",
+          "public probability-zero rejection with no emitted or outstanding notes and exact probability-100 recovery",
+          "native output disconnect with no emitted or outstanding notes and exact reconnect recovery without a settings edit",
+          "eleven public Stop/Start cycles plus copied-song entry and source-song re-entry",
           "exact ordinary merge/scale grid and MIDI recovery when Off becomes active",
           "saved mapping recovery when Pattern is re-enabled",
           "real-time and controlled-time pre-fix failures at the absent projection oracle"
@@ -104,14 +109,21 @@
         ]
       },
       {
-        "dimension": "delayed scheduling, gates, swing, mute-root termination and actual-onset history",
+        "dimension": "delayed scheduling, gates, swing, mute-root termination, Pattern chord-mask bypass and actual-onset history",
         "tests": [
           "test_harmony_playback_delayed_first_arp_voice_commits_at_first_reached_onset",
           "test_harmony_playback_zero_gate_silent_arp_does_not_commit_history",
           "test_harmony_playback_gate_before_first_voiced_arp_slot_does_not_commit_history",
           "test_harmony_playback_terminating_interval_before_first_voiced_arp_slot_does_not_commit_history",
           "test_harmony_playback_swung_gate_before_first_voiced_arp_slot_does_not_commit_history",
-          "test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset"
+          "test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset",
+          "test_harmony_pattern_delayed_strum_bypass_keeps_legacy_pitch_and_note_ownership"
+        ]
+      },
+      {
+        "dimension": "multiple independent Pattern channels at staggered ordinary-clock callbacks",
+        "tests": [
+          "test_harmony_pattern_channels_retain_independent_frames_at_staggered_clocks"
         ]
       }
     ]
@@ -129,7 +141,7 @@
       "test_harmony_grid_projection_rejects_stale_events_and_names_out_of_range",
       "test_harmony_grid_projection_inverts_only_exact_native_grid_positions"
     ],
-    "public_behaviour": "M-HARMONY-PATTERN-001 asserts exact active, Off and re-enabled grid/MIDI results through only grid, key and encoder input in both timing lanes."
+    "public_behaviour": "M-HARMONY-PATTERN-001 asserts exact active, Off and re-enabled grid/MIDI results plus literal onset/gate timing, rests, probability rejection, output loss/recovery, repeated transport starts and song entry through public grid, key, encoder and native connection input in both timing lanes."
   },
   "qualification": "The named Harmony/Musical Merge campaign is feature acceptance rather than the repository's exhaustive sharded behaviour campaign or physical-norns timing evidence. MM-08+ is intentionally outside the user-authorized first package; this matrix makes no claim to deliver those later designs."
 }

@@ -417,6 +417,57 @@ function test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recov
   luaunit.assert_not_nil(harmony_runtime_state.snapshot(song).channels[1].consumed)
 end
 
+function test_harmony_pattern_channels_retain_independent_frames_at_staggered_clocks()
+  local song=setup();source(song,1,{[1]=0},{1});source(song,2,{[1]=3},{1})
+  local first=song.channels[1];first.voicing=harmony_config.new_channel("pattern")
+  first.voicing.roles.v1=exact_role(48)
+  assign(song,1,1)
+  first.voicing.pattern_maps[pattern_harmony.binding_key(first)]={schema_version=1,revision=1,
+    assignments={["0"]="bass"}}
+  local second=song.channels[2];second.voicing=harmony_config.new_channel("pattern")
+  second.voicing.roles.v1=exact_role(53)
+  assign(song,2,2)
+  second.voicing.pattern_maps[pattern_harmony.binding_key(second)]={schema_version=1,revision=1,
+    assignments={["3"]="bass"}}
+
+  -- Deliberately stagger and reverse the channel callback order.  Each Pattern
+  -- channel keeps its own frame/history and the ordinary lattice owns onsets.
+  step.handle(2,1);progress(1);step.handle(1,1);progress(2);step.handle(2,1)
+  luaunit.assert_equals({midi_note_on_events[1][1],midi_note_on_events[2][1],
+    midi_note_on_events[3][1]},{53,48,53})
+  local origin=midi_event_log[1].pulse
+  luaunit.assert_equals({midi_event_log[1].pulse-origin,midi_event_log[2].pulse-origin,
+    midi_event_log[3].pulse-origin},{0,24,72})
+  local runtime=harmony_runtime_state.snapshot(song).channels
+  luaunit.assert_equals(runtime[1].consumed_count,1)
+  luaunit.assert_equals(runtime[2].consumed_count,1)
+  luaunit.assert_not_equals(runtime[1].consumed_revision,runtime[2].consumed_revision)
+end
+
+function test_harmony_pattern_delayed_strum_bypass_keeps_legacy_pitch_and_note_ownership()
+  local song=setup();source(song,1,{[1]=0},{1});local channel=song.channels[1]
+  channel.voicing=harmony_config.new_channel("pattern");channel.voicing.roles.v1=exact_role(48)
+  assign(song,1,1);channel.voicing.pattern_maps[pattern_harmony.binding_key(channel)]={
+    schema_version=1,revision=1,assignments={["0"]="bass"}}
+  channel.chord_one_mask=2
+  channel.trig_lock_params[1]={id="chord_arp",param_id="chord_arp_1"}
+  channel.trig_lock_params[2]={id="chord_strum_pattern",param_id="chord_strum_pattern_1"}
+  program.add_step_param_trig_lock(1,1,4)
+  program.add_step_param_trig_lock(1,2,2) -- reverse, with delayed leading empty slots
+  song.patterns[1].lengths[1]=2
+
+  step.handle(1,1)
+  luaunit.assert_equals(harmony_inspection.snapshot(song,1,1).planned.bypass,"chord_mask")
+  luaunit.assert_nil(harmony_runtime_state.snapshot(song).channels[1])
+  progress(8)
+  local pitches={};for _,event in ipairs(midi_note_on_events)do pitches[#pitches+1]=event[1]end
+  luaunit.assert_equals(pitches,{64,60})
+  progress(8)
+  local releases={};for _,event in ipairs(midi_note_off_events)do releases[#releases+1]=event[1]end
+  luaunit.assert_equals(releases,{64,60})
+  luaunit.assert_nil(harmony_runtime_state.snapshot(song).channels[1])
+end
+
 function test_harmony_ensemble_absolute_mask_is_visible_legacy_bypass()
   local song=setup();source(song,1,{[1]=0},{1})
   local group=harmony_config.new_group(1);group.enabled=true;group.roles.bass=exact_role(48)

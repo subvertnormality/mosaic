@@ -139,6 +139,41 @@ def setup_pattern_harmony(c):
     c.screen_header('Ch. 1 Harmony')
 
 
+def assert_pattern_progression_timing(c, notes, stage,
+                                      active_steps=(1, 2, 3, 4)):
+    """PATTERN-HARMONY PH-03: pitch placement adds no onset or gate delay."""
+    from cases import assert_durations
+    # configure() authors four consecutive default-division/default-length
+    # steps.  At Mosaic's 90 BPM fixture that is one sixth of a second per
+    # step.  The ninth Note On only closes two complete loops and is stopped
+    # immediately by Driver.playback(), so the first eight are the literal
+    # two-cycle timing oracle.
+    complete_count = len(active_steps) * 2
+    complete = notes[:complete_count]
+    assert len(complete) == complete_count, notes
+    field = ('logical_ns' if c.clock_mode == 'controlled-experimental'
+             else 'monotonic_ns')
+    tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
+    expected_offsets = [((cycle * 4) + step - 1) / 6
+                        for cycle in range(2) for step in active_steps]
+    actual_offsets = [(note[field] - complete[0][field]) / 1e9
+                      for note in complete]
+    errors = [actual - expected for actual, expected
+              in zip(actual_offsets, expected_offsets)]
+    assert all(abs(error) <= tolerance for error in errors), dict(
+        stage=stage, expected_offsets=expected_offsets,
+        actual_offsets=actual_offsets, errors=errors)
+    # This pairs each actual emitted pitch with its own Note Off and proves the
+    # unchanged one-step gate, including the repeated B identity.
+    assert_durations(c, complete, [1] * complete_count)
+    c.results.append(dict(kind='pattern-harmony-progression-timing',
+                          stage=stage, field=field,
+                          expected_onset_offsets_seconds=expected_offsets,
+                          actual_onset_offsets_seconds=actual_offsets,
+                          expected_gate_seconds=1 / 6,
+                          tolerance_seconds=tolerance, passed=True))
+
+
 def pattern_harmony_workflow(c):
     # Author the user's explicit broken-chord key case A-B-C-B through the
     # existing Pattern Note faders.  These are shared source cells; Harmony is
@@ -176,7 +211,90 @@ def pattern_harmony_workflow(c):
     c.enc(1, -1); c.screen_header('Ch. 1 Harmony')
     mapped = [(1, [144, note, velocity]) for note, velocity in
               ((48, 127), (52, 117), (67, 107), (51, 97))]
-    c.playback(mapped, cycles=2, timeout=6)
+    mapped_notes = c.playback(mapped, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, mapped_notes, 'pattern-active')
+
+    # PH-03 rest/history interaction through the actual grid path: remove C's
+    # fourth trig while Pattern is active, prove the sparse onset set and its
+    # wrap gap, then restore it.  The retained map and following full phrase
+    # prove that a rest neither consumes nor corrupts Pattern history.
+    c.tap(5, 8); c.tap(4, 4); c.tap(3, 8)
+    sparse = mapped[:3]
+    sparse_notes = c.playback(sparse, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, sparse_notes, 'pattern-rest-step4',
+                                      active_steps=(1, 2, 3))
+    c.tap(5, 8); c.tap(4, 4); c.tap(3, 8)
+    restored_notes = c.playback(mapped, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, restored_notes,
+                                      'pattern-rest-restored')
+
+    # PH-03 missing-output interaction through the emulator's native hotplug
+    # input.  A disconnected route emits and owns no notes; reconnecting must
+    # resume the same mapped frame and unchanged timing without a settings edit.
+    c.action(type='midi_connection', port=1, connected=False); c.elapse(.1)
+    disconnected_before = c.snapshot()['midi_count']
+    c.tap(1, 8); c.elapse(1.0); disconnected = c.snapshot(); c.tap(1, 8)
+    missing_output_notes = [event for event in disconnected['midi']
+                            if event['index'] > disconnected_before
+                            and event['port'] == 1
+                            and len(event['bytes']) == 3
+                            and event['bytes'][0] == 144
+                            and event['bytes'][2] > 0]
+    assert missing_output_notes == [], missing_output_notes
+    assert disconnected['midi_capture']['outstanding'] == []
+    c.action(type='midi_connection', port=1, connected=True); c.elapse(.3)
+    hotplug_notes = c.playback(mapped, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, hotplug_notes,
+                                      'pattern-output-reconnected')
+    c.results.append(dict(kind='pattern-harmony-output-disconnection',
+                          disconnected_note_ons=0,
+                          disconnected_outstanding_notes=0,
+                          recovered_without_edit=True, passed=True))
+
+    # PH-03 probability rejection through the stock Channel Trig Locks page.
+    # Harmony is page 8 and Trig Locks is page 2 in the documented clamped
+    # Channel cycle.  Probability zero must schedule nothing and must not
+    # consume/corrupt the Pattern frame; restoring 100 resumes it exactly.
+    from cases import assign_trig_parameter
+    c.enc(1, -6); c.screen_header('Ch. 1 Trig Locks')
+    assign_trig_parameter(c, 'Trig Probability')
+    c.action(type='enc', n=3, delta=-126); c.elapse(.15); c.enc(3, 1)
+    rejected_before = c.snapshot()['midi_count']
+    c.tap(1, 8); c.elapse(1.0); rejected = c.snapshot(); c.tap(1, 8)
+    rejected_notes = [event for event in rejected['midi']
+                      if event['index'] > rejected_before
+                      and event['port'] == 1
+                      and len(event['bytes']) == 3
+                      and event['bytes'][0] == 144
+                      and event['bytes'][2] > 0]
+    assert rejected_notes == [], rejected_notes
+    assert rejected['midi_capture']['outstanding'] == []
+    c.enc(3, 100); c.enc(1, 6); c.screen_header('Ch. 1 Harmony')
+    probability_notes = c.playback(mapped, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, probability_notes,
+                                      'pattern-probability-restored')
+    c.results.append(dict(kind='pattern-harmony-probability-rejection',
+                          probability_zero_note_ons=0,
+                          probability_zero_outstanding_notes=0,
+                          probability_100_recovered=True, passed=True))
+
+    # PH-03 song entry through the public Song grid: copy slot 1 to slot 2,
+    # enter the copy, then re-enter the source.  Both entries must carry their
+    # own copied Pattern configuration and start with the same literal frame,
+    # onset phase and note ownership.
+    c.tap(6, 8); c.hold_tap((1, 1), (2, 1)); c.tap(2, 1)
+    copied_song_notes = c.playback(mapped, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, copied_song_notes,
+                                      'pattern-copied-song-entry')
+    c.tap(1, 1)
+    source_song_notes = c.playback(mapped, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, source_song_notes,
+                                      'pattern-source-song-reentry')
+    c.tap(3, 8); c.screen_header('Ch. 1 Harmony')
+    c.results.append(dict(kind='pattern-harmony-song-entry',
+                          copied_slot=2, source_slot=1,
+                          copied_config_played=True,
+                          source_reentry_played=True, passed=True))
 
     # The final played positions span both native seven-row note banks.  The
     # lower bank shows Bass A and both B occurrences; the centred bank shows C.
@@ -199,12 +317,14 @@ def pattern_harmony_workflow(c):
     c.enc(3, -2); c.key(3)
     ordinary = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (64, 117), (67, 107), (63, 97))]
-    c.playback(ordinary, cycles=2, timeout=6)
+    ordinary_notes = c.playback(ordinary, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, ordinary_notes, 'off-ordinary')
     c.tap(5, 8); c.tap(5, 8)
     c.led_values([(1, 7), (2, 5), (3, 3), (4, 5)], [12, 12, 12, 12])
     c.tap(3, 8); c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
     c.enc(3, 2); c.key(3)
-    c.playback(mapped, cycles=2, timeout=6)
+    recovered_notes = c.playback(mapped, cycles=2, timeout=6)
+    assert_pattern_progression_timing(c, recovered_notes, 'pattern-reenabled')
     c.results.append(dict(kind='pattern-harmony-broken-chord-progression',
                           source_values=[0, 2, 4, 2], scale_slots=[1, 1, 2, 2],
                           chord_masks_enabled=False, mapped=mapped,
@@ -212,7 +332,16 @@ def pattern_harmony_workflow(c):
                           projected_grid_values=[-7, -5, 4, -5],
                           ordinary_grid_values=[0, 2, 4, 2],
                           repeated_identity='inner1', source_edit_restored=True,
-                          recovered=True, passed=True))
+                          rest_active_steps=[1, 2, 3],
+                          rest_recovery=True,
+                          output_disconnect_silent=True,
+                          output_reconnect_recovered=True,
+                          probability_zero_silent=True,
+                          probability_recovery=True,
+                          copied_song_entry=True,
+                          source_song_reentry=True,
+                          exact_onset_and_gate_timing=True,
+                          stop_restart_cycles=11, recovered=True, passed=True))
 
 
 def pattern_harmony_persistence_workflow(c):
