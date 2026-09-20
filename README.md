@@ -511,10 +511,27 @@ configuration.
 
 To paint a ready lane, select the destination pattern with the top row, press
 Paint (column 16, row 8) to preview, then press it again to commit. Cancel
-(column 14, row 8) discards the preview. During a preview, columns 10, 11, and
-12 of row 8 shift left, reset, and shift right. Toggle is the default paint
-policy; Add and Replace are selectable on the Rhythm Doctor screen. Painting
-does not alter the captured bank.
+(column 14, row 8) discards the preview. Toggle is the default paint policy;
+Add and Replace are selectable on the Rhythm Doctor screen. Painting does not
+alter the captured bank.
+
+**Finding the phrase.** The analysis estimates where the four-bar phrase
+begins and aligns the gates to it, rather than to the moment you pressed
+Record. In this mode columns 10, 11 and 12 of row 8 browse the recording:
+column 11 returns to the calculated phrase start, and columns 10 and 12 page
+back and forward a whole four-bar phrase at a time. The displayed window is
+exactly four bars wide, so every position you reach this way stays aligned
+with the phrase. E3 still moves by a single bar or step. In every other
+algorithm those three buttons continue to shift a previewed pattern's
+position.
+
+The phrase estimate is a starting point, not a verdict. The bar the detector
+picks is reliable when the playing announces it -- a crash on the one, or a
+fill closing the bar before -- and genuinely undecidable when every bar is
+identical, which the reported confidence says rather than hides. To move it,
+open ALIGNMENT on the Rhythm Doctor screen and step START BEAT through the
+detected beat grid; the editor opens on the beat the detector chose, so
+confirming without editing keeps its answer.
 
 **Availability:** Mosaic starts a local capture helper when this mode opens,
 and analyses captures with a model-free detector it builds from source the
@@ -553,7 +570,7 @@ Opt out of a prepared pattern by using the cancel button:
 
 <img alt="Pattern editor prime and paint cancel button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="300" />
 
-While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes.
+While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes. In Rhythm Doctor these same three buttons browse the recording instead: the centre returns to the calculated start of the four-bar phrase, and the outer two page back and forward a phrase at a time.
 
 <img alt="Pattern editor move buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="300" />
 
