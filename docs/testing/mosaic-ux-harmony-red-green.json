@@ -3,7 +3,7 @@
   "subject": "Harmony convergence regressions",
   "source_binding": {
     "rule": "Each baseline clone was placed at PARENT/mosaic because the Lua harness resolves include('mosaic/...') from that layout. Earlier clones with a different leaf name are excluded from evidence.",
-    "candidate_revision": "36d0f7ba01afc123b5964c8187a80deccbcece5f"
+    "candidate_revision": "6ee805d1a5ffc677fb67972bada500d5e669197d"
   },
   "red": [
     {
@@ -76,14 +76,14 @@
     }
   ],
   "green": {
-    "revision": "36d0f7ba01afc123b5964c8187a80deccbcece5f",
+    "revision": "6ee805d1a5ffc677fb67972bada500d5e669197d",
     "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason test_harmony_group_result_surfaces_a_members_local_scale_bypass test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset test_harmony_result_names_local_octave_bypass_instead_of_no_voicing test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
     "result": {
       "passed": 17,
       "failed": 0
     },
     "full_lua_suite": {
-      "passed": 1866,
+      "passed": 1868,
       "failed": 0,
       "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua"
     },
@@ -96,7 +96,7 @@
       "ensemble_workflow": "Both real-time and controlled-experimental lanes passed literal local-scale-bypass MIDI plus visible LOCAL SCALE BYPASS group status.",
       "grid_projection_real_time": {"manifest_sha256": "e640668253dc70f4bacf59ec2839d467172e6a0ca22bc8a2fda6a9762c20c1c6", "passed": true},
       "grid_projection_controlled_time": {"manifest_sha256": "8da904334d7b5ecff74bed56113342f06178c8c83dc4696cc7bcddecf66e0e64", "passed": true},
-      "exact_commit_suite_sha256": "1c02a400964a217122649f7d6058b098d219ca14b9a2c2c9d8f88b6d4a16b03f",
+      "exact_commit_suite_sha256": "1e4c35bc29f402850e45e248df5df6e21166a0322775b73195ea4d285821ad3f",
       "qualification": "The dirty-candidate projection greens preserve immediate red-green feedback; the exact clean-commit campaign passed all eight selected workflows in both timing lanes and is recorded in mosaic-ux-harmony-acceptance.json."
     }
   }
