@@ -30,8 +30,11 @@ the lane definition was, and the events it finds are real cymbal hits a player
 may want. Adding ride and crash decoy templates was tried and gains only 0.02;
 summing their activations into the lane costs 0.08.
 
-BASS is not detected here. No corpus with human-verified bass onsets on real
-full-mix music exists, so the lane cannot be honestly measured (see CORPUS.md).
+A BASS lane was carried through v1.3 and has been withdrawn. It never detected
+bass independently: it reclassified the low-band onsets the BD lane had already
+found, and on real captures the pitch test rejected none of them, so BASS was a
+duplicate of BD wearing another name. No corpus with human-verified bass onsets
+on real full-mix music exists to measure a replacement against (see CORPUS.md).
 """
 from __future__ import annotations
 
@@ -41,7 +44,7 @@ import numpy as np
 
 SR = 44100
 NFFT, HOP = 2048, 512
-LANES = ("BD", "SD", "CYM", "BASS")
+LANES = ("BD", "SD", "CYM")
 EPS = 1e-10
 
 # Harmonic rank. The shipped toolbox default is 50; a sweep on real-music
@@ -135,36 +138,7 @@ def pick_peaks(curve, delta, w1=W1, w2=W2, w3=W3, w4=W4, w5=W5):
 
 
 # Selected on the development half of the real-music corpus only.
-DEFAULT_DELTA = {"BD": 0.40, "SD": 0.35, "CYM": 0.15, "BASS": 0.40}
-
-# BASS is not detected independently. It reclassifies low-band onsets that hold
-# a stable pitch after the attack, which is the one drum/instrument distinction
-# that is physically reliable: a membrane vibrates in inharmonic Bessel ratios
-# and decays fast, a string in integer ratios and sustains. The lanes are NOT
-# exclusive, because a kick and a bass note routinely land together.
-PITCH_CONFIDENCE_CUT = 0.15
-PITCH_WINDOW_SECONDS = 0.080
-BASS_F0_MIN, BASS_F0_MAX = 35.0, 300.0
-
-
-def pitch_confidence(segment, sample_rate, f0_min=BASS_F0_MIN, f0_max=BASS_F0_MAX):
-    """Normalised autocorrelation peak in the bass register.
-
-    High for a sustained string tone, low for an inharmonic membrane strike.
-    """
-    seg = np.asarray(segment, dtype=np.float64)
-    if seg.size < 64 or not np.any(seg):
-        return 0.0
-    seg = seg - seg.mean()
-    ac = np.correlate(seg, seg, mode="full")[seg.size - 1:]
-    if ac.size < 4 or ac[0] <= 0:
-        return 0.0
-    ac = ac / ac[0]
-    lo, hi = int(sample_rate / f0_max), min(len(ac) - 1, int(sample_rate / f0_min))
-    if hi <= lo:
-        return 0.0
-    return float(np.max(ac[lo:hi + 1]))
-
+DEFAULT_DELTA = {"BD": 0.40, "SD": 0.35, "CYM": 0.15}
 
 def analyse(mono, deltas=None, sample_rate=SR):
     """Return onset times in seconds per drum lane for mono float PCM."""
@@ -192,21 +166,8 @@ def analyse(mono, deltas=None, sample_rate=SR):
     # The dictionary's third column is a closed-hat template, but the lane it
     # feeds is CYM: see the lane-scope note in the module docstring.
     column = {"BD": "BD", "SD": "SD", "CYM": "CHH"}
-    out = {lane: [i / fps for i in pick_peaks(G_D[lanes.index(column[lane])], deltas[lane])]
-           for lane in ("BD", "SD", "CYM")}
-    out["BASS"] = _bass_from_low_onsets(x, out["BD"], sample_rate)
-    return out
-
-
-def _bass_from_low_onsets(mono, low_onsets, sample_rate):
-    """Low-band onsets that hold a stable pitch are also BASS candidates."""
-    span = int(PITCH_WINDOW_SECONDS * sample_rate)
-    bass = []
-    for t in low_onsets:
-        start = int(t * sample_rate)
-        if pitch_confidence(mono[start:start + span], sample_rate) >= PITCH_CONFIDENCE_CUT:
-            bass.append(t)
-    return bass
+    return {lane: [i / fps for i in pick_peaks(G_D[lanes.index(column[lane])], deltas[lane])]
+            for lane in LANES}
 
 
 # --- capture WAV ------------------------------------------------------------
@@ -380,31 +341,19 @@ def analyse_request(wav_path, deltas=None, alignment=None):
     fps = SR / float(HOP)
     column = {"BD": "BD", "SD": "SD", "CYM": "CHH"}
     candidates, envelope = [], np.zeros(G_D.shape[1], dtype=np.float64)
-    low_frames, low_row = [], None
 
     def source_index(frame):
         """Frame -> sample index in the ORIGINAL capture's coordinates."""
         return int(round(frame * HOP * source_rate / float(SR)))
 
-    for lane in ("BD", "SD", "CYM"):
+    for lane in LANES:
         row = G_D[lanes.index(column[lane])]
         envelope += row / (row.max() + EPS)
         frames = pick_peaks(row, deltas[lane])
-        if lane == "BD":
-            low_frames, low_row = list(frames), row
         for frame, velocity in zip(frames, velocities(row, frames, fps)):
             candidates.append({"lane": lane, "sample_index": source_index(frame),
                                "velocity": int(velocity),
                                "confidence": float(min(1.0, row[frame] / (row.max() + EPS)))})
-    span = int(PITCH_WINDOW_SECONDS * source_rate)
-    bass_frames = [f for f in low_frames
-                   if pitch_confidence(mono[source_index(f):source_index(f) + span],
-                                       source_rate) >= PITCH_CONFIDENCE_CUT]
-    if low_row is not None:
-        for frame, velocity in zip(bass_frames, velocities(low_row, bass_frames, fps)):
-            candidates.append({"lane": "BASS", "sample_index": source_index(frame),
-                               "velocity": int(velocity),
-                               "confidence": float(min(1.0, low_row[frame] / (low_row.max() + EPS)))})
     candidates.sort(key=lambda c: (c["sample_index"], LANES.index(c["lane"])))
     bpm, detected = estimate_bpm(envelope, fps)
     origin, mode = 0, "auto"

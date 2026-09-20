@@ -92,7 +92,7 @@ class LaneScopeTests(unittest.TestCase):
         reaches 0.7165 at 0.7006. Renaming this lane back to CHH would silently
         turn real cymbal detections into errors.
         """
-        self.assertEqual(dsp.LANES, ("BD", "SD", "CYM", "BASS"))
+        self.assertEqual(dsp.LANES, ("BD", "SD", "CYM"))
         self.assertEqual(set(dsp.DEFAULT_DELTA), set(dsp.LANES))
         out = dsp.analyse(click_train([0.5, 1.0], kind="chh"))
         self.assertEqual(set(out), set(dsp.LANES))
@@ -276,44 +276,44 @@ class AlignmentTests(unittest.TestCase):
         os.unlink(path)
 
 
-class BassLaneTests(unittest.TestCase):
-    """BASS reclassifies pitched low-band onsets rather than detecting afresh."""
+class WithdrawnBassLaneTests(unittest.TestCase):
+    """BASS was withdrawn in 1.4.0 and must not return by accident.
 
-    @staticmethod
-    def _tone(times, hz, seconds=4.0, sr=44100, decay=3.0):
-        x = np.zeros(int(seconds*sr), dtype=np.float32)
-        for t in times:
-            i = int(t*sr); n = int(0.35*sr)
-            env = np.exp(-np.linspace(0, decay, n)).astype(np.float32)
-            wave_ = np.sin(2*np.pi*hz*np.arange(n)/sr).astype(np.float32)
-            seg = (wave_*env)[:max(0, len(x)-i)]
-            x[i:i+len(seg)] += seg
-        return x/(np.abs(x).max()+1e-9)
+    The lane never detected bass. It re-scored the low-band onsets BD had
+    already found, keeping the ones whose attack held a stable pitch; on real
+    captures that test rejected none of them, so BASS reproduced BD exactly
+    (48 of 48 onsets identical). A lane that duplicates another lane costs the
+    player a grid column and teaches them to distrust the analysis.
+    """
 
-    def test_a_sustained_low_tone_is_reported_as_bass(self):
-        times = [0.5, 1.0, 1.5, 2.0, 2.5]
-        out = dsp.analyse(self._tone(times, 55.0, decay=1.5))
-        hit = sum(1 for t in times if any(abs(t-g) <= 0.05 for g in out["BASS"]))
-        self.assertGreaterEqual(hit, 3, f"BASS lane found {out['BASS']}")
+    def test_the_backend_does_not_offer_a_bass_lane(self):
+        self.assertNotIn("BASS", dsp.LANES)
+        self.assertNotIn("BASS", dsp.DEFAULT_DELTA)
 
-    def test_bass_and_bass_drum_are_not_exclusive(self):
-        """A kick and a bass note land together constantly; forcing a choice
-        between the lanes would drop one of them."""
-        times = [0.5, 1.0, 1.5, 2.0, 2.5]
-        out = dsp.analyse(self._tone(times, 55.0, decay=1.5))
-        shared = [b for b in out["BASS"] if any(abs(b-d) <= 1e-9 for d in out["BD"])]
-        self.assertTrue(shared, "a pitched low onset must be able to occupy both lanes")
-
-    def test_pitch_confidence_separates_a_tone_from_noise(self):
+    def test_no_analysis_can_emit_a_bass_candidate(self):
+        """The withdrawal is in the output, not only in the lane table."""
         sr = 44100
-        tone = np.sin(2*np.pi*55*np.arange(int(0.08*sr))/sr).astype(np.float32)
-        noise = np.random.default_rng(1).standard_normal(int(0.08*sr)).astype(np.float32)
-        self.assertGreater(dsp.pitch_confidence(tone, sr), dsp.PITCH_CONFIDENCE_CUT)
-        self.assertLess(dsp.pitch_confidence(noise, sr), dsp.PITCH_CONFIDENCE_CUT)
+        x = np.zeros(int(4.0*sr), dtype=np.float32)
+        for t in (0.5, 1.0, 1.5, 2.0, 2.5):
+            i = int(t*sr); n = int(0.35*sr)
+            env = np.exp(-np.linspace(0, 1.5, n)).astype(np.float32)
+            seg = (np.sin(2*np.pi*55*np.arange(n)/sr).astype(np.float32)*env)[:len(x)-i]
+            x[i:i+len(seg)] += seg
+        x = x/(np.abs(x).max()+1e-9)
+        self.assertNotIn("BASS", dsp.analyse(x))
+        handle = tempfile.NamedTemporaryFile(suffix=".wav", delete=False); handle.close()
+        _riff(handle.name, x, sample_rate=sr)
+        try:
+            value = dsp.analyse_request(handle.name)
+        finally:
+            os.unlink(handle.name)
+        self.assertNotIn("BASS", value["lane_onset_gates"])
+        self.assertEqual([c for c in value["candidates"] if c["lane"] == "BASS"], [])
 
-    def test_silence_and_short_segments_are_not_called_pitched(self):
-        self.assertEqual(dsp.pitch_confidence(np.zeros(4000, dtype=np.float32), 44100), 0.0)
-        self.assertEqual(dsp.pitch_confidence(np.zeros(4, dtype=np.float32), 44100), 0.0)
+    def test_the_pitch_test_that_powered_the_lane_is_gone(self):
+        """Leaving the helper behind invites a future caller to revive it."""
+        self.assertFalse(hasattr(dsp, "pitch_confidence"))
+        self.assertFalse(hasattr(dsp, "PITCH_CONFIDENCE_CUT"))
 
 
 class WorkerIntegrationTests(unittest.TestCase):
