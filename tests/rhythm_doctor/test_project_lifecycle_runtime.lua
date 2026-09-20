@@ -1,5 +1,21 @@
 -- Project lifecycle bridge check, characterisation outside README.
+
+-- Harmony and Musical Merge resolve their transient state at load, and this
+-- case is about the capture bridge rather than either of them, so they are
+-- supplied as modules that reset to nothing.
+local harmony_modules = {
+  ['mosaic/lib/musical_merge/state'] = true,
+  ['mosaic/lib/harmony/config_state'] = true,
+  ['mosaic/lib/harmony/state'] = true,
+  ['mosaic/lib/harmony/inspection'] = true,
+}
+local resets = {}
+include = function(path)
+  assert(harmony_modules[path], 'unexpected include: ' .. tostring(path))
+  return { reset = function() resets[path] = (resets[path] or 0) + 1 end }
+end
 local lifecycle = dofile('lib/project_lifecycle.lua')
+include = nil
 
 local failures, count = {}, 0
 local function test(name, body)
