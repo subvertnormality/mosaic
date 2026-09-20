@@ -7,7 +7,7 @@ def recording_lifetime(c,ending,scale_page=False):
     slide=ending.startswith('slide-')
     value=-1 if ending=='slide-off' else 64
     open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.enc(1,-3);cc1_offset=assign_trig_parameter(c,'CC 1')
     for step,lock in [(1,24),(3,96)]:
         c.action(type='grid',x=step,y=4,state=1)
         try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,lock+1)
@@ -67,7 +67,9 @@ def recording_lifetime(c,ending,scale_page=False):
             port=2;channel=1;replay=[65]*4
             # Confirmation clears device locks and resets assignments, including
             # route-only changes. Reassign before wrap to expose latent dirty state.
-            assign_trig_parameter(c,'CC 1')
+            # Reuse the offset found at setup: scanning the parameter list
+            # again here takes longer than the two steps this must fit inside.
+            assign_trig_parameter(c,'CC 1',offset=cc1_offset)
             assert len(notes(c.snapshot()))<4,'Reassignment missed pre-wrap step4'
     state=c.wait(lambda state:len(notes(state))>=wanted_steps,timeout=18)
     ons=notes(state);assert len(ons)==wanted_steps,ons

@@ -1474,13 +1474,26 @@ def parameter_list_label(c,label,wait=True):
         c.wait(matches);c.results.append(dict(kind='parameter-list-label',label=label,passed=True));return True
     return matches(c.snapshot())
 
-def assign_trig_parameter(c,label):
+def assign_trig_parameter(c,label,offset=None):
+    """Select a trig parameter through the real list UI and return its offset.
+
+    Finding the entry means stepping the list and reading the screen at each
+    position, which is slow enough to matter when a caller has to finish inside
+    a couple of sequencer steps. A caller that has already located the same
+    label can pass the offset back to jump straight to it; the label is still
+    verified before confirming, so a wrong offset fails rather than assigning
+    something else.
+    """
     c.key(2);c.enc(3,-50)
-    for attempt in range(50):
-        if parameter_list_label(c,label,wait=False):break
-        c.enc(3,1)
-    else:raise AssertionError('Parameter unavailable through native UI: '+label)
+    if offset is None:
+        for offset in range(50):
+            if parameter_list_label(c,label,wait=False):break
+            c.enc(3,1)
+        else:raise AssertionError('Parameter unavailable through native UI: '+label)
+    elif offset:
+        c.enc(3,offset)
     parameter_list_label(c,label);c.key(3);c.key(2)
+    return offset
 
 def strum_reset_continuity(c):
     import time
