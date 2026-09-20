@@ -363,6 +363,8 @@ function Lattice:pulse_all()
         -- served here rather than behind the notes that follow it.
         if serve then serve() end
         if self.output then self.output.flush() end
+        if self.before_note_group then self.before_note_group(deferred, deferred_count, self.transport) end
+        if not self.enabled then return end
         -- The group's notes leave back to back, then each sprocket finishes its
         -- step and moves past the onset. Every note is still sent before its
         -- own sprocket advances, so its releases keep the phase they had.
@@ -390,6 +392,7 @@ function Lattice:pulse_all()
           if probe then probe:record(3, self.transport, sprocket.id, 0, 2) end
           if not self.enabled then return end
         end
+        if self.after_note_group then self.after_note_group(deferred, deferred_count, self.transport) end
         -- m_midi only appends a note to the pulse's batch; it reaches the wire
         -- at a flush. Finishing a step under lookahead resolves the next step's
         -- values, which reads and allocates, so the group's notes are written

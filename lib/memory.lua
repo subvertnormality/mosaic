@@ -3,6 +3,29 @@ memory.max_history_size = 5000
 
 local history_ring = include("mosaic/lib/history_ring")
 local event_handlers = include("mosaic/lib/memory/event_handlers").new(program, fn)
+local optional_config_transaction=include("mosaic/lib/optional_config_transaction")
+local feature_histories=setmetatable({},{__mode="k"})
+
+local function runtime_history()
+  local project=program.get();local value=feature_histories[project]
+  if not value then value={transactions={},next_sequence=0,event_sequences=setmetatable({},{__mode="k"})};feature_histories[project]=value end
+  return value
+end
+local function next_sequence()
+  local value=runtime_history();value.next_sequence=value.next_sequence+1;return value.next_sequence
+end
+local function affects(transaction,channel)
+  return transaction.affected[channel]and not(transaction.forgotten and transaction.forgotten[channel])
+end
+local function latest_feature_undo(channel)
+  local best;for _,transaction in ipairs(runtime_history().transactions)do if transaction.applied and affects(transaction,channel)and(not best or transaction.sequence>best.sequence)then best=transaction end end;return best
+end
+local function next_feature_redo(channel)
+  local best;for _,transaction in ipairs(runtime_history().transactions)do if not transaction.applied and affects(transaction,channel)and(not best or transaction.sequence<best.sequence)then best=transaction end end;return best
+end
+local function discard_feature_redo()
+  local history=runtime_history();local kept={};for _,transaction in ipairs(history.transactions)do if transaction.applied then kept[#kept+1]=transaction end end;history.transactions=kept
+end
 
 -- Main state structure
 
@@ -125,7 +148,9 @@ function memory.record_event_for_target(song_pattern, channel_number, event_type
   }
   
   state.channels[channel_number]:truncate(state.current_indices[channel_number])
+  discard_feature_redo()
   local new_size = state.channels[channel_number]:push(event)
+  runtime_history().event_sequences[event]=next_sequence()
   state.current_indices[channel_number] = new_size
   
   handler.apply_event(channel, data.step, data, "record")
@@ -145,7 +170,17 @@ function memory.record_event(channel_number, event_type, data)
 end
 
 function memory.undo(channel_number)
-  if not channel_number or not state.channels[channel_number] then return end
+  if not channel_number then return end
+  local feature=latest_feature_undo(channel_number)
+  local normal_event,state_index
+  if state.channels[channel_number]then state_index=state.current_indices[channel_number];normal_event=state.channels[channel_number]:get(state_index)end
+  local normal_sequence=normal_event and runtime_history().event_sequences[normal_event]or-1
+  if feature and feature.sequence>normal_sequence then
+    local song=program.get_song_pattern(feature.song_pattern)
+    local ok=optional_config_transaction.apply_transition(song,feature.after,feature.before,m_clock and m_clock.is_playing and m_clock.is_playing()or false,feature.boundary)
+    if ok then feature.applied=false end;return ok
+  end
+  if not state.channels[channel_number] then return end
   
   local channel_events = state.channels[channel_number]
   local current_index = state.current_indices[channel_number]
@@ -176,7 +211,17 @@ function memory.undo(channel_number)
 end
 
 function memory.redo(channel_number)
-  if not channel_number or not state.channels[channel_number] then return end
+  if not channel_number then return end
+  local feature=next_feature_redo(channel_number)
+  local normal_event
+  if state.channels[channel_number]and state.current_indices[channel_number]<state.channels[channel_number].total_size then normal_event=state.channels[channel_number]:get(state.current_indices[channel_number]+1)end
+  local normal_sequence=normal_event and runtime_history().event_sequences[normal_event]or math.huge
+  if feature and feature.sequence<normal_sequence then
+    local song=program.get_song_pattern(feature.song_pattern)
+    local ok=optional_config_transaction.apply_transition(song,feature.before,feature.after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,feature.boundary)
+    if ok then feature.applied=true end;return ok
+  end
+  if not state.channels[channel_number] then return end
   
   if state.current_indices[channel_number] < state.channels[channel_number].total_size then
     state.current_indices[channel_number] = state.current_indices[channel_number] + 1
@@ -190,7 +235,9 @@ function memory.redo(channel_number)
 end
 
 function memory.undo_all(channel_number)
-  if not channel_number or not state.channels[channel_number] then return end
+  if not channel_number then return end
+  if latest_feature_undo(channel_number)then while memory.get_event_count(channel_number)>0 do memory.undo(channel_number)end;return end
+  if not state.channels[channel_number] then return end
   
   local channel_events = state.channels[channel_number]
   local current_index = state.current_indices[channel_number]
@@ -221,7 +268,9 @@ function memory.undo_all(channel_number)
 end
 
 function memory.redo_all(channel_number)
-  if not channel_number or not state.channels[channel_number] then return end
+  if not channel_number then return end
+  if next_feature_redo(channel_number)then while memory.get_event_count(channel_number)<memory.get_total_event_count(channel_number)do memory.redo(channel_number)end;return end
+  if not state.channels[channel_number] then return end
   
   local channel_events = state.channels[channel_number]
   if not channel_events.total_size or channel_events.total_size == 0 then return end
@@ -288,17 +337,40 @@ function memory.clear(channel_number)
   state.channels[channel_number] = history_ring.new(memory.max_history_size)
   state.current_indices[channel_number] = 0
   state.original_states[channel_number] = {}
+  for _,transaction in ipairs(runtime_history().transactions)do if transaction.affected[channel_number]then transaction.forgotten=transaction.forgotten or{};transaction.forgotten[channel_number]=true end end
+end
+
+function memory.record_optional_config(song_pattern,affected,before,after,boundary)
+  local song=program.get_song_pattern(song_pattern)
+  local ok,reason=optional_config_transaction.validate(song,after);if not ok then return nil,reason end
+  -- Applying an unchanged draft is a successful no-op, not an undoable edit.
+  if optional_config_transaction.equivalent(before,after) then return true end
+  discard_feature_redo();local affected_set={}
+  for _,channel in ipairs(affected)do
+    affected_set[channel]=true
+    if state.channels[channel]then state.channels[channel]:truncate(state.current_indices[channel])end
+  end
+  local transaction={type="optional_config",song_pattern=song_pattern,affected=affected_set,
+    before=fn.deep_copy(before),after=fn.deep_copy(after),boundary=boundary or"channel",sequence=next_sequence(),applied=false}
+  ok,reason=optional_config_transaction.apply_transition(song,before,after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,transaction.boundary)
+  if not ok then return nil,reason end
+  transaction.applied=true;runtime_history().transactions[#runtime_history().transactions+1]=transaction
+  return true
 end
 
 function memory.get_event_count(channel_number)
-  if not channel_number or not state.channels[channel_number] then return 0 end
-  return state.current_indices[channel_number] or 0
+  if not channel_number then return 0 end
+  local count=state.channels[channel_number]and state.current_indices[channel_number]or 0
+  for _,transaction in ipairs(runtime_history().transactions)do if transaction.applied and affects(transaction,channel_number)then count=count+1 end end
+  return count
 end
 
 function memory.get_total_event_count(channel_number)
-  if not channel_number or not state.channels[channel_number] then return 0 end
+  if not channel_number then return 0 end
   local channel_events = state.channels[channel_number]
-  return channel_events and channel_events.total_size or 0
+  local count=channel_events and channel_events.total_size or 0
+  for _,transaction in ipairs(runtime_history().transactions)do if affects(transaction,channel_number)then count=count+1 end end
+  return count
 end
 
 function memory.get_recent_events(channel_number, count)
@@ -317,6 +389,9 @@ function memory.get_recent_events(channel_number, count)
     end
   end
   
+  for _,transaction in ipairs(runtime_history().transactions)do if transaction.applied and affects(transaction,channel_number)then events[#events+1]={type="optional_config",sequence=transaction.sequence,data={song_pattern=transaction.song_pattern}}end end
+  table.sort(events,function(a,b)return(a.sequence or runtime_history().event_sequences[a]or 0)>(b.sequence or runtime_history().event_sequences[b]or 0)end)
+  while #events>count do table.remove(events)end
   return events
 end
 

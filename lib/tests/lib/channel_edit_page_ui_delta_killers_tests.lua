@@ -747,7 +747,9 @@ function test_hardening_channel_step_releases_commit_individually_and_coalesce_o
       refreshes[#refreshes + 1] = {"faders", selected.number}
     end
     page.register_press()
-    luaunit.assert_equals(#_G.press.post, 1)
+    -- The first post handler commits step history; the second clears the
+    -- transient Merge gesture label after a merge selector is released.
+    luaunit.assert_equals(#_G.press.post, 2)
 
     -- Each ordinary release records history and asks for musical rebuild before
     -- the UI scheduler is allowed to run.

@@ -152,6 +152,7 @@ function channel_edit_page.register_press()
     "channel_edit_page",
     function(x, y)
       if channel_edit_page_sequencer:is_this(x, y) then
+        channel_edit_page_ui.leave_feature_editor_for_grid()
         if is_key1_down then
           channel_edit_page_sequencer:press(x, y)
           local channel = program.get_selected_channel()
@@ -358,6 +359,7 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        channel_edit_page_ui.show_merge_gesture("TRIG " .. string.upper(target_channel.trig_merge_mode))
 
       end
     end
@@ -397,6 +399,7 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        channel_edit_page_ui.show_merge_gesture("NOTE " .. string.upper(target_channel.note_merge_mode))
 
       end
     end
@@ -435,6 +438,7 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        channel_edit_page_ui.show_merge_gesture("VELOCITY " .. string.upper(target_channel.velocity_merge_mode))
 
       end
     end
@@ -474,6 +478,16 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        channel_edit_page_ui.show_merge_gesture("LENGTH " .. string.upper(target_channel.length_merge_mode))
+      end
+    end
+  )
+  press:register_post(
+    "channel_edit_page",
+    function(x, y)
+      if trig_merge_mode_button:is_this(x,y)or note_merge_mode_button:is_this(x,y)or
+        velocity_merge_mode_button:is_this(x,y)or length_merge_mode_button:is_this(x,y)then
+        channel_edit_page_ui.hide_merge_gesture()
       end
     end
   )

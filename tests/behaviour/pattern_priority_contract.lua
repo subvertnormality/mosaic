@@ -1,6 +1,12 @@
 -- Supplementary real merge-module contract. Native user-input cases remain required.
 local song,channel
-include=function() return {} end
+include=function(path)
+ if path=='mosaic/lib/musical_merge/config'then return{new=function()return{schema_version=1,mode='off'}end}end
+ if path=='mosaic/lib/musical_merge/state'then return{effective=function(_,_,requested)return{config=requested}end}end
+ -- Foundation is intentionally Off throughout this legacy-priority contract;
+ -- its planner and quantiser are therefore outside the exercised boundary.
+ return{}
+end
 scheduler={debounce=function(f) return f end}
 fn={average_table_values=function(t) local sum=0;for _,v in ipairs(t) do sum=sum+v end;return sum/#t end}
 program={initialise_64_table=function() local t={};for i=1,64 do t[i]={} end;return t end,

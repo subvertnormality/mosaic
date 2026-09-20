@@ -3,6 +3,10 @@ local musicutil = require("musicutil")
 local quantiser = include("mosaic/lib/quantiser")
 
 local nrpn_codec = include("mosaic/lib/devices/nrpn_codec")
+local merge_state = include("mosaic/lib/musical_merge/state")
+local harmony_config_state = include("mosaic/lib/harmony/config_state")
+local harmony_state = include("mosaic/lib/harmony/state")
+local harmony_inspection = include("mosaic/lib/harmony/inspection")
 local model_defaults = include("mosaic/lib/models/model_defaults").new(quantiser, nrpn_codec)
 local program = {}
 local program_store = {}
@@ -70,6 +74,9 @@ local notify_lock_edit
 
 function program.set_song_pattern(p, pattern)
   program_store.song_patterns[pattern] = fn.deep_copy(program.get_song_pattern(p))
+  local copied=program_store.song_patterns[pattern]
+  merge_state.reset_song(copied);harmony_config_state.reset_song(copied)
+  harmony_state.reset_song(copied);harmony_inspection.reset_song(copied)
   -- Copying over the sequence that is playing replaces every channel's locks
   -- and assignments at once. Each channel is reported as wholly edited, so a
   -- value resolved from the old sequence is not heard, and what the new

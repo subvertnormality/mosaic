@@ -64,7 +64,11 @@ local function load_context()
     ["mosaic/lib/ui"]={refresh=function() end},["mosaic/lib/m_grid"]={refresh=function() end},
     ["mosaic/lib/devices/param_manager"]={init=function() count.restore=count.restore+1 end,add_device_params=function() end},
     ["mosaic/lib/devices/device_map"]={get_device=function() return {} end},
-    ["mosaic/lib/memory"]={init=function() count.memory_init=count.memory_init+1 end}}
+    ["mosaic/lib/memory"]={init=function() count.memory_init=count.memory_init+1 end},
+    ["mosaic/lib/musical_merge/state"]={reset=function() end},
+    ["mosaic/lib/harmony/config_state"]={reset=function() end},
+    ["mosaic/lib/harmony/state"]={reset=function() end},
+    ["mosaic/lib/harmony/inspection"]={reset=function() end}}
   local lifecycle
   env.include=function(name)
     if name == "mosaic/lib/project_lifecycle" then

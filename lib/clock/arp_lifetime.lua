@@ -109,6 +109,7 @@ function arp_lifetime.new(get_clock, program, get_lattice, get_shuffle_values, c
     arp.shuffle_updated = true -- Constructor already rounded the startup gap.
     get_clock().delay_action(c, length, "must_execute", finish_arp)
     table.insert(arp_sprockets[c], arp)
+    return true
   end
 
   function arps.reset_channel(c) arp_sprockets[c] = {} end

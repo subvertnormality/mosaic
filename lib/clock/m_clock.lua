@@ -4,6 +4,8 @@ local lattice = include("mosaic/lib/clock/m_lattice")
 local midi_output_transport = include("mosaic/lib/clock/midi_output_transport")
 local step_cursor = include("mosaic/lib/clock/step_cursor")
 local parameter_preview = include("mosaic/lib/clock/parameter_preview")
+local merge_state = include("mosaic/lib/musical_merge/state")
+local merge_config = include("mosaic/lib/musical_merge/config")
 
 m_clock = {}
 clock_lattice = {}
@@ -448,6 +450,17 @@ local function count_active_actions(action)
   return count
 end
 
+local harmony_config_state = include("mosaic/lib/harmony/config_state")
+local harmony_state = include("mosaic/lib/harmony/state")
+local function settle_optional_state_on_stop()
+  local affected=merge_state.stop_all();harmony_config_state.stop_all();harmony_state.reset()
+  for song,channels in pairs(affected)do for channel in pairs(channels)do
+    if type(song)=="table"and type(song.patterns)=="table"and type(song.channels)=="table"and
+      type(song.channels[channel])=="table"and type(song.channels[channel].selected_patterns)=="table"then
+      pattern.update_working_pattern(channel,song)
+    end
+  end end
+end
 local transport = include("mosaic/lib/clock/transport_lifecycle").new {
   get_clock = function() return m_clock end,
   get_lattice = function() return clock_lattice end,
@@ -466,9 +479,12 @@ local transport = include("mosaic/lib/clock/transport_lifecycle").new {
       end
     end
   end,
+  on_stop = settle_optional_state_on_stop,
+  on_reset = settle_optional_state_on_stop,
 }
 
 function m_clock.init()
+  transport.set_stopped()
   -- Stop clears the native subscription before re-entering reset/init, so the
   -- old callbacks cannot retain a replaced lattice or its held voices.
   if transport.stop_if_subscribed() then return end
@@ -477,6 +493,12 @@ function m_clock.init()
     enabled = false,
     ppqn = ppqn,
   })
+  clock_lattice.before_note_group = function(deferred, count)
+    if step.prepare_harmony_group_frames then step.prepare_harmony_group_frames(deferred, count) end
+  end
+  clock_lattice.after_note_group = function()
+    if step.finish_harmony_group_frames then step.finish_harmony_group_frames() end
+  end
   if m_midi and m_midi.begin_output_batch then
     clock_lattice.output = {begin = m_midi.begin_output_batch, flush = m_midi.flush_output_batch,
                             serve = m_midi.serve_delayed}
@@ -575,11 +597,10 @@ function m_clock.init()
     local finish_step
 
     local sprocket_action = function(t)
-      local song_pattern = program.get().selected_song_pattern
-      local channel = program.get_channel(song_pattern, channel_number)
+      local song_pattern_number = program.get().selected_song_pattern
+      local song_pattern = program.get_song_pattern(song_pattern_number)
+      local channel = program.get_channel(song_pattern_number, channel_number)
       local current_step = program.get_current_step_for_channel(channel_number)
-      local pattern = channel.working_pattern
-      local trig_values = pattern.trig_values
       local clock = m_clock[clock_key]
       
       -- Cache frequently accessed values
@@ -594,6 +615,13 @@ function m_clock.init()
       current_step = selected_step
 
       if wrapped then
+        if channel_number ~= 17 and(channel.musical_merge or merge_state.has(song_pattern,channel_number))then
+          merge_state.on_cycle_boundary(song_pattern, channel_number,
+            channel.musical_merge or merge_config.new())
+          local scheduler = m_clock.lookahead_scheduler
+          if scheduler then scheduler:invalidate(channel_number, current_step, nil) end
+          pattern.update_working_pattern(channel_number, song_pattern)
+        end
         
         -- The global scale channel has no MIDI parameter recorder bank.
         if channel_number ~= 17 and params:get("record") == 2 and program.get_selected_channel() == channel then
@@ -635,12 +663,12 @@ function m_clock.init()
           clock.note_pending = current_step
           clock.pending_note = step.prepare_note(channel_number, current_step)
           clock.pending_channel = channel
-          clock.pending_song_pattern = song_pattern
+          clock.pending_song_pattern = song_pattern_number
           return
         end
       end
 
-      finish_step(clock, channel, current_step, false, trigless_locks, song_pattern)
+      finish_step(clock, channel, current_step, false, trigless_locks, song_pattern_number)
     end
 
     finish_step = function(clock, channel, current_step, has_trig, trigless_locks, song_pattern)
@@ -994,6 +1022,3 @@ function m_clock.seconds_to_next_step()
 end
 
 return m_clock
-
-
-

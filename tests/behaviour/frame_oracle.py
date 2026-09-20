@@ -52,8 +52,17 @@ def render(commands,font_size=8,antialias=2):
         bind(ca,'cairo_surface_destroy',[ptr])(surface)
         bind(ca,'cairo_font_options_destroy',[ptr])(options)
 
-def header(text,selected=None,tabs=6):
-    if selected is None:selected={'Ch. 1 Note Masks':1,'Ch. 1 Memory':3,'Ch. 1 Device Config':5}[text]
+def header(text,selected=None,tabs=8):
+    if selected is None:selected={
+        'Ch. 1 Note Masks':1,
+        'Ch. 1 Trig Locks':2,
+        'Ch. 1 Memory':3,
+        'Ch. 1 Clocks':4,
+        'Ch. 1 Device Config':5,
+        'Ch. 1 Note Dashboard':6,
+        'Ch. 1 Merge Shape':7,
+        'Ch. 1 Harmony':8,
+    }[text]
     commands=[((tab-1)*10,1,10 if tab==selected else 1,'_') for tab in range(1,tabs+1)]
     commands += [(0,9,10,text),(120,9,10,'m')]
     return render(commands)[:128*10*4]

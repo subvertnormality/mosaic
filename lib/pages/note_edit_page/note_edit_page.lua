@@ -3,6 +3,7 @@ local note_edit_page = {}
 
 local vertical_fader = include("mosaic/lib/controls/vertical_fader")
 local fade_button = include("mosaic/lib/controls/fade_button")
+local harmony_grid_projection = include("mosaic/lib/harmony/grid_projection")
 
 local faders = {}
 local vertical_offset = 7
@@ -304,14 +305,19 @@ end
 
 function note_edit_page.refresh_fader(s)
   local selected_pattern = program.get().selected_pattern
+  local song = program.get_selected_song_pattern()
+  local channel = program.get_selected_channel()
 
   faders["step" .. s .. "_fader"]:set_vertical_offset(vertical_offset)
   faders["step" .. s .. "_fader"]:set_horizontal_offset(horizontal_offset)
-  local value = fn.value_from_note(program.get_selected_song_pattern().patterns[selected_pattern].note_values[s])
+  local source_note = song.patterns[selected_pattern].note_values[s]
+  local effective_note = channel.working_pattern and channel.working_pattern.note_values[s]
+  local displayed_note = harmony_grid_projection.value(song,channel.number,s,effective_note,source_note)
+  local value = displayed_note~=nil and fn.value_from_note(displayed_note)or nil
 
   if value then
     faders["step" .. s .. "_fader"]:set_value(value)
-  end
+  else faders["step" .. s .. "_fader"]:set_value(0)end
 
   if program.get_selected_song_pattern().patterns[selected_pattern].trig_values[s] < 1 then
     faders["step" .. s .. "_fader"]:set_dark()
