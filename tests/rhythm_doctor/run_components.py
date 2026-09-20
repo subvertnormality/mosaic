@@ -46,13 +46,14 @@ def main():
         selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter',
                         'audio_frontend', 'capture_worker_ipc', 'omnizart_onnx',
                          'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
-                         'pretrained_composite_backend', 'dsp_drum_backend', 'build_scheduled',
-                         'pretrained_corpus_evaluate'))
+                         'pretrained_composite_backend', 'dsp_drum_backend', 'native_backend',
+                         'build_scheduled', 'pretrained_corpus_evaluate'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
     detector_tests = {'detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend',
                       'omnizart_onnx', 'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
-                      'pretrained_composite_backend', 'dsp_drum_backend', 'build_scheduled', 'pretrained_corpus_evaluate'}
+                      'pretrained_composite_backend', 'dsp_drum_backend', 'native_backend', 'build_scheduled',
+                      'pretrained_corpus_evaluate'}
     commands += [(name, [args.analysis_python if name in detector_tests else sys.executable,
                          '-m', 'unittest', 'discover', '-s',
                         'tests/rhythm_doctor', '-p', 'test_' + name + '.py', '-v'])
