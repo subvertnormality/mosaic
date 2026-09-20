@@ -15,13 +15,12 @@ ROOT = Path(__file__).resolve().parents[2]
 LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries', 'paint_transactions',
              'capture_transitions', 'assets', 'capture_controller', 'file_mailbox', 'softcut_recorder', 'analysis_controller', 'analysis_runtime', 'analysis_transport', 'runtime',
              'runtime_paint', 'runtime_persistence', 'bank_persistence', 'project_lifecycle_runtime',
-             'ui_adapter', 'worker_host', 'app_surface', 'dancing_doctor')
+             'ui_adapter', 'app_surface', 'dancing_doctor')
 PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit',
-                'acquisition_quality', 'grid_quality', 'native_transport', 'analysis_worker_ipc',
-                'runtime_dependencies', 'matron_compatibility', 'launch_worker', 'launch_analysis_worker',
+                'acquisition_quality', 'grid_quality', 'analysis_worker_ipc',
+                'runtime_dependencies', 'matron_compatibility', 'launch_analysis_worker',
                 'pretrained_bass_backend', 'hardware_core_runner', 'documentation')
-NATIVE_TESTS = ('capture_contract', 'capture_native', 'tempo_candidate', 'tempo_native',
-                'capture_worker_ipc')
+NATIVE_TESTS = ('tempo_candidate', 'tempo_native')
 
 
 def main():

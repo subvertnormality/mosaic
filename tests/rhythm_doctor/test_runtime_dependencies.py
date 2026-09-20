@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[2]
 TOOLS = ROOT / "tools" / "rhythm_doctor"
 
 # Entry points the Lua hosts execute on the device.
-ENTRY_POINTS = ("launch_worker.py", "launch_analysis_worker.py", "rd_analysis_worker.py")
+ENTRY_POINTS = ("launch_analysis_worker.py", "rd_analysis_worker.py")
 
 STDLIB = set(getattr(sys, "stdlib_module_names", ()))
 # Python 3.9 on a Norns has no sys.stdlib_module_names, so fall back to the set

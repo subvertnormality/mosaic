@@ -410,19 +410,5 @@ test("cleanup closes a worker that was still starting and never retries it", fun
   runtime:poll(); equal(opens, 1, "closed runtime cannot revive a detached startup worker")
 end)
 
-test("worker-host cleanup removes only its stale publication files", function()
-  local Host = require("rhythm_doctor.worker_host")
-  local commands = {}
-  local host = Host.new({code_root = "/code/mosaic", runtime_root = "/data/rd",
-    execute = function(command) commands[#commands + 1] = command; return true end,
-    read_line = function(path) return path:match("/pid$") and "42" or nil end,
-    transport_factory = function() error("not reached") end})
-  host:close()
-  check(commands[1]:find("/data/rd/cancel", 1, true))
-  equal(commands[2], "kill 42 2>/dev/null")
-  check(commands[3]:find("rm -f '/data/rd/mailbox' '/data/rd/pid' '/data/rd/error'", 1, true),
-        "cleanup must remove only its exact stale mailbox/PID/error publications")
-end)
-
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end
 print("rhythm_doctor app surface: " .. tests .. " tests passed")

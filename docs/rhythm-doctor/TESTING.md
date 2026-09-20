@@ -44,13 +44,13 @@ temporary directory, verifies deployed hashes and removes its files. It does not
 replace or load the user's script. Supply `--host`, `--control-path` and a new
 `--output` report path. Pure component passes are not full-feature device evidence.
 
-`tests/rhythm_doctor/run_hardware_capture.py` deploys and hash-verifies the capture
-probe and native sources in an isolated device directory, runs three trials,
-and removes exactly its own files even on failure. Supply the same connection
-arguments and a new output path. The probe in
-`tests/behaviour/rhythm_doctor_capture_hardware.py` verifies
-owned JACK injection/capture continuity and route restoration. It is not an ADC,
-physical grid or classifier test. Bank benchmarks report Lua CPU, not UI latency.
+Capture no longer owns a JACK client, so the runners that deployed and probed
+one are gone with it: `run_hardware_capture.py`, `run_hardware_worker.py` and
+`run_hardware_launch_worker.py`, along with the JACK injection probe. Recording
+goes through softcut, which lives inside crone and is already connected, and is
+covered by `tests/rhythm_doctor/test_softcut_recorder.lua` -- including the real
+capture controller and state machine driven through it. Bank benchmarks report
+Lua CPU, not UI latency.
 
 ## Actual application and corpus gates
 

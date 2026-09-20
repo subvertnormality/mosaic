@@ -92,3 +92,30 @@ and audio-frame origins are wall-clock/native-runtime properties. The contract
 test provides deterministic frame-index coverage; the dedicated-JACK test is
 the real-time local native-injection lane. Desktop results do not establish ARM
 norns scheduling or hardware-input performance.
+
+## Closed: capture moved to softcut, and this spike was removed
+
+This spike's native capture engine, its owned JACK worker and everything built
+on them (`rd_capture.c`, `rd_capture_worker.c`, `launch_worker.py`,
+`worker_host.lua`, `native_transport.lua`, the JACK injection probe and their
+suites) are no longer in the tree. The record above stays because the reasoning
+it contains is still the reason the replacement looks as it does.
+
+What the spike got wrong was not its implementation but its premise. Owning a
+JACK client is the one thing a norns cannot be relied on to allow: systemd's
+`RemoveIPC` default deletes the user's POSIX shared memory when their last
+login session ends, and JACK's registry goes with it. Clients already connected
+survive on open descriptors -- crone, softcut, the engine, everything the
+player can hear -- but nothing new can join the graph until jackd restarts.
+Measured on a device: jackd started 2026-09-19 11:07:42 and `/dev/shm` was
+emptied at 11:17:50, after which `jack_client_open` failed for good while audio
+kept playing.
+
+Capture now runs through softcut, inside crone, where the connection already
+exists. See `lib/rhythm_doctor/softcut_recorder.lua`. It speaks the same
+protocol the controller always spoke, so the state machine and everything above
+it were unchanged by the move. Two differences are worth recording: softcut
+writes 24-bit PCM rather than float32, and it taps the input after the player's
+own AUDIO input level rather than the hardware port directly -- measured as a
+4 dB difference against a simultaneous JACK tap on a device whose input level
+was set to -4.1 dB.
