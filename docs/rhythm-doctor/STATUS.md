@@ -606,3 +606,36 @@ The `bass_artifact_sha256` identity in the optional pretrained backend
 configuration still exists and now describes a lane that does not. It is
 unconfigured by default and nothing reaches it; removing that shape is
 follow-up work rather than part of this change.
+
+## Phrase alignment and the analysis server on hardware (2026-09-20)
+
+The native backend carrying phrase alignment was compiled and run on the norns
+(armv7l, Raspbian 11, gcc 10.2.1). On a 25.8-second synthetic groove it
+produced results **identical to the x86 reference**: phrase start 33280, BPM
+120.19, 142 candidates (BD 48, CYM 56, SD 38), and the phrase exactly 6.0000
+cells after the origin. Analysis took 45.8 seconds on the device against 1.6
+seconds on x86.
+
+The remote client was exercised under the device's own Python 3.9.2. With no
+endpoint, and with an unreachable one, it fell back to the native backend and
+produced the same 142 candidates. Against a real HTTP server running on the
+device it posted the 3.4 MB capture and accepted a ten-lane response in 0.5
+seconds, stripping the transport fields before writing the result.
+
+Work was confined to `/tmp/rdtest`, which was removed; the device's saved
+projects were not touched and no process was left running. A public key was
+added to `~/.ssh/authorized_keys` so later runs need no password.
+
+**The device has not talked to the real analysis server.** It is in AP mode,
+serving its own hotspot at 10.42.0.1 with no route off it, so it cannot reach
+a machine on the LAN. Everything above tests the device's client path against
+a server on the device itself. Separation quality on real hardware over a real
+network is unmeasured.
+
+Model timings, x86 CPU, same 25.8-second capture: separation and beat tracking
+without LarsNet 12 seconds for six lanes; with LarsNet 15.4 seconds for ten.
+Beat This! reported 120.00 BPM where the local autocorrelation reported 120.19,
+and both placed the phrase start within a sixteenth of a true downbeat.
+
+These are device and timing observations. They are not transcription-quality
+evidence and make no claim about separation accuracy on real music.
