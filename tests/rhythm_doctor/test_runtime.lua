@@ -300,6 +300,11 @@ test('a correction with no retained capture fails instead of hanging', function(
 
   local outcome = runtime:apply_alignment({ bpm = 90, start_beat = 1, fine_start_ms = 0 })
   check(not outcome.ok, 'a correction that cannot be dispatched must not report success')
+  -- The player sees this code on the screen, so it has to say what actually
+  -- went wrong. CORRECTION_FAILED tells them nothing they can act on; the
+  -- retained audio is gone and they need to record again.
+  equal(outcome.code, 'CAPTURE_AUDIO_UNAVAILABLE',
+    'the refusal must name the reason, not just that it failed')
   check(runtime.machine.state ~= Machine.REANALYSING,
     'the bank was left stuck in REANALYSING with no pending analysis')
   check(runtime.machine.bank ~= nil, 'the ready bank must survive a failed correction')

@@ -220,7 +220,11 @@ end
 -- for good; fail the lease instead, which restores the previous ready bank.
 function Runtime:_analyse(token)
   local outcome = self.controller and self.controller:analyse(token)
-  if outcome and outcome.code ~= "STALE_JOB" then return end
+  if outcome and outcome.code ~= "STALE_JOB" then self.dispatch_error = nil; return end
+  -- The player reads this on the screen, so keep the specific reason: the
+  -- machine's own rollback message only says a correction failed, which tells
+  -- them nothing they can act on.
+  self.dispatch_error = "CAPTURE_AUDIO_UNAVAILABLE"
   self.machine:receive_analysis({ project_id = token.project_id, generation = token.generation,
     analysis_revision = token.analysis_revision, error = "CAPTURE_AUDIO_UNAVAILABLE" })
 end
@@ -284,12 +288,13 @@ function Runtime:apply_alignment(alignment)
   if self.transport_stopped() ~= true then return result("STOP_SEQUENCER") end
   if self.machine.state ~= Machine.READY then return result("NOT_READY") end
   self.alignment = copy(alignment)
+  self.dispatch_error = nil
   local outcome = self.machine:begin_reanalysis(true)
   -- The dispatch can fail while begin_reanalysis is still running, which leaves
   -- the machine out of REANALYSING again. Report that as a failure so the
   -- player keeps their draft rather than being told a correction was applied.
   if outcome and outcome.ok and self.machine.state ~= Machine.REANALYSING then
-    return result(self.machine.last_message or "CAPTURE_AUDIO_UNAVAILABLE")
+    return result(self.dispatch_error or self.machine.last_message or "CAPTURE_AUDIO_UNAVAILABLE")
   end
   return outcome
 end
