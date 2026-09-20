@@ -37,6 +37,27 @@ enum { W1 = 3, W2 = 3, W3 = 8, W4 = 1, W5 = 2 };
 #define BPM_MAX 240.0
 #define DEFAULT_BPM 120.0
 
+/* Tempo octave preference. Autocorrelation cannot tell a tempo from half or
+   double it, and for kick on 1 and 3 -- the commonest pattern there is -- the
+   two-beat period is the STRONGER one, so a bare maximum calls a 120 BPM rock
+   groove 60 BPM and every bar comes out twice as long. These are librosa's
+   published defaults, not values fitted to this project's material. */
+#define TEMPO_PRIOR_CENTRE 120.0
+#define TEMPO_PRIOR_OCTAVES 1.0
+
+/* Phrase alignment. Mirrors dsp_drum_backend.py; see that module for why each
+   cue is scored the way it is. The two must agree, because the Python backend
+   is this one's reference oracle. */
+#define BEATS_PER_BAR 4
+#define PHRASE_BARS 4
+#define CELLS_PER_BEAT 4
+#define WINDOW_CELLS (PHRASE_BARS * BEATS_PER_BAR * CELLS_PER_BEAT)
+#define CRASH_BAND_HZ 5000.0
+#define CRASH_TAIL_SECONDS 0.40
+/* Bar-phase margin at which the downbeat stops discounting the reported
+   confidence; four candidates scored as shares start from 0.25 each. */
+#define BAR_MARGIN_FULL 0.10
+
 
 #define BACKEND_ID "nmf-pfnmf-drums-v1"
 
@@ -363,22 +384,27 @@ static int pick_peaks(const float *curve, int n, float delta, int *picked) {
 /* --- autocorrelation helpers ---------------------------------------------- */
 
 /* Normalised autocorrelation peak in a lag range; shared by tempo and pitch. */
-static double autocorr_peak(const double *x, int n, int lo, int hi, int *best_lag) {
+static double autocorr_peak(const double *x, int n, int lo, int hi, double fps, int *best_lag) {
   if (n < 4) return 0.0;
   double zero = 0.0;
   for (int i = 0; i < n; i++) zero += x[i] * x[i];
   if (zero <= 0.0) return 0.0;
   if (hi > n - 1) hi = n - 1;
   if (hi <= lo) return 0.0;
-  double best = -1e30; int at = lo;
+  double best = -1e30, raw_at_best = 0.0; int at = lo;
   for (int lag = lo; lag <= hi; lag++) {
     double s = 0.0;
     for (int i = 0; i + lag < n; i++) s += x[i] * x[i + lag];
     s /= zero;
-    if (s > best) { best = s; at = lag; }
+    /* The prior reweights WHICH periodicity is chosen. The caller's usable
+       -periodicity floor is applied to the raw correlation at the winner, so
+       preferring a tempo can never manufacture a detection out of noise. */
+    double octaves = log2((60.0 * fps / lag) / TEMPO_PRIOR_CENTRE) / TEMPO_PRIOR_OCTAVES;
+    double weighted = s * exp(-0.5 * octaves * octaves);
+    if (weighted > best) { best = weighted; at = lag; raw_at_best = s; }
   }
   if (best_lag) *best_lag = at;
-  return best;
+  return raw_at_best;
 }
 
 static double estimate_bpm(const double *env, int n, double fps, int *detected) {
@@ -394,7 +420,7 @@ static double estimate_bpm(const double *env, int n, double fps, int *detected) 
   int lo = (int)lround(60.0 * fps / BPM_MAX); if (lo < 1) lo = 1;
   int hi = (int)lround(60.0 * fps / BPM_MIN);
   int best = lo;
-  double peak = autocorr_peak(x, n, lo, hi, &best);
+  double peak = autocorr_peak(x, n, lo, hi, fps, &best);
   free(x);
   if (peak <= 0.1) return DEFAULT_BPM;          /* no usable periodicity */
   double bpm = 60.0 * fps / best;
@@ -403,6 +429,175 @@ static double estimate_bpm(const double *env, int n, double fps, int *detected) 
   if (!(bpm >= BPM_MIN && bpm <= BPM_MAX)) return DEFAULT_BPM;
   *detected = 1;
   return bpm;
+}
+
+
+/* --- phrase alignment ------------------------------------------------------
+   A line-for-line companion to dsp_drum_backend.py. Any divergence here shows
+   up as the native backend disagreeing with its own reference oracle. */
+
+/* Positive deviation above the lane's median: "did this lane do something
+   UNUSUAL here", not "is this lane busy here", which a steady hat satisfies on
+   every eighth and which says nothing about where the bar starts. */
+static float *accent_of(const float *curve, int n) {
+  float *out = xalloc((size_t)n * sizeof(float));
+  float mid = percentile(curve, n, 50.0);
+  for (int i = 0; i < n; i++) out[i] = curve[i] > mid ? curve[i] - mid : 0.f;
+  return out;
+}
+
+/* Mean of `curve` sampled at first, first+stride, ... steps of `spacing` from
+   `phase`. A mean, so candidates fitting different counts stay comparable. */
+static double comb(const float *curve, int n, double phase, double spacing,
+                   int first, int stride) {
+  double total = 0.0; int count = 0;
+  for (int index = first;; index += stride) {
+    long frame = lround(phase + index * spacing);
+    if (frame >= n) break;
+    if (frame >= 0) { total += curve[frame]; count++; }
+  }
+  return count ? total / count : 0.0;
+}
+
+static void shares(const double *values, int n, double *out) {
+  double total = 0.0;
+  for (int i = 0; i < n; i++) total += values[i];
+  for (int i = 0; i < n; i++) out[i] = total > 0.0 ? values[i] / total : 0.0;
+}
+
+/* Frame offset of the first beat: the comb phase collecting most energy. */
+static double beat_phase(const double *env, int n, double fps, double bpm) {
+  double beat = 60.0 * fps / bpm;
+  if (n < beat) return 0.0;
+  int any = 0;
+  for (int i = 0; i < n; i++) if (env[i] > 0.0) { any = 1; break; }
+  if (!any) return 0.0;
+  float *curve = xalloc((size_t)n * sizeof(float));
+  for (int i = 0; i < n; i++) curve[i] = (float)env[i];
+  double best = 0.0, best_score = -1.0;
+  int steps = (int)lround(beat); if (steps < 1) steps = 1;
+  for (int frame = 0; frame < steps; frame++) {
+    double score = comb(curve, n, (double)frame, beat, 0, 1);
+    if (score > best_score) { best = frame; best_score = score; }
+  }
+  free(curve);
+  return best;
+}
+
+/* How much high-band energy each frame LEAVES BEHIND it. A crash and a closed
+   hat occupy the same band, so level cannot separate them; duration can. Taken
+   from the spectrogram rather than the CYM lane, whose activation is
+   suppressed wherever a kick or snare explains the same frame -- which is
+   exactly on the downbeats being looked for. */
+static float *crash_sustain(const float *V, int bins, int frames, double fps) {
+  float *out = xalloc((size_t)(frames > 0 ? frames : 1) * sizeof(float));
+  if (frames <= 0) return out;
+  int first = (int)lround(CRASH_BAND_HZ * NFFT / (double)SR);
+  if (first >= bins) { for (int f = 0; f < frames; f++) out[f] = 0.f; return out; }
+  float *band = xalloc((size_t)frames * sizeof(float));
+  for (int f = 0; f < frames; f++) {
+    double sum = 0.0;
+    for (int b = first; b < bins; b++) sum += V[(size_t)b * frames + f];
+    band[f] = (float)(sum / (bins - first));
+  }
+  int tail = (int)lround(CRASH_TAIL_SECONDS * fps); if (tail < 1) tail = 1;
+  for (int f = 0; f < frames; f++) {
+    double sum = 0.0;
+    for (int k = 0; k < tail; k++) { int at = f + k; if (at < frames) sum += band[at]; }
+    out[f] = (float)(sum / tail);
+  }
+  free(band);
+  float *accent = accent_of(out, frames);
+  free(out);
+  return accent;
+}
+
+/* Activity in the three sixteenths immediately before each candidate downbeat.
+   Drummers announce the bar line, and that announcement sits between the beats
+   -- so beat-resolution scoring cannot see it at all. It is the cue that
+   separates beat 1 from beat 3 when the kick plays both. */
+static double pickup_score(const float *combined, int n, double phase,
+                           double beat, int offset) {
+  double sixteenth = beat / CELLS_PER_BEAT, total = 0.0;
+  int count = 0;
+  for (int bar = 0;; bar++) {
+    double downbeat = phase + (offset + BEATS_PER_BAR * bar) * beat;
+    if (downbeat >= n) break;
+    for (int step = 1; step <= 3; step++) {
+      long frame = lround(downbeat - step * sixteenth);
+      if (frame >= 0 && frame < n) { total += combined[frame]; count++; }
+    }
+  }
+  return count ? total / count : 0.0;
+}
+
+/* Which beat of four is "1", and how decided the vote was. */
+static int downbeat_offset(float *const *accents, const float *crash, int n,
+                           double fps, double bpm, double phase, double *margin) {
+  double beat = 60.0 * fps / bpm;
+  float *combined = xalloc((size_t)n * sizeof(float));
+  for (int i = 0; i < n; i++) combined[i] = 0.f;
+  for (int lane = 0; lane < LANE_COUNT; lane++) {
+    float top = 0.f;
+    for (int i = 0; i < n; i++) if (accents[lane][i] > top) top = accents[lane][i];
+    for (int i = 0; i < n; i++) combined[i] += accents[lane][i] / (top + EPSF);
+  }
+  double kick[BEATS_PER_BAR], back[BEATS_PER_BAR], pick[BEATS_PER_BAR], ring[BEATS_PER_BAR];
+  for (int o = 0; o < BEATS_PER_BAR; o++) {
+    kick[o] = comb(accents[0], n, phase, beat, o, BEATS_PER_BAR);
+    back[o] = comb(accents[1], n, phase, beat, o + 1, BEATS_PER_BAR)
+            + comb(accents[1], n, phase, beat, o + 3, BEATS_PER_BAR);
+    pick[o] = pickup_score(combined, n, phase, beat, o);
+    ring[o] = comb(crash, n, phase, beat, o, BEATS_PER_BAR);
+  }
+  free(combined);
+  /* Each lane votes on its own scale -- a kick activation is routinely two
+     orders of magnitude larger than a cymbal one -- so the votes are made
+     comparable before they are combined. Unnormalised, the kick decides alone
+     and cannot separate beat 1 from beat 3 in the pattern where it plays both.
+     The cymbal LANE deliberately does not vote; only the crash ring does. */
+  double ks[BEATS_PER_BAR], bs[BEATS_PER_BAR], ps[BEATS_PER_BAR], rs[BEATS_PER_BAR];
+  shares(kick, BEATS_PER_BAR, ks); shares(back, BEATS_PER_BAR, bs);
+  shares(pick, BEATS_PER_BAR, ps); shares(ring, BEATS_PER_BAR, rs);
+  double scored[BEATS_PER_BAR];
+  int best = 0;
+  for (int o = 0; o < BEATS_PER_BAR; o++) {
+    scored[o] = ks[o] + bs[o] + ps[o] + rs[o];
+    if (scored[o] > scored[best]) best = o;
+  }
+  double top = scored[best], second = -1e30;
+  for (int o = 0; o < BEATS_PER_BAR; o++) if (o != best && scored[o] > second) second = scored[o];
+  *margin = top <= 0.0 ? 0.0 : (top - second) / top;
+  return best;
+}
+
+/* Which bar of four opens the phrase, and how much to believe it. Phrase
+   position is normally recovered from repetition at a four-bar period; a
+   capture is a handful of bars, so there is often no second phrase to
+   correlate against and the honest answer is "unknown". */
+static int phrase_offset(const float *crash, int n, double fps, double bpm,
+                         double phase, int downbeat, double *confidence) {
+  double beat = 60.0 * fps / bpm, bar = beat * BEATS_PER_BAR;
+  double span = n - phase - downbeat * beat;
+  int bars_available = span > 0.0 ? (int)(span / bar) : 0;
+  *confidence = 0.0;
+  if (bars_available < PHRASE_BARS) return 0;
+  double origin = phase + downbeat * beat, scores[PHRASE_BARS];
+  int best = 0;
+  for (int c = 0; c < PHRASE_BARS; c++) {
+    scores[c] = comb(crash, n, origin, bar, c, PHRASE_BARS);
+    if (scores[c] > scores[best]) best = c;
+  }
+  double top = scores[best], second = -1e30;
+  for (int c = 0; c < PHRASE_BARS; c++) if (c != best && scores[c] > second) second = scores[c];
+  double margin = top <= 0.0 ? 0.0 : (top - second) / top;
+  /* One phrase gives a margin with nothing to corroborate it; two or more let
+     the cue repeat. Below two the margin is halved rather than discarded,
+     because a lone crash is still evidence. */
+  double phrases = bars_available / (double)PHRASE_BARS;
+  double value = margin * (phrases >= 2.0 ? 1.0 : 0.5);
+  *confidence = value < 0.0 ? 0.0 : (value > 1.0 ? 1.0 : value);
+  return best;
 }
 
 /* --- velocity ------------------------------------------------------------- */
@@ -638,6 +833,8 @@ int main(int argc, char **argv) {
   const char *mode = have_alignment ? "manual" : "auto";
 
   candidate_t *cands = NULL; int ncand = 0;
+  long phrase_start = 0; double phrase_confidence = 0.0;
+  long *beats = NULL; int nbeats = 0;
   int any = 0;
   for (size_t i = 0; i < n; i++) if (mono[i] != 0.f) { any = 1; break; }
   if (any) {
@@ -654,10 +851,12 @@ int main(int argc, char **argv) {
       cands = xalloc((size_t)frames * 3 * sizeof(candidate_t));
       static const char *const column[3] = {"BD", "SD", "CHH"};
       static const char *const lane_name[3] = {"BD", "SD", "CYM"};
+      const float *rows[LANE_COUNT] = {0};
       for (int lane = 0; lane < 3; lane++) {
         int col = template_column(&tpl, column[lane]);
         if (col < 0) continue;
         const float *row = Gd + (size_t)col * frames;
+        rows[lane] = row;
         float top = 0.f;
         for (int f = 0; f < frames; f++) if (row[f] > top) top = row[f];
         for (int f = 0; f < frames; f++) envelope[f] += row[f] / (top + EPSF);
@@ -671,6 +870,58 @@ int main(int argc, char **argv) {
         }
       }
       if (!have_alignment) bpm = estimate_bpm(envelope, frames, fps, &detected);
+      if (detected && !have_alignment && rows[0] && rows[1] && rows[2]) {
+        /* The origin is rewound from the phrase start in whole cells, as far
+           as the capture allows: it keeps the grid in phase with the music, so
+           a gate on beat 1 quantises to a cell boundary rather than straddling
+           one, and it keeps the audio recorded before the phrase inside the
+           timeline so the player can scroll back behind it. */
+        float *accents[LANE_COUNT];
+        for (int lane = 0; lane < LANE_COUNT; lane++) accents[lane] = accent_of(rows[lane], frames);
+        float *crash = crash_sustain(V, BINS, frames, fps);
+        double phase = beat_phase(envelope, frames, fps, bpm), bar_margin = 0.0;
+        int down = downbeat_offset(accents, crash, frames, fps, bpm, phase, &bar_margin);
+        double phrase_margin = 0.0;
+        int offset = phrase_offset(crash, frames, fps, bpm, phase, down, &phrase_margin);
+        /* A phrase position is only as trustworthy as the bar phase it is
+           measured against: naming the right bar of four is worthless if the
+           downbeat inside it is two beats out. */
+        double scale = bar_margin / BAR_MARGIN_FULL; if (scale > 1.0) scale = 1.0;
+        phrase_confidence = phrase_margin * scale;
+        double beat = 60.0 * fps / bpm, bar = beat * BEATS_PER_BAR;
+        double samples_per_cell = source_rate * 15.0 / bpm;
+        double window = WINDOW_CELLS * samples_per_cell;
+        /* Walk phrase candidates forward to the first with a whole window
+           behind it; jumping to one with two bars left would show a view
+           clamped against the end, which reads as a detector fault. */
+        double start_frame = phase + down * beat + offset * bar;
+        long found = -1;
+        for (;;) {
+          long candidate = lround(start_frame * HOP * source_rate / (double)SR);
+          if ((double)candidate + window > (double)n) break;
+          if (candidate >= 0) { found = candidate; break; }
+          start_frame += bar * PHRASE_BARS;
+        }
+        if (found >= 0) {
+          phrase_start = found;
+          long cells_before = (long)(phrase_start / samples_per_cell);
+          long o = lround(phrase_start - cells_before * samples_per_cell);
+          origin = o < 0 ? 0 : o;
+          /* The whole beat grid, anchored on the phrase start so stepping away
+             and back is exact. Beats before it are included: the player may
+             decide the phrase begins earlier than the detector did. */
+          double samples_per_beat = source_rate * 60.0 / bpm;
+          double first = phrase_start - samples_per_beat * (long)(phrase_start / samples_per_beat);
+          int cap = (int)(n / samples_per_beat) + 2;
+          beats = xalloc((size_t)cap * sizeof(long));
+          for (double at = first; at < (double)n && nbeats < cap; at += samples_per_beat)
+            beats[nbeats++] = lround(at);
+        } else {
+          phrase_confidence = 0.0;
+        }
+        free(crash);
+        for (int lane = 0; lane < LANE_COUNT; lane++) free(accents[lane]);
+      }
       free(vel); free(picked); free(envelope); free(Gd);
     }
     free(V); free(analysis);
@@ -679,8 +930,18 @@ int main(int argc, char **argv) {
 
   FILE *out = fopen(result_path, "wb");
   if (!out) { fprintf(stderr, "cannot write result\n"); return 2; }
+  if (have_alignment) {
+    /* A corrected origin IS the phrase start the player chose: the whole point
+       of the correction is to say where the phrase begins. */
+    phrase_start = origin; phrase_confidence = 1.0;
+    if (nbeats == 0) { beats = xalloc(sizeof(long)); beats[nbeats++] = origin; }
+  }
   fprintf(out, "{\"bpm\":%.10g,\"tempo_detected\":%s,\"origin_sample\":%ld,\"tempo_mode\":\"%s\",",
           bpm, detected ? "true" : "false", origin, mode);
+  fprintf(out, "\"phrase_start_sample\":%ld,\"phrase_confidence\":%.10g,", phrase_start, phrase_confidence);
+  fprintf(out, "\"beat_positions\":[");
+  for (int i = 0; i < nbeats; i++) fprintf(out, "%s%ld", i ? "," : "", beats[i]);
+  fprintf(out, "],");
   fprintf(out, "\"detector\":{\"backend_id\":\"%s\",\"backend_sha256\":\"%s\",\"template_sha256\":\"%s\"},",
           BACKEND_ID, backend_hex, template_hex);
   fprintf(out, "\"lane_onset_gates\":{");
@@ -692,6 +953,6 @@ int main(int argc, char **argv) {
             i ? "," : "", cands[i].lane, cands[i].sample_index, cands[i].velocity, cands[i].confidence);
   fprintf(out, "]}\n");
   fclose(out);
-  free(cands); free(mono); free(tpl.data); free(request);
+  free(beats); free(cands); free(mono); free(tpl.data); free(request);
   return 0;
 }

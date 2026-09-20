@@ -603,9 +603,9 @@ def analyse_request(wav_path, deltas=None, alignment=None):
     candidates.sort(key=lambda c: (c["sample_index"], LANES.index(c["lane"])))
     bpm, detected = estimate_bpm(envelope, fps)
     origin, mode = 0, "auto"
-    phrase_start, phrase_confidence = 0, 0.0
+    phrase_start, phrase_confidence, beats = 0, 0.0, []
     if detected:
-        phrase_start, phrase_confidence, origin = _align_to_phrase(
+        phrase_start, phrase_confidence, origin, beats = _align_to_phrase(
             {lane: G_D[lanes.index(column[lane])] for lane in LANES},
             crash_sustain(V, fps), envelope, fps, bpm, source_rate, mono.size, source_index)
     if confirmed:
@@ -615,15 +615,21 @@ def analyse_request(wav_path, deltas=None, alignment=None):
         # the whole point of the correction is to say where the phrase begins.
         bpm, detected, origin, mode = confirmed["bpm"], True, confirmed["origin_sample"], "manual"
         phrase_start, phrase_confidence = origin, 1.0
+        # A corrected origin is a beat by definition, so it joins the grid the
+        # player steps through rather than sitting between two of its entries.
+        beats = sorted(set(beats) | {int(origin)})
     return {"bpm": float(bpm), "tempo_detected": bool(detected), "origin_sample": int(origin),
             "phrase_start_sample": int(phrase_start),
             "phrase_confidence": float(phrase_confidence),
+            "beat_positions": [int(b) for b in beats],
             "tempo_mode": mode, "detector": identity, "lane_onset_gates": empty_gates,
             "candidates": candidates}
 
 
 def _align_to_phrase(curves, crash, envelope, fps, bpm, source_rate, capture_samples, source_index):
-    """Return (phrase_start_sample, confidence, origin_sample) in source coordinates.
+    """Return (phrase_start_sample, confidence, origin_sample, beat_positions).
+
+    All in the ORIGINAL capture's sample coordinates.
 
     The origin is rewound from the phrase start in whole cells, as far as the
     capture allows, for two reasons. It keeps the grid in phase with the music,
@@ -659,10 +665,20 @@ def _align_to_phrase(curves, crash, envelope, fps, bpm, source_rate, capture_sam
             break
         start_frame += bar * PHRASE_BARS
     if phrase_start is None or phrase_start < 0:
-        return 0, 0.0, 0
+        return 0, 0.0, 0, []
     cells_before = int(phrase_start // samples_per_cell)
     origin = int(round(phrase_start - cells_before * samples_per_cell))
-    return phrase_start, confidence, max(0, origin)
+    # The whole beat grid, anchored on the phrase start so that stepping away
+    # from it and back is exact. Beats before the phrase start are included:
+    # the player may decide the phrase begins earlier than the detector did,
+    # and they cannot say so if those beats are missing from the list.
+    samples_per_beat = source_rate * 60.0 / bpm
+    first = phrase_start - samples_per_beat * int(phrase_start // samples_per_beat)
+    beats, position = [], first
+    while position < capture_samples:
+        beats.append(int(round(position)))
+        position += samples_per_beat
+    return phrase_start, confidence, max(0, origin), beats
 
 
 def _mono_float(pcm):

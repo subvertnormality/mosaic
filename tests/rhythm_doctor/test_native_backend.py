@@ -116,6 +116,33 @@ class NativeBackendTests(unittest.TestCase):
         self.assertEqual(value["tempo_mode"], "manual")
         self.assertTrue(value["tempo_detected"])
 
+    def test_it_aligns_the_phrase_where_the_reference_does(self):
+        """The native backend is a port, so a phrase start it finds somewhere
+        else is a port bug -- and one the player would experience as the gates
+        landing on different steps on the device than in every test here."""
+        from test_dsp_drum_backend import groove
+        mono, _ = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        wav = self.capture(mono)
+        native, reference = self.analyse(wav), dsp.analyse_request(str(wav))
+        cell = 44100 * 15 / reference["bpm"]
+        self.assertAlmostEqual(native["bpm"], reference["bpm"], delta=1.0)
+        self.assertLessEqual(abs(native["phrase_start_sample"] - reference["phrase_start_sample"]), cell,
+                             "native %d vs reference %d" %
+                             (native["phrase_start_sample"], reference["phrase_start_sample"]))
+        self.assertLessEqual(abs(native["origin_sample"] - reference["origin_sample"]), cell)
+        self.assertAlmostEqual(native["phrase_confidence"], reference["phrase_confidence"], delta=0.2)
+        self.assertEqual(len(native["beat_positions"]), len(reference["beat_positions"]))
+
+    def test_the_phrase_start_is_a_whole_number_of_cells_after_the_origin(self):
+        """Same grid rule as the reference: a phrase start off a cell boundary
+        cannot be addressed by the bank as a window position."""
+        from test_dsp_drum_backend import groove
+        mono, _ = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        value = self.analyse(self.capture(mono))
+        cell = 44100 * 15 / value["bpm"]
+        offset = (value["phrase_start_sample"] - value["origin_sample"]) / cell
+        self.assertLess(abs(offset - round(offset)), 0.01)
+
     def test_it_finds_the_same_onsets_as_the_reference(self):
         signal = click_train([0.5, 1.0, 1.5, 2.0, 2.5, 3.0], kind="bd")
         snare = click_train([1.0, 2.0, 3.0], kind="sd")
