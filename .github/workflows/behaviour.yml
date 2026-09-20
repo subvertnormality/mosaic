@@ -241,7 +241,7 @@ jobs:
         with:
           name: rhythm-doctor-surface
           path: |
-            /tmp/rd-surface/**/manifest.json
+            /tmp/rd-surface/*/manifest.json
           retention-days: 7
 
   complete:

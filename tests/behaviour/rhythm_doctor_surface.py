@@ -120,12 +120,24 @@ def main():
                 runtime = c.data_directory / "rhythm-doctor-runtime"
                 pid = int((runtime / "pid").read_text()) if (runtime / "pid").is_file() else None
                 socket_path = (runtime / "socket").read_text().strip() if (runtime / "socket").is_file() else None
-                for _ in range(20):
-                    if pid is None or not Path("/proc").joinpath(str(pid)).exists(): break
-                    time.sleep(.05)
+                # Teardown is asynchronous, and a process that has exited but not
+                # been reaped keeps its /proc entry as a zombie. Neither means the
+                # helper is still running, so wait long enough for a loaded CI
+                # container and read the process state rather than the directory.
+                def still_running(number):
+                    if number is None: return False
+                    try:
+                        stat = Path("/proc").joinpath(str(number), "stat").read_text()
+                    except (FileNotFoundError, ProcessLookupError, PermissionError):
+                        return False
+                    # State is the field after the parenthesised command name.
+                    return stat.rsplit(") ", 1)[-1].split(" ", 1)[0] not in ("Z", "X", "x")
+                deadline = time.monotonic() + 30
+                while still_running(pid) and time.monotonic() < deadline:
+                    time.sleep(.1)
                 runtime_cleanup = dict(cancel=(runtime / "cancel").is_file(),
                                        status_socket=(runtime / "socket").exists(), status_pid=(runtime / "pid").exists(),
-                                       process_alive=bool(pid and Path("/proc").joinpath(str(pid)).exists()),
+                                       process_alive=still_running(pid),
                                        owned_socket_alive=bool(socket_path and Path(socket_path).exists()))
                 assert not runtime_cleanup["process_alive"], runtime_cleanup
                 # The emulator tears down its native process group without the
