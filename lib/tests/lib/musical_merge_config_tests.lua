@@ -62,4 +62,3 @@ function test_musical_merge_config_validates_curve_and_target_identity()
   value.target = {kind = "degrees", degrees = {1, 3, 5}}
   luaunit.assert_true(config.validate(value))
 end
-

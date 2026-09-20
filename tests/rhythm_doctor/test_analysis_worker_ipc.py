@@ -227,7 +227,7 @@ class DspBackendConfigurationTests(unittest.TestCase):
         backend, digest = self._backend()
         code = self._launch(runtime, "--backend", str(backend), "--backend-sha256", digest,
                             "--template-sha256", "b" * 64)
-        self.assertNotEqual((runtime / "error").exists() and (runtime / "error").read_text(), 
+        self.assertNotEqual((runtime / "error").exists() and (runtime / "error").read_text(),
                             "incomplete analysis backend configuration\n")
 
     def test_mixing_the_two_identity_shapes_is_refused(self):
