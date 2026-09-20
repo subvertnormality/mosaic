@@ -61,7 +61,7 @@ def seed_project_with_bank(c):
 
 def inject_bank(ptn):
     norns_lua = json.loads((EMULATOR_ROOT / ".runtime/current.json").read_text())["source"] + "/lua/lib"
-    done = subprocess.run(["lua", str(REPO / "tests/behaviour/inject_ready_bank.lua"),
+    done = subprocess.run(["lua", str(REPO / "tests/behaviour/fixtures/inject_ready_bank.lua"),
                            str(ptn), norns_lua],
                           cwd=str(REPO), capture_output=True, text=True)
     if done.returncode != 0:
