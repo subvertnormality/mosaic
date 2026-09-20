@@ -15,11 +15,12 @@ ROOT = Path(__file__).resolve().parents[2]
 LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries', 'paint_transactions',
              'capture_transitions', 'assets', 'capture_controller', 'file_mailbox', 'softcut_recorder', 'analysis_controller', 'analysis_runtime', 'analysis_transport', 'runtime',
              'runtime_paint', 'runtime_persistence', 'bank_persistence', 'project_lifecycle_runtime',
-             'ui_adapter', 'app_surface', 'dancing_doctor')
+             'ui_adapter', 'app_surface', 'dancing_doctor', 'analysis_worker_host')
 PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit',
                 'acquisition_quality', 'grid_quality', 'analysis_worker_ipc',
                 'runtime_dependencies', 'matron_compatibility', 'launch_analysis_worker',
-                'pretrained_bass_backend', 'hardware_core_runner', 'documentation')
+                'pretrained_bass_backend', 'hardware_core_runner', 'documentation',
+                'remote_backend')
 NATIVE_TESTS = ('tempo_candidate', 'tempo_native')
 
 
@@ -37,7 +38,9 @@ def main():
     paths += list((ROOT/'tests/rhythm_doctor').glob('*.py'))
     paths += list((ROOT/'tests/rhythm_doctor').glob('*.lua'))
     paths += list((ROOT/'tests/rhythm_doctor').glob('*.c'))
-    for folder in ('rhythm_doctor', 'rhythm_doctor_tempo', 'rhythm_doctor_analysis'):
+    paths += list((ROOT/'tests/rhythm_doctor_server').glob('*.py'))
+    for folder in ('rhythm_doctor', 'rhythm_doctor_tempo', 'rhythm_doctor_analysis',
+                   'rhythm_doctor_server'):
         paths += [p for p in (ROOT/'tools'/folder).glob('*') if p.is_file()]
     identities = {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest()
                   for p in paths}
@@ -51,6 +54,14 @@ def main():
                          'build_scheduled', 'pretrained_corpus_evaluate'))
     if args.tempo_corpus:
         selected.append('tempo_corpus')
+    # The analysis server's own suites. They stub the models, so they need
+    # numpy but not torch, and they run wherever the detector group runs.
+    server_tests = (('server_onsets', 'onsets'), ('server_phrase', 'phrase'),
+                    ('server_http', 'server')) if args.detector else ()
+    commands += [(label,
+                  [args.analysis_python, '-m', 'unittest', 'discover', '-s',
+                   'tests/rhythm_doctor_server', '-p', 'test_' + name + '.py', '-v'])
+                 for label, name in server_tests]
     detector_tests = {'detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter', 'audio_frontend',
                       'omnizart_onnx', 'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
                       'pretrained_composite_backend', 'dsp_drum_backend', 'native_backend', 'build_scheduled',
