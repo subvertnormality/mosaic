@@ -1,6 +1,6 @@
 -- PLAN capture architecture: real transport/controller/worker collaboration on
--- the interpreter matron embeds.  A norns has no luajit and no FFI, so the
--- wait is a plain sleep rather than a C call.
+-- the interpreter matron embeds.  Inside matron there is no FFI, whatever the
+-- device's standalone luajit offers, so the wait is a sleep not a C call.
 package.path = './lib/?.lua;' .. package.path
 local function sleep(seconds) os.execute('sleep ' .. tostring(seconds)) end
 local Machine = require('rhythm_doctor.state_machine')

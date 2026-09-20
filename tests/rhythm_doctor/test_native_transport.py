@@ -1,7 +1,8 @@
 """Transport round trips on the interpreter matron embeds, over a file mailbox.
 
-These once ran under `luajit` against AF_UNIX.  A norns has neither, so they
-proved nothing about the device and skipped on CI; see test_matron_compatibility.
+These once ran under `luajit` against AF_UNIX.  matron is neither, so they
+proved nothing about the environment a script runs in, and skipped on CI where
+there is no luajit at all; see test_matron_compatibility.
 """
 import pathlib
 import subprocess

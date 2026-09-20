@@ -1,6 +1,7 @@
 -- Physical-Norns launch_worker smoke transport. Characterisation outside README.
 -- Uses the production file-mailbox transport against one disposable worker, on
--- the Lua matron embeds: a norns has no luajit binary and no FFI.
+-- the Lua matron embeds -- not the device's standalone luajit, which has an
+-- FFI that matron does not.
 local mailbox_root, lib_root = assert(arg[1]), assert(arg[2])
 package.path = lib_root .. "/?.lua;" .. package.path
 

@@ -30,7 +30,7 @@ for index, frame in ipairs(Doctor.FRAMES) do
   end
   check(lit > 250, 'pose ' .. index .. ' is too sparse to read: ' .. lit .. ' pixels')
   check(levels[15], 'pose ' .. index .. ' has no white: the coat carries the shape')
-  check(levels[4], 'pose ' .. index .. ' has no dark detail')
+  check(levels[3], 'pose ' .. index .. ' has no dark detail')
 end
 
 -- The poses differ, or he is standing still rather than dancing.
@@ -69,7 +69,7 @@ screen = { level = function(value) levels[#levels + 1] = value end,
 Doctor.draw(97, 15, 1)
 screen = previous
 check(fills == #levels, 'each level is filled exactly once')
-check(fills <= 4, 'a pose costs at most four fills: ' .. fills)
+check(fills <= 5, 'a pose costs at most one fill per palette level: ' .. fills)
 check(rects > 40, 'the pose actually drew: ' .. rects .. ' runs')
 for i = 2, #levels do check(levels[i] > levels[i - 1], 'levels are set in one ascending pass') end
 

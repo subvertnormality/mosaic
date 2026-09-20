@@ -503,8 +503,17 @@ Why the suites did not see it, which is the more important half:
   behaviour — they passed *because* the transport failed.
 - `test_native_transport.py` and the whole-path
   `test_machine_controller_transport_worker_flow` were gated on
-  `shutil.which("luajit")`. CI has no luajit, so they skipped; a developer
-  machine with luajit exercised an interpreter no norns has.
+  `shutil.which("luajit")`. CI has no luajit, so they skipped exactly where
+  they would have caught this; a developer machine with luajit exercised an
+  interpreter matron is not.
+
+A norns does ship standalone interpreters, and that is the trap rather than the
+excuse: `/usr/bin/lua` is **5.1** and `/usr/bin/luajit` is **LuaJIT 2.1**, which
+has an FFI. Neither is what runs a script. Verified on the device: matron links
+`liblua5.3.so.0`, and inside its REPL `require('ffi')` fails while the mailbox
+transports load. The hardware runners now accept an interpreter only for the
+version it reports, never for its name, so a 5.1 result cannot stand in for
+matron's 5.3.
 
 Sockets were therefore unreachable from a script at all, and the transports are
 now carried by a **sequenced file mailbox** (`lib/rhythm_doctor/file_mailbox.lua`
@@ -532,3 +541,23 @@ covers framing, ordering, the one-shot claim and both liveness directions; and
 the whole-path capture flow runs on the interpreter matron embeds rather than
 on LuaJIT. The hardware runners now use the device's own Lua for the same
 reason. Verified red against the previous transports and green against these.
+
+### Verified on the device, and what it then found
+
+Deployed to a physical norns and driven through matron's own REPL:
+`require('ffi')` still fails, and `native_transport`, `analysis_transport` and
+`dancing_doctor` all load. The capture worker publishes its mailbox, the client
+claims it and stamps liveness. Record reaches the worker, which is the whole
+point: it previously reached nothing at all.
+
+Preflight then failed, and the message it failed with was wrong. Every
+unsuccessful `rd_capture_preflight` reported `INPUT_RESOURCE_BUSY`, which sends
+a player to look at their inputs. The actual cause on that device was that
+JACK's shared-memory registry had been deleted: `jackd` started 2026-09-19
+11:07:42, `/dev/shm` was emptied at 11:17:50, and `jack-shm-registry` and
+jackd's own listening socket `/dev/shm/jack_default_1000_0` no longer exist on
+disk. Clients that were already connected keep running from open descriptors;
+no new client can connect at all, which would break any script that opens its
+own JACK client. Preflight now distinguishes `AUDIO_SERVER_UNAVAILABLE`,
+`UNSUPPORTED_SAMPLE_RATE` and `CAPTURE_OUT_OF_MEMORY` from a genuinely busy
+input, so the screen names the problem it actually has.

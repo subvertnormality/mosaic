@@ -211,6 +211,15 @@ static int parse_seconds(const char *argument, uint32_t *seconds) {
   if (argument[n] && strcmp(argument + n + 1, "auto") && strcmp(argument + n + 1, "manual")) return 0;
   *seconds = value; return 1;
 }
+/* The player reads this on the screen, so it has to name the actual problem. */
+static const char *preflight_detail(int reason) {
+  switch (reason) {
+    case RD_PREFLIGHT_AUDIO_SERVER_UNAVAILABLE: return "AUDIO_SERVER_UNAVAILABLE";
+    case RD_PREFLIGHT_UNSUPPORTED_RATE: return "UNSUPPORTED_SAMPLE_RATE";
+    case RD_PREFLIGHT_OUT_OF_MEMORY: return "CAPTURE_OUT_OF_MEMORY";
+    default: return "INPUT_RESOURCE_BUSY";
+  }
+}
 static void destroy_capture(struct worker *worker) {
   if (worker->capture) { rd_capture_destroy(worker->capture); worker->capture = NULL; }
   worker->terminal_reported = 0;
@@ -241,8 +250,9 @@ static int handle_message(struct worker *worker, const struct rd1_message *messa
     if (worker->capture) return respond_to(&worker->mailbox, message, "FAILED", "BUSY");
     reset_job(worker);
     if (!parse_seconds(message->argument, &seconds)) return respond_to(&worker->mailbox, message, "FAILED", "INVALID_DURATION");
-    worker->capture = rd_capture_preflight(seconds);
-    if (!worker->capture) return respond_to(&worker->mailbox, message, "FAILED", "INPUT_RESOURCE_BUSY");
+    int reason = RD_PREFLIGHT_OK;
+    worker->capture = rd_capture_preflight_because(seconds, &reason);
+    if (!worker->capture) return respond_to(&worker->mailbox, message, "FAILED", preflight_detail(reason));
     worker->owner = *message;
     if (jack_connect(worker->capture->client, worker->left_source, rd_capture_input_port(worker->capture, 0)) ||
         jack_connect(worker->capture->client, worker->right_source, rd_capture_input_port(worker->capture, 1))) {

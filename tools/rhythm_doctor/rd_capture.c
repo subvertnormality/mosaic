@@ -19,6 +19,11 @@ enum rd_capture_state { RD_CAPTURE_READY, RD_CAPTURE_ARMED, RD_CAPTURE_CAPTURING
 enum rd_capture_error { RD_CAPTURE_OK, RD_CAPTURE_ERROR_BAD_COMMAND, RD_CAPTURE_ERROR_OVERFLOW,
   RD_CAPTURE_ERROR_XRUN, RD_CAPTURE_ERROR_PUBLISH, RD_CAPTURE_ERROR_DISCONTINUITY,
   RD_CAPTURE_ERROR_SERVER_SHUTDOWN };
+/* Why a preflight failed.  "Busy" was once the answer to every one of these,
+   which sent a player looking at their inputs when the audio server was
+   simply unreachable. */
+enum rd_preflight_reason { RD_PREFLIGHT_OK, RD_PREFLIGHT_AUDIO_SERVER_UNAVAILABLE,
+  RD_PREFLIGHT_UNSUPPORTED_RATE, RD_PREFLIGHT_OUT_OF_MEMORY, RD_PREFLIGHT_INPUT_UNAVAILABLE };
 
 struct rd_capture {
   jack_client_t *client; jack_port_t *input[2]; float *left, *right;
@@ -159,13 +164,17 @@ static struct rd_capture *allocate_capture(uint32_t rate, uint32_t seconds) {
 }
 
 /* Call at mode entry, before Record, to reserve the JACK client and 45s stereo PCM. */
-struct rd_capture *rd_capture_preflight(uint32_t seconds) {
+struct rd_capture *rd_capture_preflight_because(uint32_t seconds, int *reason) {
+  int ignored; if (!reason) reason = &ignored;
+  *reason = RD_PREFLIGHT_OK;
   struct timespec began, ended; clock_gettime(CLOCK_MONOTONIC, &began);
-  jack_status_t status; jack_client_t *client = jack_client_open("mosaic-rd-capture", JackNoStartServer, &status);
-  if (!client) return NULL;
-  if (jack_get_sample_rate(client) < 8000 || jack_get_sample_rate(client) > 192000) { jack_client_close(client); return NULL; }
+  jack_status_t status = 0; jack_client_t *client = jack_client_open("mosaic-rd-capture", JackNoStartServer, &status);
+  if (!client) { *reason = RD_PREFLIGHT_AUDIO_SERVER_UNAVAILABLE; return NULL; }
+  if (jack_get_sample_rate(client) < 8000 || jack_get_sample_rate(client) > 192000) {
+    jack_client_close(client); *reason = RD_PREFLIGHT_UNSUPPORTED_RATE; return NULL;
+  }
   struct rd_capture *c = allocate_capture(jack_get_sample_rate(client), seconds);
-  if (!c) { jack_client_close(client); return NULL; }
+  if (!c) { jack_client_close(client); *reason = RD_PREFLIGHT_OUT_OF_MEMORY; return NULL; }
   c->client = client;
   c->input[0] = jack_port_register(client, "input_l", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
   c->input[1] = jack_port_register(client, "input_r", JACK_DEFAULT_AUDIO_TYPE, JackPortIsInput, 0);
@@ -173,13 +182,19 @@ struct rd_capture *rd_capture_preflight(uint32_t seconds) {
       jack_set_xrun_callback(client, jack_xrun, c) || (jack_on_shutdown(client, jack_shutdown, c), 0) || jack_activate(client)) {
     if (c->input[0]) jack_port_unregister(client, c->input[0]);
     if (c->input[1]) jack_port_unregister(client, c->input[1]);
-    jack_client_close(client); free(c->left); free(c->right); free(c); return NULL;
+    jack_client_close(client); free(c->left); free(c->right); free(c);
+    *reason = RD_PREFLIGHT_INPUT_UNAVAILABLE; return NULL;
   }
   clock_gettime(CLOCK_MONOTONIC, &ended);
   int64_t elapsed = ((int64_t)ended.tv_sec - (int64_t)began.tv_sec) * 1000000000ll +
                     ((int64_t)ended.tv_nsec - (int64_t)began.tv_nsec);
   c->preflight_nanoseconds = elapsed > 0 ? (uint64_t)elapsed : 0;
   return c;
+}
+/* The original one-argument entry point, kept for callers that only need to
+   know whether a capture could be acquired. */
+struct rd_capture *rd_capture_preflight(uint32_t seconds) {
+  return rd_capture_preflight_because(seconds, NULL);
 }
 void rd_capture_destroy(struct rd_capture *c) {
   if (!c) return;

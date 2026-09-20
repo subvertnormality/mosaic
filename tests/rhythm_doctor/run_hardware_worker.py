@@ -22,8 +22,11 @@ def main():
               "p=subprocess.Popen("+repr(argv)+",stdin=subprocess.DEVNULL,stdout=out,stderr=err,start_new_session=True);print(p.pid)")
         return int(checked('python3 -c '+shlex.quote(code)).strip())
     checked('test ! -e /home/we/.cache/mosaic-real-norns/active')
-    device_lua=checked('command -v lua5.3 || command -v lua').strip()
-    if not device_lua:raise RuntimeError('no Lua interpreter on the device; matron embeds Lua 5.3')
+    # Accept an interpreter only for the version it reports: the device's own
+    # `lua` is 5.1 and its `luajit` has an FFI matron does not.
+    device_lua=checked("""for candidate in lua5.3 lua; do path=$(command -v $candidate 2>/dev/null) || continue; case "$($path -v 2>&1)" in *5.3*) echo "$path"; break;; esac; done""").strip()
+    if not device_lua:raise RuntimeError('no Lua 5.3 on the device, which is what matron embeds; '
+        'a 5.1 or LuaJIT result would not describe the script runtime')
     before=checked("jack_lsp -c | grep -v 'mosaic-rd-capture\|rd-capture-injector' || true")
     directories=(remote,remote+'/tools',remote+'/tools/rhythm_doctor',remote+'/tests',remote+'/tests/rhythm_doctor',remote+'/lib',remote+'/lib/rhythm_doctor')
     checked('mkdir '+ ' '.join(shlex.quote(x) for x in directories))
@@ -45,8 +48,9 @@ def main():
             if mailbox_root:break
             time.sleep(.05)
         if not mailbox_root:raise RuntimeError('worker mailbox was not published')
-        # matron embeds Lua 5.3 and a norns has no luajit, so the device's own
-        # interpreter is the only one whose result means anything here.
+        # matron embeds Lua 5.3.  The device's own `lua` is 5.1 and its
+        # `luajit` has an FFI matron does not, so only an interpreter that
+        # reports 5.3 proves anything about the deployed transport.
         result=call('cd '+shlex.quote(remote)+' && '+device_lua+' tests/rhythm_doctor/test_capture_stack.lua '+shlex.quote(mailbox_root),30)
         if result.returncode:raise RuntimeError(result.stdout+result.stderr)
         # Without a socket there is no hangup: the worker leaves once the client

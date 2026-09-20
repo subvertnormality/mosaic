@@ -192,11 +192,13 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
             time.sleep(.05)
         if remote.call("kill -0 " + str(launcher_pid), check=False).returncode == 0:
             raise RuntimeError("launch_worker helper did not exit after publishing its mailbox")
-        # matron embeds Lua 5.3 and a norns has no luajit, so only the device's
-        # own interpreter proves anything about the deployed transport.
-        device_lua = remote_text(remote, "command -v lua5.3 || command -v lua").strip()
+        # matron embeds Lua 5.3.  The device's own `lua` is 5.1 and its
+        # `luajit` has an FFI matron does not, so a binary is accepted only for
+        # the version it reports -- never for its name.
+        device_lua = remote_text(remote, """for candidate in lua5.3 lua; do path=$(command -v $candidate 2>/dev/null) || continue; case "$($path -v 2>&1)" in *5.3*) echo "$path"; break;; esac; done""").strip()
         if not device_lua:
-            raise RuntimeError("no Lua interpreter on the device; matron embeds Lua 5.3")
+            raise RuntimeError("no Lua 5.3 on the device, which is what matron embeds; "
+                               "a 5.1 or LuaJIT result would not describe the script runtime")
         command = "cd " + shlex.quote(remote_root) + " && " + device_lua + " tests/rhythm_doctor/test_launch_worker_transport.lua " + shlex.quote(mailbox_root) + " " + shlex.quote(remote_root + "/lib")
         transport_result = remote.call(command, timeout=60, check=False)
         if transport_result.returncode:

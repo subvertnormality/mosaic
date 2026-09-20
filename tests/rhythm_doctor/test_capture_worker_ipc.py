@@ -1,7 +1,8 @@
 """Compiled mailbox/JACK integration for the Rhythm Doctor capture worker.
 
-The Lua half runs on the interpreter matron embeds, never on LuaJIT: a norns
-has no luajit binary, so anything proved under one says nothing about it.
+The Lua half runs on the interpreter matron embeds, never on LuaJIT.  A norns
+does ship a luajit binary, but matron is not it, so anything proved under one
+says nothing about the environment a script actually runs in.
 """
 import hashlib
 import os
@@ -94,6 +95,9 @@ class CaptureWorkerIPC(unittest.TestCase):
         reply = self.exchange("RD1\tj\tp\t0\t0\tPREFLIGHT\t1,manual")
         self.assertEqual(reply[1:6], ["j", "p", "0", "0", "PREFLIGHT"])
         self.assertEqual(reply[6], "FAILED")  # no named JACK server; fail visibly without auto-start
+        # An unreachable audio server is not a busy input, and saying so sends
+        # anyone reading the screen after the wrong problem entirely.
+        self.assertEqual(reply[7], "AUDIO_SERVER_UNAVAILABLE", "preflight must name why it failed")
 
     def test_overlong_mailbox_root_removes_the_acquired_private_root(self):
         parent = self.root / ("x" * 90); parent.mkdir()
@@ -156,8 +160,8 @@ class CaptureWorkerIPC(unittest.TestCase):
         """The whole capture path, on matron's own interpreter.
 
         This is the test the FFI transports evaded: it was gated on a luajit
-        binary no norns has, so it skipped wherever it mattered while the
-        transport it covers could not even load on a device.
+        binary, which CI does not have and a norns does, so it skipped where it
+        would have caught the bug and passed where ffi happened to exist.
         """
         self.start_jack()
         self.injector = subprocess.Popen([str(self.injector_binary)], env=self.environment,
@@ -187,6 +191,12 @@ transport:close()
         result = subprocess.run([LUA, "-e", script], cwd=ROOT, env=self.environment,
                                 text=True, capture_output=True, timeout=120)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        # The Lua process has gone, so the worker is now waiting out its idle
+        # timeout. Backdating the stamp reaches that decision at once rather
+        # than spending the timeout here; the timeout itself is covered by
+        # test_a_client_that_stops_stamping_liveness_ends_the_run.
+        stale = time.time() - 4 * 3600
+        os.utime(owned / "alive", (stale, stale))
         self.process.wait(timeout=20)
         self.assertFalse(owned.exists())
 

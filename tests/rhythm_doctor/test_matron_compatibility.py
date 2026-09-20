@@ -1,11 +1,12 @@
 """Every Rhythm Doctor Lua module must load on the interpreter norns actually runs.
 
-matron embeds Lua 5.3 (liblua5.3.so.0), not LuaJIT.  A stock norns therefore
-has no ffi, no bit, no luasocket and no posix binding.  The capture and
-analysis transports were once written against the LuaJIT FFI and were only ever
-exercised under a `luajit` binary that no device has, so they raised on the
-first require, the runtime swallowed it in a pcall and retried forever: Record
-did nothing on hardware while every suite stayed green.
+matron embeds Lua 5.3 (liblua5.3.so.0), not LuaJIT.  Inside matron there is no
+ffi, no bit, no luasocket and no posix binding.  A norns does ship a `luajit`
+binary, and that is the trap: the capture and analysis transports were written
+against the LuaJIT FFI and exercised under that binary, where ffi exists, while
+matron -- which actually runs the script -- could not load them at all.  They
+raised on the first require, the runtime swallowed it in a pcall and retried
+forever: Record did nothing on hardware while every suite stayed green.
 
 These tests close that gap from both sides.  Each module is loaded under a real
 Lua 5.3, and the source is scanned for the LuaJIT-only dependencies, so a
