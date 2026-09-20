@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "1857a5ff329cdb305faa4dcf052298d1c63d7c8decd623beb02bd9da6345a28c",
+ "manual_sha256": "be60cba39e7431a400aa7ac61f026253af880b497dd9396e27d6ee66637b26e4",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1541,7 +1541,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "1857a5ff329cdb305faa4dcf052298d1c63d7c8decd623beb02bd9da6345a28c"
+   "sha256": "be60cba39e7431a400aa7ac61f026253af880b497dd9396e27d6ee66637b26e4"
   },
   {
    "path": "cheat_sheet.html",
@@ -7461,7 +7461,7 @@
    "sections": [
     "MAN-115"
    ],
-   "statement": "Record starts on a grid column 1 row 2 press with its release consumed, and during capture K3 can Finish only while the screen says ENOUGH AUDIO / K3 FINISH, otherwise MORE AUDIO NEEDED.",
+   "statement": "Record starts on a grid column 1 row 2 press with its release consumed, and during capture either that same Record key or K3 can Finish, but only while the screen says ENOUGH / REC OR K3; otherwise it says MORE AUDIO NEEDED and Record offers to abandon the take instead.",
    "cases": [],
    "status": "in_progress",
    "domain": "Finish eligibility measures audio acquired from the recorder's STARTED report and requires the span a bank needs at the slowest tempo the detector can report, so the advertised state always builds. Covered by test_runtime and test_ui_adapter.",

@@ -257,6 +257,59 @@ test("the screen shows a refused correction rather than the ordinary alignment l
   check(table.concat(texts, " "):find("ALIGNMENT / HALF TEMPO", 1, true))
 end)
 
+test("the window position is left to the grid rather than spelled out", function()
+  -- "START 1.1.1-4.4.4" told the player what the grid already shows, on the
+  -- row the modal and the dancing doctor also use.
+  local texts, ui_draw = {}, nil
+  local old_include = include
+  local pages_component = { new = function() return {add_page = function() end, select_page = function() end, draw = function() end, next_page = function() end, previous_page = function() end, get_selected_page = function() return 1 end} end }
+  local page_component = { new = function() return {} end }
+  local viewer = { new = function() return {draw = function() end, next_channel = function() end, prev_channel = function() end} end }
+  local selector = { new = function() return {select = function() end, draw = function() end, increment = function() end, decrement = function() end, get_selected = function() return {id = 1} end, set_selected_value = function() end} end }
+  include = function(path)
+    local modules = {
+      ["mosaic/lib/ui_components/pages"] = pages_component,
+      ["mosaic/lib/ui_components/page"] = page_component,
+      ["mosaic/lib/ui_components/grid_viewer"] = viewer,
+      ["mosaic/lib/ui_components/list_selector"] = selector,
+      ["mosaic/lib/rhythm_doctor/dancing_doctor"] = dofile(root .. "lib/rhythm_doctor/dancing_doctor.lua"),
+    }
+    return assert(modules[path], path)
+  end
+  draw = {register_ui = function(_, _, fn) ui_draw = fn end}
+  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end,
+    rect = function() end, fill = function() end}
+  fn = {dirty_screen = function() end, dirty_grid = function() end}
+  params = {get = function() return 1 end, set = function() end}
+  local ready = {active = true, field = "WINDOW BAR"}
+  trigger_edit_page = {
+    get_algorithm = function() return 5 end,
+    handle_rhythm_doctor_key = function() return {code = "OK"} end,
+    handle_rhythm_doctor_encoder = function() return {code = "OK"} end,
+    get_rhythm_doctor_model = function()
+      return { lane = "BD", status = "READY", hit_count = 12, state = "READY", worker_ready = true,
+        tempo = 126.0, tempo_source = "auto", ready = ready,
+        window_start_label = "1.1.1", window_end_label = "4.4.4", sensitivity = 0.4, paint_policy = "toggle" }
+    end,
+  }
+  local ui = dofile(root .. "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua")
+  include = old_include
+  ui.register_ui_draws()
+
+  texts = {}; ui_draw()
+  local drawn = table.concat(texts, " ")
+  check(not drawn:find("START", 1, true), "the window label must be gone: " .. drawn)
+  check(not drawn:find("1.1.1", 1, true), "and not spelled any other way: " .. drawn)
+
+  -- The fields that do say something still do.
+  ready.field = "SENSITIVITY"
+  texts = {}; ui_draw()
+  check(table.concat(texts, " "):find("SENS", 1, true), "sensitivity still reports its value")
+  ready.field = "PAINT POLICY"
+  texts = {}; ui_draw()
+  check(table.concat(texts, " "):find("PAINT", 1, true), "paint policy still reports its value")
+end)
+
 test("the dancing doctor holds the free space and yields it to an overlay", function()
   -- The right-hand third is only free while no editor or modal is open: the
   -- overlays write text straight across it, so he has to step aside rather

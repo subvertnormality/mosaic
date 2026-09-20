@@ -115,10 +115,13 @@ function trigger_edit_page_ui.register_ui_draws()
             if model.tempo then screen.text(string.format("%.1f BPM / %s", model.tempo, tostring(model.tempo_source or "")))
             elseif model.acquired_beats then screen.text(tostring(model.acquired_beats) .. " BEATS") end
             if model.ready and model.ready.active then
-              screen.move(0, 58)
-              local window = model.window_start_label and ("START " .. model.window_start_label .. "-" .. tostring(model.window_end_label)) or ""
-              screen.text((model.ready.field == "SENSITIVITY" and "SENS " .. tostring(model.sensitivity or "") or
-                model.ready.field == "PAINT POLICY" and "PAINT " .. string.upper(tostring(model.paint_policy or "toggle")) or window))
+              -- The window position is shown by the grid itself, so spelling it
+              -- out here said nothing the player could not already see and
+              -- collided with the row the modal and the doctor share.
+              local detail = model.ready.field == "SENSITIVITY" and ("SENS " .. tostring(model.sensitivity or ""))
+                or model.ready.field == "PAINT POLICY" and ("PAINT " .. string.upper(tostring(model.paint_policy or "toggle")))
+                or nil
+              if detail then screen.move(0, 58); screen.text(detail) end
             end
           end
           if model.modal then
