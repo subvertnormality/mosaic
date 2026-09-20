@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rhythm-doctor-server"
+version = "1.0.0"
+description = "Remote stem separation and rhythm analysis for Mosaic's Rhythm Doctor"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = ["numpy>=1.24"]
+
+[project.optional-dependencies]
+# The models. Kept optional so the package installs, and its contract tests
+# run, without several gigabytes of weights.
+models = ["torch>=2.0", "demucs>=4.0", "beat-this", "pyyaml>=6.0"]
+# LarsNet is not on PyPI and its checkpoints are CC BY-NC 4.0. See README.md.
+fetch = ["gdown>=5.0"]
+
+[project.scripts]
+rhythm-doctor-server = "server:main"
+rhythm-doctor-fetch-models = "fetch_models:main"
+
+[tool.setuptools]
+py-modules = ["server", "pipeline", "models", "onsets", "phrase", "lanes", "fetch_models"]

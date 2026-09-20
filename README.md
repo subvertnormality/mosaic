@@ -533,6 +533,28 @@ open ALIGNMENT on the Rhythm Doctor screen and step START BEAT through the
 detected beat grid; the editor opens on the beat the detector chose, so
 confirming without editing keeps its answer.
 
+**Analysis server (advanced).** Analysis runs on the norns by default and
+needs nothing configured. If you run the optional analysis server on a computer
+on the same network, Rhythm Doctor can send the capture there instead and get
+back ten lanes rather than three: KICK, SNARE, TOMS, HIHAT and CYMBALS from a
+model that separates a kit into its pieces, and BASS, GUITAR, PIANO, VOCALS and
+OTHER from the rest of the mix. The melodic lanes carry rhythm and velocity,
+not notes.
+
+Set it up in PARAMS > MOSAIC > Rhythm Doctor: put the address in **Analysis
+server** (for example `http://192.168.1.50:8420`) and switch **Use analysis
+server** on. The switch is separate from the address so you can keep a server
+saved while working locally.
+
+The on-device analysis stays the default and the fallback. If the server is
+switched off, unreachable, slower than its timeout, or returns anything Mosaic
+does not accept, the capture is analysed on the norns instead and you still get
+gates. You lose the extra lanes, not the recording.
+
+The server also tracks the beat with a model trained for it, so on the remote
+path the tempo and the phrase start are usually better than the on-device
+estimate. See `tools/rhythm_doctor_server/README.md` for how to run it.
+
 **Availability:** Mosaic starts a local capture helper when this mode opens,
 and analyses captures with a model-free detector it builds from source the
 first time this mode is used. Nothing is downloaded, no Python packages are
