@@ -5,6 +5,7 @@ local pages = include("mosaic/lib/ui_components/pages")
 local page = include("mosaic/lib/ui_components/page")
 local grid_viewer = include("mosaic/lib/ui_components/grid_viewer")
 local list_selector = include("mosaic/lib/ui_components/list_selector")
+local dancing_doctor = include("mosaic/lib/rhythm_doctor/dancing_doctor")
 
 local pages = pages:new()
 local grid_viewer = grid_viewer:new(0, 3)
@@ -25,6 +26,27 @@ local tresillo_mult =
   }
 )
 
+
+-- The right-hand third of the Rhythm Doctor page is empty whenever no editor
+-- or modal is open, so the doctor dances there -- in time with the analysed
+-- tempo when there is one.  He yields the space the moment anything needs it,
+-- because the overlays write text right across the screen.
+local DOCTOR_X, DOCTOR_Y = 97, 15
+
+local function seconds_now()
+  if util and type(util.time) == "function" then return util.time() end
+  return os.clock()
+end
+
+local function doctor_is_clear(model)
+  if not model then return true end
+  if model.modal then return false end
+  if model.alignment and model.alignment.active then return false end
+  if model.setup and model.setup.active then return false end
+  return true
+end
+
+trigger_edit_page_ui.doctor_is_clear = doctor_is_clear
 
 local grid_viewer_page =
   page:new(
@@ -54,6 +76,11 @@ function trigger_edit_page_ui.register_ui_draws()
         screen.text("RHYTHM DOCTOR")
         screen.move(120, 9)
         screen.text("m")
+        if doctor_is_clear(model) then
+          dancing_doctor.draw(DOCTOR_X, DOCTOR_Y,
+            dancing_doctor.pose_at(seconds_now(), model and model.tempo))
+        end
+        screen.level(10)
         screen.move(0, 22)
         if model and model.alignment and model.alignment.active then
           -- A refused correction keeps its draft, so without this the screen

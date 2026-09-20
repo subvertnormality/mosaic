@@ -154,7 +154,7 @@ test("transport-gated lane selection leaves the displayed lane unchanged", funct
 end)
 
 test("K2 and K3 reach Rhythm Doctor only while algorithm five is selected", function()
-  local calls, dirty, texts, ui_draw = {}, 0, {}, nil
+  local calls, dirty, texts, ui_draw, rects = {}, 0, {}, nil, 0
   local old_include = include
   local pages_component = { new = function() return {add_page = function() end, select_page = function() end, draw = function() end, next_page = function() end, previous_page = function() end, get_selected_page = function() return 1 end} end }
   local page_component = { new = function() return {} end }
@@ -166,11 +166,14 @@ test("K2 and K3 reach Rhythm Doctor only while algorithm five is selected", func
       ["mosaic/lib/ui_components/page"] = page_component,
       ["mosaic/lib/ui_components/grid_viewer"] = viewer,
       ["mosaic/lib/ui_components/list_selector"] = selector,
+      -- The real sprite, so a page that draws it is exercised, not stubbed out.
+      ["mosaic/lib/rhythm_doctor/dancing_doctor"] = dofile(root .. "lib/rhythm_doctor/dancing_doctor.lua"),
     }
     return assert(modules[path], path)
   end
   draw = {register_ui = function(_, _, fn) ui_draw = fn end}
-  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end}
+  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end,
+    rect = function() rects = rects + 1 end, fill = function() end}
   fn = {dirty_screen = function() dirty = dirty + 1 end, dirty_grid = function() dirty = dirty + 1 end}
   params = {get = function() return 1 end, set = function() end}
   local algorithm = 4
@@ -213,11 +216,14 @@ test("the screen shows a refused correction rather than the ordinary alignment l
       ["mosaic/lib/ui_components/page"] = page_component,
       ["mosaic/lib/ui_components/grid_viewer"] = viewer,
       ["mosaic/lib/ui_components/list_selector"] = selector,
+      -- The real sprite, so a page that draws it is exercised, not stubbed out.
+      ["mosaic/lib/rhythm_doctor/dancing_doctor"] = dofile(root .. "lib/rhythm_doctor/dancing_doctor.lua"),
     }
     return assert(modules[path], path)
   end
   draw = {register_ui = function(_, _, fn) ui_draw = fn end}
-  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end}
+  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end,
+    rect = function() rects = rects + 1 end, fill = function() end}
   fn = {dirty_screen = function() end, dirty_grid = function() end}
   params = {get = function() return 1 end, set = function() end}
   local alignment = {active = true, field = "HALF TEMPO", bpm = 120, start_beat = 1, fine_start_ms = 0}
@@ -249,6 +255,68 @@ test("the screen shows a refused correction rather than the ordinary alignment l
   alignment.error = nil
   texts = {}; ui_draw()
   check(table.concat(texts, " "):find("ALIGNMENT / HALF TEMPO", 1, true))
+end)
+
+test("the dancing doctor holds the free space and yields it to an overlay", function()
+  -- The right-hand third is only free while no editor or modal is open: the
+  -- overlays write text straight across it, so he has to step aside rather
+  -- than be drawn underneath them.
+  local texts, ui_draw, rects = {}, nil, 0
+  local old_include = include
+  local pages_component = { new = function() return {add_page = function() end, select_page = function() end, draw = function() end, next_page = function() end, previous_page = function() end, get_selected_page = function() return 1 end} end }
+  local page_component = { new = function() return {} end }
+  local viewer = { new = function() return {draw = function() end, next_channel = function() end, prev_channel = function() end} end }
+  local selector = { new = function() return {select = function() end, draw = function() end, increment = function() end, decrement = function() end, get_selected = function() return {id = 1} end, set_selected_value = function() end} end }
+  include = function(path)
+    local modules = {
+      ["mosaic/lib/ui_components/pages"] = pages_component,
+      ["mosaic/lib/ui_components/page"] = page_component,
+      ["mosaic/lib/ui_components/grid_viewer"] = viewer,
+      ["mosaic/lib/ui_components/list_selector"] = selector,
+      ["mosaic/lib/rhythm_doctor/dancing_doctor"] = dofile(root .. "lib/rhythm_doctor/dancing_doctor.lua"),
+    }
+    return assert(modules[path], path)
+  end
+  draw = {register_ui = function(_, _, fn) ui_draw = fn end}
+  local left, top = 128, 64
+  screen = {level = function() end, move = function() end, text = function(value) texts[#texts + 1] = value end,
+    rect = function(x, y, w)
+      rects = rects + 1
+      if x < left then left = x end
+      if y < top then top = y end
+      check(x >= 0 and x + w <= 128, "the sprite must stay on the 128 pixel screen")
+      check(y >= 0 and y < 64, "the sprite must stay on the 64 pixel screen")
+    end,
+    fill = function() end}
+  fn = {dirty_screen = function() end, dirty_grid = function() end}
+  params = {get = function() return 1 end, set = function() end}
+  local model = { lane = "BD", status = "READY", hit_count = 24, state = "READY",
+    worker_ready = true, tempo = 124.0, tempo_source = "AUTO" }
+  trigger_edit_page = {
+    get_algorithm = function() return 5 end,
+    handle_rhythm_doctor_key = function() return {code = "OK"} end,
+    handle_rhythm_doctor_encoder = function() return {code = "OK"} end,
+    get_rhythm_doctor_model = function() return model end,
+  }
+  local ui = dofile(root .. "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua")
+  include = old_include
+  ui.register_ui_draws()
+
+  texts = {}; rects = 0; ui_draw()
+  check(rects > 40, "the ordinary view must show him dancing: " .. rects .. " runs")
+  -- The longest ordinary status is about eighteen glyphs at five pixels each,
+  -- so he starts past the text rather than through it.
+  check(left >= 95, "the sprite crowds the status text at x=" .. left)
+  check(top > 12, "the sprite overlaps the title row at y=" .. top)
+  check(table.concat(texts, " "):find("124.0 BPM", 1, true), "the page still draws its own text")
+
+  for _, overlay in ipairs({ {alignment = {active = true, field = "HALF TEMPO", bpm = 120}},
+                             {setup = {active = true, field = "TEMPO"}},
+                             {modal = {detail = "K2 NO / K3 YES"}} }) do
+    model.alignment, model.setup, model.modal = overlay.alignment, overlay.setup, overlay.modal
+    rects = 0; ui_draw()
+    check(rects == 0, "he must yield the space to an overlay, not draw beneath it")
+  end
 end)
 
 test("the application encoder route opens stopped setup from Rhythm Doctor", function()
@@ -293,6 +361,8 @@ test("the application encoder route opens stopped setup from Rhythm Doctor", fun
       ["mosaic/lib/ui_components/page"] = page_component,
       ["mosaic/lib/ui_components/grid_viewer"] = viewer,
       ["mosaic/lib/ui_components/list_selector"] = selector,
+      -- The real sprite, so a page that draws it is exercised, not stubbed out.
+      ["mosaic/lib/rhythm_doctor/dancing_doctor"] = dofile(root .. "lib/rhythm_doctor/dancing_doctor.lua"),
     }
     return assert(modules[path], path)
   end
