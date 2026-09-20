@@ -2,7 +2,10 @@ name: Full behaviour suite
 
 on:
   pull_request:
-    branches: [main]
+    # Stacked release branches are gated too: a pull request into a release
+    # branch is reviewed on the same evidence as one into main, and without
+    # this a stacked PR shows no checks at all rather than showing red.
+    branches: [main, codex/1.4.0, codex/rhythm-doctor-phrase]
   push:
     branches: [main]
   workflow_dispatch:
