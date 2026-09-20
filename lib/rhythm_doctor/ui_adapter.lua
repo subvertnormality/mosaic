@@ -412,6 +412,23 @@ function Adapter:finish_eligible()
   return false
 end
 
+-- The protocol keeps its exact codes; the screen is 128 pixels wide and the
+-- player needs to know what to do about it. A code with no entry here is shown
+-- with its underscores opened out rather than hidden, so a new one is visible
+-- rather than silently swallowed.
+Adapter.MESSAGES = {
+  AUDIO_SERVER_UNAVAILABLE = "NO AUDIO / RESTART",
+  INPUT_RESOURCE_BUSY = "INPUT IN USE",
+  INPUT_ROUTE_FAILED = "NO INPUT ROUTE",
+  UNSUPPORTED_SAMPLE_RATE = "BAD SAMPLE RATE",
+  CAPTURE_OUT_OF_MEMORY = "OUT OF MEMORY",
+}
+
+function Adapter.readable(code)
+  if type(code) ~= "string" or code == "" then return "FAILED" end
+  return Adapter.MESSAGES[code] or code:gsub("_", " ")
+end
+
 function Adapter:set_status(code, detail)
   self.feedback = code
   if code == "CAPTURE_WORKER_READY" then self.worker_ready = true
@@ -564,7 +581,7 @@ function Adapter:screen_model()
   elseif capture_states[state] then
     model.finish_enabled = self:finish_eligible() == true
     model.status = model.finish_enabled and "ENOUGH AUDIO / K3 FINISH" or "MORE AUDIO NEEDED"
-  elseif state == "FAILED" then model.status = machine.last_message or "FAILED"
+  elseif state == "FAILED" then model.status = Adapter.readable(machine.last_message)
   else model.status = state end
   return model
 end

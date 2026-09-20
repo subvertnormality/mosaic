@@ -289,3 +289,22 @@ end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end
 print("rhythm_doctor ui adapter: " .. count .. " tests passed")
+
+-- A capture failure is the one message a player is most likely to meet, and a
+-- raw protocol code neither fits the screen nor says what to do about it.
+do
+  local Adapter = require('rhythm_doctor.ui_adapter')
+  local function check(condition, message) assert(condition, message) end
+  check(Adapter.readable("AUDIO_SERVER_UNAVAILABLE") == "NO AUDIO / RESTART",
+    "an unreachable audio server must tell the player to restart")
+  check(#Adapter.readable("AUDIO_SERVER_UNAVAILABLE") < #"AUDIO_SERVER_UNAVAILABLE",
+    "the message must be shorter than the code it replaces")
+  for code, text in pairs(Adapter.MESSAGES) do
+    check(#text <= 18, code .. " is too wide for the status row: " .. text)
+    check(text:match("^[A-Z0-9 /]+$") ~= nil, code .. " must stay in the screen's own vocabulary")
+  end
+  -- An unmapped code stays visible rather than being swallowed.
+  check(Adapter.readable("SOME_NEW_PROBLEM") == "SOME NEW PROBLEM", "unknown codes are opened out")
+  check(Adapter.readable(nil) == "FAILED", "a missing code still says something")
+  print('ui_adapter readable status: 5 tests passed')
+end
