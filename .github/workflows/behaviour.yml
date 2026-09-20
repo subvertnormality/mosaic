@@ -201,6 +201,49 @@ jobs:
           retention-days: 7
           compression-level: 9
 
+  rhythm-doctor:
+    name: Rhythm Doctor surface
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 120
+    steps:
+      - *packages
+      - *checkout
+      - name: Trust checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+      - *emulator
+      - *cache
+      - *build
+      # These recipes are standalone rather than cases.py entries, so the case
+      # shards never reach them. Without this job the four-lane surface, the
+      # reload-to-READY path and the refused correction are unguarded by CI.
+      - name: Run Rhythm Doctor recipes in both timing lanes
+        run: |
+          revision="$(git rev-parse HEAD)"
+          install="$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"
+          for lane in real-time controlled-experimental; do
+            for recipe in rhythm_doctor rhythm_doctor_surface rhythm_doctor_correction; do
+              python3 "tests/behaviour/$recipe.py" \
+                --app-root "$GITHUB_WORKSPACE" \
+                --source-revision "$revision" \
+                --artifacts "/tmp/rd-surface/$recipe-$lane" \
+                --experimental-install "$install" \
+                --clock-mode "$lane"
+            done
+          done
+      # Deliberately not named behaviour-*: the aggregation job downloads that
+      # prefix and requires exactly ten suite.json files.
+      - name: Upload Rhythm Doctor surface report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rhythm-doctor-surface
+          path: |
+            /tmp/rd-surface/**/manifest.json
+          retention-days: 7
+
   complete:
     name: Complete behaviour coverage
     if: always()
