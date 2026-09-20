@@ -26,6 +26,7 @@ class HardwareLaunchWorkerRunnerContract(unittest.TestCase):
             "tools/rhythm_doctor/rd_capture_worker.c",
             "tools/rhythm_doctor/rd_capture.c",
             "lib/rhythm_doctor/native_transport.lua",
+            "lib/rhythm_doctor/file_mailbox.lua",
             "tests/rhythm_doctor/test_launch_worker_transport.lua",
         ))
         self.assertTrue(all(not name.startswith(("mosaic.lua", "data/", "projects/"))
@@ -43,10 +44,10 @@ class HardwareLaunchWorkerRunnerContract(unittest.TestCase):
         self.assertNotIn("/home/we/dust", command)
 
     def test_only_the_worker_private_tmp_root_is_accepted_for_cleanup(self):
-        self.assertEqual(self.runner.private_worker_root("/tmp/mosaic-rd-1000-abcdef/worker.sock", 1000),
+        self.assertEqual(self.runner.private_worker_root("/tmp/mosaic-rd-1000-abcdef", 1000),
                          "/tmp/mosaic-rd-1000-abcdef")
-        for value in ("/tmp/other/worker.sock", "/tmp/mosaic-rd-1001-abcdef/worker.sock",
-                      "/tmp/mosaic-rd-1000-abcdef/not-worker.sock", "relative/worker.sock"):
+        for value in ("/tmp/other", "/tmp/mosaic-rd-1001-abcdef",
+                      "/tmp/mosaic-rd-1000-abcdef/c2w", "mosaic-rd-1000-abcdef"):
             self.assertIsNone(self.runner.private_worker_root(value, 1000))
 
     def test_report_output_is_created_once(self):

@@ -65,7 +65,7 @@ function Host:open()
     return nil, "analysis worker starting"
   end
   local problem=self.read_line(self.runtime_root.."/error"); if problem then return nil,problem end
-  local socket=self.read_line(self.runtime_root.."/socket"); if socket then return self.transport_factory(socket, self.runtime_root.."/results") end
+  local mailbox=self.read_line(self.runtime_root.."/mailbox"); if mailbox then return self.transport_factory(mailbox, self.runtime_root.."/results") end
   return nil,"analysis worker starting"
 end
 function Host:close()

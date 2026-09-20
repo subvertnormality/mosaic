@@ -51,19 +51,19 @@ function Host:open()
   end
   local problem = self.read_line(self.runtime_root .. "/error")
   if problem then return nil, problem end
-  local socket_path = self.read_line(self.runtime_root .. "/socket")
-  if socket_path then return self.transport_factory(socket_path) end
+  local mailbox_root = self.read_line(self.runtime_root .. "/mailbox")
+  if mailbox_root then return self.transport_factory(mailbox_root) end
   return nil, "worker starting"
 end
 
 function Host:close()
-  -- Closing the seqpacket transport makes the native worker observe HUP, destroy
-  -- its JACK client and remove its exact owned directory.  Never kill by name.
+  -- The cancel flag and the signal make the native worker destroy its JACK
+  -- client and remove its exact owned directory.  Never kill by name.
   self.closed = true
   self.execute("mkdir -p " .. shell_quote(self.runtime_root) .. " && : > " .. shell_quote(self.runtime_root .. "/cancel"))
   local pid = self.read_line(self.runtime_root .. "/pid")
   if pid and pid:match("^[0-9]+$") then self.execute("kill " .. pid .. " 2>/dev/null") end
-  self.execute("rm -f " .. shell_quote(self.runtime_root .. "/socket") .. " " ..
+  self.execute("rm -f " .. shell_quote(self.runtime_root .. "/mailbox") .. " " ..
     shell_quote(self.runtime_root .. "/pid") .. " " .. shell_quote(self.runtime_root .. "/error"))
 end
 

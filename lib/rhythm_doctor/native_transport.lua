@@ -1,24 +1,14 @@
--- Linux/LuaJIT nonblocking AF_UNIX transport for rd_capture_worker.
-local ffi = require('ffi')
-local bit = require('bit')
-ffi.cdef[[
-typedef unsigned short sa_family_t;
-struct sockaddr { sa_family_t sa_family; char sa_data[14]; };
-struct sockaddr_un { sa_family_t sun_family; char sun_path[108]; };
-int socket(int domain, int type, int protocol);
-int connect(int fd, const struct sockaddr *addr, unsigned int addrlen);
-long send(int fd, const void *buf, unsigned long len, int flags);
-long recv(int fd, void *buf, unsigned long len, int flags);
-int close(int fd);
-int fcntl(int fd, int command, ...);
-char *strerror(int errnum);
-]]
+-- Nonblocking boundary to rd_capture_worker over a sequenced file mailbox.
+-- The RD1 wire record is unchanged; only its carrier is, because matron's
+-- Lua 5.3 has no ffi and cannot reach an AF_UNIX socket.  See file_mailbox.
+local function dependency(name, path)
+  if type(include) == "function" then return include(path) end
+  return require(name)
+end
+local Mailbox = dependency("rhythm_doctor.file_mailbox", "mosaic/lib/rhythm_doctor/file_mailbox")
 
-local C, Transport = ffi.C, {}
+local Transport = {}
 Transport.__index = Transport
-local AF_UNIX, SOCK_SEQPACKET, SOCK_NONBLOCK = 1, 5, 2048
-local F_SETFL, O_NONBLOCK = 4, 2048
-local EAGAIN, EWOULDBLOCK, EINPROGRESS = 11, 11, 115
 local MAX_MESSAGE, MAX_QUEUE = 1023, 8
 
 local function safe_id(value)
@@ -28,7 +18,6 @@ local function integer(value)
   return type(value) == 'number' and value == math.floor(value) and value >= 0 and value <= 4294967295
 end
 local function failure(code, detail) return nil, { code = code, detail = detail } end
-local function errno_text() local number = ffi.errno(); return number, ffi.string(C.strerror(number)) end
 
 local function identity(message)
   if type(message) ~= 'table' or message.protocol_version ~= 1 or not safe_id(message.job_id) or
@@ -80,33 +69,25 @@ local function decode(wire)
   return message
 end
 
-function Transport.new(socket_path)
-  if type(socket_path)~='string' or socket_path:sub(1,1)~='/' or #socket_path>107 or socket_path:find('[%z\r\n\t]') then
-    return failure('INVALID_SOCKET_PATH')
-  end
-  local fd=C.socket(AF_UNIX,bit.bor(SOCK_SEQPACKET,SOCK_NONBLOCK),0)
-  if fd<0 then local _,problem=errno_text();return failure('SOCKET_FAILED',problem) end
-  local address=ffi.new('struct sockaddr_un');address.sun_family=AF_UNIX;ffi.copy(address.sun_path,socket_path,#socket_path)
-  local connected=C.connect(fd,ffi.cast('const struct sockaddr *',address),ffi.sizeof(address))
-  if connected~=0 then
-    local number,problem=errno_text();C.close(fd)
-    return failure(number==EINPROGRESS and 'CONNECT_PENDING' or 'CONNECT_FAILED',problem)
-  end
-  C.fcntl(fd,F_SETFL,O_NONBLOCK)
-  return setmetatable({fd=fd,queue={},receive=ffi.new('char[?]',MAX_MESSAGE+1),last_identity=nil},Transport)
+function Transport.new(mailbox_root, deps)
+  deps = deps or {}
+  local mailbox, problem = (deps.mailbox_factory or Mailbox.open)(mailbox_root, 'c2w', 'w2c',
+    { limit = MAX_MESSAGE, open_file = deps.open_file, rename = deps.rename, remove = deps.remove,
+      now = deps.now, claim = deps.claim })
+  if not mailbox then return failure(problem) end
+  return setmetatable({ mailbox=mailbox, queue={}, last_identity=nil }, Transport)
 end
 
 function Transport:_flush()
   while #self.queue>0 do
-    local wire=self.queue[1];local sent=C.send(self.fd,wire,#wire,0)
-    if sent<0 then local number,problem=errno_text();if number==EAGAIN or number==EWOULDBLOCK then return true end;return false,problem end
-    if sent~=#wire then return false,'partial seqpacket send' end
+    local sent,problem=self.mailbox:send(self.queue[1])
+    if not sent then return false,problem end
     table.remove(self.queue,1)
   end
   return true
 end
 function Transport:send(message)
-  if self.fd<0 then return false,'closed' end
+  if not self.mailbox or self.mailbox.closed then return false,'closed' end
   local wire,id_or_error=encode(message);if not wire then return false,id_or_error.code end
   if #self.queue>=MAX_QUEUE then return false,'queue full' end
   self.queue[#self.queue+1]=wire;self.last_identity=id_or_error
@@ -117,15 +98,20 @@ function Transport:_protocol_failure()
   if not id then return {protocol_version=1,job_id='invalid',project_id='invalid',generation=0,analysis_revision=0,command='EVENT',status='FAILED',capture_error='CAPTURE_PROTOCOL_ERROR'} end
   id.command,id.status,id.capture_error='EVENT','FAILED','CAPTURE_PROTOCOL_ERROR';return id
 end
+-- A record already in the mailbox outranks a departed worker: the worker
+-- answers EXIT and only then removes its sentinel, so draining before the
+-- liveness check keeps that final reply from being reported as a failure.
 function Transport:poll()
-  if self.fd<0 then return nil end
-  local ok=self:_flush();if not ok then return self:_protocol_failure() end
-  local received=C.recv(self.fd,self.receive,MAX_MESSAGE+1,0)
-  if received<0 then local number=ffi.errno();if number==EAGAIN or number==EWOULDBLOCK then return nil end;return self:_protocol_failure() end
-  if received==0 or received>MAX_MESSAGE then return self:_protocol_failure() end
-  return decode(ffi.string(self.receive,received)) or self:_protocol_failure()
+  if not self.mailbox or self.mailbox.closed then return nil end
+  self.mailbox:heartbeat()
+  local flushed=self:_flush();if not flushed then return self:_protocol_failure() end
+  local wire,problem=self.mailbox:receive()
+  if wire then return decode(wire) or self:_protocol_failure() end
+  if problem then return self:_protocol_failure() end
+  if not self.mailbox:peer_present() then return self:_protocol_failure() end
+  return nil
 end
 function Transport:close()
-  if self.fd>=0 then C.close(self.fd);self.fd=-1 end
+  if self.mailbox then self.mailbox:close() end
 end
 return Transport

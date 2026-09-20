@@ -16,10 +16,10 @@ from pathlib import Path
 import re
 import shutil
 import signal
-import socket
 import subprocess
 import sys
 import tempfile
+import time
 from typing import Any
 import wave
 
@@ -182,6 +182,83 @@ def analysis_is_dsp(value: Any, backend_sha256: str, template_sha256: str) -> bo
                                              "template_sha256": template_sha256})
 
 
+class Mailbox:
+    """Sequenced file mailbox; the Python half of lib/rhythm_doctor/file_mailbox.lua.
+
+    matron embeds Lua 5.3 without FFI, luasocket or a posix binding, so a norns
+    script cannot hold an AF_UNIX socket at all. One message is therefore one
+    file, written beside its target and renamed into place. Rename is atomic
+    within a directory, so a reader never sees a partial record and framing
+    stays exact -- the guarantee SOCK_SEQPACKET provided.
+
+    The client has no socket to hang up, so it stamps "alive" while it polls
+    and claims the mailbox exactly once. An unclaimed mailbox means nobody ever
+    arrived; a stale stamp means the script is gone.
+    """
+
+    IDLE_SECONDS = 30.0
+    CLAIM_SECONDS = 120.0
+
+    def __init__(self, root: Path, outbound: str, inbound: str, limit: int) -> None:
+        self.root, self.limit = root, limit
+        self.outbound, self.inbound = root / outbound, root / inbound
+        root.mkdir(mode=0o700, parents=True, exist_ok=True); os.chmod(root, 0o700)
+        for directory in (self.outbound, self.inbound):
+            shutil.rmtree(directory, ignore_errors=True); directory.mkdir(mode=0o700)
+        self.send_sequence = self.receive_sequence = 1
+        (root / "claimed").unlink(missing_ok=True); (root / "alive").unlink(missing_ok=True)
+        (root / "claim").write_bytes(b""); (root / "up").write_bytes(b"")
+        self.started = time.monotonic()
+
+    def _name(self, directory: Path, sequence: int, suffix: str = "") -> Path:
+        return directory / f"{sequence:09d}.msg{suffix}"
+
+    def send(self, payload: bytes) -> None:
+        partial = self._name(self.outbound, self.send_sequence, ".part")
+        partial.write_bytes(payload)
+        os.replace(partial, self._name(self.outbound, self.send_sequence))
+        self.send_sequence += 1
+
+    def receive(self) -> bytes | None:
+        path = self._name(self.inbound, self.receive_sequence)
+        try:
+            payload = path.read_bytes()
+        except FileNotFoundError:
+            return None
+        path.unlink(missing_ok=True); self.receive_sequence += 1
+        return payload if 0 < len(payload) <= self.limit else b""
+
+    def client_lost(self) -> bool:
+        if not (self.root / "claimed").exists():
+            return time.monotonic() - self.started > self.CLAIM_SECONDS
+        try:
+            stamped = (self.root / "alive").stat().st_mtime
+        except FileNotFoundError:
+            return False
+        return time.time() - stamped > self.IDLE_SECONDS
+
+    def flush_to_client(self, seconds: float = 1.0) -> None:
+        """A socket kept a final reply buffered after close; files do not.
+
+        Removing the outbox at once would delete an answer the client has not
+        read yet, so a departing worker waits briefly for its last record to be
+        consumed -- and only when a client actually claimed the mailbox.
+        """
+        if self.send_sequence <= 1 or not (self.root / "claimed").exists():
+            return
+        last = self._name(self.outbound, self.send_sequence - 1)
+        deadline = time.monotonic() + seconds
+        while last.exists() and time.monotonic() < deadline:
+            time.sleep(.005)
+
+    def close(self) -> None:
+        self.flush_to_client()
+        (self.root / "up").unlink(missing_ok=True)
+        shutil.rmtree(self.outbound, ignore_errors=True); shutil.rmtree(self.inbound, ignore_errors=True)
+        for leaf in ("claim", "claimed", "alive"):
+            (self.root / leaf).unlink(missing_ok=True)
+
+
 class Worker:
     def __init__(self, runtime: Path, backend: Path | None, backend_sha256: str | None = None,
                  drum_artifact_sha256: str | None = None, bass_artifact_sha256: str | None = None,
@@ -192,10 +269,8 @@ class Worker:
         self.bass_artifact_sha256 = bass_artifact_sha256
         self.template_sha256 = template_sha256
         self.results = runtime / "results"; self.results.mkdir(mode=0o700, exist_ok=True)
-        self.socket_path = runtime / "analysis.sock"; self.socket_path.unlink(missing_ok=True)
-        self.server = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET)
-        self.server.bind(str(self.socket_path)); os.chmod(self.socket_path, 0o600); self.server.listen(1)
-        self.peer: socket.socket | None = None; self.request: dict[str, Any] | None = None
+        self.mailbox = Mailbox(runtime / "mailbox", "w2c", "c2w", 8192)
+        self.request: dict[str, Any] | None = None
         self.process: subprocess.Popen[bytes] | None = None; self.request_path: Path | None = None; self.result_path: Path | None = None
 
     def expected_detector(self) -> dict[str, str]:
@@ -216,8 +291,7 @@ class Worker:
         return identity
 
     def send(self, value: dict[str, Any]) -> None:
-        assert self.peer is not None
-        self.peer.send(json.dumps(value, separators=(",", ":")).encode("utf-8"))
+        self.mailbox.send(json.dumps(value, separators=(",", ":")).encode("utf-8"))
 
     def clear_job(self) -> None:
         if self.process and self.process.poll() is None:
@@ -286,16 +360,15 @@ class Worker:
         self.clear_job()
 
     def run(self) -> int:
-        print(self.socket_path, flush=True)
-        self.peer, _ = self.server.accept(); self.peer.settimeout(.02)
+        print(self.mailbox.root, flush=True)
         while not STOP:
             if self.process and self.process.poll() is not None:
                 self.complete()
-            try:
-                raw = self.peer.recv(8192)
-            except socket.timeout:
-                continue
-            if not raw: break
+            raw = self.mailbox.receive()
+            if raw is None:
+                if self.mailbox.client_lost(): break
+                time.sleep(.02); continue
+            if not raw: continue
             try: message = json.loads(raw.decode("utf-8"))
             except (UnicodeDecodeError, json.JSONDecodeError): continue
             if not identity(message): continue
@@ -308,8 +381,7 @@ class Worker:
         self.clear_job(); return 0
 
     def close(self) -> None:
-        if self.peer: self.peer.close()
-        self.server.close(); self.socket_path.unlink(missing_ok=True)
+        self.mailbox.close()
         shutil.rmtree(self.results, ignore_errors=True)
 
 

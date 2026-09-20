@@ -8,6 +8,7 @@ import argparse
 import hashlib
 import json
 import re
+import shutil
 from pathlib import Path
 import time
 import traceback
@@ -119,7 +120,7 @@ def main():
                 c.finish()
                 runtime = c.data_directory / "rhythm-doctor-runtime"
                 pid = int((runtime / "pid").read_text()) if (runtime / "pid").is_file() else None
-                socket_path = (runtime / "socket").read_text().strip() if (runtime / "socket").is_file() else None
+                mailbox_root = (runtime / "mailbox").read_text().strip() if (runtime / "mailbox").is_file() else None
                 # Teardown is asynchronous, and a process that has exited but not
                 # been reaped keeps its /proc entry as a zombie. Neither means the
                 # helper is still running, so wait long enough for a loaded CI
@@ -136,19 +137,19 @@ def main():
                 while still_running(pid) and time.monotonic() < deadline:
                     time.sleep(.1)
                 runtime_cleanup = dict(cancel=(runtime / "cancel").is_file(),
-                                       status_socket=(runtime / "socket").exists(), status_pid=(runtime / "pid").exists(),
+                                       status_mailbox=(runtime / "mailbox").exists(), status_pid=(runtime / "pid").exists(),
                                        process_alive=still_running(pid),
-                                       owned_socket_alive=bool(socket_path and Path(socket_path).exists()))
+                                       owned_mailbox_alive=bool(mailbox_root and Path(mailbox_root).exists()))
                 assert not runtime_cleanup["process_alive"], runtime_cleanup
                 # The emulator tears down its native process group without the
                 # norns script-switch cleanup callback. Remove only that dead
-                # session's verified private socket directory; physical-norns
+                # session's verified private mailbox directory; physical-norns
                 # cleanup is exercised by the hardware runner.
-                if runtime_cleanup["owned_socket_alive"]:
-                    owned_socket = Path(socket_path); owned_root = owned_socket.parent
+                if runtime_cleanup["owned_mailbox_alive"]:
+                    owned_root = Path(mailbox_root)
                     assert re.fullmatch(r"mosaic-rd-[0-9]+-[A-Za-z0-9]+", owned_root.name), owned_root
-                    owned_socket.unlink(); owned_root.rmdir()
-                    runtime_cleanup["harness_removed_dead_socket"] = True
+                    shutil.rmtree(owned_root)
+                    runtime_cleanup["harness_removed_dead_mailbox"] = True
             except Exception:
                 cleanup_failure = traceback.format_exc()
     result = dict(case="RD-UI-002", passed=failure is None and cleanup_failure is None,

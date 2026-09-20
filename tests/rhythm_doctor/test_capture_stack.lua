@@ -1,13 +1,14 @@
--- PLAN capture architecture: real LuaJIT transport/controller/worker collaboration.
+-- PLAN capture architecture: real transport/controller/worker collaboration on
+-- the interpreter matron embeds.  A norns has no luajit and no FFI, so the
+-- wait is a plain sleep rather than a C call.
 package.path = './lib/?.lua;' .. package.path
-local ffi = require('ffi')
-ffi.cdef[[int usleep(unsigned int);]]
+local function sleep(seconds) os.execute('sleep ' .. tostring(seconds)) end
 local Machine = require('rhythm_doctor.state_machine')
 local Controller = require('rhythm_doctor.capture_controller')
 local Native = require('rhythm_doctor.native_transport')
 
-local socket_path = assert(arg[1], 'worker socket is required')
-local transport = assert(Native.new(socket_path))
+local mailbox_root = assert(arg[1], 'worker mailbox root is required')
+local transport = assert(Native.new(mailbox_root))
 local controller, machine, saved, analysed
 machine = Machine.new{
   project_id='stack-test',
@@ -26,11 +27,11 @@ controller = Controller.new{
   end,
 }
 assert(machine:start_capture('manual', true).ok)
-for _=1,500 do controller:poll();if controller.job.phase=='CAPTURING' then break end;ffi.C.usleep(10000) end
+for _=1,500 do controller:poll();if controller.job.phase=='CAPTURING' then break end;sleep(0.01) end
 assert(controller.job.phase=='CAPTURING','worker did not start')
-ffi.C.usleep(120000)
+sleep(0.12)
 assert(machine:finish_capture(true,true).ok)
-for _=1,500 do controller:poll();if machine.resources_are_released then break end;ffi.C.usleep(10000) end
+for _=1,500 do controller:poll();if machine.resources_are_released then break end;sleep(0.01) end
 assert(saved and analysed and saved.wav_sha256==analysed.wav_sha256,'asset callbacks mismatch')
 assert(machine.state=='FAILED' and machine.resources_are_released,'terminal release incomplete')
 local file=assert(io.open(saved.wav_path,'rb'));local bytes=file:read('*a');file:close()

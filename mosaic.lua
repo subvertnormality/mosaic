@@ -70,8 +70,8 @@ end
 local function init_rhythm_doctor()
   local worker = rhythm_doctor_worker_host.new({
     runtime_root = norns.state.data .. "rhythm-doctor-runtime",
-    transport_factory = function(socket_path)
-      return include("mosaic/lib/rhythm_doctor/native_transport").new(socket_path)
+    transport_factory = function(mailbox_root)
+      return include("mosaic/lib/rhythm_doctor/native_transport").new(mailbox_root)
     end
   })
   local analysis_worker = rhythm_doctor_analysis_worker_host.new({
@@ -86,8 +86,8 @@ local function init_rhythm_doctor()
     -- The shipped classical-DSP backend pins its own source and template
     -- table instead of model artifacts, and needs no downloads.
     template_sha256 = os.getenv("RHYTHM_DOCTOR_TEMPLATE_SHA256"),
-    transport_factory = function(socket_path, result_root)
-      return include("mosaic/lib/rhythm_doctor/analysis_transport").new(socket_path, result_root)
+    transport_factory = function(mailbox_root, result_root)
+      return include("mosaic/lib/rhythm_doctor/analysis_transport").new(mailbox_root, result_root)
     end,
   })
   rhythm_doctor_runtime = rhythm_doctor_runtime_module.new({

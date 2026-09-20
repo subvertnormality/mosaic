@@ -1,9 +1,9 @@
 """Build and detach Mosaic's owned Rhythm Doctor capture worker.
 
 The norns Lua event thread starts this helper in the background and polls the
-published socket pathname.  This process performs compilation and blocking
-startup away from that event thread.  The worker removes its own socket and
-capture directory after its sole peer disconnects.
+published mailbox pathname.  This process performs compilation and blocking
+startup away from that event thread.  The worker removes its own mailbox and
+capture directory once its client stops stamping liveness.
 """
 from __future__ import annotations
 
@@ -60,8 +60,8 @@ def main() -> int:
     args = parser.parse_args()
     args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
     os.chmod(args.runtime, 0o700)
-    socket_file, error_file = args.runtime / "socket", args.runtime / "error"
-    socket_file.unlink(missing_ok=True); error_file.unlink(missing_ok=True)
+    mailbox_file, error_file = args.runtime / "mailbox", args.runtime / "error"
+    mailbox_file.unlink(missing_ok=True); error_file.unlink(missing_ok=True)
     try:
         binary = args.runtime / "rd-worker"
         compile_worker(args.source, binary, args.runtime / "rd-worker.sha256")
@@ -84,9 +84,9 @@ def main() -> int:
             return 0
         if process.poll() is not None or not line.startswith("/") or "\n" in line or "\t" in line:
             process.terminate()
-            raise RuntimeError("capture worker did not publish a socket")
+            raise RuntimeError("capture worker did not publish a mailbox")
         atomic_text(args.runtime / "pid", str(process.pid) + "\n")
-        atomic_text(socket_file, line + "\n")
+        atomic_text(mailbox_file, line + "\n")
         return 0
     except Exception as error:
         atomic_text(error_file, type(error).__name__ + ": " + str(error) + "\n")

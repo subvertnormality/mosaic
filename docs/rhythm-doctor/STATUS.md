@@ -480,3 +480,55 @@ armv7l so the deployed path could never be this one.
 
 Separation-first is therefore blocked on device footprint under the standalone
 requirement — not on quality and not on licence.
+
+## The capture path never ran on a norns: matron has no FFI
+
+Pressing Record on a physical device did nothing, while every suite stayed
+green. The cause was not a bug in the capture logic. `native_transport.lua` and
+`analysis_transport.lua` both opened with `require('ffi')`, and **matron embeds
+Lua 5.3 — `liblua5.3.so.0`, not LuaJIT.** Confirmed on the device's own matron
+REPL: `require('ffi')` fails with `no file './ffi.so'`, and `ffi`, `bit`,
+`socket`, `posix`, `lpeg` and `cjson` are all absent. The emulator's matron
+links the same library, so this was never an ARM or a deployment difference.
+
+The failure was invisible by construction. `Host:open()` raised on the first
+require, `Runtime:_open` swallowed it in a `pcall`, `valid_transport(nil)`
+returned false, and the runtime retried every 0.25 s forever. No controller was
+ever created, so Record was inert with no error anywhere on screen.
+
+Why the suites did not see it, which is the more important half:
+
+- Component tests inject fake transports and never load the real modules.
+- Behaviour recipes run with the worker unavailable and assert the inert
+  behaviour — they passed *because* the transport failed.
+- `test_native_transport.py` and the whole-path
+  `test_machine_controller_transport_worker_flow` were gated on
+  `shutil.which("luajit")`. CI has no luajit, so they skipped; a developer
+  machine with luajit exercised an interpreter no norns has.
+
+Sockets were therefore unreachable from a script at all, and the transports are
+now carried by a **sequenced file mailbox** (`lib/rhythm_doctor/file_mailbox.lua`
+with matching implementations in `rd_capture_worker.c` and
+`rd_analysis_worker.py`). One message is one file, written beside its target and
+renamed into place; rename is atomic within a directory, so a reader never sees
+a partial record and framing stays exact — the guarantee `SOCK_SEQPACKET` gave.
+Ordering and exactly-once delivery come from both ends agreeing on the next
+sequence number, so nothing lists a directory, which Lua 5.3 cannot do. The RD1
+wire record and the analysis JSON envelopes are unchanged; only the carrier is.
+
+Three things a socket gave for free are now explicit. A client claims the
+mailbox by renaming a `claim` token, which is an atomic test-and-set, so a
+second transport is refused rather than interleaving sequence numbers. A worker
+that has no peer to hang up watches an `alive` file the client stamps through
+`Runtime:poll` at 30 Hz and leaves after 30 s of silence. A departing worker
+waits up to a second for its last record to be consumed before removing its
+outbox, because the kernel used to buffer that final reply and a directory does
+not.
+
+The tests that could not have caught this now run where it matters:
+`test_matron_compatibility.py` loads every Rhythm Doctor module under a real Lua
+5.3 and rejects any `require` of `ffi`, `bit` or `jit`; `test_file_mailbox.lua`
+covers framing, ordering, the one-shot claim and both liveness directions; and
+the whole-path capture flow runs on the interpreter matron embeds rather than
+on LuaJIT. The hardware runners now use the device's own Lua for the same
+reason. Verified red against the previous transports and green against these.

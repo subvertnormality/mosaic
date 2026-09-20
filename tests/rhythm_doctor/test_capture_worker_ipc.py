@@ -1,16 +1,24 @@
-"""Compiled AF_UNIX/JACK integration for the Rhythm Doctor capture worker."""
+"""Compiled mailbox/JACK integration for the Rhythm Doctor capture worker.
+
+The Lua half runs on the interpreter matron embeds, never on LuaJIT: a norns
+has no luajit binary, so anything proved under one says nothing about it.
+"""
 import hashlib
 import os
 import pathlib
 import shutil
 import signal
-import socket
 import struct
 import subprocess
 import tempfile
 import time
+import sys
 import unittest
 import uuid
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from mailbox_client import MailboxClient
+from matron import LUA, SKIP_REASON
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
 WORKER = ROOT / "tools/rhythm_doctor/rd_capture_worker.c"
@@ -58,19 +66,20 @@ class CaptureWorkerIPC(unittest.TestCase):
         template = str(self.root / "owned-XXXXXX")
         self.process = subprocess.Popen([str(self.binary), template, *sources], stdout=subprocess.PIPE,
                                         stderr=subprocess.PIPE, text=True, env=getattr(self, "environment", None))
-        socket_path = self.process.stdout.readline().strip()
-        self.assertTrue(socket_path)
-        return socket_path, pathlib.Path(socket_path).parent
+        mailbox_root = self.process.stdout.readline().strip()
+        self.assertTrue(mailbox_root)
+        return mailbox_root, pathlib.Path(mailbox_root)
 
     def start_worker(self, sources=("missing:left", "missing:right")):
-        socket_path, owned = self.launch_worker(sources)
-        self.peer = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET); self.peer.settimeout(3); self.peer.connect(socket_path)
-        mode = stat_mode(pathlib.Path(socket_path)); self.assertEqual(mode, 0o600)
-        self.assertEqual(stat_mode(pathlib.Path(socket_path).parent), 0o700)
+        mailbox_root, owned = self.launch_worker(sources)
+        self.peer = MailboxClient(mailbox_root, limit=1023)
+        self.assertEqual(stat_mode(owned), 0o700)
+        for direction in ("c2w", "w2c"):
+            self.assertEqual(stat_mode(owned / direction), 0o700)
         return owned
 
     def exchange(self, record):
-        self.peer.send(record.encode()); return self.peer.recv(2048).decode().split("\t")
+        self.peer.send(record.encode()); return self.peer.receive(3).decode().split("\t")
 
     def test_parser_rejects_malformed_overflow_long_and_unknown_records(self):
         self.start_worker()
@@ -86,7 +95,7 @@ class CaptureWorkerIPC(unittest.TestCase):
         self.assertEqual(reply[1:6], ["j", "p", "0", "0", "PREFLIGHT"])
         self.assertEqual(reply[6], "FAILED")  # no named JACK server; fail visibly without auto-start
 
-    def test_overlong_socket_path_removes_the_acquired_private_root(self):
+    def test_overlong_mailbox_root_removes_the_acquired_private_root(self):
         parent = self.root / ("x" * 90); parent.mkdir()
         template = str(parent / "owned-XXXXXX")
         result = subprocess.run([str(self.binary), template, "missing:left", "missing:right"],
@@ -95,12 +104,23 @@ class CaptureWorkerIPC(unittest.TestCase):
         self.assertIn("File name too long", result.stderr)
         self.assertEqual(list(parent.glob("owned-*")), [])
 
-    def test_session_hangup_removes_socket_and_private_root(self):
-        socket_path, owned = self.launch_worker()
+    def test_session_hangup_removes_the_mailbox_and_private_root(self):
+        mailbox_root, owned = self.launch_worker()
+        self.assertTrue((owned / "up").exists())
         self.process.send_signal(signal.SIGHUP)
         self.process.wait(timeout=3)
-        self.assertFalse(pathlib.Path(socket_path).exists())
+        self.assertFalse(owned.exists(), "the worker must remove its exact owned root")
+
+    def test_a_client_that_stops_stamping_liveness_ends_the_run(self):
+        """A file mailbox has no hangup, so an abandoned worker times itself out."""
+        mailbox_root, owned = self.launch_worker()
+        peer = MailboxClient(mailbox_root, limit=1023)
+        self.assertTrue((owned / "alive").exists())
+        stale = time.time() - 4 * 3600
+        os.utime(owned / "alive", (stale, stale))
+        self.process.wait(timeout=20)
         self.assertFalse(owned.exists())
+        del peer
 
     def test_real_jack_pcm_publish_identity_release_and_cleanup(self):
         self.start_jack()
@@ -115,7 +135,7 @@ class CaptureWorkerIPC(unittest.TestCase):
         self.assertEqual(self.exchange(identity + "START\t")[6], "STARTED")
         time.sleep(.12)
         self.peer.send((identity + "STOP\t").encode())
-        complete = self.peer.recv(2048).decode().split("\t")
+        complete = self.peer.receive(3).decode().split("\t")
         self.assertEqual((complete[1:5], complete[5:7]), (["job-1", "project-a", "7", "2"], ["EVENT", "COMPLETED"]))
         published = self.exchange(identity + "PUBLISH\t")
         self.assertEqual(published[6], "PUBLISHED")
@@ -131,18 +151,24 @@ class CaptureWorkerIPC(unittest.TestCase):
         self.process.wait(timeout=3)
         self.assertFalse(wav.exists()); self.assertFalse(owned.exists())
 
-    @unittest.skipUnless(shutil.which("luajit"), "requires LuaJIT")
+    @unittest.skipUnless(LUA, SKIP_REASON)
     def test_machine_controller_transport_worker_flow(self):
+        """The whole capture path, on matron's own interpreter.
+
+        This is the test the FFI transports evaded: it was gated on a luajit
+        binary no norns has, so it skipped wherever it mattered while the
+        transport it covers could not even load on a device.
+        """
         self.start_jack()
         self.injector = subprocess.Popen([str(self.injector_binary)], env=self.environment,
                                          stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         time.sleep(.15)
-        socket_path, owned = self.launch_worker(("rd-capture-injector:left", "rd-capture-injector:right"))
-        lua_path = str(ROOT / "lib/?.lua").replace("\\", "/")
+        mailbox_root, owned = self.launch_worker(("rd-capture-injector:left", "rd-capture-injector:right"))
+        lua_path = str(ROOT / "lib/?.lua").replace("\\\\", "/")
         script = f'''package.path={lua_path!r}..';'..package.path
-local ffi=require('ffi');ffi.cdef[[int usleep(unsigned int);]]
+local function sleep(seconds) os.execute('sleep '..tostring(seconds)) end
 local Machine=require('rhythm_doctor.state_machine');local Controller=require('rhythm_doctor.capture_controller')
-local Native=require('rhythm_doctor.native_transport');local transport=assert(Native.new({socket_path!r}))
+local Native=require('rhythm_doctor.native_transport');local transport=assert(Native.new({mailbox_root!r}))
 local controller,machine,asset,saved
 machine=Machine.new{{project_id='integration',on_capture_start=function(mode,token) controller:begin(mode,token,1) end,
  on_cancel=function(token) controller:cancel(token) end,on_release=function(token) controller:release(token) end,
@@ -151,17 +177,17 @@ controller=Controller.new{{machine=machine,transport=transport,now=os.clock,tran
  on_capture_saved=function(value) saved=value end,on_analysis_ready=function(value,token)
   asset=value;machine:receive_analysis{{project_id=token.project_id,generation=token.generation,analysis_revision=token.analysis_revision,error='TEST_ANALYSIS_STOP'}} end}}
 assert(machine:start_capture('manual',true).ok)
-for i=1,500 do controller:poll();if controller.job.phase=='CAPTURING' then break end;ffi.C.usleep(10000) end
-assert(controller.job.phase=='CAPTURING');ffi.C.usleep(120000);assert(machine:finish_capture(true,true).ok)
-for i=1,500 do controller:poll();if machine.resources_are_released then break end;ffi.C.usleep(10000) end
+for i=1,300 do controller:poll();if controller.job.phase=='CAPTURING' then break end;sleep(0.01) end
+assert(controller.job.phase=='CAPTURING','never reached CAPTURING');sleep(0.15);assert(machine:finish_capture(true,true).ok)
+for i=1,300 do controller:poll();if machine.resources_are_released then break end;sleep(0.01) end
 assert(asset and saved and asset.wav_sha256==saved.wav_sha256 and machine.state=='FAILED' and machine.resources_are_released)
 local file=assert(io.open(asset.wav_path,'rb'));local bytes=file:read('*a');file:close();assert(#bytes>44 and bytes:sub(1,4)=='RIFF')
 transport:close()
 '''
-        result = subprocess.run(["luajit", "-e", script], cwd=ROOT, env=self.environment,
-                                text=True, capture_output=True, timeout=10)
+        result = subprocess.run([LUA, "-e", script], cwd=ROOT, env=self.environment,
+                                text=True, capture_output=True, timeout=120)
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.process.wait(timeout=3)
+        self.process.wait(timeout=20)
         self.assertFalse(owned.exists())
 
 

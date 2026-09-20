@@ -13,14 +13,15 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 LUA_TESTS = ('core', 'integration', 'lifecycle', 'journal', 'bank_schema', 'paint_boundaries', 'paint_transactions',
-             'capture_transitions', 'assets', 'capture_controller', 'analysis_controller', 'analysis_runtime', 'analysis_transport', 'runtime',
+             'capture_transitions', 'assets', 'capture_controller', 'file_mailbox', 'analysis_controller', 'analysis_runtime', 'analysis_transport', 'runtime',
              'runtime_paint', 'runtime_persistence', 'bank_persistence', 'project_lifecycle_runtime',
              'ui_adapter', 'worker_host', 'app_surface')
 PYTHON_TESTS = ('quality', 'quality_report', 'performance', 'corpus', 'rendered_corpus_audit',
                 'acquisition_quality', 'grid_quality', 'native_transport', 'analysis_worker_ipc',
-                'runtime_dependencies',
+                'runtime_dependencies', 'matron_compatibility',
                 'pretrained_bass_backend', 'hardware_core_runner', 'documentation')
-NATIVE_TESTS = ('capture_contract', 'capture_native', 'tempo_candidate', 'tempo_native')
+NATIVE_TESTS = ('capture_contract', 'capture_native', 'tempo_candidate', 'tempo_native',
+                'capture_worker_ipc')
 
 
 def main():
@@ -45,7 +46,7 @@ def main():
     selected = list(PYTHON_TESTS) + (list(NATIVE_TESTS) if args.native else [])
     if args.detector:
         selected.extend(('detector', 'nmf_template', 'adtof_evaluate', 'basic_pitch_adapter',
-                        'audio_frontend', 'capture_worker_ipc', 'omnizart_onnx',
+                        'audio_frontend', 'omnizart_onnx',
                          'omnizart_onnx_backend', 'pretrained_bass_runtime', 'pretrained_runtime_factory',
                          'pretrained_composite_backend', 'dsp_drum_backend', 'native_backend',
                          'build_scheduled', 'pretrained_corpus_evaluate'))

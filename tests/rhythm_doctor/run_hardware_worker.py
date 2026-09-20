@@ -22,10 +22,12 @@ def main():
               "p=subprocess.Popen("+repr(argv)+",stdin=subprocess.DEVNULL,stdout=out,stderr=err,start_new_session=True);print(p.pid)")
         return int(checked('python3 -c '+shlex.quote(code)).strip())
     checked('test ! -e /home/we/.cache/mosaic-real-norns/active')
+    device_lua=checked('command -v lua5.3 || command -v lua').strip()
+    if not device_lua:raise RuntimeError('no Lua interpreter on the device; matron embeds Lua 5.3')
     before=checked("jack_lsp -c | grep -v 'mosaic-rd-capture\|rd-capture-injector' || true")
     directories=(remote,remote+'/tools',remote+'/tools/rhythm_doctor',remote+'/tests',remote+'/tests/rhythm_doctor',remote+'/lib',remote+'/lib/rhythm_doctor')
     checked('mkdir '+ ' '.join(shlex.quote(x) for x in directories))
-    hashes={};worker_pid=injector_pid=None;socket_path=None;result=None;cleanup=[]
+    hashes={};worker_pid=injector_pid=None;mailbox_root=None;result=None;cleanup=[]
     try:
         with tempfile.TemporaryDirectory(prefix=run) as frozen:
             for relative in FILES:
@@ -36,27 +38,31 @@ def main():
                 if actual!=digest:raise RuntimeError('deployed source mismatch: '+relative)
         checked('cd '+shlex.quote(remote)+' && gcc -std=c11 -O2 -Wall -Wextra -Werror tools/rhythm_doctor/rd_capture_worker.c -o rd-worker -ljack && gcc -std=c11 -O2 -Wall -Wextra -Werror tests/rhythm_doctor/test_capture_injector.c -o rd-injector -ljack',60)
         injector_pid=launch([remote+'/rd-injector'],remote+'/injector.log',remote+'/injector.log');time.sleep(.2)
-        worker_pid=launch([remote+'/rd-worker',remote+'/owned-XXXXXX','rd-capture-injector:left','rd-capture-injector:right'],remote+'/worker.socket',remote+'/worker.log')
+        worker_pid=launch([remote+'/rd-worker',remote+'/owned-XXXXXX','rd-capture-injector:left','rd-capture-injector:right'],remote+'/worker.mailbox',remote+'/worker.log')
         deadline=time.monotonic()+5
         while time.monotonic()<deadline:
-            socket_path=checked('test -s '+shlex.quote(remote+'/worker.socket')+' && head -1 '+shlex.quote(remote+'/worker.socket')+' || true').strip()
-            if socket_path:break
+            mailbox_root=checked('test -s '+shlex.quote(remote+'/worker.mailbox')+' && head -1 '+shlex.quote(remote+'/worker.mailbox')+' || true').strip()
+            if mailbox_root:break
             time.sleep(.05)
-        if not socket_path:raise RuntimeError('worker socket was not published')
-        result=call('cd '+shlex.quote(remote)+' && luajit tests/rhythm_doctor/test_capture_stack.lua '+shlex.quote(socket_path),15)
+        if not mailbox_root:raise RuntimeError('worker mailbox was not published')
+        # matron embeds Lua 5.3 and a norns has no luajit, so the device's own
+        # interpreter is the only one whose result means anything here.
+        result=call('cd '+shlex.quote(remote)+' && '+device_lua+' tests/rhythm_doctor/test_capture_stack.lua '+shlex.quote(mailbox_root),30)
         if result.returncode:raise RuntimeError(result.stdout+result.stderr)
-        deadline=time.monotonic()+3
-        while time.monotonic()<deadline and call('kill -0 '+str(worker_pid)).returncode==0:time.sleep(.05)
+        # Without a socket there is no hangup: the worker leaves once the client
+        # stops stamping liveness, which takes its idle timeout.
+        deadline=time.monotonic()+45
+        while time.monotonic()<deadline and call('kill -0 '+str(worker_pid)).returncode==0:time.sleep(.25)
         after=checked("jack_lsp -c | grep -v 'mosaic-rd-capture\|rd-capture-injector' || true")
-        cleanup.append({'worker_exited_after_peer_close':call('kill -0 '+str(worker_pid)).returncode!=0,'unrelated_routes_restored':after==before})
+        cleanup.append({'worker_exited_after_client_left':call('kill -0 '+str(worker_pid)).returncode!=0,'unrelated_routes_restored':after==before})
     finally:
         for pid in (worker_pid,injector_pid):
             if pid:call('kill '+str(pid)+' 2>/dev/null || true')
         # Exact known files only; the worker owns and removes its mkdtemp directory.
         for relative in FILES:call('rm -f '+shlex.quote(remote+'/'+relative))
-        for name in ('rd-worker','rd-injector','injector.log','worker.socket','worker.log'):call('rm -f '+shlex.quote(remote+'/'+name))
+        for name in ('rd-worker','rd-injector','injector.log','worker.mailbox','worker.log'):call('rm -f '+shlex.quote(remote+'/'+name))
         for directory in reversed(directories):call('rmdir '+shlex.quote(directory)+' 2>/dev/null || true')
     passed=bool(result and result.returncode==0 and cleanup and all(cleanup[0].values()) and call('test ! -e '+shlex.quote(remote)).returncode==0)
-    report={'run_id':run,'profile':'physical-norns-native-worker','source_sha256':hashes,'result':{'exit_code':result.returncode if result else None,'stdout':result.stdout if result else '', 'stderr':result.stderr if result else ''},'cleanup':cleanup,'passed':passed,'scope':'actual Norns JACK input worker plus LuaJIT controller transport; injected PCM, not physical ADC or transcription','full_feature_acceptance':False}
+    report={'run_id':run,'profile':'physical-norns-native-worker','source_sha256':hashes,'result':{'exit_code':result.returncode if result else None,'stdout':result.stdout if result else '', 'stderr':result.stderr if result else ''},'cleanup':cleanup,'passed':passed,'scope':'actual Norns JACK input worker plus controller transport on the device Lua; injected PCM, not physical ADC or transcription','full_feature_acceptance':False}
     args.output.write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8');print(json.dumps(report,indent=2));return int(not passed)
 if __name__=='__main__':raise SystemExit(main())

@@ -3,7 +3,8 @@
 The runner deploys only a short, hash-verified source manifest to one new
 ``/tmp`` directory.  It refuses a device with the real-norns active guard,
 builds through the production helper with ``system:capture_1/2``, drives the
-production LuaJIT AF_UNIX transport through PREFLIGHT/START/CANCEL/RELEASE,
+production file-mailbox transport through PREFLIGHT/START/CANCEL/RELEASE
+on the device's own Lua 5.3, which is what matron embeds,
 and removes only paths and process IDs it created.  It never copies, loads, or
 changes a user Mosaic project.  ``--execute`` is required deliberately: this
 is a review-gated physical-device check, not CI or an ordinary local test.
@@ -27,11 +28,12 @@ FILES = (
     "tools/rhythm_doctor/rd_capture_worker.c",
     "tools/rhythm_doctor/rd_capture.c",
     "lib/rhythm_doctor/native_transport.lua",
+    "lib/rhythm_doctor/file_mailbox.lua",
     "tests/rhythm_doctor/test_launch_worker_transport.lua",
 )
 ACTIVE_GUARD = "/home/we/.cache/mosaic-real-norns/active"
 RUNTIME_FILES = (
-    "socket", "socket.new", "error", "error.new", "rd-worker", "rd-worker.new",
+    "mailbox", "mailbox.new", "error", "error.new", "rd-worker", "rd-worker.new",
     "rd-worker.sha256", "rd-worker.sha256.new", "worker.log", "pid", "pid.new", "cancel",
 )
 
@@ -46,10 +48,10 @@ def launch_command(remote: str) -> str:
     ))
 
 
-def private_worker_root(socket_path: str, uid: int) -> str | None:
+def private_worker_root(mailbox_root: str, uid: int) -> str | None:
     """Accept only the mkdtemp root owned by this helper's worker process."""
-    match = re.fullmatch(r"(/tmp/mosaic-rd-" + re.escape(str(uid)) + r"-[A-Za-z0-9]{6,})/worker\.sock", socket_path)
-    return match.group(1) if match else None
+    match = re.fullmatch(r"/tmp/mosaic-rd-" + re.escape(str(uid)) + r"-[A-Za-z0-9]{6,}", mailbox_root)
+    return match.group(0) if match else None
 
 
 class Remote:
@@ -166,41 +168,48 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         routes_before = remote_text(remote, "jack_lsp -c")
         launcher_pid = remote.start(launch_command(remote_root), remote_root + "/launcher.stdout", remote_root + "/launcher.stderr")
         deadline = time.monotonic() + 70
-        socket_path = ""
+        mailbox_root = ""
         while time.monotonic() < deadline:
             if remote.call("test -s " + shlex.quote(remote_root + "/runtime/error"), check=False).returncode == 0:
                 raise RuntimeError(remote_text(remote, "cat " + shlex.quote(remote_root + "/runtime/error")))
-            result = remote.call("test -s " + shlex.quote(remote_root + "/runtime/socket") + " && head -n 1 " + shlex.quote(remote_root + "/runtime/socket") + " || true")
-            socket_path = result.stdout.strip()
-            if socket_path:
+            result = remote.call("test -s " + shlex.quote(remote_root + "/runtime/mailbox") + " && head -n 1 " + shlex.quote(remote_root + "/runtime/mailbox") + " || true")
+            mailbox_root = result.stdout.strip()
+            if mailbox_root:
                 uid = int(remote_text(remote, "id -u").strip())
-                worker_root = private_worker_root(socket_path, uid)
+                worker_root = private_worker_root(mailbox_root, uid)
                 if worker_root is None:
-                    raise RuntimeError("worker published an unexpected socket path")
+                    raise RuntimeError("worker published an unexpected mailbox root")
                 worker_pid = int(remote_text(remote, "cat " + shlex.quote(remote_root + "/runtime/pid")).strip())
                 if remote_text(remote, "cat " + shlex.quote(remote_root + "/runtime/rd-worker.sha256")).strip() != expected_worker_identity:
                     raise RuntimeError("launch_worker build identity differs from deployed capture sources")
                 built_worker_sha256 = remote_text(remote, "sha256sum " + shlex.quote(remote_root + "/runtime/rd-worker")).split()[0]
                 break
             time.sleep(.1)
-        if not socket_path:
-            raise RuntimeError("launch_worker did not publish a socket")
+        if not mailbox_root:
+            raise RuntimeError("launch_worker did not publish a mailbox")
         deadline = time.monotonic() + 3
         while time.monotonic() < deadline and remote.call("kill -0 " + str(launcher_pid), check=False).returncode == 0:
             time.sleep(.05)
         if remote.call("kill -0 " + str(launcher_pid), check=False).returncode == 0:
-            raise RuntimeError("launch_worker helper did not exit after publishing its socket")
-        command = "cd " + shlex.quote(remote_root) + " && luajit tests/rhythm_doctor/test_launch_worker_transport.lua " + shlex.quote(socket_path) + " " + shlex.quote(remote_root + "/lib")
-        transport_result = remote.call(command, timeout=15, check=False)
+            raise RuntimeError("launch_worker helper did not exit after publishing its mailbox")
+        # matron embeds Lua 5.3 and a norns has no luajit, so only the device's
+        # own interpreter proves anything about the deployed transport.
+        device_lua = remote_text(remote, "command -v lua5.3 || command -v lua").strip()
+        if not device_lua:
+            raise RuntimeError("no Lua interpreter on the device; matron embeds Lua 5.3")
+        command = "cd " + shlex.quote(remote_root) + " && " + device_lua + " tests/rhythm_doctor/test_launch_worker_transport.lua " + shlex.quote(mailbox_root) + " " + shlex.quote(remote_root + "/lib")
+        transport_result = remote.call(command, timeout=60, check=False)
         if transport_result.returncode:
             raise RuntimeError(transport_result.stdout + transport_result.stderr)
-        deadline = time.monotonic() + 5
+        # A file mailbox has no hangup: the worker leaves once the client stops
+        # stamping liveness, which takes its idle timeout.
+        deadline = time.monotonic() + 45
         while time.monotonic() < deadline and remote.call("kill -0 " + str(worker_pid), check=False).returncode == 0:
-            time.sleep(.05)
+            time.sleep(.25)
         if remote.call("kill -0 " + str(worker_pid), check=False).returncode == 0:
-            raise RuntimeError("worker remained after AF_UNIX peer close")
+            raise RuntimeError("worker remained after its client stopped stamping liveness")
         if remote.call("test ! -e " + shlex.quote(worker_root), check=False).returncode:
-            raise RuntimeError("worker private socket root survived peer close")
+            raise RuntimeError("worker private mailbox root survived the client leaving")
         routes_after = remote_text(remote, "jack_lsp -c")
         if routes_after != routes_before:
             raise RuntimeError("JACK connections changed after cleanup")
@@ -232,7 +241,7 @@ def run(args: argparse.Namespace) -> tuple[dict, int]:
         "failure": failure,
         "passed": bool(transport_result and transport_result.returncode == 0 and not failure and not cleanup_failures and
                        routes_before is not None and routes_after == routes_before),
-        "scope": "production launch_worker plus AF_UNIX transport with system capture ports; no Mosaic user project is deployed or loaded",
+        "scope": "production launch_worker plus file-mailbox transport on the device Lua with system capture ports; no Mosaic user project is deployed or loaded",
         "full_feature_acceptance": False,
     }
     with args.output.open("x", encoding="utf-8") as output:

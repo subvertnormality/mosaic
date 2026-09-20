@@ -89,7 +89,7 @@ def main() -> int:
     native_built = None
     args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
     os.chmod(args.runtime, 0o700)
-    for name in ("socket", "error", "pid"):
+    for name in ("mailbox", "error", "pid"):
         (args.runtime / name).unlink(missing_ok=True)
     if (args.runtime / "cancel").exists():
         return 0
@@ -145,9 +145,9 @@ def main() -> int:
         if (args.runtime / "cancel").exists():
             process.terminate(); return 0
         if process.poll() is not None or not line.startswith("/") or "\t" in line or "\n" in line:
-            process.terminate(); raise RuntimeError("analysis worker did not publish a socket")
+            process.terminate(); raise RuntimeError("analysis worker did not publish a mailbox")
         atomic_text(args.runtime / "pid", str(process.pid) + "\n")
-        atomic_text(args.runtime / "socket", line + "\n")
+        atomic_text(args.runtime / "mailbox", line + "\n")
         return 0
     except Exception as error:
         atomic_text(args.runtime / "error", type(error).__name__ + ": " + str(error) + "\n")

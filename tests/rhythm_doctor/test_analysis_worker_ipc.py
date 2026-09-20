@@ -7,9 +7,11 @@ lane gates, and fails closed when no backend was configured.
 import hashlib
 import json
 from pathlib import Path
-import socket
 import subprocess
 import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from mailbox_client import MailboxClient
 import tempfile
 import time
 import unittest
@@ -74,7 +76,6 @@ class AnalysisWorkerValidation(unittest.TestCase):
             self.assertIn("invalid analysis backend", (runtime / "error").read_text())
 
 
-@unittest.skipUnless(hasattr(socket, "AF_UNIX") and hasattr(socket, "SOCK_SEQPACKET"), "requires AF_UNIX SOCK_SEQPACKET")
 class AnalysisWorkerIPC(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory(prefix="rd-analysis-worker-")
@@ -96,9 +97,8 @@ class AnalysisWorkerIPC(unittest.TestCase):
         path = process.stdout.readline().strip()
         if not path or not Path(path).exists():
             detail = process.stderr.read(); process.wait(timeout=3)
-            self.fail(detail or "analysis worker did not publish a socket")
-        peer = socket.socket(socket.AF_UNIX, socket.SOCK_SEQPACKET); peer.connect(path)
-        return process, peer
+            self.fail(detail or "analysis worker did not publish a mailbox")
+        return process, MailboxClient(path)
 
     def stop(self, process, peer):
         peer.close(); process.terminate(); process.wait(timeout=3)
@@ -106,8 +106,7 @@ class AnalysisWorkerIPC(unittest.TestCase):
         if process.stderr: process.stderr.close()
 
     def receive(self, peer):
-        peer.settimeout(3)
-        return json.loads(peer.recv(8192).decode("utf-8"))
+        return json.loads(peer.receive(3).decode("utf-8"))
 
     def test_pinned_backend_receives_verified_pcm_and_publishes_every_lane_gate(self):
         backend = self.root / "backend.py"

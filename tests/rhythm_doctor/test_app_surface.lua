@@ -350,8 +350,8 @@ test("worker-host cleanup removes only its stale publication files", function()
   host:close()
   check(commands[1]:find("/data/rd/cancel", 1, true))
   equal(commands[2], "kill 42 2>/dev/null")
-  check(commands[3]:find("rm -f '/data/rd/socket' '/data/rd/pid' '/data/rd/error'", 1, true),
-        "cleanup must remove only its exact stale socket/PID/error publications")
+  check(commands[3]:find("rm -f '/data/rd/mailbox' '/data/rd/pid' '/data/rd/error'", 1, true),
+        "cleanup must remove only its exact stale mailbox/PID/error publications")
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end

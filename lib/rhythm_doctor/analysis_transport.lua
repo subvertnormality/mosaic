@@ -1,29 +1,16 @@
--- Nonblocking AF_UNIX boundary for the detached Rhythm Doctor analysis worker.
--- Large banks never travel in a socket packet: the worker atomically publishes
--- one owned JSON result file, then sends its small pathname/identity envelope.
-local ffi = require("ffi")
-local bit = require("bit")
+-- Nonblocking boundary to the detached Rhythm Doctor analysis worker, carried
+-- by a sequenced file mailbox because matron's Lua 5.3 has no FFI.  Large banks
+-- never travel in a message: the worker atomically publishes one owned JSON
+-- result file, then sends its small pathname/identity envelope.
 local function dependency(name, path)
   if type(include) == "function" then return include(path) end
   return require(name)
 end
 local json = dependency("helpers.json", "mosaic/lib/helpers/json")
 local Bank = dependency("rhythm_doctor.bank", "mosaic/lib/rhythm_doctor/bank")
+local Mailbox = dependency("rhythm_doctor.file_mailbox", "mosaic/lib/rhythm_doctor/file_mailbox")
 
-ffi.cdef[[
-typedef unsigned short sa_family_t;
-struct sockaddr { sa_family_t sa_family; char sa_data[14]; };
-struct sockaddr_un { sa_family_t sun_family; char sun_path[108]; };
-int socket(int domain, int type, int protocol);
-int connect(int fd, const struct sockaddr *addr, unsigned int addrlen);
-long send(int fd, const void *buf, unsigned long len, int flags);
-long recv(int fd, void *buf, unsigned long len, int flags);
-int close(int fd); int fcntl(int fd, int command, ...); char *strerror(int errnum);
-]]
-
-local C, Transport = ffi.C, {}; Transport.__index = Transport
-local AF_UNIX, SOCK_SEQPACKET, SOCK_NONBLOCK = 1, 5, 2048
-local F_SETFL, O_NONBLOCK, EAGAIN, EWOULDBLOCK, EINPROGRESS = 4, 2048, 11, 11, 115
+local Transport = {}; Transport.__index = Transport
 local MAX_PACKET, MAX_RESULT, MAX_QUEUE = 8192, 4 * 1024 * 1024, 8
 
 local function safe_id(value)
@@ -84,28 +71,22 @@ local function complete_lane_gates(value)
   return true
 end
 
-function Transport.new(socket_path, result_root, deps)
+function Transport.new(mailbox_root, result_root, deps)
   deps = deps or {}
-  if type(socket_path) ~= "string" or socket_path:sub(1, 1) ~= "/" or #socket_path > 107 or socket_path:find("[%z\r\n\t]") then
-    return nil, { code="INVALID_SOCKET_PATH" }
-  end
   if type(result_root) ~= "string" or result_root:sub(1, 1) ~= "/" or result_root:sub(-1) == "/" or result_root:find("[%z\r\n\t]") then
     return nil, { code="INVALID_RESULT_ROOT" }
   end
-  local fd = C.socket(AF_UNIX, bit.bor(SOCK_SEQPACKET, SOCK_NONBLOCK), 0)
-  if fd < 0 then return nil, { code="SOCKET_FAILED" } end
-  local address = ffi.new("struct sockaddr_un"); address.sun_family = AF_UNIX; ffi.copy(address.sun_path, socket_path, #socket_path)
-  if C.connect(fd, ffi.cast("const struct sockaddr *", address), ffi.sizeof(address)) ~= 0 and ffi.errno() ~= EINPROGRESS then
-    C.close(fd); return nil, { code="CONNECT_FAILED" }
-  end
-  C.fcntl(fd, F_SETFL, O_NONBLOCK)
-  return setmetatable({ fd=fd, queue={}, receive=ffi.new("char[?]", MAX_PACKET + 1), last_identity=nil,
+  local mailbox, problem = (deps.mailbox_factory or Mailbox.open)(mailbox_root, "c2w", "w2c",
+    { limit = MAX_PACKET, open_file = deps.open_file, rename = deps.rename, remove = deps.remove,
+      now = deps.now, claim = deps.claim })
+  if not mailbox then return nil, { code = problem } end
+  return setmetatable({ mailbox=mailbox, queue={}, last_identity=nil,
     result_root=result_root, read_file=deps.read_file or read_limited }, Transport)
 end
 
 function Transport:send(message)
   local id = identity(message)
-  if self.fd < 0 or not id or (message.command ~= "ANALYSE" and message.command ~= "CANCEL") then return false, "invalid message" end
+  if not self.mailbox or self.mailbox.closed or not id or (message.command ~= "ANALYSE" and message.command ~= "CANCEL") then return false, "invalid message" end
   if message.command == "ANALYSE" and (not safe_asset(message) or message.result_schema_version == nil or message.max_candidates == nil) then
     return false, "invalid analysis request"
   end
@@ -116,9 +97,8 @@ function Transport:send(message)
 end
 function Transport:_flush()
   while #self.queue > 0 do
-    local wire = self.queue[1]; local sent = C.send(self.fd, wire, #wire, 0)
-    if sent < 0 then local number=ffi.errno(); if number == EAGAIN or number == EWOULDBLOCK then return true end; return false, "send failed" end
-    if sent ~= #wire then return false, "partial seqpacket send" end
+    local sent, problem = self.mailbox:send(self.queue[1])
+    if not sent then return false, problem end
     table.remove(self.queue, 1)
   end
   return true
@@ -147,13 +127,19 @@ function Transport:_completed(message)
     analysis_revision=message.analysis_revision, command="ANALYSE", status="COMPLETED", wav_sha256=stored.wav_sha256,
     frames=stored.frames, sample_rate=stored.sample_rate, bank=bank }
 end
+-- A record already in the mailbox outranks a departed worker, so the envelope
+-- is drained before liveness is judged.
 function Transport:poll()
-  if self.fd < 0 then return nil end
+  if not self.mailbox or self.mailbox.closed then return nil end
+  self.mailbox:heartbeat()
   local flushed = self:_flush(); if not flushed then return failure(self.last_identity, "ANALYSIS_TRANSPORT_ERROR") end
-  local received = C.recv(self.fd, self.receive, MAX_PACKET + 1, 0)
-  if received < 0 then local number=ffi.errno(); return (number == EAGAIN or number == EWOULDBLOCK) and nil or failure(self.last_identity, "ANALYSIS_TRANSPORT_ERROR") end
-  if received == 0 or received > MAX_PACKET then return failure(self.last_identity, "ANALYSIS_PROTOCOL_ERROR") end
-  local ok, message = pcall(json.decode, ffi.string(self.receive, received))
+  local wire, problem = self.mailbox:receive()
+  if problem then return failure(self.last_identity, "ANALYSIS_PROTOCOL_ERROR") end
+  if not wire then
+    if not self.mailbox:peer_present() then return failure(self.last_identity, "ANALYSIS_TRANSPORT_ERROR") end
+    return nil
+  end
+  local ok, message = pcall(json.decode, wire)
   if not ok or type(message) ~= "table" or not same_identity(message, self.last_identity) then
     return failure(self.last_identity, "ANALYSIS_PROTOCOL_ERROR")
   end
@@ -162,5 +148,5 @@ function Transport:poll()
   if message.status == "CANCELLED" and message.command == "CANCEL" then return message end
   return failure(message, "ANALYSIS_PROTOCOL_ERROR")
 end
-function Transport:close() if self.fd >= 0 then C.close(self.fd); self.fd=-1 end end
+function Transport:close() if self.mailbox then self.mailbox:close() end end
 return Transport

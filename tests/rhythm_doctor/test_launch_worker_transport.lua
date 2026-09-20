@@ -1,12 +1,12 @@
 -- Physical-Norns launch_worker smoke transport. Characterisation outside README.
--- Uses the production LuaJIT AF_UNIX transport against one disposable worker.
-local socket_path, lib_root = assert(arg[1]), assert(arg[2])
+-- Uses the production file-mailbox transport against one disposable worker, on
+-- the Lua matron embeds: a norns has no luajit binary and no FFI.
+local mailbox_root, lib_root = assert(arg[1]), assert(arg[2])
 package.path = lib_root .. "/?.lua;" .. package.path
 
-local ffi = require("ffi")
-ffi.cdef[[int usleep(unsigned int useconds);]]
+local function sleep(seconds) os.execute("sleep " .. tostring(seconds)) end
 local Native = require("rhythm_doctor.native_transport")
-local transport, problem = Native.new(socket_path)
+local transport, problem = Native.new(mailbox_root)
 assert(transport, problem and problem.code or "native transport unavailable")
 
 local identity = {
@@ -35,7 +35,7 @@ local function wait_for(status)
       assert(message.status == status, (message.status or "nil") .. ":" .. (message.capture_error or ""))
       return message
     end
-    ffi.C.usleep(10000)
+    sleep(0.01)
   end
   error("timed out waiting for " .. status)
 end
@@ -45,7 +45,7 @@ wait_for("READY")
 send("START", { mode = "manual" })
 wait_for("STARTED")
 send("CANCEL")
-ffi.C.usleep(50000) -- CANCEL deliberately has no immediate RD1 reply.
+sleep(0.05) -- CANCEL deliberately has no immediate RD1 reply.
 send("RELEASE")
 wait_for("RELEASED")
-transport:close() -- peer close is the worker's self-cleanup trigger.
+transport:close() -- the client stops stamping liveness, which the worker acts on.

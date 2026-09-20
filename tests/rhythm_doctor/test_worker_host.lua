@@ -4,16 +4,16 @@ local calls, files = {}, {}
 local host = Host.new({ code_root='/code/mosaic', runtime_root='/data/rd runtime',
   execute=function(command) calls[#calls+1]=command; return true end,
   read_line=function(path) return files[path] end,
-  transport_factory=function(path) return {socket=path,send=function() end,poll=function() end} end })
+  transport_factory=function(path) return {mailbox=path,send=function() end,poll=function() end} end })
 local value, reason = host:open()
 assert(value == nil and reason == 'worker starting' and #calls == 1)
 assert(calls[1]:find("'/data/rd runtime'", 1, true), 'runtime path was not quoted')
 host:open(); assert(#calls == 1, 'launcher repeated while starting')
-files['/data/rd runtime/socket']='/tmp/owned/worker.sock'
+files['/data/rd runtime/mailbox']='/tmp/owned/rd-mailbox'
 files['/data/rd runtime/pid']='1234'
-local transport=assert(host:open()); assert(transport.socket=='/tmp/owned/worker.sock')
+local transport=assert(host:open()); assert(transport.mailbox=='/tmp/owned/rd-mailbox')
 host:close(); assert(#calls == 4 and calls[3]=='kill 1234 2>/dev/null')
-assert(calls[4]:find("rm -f '/data/rd runtime/socket'", 1, true))
+assert(calls[4]:find("rm -f '/data/rd runtime/mailbox'", 1, true))
 assert(select(2,host:open())=='worker host closed')
 assert(Host.shell_quote("a'b") == "'a'\\''b'")
 local AnalysisHost = require('rhythm_doctor.analysis_worker_host')
@@ -22,7 +22,7 @@ local analysis = AnalysisHost.new({ code_root='/code/mosaic', runtime_root='/dat
   backend_sha256=string.rep('a',64), drum_artifact_sha256=string.rep('b',64), bass_artifact_sha256=string.rep('c',64),
   execute=function(command) analysis_calls[#analysis_calls+1]=command; return true end,
   read_line=function(path) return analysis_files[path] end,
-  transport_factory=function(path) return {socket=path,send=function() end,poll=function() end} end })
+  transport_factory=function(path) return {mailbox=path,send=function() end,poll=function() end} end })
 assert(select(2,analysis:open())=='analysis worker starting')
 assert(analysis_calls[1]:find("--backend '/opt/rd-analysis'",1,true))
 assert(analysis_calls[1]:find("--backend-sha256 '"..string.rep('a',64).."'",1,true))
@@ -56,7 +56,7 @@ local dsp_calls = {}
 local dsp = AnalysisHost.new({ code_root='/code/mosaic', runtime_root='/data/analysis dsp',
   backend='/opt/rd-dsp', backend_sha256=string.rep('d',64), template_sha256=string.rep('e',64),
   execute=function(command) dsp_calls[#dsp_calls+1]=command; return true end, read_line=function() end,
-  transport_factory=function(path) return {socket=path,send=function() end,poll=function() end} end })
+  transport_factory=function(path) return {mailbox=path,send=function() end,poll=function() end} end })
 assert(select(2,dsp:open())=='analysis worker starting')
 assert(dsp_calls[1]:find("--template-sha256 '"..string.rep('e',64).."'",1,true))
 assert(not dsp_calls[1]:find("--drum-artifact-sha256",1,true), 'DSP launch must not claim model artifacts')

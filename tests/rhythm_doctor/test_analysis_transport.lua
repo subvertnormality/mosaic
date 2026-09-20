@@ -1,13 +1,5 @@
 package.path = './lib/?.lua;' .. package.path
 
--- The transport reaches the socket through LuaJIT's ffi. Its result validator
--- is pure Lua, so stub the C boundary to bring that validator under test on
--- the 5.3 interpreter the component runner uses.
-package.preload['ffi'] = function()
-  return { cdef=function() end, C=setmetatable({}, {__index=function() return function() return -1 end end}),
-    errno=function() return 11 end, string=function() return '' end, new=function() return {} end }
-end
-package.preload['bit'] = function() return { bor=function(a,b) return a+b end } end
 local Transport = require('rhythm_doctor.analysis_transport')
 local json = require('helpers.json')
 local Bank = require('rhythm_doctor.bank')
@@ -25,9 +17,9 @@ local function gates()
   return value
 end
 
--- Build a transport that reads one injected result file instead of a socket.
+-- Build a transport that reads one injected result file instead of the mailbox.
 local function transport_reading(stored)
-  local self = setmetatable({ fd = -1, queue = {}, result_root = '/results',
+  local self = setmetatable({ queue = {}, result_root = '/results',
     read_file = function() return json.encode(stored) end }, { __index = Transport })
   return self
 end
