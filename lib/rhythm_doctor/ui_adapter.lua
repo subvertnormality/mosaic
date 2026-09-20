@@ -453,7 +453,13 @@ function Adapter:record_pressed()
   local value
   if state == "EMPTY" or state == "FAILED" then
     value = self.runtime:start_capture(self.capture_mode)
+  elseif capture_states[state] and self:finish_eligible() == true then
+    -- Record started the take, so Record ends it. Crossing to K3 to stop
+    -- something the grid began is a split a player has to memorise.
+    value = self.runtime:finish(true)
   else
+    -- Too little audio to finish, so the gesture keeps its older meaning and
+    -- offers to abandon the take rather than doing nothing at all.
     value = self.runtime:record_action()
     if type(value) == "table" and type(value.operation) == "string" then self.modal = value end
   end
@@ -580,7 +586,7 @@ function Adapter:screen_model()
   elseif not self.worker_ready and (state == "EMPTY" or state == "FAILED") then model.status = "NOT READY"
   elseif capture_states[state] then
     model.finish_enabled = self:finish_eligible() == true
-    model.status = model.finish_enabled and "ENOUGH AUDIO / K3 FINISH" or "MORE AUDIO NEEDED"
+    model.status = model.finish_enabled and "ENOUGH / REC OR K3" or "MORE AUDIO NEEDED"
   elseif state == "FAILED" then model.status = Adapter.readable(machine.last_message)
   else model.status = state end
   return model

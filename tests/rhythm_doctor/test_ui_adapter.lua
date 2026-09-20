@@ -115,6 +115,37 @@ test("K3 Finish is available only after enough audio and only while capturing", 
   equal(c.calls[#c.calls][1], "finish"); check(c.calls[#c.calls][2])
 end)
 
+test("the Record key stops a capture that has enough audio, without reaching for K3", function()
+  -- Record starts the take, so Record ends it. Having to cross to K3 to stop
+  -- something the grid started is the kind of split a player has to memorise.
+  local c = context(); c.runtime.machine.state = "RECORDING"
+  c.adapter:set_capture_progress({ enough_audio = true, acquired_beats = 16, tempo = 120, source = "manual" })
+  equal(c.adapter:grid_key(1, 2, 1).code, "OK")
+  equal(c.calls[#c.calls][1], "finish", "Record must finish the capture itself")
+  check(c.calls[#c.calls][2], "and finish it as a complete take")
+  for _, call in ipairs(c.calls) do
+    check(call[1] ~= "record_action", "no modal: the player asked to stop, not to discard")
+  end
+  equal(c.adapter:grid_key(1, 2, 0).code, "RELEASE_CONSUMED", "the release is still consumed")
+end)
+
+test("the Record key still offers to discard a take that has too little audio", function()
+  -- Finishing early is not possible, so the gesture keeps its old meaning
+  -- rather than silently doing nothing: abandoning a bad take stays reachable.
+  local c = context(); c.runtime.machine.state = "RECORDING"; c.runtime.next_operation = "cancel_capture"
+  local value = c.adapter:grid_key(1, 2, 1)
+  equal(value.operation, "cancel_capture", "Record offers to abandon the take")
+  equal(c.calls[#c.calls][1], "record_action")
+end)
+
+test("the screen says the Record key can finish, because that is now true", function()
+  local c = context(); c.runtime.machine.state = "RECORDING"
+  c.adapter:set_capture_progress({ enough_audio = true, acquired_beats = 16, tempo = 120, source = "manual" })
+  local model = c.adapter:screen_model()
+  check(model.status:find("REC") ~= nil, "the status must name the Record key: " .. tostring(model.status))
+  check(#model.status <= 19, "the status row shares the screen with the doctor: " .. tostring(model.status))
+end)
+
 test("lane keys select BD, SD, CYM and BASS, ignore their releases, and leave the retired column inert", function()
   local c = context()
   for index, lane in ipairs({ "BD", "SD", "CYM", "BASS" }) do

@@ -493,10 +493,11 @@ cancels an unfinished capture or analysis and discards a paint preview. It does
 not start or stop the sequencer for you.
 
 On an empty bank, press grid column 1, row 2 to begin Record; the press starts
-the action and its release is consumed. During capture, K3 can Finish only when
-the screen says `ENOUGH AUDIO / K3 FINISH`; otherwise it says `MORE AUDIO
-NEEDED`. Pressing Record on an occupied bank asks whether to clear its capture
-bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that
+the action and its release is consumed. Press Record again to stop, or press K3:
+either finishes the capture once the screen says `ENOUGH / REC OR K3`. Until it
+does, the screen says `MORE AUDIO NEEDED`, and pressing Record then asks whether
+to abandon the take instead. Pressing Record on an occupied bank asks whether to
+clear its capture bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that
 were already painted. In a ready bank, use E2 to choose Window bar, Window
 step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
 edit the chosen item. Window bar moves by 16 steps and Window step by one; both
