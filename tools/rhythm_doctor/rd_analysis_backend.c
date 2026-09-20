@@ -588,11 +588,16 @@ int main(int argc, char **argv) {
     fprintf(stderr, "usage: %s --request FILE --result FILE [--source FILE] [--templates FILE]\n", argv[0]);
     return 2;
   }
-  char template_default[4096];
-  if (!template_path) {
-    snprintf(template_default, sizeof template_default, "%s", "data/nmf_drum_templates.bin");
-    template_path = template_default;
-  }
+  /* The worker invokes a backend with only --request and --result, so the
+   * launcher bakes the data paths in when it compiles this. */
+#ifdef RD_TEMPLATE_PATH
+  if (!template_path) template_path = RD_TEMPLATE_PATH;
+#else
+  if (!template_path) template_path = "data/nmf_drum_templates.bin";
+#endif
+#ifdef RD_SOURCE_PATH
+  if (!source_path) source_path = RD_SOURCE_PATH;
+#endif
 
   FILE *rf = fopen(request_path, "rb");
   if (!rf) { fprintf(stderr, "cannot read request\n"); return 2; }

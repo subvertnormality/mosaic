@@ -517,15 +517,18 @@ policy; Add and Replace are selectable on the Rhythm Doctor screen. Painting
 does not alter the captured bank.
 
 **Availability:** Mosaic starts a local capture helper when this mode opens,
-but this build does not configure an analysis executable. After a capture
-completes, analysis therefore fails closed with `ANALYSIS_BACKEND_UNAVAILABLE`
-instead of producing a ready bank. There is no user-facing backend
-configuration in Mosaic. A delivery profile must point the analysis worker at a
-local executable that accepts the worker request/result protocol and returns
-all four lanes before capture-to-paint can be used. Mosaic ships one such
-backend, a model-free classical-DSP detector that needs no downloads; a profile
-must still supply its path and digests explicitly. No detector quality,
-transcription accuracy, or timing performance is claimed here.
+and analyses captures with a model-free detector it builds from source the
+first time this mode is used. Nothing is downloaded, no Python packages are
+needed, and there is no configuration to do: the build takes about half a
+minute on a Norns and is then reused. Analysis of a 45-second capture takes
+roughly half a minute on the device.
+
+If no C compiler is available, or the build fails, analysis fails closed with
+`ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery profile can
+still point the analysis worker at its own executable that accepts the worker
+request/result protocol and returns all four lanes, in which case that one is
+used instead. No detector quality, transcription accuracy, or timing
+performance is claimed here.
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.
 

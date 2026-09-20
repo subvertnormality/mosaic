@@ -876,7 +876,7 @@
     <div class="command-text"><strong>Rhythm Doctor setup and paint:</strong> Before capture, E2 selects Auto/Manual tempo, manual BPM, or Stereo/L/R and E3 edits; K2 discards the setup draft and K3 keeps it. With a ready bank, E2/E3 select/edit bar or step window, lane sensitivity, paint policy, and alignment. Paint (16,8) previews then commits; Cancel (14,8) discards; Shift/Reset/Shift are 10/11/12,8 during preview.</div>
   </div>
   <div class="command">
-    <div class="command-text"><strong>Rhythm Doctor availability:</strong> this build has no configured analysis backend. Capture completion therefore reports <code>ANALYSIS_BACKEND_UNAVAILABLE</code>; the input choice is not audio routing. No analysis quality or performance is claimed.</div>
+    <div class="command-text"><strong>Rhythm Doctor availability:</strong> analysis uses a model-free detector Mosaic builds from source on first use, with no downloads or configuration. Without a C compiler it reports <code>ANALYSIS_BACKEND_UNAVAILABLE</code>; the input choice is not audio routing. No analysis quality or performance is claimed.</div>
   </div>
   <div class="command">
    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg" width="80" />

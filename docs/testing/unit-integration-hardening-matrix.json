@@ -28,9 +28,9 @@
   },
   "base_revision": "7141f50",
   "manual": "README.md",
-  "manual_sha256": "90f199b214e057cc25cc945a5111e109836b756aa6d69932593626db48bd239a",
+  "manual_sha256": "1857a5ff329cdb305faa4dcf052298d1c63d7c8decd623beb02bd9da6345a28c",
   "inventory": "tests/behaviour/manual-inventory.json",
-  "inventory_sha256": "ff394463f7e51e00a4a053e7065ada1af50d269ecb7b57632a4ff56d3c7e6039",
+  "inventory_sha256": "c9a2ecef296c32b4698d44b15462f587f942b5ce1b78d69f400c837a6e70fe13",
   "counts": {
     "requirements": 147,
     "production_lua_modules": 116,

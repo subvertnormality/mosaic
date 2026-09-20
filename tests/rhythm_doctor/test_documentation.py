@@ -25,7 +25,8 @@ class RhythmDoctorDocumentationTests(unittest.TestCase):
         cheat_sheet = (ROOT / "cheat_sheet.html").read_text(encoding="utf-8")
         self.assertIn("ANALYSIS_BACKEND_UNAVAILABLE", manual)
         self.assertIn("ANALYSIS_BACKEND_UNAVAILABLE", cheat_sheet)
-        self.assertIn("this build does not configure an analysis executable", manual)
+        self.assertIn("builds from source the", manual)
+        self.assertIn("no Python packages are", manual)
         self.assertIn("not audio routing", cheat_sheet)
 
     def test_detector_document_names_the_pinned_pretrained_worker_contract(self):

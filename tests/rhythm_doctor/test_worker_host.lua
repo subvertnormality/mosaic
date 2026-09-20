@@ -28,6 +28,22 @@ assert(analysis_calls[1]:find("--backend '/opt/rd-analysis'",1,true))
 assert(analysis_calls[1]:find("--backend-sha256 '"..string.rep('a',64).."'",1,true))
 assert(analysis_calls[1]:find("--drum-artifact-sha256 '"..string.rep('b',64).."'",1,true))
 assert(analysis_calls[1]:find("--bass-artifact-sha256 '"..string.rep('c',64).."'",1,true))
+-- With nothing configured, the host must launch the native backend Mosaic
+-- ships. Before this the worker started with no backend at all and every
+-- capture failed ANALYSIS_BACKEND_UNAVAILABLE, so the feature did not work on
+-- a stock install.
+local default_calls = {}
+local defaulted = AnalysisHost.new({ code_root='/code/mosaic', runtime_root='/data/analysis default',
+  execute=function(command) default_calls[#default_calls+1]=command; return true end,
+  read_line=function() end,
+  transport_factory=function() end })
+assert(select(2,defaulted:open())=='analysis worker starting')
+assert(default_calls[1]:find("--native-source '/code/mosaic/tools/rhythm_doctor/rd_analysis_backend.c'",1,true),
+  'an unconfigured host must build the native backend')
+assert(default_calls[1]:find("--templates '/code/mosaic/tools/rhythm_doctor/data/nmf_drum_templates.bin'",1,true),
+  'the native backend needs its template table')
+assert(not default_calls[1]:find("--backend ",1,true), 'no external backend is configured by default')
+
 local incomplete = AnalysisHost.new({ code_root='/code/mosaic', runtime_root='/data/analysis incomplete', backend='/opt/rd-analysis',
   execute=function() error('partial configuration must not launch') end, read_line=function() end,
   transport_factory=function() error('partial configuration must not connect') end })

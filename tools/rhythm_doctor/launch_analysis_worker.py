@@ -33,6 +33,46 @@ def sha256(value: str | None) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(character in "0123456789abcdefABCDEF" for character in value)
 
 
+
+def build_native(runtime: Path, source: Path, templates: Path) -> Path:
+    """Compile the native analysis backend, reusing an identical earlier build.
+
+    The data paths are baked in because the worker invokes a backend with only
+    --request and --result. The backend re-hashes both at run time, so the
+    identity it reports is its real source and template digest, not a claim the
+    launcher makes on its behalf.
+    """
+    source, templates = source.resolve(), templates.resolve()
+    if not source.is_file() or not templates.is_file():
+        raise RuntimeError("native backend source or templates missing")
+    output = runtime / "rd_analysis_backend"
+    stamp = runtime / "rd_analysis_backend.identity"
+    identity = "\t".join([sha256_file(source), sha256_file(templates), str(templates)])
+    if output.is_file() and os.access(output, os.X_OK) and stamp.is_file() \
+            and stamp.read_text().strip() == identity:
+        return output
+    candidate = output.with_name(output.name + ".new")
+    candidate.unlink(missing_ok=True)
+    common = ["gcc", "-std=c11", "-O3", "-ffast-math", "-funroll-loops",
+              "-DRD_TEMPLATE_PATH=\"" + str(templates) + "\"",
+              "-DRD_SOURCE_PATH=\"" + str(source) + "\"",
+              str(source), "-o", str(candidate), "-lm"]
+    # NEON and OpenMP are worth roughly three times on the device, but neither
+    # is required; fall back rather than fail to build.
+    for extra in (["-mfpu=neon-vfpv4", "-fopenmp"], ["-fopenmp"], []):
+        done = subprocess.run(common[:1] + extra + common[1:], stdin=subprocess.DEVNULL,
+                              stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+                              text=True, timeout=300)
+        if done.returncode == 0:
+            break
+    else:
+        raise RuntimeError(done.stderr.strip().splitlines()[-1] if done.stderr else "compile failed")
+    os.chmod(candidate, 0o700)
+    os.replace(candidate, output)
+    atomic_text(stamp, identity + "\n")
+    return output
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--runtime", type=Path, required=True)
@@ -41,13 +81,32 @@ def main() -> int:
     parser.add_argument("--drum-artifact-sha256")
     parser.add_argument("--bass-artifact-sha256")
     parser.add_argument("--template-sha256")
+    parser.add_argument("--native-source", type=Path,
+                        help="C analysis backend to build and use when no --backend is given")
+    parser.add_argument("--templates", type=Path,
+                        help="template table the native backend reads")
     args = parser.parse_args()
+    native_built = None
     args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
     os.chmod(args.runtime, 0o700)
     for name in ("socket", "error", "pid"):
         (args.runtime / name).unlink(missing_ok=True)
     if (args.runtime / "cancel").exists():
         return 0
+    # With no backend configured, build the native one that ships with Mosaic.
+    # This is what lets a stock install analyse a capture: the alternative is a
+    # Python backend that needs numpy, which a Norns does not have.
+    if args.backend is None and args.native_source and args.templates:
+        try:
+            built = build_native(args.runtime, args.native_source, args.templates)
+        except Exception as error:
+            atomic_text(args.runtime / "error",
+                        "native analysis backend build failed: " + str(error) + "\n")
+            return 1
+        args.backend = built
+        native_built = built.resolve()
+        args.backend_sha256 = sha256_file(args.native_source)
+        args.template_sha256 = sha256_file(args.templates)
     # Either a model-free DSP identity (source + templates) or a pretrained
     # identity (source + model artifacts). Exactly one, completely.
     supplied = (args.backend, args.backend_sha256, args.drum_artifact_sha256,
@@ -62,7 +121,8 @@ def main() -> int:
     backend = args.backend.resolve() if args.backend else None
     if backend:
         try:
-            backend_valid = backend.is_file() and os.access(backend, os.X_OK) and sha256_file(backend).lower() == args.backend_sha256.lower()
+            backend_valid = backend.is_file() and os.access(backend, os.X_OK) and (
+                native_built == backend or sha256_file(backend).lower() == args.backend_sha256.lower())
         except OSError:
             backend_valid = False
         if not backend_valid:

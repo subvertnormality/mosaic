@@ -45,6 +45,12 @@ function Host:open()
     local command="mkdir -p "..shell_quote(self.runtime_root).." && rm -f "..shell_quote(self.runtime_root.."/cancel")..
       " && python3 "..shell_quote(self.code_root.."/tools/rhythm_doctor/launch_analysis_worker.py")..
       " --runtime "..shell_quote(self.runtime_root)
+    if not self.backend then
+      -- Nothing configured: build and use the native backend Mosaic ships, so
+      -- a stock install can analyse a capture without any Python packages.
+      command=command.." --native-source "..shell_quote(self.code_root.."/tools/rhythm_doctor/rd_analysis_backend.c")..
+        " --templates "..shell_quote(self.code_root.."/tools/rhythm_doctor/data/nmf_drum_templates.bin")
+    end
     if self.backend then
       command=command.." --backend "..shell_quote(self.backend).." --backend-sha256 "..shell_quote(self.backend_sha256)
       if self.template_sha256 then
