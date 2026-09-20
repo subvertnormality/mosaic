@@ -358,13 +358,18 @@ function Runtime:serialize_project(data, project_path)
     data.rhythm_doctor = nil
     return result("OK")
   end
+  -- The written bank belongs to the file it is written to, so the snapshot is
+  -- rebound to that destination. The live session is not: saving writes a
+  -- file, it does not replace the project being worked on. Re-identifying the
+  -- machine here also reset the paint journal, so every autosave threw away
+  -- undo history -- and it happened before the write, so a failed write left
+  -- the session re-identified and the history gone anyway.
   local identity = type(project_path) == "string" and project_identity(project_path) or self.machine.project_id
   local bank = copy(self.machine.bank)
   bank.project_id = identity
-  if not Persistence.encode(bank) then return result("INVALID_BANK") end
-  self.machine.project_id, self.machine.bank = identity, bank
-  if self.paint_transactions then self.paint_transactions:project_loaded(identity) end
-  data.rhythm_doctor = assert(Persistence.encode(bank))
+  local encoded = Persistence.encode(bank)
+  if not encoded then return result("INVALID_BANK") end
+  data.rhythm_doctor = encoded
   return result("OK")
 end
 

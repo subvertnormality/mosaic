@@ -41,3 +41,35 @@ data.rhythm_doctor = {version=1,bank={unsafe=true}}
 check(runtime:serialize_project(data, save_path).ok, "active job does not serialize a partial bank")
 check(data.rhythm_doctor == nil, "active job clears any stale project envelope")
 print("rhythm_doctor runtime persistence: " .. checks .. " checks")
+
+-- Saving writes a file; it does not replace the project you are working on.
+-- serialize_project used to re-identify the live machine and reset the paint
+-- journal before the write was even attempted, so every autosave discarded
+-- undo history and a failed write left the session re-identified anyway.
+do
+  local path = "data/session.ptn"
+  local live = new_runtime(path)
+  local identity = Runtime.project_identity(path)
+  live.machine.project_id, live.machine.generation, live.machine.analysis_revision = identity, 2, 1
+  live.machine.state = "READY"
+  live.machine.bank = assert(Bank.build({project_id=identity, generation=2, analysis_revision=1,
+    sample_rate=100, capture_start_sample=0, capture_end_sample=1000, origin_sample=0, bpm=120,
+    candidates={{lane="BD", sample_index=0, velocity=76, confidence=1}}}))
+  local reloads = 0
+  live.paint_transactions = { project_loaded = function() reloads = reloads + 1; return { ok = true } end }
+  local live_bank = live.machine.bank
+
+  local elsewhere = {song_patterns={}}
+  check(live:serialize_project(elsewhere, "data/copy.ptn").ok, "a bank serializes to another destination")
+  equal(elsewhere.rhythm_doctor.bank.project_id, Runtime.project_identity("data/copy.ptn"),
+    "the written bank belongs to the file it was written to")
+  equal(live.machine.project_id, identity, "the live session keeps its own identity")
+  equal(live.machine.bank, live_bank, "and its own bank")
+  equal(reloads, 0, "saving is not a project replacement, so paint history survives")
+
+  local same = {song_patterns={}}
+  check(live:serialize_project(same, path).ok, "and saving over itself works too")
+  equal(reloads, 0, "an ordinary autosave still keeps the history")
+end
+
+print("runtime persistence: saving does not replace the live session")
