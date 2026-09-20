@@ -269,7 +269,9 @@ class Worker:
         self.bass_artifact_sha256 = bass_artifact_sha256
         self.template_sha256 = template_sha256
         self.results = runtime / "results"; self.results.mkdir(mode=0o700, exist_ok=True)
-        self.mailbox = Mailbox(runtime / "mailbox", "w2c", "c2w", 8192)
+        # Not "mailbox": the launcher publishes this root under that name as a
+        # file, and a directory of the same name collides with it.
+        self.mailbox = Mailbox(runtime / "ipc", "w2c", "c2w", 8192)
         self.request: dict[str, Any] | None = None
         self.process: subprocess.Popen[bytes] | None = None; self.request_path: Path | None = None; self.result_path: Path | None = None
 
