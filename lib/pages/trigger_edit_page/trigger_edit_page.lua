@@ -544,11 +544,16 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_left_button:is_this(x, y) then
+        -- Rhythm Doctor browses the recording with these, so they act
+        -- whenever algorithm 5 is selected. The paint-preview state gate
+        -- below belongs to shifting a previewed pattern: leaving it in
+        -- place made phrase navigation reachable only while previewing,
+        -- which is precisely when the player is no longer browsing.
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          rhythm_doctor_page_window(-1)
+          return
+        end
         if (trigger_edit_page_left_button:get_state() == 2) then
-          if trigger_edit_page_algorithm_fader:get_value() == 5 then
-            rhythm_doctor_page_window(-1)
-            return
-          end
           shift = shift - 1
 
           load_paint_pattern()
@@ -564,11 +569,16 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_centre_button:is_this(x, y) then
+        -- Rhythm Doctor browses the recording with these, so they act
+        -- whenever algorithm 5 is selected. The paint-preview state gate
+        -- below belongs to shifting a previewed pattern: leaving it in
+        -- place made phrase navigation reachable only while previewing,
+        -- which is precisely when the player is no longer browsing.
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          rhythm_doctor_jump_to_phrase_start()
+          return
+        end
         if (trigger_edit_page_centre_button:get_state() == 2) then
-          if trigger_edit_page_algorithm_fader:get_value() == 5 then
-            rhythm_doctor_jump_to_phrase_start()
-            return
-          end
           shift = 0
           load_paint_pattern()
           trigger_edit_page_centre_button:set_state(2)
@@ -583,11 +593,16 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_right_button:is_this(x, y) then
+        -- Rhythm Doctor browses the recording with these, so they act
+        -- whenever algorithm 5 is selected. The paint-preview state gate
+        -- below belongs to shifting a previewed pattern: leaving it in
+        -- place made phrase navigation reachable only while previewing,
+        -- which is precisely when the player is no longer browsing.
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          rhythm_doctor_page_window(1)
+          return
+        end
         if (trigger_edit_page_right_button:get_state() == 2) then
-          if trigger_edit_page_algorithm_fader:get_value() == 5 then
-            rhythm_doctor_page_window(1)
-            return
-          end
           shift = shift + 1
 
           trigger_edit_page_right_button:set_state(2)

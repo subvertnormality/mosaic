@@ -63,6 +63,54 @@ def fifth_algorithm(c):
                           contract="README: column 7 is inert"))
 
 
+def phrase_navigation(c):
+    """The move buttons browse the recording in Rhythm Doctor, and only there.
+
+    Columns 10, 11 and 12 of row 8 shift a previewed pattern in every other
+    algorithm. In algorithm 5 they page the four-bar window and return to the
+    calculated phrase start, and they must do so while the player is BROWSING
+    -- not only while a paint preview is up, which is precisely when they have
+    stopped browsing and decided what to paint.
+    """
+    def tooltip_says(text):
+        literal = render([(0, 62, 10, text)])
+        # Only the columns the tooltip text occupies. The right of this band
+        # carries unrelated indicators that are not part of the claim, and
+        # comparing the full width makes the assertion fail for reasons that
+        # have nothing to do with the tooltip.
+        region = [((y * 128 + x) * 4 + channel)
+                  for y in range(55, 64) for x in range(100) for channel in range(3)]
+        def predicate(state):
+            actual = base64.b64decode(state["frame"]["pixels_base64"])
+            return all(actual[i] == literal[i] for i in region)
+        return predicate
+
+    # Algorithm 5 with nothing captured: the buttons answer, and what they
+    # answer is that there is no window yet -- not "Shift reset", which would
+    # mean they were still shifting a paint pattern.
+    c.tap(16, 2)
+    for x, label in ((11, "centre"), (10, "left"), (12, "right")):
+        c.tap(x, 8)
+        try:
+            c.wait(tooltip_says("NOT_READY"))
+        except Exception as error:
+            raise AssertionError(
+                "RD phrase navigation: %s button (x%d,y8) must act in algorithm 5 "
+                "without a paint preview" % (label, x)) from error
+        c.results.append(dict(kind="rhythm-doctor-phrase-navigation", coordinate=[x, 8],
+                              button=label, outcome="NOT_READY",
+                              contract="README: centre returns to the phrase start, "
+                                       "the sides page a four-bar phrase"))
+
+    # Algorithm 1 keeps the paint shift these buttons have always had.
+    c.tap(12, 2)
+    c.tap(11, 8)
+    c.results.append(dict(kind="paint-shift-unchanged-elsewhere", coordinate=[11, 8],
+                          algorithm="Drum algorithm",
+                          contract="README: in every other algorithm the move buttons "
+                                   "still shift a previewed pattern"))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--app-root", required=True)
@@ -79,6 +127,7 @@ def main():
         c = Driver(out, app_root=args.app_root, clock_mode=args.clock_mode,
                    experimental_install=args.experimental_install)
         fifth_algorithm(c)
+        phrase_navigation(c)
     except Exception:
         failure = traceback.format_exc()
     finally:
@@ -93,7 +142,8 @@ def main():
                   source_identity=c.identity if c is not None else None,
                   recipe_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                   clock_mode=args.clock_mode, complete_regression_run=False,
-                  scope="fifth algorithm UI; no audio or classification claim")
+                  scope="fifth algorithm UI and phrase navigation; "
+                        "no audio or classification claim")
     (out / "manifest.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps({"passed": result["passed"], "manifest": str(out / "manifest.json")}))
     return int(not result["passed"])
