@@ -61,3 +61,11 @@ function test_harmony_inspection_replaces_a_steps_old_event_without_accepting_it
   luaunit.assert_equals(selected.planned.output,64)
   luaunit.assert_nil(selected.emitted)
 end
+
+function test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event()
+  writer.reset();local song={}
+  writer.plan(song,1,{step=2,source=1,output=62,status="ok"})
+  luaunit.assert_equals(reader.snapshot(song,1,1),{})
+  luaunit.assert_equals(reader.snapshot(song,1,2).planned.output,62)
+  luaunit.assert_equals(reader.snapshot(song,1).planned.output,62)
+end

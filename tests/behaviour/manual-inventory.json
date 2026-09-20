@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "c19488442d108d2b2c05f726bbd314d568a7c40e5c22e2555db4f2c2da6fc687",
+ "manual_sha256": "b7909529a13f2e5b0f1e7a447a4b7eb9a9ac0f9bf107e1fd5de80fd2e29fdfea",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1522,11 +1522,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "c19488442d108d2b2c05f726bbd314d568a7c40e5c22e2555db4f2c2da6fc687"
+   "sha256": "b7909529a13f2e5b0f1e7a447a4b7eb9a9ac0f9bf107e1fd5de80fd2e29fdfea"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "5081e78c1b1580f990536ca101471d188f2912e9786dae2b4c7b24de994c0152"
+   "sha256": "2a1426db7d573971ad804addef3f77d5443cc1894519b06b25260d47010d8038"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -7454,7 +7454,7 @@
    "domain": "Physical Masks/Harmony workflow covers a two-voice progression with literal pitches over complete loops; unit/integration coverage adds five voices, Pattern, Ensemble, bass policies, failure, frozen arp and lifecycle boundaries.",
    "oracles": ["Public norns page", "literal ordered MIDI chord voices", "complete repeated loops", "balanced releases"],
    "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1253, "end_line": 1293, "text": "Harmony mode and solver contract"}
+   "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Harmony mode and solver contract"}
   },
   {
    "id": "HARMONY-PATTERN",
@@ -7465,7 +7465,7 @@
    "domain": "Physical Harmony and Tone Map controls map one authored tone and prove mapped placement plus unchanged Raw tones; unit and integration coverage adds binding identity, alias conflict and fallback.",
    "oracles": ["Public norns page", "literal MIDI pitches", "complete repeated loops", "balanced releases"],
    "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1253, "end_line": 1293, "text": "Pattern Harmony Tone Map contract"}
+   "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Pattern Harmony Tone Map contract"}
   },
   {
    "id": "HARMONY-ENSEMBLE",
@@ -7473,10 +7473,10 @@
    "statement": "Ensemble assigns stable group roles to explicit channels while retaining every member's independent rhythm, velocity and route.",
    "cases": ["M-HARMONY-ENSEMBLE-001"],
    "status": "partial-domain-coverage",
-   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Unit/integration coverage adds frame revision, callback order, rests and failure.",
-   "oracles": ["literal per-channel MIDI pitches", "independent rhythmic intervals", "source velocities", "balanced releases"],
+   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. A conflicting local scale lock proves ordinary member pitch plus visible LOCAL SCALE BYPASS. Unit/integration coverage adds frame revision, callback order, rests and failure.",
+   "oracles": ["literal per-channel MIDI pitches", "independent rhythmic intervals", "source velocities", "visible local-scale-bypass status", "balanced releases"],
    "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1253, "end_line": 1293, "text": "Ensemble groups and independent-channel contract"}
+   "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Ensemble groups and independent-channel contract"}
   },
   {
    "id": "HARMONY-PERSISTENCE",
@@ -7487,7 +7487,7 @@
    "domain": "A UI-created Pattern mapping is autosaved, loaded by a fresh native process and replayed with identical anchored output; integration tests cover all song slots, malformed rejection and transient omission.",
    "oracles": ["native autosave files", "fresh-process literal MIDI", "balanced releases"],
    "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1253, "end_line": 1293, "text": "Harmony persistence and cold-entry contract"}
+   "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Harmony persistence and cold-entry contract"}
   },
   {
    "id": "HARMONY-FAILURE",
@@ -7495,10 +7495,10 @@
    "statement": "An infeasible optional voicing emits no mapped note by default, displays NO VOICING, retains prior note ownership, and uses legacy pitch only when explicitly selected.",
    "cases": ["M-HARMONY-FAILURE-001"],
    "status": "partial-domain-coverage",
-   "domain": "Physical Register, Tone Map and Failure controls produce a range-infeasible mapped tone, visible failure, strict silence and explicit Legacy recovery; solver tests cover the remaining failure reasons.",
-   "oracles": ["native NO VOICING framebuffer", "literal strict-silence MIDI", "literal Legacy fallback MIDI", "balanced releases"],
+   "domain": "Physical Register, Tone Map and Failure controls produce a range-infeasible mapped tone, a reason-specific NO VOICING status, an unrecorded-step NO EVENT status, strict silence, and reason-specific explicit Legacy recovery; solver tests cover the remaining failure reasons.",
+   "oracles": ["native reason-specific NO VOICING framebuffer", "native NO EVENT framebuffer", "literal strict-silence MIDI", "literal Legacy fallback MIDI", "balanced releases"],
    "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1253, "end_line": 1293, "text": "Harmony no-solution and explicit-fallback contract"}
+   "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Harmony no-solution and explicit-fallback contract"}
   },
   {
    "id": "HARMONY-HELD-PRECEDENCE",
@@ -7509,7 +7509,7 @@
    "domain": "A dirty Harmony draft is interrupted by a physical held-step MIDI edit; the last editable Trig Locks screen, exact stored/replayed note and unchanged Off output prove cancellation, workspace restoration and single routing.",
    "oracles": ["native Trig Locks framebuffer", "literal MIDI phrase", "balanced releases"],
    "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1253, "end_line": 1293, "text": "Held-grid precedence contract"}
+   "source": {"path": "README.md", "line": 1253, "end_line": 1298, "text": "Held-grid precedence contract"}
   }
  ],
  "statement_mappings": [

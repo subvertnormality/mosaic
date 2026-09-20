@@ -130,20 +130,54 @@ function test_harmony_editor_routes_h01_children_and_tone_map_open_is_read_only(
 end
 
 function test_harmony_result_prefers_active_event_bypass_without_a_solver_result()
-  local song=setup();harmony_inspection.plan(song,1,{status="ok",bypass="note_mask",output=65})
+  local song=setup();harmony_inspection.plan(song,1,{step=1,status="ok",bypass="note_mask",output=65})
   local value=feature_editor.new("harmony");value:enter();open_label(value,"Result")
   luaunit.assert_equals(select_label(value,"Status").get(),"BYPASS note_mask")
 end
 
 function test_harmony_failure_details_use_active_event_not_unapplied_draft()
   local song=setup();local value=feature_editor.new("harmony");value:enter()
-  harmony_inspection.plan(song,1,{status="group_missing",fallback="legacy",output=nil})
+  harmony_inspection.plan(song,1,{step=1,status="group_missing",reason="group_missing",fallback="legacy",output=nil})
   value.draft.fallback="silence"
   open_label(value,"Result")
-  luaunit.assert_equals(select_label(value,"Status").get(),"NO VOICING")
+  luaunit.assert_equals(select_label(value,"Status").get(),"LEGACY group_missing")
   open_label(value,"Failure details")
   luaunit.assert_equals(select_label(value,"Reason").get(),"group_missing")
   luaunit.assert_equals(select_label(value,"Fallback").get(),"legacy")
+end
+
+
+function test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state()
+  local song=setup();local value=feature_editor.new("harmony");value:enter()
+  harmony_inspection.plan(song,1,{step=2,status="ok",output=62,role_pitches={v1=62}})
+  open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"NO EVENT")
+  luaunit.assert_nil(select_label(value,"CH1 planned").get())
+  luaunit.assert_error(function()select_label(value,"Failure details")end)
+end
+
+function test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason()
+  local song=setup();local value=feature_editor.new("harmony");value:enter()
+  harmony_inspection.plan(song,1,{step=1,status="local_scale_bypass",bypass="local_scale_bypass",output=60})
+  open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"LOCAL SCALE BYPASS")
+  value:encoder_one()
+  harmony_inspection.plan(song,1,{step=1,status="no_solution",reason="range",fallback="silence"})
+  open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"NO VOICING range")
+  open_label(value,"Failure details")
+  luaunit.assert_equals(select_label(value,"Reason").get(),"range")
+end
+
+function test_harmony_group_result_surfaces_a_members_local_scale_bypass()
+  local song=setup();local group=harmony_config.four_part_smooth(1,{1,2,3,4});group.enabled=true
+  song.voicing={schema_version=1,groups={[1]=group}}
+  song.channels[1].voicing=harmony_config.new_channel("ensemble");song.channels[1].voicing.group_id=1
+  harmony_inspection.plan(song,1,{step=1,status="ok",output=48})
+  harmony_inspection.plan(song,2,{step=1,status="local_scale_bypass",reason="local_scale_bypass",
+    bypass="local_scale_bypass",output=64})
+  local value=feature_editor.new("harmony");value:enter();open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"LOCAL SCALE BYPASS")
 end
 
 function test_harmony_result_step_selector_reads_one_coherent_event_chain()

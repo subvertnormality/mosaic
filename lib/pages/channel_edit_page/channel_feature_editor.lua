@@ -329,42 +329,43 @@ function editor.new(kind)
           mark_dirty();back()
         end})}
     elseif self.screen=="H05"then
-      local snapshot=harmony_state.snapshot(self.song)
       local active_song=harmony_config_state.effective_song(self.song,self.song.voicing or{schema_version=1,groups={}})
       local selected_group=self.context_group and active_song.groups[self.selected_group]
-      local result;if self.context_group then result=(snapshot.groups[self.selected_group]or{}).prepared
-      else result=(snapshot.channels[self.channel_number]or{}).prepared end
       local traces={};if selected_group then for _,member in ipairs(selected_group.members or{})do traces[#traces+1]={channel=member.channel,role=member.role,trace=harmony_inspection.snapshot(self.song,member.channel,self.selected_step)}end
       else traces[1]={channel=self.channel_number,trace=harmony_inspection.snapshot(self.song,self.channel_number,self.selected_step)}end
-      local active_plan;for _,entry in ipairs(traces)do if entry.trace.planned then active_plan=entry.trace.planned break end end
+      local active_plan;for _,entry in ipairs(traces)do local plan=entry.trace.planned;if plan then
+        active_plan=active_plan or plan
+        if plan.status=="local_scale_bypass"or plan.bypass or(plan.status~="ok"and plan.status~="off")then active_plan=plan;break end
+      end end
       local fields={editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{min=1,max=64}),readonly("Status",function()
-        for _,entry in ipairs(traces)do if entry.trace.planned and entry.trace.planned.bypass then return"BYPASS "..tostring(entry.trace.planned.bypass)end end
-        for _,entry in ipairs(traces)do local status=entry.trace.planned and entry.trace.planned.status
-          if status and status~="ok"and status~="off"then return"NO VOICING"end end
-        if not result then return"NO RESULT"end
-        return result.status=="ok"and"OK"or"NO VOICING"
+        if not active_plan then return"NO EVENT"end
+        if active_plan.status=="local_scale_bypass"then return"LOCAL SCALE BYPASS"end
+        if active_plan.fallback=="legacy"and active_plan.status~="ok"and active_plan.status~="off"then
+          return"LEGACY "..tostring(active_plan.reason or active_plan.status)end
+        if active_plan.bypass then return"BYPASS "..tostring(active_plan.bypass)end
+        if active_plan.status~="ok"and active_plan.status~="off"then
+          return"NO VOICING "..tostring(active_plan.reason or active_plan.status)end
+        return active_plan.status=="ok"and"OK"or"OFF"
       end)}
-      if result and result.role_pitches then for role,pitch in pairs(result.role_pitches)do local p=pitch;fields[#fields+1]=readonly(role,function()return p end)end end
       for _,entry in ipairs(traces)do local item=entry
         fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." planned",function()return item.trace.planned and item.trace.planned.output end)
         fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." emitted",function()return item.trace.emitted and item.trace.emitted.pitch end)
       end
-      if(result and result.status~="ok")or(active_plan and active_plan.status~="ok")then
+      if active_plan and active_plan.status~="ok"and not active_plan.bypass then
         fields[#fields+1]=action("Failure details","H06")
       end;return fields
     elseif self.screen=="H06"then
-      local snapshot=harmony_state.snapshot(self.song);local active_song=harmony_config_state.effective_song(self.song,self.song.voicing or{schema_version=1,groups={}})
+      local active_song=harmony_config_state.effective_song(self.song,self.song.voicing or{schema_version=1,groups={}})
       local selected_group=self.context_group and active_song.groups[self.selected_group]
-      local result;if self.context_group then result=(snapshot.groups[self.selected_group]or{}).prepared
-      else result=(snapshot.channels[self.channel_number]or{}).prepared end
-      local trace=not self.context_group and harmony_inspection.snapshot(self.song,self.channel_number,self.selected_step)or nil
-      local effective=not self.context_group and harmony_config_state.effective_channel(self.song,self.channel_number,
-        self.channel.voicing or harmony_config.new_channel())or nil
+      local traces={};if selected_group then for _,member in ipairs(selected_group.members or{})do traces[#traces+1]=harmony_inspection.snapshot(self.song,member.channel,self.selected_step)end
+      else traces[1]=harmony_inspection.snapshot(self.song,self.channel_number,self.selected_step)end
+      local active_plan;for _,trace in ipairs(traces)do local plan=trace.planned;if plan then
+        active_plan=active_plan or plan
+        if plan.status=="local_scale_bypass"or plan.bypass or(plan.status~="ok"and plan.status~="off")then active_plan=plan;break end
+      end end
       return{readonly("Reason",function()return
-          (trace and trace.planned and(trace.planned.reason or trace.planned.status))or
-          (result and result.reason)or"NO VOICING"end),
-        readonly("Fallback",function()return(trace and trace.planned and trace.planned.fallback)or
-          (selected_group and selected_group.fallback)or(effective and effective.fallback)or"silence"end),action("Settings","H02")}
+          (active_plan and(active_plan.reason or active_plan.status))or"NO EVENT"end),
+        readonly("Fallback",function()return(active_plan and active_plan.fallback)or"NONE"end),action("Settings","H02")}
     end;return{}
   end
 

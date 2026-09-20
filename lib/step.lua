@@ -1000,6 +1000,8 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
   local consumed = false
   return {
     pitches=pitches or {}, frame=frame, status=frame and frame.status or "no_solution",
+    reason=frame and(frame.reason or frame.status)or nil,
+    role_pitches=frame and frame.role_pitches or nil,
     fallback=active_fallback,
     consume=consume and function()
       if not consumed and frame and frame.status == "ok" then consumed=true consume() end
@@ -1080,6 +1082,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     harmony=planned_root,
     output=planned_root,
     status=harmony and harmony.status or "off",
+    reason=harmony and(harmony.reason or harmony.status)or"off",
+    role_pitches=harmony and harmony.role_pitches or nil,
     structural_status=unprocessed_note_container.structural_status,
     -- A failed solve is the feature's strict-silence result, not a bypass.
     -- Reserve BYPASS for frames that deliberately use the ordinary pitch path.

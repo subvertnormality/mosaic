@@ -173,6 +173,8 @@ def pattern_harmony_persistence_workflow(c):
 
 
 def ensemble_polyrhythm_workflow(c):
+    import base64
+    from frame_oracle import render
     c.configure()
     # Author independent sparse patterns, then route and assign one to each member.
     rhythms = {2: (1, 3), 3: (2, 4), 4: (4,)}
@@ -243,6 +245,29 @@ def ensemble_polyrhythm_workflow(c):
     c.results.append(dict(kind='ensemble-polyrhythm', role_pitches={k:v[0] for k,v in expected.items()},
                           times_by_channel=traces, passed=True))
 
+    # Give member 2 a conflicting local E-major lock through the public Scale
+    # page. Its own written line must play unchanged by Ensemble and H05 must
+    # name the bypass instead of presenting it as a solved/group event.
+    c.tap(4, 8); c.tap(3, 3); c.enc(2, -1); c.enc(3, 4); c.key(3)
+    c.tap(1, 3); c.tap(3, 8); c.tap(2, 1)
+    c.hold_tap((1, 4), (3, 3)); c.elapse(.1)
+    marker = c.snapshot()['midi_count']; c.tap(1, 8)
+    def local_member(state):
+        return [m for m in state['midi'] if m['index'] > marker and
+                m['bytes'][0] == 145 and m['bytes'][2] > 0]
+    state = c.wait(lambda value: len(local_member(value)) >= 5, timeout=8)
+    local_pitches = [m['bytes'][1] for m in local_member(state)]
+    assert local_pitches == [64, 64, 64, 64, 64], local_pitches
+    c.tap(1, 8); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
+    c.screen_header('Ch. 2 Harmony', selected=8)
+    c.enc(2, 9); c.key(3)
+    bypass = render([(2, 36, 4, 'Status LOCAL SCALE BYPASS')])
+    indexes = [(y*128+x)*4+k for y in range(29, 38) for x in range(2, 128) for k in range(3)]
+    c.wait(lambda value: all(base64.b64decode(value['frame']['pixels_base64'])[i] == bypass[i]
+                             for i in indexes))
+    c.results.append(dict(kind='local-scale-bypass', channel=2,
+                          pitches=local_pitches, status='LOCAL SCALE BYPASS', passed=True))
+
 
 def no_voicing_fallback_workflow(c):
     import base64
@@ -263,14 +288,14 @@ def no_voicing_fallback_workflow(c):
     # made a documentation frame depend on which real-time step crossed capture.
     c.playback(silent_mapped, cycles=2, timeout=6)
     c.enc(1, 1); c.enc(2, 9); c.key(3)  # Result
-    expected = render([(2, 36, 4, 'Status NO VOICING')])
+    expected = render([(2, 36, 4, 'Status NO VOICING RANGE:V1')])
     indexes = [(y*128+x)*4+k for y in range(29, 38) for x in range(2, 108) for k in range(3)]
     c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == expected[i]
                              for i in indexes))
     c.results.append(dict(kind='no-voicing-visible', reason='range', passed=True))
     # Playback is stopped, so both the semantic status and last-emitted rows are
     # stable in real and controlled time.
-    documentation_frame(c, 'c2610b1c809c22a78a7101010d91fb439dd6b63c440baf6312b2b820f0379b2a',
+    documentation_frame(c, 'eddf4b563aa465680053b34cd8be8ebed77c803570c462d416ec99bfde9bc2b4',
                         'images/harmony-no-voicing.png', stable_rows=55)
     c.enc(3, 1)  # H05 Step 2: select one coherent event chain.
     selected = render([(2, 27, 15, 'Step 2'), (2, 45, 4, 'CH1 planned 62')])
@@ -278,12 +303,24 @@ def no_voicing_fallback_workflow(c):
                         [(y*128+x)*4+k for y in range(37, 47) for x in range(2, 92) for k in range(3)])
     c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == selected[i]
                              for i in selected_indexes))
-    c.enc(3, -1)
+    c.enc(3, 3)
+    empty = render([(2, 27, 15, 'Step 5'), (2, 36, 4, 'Status NO EVENT'),
+                    (2, 45, 4, 'CH1 planned NONE')])
+    empty_indexes = [(y*128+x)*4+k for y in range(19, 47) for x in range(2, 108) for k in range(3)]
+    c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == empty[i]
+                             for i in empty_indexes))
+    c.results.append(dict(kind='unrecorded-step-inspection', step=5, status='NO EVENT', passed=True))
+    c.enc(3, -4)
     c.enc(1, 1); c.enc(2, 8); c.key(3)   # Entry / Failure
     c.enc(2, 3); c.enc(3, 1); c.key(3)   # Fallback Legacy
     legacy = [(1, [144, note, velocity]) for note, velocity in
               ((60, 127), (62, 117), (64, 107), (65, 97))]
     c.playback(legacy, cycles=2, timeout=6)
+    c.enc(1, 1); c.enc(2, 9); c.key(3)
+    legacy_status = render([(2, 36, 4, 'Status LEGACY RANGE')])
+    legacy_indexes = [(y*128+x)*4+k for y in range(29, 38) for x in range(2, 108) for k in range(3)]
+    c.wait(lambda state: all(base64.b64decode(state['frame']['pixels_base64'])[i] == legacy_status[i]
+                             for i in legacy_indexes))
     c.results.append(dict(kind='explicit-legacy-fallback', passed=True))
 
 

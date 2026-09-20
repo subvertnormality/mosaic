@@ -39,7 +39,7 @@ function inspection.emitted(song,number,pitch,source,context)
 end
 function inspection.snapshot(song,number,step)
   local state=channel(song,number)
-  local id=step~=nil and state.by_step[step]or state.latest_id
+  local id;if step~=nil then id=state.by_step[step]else id=state.latest_id end
   return copy(id and state.events[id]or{})
 end
 function inspection.reset_song(song)registry.songs[song]=nil end

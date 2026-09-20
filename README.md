@@ -1295,7 +1295,12 @@ and additions therefore appear as active steps there. Final Harmony pitches are
 shown on Note Dashboard/context inspection as planned, scheduled and last-emitted
 values. H05 Result uses its Step row to select one coherent event chain; on Note
 Dashboard, holding a grid step temporarily inspects that step instead of combining
-it with a later delayed event. The projection never writes back into a shared pattern. Copy/save stores
+it with a later delayed event. A step with no recorded event says `NO EVENT` and
+shows no planned or emitted pitch; it never borrows the latest event from another
+step. Result status names local-scale bypasses, explicit Legacy fallback and the
+specific no-voicing reason. For an Ensemble group, any member bypass or failure is
+surfaced even when another member has a valid voicing. The projection never writes
+back into a shared pattern. Copy/save stores
 versioned configuration, not running solver or phrase history. Missing optional
 configuration loads as Off; unknown schema versions reject the project before it
 replaces the active project.

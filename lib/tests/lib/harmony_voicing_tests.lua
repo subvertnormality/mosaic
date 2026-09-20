@@ -228,7 +228,7 @@ local function independent_two_voice(frame)
 end
 
 function test_harmony_voicing_matches_independent_small_bruteforce_oracle()
-  local pitch_classes = {0, 4, 7}
+  local pitch_classes = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
   for _, first in ipairs(pitch_classes) do
     for _, second in ipairs(pitch_classes) do
       if first ~= second then

@@ -218,6 +218,27 @@ function test_harmony_playback_swung_gate_before_first_voiced_arp_slot_does_not_
   luaunit.assert_equals(runtime.consumed_count,0)
 end
 
+function test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset()
+  local song=setup();source(song,1,{[1]=0},{1})
+  local channel=song.channels[1];channel.chord_one_mask=2
+  channel.voicing=harmony_config.new_channel("revoice")
+  channel.trig_lock_params[1]={id="chord_arp",param_id="chord_arp_1"}
+  channel.trig_lock_params[2]={id="chord_strum_pattern",param_id="chord_strum_pattern_1"}
+  program.add_step_param_trig_lock(1,1,4)
+  program.add_step_param_trig_lock(1,2,2)
+  song.patterns[1].lengths[1]=2
+  assign(song,1,1);step.handle(1,1)
+  local runtime=harmony_runtime_state.snapshot(song).channels[1]
+  luaunit.assert_equals(#midi_note_on_events,0)
+  luaunit.assert_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,0)
+  progress(4)
+  runtime=harmony_runtime_state.snapshot(song).channels[1]
+  luaunit.assert_true(#midi_note_on_events>0)
+  luaunit.assert_not_nil(runtime.consumed)
+  luaunit.assert_equals(runtime.consumed_count,1)
+end
+
 function test_harmony_inspection_keeps_authored_source_distinct_from_note_mask_merge_pitch()
   local song=setup();source(song,1,{[1]=0},{1});source(song,2,{[2]=3},{2})
   local channel=song.channels[1]
