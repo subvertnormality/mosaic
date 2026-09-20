@@ -30,9 +30,9 @@
   "manual": "README.md",
   "manual_sha256": "90f199b214e057cc25cc945a5111e109836b756aa6d69932593626db48bd239a",
   "inventory": "tests/behaviour/manual-inventory.json",
-  "inventory_sha256": "2d5f50cd27981ca471334c17bbe9d23f2acb28e5105a1334fd57d0cd1d24f165",
+  "inventory_sha256": "ff394463f7e51e00a4a053e7065ada1af50d269ecb7b57632a4ff56d3c7e6039",
   "counts": {
-    "requirements": 140,
+    "requirements": 147,
     "production_lua_modules": 116,
     "unit_integration_files": 79,
     "domains": 16
@@ -2371,21 +2371,13 @@
         "The behaviour recipes run the four-lane surface, the reload-to-READY path and the refused correction, and are executed manually rather than by CI."
       ],
       "requirement_ids": [
-        "CH-DASHBOARD",
-        "CHORD-ACCEL",
-        "CHORD-ARP",
-        "CHORD-MUTE-ROOT",
-        "CHORD-SHAPE",
-        "CHORD-SPREAD",
-        "CHORD-STRUM",
-        "CHORD-VELOCITY",
-        "MASK-CHORD",
-        "MEMORY-RECORD",
-        "OPT-KEYBOARD-DEGREE",
-        "OPT-KEYBOARD-ROTATION",
-        "OPT-KEYBOARD-TRANSPOSE",
-        "OPT-KEYBOARD-WHITE",
-        "REC-KEYBOARD-STEP"
+        "RD-LANES",
+        "RD-CAPTURE-FINISH",
+        "RD-ALIGNMENT",
+        "RD-ALIGNMENT-REFUSED",
+        "RD-BANK-PERSIST",
+        "RD-DETECTOR-IDENTITY",
+        "RD-BACKEND-UNAVAILABLE"
       ],
       "production_modules": [
         "lib/rhythm_doctor/analysis_controller.lua",

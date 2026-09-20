@@ -1517,6 +1517,25 @@
     "REC-ARM"
    ],
    "status": "unreviewed"
+  },
+  {
+   "id": "MAN-115",
+   "title": "Rhythm Doctor",
+   "level": 5,
+   "start_line": 469,
+   "end_line": 565,
+   "text_sha256": "8f85de52089e92cd43756cf6bef93a6ca5b2c1840e2aa192cb7e78e71684228c",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "RD-LANES",
+    "RD-CAPTURE-FINISH",
+    "RD-ALIGNMENT",
+    "RD-ALIGNMENT-REFUSED",
+    "RD-BANK-PERSIST",
+    "RD-DETECTOR-IDENTITY",
+    "RD-BACKEND-UNAVAILABLE"
+   ],
+   "status": "unreviewed"
   }
  ],
  "manual_sources": [
@@ -7422,6 +7441,104 @@
     "text": "The initial stage of song creation with _Mosaic_ involves setting up a few basic voices. These preliminary sound designs may evolve, but it's useful to have a basic foundation for developing the rhythmic, harmonic, and melodic aspects of your track.\n\nStart by selecting the device for each element of your composition, whether it be an internal Norns player, an external drum machine or synthesizer, or components of a modular patch. To do this, assign each device to a Mosaic [channel](#channel-editor) as detailed in the [device](#devices) section. Organizing different instruments can be helpful; for instance, group drums on channels 1-6, harmonic and textural elements on channels 7-10, melodic elements on channels 11-14, and reserve channels 15 and 16 for modulation. Adapt these assignments to suit your specific musical style and needs.\n\nWith your devices assigned, you're ready to begin the rhythm and harmony design process.\n\n### Rhythm Section Design\n\nThe rhythm of your track is crafted using the [pattern editor](#pattern-editor), accessible by pressing the third button in the global menu cluster located at the bottom left of your grid. A pattern in Mosaic is defined as a sequence composed of 64 steps with trigs, notes, velocities, and duration data. Patterns are the building blocks of your rhythm section.\n\nThe pattern editor provides multiple tools to create these building blocks. You can input trigs manually in an XOX style, or choose from predefined banks featuring bass, snare, and hi-hat patterns. For more complex needs, explore using Euclidean patterns or patterns from Noise Engineering's Numeric Repetitor. To add unique rhythmic variations, apply a tresillo modifier, which introduces a 3-3-2 repeating pattern. These rhythm types can be blended by selecting and \"painting\" them onto the grid. It's possible to paint more than one pattern at a time, and then edit further to taste XOX style. To learn more about this process, refer to the [Adding Trigs](#adding-trigs) section.\n\nAfter establishing a pattern of trigs, assign relative [notes](#adding-notes) and [velocity](#adding-velocity) data. These patterns will later be merged and remixed to form your rhythm and harmony sections.\n\n### Harmony Design\n\n_Mosaic_'s harmony tools enable you to compose your song's chordal progressions. These progressions can dynamically modulate your patterns, allowing for the creation of complex harmonic sequences with minimal music theory knowledge.\n\nHarmonic progressions can be applied globally \u2014 modulating all notes across all channels to the same key, degree, and scale rotation \u2014 or on a per-channel basis, affecting only the notes within that channel. This decoupling of patterns and notes from the active scale enables dynamic and experimental tonal modulations. For example, setting your global scale to change in a polyrhythmic pattern relative to your channel's note data can create captivating musical textures.\n\nEach project supports 16 scale slots. Each slot includes a root note, a scale type (e.g., Dorian, Major), a degree, transposition, and a scale rotation. The [Scale Editor](#scale-editor) is where you craft the scales that will form your chord progressions, and you can sequence these using [Scale Locks](#scale-locks) either globally from the scale editor, or per channel using the channel editor.\n\n### Sequence Composition\n\nAt this point you will have a set of sound sources attached to a number of channels, a set of patterns with relative notes, trigs, velocities, and lengths, and a set of scales that work well together - possibly assigned as either a global scale or a set of trig locks on the global scale editor. Now it's time to compose your first sequence. The pattern tools offer the ability to craft intricate rhythmic and harmonic sections. However, the true heart of Mosaic is the [Channel Editor](##channel-editor). The channel editor is used to lay out your harmonic and rhythm sections by [adding patterns to channels](#adding-patterns-to-channels).\n\n#### Using Merge Modes\n\nWhen assigning multiple patterns to a single channel, you might notice that overlapping steps in different patterns deactivate. This occurs because the default \"skip\" merge mode is active. [Merge Modes](#merge-mode) control the behavior of these overlaps, allowing patterns to be combined in different combinations across multiple channels whilst interacting in harmonically meaningful ways. Experiment with different merge modes to explore various musical interactions.\n\n#### Melody Composition\n\nThe [Channel Editor](##channel-editor) doesn't merely allow you to add, merge, and apply scales to patterns; it enables you to enhance them with melodies and other elements to further enrich your music. In fact, you could compose entire songs using just the channel editor if you wanted to, thanks to [Masks](#masks). Masks provide a direct method to input triggers, notes, velocities, and chords right into the channel editor grid, giving you precise control over your musical creations. You can overwrite pattern values or create entirely new steps.\n\nUse the live recording mode to play your melodies directly over your rhythm and harmony patterns. Then record in automation directly by altering trig params whilst recording.\n\n### Modulation, Movement, and Interest\n\nEven a song crafted with compelling chord progressions, engaging rhythms, and striking melodies can sometimes sound flat when produced on electronic devices. The secret to invigorating such tracks lies in the addition of dynamics, movement, and interest, which is often achieved through thoughtful and abundant modulation. _Mosaic_ provides robust tools for modulation, including [Trig Parameters](#trig-parameters) and [Trig Locks](#trig-locks). \"Trig lock\" is a term borrowed from Elektron, referring to the ability to fix a parameter to a specific value at a certain step in the sequence. This feature allows you to control any MIDI device parameter, modulation parameter, the octave of a note, and even the scale to which the note is quantised, at each step, offering precise manipulation over the quality and dynamics of your music. \n\n### Song Composition\n\nAt this point, your sequence is likely \"full to the brim,\" containing all the elements of your song in its most complex form. For those familiar with Elektron devices, this stage can feel like a precarious juncture, where it's tempting to fall into a cycle of making minor adjustments to the same pattern repeatedly. _Mosaic_ offers a solution with its [Song Editor](#song-editor), designed to help you break free from this procrastination loop.\n\nTo access the song editor, press the last key in the global menu's Grid button cluster. You'll be greeted by a grid where the first button is dimly lit, indicating the sequence you are currently working on. The song editor allows you to take this sequence, copy it, and creatively manipulate the copy: you can mute channels, modify scale locks, alter pattern combinations and merge modes, adjust masks, and more. You can then chain multiple sequences together. This flexibility enables you to develop your composition from the base sequence upwards. As you become accustomed to this workflow, you'll find that you can construct an entire song from a single sequence, streamlining your creative process.",
     "sha256": "d8551a2f3b2ecf6648f014725ba8fdc68cee3618a83b1ed0a75cd8237f2b6fc8"
    }
+  },
+  {
+   "id": "RD-LANES",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "The capture bank has four lanes selected on grid row 2 columns 3-6 - BD, SD, CYM (hi-hats and cymbals together) and BASS (pitched low attacks) - with column 2 reserved and column 7 inert; BASS paints trig timing and velocity only.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Covered by component tests (bank schema, ui adapter, app surface) and by the RD-UI-001/RD-UI-002 behaviour recipes, which assert the lane LEDs and that the retired column 7 stays dark. Those recipes are not registered in cases.py, so no case id is listed here.",
+   "oracles": [
+    "grid LED levels for row 2 columns 2-7",
+    "native screen header and status line"
+   ]
+  },
+  {
+   "id": "RD-CAPTURE-FINISH",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "Record starts on a grid column 1 row 2 press with its release consumed, and during capture K3 can Finish only while the screen says ENOUGH AUDIO / K3 FINISH, otherwise MORE AUDIO NEEDED.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Finish eligibility measures audio acquired from the recorder's STARTED report and requires the span a bank needs at the slowest tempo the detector can report, so the advertised state always builds. Covered by test_runtime and test_ui_adapter.",
+   "oracles": [
+    "native screen status line",
+    "state machine transition results"
+   ]
+  },
+  {
+   "id": "RD-ALIGNMENT",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "A ready bank can be corrected through the alignment controls, and the confirmed tempo and origin are used for the reanalysis rather than the detector's automatic estimate.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "The confirmed alignment travels with the analysis request and the shipped backend honours it, reporting a manual tempo mode. It is cleared when a new capture starts or another project is loaded so it cannot affect later work.",
+   "oracles": [
+    "analysis request payload",
+    "resulting bank bpm, origin and tempo mode"
+   ]
+  },
+  {
+   "id": "RD-ALIGNMENT-REFUSED",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "A correction that cannot be applied is refused visibly and keeps its draft, leaving the ready bank usable.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "After a reload or Save As the retained audio is gone, so the correction is refused with CAPTURE AUDIO UNAVAILABLE drawn in place of the alignment label until the draft is edited or cancelled. Covered by the RD-UI-003 recipe in both timing lanes, with a preserved failing baseline; not registered in cases.py.",
+   "oracles": [
+    "framebuffer text on the status line",
+    "retained alignment draft fields"
+   ]
+  },
+  {
+   "id": "RD-BANK-PERSIST",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "A completed bank is saved with the project and restored ready on reload, without requiring an analysis backend.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Only a fully validated completed bank crosses the project boundary; jobs, leases and paint history do not. Covered by test_runtime_persistence, test_bank_persistence and the RD-UI-003 recipe, which reloads a seeded project to READY.",
+   "oracles": [
+    "restored bank identity and timeline",
+    "native screen status line"
+   ]
+  },
+  {
+   "id": "RD-DETECTOR-IDENTITY",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "An analysis result is accepted only when it carries exactly one complete detector identity: the backend source with its template table, or the backend source with both model artifact digests.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Enforced at the worker and again at the Lua transport before a bank is built; a partial or mixed identity fails closed. Covered by test_analysis_transport and test_analysis_worker_ipc.",
+   "oracles": [
+    "analysis result envelope validation",
+    "worker launch configuration errors"
+   ]
+  },
+  {
+   "id": "RD-BACKEND-UNAVAILABLE",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "With no analysis executable configured, a completed capture fails closed with ANALYSIS_BACKEND_UNAVAILABLE instead of producing a ready bank, and Mosaic offers no user-facing backend configuration.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "This is the shipped default. A delivery profile must supply the executable path and digests explicitly; the model-free backend Mosaic ships is not configured automatically.",
+   "oracles": [
+    "analysis failure code",
+    "manual and cheat sheet availability statements"
+   ]
   }
  ],
  "statement_mappings": [
