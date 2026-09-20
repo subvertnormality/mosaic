@@ -140,28 +140,86 @@ def setup_pattern_harmony(c):
 
 
 def pattern_harmony_workflow(c):
-    setup_pattern_harmony(c)
-    documentation_frame(c, '86194708548c7adb76d64ed25e3e59b8ef093e938b3a636da7b1b3c818c29836',
-                        'images/harmony-tone-map.png')
+    # Author the user's explicit broken-chord key case A-B-C-B through the
+    # existing Pattern Note faders.  These are shared source cells; Harmony is
+    # a channel projection and must never flatten its output back into them.
+    c.configure(); c.tap(5, 8); c.tap(5, 8)
+    for x, y in ((2, 5), (3, 3), (4, 5)): c.tap(x, y)
+    c.tap(3, 8)
+
+    # Existing global scale progression: C major for steps 1/2, then C minor
+    # from step 3.  No Mosaic chord masks participate in this fixture.
+    c.tap(4, 8)
+    c.action(type='key', n=1, state=1)
+    try: c.elapse(.3); c.tap(2, 3)
+    finally: c.action(type='key', n=1, state=0)
+    c.enc(3, 2); c.key(3)  # Slot 2 Major -> Minor, root remains C.
+    c.hold_tap((1, 4), (4, 4))
+    c.hold_tap((3, 4), (2, 3))
+    c.tap(3, 8)
+
+    # Pattern Harmony maps A/B/C identities to Bass/Inner1/Top.  Repeated B
+    # occurrences therefore share one role and one placement per frame.
+    c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
+    c.enc(3, 2); c.enc(2, 3); c.key(3)
+    c.enc(3, 1)             # Tone 0 -> Bass.
+    c.enc(2, 1); c.enc(3, 2)  # Tone 2 -> Inner1.
+    c.enc(2, 1); c.enc(3, 5)  # Tone 4 -> Top.
+    c.key(3)
+    # Constrain Bass C below MIDI 56 and Inner1 E/Eb below MIDI 61.  These
+    # public Register edits force audible placement while Top G can retain its
+    # literal common tone at the C-major -> C-minor boundary.
+    c.enc(1, -1); c.enc(2, 4); c.key(3)
+    c.enc(2, 2); c.enc(3, -5); c.key(3)   # v1 High 60 -> 55.
+    c.enc(1, -1); c.enc(2, 4); c.key(3)
+    c.enc(3, 1); c.enc(2, 2); c.enc(3, -12); c.key(3)  # v2 High 72 -> 60.
+    c.enc(1, -1); c.screen_header('Ch. 1 Harmony')
     mapped = [(1, [144, note, velocity]) for note, velocity in
-              ((60, 127), (86, 117), (88, 107), (89, 97))]
+              ((48, 127), (52, 117), (67, 107), (51, 97))]
     c.playback(mapped, cycles=2, timeout=6)
+
+    # The final played positions span both native seven-row note banks.  The
+    # lower bank shows Bass A and both B occurrences; the centred bank shows C.
+    c.tap(5, 8); c.tap(5, 8)
+    c.action(type='grid', x=16, y=8, state=1)
+    try: c.elapse(1.1)
+    finally: c.action(type='grid', x=16, y=8, state=0)
+    c.elapse(.1)
+    c.led_values([(1, 7), (2, 5), (4, 5)], [12, 12, 12])
+    c.tap(15, 8)
+    c.led_values([(3, 3)], [12])
+
+    # Editing through the visible projection still owns source step 2.  Change
+    # B from value 2 to 1, restore it to 2, and prove the exact ordinary source
+    # sequence below; no Harmony output is ever written into the pattern.
+    c.tap(2, 6); c.tap(2, 5)
+    c.tap(3, 8); c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
     # Turning Harmony Off through the same public Mode field must reveal the
-    # untouched ordinary octave/scale result, including the formerly mapped
-    # first tone. Re-enabling Pattern must recover the saved mapping.
+    # untouched ordinary scale result immediately in both MIDI and grid.
     c.enc(3, -2); c.key(3)
     ordinary = [(1, [144, note, velocity]) for note, velocity in
-                ((84, 127), (86, 117), (88, 107), (89, 97))]
+                ((60, 127), (64, 117), (67, 107), (63, 97))]
     c.playback(ordinary, cycles=2, timeout=6)
+    c.tap(5, 8); c.tap(5, 8)
+    c.led_values([(1, 7), (2, 5), (3, 3), (4, 5)], [12, 12, 12, 12])
+    c.tap(3, 8); c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
     c.enc(3, 2); c.key(3)
     c.playback(mapped, cycles=2, timeout=6)
-    c.results.append(dict(kind='pattern-harmony-physical-workflow', mapped=mapped,
-                          ordinary_after_disable=ordinary, recovered=True, passed=True))
+    c.results.append(dict(kind='pattern-harmony-broken-chord-progression',
+                          source_values=[0, 2, 4, 2], scale_slots=[1, 1, 2, 2],
+                          chord_masks_enabled=False, mapped=mapped,
+                          ordinary_after_disable=ordinary,
+                          projected_grid_values=[-7, -5, 4, -5],
+                          ordinary_grid_values=[0, 2, 4, 2],
+                          repeated_identity='inner1', source_edit_restored=True,
+                          recovered=True, passed=True))
 
 
 def pattern_harmony_persistence_workflow(c):
     from driver import Driver, digest
     setup_pattern_harmony(c)
+    documentation_frame(c, '86194708548c7adb76d64ed25e3e59b8ef093e938b3a636da7b1b3c818c29836',
+                        'images/harmony-tone-map.png')
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (86, 117), (88, 107), (89, 97))]
     c.playback(expected, cycles=2, timeout=6)

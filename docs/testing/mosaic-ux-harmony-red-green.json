@@ -58,17 +58,32 @@
           "H05 rendered the generic BYPASS local_octave label instead of LOCAL OCTAVE BYPASS"
         ]
       }
+    },
+    {
+      "claim": "A played Pattern Harmony result must move each representable Note-grid LED to the final effective position while Off recovers the ordinary position and source editing remains source-owned.",
+      "baseline_revision": "1a1570b4205031b37b72426ade5f52b62ece6a5b",
+      "regression": "M-HARMONY-PATTERN-001 public A-B-C-B broken-chord workflow",
+      "real_time": {
+        "manifest": "/tmp/mosaic-harmony-grid-red-real-4/7620946703a942ec9f7ae8bdeec2032a/manifest.json",
+        "sha256": "a312933d6d1fd03896fe0e6c841816154925fbfad31e979d4f3d9dd4aceab7a2",
+        "expected_failure": "Required mapped lower-bank LED positions never appeared"
+      },
+      "controlled_time": {
+        "manifest": "/tmp/mosaic-harmony-grid-red-controlled/4ef1d3762be94f9e852ba7a843453ddd/manifest.json",
+        "sha256": "cc0515036baca654dcab26e790bc0745b8380ac509afbf0899f5969dc25083b7",
+        "expected_failure": "The identical mapped lower-bank LED oracle never appeared"
+      }
     }
   ],
   "green": {
     "revision": "48fc157b72bb8a1684e92b3b95b6094fdbe2c069",
     "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason test_harmony_group_result_surfaces_a_members_local_scale_bypass test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset test_harmony_result_names_local_octave_bypass_instead_of_no_voicing test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
     "result": {
-      "passed": 10,
+      "passed": 17,
       "failed": 0
     },
     "full_lua_suite": {
-      "passed": 1860,
+      "passed": 1866,
       "failed": 0,
       "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua"
     },
@@ -79,7 +94,9 @@
     "public_behaviour": {
       "failure_workflow": "Both real-time and controlled-experimental lanes passed reason-specific NO VOICING, NO EVENT selected-step inspection, strict silence and reason-specific Legacy fallback.",
       "ensemble_workflow": "Both real-time and controlled-experimental lanes passed literal local-scale-bypass MIDI plus visible LOCAL SCALE BYPASS group status.",
-      "qualification": "The final exact-commit 16-run acceptance campaign is recorded separately in mosaic-ux-harmony-acceptance.json."
+      "grid_projection_real_time": {"manifest_sha256": "e640668253dc70f4bacf59ec2839d467172e6a0ca22bc8a2fda6a9762c20c1c6", "passed": true},
+      "grid_projection_controlled_time": {"manifest_sha256": "8da904334d7b5ecff74bed56113342f06178c8c83dc4696cc7bcddecf66e0e64", "passed": true},
+      "qualification": "These dirty-candidate projection greens precede the final exact-commit campaign, which is recorded separately in mosaic-ux-harmony-acceptance.json."
     }
   }
 }

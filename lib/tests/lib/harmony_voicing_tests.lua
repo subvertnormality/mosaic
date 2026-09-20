@@ -274,7 +274,7 @@ local function independent_assignment_oracle(frame)
       centre=centre+math.abs(pitches[index]-(role_value.centre or pitches[index]))
     end
     local spacing=0
-    if #pitches>1 then spacing=spacing+math.max(0,5-(pitches[2]-pitches[1]))end
+    if frame.has_bass~=false and #pitches>1 then spacing=spacing+math.max(0,5-(pitches[2]-pitches[1]))end
     for index=2,#pitches-1 do spacing=spacing+math.max(0,pitches[index+1]-pitches[index]-12)end
     local values={0,common_moved,movement,max_upper,excess,centre,spacing}
     for _,pitch in ipairs(pitches)do values[#values+1]=pitch end
@@ -291,16 +291,68 @@ local function independent_assignment_oracle(frame)
       return
     end
     local role_value=frame.roles[index]
-    for _,id in ipairs(ids)do if not used[id]then
-      local pitch=role_value.min+((by_id[id].pc-role_value.min)%12)
-      if index==1 or pitch>pitches[index-1]then
-        used[id]=true;order[index]=id;pitches[index]=pitch
-        visit(index+1,used,pitches)
-        used[id]=nil;order[index]=nil;pitches[index]=nil
+    local options=role_value.material_id and{role_value.material_id}or ids
+    for _,id in ipairs(options)do if by_id[id]and not used[id]then
+      local first=role_value.min+((by_id[id].pc-role_value.min)%12)
+      for pitch=first,role_value.max,12 do
+        if index==1 or pitch>pitches[index-1]then
+          used[id]=true;order[index]=id;pitches[index]=pitch
+          visit(index+1,used,pitches)
+          used[id]=nil;order[index]=nil;pitches[index]=nil
+        end
       end
     end end
   end
   visit(1,{},{});return best
+end
+
+function test_harmony_voicing_matches_independent_oracle_across_small_multi_register_domains()
+  local checked=0
+  for voice_count=1,5 do
+    local selected={}
+    local function visit(next_pc)
+      if #selected==voice_count then
+        for layout=1,2 do
+          local material,roles={},{ }
+          for index,pitch_class in ipairs(selected)do
+            local id="tone"..index;material[index]={id=id,pc=pitch_class}
+            local low=35+(index-1)*5+(layout-1)*2
+            roles[index]=role("v"..index,low,low+24,low+12,127)
+            roles[index].material_id=id
+          end
+          for previous_case=1,3 do
+            local previous={}
+            if previous_case>1 then
+              for index,role_value in ipairs(roles)do
+                local first=role_value.min+((material[index].pc-role_value.min)%12)
+                previous[role_value.id]=first+(previous_case==3 and 12 or 0)
+              end
+            end
+            local frame={mode="revoice",material=material,roles=roles,previous=previous,
+              crossing=false,exact_unison=false,preset="smooth",policy_version=1,node_budget=200000,
+              bass={mode="smooth",direction="nearest"},has_bass=false}
+            local expected=independent_assignment_oracle(frame)
+            local actual=voicing.solve(frame)
+            if expected then
+              luaunit.assert_equals(actual.status,"ok")
+              luaunit.assert_equals(actual.pitches,expected,
+                string.format("voices %d set %s layout %d previous %d",voice_count,
+                  table.concat(selected,","),layout,previous_case))
+            else luaunit.assert_equals(actual.status,"no_solution")end
+            checked=checked+1
+          end
+        end
+        return
+      end
+      -- Six pitch classes keep the brute-force domain bounded while crossing
+      -- every subset size, one to five voices, in two 25-semitone registers.
+      for pitch_class=next_pc,5 do
+        selected[#selected+1]=pitch_class;visit(pitch_class+1);selected[#selected]=nil
+      end
+    end
+    visit(0)
+  end
+  luaunit.assert_equals(checked,372)
 end
 
 function test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices()

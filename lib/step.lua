@@ -14,6 +14,7 @@ local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local harmony_context = include("mosaic/lib/harmony/context")
 local pattern_harmony = include("mosaic/lib/harmony/pattern")
 local harmony_inspection = include("mosaic/lib/harmony/inspection")
+local harmony_grid_projection = include("mosaic/lib/harmony/grid_projection")
 local merge_pitch_target = include("mosaic/lib/musical_merge/pitch_target")
 local musical_merge_state = include("mosaic/lib/musical_merge/state")
 local musical_merge_config = include("mosaic/lib/musical_merge/config")
@@ -1074,6 +1075,16 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     m_midi.has_device(note_container.midi_device))
   local planned_root = harmony_pitches and harmony_pitches.root
   if harmony_pitches == nil then planned_root = note_container.note end
+  local function resolve_grid_value(value)
+    if unprocessed_note_container.is_mask then
+      return quantiser.process_with_mask_params(value,unprocessed_note_container.octave_mod,
+        unprocessed_note_container.transpose,channel.step_scale_number,
+        unprocessed_note_container.fully_quantise_mask)
+    end
+    return quantiser.process(value,unprocessed_note_container.octave_mod,
+      unprocessed_note_container.transpose,channel.step_scale_number,
+      unprocessed_note_container.do_pentatonic)
+  end
   local inspection_context={
     step=current_step,
     source=unprocessed_note_container.source_note_value or unprocessed_note_container.note_value,
@@ -1081,6 +1092,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     scale=note_container.note,
     harmony=planned_root,
     output=planned_root,
+    grid=harmony_grid_projection.capture(unprocessed_note_container.note_value,
+      note_container.note,planned_root,resolve_grid_value),
     status=harmony and harmony.status or "off",
     reason=harmony and(harmony.reason or harmony.status)or"off",
     role_pitches=harmony and harmony.role_pitches or nil,
@@ -1097,6 +1110,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     fallback=harmony and harmony.fallback or nil
   }
   harmony_inspection.plan(event_song, c, inspection_context)
+  if pages and note_edit_page and pages.pages and
+      program.get_selected_page()==pages.pages.note_edit_page then note_edit_page.refresh()end
   local emit_note_on = note_on_func
   local function note_on_for_source(source_id)return function(pitch, velocity, midi_channel, midi_device)
     local scheduled,actually_emitted,actual_pitch=false,false,nil

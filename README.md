@@ -1292,7 +1292,17 @@ at their onset, and Note Off always releases the pitch and route actually sent.
 ![Harmony NO VOICING result on Norns](images/harmony-no-voicing.png)
 
 The Channel grid remains the chronological trig/mask surface. Foundation anchors
-and additions therefore appear as active steps there. Final Harmony pitches are
+and additions therefore appear as active steps there. After a step plays, the
+Pattern Note grid moves that step's bright note LED to the final effective pitch
+that the native 21-position note range can represent. Switch its upper, centred
+or lower seven-note bank as usual to inspect octave placement. Raw and bypassed
+events use the ordinary pre-Harmony position; turning Harmony Off restores the
+ordinary merged/scale positions immediately. An exact pitch outside that native
+range has no false in-range LED and remains available in Result/Note Dashboard.
+
+This display is read-only: touching the projected Note fader still edits its
+selected source-pattern value. Until the changed step plays again, the edited
+source is displayed rather than a stale output. Final Harmony pitches are also
 shown on Note Dashboard/context inspection as planned, scheduled and last-emitted
 values. H05 Result uses its Step row to select one coherent event chain; on Note
 Dashboard, holding a grid step temporarily inspects that step instead of combining

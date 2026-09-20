@@ -28,13 +28,13 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "4f1fa9c35d4fecebfe1d4eef7a6ad3521d7eff298d837625f643c106b9ca3581",
+ "manual_sha256": "a36d893408f874ecde40049e7a5211378d7dc10502f1926d44c09d202feac491",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "86b0cfff4646872c2da61032596c6f6bdfc7c055feda8fd5e4e69b49fb65fe03",
+ "inventory_sha256": "213bfefeb5590202a1ee6ca0b4363d8dd65a6bbbaf319c1e74a110bf3cabe874",
  "counts": {
   "requirements": 148,
-  "production_lua_modules": 113,
-  "unit_integration_files": 94,
+  "production_lua_modules": 114,
+  "unit_integration_files": 95,
   "domains": 16
  },
  "coverage_language": {
@@ -70,6 +70,7 @@
    ],
    "production_modules": [
     "lib/harmony/config_state.lua", "lib/harmony/config.lua", "lib/harmony/context.lua",
+    "lib/harmony/grid_projection.lua",
     "lib/harmony/inspection.lua", "lib/harmony/pattern.lua", "lib/harmony/state.lua", "lib/harmony/voicing.lua",
     "lib/musical_merge/config.lua", "lib/musical_merge/foundation.lua",
     "lib/musical_merge/pitch_target.lua", "lib/musical_merge/state.lua",
@@ -79,7 +80,8 @@
    "existing_unit_integration_files": [
     "lib/tests/lib/channel_feature_editor_tests.lua", "lib/tests/lib/foundation_planner_tests.lua",
     "lib/tests/lib/harmony_config_state_tests.lua", "lib/tests/lib/harmony_config_tests.lua",
-    "lib/tests/lib/harmony_context_tests.lua", "lib/tests/lib/harmony_pattern_tests.lua",
+    "lib/tests/lib/harmony_context_tests.lua", "lib/tests/lib/harmony_grid_projection_tests.lua",
+    "lib/tests/lib/harmony_pattern_tests.lua",
     "lib/tests/lib/harmony_playback_integration_tests.lua", "lib/tests/lib/harmony_state_tests.lua",
     "lib/tests/lib/harmony_voicing_tests.lua", "lib/tests/lib/musical_merge_config_tests.lua",
     "lib/tests/lib/harmony_inspection_tests.lua", "lib/tests/lib/musical_merge_pattern_integration_tests.lua",

@@ -12,6 +12,10 @@
       {
         "test": "test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
         "domain": "3,170 frames: every one-through-five-voice subset of the twelve pitch classes (1,585 sets), each with empty and populated previous state; independent assignment enumeration"
+      },
+      {
+        "test": "test_harmony_voicing_matches_independent_oracle_across_small_multi_register_domains",
+        "domain": "372 independently enumerated frames: every one-through-five-voice subset of a bounded six-pitch-class universe, two distinct 25-semitone role layouts with two or three legal octave placements per identity, and empty/lower/upper previous states"
       }
     ],
     "hard_constraints": [
@@ -34,11 +38,14 @@
         "case": "M-HARMONY-PATTERN-001",
         "covers": [
           "Harmony and Tone Map entry through norns encoders/keys",
-          "mapped role placement and unchanged Raw tones with literal MIDI",
+          "grid-authored A-B-C-B broken chord through a public C-major to C-minor scale progression with no chord masks",
+          "three stable mapped identities, constrained Bass/Inner movement and legal Top common-tone retention with literal MIDI",
+          "every final played Harmony position across the native lower and centred Note-grid banks",
+          "source-owned edit while the projection is visible without flattening played output into the pattern",
           "complete repeated loops and balanced releases",
-          "exact ordinary merge/scale MIDI recovery when Off becomes active",
+          "exact ordinary merge/scale grid and MIDI recovery when Off becomes active",
           "saved mapping recovery when Pattern is re-enabled",
-          "actual emulator framebuffer documentation capture"
+          "real-time and controlled-time pre-fix failures at the absent projection oracle"
         ]
       },
       {
@@ -71,7 +78,7 @@
     ],
     "integration_products": [
       {
-        "dimension": "identity, Raw passing tones, immutable sources and post-Foundation pitch",
+        "dimension": "identity, Raw passing tones including a wide leap, immutable sources and post-Foundation pitch",
         "tests": [
           "test_harmony_playback_pattern_reuses_mapped_identity_and_leaves_raw_exact",
           "test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap",
@@ -115,5 +122,14 @@
     {"trigger": "channel or step octave override", "result": "LOCAL OCTAVE BYPASS plus literal ordinary MIDI", "evidence": "test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch and M-HARMONY-ENSEMBLE-001 in both lanes"},
     {"trigger": "missing output", "result": "visible missing_output bypass and no scheduled/emitted note", "evidence": "test_voice_lifetime_rejected_output_does_not_schedule_or_report_acceptance"}
   ],
-  "qualification": "The 16-run Harmony/Musical Merge campaign is the named feature acceptance selection, not the repository's exhaustive sharded behaviour campaign or physical-norns timing evidence. No plan requirement is deferred by this qualification."
+  "grid_projection": {
+    "unit_integration": [
+      "test_harmony_grid_projection_uses_played_harmony_value_without_mutating_source",
+      "test_harmony_grid_projection_off_and_bypass_recover_ordinary_value_immediately",
+      "test_harmony_grid_projection_rejects_stale_events_and_names_out_of_range",
+      "test_harmony_grid_projection_inverts_only_exact_native_grid_positions"
+    ],
+    "public_behaviour": "M-HARMONY-PATTERN-001 asserts exact active, Off and re-enabled grid/MIDI results through only grid, key and encoder input in both timing lanes."
+  },
+  "qualification": "The named Harmony/Musical Merge campaign is feature acceptance rather than the repository's exhaustive sharded behaviour campaign or physical-norns timing evidence. MM-08+ is intentionally outside the user-authorized first package; this matrix makes no claim to deliver those later designs."
 }
