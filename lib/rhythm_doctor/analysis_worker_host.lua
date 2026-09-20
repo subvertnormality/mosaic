@@ -64,7 +64,10 @@ function Host:open()
     local ok=self.execute(command); if ok~=true and ok~=0 then return nil, "analysis worker launcher failed" end
     return nil, "analysis worker starting"
   end
-  local problem=self.read_line(self.runtime_root.."/error"); if problem then return nil,problem end
+  -- An error file is the launcher's terminal verdict, not a slow start. The
+  -- third value says so, because a caller that cannot tell them apart retries
+  -- a failed build forever and the capture waits behind it.
+  local problem=self.read_line(self.runtime_root.."/error"); if problem then return nil,problem,true end
   local mailbox=self.read_line(self.runtime_root.."/mailbox"); if mailbox then return self.transport_factory(mailbox, self.runtime_root.."/results") end
   return nil,"analysis worker starting"
 end

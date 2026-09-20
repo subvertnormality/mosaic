@@ -99,3 +99,32 @@ do
 end
 
 print('analysis runtime: late worker readiness covered')
+
+-- A backend that fails to build is terminal, not slow. Retrying it forever
+-- left the capture in ANALYSING with saving blocked until the player thought
+-- to cancel, and nothing on screen said the build had failed.
+do
+  local cap, failed_worker = transport(), nil
+  local runtime = Runtime.new({ project_id = 'build-fails', worker = { open = function() return cap end },
+    analysis_worker = { open = function()
+      return nil, 'native analysis backend build failed: gcc not found', true
+    end },
+    now = function() return 0 end, transport_stopped = function() return true end })
+  runtime:enter()
+  assert(runtime:start_capture('manual').ok)
+  local pre = cap.sent[#cap.sent]; cap.replies[#cap.replies + 1] = reply(pre, 'READY'); runtime:poll()
+  local started = cap.sent[#cap.sent]; cap.replies[#cap.replies + 1] = reply(started, 'STARTED'); runtime:poll()
+  assert(runtime:finish(true).ok)
+  local stopped = cap.sent[#cap.sent]; cap.replies[#cap.replies + 1] = reply(stopped, 'COMPLETED'); runtime:poll()
+  local published = cap.sent[#cap.sent]
+  cap.replies[#cap.replies + 1] = reply(published, 'PUBLISHED',
+    { wav_path = '/tmp/nobuild.wav', wav_sha256 = string.rep('d', 64), frames = 200000, sample_rate = 8000 })
+  runtime:poll()
+  runtime.analysis_retry_at = 0
+  runtime:poll()
+  assert(runtime.machine.state ~= 'ANALYSING',
+    'a backend that cannot be built must fail the capture, not leave it analysing forever')
+  assert(runtime.machine.state == 'FAILED', 'and it fails visibly, got ' .. tostring(runtime.machine.state))
+end
+
+print('analysis runtime: a terminal build failure is terminal')

@@ -156,9 +156,13 @@ end
 function Runtime:_open_analysis_worker()
   if self.analysis_controller then return result("OK") end
   if not self.analysis_worker or self.closing then return result("ANALYSIS_WORKER_UNAVAILABLE") end
-  local ok, transport, problem = pcall(self.analysis_worker.open, self.analysis_worker)
+  local ok, transport, problem, terminal = pcall(self.analysis_worker.open, self.analysis_worker)
   if not ok or not valid_transport(transport) then
     self:_status("ANALYSIS_WORKER_UNAVAILABLE", ok and problem or transport)
+    -- A host that says its failure is terminal will never open. Waiting on it
+    -- leaves the capture in ANALYSING and saving blocked until the player
+    -- happens to cancel, with nothing on screen explaining why.
+    if ok and terminal then self.analysis_backend_failed = true end
     return result("ANALYSIS_WORKER_UNAVAILABLE")
   end
   return self:_open_analysis_transport(transport)
@@ -248,6 +252,20 @@ function Runtime:_analysis_ready(asset, token)
   -- was never made.
   if self.analysis_worker then self.pending_analysis = { asset = asset, token = token } end
   return result("OK")
+end
+
+-- The backend cannot be built, so nothing will ever analyse this capture. The
+-- failure is raised from poll rather than where it is discovered, because the
+-- discovery happens while the machine is still entering ANALYSING and a lease
+-- cannot be failed before it is held.
+function Runtime:_fail_analysis_backend()
+  if not self.analysis_backend_failed or self.machine.state ~= Machine.ANALYSING then return end
+  self.analysis_backend_failed = false
+  self.analysis_worker, self.pending_analysis = nil, nil
+  local token = self.machine:job_token()
+  if type(token) ~= "table" then return end
+  self.machine:receive_analysis({ project_id = token.project_id, generation = token.generation,
+    analysis_revision = token.analysis_revision, error = "ANALYSIS_BACKEND_UNAVAILABLE" })
 end
 
 -- Dispatch a publication that arrived before the worker did, once.
@@ -439,6 +457,7 @@ function Runtime:poll()
   end
   self:_dispatch_pending_analysis()
   local event = self.controller and self.controller:poll() or result("NO_EVENT")
+  self:_fail_analysis_backend()
   if event.code == "STARTED" then self:capture_acquiring() end
   local analysis_event = self.analysis_controller and self.analysis_controller:poll() or result("NO_EVENT")
   self:_close_if_released()
