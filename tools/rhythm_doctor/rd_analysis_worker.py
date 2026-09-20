@@ -23,12 +23,15 @@ import time
 from typing import Any
 import wave
 
+# The lane set the on-device backend produces. A remote analysis declares its
+# own, which is why nothing below compares against this beyond a default.
 LANES = ("BD", "SD", "CYM")
 MAX_CANDIDATES = 22_500
 MAX_RESULT_BYTES = 4 * 1024 * 1024
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 SAFE_BACKEND_ERROR = re.compile(r"^OMNIZART_[A-Z0-9_]{1,128}$")
 SHA256 = re.compile(r"^[0-9a-fA-F]{64}$")
+LANE_NAME = re.compile(r"^[A-Z][A-Z0-9_]{0,15}$")
 STOP = False
 
 
@@ -156,13 +159,22 @@ def analysis_matches_detector(value: Any, expected: dict[str, str]) -> bool:
         actual = detector.get(name)
         if not isinstance(actual, str) or not SHA256.fullmatch(actual) or actual.lower() != str(digest).lower():
             return False
-    if not isinstance(gates, dict) or set(gates) != set(LANES) or any(not isinstance(gates[lane], (int, float)) or not 0 <= gates[lane] <= 1 for lane in LANES):
+    # The gate table declares the lane set this analysis produced. The
+    # on-device backend produces three; the remote server separates a kit and
+    # produces ten. Demanding the local three would reject every remote result
+    # and make the server pointless, so the declared set is validated for shape
+    # and the candidates are held to it.
+    if not isinstance(gates, dict) or not gates or len(gates) > 32:
+        return False
+    if any(not isinstance(lane, str) or not LANE_NAME.fullmatch(lane) or
+           not isinstance(gate, (int, float)) or isinstance(gate, bool) or not 0 <= gate <= 1
+           for lane, gate in gates.items()):
         return False
     candidates = value.get("candidates", [])
     if not isinstance(candidates, list) or len(candidates) > MAX_CANDIDATES:
         return False
     for candidate in candidates:
-        if not isinstance(candidate, dict) or candidate.get("lane") not in LANES or not isinstance(candidate.get("sample_index"), int) or candidate["sample_index"] < 0:
+        if not isinstance(candidate, dict) or candidate.get("lane") not in gates or not isinstance(candidate.get("sample_index"), int) or candidate["sample_index"] < 0:
             return False
         if not isinstance(candidate.get("velocity"), (int, float)) or not 1 <= candidate["velocity"] <= 127 or not isinstance(candidate.get("confidence"), (int, float)) or not 0 <= candidate["confidence"] <= 1:
             return False

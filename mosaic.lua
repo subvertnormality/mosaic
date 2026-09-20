@@ -67,6 +67,17 @@ local function post_splash_init()
 
 end
 
+-- Read the configured analysis server, honouring the on/off switch so a player
+-- can keep an address saved while working locally.
+local function rhythm_doctor_server_endpoint()
+  if params == nil or type(params.get) ~= "function" then return nil end
+  local ok, enabled = pcall(function() return params:get("rhythm_doctor_use_server") end)
+  if not ok or enabled ~= 2 then return nil end
+  local read, endpoint = pcall(function() return params:get("rhythm_doctor_server") end)
+  if not read or type(endpoint) ~= "string" or endpoint:match("^%s*$") then return nil end
+  return (endpoint:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
 local function init_rhythm_doctor()
   -- Capture runs through softcut, which lives inside crone and is therefore
   -- already connected to JACK. Opening a JACK client of our own is the one
@@ -88,6 +99,10 @@ local function init_rhythm_doctor()
     -- The shipped classical-DSP backend pins its own source and template
     -- table instead of model artifacts, and needs no downloads.
     template_sha256 = os.getenv("RHYTHM_DOCTOR_TEMPLATE_SHA256"),
+    -- The analysis server, if the player has configured one and switched it
+    -- on. An unreachable or slow server is not an error: the capture falls
+    -- back to on-device analysis and the player still gets gates.
+    remote_endpoint = rhythm_doctor_server_endpoint(),
     transport_factory = function(mailbox_root, result_root)
       return include("mosaic/lib/rhythm_doctor/analysis_transport").new(mailbox_root, result_root)
     end,

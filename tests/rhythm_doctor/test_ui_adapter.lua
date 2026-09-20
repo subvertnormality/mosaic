@@ -430,3 +430,42 @@ do
   equal(c.adapter.alignment_draft ~= nil, true, "the alignment editor opens")
   equal(c.adapter.alignment_draft.start_beat, 3, "START BEAT opens on the beat holding the phrase start")
 end
+
+-- Ten lanes from the remote server must reach ten grid buttons. "Mosaic
+-- assigns all data to more buttons than DSP" is the whole point of the server;
+-- a grid hard-coded to three columns would silently discard seven lanes.
+do
+  local c = context()
+  local remote = { "KICK", "SNARE", "TOMS", "HIHAT", "CYMBALS",
+                   "BASS", "GUITAR", "PIANO", "VOCALS", "OTHER" }
+  local sensitivities, lanes = {}, {}
+  for _, lane in ipairs(remote) do sensitivities[lane] = 0; lanes[lane] = {} end
+  c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = {
+    version = 4, project_id = "p", bpm = 120, sample_rate = 48000,
+    capture_start_sample = 0, capture_end_sample = 480000, origin_sample = 0,
+    timeline_cells = 80, samples_per_cell = 6000, window_start = 0,
+    phrase_start_cell = 0, phrase_confidence = 0,
+    lane_names = remote, sensitivities = sensitivities, lanes = lanes,
+    candidates = {}, source = {},
+  }
+  for index, lane in ipairs(remote) do
+    local result = c.adapter:grid_key(index + 2, 2, 1)
+    equal(result.code, "LANE_SELECTED", "column " .. (index + 2) .. " selects " .. lane)
+    equal(c.adapter.lane, lane, "column " .. (index + 2) .. " selects " .. lane)
+  end
+  equal(c.adapter:grid_key(13, 2, 1).code, "UNCLAIMED", "the column past the last lane stays inert")
+
+  -- With no bank the grid still offers the lanes the device itself produces,
+  -- so the page is usable before anything has been recorded.
+  c.runtime.machine.state, c.runtime.machine.bank = "EMPTY", nil
+  equal(c.adapter:grid_key(5, 2, 1).code, "LANE_SELECTED", "the default lane set is addressable")
+  equal(c.adapter:grid_key(6, 2, 1).code, "UNCLAIMED", "and stops at three columns")
+end
+
+-- The blocks above run after this file's first report. `equal` raises rather
+-- than collecting, so they do fail loudly, but the pcall-based `test` helper
+-- collects into `failures` -- and nothing reads it past line 343. Re-check it
+-- here so a failure in an appended block cannot pass silently.
+if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end
+print("rhythm_doctor ui adapter: phrase navigation and remote lane columns checked")

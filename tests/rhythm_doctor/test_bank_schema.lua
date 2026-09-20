@@ -32,7 +32,7 @@ local cases = {
   function(b) b.phrase_confidence='high' end,
 }
 assert(Bank.valid_ready(fresh()))
-assert(Bank.VERSION == 3, "schema migration must publish version 3")
+assert(Bank.VERSION == 4, "schema migration must publish version 4")
 
 -- Phrase alignment. The bank addresses the phrase start as a cell so the
 -- centre button can jump the window there; the beat grid is what the alignment
@@ -71,14 +71,27 @@ end
 -- real captures on the device; rejecting them to publish a schema number would
 -- destroy work to gain nothing.
 do
+  -- Version 2: before phrase alignment and before lane sets were data.
   local legacy = fresh()
   legacy.version = 2
   legacy.phrase_start_cell, legacy.phrase_confidence, legacy.source = nil, nil, nil
+  legacy.lane_names = nil
   local upgraded = Bank.upgrade(legacy)
   assert(upgraded, "a version 2 bank must upgrade")
-  assert(upgraded.version == 3 and upgraded.phrase_start_cell == 0 and upgraded.phrase_confidence == 0,
+  assert(upgraded.version == Bank.VERSION and upgraded.phrase_start_cell == 0 and upgraded.phrase_confidence == 0,
     "an upgraded bank has a phrase start at the timeline start and claims nothing")
+  assert(table.concat(upgraded.lane_names, ",") == "BD,SD,CYM",
+    "a bank written before lane sets were data had the three the device produces")
   assert(Bank.valid_ready(upgraded), "an upgraded bank is valid")
+
+  -- Version 3: had phrase alignment, still had no declared lane set.
+  local three = fresh()
+  three.version, three.lane_names = 3, nil
+  local from_three = Bank.upgrade(three)
+  assert(from_three and from_three.version == Bank.VERSION, "a version 3 bank must upgrade")
+  assert(table.concat(from_three.lane_names, ",") == "BD,SD,CYM", "and gains the lane set it had")
+  assert(Bank.valid_ready(from_three), "an upgraded version 3 bank is valid")
+
   assert(Bank.upgrade({ version = 99 }) == nil, "an unknown schema is not silently accepted")
 end
 assert(table.concat(Bank.LANES, ",") == "BD,SD,CYM", "schema lane order is the three shipped lanes")
@@ -100,3 +113,42 @@ local ok, low = pcall(Bank.window_bounds,{})
 if not ok or low~=nil then failures[#failures+1]='missing timeline did not reject cleanly' end
 if #failures>0 then io.stderr:write(table.concat(failures,'\n')..'\n'); os.exit(1) end
 print('rhythm_doctor schema: '..total..' malformed banks rejected')
+
+-- Lane sets are data. The local backend produces three lanes; the remote
+-- server separates a kit and produces ten. A bank has to hold whichever its
+-- own analysis produced, or the extra lanes are discarded on arrival and the
+-- server is pointless.
+do
+  local remote = { "KICK", "SNARE", "TOMS", "HIHAT", "CYMBALS",
+                   "BASS", "GUITAR", "PIANO", "VOCALS", "OTHER" }
+  local sensitivities = {}
+  for _, lane in ipairs(remote) do sensitivities[lane] = 0 end
+  local bank = assert(Bank.build{ project_id = "p", sample_rate = 48000,
+    capture_start_sample = 0, capture_end_sample = 480000, origin_sample = 0, bpm = 120,
+    lane_names = remote, sensitivities = sensitivities,
+    candidates = { { lane = "TOMS", sample_index = 6000, velocity = 90, confidence = .9 },
+                   { lane = "GUITAR", sample_index = 12000, velocity = 40, confidence = .8 } } },
+    "a ten lane bank must build")
+  assert(#bank.lane_names == 10, "the bank keeps every lane it was given")
+  assert(bank.lanes.TOMS[2], "a tom lands in its own lane, got " .. tostring(bank.lanes.TOMS[2]))
+  assert(bank.lanes.GUITAR[3], "a melodic stem lands in its own lane")
+  assert(Bank.valid_ready(bank), "a ten lane bank is valid")
+  local window = assert(Bank.window(bank, "GUITAR"), "a window can be taken of any declared lane")
+  assert(window.cells[3], "the window shows the lane's hits")
+  assert(Bank.window(bank, "BD") == nil, "a lane this bank does not have is not addressable")
+
+  -- A candidate naming a lane the bank was not told about is a mismatched
+  -- analysis, not a new lane to invent.
+  local bad = Bank.build{ project_id = "p", sample_rate = 48000, capture_start_sample = 0,
+    capture_end_sample = 480000, origin_sample = 0, bpm = 120, lane_names = remote,
+    sensitivities = sensitivities,
+    candidates = { { lane = "TROMBONE", sample_index = 6000, velocity = 90, confidence = .9 } } }
+  assert(not bad, "a candidate outside the declared lane set is rejected")
+
+  -- Saying nothing keeps the three lanes the local backend produces, so every
+  -- existing caller and every saved bank behaves exactly as before.
+  local default = assert(Bank.build{ project_id = "p", sample_rate = 48000,
+    capture_start_sample = 0, capture_end_sample = 480000, origin_sample = 0, bpm = 120,
+    candidates = {} })
+  assert(table.concat(default.lane_names, ",") == "BD,SD,CYM", "the default lane set is unchanged")
+end

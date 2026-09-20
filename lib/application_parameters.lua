@@ -2,7 +2,7 @@
 local application_parameters = {}
 
 function application_parameters.register(project_actions)
-  params:add_group("mosaic", "MOSAIC", 36)
+  params:add_group("mosaic", "MOSAIC", 39)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -117,6 +117,13 @@ function application_parameters.register(project_actions)
       trigger_edit_page_ui:refresh()
     end
   )
+  params:add_separator("Rhythm Doctor")
+  -- Analysis runs on the norns by default and needs nothing configured. An
+  -- analysis server is an advanced option: it separates a kit into its pieces
+  -- instead of guessing them from a full mix, and returns ten lanes instead of
+  -- three. Leaving the address empty keeps everything local.
+  params:add_text("rhythm_doctor_server", "Analysis server", "")
+  params:add_option("rhythm_doctor_use_server", "Use analysis server", {"Off", "On"}, 1)
   params:add_separator("Midi control")
   params:add_option("midi_scale_mapped_to_white_keys", "Map scale to white keys", {"Off", "On"}, 1)
   params:add_option("midi_honour_rotation", "Honour scale rotations", {"Off", "On"}, 1)

@@ -9,7 +9,11 @@
 local Adapter = {}
 Adapter.__index = Adapter
 
+-- The lane set before any capture exists, and the one the on-device backend
+-- produces. A bank carries its own, which is what the grid actually shows.
 Adapter.LANES = { "BD", "SD", "CYM" }
+-- Columns 1 and 2 of the row are Record and a gap, so this many lanes fit.
+Adapter.MAX_LANE_COLUMNS = 14
 Adapter.SETUP_FIELDS = { "TEMPO", "MANUAL BPM", "INPUT" }
 Adapter.READY_FIELDS = { "WINDOW BAR", "WINDOW STEP", "SENSITIVITY", "PAINT POLICY", "ALIGNMENT" }
 Adapter.ALIGNMENT_FIELDS = { "HALF TEMPO", "DOUBLE TEMPO", "EXACT BPM", "START BEAT", "FINE START" }
@@ -27,8 +31,14 @@ local function outcome(code, extra)
   return extra
 end
 
-local function lane_valid(lane)
-  for _, value in ipairs(Adapter.LANES) do if value == lane then return true end end
+local function lanes_of(self)
+  local bank = self.runtime.machine and self.runtime.machine.bank
+  local names = type(bank) == "table" and bank.lane_names
+  return type(names) == "table" and #names > 0 and names or Adapter.LANES
+end
+
+local function lane_valid(self, lane)
+  for _, value in ipairs(lanes_of(self)) do if value == lane then return true end end
   return false
 end
 
@@ -326,7 +336,7 @@ end
 
 function Adapter:select_lane(lane)
   if not stopped(self) then return outcome("STOP_SEQUENCER") end
-  if not lane_valid(lane) then return outcome("INVALID_LANE") end
+  if not lane_valid(self, lane) then return outcome("INVALID_LANE") end
   self.lane = lane
   touch_window(self)
   return outcome("LANE_SELECTED", { lane = lane })
@@ -540,9 +550,11 @@ function Adapter:grid_key(x, y, z)
     if z == 0 then return self:record_released() end
     return outcome("UNCLAIMED")
   end
-  if y == 2 and x >= 3 and x <= 2 + #Adapter.LANES then
+  local names = lanes_of(self)
+  local columns = math.min(#names, Adapter.MAX_LANE_COLUMNS)
+  if y == 2 and x >= 3 and x <= 2 + columns then
     if z ~= 1 then return outcome("UNCLAIMED") end
-    return self:select_lane(Adapter.LANES[x - 2])
+    return self:select_lane(names[x - 2])
   end
   return outcome("UNCLAIMED")
 end

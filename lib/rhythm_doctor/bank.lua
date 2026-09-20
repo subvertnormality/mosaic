@@ -2,7 +2,11 @@
 -- UI dependency belongs here.  `sample_index` is authoritative for every event.
 -- See docs/rhythm-doctor/PLAN.md, "Four bars, clock and quantisation".
 local Bank = {
-  VERSION = 3,
+  VERSION = 4,
+  -- The lane set the on-device backend produces. It is a DEFAULT, not the only
+  -- possibility: the remote analysis server separates a kit and returns ten
+  -- lanes, and a bank has to hold whichever set its own analysis produced or
+  -- the extra lanes are discarded on arrival.
   LANES = { "BD", "SD", "CYM" },
   WINDOW_CELLS = 64,
   -- 45 seconds × an explicit 100 retained candidates/second/lane × 5 lanes.
@@ -27,9 +31,22 @@ local function copy(value)
   return out
 end
 
-local function valid_lane(lane)
-  for _, name in ipairs(Bank.LANES) do if name == lane then return true end end
+local function valid_lane(lane, names)
+  for _, name in ipairs(names or Bank.LANES) do if name == lane then return true end end
   return false
+end
+
+-- A declared lane set: names only, each a non-empty plain word, no repeats.
+local function lane_names(value)
+  if value == nil then return Bank.LANES end
+  if type(value) ~= "table" or #value == 0 or #value > 32 then return nil end
+  local seen, out = {}, {}
+  for index, name in ipairs(value) do
+    if type(name) ~= "string" or not name:match("^[A-Z][A-Z0-9_]*$") or #name > 16 then return nil end
+    if seen[name] then return nil end
+    seen[name], out[index] = true, name
+  end
+  return out
 end
 
 local function number(value)
@@ -59,15 +76,15 @@ local function timeline_length(args)
   return math.floor((args.capture_end_sample - args.origin_sample) / samples_per_cell), samples_per_cell
 end
 
-local function empty_lanes()
+local function empty_lanes(names)
   local lanes = {}
-  for _, lane in ipairs(Bank.LANES) do lanes[lane] = {} end
+  for _, lane in ipairs(names) do lanes[lane] = {} end
   return lanes
 end
 
-local function normalized_sensitivities(values)
+local function normalized_sensitivities(values, names)
   local out = {}
-  for _, lane in ipairs(Bank.LANES) do
+  for _, lane in ipairs(names) do
     local value = values and values[lane] or 0
     if not number(value) or value < 0 or value > 1 then return nil, lane end
     out[lane] = value
@@ -95,9 +112,10 @@ local function quantize_candidate(candidate, origin_sample, samples_per_cell, ce
 end
 
 local function rebuild(bank)
-  local lanes = empty_lanes()
+  local names = bank.lane_names or Bank.LANES
+  local lanes = empty_lanes(names)
   local collision_count = 0
-  local retained_counts = empty_lanes()
+  local retained_counts = empty_lanes(names)
   -- Collision diagnostics describe the retained detector candidates, not merely
   -- the candidates visible at the current sensitivity.  Thus lowering a
   -- threshold can reveal a candidate without changing its original diagnosis.
@@ -163,13 +181,15 @@ function Bank.build(args)
   if not number(args.bpm) or args.bpm < Bank.MIN_BPM or args.bpm > Bank.MAX_BPM then return failure("UNSUPPORTED_BPM") end
   local cells, samples_per_cell = timeline_length(args)
   if cells < Bank.WINDOW_CELLS then return failure("NOT_ENOUGH_ALIGNED_AUDIO") end
-  local sensitivities, bad_lane = normalized_sensitivities(args.sensitivities)
+  local names = lane_names(args.lane_names)
+  if not names then return failure("INVALID_LANE_SET") end
+  local sensitivities, bad_lane = normalized_sensitivities(args.sensitivities, names)
   if not sensitivities then return failure("INVALID_SENSITIVITY", bad_lane) end
   if args.candidates ~= nil and type(args.candidates) ~= "table" then return failure("INVALID_CANDIDATE") end
   if args.candidates and #args.candidates > Bank.MAX_CANDIDATES then return failure("CANDIDATE_LIMIT") end
   local candidates = {}
   for index, event in ipairs(args.candidates or {}) do
-    if type(event) ~= "table" or not valid_lane(event.lane) or not integer(event.sample_index) or
+    if type(event) ~= "table" or not valid_lane(event.lane, names) or not integer(event.sample_index) or
         not number(event.velocity) or event.velocity < 1 or event.velocity > 127 or not number(event.confidence) or
         event.confidence < 0 or event.confidence > 1 then return failure("INVALID_CANDIDATE", index) end
     local item = copy(event)
@@ -178,7 +198,7 @@ function Bank.build(args)
     if item.cell ~= nil then candidates[#candidates + 1] = item end
   end
   local bank = {
-    version = Bank.VERSION, project_id = args.project_id,
+    version = Bank.VERSION, project_id = args.project_id, lane_names = names,
     generation = args.generation or 0, analysis_revision = args.analysis_revision or 0,
     tempo_mode = args.tempo_mode or "auto", bpm = args.bpm,
     tempo_candidates = copy(args.tempo_candidates or {}), tempo_confidence = args.tempo_confidence,
@@ -232,8 +252,10 @@ function Bank.valid_ready(bank, expected)
       number(hit.confidence) and hit.confidence >= 0 and hit.confidence <= 1 and integer(hit.sample_index) and
       quantize_candidate(hit, bank.origin_sample, spacing, cells) == cell
   end
-  for lane in pairs(bank.lanes) do if not valid_lane(lane) then return invalid() end end
-  for _, lane in ipairs(Bank.LANES) do
+  local names = lane_names(bank.lane_names)
+  if not names then return invalid() end
+  for lane in pairs(bank.lanes) do if not valid_lane(lane, names) then return invalid() end end
+  for _, lane in ipairs(names) do
     local threshold = bank.sensitivities[lane]
     if not number(threshold) or threshold < 0 or threshold > 1 or type(bank.lanes[lane]) ~= "table" then return invalid() end
     for step, hit in pairs(bank.lanes[lane]) do
@@ -244,14 +266,14 @@ function Bank.valid_ready(bank, expected)
   for index, hit in pairs(bank.candidates) do
     count = count + 1
     if not integer(index) or index < 1 or index > #bank.candidates or type(hit) ~= "table" or
-        not valid_lane(hit.lane) or not integer(hit.cell) or hit.cell >= cells or not valid_hit(hit, hit.cell) then return invalid() end
+        not valid_lane(hit.lane, names) or not integer(hit.cell) or hit.cell >= cells or not valid_hit(hit, hit.cell) then return invalid() end
   end
   if count ~= #bank.candidates then return invalid() end
   return true
 end
 
 function Bank.with_sensitivity(bank, lane, sensitivity)
-  if type(bank) ~= "table" or not valid_lane(lane) or not number(sensitivity) or sensitivity < 0 or sensitivity > 1 then
+  if type(bank) ~= "table" or not valid_lane(lane, bank.lane_names) or not number(sensitivity) or sensitivity < 0 or sensitivity > 1 then
     return nil, { code = "INVALID_SENSITIVITY" }
   end
   local changed = copy(bank)
@@ -273,10 +295,13 @@ end
 function Bank.upgrade(bank)
   if type(bank) ~= "table" then return nil end
   if bank.version == Bank.VERSION then return bank end
-  if bank.version ~= 2 then return nil end
+  if bank.version ~= 2 and bank.version ~= 3 then return nil end
   local changed = copy(bank)
+  -- A bank written before lane sets were data had the three the on-device
+  -- backend produces, because that was the only set there was.
+  changed.lane_names = changed.lane_names or { table.unpack(Bank.LANES) }
+  if bank.version == 2 then changed.phrase_start_cell, changed.phrase_confidence = 0, 0 end
   changed.version = Bank.VERSION
-  changed.phrase_start_cell, changed.phrase_confidence = 0, 0
   changed.source = type(changed.source) == "table" and changed.source or {}
   return changed
 end
@@ -308,7 +333,7 @@ function Bank.with_window_start(bank, desired_start)
 end
 
 function Bank.window(bank, lane, requested_start)
-  if not valid_lane(lane) then return nil, { code = "INVALID_LANE" } end
+  if type(bank) ~= "table" or not valid_lane(lane, bank.lane_names) then return nil, { code = "INVALID_LANE" } end
   local start, at_start, at_end = Bank.move_window(bank, requested_start)
   if not start then return nil, at_start end
   local cells = {}

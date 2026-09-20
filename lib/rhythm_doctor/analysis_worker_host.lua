@@ -15,6 +15,22 @@ end
 local function sha256(value)
   return type(value) == "string" and #value == 64 and value:match("^[%x]+$") ~= nil
 end
+-- The remote endpoint is text the player types on a norns and it ends up
+-- inside a shell command. shell_quote makes it inert, but a typo should fail
+-- where it can be seen rather than become a strange command, so the shape is
+-- checked as well: plain http or https, a host of the usual characters, an
+-- optional port and an optional trailing slash. Nothing else, and nothing long
+-- enough to be hiding something.
+local function endpoint_valid(value)
+  if type(value) ~= "string" or #value == 0 or #value > 200 then return false end
+  local scheme, rest = value:match("^(https?)://([^/]+)/?$")
+  if not scheme or not rest then return false end
+  local host, port = rest:match("^([%w%.%-]+):(%d+)$")
+  if not host then host, port = rest:match("^([%w%.%-]+)$"), nil end
+  if not host or #host == 0 or host:find("%.%.") then return false end
+  if port and (tonumber(port) < 1 or tonumber(port) > 65535) then return false end
+  return true
+end
 function Host.new(deps)
   deps=deps or {}; local root=deps.code_root or code_root()
   assert(type(root)=="string" and root~="", "Mosaic code root is required")
@@ -30,7 +46,14 @@ function Host.new(deps)
   local pretrained=located and sha256(deps.drum_artifact_sha256) and sha256(deps.bass_artifact_sha256)
     and deps.template_sha256==nil
   local valid=not configured or dsp or pretrained
+  -- An endpoint that is present but unusable is a configuration error, not a
+  -- silent downgrade: a player who typed a URL believes captures are going to
+  -- their server, and should be told when they are not.
+  local endpoint=deps.remote_endpoint
+  if type(endpoint)=="string" and endpoint:match("^%s*$") then endpoint=nil end
+  local endpoint_error=endpoint~=nil and not endpoint_valid(endpoint)
   return setmetatable({code_root=root, runtime_root=deps.runtime_root, backend=deps.backend,
+    remote_endpoint=endpoint, endpoint_error=endpoint_error,
     backend_sha256=deps.backend_sha256, drum_artifact_sha256=deps.drum_artifact_sha256,
     bass_artifact_sha256=deps.bass_artifact_sha256, template_sha256=deps.template_sha256,
     configuration_error=not valid,
@@ -40,6 +63,7 @@ end
 function Host:open()
   if self.closed then return nil, "analysis worker host closed" end
   if self.configuration_error then return nil, "invalid analysis backend configuration" end
+  if self.endpoint_error then return nil, "invalid analysis server endpoint", true end
   if not self.launched then
     self.launched=true
     local command="mkdir -p "..shell_quote(self.runtime_root).." && rm -f "..shell_quote(self.runtime_root.."/cancel")..
@@ -59,6 +83,14 @@ function Host:open()
         command=command.." --drum-artifact-sha256 "..shell_quote(self.drum_artifact_sha256)..
           " --bass-artifact-sha256 "..shell_quote(self.bass_artifact_sha256)
       end
+    end
+    if self.remote_endpoint then
+      -- The remote backend wraps the local one rather than replacing it: the
+      -- server is an advanced option and every failure has to end with the
+      -- player getting gates, so the fallback must be built and present even
+      -- when the endpoint is reachable.
+      command=command.." --remote-backend "..shell_quote(self.code_root.."/tools/rhythm_doctor/rd_remote_backend.py")..
+        " --remote-endpoint "..shell_quote(self.remote_endpoint)
     end
     command=command.." >/dev/null 2>&1 &"
     local ok=self.execute(command); if ok~=true and ok~=0 then return nil, "analysis worker launcher failed" end

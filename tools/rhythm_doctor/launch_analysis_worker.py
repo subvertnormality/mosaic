@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import os
 from pathlib import Path
+import shlex
 import subprocess
 import sys
 
@@ -83,6 +84,10 @@ def main() -> int:
     parser.add_argument("--template-sha256")
     parser.add_argument("--native-source", type=Path,
                         help="C analysis backend to build and use when no --backend is given")
+    parser.add_argument("--remote-backend", type=Path,
+                        help="rd_remote_backend.py, used when an endpoint is configured")
+    parser.add_argument("--remote-endpoint", default="",
+                        help="analysis server base URL; empty means local analysis only")
     parser.add_argument("--templates", type=Path,
                         help="template table the native backend reads")
     args = parser.parse_args()
@@ -133,6 +138,22 @@ def main() -> int:
         if not backend_valid:
             atomic_text(args.runtime / "error", "invalid analysis backend\n")
             return 1
+    # With an endpoint configured, the worker talks to a wrapper that posts the
+    # capture and falls back to the local backend on any failure. The wrapper is
+    # generated rather than invoked directly because the worker runs exactly one
+    # executable with --request/--result and checks its digest; a script pinned
+    # to this runtime carries the endpoint without changing that contract.
+    if args.remote_endpoint and args.remote_backend and backend is not None:
+        wrapper = args.runtime / "remote-backend"
+        wrapper.write_text(
+            "#!/bin/sh\nexec %s %s --endpoint %s --fallback %s \"$@\"\n" % (
+                shlex.quote(sys.executable), shlex.quote(str(args.remote_backend.resolve())),
+                shlex.quote(args.remote_endpoint), shlex.quote(str(backend))),
+            encoding="utf-8")
+        wrapper.chmod(0o755)
+        backend = wrapper.resolve()
+        native_binary_sha256 = sha256_file(wrapper)
+
     try:
         worker = Path(__file__).with_name("rd_analysis_worker.py")
         process = subprocess.Popen(

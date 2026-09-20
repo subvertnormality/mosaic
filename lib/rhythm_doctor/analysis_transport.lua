@@ -62,13 +62,23 @@ local function supported_detector(detector)
     detector.template_sha256 == nil
   return (dsp or pretrained) and not (dsp and pretrained)
 end
-local function complete_lane_gates(value)
-  if type(value) ~= "table" then return false end
-  for _, lane in ipairs(Bank.LANES) do
-    local gate=value[lane]
-    if type(gate) ~= "number" or gate ~= gate or gate < 0 or gate > 1 then return false end
+-- The gate table declares the lane set this analysis produced: three from the
+-- on-device backend, ten from the remote server. Demanding the local three
+-- would discard the server's extra lanes on arrival and make it pointless.
+local function declared_lanes(value)
+  if type(value) ~= "table" then return nil end
+  local names = {}
+  for lane, gate in pairs(value) do
+    if type(lane) ~= "string" or not lane:match("^[A-Z][A-Z0-9_]*$") or #lane > 16 then return nil end
+    if type(gate) ~= "number" or gate ~= gate or gate < 0 or gate > 1 then return nil end
+    names[#names + 1] = lane
   end
-  return true
+  if #names == 0 or #names > 32 then return nil end
+  -- Sorted so a bank's lane order does not depend on Lua's hash iteration
+  -- order, which would make the grid columns move between loads of the same
+  -- project.
+  table.sort(names)
+  return names
 end
 
 function Transport.new(mailbox_root, result_root, deps)
@@ -111,10 +121,11 @@ function Transport:_completed(message)
   if not ok or type(stored) ~= "table" or not same_identity(message, stored) or stored.command ~= "ANALYSE" or
       stored.status ~= "COMPLETED" or not safe_asset(stored) or type(stored.analysis) ~= "table" or
       not supported_detector(stored.analysis.detector) or
-      not complete_lane_gates(stored.analysis.lane_onset_gates) then
+      not declared_lanes(stored.analysis.lane_onset_gates) then
     return failure(message, "ANALYSIS_PROTOCOL_ERROR")
   end
   local analysis=stored.analysis
+  local names=declared_lanes(analysis.lane_onset_gates)
   analysis.detector.lane_onset_gates=analysis.lane_onset_gates
   local bank, problem=Bank.build({ project_id=stored.project_id, generation=stored.generation,
     analysis_revision=stored.analysis_revision, sample_rate=stored.sample_rate, capture_start_sample=0,
@@ -130,6 +141,7 @@ function Transport:_completed(message)
     -- list to step through and did nothing.
     phrase_start_sample=analysis.phrase_start_sample, phrase_confidence=analysis.phrase_confidence,
     beat_positions=analysis.beat_positions,
+    lane_names=names,
     sensitivities=analysis.sensitivities, candidates=analysis.candidates, detector=analysis.detector,
     quality_warnings=analysis.quality_warnings })
   if not bank then return failure(message, problem and problem.code or "ANALYSIS_PROTOCOL_ERROR") end
