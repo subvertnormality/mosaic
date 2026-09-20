@@ -1,7 +1,7 @@
 """Detached, local-only protocol worker for a pinned pretrained backend.
 
 The backend is an executable with ``--request REQUEST --result RESULT``.  It
-must produce JSON analysis data for BD, SD, CHH, OHH, and BASS.  This worker
+must produce JSON analysis data for BD, SD and CYM.  This worker
 checks WAV identity before invocation and keeps model execution off the norns
 Lua event thread.  There is deliberately no fallback classifier or training
 path: a missing/invalid backend reports a terminal error.
@@ -23,7 +23,7 @@ import time
 from typing import Any
 import wave
 
-LANES = ("BD", "SD", "CYM", "BASS")
+LANES = ("BD", "SD", "CYM")
 MAX_CANDIDATES = 22_500
 MAX_RESULT_BYTES = 4 * 1024 * 1024
 SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")

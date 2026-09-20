@@ -61,11 +61,11 @@ def stopped_setup_controls(c):
 
 
 def owned_input_and_transport_gate(c):
-    fifth_algorithm(c)  # enters algorithm five and selects BASS at x6,y2
+    fifth_algorithm(c)  # enters algorithm five and leaves CYM selected at x5,y2
     # Four lanes occupy columns 3-6 and the retired fifth column is inert, so
-    # the selected lane is BASS at column 6 and column 7 must stay dark.
+    # the selected lane is CYM at column 5; columns 6 and 7 must stay dark.
     active_lanes = [(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)]
-    lanes_with_bass = [4, 4, 4, 15, 0]
+    lanes_with_bass = [4, 4, 15, 0, 0]
     c.led_values(active_lanes, lanes_with_bass)
     stopped_setup_controls(c)
 
@@ -75,7 +75,7 @@ def owned_input_and_transport_gate(c):
     c.action(type="grid", x=1, y=2, state=0); c.elapse(.08)
     c.led_values(active_lanes, lanes_with_bass)
     c.results.append(dict(kind="rhythm-doctor-record-ownership", cell=[1, 2],
-                          selected_lane="BASS", contract="PLAN.md Record key-down ownership"))
+                          selected_lane="CYM", contract="PLAN.md Record key-down ownership"))
 
     # K2/K3 are routed through the Rhythm Doctor trigger screen while its fifth
     # algorithm is active.  On an unavailable worker they are inert, but still
@@ -85,16 +85,16 @@ def owned_input_and_transport_gate(c):
         c.action(type="key", n=key, state=0); c.elapse(.06)
         c.led_values(active_lanes, lanes_with_bass)
     c.results.append(dict(kind="rhythm-doctor-norns-keys", keys=[2, 3],
-                          selected_lane="BASS", contract="PLAN.md K2/K3 routing"))
+                          selected_lane="CYM", contract="PLAN.md K2/K3 routing"))
 
     # Starting Mosaic transport gates capture controls.  A lane tap is still
-    # received by the app, but must retain BASS until transport has stopped.
+    # received by the app, but must retain CYM until transport has stopped.
     c.tap(1, 8); c.elapse(.1)
     c.tap(5, 2)
     c.led_values(active_lanes, lanes_with_bass)
     c.tap(1, 8); c.elapse(.1)
     c.results.append(dict(kind="rhythm-doctor-transport-gate", attempted_lane="CYM",
-                          retained_lane="BASS", contract="PLAN.md capture transport gate"))
+                          retained_lane="CYM", contract="PLAN.md capture transport gate"))
 
 
 def main():

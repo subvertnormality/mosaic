@@ -38,26 +38,28 @@ def fifth_algorithm(c):
         raise AssertionError("RD-04: fifth algorithm button must display RHYTHM DOCTOR") from error
     c.results.append(dict(kind="screen-header", expected="RHYTHM DOCTOR", matched=True,
                           contract="PLAN.md User contract and coordinate convention"))
-    # Four lanes at x3..x6. x2 stays reserved and x7 is inert: it carried a
-    # lane before the set shrank, so it must go dark rather than leave a lane
-    # the player can see but not select.
+    # Three lanes at x3..x5. x2 stays reserved, and x6 and x7 are inert: both
+    # carried a lane before the set shrank, so they must go dark rather than
+    # leave lanes the player can see but not select.
     c.led_values([(2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2)],
-                 [0, 15, 4, 4, 4, 0])
+                 [0, 15, 4, 4, 0, 0])
     c.results.append(dict(kind="rhythm-doctor-lanes", selected="BD", selected_coordinate=[3, 2],
                           reserved_coordinate=[2, 2],
-                          contract="README: x2 reserved; x3..6 select BD/SD/CYM/BASS"))
+                          contract="README: x2 reserved; x3..5 select BD/SD/CYM"))
     c.tap(5, 2)
-    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 15, 4, 0])
+    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 15, 0, 0])
     c.results.append(dict(kind="rhythm-doctor-lane-selection", selected="CYM",
                           coordinate=[5, 2], contract="README: CYM is native x5,y2"))
+    # x6 carried BASS until that lane was withdrawn.
     c.tap(6, 2)
-    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 4, 15, 0])
-    c.results.append(dict(kind="rhythm-doctor-lane-selection", selected="BASS",
-                          coordinate=[6, 2], contract="README: BASS is native x6,y2"))
+    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 15, 0, 0])
+    c.results.append(dict(kind="rhythm-doctor-withdrawn-column", coordinate=[6, 2],
+                          retained_lane="CYM",
+                          contract="README: columns 6 and 7 are inert"))
     c.tap(7, 2)
-    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 4, 15, 0])
+    c.led_values([(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)], [4, 4, 15, 0, 0])
     c.results.append(dict(kind="rhythm-doctor-retired-column", coordinate=[7, 2],
-                          retained_lane="BASS",
+                          retained_lane="CYM",
                           contract="README: column 7 is inert"))
 
 

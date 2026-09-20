@@ -9,7 +9,7 @@
 local Adapter = {}
 Adapter.__index = Adapter
 
-Adapter.LANES = { "BD", "SD", "CYM", "BASS" }
+Adapter.LANES = { "BD", "SD", "CYM" }
 Adapter.SETUP_FIELDS = { "TEMPO", "MANUAL BPM", "INPUT" }
 Adapter.READY_FIELDS = { "WINDOW BAR", "WINDOW STEP", "SENSITIVITY", "PAINT POLICY", "ALIGNMENT" }
 Adapter.ALIGNMENT_FIELDS = { "HALF TEMPO", "DOUBLE TEMPO", "EXACT BPM", "START BEAT", "FINE START" }

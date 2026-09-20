@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "be60cba39e7431a400aa7ac61f026253af880b497dd9396e27d6ee66637b26e4",
+ "manual_sha256": "c82e774d273efe3f0d0d53b9194ad68147e7ef5be7e0abd3d4fcb72d0f6f6a74",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1541,11 +1541,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "be60cba39e7431a400aa7ac61f026253af880b497dd9396e27d6ee66637b26e4"
+   "sha256": "c82e774d273efe3f0d0d53b9194ad68147e7ef5be7e0abd3d4fcb72d0f6f6a74"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "84393fa35dda3642f80eb7adfa66f08edddc5a5d9fb1e6463b7638c83ba84468"
+   "sha256": "1828253b209a14f8ecbda312bbf9f0f823a90802fa22266e3ba7d799955a858f"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -7447,7 +7447,7 @@
    "sections": [
     "MAN-115"
    ],
-   "statement": "The capture bank has four lanes selected on grid row 2 columns 3-6 - BD, SD, CYM (hi-hats and cymbals together) and BASS (pitched low attacks) - with column 2 reserved and column 7 inert; BASS paints trig timing and velocity only.",
+   "statement": "The capture bank has three lanes selected on grid row 2 columns 3-5 - BD, SD and CYM (hi-hats and cymbals together) - with column 2 reserved and columns 6 and 7 inert. Bass, open hi-hat and tom have no lane.",
    "cases": [],
    "status": "in_progress",
    "domain": "Covered by component tests (bank schema, ui adapter, app surface) and by the RD-UI-001/RD-UI-002 behaviour recipes, which assert the lane LEDs and that the retired column 7 stays dark. Those recipes are not registered in cases.py, so no case id is listed here.",

@@ -469,22 +469,21 @@ Craft unique rhythms using a variety of built-in algorithms. The algorithm is se
 ##### Rhythm Doctor
 
 Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
-It keeps one captured four-lane bank per project and lets you preview a 64-step
+It keeps one captured three-lane bank per project and lets you preview a 64-step
 window from one selected lane before painting it into the selected pattern. The
-lanes are grid row 2, columns 3–6: **BD** (bass drum), **SD** (snare drum),
-**CYM** (hi-hats and cymbals), and **BASS** (pitched low attacks). BASS paints
-trig timing and velocity only; use Mosaic's note tools to author its pitches.
-Column 2 is reserved in this mode, and column 7 is inert.
+lanes are grid row 2, columns 3–5: **BD** (bass drum), **SD** (snare drum) and
+**CYM** (hi-hats and cymbals). Column 2 is reserved in this mode, and columns 6
+and 7 are inert.
 
 The lanes describe what can be told apart reliably, not a full drum-kit
 transcription. **CYM** is hats *and* cymbals together because a closed hat and a
 ride are both inharmonic metal with overlapping spectra, and the decay that
 distinguishes them in isolation is buried in a mix; separating them was measured
-and does not work. **BASS** marks low-band attacks that hold a steady pitch
-afterwards, which is what separates a plucked string from a drum head, so a kick
-and a bass note played together appear in both lanes rather than one stealing
-the other. Open hi-hat and tom have no lane: neither could be detected reliably
-enough to paint.
+and does not work. Bass, open hi-hat and tom have no lane: none could be
+detected reliably enough to paint. Bass was tried and withdrawn — every
+approach either failed to separate a bass note from the kick that hides it, or
+marked the kicks themselves, so the lane only ever restated what BD already
+said.
 
 Rhythm Doctor is available only while the Mosaic sequencer is stopped. Its
 screen says `STOP SEQUENCER` while running; Record, lane selection, setup,

@@ -20,7 +20,7 @@ import wave
 ROOT = Path(__file__).resolve().parents[2]
 WORKER = ROOT / "tools" / "rhythm_doctor" / "rd_analysis_worker.py"
 LAUNCHER = ROOT / "tools" / "rhythm_doctor" / "launch_analysis_worker.py"
-LANES = ("BD", "SD", "CYM", "BASS")
+LANES = ("BD", "SD", "CYM")
 BACKEND_HASH = "a" * 64
 DRUM_HASH = "b" * 64
 BASS_HASH = "c" * 64
@@ -44,7 +44,6 @@ class AnalysisWorkerValidation(unittest.TestCase):
                 "bass_artifact_sha256": BASS_HASH},
                 "lane_onset_gates": dict.fromkeys(LANES, .5), "candidates": [
                     {"lane": "CYM", "sample_index": 10, "velocity": 90, "confidence": .8},
-                    {"lane": "BASS", "sample_index": 20, "velocity": 91, "confidence": .7},
                 ]}
 
     def test_every_active_lane_requires_its_own_gate(self):
@@ -115,7 +114,7 @@ import argparse,json
 p=argparse.ArgumentParser();p.add_argument('--request');p.add_argument('--result');a=p.parse_args()
 r=json.load(open(a.request)); assert r['wav_sha256'] and r['frames']==64000
 p=r['pretrained']; assert p['drum_artifact_sha256']=='%s' and p['bass_artifact_sha256']=='%s'
-json.dump({'bpm':120,'origin_sample':0,'tempo_mode':'manual','detector':{'backend_id':'fixture-pretrained','backend_sha256':p['backend_sha256'],'drum_artifact_sha256':p['drum_artifact_sha256'],'bass_artifact_sha256':p['bass_artifact_sha256']},'lane_onset_gates':dict.fromkeys(('BD','SD','CYM','BASS'),.5),'candidates':[]},open(a.result,'w'))
+json.dump({'bpm':120,'origin_sample':0,'tempo_mode':'manual','detector':{'backend_id':'fixture-pretrained','backend_sha256':p['backend_sha256'],'drum_artifact_sha256':p['drum_artifact_sha256'],'bass_artifact_sha256':p['bass_artifact_sha256']},'lane_onset_gates':dict.fromkeys(('BD','SD','CYM'),.5),'candidates':[]},open(a.result,'w'))
 """ % (sys.executable, DRUM_HASH, BASS_HASH), encoding="utf-8")
         backend.chmod(0o700)
         process, peer = self.start(backend)

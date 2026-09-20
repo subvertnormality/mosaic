@@ -37,15 +37,16 @@ enum { W1 = 3, W2 = 3, W3 = 8, W4 = 1, W5 = 2 };
 #define BPM_MAX 240.0
 #define DEFAULT_BPM 120.0
 
-#define PITCH_CONFIDENCE_CUT 0.15
-#define PITCH_WINDOW_SECONDS 0.080
-#define BASS_F0_MIN 35.0
-#define BASS_F0_MAX 300.0
 
 #define BACKEND_ID "nmf-pfnmf-drums-v1"
 
-static const char *const LANES[4] = {"BD", "SD", "CYM", "BASS"};
-static const float DEFAULT_DELTA[4] = {0.40f, 0.35f, 0.15f, 0.40f};
+static const char *const LANES[] = {"BD", "SD", "CYM"};
+static const float DEFAULT_DELTA[] = {0.40f, 0.35f, 0.15f};
+#define LANE_COUNT ((int)(sizeof(LANES) / sizeof(LANES[0])))
+/* The gate table is per lane, so a lane added or removed without its gate
+   would silently read past the end. */
+_Static_assert(sizeof(DEFAULT_DELTA) / sizeof(DEFAULT_DELTA[0]) == sizeof(LANES) / sizeof(LANES[0]),
+               "every lane needs exactly one onset gate");
 
 static void *xalloc(size_t n) {
   void *p = calloc(n ? n : 1, 1);
@@ -380,21 +381,6 @@ static double autocorr_peak(const double *x, int n, int lo, int hi, int *best_la
   return best;
 }
 
-static double pitch_confidence(const float *seg, int n, double rate) {
-  if (n < 64) return 0.0;
-  int any = 0;
-  for (int i = 0; i < n; i++) if (seg[i] != 0.f) { any = 1; break; }
-  if (!any) return 0.0;
-  double *x = xalloc((size_t)n * sizeof(double)), mean = 0.0;
-  for (int i = 0; i < n; i++) mean += seg[i];
-  mean /= n;
-  for (int i = 0; i < n; i++) x[i] = seg[i] - mean;
-  int lo = (int)(rate / BASS_F0_MAX), hi = (int)(rate / BASS_F0_MIN);
-  double peak = autocorr_peak(x, n, lo, hi, NULL);
-  free(x);
-  return peak;
-}
-
 static double estimate_bpm(const double *env, int n, double fps, int *detected) {
   *detected = 0;
   if (n < 8) return DEFAULT_BPM;
@@ -583,7 +569,7 @@ static int cmp_candidate(const void *a, const void *b) {
   const candidate_t *x = a, *y = b;
   if (x->sample_index != y->sample_index) return x->sample_index < y->sample_index ? -1 : 1;
   int xi = 0, yi = 0;
-  for (int i = 0; i < 4; i++) { if (!strcmp(x->lane, LANES[i])) xi = i; if (!strcmp(y->lane, LANES[i])) yi = i; }
+  for (int i = 0; i < LANE_COUNT; i++) { if (!strcmp(x->lane, LANES[i])) xi = i; if (!strcmp(y->lane, LANES[i])) yi = i; }
   return xi - yi;
 }
 
@@ -665,11 +651,9 @@ int main(int argc, char **argv) {
       double *envelope = xalloc((size_t)frames * sizeof(double));
       int *picked = xalloc((size_t)frames * sizeof(int));
       int *vel = xalloc((size_t)frames * sizeof(int));
-      cands = xalloc((size_t)frames * 4 * sizeof(candidate_t));
+      cands = xalloc((size_t)frames * 3 * sizeof(candidate_t));
       static const char *const column[3] = {"BD", "SD", "CHH"};
       static const char *const lane_name[3] = {"BD", "SD", "CYM"};
-      int *low_frames = xalloc((size_t)frames * sizeof(int));
-      int low_count = 0; const float *low_row = NULL;
       for (int lane = 0; lane < 3; lane++) {
         int col = template_column(&tpl, column[lane]);
         if (col < 0) continue;
@@ -679,7 +663,6 @@ int main(int argc, char **argv) {
         for (int f = 0; f < frames; f++) envelope[f] += row[f] / (top + EPSF);
         int count = pick_peaks(row, frames, DEFAULT_DELTA[lane], picked);
         velocities(row, frames, picked, count, fps, vel);
-        if (lane == 0) { memcpy(low_frames, picked, (size_t)count * sizeof(int)); low_count = count; low_row = row; }
         for (int i = 0; i < count; i++) {
           double conf = row[picked[i]] / (top + EPSF);
           cands[ncand++] = (candidate_t){lane_name[lane],
@@ -687,31 +670,8 @@ int main(int argc, char **argv) {
             vel[i], conf > 1.0 ? 1.0 : conf};
         }
       }
-      /* BASS reclassifies low-band onsets that hold a stable pitch; the lanes
-       * are deliberately not exclusive. */
-      int span = (int)(PITCH_WINDOW_SECONDS * source_rate);
-      int *bass = xalloc((size_t)(low_count ? low_count : 1) * sizeof(int));
-      int bass_count = 0;
-      for (int i = 0; i < low_count; i++) {
-        long start = lround((double)low_frames[i] * HOP * source_rate / (double)SR);
-        if (start < 0 || (size_t)start >= n) continue;
-        int avail = (int)(n - (size_t)start); if (avail > span) avail = span;
-        if (pitch_confidence(mono + start, avail, source_rate) >= PITCH_CONFIDENCE_CUT)
-          bass[bass_count++] = low_frames[i];
-      }
-      if (bass_count && low_row) {
-        velocities(low_row, frames, bass, bass_count, fps, vel);
-        float top = 0.f;
-        for (int f = 0; f < frames; f++) if (low_row[f] > top) top = low_row[f];
-        for (int i = 0; i < bass_count; i++) {
-          double conf = low_row[bass[i]] / (top + EPSF);
-          cands[ncand++] = (candidate_t){"BASS",
-            lround((double)bass[i] * HOP * source_rate / (double)SR),
-            vel[i], conf > 1.0 ? 1.0 : conf};
-        }
-      }
       if (!have_alignment) bpm = estimate_bpm(envelope, frames, fps, &detected);
-      free(bass); free(low_frames); free(vel); free(picked); free(envelope); free(Gd);
+      free(vel); free(picked); free(envelope); free(Gd);
     }
     free(V); free(analysis);
   }
@@ -724,7 +684,7 @@ int main(int argc, char **argv) {
   fprintf(out, "\"detector\":{\"backend_id\":\"%s\",\"backend_sha256\":\"%s\",\"template_sha256\":\"%s\"},",
           BACKEND_ID, backend_hex, template_hex);
   fprintf(out, "\"lane_onset_gates\":{");
-  for (int i = 0; i < 4; i++)
+  for (int i = 0; i < LANE_COUNT; i++)
     fprintf(out, "%s\"%s\":%.10g", i ? "," : "", LANES[i], (double)DEFAULT_DELTA[i]);
   fprintf(out, "},\"candidates\":[");
   for (int i = 0; i < ncand; i++)

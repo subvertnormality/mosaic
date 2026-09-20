@@ -28,7 +28,7 @@ local cases = {
 }
 assert(Bank.valid_ready(fresh()))
 assert(Bank.VERSION == 2, "schema migration must publish version 2")
-assert(table.concat(Bank.LANES, ",") == "BD,SD,CYM,BASS", "schema lane order is the four shipped lanes")
+assert(table.concat(Bank.LANES, ",") == "BD,SD,CYM", "schema lane order is the three shipped lanes")
 do
   local args = { project_id = "p", sample_rate = 48000, capture_start_sample = 0, capture_end_sample = 480000,
     origin_sample = 0, bpm = 120, candidates = {{lane = "CYM", sample_index = 0, velocity = 80, confidence = .9},

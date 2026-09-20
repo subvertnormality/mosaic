@@ -167,17 +167,18 @@ test("a tempo the detector never found is not shown as one it did", function()
   equal(c.adapter:screen_model().tempo_source, "manual", "a tempo the player set is theirs, not a fallback")
 end)
 
-test("lane keys select BD, SD, CYM and BASS, ignore their releases, and leave the retired column inert", function()
+test("lane keys select BD, SD and CYM, ignore their releases, and leave the retired columns inert", function()
   local c = context()
-  for index, lane in ipairs({ "BD", "SD", "CYM", "BASS" }) do
+  for index, lane in ipairs({ "BD", "SD", "CYM" }) do
     equal(c.adapter:grid_key(index + 2, 2, 1).code, "LANE_SELECTED")
     equal(c.adapter:screen_model().lane, lane)
     equal(c.adapter:grid_key(index + 2, 2, 0).code, "UNCLAIMED")
   end
   equal(c.adapter:grid_key(2, 2, 1).code, "UNCLAIMED", "reserved column has no legacy fader effect")
-  -- Columns 6 and 7 carried OHH and BASS before those lanes were withdrawn.
+  -- Columns 6 and 7 carried BASS and OHH before those lanes were withdrawn.
   -- They must not silently select a lane now, or a player pressing where a
   -- lane used to be would get an unrelated one.
+  equal(c.adapter:grid_key(6, 2, 1).code, "UNCLAIMED", "the withdrawn BASS column stays inert")
   equal(c.adapter:grid_key(7, 2, 1).code, "UNCLAIMED", "retired lane column stays inert")
 end)
 

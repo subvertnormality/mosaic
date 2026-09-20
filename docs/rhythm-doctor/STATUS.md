@@ -561,3 +561,48 @@ no new client can connect at all, which would break any script that opens its
 own JACK client. Preflight now distinguishes `AUDIO_SERVER_UNAVAILABLE`,
 `UNSUPPORTED_SAMPLE_RATE` and `CAPTURE_OUT_OF_MEMORY` from a genuinely busy
 input, so the screen names the problem it actually has.
+
+## BASS is withdrawn
+
+The lane is removed from the product: from `Bank.LANES`, the adapter, the grid
+row, the analysis worker's accepted lanes, the native backend, the manual and
+the cheat sheet. Row 2 now selects BD, SD and CYM on columns 3-5, with columns
+6 and 7 inert.
+
+The decision is the user's, on evidence from two captures of real music played
+into a device rather than from the corpus.
+
+What the shipped backend actually did: BASS was never detected. It took the BD
+peak list and kept the onsets whose next 80 ms held a confident pitch, so a
+bass note between kicks was unreachable by construction, and the lane could
+only ever be a subset of BD. On the first capture 98 of 111 kicks passed the
+filter; on the second, 48 of 48, and the two lanes were identical.
+
+The filter does not discriminate either. Extracting `pitch_confidence` into a
+standalone probe and running it over the second capture gives, at the 48 BD
+onsets, a minimum of 0.167 against a cut of 0.15 - nothing rejected - and at
+the 89 SD onsets a median of 0.309, with 2 rejected. It is a normalised
+autocorrelation over 35-300 Hz on the full mix, which is the band a kick
+occupies, so it scores a drum as readily as a bass note. Raising the cut could
+only delete kicks from a copy of BD; it could not make the lane find a bass
+line.
+
+This is consistent with everything measured before it. The harmonic residual
+route was refuted on 2026-09-19 because PFNMF separates drums from not-drums
+rather than bass from other harmonic content - a mean of 0.1 of 10 harmonic
+columns carry half their mass in 40-260 Hz. Separation-first is blocked on
+device memory. The ceiling analysis put held-out BASS F1 at 0.314 against a
+recall ceiling of 0.814, failing on discrimination.
+
+The route that remains open, and is not taken here, is a pitch-salience front
+end rather than a template: `walking_bass_transcription_dnn` is MIT, about
+13,000 parameters in 64 KB, and would run on armv7 with a hand-written forward
+pass. It outputs salience, so it suits gating candidate onsets rather than
+producing them. Anything built on it needs the real-music evaluation set this
+document has already called for; the rendered corpus is not a sufficient gate
+for that target.
+
+The `bass_artifact_sha256` identity in the optional pretrained backend
+configuration still exists and now describes a lane that does not. It is
+unconfigured by default and nothing reaches it; removing that shape is
+follow-up work rather than part of this change.

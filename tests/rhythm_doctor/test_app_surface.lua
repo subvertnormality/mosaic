@@ -110,9 +110,10 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
   equal(page.get_algorithm(), 5); equal(calls[1], "enter")
   for _, draw_fn in ipairs(observed.draw) do draw_fn() end
   equal(observed.leds["1,2"], 15); equal(observed.leds["2,2"], 0)
-  equal(observed.leds["3,2"], 15); equal(observed.leds["6,2"], 4)
-  -- Column 7 lit a lane LED before the lane set shrank to four. It must go
-  -- dark rather than leave a lane the player cannot select.
+  equal(observed.leds["3,2"], 15); equal(observed.leds["5,2"], 4)
+  -- Columns 6 and 7 lit lane LEDs before the set shrank to three. They must go
+  -- dark rather than leave lanes the player cannot select.
+  equal(observed.leds["6,2"], nil)
   equal(observed.leds["7,2"], nil)
   local claimed = false
   for _, pre in ipairs(observed.pre) do claimed = pre(1, 2) or claimed end
@@ -126,12 +127,12 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
   equal(page.get_rhythm_doctor_lane(), "SD"); equal(calls[#calls], "lane:SD")
   invoke(observed.normal, 5, 2)
   equal(page.get_rhythm_doctor_lane(), "CYM"); equal(calls[#calls], "lane:CYM", "x5 selects the cymbal lane")
-  -- x6 and x7 held OHH and BASS before those lanes were withdrawn; pressing
+  -- x6 and x7 held BASS and OHH before those lanes were withdrawn; pressing
   -- there must leave the selection alone rather than pick a neighbour.
   invoke(observed.normal, 6, 2)
-  equal(page.get_rhythm_doctor_lane(), "BASS"); equal(calls[#calls], "lane:BASS", "x6 selects the bass lane")
+  equal(page.get_rhythm_doctor_lane(), "CYM", "the withdrawn BASS column does not change the selection")
   invoke(observed.normal, 7, 2)
-  equal(page.get_rhythm_doctor_lane(), "BASS", "retired lane column does not change the selection")
+  equal(page.get_rhythm_doctor_lane(), "CYM", "retired lane column does not change the selection")
   equal(page.handle_rhythm_doctor_encoder(2, 1).code, "SETUP_EDITED")
   equal(calls[#calls], "enc:2,1")
   invoke(observed.normal, 15, 2)

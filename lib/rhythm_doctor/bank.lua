@@ -3,7 +3,7 @@
 -- See docs/rhythm-doctor/PLAN.md, "Four bars, clock and quantisation".
 local Bank = {
   VERSION = 2,
-  LANES = { "BD", "SD", "CYM", "BASS" },
+  LANES = { "BD", "SD", "CYM" },
   WINDOW_CELLS = 64,
   -- 45 seconds × an explicit 100 retained candidates/second/lane × 5 lanes.
   -- A worker exceeding this contract is rejected before allocating bank copies.

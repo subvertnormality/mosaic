@@ -85,7 +85,7 @@ def refused_correction_is_visible(c):
     fifth_algorithm(c)
 
     # The reloaded bank is READY without any analysis backend.
-    ready = status_band("BASS / READY")
+    ready = status_band("CYM / READY")
     c.wait(ready)
     c.results.append(dict(kind="correction-reload-ready", state="READY",
                           contract="README: a saved bank reloads ready without a backend"))

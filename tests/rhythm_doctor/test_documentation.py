@@ -15,7 +15,9 @@ class RhythmDoctorDocumentationTests(unittest.TestCase):
             self.assertIn("BD", document)
             self.assertIn("SD", document)
             self.assertIn("CYM", document)
-            self.assertIn("BASS", document)
+            # BASS was withdrawn: a lane the product does not have must not be
+            # advertised to a player as one it does.
+            self.assertNotIn("**BASS**", document)
             # OHH and TOM have no lane. The manual must not advertise one.
             self.assertNotIn("OHH", document)
             self.assertIn("stopped", document.lower())
