@@ -215,10 +215,247 @@ def read_capture_wav(path):
     return mono.astype(np.float32), int(rate), int(mono.size)
 
 
+# --- phrase alignment -------------------------------------------------------
+#
+# A capture starts when the player hits Record, which is never the top of a
+# bar. Until this existed the analysis returned origin_sample 0, so cell 0 was
+# the moment of the keypress and every gate sat at an arbitrary offset from the
+# beat. Three phases are recovered, in order, each conditioned on the last:
+#
+#   beat phase   -- where the beat grid sits inside the capture
+#   bar phase    -- which of the four beats is "1"
+#   phrase phase -- which of the four bars opens the phrase
+#
+# The first two are well determined by drum content. The third is not, and is
+# reported with a confidence rather than asserted: see phrase_offset.
+
+BEATS_PER_BAR = 4
+PHRASE_BARS = 4
+# Bar-phase margin at which the downbeat stops discounting the reported
+# confidence. Four candidates scored as shares of their total start from a
+# 0.25 share each, so a winner taking a tenth more than the runner-up is
+# already a clear result; below that the vote is close and says so.
+BAR_MARGIN_FULL = 0.10
+CELLS_PER_BEAT = 4
+WINDOW_CELLS = PHRASE_BARS * BEATS_PER_BAR * CELLS_PER_BEAT   # 64, == Bank.WINDOW_CELLS
+
+
+def _accent(curve):
+    """Positive deviation above the lane's median activation.
+
+    Raw activation answers "is this lane busy here", which a steady hat pattern
+    satisfies on every eighth and which therefore says nothing about where the
+    bar starts. Accent answers "does this lane do something UNUSUAL here",
+    which is what a crash on the downbeat or a kick against a sparse floor
+    actually is. The median is the baseline rather than the mean because a few
+    large accents would drag a mean up towards themselves and mask the very
+    events being looked for.
+    """
+    curve = np.asarray(curve, dtype=np.float64)
+    if not curve.size:
+        return curve
+    return np.maximum(curve - np.median(curve), 0.0)
+
+
+def _combined_accent(accents):
+    """All lanes' accents summed after each is scaled to its own peak.
+
+    Used where the question is "did anything happen here", not "did this
+    particular drum happen here".
+    """
+    total = None
+    for curve in accents.values():
+        scaled = curve / (curve.max() + EPS)
+        total = scaled if total is None else total + scaled
+    return total
+
+
+def _pickup(combined, phase, beat, offset, size):
+    """Activity in the three sixteenths immediately before each candidate downbeat.
+
+    Drummers announce the bar line: a fill, a snare pickup, a kick run. That
+    announcement sits in the sixteenths before beat 1 and nowhere else, which
+    makes it the cue that separates beat 1 from beat 3 when the kick plays both
+    and the snare answers on both backbeats. Beat-resolution scoring cannot see
+    it at all, because it happens between the beats.
+    """
+    sixteenth = beat / CELLS_PER_BEAT
+    total, count, bar_index = 0.0, 0, 0
+    while True:
+        downbeat_frame = phase + (offset + BEATS_PER_BAR * bar_index) * beat
+        if downbeat_frame >= size:
+            break
+        for step in (1, 2, 3):
+            frame = int(round(downbeat_frame - step * sixteenth))
+            if 0 <= frame < size:
+                total += combined[frame]
+                count += 1
+        bar_index += 1
+    return total / count if count else 0.0
+
+
+def _share(values):
+    """Scale a set of candidate scores to fractions of their total."""
+    total = float(sum(values))
+    if total <= 0:
+        return [0.0] * len(values)
+    return [float(value) / total for value in values]
+
+
+def _comb(curve, phase, spacing, first, stride, size):
+    """Mean of `curve` sampled at first, first+stride, ... beats from `phase`.
+
+    A mean rather than a sum so candidates that fit different numbers of beats
+    into the capture stay comparable.
+    """
+    total, count, index = 0.0, 0, first
+    while True:
+        frame = int(round(phase + index * spacing))
+        if frame >= size:
+            break
+        if frame >= 0:
+            total += curve[frame]
+            count += 1
+        index += stride
+    return total / count if count else 0.0
+
+
+def beat_phase(envelope, fps, bpm):
+    """Frame offset of the first beat: the comb phase collecting most energy.
+
+    Searched at frame resolution, which at the shipped 512-sample hop is 11.6 ms
+    -- finer than the onset envelope's own smearing, so a finer lattice would
+    only fit noise.
+    """
+    env = np.asarray(envelope, dtype=np.float64)
+    beat = 60.0 * fps / bpm
+    if env.size < beat or not np.any(env > 0):
+        return 0.0
+    best, best_score = 0.0, -1.0
+    for frame in range(max(1, int(round(beat)))):
+        score = _comb(env, float(frame), beat, 0, 1, env.size)
+        if score > best_score:
+            best, best_score = float(frame), score
+    return best
+
+
+def downbeat_offset(curves, crash, fps, bpm, phase):
+    """Which beat of four is "1", and how decided the vote was.
+
+    Weights encode the two facts that hold across essentially all backbeat
+    material: the kick marks the downbeat, and the snare marks 2 and 4. The
+    crash contributes at half weight because it appears on some downbeats only.
+    """
+    beat = 60.0 * fps / bpm
+    accents = {lane: _accent(curve) for lane, curve in curves.items()}
+    combined = _combined_accent(accents)
+    size = len(accents["BD"])
+    offsets = range(BEATS_PER_BAR)
+    kick = [_comb(accents["BD"], phase, beat, o, BEATS_PER_BAR, size) for o in offsets]
+    back = [_comb(accents["SD"], phase, beat, o + 1, BEATS_PER_BAR, size)
+            + _comb(accents["SD"], phase, beat, o + 3, BEATS_PER_BAR, size) for o in offsets]
+    pickup = [_pickup(combined, phase, beat, o, size) for o in offsets]
+    ring = [_comb(crash, phase, beat, o, BEATS_PER_BAR, size) for o in offsets]
+    # Each lane votes on its own scale -- a kick activation is routinely two
+    # orders of magnitude larger than a cymbal one -- so the votes are made
+    # comparable before they are combined. Without this the kick decides alone,
+    # and the kick cannot separate beat 1 from beat 3 in the commonest pattern
+    # there is, where it plays both.
+    #
+    # The cymbal LANE deliberately does not vote. Its activation is highest
+    # where a hat sounds UNMASKED by a kick or snare, which is the off-beat, so
+    # scoring it at beat resolution votes confidently for the wrong answer. The
+    # crash ring (crash_sustain) is a different measurement and does vote: it
+    # is the only cue that survives when a pattern has no fill and the kick
+    # plays 1 and 3, which is symmetric under a two-beat shift.
+    kick_share, back_share = _share(kick), _share(back)
+    pickup_share, ring_share = _share(pickup), _share(ring)
+    scored = [kick_share[o] + back_share[o] + pickup_share[o] + ring_share[o] for o in offsets]
+    best = max(offsets, key=lambda o: scored[o])
+    ordered = sorted(scored, reverse=True)
+    margin = 0.0 if ordered[0] <= 0 else (ordered[0] - ordered[1]) / ordered[0]
+    return best, float(margin)
+
+
+CRASH_BAND_HZ = 5000.0
+CRASH_TAIL_SECONDS = 0.40
+
+
+def crash_sustain(V, fps, sample_rate=SR):
+    """How much high-band energy each frame LEAVES BEHIND it.
+
+    A crash and a closed hat occupy the same band, so level cannot separate
+    them; duration can. A crash rings for most of a second, a hat is gone in
+    tens of milliseconds. This measures the mean high-band magnitude over the
+    400 ms following each frame, so a hat scores near its own baseline and a
+    crash scores far above it.
+
+    Taken from the spectrogram rather than from the NMF lane on purpose. The
+    lane's activation is suppressed wherever a kick or snare explains the same
+    frame, which is exactly on the downbeats being looked for.
+    """
+    V = np.asarray(V, dtype=np.float64)
+    if V.shape[1] == 0:
+        return np.zeros(0)
+    first = int(round(CRASH_BAND_HZ * NFFT / float(sample_rate)))
+    if first >= V.shape[0]:
+        return np.zeros(V.shape[1])
+    band = V[first:].mean(axis=0)
+    tail = max(1, int(round(CRASH_TAIL_SECONDS * fps)))
+    padded = np.concatenate([band, np.zeros(tail)])
+    window = np.convolve(padded, np.ones(tail) / tail, mode="full")[tail - 1:tail - 1 + band.size]
+    return _accent(window)
+
+
+def phrase_offset(crash, fps, bpm, phase, downbeat):
+    """Which bar of four opens the phrase, and how much to believe it.
+
+    Phrase position is normally recovered from repetition at a four-bar period.
+    A Rhythm Doctor capture is a handful of bars, so there is often no second
+    phrase to correlate against and the honest answer is "unknown". What
+    survives on a short take is the crash a player lands on the top of the
+    phrase, measured by its ring rather than its level (see crash_sustain).
+    That cue is scored here, and the confidence is the margin between
+    the best candidate and the runner-up, scaled down when too few phrases were
+    observed for the margin to mean anything. It is NOT a probability; it is
+    how much better the winner did than its nearest rival.
+    """
+    beat = 60.0 * fps / bpm
+    bar = beat * BEATS_PER_BAR
+    size = len(crash)
+    bars_available = int(max(0.0, (size - phase - downbeat * beat)) // bar)
+    if bars_available < PHRASE_BARS:
+        return 0, 0.0
+    origin = phase + downbeat * beat
+    scores = [_comb(crash, origin, bar, candidate, PHRASE_BARS, size)
+              for candidate in range(PHRASE_BARS)]
+    best = max(range(PHRASE_BARS), key=lambda i: scores[i])
+    ordered = sorted(scores, reverse=True)
+    margin = 0.0 if ordered[0] <= 0 else (ordered[0] - ordered[1]) / ordered[0]
+    # One phrase gives a margin with nothing to corroborate it; two or more let
+    # the cue repeat. Below two observed phrases the margin is halved rather
+    # than discarded, because a lone crash is still evidence.
+    phrases = bars_available / float(PHRASE_BARS)
+    scale = 1.0 if phrases >= 2.0 else 0.5
+    return best, float(min(1.0, max(0.0, margin * scale)))
+
+
 # --- tempo -----------------------------------------------------------------
 
 BPM_MIN, BPM_MAX = 40.0, 240.0
 DEFAULT_BPM = 120.0
+
+# Tempo octave preference. Autocorrelation cannot tell a tempo from half or
+# double it -- both are genuine periodicities of the same signal -- and for the
+# commonest drum pattern there is, kick on 1 and 3, the two-beat period is the
+# STRONGER one. A bare maximum therefore calls a 120 BPM rock groove 60 BPM,
+# and the bars, the phrase alignment and every quantised gate inherit the
+# error. The standard remedy is a log-normal preference over tempo; these are
+# librosa's published defaults (start_bpm 120, std_bpm 1.0 octave) rather than
+# values fitted to this project's material. The preference is gentle: a 60 BPM
+# peak still wins if it is about 1.65x stronger than the 120 BPM one.
+TEMPO_PRIOR_CENTRE = 120.0
+TEMPO_PRIOR_OCTAVES = 1.0
 
 
 def estimate_bpm(onset_envelope, fps, bpm_min=BPM_MIN, bpm_max=BPM_MAX):
@@ -242,9 +479,15 @@ def estimate_bpm(onset_envelope, fps, bpm_min=BPM_MIN, bpm_max=BPM_MAX):
     if hi <= lo:
         return DEFAULT_BPM, False
     window = ac[lo:hi + 1]
-    best = int(np.argmax(window)) + lo
     if window.max() <= 0.1:                       # no usable periodicity
         return DEFAULT_BPM, False
+    lags = np.arange(lo, hi + 1, dtype=np.float64)
+    prior = np.exp(-0.5 * (np.log2((60.0 * fps / lags) / TEMPO_PRIOR_CENTRE)
+                           / TEMPO_PRIOR_OCTAVES) ** 2)
+    # The prior reweights which periodicity is chosen; the 0.1 floor above is
+    # still applied to the raw correlation, so preferring a tempo can never
+    # manufacture a detection out of an unpulsed envelope.
+    best = int(np.argmax(window * prior)) + lo
     bpm = 60.0 * fps / best
     while bpm < bpm_min: bpm *= 2.0
     while bpm > bpm_max: bpm /= 2.0
@@ -323,11 +566,14 @@ def analyse_request(wav_path, deltas=None, alignment=None):
                 "template_sha256": _sha256_file(_TEMPLATES)}
     confirmed = confirmed_alignment(alignment)
     empty = {"bpm": DEFAULT_BPM, "tempo_detected": False, "origin_sample": 0,
+             "phrase_start_sample": 0, "phrase_confidence": 0.0,
              "tempo_mode": "auto", "detector": identity,
              "lane_onset_gates": empty_gates, "candidates": []}
     if confirmed:
         empty.update({"bpm": confirmed["bpm"], "tempo_detected": True,
-                      "origin_sample": confirmed["origin_sample"], "tempo_mode": "manual"})
+                      "origin_sample": confirmed["origin_sample"], "tempo_mode": "manual",
+                      "phrase_start_sample": confirmed["origin_sample"],
+                      "phrase_confidence": 1.0})
     if not mono.size or not np.any(mono):
         return empty
     analysis = mono if source_rate == SR else _resample(mono, source_rate, SR)
@@ -357,14 +603,66 @@ def analyse_request(wav_path, deltas=None, alignment=None):
     candidates.sort(key=lambda c: (c["sample_index"], LANES.index(c["lane"])))
     bpm, detected = estimate_bpm(envelope, fps)
     origin, mode = 0, "auto"
+    phrase_start, phrase_confidence = 0, 0.0
+    if detected:
+        phrase_start, phrase_confidence, origin = _align_to_phrase(
+            {lane: G_D[lanes.index(column[lane])] for lane in LANES},
+            crash_sustain(V, fps), envelope, fps, bpm, source_rate, mono.size, source_index)
     if confirmed:
         # The player corrected this capture and asked for it to be reanalysed;
         # their tempo and origin stand, and onset positions are absolute, so
-        # they do not move.
+        # they do not move. A corrected origin IS the phrase start they chose:
+        # the whole point of the correction is to say where the phrase begins.
         bpm, detected, origin, mode = confirmed["bpm"], True, confirmed["origin_sample"], "manual"
+        phrase_start, phrase_confidence = origin, 1.0
     return {"bpm": float(bpm), "tempo_detected": bool(detected), "origin_sample": int(origin),
+            "phrase_start_sample": int(phrase_start),
+            "phrase_confidence": float(phrase_confidence),
             "tempo_mode": mode, "detector": identity, "lane_onset_gates": empty_gates,
             "candidates": candidates}
+
+
+def _align_to_phrase(curves, crash, envelope, fps, bpm, source_rate, capture_samples, source_index):
+    """Return (phrase_start_sample, confidence, origin_sample) in source coordinates.
+
+    The origin is rewound from the phrase start in whole cells, as far as the
+    capture allows, for two reasons. It keeps the grid in phase with the music,
+    so a gate detected on beat 1 quantises to a cell boundary rather than
+    straddling one. And it keeps the audio recorded before the phrase began
+    inside the timeline, so the player can scroll back behind the phrase start
+    instead of losing it.
+    """
+    phase = beat_phase(envelope, fps, bpm)
+    downbeat, bar_margin = downbeat_offset(curves, crash, fps, bpm, phase)
+    offset, phrase_margin = phrase_offset(crash, fps, bpm, phase, downbeat)
+    # A phrase position is only as trustworthy as the bar phase it is measured
+    # against: naming the right bar of four is worthless if the downbeat inside
+    # it is two beats out. Reporting the phrase margin alone told the player to
+    # trust exactly that.
+    confidence = phrase_margin * min(1.0, bar_margin / BAR_MARGIN_FULL)
+    beat = 60.0 * fps / bpm
+    bar = beat * BEATS_PER_BAR
+    samples_per_cell = source_rate * 15.0 / bpm
+    window = WINDOW_CELLS * samples_per_cell
+    # Walk phrase candidates forward and take the first that still has a whole
+    # window behind it. Jumping to a phrase start with two bars of capture left
+    # would show a view clamped against the end, which reads as a detector
+    # error rather than as the end of the recording.
+    start_frame = phase + downbeat * beat + offset * bar
+    phrase_start = None
+    while True:
+        candidate = source_index(start_frame)
+        if candidate + window > capture_samples:
+            break
+        phrase_start = candidate
+        if phrase_start >= 0:
+            break
+        start_frame += bar * PHRASE_BARS
+    if phrase_start is None or phrase_start < 0:
+        return 0, 0.0, 0
+    cells_before = int(phrase_start // samples_per_cell)
+    origin = int(round(phrase_start - cells_before * samples_per_cell))
+    return phrase_start, confidence, max(0, origin)
 
 
 def _mono_float(pcm):

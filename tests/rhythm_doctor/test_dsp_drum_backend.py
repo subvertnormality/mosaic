@@ -131,6 +131,24 @@ class TempoTests(unittest.TestCase):
         self.assertTrue(detected)
         self.assertAlmostEqual(bpm, 120.0, delta=4.0)
 
+    def test_a_backbeat_groove_is_not_reported_at_half_speed(self):
+        """Kick on 1 and 3 makes the two-beat period the strongest one in the
+        signal, so a bare autocorrelation maximum calls a 120 BPM rock groove
+        60 BPM. Everything downstream inherits that: bars come out twice as
+        long and the phrase alignment lands on the wrong beat."""
+        mono, _ = groove(bars=8, bpm=120.0)
+        fps = dsp.SR / dsp.HOP
+        V = dsp.stft_magnitude(mono)
+        lane_names, B_D, _ = dsp.load_templates()
+        G_D = dsp.pfnmf(V, B_D)
+        env = np.zeros(G_D.shape[1])
+        for lane in dsp.LANES:
+            row = G_D[lane_names.index({"BD": "BD", "SD": "SD", "CYM": "CHH"}[lane])]
+            env += row / (row.max() + dsp.EPS)
+        bpm, detected = dsp.estimate_bpm(env, fps)
+        self.assertTrue(detected)
+        self.assertAlmostEqual(bpm, 120.0, delta=6.0)
+
     def test_an_unpulsed_envelope_reports_a_placeholder_rather_than_a_guess(self):
         fps = dsp.SR / dsp.HOP
         bpm, detected = dsp.estimate_bpm(np.zeros(400, dtype=np.float32), fps)
@@ -454,5 +472,170 @@ class SampleRateTests(unittest.TestCase):
             self.assertLess(nearest, 0.05, f"44.1k onset {a:.3f}s unmatched at 48k: {got[48000]}")
 
 
+
+
+def crash_train(times, sr=44100, seconds=4.0):
+    """A crash, which is a hat's opposite: broadband and long, not short.
+
+    Using a louder closed hat here would put no crash-like cue in the fixture
+    at all, and a detector that appeared to find the phrase would only be
+    finding the amplitude bump.
+    """
+    x = np.zeros(int(seconds * sr), dtype=np.float32)
+    rng = np.random.default_rng(7)
+    n = int(1.6 * sr)
+    env = np.exp(-np.linspace(0, 5, n)).astype(np.float32)
+    for t in times:
+        i = int(t * sr)
+        seg = (rng.standard_normal(n).astype(np.float32) * env)[:max(0, len(x) - i)]
+        x[i:i + len(seg)] += seg
+    return x / (np.abs(x).max() + 1e-9)
+
+
+def groove(bars=8, bpm=120.0, sr=44100, lead_in_beats=0.0, crash_every=4,
+           fill_bar=None):
+    """A plain rock pattern whose true downbeats are known exactly.
+
+    Kick on beats 1 and 3, snare on 2 and 4, closed hat on every eighth. A
+    crash lands on the downbeat of every `crash_every` bars, which is the cue a
+    player hears as the top of the phrase. Returns (mono, downbeat_samples).
+    """
+    beat = 60.0 / bpm
+    lead = lead_in_beats * beat
+    seconds = lead + bars * 4 * beat + 1.0
+    bd, sd, hh, cym = [], [], [], []
+    downbeats = []
+    for bar in range(bars):
+        start = lead + bar * 4 * beat
+        downbeats.append(int(round(start * sr)))
+        bd += [start, start + 2 * beat]
+        sd += [start + beat, start + 3 * beat]
+        hh += [start + i * beat / 2 for i in range(8)]
+        if crash_every and bar % crash_every == 0:
+            cym.append(start)
+        if fill_bar is not None and bar % 4 == fill_bar:
+            sd += [start + 3 * beat + i * beat / 4 for i in range(1, 4)]
+    mono = (click_train(bd, sr=sr, seconds=seconds, kind="bd")
+            + click_train(sd, sr=sr, seconds=seconds, kind="sd")
+            + 0.5 * click_train(hh, sr=sr, seconds=seconds, kind="chh"))
+    if cym:
+        mono = mono + 0.9 * crash_train(cym, sr=sr, seconds=seconds)
+    return (mono / (np.abs(mono).max() + 1e-9)).astype(np.float32), downbeats
+
+
+class PhraseAlignmentTests(unittest.TestCase):
+    """The analysis must place the gates against the music, not against the
+    moment Record was pressed.
+
+    Before this, auto analysis returned origin_sample 0, so cell 0 was wherever
+    the player happened to start recording and every gate position was
+    arbitrary relative to the bar.
+    """
+
+    SR = 44100
+    BPM = 120.0
+
+    def _analysed(self, mono, sr=None):
+        sr = sr or self.SR
+        handle = tempfile.NamedTemporaryFile(suffix=".wav", delete=False); handle.close()
+        _riff(handle.name, mono, sample_rate=sr)
+        try:
+            return dsp.analyse_request(handle.name)
+        finally:
+            os.unlink(handle.name)
+
+    def test_the_phrase_start_lands_on_a_real_downbeat(self):
+        mono, downbeats = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        value = self._analysed(mono)
+        cell = self.SR * 15 / value["bpm"]
+        nearest = min(downbeats, key=lambda d: abs(d - value["phrase_start_sample"]))
+        self.assertLessEqual(abs(nearest - value["phrase_start_sample"]), cell,
+                             "phrase start is not within a sixteenth of any downbeat")
+
+    def test_the_phrase_start_is_a_whole_number_of_cells_after_the_origin(self):
+        """The origin is the grid zero. If the phrase start does not fall on a
+        cell boundary the bank cannot address it as a window position."""
+        mono, _ = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        value = self._analysed(mono)
+        cell = self.SR * 15 / value["bpm"]
+        offset = (value["phrase_start_sample"] - value["origin_sample"]) / cell
+        self.assertAlmostEqual(offset, round(offset), places=6)
+        self.assertGreaterEqual(round(offset), 0)
+
+    def test_audio_before_the_phrase_start_is_kept_so_the_player_can_scroll_back(self):
+        mono, _ = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        value = self._analysed(mono)
+        self.assertGreaterEqual(value["origin_sample"], 0)
+        self.assertLess(value["origin_sample"], value["phrase_start_sample"],
+                        "a capture with a lead-in must leave cells before the phrase start")
+
+    def test_a_full_window_remains_after_the_phrase_start(self):
+        """Jumping to the phrase start must show four whole bars, not a partial
+        view clamped against the end of the capture."""
+        mono, _ = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        value = self._analysed(mono)
+        cell = self.SR * 15 / value["bpm"]
+        self.assertLessEqual(value["phrase_start_sample"] + 64 * cell, mono.size)
+
+    def test_a_crash_alone_is_enough_to_find_the_downbeat(self):
+        """Kick on 1 and 3 with snare on 2 and 4 is symmetric under a two-beat
+        shift, so the kick and snare cannot say which is beat 1. Without a fill
+        the crash is the only cue left, and it has to be used."""
+        mono, downbeats = groove(bars=8, crash_every=4, lead_in_beats=1.5)
+        value = self._analysed(mono)
+        cell = self.SR * 15 / value["bpm"]
+        nearest = min(downbeats, key=lambda d: abs(d - value["phrase_start_sample"]))
+        self.assertLessEqual(abs(nearest - value["phrase_start_sample"]), cell)
+
+    def test_an_ambiguous_bar_phase_is_not_reported_confidently(self):
+        """Confidence must fall when the bar phase itself is a near-tie, not
+        only when the phrase position is. Reporting 1.0 for a downbeat landing
+        on beat 3 tells the player to trust an alignment that is two beats out."""
+        mono, downbeats = groove(bars=8, crash_every=0, lead_in_beats=1.5)
+        value = self._analysed(mono)
+        cell = self.SR * 15 / value["bpm"]
+        nearest = min(downbeats, key=lambda d: abs(d - value["phrase_start_sample"]))
+        if abs(nearest - value["phrase_start_sample"]) > cell:
+            self.assertLess(value["phrase_confidence"], 0.5,
+                            "a wrong downbeat must not be reported confidently")
+
+    def test_a_crash_on_the_phrase_downbeat_beats_a_pattern_without_one(self):
+        """The crash is the strongest phrase cue available from drums alone."""
+        with_crash, _ = groove(bars=8, crash_every=4)
+        without, _ = groove(bars=8, crash_every=0)
+        self.assertGreater(self._analysed(with_crash)["phrase_confidence"],
+                           self._analysed(without)["phrase_confidence"])
+
+    def test_identical_bars_do_not_claim_a_confident_phrase(self):
+        """Eight identical bars carry no information about which bar is the
+        top of the phrase. Reporting a confident answer would be a fabrication."""
+        mono, _ = groove(bars=8, crash_every=0)
+        self.assertLess(self._analysed(mono)["phrase_confidence"], 0.35)
+
+    def test_confidence_is_reported_for_every_analysis(self):
+        mono, _ = groove(bars=8)
+        value = self._analysed(mono)
+        self.assertIsInstance(value["phrase_confidence"], float)
+        self.assertGreaterEqual(value["phrase_confidence"], 0.0)
+        self.assertLessEqual(value["phrase_confidence"], 1.0)
+
+    def test_a_player_correction_still_outranks_the_detected_phrase(self):
+        mono, _ = groove(bars=8, lead_in_beats=1.5, fill_bar=3)
+        handle = tempfile.NamedTemporaryFile(suffix=".wav", delete=False); handle.close()
+        _riff(handle.name, mono, sample_rate=self.SR)
+        try:
+            value = dsp.analyse_request(
+                handle.name, alignment={"bpm": 96.0, "origin_sample": 12345})
+        finally:
+            os.unlink(handle.name)
+        self.assertEqual(value["tempo_mode"], "manual")
+        self.assertEqual(value["origin_sample"], 12345)
+        self.assertEqual(value["phrase_start_sample"], 12345,
+                         "a corrected origin is the phrase start the player chose")
+
+    def test_silence_reports_no_phrase_rather_than_guessing(self):
+        value = self._analysed(np.zeros(int(6 * self.SR), dtype=np.float32))
+        self.assertEqual(value["phrase_start_sample"], value["origin_sample"])
+        self.assertEqual(value["phrase_confidence"], 0.0)
 if __name__ == "__main__":
     unittest.main()
