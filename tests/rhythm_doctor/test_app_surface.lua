@@ -311,6 +311,21 @@ test("the window position is left to the grid rather than spelled out", function
   check(table.concat(texts, " "):find("PAINT", 1, true), "paint policy still reports its value")
 end)
 
+test("a paint preview does not outlive the destination it was built for", function()
+  -- A preview commits to the target it was built for. Leaving it armed after
+  -- the selection moves means Paint writes to the pattern the player navigated
+  -- away from while the screen shows the new one. Both the pattern fader and
+  -- the page draw consult this, the draw because the song slot changes from
+  -- another page entirely.
+  local page = trigger_page_context()
+  local moved = page.paint_target_moved
+  check(moved({song_slot = 1, pattern_id = 1}, {song_slot = 1, pattern_id = 2}), "a new pattern is a new destination")
+  check(moved({song_slot = 1, pattern_id = 1}, {song_slot = 2, pattern_id = 1}), "so is a new song slot")
+  check(not moved({song_slot = 1, pattern_id = 1}, {song_slot = 1, pattern_id = 1}), "the same destination has not moved")
+  check(not moved(nil, {song_slot = 1, pattern_id = 1}), "nothing armed is nothing to discard")
+  check(not moved({song_slot = 1, pattern_id = 1}, nil), "an unknown destination is not a move")
+end)
+
 test("the dancing doctor holds the free space and yields it to an overlay", function()
   -- The right-hand third is only free while no editor or modal is open: the
   -- overlays write text straight across it, so he has to step aside rather

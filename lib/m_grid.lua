@@ -136,6 +136,11 @@ local function register_press()
       if (y == 8) then
         if (x == 1) then
           if not m_clock.is_playing() then
+            -- Announce the start before it happens. Rhythm Doctor cancels a
+            -- capture when the sequencer runs, and this key does not go through
+            -- clock.transport, so without this a capture kept recording under
+            -- playback while Stop -- which does go through it -- cancelled.
+            if transport_started_by_user then transport_started_by_user() end
             m_clock:start()
             tooltip:show("Starting playback")
           else

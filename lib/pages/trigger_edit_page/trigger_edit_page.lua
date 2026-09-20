@@ -27,10 +27,30 @@ function trigger_edit_page.init()
   trigger_edit_page.refresh_trigger_edit_page_ui()
 end
 
+local cancel_rhythm_doctor_paint
+local rhythm_doctor_target
+
+-- Whether an armed preview is still aimed at the destination that is selected.
+function trigger_edit_page.paint_target_moved(armed, current)
+  if type(armed) ~= "table" or type(current) ~= "table" then return false end
+  return armed.song_slot ~= current.song_slot or armed.pattern_id ~= current.pattern_id
+end
+
+local function discard_stale_rhythm_doctor_paint()
+  local preview = rhythm_doctor_paint_preview
+  if not preview or type(preview.target) ~= "table" then return false end
+  if not trigger_edit_page.paint_target_moved(preview.target, rhythm_doctor_target()) then return false end
+  cancel_rhythm_doctor_paint()
+  return true
+end
+
 function trigger_edit_page.register_draws()
   draw:register_grid(
     "trigger_edit_page",
     function()
+      -- The song slot can change from another page, so the armed preview is
+      -- rechecked here rather than only where the pattern fader is pressed.
+      discard_stale_rhythm_doctor_paint()
       return trigger_edit_page_pattern_select_fader:draw()
     end
   )
@@ -244,7 +264,7 @@ local function save_paint_pattern(p)
   selected_song_pattern.active = true
 end
 
-local function rhythm_doctor_target()
+function rhythm_doctor_target()
   local data = program.get()
   return { song_slot = data.selected_song_pattern, pattern_id = data.selected_pattern }
 end
@@ -264,7 +284,12 @@ local function preview_rhythm_doctor_paint()
   return preview
 end
 
-local function cancel_rhythm_doctor_paint()
+-- A preview commits to the destination it was built for, not the one that is
+-- selected now, so an armed preview must not outlive the selection. Changing
+-- pattern or song slot leaves it pointing at the old target while the screen
+-- shows the new one, and Paint would then write where the player is no longer
+-- looking.
+function cancel_rhythm_doctor_paint()
   rhythm_doctor_paint_preview = nil
   trigger_edit_page_sequencer:hide_unsaved_grid()
   if rhythm_doctor and type(rhythm_doctor.invalidate_paint_preview) == "function" then rhythm_doctor:invalidate_paint_preview() end
@@ -277,6 +302,7 @@ function trigger_edit_page.register_press()
       if trigger_edit_page_pattern_select_fader:is_this(x, y) then
         trigger_edit_page_pattern_select_fader:press(x, y)
         program.get().selected_pattern = trigger_edit_page_pattern_select_fader:get_value()
+        discard_stale_rhythm_doctor_paint()
         tooltip:show("Pattern " .. program.get().selected_pattern .. " selected")
       end
     end

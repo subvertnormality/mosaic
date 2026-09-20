@@ -301,8 +301,16 @@ function autosave_reset()
   project.reset_autosave()
 end
 
-function clock.transport:start()
+-- Every route that starts the sequencer has to tell Rhythm Doctor, or a
+-- capture keeps running underneath playback. clock.transport is one route; the
+-- grid Play key is another and does not pass through it. The local/external
+-- distinction stays with each caller: this only announces.
+function transport_started_by_user()
   if rhythm_doctor_ui then rhythm_doctor_ui:transport_started() end
+end
+
+function clock.transport:start()
+  transport_started_by_user()
   m_clock:start(params:get("clock_source") == 2)
 end
 
