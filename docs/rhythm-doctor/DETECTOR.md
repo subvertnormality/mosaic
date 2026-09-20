@@ -109,14 +109,27 @@ missing lane, or an identity mismatch fails closed. The adapter installs,
 downloads, trains, and fine-tunes nothing; the operator must supply every frozen
 local artifact and its runtime sessions explicitly.
 
-The shipped model-free backend, `tools/rhythm_doctor/dsp_drum_backend.py`, uses
-the second supported identity shape: it has no model artifacts, so it pins its
-own source through `RHYTHM_DOCTOR_ANALYSIS_BACKEND_SHA256` and the published
-NMF template table it reads through `RHYTHM_DOCTOR_TEMPLATE_SHA256`, alongside
-`RHYTHM_DOCTOR_ANALYSIS_BACKEND`. A configuration must supply exactly one
-complete shape: a template digest together with either model artifact digest is
-rejected, as is half of either shape. Like the pretrained profile it is
-unconfigured by default and downloads nothing.
+The backend Mosaic actually runs is
+`tools/rhythm_doctor/rd_analysis_backend.c`, a native model-free detector the
+analysis launcher compiles on first use and then reuses. It needs no Python
+packages, which is what lets a stock Norns analyse a capture at all: a Norns
+has the standard library and nothing else, and the earlier Python backend
+needed numpy. The FFT is not reimplemented - numpy's own pocketfft is vendored
+as `tools/rhythm_doctor/pocketfft.c`, so the spectrogram comes from the same
+code the reference uses; `vendor_pocketfft.sh` regenerates it. It reports the
+second supported identity shape, hashing its own source and the template table
+at run time rather than being told what they are.
+
+`tools/rhythm_doctor/dsp_drum_backend.py` remains the reference implementation.
+It is not what runs on a device and it does need numpy; it is kept because the
+native port is validated against it, and `test_native_backend.py` compares the
+two on every run. A delivery profile can still supply an executable of
+its own, which takes precedence over the native build: `RHYTHM_DOCTOR_ANALYSIS_BACKEND`
+with `RHYTHM_DOCTOR_ANALYSIS_BACKEND_SHA256`, and then either
+`RHYTHM_DOCTOR_TEMPLATE_SHA256` for a model-free detector or both model
+artifact digests for a pretrained one. Exactly one shape, completely: a
+template digest together with either artifact digest is rejected, as is half of
+either shape.
 
 `tools/rhythm_doctor/pretrained_bass_runtime.py` supplies the concrete pinned
 desktop UMXHQ and Basic Pitch ONNX loaders used by that factory boundary. It
