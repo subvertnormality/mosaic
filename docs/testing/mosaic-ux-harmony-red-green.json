@@ -3,7 +3,7 @@
   "subject": "Harmony convergence regressions",
   "source_binding": {
     "rule": "Each baseline clone was placed at PARENT/mosaic because the Lua harness resolves include('mosaic/...') from that layout. Earlier clones with a different leaf name are excluded from evidence.",
-    "candidate_revision": "2d4dfe5718e48a3232616185b62e0db06bbc3139"
+    "candidate_revision": "48fc157b72bb8a1684e92b3b95b6094fdbe2c069"
   },
   "red": [
     {
@@ -40,17 +40,35 @@
         "failed": 1,
         "expected_failure": "runtime.consumed was already populated immediately after step.handle, before any MIDI Note On"
       }
+    },
+    {
+      "claim": "A member-local octave override must retain its exact ordinary pitch and be exposed as a reason-specific local-octave bypass.",
+      "baseline_revision": "f248a881eca9e5da72318cae13a3a93ba23a3aed",
+      "checkout": "/tmp/mosaic-red-local-octave-bound/mosaic",
+      "regression_patch": {
+        "path": "/tmp/mosaic-local-octave-regressions.patch",
+        "sha256": "fc963f4c21160445a3a9a7259dc084119a0e9d8037ae42766fe5858c18437d01"
+      },
+      "command": "cd /tmp/mosaic-red-local-octave-bound/mosaic/lib/tests && lua run_tests.lua test_harmony_result_names_local_octave_bypass_instead_of_no_voicing test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch",
+      "result": {
+        "passed": 0,
+        "failed": 2,
+        "expected_failures": [
+          "the playback inspection chain omitted the local_octave bypass classification",
+          "H05 rendered the generic BYPASS local_octave label instead of LOCAL OCTAVE BYPASS"
+        ]
+      }
     }
   ],
   "green": {
-    "revision": "2d4dfe5718e48a3232616185b62e0db06bbc3139",
-    "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason test_harmony_group_result_surfaces_a_members_local_scale_bypass test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset",
+    "revision": "48fc157b72bb8a1684e92b3b95b6094fdbe2c069",
+    "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason test_harmony_group_result_surfaces_a_members_local_scale_bypass test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset test_harmony_result_names_local_octave_bypass_instead_of_no_voicing test_harmony_playback_ensemble_local_octave_is_visible_bypass_with_legacy_pitch test_harmony_pattern_runtime_alias_conflict_preserves_history_and_recovers_without_edit test_harmony_pattern_preserves_deliberately_wide_unmapped_melodic_leap test_harmony_voicing_matches_independent_oracle_for_all_pitch_class_sets_one_to_five_voices",
     "result": {
-      "passed": 5,
+      "passed": 10,
       "failed": 0
     },
     "full_lua_suite": {
-      "passed": 1855,
+      "passed": 1860,
       "failed": 0,
       "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua"
     },
