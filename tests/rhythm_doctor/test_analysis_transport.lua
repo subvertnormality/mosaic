@@ -80,4 +80,27 @@ assert(built.status == 'COMPLETED',
 assert(built.bank.bpm == 77.0, 'the bank did not keep the confirmed tempo')
 assert(built.bank.tempo_mode == 'manual', 'the bank did not record a manual tempo')
 
-print('test_analysis_transport: 9 tests passed')
+
+-- The backend says outright when it found no periodicity and fell back to its
+-- default tempo. That flag used to be dropped here, and the screen presented a
+-- default of 120 exactly as it presents a real detection.
+do
+  local stored = stored_with({ backend_id='x', backend_sha256=SHA, template_sha256=SHA })
+  stored.analysis.tempo_detected = false
+  local transport = transport_reading(stored)
+  local result = transport:_completed(envelope())
+  assert(result.status == 'COMPLETED', 'an undetected tempo is still a usable bank')
+  assert(result.bank.tempo_detected == false, 'the bank must carry that the tempo was not detected')
+
+  local found = stored_with({ backend_id='x', backend_sha256=SHA, template_sha256=SHA })
+  found.analysis.tempo_detected = true
+  local ok = transport_reading(found):_completed(envelope())
+  assert(ok.bank.tempo_detected == true, 'and that it was, when it was')
+
+  -- An older bank says nothing either way, and must not be relabelled.
+  local silent = stored_with({ backend_id='x', backend_sha256=SHA, template_sha256=SHA })
+  local quiet = transport_reading(silent):_completed(envelope())
+  assert(quiet.bank.tempo_detected == true, 'silence is not a claim that detection failed')
+end
+
+print('test_analysis_transport: 13 tests passed')

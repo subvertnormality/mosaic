@@ -146,6 +146,27 @@ test("the screen says the Record key can finish, because that is now true", func
   check(#model.status <= 19, "the status row shares the screen with the doctor: " .. tostring(model.status))
 end)
 
+test("a tempo the detector never found is not shown as one it did", function()
+  -- The backend returns a default of 120 when it finds no usable periodicity.
+  -- Presenting that as AUTO tells the player the grid was measured from their
+  -- playing, and every trig is painted onto it.
+  local c = context()
+  c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = { bpm = 120, tempo_mode = "auto", tempo_detected = false,
+    timeline_cells = 64, window_start = 0, sensitivities = {}, candidates = {}, lanes = {} }
+  local model = c.adapter:screen_model()
+  check(model.tempo_source ~= "auto", "a default tempo must not read as auto detection")
+  equal(model.tempo_detected, false, "the model carries the fact for the renderer")
+  check(#string.format("%.1f BPM / %s", model.tempo, model.tempo_source) <= 19,
+    "the tempo row shares the screen with the doctor")
+
+  c.runtime.machine.bank.tempo_detected = true
+  equal(c.adapter:screen_model().tempo_source, "auto", "a real detection still reads as auto")
+
+  c.runtime.machine.bank.tempo_mode, c.runtime.machine.bank.tempo_detected = "manual", false
+  equal(c.adapter:screen_model().tempo_source, "manual", "a tempo the player set is theirs, not a fallback")
+end)
+
 test("lane keys select BD, SD, CYM and BASS, ignore their releases, and leave the retired column inert", function()
   local c = context()
   for index, lane in ipairs({ "BD", "SD", "CYM", "BASS" }) do

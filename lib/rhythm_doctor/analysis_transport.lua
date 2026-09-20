@@ -120,6 +120,10 @@ function Transport:_completed(message)
     analysis_revision=stored.analysis_revision, sample_rate=stored.sample_rate, capture_start_sample=0,
     capture_end_sample=stored.frames, origin_sample=analysis.origin_sample, bpm=analysis.bpm,
     tempo_mode=analysis.tempo_mode, tempo_candidates=analysis.tempo_candidates, tempo_confidence=analysis.tempo_confidence,
+    -- The backend says when it found no periodicity and returned its default
+    -- tempo. Dropping that here is how a default reached the screen looking
+    -- exactly like a measurement.
+    tempo_detected=analysis.tempo_detected,
     sensitivities=analysis.sensitivities, candidates=analysis.candidates, detector=analysis.detector,
     quality_warnings=analysis.quality_warnings })
   if not bank then return failure(message, problem and problem.code or "ANALYSIS_PROTOCOL_ERROR") end

@@ -159,6 +159,9 @@ function Bank.build(args)
     generation = args.generation or 0, analysis_revision = args.analysis_revision or 0,
     tempo_mode = args.tempo_mode or "auto", bpm = args.bpm,
     tempo_candidates = copy(args.tempo_candidates or {}), tempo_confidence = args.tempo_confidence,
+    -- Only an explicit false means the tempo was not detected: a bank that
+    -- says nothing predates the flag and must not be relabelled as a guess.
+    tempo_detected = args.tempo_detected ~= false,
     meter = args.meter or "4/4", source = copy(args.source or {}),
     capture_start_sample = args.capture_start_sample, capture_end_sample = args.capture_end_sample,
     origin_sample = args.origin_sample, sample_rate = args.sample_rate,

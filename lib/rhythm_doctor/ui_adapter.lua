@@ -553,11 +553,17 @@ function Adapter:screen_model()
   local total_steps = type(bank) == "table" and bank.timeline_cells or nil
   local tempo = type(bank) == "table" and bank.bpm or self.progress.tempo
   local tempo_source = type(bank) == "table" and bank.tempo_mode or self.progress.source
+  -- A tempo the detector never found is the backend's default, not a reading
+  -- of the player's playing, and the grid every trig lands on is built from
+  -- it. Saying "auto" there claims a measurement that was never made.
+  local tempo_detected = type(bank) ~= "table" or bank.tempo_detected ~= false
+  if not tempo_detected and tempo_source == "auto" then tempo_source = "default" end
   local setup = setup_values(self)
   local window_start = type(bank) == "table" and bank.window_start or nil
   local window_end = type(window_start) == "number" and window_start + 63 or nil
   local model = { title = "RHYTHM DOCTOR", state = state, lane = self.lane,
     hit_count = hit_count(bank, self.lane), tempo = tempo, tempo_source = tempo_source,
+    tempo_detected = tempo_detected,
     listening_confidence = self.progress.listening_confidence, acquired_beats = self.progress.acquired_beats,
     analysis_progress = self.progress.analysis_progress, total_steps = total_steps,
     total_bars = type(total_steps) == "number" and math.floor(total_steps / 16) or nil,
