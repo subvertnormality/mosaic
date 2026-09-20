@@ -177,13 +177,22 @@ function Recorder:_reset()
   if self.published_path then self.remove(self.published_path); self.published_path = nil end
 end
 
+-- A capture can be armed when nothing holds the input: either nothing has
+-- happened yet, or the last one handed its voices back. Anything in between is
+-- genuinely busy.
 function Recorder:_preflight(message, id)
-  if self.phase ~= 'IDLE' then return self:_emit(reply(id, 'PREFLIGHT', 'FAILED', { capture_error = 'BUSY' })) end
+  if self.phase ~= 'IDLE' and self.phase ~= 'RELEASED' then
+    return self:_emit(reply(id, 'PREFLIGHT', 'FAILED', { capture_error = 'BUSY' }))
+  end
   local seconds = message.seconds
   if not integer(seconds) or seconds < 1 or seconds > MAX_SECONDS or
       (message.mode ~= 'auto' and message.mode ~= 'manual') then
     return self:_emit(reply(id, 'PREFLIGHT', 'FAILED', { capture_error = 'INVALID_DURATION' }))
   end
+  -- The previous take's file goes now, not at release: the analysis worker
+  -- reads it after the voices have already been handed back.
+  if self.published_path then self.remove(self.published_path); self.published_path = nil end
+  self.started_at, self.duration, self.publish = nil, nil, nil
   local ok = pcall(function() self:_arm() end)
   if not ok then return self:_emit(reply(id, 'PREFLIGHT', 'FAILED', { capture_error = 'INPUT_RESOURCE_BUSY' })) end
   self.owner, self.seconds, self.phase = id, seconds, 'READY'
@@ -270,7 +279,14 @@ local handlers = {
     if self.phase ~= 'PUBLISHED' then self.phase = 'READY'; self.duration, self.publish = nil, nil end
   end,
   PUBLISH = function(self, _, id) self:_publish_request(id) end,
-  RELEASE = function(self, _, id) self:_release_voices(); self:_emit(reply(id, 'RELEASE', 'RELEASED')) end,
+  -- Releasing hands softcut back but keeps the published capture, which the
+  -- analysis worker has not finished with, and leaves the recorder ready to be
+  -- armed again rather than wedged as busy.
+  RELEASE = function(self, _, id)
+    self:_release_voices()
+    self.phase = 'RELEASED'
+    self:_emit(reply(id, 'RELEASE', 'RELEASED'))
+  end,
   EXIT = function(self, _, id) self:_emit(reply(id, 'EXIT', 'BYE')); self:_reset() end,
 }
 

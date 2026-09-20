@@ -281,4 +281,61 @@ do
   check(refused == nil and why ~= nil, 'a closed host refuses rather than reopening softcut')
 end
 
+-- A second capture must be possible, which is the whole point of a bank you
+-- can clear and record again.
+do
+  local recorder, sc, files, clock = context()
+  sc.buffer_write_stereo = function(path, start, duration)
+    sc.last.buffer_write_stereo = { path, start, duration }
+    files.content[path] = wav(math.floor(duration * 48000), 48000, 2, 16)
+  end
+  recorder.execute = function(command)
+    local path = command:match("sha256sum '([^']+)'")
+    if path then files.content[path .. '.sha256'] = string.rep('d', 64) .. '  ' .. path end
+    return true
+  end
+  local function capture(job)
+    local id = { protocol_version = 1, job_id = job, project_id = 'proj', generation = 3, analysis_revision = 2 }
+    local function send(command, extra)
+      local m = {}
+      for k, v in pairs(id) do m[k] = v end
+      m.command = command
+      for k, v in pairs(extra or {}) do m[k] = v end
+      recorder:send(m)
+    end
+    local function await(status)
+      for _ = 1, 200 do
+        local m = recorder:poll()
+        if m and m.status == status then return m end
+        if m and m.status == 'FAILED' then return m end
+        clock.value = clock.value + 0.05
+      end
+      return nil
+    end
+    send('PREFLIGHT', { seconds = 6, mode = 'manual' })
+    local ready = await('READY')
+    if not ready or ready.status ~= 'READY' then return ready end
+    send('START'); await('STARTED')
+    clock.value = clock.value + 4
+    send('STOP'); await('COMPLETED')
+    send('PUBLISH')
+    local published = await('PUBLISHED')
+    send('RELEASE'); await('RELEASED')
+    return published
+  end
+
+  local first = capture('take-1')
+  check(first and first.status == 'PUBLISHED', 'the first capture publishes')
+  -- The analysis worker reads this file after the voices are handed back, so
+  -- releasing must not take it away.
+  check(files.content[first.wav_path] ~= nil, 'the published capture survives RELEASE')
+
+  local second = capture('take-2')
+  check(second ~= nil, 'a second capture answers at all')
+  check(second.status == 'PUBLISHED',
+    'a second capture must work, not report ' .. tostring(second.capture_error))
+  check(second.wav_path ~= first.wav_path, 'and publishes under its own job id')
+  check(files.content[first.wav_path] == nil, 'the previous capture is cleaned up when the next one is armed')
+end
+
 print('test_softcut_recorder: ' .. passed .. ' tests passed')
