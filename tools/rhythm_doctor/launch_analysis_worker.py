@@ -87,6 +87,7 @@ def main() -> int:
                         help="template table the native backend reads")
     args = parser.parse_args()
     native_built = None
+    native_binary_sha256 = None
     args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
     os.chmod(args.runtime, 0o700)
     for name in ("mailbox", "error", "pid"):
@@ -105,8 +106,12 @@ def main() -> int:
             return 1
         args.backend = built
         native_built = built.resolve()
+        # The identity a result declares is the source and the template table,
+        # because those reproduce anywhere; the compiled binary does not, so it
+        # is pinned separately for the worker's own integrity check.
         args.backend_sha256 = sha256_file(args.native_source)
         args.template_sha256 = sha256_file(args.templates)
+        native_binary_sha256 = sha256_file(built)
     # Either a model-free DSP identity (source + templates) or a pretrained
     # identity (source + model artifacts). Exactly one, completely.
     supplied = (args.backend, args.backend_sha256, args.drum_artifact_sha256,
@@ -133,6 +138,7 @@ def main() -> int:
         process = subprocess.Popen(
             [sys.executable, str(worker), "--runtime", str(args.runtime)] +
             (["--backend", str(backend), "--backend-sha256", args.backend_sha256] +
+             (["--backend-binary-sha256", native_binary_sha256] if native_binary_sha256 else []) +
              (["--template-sha256", args.template_sha256] if is_dsp else
               ["--drum-artifact-sha256", args.drum_artifact_sha256,
                "--bass-artifact-sha256", args.bass_artifact_sha256]) if backend else []),

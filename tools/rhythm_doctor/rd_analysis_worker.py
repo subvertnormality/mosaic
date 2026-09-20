@@ -262,9 +262,15 @@ class Mailbox:
 class Worker:
     def __init__(self, runtime: Path, backend: Path | None, backend_sha256: str | None = None,
                  drum_artifact_sha256: str | None = None, bass_artifact_sha256: str | None = None,
-                 template_sha256: str | None = None) -> None:
+                 template_sha256: str | None = None, backend_binary_sha256: str | None = None) -> None:
         self.runtime, self.backend = runtime, backend
         self.backend_sha256 = backend_sha256
+        # Two different digests. backend_sha256 is the identity a result has to
+        # declare, and for the backend Mosaic compiles itself that is the C
+        # source, because a source digest reproduces and a binary does not --
+        # it varies with the toolchain that built it. The integrity check below
+        # needs the digest of the file actually on disk, which is this one.
+        self.backend_binary_sha256 = backend_binary_sha256 or backend_sha256
         self.drum_artifact_sha256 = drum_artifact_sha256
         self.bass_artifact_sha256 = bass_artifact_sha256
         self.template_sha256 = template_sha256
@@ -319,7 +325,7 @@ class Worker:
         if self.backend is None:
             self.send(failed(request, "ANALYSIS_BACKEND_UNAVAILABLE")); return
         try:
-            backend_matches = sha256_file(self.backend).lower() == self.backend_sha256.lower()
+            backend_matches = sha256_file(self.backend).lower() == self.backend_binary_sha256.lower()
         except OSError:
             backend_matches = False
         if not backend_matches:
@@ -391,6 +397,9 @@ def main() -> int:
     parser=argparse.ArgumentParser(); parser.add_argument("--runtime", type=Path, required=True); parser.add_argument("--backend", type=Path)
     parser.add_argument("--backend-sha256"); parser.add_argument("--drum-artifact-sha256"); parser.add_argument("--bass-artifact-sha256")
     parser.add_argument("--template-sha256")
+    parser.add_argument("--backend-binary-sha256",
+                        help="digest of the executable on disk, when it differs from the "
+                             "identity a result declares (it does for a self-compiled backend)")
     args=parser.parse_args(); args.runtime.mkdir(mode=0o700, parents=True, exist_ok=True)
     # Two identity shapes are supported, and a backend must supply exactly one
     # of them completely. A model-free DSP backend pins its source and template
@@ -414,7 +423,7 @@ def main() -> int:
     if hasattr(signal, "SIGHUP"): signal.signal(signal.SIGHUP, stop)
     signal.signal(signal.SIGINT, stop)
     worker=Worker(args.runtime, args.backend, args.backend_sha256, args.drum_artifact_sha256,
-                  args.bass_artifact_sha256, args.template_sha256)
+                  args.bass_artifact_sha256, args.template_sha256, args.backend_binary_sha256)
     try: return worker.run()
     finally: worker.close()
 
