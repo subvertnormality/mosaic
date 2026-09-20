@@ -5,7 +5,12 @@ include=function(path)
  if path=='mosaic/lib/musical_merge/state'then return{effective=function(_,_,requested)return{config=requested}end}end
  -- Foundation is intentionally Off throughout this legacy-priority contract;
  -- its planner and quantiser are therefore outside the exercised boundary.
- return{}
+ -- pattern.lua builds a source-revision tracker at load. This contract is
+ -- about merge priority, so a tracker that records nothing is enough.
+ if path=='mosaic/lib/source_pattern_revision' then
+  return {new=function() return {get=function() return 0 end,edited=function() end} end}
+ end
+ return {}
 end
 scheduler={debounce=function(f) return f end}
 fn={average_table_values=function(t) local sum=0;for _,v in ipairs(t) do sum=sum+v end;return sum/#t end}

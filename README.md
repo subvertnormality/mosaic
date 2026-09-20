@@ -62,6 +62,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
 - [Dig Deeper](#dig-deeper)
   * [Pattern Editor](#pattern-editor)
       - [Adding Trigs](#adding-trigs)
+        + [Rhythm Doctor](#rhythm-doctor)
       - [Adding Notes](#adding-notes)
       - [Adding Velocity](#adding-velocity)
   * [Channel Editor](#channel-editor)
@@ -455,14 +456,79 @@ To set your rhythm, simply tap in steps using the sequencer. Bright steps symbol
 <img alt="Pattern editor step edit buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg" width="300" />
 
 
-Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the four algorithm select buttons. From left to right:
+Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the five algorithm select buttons. From left to right:
 
 * Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
 * Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the Norns screen for more variations.
 * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
+* Button 5: Rhythm Doctor, a stopped-transport capture and paint workflow described below.
 
-<img alt="Pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
+<img alt="The first four pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
+
+##### Rhythm Doctor
+
+Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
+It keeps one captured three-lane bank per project and lets you preview a 64-step
+window from one selected lane before painting it into the selected pattern. The
+lanes are grid row 2, columns 3–5: **BD** (bass drum), **SD** (snare drum) and
+**CYM** (hi-hats and cymbals). Column 2 is reserved in this mode, and columns 6
+and 7 are inert.
+
+The lanes describe what can be told apart reliably, not a full drum-kit
+transcription. **CYM** is hats *and* cymbals together because a closed hat and a
+ride are both inharmonic metal with overlapping spectra, and the decay that
+distinguishes them in isolation is buried in a mix; separating them was measured
+and does not work. Bass, open hi-hat and tom have no lane: none could be
+detected reliably enough to paint. Bass was tried and withdrawn — every
+approach either failed to separate a bass note from the kick that hides it, or
+marked the kicks themselves, so the lane only ever restated what BD already
+said.
+
+Rhythm Doctor is available only while the Mosaic sequencer is stopped. Its
+screen says `STOP SEQUENCER` while running; Record, lane selection, setup,
+window editing, and Paint do nothing until you stop. Starting the sequencer
+cancels an unfinished capture or analysis and discards a paint preview. It does
+not start or stop the sequencer for you.
+
+On an empty bank, press grid column 1, row 2 to begin Record; the press starts
+the action and its release is consumed. Press Record again to stop, or press K3:
+either finishes the capture once the screen says `ENOUGH / REC OR K3`. Until it
+does, the screen says `MORE AUDIO NEEDED`, and pressing Record then asks whether
+to abandon the take instead. Pressing Record on an occupied bank asks whether to
+clear its capture bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that
+were already painted. In a ready bank, use E2 to choose Window bar, Window
+step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
+edit the chosen item. Window bar moves by 16 steps and Window step by one; both
+view the same bounded timeline. Choose Alignment and use E3 to open its tempo,
+start-beat, and fine-start settings; K2 cancels and K3 applies the draft.
+
+Before recording, E2/E3 open a draft setup for Auto or Manual tempo, manual BPM
+(40–240), and Stereo/L/R input; K2 discards the draft and K3 keeps it. The
+current build presents these settings but does not pass manual BPM or the input
+selection to the capture or analysis backend, so they are not an audio-routing
+configuration.
+
+To paint a ready lane, select the destination pattern with the top row, press
+Paint (column 16, row 8) to preview, then press it again to commit. Cancel
+(column 14, row 8) discards the preview. During a preview, columns 10, 11, and
+12 of row 8 shift left, reset, and shift right. Toggle is the default paint
+policy; Add and Replace are selectable on the Rhythm Doctor screen. Painting
+does not alter the captured bank.
+
+**Availability:** Mosaic starts a local capture helper when this mode opens,
+and analyses captures with a model-free detector it builds from source the
+first time this mode is used. Nothing is downloaded, no Python packages are
+needed, and there is no configuration to do: the build takes about half a
+minute on a Norns and is then reused. Analysis of a 45-second capture takes
+roughly half a minute on the device.
+
+If no C compiler is available, or the build fails, analysis fails closed with
+`ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery profile can
+still point the analysis worker at its own executable that accepts the worker
+request/result protocol and returns all four lanes, in which case that one is
+used instead. No detector quality, transcription accuracy, or timing
+performance is claimed here.
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.
 

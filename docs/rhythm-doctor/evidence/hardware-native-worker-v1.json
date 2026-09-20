@@ -1,0 +1,28 @@
+{
+  "run_id": "mosaic-rd-worker-7302b4139605439abd037e222595b375",
+  "profile": "physical-norns-native-worker",
+  "source_sha256": {
+    "tools/rhythm_doctor/rd_capture.c": "6b613f9e8640c8bbce6a9cab0b6cb376e85204c820288c4d78a8070ed35d3bf3",
+    "tools/rhythm_doctor/rd_capture_worker.c": "db3163e0ae4308a258b590e61e0783bbecf67967f4581ce38a931a0692ebeab5",
+    "tests/rhythm_doctor/test_capture_injector.c": "7fc977c01a0cb47eb1bebb08c4cf93acd8341a9b7c3d60cc94c56ddd5b69a0b9",
+    "tests/rhythm_doctor/test_capture_stack.lua": "259e9b5681081923f6fef882c0cc3fd2bf4da9c5aaca4a3c6c1200659c11a6fb",
+    "lib/rhythm_doctor/state_machine.lua": "b6f34d92faf0f3bf5aa95564ee4e4c5091b5d88b4a0593374381b1801912d023",
+    "lib/rhythm_doctor/bank.lua": "b61ef75b986e146e1643469ee14d05260c70d4563fe09247cdf45f00ffdd4b7d",
+    "lib/rhythm_doctor/capture_controller.lua": "52db3d5badcffe274fb8a88db76e6a8389479ebd750352972c2bcedc6a1dcc71",
+    "lib/rhythm_doctor/native_transport.lua": "4870b1f82fff1bc9db22898851c3747e26018cd656a37f8446447b1132c88f2e"
+  },
+  "result": {
+    "exit_code": 0,
+    "stdout": "1afa1006c37556be2ee0a3ef52fb50a9054c002cba063d2246ae6ea982f2002e 6272 48000 50220\n",
+    "stderr": ""
+  },
+  "cleanup": [
+    {
+      "worker_exited_after_peer_close": true,
+      "unrelated_routes_restored": true
+    }
+  ],
+  "passed": true,
+  "scope": "actual Norns JACK input worker plus LuaJIT controller transport; injected PCM, not physical ADC or transcription",
+  "full_feature_acceptance": false
+}

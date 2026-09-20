@@ -1,0 +1,40 @@
+{
+  "schema": "rhythm-doctor-beatnet-dev-transfer-v4-evidence-v1",
+  "scope": "DEV-only transfer diagnostic. It is not a held-out evaluation, ARMv7 validation, acquisition acceptance, or a release decision.",
+  "pinned_source": {
+    "repository": "https://github.com/mjhydri/BeatNet/tree/81cedd4beeb7235262db80969a0c9ce9a48a0ed4",
+    "commit": "81cedd4beeb7235262db80969a0c9ce9a48a0ed4",
+    "model_py_sha256": "65d38b46a12cfa6f33ad09d0a2cbc2cfb628721816e4cf9bcbc2197adb98c971",
+    "BeatNet_py_sha256": "afe04b7e110f901c61293572f63e26730eec72f119137cef5f9fe0d106cca403",
+    "log_spect_py_sha256": "e8474d0e5eba0426a5bb0f8993c9c3cad0a9e659d936dd6d91b6aed92370db3a",
+    "official_model_1_weights_sha256": "619091bc317ca3e83b45591d46f6de3d5a41588bcb39fe9fe7be30cffa6aca84"
+  },
+  "v3_adapter_invalid": {
+    "report_sha256": "020ffa090033e2fb4b9df1e253c0ed7c7a4b4d10668c8fc9a37543d64397b221",
+    "reason": "The target adapter encoded [non-beat, beat, downbeat], while the pinned pretrained head and handler use [beat, downbeat, non-beat]. V3 must not be interpreted as transfer-quality evidence."
+  },
+  "class_mapping_regression": {
+    "path": "/home/andy/.cache/rhythm-doctor-diagnostics/beatnet-81cedd4/babyslakh-dev-transfer-v4-class-mapping-regression.json",
+    "sha256": "27562a043a03e22409cdca9c0ca1996b5e72021376122ddb387912ed7c8bf44d",
+    "passed": true,
+    "verified_order": ["beat", "downbeat", "non-beat"],
+    "evidence": "Pinned prepare_data.py builds that one-hot order and clears beat at downbeat frames; pinned BeatNet.py passes preds[:2].T to the decoder."
+  },
+  "v4": {
+    "stage_audit_sha256": "755dffae6e2660a00cc96269ef0d7f7619ed4f004de3fc795c3429fc989f568a",
+    "raw_report_path": "C:\\Users\\andy\\.cache\\rhythm-doctor-diagnostics\\beatnet-81cedd4\\babyslakh-dev-transfer-v4\\model1-one-epoch\\transfer-report.json",
+    "raw_report_sha256": "be0b7323991a2132f107ae0a376b7baf4c76e54bc91db313e8e7855235857c33",
+    "provenance_correction_sha256": "19d50c6cb29fed7c68e5dca0fffc397c595d598d9bfff53949d353d1ea6a24d9",
+    "frontend_scaler_audit_sha256": "c0041f883e8ceb0addc3783ee903fae6d38254edd3397070922f513970e7c125",
+    "split": {"training_tracks": [3,4,7,10,12,17,18], "fixed_validation_tracks": [5,13], "held_tracks_used": []},
+    "input": "First 45 seconds of original BabySlakh selected mix audio. Labels derive only from consistent source-MIDI tempo/time-signature maps; all staged tracks had explicit 4/4 at tick zero and 92-150 BPM source tempo in the retained interval.",
+    "training": {"seed": 20260919, "device": "Windows CPU Torch 1.11.0+cpu", "epochs": 1, "elapsed_seconds": 35.05615189997479, "variants": 19, "class_counts": [2500,852,49523], "class_weights": [0.75286958219793,2.20912436090942,0.0380060568926524], "loss": "weighted cross entropy over exact BDA.train_forward logits"},
+    "frontend": {"sample_rate_hz": 22050, "window_samples": 1411, "hop_samples": 441, "bands": 24, "mode": "online", "external_fitted_scaler": null},
+    "decoder_selection": {"validation_only": true, "predeclared_peak_threshold_grid": [0.15,0.25,0.35,0.45,0.55], "chosen_threshold": 0.55, "minimum_interval_seconds": 0.25, "match_tolerance_ms": 20},
+    "validation": {
+      "track_5": {"f1": 0.5953488372093023, "precision": 0.4740740740740741, "recall": 0.8, "mean_absolute_phase_ms": 7.282249999999824, "decoded_median_bpm": 214.28571428571342, "source_midi_bpm": 106.0},
+      "track_13": {"f1": 0.24175824175824176, "precision": 0.2558139534883721, "recall": 0.22916666666666666, "mean_absolute_phase_ms": 7.32954545454545, "decoded_median_bpm": 130.4347826086954, "source_midi_bpm": 128.0}
+    },
+    "conclusion": "Validation is insufficient: it includes a clear double-tempo result on track 5 and low onset F1 on track 13. Do not use this fit, threshold, or decoder as an acceptance candidate."
+  }
+}

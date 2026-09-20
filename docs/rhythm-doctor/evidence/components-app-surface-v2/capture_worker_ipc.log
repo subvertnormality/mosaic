@@ -1,0 +1,10 @@
+test_machine_controller_transport_worker_flow (test_capture_worker_ipc.CaptureWorkerIPC) ... ok
+test_overlong_socket_path_removes_the_acquired_private_root (test_capture_worker_ipc.CaptureWorkerIPC) ... ok
+test_parser_rejects_malformed_overflow_long_and_unknown_records (test_capture_worker_ipc.CaptureWorkerIPC) ... ok
+test_real_jack_pcm_publish_identity_release_and_cleanup (test_capture_worker_ipc.CaptureWorkerIPC) ... ok
+test_session_hangup_removes_socket_and_private_root (test_capture_worker_ipc.CaptureWorkerIPC) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 2.639s
+
+OK

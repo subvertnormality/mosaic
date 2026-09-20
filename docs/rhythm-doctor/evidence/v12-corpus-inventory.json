@@ -1,0 +1,43 @@
+{
+  "accepted": true,
+  "acquisition_clips": 7,
+  "corpus_id": "rd02-scheduled-v12",
+  "development_clips": 40,
+  "held_out_clips": 66,
+  "held_out_events": {
+    "BASS": 732,
+    "BD": 550,
+    "CHH": 1588,
+    "OHH": 557,
+    "SD": 531
+  },
+  "held_out_positive_clips": {
+    "BASS": 49,
+    "BD": 49,
+    "CHH": 48,
+    "OHH": 48,
+    "SD": 48
+  },
+  "manifest_sha256": "b7a804939e53f64858296c1073a8060bd14c9a36967f758438936474bb04dbdf",
+  "open_hat_sources": [
+    {
+      "path": "data/drumkits/GMRockKit/HatOpen-Med.wav",
+      "sha256": "3780da6449a3db83e05642c9e2410ed3700bdb8dc50f2322b0741841d5e26943"
+    },
+    {
+      "path": "data/drumkits/TR808EmulationKit/808_Hat_Open.flac",
+      "sha256": "94b5590ac6fea7d5799caf63ac3a5c69625f6c1beb80d38b6563cddf01af9b9a"
+    }
+  ],
+  "renderer_sha256": "da6437ad333a8226152871dd8ace8b06dc96bc1b40e1a8a41e60d10fb372832e",
+  "schema_version": 2,
+  "scope": "independent corpus inventory and provenance; not transcription quality",
+  "source_archives": {
+    "freepats-electric-bass-YR": "7821c8d749c48d623e1a6d305d2a537835f99e2874671ec45e866c7225e09a9d",
+    "freepats-synth-bass-2": "5a877b9abf2fc8dff7cb6c95c1da3aed5127d6829d3b1232f94b2cd16e288c60",
+    "hydrogen-gmrock": "76813eb3f34ab451aa5a926e1283c5ebfcac4c2e0497633b1976faf300a371e7",
+    "hydrogen-tr808": "896741313edfd49703a34e34acacd16ae8ea0156f1b1bba4dbd3c6047b0ecd4b"
+  },
+  "source_revision": "hydrogen-music/hydrogen@7440c1175574a624d518d820ff7fcc597b11c4f3",
+  "validator": "tests/rhythm_doctor/corpus.py"
+}

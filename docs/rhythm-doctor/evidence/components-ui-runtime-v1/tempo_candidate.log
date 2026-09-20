@@ -1,0 +1,12 @@
+test_fifteen_buffered_intervals_are_not_four_bars_but_sixteen_are (test_tempo_candidate.CandidateTests) ... ok
+test_half_double_table_remains_visible_candidate_data (test_tempo_candidate.CandidateTests) ... ok
+test_initial_transient_can_be_skipped_for_a_later_stable_span (test_tempo_candidate.CandidateTests) ... ok
+test_late_tempo_drift_invalidates_the_whole_retained_span (test_tempo_candidate.CandidateTests) ... ok
+test_literal_half_time_pulse_is_tempo_ambiguous_not_ready (test_tempo_candidate.CandidateTests) ... ok
+test_literal_syncopation_keeps_beat_grid_support_separate_from_offbeats (test_tempo_candidate.CandidateTests) ... ok
+test_regular_supported_envelope_reports_unresolvable_half_time (test_tempo_candidate.CandidateTests) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.868s
+
+OK

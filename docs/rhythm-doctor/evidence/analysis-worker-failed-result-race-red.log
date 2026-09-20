@@ -1,0 +1,22 @@
+test_absent_backend_fails_without_a_result_or_ready_payload (test_analysis_worker_ipc.AnalysisWorkerIPC) ... ok
+test_cancel_terminates_pinned_backend_without_publishing_a_result (test_analysis_worker_ipc.AnalysisWorkerIPC) ... ok
+test_forty_five_second_capture_bound_is_enforced_before_backend_execution (test_analysis_worker_ipc.AnalysisWorkerIPC) ... ok
+test_omnizart_partial_drum_backend_reports_its_missing_bass_component (test_analysis_worker_ipc.AnalysisWorkerIPC) ... FAIL
+test_pinned_backend_receives_verified_pcm_and_publishes_five_lane_gates (test_analysis_worker_ipc.AnalysisWorkerIPC) ... ok
+test_capture_contract_cannot_exceed_forty_five_seconds (test_analysis_worker_ipc.AnalysisWorkerValidation) ... ok
+test_every_active_lane_requires_its_own_gate (test_analysis_worker_ipc.AnalysisWorkerValidation) ... ok
+test_launcher_refuses_partial_or_changed_local_backend_profile (test_analysis_worker_ipc.AnalysisWorkerValidation) ... ok
+test_unknown_lane_and_unpinned_artifact_are_rejected (test_analysis_worker_ipc.AnalysisWorkerValidation) ... ok
+
+======================================================================
+FAIL: test_omnizart_partial_drum_backend_reports_its_missing_bass_component (test_analysis_worker_ipc.AnalysisWorkerIPC)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/c/Users/andy/Documents/ChatGPT/mosaic/.worktrees/rhythm-doctor/mosaic/tests/rhythm_doctor/test_analysis_worker_ipc.py", line 162, in test_omnizart_partial_drum_backend_reports_its_missing_bass_component
+    self.assertFalse(any((self.runtime / "results").glob("*.json")))
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 9 tests in 1.355s
+
+FAILED (failures=1)

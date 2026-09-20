@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "a36d893408f874ecde40049e7a5211378d7dc10502f1926d44c09d202feac491",
+ "manual_sha256": "785544c9b4da670c5cb0197161fce3752ac72be3e7a448cd4b34534ce9d0b62c",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -14,8 +14,8 @@
    "text_sha256": "1e695ab10ae9abde60ddb6cdc1a8e425ad744cb62032d687c92449216aaf9d74",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
-    "status": "unreviewed"
-   },
+   "status": "unreviewed"
+  },
   {
    "id": "MAN-002",
    "title": "Install",
@@ -1517,16 +1517,35 @@
     "REC-ARM"
    ],
    "status": "unreviewed"
+  },
+  {
+   "id": "MAN-115",
+   "title": "Rhythm Doctor",
+   "level": 5,
+   "start_line": 469,
+   "end_line": 565,
+   "text_sha256": "8f85de52089e92cd43756cf6bef93a6ca5b2c1840e2aa192cb7e78e71684228c",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "RD-LANES",
+    "RD-CAPTURE-FINISH",
+    "RD-ALIGNMENT",
+    "RD-ALIGNMENT-REFUSED",
+    "RD-BANK-PERSIST",
+    "RD-DETECTOR-IDENTITY",
+    "RD-BACKEND-UNAVAILABLE"
+   ],
+   "status": "unreviewed"
   }
  ],
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "a36d893408f874ecde40049e7a5211378d7dc10502f1926d44c09d202feac491"
+   "sha256": "785544c9b4da670c5cb0197161fce3752ac72be3e7a448cd4b34534ce9d0b62c"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "3db05c36f5504593e3714879b10740fa59ae53138bb022150cf88c8e2e7dd023"
+   "sha256": "5648a21bfb7546fa8ad3c665d4c1c29d30ef17eafa1997488f7f86dfda4ba1c0"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -7430,89 +7449,314 @@
    "id": "MERGE-FOUNDATION",
    "sections": [],
    "statement": "Foundation protects an explicit assigned anchor pattern and admits deterministic, accented and phrase-shaped additions without rewriting source patterns.",
-   "cases": ["M-MERGE-FOUNDATION-001"],
+   "cases": [
+    "M-MERGE-FOUNDATION-001"
+   ],
    "status": "partial-domain-coverage",
    "domain": "Physical Channel-page setup covers one anchor, one addition source, a non-64 loop, projected grid trigs, literal accented MIDI and complete real/controlled loops; pure tests cover seeds, density, gaps, wrap, masks and phrase curves.",
-   "oracles": ["Public grid LEDs", "literal MIDI pitches and velocities", "balanced releases", "unchanged authored sources"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1223, "end_line": 1251, "text": "Merge Shape Foundation contract"}
+   "oracles": [
+    "Public grid LEDs",
+    "literal MIDI pitches and velocities",
+    "balanced releases",
+    "unchanged authored sources"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1223,
+    "end_line": 1251,
+    "text": "Merge Shape Foundation contract"
+   }
   },
   {
    "id": "MERGE-PHRASE",
    "sections": [],
    "statement": "Foundation phrase curves deterministically change addition density by channel cycle without changing anchor timing or inserting scheduler delay.",
-   "cases": ["M-MERGE-PHRASE-001"],
+   "cases": [
+    "M-MERGE-PHRASE-001"
+   ],
    "status": "partial-domain-coverage",
    "domain": "Physical Merge Shape controls create a two-cycle Build phrase and verify literal alternating onset sets plus exact controlled-time and bounded real-time gaps over repeated phrases.",
-   "oracles": ["literal MIDI onset sets", "exact cycle-relative timing", "balanced releases"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1223, "end_line": 1251, "text": "Merge Shape phrase-cycle contract"}
+   "oracles": [
+    "literal MIDI onset sets",
+    "exact cycle-relative timing",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1223,
+    "end_line": 1251,
+    "text": "Merge Shape phrase-cycle contract"
+   }
   },
   {
    "id": "HARMONY-REVOICE",
    "sections": [],
    "statement": "Revoice preserves Mosaic's resolved chord pitch-class material while deterministically placing every sounding source in configured registers.",
-   "cases": ["M-HARMONY-REVOICE-001"],
+   "cases": [
+    "M-HARMONY-REVOICE-001"
+   ],
    "status": "partial-domain-coverage",
    "domain": "Physical Masks/Harmony workflow covers a two-voice progression with literal pitches over complete loops; unit/integration coverage adds five voices, Pattern, Ensemble, bass policies, failure, frozen arp and lifecycle boundaries.",
-   "oracles": ["Public norns page", "literal ordered MIDI chord voices", "complete repeated loops", "balanced releases"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1255, "end_line": 1317, "text": "Harmony mode, solver and effective Note-grid contract"}
+   "oracles": [
+    "Public norns page",
+    "literal ordered MIDI chord voices",
+    "complete repeated loops",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1255,
+    "end_line": 1317,
+    "text": "Harmony mode, solver and effective Note-grid contract"
+   }
   },
   {
    "id": "HARMONY-PATTERN",
    "sections": [],
    "statement": "Pattern Harmony maps recurring authored relative values to stable voice roles while leaving Raw values on the legacy pitch path.",
-   "cases": ["M-HARMONY-PATTERN-001", "M-HARMONY-PATTERN-CLOCKS-001", "M-HARMONY-PATTERN-BYPASS-001"],
+   "cases": [
+    "M-HARMONY-PATTERN-001",
+    "M-HARMONY-PATTERN-CLOCKS-001",
+    "M-HARMONY-PATTERN-BYPASS-001"
+   ],
    "status": "partial-domain-coverage",
    "domain": "Physical Pattern Note, Scale, Harmony, Tone Map and Register controls author A-B-C-B, apply a C-major to C-minor progression without chord masks, constrain three stable role identities, project every represented final pitch, retain a legal common tone, edit the source layer, reveal exact ordinary grid/MIDI when disabled, and recover the saved mapping when re-enabled. Public companion workflows cover two independent Pattern channels at unequal clocks and a delayed reverse-arpeggio chord-mask bypass. Unit and integration coverage adds Raw wide leaps, binding identity, runtime alias-conflict recovery, out-of-range handling and fallback.",
-   "oracles": ["Public grid/norns input", "literal mapped MIDI pitches", "literal Harmony Note-grid positions in two banks", "source-owned edit proved by ordinary replay", "literal Off recovery grid and MIDI", "mapping recovery after re-enable", "independent /1 and /2 channel onset/gate traces", "delayed reverse-arpeggio legacy pitch/onset/release trace", "complete repeated loops", "balanced releases"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1255, "end_line": 1317, "text": "Pattern Harmony Tone Map and effective Note-grid contract"}
+   "oracles": [
+    "Public grid/norns input",
+    "literal mapped MIDI pitches",
+    "literal Harmony Note-grid positions in two banks",
+    "source-owned edit proved by ordinary replay",
+    "literal Off recovery grid and MIDI",
+    "mapping recovery after re-enable",
+    "independent /1 and /2 channel onset/gate traces",
+    "delayed reverse-arpeggio legacy pitch/onset/release trace",
+    "complete repeated loops",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1255,
+    "end_line": 1317,
+    "text": "Pattern Harmony Tone Map and effective Note-grid contract"
+   }
   },
   {
    "id": "HARMONY-ENSEMBLE",
    "sections": [],
    "statement": "Ensemble assigns stable group roles to explicit channels while retaining every member's independent rhythm, velocity and route.",
-   "cases": ["M-HARMONY-ENSEMBLE-001"],
+   "cases": [
+    "M-HARMONY-ENSEMBLE-001"
+   ],
    "status": "partial-domain-coverage",
    "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure.",
-   "oracles": ["literal per-channel MIDI pitches", "independent rhythmic intervals", "source velocities", "visible local scale/octave bypass status", "balanced releases"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1255, "end_line": 1317, "text": "Ensemble groups and independent-channel contract"}
+   "oracles": [
+    "literal per-channel MIDI pitches",
+    "independent rhythmic intervals",
+    "source velocities",
+    "visible local scale/octave bypass status",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1255,
+    "end_line": 1317,
+    "text": "Ensemble groups and independent-channel contract"
+   }
   },
   {
    "id": "HARMONY-PERSISTENCE",
    "sections": [],
    "statement": "Optional Harmony configuration persists with the project while transient solver history does not; cold load starts from the deterministic Anchor entry.",
-   "cases": ["M-HARMONY-PERSIST-001"],
+   "cases": [
+    "M-HARMONY-PERSIST-001"
+   ],
    "status": "partial-domain-coverage",
    "domain": "A UI-created Pattern mapping is autosaved, loaded by a fresh native process and replayed with identical anchored output; integration tests cover all song slots, malformed rejection and transient omission.",
-   "oracles": ["native autosave files", "fresh-process literal MIDI", "balanced releases"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1255, "end_line": 1317, "text": "Harmony persistence and cold-entry contract"}
+   "oracles": [
+    "native autosave files",
+    "fresh-process literal MIDI",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1255,
+    "end_line": 1317,
+    "text": "Harmony persistence and cold-entry contract"
+   }
   },
   {
    "id": "HARMONY-FAILURE",
    "sections": [],
    "statement": "An infeasible optional voicing emits no mapped note by default, displays NO VOICING, retains prior note ownership, and uses legacy pitch only when explicitly selected.",
-   "cases": ["M-HARMONY-FAILURE-001"],
+   "cases": [
+    "M-HARMONY-FAILURE-001"
+   ],
    "status": "partial-domain-coverage",
    "domain": "Physical Register, Tone Map and Failure controls produce a range-infeasible mapped tone, a reason-specific NO VOICING status, an unrecorded-step NO EVENT status, strict silence, and reason-specific explicit Legacy recovery; solver tests cover the remaining failure reasons.",
-   "oracles": ["native reason-specific NO VOICING framebuffer", "native NO EVENT framebuffer", "literal strict-silence MIDI", "literal Legacy fallback MIDI", "balanced releases"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1255, "end_line": 1317, "text": "Harmony no-solution, out-of-range projection and explicit-fallback contract"}
+   "oracles": [
+    "native reason-specific NO VOICING framebuffer",
+    "native NO EVENT framebuffer",
+    "literal strict-silence MIDI",
+    "literal Legacy fallback MIDI",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1255,
+    "end_line": 1317,
+    "text": "Harmony no-solution, out-of-range projection and explicit-fallback contract"
+   }
   },
   {
    "id": "HARMONY-HELD-PRECEDENCE",
    "sections": [],
    "statement": "A held grid step outranks optional feature editors: the draft is cancelled, the prior legacy workspace returns and the original gesture is routed once to its existing owner.",
-   "cases": ["M-HARMONY-HELD-001"],
+   "cases": [
+    "M-HARMONY-HELD-001"
+   ],
    "status": "covered",
    "domain": "A dirty Harmony draft is interrupted by a physical held-step MIDI edit; the last editable Trig Locks screen, exact stored/replayed note and unchanged Off output prove cancellation, workspace restoration and single routing.",
-   "oracles": ["native Trig Locks framebuffer", "literal MIDI phrase", "balanced releases"],
-   "lanes": ["E", "D"],
-   "source": {"path": "README.md", "line": 1255, "end_line": 1317, "text": "Held-grid and source-owned projected-edit contract"}
+   "oracles": [
+    "native Trig Locks framebuffer",
+    "literal MIDI phrase",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1255,
+    "end_line": 1317,
+    "text": "Held-grid and source-owned projected-edit contract"
+   }
+  },
+  {
+   "id": "RD-LANES",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "The capture bank has three lanes selected on grid row 2 columns 3-5 - BD, SD and CYM (hi-hats and cymbals together) - with column 2 reserved and columns 6 and 7 inert. Bass, open hi-hat and tom have no lane.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Covered by component tests (bank schema, ui adapter, app surface) and by the RD-UI-001/RD-UI-002 behaviour recipes, which assert the lane LEDs and that the retired column 7 stays dark. Those recipes are not registered in cases.py, so no case id is listed here.",
+   "oracles": [
+    "grid LED levels for row 2 columns 2-7",
+    "native screen header and status line"
+   ]
+  },
+  {
+   "id": "RD-CAPTURE-FINISH",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "Record starts on a grid column 1 row 2 press with its release consumed, and during capture either that same Record key or K3 can Finish, but only while the screen says ENOUGH / REC OR K3; otherwise it says MORE AUDIO NEEDED and Record offers to abandon the take instead.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Finish eligibility measures audio acquired from the recorder's STARTED report and requires the span a bank needs at the slowest tempo the detector can report, so the advertised state always builds. Covered by test_runtime and test_ui_adapter.",
+   "oracles": [
+    "native screen status line",
+    "state machine transition results"
+   ]
+  },
+  {
+   "id": "RD-ALIGNMENT",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "A ready bank can be corrected through the alignment controls, and the confirmed tempo and origin are used for the reanalysis rather than the detector's automatic estimate.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "The confirmed alignment travels with the analysis request and the shipped backend honours it, reporting a manual tempo mode. It is cleared when a new capture starts or another project is loaded so it cannot affect later work.",
+   "oracles": [
+    "analysis request payload",
+    "resulting bank bpm, origin and tempo mode"
+   ]
+  },
+  {
+   "id": "RD-ALIGNMENT-REFUSED",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "A correction that cannot be applied is refused visibly and keeps its draft, leaving the ready bank usable.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "After a reload or Save As the retained audio is gone, so the correction is refused with CAPTURE AUDIO UNAVAILABLE drawn in place of the alignment label until the draft is edited or cancelled. Covered by the RD-UI-003 recipe in both timing lanes, with a preserved failing baseline; not registered in cases.py.",
+   "oracles": [
+    "framebuffer text on the status line",
+    "retained alignment draft fields"
+   ]
+  },
+  {
+   "id": "RD-BANK-PERSIST",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "A completed bank is saved with the project and restored ready on reload, without requiring an analysis backend.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Only a fully validated completed bank crosses the project boundary; jobs, leases and paint history do not. Covered by test_runtime_persistence, test_bank_persistence and the RD-UI-003 recipe, which reloads a seeded project to READY.",
+   "oracles": [
+    "restored bank identity and timeline",
+    "native screen status line"
+   ]
+  },
+  {
+   "id": "RD-DETECTOR-IDENTITY",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "An analysis result is accepted only when it carries exactly one complete detector identity: the backend source with its template table, or the backend source with both model artifact digests.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "Enforced at the worker and again at the Lua transport before a bank is built; a partial or mixed identity fails closed. Covered by test_analysis_transport and test_analysis_worker_ipc.",
+   "oracles": [
+    "analysis result envelope validation",
+    "worker launch configuration errors"
+   ]
+  },
+  {
+   "id": "RD-BACKEND-UNAVAILABLE",
+   "sections": [
+    "MAN-115"
+   ],
+   "statement": "With no analysis executable configured, a completed capture fails closed with ANALYSIS_BACKEND_UNAVAILABLE instead of producing a ready bank, and Mosaic offers no user-facing backend configuration.",
+   "cases": [],
+   "status": "in_progress",
+   "domain": "This is the shipped default. A delivery profile must supply the executable path and digests explicitly; the model-free backend Mosaic ships is not configured automatically.",
+   "oracles": [
+    "analysis failure code",
+    "manual and cheat sheet availability statements"
+   ]
   }
  ],
  "statement_mappings": [

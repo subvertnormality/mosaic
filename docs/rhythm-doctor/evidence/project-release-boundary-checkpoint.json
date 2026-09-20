@@ -1,0 +1,300 @@
+{
+  "revision": "61765449d8a162f06887d67196fdce08c892fc3c",
+  "nb_revision": "503be3ae9a7f4368a8bc35d6081795e0a130cadf",
+  "case": "M-PAT-BOUNDARY-001",
+  "runs": [
+    {
+      "clock_mode": "real-time",
+      "passed": true,
+      "cleanup_failure": null,
+      "source_digest": "fdbaae4b3cb8638392885797e568d1f4cd28449feeb8918af3167bfc48ebc3d5",
+      "critical_sources": [
+        {
+          "path": "mosaic/lib/project_lifecycle.lua",
+          "sha256": "185a95c4e8fb03708ad5e5c1a7dacaf0d966a15143af79d3323c869c9543d3a8",
+          "size": 7192
+        },
+        {
+          "path": "mosaic/lib/rhythm_doctor/state_machine.lua",
+          "sha256": "3e2c756063a351d755fcf90d50ab4c7902355b83f092471da5e8c8d6b961a582",
+          "size": 10883
+        },
+        {
+          "path": "mosaic/mosaic.lua",
+          "sha256": "ec614a5072c1015d8ad51b72aadf653a1a617f0d4cccc89d4ed18de76c386978",
+          "size": 6028
+        }
+      ],
+      "raw_evidence": "tests/rhythm_doctor/artifacts/project-release-boundary-6176544/real-time",
+      "raw_files": {
+        "manifest.json": {
+          "sha256": "25a477a843097bc5970a0fa7e2e462f0857f48b2c9d6ceb2db5190bda1e8cae0",
+          "bytes": 272594
+        },
+        "results.json": {
+          "sha256": "98108b4cc061ac331cc19fff4acabcd642b6f5738134a34d23ab0062e4bf8283",
+          "bytes": 1672
+        },
+        "recipe.json": {
+          "sha256": "39ad7795fdfbf33d34c0921f79e7c58b967cff9954ca56309a9b7a135edec946",
+          "bytes": 9282
+        },
+        "observations.json": {
+          "sha256": "cb26a82d60038ec0aed1f3ffaf7affc919e80959904be54fbfe7eae67a01e084",
+          "bytes": 1722062
+        }
+      },
+      "assertions": [
+        {
+          "kind": "selected-menu-label",
+          "text": "LEVELS >"
+        },
+        {
+          "kind": "selected-menu-option-row",
+          "label": "Lock lead time (ms)",
+          "value": "0",
+          "matched": true
+        },
+        {
+          "kind": "global-lock-lead-setting",
+          "value_ms": 0,
+          "default_checked": null
+        },
+        {
+          "kind": "selected-menu-label",
+          "text": "LEVELS >"
+        },
+        {
+          "kind": "grid",
+          "cells": [
+            [
+              1,
+              2
+            ]
+          ],
+          "expected": [
+            15
+          ],
+          "actual": [
+            15
+          ]
+        },
+        {
+          "kind": "screen-header",
+          "expected": "Ch. 1 Device Config",
+          "matched": true
+        },
+        {
+          "kind": "pattern-boundary-input-validity",
+          "lane": "real-time",
+          "boundary_ns": 142728094271610,
+          "planned_ns": [
+            142728063271610,
+            142728064271610
+          ],
+          "callback_completed_ns": [
+            142728063719776,
+            142728064853634
+          ],
+          "both_callbacks_completed_before_boundary": true
+        },
+        {
+          "kind": "pattern-boundary-edit",
+          "channel": 16,
+          "expected": [
+            60,
+            62,
+            64,
+            65,
+            72,
+            74,
+            76,
+            77,
+            67,
+            62,
+            64,
+            65,
+            72
+          ],
+          "actual": [
+            60,
+            62,
+            64,
+            65,
+            72,
+            74,
+            76,
+            77,
+            67,
+            62,
+            64,
+            65,
+            72
+          ],
+          "input_validity": {
+            "kind": "pattern-boundary-input-validity",
+            "lane": "real-time",
+            "boundary_ns": 142728094271610,
+            "planned_ns": [
+              142728063271610,
+              142728064271610
+            ],
+            "callback_completed_ns": [
+              142728063719776,
+              142728064853634
+            ],
+            "both_callbacks_completed_before_boundary": true
+          }
+        }
+      ]
+    },
+    {
+      "clock_mode": "controlled-experimental",
+      "passed": true,
+      "cleanup_failure": null,
+      "source_digest": "fdbaae4b3cb8638392885797e568d1f4cd28449feeb8918af3167bfc48ebc3d5",
+      "critical_sources": [
+        {
+          "path": "mosaic/lib/project_lifecycle.lua",
+          "sha256": "185a95c4e8fb03708ad5e5c1a7dacaf0d966a15143af79d3323c869c9543d3a8",
+          "size": 7192
+        },
+        {
+          "path": "mosaic/lib/rhythm_doctor/state_machine.lua",
+          "sha256": "3e2c756063a351d755fcf90d50ab4c7902355b83f092471da5e8c8d6b961a582",
+          "size": 10883
+        },
+        {
+          "path": "mosaic/mosaic.lua",
+          "sha256": "ec614a5072c1015d8ad51b72aadf653a1a617f0d4cccc89d4ed18de76c386978",
+          "size": 6028
+        }
+      ],
+      "raw_evidence": "tests/rhythm_doctor/artifacts/project-release-boundary-6176544/controlled-experimental",
+      "raw_files": {
+        "manifest.json": {
+          "sha256": "3b5a421760112160e2a69ee6c3900dce5c7b5f23afd5791b5fbed4b1bb35db59",
+          "bytes": 272622
+        },
+        "results.json": {
+          "sha256": "d3679e7cd3a1a308d6649c04306a637092bc630f3b335ecf4c8c44e6dc74ec88",
+          "bytes": 1650
+        },
+        "recipe.json": {
+          "sha256": "b85d3686d15f32506255eec967f4d3e52bdd99c750550ec68a6a6dfccfb0c921",
+          "bytes": 24197
+        },
+        "observations.json": {
+          "sha256": "6e38d9ac7a3a463786c061384e87add346d80344ca9ec78dda9acb878200964f",
+          "bytes": 1600976
+        }
+      },
+      "assertions": [
+        {
+          "kind": "selected-menu-label",
+          "text": "LEVELS >"
+        },
+        {
+          "kind": "selected-menu-option-row",
+          "label": "Lock lead time (ms)",
+          "value": "0",
+          "matched": true
+        },
+        {
+          "kind": "global-lock-lead-setting",
+          "value_ms": 0,
+          "default_checked": null
+        },
+        {
+          "kind": "selected-menu-label",
+          "text": "LEVELS >"
+        },
+        {
+          "kind": "grid",
+          "cells": [
+            [
+              1,
+              2
+            ]
+          ],
+          "expected": [
+            15
+          ],
+          "actual": [
+            15
+          ]
+        },
+        {
+          "kind": "screen-header",
+          "expected": "Ch. 1 Device Config",
+          "matched": true
+        },
+        {
+          "kind": "pattern-boundary-input-validity",
+          "lane": "controlled-experimental",
+          "boundary_ns": 9316666667,
+          "planned_ns": [
+            9285666667,
+            9286666667
+          ],
+          "callback_completed_ns": [
+            9285666667,
+            9286666667
+          ],
+          "both_callbacks_completed_before_boundary": true
+        },
+        {
+          "kind": "pattern-boundary-edit",
+          "channel": 16,
+          "expected": [
+            60,
+            62,
+            64,
+            65,
+            72,
+            74,
+            76,
+            77,
+            67,
+            62,
+            64,
+            65,
+            72
+          ],
+          "actual": [
+            60,
+            62,
+            64,
+            65,
+            72,
+            74,
+            76,
+            77,
+            67,
+            62,
+            64,
+            65,
+            72
+          ],
+          "input_validity": {
+            "kind": "pattern-boundary-input-validity",
+            "lane": "controlled-experimental",
+            "boundary_ns": 9316666667,
+            "planned_ns": [
+              9285666667,
+              9286666667
+            ],
+            "callback_completed_ns": [
+              9285666667,
+              9286666667
+            ],
+            "both_callbacks_completed_before_boundary": true
+          }
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "full_feature_acceptance": false,
+  "scope": "Existing actual-application pattern-boundary MIDI compatibility; native public input in both clock lanes. Capture-controller wiring and PCM/UI acceptance remain outstanding."
+}

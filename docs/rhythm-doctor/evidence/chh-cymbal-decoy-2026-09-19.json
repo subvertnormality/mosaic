@@ -1,0 +1,24 @@
+{
+  "scope": "Development-half-only experiment on the classical-DSP drum backend. Held-out data was not opened. No production change was made on this evidence.",
+  "date": "2026-09-19",
+  "question": "CHH has high recall and about 0.30 precision on real music because ride and crash cymbals activate the hat lane. The literature's recommended mitigation is a decoy template so those events compete for their own column. Does it work?",
+  "verdict": "Marginal. Ride and crash decoys raise CHH precision from 0.4748 to 0.4935 and F1 from 0.6049 to 0.6144 on the development half, and slightly cost BD. This does not make the lane shippable.",
+  "samples": {
+    "source": "Hydrogen official repository at the corpus's pinned commit 7440c1175574a624d518d820ff7fcc597b11c4f3, GMRockKit",
+    "extracted": ["24Ride-3.wav", "Ride-Med.wav", "Crash-Med.wav"],
+    "note": "Same licence-clean provenance as the corpus render assets. The TR808 cymbal is FLAC and was skipped because the evaluation environment has no FLAC decoder."
+  },
+  "results_development_half": [
+    {"decoys": [], "columns": 3, "BD_f1": 0.7474, "SD_f1": 0.6863, "CHH_f1": 0.6049, "CHH_recall": 0.8331, "CHH_precision": 0.4748},
+    {"decoys": ["RIDE","CRASH"], "columns": 5, "BD_f1": 0.7365, "SD_f1": 0.6760, "CHH_f1": 0.6144, "CHH_recall": 0.8138, "CHH_precision": 0.4935},
+    {"decoys": ["RIDE","CRASH","OHH"], "columns": 6, "BD_f1": 0.7378, "SD_f1": 0.6784, "CHH_f1": 0.6132, "CHH_recall": 0.8116, "CHH_precision": 0.4928},
+    {"decoys": ["RIDE","CRASH","OHH","TOM"], "columns": 7, "BD_f1": 0.7238, "SD_f1": 0.6836, "CHH_f1": 0.6139, "CHH_recall": 0.8079, "CHH_precision": 0.4950}
+  ],
+  "why_it_does_not_work": [
+    "A kick and a bass note are physically different kinds of vibration. A string vibrates in integer ratios, a drum membrane in Bessel ratios, so one is harmonic and the other is not. PFNMF exploits exactly that asymmetry: the free harmonic dictionary absorbs the bass stack while the fixed inharmonic template keeps the kick. This is why BD is the strongest lane.",
+    "A hi-hat and a ride are the same kind of object: inharmonic metal plates with dense overlapping energy across roughly 5 to 15 kHz. There is no harmonic/inharmonic asymmetry to exploit, so an NMF template can only separate them by spectral shape, and their shapes are genuinely similar.",
+    "The one property that does separate them is decay time, and a separate measurement showed decay stops discriminating in a full mix: sweeping the hat decay gate from 0.06 s to 0.60 s moved F1 by only 0.02, because guitars, vocals and other cymbals keep the band energised so nothing decays cleanly."
+  ],
+  "corroboration": "The pinned pretrained chain fails this lane identically, at 0.459 F1 with 0.976 recall and 0.300 precision on the same real-music corpus. Two unrelated architectures failing the same way, in the same direction, indicates a property of the problem rather than a weakness of either implementation. The literature records no published rule that separates closed hat from ride on full mixes.",
+  "consequence": "CHH cannot be made shippable by adding templates. The realistic options are to descope the lane as OHH and TOM were descoped, or to accept it at roughly 0.30 precision and make that visible to the player."
+}

@@ -1,0 +1,398 @@
+{
+  "adapter": {
+    "decoder": "named args; MIDI28 inclusive to MIDI61 exclusive upper constraint retains MIDI28..60",
+    "midi_slice": "midi_pitch_slice(28, 60) = slice(7, 40)",
+    "time": "frame_time with Basic Pitch 0.4.0 cumulative window correction"
+  },
+  "artifact": {
+    "directory": "tests/rhythm_doctor/artifacts/basic-pitch-direct-oracle-adapter-corrected-v3-20260919",
+    "results": "tests/rhythm_doctor/artifacts/basic-pitch-direct-oracle-adapter-corrected-v3-20260919/results.json",
+    "results_sha256": "56f587f925d8ca7b3de48138c92bbe4c5da449662fb37d7995a809957f58dd48",
+    "runner": "tests/rhythm_doctor/artifacts/basic-pitch-direct-oracle-adapter-corrected-v3-20260919/run_direct_oracle_corrected.py"
+  },
+  "direct_source_verification": {
+    "frontend_direct_true_bass_bypasses_umx": true,
+    "oracle_identity": "tests/rhythm_doctor/artifacts/basic-pitch-bass-pilot/true-bass-oracle/oracle-identity.json",
+    "source_builder": "tests/rhythm_doctor/artifacts/basic-pitch-bass-pilot/prepare_true_bass_oracle.py",
+    "source_builder_hash_verified_against_direct_report_runner": true
+  },
+  "frozen_configs_from_corrected_mixed_dev": {
+    "official_decoder": {
+      "frame_threshold": 0.2,
+      "onset_threshold": 0.4
+    },
+    "raw_onset": {
+      "gap_frames": 12,
+      "threshold": 0.2
+    }
+  },
+  "kind": "Basic Pitch direct true-Bass corrected DEV-only rescore",
+  "limitations": [
+    "This isolates true-Bass source separation from decoder behavior only; it is DEV-only and not held-out evidence.",
+    "No clean v11 corpus, ARM, latency, real-time, Norns, or production-readiness claim is made."
+  ],
+  "results": {
+    "official_decoder": {
+      "aggregate_50ms_one_to_one": {
+        "f1": 0.5226586102719033,
+        "fn": 30,
+        "fp": 286,
+        "precision": 0.3769063180827887,
+        "recall": 0.8522167487684729,
+        "tp": 173
+      },
+      "per_track_counts": [
+        {
+          "prediction_count": 107,
+          "reference_count": 43,
+          "score_50ms_one_to_one": {
+            "f1": 0.56,
+            "fn": 1,
+            "fp": 65,
+            "precision": 0.3925233644859813,
+            "recall": 0.9767441860465116,
+            "tp": 42
+          },
+          "split": "development",
+          "track": "Track00003"
+        },
+        {
+          "prediction_count": 14,
+          "reference_count": 8,
+          "score_50ms_one_to_one": {
+            "f1": 0.5454545454545454,
+            "fn": 2,
+            "fp": 8,
+            "precision": 0.42857142857142855,
+            "recall": 0.75,
+            "tp": 6
+          },
+          "split": "development",
+          "track": "Track00004"
+        },
+        {
+          "prediction_count": 60,
+          "reference_count": 27,
+          "score_50ms_one_to_one": {
+            "f1": 0.5517241379310345,
+            "fn": 3,
+            "fp": 36,
+            "precision": 0.4,
+            "recall": 0.8888888888888888,
+            "tp": 24
+          },
+          "split": "development",
+          "track": "Track00005"
+        },
+        {
+          "prediction_count": 47,
+          "reference_count": 16,
+          "score_50ms_one_to_one": {
+            "f1": 0.5079365079365079,
+            "fn": 0,
+            "fp": 31,
+            "precision": 0.3404255319148936,
+            "recall": 1.0,
+            "tp": 16
+          },
+          "split": "development",
+          "track": "Track00007"
+        },
+        {
+          "prediction_count": 73,
+          "reference_count": 23,
+          "score_50ms_one_to_one": {
+            "f1": 0.4583333333333333,
+            "fn": 1,
+            "fp": 51,
+            "precision": 0.3013698630136986,
+            "recall": 0.9565217391304348,
+            "tp": 22
+          },
+          "split": "development",
+          "track": "Track00010"
+        },
+        {
+          "prediction_count": 42,
+          "reference_count": 18,
+          "score_50ms_one_to_one": {
+            "f1": 0.5666666666666667,
+            "fn": 1,
+            "fp": 25,
+            "precision": 0.40476190476190477,
+            "recall": 0.9444444444444444,
+            "tp": 17
+          },
+          "split": "development",
+          "track": "Track00012"
+        },
+        {
+          "prediction_count": 63,
+          "reference_count": 50,
+          "score_50ms_one_to_one": {
+            "f1": 0.6548672566371682,
+            "fn": 13,
+            "fp": 26,
+            "precision": 0.5873015873015873,
+            "recall": 0.74,
+            "tp": 37
+          },
+          "split": "development",
+          "track": "Track00013"
+        },
+        {
+          "prediction_count": 53,
+          "reference_count": 18,
+          "score_50ms_one_to_one": {
+            "f1": 0.2535211267605634,
+            "fn": 9,
+            "fp": 44,
+            "precision": 0.16981132075471697,
+            "recall": 0.5,
+            "tp": 9
+          },
+          "split": "development",
+          "track": "Track00018"
+        }
+      ]
+    },
+    "raw_onset": {
+      "aggregate_50ms_one_to_one": {
+        "f1": 0.5581395348837209,
+        "fn": 23,
+        "fp": 262,
+        "precision": 0.4072398190045249,
+        "recall": 0.8866995073891626,
+        "tp": 180
+      },
+      "per_track_counts": [
+        {
+          "prediction_count": 82,
+          "reference_count": 43,
+          "score_50ms_one_to_one": {
+            "f1": 0.672,
+            "fn": 1,
+            "fp": 40,
+            "precision": 0.5121951219512195,
+            "recall": 0.9767441860465116,
+            "tp": 42
+          },
+          "split": "development",
+          "track": "Track00003"
+        },
+        {
+          "prediction_count": 27,
+          "reference_count": 8,
+          "score_50ms_one_to_one": {
+            "f1": 0.34285714285714286,
+            "fn": 2,
+            "fp": 21,
+            "precision": 0.2222222222222222,
+            "recall": 0.75,
+            "tp": 6
+          },
+          "split": "development",
+          "track": "Track00004"
+        },
+        {
+          "prediction_count": 56,
+          "reference_count": 27,
+          "score_50ms_one_to_one": {
+            "f1": 0.5542168674698795,
+            "fn": 4,
+            "fp": 33,
+            "precision": 0.4107142857142857,
+            "recall": 0.8518518518518519,
+            "tp": 23
+          },
+          "split": "development",
+          "track": "Track00005"
+        },
+        {
+          "prediction_count": 44,
+          "reference_count": 16,
+          "score_50ms_one_to_one": {
+            "f1": 0.5333333333333333,
+            "fn": 0,
+            "fp": 28,
+            "precision": 0.36363636363636365,
+            "recall": 1.0,
+            "tp": 16
+          },
+          "split": "development",
+          "track": "Track00007"
+        },
+        {
+          "prediction_count": 41,
+          "reference_count": 23,
+          "score_50ms_one_to_one": {
+            "f1": 0.6875,
+            "fn": 1,
+            "fp": 19,
+            "precision": 0.5365853658536586,
+            "recall": 0.9565217391304348,
+            "tp": 22
+          },
+          "split": "development",
+          "track": "Track00010"
+        },
+        {
+          "prediction_count": 52,
+          "reference_count": 18,
+          "score_50ms_one_to_one": {
+            "f1": 0.5142857142857142,
+            "fn": 0,
+            "fp": 34,
+            "precision": 0.34615384615384615,
+            "recall": 1.0,
+            "tp": 18
+          },
+          "split": "development",
+          "track": "Track00012"
+        },
+        {
+          "prediction_count": 75,
+          "reference_count": 50,
+          "score_50ms_one_to_one": {
+            "f1": 0.608,
+            "fn": 12,
+            "fp": 37,
+            "precision": 0.5066666666666667,
+            "recall": 0.76,
+            "tp": 38
+          },
+          "split": "development",
+          "track": "Track00013"
+        },
+        {
+          "prediction_count": 65,
+          "reference_count": 18,
+          "score_50ms_one_to_one": {
+            "f1": 0.3614457831325301,
+            "fn": 3,
+            "fp": 50,
+            "precision": 0.23076923076923078,
+            "recall": 0.8333333333333334,
+            "tp": 15
+          },
+          "split": "development",
+          "track": "Track00018"
+        }
+      ]
+    }
+  },
+  "schema_version": 1,
+  "scorer": "tests/rhythm_doctor/quality.py:onset_score; sorted maximum one-to-one 50ms matching; all eight DEV tracks included even if zero predictions.",
+  "source_and_posterior_hashes": {
+    "input_hashes": {
+      "Track00003": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00003-outputs.npz",
+        "posterior_npz_sha256": "cdd8092237bd2406742dbfaa0adba6e27a2ac52957e5371b84231af5cf7cffcf"
+      },
+      "Track00004": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00004-outputs.npz",
+        "posterior_npz_sha256": "2893dae90bd89ff48ddcd50328b7c016d4778c061a1a7ec8d3c81fdc8a49a32e"
+      },
+      "Track00005": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00005-outputs.npz",
+        "posterior_npz_sha256": "a06571e25f1e6bea9cf72a1e74e172362c1cfcfc52aae9e95f03386299a102a6"
+      },
+      "Track00007": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00007-outputs.npz",
+        "posterior_npz_sha256": "55e248de3bbe2633a1a36fd92c9b51ff5dd4b61b9b9461e85d7b62f0ac194d64"
+      },
+      "Track00010": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00010-outputs.npz",
+        "posterior_npz_sha256": "ffb596dd93f5d62b3abde3b4fc43b18adce86a2ab7525726a778bf1df51f334d"
+      },
+      "Track00012": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00012-outputs.npz",
+        "posterior_npz_sha256": "433ef7a458825a17fa7031c3b7425854d5fc558675651ef7029946e50d429e55"
+      },
+      "Track00013": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00013-outputs.npz",
+        "posterior_npz_sha256": "628af179a1007f7e0bcbfbda83917a99f1a7556e9674643c9d7b8d564c97be43"
+      },
+      "Track00018": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00018-outputs.npz",
+        "posterior_npz_sha256": "9ac1cadc6037b70b9a8718d07f008bfb1adb13c82776828bed688afb3d24f547"
+      }
+    },
+    "source_hashes": {
+      "adapter_py_sha256": "b35626c11ec7e8e58cd17373a8d07622d306d68a79fad7db011650b2dcb7264b",
+      "direct_raw_report_sha256": "35537866e37a49f24d0395e06f43602f0a11db63c98ebb4e7bba40e3ae313d27",
+      "mixed_corrected_results_sha256": "4c36e92367348e12bd6c2b62f0bcfd98832dd87c76c79cd42de3b3b9601bbfd0",
+      "oracle_identity_sha256": "91e32e816f609ffe23b3dcf04f2faebbaf199119ad76866c7db1412c980a1d84",
+      "oracle_source_builder_sha256": "101307800c86af6dfeb7a7017ac11d90e6ecab70ad64f5f08c3018df9c128b10",
+      "preserved_pilot_runner_sha256": "9e637b48dee246aad552db6a07920920a012af3df9303d7f83f8392870af917b",
+      "quality_py_sha256": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b",
+      "script_sha256": "51af89c5a4285f9172f3157f4a6ec59d31eaf4e66d8b298aa7b0394280be2bb1",
+      "wheel_sha256": "738adb503aae7fdfc7d1e1511aa0ce35052315f260a19531ef4c356708425db0"
+    }
+  },
+  "status": "completed_diagnostic_only"
+}

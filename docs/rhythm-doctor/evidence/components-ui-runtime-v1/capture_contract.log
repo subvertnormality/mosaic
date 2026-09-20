@@ -1,0 +1,13 @@
+test_cancel_discards_and_cannot_be_published_or_restarted (test_capture_contract.CaptureContractTests) ... ok
+test_cancel_wins_over_pending_stop_completion (test_capture_contract.CaptureContractTests) ... ok
+test_capacity_automatically_completes_and_retains_partial_final_block (test_capture_contract.CaptureContractTests) ... ok
+test_discontinuous_callback_frame_is_visible_failure (test_capture_contract.CaptureContractTests) ... ok
+test_first_callback_sets_authoritative_sample_origin_and_preserves_stereo (test_capture_contract.CaptureContractTests) ... ok
+test_invalid_commands_are_rejected (test_capture_contract.CaptureContractTests) ... ok
+test_stop_is_completed_by_callback_and_never_accepts_a_later_block (test_capture_contract.CaptureContractTests) ... ok
+test_xrun_is_a_visible_terminal_failure (test_capture_contract.CaptureContractTests) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.908s
+
+OK
