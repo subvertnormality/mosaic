@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "subject": "Harmony convergence regressions",
+  "source_binding": {
+    "rule": "Each baseline clone was placed at PARENT/mosaic because the Lua harness resolves include('mosaic/...') from that layout. Earlier clones with a different leaf name are excluded from evidence.",
+    "candidate_revision": "2d4dfe5718e48a3232616185b62e0db06bbc3139"
+  },
+  "red": [
+    {
+      "claim": "Selected-step inspection must not borrow a later event, and H05/H06 must report the selected event's bypass, reason and fallback.",
+      "baseline_revision": "a1347fa",
+      "checkout": "/tmp/mosaic-red-inspection-bound/mosaic",
+      "regression_patch": {
+        "path": "/tmp/mosaic-inspection-regressions-v2.patch",
+        "sha256": "dd74962acbe527170e511de848c0b679c6c88941d7cfe1036447c8e782593575"
+      },
+      "command": "cd /tmp/mosaic-red-inspection-bound/mosaic/lib/tests && lua run_tests.lua test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason test_harmony_group_result_surfaces_a_members_local_scale_bypass",
+      "result": {
+        "passed": 0,
+        "failed": 4,
+        "expected_failures": [
+          "unknown selected step returned the latest event",
+          "empty selected step displayed NO RESULT instead of NO EVENT",
+          "local scale was labelled as a generic bypass",
+          "a healthy group member hid another member's local-scale bypass"
+        ]
+      }
+    },
+    {
+      "claim": "A reachable delayed arpeggio must consume Harmony history only at its actual emitted onset.",
+      "baseline_revision": "c08b99e",
+      "checkout": "/tmp/mosaic-red-scheduler-bound/mosaic",
+      "regression_patch": {
+        "path": "/tmp/mosaic-scheduler-regressions-v2.patch",
+        "sha256": "c6b4802f13cf2443fb098b75611ddddae18163fe6edc511ea0498c017bf49699"
+      },
+      "command": "cd /tmp/mosaic-red-scheduler-bound/mosaic/lib/tests && lua run_tests.lua test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset",
+      "result": {
+        "passed": 0,
+        "failed": 1,
+        "expected_failure": "runtime.consumed was already populated immediately after step.handle, before any MIDI Note On"
+      }
+    }
+  ],
+  "green": {
+    "revision": "2d4dfe5718e48a3232616185b62e0db06bbc3139",
+    "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua test_harmony_inspection_unrecorded_selected_step_does_not_fall_back_to_latest_event test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_solver_state test_harmony_result_distinguishes_local_scale_bypass_and_specific_failure_reason test_harmony_group_result_surfaces_a_members_local_scale_bypass test_harmony_playback_reachable_delayed_arp_commits_only_at_actual_onset",
+    "result": {
+      "passed": 5,
+      "failed": 0
+    },
+    "full_lua_suite": {
+      "passed": 1855,
+      "failed": 0,
+      "command": "cd /tmp/mosaic/lib/tests && lua run_tests.lua"
+    },
+    "python_guards": {
+      "passed": 18,
+      "failed": 0
+    },
+    "public_behaviour": {
+      "failure_workflow": "Both real-time and controlled-experimental lanes passed reason-specific NO VOICING, NO EVENT selected-step inspection, strict silence and reason-specific Legacy fallback.",
+      "ensemble_workflow": "Both real-time and controlled-experimental lanes passed literal local-scale-bypass MIDI plus visible LOCAL SCALE BYPASS group status.",
+      "qualification": "The final exact-commit 16-run acceptance campaign is recorded separately in mosaic-ux-harmony-acceptance.json."
+    }
+  }
+}
