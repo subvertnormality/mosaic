@@ -107,6 +107,10 @@ def main():
     args = parser.parse_args()
     out = Path(args.artifacts); out.mkdir(parents=True, exist_ok=False)
     c = None; failure = cleanup_failure = None; runtime_cleanup = None
+    # Capture owns no private directory now, but a developer machine carries
+    # leftovers from older runs. The property is that this run adds none, not
+    # that the machine is clean.
+    private_roots_before = {str(path) for path in Path("/tmp").glob("mosaic-rd-*")}
     try:
         c = Driver(out, app_root=args.app_root, clock_mode=args.clock_mode,
                    experimental_install=args.experimental_install)
@@ -137,14 +141,15 @@ def main():
                 deadline = time.monotonic() + 30
                 while still_running(pid) and time.monotonic() < deadline:
                     time.sleep(.1)
-                strays = sorted(str(path) for path in Path("/tmp").glob("mosaic-rd-*"))
+                strays = sorted({str(path) for path in Path("/tmp").glob("mosaic-rd-*")}
+                                - private_roots_before)
                 runtime_cleanup = dict(cancel=(runtime / "cancel").is_file(),
                                        analysis_pid=(runtime / "pid").exists(),
                                        analysis_process_alive=still_running(pid),
                                        capture_runtime=(c.data_directory / "rhythm-doctor-runtime").exists(),
                                        private_capture_roots=strays)
                 assert not runtime_cleanup["analysis_process_alive"], runtime_cleanup
-                # The capture worker and its owned /tmp root were removed with
+                # The capture worker and the private /tmp root it owned went with
                 # the JACK path; nothing may quietly bring them back.
                 assert not runtime_cleanup["capture_runtime"], runtime_cleanup
                 assert strays == [], runtime_cleanup

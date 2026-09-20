@@ -27,16 +27,23 @@ from rhythm_doctor import fifth_algorithm
 REPO = Path(__file__).resolve().parents[2]
 
 
-def status_band(text):
-    """Match only the rows carrying the status line.
+# The status line owns the left of the screen; the right-hand third is where
+# the dancing doctor is drawn, and he is placed to start past it.
+STATUS_COLUMNS = 97
 
-    The rest of the screen shows live bank detail - hit counts, tempo, window
-    positions - which is not what this case is about, so comparing whole frames
-    would make it fail for unrelated reasons.
+
+def status_band(text):
+    """Match only the part of the screen carrying the status line.
+
+    The rest shows live bank detail - hit counts, tempo, window positions, and
+    the doctor - which is not what this case is about, so comparing whole
+    frames would make it fail for unrelated reasons. The bound is the same one
+    the sprite is held to in test_app_surface, so text and drawing cannot
+    silently start overlapping without that test failing.
     """
     literal = render([(0, 22, 10, text)])
     region = [((y * 128 + x) * 4 + channel)
-              for y in range(15, 26) for x in range(128) for channel in range(3)]
+              for y in range(15, 26) for x in range(STATUS_COLUMNS) for channel in range(3)]
 
     def expected(state):
         actual = base64.b64decode(state["frame"]["pixels_base64"])
