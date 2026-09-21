@@ -5,7 +5,7 @@ local drum_ops = include("mosaic/lib/helpers/drum_ops")
 local trigger_edit_page = {}
 local shift = 0
 local rhythm_doctor = nil
-local rhythm_doctor_lane = "BD"
+local rhythm_doctor_lane = nil
 local rhythm_doctor_paint_preview = nil
 
 local trigger_edit_page_pattern_select_fader = fader:new(1, 1, 16, 16)
@@ -120,8 +120,11 @@ function trigger_edit_page.register_draws()
       if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
       local model = rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
       grid_abstraction.led(1, 2, model and model.worker_ready and 15 or 4)
-      local lanes = {"BD", "SD", "CYM"}
-      for index, lane in ipairs(lanes) do grid_abstraction.led(index + 2, 2, lane == rhythm_doctor_lane and 15 or 4) end
+      local lanes = rhythm_doctor and rhythm_doctor.lanes and rhythm_doctor:lanes() or {}
+      -- The effective lane, not the raw local: nothing is selected until the
+      -- player picks, and the first lane of the live set is current until then.
+      local current = trigger_edit_page.get_rhythm_doctor_lane()
+      for index, lane in ipairs(lanes) do grid_abstraction.led(index + 2, 2, lane == current and 15 or 4) end
       grid_abstraction.led(2, 2, 0) -- reserved: never an old fader side effect
     end
   )
@@ -438,7 +441,7 @@ function trigger_edit_page.register_press()
       -- Columns are bound to the live lane set, not a fixed 3..7 range: a
       -- column past the last lane must stay inert rather than dispatch a nil
       -- lane into the adapter.
-      local rd_lanes = {"BD", "SD", "CYM"}
+      local rd_lanes = rhythm_doctor and rhythm_doctor.lanes and rhythm_doctor:lanes() or {}
       if trigger_edit_page_algorithm_fader:get_value() == 5 and y == 2
          and x >= 3 and x <= 2 + #rd_lanes then
         local selected = rd_lanes[x - 2]
@@ -687,7 +690,13 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
 end
 
 function trigger_edit_page.get_algorithm() return trigger_edit_page_algorithm_fader:get_value() end
-function trigger_edit_page.get_rhythm_doctor_lane() return rhythm_doctor_lane end
+function trigger_edit_page.get_rhythm_doctor_lane()
+  -- Before anything is selected, the first lane of the live set is current --
+  -- which after a ten lane analysis is not BD.
+  if rhythm_doctor_lane then return rhythm_doctor_lane end
+  local lanes = rhythm_doctor and rhythm_doctor.lanes and rhythm_doctor:lanes() or {}
+  return lanes[1]
+end
 function trigger_edit_page.get_rhythm_doctor_model()
   return rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
 end

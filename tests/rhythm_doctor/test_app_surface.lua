@@ -101,6 +101,7 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
     leave = function() calls[#calls + 1] = "leave" end,
     record_pressed = function() calls[#calls + 1] = "record_down" end,
     record_released = function() calls[#calls + 1] = "record_up" end,
+    lanes = function() return { "BD", "SD", "CYM" } end,
     select_lane = function(_, lane) calls[#calls + 1] = "lane:" .. lane; return {code = "LANE_SELECTED"} end,
     enc = function(_, n, d) calls[#calls + 1] = "enc:" .. n .. "," .. d; return {code = "SETUP_EDITED"} end,
     screen_model = function() return {worker_ready = true} end,
@@ -144,6 +145,7 @@ test("transport-gated lane selection leaves the displayed lane unchanged", funct
   local selected = "BD"
   page.set_rhythm_doctor({
     enter = function() end,
+    lanes = function() return { "BD", "SD", "CYM" } end,
     select_lane = function(_, lane) selected = lane; return {code = "STOP_SEQUENCER"} end,
     screen_model = function() return {worker_ready = false} end,
   })

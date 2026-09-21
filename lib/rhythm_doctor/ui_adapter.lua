@@ -344,6 +344,18 @@ end
 
 -- Paint owns no source data here.  This context is the complete view token that
 -- the transaction layer must pin before it previews or writes a source pattern.
+-- The lane set the grid should show: the bank's own, or the device's default
+-- before anything has been captured. The page must not keep its own copy --
+-- a hardcoded list there silently overrides a ten lane analysis.
+function Adapter:lanes()
+  local names, out = lanes_of(self), {}
+  for index, lane in ipairs(names) do
+    if index > Adapter.MAX_LANE_COLUMNS then break end
+    out[index] = lane
+  end
+  return out
+end
+
 function Adapter:paint_context()
   local bank, machine = bank_of(self), self.runtime.machine or {}
   if state_of(self) ~= "READY" or type(bank) ~= "table" then return nil, outcome("NOT_READY") end

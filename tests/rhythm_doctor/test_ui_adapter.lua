@@ -469,3 +469,36 @@ end
 -- here so a failure in an appended block cannot pass silently.
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end
 print("rhythm_doctor ui adapter: phrase navigation and remote lane columns checked")
+
+-- The grid page asks the adapter for the lane set. It used to keep its own
+-- hardcoded {"BD","SD","CYM"}, so a ten lane analysis lit three columns, the
+-- rest were inert, and the selected lane defaulted to a lane the bank did not
+-- contain -- the capture succeeded and nothing could be selected.
+do
+  local c = context()
+  equal(#c.adapter:lanes(), 3, "with no bank the device's own lanes are offered")
+  equal(c.adapter:lanes()[1], "BD", "and BD is first")
+
+  local remote = { "BASS", "CYMBALS", "GUITAR", "HIHAT", "KICK",
+                   "OTHER", "PIANO", "SNARE", "TOMS", "VOCALS" }
+  local sens, lanes = {}, {}
+  for _, lane in ipairs(remote) do sens[lane] = 0; lanes[lane] = {} end
+  c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = {
+    version = 4, project_id = "p", bpm = 125, sample_rate = 48000,
+    capture_start_sample = 0, capture_end_sample = 1749407, origin_sample = 1920,
+    timeline_cells = 303, samples_per_cell = 5760, window_start = 0,
+    phrase_start_cell = 37, phrase_confidence = .06,
+    lane_names = remote, sensitivities = sens, lanes = lanes, candidates = {}, source = {},
+  }
+  equal(#c.adapter:lanes(), 10, "a ten lane bank offers ten lanes")
+  for index, lane in ipairs(remote) do
+    equal(c.adapter:lanes()[index], lane, "lane " .. index .. " is " .. lane)
+  end
+
+  -- Never more columns than the row has room for.
+  local many = {}
+  for i = 1, 20 do many[i] = "L" .. i end
+  c.runtime.machine.bank.lane_names = many
+  equal(#c.adapter:lanes(), 14, "the lane set is capped at the columns that exist")
+end
