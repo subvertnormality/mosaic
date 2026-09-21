@@ -199,6 +199,70 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(caught.exception.code, 404)
 
 
+class CaptureRateTests(unittest.TestCase):
+    """A norns does not record at 44100.
+
+    Every other test here uses 44100, which is why a capture at the device's
+    real rate reached the server and was refused outright: demucs raises on a
+    rate it was not trained at. Beat This! would have been worse -- it accepts
+    any rate and reports a tempo scaled by the ratio, so the capture would have
+    come back plausible and wrong.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        server.Handler.service = server.Service(stub_models())
+        cls.httpd = ThreadingHTTPServer(("127.0.0.1", 0), server.Handler)
+        cls.port = cls.httpd.server_address[1]
+        cls.thread = threading.Thread(target=cls.httpd.serve_forever, daemon=True)
+        cls.thread.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.httpd.shutdown(); cls.httpd.server_close(); cls.thread.join(timeout=5)
+
+    def post(self, body):
+        request = urllib.request.Request(
+            "http://127.0.0.1:%d/v1/analyse" % self.port, data=body, method="POST")
+        with urllib.request.urlopen(request, timeout=120) as response:
+            return json.loads(response.read())
+
+    def test_a_48k_capture_is_analysed_rather_than_refused(self):
+        rate = 48000
+        value = self.post(wav_bytes(groove(sr=rate), sr=rate, width=3))
+        self.assertTrue(value["candidates"], "a 48kHz capture must produce gates")
+        self.assertTrue(40 <= value["bpm"] <= 240)
+
+    def test_positions_come_back_in_the_captures_own_coordinates(self):
+        """The bank addresses samples of the file the player recorded, not of
+        the server's resampled working copy. Reporting analysis-rate indices
+        would place every gate about 9% early on a 48kHz capture."""
+        rate = 48000
+        mono = groove(sr=rate)
+        value = self.post(wav_bytes(mono, sr=rate, width=3))
+        for candidate in value["candidates"]:
+            self.assertLess(candidate["sample_index"], mono.size,
+                            "an onset past the end of the capture is out of coordinates")
+        for beat in value["beat_positions"]:
+            self.assertLess(beat, mono.size)
+        self.assertLess(value["phrase_start_sample"], mono.size)
+        self.assertLess(value["origin_sample"], mono.size)
+
+    def test_the_tempo_is_not_scaled_by_the_rate_ratio(self):
+        """The stub tracker places beats on a real grid, so a mishandled rate
+        shows up as a tempo off by exactly 48000/44100."""
+        at_44 = self.post(wav_bytes(groove(sr=44100), sr=44100))
+        at_48 = self.post(wav_bytes(groove(sr=48000), sr=48000, width=3))
+        self.assertAlmostEqual(at_44["bpm"], at_48["bpm"], delta=2.0,
+                               msg="%.2f vs %.2f" % (at_44["bpm"], at_48["bpm"]))
+
+    def test_resampling_preserves_length_within_a_sample(self):
+        mono = np.zeros(48000, dtype=np.float32)
+        out = pipeline.resample(mono, 48000, 44100)
+        self.assertAlmostEqual(len(out), 44100, delta=1)
+        self.assertIs(pipeline.resample(mono, 44100, 44100).dtype.type, np.float32)
+
+
 class UnreadyServerTests(unittest.TestCase):
     """A server whose models failed to load must say so, not pretend."""
 

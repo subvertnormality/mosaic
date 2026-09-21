@@ -77,6 +77,33 @@ def bar_activity(candidates: list[dict], downbeats: list[int],
     return rows
 
 
+def resample(mono: np.ndarray, source_rate: int, target_rate: int) -> np.ndarray:
+    """Bring a capture to the rate the models were trained at.
+
+    A norns records at its hardware rate, which is not 44100, and every model
+    here expects 44100: demucs refuses outright, and Beat This! would report a
+    tempo scaled by the rate ratio without complaining at all. Uses torchaudio
+    when it is present -- it is a demucs dependency, so in practice it always
+    is -- and falls back to linear interpolation, which is poorer but honest
+    and keeps the server working rather than failing the capture.
+    """
+    if source_rate == target_rate:
+        return np.asarray(mono, dtype=np.float32)
+    try:
+        import torch
+        import torchaudio
+        wave = torch.tensor(np.asarray(mono, dtype=np.float32))[None]
+        out = torchaudio.functional.resample(wave, source_rate, target_rate)
+        return out[0].numpy().astype(np.float32)
+    except Exception:
+        count = int(round(len(mono) * target_rate / float(source_rate)))
+        if count <= 0:
+            return np.zeros(0, dtype=np.float32)
+        source = np.arange(len(mono), dtype=np.float64)
+        target = np.linspace(0, len(mono) - 1, count)
+        return np.interp(target, source, np.asarray(mono, dtype=np.float64)).astype(np.float32)
+
+
 def analyse(mono: np.ndarray, sample_rate: int, models: Models,
             gates: dict[str, float] | None = None,
             alignment: dict | None = None) -> dict:
@@ -95,23 +122,32 @@ def analyse(mono: np.ndarray, sample_rate: int, models: Models,
     if not mono.size or not np.any(mono):
         return empty
 
-    beats, downbeats = models.track_beats(mono, sample_rate)
-    beats = [int(b) for b in beats if 0 <= int(b) < mono.size]
-    downbeats = [int(b) for b in downbeats if 0 <= int(b) < mono.size]
+    # Everything below runs at the models' rate; positions are converted back
+    # to the capture's own coordinates at the end, because the bank addresses
+    # samples of the file the player recorded, not of our working copy.
+    source_rate, source_samples = int(sample_rate), int(mono.size)
+    analysis = resample(mono, source_rate, SR)
+    if not analysis.size:
+        return empty
+    scale = source_rate / float(SR)
 
-    stems = models.separate(mono, sample_rate)
+    beats, downbeats = models.track_beats(analysis, SR)
+    beats = [int(b) for b in beats if 0 <= int(b) < analysis.size]
+    downbeats = [int(b) for b in downbeats if 0 <= int(b) < analysis.size]
+
+    stems = models.separate(analysis, SR)
     drums = stems.get("drums")
     candidates: list[dict] = []
     if drums is not None and models.separate_drums is not None:
-        pieces = models.separate_drums(drums, sample_rate)
+        pieces = models.separate_drums(drums, SR)
         for lane in lanes.DRUM_LANES:
             piece = pieces.get(lane.lower())
             if piece is None:
                 continue
-            for found in onsets.analyse_stem(piece, sample_rate, gates[lane]):
+            for found in onsets.analyse_stem(piece, SR, gates[lane]):
                 candidates.append({"lane": lane, **found})
     elif drums is not None:
-        for found in onsets.analyse_stem(drums, sample_rate, gates["DRUMS"]):
+        for found in onsets.analyse_stem(drums, SR, gates["DRUMS"]):
             candidates.append({"lane": "DRUMS", **found})
     for lane in lanes.MELODIC_LANES:
         stem = stems.get(lanes.STEM_FOR_LANE[lane])
@@ -122,16 +158,28 @@ def analyse(mono: np.ndarray, sample_rate: int, models: Models,
 
     order = {name: index for index, name in enumerate(names)}
     candidates.sort(key=lambda c: (c["sample_index"], order[c["lane"]]))
-    for candidate in candidates:
-        candidate["sample_index"] = min(int(candidate["sample_index"]), int(mono.size) - 1)
 
     # Per-bar lane activity is the feature the phrase boundary is found from.
     # A bar of a chorus and a bar of a verse differ in WHICH instruments play
     # and how often, which is exactly what a self-similarity matrix over these
     # rows measures -- and far more informative than downbeat spacing, which is
     # constant at a fixed tempo and so carries no structure at all.
-    aligned = phrase.align(beats, downbeats, sample_rate, mono.size, alignment,
+    #
+    # Still at the models' rate: the beat grid and the onsets have to agree
+    # about what a sample is, and the tempo is derived from their spacing.
+    aligned = phrase.align(beats, downbeats, SR, analysis.size, alignment,
                            features=bar_activity(candidates, downbeats, names))
+
+    # Back to the capture's own coordinates. The bank addresses samples of the
+    # file the player recorded, not of the server's resampled working copy.
+    for candidate in candidates:
+        candidate["sample_index"] = min(int(round(candidate["sample_index"] * scale)),
+                                        source_samples - 1)
+    aligned["beat_positions"] = [min(int(round(b * scale)), source_samples - 1)
+                                 for b in aligned.get("beat_positions", [])]
+    for key in ("origin_sample", "phrase_start_sample"):
+        aligned[key] = min(int(round(aligned[key] * scale)), source_samples - 1)
+
     value = dict(empty)
     value.update(aligned)
     value["candidates"] = candidates
