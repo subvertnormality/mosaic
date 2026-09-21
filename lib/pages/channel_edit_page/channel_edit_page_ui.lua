@@ -265,7 +265,11 @@ local notes_page = page:new("Note Dashboard", function()
   local snapshot=harmony_inspection.snapshot(program.get_selected_song_pattern(),program.get().selected_channel,inspected_step)
   if snapshot.planned then
     local function pitch(stage)return stage and stage.pitch or "-"end
-    screen.level(3);screen.move(2,54)
+    -- 56, not 54. The Note Dashboard's bottom row of value cells is read from
+    -- baseline 48, which spans rows 41..50; text at baseline 54 puts glyphs in
+    -- rows 49..54 and draws over the chord slot values. Two pixels lower
+    -- clears them.
+    screen.level(3);screen.move(2,56)
     screen.text("SRC"..tostring(snapshot.planned.source or "-").." M"..tostring(snapshot.planned.merge or "-")..
       " S"..tostring(snapshot.planned.scale or "-").." H"..tostring(snapshot.planned.harmony or "-"))
     screen.level(4);screen.move(2,63)
