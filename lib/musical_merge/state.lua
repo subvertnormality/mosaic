@@ -125,7 +125,26 @@ function state.effective(song, channel, requested)
   }
 end
 
-function state.has(song,channel)return songs[song]and songs[song][channel]~=nil end
+-- Whether this channel has merge state the clock owes work to.
+--
+-- A record is NOT evidence of that. pattern.get_and_merge_patterns calls
+-- state.effective for every channel it merges, including channels with no
+-- merge configured, and effective creates a record as a side effect. Treating
+-- a bare record as merge state made the clock run on_cycle_boundary and
+-- invalidate the lookahead scheduler for every channel in the song; under a
+-- lead time the lookahead has already sent the upcoming step, so invalidating
+-- it re-resolved and re-emitted that step and the note at the wrap sounded
+-- twice.
+--
+-- A queued change still counts: merge turned off mid-play owes its wind-down
+-- at the next boundary.
+function state.has(song, channel)
+  local record = songs[song] and songs[song][channel]
+  if not record then return false end
+  if record.queued ~= nil then return true end
+  local active = record.active
+  return active ~= nil and active.mode ~= nil and active.mode ~= "off"
+end
 
 function state.stop(song)
   local values = songs[song]

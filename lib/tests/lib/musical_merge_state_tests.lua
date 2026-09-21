@@ -118,3 +118,40 @@ function test_musical_merge_queued_removal_stays_active_until_cycle_boundary()
   state.on_cycle_boundary(song,3,removed)
   luaunit.assert_equals(state.effective(song,3,removed).config.mode,"off")
 end
+
+-- The pattern merger calls state.effective for EVERY channel, including ones
+-- with no merge configured, and effective creates a record as a side effect.
+-- If a bare record counts as "has merge state", the clock runs cycle-boundary
+-- merge work and invalidates the lookahead on every channel in the song --
+-- and under a lead time that re-emits a step the lookahead already sent, so
+-- the player hears the note at the wrap twice.
+function test_musical_merge_an_untouched_channel_reports_no_state()
+  state.reset()
+  local song = {}
+  luaunit.assert_false(state.has(song, 5) and true or false)
+end
+
+function test_musical_merge_a_default_config_does_not_create_state()
+  state.reset()
+  local song = {}
+  state.effective(song, 5, config.new())
+  luaunit.assert_false(state.has(song, 5) and true or false,
+    "a channel with merge off must not look like a channel with merge on")
+end
+
+function test_musical_merge_a_configured_channel_reports_state()
+  state.reset()
+  local song = {}
+  state.effective(song, 5, value(2, "fixed"))
+  luaunit.assert_true(state.has(song, 5) and true or false)
+end
+
+function test_musical_merge_a_queued_removal_still_reports_state()
+  -- Merge turned off while playing still owes its wind-down at the boundary.
+  state.reset()
+  local song = {}
+  state.effective(song, 6, value(2, "fixed"))
+  state.request(song, 6, config.new(), true)
+  luaunit.assert_true(state.has(song, 6) and true or false,
+    "a channel winding merge down still needs its cycle boundary")
+end
