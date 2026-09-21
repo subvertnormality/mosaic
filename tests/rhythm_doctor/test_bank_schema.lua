@@ -32,7 +32,7 @@ local cases = {
   function(b) b.phrase_confidence='high' end,
 }
 assert(Bank.valid_ready(fresh()))
-assert(Bank.VERSION == 4, "schema migration must publish version 4")
+assert(Bank.VERSION == 5, "schema migration must publish version 5")
 
 -- Phrase alignment. The bank addresses the phrase start as a cell so the
 -- centre button can jump the window there; the beat grid is what the alignment
@@ -182,4 +182,35 @@ do
   assert(upgraded.lanes.BD and upgraded.lanes.SD, "the lanes the product still has are kept")
   assert(#upgraded.candidates == 2, "only the withdrawn lane's candidates go, got " .. #upgraded.candidates)
   assert(Bank.valid_ready(upgraded), "an upgraded four lane bank loads")
+end
+
+-- Lane order is part of what a bank stores, and it changed: the grid used to
+-- read BASS, CYMBALS, GUITAR, HIHAT, KICK... because the names were sorted
+-- alphabetically. A bank written before that changed must come forward, or a
+-- player who analysed yesterday keeps a grid that reads as nonsense until they
+-- record again.
+do
+  local Bank = require('rhythm_doctor.bank')
+  local alphabetical = { "BASS", "CYMBALS", "GUITAR", "HIHAT", "KICK",
+                         "OTHER", "PIANO", "SNARE", "TOMS", "VOCALS" }
+  local lanes, sensitivities = {}, {}
+  for _, lane in ipairs(alphabetical) do lanes[lane] = {}; sensitivities[lane] = .3 end
+  local stored = { version = 4, project_id = "p", lane_names = alphabetical,
+    lanes = lanes, sensitivities = sensitivities, candidates = {}, source = {},
+    phrase_start_cell = 0, phrase_confidence = 0 }
+
+  local upgraded = Bank.upgrade(stored)
+  assert(upgraded, "a bank one version behind must still load")
+  assert(table.concat(upgraded.lane_names, " ") ==
+    "KICK SNARE HIHAT CYMBALS TOMS BASS GUITAR PIANO VOCALS OTHER",
+    "a stored bank is brought into kit order rather than left alphabetical")
+  assert(upgraded.version == Bank.VERSION, "and lands on the current version")
+  for _, lane in ipairs(alphabetical) do
+    assert(upgraded.lanes[lane], lane .. " must survive the reorder")
+    assert(upgraded.sensitivities[lane] == .3, lane .. " keeps its sensitivity")
+  end
+
+  -- Reordering is idempotent: a bank already at this version is returned as is.
+  assert(Bank.upgrade(upgraded) == upgraded, "an up-to-date bank is not rebuilt")
+  print("bank schema: stored lane order is brought into kit order")
 end

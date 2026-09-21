@@ -2,7 +2,7 @@
 -- UI dependency belongs here.  `sample_index` is authoritative for every event.
 -- See docs/rhythm-doctor/PLAN.md, "Four bars, clock and quantisation".
 local Bank = {
-  VERSION = 4,
+  VERSION = 5,
   -- The lane set the on-device backend produces. It is a DEFAULT, not the only
   -- possibility: the remote analysis server separates a kit and returns ten
   -- lanes, and a bank has to hold whichever set its own analysis produced or
@@ -36,6 +36,41 @@ local function valid_lane(lane, names)
   return false
 end
 
+-- Left to right, top row then bottom: the kit first, in the order a drummer
+-- names it, then whatever else the analysis separated out. Sorting by name
+-- instead put BASS before KICK and CYMBALS before HIHAT, so the grid read as
+-- nonsense to anyone who plays drums. Both naming schemes appear because the
+-- on-device backend and the server name the same drum differently (BD/KICK,
+-- SD/SNARE, CYM/CYMBALS) and a bank can hold either.
+local LANE_ORDER = {
+  BD = 1, KICK = 1,
+  SD = 2, SNARE = 2,
+  HH = 3, HIHAT = 3,
+  CYM = 4, CYMBALS = 4,
+  TOM = 5, TOMS = 5,
+  -- Without LarsNet the drums stem is not split, so one lane stands for the
+  -- whole kit and still leads the melodic lanes.
+  DRUMS = 6,
+  BASS = 7, GUITAR = 8, PIANO = 9, VOCALS = 10, OTHER = 11,
+}
+local UNRANKED = 1e9
+
+-- The one definition of lane order. Every caller asks here: the transport when
+-- it declares a bank's lanes, the bank when it validates one, and the UI when
+-- it draws a bank stored before this order existed. A second copy anywhere
+-- would eventually disagree with this one and move the grid columns.
+function Bank.order_lanes(names)
+  if type(names) ~= "table" then return names end
+  local out = {}
+  for index, name in ipairs(names) do out[index] = name end
+  table.sort(out, function(a, b)
+    local ra, rb = LANE_ORDER[a] or UNRANKED, LANE_ORDER[b] or UNRANKED
+    if ra ~= rb then return ra < rb end
+    return a < b
+  end)
+  return out
+end
+
 -- A declared lane set: names only, each a non-empty plain word, no repeats.
 local function lane_names(value)
   if value == nil then return Bank.LANES end
@@ -46,7 +81,7 @@ local function lane_names(value)
     if seen[name] then return nil end
     seen[name], out[index] = true, name
   end
-  return out
+  return Bank.order_lanes(out)
 end
 
 local function number(value)
@@ -295,7 +330,7 @@ end
 function Bank.upgrade(bank)
   if type(bank) ~= "table" then return nil end
   if bank.version == Bank.VERSION then return bank end
-  if bank.version ~= 2 and bank.version ~= 3 then return nil end
+  if bank.version ~= 2 and bank.version ~= 3 and bank.version ~= 4 then return nil end
   local changed = copy(bank)
   -- A bank written before lane sets were data had whatever lanes the product
   -- had then, which for anything saved before BASS was withdrawn is four.
@@ -303,7 +338,7 @@ function Bank.upgrade(bank)
   -- duplicated BD; refusing the bank would lose the player their whole
   -- project over it. The lane is dropped and the rest of the bank loads.
   if changed.lane_names == nil then
-    changed.lane_names = { table.unpack(Bank.LANES) }
+    changed.lane_names = Bank.order_lanes({ table.unpack(Bank.LANES) })
     for lane in pairs(changed.lanes or {}) do
       if not valid_lane(lane, changed.lane_names) then changed.lanes[lane] = nil end
     end
@@ -317,6 +352,10 @@ function Bank.upgrade(bank)
     changed.candidates = kept
   end
   if bank.version == 2 then changed.phrase_start_cell, changed.phrase_confidence = 0, 0 end
+  -- Version 5 is version 4 with the lanes in kit order. Banks up to 4 stored
+  -- them alphabetically, which put BASS before KICK on the grid; the names are
+  -- the same and only their order moves, so nothing else in the bank changes.
+  changed.lane_names = Bank.order_lanes(changed.lane_names)
   changed.version = Bank.VERSION
   changed.source = type(changed.source) == "table" and changed.source or {}
   return changed

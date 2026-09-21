@@ -482,6 +482,15 @@ the first three cells light. A remote analysis declares up to ten, which is why
 the block is two rows: a single row would run the later lanes under the
 algorithm fader, where selecting one would also change the algorithm.
 
+Lanes read in kit order rather than alphabetically: kick, snare, hi-hat,
+cymbals and toms fill the top row, and whatever else the analysis separated out
+— bass, guitar, piano, vocals and demucs' residual **OTHER** — follows on the
+bottom row. A lane neither of those names keeps a stable alphabetical place
+after the ones they do, so an unfamiliar backend still puts its columns in the
+same order every time a project loads. A bank saved before this order existed
+is brought forward when it loads, so an older capture does not keep an
+alphabetical grid until it is recorded again.
+
 The lanes describe what can be told apart reliably, not a full drum-kit
 transcription. **CYM** is hats *and* cymbals together because a closed hat and a
 ride are both inharmonic metal with overlapping spectra, and the decay that

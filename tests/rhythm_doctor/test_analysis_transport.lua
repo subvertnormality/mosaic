@@ -124,3 +124,46 @@ do
     print("analysis transport: remote detector identity accepted")
   end
 end
+
+-- Grid order. The lanes were sorted alphabetically, which is deterministic but
+-- reads as nonsense on a drum kit: BASS landed before KICK, and CYMBALS before
+-- HIHAT. A kit should read left to right the way a drummer names it, with
+-- whatever the analysis found besides the kit following on the second row.
+do
+  local transport = require('rhythm_doctor.analysis_transport')
+  local declared = transport.__declared_lanes
+  assert(declared, "the lane order must be reachable from a test")
+
+  local function gates(names)
+    local out = {}
+    for _, lane in ipairs(names) do out[lane] = 0.3 end
+    return out
+  end
+  local function order(names) return table.concat(declared(gates(names)), " ") end
+
+  -- A ten lane remote analysis, declared in the order the server happens to
+  -- emit it. The first five cells are the kit; the rest follow.
+  assert(order({"OTHER", "BASS", "CYMBALS", "KICK", "VOCALS",
+                "TOMS", "SNARE", "PIANO", "HIHAT", "GUITAR"}) ==
+    "KICK SNARE HIHAT CYMBALS TOMS BASS GUITAR PIANO VOCALS OTHER",
+    "the kit comes first in kit order, then everything else")
+
+  -- The device's own three. Alphabetically this was BD CYM SD.
+  assert(order({"CYM", "SD", "BD"}) == "BD SD CYM",
+    "the on-device lanes read as a kit too")
+
+  -- Without LarsNet the drums stem stays whole, and the single drum lane still
+  -- leads the melodic ones.
+  assert(order({"OTHER", "PIANO", "DRUMS", "BASS", "VOCALS", "GUITAR"}) ==
+    "DRUMS BASS GUITAR PIANO VOCALS OTHER",
+    "an unsplit kit still leads")
+
+  -- A backend naming something this table has never heard of must still be
+  -- deterministic, or the grid columns move between loads of one project.
+  assert(order({"ZITHER", "KICK", "AARDVARK"}) == "KICK AARDVARK ZITHER",
+    "unknown lanes follow the kit in a stable alphabetical order")
+  assert(order({"AARDVARK", "ZITHER", "KICK"}) == "KICK AARDVARK ZITHER",
+    "and the order does not depend on how they arrived")
+
+  print("analysis transport: lane order reads as a kit")
+end

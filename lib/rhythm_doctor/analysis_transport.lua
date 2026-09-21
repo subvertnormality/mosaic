@@ -87,11 +87,9 @@ local function declared_lanes(value)
     names[#names + 1] = lane
   end
   if #names == 0 or #names > 32 then return nil end
-  -- Sorted so a bank's lane order does not depend on Lua's hash iteration
-  -- order, which would make the grid columns move between loads of the same
-  -- project.
-  table.sort(names)
-  return names
+  -- Bank owns the order, so a bank's lane order neither depends on Lua's hash
+  -- iteration order nor disagrees with what the grid draws.
+  return Bank.order_lanes(names)
 end
 
 function Transport.new(mailbox_root, result_root, deps)
@@ -187,4 +185,5 @@ function Transport:close() if self.mailbox then self.mailbox:close() end end
 -- Exposed for tests: identity acceptance is the gate a remote result must
 -- pass before anything else looks at it.
 Transport.__supported_detector = supported_detector
+Transport.__declared_lanes = declared_lanes
 return Transport
