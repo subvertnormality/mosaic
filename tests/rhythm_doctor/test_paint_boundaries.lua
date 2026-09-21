@@ -61,3 +61,24 @@ do
  bad=preview("add",0,{}); bad.generation=1.5; ok(not Paint.preview(bad),"fractional generation rejected")
 end
 print("paint boundaries: "..n.." assertions passed")
+
+-- Painting a lane that only a remote analysis produces. Paint validates the
+-- lane against the bank's own set; without it the default three applied and
+-- every remote lane was refused as an invalid preview.
+do
+  local Paint = require('rhythm_doctor.paint')
+  local remote = { "BASS", "CYMBALS", "GUITAR", "HIHAT", "KICK",
+                   "OTHER", "PIANO", "SNARE", "TOMS", "VOCALS" }
+  local function spec(lane, names)
+    return { project_id = "p", generation = 1, analysis_revision = 1, window_revision = 1,
+      lane = lane, window_start = 0, policy = "toggle", shift = 0, thresholds = {},
+      cells = { [1] = { velocity = 90 } }, lane_names = names,
+      target = { project_id = "p", song_slot = 1, pattern_id = 1, revision = 1 } }
+  end
+  assert(Paint.preview(spec("KICK", remote)), "a remote lane paints when the bank declares it")
+  assert(Paint.preview(spec("TOMS", remote)), "and so does every other one")
+  assert(not Paint.preview(spec("KICK", nil)), "without a declared set the device's lanes still apply")
+  assert(Paint.preview(spec("BD", nil)), "and the device's own lanes still paint")
+  assert(not Paint.preview(spec("TROMBONE", remote)), "a lane outside the declared set is refused")
+  print("paint boundaries: remote lane sets paint")
+end

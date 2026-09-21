@@ -107,6 +107,10 @@ function Transactions:_preview_spec(view, bank, target, source)
     project_id = view.project_id, generation = view.generation, analysis_revision = view.analysis_revision,
     lane = view.lane, window_start = window.start, window_revision = view.window_revision, target = pinned_target,
     policy = view.policy, shift = view.shift or 0, thresholds = copy(view.thresholds or {}), cells = window.cells,
+    -- The lane set this bank actually holds. Without it Paint validates the
+    -- lane against the device's default three, so painting any lane a remote
+    -- analysis produced was refused as an invalid preview.
+    lane_names = copy(bank.lane_names),
   }
 end
 
