@@ -70,6 +70,8 @@ end
 -- Read the configured analysis server, honouring the on/off switch so a player
 -- can keep an address saved while working locally.
 local function rhythm_doctor_server_endpoint()
+  -- Called when the analysis worker opens, which is after init() has
+  -- registered these parameters.
   if params == nil or type(params.get) ~= "function" then return nil end
   local ok, enabled = pcall(function() return params:get("rhythm_doctor_use_server") end)
   if not ok or enabled ~= 2 then return nil end
@@ -102,7 +104,12 @@ local function init_rhythm_doctor()
     -- The analysis server, if the player has configured one and switched it
     -- on. An unreachable or slow server is not an error: the capture falls
     -- back to on-device analysis and the player still gets gates.
-    remote_endpoint = rhythm_doctor_server_endpoint(),
+    -- Passed as a provider, not a value. init() builds this host before the
+    -- parameters holding the endpoint are registered, so reading it here
+    -- always found nothing and the player silently got on-device analysis.
+    -- Resolved when the worker opens instead, so the setting also takes
+    -- effect on the next capture rather than the next script reload.
+    remote_endpoint = rhythm_doctor_server_endpoint,
     transport_factory = function(mailbox_root, result_root)
       return include("mosaic/lib/rhythm_doctor/analysis_transport").new(mailbox_root, result_root)
     end,

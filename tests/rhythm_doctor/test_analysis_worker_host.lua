@@ -83,3 +83,44 @@ end
 
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end
 print("analysis worker host: " .. checks .. " checks")
+
+-- The endpoint is read when the host opens the worker, not when the host is
+-- built. Mosaic constructs the host during init(), before the parameters that
+-- hold the endpoint exist, so a value captured at construction is always
+-- absent -- and a player who typed a server address gets on-device analysis
+-- with nothing to tell them why. Reading it lazily also means changing the
+-- setting takes effect on the next capture instead of the next script reload.
+do
+  local configured = nil
+  local commands = {}
+  local h = Host.new({
+    code_root = "/code", runtime_root = "/run",
+    execute = function(command) commands[#commands + 1] = command; return true end,
+    read_line = function() return nil end,
+    transport_factory = function() return {} end,
+    -- A provider, exactly as a params lookup would be.
+    remote_endpoint = function() return configured end,
+  })
+  h:open()
+  equal(commands[1]:find("rd_remote_backend", 1, true), nil,
+    "no endpoint configured yet means local analysis")
+
+  configured = "http://192.168.1.50:8420"
+  local h2 = Host.new({
+    code_root = "/code", runtime_root = "/run",
+    execute = function(command) commands[#commands + 1] = command; return true end,
+    read_line = function() return nil end,
+    transport_factory = function() return {} end,
+    remote_endpoint = function() return configured end,
+  })
+  h2:open()
+  truthy(commands[2]:find("rd_remote_backend", 1, true) ~= nil,
+    "an endpoint set after construction is still used")
+  truthy(commands[2]:find("'http://192.168.1.50:8420'", 1, true) ~= nil,
+    "and is passed through quoted")
+end
+
+-- The report above runs before the blocks appended after it, so their
+-- failures would otherwise be collected and never read.
+if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end
+print("analysis worker host: " .. checks .. " checks including lazy endpoint resolution")

@@ -46,14 +46,14 @@ function Host.new(deps)
   local pretrained=located and sha256(deps.drum_artifact_sha256) and sha256(deps.bass_artifact_sha256)
     and deps.template_sha256==nil
   local valid=not configured or dsp or pretrained
-  -- An endpoint that is present but unusable is a configuration error, not a
-  -- silent downgrade: a player who typed a URL believes captures are going to
-  -- their server, and should be told when they are not.
-  local endpoint=deps.remote_endpoint
-  if type(endpoint)=="string" and endpoint:match("^%s*$") then endpoint=nil end
-  local endpoint_error=endpoint~=nil and not endpoint_valid(endpoint)
+  -- The endpoint may be a value or a provider. Mosaic builds this host during
+  -- init(), before the parameters holding the endpoint exist, so a value read
+  -- at construction is always absent and the player silently gets on-device
+  -- analysis. A provider is called when the worker opens instead, which also
+  -- means changing the setting takes effect on the next capture rather than
+  -- the next script reload.
   return setmetatable({code_root=root, runtime_root=deps.runtime_root, backend=deps.backend,
-    remote_endpoint=endpoint, endpoint_error=endpoint_error,
+    remote_endpoint=deps.remote_endpoint,
     backend_sha256=deps.backend_sha256, drum_artifact_sha256=deps.drum_artifact_sha256,
     bass_artifact_sha256=deps.bass_artifact_sha256, template_sha256=deps.template_sha256,
     configuration_error=not valid,
@@ -63,7 +63,18 @@ end
 function Host:open()
   if self.closed then return nil, "analysis worker host closed" end
   if self.configuration_error then return nil, "invalid analysis backend configuration" end
-  if self.endpoint_error then return nil, "invalid analysis server endpoint", true end
+  local endpoint=self.remote_endpoint
+  if type(endpoint)=="function" then
+    local ok,value=pcall(endpoint)
+    endpoint=ok and value or nil
+  end
+  if type(endpoint)~="string" or endpoint:match("^%s*$") then endpoint=nil end
+  -- An endpoint that is present but unusable is a configuration error, not a
+  -- silent downgrade: a player who typed a URL believes captures are going to
+  -- their server, and should be told when they are not.
+  if endpoint~=nil and not endpoint_valid(endpoint) then
+    return nil, "invalid analysis server endpoint", true
+  end
   if not self.launched then
     self.launched=true
     local command="mkdir -p "..shell_quote(self.runtime_root).." && rm -f "..shell_quote(self.runtime_root.."/cancel")..
@@ -84,13 +95,13 @@ function Host:open()
           " --bass-artifact-sha256 "..shell_quote(self.bass_artifact_sha256)
       end
     end
-    if self.remote_endpoint then
+    if endpoint then
       -- The remote backend wraps the local one rather than replacing it: the
       -- server is an advanced option and every failure has to end with the
       -- player getting gates, so the fallback must be built and present even
       -- when the endpoint is reachable.
       command=command.." --remote-backend "..shell_quote(self.code_root.."/tools/rhythm_doctor/rd_remote_backend.py")..
-        " --remote-endpoint "..shell_quote(self.remote_endpoint)
+        " --remote-endpoint "..shell_quote(endpoint)
     end
     command=command.." >/dev/null 2>&1 &"
     local ok=self.execute(command); if ok~=true and ok~=0 then return nil, "analysis worker launcher failed" end
