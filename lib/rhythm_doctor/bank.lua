@@ -297,9 +297,25 @@ function Bank.upgrade(bank)
   if bank.version == Bank.VERSION then return bank end
   if bank.version ~= 2 and bank.version ~= 3 then return nil end
   local changed = copy(bank)
-  -- A bank written before lane sets were data had the three the on-device
-  -- backend produces, because that was the only set there was.
-  changed.lane_names = changed.lane_names or { table.unpack(Bank.LANES) }
+  -- A bank written before lane sets were data had whatever lanes the product
+  -- had then, which for anything saved before BASS was withdrawn is four.
+  -- Keeping that lane would resurrect one removed because it only ever
+  -- duplicated BD; refusing the bank would lose the player their whole
+  -- project over it. The lane is dropped and the rest of the bank loads.
+  if changed.lane_names == nil then
+    changed.lane_names = { table.unpack(Bank.LANES) }
+    for lane in pairs(changed.lanes or {}) do
+      if not valid_lane(lane, changed.lane_names) then changed.lanes[lane] = nil end
+    end
+    for lane in pairs(changed.sensitivities or {}) do
+      if not valid_lane(lane, changed.lane_names) then changed.sensitivities[lane] = nil end
+    end
+    local kept = {}
+    for _, candidate in ipairs(changed.candidates or {}) do
+      if valid_lane(candidate.lane, changed.lane_names) then kept[#kept + 1] = candidate end
+    end
+    changed.candidates = kept
+  end
   if bank.version == 2 then changed.phrase_start_cell, changed.phrase_confidence = 0, 0 end
   changed.version = Bank.VERSION
   changed.source = type(changed.source) == "table" and changed.source or {}

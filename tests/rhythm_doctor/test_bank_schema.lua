@@ -152,3 +152,34 @@ do
     candidates = {} })
   assert(table.concat(default.lane_names, ",") == "BD,SD,CYM", "the default lane set is unchanged")
 end
+
+-- A bank saved before BASS was withdrawn still has four lanes, and its owner
+-- still has the project. Refusing to load it loses their whole song over a
+-- lane the product removed; keeping the lane resurrects one that was withdrawn
+-- because it only ever duplicated BD. The upgrade drops it, and says so by
+-- leaving the bank valid rather than rejecting it.
+do
+  local legacy = assert(Bank.build{project_id='p', generation=5, analysis_revision=0,
+    sample_rate=48000, capture_start_sample=0, capture_end_sample=480000,
+    origin_sample=0, bpm=120, candidates={
+      {lane='BD', sample_index=0, velocity=80, confidence=.9},
+      {lane='SD', sample_index=6000, velocity=70, confidence=.8}}})
+  -- Reshape it as a version 2 bank that still carries BASS.
+  legacy.version = 2
+  legacy.lane_names, legacy.phrase_start_cell, legacy.phrase_confidence = nil, nil, nil
+  legacy.lanes.BASS = { [1] = { velocity = 80, confidence = .9, sample_index = 0, collision_count = 0 } }
+  legacy.sensitivities.BASS = 0
+  legacy.candidates[#legacy.candidates + 1] =
+    { lane = 'BASS', sample_index = 0, velocity = 80, confidence = .9, cell = 0 }
+
+  local upgraded = Bank.upgrade(legacy)
+  assert(upgraded, "a four lane bank must upgrade rather than fail")
+  assert(upgraded.lanes.BASS == nil, "the withdrawn lane is dropped")
+  assert(upgraded.sensitivities.BASS == nil, "and so is its sensitivity")
+  for _, candidate in ipairs(upgraded.candidates) do
+    assert(candidate.lane ~= 'BASS', "and its candidates")
+  end
+  assert(upgraded.lanes.BD and upgraded.lanes.SD, "the lanes the product still has are kept")
+  assert(#upgraded.candidates == 2, "only the withdrawn lane's candidates go, got " .. #upgraded.candidates)
+  assert(Bank.valid_ready(upgraded), "an upgraded four lane bank loads")
+end

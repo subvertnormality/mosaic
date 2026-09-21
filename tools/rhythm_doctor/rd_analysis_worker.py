@@ -272,6 +272,8 @@ class Mailbox:
 
 
 class Worker:
+    remote_backend_id: str | None = None
+
     def __init__(self, runtime: Path, backend: Path | None, backend_sha256: str | None = None,
                  drum_artifact_sha256: str | None = None, bass_artifact_sha256: str | None = None,
                  template_sha256: str | None = None, backend_binary_sha256: str | None = None) -> None:
@@ -292,6 +294,29 @@ class Worker:
         self.mailbox = Mailbox(runtime / "ipc", "w2c", "c2w", 8192)
         self.request: dict[str, Any] | None = None
         self.process: subprocess.Popen[bytes] | None = None; self.request_path: Path | None = None; self.result_path: Path | None = None
+
+    def analysis_is_acceptable(self, analysis: Any) -> bool:
+        """Whether this result may become a bank.
+
+        A locally produced result is pinned by digest: the worker built the
+        backend, so it knows exactly what should have produced the answer.
+
+        A result from the analysis server cannot be. Its models live on another
+        machine that Mosaic does not build, install or version, so there is no
+        digest to compare against and inventing one would only pin a claim the
+        server makes about itself. What is checked instead is that the result
+        declares the remote backend the launcher was told to expect, and that
+        every field satisfies the same structural contract as a local result --
+        which is what actually protects the bank.
+        """
+        if analysis_matches_detector(analysis, self.expected_detector()):
+            return True
+        if not self.remote_backend_id:
+            return False
+        detector = analysis.get("detector") if isinstance(analysis, dict) else None
+        if not isinstance(detector, dict) or detector.get("backend_id") != self.remote_backend_id:
+            return False
+        return analysis_matches_detector(analysis, {"backend_id": self.remote_backend_id})
 
     def expected_detector(self) -> dict[str, str]:
         """The identity this worker will accept, keyed by how it was configured.
@@ -366,7 +391,7 @@ class Worker:
             self.remove_job_files(True); self.clear_job(); self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); return
         if isinstance(analysis, dict) and set(analysis) == {"backend_error"} and isinstance(analysis["backend_error"], str) and SAFE_BACKEND_ERROR.fullmatch(analysis["backend_error"]):
             self.remove_job_files(True); self.clear_job(); self.send(failed(request, analysis["backend_error"])); return
-        if not analysis_matches_detector(analysis, self.expected_detector()) or \
+        if not self.analysis_is_acceptable(analysis) or \
                 any(candidate["sample_index"] >= request["frames"] for candidate in analysis["candidates"]):
             self.remove_job_files(True); self.clear_job(); self.send(failed(request, "ANALYSIS_BACKEND_INVALID")); return
         stored = response(request, "COMPLETED", wav_path=request["wav_path"], wav_sha256=request["wav_sha256"],
