@@ -36,7 +36,10 @@ local SELECTED = 2 -- the selected channel's number
 
 local function new_screen(env)
   env.frame = {}
+  env.fills = {}
   local x, y = 0 / 0, 0 / 0
+  local level = nil
+  local pending_rect = nil
   local function put(text)
     -- %.10g: a coordinate is a number; 0 and 0.0 draw the same pixel, so they print the same
     table.insert(env.frame, string.format("%.10g,%.10g %s", x, y, tostring(text)))
@@ -46,7 +49,18 @@ local function new_screen(env)
     text = function(t) put(t) end,
     text_trim = function(t) put(t) end,
     text_right = function(t) put(t) end,
-    text_center = function(t) put(t) end
+    text_center = function(t) put(t) end,
+    -- Filled rectangles matter here: an overlay that has to take the tooltip's
+    -- row must erase it rather than draw a second text into the same pixels.
+    level = function(l) level = l end,
+    rect = function(rx, ry, rw, rh) pending_rect = {x = rx, y = ry, w = rw, h = rh} end,
+    fill = function()
+      if pending_rect then
+        pending_rect.level = level
+        table.insert(env.fills, pending_rect)
+        pending_rect = nil
+      end
+    end
   }, {__index = function() return function() end end})
 end
 
@@ -654,4 +668,91 @@ function test_w3c_isolation_restores_globals_after_a_failure()
   luaunit.assert_nil(leaked_by_w3c_test)
   for k, v in pairs(before) do luaunit.assert_is(_G[k], v, k) end
   for k in pairs(_G) do luaunit.assert_not_nil(before[k], k) end
+end
+
+------------------------------------------------------------------------------------------------
+-- The harmony inspection overlay and the tooltip row
+--
+-- The tooltip draws every page's transient messages at baseline 62 (rows 55-62) and is
+-- registered before the pages, so a page draws over it. The Note Dashboard's harmony
+-- inspection puts its second line at baseline 63, which lands in exactly those rows: two
+-- different texts in the same pixels, and neither readable. The inspection is persistent page
+-- content the player is reading, so it takes the row -- but it must take it by clearing it,
+-- not by overprinting.
+------------------------------------------------------------------------------------------------
+
+local TOOLTIP_BASELINE = 62 -- lib/ui_components/tooltip.lua
+local TOOLTIP_TOP = TOOLTIP_BASELINE - 7
+
+local function plan_harmony(env)
+  local harmony_inspection = include("mosaic/lib/harmony/inspection")
+  harmony_inspection.reset()
+  harmony_inspection.plan(program.get_selected_song_pattern(), SELECTED,
+    {step = 1, status = "ok", source = 1, merge = 2, scale = 3, harmony = 4, output = 65})
+  return harmony_inspection
+end
+
+local function covers_tooltip_row(fill)
+  return fill.level == 0 and fill.y <= TOOLTIP_TOP and (fill.y + fill.h) >= TOOLTIP_BASELINE + 1
+end
+
+function test_harmony_inspection_clears_the_tooltip_row_before_using_it()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    plan_harmony(env)
+    local drawn = frame(env)
+
+    local inspection_line = nil
+    for _, entry in ipairs(drawn) do
+      if entry:find("^0*2,63 ") or entry:find("^2,63 ") then inspection_line = entry end
+    end
+    luaunit.assert_not_nil(inspection_line,
+      "the inspection's second line must still be drawn on the bottom row")
+
+    local cleared = false
+    for _, fill in ipairs(env.fills) do
+      if covers_tooltip_row(fill) then cleared = true end
+    end
+    luaunit.assert_true(cleared,
+      "the overlay must erase the tooltip's rows before drawing into them, or the two texts overlap")
+  end)
+end
+
+function test_harmony_inspection_leaves_the_chord_values_alone()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    env.ui.set_note_dashboard_values({note = 60, velocity = 100, length = 0.25, chords = {62, 64, 65, 67}})
+    plan_harmony(env)
+    local drawn = frame(env)
+
+    -- The chord row's values are read from baseline 48 and its descenders reach about row 50.
+    for _, fill in ipairs(env.fills) do
+      if fill.level == 0 then
+        luaunit.assert_true(fill.y > 50,
+          "an erase at row " .. tostring(fill.y) .. " would take the chord values with it")
+      end
+    end
+    local saw_chord = false
+    for _, entry in ipairs(drawn) do if entry:find(",48 ") then saw_chord = true end end
+    luaunit.assert_true(saw_chord, "the chord values must survive the overlay")
+  end)
+end
+
+function test_note_dashboard_without_harmony_leaves_the_tooltip_row_untouched()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    local harmony_inspection = include("mosaic/lib/harmony/inspection")
+    harmony_inspection.reset()
+    frame(env)
+    for _, fill in ipairs(env.fills) do
+      luaunit.assert_false(covers_tooltip_row(fill),
+        "with no harmony event there is no overlay, so the tooltip keeps its row")
+    end
+  end)
 end
