@@ -53,9 +53,22 @@ end
 -- of them whole. The shipped classical-DSP backend pins its own source and the
 -- template table it reads; a pretrained chain pins its model artifacts. Half a
 -- shape, or both at once, is a configuration error and pins nothing reliably.
+-- Results from the analysis server declare themselves with this prefix.
+local REMOTE_BACKEND_PREFIX = "remote-"
 local function supported_detector(detector)
-  if type(detector) ~= "table" or type(detector.backend_id) ~= "string" or detector.backend_id == "" or
-      not digest(detector.backend_sha256) then return false end
+  if type(detector) ~= "table" or type(detector.backend_id) ~= "string" or detector.backend_id == "" then
+    return false
+  end
+  -- A result computed on the analysis server has no digest to carry: Mosaic
+  -- does not build, install or version those models, so there is nothing to
+  -- compare against and a digest would pin only a claim the server makes about
+  -- itself. Its identity is the declared backend, matched by prefix because
+  -- the server names itself for the models it actually loaded. Every other
+  -- field is still validated, here and in the bank.
+  if detector.backend_id:sub(1, #REMOTE_BACKEND_PREFIX) == REMOTE_BACKEND_PREFIX then
+    return true
+  end
+  if not digest(detector.backend_sha256) then return false end
   local dsp = digest(detector.template_sha256) and detector.drum_artifact_sha256 == nil and
     detector.bass_artifact_sha256 == nil
   local pretrained = digest(detector.drum_artifact_sha256) and digest(detector.bass_artifact_sha256) and
@@ -171,4 +184,7 @@ function Transport:poll()
   return failure(message, "ANALYSIS_PROTOCOL_ERROR")
 end
 function Transport:close() if self.mailbox then self.mailbox:close() end end
+-- Exposed for tests: identity acceptance is the gate a remote result must
+-- pass before anything else looks at it.
+Transport.__supported_detector = supported_detector
 return Transport

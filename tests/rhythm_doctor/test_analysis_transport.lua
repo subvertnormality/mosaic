@@ -104,3 +104,23 @@ do
 end
 
 print('test_analysis_transport: 13 tests passed')
+
+-- A result from the analysis server carries no digest, because Mosaic does not
+-- build, install or version those models. The transport had its own detector
+-- check, separate from the worker's, and it demanded one -- so every remote
+-- result was accepted by the worker and then refused here, and the capture
+-- reported FAILED after the server had done the work.
+do
+  local transport = dofile('lib/rhythm_doctor/analysis_transport.lua')
+  local supported = transport.__supported_detector
+  if supported then
+    assert(supported({backend_id = "remote-htdemucs6s-larsnet-v1"}),
+      "a remote detector is supported without digests")
+    assert(supported({backend_id = "remote-htdemucs6s-v1"}),
+      "and whatever models the server actually loaded")
+    assert(not supported({backend_id = "nmf-pfnmf-drums-v1"}),
+      "a local backend still has to carry its digests")
+    assert(not supported({backend_id = "notremote-x"}), "the prefix is required")
+    print("analysis transport: remote detector identity accepted")
+  end
+end
