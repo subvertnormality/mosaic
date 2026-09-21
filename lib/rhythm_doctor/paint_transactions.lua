@@ -52,11 +52,11 @@ end
 
 function Transactions.new(deps)
   assert(type(deps) == "table", "dependencies are required")
-  for _, name in ipairs({ "context", "bank", "transport_stopped", "read_source", "write_source", "reproject" }) do
+  for _, name in ipairs({ "context", "bank", "read_source", "write_source", "reproject" }) do
     assert(type(deps[name]) == "function", name .. " callback is required")
   end
   local limit = deps.journal_limit or 32
-  local self = setmetatable({ context = deps.context, bank = deps.bank, transport_stopped = deps.transport_stopped,
+  local self = setmetatable({ context = deps.context, bank = deps.bank,
     read_source = deps.read_source, write_source = deps.write_source, reproject = deps.reproject, adapter = deps.adapter,
     journal_limit = limit, journal = Journal.new(limit), project_id = nil }, Transactions)
   local view = self.context()
@@ -71,11 +71,6 @@ function Transactions:_view()
   if self.project_id and view.project_id ~= self.project_id then return nil, result("PROJECT_MISMATCH") end
   self.project_id = view.project_id
   return view
-end
-
-function Transactions:_stopped()
-  if self.transport_stopped() ~= true then return nil, result("STOP_SEQUENCER") end
-  return true
 end
 
 function Transactions:_target(view, target)
@@ -118,7 +113,6 @@ end
 -- window. Callers cannot inject a different lane mask while retaining a valid
 -- identity token.
 function Transactions:preview(target)
-  local stopped, stop_problem = self:_stopped(); if not stopped then return nil, stop_problem end
   local view, view_problem = self:_view(); if not view then return nil, view_problem end
   local valid_target_value, target_problem = self:_target(view, target); if not valid_target_value then return nil, target_problem end
   local bank, bank_problem = self:_bank(view); if not bank then return nil, bank_problem end
@@ -150,7 +144,6 @@ end
 -- Paint writes exactly once after rechecking every preview pin. The journal is
 -- updated only once the mutation and all shared-channel reprojections succeed.
 function Transactions:commit(preview, replace_confirmed)
-  local stopped, stop_problem = self:_stopped(); if not stopped then return nil, stop_problem end
   if type(preview) ~= "table" then return nil, result("INVALID_PREVIEW") end
   local spec, source, target, problem = self:_current(preview)
   if not spec then return nil, problem end
@@ -171,7 +164,6 @@ function Transactions:commit(preview, replace_confirmed)
 end
 
 function Transactions:_history(operation, target)
-  local stopped, stop_problem = self:_stopped(); if not stopped then return nil, stop_problem end
   local view, view_problem = self:_view(); if not view then return nil, view_problem end
   local valid_target_value, target_problem = self:_target(view, target); if not valid_target_value then return nil, target_problem end
   local source, source_problem = self:_source(valid_target_value); if not source then return nil, source_problem end

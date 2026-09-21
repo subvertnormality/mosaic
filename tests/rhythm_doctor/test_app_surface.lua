@@ -4,7 +4,8 @@
 -- detector and bank model suites: the contract here is native input ownership.
 --
 -- Characterisation outside README.  PLAN.md's Rhythm Doctor user contract
--- reserves x1/y2 for Record, x2/y2, and x3..7/y2 for the five lanes.
+-- reserves x1/y2 for Record and x2/y2, and gives the lanes a block of five
+-- columns from x3 on each of rows 2 and 3.
 
 package.preload.er = function() return { gen = function() return {} end } end
 
@@ -94,6 +95,26 @@ local function trigger_page_context()
   return page, recorded
 end
 
+-- Mirrors Adapter:lane_cells -- five columns from 3 on each of rows 2 and 3.
+-- The doubles carry it so a page test exercises the same addressing the real
+-- adapter hands the page.
+local function lane_layout(names)
+  local cells = {}
+  for index, lane in ipairs(names) do
+    cells[index] = { lane = lane, x = 3 + ((index - 1) % 5), y = index <= 5 and 2 or 3 }
+  end
+  return cells
+end
+
+local function give_lane_layout(doctor, names)
+  doctor.lane_cells = function() return lane_layout(names) end
+  doctor.lane_at = function(_, x, y)
+    for _, cell in ipairs(lane_layout(names)) do if cell.x == x and cell.y == y then return cell.lane end end
+    return nil
+  end
+  return doctor
+end
+
 local function invoke(functions, x, y)
   for _, fn in ipairs(functions) do fn(x, y) end
 end
@@ -114,6 +135,13 @@ test("fifth algorithm has exact LEDs and its Record key is claimed on key-down",
     record_pressed = function() calls[#calls + 1] = "record_down" end,
     record_released = function() calls[#calls + 1] = "record_up" end,
     lanes = function() return { "BD", "SD", "CYM" } end,
+    lane_cells = function() return lane_layout({ "BD", "SD", "CYM" }) end,
+    lane_at = function(_, x, y)
+      for _, cell in ipairs(lane_layout({ "BD", "SD", "CYM" })) do
+        if cell.x == x and cell.y == y then return cell.lane end
+      end
+      return nil
+    end,
     select_lane = function(_, lane) calls[#calls + 1] = "lane:" .. lane; return {code = "LANE_SELECTED"} end,
     enc = function(_, n, d) calls[#calls + 1] = "enc:" .. n .. "," .. d; return {code = "SETUP_EDITED"} end,
     screen_model = function() return {worker_ready = true} end,
@@ -155,12 +183,12 @@ end)
 test("transport-gated lane selection leaves the displayed lane unchanged", function()
   local page, observed = trigger_page_context()
   local selected = "BD"
-  page.set_rhythm_doctor({
+  page.set_rhythm_doctor(give_lane_layout({
     enter = function() end,
     lanes = function() return { "BD", "SD", "CYM" } end,
     select_lane = function(_, lane) selected = lane; return {code = "STOP_SEQUENCER"} end,
     screen_model = function() return {worker_ready = false} end,
-  })
+  }, { "BD", "SD", "CYM" }))
   page.register_press(); invoke(observed.normal, 16, 2)
   invoke(observed.normal, 5, 2)
   equal(selected, "CYM", "adapter must receive the attempted lane for transport gating")
@@ -519,6 +547,7 @@ local function window_doctor(options)
   function doctor:enter() end
   function doctor:leave() end
   function doctor:lanes() return { "KICK", "SNARE" } end
+  give_lane_layout(doctor, { "KICK", "SNARE" })
   function doctor:select_lane(lane) self.calls[#self.calls + 1] = "lane:" .. lane; return { code = "LANE_SELECTED" } end
   function doctor:screen_model() return { worker_ready = true, window_start = self.window } end
   function doctor:invalidate_paint_preview() self.calls[#self.calls + 1] = "invalidate" end
@@ -657,6 +686,66 @@ test("the browse buttons stay out of the other algorithms", function()
   invoke(observed.normal, 11, 8)
   equal(doctor.window, 128, "paint shift owns these buttons for every other algorithm")
   equal(#doctor.calls, 0, "no algorithm but the fifth may reach the recording window")
+end)
+
+-- Ten lanes on one row reached column 12, where the algorithm fader starts:
+-- selecting the tenth lane also moved the fader and left Rhythm Doctor. The
+-- page must take the layout from the adapter rather than assume a row.
+local function ten_lane_doctor()
+  local names = { "KICK", "SNARE", "HIHAT", "TOMS", "CYMBALS", "RIDE", "CLAP", "PERC", "BASS", "OTHER" }
+  local doctor = { selected = nil }
+  function doctor:enter() end
+  function doctor:leave() end
+  function doctor:lanes() return names end
+  give_lane_layout(doctor, names)
+  function doctor:select_lane(lane) self.selected = lane; return { code = "LANE_SELECTED" } end
+  function doctor:screen_model() return { worker_ready = true } end
+  return doctor
+end
+
+test("ten lanes light two rows of five and never touch the faders", function()
+  local page, observed = trigger_page_context()
+  local doctor = ten_lane_doctor()
+  page.set_rhythm_doctor(doctor); page.register_draws(); page.register_press()
+  invoke(observed.normal, 16, 2)
+  for _, draw_fn in ipairs(observed.draw) do draw_fn() end
+  for _, cell in ipairs(doctor:lane_cells()) do
+    check(observed.leds[cell.x .. "," .. cell.y] ~= nil, cell.lane .. " must light its cell")
+  end
+  -- Columns 12..16 of rows 2 and 3 are the algorithm and bank-mask faders.
+  for x = 12, 16 do
+    for y = 2, 3 do
+      equal(observed.leds[x .. "," .. y], nil,
+        "column " .. x .. " row " .. y .. " belongs to a fader and must stay unlit by lanes")
+    end
+  end
+end)
+
+test("the tenth lane is selectable and does not move the algorithm fader", function()
+  local page, observed = trigger_page_context()
+  local doctor = ten_lane_doctor()
+  page.set_rhythm_doctor(doctor); page.register_draws(); page.register_press()
+  invoke(observed.normal, 16, 2)
+  equal(page.get_algorithm(), 5)
+  invoke(observed.normal, 7, 3)
+  equal(doctor.selected, "OTHER", "the tenth lane is reachable on the second row")
+  equal(page.get_rhythm_doctor_lane(), "OTHER")
+  equal(page.get_algorithm(), 5, "selecting a lane must not disturb the algorithm")
+  invoke(observed.normal, 3, 3)
+  equal(doctor.selected, "RIDE", "the sixth lane opens the second row")
+  equal(page.get_algorithm(), 5)
+end)
+
+test("a press outside the lane block is not taken as a lane", function()
+  local page, observed = trigger_page_context()
+  local doctor = ten_lane_doctor()
+  page.set_rhythm_doctor(doctor); page.register_draws(); page.register_press()
+  invoke(observed.normal, 16, 2)
+  doctor.selected = nil
+  invoke(observed.normal, 8, 2)
+  equal(doctor.selected, nil, "the column past the block selects nothing")
+  invoke(observed.normal, 8, 3)
+  equal(doctor.selected, nil)
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end

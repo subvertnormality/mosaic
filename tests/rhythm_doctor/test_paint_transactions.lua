@@ -30,7 +30,7 @@ local function ready_bank(project_id, generation, analysis_revision)
   }))
 end
 
-local function fixture()
+local function fixture(transport_running)
   local view = { project_id = "project-a", generation = 4, analysis_revision = 2, state = "READY",
     lane = "BD", window_start = 0, window_revision = 8, policy = "add", shift = 0, thresholds = {} }
   local source = { revision = 10, trigs = {}, velocities = {}, lengths = {} }
@@ -38,7 +38,7 @@ local function fixture()
   local engine = Transactions.new({
     context = function() return view end,
     bank = function() return ready_bank(view.project_id, view.generation, view.analysis_revision) end,
-    transport_stopped = function() return true end,
+    transport_stopped = function() return not transport_running end,
     read_source = function(target)
       if target.project_id ~= view.project_id then return nil, { code = "PROJECT_MISMATCH" } end
       return clone(source)
@@ -91,9 +91,16 @@ do
   value, problem = c.engine:commit(preview, false)
   check(value == nil and problem.code == "NOT_READY", "only READY can paint")
 
-  c = fixture(); preview = assert(c.engine:preview(c.target)); c.engine.transport_stopped = function() return false end
+  -- Painting writes a pattern, which every other Trigger Editor algorithm
+  -- does while the sequencer runs. Only capture and re-analysis need a stop,
+  -- so a finished bank paints either way.
+  c = fixture(true)
+  preview, problem = c.engine:preview(c.target)
+  check(preview ~= nil, "an analysed bank previews while the transport runs: " .. tostring(problem and problem.code))
   value, problem = c.engine:commit(preview, false)
-  check(value == nil and problem.code == "STOP_SEQUENCER", "running transport cannot paint")
+  check(value ~= nil, "and commits: " .. tostring(problem and problem.code))
+  check(c.writes() > 0, "and the write actually lands")
+  check(c.engine:undo(c.target) ~= nil, "and undo works while playing too")
 
   c = fixture(); preview = assert(c.engine:preview(c.target)); assert(c.engine:commit(preview, false))
   local source = c.get_source(); source.revision = 99

@@ -12,8 +12,16 @@ Adapter.__index = Adapter
 -- The lane set before any capture exists, and the one the on-device backend
 -- produces. A bank carries its own, which is what the grid actually shows.
 Adapter.LANES = { "BD", "SD", "CYM" }
--- Columns 1 and 2 of the row are Record and a gap, so this many lanes fit.
-Adapter.MAX_LANE_COLUMNS = 14
+-- Lanes occupy a block of five columns on each of two rows, starting at
+-- column 3: columns 1 and 2 of row two are Record and a reserved gap, and
+-- columns 12..16 of both rows belong to the algorithm and bank-mask faders.
+-- A single unbounded row ran a ten lane analysis straight under the algorithm
+-- fader, so selecting the tenth lane also moved the fader and left Rhythm
+-- Doctor entirely.
+Adapter.LANE_ORIGIN_COLUMN = 3
+Adapter.LANE_ROW_WIDTH = 5
+Adapter.LANE_ROWS = { 2, 3 }
+Adapter.MAX_LANE_COLUMNS = Adapter.LANE_ROW_WIDTH * #Adapter.LANE_ROWS
 Adapter.SETUP_FIELDS = { "TEMPO", "MANUAL BPM", "INPUT" }
 Adapter.READY_FIELDS = { "WINDOW BAR", "WINDOW STEP", "SENSITIVITY", "PAINT POLICY", "ALIGNMENT" }
 Adapter.ALIGNMENT_FIELDS = { "HALF TEMPO", "DOUBLE TEMPO", "EXACT BPM", "START BEAT", "FINE START" }
@@ -220,9 +228,15 @@ end
 -- Tempo and input selection are intentionally local UI configuration.  This
 -- adapter does not assert that a capture/analysis backend consumes BPM or
 -- input routing; the existing runtime continues to receive only auto/manual.
+-- Capture and re-analysis need a stopped sequencer: capture takes over the
+-- audio input, and analysis rewrites the bank underneath whatever is on the
+-- screen. Reading a bank that has already been analysed needs neither, so
+-- browsing it, choosing a lane, changing sensitivity and painting stay
+-- available while the sequencer runs -- which is what the rest of the Trigger
+-- Editor already allows.
 function Adapter:enc(n, d)
   if n ~= 2 and n ~= 3 then return outcome("UNCLAIMED") end
-  if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  if not stopped(self) and state_of(self) ~= "READY" then return outcome("STOP_SEQUENCER") end
   if self.alignment_draft then
     if type(d) ~= "number" or d == 0 then return outcome("UNCLAIMED") end
     if n == 2 then
@@ -275,6 +289,9 @@ function Adapter:enc(n, d)
       touch_window(self)
       return outcome("PAINT_POLICY_UPDATED", { policy = self.paint_policy })
     elseif field == "ALIGNMENT" then
+      -- Alignment dispatches a re-analysis, which is capture work: it needs
+      -- the recorder and replaces the bank the player is looking at.
+      if not stopped(self) then return outcome("STOP_SEQUENCER") end
       if not begin_alignment(self) then return outcome("ALIGNMENT_UNAVAILABLE") end
       return outcome("ALIGNMENT_OPENED")
     end
@@ -345,7 +362,6 @@ function Adapter:cancel_alignment()
 end
 
 function Adapter:select_lane(lane)
-  if not stopped(self) then return outcome("STOP_SEQUENCER") end
   if not lane_valid(self, lane) then return outcome("INVALID_LANE") end
   self.lane = lane
   touch_window(self)
@@ -364,6 +380,29 @@ function Adapter:lanes()
     out[index] = lane
   end
   return out
+end
+
+-- Where each lane sits on the grid. The page draws from this and resolves its
+-- presses with lane_at, so the layout has exactly one definition; the page
+-- keeping its own copy is how a ten lane analysis lit three columns before.
+function Adapter:lane_cells()
+  local out = {}
+  for index, lane in ipairs(self:lanes()) do
+    local row = math.floor((index - 1) / Adapter.LANE_ROW_WIDTH) + 1
+    out[index] = {
+      lane = lane,
+      x = Adapter.LANE_ORIGIN_COLUMN + ((index - 1) % Adapter.LANE_ROW_WIDTH),
+      y = Adapter.LANE_ROWS[row],
+    }
+  end
+  return out
+end
+
+function Adapter:lane_at(x, y)
+  for _, cell in ipairs(self:lane_cells()) do
+    if cell.x == x and cell.y == y then return cell.lane end
+  end
+  return nil
 end
 
 function Adapter:paint_context()
@@ -388,7 +427,6 @@ end
 -- recording. The label is built here too, beside the one definition of what a
 -- cell position is called.
 local function move_window(self, target)
-  if not stopped(self) then return outcome("STOP_SEQUENCER") end
   local bank = bank_of(self)
   if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
   if type(self.runtime.set_window_start) ~= "function" then return outcome("UNSUPPORTED") end
@@ -406,7 +444,6 @@ local function move_window(self, target)
 end
 
 local function step_window(self, delta, span)
-  if not stopped(self) then return outcome("STOP_SEQUENCER") end
   local bank = bank_of(self)
   if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
   if type(delta) ~= "number" or delta ~= delta or math.floor(delta) ~= delta then return outcome("INVALID_SHIFT") end
@@ -414,7 +451,6 @@ local function step_window(self, delta, span)
 end
 
 function Adapter:jump_to_phrase_start()
-  if not stopped(self) then return outcome("STOP_SEQUENCER") end
   local bank = bank_of(self)
   if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
   if type(bank.phrase_start_cell) ~= "number" then return outcome("WINDOW_UNAVAILABLE") end
@@ -444,7 +480,6 @@ function Adapter:invalidate_paint_preview()
 end
 
 function Adapter:shift_paint(delta)
-  if not stopped(self) then return outcome("STOP_SEQUENCER") end
   if state_of(self) ~= "READY" or type(delta) ~= "number" or delta ~= delta or delta == math.huge or delta == -math.huge or
       math.floor(delta) ~= delta then return outcome("INVALID_SHIFT") end
   self.paint_shift = self.paint_shift + delta
@@ -453,7 +488,6 @@ function Adapter:shift_paint(delta)
 end
 
 function Adapter:reset_paint_shift()
-  if not stopped(self) then return outcome("STOP_SEQUENCER") end
   if state_of(self) ~= "READY" then return outcome("NOT_READY") end
   self.paint_shift = 0
   touch_window(self)
@@ -470,7 +504,6 @@ function Adapter:paint_target(target)
 end
 
 function Adapter:paint_preview(target)
-  if not stopped(self) then return nil, outcome("STOP_SEQUENCER") end
   if type(self.runtime.paint_preview) ~= "function" then return nil, outcome("UNSUPPORTED") end
   local context, problem = self:paint_context(); if not context then return nil, problem end
   local pinned_target, target_problem = self:paint_target(target); if not pinned_target then return nil, target_problem end
@@ -480,7 +513,6 @@ function Adapter:paint_preview(target)
 end
 
 function Adapter:paint_commit(preview, replace_confirmed)
-  if not stopped(self) then return nil, outcome("STOP_SEQUENCER") end
   if type(self.runtime.paint_commit) ~= "function" then return nil, outcome("UNSUPPORTED") end
   local context, problem = self:paint_context(); if not context then return nil, problem end
   local saved, value = self.runtime:paint_commit(context, preview or self.active_paint_preview, replace_confirmed)
@@ -489,14 +521,12 @@ function Adapter:paint_commit(preview, replace_confirmed)
 end
 
 function Adapter:paint_undo(target)
-  if not stopped(self) then return nil, outcome("STOP_SEQUENCER") end
   if type(self.runtime.paint_undo) ~= "function" then return nil, outcome("UNSUPPORTED") end
   local context, problem = self:paint_context(); if not context then return nil, problem end
   return self.runtime:paint_undo(context, target)
 end
 
 function Adapter:paint_redo(target)
-  if not stopped(self) then return nil, outcome("STOP_SEQUENCER") end
   if type(self.runtime.paint_redo) ~= "function" then return nil, outcome("UNSUPPORTED") end
   local context, problem = self:paint_context(); if not context then return nil, problem end
   return self.runtime:paint_redo(context, target)
@@ -598,11 +628,10 @@ function Adapter:grid_key(x, y, z)
     if z == 0 then return self:record_released() end
     return outcome("UNCLAIMED")
   end
-  local names = lanes_of(self)
-  local columns = math.min(#names, Adapter.MAX_LANE_COLUMNS)
-  if y == 2 and x >= 3 and x <= 2 + columns then
+  local lane = self:lane_at(x, y)
+  if lane then
     if z ~= 1 then return outcome("UNCLAIMED") end
-    return self:select_lane(names[x - 2])
+    return self:select_lane(lane)
   end
   return outcome("UNCLAIMED")
 end
@@ -642,7 +671,10 @@ end
 function Adapter:transport_started()
   self.transport_running, self.record_held, self.modal, self.setup_draft, self.alignment_draft = true, false, nil, nil, nil
   self.alignment_error = nil
-  self.active_paint_preview = nil
+  -- The armed paint preview stays: painting an analysed bank is allowed while
+  -- the sequencer runs, so discarding it here would make "arm paint, start
+  -- playing, commit" impossible. Capture drafts above do not survive, because
+  -- what they configure cannot happen until the sequencer stops again.
   if type(self.runtime.transport_started) ~= "function" then return outcome("UNSUPPORTED") end
   return self.runtime:transport_started()
 end
@@ -702,7 +734,10 @@ function Adapter:screen_model()
     window_revision = self.window_revision,
     modal = modal_copy(self.modal), finish_enabled = false,
     worker_ready = self.worker_ready }
-  if not stopped(self) then model.status = "STOP SEQUENCER"
+  -- Only say the sequencer is in the way when it actually is. With a bank to
+  -- work on, everything the READY editor offers except alignment still works
+  -- while playing, and reporting it as blocked would be a lie.
+  if not stopped(self) and state ~= "READY" then model.status = "STOP SEQUENCER"
   elseif self.modal then model.status = model.modal.title
   elseif self.alignment_draft then
     model.status = self.alignment_error and self.alignment_error:gsub("_", " ")

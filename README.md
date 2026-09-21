@@ -462,18 +462,25 @@ Craft unique rhythms using a variety of built-in algorithms. The algorithm is se
 * Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the Norns screen for more variations.
 * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
-* Button 5: Rhythm Doctor, a stopped-transport capture and paint workflow described below.
+* Button 5: Rhythm Doctor, a capture and paint workflow described below. Recording needs the sequencer stopped; an analysed bank can be used while it plays.
 
 <img alt="The first four pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
 
 ##### Rhythm Doctor
 
 Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
-It keeps one captured three-lane bank per project and lets you preview a 64-step
-window from one selected lane before painting it into the selected pattern. The
-lanes are grid row 2, columns 3–5: **BD** (bass drum), **SD** (snare drum) and
-**CYM** (hi-hats and cymbals). Column 2 is reserved in this mode, and columns 6
-and 7 are inert.
+It keeps one captured bank per project and lets you preview a 64-step window
+from one selected lane before painting it into the selected pattern.
+
+The lanes occupy a block of five columns on each of two rows, starting at
+column 3: lanes one to five on row 2 at columns 3–7, and lanes six to ten on
+row 3 at the same columns. Column 1 of row 2 is Record, column 2 is reserved,
+and columns 12–16 of both rows belong to the algorithm and bank-mask faders and
+are never lanes. A bank analysed on the device declares three lanes — **BD**
+(bass drum), **SD** (snare drum) and **CYM** (hi-hats and cymbals) — so only
+the first three cells light. A remote analysis declares up to ten, which is why
+the block is two rows: a single row would run the later lanes under the
+algorithm fader, where selecting one would also change the algorithm.
 
 The lanes describe what can be told apart reliably, not a full drum-kit
 transcription. **CYM** is hats *and* cymbals together because a closed hat and a
@@ -485,11 +492,20 @@ approach either failed to separate a bass note from the kick that hides it, or
 marked the kicks themselves, so the lane only ever restated what BD already
 said.
 
-Rhythm Doctor is available only while the Mosaic sequencer is stopped. Its
-screen says `STOP SEQUENCER` while running; Record, lane selection, setup,
-window editing, and Paint do nothing until you stop. Starting the sequencer
-cancels an unfinished capture or analysis and discards a paint preview. It does
-not start or stop the sequencer for you.
+Recording needs the sequencer stopped, because capture takes over the audio
+input and analysis replaces the bank underneath whatever is on the screen. So
+does Alignment, which re-analyses. Record, capture setup and Alignment do
+nothing while the sequencer runs, and the screen says `STOP SEQUENCER` when
+there is no bank to work on instead.
+
+A bank that has already been analysed stays usable while the sequencer plays.
+Choosing a lane, browsing the recording, changing sensitivity or paint policy,
+and previewing and painting all read a finished bank and write to a pattern,
+which is what the rest of the Trigger Editor already lets you do while playing.
+Starting the sequencer cancels an unfinished capture or analysis and closes a
+capture-setup or alignment draft, but keeps an armed paint preview, so you can
+arm Paint, start the sequencer and commit. Rhythm Doctor does not start or stop
+the sequencer for you.
 
 On an empty bank, press grid column 1, row 2 to begin Record; the press starts
 the action and its release is consumed. Press Record again to stop, or press K3:

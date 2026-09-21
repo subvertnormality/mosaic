@@ -121,11 +121,15 @@ function trigger_edit_page.register_draws()
       if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
       local model = rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
       grid_abstraction.led(1, 2, model and model.worker_ready and 15 or 4)
-      local lanes = rhythm_doctor and rhythm_doctor.lanes and rhythm_doctor:lanes() or {}
+      -- The adapter owns where a lane sits, because the page assuming a single
+      -- row ran a ten lane analysis under the algorithm fader at column 12.
+      local cells = rhythm_doctor and rhythm_doctor.lane_cells and rhythm_doctor:lane_cells() or {}
       -- The effective lane, not the raw local: nothing is selected until the
       -- player picks, and the first lane of the live set is current until then.
       local current = trigger_edit_page.get_rhythm_doctor_lane()
-      for index, lane in ipairs(lanes) do grid_abstraction.led(index + 2, 2, lane == current and 15 or 4) end
+      for _, cell in ipairs(cells) do
+        grid_abstraction.led(cell.x, cell.y, cell.lane == current and 15 or 4)
+      end
       grid_abstraction.led(2, 2, 0) -- reserved: never an old fader side effect
     end
   )
@@ -467,13 +471,13 @@ function trigger_edit_page.register_press()
   press:register(
     "trigger_edit_page",
     function(x, y)
-      -- Columns are bound to the live lane set, not a fixed 3..7 range: a
-      -- column past the last lane must stay inert rather than dispatch a nil
+      -- Cells are bound to the live lane set through the adapter, which owns
+      -- the layout: a cell past the last lane, and every cell belonging to the
+      -- algorithm or bank-mask fader, must stay inert rather than dispatch a
       -- lane into the adapter.
-      local rd_lanes = rhythm_doctor and rhythm_doctor.lanes and rhythm_doctor:lanes() or {}
-      if trigger_edit_page_algorithm_fader:get_value() == 5 and y == 2
-         and x >= 3 and x <= 2 + #rd_lanes then
-        local selected = rd_lanes[x - 2]
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
+      local selected = rhythm_doctor and rhythm_doctor.lane_at and rhythm_doctor:lane_at(x, y) or nil
+      if selected then
         local accepted = not rhythm_doctor or not rhythm_doctor.select_lane or rhythm_doctor:select_lane(selected)
         if not accepted or accepted.code == "LANE_SELECTED" then
           rhythm_doctor_lane = selected

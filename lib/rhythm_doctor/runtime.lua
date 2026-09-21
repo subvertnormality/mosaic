@@ -103,7 +103,6 @@ function Runtime.new(deps)
     self.paint_transactions = Transactions.new({
       context = function() return self.paint_context end,
       bank = function() return self.machine.bank end,
-      transport_stopped = self.transport_stopped,
       read_source = deps.paint.read_source,
       write_source = deps.paint.write_source,
       reproject = deps.paint.reproject,
@@ -303,8 +302,9 @@ end
 function Runtime:finish(enough_audio)
   return self.machine:finish_capture(self.transport_stopped() == true, enough_audio == true)
 end
+-- Browsing and sensitivity read a bank that analysis has already finished, so
+-- neither needs the sequencer stopped. Capture and re-analysis still do.
 function Runtime:set_window_start(desired_start)
-  if self.transport_stopped() ~= true then return result("STOP_SEQUENCER") end
   if self.machine.state ~= Machine.READY or type(self.machine.bank) ~= "table" then return result("NOT_READY") end
   local bank, problem = Bank.with_window_start(self.machine.bank, desired_start)
   if not bank then return problem or result("INVALID_WINDOW_START") end
@@ -312,7 +312,6 @@ function Runtime:set_window_start(desired_start)
   return result("WINDOW_MOVED", { window_start = bank.window_start })
 end
 function Runtime:set_sensitivity(lane, sensitivity)
-  if self.transport_stopped() ~= true then return result("STOP_SEQUENCER") end
   if self.machine.state ~= Machine.READY or type(self.machine.bank) ~= "table" then return result("NOT_READY") end
   local bank, problem = Bank.with_sensitivity(self.machine.bank, lane, sensitivity)
   if not bank then return problem or result("INVALID_SENSITIVITY") end

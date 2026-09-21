@@ -229,13 +229,89 @@ test("manual BPM is bounded to the documented supported capture range", function
   equal(c.adapter:screen_model().manual_bpm, 240)
 end)
 
-test("running transport gates grid, lane changes, Finish, and presents STOP SEQUENCER", function()
+-- The sequencer has to be stopped to record, because capture takes over the
+-- audio input and analysis rewrites the bank underneath whatever is on the
+-- screen. Reading a bank that has already been analysed needs none of that,
+-- and the rest of the Trigger Editor lets you paint while the sequencer runs.
+test("running transport gates capture but leaves an analysed bank usable", function()
   local c = context(); c.set_stopped(false); c.runtime.machine.state = "READY"
-  equal(c.adapter:grid_key(1, 2, 1).code, "STOP_SEQUENCER")
-  equal(c.adapter:grid_key(4, 2, 1).code, "STOP_SEQUENCER")
-  equal(c.adapter:key(3, 1).code, "STOP_SEQUENCER")
-  equal(#c.calls, 0)
-  equal(c.adapter:screen_model().status, "STOP SEQUENCER")
+  equal(c.adapter:grid_key(1, 2, 1).code, "STOP_SEQUENCER", "Record still needs a stopped sequencer")
+  equal(c.adapter:key(3, 1).code, "STOP_SEQUENCER", "and so does finishing a capture")
+  equal(#c.calls, 0, "nothing reached the recorder")
+  equal(c.adapter:grid_key(4, 2, 1).code, "LANE_SELECTED", "choosing a lane reads the bank and is allowed")
+  equal(c.adapter:screen_model().status, "READY",
+    "a usable bank must not report itself as blocked")
+end)
+
+-- Everything that only reads a finished bank, or writes to a pattern the way
+-- every other algorithm does, stays available while the sequencer runs.
+test("an analysed bank browses, adjusts and paints while the sequencer plays", function()
+  local c = context()
+  local bank = {
+    version = 4, project_id = "p", bpm = 120, sample_rate = 48000,
+    capture_start_sample = 0, capture_end_sample = 1920000, origin_sample = 0,
+    timeline_cells = 320, samples_per_cell = 6000, window_start = 0,
+    phrase_start_cell = 8, phrase_confidence = .75,
+    lane_names = { "BD", "SD", "CYM" },
+    sensitivities = { BD = .5, SD = .5, CYM = .5 }, lanes = { BD = {}, SD = {}, CYM = {} },
+    candidates = {}, source = { beat_positions = { 0, 24000, 48000, 72000 } },
+  }
+  c.runtime.machine.state, c.runtime.machine.bank = "READY", bank
+  local Bank = require('rhythm_doctor.bank')
+  c.runtime.set_window_start = function(_, value)
+    local low, high = Bank.window_bounds(bank)
+    bank.window_start = math.max(low, math.min(high, math.floor(value)))
+    return { ok = true, code = "WINDOW_MOVED" }
+  end
+  local sensitivity = nil
+  c.runtime.set_sensitivity = function(_, lane, value)
+    sensitivity = { lane = lane, value = value }
+    bank.sensitivities[lane] = value
+    return { ok = true, code = "SENSITIVITY_UPDATED" }
+  end
+
+  c.set_stopped(false)
+  equal(c.adapter:select_lane("SD").code, "LANE_SELECTED", "lanes are selectable while playing")
+  equal(c.adapter:nudge_window(1).code, "WINDOW_MOVED", "the window steps while playing")
+  equal(bank.window_start, 1)
+  equal(c.adapter:page_window(1).code, "WINDOW_MOVED", "and pages while playing")
+  equal(c.adapter:jump_to_phrase_start().code, "WINDOW_MOVED", "and returns to the phrase start")
+  equal(bank.window_start, 8)
+  equal(c.adapter:shift_paint(1).code, "PAINT_SHIFTED", "a preview can be nudged while playing")
+  equal(c.adapter:reset_paint_shift().code, "PAINT_SHIFT_RESET")
+
+  -- Sensitivity and paint policy read the bank and change what the preview
+  -- would contain; neither touches the recorder.
+  c.adapter.ready_field = 3
+  equal(c.adapter:enc(3, 1).code, "SENSITIVITY_UPDATED", "sensitivity is adjustable while playing")
+  equal(sensitivity.lane, "SD")
+  c.adapter.ready_field = 4
+  equal(c.adapter:enc(3, 1).code, "PAINT_POLICY_UPDATED", "so is the paint policy")
+  c.adapter.ready_field = 1
+  equal(c.adapter:enc(3, 1).code, "WINDOW_MOVED", "and the window encoder still moves")
+
+  -- Re-analysis rewrites the bank and needs the recorder, so it stays gated
+  -- even though the rest of the READY editor is open.
+  c.adapter.ready_field = 5
+  equal(c.adapter:enc(3, 1).code, "STOP_SEQUENCER", "alignment re-analyses and must wait for a stop")
+  equal(c.adapter.alignment_draft, nil, "and opens no draft while playing")
+  equal(c.adapter:set_capture_mode("auto").code, "STOP_SEQUENCER", "capture setup stays gated")
+  equal(c.adapter:record_pressed().code, "STOP_SEQUENCER", "and Record stays gated")
+end)
+
+-- A preview armed while stopped used to be thrown away the moment the
+-- sequencer started, which made "arm paint, start playing, commit" impossible
+-- even once painting itself was allowed.
+test("starting the sequencer keeps an armed paint preview but drops capture drafts", function()
+  local c = context()
+  c.runtime.machine.state = "READY"
+  c.adapter.active_paint_preview = { marker = true }
+  c.adapter.setup_draft = { capture_mode = "auto" }
+  c.adapter.alignment_draft = { bpm = 120 }
+  c.adapter:transport_started()
+  equal(c.adapter.active_paint_preview ~= nil, true, "the armed preview survives the start")
+  equal(c.adapter.setup_draft, nil, "a capture setup draft does not")
+  equal(c.adapter.alignment_draft, nil, "and neither does an alignment draft")
 end)
 
 test("screen model is a read-only summary of status, selected-lane hits and capture diagnostics", function()
@@ -471,10 +547,12 @@ do
   equal(c.adapter.window_revision > revision, true, "returning to the phrase start invalidates the preview")
 
   -- Browsing is a stopped-transport action, like every other window move.
+  -- Browsing reads a finished bank, so it keeps working while the sequencer
+  -- runs; only capture and re-analysis need a stop.
   c.set_stopped(false)
-  equal(c.adapter:nudge_window(1).code, "STOP_SEQUENCER", "a step is refused while the sequencer runs")
-  equal(c.adapter:page_window(1).code, "STOP_SEQUENCER")
-  equal(c.adapter:jump_to_phrase_start().code, "STOP_SEQUENCER")
+  equal(c.adapter:nudge_window(1).code, "WINDOW_MOVED", "a step still works while the sequencer runs")
+  equal(c.adapter:page_window(1).code, "WINDOW_MOVED")
+  equal(c.adapter:jump_to_phrase_start().code, "WINDOW_MOVED")
   c.set_stopped(true)
 
   -- The alignment editor opens on the detected phrase start rather than on the
@@ -504,24 +582,86 @@ do
     lane_names = remote, sensitivities = sensitivities, lanes = lanes,
     candidates = {}, source = {},
   }
+  -- Ten lanes across two rows of five. The cells are asked for rather than
+  -- assumed, so this proves every declared lane is reachable wherever the
+  -- layout puts it.
+  local cells = c.adapter:lane_cells()
+  equal(#cells, #remote, "every remote lane has a cell")
   for index, lane in ipairs(remote) do
-    local result = c.adapter:grid_key(index + 2, 2, 1)
-    equal(result.code, "LANE_SELECTED", "column " .. (index + 2) .. " selects " .. lane)
-    equal(c.adapter.lane, lane, "column " .. (index + 2) .. " selects " .. lane)
+    local cell = cells[index]
+    equal(cell.lane, lane)
+    local result = c.adapter:grid_key(cell.x, cell.y, 1)
+    equal(result.code, "LANE_SELECTED", lane .. " is selectable at " .. cell.x .. "," .. cell.y)
+    equal(c.adapter.lane, lane, lane .. " becomes the selected lane")
   end
-  equal(c.adapter:grid_key(13, 2, 1).code, "UNCLAIMED", "the column past the last lane stays inert")
+  equal(c.adapter:grid_key(8, 2, 1).code, "UNCLAIMED", "the column past the lane block stays inert")
+  equal(c.adapter:grid_key(8, 3, 1).code, "UNCLAIMED")
 
   -- With no bank the grid still offers the lanes the device itself produces,
   -- so the page is usable before anything has been recorded.
   c.runtime.machine.state, c.runtime.machine.bank = "EMPTY", nil
   equal(c.adapter:grid_key(5, 2, 1).code, "LANE_SELECTED", "the default lane set is addressable")
   equal(c.adapter:grid_key(6, 2, 1).code, "UNCLAIMED", "and stops at three columns")
+  equal(c.adapter:grid_key(3, 3, 1).code, "UNCLAIMED", "with no second row in use")
 end
 
 -- The blocks above run after this file's first report. `equal` raises rather
 -- than collecting, so they do fail loudly, but the pcall-based `test` helper
 -- collects into `failures` -- and nothing reads it past line 343. Re-check it
 -- here so a failure in an appended block cannot pass silently.
+-- The lane row ran from column 3 rightwards without a limit, so a ten lane
+-- analysis reached column 12 -- where the algorithm fader starts. Pressing
+-- the tenth lane also moved the algorithm fader and threw the player out of
+-- Rhythm Doctor. Lanes now occupy two rows of five, clear of the faders at
+-- columns 12..16.
+do
+  local Adapter = require('rhythm_doctor.ui_adapter')
+  local c = context()
+  local ten = { "KICK", "SNARE", "HIHAT", "TOMS", "CYMBALS", "RIDE", "CLAP", "PERC", "BASS", "OTHER" }
+  c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = { lane_names = ten, lanes = {}, sensitivities = {} }
+
+  local cells = c.adapter:lane_cells()
+  equal(#cells, 10, "every declared lane gets a cell")
+  equal(cells[1].x, 3); equal(cells[1].y, 2); equal(cells[1].lane, "KICK")
+  equal(cells[5].x, 7); equal(cells[5].y, 2, "the first five sit on row two")
+  equal(cells[6].x, 3); equal(cells[6].y, 3, "the sixth wraps to row three")
+  equal(cells[10].x, 7); equal(cells[10].y, 3, "and the tenth is the last cell of row three")
+  for _, cell in ipairs(cells) do
+    check(cell.x >= 3 and cell.x <= 7,
+      "lane column " .. cell.x .. " would collide with the algorithm or bank-mask fader")
+    check(cell.y == 2 or cell.y == 3, "lanes use only the two rows they own")
+  end
+
+  equal(c.adapter:lane_at(3, 2), "KICK", "the grid resolves a press on row two")
+  equal(c.adapter:lane_at(7, 3), "OTHER", "and on row three")
+  equal(c.adapter:lane_at(8, 2), nil, "a column past the lane block is not a lane")
+  equal(c.adapter:lane_at(12, 2), nil, "the algorithm fader is never a lane")
+  equal(c.adapter:lane_at(12, 3), nil, "and neither is the bank-mask fader")
+  equal(c.adapter:lane_at(1, 2), nil, "Record is not a lane")
+  equal(c.adapter:lane_at(3, 4), nil, "the sequencer rows are not lanes")
+
+  equal(c.adapter:grid_key(7, 3, 1).code, "LANE_SELECTED", "the tenth lane is selectable")
+  equal(c.adapter:screen_model().lane, "OTHER")
+  equal(c.adapter:grid_key(12, 2, 1).code, "UNCLAIMED",
+    "a press on the algorithm fader must never be claimed as a lane")
+
+  -- A short lane set leaves the rest of the block dark rather than lighting
+  -- cells that do nothing.
+  c.runtime.machine.bank = { lane_names = { "BD", "SD", "CYM" }, lanes = {}, sensitivities = {} }
+  equal(#c.adapter:lane_cells(), 3)
+  equal(c.adapter:lane_at(6, 2), nil, "an unused column in the block is inert")
+  equal(c.adapter:lane_at(3, 3), nil, "and so is the whole second row")
+
+  -- Two rows of five is the ceiling; a backend declaring more must not spill.
+  local twelve = {}
+  for i = 1, 12 do twelve[i] = "L" .. i end
+  c.runtime.machine.bank = { lane_names = twelve, lanes = {}, sensitivities = {} }
+  equal(#c.adapter:lanes(), 10, "the addressable lane set stops at ten")
+  equal(#c.adapter:lane_cells(), 10, "and so does the grid block")
+  equal(Adapter.MAX_LANE_COLUMNS, 10, "ten is five columns on each of two rows")
+end
+
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end
 print("rhythm_doctor ui adapter: phrase navigation and remote lane columns checked")
 
@@ -551,11 +691,11 @@ do
     equal(c.adapter:lanes()[index], lane, "lane " .. index .. " is " .. lane)
   end
 
-  -- Never more columns than the row has room for.
+  -- Never more lanes than the two rows of five have room for.
   local many = {}
   for i = 1, 20 do many[i] = "L" .. i end
   c.runtime.machine.bank.lane_names = many
-  equal(#c.adapter:lanes(), 14, "the lane set is capped at the columns that exist")
+  equal(#c.adapter:lanes(), 10, "the lane set is capped at the cells that exist")
 end
 
 -- A remote analysis replaces the whole lane set, so the lane the adapter was
