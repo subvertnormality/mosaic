@@ -158,6 +158,7 @@ def main() -> int:
         worker = Path(__file__).with_name("rd_analysis_worker.py")
         process = subprocess.Popen(
             [sys.executable, str(worker), "--runtime", str(args.runtime)] +
+            (["--remote-analysis"] if (args.remote_endpoint and args.remote_backend) else []) +
             (["--backend", str(backend), "--backend-sha256", args.backend_sha256] +
              (["--backend-binary-sha256", native_binary_sha256] if native_binary_sha256 else []) +
              (["--template-sha256", args.template_sha256] if is_dsp else

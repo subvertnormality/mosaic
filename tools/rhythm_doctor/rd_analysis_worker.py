@@ -32,6 +32,8 @@ SAFE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
 SAFE_BACKEND_ERROR = re.compile(r"^OMNIZART_[A-Z0-9_]{1,128}$")
 SHA256 = re.compile(r"^[0-9a-fA-F]{64}$")
 LANE_NAME = re.compile(r"^[A-Z][A-Z0-9_]{0,15}$")
+# Results from the analysis server declare themselves with this prefix.
+REMOTE_BACKEND_PREFIX = "remote-"
 STOP = False
 
 
@@ -137,7 +139,7 @@ def asset_is_exact(request: dict[str, Any]) -> bool:
         return False
 
 
-def analysis_matches_detector(value: Any, expected: dict[str, str]) -> bool:
+def analysis_matches_detector(value: Any, expected: dict[str, str] | None) -> bool:
     """Validate a backend result against an explicit detector identity.
 
     The identity fields differ by backend: a pretrained chain pins its model
@@ -153,12 +155,15 @@ def analysis_matches_detector(value: Any, expected: dict[str, str]) -> bool:
     detector, gates = value.get("detector"), value.get("lane_onset_gates")
     if not isinstance(detector, dict) or not isinstance(detector.get("backend_id"), str) or not detector["backend_id"]:
         return False
-    if not expected:
-        return False
-    for name, digest in expected.items():
-        actual = detector.get(name)
-        if not isinstance(actual, str) or not SHA256.fullmatch(actual) or actual.lower() != str(digest).lower():
+    # expected None means "identity has already been established by other
+    # means"; an empty mapping still means "nothing is acceptable".
+    if expected is not None:
+        if not expected:
             return False
+        for name, digest in expected.items():
+            actual = detector.get(name)
+            if not isinstance(actual, str) or not SHA256.fullmatch(actual) or actual.lower() != str(digest).lower():
+                return False
     # The gate table declares the lane set this analysis produced. The
     # on-device backend produces three; the remote server separates a kit and
     # produces ten. Demanding the local three would reject every remote result
@@ -272,7 +277,7 @@ class Mailbox:
 
 
 class Worker:
-    remote_backend_id: str | None = None
+    remote_enabled: bool = False
 
     def __init__(self, runtime: Path, backend: Path | None, backend_sha256: str | None = None,
                  drum_artifact_sha256: str | None = None, bass_artifact_sha256: str | None = None,
@@ -309,14 +314,22 @@ class Worker:
         every field satisfies the same structural contract as a local result --
         which is what actually protects the bank.
         """
-        if analysis_matches_detector(analysis, self.expected_detector()):
+        if self.expected_detector() and analysis_matches_detector(analysis, self.expected_detector()):
             return True
-        if not self.remote_backend_id:
+        if not self.remote_enabled:
             return False
         detector = analysis.get("detector") if isinstance(analysis, dict) else None
-        if not isinstance(detector, dict) or detector.get("backend_id") != self.remote_backend_id:
+        backend_id = detector.get("backend_id") if isinstance(detector, dict) else None
+        # A prefix, not a fixed id: the server names itself for the models it
+        # actually loaded, so it reports remote-htdemucs6s-larsnet-v1 with the
+        # drum splitter and remote-htdemucs6s-v1 without it. Pinning one exact
+        # id would reject every result the moment the operator added or removed
+        # a model.
+        if not isinstance(backend_id, str) or not backend_id.startswith(REMOTE_BACKEND_PREFIX):
             return False
-        return analysis_matches_detector(analysis, {"backend_id": self.remote_backend_id})
+        # Identity established by the declared backend id; everything else is
+        # held to exactly the same structural contract as a local result.
+        return analysis_matches_detector(analysis, None)
 
     def expected_detector(self) -> dict[str, str]:
         """The identity this worker will accept, keyed by how it was configured.
@@ -434,6 +447,9 @@ def main() -> int:
     parser=argparse.ArgumentParser(); parser.add_argument("--runtime", type=Path, required=True); parser.add_argument("--backend", type=Path)
     parser.add_argument("--backend-sha256"); parser.add_argument("--drum-artifact-sha256"); parser.add_argument("--bass-artifact-sha256")
     parser.add_argument("--template-sha256")
+    parser.add_argument("--remote-analysis", action="store_true",
+                        help="accept results declaring a remote- backend, whose models "
+                             "live on another machine and have no local digest")
     parser.add_argument("--backend-binary-sha256",
                         help="digest of the executable on disk, when it differs from the "
                              "identity a result declares (it does for a self-compiled backend)")
@@ -461,6 +477,7 @@ def main() -> int:
     signal.signal(signal.SIGINT, stop)
     worker=Worker(args.runtime, args.backend, args.backend_sha256, args.drum_artifact_sha256,
                   args.bass_artifact_sha256, args.template_sha256, args.backend_binary_sha256)
+    worker.remote_enabled = bool(args.remote_analysis)
     try: return worker.run()
     finally: worker.close()
 

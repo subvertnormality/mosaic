@@ -280,4 +280,71 @@ class DspBackendConfigurationTests(unittest.TestCase):
         self.assertEqual(captured["identity"].get("backend_sha256"), digest)
 
 
+
+
+class RemoteAnalysisAcceptanceTests(unittest.TestCase):
+    """A result from the analysis server has no local digest to pin.
+
+    Its models live on a machine Mosaic does not build, install or version, so
+    there is nothing to compare a digest against and inventing one would only
+    pin a claim the server makes about itself. Without this the worker rejected
+    every remote result and the capture silently fell back to three lanes.
+    """
+
+    def worker(self, remote):
+        import tempfile
+        from pathlib import Path
+        work = tempfile.mkdtemp()
+        w = rd_analysis_worker.Worker(Path(work), None, None)
+        w.remote_enabled = remote
+        return w
+
+    def remote_analysis(self, backend_id="remote-htdemucs6s-larsnet-v1", **over):
+        value = {
+            "bpm": 120.0, "tempo_detected": True, "origin_sample": 0,
+            "tempo_mode": "auto",
+            "lane_onset_gates": {"KICK": 0.3, "SNARE": 0.3, "GUITAR": 0.45},
+            "candidates": [{"lane": "KICK", "sample_index": 10, "velocity": 90,
+                            "confidence": 0.7}],
+            "detector": {"backend_id": backend_id},
+        }
+        value.update(over)
+        return value
+
+    def test_a_remote_result_is_accepted_when_remote_is_enabled(self):
+        self.assertTrue(self.worker(True).analysis_is_acceptable(self.remote_analysis()))
+
+    def test_the_backend_id_is_matched_by_prefix_not_exactly(self):
+        """The server names itself for the models it loaded, so the id changes
+        when the drum splitter is added or removed."""
+        for backend_id in ("remote-htdemucs6s-larsnet-v1", "remote-htdemucs6s-v1"):
+            self.assertTrue(self.worker(True).analysis_is_acceptable(
+                self.remote_analysis(backend_id)), backend_id)
+
+    def test_remote_results_are_refused_when_remote_is_not_configured(self):
+        """Nothing should accept a remote result on a device with no server
+        configured: it could only have come from somewhere unexpected."""
+        self.assertFalse(self.worker(False).analysis_is_acceptable(self.remote_analysis()))
+
+    def test_a_result_claiming_another_identity_is_refused(self):
+        w = self.worker(True)
+        for backend_id in ("nmf-pfnmf-drums-v1", "remote", "", "notremote-x"):
+            self.assertFalse(w.analysis_is_acceptable(self.remote_analysis(backend_id)),
+                             repr(backend_id))
+
+    def test_a_remote_result_is_still_held_to_the_structural_contract(self):
+        """Declaring a remote backend buys identity, not a free pass: a result
+        that would poison the bank is refused exactly as a local one is."""
+        w = self.worker(True)
+        for label, over in (
+            ("tempo out of contract", {"bpm": 900.0}),
+            ("negative origin", {"origin_sample": -1}),
+            ("velocity out of range", {"candidates": [
+                {"lane": "KICK", "sample_index": 10, "velocity": 999, "confidence": 0.5}]}),
+            ("a lane with no gate", {"candidates": [
+                {"lane": "TROMBONE", "sample_index": 10, "velocity": 90, "confidence": 0.5}]}),
+            ("no gates at all", {"lane_onset_gates": {}}),
+        ):
+            with self.subTest(label):
+                self.assertFalse(w.analysis_is_acceptable(self.remote_analysis(**over)), label)
 if __name__ == "__main__": unittest.main()
