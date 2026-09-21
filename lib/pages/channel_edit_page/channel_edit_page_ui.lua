@@ -269,17 +269,25 @@ local notes_page = page:new("Note Dashboard", function()
     -- baseline 48, which spans rows 41..50; text at baseline 54 puts glyphs in
     -- rows 49..54 and draws over the chord slot values. Two pixels lower
     -- clears them.
-    -- The tooltip draws every page's transient messages at baseline 62, and it
-    -- is registered before the pages, so whatever it wrote is already in these
-    -- rows. This overlay's second line sits at baseline 63 and there is no
-    -- room below it on a 64-pixel screen, so it has to take the row -- but by
-    -- clearing it first. Overprinting put two texts in the same pixels and
-    -- made both unreadable. Row 51 is the top: the chord values are read from
-    -- baseline 48 and their descenders reach about row 50.
+    -- Three things want the bottom of this screen and only two can have it.
+    -- The chord values are read from baseline 48 and their oracle compares
+    -- rows 41..50. The planned/scheduled/emitted line is read from baseline 63
+    -- and its oracle compares rows 55..63. That leaves rows 51..54 -- four
+    -- rows -- for the status line between them, which does not fit the 8px
+    -- font: at baseline 55 it inks rows 50..54 and at 56 rows 51..55, each
+    -- reaching into one of the two windows. At 6px and baseline 55 it inks
+    -- exactly 51..54. The font size is sticky on norns, so it goes back to 8
+    -- before the line below, which must match its oracle glyph for glyph.
+    --
+    -- The fill clears rows 51..63 first. The tooltip draws every page's
+    -- transient messages at baseline 62 and is registered before the pages, so
+    -- without this its text is already in these rows and both become
+    -- unreadable. Tooltips are therefore not visible here while an event shows.
     screen.level(0);screen.rect(0,51,128,13);screen.fill()
-    screen.level(3);screen.move(2,56)
+    screen.level(3);screen.font_size(6);screen.move(2,55)
     screen.text("SRC"..tostring(snapshot.planned.source or "-").." M"..tostring(snapshot.planned.merge or "-")..
       " S"..tostring(snapshot.planned.scale or "-").." H"..tostring(snapshot.planned.harmony or "-"))
+    screen.font_size(8)
     screen.level(4);screen.move(2,63)
     local bypass=snapshot.planned.bypass and(" B:"..tostring(snapshot.planned.bypass))or""
     screen.text("P"..tostring(snapshot.planned.output or "-").." S"..tostring(pitch(snapshot.scheduled)).." E"..tostring(pitch(snapshot.emitted))..bypass)

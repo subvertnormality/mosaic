@@ -37,12 +37,17 @@ local SELECTED = 2 -- the selected channel's number
 local function new_screen(env)
   env.frame = {}
   env.fills = {}
+  env.texts = {}
   local x, y = 0 / 0, 0 / 0
   local level = nil
   local pending_rect = nil
+  local font = 8
   local function put(text)
     -- %.10g: a coordinate is a number; 0 and 0.0 draw the same pixel, so they print the same
     table.insert(env.frame, string.format("%.10g,%.10g %s", x, y, tostring(text)))
+    -- The size matters for anything squeezed between two framebuffer oracles,
+    -- so it is recorded beside the text rather than thrown away.
+    table.insert(env.texts, {x = x, y = y, size = font, level = level, text = tostring(text)})
   end
   return setmetatable({
     move = function(nx, ny) x, y = nx, ny end,
@@ -53,6 +58,7 @@ local function new_screen(env)
     -- Filled rectangles matter here: an overlay that has to take the tooltip's
     -- row must erase it rather than draw a second text into the same pixels.
     level = function(l) level = l end,
+    font_size = function(sz) font = sz end,
     rect = function(rx, ry, rw, rh) pending_rect = {x = rx, y = ry, w = rw, h = rh} end,
     fill = function()
       if pending_rect then
@@ -212,6 +218,7 @@ end
 -- Draw the channel editor once; returns the sorted "x,y text" entries it drew.
 local function frame(env)
   env.frame = {}
+  env.texts = {}
   env.draws.channel_edit_page()
   local f = env.frame
   table.sort(f)
@@ -754,5 +761,45 @@ function test_note_dashboard_without_harmony_leaves_the_tooltip_row_untouched()
       luaunit.assert_false(covers_tooltip_row(fill),
         "with no harmony event there is no overlay, so the tooltip keeps its row")
     end
+  end)
+end
+
+-- Three things want the bottom of the Note Dashboard and only two can have it.
+-- Two framebuffer oracles pin the outer bands: M-DASHBOARD-CHORD-001 compares
+-- rows 41..50 (the chord values, read from baseline 48) and M-HARMONY-HELD-001
+-- compares rows 55..63 (the planned/scheduled/emitted line, read from baseline
+-- 63). The status line between them therefore has rows 51..54 and no more --
+-- four rows, which the 8px font does not fit. Moving it from baseline 54 to 56
+-- to clear the chord values pushed it into the harmony window instead, so one
+-- oracle passed at the cost of the other. This pins the geometry that satisfies
+-- both, because nothing else does: the behaviour cases run on hardware-like
+-- lanes in CI, hours after the change that breaks them.
+function test_harmony_status_line_fits_between_the_two_framebuffer_oracles()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    plan_harmony(env)
+    frame(env)
+
+    local status, values = nil, nil
+    for _, t in ipairs(env.texts) do
+      if t.text:sub(1, 3) == "SRC" then status = t end
+      if t.text:sub(1, 1) == "P" and t.text:find(" S") and t.text:find(" E") then values = t end
+    end
+    luaunit.assert_not_nil(status, "the status line must be drawn")
+    luaunit.assert_not_nil(values, "the planned/scheduled/emitted line must be drawn")
+
+    -- Measured against the real norns face: at 6px a capitals-and-digits line
+    -- inks baseline-4 .. baseline-1, so baseline 55 occupies exactly 51..54.
+    luaunit.assert_equals(status.size, 6,
+      "the 8px font inks five rows and cannot fit between the two oracle windows")
+    luaunit.assert_equals(status.y, 55, "baseline 55 at 6px inks rows 51..54")
+
+    -- The line below is compared glyph for glyph against an 8px oracle, and
+    -- font size is sticky on norns, so it must be restored first.
+    luaunit.assert_equals(values.size, 8,
+      "the values line must be back at 8px or it will not match its oracle")
+    luaunit.assert_equals(values.y, 63)
   end)
 end
