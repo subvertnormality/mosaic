@@ -517,13 +517,23 @@ alter the captured bank.
 
 **Finding the phrase.** The analysis estimates where the four-bar phrase
 begins and aligns the gates to it, rather than to the moment you pressed
-Record. In this mode columns 10, 11 and 12 of row 8 browse the recording:
-column 11 returns to the calculated phrase start, and columns 10 and 12 page
-back and forward a whole four-bar phrase at a time. The displayed window is
-exactly four bars wide, so every position you reach this way stays aligned
-with the phrase. E3 still moves by a single bar or step. In every other
-algorithm those three buttons continue to shift a previewed pattern's
+Record. In this mode columns 10, 11 and 12 of row 8 browse the recording, and
+they do it with the same gestures that shift a previewed pattern everywhere
+else. A press of column 10 or 12 moves the window one step back or forward.
+Holding either of them covers a whole four-bar phrase in that direction, which
+is exactly the width of the displayed window, so every position reached by
+holding stays aligned with the phrase. A press of column 11 returns to the
+calculated phrase start. E3 still moves by a single bar or step. In every
+other algorithm those three buttons continue to shift a previewed pattern's
 position.
+
+Each move names where it landed, as bar.beat.step, so you can read the window
+position off the tooltip rather than counting presses. A move that the
+recording absorbs -- a step forward when the window is already at the last
+whole phrase, or a return to a phrase start you are already sitting on --
+says so instead of reporting a move that did not happen. If you are painting
+while you browse, the preview follows the window: the grid keeps showing the
+gates under the part of the recording you are looking at.
 
 The phrase estimate is a starting point, not a verdict. The bar the detector
 picks is reliable when the playing announces it -- a crash on the one, or a
@@ -599,7 +609,7 @@ Opt out of a prepared pattern by using the cancel button:
 
 <img alt="Pattern editor prime and paint cancel button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="300" />
 
-While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes. In Rhythm Doctor these same three buttons browse the recording instead: the centre returns to the calculated start of the four-bar phrase, and the outer two page back and forward a phrase at a time.
+While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes. In Rhythm Doctor these same three buttons browse the recording instead, with the same gestures: a press of the outer two moves the window one step, holding either covers a whole four-bar phrase, and the centre button returns to the calculated start of the phrase.
 
 <img alt="Pattern editor move buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="300" />
 

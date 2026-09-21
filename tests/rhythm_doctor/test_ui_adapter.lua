@@ -422,6 +422,61 @@ do
   for _ = 1, 10 do c.adapter:page_window(-1) end
   equal(moved, 0, "paging back stops at the timeline start")
 
+  -- A press of a browse button is worth one step, the same as a press of the
+  -- same button in every other algorithm. Paging a whole phrase is the held
+  -- gesture, so the two must not be the same size.
+  c.adapter:nudge_window(1)
+  equal(moved, 1, "one press moves a single step")
+  c.adapter:nudge_window(1)
+  equal(moved, 2, "and presses accumulate one step at a time")
+  c.adapter:nudge_window(-1)
+  equal(moved, 1, "a press the other way steps back by one")
+  equal(c.adapter:nudge_window(0).code, "WINDOW_MOVED", "a zero step is accepted and goes nowhere")
+  equal(moved, 1)
+  equal(c.adapter:nudge_window(.5).code, "INVALID_SHIFT", "a fractional step is refused")
+  equal(c.adapter:nudge_window("1").code, "INVALID_SHIFT", "and so is a non-number")
+  for _ = 1, 3 do c.adapter:nudge_window(-1) end
+  equal(moved, 0, "stepping back stops at the timeline start")
+
+  -- Every move reports where it landed and whether it actually went anywhere.
+  -- Clamping makes a refused move and an absorbed one both look like success,
+  -- and a caller that cannot tell them apart tells the player it advanced
+  -- while the window stood still at the end of the recording.
+  local held = c.adapter:nudge_window(-1)
+  equal(held.moved, false, "a move absorbed by the timeline start reports no movement")
+  equal(held.window_start, 0, "and still says where the window is")
+  equal(held.window_label, "1.1.1", "named the way the screen names a position")
+  local stepped = c.adapter:nudge_window(1)
+  equal(stepped.moved, true, "a move that lands somewhere new says so")
+  equal(stepped.window_label, "1.1.2")
+  local paged = c.adapter:page_window(1)
+  equal(paged.moved, true)
+  equal(paged.window_start, 65, "a phrase is sixty-four cells wide")
+  local phrase = c.adapter:jump_to_phrase_start()
+  equal(phrase.moved, true)
+  equal(phrase.window_start, 8, "the centre button returns to the detected phrase start")
+  equal(c.adapter:jump_to_phrase_start().moved, false,
+    "and pressing it again reports that the window was already there")
+
+  -- Every browse gesture retires the paint preview: a preview describes the
+  -- window it was taken from and cannot outlive it.
+  local revision = c.adapter.window_revision
+  c.adapter:nudge_window(1)
+  equal(c.adapter.window_revision > revision, true, "a step invalidates the preview")
+  revision = c.adapter.window_revision
+  c.adapter:page_window(1)
+  equal(c.adapter.window_revision > revision, true, "a phrase page invalidates the preview")
+  revision = c.adapter.window_revision
+  c.adapter:jump_to_phrase_start()
+  equal(c.adapter.window_revision > revision, true, "returning to the phrase start invalidates the preview")
+
+  -- Browsing is a stopped-transport action, like every other window move.
+  c.set_stopped(false)
+  equal(c.adapter:nudge_window(1).code, "STOP_SEQUENCER", "a step is refused while the sequencer runs")
+  equal(c.adapter:page_window(1).code, "STOP_SEQUENCER")
+  equal(c.adapter:jump_to_phrase_start().code, "STOP_SEQUENCER")
+  c.set_stopped(true)
+
   -- The alignment editor opens on the detected phrase start rather than on the
   -- first beat of the capture, so confirming without editing keeps the
   -- detector's answer instead of silently replacing it with beat one.

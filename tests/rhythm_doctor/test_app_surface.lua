@@ -42,23 +42,34 @@ local function button_class()
   return B
 end
 
+-- The unsaved grid is the only thing that tells a player what the recording
+-- holds at the current window, so the double records it rather than
+-- discarding it. A no-op here is what let phrase navigation blank the grid
+-- with every adapter-level test still passing.
 local function sequencer_class()
   local S = {}; S.__index = S
-  function S:new() return setmetatable({}, S) end
+  function S:new()
+    local instance = setmetatable({ unsaved = nil, unsaved_shows = 0, unsaved_hides = 0 }, S)
+    S.last = instance
+    return instance
+  end
   function S:is_this() return false end
   function S:draw() end; function S:press() end; function S:dual_press() end
-  function S:long_press() end; function S:show_unsaved_grid() end; function S:hide_unsaved_grid() end
+  function S:long_press() end
+  function S:show_unsaved_grid(grid) self.unsaved = grid; self.unsaved_shows = self.unsaved_shows + 1 end
+  function S:hide_unsaved_grid() self.unsaved = nil; self.unsaved_hides = self.unsaved_hides + 1 end
   return S
 end
 
 local function trigger_page_context()
   fader, button, sequencer = fader_class(), button_class(), sequencer_class()
-  local recorded = { normal = {}, pre = {}, post = {}, leds = {}, tips = {}, dirty = 0 }
+  local recorded = { normal = {}, pre = {}, post = {}, long = {}, leds = {}, tips = {}, dirty = 0 }
   press = {
     register = function(_, page, fn) recorded.normal[#recorded.normal + 1] = fn end,
     register_pre = function(_, page, fn) recorded.pre[#recorded.pre + 1] = fn end,
     register_post = function(_, page, fn) recorded.post[#recorded.post + 1] = fn end,
-    register_dual = function() end, register_long = function() end,
+    register_dual = function() end,
+    register_long = function(_, page, fn) recorded.long[#recorded.long + 1] = fn end,
   }
   draw = { register_grid = function(_, page, fn) recorded.draw = recorded.draw or {}; recorded.draw[#recorded.draw + 1] = fn end }
   grid_abstraction = { led = function(x, y, value) recorded.leds[x .. "," .. y] = value end }
@@ -79,6 +90,7 @@ local function trigger_page_context()
   end
   local page = dofile(root .. "lib/pages/trigger_edit_page/trigger_edit_page.lua")
   include = old_include
+  recorded.sequencer = sequencer.last
   return page, recorded
 end
 
@@ -479,6 +491,172 @@ test("cleanup closes a worker that was still starting and never retries it", fun
   equal(runtime:cleanup().code, "CLOSED")
   equal(closes, 1, "shutdown owns and closes a pre-transport worker")
   runtime:poll(); equal(opens, 1, "closed runtime cannot revive a detached startup worker")
+end)
+
+-- Phrase navigation on the grid.  The adapter suite already proves the window
+-- moves; what it cannot see is what the player is shown afterwards, which is
+-- where this feature was broken: every move retired the paint preview and
+-- nothing took a new one, so the grid went dark until an unrelated press
+-- happened to rebuild it.
+local function window_doctor(options)
+  options = options or {}
+  local doctor = {
+    window = options.window or 128,
+    phrase = options.phrase or 37,
+    low = options.low or 0,
+    high = options.high or 239,
+    calls = {},
+  }
+  local function label(cell)
+    return string.format("%d.%d.%d", math.floor(cell / 16) + 1, math.floor(cell % 16 / 4) + 1, cell % 4 + 1)
+  end
+  local function land(target)
+    local before = doctor.window
+    doctor.window = math.max(doctor.low, math.min(doctor.high, target))
+    return { code = "WINDOW_MOVED", window_start = doctor.window,
+             window_label = label(doctor.window), moved = doctor.window ~= before }
+  end
+  function doctor:enter() end
+  function doctor:leave() end
+  function doctor:lanes() return { "KICK", "SNARE" } end
+  function doctor:select_lane(lane) self.calls[#self.calls + 1] = "lane:" .. lane; return { code = "LANE_SELECTED" } end
+  function doctor:screen_model() return { worker_ready = true, window_start = self.window } end
+  function doctor:invalidate_paint_preview() self.calls[#self.calls + 1] = "invalidate" end
+  function doctor:nudge_window(delta)
+    self.calls[#self.calls + 1] = "nudge:" .. delta
+    if options.refuse then return { code = "NOT_READY" } end
+    return land(self.window + delta)
+  end
+  function doctor:page_window(delta)
+    self.calls[#self.calls + 1] = "page:" .. delta
+    if options.refuse then return { code = "NOT_READY" } end
+    return land(self.window + delta * 64)
+  end
+  function doctor:jump_to_phrase_start()
+    self.calls[#self.calls + 1] = "phrase"
+    if options.refuse then return { code = "WINDOW_UNAVAILABLE" } end
+    return land(self.phrase)
+  end
+  -- A preview describes one window, so its cells carry that window's number.
+  -- A grid still showing the old number after a move is a stale preview.
+  function doctor:paint_preview()
+    self.calls[#self.calls + 1] = "preview:" .. self.window
+    if options.no_preview then return nil, { code = "NOTHING_TO_PAINT" } end
+    return { shifted_cells = { [1] = { window = self.window } }, target = {} }
+  end
+  return doctor
+end
+
+local function arm_paint(page, observed, doctor)
+  page.set_rhythm_doctor(doctor); page.register_press(); page.register_draws()
+  invoke(observed.normal, 16, 2)
+  invoke(observed.normal, 16, 8)
+  return observed.sequencer
+end
+
+test("a single left or right press moves the window one step and says where it landed", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor()
+  arm_paint(page, observed, doctor)
+  invoke(observed.normal, 12, 8)
+  equal(doctor.window, 129, "one press of the right button advances a single step")
+  equal(observed.tips[#observed.tips], "Step right 9.1.2", "the move reports the position it reached")
+  invoke(observed.normal, 10, 8)
+  equal(doctor.window, 128, "one press of the left button retreats a single step")
+  equal(observed.tips[#observed.tips], "Step left 9.1.1")
+end)
+
+test("holding left or right moves a whole phrase", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor()
+  arm_paint(page, observed, doctor)
+  invoke(observed.long, 12, 8)
+  equal(doctor.window, 192, "a held right button pages a whole phrase forward")
+  equal(observed.tips[#observed.tips], "Next phrase 13.1.1")
+  invoke(observed.long, 10, 8)
+  equal(doctor.window, 128, "a held left button pages a whole phrase back")
+  equal(observed.tips[#observed.tips], "Previous phrase 9.1.1")
+end)
+
+test("the centre button returns to the phrase marker", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor()
+  arm_paint(page, observed, doctor)
+  invoke(observed.normal, 11, 8)
+  equal(doctor.window, 37, "the centre button lands on the detected phrase start")
+  equal(observed.tips[#observed.tips], "Phrase start 3.2.2")
+  invoke(observed.normal, 11, 8)
+  equal(observed.tips[#observed.tips], "At phrase start",
+    "a second press must not claim a move that did not happen")
+end)
+
+test("navigating while painting keeps the recording on the grid", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor()
+  local seq = arm_paint(page, observed, doctor)
+  check(seq.unsaved ~= nil, "arming paint shows the recording")
+  equal(seq.unsaved[1], true, "the armed preview lights its cell")
+
+  invoke(observed.normal, 12, 8)
+  check(seq.unsaved ~= nil, "a step must not blank the grid the player is browsing")
+  equal(doctor.calls[#doctor.calls], "preview:129", "the preview is retaken at the window reached")
+
+  invoke(observed.long, 12, 8)
+  check(seq.unsaved ~= nil, "paging a phrase must not blank the grid")
+  equal(doctor.calls[#doctor.calls], "preview:193")
+
+  invoke(observed.normal, 11, 8)
+  check(seq.unsaved ~= nil, "returning to the phrase start must not blank the grid")
+  equal(doctor.calls[#doctor.calls], "preview:37")
+end)
+
+test("navigating without an armed paint leaves the grid alone", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor()
+  page.set_rhythm_doctor(doctor); page.register_press(); page.register_draws()
+  invoke(observed.normal, 16, 2)
+  local seq = observed.sequencer
+  invoke(observed.normal, 12, 8)
+  equal(doctor.window, 129, "browsing works before paint is armed")
+  equal(seq.unsaved, nil, "an unarmed page must not start showing a preview")
+  for _, call in ipairs(doctor.calls) do
+    check(call:sub(1, 8) ~= "preview:", "no preview may be taken while paint is disarmed")
+  end
+end)
+
+test("a refused move reports the refusal and shows nothing stale", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor({ refuse = true })
+  local seq = arm_paint(page, observed, doctor)
+  invoke(observed.normal, 12, 8)
+  equal(observed.tips[#observed.tips], "NOT_READY", "a refusal names its reason")
+  equal(seq.unsaved, nil, "a preview from the old window must not survive a refused move")
+end)
+
+test("a move that clamps at the end of the recording says so", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor({ window = 239 })
+  arm_paint(page, observed, doctor)
+  invoke(observed.normal, 12, 8)
+  equal(doctor.window, 239)
+  equal(observed.tips[#observed.tips], "End of recording",
+    "a clamped move must not claim the player moved")
+  doctor.window = 0
+  invoke(observed.normal, 10, 8)
+  equal(observed.tips[#observed.tips], "Start of recording")
+end)
+
+test("the browse buttons stay out of the other algorithms", function()
+  local page, observed = trigger_page_context()
+  local doctor = window_doctor()
+  page.set_rhythm_doctor(doctor); page.register_press(); page.register_draws()
+  invoke(observed.normal, 15, 2)
+  invoke(observed.normal, 12, 8)
+  invoke(observed.long, 12, 8)
+  invoke(observed.long, 10, 8)
+  invoke(observed.normal, 11, 8)
+  equal(doctor.window, 128, "paint shift owns these buttons for every other algorithm")
+  equal(#doctor.calls, 0, "no algorithm but the fifth may reach the recording window")
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, "\n") .. "\n"); os.exit(1) end

@@ -28,6 +28,7 @@ function trigger_edit_page.init()
 end
 
 local cancel_rhythm_doctor_paint
+local preview_rhythm_doctor_paint
 local rhythm_doctor_target
 
 -- Whether an armed preview is still aimed at the destination that is selected.
@@ -279,17 +280,40 @@ local function rhythm_doctor_preview_grid(preview)
 end
 
 -- The left/centre/right buttons browse the recording while algorithm 5 is
--- selected: centre returns to the calculated start of the four-bar phrase and
--- the sides page a whole phrase either way. For every other algorithm they
--- keep shifting the paint pattern, which is why these run only inside the
--- algorithm-5 branches of the press handlers.
-local function rhythm_doctor_window_feedback(value)
-  if value and (value.ok or value.code == "WINDOW_MOVED") then
-    trigger_edit_page_sequencer:hide_unsaved_grid()
-    return true
+-- selected, and they browse it the way they shift a paint pattern everywhere
+-- else: a press is worth one step, so the gesture means the same thing in
+-- every mode. Holding left or right covers a whole four-bar phrase, and
+-- centre returns to the detected phrase start the way it resets the shift.
+-- For every other algorithm they keep shifting the paint pattern, which is
+-- why these run only inside the algorithm-5 branches of the press handlers.
+
+-- A preview describes the window it was taken from, so a move retires it. But
+-- the reason to move while painting is to look at the next part of the
+-- recording, so the preview is taken again where the window landed. Without
+-- this the grid simply went dark, and stayed dark until some unrelated press
+-- happened to rebuild it.
+local function refresh_rhythm_doctor_paint()
+  if trigger_edit_page_paint_button:get_state() ~= 2 then return end
+  local preview, problem = preview_rhythm_doctor_paint()
+  if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+end
+
+-- Report what happened, not what was asked for. Every move is clamped to the
+-- recording, so a press at either end succeeds without moving anything;
+-- naming the requested action there would tell the player they had advanced a
+-- phrase while the window stood still.
+local function rhythm_doctor_window_feedback(value, action, stalled)
+  if not (value and (value.ok or value.code == "WINDOW_MOVED")) then
+    tooltip:show((value and value.code) or "WINDOW UNAVAILABLE")
+    return false
   end
-  tooltip:show((value and value.code) or "WINDOW UNAVAILABLE")
-  return false
+  if value.moved == false then
+    tooltip:show(stalled)
+  else
+    tooltip:show(value.window_label and (action .. " " .. value.window_label) or action)
+  end
+  refresh_rhythm_doctor_paint()
+  return true
 end
 
 function rhythm_doctor_jump_to_phrase_start()
@@ -297,28 +321,33 @@ function rhythm_doctor_jump_to_phrase_start()
     tooltip:show("WINDOW UNAVAILABLE")
     return false
   end
-  -- A paint preview describes the window it was taken from, so it cannot
-  -- survive the window moving underneath it.
   cancel_rhythm_doctor_paint()
   local value = rhythm_doctor:jump_to_phrase_start()
-  if rhythm_doctor_window_feedback(value) then tooltip:show("Phrase start") end
+  rhythm_doctor_window_feedback(value, "Phrase start", "At phrase start")
   return value ~= nil
 end
 
-function rhythm_doctor_page_window(delta)
-  if not rhythm_doctor or type(rhythm_doctor.page_window) ~= "function" then
+local function rhythm_doctor_browse(method, delta, action)
+  if not rhythm_doctor or type(rhythm_doctor[method]) ~= "function" then
     tooltip:show("WINDOW UNAVAILABLE")
     return false
   end
   cancel_rhythm_doctor_paint()
-  local value = rhythm_doctor:page_window(delta)
-  if rhythm_doctor_window_feedback(value) then
-    tooltip:show(delta < 0 and "Previous phrase" or "Next phrase")
-  end
+  local value = rhythm_doctor[method](rhythm_doctor, delta)
+  rhythm_doctor_window_feedback(value, action,
+    delta < 0 and "Start of recording" or "End of recording")
   return value ~= nil
 end
 
-local function preview_rhythm_doctor_paint()
+function rhythm_doctor_nudge_window(delta)
+  return rhythm_doctor_browse("nudge_window", delta, delta < 0 and "Step left" or "Step right")
+end
+
+function rhythm_doctor_page_window(delta)
+  return rhythm_doctor_browse("page_window", delta, delta < 0 and "Previous phrase" or "Next phrase")
+end
+
+function preview_rhythm_doctor_paint()
   if not rhythm_doctor or type(rhythm_doctor.paint_preview) ~= "function" then return nil, { code = "PAINT_UNAVAILABLE" } end
   local preview, problem = rhythm_doctor:paint_preview(rhythm_doctor_target())
   if not preview then return nil, problem end
@@ -553,7 +582,7 @@ function trigger_edit_page.register_press()
         -- place made phrase navigation reachable only while previewing,
         -- which is precisely when the player is no longer browsing.
         if trigger_edit_page_algorithm_fader:get_value() == 5 then
-          rhythm_doctor_page_window(-1)
+          rhythm_doctor_nudge_window(-1)
           return
         end
         if (trigger_edit_page_left_button:get_state() == 2) then
@@ -602,7 +631,7 @@ function trigger_edit_page.register_press()
         -- place made phrase navigation reachable only while previewing,
         -- which is precisely when the player is no longer browsing.
         if trigger_edit_page_algorithm_fader:get_value() == 5 then
-          rhythm_doctor_page_window(1)
+          rhythm_doctor_nudge_window(1)
           return
         end
         if (trigger_edit_page_right_button:get_state() == 2) then
@@ -627,6 +656,17 @@ function trigger_edit_page.register_press()
         pattern.update_source_working_patterns(song, source)
         tooltip:show("Note length set")
       end
+    end
+  )
+  -- Held, the browse buttons cover a whole phrase. Registered separately from
+  -- the short press because the grid suppresses the short press once a hold
+  -- has fired, so the two gestures cannot both act on one key.
+  press:register_long(
+    "trigger_edit_page",
+    function(x, y)
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
+      if trigger_edit_page_left_button:is_this(x, y) then rhythm_doctor_page_window(-1)
+      elseif trigger_edit_page_right_button:is_this(x, y) then rhythm_doctor_page_window(1) end
     end
   )
   press:register_long(

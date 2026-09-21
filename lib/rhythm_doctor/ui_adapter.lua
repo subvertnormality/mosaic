@@ -377,39 +377,65 @@ function Adapter:paint_context()
   }
 end
 
--- Phrase navigation. Neither of these clamps: Runtime already routes every
--- window move through the bank's own bounds, and a second copy of that rule
--- here could only ever disagree with it.
-function Adapter:jump_to_phrase_start()
+-- Window navigation. None of this clamps: Runtime already routes every window
+-- move through the bank's own bounds, and a second copy of that rule here
+-- could only ever disagree with it.
+--
+-- What the move does report is where it landed and whether it actually went
+-- anywhere. Clamping means a refused move and an absorbed one both come back
+-- as success, and a caller that cannot tell them apart ends up telling the
+-- player it advanced a phrase while the window sat still at the end of the
+-- recording. The label is built here too, beside the one definition of what a
+-- cell position is called.
+local function move_window(self, target)
   if not stopped(self) then return outcome("STOP_SEQUENCER") end
   local bank = bank_of(self)
   if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
   if type(self.runtime.set_window_start) ~= "function" then return outcome("UNSUPPORTED") end
-  local target = bank.phrase_start_cell
-  if type(target) ~= "number" then return outcome("WINDOW_UNAVAILABLE") end
-  -- Runtime clamps through Bank.with_window_start, so a phrase start with no
-  -- room for a whole window behind it lands on the last valid position here
-  -- without this module needing its own copy of the window rule.
+  local before = bank.window_start or 0
   local value = self.runtime:set_window_start(target)
-  if value and (value.ok or value.code == "WINDOW_MOVED") then touch_window(self) end
+  if value and (value.ok or value.code == "WINDOW_MOVED") then
+    touch_window(self)
+    local landed = bank_of(self)
+    landed = type(landed) == "table" and landed.window_start or value.window_start
+    landed = type(landed) == "number" and landed or before
+    value.window_start, value.window_label, value.moved = landed, position_label(landed), landed ~= before
+  end
   self.feedback = value and value.code
   return value or outcome("WINDOW_UNAVAILABLE")
 end
 
--- One press moves a whole four-bar phrase, which is exactly the width of the
--- window, so every position reachable by paging stays aligned with the phrase
--- the centre button returns to. The encoders remain the way to move by a
--- single bar or step.
-function Adapter:page_window(delta)
+local function step_window(self, delta, span)
   if not stopped(self) then return outcome("STOP_SEQUENCER") end
   local bank = bank_of(self)
   if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
   if type(delta) ~= "number" or delta ~= delta or math.floor(delta) ~= delta then return outcome("INVALID_SHIFT") end
-  if type(self.runtime.set_window_start) ~= "function" then return outcome("UNSUPPORTED") end
-  local value = self.runtime:set_window_start((bank.window_start or 0) + delta * Adapter.WINDOW_CELLS)
-  if value and (value.ok or value.code == "WINDOW_MOVED") then touch_window(self) end
-  self.feedback = value and value.code
-  return value or outcome("WINDOW_UNAVAILABLE")
+  return move_window(self, (bank.window_start or 0) + delta * span)
+end
+
+function Adapter:jump_to_phrase_start()
+  if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  local bank = bank_of(self)
+  if state_of(self) ~= "READY" or type(bank) ~= "table" then return outcome("NOT_READY") end
+  if type(bank.phrase_start_cell) ~= "number" then return outcome("WINDOW_UNAVAILABLE") end
+  -- Runtime clamps through Bank.with_window_start, so a phrase start with no
+  -- room for a whole window behind it lands on the last valid position here
+  -- without this module needing its own copy of the window rule.
+  return move_window(self, bank.phrase_start_cell)
+end
+
+-- A single step, which is what one press of the browse buttons is worth. It
+-- matches what those buttons do for every other algorithm, where a press
+-- shifts the paint pattern by one.
+function Adapter:nudge_window(delta)
+  return step_window(self, delta, 1)
+end
+
+-- A whole four-bar phrase, which is exactly the width of the window, so every
+-- position reachable this way stays aligned with the phrase the centre button
+-- returns to. Held rather than pressed, because it is the coarse gesture.
+function Adapter:page_window(delta)
+  return step_window(self, delta, Adapter.WINDOW_CELLS)
 end
 
 function Adapter:invalidate_paint_preview()
