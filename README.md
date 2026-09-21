@@ -553,7 +553,14 @@ gates. You lose the extra lanes, not the recording.
 
 The server also tracks the beat with a model trained for it, so on the remote
 path the tempo and the phrase start are usually better than the on-device
-estimate. See `tools/rhythm_doctor_server/README.md` for how to run it.
+estimate.
+
+`tools/rhythm_doctor_server/README.md` has step-by-step setup, including a
+Windows walkthrough that needs no administrator rights, how to find the
+address to type into the setting, and what to check when captures keep coming
+back with three lanes. Three lanes is the on-device fallback: it is what you
+get whenever the server cannot be reached, so it is the symptom to look for
+rather than an error message.
 
 **Availability:** Mosaic starts a local capture helper when this mode opens,
 and analyses captures with a model-free detector it builds from source the

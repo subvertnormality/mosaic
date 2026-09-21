@@ -80,6 +80,111 @@ decide whether the feature exists at all.
 which is useful for checking connectivity from the norns before the models are
 in place.
 
+## Windows, start to finish
+
+Verified on Windows 10/11 with Python 3.10 and a norns in access-point mode.
+No administrator rights are needed.
+
+### 1. Install
+
+```powershell
+mkdir $HOME\rd-server; cd $HOME\rd-server
+copy \\wsl.localhost\Ubuntu-20.04\home\<you>\path\to\mosaic\tools\rhythm_doctor_server\*.py .
+python -m venv .venv
+.\.venv\Scripts\pip install numpy torch demucs beat-this pyyaml
+```
+
+Copy the files from wherever the repository lives; the UNC path above is only
+what a WSL checkout looks like from Windows.
+
+### 2. Optional: the drum splitter
+
+Without this the server runs in six-lane mode, which is supported and twice
+what the device produces on its own. With it you get ten. The checkpoints are
+CC BY-NC 4.0: read the licence before building anything commercial on them.
+
+```powershell
+git clone https://github.com/polimi-ispl/larsnet $HOME\rd-server\larsnet
+.\.venv\Scripts\pip install gdown
+.\.venv\Scripts\python fetch_models.py --larsnet-root .\larsnet
+$env:LARSNET_ROOT = "$HOME\rd-server\larsnet"
+```
+
+`fetch_models.py` prints the archive's SHA-256; pass it back as `--sha256`
+next time to pin the download, or point `--url` at your own mirror. Cloning
+the repository is not enough on its own -- the weights are a separate
+download, and the server says exactly which file is missing if you skip it:
+
+```
+WARNING drum splitting unavailable, drums stay one lane:
+        larsnet checkpoint missing for kick: ...\pretrained_kick_unet.pth
+        -- run fetch_models.py
+```
+
+### 3. Run
+
+```powershell
+cd $HOME\rd-server
+.\.venv\Scripts\python server.py --host 0.0.0.0 --port 8420
+```
+
+`--host 0.0.0.0` matters: bound to loopback the norns cannot reach it. Expect
+
+```
+INFO listening on http://0.0.0.0:8420/ (ready=True)
+```
+
+Windows Firewall prompts on the first run. Allow it on **private** networks,
+or the norns connects to nothing and analysis quietly falls back on-device.
+
+### 4. Point the norns at it
+
+PARAMS > MOSAIC > Rhythm Doctor: set **Analysis server** to the PC's address on
+the network the norns is on, for example `http://10.42.0.144:8420`, and switch
+**Use analysis server** on.
+
+Find that address with `ipconfig`, or in PowerShell:
+
+```powershell
+Get-NetIPAddress -AddressFamily IPv4 | Select-Object IPAddress,InterfaceAlias
+```
+
+When the norns is acting as the access point, the PC's address is the one on
+the norns' subnet (10.42.0.x), not its usual LAN address.
+
+### 5. Check it before recording
+
+```powershell
+curl.exe http://10.42.0.144:8420/v1/health
+```
+
+You want `"ready": true` and the lane list. If that answers from PowerShell
+but captures still come back with three lanes, the firewall is blocking the
+norns: three lanes is the on-device fallback, which is what you get whenever
+the server cannot be reached.
+
+### Running the server inside WSL instead
+
+The norns cannot reach a WSL2 server directly: WSL2 sits behind its own NAT on
+a different subnet, and a norns in access-point mode has no route off its own
+hotspot. Forward the port from Windows, in an **elevated** PowerShell:
+
+```powershell
+$wsl = (wsl -d Ubuntu-20.04 -- hostname -I).Trim().Split(" ")[0]
+netsh interface portproxy add v4tov4 listenaddress=0.0.0.0 listenport=8420 connectaddress=$wsl connectport=8420
+New-NetFirewallRule -DisplayName "Rhythm Doctor server" -Direction Inbound -Protocol TCP -LocalPort 8420 -Action Allow
+```
+
+WSL2's address changes when it restarts, so that rule goes stale; re-run it, or
+remove it with:
+
+```powershell
+netsh interface portproxy delete v4tov4 listenaddress=0.0.0.0 listenport=8420
+Remove-NetFirewallRule -DisplayName "Rhythm Doctor server"
+```
+
+Running natively on Windows avoids all of this.
+
 ## API
 
 `GET /v1/health` — protocol version, readiness, the lane list and its default
