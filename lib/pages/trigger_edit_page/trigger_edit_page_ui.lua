@@ -70,7 +70,7 @@ function trigger_edit_page_ui.register_ui_draws()
     function()
       if trigger_edit_page and trigger_edit_page.get_algorithm and trigger_edit_page.get_algorithm() == 5 then
         local model = trigger_edit_page.get_rhythm_doctor_model and trigger_edit_page.get_rhythm_doctor_model() or nil
-        local lane = model and model.lane or (trigger_edit_page.get_rhythm_doctor_lane and trigger_edit_page.get_rhythm_doctor_lane() or "BD")
+        local lane = model and model.lane or (trigger_edit_page.get_rhythm_doctor_lane and trigger_edit_page.get_rhythm_doctor_lane())
         screen.level(10)
         screen.move(0, 9)
         screen.text("RHYTHM DOCTOR")

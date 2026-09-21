@@ -37,6 +37,16 @@ local function lanes_of(self)
   return type(names) == "table" and #names > 0 and names or Adapter.LANES
 end
 
+-- The lane the player is working on, guaranteed to be one the bank holds.
+-- The adapter starts on the device's first lane, and a remote analysis
+-- replaces the whole set -- so a stored lane can stop existing without anyone
+-- touching it. Everything that reads a lane reads this.
+local function current_lane(self)
+  local names = lanes_of(self)
+  for _, value in ipairs(names) do if value == self.lane then return self.lane end end
+  return names[1]
+end
+
 local function lane_valid(self, lane)
   for _, value in ipairs(lanes_of(self)) do if value == lane then return true end end
   return false
@@ -154,7 +164,7 @@ local function modal_copy(token)
   if not token then return nil end
   local operation = token.operation
   local text = {
-    clear = { title = "CLEAR CAPTURE BANK?", detail = "ALL 4 LANES", note = "PAINTED PATTERNS KEPT" },
+    clear = { title = "CLEAR CAPTURE BANK?", detail = "ALL LANES", note = "PAINTED PATTERNS KEPT" },
     cancel_capture = { title = "CANCEL CAPTURE?" },
     cancel_correction = { title = "CANCEL CORRECTION?" },
   }
@@ -254,9 +264,9 @@ function Adapter:enc(n, d)
       return value or outcome("WINDOW_UNAVAILABLE")
     elseif field == "SENSITIVITY" then
       if type(self.runtime.set_sensitivity) ~= "function" then return outcome("UNSUPPORTED") end
-      local current = bank.sensitivities and bank.sensitivities[self.lane]
+      local current = bank.sensitivities and bank.sensitivities[current_lane(self)]
       if type(current) ~= "number" then return outcome("INVALID_SENSITIVITY") end
-      local value = self.runtime:set_sensitivity(self.lane, clamp(current + d * .05, 0, 1))
+      local value = self.runtime:set_sensitivity(current_lane(self), clamp(current + d * .05, 0, 1))
       if value and (value.ok or value.code == "SENSITIVITY_UPDATED") then touch_window(self) end
       self.feedback = value and value.code
       return value or outcome("SENSITIVITY_UNAVAILABLE")
@@ -361,7 +371,7 @@ function Adapter:paint_context()
   if state_of(self) ~= "READY" or type(bank) ~= "table" then return nil, outcome("NOT_READY") end
   return {
     state = "READY", project_id = machine.project_id, generation = machine.generation,
-    analysis_revision = machine.analysis_revision, lane = self.lane,
+    analysis_revision = machine.analysis_revision, lane = current_lane(self),
     window_start = bank.window_start or 0, window_revision = self.window_revision,
     policy = self.paint_policy, shift = self.paint_shift, thresholds = bank.sensitivities or {},
   }
@@ -643,8 +653,8 @@ function Adapter:screen_model()
   local setup = setup_values(self)
   local window_start = type(bank) == "table" and bank.window_start or nil
   local window_end = type(window_start) == "number" and window_start + 63 or nil
-  local model = { title = "RHYTHM DOCTOR", state = state, lane = self.lane,
-    hit_count = hit_count(bank, self.lane), tempo = tempo, tempo_source = tempo_source,
+  local model = { title = "RHYTHM DOCTOR", state = state, lane = current_lane(self),
+    hit_count = hit_count(bank, current_lane(self)), tempo = tempo, tempo_source = tempo_source,
     tempo_detected = tempo_detected,
     listening_confidence = self.progress.listening_confidence, acquired_beats = self.progress.acquired_beats,
     analysis_progress = self.progress.analysis_progress, total_steps = total_steps,
@@ -657,7 +667,7 @@ function Adapter:screen_model()
       bpm = self.alignment_draft.bpm, start_beat = self.alignment_draft.start_beat,
       fine_start_ms = self.alignment_draft.fine_start_ms, capture_start_sample = self.alignment_draft.capture_start_sample,
       capture_end_sample = self.alignment_draft.capture_end_sample } or { active = false },
-    paint_policy = self.paint_policy, sensitivity = type(bank) == "table" and bank.sensitivities and bank.sensitivities[self.lane] or nil,
+    paint_policy = self.paint_policy, sensitivity = type(bank) == "table" and bank.sensitivities and bank.sensitivities[current_lane(self)] or nil,
     window_start = window_start, window_end = window_end,
     window_start_label = window_start ~= nil and position_label(window_start) or nil,
     window_end_label = window_end ~= nil and position_label(window_end) or nil,

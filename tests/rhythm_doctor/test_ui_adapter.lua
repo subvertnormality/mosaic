@@ -502,3 +502,29 @@ do
   c.runtime.machine.bank.lane_names = many
   equal(#c.adapter:lanes(), 14, "the lane set is capped at the columns that exist")
 end
+
+-- A remote analysis replaces the whole lane set, so the lane the adapter was
+-- last working on can stop existing without anyone touching it. Reading a
+-- stale lane asks the bank for a window it does not have.
+do
+  local c = context()
+  local remote = { "BASS", "CYMBALS", "GUITAR", "HIHAT", "KICK",
+                   "OTHER", "PIANO", "SNARE", "TOMS", "VOCALS" }
+  local sens, lanes = {}, {}
+  for _, lane in ipairs(remote) do sens[lane] = .5; lanes[lane] = {} end
+  c.runtime.machine.state = "READY"
+  c.runtime.machine.bank = {
+    version = 4, project_id = "p", bpm = 125, sample_rate = 48000,
+    capture_start_sample = 0, capture_end_sample = 1749407, origin_sample = 1920,
+    timeline_cells = 303, samples_per_cell = 5760, window_start = 0,
+    phrase_start_cell = 37, phrase_confidence = .06,
+    lane_names = remote, sensitivities = sens, lanes = lanes, candidates = {}, source = {},
+  }
+  -- The adapter still holds "BD" from construction; the bank has no such lane.
+  equal(c.adapter.lane, "BD", "the stored lane is still the device default")
+  local model = c.adapter:screen_model()
+  equal(model.lane, "BASS", "the screen shows a lane the bank actually holds")
+  equal(model.sensitivity, .5, "and its sensitivity resolves instead of coming back nil")
+  local ctx = c.adapter:paint_context()
+  equal(ctx.lane, "BASS", "and paint works on that lane too")
+end
