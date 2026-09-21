@@ -269,6 +269,14 @@ local notes_page = page:new("Note Dashboard", function()
     -- baseline 48, which spans rows 41..50; text at baseline 54 puts glyphs in
     -- rows 49..54 and draws over the chord slot values. Two pixels lower
     -- clears them.
+    -- The tooltip draws every page's transient messages at baseline 62, and it
+    -- is registered before the pages, so whatever it wrote is already in these
+    -- rows. This overlay's second line sits at baseline 63 and there is no
+    -- room below it on a 64-pixel screen, so it has to take the row -- but by
+    -- clearing it first. Overprinting put two texts in the same pixels and
+    -- made both unreadable. Row 51 is the top: the chord values are read from
+    -- baseline 48 and their descenders reach about row 50.
+    screen.level(0);screen.rect(0,51,128,13);screen.fill()
     screen.level(3);screen.move(2,56)
     screen.text("SRC"..tostring(snapshot.planned.source or "-").." M"..tostring(snapshot.planned.merge or "-")..
       " S"..tostring(snapshot.planned.scale or "-").." H"..tostring(snapshot.planned.harmony or "-"))

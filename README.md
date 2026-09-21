@@ -1446,7 +1446,9 @@ values. H05 Result uses its Step row to select one coherent event chain; on Note
 Dashboard, holding a grid step temporarily inspects that step instead of combining
 it with a later delayed event. A step with no recorded event says `NO EVENT` and
 shows no planned or emitted pitch; it never borrows the latest event from another
-step. Result status names local scale/octave bypasses, explicit Legacy fallback
+step. This readout occupies the bottom two lines of the Note Dashboard, which is
+the row tooltips use, so while a harmony event is being shown there the page
+clears that row and tooltips are not visible on it. Result status names local scale/octave bypasses, explicit Legacy fallback
 and the specific no-voicing reason. For an Ensemble group, any member bypass or failure is
 surfaced even when another member has a valid voicing. The projection never writes
 back into a shared pattern. Copy/save stores
