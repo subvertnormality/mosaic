@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "dfd7642c36e822d8721b0188ca5f7fda1a7ee8bbec769bd4b118d95654749c3a",
+ "manual_sha256": "761a0e92fdd6407fb9426dc31f78b5324e24fc22e6928e639ad92bca23647545",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1541,7 +1541,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "dfd7642c36e822d8721b0188ca5f7fda1a7ee8bbec769bd4b118d95654749c3a"
+   "sha256": "761a0e92fdd6407fb9426dc31f78b5324e24fc22e6928e639ad92bca23647545"
   },
   {
    "path": "cheat_sheet.html",
