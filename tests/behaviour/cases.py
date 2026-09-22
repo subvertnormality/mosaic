@@ -6,7 +6,7 @@ from grid_hot_disconnect import grid_disconnect_two_key_range
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from keyboard_repeated_note_on import keyboard_repeated_note_on
-from keyboard_chord_after_stop import keyboard_chord_after_stop
+from contract.keyboard_chord_after_stop import keyboard_chord_after_stop
 from stop_safety import shift_press_to_stop
 from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
@@ -54,7 +54,7 @@ from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
 from midi_mapping_targets import midi_mapping_targets
 from pattern_boundary_edit import pattern_boundary_edit
-from editor_pattern_flicker import editor_pattern_flicker
+from contract.editor_pattern_flicker import editor_pattern_flicker
 from reset_pending_voice import reset_pending_voice
 from swing_reset_mid_step import swing_reset_mid_step
 from slide_reset_mid_step import slide_reset_mid_step
@@ -65,7 +65,7 @@ from memory_redo_chord_merge import memory_redo_chord_merge
 from memory_step_undo import memory_step_undo
 from memory_lock_slide_undo import memory_lock_slide_undo
 from memory_chord_three_held import memory_chord_three_held
-from paint_race import paint_race
+from contract.paint_race import paint_race
 from device_picker_names import device_picker_names
 from syntakt_pedal_params import syntakt_pedal_params
 from dashboard_channel_select import dashboard_channel_select
@@ -96,7 +96,7 @@ from mask_gestures import multiheld_keyboard
 from mask_gestures import held_keyboard_chord
 from contract.mask_gestures import trig_gesture_all_steps
 from held_mask_extra_key import held_mask_extra_key
-from chord_mask_start_x import chord_mask_start_x
+from contract.chord_mask_start_x import chord_mask_start_x
 from mask_off_probe import mask_off_probe
 from pending_note_mask_song_transition import pending_note_mask_song_transition
 from mask_quantisation import mask_full_chord_inheritance

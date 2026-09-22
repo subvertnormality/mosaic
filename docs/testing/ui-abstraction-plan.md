@@ -270,7 +270,17 @@ gates pass, as do three-fresh-process controlled repeats for both modules. The t
 leave the contract inventory at 410 cases under a 451 ceiling, and both modules leave the
 allowlist.
 
-At this checkpoint 255 stored migration lanes pass the strict recipe/result gate and 74
+Four already-classified visual interaction contracts moved byte-identically into
+`contract/`: `M-MASK-CHORD-X-001`, `M-EDIT-FLICKER-001`,
+`M-KEYBOARD-STOP-001` and `M-ALG-PAINT-RACE-001`. Only registry ownership changed; the
+rendering, grid, timing and MIDI bodies and their contract inventory entries are unchanged.
+All eight timing lanes pass strict gates and each module passes a controlled repeat. A fifth
+candidate, `M-PARAM-DIAL-OFF-001`, remains in its original module and on the allowlist: its
+real-time settled-dial oracle failed both the grouped candidate run and the prescribed serial
+rerun despite a byte-identical body, so the failed evidence is preserved outside the tree and
+the extraction is not claimed.
+
+At this checkpoint 263 stored migration lanes pass the strict recipe/result gate and 70
 modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
 included: its physical recipe was identical, but the controlled run produced a different raw
 `.ptn` digest across fresh data directories. The gate rejected that comparison, the module
