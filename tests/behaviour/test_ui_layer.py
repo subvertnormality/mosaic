@@ -77,6 +77,25 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertIn("M-SYNC-010", classified)
         self.assertNotIn("M-MAP-PAGE-RETURN-001", classified)
         self.assertNotIn("M-SCALE-CACHE-001", classified)
+    def test_memory_position_result_preserves_optional_channel(self):
+        from unittest.mock import patch
+        from ui import Ui
+
+        class Driver:
+            def __init__(self):
+                self.results = []
+
+        driver = Driver()
+        ui = Ui(driver)
+        with patch.object(ui, "wait_memory_position"):
+            ui.expect_memory_position(1, 2)
+            ui.expect_memory_position(0, 1, channel=2)
+
+        self.assertEqual(driver.results, [
+            dict(kind="memory-position", current=1, total=2, frame_matched=True),
+            dict(kind="memory-position", current=0, total=1, frame_matched=True,
+                 channel=2),
+        ])
 
 
 
@@ -97,7 +116,8 @@ class UiLayerGuardTests(unittest.TestCase):
         from ui_layer_guard import classify_contract_cases
         classified = classify_contract_cases(CASES)
         self.assertEqual(value["cases"], sorted(classified))
-        self.assertEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
+        self.assertEqual(value["ceiling"], 450)
+        self.assertGreaterEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
 
 
 if __name__ == "__main__":

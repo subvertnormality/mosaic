@@ -295,6 +295,19 @@ contract-classified because its historical production baseline failure is record
 `contract_baseline_failures.json`; `M-MEMORY-010` remains ordinary. All three modules leave
 the allowlist.
 
+The apply-and-forget Memory workflow (`memory_truncate.py`, `M-MEMORY-003`) and
+per-channel history isolation/cold reload workflow (`memory_truncate_isolation.py`,
+`M-MEMORY-007`) are UI-independent. Both now use existing `Ui` channel-page,
+header/counter, step-recording, held-key and encoder verbs; mapped memory counters
+retain their exact framebuffer pixels, and M007's channel field remains in its result
+records. The K1+K2/K3 gestures retain the 0.4 s K1 hold. The nested restart and exact
+`-5,+2` channel-page route remain intact. All four before/after lanes pass the strict
+migration gate; each module passes a three-fresh-process controlled repeat and a
+separate real-time repeat. Both modules leave the allowlist and contract inventory,
+whose fixed 450-case ceiling is retained. Before/after recipes and results, including
+M007's nested restart session, are committed under
+`docs/testing/ui-migration-baselines/`.
+
 Four already-classified visual/input contracts (`M-SYNC-014`,
 `M-DASHBOARD-SELECT-001`, `M-DASHBOARD-CHORD-001` and
 `M-SETUP-DEVICE-NAMES-001`) now have byte-identical bodies under `contract/`.

@@ -20,8 +20,6 @@
   "master_lifecycle.py",
   "master_multi_output.py",
   "memory_lock_slide_undo.py",
-  "memory_truncate.py",
-  "memory_truncate_isolation.py",
   "memory_wrap.py",
   "midi_mapping.py",
   "midi_mapping_targets.py",

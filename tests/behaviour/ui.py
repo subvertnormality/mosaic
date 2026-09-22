@@ -508,12 +508,13 @@ class Ui:
 
         return self.driver.wait(matches)
 
-    def expect_memory_position(self, current, total):
+    def expect_memory_position(self, current, total, channel=None):
         self.wait_memory_position(current, total)
-        self.driver.results.append(dict(
-            kind="memory-position", current=current, total=total,
-            frame_matched=True,
-        ))
+        result = dict(kind="memory-position", current=current, total=total,
+                      frame_matched=True)
+        if channel is not None:
+            result["channel"] = channel
+        self.driver.results.append(result)
 
     def expect_native_menu_value(self, parameter, value):
         try:
