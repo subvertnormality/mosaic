@@ -1,0 +1,946 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "original",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        62,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s42-first-note",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        4,
+        117
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s42-velocity-30",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        4,
+        30
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s42-second-note",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s42-undone",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        4,
+        30
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-check",
+    "scenario": "S42-undo-restores-note-and-keeps-velocity",
+    "passed": true,
+    "detail": {
+      "expected": [
+        [
+          60,
+          127
+        ],
+        [
+          4,
+          30
+        ],
+        [
+          64,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ],
+      "actual": [
+        [
+          60,
+          127
+        ],
+        [
+          4,
+          30
+        ],
+        [
+          64,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s42-redone",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-check",
+    "scenario": "S42-redo-returns-to-latest",
+    "passed": true,
+    "detail": {
+      "expected": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          64,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ],
+      "actual": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          64,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s43-chord",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        64,
+        107
+      ],
+      [
+        67,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s43-first-note",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        4,
+        107
+      ],
+      [
+        7,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s43-second-note",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s43-undone",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        4,
+        107
+      ],
+      [
+        7,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-check",
+    "scenario": "S43-undo-keeps-earlier-chord",
+    "passed": true,
+    "detail": {
+      "expected": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          4,
+          107
+        ],
+        [
+          7,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ],
+      "actual": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          4,
+          107
+        ],
+        [
+          7,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s43-latest",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        65,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-check",
+    "scenario": "S43-latest-keeps-chord",
+    "passed": true,
+    "detail": {
+      "expected": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ],
+      "actual": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          65,
+          97
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s44a-note-lock",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        4,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Fixed Note",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s44a-trig-lock",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        72,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s44a-undone",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        4,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-check",
+    "scenario": "S44a-undo-drops-trig-lock-after-note-lock",
+    "passed": true,
+    "detail": {
+      "expected": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          4,
+          97
+        ]
+      ],
+      "actual": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          4,
+          97
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s44a-redone",
+    "cycle": [
+      [
+        60,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        72,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-check",
+    "scenario": "S44a-redo-returns-to-latest",
+    "passed": true,
+    "detail": {
+      "expected": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          72,
+          97
+        ]
+      ],
+      "actual": [
+        [
+          60,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          72,
+          97
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Quantised Fixed Note",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s44b-slot2-lock",
+    "cycle": [
+      [
+        67,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        72,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s44b-slot1-lock",
+    "cycle": [
+      [
+        74,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        72,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-heard",
+    "stage": "s44b-undone",
+    "cycle": [
+      [
+        67,
+        127
+      ],
+      [
+        5,
+        30
+      ],
+      [
+        5,
+        107
+      ],
+      [
+        9,
+        107
+      ],
+      [
+        72,
+        97
+      ]
+    ]
+  },
+  {
+    "kind": "memory-step-undo-check",
+    "scenario": "S44b-undo-drops-other-slot-lock",
+    "passed": true,
+    "detail": {
+      "expected": [
+        [
+          67,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          72,
+          97
+        ]
+      ],
+      "actual": [
+        [
+          67,
+          127
+        ],
+        [
+          5,
+          30
+        ],
+        [
+          5,
+          107
+        ],
+        [
+          9,
+          107
+        ],
+        [
+          72,
+          97
+        ]
+      ]
+    }
+  },
+  {
+    "kind": "memory-step-undo-summary",
+    "passed": true,
+    "failures": []
+  }
+]

@@ -133,6 +133,11 @@ PATCH_PARAMETER_VALUES = {
     "off": "X",
 }
 
+TRIG_PARAMETERS = {
+    "fixed_note": "Fixed Note",
+    "quantised_fixed_note": "Quantised Fixed Note",
+}
+
 # Every distinct level has a distinct semantic name. Controls may narrow this
 # vocabulary after captured-baseline domain generation; keeping it injective is
 # the invariant that prevents an assertion from becoming weaker.

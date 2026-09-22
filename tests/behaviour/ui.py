@@ -6,7 +6,8 @@ import time
 
 from ui_map import (CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
                     NATIVE_MENU_VALUES, PATCH_PARAMETERS,
-                    PATCH_PARAMETER_VALUES, SCREEN, control_cell, header_text)
+                    PATCH_PARAMETER_VALUES, SCREEN, TRIG_PARAMETERS,
+                    control_cell, header_text)
 
 
 class UiMapError(AssertionError):
@@ -252,6 +253,14 @@ class Ui:
         self.press_key(2)
         return offset
 
+    def assign_trig_parameter_key(self, parameter, offset=None):
+        """Assign a trig parameter through a stable semantic key."""
+        try:
+            label = TRIG_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown trig parameter: " + str(parameter)) from error
+        return self.assign_trig_parameter(label, offset=offset)
+
     def open_patch_control(self, configured=False, setup=True):
         """Open channel 1's stored patch control with the legacy scan recipe."""
         from frame_oracle import selected_line
@@ -443,7 +452,8 @@ class Ui:
         self.driver.wait(lambda state: selected_value(state, value))
         self.driver.results.append(dict(kind="selected-menu-value", text=value))
 
-    def expect_memory_position(self, current, total):
+    def wait_memory_position(self, current, total):
+        """Wait for the exact memory counters without adding a result record."""
         from frame_oracle import render
 
         data = SCREEN["memory_position"]
@@ -466,7 +476,10 @@ class Ui:
             actual = base64.b64decode(state["frame"]["pixels_base64"])
             return all(actual[index] == expected[index] for index in indices)
 
-        self.driver.wait(matches)
+        return self.driver.wait(matches)
+
+    def expect_memory_position(self, current, total):
+        self.wait_memory_position(current, total)
         self.driver.results.append(dict(
             kind="memory-position", current=current, total=total,
             frame_matched=True,

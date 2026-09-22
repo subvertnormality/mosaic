@@ -1,0 +1,234 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "original",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "note-locked",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "note-undone",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "note-redone",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "note-redone-after-rebuild",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "velocity-locked",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      50,
+      97
+    ]
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "velocity-undone",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "velocity-redone",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      50,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-redo-encoder-lock",
+    "stage": "velocity-redone-after-rebuild",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      50,
+      97
+    ]
+  },
+  {
+    "kind": "memory-redo-encoder-lock-summary",
+    "passed": true
+  }
+]

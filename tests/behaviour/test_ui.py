@@ -77,6 +77,14 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual(PATCH_PARAMETERS["nrpn14"]["label"], "NRPN14")
         self.assertEqual(PATCH_PARAMETER_VALUES["off"], "X")
 
+    def test_trig_parameter_surface_has_stable_keys(self):
+        from ui_map import TRIG_PARAMETERS
+
+        self.assertEqual(TRIG_PARAMETERS, {
+            "fixed_note": "Fixed Note",
+            "quantised_fixed_note": "Quantised Fixed Note",
+        })
+
     def test_every_grid_cell_has_exactly_one_control_on_each_page(self):
         from ui_map import grid_partition
 
@@ -151,6 +159,34 @@ class UiInputTests(unittest.TestCase):
         driver, ui = self.ui()
         ui.channel_page("masks", "midi_config", confirm=False, saturate=True)
         self.assertEqual(driver.calls, [("enc", 1, -5)])
+
+    def test_trig_parameter_keys_delegate_exact_labels_and_offsets(self):
+        from ui import Ui
+
+        driver, ui = self.ui()
+        for key, label in (("fixed_note", "Fixed Note"),
+                           ("quantised_fixed_note", "Quantised Fixed Note")):
+            for offset in (None, 0, 2, 49, -1):
+                with self.subTest(key=key, offset=offset):
+                    with patch.object(ui, "assign_trig_parameter",
+                                      return_value=offset) as assign:
+                        self.assertEqual(
+                            ui.assign_trig_parameter_key(key, offset=offset), offset
+                        )
+                    assign.assert_called_once_with(label, offset=offset)
+        self.assertEqual(driver.calls, [])
+
+    def test_unknown_trig_parameter_key_fails_before_input(self):
+        from ui import UiMapError
+
+        driver, ui = self.ui()
+        with patch.object(ui, "assign_trig_parameter") as assign:
+            for key in ("missing", "Fixed Note"):
+                with self.subTest(key=key), self.assertRaises(UiMapError):
+                    ui.assign_trig_parameter_key(key)
+        assign.assert_not_called()
+        self.assertEqual(driver.calls, [])
+        self.assertEqual(driver.results, [])
 
     def test_range_recipe_is_identical_to_hold_then_tap(self):
         driver, ui = self.ui()
@@ -575,18 +611,30 @@ class MemoryUiVerbTests(unittest.TestCase):
         driver = self.Driver(payload)
         ui = Ui(driver)
         with patch("frame_oracle.render", return_value=payload) as render:
-            ui.expect_memory_position(2, 2)
+            ui.expect_memory_position(2, 5)
         bands = SCREEN["memory_position"]["bands"]
         self.assertEqual(render.call_args.args[0], [
             [bands["current"]["x"], bands["current"]["baseline"], 15, "2"],
-            [bands["total"]["x"], bands["total"]["baseline"], 15, "2"],
+            [bands["total"]["x"], bands["total"]["baseline"], 15, "5"],
         ])
         self.assertEqual(render.call_args.kwargs, {"font_size": 10, "antialias": 1})
         self.assertEqual(driver.calls, [("wait",)])
         self.assertEqual(driver.results, [{
             "kind": "memory-position", "current": 2,
-            "total": 2, "frame_matched": True,
+            "total": 5, "frame_matched": True,
         }])
+
+    def test_memory_position_wait_only_returns_state_without_a_result(self):
+        from ui import Ui
+
+        payload = bytes(self.frame_bytes())
+        driver = self.Driver(payload)
+        with patch("frame_oracle.render", return_value=payload):
+            state = Ui(driver).wait_memory_position(2, 5)
+        self.assertEqual(state["frame"]["pixels_base64"],
+                         base64.b64encode(payload).decode())
+        self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(driver.results, [])
 
     def test_memory_position_ignores_outside_pixels(self):
         from ui import Ui

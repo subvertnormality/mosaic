@@ -280,7 +280,22 @@ real-time settled-dial oracle failed both the grouped candidate run and the pres
 rerun despite a byte-identical body, so the failed evidence is preserved outside the tree and
 the extraction is not claimed.
 
-At this checkpoint 263 stored migration lanes pass the strict recipe/result gate and 70
+Three more Memory cases (`M-MEMORY-009`, `M-MEMORY-010` and `M-MEMORY-011`) are
+UI-independent. Their held-step mask and trig-lock gestures retain the original separate E2
+movements, native E3 event, elapsed-time boundaries and exception-safe releases. Stable trig
+parameter keys replace rendered assignment labels. The memory counter is split into a mapped
+wait-only oracle and the existing result-producing wrapper, so `M-MEMORY-011` preserves its
+original custom counter records and failure translation. All six timing lanes pass strict
+before/after gates and all three modules pass three-fresh-process controlled repeats. The
+original parallel real-time baselines for `M-MEMORY-009` and `M-MEMORY-010` were
+load-sensitive and their prescribed serial reruns supply the passing before evidence; the
+failed parallel evidence remains preserved outside the tree. `M-MEMORY-011` leaves the
+contract inventory, which is now 409 cases under a 450 ceiling. `M-MEMORY-009` remains
+contract-classified because its historical production baseline failure is recorded in
+`contract_baseline_failures.json`; `M-MEMORY-010` remains ordinary. All three modules leave
+the allowlist.
+
+At this checkpoint 269 stored migration lanes pass the strict recipe/result gate and 67
 modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
 included: its physical recipe was identical, but the controlled run produced a different raw
 `.ptn` digest across fresh data directories. The gate rejected that comparison, the module

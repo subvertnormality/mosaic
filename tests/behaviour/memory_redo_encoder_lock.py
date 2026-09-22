@@ -12,10 +12,11 @@ PATTERN = [127, 117, 107, 97]
 
 
 def memory_redo_encoder_lock(c):
-    c.configure()
+    ui = c.ui
+    ui.configure()
 
     def heard(stage):
-        marker = c.snapshot()['midi_count']; c.tap(1, 8); c.elapse(1.4); c.tap(1, 8)
+        marker = c.snapshot()['midi_count']; ui.play(); c.elapse(1.4); ui.stop()
         state = c.wait(lambda s: not s['midi_capture']['outstanding'])
         ons = [m['bytes'] for m in state['midi'] if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0][:4]
         actual = dict(notes=[b[1] for b in ons], velocities=[b[2] for b in ons])
@@ -23,18 +24,17 @@ def memory_redo_encoder_lock(c):
         return actual
 
     def held_edit(field_offset, step, turns):
-        c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
-        c.enc(2, -5); c.enc(2, field_offset)
-        c.action(type='grid', x=step, y=4, state=1); c.elapse(.05)
-        try: c.enc(3, turns)
-        finally: c.action(type='grid', x=step, y=4, state=0)
-        c.elapse(.1); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+        ui.channel_page('masks', 'memory', confirm=False); ui.expect_header('masks', channel=1)
+        ui.select_field('mask_attribute', saturate=-5, then=field_offset)
+        with ui.hold_step(step):
+            c.elapse(.05); ui.turn(3, turns)
+        c.elapse(.1); ui.channel_page('memory', 'masks', confirm=False); ui.expect_header('memory', channel=1)
 
     def rebuild():
-        c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
-        c.tap(4, 4); c.elapse(.2); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+        ui.channel_page('masks', 'memory', confirm=False); ui.expect_header('masks', channel=1)
+        ui.tap_step(4); c.elapse(.2); ui.channel_page('memory', 'masks', confirm=False); ui.expect_header('memory', channel=1)
 
-    c.enc(1, -2); c.screen_header('Ch. 1 Memory')
+    ui.channel_page('memory', 'midi_config', confirm=False); ui.expect_header('memory', channel=1)
     original = heard('original')
     assert original == dict(notes=[60, 62, 64, 65], velocities=PATTERN), original
 
@@ -42,13 +42,13 @@ def memory_redo_encoder_lock(c):
     locked = heard('note-locked')
     assert locked['notes'][0] == 60 and locked['notes'][2:] == [64, 65] and locked['notes'][1] != 62, locked
     assert locked['velocities'] == PATTERN, locked
-    c.enc(3, -1); undone = heard('note-undone'); assert undone == original, undone
-    c.enc(3, 1); redone = heard('note-redone'); assert redone == locked, ('Redo differs from the locked state', redone, locked)
+    ui.turn(3, -1); undone = heard('note-undone'); assert undone == original, undone
+    ui.turn(3, 1); redone = heard('note-redone'); assert redone == locked, ('Redo differs from the locked state', redone, locked)
     rebuild(); again = heard('note-redone-after-rebuild'); assert again == locked, ('Redo differs after a rebuild', again, locked)
 
     held_edit(2, 3, 51)                                         # velocity lock 50 on step 3
     vlocked = heard('velocity-locked'); assert vlocked['velocities'] == [127, 117, 50, 97], vlocked
-    c.enc(3, -1); heard('velocity-undone')
-    c.enc(3, 1); vredone = heard('velocity-redone'); assert vredone == vlocked, ('Velocity redo differs', vredone, vlocked)
+    ui.turn(3, -1); heard('velocity-undone')
+    ui.turn(3, 1); vredone = heard('velocity-redone'); assert vredone == vlocked, ('Velocity redo differs', vredone, vlocked)
     rebuild(); vagain = heard('velocity-redone-after-rebuild'); assert vagain == vlocked, ('Velocity redo differs after a rebuild', vagain, vlocked)
     c.results.append(dict(kind='memory-redo-encoder-lock-summary', passed=True))
