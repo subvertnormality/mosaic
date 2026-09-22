@@ -239,6 +239,43 @@ class Ui:
         self.press_key(2)
         return offset
 
+    def open_patch_control(self, configured=False, setup=True):
+        """Open channel 1's stored patch control with the legacy scan recipe."""
+        from frame_oracle import selected_line
+
+        if setup:
+            self.driver.configure()
+            if configured:
+                self.turn(3, 1)
+                self.press_key(3)
+        self.press_key(1)
+        self.turn(1, 4)
+        self.press_key(3)
+        self.expect_menu_label("LEVELS >")
+        roots = self.driver.snapshot()["diagnostics"]["parameter_roots"]
+        position = next(
+            index for index, row in enumerate(roots)
+            if row["id"] == "midi_device_params_group_channel_1"
+        )
+        self.turn(2, position)
+        self.press_key(3)
+        label = "Control 1" if configured else "CC 1"
+        for _ in range(180):
+            if selected_line(self.driver.snapshot(), label):
+                break
+            self.turn(2, 1)
+        else:
+            raise AssertionError("Configured patch control not reachable: " + label)
+        self.expect_menu_label(label)
+        return label
+
+    def turn_patch_control(self, steps):
+        """Keep native acceleration disabled and retain the historical settling time."""
+        assert -63 <= steps <= 63 and steps
+        self.driver.elapse(.05)
+        self.encoder_event(3, 2 * steps)
+        self.driver.elapse(.03)
+
     def select_midi_clock_source(self):
         """Seek the native CLOCK root and change its source from internal to MIDI."""
         self.configure()

@@ -230,6 +230,43 @@ class UiInputTests(unittest.TestCase):
             "enabled": True,
         }])
 
+    def test_patch_control_preserves_setup_scan_and_observed_label(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[
+            {"diagnostics": {"parameter_roots": [
+                {"id": "other"},
+                {"id": "midi_device_params_group_channel_1"},
+            ]}},
+            {},
+            {},
+        ])
+        driver.configure = lambda: driver.calls.append(("configure",))
+        ui = Ui(driver)
+        ui.expect_menu_label = lambda label: driver.calls.append(("menu-label", label))
+        with patch("frame_oracle.selected_line", side_effect=[False, True]):
+            self.assertEqual(ui.open_patch_control(configured=True), "Control 1")
+        self.assertEqual(driver.calls, [
+            ("configure",), ("enc", 3, 1), ("key", 3),
+            ("key", 1), ("enc", 1, 4), ("key", 3),
+            ("menu-label", "LEVELS >"), ("snapshot",),
+            ("enc", 2, 1), ("key", 3),
+            ("snapshot",), ("enc", 2, 1), ("snapshot",),
+            ("menu-label", "Control 1"),
+        ])
+
+    def test_patch_control_turn_keeps_native_event_spacing_and_bounds(self):
+        driver, ui = self.ui()
+        ui.turn_patch_control(-63)
+        self.assertEqual(driver.calls, [
+            ("elapse", .05),
+            ("action", {"type": "enc", "n": 3, "delta": -126}),
+            ("elapse", .03),
+        ])
+        for invalid in (-64, 0, 64):
+            with self.assertRaises(AssertionError):
+                ui.turn_patch_control(invalid)
+
     def test_select_midi_clock_source_preserves_observed_seek_recipe(self):
         from ui import Ui
 

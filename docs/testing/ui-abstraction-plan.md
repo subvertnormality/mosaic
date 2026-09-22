@@ -206,6 +206,36 @@ zero reachable raw UI dependencies and are absent from the allowlist. All thirty
 lanes and strict before/after gates pass, as do a three-fresh-process controlled repeat and an
 independent real-time repeat for one representative from each module.
 
+The range and parameter-lock split (`range_rejection.py`, `parameter_lock_domain.py`) is
+UI-independent across the five ordinary cases `M-RANGE-REJECT-005`,
+`M-RANGE-GLOBAL-004`, `M-PARAM-043`, `M-PARAM-044` and `M-PARAM-046`. The raw range
+rendering cases (`M-RANGE-REJECT-001` through `M-RANGE-REJECT-004`,
+`M-RANGE-GLOBAL-001`, `M-RANGE-LIVE-002`) and parameter fine-gesture contract
+`M-PARAM-045` moved without body changes into their corresponding `contract/` modules;
+the registry routes them there, so the classifier remains at 412 contract cases under its
+454 ceiling while both ordinary modules leave the allowlist. Their ten timing lanes pass
+strict before/after gates. A three-fresh-process controlled repeat and an independent
+real-time repeat pass for one representative from each ordinary module.
+
+The mid-step slide reset (`slide_reset_mid_step.py`, `M-SLIDE-RESET-001`), step-slide
+workflow (`step_slides.py`, `M-SLIDE-STEP-001`) and keyboard-options workflow
+(`keyboard_options.py`, `M-OPT-KEYS-001`) are UI-independent. The two slide cases use
+semantic patch-control discovery and turning verbs whose exact setup scan, observed label,
+native encoder event spacing and bounds have red-green differential coverage. The keyboard
+case uses the existing semantic Mosaic-options verb while preserving its MIDI input,
+white-key, rotation, degree and transpose expectations. All three modules have zero
+reachable raw UI dependencies and are absent from the allowlist. Their six timing lanes pass
+strict before/after gates; each module also passes a three-fresh-process controlled repeat
+and an independent real-time repeat. The slide-reset baseline's initial real-time session
+failed during native startup with a matron `-11` exit; the original failure is preserved and
+its linked serial rerun passed, so the effective baseline remains explicitly load-sensitive.
+
+At this checkpoint 221 stored migration lanes pass the strict recipe/result gate and 77
+modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
+included: its physical recipe was identical, but the controlled run produced a different raw
+`.ptn` digest across fresh data directories. The gate rejected that comparison, the module
+was restored to the allowlist, and neither the digest oracle nor normalization was weakened.
+
 Implementation census: revision `4108035` contains 837 registered cases. The
 map follows the current eight-page channel editor, including Merge Shape and
 Harmony; the 773-case figures below remain the proposal's 2026-09-11 baseline.
