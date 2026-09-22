@@ -230,7 +230,20 @@ and an independent real-time repeat. The slide-reset baseline's initial real-tim
 failed during native startup with a matron `-11` exit; the original failure is preserved and
 its linked serial rerun passed, so the effective baseline remains explicitly load-sensitive.
 
-At this checkpoint 221 stored migration lanes pass the strict recipe/result gate and 77
+The stored-patch boundary and Play-recall slice (`patch_params_batch.py`) is
+UI-independent across `M-PATCH-001`, `M-PATCH-002`, `M-PATCH-003` and
+`M-PATCH-005`. The extracted bodies retain sentinel boundaries, configured-device
+behaviour, exact CC streams, one- and three-cycle recall, native sequence continuity and
+the requirement that recall precede the first note. Navigation delegates to the existing
+semantic patch-control verbs, including their observed-label scan and native encoder timing;
+the remaining `patch_params.py` cases and their allowlist entry are unchanged. All eight
+timing lanes pass strict before/after gates, as do a three-fresh-process controlled repeat
+and an independent real-time repeat. `M-PATCH-008` and `M-PATCH-009` were deliberately
+excluded after the controlled gate found different raw `autosave.ptn` digests across fresh
+data directories despite identical recipes and identical nested reload results; their
+original routing and digest oracles remain intact.
+
+At this checkpoint 229 stored migration lanes pass the strict recipe/result gate and 77
 modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
 included: its physical recipe was identical, but the controlled run produced a different raw
 `.ptn` digest across fresh data directories. The gate rejected that comparison, the module
