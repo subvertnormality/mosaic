@@ -3,7 +3,6 @@
   "cases.py",
   "dense_workload.py",
   "elektron_program_changes.py",
-  "endurance.py",
   "external_started_handoff.py",
   "fast_acquisition.py",
   "forwarded_clock.py",

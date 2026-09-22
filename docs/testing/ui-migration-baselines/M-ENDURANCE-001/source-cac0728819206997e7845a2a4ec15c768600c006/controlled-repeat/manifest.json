@@ -1,0 +1,30 @@
+{
+  "case": "M-ENDURANCE-001",
+  "profile": "base-midi",
+  "mod_patches": false,
+  "passed": true,
+  "failure": null,
+  "diagnostic_only": true,
+  "controlled_time_admitted": false,
+  "runs": [
+    {
+      "manifest": "/home/andy/rd/v140/mosaic-behaviour-runs/e4ba46af8b3d4ae6a9d9ca4a8c38459d/manifest.json",
+      "sha256": "10867831d3ab129cd0c18a2736a42d48414477d5dcbf98595169f02db382e0bd",
+      "wall_elapsed_seconds": 18.63438178400247,
+      "logical_advanced_seconds": 613.05
+    },
+    {
+      "manifest": "/home/andy/rd/v140/mosaic-behaviour-runs/9b44aa9be2f048e39203cf5a5615ba78/manifest.json",
+      "sha256": "f646057b7c46ec380207ed630cf51429a83c486fc02043577ffe8af53a1f0d7b",
+      "wall_elapsed_seconds": 17.934035645997938,
+      "logical_advanced_seconds": 613.05
+    },
+    {
+      "manifest": "/home/andy/rd/v140/mosaic-behaviour-runs/98a6dc81bc9b4e0093f1a5cad8a34653/manifest.json",
+      "sha256": "9ebeacfc167c521bb4fc4afc7cecf8c5975e5d3aecb66693c12f09784cb8c177",
+      "wall_elapsed_seconds": 17.903864246000012,
+      "logical_advanced_seconds": 613.05
+    }
+  ],
+  "normalized_sha256": "21d936a0f55be93e1829d2c815123ea02a21781aaa9fc5b3719ce76ec0e2940a"
+}
