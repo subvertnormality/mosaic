@@ -1,4 +1,9 @@
 """Two independent receivers share phase; disabled outputs receive no clock."""
+def diagnostic_events(events,clock_mode):
+    if clock_mode!="controlled-experimental":return events
+    return [{key:value for key,value in event.items() if key!="monotonic_ns"}
+            for event in events]
+
 def master_multi_output(c):
     import base64
     from master_clock import configure_master_output,assert_master_receiver
@@ -29,4 +34,5 @@ def master_multi_output(c):
         assert abs(first['first_clock_ns']-second['first_clock_ns'])/1e9<=tolerance
         assert not any(e['port']==3 and e['bytes']==[248] for e in capture.events),'Clock leaked to disabled port3'
         assert not any(e['port']==2 and len(e['bytes'])==3 and e['bytes'][0]==144 and e['bytes'][2]>0 for e in capture.events),'Notes leaked to port2'
-        c.results.append(dict(kind='master-two-receiver-phase',phase_delay_seconds=phase,receivers=[first,second],events=capture.events,passed=True))
+        reported_events=diagnostic_events(capture.events,c.clock_mode)
+        c.results.append(dict(kind='master-two-receiver-phase',phase_delay_seconds=phase,receivers=[first,second],events=reported_events,passed=True))
