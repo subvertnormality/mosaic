@@ -208,6 +208,48 @@ class UiInputTests(unittest.TestCase):
             self.assertEqual(set_options.call_count, 1)
         self.assertEqual(driver.calls, [])
 
+    def test_mapped_grid_events_keep_exact_controlled_timestamps_and_order(self):
+        from ui import Ui
+
+        class ControlledDriver(FakeDriver):
+            logical_ns = 900_000_000
+
+            def elapse(self, seconds):
+                nanoseconds = round(seconds * 1e9)
+                self.action(type="advance", nanoseconds=nanoseconds)
+                self.logical_ns += nanoseconds
+
+        driver = ControlledDriver()
+        Ui(driver).grid_events_at([
+            (969_000_000, "pattern_note_degree", (1, 4), 1),
+            (970_000_000, "pattern_note_degree", (1, 4), 0),
+        ])
+        self.assertEqual(driver.logical_ns, 970_000_000)
+        self.assertEqual(driver.calls, [
+            ("action", dict(type="advance", nanoseconds=69_000_000)),
+            ("action", dict(type="grid", x=1, y=3, state=1)),
+            ("action", dict(type="advance", nanoseconds=1_000_000)),
+            ("action", dict(type="grid", x=1, y=3, state=0)),
+        ])
+
+    def test_mapped_grid_events_keep_one_native_real_time_batch(self):
+        from ui import Ui
+
+        driver = FakeDriver(clock_mode="real-time")
+        ack = Ui(driver).grid_events_at([
+            (969_000_000, "pattern_note_degree", (1, 4), 1),
+            (970_000_000, "pattern_note_degree", (1, 4), 0),
+        ], schedule_id=1)
+        self.assertEqual(ack, {"native": "ack"})
+        self.assertEqual(driver.calls, [("action", dict(
+            type="native_input_schedule", schedule_id=1, events=[
+                dict(type="grid", x=1, y=3, state=1,
+                     at_monotonic_ns=969_000_000),
+                dict(type="grid", x=1, y=3, state=0,
+                     at_monotonic_ns=970_000_000),
+            ],
+        ))])
+
     def test_channel_page_can_preserve_a_clamped_boundary_recipe(self):
         driver, ui = self.ui()
         ui.channel_page("masks", "midi_config", confirm=False, saturate=True)

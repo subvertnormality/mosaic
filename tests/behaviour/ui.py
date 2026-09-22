@@ -142,6 +142,28 @@ class Ui:
             x, y = control_cell(control, index)
             self.driver.action(type="grid", x=x, y=y, state=0)
 
+    def grid_events_at(self, events, schedule_id=1):
+        """Emit ordered mapped grid edges at exact lane-specific timestamps.
+
+        Events are (timestamp_ns, control, index, state). Controlled time
+        advances before each edge; real time submits all edges together to the
+        native scheduler, so press latency cannot shift the release deadline.
+        """
+        mapped = []
+        for at_ns, control, index, state in events:
+            x, y = control_cell(control, index)
+            mapped.append((at_ns, x, y, state))
+        if self.driver.clock_mode == "real-time":
+            return self.driver.action(
+                type="native_input_schedule", schedule_id=schedule_id,
+                events=[dict(type="grid", x=x, y=y, state=state,
+                             at_monotonic_ns=at_ns)
+                        for at_ns, x, y, state in mapped],
+            )
+        for at_ns, x, y, state in mapped:
+            self.driver.elapse((at_ns - self.driver.logical_ns) / 1e9)
+            self.driver.action(type="grid", x=x, y=y, state=state)
+
     def set_range(self, first, last):
         start, end = self.step(first), self.step(last)
         self.driver.action(type="grid", x=start[0], y=start[1], state=1)
