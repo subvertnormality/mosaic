@@ -23,7 +23,6 @@
   "lifecycle_cycles.py",
   "lock_lead_clock_matrix.py",
   "lock_lead_time.py",
-  "mask_gestures.py",
   "master_clock.py",
   "master_lifecycle.py",
   "master_multi_output.py",

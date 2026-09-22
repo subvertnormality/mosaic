@@ -243,7 +243,23 @@ excluded after the controlled gate found different raw `autosave.ptn` digests ac
 data directories despite identical recipes and identical nested reload results; their
 original routing and digest oracles remain intact.
 
-At this checkpoint 229 stored migration lanes pass the strict recipe/result gate and 77
+The muted-recall and native-NRPN slice (`patch_params_batch2.py`) is UI-independent across
+`M-PATCH-006` and `M-PATCH-007`. Stable patch-parameter and value keys now resolve all
+rendered native labels inside `ui.py`; the cases retain the exact 180-observation scan
+boundary, release-on-error channel hold, MIDI sequence and byte assertions, and original
+result ordering. All four timing lanes pass strict before/after gates, and the required
+three-fresh-process controlled repeat passes. The remaining `patch_params.py` cases and its
+allowlist entry are unchanged.
+
+The mask-gesture family is split cleanly by oracle ownership. `M-MASK-023` moved with its
+body unchanged into `contract/mask_gestures.py`, retaining the exact all-64-cell grid
+predicate. The eight ordinary cases `M-MASK-024` through `M-MASK-031` now express step
+press/release order, range selection and LED expectations through stable semantic verbs
+while preserving their MIDI previews, chord replacement, duration and timing assertions.
+All 18 timing lanes pass strict before/after gates, the representative controlled repeat
+passes, and `mask_gestures.py` is absent from the allowlist.
+
+At this checkpoint 251 stored migration lanes pass the strict recipe/result gate and 76
 modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
 included: its physical recipe was identical, but the controlled run produced a different raw
 `.ptn` digest across fresh data directories. The gate rejected that comparison, the module

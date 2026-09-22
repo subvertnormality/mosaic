@@ -74,6 +74,8 @@ SCREEN = {
 NATIVE_MENU = {
     "levels_root": "LEVELS >",
     "clock_source": "source",
+    "patch_control_default": "CC 1",
+    "patch_control_configured": "Control 1",
 }
 
 NATIVE_MENU_VALUES = {
@@ -81,6 +83,17 @@ NATIVE_MENU_VALUES = {
         "internal": "internal",
         "midi": "midi",
     },
+}
+
+PATCH_PARAMETERS = {
+    "nrpn14": {
+        "label": "NRPN14",
+        "failure": "NRPN14 control not reachable",
+    },
+}
+
+PATCH_PARAMETER_VALUES = {
+    "off": "X",
 }
 
 # Every distinct level has a distinct semantic name. Controls may narrow this

@@ -5,7 +5,8 @@ import contextlib
 import time
 
 from ui_map import (CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
-                    NATIVE_MENU_VALUES, SCREEN, control_cell, header_text)
+                    NATIVE_MENU_VALUES, PATCH_PARAMETERS,
+                    PATCH_PARAMETER_VALUES, SCREEN, control_cell, header_text)
 
 
 class UiMapError(AssertionError):
@@ -113,6 +114,16 @@ class Ui:
             self.driver.action(type="grid", x=cell[0], y=cell[1], state=0)
 
     @contextlib.contextmanager
+    def hold_control(self, control, index=None):
+        """Hold a mapped grid control across caller-controlled elapsed time."""
+        cell = control_cell(control, index)
+        self.driver.action(type="grid", x=cell[0], y=cell[1], state=1)
+        try:
+            yield self
+        finally:
+            self.driver.action(type="grid", x=cell[0], y=cell[1], state=0)
+
+    @contextlib.contextmanager
     def hold_keys(self, *keys):
         for number in keys:
             self.driver.action(type="key", n=number, state=1)
@@ -191,7 +202,7 @@ class Ui:
         self.press_key(1)
         self.turn(1, 4)
         self.press_key(3)
-        self.expect_menu_label("LEVELS >")
+        self.expect_menu_label(NATIVE_MENU["levels_root"])
         position = next(
             index for index, value in enumerate(
                 self.driver.snapshot()["diagnostics"]["parameter_roots"]
@@ -217,7 +228,7 @@ class Ui:
             )
         self.press_key(2)
         self.turn(2, -60)
-        self.expect_menu_label("LEVELS >")
+        self.expect_menu_label(NATIVE_MENU["levels_root"])
         self.press_key(2)
         self.press_key(1)
 
@@ -251,7 +262,7 @@ class Ui:
         self.press_key(1)
         self.turn(1, 4)
         self.press_key(3)
-        self.expect_menu_label("LEVELS >")
+        self.expect_menu_label(NATIVE_MENU["levels_root"])
         roots = self.driver.snapshot()["diagnostics"]["parameter_roots"]
         position = next(
             index for index, row in enumerate(roots)
@@ -259,7 +270,8 @@ class Ui:
         )
         self.turn(2, position)
         self.press_key(3)
-        label = "Control 1" if configured else "CC 1"
+        label_key = "patch_control_configured" if configured else "patch_control_default"
+        label = NATIVE_MENU[label_key]
         for _ in range(180):
             if selected_line(self.driver.snapshot(), label):
                 break
@@ -268,6 +280,34 @@ class Ui:
             raise AssertionError("Configured patch control not reachable: " + label)
         self.expect_menu_label(label)
         return label
+
+    def seek_patch_parameter(self, parameter, configured=False, attempts=180):
+        """Open a patch control and seek a mapped parameter by observed state."""
+        from frame_oracle import selected_line
+
+        try:
+            data = PATCH_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown patch parameter: " + str(parameter)) from error
+        self.open_patch_control(configured=configured)
+        for _ in range(attempts):
+            if selected_line(self.driver.snapshot(), data["label"]):
+                break
+            self.turn(2, 1)
+        else:
+            raise AssertionError(data["failure"])
+        self.expect_menu_label(data["label"])
+
+    def expect_patch_value(self, value):
+        """Observe a patch value from a stable state key or an integer value."""
+        if isinstance(value, int):
+            rendered = str(value)
+        else:
+            try:
+                rendered = PATCH_PARAMETER_VALUES[value]
+            except KeyError as error:
+                raise UiMapError("unknown patch parameter value: " + str(value)) from error
+        self.expect_menu_value(rendered)
 
     def turn_patch_control(self, steps):
         """Keep native acceleration disabled and retain the historical settling time."""

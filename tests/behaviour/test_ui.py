@@ -69,6 +69,14 @@ class UiMapTests(unittest.TestCase):
              "note_dashboard", "merge_shape", "harmony"],
         )
 
+    def test_patch_menu_surface_has_stable_keys(self):
+        from ui_map import NATIVE_MENU, PATCH_PARAMETERS, PATCH_PARAMETER_VALUES
+
+        self.assertEqual(NATIVE_MENU["patch_control_default"], "CC 1")
+        self.assertEqual(NATIVE_MENU["patch_control_configured"], "Control 1")
+        self.assertEqual(PATCH_PARAMETERS["nrpn14"]["label"], "NRPN14")
+        self.assertEqual(PATCH_PARAMETER_VALUES["off"], "X")
+
     def test_every_grid_cell_has_exactly_one_control_on_each_page(self):
         from ui_map import grid_partition
 
@@ -160,6 +168,16 @@ class UiInputTests(unittest.TestCase):
             ("action", {"type": "grid", "x": 16, "y": 8, "state": 1}),
             ("tap", 1, 2),
             ("action", {"type": "grid", "x": 16, "y": 8, "state": 0}),
+        ])
+
+    def test_hold_control_releases_the_mapped_cell_after_failure(self):
+        driver, ui = self.ui()
+        with self.assertRaisesRegex(RuntimeError, "stop"):
+            with ui.hold_control("channel", 1):
+                raise RuntimeError("stop")
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 1, "y": 1, "state": 1}),
+            ("action", {"type": "grid", "x": 1, "y": 1, "state": 0}),
         ])
 
     def test_gesture_preserves_non_nested_release_order(self):
@@ -266,6 +284,51 @@ class UiInputTests(unittest.TestCase):
         for invalid in (-64, 0, 64):
             with self.assertRaises(AssertionError):
                 ui.turn_patch_control(invalid)
+
+    def test_patch_parameter_seek_uses_stable_key_and_preserves_scan_recipe(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{}, {}])
+        ui = Ui(driver)
+        ui.open_patch_control = lambda configured=False: driver.calls.append(
+            ("open-patch-control", configured)
+        )
+        ui.expect_menu_label = lambda label: driver.calls.append(("menu-label", label))
+        with patch("frame_oracle.selected_line", side_effect=[False, True]):
+            ui.seek_patch_parameter("nrpn14", configured=True)
+        self.assertEqual(driver.calls, [
+            ("open-patch-control", True),
+            ("snapshot",), ("enc", 2, 1), ("snapshot",),
+            ("menu-label", "NRPN14"),
+        ])
+
+    def test_patch_parameter_seek_preserves_exhaustion_boundary_and_failure(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{}, {}])
+        ui = Ui(driver)
+        ui.open_patch_control = lambda configured=False: driver.calls.append(
+            ("open-patch-control", configured)
+        )
+        with patch("frame_oracle.selected_line", return_value=False):
+            with self.assertRaisesRegex(AssertionError, "NRPN14 control not reachable"):
+                ui.seek_patch_parameter("nrpn14", configured=True, attempts=2)
+        self.assertEqual(driver.calls, [
+            ("open-patch-control", True),
+            ("snapshot",), ("enc", 2, 1),
+            ("snapshot",), ("enc", 2, 1),
+        ])
+
+    def test_patch_value_resolves_stable_and_numeric_values_and_rejects_unknown(self):
+        driver, ui = self.ui()
+        ui.expect_menu_value = lambda value: driver.calls.append(("menu-value", value))
+        ui.expect_patch_value("off")
+        ui.expect_patch_value(126)
+        with self.assertRaisesRegex(AssertionError, "unknown patch parameter value"):
+            ui.expect_patch_value("rendered-text")
+        self.assertEqual(driver.calls, [
+            ("menu-value", "X"), ("menu-value", "126"),
+        ])
 
     def test_select_midi_clock_source_preserves_observed_seek_recipe(self):
         from ui import Ui

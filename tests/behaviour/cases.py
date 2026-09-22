@@ -94,7 +94,7 @@ from range_workflows import accepted_live_range_transitions
 from range_workflows import offset_range_clipping, offset_range_rates
 from mask_gestures import multiheld_keyboard
 from mask_gestures import held_keyboard_chord
-from mask_gestures import trig_gesture_all_steps
+from contract.mask_gestures import trig_gesture_all_steps
 from held_mask_extra_key import held_mask_extra_key
 from chord_mask_start_x import chord_mask_start_x
 from mask_off_probe import mask_off_probe
@@ -138,8 +138,8 @@ from patch_params import patch_duplicate_slot_lock
 from lock_lead_clock_matrix import lock_lead_clock_matrix
 from patch_params import patch_sparse_range
 from patch_params import patch_restart
-from patch_params import patch_nrpn_bytes
-from patch_params import patch_muted_recall
+from patch_params_batch2 import patch_nrpn_bytes
+from patch_params_batch2 import patch_muted_recall
 """Mosaic-owned physical-input regressions; independent literal musical oracles."""
 from driver import REPO,Driver,digest
 
