@@ -42,10 +42,8 @@
   "rhythm_doctor.py",
   "rhythm_doctor_correction.py",
   "rhythm_doctor_surface.py",
-  "scale_lock_precedence.py",
   "song_tempo.py",
   "syntakt_pedal_params.py",
-  "trig_note_merge.py",
   "trig_parameter_interactions.py",
   "trigless_slide_clock.py"
 ]
