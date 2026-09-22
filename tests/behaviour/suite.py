@@ -36,6 +36,7 @@ PYTHON_UNITTEST={'test_acquisition_oracle','test_collection','test_duration_rout
     'test_midi_window','test_note_accounting','test_note_schedule','test_output_profiles','test_panic_hotplug_trace',
     'test_inventory','test_hardening_matrix','test_real_norns','test_hardware_performance','test_lua_test_names','test_lua_syntax','test_perf_input','test_perf_overload','test_panic_repeat_trace','test_panic_trace','test_panic_transport','test_pcm_oracle','test_suite',
     'test_heldout_workloads','test_perf_campaign','test_lead_timing_oracle','test_pulse_probe','test_fixture_migration','test_hardware_run_options','test_probe_overhead','test_swing_window_oracle','test_persisted_digest','test_ui','test_ui_assign_trig_parameter','test_ui_layer'}
+PYTHON_UNITTEST.add('test_ui_baseline_import')
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.
