@@ -137,7 +137,9 @@ class DriftArtifactTests(unittest.TestCase):
 
     def test_fixture_commits_ignore_unavailable_signing_key(self):
         self.git("config", "commit.gpgsign", "true")
-        self.git("config", "gpg.format", "ssh")
+        # Ubuntu 20.04's Git rejects the newer ssh format while parsing config,
+        # even when this fixture explicitly disables signing for the commit.
+        self.git("config", "gpg.format", "openpgp")
         self.git("config", "user.signingkey", str(self.repo / "absent-signing-key"))
         self.put("fixture-only.txt", "Synthetic commit does not require user signing credentials.")
         self.commit()
