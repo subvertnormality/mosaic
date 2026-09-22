@@ -295,7 +295,20 @@ contract-classified because its historical production baseline failure is record
 `contract_baseline_failures.json`; `M-MEMORY-010` remains ordinary. All three modules leave
 the allowlist.
 
-At this checkpoint 269 stored migration lanes pass the strict recipe/result gate and 67
+Four already-classified visual/input contracts (`M-SYNC-014`,
+`M-DASHBOARD-SELECT-001`, `M-DASHBOARD-CHORD-001` and
+`M-SETUP-DEVICE-NAMES-001`) now have byte-identical bodies under `contract/`.
+Only their registry imports changed. All eight controlled/real-time lanes pass the strict
+before/after gate, including the device-picker's nested session, and each module passes a
+three-fresh-process controlled repeat. Their contract inventory entries are unchanged.
+`M-SAVE-FAIL-001` remains in its original module and on the allowlist: its raw `.ptn` SHA
+differs across otherwise passing controlled runs because the Lua serializer emits table keys
+in variable order. Decoding two captured `.ptn` files with the pinned `tabutil` and comparing
+their content in stable key order found identical project data. The strict controlled gate
+still fails on the recorded raw SHA, so its failed comparison remains preserved separately
+pending a deterministic semantic oracle and fresh baseline.
+
+At this checkpoint 277 stored migration lanes pass the strict recipe/result gate and 63
 modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
 included: its physical recipe was identical, but the controlled run produced a different raw
 `.ptn` digest across fresh data directories. The gate rejected that comparison, the module

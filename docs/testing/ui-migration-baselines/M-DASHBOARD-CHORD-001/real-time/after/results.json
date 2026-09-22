@@ -1,0 +1,412 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Dashboard",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-fresh",
+    "chords": {
+      "Chd1": "X",
+      "Chd2": "X",
+      "Chd3": "X",
+      "Chd4": "X"
+    },
+    "top": {
+      "Note": "C-2",
+      "Vel": "0",
+      "Len": "0"
+    },
+    "note": "Note/Vel/Len recorded only: characterisation, not asserted"
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Fresh dashboard chord slots",
+    "actual": [
+      "X",
+      "X",
+      "X",
+      "X"
+    ],
+    "expected": [
+      "X",
+      "X",
+      "X",
+      "X"
+    ],
+    "cite": "README 679 + human decision S51 (X is characterisation)",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "chord-mask-screen",
+    "label": "-6th",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Dashboard",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-chord-play",
+    "mask": "-6th",
+    "sent": [
+      9,
+      12
+    ],
+    "cells": {
+      "Chd1": "A-2",
+      "Chd2": "X",
+      "Chd3": "X",
+      "Chd4": "X"
+    }
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd1 after playing -6th",
+    "actual": "A-2",
+    "expected": "A-2",
+    "cite": "README 679 + human decision S51",
+    "passed": true
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd2..Chd4 after playing -6th",
+    "actual": [
+      "X",
+      "X",
+      "X"
+    ],
+    "expected": [
+      "X",
+      "X",
+      "X"
+    ],
+    "cite": "README 679 + human decision S51 (X is characterisation)",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "chord-mask-screen",
+    "label": "-oct",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Dashboard",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-chord-play",
+    "mask": "-oct",
+    "sent": [
+      0,
+      12
+    ],
+    "cells": {
+      "Chd1": "C-2",
+      "Chd2": "X",
+      "Chd3": "X",
+      "Chd4": "X"
+    }
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd1 after playing -oct",
+    "actual": "C-2",
+    "expected": "C-2",
+    "cite": "README 679 + human decision S51",
+    "passed": true
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd2..Chd4 after playing -oct",
+    "actual": [
+      "X",
+      "X",
+      "X"
+    ],
+    "expected": [
+      "X",
+      "X",
+      "X"
+    ],
+    "cite": "README 679 + human decision S51 (X is characterisation)",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "chord-mask-screen",
+    "label": "-6th",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Dashboard",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-chord-play",
+    "mask": "-6th",
+    "sent": [
+      9,
+      12
+    ],
+    "cells": {
+      "Chd1": "A-2",
+      "Chd2": "X",
+      "Chd3": "X",
+      "Chd4": "X"
+    }
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd1 after playing -6th",
+    "actual": "A-2",
+    "expected": "A-2",
+    "cite": "README 679 + human decision S51",
+    "passed": true
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd2..Chd4 after playing -6th",
+    "actual": [
+      "X",
+      "X",
+      "X"
+    ],
+    "expected": [
+      "X",
+      "X",
+      "X"
+    ],
+    "cite": "README 679 + human decision S51 (X is characterisation)",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "chord-mask-screen",
+    "label": "--7th",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Dashboard",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-chord-play",
+    "mask": "--7th",
+    "sent": [
+      0,
+      12
+    ],
+    "cells": {
+      "Chd1": "C-2",
+      "Chd2": "X",
+      "Chd3": "X",
+      "Chd4": "X"
+    }
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd1 after playing --7th",
+    "actual": "C-2",
+    "expected": "C-2",
+    "cite": "README 679 + human decision S51",
+    "passed": true
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd2..Chd4 after playing --7th",
+    "actual": [
+      "X",
+      "X",
+      "X"
+    ],
+    "expected": [
+      "X",
+      "X",
+      "X"
+    ],
+    "cite": "README 679 + human decision S51 (X is characterisation)",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "chord-mask-screen",
+    "label": "-6th",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Dashboard",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-chord-play",
+    "mask": "-6th",
+    "sent": [
+      9,
+      12
+    ],
+    "cells": {
+      "Chd1": "A-2",
+      "Chd2": "X",
+      "Chd3": "X",
+      "Chd4": "X"
+    }
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd1 after playing -6th",
+    "actual": "A-2",
+    "expected": "A-2",
+    "cite": "README 679 + human decision S51",
+    "passed": true
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd2..Chd4 after playing -6th",
+    "actual": [
+      "X",
+      "X",
+      "X"
+    ],
+    "expected": [
+      "X",
+      "X",
+      "X"
+    ],
+    "cite": "README 679 + human decision S51 (X is characterisation)",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "chord-mask-screen",
+    "label": "--6th",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Dashboard",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-chord-play",
+    "mask": "--6th",
+    "sent": [
+      0,
+      12
+    ],
+    "cells": {
+      "Chd1": "C-2",
+      "Chd2": "X",
+      "Chd3": "X",
+      "Chd4": "X"
+    }
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd1 after playing --6th",
+    "actual": "C-2",
+    "expected": "C-2",
+    "cite": "README 679 + human decision S51",
+    "passed": true
+  },
+  {
+    "kind": "dashboard-chord-slot",
+    "label": "Chd2..Chd4 after playing --6th",
+    "actual": [
+      "X",
+      "X",
+      "X"
+    ],
+    "expected": [
+      "X",
+      "X",
+      "X"
+    ],
+    "cite": "README 679 + human decision S51 (X is characterisation)",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "dashboard-chord-slots-summary",
+    "checks": 13,
+    "passed": true
+  }
+]
