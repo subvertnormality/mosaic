@@ -235,6 +235,36 @@ class Ui:
         self.press_key(2)
         self.press_key(1)
 
+    def enter_native_menu(self):
+        """Open the native menu and observe the public mode transition."""
+        self.press_key(1)
+        return self._observe_native_menu_mode(True)
+
+    def leave_native_menu(self):
+        """Close the native menu and observe the public mode transition."""
+        self.press_key(1)
+        return self._observe_native_menu_mode(False)
+
+    def _observe_native_menu_mode(self, expected):
+        """Confirm a key-driven mode change without advancing controlled time."""
+        predicate = lambda state: state["diagnostics"]["menu_mode"] is expected
+        if self.driver.clock_mode == "real-time":
+            return self.driver.wait(predicate, timeout=1)
+        state = self.driver.snapshot()
+        if not predicate(state):
+            raise UiMapError(
+                "native menu mode is %r, expected %r" %
+                (state["diagnostics"]["menu_mode"], expected)
+            )
+        return state
+
+    def open_native_parameters(self):
+        """Open PARAMETERS from HOME after native menu entry is observable."""
+        self.enter_native_menu()
+        self.turn(1, 4)
+        self.press_key(3)
+        self.expect_menu_label(NATIVE_MENU["levels_root"])
+
     def assign_trig_parameter(self, label, offset=None):
         """Assign by the historical scan or a previously verified list offset."""
         self.press_key(2)

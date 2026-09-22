@@ -138,7 +138,7 @@ class Driver:
     def _set_midi_lead_time(self,value,expected=None,capture=False):
         from cases import menu_label,menu_option_row
         from frame_oracle import selected_line
-        self.key(1);self.enc(1,4);self.key(3);menu_label(self,'LEVELS >')
+        self.ui.open_native_parameters()
         position=next(i for i,row in enumerate(self.snapshot()['diagnostics']['parameter_roots']) if row['id']=='mosaic')
         self.enc(2,position);self.key(3)
         for _ in range(40):
@@ -155,7 +155,7 @@ class Driver:
         self.action(type='enc',n=3,delta=-100);self.elapse(.15);self.enc(3,value);menu_option_row(self,'Lock lead time (ms)',str(value),top=23)
         self.results.append(dict(kind='global-lock-lead-setting',value_ms=value,default_checked=expected))
         self.key(2);self.action(type='enc',n=2,delta=-120);self.elapse(.15);menu_label(self,'LEVELS >');self.key(2)
-        self.enc(1,-4);self.key(1)  # Restore startup HOME panel for existing recipes.
+        self.enc(1,-4);self.ui.leave_native_menu()  # Restore startup HOME panel for existing recipes.
 
     def configure(self):
         self.ui.configure()

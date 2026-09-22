@@ -160,6 +160,80 @@ class UiInputTests(unittest.TestCase):
         ui.channel_page("masks", "midi_config", confirm=False, saturate=True)
         self.assertEqual(driver.calls, [("enc", 1, -5)])
 
+    def test_native_parameters_observes_controlled_menu_mode_before_navigation(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"diagnostics": {"menu_mode": True}}])
+        ui = Ui(driver)
+        with patch.object(ui, "expect_menu_label") as expect:
+            ui.open_native_parameters()
+        self.assertEqual(driver.calls, [
+            ("key", 1), ("snapshot",), ("enc", 1, 4), ("key", 3),
+        ])
+        expect.assert_called_once_with("LEVELS >")
+
+    def test_native_parameters_controlled_mode_fails_closed_on_opposite_state(self):
+        from ui import Ui, UiMapError
+
+        driver = FakeDriver(states=[{"diagnostics": {"menu_mode": False}}])
+        ui = Ui(driver)
+        with patch.object(ui, "expect_menu_label") as expect, self.assertRaises(UiMapError):
+            ui.open_native_parameters()
+        self.assertEqual(driver.calls, [
+            ("key", 1), ("snapshot",),
+        ])
+        expect.assert_not_called()
+
+    def test_native_parameters_real_time_rejects_opposite_then_accepts_open(self):
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                states = [
+                    {"diagnostics": {"menu_mode": False}},
+                    {"diagnostics": {"menu_mode": True}},
+                ]
+                self.matches = [predicate(state) for state in states]
+                return states[-1]
+
+        driver = Driver(clock_mode="real-time")
+        ui = Ui(driver)
+        with patch.object(ui, "expect_menu_label"):
+            ui.open_native_parameters()
+        self.assertEqual(driver.calls, [
+            ("key", 1), ("wait", 1), ("enc", 1, 4), ("key", 3),
+        ])
+        self.assertEqual(driver.matches, [False, True])
+
+    def test_leave_native_menu_controlled_mode_rejects_still_open(self):
+        from ui import Ui, UiMapError
+
+        driver = FakeDriver(states=[{"diagnostics": {"menu_mode": True}}])
+        ui = Ui(driver)
+        with self.assertRaises(UiMapError):
+            ui.leave_native_menu()
+        self.assertEqual(driver.calls, [("key", 1), ("snapshot",)])
+
+    def test_leave_native_menu_real_time_rejects_open_then_accepts_closed(self):
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                states = [
+                    {"diagnostics": {"menu_mode": True}},
+                    {"diagnostics": {"menu_mode": False}},
+                ]
+                self.matches = [predicate(state) for state in states]
+                return states[-1]
+
+        driver = Driver(clock_mode="real-time")
+        ui = Ui(driver)
+        ui.leave_native_menu()
+        self.assertEqual(driver.calls, [("key", 1), ("wait", 1)])
+        self.assertEqual(driver.matches, [False, True])
+
     def test_trig_parameter_keys_delegate_exact_labels_and_offsets(self):
         from ui import Ui
 
