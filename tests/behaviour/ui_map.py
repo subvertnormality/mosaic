@@ -136,6 +136,12 @@ PATCH_PARAMETER_VALUES = {
 TRIG_PARAMETERS = {
     "fixed_note": "Fixed Note",
     "quantised_fixed_note": "Quantised Fixed Note",
+    "trig_probability": "Trig Probability",
+}
+
+MOSAIC_OPTIONS = {
+    "scale_lock_until_pattern_end": "Scales lock until ptn end",
+    "lock_merged_to_pentatonic": "Lock merged to pent.",
 }
 
 # Every distinct level has a distinct semantic name. Controls may narrow this
@@ -178,6 +184,12 @@ def control_cell(control, index=None):
         if not (isinstance(index, tuple) and len(index) == 2):
             raise ValueError("pattern note fader needs an (x, y) value cell")
         return index
+    if control == "pattern_note_degree":
+        if not (isinstance(index, tuple) and len(index) == 2
+                and all(isinstance(value, int) for value in index)
+                and 1 <= index[0] <= CHANNEL_COUNT and 0 <= index[1] <= 6):
+            raise ValueError("pattern note degree needs (step 1..16, degree 0..6)")
+        return index[0], 7 - index[1]
     if control == "song_slot":
         return index, 3
     if control == "song_pattern_slot":
@@ -194,6 +206,10 @@ def control_cell(control, index=None):
         if index is not None:
             raise ValueError("trig merge mode does not take an index")
         return 14, 8
+    if control == "note_merge_mode":
+        if index is not None:
+            raise ValueError("note merge mode does not take an index")
+        return 15, 8
     if control == "velocity_merge_mode":
         if index is not None:
             raise ValueError("velocity merge mode does not take an index")
@@ -258,6 +274,7 @@ def grid_partition(page):
         for octave in range(-2, 3):
             cells[(10 + octave, 8)] = ("channel_octave", octave)
         cells[(14, 8)] = ("trig_merge_mode", None)
+        cells[(15, 8)] = ("note_merge_mode", None)
         cells[(16, 8)] = ("velocity_merge_mode", None)
     if page == "song_editor":
         for length in range(1, CHANNEL_COUNT + 1):

@@ -83,7 +83,30 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual(TRIG_PARAMETERS, {
             "fixed_note": "Fixed Note",
             "quantised_fixed_note": "Quantised Fixed Note",
+            "trig_probability": "Trig Probability",
         })
+
+    def test_mosaic_option_keys_match_documented_native_labels(self):
+        from ui_map import MOSAIC_OPTIONS
+
+        self.assertEqual(MOSAIC_OPTIONS["scale_lock_until_pattern_end"],
+                         "Scales lock until ptn end")
+        self.assertEqual(MOSAIC_OPTIONS["lock_merged_to_pentatonic"],
+                         "Lock merged to pent.")
+
+    def test_pattern_note_degree_and_note_merge_have_page_specific_keys(self):
+        from ui_map import control_cell, grid_partition
+
+        self.assertEqual(control_cell("pattern_note_degree", (1, 0)), (1, 7))
+        self.assertEqual(control_cell("pattern_note_degree", (16, 6)), (16, 1))
+        self.assertEqual(control_cell("note_merge_mode"), (15, 8))
+        self.assertEqual(grid_partition("channel_editor")[(15, 8)],
+                         ("note_merge_mode", None))
+        for invalid in ((0, 0), (17, 0), (1, -1), (1, 7), 1):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                control_cell("pattern_note_degree", invalid)
+        with self.assertRaises(ValueError):
+            control_cell("note_merge_mode", 1)
 
     def test_every_grid_cell_has_exactly_one_control_on_each_page(self):
         from ui_map import grid_partition
@@ -154,6 +177,36 @@ class UiInputTests(unittest.TestCase):
         driver, ui = self.ui()
         ui.channel_page("harmony", "masks", confirm=False)
         self.assertEqual(driver.calls, [("enc", 1, 7)])
+
+    def test_note_degree_and_merge_led_keep_the_existing_physical_recipe(self):
+        driver, ui = self.ui()
+        ui.tap_control("pattern_note_degree", (4, 3))
+        ui.tap_control("note_merge_mode")
+        ui.expect_leds({("note_merge_mode", None): "off"})
+        ui.expect_leds({("note_merge_mode", None): "in_range"})
+        ui.expect_leds({("note_merge_mode", None): "medium"})
+        self.assertEqual(driver.calls, [
+            ("tap", 4, 4), ("tap", 15, 8),
+            ("led_values", [(15, 8)], [2]),
+            ("led_values", [(15, 8)], [5]),
+            ("led_values", [(15, 8)], [8]),
+        ])
+
+    def test_mosaic_option_keys_delegate_to_existing_observed_label_recipe(self):
+        driver, ui = self.ui()
+        with patch.object(ui, "set_mosaic_options") as set_options:
+            ui.set_mosaic_option_keys([
+                ("scale_lock_until_pattern_end", False),
+                ("lock_merged_to_pentatonic", True),
+            ])
+            set_options.assert_called_once_with([
+                ("Scales lock until ptn end", False),
+                ("Lock merged to pent.", True),
+            ])
+            with self.assertRaisesRegex(AssertionError, "unknown Mosaic option"):
+                ui.set_mosaic_option_keys([("not_an_option", True)])
+            self.assertEqual(set_options.call_count, 1)
+        self.assertEqual(driver.calls, [])
 
     def test_channel_page_can_preserve_a_clamped_boundary_recipe(self):
         driver, ui = self.ui()

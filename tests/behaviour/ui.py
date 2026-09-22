@@ -5,7 +5,7 @@ import contextlib
 import time
 
 from ui_map import (CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
-                    NATIVE_MENU_VALUES, PATCH_PARAMETERS,
+                    MOSAIC_OPTIONS, NATIVE_MENU_VALUES, PATCH_PARAMETERS,
                     PATCH_PARAMETER_VALUES, SCREEN, TRIG_PARAMETERS,
                     control_cell, header_text)
 
@@ -197,6 +197,16 @@ class Ui:
         self.driver.hold_tap(start, end)
         self.expect_leds({("pattern_slot", 1): "selected"})
         self.expect_header("midi_config", channel=1)
+
+    def set_mosaic_option_keys(self, options):
+        """Resolve stable option keys before the observed-label native UI recipe."""
+        mapped = []
+        for key, enabled in options:
+            try:
+                mapped.append((MOSAIC_OPTIONS[key], enabled))
+            except KeyError as error:
+                raise UiMapError("unknown Mosaic option: " + str(key)) from error
+        self.set_mosaic_options(mapped)
 
     def set_mosaic_options(self, options):
         """Seek Mosaic's native parameter submenu by observed labels."""
