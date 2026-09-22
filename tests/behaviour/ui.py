@@ -168,9 +168,11 @@ class Ui:
         finally:
             self.driver.action(type="grid", x=held[0], y=held[1], state=0)
 
-    def record_key(self, step, note, velocity):
+    def record_key(self, step, note, velocity, hold_seconds=0.0):
         with self.hold_step(step):
             self.driver.action(type="midi", port=1, bytes=[144, note, velocity])
+            if hold_seconds:
+                self.driver.elapse(hold_seconds)
             self.driver.action(type="midi", port=1, bytes=[128, note, 0])
 
     def configure(self):
@@ -391,17 +393,84 @@ class Ui:
         self.driver.results.append(result)
         return state
 
-    def expect_menu_label(self, label, x=0):
+    def expect_menu_label(self, label, x=None, width=None, top=None):
         from frame_oracle import selected_line
 
-        self.driver.wait(lambda state: selected_line(state, label, x))
+        geometry = SCREEN["menu_label"]
+        x = geometry["x"] if x is None else x
+        width = geometry["width"] if width is None else width
+        top = geometry["top"] if top is None else top
+        self.driver.wait(lambda state: selected_line(
+            state, label, x=x, width=width, top=top
+        ))
         self.driver.results.append(dict(kind="selected-menu-label", text=label))
+
+    def select_project_action(self, action, returning=False, activate=True):
+        project = SCREEN["project_menu"]
+        actions = project["actions"]
+        try:
+            spec = actions[action]
+        except KeyError as error:
+            raise UiMapError("unknown project action: " + str(action)) from error
+        save = actions["save"]
+
+        self.press_key(1)
+        if not returning:
+            self.turn(1, 4)
+            self.press_key(3)
+            self.expect_menu_label(NATIVE_MENU["levels_root"])
+            position = next(
+                index for index, value in enumerate(
+                    self.driver.snapshot()["diagnostics"]["parameter_roots"]
+                ) if value["id"] == project["root_id"]
+            )
+            self.turn(2, position)
+            self.press_key(3)
+        self.turn(2, -60)
+        self.turn(2, 1)
+        self.expect_menu_label(save["label"], x=save["x"],
+                               width=save["width"], top=save["top"])
+        if spec["offset"]:
+            self.turn(2, spec["offset"])
+            self.expect_menu_label(spec["label"], x=spec["x"],
+                                   width=spec["width"], top=spec["top"])
+        if activate:
+            self.press_key(3)
 
     def expect_menu_value(self, value):
         from frame_oracle import selected_value
 
         self.driver.wait(lambda state: selected_value(state, value))
         self.driver.results.append(dict(kind="selected-menu-value", text=value))
+
+    def expect_memory_position(self, current, total):
+        from frame_oracle import render
+
+        data = SCREEN["memory_position"]
+        bands = data["bands"]
+        expected = render([
+            [bands["current"]["x"], bands["current"]["baseline"],
+             data["level"], str(current)],
+            [bands["total"]["x"], bands["total"]["baseline"],
+             data["level"], str(total)],
+        ], font_size=data["font_size"], antialias=data["antialias"])
+        indices = [
+            (y * data["frame_width"] + x) * data["bytes_per_pixel"] + channel
+            for band in bands.values()
+            for y in range(band["top"], band["bottom"])
+            for x in range(band["left"], band["right"])
+            for channel in range(data["channels"])
+        ]
+
+        def matches(state):
+            actual = base64.b64decode(state["frame"]["pixels_base64"])
+            return all(actual[index] == expected[index] for index in indices)
+
+        self.driver.wait(matches)
+        self.driver.results.append(dict(
+            kind="memory-position", current=current, total=total,
+            frame_matched=True,
+        ))
 
     def expect_native_menu_value(self, parameter, value):
         try:

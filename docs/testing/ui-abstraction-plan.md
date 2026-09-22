@@ -259,7 +259,18 @@ while preserving their MIDI previews, chord replacement, duration and timing ass
 All 18 timing lanes pass strict before/after gates, the representative controlled repeat
 passes, and `mask_gestures.py` is absent from the allowlist.
 
-At this checkpoint 251 stored migration lanes pass the strict recipe/result gate and 76
+The new-project and persistence Memory cases (`M-MEMORY-005` and `M-MEMORY-006`) are
+UI-independent. Their counter oracle preserves the two disjoint captured framebuffer bands
+through map-owned geometry, font and antialias settings; project creation uses a stable
+`new` action key while retaining the native root lookup, Save-row confirmation, `+ New`
+selection and menu close. Step recording keeps the 50 ms note hold inside the held-grid
+gesture. Persistence retains its three autosave deadlines, nested cold-restart session,
+root-result ownership and undo/redo playback checks. All four root and nested timing-lane
+gates pass, as do three-fresh-process controlled repeats for both modules. The two cases
+leave the contract inventory at 410 cases under a 451 ceiling, and both modules leave the
+allowlist.
+
+At this checkpoint 255 stored migration lanes pass the strict recipe/result gate and 74
 modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
 included: its physical recipe was identical, but the controlled run produced a different raw
 `.ptn` digest across fresh data directories. The gate rejected that comparison, the module

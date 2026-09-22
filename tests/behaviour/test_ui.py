@@ -498,5 +498,197 @@ class MigrationGateTests(unittest.TestCase):
         self.assertIn("restarted normalized recipes differ",errors)
 
 
+class MemoryUiMapTests(unittest.TestCase):
+    def test_memory_counter_map_locks_captured_render_and_disjoint_geometry(self):
+        from ui_map import SCREEN
+
+        self.assertEqual(SCREEN["memory_position"], {
+            "frame_width": 128,
+            "frame_height": 64,
+            "channels": 3,
+            "bytes_per_pixel": 4,
+            "font_size": 10,
+            "antialias": 1,
+            "level": 15,
+            "bands": {
+                "current": {
+                    "left": 0, "right": 16, "top": 13, "bottom": 26,
+                    "x": 0, "baseline": 23,
+                },
+                "total": {
+                    "left": 0, "right": 16, "top": 39, "bottom": 52,
+                    "x": 0, "baseline": 49,
+                },
+            },
+        })
+
+    def test_project_menu_map_locks_distinct_save_and_normal_rows(self):
+        from ui_map import SCREEN
+
+        menu = SCREEN["project_menu"]
+        self.assertEqual(menu["root_id"], "mosaic")
+        self.assertEqual(SCREEN["menu_label"], {"x": 0, "width": 70, "top": 22})
+        self.assertEqual(menu["actions"]["save"], {
+            "label": "< Save project", "offset": 0,
+            "x": 0, "width": 70, "top": 23,
+        })
+        self.assertEqual(menu["actions"]["new"], {
+            "label": "+ New", "offset": 2,
+            "x": 0, "width": 70, "top": 22,
+        })
+
+
+class MemoryUiVerbTests(unittest.TestCase):
+    class Driver:
+        clock_mode = "controlled-experimental"
+
+        def __init__(self, payload):
+            self.payload = payload
+            self.results = []
+            self.calls = []
+
+        def wait(self, predicate):
+            self.calls.append(("wait",))
+            state = {"frame": {"pixels_base64": base64.b64encode(self.payload).decode()}}
+            if not predicate(state):
+                raise AssertionError("Memory counter framebuffer rejected")
+            return state
+
+        def action(self, **value):
+            self.calls.append(("action", value))
+
+        def elapse(self, seconds):
+            self.calls.append(("elapse", seconds))
+
+    @staticmethod
+    def frame_bytes():
+        from ui_map import SCREEN
+
+        data = SCREEN["memory_position"]
+        return data["frame_width"] * data["frame_height"] * data["bytes_per_pixel"]
+
+    def test_memory_position_waits_once_and_keeps_result_shape(self):
+        from ui import Ui
+        from ui_map import SCREEN
+
+        payload = bytes(self.frame_bytes())
+        driver = self.Driver(payload)
+        ui = Ui(driver)
+        with patch("frame_oracle.render", return_value=payload) as render:
+            ui.expect_memory_position(2, 2)
+        bands = SCREEN["memory_position"]["bands"]
+        self.assertEqual(render.call_args.args[0], [
+            [bands["current"]["x"], bands["current"]["baseline"], 15, "2"],
+            [bands["total"]["x"], bands["total"]["baseline"], 15, "2"],
+        ])
+        self.assertEqual(render.call_args.kwargs, {"font_size": 10, "antialias": 1})
+        self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(driver.results, [{
+            "kind": "memory-position", "current": 2,
+            "total": 2, "frame_matched": True,
+        }])
+
+    def test_memory_position_ignores_outside_pixels(self):
+        from ui import Ui
+
+        expected = bytes(self.frame_bytes())
+        outside = bytearray(expected)
+        outside[0] = 7
+        driver = self.Driver(bytes(outside))
+        with patch("frame_oracle.render", return_value=expected):
+            Ui(driver).expect_memory_position(2, 2)
+        self.assertTrue(driver.results[0]["frame_matched"])
+
+    def test_memory_position_rejects_a_changed_pixel_in_each_counter_band(self):
+        from ui import Ui
+        from ui_map import SCREEN
+
+        data = SCREEN["memory_position"]
+        expected = bytes(self.frame_bytes())
+        for band_name, band in data["bands"].items():
+            with self.subTest(band=band_name):
+                changed = bytearray(expected)
+                index = ((band["top"] * 128 + band["left"]) * 4)
+                changed[index] = 7
+                driver = self.Driver(bytes(changed))
+                with patch("frame_oracle.render", return_value=expected):
+                    with self.assertRaises(AssertionError):
+                        Ui(driver).expect_memory_position(2, 2)
+
+    def test_record_key_keeps_delay_inside_held_step(self):
+        from ui import Ui
+
+        driver = self.Driver(bytes(self.frame_bytes()))
+        Ui(driver).record_key(1, 72, 90, hold_seconds=.05)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 1, "y": 4, "state": 1}),
+            ("action", {"type": "midi", "port": 1, "bytes": [144, 72, 90]}),
+            ("elapse", .05),
+            ("action", {"type": "midi", "port": 1, "bytes": [128, 72, 0]}),
+            ("action", {"type": "grid", "x": 1, "y": 4, "state": 0}),
+        ])
+
+
+class ProjectActionUiVerbTests(unittest.TestCase):
+    class Driver:
+        clock_mode = "controlled-experimental"
+
+        def __init__(self):
+            self.calls = []
+            self.results = []
+
+        def key(self, number):
+            self.calls.append(("key", number))
+
+        def enc(self, encoder, detents):
+            self.calls.append(("enc", encoder, detents))
+
+        def snapshot(self):
+            self.calls.append(("snapshot",))
+            return {"diagnostics": {"parameter_roots": [
+                {"id": "other"}, {"id": "mosaic"},
+            ]}}
+
+        def wait(self, predicate):
+            self.calls.append(("wait",))
+            if not predicate({"frame": {}}):
+                raise AssertionError("project action label not selected")
+            return {"frame": {}}
+
+    def test_new_action_recipe_results_and_geometry_are_stable(self):
+        from ui import Ui
+
+        driver = self.Driver()
+        ui = Ui(driver)
+        with patch("frame_oracle.selected_line", return_value=True) as selected:
+            ui.select_project_action("new")
+        self.assertEqual(driver.calls, [
+            ("key", 1), ("enc", 1, 4), ("key", 3), ("wait",),
+            ("snapshot",), ("enc", 2, 1), ("key", 3),
+            ("enc", 2, -60), ("enc", 2, 1), ("wait",),
+            ("enc", 2, 2), ("wait",), ("key", 3),
+        ])
+        self.assertEqual(driver.results, [
+            {"kind": "selected-menu-label", "text": "LEVELS >"},
+            {"kind": "selected-menu-label", "text": "< Save project"},
+            {"kind": "selected-menu-label", "text": "+ New"},
+        ])
+        self.assertEqual([item.args[1] for item in selected.call_args_list],
+                         ["LEVELS >", "< Save project", "+ New"])
+        self.assertEqual([item.kwargs for item in selected.call_args_list], [
+            {"x": 0, "width": 70, "top": 22},
+            {"x": 0, "width": 70, "top": 23},
+            {"x": 0, "width": 70, "top": 22},
+        ])
+
+    def test_unknown_project_action_fails_closed_without_input(self):
+        from ui import Ui, UiMapError
+
+        driver = self.Driver()
+        with self.assertRaisesRegex(UiMapError, "unknown project action"):
+            Ui(driver).select_project_action("not-a-project-action")
+        self.assertEqual(driver.calls, [])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -28,8 +28,6 @@
   "master_multi_output.py",
   "memory_chord_three_held.py",
   "memory_lock_slide_undo.py",
-  "memory_new_project.py",
-  "memory_persistence.py",
   "memory_redo_encoder_lock.py",
   "memory_step_undo.py",
   "memory_truncate.py",

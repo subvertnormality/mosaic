@@ -69,6 +69,43 @@ SCREEN = {
         "x": 10, "baseline": 35, "level": 15,
         "left": 10, "right": 58, "top": 27, "bottom": 37,
     },
+    "menu_label": {"x": 0, "width": 70, "top": 22},
+    "memory_position": {
+        "frame_width": 128,
+        "frame_height": 64,
+        "channels": 3,
+        "bytes_per_pixel": 4,
+        "font_size": 10,
+        "antialias": 1,
+        "level": 15,
+        "bands": {
+            "current": {
+                "left": 0, "right": 16, "top": 13, "bottom": 26,
+                "x": 0, "baseline": 23,
+            },
+            "total": {
+                "left": 0, "right": 16, "top": 39, "bottom": 52,
+                "x": 0, "baseline": 49,
+            },
+        },
+    },
+    "project_menu": {
+        "root_id": "mosaic",
+        "actions": {
+            "save": {
+                "label": "< Save project", "offset": 0,
+                "x": 0, "width": 70, "top": 23,
+            },
+            "load": {
+                "label": "> Load project", "offset": 1,
+                "x": 0, "width": 70, "top": 22,
+            },
+            "new": {
+                "label": "+ New", "offset": 2,
+                "x": 0, "width": 70, "top": 22,
+            },
+        },
+    },
 }
 
 NATIVE_MENU = {

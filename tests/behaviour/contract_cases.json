@@ -298,8 +298,6 @@
     "M-MEMORY-002",
     "M-MEMORY-003",
     "M-MEMORY-004",
-    "M-MEMORY-005",
-    "M-MEMORY-006",
     "M-MEMORY-007",
     "M-MEMORY-009",
     "M-MEMORY-011",
@@ -413,5 +411,5 @@
     "M-XA-006-NB-CHORD-ACCEL",
     "M-XA-007-NB-SWITCH-SLOTS"
   ],
-  "ceiling": 454
+  "ceiling": 451
 }
