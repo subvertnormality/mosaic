@@ -28,20 +28,36 @@ def shuffle_first_bar_record(c):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     from shuffle_matrix import pulse_plan
-    c.configure(); c.enc(1, -1); c.screen_header('Ch. 1 Clocks', selected=4)
-    c.enc(2, 1); c.enc(3, 2); c.key(3)                            # X -> local Shuffle
-    c.enc(2, 1); c.enc(3, 2); c.key(3)                            # feel Smooth
-    c.enc(2, 1); c.enc(3, 1); c.key(3)                            # basis 1 (9)
-    c.enc(2, 1); c.enc(3, -101); c.key(3); c.enc(3, 100); c.key(3)   # amount 100
-    plan = pulse_plan('Smooth', 1, 100, 9)                        # 0, 26, 48, 69, 96, ...
-    c.tap(2, 8)                                                   # arm recording
+
+    ui = c.ui
+    ui.configure()
+    ui.channel_page('clock_mods', 'midi_config', channel=1, confirm=False)
+    ui.expect_header('clock_mods', channel=1)
+
+    def set_clock_field(field, offset, value):
+        ui.select_field(field, offset=offset)
+        ui.set_value(value)
+        ui.press_key(3)
+
+    set_clock_field('shuffle', 1, 2)                             # X -> local Shuffle
+    set_clock_field('feel', 1, 2)                                # feel Smooth
+    set_clock_field('basis', 1, 1)                              # basis 1 (9)
+    ui.select_field('amount', offset=1)
+    ui.set_value(-101)
+    ui.press_key(3)
+    ui.set_value(100)
+    ui.press_key(3)                                              # amount 100
+    plan = pulse_plan('Smooth', 1, 100, 9)                       # 0, 26, 48, 69, 96, ...
+    ui.tap_control('record')                                     # arm recording
     controlled = c.clock_mode == 'controlled-experimental'
     field = 'logical_ns' if controlled else 'monotonic_ns'
     tolerance = 2e-9 if controlled else .01
     capture = MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
+    ui.gesture([('play_stop', None)], [('play_stop', None)])
     origin = c.logical_ns if controlled else time.monotonic_ns()
+
     def at(pulse): return origin + round(pulse * 1e9 / PULSE_RATE)
+
     middle = [(a + b) / 2 for a, b in zip(plan, plan[1:])]         # middle of steps 1..8
     # A: step 2, released inside it. B: pressed in step 3, released in step 4.
     packets = [(at(middle[1]), [144, 72, 90]), (at(middle[1]) + 20000000, [128, 72, 0]),
@@ -50,12 +66,13 @@ def shuffle_first_bar_record(c):
     events = [dict(port=1, bytes=data, **{'at_' + domain + '_ns': when}) for when, data in packets]
     request = dict(type='midi_schedule', schedule_id=1, events=events)
     if controlled: request['time_domain'] = 'logical'
-    c.action(**request)
+    c.action(**request)                                          # scheduled MIDI remains an external stimulus
     c.wait(lambda s: capture.extend(s) and len(s['midi_input_schedule']['delivered']) == len(events)
            and len([m for m in capture.note_ons() if m['bytes'][1] in (60, 62, 64, 65)]) >= 5, timeout=3)
-    c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
-    c.elapse(.06); c.wait(lambda s: capture.extend(s) and not s['midi_capture']['outstanding'])
-    c.tap(2, 8)                                                   # disarm
+    ui.gesture([('play_stop', None)], [('play_stop', None)])
+    c.elapse(.06)
+    c.wait(lambda s: capture.extend(s) and not s['midi_capture']['outstanding'])
+    ui.tap_control('record')                                     # disarm
     notes = [m for m in capture.note_ons() if m['bytes'][1] in (60, 62, 64, 65)]
     first_bar = notes[:4]
     assert [(m['port'], m['bytes']) for m in first_bar] == [(1, [144, n, v]) for n, v in PHRASE], \

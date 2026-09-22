@@ -29,7 +29,7 @@ def main():
     c.finish()
     (work/'reload').mkdir()
     d = Driver(work/'reload', project_seed=c.data_directory, **options)
-    d.tap(3, 8); golden = capture_stream(d); d.finish()
+    d.ui.menu('channel_editor'); golden = capture_stream(d); d.finish()
     assert [e['bytes'] for e in golden if e['bytes'][0] == 144] == [e['bytes'] for e in before if e['bytes'][0] == 144], \
         'The saving version does not replay its own save identically'
     target.mkdir(parents=True)

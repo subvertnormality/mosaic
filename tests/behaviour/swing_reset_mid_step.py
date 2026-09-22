@@ -23,14 +23,17 @@ def swing_reset_mid_step(c):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure(); c.enc(1, -1); c.screen_header('Ch. 1 Clocks', selected=4)
-    c.enc(3, -2); c.key(3)                                         # /1 -> /2 (index 13 -> 15)
-    c.enc(2, 1); c.enc(3, 1); c.key(3)                             # local Swing, not inherited X
-    c.enc(2, 1); c.enc(3, 25 + 51); c.key(3)                       # X (-51) -> 25
-    c.tap(6, 8); c.tap(2, 7)
-    for _ in range(5): c.tap(8, 7)                                 # global length 6
-    c.hold_tap((1, 1), (2, 1)); c.tap(2, 1); c.tap(3, 8); c.tap(11, 8)   # slot 2 = copy, octave +1
-    c.tap(6, 8); c.tap(1, 1); c.tap(3, 8)
+    ui = c.ui
+    ui.configure(); ui.channel_page('clock_mods', 'midi_config', confirm=False)
+    ui.expect_header('clock_mods', channel=1)
+    ui.set_value(-2); ui.press_key(3)                              # /1 -> /2 (index 13 -> 15)
+    ui.select_field('swing', offset=1); ui.set_value(1); ui.press_key(3)  # local Swing, not inherited X
+    ui.select_field('swing_x', offset=1); ui.set_value(25 + 51); ui.press_key(3)  # X (-51) -> 25
+    ui.song_editor(); ui.tap_control('global_pattern_length', 2)
+    for _ in range(5): ui.tap_control('global_pattern_length', 8)     # global length 6
+    ui.copy_slot(1, 2, control='song_pattern_slot'); ui.tap_control('song_pattern_slot', 2)
+    ui.menu('channel_editor'); ui.tap_control('channel_octave', 1)   # slot 2 = copy, octave +1
+    ui.song_editor(); ui.tap_control('song_pattern_slot', 1); ui.menu('channel_editor')
     # Slots 1, 2, 1, 2, then slot 1's first step: at least 13 onsets over 576 pulses (4 s).
     def plan(count):
         onsets, durations = [], []
@@ -42,11 +45,11 @@ def swing_reset_mid_step(c):
             # step 3's note keeps its 60 pulses across the transition at 144.
             durations.append(length)
         return onsets, durations
-    capture = MidiWindow(c.snapshot()['midi_count']); c.tap(1, 8)
+    capture = MidiWindow(c.snapshot()['midi_count']); ui.play()
     c.wait(lambda s: capture.extend(s) and len(capture.note_ons()) >= 13, timeout=6)
     controlled = c.clock_mode == 'controlled-experimental'
     lower = c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid', x=1, y=8, state=1); c.action(type='grid', x=1, y=8, state=0)
+    ui.gesture([('play_stop', None)], [('play_stop', None)])
     upper = c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(.06); c.wait(lambda s: capture.extend(s) and not s['midi_capture']['outstanding'])
     notes = capture.note_ons(); assert len(notes) >= 13, [m['bytes'] for m in notes]

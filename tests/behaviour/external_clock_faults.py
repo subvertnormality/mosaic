@@ -35,17 +35,12 @@ def _offsets(kind):
 
 
 def _configure_midi_source(c):
-    from cases import menu_label, menu_value
-    c.configure(); c.key(1); c.enc(1, 4); c.key(3); menu_label(c, 'LEVELS >')
-    position = next(index for index, value in enumerate(c.snapshot()['diagnostics']['parameter_roots'])
-                    if value['name'] == 'CLOCK')
-    c.enc(2, position); c.key(3); menu_label(c, 'source'); menu_value(c, 'internal')
-    c.enc(3, 1); menu_value(c, 'midi')
+    c.ui.select_midi_clock_source()
     # Native norns defaults clock input to all connected devices. Select vport1
     # explicitly so the port2 prelude is a meaningful routing negative.
     # The long selected label scrolls horizontally in the native menu, so the
     # stable proof of this setting is its routing effect below, not OCR text.
-    c.enc(2, 11); c.enc(3, 2)
+    c.ui.turn(2, 11); c.ui.set_value(2)
 
 
 def _assert_notes(events, field, onsets, releases, tolerance_ns,

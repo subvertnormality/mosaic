@@ -11,25 +11,27 @@ held step, whichever of the two keys went down first; no channel-wide velocity i
 
 
 def held_mask_extra_key(c):
-    c.configure(); c.enc(1, -4); c.enc(2, 1)                     # Masks page, Vel selector
+    c.configure()
+    c.ui.channel_page('masks', 'midi_config')
+    c.ui.select_field('velocity', offset=1)                     # Masks page, Vel selector
 
     def hold_two(first, second, turns):
-        c.action(type='grid', x=first[0], y=first[1], state=1); c.elapse(.06)
-        c.action(type='grid', x=second[0], y=second[1], state=1); c.elapse(.06)
-        try: c.enc(3, turns)
+        c.ui.gesture([first], []); c.elapse(.06)
+        c.ui.gesture([second], []); c.elapse(.06)
+        try: c.ui.set_value(turns)
         finally:
-            c.action(type='grid', x=second[0], y=second[1], state=0); c.elapse(.06)
-            c.action(type='grid', x=first[0], y=first[1], state=0); c.elapse(.3)
+            c.ui.gesture([], [second]); c.elapse(.06)
+            c.ui.gesture([], [first]); c.elapse(.3)
 
     # Step 1 held first, then the pattern-row key: step 1 locked to velocity 50 (X + 51).
-    hold_two((1, 4), (2, 2), 51)
+    hold_two(('step', 1), ('pattern_slot', 2), 51)
     expected = [(1, [144, 60, 50]), (1, [144, 62, 117]), (1, [144, 64, 107]), (1, [144, 65, 97])]
     c.playback(expected, cycles=2, timeout=4)
     c.results.append(dict(kind='held-mask-extra-key', order='step-first', passed=True))
 
     # The pattern-row key first, then step 2: step 2 alone is locked to velocity 40 (X + 41);
     # steps 3 and 4 keep their pattern velocities (README 595/597).
-    hold_two((2, 2), (2, 4), 41)
+    hold_two(('pattern_slot', 2), ('step', 2), 41)
     before = c.snapshot()['midi_count']
     expected = [(1, [144, 60, 50]), (1, [144, 62, 40]), (1, [144, 64, 107]), (1, [144, 65, 97])]
     try:

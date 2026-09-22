@@ -9,26 +9,26 @@ def autosave_idle_lifecycle(c):
         # One controlled advance is bounded by the action schema; split long idles.
         while seconds>0:
             step=min(30,seconds);c.elapse(step);seconds-=step
-    def record(stage,value):c.results.append(dict(kind='autosave-idle',stage=stage,autosave=value,passed=True))
+    def record(stage,state):c.results.append(dict(kind='autosave-idle',stage=stage,autosave_state=state,passed=True))
     assert saved() is None,'Fresh fixture unexpectedly contains autosave'
     # A grid press inside the idle period restarts it.
-    idle(59.5);assert saved() is None,'Autosave before 60 s idle';record('59.5s-idle',None)
-    c.tap(3,8);idle(59.5);assert saved() is None,'Input did not restart the idle period';record('input-restarts',None)
+    idle(59.5);assert saved() is None,'Autosave before 60 s idle';record('59.5s-idle','absent')
+    c.ui.menu("channel_editor");idle(59.5);assert saved() is None,'Input did not restart the idle period';record('input-restarts','absent')
     idle(1.5);c.wait(lambda _:saved() is not None,timeout=2)
-    first=saved();record('saved-after-idle',first)
+    first=saved();record('saved-after-idle','created')
     # Playing past 60 s, with an edit made while playing (step 4 F -> G), never saves.
-    c.tap(1,8);c.tap(5,8);c.tap(5,8);c.tap(4,3);c.tap(3,8)
-    idle(65);assert saved()==first,'Autosave while playing';record('no-save-while-playing',first)
-    c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding'])
-    idle(59.5);assert saved()==first,'Autosave within 60 s of Stop';record('stop-restarts',first)
+    c.ui.play();c.ui.menu("pattern_editor");c.ui.menu("pattern_editor");c.ui.tap_control("scale_slot",4);c.ui.menu("channel_editor")
+    idle(65);assert saved()==first,'Autosave while playing';record('no-save-while-playing','unchanged')
+    c.ui.stop();c.wait(lambda s:not s['midi_capture']['outstanding'])
+    idle(59.5);assert saved()==first,'Autosave within 60 s of Stop';record('stop-restarts','unchanged')
     idle(1.5);c.wait(lambda _:saved() not in (None,first),timeout=2)
-    second=saved();record('saved-after-stop',second)
+    second=saved();record('saved-after-stop','changed')
     c.finish()
     # A fresh process restores the latest autosave, including the edit made while playing.
     out=c.out/'reloaded';out.mkdir()
     loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
     try:
-        loaded.tap(3,8)
+        loaded.ui.menu("channel_editor")
         loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(67,97)]])
         loaded.results.append(dict(kind='autosave-restore',phrase=[60,62,64,67],passed=True))
     finally:loaded.finish()

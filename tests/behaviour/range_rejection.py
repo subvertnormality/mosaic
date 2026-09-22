@@ -129,31 +129,6 @@ def global_range_clipping(c):
             c.results.append(dict(kind='global-channel-range-clipping',start=start,end=end,global_length=length,played_steps=steps,passed=True))
 
 
-def offset_range_clipping(c):
-    from cases import assert_durations
-    c.configure();c.hold_tap((2,4),(4,4));c.tap(6,8);c.tap(2,7);c.tap(8,7);c.tap(3,8)
-    c.led_values([(1,4),(2,4),(3,4),(4,4)],[0,15,15,0])
-    notes=c.playback([(1,[144,62,117]),(1,[144,64,107])],cycles=3,timeout=4)
-    assert_durations(c,notes,[1]*6)
-    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
-    c.results.append(dict(kind='offset-channel-global-cap',start=2,end=4,global_length=2,passed=True))
-
-
-def offset_range_rates(c):
-    from cases import assert_durations
-    c.configure();c.hold_tap((2,4),(4,4));c.tap(6,8);c.tap(2,7);c.tap(8,7);c.tap(3,8)
-    c.enc(1,-1);selected=13
-    for index,label,factor in [(8,'x3',1/3),(10,'x2',.5),(13,'/1',1),(15,'/2',2),(17,'/3',3)]:
-        c.enc(3,selected-index);c.key(3);selected=index
-        notes=c.playback([(1,[144,62,117]),(1,[144,64,107])],cycles=10,timeout=12)
-        assert_durations(c,notes,[factor]*18)
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i*factor/6)<=tolerance
-        c.results.append(dict(kind='offset-global-range-clock-rate',label=label,completed_loops=10,passed=True))
-
 def offset_scale_range_clipping(c):
     from cases import assert_durations
     c.configure();c.tap(4,8);c.enc(2,-1)
@@ -175,36 +150,6 @@ def offset_scale_range_clipping(c):
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
         c.results.append(dict(kind='offset-scale-global-cap',length=length,pitches=pitches,passed=True))
-
-
-def accepted_live_range_transitions(c):
-    from cases import assert_durations
-    c.configure()
-    phrase=[(60,127),(62,117),(64,107),(65,97)]
-    # Explicit hand-derived next steps: retain progress within the new range,
-    # jump forward to its start from below, or wrap to its start from above.
-    scenarios=[('inside',2,2,4,[3,4,2]),('below',1,3,4,[3,4]),('above',4,1,2,[1,2])]
-    for label,after,start,end,tail in scenarios:
-        c.hold_tap((1,4),(4,4))
-        marker=c.snapshot()['midi_count'];c.tap(1,8)
-        def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
-        before=c.wait(lambda state:len(emitted(state))>=after)
-        assert len(emitted(before))==after,'Fixture missed its intended pre-edit onset'
-        for x,z in [(start,1),(end,1),(end,0),(start,0)]:c.action(type='grid',x=x,y=4,state=z)
-        assert len(emitted(c.snapshot()))==after,'Fixture edit crossed an onset before its release; retain evidence'
-        count=after+len(tail)*3+1
-        state=c.wait(lambda state:len(emitted(state))>=count,5);notes=emitted(state)
-        steps=list(range(1,after+1))+[tail[i%len(tail)] for i in range(len(notes)-after)]
-        expected=[(1,[144,*phrase[step-1]]) for step in steps]
-        assert [(m['port'],m['bytes']) for m in notes]==expected,dict(label=label,expected=expected,actual=[(m['port'],m['bytes']) for m in notes])
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
-        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-        assert_durations(c,notes,[1]*(count-1))
-        cells=[((i-1)%16+1,(i-1)//16+4) for i in range(1,65)]
-        c.led_values(cells,[15 if start<=i<=end else 0 for i in range(1,65)])
-        c.results.append(dict(kind='accepted-live-range-transition',relation=label,range=[start,end],after_step=after,expected_steps=steps,passed=True))
 
 
 def queued_global_length_transitions(c):

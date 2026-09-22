@@ -13,7 +13,8 @@ name per line, so it is offered an entry "mm-missing.json" that does not exist, 
 it fails exactly as opening a broken symlink does (no such file). Next to it are the valid
 emulator test device (listed before it) and a valid custom config (listed after it).
 """
-from device_configs import VALID, boot_with, picker_names
+from contract.device_configs import picker_names
+from device_configs import VALID, boot_with
 
 AFTER = 'Zz Custom Poly'
 FILES = {'mm-broken\nmm-missing.json': '[{"name": "Unreachable", "id": "unreachable", "type": "midi", "params": []}]',

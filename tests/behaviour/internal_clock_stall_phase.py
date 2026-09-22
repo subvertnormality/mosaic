@@ -32,17 +32,18 @@ _WARM_ONSETS = 4
 def internal_clock_stall_phase(c):
     assert c.clock_mode == "real-time", "Lua-thread stalls use wall-clock time"
     build_composition(c)
+    ui = c.ui
     # The expected 120 BPM value is a user-visible song-page parameter.
-    c.tap(6, 8)
-    c.enc(1, 1)
-    c.enc(3, _BPM - 90)
-    c.key(3)
-    c.enc(1, -1)
-    c.tap(3, 8)
+    ui.song_editor()
+    ui.turn(1, 1)
+    ui.set_value(_BPM - 90)
+    ui.press_key(3)
+    ui.turn(1, -1)
+    ui.menu("channel_editor")
 
     marker = c.snapshot()["midi_count"]
     capture = MidiWindow(marker)
-    c.tap(1, 8)
+    ui.play()
     def port_one_onsets():
         return [event for event in capture.events
                 if event["port"] == 1 and event["bytes"][0] == 144 and event["bytes"][2] > 0]
@@ -59,7 +60,7 @@ def internal_clock_stall_phase(c):
     after = time.monotonic_ns()
     assert before < target_due < after, (before, target_due, after)
     c.elapse(6)
-    c.tap(1, 8)
+    ui.stop()
     c.wait(lambda state: not state["midi_capture"]["outstanding"], timeout=5)
     c.finish()
 

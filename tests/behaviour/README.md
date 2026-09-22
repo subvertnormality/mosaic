@@ -14,8 +14,38 @@ The final command intentionally fails until all manual requirements and the full
 campaign gate are implemented. A focused case passing is not complete coverage.
 The length case initially reproduces a known baseline defect; it is never xfailed.
 Runtime inputs use the public emulator Session client, with physical encoders,
-buttons and grid events. Results assert raw screen/LED and native MIDI outputs.
-No Mosaic model functions are invoked to manufacture expected results.
+buttons and grid events. Results assert screen/LED and native MIDI outputs. The
+test-side UI layer in `ui.py` resolves stable control, page and field keys through
+`ui_map.py`; it still emits the same public physical inputs and uses framebuffer
+and grid observations. Contract cases may pin raw screen or LED details when no
+UI verb reproduces their assertion exactly. No Mosaic model functions are invoked
+to manufacture expected results.
+
+## UI-independent case layer
+
+New musical cases use `c.ui` verbs instead of driver coordinates or rendered
+labels. `ui_map.py` is the authority for grid coordinates, channel-page order and
+titles, screen regions and LED levels. `frame_oracle.py` consumes that geometry;
+cases do not import it directly unless they are explicit UI contract cases.
+
+`test_ui_layer.py` fails closed when a raw driver call or framebuffer/grid access
+appears outside the temporary `ui_migration_allowlist.json`. It also rejects stale
+allowlist entries, so a module must leave the list in the same change that removes
+its final raw UI dependency. `contract_cases.json` records the fixed contract set
+and ceiling. `ui_verb_sources.json` identifies shared rendering helpers represented
+exactly by UI verbs.
+
+For each migrated case lane, preserve `recipe.json` and `results.json` under
+`docs/testing/ui-migration-baselines/<case>/<lane>/{before,after}/`, then run:
+
+```sh
+python3 tests/behaviour/ui_migration_gate.py \
+  docs/testing/ui-migration-baselines/<case>/<lane> --lane controlled
+```
+
+The gate recursively removes only `at_monotonic_ns` from recipes. Controlled
+results must otherwise be byte-for-byte equivalent after ignoring added
+`ui-confirm` entries; real-time runs retain the same ordered result kinds.
 
 Runs use sibling mosaic-behaviour-runs storage, away from the source tree and
 user project data. Each run links the actual worktree under its required code/mosaic

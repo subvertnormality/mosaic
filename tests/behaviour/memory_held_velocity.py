@@ -9,14 +9,19 @@ turning E3 locks velocity 50 on step 2; stepping memory back must restore 117, a
 after a later working-pattern rebuild (a tap on step 4). A note lock on step 2 made first
 (undone, then rebuilt) is the control. Redo is checked separately (M-MEMORY-009).
 """
+
 PATTERN = [127, 117, 107, 97]
 
 
 def memory_held_velocity(c):
-    c.configure()
+    ui = c.ui
+    ui.configure()
 
     def heard(stage, expected_velocities=None, expected_notes=None):
-        marker = c.snapshot()['midi_count']; c.tap(1, 8); c.elapse(1.4); c.tap(1, 8)
+        marker = c.snapshot()['midi_count']
+        ui.play()
+        c.elapse(1.4)
+        ui.stop()
         state = c.wait(lambda s: not s['midi_capture']['outstanding'])
         ons = [m['bytes'] for m in state['midi'] if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0][:4]
         actual = dict(notes=[b[1] for b in ons], velocities=[b[2] for b in ons])
@@ -26,28 +31,40 @@ def memory_held_velocity(c):
         return actual
 
     def held_edit(field_offset, turns):
-        c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
-        c.enc(2, -5); c.enc(2, field_offset)
-        c.action(type='grid', x=2, y=4, state=1); c.elapse(.05)
-        try: c.enc(3, turns)
-        finally: c.action(type='grid', x=2, y=4, state=0)
-        c.elapse(.1); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+        ui.channel_page('masks', 'memory', channel=1, confirm=False)
+        ui.expect_header('masks', channel=1)
+        ui.select_field('trig', offset=-5)
+        field_name = {1: 'note', 2: 'velocity'}[field_offset]
+        ui.select_field(field_name, offset=field_offset)
+        with ui.hold_step(2):
+            c.elapse(.05)
+            ui.set_value(turns)
+        c.elapse(.1)
+        ui.channel_page('memory', 'masks', channel=1, confirm=False)
+        ui.expect_header('memory', channel=1)
 
     def rebuild():
-        c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
-        c.tap(4, 4); c.elapse(.2); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+        ui.channel_page('masks', 'memory', channel=1, confirm=False)
+        ui.expect_header('masks', channel=1)
+        ui.tap_step(4)
+        c.elapse(.2)
+        ui.channel_page('memory', 'masks', channel=1, confirm=False)
+        ui.expect_header('memory', channel=1)
 
-    c.enc(1, -2); c.screen_header('Ch. 1 Memory')
+    ui.channel_page('memory', 'midi_config', channel=1, confirm=False)
+    ui.expect_header('memory', channel=1)
     original = heard('original', PATTERN)
 
     held_edit(1, 5)                                            # control: note lock on step 2
     locked = heard('note-locked', PATTERN)
     assert locked['notes'] != original['notes'], ('Note lock not heard', locked)
-    c.enc(3, -1); heard('note-undone', PATTERN, original['notes'])
+    ui.set_value(-1)
+    heard('note-undone', PATTERN, original['notes'])
     rebuild(); heard('note-undone-after-rebuild', PATTERN, original['notes'])
 
     held_edit(2, 51)                                           # velocity lock 50 on step 2 (new action)
     heard('velocity-locked', [127, 50, 107, 97], original['notes'])
-    c.enc(3, -1); heard('velocity-undone', PATTERN, original['notes'])
+    ui.set_value(-1)
+    heard('velocity-undone', PATTERN, original['notes'])
     rebuild(); heard('velocity-undone-after-rebuild', PATTERN, original['notes'])
     c.results.append(dict(kind='memory-held-velocity-summary', passed=True))

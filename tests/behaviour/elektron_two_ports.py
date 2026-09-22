@@ -12,7 +12,6 @@ from driver import Driver, REPO
 
 
 def elektron_two_ports(c):
-    from cases import set_mosaic_options
     from elektron_program_changes import pick_device, program_changes
     seed = c.out/'elektron-seed'; (seed/'config').mkdir(parents=True)
     shutil.copy(REPO/'tests/behaviour/config/emu-midi.json', seed/'config/emu-midi.json')
@@ -25,11 +24,13 @@ def elektron_two_ports(c):
     e = Driver(out, project_seed=seed, **c.launch_options)
     try:
         e.configure(); pick_device(e, 'Digitakt')
-        e.tap(2, 1); e.screen_header('Ch. 2 Device Config', selected=5); pick_device(e, 'Syntakt')
-        e.tap(1, 1)
-        e.tap(6, 8); e.hold_tap((1, 1), (2, 1)); e.tap(1, 1)        # slot 2 = copy of slot 1
-        set_mosaic_options(e, [('Elektron program changes', True)])
-        marker = e.snapshot()['midi_count']; e.tap(2, 1); e.elapse(.2); e.tap(1, 1); e.elapse(.2)
+        e.ui.select_channel(2); e.ui.expect_header('midi_config', channel=2); pick_device(e, 'Syntakt')
+        e.ui.select_channel(1)
+        e.ui.song_editor()
+        e.ui.copy_slot(1, 2, control='song_pattern_slot')
+        e.ui.tap_control('song_pattern_slot', 1)                     # slot 2 = copy of slot 1
+        e.ui.set_mosaic_options([('Elektron program changes', True)])
+        marker = e.snapshot()['midi_count']; e.ui.tap_control('song_pattern_slot', 2); e.elapse(.2); e.ui.tap_control('song_pattern_slot', 1); e.elapse(.2)
         sent = sorted(program_changes(e.snapshot(), marker))
         expected = sorted([(1, [201, 1]), (2, [201, 1]), (1, [201, 0]), (2, [201, 0])])
         e.results.append(dict(kind='elektron-two-ports', expected=expected, actual=sent))

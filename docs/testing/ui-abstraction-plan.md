@@ -1,9 +1,192 @@
 # Plan: a UI layer that makes the behaviour cases robust to UI change
 
-Status: proposal (revision 13, after Opus plan review rounds 1-14), not started. Test-side only:
+Status: in progress on `codex/1.4.0` (implementation started 2026-09-21). The
+map/verb foundation, migration comparator, static allowlist guard and shared
+frame-oracle migration are implemented. `midi_cc_page_return.py`,
+`startup_transport.py`, `scale_cache.py`, `elektron_two_ports.py`,
+`gesture_release_order.py`, `midi_mapping_held_step.py`, `external_start_phase.py`,
+`song_slot_copy.py`, `held_mask_extra_key.py` and
+`persisted_fixture_builder.py` are clean; registered cases have controlled and
+real-time before/after evidence plus three-process controlled repeats. The raw Cairo
+oracle is extracted under `contract/`. Baseline failures `M-MEMORY-009`, `M-SYNC-002`,
+`M-SYNC-007`, `M-SYNC-008` and `M-SYNC-010` are classified fail-closed as contract
+cases. The guard follows case
+call graphs into shared helpers and rejects raw dependencies whose defining module is
+not still allowlisted. Broader family migration,
+case-body contract extraction and the drift drill remain. Test-side only:
 no change to Mosaic (repo root `mosaic.lua`, `lib/`) and none to the emulator checkout.
 `tests/behaviour/driver.py` is this suite's own driver over the emulator's public client, so
 it is in scope.
+
+The external-clock-fault family (`external_clock_faults.py`) is UI-independent across the
+seven registered cases `M-SYNC-015` through `M-SYNC-021` (jitter, one missing clock, one
+extra clock, an abrupt tempo step, gradual drift, explicit recovery and a bunched-clock
+burst). The module now uses the semantic native-clock-source verb, has zero reachable raw
+UI dependencies, is absent from the allowlist, and passes controlled and real-time
+before/after evidence, all fourteen strict recipe/result gates, and a two-lane repeat.
+
+The idle-autosave lifecycle (`autosave_idle.py`, `M-SAVE-002`) is UI-independent across
+its root session and nested reload. Its eight fixed-coordinate taps now use semantic
+channel-editor, transport, pattern-editor and scale-slot verbs; raw digest assertions still
+prove absence, creation, stability while playing, and change after Stop, while stored result
+evidence records those deterministic relationships instead of run-specific file hashes. The
+module has zero reachable raw UI dependencies, is absent from the allowlist, and passes both
+recursive strict migration gates plus controlled and real-time repeats (including cleanup).
+
+The pentatonic-option workflow (`pentatonic_options.py`, `M-OPT-PENT-ALL-001`) is
+UI-independent. Its seven-step pattern setup, active-note LED assertion, scale transitions,
+exact controlled timing, real-time tolerance, and MIDI expectations route through existing
+semantic `Ui` verbs. The case calls `Ui.set_mosaic_options` directly while the shared legacy
+helper remains available to unmigrated callers. Both strict before/after gates pass, the
+controlled repeat passes, and the preserved real-time repeat's single compensated host stall
+passes its linked serial rerun and remains classified as load-sensitive evidence.
+
+The queued-song Stop workflow (`song_queue_stop.py`, `M-SONG-QUEUE-STOP-001`) is
+UI-independent. Its setup, slot copies, octave changes, transport, queued slot/length changes
+and stopped-state length application use existing semantic `Ui`/`ui_map` verbs, with exact
+musical and quiescence assertions unchanged. Both strict before/after gates and both settled
+lane repeats pass, and the module has zero reachable raw UI dependencies.
+
+The pending-voice reset workflow (`reset_pending_voice.py`, `M-TIME-013`) is
+UI-independent. Its exact physical setup, song-slot copy, octave change, held step edit and
+transport gestures now use semantic UI verbs. The historical page move deliberately turns one
+detent past the first page and relies on clamping; `Ui.channel_page(..., saturate=True)` derives
+that boundary recipe from the page map, with a red-green unit regression, instead of exposing
+the five-detent layout fact in the case. The module has zero reachable raw UI dependencies and
+is absent from the allowlist. Both controlled and real-time before/after runs and strict gates
+pass, as do the three-fresh-process controlled repeat and an independent real-time repeat.
+
+The chord-merge redo workflow (`memory_redo_chord_merge.py`, `M-MEMORY-013`) is
+UI-independent while retaining its historical S57 regression oracle. Its physical transport,
+page navigation, named chord-field edits, held-step timing, memory rewind and K3 jump recipe
+use semantic UI verbs. `Ui.expect_header` preserves every existing `screen-header` evidence
+entry rather than replacing that established schema with generic confirmation records. The
+module has zero reachable raw UI dependencies and is absent from the allowlist. Both timing
+lanes and strict before/after gates pass, as do the three-fresh-process controlled repeat and
+an independent real-time repeat.
+
+The held-velocity undo workflow (`memory_held_velocity.py`, `M-MEMORY-008`) is
+UI-independent. Its physical transport, Memory and Note Masks navigation, named
+trig/note/velocity field moves, held-step timing, rebuild taps and memory rewind use semantic
+UI verbs while retaining every existing header and musical oracle. The module has zero
+reachable raw UI dependencies and is absent from the allowlist. Both timing lanes and strict
+before/after gates pass, as do the three-fresh-process controlled repeat and an independent
+real-time repeat.
+
+The Sinfonion software workflow (`sinfonion_software.py`, `M-SIN-001`) is
+UI-independent. Its semantic rewrite preserves initialization, stopped-edit silence,
+transport framing, scale application, global transposition and held scale-track-lock oracles.
+The scale editor's global-transpose minimum and increment endpoints now have distinct,
+page-specific map keys added through red-green coverage; no channel-editor control name is
+reused merely because it shares a coordinate. The module has zero reachable raw UI
+dependencies and is absent from the allowlist. Both timing lanes and strict before/after gates
+pass, as do the three-fresh-process controlled repeat and an independent real-time repeat.
+
+The mid-step swing reset workflow (`swing_reset_mid_step.py`, `M-TIME-014`) is
+UI-independent. Its semantic rewrite preserves clock-page and swing-field edits,
+song-slot copy and octave setup, transport timing bounds, controlled/real-time schedule checks,
+and the S41 regression oracle. The raw zero-delay Stop edge is represented by the semantic
+`gesture` verb so its exact press/release recipe and narrow stop bounds are not weakened.
+The module has zero reachable raw UI dependencies and is absent from the allowlist. Both
+timing lanes and strict before/after gates pass, as do the three-fresh-process controlled
+repeat and an independent real-time repeat.
+
+The global/channel scale-lock precedence workflow (`scale_lock_order.py`,
+`M-SCALE-ORDER-001`) is UI-independent. Its semantic rewrite preserves the
+global-length setup, scale-root edits, global-before-channel lock ordering and exact pitch
+oracles. Global scale slots and same-coordinate channel scale slots now have distinct map keys
+added through red-green coverage, so the precedence recipe retains its page ownership rather
+than collapsing both gestures into one generic control. The module has zero reachable raw UI
+dependencies and is absent from the allowlist. Both timing lanes and strict before/after gates
+pass, as do the three-fresh-process controlled repeat and an independent real-time repeat.
+
+The fractional-length persistence workflow (`length_persistence.py`,
+`M-SAVE-LENGTH-001`) is UI-independent. Its semantic rewrite preserves the
+main-session edits, exact E1/E2/E3 offsets, visible `X`, `1/3` and `5/6` field results, idle
+autosave, nested cold restart, MIDI durations and failure cleanup through each Driver's own
+semantic UI object. The module has zero reachable raw UI dependencies and is absent from the
+allowlist. Both timing lanes and recursive root/restarted strict gates pass, as do the
+three-fresh-process controlled repeat and an independent real-time repeat.
+
+The Memory-page scale-lock display workflow (`memory_scale_lock_display.py`,
+`M-SCALE-MEMORY-DISPLAY-001`) is UI-independent as an ordinary characterisation. Its semantic
+rewrite preserves the page-specific channel-scale lock gesture, Memory and Trig Locks header
+evidence, selected/unselected step interaction, exact LED levels, timing and result payload
+through semantic UI verbs. The module has zero reachable raw UI dependencies and is absent
+from the allowlist. Both timing lanes and strict before/after gates pass, as do the
+three-fresh-process controlled repeat and an independent real-time repeat.
+
+The first-bar Shuffle live-recording regression (`shuffle_first_bar_record.py`,
+`M-TIME-015`) is UI-independent. Its semantic rewrite preserves the exact clock-page field
+recipe, record arm/disarm, scheduled MIDI stimulus, first-bar pulse plan, gate accounting and
+two-cycle recorded replay oracles. Immediate transport edges use the semantic `gesture` verb,
+so the original zero-delay press/release ordering and nanosecond-level controlled-time bound
+are retained. The module has zero reachable raw UI dependencies and is absent from the
+allowlist. Both timing lanes and strict before/after gates pass, as do the three-fresh-process
+controlled repeat and an independent real-time repeat.
+
+The mask-off regression probe (`mask_off_probe.py`, `M-MASK-OFF-001`) is UI-independent.
+Its semantic rewrite preserves channel and held-step trig/velocity edits, every audible MIDI
+observation, idle autosave, the cold-restart channel-page overshoot recipe and the Memory undo
+characterisation. Main and restarted sessions each use their own semantic UI object, and the
+recursive gate retains both sessions' established result schemas. The module has zero
+reachable raw UI dependencies and is absent from the allowlist. Both timing lanes and strict
+before/after gates pass, as do the three-fresh-process controlled repeat and an independent
+real-time repeat.
+
+The local Shuffle-field inheritance matrix (`shuffle_field_inheritance.py`,
+`M-SHUFFLE-009`, `M-SHUFFLE-010`, `M-SHUFFLE-011`) is UI-independent. Its semantic rewrite
+preserves the global Shuffle/feel/basis/amount setup, each local X/minimum/maximum/X round
+trip, exact independent pulse plans, complete gate pairing and controlled/real-time phase
+bounds. Named field annotations retain the original physical offsets without inventing an
+uncaptured header result. The module has zero reachable raw UI dependencies and is absent
+from the allowlist. All six timing lanes and strict before/after gates pass, as do a
+three-fresh-process controlled repeat and an independent real-time repeat.
+
+The native scale-slot ownership matrix (`scale_slot_matrix.py`, `M-SCALE-004`) is
+UI-independent. Its semantic rewrite preserves all sixteen independently edited slots,
+forward and reverse application order, short-reselect disable behaviour, distinct global and
+channel scale-lock ownership, exact grid levels, MIDI pitches and timing bounds. A
+page-specific no-result header helper was added through red-green coverage so the exact
+trailing-space, selected-tab and tab-count framebuffer oracle remains intact without changing
+the established result schema. The module has zero reachable raw UI dependencies and is
+absent from the allowlist. Both timing lanes and strict before/after gates pass, as do the
+three-fresh-process controlled repeat and an independent real-time repeat.
+
+The simultaneous mixed-channel Shuffle inheritance workflow (`shuffle_mixed_channels.py`,
+`M-SHUFFLE-008`) is UI-independent. Its semantic rewrite preserves channel/device setup,
+pattern selection, local Swing versus inherited global Shuffle, all three live inheritance
+stages, exact per-port MIDI bytes, onset plans, release pairing and cross-lane alignment. A
+strict controlled comparison caught and rejected an incorrect pattern-slot mapping; the
+corrected candidate reproduces the baseline recipe exactly. The module has zero reachable raw
+UI dependencies and is absent from the allowlist. Both timing lanes and strict before/after
+gates pass, as do the three-fresh-process controlled repeat and an independent real-time
+repeat.
+
+The global/local Shuffle type inheritance workflows (`shuffle_inheritance.py`,
+`M-SHUFFLE-005`, `M-SHUFFLE-006`, `M-SHUFFLE-007`) are UI-independent. Their semantic rewrite
+preserves global Shuffle setup, local X/Swing/Shuffle round trips, both live boundary-change
+directions, exact MIDI schedules, complete gate pairing and lane-specific phase bounds. The
+mapped clock-page header is observed through the red-green no-result wait helper, retaining
+the original framebuffer oracle without adding evidence records. The module has zero
+reachable raw UI dependencies and is absent from the allowlist. All six timing lanes and
+strict before/after gates pass, as do a three-fresh-process controlled repeat and an
+independent real-time repeat.
+
+The four-way Shuffle matrix (`shuffle_matrix.py`, `M-SHUFFLE-001`, `M-SHUFFLE-002`,
+`M-SHUFFLE-003`, `M-SHUFFLE-004`) is UI-independent. Its semantic rewrite preserves each
+global Shuffle type, the per-channel Swing/Shuffle/X selections, exact clock-page field
+navigation, four-cycle MIDI onset plans, gate pairing and lane-specific phase bounds. Named
+field annotations and the mapped no-result header wait retain the original physical recipe
+and framebuffer oracle without changing the result schema. The module has zero reachable raw
+UI dependencies and is absent from the allowlist. All eight timing lanes and strict
+before/after gates pass, as do a three-fresh-process controlled repeat and an independent
+real-time repeat.
+
+Implementation census: revision `4108035` contains 837 registered cases. The
+map follows the current eight-page channel editor, including Merge Shape and
+Harmony; the 773-case figures below remain the proposal's 2026-09-11 baseline.
+
 
 ## Problem
 
@@ -282,7 +465,9 @@ module being migrated, in every lane the suite runs it in (`controlled_only` cas
 controlled only; `crow-jf`/`nb-audio` cases: real-time only; all others: both):
 
 1. Before any edit, run the case at the current commit and copy its `recipe.json` and
-   `results.json` to `<case>/<lane>/before/`. A missing `before/` fails the gate.
+   `results.json` to `<case>/<lane>/before/`, preserving any nested driver sessions (for
+   example `restarted/recipe.json` and `restarted/results.json`). A missing pair or a
+   before/after session-set mismatch fails the gate.
 2. After the edit, run it again and copy the same two files to `<case>/<lane>/after/`.
    `tests/behaviour/ui_migration_gate.py <case>/<lane>` exits non-zero unless the normalized
    recipes are identical (same actions, order and, in the controlled lane, advances) and the

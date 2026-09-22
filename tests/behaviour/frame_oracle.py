@@ -6,6 +6,7 @@ Use the shared font/rasterizer as a rendering primitive, not Mosaic draw code.
 """
 import base64,ctypes as C
 from driver import EMULATOR_ROOT as ROOT
+from ui_map import CHANNEL_COUNT, HEADERS, SCREEN, header_text
 import json
 def read_json(path):return json.loads(path.read_text())
 
@@ -53,27 +54,25 @@ def render(commands,font_size=8,antialias=2):
         bind(ca,'cairo_font_options_destroy',[ptr])(options)
 
 def header(text,selected=None,tabs=8):
-    if selected is None:selected={
-        'Ch. 1 Note Masks':1,
-        'Ch. 1 Trig Locks':2,
-        'Ch. 1 Memory':3,
-        'Ch. 1 Clocks':4,
-        'Ch. 1 Device Config':5,
-        'Ch. 1 Note Dashboard':6,
-        'Ch. 1 Merge Shape':7,
-        'Ch. 1 Harmony':8,
-    }[text]
-    commands=[((tab-1)*10,1,10 if tab==selected else 1,'_') for tab in range(1,tabs+1)]
-    commands += [(0,9,10,text),(120,9,10,'m')]
-    return render(commands)[:128*10*4]
+    if selected is None:
+        matches_by_key = [data for key,data in HEADERS.items()
+                          if "{channel}" in data["template"] and
+                          any(header_text(key,channel=channel)==text
+                              for channel in range(1,CHANNEL_COUNT+1))]
+        if len(matches_by_key)!=1:raise KeyError(text)
+        selected=matches_by_key[0]['selected'];tabs=matches_by_key[0]['tabs']
+    commands=[((tab-1)*SCREEN['tab_pitch'],SCREEN['tab_baseline'],10 if tab==selected else 1,'_') for tab in range(1,tabs+1)]
+    commands += [((*SCREEN['title'],text)),SCREEN['brand']]
+    return render(commands)[:128*SCREEN['header_rows'][1]*4]
 
-def selected_line(state,text,x=0,width=70,top=22):
+def selected_line(state,text,x=0,width=70,top=None):
     # Native menu selected rows use baseline30, level15. Ignore the separate
     # right-hand value field, not the text glyphs or background around them.
-    expected=render([(x,30,15,text)])
+    row=SCREEN['selected_row'];top=row['top'] if top is None else top
+    expected=render([(x,row['baseline'],row['level'],text)])
     actual=base64.b64decode(state['frame']['pixels_base64'])
     return all(actual[(y*128+col)*4+k]==expected[(y*128+col)*4+k]
-               for y in range(top,32) for col in range(x,x+width) for k in range(3))
+               for y in range(top,row['bottom']) for col in range(x,x+width) for k in range(3))
 
 def matches(state,expected):
     actual=base64.b64decode(state['frame']['pixels_base64'])[:len(expected)]
@@ -81,7 +80,8 @@ def matches(state,expected):
     return all(actual[i]==expected[i] for i in range(len(expected)) if i%4!=3)
 
 def selected_value(state,text):
-    expected=render([(None,30,15,text)])
+    row=SCREEN['selected_row'];value=SCREEN['selected_value']
+    expected=render([(None,row['baseline'],row['level'],text)])
     actual=base64.b64decode(state['frame']['pixels_base64'])
     return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k]
-               for y in range(22,32) for x in range(108,128) for k in range(3))
+               for y in range(row['top'],row['bottom']) for x in range(value['left'],value['right']) for k in range(3))

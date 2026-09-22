@@ -4,7 +4,7 @@ A seeded session supplies the repository's Digitakt device configuration next to
 the emulator test device; the shared test seed is not changed, so device-picker
 positions in every other case stay the same.
 """
-import base64,shutil
+import shutil
 from pathlib import Path
 from driver import Driver,REPO
 
@@ -12,17 +12,7 @@ def program_changes(state,marker,ports=(1,2)):
     return [(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and m['port'] in ports and m['bytes'][0]&240==192]
 
 def pick_device(e,name):
-    from frame_oracle import render
-    expected=render([(10,35,15,name)])
-    indices=[(y*128+x)*4+k for y in range(27,37) for x in range(10,58) for k in range(3)] # name column only
-    def visible(state):
-        pixels=base64.b64decode(state['frame']['pixels_base64'])
-        return all(pixels[i]==expected[i] for i in indices)
-    for _ in range(40):
-        if visible(e.snapshot()):break
-        e.enc(3,1)
-    else:raise AssertionError('Device not visible in picker: '+name)
-    e.key(3);e.results.append(dict(kind='device-picker-frame',label=name,matched=True))
+    e.ui.pick_device(name)
 
 def set_mosaic_number(e,label,delta,shown):
     from cases import menu_label,menu_option_row

@@ -34,6 +34,8 @@ class Driver:
         self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches,cost_profile=cost_profile,midi_lead_time_ms=midi_lead_time_ms)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
+        from ui import Ui
+        self.ui=Ui(self)
         # app_root runs another Mosaic tree (e.g. a campaign baseline) with this harness.
         self.app_root=Path(app_root).resolve() if app_root else REPO
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(self.app_root,target_is_directory=True)
@@ -156,14 +158,7 @@ class Driver:
         self.enc(1,-4);self.key(1)  # Restore startup HOME panel for existing recipes.
 
     def configure(self):
-        self.tap(3,8);self.enc(1,4);self.enc(3,1);self.key(3);self.tap(5,8)
-        for x in range(1,5):self.tap(x,4)
-        self.tap(5,8)
-        for x,y in ((1,7),(2,6),(3,5),(4,4)):self.tap(x,y)
-        self.tap(5,8)
-        for x,y in ((1,1),(2,2),(3,3),(4,4)):self.tap(x,y)
-        self.tap(3,8);self.tap(1,2);self.hold_tap((1,4),(4,4))
-        self.led_values([(1,2)],[15]);self.screen_header('Ch. 1 Device Config')
+        self.ui.configure()
     def playback(self,expected,cycles=3,timeout=5,settle_seconds=0):
         assert expected and cycles>=2
         assert settle_seconds>=0

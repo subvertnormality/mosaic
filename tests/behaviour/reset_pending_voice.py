@@ -10,20 +10,21 @@ PHRASE = [(60, 127), (62, 117), (64, 107), (65, 97)]
 
 
 def reset_pending_voice(c):
-    from cases import length_mask_display
-    c.configure()
-    c.tap(6, 8); c.tap(2, 7)
-    for _ in range(3): c.tap(8, 7)                                # global length 4
-    c.hold_tap((1, 1), (2, 1)); c.tap(2, 1); c.tap(3, 8); c.tap(11, 8)   # slot 2 = copy, octave +1
-    c.tap(6, 8); c.tap(1, 1); c.tap(3, 8)
-    c.enc(1, -5); c.enc(2, -5); c.enc(2, 3); length_mask_display(c, 'X')   # Note Masks, Len
-    c.action(type='grid', x=4, y=4, state=1)
-    try: c.elapse(.05); c.enc(3, 22); length_mask_display(c, '3')       # step 4: 3 steps
-    finally: c.action(type='grid', x=4, y=4, state=0)
-    before = c.snapshot()['midi_count']; c.tap(1, 8)
+    ui = c.ui
+    ui.configure()
+    ui.song_editor(); ui.tap_control('global_pattern_length', 2)
+    for _ in range(3): ui.tap_control('global_pattern_length', 8)       # global length 4
+    ui.copy_slot(1, 2, control='song_pattern_slot'); ui.tap_control('song_pattern_slot', 2)
+    ui.menu('channel_editor'); ui.tap_control('channel_octave', 1)  # slot 2 = copy, octave +1
+    ui.song_editor(); ui.tap_control('song_pattern_slot', 1); ui.menu('channel_editor')
+    ui.channel_page('masks', 'midi_config', saturate=True)
+    ui.select_field('length', saturate=-5, then=3); ui.expect_field_value('length', 'X')   # Note Masks, Len
+    with ui.hold_step(4):
+        c.elapse(.05); ui.set_value(22); ui.expect_field_value('length', '3')       # step 4: 3 steps
+    before = c.snapshot()['midi_count']; ui.play()
     def onsets(s): return [m for m in s['midi'] if m['index'] > before and m['bytes'][0] == 144 and m['bytes'][2] > 0]
     state = c.wait(lambda s: len(onsets(s)) >= 9, timeout=4)
-    c.tap(1, 8); state = c.wait(lambda s: not s['midi_capture']['outstanding'])
+    ui.stop(); state = c.wait(lambda s: not s['midi_capture']['outstanding'])
     field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
     tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
     notes = onsets(state)[:8]
