@@ -9,6 +9,9 @@ from pathlib import Path
 import ui_baseline_import as importer
 
 REVISION = 'a' * 40
+TEST_REGISTRY = {'M-TEST-001', 'M-OTHER-001', 'M-PAT-001',
+                 'M-PERSIST-FIXTURE-1.2.12',
+                 *('M-PROFILE-' + str(index) for index in range(4))}
 
 
 def digest(data):
@@ -65,7 +68,8 @@ class ImportTests(unittest.TestCase):
 
     def run_import(self, **kwargs):
         return importer.import_baselines(self.download, self.output, REVISION,
-                                         'https://github.com/example/mosaic/actions/runs/123', **kwargs)
+                                         'https://github.com/example/mosaic/actions/runs/123',
+                                         registered_cases=TEST_REGISTRY, **kwargs)
 
     def test_nested_sessions_and_provenance_preserved(self):
         report, manifest = self.fixture(sessions=('.', 'restarted', 'restarted/reload'))
@@ -85,6 +89,32 @@ class ImportTests(unittest.TestCase):
     def test_dry_run(self):
         self.fixture()
         self.assertEqual(len(self.run_import(dry_run=True)['imported']), 1)
+        self.assertFalse(self.output.exists())
+
+    def test_registered_dotted_case_id_is_safe_and_importable(self):
+        self.fixture(case='M-PERSIST-FIXTURE-1.2.12')
+        result = importer.import_baselines(
+            self.download, self.output, REVISION,
+            'https://github.com/example/mosaic/actions/runs/123', dry_run=True)
+        self.assertEqual([(row['case'], row['lane']) for row in result['imported']],
+                         [('M-PERSIST-FIXTURE-1.2.12', 'controlled')])
+        self.assertFalse(self.output.exists())
+
+    def test_case_ids_reject_traversal_separators_and_unregistered_values(self):
+        self.fixture()
+        for value in ('.', '..', '../M-TEST-001', 'M-TEST-001/../evil',
+                      'M-TEST-001\\evil', 'M:TEST-001', 'M-UNREGISTERED-999'):
+            with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'case ID'):
+                self.run_import(cases=[value], dry_run=True)
+        self.assertFalse(self.output.exists())
+
+    def test_unregistered_report_case_is_rejected(self):
+        report, _ = self.fixture()
+        suite = json.loads(report.read_text())
+        suite['cases'][0]['case'] = 'M-UNREGISTERED-999'
+        write_json(report, suite)
+        with self.assertRaisesRegex(ValueError, 'case ID'):
+            self.run_import(dry_run=True)
         self.assertFalse(self.output.exists())
 
     def test_failed_rows_skipped(self):
@@ -213,7 +243,7 @@ class ImportTests(unittest.TestCase):
     def test_absent_requested_case(self):
         self.fixture()
         with self.assertRaisesRegex(ValueError, 'requested case'):
-            self.run_import(cases=['M-MISSING-001'])
+            self.run_import(cases=['M-OTHER-001'])
 
     def test_all_selected_lanes_validated_before_writes(self):
         self.fixture()
@@ -265,7 +295,7 @@ class ImportTests(unittest.TestCase):
             self.run_import()
 
     def test_cli_dry_run_and_error_exit(self):
-        self.fixture()
+        self.fixture(case='M-PAT-001')
         command = [sys.executable, importer.__file__, str(self.download), '--output', str(self.output),
                    '--revision', REVISION, '--source-run', 'https://github.com/example/mosaic/actions/runs/123']
         result = subprocess.run(command + ['--dry-run'], capture_output=True, text=True)

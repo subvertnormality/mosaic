@@ -12,6 +12,7 @@ from pathlib import Path, PurePosixPath
 
 LANES = {'controlled-experimental': 'controlled', 'real-time': 'real-time'}
 EVIDENCE_NAMES = {'recipe.json', 'results.json'}
+CASE_ID = re.compile(r'[A-Za-z0-9][A-Za-z0-9_.-]*')
 
 
 def sha(data):
@@ -21,6 +22,13 @@ def sha(data):
 def require(condition, message):
     if not condition:
         raise ValueError(message)
+
+
+def registered_case_id(value, registry):
+    require(isinstance(value, str) and CASE_ID.fullmatch(value),
+            'unsafe case ID: %r' % value)
+    require(value in registry, 'unregistered case ID: %r' % value)
+    return value
 
 
 def safe_relative(value):
@@ -102,7 +110,7 @@ def verified_pair_files(manifest, run):
     return payload
 
 
-def import_baselines(download, output, revision, source_run, cases=None, dry_run=False):
+def import_baselines(download, output, revision, source_run, cases=None, dry_run=False, registered_cases=None):
     """Validate every selected lane before writes; never merge an existing before/.
 
     Input must be a quiescent local artifact download, with one original suite per
@@ -115,9 +123,13 @@ def import_baselines(download, output, revision, source_run, cases=None, dry_run
     download, output = no_symlink(download), no_symlink(output)
     require(download != output and download not in output.parents and output not in download.parents,
             'download and output directories must be disjoint')
+    if registered_cases is None:
+        from cases import CASES
+        registered_cases = CASES
+    registered_cases = set(registered_cases)
     requested = set(cases or [])
     for case in requested:
-        require(re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]*', case), 'unsafe case ID: %r' % case)
+        registered_case_id(case, registered_cases)
     reports = [p for p in files_under(download) if p.name == 'suite.json']
     require(reports, 'no original suite.json reports found')
     planned, skipped, seen, found = [], [], set(), set()
@@ -140,8 +152,7 @@ def import_baselines(download, output, revision, source_run, cases=None, dry_run
         for row in rows:
             require(isinstance(row, dict), 'invalid suite case row')
             case, clock_mode = row.get('case'), row.get('lane')
-            require(isinstance(case, str) and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]*', case),
-                    'unsafe case ID: %r' % case)
+            registered_case_id(case, registered_cases)
             if requested and case not in requested:
                 continue
             found.add(case)
