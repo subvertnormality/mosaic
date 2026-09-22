@@ -1,0 +1,30 @@
+{
+  "case": "M-SAVE-FAIL-001",
+  "profile": "base-midi",
+  "mod_patches": false,
+  "passed": true,
+  "failure": null,
+  "diagnostic_only": true,
+  "controlled_time_admitted": false,
+  "runs": [
+    {
+      "manifest": "/home/andy/rd/v140/mosaic-behaviour-runs/523d16fef81a493d8d8e8a1e4d91fae4/manifest.json",
+      "sha256": "cc21a19a9c9b91da12d2d20e999afbebb6d5a89fe81b849c1b4c33763a3ffb34",
+      "wall_elapsed_seconds": 11.420253106000018,
+      "logical_advanced_seconds": 326.26
+    },
+    {
+      "manifest": "/home/andy/rd/v140/mosaic-behaviour-runs/f8669f8ef09744fe8b92badb84a0a7ad/manifest.json",
+      "sha256": "480e5920d9948d6d38d3367805beb914d9a743c7c69bf60abb20886ef4bd93e0",
+      "wall_elapsed_seconds": 14.2185626160026,
+      "logical_advanced_seconds": 326.26
+    },
+    {
+      "manifest": "/home/andy/rd/v140/mosaic-behaviour-runs/4bd28717898f42a7be06ded5273a624e/manifest.json",
+      "sha256": "7800936b7165932953cec92771e60f1ffa28a975a735e691d0338d7ace6380a4",
+      "wall_elapsed_seconds": 13.70866408099755,
+      "logical_advanced_seconds": 326.26
+    }
+  ],
+  "normalized_sha256": "2e628b1d9539185a85c293ac9cc66b09609a173b03f19d12e0ed4d45dac16818"
+}

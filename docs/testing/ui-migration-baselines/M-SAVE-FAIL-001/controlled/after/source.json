@@ -1,0 +1,10 @@
+{
+  "run": "/tmp/mosaic-ui-save-stable-after/controlled/77ea5b7d41f84bdf9cdd347ac5e66f3e",
+  "manifest_sha256": "1bd99e3ef6cd7c2b01122f5073394a65814c8fb9d7f27b61f357a4fda4790364",
+  "revision": "45e87782c4f7235ceff0a0649b53123f2af0f577",
+  "source_sha256": {
+    "tests/behaviour/contract/autosave_failure.py": "161a4d1a7fd6cfd94e16f1a2161b94a699d342dc356ab9fea5991cc5cb8ac060",
+    "tests/behaviour/persisted_digest.py": "7ef0baf1759005e3f68ef83d65d0830d9689f654df90248469374514b4e0da19",
+    "tests/behaviour/persisted_digest.lua": "1704dd05df57a472b3351abd0e01a8361d9d2538df988bc64668792de5fe32f7"
+  }
+}

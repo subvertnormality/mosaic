@@ -314,15 +314,20 @@ Four already-classified visual/input contracts (`M-SYNC-014`,
 Only their registry imports changed. All eight controlled/real-time lanes pass the strict
 before/after gate, including the device-picker's nested session, and each module passes a
 three-fresh-process controlled repeat. Their contract inventory entries are unchanged.
-`M-SAVE-FAIL-001` remains in its original module and on the allowlist: its raw `.ptn` SHA
-differs across otherwise passing controlled runs because the Lua serializer emits table keys
-in variable order. Decoding two captured `.ptn` files with the pinned `tabutil` and comparing
-their content in stable key order found identical project data. The strict controlled gate
-still fails on the recorded raw SHA, so its failed comparison remains preserved separately
-pending a deterministic semantic oracle and fresh baseline.
+`M-SAVE-FAIL-001` now has a byte-identical body under `contract/`, following a separate
+oracle-stabilization commit and fresh before baselines. Its `.ptn` digest now covers the
+complete decoded project using pinned `tabutil`, sorted typed keys, exact scalar values and
+nested table contents; `.pset` retains its byte digest. Regression tests distinguish changed
+values, key types, nested content and large integers, and reject malformed saved content.
+The original order-sensitive raw-digest failure, original source manifests and semantic
+comparison are preserved under `docs/testing/save-oracle-stabilization/`. Every existing
+player-visible save/failure assertion is unchanged. Fresh controlled and real-time strict
+before/after gates pass, as does the three-fresh-process controlled repeat. The contract
+inventory and sections 5–7 are unchanged; only registry routing and allowlist membership
+change in the extraction.
 
-At this checkpoint 277 stored migration lanes pass the strict recipe/result gate and 63
-modules remain on the fail-closed allowlist. The named-save candidate is deliberately not
+At the preceding checkpoint 277 stored migration lanes passed the strict recipe/result gate
+and 63 modules remained on the fail-closed allowlist. The named-save candidate was not
 included: its physical recipe was identical, but the controlled run produced a different raw
 `.ptn` digest across fresh data directories. The gate rejected that comparison, the module
 was restored to the allowlist, and neither the digest oracle nor normalization was weakened.
