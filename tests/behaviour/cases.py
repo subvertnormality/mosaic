@@ -7,14 +7,14 @@ from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from keyboard_repeated_note_on import keyboard_repeated_note_on
 from contract.keyboard_chord_after_stop import keyboard_chord_after_stop
-from stop_safety import shift_press_to_stop
+from contract.stop_safety import shift_press_to_stop
 from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
 from autosave_idle import autosave_idle_lifecycle
 from named_save import named_save_load
 from channel_scale_display import channel_active_scale_display
 from memory_scale_lock_display import memory_scale_lock_display
-from tooltips import tooltip_messages
+from contract.tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from contract.device_configs import invalid_device_configs
@@ -35,7 +35,7 @@ from recorded_same_key_sources import recorded_same_key_sources
 from recorded_note_page_key_held import recorded_note_page_key_held
 from trigless_slide_clock import trigless_slide_clock
 from recording_lock_song import recording_lock_song
-from song_divisions import song_tempo_divisions
+from contract.song_divisions import song_tempo_divisions
 from memory_wrap import memory_wrap,memory_retained_floor
 from scale_cache import scale_cache_saves
 from nb_param_lock import nb_param_lock
@@ -49,7 +49,7 @@ from scale_lock_order import scale_lock_order
 from persisted_fixture import persisted_fixture
 from elektron_two_ports import elektron_two_ports
 from memory_persistence import memory_persistence
-from tooltip_autosave import tooltip_autosave
+from contract.tooltip_autosave import tooltip_autosave
 from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
 from midi_mapping_targets import midi_mapping_targets
@@ -3196,11 +3196,11 @@ from shuffle_mixed_channels import mixed_shuffle_inheritance
 
 from shuffle_field_inheritance import shuffle_field_inheritance
 
-from song_length_domain import song_length_domain
+from contract.song_length_domain import song_length_domain
 
 from song_length_sparse import sparse_song_lengths
 
-from song_repetitions import song_repetition_domain
+from contract.song_repetitions import song_repetition_domain
 
 from song_tempo import song_tempo_bounds
 

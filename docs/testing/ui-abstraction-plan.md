@@ -5,6 +5,13 @@ map/verb foundation, migration comparator, static allowlist guard and shared
 frame-oracle migration are implemented. `midi_cc_page_return.py`,
 `startup_transport.py`, `scale_cache.py`, `elektron_two_ports.py`,
 `gesture_release_order.py`, `midi_mapping_held_step.py`, `external_start_phase.py`,
+`song_divisions.py`, `song_length_domain.py`, `song_repetitions.py`, `stop_safety.py`,
+`tooltip_autosave.py` and `tooltips.py` are now byte-identically extracted into
+`contract/`, with controlled and real-time before/after evidence, strict gates, and a
+representative controlled repeat for each module. `M-SONG-SETTINGS-002` remains in its
+original location and allowlist: its release-deadline oracle failed in both the original
+and isolated serial real-time runs, whose manifests are preserved outside the committed
+baseline. `song_tempo.py`,
 `song_slot_copy.py`, `held_mask_extra_key.py` and
 `persisted_fixture_builder.py` are clean; registered cases have controlled and
 real-time before/after evidence plus three-process controlled repeats. The raw Cairo

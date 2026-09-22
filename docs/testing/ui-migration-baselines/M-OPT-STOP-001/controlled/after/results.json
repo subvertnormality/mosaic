@@ -1,0 +1,138 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "default-started",
+    "transport": "playing",
+    "onsets_after_gesture": 4,
+    "passed": true
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "default-tap",
+    "transport": "stopped",
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Shift press to stop",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Shift press to stop",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "on-tap-starts",
+    "transport": "playing",
+    "onsets_after_gesture": 4,
+    "passed": true
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "on-short-tap-ignored",
+    "transport": "playing",
+    "onsets_after_gesture": 5,
+    "passed": true
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "on-hold-below-threshold-ignored",
+    "transport": "playing",
+    "onsets_after_gesture": 5,
+    "passed": true
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "on-shift-K1-tap-stops",
+    "transport": "stopped",
+    "passed": true
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "on-K3-tap-ignored",
+    "transport": "playing",
+    "onsets_after_gesture": 4,
+    "passed": true
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "on-long-press-stops",
+    "transport": "stopped",
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Shift press to stop",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Shift press to stop",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "stop-safety",
+    "stage": "off-again-tap-stops",
+    "transport": "stopped",
+    "passed": true
+  }
+]

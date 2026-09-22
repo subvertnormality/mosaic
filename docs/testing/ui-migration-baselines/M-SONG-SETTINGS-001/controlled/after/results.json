@@ -1,0 +1,306 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 1,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      2,
+      4
+    ],
+    "onsets": 5,
+    "observed_onsets": 5,
+    "release_checks": 5,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 2,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      4,
+      6
+    ],
+    "onsets": 7,
+    "observed_onsets": 7,
+    "release_checks": 7,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 3,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      6,
+      8
+    ],
+    "onsets": 9,
+    "observed_onsets": 9,
+    "release_checks": 9,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 4,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      8,
+      10
+    ],
+    "onsets": 11,
+    "observed_onsets": 11,
+    "release_checks": 11,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 5,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      10,
+      12
+    ],
+    "onsets": 13,
+    "observed_onsets": 13,
+    "release_checks": 13,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 6,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      12,
+      14
+    ],
+    "onsets": 15,
+    "observed_onsets": 15,
+    "release_checks": 15,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 7,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      14,
+      16
+    ],
+    "onsets": 17,
+    "observed_onsets": 17,
+    "release_checks": 17,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 8,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      16,
+      18
+    ],
+    "onsets": 19,
+    "observed_onsets": 19,
+    "release_checks": 19,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 9,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      18,
+      20
+    ],
+    "onsets": 21,
+    "observed_onsets": 21,
+    "release_checks": 21,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 10,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      20,
+      22
+    ],
+    "onsets": 23,
+    "observed_onsets": 23,
+    "release_checks": 23,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 11,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      22,
+      24
+    ],
+    "onsets": 25,
+    "observed_onsets": 25,
+    "release_checks": 25,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 12,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      24,
+      26
+    ],
+    "onsets": 27,
+    "observed_onsets": 27,
+    "release_checks": 27,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 13,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      26,
+      28
+    ],
+    "onsets": 29,
+    "observed_onsets": 29,
+    "release_checks": 29,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 14,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      28,
+      30
+    ],
+    "onsets": 31,
+    "observed_onsets": 31,
+    "release_checks": 31,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 15,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      30,
+      32
+    ],
+    "onsets": 33,
+    "observed_onsets": 33,
+    "release_checks": 33,
+    "stopped_led": 2,
+    "passed": true
+  },
+  {
+    "kind": "song-repetition-domain",
+    "repeats": 16,
+    "second_slot_repeats": 1,
+    "transition_indices": [
+      32,
+      34
+    ],
+    "onsets": 35,
+    "observed_onsets": 35,
+    "release_checks": 35,
+    "stopped_led": 2,
+    "passed": true
+  }
+]
