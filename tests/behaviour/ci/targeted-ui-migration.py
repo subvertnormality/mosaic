@@ -1,0 +1,324 @@
+#!/usr/bin/env python3
+"""Run explicit base-MIDI before/after UI gates at two immutable source commits.
+
+This is a partial, manual campaign. The exhaustive behaviour workflow is separate.
+Every failed run and gate still leaves its original manifest and recipe/result files.
+"""
+
+import argparse
+import ast
+import hashlib
+import json
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from ui_migration_gate import check_session_roots
+
+SHA = re.compile(r"[0-9a-f]{40}\Z")
+CASE = re.compile(r"M-[A-Z0-9][A-Z0-9.-]*\Z")
+LANES = (("real-time", "real-time"),
+         ("controlled-experimental", "controlled"))
+UI_SOURCE_ALLOWLIST = {
+    "tests/behaviour/cases.py",  # selected case routing or inline case body
+    "tests/behaviour/ui.py",
+    "tests/behaviour/ui_map.py",
+    "tests/behaviour/frame_oracle.py",
+    "tests/behaviour/ui_migration_allowlist.json",
+    "tests/behaviour/contract_cases.json",
+    "tests/behaviour/ui_verb_sources.json",
+    "tests/behaviour/ci/test_targeted_ui_migration.py",
+}
+PINNED_GATE_PATHS = (
+    "tests/behaviour/ui_migration_gate.py",
+    "tests/behaviour/ci/targeted-ui-migration.py",
+)
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def sha256(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def cases_from_input(raw):
+    cases = [item.strip() for item in raw.split(",")]
+    require(cases and all(CASE.fullmatch(item) for item in cases),
+            "case_ids must be comma-separated, nonempty case IDs")
+    require(len(cases) == len(set(cases)), "duplicate case ID")
+    return cases
+
+
+def source_identity(root, expected):
+    require(SHA.fullmatch(expected), "source ref must be a lowercase, full commit SHA")
+    actual = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+    require(actual == expected, "checkout is not requested commit: " + str(root))
+    require(subprocess.check_output(
+        ["git", "status", "--porcelain"], cwd=root, text=True).strip() == "",
+        "source checkout is dirty: " + str(root))
+    return actual
+
+
+def registry_profile(root):
+    tree = ast.parse((root / "tests/behaviour/cases.py").read_text())
+    entries = [node.value for node in tree.body if isinstance(node, ast.Assign)
+               and any(isinstance(target, ast.Name) and target.id == "CASES"
+                       for target in node.targets)]
+    require(len(entries) == 1 and isinstance(entries[0], ast.Dict),
+            "expected one literal CASES registry")
+    names = [ast.literal_eval(key) for key in entries[0].keys]
+    require(all(isinstance(name, str) for name in names) and len(names) == len(set(names)),
+            "invalid or duplicate registry case IDs")
+    suite = ast.parse((root / "tests/behaviour/suite.py").read_text())
+    profiles = [node.value for node in suite.body if isinstance(node, ast.Assign)
+                and any(isinstance(target, ast.Name) and target.id == "CASE_PROFILE"
+                        for target in node.targets)]
+    require(len(profiles) == 1 and isinstance(profiles[0], ast.Dict),
+            "expected one literal CASE_PROFILE map")
+    keys = [ast.literal_eval(key) for key in profiles[0].keys]
+    require(len(keys) == len(set(keys)), "duplicate case profile IDs")
+    profile_map = ast.literal_eval(profiles[0])
+    require(set(profile_map) <= set(names), "profile map contains unknown case")
+    return {name: profile_map.get(name, "base-midi") for name in names}
+
+
+def selected_case_modules(root, cases):
+    """Only the modules owning selected registry callables may change."""
+    tree = ast.parse((root / "tests/behaviour/cases.py").read_text())
+    imports = {}
+    for node in tree.body:
+        if isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
+            for alias in node.names:
+                name = alias.asname or alias.name
+                require(name not in imports, "ambiguous imported case callable: " + name)
+                imports[name] = node.module
+    registries = [node.value for node in tree.body if isinstance(node, ast.Assign)
+                  and any(isinstance(target, ast.Name) and target.id == "CASES"
+                          for target in node.targets)]
+    require(len(registries) == 1 and isinstance(registries[0], ast.Dict),
+            "expected one literal CASES registry")
+    entries = {ast.literal_eval(key): value
+               for key, value in zip(registries[0].keys, registries[0].values)}
+    result = set()
+    for case in cases:
+        definition = entries[case]
+        require(isinstance(definition, ast.Call) and isinstance(definition.func, ast.Name)
+                and definition.func.id == "dict", "unrecognized case registration: " + case)
+        runs = [item.value for item in definition.keywords if item.arg == "run"]
+        require(len(runs) == 1, "unrecognized run callable: " + case)
+        run = runs[0]
+        if isinstance(run, ast.Name):
+            symbol = run.id
+        elif isinstance(run, ast.Lambda) and isinstance(run.body, ast.Call) \
+                and isinstance(run.body.func, ast.Name):
+            symbol = run.body.func.id
+        else:
+            raise ValueError("unrecognized run callable: " + case)
+        module = imports.get(symbol)
+        if module is not None:
+            path = "tests/behaviour/" + module.replace(".", "/") + ".py"
+            require((root / path).is_file(), "missing selected case module: " + path)
+            result.add(path)
+    return result
+
+
+def tree_entries(root, *paths):
+    """Git object identity includes executable modes, symlinks and gitlinks."""
+    raw = subprocess.check_output(
+        ["git", "ls-tree", "-r", "-z", "HEAD", "--", *paths], cwd=root)
+    entries = {}
+    for record in raw.split(b"\0"):
+        if not record:
+            continue
+        metadata, separator, encoded_path = record.partition(b"\t")
+        parts = metadata.split()
+        require(separator and len(parts) == 3, "malformed git tree entry")
+        path = encoded_path.decode("utf-8")
+        require(path not in entries, "duplicate git tree entry: " + path)
+        entries[path] = tuple(part.decode("ascii") for part in parts)
+    return entries
+
+
+def check_source_delta(before, after, cases):
+    production_before = tree_entries(before, "mosaic.lua", "lib", ".gitmodules",
+                                     "README.md", "cheat_sheet.html")
+    production_after = tree_entries(after, "mosaic.lua", "lib", ".gitmodules",
+                                    "README.md", "cheat_sheet.html")
+    require("mosaic.lua" in production_before and "mosaic.lua" in production_after
+            and any(path.startswith("lib/") for path in production_before)
+            and any(path.startswith("lib/") for path in production_after),
+            "missing production tree in source checkout")
+    changed_production = sorted(path for path in production_before.keys() | production_after.keys()
+                                if production_before.get(path) != production_after.get(path))
+    require(not changed_production, "production/manual source changed between runs: "
+            + ", ".join(changed_production))
+    before_tests = tree_entries(before, "tests/behaviour")
+    after_tests = tree_entries(after, "tests/behaviour")
+    for path in PINNED_GATE_PATHS:
+        require(path in before_tests and before_tests[path] == after_tests.get(path),
+                "targeted gate/runner differs or is absent between source commits: " + path)
+    allowed = UI_SOURCE_ALLOWLIST | selected_case_modules(before, cases) \
+        | selected_case_modules(after, cases)
+    changed_tests = sorted(path for path in before_tests.keys() | after_tests.keys()
+                           if before_tests.get(path) != after_tests.get(path))
+    unexpected = sorted(set(changed_tests) - allowed)
+    require(not unexpected, "unrelated behaviour harness/fixture source changed: "
+            + ", ".join(unexpected))
+    for side, entries in (("before", before_tests), ("after", after_tests)):
+        unsafe = sorted(path for path in changed_tests if path in entries
+                        and entries[path][0] not in ("100644", "100755"))
+        require(not unsafe, "%s changed behaviour source is not a regular file: %s" %
+                (side, ", ".join(unsafe)))
+    return dict(production_tree_unchanged=True, changed_behaviour_paths=changed_tests,
+                allowed_behaviour_paths=sorted(allowed))
+
+
+def require_no_symlink_ancestors(path):
+    for component in (path, *path.parents):
+        require(not component.is_symlink(), "symlinked evidence path: " + str(component))
+
+
+def verified_manifest(manifest_path, case, lane, revision):
+    require_no_symlink_ancestors(manifest_path)
+    item = json.loads(manifest_path.read_text())
+    require(isinstance(item, dict), "run manifest is not an object")
+    for key, expected in (("case", case), ("clock_mode", lane),
+                          ("mosaic_revision", revision), ("profile", "base-midi")):
+        require(item.get(key) == expected, "run manifest %s differs" % key)
+    require(item.get("campaign_complete") is False and item.get("passed") is True
+            and item.get("failure") is None, "before/after run did not pass")
+    require(item.get("diagnostic_only") is (lane == "controlled-experimental"),
+            "run diagnostic marker differs")
+    artifacts = item.get("artifacts")
+    require(isinstance(artifacts, list), "missing artifact digest inventory")
+    seen = set()
+    for record in artifacts:
+        require(isinstance(record, dict), "invalid artifact record")
+        name = record.get("path")
+        require(isinstance(name, str) and name and "\\" not in name,
+                "invalid artifact path")
+        parts = Path(name).parts
+        require(not Path(name).is_absolute() and all(part not in (".", "..") for part in parts)
+                and not {"code", "data"} & set(parts), "unsafe artifact path")
+        require(name not in seen, "duplicate artifact path")
+        seen.add(name)
+        path = manifest_path.parent / name
+        require_no_symlink_ancestors(path)
+        require(path.is_file() and record.get("sha256") == sha256(path)
+                and record.get("size") == path.stat().st_size,
+                "artifact missing or digest differs: " + name)
+    present = {path.relative_to(manifest_path.parent).as_posix()
+               for path in manifest_path.parent.rglob("*") if path.is_file()
+               and path != manifest_path
+               and not {"code", "data"} & set(path.relative_to(manifest_path.parent).parts)}
+    require(seen == present, "artifact inventory does not cover all run evidence")
+    recipes = {name for name in seen if name.endswith("recipe.json")}
+    results = {name for name in seen if name.endswith("results.json")}
+    require("recipe.json" in recipes and "results.json" in results,
+            "missing root recipe/results evidence")
+    require({name[:-len("recipe.json")] for name in recipes}
+            == {name[:-len("results.json")] for name in results},
+            "unmatched nested recipe/results evidence")
+    return item
+
+
+def single_manifest(output):
+    paths = list(output.glob("*/manifest.json"))
+    require(len(paths) == 1, "expected exactly one fresh run manifest in " + str(output))
+    return paths[0]
+
+
+def run_one(source, case, lane, output, install):
+    output.mkdir(parents=True, exist_ok=False)
+    command = [sys.executable, str(source / "tests/behaviour/run.py"),
+               "--case", case, "--artifacts", str(output), "--clock-mode", lane]
+    if lane == "controlled-experimental":
+        command.extend(("--experimental-install", str(install)))
+    with (output / "process.log").open("w") as log:
+        status = subprocess.run(command, cwd=source, stdout=log,
+                                stderr=subprocess.STDOUT, check=False).returncode
+    return status, single_manifest(output)
+
+
+def execute(args):
+    cases = cases_from_input(args.case_ids)
+    require(args.before.resolve() != args.after.resolve(), "source checkouts must be distinct")
+    before_sha = source_identity(args.before, args.before_sha)
+    after_sha = source_identity(args.after, args.after_sha)
+    require(before_sha != after_sha, "before and after commits must differ")
+    for label, source in (("before", args.before), ("after", args.after)):
+        profiles = registry_profile(source)
+        for case in cases:
+            require(case in profiles, "%s source lacks case %s" % (label, case))
+            require(profiles[case] == "base-midi", "%s is not base-MIDI in %s source" % (case, label))
+    source_delta = check_source_delta(args.before, args.after, cases)
+    require(args.install.is_file(), "missing qualified controlled-time installation")
+    emulator_sha = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"], cwd=args.emulator, text=True).strip()
+    report = dict(schema_version=1, complete_regression_run=False,
+                  before_sha=before_sha, after_sha=after_sha,
+                  emulator_sha=emulator_sha, selected_cases=cases,
+                  source_delta=source_delta,
+                  lanes=[lane for lane, _ in LANES], cases=[], passed=False)
+    try:
+        for case in cases:
+            row = dict(case=case, lanes=[])
+            report["cases"].append(row)
+            for lane, gate_lane in LANES:
+                lane_row = dict(lane=lane, runs={}, gate_errors=[])
+                row["lanes"].append(lane_row)
+                roots = {}
+                for side, source, revision in (("before", args.before, before_sha),
+                                               ("after", args.after, after_sha)):
+                    output = args.output / case / lane / side
+                    try:
+                        status, manifest = run_one(source, case, lane, output, args.install)
+                        lane_row["runs"][side] = dict(returncode=status,
+                            manifest=str(manifest.relative_to(args.output)),
+                            manifest_sha256=sha256(manifest))
+                        require(status == 0, "%s run exited %d" % (side, status))
+                        verified_manifest(manifest, case, lane, revision)
+                        roots[side] = manifest.parent
+                    except (ValueError, OSError, subprocess.SubprocessError) as error:
+                        lane_row["gate_errors"].append("%s: %s" % (side, error))
+                if len(roots) == 2:
+                    lane_row["gate_errors"].extend(check_session_roots(
+                        roots["before"], roots["after"], gate_lane))
+    finally:
+        report["passed"] = (len(report["cases"]) == len(cases) and all(
+            len(row["lanes"]) == len(LANES) and all(
+                not lane["gate_errors"] and len(lane["runs"]) == 2
+                for lane in row["lanes"]) for row in report["cases"]))
+        args.output.mkdir(parents=True, exist_ok=True)
+        (args.output / "targeted-ui-migration.json").write_text(
+            json.dumps(report, indent=2) + "\n")
+        print(json.dumps(dict(passed=report["passed"], report=str(
+            args.output / "targeted-ui-migration.json"))), flush=True)
+    return 0 if report["passed"] else 1
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--before", type=Path, required=True)
+    parser.add_argument("--before-sha", required=True)
+    parser.add_argument("--after", type=Path, required=True)
+    parser.add_argument("--after-sha", required=True)
+    parser.add_argument("--case-ids", required=True)
+    parser.add_argument("--emulator", type=Path, required=True)
+    parser.add_argument("--install", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args(argv)
+    try:
+        return execute(args)
+    except (ValueError, OSError, subprocess.SubprocessError) as error:
+        parser.exit(1, str(error) + "\n")
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

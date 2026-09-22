@@ -56,9 +56,8 @@ def _session_paths(side):
     return recipes,results
 
 
-def check_lane(root, lane):
+def check_session_roots(before, after, lane):
     errors = []
-    before,after=root / "before",root / "after"
     before_recipes,before_results=_session_paths(before)
     after_recipes,after_results=_session_paths(after)
     if before_recipes != before_results:
@@ -84,6 +83,10 @@ def check_lane(root, lane):
         errors.extend("%s: %s" % (label,error)
                       for error in compare_results(before_values,after_values,lane))
     return errors
+
+
+def check_lane(root, lane):
+    return check_session_roots(root / "before", root / "after", lane)
 
 
 def main(argv=None):

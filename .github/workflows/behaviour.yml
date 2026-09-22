@@ -9,12 +9,26 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      ui_migration_targeted:
+        description: Run only SHA-bound targeted UI-migration gates (not full coverage)
+        type: boolean
+        default: false
+      ui_migration_before_sha:
+        description: Full 40-character baseline commit SHA
+        type: string
+      ui_migration_after_sha:
+        description: Full 40-character candidate commit SHA
+        type: string
+      ui_migration_case_ids:
+        description: Comma-separated base-MIDI case IDs (no regex)
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: full-behaviour-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ inputs.ui_migration_targeted && format('targeted-ui-{0}', github.run_id) || format('full-behaviour-{0}', github.event.pull_request.number || github.ref) }}
   cancel-in-progress: true
 
 env:
@@ -26,6 +40,7 @@ env:
 jobs:
   base-midi:
     name: Base MIDI shard ${{ matrix.shard }}
+    if: ${{ !inputs.ui_migration_targeted }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -66,7 +81,7 @@ jobs:
       - name: Verify CI partition and aggregation contracts
         if: matrix.shard == 0
         working-directory: tests/behaviour
-        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths
+        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration
       - name: Fetch output-profile fixtures for fast layers
         if: matrix.shard == 0
         run: |
@@ -121,6 +136,7 @@ jobs:
 
   midi-modulation:
     name: MIDI modulation profiles
+    if: ${{ !inputs.ui_migration_targeted }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -163,6 +179,7 @@ jobs:
 
   audio-crow:
     name: Audio and Crow/JF profiles
+    if: ${{ !inputs.ui_migration_targeted }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -218,6 +235,7 @@ jobs:
 
   rhythm-doctor:
     name: Rhythm Doctor surface
+    if: ${{ !inputs.ui_migration_targeted }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -261,7 +279,7 @@ jobs:
 
   complete:
     name: Complete behaviour coverage
-    if: always()
+    if: ${{ always() && !inputs.ui_migration_targeted }}
     needs: [base-midi, midi-modulation, audio-crow]
     runs-on: ubuntu-latest
     steps:
@@ -290,3 +308,86 @@ jobs:
           name: full-behaviour-report
           path: full-behaviour-report.json
           retention-days: 14
+
+  targeted-ui-migration:
+    name: Targeted UI migration (partial, both lanes)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_targeted }}
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 240
+    steps:
+      - name: Validate immutable source selections
+        shell: bash
+        env:
+          BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
+          AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
+          CASE_IDS: ${{ inputs.ui_migration_case_ids }}
+        run: |
+          [[ "$BEFORE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$AFTER_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$BEFORE_SHA" != "$AFTER_SHA" ]]
+          [[ -n "$CASE_IDS" ]]
+      - name: Check out baseline source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ui_migration_before_sha }}
+          path: before-source
+          submodules: recursive
+      - name: Check out candidate source and gate
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ui_migration_after_sha }}
+          path: after-source
+          submodules: recursive
+      - name: Verify candidate has targeted gate runner
+        run: test -f after-source/tests/behaviour/ci/targeted-ui-migration.py
+      - name: Install native runtime dependencies
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends build-essential ca-certificates cmake git jackd2 lua5.3 pkg-config python3 libasound2-dev libavahi-compat-libdnssd-dev libcairo2-dev libevdev-dev libgpiod-dev libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
+      - name: Check out pinned emulator
+        run: |
+          git clone --filter=blob:none https://github.com/subvertnormality/monome-emulator.git "$EMULATOR_ROOT"
+          git -C "$EMULATOR_ROOT" checkout --detach "$EMULATOR_REVISION"
+          test "$(git -C "$EMULATOR_ROOT" rev-parse HEAD)" = "$EMULATOR_REVISION"
+      - name: Restore native runtime
+        uses: actions/cache@v4
+        with:
+          path: /tmp/monome-emulator/.runtime
+          key: monome-emulator-ubuntu20-68ab709-qualified-v9
+      - name: Build native runtimes
+        run: after-source/tests/behaviour/ci/prepare-emulator.sh
+      - name: Prepare unprivileged behaviour user
+        run: |
+          useradd --create-home --shell /bin/bash mosaic-ci
+          chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE/before-source" "$GITHUB_WORKSPACE/after-source" "$EMULATOR_ROOT"
+      - name: Run passing before/after cases and strict gates
+        env:
+          BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
+          AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
+          CASE_IDS: ${{ inputs.ui_migration_case_ids }}
+        run: |
+          runuser -u mosaic-ci --preserve-environment -- python3 \
+            "$GITHUB_WORKSPACE/after-source/tests/behaviour/ci/targeted-ui-migration.py" \
+            --before "$GITHUB_WORKSPACE/before-source" --before-sha "$BEFORE_SHA" \
+            --after "$GITHUB_WORKSPACE/after-source" --after-sha "$AFTER_SHA" \
+            --case-ids "$CASE_IDS" --emulator "$EMULATOR_ROOT" \
+            --install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
+            --output /tmp/mosaic-ui-targeted
+      - name: Upload partial run evidence (never full coverage)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: targeted-ui-migration-${{ github.run_id }}
+          path: |
+            /tmp/mosaic-ui-targeted/targeted-ui-migration.json
+            /tmp/mosaic-ui-targeted/**/process.log
+            /tmp/mosaic-ui-targeted/**/manifest.json
+            /tmp/mosaic-ui-targeted/**/recipe.json
+            /tmp/mosaic-ui-targeted/**/results.json
+            !/tmp/mosaic-ui-targeted/**/code/**
+            !/tmp/mosaic-ui-targeted/**/data/**
+          retention-days: 14
+          compression-level: 9
