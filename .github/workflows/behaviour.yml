@@ -66,7 +66,7 @@ jobs:
       - name: Verify CI partition and aggregation contracts
         if: matrix.shard == 0
         working-directory: tests/behaviour
-        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full
+        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths
       - name: Fetch output-profile fixtures for fast layers
         if: matrix.shard == 0
         run: |
@@ -114,6 +114,8 @@ jobs:
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/results.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/serial-rerun/**/manifest.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/logs/**
+            !/tmp/mosaic-behaviour-base-${{ matrix.shard }}/**/code/**
+            !/tmp/mosaic-behaviour-base-${{ matrix.shard }}/**/data/**
           retention-days: 7
           compression-level: 9
 
@@ -154,6 +156,8 @@ jobs:
             /tmp/mosaic-behaviour-modulation/runs/**/recipe.json
             /tmp/mosaic-behaviour-modulation/runs/**/results.json
             /tmp/mosaic-behaviour-modulation/logs/**
+            !/tmp/mosaic-behaviour-modulation/**/code/**
+            !/tmp/mosaic-behaviour-modulation/**/data/**
           retention-days: 7
           compression-level: 9
 
@@ -207,6 +211,8 @@ jobs:
             /tmp/mosaic-behaviour-output/runs/**/recipe.json
             /tmp/mosaic-behaviour-output/runs/**/results.json
             /tmp/mosaic-behaviour-output/logs/**
+            !/tmp/mosaic-behaviour-output/**/code/**
+            !/tmp/mosaic-behaviour-output/**/data/**
           retention-days: 7
           compression-level: 9
 
