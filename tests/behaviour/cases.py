@@ -44,7 +44,7 @@ from nb_device_switch_slots import nb_device_switch_slots
 from length_persistence import length_persistence
 from slide_capacity import slide_capacity
 from memory_new_project import memory_new_project
-from autosave_failure import autosave_failure
+from contract.autosave_failure import autosave_failure
 from scale_lock_order import scale_lock_order
 from persisted_fixture import persisted_fixture
 from elektron_two_ports import elektron_two_ports

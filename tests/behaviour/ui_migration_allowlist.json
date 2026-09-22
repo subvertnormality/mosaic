@@ -1,6 +1,5 @@
 [
   "acquisition_stop.py",
-  "autosave_failure.py",
   "cases.py",
   "dense_workload.py",
   "dial_off_display.py",
