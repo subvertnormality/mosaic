@@ -10,6 +10,7 @@ failed idle autosave writes nothing and the next input restarts the idle period.
 import base64, json, os, shutil, stat, subprocess
 from pathlib import Path
 from driver import digest
+from persisted_digest import project_digest
 
 
 def autosave_failure(c):
@@ -17,8 +18,9 @@ def autosave_failure(c):
     from frame_oracle import render
     c.configure()
     data = c.data_directory
+    source = json.loads(Path(c.launch_options['experimental_install']).read_text())['source']
     ptn, pset = data/'autosave.ptn', data/'autosave.pset'
-    def saved(): return (digest(ptn), digest(pset)) if ptn.is_file() and pset.is_file() else None
+    def saved(): return (project_digest(ptn, source), digest(pset)) if ptn.is_file() and pset.is_file() else None
     def idle(seconds):
         while seconds > 0:
             step = min(30, seconds); c.elapse(step); seconds -= step
@@ -39,7 +41,6 @@ def autosave_failure(c):
     script = c.out/'bad-range.lua'
     script.write_text("local root,path=table.unpack(arg);local tab=dofile(root..'/lua/lib/tabutil.lua');local saved=assert(tab.load(path));"
                       "local channel=saved[2].song_patterns[1].channels[1];channel.start_trig={4,4};channel.end_trig={2,4};assert(tab.save(saved,path)==nil)")
-    source = json.loads(Path(c.launch_options['experimental_install']).read_text())['source']
     subprocess.run(['lua5.3', str(script), source, str(broken)], check=True)
     select_project_file(c, 'broken.ptn'); c.key(3); c.key(1)
     expected = render([(0, 62, 10, 'Slot 1 ch 1 reversed')])
