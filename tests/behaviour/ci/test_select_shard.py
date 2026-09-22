@@ -6,7 +6,7 @@ module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 
 class Tests(unittest.TestCase):
     def test_base_shards_are_disjoint_and_exhaustive(self):
-        shards=[module.select('base-midi',i,8) for i in range(8)]
+        shards=[module.select('base-midi',i,16) for i in range(16)]
         flat=[case for shard in shards for case in shard]
         self.assertEqual(len(flat),len(set(flat)))
         self.assertEqual(set(flat),set(module.select('base-midi',0,1)))
@@ -16,5 +16,5 @@ class Tests(unittest.TestCase):
         self.assertEqual(3,len(module.select('nb-audio',0,1)))
         self.assertEqual(4,len(module.select('crow-jf',0,1)))
     def test_rejects_invalid_shard(self):
-        with self.assertRaises(ValueError):module.select('base-midi',8,8)
+        with self.assertRaises(ValueError):module.select('base-midi',16,16)
 if __name__=='__main__':unittest.main()

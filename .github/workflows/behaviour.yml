@@ -33,9 +33,9 @@ jobs:
     timeout-minutes: 180
     strategy:
       fail-fast: false
-      max-parallel: 8
+      max-parallel: 16
       matrix:
-        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
     steps:
       - &packages
         name: Install native runtime dependencies
@@ -88,7 +88,7 @@ jobs:
           fi
       - name: Run exhaustive base-MIDI shard
         run: |
-          pattern="$(python3 tests/behaviour/ci/select-shard.py --profile base-midi --index ${{ matrix.shard }} --count 8)"
+          pattern="$(python3 tests/behaviour/ci/select-shard.py --profile base-midi --index ${{ matrix.shard }} --count 16)"
           extra="--skip-fast-layers"
           output_mod=""
           if [ "${{ matrix.shard }}" = 0 ]; then
@@ -110,6 +110,8 @@ jobs:
           path: |
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite*.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/manifest.json
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/recipe.json
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/results.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/serial-rerun/**/manifest.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/logs/**
           retention-days: 7
@@ -149,6 +151,8 @@ jobs:
           path: |
             /tmp/mosaic-behaviour-modulation/suite*.json
             /tmp/mosaic-behaviour-modulation/runs/**/manifest.json
+            /tmp/mosaic-behaviour-modulation/runs/**/recipe.json
+            /tmp/mosaic-behaviour-modulation/runs/**/results.json
             /tmp/mosaic-behaviour-modulation/logs/**
           retention-days: 7
           compression-level: 9
@@ -200,6 +204,8 @@ jobs:
           path: |
             /tmp/mosaic-behaviour-output/suite*.json
             /tmp/mosaic-behaviour-output/runs/**/manifest.json
+            /tmp/mosaic-behaviour-output/runs/**/recipe.json
+            /tmp/mosaic-behaviour-output/runs/**/results.json
             /tmp/mosaic-behaviour-output/logs/**
           retention-days: 7
           compression-level: 9
@@ -237,7 +243,7 @@ jobs:
             done
           done
       # Deliberately not named behaviour-*: the aggregation job downloads that
-      # prefix and requires exactly ten suite.json files.
+      # prefix and requires exactly eighteen suite.json files.
       - name: Upload Rhythm Doctor surface report
         if: always()
         uses: actions/upload-artifact@v4
@@ -269,7 +275,7 @@ jobs:
           MONOME_EMULATOR: /tmp/identity-only
         run: |
           mapfile -t suites < <(find reports -name suite.json -type f | sort)
-          test "${#suites[@]}" -eq 10
+          test "${#suites[@]}" -eq 18
           python3 tests/behaviour/ci/verify-full.py --output full-behaviour-report.json "${suites[@]}"
           cat full-behaviour-report.json >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
