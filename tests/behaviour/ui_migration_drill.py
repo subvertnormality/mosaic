@@ -222,8 +222,7 @@ def verify_swap(repo, baseline, scratch, pages):
     require(ast.dump(before) == ast.dump(after), "scratch change is not exactly the requested page-order swap")
     paths = git(repo, "ls-tree", "-r", "--name-only", scratch, "tests/behaviour").decode().splitlines()
     sources = {path: sha(raw) for path, raw in blobs(repo, scratch, [
-        path for path in paths if PurePosixPath(path).parent.as_posix() == "tests/behaviour"
-        and path.endswith(".py")]).items()}
+        path for path in paths if path.endswith(".py")]).items()}
     return scratch, sources
 
 

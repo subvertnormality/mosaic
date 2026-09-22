@@ -116,6 +116,7 @@ class DriftArtifactTests(unittest.TestCase):
         self.put("tests/behaviour/ui_map.py", self.map_source)
         self.put("tests/behaviour/cases.py", 'CASES = {"A": {}, "B": {}}\n')
         self.put("tests/behaviour/suite.py", 'CASE_PROFILE = {}\n')
+        self.put("tests/behaviour/contract/nested_probe.py", 'NESTED_SOURCE = True\n')
         root = "docs/testing/ui-migration-baselines/A/controlled/after/"
         self.put(root + "recipe.json", [])
         self.put(root + "results.json", [dict(kind="ui-confirm", page="masks", channel=1)])
@@ -167,6 +168,19 @@ class DriftArtifactTests(unittest.TestCase):
         self.assertEqual(revision, self.baseline)
         self.assertEqual(set(selected), {"A"})
         self.assertEqual(profiles, {})
+
+    def test_scratch_sources_match_recursive_runner_hashes(self):
+        nested = "tests/behaviour/contract/nested_probe.py"
+        self.assertIn(nested, self.sources)
+        expected = {
+            path.relative_to(self.repo).as_posix(): sha(path.read_bytes())
+            for path in sorted((self.repo / "tests/behaviour").rglob("*.py"))
+        }
+        self.assertEqual(self.sources, expected)
+        self.put(nested, 'NESTED_SOURCE = "uncommitted"\n')
+        _, committed_sources = verify_swap(
+            self.repo, self.baseline, self.scratch, ("masks", "memory"))
+        self.assertEqual(committed_sources, expected)
 
     def test_list_never_creates_report(self):
         self.assertEqual(main(["--repo", str(self.repo), "--baseline", self.baseline,
