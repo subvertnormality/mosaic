@@ -76,6 +76,14 @@ class CollectionTests(unittest.TestCase):
         self.assertEqual(set(python),{p.stem for p in suite.BEHAVIOUR.glob('test_*.py')})
         self.assertEqual(set(lua),{p.name for p in suite.BEHAVIOUR.glob('*.lua')})
 
+    def test_persisted_digest_lua_contract_receives_norns_root_and_project(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(suite, 'run_command') as run:
+                suite.lua_layer(['persisted_digest.lua'], Path(tmp), Path(tmp))
+        command = run.call_args.args[1]
+        self.assertEqual(command[2:], [tmp,
+                          str(suite.BEHAVIOUR/'fixtures/persisted/current/data/autosave.ptn')])
+
     def test_unclassified_or_stale_declarations_fail(self):
         cases=set(suite.case_registry())
         with patch.object(suite,'PYTHON_UNITTEST',suite.PYTHON_UNITTEST-{'test_midi_window'}):

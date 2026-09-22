@@ -29,7 +29,7 @@ REPO=Path(__file__).resolve().parents[2]
 BEHAVIOUR=REPO/'tests/behaviour'
 # Declared invocation for every Lua file in tests/behaviour; an unlisted file fails collection.
 LUA_ARGUMENT={'panic_live_note_contract.lua':'mosaic-root','test_native_control_endpoint.lua':'norns-root',
-              'test_patch_param_domain.lua':'norns-root'}
+              'test_patch_param_domain.lua':'norns-root','persisted_digest.lua':'norns-root-persisted-project'}
 # Python test modules run under unittest, each with the environment it needs.
 PYTHON_UNITTEST={'test_acquisition_oracle','test_collection','test_duration_routes','test_external_clock_fault_oracle',
     'test_forwarded_clock_oracle','test_fractional_stop_boundary','test_jf_oracle','test_master_clock_oracle',
@@ -107,7 +107,10 @@ def lua_layer(files,norns,out):
     rows=[]
     for name in files:
         kind=LUA_ARGUMENT.get(name)
-        args=[] if kind is None else [str(REPO) if kind=='mosaic-root' else str(norns)]
+        if kind=='norns-root-persisted-project':
+            args=[str(norns),str(BEHAVIOUR/'fixtures/persisted/current/data/autosave.ptn')]
+        else:
+            args=[] if kind is None else [str(REPO) if kind=='mosaic-root' else str(norns)]
         rows.append(run_command(name,['lua5.3','tests/behaviour/'+name,*args],REPO,log=logs/(name+'.log')))
     return rows
 
