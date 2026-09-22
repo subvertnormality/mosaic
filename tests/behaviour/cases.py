@@ -2,7 +2,7 @@ from lock_lead_time import lock_lead_time
 from shuffle_matrix import shuffle_matrix
 from shuffle_first_bar_record import shuffle_first_bar_record
 from random_note_domains import random_note_domains
-from grid_hot_disconnect import grid_disconnect_two_key_range
+from contract.grid_hot_disconnect import grid_disconnect_two_key_range
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from keyboard_repeated_note_on import keyboard_repeated_note_on
@@ -36,13 +36,13 @@ from recorded_note_page_key_held import recorded_note_page_key_held
 from trigless_slide_clock import trigless_slide_clock
 from recording_lock_song import recording_lock_song
 from contract.song_divisions import song_tempo_divisions
-from memory_wrap import memory_wrap,memory_retained_floor
+from contract.memory_wrap import memory_wrap,memory_retained_floor
 from scale_cache import scale_cache_saves
 from nb_param_lock import nb_param_lock
 from nb_chord_acceleration_lock import nb_chord_acceleration_lock
 from nb_device_switch_slots import nb_device_switch_slots
 from length_persistence import length_persistence
-from slide_capacity import slide_capacity
+from contract.slide_capacity import slide_capacity
 from memory_new_project import memory_new_project
 from contract.autosave_failure import autosave_failure
 from scale_lock_order import scale_lock_order
@@ -79,7 +79,7 @@ from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
 from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit
 from contract.parameter_lock_domain import parameter_fine_gesture
-from dial_off_display import dial_off_display
+from contract.dial_off_display import dial_off_display
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
 from persisted_ranges import rejected_manual_range
