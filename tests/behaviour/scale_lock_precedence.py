@@ -12,12 +12,10 @@ def pitch(slot,degree):return ROOT[slot]+MAJOR[degree]
 VELOCITY=[127,117,107,97]
 
 def scale_lock_precedence(c):
-    from cases import set_mosaic_options,assign_trig_parameter
-    def edit_root(semitones):c.enc(2,-1);c.enc(3,semitones);c.key(3);c.enc(2,1)
+    ui=c.ui
+    def edit_root(semitones):ui.turn(2,-1);ui.set_value(semitones);ui.press_key(3);ui.turn(2,1)
     def hold_slot(step,slot):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.tap(slot,3)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with ui.hold_step(step):ui.tap_control('scale_slot',slot)
         c.elapse(.1)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
@@ -31,31 +29,30 @@ def scale_lock_precedence(c):
             assert abs((b[field]-a[field])/1e9-((right-left)%4 or 4)/6)<=tolerance,(stage,i)
         c.results.append(dict(kind='scale-lock-precedence',stage=stage,slots=slots,pitches=[e[1][1] for e in expected],passed=True))
     c.configure()
-    c.tap(4,8);c.hold_tap((1,4),(4,4))                       # scale track steps 1-4
-    c.tap(3,3);edit_root(4);c.tap(4,3);edit_root(7);c.tap(2,3);edit_root(2)
+    ui.scale_editor()
+    with ui.hold_step(1):ui.tap_step(4)                     # scale track steps 1-4
+    ui.tap_control('scale_slot',3);edit_root(4);ui.tap_control('scale_slot',4);edit_root(7);ui.tap_control('scale_slot',2);edit_root(2)
     hold_slot(2,4)                                           # global lock: step 2 -> G major
-    c.tap(3,8);hold_slot(1,3)                                # channel lock: step 1 -> E major
+    ui.tap_control('channel_editor');hold_slot(1,3)          # channel lock: step 1 -> E major
     phrase('hold-on-channel-over-global',[3,3,3,3])
-    set_mosaic_options(c,[('Scales lock until ptn end',False)])
+    ui.set_mosaic_option_keys([('scale_lock_until_pattern_end',False)])
     phrase('hold-off-next-trig-clears',[3,4,4,4])
     # A probability-rejected trig does not clear the channel lock.
-    c.enc(1,-3);assign_trig_parameter(c,'Trig Probability')
-    c.action(type='grid',x=2,y=4,state=1)
-    try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,1) # step 2 probability 0
-    finally:c.action(type='grid',x=2,y=4,state=0)
+    ui.turn(1,-3);ui.assign_trig_parameter_key('trig_probability')
+    with ui.hold_step(2):
+        c.elapse(.05);ui.encoder_event(3,-126);c.elapse(.15);ui.turn(3,1) # step 2 probability 0
     c.elapse(.15)
     phrase('hold-off-rejected-trig-keeps-lock',[3,None,4,4])
-    c.action(type='grid',x=2,y=4,state=1)
-    try:c.elapse(.05);c.key(2)                               # clear step-2 trig locks
-    finally:c.action(type='grid',x=2,y=4,state=0)
+    with ui.hold_step(2):
+        c.elapse(.05);ui.press_key(2)                        # clear step-2 trig locks
     c.elapse(.15)
     phrase('hold-off-probability-cleared',[3,4,4,4])
     # A rest (no trig on step 2) does not clear it either.
-    c.tap(5,8);c.tap(1,1);c.tap(2,4);c.tap(3,8)
+    ui.pattern_editor();ui.tap_control('pattern_select',1);ui.tap_step(2);ui.tap_control('channel_editor')
     phrase('hold-off-rest-keeps-lock',[3,None,4,4])
-    c.tap(5,8);c.tap(1,1);c.tap(2,4);c.tap(3,8)
+    ui.pattern_editor();ui.tap_control('pattern_select',1);ui.tap_step(2);ui.tap_control('channel_editor')
     # A new channel lock on step 3 replaces the old one and applies normally.
     hold_slot(3,2)
     phrase('hold-off-replacement',[3,4,2,4])
-    set_mosaic_options(c,[('Scales lock until ptn end',True)])
+    ui.set_mosaic_option_keys([('scale_lock_until_pattern_end',True)])
     phrase('hold-on-replacement',[3,3,2,2])
