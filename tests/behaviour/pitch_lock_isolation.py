@@ -1,28 +1,25 @@
 """Independent MIDI oracles for pitch-lock ownership across channels/song copies."""
 
 def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reassign=False):
-    from cases import assign_trig_parameter,assert_durations
-    c.configure()
-    c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.enc(1,-3)
+    from cases import assert_durations
+    c.ui.configure()
+    c.ui.select_channel(2);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
+    c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.turn(1,-3)
     def lock(step,value):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-            if value>=0:c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with c.ui.hold_step(step):
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
+            if value>=0:c.ui.set_value(value+1)
         c.elapse(.15)
     def clear(step):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.key(2)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with c.ui.hold_step(step):
+            c.elapse(.05);c.ui.press_key(2)
         c.elapse(.15)
     def verify(one,two,label,driver=c):
         c=driver
-        before=c.snapshot()['midi_count'];c.tap(1,8)
+        before=c.snapshot()['midi_count'];c.ui.play()
         def emitted(state):return [m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         state=c.wait(lambda state:all(sum(m['port']==port for m in emitted(state))>=9 for port in [1,2]),4)
-        notes=emitted(state);c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        notes=emitted(state);c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
         assert all((m['port'],m['bytes'][0]) in [(1,144),(2,145)] for m in notes)
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
@@ -36,9 +33,9 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
             assert_durations(c,lane,[1]*8)
         assert abs(origins[1]-origins[0])/1e9<=tolerance
         c.results.append(dict(kind='pitch-lock-channel-song-isolation',stage=label,pitches=[one,two],routes=2,passed=True))
-    assign_trig_parameter(c,'Quantised Fixed Note');c.enc(3,66)
+    c.ui.assign_trig_parameter('Quantised Fixed Note');c.ui.set_value(66)
     lock(1,63);lock(3,0)
-    c.tap(1,1);assign_trig_parameter(c,'Fixed Note');c.enc(3,61)
+    c.ui.select_channel(1);c.ui.assign_trig_parameter('Fixed Note');c.ui.set_value(61)
     lock(2,0);lock(4,127)
     one=[60,0,60,127];two=[62,65,0,65]
     verify(one,two,'independent-fixed-and-quantised-locks')
@@ -47,38 +44,38 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
         lock(1,0);lock(2,63);lock(3,61)
         raw=[0,63,61,127];quantised=[0,62,60,127]
         verify(raw,two,'fixed-values-before-reassignment')
-        assign_trig_parameter(c,'Fixed Note')
+        c.ui.assign_trig_parameter('Fixed Note')
         verify(raw,two,'same-assignment-retains-locks')
-        assign_trig_parameter(c,'Quantised Fixed Note')
+        c.ui.assign_trig_parameter('Quantised Fixed Note')
         # Stock defaults remain active without a slot. Fixed Note's existing
         # channel default takes precedence over the newly assigned quantiser.
         verify([60]*4,two,'unassigned-fixed-default-retains-precedence')
-        assign_trig_parameter(c,'Fixed Note');verify(raw,two,'restore-fixed-with-original-locks')
-        c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+        c.ui.assign_trig_parameter('Fixed Note');verify(raw,two,'restore-fixed-with-original-locks')
+        c.ui.encoder_event(3,-126);c.elapse(.15)
         verify(raw,two,'disable-fixed-default-without-clearing-locks')
-        assign_trig_parameter(c,'Quantised Fixed Note')
+        c.ui.assign_trig_parameter('Quantised Fixed Note')
         verify(quantised,two,'stored-values-follow-quantised-target')
-        assign_trig_parameter(c,'Quantised Fixed Note')
+        c.ui.assign_trig_parameter('Quantised Fixed Note')
         verify(quantised,two,'same-quantised-assignment-retains-locks')
-        assign_trig_parameter(c,'None')
+        c.ui.assign_trig_parameter('None')
         verify([60,62,64,65],two,'unassigned-slot-does-not-apply-dormant-locks')
-        assign_trig_parameter(c,'Fixed Note')
+        c.ui.assign_trig_parameter('Fixed Note')
         verify(raw,two,'restored-assignment-reuses-original-raw-values')
         return
     if history:
-        c.tap(1,1);c.enc(1,1);c.screen_header('Ch. 1 Memory',selected=3)
-        c.key(2);verify([60]*4,two,'undo-first-channel-only')
-        c.key(3);verify(one,two,'redo-first-channel-extreme-locks')
-        c.tap(2,1);c.screen_header('Ch. 2 Memory',selected=3)
-        c.key(2);verify(one,[65]*4,'undo-second-channel-only')
-        c.key(3);verify(one,two,'redo-second-channel-quantised-and-zero')
-        c.key(2);c.enc(1,-1);lock(4,72);c.enc(1,1)
-        c.screen_header('Ch. 2 Memory',selected=3);c.key(3)
+        c.ui.select_channel(1);c.ui.turn(1,1);c.ui.expect_header('memory',channel=1)
+        c.ui.press_key(2);verify([60]*4,two,'undo-first-channel-only')
+        c.ui.press_key(3);verify(one,two,'redo-first-channel-extreme-locks')
+        c.ui.select_channel(2);c.ui.expect_header('memory',channel=2)
+        c.ui.press_key(2);verify(one,[65]*4,'undo-second-channel-only')
+        c.ui.press_key(3);verify(one,two,'redo-second-channel-quantised-and-zero')
+        c.ui.press_key(2);c.ui.turn(1,-1);lock(4,72);c.ui.turn(1,1)
+        c.ui.expect_header('memory',channel=2);c.ui.press_key(3)
         verify(one,[65,65,65,72],'new-edit-discards-second-channel-redo')
-        c.key(2);verify(one,[65]*4,'branched-history-start')
-        c.key(3);verify(one,[65,65,65,72],'branched-history-end')
-        c.tap(1,1);c.key(2);verify([60]*4,[65,65,65,72],'other-history-survives-branch')
-        c.key(3);verify(one,[65,65,65,72],'other-history-redo-survives-branch')
+        c.ui.press_key(2);verify(one,[65]*4,'branched-history-start')
+        c.ui.press_key(3);verify(one,[65,65,65,72],'branched-history-end')
+        c.ui.select_channel(1);c.ui.press_key(2);verify([60]*4,[65,65,65,72],'other-history-survives-branch')
+        c.ui.press_key(3);verify(one,[65,65,65,72],'other-history-redo-survives-branch')
         if persistence:
             from driver import Driver,digest
             def save_idle(driver):
@@ -94,18 +91,18 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
                 loaded=Driver(out,project_seed=next_seed,**c.launch_options)
                 try:
                     # Cold init does not preserve the encoder-selected UI page.
-                    loaded.tap(3,8);loaded.tap(1,1);loaded.enc(1,-10);loaded.enc(1,2)
-                    loaded.screen_header('Ch. 1 Memory',selected=3)
+                    loaded.ui.menu('channel_editor');loaded.ui.select_channel(1);loaded.ui.turn(1,-10);loaded.ui.turn(1,2)
+                    loaded.ui.expect_header('memory',channel=1)
                     verify(one if generation==0 else [60]*4,[65,65,65,72],'cold-restored-history-'+str(generation),loaded)
                     if generation==0:
-                        loaded.key(2)
+                        loaded.ui.press_key(2)
                         verify([60]*4,[65,65,65,72],'save-undone-first-channel',loaded)
                         save_idle(loaded)
                     else:
-                        loaded.key(3);verify(one,[65,65,65,72],'redo-after-undone-cold-save',loaded)
-                        loaded.tap(2,1);loaded.screen_header('Ch. 2 Memory',selected=3)
-                        loaded.key(2);verify(one,[65]*4,'other-channel-undo-after-two-boots',loaded)
-                        loaded.key(3);verify(one,[65,65,65,72],'discarded-redo-does-not-return-after-boots',loaded)
+                        loaded.ui.press_key(3);verify(one,[65,65,65,72],'redo-after-undone-cold-save',loaded)
+                        loaded.ui.select_channel(2);loaded.ui.expect_header('memory',channel=2)
+                        loaded.ui.press_key(2);verify(one,[65]*4,'other-channel-undo-after-two-boots',loaded)
+                        loaded.ui.press_key(3);verify(one,[65,65,65,72],'discarded-redo-does-not-return-after-boots',loaded)
                     loaded.results.append(dict(kind='pitch-lock-history-cold-generation',generation=generation,passed=True))
                 finally:loaded.finish()
                 next_seed=loaded.data_directory
@@ -113,26 +110,26 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
             c.results.append(dict(kind='pitch-lock-history-persistence',cold_generations=2,undone_position_and_redo=True,source_preserved=True,passed=True))
         return
     if song_copy:
-        c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1)
-        c.led_values([(1,1),(2,1)],[7,15]);c.tap(3,8)
+        c.ui.song_editor();c.ui.copy_slot(1,2,control='song_pattern_slot');c.ui.tap_control('song_pattern_slot',2)
+        c.ui.expect_leds({('song_pattern_slot',1):'alternate',('song_pattern_slot',2):'selected'});c.ui.menu('channel_editor')
         verify(one,two,'copied-song-retains-both-channels')
-        c.tap(1,1);lock(2,72)
-        c.tap(2,1);lock(1,67)
+        c.ui.select_channel(1);lock(2,72)
+        c.ui.select_channel(2);lock(1,67)
         verify([60,72,60,127],[67,65,0,65],'copy-edits-isolated-between-channels')
-        c.tap(6,8);c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7]);c.tap(3,8)
+        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',1);c.ui.expect_leds({('song_pattern_slot',1):'selected',('song_pattern_slot',2):'alternate'});c.ui.menu('channel_editor')
         verify(one,two,'source-song-unchanged-after-copy-edits')
-        c.tap(6,8);c.tap(2,1);c.tap(3,8)
-        c.tap(1,1);clear(4);c.tap(2,1);clear(3)
+        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',2);c.ui.menu('channel_editor')
+        c.ui.select_channel(1);clear(4);c.ui.select_channel(2);clear(3)
         verify([60,72,60,60],[67,65,65,65],'clear-only-copied-extreme-locks')
-        c.tap(6,8);c.tap(1,1);c.tap(3,8)
+        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',1);c.ui.menu('channel_editor')
         verify(one,two,'source-zero-and-upper-locks-retained')
         return
-    c.tap(2,1);clear(1);verify(one,[65,65,0,65],'clear-second-channel-only')
-    c.tap(1,1);c.enc(3,10);verify([70,0,70,127],[65,65,0,65],'default-edit-retains-other-channel-and-local-locks')
+    c.ui.select_channel(2);clear(1);verify(one,[65,65,0,65],'clear-second-channel-only')
+    c.ui.select_channel(1);c.ui.set_value(10);verify([70,0,70,127],[65,65,0,65],'default-edit-retains-other-channel-and-local-locks')
     clear(2);verify([70,70,70,127],[65,65,0,65],'clear-first-channel-zero-only')
-    c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+    c.ui.encoder_event(3,-126);c.elapse(.15)
     verify([60,62,64,127],[65,65,0,65],'fixed-default-off-restores-own-pattern')
-    c.tap(2,1);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+    c.ui.select_channel(2);c.ui.encoder_event(3,-126);c.elapse(.15)
     verify([60,62,64,127],[60,62,0,65],'quantised-default-off-preserves-own-zero')
-    clear(3);c.tap(1,1);clear(4)
+    clear(3);c.ui.select_channel(1);clear(4)
     verify([60,62,64,65],[60,62,64,65],'both-original-phrases-restored')

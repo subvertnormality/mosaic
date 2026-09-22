@@ -183,6 +183,29 @@ UI dependencies and is absent from the allowlist. All eight timing lanes and str
 before/after gates pass, as do a three-fresh-process controlled repeat and an independent
 real-time repeat.
 
+The cross-song pending note-mask ownership workflow
+(`pending_note_mask_song_transition.py`, `M-MASK-032`) is UI-independent. Its semantic
+rewrite preserves the exact pre-boundary held-step press and native encoder event, keeps the
+step held across the automatic song transition, and releases only after the copied slot's
+octave fingerprint sounds. Slot LEDs, exact Note Masks and Memory headers, replay pitches,
+input callback timing and song-A undo/redo ownership retain their established result schemas.
+The module has zero reachable raw UI dependencies and is absent from the allowlist. Both
+timing lanes and strict before/after gates pass, as do the three-fresh-process controlled
+repeat and an independent real-time repeat.
+
+The pitch-parameter batch (`pitch_lock_isolation.py`, `random_note_domains.py`,
+`mask_quantisation.py` and `merge_lock_random.py`) is UI-independent across sixteen ordinary
+cases: `M-PARAM-032` through `M-PARAM-042`, `M-MASK-019` through `M-MASK-022`, and
+`M-TRIPLE-001`. A shared `Ui.assign_trig_parameter` verb was added through red-green
+differential coverage against the legacy helper, including first/middle/last scans, cached
+positive, zero and negative offsets, the fifty-step unavailable failure and failed cached
+label confirmation. The rewrites preserve native PRNG seeds and draw order, exact mask and
+pitch domains, held-step/native-encoder timing, channel/song/history ownership, cold reloads,
+MIDI duration and phase checks, and every established result schema. All four modules have
+zero reachable raw UI dependencies and are absent from the allowlist. All thirty-two timing
+lanes and strict before/after gates pass, as do a three-fresh-process controlled repeat and an
+independent real-time repeat for one representative from each module.
+
 Implementation census: revision `4108035` contains 837 registered cases. The
 map follows the current eight-page channel editor, including Merge Shape and
 Harmony; the 773-case figures below remain the proposal's 2026-09-11 baseline.

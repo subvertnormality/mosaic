@@ -221,6 +221,24 @@ class Ui:
         self.press_key(2)
         self.press_key(1)
 
+    def assign_trig_parameter(self, label, offset=None):
+        """Assign by the historical scan or a previously verified list offset."""
+        self.press_key(2)
+        self.turn(3, -50)
+        if offset is None:
+            for offset in range(50):
+                if self.expect_list_label(label, wait=False):
+                    break
+                self.turn(3, 1)
+            else:
+                raise UiMapError("Parameter unavailable through native UI: " + label)
+        elif offset:
+            self.turn(3, offset)
+        self.expect_list_label(label)
+        self.press_key(3)
+        self.press_key(2)
+        return offset
+
     def select_midi_clock_source(self):
         """Seek the native CLOCK root and change its source from internal to MIDI."""
         self.configure()
