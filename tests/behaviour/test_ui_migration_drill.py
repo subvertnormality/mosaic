@@ -133,7 +133,15 @@ class DriftArtifactTests(unittest.TestCase):
 
     def commit(self):
         self.git("add", ".")
-        self.git("commit", "-qm", "Synthetic unit fixture")
+        self.git("-c", "commit.gpgsign=false", "commit", "-qm", "Synthetic unit fixture")
+
+    def test_fixture_commits_ignore_unavailable_signing_key(self):
+        self.git("config", "commit.gpgsign", "true")
+        self.git("config", "gpg.format", "ssh")
+        self.git("config", "user.signingkey", str(self.repo / "absent-signing-key"))
+        self.put("fixture-only.txt", "Synthetic commit does not require user signing credentials.")
+        self.commit()
+        self.assertNotIn("\ngpgsig ", self.git("cat-file", "-p", "HEAD"))
 
     def put(self, path, value):
         path = self.repo / path
