@@ -44,6 +44,8 @@ PYTHON_UNITTEST.add('test_perf_provenance')
 PYTHON_UNITTEST.add('test_named_save')
 PYTHON_UNITTEST.add('test_midi_mapping_pmap')
 PYTHON_UNITTEST.add('test_persisted_ranges_source')
+PYTHON_UNITTEST.add('test_harmony_merge_ui_layer')
+PYTHON_UNITTEST.add('test_harmony_persistence_oracle')
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.
