@@ -48,16 +48,6 @@ RHYTHM_DOCTOR_SCREEN = {
 }
 CHANNEL_COUNT = 16
 
-# Stable pitch keys for the authored C4-F4 notes on the pattern note grid.
-# These preserve the established note-entry gestures used by the Euclidean
-# workflow cases while keeping their physical cells in this map.
-PATTERN_NOTE_PITCHES = {
-    "pattern_note_c": (5, 3),
-    "pattern_note_d": (6, 2),
-    "pattern_note_e": (7, 1),
-    "pattern_note_f": (8, 6),
-}
-
 CHANNEL_PAGES = OrderedDict([
     ("masks", {"title": "Note Masks"}),
     ("trig_locks", {"title": "Trig Locks"}),
@@ -266,10 +256,6 @@ def step_cell(step):
 
 
 def control_cell(control, index=None):
-    if control in PATTERN_NOTE_PITCHES:
-        if index is not None:
-            raise ValueError("pattern note pitch controls do not take an index")
-        return PATTERN_NOTE_PITCHES[control]
     if control in RHYTHM_DOCTOR_CONTROLS:
         if index is not None:
             raise ValueError("Rhythm Doctor control %s does not take an index" % control)
@@ -286,18 +272,6 @@ def control_cell(control, index=None):
         if not 1 <= index <= CHANNEL_COUNT:
             raise ValueError("pattern selection must be in 1..%d" % CHANNEL_COUNT)
         return index, 1
-    if control == "pattern_group":
-        if type(index) is not int or not 1 <= index <= 4:
-            raise ValueError("pattern group must be an integer in 1..4")
-        return 8 + index, 8
-    if control in ("pattern_velocity_range_down", "pattern_velocity_range_reset"):
-        if index is not None:
-            raise ValueError("velocity range controls do not take an index")
-        return (16, 8) if control.endswith("down") else (15, 8)
-    if control == "pattern_length_merge_mode":
-        if index is not None:
-            raise ValueError("pattern length merge mode does not take an index")
-        return 16, 8
     if control == "pattern_note_fader":
         if not (isinstance(index, tuple) and len(index) == 2):
             raise ValueError("pattern note fader needs an (x, y) value cell")
@@ -340,10 +314,6 @@ def control_cell(control, index=None):
         if not -2 <= index <= 2:
             raise ValueError("channel octave must be in -2..2")
         return 10 + index, 8
-    if control == "pattern_note_page":
-        if type(index) is not int or not 1 <= index <= 4:
-            raise ValueError("pattern note page must be an integer in 1..4")
-        return 8 + index, 8
     if control == "trig_merge_mode":
         if index is not None:
             raise ValueError("trig merge mode does not take an index")
@@ -368,22 +338,6 @@ def control_cell(control, index=None):
         if index is not None:
             raise ValueError("global transpose increment does not take an index")
         return 16, 8
-    if control == "global_transpose_plus_four":
-        if index is not None:
-            raise ValueError("global transpose +4 does not take an index")
-        return 13, 8
-    if control == "step_transpose_minimum":
-        if index is not None:
-            raise ValueError("step transpose minimum does not take an index")
-        return 9, 8
-    if control == "step_transpose_increment":
-        if index is not None:
-            raise ValueError("step transpose increment does not take an index")
-        return 16, 8
-    if control == "step_transpose_zero":
-        if index is not None:
-            raise ValueError("step transpose zero does not take an index")
-        return 12, 8
     if control in MENU:
         if index is not None:
             raise ValueError("menu controls do not take an index")
