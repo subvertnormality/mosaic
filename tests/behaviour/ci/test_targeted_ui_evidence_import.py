@@ -22,11 +22,11 @@ def write_json(path, value):
     path.write_text(json.dumps(value))
 
 
-def fixture(root):
+def fixture(root, profile="base-midi"):
     """A complete two-lane gate whose native log is intentionally not uploaded."""
     report = dict(schema_version=1, passed=True, complete_regression_run=False,
                   before_sha=BEFORE, after_sha=AFTER, selected_cases=[CASE],
-                  lanes=list(importer.LANES),
+                  lanes=list(importer.LANES), profile=profile,
                   source_delta={"production_tree_unchanged": True}, cases=[])
     row = dict(case=CASE, lanes=[])
     report["cases"].append(row)
@@ -47,7 +47,7 @@ def fixture(root):
             # CI verifies this file at runtime, but the upload intentionally omits it.
             artifacts.append(dict(path="native/matron.log", size=1, sha256="0" * 64))
             manifest = dict(schema_version=1, mosaic_revision=sha, case=CASE,
-                            clock_mode=clock_mode, profile="base-midi", passed=True,
+                            clock_mode=clock_mode, profile=profile, passed=True,
                             failure=None, campaign_complete=False,
                             diagnostic_only=(clock_mode == "controlled-experimental"),
                             artifacts=artifacts)
@@ -59,7 +59,7 @@ def fixture(root):
     write_json(root / "targeted-ui-migration.json", report)
     write_json(root / "targeted-ui-repeatability.json",
                dict(schema_version=1, passed=True, complete_regression_run=False,
-                    after_sha=AFTER, selected_cases=[CASE],
+                    after_sha=AFTER, profile=profile, selected_cases=[CASE],
                     selected_modules={"tests/behaviour/project_dialog_lifecycle.py": CASE},
                     repeats=[dict(module="tests/behaviour/project_dialog_lifecycle.py",
                                   case=CASE, returncode=0, passed=True)]))
@@ -75,9 +75,49 @@ class TargetedEvidenceImportTests(unittest.TestCase):
         self.output = self.root / "baselines"
         fixture(self.download)
 
-    def run_import(self, dry_run=False):
+    def run_import(self, dry_run=False, profile="base-midi"):
         return importer.import_targeted(self.download, self.output, "35802998566",
-                                        BEFORE, AFTER, [CASE], dry_run=dry_run)
+                                        BEFORE, AFTER, [CASE], dry_run=dry_run,
+                                        profile=profile)
+
+    def test_imports_requested_non_default_profile(self):
+        fixture(self.download, profile="midi-modulation")
+        dry = self.run_import(dry_run=True, profile="midi-modulation")
+        self.assertEqual(len(dry["imported"]), 4)
+        self.assertFalse(self.output.exists())
+        self.run_import(profile="midi-modulation")
+        provenance = json.loads((self.output / CASE / "controlled" /
+                                 "before/provenance.json").read_text())
+        self.assertEqual(provenance["profile"], "midi-modulation")
+
+    def test_refuses_report_or_manifest_profile_mismatch(self):
+        fixture(self.download, profile="midi-modulation")
+        with self.assertRaisesRegex(ValueError, "profile"):
+            self.run_import(dry_run=True)
+
+        fixture(self.download, profile="midi-modulation")
+        report_path = self.download / "targeted-ui-migration.json"
+        report = json.loads(report_path.read_text())
+        manifest_path = (self.download / CASE / "real-time" /
+                         "before/session-1/manifest.json")
+        manifest = json.loads(manifest_path.read_text())
+        write_json(manifest_path, {**manifest, "profile": "base-midi"})
+        run = report["cases"][0]["lanes"][0]["runs"]["before"]
+        run["manifest_sha256"] = importer.digest(manifest_path.read_bytes())
+        write_json(report_path, report)
+        with self.assertRaisesRegex(ValueError, "profile"):
+            self.run_import(dry_run=True, profile="midi-modulation")
+        self.assertFalse(self.output.exists())
+
+    def test_refuses_repeatability_profile_mismatch_and_unknown_profile(self):
+        repeat_path = self.download / "targeted-ui-repeatability.json"
+        repeat = json.loads(repeat_path.read_text())
+        write_json(repeat_path, {**repeat, "profile": "midi-modulation"})
+        with self.assertRaisesRegex(ValueError, "repeatability"):
+            self.run_import(dry_run=True)
+        fixture(self.download)
+        with self.assertRaisesRegex(ValueError, "invalid profile"):
+            self.run_import(dry_run=True, profile="crow-jf")
 
     def test_imports_both_lanes_sides_and_nested_pairs_with_provenance(self):
         dry = self.run_import(dry_run=True)

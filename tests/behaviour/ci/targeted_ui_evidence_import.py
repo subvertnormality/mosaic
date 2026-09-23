@@ -20,6 +20,7 @@ CASE = re.compile(r"M-[A-Z0-9][A-Z0-9.-]*\Z")
 LANES = {"real-time": "real-time", "controlled-experimental": "controlled"}
 SIDES = ("before", "after")
 NAMES = {"recipe.json", "results.json"}
+PROFILES = ("base-midi", "midi-modulation")
 
 
 def require(condition, message):
@@ -94,13 +95,15 @@ def pair_payload(manifest, session):
 
 
 def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
-                    dry_run=False):
+                    dry_run=False, profile="base-midi"):
     """Validate the entire selected artifact before creating any destination."""
     require(isinstance(run_id, str) and re.fullmatch(r"[1-9][0-9]*", run_id),
             "run ID must be a positive decimal number")
     require(all(isinstance(sha, str) and SHA.fullmatch(sha)
                 for sha in (before_sha, after_sha)) and before_sha != after_sha,
             "expected distinct full 40-character source SHAs")
+    require(profile in PROFILES,
+            "invalid profile")
     require(isinstance(case_ids, list) and case_ids
             and all(isinstance(case, str) and CASE.fullmatch(case) for case in case_ids)
             and len(set(case_ids)) == len(case_ids), "invalid or duplicate selected cases")
@@ -116,7 +119,9 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
     require(report.get("before_sha") == before_sha
             and report.get("after_sha") == after_sha
             and report.get("selected_cases") == case_ids
-            and report.get("lanes") == list(LANES), "targeted selection/source differs")
+            and report.get("lanes") == list(LANES)
+            and report.get("profile") == profile,
+            "targeted selection/source/profile differs")
     source_delta = report.get("source_delta")
     require(isinstance(source_delta, dict)
             and source_delta.get("production_tree_unchanged") is True,
@@ -130,7 +135,8 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
     require(repeat.get("schema_version") == 1 and repeat.get("passed") is True
             and repeat.get("complete_regression_run") is False
             and repeat.get("after_sha") == after_sha
-            and repeat.get("selected_cases") == case_ids,
+            and repeat.get("selected_cases") == case_ids
+            and ("profile" not in repeat or repeat.get("profile") == profile),
             "candidate three-process repeatability report did not pass")
     modules, repeats = repeat.get("selected_modules"), repeat.get("repeats")
     require(isinstance(modules, dict) and modules
@@ -177,13 +183,13 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                         and manifest.get("mosaic_revision") == revision
                         and manifest.get("case") == case
                         and manifest.get("clock_mode") == clock_mode
-                        and manifest.get("profile") == "base-midi"
+                        and manifest.get("profile") == profile
                         and manifest.get("passed") is True
                         and manifest.get("failure") is None
                         and manifest.get("campaign_complete") is False
                         and manifest.get("diagnostic_only") is
                         (clock_mode == "controlled-experimental"),
-                        "manifest source/lane/pass identity differs")
+                        "manifest source/lane/profile/pass identity differs")
                 payload = pair_payload(manifest, manifest_path.parent)
                 target = no_symlink(output / case / lane / side)
                 require(not target.exists(), "existing evidence will not be overwritten: " + str(target))
@@ -191,6 +197,7 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                                   "https://github.com/subvertnormality/mosaic/actions/runs/" + run_id,
                                   source_run_id=run_id, source_revision=revision,
                                   case=case, lane=lane, clock_mode=clock_mode, side=side,
+                                  profile=profile,
                                   targeted_report_sha256=digest(report_raw),
                                   repeatability_report_sha256=digest(read_bytes(repeat_path)),
                                   manifest=relative.as_posix(),
@@ -227,12 +234,13 @@ def main(argv=None):
     parser.add_argument("--before-sha", required=True)
     parser.add_argument("--after-sha", required=True)
     parser.add_argument("--case", action="append", dest="cases", required=True)
+    parser.add_argument("--profile", choices=PROFILES, default="base-midi")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     try:
         result = import_targeted(args.download, args.output, args.run_id,
                                  args.before_sha, args.after_sha, args.cases,
-                                 dry_run=args.dry_run)
+                                 dry_run=args.dry_run, profile=args.profile)
     except (ValueError, OSError) as error:
         parser.exit(1, "Targeted evidence import refused: %s\n" % error)
     print(json.dumps(result, indent=2))
