@@ -104,10 +104,11 @@ class CollectionTests(unittest.TestCase):
             self.assertEqual(run.main(),0)
         self.assertEqual(json.loads(output.getvalue())['M-PAT-003']['requirements'],['PAT-DURATION'])
         source=(run.REPO/'tests/behaviour/cases.py').read_text()
-        self.assertEqual(source.count("'M-PAT-003':dict(run=pattern_duration_domain"),1)
+        registration="'M-PAT-003':dict("
+        self.assertEqual(source.count(registration),1)
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);path=root/'tests/behaviour';path.mkdir(parents=True)
-            (path/'cases.py').write_text(source.replace("'M-PAT-003':dict(run=pattern_duration_domain","'M-PAT-002':dict(run=pattern_duration_domain"))
+            (path/'cases.py').write_text(source.replace(registration,"'M-PAT-002':dict(",1))
             with patch.object(run,'REPO',root),patch.object(sys,'argv',['run.py','--list']):
                 with self.assertRaisesRegex(AssertionError,'Duplicate case IDs'):
                     run.main()

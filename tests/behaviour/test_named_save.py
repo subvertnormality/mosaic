@@ -3,7 +3,6 @@
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 from driver import digest
 from named_save import named_save_load
@@ -94,16 +93,8 @@ class NamedSaveResultTests(unittest.TestCase):
         directory = tempfile.TemporaryDirectory()
         self.addCleanup(directory.cleanup)
         case = FakeCase(directory.name, salt, tamper_after_idle)
-        # The raw-UI baseline imports these navigation helpers inside the case.
-        # The fake only models their save/load effect; both source variants
-        # retain their own tap/key/encoder sequence in production.
-        with patch("persisted_ranges.select_project_action",
-                   side_effect=lambda c, offset, returning=False:
-                       c.ui.select_project_action("save", returning=returning)), \
-             patch("persisted_ranges.select_project_file",
-                   side_effect=lambda c, name, returning=False:
-                       c.ui.select_project_file(name, returning=returning)):
-            named_save_load(case)
+        # FakeUi implements the menu entry points used by named_save_load.
+        named_save_load(case)
         return case
 
     def test_result_records_describe_relationships_across_distinct_raw_hashes(self):
