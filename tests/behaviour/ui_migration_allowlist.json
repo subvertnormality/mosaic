@@ -19,7 +19,6 @@
   "persisted_ranges.py",
   "recording_lifetimes.py",
   "recording_lock_song.py",
-  "recording_song_transition.py",
   "rhythm_doctor.py",
   "rhythm_doctor_correction.py",
   "rhythm_doctor_surface.py",
