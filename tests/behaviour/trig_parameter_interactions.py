@@ -42,7 +42,7 @@ def quantised_fixed_table(c,profile='major'):
         'a-harmonic-minor':[(125,125),(126,125),(127,125)],
     }
     assert profile in tables
-    c.configure()
+    c.ui.configure()
     if profile!='major':
         c.ui.scale_editor()
         if profile=='a-harmonic-minor':c.ui.set_value(3) # Major -> Harmonic Minor

@@ -534,6 +534,51 @@ class UiInputTests(unittest.TestCase):
             ("header", "midi_config", {"channel": 1}),
         ])
 
+    def test_quantised_fixed_major_uses_semantic_setup_and_preserves_trace(self):
+        from types import ModuleType, SimpleNamespace
+        from trig_parameter_interactions import quantised_fixed_table
+
+        driver, ui = self.ui()
+        ui.expect_header = lambda page, **params: driver.calls.append(("header", page, params))
+        ui.assign_trig_parameter_key = lambda parameter: driver.calls.append(
+            ("assign_trig_parameter_key", parameter)
+        )
+        case = SimpleNamespace(
+            ui=ui,
+            clock_mode="controlled-experimental",
+            results=[],
+            configure=lambda: self.fail("case-level raw setup must not be used"),
+            playback=lambda *args, **kwargs: [
+                {"logical_ns": index * 166666666} for index in range(4)
+            ],
+        )
+        cases = ModuleType("cases")
+        cases.assert_durations = lambda context, notes, lengths: self.assertEqual(
+            lengths, [1, 1, 1]
+        )
+
+        with patch.dict(sys.modules, {"cases": cases}):
+            quantised_fixed_table(case, profile="major")
+
+        self.assertEqual(driver.calls[:4], [
+            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+        ])
+        self.assertEqual(driver.calls[19:24], [
+            ("tap", 3, 8), ("tap", 1, 2),
+            ("hold_tap", (1, 4), (4, 4)),
+            ("led_values", [(1, 2)], [15]),
+            ("header", "midi_config", {"channel": 1}),
+        ])
+        self.assertEqual(driver.calls[24:26], [
+            ("enc", 1, -3),
+            ("assign_trig_parameter_key", "quantised_fixed_note"),
+        ])
+        self.assertEqual(driver.calls[26:40], [
+            ("enc", 3, delta) for delta in
+            (1, 1, 2, 3, 1, 4, 1, 48, 1, 2, 3, 4, 56, 1)
+        ])
+        self.assertEqual(len(case.results), 14)
+
     def test_set_mosaic_options_preserves_observed_seek_recipe_and_results(self):
         from ui import Ui
 
