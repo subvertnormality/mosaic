@@ -1,8 +1,19 @@
 """Saved-range validation through real autosave, cold boot and native inputs."""
 import base64,json,shutil,subprocess
 from pathlib import Path
-from driver import Driver,digest
+from driver import Driver,digest,EMULATOR_ROOT
 from frame_oracle import render
+
+
+def serializer_source(c):
+    """Use the qualified norns source in controlled time, the pinned checkout otherwise."""
+    install = c.launch_options.get('experimental_install')
+    source = (Path(json.loads(Path(install).read_text())['source']) if install else
+              EMULATOR_ROOT / '.runtime/deps/norns' if EMULATOR_ROOT else None)
+    tabutil = source / 'lua/lib/tabutil.lua' if source else None
+    if tabutil is None or not tabutil.is_file():
+        raise FileNotFoundError('Pinned norns tabutil source unavailable: ' + str(tabutil))
+    return str(source)
 
 def rejected_saved_range(c):
     c.configure();c.elapse(59);c.elapse(2)
@@ -12,7 +23,7 @@ def rejected_saved_range(c):
     seed=c.out/'bad-range-seed';shutil.copytree(c.data_directory,seed)
     script=c.out/'bad-range.lua'
     script.write_text("local root,path=table.unpack(arg);local tab=dofile(root..'/lua/lib/tabutil.lua');local saved=assert(tab.load(path));local channel=saved[2].song_patterns[1].channels[1];channel.start_trig={4,4};channel.end_trig={2,4};assert(tab.save(saved,path)==nil)")
-    source=json.loads(Path(c.launch_options['experimental_install']).read_text())['source']
+    source=serializer_source(c)
     subprocess.run(['lua5.3',str(script),source,str(seed/'autosave.ptn')],check=True)
     rejected={name:digest(seed/name) for name in original}
     # The rejection message is shown at boot. Skip the zero-lead menu setup, which
@@ -79,7 +90,7 @@ def rejected_manual_range(c,recovery="load"):
     bad=c.data_directory/'broken.ptn';shutil.copyfile(c.data_directory/'autosave.ptn',bad)
     script=c.out/'bad-manual-range.lua'
     script.write_text("local root,path=table.unpack(arg);local tab=dofile(root..'/lua/lib/tabutil.lua');local saved=assert(tab.load(path));local channel=saved[2].song_patterns[1].channels[17];channel.start_trig={4,4};channel.end_trig={2,4};assert(tab.save(saved,path)==nil)")
-    source=json.loads(Path(c.launch_options['experimental_install']).read_text())['source']
+    source=serializer_source(c)
     subprocess.run(['lua5.3',str(script),source,str(bad)],check=True)
     preserved={n:digest(c.data_directory/n) for n in ['autosave.ptn','autosave.pset','broken.ptn']}
     select_project_file(c,'broken.ptn')
@@ -176,7 +187,7 @@ def saved_range_compatibility(c,legacy=False):
     # A one-step range is valid stored data even though no grid gesture authors
     # it. Use the official serializer for this explicit compatibility fixture.
     script.write_text("local root,path,legacy=table.unpack(arg);local tab=dofile(root..'/lua/lib/tabutil.lua');local saved=assert(tab.load(path));local data=saved[2];assert(data.selected_song_pattern==96);local ch=data.song_patterns[96].channels[1];ch.start_trig={3,4};ch.end_trig={3,4};if legacy=='yes' then data.sequencer_patterns=data.song_patterns;data.song_patterns=nil end;assert(tab.save(saved,path)==nil)")
-    source=json.loads(Path(c.launch_options['experimental_install']).read_text())['source']
+    source=serializer_source(c)
     subprocess.run(['lua5.3',str(script),source,str(seed/'autosave.ptn'),'yes' if legacy else 'no'],check=True)
     seeded={n:digest(seed/n) for n in original}
     next_seed=seed
