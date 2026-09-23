@@ -286,6 +286,23 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertEqual(run.__module__, "contract.recording_stop_safety")
         self.assertEqual(callable_raw_dependencies(run), [])
 
+    def test_persisted_recording_case_has_named_contract_owner(self):
+        from unittest.mock import patch
+        from cases import CASES
+        from contract import recording_lock_song as contract_recording
+        from ui_layer_guard import classify_contract_cases
+
+        run = CASES["M-PERSIST-COMBINED-001"]["run"]
+        owner = getattr(contract_recording, "recording_lock_song_persisted", None)
+        self.assertIs(run, owner)
+        self.assertEqual(run.__module__, "contract.recording_lock_song")
+        self.assertIsNone(run.__closure__)
+        self.assertIn("M-PERSIST-COMBINED-001", classify_contract_cases(CASES))
+        driver = object()
+        with patch.object(contract_recording, "recording_lock_song") as called:
+            run(driver)
+        called.assert_called_once_with(driver, persist=True)
+
     def test_lock_lead_clock_matrix_cases_are_owned_by_contract_module(self):
         from cases import CASES
         from contract.lock_lead_clock_matrix import lock_lead_clock_matrix

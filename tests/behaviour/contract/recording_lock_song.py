@@ -101,3 +101,7 @@ def recording_lock_song(c, persist=False):
     d.results.append(dict(kind='recording-lock-across-song-transition-restored', replay=restored, restored_tempo=tempo, passed=True))
     d.finish()
     c.results.append(dict(kind='recording-lock-across-song-transition-restored', replay=restored, restored_tempo=tempo, passed=True))
+
+
+def recording_lock_song_persisted(c):
+    return recording_lock_song(c, persist=True)
