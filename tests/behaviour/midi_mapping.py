@@ -22,13 +22,13 @@ def midi_mapping(c):
     try:
         e.configure()
         # Channel 2 on port 2 / MIDI channel 2 playing pattern 1 over steps 1-4.
-        e.tap(2,1);e.enc(3,1);e.enc(2,1);e.enc(3,1);e.enc(2,1);e.enc(3,1);e.key(3)
-        e.tap(1,2);e.hold_tap((1,4),(4,4));e.tap(1,1)
+        e.ui.select_channel(2);e.ui.set_value(1);e.ui.turn(2,1);e.ui.set_value(1);e.ui.turn(2,1);e.ui.set_value(1);e.ui.press_key(3)
+        e.ui.tap_control('pattern_slot',1);e.ui.set_range(1,4);e.ui.select_channel(1)
         def cc(number,value):e.action(type='midi',port=1,bytes=[176,number,value]);e.elapse(.2) # slower than the 0.15 s acceleration window
         def velocities(stage,expected):
-            marker=e.snapshot()['midi_count'];e.tap(1,8)
+            marker=e.snapshot()['midi_count'];e.ui.play()
             state=e.wait(lambda s:sum(1 for m in s['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0)>=8,timeout=4)
-            e.tap(1,8);e.wait(lambda s:not s['midi_capture']['outstanding'])
+            e.ui.stop();e.wait(lambda s:not s['midi_capture']['outstanding'])
             ons=[m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
             for port,wanted in expected.items():
                 seen=[m['bytes'][2] for m in ons if m['port']==port]
@@ -41,9 +41,9 @@ def midi_mapping(c):
         velocities('selected-ch1-plus-11',{1:10,2:pattern})
         cc(20,63);cc(20,63);velocities('selected-ch1-minus-2',{1:8,2:pattern})
         # Selection moves the selected-channel map to channel 2; channel 1 keeps 8.
-        e.tap(2,1);cc(20,65);cc(20,65);cc(20,65);velocities('selected-ch2-plus-3',{1:8,2:2})
+        e.ui.select_channel(2);cc(20,65);cc(20,65);cc(20,65);velocities('selected-ch2-plus-3',{1:8,2:2})
         # The fixed channel-2 map ignores selection.
-        e.tap(1,1);cc(21,65);cc(21,65);velocities('fixed-ch2-plus-2',{1:8,2:4})
+        e.ui.select_channel(1);cc(21,65);cc(21,65);velocities('fixed-ch2-plus-2',{1:8,2:4})
         cc(21,0);velocities('fixed-ch2-value-0-decreases',{1:8,2:3})
     finally:e.finish()
     c.results.append(dict(kind='midi-mapping-session',nested=str(out),passed=True))
