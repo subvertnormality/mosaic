@@ -309,50 +309,46 @@ def live_pattern_duration(c):
 def euclidean_workflow(c):
     # Migrated from emulator tests/mosaic_euclidean.py; independent3-in-8 table.
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    c.ui.configure();c.ui.set_range(1,8)
-    c.ui.tap_control("pattern_editor");c.ui.tap_control("pattern_editor")
-    for control in ("pattern_note_c","pattern_note_d","pattern_note_e","pattern_note_f"):
-        c.ui.tap_control(control)
-    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor") # trig editor
+    c.configure();c.hold_tap((1,4),(8,4))
+    c.tap(5,8);c.tap(5,8)
+    for x,y in [(5,3),(6,2),(7,1),(8,6)]:c.tap(x,y)
+    c.tap(3,8);c.tap(5,8) # trig editor
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='eight-step-loop-baseline',passed=True))
-    c.ui.tap_control("euclidean_tool")
-    c.ui.tap_control("euclidean_fill_minimum") # broad fader minimum: one pulse
-    for _ in range(2):c.ui.tap_control("euclidean_fill_maximum")
-    c.ui.tap_control("euclidean_rotation_minimum")
-    for _ in range(7):c.ui.tap_control("euclidean_rotation_maximum")
-    c.ui.tap_control("paint")
+    c.tap(14,2) # Euclidean
+    c.tap(2,2) # broad fader minimum: one pulse
+    for _ in range(2):c.tap(10,2)
+    c.tap(2,3)
+    for _ in range(7):c.tap(10,3)
+    c.tap(16,8)
     # The manual distinguishes dim overlaps and bright newly proposed steps.
     # Verify both blink phases and all64 cells against fixed authored/candidate
     # sets; no application rhythm calculation supplies the expected positions.
+    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     original={1,2,3,4}
     proposed={step for step in range(1,65) if (step-1)%8+1 in (1,4,7)}
     for overlap,new in ((0,15),(3,12)):
-        levels={step:("dark" if overlap==0 else "inactive") for step in original & proposed}
-        levels.update({step:("selected" if new==15 else "active") for step in proposed-original})
-        levels.update({step:"selected" for step in original-proposed})
-        levels.update({step:"off" for step in range(1,65) if step not in original|proposed})
-        c.ui.expect_steps(levels)
+        c.led_values(cells,[overlap if step in original and step in proposed else new if step in proposed else 15 if step in original else 2 for step in range(1,65)])
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='preview-does-not-paint',passed=True))
-    c.ui.tap_control("cancel");c.ui.expect_steps({step:"selected" if step<=4 else "off" for step in range(1,9)})
+    c.tap(14,8);c.led_values([(x,4) for x in range(1,9)],[15]*4+[2]*4)
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='cancel-retains-pattern',passed=True))
-    c.ui.tap_control("paint");c.ui.tap_control("shift_right") # shift right: {2,5,8}
-    c.ui.expect_steps({2:"dark",5:"selected",8:"selected"});c.ui.tap_control("paint")
+    c.tap(16,8);c.tap(12,8) # shift right: {2,5,8}
+    c.led_values([(2,4),(5,4),(8,4)],[0,15,15]);c.tap(16,8)
     shifted={step for step in range(1,65) if (step-1)%8+1 in (2,5,8)}
     painted=original.symmetric_difference(shifted)
-    c.ui.expect_steps({step:"selected" if step in painted else "off" for step in range(1,65)})
+    c.led_values(cells,[15 if step in painted else 2 for step in range(1,65)])
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(65,97),(67,100),(62,100)]])
     c.results.append(dict(kind='workflow-check',name='shifted-paint-xor',passed=True))
-    c.ui.tap_control("paint");c.ui.expect_steps({2:"selected",5:"dark",8:"dark"});c.ui.tap_control("paint")
+    c.tap(16,8);c.led_values([(2,4),(5,4),(8,4)],[15,0,0]);c.tap(16,8)
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='repaint-restores-original',passed=True))
-    c.ui.tap_control("paint");c.ui.tap_control("shift_left") # left: back to {1,4,7}
-    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("shift_right");c.ui.tap_control("shift_reset")
-    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("paint")
+    c.tap(16,8);c.tap(10,8) # left: back to {1,4,7}
+    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(12,8);c.tap(11,8)
+    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(16,8)
     c.playback([(1,[144,n,v]) for n,v in [(62,117),(64,107),(71,100)]])
     c.results.append(dict(kind='workflow-check',name='left-and-center-reset',passed=True))
-    c.ui.tap_control("paint");c.ui.expect_steps({1:"selected",4:"selected",7:"dark"});c.ui.tap_control("paint");c.playback(baseline)
-    c.ui.tap_control("euclidean_fill_boundary") # fill32, exceeding length8: every step selected
-    c.ui.tap_control("paint");c.ui.expect_steps({1:"dark",4:"dark",5:"selected",61:"selected"});c.ui.tap_control("paint")
-    c.ui.expect_steps({step:"selected" if step>4 else "off" for step in range(1,65)})
+    c.tap(16,8);c.led_values([(1,4),(4,4),(7,4)],[15,15,0]);c.tap(16,8);c.playback(baseline)
+    c.tap(9,2) # fill32, exceeding length8: every step selected
+    c.tap(16,8);c.led_values([(1,4),(4,4),(5,4),(16,7)],[0,0,15,15]);c.tap(16,8)
+    c.led_values([(x,y) for y in range(4,8) for x in range(1,17)],[2]*4+[15]*60)
     c.playback([(1,[144,n,100]) for n in [67,69,71,62]]);c.results.append(dict(kind='workflow-check',name='dense-fill-boundary',passed=True))
 
 # Independent literal 3/3/2 segment tables; no application algorithm import.
