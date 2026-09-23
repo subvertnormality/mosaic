@@ -377,17 +377,17 @@ def merge_rounding(c,three=False,extreme=False,pentatonic=False):
 
 def numeric_velocity_merge(c,three=False):
     from cases import assert_durations
-    c.configure();c.tap(5,8)
+    c.configure();c.ui.pattern_editor()
     for slot in ([2,3,4] if three else [2,4]):
-        c.tap(slot,1)
-        for x in range(1,5):c.tap(x,4)
-    c.tap(5,8)
-    for x in range(1,5):c.tap(x,3) # Unassigned pattern4 supplies G only.
-    c.led_values([(x,3) for x in range(1,5)],[12]*4)
-    c.tap(3,8);c.tap(2,2)
-    if three:c.tap(3,2)
-    c.tap(14,8);c.tap(14,8);c.hold_tap((15,8),(4,2))
-    c.led_values([(4,2)],[2])
+        c.ui.tap_control('pattern_select',slot)
+        for x in range(1,5):c.ui.tap_step(x)
+    c.ui.pattern_editor('note',from_view='trigger')
+    for x in range(1,5):c.ui.tap_control('pattern_note_degree',(x,4)) # Unassigned pattern4 supplies G only.
+    c.ui.expect_leds({('pattern_note_degree',(x,4)):'active' for x in range(1,5)})
+    c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2)
+    if three:c.ui.tap_control('pattern_slot',3)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode');c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=4)
+    c.ui.expect_leds({('pattern_slot',4):'off'})
     # Sources127/117/107/97 and one or two100s. Round the mean first;
     # apply mode arithmetic, then enforce MIDI velocity's upper bound127.
     expected=([('average',2,[109,106,102,99]),('higher',5,[127,123,109,102]),('lower',8,[91,94,98,95])] if three else
@@ -395,8 +395,8 @@ def numeric_velocity_merge(c,three=False):
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     for index,(mode,level,velocities) in enumerate(expected+[expected[0]]):
-        if index:c.tap(16,8)
-        c.led_values([(16,8)],[level])
+        if index:c.ui.tap_control('velocity_merge_mode')
+        c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
         notes=c.playback([(1,[144,67,v]) for v in velocities],cycles=2,timeout=4)
         assert_durations(c,notes,[1]*8)
         for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i/6)<=tolerance
