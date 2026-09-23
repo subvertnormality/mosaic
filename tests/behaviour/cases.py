@@ -2482,6 +2482,7 @@ def memory_channel_isolation(c):
 def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False):
     import time
     c.configure()
+    placement_steps=tuple(expected_steps)
     if boundary_witness:
         # An independent audible channel marks the active step through MIDI.
         # Same four-step range and clock; no application-state oracle.
@@ -2542,12 +2543,22 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
         for i,m in enumerate(witness):
             assert abs(m[field]-(origin+1250000000+i*150000000))<=(2 if controlled else 10000000),m
         evidence=[]
-        for pitch,step in zip((72,79),expected_steps):
-            active_pitch=phrase[step-1][0]
+        equal_deadline_race=input_offsets==(1400000000,1700000000)
+        if equal_deadline_race and controlled:
+            # README.md, "Arm live record": at an exact deadline, the note
+            # belongs to the prior step when Mosaic processes it first.
+            assert tuple(expected_steps)==(1,3)
+        for i,(pitch,configured_step) in enumerate(zip((72,79),expected_steps)):
             preview=next(m for m in emitted if m['port']==1 and m['bytes'][:2]==[144,pitch])
             prior=[m for m in emitted if m['index']<preview['index'] and m['port']==2 and m['bytes'][0]==145 and m['bytes'][2]>0]
             following=[m for m in emitted if m['index']>preview['index'] and m['port']==2 and m['bytes'][0]==145 and m['bytes'][2]>0]
             assert prior and following,'Missing MIDI step witness'
+            step=configured_step
+            if equal_deadline_race and not controlled:
+                from record_placement_oracle import derive_boundary_recorded_step
+                candidates=((1,2),(3,4))[i]
+                step=derive_boundary_recorded_step(prior[-1]['bytes'][1],following[0]['bytes'][1],candidates)
+            active_pitch=phrase[step-1][0]
             assert prior[-1]['bytes'][1]==active_pitch,dict(preview=preview,prior=prior[-1])
             assert following[0]['bytes'][1]==phrase[step%4][0]
             assert prior[-1][field]<=preview[field]<following[0][field]
@@ -2556,16 +2567,18 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
             if controlled and input_offsets==(1400000000,1700000000):
                 assert following[0][field]-preview[field]==1
             evidence.append(dict(recorded_step=step,preview=preview,active_step_onset=prior[-1],next_step_onset=following[0],gap_to_next_ns=following[0][field]-preview[field]))
+        if equal_deadline_race and not controlled:
+            placement_steps=tuple(item['recorded_step'] for item in evidence)
         c.results.append(dict(kind='boundary-active-step-midi-witness',events=evidence))
     c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
-    c.led_values(cells,[15 if step in expected_steps else (2 if range_start<=step<=range_start+3 else 0) for step in range(1,65)])
-    c.results.append(dict(kind='recorded-step-placement',expected_steps=list(expected_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
+    c.led_values(cells,[15 if step in placement_steps else (2 if range_start<=step<=range_start+3 else 0) for step in range(1,65)])
+    c.results.append(dict(kind='recorded-step-placement',expected_steps=list(placement_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
     # Replay in normal internal clock after disarming; preview MIDI cannot
     # satisfy this oracle because playback takes a fresh capture marker.
     c.key(1);c.key(3);menu_label(c,'source');c.enc(3,-1);menu_value(c,'internal')
     c.enc(2,1);menu_label(c,'tempo');c.enc(3,-10);menu_value(c,'90');c.key(1)
     # Independent step positions define playback order, including wrap input.
-    phrase=sorted(zip(expected_steps,[(1,[144,72,90]),(1,[144,79,80])]))
+    phrase=sorted(zip(placement_steps,[(1,[144,72,90]),(1,[144,79,80])]))
     if boundary_witness:
         c.tap(2,1);c.tap(2,2);c.tap(1,1)
     notes=c.playback([event for step,event in phrase],cycles=3)

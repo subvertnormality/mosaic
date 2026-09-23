@@ -31,7 +31,7 @@ BEHAVIOUR=REPO/'tests/behaviour'
 LUA_ARGUMENT={'panic_live_note_contract.lua':'mosaic-root','test_native_control_endpoint.lua':'norns-root',
               'test_patch_param_domain.lua':'norns-root','persisted_digest.lua':'norns-root-persisted-project'}
 # Python test modules run under unittest, each with the environment it needs.
-PYTHON_UNITTEST={'test_acquisition_oracle','test_collection','test_duration_routes','test_external_clock_fault_oracle',
+PYTHON_UNITTEST={'test_acquisition_oracle','test_record_placement_oracle','test_collection','test_duration_routes','test_external_clock_fault_oracle',
     'test_forwarded_clock_oracle','test_fractional_stop_boundary','test_jf_oracle','test_master_clock_oracle',
     'test_midi_window','test_note_accounting','test_note_schedule','test_output_profiles','test_panic_hotplug_trace',
     'test_inventory','test_hardening_matrix','test_real_norns','test_hardware_performance','test_lua_test_names','test_lua_syntax','test_perf_input','test_perf_overload','test_panic_repeat_trace','test_panic_trace','test_panic_transport','test_pcm_oracle','test_suite',
@@ -40,6 +40,7 @@ PYTHON_UNITTEST.add('test_ui_baseline_import')
 PYTHON_UNITTEST.add('test_ui_migration_drill')
 PYTHON_UNITTEST.add('test_rec_param_input_timing')
 PYTHON_UNITTEST.add('test_perf_dense_container_driver')
+PYTHON_UNITTEST.add('test_perf_provenance')
 PYTHON_UNITTEST.add('test_named_save')
 PYTHON_UNITTEST.add('test_midi_mapping_pmap')
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}

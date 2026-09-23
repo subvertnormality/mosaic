@@ -19,6 +19,7 @@ EMULATOR=Path(os.environ['MONOME_EMULATOR']).resolve()
 sys.path.insert(0,str(EMULATOR/'src'));sys.path.insert(0,str(BEHAVIOUR))
 from automation.performance import performance_metrics,throttling_deltas,bracketing_samples
 import driver
+from perf_provenance import git_identity,installation_identity
 from dense_workload import build_project,validate_events
 
 STEP=1/6  # default 90 BPM, sixteenth steps
@@ -199,17 +200,32 @@ def main():
     observations.add_argument('--no-render-observations',action='store_true',help='Diagnostic: keep pressure gestures but omit per-gesture snapshots to measure observer cost')
     parser.add_argument('--image',default='monome-emulator:perf-recorder-02');parser.add_argument('--output',required=True)
     parser.add_argument('--channels',default='1,4,8,16');parser.add_argument('--cpus',type=float,default=.5);parser.add_argument('--repeats',type=int,default=3);parser.add_argument('--seconds',type=float,default=8)
+    parser.add_argument('--installation-manifest',help='Optional native installation.json to verify and bind to this report')
     args=parser.parse_args()
     if (args.no_render_observations or args.display_observations) and not args.render_pressure:parser.error('Observation mode requires --render-pressure')
     if args.render_pressure and args.seconds!=8:parser.error('--render-pressure requires --seconds 8')
     if args.cpus<=0:parser.error('--cpus must be positive')
     root=Path(args.output).resolve();root.mkdir(parents=True,exist_ok=False)
-    revision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=REPO,text=True).strip()
+    source_git=git_identity(REPO);emulator_git=git_identity(EMULATOR)
     dirty=subprocess.check_output(['git','diff','HEAD'],cwd=REPO)
+    manifest=args.installation_manifest
+    if manifest is None:
+        candidate=EMULATOR/'.runtime/performance-profile/installation.json'
+        manifest=str(candidate) if candidate.is_file() else None
+    install=installation_identity(manifest) if manifest else None
     image_id=docker('image','inspect',args.image,'--format','{{.Id}}').stdout.strip()
     rows=[run_one(args.image,root/('channels-%s-%d'%(n,r)),int(n),r,args.seconds,args.workload,args.render_pressure,not args.no_render_observations,args.display_observations,args.cpus) for n in args.channels.split(',') for r in range(1,args.repeats+1)]
-    report=dict(schema_version=1,workload=workload_id(args.workload,args.render_pressure),mosaic_revision=revision,dirty_patch_sha256=hashlib.sha256(dirty).hexdigest() if dirty else None,
+    source_after=git_identity(REPO);emulator_after=git_identity(EMULATOR)
+    install_after=installation_identity(manifest) if manifest else None
+    stable=(source_git==source_after and emulator_git==emulator_after and install==install_after)
+    report=dict(schema_version=2,workload=workload_id(args.workload,args.render_pressure),mosaic_revision=source_git['revision'],dirty_patch_sha256=hashlib.sha256(dirty).hexdigest() if dirty else None,
                 emulator=str(EMULATOR),image=args.image,image_id=image_id,argv=sys.argv[1:],passed=all(r['passed'] for r in rows),runs=rows)
+    report.update(source_git=source_git,source_git_after=source_after,emulator_git=emulator_git,
+                  emulator_git_after=emulator_after,native_installation=install,
+                  native_installation_after=install_after,provenance_stable=stable)
+    if not stable:
+        report['passed']=False
+        report['provenance_error']='Mosaic, emulator, or native installation identity changed during the run'
     driver.write(root/'result.json',report);print(root/'result.json')
     return 0 if report['passed'] else 1
 
