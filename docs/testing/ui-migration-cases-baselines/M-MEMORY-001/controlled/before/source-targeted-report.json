@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "c72991551e2d87377235078805e78a3c59030ced",
+  "after_sha": "c1882e0dc5baa811c685db548219ef83426eadd1",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MEMORY-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract/memory_navigation.py",
+      "tests/behaviour/contract_cases.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract/memory_navigation.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/scale_memory.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MEMORY-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MEMORY-001/real-time/before/bb52373cc9a84db191554657db3e785a/manifest.json",
+              "manifest_sha256": "1f94ac29300a4f08d51e07b95e34a96e3f76ff827260f1a667e5a7a212f02763"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MEMORY-001/real-time/after/f9456d067e564f588b714d448fde095b/manifest.json",
+              "manifest_sha256": "89345c833b05b395276ef25ceca13c051b62860a03222bacacab7fbf0e773081"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MEMORY-001/controlled-experimental/before/805bbc5460364c2bae86adcf86713bc1/manifest.json",
+              "manifest_sha256": "1510461fdecaadb96081defb593ac02f0c6aea1f213d4e7d9982cf42feb0aeaf"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MEMORY-001/controlled-experimental/after/54270de578b74d42a711dd8478186a07/manifest.json",
+              "manifest_sha256": "592b3940036ba567a7130f5d88783d04172dac22986c16a4b9c04fea15a3ce31"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
