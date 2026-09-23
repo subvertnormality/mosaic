@@ -556,37 +556,37 @@ def note_pattern_selectors(c):
 
 def editor_hold_boundaries(c):
     import time
-    c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger')
+    from editor_hold_evidence import record_hold_input_bounds, raw_editor_range_hold
+    c.configure();c.tap(5,8);c.tap(5,8)
     before=.999999999 if c.clock_mode=='controlled-experimental' else .95
     after=1.000000001 if c.clock_mode=='controlled-experimental' else 1.05
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]
-    def hold(control,seconds,expected_long,interrupt=False):
+    def hold(x,seconds,expected_long,interrupt=False):
         logical_start=c.logical_ns;t0=time.monotonic_ns()
-        c.ui.control_edge(control,True);t1=time.monotonic_ns()
+        c.action(type='grid',x=x,y=8,state=1);t1=time.monotonic_ns()
         if interrupt:
-            c.elapse(.5);c.ui.tap_control('pattern_note_degree',(4,4));c.elapse(.6)
+            c.elapse(.5);c.tap(4,3);c.elapse(.6)
         else:c.elapse(seconds)
         t2=time.monotonic_ns();logical_end=c.logical_ns
-        c.ui.control_edge(control,False);t3=time.monotonic_ns()
+        c.action(type='grid',x=x,y=8,state=0);t3=time.monotonic_ns()
         lower=(t2-t1)/1e9;upper=(t3-t0)/1e9
-        x = c.ui.control_cell(control)[0]
-        c.results.append(dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
+        record_hold_input_bounds(c,dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
             expected_long=expected_long,logical_seconds=(logical_end-logical_start)/1e9,
             wall_lower_seconds=lower,wall_upper_seconds=upper))
         if c.clock_mode=='real-time' and not interrupt:
             assert lower>1 if expected_long else upper<1, 'Host input delivery crossed the intended one-second hold boundary'
         c.elapse(.06)
     for label,duration,pitch in [('before',before,72),('after',after,83),('cancelled',0,71)]:
-        c.ui.tap_control('pattern_note_octave_reset') # Return the displayed note range to the root page.
-        hold('pattern_note_octave_up',duration,label=='after',interrupt=label=='cancelled')
-        c.ui.tap_control('pattern_note_degree',(4,6));c.led_values([(4,1)],[12])
+        c.tap(15,8) # Return the displayed note range to the root page.
+        hold(14,duration,label=='after',interrupt=label=='cancelled')
+        c.tap(4,1);c.led_values([(4,1)],[12])
         c.playback(baseline+[(1,[144,pitch,97])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='note',boundary=label,pitch=pitch,passed=True))
-    c.ui.pattern_editor(view='velocity',from_view='note') # The fourth note now remains B4.
+    c.tap(5,8) # Velocity editor; the fourth note now remains B4.
     for label,duration,velocity in [('before',before,117),('after',after,58),('cancelled',0,127)]:
-        editor_range_hold(c,'pattern_velocity_range_reset') # Highest velocity range, independent of old offset.
-        hold('pattern_velocity_range_down',duration,label=='after',interrupt=label=='cancelled')
-        c.ui.tap_control('pattern_velocity_level',(4,7));c.led_values([(4,1)],[12])
+        raw_editor_range_hold(c,15,8) # Highest velocity range, independent of old offset.
+        hold(16,duration,label=='after',interrupt=label=='cancelled')
+        c.tap(4,1);c.led_values([(4,1)],[12])
         c.playback(baseline+[(1,[144,71,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='velocity',boundary=label,velocity=velocity,passed=True))
 
