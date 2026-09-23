@@ -44,6 +44,7 @@ def setup_foundation(c):
     c.ui.tap_control("channel_editor"); c.ui.tap_control("pattern_slot", 2)
     # Device Config -> Merge Shape. Enable Foundation and explicitly select P01.
     c.ui.channel_page("merge_shape", "midi_config", channel=1)
+    c.ui.expect_header("merge_shape", channel=1)
     c.ui.turn(3, 1)       # Mode: Foundation (staged).
     c.ui.turn(2, 1); c.ui.press_key(3)  # Rhythm -> M02.
     c.ui.turn(3, 1); c.ui.press_key(3)  # Anchor: P01; apply the whole transaction.
@@ -112,6 +113,7 @@ def revoice_workflow(c):
     c.ui.turn(1, -20); c.ui.turn(2, 3); c.ui.set_value(1)
     # Masks -> Harmony; Revoice is the first opt-in mode.
     c.ui.channel_page("harmony", "masks", channel=1)
+    c.ui.expect_header("harmony", channel=1)
     c.ui.set_value(1); c.ui.press_key(3)
     expected = []
     for root, upper, velocity in ((48, 50, 127), (50, 52, 117),
@@ -540,6 +542,7 @@ def ensemble_polyrhythm_workflow(c):
 
     # Create a four-part group and assign its four explicit channel roles.
     c.ui.select_channel(1); c.ui.channel_page("harmony", "midi_config", channel=1)
+    c.ui.expect_header("harmony", channel=1)
     c.ui.turn(2, 5); c.ui.press_key(3)       # Groups
     c.ui.turn(2, 1); c.ui.press_key(3)       # Create group 1
     c.ui.turn(2, 1); c.ui.press_key(3)       # Four-part smooth
@@ -635,6 +638,7 @@ def ensemble_polyrhythm_workflow(c):
     octave_pitches = [m['bytes'][1] for m in octave_member(state)]
     assert octave_pitches == [72, 72, 72, 72, 72, 72], octave_pitches
     c.ui.stop(); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
+    c.ui.channel_page("harmony", "midi_config", channel=3, confirm=False)
     c.ui.expect_header("harmony", channel=3)
     c.ui.turn(2, 9); c.ui.press_key(3); c.ui.set_value(1)
     expect_rendered_region(c, [(2, 36, 4, 'Status LOCAL OCTAVE BYPASS')],
@@ -646,6 +650,7 @@ def ensemble_polyrhythm_workflow(c):
 def no_voicing_fallback_workflow(c):
     from contract.harmony_merge_visual import expect_rendered_region
     c.configure(); c.ui.channel_page("harmony", "midi_config", channel=1)
+    c.ui.expect_header("harmony", channel=1)
     c.ui.set_value(2)                # Pattern
     c.ui.turn(2, 4); c.ui.press_key(3)      # Register
     c.ui.turn(2, 1); c.ui.set_value(26)  # Bass Low 50
@@ -696,6 +701,7 @@ def held_step_precedence_workflow(c):
     c.configure()
     c.ui.turn(1, -20); c.ui.expect_header("masks", channel=1)
     c.ui.channel_page("harmony", "masks", channel=1)
+    c.ui.expect_header("harmony", channel=1)
     c.ui.set_value(1)  # Dirty Revoice draft; deliberately do not Apply.
     try:
         with c.ui.hold_step(1):
@@ -708,6 +714,7 @@ def held_step_precedence_workflow(c):
                 ((72, 90), (62, 117), (64, 107), (65, 97))]
     c.playback(expected, cycles=2, timeout=6)
     c.ui.channel_page("note_dashboard", "trig_locks", channel=1)
+    c.ui.expect_header("note_dashboard", channel=1)
     with c.ui.hold_step(2):
         expect_rendered_region(c, [(2, 63, 4, 'P62 S62 E62')],
                                left=2, right=72, top=55, bottom=64)

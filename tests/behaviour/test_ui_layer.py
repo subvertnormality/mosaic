@@ -18,6 +18,77 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_harmony_page_navigation_preserves_header_observations(self):
+        """README MERGE-FOUNDATION/HARMONY-REVOICE: show the selected page."""
+        import ast
+        import inspect
+        import textwrap
+
+        from harmony_merge_workflow import revoice_workflow, setup_foundation
+
+        for run, page in ((setup_foundation, "merge_shape"),
+                          (revoice_workflow, "harmony")):
+            calls = [node for node in ast.walk(ast.parse(
+                textwrap.dedent(inspect.getsource(run))))
+                if isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and isinstance(node.func.value, ast.Attribute)
+                and node.func.value.attr == "ui"
+                and node.args and isinstance(node.args[0], ast.Constant)
+                and node.args[0].value == page]
+            navigation = [node.lineno for node in calls
+                          if node.func.attr == "channel_page"]
+            observations = [node.lineno for node in calls
+                            if node.func.attr == "expect_header"]
+            self.assertEqual(len(navigation), 1, run.__name__)
+            self.assertTrue(any(line > navigation[0] for line in observations),
+                            "%s lost its screen-header result" % run.__name__)
+
+    def test_harmony_replay_retains_page_observations_and_navigation(self):
+        """README Harmony workflows retain their visible page checkpoints."""
+        import ast
+        import inspect
+        import textwrap
+
+        from harmony_merge_workflow import (
+            ensemble_polyrhythm_workflow, held_step_precedence_workflow,
+            no_voicing_fallback_workflow,
+        )
+
+        for run, page, minimum in (
+            (ensemble_polyrhythm_workflow, "harmony", 3),
+            (no_voicing_fallback_workflow, "harmony", 1),
+            (held_step_precedence_workflow, "harmony", 1),
+            (held_step_precedence_workflow, "note_dashboard", 1),
+        ):
+            tree = ast.parse(textwrap.dedent(inspect.getsource(run)))
+            calls = [node for node in ast.walk(tree)
+                     if isinstance(node, ast.Call)
+                     and isinstance(node.func, ast.Attribute)
+                     and isinstance(node.func.value, ast.Attribute)
+                     and node.func.value.attr == "ui"
+                     and node.args and isinstance(node.args[0], ast.Constant)
+                     and node.args[0].value == page]
+            observations = [node for node in calls
+                            if node.func.attr == "expect_header"]
+            self.assertGreaterEqual(len(observations), minimum,
+                                    "%s lost a %s screen-header result" %
+                                    (run.__name__, page))
+        tree = ast.parse(textwrap.dedent(inspect.getsource(
+            ensemble_polyrhythm_workflow)))
+        channel_three = [node for node in ast.walk(tree)
+                         if isinstance(node, ast.Call)
+                         and isinstance(node.func, ast.Attribute)
+                         and node.func.attr == "channel_page"
+                         and node.args and isinstance(node.args[0], ast.Constant)
+                         and node.args[0].value == "harmony"
+                         and any(keyword.arg == "channel"
+                                 and isinstance(keyword.value, ast.Constant)
+                                 and keyword.value.value == 3
+                                 for keyword in node.keywords)]
+        self.assertEqual(len(channel_three), 1,
+                         "ensemble must navigate back to Ch. 3 Harmony")
+
     def test_allowlist_is_exact_and_fail_closed(self):
         from ui_layer_guard import validate_allowlist
 
