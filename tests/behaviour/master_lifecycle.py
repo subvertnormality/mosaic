@@ -4,8 +4,7 @@ def master_lifecycle(c):
     from midi_window import MidiWindow
     configure_master_output(c)
     def play_toggle():
-        c.action(type='grid',x=1,y=8,state=1)
-        c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture([('play_stop',None)],[('play_stop',None)])
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     for delay in (0,.001,.025):
         cancelled=MidiWindow(c.snapshot()['midi_count'])

@@ -1,13 +1,11 @@
 """First-ever MIDI clock after Start must establish the external beat origin."""
 def fast_acquisition(c,bpm=20):
     import time
-    from cases import menu_label,menu_value
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.enc(1,-1);c.enc(3,10);c.key(3);c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
-    c.enc(3,1);menu_value(c,'midi')
+    c.ui.configure();c.ui.turn(1,-1);c.ui.turn(3,10);c.ui.press_key(3)
+    c.ui.press_key(1);c.ui.turn(1,4);c.ui.press_key(3)
+    c.ui.select_midi_clock_source_from_levels()
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     tick_ns=60_000_000_000/bpm/24
     # Fresh native process: no MIDI clocks have been sent before this Start.

@@ -395,6 +395,10 @@ class Ui:
         self.press_key(1)
         self.turn(1, 4)
         self.press_key(3)
+        self.select_midi_clock_source_from_levels()
+
+    def select_midi_clock_source_from_levels(self):
+        """Select the CLOCK source after opening the native LEVELS root."""
         self.expect_menu_label(NATIVE_MENU["levels_root"])
         position = next(
             index for index, value in enumerate(

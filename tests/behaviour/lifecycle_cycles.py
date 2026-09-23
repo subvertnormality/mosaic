@@ -17,12 +17,14 @@ def lifecycle_cycles(c,cycles=10):
         d.wait(lambda _:all((d.data_directory/n).is_file() and (d.data_directory/n).stat().st_mtime_ns!=before.get(n) for n in ('autosave.ptn','autosave.pset')))
     d=c;d.configure();phrase(d,0,'fresh')
     for cycle in range(1,cycles+1):
-        d.tap(4,8);d.tap(16,8);d.tap(3,8) # global transpose +1
+        d.ui.tap_control('scale_editor')
+        d.ui.tap_control('global_transpose_increment')
+        d.ui.tap_control('channel_editor') # global transpose +1
         phrase(d,cycle,'cycle-%d-edited'%cycle)
         idle_autosave(d);d.finish()
         out=c.out/('cycle-%02d'%cycle);out.mkdir()
         d=Driver(out,project_seed=d.data_directory,**c.launch_options)
-        try:d.tap(3,8);phrase(d,cycle,'cycle-%d-restored'%cycle)
+        try:d.ui.tap_control('channel_editor');phrase(d,cycle,'cycle-%d-restored'%cycle)
         except Exception:
             try:d.finish() # never leave a restarted session running
             except Exception:pass

@@ -1,12 +1,8 @@
 """External transport origin must not fast-forward when source epochs differ."""
 def external_started_handoff(c):
     import time
-    from cases import menu_label,menu_value
     from midi_window import MidiWindow
-    c.configure();c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
-    c.enc(3,1);menu_value(c,'midi')
+    c.ui.select_midi_clock_source()
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     origin=(c.logical_ns if controlled else time.monotonic_ns())+500000000
     first=origin+1250000000
@@ -21,9 +17,9 @@ def external_started_handoff(c):
     c.wait(lambda state:capture.extend(state) and len(capture.note_ons())==1,timeout=3)
     c.elapse(.1);capture.extend(c.snapshot())
     assert c.snapshot()['midi_capture']['outstanding'],'No held note before source handoff'
-    switch=c.action(type='enc',n=3,delta=-2)
-    c.elapse(.5);capture.extend(c.snapshot());menu_value(c,'internal')
-    c.tap(1,8)
+    switch=c.ui.encoder_event(3,-2)
+    c.elapse(.5);capture.extend(c.snapshot());c.ui.expect_native_menu_value('clock_source','internal')
+    c.ui.stop()
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'] and len(state['midi_input_schedule']['delivered'])==len(events),timeout=3)
     notes=capture.note_ons();field='logical_ns' if controlled else 'monotonic_ns'
     c.results.append(dict(kind='external-start-handoff-diagnostic',switch=switch,note_count=len(notes),notes=notes))
