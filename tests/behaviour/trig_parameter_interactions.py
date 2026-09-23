@@ -3,7 +3,7 @@
 def fixed_note_domain(c,start=0,count=16):
     from cases import assert_durations
     assert 0<=start<128 and 1<=count<=16 and start+count<=128
-    c.ui.configure();c.ui.turn(1,-3)
+    c.ui.configure();c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
     c.ui.assign_trig_parameter_key('fixed_note')
     for parameter,value in [('quantised_fixed_note',7),('random_note',4),('twos_random_note',4)]:
         c.ui.turn(2,1);c.ui.assign_trig_parameter_key(parameter)
@@ -63,7 +63,7 @@ def quantised_fixed_table(c,profile='major'):
 
 def stock_pitch_lock_inheritance(c,quantised=True):
     from cases import assert_durations
-    c.ui.configure();c.ui.turn(1,-3)
+    c.ui.configure();c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
     c.ui.assign_trig_parameter_key('quantised_fixed_note' if quantised else 'fixed_note')
     def phrase(pitches,phase):
         notes=c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],cycles=2)
@@ -98,10 +98,10 @@ def stock_pitch_lock_inheritance(c,quantised=True):
 
 
 def competing_pitch_locks(c):
-    from cases import assign_trig_parameter,assert_durations
-    c.configure();c.enc(1,-3)
-    assign_trig_parameter(c,'Quantised Fixed Note');c.enc(3,66)
-    c.enc(2,1);assign_trig_parameter(c,'Fixed Note');c.enc(3,61)
+    from cases import assert_durations
+    c.ui.configure();c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
+    c.ui.assign_trig_parameter_key('quantised_fixed_note');c.ui.set_value(66)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('fixed_note');c.ui.set_value(61)
     def phrase(pitches,phase):
         notes=c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],cycles=2)
         assert_durations(c,notes,[1]*(len(notes)-1))
@@ -111,27 +111,27 @@ def competing_pitch_locks(c):
         assert all(abs(e)<=tolerance for e in errors),errors
         c.results.append(dict(kind='competing-stock-pitch-locks',phase=phase,pitches=pitches,timing_errors=errors,passed=True))
     def lock(step,value):
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step',step)],[])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-            if value>=0:c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
+            if value>=0:c.ui.set_value(value+1)
+        finally:c.ui.gesture([],[('step',step)])
         c.elapse(.15)
     def clear(step):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.key(2)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        c.ui.gesture([('step',step)],[])
+        try:c.elapse(.05);c.ui.press_key(2)
+        finally:c.ui.gesture([],[('step',step)])
         c.elapse(.15)
     phrase([60]*4,'fixed-default-beats-quantised')
-    c.enc(2,-1);lock(1,63)
+    c.ui.turn(2,-1);lock(1,63)
     phrase([60]*4,'fixed-default-beats-quantised-lock')
-    c.enc(2,1);lock(2,0);lock(3,-1)
+    c.ui.turn(2,1);lock(2,0);lock(3,-1)
     phrase([60,0,60,60],'fixed-zero-lock-and-off-inheritance')
-    c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+    c.ui.encoder_event(3,-126);c.elapse(.15)
     phrase([62,0,65,65],'fixed-off-reveals-quantised-default-and-lock')
-    c.enc(2,-1);lock(4,0)
+    c.ui.turn(2,-1);lock(4,0)
     phrase([62,0,65,0],'independent-zero-locks-on-two-slots')
-    c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+    c.ui.encoder_event(3,-126);c.elapse(.15)
     phrase([62,0,64,0],'both-defaults-off-preserve-local-locks')
     clear(2);phrase([62,62,64,0],'clear-fixed-lock-only-step2')
     clear(1);phrase([60,62,64,0],'clear-quantised-lock-only-step1')
@@ -139,10 +139,10 @@ def competing_pitch_locks(c):
 
 
 def probability_endpoint_locks(c):
-    from cases import assign_trig_parameter,assert_durations
-    c.configure();c.enc(1,-3)
-    assign_trig_parameter(c,'Fixed Note');c.enc(3,66)
-    c.enc(2,1);assign_trig_parameter(c,'Trig Probability')
+    from cases import assert_durations
+    c.ui.configure();c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
+    c.ui.assign_trig_parameter_key('fixed_note');c.ui.set_value(66)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('trig_probability')
     def phrase(steps,phase):
         velocities=(127,117,107,97)
         notes=c.playback([(1,[144,65,velocities[step-1]]) for step in steps],cycles=3)
@@ -154,30 +154,30 @@ def probability_endpoint_locks(c):
         assert all(abs(e)<=tolerance for e in errors),errors
         c.results.append(dict(kind='probability-endpoint-locked-phrase',phase=phase,active_steps=steps,expected_offsets=expected,timing_errors=errors,passed=True))
     def lock(step,value):
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step',step)],[])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-            c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
+            c.ui.set_value(value+1)
+        finally:c.ui.gesture([],[('step',step)])
         c.elapse(.15)
     def clear(step):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.key(2)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        c.ui.gesture([('step',step)],[])
+        try:c.elapse(.05);c.ui.press_key(2)
+        finally:c.ui.gesture([],[('step',step)])
         c.elapse(.15)
-    c.enc(3,101);phrase([1,2,3,4],'100-always')
-    c.enc(3,3);phrase([1,2,3,4],'upper-clamp100')
-    c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,1)
+    c.ui.set_value(101);phrase([1,2,3,4],'100-always')
+    c.ui.set_value(3);phrase([1,2,3,4],'upper-clamp100')
+    c.ui.encoder_event(3,-126);c.elapse(.15);c.ui.set_value(1)
     # Include the very first onset opportunity in the silence window.
-    before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(2.8)
+    before=c.snapshot()['midi_count'];c.ui.play();c.elapse(2.8)
     state=c.snapshot()
     notes=[e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
     assert notes==[],notes
     assert state['midi_capture']['outstanding']==[]
-    c.tap(1,8)
+    c.ui.stop()
     c.results.append(dict(kind='probability-zero-silence',seconds=2.8,note_ons=notes,fixed_pitch=65,passed=True))
     lock(2,100);phrase([2],'step100-overrides-channel0')
-    c.enc(3,100);lock(1,0);phrase([2,3,4],'step0-overrides-channel100')
+    c.ui.set_value(100);lock(1,0);phrase([2,3,4],'step0-overrides-channel100')
     lock(4,0);phrase([2,3],'first-and-wrap-step0')
     clear(1);phrase([1,2,3],'clear-first-zero')
     clear(4);phrase([1,2,3,4],'clear-wrap-zero')
@@ -236,28 +236,28 @@ def seeded_probability(c,probability=50,opportunities=64):
 
 
 def probability_midi_locks(c,trigless=True,nrpn=False):
-    from cases import assign_trig_parameter,set_mosaic_options,assert_durations
-    c.configure()
-    if nrpn:c.enc(3,1);c.key(3) # Generic CC -> existing configured NRPN fixture.
-    set_mosaic_options(c,[('Trigless locks',trigless)])
-    c.tap(2,1);c.screen_header('Ch. 2 Device Config',selected=5)
-    c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1);c.enc(1,-3)
-    assign_trig_parameter(c,'NRPN14' if nrpn else 'CC 1')
+    from cases import assert_durations
+    c.ui.configure()
+    if nrpn:c.ui.set_value(1);c.ui.press_key(3) # Generic CC -> existing configured NRPN fixture.
+    c.ui.set_mosaic_option_keys([('trigless_locks',trigless)])
+    c.ui.select_channel(2);c.ui.expect_header('midi_config',channel=2)
+    c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
+    c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.select_channel(1);c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
+    c.ui.assign_trig_parameter_key('nrpn14' if nrpn else 'stored_patch_cc1')
     values=[126,253,126,253] if nrpn else [24,48,72,96]
     for step,value in enumerate(values,1):
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step',step)],[])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126)
-            c.enc(3,(1 if value==126 else 2) if nrpn else value+1)
+            c.elapse(.05);c.ui.encoder_event(3,-126)
+            c.ui.set_value((1 if value==126 else 2) if nrpn else value+1)
             if nrpn:
-                c.action(type='key',n=1,state=1);c.elapse(.3)
-                try:c.enc(3,-2 if value==126 else -4)
-                finally:c.action(type='key',n=1,state=0)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.enc(2,1);assign_trig_parameter(c,'Trig Probability');c.enc(3,1)
+                with c.ui.hold_keys(1):
+                    c.elapse(.3)
+                    c.ui.set_value(-2 if value==126 else -4)
+        finally:c.ui.gesture([],[('step',step)])
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('trig_probability');c.ui.set_value(1)
     def phase(active,accepted,label):
-        before=c.snapshot()['midi_count'];c.tap(1,8)
+        before=c.snapshot()['midi_count'];c.ui.play()
         def ons(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
         def refs(state):return [e for e in ons(state) if e['port']==2 and e['bytes'][0]==145]
         state=c.wait(lambda state:len(refs(state))>=2*len(active)+1)
@@ -289,16 +289,16 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
         for note,step in zip(selected,target_steps):
             packet=packets[lock_steps.index(step)]
             assert packet['index']<note['index'],'MIDI lock must precede accepted note'
-        c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+        c.ui.stop();c.wait(lambda state:state['midi_capture']['outstanding']==[])
         assert_durations(c,ref,[1]*(len(ref)-1))
         if selected:assert_durations(c,selected,[1]*len(selected))
         c.results.append(dict(kind='probability-trigless-midi-locks',nrpn=nrpn,trigless=trigless,phase=label,active_steps=active,accepted_steps=accepted,lock_opportunities=lock_steps,passed=True))
     phase([1,2,3,4],[],'probability0-active-trigs-retain-locks')
-    c.tap(5,8);c.tap(3,4);c.tap(3,8)
+    c.ui.pattern_editor();c.ui.tap_step(3);c.ui.menu('channel_editor')
     phase([1,2,4],[],'removed-trig-respects-trigless')
-    c.action(type='grid',x=4,y=4,state=1)
-    try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,101)
-    finally:c.action(type='grid',x=4,y=4,state=0)
+    c.ui.gesture([('step',4)],[])
+    try:c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15);c.ui.set_value(101)
+    finally:c.ui.gesture([],[('step',4)])
     c.elapse(.15)
     phase([1,2,4],[4],'step-probability100-keeps-lock-before-note')
 
@@ -306,7 +306,7 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
 def recorded_edit_receipt(c):
     """One normal encoder detent, retaining its public applied-input receipt."""
     c.elapse(.05)
-    receipt=c.action(type='enc',n=3,delta=2)
+    receipt=c.ui.encoder_event(3,2)
     c.elapse(.15)
     return receipt
 
@@ -324,28 +324,26 @@ def assert_immediate_cc_on_edit(control,receipt):
 
 
 def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False):
-    from cases import assign_trig_parameter,menu_label,menu_value,set_mosaic_options
-    from patch_params import open_patch_control,turn
-    c.configure()
+    c.ui.configure()
     assert not (empty_step and probability_zero)
-    if empty_step or probability_zero:set_mosaic_options(c,[('Trigless locks',trigless)])
-    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    if empty_step or probability_zero:c.ui.set_mosaic_option_keys([('trigless_locks',trigless)])
+    c.ui.open_patch_control(setup=False);c.ui.turn_patch_control(63);c.ui.turn_patch_control(1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step,value in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        c.ui.gesture([('step',step)],[])
+        try:c.elapse(.05);c.ui.encoder_event(3,-126);c.ui.set_value(value+1)
+        finally:c.ui.gesture([],[('step',step)])
     if probability_zero:
-        c.enc(2,1);assign_trig_parameter(c,'Trig Probability')
-        c.action(type='grid',x=3,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,1)
-        finally:c.action(type='grid',x=3,y=4,state=0)
-        c.enc(2,-1)
+        c.ui.turn(2,1);c.ui.assign_trig_parameter_key('trig_probability')
+        c.ui.gesture([('step',3)],[])
+        try:c.elapse(.05);c.ui.encoder_event(3,-126);c.ui.set_value(1)
+        finally:c.ui.gesture([],[('step',3)])
+        c.ui.turn(2,-1)
     if empty_step:
-        c.tap(5,8);c.tap(3,4);c.tap(3,8) # Remove note3 through pattern editor.
-    c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2) # Four seconds per step.
-    c.tap(2,8) # Native recording arm.
-    before=c.snapshot()['midi_count'];c.tap(1,8)
+        c.ui.pattern_editor();c.ui.tap_step(3);c.ui.menu('channel_editor') # Remove note3 through pattern editor.
+    c.ui.channel_page('clock_mods',from_page='trig_locks',confirm=False);c.ui.set_value(-23);c.ui.press_key(3);c.ui.channel_page('trig_locks',from_page='clock_mods',confirm=False) # Four seconds per step.
+    c.ui.tap_control('record') # Native recording arm.
+    before=c.snapshot()['midi_count'];c.ui.play()
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
     first=c.wait(lambda state:len(notes(state))==1)
     assert notes(first)[0]['bytes']==[144,60,127]
@@ -357,15 +355,15 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     if edit_value==64:edit_receipt=recorded_edit_receipt(c)
     else:
         assert edit_value in (-1,0)
-        c.action(type='enc',n=3,delta=-126);c.elapse(.15) # Saturate to Off.
+        c.ui.encoder_event(3,-126);c.elapse(.15) # Saturate to Off.
         if edit_value==0:edit_receipt=recorded_edit_receipt(c)
     if switch_return:
-        c.tap(4,8) if scale_page else c.tap(2,1) # Pause via global scale editor or channel2.
+        c.ui.scale_editor() if scale_page else c.ui.select_channel(2) # Pause via global scale editor or channel2.
         paused=c.wait(lambda state:len(notes(state))>=3,timeout=10)
         old=[e for e in paused['midi'] if e['index']>edited_after and e['bytes'][0]==176]
         assert old[-1]['bytes']==[176,1,96],old
         c.elapse(.3)
-        c.tap(3,8) if scale_page else c.tap(1,1)
+        c.ui.menu('channel_editor') if scale_page else c.ui.select_channel(1)
     silent_step=empty_step or probability_zero
     state=c.wait(lambda state:len(notes(state))>=(3 if silent_step else 4),timeout=14)
     captured=[e for e in state['midi'] if e['index']>edited_after and e['bytes'][0]==176]
@@ -418,25 +416,25 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     origin_live=live_notes[0][field]
     now=lambda:c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
     remaining=origin_live+15_800_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
-    c.tap(2,8)
+    c.ui.tap_control('record')
     remaining=origin_live+16_200_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
-    c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+    c.ui.stop();c.wait(lambda state:state['midi_capture']['outstanding']==[])
     live_events=[e for e in c.snapshot()['midi'] if e['index']>before]
     from note_accounting import note_pairs
     pairs=note_pairs(live_events);assert [on for on,off in pairs[:len(live_notes)]]==live_notes
     assert len(pairs)==len(live_notes)+1 and pairs[-1][0]['bytes']==[144,60,127]
     from cases import assert_durations
     assert_durations(c,live_notes,[24]*len(live_notes),events=live_events)
-    c.key(1);menu_value(c,'X' if edit_value==-1 else str(edit_value));c.key(1)
-    c.enc(3,65-edit_value) # Distinct default proves stored locks independently.
-    c.key(1);menu_value(c,'65');c.key(1)
+    c.ui.press_key(1);c.ui.expect_patch_value('off' if edit_value==-1 else edit_value);c.ui.press_key(1)
+    c.ui.set_value(65-edit_value) # Distinct default proves stored locks independently.
+    c.ui.press_key(1);c.ui.expect_patch_value(65);c.ui.press_key(1)
     if empty_step and not trigless:
         # Native params reopens at the prior device control. Return through its
         # group list to a stable root before selecting Mosaic options.
-        c.key(1);c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
+        c.ui.press_key(1);c.ui.press_key(2);c.ui.turn(2,-60);c.ui.expect_native_menu_label('levels_root');c.ui.press_key(2);c.ui.press_key(1)
         # Reveal the silent step's stored value during replay. If recording while
         # disabled overwrote it, the expected96 below becomes64 and fails.
-        set_mosaic_options(c,[('Trigless locks',True)])
+        c.ui.set_mosaic_option_keys([('trigless_locks',True)])
     # Disarmed playback proves the future steps were actually recorded, not
     # merely suppressed during the recording pass. Step1 already sounded before
     # the edit; steps2..4 receive64 through the end of this channel cycle.
@@ -474,42 +472,37 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
 def recording_trigless_toggle(c):
     """Mid-recording option changes use authored-trigger eligibility immediately."""
     import time
-    from cases import assign_trig_parameter,assert_durations,menu_label,menu_option_row,set_mosaic_options
-    from frame_oracle import selected_line
+    from cases import assert_durations,menu_label,menu_option_row,set_mosaic_options
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure();set_mosaic_options(c,[('Trigless locks',False)])
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.ui.configure();c.ui.set_mosaic_option_keys([('trigless_locks',False)])
+    c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step,value in enumerate((24,48,96,120),1):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,65) # Explicit default64.
-    c.tap(5,8);c.tap(2,4);c.tap(3,4);c.tap(3,8)
-    c.enc(1,2);c.enc(3,-29);c.key(3);c.enc(1,-2) # /48: eight seconds per step.
-    c.tap(2,8);capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture([('step',step)],[])
+        try:c.elapse(.05);c.ui.encoder_event(3,-126);c.ui.set_value(value+1)
+        finally:c.ui.gesture([],[('step',step)])
+    c.ui.encoder_event(3,-126);c.elapse(.15);c.ui.set_value(65) # Explicit default64.
+    c.ui.pattern_editor();c.ui.tap_step(2);c.ui.tap_step(3);c.ui.menu('channel_editor')
+    c.ui.channel_page('clock_mods',from_page='trig_locks',confirm=False);c.ui.set_value(-29);c.ui.press_key(3);c.ui.channel_page('trig_locks',from_page='clock_mods',confirm=False) # /48: eight seconds per step.
+    c.ui.tap_control('record');capture=MidiWindow(c.snapshot()['midi_count'])
+    c.ui.gesture([('play_stop',None)],[('play_stop',None)])
     def now():return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
     origin=now();c.elapse(.5)
-    c.enc(3,1) # Timed live edit64 to65.
+    c.ui.set_value(1) # Timed live edit64 to65.
     def reach(seconds):
         remaining=origin+round(seconds*1e9)-now();assert remaining>0
         c.elapse(remaining/1e9)
     # Open Trigless locks once and leave it selected for both live transitions.
-    reach(1);c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
-    c.enc(2,position);c.key(3);c.action(type='enc',n=2,delta=-126);c.elapse(.15)
-    for _ in range(40):
-        if selected_line(c.snapshot(),'Trigless locks',top=23):break
-        c.enc(2,1)
-    else:raise AssertionError('Trigless option not reached during recording')
+    reach(1);c.ui.open_native_parameters(observe_entry=False)
+    c.ui.seek_native_parameter_root('mosaic');c.ui.press_key(3)
+    c.ui.seek_mosaic_option('trigless_locks',failure='Trigless option not reached during recording')
     assert now()<origin+7_000_000_000
-    reach(8.2);c.enc(3,3);menu_option_row(c,'Trigless locks','On',top=23)
-    reach(16.2);c.enc(3,-3);menu_option_row(c,'Trigless locks','Off',top=23)
+    reach(8.2);c.ui.set_value(3);c.ui.expect_mosaic_option('trigless_locks',True)
+    reach(16.2);c.ui.set_value(-3);c.ui.expect_mosaic_option('trigless_locks',False)
     # Disarm before wrap so step4 can complete its natural eight-second gate
     # without recording the next step1. Observe that wrap, then Stop the new gate.
-    reach(31.8);c.tap(2,8);reach(32.2);capture.extend(c.snapshot())
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    reach(31.8);c.ui.tap_control('record');reach(32.2);capture.extend(c.snapshot())
+    c.ui.gesture([('play_stop',None)],[('play_stop',None)])
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
     notes=capture.note_ons();assert [(e['port'],e['bytes']) for e in notes]==[(1,[144,60,127]),(1,[144,65,97]),(1,[144,60,127])]
     pairs=note_pairs(capture.events);assert len(pairs)==3 and [on for on,off in pairs]==notes
@@ -522,9 +515,9 @@ def recording_trigless_toggle(c):
     for actual,wanted in zip(offsets,(0,0,.55,16,24,32)):assert abs(actual-wanted)<=tol,(offsets,wanted)
     for control,note in ((live_cc[1],notes[0]),(live_cc[4],notes[1]),(live_cc[5],notes[2])):
         assert control['index']<note['index'] and abs((control[field]-note[field])/1e9)<=tol
-    c.enc(3,3);menu_option_row(c,'Trigless locks','On',top=23)
-    c.key(2);c.action(type='enc',n=2,delta=-126);c.elapse(.15);menu_label(c,'LEVELS >');c.key(2);c.key(1)
-    c.enc(3,1)
+    c.ui.set_value(3);c.ui.expect_mosaic_option('trigless_locks',True)
+    c.ui.press_key(2);c.ui.encoder_event(2,-126);c.elapse(.15);c.ui.expect_native_menu_label('levels_root');c.ui.press_key(2);c.ui.press_key(1)
+    c.ui.set_value(1)
     before=c.snapshot()['midi_count']
     played=c.playback([(1,[144,60,127]),(1,[144,65,97])],cycles=2,timeout=80,settle_seconds=60)
     events=[e for e in c.snapshot()['midi'] if e['index']>before]
@@ -543,19 +536,18 @@ def recording_trigless_toggle(c):
                           replay_values=values[1:],transitions=['off','on','off','on-for-replay'],passed=True))
 
 def cc_encoder_domain(c,configured=True):
-    from cases import assign_trig_parameter
-    c.configure()
-    if configured:c.enc(3,1);c.key(3)
-    c.enc(1,-3);assign_trig_parameter(c,'Control 1' if configured else 'CC 1')
-    c.enc(1,2);c.enc(3,-8);c.key(3);c.enc(1,-2) # One-second step avoids host input latency overlap.
+    c.ui.configure()
+    if configured:c.ui.set_value(1);c.ui.press_key(3)
+    c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key('configured_control_1' if configured else 'stored_patch_cc1')
+    c.ui.channel_page('clock_mods',from_page='trig_locks',confirm=False);c.ui.set_value(-8);c.ui.press_key(3);c.ui.channel_page('trig_locks',from_page='clock_mods',confirm=False) # One-second step avoids host input latency overlap.
     tested=[]
     for expected in list(range(128))+[127,-1,0]:
-        c.action(type='grid',x=1,y=4,state=1)
+        c.ui.gesture([('step',1)],[])
         try:
-            if expected==-1:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-            else:c.enc(3,1)
-        finally:c.action(type='grid',x=1,y=4,state=0)
-        before=c.snapshot()['midi_count'];c.tap(1,8)
+            if expected==-1:c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
+            else:c.ui.set_value(1)
+        finally:c.ui.gesture([],[('step',1)])
+        before=c.snapshot()['midi_count'];c.ui.play()
         def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
         state=c.wait(lambda state:len(notes(state))>=1)
         assert [(e['port'],e['bytes']) for e in notes(state)]==[(1,[144,60,127])]
@@ -564,16 +556,15 @@ def cc_encoder_domain(c,configured=True):
         actual=[(e['port'],e['bytes']) for e in cc]
         assert actual==wanted,dict(configured=configured,encoder_detent=len(tested)+1,expected=wanted,actual=actual)
         if cc:assert cc[0]['index']<notes(state)[0]['index']
-        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
         tested.append(expected)
     c.results.append(dict(kind='CC-editor-every-detent-native-MIDI',configured=configured,values=tested,includes_clamp_Off_reentry=True,passed=True))
 
 
 def sparse_editor_domain(c,domain):
-    from cases import assign_trig_parameter
     assert domain in ('SparseLow','SparseHigh','NS0','NS6')
-    c.configure();c.enc(3,1);c.key(3);c.enc(1,-3);assign_trig_parameter(c,domain)
-    c.enc(1,2);c.enc(3,-8);c.key(3);c.enc(1,-2)
+    c.ui.configure();c.ui.set_value(1);c.ui.press_key(3);c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key({'SparseLow':'sparse_low','SparseHigh':'sparse_high','NS0':'ns0','NS6':'ns6'}[domain])
+    c.ui.channel_page('clock_mods',from_page='trig_locks',confirm=False);c.ui.set_value(-8);c.ui.press_key(3);c.ui.channel_page('trig_locks',from_page='clock_mods',confirm=False)
     if domain=='SparseLow':
         operations=[(1,v) for v in range(100,128)]+[(1,127)]+[(-1,v) for v in range(126,99,-1)]+[(-1,None),(-1,None),(1,100)]
     elif domain=='SparseHigh':
@@ -584,14 +575,15 @@ def sparse_editor_domain(c,domain):
     checked=[]
     for i,(direction,value) in enumerate(operations):
         fine=i%2==0
-        c.action(type='grid',x=1,y=4,state=1)
+        c.ui.gesture([('step',1)],[])
         try:
-            if fine:c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.enc(3,direction)
-            finally:
-                if fine:c.action(type='key',n=1,state=0)
-        finally:c.action(type='grid',x=1,y=4,state=0)
-        start=c.snapshot()['midi_count'];c.tap(1,8)
+            if fine:
+                with c.ui.hold_keys(1):
+                    c.elapse(.3)
+                    c.ui.set_value(direction)
+            else:c.ui.set_value(direction)
+        finally:c.ui.gesture([],[('step',1)])
+        start=c.snapshot()['midi_count'];c.ui.play()
         def notes(state):return [e for e in state['midi'] if e['index']>start and e['bytes'][0]&240==144 and e['bytes'][2]>0]
         state=c.wait(lambda state:len(notes(state))>=1)
         assert [(e['port'],e['bytes']) for e in notes(state)]==[(1,[144,60,127])]
@@ -604,58 +596,56 @@ def sparse_editor_domain(c,domain):
         actual=[(e['port'],e['bytes']) for e in cc]
         assert actual==wanted,dict(domain=domain,operation=i,direction=direction,fine=fine,expected=wanted,actual=actual)
         assert all(e['index']<notes(state)[0]['index'] for e in cc)
-        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
         checked.append(dict(direction=direction,value=value,fine=fine))
     c.results.append(dict(kind='native-sparse-singleton-editor-domain',domain=domain,operations=checked,clamp_and_Off=True,passed=True))
 
 
 def pending_parameter_lock_song_transition(c):
     """A held parameter edit belongs to the song slot active at first press."""
-    from cases import assign_trig_parameter,menu_value
-    from patch_params import open_patch_control,turn
-    c.configure()
-    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.ui.configure()
+    c.ui.open_patch_control(setup=False);c.ui.turn_patch_control(63);c.ui.turn_patch_control(1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     def lock(step,value):
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step',step)],[])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.ui.set_value(value+1)
+        finally:c.ui.gesture([],[('step',step)])
     lock(2,24)
     # Slot 2 is a copy with a distinct octave and step-2 lock.
-    c.tap(6,8);c.tap(2,7)
-    for _ in range(7):c.tap(8,7)
-    c.hold_tap((1,1),(2,1));c.tap(2,1);c.led_values([(1,1),(2,1)],[7,15])
-    c.tap(3,8);c.tap(11,8);lock(2,96)
-    c.tap(6,8);c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(3,8);c.screen_header('Ch. 1 Trig Locks',selected=2)
+    c.ui.song_editor();c.ui.tap_control('global_pattern_length',2)
+    for _ in range(7):c.ui.tap_control('global_pattern_length',8)
+    c.ui.copy_slot(1,2,control='song_slot');c.ui.select_song_slot(2);c.ui.expect_leds({('song_slot',1):'alternate',('song_slot',2):'selected'})
+    c.ui.menu('channel_editor');c.ui.tap_control('channel_octave',1);lock(2,96)
+    c.ui.song_editor();c.ui.select_song_slot(1);c.ui.expect_leds({('song_slot',1):'selected',('song_slot',2):'alternate'})
+    c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1)
 
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    marker=c.snapshot()['midi_count'];c.ui.play()
     def onsets(state,after=marker):
         return [e for e in state['midi'] if e['index']>after and e['bytes'][0]==144 and e['bytes'][2]>0]
     first=c.wait(lambda state:len(onsets(state))>=1,timeout=3)
     assert onsets(first)[0]['bytes']==[144,60,127]
-    c.action(type='grid',x=2,y=4,state=1)
+    c.ui.gesture([('step',2)],[])
     try:
-        c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,1)
+        c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15);c.ui.set_value(1)
         # Value zero is queued while slot 1 owns the gesture. Keep it held
         # across the actual boundary, whose octave proves slot 2 is live.
         crossed=c.wait(lambda state:any(e['bytes']==[144,72,127] for e in onsets(state)),timeout=12)
         assert any(e['bytes']==[144,72,127] for e in onsets(crossed))
-    finally:c.action(type='grid',x=2,y=4,state=0)
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-    c.tap(6,8);c.led_values([(1,1),(2,1)],[7,15])
-    c.tap(3,8)
+    finally:c.ui.gesture([],[('step',2)])
+    c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
+    c.ui.song_editor();c.ui.expect_leds({('song_slot',1):'alternate',('song_slot',2):'selected'})
+    c.ui.menu('channel_editor')
 
     def select_slot(slot):
-        c.tap(6,8);c.tap(slot,1);c.tap(3,8);c.screen_header('Ch. 1 Trig Locks',selected=2)
+        c.ui.song_editor();c.ui.select_song_slot(slot);c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1)
     # A distinct unheld default separates locks from ordinary values in both slots.
     for slot in (1,2):
         select_slot(slot)
-        c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,66)
+        c.ui.encoder_event(3,-126);c.elapse(.15);c.ui.set_value(66)
 
     def replay(slot,pitches,step_two):
-        select_slot(slot);start=c.snapshot()['midi_count'];c.tap(1,8)
+        select_slot(slot);start=c.snapshot()['midi_count'];c.ui.play()
         state=c.wait(lambda current:len(onsets(current,start))>=4,timeout=8)
         notes=onsets(state,start)[:4];cutoff=notes[-1]['index']
         cc=[e for e in state['midi'] if start<e['index']<=cutoff and e['bytes'][:2]==[176,1]]
@@ -664,7 +654,7 @@ def pending_parameter_lock_song_transition(c):
         assert [e['bytes'] for e in notes]==expected_notes,(slot,notes,expected_notes)
         assert [e['bytes'] for e in cc]==expected_cc,(slot,cc,expected_cc)
         for control,note in zip(cc[1:],notes):assert control['index']<note['index']
-        c.tap(1,8);c.wait(lambda current:not current['midi_capture']['outstanding'])
+        c.ui.stop();c.wait(lambda current:not current['midi_capture']['outstanding'])
         return dict(slot=slot,pitches=pitches,controls=expected_cc,passed=True)
     slot1=replay(1,[60,62,64,65],0)
     slot2=replay(2,[72,74,76,77],96)
