@@ -524,6 +524,53 @@ class UiInputTests(unittest.TestCase):
             ("snapshot",), ("enc", 2, 1),
         ])
 
+    def test_mapping_parameter_seek_keeps_native_recipe_and_top_fallback(self):
+        from ui import Ui
+
+        states = [{"diagnostics": {"parameter_roots": [
+            {"id": "other"}, {"id": "mosaic_mask_midi_maps"},
+        ]}}] + [{"frame": {}} for _ in range(3)]
+        driver = FakeDriver(states=states)
+        ui = Ui(driver)
+        ui.expect_menu_label = lambda label: driver.calls.append(("menu-label", label))
+        checks = []
+        def selected(state, label, top=22):
+            checks.append((label, top))
+            return len(checks) == 5
+        with patch("frame_oracle.selected_line", side_effect=selected):
+            ui.seek_native_mapping_parameter("selected_channel_velocity")
+        self.assertEqual(driver.calls, [
+            ("key", 1), ("enc", 1, 4), ("key", 3), ("menu-label", "LEVELS >"),
+            ("snapshot",), ("enc", 2, 1), ("key", 3),
+            ("snapshot",), ("enc", 2, 1),
+            ("snapshot",), ("enc", 2, 1),
+            ("snapshot",),
+        ])
+        self.assertEqual(checks, [
+            ("Selected Ch. Velocity", 23), ("Selected Ch. Velocity", 22),
+            ("Selected Ch. Velocity", 23), ("Selected Ch. Velocity", 22),
+            ("Selected Ch. Velocity", 23),
+        ])
+        self.assertEqual(driver.results, [])
+
+    def test_mapping_parameter_seek_keeps_twelve_check_failure_boundary(self):
+        from ui import Ui
+
+        states = [{"diagnostics": {"parameter_roots": [
+            {"id": "mosaic_mask_midi_maps"},
+        ]}}] + [{"frame": {}} for _ in range(12)]
+        driver = FakeDriver(states=states)
+        ui = Ui(driver)
+        ui.expect_menu_label = lambda label: driver.calls.append(("menu-label", label))
+        with patch("frame_oracle.selected_line", return_value=False) as selected:
+            with self.assertRaisesRegex(AssertionError, "Mapping parameter not reached"):
+                ui.seek_native_mapping_parameter("selected_channel_velocity")
+        self.assertEqual(selected.call_count, 24)
+        self.assertEqual(driver.calls.count(("snapshot",)), 13)
+        self.assertEqual(driver.calls.count(("enc", 2, 1)), 12)
+        self.assertEqual(driver.calls[-1], ("enc", 2, 1))
+        self.assertEqual(driver.results, [])
+
     def test_patch_value_resolves_stable_and_numeric_values_and_rejects_unknown(self):
         driver, ui = self.ui()
         ui.expect_menu_value = lambda value: driver.calls.append(("menu-value", value))
