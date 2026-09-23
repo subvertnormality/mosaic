@@ -5,6 +5,10 @@ from driver import Driver,digest
 from frame_oracle import render
 from persisted_ranges import serializer_source
 
+def rejected_load_preservation_result(deadline, checked_files):
+    return dict(kind='rejected-load-file-preservation',deadline=deadline,
+                checked_filenames=sorted(checked_files),preserved=True,passed=True)
+
 def rejected_saved_range(c):
     c.ui.configure();c.elapse(59);c.elapse(2)
     c.wait(lambda _:all((c.data_directory/name).is_file() for name in ['autosave.ptn','autosave.pset']))
@@ -30,7 +34,7 @@ def rejected_saved_range(c):
             loaded.ui.menu('channel_editor');loaded.elapse(59);loaded.elapse(2)
             actual={name:digest(loaded.data_directory/name) for name in rejected}
             assert actual==rejected,'Rejected autosave was overwritten after input/idle'
-            loaded.results.append(dict(kind='rejected-load-file-preservation',deadline=deadline,sha256=actual,passed=True))
+            loaded.results.append(rejected_load_preservation_result(deadline,actual))
         marker=loaded.snapshot()['midi_count'];loaded.ui.play();loaded.elapse(.8);loaded.ui.stop()
         state=loaded.snapshot()
         assert not [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]

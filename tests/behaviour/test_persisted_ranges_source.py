@@ -8,6 +8,20 @@ from unittest.mock import patch
 
 
 class SerializerSourceTests(unittest.TestCase):
+    def test_rejected_load_preservation_result_is_semantic_and_stable(self):
+        from cases import rejected_saved_range
+
+        rejected_load_preservation_result = rejected_saved_range.__globals__["rejected_load_preservation_result"]
+
+        actual = rejected_load_preservation_result(2, {"autosave.ptn": "run-a", "autosave.pset": "run-b"})
+        self.assertEqual(actual, {
+            "kind": "rejected-load-file-preservation",
+            "deadline": 2,
+            "checked_filenames": ["autosave.pset", "autosave.ptn"],
+            "preserved": True,
+            "passed": True,
+        })
+
     def test_real_time_uses_the_pinned_emulator_norns_checkout(self):
         from persisted_ranges import serializer_source
 
