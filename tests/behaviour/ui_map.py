@@ -112,6 +112,7 @@ NATIVE_MENU = {
     "levels_root": "LEVELS >",
     "clock_source": "source",
     "clock_tempo": "tempo",
+    "elektron_program_change_channel": "Elektron p.change channel",
     "patch_control_default": "CC 1",
     "patch_control_configured": "Control 1",
 }

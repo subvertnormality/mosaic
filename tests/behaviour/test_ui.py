@@ -454,6 +454,37 @@ class UiInputTests(unittest.TestCase):
             "enabled": True,
         }])
 
+    def test_set_mosaic_number_preserves_observed_seek_recipe_and_result(self):
+        from ui import Ui
+
+        states = [
+            {"diagnostics": {"parameter_roots": [
+                {"id": "other"}, {"id": "other-2"}, {"id": "mosaic"},
+            ]}},
+            {"frame": {}},
+        ]
+        driver = FakeDriver(states=states)
+        ui = Ui(driver)
+        ui.expect_menu_label = lambda label: driver.calls.append(("menu-label", label))
+        ui.expect_menu_option_row = lambda label, value, top=None: driver.calls.append(
+            ("menu-option-row", label, value, top)
+        )
+        with patch("frame_oracle.selected_line", return_value=True):
+            ui.set_mosaic_number("elektron_program_change_channel", -9, "1")
+        self.assertEqual(driver.calls, [
+            ("key", 1), ("enc", 1, 4), ("key", 3), ("menu-label", "LEVELS >"),
+            ("snapshot",), ("enc", 2, 2), ("key", 3), ("enc", 2, -60),
+            ("snapshot",), ("enc", 3, -9),
+            ("menu-option-row", "Elektron p.change channel", "1", 22),
+            ("key", 2), ("enc", 2, -60), ("menu-label", "LEVELS >"),
+            ("key", 2), ("key", 1),
+        ])
+        self.assertEqual(driver.results, [{
+            "kind": "mosaic-number-input",
+            "label": "Elektron p.change channel",
+            "value": "1",
+        }])
+
     def test_patch_control_preserves_setup_scan_and_observed_label(self):
         from ui import Ui
 

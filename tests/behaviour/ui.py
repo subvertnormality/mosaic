@@ -230,6 +230,44 @@ class Ui:
                 raise UiMapError("unknown Mosaic option: " + str(key)) from error
         self.set_mosaic_options(mapped)
 
+    def set_mosaic_number(self, parameter, delta, shown):
+        """Set a mapped numeric Mosaic option through its observed menu row."""
+        from frame_oracle import selected_line
+
+        try:
+            label = NATIVE_MENU[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown Mosaic numeric option: " + str(parameter)) from error
+
+        self.press_key(1)
+        self.turn(1, 4)
+        self.press_key(3)
+        self.expect_native_menu_label("levels_root")
+        position = next(
+            index for index, value in enumerate(
+                self.driver.snapshot()["diagnostics"]["parameter_roots"]
+            ) if value["id"] == "mosaic"
+        )
+        self.turn(2, position)
+        self.press_key(3)
+        self.turn(2, -60)
+        for _ in range(40):
+            if selected_line(self.driver.snapshot(), label):
+                break
+            self.turn(2, 1)
+        else:
+            raise UiMapError("Required Mosaic option not reached: " + label)
+        self.turn(3, delta)
+        self.expect_menu_option_row(label, shown, top=22)
+        self.driver.results.append(
+            dict(kind="mosaic-number-input", label=label, value=shown)
+        )
+        self.press_key(2)
+        self.turn(2, -60)
+        self.expect_native_menu_label("levels_root")
+        self.press_key(2)
+        self.press_key(1)
+
     def set_mosaic_options(self, options):
         """Seek Mosaic's native parameter submenu by observed labels."""
         from frame_oracle import selected_line
