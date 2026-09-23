@@ -89,10 +89,10 @@ class UiLayerGuardTests(unittest.TestCase):
         case_ids = {"M-RANGE-SAVED-001", "M-RANGE-SAVED-002"}
         self.assertEqual(
             {CASES[case_id]["run"].__module__ for case_id in case_ids},
-            {"persisted_ranges"},
+            {"contract.persisted_range_rejection"},
         )
         self.assertEqual(rejected_manual_range.__module__,
-                         "persisted_ranges")
+                         "contract.persisted_range_rejection")
 
     def test_contract_classifier_follows_helpers_and_baseline_failures(self):
         from cases import CASES

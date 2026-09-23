@@ -270,7 +270,7 @@ class UiInputTests(unittest.TestCase):
 
     def test_rejected_saved_range_starts_with_semantic_setup(self):
         from types import SimpleNamespace
-        from persisted_ranges import rejected_saved_range
+        from contract.persisted_range_rejection import rejected_saved_range
 
         class StoppedAfterSetup(Exception):
             pass
