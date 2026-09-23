@@ -478,7 +478,7 @@ def editor_range_hold(c,control,index=None):
 def editor_note_ranges(c):
     c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger')
     def choose(y,note):
-        c.ui.tap_control('pattern_note_degree',(4,7-y));c.led_values([(4,y)],[12]);c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+[(1,[144,note,97])])
+        c.ui.tap_control('pattern_note_degree',(4,7-y));c.ui.expect_leds({('pattern_note_degree',(4,7-y)):'active'});c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+[(1,[144,note,97])])
     choose(1,71);c.results.append(dict(kind='workflow-check',name='initial-note-range',passed=True))
     c.ui.tap_control('pattern_note_octave_up');choose(1,72);c.results.append(dict(kind='workflow-check',name='first-up-step',passed=True))
     c.ui.tap_control('pattern_note_octave_up');choose(1,74);c.results.append(dict(kind='workflow-check',name='second-up-step',passed=True))
@@ -495,7 +495,7 @@ VELOCITIES=[127,117,107,97,87,78,68,58,48,39,29,19,9,0]
 def editor_velocity_ranges(c):
     c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger');c.ui.pattern_editor(view='velocity',from_view='note')
     def choose(y,value):
-        c.ui.tap_control('pattern_velocity_level',(4,8-y));c.led_values([(4,y)],[12])
+        c.ui.tap_control('pattern_velocity_level',(4,8-y));c.ui.expect_leds({('pattern_velocity_level',(4,8-y)):'active'})
         c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+([(1,[144,65,value])] if value else []))
     for y,value in enumerate(VELOCITIES[:7],1):choose(y,value);c.results.append(dict(kind='workflow-check',name='velocity-'+str(value),passed=True))
     c.ui.tap_control('pattern_velocity_range_down');choose(1,117);c.results.append(dict(kind='workflow-check',name='first-velocity-range-step',passed=True))
@@ -514,12 +514,12 @@ def editor_step_groups(c):
     c.ui.pattern_editor(view='note',from_view='trigger')
     for x in range(1,5):editor_shift_tap(c,'pattern_note_degree',(x,x-1))
     for group in range(4):
-        c.ui.tap_control('pattern_group',group+1);c.led_values([(x,8-x) for x in range(1,5)],[12]*4)
+        c.ui.tap_control('pattern_group',group+1);c.ui.expect_leds({('pattern_note_degree',(x,x-1)):'active' for x in range(1,5)})
     c.results.append(dict(kind='workflow-check',name='shift-copies-notes-to-four-groups',passed=True))
     c.ui.pattern_editor(view='velocity',from_view='note')
     for x in range(1,5):editor_shift_tap(c,'pattern_slot',x)
     for group in range(4):
-        c.ui.tap_control('pattern_group',group+1);c.led_values([(x,2) for x in range(1,5)],[12]*4)
+        c.ui.tap_control('pattern_group',group+1);c.ui.expect_leds({('pattern_slot',x):'active' for x in range(1,5)})
     c.results.append(dict(kind='workflow-check',name='shift-copies-velocities-to-four-groups',passed=True))
     c.ui.tap_control('channel_editor')
     for group in range(4):
@@ -547,10 +547,10 @@ def note_pattern_selectors(c):
             else:editor_range_hold(c,'pattern_select',slot)
             offset=(slot-1+pass_index)%7
             assert authored[slot]!=pitches[offset]
-            c.ui.tap_control('pattern_note_degree',(1,offset));c.led_values([(1,7-offset)],[12])
+            c.ui.tap_control('pattern_note_degree',(1,offset));c.ui.expect_leds({('pattern_note_degree',(1,offset)):'active'})
             authored[slot]=pitches[offset];c.ui.tap_control('channel_editor')
             if assigned!=slot:c.ui.tap_control('pattern_slot',assigned);c.ui.tap_control('pattern_slot',slot)
-            assigned=slot;c.led_values([(slot,2)],[15])
+            assigned=slot;c.ui.expect_leds({('pattern_slot',slot):'selected'})
             c.playback([(1,[144,authored[slot],127 if slot==1 else 100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
             c.results.append(dict(kind='pattern-selector',gesture=gesture,slot=slot,pitch=authored[slot],passed=True))
             c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_editor')
@@ -590,14 +590,14 @@ def editor_hold_boundaries(c):
     for label,duration,pitch in [('before',before,72),('after',after,83),('cancelled',0,71)]:
         c.ui.tap_control('pattern_note_octave_reset') # Return the displayed note range to the root page.
         hold('pattern_note_octave_up',duration,label=='after',interrupt=label=='cancelled')
-        c.ui.tap_control('pattern_note_degree',(4,6));c.led_values([(4,1)],[12])
+        c.ui.tap_control('pattern_note_degree',(4,6));c.ui.expect_leds({('pattern_note_degree',(4,6)):'active'})
         c.playback(baseline+[(1,[144,pitch,97])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='note',boundary=label,pitch=pitch,passed=True))
     c.ui.pattern_editor(view='velocity',from_view='note') # The fourth note now remains B4.
     for label,duration,velocity in [('before',before,117),('after',after,58),('cancelled',0,127)]:
         editor_range_hold(c,'pattern_velocity_range_reset') # Highest velocity range, independent of old offset.
         hold('pattern_velocity_range_down',duration,label=='after',interrupt=label=='cancelled')
-        c.ui.tap_control('pattern_velocity_level',(4,7));c.led_values([(4,1)],[12])
+        c.ui.tap_control('pattern_velocity_level',(4,7));c.ui.expect_leds({('pattern_velocity_level',(4,7)):'active'})
         c.playback(baseline+[(1,[144,71,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='velocity',boundary=label,velocity=velocity,passed=True))
 
