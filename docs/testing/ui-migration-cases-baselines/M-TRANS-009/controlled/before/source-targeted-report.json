@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "after_sha": "6d47cb7a6c5e9bc2c5fae1a8d342ca142dbc9a6b",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TRANS-009",
+    "M-VIEW-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TRANS-009",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/real-time/before/e6323aad812f42669851f2b068489a59/manifest.json",
+              "manifest_sha256": "85a56ea3c8e10ee2c3d1313cdc140410f20a7f9b5ca1993c63baac1bd241a660"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/real-time/after/1605060d6dfa49cc904bc2859dbd50ea/manifest.json",
+              "manifest_sha256": "8af68fc9ba16f1596d7a214d0ef32144f268b238e3f7f734d1f5df7e7ae5c245"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/controlled-experimental/before/24cfc8d7b63849f295cf50deefd6df4d/manifest.json",
+              "manifest_sha256": "9442b7d7e9713a71c1498a59baa37b371d6e67392630caccb9b25404b09808b7"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TRANS-009/controlled-experimental/after/ce65fbebf75749a6a7e680c86e75b8a1/manifest.json",
+              "manifest_sha256": "8be0d49736b9d16e815323100b500de2f054e7453ec450118eed1be779c363ea"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-VIEW-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/real-time/before/72e91aaa10a0443d81a61ecf812f79ec/manifest.json",
+              "manifest_sha256": "eeb76a5c0927edb95df873fd3dcc7ed7ed8069b7048dcc55e3b5e05394deeae6"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/real-time/after/e0b5731bd808461ba441f750b81c2457/manifest.json",
+              "manifest_sha256": "e1af0accb948b979367af396d4c73e80ddea8b304566903d23b9a4e3b35dc92b"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/controlled-experimental/before/4b24e5bdbf36479bbe6613ac6434e404/manifest.json",
+              "manifest_sha256": "e44687d3466c74d0ffe2c906875088d0c24db34b068ccc7cd5ea38298278b534"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-VIEW-001/controlled-experimental/after/9c41b791deae470db32d0158344ec238/manifest.json",
+              "manifest_sha256": "975dc801208b6ad687e59ebfd40fb4bf65b16b0c742e34da06c38eab5472753b"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
