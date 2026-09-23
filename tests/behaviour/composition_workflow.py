@@ -50,7 +50,7 @@ def build_composition(c,check=None):
     ui.configure()
     ui.pattern_editor();ui.tap_control('pattern_select',2);ui.tap_step(1);ui.tap_step(3)
     ui.pattern_editor(view='note',from_view='trigger')
-    ui.tap_control('pattern_note_fader',(1,3));ui.tap_control('pattern_note_fader',(3,1));ui.menu('channel_editor')
+    ui.tap_control('pattern_note_degree',(1,4));ui.tap_control('pattern_note_degree',(3,6));ui.menu('channel_editor')
     ui.scale_editor();ui.tap_control('scale_slot',2);edit_root(2);ui.menu('channel_editor')
     ui.tap_control('pattern_slot',2);check('default-skip',[(CH1_SKIP,{},0)])
     ui.tap_control('trig_merge_mode');ui.tap_control('trig_merge_mode')

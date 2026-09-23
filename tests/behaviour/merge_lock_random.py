@@ -31,7 +31,7 @@ def merge_lock_random(c):
     c.ui.pattern_editor();c.ui.tap_control('pattern_select',2)
     for x in range(1,5):c.ui.tap_step(x)
     c.ui.pattern_editor()
-    for x,degree in enumerate([2,3,4,5],1):c.ui.tap_control('pattern_note_fader',(x,7-degree))
+    for x,degree in enumerate([2,3,4,5],1):c.ui.tap_control('pattern_note_degree',(x,degree))
     c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2) # both patterns on channel 1
     c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode');c.ui.expect_leds({('trig_merge_mode',None):'medium'}) # trig All; note Average is the default
     c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1) # velocity priority pattern 1

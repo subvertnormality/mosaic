@@ -34,13 +34,13 @@ def lock_all_to_pentatonic(c):
     for step in (5, 6, 7):ui.tap_step(step)
     ui.tap_control("pattern_editor")
     for x,degree in enumerate(DEGREES,1):
-        ui.tap_control("pattern_note_fader", (x, 7 - degree))
+        ui.tap_control("pattern_note_degree", (x, degree))
     # Row 1 doubles as the pattern-selector row; degree VII is checked by MIDI.
-    ui.expect_leds({("pattern_note_fader", (x, 7 - d)): "active"
+    ui.expect_leds({("pattern_note_degree", (x, d)): "active"
                     for x,d in enumerate(DEGREES[:6],1)})
     ui.tap_control("pattern_editor")
-    for x,y in ((5,1),(6,2),(7,3)):
-        ui.tap_control("pattern_note_fader", (x, y))
+    for x,degree in ((5,6),(6,5),(7,4)):
+        ui.tap_control("pattern_note_degree", (x, degree))
     ui.tap_control("channel_editor")
     ui.set_range(1, 7)
     def verify(label,pitches):
