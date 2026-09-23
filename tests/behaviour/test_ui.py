@@ -213,6 +213,46 @@ class UiMapTests(unittest.TestCase):
             ("key", 3), ("menu-label-key", "clock_source"),
         ])
 
+    def test_native_levels_entry_recipes_preserve_each_callers_origin(self):
+        from types import SimpleNamespace
+        from cases import toolkit_parameter_group
+        from ui import Ui
+
+        roots = [{"name": "OTHER"}, {"name": "macro 1"}]
+        driver = FakeDriver(states=[{"diagnostics": {"parameter_roots": roots}}])
+        ui = Ui(driver)
+        ui.expect_native_menu_label = lambda key: driver.calls.append(
+            ("menu-label-key", key))
+        toolkit_parameter_group(SimpleNamespace(ui=ui), "macro_1")
+        self.assertEqual(driver.calls, [
+            ("enc", 1, 4), ("key", 3), ("menu-label-key", "levels_root"),
+            ("snapshot",), ("enc", 2, 1), ("key", 3),
+        ])
+
+        # Clock callers start from a different screen and retain the native
+        # recipe that includes K1. The helper must continue to emit that order.
+        driver = FakeDriver()
+        ui = Ui(driver)
+        ui.enter_native_levels_menu()
+        self.assertEqual(driver.calls, [("key", 1), ("enc", 1, 4), ("key", 3)])
+
+        source = ast.parse((BEHAVIOUR / "cases.py").read_text())
+        functions = {node.name: node for node in source.body
+                     if isinstance(node, ast.FunctionDef)
+                     and node.name in {"midi_clock_transport", "live_clock_handoff"}}
+        self.assertEqual(set(functions), {"midi_clock_transport", "live_clock_handoff"})
+        for name, function in functions.items():
+            calls = sorted((node for node in ast.walk(function)
+                            if isinstance(node, ast.Call)
+                            and isinstance(node.func, ast.Attribute)),
+                           key=lambda node: (node.lineno, node.col_offset))
+            attrs = [call.func.attr for call in calls]
+            with self.subTest(caller=name):
+                self.assertIn("enter_native_levels_menu", attrs)
+                self.assertIn("select_native_parameter_group", attrs)
+                self.assertLess(attrs.index("enter_native_levels_menu"),
+                                attrs.index("select_native_parameter_group"))
+
     def test_arp_and_spread_cases_use_semantic_ui_verbs_and_parameter_keys(self):
         from ui_layer_guard import _raw_sites_in_node
         from ui_map import TRIG_PARAMETERS
