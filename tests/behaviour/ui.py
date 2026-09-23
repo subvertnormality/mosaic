@@ -156,6 +156,9 @@ class Ui:
     def song_editor(self):
         self.tap_control("song_editor")
 
+    def channel_editor(self):
+        self.tap_control("channel_editor")
+
     def scale_editor(self):
         self.tap_control("scale_editor")
 
@@ -212,6 +215,18 @@ class Ui:
 
     def tap_step(self, step):
         self.tap_control("step", step)
+
+    def set_channel_octave(self, octave):
+        self.tap_control("channel_octave", octave)
+
+    def set_step_octave(self, step, octave):
+        self.hold_control_tap("step", "channel_octave", step, octave)
+
+    def select_pattern_note_page(self, page):
+        self.tap_control("pattern_note_page", page)
+
+    def tap_pattern_note_fader(self, step, position):
+        self.tap_control("pattern_note_fader", (step, position))
 
     def step(self, step):
         return control_cell("step", step)
@@ -643,6 +658,11 @@ class Ui:
 
     def expect_steps(self, states):
         self.expect_leds({("step", step): state for step, state in states.items()})
+
+    def expect_channel_octave(self, octave):
+        self.expect_leds({("channel_octave", value):
+                          ("selected" if value == octave else "off")
+                          for value in range(-2, 3)})
 
     def select_rhythm_doctor_algorithm(self, algorithm):
         """Select a named algorithm from Mosaic's rhythm-tool chooser."""
