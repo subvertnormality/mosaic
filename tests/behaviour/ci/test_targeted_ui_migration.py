@@ -1,5 +1,6 @@
 """Harness characterisation outside README: partial targeted CI gate contracts."""
 
+import ast
 import importlib.util
 import json
 import tempfile
@@ -178,6 +179,19 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("--before-sha \"$BEFORE_SHA\"", workflow)
         self.assertIn("--after-sha \"$AFTER_SHA\"", workflow)
         self.assertIn("--case-ids \"$CASE_IDS\"", workflow)
+
+    def test_dispatch_repeats_one_candidate_per_module_without_full_coverage_claim(self):
+        workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
+        self.assertIn("Repeat one candidate case per migrated module", workflow)
+        self.assertIn("targeted.selected_case_modules(source, [case])", workflow)
+        self.assertIn("selection.setdefault(owner, case)", workflow)
+        self.assertIn("len(item['runs']) == 3", workflow)
+        self.assertIn("actual['mosaic_revision'] == after_sha", workflow)
+        self.assertIn("targeted-ui-repeatability.json", workflow)
+        self.assertIn("complete_regression_run=False", workflow)
+        script = workflow.split("runuser -u mosaic-ci --preserve-environment -- python3 - <<'PY'\n", 1)[1]
+        script = script.split("\n          PY", 1)[0]
+        ast.parse("\n".join(line[10:] for line in script.splitlines()))
 
 
 if __name__ == "__main__":

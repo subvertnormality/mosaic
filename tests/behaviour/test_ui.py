@@ -554,6 +554,22 @@ class UiInputTests(unittest.TestCase):
         ])
 
 
+    def test_select_midi_clock_source_from_levels_preserves_suffix_recipe(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"diagnostics": {"parameter_roots": [
+            {"name": "OTHER"}, {"name": "CLOCK"},
+        ]}}])
+        ui = Ui(driver)
+        ui.expect_menu_label = lambda label: driver.calls.append(("menu-label", label))
+        ui.expect_menu_value = lambda value: driver.calls.append(("menu-value", value))
+        ui.select_midi_clock_source_from_levels()
+        self.assertEqual(driver.calls, [
+            ("menu-label", "LEVELS >"), ("snapshot",), ("enc", 2, 1),
+            ("key", 3), ("menu-label", "source"), ("menu-value", "internal"),
+            ("enc", 3, 1), ("menu-value", "midi"),
+        ])
+
 class UiObservationTests(unittest.TestCase):
     def test_wait_for_header_uses_driver_wait_state_without_result(self):
         from unittest.mock import patch

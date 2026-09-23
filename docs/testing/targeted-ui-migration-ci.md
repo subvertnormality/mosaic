@@ -8,7 +8,7 @@ aggregation.
 Dispatch `behaviour.yml` on the migration branch with `ui_migration_targeted`
 enabled, two distinct full 40-character commit SHAs (`ui_migration_before_sha`
 and `ui_migration_after_sha`), and comma-separated exact IDs in
-`ui_migration_case_ids` (for example `M-GRID-001,M-SCALE-LOCK-003`). The candidate
+`ui_migration_case_ids` (for example `M-GRID-001,M-SCALE-LOCK-003`).
 Both commits must contain the same targeted runner and comparison gate: capture
 the before baseline only after this CI tooling lands. Both commits must contain the named
 registered cases as base-MIDI cases. Use a source commit immediately before the
@@ -32,12 +32,20 @@ strict migration gate then checks every root and nested recipe/results session:
 normalized recipes must be identical, controlled results may add only
 `ui-confirm` entries, and real-time result-kind sequences must remain the same.
 Symlinked manifests and evidence paths are rejected before reading or hashing.
+After those gates pass, CI runs `repeat.py` once for a selected candidate case
+from each distinct registered owner module. Each invocation starts three fresh
+controlled-time processes and compares their normalized recipes and logical
+outputs. The step checks all three run manifests against the candidate commit;
+a failed, missing or mismatched repeat fails the targeted job. Inline cases
+are grouped under `cases.py`. The separate `targeted-ui-repeatability.json`
+records module selection and repeat verdicts; it is not a full-coverage report.
 The uploaded `targeted-ui-migration-<run>` artifact contains the partial report,
-run manifests, recipes, results and process logs, excluding copied code/data.
+repeatability report, repeat manifests and normalized traces, run manifests,
+recipes, results and process logs, excluding copied code/data.
 Its `complete_regression_run` field is always `false`. The targeted path skips
 all exhaustive shards, special profiles and the full-coverage aggregate; an
 ordinary manual dispatch with the toggle off retains the full campaign.
 
-The plan's independent repeatability requirement still applies to migrated
-modules. Targeted CI gates do not claim to satisfy it, nor do they authorize
-weaker assertions or acceptance of a failed source baseline.
+This satisfies the plan's controlled repeatability check only for the selected
+base-MIDI modules, not for unselected modules or real-time-only profiles. It
+does not authorize weaker assertions or acceptance of a failed source baseline.

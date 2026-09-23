@@ -376,6 +376,98 @@ jobs:
             --case-ids "$CASE_IDS" --emulator "$EMULATOR_ROOT" \
             --install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
             --output /tmp/mosaic-ui-targeted
+      - name: Prepare independent repeat output
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/mosaic-behaviour-runs"
+          chown mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE/mosaic-behaviour-runs"
+      - name: Repeat one candidate case per migrated module
+        env:
+          AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
+          CASE_IDS: ${{ inputs.ui_migration_case_ids }}
+        run: |
+          runuser -u mosaic-ci --preserve-environment -- python3 - <<'PY'
+          import importlib.util
+          import json
+          import os
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          workspace = Path(os.environ['GITHUB_WORKSPACE'])
+          source = workspace / 'after-source'
+          root = workspace / 'mosaic-behaviour-runs'
+          output = Path('/tmp/mosaic-ui-targeted')
+          after_sha = os.environ['AFTER_SHA']
+          spec = importlib.util.spec_from_file_location(
+              'targeted_ui_migration', source / 'tests/behaviour/ci/targeted-ui-migration.py')
+          targeted = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(targeted)
+          cases = targeted.cases_from_input(os.environ['CASE_IDS'])
+          gate = json.loads((output / 'targeted-ui-migration.json').read_text())
+          targeted.require(gate['passed'] is True and gate['complete_regression_run'] is False
+                           and gate['after_sha'] == after_sha and gate['selected_cases'] == cases,
+                           'repeat requires a passing, partial gate for the selected candidate')
+          selection = {}
+          for case in cases:
+              owners = targeted.selected_case_modules(source, [case])
+              targeted.require(len(owners) <= 1, 'ambiguous owner for ' + case)
+              owner = next(iter(owners)) if owners else 'tests/behaviour/cases.py'
+              selection.setdefault(owner, case)
+          report = dict(schema_version=1, complete_regression_run=False,
+                        after_sha=after_sha, selected_cases=cases,
+                        selected_modules=selection, repeats=[], passed=False)
+          try:
+              for owner, case in selection.items():
+                  row = dict(module=owner, case=case)
+                  report['repeats'].append(row)
+                  previous = set(root.glob('repeat-*'))
+                  command = [sys.executable, str(source / 'tests/behaviour/repeat.py'),
+                             '--case', case, '--experimental-install',
+                             os.environ['EMULATOR_ROOT'] +
+                             '/.runtime/ci-qualified/runtime/installation.json']
+                  completed = subprocess.run(command, cwd=source, text=True,
+                                             capture_output=True)
+                  row.update(returncode=completed.returncode, stdout=completed.stdout,
+                             stderr=completed.stderr)
+                  try:
+                      created = set(root.glob('repeat-*')) - previous
+                      targeted.require(len(created) == 1, 'repeat created no unique output')
+                      manifest = next(iter(created)) / 'manifest.json'
+                      item = json.loads(manifest.read_text())
+                      row['manifest'] = str(manifest.relative_to(workspace))
+                      row['manifest_sha256'] = targeted.sha256(manifest)
+                      targeted.require(completed.returncode == 0 and item['passed'] is True,
+                                       'three-process repeat failed')
+                      targeted.require(item['case'] == case and item['profile'] == 'base-midi'
+                                       and item['diagnostic_only'] is True
+                                       and item['controlled_time_admitted'] is False
+                                       and len(item['runs']) == 3,
+                                       'invalid repeat manifest')
+                      seen = set()
+                      for run in item['runs']:
+                          path = Path(run['manifest'])
+                          targeted.require(os.path.commonpath((root.resolve(), path.resolve()))
+                                           == str(root.resolve()) and path not in seen,
+                                           'repeat run outside output root or duplicated')
+                          seen.add(path)
+                          actual = json.loads(path.read_text())
+                          targeted.require(targeted.sha256(path) == run['sha256']
+                                           and actual['mosaic_revision'] == after_sha
+                                           and actual['case'] == case
+                                           and actual['clock_mode'] == 'controlled-experimental'
+                                           and actual['passed'] is True
+                                           and actual['diagnostic_only'] is True,
+                                           'repeat run source, lane or digest mismatch')
+                      row['passed'] = True
+                  except (ValueError, OSError, KeyError, AssertionError) as error:
+                      row.update(passed=False, error=str(error))
+          finally:
+              report['passed'] = len(report['repeats']) == len(selection) and all(
+                  row.get('passed') is True for row in report['repeats'])
+              (output / 'targeted-ui-repeatability.json').write_text(
+                  json.dumps(report, indent=2) + '\n')
+          raise SystemExit(0 if report['passed'] else 1)
+          PY
       - name: Upload partial run evidence (never full coverage)
         if: always()
         uses: actions/upload-artifact@v4
@@ -383,10 +475,17 @@ jobs:
           name: targeted-ui-migration-${{ github.run_id }}
           path: |
             /tmp/mosaic-ui-targeted/targeted-ui-migration.json
+            /tmp/mosaic-ui-targeted/targeted-ui-repeatability.json
             /tmp/mosaic-ui-targeted/**/process.log
             /tmp/mosaic-ui-targeted/**/manifest.json
             /tmp/mosaic-ui-targeted/**/recipe.json
             /tmp/mosaic-ui-targeted/**/results.json
+            ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/manifest.json
+            ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/normalized.json
+            ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/process-*.json
+            ${{ github.workspace }}/mosaic-behaviour-runs/*/manifest.json
+            ${{ github.workspace }}/mosaic-behaviour-runs/*/**/recipe.json
+            ${{ github.workspace }}/mosaic-behaviour-runs/*/**/results.json
             !/tmp/mosaic-ui-targeted/**/code/**
             !/tmp/mosaic-ui-targeted/**/data/**
           retention-days: 14
