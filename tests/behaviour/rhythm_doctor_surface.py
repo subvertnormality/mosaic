@@ -57,6 +57,7 @@ def stopped_setup_controls(c):
 
 
 def owned_input_and_transport_gate(c):
+    ui = c.ui
     fifth_algorithm(c)  # enters algorithm five and leaves CYM selected at x5,y2
     # Four lanes occupy columns 3-6 and the retired fifth column is inert, so
     # the selected lane is CYM at column 5; columns 6 and 7 must stay dark.

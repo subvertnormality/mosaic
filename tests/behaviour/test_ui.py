@@ -3,7 +3,7 @@ import ast
 import base64
 import tempfile
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 from pathlib import Path
 
 
@@ -2554,6 +2554,28 @@ class ProjectActionUiVerbTests(unittest.TestCase):
         self.assertEqual(driver.results, [
             {"kind": "selected-menu-label", "text": "Scales lock until ptn end"},
             {"kind": "selected-menu-value", "text": "On"},
+        ])
+
+
+class RhythmDoctorSurfaceRecipeTests(unittest.TestCase):
+    def test_owned_input_routes_through_driver_ui(self):
+        from rhythm_doctor_surface import owned_input_and_transport_gate
+
+        driver = Mock()
+        driver.results = []
+        with patch("rhythm_doctor_surface.fifth_algorithm"), \
+                patch("rhythm_doctor_surface.stopped_setup_controls"):
+            owned_input_and_transport_gate(driver)
+
+        self.assertEqual(driver.ui.expect_rhythm_doctor_lanes.call_count, 5)
+        driver.ui.rhythm_doctor_capture_edge.assert_any_call(True)
+        driver.ui.rhythm_doctor_capture_edge.assert_any_call(False)
+        driver.ui.play.assert_called_once_with()
+        driver.ui.stop.assert_called_once_with()
+        self.assertEqual([row["kind"] for row in driver.results], [
+            "rhythm-doctor-record-ownership",
+            "rhythm-doctor-norns-keys",
+            "rhythm-doctor-transport-gate",
         ])
 
 
