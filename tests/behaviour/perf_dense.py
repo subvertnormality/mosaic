@@ -52,6 +52,8 @@ class ContainerDriver(driver.Driver):
     def __init__(self,out,http):
         self.out=out;self.runtime=http;self.clock_mode='real-time';self.logical_ns=0
         self.recipe=[];self.observations=[];self.results=[];self.profile='base-midi';self.launch_options={}
+        from ui import Ui
+        self.ui=Ui(self)
         self.action_acks=[]
     def action(self,**value):
         ack=super().action(**value)
