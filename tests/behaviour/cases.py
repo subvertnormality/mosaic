@@ -3,9 +3,10 @@ from duration_witness import assert_duration_witness_observed, controlled_durati
 from scale_memory import (adjacent_channel_ranges, all_pattern_slots,
                           channel_long_hold, channel_mute_gestures,
                           channel_routing_isolation, memory_channel_isolation,
-                          memory_navigation, scale_edit_selection,
+                          scale_edit_selection,
                           scale_lock_lifetime, scale_stop_indicator,
                           trig_merge_sets)
+from contract.memory_navigation import memory_navigation
 from shuffle_matrix import shuffle_matrix
 from shuffle_first_bar_record import shuffle_first_bar_record
 from random_note_domains import random_note_domains

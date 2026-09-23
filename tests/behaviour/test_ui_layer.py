@@ -341,6 +341,19 @@ class UiLayerGuardTests(unittest.TestCase):
 
 
 
+    def test_memory_navigation_contract_callable_ownership(self):
+        from cases import CASES
+        from ui_layer_guard import classify_contract_cases
+
+        case_id = "M-MEMORY-001"
+        run = CASES[case_id]["run"]
+        source = Path(run.__code__.co_filename).resolve()
+        contract_root = (BEHAVIOUR / "contract").resolve()
+
+        self.assertEqual(case_id in classify_contract_cases(CASES),
+                         source.parent == contract_root)
+
+
     def test_contract_inventory_has_a_fixed_ceiling(self):
         import json
         from cases import CASES
