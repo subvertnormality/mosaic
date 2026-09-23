@@ -460,5 +460,36 @@ class DurationMigrationTests(unittest.TestCase):
                     control_cell("pattern_note_position", position)
 
 
+class FractionalResultEvidenceTests(unittest.TestCase):
+    def test_controlled_input_identity_drops_only_volatile_coordinates(self):
+        from fractional_deadlines import result_input_evidence
+
+        evidence = {
+            "action_id": "run-specific-action",
+            "native_sequence": 1536,
+            "origin_ns": 1_648_608_152_219,
+            "applied_ns": 1_648_610_307_010,
+            "input_to_applied_ns": 2_154_791,
+            "boundary": "backend-input-submission",
+            "verified": True,
+        }
+        original = evidence.copy()
+        self.assertEqual(result_input_evidence(evidence, controlled=True), {
+            "native_sequence": 1536,
+            "boundary": "backend-input-submission",
+            "verified": True,
+        })
+        self.assertEqual(evidence, original)
+
+    def test_real_time_input_evidence_is_returned_unchanged(self):
+        from fractional_deadlines import result_input_evidence
+
+        evidence = {"action_id": "wall-clock-id", "native_sequence": 12,
+                    "origin_ns": 100, "applied_ns": 130,
+                    "input_to_applied_ns": 30,
+                    "boundary": "backend-input-submission"}
+        self.assertIs(result_input_evidence(evidence, controlled=False), evidence)
+
+
 if __name__ == "__main__":
     unittest.main()

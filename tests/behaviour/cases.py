@@ -1290,7 +1290,8 @@ def repeated_pattern_reset_policy(c,verify_pending=False):
 def fractional_clock_continuity(c):
     from fractions import Fraction
     from midi_window import MidiWindow
-    from fractional_deadlines import check_segment, reconcile_note_stream
+    from fractional_deadlines import (check_segment, reconcile_note_stream,
+                                      result_input_evidence)
     from automation.input_origin import verified_input_origin
     import json
     c.ui.configure();c.ui.pattern_editor();c.ui.pattern_editor()
@@ -1331,10 +1332,14 @@ def fractional_clock_continuity(c):
         assert len(submissions)==1
         return verified_input_origin(events,actions,session_id=c.runtime.id,action_id=ack['action_id'],
             expected_action=trigger_action,declared_origin_ns=submissions[0]['monotonic_ns'])
+    verified_inputs=[]
     try:
         c.results.append(reconcile_note_stream(events,segments,kind))
         for segment in segments:
-            start_evidence=input_origin(segment['start_ack']);stop_evidence=input_origin(segment['stop_ack'])
+            start_evidence=input_origin(segment['start_ack'])
+            verified_inputs.append(dict(label=segment['label'],edge='start',evidence=start_evidence))
+            stop_evidence=input_origin(segment['stop_ack'])
+            verified_inputs.append(dict(label=segment['label'],edge='stop',evidence=stop_evidence))
             origin=segment['logical_start'] if controlled else start_evidence['origin_ns']
             stop=segment['logical_stop'] if controlled else stop_evidence['origin_ns']
             applied=stop if controlled else stop_evidence['applied_ns']
@@ -1344,9 +1349,13 @@ def fractional_clock_continuity(c):
             report=check_segment(captured,Fraction(*segment['ratio']),origin,stop,applied,controlled=controlled,preview_seed=Fraction(*segment['preview_seed']))
             assert report['onsets']>=2*segment['ratio'][1]+1
             assert stop-origin>=45_000_000_000, 'Missing45-second timing population'
-            report.update(label=segment['label'],global_boundaries_crossed=4,start_input=start_evidence,stop_input=stop_evidence)
+            report.update(label=segment['label'],global_boundaries_crossed=4,
+                start_input=result_input_evidence(start_evidence,controlled),
+                stop_input=result_input_evidence(stop_evidence,controlled))
             c.results.append(report)
     finally:
+        (c.out/'fractional-clock-input-evidence.json').write_text(json.dumps(dict(
+            clock_mode=c.clock_mode,verified_inputs=verified_inputs),indent=2)+'\n')
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
