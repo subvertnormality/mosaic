@@ -4,7 +4,7 @@ from types import SimpleNamespace
 from pathlib import Path
 from unittest.mock import patch
 import run
-from editor_hold_evidence import record_hold_input_bounds, raw_editor_range_hold
+from editor_hold_evidence import record_hold_input_bounds
 from ui import Ui
 
 class CollectionTests(unittest.TestCase):
@@ -46,24 +46,6 @@ class CollectionTests(unittest.TestCase):
         self.assertEqual(driver.observations[0]["kind"], "hold-input-bounds-sample")
         self.assertEqual(driver.observations[0]["wall_lower_seconds"], 1.021)
         self.assertEqual(driver.observations[0]["wall_upper_seconds"], 1.073)
-
-    def test_edit005_raw_range_hold_keeps_original_primitive_recipe(self):
-        recipe = []
-
-        class Driver:
-            def action(self, **action):
-                recipe.append(action)
-
-            def elapse(self, seconds):
-                recipe.append({"type": "advance", "seconds": seconds})
-
-        raw_editor_range_hold(Driver(), 15, 8)
-
-        self.assertEqual(recipe, [
-            {"type": "grid", "x": 15, "y": 8, "state": 1},
-            {"type": "advance", "seconds": 1.1},
-            {"type": "grid", "x": 15, "y": 8, "state": 0},
-        ])
 
     def test_edit005_semantic_controls_expand_to_raw_grid_recipe(self):
         recipe = []

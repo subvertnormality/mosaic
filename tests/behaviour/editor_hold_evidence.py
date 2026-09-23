@@ -16,12 +16,3 @@ def record_hold_input_bounds(driver, sample):
         result = dict(sample)
     driver.results.append(result)
     return result
-
-
-def raw_editor_range_hold(c, x, y):
-    """Replay the pre-abstraction range hold as the same primitive grid edges."""
-    c.action(type="grid", x=x, y=y, state=1)
-    try:
-        c.elapse(1.1)
-    finally:
-        c.action(type="grid", x=x, y=y, state=0)
