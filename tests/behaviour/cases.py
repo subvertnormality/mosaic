@@ -893,30 +893,31 @@ def transpose_song_copy_isolation(c):
 
 def transpose_song_persistence(c):
     """Independent copied song transposes survive autosave and cold reload."""
-    c.configure();c.ui.scale_editor()
+    c.configure();c.tap(4,8)
     def set_global(driver,value):
-        driver.ui.tap_control("global_transpose_minimum")
-        for _ in range(value+12):driver.ui.tap_control("global_transpose_increment")
+        driver.tap(9,8)
+        for _ in range(value+12):driver.tap(16,8)
     set_global(c,5)
-    c.ui.song_editor();c.ui.hold_control_tap("channel", "channel", 1, 2)
-    c.ui.select_channel(2)
-    c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
+    c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1)
+    c.led_values([(1,1),(2,1)],[7,15])
     c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-    c.ui.menu("channel_editor");c.ui.scale_editor();set_global(c,-7)
+    c.tap(3,8);c.tap(4,8);set_global(c,-7)
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
     c.elapse(59);assert not saved.exists() and not pset.exists()
     c.elapse(2);c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)
     hashes={path.name:digest(path) for path in (saved,pset)}
+    import shutil
+    capture=c.out/'generated-project';capture.mkdir()
+    shutil.copy2(saved,capture/'autosave.ptn')
     c.results.append(dict(kind='transpose-autosave',files=hashes,passed=True))
     c.finish()
     out=c.out/'reloaded';out.mkdir()
     loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
     try:
-        loaded.ui.song_editor();loaded.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
-        loaded.ui.select_channel(1);loaded.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
+        loaded.tap(6,8);loaded.led_values([(1,1),(2,1)],[7,15])
+        loaded.tap(1,1);loaded.led_values([(1,1),(2,1)],[15,7])
         loaded.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-        loaded.ui.song_editor();loaded.ui.select_channel(2)
-        loaded.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
+        loaded.tap(6,8);loaded.tap(2,1);loaded.led_values([(1,1),(2,1)],[7,15])
         loaded.playback([(1,[144,n,v]) for n,v in ((53,127),(55,117),(57,107),(58,97))],cycles=2)
         loaded.results.append(dict(kind='transpose-cold-reload',source_transpose=5,
                                    copy_transpose=-7,source_and_copy_played=True,passed=True))
