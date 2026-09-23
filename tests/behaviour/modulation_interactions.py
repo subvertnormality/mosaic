@@ -19,9 +19,9 @@ def modulated_cc_lock_precedence(c):
     # Assign the same configured parameter as a trig-lock slot and author two
     # explicit locks. The routed/default value must fill only the other steps.
     c.ui.turn(1,-3);c.ui.assign_trig_parameter('Control 1')
-    for step,value in ((1,24),(3,48)):
+    for step,lock_value in ((1,24),(3,48)):
         with c.ui.hold_step(step):
-            c.elapse(.05);c.ui.encoder_event(3,-126);c.ui.turn(3,value+1)
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.ui.turn(3,lock_value+1)
         c.elapse(.15)
     c.ui.turn(1,3)
 
