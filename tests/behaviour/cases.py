@@ -303,46 +303,50 @@ def live_pattern_duration(c):
 def euclidean_workflow(c):
     # Migrated from emulator tests/mosaic_euclidean.py; independent3-in-8 table.
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    c.configure();c.hold_tap((1,4),(8,4))
-    c.tap(5,8);c.tap(5,8)
-    for x,y in [(5,3),(6,2),(7,1),(8,6)]:c.tap(x,y)
-    c.tap(3,8);c.tap(5,8) # trig editor
+    c.ui.configure();c.ui.set_range(1,8)
+    c.ui.tap_control("pattern_editor");c.ui.tap_control("pattern_editor")
+    for control in ("pattern_note_c","pattern_note_d","pattern_note_e","pattern_note_f"):
+        c.ui.tap_control(control)
+    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor") # trig editor
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='eight-step-loop-baseline',passed=True))
-    c.tap(14,2) # Euclidean
-    c.tap(2,2) # broad fader minimum: one pulse
-    for _ in range(2):c.tap(10,2)
-    c.tap(2,3)
-    for _ in range(7):c.tap(10,3)
-    c.tap(16,8)
+    c.ui.tap_control("euclidean_tool")
+    c.ui.tap_control("euclidean_fill_minimum") # broad fader minimum: one pulse
+    for _ in range(2):c.ui.tap_control("euclidean_fill_maximum")
+    c.ui.tap_control("euclidean_rotation_minimum")
+    for _ in range(7):c.ui.tap_control("euclidean_rotation_maximum")
+    c.ui.tap_control("paint")
     # The manual distinguishes dim overlaps and bright newly proposed steps.
     # Verify both blink phases and all64 cells against fixed authored/candidate
     # sets; no application rhythm calculation supplies the expected positions.
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     original={1,2,3,4}
     proposed={step for step in range(1,65) if (step-1)%8+1 in (1,4,7)}
     for overlap,new in ((0,15),(3,12)):
-        c.led_values(cells,[overlap if step in original and step in proposed else new if step in proposed else 15 if step in original else 2 for step in range(1,65)])
+        levels={step:("dark" if overlap==0 else "inactive") for step in original & proposed}
+        levels.update({step:("selected" if new==15 else "active") for step in proposed-original})
+        levels.update({step:"selected" for step in original-proposed})
+        levels.update({step:"off" for step in range(1,65) if step not in original|proposed})
+        c.ui.expect_steps(levels)
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='preview-does-not-paint',passed=True))
-    c.tap(14,8);c.led_values([(x,4) for x in range(1,9)],[15]*4+[2]*4)
+    c.ui.tap_control("cancel");c.ui.expect_steps({step:"selected" if step<=4 else "off" for step in range(1,9)})
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='cancel-retains-pattern',passed=True))
-    c.tap(16,8);c.tap(12,8) # shift right: {2,5,8}
-    c.led_values([(2,4),(5,4),(8,4)],[0,15,15]);c.tap(16,8)
+    c.ui.tap_control("paint");c.ui.tap_control("shift_right") # shift right: {2,5,8}
+    c.ui.expect_steps({2:"dark",5:"selected",8:"selected"});c.ui.tap_control("paint")
     shifted={step for step in range(1,65) if (step-1)%8+1 in (2,5,8)}
     painted=original.symmetric_difference(shifted)
-    c.led_values(cells,[15 if step in painted else 2 for step in range(1,65)])
+    c.ui.expect_steps({step:"selected" if step in painted else "off" for step in range(1,65)})
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(65,97),(67,100),(62,100)]])
     c.results.append(dict(kind='workflow-check',name='shifted-paint-xor',passed=True))
-    c.tap(16,8);c.led_values([(2,4),(5,4),(8,4)],[15,0,0]);c.tap(16,8)
+    c.ui.tap_control("paint");c.ui.expect_steps({2:"selected",5:"dark",8:"dark"});c.ui.tap_control("paint")
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='repaint-restores-original',passed=True))
-    c.tap(16,8);c.tap(10,8) # left: back to {1,4,7}
-    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(12,8);c.tap(11,8)
-    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(16,8)
+    c.ui.tap_control("paint");c.ui.tap_control("shift_left") # left: back to {1,4,7}
+    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("shift_right");c.ui.tap_control("shift_reset")
+    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("paint")
     c.playback([(1,[144,n,v]) for n,v in [(62,117),(64,107),(71,100)]])
     c.results.append(dict(kind='workflow-check',name='left-and-center-reset',passed=True))
-    c.tap(16,8);c.led_values([(1,4),(4,4),(7,4)],[15,15,0]);c.tap(16,8);c.playback(baseline)
-    c.tap(9,2) # fill32, exceeding length8: every step selected
-    c.tap(16,8);c.led_values([(1,4),(4,4),(5,4),(16,7)],[0,0,15,15]);c.tap(16,8)
-    c.led_values([(x,y) for y in range(4,8) for x in range(1,17)],[2]*4+[15]*60)
+    c.ui.tap_control("paint");c.ui.expect_steps({1:"selected",4:"selected",7:"dark"});c.ui.tap_control("paint");c.playback(baseline)
+    c.ui.tap_control("euclidean_fill_boundary") # fill32, exceeding length8: every step selected
+    c.ui.tap_control("paint");c.ui.expect_steps({1:"dark",4:"dark",5:"selected",61:"selected"});c.ui.tap_control("paint")
+    c.ui.expect_steps({step:"selected" if step>4 else "off" for step in range(1,65)})
     c.playback([(1,[144,n,100]) for n in [67,69,71,62]]);c.results.append(dict(kind='workflow-check',name='dense-fill-boundary',passed=True))
 
 # Independent literal 3/3/2 segment tables; no application algorithm import.
@@ -351,27 +355,25 @@ TRESILLO_STEPS={8:[3,6],16:[3,9,15],24:[3,12,21],32:[3,15,27],
       64:[3,16,27,40,51,64]}
 
 def tresillo_setup(c):
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(5,8)
-    for x in range(1,17):
-        c.action(type='key',n=1,state=1);c.elapse(.3)
-        c.tap(x,7-((x-1)%6));c.action(type='key',n=1,state=0)
-    c.tap(3,8);c.tap(5,8);c.tap(13,2);c.tap(12,3)
-    c.tap(2,2);c.tap(10,2);c.tap(2,3);c.tap(10,3)
-    c.enc(1,1);c.enc(3,-8)
-    from frame_oracle import header,matches
-    expected=header('Trig editor options',selected=2,tabs=2)
-    c.wait(lambda state:matches(state,expected))
-    c.results.append(dict(kind='screen-header',expected='Trig editor options',selected=2,tabs=2,matched=True))
+    c.ui.configure();c.ui.tap_control("pattern_editor")
+    for step in range(1,5):c.ui.tap_step(step)
+    c.ui.tap_control("pattern_editor")
+    for step in range(1,17):
+        c.ui.press_key_down(1);c.elapse(.3)
+        try:c.ui.tap_control("pattern_note",(step,(step-1)%6+1))
+        finally:c.ui.release_key(1)
+    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
+    c.ui.tap_control("tresillo_tool");c.ui.tap_control("drum_bank",1)
+    c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_fill_maximum")
+    c.ui.tap_control("rhythm_factor_minimum");c.ui.tap_control("rhythm_factor_maximum")
+    c.ui.turn(1,1);c.ui.turn(3,-8);c.ui.expect_header("trigger_editor_confirmation")
 
 def tresillo_rhythm(c,length,steps):
-    c.tap(3,8);c.hold_tap((1,4),((length-1)%16+1,4+(length-1)//16));c.tap(5,8)
-    c.tap(16,8)
-    first=((steps[0]-1)%16+1,4+(steps[0]-1)//16)
-    c.led_values([first],[15]);c.tap(16,8)
-    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
-    c.led_values(cells,[15 if i%length+1 in steps else 2 for i in range(64)])
+    c.ui.tap_control("channel_editor");c.ui.set_range(1,length);c.ui.tap_control("pattern_editor")
+    c.ui.tap_control("paint")
+    first=steps[0]
+    c.ui.expect_steps({first:"selected"});c.ui.tap_control("paint")
+    c.ui.expect_steps({step:"selected" if (step-1)%length+1 in steps else "off" for step in range(1,65)})
     pitches=[60,62,64,65,67,69]
     velocities=[127,117,107,97]+[100]*60
     expected=[(1,[144,pitches[((s-1)%16)%6],velocities[s-1]]) for s in steps]
@@ -388,16 +390,16 @@ def tresillo_rhythm(c,length,steps):
         rows.append(dict(from_step=steps[i%len(steps)],to_step=steps[(i+1)%len(steps)],expected_seconds=gap/6,actual_seconds=actual))
     c.results.append(dict(kind='tresillo-timing',length=length,steps=steps,rows=rows))
     assert len(rows)>=2*len(steps) and all(abs(x['actual_seconds']-x['expected_seconds'])<=tolerance for x in rows),rows
-    c.tap(16,8);c.led_values([first],[0]);c.tap(16,8);c.led_values(cells,[2]*64)
+    c.ui.tap_control("paint");c.ui.expect_steps({first:"dark"});c.ui.tap_control("paint");c.ui.expect_steps({step:"off" for step in range(1,65)})
 
 def tresillo_multipliers(c):
     tresillo_setup(c);c.results.append(dict(kind='workflow-check',name='tresillo-input-setup',passed=True))
     for i,(length,steps) in enumerate(TRESILLO_STEPS.items()):
-        if i:c.enc(3,1)
+        if i:c.ui.turn(3,1)
         tresillo_rhythm(c,length,steps);c.results.append(dict(kind='workflow-check',name='multiplier-'+str(length),passed=True))
 
 def tresillo_drum_boundary(c):
-    tresillo_setup(c);c.tap(13,3);c.enc(3,7)
+    tresillo_setup(c);c.ui.tap_control("drum_bank",2);c.ui.turn(3,7)
     tresillo_rhythm(c,64,list(range(1,65,8)));c.results.append(dict(kind='workflow-check',name='drum-bank-64-step-tresillo',passed=True))
 
 
@@ -409,105 +411,103 @@ def rhythm_bank_workflow(c):
       '4':[1,3,5,7,9,11,13,15],'5':[]},
       'numeric_prime_1_factor_1':{'1':[5,13],'2':[1],'3':[9],'4':[1,5,9,13]}}
     def silence(c):
-        before=c.snapshot()['midi_count'];c.tap(1,8)
-        c.elapse(16/6*2+.1);c.tap(1,8)
+        before=c.snapshot()['midi_count'];c.ui.play()
+        c.elapse(16/6*2+.1);c.ui.stop()
         state=c.snapshot()
         emitted=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         assert emitted==[] and state['midi_capture']['outstanding']==[],emitted
         c.results.append(dict(kind='silence',complete_cycles=2,emitted=emitted))
-    c.configure();c.hold_tap((1,4),(16,4))
-    c.tap(5,8)
-    for x in range(1,5):c.tap(x,4) # empty pattern, retain routing
-    c.tap(5,8)
-    for x in range(1,17):c.tap(x,7-((x-1)%7))
-    c.tap(3,8);c.tap(5,8)
-    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
-    c.led_values(cells,[2]*64);silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
+    c.ui.configure();c.ui.set_range(1,16)
+    c.ui.tap_control("pattern_editor")
+    for step in range(1,5):c.ui.tap_step(step) # empty pattern, retain routing
+    c.ui.tap_control("pattern_editor")
+    for step in range(1,17):c.ui.tap_control("pattern_note",(step,(step-1)%7+1))
+    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
+    c.ui.expect_steps({step:"off" for step in range(1,65)});silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
     def paint(steps):
-        c.tap(16,8)
+        c.ui.tap_control("paint")
         # Nonempty previews flash coherently. Empty banks have no step flashes.
-        if steps:c.led_values([((steps[0]-1)%16+1,4)],[15])
-        else:c.led_values([(14,8)],[15])
-        c.tap(16,8)
-        c.led_values(cells,[15 if i%16+1 in steps else 2 for i in range(64)])
+        if steps:c.ui.expect_steps({steps[0]:"selected"})
+        else:c.ui.expect_leds({("cancel",None):"selected"})
+        c.ui.tap_control("paint")
+        c.ui.expect_steps({step:"selected" if (step-1)%16+1 in steps else "off" for step in range(1,65)})
         if steps:
             pitches=[60,62,64,65,67,69,71]
             velocities=[127,117,107,97]+[100]*12
             c.playback([(1,[144,pitches[(s-1)%7],velocities[s-1]]) for s in steps],cycles=2,timeout=4,settle_seconds=16/3-.1)
         else:silence(c)
-        c.tap(16,8)
-        if steps:c.led_values([((steps[0]-1)%16+1,4)],[0])
-        else:c.led_values([(14,8)],[15])
-        c.tap(16,8);c.led_values(cells,[2]*64)
-    c.tap(12,2);c.tap(2,2);c.tap(10,2) # drum pattern2
+        c.ui.tap_control("paint")
+        if steps:c.ui.expect_steps({steps[0]:"dark"})
+        else:c.ui.expect_leds({("cancel",None):"selected"})
+        c.ui.tap_control("paint");c.ui.expect_steps({step:"off" for step in range(1,65)})
+    c.ui.tap_control("drum_pattern_two");c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_fill_maximum") # drum pattern2
     for bank in range(1,6):
-        c.tap(11+bank,3);paint(oracle['drum_pattern_2'][str(bank)]);c.results.append(dict(kind='workflow-check',name='drum-bank-'+str(bank),passed=True))
-    c.tap(15,2);c.tap(2,2);c.tap(2,3) # numeric prime1, factor1
+        c.ui.tap_control("drum_bank",bank);paint(oracle['drum_pattern_2'][str(bank)]);c.results.append(dict(kind='workflow-check',name='drum-bank-'+str(bank),passed=True))
+    c.ui.tap_control("numeric_prime_one");c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_factor_minimum") # numeric prime1, factor1
     for bank in range(1,5):
-        c.tap(11+bank,3);paint(oracle['numeric_prime_1_factor_1'][str(bank)]);c.results.append(dict(kind='workflow-check',name='numeric-mask-'+str(bank),passed=True))
+        c.ui.tap_control("numeric_mask",bank);paint(oracle['numeric_prime_1_factor_1'][str(bank)]);c.results.append(dict(kind='workflow-check',name='numeric-mask-'+str(bank),passed=True))
 
 
 
 # Ported editor-range fixture; literal pitches and velocities remain independent.
-def editor_shift_tap(c,x,y):
-    c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.tap(x,y)
-    finally:c.action(type='key',n=1,state=0)
+def editor_shift_tap(c,control,index=None):
+    with c.ui.hold_keys(1):
+        c.elapse(.3)
+        c.ui.tap_control(control,index)
 
-def editor_range_hold(c,x,y):
-    c.action(type='grid',x=x,y=y,state=1)
-    try:c.elapse(1.1)
-    finally:c.action(type='grid',x=x,y=y,state=0)
+def editor_range_hold(c,control,index=None):
+    with c.ui.hold_control(control,index):
+        c.elapse(1.1)
 
 def editor_note_ranges(c):
-    c.configure();c.tap(5,8);c.tap(5,8)
+    c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger')
     def choose(y,note):
-        c.tap(4,y);c.led_values([(4,y)],[12]);c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+[(1,[144,note,97])])
+        c.ui.tap_control('pattern_note_degree',(4,7-y));c.led_values([(4,y)],[12]);c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+[(1,[144,note,97])])
     choose(1,71);c.results.append(dict(kind='workflow-check',name='initial-note-range',passed=True))
-    c.tap(14,8);choose(1,72);c.results.append(dict(kind='workflow-check',name='first-up-step',passed=True))
-    c.tap(14,8);choose(1,74);c.results.append(dict(kind='workflow-check',name='second-up-step',passed=True))
-    c.tap(16,8);choose(1,72);c.results.append(dict(kind='workflow-check',name='first-down-step',passed=True))
-    c.tap(16,8);choose(1,71);c.results.append(dict(kind='workflow-check',name='second-down-step',passed=True))
-    editor_range_hold(c,14,8);choose(1,83);c.results.append(dict(kind='workflow-check',name='hold-to-highest-range',passed=True))
-    c.tap(14,8);choose(1,83);c.results.append(dict(kind='workflow-check',name='highest-range-clamp',passed=True))
-    editor_range_hold(c,16,8);choose(7,48);c.results.append(dict(kind='workflow-check',name='hold-to-lowest-range',passed=True))
-    c.tap(16,8);choose(7,48);c.results.append(dict(kind='workflow-check',name='lowest-range-clamp',passed=True))
-    c.tap(15,8);choose(4,65);c.results.append(dict(kind='workflow-check',name='center-restores-root-page',passed=True))
+    c.ui.tap_control('pattern_note_octave_up');choose(1,72);c.results.append(dict(kind='workflow-check',name='first-up-step',passed=True))
+    c.ui.tap_control('pattern_note_octave_up');choose(1,74);c.results.append(dict(kind='workflow-check',name='second-up-step',passed=True))
+    c.ui.tap_control('pattern_note_octave_down');choose(1,72);c.results.append(dict(kind='workflow-check',name='first-down-step',passed=True))
+    c.ui.tap_control('pattern_note_octave_down');choose(1,71);c.results.append(dict(kind='workflow-check',name='second-down-step',passed=True))
+    editor_range_hold(c,'pattern_note_octave_up');choose(1,83);c.results.append(dict(kind='workflow-check',name='hold-to-highest-range',passed=True))
+    c.ui.tap_control('pattern_note_octave_up');choose(1,83);c.results.append(dict(kind='workflow-check',name='highest-range-clamp',passed=True))
+    editor_range_hold(c,'pattern_note_octave_down');choose(7,48);c.results.append(dict(kind='workflow-check',name='hold-to-lowest-range',passed=True))
+    c.ui.tap_control('pattern_note_octave_down');choose(7,48);c.results.append(dict(kind='workflow-check',name='lowest-range-clamp',passed=True))
+    c.ui.tap_control('pattern_note_octave_reset');choose(4,65);c.results.append(dict(kind='workflow-check',name='center-restores-root-page',passed=True))
 
 VELOCITIES=[127,117,107,97,87,78,68,58,48,39,29,19,9,0]
 
 def editor_velocity_ranges(c):
-    c.configure();c.tap(5,8);c.tap(5,8);c.tap(5,8)
+    c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger');c.ui.pattern_editor(view='velocity',from_view='note')
     def choose(y,value):
-        c.tap(4,y);c.led_values([(4,y)],[12])
+        c.ui.tap_control('pattern_velocity_level',(4,8-y));c.led_values([(4,y)],[12])
         c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+([(1,[144,65,value])] if value else []))
     for y,value in enumerate(VELOCITIES[:7],1):choose(y,value);c.results.append(dict(kind='workflow-check',name='velocity-'+str(value),passed=True))
-    c.tap(16,8);choose(1,117);c.results.append(dict(kind='workflow-check',name='first-velocity-range-step',passed=True))
-    c.tap(16,8);choose(1,107);c.results.append(dict(kind='workflow-check',name='second-velocity-range-step',passed=True))
-    c.tap(15,8);choose(1,117);c.results.append(dict(kind='workflow-check',name='velocity-range-step-back',passed=True))
-    editor_range_hold(c,16,8)
+    c.ui.tap_control('pattern_velocity_range_down');choose(1,117);c.results.append(dict(kind='workflow-check',name='first-velocity-range-step',passed=True))
+    c.ui.tap_control('pattern_velocity_range_down');choose(1,107);c.results.append(dict(kind='workflow-check',name='second-velocity-range-step',passed=True))
+    c.ui.tap_control('pattern_velocity_range_reset');choose(1,117);c.results.append(dict(kind='workflow-check',name='velocity-range-step-back',passed=True))
+    editor_range_hold(c,'pattern_velocity_range_down')
     for y,value in enumerate(VELOCITIES[7:],1):choose(y,value);c.results.append(dict(kind='workflow-check',name='velocity-'+str(value),passed=True))
-    c.tap(16,8);choose(7,0);c.results.append(dict(kind='workflow-check',name='lowest-velocity-range-clamp',passed=True))
-    editor_range_hold(c,15,8);choose(1,127);c.results.append(dict(kind='workflow-check',name='hold-to-highest-velocity-range',passed=True))
-    c.tap(15,8);choose(1,127);c.results.append(dict(kind='workflow-check',name='highest-velocity-range-clamp',passed=True))
+    c.ui.tap_control('pattern_velocity_range_down');choose(7,0);c.results.append(dict(kind='workflow-check',name='lowest-velocity-range-clamp',passed=True))
+    editor_range_hold(c,'pattern_velocity_range_reset');choose(1,127);c.results.append(dict(kind='workflow-check',name='hold-to-highest-velocity-range',passed=True))
+    c.ui.tap_control('pattern_velocity_range_reset');choose(1,127);c.results.append(dict(kind='workflow-check',name='highest-velocity-range-clamp',passed=True))
 
 def editor_step_groups(c):
-    c.configure();c.tap(5,8)
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
     for y in range(5,8):
-        for x in range(1,5):c.tap(x,y)
-    c.tap(5,8)
-    for x in range(1,5):editor_shift_tap(c,x,8-x)
+        for x in range(1,5):c.ui.tap_control('step',(y-4)*16+x)
+    c.ui.pattern_editor(view='note',from_view='trigger')
+    for x in range(1,5):editor_shift_tap(c,'pattern_note_degree',(x,x-1))
     for group in range(4):
-        c.tap(9+group,8);c.led_values([(x,8-x) for x in range(1,5)],[12]*4)
+        c.ui.tap_control('pattern_group',group+1);c.led_values([(x,8-x) for x in range(1,5)],[12]*4)
     c.results.append(dict(kind='workflow-check',name='shift-copies-notes-to-four-groups',passed=True))
-    c.tap(5,8)
-    for x in range(1,5):editor_shift_tap(c,x,2)
+    c.ui.pattern_editor(view='velocity',from_view='note')
+    for x in range(1,5):editor_shift_tap(c,'pattern_slot',x)
     for group in range(4):
-        c.tap(9+group,8);c.led_values([(x,2) for x in range(1,5)],[12]*4)
+        c.ui.tap_control('pattern_group',group+1);c.led_values([(x,2) for x in range(1,5)],[12]*4)
     c.results.append(dict(kind='workflow-check',name='shift-copies-velocities-to-four-groups',passed=True))
-    c.tap(3,8)
+    c.ui.tap_control('channel_editor')
     for group in range(4):
-        c.hold_tap((1,4+group),(4,4+group))
+        c.ui.hold_control_tap('step','step',group*16+1,group*16+4)
         c.playback([(1,[144,n,117]) for n in [60,62,64,65]])
         c.results.append(dict(kind='workflow-check',name='play-step-group-'+str(group+1),passed=True))
 
@@ -515,34 +515,34 @@ def editor_step_groups(c):
 
 def note_pattern_selectors(c):
     # Author distinguishable single-note patterns through the normal editor.
-    c.configure();pitches=[60,62,64,65,67,69,71];authored={}
+    c.ui.configure();pitches=[60,62,64,65,67,69,71];authored={}
     for slot in range(1,17):
-        c.tap(5,8);c.tap(slot,1)
+        c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_select',slot)
         if slot==1:
-            for x in (2,3,4):c.tap(x,4)
-        else:c.tap(1,4)
-        c.tap(5,8);offset=(slot-1)%7;c.tap(1,7-offset)
-        authored[slot]=pitches[offset];c.tap(3,8)
+            for x in (2,3,4):c.ui.tap_control('pattern_note_degree',(x,3))
+        else:c.ui.tap_control('pattern_note_degree',(1,3))
+        c.ui.tap_control('pattern_editor');offset=(slot-1)%7;c.ui.tap_control('pattern_note_degree',(1,offset))
+        authored[slot]=pitches[offset];c.ui.tap_control('channel_editor')
     assigned=1
-    c.tap(5,8);c.tap(5,8)
+    c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_editor')
     for pass_index,gesture in enumerate(('shift','hold'),1):
         for slot in range(1,17):
-            if gesture=='shift':editor_shift_tap(c,slot,1)
-            else:editor_range_hold(c,slot,1)
+            if gesture=='shift':editor_shift_tap(c,'pattern_select',slot)
+            else:editor_range_hold(c,'pattern_select',slot)
             offset=(slot-1+pass_index)%7
             assert authored[slot]!=pitches[offset]
-            c.tap(1,7-offset);c.led_values([(1,7-offset)],[12])
-            authored[slot]=pitches[offset];c.tap(3,8)
-            if assigned!=slot:c.tap(assigned,2);c.tap(slot,2)
+            c.ui.tap_control('pattern_note_degree',(1,offset));c.led_values([(1,7-offset)],[12])
+            authored[slot]=pitches[offset];c.ui.tap_control('channel_editor')
+            if assigned!=slot:c.ui.tap_control('pattern_slot',assigned);c.ui.tap_control('pattern_slot',slot)
             assigned=slot;c.led_values([(slot,2)],[15])
             c.playback([(1,[144,authored[slot],127 if slot==1 else 100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
             c.results.append(dict(kind='pattern-selector',gesture=gesture,slot=slot,pitch=authored[slot],passed=True))
-            c.tap(5,8);c.tap(5,8)
+            c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_editor')
     # Holding a top-row cell must not damage a previously edited pattern.
     # Revisit every assignment after the whole selector/edit history.
-    c.tap(3,8)
+    c.ui.tap_control('channel_editor')
     for slot in range(1,17):
-        if assigned!=slot:c.tap(assigned,2);c.tap(slot,2)
+        if assigned!=slot:c.ui.tap_control('pattern_slot',assigned);c.ui.tap_control('pattern_slot',slot)
         assigned=slot
         c.playback([(1,[144,authored[slot],127 if slot==1 else 100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='pattern-selector-retained',slot=slot,pitch=authored[slot],passed=True))
@@ -550,19 +550,20 @@ def note_pattern_selectors(c):
 
 def editor_hold_boundaries(c):
     import time
-    c.configure();c.tap(5,8);c.tap(5,8)
+    c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger')
     before=.999999999 if c.clock_mode=='controlled-experimental' else .95
     after=1.000000001 if c.clock_mode=='controlled-experimental' else 1.05
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]
-    def hold(x,seconds,expected_long,interrupt=False):
+    def hold(control,seconds,expected_long,interrupt=False):
         logical_start=c.logical_ns;t0=time.monotonic_ns()
-        c.action(type='grid',x=x,y=8,state=1);t1=time.monotonic_ns()
+        c.ui.control_edge(control,True);t1=time.monotonic_ns()
         if interrupt:
-            c.elapse(.5);c.tap(4,3);c.elapse(.6)
+            c.elapse(.5);c.ui.tap_control('pattern_note_degree',(4,4));c.elapse(.6)
         else:c.elapse(seconds)
         t2=time.monotonic_ns();logical_end=c.logical_ns
-        c.action(type='grid',x=x,y=8,state=0);t3=time.monotonic_ns()
+        c.ui.control_edge(control,False);t3=time.monotonic_ns()
         lower=(t2-t1)/1e9;upper=(t3-t0)/1e9
+        x = c.ui.control_cell(control)[0]
         c.results.append(dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
             expected_long=expected_long,logical_seconds=(logical_end-logical_start)/1e9,
             wall_lower_seconds=lower,wall_upper_seconds=upper))
@@ -570,16 +571,16 @@ def editor_hold_boundaries(c):
             assert lower>1 if expected_long else upper<1, 'Host input delivery crossed the intended one-second hold boundary'
         c.elapse(.06)
     for label,duration,pitch in [('before',before,72),('after',after,83),('cancelled',0,71)]:
-        c.tap(15,8) # Return the displayed note range to the root page.
-        hold(14,duration,label=='after',interrupt=label=='cancelled')
-        c.tap(4,1);c.led_values([(4,1)],[12])
+        c.ui.tap_control('pattern_note_octave_reset') # Return the displayed note range to the root page.
+        hold('pattern_note_octave_up',duration,label=='after',interrupt=label=='cancelled')
+        c.ui.tap_control('pattern_note_degree',(4,6));c.led_values([(4,1)],[12])
         c.playback(baseline+[(1,[144,pitch,97])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='note',boundary=label,pitch=pitch,passed=True))
-    c.tap(5,8) # Velocity editor; the fourth note now remains B4.
+    c.ui.pattern_editor(view='velocity',from_view='note') # The fourth note now remains B4.
     for label,duration,velocity in [('before',before,117),('after',after,58),('cancelled',0,127)]:
-        editor_range_hold(c,15,8) # Highest velocity range, independent of old offset.
-        hold(16,duration,label=='after',interrupt=label=='cancelled')
-        c.tap(4,1);c.led_values([(4,1)],[12])
+        editor_range_hold(c,'pattern_velocity_range_reset') # Highest velocity range, independent of old offset.
+        hold('pattern_velocity_range_down',duration,label=='after',interrupt=label=='cancelled')
+        c.ui.tap_control('pattern_velocity_level',(4,7));c.led_values([(4,1)],[12])
         c.playback(baseline+[(1,[144,71,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='velocity',boundary=label,velocity=velocity,passed=True))
 
@@ -601,25 +602,25 @@ def pattern_grid_viewer(c):
         row=dict(kind='grid-viewer-frame',channel=channel,label=label,expected_levels=levels,passed=False)
         c.results.append(row);c.wait(matches);row['passed']=True
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    c.ui.configure();c.ui.set_range(1,64);c.ui.pattern_editor(view='trigger')
     viewer(1,[15]*4+[2]*60,'wide-range-positive-oracle')
-    c.tap(3,8);c.hold_tap((1,4),(4,4));c.tap(5,8)
+    c.ui.tap_control('channel_editor');c.ui.set_range(1,4);c.ui.pattern_editor(view='trigger')
     viewer(1,[15]*4+[0]*60,'shortened-range-clears-outside')
     c.playback(baseline,cycles=2,timeout=3,settle_seconds=4/3-.1)
     for channel in range(2,17):
-        c.enc(2,1);viewer(channel,[2]*64,'unassigned-channel')
-    c.enc(2,1);viewer(16,[2]*64,'upper-channel-clamp')
-    c.enc(2,-15);viewer(1,[15]*4+[0]*60,'return-to-short-channel')
-    c.enc(2,-1);viewer(1,[15]*4+[0]*60,'lower-channel-clamp')
+        c.ui.select_field('pattern_channel',offset=1);viewer(channel,[2]*64,'unassigned-channel')
+    c.ui.select_field('pattern_channel',offset=1);viewer(16,[2]*64,'upper-channel-clamp')
+    c.ui.select_field('pattern_channel',offset=-15);viewer(1,[15]*4+[0]*60,'return-to-short-channel')
+    c.ui.select_field('pattern_channel',offset=-1);viewer(1,[15]*4+[0]*60,'lower-channel-clamp')
     # Note and velocity editors have separate viewer selections but share the
     # same drawing/cache component. Page changes must not leak the previous view.
-    c.tap(5,8);viewer(1,[15]*4+[0]*60,'note-page-short-channel')
-    c.enc(2,15);viewer(16,[2]*64,'note-page-channel16')
-    c.tap(5,8);viewer(1,[15]*4+[0]*60,'velocity-page-short-channel')
-    c.enc(2,15);viewer(16,[2]*64,'velocity-page-channel16')
-    c.tap(5,8);viewer(1,[15]*4+[0]*60,'trig-page-retains-own-selection')
-    c.tap(5,8);viewer(16,[2]*64,'note-page-retains-own-selection')
-    c.tap(3,8);c.tap(5,8);viewer(1,[15]*4+[0]*60,'return-from-channel-page')
+    c.ui.pattern_editor(view='note',from_view='trigger');viewer(1,[15]*4+[0]*60,'note-page-short-channel')
+    c.ui.select_field('pattern_channel',offset=15);viewer(16,[2]*64,'note-page-channel16')
+    c.ui.pattern_editor(view='velocity',from_view='note');viewer(1,[15]*4+[0]*60,'velocity-page-short-channel')
+    c.ui.select_field('pattern_channel',offset=15);viewer(16,[2]*64,'velocity-page-channel16')
+    c.ui.pattern_editor(view='trigger',from_view='velocity');viewer(1,[15]*4+[0]*60,'trig-page-retains-own-selection')
+    c.ui.pattern_editor(view='note',from_view='trigger');viewer(16,[2]*64,'note-page-retains-own-selection')
+    c.ui.tap_control('channel_editor');c.ui.pattern_editor(view='trigger');viewer(1,[15]*4+[0]*60,'return-from-channel-page')
     # Viewer selection is independent of the channel's pattern data and route.
     c.led_values([((s-1)%16+1,(s-1)//16+4) for s in range(1,65)],[15]*4+[2]*60)
     c.playback(baseline,cycles=2,timeout=3,settle_seconds=4/3-.1)
@@ -628,70 +629,70 @@ def pattern_grid_viewer(c):
 def inactive_note_priority(c,source_slot=1):
     assert source_slot in (1,3)
     def silence(label):
-        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(1.5);c.tap(1,8)
+        before=c.snapshot()['midi_count'];c.ui.play();c.elapse(1.5);c.ui.stop()
         state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         assert not notes and not state['midi_capture']['outstanding'],notes
         c.results.append(dict(kind='inactive-note-silence',phase=label,seconds=1.5,passed=True))
     def phrase(pitch,velocity,label):
         c.playback([(1,[144,pitch,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='inactive-note-priority',source_slot=source_slot,phase=label,pitch=pitch,velocity=velocity,passed=True))
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(source_slot,1);c.tap(5,8);c.tap(1,3) # G4 on an inactive step.
-    c.led_values([(1,3)],[12]);c.tap(3,8)
-    if source_slot!=1:c.tap(1,2);c.tap(source_slot,2)
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
+    for x in range(1,5):c.ui.tap_step(x)
+    c.ui.tap_control('pattern_select',source_slot);c.ui.pattern_editor(view='note',from_view='trigger');c.ui.tap_control('pattern_note_degree',(1,4)) # G4 on an inactive step.
+    c.led_values([(1,3)],[12]);c.ui.tap_control('channel_editor')
+    if source_slot!=1:c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',source_slot)
     silence('authored-inactive-pattern')
-    c.tap(5,8);c.tap(2,1);c.tap(1,4);c.tap(3,8)
-    c.tap(source_slot,2);c.tap(2,2)
+    c.ui.pattern_editor(view='trigger');c.ui.tap_control('pattern_select',2);c.ui.tap_step(1);c.ui.tap_control('channel_editor')
+    c.ui.tap_control('pattern_slot',source_slot);c.ui.tap_control('pattern_slot',2)
     phrase(60,100,'rhythm-pattern-alone')
-    c.hold_tap((15,8),(source_slot,2))
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,source_slot)
     c.led_values([(source_slot,2),(2,2),(15,8)],[2,15,15])
     phrase(67,100,'unassigned-note-source')
-    c.tap(source_slot,2);phrase(67,100,'assigned-inactive-note-source')
-    c.tap(2,2);c.tap(5,8);c.tap(source_slot,1);c.tap(1,4);c.tap(3,8)
+    c.ui.tap_control('pattern_slot',source_slot);phrase(67,100,'assigned-inactive-note-source')
+    c.ui.tap_control('pattern_slot',2);c.ui.pattern_editor(view='trigger');c.ui.tap_control('pattern_select',source_slot);c.ui.tap_step(1);c.ui.tap_control('channel_editor')
     phrase(67,127 if source_slot==1 else 100,'later-trig-uses-authored-note')
-    c.tap(5,8);c.tap(1,4);c.tap(3,8);silence('trig-removed-note-retained')
+    c.ui.pattern_editor(view='trigger');c.ui.tap_step(1);c.ui.tap_control('channel_editor');silence('trig-removed-note-retained')
 
 
 def priority_field_isolation(c,field,source_slot):
     assert field in ('velocity','length') and source_slot in (1,3)
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(source_slot,1);c.tap(1,4);c.hold_tap((1,4),(3,4))
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
+    for x in range(1,5):c.ui.tap_step(x)
+    c.ui.tap_control('pattern_select',source_slot);c.ui.tap_step(1);c.ui.set_range(1,3)
     c.led_values([(1,4),(2,4),(3,4)],[15,5,5])
-    c.tap(5,8);c.tap(1,3) # Inactive source will hold G4, velocity107, length3.
-    c.tap(5,8);c.tap(1,3);c.tap(3,8);c.tap(5,8);c.tap(1,4)
+    c.ui.pattern_editor(view='note',from_view='trigger');c.ui.tap_control('pattern_note_degree',(1,4)) # Inactive source will hold G4, velocity107, length3.
+    c.ui.pattern_editor(view='velocity',from_view='note');c.ui.tap_control('pattern_velocity_level',(1,5));c.ui.tap_control('channel_editor');c.ui.pattern_editor(view='trigger');c.ui.tap_step(1)
     c.led_values([(1,4),(2,4),(3,4)],[2,2,2])
-    c.tap(2,1);c.tap(1,4);c.tap(3,8);c.tap(1,2);c.tap(2,2)
+    c.ui.tap_control('pattern_select',2);c.ui.tap_step(1);c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',2)
     base=c.playback([(1,[144,60,100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
     assert_durations(c,base,[1,1])
-    if field=='length':c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.hold_tap((16,8),(source_slot,2));c.led_values([(16,8)],[15])
-    finally:
-        if field=='length':c.action(type='key',n=1,state=0)
+    if field=='length':
+        with c.ui.hold_keys(1):
+            c.elapse(.3);c.ui.hold_control_tap('pattern_length_merge_mode','pattern_slot',None,source_slot);c.led_values([(16,8)],[15])
+    else:c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',None,source_slot);c.led_values([(16,8)],[15])
     velocity=107 if field=='velocity' else 100
     length=3 if field=='length' else 1
     notes=c.playback([(1,[144,60,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
     assert_durations(c,notes,[length,length])
     # The same physical button addresses velocity normally and length with K1.
     # Selecting one priority source must preserve the other merge mode.
-    if field=='velocity':c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.led_values([(16,8)],[2])
-    finally:
-        if field=='velocity':c.action(type='key',n=1,state=0)
+    if field=='velocity':
+        with c.ui.hold_keys(1):
+            c.elapse(.3);c.led_values([(16,8)],[2])
+    else:c.led_values([(16,8)],[2])
     c.results.append(dict(kind='priority-field-isolation',field=field,source_slot=source_slot,pitch=60,velocity=velocity,length_steps=length,passed=True))
 
 
 def inactive_note_positions(c):
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(3,1);c.tap(5,8)
+    c.ui.configure();c.ui.set_range(1,64);c.ui.pattern_editor(view='trigger')
+    for x in range(1,5):c.ui.tap_step(x)
+    c.ui.tap_control('pattern_select',3);c.ui.pattern_editor(view='note',from_view='trigger')
     pitches=[60,62,64,65,67,69,71]
     cells=[((s-1)%16+1,(s-1)//16+4) for s in range(1,65)]
     for page in range(4):
-        c.tap(9+page,8)
+        c.ui.tap_control('pattern_group',page+1)
         selections=[(x,7-((page*16+x-1)%7)) for x in range(1,17)]
-        for cell in selections:c.tap(*cell)
+        for x,y in selections:c.ui.tap_control('pattern_note_degree',(x,7-y))
         # Characterisation, not manual text: selected pattern 3 blinks on row 1.
         # A selected note at that cell is 11/13; all other selected notes stay 12.
         steady=[cell for cell in selections if cell != (3,1)]
@@ -700,10 +701,10 @@ def inactive_note_positions(c):
             state=c.wait(lambda state: state['grid'][2] in (11,13))
             c.results.append(dict(kind='selected-note-pattern-blink',cell=[3,1],
                                   allowed=[11,13],actual=state['grid'][2],passed=True))
-    c.tap(3,8);c.tap(1,2);c.tap(3,2)
+    c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',3)
     def silence(label):
         c.led_values(cells,[2]*64)
-        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(64/3+.1);c.tap(1,8)
+        before=c.snapshot()['midi_count'];c.ui.play();c.elapse(64/3+.1);c.ui.stop()
         state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         assert not notes and not state['midi_capture']['outstanding'],notes
         c.results.append(dict(kind='inactive-position-silence',phase=label,steps=64,complete_cycles=2,passed=True))
@@ -716,31 +717,31 @@ def inactive_note_positions(c):
         assert len(errors)>=128 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
         c.results.append(dict(kind='inactive-position-playback',phase=label,steps=64,complete_cycles=2,max_spacing_error_seconds=max(abs(x) for x in errors),passed=True))
     silence('all64-authored-without-trigs')
-    c.tap(5,8);c.tap(2,1)
-    for cell in cells:c.tap(*cell)
-    c.led_values(cells,[15]*64);c.tap(3,8);c.tap(3,2);c.tap(2,2)
-    c.hold_tap((15,8),(3,2));c.led_values([(3,2),(2,2),(15,8)],[2,15,15])
+    c.ui.pattern_editor(view='note');c.ui.tap_control('pattern_select',2)
+    for x,y in cells:c.ui.tap_control('pattern_note_degree',(x,7-y))
+    c.led_values(cells,[15]*64);c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_slot',3);c.ui.tap_control('pattern_slot',2)
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,3);c.led_values([(3,2),(2,2),(15,8)],[2,15,15])
     phrase('unassigned-priority-source-all64')
-    c.tap(3,2);phrase('assigned-inactive-priority-source-all64')
-    c.tap(2,2);c.tap(5,8);c.tap(3,1)
-    for cell in cells:c.tap(*cell)
-    c.led_values(cells,[15]*64);c.tap(3,8);phrase('all64-later-activated')
-    c.tap(5,8)
-    for cell in cells:c.tap(*cell)
-    c.tap(3,8);silence('all64-trigs-removed-again')
+    c.ui.tap_control('pattern_slot',3);phrase('assigned-inactive-priority-source-all64')
+    c.ui.tap_control('pattern_slot',2);c.ui.pattern_editor(view='note');c.ui.tap_control('pattern_select',3)
+    for x,y in cells:c.ui.tap_control('pattern_note_degree',(x,7-y))
+    c.led_values(cells,[15]*64);c.ui.tap_control('channel_editor');phrase('all64-later-activated')
+    c.ui.pattern_editor(view='note')
+    for x,y in cells:c.ui.tap_control('pattern_note_degree',(x,7-y))
+    c.ui.tap_control('channel_editor');silence('all64-trigs-removed-again')
 
 
 def all_note_priorities(c):
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
+    for x in range(1,5):c.ui.tap_step(x)
     pitches=[60,62,64,65,67,69,71]
     # Two base-seven digits make a distinct musical fingerprint for each slot.
     for slot in range(1,17):
-        c.tap(slot,1);c.tap(5,8)
-        c.tap(1,7-(slot-1)%7);c.tap(2,7-(slot-1)//7)
-        c.tap(3,8);c.tap(5,8)
-    c.tap(2,1);c.tap(1,4);c.tap(2,4);c.tap(3,8)
-    c.tap(1,2);c.tap(2,2);rhythm=2
+        c.ui.tap_control('pattern_select',slot);c.ui.tap_control('pattern_editor')
+        c.ui.tap_control('pattern_note_degree',(1,(slot-1)%7));c.ui.tap_control('pattern_note_degree',(2,(slot-1)//7))
+        c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_editor')
+    c.ui.tap_control('pattern_select',2);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3));c.ui.tap_control('channel_editor')
+    c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',2);rhythm=2
     def play(slot,assigned):
         velocities=[127,117] if rhythm==1 else [100,100]
         expected=[(1,[144,pitches[(slot-1)%7],velocities[0]]),(1,[144,pitches[(slot-1)//7],velocities[1]])]
@@ -754,26 +755,26 @@ def all_note_priorities(c):
         wanted_rhythm=1 if slot==2 else 2
         if rhythm!=wanted_rhythm:
             c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
-            c.tap(5,8);c.tap(rhythm,1);c.tap(1,4);c.tap(2,4)
-            c.tap(wanted_rhythm,1);c.tap(1,4);c.tap(2,4);c.tap(3,8)
+            c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_select',rhythm);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3))
+            c.ui.tap_control('pattern_select',wanted_rhythm);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3));c.ui.tap_control('channel_editor')
             c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
-            c.tap(rhythm,2);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,2])
-            c.tap(wanted_rhythm,2);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,15]);rhythm=wanted_rhythm
-        c.hold_tap((15,8),(slot,2))
+            c.ui.tap_control('pattern_slot',rhythm);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,2])
+            c.ui.tap_control('pattern_slot',wanted_rhythm);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,15]);rhythm=wanted_rhythm
+        c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,slot)
         c.led_values([(slot,2),(rhythm,2),(15,8)],[2,15,15]);play(slot,False)
-        c.tap(slot,2);c.led_values([(slot,2),(rhythm,2)],[15,15]);play(slot,True)
-        c.tap(slot,2)
+        c.ui.tap_control('pattern_slot',slot);c.led_values([(slot,2),(rhythm,2)],[15,15]);play(slot,True)
+        c.ui.tap_control('pattern_slot',slot)
 
 
 def transpose_global_domain(c):
     """Walk every value exposed by the global transpose fader."""
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure(); c.tap(4,8)
-    c.tap(9,8)  # Direct inner press selects the left endpoint, -12.
+    c.configure(); c.ui.scale_editor()
+    c.ui.tap_control("global_transpose_minimum")  # Direct inner press selects -12.
     values=list(range(-12,13)); velocities=(127,117,107,97)
     for index,value in enumerate(values):
-        if index: c.tap(16,8)  # Repeated right endpoint presses advance by one.
+        if index: c.ui.tap_control("global_transpose_increment")  # Advance one semitone.
         pitches=tuple(base+value for base in (60,62,64,65));before=c.snapshot()
         if index==0:
             startup=[(3,[192,0]),(3,[193,0]),(3,[194,0]),(3,[195,64]),(3,[196,0]),
@@ -781,12 +782,12 @@ def transpose_global_domain(c):
             assert before['midi_count']==10
             assert [(e['port'],e['bytes']) for e in before['midi']]==startup
         capture=MidiWindow(before['midi_count'])
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.control_edge("play_stop", True);c.ui.control_edge("play_stop", False)
         c.elapse(4/3-.1)
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=3)
-        c.action(type='grid',x=1,y=8,state=1)
+        c.ui.control_edge("play_stop", True)
         stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=0)
+        c.ui.control_edge("play_stop", False)
         stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         notes=capture.note_ons();assert 9<=len(notes)<=10,('Observation overshoot',len(notes))
@@ -820,31 +821,33 @@ def transpose_song_copy_isolation(c):
     """Copied song transpose remains isolated and alternates at live boundaries."""
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure();c.tap(4,8);c.hold_tap((1,4),(4,4))
+    c.configure();c.ui.scale_editor();c.ui.set_range(1,4)
     def set_global(value):
-        c.tap(9,8)
-        for _ in range(value+12):c.tap(16,8)
+        c.ui.tap_control("global_transpose_minimum")
+        for _ in range(value+12):c.ui.tap_control("global_transpose_increment")
     set_global(5)
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(2,1);c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.song_editor();c.ui.hold_control_tap("channel", "channel", 1, 2)
+    c.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
+    c.ui.select_channel(2)
+    c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-    c.tap(3,8);c.tap(4,8);set_global(-7)
-    c.tap(6,8);c.led_values([(1,1),(2,1)],[7,15])
-    set_mosaic_options(c,[('Song mode',True)])
-    c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
+    c.ui.menu("channel_editor");c.ui.scale_editor();set_global(-7)
+    c.ui.song_editor();c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
+    c.ui.set_mosaic_option_keys([("song_mode", True)])
+    c.ui.select_channel(1);c.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
     capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge("play_stop", True);c.ui.control_edge("play_stop", False)
     # The note lane emits every24 pulses.  Song slots advance on the full
     # 1,536-pulse global cycle, so this four-step phrase repeats16 times.
     c.elapse(10.8);capture.extend(c.snapshot())
     assert len(capture.note_ons())>=65
-    c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.elapse(10.8);capture.extend(c.snapshot())
     assert len(capture.note_ons())>=129
-    c.led_values([(1,1),(2,1)],[15,7])
-    c.action(type='grid',x=1,y=8,state=1)
+    c.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
+    c.ui.control_edge("play_stop", True)
     stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge("play_stop", False)
     stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
     notes=capture.note_ons();assert 129<=len(notes)<=136,('Observation overshoot',len(notes))
@@ -884,15 +887,16 @@ def transpose_song_copy_isolation(c):
 
 def transpose_song_persistence(c):
     """Independent copied song transposes survive autosave and cold reload."""
-    c.configure();c.tap(4,8)
+    c.configure();c.ui.scale_editor()
     def set_global(driver,value):
-        driver.tap(9,8)
-        for _ in range(value+12):driver.tap(16,8)
+        driver.ui.tap_control("global_transpose_minimum")
+        for _ in range(value+12):driver.ui.tap_control("global_transpose_increment")
     set_global(c,5)
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1)
-    c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.song_editor();c.ui.hold_control_tap("channel", "channel", 1, 2)
+    c.ui.select_channel(2)
+    c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-    c.tap(3,8);c.tap(4,8);set_global(c,-7)
+    c.ui.menu("channel_editor");c.ui.scale_editor();set_global(c,-7)
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
     c.elapse(59);assert not saved.exists() and not pset.exists()
     c.elapse(2);c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)
@@ -902,10 +906,11 @@ def transpose_song_persistence(c):
     out=c.out/'reloaded';out.mkdir()
     loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
     try:
-        loaded.tap(6,8);loaded.led_values([(1,1),(2,1)],[7,15])
-        loaded.tap(1,1);loaded.led_values([(1,1),(2,1)],[15,7])
+        loaded.ui.song_editor();loaded.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
+        loaded.ui.select_channel(1);loaded.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
         loaded.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-        loaded.tap(6,8);loaded.tap(2,1);loaded.led_values([(1,1),(2,1)],[7,15])
+        loaded.ui.song_editor();loaded.ui.select_channel(2)
+        loaded.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
         loaded.playback([(1,[144,n,v]) for n,v in ((53,127),(55,117),(57,107),(58,97))],cycles=2)
         loaded.results.append(dict(kind='transpose-cold-reload',source_transpose=5,
                                    copy_transpose=-7,source_and_copy_played=True,passed=True))
@@ -918,21 +923,21 @@ def transpose_global_live_edit(c):
     import time
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure();c.tap(4,8)
+    c.configure();c.ui.scale_editor()
     capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge("play_stop", True);c.ui.control_edge("play_stop", False)
     c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=1)
     c.elapse(.04)
     def now():
         return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
-    edit1_lower=now();c.action(type='grid',x=16,y=8,state=1);c.action(type='grid',x=16,y=8,state=0);edit1_upper=now()
+    edit1_lower=now();c.ui.control_edge("global_transpose_increment", True);c.ui.control_edge("global_transpose_increment", False);edit1_upper=now()
     c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=5)
     c.elapse(.04)
     before_second=len(capture.note_ons());assert 5<=before_second<=6
-    edit2_lower=now();c.action(type='grid',x=9,y=8,state=1);c.action(type='grid',x=9,y=8,state=0);edit2_upper=now()
+    edit2_lower=now();c.ui.control_edge("global_transpose_minimum", True);c.ui.control_edge("global_transpose_minimum", False);edit2_upper=now()
     c.elapse(1);capture.extend(c.snapshot())
-    c.action(type='grid',x=1,y=8,state=1)
-    stop_lower=now();c.action(type='grid',x=1,y=8,state=0);stop_upper=now()
+    c.ui.control_edge("play_stop", True)
+    stop_lower=now();c.ui.control_edge("play_stop", False);stop_upper=now()
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
     notes=capture.note_ons();assert len(notes)>=10
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -976,18 +981,18 @@ def transpose_global_live_edit(c):
 
 def transpose_lock_domain(c):
     """Walk every transpose value exposed by the native scale-page fader."""
-    c.configure(); c.tap(4,8)
-    c.tap(13,8)  # Global +4 distinguishes an absent lock from explicit zero.
+    c.configure(); c.ui.scale_editor()
+    c.ui.tap_control("global_transpose_plus_four")  # Global +4 distinguishes an absent lock from explicit zero.
     # Bound the step-1 lock with an explicit zero lock at step 2 so its
     # persistence cannot hide which authored step supplied each pitch.
-    c.hold_tap((2,4),(12,8))
+    c.ui.hold_control_tap("step", "step_transpose_zero", 2)
     values = list(range(-12,13))
     # Direct inner press selects -12, then the right endpoint advances one
     # semitone per physical press while the step remains the first operand.
-    c.hold_tap((1,4),(9,8))
+    c.ui.hold_control_tap("step", "step_transpose_minimum", 1)
     for index, value in enumerate(values):
         if index:
-            c.hold_tap((1,4),(16,8))
+            c.ui.hold_control_tap("step", "step_transpose_increment", 1)
         expected = [(1,[144,60+value,127]), (1,[144,62,117]),
                     (1,[144,64,107]), (1,[144,65,97])]
         notes = c.playback(expected, cycles=2, timeout=3, settle_seconds=4/3-.1)
@@ -1002,9 +1007,7 @@ def transpose_lock_domain(c):
                               passed=True))
     # K2 while holding step1 restores global +4 there. Step2 must remain
     # explicitly zero and keep the remaining phrase untransposed.
-    c.action(type='grid',x=1,y=4,state=1)
-    try: c.key(2)
-    finally: c.action(type='grid',x=1,y=4,state=0)
+    with c.ui.hold_step(1): c.ui.press_key(2)
     restored = (64,62,64,65)
     notes = c.playback([(1,[144,p,v]) for p,v in zip(restored,(127,117,107,97))],
                        cycles=2, timeout=3, settle_seconds=4/3-.1)
@@ -1016,15 +1019,16 @@ def transpose_lock_domain(c):
 def transpose_scale_octave_composition(c):
     """Compose channel octave, saved scale transpose and persistent step locks."""
     c.configure()
-    c.tap(11,8)  # Channel octave +1.
-    c.tap(4,8)
-    c.tap(13,8)  # Song/global transpose +4; locks below must override it.
+    c.ui.tap_control("channel_octave", 1)  # Channel octave +1.
+    c.ui.scale_editor()
+    c.ui.tap_control("global_transpose_plus_four")  # Song/global transpose +4; locks below must override it.
     # Native scale editor: Quantizer -> Roman -> Transpose, then save +3.
-    c.enc(2,2); c.enc(3,3); c.key(3)
+    c.ui.select_field("scale_transpose", offset=2)
+    c.ui.set_value(3); c.ui.press_key(3)
     # Step locks are persistent until replacement and reset at channel wrap.
-    c.hold_tap((1,4),(9,8))   # -12
-    c.hold_tap((2,4),(12,8))  # explicit 0
-    c.hold_tap((3,4),(15,8))  # +12, persists through step4
+    c.ui.hold_control_tap("step", "step_transpose_minimum", 1)   # -12
+    c.ui.hold_control_tap("step", "step_transpose_zero", 2)  # explicit 0
+    c.ui.hold_control_tap("step", "step_transpose_increment", 3)  # +12, persists through step4
     pitches = (63,77,91,92)
     notes = c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],
                        cycles=3, timeout=5, settle_seconds=2-.1)
@@ -1044,11 +1048,11 @@ def transpose_lock_live_clear(c):
     """Clear a future wrap lock while another explicitly-zero step sounds."""
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure(); c.tap(4,8); c.tap(13,8)  # Global +4.
-    c.hold_tap((1,4),(9,8))   # Step1 -12.
-    c.hold_tap((2,4),(12,8))  # Step2 explicit zero bounds persistence.
+    c.configure(); c.ui.scale_editor(); c.ui.tap_control("global_transpose_plus_four")  # Global +4.
+    c.ui.hold_control_tap("step", "step_transpose_minimum", 1)   # Step1 -12.
+    c.ui.hold_control_tap("step", "step_transpose_zero", 2)  # Step2 explicit zero bounds persistence.
     capture = MidiWindow(c.snapshot()['midi_count'])
-    c.tap(1,8)
+    c.ui.play()
     def onsets(state):
         capture.extend(state)
         return capture.note_ons()
@@ -1058,12 +1062,10 @@ def transpose_lock_live_clear(c):
                        [144,48,127],[144,62,117]]
     assert [event['bytes'] for event in before[:6]] == expected_before, before
     clear_lower = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
-    c.action(type='grid',x=1,y=4,state=1)
-    try: c.key(2)
-    finally: c.action(type='grid',x=1,y=4,state=0)
+    with c.ui.hold_step(1): c.ui.press_key(2)
     clear_upper = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
     c.wait(lambda state: len(onsets(state)) >= 11, timeout=3)
-    c.tap(1,8)
+    c.ui.stop()
     c.wait(lambda state: capture.extend(state) and not state['midi_capture']['outstanding'])
     notes = capture.note_ons()
     assert 11 <= len(notes) <= 12, ('Unexpected complete onset count', len(notes), notes)
@@ -1111,52 +1113,48 @@ def octave_phrase(c,octaves,phase):
     c.results.append(dict(kind='octave-phrase',phase=phase,octaves=octaves,passed=True))
 
 def channel_octave_controls(c):
-    c.configure()
+    ui=c.ui;ui.configure()
     for octave in (-2,-1,0,1,2,0,0):
-        c.tap(octave+10,8)
-        c.led_values([(x,8) for x in range(8,13)],[15 if x==octave+10 else 2 for x in range(8,13)])
+        ui.set_channel_octave(octave)
+        ui.expect_channel_octave(octave)
         octave_phrase(c,[octave]*4,'global-'+str(octave))
-    c.tap(5,8);c.tap(3,8)
-    c.led_values([(x,8) for x in range(8,13)],[2,2,15,2,2])
+    ui.pattern_editor();ui.channel_editor()
+    ui.expect_channel_octave(0)
     octave_phrase(c,[0]*4,'center-retained-after-navigation')
 
 def octave_lock_precedence(c):
-    c.configure();c.enc(1,-3)
+    ui=c.ui;ui.configure();ui.turn(1,-3)
     def held_feedback(step,octave):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.led_values([(x,8) for x in range(8,13)],[15 if x==octave+10 else 2 for x in range(8,13)])
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with ui.hold_step(step):ui.expect_channel_octave(octave)
     for global_octave in range(-2,3):
-        c.tap(global_octave+10,8)
+        ui.set_channel_octave(global_octave)
         for locked_octave in range(-2,3):
-            c.hold_tap((2,4),(locked_octave+10,8));held_feedback(2,locked_octave)
+            ui.set_step_octave(2,locked_octave);held_feedback(2,locked_octave)
             octave_phrase(c,[global_octave,locked_octave,global_octave,global_octave],'override-%s-%s'%(global_octave,locked_octave))
-            c.action(type='grid',x=2,y=4,state=1)
-            try:c.key(2)
-            finally:c.action(type='grid',x=2,y=4,state=0)
+            with ui.hold_step(2):ui.press_key(2)
             held_feedback(2,global_octave)
             octave_phrase(c,[global_octave]*4,'cleared-%s-%s'%(global_octave,locked_octave))
-    c.tap(-2+10,8)
+    ui.set_channel_octave(-2)
     # Repeating the same lock selector removes it, including explicit zero.
     for step in range(1,5):
-        c.hold_tap((step,4),(10,8));held_feedback(step,0)
+        ui.set_step_octave(step,0);held_feedback(step,0)
         expected=[-2]*4;expected[step-1]=0
         octave_phrase(c,expected,'zero-lock-step-'+str(step))
-        c.hold_tap((step,4),(10,8));held_feedback(step,-2)
+        ui.set_step_octave(step,0);held_feedback(step,-2)
         octave_phrase(c,[-2]*4,'toggle-clear-step-'+str(step))
 
 
 def octave_all_positions(c):
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    ui=c.ui;ui.configure();ui.set_range(1,64);ui.pattern_editor()
     cells=[(i%16+1,i//16+4) for i in range(64)]
-    for cell in cells[4:]:c.tap(*cell)
-    c.tap(5,8)
+    for cell in cells[4:]:ui.tap_step((cell[1]-4)*16+cell[0])
+    ui.pattern_editor()
     for page in range(4):
-        c.tap(9+page,8)
-        for x in range(1,17):c.tap(x,7)
-    c.tap(3,8);c.enc(1,-3)
+        ui.select_pattern_note_page(page+1)
+        for x in range(1,17):ui.tap_pattern_note_fader(x,7)
+    ui.channel_editor();ui.turn(1,-3)
     octaves=[i%5-2 for i in range(64)]
-    for cell,octave in zip(cells,octaves):c.hold_tap(cell,(10+octave,8))
+    for index,octave in enumerate(octaves,1):ui.set_step_octave(index,octave)
     velocities=[127,117,107,97]+[100]*60
     def play(expected_octaves,phase):
         expected=[(1,[144,60+12*octave,velocity]) for octave,velocity in zip(expected_octaves,velocities)]
@@ -1167,40 +1165,34 @@ def octave_all_positions(c):
         assert len(errors)>=128 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
         c.results.append(dict(kind='octave-position-playback',phase=phase,octaves=expected_octaves,passed=True))
     for global_octave in (-2,2):
-        c.tap(10+global_octave,8)
-        for cell,octave in zip(cells,octaves):
-            c.action(type='grid',x=cell[0],y=cell[1],state=1)
-            try:c.led_values([(x,8) for x in range(8,13)],[15 if x==10+octave else 2 for x in range(8,13)])
-            finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+        ui.set_channel_octave(global_octave)
+        for index,octave in enumerate(octaves,1):
+            with ui.hold_step(index):ui.expect_channel_octave(octave)
         play(octaves,'all64-override-global-'+str(global_octave))
-    c.action(type='key',n=1,state=1)
-    try:c.elapse(.3);c.key(2)
-    finally:c.action(type='key',n=1,state=0)
-    for cell in cells:
-        c.action(type='grid',x=cell[0],y=cell[1],state=1)
-        try:c.led_values([(x,8) for x in range(8,13)],[2,2,2,2,15])
-        finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+    with ui.hold_keys(1):
+        c.elapse(.3);ui.press_key(2)
+    for index in range(1,65):
+        with ui.hold_step(index):ui.expect_channel_octave(2)
     play([2]*64,'all64-cleared-to-global')
 
 
 def integral_clock_divisions(c,slow=False):
     from fractions import Fraction
     from midi_window import MidiWindow
-    from frame_oracle import header,matches
     # Fixed public selector labels; expected seconds follow the musical ratio,
     # never Mosaic's clock or lattice implementation.
     labels=['x16','x12','x8','x6','x5.3','x5','x4','x3','x2.6','x2','x1.5','x1.3',
       '/1','/1.5','/2','/2.6','/3','/4','/5','/5.3','/6','/7','/8','/9','/10','/11','/12','/13','/14','/15','/16',
       '/17','/19','/21','/23','/24','/25','/27','/29','/32','/40','/48','/56','/64','/96','/101','/128']
-    c.configure();c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+    c.ui.configure();c.ui.channel_page('clock_mods','midi_config')
     selected=13;tested=[]
     for index,label in enumerate(labels,1):
         number=Fraction(label[1:]);factor=1/number if label[0]=='x' else number
         pulses=24*factor
         if pulses.denominator!=1 or (factor>16)!=slow:continue
-        c.enc(3,selected-index);c.key(3);selected=index
+        c.ui.turn(3,selected-index);c.ui.press_key(3);selected=index
         expected=[(1,[144,n,v]) for n,v in zip([60,62,64,65],[127,117,107,97])]
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);capture.extend(c.snapshot())
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();capture.extend(c.snapshot())
         remaining=float(8*factor/6)
         # Public controlled advances are bounded to60s. Small chunks retain
         # responsive clients and preserve that runtime limit in both lanes.
@@ -1209,7 +1201,7 @@ def integral_clock_divisions(c,slow=False):
         c.wait(lambda state:len(capture.extend(state).note_ons())>=9,timeout=3)
         notes=capture.note_ons()
         assert [(m['port'],m['bytes']) for m in notes]==[expected[i%4] for i in range(len(notes))],label
-        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        c.ui.stop();c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
         errors=[(m[field]-notes[0][field])/1e9-float(i*factor/6) for i,m in enumerate(notes)]
         assert all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),(label,errors)
@@ -1242,11 +1234,12 @@ def set_mosaic_options(c,options):
 
 def repeated_pattern_reset_policy(c,verify_pending=False):
     from midi_window import MidiWindow
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
+    c.ui.configure();c.ui.set_range(1,3)
+    c.ui.channel_page('clock_mods','midi_config');c.ui.turn(3,-11);c.ui.press_key(3)
     for song_on,transition_reset,repeat_reset in ((True,False,False),(True,True,False),(True,False,True),(True,True,True),(False,True,True)):
         set_mosaic_options(c,[('Song mode',song_on),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(24);capture.extend(c.snapshot())
-        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(24);capture.extend(c.snapshot())
+        c.ui.stop();c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         reset=song_on and repeat_reset
         def append_scheduled(expected,tick):
             origin=(tick//1536)*1536 if reset else 0
@@ -1280,25 +1273,25 @@ def fractional_clock_continuity(c):
     from fractional_deadlines import check_segment, reconcile_note_stream
     from automation.input_origin import verified_input_origin
     import json
-    c.configure();c.tap(5,8);c.tap(5,8)
-    for x in range(1,5):c.tap(x,7)
-    c.tap(3,8);c.enc(1,-1)
+    c.ui.configure();c.ui.pattern_editor();c.ui.pattern_editor()
+    for x in range(1,5):c.ui.tap_control('cell',(x,7))
+    c.ui.menu('channel_editor');c.ui.turn(1,-1)
     set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
     ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
     selected=13;segments=[];trigger_action=dict(type='grid',x=1,y=8,state=0)
     for index,label,pulses in ratios:
-        c.enc(3,selected-index);c.key(3);selected=index
+        c.ui.turn(3,selected-index);c.ui.press_key(3);selected=index
         capture=MidiWindow(c.snapshot()['midi_count']);observation_start=len(c.observations)
         # Transport start reconstructs from final settings with one canonical preview.
         seed=Fraction(1,2)
-        c.action(type='grid',x=1,y=8,state=1)
-        logical_start=c.logical_ns;start_ack=c.action(**trigger_action)
+        c.ui.control_edge('play_stop',True)
+        logical_start=c.logical_ns;start_ack=c.ui.control_edge('play_stop',False)
         c.elapse(.06)
         for _ in range(90):
             c.elapse(.5);capture.extend(c.snapshot())
             if len(c.observations)>observation_start+2:del c.observations[observation_start+1:-1]
-        c.action(type='grid',x=1,y=8,state=1)
-        logical_stop=c.logical_ns;stop_ack=c.action(**trigger_action)
+        c.ui.control_edge('play_stop',True)
+        logical_stop=c.logical_ns;stop_ack=c.ui.control_edge('play_stop',False)
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         segments.append(dict(label=label,ratio=[pulses.numerator,pulses.denominator],preview_seed=[seed.numerator,seed.denominator],after=capture.after,cursor=capture.cursor,
             start_ack=start_ack,stop_ack=stop_ack,logical_start=logical_start,logical_stop=logical_stop,
@@ -1339,16 +1332,19 @@ def fractional_clock_continuity(c):
 
 def song_transition_reset_policy(c,verify_pending=False):
     from midi_window import MidiWindow
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
+    c.ui.configure();c.ui.set_range(1,3)
+    c.ui.channel_page('clock_mods','midi_config');c.ui.turn(3,-11);c.ui.press_key(3)
+    c.ui.song_editor();c.ui.copy_slot((1,1),(2,1),control='cell')
+    c.ui.expect_leds({('cell',(1,1)):'selected',('cell',(2,1)):'alternate'})
+    c.ui.tap_control('cell',(2,1));c.ui.menu('channel_editor');c.ui.tap_control('shift_reset')
+    c.ui.song_editor();c.ui.tap_control('cell',(1,1))
     for transition_reset,repeat_reset in ((False,False),(True,False),(False,True),(True,True)):
         set_mosaic_options(c,[('Song mode',True),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
-        c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
-        c.elapse(10.8);capture.extend(c.snapshot());c.led_values([(1,1),(2,1)],[7,15])
-        c.elapse(10.8);capture.extend(c.snapshot());c.led_values([(1,1),(2,1)],[15,7])
-        c.elapse(1.4);capture.extend(c.snapshot());c.tap(1,8)
+        c.ui.tap_control('cell',(1,1));c.ui.expect_leds({('cell',(1,1)):'selected',('cell',(2,1)):'alternate'})
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play()
+        c.elapse(10.8);capture.extend(c.snapshot());c.ui.expect_leds({('cell',(1,1)):'alternate',('cell',(2,1)):'selected'})
+        c.elapse(10.8);capture.extend(c.snapshot());c.ui.expect_leds({('cell',(1,1)):'selected',('cell',(2,1)):'alternate'})
+        c.elapse(1.4);capture.extend(c.snapshot());c.ui.stop()
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         # Preserve the existing reset predicate, including repeat reset on a
         # changed-pattern boundary; candidate0026 does not redefine that option.
@@ -1418,35 +1414,35 @@ def length_mask_display(c,label):
     c.ui.expect_field_value('length',label)
 
 def length_mask_boundaries(c):
-    c.configure();c.enc(1,-4);c.enc(2,2)
-    length_mask_display(c,'X');c.enc(3,-3);length_mask_display(c,'X')
-    c.enc(3,89);length_mask_display(c,'128')
-    c.enc(3,3);length_mask_display(c,'128')
-    c.enc(3,-12);length_mask_display(c,'64')
-    c.enc(3,-59);length_mask_display(c,'2')
-    c.enc(3,-10);length_mask_display(c,'1/2')
-    c.enc(3,-8);length_mask_display(c,'X')
+    c.ui.configure();c.ui.channel_page('masks','midi_config',confirm=False);c.ui.select_field('length',offset=2)
+    length_mask_display(c,'X');c.ui.set_value(-3);length_mask_display(c,'X')
+    c.ui.set_value(89);length_mask_display(c,'128')
+    c.ui.set_value(3);length_mask_display(c,'128')
+    c.ui.set_value(-12);length_mask_display(c,'64')
+    c.ui.set_value(-59);length_mask_display(c,'2')
+    c.ui.set_value(-10);length_mask_display(c,'1/2')
+    c.ui.set_value(-8);length_mask_display(c,'X')
 
 
 def pending_mask_lengths(c,long=False):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
-    c.enc(1,-3);c.enc(2,2);selected=0
+    c.ui.configure();c.ui.set_range(1,3);c.ui.channel_page('clock_mods','midi_config',confirm=False);c.ui.set_value(-11);c.ui.press_key(3)
+    c.ui.channel_page('masks','clock_mods',confirm=False);c.ui.select_field('length',offset=2);selected=0
     choices=[(89,'128',128,True)] if long else [(8,'1/2',.5,False),(8,'1/2',.5,True),(18,'2',2,False),(18,'2',2,True)]
     for index,label,length,reset in choices:
-        c.enc(3,index-selected);selected=index;length_mask_display(c,label)
-        set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',reset)])
+        c.ui.set_value(index-selected);selected=index;length_mask_display(c,label)
+        c.ui.set_mosaic_option_keys([('reset_on_song_seq_change',False),('reset_on_pattern_repeat',reset)])
         length_mask_display(c,label)
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play()
         seconds=195 if long else 24
         remaining=seconds
         while remaining:
             chunk=min(30,remaining);c.elapse(chunk);capture.extend(c.snapshot());remaining-=chunk
         controlled=c.clock_mode=='controlled-experimental'
         lower=c.logical_ns if controlled else time.monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture([('play_stop',None)],[('play_stop',None)])
         upper=c.logical_ns if controlled else time.monotonic_ns()
         c.elapse(.06);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         onsets=[]

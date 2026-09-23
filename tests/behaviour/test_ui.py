@@ -1,4 +1,5 @@
 import sys
+import ast
 import base64
 import tempfile
 import unittest
@@ -60,6 +61,43 @@ class FakeDriver:
 
 
 class UiMapTests(unittest.TestCase):
+    def test_editor_range_and_selector_cases_use_semantic_inputs(self):
+        source = (BEHAVIOUR / "cases.py").read_text()
+        module = ast.parse(source)
+        names = {
+            "editor_shift_tap", "editor_range_hold", "editor_note_ranges",
+            "editor_velocity_ranges", "editor_step_groups", "note_pattern_selectors",
+            "editor_hold_boundaries", "pattern_grid_viewer", "inactive_note_priority",
+            "priority_field_isolation", "inactive_note_positions", "all_note_priorities",
+        }
+        raw_methods = {"tap", "action", "hold_tap", "enc", "configure"}
+        functions = [node for node in module.body
+                     if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+                     and node.name in names]
+        self.assertEqual({node.name for node in functions}, names)
+        raw_calls = []
+        for function in functions:
+            for node in ast.walk(function):
+                if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                        and isinstance(node.func.value, ast.Name)
+                        and node.func.value.id == "c" and node.func.attr in raw_methods):
+                    raw_calls.append("%s:%d c.%s" %
+                                     (function.name, node.lineno, node.func.attr))
+        self.assertEqual(raw_calls, [])
+
+    def test_pattern_group_selectors_have_semantic_names(self):
+        from ui_map import control_cell
+
+        self.assertEqual(
+            [control_cell("pattern_group", index) for index in range(1, 5)],
+            [(9, 8), (10, 8), (11, 8), (12, 8)],
+        )
+        self.assertEqual(control_cell("pattern_velocity_range_down"), (16, 8))
+        self.assertEqual(control_cell("pattern_velocity_range_reset"), (15, 8))
+        for invalid in (0, 5, True, 1.0):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                control_cell("pattern_group", invalid)
+
     def test_rhythm_doctor_controls_have_distinct_semantic_names(self):
         from ui_map import control_cell
 
@@ -150,6 +188,21 @@ class UiMapTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             control_cell("note_merge_mode", 1)
 
+    def test_pattern_note_pitch_keys_preserve_authored_grid_cells(self):
+        from ui_map import PATTERN_NOTE_PITCHES, control_cell
+
+        self.assertEqual(PATTERN_NOTE_PITCHES, {
+            "pattern_note_c": (5, 3),
+            "pattern_note_d": (6, 2),
+            "pattern_note_e": (7, 1),
+            "pattern_note_f": (8, 6),
+        })
+        for key, cell in PATTERN_NOTE_PITCHES.items():
+            with self.subTest(key=key):
+                self.assertEqual(control_cell(key), cell)
+                with self.assertRaises(ValueError):
+                    control_cell(key, 1)
+
     def test_every_grid_cell_has_exactly_one_control_on_each_page(self):
         from ui_map import grid_partition
 
@@ -204,6 +257,40 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual(control_cell("channel_octave", 1), (11, 8))
         self.assertEqual(grid_partition("channel_editor")[(11, 8)],
                          ("channel_octave", 1))
+
+    def test_pattern_note_page_uses_four_stable_selector_keys(self):
+        from ui_map import control_cell
+
+        self.assertEqual([control_cell("pattern_note_page", page)
+                          for page in range(1, 5)],
+                         [(9, 8), (10, 8), (11, 8), (12, 8)])
+        for page in (0, 5, True, 1.0):
+            with self.subTest(page=page), self.assertRaises(ValueError):
+                control_cell("pattern_note_page", page)
+
+    def test_octave_verbs_preserve_physical_actions_and_feedback_order(self):
+        from ui import Ui
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        ui.set_channel_octave(-1)
+        ui.set_step_octave(17, 2)
+        with ui.hold_step(17):
+            ui.expect_channel_octave(-1)
+        ui.select_pattern_note_page(4)
+        ui.tap_pattern_note_fader(16, 7)
+        self.assertEqual(driver.calls, [
+            ("tap", 9, 8),
+            ("action", {"type": "grid", "x": 1, "y": 5, "state": 1}),
+            ("tap", 12, 8),
+            ("action", {"type": "grid", "x": 1, "y": 5, "state": 0}),
+            ("action", {"type": "grid", "x": 1, "y": 5, "state": 1}),
+            ("led_values", [(8, 8), (9, 8), (10, 8), (11, 8), (12, 8)],
+             [2, 15, 2, 2, 2]),
+            ("action", {"type": "grid", "x": 1, "y": 5, "state": 0}),
+            ("tap", 12, 8),
+            ("tap", 16, 7),
+        ])
 
     def test_pattern_note_octave_controls_have_stable_keys(self):
         from ui import Ui
@@ -290,6 +377,25 @@ class UiInputTests(unittest.TestCase):
             ("enc", 2, 3),
         ])
 
+    def test_pattern_group_hold_tap_keeps_octave_modifier_recipe(self):
+        driver, ui = self.ui()
+        ui.hold_control_tap("pattern_note_octave_up", "pattern_group", None, 1)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 14, "y": 8, "state": 1}),
+            ("tap", 9, 8),
+            ("action", {"type": "grid", "x": 14, "y": 8, "state": 0}),
+        ])
+
+    def test_editor_range_holds_keep_native_grid_edges_and_duration(self):
+        driver, ui = self.ui()
+        with ui.hold_control("pattern_velocity_range_down"):
+            driver.elapse(1.1)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 16, "y": 8, "state": 1}),
+            ("elapse", 1.1),
+            ("action", {"type": "grid", "x": 16, "y": 8, "state": 0}),
+        ])
+
     def test_rejected_saved_range_controls_keep_native_tap_recipe(self):
         driver, ui = self.ui()
         ui.menu("channel_editor")
@@ -300,6 +406,50 @@ class UiInputTests(unittest.TestCase):
             ("tap", 1, 8),
             ("tap", 1, 8),
         ])
+
+    def test_transpose_cases_return_to_channel_editor_before_scale_editor(self):
+        source = (BEHAVIOUR / "cases.py").read_text()
+        module = ast.parse(source)
+        names = {"transpose_song_copy_isolation", "transpose_song_persistence"}
+        functions = {node.name: node for node in module.body
+                     if isinstance(node, ast.FunctionDef) and node.name in names}
+        self.assertEqual(set(functions), names)
+        for function in functions.values():
+            calls = sorted((node for node in ast.walk(function)
+                            if isinstance(node, ast.Call)
+                            and isinstance(node.func, ast.Attribute)),
+                           key=lambda node: (node.lineno, node.col_offset))
+            channel_editor = next((call.lineno, call.col_offset) for call in calls
+                                  if call.func.attr == "menu"
+                                  and call.args
+                                  and isinstance(call.args[0], ast.Constant)
+                                  and call.args[0].value == "channel_editor")
+            scale_editors = [(call.lineno, call.col_offset) for call in calls
+                             if call.func.attr == "scale_editor"]
+            self.assertGreaterEqual(len(scale_editors), 2)
+            self.assertLess(scale_editors[0], channel_editor)
+            self.assertLess(channel_editor, scale_editors[1])
+
+    def test_control_cell_exposes_mapped_diagnostic_coordinates(self):
+        _, ui = self.ui()
+        self.assertEqual(ui.control_cell("pattern_note_octave_up"), (14, 8))
+        self.assertEqual(ui.control_cell("pattern_velocity_range_down"), (16, 8))
+
+    def test_editor_hold_results_resolve_x_from_the_control_map(self):
+        source = (BEHAVIOUR / "cases.py").read_text()
+        module = ast.parse(source)
+        function = next(node for node in module.body
+                        if isinstance(node, ast.FunctionDef)
+                        and node.name == "editor_hold_boundaries")
+        hold = next(node for node in function.body
+                    if isinstance(node, ast.FunctionDef) and node.name == "hold")
+        assignment = next(node for node in hold.body
+                          if isinstance(node, ast.Assign)
+                          and any(isinstance(target, ast.Name) and target.id == "x"
+                                  for target in node.targets))
+        self.assertIsInstance(assignment.value, ast.Subscript)
+        self.assertIsInstance(assignment.value.value, ast.Call)
+        self.assertEqual(assignment.value.value.func.attr, "control_cell")
 
     def test_rejected_saved_range_starts_with_semantic_setup(self):
         from types import SimpleNamespace
@@ -571,6 +721,14 @@ class UiInputTests(unittest.TestCase):
             ("action", {"type": "grid", "x": 2, "y": 3, "state": 1}),
             ("action", {"type": "grid", "x": 1, "y": 4, "state": 0}),
             ("action", {"type": "grid", "x": 2, "y": 3, "state": 0}),
+        ])
+
+    def test_gesture_maps_play_stop_pulse_without_advancing(self):
+        driver, ui = self.ui()
+        ui.gesture([("play_stop", None)], [("play_stop", None)])
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 1, "y": 8, "state": 1}),
+            ("action", {"type": "grid", "x": 1, "y": 8, "state": 0}),
         ])
 
     def test_encoder_event_preserves_one_native_event_without_timing(self):
