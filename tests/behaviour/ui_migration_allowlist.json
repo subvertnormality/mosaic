@@ -4,6 +4,7 @@
   "hardware_driver.py",
   "hardware_performance.py",
   "harmony_merge_workflow.py",
+  "modulation_interactions.py",
   "numeric_merging.py",
   "patch_params.py",
   "perf_calibration_emulator.py",
