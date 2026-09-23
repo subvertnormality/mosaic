@@ -120,7 +120,12 @@ from numeric_merging import lydian_octave_boundary
 from numeric_merging import numeric_velocity_merge
 from numeric_merging import merge_rounding
 from numeric_merging import merge_mode_cycle
-from contract.numeric_merging import numeric_note_merge
+from contract.numeric_merging import (
+    numeric_note_merge, numeric_note_merge_all_pentatonic_scales,
+    numeric_note_merge_all_scales, numeric_note_merge_exclude_foreign_velocity,
+    numeric_note_merge_harmony, numeric_note_merge_harmony_pentatonic,
+    numeric_note_merge_pentatonic_velocity,
+)
 from numeric_merging import merge_transpose_scale_lock
 from numeric_merging import transpose_midi_boundaries
 from recording_lifetimes import recording_ten_slots,recording_ten_slots_trigless
@@ -3096,13 +3101,13 @@ CASES={
  'M-MERGE-026':dict(run=lambda c:numeric_length_merge(c,1),requirements=['MERGE-LENGTH'],description='Numeric length merging with literal rounded arithmetic, all modes and exact MIDI release timing'),
  'M-MERGE-027':dict(run=lambda c:numeric_length_merge(c,2),requirements=['MERGE-LENGTH'],description='Numeric length merging with literal rounded arithmetic, all modes and exact MIDI release timing'),
  'M-MERGE-024':dict(run=velocity_zero_boundary,requirements=['MERGE-VELOCITY'],description='Zero and negative numeric velocity results clamp without wrapping, with raw MIDI releases and exact timing'),
- 'M-MERGE-043':dict(run=lambda c:numeric_note_merge(c,True,False,harmony=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic False, exact MIDI gates and phase'),
- 'M-MERGE-044':dict(run=lambda c:numeric_note_merge(c,True,True,harmony=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic True, exact MIDI gates and phase'),
- 'M-MERGE-023':dict(run=lambda c:numeric_note_merge(c,True,True,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='All ten reviewed modal pentatonic selections across numeric merge modes, negative degrees, exact MIDI and timing'),
+ 'M-MERGE-043':dict(run=numeric_note_merge_harmony,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic False, exact MIDI gates and phase'),
+ 'M-MERGE-044':dict(run=numeric_note_merge_harmony_pentatonic,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic True, exact MIDI gates and phase'),
+ 'M-MERGE-023':dict(run=numeric_note_merge_all_pentatonic_scales,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='All ten reviewed modal pentatonic selections across numeric merge modes, negative degrees, exact MIDI and timing'),
  'M-MERGE-022':dict(run=lydian_octave_boundary,requirements=['MERGE-NOTE-AVERAGE','SCALE-EDIT'],description='Rootless Lydian pentatonic nearest-pitch snapping is octave-equivalent for merged degrees -7/0/7'),
  'M-MERGE-021':dict(run=lambda c:numeric_velocity_merge(c,True),requirements=['MERGE-VELOCITY','MERGE-NOTE-PATTERN'],description='Numeric velocity Average/Higher/Lower: rounded means, upper MIDI clamp and unassigned note-priority isolation'),
  'M-MERGE-020':dict(run=lambda c:numeric_velocity_merge(c,False),requirements=['MERGE-VELOCITY','MERGE-NOTE-PATTERN'],description='Numeric velocity Average/Higher/Lower: rounded means, upper MIDI clamp and unassigned note-priority isolation'),
- 'M-MERGE-019':dict(run=lambda c:numeric_note_merge(c,True,False,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='All ten scale types across Average/Higher/Lower, negative degrees and exact MIDI timing with independent interval tables'),
+ 'M-MERGE-019':dict(run=numeric_note_merge_all_scales,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='All ten scale types across Average/Higher/Lower, negative degrees and exact MIDI timing with independent interval tables'),
  'M-MERGE-018':dict(run=lambda c:merge_rounding(c,extreme=False,pentatonic=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed/extreme note merging with pentatonic=True, exact output beyond editor input range and octave-crossing quantisation'),
  'M-MERGE-017':dict(run=lambda c:merge_rounding(c,extreme=True,pentatonic=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed/extreme note merging with pentatonic=True, exact output beyond editor input range and octave-crossing quantisation'),
  'M-MERGE-016':dict(run=lambda c:merge_rounding(c,extreme=True,pentatonic=False),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','PAT-SCALE-RELATIVE'],description='Signed/extreme note merging with pentatonic=False, exact output beyond editor input range and octave-crossing quantisation'),
@@ -3110,9 +3115,9 @@ CASES={
  'M-MERGE-014':dict(run=lambda c:merge_rounding(c,False),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed fractional means with 2 contributors, half ties, equal values, all numeric modes and assignment-order invariance'),
  'M-MERGE-013':dict(run=lambda c:merge_mode_cycle(c,'length'),requirements=['MERGE-LENGTH','MERGE-CONTROL'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible length merge mode'),
  'M-MERGE-012':dict(run=lambda c:merge_mode_cycle(c,'velocity'),requirements=['MERGE-VELOCITY','MERGE-CONTROL'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible velocity merge mode'),
- 'M-MERGE-011':dict(run=lambda c:numeric_note_merge(c,True,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='Numeric Average/Higher with pentatonic filtering across C major, D major, D minor and restored scale; unassigned velocity source stays isolated'),
+ 'M-MERGE-011':dict(run=numeric_note_merge_pentatonic_velocity,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='Numeric Average/Higher with pentatonic filtering across C major, D major, D minor and restored scale; unassigned velocity source stays isolated'),
  'M-MERGE-009':dict(run=numeric_note_merge,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER'],description='Two assigned patterns: independent Average/Higher degree arithmetic, C-major pitches, velocity priority isolation and exact timing'),
- 'M-MERGE-010':dict(run=lambda c:numeric_note_merge(c,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-VELOCITY'],description='Unassigned velocity-priority source must not contribute notes to numeric merge'),
+ 'M-MERGE-010':dict(run=numeric_note_merge_exclude_foreign_velocity,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-VELOCITY'],description='Unassigned velocity-priority source must not contribute notes to numeric merge'),
  'M-REC-PARAM-027':dict(run=lambda c:recording_lifetime(c,'persistence'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','PERSIST-AUTO-001'],description='Recorded locks and undo position survive autosave and two fresh native processes; persisted redo restores recorded step after restart'),
  'M-REC-PARAM-026':dict(run=lambda c:recording_lifetime(c,'memory-branch'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','MEMORY-NAV'],description='New lock edit after undo branches recorded automation history; latest/undo/redo/past-end preserve independent step2 and cannot resurrect abandoned step4'),
  'M-REC-PARAM-025':dict(run=lambda c:recording_lifetime(c,'memory'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','MEMORY-NAV'],description='Undo and redo each of three recorded parameter steps: restore overwritten lock96 and unbound defaults, exact disarmed MIDI replay after every action'),

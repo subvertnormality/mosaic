@@ -239,19 +239,42 @@ class UiLayerGuardTests(unittest.TestCase):
 
         self.assertEqual(raw_sites(BEHAVIOUR / "numeric_merging.py"), [])
 
-    def test_numeric_note_blink_contracts_are_owned_by_contract_module(self):
-        from cases import CASES
-        from contract.numeric_merging import numeric_note_merge
-        from ui_layer_guard import raw_sites
+    def test_numeric_note_merge_cases_have_named_contract_owners(self):
+        from unittest.mock import patch
 
-        case_ids = ("M-MERGE-009", "M-MERGE-010", "M-MERGE-011",
-                    "M-MERGE-019", "M-MERGE-023", "M-MERGE-043", "M-MERGE-044")
-        self.assertEqual(CASES["M-MERGE-009"]["run"], numeric_note_merge)
-        for case_id in case_ids[1:]:
-            self.assertIs(CASES[case_id]["run"].__globals__["numeric_note_merge"],
-                          numeric_note_merge, case_id)
-        self.assertEqual(numeric_note_merge.__module__, "contract.numeric_merging")
-        self.assertIn((5, "state:grid"), raw_sites(BEHAVIOUR / "contract" / "numeric_merging.py"))
+        from cases import CASES
+        from contract import numeric_merging as contract_numeric
+        import numeric_merging
+        from ui_layer_guard import classify_contract_cases, raw_sites
+
+        cases = {
+            "M-MERGE-010": ("numeric_note_merge_exclude_foreign_velocity", (True, False, False, False), {}),
+            "M-MERGE-011": ("numeric_note_merge_pentatonic_velocity", (True, True, False, False), {}),
+            "M-MERGE-019": ("numeric_note_merge_all_scales", (True, False, True, False), {}),
+            "M-MERGE-023": ("numeric_note_merge_all_pentatonic_scales", (True, True, True, False), {}),
+            "M-MERGE-043": ("numeric_note_merge_harmony", (True, False, False, True), {}),
+            "M-MERGE-044": ("numeric_note_merge_harmony_pentatonic", (True, True, False, True), {}),
+        }
+        self.assertIn("M-MERGE-009", classify_contract_cases(CASES))
+        for case_id, (name, args, kwargs) in cases.items():
+            with self.subTest(case=case_id):
+                owner = getattr(contract_numeric, name)
+                run = CASES[case_id]["run"]
+                self.assertIs(run, owner)
+                self.assertEqual(run.__module__, "contract.numeric_merging")
+                self.assertIsNone(run.__closure__)
+                self.assertIn(case_id, classify_contract_cases(CASES))
+                driver = object()
+                with patch.object(numeric_merging, "numeric_note_merge") as called:
+                    run(driver)
+                called.assert_called_once_with(
+                    driver, *args, **kwargs,
+                    blink_observer=contract_numeric._expect_selected_pattern_top_note_blink,
+                )
+        self.assertEqual(contract_numeric.numeric_note_merge.__module__,
+                         "contract.numeric_merging")
+        self.assertIn((5, "state:grid"),
+                      raw_sites(BEHAVIOUR / "contract" / "numeric_merging.py"))
 
     def test_recording_stop_case_is_owned_by_its_contract_module(self):
         from cases import CASES

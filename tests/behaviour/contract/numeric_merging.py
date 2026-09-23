@@ -16,3 +16,27 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,
         c, foreign_velocity, pentatonic, all_scales, harmony,
         blink_observer=_expect_selected_pattern_top_note_blink,
     )
+
+
+def numeric_note_merge_exclude_foreign_velocity(c):
+    return numeric_note_merge(c, True)
+
+
+def numeric_note_merge_pentatonic_velocity(c):
+    return numeric_note_merge(c, True, True)
+
+
+def numeric_note_merge_all_scales(c):
+    return numeric_note_merge(c, True, False, True)
+
+
+def numeric_note_merge_all_pentatonic_scales(c):
+    return numeric_note_merge(c, True, True, True)
+
+
+def numeric_note_merge_harmony(c):
+    return numeric_note_merge(c, True, False, harmony=True)
+
+
+def numeric_note_merge_harmony_pentatonic(c):
+    return numeric_note_merge(c, True, True, harmony=True)
