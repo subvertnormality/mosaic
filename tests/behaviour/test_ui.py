@@ -61,6 +61,94 @@ class FakeDriver:
 
 
 class UiMapTests(unittest.TestCase):
+    def test_pattern_note_mapping_covers_authored_rows_one_through_seven(self):
+        from ui_map import control_cell
+
+        for step in range(1, 17):
+            for row in range(1, 8):
+                with self.subTest(step=step, row=row):
+                    self.assertEqual(control_cell("pattern_note", (step, row)),
+                                     (step, row))
+        for invalid in ((0, 1), (17, 1), (1, 0), (1, 8),
+                        (True, 1), (1, 1.0), (1,), None):
+            with self.subTest(invalid=invalid):
+                with self.assertRaises(ValueError):
+                    control_cell("pattern_note", invalid)
+
+    def test_rhythm_bank_authored_note_recipe_resolves_all_sixteen_source_cells(self):
+        from types import SimpleNamespace
+        from cases import rhythm_bank_workflow
+        from ui import Ui
+
+        class StopAfterNoteEntry(Exception):
+            pass
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        ui.configure = lambda: None
+        ui.set_range = lambda *args: None
+        original_tap_control = ui.tap_control
+        note_taps = 0
+
+        def stop_after_notes(control, index=None):
+            nonlocal note_taps
+            if control == "channel_editor" and note_taps == 16:
+                raise StopAfterNoteEntry
+            result = original_tap_control(control, index)
+            if control == "pattern_note":
+                note_taps += 1
+            return result
+
+        ui.tap_control = stop_after_notes
+        with self.assertRaises(StopAfterNoteEntry):
+            rhythm_bank_workflow(SimpleNamespace(ui=ui))
+
+        expected = [("tap", 5, 8)]
+        expected.extend(("tap", step, 4) for step in range(1, 5))
+        expected.append(("tap", 5, 8))
+        expected.extend(("tap", step, (step - 1) % 7 + 1)
+                        for step in range(1, 17))
+        self.assertEqual(driver.calls, expected)
+
+    def test_tresillo_setup_emits_exact_key_hold_note_tap_release_recipe(self):
+        from types import SimpleNamespace
+        from cases import tresillo_setup
+        from ui import Ui
+
+        class StopAfterNoteEntry(Exception):
+            pass
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        ui.configure = lambda: None
+        original_tap_control = ui.tap_control
+        note_taps = 0
+
+        def stop_after_notes(control, index=None):
+            nonlocal note_taps
+            if control == "channel_editor" and note_taps == 16:
+                raise StopAfterNoteEntry
+            result = original_tap_control(control, index)
+            if control == "pattern_note":
+                note_taps += 1
+            return result
+
+        ui.tap_control = stop_after_notes
+        with self.assertRaises(StopAfterNoteEntry):
+            tresillo_setup(SimpleNamespace(ui=ui, elapse=driver.elapse))
+
+        expected = [("tap", 5, 8)]
+        expected.extend(("tap", step, 4) for step in range(1, 5))
+        expected.append(("tap", 5, 8))
+        for step in range(1, 17):
+            expected.extend([
+                ("action", {"type": "key", "n": 1, "state": 1}),
+                ("elapse", .3),
+                ("tap", step, (step - 1) % 6 + 1),
+                ("action", {"type": "key", "n": 1, "state": 0}),
+            ])
+        self.assertEqual(driver.calls, expected)
+
     def test_euclidean_workflow_controls_match_raw_baseline_cells(self):
         """Every semantic Euclidean tap retains the original authored cell."""
         from ui import Ui
