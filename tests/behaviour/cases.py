@@ -1759,6 +1759,9 @@ def autosave_restart(c):
     c.elapse(2)
     c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)
     assert saved.stat().st_size>0 and pset.stat().st_size>0
+    import shutil
+    capture=c.out/'generated-project';capture.mkdir()
+    shutil.copy2(saved,capture/'autosave.ptn')
     c.results.append(dict(kind='saved-project',files=[dict(name=p.name,sha256=digest(p)) for p in (saved,pset)]))
     c.finish()
     out=c.out/'reloaded';out.mkdir()

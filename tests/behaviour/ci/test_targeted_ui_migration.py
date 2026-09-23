@@ -780,6 +780,128 @@ class TargetedMigrationTests(unittest.TestCase):
                                 for error in check_session_roots(
                                     before, after, "controlled", case="M-REC-PARAM-027")))
 
+    def test_save_001_graph_gate_rejects_unverified_ptn_hash(self):
+        import json
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                project.write_text('return { {x={1},y={1}} }\n')
+                (run / "results.json").write_text(json.dumps([{
+                    "kind": "saved-project",
+                    "files": [
+                        {"name": "autosave.ptn", "sha256": "f" * 64},
+                        {"name": "autosave.pset", "sha256": "a" * 64},
+                    ],
+                }]))
+            errors = check_session_roots(
+                root / "before", root / "after", "controlled", case="M-SAVE-001")
+            self.assertTrue(any("saved-project autosave.ptn SHA differs from artifact" in error
+                                for error in errors), errors)
+
+    def test_save_001_compares_captured_graph_and_preserves_pset(self):
+        import hashlib
+        import json
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            projects = {}
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                project.write_text(
+                    'return { {song={2}}, {source={3}, copy={3}}, {value=7} }\n'
+                    if side == "before" else
+                    'return { {song={3}}, {unused=0}, {source={4}, copy={4}}, {value=7} }\n')
+                projects[side] = project
+                (run / "results.json").write_text(json.dumps([{
+                    "kind": "saved-project",
+                    "files": [
+                        {"name": "autosave.ptn", "sha256": hashlib.sha256(project.read_bytes()).hexdigest()},
+                        {"name": "autosave.pset", "sha256": "a" * 64},
+                    ],
+                }]))
+            self.assertNotEqual(hashlib.sha256(projects["before"].read_bytes()).hexdigest(),
+                                hashlib.sha256(projects["after"].read_bytes()).hexdigest())
+            self.assertEqual(check_session_roots(
+                root / "before", root / "after", "controlled", case="M-SAVE-001"), [])
+            values_path = root / "after/results.json"
+            values = json.loads(values_path.read_text())
+            values[0]["files"][1]["sha256"] = "b" * 64
+            values_path.write_text(json.dumps(values))
+            self.assertTrue(any("controlled results differ" in error for error in check_session_roots(
+                root / "before", root / "after", "controlled", case="M-SAVE-001")))
+
+    def test_save_001_requires_exact_ptn_and_pset_file_rows(self):
+        import hashlib
+        import json
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            valid_rows = []
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                project.write_text('return { {x={1},y={1}} }\n')
+                valid_rows.append([
+                    {"name": "autosave.ptn",
+                     "sha256": hashlib.sha256(project.read_bytes()).hexdigest()},
+                    {"name": "autosave.pset", "sha256": "a" * 64},
+                ])
+
+            malformed_rows = (
+                ("missing autosave.pset", lambda rows: rows[:1]),
+                ("duplicate autosave.pset", lambda rows: rows + [dict(rows[1])]),
+                ("unexpected saved-project file", lambda rows: rows + [
+                    {"name": "other.json", "sha256": "b" * 64}]),
+                ("malformed saved-project file row", lambda rows: [rows[0],
+                    {"name": [], "sha256": "b" * 64}]),
+            )
+            for label, malformed in malformed_rows:
+                with self.subTest(label=label):
+                    for side, rows in zip(("before", "after"), valid_rows):
+                        (root / side / "results.json").write_text(json.dumps([{
+                            "kind": "saved-project",
+                            "files": malformed(rows),
+                        }]))
+                    errors = check_session_roots(
+                        root / "before", root / "after", "controlled", case="M-SAVE-001")
+                    self.assertTrue(any("requires exactly autosave.ptn and autosave.pset files"
+                                        in error for error in errors), errors)
+
+            for side, rows in zip(("before", "after"), valid_rows):
+                (root / side / "results.json").write_text(json.dumps([{
+                    "kind": "saved-project",
+                    "files": [rows[0], {"name": "autosave.pset"}],
+                }]))
+            errors = check_session_roots(
+                root / "before", root / "after", "controlled", case="M-SAVE-001")
+            self.assertTrue(any("autosave.pset SHA is missing or invalid" in error
+                                for error in errors), errors)
+
     def test_archived_project_result_rows_allow_only_the_verified_ptn_hash(self):
         from ui_migration_gate import compare_results_with_verified_project
 
