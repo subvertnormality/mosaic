@@ -1779,7 +1779,10 @@ def route_fixed_note(c,source):
     c.ui.route_fixed_note_from_modulation_source(source)
 
 def toolkit_parameter_group(c,name):
-    c.ui.enter_native_levels_menu()
+    # This caller begins on the retained Matrix value screen, unlike the clock
+    # callers which begin in the usual native-menu context. Preserve its
+    # original E1+4, K3 recipe without first backing out with K1.
+    c.ui.turn(1,4);c.ui.press_key(3)
     c.ui.select_native_parameter_group(name)
 
 def macro_route_clear(c):
