@@ -1,4 +1,4 @@
-"""Failed saves and autosave (README line 1054).
+"""Failed saves and autosave (README save/load autosave paragraph).
 
 README: a rejected load suspends autosaving; "saving a named project ... resumes the
 normal idle autosave interval. A failed save leaves autosaving suspended." Part B
@@ -14,7 +14,7 @@ from persisted_digest import project_digest
 
 
 def autosave_failure(c):
-    from persisted_ranges import select_project_action, select_project_file
+    from contract.persisted_range_rejection import select_project_action, select_project_file
     from frame_oracle import render
     c.configure()
     data = c.data_directory
