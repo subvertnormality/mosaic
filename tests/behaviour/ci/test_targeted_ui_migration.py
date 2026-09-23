@@ -218,6 +218,21 @@ class TargetedMigrationTests(unittest.TestCase):
                 result = targeted.check_source_delta(
                     Path("before"), Path("after"), ["M-SCALE-LOCK-003"])
                 self.assertEqual(result["changed_behaviour_paths"], [case_file])
+            ui_test = "tests/behaviour/test_ui.py"
+            changed_case_and_ui_test = {**changed_case, ui_test:
+                                        ("100644", "blob", "e" * 40)}
+            with patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, tests, changed_case_and_ui_test]):
+                result = targeted.check_source_delta(
+                    Path("before"), Path("after"), ["M-SCALE-LOCK-003"])
+                self.assertEqual(result["changed_behaviour_paths"],
+                                 [case_file, ui_test])
+            with patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, tests,
+                    {**tests, ui_test: ("100644", "blob", "e" * 40)}]):
+                with self.assertRaisesRegex(ValueError, "UI unit tests changed without"):
+                    targeted.check_source_delta(
+                        Path("before"), Path("after"), ["M-SCALE-LOCK-003"])
             symlink_case = {**tests, case_file: ("120000", "blob", "e" * 40)}
             with patch.object(targeted, "tree_entries",
                               side_effect=[production, production, tests, symlink_case]):
