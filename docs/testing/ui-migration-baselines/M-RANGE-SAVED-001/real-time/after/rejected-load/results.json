@@ -1,0 +1,29 @@
+[
+  {
+    "kind": "rejected-load-file-preservation",
+    "deadline": 1,
+    "checked_filenames": [
+      "autosave.pset",
+      "autosave.ptn"
+    ],
+    "preserved": true,
+    "passed": true
+  },
+  {
+    "kind": "rejected-load-file-preservation",
+    "deadline": 2,
+    "checked_filenames": [
+      "autosave.pset",
+      "autosave.ptn"
+    ],
+    "preserved": true,
+    "passed": true
+  },
+  {
+    "kind": "malformed-range-cold-rejection",
+    "visible_reason": "Slot 1 ch 1 reversed",
+    "no_invalid_playback": true,
+    "source_preserved": true,
+    "passed": true
+  }
+]
