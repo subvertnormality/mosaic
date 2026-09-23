@@ -6,7 +6,6 @@
   "hardware_performance.py",
   "harmony_merge_workflow.py",
   "lock_lead_clock_matrix.py",
-  "midi_mapping.py",
   "midi_mapping_targets.py",
   "modulation_interactions.py",
   "numeric_merging.py",
