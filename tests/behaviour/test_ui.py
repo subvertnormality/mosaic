@@ -87,6 +87,8 @@ class UiMapTests(unittest.TestCase):
             "trig_probability": "Trig Probability",
             "chord_note_arpeggio": "Chord Note Arpeggio",
             "chord_pattern": "Chord Pattern",
+            "random_note": "Random Note",
+            "twos_random_note": "Twos Random Note",
         })
 
     def test_mosaic_option_keys_match_documented_native_labels(self):
@@ -455,7 +457,9 @@ class UiInputTests(unittest.TestCase):
 
         driver, ui = self.ui()
         for key, label in (("fixed_note", "Fixed Note"),
-                           ("quantised_fixed_note", "Quantised Fixed Note")):
+                           ("quantised_fixed_note", "Quantised Fixed Note"),
+                           ("random_note", "Random Note"),
+                           ("twos_random_note", "Twos Random Note")):
             for offset in (None, 0, 2, 49, -1):
                 with self.subTest(key=key, offset=offset):
                     with patch.object(ui, "assign_trig_parameter",
@@ -648,6 +652,73 @@ class UiInputTests(unittest.TestCase):
             ("header", "midi_config", {"channel": 1}),
         ])
         self.assertEqual(selected, [2])
+
+    def test_fixed_note_domain_uses_semantic_ui_and_preserves_input_trace(self):
+        from types import ModuleType, SimpleNamespace
+        from trig_parameter_interactions import fixed_note_domain
+
+        driver, ui = self.ui()
+        ui.expect_header = lambda page, **params: driver.calls.append(("header", page, params))
+        ui.assign_trig_parameter_key = lambda parameter: driver.calls.append(
+            ("assign_trig_parameter_key", parameter)
+        )
+        case = SimpleNamespace(
+            ui=ui,
+            clock_mode="controlled-experimental",
+            results=[],
+            configure=lambda: self.fail("case-level raw setup must not be used"),
+            enc=lambda *args: self.fail("case-level raw encoder must not be used"),
+            action=lambda **kwargs: self.fail("case-level raw action must not be used"),
+            elapse=driver.elapse,
+            playback=lambda *args, **kwargs: [
+                {"logical_ns": index * 166666666} for index in range(4)
+            ],
+        )
+        cases = ModuleType("cases")
+        cases.assign_trig_parameter = lambda *args, **kwargs: self.fail(
+            "case-level native assignment helper must not be used"
+        )
+        cases.assert_durations = lambda context, notes, lengths: self.assertEqual(
+            lengths, [1, 1, 1]
+        )
+
+        with patch.dict(sys.modules, {"cases": cases}):
+            fixed_note_domain(case, start=0, count=1)
+
+        self.assertEqual(driver.calls, [
+            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+            ("tap", 5, 8),
+            ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
+            ("tap", 5, 8),
+            ("tap", 1, 7), ("tap", 2, 6), ("tap", 3, 5), ("tap", 4, 4),
+            ("tap", 5, 8),
+            ("tap", 1, 1), ("tap", 2, 2), ("tap", 3, 3), ("tap", 4, 4),
+            ("tap", 3, 8), ("tap", 1, 2),
+            ("hold_tap", (1, 4), (4, 4)),
+            ("led_values", [(1, 2)], [15]),
+            ("header", "midi_config", {"channel": 1}),
+            ("enc", 1, -3),
+            ("assign_trig_parameter_key", "fixed_note"),
+            ("enc", 2, 1), ("assign_trig_parameter_key", "quantised_fixed_note"),
+            ("enc", 3, 8),
+            ("enc", 2, 1), ("assign_trig_parameter_key", "random_note"),
+            ("enc", 3, 4),
+            ("enc", 2, 1), ("assign_trig_parameter_key", "twos_random_note"),
+            ("enc", 3, 4),
+            ("enc", 2, -3), ("enc", 3, 1),
+            ("elapse", .05), ("action", {"type": "enc", "n": 3, "delta": -126}),
+            ("elapse", .15),
+            ("enc", 2, 1), ("elapse", .05),
+            ("action", {"type": "enc", "n": 3, "delta": -126}), ("elapse", .15),
+            ("enc", 2, 1), ("elapse", .05),
+            ("action", {"type": "enc", "n": 3, "delta": -126}), ("elapse", .15),
+            ("enc", 2, 1), ("elapse", .05),
+            ("action", {"type": "enc", "n": 3, "delta": -126}), ("elapse", .15),
+        ])
+        self.assertEqual(
+            [(result["phase"], result["pitches"]) for result in case.results],
+            [("0", [0, 0, 0, 0]), ("all-overrides-off", [60, 62, 64, 65])],
+        )
 
     def test_set_mosaic_options_preserves_observed_seek_recipe_and_results(self):
         from ui import Ui

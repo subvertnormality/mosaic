@@ -161,6 +161,8 @@ TRIG_PARAMETERS = {
     "fixed_note": "Fixed Note",
     "quantised_fixed_note": "Quantised Fixed Note",
     "trig_probability": "Trig Probability",
+    "random_note": "Random Note",
+    "twos_random_note": "Twos Random Note",
     "chord_note_arpeggio": "Chord Note Arpeggio",
     "chord_pattern": "Chord Pattern",
 }

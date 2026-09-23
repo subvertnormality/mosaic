@@ -1,14 +1,14 @@
 """Native stock-parameter precedence; literal MIDI and musical-time oracles."""
 
 def fixed_note_domain(c,start=0,count=16):
-    from cases import assign_trig_parameter,assert_durations
+    from cases import assert_durations
     assert 0<=start<128 and 1<=count<=16 and start+count<=128
-    c.configure();c.enc(1,-3)
-    assign_trig_parameter(c,'Fixed Note')
-    for label,value in [('Quantised Fixed Note',7),('Random Note',4),('Twos Random Note',4)]:
-        c.enc(2,1);assign_trig_parameter(c,label)
-        c.enc(3,value+(1 if label=='Quantised Fixed Note' else 0))
-    c.enc(2,-3);c.enc(3,start+1)
+    c.ui.configure();c.ui.turn(1,-3)
+    c.ui.assign_trig_parameter_key('fixed_note')
+    for parameter,value in [('quantised_fixed_note',7),('random_note',4),('twos_random_note',4)]:
+        c.ui.turn(2,1);c.ui.assign_trig_parameter_key(parameter)
+        c.ui.set_value(value+(1 if parameter=='quantised_fixed_note' else 0))
+    c.ui.turn(2,-3);c.ui.set_value(start+1)
     def phrase(pitches,label):
         notes=c.playback([(1,[144,pitch,velocity]) for pitch,velocity in zip(pitches,(127,117,107,97))],cycles=2)
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -19,15 +19,15 @@ def fixed_note_domain(c,start=0,count=16):
         assert_durations(c,notes,[1]*(len(notes)-1))
         c.results.append(dict(kind='fixed-note-precedence',phase=label,pitches=pitches,other_sources=['pattern','quantised-fixed7','random4','twos4'],timing_errors=errors,passed=True))
     for pitch in range(start,start+count):
-        if pitch>start:c.enc(3,1)
+        if pitch>start:c.ui.set_value(1)
         phrase([pitch]*4,str(pitch))
     if start+count==128:
-        c.enc(3,3);phrase([127]*4,'upper-clamp')
+        c.ui.set_value(3);phrase([127]*4,'upper-clamp')
     # Disable all four sources using real encoder saturation, then require the
     # original four-note/velocity phrase. No inferred random-output golden.
     for slot in (1,2,3,4):
-        if slot>1:c.enc(2,1)
-        c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+        if slot>1:c.ui.turn(2,1)
+        c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
     phrase([60,62,64,65],'all-overrides-off')
 
 
