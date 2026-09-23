@@ -351,7 +351,7 @@ def euclidean_workflow(c):
     c.results.append(dict(kind='workflow-check',name='left-and-center-reset',passed=True))
     c.ui.tap_control("paint");c.ui.expect_steps({1:"selected",4:"selected",7:"dark"});c.ui.tap_control("paint");c.playback(baseline)
     c.ui.tap_control("euclidean_fill_boundary") # fill32, exceeding length8: every step selected
-    c.ui.tap_control("paint");c.ui.expect_steps({1:"dark",4:"dark",5:"selected",61:"selected"});c.ui.tap_control("paint")
+    c.ui.tap_control("paint");c.ui.expect_steps({1:"dark",4:"dark",5:"selected",64:"selected"});c.ui.tap_control("paint")
     c.ui.expect_steps({step:"selected" if step>4 else "off" for step in range(1,65)})
     c.playback([(1,[144,n,100]) for n in [67,69,71,62]]);c.results.append(dict(kind='workflow-check',name='dense-fill-boundary',passed=True))
 
