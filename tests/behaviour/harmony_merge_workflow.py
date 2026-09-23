@@ -437,11 +437,11 @@ def pattern_harmony_workflow(c):
     # onset phase and note ownership.
     c.ui.song_editor(); c.ui.hold_control_tap(
         "song_pattern_slot", "song_pattern_slot", held_index=1, target_index=2)
-    c.ui.select_song_slot(2)
+    c.ui.tap_control("song_pattern_slot", 2)
     copied_song_notes = c.playback(mapped, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, copied_song_notes,
                                       'pattern-copied-song-entry')
-    c.ui.select_song_slot(1)
+    c.ui.tap_control("song_pattern_slot", 1)
     source_song_notes = c.playback(mapped, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, source_song_notes,
                                       'pattern-source-song-reentry')
