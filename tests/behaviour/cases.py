@@ -1780,14 +1780,15 @@ def route_fixed_note(c,source):
     c.ui.route_fixed_note_from_modulation_source(source)
 
 def toolkit_parameter_group(c,name):
-    c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,v in enumerate(roots) if v['name']==name)
-    c.enc(2,position);c.key(3)
+    # This caller begins on the retained Matrix value screen, unlike the clock
+    # callers which begin in the usual native-menu context. Preserve its
+    # original E1+4, K3 recipe without first backing out with K1.
+    c.ui.turn(1,4);c.ui.press_key(3)
+    c.ui.select_native_parameter_group(name)
 
 def macro_route_clear(c):
     route_fixed_note(c,'macro_1')
-    toolkit_parameter_group(c,'macro 1');c.ui.expect_native_menu_label('mod_active')
+    toolkit_parameter_group(c,'macro_1');c.ui.expect_native_menu_label('mod_active')
     c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_value');c.ui.turn(3,100);c.ui.press_key(1)
     c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
     # Return to the retained Matrix source selection, then zero its depth.
@@ -1806,7 +1807,7 @@ def held_macro_rebind(c):
 
 def pulse_lfo(c):
     route_fixed_note(c,'lfo_1')
-    toolkit_parameter_group(c,'lfo 1');c.ui.expect_native_menu_label('mod_clocked');c.ui.press_key(3)
+    toolkit_parameter_group(c,'lfo_1');c.ui.expect_native_menu_label('mod_clocked');c.ui.press_key(3)
     c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_beats');c.ui.turn(3,9)
     c.ui.turn(2,2);c.ui.expect_native_menu_label('mod_shape');c.ui.turn(3,2);c.ui.press_key(1)
     # A4-beat pulse with50% width is high for8 sixteenth notes and low for8.
