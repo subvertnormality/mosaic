@@ -120,6 +120,42 @@ class UiMapTests(unittest.TestCase):
             cells = grid_partition(page)
             self.assertEqual(len(cells), 128, page)
             self.assertEqual(len(set(cells)), 128, page)
+    def test_song_pattern_slot_ordinals_cover_all_six_rows_uniquely(self):
+        from ui_map import control_cell
+
+        expected = {
+            1: (1, 1), 16: (16, 1),
+            17: (1, 2), 48: (16, 3),
+            49: (1, 4), 96: (16, 6),
+        }
+        for ordinal, cell in expected.items():
+            with self.subTest(ordinal=ordinal):
+                self.assertEqual(control_cell("song_pattern_slot", ordinal), cell)
+        cells = {control_cell("song_pattern_slot", ordinal)
+                 for ordinal in range(1, 97)}
+        self.assertEqual(len(cells), 96)
+
+    def test_song_pattern_slot_rejects_invalid_ordinals(self):
+        from ui_map import control_cell
+
+        for ordinal in (0, 97, 1.5, "1", None, True):
+            with self.subTest(ordinal=ordinal), self.assertRaises(ValueError):
+                control_cell("song_pattern_slot", ordinal)
+
+    def test_song_editor_partition_assigns_all_slots_and_preserves_lower_controls(self):
+        from ui_map import grid_partition
+
+        cells = grid_partition("song_editor")
+        for ordinal in range(1, 97):
+            x = (ordinal - 1) % 16 + 1
+            y = (ordinal - 1) // 16 + 1
+            with self.subTest(ordinal=ordinal):
+                self.assertEqual(cells[(x, y)], ("song_pattern_slot", ordinal))
+        self.assertEqual(cells[(8, 7)], ("global_pattern_length", 8))
+        self.assertEqual(cells[(1, 8)], ("play_stop", None))
+        self.assertEqual(len(cells), 128)
+        self.assertEqual(len(set(cells)), 128)
+
     def test_song_pattern_slots_have_stable_row_one_keys(self):
         from ui_map import control_cell
 
@@ -182,6 +218,22 @@ class UiInputTests(unittest.TestCase):
         driver, ui = self.ui()
         ui.channel_page("harmony", "masks", confirm=False)
         self.assertEqual(driver.calls, [("enc", 1, 7)])
+
+    def test_song_pattern_copy_and_leds_use_first_and_last_semantic_slots(self):
+        driver, ui = self.ui()
+
+        ui.copy_slot(1, 96, control="song_pattern_slot")
+        ui.expect_leds({
+            ("song_pattern_slot", 1): "selected",
+            ("song_pattern_slot", 96): "in_range",
+        })
+
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 1, "y": 1, "state": 1}),
+            ("tap", 16, 6),
+            ("action", {"type": "grid", "x": 1, "y": 1, "state": 0}),
+            ("led_values", [(1, 1), (16, 6)], [15, 5]),
+        ])
 
     def test_note_degree_and_merge_led_keep_the_existing_physical_recipe(self):
         driver, ui = self.ui()

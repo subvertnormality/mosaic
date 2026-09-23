@@ -207,7 +207,9 @@ def control_cell(control, index=None):
     if control == "song_slot":
         return index, 3
     if control == "song_pattern_slot":
-        return index, 1
+        if type(index) is not int or not 1 <= index <= 96:
+            raise ValueError("song pattern slot must be an integer in 1..96")
+        return (index - 1) % CHANNEL_COUNT + 1, (index - 1) // CHANNEL_COUNT + 1
     if control == "scale_slot":
         return index, 3
     if control == "channel_scale_slot":
@@ -262,16 +264,14 @@ def grid_partition(page):
     cells = {}
     for y in range(1, 9):
         for x in range(1, CHANNEL_COUNT + 1):
-            if y >= 4:
+            if page == "song_editor" and y <= 6:
+                owner = ("song_pattern_slot", (y - 1) * CHANNEL_COUNT + x)
+            elif y >= 4:
                 owner = ("step", (y - 4) * 16 + x)
             elif page == "channel_editor" and y == 1:
                 owner = ("channel", x)
-            elif page == "song_editor" and y == 1:
-                owner = ("song_pattern_slot", x)
             elif y == 2:
                 owner = ("pattern_slot", x)
-            elif y == 3 and page == "song_editor":
-                owner = ("song_slot", x)
             elif y == 3 and page == "scale_editor":
                 owner = ("scale_slot", x)
             else:
