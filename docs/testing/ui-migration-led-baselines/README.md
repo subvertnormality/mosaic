@@ -38,3 +38,12 @@ duration/MIDI LED records are stored here as a second immutable migration
 stage, alongside the length LED records. The targeted gate passed in both
 real-time and controlled-time lanes, with `complete_regression_run: false`;
 it is not a substitute for the aggregate behaviour campaign.
+
+The editor LED reexpression for `M-EDIT-005` also lives here because an
+earlier immutable record exists in `ui-migration-cases-baselines/`. Its
+strict raw/candidate pair is `8767bd1eab3c9958bd9756b91e53edd5cd18ea5e`
+and `bf1e4c1abd8731134213100f40e3119f9a37583a`. GitHub Actions run
+`35932086040` passed in both timing lanes after a failed grouped run had
+reported a native `matron` shutdown crash on the raw side. That failure
+artifact remains separately preserved; this successful retry has its own
+source manifests, results, recipes and provenance.
