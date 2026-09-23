@@ -16,10 +16,12 @@ def serializer_source(c):
 
 def saved_range_compatibility(c,legacy=False):
     from cases import assert_durations
-    c.configure();c.tap(6,8)
+    c.configure();c.ui.song_editor()
     # Author the highest song slot through the actual copy/select gestures.
-    c.hold_tap((1,1),(16,6));c.tap(16,6)
-    c.led_values([(1,1),(16,6)],[7,15]);c.tap(3,8)
+    c.ui.copy_slot(1,96,control='song_pattern_slot')
+    c.ui.tap_control('song_pattern_slot',96)
+    c.ui.expect_leds({('song_pattern_slot',1):'alternate',('song_pattern_slot',96):'selected'})
+    c.ui.menu('channel_editor')
     c.playback([(1,[144,p,v]) for p,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2)
     c.elapse(59);c.elapse(2)
     c.wait(lambda _:all((c.data_directory/n).is_file() for n in ['autosave.ptn','autosave.pset']))
@@ -38,15 +40,16 @@ def saved_range_compatibility(c,legacy=False):
         out=c.out/('compatible-load-'+str(generation));out.mkdir()
         loaded=Driver(out,project_seed=next_seed,**c.launch_options)
         try:
-            loaded.tap(3,8)
-            cells=[((i-1)%16+1,(i-1)//16+4) for i in range(1,65)]
-            loaded.led_values(cells,[15 if i==3 else 0 for i in range(1,65)])
+            loaded.ui.menu('channel_editor')
+            loaded.ui.expect_steps({i:('selected' if i==3 else 'dark') for i in range(1,65)})
             notes=loaded.playback([(1,[144,64,107])],cycles=6)
             assert_durations(loaded,notes,[1]*5)
             field='logical_ns' if loaded.clock_mode=='controlled-experimental' else 'monotonic_ns'
             tolerance=2e-9 if loaded.clock_mode=='controlled-experimental' else .01
             for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
-            loaded.tap(6,8);loaded.led_values([(1,1),(16,6)],[7,15]);loaded.tap(3,8)
+            loaded.ui.song_editor()
+            loaded.ui.expect_leds({('song_pattern_slot',1):'alternate',('song_pattern_slot',96):'selected'})
+            loaded.ui.menu('channel_editor')
             before=(loaded.data_directory/'autosave.ptn').stat().st_mtime_ns
             loaded.elapse(59);loaded.elapse(2)
             loaded.wait(lambda _:(loaded.data_directory/'autosave.ptn').stat().st_mtime_ns>before)
