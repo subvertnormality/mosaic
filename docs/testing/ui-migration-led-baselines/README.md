@@ -1,4 +1,4 @@
-# Recording LED oracle migration evidence
+# LED oracle migration evidence
 
 The strict targeted CI before/after records for the later recording LED-oracle
 reexpression live here because `ui-migration-cases-baselines/` already contains
@@ -19,3 +19,15 @@ The same source pair also passed for M-REC-001 through M-REC-004 in run
 `35918866295`; those records live in `ui-migration-cases-baselines/`.
 All three targeted reports set `complete_regression_run` to `false`, as required
 for selected-case evidence rather than a full regression campaign.
+
+## Length and duration LED assertions
+
+The later semantic LED reexpression for `M-LEN-001` through `M-LEN-004`
+is also stored here because their earlier canonical migration records already
+exist in `ui-migration-cases-baselines/`; those records were not overwritten.
+GitHub Actions run `35928530231` passed the strict gate in real-time and
+controlled-time lanes for the raw physical-LED source
+`6a93b8861996f1ef65e29a644545a7262b7b0b73` and semantic candidate
+`612d1802ce461f7557a16380bfa1cc7b6bb11232`. Both sides used the same
+UI map, runner, gate, and application source. Its targeted report retains
+`complete_regression_run: false`.
