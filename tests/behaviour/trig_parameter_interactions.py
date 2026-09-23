@@ -187,7 +187,7 @@ def probability_endpoint_locks(c):
 
 
 def seeded_probability(c,probability=50,opportunities=64):
-    from cases import assign_trig_parameter,assert_durations
+    from cases import assert_durations
     import subprocess
     assert probability in (1,50,99)
     # Separate Lua process uses the native PRNG interface, not Mosaic's
@@ -206,11 +206,11 @@ def seeded_probability(c,probability=50,opportunities=64):
     # A second channel carries the same authored four-step phrase at100%.
     # Its raw MIDI output independently exposes every opportunity, including
     # the first accepted note's position and the complete rejected tail.
-    c.tap(2,1);c.screen_header('Ch. 2 Device Config',selected=5)
-    c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.led_values([(2,1),(1,2)],[15,15])
-    c.tap(1,1);c.enc(1,-3);assign_trig_parameter(c,'Trig Probability');c.enc(3,probability+1)
-    before=c.snapshot()['midi_count'];c.tap(1,8)
+    c.ui.select_channel(2);c.ui.expect_header('midi_config',channel=2)
+    c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
+    c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.expect_leds({('channel',2):'selected',('pattern_slot',1):'selected'})
+    c.ui.select_channel(1);c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key('trig_probability');c.ui.set_value(probability+1)
+    before=c.snapshot()['midi_count'];c.ui.play()
     def notes(state):
         return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
     def reference(state):return [e for e in notes(state) if e['port']==2 and e['bytes'][0]==145]
@@ -223,7 +223,7 @@ def seeded_probability(c,probability=50,opportunities=64):
     assert actual==expected,dict(expected=expected,actual=actual)
     ref_expected=[(2,[145,(60,62,64,65)[i%4],(127,117,107,97)[i%4]]) for i in range(opportunities+1)]
     assert [(e['port'],e['bytes']) for e in ref]==ref_expected
-    c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+    c.ui.stop();c.wait(lambda state:state['midi_capture']['outstanding']==[])
     # The closing reference onset can be cut by Stop. Every earlier planned
     # reference note and accepted probability note must get its full duration.
     assert_durations(c,ref,[1]*opportunities)
