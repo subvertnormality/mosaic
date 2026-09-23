@@ -3,6 +3,7 @@
 import ast
 import importlib.util
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -119,7 +120,7 @@ class TargetedMigrationTests(unittest.TestCase):
             for lane in ("real-time", "controlled-experimental"):
                 output = root / lane
                 expected = output / "run-1/manifest.json"
-                def launch(command, cwd, stdout, stderr, check, expected=expected):
+                def launch(command, cwd, stdout, stderr, check, env, expected=expected):
                     expected.parent.mkdir(parents=True)
                     expected.write_text("{}")
                     self.assertEqual(command[command.index("--profile") + 1],
@@ -127,8 +128,11 @@ class TargetedMigrationTests(unittest.TestCase):
                     self.assertEqual(command[command.index("--mod-code-root") + 1],
                                      str(fixture))
                     self.assertIn("--mod-patches", command)
+                    self.assertEqual(env["MOSAIC_BEHAVIOUR_INSTALLATION"], str(install))
                     if lane == "controlled-experimental":
                         self.assertIn("--experimental-install", command)
+                    else:
+                        self.assertNotIn("--experimental-install", command)
                     return type("Completed", (), {"returncode": 0})()
                 with patch.object(targeted.subprocess, "run", side_effect=launch):
                     status, manifest = targeted.run_one(
@@ -136,6 +140,32 @@ class TargetedMigrationTests(unittest.TestCase):
                         "midi-modulation", fixture, True)
                 self.assertEqual(status, 0)
                 self.assertEqual(manifest, expected)
+
+    def test_nrpn_conversion_reads_inert_install_metadata_in_real_time(self):
+        from patch_params import _nrpn_conversion_installation
+
+        class DriverStub:
+            launch_options = {"experimental_install": None}
+
+        with tempfile.TemporaryDirectory() as temporary:
+            install = Path(temporary) / "installation.json"
+            install.write_text(json.dumps({"source": "/pinned/norns"}))
+            with patch.dict(os.environ,
+                            {"MOSAIC_BEHAVIOUR_INSTALLATION": str(install)}):
+                self.assertEqual(_nrpn_conversion_installation(DriverStub()),
+                                 {"source": "/pinned/norns"})
+
+    def test_nrpn_conversion_prefers_driver_installation_when_present(self):
+        from patch_params import _nrpn_conversion_installation
+
+        class DriverStub:
+            launch_options = {"experimental_install": "/driver/install.json"}
+
+        with patch.dict(os.environ,
+                        {"MOSAIC_BEHAVIOUR_INSTALLATION": "/other/install.json"}):
+            with patch("pathlib.Path.read_text", return_value='{"source":"/driver/norns"}'):
+                self.assertEqual(_nrpn_conversion_installation(DriverStub()),
+                                 {"source": "/driver/norns"})
 
     def test_manifest_rejects_symlinked_file_and_ancestor_before_hashing(self):
         with tempfile.TemporaryDirectory() as temporary:

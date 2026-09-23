@@ -9,6 +9,7 @@ import argparse
 import ast
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
@@ -289,9 +290,14 @@ def run_one(source, case, lane, output, install, profile="base-midi",
         command.extend(("--profile", profile, "--mod-code-root", str(mod_code_root)))
         if mod_patches:
             command.append("--mod-patches")
+    # This is inert converter metadata. Keep the real-time emulator launch options
+    # identical while making the pinned norns source available to migration cases.
+    environment = os.environ.copy()
+    environment["MOSAIC_BEHAVIOUR_INSTALLATION"] = str(install)
     with (output / "process.log").open("w") as log:
         status = subprocess.run(command, cwd=source, stdout=log,
-                                stderr=subprocess.STDOUT, check=False).returncode
+                                stderr=subprocess.STDOUT, check=False,
+                                env=environment).returncode
     return status, single_manifest(output)
 
 

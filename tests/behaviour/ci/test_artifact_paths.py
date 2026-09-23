@@ -51,11 +51,20 @@ class Tests(unittest.TestCase):
                 path = run / folder
                 path.mkdir()
                 (path / 'private.json').write_text('private')
+            for folder in ('generated-project', 'pre-policy-seed'):
+                path = run / folder
+                path.mkdir()
+                (path / 'autosave.ptn').write_text('generated fixture')
+                (path / 'autosave.pset').write_text('generated numeric fixture')
             actual = selected_files(patterns, root)
             prefix = 'mosaic-ui-targeted/M-TEST-001/real-time/after/session/'
             self.assertTrue({prefix + 'native/' + name for name in
                              ('matron.log', 'crone.log', 'cleanup.json',
                               'native-events.jsonl')} <= actual)
+            self.assertEqual({name for name in actual if name.endswith('autosave.ptn')},
+                             {prefix + 'generated-project/autosave.ptn',
+                              prefix + 'pre-policy-seed/autosave.ptn'})
+            self.assertFalse(any(name.endswith('autosave.pset') for name in actual))
             self.assertFalse(any('/code/' in name or '/data/' in name
                                  for name in actual))
 
