@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "959c814f464a004f9eed92295b1bf01452db60cc",
+  "after_sha": "90595bb99717de83f4886ec1acac7bca1a99054a",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-HARMONY-REVOICE-001",
+    "M-HARMONY-PATTERN-CLOCKS-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-HARMONY-REVOICE-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-REVOICE-001/real-time/before/90a3b7e787564c85926d9a29d6702f8d/manifest.json",
+              "manifest_sha256": "b80377d1d434e96bdf0a3d648b8d8a320e7c3f6a9d9772bf3345ed8569143dbf"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-REVOICE-001/real-time/after/39516073924e49e692114219857ae125/manifest.json",
+              "manifest_sha256": "2363f4f7e577e067e160865fcf1836bcb103a5d5e332b5b56103e2a21049aed8"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-REVOICE-001/controlled-experimental/before/746d11ae59524760a1f69159e7a3d0b4/manifest.json",
+              "manifest_sha256": "5c6ab8bf27cafa2938eeb2b92a402d428bedb1d534a3f0d96a504bf3e25097b7"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-REVOICE-001/controlled-experimental/after/f58d37307230458ab8aabf116fa7b4d5/manifest.json",
+              "manifest_sha256": "6be1458ae5ca64a92dc06c45b8ce68c43231b06720be6fd2de35ffea2c83d3a0"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-HARMONY-PATTERN-CLOCKS-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PATTERN-CLOCKS-001/real-time/before/b812bc59dafd4d40a51b0380afaaca88/manifest.json",
+              "manifest_sha256": "4f3e74bc187bbd815b07b6c17e922220786dd14f82479fef95d13cdaae22df26"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PATTERN-CLOCKS-001/real-time/after/53961edf5040479f9c76646000bc4bd8/manifest.json",
+              "manifest_sha256": "b808baaef23cc251fbd4115411125218b4060473ffb96f4666258b5e56b2e521"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PATTERN-CLOCKS-001/controlled-experimental/before/87c95e2e24694f58a85dc4b435945a40/manifest.json",
+              "manifest_sha256": "a47d3bc2ee5f3e1e9efa9301d7cefb6ceae4c243c65d74a3af87c12a6ba28b4f"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-PATTERN-CLOCKS-001/controlled-experimental/after/fa3c9eb5d24c4a938020761574e27ce5/manifest.json",
+              "manifest_sha256": "40fb2d8001d7aa5bafcb24c6db3cb94f400219b798b8bd21a46864786a41e46d"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
