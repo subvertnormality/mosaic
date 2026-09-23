@@ -85,6 +85,93 @@ class UiMapTests(unittest.TestCase):
         euclidean_workflow(case)
         self.assertIn({1: "dark", 4: "dark", 5: "selected",
                        64: "selected"}, probes)
+        self.assertEqual(list(probes[0]), list(range(1, 65)))
+        self.assertEqual(list(probes[1]), list(range(1, 65)))
+
+    def test_algorithm_workflow_controls_resolve_to_raw_baseline_cells(self):
+        from ui import Ui
+        from ui_map import control_cell
+
+        expected = {
+            "tresillo_tool": (13, 2),
+            "drum_pattern_two": (12, 2),
+            "rhythm_fill_minimum": (2, 2),
+            "rhythm_fill_maximum": (10, 2),
+            "rhythm_factor_minimum": (2, 3),
+            "rhythm_factor_maximum": (10, 3),
+            "numeric_prime_one": (15, 2),
+        }
+        driver = FakeDriver()
+        ui = Ui(driver)
+        expected_taps = []
+        for control, cell in expected.items():
+            with self.subTest(control=control):
+                self.assertEqual(control_cell(control), cell)
+                ui.tap_control(control)
+                expected_taps.append(("tap", *cell))
+        for bank in range(1, 6):
+            with self.subTest(control="drum_bank", bank=bank):
+                cell = (11 + bank, 3)
+                self.assertEqual(control_cell("drum_bank", bank), cell)
+                ui.tap_control("drum_bank", bank)
+                expected_taps.append(("tap", *cell))
+        for mask in range(1, 5):
+            with self.subTest(control="numeric_mask", mask=mask):
+                cell = (11 + mask, 3)
+                self.assertEqual(control_cell("numeric_mask", mask), cell)
+                ui.tap_control("numeric_mask", mask)
+                expected_taps.append(("tap", *cell))
+        self.assertEqual(driver.calls, expected_taps)
+
+    def test_m_alg_001_to_004_literal_tap_controls_are_mapped(self):
+        from ui_map import control_cell
+
+        source = ast.parse((BEHAVIOUR / "cases.py").read_text())
+        names = {
+            "euclidean_workflow", "tresillo_setup", "tresillo_rhythm",
+            "tresillo_multipliers", "tresillo_drum_boundary",
+            "rhythm_bank_workflow",
+        }
+        functions = {node.name: node for node in source.body
+                     if isinstance(node, ast.FunctionDef)}
+        self.assertTrue(names <= functions.keys(), names - functions.keys())
+        controls = set()
+        for name in names:
+            function = functions[name]
+            literal_iterables = {
+                node.target.id: tuple(item.value for item in node.iter.elts)
+                for node in ast.walk(function)
+                if isinstance(node, ast.For)
+                and isinstance(node.target, ast.Name)
+                and isinstance(node.iter, ast.Tuple)
+                and all(isinstance(item, ast.Constant)
+                        and isinstance(item.value, str) for item in node.iter.elts)
+            }
+            for node in ast.walk(function):
+                if not (isinstance(node, ast.Call)
+                        and isinstance(node.func, ast.Attribute)
+                        and node.func.attr == "tap_control"
+                        and node.args):
+                    continue
+                control = node.args[0]
+                if isinstance(control, ast.Constant) and isinstance(control.value, str):
+                    controls.add(control.value)
+                elif isinstance(control, ast.Name):
+                    self.assertIn(control.id, literal_iterables, name)
+                    controls.update(literal_iterables[control.id])
+
+        for control in sorted(controls):
+            with self.subTest(control=control):
+                if control == "drum_bank":
+                    for index in range(1, 6):
+                        control_cell(control, index)
+                elif control == "numeric_mask":
+                    for index in range(1, 5):
+                        control_cell(control, index)
+                elif control == "pattern_note":
+                    control_cell(control, (1, 1))
+                else:
+                    control_cell(control)
 
     def test_pattern_note_mapping_covers_authored_rows_one_through_seven(self):
         from ui_map import control_cell

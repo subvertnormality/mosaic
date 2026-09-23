@@ -330,10 +330,19 @@ def euclidean_workflow(c):
     original={1,2,3,4}
     proposed={step for step in range(1,65) if (step-1)%8+1 in (1,4,7)}
     for overlap,new in ((0,15),(3,12)):
-        levels={step:("dark" if overlap==0 else "inactive") for step in original & proposed}
-        levels.update({step:("selected" if new==15 else "active") for step in proposed-original})
-        levels.update({step:"selected" for step in original-proposed})
-        levels.update({step:"off" for step in range(1,65) if step not in original|proposed})
+        shared = original & proposed
+        proposed_only = proposed - original
+        original_only = original - proposed
+        levels = {}
+        for step in range(1, 65):
+            if step in shared:
+                levels[step] = "dark" if overlap == 0 else "inactive"
+            elif step in proposed_only:
+                levels[step] = "selected" if new == 15 else "active"
+            elif step in original_only:
+                levels[step] = "selected"
+            else:
+                levels[step] = "off"
         c.ui.expect_steps(levels)
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='preview-does-not-paint',passed=True))
     c.ui.tap_control("cancel");c.ui.expect_steps({step:"selected" if step<=4 else "off" for step in range(1,9)})

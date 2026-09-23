@@ -48,6 +48,18 @@ RHYTHM_DOCTOR_CONTROLS = {
     "phrase_centre": (11, 8),
     "phrase_right": (12, 8),
 }
+
+# Pattern-algorithm workflow names share physical cells with some chooser
+# controls above, but refer to the legacy grid workflow under test.
+ALGORITHM_WORKFLOW_CONTROLS = {
+    "tresillo_tool": (13, 2),
+    "drum_pattern_two": (12, 2),
+    "rhythm_fill_minimum": (2, 2),
+    "rhythm_fill_maximum": (10, 2),
+    "rhythm_factor_minimum": (2, 3),
+    "rhythm_factor_maximum": (10, 3),
+    "numeric_prime_one": (15, 2),
+}
 RHYTHM_DOCTOR_SCREEN = {
     "header": {"bottom": 10},
     "tooltip": {"left": 0, "right": 100, "top": 55, "bottom": 64},
@@ -296,6 +308,10 @@ def control_cell(control, index=None):
         if index is not None:
             raise ValueError("Rhythm Doctor control %s does not take an index" % control)
         return RHYTHM_DOCTOR_CONTROLS[control]
+    if control in ALGORITHM_WORKFLOW_CONTROLS:
+        if index is not None:
+            raise ValueError("algorithm workflow control %s does not take an index" % control)
+        return ALGORITHM_WORKFLOW_CONTROLS[control]
     if control == "step":
         return step_cell(index)
     if control == "channel":
@@ -304,6 +320,14 @@ def control_cell(control, index=None):
         return index, 1
     if control == "pattern_slot":
         return index, 2
+    if control == "drum_bank":
+        if type(index) is not int or not 1 <= index <= 5:
+            raise ValueError("drum bank must be an integer in 1..5")
+        return 11 + index, 3
+    if control == "numeric_mask":
+        if type(index) is not int or not 1 <= index <= 4:
+            raise ValueError("numeric mask must be an integer in 1..4")
+        return 11 + index, 3
     if control == "pattern_select":
         if not 1 <= index <= CHANNEL_COUNT:
             raise ValueError("pattern selection must be in 1..%d" % CHANNEL_COUNT)
