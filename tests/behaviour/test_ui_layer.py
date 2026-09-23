@@ -60,6 +60,18 @@ class UiLayerGuardTests(unittest.TestCase):
             {"contract.chord_shapes"},
         )
 
+    def test_saved_range_rejection_contracts_have_one_owner(self):
+        from cases import CASES
+        from cases import rejected_manual_range
+
+        case_ids = {"M-RANGE-SAVED-001", "M-RANGE-SAVED-002"}
+        self.assertEqual(
+            {CASES[case_id]["run"].__module__ for case_id in case_ids},
+            {"contract.persisted_range_rejection"},
+        )
+        self.assertEqual(rejected_manual_range.__module__,
+                         "contract.persisted_range_rejection")
+
     def test_contract_classifier_follows_helpers_and_baseline_failures(self):
         from cases import CASES
         from ui_layer_guard import callable_is_contract, classify_contract_cases
