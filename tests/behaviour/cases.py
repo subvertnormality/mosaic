@@ -34,7 +34,7 @@ from recording_song_transition import recording_song_transition
 from recorded_same_key_sources import recorded_same_key_sources
 from recorded_note_page_key_held import recorded_note_page_key_held
 from trigless_slide_clock import trigless_slide_clock
-from recording_lock_song import recording_lock_song
+from contract.recording_lock_song import recording_lock_song
 from contract.song_divisions import song_tempo_divisions
 from contract.memory_wrap import memory_wrap,memory_retained_floor
 from scale_cache import scale_cache_saves
