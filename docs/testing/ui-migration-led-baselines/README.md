@@ -47,3 +47,10 @@ and `bf1e4c1abd8731134213100f40e3119f9a37583a`. GitHub Actions run
 reported a native `matron` shutdown crash on the raw side. That failure
 artifact remains separately preserved; this successful retry has its own
 source manifests, results, recipes and provenance.
+
+The same raw/candidate editor LED pair passed for `M-EDIT-001` through
+`M-EDIT-004` in GitHub Actions run `35933484155`, in both real-time and
+controlled-time lanes. These records live here together because
+`M-EDIT-004` already has an earlier immutable record in
+`ui-migration-cases-baselines/`. The targeted report remains partial
+(`complete_regression_run: false`).
