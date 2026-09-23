@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "6be0bce0df38c8ab18715814ccab97d1e3a049b5",
+  "after_sha": "bcc90876c6e4c05cc9b0b6e683ac25666bd703e5",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-PARAM-047"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/trig_parameter_interactions.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/trig_parameter_interactions.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-PARAM-047",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PARAM-047/real-time/before/8f4802379f664151a173b26ae6e0995c/manifest.json",
+              "manifest_sha256": "3e66a48628e18dd2427a7675b81eb576bc8d5e26d15c16511409c270f63fee64"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PARAM-047/real-time/after/fe1c07d64d52410bb794b74b7d898f7d/manifest.json",
+              "manifest_sha256": "254185e23b9ef1383a8277fa90a66b71bdb0e5bcc1b386c96af0ca072fdede4a"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PARAM-047/controlled-experimental/before/d4b53da996f047b8a37979918f16538f/manifest.json",
+              "manifest_sha256": "04ac496171885d7023447bffc7ba8a009eca0f47972b3150beb3d43bdfc167b0"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PARAM-047/controlled-experimental/after/536dbefc7c2b4142afb647180656d274/manifest.json",
+              "manifest_sha256": "f628849ad0b37e9f3f8b53fe44fac243463469b8a65fe98241f04a7e30b00df4"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
