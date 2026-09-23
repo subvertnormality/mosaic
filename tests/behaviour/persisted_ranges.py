@@ -16,7 +16,7 @@ def serializer_source(c):
     return str(source)
 
 def rejected_saved_range(c):
-    c.configure();c.elapse(59);c.elapse(2)
+    c.ui.configure();c.elapse(59);c.elapse(2)
     c.wait(lambda _:all((c.data_directory/name).is_file() for name in ['autosave.ptn','autosave.pset']))
     c.finish()
     original={name:digest(c.data_directory/name) for name in ['autosave.ptn','autosave.pset']}
