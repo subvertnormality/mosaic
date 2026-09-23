@@ -35,6 +35,7 @@ UI_SOURCE_ALLOWLIST = {
 PINNED_GATE_PATHS = (
     "tests/behaviour/ui_migration_gate.py",
     "tests/behaviour/ci/targeted-ui-migration.py",
+    "tests/behaviour/ci/compare_ptn_graph.lua",
 )
 
 
@@ -356,7 +357,7 @@ def execute(args):
                         lane_row["gate_errors"].append("%s: %s" % (side, error))
                 if len(roots) == 2:
                     lane_row["gate_errors"].extend(check_session_roots(
-                        roots["before"], roots["after"], gate_lane))
+                        roots["before"], roots["after"], gate_lane, case=case))
     finally:
         report["passed"] = (len(report["cases"]) == len(cases) and all(
             len(row["lanes"]) == len(LANES) and all(

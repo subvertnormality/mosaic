@@ -220,6 +220,7 @@ class TargetedMigrationTests(unittest.TestCase):
         tests = {"tests/behaviour/driver.py": ("100644", "blob", "c" * 40),
                  "tests/behaviour/scale_lock_precedence.py": ("100644", "blob", "d" * 40),
                  "tests/behaviour/ui_migration_gate.py": ("100644", "blob", "f" * 40),
+                 "tests/behaviour/ci/compare_ptn_graph.lua": ("100644", "blob", "0" * 40),
                  "tests/behaviour/ci/targeted-ui-migration.py": ("100644", "blob", "1" * 40)}
         case_file = "tests/behaviour/scale_lock_precedence.py"
         with patch.object(targeted, "selected_case_modules", return_value={case_file}):
@@ -362,6 +363,263 @@ class TargetedMigrationTests(unittest.TestCase):
                 '[{"type":"advance","nanoseconds":101}]')
             self.assertIn("normalized recipes differ", " ".join(
                 targeted.check_session_roots(root / "before", root / "after", "real-time")))
+
+    def test_patch_persistence_requires_equal_decoded_graph_and_preserves_raw_hashes(self):
+        import hashlib
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        lua = shutil.which("lua5.3") or shutil.which("lua")
+        if not lua:
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for side in ("before", "after"):
+                run = root / side
+                run.mkdir()
+                (run / "recipe.json").write_text("[]")
+                (run / "generated-project").mkdir()
+            before = (root / "before/generated-project/autosave.ptn")
+            after = (root / "after/generated-project/autosave.ptn")
+            before.write_text('return { {"autosave", {2}}, { shared={3}, again={3} }, { value=7 } }\n')
+            # Different table-pool layout and raw bytes; decoded field values
+            # and the shared child alias remain identical.
+            after.write_text('return { { "autosave", {3} }, { orphan=9 }, { again={4}, shared={4} }, { value=7 } }\n')
+            self.assertNotEqual(hashlib.sha256(before.read_bytes()).digest(),
+                                hashlib.sha256(after.read_bytes()).digest())
+            def save_results(side_path, pset_sha="c" * 64):
+                project_sha = hashlib.sha256(side_path.read_bytes()).hexdigest()
+                (side_path.parents[1] / "results.json").write_text(json.dumps([
+                    {"kind": "patch-autosave", "files": [
+                        {"name": "autosave.ptn", "sha256": project_sha},
+                        {"name": "autosave.pset", "sha256": pset_sha},
+                    ]},
+                ]))
+            save_results(before)
+            save_results(after)
+            self.assertEqual(check_session_roots(root / "before", root / "after",
+                                                 "controlled", case="M-PATCH-008"), [])
+            for changed in (
+                    'return { {"autosave", {2}}, { shared={3}, again={3} }, { value=8 } }\n',
+                    'return { {"autosave", {2}}, { shared={3}, again={4} }, { value=7 }, { value=7 } }\n',
+                    'return { {"autosave", {999}}, { shared={3}, again={3} }, { value=7 } }\n'):
+                after.write_text(changed)
+                save_results(after)
+                self.assertTrue(any("persisted project graphs differ" in error
+                                    for error in check_session_roots(
+                                        root / "before", root / "after", "controlled",
+                                        case="M-PATCH-008")))
+            after.write_text('return { { "autosave", {3} }, { orphan=9 }, { again={4}, shared={4} }, { value=7 } }\n')
+            save_results(after)
+            save_results(after, pset_sha="d" * 64)
+            self.assertTrue(any("controlled results differ" in error
+                                for error in check_session_roots(
+                                    root / "before", root / "after", "controlled",
+                                    case="M-PATCH-008")))
+            after.unlink()
+            self.assertTrue(any("missing persisted project artifact" in error
+                                for error in check_session_roots(
+                                    root / "before", root / "after", "controlled",
+                                    case="M-PATCH-009")))
+
+    def test_pre_policy_project_fixtures_are_compared_as_graphs(self):
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        import hashlib
+        import json
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for side in ("before", "after"):
+                run = root / side
+                run.mkdir()
+                (run / "recipe.json").write_text("[]")
+                (run / "results.json").write_text("[]")
+                fixture = "pre-policy-seed"
+                (run / fixture).mkdir()
+                project = run / fixture / "autosave.ptn"
+                project.write_text(
+                    'return { {"autosave", {2}}, { policy={3} }, { enabled=true } }\n')
+                (run / "results.json").write_text(json.dumps([{
+                    "kind": "pre-policy-project-fixture",
+                    "removed_fields": ["nrpn_policy_version", "nrpn_stored_modes"],
+                    "sha256": hashlib.sha256(project.read_bytes()).hexdigest(),
+                    "numeric_values_unchanged": True,
+                }]))
+            (root / "after/pre-policy-seed/autosave.ptn").write_text(
+                'return { { "autosave", {3} }, { spare=0 }, { policy={4} }, { enabled=true } }\n')
+            after_project = root / "after/pre-policy-seed/autosave.ptn"
+            (root / "after/results.json").write_text(json.dumps([{
+                "kind": "pre-policy-project-fixture",
+                "removed_fields": ["nrpn_policy_version", "nrpn_stored_modes"],
+                "sha256": hashlib.sha256(after_project.read_bytes()).hexdigest(),
+                "numeric_values_unchanged": True,
+            }]))
+            self.assertEqual(check_session_roots(
+                root / "before", root / "after", "controlled", case="M-PATCH-051"), [])
+            self.assertEqual(check_session_roots(
+                root / "before", root / "after", "controlled", case="M-PATCH-059"), [])
+            (root / "after/pre-policy-seed/autosave.ptn").write_text(
+                'return { {"autosave", {2}}, { policy={3} }, { enabled=false } }\n')
+            after_project = root / "after/pre-policy-seed/autosave.ptn"
+            (root / "after/results.json").write_text(json.dumps([{
+                "kind": "pre-policy-project-fixture",
+                "removed_fields": ["nrpn_policy_version", "nrpn_stored_modes"],
+                "sha256": hashlib.sha256(after_project.read_bytes()).hexdigest(),
+                "numeric_values_unchanged": True,
+            }]))
+            self.assertTrue(any("persisted project graphs differ for pre-policy-seed/autosave.ptn" in error
+                                for error in check_session_roots(
+                                    root / "before", root / "after", "controlled",
+                                    case="M-PATCH-059")))
+
+    def test_archived_project_result_rows_allow_only_the_verified_ptn_hash(self):
+        from ui_migration_gate import compare_results_with_verified_project
+
+        archived_pairs = (
+            ("patch-autosave", {
+                "kind": "patch-autosave", "files": [
+                    {"name": "autosave.ptn", "sha256": "2f5a39ca4c87b7b0c3fc0951fd69e6f571bee164ece9b4a93efbe930a4ee908b"},
+                    {"name": "autosave.pset", "sha256": "d7b81b2402067f472d9a7a317486444111cec332a33d1b7054b0c2aa9183f7fa"},
+                ]}, {
+                "kind": "patch-autosave", "files": [
+                    {"name": "autosave.ptn", "sha256": "28508a40bc409b87cc901db1774ec722606b7cbd3001d7ca73a851b527b7724d"},
+                    {"name": "autosave.pset", "sha256": "d7b81b2402067f472d9a7a317486444111cec332a33d1b7054b0c2aa9183f7fa"},
+                ]}, "2f5a39ca4c87b7b0c3fc0951fd69e6f571bee164ece9b4a93efbe930a4ee908b",
+                "28508a40bc409b87cc901db1774ec722606b7cbd3001d7ca73a851b527b7724d"),
+            ("patch-autosave", {
+                "kind": "patch-autosave", "files": [
+                    {"name": "autosave.ptn", "sha256": "9f6f77f6797158538a249b58ae187b3301fe7163d1b5a5b9f3672e371828f9b4"},
+                    {"name": "autosave.pset", "sha256": "c9d3d14e0170c9c189e179c670a0f8c383ce13c5e14d2a730d70be70b011bde2"},
+                ]}, {
+                "kind": "patch-autosave", "files": [
+                    {"name": "autosave.ptn", "sha256": "30a89766fb37223750eeb2589f6bd80b693ef825daed6e1bae0fbd65102cd0af"},
+                    {"name": "autosave.pset", "sha256": "c9d3d14e0170c9c189e179c670a0f8c383ce13c5e14d2a730d70be70b011bde2"},
+                ]}, "9f6f77f6797158538a249b58ae187b3301fe7163d1b5a5b9f3672e371828f9b4",
+                "30a89766fb37223750eeb2589f6bd80b693ef825daed6e1bae0fbd65102cd0af"),
+            ("pre-policy-project-fixture", {
+                "kind": "pre-policy-project-fixture",
+                "removed_fields": ["nrpn_policy_version", "nrpn_stored_modes"],
+                "sha256": "f5413b2e6055fe3bf8d08979254e5d1d040eb79a54d2ee54d6a46966bf9c9be6",
+                "numeric_values_unchanged": True}, {
+                "kind": "pre-policy-project-fixture",
+                "removed_fields": ["nrpn_policy_version", "nrpn_stored_modes"],
+                "sha256": "064a575659a2e895e28124f1dfa6127c33f16eb98e0c09e0400a22174db37038",
+                "numeric_values_unchanged": True},
+                "f5413b2e6055fe3bf8d08979254e5d1d040eb79a54d2ee54d6a46966bf9c9be6",
+                "064a575659a2e895e28124f1dfa6127c33f16eb98e0c09e0400a22174db37038"),
+            ("pre-policy-project-fixture", {
+                "kind": "pre-policy-project-fixture",
+                "removed_fields": ["nrpn_policy_version", "nrpn_stored_modes"],
+                "sha256": "949b978148972e56db02166d31c09bd5569612640457e4dc7a83431837c4dd84",
+                "numeric_values_unchanged": True}, {
+                "kind": "pre-policy-project-fixture",
+                "removed_fields": ["nrpn_policy_version", "nrpn_stored_modes"],
+                "sha256": "782e05e6f8544e0649be5d8259735d96ae1b8bbbf14aa4622c3cfac5eefe47ac",
+                "numeric_values_unchanged": True},
+                "949b978148972e56db02166d31c09bd5569612640457e4dc7a83431837c4dd84",
+                "782e05e6f8544e0649be5d8259735d96ae1b8bbbf14aa4622c3cfac5eefe47ac"),
+        )
+        for kind, before_entry, after_entry, before_sha, after_sha in archived_pairs:
+            with self.subTest(kind=kind):
+                self.assertEqual(compare_results_with_verified_project(
+                    [before_entry], [after_entry], "controlled", kind,
+                    before_sha, after_sha), [])
+
+        patch_before, patch_after = archived_pairs[0][1:3]
+        changed_pset = json.loads(json.dumps(patch_after))
+        changed_pset["files"][1]["sha256"] = "e" * 64
+        errors = compare_results_with_verified_project(
+            [patch_before], [changed_pset], "controlled", "patch-autosave",
+            archived_pairs[0][3], archived_pairs[0][4])
+        self.assertTrue(any("controlled results differ" in error for error in errors), errors)
+        duplicate = [patch_after, dict(patch_after)]
+        errors = compare_results_with_verified_project(
+            [patch_before], duplicate, "controlled", "patch-autosave",
+            archived_pairs[0][3], archived_pairs[0][4])
+        self.assertTrue(any("exactly one patch-autosave" in error for error in errors), errors)
+        errors = compare_results_with_verified_project(
+            [], [patch_after], "controlled", "patch-autosave",
+            archived_pairs[0][3], archived_pairs[0][4])
+        self.assertTrue(any("exactly one patch-autosave" in error for error in errors), errors)
+        other_payload = json.loads(json.dumps(patch_after))
+        other_payload["unrelated"] = "changed"
+        errors = compare_results_with_verified_project(
+            [patch_before], [other_payload], "controlled", "patch-autosave",
+            archived_pairs[0][3], archived_pairs[0][4])
+        self.assertTrue(any("controlled results differ" in error for error in errors), errors)
+        other_hash = {"kind": "other-artifact", "sha256": "e" * 64}
+        changed_other_hash = {"kind": "other-artifact", "sha256": "f" * 64}
+        errors = compare_results_with_verified_project(
+            [patch_before, other_hash], [patch_after, changed_other_hash],
+            "controlled", "patch-autosave", archived_pairs[0][3], archived_pairs[0][4])
+        self.assertTrue(any("controlled results differ" in error for error in errors), errors)
+
+    def test_persisted_project_gate_is_scoped_to_patch_recall_cases_and_controlled_lane(self):
+        from ui_migration_gate import check_session_roots
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for side in ("before", "after"):
+                (root / side).mkdir()
+                (root / side / "recipe.json").write_text("[]")
+                (root / side / "results.json").write_text("[]")
+            self.assertEqual(check_session_roots(root / "before", root / "after",
+                                                 "controlled", case="M-PAT-001"), [])
+            self.assertEqual(check_session_roots(root / "before", root / "after",
+                                                 "real-time", case="M-PATCH-008"), [])
+
+    def test_project_gate_fails_closed_when_lua_runtime_is_missing(self):
+        from unittest.mock import patch
+
+        from ui_migration_gate import check_session_roots
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                (run / "results.json").write_text("[]")
+                (run / "generated-project/autosave.ptn").write_text(
+                    'return { {"autosave", {2}}, { value=true } }\n')
+            with patch("ui_migration_gate.shutil.which", return_value=None):
+                errors = check_session_roots(
+                    root / "before", root / "after", "controlled", case="M-PATCH-008")
+        self.assertTrue(any("Lua 5.3 runtime unavailable" in error for error in errors), errors)
+
+    def test_project_result_gate_rejects_non_array_json_without_raising(self):
+        import json
+        import hashlib
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                project.write_text('return { {"autosave", {2}}, { value=true } }\n')
+                (run / "results.json").write_text(json.dumps([{
+                    "kind": "patch-autosave", "files": [{
+                        "name": "autosave.ptn",
+                        "sha256": hashlib.sha256(project.read_bytes()).hexdigest(),
+                    }],
+                }]))
+            (root / "after/results.json").write_text("null")
+            errors = check_session_roots(
+                root / "before", root / "after", "controlled", case="M-PATCH-008")
+        self.assertTrue(any("after results are not an array" in error for error in errors), errors)
 
     def test_dispatch_never_feeds_partial_report_to_full_aggregation(self):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
