@@ -3197,7 +3197,7 @@ from panic_hotplug import panic_hotplug
 from patch_params_batch import patch_boundaries,patch_play_recall
 from contract.patch_matrix import patch_cc_matrix
 
-from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_phrase,doubledecker_audition
+from contract.output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_phrase,doubledecker_audition
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 

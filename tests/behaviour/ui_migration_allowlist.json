@@ -6,7 +6,6 @@
   "harmony_merge_workflow.py",
   "lock_lead_clock_matrix.py",
   "numeric_merging.py",
-  "output_cases.py",
   "patch_params.py",
   "perf_calibration_emulator.py",
   "perf_dense.py",
