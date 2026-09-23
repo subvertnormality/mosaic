@@ -5,7 +5,6 @@
   "hardware_performance.py",
   "harmony_merge_workflow.py",
   "lock_lead_clock_matrix.py",
-  "modulation_interactions.py",
   "numeric_merging.py",
   "output_cases.py",
   "patch_params.py",
