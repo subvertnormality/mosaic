@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "91394ab69ff8a54f8273d7641220e3dc5447d10d",
+  "selected_cases": [
+    "M-REC-PARAM-022"
+  ],
+  "selected_modules": {
+    "tests/behaviour/recording_lifetimes.py": "M-REC-PARAM-022"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/recording_lifetimes.py",
+      "case": "M-REC-PARAM-022",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-f33633b4007740f9a6caefefb7aecc3d/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-f33633b4007740f9a6caefefb7aecc3d/manifest.json",
+      "manifest_sha256": "b525d832f071a38765a324908b12b8bd020a141d1296d7547627e00be7934701",
+      "passed": true
+    }
+  ],
+  "passed": true
+}
