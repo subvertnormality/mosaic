@@ -61,6 +61,69 @@ class FakeDriver:
 
 
 class UiMapTests(unittest.TestCase):
+    def test_euclidean_workflow_controls_match_raw_baseline_cells(self):
+        """Every semantic Euclidean tap retains the original authored cell."""
+        from ui import Ui
+        from ui_map import control_cell
+
+        expected = {
+            "pattern_note_c": ((None,), (5, 3)),
+            "pattern_note_d": ((None,), (6, 2)),
+            "pattern_note_e": ((None,), (7, 1)),
+            "pattern_note_f": ((None,), (8, 6)),
+            "channel_editor": ((None,), (3, 8)),
+            "pattern_editor": ((None,), (5, 8)),
+            "euclidean_tool": ((None,), (14, 2)),
+            "euclidean_fill_minimum": ((None,), (2, 2)),
+            "euclidean_fill_maximum": ((None,), (10, 2)),
+            "euclidean_rotation_minimum": ((None,), (2, 3)),
+            "euclidean_rotation_maximum": ((None,), (10, 3)),
+            "paint": ((None,), (16, 8)),
+            "cancel": ((None,), (14, 8)),
+            "shift_right": ((None,), (12, 8)),
+            "shift_left": ((None,), (10, 8)),
+            "shift_reset": ((None,), (11, 8)),
+            "euclidean_fill_boundary": ((None,), (9, 2)),
+        }
+
+        source = ast.parse((BEHAVIOUR / "cases.py").read_text())
+        workflow = next(node for node in source.body
+                        if isinstance(node, ast.FunctionDef)
+                        and node.name == "euclidean_workflow")
+        literal_iterables = {}
+        for node in ast.walk(workflow):
+            if (isinstance(node, ast.For) and isinstance(node.target, ast.Name)
+                    and isinstance(node.iter, ast.Tuple)
+                    and all(isinstance(item, ast.Constant)
+                            and isinstance(item.value, str) for item in node.iter.elts)):
+                literal_iterables[node.target.id] = tuple(
+                    item.value for item in node.iter.elts)
+        calls = []
+        for node in ast.walk(workflow):
+            if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                    and node.func.attr == "tap_control"
+                    and isinstance(node.func.value, ast.Attribute)
+                    and node.func.value.attr == "ui"
+                    and isinstance(node.func.value.value, ast.Name)
+                    and node.func.value.value.id == "c"):
+                self.assertEqual(len(node.args), 1,
+                                 "workflow tap_control must not hide a dynamic index")
+                argument = node.args[0]
+                if isinstance(argument, ast.Constant) and isinstance(argument.value, str):
+                    calls.append(argument.value)
+                else:
+                    self.assertIsInstance(argument, ast.Name)
+                    self.assertIn(argument.id, literal_iterables)
+                    calls.extend(literal_iterables[argument.id])
+
+        self.assertEqual(set(calls), set(expected))
+        for control, ((index,), baseline_cell) in expected.items():
+            with self.subTest(control=control):
+                self.assertEqual(control_cell(control, index), baseline_cell)
+                driver = FakeDriver()
+                Ui(driver).tap_control(control, index)
+                self.assertEqual(driver.calls, [("tap", *baseline_cell)])
+
     def test_pattern_note_pitch_keys_preserve_authored_grid_cells(self):
         from ui_map import PATTERN_NOTE_PITCHES, control_cell
 

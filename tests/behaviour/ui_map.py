@@ -28,6 +28,13 @@ RHYTHM_DOCTOR_CONTROLS = {
     "legacy_drum_algorithm": (12, 2),
     "legacy_tresillo_algorithm": (13, 2),
     "legacy_euclidean_algorithm": (14, 2),
+    # Euclidean workflow names retain the raw recipe's cells on this page.
+    "euclidean_tool": (14, 2),
+    "euclidean_fill_minimum": (2, 2),
+    "euclidean_fill_maximum": (10, 2),
+    "euclidean_fill_boundary": (9, 2),
+    "euclidean_rotation_minimum": (2, 3),
+    "euclidean_rotation_maximum": (10, 3),
     "legacy_numeric_repetitor_algorithm": (15, 2),
     "algorithm": (16, 2),
     "reserved_lane": (2, 2),
