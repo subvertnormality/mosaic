@@ -312,59 +312,47 @@ def live_pattern_duration(c):
 def euclidean_workflow(c):
     # Migrated from emulator tests/mosaic_euclidean.py; independent3-in-8 table.
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    c.ui.configure();c.ui.set_range(1,8)
-    c.ui.tap_control("pattern_editor");c.ui.tap_control("pattern_editor")
-    for control in ("pattern_note_c","pattern_note_d","pattern_note_e","pattern_note_f"):
-        c.ui.tap_control(control)
-    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor") # trig editor
+    c.configure();c.hold_tap((1,4),(8,4))
+    c.tap(5,8);c.tap(5,8)
+    for x,y in [(5,3),(6,2),(7,1),(8,6)]:c.tap(x,y)
+    c.tap(3,8);c.tap(5,8) # trig editor
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='eight-step-loop-baseline',passed=True))
-    c.ui.tap_control("euclidean_tool")
-    c.ui.tap_control("euclidean_fill_minimum") # broad fader minimum: one pulse
-    for _ in range(2):c.ui.tap_control("euclidean_fill_maximum")
-    c.ui.tap_control("euclidean_rotation_minimum")
-    for _ in range(7):c.ui.tap_control("euclidean_rotation_maximum")
-    c.ui.tap_control("paint")
+    c.tap(14,2) # Euclidean
+    c.tap(2,2) # broad fader minimum: one pulse
+    for _ in range(2):c.tap(10,2)
+    c.tap(2,3)
+    for _ in range(7):c.tap(10,3)
+    c.tap(16,8)
     # The manual distinguishes dim overlaps and bright newly proposed steps.
     # Verify both blink phases and all64 cells against fixed authored/candidate
     # sets; no application rhythm calculation supplies the expected positions.
     original={1,2,3,4}
     proposed={step for step in range(1,65) if (step-1)%8+1 in (1,4,7)}
+    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     for overlap,new in ((0,15),(3,12)):
-        shared = original & proposed
-        proposed_only = proposed - original
-        original_only = original - proposed
-        levels = {}
-        for step in range(1, 65):
-            if step in shared:
-                levels[step] = "dark" if overlap == 0 else "inactive"
-            elif step in proposed_only:
-                levels[step] = "selected" if new == 15 else "active"
-            elif step in original_only:
-                levels[step] = "selected"
-            else:
-                levels[step] = "off"
-        c.ui.expect_steps(levels)
+        c.led_values(cells,[overlap if step in original and step in proposed else new if step in proposed else 15 if step in original else 2 for step in range(1,65)])
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='preview-does-not-paint',passed=True))
-    c.ui.tap_control("cancel");c.ui.expect_steps({step:"selected" if step<=4 else "off" for step in range(1,9)})
+    c.tap(14,8);c.led_values([(x,4) for x in range(1,9)],[15]*4+[2]*4)
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='cancel-retains-pattern',passed=True))
-    c.ui.tap_control("paint");c.ui.tap_control("shift_right") # shift right: {2,5,8}
-    c.ui.expect_steps({2:"dark",5:"selected",8:"selected"});c.ui.tap_control("paint")
+    c.tap(16,8);c.tap(12,8) # shift right: {2,5,8}
+    c.led_values([(2,4),(5,4),(8,4)],[0,15,15]);c.tap(16,8)
     shifted={step for step in range(1,65) if (step-1)%8+1 in (2,5,8)}
     painted=original.symmetric_difference(shifted)
-    c.ui.expect_steps({step:"selected" if step in painted else "off" for step in range(1,65)})
+    c.led_values(cells,[15 if step in painted else 2 for step in range(1,65)])
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(65,97),(67,100),(62,100)]])
     c.results.append(dict(kind='workflow-check',name='shifted-paint-xor',passed=True))
-    c.ui.tap_control("paint");c.ui.expect_steps({2:"selected",5:"dark",8:"dark"});c.ui.tap_control("paint")
+    c.tap(16,8);c.led_values([(2,4),(5,4),(8,4)],[15,0,0]);c.tap(16,8)
+    c.led_values(cells,[2]*64)
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='repaint-restores-original',passed=True))
-    c.ui.tap_control("paint");c.ui.tap_control("shift_left") # left: back to {1,4,7}
-    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("shift_right");c.ui.tap_control("shift_reset")
-    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("paint")
+    c.tap(16,8);c.tap(10,8) # left: back to {1,4,7}
+    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(12,8);c.tap(11,8)
+    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(16,8)
     c.playback([(1,[144,n,v]) for n,v in [(62,117),(64,107),(71,100)]])
     c.results.append(dict(kind='workflow-check',name='left-and-center-reset',passed=True))
-    c.ui.tap_control("paint");c.ui.expect_steps({1:"selected",4:"selected",7:"dark"});c.ui.tap_control("paint");c.playback(baseline)
-    c.ui.tap_control("euclidean_fill_boundary") # fill32, exceeding length8: every step selected
-    c.ui.tap_control("paint");c.ui.expect_steps({1:"dark",4:"dark",5:"selected",64:"selected"});c.ui.tap_control("paint")
-    c.ui.expect_steps({step:"selected" if step>4 else "off" for step in range(1,65)})
+    c.tap(16,8);c.led_values([(1,4),(4,4),(7,4)],[15,15,0]);c.tap(16,8);c.playback(baseline)
+    c.tap(9,2) # fill32, exceeding length8: every step selected
+    c.tap(16,8);c.led_values([(1,4),(4,4),(5,4),(16,7)],[0,0,15,15]);c.tap(16,8)
+    c.led_values(cells,[2]*4+[15]*60)
     c.playback([(1,[144,n,100]) for n in [67,69,71,62]]);c.results.append(dict(kind='workflow-check',name='dense-fill-boundary',passed=True))
 
 # Independent literal 3/3/2 segment tables; no application algorithm import.
@@ -373,25 +361,23 @@ TRESILLO_STEPS={8:[3,6],16:[3,9,15],24:[3,12,21],32:[3,15,27],
       64:[3,16,27,40,51,64]}
 
 def tresillo_setup(c):
-    c.ui.configure();c.ui.tap_control("pattern_editor")
-    for step in range(1,5):c.ui.tap_step(step)
-    c.ui.tap_control("pattern_editor")
-    for step in range(1,17):
-        c.ui.key_edge(1,True);c.elapse(.3)
-        try:c.ui.tap_control("pattern_note",(step,(step-1)%6+1))
-        finally:c.ui.key_edge(1,False)
-    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
-    c.ui.tap_control("tresillo_tool");c.ui.tap_control("drum_bank",1)
-    c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_fill_maximum")
-    c.ui.tap_control("rhythm_factor_minimum");c.ui.tap_control("rhythm_factor_maximum")
-    c.ui.turn(1,1);c.ui.turn(3,-8);c.ui.expect_header("trigger_editor_confirmation")
+    c.configure();c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(5,8)
+    for x in range(1,17):
+        c.action(type='key',n=1,state=1);c.elapse(.3)
+        c.tap(x,7-((x-1)%6));c.action(type='key',n=1,state=0)
+    c.tap(3,8);c.tap(5,8);c.tap(13,2);c.tap(12,3)
+    c.tap(2,2);c.tap(10,2);c.tap(2,3);c.tap(10,3)
+    c.enc(1,1);c.enc(3,-8);c.ui.expect_header("trigger_editor_confirmation")
 
 def tresillo_rhythm(c,length,steps):
-    c.ui.tap_control("channel_editor");c.ui.set_range(1,length);c.ui.tap_control("pattern_editor")
-    c.ui.tap_control("paint")
-    first=steps[0]
-    c.ui.expect_steps({first:"selected"});c.ui.tap_control("paint")
-    c.ui.expect_steps({step:"selected" if (step-1)%length+1 in steps else "off" for step in range(1,65)})
+    c.tap(3,8);c.hold_tap((1,4),((length-1)%16+1,4+(length-1)//16));c.tap(5,8)
+    c.tap(16,8)
+    first=((steps[0]-1)%16+1,4+(steps[0]-1)//16)
+    c.led_values([first],[15]);c.tap(16,8)
+    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
+    c.led_values(cells,[15 if i%length+1 in steps else 2 for i in range(64)])
     pitches=[60,62,64,65,67,69]
     velocities=[127,117,107,97]+[100]*60
     expected=[(1,[144,pitches[((s-1)%16)%6],velocities[s-1]]) for s in steps]
@@ -408,16 +394,16 @@ def tresillo_rhythm(c,length,steps):
         rows.append(dict(from_step=steps[i%len(steps)],to_step=steps[(i+1)%len(steps)],expected_seconds=gap/6,actual_seconds=actual))
     c.results.append(dict(kind='tresillo-timing',length=length,steps=steps,rows=rows))
     assert len(rows)>=2*len(steps) and all(abs(x['actual_seconds']-x['expected_seconds'])<=tolerance for x in rows),rows
-    c.ui.tap_control("paint");c.ui.expect_steps({first:"dark"});c.ui.tap_control("paint");c.ui.expect_steps({step:"off" for step in range(1,65)})
+    c.tap(16,8);c.led_values([first],[0]);c.tap(16,8);c.led_values(cells,[2]*64)
 
 def tresillo_multipliers(c):
     tresillo_setup(c);c.results.append(dict(kind='workflow-check',name='tresillo-input-setup',passed=True))
     for i,(length,steps) in enumerate(TRESILLO_STEPS.items()):
-        if i:c.ui.turn(3,1)
+        if i:c.enc(3,1)
         tresillo_rhythm(c,length,steps);c.results.append(dict(kind='workflow-check',name='multiplier-'+str(length),passed=True))
 
 def tresillo_drum_boundary(c):
-    tresillo_setup(c);c.ui.tap_control("drum_bank",2);c.ui.turn(3,7)
+    tresillo_setup(c);c.tap(13,3);c.enc(3,7)
     tresillo_rhythm(c,64,list(range(1,65,8)));c.results.append(dict(kind='workflow-check',name='drum-bank-64-step-tresillo',passed=True))
 
 
@@ -429,41 +415,42 @@ def rhythm_bank_workflow(c):
       '4':[1,3,5,7,9,11,13,15],'5':[]},
       'numeric_prime_1_factor_1':{'1':[5,13],'2':[1],'3':[9],'4':[1,5,9,13]}}
     def silence(c):
-        before=c.snapshot()['midi_count'];c.ui.play()
-        c.elapse(16/6*2+.1);c.ui.stop()
+        before=c.snapshot()['midi_count'];c.tap(1,8)
+        c.elapse(16/6*2+.1);c.tap(1,8)
         state=c.snapshot()
         emitted=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         assert emitted==[] and state['midi_capture']['outstanding']==[],emitted
         c.results.append(dict(kind='silence',complete_cycles=2,emitted=emitted))
-    c.ui.configure();c.ui.set_range(1,16)
-    c.ui.tap_control("pattern_editor")
-    for step in range(1,5):c.ui.tap_step(step) # empty pattern, retain routing
-    c.ui.tap_control("pattern_editor")
-    for step in range(1,17):c.ui.tap_control("pattern_note",(step,(step-1)%7+1))
-    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
-    c.ui.expect_steps({step:"off" for step in range(1,65)});silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
+    c.configure();c.hold_tap((1,4),(16,4))
+    c.tap(5,8)
+    for x in range(1,5):c.tap(x,4) # empty pattern, retain routing
+    c.tap(5,8)
+    for x in range(1,17):c.tap(x,7-((x-1)%7))
+    c.tap(3,8);c.tap(5,8)
+    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
+    c.led_values(cells,[2]*64);silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
     def paint(steps):
-        c.ui.tap_control("paint")
+        c.tap(16,8)
         # Nonempty previews flash coherently. Empty banks have no step flashes.
-        if steps:c.ui.expect_steps({steps[0]:"selected"})
-        else:c.ui.expect_leds({("cancel",None):"selected"})
-        c.ui.tap_control("paint")
-        c.ui.expect_steps({step:"selected" if (step-1)%16+1 in steps else "off" for step in range(1,65)})
+        if steps:c.led_values([((steps[0]-1)%16+1,4)],[15])
+        else:c.led_values([(14,8)],[15])
+        c.tap(16,8)
+        c.led_values(cells,[15 if i%16+1 in steps else 2 for i in range(64)])
         if steps:
             pitches=[60,62,64,65,67,69,71]
             velocities=[127,117,107,97]+[100]*12
             c.playback([(1,[144,pitches[(s-1)%7],velocities[s-1]]) for s in steps],cycles=2,timeout=4,settle_seconds=16/3-.1)
         else:silence(c)
-        c.ui.tap_control("paint")
-        if steps:c.ui.expect_steps({steps[0]:"dark"})
-        else:c.ui.expect_leds({("cancel",None):"selected"})
-        c.ui.tap_control("paint");c.ui.expect_steps({step:"off" for step in range(1,65)})
-    c.ui.tap_control("drum_pattern_two");c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_fill_maximum") # drum pattern2
+        c.tap(16,8)
+        if steps:c.led_values([((steps[0]-1)%16+1,4)],[0])
+        else:c.led_values([(14,8)],[15])
+        c.tap(16,8);c.led_values(cells,[2]*64)
+    c.tap(12,2);c.tap(2,2);c.tap(10,2) # drum pattern2
     for bank in range(1,6):
-        c.ui.tap_control("drum_bank",bank);paint(oracle['drum_pattern_2'][str(bank)]);c.results.append(dict(kind='workflow-check',name='drum-bank-'+str(bank),passed=True))
-    c.ui.tap_control("numeric_prime_one");c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_factor_minimum") # numeric prime1, factor1
+        c.tap(11+bank,3);paint(oracle['drum_pattern_2'][str(bank)]);c.results.append(dict(kind='workflow-check',name='drum-bank-'+str(bank),passed=True))
+    c.tap(15,2);c.tap(2,2);c.tap(2,3) # numeric prime1, factor1
     for bank in range(1,5):
-        c.ui.tap_control("numeric_mask",bank);paint(oracle['numeric_prime_1_factor_1'][str(bank)]);c.results.append(dict(kind='workflow-check',name='numeric-mask-'+str(bank),passed=True))
+        c.tap(11+bank,3);paint(oracle['numeric_prime_1_factor_1'][str(bank)]);c.results.append(dict(kind='workflow-check',name='numeric-mask-'+str(bank),passed=True))
 
 
 
