@@ -1,6 +1,7 @@
 """Independent receiver rejects the observed failure modes without native boot."""
 import copy
 import unittest
+from contract.master_clock import master_output_diagnostic
 from master_clock import assert_master_receiver
 from master_multi_output import diagnostic_events
 
@@ -44,6 +45,15 @@ class MasterReceiverTests(unittest.TestCase):
         with self.assertRaises(AssertionError):self.check(events)
 
 class DiagnosticEventTests(unittest.TestCase):
+    def test_master_diagnostic_uses_stable_controlled_events(self):
+        events=[dict(port=1,bytes=[248],logical_ns=123,monotonic_ns=456)]
+        result=master_output_diagnostic(.009,events,'controlled-experimental')
+        self.assertEqual(result,dict(kind='master-output-diagnostic',
+                                     phase_delay_seconds=.009,
+                                     events=[dict(port=1,bytes=[248],logical_ns=123)]))
+        self.assertEqual(events[0]['monotonic_ns'],456)
+        self.assertEqual(master_output_diagnostic(.009,events,'real-time')['events'],events)
+
     def test_controlled_diagnostics_omit_only_host_monotonic_time(self):
         events=[dict(port=1,bytes=[248],index=7,logical_ns=123456,monotonic_ns=987654321)]
         original=copy.deepcopy(events)

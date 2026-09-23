@@ -1,4 +1,12 @@
 """External input clock, Mosaic notes and a second independent receiver."""
+from contract.master_multi_output import diagnostic_events
+
+def forwarded_clock_diagnostic(warm_ticks,first,events,stimulus,delivered,clock_mode):
+    return dict(kind='forwarded-clock-diagnostic',warm_ticks=warm_ticks,
+                first_clock_deadline_ns=first,
+                events=diagnostic_events(events,clock_mode),
+                stimulus=stimulus,delivered=delivered)
+
 def assert_forwarded_receiver(events,field,first,tolerance):
     active=False;tick=-1;notes=0;clocks=[];starts=0;stops=0
     for event in events:
@@ -45,7 +53,7 @@ def forwarded_clock(c,warm_ticks):
     c.action(**request)
     state=c.wait(lambda state:capture.extend(state) and len(state['midi_input_schedule']['delivered'])==len(stimulus),timeout=5)
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
-    c.results.append(dict(kind='forwarded-clock-diagnostic',warm_ticks=warm_ticks,first_clock_deadline_ns=first,events=capture.events,stimulus=stimulus,delivered=state['midi_input_schedule']['delivered']))
+    c.results.append(forwarded_clock_diagnostic(warm_ticks,first,capture.events,stimulus,state['midi_input_schedule']['delivered'],c.clock_mode))
     field='logical_ns' if controlled else 'monotonic_ns';tolerance=2e-9 if controlled else .01
     onsets=[(6*i,(60,62,64,65)[i%4],(127,117,107,97)[i%4]) for i in range(10)]
     assert len(capture.note_ons())==10

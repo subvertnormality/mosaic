@@ -1,4 +1,10 @@
 """Independent MIDI receiver for Mosaic master Start/Clock/note phase."""
+from contract.master_multi_output import diagnostic_events
+
+def master_output_diagnostic(phase,events,clock_mode):
+    return dict(kind='master-output-diagnostic',phase_delay_seconds=phase,
+                events=diagnostic_events(events,clock_mode))
+
 def assert_master_receiver(events,field,tolerance):
     selected=[e for e in events if e['port']==1]
     active=False;tick=-1;clocks=[];notes=[];starts=[];stops=[]
@@ -52,6 +58,6 @@ def master_clock(c):
         c.elapse(1.2);capture.extend(c.snapshot())
         c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
-        c.results.append(dict(kind='master-output-diagnostic',phase_delay_seconds=phase,events=capture.events))
+        c.results.append(master_output_diagnostic(phase,capture.events,c.clock_mode))
         check=assert_master_receiver(capture.events,field,2e-9 if c.clock_mode=='controlled-experimental' else .01)
         c.results.append(dict(kind='master-independent-receiver',phase_delay_seconds=phase,passed=True,**check))
