@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "446a00870f9489cc78d64342288b6fa28b8b1dc3",
+  "after_sha": "132900c537c367fdb144e5cc323ec4778a4cfb40",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-PATCH-055",
+    "M-PATCH-060"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/patch_params.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/patch_params.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-PATCH-055",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PATCH-055/real-time/before/dac02cf36a994d949024441b93cd4d8f/manifest.json",
+              "manifest_sha256": "e671bf447bd49352bbcd766f5ff07a46c9e2114797505ba9509d22f3f082654d"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PATCH-055/real-time/after/e116e83089694e12869760e55cc357c1/manifest.json",
+              "manifest_sha256": "338490b510c71a6296ccb4d9ed26bea5f2ceb56bad9e2dc2f2d729ebf023ebcb"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PATCH-055/controlled-experimental/before/a92cfdf805454622974f36c0e403ca1b/manifest.json",
+              "manifest_sha256": "11d64f97f48e043e8d1e1dd7a12e904ba6ee3876a4157a1368255e0677a073aa"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PATCH-055/controlled-experimental/after/37af4a8981324bcd91ed24a10c4fe0ee/manifest.json",
+              "manifest_sha256": "206aa6da9771c2b543c83e8eb5d7babc7240e901975d6b908cab102eb9d787ad"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-PATCH-060",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PATCH-060/real-time/before/54cf7631baa64d4db1812beedb482f27/manifest.json",
+              "manifest_sha256": "1d53b65ac92f6b07569e78de91b237c3ebd5838cb3f3064619a4edd4fd1b5af2"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PATCH-060/real-time/after/e6c7f2c1521f4700951ceff542b2f49e/manifest.json",
+              "manifest_sha256": "2e408c5dc79c9f7fc489bff9a3a57872f295c3b497bf65f9c2f3ec1d3dbf9fed"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PATCH-060/controlled-experimental/before/5d443aecd2f648c59ed62586698a842b/manifest.json",
+              "manifest_sha256": "8bdca994ebfff514b6054420cc10c6b1b820e7f425557f81289ec4c64e7d71b4"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PATCH-060/controlled-experimental/after/296634385e6c4afba7e8fe8629870584/manifest.json",
+              "manifest_sha256": "2e48f56d042845b88bc44c12e44a34fb2d70c206a3fa2626601e3fe9a7632459"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
