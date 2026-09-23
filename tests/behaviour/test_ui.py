@@ -94,6 +94,8 @@ class UiMapTests(unittest.TestCase):
                          "Scales lock until ptn end")
         self.assertEqual(MOSAIC_OPTIONS["lock_merged_to_pentatonic"],
                          "Lock merged to pent.")
+        self.assertEqual(MOSAIC_OPTIONS["elektron_program_changes"],
+                         "Elektron program changes")
 
     def test_pattern_note_degree_and_note_merge_have_page_specific_keys(self):
         from ui_map import control_cell, grid_partition
