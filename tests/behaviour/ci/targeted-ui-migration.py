@@ -202,14 +202,15 @@ def check_source_delta(before, after, cases):
     allowed = UI_SOURCE_ALLOWLIST | selected_sources
     changed_tests = sorted(path for path in before_tests.keys() | after_tests.keys()
                            if before_tests.get(path) != after_tests.get(path))
-    ui_test = "tests/behaviour/test_ui.py"
-    if ui_test in changed_tests:
+    ui_tests = {"tests/behaviour/test_ui.py",
+                "tests/behaviour/test_ui_layer.py"}
+    if ui_tests & set(changed_tests):
         ui_sources = selected_sources | {
             "tests/behaviour/ui.py", "tests/behaviour/ui_map.py",
             "tests/behaviour/frame_oracle.py"}
         require(bool(set(changed_tests) & ui_sources),
                 "UI unit tests changed without selected UI source")
-        allowed.add(ui_test)
+        allowed.update(ui_tests)
     unexpected = sorted(set(changed_tests) - allowed)
     require(not unexpected, "unrelated behaviour harness/fixture source changed: "
             + ", ".join(unexpected))
