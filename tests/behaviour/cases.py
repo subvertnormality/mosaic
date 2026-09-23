@@ -169,7 +169,7 @@ def next_trig_cutoff(c):
     for x in (2,3,4):c.ui.tap_step(x)
     c.ui.tap_step(5);c.ui.pattern_editor();c.ui.tap_pattern_note_position((5,3));c.ui.channel_editor();c.ui.pattern_editor()
     c.ui.set_range(1,4);c.ui.tap_step(3)
-    c.led_values([(x,4) for x in range(1,6)],[15,5,15,2,15])
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"selected",4:"off",5:"selected"})
     notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
 
@@ -191,12 +191,12 @@ def restore_length(c):
     # The source length must survive temporary interruption by an inserted trig.
     next_trig_cutoff(c)
     c.ui.tap_step(3)
-    c.led_values([(x,4) for x in range(1,6)],[15,5,5,5,15])
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"in_range",4:"in_range",5:"selected"})
     notes=c.playback([(1,[144,60,127]),(1,[144,67,100])],timeout=6)
     assert_durations(c,notes,[4,1]*2)
     # Reinsert the collision: the same authored length must shorten again.
     c.ui.tap_step(3)
-    c.led_values([(x,4) for x in range(1,6)],[15,5,15,2,15])
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"selected",4:"off",5:"selected"})
     notes=c.playback([(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100])],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
 
@@ -204,16 +204,16 @@ def wrapped_length(c,same_pitch=False):
     c.configure();c.ui.set_range(1,64);c.ui.pattern_editor()
     for x in (2,3,4):c.ui.tap_step(x)
     c.ui.tap_step(63);c.ui.set_range(63,2)
-    c.led_values([(15,7),(16,7),(1,4),(2,4)],[15,5,15,2])
+    c.ui.expect_steps({63:"selected",64:"in_range",1:"selected",2:"off"})
     if not same_pitch:
         c.ui.pattern_editor();c.ui.tap_control("shift_right");c.ui.tap_pattern_note_position((15,3))
-        c.led_values([(15,3)],[12])
+        c.ui.expect_leds({("pattern_note_degree",(15,4)):"active"})
     notes=c.playback([(1,[144,60,127]),(1,[144,60 if same_pitch else 67,100])],timeout=38)
     assert_durations(c,notes,[1,2]*2)
     if not same_pitch:
         # Page49-64's empty selected-pattern top cell has base brightness1,
         # with the same +/-1 selection animation as the authored-note page.
-        c.led_values([(1,1)],[0]);c.led_values([(1,1)],[2])
+        c.ui.expect_leds({("pattern_select",1):"dark"});c.ui.expect_leds({("pattern_select",1):"off"})
         c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[0,2],passed=True))
 
 
@@ -222,12 +222,11 @@ def pattern_duration_domain(c,lengths=range(1,65),channel_end=64,reexpress_contr
     # Author each duration using grid gestures; observe every cell and MIDI off.
     c.configure();c.ui.set_range(1,channel_end);c.ui.pattern_editor()
     for x in (2,3,4):c.ui.tap_step(x)
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     for length in lengths:
         if length>1:c.ui.set_range(1,length)
-        c.led_values(cells,[15 if step==1 else 5 if step<=length else 2 for step in range(1,65)])
+        c.ui.expect_steps({step:"selected" if step==1 else "in_range" if step<=length else "off" for step in range(1,65)})
         marker=c.snapshot()['midi_count'];c.ui.tap_control("play_stop")
         def recorded(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes'][0] in (128,144)]
         # Native capture retains all events; fewer snapshots cannot hide an
@@ -256,9 +255,8 @@ def pattern_duration_controls(c):
     c.configure();c.ui.set_range(1,8);c.ui.pattern_editor()
     for x in (2,3,4):c.ui.tap_step(x)
     c.ui.tap_step(5);c.ui.pattern_editor();c.ui.tap_pattern_note_position((5,3));c.ui.channel_editor();c.ui.pattern_editor()
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     def phrase(length):
-        c.led_values(cells,[15 if step in (1,5) else 5 if 1<step<=length else 2 for step in range(1,65)])
+        c.ui.expect_steps({step:"selected" if step in (1,5) else "in_range" if 1<step<=length else "off" for step in range(1,65)})
         notes=c.playback([(1,[144,60,127]),(1,[144,67,100])],cycles=2)
         assert_durations(c,notes,[length,1]*2)
     def long_hold(step):
@@ -303,8 +301,7 @@ def live_pattern_duration(c):
     assert_durations(c,[first,second,third],[4,2,4])
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     assert all(abs((b[field]-a[field])/1e9-8/6)<=tolerance for a,b in ((first,second),(second,third)))
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
-    c.led_values(cells,[15 if step==1 else 5 if step<=4 else 2 for step in range(1,65)])
+    c.ui.expect_steps({step:"selected" if step==1 else "in_range" if step<=4 else "off" for step in range(1,65)})
     notes=c.playback([(1,[144,60,127])],cycles=2)
     assert_durations(c,notes,[4,4])
 
