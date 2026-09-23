@@ -134,7 +134,7 @@ from patch_params import patch_slide_timing
 from patch_params import patch_adjacent_locks
 from patch_params import patch_lock_precedence
 from patch_params import patch_duplicate_slot_lock
-from lock_lead_clock_matrix import lock_lead_clock_matrix
+from contract.lock_lead_clock_matrix import lock_lead_clock_matrix
 from patch_params import patch_sparse_range
 from patch_params import patch_restart
 from patch_params_batch2 import patch_nrpn_bytes

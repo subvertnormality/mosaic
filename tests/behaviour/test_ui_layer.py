@@ -55,6 +55,18 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertEqual(run.__module__, "contract.recording_stop_safety")
         self.assertEqual(callable_raw_dependencies(run), [])
 
+    def test_lock_lead_clock_matrix_cases_are_owned_by_contract_module(self):
+        from cases import CASES
+        from contract.lock_lead_clock_matrix import lock_lead_clock_matrix
+
+        self.assertEqual(lock_lead_clock_matrix.__module__,
+                         "contract.lock_lead_clock_matrix")
+        self.assertFalse((BEHAVIOUR / "lock_lead_clock_matrix.py").exists())
+        for index in range(2, 21):
+            case_id = "M-SYNC-LEAD-%03d" % index
+            self.assertIs(CASES[case_id]["run"].__globals__["lock_lead_clock_matrix"],
+                          lock_lead_clock_matrix, case_id)
+
     def test_chord_contract_family_is_owned_by_contract_module(self):
         from cases import CASES
 
