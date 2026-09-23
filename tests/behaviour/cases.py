@@ -355,6 +355,7 @@ def euclidean_workflow(c):
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(65,97),(67,100),(62,100)]])
     c.results.append(dict(kind='workflow-check',name='shifted-paint-xor',passed=True))
     c.ui.tap_control("paint");c.ui.expect_steps({2:"selected",5:"dark",8:"dark"});c.ui.tap_control("paint")
+    c.ui.expect_steps({step:"selected" if step<=4 else "off" for step in range(1,65)})
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='repaint-restores-original',passed=True))
     c.ui.tap_control("paint");c.ui.tap_control("shift_left") # left: back to {1,4,7}
     c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("shift_right");c.ui.tap_control("shift_reset")
@@ -378,7 +379,7 @@ def tresillo_setup(c):
     c.ui.tap_control("pattern_editor")
     for step in range(1,17):
         c.ui.key_edge(1,True);c.elapse(.3)
-        try:c.ui.tap_control("pattern_note",(step,(step-1)%6+1))
+        try:c.ui.tap_control("pattern_note",(step,7-((step-1)%6)))
         finally:c.ui.key_edge(1,False)
     c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
     c.ui.tap_control("tresillo_tool");c.ui.tap_control("drum_bank",1)
@@ -439,7 +440,7 @@ def rhythm_bank_workflow(c):
     c.ui.tap_control("pattern_editor")
     for step in range(1,5):c.ui.tap_step(step) # empty pattern, retain routing
     c.ui.tap_control("pattern_editor")
-    for step in range(1,17):c.ui.tap_control("pattern_note",(step,(step-1)%7+1))
+    for step in range(1,17):c.ui.tap_control("pattern_note",(step,7-((step-1)%7)))
     c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
     c.ui.expect_steps({step:"off" for step in range(1,65)});silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
     def paint(steps):

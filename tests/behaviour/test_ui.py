@@ -87,6 +87,8 @@ class UiMapTests(unittest.TestCase):
                        64: "selected"}, probes)
         self.assertEqual(list(probes[0]), list(range(1, 65)))
         self.assertEqual(list(probes[1]), list(range(1, 65)))
+        self.assertIn({step: "selected" if step <= 4 else "off"
+                       for step in range(1, 65)}, probes)
 
     def test_algorithm_workflow_controls_resolve_to_raw_baseline_cells(self):
         from ui import Ui
@@ -218,7 +220,7 @@ class UiMapTests(unittest.TestCase):
         expected = [("tap", 5, 8)]
         expected.extend(("tap", step, 4) for step in range(1, 5))
         expected.append(("tap", 5, 8))
-        expected.extend(("tap", step, (step - 1) % 7 + 1)
+        expected.extend(("tap", step, 7 - ((step - 1) % 7))
                         for step in range(1, 17))
         self.assertEqual(driver.calls, expected)
 
@@ -256,10 +258,27 @@ class UiMapTests(unittest.TestCase):
             expected.extend([
                 ("action", {"type": "key", "n": 1, "state": 1}),
                 ("elapse", .3),
-                ("tap", step, (step - 1) % 6 + 1),
+                ("tap", step, 7 - ((step - 1) % 6)),
                 ("action", {"type": "key", "n": 1, "state": 0}),
             ])
         self.assertEqual(driver.calls, expected)
+
+    def test_trigger_editor_confirmation_header_alias_preserves_selected_tab(self):
+        from ui import Ui
+        from ui_map import HEADERS, header_text
+
+        self.assertEqual(header_text("trigger_editor_confirmation"),
+                         "Trig editor options")
+        data = HEADERS["trigger_editor_confirmation"]
+        self.assertEqual((data["selected"], data["tabs"]), (2, 2))
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.header", return_value="expected-header") as make_header:
+            with patch("frame_oracle.matches", return_value=True):
+                Ui(driver).expect_header("trigger_editor_confirmation")
+        make_header.assert_called_once_with(
+            "Trig editor options", selected=2, tabs=2)
+        self.assertEqual(driver.results, [dict(
+            kind="screen-header", expected="Trig editor options", matched=True)])
 
     def test_euclidean_workflow_controls_match_raw_baseline_cells(self):
         """Every semantic Euclidean tap retains the original authored cell."""

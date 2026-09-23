@@ -98,6 +98,7 @@ HEADERS = {
         for index, (key, value) in enumerate(CHANNEL_PAGES.items(), 1)
     },
     "trigger_editor": {"template": "Trig editor options", "selected": 1, "tabs": 2},
+    "trigger_editor_confirmation": {"template": "Trig editor options", "selected": 2, "tabs": 2},
     "note_editor": {"template": "Note editor options", "selected": 1, "tabs": 2},
     "velocity_editor": {"template": "Velocity editor options", "selected": 1, "tabs": 2},
 }
