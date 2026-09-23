@@ -306,6 +306,26 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
     phase([1,2,4],[4],'step-probability100-keeps-lock-before-note')
 
 
+def recorded_edit_receipt(c):
+    """One normal encoder detent, retaining its public applied-input receipt."""
+    c.elapse(.05)
+    receipt=c.action(type='enc',n=3,delta=2)
+    c.elapse(.15)
+    return receipt
+
+
+def assert_immediate_cc_on_edit(control,receipt):
+    """Require the audible MIDI response at the applied encoder input."""
+    assert isinstance(receipt,dict) and receipt.get('status')=='applied',receipt
+    native=receipt.get('native')
+    assert isinstance(native,dict) and type(native.get('monotonic_ns')) is int,receipt
+    applied_ns=native['monotonic_ns']
+    assert type(control.get('monotonic_ns')) is int,control
+    delay_ns=control['monotonic_ns']-applied_ns
+    assert abs(delay_ns)<=10_000_000,dict(delay_ns=delay_ns,applied_ns=applied_ns,control=control)
+    return delay_ns
+
+
 def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False):
     from cases import assign_trig_parameter,menu_label,menu_value,set_mosaic_options
     from patch_params import open_patch_control,turn
@@ -336,11 +356,12 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     assert cc==[[176,1,63],[176,1,24]],cc # Stored patch recall precedes first lock.
     c.elapse(.5)
     edited_after=c.snapshot()['midi_count']
-    if edit_value==64:c.enc(3,1)
+    edit_receipt=None
+    if edit_value==64:edit_receipt=recorded_edit_receipt(c)
     else:
         assert edit_value in (-1,0)
         c.action(type='enc',n=3,delta=-126);c.elapse(.15) # Saturate to Off.
-        if edit_value==0:c.enc(3,1)
+        if edit_value==0:edit_receipt=recorded_edit_receipt(c)
     if switch_return:
         c.tap(4,8) if scale_page else c.tap(2,1) # Pause via global scale editor or channel2.
         paused=c.wait(lambda state:len(notes(state))>=3,timeout=10)
@@ -370,8 +391,15 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
         expected_offsets=[] if edit_value==-1 else [immediate_offset]+boundary_offsets
         assert len(actual_offsets)==len(expected_offsets)
         if expected_offsets:
-            input_tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .03
-            assert abs(actual_offsets[0]-expected_offsets[0])<=input_tolerance,dict(actual=actual_offsets,expected=expected_offsets)
+            if c.clock_mode=='controlled-experimental':
+                assert abs(actual_offsets[0]-expected_offsets[0])<=2e-9,dict(actual=actual_offsets,expected=expected_offsets)
+            else:
+                # Host-side sleeps, polling and RPCs do not determine when the
+                # encoder is applied. Retain the same 10 ms MIDI response bound
+                # against the public input acknowledgement instead.
+                delay_ns=assert_immediate_cc_on_edit(captured[0],edit_receipt)
+                c.results.append(dict(kind='live-parameter-immediate-input',delay_ns=delay_ns,
+                                      max_abs_delay_ns=10_000_000,passed=True))
             assert all(abs(actual-wanted)<=tolerance for actual,wanted in zip(actual_offsets[1:],expected_offsets[1:])),dict(actual=actual_offsets,expected=expected_offsets)
     else:
         assert actual==[(1,[176,1,v]) for v in [64,64,96,64]],actual
