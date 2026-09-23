@@ -1,0 +1,6290 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 2"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 3"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 4"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 5"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 6"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 7"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 8"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 9"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 10"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 11"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 12"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 13"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 14"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 15"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 16"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 17"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 18"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 19"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 20"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 21"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 22"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 23"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 24"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 25"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 26"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 27"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 28"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 29"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 30"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 31"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 32"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 33"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 34"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 35"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 36"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 37"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 38"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 39"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 40"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 41"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 42"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 43"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 44"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 45"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 46"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 47"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 48"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 49"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 50"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 51"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 52"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 53"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 54"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 55"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 56"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 57"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 58"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 59"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 60"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 61"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 62"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 65"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 66"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 67"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 68"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 69"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 70"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 71"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 72"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 73"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 74"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 75"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 76"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 77"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 78"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 79"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 80"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 81"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 82"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 83"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 84"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 85"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 86"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 87"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 88"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 89"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 90"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 91"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 92"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 93"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 94"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 95"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 96"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 97"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 98"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 99"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 100"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 101"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 102"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 103"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 104"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 105"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 106"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 107"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 108"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 109"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 110"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 111"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 112"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 113"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 114"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 115"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 116"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 117"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 118"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 119"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 120"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 121"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 122"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 123"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 124"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 125"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "64"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "all-generic-cc-patch-boundaries",
+    "ccs": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71,
+      72,
+      73,
+      74,
+      75,
+      76,
+      77,
+      78,
+      79,
+      80,
+      81,
+      82,
+      83,
+      84,
+      85,
+      86,
+      87,
+      88,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      97,
+      98,
+      99,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127
+    ],
+    "values": [
+      -1,
+      0,
+      1,
+      63,
+      64,
+      126,
+      127
+    ],
+    "below_above_bound_attempts": true,
+    "midi_messages": 762,
+    "screen_assertions": 1397,
+    "passed": true
+  }
+]
