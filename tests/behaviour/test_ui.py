@@ -61,6 +61,31 @@ class FakeDriver:
 
 
 class UiMapTests(unittest.TestCase):
+    def test_euclidean_dense_fill_probes_bottom_right_boundary(self):
+        from types import SimpleNamespace
+        from cases import euclidean_workflow
+
+        probes = []
+
+        class UiProbe:
+            def configure(self):
+                pass
+
+            def set_range(self, first, last):
+                pass
+
+            def tap_control(self, control):
+                pass
+
+            def expect_steps(self, levels):
+                probes.append(levels)
+
+        case = SimpleNamespace(ui=UiProbe(), playback=lambda *a, **k: [],
+                               results=[])
+        euclidean_workflow(case)
+        self.assertIn({1: "dark", 4: "dark", 5: "selected",
+                       64: "selected"}, probes)
+
     def test_pattern_note_mapping_covers_authored_rows_one_through_seven(self):
         from ui_map import control_cell
 
