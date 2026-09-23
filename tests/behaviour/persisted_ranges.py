@@ -20,7 +20,7 @@ def rejected_load_preservation_result(deadline, checked_files):
                 checked_filenames=sorted(checked_files),preserved=True,passed=True)
 
 def rejected_saved_range(c):
-    c.configure();c.elapse(59);c.elapse(2)
+    c.ui.configure();c.elapse(59);c.elapse(2)
     c.wait(lambda _:all((c.data_directory/name).is_file() for name in ['autosave.ptn','autosave.pset']))
     c.finish()
     original={name:digest(c.data_directory/name) for name in ['autosave.ptn','autosave.pset']}
@@ -41,11 +41,11 @@ def rejected_saved_range(c):
         loaded.wait(feedback)
         for deadline in [1,2]:
             # Inputs must not release the autosave inhibition latch.
-            loaded.tap(3,8);loaded.elapse(59);loaded.elapse(2)
+            loaded.ui.menu('channel_editor');loaded.elapse(59);loaded.elapse(2)
             actual={name:digest(loaded.data_directory/name) for name in rejected}
             assert actual==rejected,'Rejected autosave was overwritten after input/idle'
             loaded.results.append(rejected_load_preservation_result(deadline,actual))
-        marker=loaded.snapshot()['midi_count'];loaded.tap(1,8);loaded.elapse(.8);loaded.tap(1,8)
+        marker=loaded.snapshot()['midi_count'];loaded.ui.play();loaded.elapse(.8);loaded.ui.stop()
         state=loaded.snapshot()
         assert not [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         assert not state['midi_capture']['outstanding']

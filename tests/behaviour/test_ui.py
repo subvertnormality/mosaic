@@ -268,7 +268,7 @@ class UiInputTests(unittest.TestCase):
             ("tap", 1, 8),
         ])
 
-    def test_rejected_saved_range_starts_with_raw_setup(self):
+    def test_rejected_saved_range_starts_with_semantic_setup(self):
         from types import SimpleNamespace
         from persisted_ranges import rejected_saved_range
 
@@ -277,13 +277,13 @@ class UiInputTests(unittest.TestCase):
 
         calls = []
         case = SimpleNamespace(
-            ui=SimpleNamespace(configure=lambda: self.fail("semantic case setup belongs to the replay")),
-            configure=lambda: calls.append("raw-configure"),
+            ui=SimpleNamespace(configure=lambda: calls.append("semantic-configure")),
+            configure=lambda: self.fail("raw case setup must not be used"),
             elapse=lambda seconds: (_ for _ in ()).throw(StoppedAfterSetup()),
         )
         with self.assertRaises(StoppedAfterSetup):
             rejected_saved_range(case)
-        self.assertEqual(calls, ["raw-configure"])
+        self.assertEqual(calls, ["semantic-configure"])
 
     def test_song_pattern_copy_and_leds_use_first_and_last_semantic_slots(self):
         driver, ui = self.ui()
