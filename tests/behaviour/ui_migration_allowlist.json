@@ -9,7 +9,6 @@
   "modulation_interactions.py",
   "numeric_merging.py",
   "output_cases.py",
-  "patch_matrix.py",
   "patch_params.py",
   "perf_calibration_emulator.py",
   "perf_dense.py",
