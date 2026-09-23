@@ -1,0 +1,239 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "Control 1"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NRPN14"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "NRPN14",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Control 1",
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "0"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "127"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        2,
+        [
+          145,
+          60,
+          127
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          62,
+          117
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          64,
+          107
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          65,
+          97
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          60,
+          127
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          62,
+          117
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          64,
+          107
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          65,
+          97
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        2,
+        [
+          145,
+          60,
+          127
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          62,
+          117
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          64,
+          107
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          65,
+          97
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          60,
+          127
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          62,
+          117
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          64,
+          107
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          65,
+          97
+        ]
+      ],
+      [
+        2,
+        [
+          145,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "recording-nrpn-route-and-clean-slot",
+    "value": 0,
+    "port": 2,
+    "channel": 2,
+    "distinct_default": 127,
+    "manual_values": [
+      0
+    ],
+    "clean_CC1_step3": 96,
+    "passed": true
+  }
+]
