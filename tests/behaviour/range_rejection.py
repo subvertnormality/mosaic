@@ -24,7 +24,11 @@ def rejected_range_channel_isolation(c):
     for port,phrase in phrases.items():
         notes=[m for m in all_notes if m['port']==port]
         assert [m['bytes'] for m in notes]==[phrase[i%len(phrase)] for i in range(len(notes))]
-        for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
+        for i,note in enumerate(notes):
+            phase_error=(note[field]-notes[0][field])/1e9-i/6
+            assert abs(phase_error)<=tolerance, dict(
+                port=port, note_index=i, phase_error_seconds=phase_error,
+                tolerance_seconds=tolerance, first_ns=notes[0][field], note_ns=note[field])
         assert_durations(c,notes,[1]*12 if port==1 else [.5,1.25,.5]*4)
     first=[next(m[field] for m in all_notes if m['port']==port) for port in [1,2]]
     assert abs(first[0]-first[1])/1e9<=tolerance
