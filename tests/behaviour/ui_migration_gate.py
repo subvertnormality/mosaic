@@ -53,6 +53,7 @@ PERSISTED_RESULT_KINDS = {
     "M-PATCH-009": "patch-autosave",
     "M-PATCH-051": "pre-policy-project-fixture",
     "M-PATCH-059": "pre-policy-project-fixture",
+    "M-REC-PARAM-027": "recording-autosave-files",
 }
 
 
@@ -82,6 +83,11 @@ def _normalise_verified_ptn_result_hash(values, result_kind, raw_sha, side):
         if entry.get("sha256") != raw_sha:
             return None, ["%s pre-policy fixture SHA differs from artifact" % side]
         entry["sha256"] = "<verified-decoded-project-graph>"
+    elif result_kind == "recording-autosave-files":
+        files = entry.get("files")
+        if not isinstance(files, dict) or files.get("autosave.ptn") != raw_sha:
+            return None, ["%s recording autosave .ptn SHA differs from artifact" % side]
+        files["autosave.ptn"] = "<verified-decoded-project-graph>"
     else:
         return None, ["unsupported persisted project result kind: " + result_kind]
     return copied, []
@@ -124,6 +130,10 @@ PERSISTED_PROJECTS = {
     "M-PATCH-009": ("generated-project/autosave.ptn",),
     "M-PATCH-051": ("pre-policy-seed/autosave.ptn",),
     "M-PATCH-059": ("pre-policy-seed/autosave.ptn",),
+    "M-REC-PARAM-027": (
+        "generated-project/autosave.ptn",
+        "recording-reload-1/generated-project/autosave.ptn",
+    ),
 }
 PROJECT_GRAPH_COMPARATOR = Path(__file__).with_name("ci") / "compare_ptn_graph.lua"
 
@@ -203,8 +213,15 @@ def check_session_roots(before, after, lane, case=None):
                 for entry in after_values) if isinstance(after_values, list) else 0
         if normalize_recipe(before_recipe) != normalize_recipe(after_recipe):
             errors.append("%s normalized recipes differ" % label)
-        if (persisted_kind and session == Path(".") and not project_errors):
-            project_path = PERSISTED_PROJECTS[case][0]
+        project_path = None
+        if persisted_kind:
+            candidate_path = ((session / "generated-project/autosave.ptn").as_posix()
+                              if session != Path(".") else "generated-project/autosave.ptn")
+            if candidate_path in PERSISTED_PROJECTS[case]:
+                project_path = candidate_path
+            elif session == Path(".") and len(PERSISTED_PROJECTS[case]) == 1:
+                project_path = PERSISTED_PROJECTS[case][0]
+        if project_path and not project_errors:
             result_errors = compare_results_with_verified_project(
                 before_values, after_values, lane, persisted_kind,
                 project_hashes["before"][project_path],
@@ -214,9 +231,10 @@ def check_session_roots(before, after, lane, case=None):
         errors.extend("%s: %s" % (label, error) for error in result_errors)
     if persisted_kind:
         for side, count in persisted_result_counts.items():
-            if count != 1:
-                errors.append("%s evidence requires exactly one %s result across sessions "
-                              "(found %d)" % (side, persisted_kind, count))
+            expected = len(PERSISTED_PROJECTS[case])
+            if count != expected:
+                errors.append("%s evidence requires exactly %d %s results across sessions "
+                              "(found %d)" % (side, expected, persisted_kind, count))
     return errors
 
 

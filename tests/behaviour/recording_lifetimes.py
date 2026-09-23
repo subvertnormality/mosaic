@@ -149,11 +149,14 @@ def recording_lifetime(c,ending,scale_page=False):
     c.results.append(dict(kind='recording-lifetime-disarmed-replay',ending=ending,values=table,distinct_default=65,passed=True))
     if ending=='persistence':
         import json
+        import shutil
         from driver import Driver,digest
         ui.turn(1,2);ui.turn(3,15);ui.press_key(3) # /6 for fresh-process replay.
         def save(driver):
             driver.elapse(59);driver.elapse(2)
             driver.wait(lambda _:all((driver.data_directory/name).is_file() for name in ('autosave.ptn','autosave.pset')),timeout=3)
+            captured=driver.out/'generated-project';captured.mkdir(exist_ok=True)
+            shutil.copy2(driver.data_directory/'autosave.ptn',captured/'autosave.ptn')
             driver.results.append(dict(kind='recording-autosave-files',files={name:digest(driver.data_directory/name) for name in ('autosave.ptn','autosave.pset')}))
         save(c);c.finish();seed=c.data_directory
         for generation in (1,2):

@@ -478,6 +478,59 @@ class TargetedMigrationTests(unittest.TestCase):
                                     root / "before", root / "after", "controlled",
                                     case="M-PATCH-059")))
 
+    def test_recording_persistence_compares_root_and_reload_project_graphs(self):
+        import hashlib
+        import json
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            before = root / "before"
+            after = root / "after"
+            for side in (before, after):
+                for session in (Path("."), Path("recording-reload-1"),
+                                Path("recording-reload-2")):
+                    run = side / session
+                    run.mkdir(parents=True, exist_ok=True)
+                    (run / "recipe.json").write_text("[]")
+                    (run / "results.json").write_text("[]")
+                for session in (Path("."), Path("recording-reload-1")):
+                    run = side / session
+                    capture = run / "generated-project"
+                    capture.mkdir()
+                    project = capture / "autosave.ptn"
+                    project.write_text(
+                        'return { {"autosave", {2}}, {state={3}}, {value=7} }\n'
+                        if side == before else
+                        'return { {"autosave", {3}}, {unused=0}, {state={4}}, {value=7} }\n')
+                    (run / "results.json").write_text(json.dumps([{
+                        "kind": "recording-autosave-files",
+                        "files": {"autosave.ptn": hashlib.sha256(project.read_bytes()).hexdigest(),
+                                  "autosave.pset": "a" * 64},
+                    }]))
+            self.assertEqual(check_session_roots(
+                before, after, "controlled", case="M-REC-PARAM-027"), [])
+            nested = after / "recording-reload-1/generated-project/autosave.ptn"
+            nested.write_text('return { {"autosave", {2}}, {state={3}}, {value=8} }\n')
+            nested_result = after / "recording-reload-1/results.json"
+            row = json.loads(nested_result.read_text())
+            row[0]["files"]["autosave.ptn"] = hashlib.sha256(nested.read_bytes()).hexdigest()
+            nested_result.write_text(json.dumps(row))
+            self.assertTrue(any("persisted project graphs differ" in error
+                                for error in check_session_roots(
+                                    before, after, "controlled", case="M-REC-PARAM-027")))
+            nested.write_text('return { {"autosave", {3}}, {unused=0}, {state={4}}, {value=7} }\n')
+            row[0]["files"]["autosave.ptn"] = hashlib.sha256(nested.read_bytes()).hexdigest()
+            row[0]["files"]["autosave.pset"] = "b" * 64
+            nested_result.write_text(json.dumps(row))
+            self.assertTrue(any("controlled results differ" in error
+                                for error in check_session_roots(
+                                    before, after, "controlled", case="M-REC-PARAM-027")))
+
     def test_archived_project_result_rows_allow_only_the_verified_ptn_hash(self):
         from ui_migration_gate import compare_results_with_verified_project
 
