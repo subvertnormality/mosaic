@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "959c814f464a004f9eed92295b1bf01452db60cc",
+  "after_sha": "90595bb99717de83f4886ec1acac7bca1a99054a",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-HARMONY-ENSEMBLE-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-HARMONY-ENSEMBLE-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-ENSEMBLE-001/real-time/before/41379dd01fb7412e92264f237f5a7369/manifest.json",
+              "manifest_sha256": "c1d6c21d7e3d86eaae9180b2de9299e96eb0541e06557b27255ae8acf948ee7f"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-ENSEMBLE-001/real-time/after/88ab27cd96ce4ba38acf77e750e6c19b/manifest.json",
+              "manifest_sha256": "662d85011a9843619fa728d3342b02efa51cf59b02a36167461a619fda4396bc"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-ENSEMBLE-001/controlled-experimental/before/11804d4a77c7470298d1f65059eb8597/manifest.json",
+              "manifest_sha256": "f9d41ecf31e7dcb755b4d6b80632996939f9369cb487460b57b5c87b45be4e3f"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-HARMONY-ENSEMBLE-001/controlled-experimental/after/bcb92457a8eb40019d4a36caed69a7e6/manifest.json",
+              "manifest_sha256": "7f4c5c14fd7968cf05d86a1ceca47284332e5a07db95abc7f8ad7da1fc97fe2a"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

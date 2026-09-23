@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "959c814f464a004f9eed92295b1bf01452db60cc",
+  "after_sha": "90595bb99717de83f4886ec1acac7bca1a99054a",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MERGE-FOUNDATION-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MERGE-FOUNDATION-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-FOUNDATION-001/real-time/before/738f5ad11bf242378ae975fb7fe2cfdc/manifest.json",
+              "manifest_sha256": "2f10f89c124978f13003f1a2f3bba43ceb2c74afff54d1e54a28335b4fab067e"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-FOUNDATION-001/real-time/after/4e056ae998c840ae8352be3cf3456a08/manifest.json",
+              "manifest_sha256": "136c5a20187184306d28b4be2c7dc54cb4ec39f33eddfd0b2eee371b98689a6e"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-FOUNDATION-001/controlled-experimental/before/9a905a4d89b54d62a62f1c11f3df6ef9/manifest.json",
+              "manifest_sha256": "959e29b70f9c799660bc5248ffc2062d0e3f103e79708a0458d0efa9377e9d2f"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-FOUNDATION-001/controlled-experimental/after/00544e8e8b0e49228ba243755d5b5315/manifest.json",
+              "manifest_sha256": "efc23ca29908f0a62f4d256c5523fef8d293bd3dc1a782923a73745284e1a68e"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
