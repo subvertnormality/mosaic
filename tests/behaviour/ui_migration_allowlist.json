@@ -10,7 +10,6 @@
   "modulation_interactions.py",
   "nb_chord_acceleration_lock.py",
   "nb_device_switch_slots.py",
-  "nb_param_lock.py",
   "numeric_merging.py",
   "output_cases.py",
   "patch_matrix.py",
