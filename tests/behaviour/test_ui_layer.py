@@ -48,6 +48,28 @@ class UiLayerGuardTests(unittest.TestCase):
                 }]
                 self.assertEqual(sites, [], name)
 
+    def test_live_recording_uses_semantic_step_led_oracles(self):
+        """Keep both 64-cell recording LED vectors behind the mapped UI layer."""
+        import ast
+
+        from ui_layer_guard import _raw_sites_in_node, _tree
+
+        tree = _tree(str((BEHAVIOUR / "cases.py").resolve()))
+        function = next(node for node in tree.body
+                        if isinstance(node, ast.FunctionDef)
+                        and node.name == "live_record_placement")
+        raw_leds = [site for site in _raw_sites_in_node(function)
+                    if site[1] == "led_values"]
+        semantic_leds = [node for node in ast.walk(function)
+                         if isinstance(node, ast.Call)
+                         and isinstance(node.func, ast.Attribute)
+                         and node.func.attr == "expect_steps"
+                         and isinstance(node.func.value, ast.Name)
+                         and node.func.value.id == "ui"]
+
+        self.assertEqual(raw_leds, [])
+        self.assertEqual(len(semantic_leds), 2)
+
     def test_migrated_arp_cases_have_no_reachable_raw_ui_dependencies(self):
         from cases import CASES
         from ui_layer_guard import callable_raw_dependencies

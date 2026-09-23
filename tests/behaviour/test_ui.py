@@ -1938,6 +1938,35 @@ class UiObservationTests(unittest.TestCase):
             ("led_values", [(1, 4), (2, 4), (16, 7)], [15, 5, 2])
         ])
 
+    def test_expect_steps_preserves_full_recording_led_vectors(self):
+        from ui import Ui
+
+        driver = FakeDriver()
+        before_recording = {
+            step: ("off" if 61 <= step <= 64 else "dark")
+            for step in range(1, 65)
+        }
+        after_recording = {
+            step: ("selected" if step in (1, 64) else
+                   "off" if 61 <= step <= 64 else "dark")
+            for step in range(1, 65)
+        }
+
+        ui = Ui(driver)
+        ui.expect_steps(before_recording)
+        ui.expect_steps(after_recording)
+
+        cells = [((step - 1) % 16 + 1, (step - 1) // 16 + 4)
+                 for step in range(1, 65)]
+        self.assertEqual(driver.calls, [
+            ("led_values", cells,
+             [2 if 61 <= step <= 64 else 0 for step in range(1, 65)]),
+            ("led_values", cells,
+             [15 if step in (1, 64) else
+              2 if 61 <= step <= 64 else 0
+              for step in range(1, 65)]),
+        ])
+
     def test_expect_header_waits_and_preserves_screen_header_result(self):
         from ui import Ui
 
