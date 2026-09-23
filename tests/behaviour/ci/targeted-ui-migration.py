@@ -125,7 +125,41 @@ def selected_case_modules(root, cases):
             path = "tests/behaviour/" + module.replace(".", "/") + ".py"
             require((root / path).is_file(), "missing selected case module: " + path)
             result.add(path)
+            result.update(contract_reexport_owners(root, path, symbol))
     return result
+
+
+def contract_reexport_owners(root, path, symbol):
+    """Follow only pure re-exports of the selected callable into contract/."""
+    owners = set()
+    while True:
+        tree = ast.parse((root / path).read_text())
+        body = tree.body
+        if body and isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) \
+                and isinstance(body[0].value.value, str):
+            body = body[1:]
+        if any(isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+               and node.name == symbol for node in body):
+            return owners
+        if len(body) != 1 or not isinstance(body[0], ast.ImportFrom) \
+                or body[0].level != 0 or not body[0].module:
+            return set()
+        node = body[0]
+        parts = node.module.split(".")
+        if len(parts) != 2 or parts[0] != "contract" \
+                or not re.fullmatch(r"[a-z][a-z0-9_]*", parts[1]):
+            return set()
+        selected = [alias for alias in node.names
+                    if (alias.asname or alias.name) == symbol and alias.name != "*"]
+        if len(selected) != 1:
+            return set()
+        target = "tests/behaviour/contract/" + parts[1] + ".py"
+        require(target not in owners and target != path,
+                "selected contract re-export cycle: " + target)
+        require((root / target).is_file(),
+                "missing selected contract implementation: " + target)
+        owners.add(target)
+        path, symbol = target, selected[0].name
 
 
 def tree_entries(root, *paths):

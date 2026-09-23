@@ -30,6 +30,32 @@ class TargetedMigrationTests(unittest.TestCase):
             ROOT, ["M-PERSIST-FIXTURE-1.2.12"]),
             {"tests/behaviour/persisted_fixture.py"})
 
+    def test_real_selected_contract_shims_resolve_exact_owners(self):
+        for case, module in (("M-SYNC-009", "master_clock"),
+                             ("M-SYNC-LEAD-001", "lock_lead_time")):
+            with self.subTest(case=case):
+                owner = "tests/behaviour/" + module + ".py"
+                contract_owner = "tests/behaviour/contract/" + module + ".py"
+                tree = ast.parse((ROOT / owner).read_text())
+                body = tree.body
+                if body and isinstance(body[0], ast.Expr) \
+                        and isinstance(body[0].value, ast.Constant) \
+                        and isinstance(body[0].value.value, str):
+                    body = body[1:]
+                definitions = [node for node in body if isinstance(node, ast.FunctionDef)
+                               and node.name == module]
+                if definitions:
+                    expected = {owner}  # pre-extraction baseline
+                else:
+                    self.assertEqual(len(body), 1)
+                    self.assertIsInstance(body[0], ast.ImportFrom)
+                    self.assertEqual(body[0].module, "contract." + module)
+                    self.assertIn(module, [alias.asname or alias.name
+                                           for alias in body[0].names])
+                    self.assertTrue((ROOT / contract_owner).is_file())
+                    expected = {owner, contract_owner}
+                self.assertEqual(targeted.selected_case_modules(ROOT, [case]), expected)
+
     def test_manifest_binds_success_source_lane_and_all_nested_evidence(self):
         with tempfile.TemporaryDirectory() as temporary:
             run = Path(temporary)
@@ -148,6 +174,64 @@ class TargetedMigrationTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "not a regular file"):
                     targeted.check_source_delta(
                         Path("before"), Path("after"), ["M-SCALE-LOCK-003"])
+
+    def test_selected_contract_extraction_allows_only_exact_reexport_owner(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            before = Path(temporary) / "before"
+            after = Path(temporary) / "after"
+            for root in (before, after):
+                folder = root / "tests/behaviour"
+                folder.mkdir(parents=True)
+                (folder / "cases.py").write_text(
+                    "from master_clock import master_clock\n"
+                    "CASES={'M-SYNC-009':dict(run=master_clock)}\n")
+            (before / "tests/behaviour/master_clock.py").write_text(
+                "def master_clock(c): pass\n")
+            (after / "tests/behaviour/master_clock.py").write_text(
+                '"""Compatibility shim."""\n'
+                "from contract.master_clock import master_clock\n")
+            contract = after / "tests/behaviour/contract"
+            contract.mkdir()
+            (contract / "master_clock.py").write_text("def master_clock(c): pass\n")
+            shim = "tests/behaviour/master_clock.py"
+            owner = "tests/behaviour/contract/master_clock.py"
+            self.assertEqual(targeted.selected_case_modules(before, ["M-SYNC-009"]), {shim})
+            self.assertEqual(targeted.selected_case_modules(after, ["M-SYNC-009"]),
+                             {shim, owner})
+            production = {"mosaic.lua": ("100644", "blob", "a" * 40),
+                          "lib/nb": ("160000", "commit", "b" * 40)}
+            pinned = {path: ("100644", "blob", "c" * 40)
+                      for path in targeted.PINNED_GATE_PATHS}
+            before_tests = {**pinned, shim: ("100644", "blob", "d" * 40)}
+            after_tests = {**pinned, shim: ("100644", "blob", "e" * 40),
+                           owner: ("100644", "blob", "f" * 40)}
+            with patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, before_tests, after_tests]):
+                result = targeted.check_source_delta(before, after, ["M-SYNC-009"])
+                self.assertEqual(result["changed_behaviour_paths"], [owner, shim])
+            unrelated = "tests/behaviour/contract/unrelated.py"
+            with patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, before_tests,
+                    {**after_tests, unrelated: ("100644", "blob", "1" * 40)}]):
+                with self.assertRaisesRegex(ValueError, "unrelated behaviour harness/fixture"):
+                    targeted.check_source_delta(before, after, ["M-SYNC-009"])
+            (after / shim).write_text(
+                "from contract.master_clock import master_clock\n"
+                "UNRELATED = 1\n")
+            self.assertEqual(targeted.selected_case_modules(after, ["M-SYNC-009"]), {shim})
+            with patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, before_tests, after_tests]):
+                with self.assertRaisesRegex(ValueError, "unrelated behaviour harness/fixture"):
+                    targeted.check_source_delta(before, after, ["M-SYNC-009"])
+            (after / shim).write_text(
+                "from contract.master_clock import master_clock\n")
+            (contract / "master_clock.py").write_text("def unrelated(c): pass\n")
+            self.assertEqual(targeted.selected_case_modules(after, ["M-SYNC-009"]), {shim})
+            with patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, before_tests, after_tests]):
+                with self.assertRaisesRegex(ValueError, "unrelated behaviour harness/fixture"):
+                    targeted.check_source_delta(before, after, ["M-SYNC-009"])
+
 
     def test_strict_gate_sees_nested_recipe_and_controlled_oracle_change(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -876,6 +876,12 @@ class ProjectActionUiVerbTests(unittest.TestCase):
         def enc(self, encoder, detents):
             self.calls.append(("enc", encoder, detents))
 
+        def action(self, **value):
+            self.calls.append(("action", value))
+
+        def elapse(self, seconds):
+            self.calls.append(("elapse", seconds))
+
         def snapshot(self):
             self.calls.append(("snapshot",))
             return {"diagnostics": {"parameter_roots": [
@@ -921,6 +927,46 @@ class ProjectActionUiVerbTests(unittest.TestCase):
         with self.assertRaisesRegex(UiMapError, "unknown project action"):
             Ui(driver).select_project_action("not-a-project-action")
         self.assertEqual(driver.calls, [])
+
+    def test_project_file_search_keeps_native_event_recipe_and_no_new_results(self):
+        from ui import Ui
+
+        driver = self.Driver()
+        with patch("frame_oracle.selected_line",
+                   side_effect=[True, True, False, False, True]) as selected:
+            Ui(driver).select_project_file("newB.ptn", returning=True)
+        self.assertEqual(driver.calls, [
+            ("key", 1), ("enc", 2, -60), ("enc", 2, 1), ("wait",),
+            ("enc", 2, 1), ("wait",), ("key", 3),
+            ("action", {"type": "enc", "n": 2, "delta": -100}),
+            ("snapshot",),
+            ("action", {"type": "enc", "n": 2, "delta": 1}),
+            ("elapse", .03), ("snapshot",),
+            ("action", {"type": "enc", "n": 2, "delta": 1}),
+            ("elapse", .03), ("snapshot",),
+        ])
+        self.assertEqual([call.args[1] for call in selected.call_args_list],
+                         ["< Save project", "> Load project", "newB.ptn",
+                          "newB.ptn", "newB.ptn"])
+        self.assertEqual(driver.results, [
+            {"kind": "selected-menu-label", "text": "< Save project"},
+            {"kind": "selected-menu-label", "text": "> Load project"},
+        ])
+
+    def test_project_file_search_fails_after_exactly_thirty_checks(self):
+        from ui import Ui
+
+        driver = self.Driver()
+        with patch("frame_oracle.selected_line",
+                   side_effect=[True, True] + [False] * 30):
+            with self.assertRaisesRegex(AssertionError,
+                                        "Project file not reached: missing.ptn"):
+                Ui(driver).select_project_file("missing.ptn", returning=True)
+        self.assertEqual(driver.calls.count(("snapshot",)), 30)
+        self.assertEqual(driver.calls.count(("action", {
+            "type": "enc", "n": 2, "delta": 1,
+        })), 30)
+        self.assertEqual(driver.calls.count(("elapse", .03)), 30)
 
 
 if __name__ == "__main__":
