@@ -110,6 +110,13 @@ SCREEN = {
 
 NATIVE_MENU = {
     "levels_root": "LEVELS >",
+    "mod_devices_root": "DEVICES > ",
+    "mod_mods_root": "MODS >",
+    "mod_matrix_root": "MATRIX >",
+    "mod_rhythm_1": "rhythm 1",
+    "mod_macro_1": "macro 1",
+    "mod_active": "active",
+    "mod_value": "value",
     "clock_source": "source",
     "clock_tempo": "tempo",
     "elektron_program_change_channel": "Elektron p.change channel",
@@ -117,10 +124,24 @@ NATIVE_MENU = {
     "patch_control_configured": "Control 1",
 }
 
+NATIVE_MENU_LABEL_GEOMETRY = {
+    "mod_matrix_root": {"x": 4},
+}
+
 NATIVE_MENU_VALUES = {
     "clock_source": {
         "internal": "internal",
         "midi": "midi",
+    },
+    "modulation_control_1": {
+        "off": "X",
+        "base_32": "32",
+        "positive_half": "0.50",
+        "full_depth": "1.0",
+        "base_96": "96",
+        "base_97": "97",
+        "clear_depth": "-",
+        "negative_quarter": "-0.25",
     },
 }
 

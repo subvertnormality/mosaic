@@ -546,6 +546,13 @@ class Ui:
         ))
         self.driver.results.append(dict(kind="selected-menu-label", text=label))
 
+    def expect_trig_parameter(self, parameter):
+        try:
+            label = TRIG_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown trig parameter: " + str(parameter)) from error
+        self.expect_menu_label(label)
+
     def select_project_action(self, action, returning=False, activate=True):
         project = SCREEN["project_menu"]
         actions = project["actions"]
@@ -636,7 +643,9 @@ class Ui:
             rendered = NATIVE_MENU[parameter]
         except KeyError as error:
             raise UiMapError("unknown native menu label %s" % parameter) from error
-        self.expect_menu_label(rendered)
+        from ui_map import NATIVE_MENU_LABEL_GEOMETRY
+
+        self.expect_menu_label(rendered, **NATIVE_MENU_LABEL_GEOMETRY.get(parameter, {}))
 
     def expect_native_menu_value(self, parameter, value):
         try:
@@ -760,7 +769,10 @@ class Ui:
         except KeyError as error:
             raise UiMapError("unknown native menu parameter: " + str(parameter)) from error
         for _ in range(attempts):
-            if selected_line(self.driver.snapshot(), spec["label"]):
+            label_geometry = SCREEN["menu_label"]
+            if selected_line(self.driver.snapshot(), spec["label"],
+                             x=label_geometry["x"], width=label_geometry["width"],
+                             top=label_geometry["top"]):
                 return
             self.turn(2, 1)
         raise AssertionError(failure or spec["failure"])

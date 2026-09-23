@@ -779,6 +779,92 @@ class UiInputTests(unittest.TestCase):
         ])
 
 class UiObservationTests(unittest.TestCase):
+    def test_modulation_values_are_mapped_and_resolve_without_result_changes(self):
+        from ui import Ui
+        from ui_map import NATIVE_MENU_VALUES
+
+        values = NATIVE_MENU_VALUES["modulation_control_1"]
+        self.assertEqual(values, {
+            "off": "X",
+            "base_32": "32",
+            "positive_half": "0.50",
+            "full_depth": "1.0",
+            "base_96": "96",
+            "base_97": "97",
+            "clear_depth": "-",
+            "negative_quarter": "-0.25",
+        })
+        class Driver:
+            def __init__(self):
+                self.calls = []
+                self.results = []
+
+            def wait(self, predicate):
+                self.calls.append(("wait",))
+                state = {}
+                if not predicate(state):
+                    raise AssertionError("mapped menu value rejected")
+                return state
+
+        driver = Driver()
+        ui = Ui(driver)
+        with patch("frame_oracle.selected_value", return_value=True) as selected:
+            for key, rendered in values.items():
+                ui.expect_native_menu_value("modulation_control_1", key)
+                self.assertEqual(selected.call_args.args[1], rendered)
+        self.assertEqual(driver.calls, [("wait",)] * len(values))
+        self.assertEqual(driver.results, [
+            {"kind": "selected-menu-value", "text": rendered}
+            for rendered in values.values()
+        ])
+
+    def test_modulation_menu_labels_are_mapped_to_rendered_text(self):
+        from ui_map import NATIVE_MENU, NATIVE_MENU_LABEL_GEOMETRY
+
+        self.assertEqual({key: NATIVE_MENU[key] for key in (
+            "mod_devices_root", "mod_mods_root", "mod_matrix_root",
+            "mod_rhythm_1", "mod_macro_1", "mod_active", "mod_value",
+        )}, {
+            "mod_devices_root": "DEVICES > ",
+            "mod_mods_root": "MODS >",
+            "mod_matrix_root": "MATRIX >",
+            "mod_rhythm_1": "rhythm 1",
+            "mod_macro_1": "macro 1",
+            "mod_active": "active",
+            "mod_value": "value",
+        })
+        self.assertEqual(NATIVE_MENU_LABEL_GEOMETRY["mod_matrix_root"], {"x": 4})
+
+    def test_native_menu_label_uses_key_specific_mapped_geometry(self):
+        from ui import Ui
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        with patch.object(ui, "expect_menu_label") as expect:
+            ui.expect_native_menu_label("mod_matrix_root")
+        expect.assert_called_once_with("MATRIX >", x=4)
+
+    def test_trig_parameter_label_resolves_stable_key(self):
+        from ui import Ui, UiMapError
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        with patch.object(ui, "expect_menu_label") as expect:
+            ui.expect_trig_parameter("fixed_note")
+            expect.assert_called_once_with("Fixed Note")
+            with self.assertRaises(UiMapError):
+                ui.expect_trig_parameter("rendered_label")
+        self.assertEqual(driver.results, [])
+
+    def test_native_parameter_seek_uses_mapped_menu_label_geometry(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_line", return_value=True) as selected:
+            Ui(driver).seek_native_menu_parameter("configured_control_1")
+        self.assertEqual(selected.call_args.args[1:], ("Control 1",))
+        self.assertEqual(selected.call_args.kwargs, {"x": 0, "width": 70, "top": 22})
+
     def test_native_menu_label_key_preserves_rendered_oracle(self):
         from ui import Ui, UiMapError
 
