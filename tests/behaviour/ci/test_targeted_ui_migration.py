@@ -423,6 +423,90 @@ class TargetedMigrationTests(unittest.TestCase):
                                     root / "before", root / "after", "controlled",
                                     case="M-PATCH-009")))
 
+    def test_transpose_autosave_requires_equal_decoded_graph_and_preserves_raw_hashes(self):
+        import hashlib
+        import json
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            after_results = root / "after/results.json"
+            projects = {}
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                project.write_text(
+                    'return { {song={2}}, {source={3}, copy={3}}, {value=7} }\n'
+                    if side == "before" else
+                    'return { {song={3}}, {unused=0}, {source={4}, copy={4}}, {value=7} }\n')
+                projects[side] = project
+                ptn_sha = hashlib.sha256(project.read_bytes()).hexdigest()
+                (run / "results.json").write_text(json.dumps([{
+                    "kind": "transpose-autosave",
+                    "files": {"autosave.ptn": ptn_sha, "autosave.pset": "a" * 64},
+                    "passed": True,
+                }]))
+            before_sha = hashlib.sha256(projects["before"].read_bytes()).hexdigest()
+            after_sha = hashlib.sha256(projects["after"].read_bytes()).hexdigest()
+            self.assertNotEqual(before_sha, after_sha)
+            self.assertEqual(check_session_roots(
+                root / "before", root / "after", "controlled", case="M-TRANS-008"), [])
+
+            after_project = projects["after"]
+            after_project.write_text(
+                'return { {song={3}}, {unused=0}, {source={4}, copy={4}}, {value=8} }\n')
+            row = json.loads(after_results.read_text())
+            row[0]["files"]["autosave.ptn"] = hashlib.sha256(
+                after_project.read_bytes()).hexdigest()
+            after_results.write_text(json.dumps(row))
+            self.assertTrue(any("persisted project graphs differ" in error
+                                for error in check_session_roots(
+                                    root / "before", root / "after", "controlled",
+                                    case="M-TRANS-008")))
+
+            after_project.write_text(
+                'return { {song={3}}, {unused=0}, {source={4}, copy={5}}, '
+                '{value=7}, {value=7} }\n')
+            row = json.loads(after_results.read_text())
+            row[0]["files"]["autosave.ptn"] = hashlib.sha256(
+                after_project.read_bytes()).hexdigest()
+            after_results.write_text(json.dumps(row))
+            errors = check_session_roots(
+                root / "before", root / "after", "controlled", case="M-TRANS-008")
+            self.assertTrue(any("reference/alias mismatch" in error for error in errors), errors)
+
+            after_project.write_text(
+                'return { {song={3}}, {unused=0}, {source={4}, copy={4}}, {value=7} }\n')
+            row = json.loads(after_results.read_text())
+            row[0]["files"]["autosave.ptn"] = hashlib.sha256(
+                after_project.read_bytes()).hexdigest()
+            row[0]["files"]["autosave.pset"] = "b" * 64
+            after_results.write_text(json.dumps(row))
+            self.assertTrue(any("controlled results differ" in error
+                                for error in check_session_roots(
+                                    root / "before", root / "after", "controlled",
+                                    case="M-TRANS-008")))
+
+            row[0]["files"]["autosave.pset"] = "a" * 64
+            after_results.write_text(json.dumps(row))
+            row[0]["files"]["autosave.ptn"] = "f" * 64
+            after_results.write_text(json.dumps(row))
+            errors = check_session_roots(
+                root / "before", root / "after", "controlled", case="M-TRANS-008")
+            self.assertTrue(any("transpose autosave .ptn SHA differs from artifact" in error
+                                for error in errors), errors)
+            after_project.unlink()
+            errors = check_session_roots(
+                root / "before", root / "after", "controlled", case="M-TRANS-008")
+            self.assertTrue(any("after missing persisted project artifact" in error
+                                for error in errors), errors)
+
     def test_pre_policy_project_fixtures_are_compared_as_graphs(self):
         import shutil
 

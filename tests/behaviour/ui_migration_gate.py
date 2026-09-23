@@ -54,6 +54,7 @@ PERSISTED_RESULT_KINDS = {
     "M-PATCH-051": "pre-policy-project-fixture",
     "M-PATCH-059": "pre-policy-project-fixture",
     "M-REC-PARAM-027": "recording-autosave-files",
+    "M-TRANS-008": "transpose-autosave",
 }
 
 
@@ -87,6 +88,11 @@ def _normalise_verified_ptn_result_hash(values, result_kind, raw_sha, side):
         files = entry.get("files")
         if not isinstance(files, dict) or files.get("autosave.ptn") != raw_sha:
             return None, ["%s recording autosave .ptn SHA differs from artifact" % side]
+        files["autosave.ptn"] = "<verified-decoded-project-graph>"
+    elif result_kind == "transpose-autosave":
+        files = entry.get("files")
+        if not isinstance(files, dict) or files.get("autosave.ptn") != raw_sha:
+            return None, ["%s transpose autosave .ptn SHA differs from artifact" % side]
         files["autosave.ptn"] = "<verified-decoded-project-graph>"
     else:
         return None, ["unsupported persisted project result kind: " + result_kind]
@@ -134,6 +140,7 @@ PERSISTED_PROJECTS = {
         "generated-project/autosave.ptn",
         "recording-reload-1/generated-project/autosave.ptn",
     ),
+    "M-TRANS-008": ("generated-project/autosave.ptn",),
 }
 PROJECT_GRAPH_COMPARATOR = Path(__file__).with_name("ci") / "compare_ptn_graph.lua"
 
