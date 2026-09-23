@@ -1,0 +1,302 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Trigless locks",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Trigless locks",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Trig Probability",
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166124512,
+        "error_ms": -0.5421546666666555
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166364588,
+        "error_ms": -0.30207866666664973
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165356741,
+        "error_ms": -1.3099256666666559
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166549437,
+        "error_ms": -0.11722966666666279
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166641752,
+        "error_ms": -0.024914666666653318
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16530777,
+        "error_ms": -1.3588966666666646
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166168995,
+        "error_ms": -0.49767166666664364
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166178158,
+        "error_ms": -0.4885086666666649
+      }
+    ]
+  },
+  {
+    "kind": "probability-trigless-midi-locks",
+    "nrpn": false,
+    "trigless": true,
+    "phase": "probability0-active-trigs-retain-locks",
+    "active_steps": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "accepted_steps": [],
+    "lock_opportunities": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166093164,
+        "error_ms": -0.5735026666666698
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166242444,
+        "error_ms": -0.4242226666666682
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166356398,
+        "error_ms": -0.31026866666666875
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165697663,
+        "error_ms": -0.9690036666666624
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166354419,
+        "error_ms": -0.31224766666665404
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166216693,
+        "error_ms": -0.4499736666666587
+      }
+    ]
+  },
+  {
+    "kind": "probability-trigless-midi-locks",
+    "nrpn": false,
+    "trigless": true,
+    "phase": "removed-trig-respects-trigless",
+    "active_steps": [
+      1,
+      2,
+      4
+    ],
+    "accepted_steps": [],
+    "lock_opportunities": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166224466,
+        "error_ms": -0.44220066666667
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166552197,
+        "error_ms": -0.11446966666664449
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166417778,
+        "error_ms": -0.24888866666666898
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165127808,
+        "error_ms": -1.5388586666666704
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166325057,
+        "error_ms": -0.34160966666665904
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165593899,
+        "error_ms": -1.0727676666666686
+      }
+    ]
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166421114,
+        "error_ms": -0.24555266666664854
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165592827,
+        "error_ms": -1.0738396666666594
+      }
+    ]
+  },
+  {
+    "kind": "probability-trigless-midi-locks",
+    "nrpn": false,
+    "trigless": true,
+    "phase": "step-probability100-keeps-lock-before-note",
+    "active_steps": [
+      1,
+      2,
+      4
+    ],
+    "accepted_steps": [
+      4
+    ],
+    "lock_opportunities": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "passed": true
+  }
+]
