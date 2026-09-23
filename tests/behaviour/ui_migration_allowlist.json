@@ -22,6 +22,5 @@
   "rhythm_doctor.py",
   "rhythm_doctor_correction.py",
   "rhythm_doctor_surface.py",
-  "trig_parameter_interactions.py",
-  "trigless_slide_clock.py"
+  "trig_parameter_interactions.py"
 ]

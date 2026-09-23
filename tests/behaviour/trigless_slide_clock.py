@@ -22,22 +22,21 @@ ONSET_TOLERANCE_NS = 3_000_002     # M-SYNC-018 abrupt tempo-step bound on nativ
 
 
 def trigless_slide_clock(c):
-    from cases import menu_label, menu_value, assign_trig_parameter, set_mosaic_options
-    from patch_params import open_patch_control, turn
     from external_clock_faults import _assert_notes, _actual_delivery, _schedule
-    c.configure(); set_mosaic_options(c, [('Trigless locks', True)])
-    c.tap(5, 8); c.tap(3, 4); c.tap(3, 8)                        # remove step 3's trig; keep its lock
-    open_patch_control(c, setup=False); turn(c, 63); turn(c, 1); menu_value(c, '63'); c.key(1)
-    c.enc(1, -3); assign_trig_parameter(c, 'CC 1')
+    c.ui.configure(); c.ui.set_mosaic_options([('Trigless locks', True)])
+    c.ui.tap_control('pattern_editor'); c.ui.tap_step(3); c.ui.tap_control('channel_editor')
+    c.ui.open_patch_control(setup=False); c.ui.turn_patch_control(63); c.ui.turn_patch_control(1)
+    c.ui.expect_patch_value(63); c.ui.press_key(1)
+    c.ui.turn(1, -3); c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step, value in [(1, 24), (3, 96)]:
-        c.action(type='grid', x=step, y=4, state=1)
-        try: c.elapse(.05); c.action(type='enc', n=3, delta=-126); c.enc(3, value + 1)
-        finally: c.action(type='grid', x=step, y=4, state=0)
-    c.key(3)                                                      # global slide On
+        with c.ui.hold_step(step):
+            c.elapse(.05); c.ui.encoder_event(3, -126); c.ui.turn(3, value + 1)
+    c.ui.press_key(3)                                             # global slide On
     # norns reopens the menu inside the patch group; return to the parameter list top.
-    c.key(1); c.key(2); c.enc(2, -60); menu_label(c, 'LEVELS >')
+    c.ui.press_key(1); c.ui.press_key(2); c.ui.turn(2, -60); c.ui.expect_native_menu_label('levels_root')
     position = next(i for i, v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name'] == 'CLOCK')
-    c.enc(2, position); c.key(3); menu_label(c, 'source'); c.enc(3, 1); menu_value(c, 'midi')
+    c.ui.turn(2, position); c.ui.press_key(3); c.ui.expect_native_menu_label('clock_source')
+    c.ui.turn(3, 1); c.ui.expect_native_menu_value('clock_source', 'midi')
     controlled = c.clock_mode == 'controlled-experimental'
     domain = 'logical' if controlled else 'monotonic'; key = 'at_' + domain + '_ns'; field = domain + '_ns'
     origin = (c.logical_ns if controlled else time.monotonic_ns()) + 1_750_000_000

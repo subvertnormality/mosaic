@@ -135,6 +135,7 @@ PATCH_PARAMETER_VALUES = {
 }
 
 TRIG_PARAMETERS = {
+    "stored_patch_cc1": "CC 1",
     "fixed_note": "Fixed Note",
     "quantised_fixed_note": "Quantised Fixed Note",
     "trig_probability": "Trig Probability",
