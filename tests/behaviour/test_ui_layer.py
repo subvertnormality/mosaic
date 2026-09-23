@@ -45,6 +45,16 @@ class UiLayerGuardTests(unittest.TestCase):
 
         self.assertEqual(callable_raw_dependencies(CASES["M-OPT-ELEK-004"]["run"]), [])
 
+    def test_recording_stop_case_is_owned_by_its_contract_module(self):
+        from cases import CASES
+        from contract.recording_stop_safety import recording_stop_safety
+        from ui_layer_guard import callable_raw_dependencies
+
+        run = CASES["M-REC-PARAM-022"]["run"]
+        self.assertIs(run, recording_stop_safety)
+        self.assertEqual(run.__module__, "contract.recording_stop_safety")
+        self.assertEqual(callable_raw_dependencies(run), [])
+
     def test_chord_contract_family_is_owned_by_contract_module(self):
         from cases import CASES
 

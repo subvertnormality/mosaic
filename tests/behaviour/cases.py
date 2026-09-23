@@ -116,7 +116,7 @@ from numeric_merging import numeric_note_merge
 from numeric_merging import merge_transpose_scale_lock
 from numeric_merging import transpose_midi_boundaries
 from recording_lifetimes import recording_ten_slots,recording_ten_slots_trigless
-from recording_lifetimes import recording_stop_safety
+from contract.recording_stop_safety import recording_stop_safety
 from trig_parameter_interactions import sparse_editor_domain
 from trig_parameter_interactions import cc_encoder_domain
 from recording_lifetimes import recording_lifetime,recording_nrpn

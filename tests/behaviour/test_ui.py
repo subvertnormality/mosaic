@@ -1379,7 +1379,7 @@ class MigrationGateTests(unittest.TestCase):
 
 class RecordingLifetimeInputTests(unittest.TestCase):
     def test_long_stop_keeps_shift_and_play_stop_edges_and_release_delay(self):
-        from recording_lifetimes import long_stop
+        from contract.recording_stop_safety import long_stop
         from ui import Ui
 
         driver = FakeDriver()
