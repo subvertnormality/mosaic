@@ -1,4 +1,5 @@
 [
   "cases.py",
-  "dense_workload.py"
+  "dense_workload.py",
+  "patch_params.py"
 ]
