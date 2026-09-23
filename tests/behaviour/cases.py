@@ -1,4 +1,5 @@
 from lock_lead_time import lock_lead_time
+from duration_witness import assert_duration_witness_observed, controlled_duration_witness_pair
 from scale_memory import (adjacent_channel_ranges, all_pattern_slots,
                           channel_long_hold, channel_mute_gestures,
                           channel_routing_isolation, memory_channel_isolation,
@@ -216,7 +217,7 @@ def wrapped_length(c,same_pitch=False):
         c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[0,2],passed=True))
 
 
-def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
+def pattern_duration_domain(c,lengths=range(1,65),channel_end=64,reexpress_controlled=False):
     # The documented finite duration domain is1..64 sixteenth-note steps.
     # Author each duration using grid gestures; observe every cell and MIDI off.
     c.configure();c.ui.set_range(1,channel_end);c.ui.pattern_editor()
@@ -244,7 +245,11 @@ def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
         assert [m['bytes'] for m in emitted[:2]]==[[144,60,127],[128,60,127]],emitted
         assert all(m['bytes'] in ([144,60,127],[128,60,127]) for m in emitted)
         c.ui.tap_control("play_stop");c.wait(lambda state:not state['midi_capture']['outstanding'])
-        c.results.append(dict(kind='pattern-duration-domain',steps=length,expected_seconds=length/6,actual_seconds=elapsed,first_on=emitted[0],first_off=release))
+        witness=dict(first_on=emitted[0],first_off=release)
+        if reexpress_controlled and c.clock_mode=='controlled-experimental':
+            assert_duration_witness_observed(c.observations,emitted[0],release)
+            witness=controlled_duration_witness_pair(emitted[0],release)
+        c.results.append(dict(kind='pattern-duration-domain',steps=length,expected_seconds=length/6,actual_seconds=elapsed,**witness))
 
 
 def pattern_duration_controls(c):
@@ -3681,8 +3686,8 @@ CASES={
  'M-ALG-001':dict(run=euclidean_workflow,requirements=['PAT-ALGORITHM', 'PAT-FADERS', 'PAT-PREVIEW', 'PAT-PAINT', 'PAT-CANCEL', 'PAT-MOVE'],description='Euclidean3-in-8: full-grid two-phase preview, unchanged playback, cancel, shifted XOR paint/repaint, left/reset and dense-fill boundary'),
  'M-PAT-004':dict(run=pattern_duration_controls,requirements=['PAT-DURATION'],description='Length extension/reset and empty-step gestures preserve exact grid and MIDI phrase'),
  'M-PAT-005':dict(run=live_pattern_duration,requirements=['PAT-DURATION'],description='Shorten and extend during playback: pending release unchanged, following onsets use edited length, phrase timing preserved'),
- 'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),
- 'M-PAT-003':dict(run=pattern_duration_domain,requirements=['PAT-DURATION'],description='All64 authored duration endpoints through grid gestures, full length LEDs and independent MIDI durations with stop cleanup'),
+ 'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4,reexpress_controlled=True),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),
+ 'M-PAT-003':dict(run=lambda c:pattern_duration_domain(c,reexpress_controlled=True),requirements=['PAT-DURATION'],description='All64 authored duration endpoints through grid gestures, full length LEDs and independent MIDI durations with stop cleanup'),
  'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True,case_id='M-REC-032'),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),
  'M-REC-033':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4),boundary_witness=True,case_id='M-REC-033'),requirements=['REC-LIVE-NOTES'],description='Two milliseconds after boundary: independent active-step MIDI witness, grid and replay'),
  'M-MIDI-005':dict(run=keyboard_pitch_range,requirements=['MIDI-RELEASE-001'],description='All128 MIDI pitches at minimum/maximum velocity with both release forms; exact preview and no outstanding notes'),
