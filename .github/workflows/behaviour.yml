@@ -115,6 +115,14 @@ jobs:
             extra=""
             output_mod="--output-mod-root /tmp/mosaic-output-mods"
           fi
+          # A 30-second controlled-time advance in M-REC-PARAM-021 can exceed
+          # the native callback deadline when this runner hosts both lanes.
+          # Its original failure and passing serial retry remain distinct;
+          # serialize only whichever shard owns that case, not the campaign.
+          selected="$(python3 tests/behaviour/ci/select-shard.py --profile base-midi --index ${{ matrix.shard }} --count 16 --json)"
+          if [[ "$selected" == *'"M-REC-PARAM-021"'* ]]; then
+            extra="$extra --sequential-lanes"
+          fi
           set +e
           runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py run             --output "/tmp/mosaic-behaviour-base-${{ matrix.shard }}"             --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"             --lanes real-time,controlled-experimental --profiles base-midi             --case-pattern "$pattern" --real-time-workers 1 --controlled-workers 1             --case-timeout 3600 $extra $output_mod
           status=$?
