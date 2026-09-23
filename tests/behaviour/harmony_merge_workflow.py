@@ -282,8 +282,8 @@ def pattern_harmony_delayed_bypass_workflow(c):
     c.ui.turn(2, 2); c.ui.turn(3, 18)
     c.ui.turn(2, 1); c.ui.turn(3, 2)
     c.ui.turn(1, 1); c.ui.expect_header("trig_locks", channel=1)
-    c.ui.assign_trig_parameter('Chord Note Arpeggio'); c.ui.turn(3, 4)
-    c.ui.turn(2, 1); c.ui.assign_trig_parameter('Chord Pattern'); c.ui.turn(3, 2)
+    c.ui.assign_trig_parameter_key("chord_note_arpeggio"); c.ui.turn(3, 4)
+    c.ui.turn(2, 1); c.ui.assign_trig_parameter_key("chord_pattern"); c.ui.turn(3, 2)
 
     capture = MidiWindow(c.snapshot()['midi_count'])
     controlled = c.clock_mode == 'controlled-experimental'

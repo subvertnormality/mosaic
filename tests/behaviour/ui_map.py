@@ -161,6 +161,8 @@ TRIG_PARAMETERS = {
     "fixed_note": "Fixed Note",
     "quantised_fixed_note": "Quantised Fixed Note",
     "trig_probability": "Trig Probability",
+    "chord_note_arpeggio": "Chord Note Arpeggio",
+    "chord_pattern": "Chord Pattern",
 }
 
 MIDI_MAPPING_PARAMETERS = {

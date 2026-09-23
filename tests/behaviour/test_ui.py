@@ -85,6 +85,8 @@ class UiMapTests(unittest.TestCase):
             "fixed_note": "Fixed Note",
             "quantised_fixed_note": "Quantised Fixed Note",
             "trig_probability": "Trig Probability",
+            "chord_note_arpeggio": "Chord Note Arpeggio",
+            "chord_pattern": "Chord Pattern",
         })
 
     def test_mosaic_option_keys_match_documented_native_labels(self):
@@ -420,6 +422,26 @@ class UiInputTests(unittest.TestCase):
                         )
                     assign.assert_called_once_with(label, offset=offset)
         self.assertEqual(driver.calls, [])
+
+    def test_chord_parameter_keys_keep_the_existing_native_input_recipe(self):
+        from ui import Ui
+
+        for key, label in (("chord_note_arpeggio", "Chord Note Arpeggio"),
+                           ("chord_pattern", "Chord Pattern")):
+            with self.subTest(key=key):
+                driver = FakeDriver()
+                ui = Ui(driver)
+                with patch.object(ui, "expect_list_label", return_value=True) as expect:
+                    ui.assign_trig_parameter_key(key, offset=2)
+
+                expect.assert_called_once_with(label)
+                self.assertEqual(driver.calls, [
+                    ("key", 2),
+                    ("enc", 3, -50),
+                    ("enc", 3, 2),
+                    ("key", 3),
+                    ("key", 2),
+                ])
 
     def test_unknown_trig_parameter_key_fails_before_input(self):
         from ui import UiMapError
