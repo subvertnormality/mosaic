@@ -1250,7 +1250,7 @@ def repeated_pattern_reset_policy(c,verify_pending=False):
     c.ui.configure();c.ui.set_range(1,3)
     c.ui.channel_page('clock_mods','midi_config');c.ui.turn(3,-11);c.ui.press_key(3)
     for song_on,transition_reset,repeat_reset in ((True,False,False),(True,True,False),(True,False,True),(True,True,True),(False,True,True)):
-        set_mosaic_options(c,[('Song mode',song_on),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
+        c.ui.set_mosaic_options([('Song mode',song_on),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
         capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(24);capture.extend(c.snapshot())
         c.ui.stop();c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         reset=song_on and repeat_reset
@@ -1289,7 +1289,7 @@ def fractional_clock_continuity(c):
     c.ui.configure();c.ui.pattern_editor();c.ui.pattern_editor()
     for x in range(1,5):c.ui.tap_control('cell',(x,7))
     c.ui.menu('channel_editor');c.ui.turn(1,-1)
-    set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
+    c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
     ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
     selected=13;segments=[];trigger_action=dict(type='grid',x=1,y=8,state=0)
     for index,label,pulses in ratios:
@@ -1352,7 +1352,7 @@ def song_transition_reset_policy(c,verify_pending=False):
     c.ui.tap_control('cell',(2,1));c.ui.menu('channel_editor');c.ui.tap_control('shift_reset')
     c.ui.song_editor();c.ui.tap_control('cell',(1,1))
     for transition_reset,repeat_reset in ((False,False),(True,False),(False,True),(True,True)):
-        set_mosaic_options(c,[('Song mode',True),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
+        c.ui.set_mosaic_options([('Song mode',True),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
         c.ui.tap_control('cell',(1,1));c.ui.expect_leds({('cell',(1,1)):'selected',('cell',(2,1)):'alternate'})
         capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play()
         c.elapse(10.8);capture.extend(c.snapshot());c.ui.expect_leds({('cell',(1,1)):'alternate',('cell',(2,1)):'selected'})
@@ -1386,7 +1386,7 @@ def inactive_shuffle_transition(c,basis=False):
     c.configure();c.tap(5,8);c.tap(5,8)
     for x in range(1,5):c.tap(x,7)
     c.tap(3,8);c.enc(1,-1);c.enc(3,12);c.key(3)
-    set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
+    c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
     c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8)
     # Set either stored Smooth feel or7 basis in Shuffle mode, then return
     # to Swing. Each inactive field is tested independently at transitions.
@@ -1494,7 +1494,7 @@ def strum_reset_continuity(c):
     c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
     c.ui.assign_trig_parameter_key('chord_note_strum');c.ui.set_value(8)
     for reset in (False,True):
-        set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',reset)])
+        c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',reset)])
         capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(24);capture.extend(c.snapshot())
         controlled=c.clock_mode=='controlled-experimental'
         lower=c.logical_ns if controlled else time.monotonic_ns()
@@ -1530,7 +1530,7 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
         if fractional_gate:c.ui.turn(2,1);c.ui.set_value(4)
     c.ui.turn(1,3);c.ui.set_value(0 if fast else -11);c.ui.press_key(3);c.ui.turn(1,-2)
     c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(1 if fast else 8)
-    if reset:set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',True)])
+    if reset:c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',True)])
     seconds=3 if fast else (24 if reset else 10)
     capture=MidiWindow(c.snapshot()['midi_count'])
     if fast:c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)

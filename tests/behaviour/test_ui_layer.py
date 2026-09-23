@@ -18,6 +18,35 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_mosaic_options_case_callers_use_semantic_ui_verb(self):
+        """Keep native-menu seeks out of the six non-contract case bodies."""
+        import ast
+
+        tree = ast.parse((BEHAVIOUR / "cases.py").read_text())
+        names = {
+            "repeated_pattern_reset_policy", "fractional_clock_continuity",
+            "song_transition_reset_policy", "inactive_shuffle_transition",
+            "strum_reset_continuity", "arp_basic_timing",
+        }
+        functions = [node for node in tree.body
+                     if isinstance(node, ast.FunctionDef) and node.name in names]
+        self.assertEqual({node.name for node in functions}, names)
+        calls = [node for function in functions for node in ast.walk(function)
+                 if isinstance(node, ast.Call)]
+        raw_calls = [node for node in calls
+                     if isinstance(node, ast.Call)
+                     and isinstance(node.func, ast.Name)
+                     and node.func.id == "set_mosaic_options"]
+        semantic_calls = [node for node in calls
+                          if isinstance(node, ast.Call)
+                          and isinstance(node.func, ast.Attribute)
+                          and node.func.attr == "set_mosaic_options"
+                          and isinstance(node.func.value, ast.Attribute)
+                          and node.func.value.attr == "ui"]
+
+        self.assertEqual(raw_calls, [])
+        self.assertEqual(len(semantic_calls), 6)
+
     def test_live_recording_and_panic_cases_use_semantic_inputs(self):
         """Keep case recipes on Ui verbs while preserving their existing oracles."""
         import ast
