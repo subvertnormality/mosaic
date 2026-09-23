@@ -1,5 +1,6 @@
 """Stock-norns adapter for a deliberately small registered-recipe suite."""
 import re,time
+from ui import Ui
 
 HARDWARE_PERFORMANCE_RECIPES={
     'perf_dense.py':{
@@ -70,6 +71,7 @@ class HardwareDriver:
     def __init__(self,runner,grid_device,device_map_id,trace,capture_screens=True,artifact_prefix='m-pat-001'):
         self.runner=runner;self.grid_device=grid_device;self.device_map_id=device_map_id;self.trace=trace
         self.clock_mode='real-time';self.logical_ns=0;self.recipe=[];self.observations=[];self.results=[];self.screens=[];self.finished=False;self.capture_screens=capture_screens;self.artifact_prefix=artifact_prefix
+        self.ui=Ui(self)
         output=runner.maiden.eval("print('__MOSAIC_TEMPO__'..clock.get_tempo())");match=re.search(r'__MOSAIC_TEMPO__([0-9.]+)',output)
         if not match:raise RuntimeError('Could not observe norns clock tempo')
         self.tempo_bpm=float(match.group(1));self.expected_step_seconds=15/self.tempo_bpm;self.trace.install()
