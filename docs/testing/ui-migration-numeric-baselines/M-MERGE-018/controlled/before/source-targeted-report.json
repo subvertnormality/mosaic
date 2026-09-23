@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "fcc48ac13a47d4efbea8c25978a3901be56114ab",
+  "after_sha": "c9588d72dd6c25cd41b100bee0f583b72281322a",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MERGE-010",
+    "M-MERGE-018",
+    "M-MERGE-019",
+    "M-MERGE-020",
+    "M-MERGE-021",
+    "M-MERGE-022"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract/numeric_merging.py",
+      "tests/behaviour/numeric_merging.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract/numeric_merging.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/numeric_merging.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MERGE-010",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-010/real-time/before/612e5b7ec2cd4326bb5647ea5f617970/manifest.json",
+              "manifest_sha256": "c769276d7c165b919fa6af24094b981d19524510ebc16584cf9facef510e3e13"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-010/real-time/after/32c7e37ab2af4e00957e99745f4b4a90/manifest.json",
+              "manifest_sha256": "255de412828cf7ec49fe454c5579bcb64eb5770a4b3b5802f6ae84baa811ce5e"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-010/controlled-experimental/before/100c2897965e47f39beb716361333d3a/manifest.json",
+              "manifest_sha256": "d68e9f734bff8c1265a54e83f76baf5c022835ee9dabfde6529b3f437b01418e"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-010/controlled-experimental/after/17784cae45fb46baaafffaf9c001b3fa/manifest.json",
+              "manifest_sha256": "508039c31213a4a5aa70aebd8a3340d8b3a05b5c33f11f62163498f87c6a1498"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-018",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-018/real-time/before/ad0aea5b20aa478889e00102e5c6f168/manifest.json",
+              "manifest_sha256": "394f518b7e149d942e45ed5fb2af239c6d87787e3b27252af7bc46f3b465bb7a"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-018/real-time/after/d44561f9502f40f1b46cc92a55c3a69a/manifest.json",
+              "manifest_sha256": "637db560831a02c12f3ed98ed0c7650ee5897b34d2085955d9fa4d62ead71f09"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-018/controlled-experimental/before/6b0d9e43e34742bfba5f1fd1b781e59b/manifest.json",
+              "manifest_sha256": "141850b49920a75620dd96fbe66f7e59ea08109b976d5415c3cd51cc70ee5dd9"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-018/controlled-experimental/after/556f7891b3b3417a80e01d8b7da98bad/manifest.json",
+              "manifest_sha256": "af5271f9637dc54b9764092d9952112a15071a4d36c9c47414c873a6e844c0c6"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-019",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/real-time/before/8a42a268477e4361adce0abcbad53d4e/manifest.json",
+              "manifest_sha256": "2039832de8ebf21363b7a4141d0ccd5c928dce483a6391d6355e20134723e7df"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/real-time/after/aaff4572dc9f4f92a3b928619ff3277b/manifest.json",
+              "manifest_sha256": "5967585c269ac17f47479e536a6a76ee2b5c08b3d6f383070c85178382520a3e"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/controlled-experimental/before/1674d696de954e7784f88801c3974d67/manifest.json",
+              "manifest_sha256": "8d0b7856fe87f89a15d4a36a4e8aca968b51afb550fc444c8154c6e53b8a6f36"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-019/controlled-experimental/after/ef4ac048b8034fb5abd12d272f328228/manifest.json",
+              "manifest_sha256": "e68452ff025e11880cf310fd1eb05de9cd9fab1640b78bbef9e71fd1e9267b81"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-020",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-020/real-time/before/26677d4f03de4d1c89e1fd70a5cc2151/manifest.json",
+              "manifest_sha256": "f69495c4460891b46c863553959fc1e73e0d5a0e71f63cc24f166170e4e37906"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-020/real-time/after/1460b62d05f04515872212157c886507/manifest.json",
+              "manifest_sha256": "11d0cedafa2568c70309a23bec5c71584370be8297181775e03e644a2c1ce3db"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-020/controlled-experimental/before/cd87a00554234eb6a77a38783eb7fa3b/manifest.json",
+              "manifest_sha256": "dd64b8d2be7b95cf55371453776629e88760c4b0edb484ae9d17b3e173d8c1c9"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-020/controlled-experimental/after/4e29b9f465a44e569ac65073652e2088/manifest.json",
+              "manifest_sha256": "9c714f11e33963a37cacefd7fdf2a0058fb5e3622e77775ca9afae48b4a87eb0"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-021",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-021/real-time/before/93aed10e76a54b70adb351dc44a8e702/manifest.json",
+              "manifest_sha256": "22498cf1e6135cf789cd093a04725d89e251e39609a93bab03fdeb89629b8d90"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-021/real-time/after/ef732df10d2f42a18097af0b25f3fed6/manifest.json",
+              "manifest_sha256": "1ad7eca517cb2a339e8300b7acef2cd49ea7ae1fe22d98f97d10404d192484ee"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-021/controlled-experimental/before/c7082d56c5274a1c8f5f458338898350/manifest.json",
+              "manifest_sha256": "939e99dfdac19e695baf94653ccac48ccdc78e27b3624a5b7ed6cb5c8537ae59"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-021/controlled-experimental/after/10f5eda36e62470e8b64a946b912f93d/manifest.json",
+              "manifest_sha256": "32b1a0a85eefcf4c9c6c4a7bb460db79fca72e2634777186cf0af63406d5418c"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-022",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-022/real-time/before/46ff287ab3c74ec4ac5739ee2a6d145d/manifest.json",
+              "manifest_sha256": "daf2605a36fd2322f758d0e044629e64fc0f02a0d31a8bd280662a052c2ecad6"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-022/real-time/after/48810b0fdff94bceba5138be6759bf5a/manifest.json",
+              "manifest_sha256": "b373ead75af1a63f0d7a6f0cc95746dcd2e70f5bc4eab02abb5f2c803643b01b"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-022/controlled-experimental/before/d4ce61d505664e1d8b0c9d49dcb8af63/manifest.json",
+              "manifest_sha256": "acaa7f51886d019043043ed1f0c5588ad4b6fd78937887026d3d86f3db69664e"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-022/controlled-experimental/after/f610cc8ced754fbd8c844ee43e5aa52f/manifest.json",
+              "manifest_sha256": "ccf70613e94602100b14d8fd5ca3b522324887de46a6624efc297e4c9e3426ce"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
