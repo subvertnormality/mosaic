@@ -40,6 +40,7 @@ PYTHON_UNITTEST.add('test_ui_baseline_import')
 PYTHON_UNITTEST.add('test_ui_migration_drill')
 PYTHON_UNITTEST.add('test_rec_param_input_timing')
 PYTHON_UNITTEST.add('test_perf_dense_container_driver')
+PYTHON_UNITTEST.add('test_named_save')
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.

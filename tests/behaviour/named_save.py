@@ -30,23 +30,23 @@ def named_save_load(c):
         ui.tap_control('pattern_editor');ui.tap_control('pattern_editor')
         ui.tap_control('pattern_note_degree',(4,4));ui.tap_control('channel_editor')
     phrase('initial-A',A)
-    save();first=files('new');assert first,'Default-name save did not write new.ptn/.pset';record('save-default-name',files=first)
+    save();first=files('new');assert first,'Default-name save did not write new.ptn/.pset';record('save-default-name',files_state='created')
     save(returning=True,typed=1)
     typed=[p.stem for p in data.glob('new?.ptn')]
     assert typed==['newB'] and files('newB'),('Typed-name save',sorted(p.name for p in data.iterdir()))
-    named=files('newB');record('save-typed-name',name='newB',files=named)
+    named=files('newB');record('save-typed-name',name='newB',files_state='created')
     edit_step_four_to_g();phrase('edited-B',B)
     idle(61.5)
     assert files('autosave'),'Idle autosave missing'
     assert files('new')==first and files('newB')==named,'Autosave overwrote a named save'
-    autosaved=files('autosave');record('autosave-preserves-named',autosave=autosaved)
+    autosaved=files('autosave');record('autosave-preserves-named',autosave_state='created',named_saves='unchanged')
     # Cancel leaves every file unchanged.
     before={p.name:digest(p) for p in data.iterdir() if p.is_file()}
     ui.select_project_action('save',returning=True);ui.press_key(2);ui.press_key(1)
     assert {p.name:digest(p) for p in data.iterdir() if p.is_file()}==before,'Cancelled save changed files'
     record('cancel-save')
     # Overwrite the default name with B; the typed-name save keeps A.
-    save(returning=True);assert files('new') not in (None,first) and files('newB')==named;record('overwrite-default-name',files=files('new'))
+    save(returning=True);assert files('new') not in (None,first) and files('newB')==named;record('overwrite-default-name',files_state='changed',typed_save='unchanged')
     ui.select_project_file('newB.ptn',returning=True);ui.press_key(3);ui.press_key(1);phrase('load-typed-A',A)
     ui.select_project_file('new.ptn',returning=True);ui.press_key(3);ui.press_key(1);phrase('load-overwritten-B',B)
     assert files('newB')==named,'Loading changed a named save'
