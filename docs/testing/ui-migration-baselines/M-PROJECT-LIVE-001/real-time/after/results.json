@@ -1,0 +1,270 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166044151,
+        "error_ms": -0.6225156666666565
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166548861,
+        "error_ms": -0.11780566666666492
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166520684,
+        "error_ms": -0.14598266666665527
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166603891,
+        "error_ms": -0.06277566666665346
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165644532,
+        "error_ms": -1.0221346666666464
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166535362,
+        "error_ms": -0.13130466666666507
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165667505,
+        "error_ms": -0.9991616666666647
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166521682,
+        "error_ms": -0.14498466666665322
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166607195,
+        "error_ms": -0.05947166666664394
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165603604,
+        "error_ms": -1.0630626666666698
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166494567,
+        "error_ms": -0.17209966666664744
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166734816,
+        "error_ms": 0.06814933333335049
+      }
+    ]
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083651458,
+        "error_ms": 0.3181246666666693
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.208307029,
+        "error_ms": -0.026304333333337926
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083047235,
+        "error_ms": -0.2860983333333317
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083129612,
+        "error_ms": -0.2037213333333232
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.207399822,
+        "error_ms": -0.9335113333333311
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083006444,
+        "error_ms": -0.32688933333333003
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083191048,
+        "error_ms": -0.14228533333332516
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.208254717,
+        "error_ms": -0.07861633333333673
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083033391,
+        "error_ms": -0.29994233333333065
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.082146988,
+        "error_ms": -1.1863453333333247
+      },
+      {
+        "pitch": 81,
+        "expected_seconds": 0.20833333333333334,
+        "actual_seconds": 0.208333899,
+        "error_ms": 0.0005656666666464805
+      },
+      {
+        "pitch": 79,
+        "expected_seconds": 0.08333333333333333,
+        "actual_seconds": 0.083168983,
+        "error_ms": -0.16435033333332683
+      }
+    ]
+  },
+  {
+    "kind": "rejected-range-channel-isolation",
+    "ranges": [
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "phrases": {
+      "1": [
+        [
+          144,
+          60,
+          127
+        ],
+        [
+          144,
+          62,
+          117
+        ],
+        [
+          144,
+          64,
+          107
+        ],
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      "2": [
+        [
+          145,
+          79,
+          40
+        ],
+        [
+          145,
+          81,
+          60
+        ],
+        [
+          145,
+          79,
+          40
+        ]
+      ]
+    },
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "< Save project"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "+ New"
+  },
+  {
+    "kind": "project-action-pending-releases",
+    "action": "new",
+    "routes": 2,
+    "no_old_phrase": true,
+    "no_outstanding": true,
+    "passed": true
+  }
+]
