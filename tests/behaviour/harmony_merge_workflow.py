@@ -45,15 +45,16 @@ def playback_note_messages(c, expected, cycles=2, timeout=6):
 def setup_foundation(c):
     c.configure()
     # Extend the channel loop, author an independent second pattern, then assign it.
-    c.hold_tap((1, 4), (8, 4))
-    c.tap(5, 8); c.tap(2, 1); c.tap(5, 4); c.tap(7, 4)
-    c.tap(3, 8); c.tap(2, 2)
+    c.ui.hold_control_tap("step", "step", held_index=1, target_index=8)
+    c.ui.tap_control("pattern_editor"); c.ui.select_channel(2)
+    c.ui.tap_step(5); c.ui.tap_step(7)
+    c.ui.tap_control("channel_editor"); c.ui.tap_control("pattern_slot", 2)
     # Device Config -> Merge Shape. Enable Foundation and explicitly select P01.
-    c.enc(1, 2); c.screen_header('Ch. 1 Merge Shape')
-    c.enc(3, 1)       # Mode: Foundation (staged).
-    c.enc(2, 1); c.key(3)  # Rhythm -> M02.
-    c.enc(3, 1); c.key(3)  # Anchor: P01; apply the whole transaction.
-    c.led_values([(x, 4) for x in (1, 2, 3, 4, 5, 7)], [15] * 6)
+    c.ui.turn(1, 2); c.ui.expect_header("merge_shape", channel=1)
+    c.ui.turn(3, 1)       # Mode: Foundation (staged).
+    c.ui.turn(2, 1); c.ui.press_key(3)  # Rhythm -> M02.
+    c.ui.turn(3, 1); c.ui.press_key(3)  # Anchor: P01; apply the whole transaction.
+    c.ui.expect_steps({step: "selected" for step in (1, 2, 3, 4, 5, 7)})
 
 
 def foundation_workflow(c):
@@ -71,8 +72,8 @@ def foundation_workflow(c):
 def phrase_build_workflow(c):
     setup_foundation(c)
     # Return to M01, open Phrase, select two cycles and the Build curve (50%, 100%).
-    c.enc(1, 1); c.enc(2, 2); c.key(3)
-    c.enc(3, 1); c.enc(2, 1); c.enc(3, 1); c.key(3)
+    c.ui.turn(1, 1); c.ui.turn(2, 2); c.ui.press_key(3)
+    c.ui.turn(3, 1); c.ui.turn(2, 1); c.ui.turn(3, 1); c.ui.press_key(3)
     anchor = [(1, [144, n, v]) for n, v in
               ((60, 127), (62, 117), (64, 107), (65, 97))]
     addition = (1, [144, 60, 70])
@@ -83,7 +84,7 @@ def phrase_build_workflow(c):
         notes, steps = cycles[index % 2]
         expected.extend(notes); positions.extend(steps)
     expected.append(anchor[0]); positions.append(1)
-    before = c.snapshot()['midi_count']; c.tap(1, 8)
+    before = c.snapshot()['midi_count']; c.ui.play()
     def ons(state):
         result = []
         for packet in state['midi']:
@@ -107,7 +108,7 @@ def phrase_build_workflow(c):
     assert all(abs(gap - steps/6) <= tolerance for gap, steps in
                zip(actual_gaps, expected_steps)), dict(expected_steps=expected_steps,
                                                        actual_gaps=actual_gaps)
-    c.tap(1, 8); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
+    c.ui.stop(); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
     c.results.append(dict(kind='foundation-build-phrase', positions=positions,
                           exact_timing=True, passed=True))
 
@@ -130,13 +131,13 @@ def revoice_workflow(c):
 def setup_pattern_harmony(c):
     c.configure()
     # Put the legacy material two octaves above the Bass role's legal register.
-    c.tap(12, 8)
+    c.ui.tap_control("shift_right")
     # Harmony: Pattern, then map the recurring written tone 0 to the Bass role.
-    c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
-    c.enc(3, 2)
-    c.enc(2, 3); c.key(3)
-    c.enc(3, 1); c.key(3)
-    c.screen_header('Ch. 1 Harmony')
+    c.ui.turn(1, 3); c.ui.expect_header("harmony", channel=1)
+    c.ui.turn(3, 2)
+    c.ui.turn(2, 3); c.ui.press_key(3)
+    c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.expect_header("harmony", channel=1)
 
 
 def assert_pattern_progression_timing(c, notes, stage,
@@ -200,34 +201,34 @@ def pattern_harmony_independent_clocks_workflow(c):
     # Leave one public trigger in Pattern 1. Pattern 2 gets its own C source at
     # the same lattice position; a public register edit makes both MIDI channel
     # and pitch identify its independent frame.
-    c.tap(5, 8)
-    for step in (2, 3, 4): c.tap(step, 4)
-    c.tap(2, 1); c.tap(1, 4); c.tap(3, 8)
+    c.ui.pattern_editor()
+    for step in (2, 3, 4): c.ui.tap_step(step)
+    c.ui.select_channel(2); c.ui.tap_step(1); c.ui.tap_control("channel_editor")
 
     # Route Channel 2 to MIDI channel 2, select Pattern 2, and set its public
     # channel clock from /1 to /2. Channel 1 remains /1.
-    c.tap(2, 1); c.screen_header('Ch. 2 Device Config', selected=5)
-    c.enc(3, 1); c.enc(2, 1); c.enc(3, 1); c.key(3)
-    c.tap(2, 2); c.hold_tap((1, 4), (4, 4))
-    c.enc(1, -1); c.screen_header('Ch. 2 Clocks', selected=4)
-    c.enc(3, -2); c.key(3)
+    c.ui.select_channel(2); c.ui.expect_header("midi_config", channel=2)
+    c.ui.turn(3, 1); c.ui.turn(2, 1); c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.tap_control("pattern_slot", 2); c.ui.hold_control_tap(
+        "step", "step", held_index=1, target_index=4)
+    c.ui.turn(1, -1); c.ui.expect_header("clock_mods", channel=2)
+    c.ui.turn(3, -2); c.ui.press_key(3)
 
     # Each channel enters Pattern mode and maps its sole written identity to
     # Bass through the real Harmony editor. Defaults place C at 48 and F at 53.
-    c.enc(1, 4); c.screen_header('Ch. 2 Harmony', selected=8)
-    c.enc(3, 2); c.enc(2, 3); c.key(3); c.enc(3, 1); c.key(3)
-    c.enc(1, -1); c.enc(2, 4); c.key(3)
-    c.enc(2, 2); c.enc(3, -5); c.key(3)
-    c.enc(1, -1); c.screen_header('Ch. 2 Harmony', selected=8)
-    c.tap(1, 1); c.screen_header('Ch. 1 Harmony')
-    c.enc(3, 2); c.enc(2, 3); c.key(3); c.enc(3, 1); c.key(3)
+    c.ui.turn(1, 4); c.ui.expect_header("harmony", channel=2)
+    c.ui.turn(3, 2); c.ui.turn(2, 3); c.ui.press_key(3); c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.turn(1, -1); c.ui.turn(2, 4); c.ui.press_key(3)
+    c.ui.turn(2, 2); c.ui.turn(3, -5); c.ui.press_key(3)
+    c.ui.turn(1, -1); c.ui.expect_header("harmony", channel=2)
+    c.ui.select_channel(1); c.ui.expect_header("harmony", channel=1)
+    c.ui.turn(3, 2); c.ui.turn(2, 3); c.ui.press_key(3); c.ui.turn(3, 1); c.ui.press_key(3)
 
     capture = MidiWindow(c.snapshot()['midi_count'])
-    c.tap(1, 8); c.elapse(3.0); capture.extend(c.snapshot())
+    c.ui.play(); c.elapse(3.0); capture.extend(c.snapshot())
     controlled = c.clock_mode == 'controlled-experimental'
     lower = c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid', x=1, y=8, state=1)
-    c.action(type='grid', x=1, y=8, state=0)
+    c.ui.gesture([("play_stop", None)], [("play_stop", None)])
     upper = c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(.5); capture.extend(c.snapshot())
     c.wait(lambda state: not state['midi_capture']['outstanding'])
@@ -269,33 +270,31 @@ def pattern_harmony_delayed_bypass_workflow(c):
     from note_schedule import assert_schedule
 
     c.configure()
-    c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
-    c.enc(3, 2); c.enc(2, 3); c.key(3)
-    c.enc(3, 1); c.key(3)
-    c.screen_header('Ch. 1 Harmony')
+    c.ui.turn(1, 3); c.ui.expect_header("harmony", channel=1)
+    c.ui.turn(3, 2); c.ui.turn(2, 3); c.ui.press_key(3)
+    c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.expect_header("harmony", channel=1)
     # Isolate step 1, author a two-step gate and a third chord mask through the
     # public Pattern and Note Masks pages, then select a 1/6-step reverse arp.
-    c.tap(5, 8)
-    for step in (2, 3, 4): c.tap(step, 4)
-    c.tap(3, 8); c.enc(1, -20); c.screen_header('Ch. 1 Note Masks')
-    c.enc(2, 2); c.enc(3, 18)
-    c.enc(2, 1); c.enc(3, 2)
-    c.enc(1, 1); c.screen_header('Ch. 1 Trig Locks')
-    assign_trig_parameter(c, 'Chord Note Arpeggio'); c.enc(3, 4)
-    c.enc(2, 1); assign_trig_parameter(c, 'Chord Pattern'); c.enc(3, 2)
+    c.ui.pattern_editor()
+    for step in (2, 3, 4): c.ui.tap_step(step)
+    c.ui.tap_control("channel_editor"); c.ui.turn(1, -20); c.ui.expect_header("masks", channel=1)
+    c.ui.turn(2, 2); c.ui.turn(3, 18)
+    c.ui.turn(2, 1); c.ui.turn(3, 2)
+    c.ui.turn(1, 1); c.ui.expect_header("trig_locks", channel=1)
+    c.ui.assign_trig_parameter('Chord Note Arpeggio'); c.ui.turn(3, 4)
+    c.ui.turn(2, 1); c.ui.assign_trig_parameter('Chord Pattern'); c.ui.turn(3, 2)
 
     capture = MidiWindow(c.snapshot()['midi_count'])
     controlled = c.clock_mode == 'controlled-experimental'
     field = 'logical_ns' if controlled else 'monotonic_ns'
     trigger = c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid', x=1, y=8, state=1)
-    c.action(type='grid', x=1, y=8, state=0)
+    c.ui.gesture([("play_stop", None)], [("play_stop", None)])
     # Two complete four-note arp phrases finish before the next Pattern cycle;
     # stop in that quiet interval so host input latency cannot admit cycle 3.
     c.elapse(1.3); capture.extend(c.snapshot())
     lower = c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid', x=1, y=8, state=1)
-    c.action(type='grid', x=1, y=8, state=0)
+    c.ui.gesture([("play_stop", None)], [("play_stop", None)])
     upper = c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(.5); capture.extend(c.snapshot())
     c.wait(lambda state: not state['midi_capture']['outstanding'])
@@ -333,37 +332,37 @@ def pattern_harmony_workflow(c):
     # Author the user's explicit broken-chord key case A-B-C-B through the
     # existing Pattern Note faders.  These are shared source cells; Harmony is
     # a channel projection and must never flatten its output back into them.
-    c.configure(); c.tap(5, 8); c.tap(5, 8)
-    for x, y in ((2, 5), (3, 3), (4, 5)): c.tap(x, y)
-    c.tap(3, 8)
+    c.configure(); c.ui.pattern_editor(); c.ui.pattern_editor()
+    for step, degree in ((2, 2), (3, 4), (4, 2)):
+        c.ui.tap_control("pattern_note_degree", (step, degree))
+    c.ui.tap_control("channel_editor")
 
     # Existing global scale progression: C major for steps 1/2, then C minor
     # from step 3.  No Mosaic chord masks participate in this fixture.
-    c.tap(4, 8)
-    c.action(type='key', n=1, state=1)
-    try: c.elapse(.3); c.tap(2, 3)
-    finally: c.action(type='key', n=1, state=0)
-    c.enc(3, 2); c.key(3)  # Slot 2 Major -> Minor, root remains C.
-    c.hold_tap((1, 4), (4, 4))
-    c.hold_tap((3, 4), (2, 3))
-    c.tap(3, 8)
+    c.ui.scale_editor()
+    with c.ui.hold_keys(1):
+        c.elapse(.3); c.ui.tap_control("scale_slot", 2)
+    c.ui.turn(3, 2); c.ui.press_key(3)  # Slot 2 Major -> Minor, root remains C.
+    c.ui.hold_control_tap("step", "step", held_index=1, target_index=4)
+    c.ui.hold_control_tap("step", "scale_slot", held_index=3, target_index=2)
+    c.ui.tap_control("channel_editor")
 
     # Pattern Harmony maps A/B/C identities to Bass/Inner1/Top.  Repeated B
     # occurrences therefore share one role and one placement per frame.
-    c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
-    c.enc(3, 2); c.enc(2, 3); c.key(3)
-    c.enc(3, 1)             # Tone 0 -> Bass.
-    c.enc(2, 1); c.enc(3, 2)  # Tone 2 -> Inner1.
-    c.enc(2, 1); c.enc(3, 5)  # Tone 4 -> Top.
-    c.key(3)
+    c.ui.turn(1, 3); c.ui.expect_header("harmony", channel=1)
+    c.ui.turn(3, 2); c.ui.turn(2, 3); c.ui.press_key(3)
+    c.ui.turn(3, 1)             # Tone 0 -> Bass.
+    c.ui.turn(2, 1); c.ui.turn(3, 2)  # Tone 2 -> Inner1.
+    c.ui.turn(2, 1); c.ui.turn(3, 5)  # Tone 4 -> Top.
+    c.ui.press_key(3)
     # Constrain Bass C below MIDI 56 and Inner1 E/Eb below MIDI 61.  These
     # public Register edits force audible placement while Top G can retain its
     # literal common tone at the C-major -> C-minor boundary.
-    c.enc(1, -1); c.enc(2, 4); c.key(3)
-    c.enc(2, 2); c.enc(3, -5); c.key(3)   # v1 High 60 -> 55.
-    c.enc(1, -1); c.enc(2, 4); c.key(3)
-    c.enc(3, 1); c.enc(2, 2); c.enc(3, -12); c.key(3)  # v2 High 72 -> 60.
-    c.enc(1, -1); c.screen_header('Ch. 1 Harmony')
+    c.ui.turn(1, -1); c.ui.turn(2, 4); c.ui.press_key(3)
+    c.ui.turn(2, 2); c.ui.turn(3, -5); c.ui.press_key(3)   # v1 High 60 -> 55.
+    c.ui.turn(1, -1); c.ui.turn(2, 4); c.ui.press_key(3)
+    c.ui.turn(3, 1); c.ui.turn(2, 2); c.ui.turn(3, -12); c.ui.press_key(3)  # v2 High 72 -> 60.
+    c.ui.turn(1, -1); c.ui.expect_header("harmony", channel=1)
     mapped = [(1, [144, note, velocity]) for note, velocity in
               ((48, 127), (52, 117), (67, 107), (51, 97))]
     mapped_notes = c.playback(mapped, cycles=2, timeout=6)
@@ -373,12 +372,12 @@ def pattern_harmony_workflow(c):
     # fourth trig while Pattern is active, prove the sparse onset set and its
     # wrap gap, then restore it.  The retained map and following full phrase
     # prove that a rest neither consumes nor corrupts Pattern history.
-    c.tap(5, 8); c.tap(4, 4); c.tap(3, 8)
+    c.ui.pattern_editor(); c.ui.tap_step(4); c.ui.tap_control("channel_editor")
     sparse = mapped[:3]
     sparse_notes = c.playback(sparse, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, sparse_notes, 'pattern-rest-step4',
                                       active_steps=(1, 2, 3))
-    c.tap(5, 8); c.tap(4, 4); c.tap(3, 8)
+    c.ui.pattern_editor(); c.ui.tap_step(4); c.ui.tap_control("channel_editor")
     restored_notes = c.playback(mapped, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, restored_notes,
                                       'pattern-rest-restored')
@@ -388,7 +387,7 @@ def pattern_harmony_workflow(c):
     # resume the same mapped frame and unchanged timing without a settings edit.
     c.action(type='midi_connection', port=1, connected=False); c.elapse(.1)
     disconnected_before = c.snapshot()['midi_count']
-    c.tap(1, 8); c.elapse(1.0); disconnected = c.snapshot(); c.tap(1, 8)
+    c.ui.play(); c.elapse(1.0); disconnected = c.snapshot(); c.ui.stop()
     missing_output_notes = [event for event in disconnected['midi']
                             if event['index'] > disconnected_before
                             and event['port'] == 1
@@ -410,12 +409,11 @@ def pattern_harmony_workflow(c):
     # Harmony is page 8 and Trig Locks is page 2 in the documented clamped
     # Channel cycle.  Probability zero must schedule nothing and must not
     # consume/corrupt the Pattern frame; restoring 100 resumes it exactly.
-    from cases import assign_trig_parameter
-    c.enc(1, -6); c.screen_header('Ch. 1 Trig Locks')
-    assign_trig_parameter(c, 'Trig Probability')
-    c.action(type='enc', n=3, delta=-126); c.elapse(.15); c.enc(3, 1)
+    c.ui.turn(1, -6); c.ui.expect_header("trig_locks", channel=1)
+    c.ui.assign_trig_parameter_key("trig_probability")
+    c.ui.encoder_event(3, -126); c.elapse(.15); c.ui.turn(3, 1)
     rejected_before = c.snapshot()['midi_count']
-    c.tap(1, 8); c.elapse(1.0); rejected = c.snapshot(); c.tap(1, 8)
+    c.ui.play(); c.elapse(1.0); rejected = c.snapshot(); c.ui.stop()
     rejected_notes = [event for event in rejected['midi']
                       if event['index'] > rejected_before
                       and event['port'] == 1
@@ -424,7 +422,7 @@ def pattern_harmony_workflow(c):
                       and event['bytes'][2] > 0]
     assert rejected_notes == [], rejected_notes
     assert rejected['midi_capture']['outstanding'] == []
-    c.enc(3, 100); c.enc(1, 6); c.screen_header('Ch. 1 Harmony')
+    c.ui.turn(3, 100); c.ui.turn(1, 6); c.ui.expect_header("harmony", channel=1)
     probability_notes = c.playback(mapped, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, probability_notes,
                                       'pattern-probability-restored')
@@ -437,15 +435,17 @@ def pattern_harmony_workflow(c):
     # enter the copy, then re-enter the source.  Both entries must carry their
     # own copied Pattern configuration and start with the same literal frame,
     # onset phase and note ownership.
-    c.tap(6, 8); c.hold_tap((1, 1), (2, 1)); c.tap(2, 1)
+    c.ui.song_editor(); c.ui.hold_control_tap(
+        "song_pattern_slot", "song_pattern_slot", held_index=1, target_index=2)
+    c.ui.select_song_slot(2)
     copied_song_notes = c.playback(mapped, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, copied_song_notes,
                                       'pattern-copied-song-entry')
-    c.tap(1, 1)
+    c.ui.select_song_slot(1)
     source_song_notes = c.playback(mapped, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, source_song_notes,
                                       'pattern-source-song-reentry')
-    c.tap(3, 8); c.screen_header('Ch. 1 Harmony')
+    c.ui.tap_control("channel_editor"); c.ui.expect_header("harmony", channel=1)
     c.results.append(dict(kind='pattern-harmony-song-entry',
                           copied_slot=2, source_slot=1,
                           copied_config_played=True,
@@ -453,31 +453,35 @@ def pattern_harmony_workflow(c):
 
     # The final played positions span both native seven-row note banks.  The
     # lower bank shows Bass A and both B occurrences; the centred bank shows C.
-    c.tap(5, 8); c.tap(5, 8)
-    c.action(type='grid', x=16, y=8, state=1)
-    try: c.elapse(1.1)
-    finally: c.action(type='grid', x=16, y=8, state=0)
+    c.ui.pattern_editor(); c.ui.pattern_editor()
+    with c.ui.hold_control("paint"):
+        c.elapse(1.1)
     c.elapse(.1)
-    c.led_values([(1, 7), (2, 5), (4, 5)], [12, 12, 12])
-    c.tap(15, 8)
-    c.led_values([(3, 3)], [12])
+    c.ui.expect_leds({("pattern_note_degree", (1, 0)): "active",
+                      ("pattern_note_degree", (2, 2)): "active",
+                      ("pattern_note_degree", (4, 2)): "active"})
+    c.ui.tap_control("panic")
+    c.ui.expect_leds({("pattern_note_degree", (3, 4)): "active"})
 
     # Editing through the visible projection still owns source step 2.  Change
     # B from value 2 to 1, restore it to 2, and prove the exact ordinary source
     # sequence below; no Harmony output is ever written into the pattern.
-    c.tap(2, 6); c.tap(2, 5)
-    c.tap(3, 8); c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
+    c.ui.tap_control("pattern_note_degree", (2, 1)); c.ui.tap_control("pattern_note_degree", (2, 2))
+    c.ui.tap_control("channel_editor"); c.ui.turn(1, 3); c.ui.expect_header("harmony", channel=1)
     # Turning Harmony Off through the same public Mode field must reveal the
     # untouched ordinary scale result immediately in both MIDI and grid.
-    c.enc(3, -2); c.key(3)
+    c.ui.turn(3, -2); c.ui.press_key(3)
     ordinary = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (64, 117), (67, 107), (63, 97))]
     ordinary_notes = c.playback(ordinary, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, ordinary_notes, 'off-ordinary')
-    c.tap(5, 8); c.tap(5, 8)
-    c.led_values([(1, 7), (2, 5), (3, 3), (4, 5)], [12, 12, 12, 12])
-    c.tap(3, 8); c.enc(1, 3); c.screen_header('Ch. 1 Harmony')
-    c.enc(3, 2); c.key(3)
+    c.ui.pattern_editor(); c.ui.pattern_editor()
+    c.ui.expect_leds({("pattern_note_degree", (1, 0)): "active",
+                      ("pattern_note_degree", (2, 2)): "active",
+                      ("pattern_note_degree", (3, 4)): "active",
+                      ("pattern_note_degree", (4, 2)): "active"})
+    c.ui.tap_control("channel_editor"); c.ui.turn(1, 3); c.ui.expect_header("harmony", channel=1)
+    c.ui.turn(3, 2); c.ui.press_key(3)
     recovered_notes = c.playback(mapped, cycles=2, timeout=6)
     assert_pattern_progression_timing(c, recovered_notes, 'pattern-reenabled')
     c.results.append(dict(kind='pattern-harmony-broken-chord-progression',
