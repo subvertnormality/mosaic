@@ -139,6 +139,15 @@ TRIG_PARAMETERS = {
     "trig_probability": "Trig Probability",
 }
 
+MIDI_MAPPING_PARAMETERS = {
+    "selected_channel_velocity": {
+        "root_id": "mosaic_mask_midi_maps",
+        "label": "Selected Ch. Velocity",
+        "scan_limit": 12,
+        "first_row_top": 23,
+    },
+}
+
 MOSAIC_OPTIONS = {
     "scale_lock_until_pattern_end": "Scales lock until ptn end",
     "lock_merged_to_pentatonic": "Lock merged to pent.",

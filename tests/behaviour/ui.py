@@ -5,7 +5,7 @@ import contextlib
 import time
 
 from ui_map import (CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
-                    MOSAIC_OPTIONS, NATIVE_MENU_VALUES, PATCH_PARAMETERS,
+                    MOSAIC_OPTIONS, MIDI_MAPPING_PARAMETERS, NATIVE_MENU_VALUES, PATCH_PARAMETERS,
                     PATCH_PARAMETER_VALUES, SCREEN, TRIG_PARAMETERS,
                     control_cell, header_text)
 
@@ -296,6 +296,34 @@ class Ui:
         self.turn(1, 4)
         self.press_key(3)
         self.expect_menu_label(NATIVE_MENU["levels_root"])
+
+    def seek_native_mapping_parameter(self, parameter):
+        """Find a mapped norns parameter with the historical twelve-check scan."""
+        from frame_oracle import selected_line
+
+        try:
+            spec = MIDI_MAPPING_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown mapping parameter: " + str(parameter)) from error
+        self.press_key(1)
+        self.turn(1, 4)
+        self.press_key(3)
+        self.expect_menu_label(NATIVE_MENU["levels_root"])
+        position = next(
+            index for index, value in enumerate(
+                self.driver.snapshot()["diagnostics"]["parameter_roots"]
+            ) if value["id"] == spec["root_id"]
+        )
+        self.turn(2, position)
+        self.press_key(3)
+        for _ in range(spec["scan_limit"]):
+            state = self.driver.snapshot()
+            if (selected_line(state, spec["label"], top=spec["first_row_top"])
+                    or selected_line(state, spec["label"])):
+                break
+            self.turn(2, 1)
+        else:
+            raise AssertionError("Mapping parameter not reached")
 
     def assign_trig_parameter(self, label, offset=None):
         """Assign by the historical scan or a previously verified list offset."""
