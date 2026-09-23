@@ -322,6 +322,13 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("gate.get('profile', 'base-midi') == profile", workflow)
         self.assertIn("chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods", workflow)
 
+    def test_targeted_bash_only_steps_declare_bash(self):
+        workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
+        for name in ("Prepare unprivileged behaviour user",
+                     "Run passing before/after cases and strict gates"):
+            block = workflow.split("      - name: " + name + "\n")[-1].split("      - name:", 1)[0]
+            self.assertIn("        shell: bash\n", block, name)
+
     def test_dispatch_installs_git_before_sha_submodule_checkouts(self):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
         install = workflow.index("- name: Install Git before SHA checkouts")

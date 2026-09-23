@@ -107,6 +107,7 @@ jobs:
             chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods
           fi
       - name: Run exhaustive base-MIDI shard
+        shell: bash
         run: |
           pattern="$(python3 tests/behaviour/ci/select-shard.py --profile base-midi --index ${{ matrix.shard }} --count 16)"
           extra="--skip-fast-layers"
@@ -308,6 +309,7 @@ jobs:
           pattern: behaviour-*
           path: reports
       - name: Verify exhaustive coverage
+        shell: bash
         env:
           MONOME_EMULATOR: /tmp/identity-only
         run: |
@@ -387,6 +389,7 @@ jobs:
           git clone https://github.com/sixolet/toolkit.git /tmp/mosaic-output-mods/toolkit
           git -C /tmp/mosaic-output-mods/toolkit checkout --detach 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
       - name: Prepare unprivileged behaviour user
+        shell: bash
         run: |
           useradd --create-home --shell /bin/bash mosaic-ci
           chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE/before-source" "$GITHUB_WORKSPACE/after-source" "$EMULATOR_ROOT"
@@ -394,6 +397,7 @@ jobs:
             chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods
           fi
       - name: Run passing before/after cases and strict gates
+        shell: bash
         env:
           BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
           AFTER_SHA: ${{ inputs.ui_migration_after_sha }}

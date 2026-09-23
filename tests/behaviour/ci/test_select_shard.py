@@ -6,6 +6,16 @@ spec=importlib.util.spec_from_file_location('select_shard',HERE/'select-shard.py
 module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 
 class Tests(unittest.TestCase):
+    def test_base_shard_bash_conditional_runs_under_bash(self):
+        workflow = (HERE.parents[2] / '.github/workflows/behaviour.yml').read_text()
+        block = workflow.split('      - name: Run exhaustive base-MIDI shard\n', 1)[1].split('      - name:', 1)[0]
+        self.assertIn('        shell: bash\n', block)
+
+    def test_aggregate_bash_array_runs_under_bash(self):
+        workflow = (HERE.parents[2] / '.github/workflows/behaviour.yml').read_text()
+        block = workflow.split('      - name: Verify exhaustive coverage\n', 1)[1].split('      - name:', 1)[0]
+        self.assertIn('        shell: bash\n', block)
+
     def test_pinned_duration_tail_is_balanced_without_dropping_cases(self):
         # Red on 08421266 before partition implementation: 4,493,500 ms was
         # not below 3,100,000 ms. This is a prediction, not a CI timing claim.
