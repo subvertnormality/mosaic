@@ -1,30 +1,31 @@
-def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=False,harmony=False):
-    from cases import set_mosaic_options,assert_durations
-    c.configure();set_mosaic_options(c,[('Lock merged to pent.',pentatonic)])
+def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=False,harmony=False,
+                       blink_observer=None):
+    from cases import assert_durations
+    c.ui.configure();c.ui.set_mosaic_options([('Lock merged to pent.',pentatonic)])
     sources=[(0,2,4,6),(2,4,6,0),(6,6,6,6)]
-    c.tap(5,8)
+    c.ui.menu('pattern_editor')
     for slot,values in enumerate(sources,1):
-        c.tap(slot,1)
+        c.ui.tap_control('pattern_select',slot)
         if slot>1:
-            for x in range(1,5):c.tap(x,4)
-        c.tap(5,8)
-        for x,degree in enumerate(values,1):c.tap(x,7-degree)
+            for step in range(1,5):c.ui.tap_step(step)
+        c.ui.menu('pattern_editor')
+        for x,degree in enumerate(values,1):c.ui.tap_control('pattern_note_degree',(x,degree))
         steady=[(x,7-degree) for x,degree in enumerate(values,1) if not (x==slot and degree==6)]
-        c.led_values(steady,[12]*len(steady))
-        if values[slot-1]==6:
-            c.wait(lambda state:state['grid'][slot-1] in (11,13))
-            c.results.append(dict(kind='selected-pattern-top-note-blink',slot=slot,levels=[11,13],passed=True))
-        c.tap(3,8);c.tap(5,8)
-    c.tap(3,8);c.tap(2,2) # Only patterns1/2 are assigned.
-    c.tap(14,8);c.tap(14,8);c.led_values([(14,8)],[8]) # All trigs.
-    c.hold_tap((16,8),(3 if foreign_velocity else 1,2))
-    c.led_values([(1,2),(2,2),(3,2)],[15,15,2])
+        c.ui.expect_leds({('pattern_note_fader',cell):'active' for cell in steady})
+        if values[slot-1]==6 and blink_observer:
+            blink_observer(c,slot)
+        c.ui.menu('channel_editor');c.ui.menu('pattern_editor')
+    c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2) # Only patterns1/2 are assigned.
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.expect_leds({('trig_merge_mode',None):'medium'}) # All trigs.
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=3 if foreign_velocity else 1)
+    c.ui.expect_leds({('pattern_slot',1):'selected',('pattern_slot',2):'selected',('pattern_slot',3):'off'})
     velocity=[100]*4 if foreign_velocity else [127,117,107,97]
     # Degree means [1,3,5,3]; Higher = mean+(max-min)=[3,5,7,9].
     # Independently map these zero-based degrees through C major.
     for mode,level,pitches in [('average',2,[62,64,69,64] if pentatonic else [62,65,69,65]),('higher',5,[64,69,72,76] if pentatonic else [65,69,72,76])]:
-        if mode=='higher':c.tap(15,8)
-        c.led_values([(15,8)],[level])
+        if mode=='higher':c.ui.tap_control('note_merge_mode')
+        c.ui.expect_leds({('note_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
         notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
         assert_durations(c,notes,[1]*8)
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -44,24 +45,24 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=Fals
             ('D-root-degree-II-rotation-two',0,0,2,[[69,61,76,79],[50,66,69,59],[66,69,61,69]],[[69,62,76,78],[50,66,69,59],[66,69,62,69]]),
             ('restored-C-major',-1,-2,-2,[[65,69,72,76],[59,62,65,55],[62,65,69,65]],[[64,69,72,76],[60,62,64,55],[62,64,69,64]])]
         for label,degree_delta,rotation_delta,root_delta,plain,pent in stages:
-            c.tap(4,8)
+            c.ui.menu('scale_editor')
             # Normalize the selected field to scale type after each edit.
             if degree_delta:
-                c.enc(2,1);c.enc(3,degree_delta);c.key(3);c.enc(2,-1)
+                c.ui.turn(2,1);c.ui.set_value(degree_delta);c.ui.press_key(3);c.ui.turn(2,-1)
             if rotation_delta:
-                c.enc(2,3);c.enc(3,rotation_delta);c.key(3);c.enc(2,-3)
+                c.ui.turn(2,3);c.ui.set_value(rotation_delta);c.ui.press_key(3);c.ui.turn(2,-3)
             if root_delta:
-                c.enc(2,-1);c.enc(3,root_delta);c.key(3);c.enc(2,1)
-            c.tap(3,8)
+                c.ui.turn(2,-1);c.ui.set_value(root_delta);c.ui.press_key(3);c.ui.turn(2,1)
+            c.ui.menu('channel_editor')
             for index,(mode,level) in enumerate([('higher',5),('lower',8),('average',2)]):
-                if index:c.tap(15,8)
-                c.led_values([(15,8)],[level])
+                if index:c.ui.tap_control('note_merge_mode')
+                c.ui.expect_leds({('note_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
                 pitches=(pent if pentatonic else plain)[index]
                 notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
                 assert_durations(c,notes,[1]*8)
                 for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
                 c.results.append(dict(kind='merge-harmony-transition',stage=label,mode=mode,pentatonic=pentatonic,pitches=pitches,passed=True))
-            c.tap(15,8)
+            c.ui.tap_control('note_merge_mode')
         return
 
     if all_scales:
@@ -86,83 +87,83 @@ def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=Fals
           [[65,68,73,75],[58,61,65,53],[61,65,68,65]]]
         for number,(scale,intervals) in enumerate(scales):
             if number:
-                c.tap(4,8);c.enc(3,1);c.key(3);c.tap(3,8)
+                c.ui.menu('scale_editor');c.ui.set_value(1);c.ui.press_key(3);c.ui.menu('channel_editor')
             # Enter with Higher selected. Cycle through Lower/Average and back.
             for mode,level,degrees in [('higher',5,[3,5,7,9]),('lower',8,[-1,1,3,-3]),('average',2,[1,3,5,3])]:
-                if mode!='higher':c.tap(15,8)
-                c.led_values([(15,8)],[level])
+                if mode!='higher':c.ui.tap_control('note_merge_mode')
+                c.ui.expect_leds({('note_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
                 pitches=pent_tables[number][{'higher':0,'lower':1,'average':2}[mode]] if pentatonic else [60+12*(d//7)+intervals[d%7] for d in degrees]
                 notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
                 assert_durations(c,notes,[1]*8)
                 for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
                 c.results.append(dict(kind='numeric-merge-all-scales',scale=scale,mode=mode,degrees=degrees,pitches=pitches,passed=True))
-            c.tap(15,8)
+            c.ui.tap_control('note_merge_mode')
     if pentatonic and not all_scales:
         def verify(label,pitches):
             notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,velocity)],cycles=2,timeout=4)
             assert_durations(c,notes,[1]*8)
             for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
             c.results.append(dict(kind='numeric-merge-scale-transition',label=label,pitches=pitches,passed=True))
-        c.tap(4,8);c.enc(2,-1);c.enc(3,2);c.key(3) # Root C -> D.
+        c.ui.menu('scale_editor');c.ui.turn(2,-1);c.ui.set_value(2);c.ui.press_key(3) # Root C -> D.
         verify('D-major-pentatonic-higher',[66,71,74,78])
-        c.enc(2,1);c.enc(3,2);c.key(3) # Major -> natural minor.
+        c.ui.turn(2,1);c.ui.set_value(2);c.ui.press_key(3) # Major -> natural minor.
         verify('D-minor-pentatonic-higher',[67,69,74,77])
-        c.tap(3,8);c.tap(15,8);c.tap(15,8);c.led_values([(15,8)],[2])
+        c.ui.menu('channel_editor');c.ui.tap_control('note_merge_mode');c.ui.tap_control('note_merge_mode')
+        c.ui.expect_leds({('note_merge_mode',None):'off'})
         verify('D-minor-pentatonic-average',[65,67,69,67])
-        c.tap(4,8);c.enc(3,-2);c.key(3);c.enc(2,-1);c.enc(3,-2);c.key(3)
+        c.ui.menu('scale_editor');c.ui.set_value(-2);c.ui.press_key(3);c.ui.turn(2,-1);c.ui.set_value(-2);c.ui.press_key(3)
         verify('restored-C-major-pentatonic-average',[62,64,69,64])
 
 
 def merge_transpose_scale_lock(c):
     """Merge degrees before independent scale-lock and transpose composition."""
-    from cases import set_mosaic_options,assert_durations
+    from cases import assert_durations
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     # Include Mosaic's script-start output as well as the subsequent user run.
     capture=MidiWindow(0)
-    c.configure(); set_mosaic_options(c,[('Lock merged to pent.',False)])
+    c.ui.configure(); c.ui.set_mosaic_options([('Lock merged to pent.',False)])
     sources=[(0,2,4,6),(2,4,6,0)]
-    c.tap(5,8)
+    c.ui.menu('pattern_editor')
     for slot,values in enumerate(sources,1):
-        c.tap(slot,1)
+        c.ui.tap_control('pattern_select',slot)
         if slot>1:
-            for x in range(1,5): c.tap(x,4)
-        c.tap(5,8)
-        for x,degree in enumerate(values,1): c.tap(x,7-degree)
-        c.tap(3,8); c.tap(5,8)
-    c.tap(3,8); c.tap(2,2)
-    c.tap(14,8); c.tap(14,8)  # All trigs; Average notes is the default.
-    c.hold_tap((16,8),(1,2))  # Velocity remains owned by pattern1.
+            for step in range(1,5): c.ui.tap_step(step)
+        c.ui.menu('pattern_editor')
+        for x,degree in enumerate(values,1): c.ui.tap_control('pattern_note_degree',(x,degree))
+        c.ui.menu('channel_editor'); c.ui.menu('pattern_editor')
+    c.ui.menu('channel_editor'); c.ui.tap_control('pattern_slot',2)
+    c.ui.tap_control('trig_merge_mode'); c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
 
     # Edit-only scale slot2: D natural minor, transpose +3.
-    c.tap(4,8)
-    c.action(type='key',n=1,state=1)
-    try: c.elapse(.3); c.tap(2,3)
-    finally: c.action(type='key',n=1,state=0)
-    c.enc(3,2); c.key(3)      # Major -> Minor.
-    c.enc(2,-1); c.enc(3,2); c.key(3)  # Root C -> D.
-    c.enc(2,3); c.enc(3,3); c.key(3)   # Transpose 0 -> +3.
+    c.ui.menu('scale_editor')
+    with c.ui.hold_keys(1):
+        c.elapse(.3); c.ui.tap_control('scale_slot',2)
+    c.ui.set_value(2); c.ui.press_key(3)      # Major -> Minor.
+    c.ui.turn(2,-1); c.ui.set_value(2); c.ui.press_key(3)  # Root C -> D.
+    c.ui.turn(2,3); c.ui.set_value(3); c.ui.press_key(3)   # Transpose 0 -> +3.
 
     # Make the independent global scale track four steps long, then change
     # to slot2 at step3. It must reset at step1 of every loop. Step transpose
     # +12 persists from step3 through step4 on the same track.
-    c.hold_tap((1,4),(4,4))
-    c.hold_tap((3,4),(2,3))
-    c.hold_tap((1,4),(9,8))
-    c.hold_tap((2,4),(12,8))
-    c.hold_tap((3,4),(15,8))
-    c.tap(3,8)
+    c.ui.set_range(1,4)
+    c.ui.hold_control_tap('step','channel_scale_slot',held_index=3,target_index=2)
+    c.ui.hold_control_tap('step','global_transpose_minimum',held_index=1)
+    c.ui.hold_control_tap('step','cell',held_index=2,target_index=(12,8))
+    c.ui.hold_control_tap('step','cell',held_index=3,target_index=(15,8))
+    c.ui.menu('channel_editor')
 
     # Average degrees are [1,3,5,3]. Steps1/2 use C major: D62/F65.
     # Steps3/4 use D minor: Bb70/G67. Apply locks [-12,0,+12,+12]
     # and slot2's saved +3 only where the slot2 scale lock is active.
     expected_pitches=(50,65,85,82); expected_velocities=(127,117,107,97)
-    c.action(type='grid',x=1,y=8,state=1); c.action(type='grid',x=1,y=8,state=0)
+    c.ui.gesture((('play_stop',None),),(('play_stop',None),))
     c.elapse(1.9)
     c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=13,timeout=5)
-    c.action(type='grid',x=1,y=8,state=1)
+    c.ui.gesture((('play_stop',None),),())
     stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=0)
+    c.ui.gesture((),(('play_stop',None),))
     stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
 
@@ -213,31 +214,30 @@ def transpose_midi_boundaries(c):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     sources=[(-7,13,-7,-7),(13,-7,-7,-7)]
-    c.configure(); c.tap(5,8)
+    c.ui.configure(); c.ui.menu('pattern_editor')
     for slot,values in enumerate(sources,1):
-        c.tap(slot,1)
+        c.ui.tap_control('pattern_select',slot)
         if slot>1:
-            for x in range(1,5): c.tap(x,4)
-        c.tap(5,8)
+            for step in range(1,5): c.ui.tap_step(step)
+        c.ui.menu('pattern_editor')
         for x,degree in enumerate(values,1):
-            button=16 if degree<0 else 14
-            c.action(type='grid',x=button,y=8,state=1)
-            try: c.elapse(1.2)
-            finally: c.action(type='grid',x=button,y=8,state=0)
+            control='pattern_note_octave_down' if degree<0 else 'pattern_note_octave_up'
+            with c.ui.hold_control(control): c.elapse(1.2)
             c.elapse(.06)
-            c.tap(x,-degree if degree<0 else 14-degree)
-        c.tap(3,8); c.tap(5,8)
-    c.tap(3,8); c.tap(2,2)
-    c.tap(14,8); c.tap(14,8); c.hold_tap((16,8),(1,2))
-    c.tap(15,8)  # Average -> Higher.
+            note_degree=7-(-degree if degree<0 else 14-degree)
+            c.ui.tap_control('pattern_note_degree',(x,note_degree))
+        c.ui.menu('channel_editor'); c.ui.menu('pattern_editor')
+    c.ui.menu('channel_editor'); c.ui.tap_control('pattern_slot',2)
+    c.ui.tap_control('trig_merge_mode'); c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
+    c.ui.tap_control('note_merge_mode')  # Average -> Higher.
 
     def set_scale_transpose(delta,lock=False):
-        c.tap(4,8)
-        c.action(type='key',n=1,state=1)
-        try: c.elapse(.3); c.tap(1,3)
-        finally: c.action(type='key',n=1,state=0)
-        c.enc(2,2); c.enc(3,delta); c.key(3); c.enc(2,-2)
-        if lock: c.hold_tap((1,4),(1,3))
+        c.ui.menu('scale_editor')
+        with c.ui.hold_keys(1):
+            c.elapse(.3); c.ui.tap_control('scale_slot',1)
+        c.ui.turn(2,2); c.ui.set_value(delta); c.ui.press_key(3); c.ui.turn(2,-2)
+        if lock: c.ui.hold_control_tap('step','scale_slot',held_index=1,target_index=1)
 
     def play(mode,pitches,unbounded):
         velocities=(127,117,107,97); before=c.snapshot()
@@ -247,12 +247,12 @@ def transpose_midi_boundaries(c):
             assert before['midi_count']==10
             assert [(e['port'],e['bytes']) for e in before['midi']]==startup
         capture=MidiWindow(before['midi_count'])
-        c.action(type='grid',x=1,y=8,state=1); c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture((('play_stop',None),),(('play_stop',None),))
         c.elapse(4/3-.1)
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=4)
-        c.action(type='grid',x=1,y=8,state=1)
+        c.ui.gesture((('play_stop',None),),())
         stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture((),(('play_stop',None),))
         stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         notes=capture.note_ons(); assert len(notes)==9
@@ -284,12 +284,15 @@ def transpose_midi_boundaries(c):
 
     # Higher degrees [23,23,-7,-7] map to [100,100,48,48]. Channel
     # octave +2, scale +12 and step +12 add 48 semitones.
-    c.tap(12,8); set_scale_transpose(12,lock=True); c.hold_tap((1,4),(15,8)); c.tap(3,8)
+    c.ui.tap_control('channel_octave',2); set_scale_transpose(12,lock=True)
+    c.ui.hold_control_tap('step','cell',held_index=1,target_index=(15,8)); c.ui.menu('channel_editor')
     play('higher',(127,127,96,96),(148,148,96,96))
 
     # Lower degrees [-17,-17,-7,-7] map to [31,31,48,48]. Reversing
     # octave, scale and step transpose subtracts 48 semitones.
-    c.tap(8,8); set_scale_transpose(-24); c.hold_tap((1,4),(9,8)); c.tap(3,8); c.tap(15,8)
+    c.ui.tap_control('channel_octave',-2); set_scale_transpose(-24)
+    c.ui.hold_control_tap('step','global_transpose_minimum',held_index=1); c.ui.menu('channel_editor')
+    c.ui.tap_control('note_merge_mode')
     play('lower',(0,0,0,0),(-17,-17,0,0))
 
 
@@ -328,8 +331,8 @@ def merge_mode_cycle(c,field):
 
 
 def merge_rounding(c,three=False,extreme=False,pentatonic=False):
-    from cases import set_mosaic_options,assert_durations
-    c.configure();set_mosaic_options(c,[('Lock merged to pent.',pentatonic)])
+    from cases import assert_durations
+    c.ui.configure();c.ui.set_mosaic_options([('Lock merged to pent.',pentatonic)])
     sources=[(0,-1,2,6),(1,0,2,6),(1,0,8,6)] if three else [(1,-2,-1,6),(2,-1,0,6)]
     # Literal arithmetic before pitch mapping:
     # two: A=[2,-1,0,6], H=[3,0,1,6], L=[0,-3,-2,6].
@@ -346,35 +349,35 @@ def merge_rounding(c,three=False,extreme=False,pentatonic=False):
                   ('lower',8,[31,31,48,84] if pentatonic else [31,31,48,83])]
     elif pentatonic:
         expected=[('average',2,[64,60,60,72]),('higher',5,[64,60,62,72]),('lower',8,[60,55,57,72])]
-    c.tap(5,8)
+    c.ui.menu('pattern_editor')
     for slot,values in enumerate(sources,1):
-        c.tap(slot,1)
+        c.ui.tap_control('pattern_select',slot)
         if slot>1:
-            for x in range(1,5):c.tap(x,4)
-        c.tap(5,8)
+            for step in range(1,5):c.ui.tap_step(step)
+        c.ui.menu('pattern_editor')
         for x,degree in enumerate(values,1):
-            if 0<=degree<=6:c.tap(15,8);y=7-degree
+            if 0<=degree<=6:c.ui.tap_control('pattern_note_octave_reset');y=7-degree
             else:
-                button=16 if degree<0 else 14
-                c.action(type='grid',x=button,y=8,state=1)
-                try:c.elapse(1.2)
-                finally:c.action(type='grid',x=button,y=8,state=0)
+                control='pattern_note_octave_down' if degree<0 else 'pattern_note_octave_up'
+                with c.ui.hold_control(control):c.elapse(1.2)
                 c.elapse(.06);y=-degree if degree<0 else 14-degree
-            c.tap(x,y)
-            if not (y==1 and x==slot):c.led_values([(x,y)],[12])
-        c.tap(3,8);c.tap(5,8)
-    c.tap(3,8)
-    for slot in range(2,len(sources)+1):c.tap(slot,2)
-    c.tap(14,8);c.tap(14,8);c.hold_tap((16,8),(1,2))
+            note_degree=7-y
+            c.ui.tap_control('pattern_note_degree',(x,note_degree))
+            if not (y==1 and x==slot):c.ui.expect_leds({('pattern_note_fader',(x,y)):'active'})
+        c.ui.menu('channel_editor');c.ui.menu('pattern_editor')
+    c.ui.menu('channel_editor')
+    for slot in range(2,len(sources)+1):c.ui.tap_control('pattern_slot',slot)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     for index,(mode,level,pitches) in enumerate(expected+[expected[0]]):
-        if index:c.tap(15,8)
-        c.led_values([(15,8)],[level])
+        if index:c.ui.tap_control('note_merge_mode')
+        c.ui.expect_leds({('note_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
         for reversed_order in (False,True):
             if reversed_order:
-                for slot in range(1,len(sources)+1):c.tap(slot,2)
-                for slot in range(len(sources),0,-1):c.tap(slot,2)
+                for slot in range(1,len(sources)+1):c.ui.tap_control('pattern_slot',slot)
+                for slot in range(len(sources),0,-1):c.ui.tap_control('pattern_slot',slot)
             notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,[127,117,107,97])],cycles=2,timeout=4)
             assert_durations(c,notes,[1]*8)
             for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i/6)<=tolerance
@@ -383,7 +386,7 @@ def merge_rounding(c,three=False,extreme=False,pentatonic=False):
 
 def numeric_velocity_merge(c,three=False):
     from cases import assert_durations
-    c.configure();c.ui.pattern_editor()
+    c.ui.configure();c.ui.pattern_editor()
     for slot in ([2,3,4] if three else [2,4]):
         c.ui.tap_control('pattern_select',slot)
         for x in range(1,5):c.ui.tap_step(x)
@@ -441,35 +444,37 @@ def lydian_octave_boundary(c):
 
 
 def velocity_zero_boundary(c):
-    c.configure();c.tap(5,8)
+    c.ui.configure();c.ui.menu('pattern_editor')
     for slot in (1,2):
-        c.tap(slot,1)
+        c.ui.tap_control('pattern_select',slot)
         if slot==2:
-            for x in range(1,5):c.tap(x,4)
-        c.tap(5,8)
-        if slot==1:c.tap(4,3) # G remains G under the enabled Major pentatonic lock.
-        c.tap(5,8)
+            for step in range(1,5):c.ui.tap_step(step)
+        c.ui.menu('pattern_editor')
+        if slot==1:c.ui.tap_control('cell',(4,3)) # G remains G under the enabled Major pentatonic lock.
+        c.ui.menu('pattern_editor')
         # The manual's 14-position velocity fader spans 127..0.
         # Literal source vectors: [0,0,19,58], [127,0,58,58].
         if slot==2:
-            c.action(type='grid',x=15,y=8,state=1);c.elapse(1.2)
-            c.action(type='grid',x=15,y=8,state=0);c.elapse(.06);c.tap(1,1)
-        c.action(type='grid',x=16,y=8,state=1);c.elapse(1.2)
-        c.action(type='grid',x=16,y=8,state=0);c.elapse(.06)
+            with c.ui.hold_control('cell',(15,8)):c.elapse(1.2)
+            c.elapse(.06);c.ui.tap_control('pattern_select',1)
+        with c.ui.hold_control('cell',(16,8)):c.elapse(1.2)
+        c.elapse(.06)
         cells=([(1,7),(2,7),(3,5),(4,1)] if slot==1 else [(2,7),(3,1),(4,1)])
-        for cell in cells:c.tap(*cell)
-        c.led_values(cells,[12]*len(cells))
-        c.tap(3,8);c.tap(5,8)
-    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
-    c.hold_tap((15,8),(1,2))
+        for cell in cells:c.ui.tap_control('pattern_note_fader',cell)
+        c.ui.expect_leds({('pattern_note_fader',cell):'active' for cell in cells})
+        c.ui.menu('channel_editor');c.ui.menu('pattern_editor')
+    c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=1)
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     # Rounded mean, then mode arithmetic, then MIDI 0..127 clamp.
     # Lower raw results [-64,0,-1,58] must not wrap into loud notes.
     expected=[('average',2,[64,0,39,58]),('higher',5,[127,0,78,58]),('lower',8,[0,0,0,58])]
     for index,(mode,level,velocities) in enumerate(expected+[expected[0]]):
-        if index:c.tap(16,8)
-        c.led_values([(16,8)],[level]);before=c.snapshot()['midi_count'];c.tap(1,8)
+        if index:c.ui.tap_control('velocity_merge_mode')
+        c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
+        before=c.snapshot()['midi_count'];c.ui.tap_control('play_stop')
         def onsets(state):
             return [m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159]
         state=c.wait(lambda state:len(onsets(state))>=9,4)
@@ -482,7 +487,7 @@ def velocity_zero_boundary(c):
             if event['bytes'][2]==0:continue
             offs=[m for m in state['midi'] if m['index']>event['index'] and m['port']==1 and m['bytes'][:2]==[128,event['bytes'][1]]]
             assert offs and abs((offs[0][key]-event[key])/1e9-1/6)<=tolerance
-        c.tap(1,8);c.wait(lambda state:state['midi_capture']['outstanding']==[])
+        c.ui.tap_control('play_stop');c.wait(lambda state:state['midi_capture']['outstanding']==[])
         c.results.append(dict(kind='numeric-velocity-zero-boundary',mode=mode,velocities=velocities,raw_events_checked=len(events),passed=True))
 
 
@@ -490,33 +495,34 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
     from cases import assert_durations
     sources,expected=[([2,4],[3,5,1]),([3,4],[4,5,2]),([2,2,5],[3,6,1]),([1,2],[2,3,0]),([1,4],[3,6,0]),([2,2,8],[4,10,0])][variant]
     cycle_steps=16 if variant>=3 else 8
-    c.configure();c.hold_tap((1,4),(cycle_steps,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
+    c.ui.configure();c.ui.set_range(1,cycle_steps);c.ui.menu('pattern_editor')
+    for step in (2,3,4):c.ui.tap_step(step)
     for slot,length in enumerate(sources,1):
-        c.tap(slot,1)
-        if slot>1:c.tap(1,4)
-        if length>1:c.hold_tap((1,4),(length,4))
-        c.led_values([(x,4) for x in range(1,cycle_steps+1)],[15]+[5]*(length-1)+[2]*(cycle_steps-length))
-    c.tap(3,8)
-    for slot in range(2,len(sources)+1):c.tap(slot,2)
-    c.tap(14,8);c.tap(14,8)
-    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
+        c.ui.tap_control('pattern_select',slot)
+        if slot>1:c.ui.tap_step(1)
+        if length>1:c.ui.set_range(1,length)
+        c.ui.expect_steps({step:('selected' if step==1 else 'in_range' if step<length else 'off')
+                           for step in range(1,cycle_steps+1)})
+    c.ui.menu('channel_editor')
+    for slot in range(2,len(sources)+1):c.ui.tap_control('pattern_slot',slot)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=1)
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     if arp or strum:
         from cases import assign_trig_parameter
         assert variant in (3,4)
-        c.action(type='key',n=1,state=1);c.elapse(.3)
-        try:
-            c.tap(16,8);c.tap(16,8);c.led_values([(16,8)],[8])
-        finally:c.action(type='key',n=1,state=0)
+        with c.ui.hold_keys(1):
+            c.elapse(.3);c.ui.tap_control('velocity_merge_mode');c.ui.tap_control('velocity_merge_mode')
+            c.ui.expect_leds({('velocity_merge_mode',None):'medium'})
         if strum:
-            c.enc(1,-4);c.enc(2,3);c.enc(3,2) # First chord mask from X: degree2, E64.
-            c.enc(1,1);assign_trig_parameter(c,'Chord Note Strum');c.enc(3,0 if simultaneous else 8)
+            c.ui.turn(1,-4);c.ui.turn(2,3);c.ui.set_value(2) # First chord mask from X: degree2, E64.
+            c.ui.turn(1,1);c.ui.assign_trig_parameter('Chord Note Strum');c.ui.set_value(0 if simultaneous else 8)
             if same_pitch:
-                c.enc(2,1);assign_trig_parameter(c,'Fixed Note');c.enc(3,65) # Fixed root E64 equals the chord E64.
+                c.ui.turn(2,1);c.ui.assign_trig_parameter('Fixed Note');c.ui.set_value(65) # Fixed root E64 equals the chord E64.
         else:
-            c.enc(1,-3);assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+            c.ui.turn(1,-3);c.ui.assign_trig_parameter('Chord Note Arpeggio');c.ui.set_value(8)
         # Half-step ratchet selected, but nonpositive parent gate ends at onset.
         # Repeat transport to expose retained arp jobs and duplicate releases.
         for trial in range(2):
@@ -535,9 +541,9 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
         return
     for index,(mode,level,length) in enumerate(list(zip(['average','longer','shorter'],[2,5,8],expected))+[('average',2,expected[0])]):
         if index:
-            c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.tap(16,8);c.led_values([(16,8)],[level])
-            finally:c.action(type='key',n=1,state=0)
+            with c.ui.hold_keys(1):
+                c.elapse(.3);c.ui.tap_control('velocity_merge_mode')
+                c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
         marker=c.snapshot()['midi_count']
         notes=c.playback([(1,[144,60,127])],cycles=2,timeout=8)
         assert_durations(c,notes,[length]*2)
@@ -550,38 +556,39 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
 
 
 def fractional_length_mask_merge(c,variant=0,hierarchy=False):
-    from cases import assert_durations,length_mask_display
+    from cases import assert_durations
     sources,merged,detents,label,mask=[([2,4],[3,5,1],8,'1/2',.5),([1,4],[3,6,0],1,'1/24',1/24),([2,4],[3,5,1],15,'1.25',1.25)][variant]
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
+    c.ui.configure();c.ui.set_range(1,8);c.ui.menu('pattern_editor')
+    for step in (2,3,4):c.ui.tap_step(step)
     for slot,length in enumerate(sources,1):
-        c.tap(slot,1)
-        if slot>1:c.tap(1,4)
-        if length>1:c.hold_tap((1,4),(length,4))
-        c.led_values([(x,4) for x in range(1,9)],[15]+[5]*(length-1)+[2]*(8-length))
-    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
-    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
-    c.enc(1,-4);c.enc(2,2);length_mask_display(c,'X')
-    c.enc(3,detents);length_mask_display(c,label)
+        c.ui.tap_control('pattern_select',slot)
+        if slot>1:c.ui.tap_step(1)
+        if length>1:c.ui.set_range(1,length)
+        c.ui.expect_steps({step:('selected' if step==1 else 'in_range' if step<length else 'off')
+                           for step in range(1,9)})
+    c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=1)
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
+    c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.expect_field_value('length','X')
+    c.ui.set_value(detents);c.ui.expect_field_value('length',label)
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     modes=list(zip(['average','longer','shorter'],[2,5,8],merged))+[('average',2,merged[0])]
     for index,(mode,level,unmasked) in enumerate(modes):
         if index:
-            c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.tap(16,8);c.led_values([(16,8)],[level])
-            finally:c.action(type='key',n=1,state=0)
+            with c.ui.hold_keys(1):
+                c.elapse(.3);c.ui.tap_control('velocity_merge_mode')
+                c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
         if hierarchy:
             assert variant==0
-            c.action(type='grid',x=1,y=4,state=1)
-            try:
-                length_mask_display(c,label);c.enc(3,15-detents);length_mask_display(c,'1.25')
-            finally:c.action(type='grid',x=1,y=4,state=0)
-            c.elapse(.06);length_mask_display(c,label)
+            with c.ui.hold_step(1):
+                c.ui.expect_field_value('length',label);c.ui.set_value(15-detents);c.ui.expect_field_value('length','1.25')
+            c.elapse(.06);c.ui.expect_field_value('length',label)
             # An explicit step mask remains in force whether or not the
             # channel default exists. Clearing it later must reveal that default.
             for channel_active in (True,False):
-                if not channel_active:c.enc(3,-detents);length_mask_display(c,'X')
+                if not channel_active:c.ui.set_value(-detents);c.ui.expect_field_value('length','X')
                 marker=c.snapshot()['midi_count']
                 notes=c.playback([(1,[144,60,127])],cycles=2,timeout=5)
                 assert_durations(c,notes,[1.25]*2)
@@ -589,15 +596,13 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
                 events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
                 assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
                 c.results.append(dict(kind='step-length-mask-precedence',mode=mode,channel_active=channel_active,expected_steps=1.25,passed=True))
-            c.enc(3,detents);length_mask_display(c,label)
-            c.action(type='grid',x=1,y=4,state=1)
-            try:c.key(2)
-            finally:c.action(type='grid',x=1,y=4,state=0)
-            c.elapse(.06);length_mask_display(c,label)
+            c.ui.set_value(detents);c.ui.expect_field_value('length',label)
+            with c.ui.hold_step(1):c.ui.press_key(2)
+            c.elapse(.06);c.ui.expect_field_value('length',label)
         # Change merge mode while the mask is active, then remove the mask.
         for masked,duration in [(True,mask),(False,unmasked)]:
-            if not masked:c.enc(3,-detents);length_mask_display(c,'X')
-            else:length_mask_display(c,label)
+            if not masked:c.ui.set_value(-detents);c.ui.expect_field_value('length','X')
+            else:c.ui.expect_field_value('length',label)
             marker=c.snapshot()['midi_count']
             notes=c.playback([(1,[144,60,127])],cycles=2,timeout=5)
             assert_durations(c,notes,[duration]*2)
@@ -605,4 +610,4 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
             events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
             assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
             c.results.append(dict(kind='fractional-length-mask-merge',sources=sources,mode=mode,masked=masked,expected_steps=duration,passed=True))
-        c.enc(3,detents);length_mask_display(c,label)
+        c.ui.set_value(detents);c.ui.expect_field_value('length',label)

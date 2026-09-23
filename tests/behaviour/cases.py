@@ -112,7 +112,7 @@ from numeric_merging import lydian_octave_boundary
 from numeric_merging import numeric_velocity_merge
 from numeric_merging import merge_rounding
 from numeric_merging import merge_mode_cycle
-from numeric_merging import numeric_note_merge
+from contract.numeric_merging import numeric_note_merge
 from numeric_merging import merge_transpose_scale_lock
 from numeric_merging import transpose_midi_boundaries
 from recording_lifetimes import recording_ten_slots,recording_ten_slots_trigless

@@ -45,6 +45,25 @@ class UiLayerGuardTests(unittest.TestCase):
 
         self.assertEqual(callable_raw_dependencies(CASES["M-OPT-ELEK-004"]["run"]), [])
 
+    def test_numeric_merging_module_has_no_raw_ui(self):
+        from ui_layer_guard import raw_sites
+
+        self.assertEqual(raw_sites(BEHAVIOUR / "numeric_merging.py"), [])
+
+    def test_numeric_note_blink_contracts_are_owned_by_contract_module(self):
+        from cases import CASES
+        from contract.numeric_merging import numeric_note_merge
+        from ui_layer_guard import raw_sites
+
+        case_ids = ("M-MERGE-009", "M-MERGE-010", "M-MERGE-011",
+                    "M-MERGE-019", "M-MERGE-023", "M-MERGE-043", "M-MERGE-044")
+        self.assertEqual(CASES["M-MERGE-009"]["run"], numeric_note_merge)
+        for case_id in case_ids[1:]:
+            self.assertIs(CASES[case_id]["run"].__globals__["numeric_note_merge"],
+                          numeric_note_merge, case_id)
+        self.assertEqual(numeric_note_merge.__module__, "contract.numeric_merging")
+        self.assertIn((5, "state:grid"), raw_sites(BEHAVIOUR / "contract" / "numeric_merging.py"))
+
     def test_recording_stop_case_is_owned_by_its_contract_module(self):
         from cases import CASES
         from contract.recording_stop_safety import recording_stop_safety
