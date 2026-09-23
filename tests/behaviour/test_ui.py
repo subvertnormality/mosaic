@@ -255,6 +255,17 @@ class UiInputTests(unittest.TestCase):
             ("enc", 2, 3),
         ])
 
+    def test_rejected_saved_range_controls_keep_native_tap_recipe(self):
+        driver, ui = self.ui()
+        ui.menu("channel_editor")
+        ui.play()
+        ui.stop()
+        self.assertEqual(driver.calls, [
+            ("tap", 3, 8),
+            ("tap", 1, 8),
+            ("tap", 1, 8),
+        ])
+
     def test_song_pattern_copy_and_leds_use_first_and_last_semantic_slots(self):
         driver, ui = self.ui()
 
