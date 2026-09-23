@@ -593,6 +593,13 @@ class Ui:
             result["channel"] = channel
         self.driver.results.append(result)
 
+    def expect_native_menu_label(self, parameter):
+        try:
+            rendered = NATIVE_MENU[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown native menu label %s" % parameter) from error
+        self.expect_menu_label(rendered)
+
     def expect_native_menu_value(self, parameter, value):
         try:
             rendered = NATIVE_MENU_VALUES[parameter][value]

@@ -16,9 +16,9 @@ def recording_song_transition(c,held_across=False,release_length=False,chord=Fal
     c.ui.song_editor();c.ui.tap_control('global_pattern_length',2)
     for _ in range(3):c.ui.tap_control('global_pattern_length',8)                                 # global length 4
     c.ui.copy_slot(1,2,control='song_pattern_slot');c.ui.tap_control('song_pattern_slot',1);c.ui.tap_control('channel_editor')                # slot 2 = copy of slot 1
-    c.ui.press_key(1);c.ui.turn(1,4);c.ui.press_key(3);c.ui.expect_menu_label('LEVELS >')
+    c.ui.press_key(1);c.ui.turn(1,4);c.ui.press_key(3);c.ui.expect_native_menu_label('levels_root')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.ui.select_field('CLOCK',offset=position);c.ui.press_key(3);c.ui.expect_menu_label('source');c.ui.set_value(1);c.ui.expect_menu_value('midi');c.ui.press_key(1)
+    c.ui.select_field('CLOCK',offset=position);c.ui.press_key(3);c.ui.expect_native_menu_label('clock_source');c.ui.set_value(1);c.ui.expect_native_menu_value('clock_source','midi');c.ui.press_key(1)
     c.ui.tap_control('record')                                                   # arm recording
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
@@ -39,8 +39,8 @@ def recording_song_transition(c,held_across=False,release_length=False,chord=Fal
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=5)
     c.wait(lambda state:not state['midi_capture']['outstanding']);c.ui.tap_control('record')  # disarm
     c.results.append(dict(kind='recording-across-transition',notes={'A':[72,90,'slot1-step2'],'B':[79,80,'slot2-step2']},passed=True))
-    c.ui.press_key(1);c.ui.press_key(3);c.ui.expect_menu_label('source');c.ui.set_value(-1);c.ui.expect_menu_value('internal')
-    c.ui.select_field('tempo',offset=1);c.ui.expect_menu_label('tempo');c.ui.set_value(-10);c.ui.expect_menu_value('90');c.ui.press_key(1)
+    c.ui.press_key(1);c.ui.press_key(3);c.ui.expect_native_menu_label('clock_source');c.ui.set_value(-1);c.ui.expect_native_menu_value('clock_source','internal')
+    c.ui.select_field('tempo',offset=1);c.ui.expect_native_menu_label('clock_tempo');c.ui.set_value(-10);c.ui.expect_menu_value('90');c.ui.press_key(1)
     c.ui.song_editor();c.ui.tap_control('song_pattern_slot',1);c.ui.tap_control('channel_editor')                             # play the chain from slot 1
     # Current-active-step recording (user decision, LIVE_RECORDING_PLACEMENT.md): a note belongs
     # to the step, and so the slot, active at its first press.

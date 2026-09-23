@@ -618,6 +618,18 @@ class UiInputTests(unittest.TestCase):
         ])
 
 class UiObservationTests(unittest.TestCase):
+    def test_native_menu_label_key_preserves_rendered_oracle(self):
+        from ui import Ui, UiMapError
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        with patch.object(ui, "expect_menu_label") as expect:
+            ui.expect_native_menu_label("clock_tempo")
+            expect.assert_called_once_with("tempo")
+            with self.assertRaises(UiMapError):
+                ui.expect_native_menu_label("not_a_menu_item")
+        self.assertEqual(driver.results, [])
+
     def test_wait_for_header_uses_driver_wait_state_without_result(self):
         from unittest.mock import patch
         from ui import Ui

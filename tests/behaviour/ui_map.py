@@ -111,6 +111,7 @@ SCREEN = {
 NATIVE_MENU = {
     "levels_root": "LEVELS >",
     "clock_source": "source",
+    "clock_tempo": "tempo",
     "patch_control_default": "CC 1",
     "patch_control_configured": "Control 1",
 }
