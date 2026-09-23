@@ -240,6 +240,21 @@ class UiInputTests(unittest.TestCase):
         ui.channel_page("harmony", "masks", confirm=False)
         self.assertEqual(driver.calls, [("enc", 1, 7)])
 
+    def test_pattern_harmony_clock_page_and_value_verbs_keep_native_recipe(self):
+        driver, ui = self.ui()
+        ui.channel_page("clock_mods", "midi_config", channel=2, confirm=False)
+        ui.set_value(-2)
+        ui.channel_page("harmony", "clock_mods", channel=2, confirm=False)
+        ui.set_value(2)
+        ui.select_field("tone_0_role", offset=3)
+        self.assertEqual(driver.calls, [
+            ("enc", 1, -1),
+            ("enc", 3, -2),
+            ("enc", 1, 4),
+            ("enc", 3, 2),
+            ("enc", 2, 3),
+        ])
+
     def test_song_pattern_copy_and_leds_use_first_and_last_semantic_slots(self):
         driver, ui = self.ui()
 

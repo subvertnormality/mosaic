@@ -208,21 +208,25 @@ def pattern_harmony_independent_clocks_workflow(c):
     # Route Channel 2 to MIDI channel 2, select Pattern 2, and set its public
     # channel clock from /1 to /2. Channel 1 remains /1.
     c.ui.select_channel(2); c.ui.expect_header("midi_config", channel=2)
-    c.ui.turn(3, 1); c.ui.turn(2, 1); c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.set_value(1); c.ui.turn(2, 1); c.ui.set_value(1); c.ui.press_key(3)
     c.ui.tap_control("pattern_slot", 2); c.ui.hold_control_tap(
         "step", "step", held_index=1, target_index=4)
-    c.ui.turn(1, -1); c.ui.expect_header("clock_mods", channel=2)
-    c.ui.turn(3, -2); c.ui.press_key(3)
+    c.ui.channel_page("clock_mods", "midi_config", channel=2, confirm=False)
+    c.ui.expect_header("clock_mods", channel=2)
+    c.ui.set_value(-2); c.ui.press_key(3)
 
     # Each channel enters Pattern mode and maps its sole written identity to
     # Bass through the real Harmony editor. Defaults place C at 48 and F at 53.
-    c.ui.turn(1, 4); c.ui.expect_header("harmony", channel=2)
-    c.ui.turn(3, 2); c.ui.turn(2, 3); c.ui.press_key(3); c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.channel_page("harmony", "clock_mods", channel=2, confirm=False)
+    c.ui.expect_header("harmony", channel=2)
+    c.ui.set_value(2); c.ui.select_field("tone_0_role", offset=3)
+    c.ui.press_key(3); c.ui.set_value(1); c.ui.press_key(3)
     c.ui.turn(1, -1); c.ui.turn(2, 4); c.ui.press_key(3)
-    c.ui.turn(2, 2); c.ui.turn(3, -5); c.ui.press_key(3)
+    c.ui.turn(2, 2); c.ui.set_value(-5); c.ui.press_key(3)
     c.ui.turn(1, -1); c.ui.expect_header("harmony", channel=2)
     c.ui.select_channel(1); c.ui.expect_header("harmony", channel=1)
-    c.ui.turn(3, 2); c.ui.turn(2, 3); c.ui.press_key(3); c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.set_value(2); c.ui.select_field("tone_0_role", offset=3)
+    c.ui.press_key(3); c.ui.set_value(1); c.ui.press_key(3)
 
     capture = MidiWindow(c.snapshot()['midi_count'])
     c.ui.play(); c.elapse(3.0); capture.extend(c.snapshot())
