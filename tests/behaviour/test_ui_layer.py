@@ -18,6 +18,17 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_recording_lifetimes_use_semantic_ui(self):
+        from recording_lifetimes import (
+            recording_lifetime, recording_nrpn,
+            recording_ten_slots, recording_ten_slots_trigless,
+        )
+        from ui_layer_guard import callable_raw_dependencies
+
+        for run in (recording_lifetime, recording_nrpn,
+                    recording_ten_slots, recording_ten_slots_trigless):
+            self.assertEqual(callable_raw_dependencies(run), [], run.__name__)
+
     def test_harmony_page_navigation_preserves_header_observations(self):
         """README MERGE-FOUNDATION/HARMONY-REVOICE: show the selected page."""
         import ast

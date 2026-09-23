@@ -82,6 +82,12 @@ class UiMapTests(unittest.TestCase):
 
         self.assertEqual(TRIG_PARAMETERS, {
             "stored_patch_cc1": "CC 1",
+            **{"stored_patch_cc%d" % slot: "CC %d" % slot for slot in range(2, 11)},
+            "stored_patch_control1": "Control 1",
+            "stored_patch_nrpn14": "NRPN14",
+            "configured_control_1": "Control 1",
+            "ns0": "NS0",
+            "ns6": "NS6",
             "fixed_note": "Fixed Note",
             "quantised_fixed_note": "Quantised Fixed Note",
             "trig_probability": "Trig Probability",
@@ -89,6 +95,12 @@ class UiMapTests(unittest.TestCase):
             "chord_pattern": "Chord Pattern",
             "random_note": "Random Note",
             "twos_random_note": "Twos Random Note",
+            "none": "None",
+            "nrpn14": "NRPN14", "sparse_high": "SparseHigh", "sparse_low": "SparseLow",
+            "cc_default": "CCdefault", "nrpn_old": "NRPNold", "nrpn_default": "NRPNdef",
+            **{'nrpn_%s_%d' % (mode, index): prefix + str(index)
+               for mode, prefix in [('standard', 'NS'), ('legacy', 'NL')]
+               for index in range(7)},
         })
 
     def test_mosaic_option_keys_match_documented_native_labels(self):
@@ -547,6 +559,29 @@ class UiInputTests(unittest.TestCase):
             ("action", {"type": "enc", "n": 3, "delta": -2}),
         ])
         self.assertEqual(result, {"native": "ack"})
+
+    def test_control_and_key_edges_keep_exact_timing_free_event_shape(self):
+        driver, ui = self.ui()
+        ui.control_edge("step", True, index=3)
+        ui.control_edge("step", False, index=3)
+        ui.key_edge(1, True)
+        ui.key_edge(1, False)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 3, "y": 4, "state": 1}),
+            ("action", {"type": "grid", "x": 3, "y": 4, "state": 0}),
+            ("action", {"type": "key", "n": 1, "state": 1}),
+            ("action", {"type": "key", "n": 1, "state": 0}),
+        ])
+
+    def test_stored_patch_control_slots_are_resolved_from_stable_keys(self):
+        driver, ui = self.ui()
+        ui.assign_trig_parameter = lambda label, offset=None: driver.calls.append(
+            ("assign", label, offset)
+        )
+        ui.assign_stored_patch_control(10)
+        self.assertEqual(driver.calls, [("assign", "CC 10", None)])
+        with self.assertRaisesRegex(AssertionError, "slot must be in 1..10"):
+            ui.assign_stored_patch_control(11)
 
     def test_configure_keeps_the_historical_physical_recipe(self):
         driver, ui = self.ui()

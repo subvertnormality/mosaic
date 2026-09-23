@@ -117,9 +117,12 @@ from numeric_merging import merge_transpose_scale_lock
 from numeric_merging import transpose_midi_boundaries
 from recording_lifetimes import recording_ten_slots,recording_ten_slots_trigless
 from contract.recording_stop_safety import recording_stop_safety
+from contract.trig_parameter_interactions import live_parameter_recording as contract_live_parameter_recording
 from trig_parameter_interactions import sparse_editor_domain
 from trig_parameter_interactions import cc_encoder_domain
 from recording_lifetimes import recording_lifetime,recording_nrpn
+from contract.recording_lifetimes import stop as recording_lifetime_stop
+from contract.recording_lifetimes import nonselected_wrap as recording_lifetime_nonselected_wrap
 from modulation_interactions import modulated_cc_lock_precedence
 from patch_params import patch_sparse_slide
 from patch_params import patch_mixed_cc_nrpn_slides
@@ -129,7 +132,7 @@ from patch_params import patch_clear_mask_boundary
 from patch_params import patch_slide_live_destination
 from patch_params import patch_slide_trigless
 from patch_params import patch_slide_song_cutoff
-from patch_params import patch_slide_live_division
+from contract.patch_params import patch_slide_live_division, patch_slide_stop_restarts
 from patch_params import patch_slide_timing
 from patch_params import patch_adjacent_locks
 from patch_params import patch_lock_precedence
@@ -3451,7 +3454,7 @@ CASES={
  'M-REC-PARAM-020':dict(run=lambda c:recording_lifetime(c,'pending-assignment'),requirements=['REC-PARAM-AUTOMATION','PARAM-SLOTS','CH-DEVICE'],description='Keep pending-assignment unconfirmed across an eligible recording step, then cancel: original-route dirty MIDI and stored replay remain intact'),
  'M-PARAM-027':dict(run=lambda c:cc_encoder_domain(c,configured=False),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Every held-lock CC encoder detent emits exact MIDI0..127, upper clamp, Off and reentry; configured=False'),
  'M-PARAM-026':dict(run=lambda c:cc_encoder_domain(c,configured=True),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Every held-lock CC encoder detent emits exact MIDI0..127, upper clamp, Off and reentry; configured=True'),
- 'M-REC-PARAM-019':dict(run=lambda c:recording_lifetime(c,'nonselected-wrap',scale_page=True),requirements=['REC-PARAM-AUTOMATION','CH-SELECT','NAV-PAGES'],description='Hold scale editor through global64-step wrap while recording; runtime remains live and paused MIDI automation resumes on return'),
+ 'M-REC-PARAM-019':dict(run=recording_lifetime_nonselected_wrap,requirements=['REC-PARAM-AUTOMATION','CH-SELECT','NAV-PAGES'],description='Hold scale editor through global64-step wrap while recording; runtime remains live and paused MIDI automation resumes on return'),
  'M-REC-PARAM-018':dict(run=lambda c:recording_nrpn(c,-1),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE', 'PARAM-OFF'],description='Record NRPN -1 on port2/channel2 with exact standard bytes, timing, distinct-default replay and unchanged clean-slot CC lock'),
  'M-REC-PARAM-017':dict(run=lambda c:recording_nrpn(c,0),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE', 'PARAM-OFF'],description='Record NRPN 0 on port2/channel2 with exact standard bytes, timing, distinct-default replay and unchanged clean-slot CC lock'),
  'M-REC-PARAM-016':dict(run=lambda c:recording_nrpn(c,253),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE', 'PARAM-OFF'],description='Record NRPN 253 on port2/channel2 with exact standard bytes, timing, distinct-default replay and unchanged clean-slot CC lock'),
@@ -3460,13 +3463,13 @@ CASES={
  'M-REC-PARAM-013':dict(run=lambda c:recording_lifetime(c,'configuration'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE'],description='Changing MIDI channel and port resets defaults, device locks and assignments; reassigning before wrap cannot revive stale recording'),
  'M-REC-PARAM-012':dict(run=lambda c:recording_lifetime(c,'same-assignment'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Confirming the same CC assignment preserves pending automation'),
  'M-REC-PARAM-011':dict(run=lambda c:recording_lifetime(c,'reassign'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Changing CC assignment clears pending slot automation; existing locks follow new assignment without dirty-value leakage'),
- 'M-REC-PARAM-010':dict(run=lambda c:recording_lifetime(c,'stop'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'NAV-TRANSPORT'],description='Grid Stop clears pending automation while arm remains enabled; restart preserves previously recorded steps'),
+ 'M-REC-PARAM-010':dict(run=recording_lifetime_stop,requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'NAV-TRANSPORT'],description='Grid Stop clears pending automation while arm remains enabled; restart preserves previously recorded steps'),
  'M-REC-PARAM-009':dict(run=lambda c:recording_lifetime(c,'disarm'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'REC-ARM'],description='Disarm and immediate rearm retire pending automation without rewriting untouched future steps'),
  'M-REC-PARAM-008':dict(run=lambda c:recording_lifetime(c,'nonselected-wrap'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-SELECT'],description='Nonselected channel wrap preserves paused automation for resumption on a later eligible step'),
  'M-REC-PARAM-007':dict(run=lambda c:recording_lifetime(c,'selected-wrap'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'REC-ARM'],description='Selected channel wrap clears retained automation before its start lock sounds'),
  'M-REC-PARAM-006':dict(run=lambda c:live_parameter_recording(c,edit_value=-1),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded Off suppresses conflicting locks through the cycle and remains silent during distinct-default disarmed replay'),
  'M-REC-PARAM-005':dict(run=lambda c:live_parameter_recording(c,edit_value=0),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded zero is active MIDI, replacing a conflicting lock and surviving distinct-default disarmed replay'),
- 'M-REC-PARAM-004':dict(run=lambda c:live_parameter_recording(c,switch_return=True,scale_page=True),requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
+ 'M-REC-PARAM-004':dict(run=lambda c:contract_live_parameter_recording(c,switch_return=True,scale_page=True),requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
  'M-REC-PARAM-031':dict(run=recording_ten_slots_trigless,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='All ten CC slots record zero on one trigless rest; Stop before step3 and exact fast replay prove step1/3/4 locks unchanged'),
  'M-REC-PARAM-030':dict(run=recording_trigless_toggle,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Toggle trigless Off/On/Off during recording across rest/rest/active steps, then enable for exact24/48/65/65 stored replay and timing'),
  'M-REC-PARAM-029':dict(run=lambda c:live_parameter_recording(c,probability_zero=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS'],description='Trigless-off recording treats authored probability-zero step3 as eligible despite note silence; exact CC replay distinguishes trigger state from audible outcome'),
@@ -3530,7 +3533,7 @@ CASES={
  'M-PATCH-034':dict(run=lambda c:patch_slide_timing(c,step_local=True,global_roundtrip=True),requirements=['SLIDE-STEP','SLIDE-GLOBAL'],description='Global slides enable later locks then switch off while preserving an existing local slide and its exact timing'),
  'M-PATCH-033':dict(run=lambda c:patch_slide_timing(c,step_local=True),requirements=['SLIDE-STEP'],description='Held-step K3 slides only source lock with exact trajectory and endpoint; later lock jumps directly without unwanted global interpolation'),
  'M-PATCH-032':dict(run=lambda c:patch_slide_live_division(c,repeated_edits=True),requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Repeated confirmed queued rate edits preserve pre-boundary timing and retime active slide continuously to final rate'),
- 'M-PATCH-031':dict(run=lambda c:patch_slide_timing(c,stop_restarts=3),requirements=['SLIDE-GLOBAL','NAV-TRANSPORT'],description='Three active-slide stop/restarts leave no stale MIDI or outstanding notes and retain exact restarted slide timing'),
+ 'M-PATCH-031':dict(run=patch_slide_stop_restarts,requirements=['SLIDE-GLOBAL','NAV-TRANSPORT'],description='Three active-slide stop/restarts leave no stale MIDI or outstanding notes and retain exact restarted slide timing'),
  'M-PATCH-030':dict(run=lambda c:patch_slide_trigless(c,False),requirements=['SLIDE-GLOBAL','OPT-TRIGLESS'],description='Disabled trigless excludes silent lock from slide destination and parameter emission'),
  'M-PATCH-028':dict(run=lambda c:patch_slide_timing(c,off_middle=True),requirements=['PARAM-OFF','SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Explicit Off lock between active slide endpoints emits no sentinel/stored value and does not cancel or distort the MIDI trajectory'),
  'M-PATCH-027':dict(run=patch_slide_song_cutoff,requirements=['SLIDE-GLOBAL','SONG-ADVANCE','SONG-SLOTS'],description='Actual song transition without reset retires old active CC slide at global boundary; new octave fingerprint, phase and explicit lock remain correct'),

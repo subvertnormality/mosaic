@@ -93,6 +93,17 @@ class Ui:
         """Emit one native encoder event with no synthetic detent timing."""
         return self.driver.action(type="enc", n=encoder, delta=delta)
 
+    def control_edge(self, control, pressed, index=None):
+        """Emit one mapped grid edge without adding time between gestures."""
+        x, y = control_cell(control, index)
+        return self.driver.action(type="grid", x=x, y=y,
+                                  state=1 if pressed else 0)
+
+    def key_edge(self, number, pressed):
+        """Emit one norns key edge without adding synthetic hold time."""
+        return self.driver.action(type="key", n=number,
+                                  state=1 if pressed else 0)
+
     def set_value(self, delta):
         self.turn(3, delta)
 
@@ -328,9 +339,12 @@ class Ui:
             )
         return state
 
-    def open_native_parameters(self):
-        """Open PARAMETERS from HOME after native menu entry is observable."""
-        self.enter_native_menu()
+    def open_native_parameters(self, observe_entry=True):
+        """Open PARAMETERS, optionally preserving an existing immediate-entry recipe."""
+        if observe_entry:
+            self.enter_native_menu()
+        else:
+            self.press_key(1)
         self.turn(1, 4)
         self.press_key(3)
         self.expect_menu_label(NATIVE_MENU["levels_root"])
@@ -389,6 +403,20 @@ class Ui:
             raise UiMapError("unknown trig parameter: " + str(parameter)) from error
         return self.assign_trig_parameter(label, offset=offset)
 
+    def assign_stored_patch_control(self, slot):
+        if type(slot) is not int or not 1 <= slot <= 10:
+            raise UiMapError("stored patch-control slot must be in 1..10")
+        return self.assign_trig_parameter_key(
+            "stored_patch_cc%d" % slot
+        )
+
+    def expect_trig_parameter_visible(self, parameter, wait=True):
+        try:
+            label = TRIG_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown trig parameter: " + str(parameter)) from error
+        return self.expect_list_label(label, wait=wait)
+
     def open_patch_control(self, configured=False, setup=True):
         """Open channel 1's stored patch control with the legacy scan recipe."""
         from frame_oracle import selected_line
@@ -420,7 +448,8 @@ class Ui:
         self.expect_menu_label(label)
         return label
 
-    def seek_patch_parameter(self, parameter, configured=False, attempts=180):
+    def seek_patch_parameter(self, parameter, configured=False, attempts=180,
+                             open_control=True):
         """Open a patch control and seek a mapped parameter by observed state."""
         from frame_oracle import selected_line
 
@@ -428,7 +457,8 @@ class Ui:
             data = PATCH_PARAMETERS[parameter]
         except KeyError as error:
             raise UiMapError("unknown patch parameter: " + str(parameter)) from error
-        self.open_patch_control(configured=configured)
+        if open_control:
+            self.open_patch_control(configured=configured)
         for _ in range(attempts):
             if selected_line(self.driver.snapshot(), data["label"]):
                 break
@@ -447,6 +477,28 @@ class Ui:
             except KeyError as error:
                 raise UiMapError("unknown patch parameter value: " + str(value)) from error
         self.expect_menu_value(rendered)
+
+    def seek_current_patch_parameter(self, parameter, attempts=180, failure=None,
+                                     confirm=True):
+        """Seek from the current native row, retaining its observed-state recipe."""
+        from frame_oracle import selected_line
+
+        try:
+            spec = PATCH_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown patch parameter: " + str(parameter)) from error
+        for _ in range(attempts):
+            if selected_line(self.driver.snapshot(), spec['label']):
+                break
+            self.turn(2, 1)
+        else:
+            raise AssertionError(spec['failure'] if failure is None else failure)
+        if confirm:
+            self.expect_patch_parameter(parameter)
+
+    def expect_patch_parameter(self, parameter):
+        """Assert the selected row for a stable stored-patch parameter key."""
+        self.expect_menu_label(PATCH_PARAMETERS[parameter]['label'])
 
     def turn_patch_control(self, steps):
         """Keep native acceleration disabled and retain the historical settling time."""
@@ -776,3 +828,33 @@ class Ui:
                 return
             self.turn(2, 1)
         raise AssertionError(failure or spec["failure"])
+
+    def seek_mosaic_option(self, option, failure=None):
+        """Seek an option with the native saturation used by live recording."""
+        from frame_oracle import selected_line
+        from ui_map import MOSAIC_OPTION_ROWS
+
+        try:
+            label = MOSAIC_OPTIONS[option]
+            top = MOSAIC_OPTION_ROWS[option]
+        except KeyError as error:
+            raise UiMapError("unknown Mosaic option: " + str(option)) from error
+        self.encoder_event(2, -126)
+        self.driver.elapse(.15)
+        for _ in range(40):
+            if selected_line(self.driver.snapshot(), label, top=top):
+                return
+            self.turn(2, 1)
+        raise AssertionError(failure or "Required Mosaic option not reached: " + label)
+
+    def expect_mosaic_option(self, option, enabled):
+        """Retain the selected option's exact historical row and result entry."""
+        from ui_map import MOSAIC_OPTION_ROWS, MOSAIC_OPTION_VALUES
+
+        try:
+            label = MOSAIC_OPTIONS[option]
+            top = MOSAIC_OPTION_ROWS[option]
+            value = MOSAIC_OPTION_VALUES[enabled]
+        except KeyError as error:
+            raise UiMapError("unknown Mosaic option/value: " + str(option)) from error
+        self.expect_menu_option_row(label, value, top=top)

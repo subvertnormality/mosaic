@@ -150,6 +150,18 @@ PATCH_PARAMETERS = {
         "label": "NRPN14",
         "failure": "NRPN14 control not reachable",
     },
+    "sparse_high": {"label": "SparseHigh", "failure": "Sparse control not reachable: SparseHigh"},
+    "sparse_low": {"label": "SparseLow", "failure": "Sparse control not reachable: SparseLow"},
+    "cc_default": {"label": "CCdefault", "failure": "Default-Off CC control unreachable"},
+    "nrpn_old": {"label": "NRPNold", "failure": "NRPN slide control unreachable"},
+    "nrpn_default": {"label": "NRPNdef", "failure": "NRPN slide control unreachable"},
+    **{
+        'nrpn_%s_%d' % (mode, index): {
+            'label': prefix + str(index), 'failure': 'Boundary NRPN controls unreachable',
+        }
+        for mode, prefix in [('standard', 'NS'), ('legacy', 'NL')]
+        for index in range(7)
+    },
 }
 
 PATCH_PARAMETER_VALUES = {
@@ -157,7 +169,11 @@ PATCH_PARAMETER_VALUES = {
 }
 
 TRIG_PARAMETERS = {
-    "stored_patch_cc1": "CC 1",
+    "stored_patch_control1": "Control 1",
+    "stored_patch_nrpn14": "NRPN14",
+    "configured_control_1": "Control 1",
+    "ns0": "NS0",
+    "ns6": "NS6",
     "fixed_note": "Fixed Note",
     "quantised_fixed_note": "Quantised Fixed Note",
     "trig_probability": "Trig Probability",
@@ -165,6 +181,9 @@ TRIG_PARAMETERS = {
     "twos_random_note": "Twos Random Note",
     "chord_note_arpeggio": "Chord Note Arpeggio",
     "chord_pattern": "Chord Pattern",
+    "none": "None",
+    **{'stored_patch_cc%d' % number: 'CC %d' % number for number in range(1, 11)},
+    **{key: value['label'] for key, value in PATCH_PARAMETERS.items()},
 }
 
 MIDI_MAPPING_PARAMETERS = {
@@ -181,6 +200,10 @@ MOSAIC_OPTIONS = {
     "lock_merged_to_pentatonic": "Lock merged to pent.",
     "elektron_program_changes": "Elektron program changes",
     "trigless_locks": "Trigless locks",
+    "wrap_param_slides": "Wrap param slides",
+    "song_mode": "Song mode",
+    "reset_on_song_seq_change": "Reset on song seq change",
+    "reset_on_pattern_repeat": "Reset on pattern repeat",
 }
 
 # Every distinct level has a distinct semantic name. Controls may narrow this
@@ -342,6 +365,7 @@ def header_text(page, **params):
     except KeyError as error:
         raise KeyError("unknown or incomplete header key %r: %s" % (page, error)) from error
 NATIVE_PARAMETER_ROOTS = {
+    "mosaic": {"field": "id", "value": "mosaic"},
     "channel_1_device_parameters": {
         "field": "id",
         "value": "midi_device_params_group_channel_1",
@@ -355,3 +379,6 @@ NATIVE_MENU_PARAMETERS = {
         "failure": "Configured Control 1 unavailable in Matrix target group",
     },
 }
+
+MOSAIC_OPTION_ROWS = {"trigless_locks": 23}
+MOSAIC_OPTION_VALUES = {False: "Off", True: "On"}

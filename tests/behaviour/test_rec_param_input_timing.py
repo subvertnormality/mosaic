@@ -6,6 +6,8 @@ from trig_parameter_interactions import recorded_edit_receipt, assert_immediate_
 
 class FakeDriver:
     def __init__(self):
+        from ui import Ui
+        self.ui = Ui(self)
         self.calls = []
         self.receipt = {'status': 'applied', 'native': {'monotonic_ns': 1_000_000_000}}
 
@@ -49,4 +51,3 @@ class RecordedEditInputTiming(unittest.TestCase):
             with self.subTest(receipt=receipt):
                 with self.assertRaises(AssertionError):
                     assert_immediate_cc_on_edit({'monotonic_ns': 1_000_000_000}, receipt)
-
