@@ -1028,7 +1028,7 @@ def transpose_scale_octave_composition(c):
     # Step locks are persistent until replacement and reset at channel wrap.
     c.ui.hold_control_tap("step", "step_transpose_minimum", 1)   # -12
     c.ui.hold_control_tap("step", "step_transpose_zero", 2)  # explicit 0
-    c.ui.hold_control_tap("step", "step_transpose_increment", 3)  # +12, persists through step4
+    c.ui.hold_control_tap("step", "step_transpose_plus_twelve", 3)  # +12, persists through step4
     pitches = (63,77,91,92)
     notes = c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],
                        cycles=3, timeout=5, settle_seconds=2-.1)

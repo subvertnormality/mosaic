@@ -362,6 +362,20 @@ class UiInputTests(unittest.TestCase):
         ui.channel_page("harmony", "masks", confirm=False)
         self.assertEqual(driver.calls, [("enc", 1, 7)])
 
+    def test_step_transpose_plus_twelve_keeps_its_original_grid_recipe(self):
+        from ui import Ui
+        from ui_map import control_cell
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        self.assertEqual(control_cell("step_transpose_plus_twelve"), (15, 8))
+        ui.hold_control_tap("step", "step_transpose_plus_twelve", 3)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 3, "y": 4, "state": 1}),
+            ("tap", 15, 8),
+            ("action", {"type": "grid", "x": 3, "y": 4, "state": 0}),
+        ])
+
     def test_pattern_harmony_clock_page_and_value_verbs_keep_native_recipe(self):
         driver, ui = self.ui()
         ui.channel_page("clock_mods", "midi_config", channel=2, confirm=False)

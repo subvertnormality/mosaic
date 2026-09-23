@@ -384,6 +384,10 @@ def control_cell(control, index=None):
         if index is not None:
             raise ValueError("step transpose zero does not take an index")
         return 12, 8
+    if control == "step_transpose_plus_twelve":
+        if index is not None:
+            raise ValueError("step transpose +12 does not take an index")
+        return 15, 8
     if control in MENU:
         if index is not None:
             raise ValueError("menu controls do not take an index")
