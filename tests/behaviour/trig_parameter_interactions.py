@@ -32,7 +32,7 @@ def fixed_note_domain(c,start=0,count=16):
 
 
 def quantised_fixed_table(c,profile='major'):
-    from cases import assign_trig_parameter,assert_durations
+    from cases import assert_durations
     # Literal musical tables, independent of Mosaic's quantiser. Root shifts
     # retain the scale's lower endpoint; ties choose the lower legal pitch.
     tables={
@@ -44,14 +44,14 @@ def quantised_fixed_table(c,profile='major'):
     assert profile in tables
     c.configure()
     if profile!='major':
-        c.tap(4,8)
-        if profile=='a-harmonic-minor':c.enc(3,3) # Major -> Harmonic Minor
-        c.enc(2,-1);c.enc(3,9 if profile=='a-harmonic-minor' else 2)
-        c.key(3);c.tap(3,8)
-    c.enc(1,-3);assign_trig_parameter(c,'Quantised Fixed Note')
+        c.ui.scale_editor()
+        if profile=='a-harmonic-minor':c.ui.set_value(3) # Major -> Harmonic Minor
+        c.ui.turn(2,-1);c.ui.set_value(9 if profile=='a-harmonic-minor' else 2)
+        c.ui.press_key(3);c.ui.menu('channel_editor')
+    c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key('quantised_fixed_note')
     previous=-1
     for value,pitch in tables[profile]:
-        c.enc(3,value-previous);previous=value
+        c.ui.set_value(value-previous);previous=value
         notes=c.playback([(1,[144,pitch,v]) for v in (127,117,107,97)],cycles=2)
         assert_durations(c,notes,[1]*(len(notes)-1))
         field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
