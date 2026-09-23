@@ -541,6 +541,9 @@ jobs:
             /tmp/mosaic-ui-targeted/**/manifest.json
             /tmp/mosaic-ui-targeted/**/recipe.json
             /tmp/mosaic-ui-targeted/**/results.json
+            /tmp/mosaic-ui-targeted/**/native/*.log
+            /tmp/mosaic-ui-targeted/**/native/cleanup.json
+            /tmp/mosaic-ui-targeted/**/native/native-events.jsonl
             ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/manifest.json
             ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/normalized.json
             ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/process-*.json

@@ -31,6 +31,34 @@ def selected_files(patterns, root):
 
 
 class Tests(unittest.TestCase):
+    def test_targeted_upload_retains_native_shutdown_diagnostics(self):
+        blocks = re.findall(r'          path: \|\n((?:            .+\n)+)',
+                            WORKFLOW.read_text())
+        selected = [block for block in blocks
+                    if '/tmp/mosaic-ui-targeted/targeted-ui-migration.json' in block]
+        self.assertEqual(len(selected), 1)
+        patterns = [line.strip() for line in selected[0].splitlines()
+                    if 'mosaic-ui-targeted' in line]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            run = root / 'mosaic-ui-targeted/M-TEST-001/real-time/after/session'
+            native = run / 'native'
+            native.mkdir(parents=True)
+            for name in ('matron.log', 'crone.log', 'cleanup.json',
+                         'native-events.jsonl'):
+                (native / name).write_text(name)
+            for folder in ('code', 'data'):
+                path = run / folder
+                path.mkdir()
+                (path / 'private.json').write_text('private')
+            actual = selected_files(patterns, root)
+            prefix = 'mosaic-ui-targeted/M-TEST-001/real-time/after/session/'
+            self.assertTrue({prefix + 'native/' + name for name in
+                             ('matron.log', 'crone.log', 'cleanup.json',
+                              'native-events.jsonl')} <= actual)
+            self.assertFalse(any('/code/' in name or '/data/' in name
+                                 for name in actual))
+
     def test_uploads_root_and_nested_evidence_without_code_or_data(self):
         patterns = upload_patterns()
         self.assertEqual(len(patterns), 3)
