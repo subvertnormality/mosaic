@@ -220,15 +220,15 @@ def wrapped_length(c,same_pitch=False):
 def pattern_duration_domain(c,lengths=range(1,65),channel_end=64,reexpress_controlled=False):
     # The documented finite duration domain is1..64 sixteenth-note steps.
     # Author each duration using grid gestures; observe every cell and MIDI off.
-    c.configure();c.ui.set_range(1,channel_end);c.ui.pattern_editor()
-    for x in (2,3,4):c.ui.tap_step(x)
+    c.configure();c.hold_tap((1,4),((channel_end-1)%16+1,(channel_end-1)//16+4));c.tap(5,8)
+    for x in (2,3,4):c.tap(x,4)
     cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     for length in lengths:
-        if length>1:c.ui.set_range(1,length)
+        if length>1:c.hold_tap(cells[0],cells[length-1])
         c.led_values(cells,[15 if step==1 else 5 if step<=length else 2 for step in range(1,65)])
-        marker=c.snapshot()['midi_count'];c.ui.tap_control("play_stop")
+        marker=c.snapshot()['midi_count'];c.tap(1,8)
         def recorded(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes'][0] in (128,144)]
         # Native capture retains all events; fewer snapshots cannot hide an
         # early release because the emission-time and order assertions follow.
@@ -244,7 +244,7 @@ def pattern_duration_domain(c,lengths=range(1,65),channel_end=64,reexpress_contr
         # note before Stop arrives. Its ordering and cleanup are still required.
         assert [m['bytes'] for m in emitted[:2]]==[[144,60,127],[128,60,127]],emitted
         assert all(m['bytes'] in ([144,60,127],[128,60,127]) for m in emitted)
-        c.ui.tap_control("play_stop");c.wait(lambda state:not state['midi_capture']['outstanding'])
+        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
         witness=dict(first_on=emitted[0],first_off=release)
         if reexpress_controlled and c.clock_mode=='controlled-experimental':
             assert_duration_witness_observed(c.observations,emitted[0],release)
