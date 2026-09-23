@@ -3,34 +3,34 @@ import json
 from panic_hotplug_trace import verify_hotplug_sweep
 from panic_trace import verify_panic_trace
 def panic_hotplug(c,removed_before,reconnect_during):
-    c.configure();c.tap(6,8)
+    c.ui.configure();c.ui.song_editor()
     before=c.snapshot()['midi_count']
     def change(connected):c.action(type='midi_connection',port=1,connected=connected)
     def reached(note):c.wait(lambda s:any(e['index']>before and e['port']==3 and e['bytes']==[143,note,0] for e in s['midi']),timeout=2)
     if removed_before:change(False)
-    c.action(type='grid',x=5,y=8,state=1);held=True
+    c.ui.gesture([('pattern_editor',None)],[]);held=True
     try:
         reached(24)
         if not removed_before:change(False)
-        c.action(type='grid',x=5,y=8,state=0);held=False
+        c.ui.gesture([],[('pattern_editor',None)]);held=False
         if reconnect_during:reached(64);change(True)
         reached(127)
         if not reconnect_during:change(True)
     finally:
-        if held:c.action(type='grid',x=5,y=8,state=0)
+        if held:c.ui.gesture([],[('pattern_editor',None)])
     c.elapse(.1);after=c.snapshot()['midi_count']
-    c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
+    c.ui.expect_leds({('channel_editor',None):'off',('scale_editor',None):'off',('pattern_editor',None):'off',('song_editor',None):'selected'})
     # Fresh physical-style keyboard input must still use the restored mapping.
     keyboard_before=c.snapshot()['midi_count']
     c.action(type='midi',port=1,bytes=[144,60,100]);c.action(type='midi',port=1,bytes=[128,60,0]);c.elapse(.05)
     keyboard_after=c.snapshot()['midi_count']
     c.wait(lambda s:not s['midi_capture']['outstanding'])
     # A new panic must now reach all ports fully, without stale debounce jobs.
-    full_before=c.snapshot()['midi_count'];c.action(type='grid',x=5,y=8,state=1)
+    full_before=c.snapshot()['midi_count'];c.ui.gesture([('pattern_editor',None)],[])
     try:c.elapse(1.9)
-    finally:c.action(type='grid',x=5,y=8,state=0)
+    finally:c.ui.gesture([],[('pattern_editor',None)])
     c.elapse(.1);full_after=c.snapshot()['midi_count']
-    c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
+    c.ui.expect_leds({('channel_editor',None):'off',('scale_editor',None):'off',('pattern_editor',None):'off',('song_editor',None):'selected'})
     melody_before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
     melody_after=c.snapshot()['midi_count'];c.finish()
