@@ -365,9 +365,9 @@ def tresillo_setup(c):
     for step in range(1,5):c.ui.tap_step(step)
     c.ui.tap_control("pattern_editor")
     for step in range(1,17):
-        c.ui.press_key_down(1);c.elapse(.3)
+        c.ui.key_edge(1,True);c.elapse(.3)
         try:c.ui.tap_control("pattern_note",(step,(step-1)%6+1))
-        finally:c.ui.release_key(1)
+        finally:c.ui.key_edge(1,False)
     c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
     c.ui.tap_control("tresillo_tool");c.ui.tap_control("drum_bank",1)
     c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_fill_maximum")

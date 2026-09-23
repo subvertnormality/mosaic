@@ -324,6 +324,12 @@ def control_cell(control, index=None):
         if not (isinstance(index, tuple) and len(index) == 2):
             raise ValueError("pattern note fader needs an (x, y) value cell")
         return index
+    if control == "pattern_note":
+        if not (isinstance(index, tuple) and len(index) == 2
+                and all(type(value) is int for value in index)
+                and 1 <= index[0] <= CHANNEL_COUNT and 1 <= index[1] <= 7):
+            raise ValueError("pattern note needs (step 1..16, row 1..7)")
+        return index
     if control == "pattern_note_degree":
         if not (isinstance(index, tuple) and len(index) == 2
                 and all(isinstance(value, int) for value in index)
