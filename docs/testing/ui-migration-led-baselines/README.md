@@ -31,3 +31,10 @@ controlled-time lanes for the raw physical-LED source
 `612d1802ce461f7557a16380bfa1cc7b6bb11232`. Both sides used the same
 UI map, runner, gate, and application source. Its targeted report retains
 `complete_regression_run: false`.
+
+The same raw and semantic source pair passed for `M-PAT-003` through
+`M-PAT-005` and `M-MIDI-001` in GitHub Actions run `35928532283`. These
+duration/MIDI LED records are stored here as a second immutable migration
+stage, alongside the length LED records. The targeted gate passed in both
+real-time and controlled-time lanes, with `complete_regression_run: false`;
+it is not a substitute for the aggregate behaviour campaign.
