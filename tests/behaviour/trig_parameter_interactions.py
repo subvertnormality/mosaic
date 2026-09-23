@@ -615,9 +615,9 @@ def pending_parameter_lock_song_transition(c):
     # Slot 2 is a copy with a distinct octave and step-2 lock.
     c.ui.song_editor();c.ui.tap_control('global_pattern_length',2)
     for _ in range(7):c.ui.tap_control('global_pattern_length',8)
-    c.hold_tap((1,1),(2,1));c.tap(2,1);c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.copy_slot(1,2,control='song_pattern_slot');c.ui.tap_control('song_pattern_slot',2);c.ui.expect_leds({('song_pattern_slot',1):'alternate',('song_pattern_slot',2):'selected'})
     c.ui.menu('channel_editor');c.ui.tap_control('channel_octave',1);lock(2,96)
-    c.ui.song_editor();c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
+    c.ui.song_editor();c.ui.tap_control('song_pattern_slot',1);c.ui.expect_leds({('song_pattern_slot',1):'selected',('song_pattern_slot',2):'alternate'})
     c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1)
 
     marker=c.snapshot()['midi_count'];c.ui.play()
@@ -634,11 +634,11 @@ def pending_parameter_lock_song_transition(c):
         assert any(e['bytes']==[144,72,127] for e in onsets(crossed))
     finally:c.ui.gesture([],[('step',2)])
     c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
-    c.ui.song_editor();c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.song_editor();c.ui.expect_leds({('song_pattern_slot',1):'alternate',('song_pattern_slot',2):'selected'})
     c.ui.menu('channel_editor')
 
     def select_slot(slot):
-        c.ui.song_editor();c.tap(slot,1);c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1)
+        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',slot);c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1)
     # A distinct unheld default separates locks from ordinary values in both slots.
     for slot in (1,2):
         select_slot(slot)

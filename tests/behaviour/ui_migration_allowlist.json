@@ -1,5 +1,4 @@
 [
   "cases.py",
-  "dense_workload.py",
-  "trig_parameter_interactions.py"
+  "dense_workload.py"
 ]
