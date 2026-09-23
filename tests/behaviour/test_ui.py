@@ -60,6 +60,27 @@ class FakeDriver:
 
 
 class UiMapTests(unittest.TestCase):
+    def test_rhythm_doctor_controls_have_distinct_semantic_names(self):
+        from ui_map import control_cell
+
+        self.assertEqual(control_cell("legacy_drum_algorithm"), (12, 2))
+        self.assertEqual(control_cell("legacy_tresillo_algorithm"), (13, 2))
+        self.assertEqual(control_cell("legacy_euclidean_algorithm"), (14, 2))
+        self.assertEqual(control_cell("legacy_numeric_repetitor_algorithm"), (15, 2))
+        self.assertEqual(control_cell("algorithm"), (16, 2))
+        self.assertEqual(control_cell("reserved_lane"), (2, 2))
+        self.assertEqual(control_cell("lane_bd"), (3, 2))
+        self.assertEqual(control_cell("lane_sd"), (4, 2))
+        self.assertEqual(control_cell("lane_cym"), (5, 2))
+        self.assertEqual(control_cell("withdrawn_lane_bass"), (6, 2))
+        self.assertEqual(control_cell("retired_lane"), (7, 2))
+        self.assertEqual(control_cell("capture"), (1, 2))
+        self.assertEqual(control_cell("phrase_left"), (10, 8))
+        self.assertEqual(control_cell("phrase_centre"), (11, 8))
+        self.assertEqual(control_cell("phrase_right"), (12, 8))
+        with self.assertRaises(ValueError):
+            control_cell("lane_cym", 1)
+
     def test_channel_page_order_is_current_1_4_surface(self):
         from ui_map import CHANNEL_PAGES
 
@@ -572,6 +593,42 @@ class UiInputTests(unittest.TestCase):
             ("action", {"type": "key", "n": 1, "state": 1}),
             ("action", {"type": "key", "n": 1, "state": 0}),
         ])
+
+    def test_hardware_adapter_verbs_keep_the_exact_timed_input_recipe(self):
+        driver, ui = self.ui()
+        ui.hardware_tap(1, 8)
+        ui.hardware_key(3)
+        ui.hardware_turn(2, -1)
+        ui.hardware_hold_tap((1, 4), (4, 4))
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 1, "y": 8, "state": 1}),
+            ("elapse", .04),
+            ("action", {"type": "grid", "x": 1, "y": 8, "state": 0}),
+            ("elapse", .12),
+            ("action", {"type": "key", "n": 3, "state": 1}),
+            ("action", {"type": "key", "n": 3, "state": 0}),
+            ("elapse", .06),
+            ("action", {"type": "enc", "n": 2, "delta": -1}),
+            ("elapse", .05),
+            ("elapse", .15),
+            ("action", {"type": "grid", "x": 1, "y": 4, "state": 1}),
+            ("action", {"type": "grid", "x": 4, "y": 4, "state": 1}),
+            ("elapse", .04),
+            ("action", {"type": "grid", "x": 4, "y": 4, "state": 0}),
+            ("elapse", .12),
+            ("action", {"type": "grid", "x": 1, "y": 4, "state": 0}),
+        ])
+
+    def test_hardware_led_observation_keeps_the_vector_result_shape(self):
+        grid = [0] * 128
+        grid[17] = 15
+        driver = FakeDriver(states=[{"grid": grid}])
+        ui = __import__("ui").Ui(driver)
+        ui.hardware_led_values([(2, 2)], [15])
+        self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(driver.results, [{
+            "kind": "grid", "cells": [(2, 2)], "expected": [15], "actual": [15],
+        }])
 
     def test_stored_patch_control_slots_are_resolved_from_stable_keys(self):
         driver, ui = self.ui()
@@ -1676,6 +1733,98 @@ class ProjectActionUiVerbTests(unittest.TestCase):
             "type": "enc", "n": 2, "delta": 1,
         })), 30)
         self.assertEqual(driver.calls.count(("elapse", .03)), 30)
+
+    def test_rhythm_doctor_controls_keep_the_native_input_trace(self):
+        from ui import Ui
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        ui.select_rhythm_doctor_algorithm("rhythm_doctor")
+        ui.select_rhythm_doctor_algorithm("drum")
+        ui.select_rhythm_doctor_lane("CYM")
+        ui.tap_control("withdrawn_lane_bass")
+        ui.tap_rhythm_doctor_phrase_button("centre")
+        ui.rhythm_doctor_setup_field(-2)
+        ui.adjust_rhythm_doctor_setup_value(14)
+        ui.rhythm_doctor_key_edge("discard_draft", True)
+        ui.rhythm_doctor_key_edge("discard_draft", False)
+        ui.rhythm_doctor_capture_edge(True)
+        ui.rhythm_doctor_capture_edge(False)
+        ui.expect_rhythm_doctor_lanes({"reserved": "dark", "BD": "blink_low",
+                                       "SD": "blink_low", "CYM": "selected",
+                                       "withdrawn_BASS": "dark", "retired": "dark"})
+
+        self.assertEqual(driver.calls, [
+            ("tap", 16, 2), ("tap", 12, 2), ("tap", 5, 2), ("tap", 6, 2),
+            ("tap", 11, 8),
+            ("action", {"type": "enc", "n": 2, "delta": -2}),
+            ("action", {"type": "enc", "n": 3, "delta": 14}),
+            ("action", {"type": "key", "n": 2, "state": 1}),
+            ("action", {"type": "key", "n": 2, "state": 0}),
+            ("action", {"type": "grid", "x": 1, "y": 2, "state": 1}),
+            ("action", {"type": "grid", "x": 1, "y": 2, "state": 0}),
+            ("led_values", [(2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2)],
+             [0, 4, 4, 15, 0, 0]),
+        ])
+
+    def test_rhythm_doctor_screen_verbs_keep_exact_rendered_regions(self):
+        from ui import Ui
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        with patch.object(ui, "_wait_rhythm_doctor_render") as observe:
+            ui.expect_rhythm_doctor_header()
+            ui.expect_rhythm_doctor_tooltip("NOT_READY")
+            ui.expect_rhythm_doctor_setup("INPUT", "auto", 120, "STEREO")
+            ui.expect_rhythm_doctor_status("CYM / READY")
+
+        self.assertEqual(observe.call_args_list[0].args[0], [
+            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
+        ])
+        self.assertEqual(observe.call_args_list[0].kwargs, {})
+        self.assertEqual(observe.call_args_list[1].args[0], [(0, 62, 10, "NOT_READY")])
+        self.assertEqual(observe.call_args_list[1].args[1],
+                         {"left": 0, "right": 100, "top": 55, "bottom": 64})
+        self.assertEqual(observe.call_args_list[2].args[0], [
+            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
+            (0, 22, 10, "SETUP / INPUT"), (0, 34, 10, " TEMPO AUTO"),
+            (0, 46, 10, " MANUAL BPM 120"), (0, 58, 10, ">INPUT STEREO"),
+        ])
+        self.assertEqual(observe.call_args_list[2].kwargs, {"full": True})
+        self.assertEqual(observe.call_args_list[3].args[0], [(0, 22, 10, "CYM / READY")])
+        self.assertEqual(observe.call_args_list[3].args[1],
+                         {"left": 0, "right": 97, "top": 15, "bottom": 26})
+        self.assertEqual(driver.results, [])
+
+    def test_rhythm_doctor_pixel_verbs_preserve_rgb_only_regions(self):
+        import base64
+        from ui import Ui
+
+        expected = bytes(128 * 64 * 4)
+        actual = bytearray(expected)
+        # The legacy frame oracle deliberately ignores alpha. Its tooltip
+        # oracle also ignores pixels to the right of the text-owning region.
+        for y in range(64):
+            for x in range(128):
+                alpha = (y * 128 + x) * 4 + 3
+                actual[alpha] = 255
+        actual[(60 * 128 + 110) * 4] = 9
+        driver = FakeDriver(states=[{
+            "frame": {"pixels_base64": base64.b64encode(actual).decode("ascii")},
+        }])
+        ui = Ui(driver)
+        with patch("frame_oracle.render", return_value=expected):
+            ui.expect_rhythm_doctor_tooltip("NOT_READY")
+
+        inside_region = bytearray(actual)
+        inside_region[(60 * 128 + 10) * 4] = 9
+        driver = FakeDriver(states=[{
+            "frame": {"pixels_base64": base64.b64encode(inside_region).decode("ascii")},
+        }])
+        ui = Ui(driver)
+        with patch("frame_oracle.render", return_value=expected), \
+                self.assertRaises(AssertionError):
+            ui.expect_rhythm_doctor_tooltip("NOT_READY")
 
 
 if __name__ == "__main__":

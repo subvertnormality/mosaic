@@ -21,6 +21,31 @@ MENU = {
     "panic": (15, 8),
     "paint": (16, 8),
 }
+
+# Rhythm Doctor's own page has a deliberately separate control vocabulary:
+# the same grid cells mean different things while that algorithm is active.
+RHYTHM_DOCTOR_CONTROLS = {
+    "legacy_drum_algorithm": (12, 2),
+    "legacy_tresillo_algorithm": (13, 2),
+    "legacy_euclidean_algorithm": (14, 2),
+    "legacy_numeric_repetitor_algorithm": (15, 2),
+    "algorithm": (16, 2),
+    "reserved_lane": (2, 2),
+    "lane_bd": (3, 2),
+    "lane_sd": (4, 2),
+    "lane_cym": (5, 2),
+    "withdrawn_lane_bass": (6, 2),
+    "retired_lane": (7, 2),
+    "capture": (1, 2),
+    "phrase_left": (10, 8),
+    "phrase_centre": (11, 8),
+    "phrase_right": (12, 8),
+}
+RHYTHM_DOCTOR_SCREEN = {
+    "header": {"bottom": 10},
+    "tooltip": {"left": 0, "right": 100, "top": 55, "bottom": 64},
+    "status": {"left": 0, "right": 97, "top": 15, "bottom": 26},
+}
 CHANNEL_COUNT = 16
 
 CHANNEL_PAGES = OrderedDict([
@@ -117,6 +142,7 @@ NATIVE_MENU = {
     "mod_macro_1": "macro 1",
     "mod_active": "active",
     "mod_value": "value",
+    "clock_root_name": "CLOCK",
     "clock_source": "source",
     "clock_tempo": "tempo",
     "elektron_program_change_channel": "Elektron p.change channel",
@@ -230,6 +256,10 @@ def step_cell(step):
 
 
 def control_cell(control, index=None):
+    if control in RHYTHM_DOCTOR_CONTROLS:
+        if index is not None:
+            raise ValueError("Rhythm Doctor control %s does not take an index" % control)
+        return RHYTHM_DOCTOR_CONTROLS[control]
     if control == "step":
         return step_cell(index)
     if control == "channel":
@@ -252,6 +282,12 @@ def control_cell(control, index=None):
                 and 1 <= index[0] <= CHANNEL_COUNT and 0 <= index[1] <= 6):
             raise ValueError("pattern note degree needs (step 1..16, degree 0..6)")
         return index[0], 7 - index[1]
+    if control == "pattern_velocity_level":
+        if not (isinstance(index, tuple) and len(index) == 2
+                and all(type(value) is int for value in index)
+                and 1 <= index[0] <= CHANNEL_COUNT and 1 <= index[1] <= 7):
+            raise ValueError("pattern velocity level needs (step 1..16, level 1..7)")
+        return index[0], 8 - index[1]
     if control == "pattern_note_octave_down":
         if index is not None:
             raise ValueError("pattern note octave down does not take an index")
@@ -311,6 +347,52 @@ def control_cell(control, index=None):
             raise ValueError("cell index must be an (x, y) tuple")
         return index
     raise KeyError("unknown UI control: " + str(control))
+
+
+def performance_gesture_recipe(gesture):
+    """Resolve a semantic performance stimulus to its legacy evidence tuple."""
+    kind, a, b = gesture
+    if kind == 'control':
+        return ('grid', *control_cell(a, b))
+    if kind == 'encoder':
+        return ('enc', a, b)
+    raise ValueError('unknown performance gesture: ' + str(kind))
+
+
+# Safe non-musical controls, every 250 ms; physical and emulator lanes share
+# this recipe. Output evidence resolves these keys to the original raw tuple.
+PERFORMANCE_RENDER_PRESSURE_SCHEDULE = [
+    (.25, 'page-channel', ('control', 'channel_editor', None)),
+    (.50, 'channel-16', ('control', 'channel', 16)),
+    (.75, 'browse-forward', ('encoder', 1, 2)),
+    (1.00, 'page-trig', ('control', 'pattern_editor', None)),
+    (1.25, 'page-song', ('control', 'song_editor', None)),
+    (1.50, 'page-channel', ('control', 'channel_editor', None)),
+    (1.75, 'channel-1', ('control', 'channel', 1)),
+    (2.00, 'browse-back', ('encoder', 1, -2)),
+    (2.25, 'page-trig', ('control', 'pattern_editor', None)),
+    (2.50, 'page-song', ('control', 'song_editor', None)),
+    (2.75, 'page-channel', ('control', 'channel_editor', None)),
+    (3.00, 'channel-16', ('control', 'channel', 16)),
+    (3.25, 'browse-forward', ('encoder', 1, 2)),
+    (3.50, 'page-trig', ('control', 'pattern_editor', None)),
+    (3.75, 'page-song', ('control', 'song_editor', None)),
+    (4.00, 'page-channel', ('control', 'channel_editor', None)),
+    (4.25, 'channel-1', ('control', 'channel', 1)),
+    (4.50, 'browse-back', ('encoder', 1, -2)),
+    (4.75, 'page-trig', ('control', 'pattern_editor', None)),
+    (5.00, 'page-song', ('control', 'song_editor', None)),
+    (5.25, 'page-channel', ('control', 'channel_editor', None)),
+    (5.50, 'channel-16', ('control', 'channel', 16)),
+    (5.75, 'browse-forward', ('encoder', 1, 2)),
+    (6.00, 'page-trig', ('control', 'pattern_editor', None)),
+    (6.25, 'page-song', ('control', 'song_editor', None)),
+    (6.50, 'page-channel', ('control', 'channel_editor', None)),
+    (6.75, 'channel-1', ('control', 'channel', 1)),
+    (7.00, 'browse-back', ('encoder', 1, -2)),
+    (7.25, 'page-trig', ('control', 'pattern_editor', None)),
+    (7.50, 'page-song', ('control', 'song_editor', None)),
+]
 
 
 def grid_partition(page):

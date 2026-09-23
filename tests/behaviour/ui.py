@@ -4,10 +4,36 @@ import base64
 import contextlib
 import time
 
-from ui_map import (CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
+from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
                     MOSAIC_OPTIONS, MIDI_MAPPING_PARAMETERS, NATIVE_MENU_VALUES, PATCH_PARAMETERS,
-                    PATCH_PARAMETER_VALUES, SCREEN, TRIG_PARAMETERS,
+                    PATCH_PARAMETER_VALUES, RHYTHM_DOCTOR_CONTROLS,
+                    RHYTHM_DOCTOR_SCREEN, SCREEN, TRIG_PARAMETERS,
                     control_cell, header_text)
+
+
+class _ActionSinkDriver:
+    """Native event timing for public HTTP/physical input clients."""
+    def __init__(self, action, elapse, encoder_pause):
+        self.sink = action
+        self.elapse = elapse if elapse is not None else time.sleep
+        self.encoder_pause = encoder_pause
+
+    def action(self, **value):
+        return self.sink(value)
+
+    def tap(self, x, y):
+        self.action(type='grid', x=x, y=y, state=1)
+        self.action(type='grid', x=x, y=y, state=0)
+        self.elapse(.06)
+
+    def key(self, n):
+        self.action(type='key', n=n, state=1)
+        self.action(type='key', n=n, state=0)
+        self.elapse(.06)
+
+    def enc(self, n, delta):
+        self.action(type='enc', n=n, delta=delta)
+        self.elapse(self.encoder_pause)
 
 
 class UiMapError(AssertionError):
@@ -18,11 +44,85 @@ class Ui:
     def __init__(self, driver):
         self.driver = driver
 
+    # Physical-backend transport timing and observations live at the UI layer.
+    def hardware_tap(self, x, y):
+        press = self.driver.action(type="grid", x=x, y=y, state=1)
+        self.driver.elapse(.04)
+        release = self.driver.action(type="grid", x=x, y=y, state=0)
+        self.driver.elapse(.12)
+        return {"press": press, "release": release}
+
+    def hardware_key(self, number):
+        self.driver.action(type="key", n=number, state=1)
+        self.driver.action(type="key", n=number, state=0)
+        self.driver.elapse(.06)
+
+    def hardware_turn(self, number, steps):
+        for _ in range(abs(steps)):
+            self.driver.action(type="enc", n=number,
+                               delta=1 if steps > 0 else -1)
+            self.driver.elapse(.05)
+        self.driver.elapse(.15)
+
+    def hardware_hold_tap(self, first, last):
+        self.control_edge("cell", True, first)
+        try:
+            self.hardware_tap(*last)
+        finally:
+            self.control_edge("cell", False, first)
+
+    def hardware_led_values(self, cells, expected):
+        indexes = [(y - 1) * CHANNEL_COUNT + x - 1 for x, y in cells]
+        state = self.driver.wait(
+            lambda snapshot: [snapshot["grid"][i] for i in indexes] == expected
+        )
+        self.driver.results.append({
+            "kind": "grid", "cells": cells, "expected": expected,
+            "actual": [state["grid"][i] for i in indexes],
+        })
+
+    @classmethod
+    def for_action_sink(cls, action, elapse=None, encoder_pause=.03):
+        """Adapt a native dictionary-action sink without changing its timing.
+
+        Performance HTTP clients record latency around each action themselves.
+        This adapter adds no observation or wait to edge/event methods; its
+        timed taps/keys and one-event turns retain the client's original tails.
+        """
+        return cls(_ActionSinkDriver(action, elapse, encoder_pause))
+
+    def performance_gesture(self, kind, a, b):
+        """One zero-delay performance stimulus from the semantic schedule."""
+        if kind == 'control':
+            self.control_edge(a, True, b)
+            self.control_edge(a, False, b)
+        elif kind == 'encoder':
+            self.encoder_event(a, b)
+        else:
+            raise ValueError('unknown performance gesture: ' + str(kind))
+
+    def performance_external_clock_port_one(self, diagnostics):
+        """Preserve the performance runner's native CLOCK traversal exactly."""
+        self.press_key(1)
+        for _ in range(4):
+            self.turn(1, 2)
+        self.press_key(3)
+        roots = diagnostics['parameter_roots']
+        position = next(index for index, root in enumerate(roots)
+                        if root['name'] == NATIVE_MENU['clock_root_name'])
+        for _ in range(position):
+            self.turn(2, 2)
+        self.press_key(3)
+        self.turn(3, 2)
+        for _ in range(11):
+            self.turn(2, 2)
+        self.turn(3, 2)
+
     def play(self):
-        self.tap_control("play_stop")
+        return self.tap_control("play_stop")
 
     def stop(self):
-        self.tap_control("play_stop")
+        return self.tap_control("play_stop")
 
     def menu(self, button):
         self.tap_control(button)
@@ -108,7 +208,7 @@ class Ui:
         self.turn(3, delta)
 
     def tap_control(self, control, index=None):
-        self.driver.tap(*control_cell(control, index))
+        return self.driver.tap(*control_cell(control, index))
 
     def tap_step(self, step):
         self.tap_control("step", step)
@@ -543,6 +643,117 @@ class Ui:
 
     def expect_steps(self, states):
         self.expect_leds({("step", step): state for step, state in states.items()})
+
+    def select_rhythm_doctor_algorithm(self, algorithm):
+        """Select a named algorithm from Mosaic's rhythm-tool chooser."""
+        names = {
+            "drum": "legacy_drum_algorithm",
+            "tresillo": "legacy_tresillo_algorithm",
+            "euclidean": "legacy_euclidean_algorithm",
+            "numeric_repetitor": "legacy_numeric_repetitor_algorithm",
+            "rhythm_doctor": "algorithm",
+        }
+        try:
+            self.tap_control(names[algorithm])
+        except KeyError as error:
+            raise UiMapError("unknown Rhythm Doctor algorithm %r" % algorithm) from error
+
+    def select_rhythm_doctor_lane(self, lane):
+        names = {"BD": "lane_bd", "SD": "lane_sd", "CYM": "lane_cym"}
+        try:
+            self.tap_control(names[lane])
+        except KeyError as error:
+            raise UiMapError("unknown Rhythm Doctor lane %r" % lane) from error
+
+    def tap_rhythm_doctor_phrase_button(self, direction):
+        names = {"left": "phrase_left", "centre": "phrase_centre", "right": "phrase_right"}
+        try:
+            self.tap_control(names[direction])
+        except KeyError as error:
+            raise UiMapError("unknown Rhythm Doctor phrase button %r" % direction) from error
+
+    def rhythm_doctor_setup_field(self, delta):
+        """Send the original native E2 encoder delta while editing setup."""
+        self.encoder_event(2, delta)
+
+    def adjust_rhythm_doctor_setup_value(self, delta):
+        """Send the original native E3 encoder delta while editing setup."""
+        self.encoder_event(3, delta)
+
+    def rhythm_doctor_key_edge(self, key, pressed):
+        if key not in {"discard_draft", "apply_correction"}:
+            raise UiMapError("unknown Rhythm Doctor key action %r" % key)
+        self.key_edge({"discard_draft": 2, "apply_correction": 3}[key], pressed)
+
+    def rhythm_doctor_capture_edge(self, pressed):
+        self.control_edge("capture", pressed)
+
+    def expect_rhythm_doctor_lanes(self, states):
+        """Assert the named lane, reserved, withdrawn and retired LED cells."""
+        names = {
+            "reserved": "reserved_lane", "BD": "lane_bd", "SD": "lane_sd",
+            "CYM": "lane_cym", "withdrawn_BASS": "withdrawn_lane_bass",
+            "retired": "retired_lane",
+        }
+        mapped = {}
+        for lane, state in states.items():
+            try:
+                mapped[(names[lane], None)] = state
+            except KeyError as error:
+                raise UiMapError("unknown Rhythm Doctor lane LED %r" % lane) from error
+        self.expect_leds(mapped)
+
+    def _wait_rhythm_doctor_render(self, commands, region=None, full=False):
+        """Keep exact framebuffer comparisons behind the page-level UI API."""
+        from frame_oracle import render
+
+        expected = render(commands)
+        if full:
+            def matches(state):
+                actual = base64.b64decode(state["frame"]["pixels_base64"])
+                return all(actual[index] == expected[index]
+                           for index in range(len(expected)) if index % 4 != 3)
+        elif region is None:
+            width = 128 * 4
+            height = RHYTHM_DOCTOR_SCREEN["header"]["bottom"]
+            expected = expected[:width * height]
+
+            def matches(state):
+                actual = base64.b64decode(state["frame"]["pixels_base64"])
+                return all(actual[index] == expected[index]
+                           for index in range(len(expected)) if index % 4 != 3)
+        else:
+            indices = [(y * 128 + x) * 4 + channel
+                       for y in range(region["top"], region["bottom"])
+                       for x in range(region["left"], region["right"])
+                       for channel in range(3)]
+
+            def matches(state):
+                actual = base64.b64decode(state["frame"]["pixels_base64"])
+                return all(actual[index] == expected[index] for index in indices)
+
+        return self.driver.wait(matches)
+
+    def expect_rhythm_doctor_header(self):
+        self._wait_rhythm_doctor_render(
+            [(0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m")])
+
+    def expect_rhythm_doctor_tooltip(self, text):
+        self._wait_rhythm_doctor_render(
+            [(0, 62, 10, text)], RHYTHM_DOCTOR_SCREEN["tooltip"])
+
+    def expect_rhythm_doctor_setup(self, field, tempo_mode, manual_bpm, input_source):
+        self._wait_rhythm_doctor_render([
+            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
+            (0, 22, 10, "SETUP / " + field),
+            (0, 34, 10, (">" if field == "TEMPO" else " ") + "TEMPO " + tempo_mode.upper()),
+            (0, 46, 10, (">" if field == "MANUAL BPM" else " ") + "MANUAL BPM " + str(manual_bpm)),
+            (0, 58, 10, (">" if field == "INPUT" else " ") + "INPUT " + input_source),
+        ], full=True)
+
+    def expect_rhythm_doctor_status(self, text):
+        self._wait_rhythm_doctor_render(
+            [(0, 22, 10, text)], RHYTHM_DOCTOR_SCREEN["status"])
 
     def wait_for_header(self, page, **params):
         """Wait for an exact mapped header without adding a result record."""
