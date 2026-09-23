@@ -1,13 +1,4 @@
 [
   "cases.py",
-  "dense_workload.py",
-  "hardware_driver.py",
-  "hardware_performance.py",
-  "perf_calibration_emulator.py",
-  "perf_dense.py",
-  "perf_input.py",
-  "perf_overload.py",
-  "rhythm_doctor.py",
-  "rhythm_doctor_correction.py",
-  "rhythm_doctor_surface.py"
+  "dense_workload.py"
 ]

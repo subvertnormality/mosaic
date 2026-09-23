@@ -137,7 +137,7 @@ def select_fixture_parameter(driver,label):
     """Select a fixture parameter with front-panel gestures; its list position is resolved first."""
     if label not in ('CC 1','CC 2','CC 3','CC 4'):raise ValueError('Hardware fixture selector only supports CC 1-4')
     position,count=parameter_position(driver.runner,label)
-    driver.key(2);driver.enc(3,-(count+2));driver.enc(3,position-1);driver.key(3);driver.key(2)
+    driver.ui.press_key(2);driver.ui.turn(3,-(count+2));driver.ui.turn(3,position-1);driver.ui.press_key(3);driver.ui.press_key(2)
 
 class ThreadSampler:
     """Run an external per-thread schedstat sampler on the device for one window."""
@@ -196,9 +196,7 @@ class HardwareLane:
     """Timed held-out stimuli through the same public controls as the emulator lane."""
     def __init__(self,runner,driver):self.runner=runner;self.driver=driver
     def gesture(self,kind,a,b):
-        if kind=='grid':
-            self.driver.action(type='grid',x=a,y=b,state=1);self.driver.action(type='grid',x=a,y=b,state=0)
-        else:self.driver.action(type='enc',n=a,delta=b)
+        self.driver.ui.performance_gesture(kind,a,b)
     def lua_load(self,iterations):
         maiden=getattr(self.runner.maiden,'maiden',self.runner.maiden)
         code='load(%s)(%d)'%(json.dumps(LUA_LOAD_SOURCE),int(iterations))
@@ -220,8 +218,8 @@ def ready_to_play(runner,driver,log):
     into a two-key press, so either would invert or swallow the window's play.
     Release held keys and stop a running transport here, outside the window."""
     playing,held=transport_state(runner)
-    for x,y in held:driver.action(type='grid',x=x,y=y,state=0);driver.elapse(.05)
-    if playing:driver.tap(1,8);driver.elapse(.3)
+    for x,y in held:driver.ui.control_edge('cell',False,(x,y));driver.elapse(.05)
+    if playing:driver.ui.stop();driver.elapse(.3)
     playing_after,held_after=transport_state(runner)
     log.append({'held_keys_released':held,'was_playing':playing,'playing_after':playing_after,'held_after':held_after})
     if playing_after or held_after:raise AssertionError(('Transport not ready for a window',log[-1]))
@@ -234,7 +232,7 @@ def stopped_after_window(runner,log):
 
 def functional_preflight(runner,driver,trace,spec):
     """Short unmeasured playback proving every channel sounds (and slides) before timing windows."""
-    ready_to_play(runner,driver,[]);trace.reset();driver.tap(1,8);driver.elapse(2.0);driver.tap(1,8);driver.elapse(.4);state=driver.snapshot()
+    ready_to_play(runner,driver,[]);trace.reset();driver.ui.play();driver.elapse(2.0);driver.ui.stop();driver.elapse(.4);state=driver.snapshot()
     channels=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==144 and e['bytes'][2]>0 and e['port']==1})
     cc1=sorted({e['bytes'][0]&15 for e in state['midi'] if len(e['bytes'])==3 and e['bytes'][0]&240==176 and e['bytes'][1]==1 and e['port']==1})
     expected=list(range(spec['channels']))
@@ -404,7 +402,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
         if spec.get('tempo_bpm') is not None and abs(driver.tempo_bpm-spec['tempo_bpm'])>.01:
             raise AssertionError('%s runs at %s bpm but the norns clock is at %s'%(case_id,spec['tempo_bpm'],driver.tempo_bpm))
         if project_fixture is None:
-            build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.enc(3,runner.device_map_index(device_map_id,channel)-1))
+            build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.ui.set_value(runner.device_map_index(device_map_id,channel)-1))
         set_lock_lead(driver, lead_ms)
         if seed_schedule is None:runner.maiden.eval('math.randomseed(%d)' % seed)
         if project_fixture is None:
@@ -412,7 +410,7 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                 runner.fetch_project(save_project_fixture)
                 write_fixture_manifest(save_project_fixture,case_id,spec,source,lead_ms=lead_ms,seed=seed,probe_mode=probe_mode,timing_contract=timing_contract)
         if spec.get('fingerprint'):__import__('perf_overload').configure_fingerprint(driver)
-        driver.tap(5,8);driver.tap(1,1);driver.led_values([(x,4) for x in range(1,17,spec.get('step_stride',1))],[15]*len(range(1,17,spec.get('step_stride',1))))
+        driver.ui.pattern_editor();driver.ui.tap_control('pattern_select',1);driver.ui.expect_steps({x:'selected' for x in range(1,17,spec.get('step_stride',1))})
         preflight=functional_preflight(runner,driver,trace,spec)
         timings=TimingTrace(runner.maiden,native=native_screen_trace,count=redraw_count_trace) if timing_trace else None
         if timings:timings.install()
@@ -438,10 +436,10 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
             trace.reset();sampler=(OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler()) if windows>1 or sampler is None else sampler;threads=ThreadSampler(runner.ssh,thread_sampler,spec['seconds']+3) if thread_sampler else None
             if threads:threads.start()
             sampler.start();time.sleep(.25)
-            started_ns=time.monotonic_ns();play_tap=driver.tap(1,8)
+            started_ns=time.monotonic_ns();play_tap=driver.ui.play()
             stimulus=run_window(HardwareLane(runner,driver),spec) if (spec.get('render') or spec.get('loads')) else None
             if stimulus is None:driver.elapse(spec['seconds'])
-            stop_tap=driver.tap(1,8);driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+            stop_tap=driver.ui.stop();driver.elapse(.3 if not spec.get('loads') else 1.5);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
             if timings:state['lua_timings']=timings.snapshot();timings.reset()
             state['run_identity']=dict(window_identity, observed_lead_ms=observed_lead, window=window)
             (runner.out/('performance-raw%s.json'%suffix)).write_text(json.dumps(state,indent=2)+'\n')

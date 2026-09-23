@@ -18,6 +18,21 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_hardware_driver_and_performance_modules_use_semantic_ui(self):
+        from ui_layer_guard import raw_sites
+
+        for name in ("hardware_driver.py", "hardware_performance.py"):
+            with self.subTest(module=name):
+                self.assertEqual(raw_sites(BEHAVIOUR / name), [])
+
+    def test_rhythm_doctor_recipes_have_no_raw_ui_dependencies(self):
+        from ui_layer_guard import raw_sites
+
+        for name in ("rhythm_doctor.py", "rhythm_doctor_correction.py",
+                     "rhythm_doctor_surface.py"):
+            with self.subTest(module=name):
+                self.assertEqual(raw_sites(BEHAVIOUR / name), [])
+
     def test_recording_lifetimes_use_semantic_ui(self):
         from recording_lifetimes import (
             recording_lifetime, recording_nrpn,

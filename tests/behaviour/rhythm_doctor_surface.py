@@ -13,19 +13,11 @@ import time
 import traceback
 
 from driver import Driver
-from frame_oracle import render, matches
 from rhythm_doctor import fifth_algorithm
 
 
 def setup_frame(c, field, mode, bpm, input_source):
-    expected = render([
-        (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
-        (0, 22, 10, "SETUP / " + field),
-        (0, 34, 10, (">" if field == "TEMPO" else " ") + "TEMPO " + mode.upper()),
-        (0, 46, 10, (">" if field == "MANUAL BPM" else " ") + "MANUAL BPM " + str(bpm)),
-        (0, 58, 10, (">" if field == "INPUT" else " ") + "INPUT " + input_source),
-    ])
-    c.wait(lambda state: matches(state, expected))
+    c.ui.expect_rhythm_doctor_setup(field, mode, bpm, input_source)
 
 
 def stopped_setup_controls(c):
@@ -33,29 +25,33 @@ def stopped_setup_controls(c):
     # Mosaic's default encoder sensitivity of 2 before calling the script, so
     # two raw detents are one logical encoder step at this boundary.
     detent = 2
+    ui = c.ui
     # E2/E3 edit a draft. K2 must discard every field together.
-    c.action(type="enc", n=2, delta=-detent); c.elapse(.06)
+    ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
     setup_frame(c, "INPUT", "auto", 120, "STEREO")
-    c.action(type="enc", n=3, delta=detent); c.elapse(.06)
+    ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
     setup_frame(c, "INPUT", "auto", 120, "L")
-    c.action(type="enc", n=2, delta=-detent); c.action(type="enc", n=3, delta=7 * detent); c.elapse(.06)
+    ui.rhythm_doctor_setup_field(-detent); ui.adjust_rhythm_doctor_setup_value(7 * detent); c.elapse(.06)
     setup_frame(c, "MANUAL BPM", "auto", 127, "L")
-    c.action(type="enc", n=2, delta=-detent); c.action(type="enc", n=3, delta=detent); c.elapse(.06)
+    ui.rhythm_doctor_setup_field(-detent); ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
     setup_frame(c, "TEMPO", "manual", 127, "L")
-    c.action(type="key", n=2, state=1); c.action(type="key", n=2, state=0); c.elapse(.06)
+    ui.rhythm_doctor_key_edge("discard_draft", True)
+    ui.rhythm_doctor_key_edge("discard_draft", False); c.elapse(.06)
 
     # Reopen the draft from the unchanged Auto/120/Stereo values, then commit a
     # manual configuration and prove the committed values seed the next draft.
-    c.action(type="enc", n=3, delta=detent); c.elapse(.06)
+    ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
     setup_frame(c, "TEMPO", "manual", 120, "STEREO")
-    c.action(type="enc", n=2, delta=detent); c.action(type="enc", n=3, delta=7 * detent); c.elapse(.06)
+    ui.rhythm_doctor_setup_field(detent); ui.adjust_rhythm_doctor_setup_value(7 * detent); c.elapse(.06)
     setup_frame(c, "MANUAL BPM", "manual", 127, "STEREO")
-    c.action(type="enc", n=2, delta=detent); c.action(type="enc", n=3, delta=detent); c.elapse(.06)
+    ui.rhythm_doctor_setup_field(detent); ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
     setup_frame(c, "INPUT", "manual", 127, "L")
-    c.action(type="key", n=3, state=1); c.action(type="key", n=3, state=0); c.elapse(.06)
-    c.action(type="enc", n=2, delta=-detent); c.elapse(.06)
+    ui.rhythm_doctor_key_edge("apply_correction", True)
+    ui.rhythm_doctor_key_edge("apply_correction", False); c.elapse(.06)
+    ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
     setup_frame(c, "MANUAL BPM", "manual", 127, "L")
-    c.action(type="key", n=2, state=1); c.action(type="key", n=2, state=0); c.elapse(.06)
+    ui.rhythm_doctor_key_edge("discard_draft", True)
+    ui.rhythm_doctor_key_edge("discard_draft", False); c.elapse(.06)
     c.results.append(dict(kind="rhythm-doctor-setup", tempo="manual", manual_bpm=127,
                           input="L", contract="PLAN.md stopped-only setup draft, K2 discard and K3 commit"))
 
@@ -64,16 +60,16 @@ def owned_input_and_transport_gate(c):
     fifth_algorithm(c)  # enters algorithm five and leaves CYM selected at x5,y2
     # Four lanes occupy columns 3-6 and the retired fifth column is inert, so
     # the selected lane is CYM at column 5; columns 6 and 7 must stay dark.
-    active_lanes = [(3, 2), (4, 2), (5, 2), (6, 2), (7, 2)]
-    lanes_with_bass = [4, 4, 15, 0, 0]
-    c.led_values(active_lanes, lanes_with_bass)
+    active_lanes = {"BD": "blink_low", "SD": "blink_low", "CYM": "selected",
+                    "withdrawn_BASS": "dark", "retired": "dark"}
+    ui.expect_rhythm_doctor_lanes(active_lanes)
     stopped_setup_controls(c)
 
     # Record is an x1/y2 key-down claim.  Its owned key-up must not turn this
     # gesture into the legacy Pattern 1 fader action or lose lane selection.
-    c.action(type="grid", x=1, y=2, state=1); c.elapse(.08)
-    c.action(type="grid", x=1, y=2, state=0); c.elapse(.08)
-    c.led_values(active_lanes, lanes_with_bass)
+    ui.rhythm_doctor_capture_edge(True); c.elapse(.08)
+    ui.rhythm_doctor_capture_edge(False); c.elapse(.08)
+    ui.expect_rhythm_doctor_lanes(active_lanes)
     c.results.append(dict(kind="rhythm-doctor-record-ownership", cell=[1, 2],
                           selected_lane="CYM", contract="PLAN.md Record key-down ownership"))
 
@@ -81,18 +77,20 @@ def owned_input_and_transport_gate(c):
     # algorithm is active.  On an unavailable worker they are inert, but still
     # must preserve the active page and lane rather than leaking a legacy edit.
     for key in (2, 3):
-        c.action(type="key", n=key, state=1); c.elapse(.04)
-        c.action(type="key", n=key, state=0); c.elapse(.06)
-        c.led_values(active_lanes, lanes_with_bass)
+        ui.rhythm_doctor_key_edge("discard_draft" if key == 2 else "apply_correction", True)
+        c.elapse(.04)
+        ui.rhythm_doctor_key_edge("discard_draft" if key == 2 else "apply_correction", False)
+        c.elapse(.06)
+        ui.expect_rhythm_doctor_lanes(active_lanes)
     c.results.append(dict(kind="rhythm-doctor-norns-keys", keys=[2, 3],
                           selected_lane="CYM", contract="PLAN.md K2/K3 routing"))
 
     # Starting Mosaic transport gates capture controls.  A lane tap is still
     # received by the app, but must retain CYM until transport has stopped.
-    c.tap(1, 8); c.elapse(.1)
-    c.tap(5, 2)
-    c.led_values(active_lanes, lanes_with_bass)
-    c.tap(1, 8); c.elapse(.1)
+    ui.play(); c.elapse(.1)
+    ui.select_rhythm_doctor_lane("CYM")
+    ui.expect_rhythm_doctor_lanes(active_lanes)
+    ui.stop(); c.elapse(.1)
     c.results.append(dict(kind="rhythm-doctor-transport-gate", attempted_lane="CYM",
                           retained_lane="CYM", contract="PLAN.md capture transport gate"))
 

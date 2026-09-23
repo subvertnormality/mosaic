@@ -18,37 +18,12 @@ import subprocess
 import traceback
 from pathlib import Path
 
-import base64
-
 from driver import Driver, EMULATOR_ROOT
-from frame_oracle import render
 from rhythm_doctor import fifth_algorithm
 
 REPO = Path(__file__).resolve().parents[2]
 
 
-# The status line owns the left of the screen; the right-hand third is where
-# the dancing doctor is drawn, and he is placed to start past it.
-STATUS_COLUMNS = 97
-
-
-def status_band(text):
-    """Match only the part of the screen carrying the status line.
-
-    The rest shows live bank detail - hit counts, tempo, window positions, and
-    the doctor - which is not what this case is about, so comparing whole
-    frames would make it fail for unrelated reasons. The bound is the same one
-    the sprite is held to in test_app_surface, so text and drawing cannot
-    silently start overlapping without that test failing.
-    """
-    literal = render([(0, 22, 10, text)])
-    region = [((y * 128 + x) * 4 + channel)
-              for y in range(15, 26) for x in range(STATUS_COLUMNS) for channel in range(3)]
-
-    def expected(state):
-        actual = base64.b64decode(state["frame"]["pixels_base64"])
-        return all(actual[i] == literal[i] for i in region)
-    return expected
 # Norns applies Mosaic's default encoder sensitivity of 2, so two raw detents
 # are one logical step at this public boundary.
 DETENT = 2
@@ -82,29 +57,29 @@ def inject_bank(ptn):
 
 
 def refused_correction_is_visible(c):
+    ui = c.ui
     fifth_algorithm(c)
 
     # The reloaded bank is READY without any analysis backend.
-    ready = status_band("CYM / READY")
-    c.wait(ready)
+    ui.expect_rhythm_doctor_status("CYM / READY")
     c.results.append(dict(kind="correction-reload-ready", state="READY",
                           contract="README: a saved bank reloads ready without a backend"))
 
     # Open the alignment draft through the ordinary READY controls.
     for _ in range(4):
-        c.action(type="enc", n=2, delta=DETENT)
+        ui.rhythm_doctor_setup_field(DETENT)
         c.elapse(.06)
-    c.action(type="enc", n=3, delta=DETENT)
+    ui.adjust_rhythm_doctor_setup_value(DETENT)
     c.elapse(.08)
-    c.wait(status_band("ALIGNMENT / HALF TEMPO"))
+    ui.expect_rhythm_doctor_status("ALIGNMENT / HALF TEMPO")
     c.results.append(dict(kind="correction-draft-open", field="HALF TEMPO",
                           contract="README: E2 chooses the alignment field, E3 opens the draft"))
 
     # K3 applies it. The retained audio is gone, so it must be refused visibly.
-    c.action(type="key", n=3, state=1); c.elapse(.04)
-    c.action(type="key", n=3, state=0); c.elapse(.12)
+    ui.rhythm_doctor_key_edge("apply_correction", True); c.elapse(.04)
+    ui.rhythm_doctor_key_edge("apply_correction", False); c.elapse(.12)
     try:
-        c.wait(status_band("CAPTURE AUDIO UNAVAILABLE"))
+        ui.expect_rhythm_doctor_status("CAPTURE AUDIO UNAVAILABLE")
     except Exception as error:
         raise AssertionError(
             "a correction refused after reload left the screen unchanged") from error
@@ -112,14 +87,15 @@ def refused_correction_is_visible(c):
                           contract="the refusal replaces the alignment label on screen"))
 
     # The draft survives the refusal, so the player can edit or cancel it.
-    c.action(type="enc", n=2, delta=DETENT); c.elapse(.08)
-    c.wait(status_band("ALIGNMENT / DOUBLE TEMPO"))
+    ui.rhythm_doctor_setup_field(DETENT); c.elapse(.08)
+    ui.expect_rhythm_doctor_status("ALIGNMENT / DOUBLE TEMPO")
     c.results.append(dict(kind="correction-draft-retained", field="DOUBLE TEMPO",
                           contract="a refused correction keeps its draft and clears the refusal"))
 
     # K2 discards it and the bank is still usable.
-    c.action(type="key", n=2, state=1); c.action(type="key", n=2, state=0); c.elapse(.1)
-    c.wait(ready)
+    ui.rhythm_doctor_key_edge("discard_draft", True)
+    ui.rhythm_doctor_key_edge("discard_draft", False); c.elapse(.1)
+    ui.expect_rhythm_doctor_status("CYM / READY")
     c.results.append(dict(kind="correction-cancelled", state="READY",
                           contract="cancelling a refused correction returns the ready bank"))
 

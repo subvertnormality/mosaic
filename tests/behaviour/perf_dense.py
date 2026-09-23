@@ -21,6 +21,8 @@ from automation.performance import performance_metrics,throttling_deltas,bracket
 import driver
 from perf_provenance import git_identity,installation_identity
 from dense_workload import build_project,validate_events
+from contract.performance_visuals import render_observation
+from ui_map import PERFORMANCE_RENDER_PRESSURE_SCHEDULE, performance_gesture_recipe
 
 STEP=1/6  # default 90 BPM, sixteenth steps
 
@@ -69,25 +71,7 @@ def workload_id(workload,pressure=False):
     return base+'+PERF-005-partial' if pressure else base
 
 # Safe, non-musical controls reused from existing page/viewer/playhead cases.
-RENDER_PRESSURE_SCHEDULE=[
- (.25,'page-channel',('grid',3,8)),(.50,'channel-16',('grid',16,1)),(.75,'browse-forward',('enc',1,2)),
- (1.00,'page-trig',('grid',5,8)),(1.25,'page-song',('grid',6,8)),(1.50,'page-channel',('grid',3,8)),
- (1.75,'channel-1',('grid',1,1)),(2.00,'browse-back',('enc',1,-2)),(2.25,'page-trig',('grid',5,8)),
- (2.50,'page-song',('grid',6,8)),(2.75,'page-channel',('grid',3,8)),(3.00,'channel-16',('grid',16,1)),
- (3.25,'browse-forward',('enc',1,2)),(3.50,'page-trig',('grid',5,8)),(3.75,'page-song',('grid',6,8)),
- (4.00,'page-channel',('grid',3,8)),(4.25,'channel-1',('grid',1,1)),(4.50,'browse-back',('enc',1,-2)),
- (4.75,'page-trig',('grid',5,8)),(5.00,'page-song',('grid',6,8)),(5.25,'page-channel',('grid',3,8)),
- (5.50,'channel-16',('grid',16,1)),(5.75,'browse-forward',('enc',1,2)),(6.00,'page-trig',('grid',5,8)),
- (6.25,'page-song',('grid',6,8)),(6.50,'page-channel',('grid',3,8)),(6.75,'channel-1',('grid',1,1)),
- (7.00,'browse-back',('enc',1,-2)),(7.25,'page-trig',('grid',5,8)),(7.50,'page-song',('grid',6,8)),
-]
-def render_observation(value):
-    state=value['state'];pixels=base64.b64decode(state['frame']['pixels_base64'],validate=True);grid=state['grid']
-    assert len(pixels)==128*64*4,('Frame shape',len(pixels))
-    assert len(grid)==128 and all(type(x) is int and 0<=x<=15 for x in grid),('Grid shape',len(grid))
-    assert hashlib.sha256(pixels).hexdigest()==state['frame']['sha256'],'Frame hash mismatch'
-    return dict(frame_revision=value['frame_revision'],grid_revision=value['grid_revision'],
-      frame_sha256=state['frame']['sha256'],grid_sha256=hashlib.sha256(bytes(grid)).hexdigest())
+RENDER_PRESSURE_SCHEDULE=PERFORMANCE_RENDER_PRESSURE_SCHEDULE
 def run_render_pressure(d,http,seconds,observe_each=True,display_only=False):
     observe=http.display if display_only else http.observe
     assert seconds==8,'Render-pressure recipe requires exactly 8 seconds'
@@ -100,13 +84,10 @@ def run_render_pressure(d,http,seconds,observe_each=True,display_only=False):
         before_start=time.monotonic_ns();before=render_observation(observe()) if observe_each else None;before_end=time.monotonic_ns()
         if time.monotonic_ns()>=deadline_ns:break
         ack_start=len(d.action_acks);dispatch_start=time.monotonic_ns()
-        if gesture[0]=='grid':
-            d.action(type='grid',x=gesture[1],y=gesture[2],state=1)
-            d.action(type='grid',x=gesture[1],y=gesture[2],state=0)
-        else:d.action(type='enc',n=gesture[1],delta=gesture[2])
+        d.ui.performance_gesture(*gesture)
         dispatch_end=time.monotonic_ns();observed_start=time.monotonic_ns()
         after=render_observation(observe()) if observe_each else None;observed_end=time.monotonic_ns()
-        rows.append(dict(offset_seconds=offset,label=label,gesture=gesture,
+        rows.append(dict(offset_seconds=offset,label=label,gesture=performance_gesture_recipe(gesture),
           target_dispatch_ns=target_ns,dispatch_started_ns=dispatch_start,dispatch_ended_ns=dispatch_end,
           dispatch_lateness_ns=dispatch_start-target_ns,acknowledgement_indexes=list(range(ack_start,len(d.action_acks))),
           before_observe_ns=[before_start,before_end] if observe_each else None,after_observe_ns=[observed_start,observed_end] if observe_each else None,
@@ -117,7 +98,7 @@ def run_render_pressure(d,http,seconds,observe_each=True,display_only=False):
     remaining_ns=deadline_ns-time.monotonic_ns()
     if remaining_ns>0:time.sleep(remaining_ns/1e9)
     ended_ns=time.monotonic_ns()
-    return dict(observation_mode=("display" if display_only else "snapshot") if observe_each else "none",observe_each_gesture=observe_each,schedule=RENDER_PRESSURE_SCHEDULE,window_seconds=8,started_ns=started_ns,ended_ns=ended_ns,
+    return dict(observation_mode=("display" if display_only else "snapshot") if observe_each else "none",observe_each_gesture=observe_each,schedule=[(offset,label,performance_gesture_recipe(gesture)) for offset,label,gesture in RENDER_PRESSURE_SCHEDULE],window_seconds=8,started_ns=started_ns,ended_ns=ended_ns,
       actual_window_ns=ended_ns-started_ns,expected_gestures=len(expected),dispatched_gestures=len(rows),
       complete=len(rows)==len(expected),observations=rows,
       acknowledged_actions=sum(len(x['acknowledgement_indexes']) for x in rows),
@@ -149,10 +130,10 @@ def run_one(image,out,channels,repeat,seconds,workload='dense',render_pressure=F
         driver.write(out/'setup-snapshot.json',http.observe())
         recording=http.request('/performance/start',dict(period_ms=10,maximum_seconds=int(seconds+15)))
         time.sleep(1.0)                            # recorded settle: build work leaves the quota window
-        d.action(type='grid',x=1,y=8,state=1);d.action(type='grid',x=1,y=8,state=0)
+        d.ui.control_edge('play_stop',True);d.ui.control_edge('play_stop',False)
         pressure=run_render_pressure(d,http,seconds,observe_each,display_only) if render_pressure else None
         if not render_pressure:time.sleep(seconds)
-        d.action(type='grid',x=1,y=8,state=1);d.action(type='grid',x=1,y=8,state=0)
+        d.ui.control_edge('play_stop',True);d.ui.control_edge('play_stop',False)
         time.sleep(1.0)
         final_snapshot=http.observe();driver.write(out/'final-snapshot.json',final_snapshot)
         state=final_snapshot['state'];assert not state['midi_capture']['outstanding'],state['midi_capture']['outstanding']

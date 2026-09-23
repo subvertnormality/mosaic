@@ -20,6 +20,8 @@ import traceback
 import uuid
 from collections import Counter
 from pathlib import Path
+from ui import Ui
+from contract.performance_visuals import assert_visual_recovery
 
 BEHAVIOUR = Path(__file__).resolve().parent
 REPO = BEHAVIOUR.parents[1]
@@ -60,11 +62,11 @@ def runtime_dependencies():
 
 def configure_fingerprint(driver):
     """Give channel 1 a C/D/E/F fingerprint through the physical note editor."""
-    driver.tap(5, 8)                  # trig editor
-    driver.tap(5, 8)                  # note editor
+    driver.ui.pattern_editor()
+    driver.ui.pattern_editor('note', 'trigger')
     for step in range(1, 17):
-        driver.tap(step, (7, 6, 5, 4)[(step - 1) % 4])
-    driver.tap(3, 8)                  # channel editor
+        driver.ui.tap_control('pattern_note_degree', (step, (step - 1) % 4))
+    driver.ui.menu('channel_editor')
 
 
 def note_groups(events, channels=CHANNELS):
@@ -154,19 +156,6 @@ def assert_recovery(groups, overload_start_ns, overload_end_ns,
                 gates=gates, passed=all(gates.values()))
 
 
-def assert_visual_recovery(before, changed):
-    """A physical page input after overload must visibly reach grid and screen."""
-    assert changed['grid_revision'] > before['grid_revision'], 'grid revision did not advance'
-    assert changed['frame_revision'] > before['frame_revision'], 'frame revision did not advance'
-    assert changed['state']['grid'] != before['state']['grid'], 'grid image did not change'
-    assert changed['state']['frame']['sha256'] != before['state']['frame']['sha256'], \
-        'screen image did not change'
-    return dict(grid_revisions=[before['grid_revision'], changed['grid_revision']],
-                frame_revisions=[before['frame_revision'], changed['frame_revision']],
-                frame_hashes=[before['state']['frame']['sha256'],
-                              changed['state']['frame']['sha256']])
-
-
 def cpu_pressure(name, seconds=OVERLOAD_SECONDS, workers=4):
     code = ("import multiprocessing,time\n"
             "def burn(deadline):\n"
@@ -226,6 +215,7 @@ def run_one(image, output, clock_trace=False):
             raise RuntimeError('container did not become ready')
         port = int(docker('port', name, '8765/tcp').stdout.strip().rsplit(':', 1)[1])
         http = Http(port, ready['token'], ready['session_id'])
+        input_ui = Ui.for_action_sink(http.action)
         driver = ContainerDriver(output, http)
         build_project(driver, CHANNELS)
         configure_fingerprint(driver)
@@ -233,23 +223,23 @@ def run_one(image, output, clock_trace=False):
         recording = http.request('/performance/start', dict(period_ms=10, maximum_seconds=25))
         time.sleep(1)
         marker = http.observe()['state']['midi_count']
-        http.action(dict(type='grid', x=1, y=8, state=1))
-        http.action(dict(type='grid', x=1, y=8, state=0))
+        input_ui.control_edge('play_stop', True)
+        input_ui.control_edge('play_stop', False)
         time.sleep(2.5)
         overload_start = time.monotonic_ns()
         cpu_pressure(name)
         overload_end = time.monotonic_ns()
         before_visual = http.request('/snapshot')
-        http.action(dict(type='grid', x=5, y=8, state=1))
-        http.action(dict(type='grid', x=5, y=8, state=0))
+        input_ui.control_edge('pattern_editor', True)
+        input_ui.control_edge('pattern_editor', False)
         time.sleep(.15)
         changed_visual = http.request('/snapshot')
         visual = assert_visual_recovery(before_visual, changed_visual)
-        http.action(dict(type='grid', x=3, y=8, state=1))
-        http.action(dict(type='grid', x=3, y=8, state=0))
+        input_ui.control_edge('channel_editor', True)
+        input_ui.control_edge('channel_editor', False)
         time.sleep(POST_RECOVERY_SECONDS)
-        http.action(dict(type='grid', x=1, y=8, state=1))
-        http.action(dict(type='grid', x=1, y=8, state=0))
+        input_ui.control_edge('play_stop', True)
+        input_ui.control_edge('play_stop', False)
         time.sleep(1)
         final = http.observe()['state']
         assert not final['midi_capture']['outstanding'], final['midi_capture']['outstanding']

@@ -106,46 +106,41 @@ class HardwareDriver:
             time.sleep(.08)
         raise AssertionError('Required observable output did not arrive')
     def tap(self,x,y):
-        # Host times of both halves: a release handled a second after its press is a
-        # long press, which swallows the tap.
-        press=self.action(type='grid',x=x,y=y,state=1);self.elapse(.04);release=self.action(type='grid',x=x,y=y,state=0);self.elapse(.12)
-        return {'press':press,'release':release}
+        return self.ui.hardware_tap(x,y)
     def key(self,n):
-        self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);self.elapse(.06)
+        self.ui.hardware_key(n)
     def enc(self,n,steps):
-        for _ in range(abs(steps)):
-            self.action(type='enc',n=n,delta=1 if steps>0 else -1);self.elapse(.05)
-        self.elapse(.15)
+        self.ui.hardware_turn(n,steps)
     def hold_tap(self,first,last):
-        self.action(type='grid',x=first[0],y=first[1],state=1)
-        try:self.tap(*last)
-        finally:self.action(type='grid',x=first[0],y=first[1],state=0)
+        self.ui.hardware_hold_tap(first,last)
     def led_values(self,cells,expected):
-        indexes=[(y-1)*16+x-1 for x,y in cells]
-        state=self.wait(lambda s:[s['grid'][i] for i in indexes]==expected)
-        self.results.append({'kind':'grid','cells':cells,'expected':expected,'actual':[state['grid'][i] for i in indexes]})
+        self.ui.hardware_led_values(cells,expected)
     def screen_header(self,text,selected=None):raise NotImplementedError(HARDWARE_DRIVER_CAPABILITIES['unsupported_semantics']['screen_header'])
     def configure(self):
-        self.runner.maiden.eval("params:set('new',1); fn.dirty_screen(true); fn.dirty_grid(true)");self.elapse(.5)
-        self.tap(4,8);self.tap(3,8);subpage=self.runner.channel_subpage()
-        while subpage<5:self.enc(1,1);subpage=self.runner.channel_subpage()
-        while subpage>5:self.enc(1,-1);subpage=self.runner.channel_subpage()
-        for _ in range(self.runner.device_map_index(self.device_map_id)-1):self.enc(3,1)
-        self.key(3);self.tap(5,8)
-        for x in range(1,5):self.tap(x,4)
-        self.tap(5,8)
-        for x,y in ((1,7),(2,6),(3,5),(4,4)):self.tap(x,y)
-        self.tap(5,8)
-        for x,y in ((1,1),(2,2),(3,3),(4,4)):self.tap(x,y)
-        self.tap(3,8);self.tap(1,2);self.hold_tap((1,4),(4,4));self.led_values([(1,2)],[15])
+        self.runner.maiden.eval("params:set('new',1); fn.dirty_screen(true); fn.dirty_grid(true)")
+        self.elapse(.5)
+        self.ui.menu('scale_editor');self.ui.menu('channel_editor')
+        subpage=self.runner.channel_subpage()
+        while subpage<5:self.ui.turn(1,1);subpage=self.runner.channel_subpage()
+        while subpage>5:self.ui.turn(1,-1);subpage=self.runner.channel_subpage()
+        for _ in range(self.runner.device_map_index(self.device_map_id)-1):self.ui.set_value(1)
+        self.ui.press_key(3);self.ui.pattern_editor()
+        for step in range(1,5):self.ui.tap_step(step)
+        self.ui.pattern_editor()
+        for step in (49,34,19,4):self.ui.tap_step(step)
+        self.ui.pattern_editor()
+        for cell in ((1,1),(2,2),(3,3),(4,4)):self.ui.tap_control('cell',cell)
+        self.ui.menu('channel_editor');self.ui.tap_control('pattern_slot',1)
+        self.ui.hold_control_tap('step','step',1,4)
+        self.ui.expect_leds({('pattern_slot',1):'selected'})
         if self.capture_screens:self.screens.append(self.runner.screenshot(self.artifact_prefix+'-authored'))
     def playback(self,expected,cycles=3,timeout=5,settle_seconds=0):
         assert expected and cycles>=2 and settle_seconds>=0
-        self.trace.reset_midi();self.tap(1,8)
+        self.trace.reset_midi();self.ui.play()
         if settle_seconds:self.elapse(settle_seconds)
         target=len(expected)*cycles+1
         state=self.wait(lambda s:len([e for e in s['midi'] if len(e['bytes'])>=3 and 144<=e['bytes'][0]<=159 and e['bytes'][2]>0])>=target,timeout)
-        self.tap(1,8);self.elapse(.3);state=self.snapshot();notes=[e for e in state['midi'] if len(e['bytes'])>=3 and 144<=e['bytes'][0]<=159 and e['bytes'][2]>0]
+        self.ui.stop();self.elapse(.3);state=self.snapshot();notes=[e for e in state['midi'] if len(e['bytes'])>=3 and 144<=e['bytes'][0]<=159 and e['bytes'][2]>0]
         actual=[(e['port'],e['bytes']) for e in notes];wanted=[expected[i%len(expected)] for i in range(len(actual))]
         assert len(actual)>=target and actual==wanted,{'expected':wanted,'actual':actual}
         intervals=[notes[i+1]['monotonic_seconds']-notes[i]['monotonic_seconds'] for i in range(target-1)]
