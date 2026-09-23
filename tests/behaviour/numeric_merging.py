@@ -296,14 +296,15 @@ def transpose_midi_boundaries(c):
 def merge_mode_cycle(c,field):
     from cases import assert_durations
     assert field in ('velocity','length')
-    c.configure();c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    if field=='length':c.hold_tap((1,4),(2,4))
-    c.tap(2,1);c.tap(1,4)
-    if field=='length':c.hold_tap((1,4),(4,4))
-    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
-    c.hold_tap((15,8),(1,2))
-    if field=='length':c.hold_tap((16,8),(1,2))
+    c.ui.configure();c.ui.pattern_editor()
+    for step in (2,3,4):c.ui.tap_step(step)
+    if field=='length':c.ui.hold_control_tap('step','step',held_index=1,target_index=2)
+    c.ui.tap_control('pattern_select',2);c.ui.tap_step(1)
+    if field=='length':c.ui.hold_control_tap('step','step',held_index=1,target_index=4)
+    c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=1)
+    if field=='length':c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
     def verify(stage):
         notes=c.playback([(1,[144,60,127 if field=='length' else 114])],cycles=2,timeout=4)
         assert_durations(c,notes,[3 if field=='length' else 1]*2)
@@ -313,11 +314,16 @@ def merge_mode_cycle(c,field):
         c.results.append(dict(kind='merge-mode-cycle',field=field,stage=stage,passed=True))
     verify('initial-average')
     for cycle in range(2):
-        if field=='length':c.action(type='key',n=1,state=1);c.elapse(.3)
-        try:
-            for level in (5,8,2):c.tap(16,8);c.led_values([(16,8)],[level])
-        finally:
-            if field=='length':c.action(type='key',n=1,state=0)
+        def cycle_modes():
+            for level in (5,8,2):
+                c.ui.tap_control('velocity_merge_mode')
+                c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
+        if field=='length':
+            with c.ui.hold_keys(1):
+                c.elapse(.3)
+                cycle_modes()
+        else:
+            cycle_modes()
         verify('returned-average-'+str(cycle+1))
 
 
