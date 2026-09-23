@@ -82,7 +82,7 @@ from contract.parameter_lock_domain import parameter_fine_gesture
 from contract.dial_off_display import dial_off_display
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
-from contract.persisted_range_rejection import rejected_manual_range,rejected_saved_range
+from persisted_ranges import rejected_manual_range,rejected_saved_range
 from contract.range_rejection import queued_global_length_transitions
 from range_rejection import offset_scale_range_clipping
 from contract.range_rejection import global_range_clipping
