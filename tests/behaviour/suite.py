@@ -51,6 +51,7 @@ PYTHON_UNITTEST.add('test_trig_parameter_ui_migration')
 PYTHON_UNITTEST.add('test_performance_ui_recipe')
 PYTHON_UNITTEST.add('test_scale_memory_migration')
 PYTHON_UNITTEST.add('test_duration_witness')
+PYTHON_UNITTEST.add('test_inactive_shuffle_ui_migration')
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.

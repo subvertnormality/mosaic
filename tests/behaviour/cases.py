@@ -1402,23 +1402,23 @@ def song_transition_reset_policy(c,verify_pending=False):
 def inactive_shuffle_transition(c,basis=False):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure();c.tap(5,8);c.tap(5,8)
-    for x in range(1,5):c.tap(x,7)
-    c.tap(3,8);c.enc(1,-1);c.enc(3,12);c.key(3)
+    c.configure();c.ui.pattern_editor();c.ui.pattern_editor()
+    for step in range(49,53):c.ui.tap_step(step)
+    c.ui.channel_editor();c.ui.turn(1,-1);c.ui.turn(3,12);c.ui.press_key(3)
     c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8)
+    c.ui.song_editor();c.ui.hold_control_tap('channel','channel',1,2);c.ui.select_channel(2);c.ui.channel_editor()
     # Set either stored Smooth feel or7 basis in Shuffle mode, then return
     # to Swing. Each inactive field is tested independently at transitions.
-    c.enc(2,1);c.enc(3,2);c.key(3)
-    c.enc(2,2 if basis else 1);c.enc(3,2);c.key(3)
-    c.enc(2,-2 if basis else -1);c.enc(3,-1);c.key(3)
-    c.tap(11,8);c.tap(6,8);c.tap(1,1)
-    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
+    c.ui.turn(2,1);c.ui.turn(3,2);c.ui.press_key(3)
+    c.ui.turn(2,2 if basis else 1);c.ui.turn(3,2);c.ui.press_key(3)
+    c.ui.turn(2,-2 if basis else -1);c.ui.turn(3,-1);c.ui.press_key(3)
+    c.ui.tap_control('shift_reset');c.ui.song_editor();c.ui.select_channel(1)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play()
     for i in range(90):
         c.elapse(.5);capture.extend(c.snapshot())
-        if i==22:c.led_values([(1,1),(2,1)],[7,15])
-        if i==44:c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        if i==22:c.ui.expect_leds({('channel',1):'alternate',('channel',2):'selected'})
+        if i==44:c.ui.expect_leds({('channel',1):'selected',('channel',2):'alternate'})
+    c.ui.stop();c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
     notes=capture.note_ons();pairs=note_pairs(capture.events)
     assert len(pairs)==len(notes) and len(notes)>4000
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
