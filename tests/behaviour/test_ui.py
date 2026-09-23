@@ -61,6 +61,143 @@ class FakeDriver:
 
 
 class UiMapTests(unittest.TestCase):
+    def test_pattern_note_pitch_keys_preserve_authored_grid_cells(self):
+        from ui_map import PATTERN_NOTE_PITCHES, control_cell
+
+        self.assertEqual(PATTERN_NOTE_PITCHES, {
+            "pattern_note_c": (5, 3),
+            "pattern_note_d": (6, 2),
+            "pattern_note_e": (7, 1),
+            "pattern_note_f": (8, 6),
+        })
+        for key, cell in PATTERN_NOTE_PITCHES.items():
+            with self.subTest(key=key):
+                self.assertEqual(control_cell(key), cell)
+                with self.assertRaises(ValueError):
+                    control_cell(key, 1)
+
+    def test_macro_clock_cases_use_semantic_ui_verbs(self):
+        source = (BEHAVIOUR / "cases.py").read_text()
+        module = ast.parse(source)
+        names = {
+            "autosave_restart", "route_fixed_note", "toolkit_parameter_group",
+            "macro_route_clear", "held_macro_rebind", "pulse_lfo", "phrase_timing",
+            "restart_phase_edges", "midi_clock_transport", "live_clock_handoff",
+            "reverse_live_clock_handoff",
+        }
+        functions = [node for node in module.body
+                     if isinstance(node, ast.FunctionDef) and node.name in names]
+        self.assertEqual({node.name for node in functions}, names)
+        raw_methods = {"key", "enc", "tap", "hold_tap", "led_values"}
+        raw_calls = []
+        raw_action_types = []
+        for function in functions:
+            for node in ast.walk(function):
+                if (isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)
+                        and isinstance(node.func.value, ast.Name)
+                        and node.func.value.id == "c"):
+                    if node.func.attr in raw_methods:
+                        raw_calls.append("%s:%d c.%s" %
+                                         (function.name, node.lineno, node.func.attr))
+                    if node.func.attr == "action" and node.args == []:
+                        for keyword in node.keywords:
+                            if keyword.arg == "type" and isinstance(keyword.value, ast.Constant):
+                                if keyword.value.value in {"grid", "enc", "key"}:
+                                    raw_action_types.append("%s:%d %s" %
+                                                            (function.name, node.lineno,
+                                                             keyword.value.value))
+        self.assertEqual(raw_calls, [])
+        self.assertEqual(raw_action_types, [])
+
+    def test_modulation_source_route_preserves_native_recipe_and_maps(self):
+        from ui import Ui
+
+        roots = [{"id": "other", "name": "OTHER"},
+                 {"id": "midi_device_params_group_channel_1", "name": "Channel 1"}]
+        driver = FakeDriver(states=[{"diagnostics": {"parameter_roots": roots}}])
+        ui = Ui(driver)
+        ui.expect_native_menu_label = lambda key: driver.calls.append(("menu-label-key", key))
+        ui.expect_menu_label = lambda label: driver.calls.append(("menu-label", label))
+        ui.expect_menu_value = lambda value: driver.calls.append(("menu-value", value))
+        for source, offset, label_key in (("lfo_1", 4, "mod_source_lfo_1"),
+                                          ("macro_1", 12, "mod_macro_1")):
+            driver.calls.clear()
+            driver._states = iter([{"diagnostics": {"parameter_roots": roots}}])
+            ui.route_fixed_note_from_modulation_source(source)
+            self.assertEqual(driver.calls, [
+                ("key", 1), ("enc", 2, 1), ("key", 3),
+                ("menu-label-key", "mod_devices_root"), ("enc", 2, 2),
+                ("menu-label-key", "mod_mods_root"), ("key", 3),
+                ("menu-label-key", "mod_matrix_root"), ("key", 3),
+                ("menu-label-key", "levels_root"), ("snapshot",), ("enc", 2, 1),
+                ("key", 3), ("menu-label-key", "mod_fixed_note"), ("key", 3),
+                ("menu-label-key", "mod_source_rhythm_1"), ("enc", 2, offset),
+                ("menu-label-key", label_key), ("enc", 3, 100),
+                ("menu-value", "1.00"),
+            ])
+
+    def test_native_clock_group_selection_keeps_observed_root_position(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"diagnostics": {"parameter_roots": [
+            {"name": "OTHER"}, {"name": "CLOCK"},
+        ]}}])
+        ui = Ui(driver)
+        ui.expect_native_menu_label = lambda key: driver.calls.append(("menu-label-key", key))
+        ui.select_native_parameter_group("clock")
+        self.assertEqual(driver.calls, [
+            ("menu-label-key", "levels_root"), ("snapshot",), ("enc", 2, 1),
+            ("key", 3), ("menu-label-key", "clock_source"),
+        ])
+
+    def test_arp_and_spread_cases_use_semantic_ui_verbs_and_parameter_keys(self):
+        from ui_layer_guard import _raw_sites_in_node
+        from ui_map import TRIG_PARAMETERS
+
+        source = (BEHAVIOUR / "cases.py").read_text()
+        module = ast.parse(source)
+        names = {
+            "assign_trig_parameter", "strum_reset_continuity", "arp_basic_timing",
+            "parameter_division_bounds", "spread_acceleration_contract",
+            "arp_empty_masks", "arp_rest_slots", "fractional_spread_contract",
+            "minimum_swung_gap_contract",
+        }
+        functions = {node.name: node for node in module.body
+                     if isinstance(node, ast.FunctionDef) and node.name in names}
+        self.assertEqual(set(functions), names)
+        raw_sites = {
+            name: [site for site in _raw_sites_in_node(node)
+                   if not site[1].startswith("state:")]
+            for name, node in functions.items()
+        }
+        self.assertEqual({name: sites for name, sites in raw_sites.items() if sites}, {})
+        self.assertEqual({name for name, node in functions.items()
+                          if any(site[1] == "state:frame"
+                                 for site in _raw_sites_in_node(node))},
+                         {"strum_reset_continuity", "parameter_division_bounds"})
+
+        forbidden_labels = {
+            "Chord Note Arpeggio", "Chord Note Strum", "Chord Spread",
+            "Chord Accel Mod", "Mute Chord Root",
+        }
+        labels = {node.value for node in ast.walk(module)
+                  if isinstance(node, ast.Constant) and isinstance(node.value, str)}
+        for name in names - {"assign_trig_parameter"}:
+            node_labels = {node.value for node in ast.walk(functions[name])
+                           if isinstance(node, ast.Constant)
+                           and isinstance(node.value, str)}
+            self.assertFalse(node_labels & forbidden_labels, name)
+        self.assertEqual({key: TRIG_PARAMETERS[key] for key in (
+            "chord_note_arpeggio", "chord_note_strum", "chord_spread",
+            "chord_accel_mod", "mute_chord_root",
+        )}, {
+            "chord_note_arpeggio": "Chord Note Arpeggio",
+            "chord_note_strum": "Chord Note Strum",
+            "chord_spread": "Chord Spread",
+            "chord_accel_mod": "Chord Accel Mod",
+            "mute_chord_root": "Mute Chord Root",
+        })
+
     def test_editor_range_and_selector_cases_use_semantic_inputs(self):
         source = (BEHAVIOUR / "cases.py").read_text()
         module = ast.parse(source)
@@ -151,6 +288,10 @@ class UiMapTests(unittest.TestCase):
             "quantised_fixed_note": "Quantised Fixed Note",
             "trig_probability": "Trig Probability",
             "chord_note_arpeggio": "Chord Note Arpeggio",
+            "chord_note_strum": "Chord Note Strum",
+            "chord_spread": "Chord Spread",
+            "chord_accel_mod": "Chord Accel Mod",
+            "mute_chord_root": "Mute Chord Root",
             "chord_pattern": "Chord Pattern",
             "random_note": "Random Note",
             "twos_random_note": "Twos Random Note",
@@ -187,21 +328,6 @@ class UiMapTests(unittest.TestCase):
                 control_cell("pattern_note_degree", invalid)
         with self.assertRaises(ValueError):
             control_cell("note_merge_mode", 1)
-
-    def test_pattern_note_pitch_keys_preserve_authored_grid_cells(self):
-        from ui_map import PATTERN_NOTE_PITCHES, control_cell
-
-        self.assertEqual(PATTERN_NOTE_PITCHES, {
-            "pattern_note_c": (5, 3),
-            "pattern_note_d": (6, 2),
-            "pattern_note_e": (7, 1),
-            "pattern_note_f": (8, 6),
-        })
-        for key, cell in PATTERN_NOTE_PITCHES.items():
-            with self.subTest(key=key):
-                self.assertEqual(control_cell(key), cell)
-                with self.assertRaises(ValueError):
-                    control_cell(key, 1)
 
     def test_every_grid_cell_has_exactly_one_control_on_each_page(self):
         from ui_map import grid_partition
@@ -351,17 +477,6 @@ class UiMapTests(unittest.TestCase):
 
 
 class UiInputTests(unittest.TestCase):
-    def ui(self):
-        from ui import Ui
-
-        driver = FakeDriver()
-        return driver, Ui(driver)
-
-    def test_channel_page_uses_explicit_origin_and_map_offset(self):
-        driver, ui = self.ui()
-        ui.channel_page("harmony", "masks", confirm=False)
-        self.assertEqual(driver.calls, [("enc", 1, 7)])
-
     def test_step_transpose_plus_twelve_keeps_its_original_grid_recipe(self):
         from ui import Ui
         from ui_map import control_cell
@@ -374,51 +489,6 @@ class UiInputTests(unittest.TestCase):
             ("action", {"type": "grid", "x": 3, "y": 4, "state": 1}),
             ("tap", 15, 8),
             ("action", {"type": "grid", "x": 3, "y": 4, "state": 0}),
-        ])
-
-    def test_pattern_harmony_clock_page_and_value_verbs_keep_native_recipe(self):
-        driver, ui = self.ui()
-        ui.channel_page("clock_mods", "midi_config", channel=2, confirm=False)
-        ui.set_value(-2)
-        ui.channel_page("harmony", "clock_mods", channel=2, confirm=False)
-        ui.set_value(2)
-        ui.select_field("tone_0_role", offset=3)
-        self.assertEqual(driver.calls, [
-            ("enc", 1, -1),
-            ("enc", 3, -2),
-            ("enc", 1, 4),
-            ("enc", 3, 2),
-            ("enc", 2, 3),
-        ])
-
-    def test_pattern_group_hold_tap_keeps_octave_modifier_recipe(self):
-        driver, ui = self.ui()
-        ui.hold_control_tap("pattern_note_octave_up", "pattern_group", None, 1)
-        self.assertEqual(driver.calls, [
-            ("action", {"type": "grid", "x": 14, "y": 8, "state": 1}),
-            ("tap", 9, 8),
-            ("action", {"type": "grid", "x": 14, "y": 8, "state": 0}),
-        ])
-
-    def test_editor_range_holds_keep_native_grid_edges_and_duration(self):
-        driver, ui = self.ui()
-        with ui.hold_control("pattern_velocity_range_down"):
-            driver.elapse(1.1)
-        self.assertEqual(driver.calls, [
-            ("action", {"type": "grid", "x": 16, "y": 8, "state": 1}),
-            ("elapse", 1.1),
-            ("action", {"type": "grid", "x": 16, "y": 8, "state": 0}),
-        ])
-
-    def test_rejected_saved_range_controls_keep_native_tap_recipe(self):
-        driver, ui = self.ui()
-        ui.menu("channel_editor")
-        ui.play()
-        ui.stop()
-        self.assertEqual(driver.calls, [
-            ("tap", 3, 8),
-            ("tap", 1, 8),
-            ("tap", 1, 8),
         ])
 
     def test_transpose_cases_return_to_channel_editor_before_scale_editor(self):
@@ -464,6 +534,96 @@ class UiInputTests(unittest.TestCase):
         self.assertIsInstance(assignment.value, ast.Subscript)
         self.assertIsInstance(assignment.value.value, ast.Call)
         self.assertEqual(assignment.value.value.func.attr, "control_cell")
+
+    def test_arp_setup_semantic_inputs_match_legacy_driver_recipe(self):
+        from ui import Ui
+
+        legacy = FakeDriver()
+        legacy.action(type="grid", x=1, y=4, state=1)
+        legacy.tap(16, 7)
+        legacy.action(type="grid", x=1, y=4, state=0)
+        legacy.tap(5, 8)
+        legacy.tap(2, 4)
+        legacy.tap(3, 4)
+        legacy.tap(4, 4)
+        legacy.tap(3, 8)
+        legacy.enc(1, -4)
+        legacy.enc(2, 1)
+        legacy.enc(3, 51)
+        legacy.key(3)
+        legacy.action(type="grid", x=1, y=8, state=1)
+        legacy.action(type="grid", x=1, y=8, state=0)
+
+        semantic = FakeDriver()
+        ui = Ui(semantic)
+        ui.set_range(1, 64)
+        ui.pattern_editor()
+        for step in (2, 3, 4):
+            ui.tap_step(step)
+        ui.channel_editor()
+        ui.turn(1, -4)
+        ui.turn(2, 1)
+        ui.set_value(51)
+        ui.press_key(3)
+        ui.gesture([("play_stop", None)], [("play_stop", None)])
+
+        self.assertEqual(semantic.calls, legacy.calls)
+
+    def ui(self):
+        from ui import Ui
+
+        driver = FakeDriver()
+        return driver, Ui(driver)
+
+    def test_channel_page_uses_explicit_origin_and_map_offset(self):
+        driver, ui = self.ui()
+        ui.channel_page("harmony", "masks", confirm=False)
+        self.assertEqual(driver.calls, [("enc", 1, 7)])
+
+    def test_pattern_harmony_clock_page_and_value_verbs_keep_native_recipe(self):
+        driver, ui = self.ui()
+        ui.channel_page("clock_mods", "midi_config", channel=2, confirm=False)
+        ui.set_value(-2)
+        ui.channel_page("harmony", "clock_mods", channel=2, confirm=False)
+        ui.set_value(2)
+        ui.select_field("tone_0_role", offset=3)
+        self.assertEqual(driver.calls, [
+            ("enc", 1, -1),
+            ("enc", 3, -2),
+            ("enc", 1, 4),
+            ("enc", 3, 2),
+            ("enc", 2, 3),
+        ])
+
+    def test_pattern_group_hold_tap_keeps_octave_modifier_recipe(self):
+        driver, ui = self.ui()
+        ui.hold_control_tap("pattern_note_octave_up", "pattern_group", None, 1)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 14, "y": 8, "state": 1}),
+            ("tap", 9, 8),
+            ("action", {"type": "grid", "x": 14, "y": 8, "state": 0}),
+        ])
+
+    def test_editor_range_holds_keep_native_grid_edges_and_duration(self):
+        driver, ui = self.ui()
+        with ui.hold_control("pattern_velocity_range_down"):
+            driver.elapse(1.1)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 16, "y": 8, "state": 1}),
+            ("elapse", 1.1),
+            ("action", {"type": "grid", "x": 16, "y": 8, "state": 0}),
+        ])
+
+    def test_rejected_saved_range_controls_keep_native_tap_recipe(self):
+        driver, ui = self.ui()
+        ui.menu("channel_editor")
+        ui.play()
+        ui.stop()
+        self.assertEqual(driver.calls, [
+            ("tap", 3, 8),
+            ("tap", 1, 8),
+            ("tap", 1, 8),
+        ])
 
     def test_rejected_saved_range_starts_with_semantic_setup(self):
         from types import SimpleNamespace
@@ -671,6 +831,10 @@ class UiInputTests(unittest.TestCase):
         from ui import Ui
 
         for key, label in (("chord_note_arpeggio", "Chord Note Arpeggio"),
+                           ("chord_note_strum", "Chord Note Strum"),
+                           ("chord_spread", "Chord Spread"),
+                           ("chord_accel_mod", "Chord Accel Mod"),
+                           ("mute_chord_root", "Mute Chord Root"),
                            ("chord_pattern", "Chord Pattern")):
             with self.subTest(key=key):
                 driver = FakeDriver()
@@ -686,6 +850,32 @@ class UiInputTests(unittest.TestCase):
                     ("key", 3),
                     ("key", 2),
                 ])
+
+    def test_parameter_label_lookup_preserves_migrated_result_labels(self):
+        from ui import Ui, UiMapError
+
+        ui = Ui(FakeDriver())
+        for key, label in (("chord_note_arpeggio", "Chord Note Arpeggio"),
+                           ("chord_note_strum", "Chord Note Strum"),
+                           ("chord_spread", "Chord Spread")):
+            with self.subTest(key=key):
+                self.assertEqual(ui.trig_parameter_label(key), label)
+        with self.assertRaises(UiMapError):
+            ui.trig_parameter_label("Chord Spread")
+
+    def test_header_surface_verb_keeps_text_only_oracle_and_result(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{}])
+        ui = Ui(driver)
+        with patch("frame_oracle.header", return_value="expected") as header, \
+                patch("frame_oracle.matches", return_value=True) as matches:
+            ui.expect_header_surface("midi_config", channel=1)
+        header.assert_called_once_with("Ch. 1 Device Config")
+        matches.assert_called_once_with({}, "expected")
+        self.assertEqual(driver.results, [{
+            "kind": "screen-header", "expected": "Ch. 1 Device Config", "matched": True
+        }])
 
     def test_unknown_trig_parameter_key_fails_before_input(self):
         from ui import UiMapError

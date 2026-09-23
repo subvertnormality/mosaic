@@ -18,6 +18,47 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_live_recording_and_panic_cases_use_semantic_inputs(self):
+        """Keep case recipes on Ui verbs while preserving their existing oracles."""
+        import ast
+
+        from ui_layer_guard import _raw_sites_in_node, _tree
+
+        source = BEHAVIOUR / "cases.py"
+        tree = _tree(str(source.resolve()))
+        names = {
+            "live_record_placement", "recorded_note_channel_switch",
+            "live_playhead_feedback", "keyboard_input_channels",
+            "overlapping_keyboard_sources", "recorded_chord_release",
+            "recorded_input_sources", "keyboard_pitch_range", "panic_hold",
+            "panic_navigation", "panic_hold_matrix", "panic_live_note_stop",
+            "panic_overlapping_holds", "panic_pending_chord",
+            "muted_sparse_reverse_arp", "arp_rest_live_scale",
+            "arp_empty_muted_replacement", "navigation_matrix",
+        }
+        functions = {node.name: node for node in tree.body
+                     if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))}
+        self.assertTrue(names <= functions.keys(), names - functions.keys())
+        for name in sorted(names):
+            with self.subTest(function=name):
+                sites = _raw_sites_in_node(functions[name])
+                sites = [site for site in sites if site[1] in {
+                    "tap", "key", "enc", "hold_tap", "action:grid",
+                    "action:key", "action:enc",
+                }]
+                self.assertEqual(sites, [], name)
+
+    def test_migrated_arp_cases_have_no_reachable_raw_ui_dependencies(self):
+        from cases import CASES
+        from ui_layer_guard import callable_raw_dependencies
+
+        for case_id in ("M-ARP-010", "M-ARP-011", "M-ARP-012",
+                        "M-ARP-013", "M-ARP-014"):
+            with self.subTest(case=case_id):
+                self.assertEqual(
+                    callable_raw_dependencies(CASES[case_id]["run"]), [], case_id
+                )
+
     def test_hardware_driver_and_performance_modules_use_semantic_ui(self):
         from ui_layer_guard import raw_sites
 

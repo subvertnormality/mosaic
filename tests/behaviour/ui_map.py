@@ -152,6 +152,12 @@ NATIVE_MENU = {
     "mod_macro_1": "macro 1",
     "mod_active": "active",
     "mod_value": "value",
+    "mod_beats": "beats",
+    "mod_shape": "shape",
+    "mod_clocked": "clocked",
+    "mod_fixed_note": "Fixed Note",
+    "mod_source_rhythm_1": "rhythm 1",
+    "mod_source_lfo_1": "lfo 1",
     "clock_root_name": "CLOCK",
     "clock_source": "source",
     "clock_tempo": "tempo",
@@ -179,6 +185,11 @@ NATIVE_MENU_VALUES = {
         "clear_depth": "-",
         "negative_quarter": "-0.25",
     },
+}
+
+NATIVE_MODULATION_SOURCES = {
+    "lfo_1": {"offset": 4, "menu_label": "mod_source_lfo_1"},
+    "macro_1": {"offset": 12, "menu_label": "mod_macro_1"},
 }
 
 PATCH_PARAMETERS = {
@@ -216,6 +227,10 @@ TRIG_PARAMETERS = {
     "random_note": "Random Note",
     "twos_random_note": "Twos Random Note",
     "chord_note_arpeggio": "Chord Note Arpeggio",
+    "chord_note_strum": "Chord Note Strum",
+    "chord_spread": "Chord Spread",
+    "chord_accel_mod": "Chord Accel Mod",
+    "mute_chord_root": "Mute Chord Root",
     "chord_pattern": "Chord Pattern",
     "none": "None",
     **{'stored_patch_cc%d' % number: 'CC %d' % number for number in range(1, 11)},
@@ -503,6 +518,8 @@ NATIVE_PARAMETER_ROOTS = {
         "value": "midi_device_params_group_channel_1",
     },
     "macro_1": {"field": "name", "value": "macro 1"},
+    "lfo_1": {"field": "name", "value": "lfo 1"},
+    "clock": {"field": "name", "value": "CLOCK"},
 }
 
 NATIVE_MENU_PARAMETERS = {

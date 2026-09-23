@@ -532,6 +532,13 @@ class Ui:
             raise UiMapError("unknown trig parameter: " + str(parameter)) from error
         return self.assign_trig_parameter(label, offset=offset)
 
+    def trig_parameter_label(self, parameter):
+        """Return the mapped native label for a stable trig parameter key."""
+        try:
+            return TRIG_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown trig parameter: " + str(parameter)) from error
+
     def assign_stored_patch_control(self, slot):
         if type(slot) is not int or not 1 <= slot <= 10:
             raise UiMapError("stored patch-control slot must be in 1..10")
@@ -643,6 +650,49 @@ class Ui:
         self.turn(1, 4)
         self.press_key(3)
         self.select_midi_clock_source_from_levels()
+
+    def enter_native_levels_menu(self):
+        """Open the native LEVELS root using the established norns recipe."""
+        self.press_key(1)
+        self.turn(1, 4)
+        self.press_key(3)
+
+    def select_native_parameter_group(self, group):
+        """Select a stable native parameter root from the LEVELS menu."""
+        self.expect_native_menu_label("levels_root")
+        self.seek_native_parameter_root(group)
+        self.press_key(3)
+        if group == "clock":
+            self.expect_native_menu_label("clock_source")
+        return group
+
+    def route_fixed_note_from_modulation_source(self, source):
+        """Route a Matrix Fixed Note target from a mapped toolkit mod source."""
+        from ui_map import NATIVE_MODULATION_SOURCES
+
+        try:
+            source_spec = NATIVE_MODULATION_SOURCES[source]
+        except KeyError as error:
+            raise UiMapError("unknown modulation source: " + str(source)) from error
+        self.press_key(1)
+        self.turn(2, 1)
+        self.press_key(3)
+        self.expect_native_menu_label("mod_devices_root")
+        self.turn(2, 2)
+        self.expect_native_menu_label("mod_mods_root")
+        self.press_key(3)
+        self.expect_native_menu_label("mod_matrix_root")
+        self.press_key(3)
+        self.expect_native_menu_label("levels_root")
+        self.seek_native_parameter_root("channel_1_device_parameters")
+        self.press_key(3)
+        self.expect_native_menu_label("mod_fixed_note")
+        self.press_key(3)
+        self.expect_native_menu_label("mod_source_rhythm_1")
+        self.turn(2, source_spec["offset"])
+        self.expect_native_menu_label(source_spec["menu_label"])
+        self.turn(3, 100)
+        self.expect_menu_value("1.00")
 
     def select_midi_clock_source_from_levels(self):
         """Select the CLOCK source after opening the native LEVELS root."""
@@ -801,6 +851,15 @@ class Ui:
     def expect_header(self, page, **params):
         text = header_text(page, **params)
         self.wait_for_header(page, **params)
+        self.driver.results.append(dict(kind="screen-header", expected=text, matched=True))
+
+    def expect_header_surface(self, page, **params):
+        """Check the mapped header using the legacy text-only screen oracle."""
+        from frame_oracle import header, matches
+
+        text = header_text(page, **params)
+        expected = header(text)
+        self.driver.wait(lambda state: matches(state, expected))
         self.driver.results.append(dict(kind="screen-header", expected=text, matched=True))
 
     def expect_scale_slot_header(self, slot):

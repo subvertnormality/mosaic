@@ -1468,31 +1468,14 @@ def parameter_list_label(c,label,wait=True):
     return c.ui.expect_list_label(label,wait=wait)
 
 def assign_trig_parameter(c,label,offset=None):
-    """Select a trig parameter through the real list UI and return its offset.
-
-    Finding the entry means stepping the list and reading the screen at each
-    position, which is slow enough to matter when a caller has to finish inside
-    a couple of sequencer steps. A caller that has already located the same
-    label can pass the offset back to jump straight to it; the label is still
-    verified before confirming, so a wrong offset fails rather than assigning
-    something else.
-    """
-    c.key(2);c.enc(3,-50)
-    if offset is None:
-        for offset in range(50):
-            if parameter_list_label(c,label,wait=False):break
-            c.enc(3,1)
-        else:raise AssertionError('Parameter unavailable through native UI: '+label)
-    elif offset:
-        c.enc(3,offset)
-    parameter_list_label(c,label);c.key(3);c.key(2)
-    return offset
+    """Select a displayed trig parameter through the UI layer."""
+    return c.ui.assign_trig_parameter(label, offset=offset)
 
 def strum_reset_continuity(c):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-4);c.enc(2,3);c.enc(3,2)  # unset chord masks start from X
+    c.configure();c.ui.hold_control_tap('step','step',1,3);c.ui.turn(1,-4);c.ui.turn(2,3);c.ui.set_value(2)  # unset chord masks start from X
     import base64
     from frame_oracle import render
     expected_chord=render([(0,40,15,'Chd1'),(0,48,15,'3rd')])
@@ -1501,14 +1484,14 @@ def strum_reset_continuity(c):
         actual=base64.b64decode(state['frame']['pixels_base64'])
         return all(actual[i]==expected_chord[i] for i in indices)
     c.wait(third_selected);c.results.append(dict(kind='chord-mask-screen',label='3rd',passed=True))
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Strum');c.enc(3,8)
+    c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_strum');c.ui.set_value(8)
     for reset in (False,True):
         set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',reset)])
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(24);capture.extend(c.snapshot())
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(24);capture.extend(c.snapshot())
         controlled=c.clock_mode=='controlled-experimental'
         lower=c.logical_ns if controlled else time.monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
         upper=c.logical_ns if controlled else time.monotonic_ns()
         # A deferred strum beyond Stop must never sound.
         c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
@@ -1531,26 +1514,26 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     if fast:assert c.clock_mode=='controlled-experimental','Exact one-pulse arp boundary fixture requires controlled time; real-time family acceptance uses separate scheduling metrics'
-    c.configure();c.hold_tap((1,4),(3,4));c.tap(5,8)
-    if not replacement:c.tap(2,4);c.tap(3,4)
-    c.tap(3,8)
-    c.enc(1,-4);c.enc(2,2);c.enc(3,15 if fractional_gate else 18);length_mask_display(c,'1.25' if fractional_gate else '2')
+    c.configure();c.ui.hold_control_tap('step','step',1,3);c.ui.tap_control('pattern_editor')
+    if not replacement:c.ui.tap_step(2);c.ui.tap_step(3)
+    c.ui.tap_control('channel_editor')
+    c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(15 if fractional_gate else 18);length_mask_display(c,'1.25' if fractional_gate else '2')
     if not (fast or reset):
-        c.enc(2,1);c.enc(3,2)  # unset chord masks start from X
-        if fractional_gate:c.enc(2,1);c.enc(3,4)
-    c.enc(1,3);c.enc(3,0 if fast else -11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,1 if fast else 8)
+        c.ui.turn(2,1);c.ui.set_value(2)  # unset chord masks start from X
+        if fractional_gate:c.ui.turn(2,1);c.ui.set_value(4)
+    c.ui.turn(1,3);c.ui.set_value(0 if fast else -11);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(1 if fast else 8)
     if reset:set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',True)])
     seconds=3 if fast else (24 if reset else 10)
     capture=MidiWindow(c.snapshot()['midi_count'])
-    if fast:c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    else:c.tap(1,8)
+    if fast:c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
+    else:c.ui.play()
     # Native rational deadlines round upward to nanoseconds. Include the
     # final planned pulse explicitly; its2ns musical error bound is unchanged.
     c.elapse(seconds+(1e-6 if fast else 0));capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental'
     lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     expected=[];durations=[]
@@ -1580,18 +1563,19 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
 def parameter_division_bounds(c,parameter):
     import base64
     from frame_oracle import render
+    parameter_label=c.ui.trig_parameter_label(parameter)
     def label(value):
         expected=render([(0,25,15,value)])
         indices=[(y*128+x)*4+k for y in range(19,27) for x in range(24) for k in range(3)]
         def matches(state):
             actual=base64.b64decode(state['frame']['pixels_base64'])
             return all(actual[i]==expected[i] for i in indices)
-        c.wait(matches);c.results.append(dict(kind='parameter-division-label',parameter=parameter,value=value,passed=True))
-    c.configure();c.enc(1,-3);assign_trig_parameter(c,parameter)
-    label('X');c.enc(3,-3);label('X')
-    c.enc(3,1);label('1/24');c.enc(3,88);label('128')
-    c.enc(3,3);label('128')
-    c.enc(3,-1);label('120');c.enc(3,-88);label('X')
+        c.wait(matches);c.results.append(dict(kind='parameter-division-label',parameter=parameter_label,value=value,passed=True))
+    c.configure();c.ui.turn(1,-3);c.ui.assign_trig_parameter_key(parameter)
+    label('X');c.ui.set_value(-3);label('X')
+    c.ui.set_value(1);label('1/24');c.ui.set_value(88);label('128')
+    c.ui.set_value(3);label('128')
+    c.ui.set_value(-1);label('120');c.ui.set_value(-88);label('X')
 
 
 def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
@@ -1599,23 +1583,23 @@ def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     assert acceleration in range(-5,6)
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
+    for turns in (2,4,5,7):c.ui.turn(2,1);c.ui.set_value(turns)  # unset chord masks start from X
+    c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio' if arp else 'chord_note_strum');c.ui.set_value(8)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_spread');c.ui.set_value(5)
     if acceleration or explicit_off:
-        c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,2 if explicit_off else acceleration)
+        c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_accel_mod');c.ui.set_value(2 if explicit_off else acceleration)
         if explicit_off:
-            c.action(type='grid',x=1,y=4,state=1)
-            try:c.enc(3,-2)
-            finally:c.action(type='grid',x=1,y=4,state=0)
-    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(18);capture.extend(c.snapshot())
+            c.ui.control_edge('step',True,1)
+            try:c.ui.set_value(-2)
+            finally:c.ui.control_edge('step',False,1)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(18);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental'
     lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     # Codex-arbitrated new contract, not a fit to current implementation:
@@ -1636,13 +1620,13 @@ def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
 
 def arp_empty_masks(c,muted=False):
     from note_accounting import note_pairs
-    c.configure();c.enc(1,-3);assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+    c.configure();c.ui.turn(1,-3);c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
     if muted:
-        c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
-        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(.5)
+        c.ui.turn(2,1);c.ui.assign_trig_parameter_key('mute_chord_root');c.ui.set_value(1)
+        before=c.snapshot()['midi_count'];c.ui.play();c.elapse(.5)
         # Silence alone cannot pass: the native input loop and screen must
         # remain responsive while an all-empty muted arp is selected.
-        c.enc(1,3);c.screen_header('Ch. 1 Device Config');c.tap(1,8);c.elapse(.25)
+        c.ui.turn(1,3);c.ui.expect_header_surface('midi_config',channel=1);c.ui.play();c.elapse(.25)
         state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and m['bytes'][0]&240==144 and m['bytes'][2]>0]
         assert not notes and not state['midi_capture']['outstanding'],'Muted empty arp emitted or retained a voice'
         c.results.append(dict(kind='empty-muted-arp-responsive-silence',passed=True));return
@@ -1658,20 +1642,20 @@ def arp_rest_slots(c,internal=False):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
     # Explicit Off values preserve real internal/trailing rest slots in the
     # baseline; this does not depend on Lua's length of a sparse table.
     for turns in (2,0,4 if internal else 0,0):
-        c.enc(2,1)
-        if turns:c.enc(3,turns)
-        else:c.enc(3,1);c.enc(3,-1)
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(8);capture.extend(c.snapshot())
+        c.ui.turn(2,1)
+        if turns:c.ui.set_value(turns)
+        else:c.ui.set_value(1);c.ui.set_value(-1)
+    c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(8);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     slots=(60,64,None,67 if internal else None,None)
@@ -1685,17 +1669,17 @@ def fractional_spread_contract(c):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     assert c.clock_mode=='controlled-experimental','Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented'
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,7);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
+    for turns in (2,4,5,7):c.ui.turn(2,1);c.ui.set_value(turns)  # unset chord masks start from X
+    c.ui.turn(1,3);c.ui.set_value(7);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_spread');c.ui.set_value(5)
     capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     c.elapse(1.500001);capture.extend(c.snapshot());lower=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns;c.elapse(.25);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     notes=capture.note_ons();assert len(notes)==61,('Fractional arp onset count',len(notes))
     origin=notes[0]['logical_ns'];pitches=(60,64,67,69,72)
@@ -1719,20 +1703,20 @@ def minimum_swung_gap_contract(c,swing):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     assert c.clock_mode=='controlled-experimental','Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented'
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,7);c.key(3)
-    c.enc(2,1);c.enc(3,1);c.key(3)
-    c.enc(2,1);c.enc(3,swing+51);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,1)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,-4)
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
+    for turns in (2,4,5,7):c.ui.turn(2,1);c.ui.set_value(turns)  # unset chord masks start from X
+    c.ui.turn(1,3);c.ui.set_value(7);c.ui.press_key(3)
+    c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
+    c.ui.turn(2,1);c.ui.set_value(swing+51);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_spread');c.ui.set_value(1)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_accel_mod');c.ui.set_value(-4)
     capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     c.elapse(.5);capture.extend(c.snapshot())
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     c.elapse(.25);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     # Four positive spacing gaps; the fifth is negative and must not sound.
     expected=(0,1,4,5,6) if swing<0 else (0,4,5,6,7)
@@ -1775,8 +1759,8 @@ def autosave_restart(c):
     try:
         # Read the restored pattern through the visible grid and complete MIDI
         # phrases. Do not re-create notes or inspect the serialized model.
-        loaded.tap(3,8);loaded.tap(5,8)
-        loaded.led_values([(x,4) for x in range(1,5)],[15,15,15,15])
+        loaded.ui.channel_editor();loaded.ui.pattern_editor()
+        loaded.ui.expect_leds({('step',x):'selected' for x in range(1,5)})
         loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
     finally:loaded.finish()
 
@@ -1786,47 +1770,39 @@ def menu_label(c,text,x=0):
 def menu_value(c,text):
     c.ui.expect_menu_value(text)
 
-def route_fixed_note(c,source_position,source_name):
+def route_fixed_note(c,source):
     assert c.profile=='midi-modulation','This case requires actual matrix/toolkit mods'
     c.configure()
-    c.key(1);c.enc(2,1);c.key(3);menu_label(c,'DEVICES > ')
-    c.enc(2,2);menu_label(c,'MODS >');c.key(3);menu_label(c,'MATRIX >',4)
-    c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,v in enumerate(roots) if v['id']=='midi_device_params_group_channel_1')
-    c.enc(2,position);c.key(3);menu_label(c,'Fixed Note')
-    c.key(3);menu_label(c,'rhythm 1')
-    c.enc(2,source_position);menu_label(c,source_name)
-    c.enc(3,100);menu_value(c,'1.00')
+    c.ui.route_fixed_note_from_modulation_source(source)
 
 def toolkit_parameter_group(c,name):
-    c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,v in enumerate(roots) if v['name']==name)
-    c.enc(2,position);c.key(3)
+    c.ui.enter_native_levels_menu()
+    c.ui.select_native_parameter_group(name)
 
 def macro_route_clear(c):
-    route_fixed_note(c,12,'macro 1')
-    toolkit_parameter_group(c,'macro 1');menu_label(c,'active')
-    c.enc(2,1);menu_label(c,'value');c.enc(3,100);c.key(1)
+    route_fixed_note(c,'macro_1')
+    toolkit_parameter_group(c,'macro_1');c.ui.expect_native_menu_label('mod_active')
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_value');c.ui.turn(3,100);c.ui.press_key(1)
     c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
     # Return to the retained Matrix source selection, then zero its depth.
-    c.key(1);c.enc(1,-4);c.key(3);c.key(3);c.key(3)
-    menu_label(c,'macro 1');c.key(3);menu_value(c,'-');c.key(1)
+    c.ui.press_key(1);c.ui.turn(1,-4);c.ui.press_key(3);c.ui.press_key(3);c.ui.press_key(3)
+    c.ui.expect_native_menu_label('mod_macro_1');c.ui.press_key(3)
+    c.ui.expect_native_menu_value('modulation_control_1','clear_depth');c.ui.press_key(1)
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))])
 
 def held_macro_rebind(c):
     macro_route_clear(c)
     # The macro still holds1. Rebinding must apply it without touching the
     # source or waiting for another source event.
-    c.key(1);menu_label(c,'macro 1');c.enc(3,100);menu_value(c,'1.00');c.key(1)
+    c.ui.press_key(1);c.ui.expect_native_menu_label('mod_macro_1')
+    c.ui.turn(3,100);menu_value(c,'1.00');c.ui.press_key(1)
     c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
 
 def pulse_lfo(c):
-    route_fixed_note(c,4,'lfo 1')
-    toolkit_parameter_group(c,'lfo 1');menu_label(c,'clocked');c.key(3)
-    c.enc(2,1);menu_label(c,'beats');c.enc(3,9)
-    c.enc(2,2);menu_label(c,'shape');c.enc(3,2);c.key(1)
+    route_fixed_note(c,'lfo_1')
+    toolkit_parameter_group(c,'lfo_1');c.ui.expect_native_menu_label('mod_clocked');c.ui.press_key(3)
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_beats');c.ui.turn(3,9)
+    c.ui.turn(2,2);c.ui.expect_native_menu_label('mod_shape');c.ui.turn(3,2);c.ui.press_key(1)
     # A4-beat pulse with50% width is high for8 sixteenth notes and low for8.
     # Place playback safely inside the high half using a verified native clock
     # read (not Mosaic state); E/R jitter and the24PPQN mod sample cannot cross
@@ -1885,11 +1861,9 @@ def restart_phase_edges(c):
 def midi_clock_transport(c):
     import time
     c.configure()
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,v in enumerate(roots) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source')
-    menu_value(c,'internal');c.enc(3,1);menu_value(c,'midi')
+    c.ui.enter_native_levels_menu();c.ui.select_native_parameter_group('clock')
+    c.ui.expect_native_menu_value('clock_source','internal')
+    c.ui.turn(3,1);c.ui.expect_native_menu_value('clock_source','midi')
     def inject(value,at=None):
         action=dict(type='midi',port=1,bytes=[value])
         if at is not None:action['at_monotonic_ns']=at
@@ -1943,11 +1917,11 @@ def midi_clock_transport(c):
         durations.append((off[field]-note[field])/1e9)
     c.results.append(dict(kind='midi-clock-durations',expected_seconds=.15,actual_seconds=durations))
     assert all(abs(d-.15)<=tolerance for d in durations),durations
-    c.enc(3,-1);menu_value(c,'internal')
+    c.ui.turn(3,-1);c.ui.expect_native_menu_value('clock_source','internal')
     # Native clock.lua updates clock_tempo from the external source; returning
     # to internal uses that adopted tempo. Explicitly edit it back to90BPM.
-    c.enc(2,1);menu_label(c,'tempo');menu_value(c,'100')
-    c.enc(3,-10);menu_value(c,'90');c.key(1)
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('clock_tempo');menu_value(c,'100')
+    c.ui.turn(3,-10);menu_value(c,'90');c.ui.press_key(1)
     internal=c.playback([(1,[144,n,v]) for n,v in expected])
     restored=[(m[field]-internal[0][field])/1e9 for m in internal[:9]]
     c.results.append(dict(kind='restored-internal-onsets',actual_seconds=restored))
@@ -1956,9 +1930,8 @@ def midi_clock_transport(c):
 def live_clock_handoff(c):
     import math,time
     next_trig_cutoff(c)
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
+    c.ui.enter_native_levels_menu();c.ui.select_native_parameter_group('clock')
+    c.ui.expect_native_menu_value('clock_source','internal')
     pulse_cursor=0
     controlled=c.clock_mode=='controlled-experimental'
     domain='logical' if controlled else 'monotonic'
@@ -1979,13 +1952,13 @@ def live_clock_handoff(c):
         else:c.wait(lambda s:len(s['midi_input_schedule']['delivered'])>=pulse_cursor)
     pulses(49)
     before=c.snapshot();start_beat=before['diagnostics']['beats'];marker=before['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     pulses(4)
     pending=c.snapshot()
     assert pending['midi_capture']['outstanding'],'No pending note at source switch'
     elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
     assert 0<elapsed_ticks<48,elapsed_ticks
-    switch_ack=c.action(type='enc',n=3,delta=2)
+    switch_ack=c.ui.encoder_event(3,2)
     handoff=c.snapshot();beat=handoff['diagnostics']['beats']
     if not controlled:
         # A pre-input snapshot can precede the audible onset by tens of ms.
@@ -2018,7 +1991,7 @@ def live_clock_handoff(c):
     error_ns=off[field]-expected_off_ns
     c.results.append(dict(kind='pending-note-source-handoff',elapsed_ticks=elapsed_ticks,expected_off_ns=expected_off_ns,actual_off_ns=off[field],error_ns=error_ns))
     assert abs(error_ns)<=(2 if c.clock_mode=='controlled-experimental' else 10000000),c.results[-1]
-    menu_value(c,'midi')
+    c.ui.expect_native_menu_value('clock_source','midi')
     reverse_live_clock_handoff(c)
 
 def reverse_live_clock_handoff(c):
@@ -2026,12 +1999,13 @@ def reverse_live_clock_handoff(c):
     # Establish100BPM on the internal reference while stopped, then return to
     # MIDI. This isolates phase/source transfer from internal24PPQN tempo
     # publication latency; pending tempo changes remain a separate edge case.
-    c.enc(3,-1);menu_value(c,'internal')
+    c.ui.turn(3,-1);c.ui.expect_native_menu_value('clock_source','internal')
     # Set the reference through the norns clock menu. Waiting for clock.lua's
     # once-per-second external-tempo publisher makes this setup phase-dependent.
-    c.enc(2,1);menu_label(c,'tempo');c.enc(3,-300);menu_value(c,'1')
-    c.enc(3,99);menu_value(c,'100')
-    c.enc(2,-1);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi')
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('clock_tempo');c.ui.turn(3,-300);menu_value(c,'1')
+    c.ui.turn(3,99);menu_value(c,'100')
+    c.ui.turn(2,-1);c.ui.expect_native_menu_label('clock_source');c.ui.turn(3,1)
+    c.ui.expect_native_menu_value('clock_source','midi')
     controlled=c.clock_mode=='controlled-experimental'
     domain='logical' if controlled else 'monotonic'
     origin=c.logical_ns if controlled else time.monotonic_ns()+500000000
@@ -2048,12 +2022,12 @@ def reverse_live_clock_handoff(c):
         else:c.wait(lambda s:len(s['midi_input_schedule']['delivered'])>=pulse)
     until(49)
     before=c.snapshot();start_beat=before['diagnostics']['beats'];marker=before['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     until(53);c.elapse(.001)  # Avoid observing exactly on a strict sync boundary.
     pending=c.snapshot();assert pending['midi_capture']['outstanding']
     elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
     assert 0<elapsed_ticks<48,elapsed_ticks
-    switch_ack=c.action(type='enc',n=3,delta=-2)
+    switch_ack=c.ui.encoder_event(3,-2)
     handoff=c.snapshot();beat=handoff['diagnostics']['beats']
     if not controlled:
         onset=next(m for m in pending['midi'] if m['index']>marker and m['bytes']==[144,60,127])
@@ -2073,7 +2047,7 @@ def reverse_live_clock_handoff(c):
     # The scheduled MIDI Stop is no longer the selected transport. Internal
     # playback must continue into the next phrase until a physical grid Stop.
     c.wait(lambda state:len(onsets(state))>=4,timeout=2)
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
     state=c.snapshot();notes=onsets(state)
     assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100]),(1,[144,60,127])],notes
     off=next(m for m in state['midi'] if m['index']>notes[0]['index'] and m['bytes']==[128,60,127])
@@ -2084,7 +2058,7 @@ def reverse_live_clock_handoff(c):
     errors=[e['actual_'+domain+'_ns']-e['intended_'+domain+'_ns'] for e in arrivals]
     c.results.append(dict(kind='reverse-continuous-midi-arrival-errors',time_domain=domain,errors_ns=errors))
     assert len(arrivals)==84 and all(0<=e<=(0 if controlled else 10000000) for e in errors),errors
-    menu_value(c,'internal')
+    c.ui.expect_native_menu_value('clock_source','internal')
 
 
 
@@ -2095,37 +2069,38 @@ def reverse_live_clock_handoff(c):
 
 def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False):
     import time
+    ui=c.ui
     c.configure()
     placement_steps=tuple(expected_steps)
     if boundary_witness:
         # An independent audible channel marks the active step through MIDI.
         # Same four-step range and clock; no application-state oracle.
-        c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-        c.tap(1,2);c.hold_tap((1,4),(4,4))
+        ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+        ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4))
         # Build a separate pattern; channel1's source will be cleared below.
-        c.tap(5,8);c.tap(2,1)
-        for x in range(1,5):c.tap(x,4)
-        c.tap(5,8)
-        for x,y in ((1,7),(2,6),(3,5),(4,4)):c.tap(x,y)
-        c.tap(5,8)
-        for x,y in ((1,1),(2,2),(3,3),(4,4)):c.tap(x,y)
-        c.tap(3,8);c.tap(1,2);c.tap(2,2);c.tap(1,1)
-    c.tap(5,8)
-    if boundary_witness:c.tap(1,1)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(3,8)
+        ui.pattern_editor();ui.tap_control('cell',(2,1))
+        for step in range(1,5):ui.tap_step(step)
+        ui.pattern_editor()
+        for x,y in ((1,7),(2,6),(3,5),(4,4)):ui.tap_control('cell',(x,y))
+        ui.pattern_editor()
+        for x,y in ((1,1),(2,2),(3,3),(4,4)):ui.tap_control('cell',(x,y))
+        ui.channel_editor();ui.tap_control('cell',(1,2));ui.tap_control('cell',(2,2));ui.tap_control('cell',(1,1))
+    ui.pattern_editor()
+    if boundary_witness:ui.tap_control('cell',(1,1))
+    for step in range(1,5):ui.tap_step(step)
+    ui.channel_editor()
     cell=lambda step:((step-1)%16+1,(step-1)//16+4)
-    if range_start!=1:c.hold_tap(cell(range_start),cell(range_start+3))
+    if range_start!=1:ui.hold_control_tap('cell','cell',cell(range_start),cell(range_start+3))
     cells=[cell(step) for step in range(1,65)]
     c.led_values(cells,[2 if range_start<=step<=range_start+3 else 0 for step in range(1,65)])
     if clock_delta:
         from frame_oracle import header,matches
-        c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        c.enc(3,clock_delta);c.key(3)
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+        ui.turn(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+        ui.set_value(clock_delta);ui.press_key(3)
+    ui.press_key(1);ui.turn(1,4);ui.press_key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi');c.key(1)
-    c.tap(2,8) # arm recording through the grid
+    ui.turn(2,position);ui.press_key(3);menu_label(c,'source');ui.set_value(1);menu_value(c,'midi');ui.press_key(1)
+    ui.tap_control('record') # arm recording through the grid
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
     # 24PPQN at100BPM:25ms pulses,150ms per sixteenth. FA follows49 warmup
@@ -2184,17 +2159,17 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
         if equal_deadline_race and not controlled:
             placement_steps=tuple(item['recorded_step'] for item in evidence)
         c.results.append(dict(kind='boundary-active-step-midi-witness',events=evidence))
-    c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
+    c.wait(lambda state:not state['midi_capture']['outstanding']);ui.tap_control('record')
     c.led_values(cells,[15 if step in placement_steps else (2 if range_start<=step<=range_start+3 else 0) for step in range(1,65)])
     c.results.append(dict(kind='recorded-step-placement',expected_steps=list(placement_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
     # Replay in normal internal clock after disarming; preview MIDI cannot
     # satisfy this oracle because playback takes a fresh capture marker.
-    c.key(1);c.key(3);menu_label(c,'source');c.enc(3,-1);menu_value(c,'internal')
-    c.enc(2,1);menu_label(c,'tempo');c.enc(3,-10);menu_value(c,'90');c.key(1)
+    ui.press_key(1);ui.press_key(3);menu_label(c,'source');ui.set_value(-1);menu_value(c,'internal')
+    ui.turn(2,1);menu_label(c,'tempo');ui.set_value(-10);menu_value(c,'90');ui.press_key(1)
     # Independent step positions define playback order, including wrap input.
     phrase=sorted(zip(placement_steps,[(1,[144,72,90]),(1,[144,79,80])]))
     if boundary_witness:
-        c.tap(2,1);c.tap(2,2);c.tap(1,1)
+        ui.tap_control('cell',(2,1));ui.tap_control('cell',(2,2));ui.tap_control('cell',(1,1))
     notes=c.playback([event for step,event in phrase],cycles=3)
     field='logical_ns' if controlled else 'monotonic_ns'
     gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
@@ -2204,9 +2179,10 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=expected_gaps,actual_seconds=gaps))
 
 def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1,disarm_while_held=False):
-    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
-    c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
+    ui=c.ui
+    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
+    ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
     field='logical_ns' if controlled else 'monotonic_ns'
     state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
@@ -2221,8 +2197,8 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
     c.action(**request)
     if controlled:c.elapse((origin+100000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=1,timeout=2)
-    c.tap(2,1)
-    if disarm_while_held:c.tap(2,8)
+    ui.tap_control('cell',(2,1))
+    if disarm_while_held:ui.tap_control('record')
     marker=c.snapshot()['midi_count']
     if controlled:c.elapse((origin+hold_ns+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==2,timeout=2)
@@ -2235,10 +2211,10 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         # New post-disarm notes may preview, but must not alter channel2 replay.
         c.action(type='midi',port=1,bytes=[144,79,80]);c.elapse(.03)
         c.action(type='midi',port=1,bytes=[128,79,0])
-    c.tap(1,8)
-    if not disarm_while_held:c.tap(2,8)
+    ui.stop()
+    if not disarm_while_held:ui.tap_control('record')
     c.wait(lambda state:not state['midi_capture']['outstanding'])
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    marker=c.snapshot()['midi_count'];ui.play()
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
     state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=13 for status in (144,145)),timeout=5)
     rows=notes(state);field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -2253,17 +2229,18 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
         c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 def live_playhead_feedback(c,clock_delta=0):
     import time
+    ui=c.ui
     c.configure()
     if clock_delta:
         from frame_oracle import header,matches
-        c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        c.enc(3,clock_delta);c.key(3)
+        ui.turn(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+        ui.set_value(clock_delta);ui.press_key(3)
     marker=c.snapshot()['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.control_edge('play_stop',True);ui.control_edge('play_stop',False)
     controlled=c.clock_mode=='controlled-experimental'
     field='logical_ns' if controlled else 'monotonic_ns'
     started=c.logical_ns if controlled else time.monotonic_ns()
@@ -2293,7 +2270,7 @@ def live_playhead_feedback(c,clock_delta=0):
     assert len(last_rows)>=9 and set(range(1,10))<=settled,dict(notes=len(last_rows),settled=sorted(settled))
     stale=[x for x in samples if x['visible']!=[x['current_step']]]
     c.results.append(dict(kind='live-playhead-latency',redraw_period_ns=50000000,maximum_allowed_stale_ns=limit,samples=samples,max_observed_stale_lower_ns=max([x['age_lower_ns'] for x in stale],default=0)))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
     c.led_values([(x,4) for x in range(1,5)],[15]*4)
 
 def keyboard_input_channels(c):
@@ -2321,11 +2298,12 @@ def keyboard_input_channels(c):
     c.results.append(dict(kind='keyboard-input-channel-matrix',input_ports=[1,2],input_channels=list(range(1,17)),release_status_types=[128,144],expected=expected,actual=actual))
 
 def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
-    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    ui=c.ui
+    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     for order in ((0,1),(1,0)):
-        c.tap(1,1);marker=c.snapshot()['midi_count']
+        ui.tap_control('cell',(1,1));marker=c.snapshot()['midi_count']
         c.action(type='midi',port=1,bytes=[144,72,90])
-        c.tap(2,1);c.action(type='midi',port=second_port,bytes=[143+second_channel,72,80])
+        ui.tap_control('cell',(2,1));c.action(type='midi',port=second_port,bytes=[143+second_channel,72,80])
         inputs=[(1,1),(second_port,second_channel)]
         expected=[(1,[144,72,90]),(2,[145,72,80])]
         for owner in order:
@@ -2389,9 +2367,10 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
 
 def recorded_input_sources(c,second_port=2,second_channel=1):
     hold_ns=500000000;expected_duration=.5;release_status=128;input_channel=1;disarm_while_held=False
-    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
-    c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
+    ui=c.ui
+    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
+    ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
     field='logical_ns' if controlled else 'monotonic_ns'
     state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
@@ -2408,8 +2387,8 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
     c.action(**request)
     if controlled:c.elapse((origin+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=1,timeout=2)
-    c.tap(2,1)
-    if disarm_while_held:c.tap(2,8)
+    ui.tap_control('cell',(2,1))
+    if disarm_while_held:ui.tap_control('record')
     marker=c.snapshot()['midi_count']
     if controlled:c.elapse((origin+610000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==4,timeout=2)
@@ -2422,10 +2401,10 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
         # New post-disarm notes may preview, but must not alter channel2 replay.
         c.action(type='midi',port=1,bytes=[144,79,80]);c.elapse(.03)
         c.action(type='midi',port=1,bytes=[128,79,0])
-    c.tap(1,8)
-    if not disarm_while_held:c.tap(2,8)
+    ui.stop()
+    if not disarm_while_held:ui.tap_control('record')
     c.wait(lambda state:not state['midi_capture']['outstanding'])
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    marker=c.snapshot()['midi_count'];ui.play()
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
     state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=13 for status in (144,145)),timeout=5)
     rows=notes(state);field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -2440,7 +2419,7 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
         c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 def keyboard_pitch_range(c):
     import time
@@ -2470,20 +2449,21 @@ def muted_sparse_reverse_arp(c,shape):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4)
-    c.enc(2,1);c.enc(3,51) # Unset -1 -> velocity50.
-    c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
-    c.enc(2,4);c.enc(3,7) # Only mask4 is populated: octave from X; others remain unset.
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
-    c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Velocity Mod');c.enc(3,10)
-    capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns;c.tap(1,8);c.elapse(8.5);capture.extend(c.snapshot())
+    ui=c.ui
+    c.configure();ui.set_range(1,64);ui.pattern_editor()
+    for step in (2,3,4):ui.tap_step(step)
+    ui.channel_editor();ui.turn(1,-4)
+    ui.turn(2,1);ui.set_value(51) # Unset -1 -> velocity50.
+    ui.turn(2,1);ui.set_value(89);length_mask_display(c,'128')
+    ui.turn(2,4);ui.set_value(7) # Only mask4 is populated: octave from X; others remain unset.
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
+    ui.assign_trig_parameter('Chord Note Arpeggio');ui.set_value(8)
+    ui.turn(2,1);ui.assign_trig_parameter('Chord Pattern');ui.set_value(shape)
+    ui.turn(2,1);ui.assign_trig_parameter('Mute Chord Root');ui.set_value(1)
+    ui.turn(2,1);ui.assign_trig_parameter('Chord Velocity Mod');ui.set_value(10)
+    capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns;ui.play();c.elapse(8.5);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     expected=[(0,72,50),(540,72,100),(1080,72,127)]
@@ -2497,25 +2477,26 @@ def arp_rest_live_scale(c,fully_masked=False):
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     assert c.clock_mode=='controlled-experimental','Absolute live-edit schedule requires controlled time until D20 mapping is admitted'
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4)
-    if fully_masked:c.enc(3,61) # Explicit C4 mask, then use full scale processing.
-    c.enc(2,1);c.enc(3,51);c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
-    c.enc(2,1);c.enc(3,2);c.enc(2,2);c.enc(3,4)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    ui=c.ui
+    c.configure();ui.set_range(1,64);ui.pattern_editor()
+    for step in (2,3,4):ui.tap_step(step)
+    ui.channel_editor();ui.turn(1,-4)
+    if fully_masked:ui.set_value(61) # Explicit C4 mask, then use full scale processing.
+    ui.turn(2,1);ui.set_value(51);ui.turn(2,1);ui.set_value(89);length_mask_display(c,'128')
+    ui.turn(2,1);ui.set_value(2);ui.turn(2,2);ui.set_value(4)  # unset chord masks start from X
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
     values=[('Chord Note Arpeggio',8),('Chord Spread',5),('Chord Accel Mod',1),('Chord Velocity Mod',10),('Mute Chord Root',1)]
     if fully_masked:values.append(('Quantise Note Mask',2))
     for index,(label,value) in enumerate(values):
-        if index:c.enc(2,1)
-        assign_trig_parameter(c,label);c.enc(3,value)
+        if index:ui.turn(2,1)
+        ui.assign_trig_parameter(label);ui.set_value(value)
     capture=MidiWindow(c.snapshot()['midi_count']);origin=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     c.elapse(2);capture.extend(c.snapshot())
-    c.tap(4,8);c.enc(2,-1);c.enc(3,2);c.key(3) # Applied scale C-major -> D-major during a rest.
+    ui.scale_editor();ui.turn(2,-1);ui.set_value(2);ui.press_key(3) # Applied scale C-major -> D-major during a rest.
     assert (c.logical_ns-origin)/1e9<4.5,'Scale edit missed its declared rest window'
     c.elapse(14-(c.logical_ns-origin)/1e9);capture.extend(c.snapshot());lower=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     upper=c.logical_ns;c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     expected=[(162,64,60),(648,69,80),(1782,66,110)]
     rows=assert_schedule(capture.events,expected,[108]*3,field='logical_ns',origin=origin,stop_bounds=(lower,upper),tolerance=2e-9)
@@ -2526,25 +2507,22 @@ def arp_empty_muted_replacement(c):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8);c.tap(4,4);c.tap(3,8)
-    c.enc(1,-4);c.enc(2,2);c.enc(3,22);length_mask_display(c,'3')
-    c.enc(2,1);c.enc(3,1);c.enc(3,-1) # Global chord1 Off from X; other masks unset.
-    for x in (1,3):
-        c.action(type='grid',x=x,y=4,state=1)
-        try:c.enc(3,2) # Third only for the first and replacement trigger.
-        finally:c.action(type='grid',x=x,y=4,state=0)
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,18) # Two-step notes/onsets.
-    c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
-    for x in (1,3):
-        c.action(type='grid',x=x,y=4,state=1)
-        try:c.enc(3,-1)
-        finally:c.action(type='grid',x=x,y=4,state=0)
+    ui=c.ui
+    c.configure();ui.set_range(1,64);ui.pattern_editor();ui.tap_step(4);ui.channel_editor()
+    ui.turn(1,-4);ui.turn(2,2);ui.set_value(22);length_mask_display(c,'3')
+    ui.turn(2,1);ui.set_value(1);ui.set_value(-1) # Global chord1 Off from X; other masks unset.
+    for step in (1,3):
+        with ui.hold_step(step):ui.set_value(2) # Third only for the first and replacement trigger.
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
+    ui.assign_trig_parameter('Chord Note Arpeggio');ui.set_value(18) # Two-step notes/onsets.
+    ui.turn(2,1);ui.assign_trig_parameter('Mute Chord Root');ui.set_value(1)
+    for step in (1,3):
+        with ui.hold_step(step):ui.set_value(-1)
     capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     c.elapse(6.75);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     upper=c.logical_ns if controlled else time.monotonic_ns();c.elapse(2);capture.extend(c.snapshot())
     c.wait(lambda state:not state['midi_capture']['outstanding'])
     # Empty-muted trigger at216 cancels the old onset due432, preserving
@@ -2567,6 +2545,7 @@ def navigation_matrix(c):
            'trig':[2,2,5,2], 'note':[2,2,10,2],
            'velocity':[2,2,15,2], 'song':[2,2,2,15]}
     melody=[(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))]
+    ui=c.ui
     c.configure();current='channel';edges=[];presses=0
     def choose(target):
         nonlocal current, presses
@@ -2575,8 +2554,9 @@ def navigation_matrix(c):
             button=5
         else:
             count=1;button={'channel':3,'scale':4,'song':6}[target]
+        control={3:'channel_editor',4:'scale_editor',5:'pattern_editor',6:'song_editor'}[button]
         for _ in range(count):
-            c.tap(button,8);presses+=1
+            ui.tap_control(control);presses+=1
             if button==5:
                 current=pattern_pages[(pattern_pages.index(current)+1)%3] if current in pattern_pages else 'trig'
             else:current={3:'channel',4:'scale',6:'song'}[button]
@@ -2595,25 +2575,28 @@ def navigation_matrix(c):
 
 
 def panic_hold(c, button, source, repeats=1):
+    ui=c.ui
     menus={'channel':[15,2,2,2], 'scale':[2,15,2,2],
            'trig':[2,2,5,2], 'note':[2,2,10,2],
            'velocity':[2,2,15,2], 'song':[2,2,2,15]}
     selected={'channel':3,'scale':4,'trig':5,'note':5,'velocity':5,'song':6}[source]
-    c.tap(3,8)
+    ui.channel_editor()
     if source in ('trig','note','velocity'):
-        for _ in range(('trig','note','velocity').index(source)+1):c.tap(5,8)
-    elif source!='channel':c.tap(selected,8)
+        for _ in range(('trig','note','velocity').index(source)+1):ui.pattern_editor()
+    elif source!='channel':ui.tap_control(('channel_editor','scale_editor','pattern_editor','song_editor')[selected-3])
     menu=menus[source];c.led_values([(x,8) for x in (3,4,5,6)],menu)
     expected=[[128+channel,note,0] for note in range(128) for channel in range(16)] if button!=selected else []
     for repeat in range(repeats):
         after=c.snapshot()['midi_count'];start=len(c.observations)
-        logical_start=c.logical_ns;press_ack=c.action(type='grid',x=button,y=8,state=1)
+        logical_start=c.logical_ns
+        control=('channel_editor','scale_editor','pattern_editor','song_editor')[button-3]
+        press_ack=ui.control_edge(control,True)
         c.elapse(.9);c.snapshot()
         # Live snapshots drive observation only; full exported MIDI is the oracle.
         for _ in range(10):
             c.elapse(.1);c.snapshot()
             if len(c.observations)>start+2:del c.observations[start+1:-1]
-        c.action(type='grid',x=button,y=8,state=0);c.elapse(.06);cursor=c.snapshot()['midi_count']
+        ui.control_edge(control,False);c.elapse(.06);cursor=c.snapshot()['midi_count']
         c.led_values([(x,8) for x in (3,4,5,6)],menu)
         if not hasattr(c,'panic_windows'):c.panic_windows=[]
         c.panic_windows.append(dict(type='panic',after=after,cursor=cursor,source=source,
@@ -2664,21 +2647,22 @@ def finish_panic_trace(c, summary=None):
 
 def panic_live_note_stop(c):
     import json
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(6,8);c.tap(1,8);c.elapse(.2)
+    ui=c.ui
+    c.configure();ui.pattern_editor()
+    for step in range(1,5):ui.tap_step(step)
+    ui.song_editor();ui.play();c.elapse(.2)
     before=c.snapshot()['midi_count']
-    c.action(type='grid',x=5,y=8,state=1)
+    ui.control_edge('pattern_editor',True)
     released=False;played=False
     try:
         c.wait(lambda s:any(e['index']>before and e['port']==1 and e['bytes']==[143,24,0] for e in s['midi']),timeout=2)
-        c.action(type='grid',x=5,y=8,state=0);released=True
+        ui.control_edge('pattern_editor',False);released=True
         c.action(type='midi',port=1,bytes=[144,24,100]);played=True
         c.wait(lambda s:any(e['index']>before and e['port']==3 and e['bytes']==[143,127,0] for e in s['midi']),timeout=2)
         c.elapse(.05);stop_before=c.snapshot()['midi_count']
-        c.tap(1,8);c.elapse(.1);stop_after=c.snapshot()['midi_count']
+        ui.stop();c.elapse(.1);stop_after=c.snapshot()['midi_count']
     finally:
-        if not released:c.action(type='grid',x=5,y=8,state=0)
+        if not released:ui.control_edge('pattern_editor',False)
         if played:c.action(type='midi',port=1,bytes=[128,24,0]);c.elapse(.1)
     c.finish()
     try:
@@ -2712,14 +2696,17 @@ def panic_overlapping_holds(c, repeats):
     import json
     from panic_repeat_trace import verify_restarted_sweeps
     from panic_trace import verify_panic_trace
-    c.configure();c.tap(6,8)
+    ui=c.ui
+    c.configure();ui.song_editor()
     before=c.snapshot()['midi_count'];held=[]
     try:
         for button in (3,4,5)[:repeats]:
-            c.action(type='grid',x=button,y=8,state=1);held.append(button);c.elapse(.12)
+            control=('channel_editor','scale_editor','pattern_editor')[button-3]
+            ui.control_edge(control,True);held.append(button);c.elapse(.12)
         c.elapse(1.9)
     finally:
-        for button in held:c.action(type='grid',x=button,y=8,state=0)
+        for button in held:
+            ui.control_edge(('channel_editor','scale_editor','pattern_editor')[button-3],False)
     c.elapse(.1);after=c.snapshot()['midi_count']
     c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
     melody_before=c.snapshot()['midi_count']
@@ -2747,25 +2734,26 @@ def panic_pending_chord(c, arp, shape):
     from automation.input_origin import verified_input_origin
     from automation.scheduling_metrics import scheduling_metrics
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,1);c.enc(3,51)
-    c.enc(2,1);c.enc(3,26);length_mask_display(c,'4')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Velocity Mod');c.enc(3,10)
-    c.tap(6,8);logical_start=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);start_ack=c.action(type='grid',x=1,y=8,state=0)
+    ui=c.ui
+    c.configure();ui.hold_control_tap('cell','cell',(1,4),(16,7));ui.pattern_editor()
+    for step in (2,3,4):ui.tap_step(step)
+    ui.channel_editor();ui.turn(1,-4);ui.turn(2,1);ui.set_value(51)
+    ui.turn(2,1);ui.set_value(26);length_mask_display(c,'4')
+    for turns in (2,4,5,7):ui.turn(2,1);ui.set_value(turns)  # unset chord masks start from X
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');ui.set_value(8)
+    ui.turn(2,1);assign_trig_parameter(c,'Chord Pattern');ui.set_value(shape)
+    ui.turn(2,1);assign_trig_parameter(c,'Chord Velocity Mod');ui.set_value(10)
+    ui.song_editor();logical_start=c.logical_ns
+    ui.control_edge('play_stop',True);start_ack=ui.control_edge('play_stop',False)
     c.elapse(.1);panic_before=c.snapshot()['midi_count']
-    c.action(type='grid',x=5,y=8,state=1)
+    ui.control_edge('pattern_editor',True)
     try:c.elapse(1.9)
-    finally:c.action(type='grid',x=5,y=8,state=0)
+    finally:ui.control_edge('pattern_editor',False)
     c.elapse(.06);panic_after=c.snapshot()['midi_count']
     c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
     c.elapse(1.19);logical_stop=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);stop_ack=c.action(type='grid',x=1,y=8,state=0)
+    ui.control_edge('play_stop',True);stop_ack=ui.control_edge('play_stop',False)
     c.elapse(1);c.snapshot();c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
@@ -3514,9 +3502,9 @@ CASES={
  'M-SPREAD-003':dict(run=lambda c:spread_acceleration_contract(c,False,-3),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -3: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-002':dict(run=lambda c:spread_acceleration_contract(c,False,-4),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -4: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-001':dict(run=lambda c:spread_acceleration_contract(c,False,-5),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -5: independent new-contract gap table, nonpositive termination and Stop accounting'),
- 'M-PARAM-003':dict(run=lambda c:parameter_division_bounds(c,'Chord Spread'),requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
- 'M-PARAM-002':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Arpeggio'),requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
- 'M-PARAM-001':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Strum'),requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-003':dict(run=lambda c:parameter_division_bounds(c,'chord_spread'),requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-002':dict(run=lambda c:parameter_division_bounds(c,'chord_note_arpeggio'),requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-001':dict(run=lambda c:parameter_division_bounds(c,'chord_note_strum'),requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-ARP-005':dict(controlled_only='Exact one-pulse arp boundary fixture requires controlled time; real-time family acceptance uses separate scheduling metrics',run=lambda c:arp_basic_timing(c,fast=True),requirements=['CHORD-ARP','CH-TEMPO'],description='Controlled one-pulse1/24 arp: exact note releases through every parent-cycle boundary and Stop, using native UI/MIDI'),
  'M-ARP-004':dict(run=lambda c:arp_basic_timing(c,reset=True),requirements=['CHORD-ARP','OPT-REPEAT-RESET','CH-TEMPO'],description='Repeat resets replace a long arp while an identical-pitch tail is sounding; old gates must not cut replacement voices'),
  'M-ARP-002':dict(run=lambda c:arp_basic_timing(c,replacement=True),requirements=['CHORD-ARP','PARAM-SLOTS','CH-TEMPO'],description='Replacing two-step arpeggios each step must not let old termination release the new generation'),
