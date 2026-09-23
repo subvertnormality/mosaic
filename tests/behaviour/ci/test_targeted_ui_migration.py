@@ -1,6 +1,7 @@
 """Harness characterisation outside README: partial targeted CI gate contracts."""
 
 import ast
+import copy
 import importlib.util
 import json
 import os
@@ -15,6 +16,141 @@ SCRIPT = Path(__file__).with_name("targeted-ui-migration.py")
 spec = importlib.util.spec_from_file_location("targeted_ui_migration", SCRIPT)
 targeted = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(targeted)
+from cases import deterministic_case_results, reexpress_case_results
+
+
+def recording_results(monotonic_base):
+    return [
+        {"kind": "boundary-active-step-midi-witness", "events": [
+            {"recorded_step": 1,
+             "preview": {"index": 10, "port": 1, "bytes": [144, 72, 90],
+                         "logical_ns": 1_400_000_000,
+                         "monotonic_ns": monotonic_base},
+             "active_step_onset": {"index": 9, "port": 2,
+                                    "bytes": [145, 60, 127],
+                                    "logical_ns": 1_400_000_000,
+                                    "monotonic_ns": monotonic_base - 1},
+             "next_step_onset": {"index": 11, "port": 2,
+                                 "bytes": [145, 62, 117],
+                                 "logical_ns": 1_400_000_001,
+                                 "monotonic_ns": monotonic_base + 1},
+             "gap_to_next_ns": 1}],
+         "other_stable_value": "preserve"},
+        {"kind": "grid", "cells": [[1, 4], [16, 7]],
+         "expected": [0, 15], "actual": [0, 15]},
+    ]
+
+
+def panic_results(identity):
+    def origin(which, start, applied):
+        sequence = 985 if which == "start" else 996
+        return {"action_id": which + identity, "native_sequence": sequence,
+                "origin_ns": start, "applied_ns": applied,
+                "input_to_applied_ns": applied - start,
+                "boundary": "backend-input-submission"}
+    return [{"kind": "panic-pending-chord", "arp": True, "shape": 2,
+             "sweep_events": 6144, "onsets": 5, "releases": 5,
+             "metrics": None, "start_origin": origin("start", 10_000, 12_000),
+             "stop_origin": origin("stop", 20_000, 31_000), "passed": True}]
+
+
+class CaseResultReexpressionTests(unittest.TestCase):
+    @staticmethod
+    def acceptance(case, rows):
+        return deterministic_case_results(case, rows)
+
+    def test_recording_host_clocks_move_to_diagnostics_only(self):
+        for case in ("M-REC-004", "M-REC-032", "M-REC-033"):
+            with self.subTest(case=case):
+                before, after = recording_results(50_000), recording_results(80_000)
+                before_copy, after_copy = copy.deepcopy(before), copy.deepcopy(after)
+                stable_before, diagnostic_before = self.acceptance(case, before)
+                stable_after, diagnostic_after = self.acceptance(case, after)
+                self.assertEqual(stable_before, stable_after)
+                self.assertEqual(before, before_copy)
+                self.assertEqual(after, after_copy)
+                self.assertEqual(diagnostic_before[0]["raw_events"], before[0]["events"])
+                self.assertEqual(diagnostic_after[0]["raw_events"], after[0]["events"])
+                self.assertNotEqual(
+                    diagnostic_before[0]["raw_events"][0]["preview"]["monotonic_ns"],
+                    diagnostic_after[0]["raw_events"][0]["preview"]["monotonic_ns"])
+
+    def test_recording_musical_fields_deadline_and_coordinates_remain_acceptance(self):
+        mutations = (
+            lambda rows: rows[0]["events"][0]["active_step_onset"]["bytes"].__setitem__(2, 126),
+            lambda rows: rows[0]["events"][0]["active_step_onset"].__setitem__("logical_ns", 1_399_999_999),
+            lambda rows: rows[0]["events"][0].__setitem__("gap_to_next_ns", 2),
+            lambda rows: rows[0]["events"][0].__setitem__("recorded_step", 2),
+            lambda rows: rows[1]["cells"][1].__setitem__(0, 13),
+        )
+        for mutate in mutations:
+            with self.subTest(mutate=mutate):
+                before, after = recording_results(50_000), recording_results(80_000)
+                mutate(after)
+                self.assertNotEqual(self.acceptance("M-REC-032", before)[0],
+                                    self.acceptance("M-REC-032", after)[0])
+
+    def test_panic_action_clocks_move_to_diagnostics_and_stable_origin_is_verified(self):
+        for case in ("M-PANIC-007", "M-PANIC-008", "M-PANIC-009", "M-PANIC-010"):
+            with self.subTest(case=case):
+                before, after = panic_results("before"), panic_results("after")
+                stable_before, diagnostic_before = self.acceptance(case, before)
+                stable_after, diagnostic_after = self.acceptance(case, after)
+                self.assertEqual(stable_before, stable_after)
+                self.assertEqual(stable_before[0]["start_origin"],
+                                 {"verified": True, "native_sequence": 985,
+                                  "boundary": "backend-input-submission"})
+                self.assertEqual(diagnostic_before[0]["start_origin"],
+                                 before[0]["start_origin"])
+                self.assertEqual(diagnostic_after[0]["stop_origin"],
+                                 after[0]["stop_origin"])
+                self.assertNotEqual(diagnostic_before[0]["start_origin"]["action_id"],
+                                    diagnostic_after[0]["start_origin"]["action_id"])
+
+    def test_panic_musical_counts_shape_mode_metrics_and_stable_boundary_still_fail(self):
+        mutations = (
+            lambda row: row.__setitem__("onsets", 4),
+            lambda row: row.__setitem__("releases", 4),
+            lambda row: row.__setitem__("sweep_events", 6143),
+            lambda row: row.__setitem__("arp", False),
+            lambda row: row.__setitem__("shape", 1),
+            lambda row: row.__setitem__("metrics", {"within_event_profile": False}),
+            lambda row: row["start_origin"].__setitem__("boundary", "other-boundary"),
+            lambda row: row["start_origin"].__setitem__("native_sequence", 984),
+        )
+        for mutate in mutations:
+            with self.subTest(mutate=mutate):
+                before, after = panic_results("same"), panic_results("same")
+                mutate(after[0])
+                self.assertNotEqual(self.acceptance("M-PANIC-009", before)[0],
+                                    self.acceptance("M-PANIC-009", after)[0])
+
+    def test_real_time_and_unlisted_cases_are_verbatim(self):
+        rows = recording_results(50_000)
+        for case in ("M-REC-001", "M-REC-004"):
+            with self.subTest(case=case):
+                stable, diagnostic = deterministic_case_results(case, rows, lane="real-time")
+                self.assertEqual(stable, rows)
+                self.assertEqual(diagnostic, [])
+        stable, diagnostic = deterministic_case_results("M-PANIC-006", rows)
+        self.assertEqual(stable, rows)
+        self.assertEqual(diagnostic, [])
+
+    def test_diagnostics_attach_to_final_observation_without_replacing_state(self):
+        class Context:
+            pass
+        with tempfile.TemporaryDirectory() as temporary:
+            context = Context()
+            context.clock_mode = "controlled-experimental"
+            context.results = recording_results(50_000)
+            context.observations = [{"state": {"diagnostics": {"beats": 4}}}]
+            context.out = Path(temporary)
+            reexpress_case_results(context, "M-REC-004")
+            persisted = json.loads((context.out / "observations.json").read_text())
+            self.assertEqual(persisted[-1]["state"]["diagnostics"]["beats"], 4)
+            raw = persisted[-1]["case_result_diagnostics"][0]["raw_events"]
+            self.assertEqual(raw, recording_results(50_000)[0]["events"])
+            self.assertNotIn("monotonic_ns", context.results[0]["events"][0]["preview"])
 
 
 class TargetedMigrationTests(unittest.TestCase):

@@ -2072,7 +2072,55 @@ def reverse_live_clock_handoff(c):
 
 
 
-def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False):
+def deterministic_case_results(case,results,lane='controlled-experimental'):
+    """Keep volatile host telemetry in observations, not controlled result rows."""
+    import copy
+    if lane!='controlled-experimental' or case not in {'M-REC-004','M-REC-032','M-REC-033','M-PANIC-007','M-PANIC-008','M-PANIC-009','M-PANIC-010'}:
+        return results,[]
+    stable=copy.deepcopy(results)
+    recording=case.startswith('M-REC-')
+    result_kind='boundary-active-step-midi-witness' if recording else 'panic-pending-chord'
+    matches=[entry for entry in stable if isinstance(entry,dict) and entry.get('kind')==result_kind]
+    assert len(matches)==1,('%s requires exactly one %s result'%(case,result_kind),len(matches))
+    entry=matches[0]
+    if recording:
+        events=entry.get('events')
+        assert isinstance(events,list) and events,('%s %s result has no events'%(case,result_kind))
+        for index,event in enumerate(events):
+            assert isinstance(event,dict),('%s event %d is malformed'%(case,index))
+            for field in ('preview','active_step_onset','next_step_onset'):
+                midi=event.get(field)
+                assert isinstance(midi,dict) and type(midi.get('monotonic_ns')) is int,('%s event %d %s lacks host monotonic timestamp'%(case,index,field))
+        diagnostic={'case_id':case,'result_kind':result_kind,'raw_events':copy.deepcopy(events)}
+        for event in entry['events']:
+            for field in ('preview','active_step_onset','next_step_onset'):
+                del event[field]['monotonic_ns']
+    else:
+        origins={}
+        for field in ('start_origin','stop_origin'):
+            origin=entry.get(field)
+            assert isinstance(origin,dict),('%s %s is missing'%(case,field))
+            expected={'action_id':str,'origin_ns':int,'applied_ns':int,'input_to_applied_ns':int,'native_sequence':int,'boundary':str}
+            for key,value_type in expected.items():
+                assert type(origin.get(key)) is value_type,('%s %s.%s is missing or malformed'%(case,field,key))
+            origins[field]=copy.deepcopy(origin)
+            entry[field]={'verified':True,'native_sequence':origin['native_sequence'],'boundary':origin['boundary']}
+        diagnostic={'case_id':case,'result_kind':result_kind,'start_origin':origins['start_origin'],'stop_origin':origins['stop_origin']}
+    return stable,[diagnostic]
+
+
+def reexpress_case_results(context,case):
+    """Install stable controlled acceptance and preserve its exact raw telemetry."""
+    import json
+    stable,diagnostic=deterministic_case_results(case,context.results,lane=context.clock_mode)
+    if not diagnostic:return
+    assert context.observations and isinstance(context.observations[-1],dict),('Missing final observation for case diagnostics',case)
+    context.results=stable
+    context.observations[-1].setdefault('case_result_diagnostics',[]).extend(diagnostic)
+    (context.out/'observations.json').write_text(json.dumps(context.observations,indent=2)+'\n')
+
+
+def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False,case_id=None):
     import time
     ui=c.ui
     c.configure()
@@ -2182,6 +2230,8 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     tolerance=2e-9 if controlled else .01
     assert all(abs(gap-expected)<=tolerance for gap,expected in zip(gaps,expected_gaps)),dict(actual=gaps,expected=expected_gaps)
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=expected_gaps,actual_seconds=gaps))
+    if case_id is not None:
+        reexpress_case_results(c,case_id)
 
 def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1,disarm_while_held=False):
     ui=c.ui
@@ -2734,7 +2784,7 @@ def panic_overlapping_holds(c, repeats):
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
-def panic_pending_chord(c, arp, shape):
+def panic_pending_chord(c, arp, shape, case_id=None):
     import json
     from automation.input_origin import verified_input_origin
     from automation.scheduling_metrics import scheduling_metrics
@@ -2796,6 +2846,8 @@ def panic_pending_chord(c, arp, shape):
             metrics=scheduling_metrics(planned,onset_events)
             assert metrics['within_event_profile'],('Pending chord onset scheduling',metrics)
         c.results.append(dict(kind='panic-pending-chord',arp=arp,shape=shape,sweep_events=len(sweep),onsets=5,releases=len(rows),start_origin=start,stop_origin=stop,metrics=metrics,passed=True))
+        if case_id is not None:
+            reexpress_case_results(c,case_id)
     finally:
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
@@ -3181,10 +3233,10 @@ CASES={
  'M-PANIC-013':dict(run=lambda c:panic_hotplug(c,False,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
  'M-PANIC-014':dict(run=lambda c:panic_hotplug(c,False,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
 
- 'M-PANIC-007':dict(run=lambda c:panic_pending_chord(c,False,1),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
- 'M-PANIC-008':dict(run=lambda c:panic_pending_chord(c,False,2),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
- 'M-PANIC-009':dict(run=lambda c:panic_pending_chord(c,True,1),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
- 'M-PANIC-010':dict(run=lambda c:panic_pending_chord(c,True,2),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-007':dict(run=lambda c:panic_pending_chord(c,False,1,'M-PANIC-007'),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-008':dict(run=lambda c:panic_pending_chord(c,False,2,'M-PANIC-008'),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-009':dict(run=lambda c:panic_pending_chord(c,True,1,'M-PANIC-009'),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-010':dict(run=lambda c:panic_pending_chord(c,True,2,'M-PANIC-010'),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
  'M-PANIC-005':dict(run=lambda c:panic_overlapping_holds(c,2),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Two overlapping long holds restart all port sweeps mid-job, preserve page and melody'),
  'M-PANIC-006':dict(run=lambda c:panic_overlapping_holds(c,3),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Three overlapping long holds restart all port sweeps twice mid-job, preserve page and melody'),
  'M-PANIC-004':dict(run=panic_live_note_stop,requirements=['PANIC-GESTURE'],description='Keyboard note played behind an in-flight panic sweep remains owned by Stop; exact full MIDI trace'),
@@ -3625,8 +3677,8 @@ CASES={
  'M-PAT-005':dict(run=live_pattern_duration,requirements=['PAT-DURATION'],description='Shorten and extend during playback: pending release unchanged, following onsets use edited length, phrase timing preserved'),
  'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),
  'M-PAT-003':dict(run=pattern_duration_domain,requirements=['PAT-DURATION'],description='All64 authored duration endpoints through grid gestures, full length LEDs and independent MIDI durations with stop cleanup'),
- 'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),
- 'M-REC-033':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds after boundary: independent active-step MIDI witness, grid and replay'),
+ 'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True,case_id='M-REC-032'),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),
+ 'M-REC-033':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4),boundary_witness=True,case_id='M-REC-033'),requirements=['REC-LIVE-NOTES'],description='Two milliseconds after boundary: independent active-step MIDI witness, grid and replay'),
  'M-MIDI-005':dict(run=keyboard_pitch_range,requirements=['MIDI-RELEASE-001'],description='All128 MIDI pitches at minimum/maximum velocity with both release forms; exact preview and no outstanding notes'),
  'M-REC-030':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after root release while second voice remains held; preserve chord and first onset'),
  'M-REC-031':dict(run=lambda c:recorded_chord_release(c,(76,72,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after second voice release while root remains held; preserve all recorded voices'),
@@ -3668,7 +3720,7 @@ CASES={
  'M-REC-005':dict(run=recorded_note_channel_switch,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Switch selected channel while recording a held note; release route and recorded length remain on origin channel'),
  'M-REC-002':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms before step boundaries belong to preceding steps; recorded grid and replay'),
  'M-REC-003':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms after step boundaries belong to new steps; recorded grid and replay'),
- 'M-REC-004':dict(run=lambda c:live_record_placement(c,(1400000000,1700000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Equal-deadline pulse/note uses current active step; transport-anchored independent MIDI witness, grid and disarmed replay'),
+ 'M-REC-004':dict(run=lambda c:live_record_placement(c,(1400000000,1700000000),(1,3),boundary_witness=True,case_id='M-REC-004'),requirements=['REC-LIVE-NOTES'],description='Equal-deadline pulse/note uses current active step; transport-anchored independent MIDI witness, grid and disarmed replay'),
  'M-REC-001':dict(run=live_record_placement,requirements=['REC-LIVE-NOTES'],description='Queued keyboard notes land on independently planned steps under MIDI clock; exact recorded LEDs and disarmed replay MIDI'),
  'M-MEMORY-002':dict(run=memory_channel_isolation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Independent histories on two routed channels sharing a pattern; untouched channel navigation cannot alter either phrase'),
  'M-MEMORY-001':dict(run=memory_navigation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Held-step MIDI edits, visible memory counter, undo/redo bounds and history branching verified through exact musical output'),
