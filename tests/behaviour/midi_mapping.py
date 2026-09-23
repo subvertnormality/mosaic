@@ -6,10 +6,27 @@ menu is SETUP-MIDI-MAP-ENTRY and is not claimed here. Inputs are relative
 binary-offset CCs on the emulator MIDI input; outputs are note velocities.
 """
 import shutil
+import re
 from driver import Driver,REPO
 
 def pmap_line(param,cc,value=2):
     return '"%s":"{cc=%d, ch=1, dev=1, in_lo=1, in_hi=2, out_lo=-1, out_hi=1, accum=true, echo=false, value=%d}"\n'%(param,cc,value)
+
+def pmap_semantic_fields(line):
+    """Canonicalise every saved PMAP field while preserving changed values."""
+    match = re.fullmatch(r'"([A-Za-z_][A-Za-z_0-9]*)":"\{(.*)\}"', line)
+    if match is None:
+        raise ValueError('Invalid PMAP row: %r' % line)
+    fields = {}
+    for token in match.group(2).split(','):
+        key, separator, value = token.partition('=')
+        key, value = key.strip(), value.strip()
+        if separator != '=' or not re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*', key) or not value:
+            raise ValueError('Invalid PMAP field: %r' % token)
+        if key in fields:
+            raise ValueError('Duplicate PMAP field: %s' % key)
+        fields[key] = value
+    return dict(parameter=match.group(1), fields=['%s=%s' % item for item in sorted(fields.items())])
 
 def midi_mapping(c):
     c.configure();c.finish()
@@ -69,7 +86,7 @@ def midi_map_entry(c):
     pmap=(c.data_directory/'mosaic.pmap').read_text()
     line=[l for l in pmap.splitlines() if l.startswith('"sel_ch_vel"')]
     assert len(line)==1 and all(t in line[0] for t in ('cc=20','ch=1','dev=1','in_lo=1','in_hi=2','accum=true')),pmap
-    c.results.append(dict(kind='pmap-entry',line=line[0],passed=True))
+    c.results.append(dict(kind='pmap-entry',source='mosaic.pmap',entry=pmap_semantic_fields(line[0]),passed=True))
     def cc(value):c.action(type='midi',port=1,bytes=[176,20,value]);c.elapse(.2)
     # A fresh map starts below its input range; begin with a decrease (Off stays Off),
     # then five increases reach velocity mask 4 and one decrease gives 3.
