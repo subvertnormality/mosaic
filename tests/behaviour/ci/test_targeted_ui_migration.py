@@ -285,6 +285,40 @@ class TargetedMigrationTests(unittest.TestCase):
         script = script.split("\n          PY", 1)[0]
         ast.parse("\n".join(line[10:] for line in script.splitlines()))
 
+    def test_dispatch_repeat_selection_uses_exact_contract_owner(self):
+        workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
+        script = workflow.split("runuser -u mosaic-ci --preserve-environment -- python3 - <<'PY'\n", 1)[1]
+        script = "\n".join(line[10:] for line in script.split("\n          PY", 1)[0].splitlines())
+        body = ast.parse(script).body
+        start = next(index for index, node in enumerate(body)
+                     if isinstance(node, ast.Assign) and
+                     any(isinstance(target, ast.Name) and target.id == "selection"
+                         for target in node.targets))
+        selection_code = compile(ast.Module(body=body[start:start + 2], type_ignores=[]),
+                                 "repeat-selection", "exec")
+        shim = "tests/behaviour/master_clock.py"
+        contract = "tests/behaviour/contract/master_clock.py"
+        scenarios = ((set(), "tests/behaviour/cases.py"),
+                     ({shim}, shim),
+                     ({contract}, contract),
+                     ({shim, contract}, contract))
+        for owners, expected in scenarios:
+            with self.subTest(owners=owners):
+                namespace = {"cases": ["M-SYNC-009"], "source": ROOT, "Path": Path,
+                             "targeted": targeted}
+                with patch.object(targeted, "selected_case_modules", return_value=owners):
+                    exec(selection_code, namespace)
+                self.assertEqual(namespace["selection"], {expected: "M-SYNC-009"})
+        for owners in (({shim, "tests/behaviour/other.py"}),
+                       ({shim, "tests/behaviour/contract/unrelated.py"}),
+                       ({shim, contract, "tests/behaviour/other.py"})):
+            with self.subTest(rejected=owners):
+                namespace = {"cases": ["M-SYNC-009"], "source": ROOT, "Path": Path,
+                             "targeted": targeted}
+                with patch.object(targeted, "selected_case_modules", return_value=owners), \
+                        self.assertRaises(ValueError):
+                    exec(selection_code, namespace)
+
 
 if __name__ == "__main__":
     unittest.main()

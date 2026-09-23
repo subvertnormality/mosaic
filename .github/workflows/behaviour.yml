@@ -414,8 +414,19 @@ jobs:
           selection = {}
           for case in cases:
               owners = targeted.selected_case_modules(source, [case])
-              targeted.require(len(owners) <= 1, 'ambiguous owner for ' + case)
-              owner = next(iter(owners)) if owners else 'tests/behaviour/cases.py'
+              contracts = {path for path in owners
+                           if path.startswith('tests/behaviour/contract/')}
+              shims = owners - contracts
+              targeted.require(len(shims) <= 1 and len(contracts) <= 1
+                               and all(path.startswith('tests/behaviour/')
+                                       and path.endswith('.py') and path.count('/') == 2
+                                       for path in shims)
+                               and all(path.endswith('.py') and path.count('/') == 3
+                                       for path in contracts)
+                               and (not shims or not contracts or
+                                    Path(next(iter(shims))).name == Path(next(iter(contracts))).name),
+                               'ambiguous or unrelated owner for ' + case)
+              owner = next(iter(contracts or shims)) if owners else 'tests/behaviour/cases.py'
               selection.setdefault(owner, case)
           report = dict(schema_version=1, complete_regression_run=False,
                         after_sha=after_sha, selected_cases=cases,
