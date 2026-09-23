@@ -311,5 +311,103 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertGreaterEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
 
 
+class DurationMigrationTests(unittest.TestCase):
+    MIGRATIONS = {
+        "M-PAT-001": "four_notes",
+        "M-LEN-001": "next_trig_cutoff",
+        "M-LEN-002": "restore_length",
+        "M-LEN-003": "wrapped_length",
+        "M-MIDI-001": "wrapped_length",
+        "M-PAT-003": "pattern_duration_domain",
+        "M-LEN-004": "pattern_duration_domain",
+        "M-PAT-004": "pattern_duration_controls",
+        "M-PAT-005": "live_pattern_duration",
+    }
+
+    class InputRecorder:
+        def __init__(self):
+            self.events = []
+
+        def action(self, **event):
+            self.events.append(("input", event))
+
+        def elapse(self, seconds):
+            self.events.append(("elapse", seconds))
+
+        def tap(self, x, y):
+            self.action(type="grid", x=x, y=y, state=1)
+            self.action(type="grid", x=x, y=y, state=0)
+            self.elapse(.06)
+
+        def hold_tap(self, first, last):
+            self.action(type="grid", x=first[0], y=first[1], state=1)
+            self.tap(*last)
+            self.action(type="grid", x=first[0], y=first[1], state=0)
+
+    def test_duration_cases_have_no_reachable_raw_input(self):
+        from cases import CASES
+        from ui_layer_guard import callable_raw_dependencies
+
+        raw_input_kinds = {
+            "tap", "key", "enc", "hold_tap", "action:grid",
+            "action:key", "action:enc",
+        }
+        for case_id in self.MIGRATIONS:
+            with self.subTest(case_id=case_id):
+                self.assertEqual(
+                    [site for site in callable_raw_dependencies(
+                        CASES[case_id]["run"]
+                    ) if site[2] in raw_input_kinds], [], case_id
+                )
+
+    def test_duration_case_callables_remain_in_cases_module(self):
+        import ast
+
+        tree = ast.parse((BEHAVIOUR / "cases.py").read_text())
+        defined = {
+            node.name for node in tree.body
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        }
+        self.assertTrue(set(self.MIGRATIONS.values()) <= defined)
+
+    def test_semantic_duration_gestures_emit_the_legacy_input_recipe(self):
+        from ui import Ui
+
+        legacy = self.InputRecorder()
+        legacy.tap(5, 8)
+        legacy.tap(5, 8)
+        legacy.tap(4, 3)
+        legacy.hold_tap((1, 4), (8, 4))
+        legacy.tap(15, 7)
+        legacy.hold_tap((15, 7), (2, 4))
+        legacy.action(type="grid", x=1, y=4, state=1)
+        legacy.elapse(1.1)
+        legacy.action(type="grid", x=1, y=4, state=0)
+        legacy.elapse(.06)
+
+        semantic = self.InputRecorder()
+        ui = Ui(semantic)
+        ui.pattern_editor()
+        ui.pattern_editor()
+        ui.tap_pattern_note_position((4, 3))
+        ui.set_range(1, 8)
+        ui.tap_step(63)
+        ui.set_range(63, 2)
+        with ui.hold_control("step", 1):
+            semantic.elapse(1.1)
+        semantic.elapse(.06)
+
+        self.assertEqual(semantic.events, legacy.events)
+
+    def test_pattern_note_position_map_rejects_menu_and_out_of_grid_cells(self):
+        from ui_map import control_cell
+
+        self.assertEqual(control_cell("pattern_note_position", (15, 3)), (15, 3))
+        for position in ((0, 3), (4, 8), (1.5, 2)):
+            with self.subTest(position=position):
+                with self.assertRaises(ValueError):
+                    control_cell("pattern_note_position", position)
+
+
 if __name__ == "__main__":
     unittest.main()
