@@ -1769,8 +1769,8 @@ def autosave_restart(c):
     try:
         # Read the restored pattern through the visible grid and complete MIDI
         # phrases. Do not re-create notes or inspect the serialized model.
-        loaded.ui.channel_editor();loaded.ui.pattern_editor()
-        loaded.ui.expect_leds({('step',x):'selected' for x in range(1,5)})
+        loaded.tap(3,8);loaded.tap(5,8)
+        loaded.led_values([(x,4) for x in range(1,5)],[15,15,15,15])
         loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
     finally:loaded.finish()
 
