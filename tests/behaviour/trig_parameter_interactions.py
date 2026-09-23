@@ -202,7 +202,7 @@ def seeded_probability(c,probability=50,opportunities=64):
     expected=[(1,[144,(60,62,64,65)[i%4],(127,117,107,97)[i%4]]) for i in accepted]
     c.results.append(dict(kind='independent-probability-oracle',seed=42,probability=probability,draws=draws,accepted_zero_based_steps=accepted,expected=expected,source='Separate lua5.3 native math.random; no startup draws expected from non-yielding Mosaic init. Never fit a draw offset to MIDI.'))
 
-    c.configure()
+    c.ui.configure()
     # A second channel carries the same authored four-step phrase at100%.
     # Its raw MIDI output independently exposes every opportunity, including
     # the first accepted note's position and the complete rejected tail.

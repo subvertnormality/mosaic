@@ -607,6 +607,48 @@ class UiInputTests(unittest.TestCase):
         ])
         self.assertEqual(len(case.results), 14)
 
+    def test_seeded_probability_uses_semantic_setup_with_same_event_trace(self):
+        from types import ModuleType, SimpleNamespace
+        from trig_parameter_interactions import seeded_probability
+
+        class StopAfterSetup(Exception):
+            pass
+
+        driver, ui = self.ui()
+        ui.expect_header = lambda page, **params: driver.calls.append(("header", page, params))
+        selected = []
+
+        def stop_on_channel(channel):
+            selected.append(channel)
+            raise StopAfterSetup()
+
+        ui.select_channel = stop_on_channel
+        case = SimpleNamespace(
+            ui=ui,
+            results=[],
+            configure=lambda: self.fail("case-level raw setup must not be used"),
+        )
+        cases = ModuleType("cases")
+        cases.assert_durations = lambda *args, **kwargs: None
+        draws = [98, 99] + [0] * 63
+        stdout = "".join(str(value) + "\n" for value in draws)
+
+        with patch.dict(sys.modules, {"cases": cases}), patch(
+            "subprocess.run", return_value=SimpleNamespace(stdout=stdout)
+        ), self.assertRaises(StopAfterSetup):
+            seeded_probability(case, probability=99, opportunities=64)
+
+        self.assertEqual(driver.calls[:4], [
+            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+        ])
+        self.assertEqual(driver.calls[19:24], [
+            ("tap", 3, 8), ("tap", 1, 2),
+            ("hold_tap", (1, 4), (4, 4)),
+            ("led_values", [(1, 2)], [15]),
+            ("header", "midi_config", {"channel": 1}),
+        ])
+        self.assertEqual(selected, [2])
+
     def test_set_mosaic_options_preserves_observed_seek_recipe_and_results(self):
         from ui import Ui
 
