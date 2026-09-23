@@ -221,6 +221,9 @@ class Ui:
     def tap_step(self, step):
         self.tap_control("step", step)
 
+    def tap_pattern_note_position(self, position):
+        self.tap_control("pattern_note_position", position)
+
     def set_channel_octave(self, octave):
         self.tap_control("channel_octave", octave)
 

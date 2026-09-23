@@ -336,6 +336,12 @@ def control_cell(control, index=None):
                 and 1 <= index[0] <= CHANNEL_COUNT and 0 <= index[1] <= 6):
             raise ValueError("pattern note degree needs (step 1..16, degree 0..6)")
         return index[0], 7 - index[1]
+    if control == "pattern_note_position":
+        if not (isinstance(index, tuple) and len(index) == 2
+                and all(type(value) is int for value in index)
+                and 1 <= index[0] <= CHANNEL_COUNT and 1 <= index[1] <= 7):
+            raise ValueError("pattern note position needs an (x, y) cell in rows 1..7")
+        return index
     if control == "pattern_velocity_level":
         if not (isinstance(index, tuple) and len(index) == 2
                 and all(type(value) is int for value in index)

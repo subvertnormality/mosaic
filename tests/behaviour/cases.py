@@ -154,7 +154,7 @@ from driver import REPO,Driver,digest
 def four_notes(c):
     c.configure()
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
-    c.tap(5,8);c.tap(5,8);c.tap(4,3)
+    c.ui.pattern_editor();c.ui.pattern_editor();c.ui.tap_pattern_note_position((4,3))
     c.led_values([(4,3)],[12])
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(67,97)]])
     # Selected pattern's top LED deliberately alternates 3-1 / 3+1.
@@ -164,10 +164,10 @@ def four_notes(c):
     c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[4,2],passed=True))
 
 def next_trig_cutoff(c):
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(5,4);c.tap(5,8);c.tap(5,3);c.tap(3,8);c.tap(5,8)
-    c.hold_tap((1,4),(4,4));c.tap(3,4)
+    c.configure();c.ui.set_range(1,8);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_step(5);c.ui.pattern_editor();c.ui.tap_pattern_note_position((5,3));c.ui.channel_editor();c.ui.pattern_editor()
+    c.ui.set_range(1,4);c.ui.tap_step(3)
     c.led_values([(x,4) for x in range(1,6)],[15,5,15,2,15])
     notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
@@ -189,23 +189,23 @@ def assert_durations(c,notes,lengths,events=None):
 def restore_length(c):
     # The source length must survive temporary interruption by an inserted trig.
     next_trig_cutoff(c)
-    c.tap(3,4)
+    c.ui.tap_step(3)
     c.led_values([(x,4) for x in range(1,6)],[15,5,5,5,15])
     notes=c.playback([(1,[144,60,127]),(1,[144,67,100])],timeout=6)
     assert_durations(c,notes,[4,1]*2)
     # Reinsert the collision: the same authored length must shorten again.
-    c.tap(3,4)
+    c.ui.tap_step(3)
     c.led_values([(x,4) for x in range(1,6)],[15,5,15,2,15])
     notes=c.playback([(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100])],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
 
 def wrapped_length(c,same_pitch=False):
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(15,7);c.hold_tap((15,7),(2,4))
+    c.configure();c.ui.set_range(1,64);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_step(63);c.ui.set_range(63,2)
     c.led_values([(15,7),(16,7),(1,4),(2,4)],[15,5,15,2])
     if not same_pitch:
-        c.tap(5,8);c.tap(12,8);c.tap(15,3)
+        c.ui.pattern_editor();c.ui.tap_control("shift_right");c.ui.tap_pattern_note_position((15,3))
         c.led_values([(15,3)],[12])
     notes=c.playback([(1,[144,60,127]),(1,[144,60 if same_pitch else 67,100])],timeout=38)
     assert_durations(c,notes,[1,2]*2)
@@ -219,15 +219,15 @@ def wrapped_length(c,same_pitch=False):
 def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
     # The documented finite duration domain is1..64 sixteenth-note steps.
     # Author each duration using grid gestures; observe every cell and MIDI off.
-    c.configure();c.hold_tap((1,4),((channel_end-1)%16+1,(channel_end-1)//16+4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
+    c.configure();c.ui.set_range(1,channel_end);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
     cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     for length in lengths:
-        if length>1:c.hold_tap(cells[0],cells[length-1])
+        if length>1:c.ui.set_range(1,length)
         c.led_values(cells,[15 if step==1 else 5 if step<=length else 2 for step in range(1,65)])
-        marker=c.snapshot()['midi_count'];c.tap(1,8)
+        marker=c.snapshot()['midi_count'];c.ui.tap_control("play_stop")
         def recorded(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes'][0] in (128,144)]
         # Native capture retains all events; fewer snapshots cannot hide an
         # early release because the emission-time and order assertions follow.
@@ -243,53 +243,51 @@ def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
         # note before Stop arrives. Its ordering and cleanup are still required.
         assert [m['bytes'] for m in emitted[:2]]==[[144,60,127],[128,60,127]],emitted
         assert all(m['bytes'] in ([144,60,127],[128,60,127]) for m in emitted)
-        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+        c.ui.tap_control("play_stop");c.wait(lambda state:not state['midi_capture']['outstanding'])
         c.results.append(dict(kind='pattern-duration-domain',steps=length,expected_seconds=length/6,actual_seconds=elapsed,first_on=emitted[0],first_off=release))
 
 
 def pattern_duration_controls(c):
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(5,4);c.tap(5,8);c.tap(5,3);c.tap(3,8);c.tap(5,8)
+    c.configure();c.ui.set_range(1,8);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_step(5);c.ui.pattern_editor();c.ui.tap_pattern_note_position((5,3));c.ui.channel_editor();c.ui.pattern_editor()
     cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     def phrase(length):
         c.led_values(cells,[15 if step in (1,5) else 5 if 1<step<=length else 2 for step in range(1,65)])
         notes=c.playback([(1,[144,60,127]),(1,[144,67,100])],cycles=2)
         assert_durations(c,notes,[length,1]*2)
-    def long_hold(cell):
-        c.action(type='grid',x=cell[0],y=cell[1],state=1)
-        try:c.elapse(1.1)
-        finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+    def long_hold(step):
+        with c.ui.hold_control("step",step):c.elapse(1.1)
         c.elapse(.06)
-    phrase(1);c.hold_tap((1,4),(3,4));phrase(3)
-    long_hold((1,4));phrase(1)
+    phrase(1);c.ui.set_range(1,3);phrase(3)
+    long_hold(1);phrase(1)
     # Empty sources must neither create a trigger nor leave hidden length data
     # that changes the existing phrase. Test both the combo and lone hold.
-    c.hold_tap((2,4),(4,4));phrase(1)
-    long_hold((2,4));phrase(1)
-    c.hold_tap((1,4),(4,4));phrase(4)
+    c.ui.set_range(2,4);phrase(1)
+    long_hold(2);phrase(1)
+    c.ui.set_range(1,4);phrase(4)
 
 def live_pattern_duration(c):
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.hold_tap((1,4),(4,4))
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    c.configure();c.ui.set_range(1,8);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.set_range(1,4)
+    marker=c.snapshot()['midi_count'];c.ui.tap_control("play_stop")
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     def onsets(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes']==[144,60,127]]
     state=c.wait(lambda state:len(onsets(state))>=1)
     first=onsets(state)[0]
-    c.hold_tap((1,4),(2,4))
+    c.ui.set_range(1,2)
     now=c.logical_ns if c.clock_mode=='controlled-experimental' else c.snapshot()['diagnostics']['monotonic_ns']
     assert now<first[field]+round(2e9/6),'Shortening gesture missed the pending note window'
     state=c.wait(lambda state:len(onsets(state))>=2)
     second=onsets(state)[1]
-    c.hold_tap((1,4),(4,4))
+    c.ui.set_range(1,4)
     now=c.logical_ns if c.clock_mode=='controlled-experimental' else c.snapshot()['diagnostics']['monotonic_ns']
     assert now<second[field]+round(2e9/6),'Extension gesture missed the pending note window'
     state=c.wait(lambda state:len(onsets(state))>=3)
     third=onsets(state)[2]
     c.wait(lambda state:any(m['index']>third['index'] and m['bytes']==[128,60,127] for m in state['midi']))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    c.ui.tap_control("play_stop");c.wait(lambda state:not state['midi_capture']['outstanding'])
     state=c.snapshot()
     actual=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
     expected=[(1,[144,60,127]),(1,[128,60,127])]*3
