@@ -68,6 +68,20 @@ class Tests(unittest.TestCase):
             self.assertFalse(any('/code/' in name or '/data/' in name
                                  for name in actual))
 
+    def test_uploads_fractional_clock_input_evidence(self):
+        workflow = WORKFLOW.read_text()
+        base_uploads = [block for block in re.findall(
+            r'          path: \|\n((?:            .+\n)+)', workflow)
+            if '/tmp/mosaic-behaviour-base-' in block]
+        targeted_uploads = [block for block in re.findall(
+            r'          path: \|\n((?:            .+\n)+)', workflow)
+            if '/tmp/mosaic-ui-targeted/' in block]
+        sidecar = 'fractional-clock-input-evidence.json'
+        self.assertEqual(len(base_uploads), 1)
+        self.assertEqual(len(targeted_uploads), 1)
+        self.assertTrue(any(sidecar in line for line in base_uploads[0].splitlines()))
+        self.assertTrue(any(sidecar in line for line in targeted_uploads[0].splitlines()))
+
     def test_uploads_root_and_nested_evidence_without_code_or_data(self):
         patterns = upload_patterns()
         self.assertEqual(len(patterns), 3)
@@ -88,6 +102,10 @@ class Tests(unittest.TestCase):
                         path = session / name
                         path.write_text('[]')
                         expected.add(path.relative_to(root).as_posix())
+                    if session == run:
+                        sidecar = session / 'fractional-clock-input-evidence.json'
+                        sidecar.write_bytes(b'{"clock_mode":"real-time"}\n')
+                        expected.add(sidecar.relative_to(root).as_posix())
                     (session / 'code').mkdir()
                     (session / 'code/mosaic').symlink_to(source, target_is_directory=True)
                     (session / 'data').mkdir()

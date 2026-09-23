@@ -217,5 +217,72 @@ class TargetedEvidenceImportTests(unittest.TestCase):
             self.run_import()
 
 
+    def test_preserves_manifest_listed_fractional_clock_sidecar_verbatim(self):
+        sidecar_bytes = b'{"clock_mode":"controlled-experimental","verified_inputs":[]}\n'
+        for lane in ("real-time", "controlled-experimental"):
+            for side in ("before", "after"):
+                run = self.download / CASE / lane / side / "session-1"
+                path = run / "fractional-clock-input-evidence.json"
+                path.write_bytes(sidecar_bytes)
+                manifest_path = run / "manifest.json"
+                manifest = json.loads(manifest_path.read_text())
+                manifest["artifacts"].append(dict(
+                    path=path.name, size=len(sidecar_bytes),
+                    sha256=importer.digest(sidecar_bytes)))
+                write_json(manifest_path, manifest)
+                report_path = self.download / "targeted-ui-migration.json"
+                report = json.loads(report_path.read_text())
+                lane_row = next(row for row in report["cases"][0]["lanes"]
+                                if row["lane"] == lane)
+                lane_row["runs"][side]["manifest_sha256"] = importer.digest(
+                    manifest_path.read_bytes())
+                write_json(report_path, report)
+
+        self.run_import()
+        target = (self.output / CASE / "controlled" / "before" /
+                  "fractional-clock-input-evidence.json")
+        self.assertEqual(target.read_bytes(), sidecar_bytes)
+        provenance = json.loads((target.parent / "provenance.json").read_text())
+        self.assertEqual(provenance["evidence_sha256"][target.name],
+                         importer.digest(sidecar_bytes))
+
+    def test_refuses_manifest_listed_sidecar_when_upload_omits_it(self):
+        run = self.download / CASE / "real-time" / "before/session-1"
+        manifest_path = run / "manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        missing = b"{}"
+        manifest["artifacts"].append(dict(
+            path="fractional-clock-input-evidence.json", size=len(missing),
+            sha256=importer.digest(missing)))
+        write_json(manifest_path, manifest)
+        report_path = self.download / "targeted-ui-migration.json"
+        report = json.loads(report_path.read_text())
+        report["cases"][0]["lanes"][0]["runs"]["before"]["manifest_sha256"] = \
+            importer.digest(manifest_path.read_bytes())
+        write_json(report_path, report)
+        with self.assertRaisesRegex(ValueError, "sidecar set differs"):
+            self.run_import(dry_run=True)
+        self.assertFalse(self.output.exists())
+
+    def test_refuses_manifest_listed_sidecar_with_wrong_digest(self):
+        run = self.download / CASE / "real-time" / "before/session-1"
+        path = run / "fractional-clock-input-evidence.json"
+        sidecar_bytes = b'{"verified_inputs":[]}\n'
+        path.write_bytes(sidecar_bytes)
+        manifest_path = run / "manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        manifest["artifacts"].append(dict(
+            path=path.name, size=len(sidecar_bytes), sha256="0" * 64))
+        write_json(manifest_path, manifest)
+        report_path = self.download / "targeted-ui-migration.json"
+        report = json.loads(report_path.read_text())
+        report["cases"][0]["lanes"][0]["runs"]["before"]["manifest_sha256"] = \
+            importer.digest(manifest_path.read_bytes())
+        write_json(report_path, report)
+        with self.assertRaisesRegex(ValueError, "evidence size/digest differs"):
+            self.run_import(dry_run=True)
+        self.assertFalse(self.output.exists())
+
+
 if __name__ == "__main__":
     unittest.main()

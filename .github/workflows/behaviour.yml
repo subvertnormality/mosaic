@@ -141,6 +141,7 @@ jobs:
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/manifest.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/recipe.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/results.json
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/fractional-clock-input-evidence.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/serial-rerun/**/manifest.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/logs/**
             !/tmp/mosaic-behaviour-base-${{ matrix.shard }}/**/code/**
@@ -185,6 +186,7 @@ jobs:
             /tmp/mosaic-behaviour-modulation/runs/**/manifest.json
             /tmp/mosaic-behaviour-modulation/runs/**/recipe.json
             /tmp/mosaic-behaviour-modulation/runs/**/results.json
+            /tmp/mosaic-behaviour-modulation/runs/**/fractional-clock-input-evidence.json
             /tmp/mosaic-behaviour-modulation/logs/**
             !/tmp/mosaic-behaviour-modulation/**/code/**
             !/tmp/mosaic-behaviour-modulation/**/data/**
@@ -241,6 +243,7 @@ jobs:
             /tmp/mosaic-behaviour-output/runs/**/manifest.json
             /tmp/mosaic-behaviour-output/runs/**/recipe.json
             /tmp/mosaic-behaviour-output/runs/**/results.json
+            /tmp/mosaic-behaviour-output/runs/**/fractional-clock-input-evidence.json
             /tmp/mosaic-behaviour-output/logs/**
             !/tmp/mosaic-behaviour-output/**/code/**
             !/tmp/mosaic-behaviour-output/**/data/**
@@ -541,6 +544,7 @@ jobs:
             /tmp/mosaic-ui-targeted/**/manifest.json
             /tmp/mosaic-ui-targeted/**/recipe.json
             /tmp/mosaic-ui-targeted/**/results.json
+            /tmp/mosaic-ui-targeted/**/fractional-clock-input-evidence.json
             /tmp/mosaic-ui-targeted/**/native/*.log
             /tmp/mosaic-ui-targeted/**/native/cleanup.json
             /tmp/mosaic-ui-targeted/**/native/native-events.jsonl

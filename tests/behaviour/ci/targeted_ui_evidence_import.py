@@ -20,6 +20,7 @@ CASE = re.compile(r"M-[A-Z0-9][A-Z0-9.-]*\Z")
 LANES = {"real-time": "real-time", "controlled-experimental": "controlled"}
 SIDES = ("before", "after")
 NAMES = {"recipe.json", "results.json"}
+PRESERVED_SIDECARS = {"fractional-clock-input-evidence.json"}
 PROFILES = ("base-midi", "midi-modulation")
 
 
@@ -67,20 +68,25 @@ def pair_payload(manifest, session):
         require(key not in listed, "duplicate artifact entry: " + key)
         listed[key] = entry
     pairs = {key: value for key, value in listed.items()
-             if Path(key).name in NAMES}
+             if Path(key).name in NAMES | PRESERVED_SIDECARS}
     recipes = {str(Path(key).parent) for key in pairs if Path(key).name == "recipe.json"}
     results = {str(Path(key).parent) for key in pairs if Path(key).name == "results.json"}
     require(recipes == results and "." in recipes,
             "missing or unmatched root/nested recipe/results pairs")
     actual = {path.relative_to(session).as_posix() for path in files_under(session)
-              if path.name in NAMES}
-    require(actual == set(pairs), "downloaded recipe/results set differs from manifest")
+              if path.name in NAMES | PRESERVED_SIDECARS}
+    require(actual == set(pairs),
+            "downloaded recipe/results/sidecar set differs from manifest")
     payload = {}
     for key, entry in sorted(pairs.items()):
         raw = read_bytes(session / safe_relative(key))
         require(type(entry.get("size")) is int and len(raw) == entry["size"]
                 and digest(raw) == entry.get("sha256"),
                 "evidence size/digest differs: " + key)
+        if Path(key).name in PRESERVED_SIDECARS:
+            json_object(raw, key)
+            payload[key] = raw
+            continue
         try:
             values = json.loads(raw, object_pairs_hook=unique_object)
         except (UnicodeError, json.JSONDecodeError) as error:
