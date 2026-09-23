@@ -656,14 +656,16 @@ def inactive_note_priority(c,source_slot=1):
     c.ui.configure();c.ui.pattern_editor(view='trigger')
     for x in range(1,5):c.ui.tap_step(x)
     c.ui.tap_control('pattern_select',source_slot);c.ui.pattern_editor(view='note',from_view='trigger');c.ui.tap_control('pattern_note_degree',(1,4)) # G4 on an inactive step.
-    c.led_values([(1,3)],[12]);c.ui.tap_control('channel_editor')
+    c.ui.expect_leds({("pattern_note_degree",(1,4)):"active"});c.ui.tap_control('channel_editor')
     if source_slot!=1:c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',source_slot)
     silence('authored-inactive-pattern')
     c.ui.pattern_editor(view='trigger');c.ui.tap_control('pattern_select',2);c.ui.tap_step(1);c.ui.tap_control('channel_editor')
     c.ui.tap_control('pattern_slot',source_slot);c.ui.tap_control('pattern_slot',2)
     phrase(60,100,'rhythm-pattern-alone')
     c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,source_slot)
-    c.led_values([(source_slot,2),(2,2),(15,8)],[2,15,15])
+    c.ui.expect_leds({("pattern_slot",source_slot):"off",
+                      ("pattern_slot",2):"selected",
+                      ("note_merge_mode",None):"selected"})
     phrase(67,100,'unassigned-note-source')
     c.ui.tap_control('pattern_slot',source_slot);phrase(67,100,'assigned-inactive-note-source')
     c.ui.tap_control('pattern_slot',2);c.ui.pattern_editor(view='trigger');c.ui.tap_control('pattern_select',source_slot);c.ui.tap_step(1);c.ui.tap_control('channel_editor')
@@ -676,17 +678,17 @@ def priority_field_isolation(c,field,source_slot):
     c.ui.configure();c.ui.pattern_editor(view='trigger')
     for x in range(1,5):c.ui.tap_step(x)
     c.ui.tap_control('pattern_select',source_slot);c.ui.tap_step(1);c.ui.set_range(1,3)
-    c.led_values([(1,4),(2,4),(3,4)],[15,5,5])
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"in_range"})
     c.ui.pattern_editor(view='note',from_view='trigger');c.ui.tap_control('pattern_note_degree',(1,4)) # Inactive source will hold G4, velocity107, length3.
     c.ui.pattern_editor(view='velocity',from_view='note');c.ui.tap_control('pattern_velocity_level',(1,5));c.ui.tap_control('channel_editor');c.ui.pattern_editor(view='trigger');c.ui.tap_step(1)
-    c.led_values([(1,4),(2,4),(3,4)],[2,2,2])
+    c.ui.expect_steps({1:"off",2:"off",3:"off"})
     c.ui.tap_control('pattern_select',2);c.ui.tap_step(1);c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',2)
     base=c.playback([(1,[144,60,100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
     assert_durations(c,base,[1,1])
     if field=='length':
         with c.ui.hold_keys(1):
-            c.elapse(.3);c.ui.hold_control_tap('pattern_length_merge_mode','pattern_slot',None,source_slot);c.led_values([(16,8)],[15])
-    else:c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',None,source_slot);c.led_values([(16,8)],[15])
+            c.elapse(.3);c.ui.hold_control_tap('pattern_length_merge_mode','pattern_slot',None,source_slot);c.ui.expect_leds({("pattern_length_merge_mode",None):"selected"})
+    else:c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',None,source_slot);c.ui.expect_leds({("velocity_merge_mode",None):"selected"})
     velocity=107 if field=='velocity' else 100
     length=3 if field=='length' else 1
     notes=c.playback([(1,[144,60,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
@@ -695,8 +697,8 @@ def priority_field_isolation(c,field,source_slot):
     # Selecting one priority source must preserve the other merge mode.
     if field=='velocity':
         with c.ui.hold_keys(1):
-            c.elapse(.3);c.led_values([(16,8)],[2])
-    else:c.led_values([(16,8)],[2])
+            c.elapse(.3);c.ui.expect_leds({("pattern_length_merge_mode",None):"off"})
+    else:c.ui.expect_leds({("velocity_merge_mode",None):"off"})
     c.results.append(dict(kind='priority-field-isolation',field=field,source_slot=source_slot,pitch=60,velocity=velocity,length_steps=length,passed=True))
 
 
@@ -737,7 +739,7 @@ def inactive_note_positions(c):
     c.ui.pattern_editor(view='note');c.ui.tap_control('pattern_select',2)
     for x,y in cells:c.ui.tap_control('pattern_note_degree',(x,7-y))
     c.led_values(cells,[15]*64);c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_slot',3);c.ui.tap_control('pattern_slot',2)
-    c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,3);c.led_values([(3,2),(2,2),(15,8)],[2,15,15])
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,3);c.ui.expect_leds({("pattern_slot",3):"off",("pattern_slot",2):"selected",("note_merge_mode",None):"selected"})
     phrase('unassigned-priority-source-all64')
     c.ui.tap_control('pattern_slot',3);phrase('assigned-inactive-priority-source-all64')
     c.ui.tap_control('pattern_slot',2);c.ui.pattern_editor(view='note');c.ui.tap_control('pattern_select',3)
@@ -771,15 +773,15 @@ def all_note_priorities(c):
     for slot in range(1,17):
         wanted_rhythm=1 if slot==2 else 2
         if rhythm!=wanted_rhythm:
-            c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
+            c.ui.expect_leds({("pattern_slot",rhythm):"selected",("pattern_slot",wanted_rhythm):"off"})
             c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_select',rhythm);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3))
             c.ui.tap_control('pattern_select',wanted_rhythm);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3));c.ui.tap_control('channel_editor')
-            c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
-            c.ui.tap_control('pattern_slot',rhythm);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,2])
-            c.ui.tap_control('pattern_slot',wanted_rhythm);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,15]);rhythm=wanted_rhythm
+            c.ui.expect_leds({("pattern_slot",rhythm):"selected",("pattern_slot",wanted_rhythm):"off"})
+            c.ui.tap_control('pattern_slot',rhythm);c.ui.expect_leds({("pattern_slot",rhythm):"off",("pattern_slot",wanted_rhythm):"off"})
+            c.ui.tap_control('pattern_slot',wanted_rhythm);c.ui.expect_leds({("pattern_slot",rhythm):"off",("pattern_slot",wanted_rhythm):"selected"});rhythm=wanted_rhythm
         c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,slot)
-        c.led_values([(slot,2),(rhythm,2),(15,8)],[2,15,15]);play(slot,False)
-        c.ui.tap_control('pattern_slot',slot);c.led_values([(slot,2),(rhythm,2)],[15,15]);play(slot,True)
+        c.ui.expect_leds({("pattern_slot",slot):"off",("pattern_slot",rhythm):"selected",("note_merge_mode",None):"selected"});play(slot,False)
+        c.ui.tap_control('pattern_slot',slot);c.ui.expect_leds({("pattern_slot",slot):"selected",("pattern_slot",rhythm):"selected"});play(slot,True)
         c.ui.tap_control('pattern_slot',slot)
 
 
