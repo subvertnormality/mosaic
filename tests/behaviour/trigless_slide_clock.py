@@ -23,7 +23,7 @@ ONSET_TOLERANCE_NS = 3_000_002     # M-SYNC-018 abrupt tempo-step bound on nativ
 
 def trigless_slide_clock(c):
     from external_clock_faults import _assert_notes, _actual_delivery, _schedule
-    c.ui.configure(); c.ui.set_mosaic_options([('Trigless locks', True)])
+    c.ui.configure(); c.ui.set_mosaic_option_keys([('trigless_locks', True)])
     c.ui.tap_control('pattern_editor'); c.ui.tap_step(3); c.ui.tap_control('channel_editor')
     c.ui.open_patch_control(setup=False); c.ui.turn_patch_control(63); c.ui.turn_patch_control(1)
     c.ui.expect_patch_value(63); c.ui.press_key(1)
