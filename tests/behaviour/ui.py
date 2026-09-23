@@ -736,3 +736,31 @@ class Ui:
             if not self._header_matches(state, page, params):
                 raise UiMapError("expected %r, observed %r" % (expected, self._observed_title(state)))
         self.driver.results.append(dict(kind="ui-confirm", page=page, **params))
+    def seek_native_parameter_root(self, root):
+        """Position E2 at a mapped native parameter root."""
+        from ui_map import NATIVE_PARAMETER_ROOTS
+
+        try:
+            spec = NATIVE_PARAMETER_ROOTS[root]
+        except KeyError as error:
+            raise UiMapError("unknown native parameter root: " + str(root)) from error
+        roots = self.driver.snapshot()["diagnostics"]["parameter_roots"]
+        position = next(index for index, value in enumerate(roots)
+                        if value[spec["field"]] == spec["value"])
+        self.turn(2, position)
+        return position
+
+    def seek_native_menu_parameter(self, parameter, attempts=180, failure=None):
+        """Seek a mapped native menu row through observed selected-line state."""
+        from frame_oracle import selected_line
+        from ui_map import NATIVE_MENU_PARAMETERS
+
+        try:
+            spec = NATIVE_MENU_PARAMETERS[parameter]
+        except KeyError as error:
+            raise UiMapError("unknown native menu parameter: " + str(parameter)) from error
+        for _ in range(attempts):
+            if selected_line(self.driver.snapshot(), spec["label"]):
+                return
+            self.turn(2, 1)
+        raise AssertionError(failure or spec["failure"])

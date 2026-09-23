@@ -607,6 +607,79 @@ class UiInputTests(unittest.TestCase):
         self.assertEqual(driver.calls[-1], ("enc", 2, 1))
         self.assertEqual(driver.results, [])
 
+
+    def test_native_parameter_root_seek_uses_stable_keys_and_exact_position(self):
+        from ui import Ui
+
+        roots = [
+            {"id": "midi_device_params_group_channel_1", "name": "MIDI"},
+            {"id": "other", "name": "macro 1"},
+        ]
+        state = {"diagnostics": {"parameter_roots": roots}}
+        driver = FakeDriver(states=[state, state])
+        ui = Ui(driver)
+        self.assertEqual(ui.seek_native_parameter_root("channel_1_device_parameters"), 0)
+        self.assertEqual(ui.seek_native_parameter_root("macro_1"), 1)
+        self.assertEqual(driver.calls, [
+            ("snapshot",), ("enc", 2, 0),
+            ("snapshot",), ("enc", 2, 1),
+        ])
+
+    def test_native_menu_parameter_seek_preserves_observed_scan_and_bound(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{}, {}])
+        ui = Ui(driver)
+        with patch("frame_oracle.selected_line", side_effect=[False, True]) as selected:
+            ui.seek_native_menu_parameter("configured_control_1")
+        self.assertEqual(driver.calls, [
+            ("snapshot",), ("enc", 2, 1), ("snapshot",),
+        ])
+        self.assertEqual(selected.call_args_list[0].args[1:], ("Control 1",))
+        self.assertEqual(selected.call_args_list[1].args[1:], ("Control 1",))
+        self.assertEqual(driver.results, [])
+
+    def test_native_menu_parameter_seek_keeps_180_check_failure_and_message(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{} for _ in range(180)])
+        with patch("frame_oracle.selected_line", return_value=False) as selected:
+            with self.assertRaisesRegex(
+                    AssertionError, "Configured Control 1 unavailable in Matrix target group"):
+                Ui(driver).seek_native_menu_parameter("configured_control_1")
+        self.assertEqual(selected.call_count, 180)
+        self.assertEqual(driver.calls.count(("snapshot",)), 180)
+        self.assertEqual(driver.calls.count(("enc", 2, 1)), 180)
+        self.assertEqual(driver.calls[-1], ("enc", 2, 1))
+        self.assertEqual(driver.results, [])
+
+    def test_native_menu_parameter_seek_rejects_unknown_key_without_input(self):
+        from ui import Ui, UiMapError
+
+        driver = FakeDriver()
+        with self.assertRaisesRegex(UiMapError, "unknown native menu parameter"):
+            Ui(driver).seek_native_menu_parameter("not-a-parameter")
+        self.assertEqual(driver.calls, [])
+
+    def test_native_parameter_root_missing_preserves_stop_iteration(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"diagnostics": {"parameter_roots": []}}])
+        with self.assertRaises(StopIteration):
+            Ui(driver).seek_native_parameter_root("macro_1")
+        self.assertEqual(driver.calls, [("snapshot",)])
+
+    def test_native_menu_parameter_seek_preserves_callers_failure_message(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_line", return_value=False):
+            with self.assertRaisesRegex(AssertionError, "second call unavailable"):
+                Ui(driver).seek_native_menu_parameter(
+                    "configured_control_1", attempts=1,
+                    failure="second call unavailable")
+        self.assertEqual(driver.calls, [("snapshot",), ("enc", 2, 1)])
+
     def test_patch_value_resolves_stable_and_numeric_values_and_rejects_unknown(self):
         driver, ui = self.ui()
         ui.expect_menu_value = lambda value: driver.calls.append(("menu-value", value))

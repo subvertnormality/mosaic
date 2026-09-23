@@ -304,3 +304,17 @@ def header_text(page, **params):
         return HEADERS[page]["template"].format(**params)
     except KeyError as error:
         raise KeyError("unknown or incomplete header key %r: %s" % (page, error)) from error
+NATIVE_PARAMETER_ROOTS = {
+    "channel_1_device_parameters": {
+        "field": "id",
+        "value": "midi_device_params_group_channel_1",
+    },
+    "macro_1": {"field": "name", "value": "macro 1"},
+}
+
+NATIVE_MENU_PARAMETERS = {
+    "configured_control_1": {
+        "label": "Control 1",
+        "failure": "Configured Control 1 unavailable in Matrix target group",
+    },
+}
