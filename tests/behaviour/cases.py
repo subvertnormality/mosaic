@@ -2152,10 +2152,8 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     ui.channel_editor()
     cell=lambda step:((step-1)%16+1,(step-1)//16+4)
     if range_start!=1:ui.hold_control_tap('cell','cell',cell(range_start),cell(range_start+3))
-    ui.expect_steps({
-        step: ('off' if range_start <= step <= range_start + 3 else 'dark')
-        for step in range(1, 65)
-    })
+    cells=[cell(step) for step in range(1,65)]
+    c.led_values(cells,[2 if range_start<=step<=range_start+3 else 0 for step in range(1,65)])
     if clock_delta:
         from frame_oracle import header,matches
         ui.turn(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
@@ -2223,11 +2221,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
             placement_steps=tuple(item['recorded_step'] for item in evidence)
         c.results.append(dict(kind='boundary-active-step-midi-witness',events=evidence))
     c.wait(lambda state:not state['midi_capture']['outstanding']);ui.tap_control('record')
-    ui.expect_steps({
-        step: ('selected' if step in placement_steps else
-               'off' if range_start <= step <= range_start + 3 else 'dark')
-        for step in range(1, 65)
-    })
+    c.led_values(cells,[15 if step in placement_steps else (2 if range_start<=step<=range_start+3 else 0) for step in range(1,65)])
     c.results.append(dict(kind='recorded-step-placement',expected_steps=list(placement_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
     # Replay in normal internal clock after disarming; preview MIDI cannot
     # satisfy this oracle because playback takes a fresh capture marker.
