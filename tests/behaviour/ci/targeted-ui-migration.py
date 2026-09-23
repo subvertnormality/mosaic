@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run explicit base-MIDI before/after UI gates at two immutable source commits.
+"""Run explicit before/after UI gates for one profile at two immutable commits.
 
 This is a partial, manual campaign. The exhaustive behaviour workflow is separate.
 Every failed run and gate still leaves its original manifest and recipe/result files.
@@ -218,12 +218,12 @@ def require_no_symlink_ancestors(path):
         require(not component.is_symlink(), "symlinked evidence path: " + str(component))
 
 
-def verified_manifest(manifest_path, case, lane, revision):
+def verified_manifest(manifest_path, case, lane, revision, profile="base-midi"):
     require_no_symlink_ancestors(manifest_path)
     item = json.loads(manifest_path.read_text())
     require(isinstance(item, dict), "run manifest is not an object")
     for key, expected in (("case", case), ("clock_mode", lane),
-                          ("mosaic_revision", revision), ("profile", "base-midi")):
+                          ("mosaic_revision", revision), ("profile", profile)):
         require(item.get(key) == expected, "run manifest %s differs" % key)
     require(item.get("campaign_complete") is False and item.get("passed") is True
             and item.get("failure") is None, "before/after run did not pass")
@@ -268,12 +268,17 @@ def single_manifest(output):
     return paths[0]
 
 
-def run_one(source, case, lane, output, install):
+def run_one(source, case, lane, output, install, profile="base-midi",
+            mod_code_root=None, mod_patches=False):
     output.mkdir(parents=True, exist_ok=False)
     command = [sys.executable, str(source / "tests/behaviour/run.py"),
                "--case", case, "--artifacts", str(output), "--clock-mode", lane]
     if lane == "controlled-experimental":
         command.extend(("--experimental-install", str(install)))
+    if profile != "base-midi":
+        command.extend(("--profile", profile, "--mod-code-root", str(mod_code_root)))
+        if mod_patches:
+            command.append("--mod-patches")
     with (output / "process.log").open("w") as log:
         status = subprocess.run(command, cwd=source, stdout=log,
                                 stderr=subprocess.STDOUT, check=False).returncode
@@ -286,16 +291,26 @@ def execute(args):
     before_sha = source_identity(args.before, args.before_sha)
     after_sha = source_identity(args.after, args.after_sha)
     require(before_sha != after_sha, "before and after commits must differ")
+    require(args.profile in ("base-midi", "midi-modulation"),
+            "unsupported targeted profile: " + args.profile)
+    if args.profile == "midi-modulation":
+        require(args.mod_code_root is not None and args.mod_code_root.is_dir(),
+                "midi-modulation requires its pinned output fixture root")
+        require(args.mod_patches, "midi-modulation requires the declared fixture patches")
+    else:
+        require(args.mod_code_root is None and not args.mod_patches,
+                "modulation fixtures are only valid for midi-modulation")
     for label, source in (("before", args.before), ("after", args.after)):
         profiles = registry_profile(source)
         for case in cases:
             require(case in profiles, "%s source lacks case %s" % (label, case))
-            require(profiles[case] == "base-midi", "%s is not base-MIDI in %s source" % (case, label))
+            require(profiles[case] == args.profile,
+                    "%s is not %s in %s source" % (case, args.profile, label))
     source_delta = check_source_delta(args.before, args.after, cases)
     require(args.install.is_file(), "missing qualified controlled-time installation")
     emulator_sha = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=args.emulator, text=True).strip()
-    report = dict(schema_version=1, complete_regression_run=False,
+    report = dict(schema_version=1, complete_regression_run=False, profile=args.profile,
                   before_sha=before_sha, after_sha=after_sha,
                   emulator_sha=emulator_sha, selected_cases=cases,
                   source_delta=source_delta,
@@ -312,12 +327,14 @@ def execute(args):
                                                ("after", args.after, after_sha)):
                     output = args.output / case / lane / side
                     try:
-                        status, manifest = run_one(source, case, lane, output, args.install)
+                        status, manifest = run_one(source, case, lane, output, args.install,
+                                                   args.profile, args.mod_code_root,
+                                                   args.mod_patches)
                         lane_row["runs"][side] = dict(returncode=status,
                             manifest=str(manifest.relative_to(args.output)),
                             manifest_sha256=sha256(manifest))
                         require(status == 0, "%s run exited %d" % (side, status))
-                        verified_manifest(manifest, case, lane, revision)
+                        verified_manifest(manifest, case, lane, revision, args.profile)
                         roots[side] = manifest.parent
                     except (ValueError, OSError, subprocess.SubprocessError) as error:
                         lane_row["gate_errors"].append("%s: %s" % (side, error))
@@ -344,6 +361,10 @@ def main(argv=None):
     parser.add_argument("--after", type=Path, required=True)
     parser.add_argument("--after-sha", required=True)
     parser.add_argument("--case-ids", required=True)
+    parser.add_argument("--profile", choices=("base-midi", "midi-modulation"),
+                        default="base-midi")
+    parser.add_argument("--mod-code-root", type=Path)
+    parser.add_argument("--mod-patches", action="store_true")
     parser.add_argument("--emulator", type=Path, required=True)
     parser.add_argument("--install", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)

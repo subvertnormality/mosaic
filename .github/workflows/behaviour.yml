@@ -21,8 +21,13 @@ on:
         description: Full 40-character candidate commit SHA
         type: string
       ui_migration_case_ids:
-        description: Comma-separated base-MIDI case IDs (no regex)
+        description: Comma-separated case IDs for the selected profile (no regex)
         type: string
+      ui_migration_profile:
+        description: Profile used by all selected targeted cases
+        type: choice
+        options: [base-midi, midi-modulation]
+        default: base-midi
 
 permissions:
   contents: read
@@ -324,11 +329,13 @@ jobs:
           BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
           AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
           CASE_IDS: ${{ inputs.ui_migration_case_ids }}
+          PROFILE: ${{ inputs.ui_migration_profile }}
         run: |
           [[ "$BEFORE_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$AFTER_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$BEFORE_SHA" != "$AFTER_SHA" ]]
           [[ -n "$CASE_IDS" ]]
+          [[ "$PROFILE" == "base-midi" || "$PROFILE" == "midi-modulation" ]]
       - name: Install Git before SHA checkouts
         run: |
           apt-get update
@@ -363,21 +370,38 @@ jobs:
           key: monome-emulator-ubuntu20-68ab709-qualified-v9
       - name: Build native runtimes
         run: after-source/tests/behaviour/ci/prepare-emulator.sh
+      - name: Fetch pinned modulation fixtures
+        if: ${{ inputs.ui_migration_profile == 'midi-modulation' }}
+        run: |
+          mkdir -p /tmp/mosaic-output-mods
+          git clone https://github.com/sixolet/matrix.git /tmp/mosaic-output-mods/matrix
+          git -C /tmp/mosaic-output-mods/matrix checkout --detach 41e11286bee8dbe48e8746e7a456400f93dc739a
+          git clone https://github.com/sixolet/toolkit.git /tmp/mosaic-output-mods/toolkit
+          git -C /tmp/mosaic-output-mods/toolkit checkout --detach 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
       - name: Prepare unprivileged behaviour user
         run: |
           useradd --create-home --shell /bin/bash mosaic-ci
           chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE/before-source" "$GITHUB_WORKSPACE/after-source" "$EMULATOR_ROOT"
+          if [[ -d /tmp/mosaic-output-mods ]]; then
+            chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods
+          fi
       - name: Run passing before/after cases and strict gates
         env:
           BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
           AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
           CASE_IDS: ${{ inputs.ui_migration_case_ids }}
+          PROFILE: ${{ inputs.ui_migration_profile }}
         run: |
+          profile_args=()
+          if [[ "$PROFILE" == "midi-modulation" ]]; then
+            profile_args+=(--mod-code-root /tmp/mosaic-output-mods --mod-patches)
+          fi
           runuser -u mosaic-ci --preserve-environment -- python3 \
             "$GITHUB_WORKSPACE/after-source/tests/behaviour/ci/targeted-ui-migration.py" \
             --before "$GITHUB_WORKSPACE/before-source" --before-sha "$BEFORE_SHA" \
             --after "$GITHUB_WORKSPACE/after-source" --after-sha "$AFTER_SHA" \
-            --case-ids "$CASE_IDS" --emulator "$EMULATOR_ROOT" \
+            --case-ids "$CASE_IDS" --profile "$PROFILE" "${profile_args[@]}" \
+            --emulator "$EMULATOR_ROOT" \
             --install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
             --output /tmp/mosaic-ui-targeted
       - name: Prepare independent repeat output
@@ -388,6 +412,7 @@ jobs:
         env:
           AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
           CASE_IDS: ${{ inputs.ui_migration_case_ids }}
+          PROFILE: ${{ inputs.ui_migration_profile }}
         run: |
           runuser -u mosaic-ci --preserve-environment -- python3 - <<'PY'
           import importlib.util
@@ -402,6 +427,7 @@ jobs:
           root = workspace / 'mosaic-behaviour-runs'
           output = Path('/tmp/mosaic-ui-targeted')
           after_sha = os.environ['AFTER_SHA']
+          profile = os.environ['PROFILE']
           spec = importlib.util.spec_from_file_location(
               'targeted_ui_migration', source / 'tests/behaviour/ci/targeted-ui-migration.py')
           targeted = importlib.util.module_from_spec(spec)
@@ -409,7 +435,8 @@ jobs:
           cases = targeted.cases_from_input(os.environ['CASE_IDS'])
           gate = json.loads((output / 'targeted-ui-migration.json').read_text())
           targeted.require(gate['passed'] is True and gate['complete_regression_run'] is False
-                           and gate['after_sha'] == after_sha and gate['selected_cases'] == cases,
+                           and gate['after_sha'] == after_sha and gate['selected_cases'] == cases
+                           and gate['profile'] == profile,
                            'repeat requires a passing, partial gate for the selected candidate')
           selection = {}
           for case in cases:
@@ -428,7 +455,7 @@ jobs:
                                'ambiguous or unrelated owner for ' + case)
               owner = next(iter(contracts or shims)) if owners else 'tests/behaviour/cases.py'
               selection.setdefault(owner, case)
-          report = dict(schema_version=1, complete_regression_run=False,
+          report = dict(schema_version=1, complete_regression_run=False, profile=profile,
                         after_sha=after_sha, selected_cases=cases,
                         selected_modules=selection, repeats=[], passed=False)
           try:
@@ -439,7 +466,10 @@ jobs:
                   command = [sys.executable, str(source / 'tests/behaviour/repeat.py'),
                              '--case', case, '--experimental-install',
                              os.environ['EMULATOR_ROOT'] +
-                             '/.runtime/ci-qualified/runtime/installation.json']
+                             '/.runtime/ci-qualified/runtime/installation.json',
+                             '--profile', profile]
+                  if profile == 'midi-modulation':
+                      command.extend(['--mod-code-root', '/tmp/mosaic-output-mods', '--mod-patches'])
                   completed = subprocess.run(command, cwd=source, text=True,
                                              capture_output=True)
                   row.update(returncode=completed.returncode, stdout=completed.stdout,
@@ -453,7 +483,8 @@ jobs:
                       row['manifest_sha256'] = targeted.sha256(manifest)
                       targeted.require(completed.returncode == 0 and item['passed'] is True,
                                        'three-process repeat failed')
-                      targeted.require(item['case'] == case and item['profile'] == 'base-midi'
+                      targeted.require(item['case'] == case and item['profile'] == profile
+                                       and item['mod_patches'] is (profile == 'midi-modulation')
                                        and item['diagnostic_only'] is True
                                        and item['controlled_time_admitted'] is False
                                        and len(item['runs']) == 3,
@@ -469,6 +500,7 @@ jobs:
                           targeted.require(targeted.sha256(path) == run['sha256']
                                            and actual['mosaic_revision'] == after_sha
                                            and actual['case'] == case
+                                               and actual['profile'] == profile
                                            and actual['clock_mode'] == 'controlled-experimental'
                                            and actual['passed'] is True
                                            and actual['diagnostic_only'] is True,

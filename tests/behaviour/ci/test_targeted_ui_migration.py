@@ -87,6 +87,56 @@ class TargetedMigrationTests(unittest.TestCase):
                 targeted.verified_manifest(manifest, "M-GRID-001",
                                            "controlled-experimental", "a" * 40)
 
+    def test_manifest_binds_requested_non_base_profile(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            run = Path(temporary)
+            for name in ("recipe.json", "results.json"):
+                (run / name).write_text("[]")
+            item = dict(case="M-MOD-001", clock_mode="controlled-experimental",
+                        mosaic_revision="a" * 40, profile="midi-modulation", passed=True,
+                        campaign_complete=False, diagnostic_only=True, failure=None,
+                        artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
+                                   for name in ("recipe.json", "results.json")])
+            manifest = run / "manifest.json"
+            manifest.write_text(json.dumps(item))
+            targeted.verified_manifest(manifest, "M-MOD-001",
+                                       "controlled-experimental", "a" * 40,
+                                       profile="midi-modulation")
+            with self.assertRaisesRegex(ValueError, "profile differs"):
+                targeted.verified_manifest(manifest, "M-MOD-001",
+                                           "controlled-experimental", "a" * 40)
+
+    def test_run_command_passes_profile_and_fixture_setup_to_both_lanes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            (source / "tests/behaviour").mkdir(parents=True)
+            (source / "tests/behaviour/run.py").write_text("")
+            install = root / "installation.json"
+            install.write_text("{}")
+            fixture = root / "fixtures"
+            fixture.mkdir()
+            for lane in ("real-time", "controlled-experimental"):
+                output = root / lane
+                expected = output / "run-1/manifest.json"
+                def launch(command, cwd, stdout, stderr, check, expected=expected):
+                    expected.parent.mkdir(parents=True)
+                    expected.write_text("{}")
+                    self.assertEqual(command[command.index("--profile") + 1],
+                                     "midi-modulation")
+                    self.assertEqual(command[command.index("--mod-code-root") + 1],
+                                     str(fixture))
+                    self.assertIn("--mod-patches", command)
+                    if lane == "controlled-experimental":
+                        self.assertIn("--experimental-install", command)
+                    return type("Completed", (), {"returncode": 0})()
+                with patch.object(targeted.subprocess, "run", side_effect=launch):
+                    status, manifest = targeted.run_one(
+                        source, "M-MOD-001", lane, output, install,
+                        "midi-modulation", fixture, True)
+                self.assertEqual(status, 0)
+                self.assertEqual(manifest, expected)
+
     def test_manifest_rejects_symlinked_file_and_ancestor_before_hashing(self):
         with tempfile.TemporaryDirectory() as temporary:
             run = Path(temporary) / "run"
@@ -257,12 +307,19 @@ class TargetedMigrationTests(unittest.TestCase):
     def test_dispatch_never_feeds_partial_report_to_full_aggregation(self):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
         self.assertIn("ui_migration_targeted:", workflow)
+        self.assertIn("ui_migration_profile:", workflow)
+        self.assertIn("options: [base-midi, midi-modulation]", workflow)
         self.assertIn("if: ${{ !inputs.ui_migration_targeted }}", workflow)
         self.assertIn("if: ${{ always() && !inputs.ui_migration_targeted }}", workflow)
         self.assertIn("name: targeted-ui-migration-${{ github.run_id }}", workflow)
         self.assertIn("--before-sha \"$BEFORE_SHA\"", workflow)
         self.assertIn("--after-sha \"$AFTER_SHA\"", workflow)
         self.assertIn("--case-ids \"$CASE_IDS\"", workflow)
+        self.assertIn("--profile \"$PROFILE\"", workflow)
+        self.assertIn("--mod-code-root /tmp/mosaic-output-mods --mod-patches", workflow)
+        self.assertIn("actual['profile'] == profile", workflow)
+        self.assertIn("gate['profile'] == profile", workflow)
+        self.assertIn("chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods", workflow)
 
     def test_dispatch_installs_git_before_sha_submodule_checkouts(self):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
@@ -283,7 +340,23 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("complete_regression_run=False", workflow)
         script = workflow.split("runuser -u mosaic-ci --preserve-environment -- python3 - <<'PY'\n", 1)[1]
         script = script.split("\n          PY", 1)[0]
-        ast.parse("\n".join(line[10:] for line in script.splitlines()))
+        body = ast.parse("\n".join(line[10:] for line in script.splitlines())).body
+        guarded = next(node for node in body if isinstance(node, ast.Try))
+        repeat_loop = next(node for node in guarded.body if isinstance(node, ast.For))
+        direct_assignments = {target.id for node in repeat_loop.body
+                              if isinstance(node, ast.Assign)
+                              for target in node.targets if isinstance(target, ast.Name)}
+        self.assertIn("command", direct_assignments)
+        self.assertTrue(any(isinstance(node, ast.Assign)
+                            and isinstance(node.value, ast.Call)
+                            and isinstance(node.value.func, ast.Attribute)
+                            and node.value.func.attr == "run"
+                            for node in repeat_loop.body))
+        profile_branch = next(node for node in repeat_loop.body if isinstance(node, ast.If))
+        self.assertFalse(any(isinstance(node, ast.Call)
+                             and isinstance(node.func, ast.Attribute)
+                             and node.func.attr == "run"
+                             for node in ast.walk(profile_branch)))
 
     def test_dispatch_repeat_selection_uses_exact_contract_owner(self):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
