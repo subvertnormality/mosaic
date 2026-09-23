@@ -62,9 +62,9 @@ def quantised_fixed_table(c,profile='major'):
 
 
 def stock_pitch_lock_inheritance(c,quantised=True):
-    from cases import assign_trig_parameter,assert_durations
-    c.configure();c.enc(1,-3)
-    assign_trig_parameter(c,'Quantised Fixed Note' if quantised else 'Fixed Note')
+    from cases import assert_durations
+    c.ui.configure();c.ui.turn(1,-3)
+    c.ui.assign_trig_parameter_key('quantised_fixed_note' if quantised else 'fixed_note')
     def phrase(pitches,phase):
         notes=c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],cycles=2)
         assert_durations(c,notes,[1]*(len(notes)-1))
@@ -74,25 +74,22 @@ def stock_pitch_lock_inheritance(c,quantised=True):
         assert all(abs(e)<=tolerance for e in errors),errors
         c.results.append(dict(kind='stock-pitch-lock-inheritance',quantised=quantised,phase=phase,pitches=pitches,timing_errors=errors,passed=True))
     def lock(step,value):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-            if value>=0:c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with c.ui.hold_step(step):
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
+            if value>=0:c.ui.set_value(value+1)
         c.elapse(.15)
     def clear(step):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.key(2)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with c.ui.hold_step(step):
+            c.elapse(.05);c.ui.press_key(2)
         c.elapse(.15)
-    c.enc(3,61);phrase([60]*4,'channel60')
+    c.ui.set_value(61);phrase([60]*4,'channel60')
     lock(2,63);locked=62 if quantised else 63
     phrase([60,locked,60,60],'step2-override')
     lock(1,0);phrase([0,locked,60,60],'zero-is-active')
     lock(4,-1);phrase([0,locked,60,60],'off-inherits')
-    c.enc(3,5);phrase([0,locked,65,65],'default-edit-preserves-locks')
+    c.ui.set_value(5);phrase([0,locked,65,65],'default-edit-preserves-locks')
     clear(2);phrase([0,65,65,65],'clear-step2')
-    c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+    c.ui.encoder_event(3,-126);c.elapse(.15)
     phrase([0,62,64,65],'channel-off-restores-pattern')
     clear(1);phrase([60,62,64,65],'clear-zero-restores-pattern')
     # Re-entering a cleared step must not reuse an old calculator/lock value.

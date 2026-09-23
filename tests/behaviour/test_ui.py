@@ -585,6 +585,9 @@ class UiInputTests(unittest.TestCase):
             ],
         )
         cases = ModuleType("cases")
+        cases.assign_trig_parameter = lambda *args, **kwargs: self.fail(
+            "case-level native assignment helper must not be used"
+        )
         cases.assert_durations = lambda context, notes, lengths: self.assertEqual(
             lengths, [1, 1, 1]
         )
@@ -719,6 +722,113 @@ class UiInputTests(unittest.TestCase):
             [(result["phase"], result["pitches"]) for result in case.results],
             [("0", [0, 0, 0, 0]), ("all-overrides-off", [60, 62, 64, 65])],
         )
+
+    def test_stock_pitch_lock_variants_use_semantic_ui_and_preserve_trace(self):
+        from types import ModuleType, SimpleNamespace
+        from trig_parameter_interactions import stock_pitch_lock_inheritance
+
+        def expected_trace():
+            calls = [
+                ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+                ("tap", 5, 8),
+                ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
+                ("tap", 5, 8),
+                ("tap", 1, 7), ("tap", 2, 6), ("tap", 3, 5), ("tap", 4, 4),
+                ("tap", 5, 8),
+                ("tap", 1, 1), ("tap", 2, 2), ("tap", 3, 3), ("tap", 4, 4),
+                ("tap", 3, 8), ("tap", 1, 2),
+                ("hold_tap", (1, 4), (4, 4)),
+                ("led_values", [(1, 2)], [15]),
+                ("header", "midi_config", {"channel": 1}),
+                ("enc", 1, -3),
+                ("key", 2), ("enc", 3, -50), ("key", 3), ("key", 2),
+                ("enc", 3, 61),
+            ]
+
+            def lock(step, value):
+                calls.append(("action", {"type": "grid", "x": step, "y": 4, "state": 1}))
+                calls.extend([
+                    ("elapse", .05),
+                    ("action", {"type": "enc", "n": 3, "delta": -126}),
+                    ("elapse", .15),
+                ])
+                if value >= 0:
+                    calls.append(("enc", 3, value + 1))
+                calls.append(("action", {"type": "grid", "x": step, "y": 4, "state": 0}))
+                calls.append(("elapse", .15))
+
+            def clear(step):
+                calls.extend([
+                    ("action", {"type": "grid", "x": step, "y": 4, "state": 1}),
+                    ("elapse", .05), ("key", 2),
+                    ("action", {"type": "grid", "x": step, "y": 4, "state": 0}),
+                    ("elapse", .15),
+                ])
+
+            lock(2, 63)
+            lock(1, 0)
+            lock(4, -1)
+            calls.append(("enc", 3, 5))
+            clear(2)
+            calls.extend([
+                ("action", {"type": "enc", "n": 3, "delta": -126}),
+                ("elapse", .15),
+            ])
+            clear(1)
+            lock(2, 0)
+            clear(2)
+            return calls
+
+        cases = ModuleType("cases")
+        cases.assign_trig_parameter = lambda *args, **kwargs: self.fail(
+            "case-level native assignment helper must not be used"
+        )
+        cases.assert_durations = lambda context, notes, lengths: self.assertEqual(
+            lengths, [1] * (len(notes) - 1)
+        )
+        with patch.dict(sys.modules, {"cases": cases}):
+            for quantised in (True, False):
+                driver, ui = self.ui()
+                labels = []
+                ui.expect_header = lambda page, **params: driver.calls.append(
+                    ("header", page, params)
+                )
+                ui.expect_list_label = lambda label, wait=True: (
+                    labels.append((label, wait)) or not wait
+                )
+                pitches_by_phase = iter([
+                    [60] * 4,
+                    [60, 62 if quantised else 63, 60, 60],
+                    [0, 62 if quantised else 63, 60, 60],
+                    [0, 62 if quantised else 63, 60, 60],
+                    [0, 62 if quantised else 63, 65, 65],
+                    [0, 65, 65, 65],
+                    [0, 62, 64, 65],
+                    [60, 62, 64, 65],
+                    [60, 0, 64, 65],
+                    [60, 62, 64, 65],
+                ])
+                case = SimpleNamespace(
+                    ui=ui,
+                    clock_mode="controlled-experimental",
+                    results=[],
+                    configure=lambda: self.fail("case-level raw setup must not be used"),
+                    enc=lambda *args: self.fail("case-level raw encoder must not be used"),
+                    key=lambda *args: self.fail("case-level raw key must not be used"),
+                    action=lambda **kwargs: self.fail("case-level raw action must not be used"),
+                    elapse=driver.elapse,
+                    playback=lambda *args, **kwargs: [
+                        {"logical_ns": index * 166666666} for index in range(4)
+                    ],
+                )
+                stock_pitch_lock_inheritance(case, quantised=quantised)
+                self.assertEqual(driver.calls, expected_trace())
+                label = "Quantised Fixed Note" if quantised else "Fixed Note"
+                self.assertEqual(labels, [(label, False), (label, True)])
+                self.assertEqual(
+                    [result["pitches"] for result in case.results],
+                    [next(pitches_by_phase) for _ in range(10)],
+                )
 
     def test_set_mosaic_options_preserves_observed_seek_recipe_and_results(self):
         from ui import Ui
