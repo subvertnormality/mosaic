@@ -180,6 +180,14 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("--after-sha \"$AFTER_SHA\"", workflow)
         self.assertIn("--case-ids \"$CASE_IDS\"", workflow)
 
+    def test_dispatch_installs_git_before_sha_submodule_checkouts(self):
+        workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
+        install = workflow.index("- name: Install Git before SHA checkouts")
+        checkout = workflow.index("- name: Check out baseline source")
+        self.assertLess(install, checkout)
+        self.assertIn("apt-get install -y --no-install-recommends git ca-certificates",
+                      workflow[install:checkout])
+
     def test_dispatch_repeats_one_candidate_per_module_without_full_coverage_claim(self):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
         self.assertIn("Repeat one candidate case per migrated module", workflow)

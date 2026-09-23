@@ -329,6 +329,10 @@ jobs:
           [[ "$AFTER_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$BEFORE_SHA" != "$AFTER_SHA" ]]
           [[ -n "$CASE_IDS" ]]
+      - name: Install Git before SHA checkouts
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends git ca-certificates
       - name: Check out baseline source
         uses: actions/checkout@v4
         with:
