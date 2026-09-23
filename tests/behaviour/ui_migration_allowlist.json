@@ -1,7 +1,6 @@
 [
   "cases.py",
   "dense_workload.py",
-  "elektron_program_changes.py",
   "hardware_driver.py",
   "hardware_performance.py",
   "harmony_merge_workflow.py",

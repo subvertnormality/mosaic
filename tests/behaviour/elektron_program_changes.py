@@ -14,20 +14,6 @@ def program_changes(state,marker,ports=(1,2)):
 def pick_device(e,name):
     e.ui.pick_device(name)
 
-def set_mosaic_number(e,label,delta,shown):
-    from cases import menu_label,menu_option_row
-    from frame_oracle import selected_line
-    e.key(1);e.enc(1,4);e.key(3);menu_label(e,'LEVELS >')
-    position=next(i for i,value in enumerate(e.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
-    e.enc(2,position);e.key(3);e.enc(2,-60)
-    for _ in range(40):
-        if selected_line(e.snapshot(),label):break
-        e.enc(2,1)
-    else:raise AssertionError('Required Mosaic option not reached: '+label)
-    e.enc(3,delta);menu_option_row(e,label,shown)
-    e.results.append(dict(kind='mosaic-number-input',label=label,value=shown))
-    e.key(2);e.enc(2,-60);menu_label(e,'LEVELS >');e.key(2);e.key(1)
-
 STEP_SECONDS=1/6 # default tempo: one sequencer step
 
 def transition_checks(e,state,marker,slots_seen):
@@ -52,7 +38,6 @@ def transition_checks(e,state,marker,slots_seen):
     return boundaries
 
 def elektron_program_changes(c,length=4,settings=True):
-    from cases import set_mosaic_options
     seed=c.out/'elektron-seed';(seed/'config').mkdir(parents=True)
     shutil.copy(REPO/'tests/behaviour/config/emu-midi.json',seed/'config/emu-midi.json')
     shutil.copy(REPO/'lib/config/elektron_digitakt.json',seed/'config/elektron_digitakt.json')
@@ -64,23 +49,28 @@ def elektron_program_changes(c,length=4,settings=True):
     try:
         e.configure();pick_device(e,'Digitakt')
         # Song slot 1 of the given global length, copied to slot 2 and raised an octave there.
-        e.tap(6,8);e.tap(2,7)
-        for _ in range(length-1):e.tap(8,7)
-        e.hold_tap((1,1),(2,1));e.tap(2,1);e.tap(3,8);e.tap(11,8);e.tap(6,8);e.tap(1,1)
+        e.ui.song_editor();e.ui.tap_control('global_pattern_length',2)
+        for _ in range(length-1):e.ui.tap_control('global_pattern_length',8)
+        e.ui.copy_slot(1,2,control='song_pattern_slot')
+        e.ui.tap_control('song_pattern_slot',2);e.ui.tap_control('channel_editor')
+        e.ui.tap_control('channel_octave',1);e.ui.song_editor()
+        e.ui.tap_control('song_pattern_slot',1)
         def run(seconds):
-            marker=e.snapshot()['midi_count'];e.tap(1,8);e.elapse(seconds);e.tap(1,8)
+            marker=e.snapshot()['midi_count'];e.ui.play();e.elapse(seconds);e.ui.play()
             state=e.wait(lambda s:not s['midi_capture']['outstanding'])
             return state,marker
         if settings:
             # Default Off: Play and slot selection send no program change.
             state,marker=run(1.2);assert program_changes(state,marker)==[],program_changes(state,marker)
-            marker=e.snapshot()['midi_count'];e.tap(2,1);e.tap(1,1);e.elapse(.2)
+            marker=e.snapshot()['midi_count'];e.ui.tap_control('song_pattern_slot',2)
+            e.ui.tap_control('song_pattern_slot',1);e.elapse(.2)
             assert program_changes(e.snapshot(),marker)==[]
             e.results.append(dict(kind='elektron-program-change',stage='default-off',sent=[],passed=True))
-        set_mosaic_options(e,[('Elektron program changes',True)])
+        e.ui.set_mosaic_option_keys([('elektron_program_changes',True)])
         if settings:
             # Stopped slot selection mirrors the slot on default channel 10 (status 201).
-            marker=e.snapshot()['midi_count'];e.tap(2,1);e.elapse(.2);e.tap(1,1);e.elapse(.2)
+            marker=e.snapshot()['midi_count'];e.ui.tap_control('song_pattern_slot',2);e.elapse(.2)
+            e.ui.tap_control('song_pattern_slot',1);e.elapse(.2)
             sent=program_changes(e.snapshot(),marker)
             assert sent==[(1,[201,1]),(1,[201,0])],sent
             e.results.append(dict(kind='elektron-program-change',stage='stopped-selection',sent=sent,passed=True))
@@ -90,8 +80,9 @@ def elektron_program_changes(c,length=4,settings=True):
         e.results.append(dict(kind='elektron-program-change',stage='playing-transitions',global_length=length,boundaries=boundaries,passed=True))
         if settings:
             # The channel setting selects the program-change channel (1 -> status 192).
-            set_mosaic_number(e,'Elektron p.change channel',-9,'1')
-            marker=e.snapshot()['midi_count'];e.tap(2,1);e.elapse(.2)
+            e.ui.set_mosaic_number('elektron_program_change_channel',-9,'1')
+            marker=e.snapshot()['midi_count']
+            e.ui.tap_control('song_pattern_slot',2);e.elapse(.2)
             sent=program_changes(e.snapshot(),marker)
             assert sent==[(1,[192,1])],sent
             e.results.append(dict(kind='elektron-program-change',stage='channel-1',sent=sent,passed=True))
