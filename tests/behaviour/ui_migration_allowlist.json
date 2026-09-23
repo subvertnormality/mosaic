@@ -8,7 +8,6 @@
   "lock_lead_clock_matrix.py",
   "midi_mapping_targets.py",
   "modulation_interactions.py",
-  "nb_device_switch_slots.py",
   "numeric_merging.py",
   "output_cases.py",
   "patch_matrix.py",
