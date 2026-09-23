@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "9b355094ecc623844577c327bb79e0079e6d2844",
+  "selected_cases": [
+    "M-MIDI-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-MIDI-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-MIDI-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-e8fd49b8bd924e40bb383c5b65fbd838/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-e8fd49b8bd924e40bb383c5b65fbd838/manifest.json",
+      "manifest_sha256": "c954d850ef6f360dc152d8a0a456bd7a0eca3237bb3b86702d3599906432ce8d",
+      "passed": true
+    }
+  ],
+  "passed": true
+}
