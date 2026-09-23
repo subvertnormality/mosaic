@@ -5,7 +5,7 @@ def offset_range_clipping(c):
     from cases import assert_durations
     ui = c.ui
     ui.configure(); ui.set_range(2, 4); ui.song_editor()
-    ui.tap_control('cell', (2, 7)); ui.tap_control('cell', (8, 7)); ui.menu('channel_editor')
+    ui.tap_control('global_pattern_length', 2); ui.tap_control('global_pattern_length', 8); ui.menu('channel_editor')
     ui.expect_leds({('step', 1): 'dark', ('step', 2): 'selected',
                     ('step', 3): 'selected', ('step', 4): 'dark'})
     notes = c.playback([(1, [144, 62, 117]), (1, [144, 64, 107])], cycles=3, timeout=4)
@@ -22,7 +22,7 @@ def offset_range_rates(c):
     from cases import assert_durations
     ui = c.ui
     ui.configure(); ui.set_range(2, 4); ui.song_editor()
-    ui.tap_control('cell', (2, 7)); ui.tap_control('cell', (8, 7)); ui.menu('channel_editor')
+    ui.tap_control('global_pattern_length', 2); ui.tap_control('global_pattern_length', 8); ui.menu('channel_editor')
     ui.turn(1, -1); selected = 13
     for index, label, factor in [(8, 'x3', 1 / 3), (10, 'x2', .5),
                                  (13, '/1', 1), (15, '/2', 2), (17, '/3', 3)]:

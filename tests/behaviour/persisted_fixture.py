@@ -22,8 +22,8 @@ def build_fixture_project(c):
     from cases import assign_trig_parameter
     ui = c.ui
     ui.configure()
-    ui.song_editor(); ui.tap_control('cell', (2, 7))
-    for _ in range(3): ui.tap_control('cell', (8, 7))             # global length 4
+    ui.song_editor(); ui.tap_control('global_pattern_length', 2)
+    for _ in range(3): ui.tap_control('global_pattern_length', 8)             # global length 4
     ui.menu('channel_editor'); ui.channel_page('trig_locks', 'midi_config', confirm=False)
     def lock(step, value):
         ui.gesture([('step', step)], [])

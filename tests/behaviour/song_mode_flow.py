@@ -10,7 +10,7 @@ def slot_notes(slot):return [60+12*OCTAVE[slot],62+12*OCTAVE[slot]]
 def song_mode_flow(c):
     ui = c.ui
     ui.configure()
-    ui.song_editor();ui.tap_control('cell',(2,7));ui.tap_control('cell',(8,7))
+    ui.song_editor();ui.tap_control('global_pattern_length',2);ui.tap_control('global_pattern_length',8)
     for target,x in ((2,11),(4,12),(5,9)):                   # copy slot 1, then set that copy's octave
         ui.song_editor();ui.tap_control('song_pattern_slot',1)
         ui.copy_slot(1,target,control='song_pattern_slot')
