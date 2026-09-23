@@ -155,6 +155,7 @@ MOSAIC_OPTIONS = {
     "scale_lock_until_pattern_end": "Scales lock until ptn end",
     "lock_merged_to_pentatonic": "Lock merged to pent.",
     "elektron_program_changes": "Elektron program changes",
+    "trigless_locks": "Trigless locks",
 }
 
 # Every distinct level has a distinct semantic name. Controls may narrow this
