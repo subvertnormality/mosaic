@@ -8,7 +8,6 @@
   "perf_dense.py",
   "perf_input.py",
   "perf_overload.py",
-  "recording_lifetimes.py",
   "rhythm_doctor.py",
   "rhythm_doctor_correction.py",
   "rhythm_doctor_surface.py",
