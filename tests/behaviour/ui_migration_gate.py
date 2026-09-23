@@ -22,6 +22,17 @@ def normalize_recipe(recipe):
     return _without_monotonic(recipe)
 
 
+def _matches_with_added_confirms(before, after, same_entry):
+    """Keep every baseline entry in order; only new confirmations may be skipped."""
+    baseline_index = 0
+    for entry in after:
+        if baseline_index < len(before) and same_entry(before[baseline_index], entry):
+            baseline_index += 1
+        elif entry["kind"] != "ui-confirm":
+            return False
+    return baseline_index == len(before)
+
+
 def compare_results(before, after, lane):
     errors = []
     for side, values in (("before", before), ("after", after)):
@@ -33,16 +44,15 @@ def compare_results(before, after, lane):
                 errors.append("%s result %d has no kind" % (side, index))
     if errors:
         return errors
-    filtered_after = [entry for entry in after if entry["kind"] != "ui-confirm"]
     if lane == "controlled":
-        if before != filtered_after:
+        if not _matches_with_added_confirms(before, after, lambda old, new: old == new):
             errors.append("controlled results differ beyond added ui-confirm entries")
     elif lane == "real-time":
-        before_kinds = [entry["kind"] for entry in before]
-        after_kinds = [entry["kind"] for entry in filtered_after]
-        if before_kinds != after_kinds:
+        if not _matches_with_added_confirms(
+                before, after, lambda old, new: old["kind"] == new["kind"]):
             errors.append("real-time result kind sequence differs: %r != %r" %
-                          (before_kinds, after_kinds))
+                          ([entry["kind"] for entry in before],
+                           [entry["kind"] for entry in after]))
     else:
         errors.append("unknown lane %r" % lane)
     return errors

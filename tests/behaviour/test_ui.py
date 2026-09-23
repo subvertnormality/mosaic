@@ -2153,6 +2153,26 @@ class MigrationGateTests(unittest.TestCase):
         ]
         self.assertEqual(compare_results(before, after, "controlled"), [])
 
+    def test_existing_ui_confirm_is_preserved_before_allowing_additions(self):
+        from ui_migration_gate import compare_results
+
+        existing = {"kind": "ui-confirm", "page": "clock_mods", "channel": 1}
+        grid = {"kind": "grid", "expected": [15], "actual": [15]}
+        before = [grid, existing, {"kind": "midi", "onsets": 4}]
+        extra = {"kind": "ui-confirm", "page": "masks", "channel": 1}
+        after = [grid, extra, existing, {"kind": "midi", "onsets": 4}]
+        self.assertEqual(compare_results(before, after, "controlled"), [])
+        self.assertEqual(compare_results(before, after, "real-time"), [])
+        self.assertTrue(compare_results(before, [grid, extra,
+                                                {"kind": "midi", "onsets": 4}],
+                                        "controlled"))
+        self.assertTrue(compare_results(before, [grid,
+                                                {"kind": "midi", "onsets": 4}],
+                                        "real-time"))
+        changed = [grid, {"kind": "ui-confirm", "page": "memory", "channel": 1},
+                   {"kind": "midi", "onsets": 4}]
+        self.assertTrue(compare_results(before, changed, "controlled"))
+
     def test_real_time_results_compare_ordered_kinds(self):
         from ui_migration_gate import compare_results
 
