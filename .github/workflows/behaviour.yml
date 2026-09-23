@@ -402,13 +402,13 @@ jobs:
         run: |
           profile_args=()
           if [[ "$PROFILE" == "midi-modulation" ]]; then
-            profile_args+=(--mod-code-root /tmp/mosaic-output-mods --mod-patches)
+            profile_args+=(--profile "$PROFILE" --mod-code-root /tmp/mosaic-output-mods --mod-patches)
           fi
           runuser -u mosaic-ci --preserve-environment -- python3 \
             "$GITHUB_WORKSPACE/after-source/tests/behaviour/ci/targeted-ui-migration.py" \
             --before "$GITHUB_WORKSPACE/before-source" --before-sha "$BEFORE_SHA" \
             --after "$GITHUB_WORKSPACE/after-source" --after-sha "$AFTER_SHA" \
-            --case-ids "$CASE_IDS" --profile "$PROFILE" "${profile_args[@]}" \
+            --case-ids "$CASE_IDS" "${profile_args[@]}" \
             --emulator "$EMULATOR_ROOT" \
             --install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
             --output /tmp/mosaic-ui-targeted
@@ -444,7 +444,7 @@ jobs:
           gate = json.loads((output / 'targeted-ui-migration.json').read_text())
           targeted.require(gate['passed'] is True and gate['complete_regression_run'] is False
                            and gate['after_sha'] == after_sha and gate['selected_cases'] == cases
-                           and gate['profile'] == profile,
+                           and gate.get('profile', 'base-midi') == profile,
                            'repeat requires a passing, partial gate for the selected candidate')
           selection = {}
           for case in cases:
@@ -474,10 +474,10 @@ jobs:
                   command = [sys.executable, str(source / 'tests/behaviour/repeat.py'),
                              '--case', case, '--experimental-install',
                              os.environ['EMULATOR_ROOT'] +
-                             '/.runtime/ci-qualified/runtime/installation.json',
-                             '--profile', profile]
+                             '/.runtime/ci-qualified/runtime/installation.json']
                   if profile == 'midi-modulation':
-                      command.extend(['--mod-code-root', '/tmp/mosaic-output-mods', '--mod-patches'])
+                      command.extend(['--profile', profile, '--mod-code-root',
+                                      '/tmp/mosaic-output-mods', '--mod-patches'])
                   completed = subprocess.run(command, cwd=source, text=True,
                                              capture_output=True)
                   row.update(returncode=completed.returncode, stdout=completed.stdout,
@@ -491,8 +491,10 @@ jobs:
                       row['manifest_sha256'] = targeted.sha256(manifest)
                       targeted.require(completed.returncode == 0 and item['passed'] is True,
                                        'three-process repeat failed')
-                      targeted.require(item['case'] == case and item['profile'] == profile
-                                       and item['mod_patches'] is (profile == 'midi-modulation')
+                      targeted.require(item['case'] == case
+                                       and item.get('profile', 'base-midi') == profile
+                                       and item.get('mod_patches', False)
+                                           is (profile == 'midi-modulation')
                                        and item['diagnostic_only'] is True
                                        and item['controlled_time_admitted'] is False
                                        and len(item['runs']) == 3,
@@ -508,7 +510,7 @@ jobs:
                           targeted.require(targeted.sha256(path) == run['sha256']
                                            and actual['mosaic_revision'] == after_sha
                                            and actual['case'] == case
-                                               and actual['profile'] == profile
+                                               and actual.get('profile', 'base-midi') == profile
                                            and actual['clock_mode'] == 'controlled-experimental'
                                            and actual['passed'] is True
                                            and actual['diagnostic_only'] is True,

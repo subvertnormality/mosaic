@@ -315,10 +315,11 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("--before-sha \"$BEFORE_SHA\"", workflow)
         self.assertIn("--after-sha \"$AFTER_SHA\"", workflow)
         self.assertIn("--case-ids \"$CASE_IDS\"", workflow)
-        self.assertIn("--profile \"$PROFILE\"", workflow)
+        self.assertIn('profile_args+=(--profile "$PROFILE" --mod-code-root', workflow)
+        self.assertIn('--case-ids "$CASE_IDS" "${profile_args[@]}"', workflow)
         self.assertIn("--mod-code-root /tmp/mosaic-output-mods --mod-patches", workflow)
-        self.assertIn("actual['profile'] == profile", workflow)
-        self.assertIn("gate['profile'] == profile", workflow)
+        self.assertIn("actual.get('profile', 'base-midi') == profile", workflow)
+        self.assertIn("gate.get('profile', 'base-midi') == profile", workflow)
         self.assertIn("chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods", workflow)
 
     def test_dispatch_installs_git_before_sha_submodule_checkouts(self):
@@ -336,6 +337,9 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("selection.setdefault(owner, case)", workflow)
         self.assertIn("len(item['runs']) == 3", workflow)
         self.assertIn("actual['mosaic_revision'] == after_sha", workflow)
+        self.assertIn("item.get('profile', 'base-midi') == profile", workflow)
+        self.assertIn("actual.get('profile', 'base-midi') == profile", workflow)
+        self.assertIn("item.get('mod_patches', False)", workflow)
         self.assertIn("targeted-ui-repeatability.json", workflow)
         self.assertIn("complete_regression_run=False", workflow)
         script = workflow.split("runuser -u mosaic-ci --preserve-environment -- python3 - <<'PY'\n", 1)[1]
@@ -353,6 +357,17 @@ class TargetedMigrationTests(unittest.TestCase):
                             and node.value.func.attr == "run"
                             for node in repeat_loop.body))
         profile_branch = next(node for node in repeat_loop.body if isinstance(node, ast.If))
+        command_assignment = next(node for node in repeat_loop.body
+                                  if isinstance(node, ast.Assign)
+                                  and any(isinstance(target, ast.Name)
+                                          and target.id == "command"
+                                          for target in node.targets))
+        self.assertFalse(any(isinstance(node, ast.Constant)
+                             and node.value == "--profile"
+                             for node in ast.walk(command_assignment)))
+        self.assertTrue(any(isinstance(node, ast.Constant)
+                            and node.value == "--profile"
+                            for node in ast.walk(profile_branch)))
         self.assertFalse(any(isinstance(node, ast.Call)
                              and isinstance(node.func, ast.Attribute)
                              and node.func.attr == "run"
