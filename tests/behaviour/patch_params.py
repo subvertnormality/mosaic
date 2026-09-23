@@ -1,105 +1,20 @@
 """Documented stored MIDI patch parameters, tested through native controls."""
 import json
-from frame_oracle import selected_line
-def open_patch_control(c,configured=False,setup=True):
-    from cases import menu_label,menu_value
-    if setup:
-        c.configure()
-        if configured:c.enc(3,1);c.key(3)
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,row in enumerate(roots) if row['id']=='midi_device_params_group_channel_1')
-    c.enc(2,position);c.key(3)
-    label='Control 1' if configured else 'CC 1'
-    for _ in range(180):
-        if selected_line(c.snapshot(),label):break
-        c.enc(2,1)
-    else:raise AssertionError('Configured patch control not reachable: '+label)
-    menu_label(c,label)
-    return label
-def turn(c,steps):
-    assert -63<=steps<=63 and steps
-    c.elapse(.05) # Beyond the official native encoder acceleration window.
-    c.action(type='enc',n=3,delta=2*steps)
-    c.elapse(.03)
-def patch_boundaries(c,configured=False):
-    from cases import menu_value
-    open_patch_control(c,configured)
-    menu_value(c,'X') # Documented -1 sentinel, including configured devices.
-    before=c.snapshot()['midi_count'];expected=[];value=-1
-    for delta in (-1,1,1,62,1,62,1,1,-63,-63,-2,-1):
-        wanted=max(-1,min(127,value+delta));turn(c,delta)
-        if wanted!=value and wanted!=-1:expected.append((1,[176,1,wanted]))
-        value=wanted;menu_value(c,'X' if value==-1 else str(value))
-        actual=[(e['port'],e['bytes']) for e in c.snapshot()['midi'] if e['index']>before]
-        assert actual==expected,dict(expected=expected,actual=actual)
-    c.results.append(dict(kind='stored-patch-sentinel-boundaries',configured=configured,values=[-1,0,1,63,64,126,127],clamped_attempts=True,expected=expected,passed=True))
-def patch_play_recall(c,repetitions=1):
-    from cases import menu_value
-    open_patch_control(c);menu_value(c,'X');turn(c,63);turn(c,1);menu_value(c,'63')
-    c.key(1);windows=[]
-    for _ in range(repetitions):
-        before=c.snapshot()['midi_count']
-        c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
-        windows.append((before,c.snapshot()['midi_count']))
-    c.finish()
-    try:
-        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
-        midi=[e for e in events if e.get('kind') in (3,11)]
-        assert [e['sequence'] for e in midi]==list(range(1,len(midi)+1))
-        for before,after in windows:
-            window=midi[before:after];cc=[e for e in window if e['bytes'][0]&240==176]
-            actual=[(e['port'],e['bytes']) for e in cc]
-            c.results.append(dict(kind='stored-unmapped-patch-play-recall',actual=actual,expected=[(1,[176,1,63])]))
-            assert actual==[(1,[176,1,63])],'Play did not recall exactly the stored unassigned CC parameter'
-            first_note=next(e for e in window if e['bytes'][0]&240==144 and e['bytes'][2]>0)
-            assert cc[0]['sequence']<first_note['sequence'],'Patch recall followed the first note'
-            c.results.append(dict(kind='stored-unmapped-patch-play-recall-complete',passed=True))
-    finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+from ui_map import TRIG_PARAMETERS
 
-def patch_muted_recall(c):
-    from cases import menu_value
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.action(type='grid',x=1,y=1,state=1)
-    try:c.elapse(1.1)
-    finally:c.action(type='grid',x=1,y=1,state=0)
-    c.led_values([(1,1)],[7])
-    before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(1.5);c.tap(1,8)
-    state=c.snapshot();after=state['midi_count']
-    assert not state['midi_capture']['outstanding']
-    c.finish()
-    try:
-        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
-        midi=[e for e in events if e.get('kind') in (3,11)]
-        assert [e['sequence'] for e in midi]==list(range(1,len(midi)+1))
-        window=midi[before:after]
-        cc=[(e['port'],e['bytes']) for e in window if e['bytes'][0]&240==176]
-        notes=[e for e in window if e['bytes'][0]&240==144 and e['bytes'][2]>0]
-        assert cc==[(1,[176,1,63])],cc
-        assert not notes,notes
-        c.results.append(dict(kind='muted-stored-patch-recall',seconds=1.5,cc=cc,note_ons=0,passed=True))
-    finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+# Compatibility entry points for unmigrated callers; all native input lives in Ui.
+def open_patch_control(c, configured=False, setup=True):
+    return c.ui.open_patch_control(configured=configured, setup=setup)
 
-def patch_nrpn_bytes(c):
-    from cases import menu_value,menu_label
-    open_patch_control(c,True)
-    for _ in range(180):
-        if selected_line(c.snapshot(),'NRPN14'):break
-        c.enc(2,1)
-    else:raise AssertionError('NRPN14 control not reachable')
-    menu_label(c,'NRPN14');menu_value(c,'X')
-    before=c.snapshot()['midi_count'];turn(c,1);menu_value(c,'126')
-    actual=[(e['port'],e['bytes']) for e in c.snapshot()['midi'] if e['index']>before]
-    expected=[(1,[176,99,4]),(1,[176,98,5]),(1,[176,6,0]),(1,[176,38,126])]
-    c.results.append(dict(kind='nrpn-native-byte-regression',expected=expected,actual=actual))
-    assert actual==expected,dict(expected=expected,actual=actual)
+def turn(c, steps):
+    return c.ui.turn_patch_control(steps)
+
 
 def patch_restart(c,off=False):
-    from cases import menu_value
     from driver import Driver,digest
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63')
-    if off:turn(c,-63);turn(c,-1);menu_value(c,'X')
-    c.key(1);c.elapse(59);c.elapse(2)
+    open_patch_control(c);turn(c,63);turn(c,1);c.ui.expect_patch_value(63)
+    if off:turn(c,-63);turn(c,-1);c.ui.expect_patch_value('off')
+    c.ui.press_key(1);c.elapse(59);c.elapse(2)
     files=[c.data_directory/'autosave.ptn',c.data_directory/'autosave.pset']
     c.wait(lambda _:all(p.is_file() and p.stat().st_size for p in files),timeout=3)
     c.results.append(dict(kind='patch-autosave',files=[dict(name=p.name,sha256=digest(p)) for p in files]))
@@ -107,7 +22,7 @@ def patch_restart(c,off=False):
     loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
     try:
         boot_end=loaded.snapshot()['midi_count']
-        open_patch_control(loaded,setup=False);menu_value(loaded,'X' if off else '63');loaded.key(1)
+        open_patch_control(loaded,setup=False);loaded.ui.expect_patch_value('off' if off else 63);loaded.ui.press_key(1)
         before=loaded.snapshot()['midi_count']
         loaded.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
         after=loaded.snapshot()['midi_count']
@@ -124,24 +39,20 @@ def patch_restart(c,off=False):
         loaded.finish();(out/'results.json').write_text(json.dumps(loaded.results,indent=2)+'\n')
 
 def patch_sparse_range(c,high=False):
-    from cases import menu_label,menu_value
-    open_patch_control(c,True);label='SparseHigh' if high else 'SparseLow';cc=3 if high else 2
-    for _ in range(180):
-        if selected_line(c.snapshot(),label):break
-        c.enc(2,1)
-    else:raise AssertionError('Sparse control not reachable: '+label)
-    menu_label(c,label);menu_value(c,'X');before=c.snapshot()['midi_count'];expected=[]
+    open_patch_control(c,True);parameter='sparse_high' if high else 'sparse_low';cc=3 if high else 2
+    c.ui.seek_current_patch_parameter(parameter, confirm=False, failure='Sparse control not reachable: '+('SparseHigh' if high else 'SparseLow'))
+    c.ui.expect_patch_parameter(parameter);c.ui.expect_patch_value('off');before=c.snapshot()['midi_count'];expected=[]
     # Enumerate every active value, with saturation and both Off transitions.
     direction=-1 if high else 1
-    turn(c,-direction);menu_value(c,'X')
+    turn(c,-direction);c.ui.expect_patch_value('off')
     for value in (range(127,99,-1) if high else range(100,128)):
-        turn(c,direction);menu_value(c,str(value));expected.append((1,[176,cc,value]))
+        turn(c,direction);c.ui.expect_patch_value(value);expected.append((1,[176,cc,value]))
         actual=[(e['port'],e['bytes']) for e in c.snapshot()['midi'] if e['index']>before]
         assert actual==expected,dict(expected=expected,actual=actual)
-    turn(c,direction);menu_value(c,'100' if high else '127')
+    turn(c,direction);c.ui.expect_patch_value(100 if high else 127)
     # Pinned native Control 1/28 endpoint callback; proven independently without Mosaic.
     expected.append((1,[176,cc,100 if high else 127]))
-    turn(c,-direction*63);menu_value(c,'X');after=c.snapshot()['midi_count'];c.finish()
+    turn(c,-direction*63);c.ui.expect_patch_value('off');after=c.snapshot()['midi_count'];c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -152,20 +63,19 @@ def patch_sparse_range(c,high=False):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 def patch_lock_precedence(c,lock_value=99):
-    from cases import menu_value,assign_trig_parameter
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
-    c.action(type='grid',x=1,y=4,state=1)
+    open_patch_control(c);turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
+    c.ui.gesture([('step', 1)], [])
     try:
         if lock_value==63:
-            c.enc(3,1);c.enc(3,-1)
+            c.ui.turn(3, 1);c.ui.turn(3, -1)
         else:
-            for _ in range(abs(lock_value-63)):c.enc(3,1 if lock_value>63 else -1)
-    finally:c.action(type='grid',x=1,y=4,state=0)
+            for _ in range(abs(lock_value-63)):c.ui.turn(3, 1 if lock_value>63 else -1)
+    finally:c.ui.gesture([], [('step', 1)])
     before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
     after=c.snapshot()['midi_count']
-    c.key(1);menu_value(c,'63');c.finish()
+    c.ui.press_key(1);c.ui.expect_patch_value(63);c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -195,19 +105,18 @@ def patch_duplicate_slot_lock(c,locked_slot=1):
     arrives last. The lock must be the value in force at its note whichever slot
     holds it, and the unlocked steps keep the stored value (user report 2026-09-17:
     a Syntakt Filter frequency lock never arrived while a second slot also held it)."""
-    from cases import menu_value,assign_trig_parameter
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
-    c.enc(2,1);assign_trig_parameter(c,'CC 1')
-    if locked_slot==1:c.enc(2,-1)
-    c.action(type='grid',x=1,y=4,state=1)
+    open_patch_control(c);turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
+    c.ui.turn(2, 1);c.ui.assign_trig_parameter_key('stored_patch_cc1')
+    if locked_slot==1:c.ui.turn(2, -1)
+    c.ui.gesture([('step', 1)], [])
     try:
-        for _ in range(99-63):c.enc(3,1)
-    finally:c.action(type='grid',x=1,y=4,state=0)
+        for _ in range(99-63):c.ui.turn(3, 1)
+    finally:c.ui.gesture([], [('step', 1)])
     before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
     after=c.snapshot()['midi_count']
-    c.key(1);menu_value(c,'63');c.finish()
+    c.ui.press_key(1);c.ui.expect_patch_value(63);c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -226,22 +135,21 @@ def patch_duplicate_slot_lock(c,locked_slot=1):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 def patch_adjacent_locks(c,start=1):
-    from cases import menu_value,assign_trig_parameter
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    open_patch_control(c);turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step in range(1,5):
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
             # The native lock calculator retains its prior edit. Clamp to Off
             # first, then enter the independently specified absolute value.
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126)
-            c.enc(3,64+step)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    if start!=1:c.hold_tap((start,4),(4,4))
+            c.elapse(.05);c.ui.encoder_event(3, -126)
+            c.ui.turn(3, 64+step)
+        finally:c.ui.gesture([], [('step', step)])
+    if start!=1:c.ui.hold_control_tap('step', 'step', held_index=start, target_index=4)
     before=c.snapshot()['midi_count']
     phrase=[(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))][start-1:]
     c.playback(phrase,cycles=3)
-    after=c.snapshot()['midi_count'];c.key(1);menu_value(c,'63');c.finish()
+    after=c.snapshot()['midi_count'];c.ui.press_key(1);c.ui.expect_patch_value(63);c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -267,62 +175,55 @@ def patch_adjacent_locks(c,start=1):
 def patch_slide_timing(c,wrap=False,target=96,fractional=False,swing=None,shuffle=False,off_middle=False,stop_restarts=0,step_local=False,global_roundtrip=False,default_off=False):
     lock_step=2 if swing is not None or shuffle else 3
     assert sum((fractional,swing is not None,shuffle))<=1
-    from cases import menu_value,assign_trig_parameter,set_mosaic_options
     if wrap:
-        c.configure();set_mosaic_options(c,[('Wrap param slides',True)])
+        c.configure();c.ui.set_mosaic_option_keys([('wrap_param_slides',True)])
     open_patch_control(c,configured=default_off,setup=not wrap)
     if default_off:
-        for _ in range(180):
-            if selected_line(c.snapshot(),'CCdefault'):break
-            c.enc(2,1)
-        else:raise AssertionError('Default-Off CC control unreachable')
-    turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CCdefault' if default_off else 'CC 1')
+        c.ui.seek_current_patch_parameter('cc_default', confirm=False, failure='Default-Off CC control unreachable')
+    turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('cc_default' if default_off else 'stored_patch_cc1')
     locks=[(1,24),(lock_step,target)]+([(2,-1)] if off_middle else [])+([(4,48)] if step_local else [])
     for step,value in locks:
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+            c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+        finally:c.ui.gesture([], [('step', step)])
     if step_local:
         # Documented held-step K3: only source step1 slides; global remains off.
-        c.action(type='grid',x=1,y=4,state=1)
-        try:c.key(3)
-        finally:c.action(type='grid',x=1,y=4,state=0)
-    else:c.key(3) # Documented global slide toggle for the selected parameter.
+        c.ui.gesture([('step', 1)], [])
+        try:c.ui.press_key(3)
+        finally:c.ui.gesture([], [('step', 1)])
+    else:c.ui.press_key(3) # Documented global slide toggle for the selected parameter.
     if fractional:
         # Parameter page 2 -> clocks page 4; /1 (index13) -> x5.3 (index5).
-        from frame_oracle import header,matches
-        c.enc(1,2);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        c.enc(3,8);c.key(3);c.enc(1,-2)
+        c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.wait_for_header('clock_mods', channel=1)
+        c.ui.turn(3, 8);c.ui.press_key(3);c.ui.channel_page('trig_locks', 'clock_mods', confirm=False)
     if swing is not None:
-        from frame_oracle import header,matches
-        c.enc(1,2);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        c.enc(2,1);c.enc(3,1);c.key(3) # Local Swing, not inherited X.
-        c.enc(2,1);c.enc(3,swing+51);c.key(3);c.enc(1,-2)
+        c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.wait_for_header('clock_mods', channel=1)
+        c.ui.turn(2, 1);c.ui.turn(3, 1);c.ui.press_key(3) # Local Swing, not inherited X.
+        c.ui.turn(2, 1);c.ui.turn(3, swing+51);c.ui.press_key(3);c.ui.channel_page('trig_locks', 'clock_mods', confirm=False)
     if shuffle:
-        from frame_oracle import header,matches
-        c.enc(1,2);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        c.enc(2,1);c.enc(3,2);c.key(3) # Local Shuffle.
-        c.enc(2,1);c.enc(3,3);c.key(3) # Heavy feel.
-        c.enc(2,1);c.enc(3,4);c.key(3) # Basis6.
-        c.enc(2,1);c.enc(3,100);c.key(3);c.enc(1,-2)
+        c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.wait_for_header('clock_mods', channel=1)
+        c.ui.turn(2, 1);c.ui.turn(3, 2);c.ui.press_key(3) # Local Shuffle.
+        c.ui.turn(2, 1);c.ui.turn(3, 3);c.ui.press_key(3) # Heavy feel.
+        c.ui.turn(2, 1);c.ui.turn(3, 4);c.ui.press_key(3) # Basis6.
+        c.ui.turn(2, 1);c.ui.turn(3, 100);c.ui.press_key(3);c.ui.channel_page('trig_locks', 'clock_mods', confirm=False)
     global_window=None
     if global_roundtrip:
         assert step_local and not wrap
-        c.key(3) # Enable global slides alongside the existing local flag.
+        c.ui.press_key(3) # Enable global slides alongside the existing local flag.
         global_before=c.snapshot()['midi_count']
         c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
         global_window=(global_before,c.snapshot()['midi_count'])
-        c.key(3) # Disable global; the original local flag must survive.
+        c.ui.press_key(3) # Disable global; the original local flag must survive.
     for attempt in range(stop_restarts):
         initial=c.snapshot()['midi_count']
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture([('play_stop', None)], []);c.ui.gesture([], [('play_stop', None)])
         def intermediate(state):
             return [e for e in state['midi'] if e['index']>initial and e['bytes'][:2]==[176,1] and 24<e['bytes'][2]<60]
         state=c.wait(lambda state:bool(intermediate(state)),timeout=2)
         seen=intermediate(state)
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture([('play_stop', None)], []);c.ui.gesture([], [('play_stop', None)])
         # A short observation drain excludes already queued pre-stop delivery.
         c.elapse(.03);stopped=c.snapshot()['midi_count'];c.elapse(1)
         state=c.snapshot()
@@ -333,7 +234,7 @@ def patch_slide_timing(c,wrap=False,target=96,fractional=False,swing=None,shuffl
         c.results.append(dict(kind='active-slide-stop',attempt=attempt,intermediate_values=[e['bytes'][2] for e in seen],quiet_seconds=1,delivery_drain_seconds=.03,passed=True))
     before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
-    after=c.snapshot()['midi_count'];c.key(1);menu_value(c,'63');c.finish()
+    after=c.snapshot()['midi_count'];c.ui.press_key(1);c.ui.expect_patch_value(63);c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -414,119 +315,24 @@ def patch_slide_timing(c,wrap=False,target=96,fractional=False,swing=None,shuffl
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
-def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=False):
-    assert not (type_switch and reset)
-    """Queued /3 -> /6 edit crosses an active slide at the pattern boundary."""
-    import math
-    from cases import menu_value,assign_trig_parameter,set_mosaic_options
-    from frame_oracle import header,matches
-    if reset:
-        c.configure();set_mosaic_options(c,[('Song mode',True),('Reset on pattern repeat',True),('Wrap param slides',True)])
-    open_patch_control(c,setup=not reset);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
-    for step,value in [(4 if reset else 1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
-        try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.key(3)
-    c.enc(1,2);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-    c.enc(3,-4);c.key(3) # Initial /3 (index17), committed while stopped.
-    if type_switch:
-        # Store Heavy6 at100%, then return to Swing before playback.
-        c.enc(2,1);c.enc(3,2);c.key(3)
-        c.enc(2,1);c.enc(3,3);c.key(3)
-        c.enc(2,1);c.enc(3,4);c.key(3)
-        c.enc(2,1);c.enc(3,100);c.key(3)
-        c.enc(2,-3);c.enc(3,-1);c.key(3)
-    before=c.snapshot()['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    c.enc(3,1 if type_switch else -4) # Queue Shuffle, or /3 index17 -> /6 index21.
-    c.key(3)
-    if repeated_edits:
-        assert not type_switch and not reset
-        # Several confirmed edits queue before the same global boundary.
-        # /6 -> /4 -> /6 -> /4 -> /6: only final /6 governs future onsets.
-        for delta in (1,-1,1,-1):
-            c.enc(3,delta);c.key(3)
-    import base64
-    from frame_oracle import render
-    label='Shuffle' if type_switch else '/6'
-    xpos=70 if type_switch else 0
-    expected_rate=render([(xpos,26,15,label)])
-    pixels=[(y*128+x)*4+k for y in range(20,30) for x in range(xpos,128 if type_switch else 48) for k in range(3)]
-    def rate_readback(state):
-        frame=base64.b64decode(state['frame']['pixels_base64'])
-        return all(frame[i]==expected_rate[i] for i in pixels)
-    c.wait(rate_readback)
-    c.results.append(dict(kind='clock-rate-readback',value=label,passed=True))
-    def notes(state):
-        return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
-    c.wait(lambda state:len(notes(state))>=(25 if reset else 23),timeout=15)
-    c.elapse(.12)
-    after=c.snapshot()['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    c.wait(lambda state:not state['midi_capture']['outstanding']);c.finish()
-    checks=[]
-    try:
-        all_events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
-        events=[e for e in all_events if e.get('kind') in (3,11)][before:after]
-        onsets=[e for e in events if e['bytes'][0]==144 and e['bytes'][2]>0]
-        assert len(onsets)>=(25 if reset else 23)
-        for i,note in enumerate(onsets):
-            slot=(i-22)%4 if reset and i>=22 else i%4
-            assert (note['port'],note['bytes'])==(1,[144,(60,62,64,65)[slot],(127,117,107,97)[slot]])
-        controlled=c.clock_mode!='real-time';field='logical_ns' if controlled else 'monotonic_ns'
-        start=onsets[0][field]
-        # The default64-step global pattern commits queued controls at1536
-        # pulses. Channel /3 starts steps1,2,3 at1440,1512,1584 before editing.
-        # At1536 the remaining48 pulses stretch to96: destination becomes1632.
-        effective_pulse=1536
-        source_pulse=1368 if reset else 1440
-        target_pulse=1824 if reset else (1568 if type_switch else 1632)
-        source_index=19 if reset else 20
-        target_index=24 if reset else 22
-        tolerance=2e-9 if controlled else .01
-        for index,note in enumerate(onsets):
-            pulse=index*72 if index<=21 else (1536+(index-22)*144 if reset else target_pulse+(index-22)*(48 if type_switch else 144))
-            assert abs((note[field]-start)/1e9-pulse/144)<=tolerance,dict(index=index,expected_pulse=pulse,actual=(note[field]-start)*144/1e9)
-        ramp=[e for e in events if onsets[source_index]['sequence']<e['sequence']<onsets[target_index]['sequence'] and e['bytes'][:2]==[176,1]]
-        assert len(ramp)>=4
-        value_at_edit=80 if reset else 72
-        old_duration=216 if reset else 144
-        for event in ramp:
-            pulse=(event[field]-start)*144/1e9
-            ideal=24+72*(pulse-source_pulse)/old_duration if pulse<=effective_pulse else value_at_edit+(96-value_at_edit)*(pulse-effective_pulse)/(target_pulse-effective_pulse)
-            error=abs(event['bytes'][2]-ideal)
-            checks.append(dict(pulse=pulse,value=event['bytes'][2],ideal=ideal,error=error))
-            assert error<=1+216*tolerance,checks[-1]
-        assert ramp[-1]['bytes'][2]==96
-        assert abs((ramp[-1][field]-onsets[target_index][field])/1e9)<=tolerance
-        c.results.append(dict(kind='live-slide-rate-edit',type_switch=type_switch,reset=reset,repeated_edits=repeated_edits,edit_pulse=effective_pulse,source_pulse=source_pulse,target_pulse=target_pulse,checks=checks,passed=True))
-    finally:
-        c.results.append(dict(kind='live-slide-rate-samples',checks=checks))
-        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
-
-
 def patch_slide_song_cutoff(c):
-    from cases import menu_value,assign_trig_parameter,set_mosaic_options
     c.configure()
-    set_mosaic_options(c,[('Song mode',True),('Reset on song seq change',False),('Reset on pattern repeat',False)])
-    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.ui.set_mosaic_option_keys([('song_mode',True),('reset_on_song_seq_change',False),('reset_on_pattern_repeat',False)])
+    open_patch_control(c,setup=False);turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step,value in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.key(3);c.enc(1,2);c.enc(3,-4);c.key(3) # /3, 72pulses/step.
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
-    before=c.snapshot()['midi_count'];c.tap(1,8)
+            c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+        finally:c.ui.gesture([], [('step', step)])
+    c.ui.press_key(3);c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.turn(3, -4);c.ui.press_key(3) # /3, 72pulses/step.
+    c.ui.tap_control('song_editor', None);c.ui.hold_control_tap('song_pattern_slot', 'song_pattern_slot', held_index=1, target_index=2);c.ui.expect_leds({('song_pattern_slot', 1): 'selected', ('song_pattern_slot', 2): 'alternate'})
+    c.ui.tap_control('song_pattern_slot', 2);c.ui.tap_control('channel_editor', None);c.ui.tap_control('channel_octave', 1);c.ui.tap_control('song_editor', None);c.ui.tap_control('song_pattern_slot', 1)
+    before=c.snapshot()['midi_count'];c.ui.tap_control('play_stop', None)
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
     c.wait(lambda state:len(notes(state))>=24,timeout=15)
-    c.led_values([(1,1),(2,1)],[7,15])
-    after=c.snapshot()['midi_count'];c.tap(1,8)
+    c.ui.expect_leds({('song_pattern_slot', 1): 'alternate', ('song_pattern_slot', 2): 'selected'})
+    after=c.snapshot()['midi_count'];c.ui.tap_control('play_stop', None)
     c.wait(lambda state:not state['midi_capture']['outstanding']);c.finish()
     try:
         raw=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
@@ -552,21 +358,20 @@ def patch_slide_song_cutoff(c):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 def patch_slide_trigless(c,enabled=True):
-    from cases import menu_value,assign_trig_parameter,set_mosaic_options
-    c.configure();set_mosaic_options(c,[('Trigless locks',enabled)])
+    c.configure();c.ui.set_mosaic_option_keys([('trigless_locks',enabled)])
     # Remove the destination note using the pattern trig page; keep its lock.
-    c.tap(5,8);c.tap(3,4);c.tap(3,8)
-    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.ui.tap_control('pattern_editor', None);c.ui.tap_control('step', 3);c.ui.tap_control('channel_editor', None)
+    open_patch_control(c,setup=False);turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step,value in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.key(3)
+            c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+        finally:c.ui.gesture([], [('step', step)])
+    c.ui.press_key(3)
     before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(65,97))],cycles=2)
-    after=c.snapshot()['midi_count'];c.key(1);menu_value(c,'63');c.finish()
+    after=c.snapshot()['midi_count'];c.ui.press_key(1);c.ui.expect_patch_value(63);c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -606,46 +411,43 @@ def patch_slide_trigless(c,enabled=True):
 
 def patch_slide_live_destination(c,off=False,clear=False,reassign=False,clear_all=False,unassign=False):
     assert sum((off,clear,reassign,clear_all,unassign))<=1
-    from cases import assign_trig_parameter,menu_value
-    from frame_oracle import header,matches
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    open_patch_control(c);turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step,value in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.key(3)
-    c.enc(1,2);c.wait(lambda s:matches(s,header('Ch. 1 Clocks',selected=4)))
-    c.enc(3,-8);c.key(3);c.enc(1,-2) # /6: one second per note at90BPM.
+            c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+        finally:c.ui.gesture([], [('step', step)])
+    c.ui.press_key(3)
+    c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.wait_for_header('clock_mods', channel=1)
+    c.ui.turn(3, -8);c.ui.press_key(3);c.ui.channel_page('trig_locks', 'clock_mods', confirm=False) # /6: one second per note at90BPM.
     before=c.snapshot()['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.gesture([('play_stop', None)], []);c.ui.gesture([], [('play_stop', None)])
     c.wait(lambda s:any(e['index']>before and e['bytes'][:2]==[176,1] and 24<e['bytes'][2]<40 for e in s['midi']))
     if clear_all:
-        c.action(type='key',n=1,state=1);c.elapse(.3) # Native K1 shift hold, not menu tap.
-        try:c.key(2)
-        finally:c.action(type='key',n=1,state=0)
+        with c.ui.hold_keys(1):
+            c.elapse(.3) # Native K1 shift hold, not menu tap.
+            c.ui.press_key(2)
     elif reassign or unassign:
-        from cases import parameter_list_label
-        c.key(2)
+        c.ui.press_key(2)
         if unassign:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-            parameter_list_label(c,'None')
-        else:c.enc(3,1);parameter_list_label(c,'CC 2')
-        c.key(3);c.key(2)
+            c.elapse(.05);c.ui.encoder_event(3, -126);c.elapse(.15)
+            c.ui.expect_list_label(TRIG_PARAMETERS['none'])
+        else:c.ui.turn(3, 1);c.ui.expect_list_label(TRIG_PARAMETERS['stored_patch_cc2'])
+        c.ui.press_key(3);c.ui.press_key(2)
     else:
-        c.action(type='grid',x=3,y=4,state=1)
+        c.ui.gesture([('step', 3)], [])
         try:
-            if clear:c.key(2) # Documented held-step clear, while transport runs.
+            if clear:c.ui.press_key(2) # Documented held-step clear, while transport runs.
             elif off:
-                c.elapse(.05);c.action(type='enc',n=3,delta=-126) # Saturate to Off.
-            else:c.enc(3,-12) #96 ->84, authored while original slide is active.
-        finally:c.action(type='grid',x=3,y=4,state=0)
+                c.elapse(.05);c.ui.encoder_event(3, -126) # Saturate to Off.
+            else:c.ui.turn(3, -12) #96 ->84, authored while original slide is active.
+        finally:c.ui.gesture([], [('step', 3)])
     edit_done=c.snapshot()['midi_count']
     def notes(s):return [e for e in s['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
     c.wait(lambda s:len(notes(s))>=9,timeout=12)
-    after=c.snapshot()['midi_count'];c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding'])
-    c.key(1);menu_value(c,'63');c.finish()
+    after=c.snapshot()['midi_count'];c.ui.tap_control('play_stop', None);c.wait(lambda s:not s['midi_capture']['outstanding'])
+    c.ui.press_key(1);c.ui.expect_patch_value(63);c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -736,46 +538,44 @@ def patch_slide_live_destination(c,off=False,clear=False,reassign=False,clear_al
 def patch_clear_mask_boundary(c,inverse=False,single=False,copy_isolation=False):
     assert not copy_isolation or not inverse
     assert not single or inverse
-    from cases import assign_trig_parameter,menu_value,length_mask_display
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-4);c.enc(2,2)
+    open_patch_control(c);turn(c,63);turn(c,1);c.ui.expect_patch_value(63);c.ui.press_key(1)
+    c.ui.channel_page('masks', 'midi_config', confirm=False);c.ui.turn(2, 2)
     if inverse:
         for step in range(1,5):
-            c.action(type='grid',x=step,y=4,state=1)
-            try:c.enc(3,8);length_mask_display(c,'1/2')
-            finally:c.action(type='grid',x=step,y=4,state=0)
-    else:c.enc(3,8);length_mask_display(c,'1/2')
-    c.enc(1,1);assign_trig_parameter(c,'CC 1')
+            c.ui.gesture([('step', step)], [])
+            try:c.ui.turn(3, 8);c.ui.expect_field_value('length', '1/2')
+            finally:c.ui.gesture([], [('step', step)])
+    else:c.ui.turn(3, 8);c.ui.expect_field_value('length', '1/2')
+    c.ui.channel_page('trig_locks', 'masks', confirm=False);c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step,value in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.hold_tap((2,4),(11,8)) # Separate octave lock +1 at step2.
+            c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+        finally:c.ui.gesture([], [('step', step)])
+    c.ui.hold_control_tap('step', 'channel_octave', held_index=2, target_index=1) # Separate octave lock +1 at step2.
     windows=[]
     if copy_isolation:
-        c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7]);c.tap(3,8)
+        c.ui.tap_control('song_editor', None);c.ui.hold_control_tap('song_pattern_slot', 'song_pattern_slot', held_index=1, target_index=2);c.ui.expect_leds({('song_pattern_slot', 1): 'selected', ('song_pattern_slot', 2): 'alternate'});c.ui.tap_control('channel_editor', None)
     phases=[(1,False),(2,False),(2,True),(1,False),(2,True)] if copy_isolation else [(1,False),(1,True)]
     for slot,cleared in phases:
         pitches=(60,74,64,65) if not cleared or inverse else (60,62,64,65)
         if copy_isolation:
-            c.tap(6,8);c.tap(slot,1)
-            c.led_values([(1,1),(2,1)],[7,15] if slot==2 else [15,7]);c.tap(3,8)
+            c.ui.tap_control('song_editor', None);c.ui.tap_control('song_pattern_slot', slot)
+            c.ui.expect_leds({('song_pattern_slot', 1): 'alternate', ('song_pattern_slot', 2): 'selected'} if slot==2 else {('song_pattern_slot', 1): 'selected', ('song_pattern_slot', 2): 'alternate'});c.ui.tap_control('channel_editor', None)
         if cleared:
-            if inverse:c.enc(1,-1) # Mask-page K1+K2 must preserve all non-mask locks.
+            if inverse:c.ui.channel_page('masks', 'trig_locks', confirm=False) # Mask-page K1+K2 must preserve all non-mask locks.
             if single:
-                c.action(type='grid',x=2,y=4,state=1)
-                try:c.key(2)
-                finally:c.action(type='grid',x=2,y=4,state=0)
+                c.ui.gesture([('step', 2)], [])
+                try:c.ui.press_key(2)
+                finally:c.ui.gesture([], [('step', 2)])
             else:
-                c.action(type='key',n=1,state=1)
-                try:c.elapse(.3);c.key(2)
-                finally:c.action(type='key',n=1,state=0)
+                with c.ui.hold_keys(1):
+                    c.elapse(.3);c.ui.press_key(2)
         before=c.snapshot()['midi_count']
         c.playback([(1,[144,n,v]) for n,v in zip(pitches,(127,117,107,97))],cycles=2)
         windows.append((slot,cleared,before,c.snapshot()['midi_count']))
-    if not inverse:c.enc(1,-1)
-    length_mask_display(c,'X' if inverse else '1/2');c.finish()
+    if not inverse:c.ui.channel_page('masks', 'trig_locks', confirm=False)
+    c.ui.expect_field_value('length', 'X' if inverse else '1/2');c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -799,28 +599,27 @@ def patch_clear_mask_boundary(c,inverse=False,single=False,copy_isolation=False)
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 def patch_channel_clear_isolation(c):
-    from cases import assign_trig_parameter
-    c.configure();c.tap(2,1)
-    c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.enc(1,-3)
+    c.configure();c.ui.tap_control('channel', 2)
+    c.ui.turn(3, 1);c.ui.turn(2, 1);c.ui.turn(3, 1);c.ui.turn(2, 1);c.ui.turn(3, 1);c.ui.press_key(3)
+    c.ui.tap_control('pattern_slot', 1);c.ui.hold_control_tap('step', 'step', held_index=1, target_index=4);c.ui.channel_page('trig_locks', 'midi_config', confirm=False)
     for channel,values,octave in [(2,(40,80),-1),(1,(24,96),1)]:
-        c.tap(channel,1);assign_trig_parameter(c,'CC 1')
+        c.ui.tap_control('channel', channel);c.ui.assign_trig_parameter_key('stored_patch_cc1')
         for step,value in zip((1,3),values):
-            c.action(type='grid',x=step,y=4,state=1)
+            c.ui.gesture([('step', step)], [])
             try:
-                c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-            finally:c.action(type='grid',x=step,y=4,state=0)
-        c.hold_tap((2,4),(10+octave,8))
+                c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+            finally:c.ui.gesture([], [('step', step)])
+        c.ui.hold_control_tap('step', 'channel_octave', held_index=2, target_index=octave)
     windows=[]
     for phase in range(3):
         if phase:
-            c.tap(1,1);c.action(type='key',n=1,state=1)
-            try:c.elapse(.3);c.key(2)
-            finally:c.action(type='key',n=1,state=0)
-        before=c.snapshot()['midi_count'];c.tap(1,8)
+            c.ui.tap_control('channel', 1)
+            with c.ui.hold_keys(1):
+                c.elapse(.3);c.ui.press_key(2)
+        before=c.snapshot()['midi_count'];c.ui.tap_control('play_stop', None)
         def complete(s):
             return all(sum(e['index']>before and e['bytes'][0]==143+ch and e['bytes'][2]>0 for e in s['midi'])>=9 for ch in (1,2))
-        c.wait(complete,timeout=5);c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding'])
+        c.wait(complete,timeout=5);c.ui.tap_control('play_stop', None);c.wait(lambda s:not s['midi_capture']['outstanding'])
         windows.append((phase,before,c.snapshot()['midi_count']))
     c.finish()
     try:
@@ -850,28 +649,26 @@ def patch_channel_clear_isolation(c):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 def patch_ten_slot_slides(c,remove_middle=False):
-    from cases import assign_trig_parameter
-    c.configure();c.enc(1,-3)
+    c.configure();c.ui.channel_page('trig_locks', 'midi_config', confirm=False)
     for slot in range(1,11):
-        if slot>1:c.enc(2,1)
-        assign_trig_parameter(c,'CC '+str(slot))
+        if slot>1:c.ui.turn(2, 1)
+        c.ui.assign_trig_parameter_key('stored_patch_cc'+str(slot))
         for step,value in [(1,slot),(3,slot+16)]:
-            c.action(type='grid',x=step,y=4,state=1)
+            c.ui.gesture([('step', step)], [])
             try:
-                c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-            finally:c.action(type='grid',x=step,y=4,state=0)
-        c.key(3)
+                c.elapse(.05);c.ui.encoder_event(3, -126);c.ui.turn(3, value+1)
+            finally:c.ui.gesture([], [('step', step)])
+        c.ui.press_key(3)
     if remove_middle:
-        c.enc(2,-5);c.enc(1,2);c.enc(3,-8);c.key(3);c.enc(1,-2) # Slot5, /6.
+        c.ui.turn(2, -5);c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.turn(3, -8);c.ui.press_key(3);c.ui.channel_page('trig_locks', 'clock_mods', confirm=False) # Slot5, /6.
     before=c.snapshot()['midi_count']
     if remove_middle:
-        from cases import parameter_list_label
-        c.tap(1,8)
+        c.ui.tap_control('play_stop', None)
         c.wait(lambda s:any(e['index']>before and e['bytes'][:2]==[176,5] and 5<e['bytes'][2]<12 for e in s['midi']))
-        c.key(2);c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-        parameter_list_label(c,'None');c.key(3);c.key(2)
+        c.ui.press_key(2);c.elapse(.05);c.ui.encoder_event(3, -126);c.elapse(.15)
+        c.ui.expect_list_label(TRIG_PARAMETERS['none']);c.ui.press_key(3);c.ui.press_key(2)
         c.wait(lambda s:sum(e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0 for e in s['midi'])>=9,timeout=12)
-        c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding'])
+        c.ui.tap_control('play_stop', None);c.wait(lambda s:not s['midi_capture']['outstanding'])
     else:c.playback([(1,[144,n,v]) for n,v in zip((60,62,64,65),(127,117,107,97))],cycles=2)
     after=c.snapshot()['midi_count'];c.finish()
     try:
@@ -916,23 +713,19 @@ def patch_ten_slot_slides(c,remove_middle=False):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 def patch_sparse_slide(c,high=False):
-    from cases import menu_label,menu_value,assign_trig_parameter
-    open_patch_control(c,True);label='SparseHigh' if high else 'SparseLow';cc_number=3 if high else 2
-    for _ in range(180):
-        if selected_line(c.snapshot(),label):break
-        c.enc(2,1)
-    else:raise AssertionError('Sparse control not reachable')
-    menu_label(c,label);menu_value(c,'X');turn(c,-1 if high else 1);turn(c,-14 if high else 13);menu_value(c,'113');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,label)
+    open_patch_control(c,True);parameter='sparse_high' if high else 'sparse_low';cc_number=3 if high else 2
+    c.ui.seek_current_patch_parameter(parameter, confirm=False, failure='Sparse control not reachable')
+    c.ui.expect_patch_parameter(parameter);c.ui.expect_patch_value('off');turn(c,-1 if high else 1);turn(c,-14 if high else 13);c.ui.expect_patch_value(113);c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key(parameter)
     for step,value in [(1,100),(3,127)]:
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=126 if high else -126)
-            c.enc(3,value-128 if high else value-99)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.key(3);before=c.snapshot()['midi_count']
+            c.elapse(.05);c.ui.encoder_event(3, 126 if high else -126)
+            c.ui.turn(3, value-128 if high else value-99)
+        finally:c.ui.gesture([], [('step', step)])
+    c.ui.press_key(3);before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in zip((60,62,64,65),(127,117,107,97))],cycles=2)
-    after=c.snapshot()['midi_count'];c.key(1);menu_value(c,'113');c.finish()
+    after=c.snapshot()['midi_count'];c.ui.press_key(1);c.ui.expect_patch_value(113);c.finish()
     try:
         raw=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in raw if e.get('kind') in (3,11)]
@@ -965,15 +758,11 @@ def patch_nrpn_restart(c,legacy=False,convert=False):
     import re,shutil,subprocess
     from pathlib import Path
     historical_output=legacy and not convert
-    from cases import menu_value,menu_label
     from driver import Driver,digest
     def locate(driver,setup):
         open_patch_control(driver,configured=True,setup=setup)
-        for _ in range(180):
-            if selected_line(driver.snapshot(),'NRPN14'):break
-            driver.enc(2,1)
-        else:raise AssertionError('NRPN14 not reachable')
-        menu_label(driver,'NRPN14')
+        driver.ui.seek_current_patch_parameter('nrpn14', confirm=False, failure='NRPN14 not reachable')
+        driver.ui.expect_patch_parameter('nrpn14')
     def packets(value):
         hi,lo=divmod(value,128)
         if historical_output:lo=lo//2 if lo%2==0 else 0
@@ -984,7 +773,7 @@ def patch_nrpn_restart(c,legacy=False,convert=False):
     def autosave(driver):
         driver.elapse(59);driver.elapse(2)
         driver.wait(lambda _:all((driver.data_directory/name).is_file() for name in ('autosave.ptn','autosave.pset')),timeout=3)
-    locate(c,True);menu_value(c,'X');turn(c,1);menu_value(c,'126');c.key(1)
+    locate(c,True);c.ui.expect_patch_value('off');turn(c,1);c.ui.expect_patch_value(126);c.ui.press_key(1)
     autosave(c);c.finish()
     seed=c.data_directory
     if legacy:
@@ -1021,11 +810,11 @@ def patch_nrpn_restart(c,legacy=False,convert=False):
         loaded=Driver(out,project_seed=seed,**c.launch_options)
         try:
             assert captured(loaded)==packets(value),dict(stage='boot',value=value,expected=packets(value),actual=captured(loaded))
-            locate(loaded,False);menu_value(loaded,str(value))
+            locate(loaded,False);loaded.ui.expect_patch_value(value)
             if generation==1:
-                before=loaded.snapshot()['midi_count'];turn(loaded,1);value=253;menu_value(loaded,'253')
+                before=loaded.snapshot()['midi_count'];turn(loaded,1);value=253;loaded.ui.expect_patch_value(253)
                 assert captured(loaded,before)==packets(value),dict(stage='edit',actual=captured(loaded,before),expected=packets(value))
-            loaded.key(1);before=loaded.snapshot()['midi_count']
+            loaded.ui.press_key(1);before=loaded.snapshot()['midi_count']
             loaded.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
             assert captured(loaded,before)==packets(value),dict(stage='play',actual=captured(loaded,before),expected=packets(value))
             if generation==1:autosave(loaded)
@@ -1038,64 +827,56 @@ def patch_nrpn_restart(c,legacy=False,convert=False):
 
 
 def patch_nrpn_boundary_matrix(c):
-    from cases import menu_label,menu_value
     open_patch_control(c,True)
-    for _ in range(180):
-        if selected_line(c.snapshot(),'NS0'):break
-        c.enc(2,1)
-    else:raise AssertionError('Boundary NRPN controls unreachable')
+    c.ui.seek_current_patch_parameter('nrpn_standard_0', confirm=False, failure='Boundary NRPN controls unreachable')
     checks=[]
     table=[(legacy,i,v) for legacy in (False,True) for i,v in enumerate((0,1,126,127,128,129,16383))]
     # Return to A after traversing standard and historical B parameters.
     for position,(legacy,index,value) in enumerate(table+[table[0]]):
-        if position==14:c.enc(2,-13)
-        elif position:c.enc(2,1)
+        if position==14:c.ui.turn(2, -13)
+        elif position:c.ui.turn(2, 1)
         name=('NL' if legacy else 'NS')+str(index)
-        menu_label(c,name);menu_value(c,'X')
-        before=c.snapshot()['midi_count'];turn(c,1);menu_value(c,str(value))
+        parameter='nrpn_%s_%d' % ('legacy' if legacy else 'standard', index)
+        c.ui.expect_patch_parameter(parameter);c.ui.expect_patch_value('off')
+        before=c.snapshot()['midi_count'];turn(c,1);c.ui.expect_patch_value(value)
         hi,lo=divmod(value,128)
         if legacy:lo=lo//2 if lo%2==0 else 0
         status=191 if legacy else 177
         expected=[(1,[status,cc,v]) for cc,v in ((99,7 if legacy else 6),(98,index),(6,hi),(38,lo))]
         actual=[(e['port'],e['bytes']) for e in c.snapshot()['midi'] if e['index']>before]
         assert actual==expected,dict(name=name,expected=expected,actual=actual)
-        before=c.snapshot()['midi_count'];turn(c,-1);menu_value(c,'X')
+        before=c.snapshot()['midi_count'];turn(c,-1);c.ui.expect_patch_value('off')
         assert c.snapshot()['midi_count']==before,'Off emitted data'
         checks.append(dict(parameter=name,value=value,expected=expected))
     c.results.append(dict(kind='nrpn-native-boundary-mode-matrix',checks=checks,off_silence=True,aba=True,passed=True))
 
 
 def patch_nrpn_slide(c,legacy=False,descending=False,default_off=False):
-    from cases import menu_label,menu_value,assign_trig_parameter
-    from frame_oracle import header,matches
-    name='NRPNdef' if default_off else ('NRPNold' if legacy else 'NRPN14')
+    parameter='nrpn_default' if default_off else ('nrpn_old' if legacy else 'nrpn14')
     open_patch_control(c,True)
-    for _ in range(180):
-        if selected_line(c.snapshot(),name):break
-        c.enc(2,1)
-    else:raise AssertionError('NRPN slide control unreachable')
-    menu_label(c,name);menu_value(c,'X');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,name)
+    c.ui.seek_current_patch_parameter(parameter, confirm=False, failure='NRPN slide control unreachable')
+    c.ui.expect_patch_parameter(parameter);c.ui.expect_patch_value('off');c.ui.press_key(1)
+    c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key(parameter)
     source,target=(253,126) if descending else (126,253)
     for step,value in ((1,source),(3,target)):
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126)
-            c.enc(3,1 if value==126 else 2)
-            c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.enc(3,-2 if value==126 else -4) # Fine edit: coarse128/257 ->126/253.
-            finally:c.action(type='key',n=1,state=0)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+            c.elapse(.05);c.ui.encoder_event(3, -126)
+            c.ui.turn(3, 1 if value==126 else 2)
+            with c.ui.hold_keys(1):
+                c.elapse(.3)
+                c.ui.turn(3, -2 if value==126 else -4) # Fine edit: coarse128/257 ->126/253.
+        finally:c.ui.gesture([], [('step', step)])
     if default_off:
-        c.action(type='grid',x=2,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-        finally:c.action(type='grid',x=2,y=4,state=0)
-    c.key(3)
-    c.enc(1,2);c.wait(lambda s:matches(s,header('Ch. 1 Clocks',selected=4)))
-    c.enc(3,-23);c.key(3);c.enc(1,-2) # /24 gives4seconds/step at90BPM.
+        c.ui.gesture([('step', 2)], [])
+        try:c.elapse(.05);c.ui.encoder_event(3, -126);c.elapse(.15)
+        finally:c.ui.gesture([], [('step', 2)])
+    c.ui.press_key(3)
+    c.ui.channel_page('clock_mods', 'trig_locks', confirm=False);c.ui.wait_for_header('clock_mods', channel=1)
+    c.ui.turn(3, -23);c.ui.press_key(3);c.ui.channel_page('trig_locks', 'clock_mods', confirm=False) # /24 gives4seconds/step at90BPM.
     before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2,timeout=36,settle_seconds=30)
-    after=c.snapshot()['midi_count'];c.key(1);menu_value(c,'X');c.finish()
+    after=c.snapshot()['midi_count'];c.ui.press_key(1);c.ui.expect_patch_value('off');c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
         midi=[e for e in events if e.get('kind') in (3,11)]
@@ -1143,39 +924,38 @@ def patch_nrpn_slide(c,legacy=False,descending=False,default_off=False):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
-
 def patch_mixed_cc_nrpn_slides(c):
     """Run independent step-local CC and global NRPN slides concurrently."""
-    from cases import assign_trig_parameter,assert_durations
+    from cases import assert_durations
     from note_accounting import note_pairs
 
     open_patch_control(c,True)
-    c.key(1);c.enc(1,-3)
+    c.ui.press_key(1);c.ui.channel_page('trig_locks', 'midi_config', confirm=False)
 
     def hold(step, action):
-        c.action(type='grid',x=step,y=4,state=1)
+        c.ui.gesture([('step', step)], [])
         try:
             c.elapse(.05);action()
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        finally:c.ui.gesture([], [('step', step)])
         c.elapse(.15)
 
     # Slot1: CC from24 to96, with only step1 marked as a slide source.
-    assign_trig_parameter(c,'CCdefault')
+    c.ui.assign_trig_parameter_key('cc_default')
     for step,value in ((1,24),(3,96)):
-        hold(step,lambda value=value:(c.action(type='enc',n=3,delta=-126),c.enc(3,value+1)))
-    hold(1,lambda:c.key(3))
+        hold(step,lambda value=value:(c.ui.encoder_event(3, -126),c.ui.turn(3, value+1)))
+    hold(1,lambda:c.ui.press_key(3))
 
     # Slot2: standard NRPN from126 to253, with the channel-wide slide flag.
-    c.enc(2,1);assign_trig_parameter(c,'NRPN14')
+    c.ui.turn(2, 1);c.ui.assign_trig_parameter_key('nrpn14')
     for step,value in ((1,126),(3,253)):
         def set_nrpn(value=value):
-            c.action(type='enc',n=3,delta=-126)
-            c.enc(3,1 if value==126 else 2)
-            c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.enc(3,-2 if value==126 else -4)
-            finally:c.action(type='key',n=1,state=0)
+            c.ui.encoder_event(3, -126)
+            c.ui.turn(3, 1 if value==126 else 2)
+            with c.ui.hold_keys(1):
+                c.elapse(.3)
+                c.ui.turn(3, -2 if value==126 else -4)
         hold(step,set_nrpn)
-    c.key(3)
+    c.ui.press_key(3)
 
     before=c.snapshot()['midi_count']
     played=c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
@@ -1262,13 +1042,13 @@ def patch_mixed_cc_nrpn_slides(c):
 
 
 def patch_configured_off_lock(c,high=False,default_kind=None):
-    from cases import assign_trig_parameter,menu_value
     name=default_kind or ('SparseHigh' if high else 'NRPN14')
-    open_patch_control(c,True);c.key(1);c.enc(1,-3);assign_trig_parameter(c,name)
-    c.action(type='grid',x=1,y=4,state=1)
+    parameter=({'CCdefault':'cc_default','NRPNdef':'nrpn_default'}[default_kind] if default_kind else ('sparse_high' if high else 'nrpn14'))
+    open_patch_control(c,True);c.ui.press_key(1);c.ui.channel_page('trig_locks', 'midi_config', confirm=False);c.ui.assign_trig_parameter_key(parameter)
+    c.ui.gesture([('step', 1)], [])
     try:
-        c.elapse(.05);c.action(type='enc',n=3,delta=126 if high else -126);c.elapse(.15)
-    finally:c.action(type='grid',x=1,y=4,state=0)
+        c.elapse(.05);c.ui.encoder_event(3, 126 if high else -126);c.elapse(.15)
+    finally:c.ui.gesture([], [('step', 1)])
     before=c.snapshot()['midi_count']
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
     actual=[(e['port'],e['bytes']) for e in c.snapshot()['midi'] if e['index']>before and e['bytes'][0]&240==176]

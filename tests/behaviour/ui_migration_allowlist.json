@@ -3,7 +3,6 @@
   "dense_workload.py",
   "hardware_driver.py",
   "hardware_performance.py",
-  "patch_params.py",
   "perf_calibration_emulator.py",
   "perf_dense.py",
   "perf_input.py",
