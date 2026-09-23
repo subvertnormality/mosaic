@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "5fb3c37796c2bc356eeef97e3f8281dda7d303af",
+  "selected_cases": [
+    "M-SAVE-NAMED-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/named_save.py": "M-SAVE-NAMED-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/named_save.py",
+      "case": "M-SAVE-NAMED-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-d763ffcda36e42cf8262489ac3055f78/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-d763ffcda36e42cf8262489ac3055f78/manifest.json",
+      "manifest_sha256": "ec0f11b7706bd9027a976b9346d6c9ea1740e1ce492a4a189abf429b09fd1d3d",
+      "passed": true
+    }
+  ],
+  "passed": true
+}
