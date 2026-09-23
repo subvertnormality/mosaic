@@ -512,6 +512,19 @@ class Ui:
         if activate:
             self.press_key(3)
 
+    def select_project_file(self, name, returning=False):
+        """Select a saved project through the native load menu."""
+        from frame_oracle import selected_line
+
+        self.select_project_action("load", returning=returning)
+        self.encoder_event(2, -100)
+        for _ in range(30):
+            if selected_line(self.driver.snapshot(), name):
+                return
+            self.encoder_event(2, 1)
+            self.driver.elapse(.03)
+        raise AssertionError("Project file not reached: " + name)
+
     def expect_menu_value(self, value):
         from frame_oracle import selected_value
 
