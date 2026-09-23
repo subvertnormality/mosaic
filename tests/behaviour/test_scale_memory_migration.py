@@ -1,6 +1,7 @@
 import sys
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 
 BEHAVIOUR = Path(__file__).resolve().parent
@@ -24,6 +25,35 @@ MIGRATIONS = {
 
 
 class ScaleMemoryMigrationTests(unittest.TestCase):
+    def test_memory_navigation_configures_before_editor_move(self):
+        from scale_memory import memory_navigation
+
+        class ReachedHeader(Exception):
+            pass
+
+        class UiProbe:
+            def __init__(self):
+                self.calls = []
+
+            def configure(self):
+                self.calls.append(("configure",))
+
+            def turn(self, encoder, detents):
+                self.calls.append(("turn", encoder, detents))
+
+            def expect_header(self, page, **params):
+                self.calls.append(("expect_header", page, params))
+                raise ReachedHeader
+
+        ui = UiProbe()
+        with self.assertRaises(ReachedHeader):
+            memory_navigation(SimpleNamespace(ui=ui))
+        self.assertEqual(ui.calls, [
+            ("configure",),
+            ("turn", 1, -2),
+            ("expect_header", "memory", {"channel": 1}),
+        ])
+
     def test_selected_cases_have_one_ui_independent_owner(self):
         from cases import CASES
         from ui_layer_guard import callable_raw_dependencies
