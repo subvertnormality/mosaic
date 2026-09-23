@@ -119,7 +119,7 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
     require(report.get("before_sha") == before_sha
             and report.get("after_sha") == after_sha
             and report.get("selected_cases") == case_ids
-            and report.get("lanes") == list(LANES)
+            and isinstance(report.get("lanes"), list)
             and report.get("profile") == profile,
             "targeted selection/source/profile differs")
     source_delta = report.get("source_delta")
@@ -149,11 +149,14 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
             "candidate module repeatability rows are incomplete")
     plans = []
     seen_manifests = set()
+    selected_lanes = set()
     for case, row in zip(case_ids, rows):
         lanes = row.get("lanes")
-        require(isinstance(lanes, list) and len(lanes) == len(LANES)
-                and [lane.get("lane") for lane in lanes if isinstance(lane, dict)]
-                == list(LANES), "case lane rows differ: " + case)
+        lane_names = ([lane.get("lane") for lane in lanes if isinstance(lane, dict)]
+                      if isinstance(lanes, list) else [])
+        require(lane_names in (list(LANES), ["controlled-experimental"]),
+                "case lane rows differ: " + case)
+        selected_lanes.update(lane_names)
         for lane_row in lanes:
             clock_mode = lane_row["lane"]
             lane = LANES[clock_mode]
@@ -210,6 +213,8 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                 payload["source-repeatability-report.json"] = read_bytes(repeat_path)
                 payload["provenance.json"] = (json.dumps(provenance, indent=2) + "\n").encode()
                 plans.append((target, payload))
+    require(report.get("lanes") == [lane for lane in LANES if lane in selected_lanes],
+            "targeted report lane summary differs from case rows")
     if not dry_run:
         for target, payload in plans:
             no_symlink(target)

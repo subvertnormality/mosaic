@@ -18,6 +18,35 @@ spec.loader.exec_module(targeted)
 
 
 class TargetedMigrationTests(unittest.TestCase):
+    def test_case_lanes_follow_registry_controlled_only_metadata(self):
+        selected = targeted.selected_case_lanes(ROOT, ROOT, [
+            "M-ARP-005", "M-ARP-012", "M-ARP-013",
+            "M-SPREAD-023", "M-SPREAD-026", "M-SPREAD-027",
+            "M-GRID-001",
+        ])
+        self.assertEqual(selected, {
+            "M-ARP-005": ("controlled-experimental",),
+            "M-ARP-012": ("controlled-experimental",),
+            "M-ARP-013": ("controlled-experimental",),
+            "M-SPREAD-023": ("controlled-experimental",),
+            "M-SPREAD-026": ("controlled-experimental",),
+            "M-SPREAD-027": ("controlled-experimental",),
+            "M-GRID-001": ("real-time", "controlled-experimental"),
+        })
+
+    def test_case_lane_applicability_must_match_both_sources(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            before, after = Path(temporary) / "before", Path(temporary) / "after"
+            before.mkdir()
+            after.mkdir()
+            for source, registration in ((before, "dict(controlled_only='reason')"),
+                                         (after, "dict()")):
+                case_file = source / "tests/behaviour/cases.py"
+                case_file.parent.mkdir(parents=True)
+                case_file.write_text("CASES = {'M-CASE-001': " + registration + "}\n")
+            with self.assertRaisesRegex(ValueError, "lane applicability differs"):
+                targeted.selected_case_lanes(before, after, ["M-CASE-001"])
+
     def test_explicit_case_ids_allow_registered_dotted_ids(self):
         self.assertEqual(targeted.cases_from_input("M-GRID-001, M-PERSIST-FIXTURE-1.2.12"),
                          ["M-GRID-001", "M-PERSIST-FIXTURE-1.2.12"])

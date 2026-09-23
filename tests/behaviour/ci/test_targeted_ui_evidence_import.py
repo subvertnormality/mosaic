@@ -22,15 +22,17 @@ def write_json(path, value):
     path.write_text(json.dumps(value))
 
 
-def fixture(root, profile="base-midi"):
-    """A complete two-lane gate whose native log is intentionally not uploaded."""
+def fixture(root, profile="base-midi", controlled_only=False):
+    """A complete selected-lane gate whose native log is intentionally not uploaded."""
+    clock_modes = (["controlled-experimental"] if controlled_only
+                   else list(importer.LANES))
     report = dict(schema_version=1, passed=True, complete_regression_run=False,
                   before_sha=BEFORE, after_sha=AFTER, selected_cases=[CASE],
-                  lanes=list(importer.LANES), profile=profile,
+                  lanes=clock_modes, profile=profile,
                   source_delta={"production_tree_unchanged": True}, cases=[])
     row = dict(case=CASE, lanes=[])
     report["cases"].append(row)
-    for clock_mode in importer.LANES:
+    for clock_mode in clock_modes:
         lane = dict(lane=clock_mode, gate_errors=[], runs={})
         row["lanes"].append(lane)
         for side, sha in (("before", BEFORE), ("after", AFTER)):
@@ -89,6 +91,13 @@ class TargetedEvidenceImportTests(unittest.TestCase):
         provenance = json.loads((self.output / CASE / "controlled" /
                                  "before/provenance.json").read_text())
         self.assertEqual(provenance["profile"], "midi-modulation")
+
+    def test_imports_controlled_only_case_lane_selection(self):
+        fixture(self.download, controlled_only=True)
+        dry = self.run_import(dry_run=True)
+        self.assertEqual(len(dry["imported"]), 2)
+        self.assertTrue(all("/controlled/" in path.replace("\\", "/")
+                            for path in dry["imported"]))
 
     def test_refuses_report_or_manifest_profile_mismatch(self):
         fixture(self.download, profile="midi-modulation")

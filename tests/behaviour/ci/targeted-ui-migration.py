@@ -90,6 +90,54 @@ def registry_profile(root):
     return {name: profile_map.get(name, "base-midi") for name in names}
 
 
+def registry_controlled_only(root, cases):
+    """Read controlled-only declarations from the literal case registry."""
+    tree = ast.parse((root / "tests/behaviour/cases.py").read_text())
+    registries = [node.value for node in tree.body if isinstance(node, ast.Assign)
+                  and any(isinstance(target, ast.Name) and target.id == "CASES"
+                          for target in node.targets)]
+    require(len(registries) == 1 and isinstance(registries[0], ast.Dict),
+            "expected one literal CASES registry")
+    entries = {ast.literal_eval(key): value
+               for key, value in zip(registries[0].keys, registries[0].values)}
+    require(len(entries) == len(registries[0].keys),
+            "invalid or duplicate registry case IDs")
+    selected = {}
+    for case in cases:
+        require(case in entries, "registry lacks case " + case)
+        definition = entries[case]
+        require(isinstance(definition, ast.Call)
+                and isinstance(definition.func, ast.Name)
+                and definition.func.id == "dict",
+                "unrecognized case registration: " + case)
+        declarations = [item.value for item in definition.keywords
+                        if item.arg == "controlled_only"]
+        require(len(declarations) <= 1,
+                "duplicate controlled_only declaration: " + case)
+        if declarations:
+            try:
+                reason = ast.literal_eval(declarations[0])
+            except (ValueError, TypeError) as error:
+                raise ValueError("nonliteral controlled_only declaration: " + case) from error
+            require(isinstance(reason, str) and reason.strip(),
+                    "invalid controlled_only declaration: " + case)
+            selected[case] = True
+        else:
+            selected[case] = False
+    return selected
+
+
+def selected_case_lanes(before, after, cases):
+    """Select lanes from pinned registry metadata, requiring source parity."""
+    before_applicability = registry_controlled_only(before, cases)
+    after_applicability = registry_controlled_only(after, cases)
+    require(before_applicability == after_applicability,
+            "lane applicability differs between before and after registries")
+    return {case: tuple(lane for lane, _ in LANES
+                         if lane == "controlled-experimental" or not controlled_only)
+            for case, controlled_only in before_applicability.items()}
+
+
 def selected_case_modules(root, cases):
     """Only the modules owning selected registry callables may change."""
     tree = ast.parse((root / "tests/behaviour/cases.py").read_text())
@@ -323,6 +371,9 @@ def execute(args):
             require(case in profiles, "%s source lacks case %s" % (label, case))
             require(profiles[case] == args.profile,
                     "%s is not %s in %s source" % (case, args.profile, label))
+    case_lanes = selected_case_lanes(args.before, args.after, cases)
+    report_lanes = [lane for lane, _ in LANES
+                    if any(lane in selected for selected in case_lanes.values())]
     source_delta = check_source_delta(args.before, args.after, cases)
     require(args.install.is_file(), "missing qualified controlled-time installation")
     emulator_sha = subprocess.check_output(
@@ -331,12 +382,13 @@ def execute(args):
                   before_sha=before_sha, after_sha=after_sha,
                   emulator_sha=emulator_sha, selected_cases=cases,
                   source_delta=source_delta,
-                  lanes=[lane for lane, _ in LANES], cases=[], passed=False)
+                  lanes=report_lanes, cases=[], passed=False)
     try:
         for case in cases:
             row = dict(case=case, lanes=[])
             report["cases"].append(row)
-            for lane, gate_lane in LANES:
+            for lane in case_lanes[case]:
+                gate_lane = dict(LANES)[lane]
                 lane_row = dict(lane=lane, runs={}, gate_errors=[])
                 row["lanes"].append(lane_row)
                 roots = {}
@@ -360,7 +412,7 @@ def execute(args):
                         roots["before"], roots["after"], gate_lane, case=case))
     finally:
         report["passed"] = (len(report["cases"]) == len(cases) and all(
-            len(row["lanes"]) == len(LANES) and all(
+            len(row["lanes"]) == len(case_lanes[row["case"]]) and all(
                 not lane["gate_errors"] and len(lane["runs"]) == 2
                 for lane in row["lanes"]) for row in report["cases"]))
         args.output.mkdir(parents=True, exist_ok=True)
