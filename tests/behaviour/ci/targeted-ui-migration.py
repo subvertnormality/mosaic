@@ -256,6 +256,7 @@ def check_source_delta(before, after, cases):
                 "tests/behaviour/test_ui_layer.py"}
     if ui_tests & set(changed_tests):
         ui_sources = selected_sources | {
+            "tests/behaviour/cases.py",  # inline selected case bodies live here
             "tests/behaviour/ui.py", "tests/behaviour/ui_map.py",
             "tests/behaviour/frame_oracle.py"}
         require(bool(set(changed_tests) & ui_sources),

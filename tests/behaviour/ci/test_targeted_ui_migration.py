@@ -450,6 +450,23 @@ class TargetedMigrationTests(unittest.TestCase):
                     targeted.check_source_delta(
                         Path("before"), Path("after"), ["M-SCALE-LOCK-003"])
 
+    def test_inline_case_source_permits_its_ui_regression(self):
+        production = {"mosaic.lua": ("100644", "blob", "a" * 40),
+                      "lib/nb": ("160000", "commit", "b" * 40)}
+        pinned = {path: ("100644", "blob", "c" * 40)
+                  for path in targeted.PINNED_GATE_PATHS}
+        case_path = "tests/behaviour/cases.py"
+        test_path = "tests/behaviour/test_ui_layer.py"
+        before = {**pinned, case_path: ("100644", "blob", "d" * 40)}
+        after = {**before, case_path: ("100644", "blob", "e" * 40),
+                 test_path: ("100644", "blob", "f" * 40)}
+        with patch.object(targeted, "selected_case_modules", return_value=set()), \
+                patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, before, after]):
+            result = targeted.check_source_delta(
+                Path("before"), Path("after"), ["M-REC-001"])
+        self.assertEqual(result["changed_behaviour_paths"], [case_path, test_path])
+
     def test_selected_contract_extraction_allows_only_exact_reexport_owner(self):
         with tempfile.TemporaryDirectory() as temporary:
             before = Path(temporary) / "before"
