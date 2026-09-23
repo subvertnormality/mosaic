@@ -411,24 +411,25 @@ def numeric_velocity_merge(c,three=False):
 
 def lydian_octave_boundary(c):
     from cases import assert_durations
-    c.configure();c.tap(5,8)
+    c.ui.configure();c.ui.menu('pattern_editor')
     for slot in (1,2):
-        c.tap(slot,1)
+        c.ui.tap_control('pattern_select',slot)
         if slot==2:
-            for x in range(1,5):c.tap(x,4)
-        c.tap(5,8)
+            for step in range(1,5):c.ui.tap_step(step)
+        c.ui.menu('pattern_editor')
         for x,degree in enumerate((-7,0,7,0),1):
-            if degree==0:c.tap(15,8);y=7
+            if degree==0:c.ui.tap_control('pattern_note_octave_reset')
             else:
-                button=16 if degree<0 else 14
-                c.action(type='grid',x=button,y=8,state=1)
-                try:c.elapse(1.2)
-                finally:c.action(type='grid',x=button,y=8,state=0)
-                c.elapse(.06);y=7
-            c.tap(x,y);c.led_values([(x,y)],[12])
-        c.tap(3,8);c.tap(5,8)
-    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
-    c.hold_tap((16,8),(1,2));c.tap(4,8);c.enc(3,7);c.key(3)
+                control='pattern_note_octave_down' if degree<0 else 'pattern_note_octave_up'
+                with c.ui.hold_control(control):c.elapse(1.2)
+                c.elapse(.06)
+            c.ui.tap_control('pattern_note_degree',(x,0))
+            c.ui.expect_leds({('pattern_note_degree',(x,0)):'active'})
+        c.ui.menu('channel_editor');c.ui.menu('pattern_editor')
+    c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
+    c.ui.menu('scale_editor');c.ui.turn(3,7);c.ui.press_key(3)
     # Lydian selection D/E/G/A/B repeats across octaves. C48/60/72
     # has B47/59/71 nearer than D50/62/74. Equal source values still merge.
     notes=c.playback([(1,[144,n,v]) for n,v in zip([47,59,71,59],[127,117,107,97])],cycles=2,timeout=4)
