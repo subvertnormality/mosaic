@@ -5,7 +5,8 @@ import contextlib
 import time
 
 from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
-                    MOSAIC_OPTIONS, MIDI_MAPPING_PARAMETERS, NATIVE_MENU_VALUES, PATCH_PARAMETERS,
+                    MOSAIC_OPTIONS, MOSAIC_OPTION_ROWS, MIDI_MAPPING_PARAMETERS,
+                    NATIVE_MENU_VALUES, PATCH_PARAMETERS,
                     PATCH_PARAMETER_VALUES, RHYTHM_DOCTOR_CONTROLS,
                     RHYTHM_DOCTOR_SCREEN, SCREEN, TRIG_PARAMETERS,
                     control_cell, header_text)
@@ -327,6 +328,15 @@ class Ui:
             if hold_seconds:
                 self.driver.elapse(hold_seconds)
             self.driver.action(type="midi", port=1, bytes=[128, note, 0])
+
+    def record_midi_mask_on_step(self, step, note, velocity,
+                                 hold_seconds=.05, release_tail_seconds=.1):
+        """Record one external MIDI note while its mapped mask step is held."""
+        with self.hold_step(step):
+            self.driver.action(type="midi", port=1, bytes=[144, note, velocity])
+            self.driver.elapse(hold_seconds)
+            self.driver.action(type="midi", port=1, bytes=[128, note, 0])
+        self.driver.elapse(release_tail_seconds)
 
     def configure(self):
         """Canonical four-note setup, preserving the historical input recipe."""
@@ -1081,6 +1091,38 @@ class Ui:
                 return
             self.turn(2, 1)
         raise AssertionError(failure or "Required Mosaic option not reached: " + label)
+
+    def seek_mosaic_option_from_current(self, option, attempts=40, failure=None):
+        """Scan forward from the current row, preserving the caller's recipe."""
+        from frame_oracle import selected_line
+        from ui_map import MOSAIC_OPTIONS, MOSAIC_OPTION_ROWS
+
+        try:
+            label = MOSAIC_OPTIONS[option]
+            top = MOSAIC_OPTION_ROWS.get(option)
+        except KeyError as error:
+            raise UiMapError("unknown Mosaic option: " + str(option)) from error
+        for _ in range(attempts):
+            if selected_line(self.driver.snapshot(), label, top=top):
+                return
+            self.turn(2, 1)
+        raise AssertionError(failure or "Required Mosaic option not reached: " + label)
+
+    def expect_mosaic_option_label(self, option):
+        try:
+            label = MOSAIC_OPTIONS[option]
+        except KeyError as error:
+            raise UiMapError("unknown Mosaic option: " + str(option)) from error
+        self.expect_menu_label(label, top=MOSAIC_OPTION_ROWS.get(option))
+
+    def expect_mosaic_option_value(self, enabled):
+        from ui_map import MOSAIC_OPTION_VALUES
+
+        try:
+            value = MOSAIC_OPTION_VALUES[enabled]
+        except KeyError as error:
+            raise UiMapError("unknown Mosaic option value: " + str(enabled)) from error
+        self.expect_menu_value(value)
 
     def expect_mosaic_option(self, option, enabled):
         """Retain the selected option's exact historical row and result entry."""

@@ -1999,5 +1999,41 @@ class ProjectActionUiVerbTests(unittest.TestCase):
             ui.expect_rhythm_doctor_tooltip("NOT_READY")
 
 
+    def test_midi_mask_recording_verb_preserves_native_edge_and_timing_recipe(self):
+        from ui import Ui
+
+        driver = FakeDriver()
+        Ui(driver).record_midi_mask_on_step(2, 72, 90)
+
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 2, "y": 4, "state": 1}),
+            ("action", {"type": "midi", "port": 1, "bytes": [144, 72, 90]}),
+            ("elapse", .05),
+            ("action", {"type": "midi", "port": 1, "bytes": [128, 72, 0]}),
+            ("action", {"type": "grid", "x": 2, "y": 4, "state": 0}),
+            ("elapse", .1),
+        ])
+
+    def test_mosaic_option_scan_and_observations_keep_existing_row_schema(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{}, {}, {}, {}])
+        ui = Ui(driver)
+        with patch("frame_oracle.selected_line", side_effect=[False, True]):
+            ui.seek_mosaic_option_from_current("scale_lock_until_pattern_end")
+        with patch("frame_oracle.selected_line", return_value=True), \
+                patch("frame_oracle.selected_value", return_value=True):
+            ui.expect_mosaic_option_label("scale_lock_until_pattern_end")
+            ui.expect_mosaic_option_value(True)
+
+        self.assertEqual(driver.calls, [
+            ("snapshot",), ("enc", 2, 1), ("snapshot",), ("wait",), ("wait",),
+        ])
+        self.assertEqual(driver.results, [
+            {"kind": "selected-menu-label", "text": "Scales lock until ptn end"},
+            {"kind": "selected-menu-value", "text": "On"},
+        ])
+
+
 if __name__ == "__main__":
     unittest.main()
