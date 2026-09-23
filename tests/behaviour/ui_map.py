@@ -48,6 +48,16 @@ RHYTHM_DOCTOR_SCREEN = {
 }
 CHANNEL_COUNT = 16
 
+# Stable pitch keys for the authored C4-F4 notes on the pattern note grid.
+# These preserve the established note-entry gestures used by the Euclidean
+# workflow cases while keeping their physical cells in this map.
+PATTERN_NOTE_PITCHES = {
+    "pattern_note_c": (5, 3),
+    "pattern_note_d": (6, 2),
+    "pattern_note_e": (7, 1),
+    "pattern_note_f": (8, 6),
+}
+
 CHANNEL_PAGES = OrderedDict([
     ("masks", {"title": "Note Masks"}),
     ("trig_locks", {"title": "Trig Locks"}),
@@ -256,6 +266,10 @@ def step_cell(step):
 
 
 def control_cell(control, index=None):
+    if control in PATTERN_NOTE_PITCHES:
+        if index is not None:
+            raise ValueError("pattern note pitch controls do not take an index")
+        return PATTERN_NOTE_PITCHES[control]
     if control in RHYTHM_DOCTOR_CONTROLS:
         if index is not None:
             raise ValueError("Rhythm Doctor control %s does not take an index" % control)

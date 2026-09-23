@@ -188,6 +188,21 @@ class UiMapTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             control_cell("note_merge_mode", 1)
 
+    def test_pattern_note_pitch_keys_preserve_authored_grid_cells(self):
+        from ui_map import PATTERN_NOTE_PITCHES, control_cell
+
+        self.assertEqual(PATTERN_NOTE_PITCHES, {
+            "pattern_note_c": (5, 3),
+            "pattern_note_d": (6, 2),
+            "pattern_note_e": (7, 1),
+            "pattern_note_f": (8, 6),
+        })
+        for key, cell in PATTERN_NOTE_PITCHES.items():
+            with self.subTest(key=key):
+                self.assertEqual(control_cell(key), cell)
+                with self.assertRaises(ValueError):
+                    control_cell(key, 1)
+
     def test_every_grid_cell_has_exactly_one_control_on_each_page(self):
         from ui_map import grid_partition
 
@@ -391,6 +406,50 @@ class UiInputTests(unittest.TestCase):
             ("tap", 1, 8),
             ("tap", 1, 8),
         ])
+
+    def test_transpose_cases_return_to_channel_editor_before_scale_editor(self):
+        source = (BEHAVIOUR / "cases.py").read_text()
+        module = ast.parse(source)
+        names = {"transpose_song_copy_isolation", "transpose_song_persistence"}
+        functions = {node.name: node for node in module.body
+                     if isinstance(node, ast.FunctionDef) and node.name in names}
+        self.assertEqual(set(functions), names)
+        for function in functions.values():
+            calls = sorted((node for node in ast.walk(function)
+                            if isinstance(node, ast.Call)
+                            and isinstance(node.func, ast.Attribute)),
+                           key=lambda node: (node.lineno, node.col_offset))
+            channel_editor = next((call.lineno, call.col_offset) for call in calls
+                                  if call.func.attr == "menu"
+                                  and call.args
+                                  and isinstance(call.args[0], ast.Constant)
+                                  and call.args[0].value == "channel_editor")
+            scale_editors = [(call.lineno, call.col_offset) for call in calls
+                             if call.func.attr == "scale_editor"]
+            self.assertGreaterEqual(len(scale_editors), 2)
+            self.assertLess(scale_editors[0], channel_editor)
+            self.assertLess(channel_editor, scale_editors[1])
+
+    def test_control_cell_exposes_mapped_diagnostic_coordinates(self):
+        _, ui = self.ui()
+        self.assertEqual(ui.control_cell("pattern_note_octave_up"), (14, 8))
+        self.assertEqual(ui.control_cell("pattern_velocity_range_down"), (16, 8))
+
+    def test_editor_hold_results_resolve_x_from_the_control_map(self):
+        source = (BEHAVIOUR / "cases.py").read_text()
+        module = ast.parse(source)
+        function = next(node for node in module.body
+                        if isinstance(node, ast.FunctionDef)
+                        and node.name == "editor_hold_boundaries")
+        hold = next(node for node in function.body
+                    if isinstance(node, ast.FunctionDef) and node.name == "hold")
+        assignment = next(node for node in hold.body
+                          if isinstance(node, ast.Assign)
+                          and any(isinstance(target, ast.Name) and target.id == "x"
+                                  for target in node.targets))
+        self.assertIsInstance(assignment.value, ast.Subscript)
+        self.assertIsInstance(assignment.value.value, ast.Call)
+        self.assertEqual(assignment.value.value.func.attr, "control_cell")
 
     def test_rejected_saved_range_starts_with_semantic_setup(self):
         from types import SimpleNamespace

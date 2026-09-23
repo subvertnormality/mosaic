@@ -563,6 +563,7 @@ def editor_hold_boundaries(c):
         t2=time.monotonic_ns();logical_end=c.logical_ns
         c.ui.control_edge(control,False);t3=time.monotonic_ns()
         lower=(t2-t1)/1e9;upper=(t3-t0)/1e9
+        x = c.ui.control_cell(control)[0]
         c.results.append(dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
             expected_long=expected_long,logical_seconds=(logical_end-logical_start)/1e9,
             wall_lower_seconds=lower,wall_upper_seconds=upper))
@@ -830,7 +831,7 @@ def transpose_song_copy_isolation(c):
     c.ui.select_channel(2)
     c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-    c.ui.pattern_editor();c.ui.scale_editor();set_global(-7)
+    c.ui.menu("channel_editor");c.ui.scale_editor();set_global(-7)
     c.ui.song_editor();c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.ui.set_mosaic_option_keys([("song_mode", True)])
     c.ui.select_channel(1);c.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
@@ -895,7 +896,7 @@ def transpose_song_persistence(c):
     c.ui.select_channel(2)
     c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-    c.ui.pattern_editor();c.ui.scale_editor();set_global(c,-7)
+    c.ui.menu("channel_editor");c.ui.scale_editor();set_global(c,-7)
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
     c.elapse(59);assert not saved.exists() and not pset.exists()
     c.elapse(2);c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)

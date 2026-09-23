@@ -202,6 +202,10 @@ class Ui:
         return self.driver.action(type="grid", x=x, y=y,
                                   state=1 if pressed else 0)
 
+    def control_cell(self, control, index=None):
+        """Return a control's mapped cell for result diagnostics."""
+        return control_cell(control, index)
+
     def key_edge(self, number, pressed):
         """Emit one norns key edge without adding synthetic hold time."""
         return self.driver.action(type="key", n=number,
