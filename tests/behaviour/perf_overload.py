@@ -229,6 +229,7 @@ def run_one(image, output, clock_trace=False):
         driver = ContainerDriver(output, http)
         build_project(driver, CHANNELS)
         configure_fingerprint(driver)
+        driver.finish()  # Export the authored session before performance measurement.
         recording = http.request('/performance/start', dict(period_ms=10, maximum_seconds=25))
         time.sleep(1)
         marker = http.observe()['state']['midi_count']

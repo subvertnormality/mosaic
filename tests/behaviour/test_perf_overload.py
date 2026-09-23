@@ -1,4 +1,11 @@
+import ast
+import json
+import sys
+import tempfile
 import unittest
+from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 from perf_overload import (CHANNELS, FINGERPRINT, PHASE_P99_NS, STEP_NS,
                            assert_recovery, assert_visual_recovery, note_groups)
@@ -89,6 +96,100 @@ class PerfOverloadOracleTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, 'screen image'):
             assert_visual_recovery(before, same_frame)
 
+
+    def test_builder_recipe_is_exported_before_measurement_starts(self):
+        import driver
+        import perf_overload
+
+        source = Path(__file__).resolve().parent / 'perf_dense.py'
+        node = next(item for item in ast.parse(source.read_text()).body
+                    if isinstance(item, ast.ClassDef) and item.name == 'ContainerDriver')
+        namespace = {'driver': driver}
+        exec(compile(ast.Module(body=[node], type_ignores=[]), str(source), 'exec'), namespace)
+        container_driver = namespace['ContainerDriver']
+        order = []
+        class ExportingContainerDriver(container_driver):
+            def finish(self):
+                order.append('export')
+                super().finish()
+
+        class FakeHttp:
+            def __init__(self, port, token, session_id):
+                self.port, self.token, self.session_id = port, token, session_id
+
+            def action(self, value):
+                return {'accepted': value}
+
+            def request(self, path, payload):
+                order.append(path)
+                raise RuntimeError('measurement stopped by test')
+
+        def fake_docker(*args, **kwargs):
+            outputs = {
+                'image': 'sha256:pinned-image',
+                'logs': json.dumps({'status': 'ready', 'token': 'token',
+                                    'session_id': 'session'}),
+                'port': '127.0.0.1:8765',
+            }
+            return SimpleNamespace(stdout=outputs.get(args[0], ''))
+
+        def fake_build(session, channels):
+            self.assertEqual(channels, perf_overload.CHANNELS)
+            order.append('build')
+            session.action(type='grid', x=5, y=8, state=1)
+            session.results.append({'kind': 'setup'})
+
+        def fake_fingerprint(session):
+            order.append('fingerprint')
+            session.action(type='grid', x=5, y=8, state=0)
+
+        dependencies = (None, None, None, None, ExportingContainerDriver, FakeHttp, fake_build)
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'overload'
+            with patch.object(perf_overload, 'runtime_dependencies', return_value=dependencies), \
+                    patch.object(perf_overload, 'docker', side_effect=fake_docker), \
+                    patch.object(perf_overload, 'configure_fingerprint', side_effect=fake_fingerprint):
+                result = perf_overload.run_one('pinned-image', output)
+            self.assertEqual(order, ['build', 'fingerprint', 'export', '/performance/start'])
+            self.assertFalse(result['passed'])
+            self.assertIn('measurement stopped by test', result['error'])
+            self.assertEqual(json.loads((output / 'recipe.json').read_text()), [
+                {'type': 'grid', 'x': 5, 'y': 8, 'state': 1},
+                {'type': 'grid', 'x': 5, 'y': 8, 'state': 0},
+            ])
+            self.assertEqual(json.loads((output / 'results.json').read_text()),
+                             [{'kind': 'setup'}])
+            self.assertEqual(len(json.loads((output / 'action-acks.json').read_text())), 2)
+            self.assertFalse(json.loads((output / 'result.json').read_text())['passed'])
+
+    def test_report_identifies_the_source_of_the_exported_session(self):
+        import perf_overload
+
+        def git_output(command, **kwargs):
+            if command[1] == 'rev-parse':
+                self.assertTrue(kwargs['text'])
+                return 'a' * 40
+            if command[1] == 'diff':
+                return b''
+            if command[1] == 'status':
+                return ''
+            raise AssertionError(command)
+
+        def fake_run_one(image, output, clock_trace=False):
+            output.mkdir()
+            return {'passed': True, 'image_id': 'sha256:pinned-image'}
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / 'overload'
+            with patch.object(perf_overload.subprocess, 'check_output', side_effect=git_output), \
+                    patch.object(perf_overload, 'run_one', side_effect=fake_run_one), \
+                    patch.object(sys, 'argv', ['perf_overload.py', '--output', str(output)]):
+                self.assertEqual(perf_overload.main(), 0)
+            report = json.loads((output / 'report.json').read_text())
+            self.assertEqual(report['mosaic_revision'], 'a' * 40)
+            self.assertIsNone(report['dirty_patch_sha256'])
+            self.assertEqual(report['source_status'], [])
+            self.assertEqual(report['image_id'], 'sha256:pinned-image')
 
 if __name__ == '__main__':
     unittest.main()
