@@ -52,7 +52,7 @@ from memory_persistence import memory_persistence
 from contract.tooltip_autosave import tooltip_autosave
 from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
-from midi_mapping_targets import midi_mapping_targets
+from contract.midi_mapping_targets import midi_mapping_targets
 from pattern_boundary_edit import pattern_boundary_edit
 from contract.editor_pattern_flicker import editor_pattern_flicker
 from reset_pending_voice import reset_pending_voice
