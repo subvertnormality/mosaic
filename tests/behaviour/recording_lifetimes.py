@@ -1,5 +1,10 @@
 """Native recording lifetime tests; literal MIDI expectations, physical controls."""
 
+def long_stop(c):
+    with c.ui.hold_control("play_stop"):
+        c.elapse(1.2)
+    c.elapse(.06)
+
 def recording_lifetime(c,ending,scale_page=False):
     from cases import assign_trig_parameter,menu_value,parameter_list_label
     from patch_params import open_patch_control,turn
@@ -294,27 +299,23 @@ def recording_nrpn(c,value):
 
 
 def recording_stop_safety(c):
-    from cases import assign_trig_parameter,set_mosaic_options,menu_value
-    from patch_params import open_patch_control,turn
-    c.configure();set_mosaic_options(c,[('Shift press to stop',True)])
-    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.ui.configure();c.ui.set_mosaic_options([('Shift press to stop',True)])
+    c.ui.open_patch_control(setup=False)
+    c.ui.turn_patch_control(63);c.ui.turn_patch_control(1)
+    c.ui.expect_menu_value('63');c.ui.press_key(1)
+    c.ui.turn(1,-3);c.ui.assign_trig_parameter('CC 1')
     for step,value in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2)
-    c.tap(2,8);before=c.snapshot()['midi_count'];c.tap(1,8)
+        with c.ui.hold_step(step):
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.ui.turn(3,value+1)
+    c.ui.turn(1,2);c.ui.turn(3,-23);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.tap_control("record");before=c.snapshot()['midi_count'];c.ui.play()
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
-    c.wait(lambda state:len(notes(state))==1);c.elapse(.5);c.enc(3,1)
+    c.wait(lambda state:len(notes(state))==1);c.elapse(.5);c.ui.turn(3,1)
     c.wait(lambda state:len(notes(state))>=2,timeout=5)
-    def long_stop():
-        c.action(type='grid',x=1,y=8,state=1)
-        try:c.elapse(1.2)
-        finally:c.action(type='grid',x=1,y=8,state=0)
-        c.elapse(.06);c.wait(lambda state:not state['midi_capture']['outstanding'])
-    long_stop()
-    before=c.snapshot()['midi_count'];c.tap(1,8)
+    def stop_and_drain():
+        long_stop(c);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    stop_and_drain()
+    before=c.snapshot()['midi_count'];c.ui.play()
     first=c.wait(lambda state:len(notes(state))>=1)
     actual=[(e['port'],e['bytes']) for e in first['midi'] if e['index']>before and e['bytes'][0]&240==176]
     expected=[(1,[176,1,64]),(1,[176,1,24])] # Patch recall then unchanged first lock.
@@ -323,19 +324,19 @@ def recording_stop_safety(c):
     assert [e['bytes'] for e in notes(state)]==[[144,n,v] for n,v in [(60,127),(62,117),(64,107),(65,97)]]
     cc=[(e['port'],e['bytes']) for e in state['midi'] if e['index']>before and e['bytes'][0]&240==176]
     assert cc==[(1,[176,1,v]) for v in [64,24,64,96,64]],cc
-    long_stop()
+    stop_and_drain()
     # Prove retained arm through a new recorded edit and distinct-default replay.
     # A Stop implementation which disarms would leave step 2 at its old 64.
-    before=c.snapshot()['midi_count'];c.tap(1,8)
-    c.wait(lambda state:len(notes(state))==1);c.elapse(.5);c.enc(3,1)
+    before=c.snapshot()['midi_count'];c.ui.play()
+    c.wait(lambda state:len(notes(state))==1);c.elapse(.5);c.ui.turn(3,1)
     c.wait(lambda state:len(notes(state))>=2,timeout=5)
-    long_stop();c.tap(2,8) # Explicitly disarm only after the new edit is recorded.
-    c.enc(3,1) # Default 66 differs from recorded 65 and original lock 64.
-    before=c.snapshot()['midi_count'];c.tap(1,8)
+    stop_and_drain();c.ui.tap_control("record") # Explicitly disarm only after the new edit is recorded.
+    c.ui.turn(3,1) # Default 66 differs from recorded 65 and original lock 64.
+    before=c.snapshot()['midi_count'];c.ui.play()
     state=c.wait(lambda state:len(notes(state))>=2,timeout=5)
     cc=[(e['port'],e['bytes']) for e in state['midi'] if e['index']>before and e['bytes'][0]&240==176]
     assert cc==[(1,[176,1,v]) for v in [66,24,65]],dict(actual=cc,meaning='Stop retains arm: new step-2 edit survives disarmed replay with a different default')
-    long_stop()
+    stop_and_drain()
     c.results.append(dict(kind='recording-stop-safety-long-press-restart',record_arm_retained=True,first_lock=24,recorded_step2=64,untouched_step3=96,new_recorded_step2=65,replay_default=66,passed=True))
 
 

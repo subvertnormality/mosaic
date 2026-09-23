@@ -1377,6 +1377,22 @@ class MigrationGateTests(unittest.TestCase):
         self.assertIn("restarted normalized recipes differ",errors)
 
 
+class RecordingLifetimeInputTests(unittest.TestCase):
+    def test_long_stop_keeps_shift_and_play_stop_edges_and_release_delay(self):
+        from recording_lifetimes import long_stop
+        from ui import Ui
+
+        driver = FakeDriver()
+        driver.ui = Ui(driver)
+        long_stop(driver)
+        self.assertEqual(driver.calls, [
+            ("action", {"type": "grid", "x": 1, "y": 8, "state": 1}),
+            ("elapse", 1.2),
+            ("action", {"type": "grid", "x": 1, "y": 8, "state": 0}),
+            ("elapse", .06),
+        ])
+
+
 class MemoryUiMapTests(unittest.TestCase):
     def test_memory_counter_map_locks_captured_render_and_disjoint_geometry(self):
         from ui_map import SCREEN
