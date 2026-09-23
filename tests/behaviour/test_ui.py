@@ -168,6 +168,25 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual(grid_partition("channel_editor")[(11, 8)],
                          ("channel_octave", 1))
 
+    def test_pattern_note_octave_controls_have_stable_keys(self):
+        from ui import Ui
+        from ui_map import control_cell
+
+        driver = FakeDriver()
+        ui = Ui(driver)
+        self.assertEqual(control_cell("pattern_note_octave_down"), (16, 8))
+        self.assertEqual(control_cell("pattern_note_octave_reset"), (15, 8))
+        self.assertEqual(control_cell("pattern_note_octave_up"), (14, 8))
+        ui.tap_control("pattern_note_octave_reset")
+        with ui.hold_control("pattern_note_octave_down"):
+            ui.driver.elapse(1.2)
+        self.assertEqual(driver.calls, [
+            ("tap", 15, 8),
+            ("action", {"type": "grid", "x": 16, "y": 8, "state": 1}),
+            ("elapse", 1.2),
+            ("action", {"type": "grid", "x": 16, "y": 8, "state": 0}),
+        ])
+
     def test_composition_controls_have_page_semantic_keys(self):
         from ui_map import control_cell, grid_partition
 

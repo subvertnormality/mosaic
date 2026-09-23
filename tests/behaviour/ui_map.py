@@ -225,6 +225,18 @@ def control_cell(control, index=None):
                 and 1 <= index[0] <= CHANNEL_COUNT and 0 <= index[1] <= 6):
             raise ValueError("pattern note degree needs (step 1..16, degree 0..6)")
         return index[0], 7 - index[1]
+    if control == "pattern_note_octave_down":
+        if index is not None:
+            raise ValueError("pattern note octave down does not take an index")
+        return 16, 8
+    if control == "pattern_note_octave_reset":
+        if index is not None:
+            raise ValueError("pattern note octave reset does not take an index")
+        return 15, 8
+    if control == "pattern_note_octave_up":
+        if index is not None:
+            raise ValueError("pattern note octave up does not take an index")
+        return 14, 8
     if control == "song_slot":
         return index, 3
     if control == "song_pattern_slot":
