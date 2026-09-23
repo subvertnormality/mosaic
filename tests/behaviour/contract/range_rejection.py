@@ -138,3 +138,18 @@ def queued_global_length_transitions(c):
     assert_durations(c,notes,[1]*24);c.tap(3,8)
     c.led_values([(1,4),(2,4),(3,4),(4,4),(5,4)],[0,15,15,15,0])
     c.results.append(dict(kind='queued-global-shrink-grow',caps=[4,2,3],application_onset_indices=[4,14],expected_steps=steps[:len(notes)],passed=True))
+
+def range_reject_001(c):
+    return rejected_range(c, False)
+
+
+def range_reject_002(c):
+    return rejected_range(c, True)
+
+
+def range_reject_003(c):
+    return rejected_range_while_playing(c, False)
+
+
+def range_reject_004(c):
+    return rejected_range_while_playing(c, True)

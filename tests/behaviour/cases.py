@@ -91,6 +91,7 @@ from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
 from contract.persisted_range_rejection import rejected_manual_range,rejected_saved_range
 from contract.range_rejection import queued_global_length_transitions
+from contract.range_rejection import range_reject_001,range_reject_002,range_reject_003,range_reject_004
 from range_rejection import offset_scale_range_clipping
 from contract.range_rejection import global_range_clipping
 from range_rejection import rejected_range_channel_isolation
@@ -3621,10 +3622,10 @@ CASES={
  'M-RANGE-LIVE-001':dict(run=accepted_live_range_transitions,requirements=['CH-RANGE'],description='Accepted range edits while playhead is inside/below/above new bounds: exact next note, three loops, unchanged phase, full releases and stopped range LEDs'),
  'M-RANGE-GLOBAL-001':dict(run=global_range_clipping,requirements=['SONG-LENGTH','CH-RANGE'],description='Global lengths1/2/3/4/64 cap channel1..4,2..4,63..64 by length, preserve endpoint LEDs, restore full range, exact notes/gates/phase'),
  'M-RANGE-REJECT-005':dict(run=rejected_range_channel_isolation,requirements=['CH-RANGE'],description='Reject range edit while two independent routed channels play four/three-step phrases with distinct notes, velocity and fractional lengths; preserve both schedules'),
- 'M-RANGE-REJECT-004':dict(run=lambda c:rejected_range_while_playing(c,True),requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageTrue: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
- 'M-RANGE-REJECT-003':dict(run=lambda c:rejected_range_while_playing(c,False),requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageFalse: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
- 'M-RANGE-REJECT-002':dict(run=lambda c:rejected_range(c,True),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageTrue: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
- 'M-RANGE-REJECT-001':dict(run=lambda c:rejected_range(c,False),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
+ 'M-RANGE-REJECT-004':dict(run=range_reject_004,requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageTrue: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
+ 'M-RANGE-REJECT-003':dict(run=range_reject_003,requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageFalse: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
+ 'M-RANGE-REJECT-002':dict(run=range_reject_002,requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageTrue: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
+ 'M-RANGE-REJECT-001':dict(run=range_reject_001,requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-MASK-031':dict(run=lambda c:multiheld_keyboard(c,False),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstFalse: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-032':dict(run=pending_note_mask_song_transition,requirements=['MASK-ATTRIBUTES','MASK-STEP-ENTRY','MEMORY-RECORD','SONG-ADVANCE','SONG-SLOTS'],description='Held-step note-mask encoder edit remains in the song selected at gesture press when automatic song mode advances before release; grid/song indicators, screen, MIDI and song-local undo/redo stay isolated'),
  'M-MASK-HELD-EXTRA-001':dict(run=held_mask_extra_key,requirements=['MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='A held-step velocity turn with a pattern-row key also held locks only the held step, in either press order (README 595-597; human decision S27)'),

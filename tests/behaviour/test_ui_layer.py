@@ -290,6 +290,39 @@ class UiLayerGuardTests(unittest.TestCase):
             {"contract.chord_shapes"},
         )
 
+    def test_range_rejection_registry_wrappers_preserve_owner_and_recipe(self):
+        from unittest.mock import patch
+        from cases import CASES
+        from contract import range_rejection
+        from ui_layer_guard import callable_is_contract, classify_contract_cases
+
+        expected = {
+            "M-RANGE-REJECT-001": ("range_reject_001",
+                                   range_rejection.rejected_range, (False,)),
+            "M-RANGE-REJECT-002": ("range_reject_002",
+                                   range_rejection.rejected_range, (True,)),
+            "M-RANGE-REJECT-003": ("range_reject_003",
+                                   range_rejection.rejected_range_while_playing, (False,)),
+            "M-RANGE-REJECT-004": ("range_reject_004",
+                                   range_rejection.rejected_range_while_playing, (True,)),
+        }
+        self.assertTrue(set(expected) <= classify_contract_cases(CASES))
+        for case_id, (wrapper_name, helper, args) in expected.items():
+            run = CASES[case_id]["run"]
+            with self.subTest(case=case_id):
+                self.assertEqual(run.__module__, "contract.range_rejection")
+                self.assertEqual(run.__name__, wrapper_name)
+                self.assertIs(run, getattr(range_rejection, wrapper_name))
+                self.assertIsNone(run.__closure__)
+                self.assertIs(run.__globals__[helper.__name__], helper)
+                self.assertTrue(callable_is_contract(run))
+                driver = object()
+                sentinel = object()
+                with patch.object(range_rejection, helper.__name__,
+                                  return_value=sentinel) as called:
+                    self.assertIs(run(driver), sentinel)
+                called.assert_called_once_with(driver, *args)
+
     def test_saved_range_rejection_contracts_have_one_owner(self):
         from cases import CASES
         from cases import rejected_manual_range
