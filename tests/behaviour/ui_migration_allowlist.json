@@ -34,7 +34,6 @@
   "perf_input.py",
   "perf_overload.py",
   "persisted_ranges.py",
-  "project_dialog_lifecycle.py",
   "recording_lifetimes.py",
   "recording_lock_song.py",
   "recording_song_transition.py",
