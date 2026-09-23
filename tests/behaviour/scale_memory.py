@@ -463,6 +463,7 @@ def channel_routing_isolation(c):
 
 def memory_navigation(c):
     ui = c.ui
+    ui.configure()
     ui.turn(1, -2)
     ui.expect_header("memory", channel=1)
     baseline = [(60, 127), (62, 117), (64, 107), (65, 97)]
