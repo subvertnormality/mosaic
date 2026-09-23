@@ -11,6 +11,26 @@ if str(BEHAVIOUR) not in sys.path:
 
 
 class TrigParameterUiMigrationTests(unittest.TestCase):
+    def test_pending_song_transition_uses_row_one_pattern_slots(self):
+        from ui_map import control_cell
+
+        source = ast.parse((BEHAVIOUR / "trig_parameter_interactions.py").read_text())
+        workflow = next(node for node in source.body
+                        if isinstance(node, ast.FunctionDef)
+                        and node.name == "pending_parameter_lock_song_transition")
+        calls = [node for node in ast.walk(workflow)
+                 if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute)]
+        copies = [node for node in calls if node.func.attr == "copy_slot"]
+        self.assertEqual(len(copies), 1)
+        self.assertEqual([(item.arg, item.value.value) for item in copies[0].keywords],
+                         [("control", "song_pattern_slot")])
+        pattern_taps = [node for node in calls if node.func.attr == "tap_control"
+                        and node.args and isinstance(node.args[0], ast.Constant)
+                        and node.args[0].value == "song_pattern_slot"]
+        self.assertGreaterEqual(len(pattern_taps), 2)
+        self.assertEqual([control_cell("song_pattern_slot", slot) for slot in (1, 2)],
+                         [(1, 1), (2, 1)])
+
     def test_ordinary_parameter_cases_have_no_raw_ui(self):
         from ui_layer_guard import raw_sites
         self.assertEqual(raw_sites(BEHAVIOUR / "trig_parameter_interactions.py"), [])
