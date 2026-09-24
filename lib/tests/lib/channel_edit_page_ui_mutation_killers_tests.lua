@@ -36,17 +36,37 @@ local SELECTED = 2 -- the selected channel's number
 
 local function new_screen(env)
   env.frame = {}
+  env.fills = {}
+  env.texts = {}
   local x, y = 0 / 0, 0 / 0
+  local level = nil
+  local pending_rect = nil
+  local font = 8
   local function put(text)
     -- %.10g: a coordinate is a number; 0 and 0.0 draw the same pixel, so they print the same
     table.insert(env.frame, string.format("%.10g,%.10g %s", x, y, tostring(text)))
+    -- The size matters for anything squeezed between two framebuffer oracles,
+    -- so it is recorded beside the text rather than thrown away.
+    table.insert(env.texts, {x = x, y = y, size = font, level = level, text = tostring(text)})
   end
   return setmetatable({
     move = function(nx, ny) x, y = nx, ny end,
     text = function(t) put(t) end,
     text_trim = function(t) put(t) end,
     text_right = function(t) put(t) end,
-    text_center = function(t) put(t) end
+    text_center = function(t) put(t) end,
+    -- Filled rectangles matter here: an overlay that has to take the tooltip's
+    -- row must erase it rather than draw a second text into the same pixels.
+    level = function(l) level = l end,
+    font_size = function(sz) font = sz end,
+    rect = function(rx, ry, rw, rh) pending_rect = {x = rx, y = ry, w = rw, h = rh} end,
+    fill = function()
+      if pending_rect then
+        pending_rect.level = level
+        table.insert(env.fills, pending_rect)
+        pending_rect = nil
+      end
+    end
   }, {__index = function() return function() end end})
 end
 
@@ -198,6 +218,7 @@ end
 -- Draw the channel editor once; returns the sorted "x,y text" entries it drew.
 local function frame(env)
   env.frame = {}
+  env.texts = {}
   env.draws.channel_edit_page()
   local f = env.frame
   table.sort(f)
@@ -213,8 +234,9 @@ local function calls_named(env, prefix)
 end
 
 
--- The row of page tabs pages:draw puts at y = 1: one per page, six pages.
-local TABS = {"0,1 _", "10,1 _", "20,1 _", "30,1 _", "40,1 _", "50,1 _"}
+-- The row of page tabs pages:draw puts at y = 1: one per page, including the
+-- appended Merge Shape and Harmony pages.
+local TABS = {"0,1 _", "10,1 _", "20,1 _", "30,1 _", "40,1 _", "50,1 _", "60,1 _", "70,1 _"}
 
 local function with_tabs(entries)
   local all = {}
@@ -433,7 +455,8 @@ function test_w3c_page_selectors_select_their_page()
     local expected = {
       {"select_mask_page", 1, "Note Masks"}, {"select_trig_page", 2, "Trig Locks"},
       {"select_memory_page", 3, "Memory"}, {"select_clock_mods_page", 4, "Clocks"},
-      {"select_midi_config_page", 5, "Device Config"}, {"select_note_dashboard_page", 6, "Note Dashboard"}
+      {"select_midi_config_page", 5, "Device Config"}, {"select_note_dashboard_page", 6, "Note Dashboard"},
+      {"select_merge_shape_page", 7, "Merge Shape"}, {"select_harmony_page", 8, "Harmony"}
     }
     for _, e in ipairs(expected) do
       env.ui[e[1]]()
@@ -444,6 +467,45 @@ function test_w3c_page_selectors_select_their_page()
       end
       luaunit.assert_equals(titles, {"Ch. 2 " .. e[3]}, e[1])
     end
+  end)
+end
+
+function test_feature_pages_restore_last_legacy_workspace_for_a_grid_gesture()
+  isolated(function(env)
+    start(env)
+    env.ui.select_trig_page()
+    env.ui.select_memory_page() -- Merely visiting a read-only page does not steal the workspace.
+    env.ui.select_harmony_page()
+    turn(env,3,1)
+    luaunit.assert_true(env.ui.leave_feature_editor_for_grid())
+    luaunit.assert_equals(env.ui.get_selected_page(),2)
+    luaunit.assert_false(env.ui.leave_feature_editor_for_grid())
+  end)
+end
+
+-- README.md held-step editing: a held grid gesture stays owned by its legacy
+-- workspace; feature editors cannot capture it part-way through the press.
+function test_held_grid_key_blocks_direct_and_encoder_entry_to_feature_pages()
+  isolated(function(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    env.pressed={{x=1,y=1}}
+    luaunit.assert_false(env.ui.select_merge_shape_page())
+    luaunit.assert_equals(env.ui.get_selected_page(),6)
+    turn(env,1,1)
+    luaunit.assert_equals(env.ui.get_selected_page(),6)
+    luaunit.assert_false(env.ui.select_harmony_page())
+    luaunit.assert_equals(env.ui.get_selected_page(),6)
+  end)
+end
+
+function test_merge_gesture_feedback_is_transient_and_returns_to_original_editor()
+  isolated(function(env)
+    start(env);env.ui.select_merge_shape_page()
+    luaunit.assert_true(env.ui.show_merge_gesture("TRIG SKIP"))
+    local shown=frame(env);local found=false;for _,v in ipairs(shown)do if v=="2,17 M09"then found=true end end;luaunit.assert_true(found)
+    env.ui.hide_merge_gesture()
+    local restored=frame(env);found=false;for _,v in ipairs(restored)do if v=="2,17 M01"then found=true end end;luaunit.assert_true(found)
   end)
 end
 
@@ -613,4 +675,131 @@ function test_w3c_isolation_restores_globals_after_a_failure()
   luaunit.assert_nil(leaked_by_w3c_test)
   for k, v in pairs(before) do luaunit.assert_is(_G[k], v, k) end
   for k in pairs(_G) do luaunit.assert_not_nil(before[k], k) end
+end
+
+------------------------------------------------------------------------------------------------
+-- The harmony inspection overlay and the tooltip row
+--
+-- The tooltip draws every page's transient messages at baseline 62 (rows 55-62) and is
+-- registered before the pages, so a page draws over it. The Note Dashboard's harmony
+-- inspection puts its second line at baseline 63, which lands in exactly those rows: two
+-- different texts in the same pixels, and neither readable. The inspection is persistent page
+-- content the player is reading, so it takes the row -- but it must take it by clearing it,
+-- not by overprinting.
+------------------------------------------------------------------------------------------------
+
+local TOOLTIP_BASELINE = 62 -- lib/ui_components/tooltip.lua
+local TOOLTIP_TOP = TOOLTIP_BASELINE - 7
+
+local function plan_harmony(env)
+  local harmony_inspection = include("mosaic/lib/harmony/inspection")
+  harmony_inspection.reset()
+  harmony_inspection.plan(program.get_selected_song_pattern(), SELECTED,
+    {step = 1, status = "ok", source = 1, merge = 2, scale = 3, harmony = 4, output = 65})
+  return harmony_inspection
+end
+
+local function covers_tooltip_row(fill)
+  return fill.level == 0 and fill.y <= TOOLTIP_TOP and (fill.y + fill.h) >= TOOLTIP_BASELINE + 1
+end
+
+function test_harmony_inspection_clears_the_tooltip_row_before_using_it()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    plan_harmony(env)
+    local drawn = frame(env)
+
+    local inspection_line = nil
+    for _, entry in ipairs(drawn) do
+      if entry:find("^0*2,63 ") or entry:find("^2,63 ") then inspection_line = entry end
+    end
+    luaunit.assert_not_nil(inspection_line,
+      "the inspection's second line must still be drawn on the bottom row")
+
+    local cleared = false
+    for _, fill in ipairs(env.fills) do
+      if covers_tooltip_row(fill) then cleared = true end
+    end
+    luaunit.assert_true(cleared,
+      "the overlay must erase the tooltip's rows before drawing into them, or the two texts overlap")
+  end)
+end
+
+function test_harmony_inspection_leaves_the_chord_values_alone()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    env.ui.set_note_dashboard_values({note = 60, velocity = 100, length = 0.25, chords = {62, 64, 65, 67}})
+    plan_harmony(env)
+    local drawn = frame(env)
+
+    -- The chord row's values are read from baseline 48 and its descenders reach about row 50.
+    for _, fill in ipairs(env.fills) do
+      if fill.level == 0 then
+        luaunit.assert_true(fill.y > 50,
+          "an erase at row " .. tostring(fill.y) .. " would take the chord values with it")
+      end
+    end
+    local saw_chord = false
+    for _, entry in ipairs(drawn) do if entry:find(",48 ") then saw_chord = true end end
+    luaunit.assert_true(saw_chord, "the chord values must survive the overlay")
+  end)
+end
+
+function test_note_dashboard_without_harmony_leaves_the_tooltip_row_untouched()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    local harmony_inspection = include("mosaic/lib/harmony/inspection")
+    harmony_inspection.reset()
+    frame(env)
+    for _, fill in ipairs(env.fills) do
+      luaunit.assert_false(covers_tooltip_row(fill),
+        "with no harmony event there is no overlay, so the tooltip keeps its row")
+    end
+  end)
+end
+
+-- Three things want the bottom of the Note Dashboard and only two can have it.
+-- Two framebuffer oracles pin the outer bands: M-DASHBOARD-CHORD-001 compares
+-- rows 41..50 (the chord values, read from baseline 48) and M-HARMONY-HELD-001
+-- compares rows 55..63 (the planned/scheduled/emitted line, read from baseline
+-- 63). The status line between them therefore has rows 51..54 and no more --
+-- four rows, which the 8px font does not fit. Moving it from baseline 54 to 56
+-- to clear the chord values pushed it into the harmony window instead, so one
+-- oracle passed at the cost of the other. This pins the geometry that satisfies
+-- both, because nothing else does: the behaviour cases run on hardware-like
+-- lanes in CI, hours after the change that breaks them.
+function test_harmony_status_line_fits_between_the_two_framebuffer_oracles()
+  isolated(function(env)
+    setup_rich(env)
+    start(env)
+    env.ui.select_note_dashboard_page()
+    plan_harmony(env)
+    frame(env)
+
+    local status, values = nil, nil
+    for _, t in ipairs(env.texts) do
+      if t.text:sub(1, 3) == "SRC" then status = t end
+      if t.text:sub(1, 1) == "P" and t.text:find(" S") and t.text:find(" E") then values = t end
+    end
+    luaunit.assert_not_nil(status, "the status line must be drawn")
+    luaunit.assert_not_nil(values, "the planned/scheduled/emitted line must be drawn")
+
+    -- Measured against the real norns face: at 6px a capitals-and-digits line
+    -- inks baseline-4 .. baseline-1, so baseline 55 occupies exactly 51..54.
+    luaunit.assert_equals(status.size, 6,
+      "the 8px font inks five rows and cannot fit between the two oracle windows")
+    luaunit.assert_equals(status.y, 55, "baseline 55 at 6px inks rows 51..54")
+
+    -- The line below is compared glyph for glyph against an 8px oracle, and
+    -- font size is sticky on norns, so it must be restored first.
+    luaunit.assert_equals(values.size, 8,
+      "the values line must be back at 8px or it will not match its oracle")
+    luaunit.assert_equals(values.y, 63)
+  end)
 end

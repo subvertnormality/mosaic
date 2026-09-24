@@ -24,6 +24,8 @@ local channel_edit_history = include("mosaic/lib/pages/channel_edit_page/channel
 local channel_edit_parameters = include("mosaic/lib/pages/channel_edit_page/channel_edit_parameters")
 local channel_edit_clock_controls = include("mosaic/lib/pages/channel_edit_page/channel_edit_clock_controls")
 local channel_edit_navigation = include("mosaic/lib/pages/channel_edit_page/channel_edit_navigation")
+local channel_feature_editor = include("mosaic/lib/pages/channel_edit_page/channel_feature_editor")
+local harmony_inspection = include("mosaic/lib/harmony/inspection")
 
 -- UI components
 local channel_pages = pages:new()
@@ -137,9 +139,13 @@ local channel_edit_history_controller = channel_edit_history.new(memory_history_
 
 local trig_lock_page
 local channel_page_to_index
+local merge_feature_editor = channel_feature_editor.new("merge")
+local harmony_feature_editor = channel_feature_editor.new("harmony")
 
 -- Page indices
-channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3, ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6}
+channel_page_to_index = {["Masks"] = 1, ["Trig Locks"] = 2, ["Memory"] = 3,
+  ["Clock Mods"] = 4, ["Midi Config"] = 5, ["Note Dashboard"] = 6,
+  ["Merge Shape"] = 7, ["Harmony"] = 8}
 
 -- The step indicator asks which page is showing for every drawn step, so read
 -- these fixed indices once instead of looking each one up on every call.
@@ -162,6 +168,7 @@ local channel_edit_navigation_controller = channel_edit_navigation.new(
     trig_lock_page = trig_lock_page,
     parameter_controller = channel_edit_parameters_controller,
     clock_controls_controller = channel_edit_clock_controls_controller
+    ,feature_editors = {merge=merge_feature_editor, harmony=harmony_feature_editor}
   },
   channel_edit_page_ui,
   channel_edit_page_ui_handlers
@@ -249,6 +256,42 @@ local notes_page = page:new("Note Dashboard", function()
   note_displays.note:draw()
   note_displays.velocity:draw()
   note_displays.length:draw()
+  local inspected_step
+  if m_grid and m_grid.get_pressed_keys then
+    for _,held in ipairs(m_grid.get_pressed_keys())do
+      if held[2]>=4 and held[2]<=7 then inspected_step=fn.calc_grid_count(held[1],held[2]);break end
+    end
+  end
+  local snapshot=harmony_inspection.snapshot(program.get_selected_song_pattern(),program.get().selected_channel,inspected_step)
+  if snapshot.planned then
+    local function pitch(stage)return stage and stage.pitch or "-"end
+    -- 56, not 54. The Note Dashboard's bottom row of value cells is read from
+    -- baseline 48, which spans rows 41..50; text at baseline 54 puts glyphs in
+    -- rows 49..54 and draws over the chord slot values. Two pixels lower
+    -- clears them.
+    -- Three things want the bottom of this screen and only two can have it.
+    -- The chord values are read from baseline 48 and their oracle compares
+    -- rows 41..50. The planned/scheduled/emitted line is read from baseline 63
+    -- and its oracle compares rows 55..63. That leaves rows 51..54 -- four
+    -- rows -- for the status line between them, which does not fit the 8px
+    -- font: at baseline 55 it inks rows 50..54 and at 56 rows 51..55, each
+    -- reaching into one of the two windows. At 6px and baseline 55 it inks
+    -- exactly 51..54. The font size is sticky on norns, so it goes back to 8
+    -- before the line below, which must match its oracle glyph for glyph.
+    --
+    -- The fill clears rows 51..63 first. The tooltip draws every page's
+    -- transient messages at baseline 62 and is registered before the pages, so
+    -- without this its text is already in these rows and both become
+    -- unreadable. Tooltips are therefore not visible here while an event shows.
+    screen.level(0);screen.rect(0,51,128,13);screen.fill()
+    screen.level(3);screen.font_size(6);screen.move(2,55)
+    screen.text("SRC"..tostring(snapshot.planned.source or "-").." M"..tostring(snapshot.planned.merge or "-")..
+      " S"..tostring(snapshot.planned.scale or "-").." H"..tostring(snapshot.planned.harmony or "-"))
+    screen.font_size(8)
+    screen.level(4);screen.move(2,63)
+    local bypass=snapshot.planned.bypass and(" B:"..tostring(snapshot.planned.bypass))or""
+    screen.text("P"..tostring(snapshot.planned.output or "-").." S"..tostring(pitch(snapshot.scheduled)).." E"..tostring(pitch(snapshot.emitted))..bypass)
+  end
 end)
 
 
@@ -296,6 +339,9 @@ end)
 trig_lock_page = page:new("Trig Locks", function()
   channel_edit_parameters_controller.draw_trig_locks()
 end)
+
+local merge_shape_page = page:new("Merge Shape", function() merge_feature_editor:draw() end)
+local harmony_page = page:new("Harmony", function() harmony_feature_editor:draw() end)
 
 -- Initialization function
 function channel_edit_page_ui.init()
@@ -370,6 +416,8 @@ function channel_edit_page_ui.init()
   set_sub_name_func(trig_lock_page, function()
     return "Ch. " .. program.get().selected_channel .. " " or ""
   end)
+  set_sub_name_func(merge_shape_page, function() return "Ch. " .. program.get().selected_channel .. " " end)
+  set_sub_name_func(harmony_page, function() return "Ch. " .. program.get().selected_channel .. " " end)
 
   trig_lock_page:set_sub_page_draw_func(function()
     channel_edit_parameters_controller.draw_assignment_subpage()
@@ -381,6 +429,8 @@ function channel_edit_page_ui.init()
   channel_pages:add_page(clock_mods_page)
   channel_pages:add_page(channel_edit_page)
   channel_pages:add_page(notes_page)
+  channel_pages:add_page(merge_shape_page)
+  channel_pages:add_page(harmony_page)
 
 
   channel_edit_page_ui.select_mask_page()
@@ -627,6 +677,26 @@ function channel_edit_page_ui.select_note_dashboard_page()
   return channel_edit_navigation_controller.select_note_dashboard_page()
 end
 
+function channel_edit_page_ui.select_merge_shape_page()
+  return channel_edit_navigation_controller.select_merge_shape_page()
+end
+
+function channel_edit_page_ui.select_harmony_page()
+  return channel_edit_navigation_controller.select_harmony_page()
+end
+
+function channel_edit_page_ui.leave_feature_editor_for_grid()
+  return channel_edit_navigation_controller.leave_feature_editor_for_grid()
+end
+
+function channel_edit_page_ui.show_merge_gesture(label)
+  return channel_edit_navigation_controller.show_merge_gesture(label)
+end
+
+function channel_edit_page_ui.hide_merge_gesture()
+  return channel_edit_navigation_controller.hide_merge_gesture()
+end
+
 function channel_edit_page_ui.select_scales_quantizer_page()
   return channel_edit_navigation_controller.select_scales_quantizer_page()
 end
@@ -767,4 +837,3 @@ end
 
 
 return channel_edit_page_ui
-

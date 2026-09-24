@@ -33,6 +33,7 @@ local menu_buttons = {}
 
 
 local pressed_keys = {}
+local claimed_keys = {}
 -- Press order of held keys, so a two-key gesture can name its first-pressed key.
 local press_sequence, press_count = {}, 0
 local dual_in_progress = false
@@ -135,6 +136,11 @@ local function register_press()
       if (y == 8) then
         if (x == 1) then
           if not m_clock.is_playing() then
+            -- Announce the start before it happens. Rhythm Doctor cancels a
+            -- capture when the sequencer runs, and this key does not go through
+            -- clock.transport, so without this a capture kept recording under
+            -- playback while Stop -- which does go through it -- cancelled.
+            if transport_started_by_user then transport_started_by_user() end
             m_clock:start()
             tooltip:show("Starting playback")
           else
@@ -232,14 +238,26 @@ function m_grid.init()
   register_press()
   
   function g.key(x, y, z)
-
+    local key_id = x .. "," .. y
     if z == 1 then
+      if claimed_keys[key_id] then return end
       table.insert(pressed_keys, {x, y})
       press_count = press_count + 1
       press_sequence[x .. "," .. y] = press_count
-      m_grid.pre_press(x, y)
-      m_grid.counter[x][y] = clock.run(m_grid.long_press, x, y)
+      if m_grid.pre_press(x, y) then
+        fn.remove_table_from_table(pressed_keys, {x, y})
+        press_sequence[key_id] = nil
+        claimed_keys[key_id] = {x, y}
+      else
+        m_grid.counter[x][y] = clock.run(m_grid.long_press, x, y)
+      end
     elseif z == 0 then -- otherwise, if a grid key is released...
+      if claimed_keys[key_id] then
+        claimed_keys[key_id] = nil
+        press_sequence[key_id] = nil
+        m_grid.post_press(x, y)
+        return
+      end
       fn.remove_table_from_table(pressed_keys, {x, y})
   
       local held_button = pressed_keys[1]
@@ -282,6 +300,11 @@ function m_grid.init()
     for i = #pressed_keys, 1, -1 do
       pressed_keys[i] = nil
     end
+    for key_id, key in pairs(claimed_keys) do
+      claimed_keys[key_id] = nil
+      press:handle_post(program.get_selected_page(), key[1], key[2])
+    end
+    if trigger_edit_page and trigger_edit_page.disconnect_rhythm_doctor then trigger_edit_page.disconnect_rhythm_doctor() end
     dual_in_progress = false
     m_grid.alert_disconnect()
   end
@@ -318,9 +341,10 @@ function m_grid.set_menu_button_state()
 end
 
 function m_grid.pre_press(x, y)
-  press:handle_pre(program.get_selected_page(), x, y)
+  local claimed = press:handle_pre(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
+  return claimed
 end
 
 function m_grid.post_press(x, y)

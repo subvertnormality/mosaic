@@ -34,6 +34,8 @@ class Driver:
         self.launch_options=dict(clock_mode=clock_mode,experimental_install=experimental_install,profile=profile,mod_code_root=mod_code_root,mod_patches=mod_patches,cost_profile=cost_profile,midi_lead_time_ms=midi_lead_time_ms)
         self.clock_mode=clock_mode;self.logical_ns=0
         self.out=out;self.recipe=[];self.observations=[];self.results=[]
+        from ui import Ui
+        self.ui=Ui(self)
         # app_root runs another Mosaic tree (e.g. a campaign baseline) with this harness.
         self.app_root=Path(app_root).resolve() if app_root else REPO
         code=out/'code';code.mkdir();(code/'mosaic').symlink_to(self.app_root,target_is_directory=True)
@@ -104,7 +106,9 @@ class Driver:
     def snapshot(self):
         value=self.runtime.observe();self.observations.append(value);return value['state']
     def wait(self,predicate,timeout=3):
-        start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else 180)
+        # Allow up to 6x wall time for slow controlled observe/advance round trips;
+        # logical_end remains the authoritative timeout for controlled time.
+        start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else max(180,timeout*6))
         logical_end=self.logical_ns+round(timeout*1e9)
         while time.monotonic()<end:
             state=self.snapshot()
@@ -118,9 +122,11 @@ class Driver:
     def key(self,n):
         self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);self.elapse(.06)
     def enc(self,n,steps):
+        receipt=None
         for _ in range(abs(steps)):
-            self.elapse(.05);self.action(type='enc',n=n,delta=2 if steps>0 else -2)
+            self.elapse(.05);receipt=self.action(type='enc',n=n,delta=2 if steps>0 else -2)
         self.elapse(.15)
+        return receipt
     def hold_tap(self,first,last):
         self.action(type='grid',x=first[0],y=first[1],state=1)
         try:self.tap(*last)
@@ -136,7 +142,7 @@ class Driver:
     def _set_midi_lead_time(self,value,expected=None,capture=False):
         from cases import menu_label,menu_option_row
         from frame_oracle import selected_line
-        self.key(1);self.enc(1,4);self.key(3);menu_label(self,'LEVELS >')
+        self.ui.open_native_parameters()
         position=next(i for i,row in enumerate(self.snapshot()['diagnostics']['parameter_roots']) if row['id']=='mosaic')
         self.enc(2,position);self.key(3)
         for _ in range(40):
@@ -153,17 +159,10 @@ class Driver:
         self.action(type='enc',n=3,delta=-100);self.elapse(.15);self.enc(3,value);menu_option_row(self,'Lock lead time (ms)',str(value),top=23)
         self.results.append(dict(kind='global-lock-lead-setting',value_ms=value,default_checked=expected))
         self.key(2);self.action(type='enc',n=2,delta=-120);self.elapse(.15);menu_label(self,'LEVELS >');self.key(2)
-        self.enc(1,-4);self.key(1)  # Restore startup HOME panel for existing recipes.
+        self.enc(1,-4);self.ui.leave_native_menu()  # Restore startup HOME panel for existing recipes.
 
     def configure(self):
-        self.tap(3,8);self.enc(1,4);self.enc(3,1);self.key(3);self.tap(5,8)
-        for x in range(1,5):self.tap(x,4)
-        self.tap(5,8)
-        for x,y in ((1,7),(2,6),(3,5),(4,4)):self.tap(x,y)
-        self.tap(5,8)
-        for x,y in ((1,1),(2,2),(3,3),(4,4)):self.tap(x,y)
-        self.tap(3,8);self.tap(1,2);self.hold_tap((1,4),(4,4))
-        self.led_values([(1,2)],[15]);self.screen_header('Ch. 1 Device Config')
+        self.ui.configure()
     def playback(self,expected,cycles=3,timeout=5,settle_seconds=0):
         assert expected and cycles>=2
         assert settle_seconds>=0

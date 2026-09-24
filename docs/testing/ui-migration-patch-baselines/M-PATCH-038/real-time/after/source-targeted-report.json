@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "446a00870f9489cc78d64342288b6fa28b8b1dc3",
+  "after_sha": "132900c537c367fdb144e5cc323ec4778a4cfb40",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-PATCH-038"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/patch_params.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/patch_params.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-PATCH-038",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PATCH-038/real-time/before/cc90439ac6ba445c9e098501e6fa56ce/manifest.json",
+              "manifest_sha256": "4b2c7cfb4554270505b60f45ef1057ca459b3ac2710be18d288d654916094f97"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PATCH-038/real-time/after/a900a52281204fa983c87c8ad4578e9f/manifest.json",
+              "manifest_sha256": "98769f202db3fdf325811cf7945a060429c32218d3c0a0b0c42adb7341635caf"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PATCH-038/controlled-experimental/before/0051e6fb428a4aca912e49839485e8b2/manifest.json",
+              "manifest_sha256": "d9c3e40c3eedb6bf44101b5ea35ce05f7410fddbef237abc3c2569a7ec988854"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PATCH-038/controlled-experimental/after/21ae400c81bf46f1a033fc51f12965c5/manifest.json",
+              "manifest_sha256": "8fad0322f260213fde1158b4ea5eed528601504180ab9b943a84b8f9f58a8b81"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

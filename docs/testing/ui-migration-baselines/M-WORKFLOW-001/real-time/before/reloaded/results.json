@@ -1,0 +1,113 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "composition-workflow",
+    "stage": "reloaded-song",
+    "expected": [
+      [
+        1,
+        144,
+        66,
+        127,
+        0
+      ],
+      [
+        2,
+        145,
+        69,
+        100,
+        0
+      ],
+      [
+        1,
+        144,
+        64,
+        117,
+        1
+      ],
+      [
+        1,
+        144,
+        69,
+        107,
+        2
+      ],
+      [
+        2,
+        145,
+        76,
+        90,
+        2
+      ],
+      [
+        1,
+        144,
+        67,
+        97,
+        3
+      ],
+      [
+        1,
+        144,
+        78,
+        127,
+        4
+      ],
+      [
+        2,
+        145,
+        69,
+        100,
+        4
+      ],
+      [
+        1,
+        144,
+        76,
+        117,
+        5
+      ],
+      [
+        1,
+        144,
+        81,
+        107,
+        6
+      ],
+      [
+        2,
+        145,
+        76,
+        90,
+        6
+      ],
+      [
+        1,
+        144,
+        79,
+        97,
+        7
+      ]
+    ],
+    "cycles": 2,
+    "passed": true
+  }
+]

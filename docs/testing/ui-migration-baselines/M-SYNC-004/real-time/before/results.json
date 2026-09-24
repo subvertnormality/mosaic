@@ -1,0 +1,2066 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "source"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "internal"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "midi"
+  },
+  {
+    "kind": "cold-start-diagnostic",
+    "bpm": 300,
+    "first_clock_deadline_ns": 219000904821129,
+    "first_note_offset_ns": 9744997,
+    "note_count": 10,
+    "stimulus": [
+      {
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "at_monotonic_ns": 219000904821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000904821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000913154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000921487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000929821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000938154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000946487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000954821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000963154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000971487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000979821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000988154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000996487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001004821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001013154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001021487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001029821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001038154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001046487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001054821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001063154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001071487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001079821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001088154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001096487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001104821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001113154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001121487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001129821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001138154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001146487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001154821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001163154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001171487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001179821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001188154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001196487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001204821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001213154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001221487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001229821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001238154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001246487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001254821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001263154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001271487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001279821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001288154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001296487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001304821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001313154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001321487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001329821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001338154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001346487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001354821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001363154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001371487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001379821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "at_monotonic_ns": 219001379821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001388154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001396487796
+      }
+    ],
+    "delivered": [
+      {
+        "index": 0,
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "intended_monotonic_ns": 219000904821129,
+        "actual_monotonic_ns": 219000905068724
+      },
+      {
+        "index": 1,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000904821129,
+        "actual_monotonic_ns": 219000905093965
+      },
+      {
+        "index": 2,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000913154462,
+        "actual_monotonic_ns": 219000913233501
+      },
+      {
+        "index": 3,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000921487796,
+        "actual_monotonic_ns": 219000921574062
+      },
+      {
+        "index": 4,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000929821129,
+        "actual_monotonic_ns": 219000930074476
+      },
+      {
+        "index": 5,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000938154462,
+        "actual_monotonic_ns": 219000938245044
+      },
+      {
+        "index": 6,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000946487796,
+        "actual_monotonic_ns": 219000946582234
+      },
+      {
+        "index": 7,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000954821129,
+        "actual_monotonic_ns": 219000954915624
+      },
+      {
+        "index": 8,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000963154462,
+        "actual_monotonic_ns": 219000963229944
+      },
+      {
+        "index": 9,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000971487796,
+        "actual_monotonic_ns": 219000971577726
+      },
+      {
+        "index": 10,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000979821129,
+        "actual_monotonic_ns": 219000979898676
+      },
+      {
+        "index": 11,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000988154462,
+        "actual_monotonic_ns": 219000988238196
+      },
+      {
+        "index": 12,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000996487796,
+        "actual_monotonic_ns": 219000996579167
+      },
+      {
+        "index": 13,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001004821129,
+        "actual_monotonic_ns": 219001004919979
+      },
+      {
+        "index": 14,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001013154462,
+        "actual_monotonic_ns": 219001013253409
+      },
+      {
+        "index": 15,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001021487796,
+        "actual_monotonic_ns": 219001021569359
+      },
+      {
+        "index": 16,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001029821129,
+        "actual_monotonic_ns": 219001029909480
+      },
+      {
+        "index": 17,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001038154462,
+        "actual_monotonic_ns": 219001038238740
+      },
+      {
+        "index": 18,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001046487796,
+        "actual_monotonic_ns": 219001046582171
+      },
+      {
+        "index": 19,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001054821129,
+        "actual_monotonic_ns": 219001054923122
+      },
+      {
+        "index": 20,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001063154462,
+        "actual_monotonic_ns": 219001063239232
+      },
+      {
+        "index": 21,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001071487796,
+        "actual_monotonic_ns": 219001071597483
+      },
+      {
+        "index": 22,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001079821129,
+        "actual_monotonic_ns": 219001079921614
+      },
+      {
+        "index": 23,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001088154462,
+        "actual_monotonic_ns": 219001088238715
+      },
+      {
+        "index": 24,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001096487796,
+        "actual_monotonic_ns": 219001096571305
+      },
+      {
+        "index": 25,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001104821129,
+        "actual_monotonic_ns": 219001104902055
+      },
+      {
+        "index": 26,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001113154462,
+        "actual_monotonic_ns": 219001113241956
+      },
+      {
+        "index": 27,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001121487796,
+        "actual_monotonic_ns": 219001121580987
+      },
+      {
+        "index": 28,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001129821129,
+        "actual_monotonic_ns": 219001129919048
+      },
+      {
+        "index": 29,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001138154462,
+        "actual_monotonic_ns": 219001138253789
+      },
+      {
+        "index": 30,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001146487796,
+        "actual_monotonic_ns": 219001146574569
+      },
+      {
+        "index": 31,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001154821129,
+        "actual_monotonic_ns": 219001154907919
+      },
+      {
+        "index": 32,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001163154462,
+        "actual_monotonic_ns": 219001163251280
+      },
+      {
+        "index": 33,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001171487796,
+        "actual_monotonic_ns": 219001171583710
+      },
+      {
+        "index": 34,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001179821129,
+        "actual_monotonic_ns": 219001179909922
+      },
+      {
+        "index": 35,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001188154462,
+        "actual_monotonic_ns": 219001188247732
+      },
+      {
+        "index": 36,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001196487796,
+        "actual_monotonic_ns": 219001196578781
+      },
+      {
+        "index": 37,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001204821129,
+        "actual_monotonic_ns": 219001204916872
+      },
+      {
+        "index": 38,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001213154462,
+        "actual_monotonic_ns": 219001213241514
+      },
+      {
+        "index": 39,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001221487796,
+        "actual_monotonic_ns": 219001221573644
+      },
+      {
+        "index": 40,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001229821129,
+        "actual_monotonic_ns": 219001229909414
+      },
+      {
+        "index": 41,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001238154462,
+        "actual_monotonic_ns": 219001238253646
+      },
+      {
+        "index": 42,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001246487796,
+        "actual_monotonic_ns": 219001246596926
+      },
+      {
+        "index": 43,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001254821129,
+        "actual_monotonic_ns": 219001254925106
+      },
+      {
+        "index": 44,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001263154462,
+        "actual_monotonic_ns": 219001263243026
+      },
+      {
+        "index": 45,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001271487796,
+        "actual_monotonic_ns": 219001271572398
+      },
+      {
+        "index": 46,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001279821129,
+        "actual_monotonic_ns": 219001279902028
+      },
+      {
+        "index": 47,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001288154462,
+        "actual_monotonic_ns": 219001288258019
+      },
+      {
+        "index": 48,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001296487796,
+        "actual_monotonic_ns": 219001296577570
+      },
+      {
+        "index": 49,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001304821129,
+        "actual_monotonic_ns": 219001304909440
+      },
+      {
+        "index": 50,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001313154462,
+        "actual_monotonic_ns": 219001313249441
+      },
+      {
+        "index": 51,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001321487796,
+        "actual_monotonic_ns": 219001321578212
+      },
+      {
+        "index": 52,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001329821129,
+        "actual_monotonic_ns": 219001329917622
+      },
+      {
+        "index": 53,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001338154462,
+        "actual_monotonic_ns": 219001338238132
+      },
+      {
+        "index": 54,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001346487796,
+        "actual_monotonic_ns": 219001346567213
+      },
+      {
+        "index": 55,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001354821129,
+        "actual_monotonic_ns": 219001354909572
+      },
+      {
+        "index": 56,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001363154462,
+        "actual_monotonic_ns": 219001363242334
+      },
+      {
+        "index": 57,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001371487796,
+        "actual_monotonic_ns": 219001371570875
+      },
+      {
+        "index": 58,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001379821129,
+        "actual_monotonic_ns": 219001379898514
+      },
+      {
+        "index": 59,
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "intended_monotonic_ns": 219001379821129,
+        "actual_monotonic_ns": 219001379934805
+      },
+      {
+        "index": 60,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001388154462,
+        "actual_monotonic_ns": 219001388238954
+      },
+      {
+        "index": 61,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001396487796,
+        "actual_monotonic_ns": 219001396572397
+      }
+    ]
+  },
+  {
+    "kind": "external-cold-start-absolute-phase",
+    "start_to_first_clock_ns": 0,
+    "first_clock_deadline_ns": 219000904821129,
+    "stop_deadline_ns": 219001379821129,
+    "first_note_offset_ns": 9744997,
+    "onsets": 10,
+    "release_checks": 10,
+    "stimulus": [
+      {
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "at_monotonic_ns": 219000904821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000904821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000913154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000921487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000929821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000938154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000946487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000954821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000963154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000971487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000979821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000988154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219000996487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001004821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001013154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001021487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001029821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001038154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001046487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001054821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001063154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001071487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001079821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001088154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001096487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001104821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001113154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001121487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001129821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001138154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001146487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001154821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001163154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001171487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001179821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001188154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001196487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001204821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001213154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001221487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001229821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001238154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001246487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001254821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001263154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001271487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001279821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001288154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001296487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001304821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001313154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001321487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001329821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001338154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001346487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001354821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001363154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001371487796
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001379821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "at_monotonic_ns": 219001379821129
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001388154462
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 219001396487796
+      }
+    ],
+    "delivered": [
+      {
+        "index": 0,
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "intended_monotonic_ns": 219000904821129,
+        "actual_monotonic_ns": 219000905068724
+      },
+      {
+        "index": 1,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000904821129,
+        "actual_monotonic_ns": 219000905093965
+      },
+      {
+        "index": 2,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000913154462,
+        "actual_monotonic_ns": 219000913233501
+      },
+      {
+        "index": 3,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000921487796,
+        "actual_monotonic_ns": 219000921574062
+      },
+      {
+        "index": 4,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000929821129,
+        "actual_monotonic_ns": 219000930074476
+      },
+      {
+        "index": 5,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000938154462,
+        "actual_monotonic_ns": 219000938245044
+      },
+      {
+        "index": 6,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000946487796,
+        "actual_monotonic_ns": 219000946582234
+      },
+      {
+        "index": 7,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000954821129,
+        "actual_monotonic_ns": 219000954915624
+      },
+      {
+        "index": 8,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000963154462,
+        "actual_monotonic_ns": 219000963229944
+      },
+      {
+        "index": 9,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000971487796,
+        "actual_monotonic_ns": 219000971577726
+      },
+      {
+        "index": 10,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000979821129,
+        "actual_monotonic_ns": 219000979898676
+      },
+      {
+        "index": 11,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000988154462,
+        "actual_monotonic_ns": 219000988238196
+      },
+      {
+        "index": 12,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219000996487796,
+        "actual_monotonic_ns": 219000996579167
+      },
+      {
+        "index": 13,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001004821129,
+        "actual_monotonic_ns": 219001004919979
+      },
+      {
+        "index": 14,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001013154462,
+        "actual_monotonic_ns": 219001013253409
+      },
+      {
+        "index": 15,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001021487796,
+        "actual_monotonic_ns": 219001021569359
+      },
+      {
+        "index": 16,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001029821129,
+        "actual_monotonic_ns": 219001029909480
+      },
+      {
+        "index": 17,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001038154462,
+        "actual_monotonic_ns": 219001038238740
+      },
+      {
+        "index": 18,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001046487796,
+        "actual_monotonic_ns": 219001046582171
+      },
+      {
+        "index": 19,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001054821129,
+        "actual_monotonic_ns": 219001054923122
+      },
+      {
+        "index": 20,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001063154462,
+        "actual_monotonic_ns": 219001063239232
+      },
+      {
+        "index": 21,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001071487796,
+        "actual_monotonic_ns": 219001071597483
+      },
+      {
+        "index": 22,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001079821129,
+        "actual_monotonic_ns": 219001079921614
+      },
+      {
+        "index": 23,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001088154462,
+        "actual_monotonic_ns": 219001088238715
+      },
+      {
+        "index": 24,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001096487796,
+        "actual_monotonic_ns": 219001096571305
+      },
+      {
+        "index": 25,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001104821129,
+        "actual_monotonic_ns": 219001104902055
+      },
+      {
+        "index": 26,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001113154462,
+        "actual_monotonic_ns": 219001113241956
+      },
+      {
+        "index": 27,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001121487796,
+        "actual_monotonic_ns": 219001121580987
+      },
+      {
+        "index": 28,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001129821129,
+        "actual_monotonic_ns": 219001129919048
+      },
+      {
+        "index": 29,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001138154462,
+        "actual_monotonic_ns": 219001138253789
+      },
+      {
+        "index": 30,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001146487796,
+        "actual_monotonic_ns": 219001146574569
+      },
+      {
+        "index": 31,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001154821129,
+        "actual_monotonic_ns": 219001154907919
+      },
+      {
+        "index": 32,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001163154462,
+        "actual_monotonic_ns": 219001163251280
+      },
+      {
+        "index": 33,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001171487796,
+        "actual_monotonic_ns": 219001171583710
+      },
+      {
+        "index": 34,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001179821129,
+        "actual_monotonic_ns": 219001179909922
+      },
+      {
+        "index": 35,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001188154462,
+        "actual_monotonic_ns": 219001188247732
+      },
+      {
+        "index": 36,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001196487796,
+        "actual_monotonic_ns": 219001196578781
+      },
+      {
+        "index": 37,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001204821129,
+        "actual_monotonic_ns": 219001204916872
+      },
+      {
+        "index": 38,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001213154462,
+        "actual_monotonic_ns": 219001213241514
+      },
+      {
+        "index": 39,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001221487796,
+        "actual_monotonic_ns": 219001221573644
+      },
+      {
+        "index": 40,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001229821129,
+        "actual_monotonic_ns": 219001229909414
+      },
+      {
+        "index": 41,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001238154462,
+        "actual_monotonic_ns": 219001238253646
+      },
+      {
+        "index": 42,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001246487796,
+        "actual_monotonic_ns": 219001246596926
+      },
+      {
+        "index": 43,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001254821129,
+        "actual_monotonic_ns": 219001254925106
+      },
+      {
+        "index": 44,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001263154462,
+        "actual_monotonic_ns": 219001263243026
+      },
+      {
+        "index": 45,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001271487796,
+        "actual_monotonic_ns": 219001271572398
+      },
+      {
+        "index": 46,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001279821129,
+        "actual_monotonic_ns": 219001279902028
+      },
+      {
+        "index": 47,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001288154462,
+        "actual_monotonic_ns": 219001288258019
+      },
+      {
+        "index": 48,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001296487796,
+        "actual_monotonic_ns": 219001296577570
+      },
+      {
+        "index": 49,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001304821129,
+        "actual_monotonic_ns": 219001304909440
+      },
+      {
+        "index": 50,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001313154462,
+        "actual_monotonic_ns": 219001313249441
+      },
+      {
+        "index": 51,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001321487796,
+        "actual_monotonic_ns": 219001321578212
+      },
+      {
+        "index": 52,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001329821129,
+        "actual_monotonic_ns": 219001329917622
+      },
+      {
+        "index": 53,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001338154462,
+        "actual_monotonic_ns": 219001338238132
+      },
+      {
+        "index": 54,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001346487796,
+        "actual_monotonic_ns": 219001346567213
+      },
+      {
+        "index": 55,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001354821129,
+        "actual_monotonic_ns": 219001354909572
+      },
+      {
+        "index": 56,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001363154462,
+        "actual_monotonic_ns": 219001363242334
+      },
+      {
+        "index": 57,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001371487796,
+        "actual_monotonic_ns": 219001371570875
+      },
+      {
+        "index": 58,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001379821129,
+        "actual_monotonic_ns": 219001379898514
+      },
+      {
+        "index": 59,
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "intended_monotonic_ns": 219001379821129,
+        "actual_monotonic_ns": 219001379934805
+      },
+      {
+        "index": 60,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001388154462,
+        "actual_monotonic_ns": 219001388238954
+      },
+      {
+        "index": 61,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 219001396487796,
+        "actual_monotonic_ns": 219001396572397
+      }
+    ],
+    "passed": true
+  }
+]

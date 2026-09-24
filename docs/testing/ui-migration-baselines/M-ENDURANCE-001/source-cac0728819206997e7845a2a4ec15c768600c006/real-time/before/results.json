@@ -1,0 +1,83 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        14,
+        8
+      ]
+    ],
+    "expected": [
+      8
+    ],
+    "actual": [
+      8
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "endurance",
+    "bpm": 120,
+    "duration_seconds": 600,
+    "ports": {
+      "1": {
+        "note_ons": 4821,
+        "full_cycles": 602,
+        "p99_ns": 2406078.0,
+        "max_ns": 5828744.0,
+        "final_phase_ns": 1048324.0
+      },
+      "2": {
+        "note_ons": 2411,
+        "full_cycles": 602,
+        "p99_ns": 3016687.0,
+        "max_ns": 5776303.0,
+        "final_phase_ns": 1051594.0
+      }
+    },
+    "passed": true
+  }
+]

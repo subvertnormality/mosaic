@@ -12,6 +12,28 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
     midi_channel_vertical_scroll_selector = controls.midi_channel_vertical_scroll_selector,
     device_map_vertical_scroll_selector = controls.device_map_vertical_scroll_selector
   }
+  local feature_editors = controls.feature_editors or {}
+  local last_legacy_page = controls.channel_page_to_index["Masks"]
+
+  local function grid_key_is_held()
+    return m_grid and m_grid.get_pressed_keys and #m_grid.get_pressed_keys() > 0
+  end
+
+  local function remember_legacy_page(page)
+    -- Held-step gestures belong to the two editable legacy workspaces. Page
+    -- traversal through Memory/Clock/Device/Dashboard must not replace that
+    -- return target merely because E1 passed over it on the way to a feature.
+    if page==controls.channel_page_to_index["Masks"]or
+      page==controls.channel_page_to_index["Trig Locks"]then
+      last_legacy_page = page
+    end
+  end
+
+  local function cancel_feature_drafts_for_legacy_workspace()
+    for _, feature in pairs(feature_editors) do
+      if feature.cancel_for_grid then feature:cancel_for_grid() end
+    end
+  end
 
   function controller.set_device_map_selector(selector)
     selectors.device_map_vertical_scroll_selector = selector
@@ -22,6 +44,10 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.enc(n, d)
+    local selected_page = controls.channel_pages:get_selected_page()
+    local feature = selected_page == controls.channel_page_to_index["Merge Shape"] and feature_editors.merge or
+      selected_page == controls.channel_page_to_index["Harmony"] and feature_editors.harmony
+    if feature and (n == 2 or n == 3) then feature:enc(n, d); return end
     if n == 3 then
       for _ = 1, math.abs(d) do
         if controls.channel_pages:get_selected_page() == controls.channel_page_to_index["Masks"] then
@@ -78,6 +104,16 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.key(n, z)
+    local selected_page = controls.channel_pages:get_selected_page()
+    local feature = selected_page == controls.channel_page_to_index["Merge Shape"] and feature_editors.merge or
+      selected_page == controls.channel_page_to_index["Harmony"] and feature_editors.harmony
+    -- A grid step held before K2/K3 owns the gesture.  Restore its last legacy
+    -- workspace before dispatch so feature Apply/Cancel cannot steal the key.
+    if feature and z==1 and(n==2 or n==3)and #m_grid.get_pressed_keys()>0 then
+      controller.leave_feature_editor_for_grid()
+      feature=nil
+    end
+    if feature and z == 1 and (n == 2 or n == 3) then feature:key(n); return end
     if n == 2 and z == 1 then
       public_ui.handle_key_two_pressed()
     elseif n == 3 and z == 1 then
@@ -86,12 +122,20 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.handle_encoder_one_positive()
+    local selected_page = controls.channel_pages:get_selected_page()
+    local feature = selected_page == controls.channel_page_to_index["Merge Shape"] and feature_editors.merge or
+      selected_page == controls.channel_page_to_index["Harmony"] and feature_editors.harmony
+    if feature and feature:encoder_one() then fn.dirty_screen(true); return end
     public_ui.select_channel_page_by_index((controls.channel_pages:get_selected_page() or 1) + 1)
     fn.dirty_screen(true)
     save_confirm.cancel()
   end
 
   function controller.handle_encoder_one_negative()
+    local selected_page = controls.channel_pages:get_selected_page()
+    local feature = selected_page == controls.channel_page_to_index["Merge Shape"] and feature_editors.merge or
+      selected_page == controls.channel_page_to_index["Harmony"] and feature_editors.harmony
+    if feature and feature:encoder_one() then fn.dirty_screen(true); return end
     public_ui.select_channel_page_by_index((controls.channel_pages:get_selected_page() or 1) - 1)
     fn.dirty_screen(true)
     save_confirm.cancel()
@@ -181,6 +225,7 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.select_page(page)
+    remember_legacy_page(page)
     controls.channel_pages:select_page(page)
     fn.dirty_screen(true)
   end
@@ -190,22 +235,29 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.select_mask_page()
+    cancel_feature_drafts_for_legacy_workspace()
     public_ui.refresh_masks()
     controls.channel_pages:select_page(controls.channel_page_to_index["Masks"])
+    remember_legacy_page(controls.channel_page_to_index["Masks"])
     fn.dirty_screen(true)
   end
 
   function controller.select_trig_page()
+    cancel_feature_drafts_for_legacy_workspace()
     public_ui.refresh_trig_locks()
     controls.channel_pages:select_page(controls.channel_page_to_index["Trig Locks"])
+    remember_legacy_page(controls.channel_page_to_index["Trig Locks"])
   end
 
   function controller.select_memory_page()
+    cancel_feature_drafts_for_legacy_workspace()
     public_ui.refresh_memory()
     controls.channel_pages:select_page(controls.channel_page_to_index["Memory"])
+    remember_legacy_page(controls.channel_page_to_index["Memory"])
   end
 
   function controller.select_clock_mods_page()
+    cancel_feature_drafts_for_legacy_workspace()
     public_ui.refresh_clock_mods()
     public_ui.refresh_swing()
     public_ui.refresh_swing_shuffle_type()
@@ -213,15 +265,52 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
     public_ui.refresh_shuffle_basis()
     public_ui.refresh_shuffle_amount()
     controls.channel_pages:select_page(controls.channel_page_to_index["Clock Mods"])
+    remember_legacy_page(controls.channel_page_to_index["Clock Mods"])
   end
 
   function controller.select_midi_config_page()
+    cancel_feature_drafts_for_legacy_workspace()
     public_ui.refresh_channel_config()
     controls.channel_pages:select_page(controls.channel_page_to_index["Midi Config"])
+    remember_legacy_page(controls.channel_page_to_index["Midi Config"])
   end
 
   function controller.select_note_dashboard_page()
+    cancel_feature_drafts_for_legacy_workspace()
     controls.channel_pages:select_page(controls.channel_page_to_index["Note Dashboard"])
+    remember_legacy_page(controls.channel_page_to_index["Note Dashboard"])
+  end
+
+  function controller.select_merge_shape_page()
+    if grid_key_is_held() then return false end
+    if feature_editors.merge then feature_editors.merge:enter() end
+    controls.channel_pages:select_page(controls.channel_page_to_index["Merge Shape"])
+    return true
+  end
+
+  function controller.select_harmony_page()
+    if grid_key_is_held() then return false end
+    if feature_editors.harmony then feature_editors.harmony:enter() end
+    controls.channel_pages:select_page(controls.channel_page_to_index["Harmony"])
+    return true
+  end
+
+  function controller.leave_feature_editor_for_grid()
+    local page=controls.channel_pages:get_selected_page()
+    if page~=controls.channel_page_to_index["Merge Shape"]and page~=controls.channel_page_to_index["Harmony"]then return false end
+    cancel_feature_drafts_for_legacy_workspace()
+    public_ui.select_channel_page_by_index(last_legacy_page)
+    return true
+  end
+
+  function controller.show_merge_gesture(label)
+    if controls.channel_pages:get_selected_page()~=controls.channel_page_to_index["Merge Shape"]then return false end
+    if feature_editors.merge then feature_editors.merge:show_merge_gesture(label);fn.dirty_screen(true);return true end
+    return false
+  end
+
+  function controller.hide_merge_gesture()
+    if feature_editors.merge then feature_editors.merge:hide_merge_gesture();fn.dirty_screen(true)end
   end
 
   function controller.select_scales_quantizer_page()
@@ -231,6 +320,10 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
   end
 
   function controller.select_channel_page_by_index(index)
+    if (index == controls.channel_page_to_index["Merge Shape"] or
+        index == controls.channel_page_to_index["Harmony"]) and grid_key_is_held() then
+      return false
+    end
     if index == 1 then
       public_ui.select_mask_page()
     elseif index == 2 then
@@ -243,7 +336,12 @@ function channel_edit_navigation.new(controls, public_ui, handlers)
       public_ui.select_midi_config_page()
     elseif index == 6 then
       public_ui.select_note_dashboard_page()
+    elseif index == 7 then
+      public_ui.select_merge_shape_page()
+    elseif index == 8 then
+      public_ui.select_harmony_page()
     end
+    return true
   end
 
   function controller.refresh()

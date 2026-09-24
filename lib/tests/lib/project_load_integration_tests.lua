@@ -9,7 +9,7 @@ local function load_fixture()
   return {"good",{song_patterns={[1]={global_pattern_length=4,channels=channels}},devices=devices}}
 end
 
-local function load_context()
+local function load_context(capture_guard)
   local count={stop=0,reset=0,init=0,set=0,read=0,restore=0,writes=0,hooks=0,memory_init=0}
   local original={identity="live",pending_notes={60,64},memory={position=3}}
   local state={store=original,playing=true,files={},messages={},timers={}}
@@ -64,13 +64,19 @@ local function load_context()
     ["mosaic/lib/ui"]={refresh=function() end},["mosaic/lib/m_grid"]={refresh=function() end},
     ["mosaic/lib/devices/param_manager"]={init=function() count.restore=count.restore+1 end,add_device_params=function() end},
     ["mosaic/lib/devices/device_map"]={get_device=function() return {} end},
-    ["mosaic/lib/memory"]={init=function() count.memory_init=count.memory_init+1 end}}
+    ["mosaic/lib/memory"]={init=function() count.memory_init=count.memory_init+1 end},
+    ["mosaic/lib/musical_merge/state"]={reset=function() end},
+    ["mosaic/lib/harmony/config_state"]={reset=function() end},
+    ["mosaic/lib/harmony/state"]={reset=function() end},
+    ["mosaic/lib/harmony/inspection"]={reset=function() end}}
   local lifecycle
   env.include=function(name)
     if name == "mosaic/lib/project_lifecycle" then
       local module = assert(loadfile("../../lib/project_lifecycle.lua", "t", env))()
       return {new=function(...)
-        lifecycle = module.new(...)
+        local args = {...}
+        args[6] = capture_guard
+        lifecycle = module.new(table.unpack(args, 1, 6))
         return lifecycle
       end}
     end
@@ -207,4 +213,135 @@ function test_hardening_released_and_current_project_fixtures_validate_and_migra
     end
   end
   program.init();memory.init()
+end
+
+-- Characterisation outside README: PLAN.md "Bank lifecycle", save inhibition.
+-- Actual entrypoint/lifecycle with the real capture machine; IO/transport are
+-- observed boundaries. This is not PCM, n.b., or public-input acceptance.
+local function rhythm_doctor_save_context(wanted)
+  local old_path = package.path
+  package.path = "../../lib/?.lua;" .. package.path
+  local Machine = require("rhythm_doctor.state_machine")
+  local Bank = require("rhythm_doctor.bank")
+  package.path = old_path
+  local context
+  local machine = Machine.new{project_id="fixture", on_deferred_save=function()
+    context.autosave()
+  end}
+  context = load_context(machine)
+  context.state.playing = false
+  machine:start_capture(wanted == "LISTENING" and "auto" or "manual", true)
+  if wanted == "ANALYSING" or wanted == "REANALYSING" then
+    machine:finish_capture(true, true)
+  end
+  if wanted == "REANALYSING" then
+    local token = machine:job_token()
+    local bank = assert(Bank.build{project_id=token.project_id, generation=token.generation,
+      analysis_revision=token.analysis_revision, sample_rate=100, capture_start_sample=0,
+      capture_end_sample=1000, origin_sample=0, bpm=120, candidates={}})
+    machine:receive_analysis{project_id=token.project_id, generation=token.generation,
+      analysis_revision=token.analysis_revision, bank=bank}
+    machine:resources_released(token, true)
+    machine:begin_reanalysis(true)
+  end
+  luaunit.assert_equals(machine.state, wanted)
+  return context, machine
+end
+
+function test_rhythm_doctor_project_save_blocks_before_transport_and_serialization()
+  for _,state in ipairs({"LISTENING","RECORDING","ANALYSING","REANALYSING"}) do
+    local c,m = rhythm_doctor_save_context(state)
+    luaunit.assert_false(c.save("manual"), state)
+    luaunit.assert_equals(c.state.messages[#c.state.messages], "CAPTURE ACTIVE / FINISH OR CANCEL", state)
+    c.autosave();c.autosave();c.autosave()
+    for _,field in ipairs({"stop","reset","writes","hooks"}) do
+      luaunit.assert_equals(c.count[field], 0, state .. "/" .. field)
+    end
+    luaunit.assert_true(m.pending_save, state)
+    local owner = m:job_token()
+    m:transport_started()
+    luaunit.assert_false(c.save("still-releasing"), state)
+    luaunit.assert_equals(c.count.stop, 0, state)
+    m:resources_released(owner, true)
+    luaunit.assert_equals(c.count.writes, 1, state)
+    luaunit.assert_equals(c.count.stop, 1, state)
+    luaunit.assert_equals(c.count.reset, 1, state)
+    m:transport_stopped()
+    luaunit.assert_equals(c.count.writes, 1, "Deferred saves coalesce: " .. state)
+  end
+end
+
+function test_rhythm_doctor_project_save_release_during_playback_waits_for_stop()
+  local c,m = rhythm_doctor_save_context("RECORDING")
+  c.autosave()
+  local owner = m:job_token()
+  m:transport_started();c.state.playing=true
+  m:resources_released(owner, false)
+  luaunit.assert_equals(c.count.writes, 0)
+  luaunit.assert_equals(c.count.stop, 0)
+  c.state.playing=false;m:transport_stopped()
+  luaunit.assert_equals(c.count.writes, 1)
+end
+
+function test_rhythm_doctor_project_save_discards_old_project_deferred_request()
+  local c,m = rhythm_doctor_save_context("LISTENING")
+  c.autosave()
+  local owner = m:job_token()
+  m:replace_project("new")
+  m:resources_released(owner, true);m:transport_stopped()
+  luaunit.assert_equals(c.count.writes, 0)
+  luaunit.assert_equals(c.count.stop, 0)
+end
+
+-- Characterisation outside README: PLAN.md Bank lifecycle requires validated
+-- load/new to await resource release, while rejection keeps the live capture.
+function test_rhythm_doctor_project_replace_waits_before_transport_and_model_mutation()
+  for _,operation in ipairs({"load", "new"}) do
+    local c,m = rhythm_doctor_save_context("RECORDING")
+    c.state.files["fixture/good.ptn"] = load_fixture()
+    c.autosave()
+    local owner = m:job_token()
+    if operation == "load" then c.load("fixture/good.ptn") else c.new() end
+    for _,field in ipairs({"stop","reset","init","set","writes","memory_init"}) do
+      luaunit.assert_equals(c.count[field], 0, operation .. "/" .. field)
+    end
+    luaunit.assert_is(c.state.store, c.original)
+    luaunit.assert_false(m.pending_save)
+    luaunit.assert_equals(c.state.messages[#c.state.messages], "RELEASING CAPTURE")
+    m:resources_released(owner, true)
+    luaunit.assert_equals(c.count.init, 1, operation)
+    luaunit.assert_equals(c.count.writes, 0, "Old autosave was discarded")
+    luaunit.assert_not_equals(c.state.store, c.original)
+    luaunit.assert_equals(c.count.set, operation == "load" and 1 or 0)
+    luaunit.assert_equals(c.count.memory_init, operation == "new" and 1 or 0)
+    m:transport_stopped()
+    luaunit.assert_equals(c.count.writes, 0)
+  end
+end
+
+function test_rhythm_doctor_project_replace_invalid_load_keeps_capture_running()
+  local c,m = rhythm_doctor_save_context("RECORDING")
+  c.state.files["fixture/bad.ptn"] = {false}
+  local generation = m.generation
+  luaunit.assert_false(c.load("fixture/bad.ptn"))
+  luaunit.assert_equals(m.state, "RECORDING")
+  luaunit.assert_equals(m.generation, generation)
+  luaunit.assert_nil(m.release_token)
+  luaunit.assert_equals(c.count.init, 0)
+  luaunit.assert_equals(c.count.stop, 0)
+end
+
+function test_rhythm_doctor_project_replace_latest_request_wins_and_cleanup_discards_it()
+  for _,cleanup in ipairs({false, true}) do
+    local c,m = rhythm_doctor_save_context("ANALYSING")
+    c.state.files["fixture/good.ptn"] = load_fixture()
+    local owner = m:job_token()
+    c.load("fixture/good.ptn");c.new()
+    luaunit.assert_equals(c.count.init, 0)
+    if cleanup then m:cleanup() end
+    m:resources_released(owner, true)
+    luaunit.assert_equals(c.count.set, 0, "Superseded load must never run")
+    luaunit.assert_equals(c.count.init, cleanup and 0 or 1)
+    luaunit.assert_equals(c.count.memory_init, cleanup and 0 or 1)
+  end
 end

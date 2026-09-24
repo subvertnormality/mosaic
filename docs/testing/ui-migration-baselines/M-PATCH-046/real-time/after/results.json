@@ -1,0 +1,492 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 2",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 3",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 4",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 5",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 6",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 7",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 8",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 9",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 10",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "all-ten-native-slide-slots",
+    "slots": 10,
+    "removed_slot": null,
+    "cycles": 2,
+    "checks": [
+      {
+        "cycle": 0,
+        "slot": 1,
+        "values": [
+          4,
+          6,
+          9,
+          12,
+          14,
+          17
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 2,
+        "values": [
+          5,
+          7,
+          10,
+          13,
+          15,
+          18
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 3,
+        "values": [
+          6,
+          8,
+          11,
+          14,
+          16,
+          19
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 4,
+        "values": [
+          7,
+          9,
+          12,
+          15,
+          17,
+          20
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 5,
+        "values": [
+          8,
+          10,
+          13,
+          16,
+          18,
+          21
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 6,
+        "values": [
+          9,
+          11,
+          14,
+          17,
+          19,
+          22
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 7,
+        "values": [
+          10,
+          12,
+          15,
+          18,
+          20,
+          23
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 8,
+        "values": [
+          11,
+          13,
+          16,
+          19,
+          21,
+          24
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 9,
+        "values": [
+          12,
+          14,
+          17,
+          20,
+          22,
+          25
+        ]
+      },
+      {
+        "cycle": 0,
+        "slot": 10,
+        "values": [
+          13,
+          15,
+          18,
+          21,
+          23,
+          26
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 1,
+        "values": [
+          4,
+          6,
+          9,
+          12,
+          14,
+          17
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 2,
+        "values": [
+          5,
+          7,
+          10,
+          13,
+          15,
+          18
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 3,
+        "values": [
+          6,
+          8,
+          11,
+          14,
+          16,
+          19
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 4,
+        "values": [
+          7,
+          9,
+          12,
+          15,
+          17,
+          20
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 5,
+        "values": [
+          8,
+          10,
+          13,
+          16,
+          18,
+          21
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 6,
+        "values": [
+          9,
+          11,
+          14,
+          17,
+          19,
+          22
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 7,
+        "values": [
+          10,
+          12,
+          15,
+          18,
+          20,
+          23
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 8,
+        "values": [
+          11,
+          13,
+          16,
+          19,
+          21,
+          24
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 9,
+        "values": [
+          12,
+          14,
+          17,
+          20,
+          22,
+          25
+        ]
+      },
+      {
+        "cycle": 1,
+        "slot": 10,
+        "values": [
+          13,
+          15,
+          18,
+          21,
+          23,
+          26
+        ]
+      }
+    ],
+    "passed": true
+  }
+]

@@ -1,0 +1,3684 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "source"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "internal"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "midi"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "2. Second MIDI"
+  },
+  {
+    "kind": "forwarded-clock-diagnostic",
+    "warm_ticks": 0,
+    "first_clock_deadline_ns": 26401136201640,
+    "events": [
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400632224679,
+        "index": 19,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400652987813,
+        "index": 20,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400673772817,
+        "index": 21,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400694491720,
+        "index": 22,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400715225896,
+        "index": 23,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400735907989,
+        "index": 24,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400756694952,
+        "index": 25,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400777698291,
+        "index": 26,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400798440245,
+        "index": 27,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400819167570,
+        "index": 28,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400840961290,
+        "index": 29,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400861751053,
+        "index": 30,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400882497979,
+        "index": 31,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400903291713,
+        "index": 32,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400924104459,
+        "index": 33,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400944833063,
+        "index": 34,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400965630177,
+        "index": 35,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26400986468350,
+        "index": 36,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401007542412,
+        "index": 37,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401028245985,
+        "index": 38,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401048974920,
+        "index": 39,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401069720824,
+        "index": 40,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401090470120,
+        "index": 41,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401111328574,
+        "index": 42,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401132465224,
+        "index": 43,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401153323902,
+        "index": 44,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401162213614,
+        "index": 45,
+        "bytes": [
+          250
+        ],
+        "decoded": [
+          {
+            "type": "start"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401162240705,
+        "index": 46,
+        "bytes": [
+          250
+        ],
+        "decoded": [
+          {
+            "type": "start"
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401162246355,
+        "index": 47,
+        "bytes": [
+          250
+        ],
+        "decoded": [
+          {
+            "type": "start"
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401162312526,
+        "index": 48,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401162318886,
+        "index": 49,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401162324326,
+        "index": 50,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401162329386,
+        "index": 51,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401162823964,
+        "index": 52,
+        "bytes": [
+          144,
+          60,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401162896965,
+        "index": 53,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401187308235,
+        "index": 54,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401211442061,
+        "index": 55,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401236941416,
+        "index": 56,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401262316164,
+        "index": 57,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401286466178,
+        "index": 58,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401311802661,
+        "index": 59,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401311922393,
+        "index": 60,
+        "bytes": [
+          128,
+          60,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401311990114,
+        "index": 61,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401312026985,
+        "index": 62,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401312035535,
+        "index": 63,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401312041935,
+        "index": 64,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401312336809,
+        "index": 65,
+        "bytes": [
+          144,
+          62,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401336932752,
+        "index": 66,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401362159946,
+        "index": 67,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401387287684,
+        "index": 68,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401411480630,
+        "index": 69,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401436664420,
+        "index": 70,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401461984860,
+        "index": 71,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401462140912,
+        "index": 72,
+        "bytes": [
+          128,
+          62,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401462219333,
+        "index": 73,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401462233774,
+        "index": 74,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401462240004,
+        "index": 75,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401462247724,
+        "index": 76,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401462595259,
+        "index": 77,
+        "bytes": [
+          144,
+          64,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401487239506,
+        "index": 78,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401511371752,
+        "index": 79,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401536664975,
+        "index": 80,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401562248952,
+        "index": 81,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401587381503,
+        "index": 82,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401611449937,
+        "index": 83,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401611511408,
+        "index": 84,
+        "bytes": [
+          128,
+          64,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401611574679,
+        "index": 85,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401611584879,
+        "index": 86,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401611590609,
+        "index": 87,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401611596099,
+        "index": 88,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401611870983,
+        "index": 89,
+        "bytes": [
+          144,
+          65,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401636596601,
+        "index": 90,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401661757103,
+        "index": 91,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401686937825,
+        "index": 92,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401712074075,
+        "index": 93,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401737163445,
+        "index": 94,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401762329947,
+        "index": 95,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401762434038,
+        "index": 96,
+        "bytes": [
+          128,
+          65,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401762476539,
+        "index": 97,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401762484739,
+        "index": 98,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401762489499,
+        "index": 99,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401762495519,
+        "index": 100,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401762775773,
+        "index": 101,
+        "bytes": [
+          144,
+          60,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401786361210,
+        "index": 102,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401811610453,
+        "index": 103,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401837074496,
+        "index": 104,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401862373499,
+        "index": 105,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401886625097,
+        "index": 106,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401911755517,
+        "index": 107,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401911876229,
+        "index": 108,
+        "bytes": [
+          128,
+          60,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401911919930,
+        "index": 109,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401911928730,
+        "index": 110,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401911933270,
+        "index": 111,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26401911938850,
+        "index": 112,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26401912273615,
+        "index": 113,
+        "bytes": [
+          144,
+          62,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401936837998,
+        "index": 114,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401962056040,
+        "index": 115,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26401987277701,
+        "index": 116,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402011431607,
+        "index": 117,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402036727361,
+        "index": 118,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402062053882,
+        "index": 119,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402062155144,
+        "index": 120,
+        "bytes": [
+          128,
+          62,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402062206374,
+        "index": 121,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402062215674,
+        "index": 122,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402062220295,
+        "index": 123,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402062225825,
+        "index": 124,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402062532219,
+        "index": 125,
+        "bytes": [
+          144,
+          64,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402087252045,
+        "index": 126,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402111406680,
+        "index": 127,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402136665524,
+        "index": 128,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402161955817,
+        "index": 129,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402187199078,
+        "index": 130,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402212441090,
+        "index": 131,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402212511901,
+        "index": 132,
+        "bytes": [
+          128,
+          64,
+          107
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              64,
+              107
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402212559082,
+        "index": 133,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402212567262,
+        "index": 134,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402212572022,
+        "index": 135,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402212578002,
+        "index": 136,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402212883387,
+        "index": 137,
+        "bytes": [
+          144,
+          65,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402236533435,
+        "index": 138,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402261924202,
+        "index": 139,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402287027232,
+        "index": 140,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402312192794,
+        "index": 141,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402336396750,
+        "index": 142,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402361558481,
+        "index": 143,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402361618042,
+        "index": 144,
+        "bytes": [
+          128,
+          65,
+          97
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              65,
+              97
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402361666853,
+        "index": 145,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402361678323,
+        "index": 146,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402361684703,
+        "index": 147,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402361691773,
+        "index": 148,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402362016928,
+        "index": 149,
+        "bytes": [
+          144,
+          60,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402386877865,
+        "index": 150,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402412096268,
+        "index": 151,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402437342319,
+        "index": 152,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402461517647,
+        "index": 153,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402486755273,
+        "index": 154,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402511913268,
+        "index": 155,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402511973649,
+        "index": 156,
+        "bytes": [
+          128,
+          60,
+          127
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              60,
+              127
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402512054370,
+        "index": 157,
+        "bytes": [
+          192,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 1,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402512064850,
+        "index": 158,
+        "bytes": [
+          193,
+          0
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 2,
+            "data": [
+              0
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402512070551,
+        "index": 159,
+        "bytes": [
+          194,
+          3
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 3,
+            "data": [
+              3
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402512075891,
+        "index": 160,
+        "bytes": [
+          195,
+          64
+        ],
+        "decoded": [
+          {
+            "type": "program_change",
+            "channel": 4,
+            "data": [
+              64
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402512371135,
+        "index": 161,
+        "bytes": [
+          144,
+          62,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_on",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402537123642,
+        "index": 162,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402562263231,
+        "index": 163,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402587407932,
+        "index": 164,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402611502136,
+        "index": 165,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402624650947,
+        "index": 166,
+        "bytes": [
+          128,
+          62,
+          117
+        ],
+        "decoded": [
+          {
+            "type": "note_off",
+            "channel": 1,
+            "data": [
+              62,
+              117
+            ]
+          }
+        ]
+      },
+      {
+        "device_id": 0,
+        "port": 1,
+        "port_name": "Emulator MIDI",
+        "monotonic_ns": 26402624706778,
+        "index": 167,
+        "bytes": [
+          252
+        ],
+        "decoded": [
+          {
+            "type": "stop"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402624714998,
+        "index": 168,
+        "bytes": [
+          252
+        ],
+        "decoded": [
+          {
+            "type": "stop"
+          }
+        ]
+      },
+      {
+        "device_id": 2,
+        "port": 3,
+        "port_name": "Norns2sinfonion",
+        "monotonic_ns": 26402624719418,
+        "index": 169,
+        "bytes": [
+          252
+        ],
+        "decoded": [
+          {
+            "type": "stop"
+          }
+        ]
+      },
+      {
+        "device_id": 1,
+        "port": 2,
+        "port_name": "Second MIDI",
+        "monotonic_ns": 26402636569738,
+        "index": 170,
+        "bytes": [
+          248
+        ],
+        "decoded": [
+          {
+            "type": "clock"
+          }
+        ]
+      }
+    ],
+    "stimulus": [
+      {
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "at_monotonic_ns": 26401136201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401136201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401161201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401186201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401211201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401236201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401261201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401286201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401311201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401336201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401361201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401386201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401411201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401436201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401461201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401486201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401511201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401536201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401561201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401586201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401611201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401636201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401661201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401686201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401711201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401736201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401761201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401786201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401811201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401836201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401861201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401886201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401911201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401936201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401961201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26401986201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402011201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402036201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402061201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402086201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402111201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402136201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402161201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402186201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402211201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402236201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402261201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402286201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402311201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402336201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402361201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402386201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402411201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402436201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402461201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402486201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402511201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402536201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402561201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402586201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 26402611201640
+      },
+      {
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "at_monotonic_ns": 26402623701640
+      }
+    ],
+    "delivered": [
+      {
+        "index": 0,
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "intended_monotonic_ns": 26401136201640,
+        "actual_monotonic_ns": 26401136288054
+      },
+      {
+        "index": 1,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401136201640,
+        "actual_monotonic_ns": 26401136331005
+      },
+      {
+        "index": 2,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401161201640,
+        "actual_monotonic_ns": 26401161294152
+      },
+      {
+        "index": 3,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401186201640,
+        "actual_monotonic_ns": 26401186287031
+      },
+      {
+        "index": 4,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401211201640,
+        "actual_monotonic_ns": 26401211289980
+      },
+      {
+        "index": 5,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401236201640,
+        "actual_monotonic_ns": 26401236296566
+      },
+      {
+        "index": 6,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401261201640,
+        "actual_monotonic_ns": 26401261292328
+      },
+      {
+        "index": 7,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401286201640,
+        "actual_monotonic_ns": 26401286297476
+      },
+      {
+        "index": 8,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401311201640,
+        "actual_monotonic_ns": 26401311293505
+      },
+      {
+        "index": 9,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401336201640,
+        "actual_monotonic_ns": 26401336294484
+      },
+      {
+        "index": 10,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401361201640,
+        "actual_monotonic_ns": 26401361294702
+      },
+      {
+        "index": 11,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401386201640,
+        "actual_monotonic_ns": 26401386294101
+      },
+      {
+        "index": 12,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401411201640,
+        "actual_monotonic_ns": 26401411298069
+      },
+      {
+        "index": 13,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401436201640,
+        "actual_monotonic_ns": 26401436295746
+      },
+      {
+        "index": 14,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401461201640,
+        "actual_monotonic_ns": 26401461512117
+      },
+      {
+        "index": 15,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401486201640,
+        "actual_monotonic_ns": 26401486288043
+      },
+      {
+        "index": 16,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401511201640,
+        "actual_monotonic_ns": 26401511290512
+      },
+      {
+        "index": 17,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401536201640,
+        "actual_monotonic_ns": 26401536293181
+      },
+      {
+        "index": 18,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401561201640,
+        "actual_monotonic_ns": 26401561294719
+      },
+      {
+        "index": 19,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401586201640,
+        "actual_monotonic_ns": 26401586280768
+      },
+      {
+        "index": 20,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401611201640,
+        "actual_monotonic_ns": 26401611282956
+      },
+      {
+        "index": 21,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401636201640,
+        "actual_monotonic_ns": 26401636287036
+      },
+      {
+        "index": 22,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401661201640,
+        "actual_monotonic_ns": 26401661291126
+      },
+      {
+        "index": 23,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401686201640,
+        "actual_monotonic_ns": 26401686295305
+      },
+      {
+        "index": 24,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401711201640,
+        "actual_monotonic_ns": 26401711287664
+      },
+      {
+        "index": 25,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401736201640,
+        "actual_monotonic_ns": 26401736288392
+      },
+      {
+        "index": 26,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401761201640,
+        "actual_monotonic_ns": 26401761404001
+      },
+      {
+        "index": 27,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401786201640,
+        "actual_monotonic_ns": 26401786294909
+      },
+      {
+        "index": 28,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401811201640,
+        "actual_monotonic_ns": 26401811292148
+      },
+      {
+        "index": 29,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401836201640,
+        "actual_monotonic_ns": 26401836290535
+      },
+      {
+        "index": 30,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401861201640,
+        "actual_monotonic_ns": 26401861295973
+      },
+      {
+        "index": 31,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401886201640,
+        "actual_monotonic_ns": 26401886304042
+      },
+      {
+        "index": 32,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401911201640,
+        "actual_monotonic_ns": 26401911310620
+      },
+      {
+        "index": 33,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401936201640,
+        "actual_monotonic_ns": 26401936296770
+      },
+      {
+        "index": 34,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401961201640,
+        "actual_monotonic_ns": 26401961309107
+      },
+      {
+        "index": 35,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26401986201640,
+        "actual_monotonic_ns": 26401986293077
+      },
+      {
+        "index": 36,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402011201640,
+        "actual_monotonic_ns": 26402011288285
+      },
+      {
+        "index": 37,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402036201640,
+        "actual_monotonic_ns": 26402036270433
+      },
+      {
+        "index": 38,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402061201640,
+        "actual_monotonic_ns": 26402061287161
+      },
+      {
+        "index": 39,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402086201640,
+        "actual_monotonic_ns": 26402086294050
+      },
+      {
+        "index": 40,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402111201640,
+        "actual_monotonic_ns": 26402111288958
+      },
+      {
+        "index": 41,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402136201640,
+        "actual_monotonic_ns": 26402136302953
+      },
+      {
+        "index": 42,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402161201640,
+        "actual_monotonic_ns": 26402161293598
+      },
+      {
+        "index": 43,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402186201640,
+        "actual_monotonic_ns": 26402186249864
+      },
+      {
+        "index": 44,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402211201640,
+        "actual_monotonic_ns": 26402211305125
+      },
+      {
+        "index": 45,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402236201640,
+        "actual_monotonic_ns": 26402236295821
+      },
+      {
+        "index": 46,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402261201640,
+        "actual_monotonic_ns": 26402261288311
+      },
+      {
+        "index": 47,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402286201640,
+        "actual_monotonic_ns": 26402286300101
+      },
+      {
+        "index": 48,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402311201640,
+        "actual_monotonic_ns": 26402311297319
+      },
+      {
+        "index": 49,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402336201640,
+        "actual_monotonic_ns": 26402336296068
+      },
+      {
+        "index": 50,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402361201640,
+        "actual_monotonic_ns": 26402361300806
+      },
+      {
+        "index": 51,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402386201640,
+        "actual_monotonic_ns": 26402386290224
+      },
+      {
+        "index": 52,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402411201640,
+        "actual_monotonic_ns": 26402411288065
+      },
+      {
+        "index": 53,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402436201640,
+        "actual_monotonic_ns": 26402436312653
+      },
+      {
+        "index": 54,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402461201640,
+        "actual_monotonic_ns": 26402461296281
+      },
+      {
+        "index": 55,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402486201640,
+        "actual_monotonic_ns": 26402486298420
+      },
+      {
+        "index": 56,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402511201640,
+        "actual_monotonic_ns": 26402511299029
+      },
+      {
+        "index": 57,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402536201640,
+        "actual_monotonic_ns": 26402536294329
+      },
+      {
+        "index": 58,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402561201640,
+        "actual_monotonic_ns": 26402561288337
+      },
+      {
+        "index": 59,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402586201640,
+        "actual_monotonic_ns": 26402586295116
+      },
+      {
+        "index": 60,
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "intended_monotonic_ns": 26402611201640,
+        "actual_monotonic_ns": 26402611287213
+      },
+      {
+        "index": 61,
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "intended_monotonic_ns": 26402623701640,
+        "actual_monotonic_ns": 26402623785242
+      }
+    ]
+  }
+]

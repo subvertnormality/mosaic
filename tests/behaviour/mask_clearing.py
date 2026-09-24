@@ -2,33 +2,31 @@
 
 def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_slot=1):
     from cases import assert_durations
+    ui = c.ui
     selection,turns={'note':(0,[73,75]),'velocity':(1,[91,81]),'length':(2,[8,15]),'trig':(-1,[1,1]),'chord':(3,[2,4])}[attribute]
     assert 1 <= chord_slot <= 4
     if attribute == "chord":selection += chord_slot - 1
-    c.configure()
+    ui.configure()
     if other_channel:
         assert defaults and attribute in ('note','trig')
-        c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-        c.tap(1,2);c.hold_tap((1,4),(4,4))
-        c.enc(1,-4)
+        ui.select_channel(2);ui.set_value(1);ui.select_field('midi_channel',offset=1);ui.set_value(1)
+        ui.select_field('default_velocity',offset=1);ui.set_value(1);ui.press_key(3)
+        ui.tap_control('pattern_slot',1);ui.set_range(1,4)
+        ui.channel_page('masks','midi_config',channel=2)
         # Channel2: port2/MIDI channel2, G79/velocity40/half-step defaults;
         # step2 overrides A81/velocity60/1.25steps. All remain untouched.
         for index,(global_turns,step_turns) in enumerate([(80,2),(41,20),(8,7)]):
-            if index:c.enc(2,1)
-            c.enc(3,global_turns)
-            c.action(type='grid',x=2,y=4,state=1)
-            try:c.enc(3,step_turns)
-            finally:c.action(type='grid',x=2,y=4,state=0)
+            if index:ui.select_field(('velocity','length')[index-1],offset=1)
+            ui.set_value(global_turns)
+            with ui.hold_step(2):ui.set_value(step_turns)
             c.elapse(.06)
-        c.tap(1,1);c.enc(2,-10);c.enc(2,1)
-    c.enc(1,-4);c.enc(2,selection)
+        ui.select_channel(1);ui.select_field('note',saturate=-10,then=1)
+    ui.channel_page('masks','midi_config',channel=1);ui.select_field(attribute if attribute != 'chord' else 'chord_%d' % chord_slot,offset=selection)
     if defaults:
         default_turns,turns={"note":(68,[5,7]),"velocity":(51,[40,30]),"length":(18,[-10,-3]),"chord":(2,[2,3]),"trig":(1,[1,1])}[attribute]  # chord from X: bugs.json chord-mask-unset-start-x
-        c.enc(3,default_turns)
+        ui.set_value(default_turns)
     for step,amount in enumerate(turns,1):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.enc(3,amount)
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with ui.hold_step(step):ui.set_value(amount)
         c.elapse(.06)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
@@ -48,7 +46,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
                 chord=([67,71][step-1] if overridden else [64,65,67,69][step-1]) if defaults else [64,69][step-1]
                 phrase.append((1,[144,chord,velocity]));lengths.append(length);positions.append(step-1)
         if other_channel:
-            marker=c.snapshot()['midi_count'];c.tap(1,8)
+            marker=c.snapshot()['midi_count'];ui.play()
             def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
             state=c.wait(lambda state:(not phrase or sum(m['port']==1 for m in emitted(state))>=len(phrase)*3+1) and sum(m['port']==2 for m in emitted(state))>=13,5)
             all_notes=emitted(state)
@@ -61,7 +59,7 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
                 assert not [m for m in state['midi'] if m['index']>marker and m['port']==1 and 128<=m['bytes'][0]<=159], 'Silent default emitted MIDI notes or releases'
             expected_other=[[145,79,40],[145,81,60],[145,79,40],[145,79,40]]
             assert [m['bytes'] for m in sentinel]==[expected_other[i%4] for i in range(len(sentinel))]
-            c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+            ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
             assert_durations(c,sentinel,[.5,1.25,.5,.5]*2)
             if notes:assert abs((notes[0][field]-sentinel[0][field])/1e9-positions[0]/6)<=tolerance
             for i,note in enumerate(sentinel):assert abs((note[field]-sentinel[0][field])/1e9-i/6)<=tolerance
@@ -75,32 +73,27 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
         c.results.append(dict(kind='mask-clear-attribute',attribute=attribute,chord_slot=chord_slot,defaults=defaults,stage=stage,active_step_overrides=sorted(active),expected_phrase=phrase,expected_lengths=lengths,passed=True))
     verify({1,2},'both-step-overrides')
     for stage in ('clear-first-step','repeat-clear-first-step'):
-        c.action(type='grid',x=1,y=4,state=1)
         shifted=stage=='repeat-clear-first-step'
-        if shifted:c.action(type='key',n=1,state=1);c.elapse(.3)
-        try:c.key(2)
-        finally:
-            if shifted:c.action(type='key',n=1,state=0)
-            c.action(type='grid',x=1,y=4,state=0)
+        with ui.hold_step(1):
+            if shifted:
+                with ui.hold_keys(1):c.elapse(.3);ui.press_key(2)
+            else:ui.press_key(2)
         c.elapse(.06);verify({2},stage)
-    c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.key(2)
-    finally:c.action(type='key',n=1,state=0)
+    with ui.hold_keys(1):c.elapse(.3);ui.press_key(2)
     c.elapse(.06);verify(set(),'clear-channel-step-overrides')
 
 
 def mask_clear_combined_chords(c):
     """Four populated chord slots: clearing a step clears every slot together."""
     from cases import assert_durations
-    c.configure();c.enc(1,-4);c.enc(2,3)
+    ui = c.ui
+    ui.configure();ui.channel_page('masks','midi_config');ui.select_field('chord_1',offset=3)
     offsets=[2,4,6,7]
     for slot,offset in enumerate(offsets):
-        if slot:c.enc(2,1)
-        c.enc(3,offset)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
+        if slot:ui.select_field('chord_%d' % (slot+1),offset=1)
+        ui.set_value(offset)  # unset chord masks start from X (bugs.json chord-mask-unset-start-x)
         for step,delta in [(1,1),(2,2)]:
-            c.action(type='grid',x=step,y=4,state=1)
-            try:c.enc(3,delta)
-            finally:c.action(type='grid',x=step,y=4,state=0)
+            with ui.hold_step(step):ui.set_value(delta)
             c.elapse(.06)
     # Independent C-major degree table. Each default/override is a scale offset.
     major=[0,2,4,5,7,9,11]
@@ -121,27 +114,23 @@ def mask_clear_combined_chords(c):
             assert abs((note[field]-notes[0][field])/1e9-(i//5)/6)<=tolerance
         c.results.append(dict(kind='combined-chord-mask-clearing',stage=stage,expected_phrase=expected,active_steps=sorted(active),passed=True))
     verify({1,2},'all-four-slots-populated')
-    c.action(type='grid',x=1,y=4,state=1)
-    try:c.key(2)
-    finally:c.action(type='grid',x=1,y=4,state=0)
+    with ui.hold_step(1):ui.press_key(2)
     c.elapse(.06);verify({2},'clear-step-all-slots')
-    c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.key(2)
-    finally:c.action(type='key',n=1,state=0)
+    with ui.hold_keys(1):
+        c.elapse(.3);ui.press_key(2)
     c.elapse(.06);verify(set(),'clear-channel-all-slots')
 
 
 def mask_clear_last_steps(c):
     from cases import assert_durations
-    c.configure();c.hold_tap((15,7),(16,7));c.enc(1,-4)
+    ui = c.ui
+    ui.configure();ui.set_range(63,64);ui.channel_page('masks','midi_config')
     # Last two channel steps have forced trigs, C60, velocity100, one-step gates.
-    c.enc(2,-1);c.enc(3,2);c.enc(2,1);c.enc(3,61)
-    c.enc(2,1);c.enc(3,101);c.enc(2,1);c.enc(3,14)
-    c.enc(2,-2)
+    ui.select_field('trig',offset=-1);ui.set_value(2);ui.select_field('note',offset=1);ui.set_value(61)
+    ui.select_field('velocity',offset=1);ui.set_value(101);ui.select_field('length',offset=1);ui.set_value(14)
+    ui.select_field('note',offset=-2)
     for x,delta in [(15,12),(16,14)]:
-        c.action(type='grid',x=x,y=7,state=1)
-        try:c.enc(3,delta)
-        finally:c.action(type='grid',x=x,y=7,state=0)
+        with ui.hold_step(x+48):ui.set_value(delta)
         c.elapse(.06)
     def verify(pitches,stage):
         notes=c.playback([(1,[144,pitch,100]) for pitch in pitches],cycles=3,timeout=5)
@@ -151,13 +140,10 @@ def mask_clear_last_steps(c):
         for i,note in enumerate(notes):assert abs((note[field]-notes[0][field])/1e9-i/6)<=tolerance
         c.results.append(dict(kind='last-step-mask-clearing',stage=stage,steps=[63,64],expected=pitches,passed=True))
     verify([72,74],'both-boundary-overrides')
-    c.action(type='grid',x=15,y=7,state=1)
-    try:c.key(2)
-    finally:c.action(type='grid',x=15,y=7,state=0)
+    with ui.hold_step(63):ui.press_key(2)
     c.elapse(.06);verify([60,74],'step63-cleared-step64-preserved')
-    c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.key(2)
-    finally:c.action(type='key',n=1,state=0)
+    with ui.hold_keys(1):
+        c.elapse(.3);ui.press_key(2)
     c.elapse(.06);verify([60,60],'step64-cleared-defaults-preserved')
 
 
@@ -166,11 +152,10 @@ def mask_clear_recorded_chord(c):
     # Real scheduled keyboard input creates C/E/G on step1; release commits
     # the shared three-step gate. The existing fixture proves recorded replay.
     recorded_chord_release(c)
-    c.enc(1,-4)
+    ui = c.ui
+    ui.channel_page('masks','midi_config')
     # An independent neighbouring note override must survive step1 clearing.
-    c.action(type='grid',x=2,y=4,state=1)
-    try:c.enc(3,75)
-    finally:c.action(type='grid',x=2,y=4,state=0)
+    with ui.hold_step(2):ui.set_value(75)
     c.elapse(.06)
     def verify(recorded,neighbour,stage):
         phrase=([(1,[144,n,90]) for n in [72,76,79]] if recorded else [(1,[144,60,127])])
@@ -186,11 +171,7 @@ def mask_clear_recorded_chord(c):
             assert abs((note[field]-notes[0][field])/1e9-expected)<=tolerance
         c.results.append(dict(kind='recorded-mask-clearing',stage=stage,expected_phrase=phrase,expected_lengths=lengths,passed=True))
     verify(True,True,'recorded-chord-and-neighbour')
-    c.action(type='grid',x=1,y=4,state=1)
-    try:c.key(2)
-    finally:c.action(type='grid',x=1,y=4,state=0)
+    with ui.hold_step(1):ui.press_key(2)
     c.elapse(.06);verify(False,True,'recorded-masks-cleared-neighbour-preserved')
-    c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.key(2)
-    finally:c.action(type='key',n=1,state=0)
+    with ui.hold_keys(1):c.elapse(.3);ui.press_key(2)
     c.elapse(.06);verify(False,False,'original-pattern-restored')

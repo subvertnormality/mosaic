@@ -1,0 +1,202 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-held-velocity",
+    "stage": "original",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-held-velocity",
+    "stage": "note-locked",
+    "notes": [
+      60,
+      4,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "memory-held-velocity",
+    "stage": "note-undone",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-held-velocity",
+    "stage": "note-undone-after-rebuild",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-held-velocity",
+    "stage": "velocity-locked",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      50,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "memory-held-velocity",
+    "stage": "velocity-undone",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Memory",
+    "matched": true
+  },
+  {
+    "kind": "memory-held-velocity",
+    "stage": "velocity-undone-after-rebuild",
+    "notes": [
+      60,
+      62,
+      64,
+      65
+    ],
+    "velocities": [
+      127,
+      117,
+      107,
+      97
+    ]
+  },
+  {
+    "kind": "memory-held-velocity-summary",
+    "passed": true
+  }
+]

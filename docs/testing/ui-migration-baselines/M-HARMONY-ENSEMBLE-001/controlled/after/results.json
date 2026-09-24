@@ -1,0 +1,153 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 3 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 4 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "harmony",
+    "channel": 1
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "ensemble-polyrhythm",
+    "role_pitches": {
+      "1": 48,
+      "2": 55,
+      "3": 64,
+      "4": 67
+    },
+    "times_by_channel": {
+      "1": [
+        23030000000,
+        23196666667,
+        23363333334,
+        23530000001,
+        23696666667,
+        23863333334,
+        24030000001,
+        24196666667,
+        24363333334,
+        24530000001,
+        24696666667,
+        24863333334,
+        25030000001
+      ],
+      "2": [
+        23030000000,
+        23363333334,
+        23696666667,
+        24030000001,
+        24363333334,
+        24696666667,
+        25030000001
+      ],
+      "3": [
+        23196666667,
+        23530000001,
+        23863333334,
+        24196666667,
+        24530000001,
+        24863333334
+      ],
+      "4": [
+        23530000001,
+        24196666667,
+        24863333334
+      ]
+    },
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "local-scale-bypass",
+    "channel": 2,
+    "pitches": [
+      64,
+      64,
+      64,
+      64,
+      64
+    ],
+    "status": "LOCAL SCALE BYPASS",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 3 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "local-octave-bypass",
+    "channel": 3,
+    "inspected_step": 2,
+    "pitches": [
+      72,
+      72,
+      72,
+      72,
+      72,
+      72
+    ],
+    "status": "LOCAL OCTAVE BYPASS",
+    "passed": true
+  }
+]

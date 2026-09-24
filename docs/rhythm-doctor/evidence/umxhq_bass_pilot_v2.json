@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "scope": "Desktop CPU-only, first matching 20 seconds of old BabySlakh tracks 00001-00020. This is a rejected BASS-onset diagnostic, not a norns or clean-corpus acceptance result.",
+  "official_model": {
+    "openunmix_commit": "b436d5f7d40c2b8ff0b2500e9d953fa47929b261",
+    "license_evidence": "docs/rhythm-doctor/evidence/umxhq-official-license.json",
+    "bass_weight_sha256": "8d85a5bd3f996a8867fca0e8442e077e5a3f5ec747a6112742452a8f347b39c8",
+    "model_source_sha256": "85f28ba5f8a24c2f80cd747925d9cc39a28c344b92a95a8d39672abf2d241358",
+    "transform_source_sha256": "84399425ae269d3686628d21fc0b55bb6633d32773968db7368ef8058cd226bd"
+  },
+  "invalid_v1": {
+    "status": "invalid: Track00017 was incorrectly treated as an empty-BASS negative",
+    "runner": "tests/rhythm_doctor/artifacts/umxhq-bass-pilot/run_pilot-v1-invalid-recreated.py",
+    "runner_sha256": "1af88956a1b41f096442a738b334a59bda3e1b69b6678f34ec2a3de032b05aab",
+    "result": "tests/rhythm_doctor/artifacts/umxhq-bass-pilot/pilot-results-v1-invalid-reproduced.json",
+    "result_sha256": "25f8cbb21fd5a06320d6089a8dae42ed1c1d7ff86a833ce00af7422aee539e8c",
+    "preservation_note": "The original result bytes were overwritten before this audit. The runner source was recovered byte-identically from its recorded SHA-256; the separately named result is a fresh reproduction and is not claimed to be the overwritten original result."
+  },
+  "track00017_reference_audit": {
+    "status": "incomplete_missing_declared_bass_midi; excluded from tuning and scoring",
+    "metadata_sha256": "43aed91db127a03be6118c80a7778cad16fde013d784e631c125182fb476e195",
+    "declared_bass_stem": "S04",
+    "missing_midi": "S04.mid",
+    "available_midi_inventory": "S00-S03,S05-S10.mid",
+    "finding": "The authoritative metadata declares S04 as Bass, but the selected corpus has no S04 MIDI. It is an unknown reference, not a zero-BASS negative."
+  },
+  "corrected_v2": {
+    "runner": "tests/rhythm_doctor/artifacts/umxhq-bass-pilot/run_pilot-v2-track00017-excluded.py",
+    "runner_sha256": "ff448c1472c0759fcb3e05cc59451daed94506e54613fe053386b3c3e3ff58e6",
+    "result": "tests/rhythm_doctor/artifacts/umxhq-bass-pilot/pilot-results-v2-track00017-excluded.json",
+    "result_sha256": "6f87758499bbd2bcc3c4bd11f7e363ec44979875197770c8e1752193d744f433",
+    "frontend": "upstream OpenUnmix core AST with upstream TorchSTFT and ComplexNorm AST; the historical torchaudio complex_norm operation is explicitly shimmed as torch.norm because torchaudio 0.11 no longer exports it",
+    "development_only_selection": {
+      "scorable_tracks": 8,
+      "excluded_incomplete_tracks": 1,
+      "threshold_mad_multiplier": 6,
+      "minimum_peak_gap_frames": 5,
+      "tp": 155,
+      "fp": 118,
+      "fn": 48,
+      "precision": 0.567766,
+      "recall": 0.763547,
+      "f1": 0.651261
+    },
+    "diagnostic_held": {
+      "scorable_tracks": 11,
+      "tp": 143,
+      "fp": 136,
+      "fn": 47,
+      "precision": 0.512545,
+      "recall": 0.752632,
+      "f1": 0.609808
+    },
+    "gate": "failed: the held BASS-onset result is not viable for delivery; no ARM timing, memory, latency, waveform, or clean-corpus claim follows from this desktop magnitude-flux pilot."
+  }
+}

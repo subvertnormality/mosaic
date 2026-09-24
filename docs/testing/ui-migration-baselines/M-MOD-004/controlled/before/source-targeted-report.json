@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "midi-modulation",
+  "before_sha": "53d99405c54e8ee0959662bdf5f9b3e8de009350",
+  "after_sha": "999aa99a997bfa584b3acac6120aceef974748a2",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MOD-004"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/modulation_interactions.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/modulation_interactions.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MOD-004",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MOD-004/real-time/before/d4d0b4e84c334300aa5d44226eb487a6/manifest.json",
+              "manifest_sha256": "a3685f49ee27d1cea62770d5148d7d4b596e66979833b03ba65022c1e7cdc159"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MOD-004/real-time/after/766fbdd5a9334b39bcf7f7462f092281/manifest.json",
+              "manifest_sha256": "0883d58ec32f1552a4b7a9fe80c4ef58f3304c5ea09c264b3859090e11533203"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MOD-004/controlled-experimental/before/4aba8721855746bd8f01c63213a99cc6/manifest.json",
+              "manifest_sha256": "d2ed5b62303943554c237b54be976d2deb6304d07b57745629d91db7cc014481"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MOD-004/controlled-experimental/after/43d1e774c1ce42ddb31800665611401f/manifest.json",
+              "manifest_sha256": "3547d0f2d2d6fcb421c6da5d1de9617abc055ab56aa422abf3d18436c366456a"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

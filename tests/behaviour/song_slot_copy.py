@@ -7,15 +7,16 @@ PHRASE = [(60, 127), (62, 117), (64, 107), (65, 97)]
 
 
 def song_slot_copy(c):
-    c.configure(); c.tap(6, 8)
+    c.configure(); c.ui.song_editor()
     def gesture(source, destination, release_source_first):
-        c.action(type='grid', x=source, y=1, state=1); c.elapse(.05)
-        c.action(type='grid', x=destination, y=1, state=1); c.elapse(.05)
+        c.ui.gesture([('song_pattern_slot', source)], []); c.elapse(.05)
+        c.ui.gesture([('song_pattern_slot', destination)], []); c.elapse(.05)
         order = (source, destination) if release_source_first else (destination, source)
-        for x in order: c.action(type='grid', x=x, y=1, state=0); c.elapse(.05)
+        for slot_number in order:
+            c.ui.gesture([], [('song_pattern_slot', slot_number)]); c.elapse(.05)
     def slot(number, stage, octave):
-        c.tap(number, 1)
-        marker = c.snapshot()['midi_count']; c.tap(1, 8); c.elapse(1.0); c.tap(1, 8)
+        c.ui.tap_control('song_pattern_slot', number)
+        marker = c.snapshot()['midi_count']; c.ui.play(); c.elapse(1.0); c.ui.stop()
         state = c.wait(lambda s: not s['midi_capture']['outstanding'])
         notes = [m['bytes'] for m in state['midi'] if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0][:4]
         expected = [] if octave is None else [[144, n + 12 * octave, v] for n, v in PHRASE]
@@ -23,7 +24,7 @@ def song_slot_copy(c):
         c.results.append(dict(kind='song-slot-copy', stage=stage, slot=number, notes=[n[1] for n in notes], passed=True))
     gesture(1, 2, release_source_first=False)                    # the usual order
     slot(2, 'copy-release-destination-first', 0)
-    c.tap(3, 8); c.tap(11, 8); c.tap(6, 8)                        # slot 2 (selected): octave +1
+    c.ui.menu('channel_editor'); c.ui.tap_control('channel_octave', 1); c.ui.song_editor()  # slot 2 (selected): octave +1
     gesture(2, 3, release_source_first=True)
     slot(3, 'copy-release-source-first', 1); slot(2, 'source-unchanged', 1)
     gesture(4, 3, release_source_first=True)                     # empty slot 4 over slot 3

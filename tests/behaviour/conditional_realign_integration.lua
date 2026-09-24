@@ -29,6 +29,13 @@ for _,repeat_reset in ipairs({false,true}) do
   if path=='mosaic/lib/clock/parameter_preview' then return dofile('lib/clock/parameter_preview.lua') end
   if path=='mosaic/lib/clock/m_clock' then return clock end
   if path=='mosaic/lib/quantiser' then return {} end
+  -- The actual lattice/transition path under test never resolves pitch or
+  -- Foundation data; satisfy step.lua's module-load boundary without mocking
+  -- any clock behaviour used by this contract.
+  if path=='mosaic/lib/harmony/config_state'then return{on_pattern_boundary=function()end,enter_song=function()end}end
+  if path=='mosaic/lib/harmony/state'then return{enter_song=function()end}end
+  if path=='mosaic/lib/musical_merge/state'then return{on_pattern_boundary=function()return{}end,reset_song=function()end}end
+  if path:match('^mosaic/lib/harmony/') or path:match('^mosaic/lib/musical_merge/') then return {} end
   assert(path=='mosaic/lib/clock/divisions',path);return {note_divisions={}}
  end
  channel_edit_page_ui={}

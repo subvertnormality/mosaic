@@ -1,0 +1,50 @@
+[
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 0
+  }
+]

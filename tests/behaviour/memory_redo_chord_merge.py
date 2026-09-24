@@ -16,9 +16,11 @@ PATTERN = [60, 62, 64, 65]
 
 
 def memory_redo_chord_merge(c):
+    ui = c.ui
+
     def heard(stage, limit=12):
         marker = c.snapshot()['midi_count']
-        c.tap(1, 8); c.elapse(1.4); c.tap(1, 8)
+        ui.play(); c.elapse(1.4); ui.stop()
         state = c.wait(lambda s: not s['midi_capture']['outstanding'])
         ons = [m['bytes'] for m in state['midi']
                if m['index'] > marker and m['bytes'][0] == 144 and m['bytes'][2] > 0][:limit]
@@ -26,32 +28,35 @@ def memory_redo_chord_merge(c):
         c.results.append(dict(kind='memory-redo-chord-merge', stage=stage, notes=notes))
         return notes
 
-    def chord_edit(field_offset, turns):
-        c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
-        c.enc(2, -9); c.enc(2, field_offset)
-        c.action(type='grid', x=2, y=4, state=1); c.elapse(.05)
-        try: c.enc(3, turns)
-        finally: c.action(type='grid', x=2, y=4, state=0)
-        c.elapse(.15); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+    def chord_edit(field, field_offset, turns):
+        ui.channel_page('masks', 'memory', channel=1, confirm=False)
+        ui.expect_header('masks', channel=1)
+        ui.select_field(field, saturate=-9, then=field_offset)
+        with ui.hold_step(2):
+            c.elapse(.05); ui.set_value(turns)
+        c.elapse(.15)
+        ui.channel_page('memory', 'masks', channel=1, confirm=False)
+        ui.expect_header('memory', channel=1)
 
-    c.configure()
-    c.enc(1, -2); c.screen_header('Ch. 1 Memory')
+    ui.configure()
+    ui.channel_page('memory', 'midi_config', channel=1, confirm=False)
+    ui.expect_header('memory', channel=1)
     base = heard('pattern')
     assert base[:4] == PATTERN, base
 
-    chord_edit(4, 1)                                   # Chd1: 2nd above D = E (64)
+    chord_edit('chord_1', 4, 1)                        # Chd1: 2nd above D = E (64)
     one = heard('chd1-set')
     assert one[:3] == [60, 62, 64], one                 # E sounds with D on step 2
 
-    chord_edit(6, 4)                                   # Chd3: 5th above D = A (69)
+    chord_edit('chord_3', 6, 4)                        # Chd3: 5th above D = A (69)
     both = heard('chd1-and-chd3-set')
     assert both[:4] == [60, 62, 64, 69], both           # both voices sound with D
 
-    c.enc(3, -2)                                       # E3 back over both actions
+    ui.set_value(-2)                                   # E3 back over both actions
     undone = heard('after-memory-back-two')
     assert undone[:4] == PATTERN, undone
 
-    c.key(3); c.elapse(.2)                             # K3: jump to the latest action
+    ui.press_key(3); c.elapse(.2)                      # K3: jump to the latest action
     redone = heard('after-k3-jump-to-latest')
     assert redone[:4] == both[:4], ('K3 lost a chord voice', redone[:4], both[:4])
     c.results.append(dict(kind='memory-redo-chord-merge-summary', voices=redone[:4], passed=True))

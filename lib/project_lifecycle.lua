@@ -1,9 +1,18 @@
 -- Project operations and autosave share one inhibition state and timer owner.
 local project_lifecycle = {}
+local merge_state=include("mosaic/lib/musical_merge/state")
+local harmony_config_state=include("mosaic/lib/harmony/config_state")
+local harmony_state=include("mosaic/lib/harmony/state")
+local harmony_inspection=include("mosaic/lib/harmony/inspection")
 
-function project_lifecycle.new(as_metro, autosave_timer, param_manager, project_validation, set_splash)
+local function reset_optional_feature_transients()
+  merge_state.reset();harmony_config_state.reset();harmony_state.reset();harmony_inspection.reset()
+end
+
+function project_lifecycle.new(as_metro, autosave_timer, param_manager, project_validation, set_splash, capture_guard)
   local autosave_inhibited = false
   local autosave_reset
+  local new_project_sequence = 0
 
 local function reject_project(reason)
   autosave_inhibited = true
@@ -20,6 +29,17 @@ local function resume_autosave()
   autosave_reset()
 end
 
+local function after_capture_release(continuation)
+  if not capture_guard then return continuation() end
+  local decision = capture_guard:prepare_project_change(continuation)
+  if decision.code == "DEFERRED" then
+    tooltip:show("RELEASING CAPTURE")
+    fn.dirty_screen(true)
+    return false, "DEFERRED"
+  end
+  return decision.value, decision.code
+end
+
 local function load_project(pth, allow_missing)
   if type(pth) ~= "string" or not pth:match("%.ptn$") then return false end
   local file, _, code = io.open(pth, "r")
@@ -33,30 +53,39 @@ local function load_project(pth, allow_missing)
   local valid, reason = project_validation.check(saved)
   if not valid then return reject_project(reason) end
 
-  -- Rejection must leave the live project, transport and pending notes intact.
-  m_clock:stop()
-  print("Loading project " .. pth)
-  program.init()
-  program.set(saved[2])
-  clock.tempo_change_handler = function(x)
-    song_edit_page_ui.refresh_tempo()
-  end
-  param_manager.init()
-  for i = 1, 16 do
-    param_manager.add_device_params(
-      i,
-      device_map.get_device(program.get().devices[i].device_map),
-      program.get().devices[i].midi_channel,
-      program.get().devices[i].midi_device,
-      false
-    )
-  end
-  if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset", true) end
-  m_clock:reset()
-  ui.refresh()
-  fn.dirty_grid(true)
-  resume_autosave()
-  return true
+  -- Validate first: rejection must leave the live project, transport, pending
+  -- notes and any capture in progress exactly as they were.
+  return after_capture_release(function()
+    m_clock:stop()
+    reset_optional_feature_transients()
+    print("Loading project " .. pth)
+    program.init()
+    program.set(saved[2])
+    clock.tempo_change_handler = function(x)
+      song_edit_page_ui.refresh_tempo()
+    end
+    param_manager.init()
+    for i = 1, 16 do
+      param_manager.add_device_params(
+        i,
+        device_map.get_device(program.get().devices[i].device_map),
+        program.get().devices[i].midi_channel,
+        program.get().devices[i].midi_device,
+        false
+      )
+    end
+    if saved[1] then params:read(norns.state.data .. saved[1] .. ".pset", true) end
+    m_clock:reset()
+    ui.refresh()
+    if capture_guard and capture_guard.project_loaded then capture_guard:project_loaded(pth) end
+    if capture_guard and capture_guard.restore_project then
+      local restored = capture_guard:restore_project(program.get(), pth)
+      if not restored or restored.ok ~= true then return reject_project("Invalid Rhythm Doctor bank") end
+    end
+    fn.dirty_grid(true)
+    resume_autosave()
+    return true
+  end)
 end
 
 -- The norns serializers ignore some write/close return values. Observe those
@@ -91,10 +120,32 @@ end
 
 local function save_project(txt, automatic)
   if not txt then return false end
+  -- The guard owns coalescing and resource-release timing. Ask before stop/reset
+  -- or serialization: ordinary project saves also silence n.b. voices.
+  if capture_guard then
+    local decision = automatic and capture_guard:autosave() or capture_guard:manual_save()
+    if decision.code ~= "SAVE_NOW" then
+      if not automatic then
+        tooltip:show("CAPTURE ACTIVE / FINISH OR CANCEL")
+        fn.dirty_screen(true)
+      end
+      return false
+    end
+  end
   m_clock:stop()
   m_clock:reset()
   print("Saving project as " .. txt)
-  local ok, err = checked_table_save({txt, program.prepare_for_save()}, norns.state.data .. txt .. ".ptn")
+  local project_data = program.prepare_for_save()
+  local project_path = norns.state.data .. txt .. ".ptn"
+  if capture_guard and capture_guard.serialize_project then
+    local serialized = capture_guard:serialize_project(project_data, project_path)
+    if not serialized or serialized.ok ~= true then
+      tooltip:show("Rhythm Doctor save failed")
+      fn.dirty_screen(true)
+      return false
+    end
+  end
+  local ok, err = checked_table_save({txt, project_data}, project_path)
   -- ParamSet:write returns nil even when opening the file fails. Its write
   -- callback is reached after attempting the write. Check IO return values as
   -- well, so silent write/close failures cannot release autosave inhibition.
@@ -129,20 +180,26 @@ local function save_project(txt, automatic)
 end
 
 local function load_new_project()
-  program.init()
-  memory.init() -- bind memory to the new project; the old history must not carry over
-  for i = 1, 16 do
-    param_manager.add_device_params(
-      i,
-      device_map.get_device(program.get().devices[i].device_map),
-      program.get().devices[i].midi_channel,
-      program.get().devices[i].midi_device,
-      true
-    )
-  end
-  m_grid.refresh()
-  ui.refresh()
-  resume_autosave()
+  return after_capture_release(function()
+    reset_optional_feature_transients()
+    program.init()
+    memory.init() -- bind memory to the new project; the old history must not carry over
+    for i = 1, 16 do
+      param_manager.add_device_params(
+        i,
+        device_map.get_device(program.get().devices[i].device_map),
+        program.get().devices[i].midi_channel,
+        program.get().devices[i].midi_device,
+        true
+      )
+    end
+    m_grid.refresh()
+    ui.refresh()
+    new_project_sequence = new_project_sequence + 1
+    if capture_guard and capture_guard.project_loaded then capture_guard:project_loaded("new:" .. tostring(new_project_sequence)) end
+    resume_autosave()
+    return true
+  end)
 end
 
 local function do_autosave()
@@ -192,7 +249,10 @@ end
     new = load_new_project,
     reset_autosave = autosave_reset,
     prime_autosave = prime_autosave,
-    autosave = do_autosave
+    autosave = do_autosave,
+    set_capture_guard = function(guard)
+      capture_guard = guard
+    end
   }
 end
 

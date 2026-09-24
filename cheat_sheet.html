@@ -867,7 +867,16 @@
   </div>
   <div class="command">
     <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="80" />
-    <div class="command-text">Algorithm Select: Drums, Tresillo, Euclidean, NE</div>
+    <div class="command-text">Algorithm Select: Drums, Tresillo, Euclidean, NE (columns 12–15). Rhythm Doctor is column 16.</div>
+  </div>
+  <div class="command">
+    <div class="command-text"><strong>Rhythm Doctor (stopped only):</strong> Select column 16, row 2. Row 2: column 1 Record; column 2 reserved; columns 3–5 select BD, SD, CYM (hats and cymbals). Columns 6 and 7 are inert. Starting Mosaic stops an unfinished capture/analysis and clears its paint preview.</div>
+  </div>
+  <div class="command">
+    <div class="command-text"><strong>Rhythm Doctor setup and paint:</strong> Before capture, E2 selects Auto/Manual tempo, manual BPM, or Stereo/L/R and E3 edits; K2 discards the setup draft and K3 keeps it. With a ready bank, E2/E3 select/edit bar or step window, lane sensitivity, paint policy, and alignment. Paint (16,8) previews then commits; Cancel (14,8) discards; Shift/Reset/Shift are 10/11/12,8 during preview.</div>
+  </div>
+  <div class="command">
+    <div class="command-text"><strong>Rhythm Doctor availability:</strong> analysis uses a model-free detector Mosaic builds from source on first use, with no downloads or configuration. Without a C compiler it reports <code>ANALYSIS_BACKEND_UNAVAILABLE</code>; the input choice is not audio routing. No analysis quality or performance is claimed.</div>
   </div>
   <div class="command">
    <img src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg" width="80" />
@@ -1018,6 +1027,39 @@
 
   <div class="footer">
     Autosave occurs after 60s when not playing
+  </div>
+
+  <div class="section">
+    <h2>Merge Shape &amp; Harmony</h2>
+    <div class="grid-container">
+      <div>
+        <strong>Channel page order</strong>
+        <p>Masks → Trig Locks → Memory → Clock Mods → MIDI Config → Note Dashboard → Merge Shape → Harmony</p>
+        <p>E1 page · E2 field · E3 draft · K3 apply · K2 cancel</p>
+      </div>
+      <div>
+        <strong>Foundation</strong>
+        <p>Anchor + deterministic additions. Set Amount, Accent, circular Gap, Seed, Phrase cycles/shape and Fixed/Per phrase variation. Explicit masks still win.</p>
+      </div>
+      <div>
+        <strong>Pitch targets</strong>
+        <p>Keep Anchor is before scale. Additions: Legacy / effective Scale / selected Degrees / enabled Ensemble material. Lower pitch wins ties.</p>
+      </div>
+      <div>
+        <strong>Harmony modes</strong>
+        <p>Off / Revoice / Pattern / Ensemble. Pattern leaves unmapped tones Raw. Ensemble members keep rhythm, velocity, gate, clock and route.</p>
+        <p>After playback, Pattern Note LEDs show final effective Harmony positions across the normal upper/centre/lower banks. Off, Raw and Bypass show ordinary positions. A projected fader still edits its source value; an out-of-range pitch is shown exactly in Result/Dashboard instead of as a false LED.</p>
+        <p>H05 Result: E2 selects Step, E3 selects the event step. An empty step says NO EVENT; group member bypass/failure wins over a healthy member. Status names LOCAL SCALE/OCTAVE BYPASS, LEGACY reason or NO VOICING reason. Note Dashboard: hold a grid step to inspect its planned → scheduled → emitted chain.</p>
+      </div>
+      <div>
+        <strong>Apply boundaries</strong>
+        <p>Stopped: immediate. Merge while playing: NEXT CYCLE. Harmony while playing: NEXT PATTERN. Stop activates the latest applied request for the next start.</p>
+      </div>
+      <div>
+        <strong>Safety</strong>
+        <p>No solution silences affected voices unless Legacy fallback is chosen. Source patterns never change. Strum/arp pitch snapshots and Note Off ownership stay fixed.</p>
+      </div>
+    </div>
   </div>
 
   <script>

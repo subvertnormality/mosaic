@@ -1,0 +1,7 @@
+{
+  "repeat_manifest": "/home/andy/rd/v140/mosaic-behaviour-runs/repeat-8586c76a4ae3414895185cd128f72a0c/manifest.json",
+  "sha256": "158c769eacacac81ef371c4b2030b2d635a70c17efeda23b7bb66e3d983e261b",
+  "passed": true,
+  "exact_controlled_results_equal_to_before": true,
+  "count": 3
+}

@@ -1,0 +1,168 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "recording-lock-across-song-transition-restored",
+    "replay": [
+      [
+        "cc",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        96
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        96
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ]
+    ],
+    "restored_tempo": 90.0,
+    "passed": true
+  }
+]

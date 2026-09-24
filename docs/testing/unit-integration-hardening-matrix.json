@@ -28,14 +28,14 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "eb82167cb3247142f26cdb9a94ccf801e7c13823a5fe7accfb2528cd04721d39",
+ "manual_sha256": "e6b1631a4dc4c958718b65cac3c66b16a0b48b3adff946fe71b0a3969bd096dc",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "45f4fbed186ad04a83be19b6a1f02b8b040799de8da7e1f4cf5586058d662165",
+ "inventory_sha256": "ea9b07056a36276468c9afb9283c485812e95c96bb748b35bec6258bf0d1b918",
  "counts": {
-  "requirements": 140,
-  "production_lua_modules": 100,
-  "unit_integration_files": 78,
-  "domains": 15
+  "requirements": 155,
+  "production_lua_modules": 131,
+  "unit_integration_files": 96,
+  "domains": 17
  },
  "coverage_language": {
   "exhaustive": "Every value in the declared finite axis is checked.",
@@ -53,6 +53,97 @@
   "The approved_final_scope overrides any earlier instruction to expand coverage or obtain another review."
  ],
  "domains": [
+  {
+   "id": "H16",
+   "title": "Musical Merge and deterministic Harmony",
+   "priority": "high",
+   "finite_axes": [
+    {
+     "name": "Harmony modes",
+     "cardinality": 4,
+     "values": [
+      "off",
+      "revoice",
+      "pattern",
+      "ensemble"
+     ],
+     "coverage": "unit, integration and physical behaviour"
+    },
+    {
+     "name": "Foundation phrase sizes",
+     "cardinality": 4,
+     "values": [
+      1,
+      2,
+      4,
+      8
+     ],
+     "coverage": "exact deterministic curves and lifecycle"
+    }
+   ],
+   "interaction_strategy": "Pure exhaustive solver/planner checks feed scheduler integration and physical grid/norns workflows; exact MIDI and active grid projection are independent acceptance oracles.",
+   "residual_gaps": [
+    "MM-08+ interlock, fragments, passing-note freedom and silence-aware interlock are explicitly deferred by the approved plan."
+   ],
+   "requirement_ids": [
+    "MERGE-FOUNDATION",
+    "MERGE-PHRASE",
+    "HARMONY-REVOICE",
+    "HARMONY-PATTERN",
+    "HARMONY-ENSEMBLE",
+    "HARMONY-PERSISTENCE",
+    "HARMONY-FAILURE",
+    "HARMONY-HELD-PRECEDENCE"
+   ],
+   "production_modules": [
+    "lib/harmony/config_state.lua",
+    "lib/harmony/config.lua",
+    "lib/harmony/context.lua",
+    "lib/harmony/grid_projection.lua",
+    "lib/harmony/inspection.lua",
+    "lib/harmony/pattern.lua",
+    "lib/harmony/state.lua",
+    "lib/harmony/voicing.lua",
+    "lib/musical_merge/config.lua",
+    "lib/musical_merge/foundation.lua",
+    "lib/musical_merge/pitch_target.lua",
+    "lib/musical_merge/state.lua",
+    "lib/optional_config_transaction.lua",
+    "lib/pages/channel_edit_page/channel_feature_editor.lua"
+   ],
+   "existing_unit_integration_files": [
+    "lib/tests/lib/channel_feature_editor_tests.lua",
+    "lib/tests/lib/foundation_planner_tests.lua",
+    "lib/tests/lib/harmony_config_state_tests.lua",
+    "lib/tests/lib/harmony_config_tests.lua",
+    "lib/tests/lib/harmony_context_tests.lua",
+    "lib/tests/lib/harmony_grid_projection_tests.lua",
+    "lib/tests/lib/harmony_pattern_tests.lua",
+    "lib/tests/lib/harmony_playback_integration_tests.lua",
+    "lib/tests/lib/harmony_state_tests.lua",
+    "lib/tests/lib/harmony_voicing_tests.lua",
+    "lib/tests/lib/musical_merge_config_tests.lua",
+    "lib/tests/lib/harmony_inspection_tests.lua",
+    "lib/tests/lib/musical_merge_pattern_integration_tests.lua",
+    "lib/tests/lib/musical_merge_pitch_target_tests.lua",
+    "lib/tests/lib/musical_merge_state_tests.lua",
+    "lib/tests/lib/optional_config_persistence_tests.lua",
+    "lib/tests/lib/voice_lifetime_tests.lua"
+   ],
+   "linked_behaviour_cases": [
+    "M-MERGE-FOUNDATION-001",
+    "M-MERGE-PHRASE-001",
+    "M-HARMONY-REVOICE-001",
+    "M-HARMONY-PATTERN-001",
+    "M-HARMONY-PATTERN-CLOCKS-001",
+    "M-HARMONY-PATTERN-BYPASS-001",
+    "M-HARMONY-ENSEMBLE-001",
+    "M-HARMONY-PERSIST-001",
+    "M-HARMONY-FAILURE-001",
+    "M-HARMONY-HELD-001"
+   ],
+   "status": "implemented"
+  },
   {
    "id": "H01",
    "title": "Pattern editing, algorithms, channel ranges and storage axes",
@@ -2343,6 +2434,68 @@
     "M-WORKFLOW-001"
    ],
    "status": "moved-to-r01-performance-ledger"
+  },
+  {
+   "id": "H17",
+   "title": "Rhythm Doctor capture, analysis handoff, bank lifecycle and painting",
+   "priority": "high",
+   "finite_axes": [
+    {
+     "name": "lanes",
+     "cardinality": 4,
+     "coverage": "exhaustive single axis"
+    },
+    {
+     "name": "capture states",
+     "cardinality": 8,
+     "coverage": "exhaustive transitions"
+    },
+    {
+     "name": "window cells",
+     "cardinality": 64,
+     "coverage": "exhaustive single axis"
+    }
+   ],
+   "interaction_strategy": "State transitions are driven through the real machine rather than set directly: every capture, analysis, correction and release path is entered by the call the application makes. Identity is exercised at both boundaries - the recorder identity adopted at PREFLIGHT and the advancing analysis lease - and both detector identity shapes are accepted or refused whole. Screen assertions are made on drawn text, not on the model.",
+   "residual_gaps": [
+    "Detector accuracy is measured on corpora and reported separately; no transcription quality is claimed by these tests.",
+    "The behaviour recipes run the four-lane surface, the reload-to-READY path and the refused correction, and are executed manually rather than by CI.",
+    "Capture runs through softcut inside crone rather than a JACK client of its own, so it is covered by a fake softcut asserting the arming call by call and by the real capture controller and state machine driven through the recorder; nothing exercises the actual engine automatically, and the hardware runners that did were removed with the JACK worker."
+   ],
+   "requirement_ids": [
+    "RD-LANES",
+    "RD-CAPTURE-FINISH",
+    "RD-ALIGNMENT",
+    "RD-ALIGNMENT-REFUSED",
+    "RD-BANK-PERSIST",
+    "RD-DETECTOR-IDENTITY",
+    "RD-BACKEND-UNAVAILABLE"
+   ],
+   "production_modules": [
+    "lib/rhythm_doctor/analysis_controller.lua",
+    "lib/rhythm_doctor/analysis_transport.lua",
+    "lib/rhythm_doctor/analysis_worker_host.lua",
+    "lib/rhythm_doctor/assets.lua",
+    "lib/rhythm_doctor/bank.lua",
+    "lib/rhythm_doctor/bank_persistence.lua",
+    "lib/rhythm_doctor/capture_controller.lua",
+    "lib/rhythm_doctor/dancing_doctor.lua",
+    "lib/rhythm_doctor/file_mailbox.lua",
+    "lib/rhythm_doctor/paint.lua",
+    "lib/rhythm_doctor/paint_journal.lua",
+    "lib/rhythm_doctor/paint_transactions.lua",
+    "lib/rhythm_doctor/runtime.lua",
+    "lib/rhythm_doctor/softcut_recorder.lua",
+    "lib/rhythm_doctor/state_machine.lua",
+    "lib/rhythm_doctor/ui_adapter.lua",
+    "lib/source_pattern_revision.lua"
+   ],
+   "existing_unit_integration_files": [
+    "lib/tests/lib/project_load_integration_tests.lua",
+    "lib/tests/lib/source_pattern_revision_tests.lua"
+   ],
+   "linked_behaviour_cases": [],
+   "status": "hardening-complete-generated"
   }
  ]
 }

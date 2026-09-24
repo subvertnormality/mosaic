@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "da944afc00d5cb9b77650ef45cde642deae005aa",
+  "selected_cases": [
+    "M-PERSIST-COMBINED-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/recording_lock_song.py": "M-PERSIST-COMBINED-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/recording_lock_song.py",
+      "case": "M-PERSIST-COMBINED-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-53086a68cbc14198b8783c476ddd41be/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-53086a68cbc14198b8783c476ddd41be/manifest.json",
+      "manifest_sha256": "9e0d7bed5a84318d55adbdeebf9705fbd3db49e0d6330bd9f01668752fe7e428",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

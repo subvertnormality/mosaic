@@ -92,7 +92,7 @@ function ui.key(n, z)
   elseif pages.pages.note_edit_page == program.get_selected_page() then
     -- note_edit_page_ui.key(n, z)
   elseif pages.pages.trigger_edit_page == program.get_selected_page() then
-    -- trigger_edit_page_ui.key(n, z)
+    trigger_edit_page_ui.key(n, z)
   elseif pages.pages.song_edit_page == program.get_selected_page() then
     song_edit_page_ui.key(n, z)
   end

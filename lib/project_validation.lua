@@ -1,5 +1,12 @@
 -- Validate range-bearing saved data without changing the current project.
 local validation = {}
+local function dependency(name, path)
+  if type(include) == "function" then return include(path) end
+  return require(name)
+end
+local harmony_config = include("mosaic/lib/harmony/config")
+local merge_config = include("mosaic/lib/musical_merge/config")
+local rhythm_doctor_persistence = dependency("rhythm_doctor.bank_persistence", "mosaic/lib/rhythm_doctor/bank_persistence")
 
 local function integer(value, low, high)
   return type(value) == "number" and value >= low and value <= high and value % 1 == 0
@@ -27,6 +34,8 @@ function validation.check(saved)
       return nil, prefix .. " global length"
     end
     if type(song.channels) ~= "table" then return nil, prefix .. " channels" end
+    local harmony_ok, harmony_reason = harmony_config.validate_song(song)
+    if not harmony_ok then return nil, prefix .. " " .. harmony_reason end
     for number = 1, 17 do
       local channel = song.channels[number]
       local label = prefix .. " ch " .. number
@@ -37,8 +46,21 @@ function validation.check(saved)
       local last = (channel.end_trig[2] - 4) * 16 + channel.end_trig[1]
       -- Equal endpoints are valid stored data; only their grid gesture is absent.
       if first > last then return nil, label .. " reversed" end
+      if channel.musical_merge ~= nil then
+        local merge_ok, merge_reason = merge_config.validate(channel.musical_merge)
+        if not merge_ok then return nil, prefix .. " " .. merge_reason end
+        local target = channel.musical_merge.target
+        if target and target.kind == "chord" then
+          local groups = song.voicing and song.voicing.groups
+          if not groups or not groups[target.group_id] then
+            return nil, label .. " merge target group missing"
+          end
+        end
+      end
     end
   end
+  local rhythm_ok, rhythm_reason = rhythm_doctor_persistence.validate(data.rhythm_doctor)
+  if not rhythm_ok then return nil, rhythm_reason == "UNKNOWN_BANK_SCHEMA" and "Unknown Rhythm Doctor bank" or "Invalid Rhythm Doctor bank" end
   return true
 end
 

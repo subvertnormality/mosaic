@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "after_sha": "6d47cb7a6c5e9bc2c5fae1a8d342ca142dbc9a6b",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MERGE-006",
+    "M-MERGE-007",
+    "M-MERGE-008",
+    "M-OCT-001",
+    "M-OCT-002",
+    "M-OCT-003"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MERGE-006",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-006/real-time/before/e521ffdbf30a42688f6a4b671f32cccf/manifest.json",
+              "manifest_sha256": "3bb95429660e593d261dfeab9b1d54971075b2a48451242aebfc0a876750fd49"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-006/real-time/after/16ad2ee943724ac7bb79ff309553e4bd/manifest.json",
+              "manifest_sha256": "17850aaaa0bc4fbf2e215a342707e4b8fe9f3a43c88fe47d57b11b2ed67fbe9c"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-006/controlled-experimental/before/36570dcbc28649df8e7f853eb53cb869/manifest.json",
+              "manifest_sha256": "187aed466f56c2829d0165e39bca5e5d1d1cdcae8a86e0acc115e29b6144b9c3"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-006/controlled-experimental/after/f44901c775c7432d96bf5f1c63217833/manifest.json",
+              "manifest_sha256": "8459025f9ed880acc236857941a2d36da7f46313d9fdc4a14ba98715ab9da0e4"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-007",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-007/real-time/before/6a6d2350ca804464a0aaba1f2229ef7f/manifest.json",
+              "manifest_sha256": "6e9c8f6dd4a0afa2555234a8c552b512e28958688e4c7106c249fd7cd48f14a8"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-007/real-time/after/9e64122b10ee4b789d0b8df8e2b45d6e/manifest.json",
+              "manifest_sha256": "19b298ba4f1daea45d843ae7ae02e4a3f3c51394f35ed4f6b2cd0a164e86b9e0"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-007/controlled-experimental/before/d1f58a35cd194d6a87c45c242d579701/manifest.json",
+              "manifest_sha256": "9dc30d7f27075872ef6dec5e1f991c5e6e9ed725099935375157d0fc7eeb63e3"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-007/controlled-experimental/after/930d22fad93b4d3f81ef0e4b99266492/manifest.json",
+              "manifest_sha256": "893133be9d03051d42402843f6186ae95e25bb7e2f49ad625b5192e90f03e19b"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-008",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-008/real-time/before/dfb02005e0944802801ce0bfc7503946/manifest.json",
+              "manifest_sha256": "59f8b4ccc9b9a03cc29ba60abed385b8793a55a5050ae3a343fc7a345f2d8751"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-008/real-time/after/a3387a3840dc41aea56c9d7b48e1a791/manifest.json",
+              "manifest_sha256": "00af3105c4ac2acc497d459dfbb5f308c91803d6433b31a9b2e1551bc2477f0f"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-008/controlled-experimental/before/11edbf65ffb241018786f4c8cde533d7/manifest.json",
+              "manifest_sha256": "a84f261658fdb98767a7b5a78a569a8d6a43a43f5360b1c12b41c64ad71fbfcf"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-008/controlled-experimental/after/f7f152c792ec457692d1e7ed5d0b9edf/manifest.json",
+              "manifest_sha256": "4da60e36f187bb178fc350f1f9d70b469537aa612d76da86aed128667871ecb0"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-OCT-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-OCT-001/real-time/before/7ef9889262984f73806054f30c4faad8/manifest.json",
+              "manifest_sha256": "5ae3f0915c83a87e09f521bfbff7a2ebd48608b5490623af393013990a2a42f0"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-OCT-001/real-time/after/cf0fd63e56aa43caa5e18a4e98cc3ed9/manifest.json",
+              "manifest_sha256": "43f40d7e83676ec93e8aa62f9db83d44b1a14c6649248233440ffb6b5b991cc7"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-OCT-001/controlled-experimental/before/ffa8cc3c99f646dbaa45abfb0cd2a9ec/manifest.json",
+              "manifest_sha256": "d2920433fdf6af8970920d077e45b8d46ed1388aff5d00bd6e8e621ab3de099a"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-OCT-001/controlled-experimental/after/beb74d40a7804d93b37b98e04bc4131e/manifest.json",
+              "manifest_sha256": "3240120c2c4e8282aea43d79693c7921f1f8066bc5c204fb6569e990d6c66cfd"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-OCT-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-OCT-002/real-time/before/352ebc36825b4a84a2f0523c1ae1c4a3/manifest.json",
+              "manifest_sha256": "0aef0282286a09791257a15c5d826768b0a1782e6a1743f2b06c939048b7b8e9"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-OCT-002/real-time/after/39b14004365f4372abfe9fe64f89d615/manifest.json",
+              "manifest_sha256": "36b46557ad0dcfbf2d6c4221c8e3270b9efde95aef02faf4e62ef8570a8cf877"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-OCT-002/controlled-experimental/before/dfbae68b7e2847a1907b268f0bc2957b/manifest.json",
+              "manifest_sha256": "1a2f9839a58bccf9c897390784bb26b574a28f024983483ce4c5811a2c55f6cc"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-OCT-002/controlled-experimental/after/095291291b3047dea8e63b5c9761e9e7/manifest.json",
+              "manifest_sha256": "f206dad7a394b56cb6d5a528ec037aff4e76acce6d2536320cdd04d7381ba38b"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-OCT-003",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-OCT-003/real-time/before/c7e93138bb194ecfab7ce7f4373266c6/manifest.json",
+              "manifest_sha256": "31858288304639e4e047327ea522c49b863d8d85ddf31917a01ddb90d3564cfd"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-OCT-003/real-time/after/0196264efe994bcaa1316a9416dd29d1/manifest.json",
+              "manifest_sha256": "50ee1c8b2483c135886dfd624f566eef96dc5ee7d7b39fcc8cb8fcfb55056d76"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-OCT-003/controlled-experimental/before/473f4616fe944be388a2b580888158eb/manifest.json",
+              "manifest_sha256": "6cb3d85ac31c98ae7f56b7c6c2cd73ece73e8d06df8aff03343fea8ab6999aed"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-OCT-003/controlled-experimental/after/b97b13509e4f40edb7c70ac0b38ee57a/manifest.json",
+              "manifest_sha256": "6a41d53965709e283afc4490d8222a001b0e8f6387c63690c486ae65c933d5f1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

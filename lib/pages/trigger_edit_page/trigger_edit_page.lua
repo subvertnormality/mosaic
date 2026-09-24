@@ -4,12 +4,15 @@ local drum_ops = include("mosaic/lib/helpers/drum_ops")
 
 local trigger_edit_page = {}
 local shift = 0
+local rhythm_doctor = nil
+local rhythm_doctor_lane = nil
+local rhythm_doctor_paint_preview = nil
 
 local trigger_edit_page_pattern_select_fader = fader:new(1, 1, 16, 16)
 local trigger_edit_page_sequencer = sequencer:new(4, "pattern")
 local trigger_edit_page_pattern1_fader = fader:new(1, 2, 10, 100)
 local trigger_edit_page_pattern2_fader = fader:new(1, 3, 10, 100)
-local trigger_edit_page_algorithm_fader = fader:new(12, 2, 4, 4)
+local trigger_edit_page_algorithm_fader = fader:new(12, 2, 5, 5)
 local trigger_edit_page_bankmask_fader = fader:new(12, 3, 5, 5)
 local trigger_edit_page_paint_button = button:new(16, 8, {{"Inactive", 3}, {"Save", 15}})
 local trigger_edit_page_cancel_button = button:new(14, 8, {{"Inactive", 3}, {"Cancel", 15}})
@@ -24,10 +27,31 @@ function trigger_edit_page.init()
   trigger_edit_page.refresh_trigger_edit_page_ui()
 end
 
+local cancel_rhythm_doctor_paint
+local preview_rhythm_doctor_paint
+local rhythm_doctor_target
+
+-- Whether an armed preview is still aimed at the destination that is selected.
+function trigger_edit_page.paint_target_moved(armed, current)
+  if type(armed) ~= "table" or type(current) ~= "table" then return false end
+  return armed.song_slot ~= current.song_slot or armed.pattern_id ~= current.pattern_id
+end
+
+local function discard_stale_rhythm_doctor_paint()
+  local preview = rhythm_doctor_paint_preview
+  if not preview or type(preview.target) ~= "table" then return false end
+  if not trigger_edit_page.paint_target_moved(preview.target, rhythm_doctor_target()) then return false end
+  cancel_rhythm_doctor_paint()
+  return true
+end
+
 function trigger_edit_page.register_draws()
   draw:register_grid(
     "trigger_edit_page",
     function()
+      -- The song slot can change from another page, so the armed preview is
+      -- rechecked here rather than only where the pattern fader is pressed.
+      discard_stale_rhythm_doctor_paint()
       return trigger_edit_page_pattern_select_fader:draw()
     end
   )
@@ -40,13 +64,13 @@ function trigger_edit_page.register_draws()
   draw:register_grid(
     "trigger_edit_page",
     function()
-      return trigger_edit_page_pattern1_fader:draw()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return trigger_edit_page_pattern1_fader:draw() end
     end
   )
   draw:register_grid(
     "trigger_edit_page",
     function()
-      return trigger_edit_page_pattern2_fader:draw()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return trigger_edit_page_pattern2_fader:draw() end
     end
   )
   draw:register_grid(
@@ -58,7 +82,7 @@ function trigger_edit_page.register_draws()
   draw:register_grid(
     "trigger_edit_page",
     function()
-      return trigger_edit_page_bankmask_fader:draw()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return trigger_edit_page_bankmask_fader:draw() end
     end
   )
   draw:register_grid(
@@ -91,6 +115,24 @@ function trigger_edit_page.register_draws()
       return trigger_edit_page_right_button:draw()
     end
   )
+  draw:register_grid(
+    "trigger_edit_page",
+    function()
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
+      local model = rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
+      grid_abstraction.led(1, 2, model and model.worker_ready and 15 or 4)
+      -- The adapter owns where a lane sits, because the page assuming a single
+      -- row ran a ten lane analysis under the algorithm fader at column 12.
+      local cells = rhythm_doctor and rhythm_doctor.lane_cells and rhythm_doctor:lane_cells() or {}
+      -- The effective lane, not the raw local: nothing is selected until the
+      -- player picks, and the first lane of the live set is current until then.
+      local current = trigger_edit_page.get_rhythm_doctor_lane()
+      for _, cell in ipairs(cells) do
+        grid_abstraction.led(cell.x, cell.y, cell.lane == current and 15 or 4)
+      end
+      grid_abstraction.led(2, 2, 0) -- reserved: never an old fader side effect
+    end
+  )
 end
 
 local function get_bank_name(id)
@@ -120,6 +162,8 @@ local function get_algorithm_name(id)
     return "Euclidean algorithm"
   elseif (id == 4) then
     return "Numeric repetitor"
+  elseif (id == 5) then
+    return "Rhythm Doctor"
   end
 end
 
@@ -228,6 +272,105 @@ local function save_paint_pattern(p)
   selected_song_pattern.active = true
 end
 
+function rhythm_doctor_target()
+  local data = program.get()
+  return { song_slot = data.selected_song_pattern, pattern_id = data.selected_pattern }
+end
+
+local function rhythm_doctor_preview_grid(preview)
+  local grid = {}
+  for step = 1, 64 do grid[step] = preview.shifted_cells and preview.shifted_cells[step] ~= nil end
+  return grid
+end
+
+-- The left/centre/right buttons browse the recording while algorithm 5 is
+-- selected, and they browse it the way they shift a paint pattern everywhere
+-- else: a press is worth one step, so the gesture means the same thing in
+-- every mode. Holding left or right covers a whole four-bar phrase, and
+-- centre returns to the detected phrase start the way it resets the shift.
+-- For every other algorithm they keep shifting the paint pattern, which is
+-- why these run only inside the algorithm-5 branches of the press handlers.
+
+-- A preview describes the window it was taken from, so a move retires it. But
+-- the reason to move while painting is to look at the next part of the
+-- recording, so the preview is taken again where the window landed. Without
+-- this the grid simply went dark, and stayed dark until some unrelated press
+-- happened to rebuild it.
+local function refresh_rhythm_doctor_paint()
+  if trigger_edit_page_paint_button:get_state() ~= 2 then return end
+  local preview, problem = preview_rhythm_doctor_paint()
+  if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+end
+
+-- Report what happened, not what was asked for. Every move is clamped to the
+-- recording, so a press at either end succeeds without moving anything;
+-- naming the requested action there would tell the player they had advanced a
+-- phrase while the window stood still.
+local function rhythm_doctor_window_feedback(value, action, stalled)
+  if not (value and (value.ok or value.code == "WINDOW_MOVED")) then
+    tooltip:show((value and value.code) or "WINDOW UNAVAILABLE")
+    return false
+  end
+  if value.moved == false then
+    tooltip:show(stalled)
+  else
+    tooltip:show(value.window_label and (action .. " " .. value.window_label) or action)
+  end
+  refresh_rhythm_doctor_paint()
+  return true
+end
+
+function rhythm_doctor_jump_to_phrase_start()
+  if not rhythm_doctor or type(rhythm_doctor.jump_to_phrase_start) ~= "function" then
+    tooltip:show("WINDOW UNAVAILABLE")
+    return false
+  end
+  cancel_rhythm_doctor_paint()
+  local value = rhythm_doctor:jump_to_phrase_start()
+  rhythm_doctor_window_feedback(value, "Phrase start", "At phrase start")
+  return value ~= nil
+end
+
+local function rhythm_doctor_browse(method, delta, action)
+  if not rhythm_doctor or type(rhythm_doctor[method]) ~= "function" then
+    tooltip:show("WINDOW UNAVAILABLE")
+    return false
+  end
+  cancel_rhythm_doctor_paint()
+  local value = rhythm_doctor[method](rhythm_doctor, delta)
+  rhythm_doctor_window_feedback(value, action,
+    delta < 0 and "Start of recording" or "End of recording")
+  return value ~= nil
+end
+
+function rhythm_doctor_nudge_window(delta)
+  return rhythm_doctor_browse("nudge_window", delta, delta < 0 and "Step left" or "Step right")
+end
+
+function rhythm_doctor_page_window(delta)
+  return rhythm_doctor_browse("page_window", delta, delta < 0 and "Previous phrase" or "Next phrase")
+end
+
+function preview_rhythm_doctor_paint()
+  if not rhythm_doctor or type(rhythm_doctor.paint_preview) ~= "function" then return nil, { code = "PAINT_UNAVAILABLE" } end
+  local preview, problem = rhythm_doctor:paint_preview(rhythm_doctor_target())
+  if not preview then return nil, problem end
+  rhythm_doctor_paint_preview = preview
+  trigger_edit_page_sequencer:show_unsaved_grid(rhythm_doctor_preview_grid(preview))
+  return preview
+end
+
+-- A preview commits to the destination it was built for, not the one that is
+-- selected now, so an armed preview must not outlive the selection. Changing
+-- pattern or song slot leaves it pointing at the old target while the screen
+-- shows the new one, and Paint would then write where the player is no longer
+-- looking.
+function cancel_rhythm_doctor_paint()
+  rhythm_doctor_paint_preview = nil
+  trigger_edit_page_sequencer:hide_unsaved_grid()
+  if rhythm_doctor and type(rhythm_doctor.invalidate_paint_preview) == "function" then rhythm_doctor:invalidate_paint_preview() end
+end
+
 function trigger_edit_page.register_press()
   press:register(
     "trigger_edit_page",
@@ -235,6 +378,7 @@ function trigger_edit_page.register_press()
       if trigger_edit_page_pattern_select_fader:is_this(x, y) then
         trigger_edit_page_pattern_select_fader:press(x, y)
         program.get().selected_pattern = trigger_edit_page_pattern_select_fader:get_value()
+        discard_stale_rhythm_doctor_paint()
         tooltip:show("Pattern " .. program.get().selected_pattern .. " selected")
       end
     end
@@ -254,6 +398,7 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_pattern1_fader:is_this(x, y) then
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then return end
         trigger_edit_page_pattern1_fader:press(x, y)
         load_paint_pattern()
         if (trigger_edit_page_algorithm_fader:get_value() == 3) then
@@ -268,6 +413,7 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_pattern2_fader:is_this(x, y) then
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then return end
         trigger_edit_page_pattern2_fader:press(x, y)
         load_paint_pattern()
         if (trigger_edit_page_algorithm_fader:get_value() == 3) then
@@ -281,10 +427,14 @@ function trigger_edit_page.register_press()
   press:register(
     "trigger_edit_page",
     function(x, y)
+      local previous = trigger_edit_page_algorithm_fader:get_value()
       trigger_edit_page_algorithm_fader:press(x, y)
       if trigger_edit_page_algorithm_fader:is_this(x, y) then
+        local selected = trigger_edit_page_algorithm_fader:get_value()
+        if previous ~= 5 and selected == 5 and rhythm_doctor and rhythm_doctor.enter then rhythm_doctor:enter() end
+        if previous == 5 and selected ~= 5 and rhythm_doctor and rhythm_doctor.leave then rhythm_doctor:leave() end
         trigger_edit_page.refresh_trigger_edit_page_ui()
-        tooltip:show(get_algorithm_name(trigger_edit_page_algorithm_fader:get_value()) .. " selected")
+        tooltip:show(get_algorithm_name(selected) .. " selected")
         load_paint_pattern()
       end
     end
@@ -293,10 +443,50 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       local algorithm = trigger_edit_page_algorithm_fader:get_value()
-      if trigger_edit_page_bankmask_fader:is_this(x, y) and algorithm ~= 3 then
+      if trigger_edit_page_bankmask_fader:is_this(x, y) and algorithm ~= 3 and algorithm ~= 5 then
         trigger_edit_page_bankmask_fader:press(x, y)
         load_paint_pattern()
         tooltip:show(get_bank_name(trigger_edit_page_bankmask_fader:get_value()) .. " selected")
+      end
+    end
+  )
+  press:register_pre(
+    "trigger_edit_page",
+    function(x, y)
+      if trigger_edit_page_algorithm_fader:get_value() == 5 and x == 1 and y == 2 then
+        if rhythm_doctor and rhythm_doctor.record_pressed then rhythm_doctor:record_pressed() end
+        return true
+      end
+      return false
+    end
+  )
+  press:register_post(
+    "trigger_edit_page",
+    function(x, y)
+      if trigger_edit_page_algorithm_fader:get_value() == 5 and x == 1 and y == 2 and rhythm_doctor and rhythm_doctor.record_released then
+        rhythm_doctor:record_released()
+      end
+    end
+  )
+  press:register(
+    "trigger_edit_page",
+    function(x, y)
+      -- Cells are bound to the live lane set through the adapter, which owns
+      -- the layout: a cell past the last lane, and every cell belonging to the
+      -- algorithm or bank-mask fader, must stay inert rather than dispatch a
+      -- lane into the adapter.
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
+      local selected = rhythm_doctor and rhythm_doctor.lane_at and rhythm_doctor:lane_at(x, y) or nil
+      if selected then
+        local accepted = not rhythm_doctor or not rhythm_doctor.select_lane or rhythm_doctor:select_lane(selected)
+        if not accepted or accepted.code == "LANE_SELECTED" then
+          rhythm_doctor_lane = selected
+          tooltip:show(rhythm_doctor_lane .. " selected")
+          if trigger_edit_page_paint_button:get_state() == 2 then
+            local preview, problem = preview_rhythm_doctor_paint()
+            if not preview then tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE") end
+          end
+        elseif accepted.code == "STOP_SEQUENCER" then tooltip:show("STOP SEQUENCER") end
       end
     end
   )
@@ -306,6 +496,44 @@ function trigger_edit_page.register_press()
       trigger_edit_page_paint_button:press(x, y)
 
       if trigger_edit_page_paint_button:is_this(x, y) then
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          if trigger_edit_page_paint_button:get_state() == 2 then
+            local preview, problem = preview_rhythm_doctor_paint()
+            if not preview then
+              trigger_edit_page_paint_button:set_state(1)
+              tooltip:show((problem and problem.code) or "PAINT UNAVAILABLE")
+              return
+            end
+            trigger_edit_page_cancel_button:set_state(2)
+            trigger_edit_page_left_button:set_state(2)
+            trigger_edit_page_centre_button:set_state(2)
+            trigger_edit_page_right_button:set_state(2)
+            trigger_edit_page_paint_button:blink()
+            tooltip:show("Painting Rhythm Doctor")
+            return
+          end
+          local preview = rhythm_doctor_paint_preview
+          local saved, problem
+          if rhythm_doctor and type(rhythm_doctor.paint_commit) == "function" then
+            saved, problem = rhythm_doctor:paint_commit(preview, preview and preview.requires_replace_confirmation == true)
+          else
+            problem = { code = "PAINT_UNAVAILABLE" }
+          end
+          if not saved then
+            trigger_edit_page_paint_button:set_state(2)
+            tooltip:show((problem and problem.code) or "PAINT FAILED")
+            return
+          end
+          rhythm_doctor_paint_preview = nil
+          trigger_edit_page_left_button:set_state(1)
+          trigger_edit_page_centre_button:set_state(1)
+          trigger_edit_page_right_button:set_state(1)
+          trigger_edit_page_cancel_button:set_state(1)
+          trigger_edit_page_sequencer:hide_unsaved_grid()
+          trigger_edit_page_paint_button:no_blink()
+          tooltip:show("Pattern painted")
+          return
+        end
         if (trigger_edit_page_paint_button:get_state() == 2) then
           trigger_edit_page_cancel_button:set_state(2)
           trigger_edit_page_left_button:set_state(2)
@@ -334,7 +562,7 @@ function trigger_edit_page.register_press()
 
       if trigger_edit_page_cancel_button:is_this(x, y) then
         if (trigger_edit_page_paint_button:get_state() == 2) then
-          trigger_edit_page_sequencer:hide_unsaved_grid()
+          if trigger_edit_page_algorithm_fader:get_value() == 5 then cancel_rhythm_doctor_paint() else trigger_edit_page_sequencer:hide_unsaved_grid() end
           trigger_edit_page_paint_button:set_state(1)
           trigger_edit_page_paint_button:no_blink()
           trigger_edit_page_cancel_button:no_blink()
@@ -352,6 +580,15 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_left_button:is_this(x, y) then
+        -- Rhythm Doctor browses the recording with these, so they act
+        -- whenever algorithm 5 is selected. The paint-preview state gate
+        -- below belongs to shifting a previewed pattern: leaving it in
+        -- place made phrase navigation reachable only while previewing,
+        -- which is precisely when the player is no longer browsing.
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          rhythm_doctor_nudge_window(-1)
+          return
+        end
         if (trigger_edit_page_left_button:get_state() == 2) then
           shift = shift - 1
 
@@ -368,6 +605,15 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_centre_button:is_this(x, y) then
+        -- Rhythm Doctor browses the recording with these, so they act
+        -- whenever algorithm 5 is selected. The paint-preview state gate
+        -- below belongs to shifting a previewed pattern: leaving it in
+        -- place made phrase navigation reachable only while previewing,
+        -- which is precisely when the player is no longer browsing.
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          rhythm_doctor_jump_to_phrase_start()
+          return
+        end
         if (trigger_edit_page_centre_button:get_state() == 2) then
           shift = 0
           load_paint_pattern()
@@ -383,6 +629,15 @@ function trigger_edit_page.register_press()
     "trigger_edit_page",
     function(x, y)
       if trigger_edit_page_right_button:is_this(x, y) then
+        -- Rhythm Doctor browses the recording with these, so they act
+        -- whenever algorithm 5 is selected. The paint-preview state gate
+        -- below belongs to shifting a previewed pattern: leaving it in
+        -- place made phrase navigation reachable only while previewing,
+        -- which is precisely when the player is no longer browsing.
+        if trigger_edit_page_algorithm_fader:get_value() == 5 then
+          rhythm_doctor_nudge_window(1)
+          return
+        end
         if (trigger_edit_page_right_button:get_state() == 2) then
           shift = shift + 1
 
@@ -407,6 +662,17 @@ function trigger_edit_page.register_press()
       end
     end
   )
+  -- Held, the browse buttons cover a whole phrase. Registered separately from
+  -- the short press because the grid suppresses the short press once a hold
+  -- has fired, so the two gestures cannot both act on one key.
+  press:register_long(
+    "trigger_edit_page",
+    function(x, y)
+      if trigger_edit_page_algorithm_fader:get_value() ~= 5 then return end
+      if trigger_edit_page_left_button:is_this(x, y) then rhythm_doctor_page_window(-1)
+      elseif trigger_edit_page_right_button:is_this(x, y) then rhythm_doctor_page_window(1) end
+    end
+  )
   press:register_long(
     "trigger_edit_page",
     function(x, y)
@@ -425,6 +691,7 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
   local algorithm = trigger_edit_page_algorithm_fader:get_value()
 
   if (algorithm == 1) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:enabled()
     trigger_edit_page_bankmask_fader:set_size(5)
     trigger_edit_page_bankmask_fader:set_length(5)
@@ -432,6 +699,7 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
     trigger_edit_page_pattern2_fader:set_size(128)
     trigger_edit_page_pattern2_fader:disabled()
   elseif (algorithm == 2) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:enabled()
     trigger_edit_page_bankmask_fader:set_size(5)
     trigger_edit_page_bankmask_fader:set_length(5)
@@ -439,6 +707,7 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
     trigger_edit_page_pattern2_fader:set_size(128)
     trigger_edit_page_pattern2_fader:enabled()
   elseif (algorithm == 3) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:disabled()
     trigger_edit_page_bankmask_fader:set_size(5)
     trigger_edit_page_bankmask_fader:set_length(5)
@@ -446,17 +715,46 @@ function trigger_edit_page.refresh_trigger_edit_page_ui()
     trigger_edit_page_pattern1_fader:set_size(32)
     trigger_edit_page_pattern2_fader:set_size(32)
   elseif (algorithm == 4) then
+    trigger_edit_page_pattern1_fader:enabled()
     trigger_edit_page_bankmask_fader:enabled()
     trigger_edit_page_bankmask_fader:set_size(4)
     trigger_edit_page_bankmask_fader:set_length(4)
     trigger_edit_page_pattern1_fader:set_size(32)
     trigger_edit_page_pattern2_fader:set_size(16)
     trigger_edit_page_pattern2_fader:enabled()
+  elseif (algorithm == 5) then
+    trigger_edit_page_bankmask_fader:disabled()
+    trigger_edit_page_pattern1_fader:disabled()
+    trigger_edit_page_pattern2_fader:disabled()
   end
 
   trigger_edit_page_pattern_select_fader:set_value(program.get().selected_pattern)
 
   fn.dirty_grid(true)
+end
+
+function trigger_edit_page.get_algorithm() return trigger_edit_page_algorithm_fader:get_value() end
+function trigger_edit_page.get_rhythm_doctor_lane()
+  -- Before anything is selected, the first lane of the live set is current --
+  -- which after a ten lane analysis is not BD.
+  if rhythm_doctor_lane then return rhythm_doctor_lane end
+  local lanes = rhythm_doctor and rhythm_doctor.lanes and rhythm_doctor:lanes() or {}
+  return lanes[1]
+end
+function trigger_edit_page.get_rhythm_doctor_model()
+  return rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
+end
+function trigger_edit_page.set_rhythm_doctor(value) rhythm_doctor = value end
+function trigger_edit_page.handle_rhythm_doctor_key(n, z)
+  if not rhythm_doctor or not rhythm_doctor.key then return nil end
+  return rhythm_doctor:key(n, z)
+end
+function trigger_edit_page.handle_rhythm_doctor_encoder(n, d)
+  if not rhythm_doctor or not rhythm_doctor.enc then return nil end
+  return rhythm_doctor:enc(n, d)
+end
+function trigger_edit_page.disconnect_rhythm_doctor()
+  if rhythm_doctor and rhythm_doctor.disconnect then rhythm_doctor:disconnect() end
 end
 
 function trigger_edit_page.refresh()

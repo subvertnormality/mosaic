@@ -13,6 +13,7 @@ FEELS = {
 }
 BASIS = ('9','7','5','6','8??','9??')
 
+
 def pulse_plan(feel,basis,amount,count):
     denominator,weights=FEELS[feel][basis-1]
     intervals=[24+F(amount,100)*(F(96*w,denominator)-24) for w in weights]
@@ -26,25 +27,36 @@ def pulse_plan(feel,basis,amount,count):
         total+=intervals[i%8]
     return pulses
 
+
 def shuffle_matrix(c,feel):
-    from frame_oracle import header,matches
     from note_accounting import note_pairs
-    c.configure();c.enc(1,-1)
-    c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-    c.enc(2,1);c.enc(3,2);c.key(3) # X -> local Shuffle.
-    c.enc(2,1);c.enc(3,list(FEELS).index(feel)+1);c.key(3)
+    ui = c.ui
+    ui.configure()
+    ui.channel_page('clock_mods', 'midi_config', channel=1, confirm=False)
+    ui.wait_for_header('clock_mods', channel=1)
+    ui.select_field('shuffle', offset=1)
+    ui.set_value(2)
+    ui.press_key(3)                                               # X -> local Shuffle.
+    ui.select_field('shuffle_feel', offset=1)
+    ui.set_value(list(FEELS).index(feel)+1)
+    ui.press_key(3)
     current_basis=0;current_amount=0
     # All bases at full amount, then a fractional basis at amount boundaries
     # and midpoint, followed by restoration. Amount0 must be straight timing.
     stages=[(basis,100) for basis in range(1,7)]+[(1,a) for a in (1,50,99,0,100)]
     for basis,amount in stages:
-        c.enc(2,1);c.enc(3,basis-current_basis);c.key(3)
-        c.enc(2,1)
+        ui.select_field('shuffle_basis', offset=1)
+        ui.set_value(basis-current_basis)
+        ui.press_key(3)
+        ui.select_field('shuffle_amount', offset=1)
         # Establish lower bound before authoring a value; also proves clamping.
-        c.enc(3,-101);c.key(3)
-        if amount:c.enc(3,amount);c.key(3)
-        c.enc(2,-2)
-        c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+        ui.set_value(-101)
+        ui.press_key(3)
+        if amount:
+            ui.set_value(amount)
+            ui.press_key(3)
+        ui.select_field('shuffle_amount', offset=-2)
+        ui.wait_for_header('clock_mods', channel=1)
         before=c.snapshot()['midi_count']
         notes=c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=4,timeout=8)
         state=c.snapshot();events=[e for e in state['midi'] if e['index']>before]

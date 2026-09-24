@@ -1,98 +1,131 @@
 from lock_lead_time import lock_lead_time
+from duration_witness import assert_duration_witness_observed, controlled_duration_witness_pair
+from scale_memory import (adjacent_channel_ranges, all_pattern_slots,
+                          channel_long_hold, channel_mute_gestures,
+                          channel_routing_isolation, memory_channel_isolation,
+                          memory_navigation, scale_edit_selection,
+                          scale_lock_lifetime, scale_stop_indicator,
+                          trig_merge_sets)
 from shuffle_matrix import shuffle_matrix
 from shuffle_first_bar_record import shuffle_first_bar_record
 from random_note_domains import random_note_domains
-from grid_hot_disconnect import grid_disconnect_two_key_range
+from contract.grid_hot_disconnect import grid_disconnect_two_key_range
 from pentatonic_options import lock_all_to_pentatonic
 from keyboard_options import keyboard_options
 from keyboard_repeated_note_on import keyboard_repeated_note_on
-from keyboard_chord_after_stop import keyboard_chord_after_stop
-from stop_safety import shift_press_to_stop
+from contract.keyboard_chord_after_stop import keyboard_chord_after_stop
+from contract.stop_safety import shift_press_to_stop
 from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
-from autosave_idle import autosave_idle_lifecycle
+from contract.autosave_idle import autosave_idle_lifecycle
 from named_save import named_save_load
 from channel_scale_display import channel_active_scale_display
 from memory_scale_lock_display import memory_scale_lock_display
-from tooltips import tooltip_messages
+from contract.tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
-from device_configs import invalid_device_configs,device_config_defaults
-from unreadable_device_config import unreadable_device_config
+from contract.device_configs import malformed_device_configs, missing_id_device_configs
+from contract.grid_viewer import pattern_grid_viewer
+from contract.inactive_note_positions import inactive_note_positions
+from contract.transpose_global_live_edit import transpose_global_live_edit
+from contract.clock_divisions import integral_clock_divisions, integral_clock_divisions_slow
+from contract.strum_reset_continuity import strum_reset_continuity
+from contract.navigation_matrix import navigation_matrix
+from contract.parameter_divisions import (
+    chord_note_strum_divisions, chord_note_arpeggio_divisions,
+    chord_spread_divisions,
+)
+from contract.playhead_feedback import (
+    live_playhead_feedback, live_playhead_feedback_twice_rate,
+)
+from contract.panic_navigation import (
+    panic_hold_matrix, panic_navigation_channel, panic_navigation_pattern,
+    panic_overlapping_holds_two, panic_overlapping_holds_three,
+)
+from contract.chord_shapes import chord_shape_case
+from device_configs import device_config_defaults
+from contract.unreadable_device_config import unreadable_device_config
 from trig_note_merge import trig_note_merge_matrix
 from scale_lock_precedence import scale_lock_precedence
 from step_slides import step_slide_variants
 from composition_workflow import composition_workflow
 from internal_clock_stall_phase import internal_clock_stall_phase
 from song_mode_flow import song_mode_flow
-from endurance import endurance_mixed
-from lifecycle_cycles import lifecycle_cycles
+from contract.endurance import endurance_mixed
+from contract.lifecycle_cycles import lifecycle_cycles
 from merge_lock_random import merge_lock_random
 from recording_song_transition import recording_song_transition
 from recorded_same_key_sources import recorded_same_key_sources
 from recorded_note_page_key_held import recorded_note_page_key_held
 from trigless_slide_clock import trigless_slide_clock
-from recording_lock_song import recording_lock_song
-from song_divisions import song_tempo_divisions
-from memory_wrap import memory_wrap,memory_retained_floor
+from contract.recording_lock_song import recording_lock_song,recording_lock_song_persisted
+from contract.song_divisions import song_tempo_divisions
+from contract.memory_wrap import memory_wrap,memory_retained_floor
 from scale_cache import scale_cache_saves
 from nb_param_lock import nb_param_lock
 from nb_chord_acceleration_lock import nb_chord_acceleration_lock
 from nb_device_switch_slots import nb_device_switch_slots
 from length_persistence import length_persistence
-from slide_capacity import slide_capacity
+from contract.slide_capacity import slide_capacity
 from memory_new_project import memory_new_project
-from autosave_failure import autosave_failure
+from contract.autosave_failure import autosave_failure
 from scale_lock_order import scale_lock_order
 from persisted_fixture import persisted_fixture
 from elektron_two_ports import elektron_two_ports
 from memory_persistence import memory_persistence
-from tooltip_autosave import tooltip_autosave
+from contract.tooltip_autosave import tooltip_autosave
 from song_queue_stop import song_queue_stop
 from song_slot_copy import song_slot_copy
-from midi_mapping_targets import midi_mapping_targets
+from contract.midi_mapping_targets import midi_mapping_targets
 from pattern_boundary_edit import pattern_boundary_edit
-from editor_pattern_flicker import editor_pattern_flicker
+from contract.editor_pattern_flicker import editor_pattern_flicker
 from reset_pending_voice import reset_pending_voice
 from swing_reset_mid_step import swing_reset_mid_step
 from slide_reset_mid_step import slide_reset_mid_step
 from memory_truncate_isolation import memory_truncate_isolation
 from memory_held_velocity import memory_held_velocity
-from memory_redo_encoder_lock import memory_redo_encoder_lock
+from contract.memory_redo_encoder_lock import memory_redo_encoder_lock
 from memory_redo_chord_merge import memory_redo_chord_merge
 from memory_step_undo import memory_step_undo
 from memory_lock_slide_undo import memory_lock_slide_undo
 from memory_chord_three_held import memory_chord_three_held
-from paint_race import paint_race
-from device_picker_names import device_picker_names
+from contract.paint_race import paint_race
+from contract.device_picker_names import device_picker_names
 from syntakt_pedal_params import syntakt_pedal_params
-from dashboard_channel_select import dashboard_channel_select
-from dashboard_chord_slots import dashboard_chord_slots
+from contract.dashboard_channel_select import dashboard_channel_select
+from contract.dashboard_chord_slots import dashboard_chord_slots
+from harmony_merge_workflow import phrase_build_workflow,pattern_harmony_workflow,pattern_harmony_independent_clocks_workflow,pattern_harmony_delayed_bypass_workflow
+from contract.harmony_workflows import revoice_workflow,pattern_harmony_persistence_workflow,ensemble_polyrhythm_workflow,no_voicing_fallback_workflow,held_step_precedence_workflow
+from contract.foundation_workflow import foundation_workflow
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
 from midi_cc_page_return import midi_cc_page_return
 from startup_transport import startup_transport
 from scale_slot_matrix import scale_slot_matrix
 from pitch_lock_isolation import pitch_lock_isolation
-from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit,parameter_fine_gesture
-from dial_off_display import dial_off_display
+from parameter_lock_domain import parameter_lock_all_steps_slots,parameter_lock_during_playback,parameter_slot_limit
+from contract.parameter_lock_domain import parameter_fine_gesture
+from contract.dial_off_display import dial_off_display
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
-from persisted_ranges import rejected_manual_range
-from persisted_ranges import rejected_saved_range
-from range_rejection import queued_global_length_transitions
-from range_rejection import accepted_live_range_transitions
-from range_rejection import offset_range_rates,offset_scale_range_clipping
-from range_rejection import offset_range_clipping
-from range_rejection import global_range_clipping
+from contract.persisted_range_rejection import (
+    rejected_manual_range, rejected_saved_range,
+    rejected_manual_range_save, rejected_manual_range_new,
+)
+from contract.range_rejection import queued_global_length_transitions
+from contract.range_rejection import range_reject_001,range_reject_002,range_reject_003,range_reject_004
+from range_rejection import offset_scale_range_clipping
+from contract.range_rejection import global_range_clipping
 from range_rejection import rejected_range_channel_isolation
-from range_rejection import rejected_range_while_playing
-from range_rejection import rejected_range
+from contract.range_rejection import rejected_range_while_playing
+from contract.range_rejection import rejected_range
+from range_workflows import accepted_live_range_transitions
+from range_workflows import offset_range_clipping, offset_range_rates
 from mask_gestures import multiheld_keyboard
 from mask_gestures import held_keyboard_chord
-from mask_gestures import trig_gesture_all_steps
+from contract.mask_gestures import trig_gesture_all_steps
 from held_mask_extra_key import held_mask_extra_key
-from chord_mask_start_x import chord_mask_start_x
+from contract.chord_mask_start_x import chord_mask_start_x
 from mask_off_probe import mask_off_probe
 from pending_note_mask_song_transition import pending_note_mask_song_transition
 from mask_quantisation import mask_full_chord_inheritance
@@ -109,14 +142,22 @@ from numeric_merging import lydian_octave_boundary
 from numeric_merging import numeric_velocity_merge
 from numeric_merging import merge_rounding
 from numeric_merging import merge_mode_cycle
-from numeric_merging import numeric_note_merge
+from contract.numeric_merging import (
+    numeric_note_merge, numeric_note_merge_all_pentatonic_scales,
+    numeric_note_merge_all_scales, numeric_note_merge_exclude_foreign_velocity,
+    numeric_note_merge_harmony, numeric_note_merge_harmony_pentatonic,
+    numeric_note_merge_pentatonic_velocity,
+)
 from numeric_merging import merge_transpose_scale_lock
 from numeric_merging import transpose_midi_boundaries
 from recording_lifetimes import recording_ten_slots,recording_ten_slots_trigless
-from recording_lifetimes import recording_stop_safety
+from contract.recording_stop_safety import recording_stop_safety
+from contract.trig_parameter_interactions import live_parameter_recording_scale_page
 from trig_parameter_interactions import sparse_editor_domain
 from trig_parameter_interactions import cc_encoder_domain
 from recording_lifetimes import recording_lifetime,recording_nrpn
+from contract.recording_lifetimes import stop as recording_lifetime_stop
+from contract.recording_lifetimes import nonselected_wrap as recording_lifetime_nonselected_wrap
 from modulation_interactions import modulated_cc_lock_precedence
 from patch_params import patch_sparse_slide
 from patch_params import patch_mixed_cc_nrpn_slides
@@ -126,37 +167,54 @@ from patch_params import patch_clear_mask_boundary
 from patch_params import patch_slide_live_destination
 from patch_params import patch_slide_trigless
 from patch_params import patch_slide_song_cutoff
-from patch_params import patch_slide_live_division
+from contract.patch_params import (
+    patch_slide_live_division, patch_slide_live_division_type_switch,
+    patch_slide_live_division_reset, patch_slide_live_division_repeated_edits,
+    patch_slide_stop_restarts,
+)
 from patch_params import patch_slide_timing
 from patch_params import patch_adjacent_locks
 from patch_params import patch_lock_precedence
 from patch_params import patch_duplicate_slot_lock
-from lock_lead_clock_matrix import lock_lead_clock_matrix
+from contract.lock_lead_clock_matrix import lock_lead_clock_matrix
+from contract.lock_lead_clock_matrix import (
+    lock_lead_clock_002_normal, lock_lead_clock_003_fast,
+    lock_lead_clock_004_x4_130, lock_lead_clock_005_x4_200,
+    lock_lead_clock_006_x16_130, lock_lead_clock_007_swing,
+    lock_lead_clock_008_swing_negative, lock_lead_clock_009_shuffle,
+    lock_lead_clock_010_swing_toggle, lock_lead_clock_011_shuffle_toggle,
+    lock_lead_clock_012_slides, lock_lead_clock_013_tempo_change,
+    lock_lead_clock_014_resend_off, lock_lead_clock_015_resend_off_x4_200,
+    lock_lead_clock_016_range_late, lock_lead_clock_017_range_wrap_slide,
+    lock_lead_clock_018_global_cap, lock_lead_clock_019_range_live,
+    lock_lead_clock_020_range_live_off,
+)
 from patch_params import patch_sparse_range
 from patch_params import patch_restart
-from patch_params import patch_nrpn_bytes
-from patch_params import patch_muted_recall
+from patch_params_batch2 import patch_nrpn_bytes
+from patch_params_batch2 import patch_muted_recall
 """Mosaic-owned physical-input regressions; independent literal musical oracles."""
 from driver import REPO,Driver,digest
 
 def four_notes(c):
     c.configure()
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
-    c.tap(5,8);c.tap(5,8);c.tap(4,3)
-    c.led_values([(4,3)],[12])
+    c.ui.pattern_editor();c.ui.pattern_editor();c.ui.tap_pattern_note_position((4,3))
+    c.ui.expect_leds({("pattern_note",(4,3)):"active"})
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(67,97)]])
     # Selected pattern's top LED deliberately alternates 3-1 / 3+1.
     # Observe both states, then compare the same visible phase in both clocks.
     # Do not mask this LED or weaken the full-grid admission comparison.
-    c.led_values([(1,1)],[4]);c.led_values([(1,1)],[2])
+    c.ui.expect_leds({("pattern_select",1):"blink_low"})
+    c.ui.expect_leds({("pattern_select",1):"off"})
     c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[4,2],passed=True))
 
 def next_trig_cutoff(c):
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(5,4);c.tap(5,8);c.tap(5,3);c.tap(3,8);c.tap(5,8)
-    c.hold_tap((1,4),(4,4));c.tap(3,4)
-    c.led_values([(x,4) for x in range(1,6)],[15,5,15,2,15])
+    c.configure();c.ui.set_range(1,8);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_step(5);c.ui.pattern_editor();c.ui.tap_pattern_note_position((5,3));c.ui.channel_editor();c.ui.pattern_editor()
+    c.ui.set_range(1,4);c.ui.tap_step(3)
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"selected",4:"off",5:"selected"})
     notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
 
@@ -177,45 +235,44 @@ def assert_durations(c,notes,lengths,events=None):
 def restore_length(c):
     # The source length must survive temporary interruption by an inserted trig.
     next_trig_cutoff(c)
-    c.tap(3,4)
-    c.led_values([(x,4) for x in range(1,6)],[15,5,5,5,15])
+    c.ui.tap_step(3)
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"in_range",4:"in_range",5:"selected"})
     notes=c.playback([(1,[144,60,127]),(1,[144,67,100])],timeout=6)
     assert_durations(c,notes,[4,1]*2)
     # Reinsert the collision: the same authored length must shorten again.
-    c.tap(3,4)
-    c.led_values([(x,4) for x in range(1,6)],[15,5,15,2,15])
+    c.ui.tap_step(3)
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"selected",4:"off",5:"selected"})
     notes=c.playback([(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100])],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
 
 def wrapped_length(c,same_pitch=False):
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(15,7);c.hold_tap((15,7),(2,4))
-    c.led_values([(15,7),(16,7),(1,4),(2,4)],[15,5,15,2])
+    c.configure();c.ui.set_range(1,64);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_step(63);c.ui.set_range(63,2)
+    c.ui.expect_steps({63:"selected",64:"in_range",1:"selected",2:"off"})
     if not same_pitch:
-        c.tap(5,8);c.tap(12,8);c.tap(15,3)
-        c.led_values([(15,3)],[12])
+        c.ui.pattern_editor();c.ui.tap_control("shift_right");c.ui.tap_pattern_note_position((15,3))
+        c.ui.expect_leds({("pattern_note_degree",(15,4)):"active"})
     notes=c.playback([(1,[144,60,127]),(1,[144,60 if same_pitch else 67,100])],timeout=38)
     assert_durations(c,notes,[1,2]*2)
     if not same_pitch:
         # Page49-64's empty selected-pattern top cell has base brightness1,
         # with the same +/-1 selection animation as the authored-note page.
-        c.led_values([(1,1)],[0]);c.led_values([(1,1)],[2])
+        c.ui.expect_leds({("pattern_select",1):"dark"});c.ui.expect_leds({("pattern_select",1):"off"})
         c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[0,2],passed=True))
 
 
-def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
+def pattern_duration_domain(c,lengths=range(1,65),channel_end=64,reexpress_controlled=False):
     # The documented finite duration domain is1..64 sixteenth-note steps.
     # Author each duration using grid gestures; observe every cell and MIDI off.
-    c.configure();c.hold_tap((1,4),((channel_end-1)%16+1,(channel_end-1)//16+4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
+    c.configure();c.ui.set_range(1,channel_end);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     for length in lengths:
-        if length>1:c.hold_tap(cells[0],cells[length-1])
-        c.led_values(cells,[15 if step==1 else 5 if step<=length else 2 for step in range(1,65)])
-        marker=c.snapshot()['midi_count'];c.tap(1,8)
+        if length>1:c.ui.set_range(1,length)
+        c.ui.expect_steps({step:"selected" if step==1 else "in_range" if step<=length else "off" for step in range(1,65)})
+        marker=c.snapshot()['midi_count'];c.ui.tap_control("play_stop")
         def recorded(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes'][0] in (128,144)]
         # Native capture retains all events; fewer snapshots cannot hide an
         # early release because the emission-time and order assertions follow.
@@ -231,53 +288,54 @@ def pattern_duration_domain(c,lengths=range(1,65),channel_end=64):
         # note before Stop arrives. Its ordering and cleanup are still required.
         assert [m['bytes'] for m in emitted[:2]]==[[144,60,127],[128,60,127]],emitted
         assert all(m['bytes'] in ([144,60,127],[128,60,127]) for m in emitted)
-        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-        c.results.append(dict(kind='pattern-duration-domain',steps=length,expected_seconds=length/6,actual_seconds=elapsed,first_on=emitted[0],first_off=release))
+        c.ui.tap_control("play_stop");c.wait(lambda state:not state['midi_capture']['outstanding'])
+        witness=dict(first_on=emitted[0],first_off=release)
+        if reexpress_controlled and c.clock_mode=='controlled-experimental':
+            assert_duration_witness_observed(c.observations,emitted[0],release)
+            witness=controlled_duration_witness_pair(emitted[0],release)
+        c.results.append(dict(kind='pattern-duration-domain',steps=length,expected_seconds=length/6,actual_seconds=elapsed,**witness))
 
 
 def pattern_duration_controls(c):
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(5,4);c.tap(5,8);c.tap(5,3);c.tap(3,8);c.tap(5,8)
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
+    c.configure();c.ui.set_range(1,8);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_step(5);c.ui.pattern_editor();c.ui.tap_pattern_note_position((5,3));c.ui.channel_editor();c.ui.pattern_editor()
     def phrase(length):
-        c.led_values(cells,[15 if step in (1,5) else 5 if 1<step<=length else 2 for step in range(1,65)])
+        c.ui.expect_steps({step:"selected" if step in (1,5) else "in_range" if 1<step<=length else "off" for step in range(1,65)})
         notes=c.playback([(1,[144,60,127]),(1,[144,67,100])],cycles=2)
         assert_durations(c,notes,[length,1]*2)
-    def long_hold(cell):
-        c.action(type='grid',x=cell[0],y=cell[1],state=1)
-        try:c.elapse(1.1)
-        finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+    def long_hold(step):
+        with c.ui.hold_control("step",step):c.elapse(1.1)
         c.elapse(.06)
-    phrase(1);c.hold_tap((1,4),(3,4));phrase(3)
-    long_hold((1,4));phrase(1)
+    phrase(1);c.ui.set_range(1,3);phrase(3)
+    long_hold(1);phrase(1)
     # Empty sources must neither create a trigger nor leave hidden length data
     # that changes the existing phrase. Test both the combo and lone hold.
-    c.hold_tap((2,4),(4,4));phrase(1)
-    long_hold((2,4));phrase(1)
-    c.hold_tap((1,4),(4,4));phrase(4)
+    c.ui.set_range(2,4);phrase(1)
+    long_hold(2);phrase(1)
+    c.ui.set_range(1,4);phrase(4)
 
 def live_pattern_duration(c):
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.hold_tap((1,4),(4,4))
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    c.configure();c.ui.set_range(1,8);c.ui.pattern_editor()
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.set_range(1,4)
+    marker=c.snapshot()['midi_count'];c.ui.tap_control("play_stop")
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     def onsets(state):return [m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes']==[144,60,127]]
     state=c.wait(lambda state:len(onsets(state))>=1)
     first=onsets(state)[0]
-    c.hold_tap((1,4),(2,4))
+    c.ui.set_range(1,2)
     now=c.logical_ns if c.clock_mode=='controlled-experimental' else c.snapshot()['diagnostics']['monotonic_ns']
     assert now<first[field]+round(2e9/6),'Shortening gesture missed the pending note window'
     state=c.wait(lambda state:len(onsets(state))>=2)
     second=onsets(state)[1]
-    c.hold_tap((1,4),(4,4))
+    c.ui.set_range(1,4)
     now=c.logical_ns if c.clock_mode=='controlled-experimental' else c.snapshot()['diagnostics']['monotonic_ns']
     assert now<second[field]+round(2e9/6),'Extension gesture missed the pending note window'
     state=c.wait(lambda state:len(onsets(state))>=3)
     third=onsets(state)[2]
     c.wait(lambda state:any(m['index']>third['index'] and m['bytes']==[128,60,127] for m in state['midi']))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    c.ui.tap_control("play_stop");c.wait(lambda state:not state['midi_capture']['outstanding'])
     state=c.snapshot()
     actual=[(m['port'],m['bytes']) for m in state['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
     expected=[(1,[144,60,127]),(1,[128,60,127])]*3
@@ -288,8 +346,7 @@ def live_pattern_duration(c):
     assert_durations(c,[first,second,third],[4,2,4])
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     assert all(abs((b[field]-a[field])/1e9-8/6)<=tolerance for a,b in ((first,second),(second,third)))
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
-    c.led_values(cells,[15 if step==1 else 5 if step<=4 else 2 for step in range(1,65)])
+    c.ui.expect_steps({step:"selected" if step==1 else "in_range" if step<=4 else "off" for step in range(1,65)})
     notes=c.playback([(1,[144,60,127])],cycles=2)
     assert_durations(c,notes,[4,4])
 
@@ -297,46 +354,60 @@ def live_pattern_duration(c):
 def euclidean_workflow(c):
     # Migrated from emulator tests/mosaic_euclidean.py; independent3-in-8 table.
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    c.configure();c.hold_tap((1,4),(8,4))
-    c.tap(5,8);c.tap(5,8)
-    for x,y in [(5,3),(6,2),(7,1),(8,6)]:c.tap(x,y)
-    c.tap(3,8);c.tap(5,8) # trig editor
+    c.ui.configure();c.ui.set_range(1,8)
+    c.ui.tap_control("pattern_editor");c.ui.tap_control("pattern_editor")
+    for control in ("pattern_note_c","pattern_note_d","pattern_note_e","pattern_note_f"):
+        c.ui.tap_control(control)
+    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor") # trig editor
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='eight-step-loop-baseline',passed=True))
-    c.tap(14,2) # Euclidean
-    c.tap(2,2) # broad fader minimum: one pulse
-    for _ in range(2):c.tap(10,2)
-    c.tap(2,3)
-    for _ in range(7):c.tap(10,3)
-    c.tap(16,8)
+    c.ui.tap_control("euclidean_tool")
+    c.ui.tap_control("euclidean_fill_minimum") # broad fader minimum: one pulse
+    for _ in range(2):c.ui.tap_control("euclidean_fill_maximum")
+    c.ui.tap_control("euclidean_rotation_minimum")
+    for _ in range(7):c.ui.tap_control("euclidean_rotation_maximum")
+    c.ui.tap_control("paint")
     # The manual distinguishes dim overlaps and bright newly proposed steps.
     # Verify both blink phases and all64 cells against fixed authored/candidate
     # sets; no application rhythm calculation supplies the expected positions.
-    cells=[((step-1)%16+1,(step-1)//16+4) for step in range(1,65)]
     original={1,2,3,4}
     proposed={step for step in range(1,65) if (step-1)%8+1 in (1,4,7)}
     for overlap,new in ((0,15),(3,12)):
-        c.led_values(cells,[overlap if step in original and step in proposed else new if step in proposed else 15 if step in original else 2 for step in range(1,65)])
+        shared = original & proposed
+        proposed_only = proposed - original
+        original_only = original - proposed
+        levels = {}
+        for step in range(1, 65):
+            if step in shared:
+                levels[step] = "dark" if overlap == 0 else "inactive"
+            elif step in proposed_only:
+                levels[step] = "selected" if new == 15 else "active"
+            elif step in original_only:
+                levels[step] = "selected"
+            else:
+                levels[step] = "off"
+        c.ui.expect_steps(levels)
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='preview-does-not-paint',passed=True))
-    c.tap(14,8);c.led_values([(x,4) for x in range(1,9)],[15]*4+[2]*4)
+    c.ui.tap_control("cancel");c.ui.expect_steps({step:"selected" if step<=4 else "off" for step in range(1,9)})
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='cancel-retains-pattern',passed=True))
-    c.tap(16,8);c.tap(12,8) # shift right: {2,5,8}
-    c.led_values([(2,4),(5,4),(8,4)],[0,15,15]);c.tap(16,8)
+    c.ui.tap_control("paint");c.ui.tap_control("shift_right") # shift right: {2,5,8}
+    c.ui.expect_steps({2:"dark",5:"selected",8:"selected"});c.ui.tap_control("paint")
     shifted={step for step in range(1,65) if (step-1)%8+1 in (2,5,8)}
     painted=original.symmetric_difference(shifted)
-    c.led_values(cells,[15 if step in painted else 2 for step in range(1,65)])
+    c.ui.expect_steps({step:"selected" if step in painted else "off" for step in range(1,65)})
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(65,97),(67,100),(62,100)]])
     c.results.append(dict(kind='workflow-check',name='shifted-paint-xor',passed=True))
-    c.tap(16,8);c.led_values([(2,4),(5,4),(8,4)],[15,0,0]);c.tap(16,8)
+    c.ui.tap_control("paint");c.ui.expect_steps({2:"selected",5:"dark",8:"dark"});c.ui.tap_control("paint")
+    c.ui.expect_steps({step:"selected" if step<=4 else "off" for step in range(1,65)})
     c.playback(baseline);c.results.append(dict(kind='workflow-check',name='repaint-restores-original',passed=True))
-    c.tap(16,8);c.tap(10,8) # left: back to {1,4,7}
-    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(12,8);c.tap(11,8)
-    c.led_values([(1,4),(4,4),(7,4)],[0,0,15]);c.tap(16,8)
+    c.ui.tap_control("paint");c.ui.tap_control("shift_left") # left: back to {1,4,7}
+    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("shift_right");c.ui.tap_control("shift_reset")
+    c.ui.expect_steps({1:"dark",4:"dark",7:"selected"});c.ui.tap_control("paint")
     c.playback([(1,[144,n,v]) for n,v in [(62,117),(64,107),(71,100)]])
     c.results.append(dict(kind='workflow-check',name='left-and-center-reset',passed=True))
-    c.tap(16,8);c.led_values([(1,4),(4,4),(7,4)],[15,15,0]);c.tap(16,8);c.playback(baseline)
-    c.tap(9,2) # fill32, exceeding length8: every step selected
-    c.tap(16,8);c.led_values([(1,4),(4,4),(5,4),(16,7)],[0,0,15,15]);c.tap(16,8)
-    c.led_values([(x,y) for y in range(4,8) for x in range(1,17)],[2]*4+[15]*60)
+    c.ui.tap_control("paint");c.ui.expect_steps({1:"selected",4:"selected",7:"dark"});c.ui.tap_control("paint");c.playback(baseline)
+    c.ui.tap_control("euclidean_fill_boundary") # fill32, exceeding length8: every step selected
+    c.ui.tap_control("paint");c.ui.expect_steps({1:"dark",4:"dark",5:"selected",64:"selected"});c.ui.tap_control("paint")
+    c.ui.expect_steps({step:"selected" if step>4 else "off" for step in range(1,65)})
     c.playback([(1,[144,n,100]) for n in [67,69,71,62]]);c.results.append(dict(kind='workflow-check',name='dense-fill-boundary',passed=True))
 
 # Independent literal 3/3/2 segment tables; no application algorithm import.
@@ -345,27 +416,25 @@ TRESILLO_STEPS={8:[3,6],16:[3,9,15],24:[3,12,21],32:[3,15,27],
       64:[3,16,27,40,51,64]}
 
 def tresillo_setup(c):
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(5,8)
-    for x in range(1,17):
-        c.action(type='key',n=1,state=1);c.elapse(.3)
-        c.tap(x,7-((x-1)%6));c.action(type='key',n=1,state=0)
-    c.tap(3,8);c.tap(5,8);c.tap(13,2);c.tap(12,3)
-    c.tap(2,2);c.tap(10,2);c.tap(2,3);c.tap(10,3)
-    c.enc(1,1);c.enc(3,-8)
-    from frame_oracle import header,matches
-    expected=header('Trig editor options',selected=2,tabs=2)
-    c.wait(lambda state:matches(state,expected))
-    c.results.append(dict(kind='screen-header',expected='Trig editor options',selected=2,tabs=2,matched=True))
+    c.ui.configure();c.ui.tap_control("pattern_editor")
+    for step in range(1,5):c.ui.tap_step(step)
+    c.ui.tap_control("pattern_editor")
+    for step in range(1,17):
+        c.ui.key_edge(1,True);c.elapse(.3)
+        try:c.ui.tap_control("pattern_note",(step,7-((step-1)%6)))
+        finally:c.ui.key_edge(1,False)
+    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
+    c.ui.tap_control("tresillo_tool");c.ui.tap_control("drum_bank",1)
+    c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_fill_maximum")
+    c.ui.tap_control("rhythm_factor_minimum");c.ui.tap_control("rhythm_factor_maximum")
+    c.ui.turn(1,1);c.ui.turn(3,-8);c.ui.expect_header("trigger_editor_confirmation")
 
 def tresillo_rhythm(c,length,steps):
-    c.tap(3,8);c.hold_tap((1,4),((length-1)%16+1,4+(length-1)//16));c.tap(5,8)
-    c.tap(16,8)
-    first=((steps[0]-1)%16+1,4+(steps[0]-1)//16)
-    c.led_values([first],[15]);c.tap(16,8)
-    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
-    c.led_values(cells,[15 if i%length+1 in steps else 2 for i in range(64)])
+    c.ui.tap_control("channel_editor");c.ui.set_range(1,length);c.ui.tap_control("pattern_editor")
+    c.ui.tap_control("paint")
+    first=steps[0]
+    c.ui.expect_steps({first:"selected"});c.ui.tap_control("paint")
+    c.ui.expect_steps({step:"selected" if (step-1)%length+1 in steps else "off" for step in range(1,65)})
     pitches=[60,62,64,65,67,69]
     velocities=[127,117,107,97]+[100]*60
     expected=[(1,[144,pitches[((s-1)%16)%6],velocities[s-1]]) for s in steps]
@@ -382,16 +451,16 @@ def tresillo_rhythm(c,length,steps):
         rows.append(dict(from_step=steps[i%len(steps)],to_step=steps[(i+1)%len(steps)],expected_seconds=gap/6,actual_seconds=actual))
     c.results.append(dict(kind='tresillo-timing',length=length,steps=steps,rows=rows))
     assert len(rows)>=2*len(steps) and all(abs(x['actual_seconds']-x['expected_seconds'])<=tolerance for x in rows),rows
-    c.tap(16,8);c.led_values([first],[0]);c.tap(16,8);c.led_values(cells,[2]*64)
+    c.ui.tap_control("paint");c.ui.expect_steps({first:"dark"});c.ui.tap_control("paint");c.ui.expect_steps({step:"off" for step in range(1,65)})
 
 def tresillo_multipliers(c):
     tresillo_setup(c);c.results.append(dict(kind='workflow-check',name='tresillo-input-setup',passed=True))
     for i,(length,steps) in enumerate(TRESILLO_STEPS.items()):
-        if i:c.enc(3,1)
+        if i:c.ui.turn(3,1)
         tresillo_rhythm(c,length,steps);c.results.append(dict(kind='workflow-check',name='multiplier-'+str(length),passed=True))
 
 def tresillo_drum_boundary(c):
-    tresillo_setup(c);c.tap(13,3);c.enc(3,7)
+    tresillo_setup(c);c.ui.tap_control("drum_bank",2);c.ui.turn(3,7)
     tresillo_rhythm(c,64,list(range(1,65,8)));c.results.append(dict(kind='workflow-check',name='drum-bank-64-step-tresillo',passed=True))
 
 
@@ -403,105 +472,103 @@ def rhythm_bank_workflow(c):
       '4':[1,3,5,7,9,11,13,15],'5':[]},
       'numeric_prime_1_factor_1':{'1':[5,13],'2':[1],'3':[9],'4':[1,5,9,13]}}
     def silence(c):
-        before=c.snapshot()['midi_count'];c.tap(1,8)
-        c.elapse(16/6*2+.1);c.tap(1,8)
+        before=c.snapshot()['midi_count'];c.ui.play()
+        c.elapse(16/6*2+.1);c.ui.stop()
         state=c.snapshot()
         emitted=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         assert emitted==[] and state['midi_capture']['outstanding']==[],emitted
         c.results.append(dict(kind='silence',complete_cycles=2,emitted=emitted))
-    c.configure();c.hold_tap((1,4),(16,4))
-    c.tap(5,8)
-    for x in range(1,5):c.tap(x,4) # empty pattern, retain routing
-    c.tap(5,8)
-    for x in range(1,17):c.tap(x,7-((x-1)%7))
-    c.tap(3,8);c.tap(5,8)
-    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
-    c.led_values(cells,[2]*64);silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
+    c.ui.configure();c.ui.set_range(1,16)
+    c.ui.tap_control("pattern_editor")
+    for step in range(1,5):c.ui.tap_step(step) # empty pattern, retain routing
+    c.ui.tap_control("pattern_editor")
+    for step in range(1,17):c.ui.tap_control("pattern_note",(step,7-((step-1)%7)))
+    c.ui.tap_control("channel_editor");c.ui.tap_control("pattern_editor")
+    c.ui.expect_steps({step:"off" for step in range(1,65)});silence(c);c.results.append(dict(kind='workflow-check',name='empty-pattern',passed=True))
     def paint(steps):
-        c.tap(16,8)
+        c.ui.tap_control("paint")
         # Nonempty previews flash coherently. Empty banks have no step flashes.
-        if steps:c.led_values([((steps[0]-1)%16+1,4)],[15])
-        else:c.led_values([(14,8)],[15])
-        c.tap(16,8)
-        c.led_values(cells,[15 if i%16+1 in steps else 2 for i in range(64)])
+        if steps:c.ui.expect_steps({steps[0]:"selected"})
+        else:c.ui.expect_leds({("cancel",None):"selected"})
+        c.ui.tap_control("paint")
+        c.ui.expect_steps({step:"selected" if (step-1)%16+1 in steps else "off" for step in range(1,65)})
         if steps:
             pitches=[60,62,64,65,67,69,71]
             velocities=[127,117,107,97]+[100]*12
             c.playback([(1,[144,pitches[(s-1)%7],velocities[s-1]]) for s in steps],cycles=2,timeout=4,settle_seconds=16/3-.1)
         else:silence(c)
-        c.tap(16,8)
-        if steps:c.led_values([((steps[0]-1)%16+1,4)],[0])
-        else:c.led_values([(14,8)],[15])
-        c.tap(16,8);c.led_values(cells,[2]*64)
-    c.tap(12,2);c.tap(2,2);c.tap(10,2) # drum pattern2
+        c.ui.tap_control("paint")
+        if steps:c.ui.expect_steps({steps[0]:"dark"})
+        else:c.ui.expect_leds({("cancel",None):"selected"})
+        c.ui.tap_control("paint");c.ui.expect_steps({step:"off" for step in range(1,65)})
+    c.ui.tap_control("drum_pattern_two");c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_fill_maximum") # drum pattern2
     for bank in range(1,6):
-        c.tap(11+bank,3);paint(oracle['drum_pattern_2'][str(bank)]);c.results.append(dict(kind='workflow-check',name='drum-bank-'+str(bank),passed=True))
-    c.tap(15,2);c.tap(2,2);c.tap(2,3) # numeric prime1, factor1
+        c.ui.tap_control("drum_bank",bank);paint(oracle['drum_pattern_2'][str(bank)]);c.results.append(dict(kind='workflow-check',name='drum-bank-'+str(bank),passed=True))
+    c.ui.tap_control("numeric_prime_one");c.ui.tap_control("rhythm_fill_minimum");c.ui.tap_control("rhythm_factor_minimum") # numeric prime1, factor1
     for bank in range(1,5):
-        c.tap(11+bank,3);paint(oracle['numeric_prime_1_factor_1'][str(bank)]);c.results.append(dict(kind='workflow-check',name='numeric-mask-'+str(bank),passed=True))
+        c.ui.tap_control("numeric_mask",bank);paint(oracle['numeric_prime_1_factor_1'][str(bank)]);c.results.append(dict(kind='workflow-check',name='numeric-mask-'+str(bank),passed=True))
 
 
 
 # Ported editor-range fixture; literal pitches and velocities remain independent.
-def editor_shift_tap(c,x,y):
-    c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.tap(x,y)
-    finally:c.action(type='key',n=1,state=0)
+def editor_shift_tap(c,control,index=None):
+    with c.ui.hold_keys(1):
+        c.elapse(.3)
+        c.ui.tap_control(control,index)
 
-def editor_range_hold(c,x,y):
-    c.action(type='grid',x=x,y=y,state=1)
-    try:c.elapse(1.1)
-    finally:c.action(type='grid',x=x,y=y,state=0)
+def editor_range_hold(c,control,index=None):
+    with c.ui.hold_control(control,index):
+        c.elapse(1.1)
 
 def editor_note_ranges(c):
-    c.configure();c.tap(5,8);c.tap(5,8)
+    c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger')
     def choose(y,note):
-        c.tap(4,y);c.led_values([(4,y)],[12]);c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+[(1,[144,note,97])])
+        c.ui.tap_control('pattern_note_degree',(4,7-y));c.ui.expect_leds({('pattern_note_degree',(4,7-y)):'active'});c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+[(1,[144,note,97])])
     choose(1,71);c.results.append(dict(kind='workflow-check',name='initial-note-range',passed=True))
-    c.tap(14,8);choose(1,72);c.results.append(dict(kind='workflow-check',name='first-up-step',passed=True))
-    c.tap(14,8);choose(1,74);c.results.append(dict(kind='workflow-check',name='second-up-step',passed=True))
-    c.tap(16,8);choose(1,72);c.results.append(dict(kind='workflow-check',name='first-down-step',passed=True))
-    c.tap(16,8);choose(1,71);c.results.append(dict(kind='workflow-check',name='second-down-step',passed=True))
-    editor_range_hold(c,14,8);choose(1,83);c.results.append(dict(kind='workflow-check',name='hold-to-highest-range',passed=True))
-    c.tap(14,8);choose(1,83);c.results.append(dict(kind='workflow-check',name='highest-range-clamp',passed=True))
-    editor_range_hold(c,16,8);choose(7,48);c.results.append(dict(kind='workflow-check',name='hold-to-lowest-range',passed=True))
-    c.tap(16,8);choose(7,48);c.results.append(dict(kind='workflow-check',name='lowest-range-clamp',passed=True))
-    c.tap(15,8);choose(4,65);c.results.append(dict(kind='workflow-check',name='center-restores-root-page',passed=True))
+    c.ui.tap_control('pattern_note_octave_up');choose(1,72);c.results.append(dict(kind='workflow-check',name='first-up-step',passed=True))
+    c.ui.tap_control('pattern_note_octave_up');choose(1,74);c.results.append(dict(kind='workflow-check',name='second-up-step',passed=True))
+    c.ui.tap_control('pattern_note_octave_down');choose(1,72);c.results.append(dict(kind='workflow-check',name='first-down-step',passed=True))
+    c.ui.tap_control('pattern_note_octave_down');choose(1,71);c.results.append(dict(kind='workflow-check',name='second-down-step',passed=True))
+    editor_range_hold(c,'pattern_note_octave_up');choose(1,83);c.results.append(dict(kind='workflow-check',name='hold-to-highest-range',passed=True))
+    c.ui.tap_control('pattern_note_octave_up');choose(1,83);c.results.append(dict(kind='workflow-check',name='highest-range-clamp',passed=True))
+    editor_range_hold(c,'pattern_note_octave_down');choose(7,48);c.results.append(dict(kind='workflow-check',name='hold-to-lowest-range',passed=True))
+    c.ui.tap_control('pattern_note_octave_down');choose(7,48);c.results.append(dict(kind='workflow-check',name='lowest-range-clamp',passed=True))
+    c.ui.tap_control('pattern_note_octave_reset');choose(4,65);c.results.append(dict(kind='workflow-check',name='center-restores-root-page',passed=True))
 
 VELOCITIES=[127,117,107,97,87,78,68,58,48,39,29,19,9,0]
 
 def editor_velocity_ranges(c):
-    c.configure();c.tap(5,8);c.tap(5,8);c.tap(5,8)
+    c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger');c.ui.pattern_editor(view='velocity',from_view='note')
     def choose(y,value):
-        c.tap(4,y);c.led_values([(4,y)],[12])
+        c.ui.tap_control('pattern_velocity_level',(4,8-y));c.ui.expect_leds({('pattern_velocity_level',(4,8-y)):'active'})
         c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]+([(1,[144,65,value])] if value else []))
     for y,value in enumerate(VELOCITIES[:7],1):choose(y,value);c.results.append(dict(kind='workflow-check',name='velocity-'+str(value),passed=True))
-    c.tap(16,8);choose(1,117);c.results.append(dict(kind='workflow-check',name='first-velocity-range-step',passed=True))
-    c.tap(16,8);choose(1,107);c.results.append(dict(kind='workflow-check',name='second-velocity-range-step',passed=True))
-    c.tap(15,8);choose(1,117);c.results.append(dict(kind='workflow-check',name='velocity-range-step-back',passed=True))
-    editor_range_hold(c,16,8)
+    c.ui.tap_control('pattern_velocity_range_down');choose(1,117);c.results.append(dict(kind='workflow-check',name='first-velocity-range-step',passed=True))
+    c.ui.tap_control('pattern_velocity_range_down');choose(1,107);c.results.append(dict(kind='workflow-check',name='second-velocity-range-step',passed=True))
+    c.ui.tap_control('pattern_velocity_range_reset');choose(1,117);c.results.append(dict(kind='workflow-check',name='velocity-range-step-back',passed=True))
+    editor_range_hold(c,'pattern_velocity_range_down')
     for y,value in enumerate(VELOCITIES[7:],1):choose(y,value);c.results.append(dict(kind='workflow-check',name='velocity-'+str(value),passed=True))
-    c.tap(16,8);choose(7,0);c.results.append(dict(kind='workflow-check',name='lowest-velocity-range-clamp',passed=True))
-    editor_range_hold(c,15,8);choose(1,127);c.results.append(dict(kind='workflow-check',name='hold-to-highest-velocity-range',passed=True))
-    c.tap(15,8);choose(1,127);c.results.append(dict(kind='workflow-check',name='highest-velocity-range-clamp',passed=True))
+    c.ui.tap_control('pattern_velocity_range_down');choose(7,0);c.results.append(dict(kind='workflow-check',name='lowest-velocity-range-clamp',passed=True))
+    editor_range_hold(c,'pattern_velocity_range_reset');choose(1,127);c.results.append(dict(kind='workflow-check',name='hold-to-highest-velocity-range',passed=True))
+    c.ui.tap_control('pattern_velocity_range_reset');choose(1,127);c.results.append(dict(kind='workflow-check',name='highest-velocity-range-clamp',passed=True))
 
 def editor_step_groups(c):
-    c.configure();c.tap(5,8)
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
     for y in range(5,8):
-        for x in range(1,5):c.tap(x,y)
-    c.tap(5,8)
-    for x in range(1,5):editor_shift_tap(c,x,8-x)
+        for x in range(1,5):c.ui.tap_control('step',(y-4)*16+x)
+    c.ui.pattern_editor(view='note',from_view='trigger')
+    for x in range(1,5):editor_shift_tap(c,'pattern_note_degree',(x,x-1))
     for group in range(4):
-        c.tap(9+group,8);c.led_values([(x,8-x) for x in range(1,5)],[12]*4)
+        c.ui.tap_control('pattern_group',group+1);c.ui.expect_leds({('pattern_note_degree',(x,x-1)):'active' for x in range(1,5)})
     c.results.append(dict(kind='workflow-check',name='shift-copies-notes-to-four-groups',passed=True))
-    c.tap(5,8)
-    for x in range(1,5):editor_shift_tap(c,x,2)
+    c.ui.pattern_editor(view='velocity',from_view='note')
+    for x in range(1,5):editor_shift_tap(c,'pattern_slot',x)
     for group in range(4):
-        c.tap(9+group,8);c.led_values([(x,2) for x in range(1,5)],[12]*4)
+        c.ui.tap_control('pattern_group',group+1);c.ui.expect_leds({('pattern_slot',x):'active' for x in range(1,5)})
     c.results.append(dict(kind='workflow-check',name='shift-copies-velocities-to-four-groups',passed=True))
-    c.tap(3,8)
+    c.ui.tap_control('channel_editor')
     for group in range(4):
-        c.hold_tap((1,4+group),(4,4+group))
+        c.ui.hold_control_tap('step','step',group*16+1,group*16+4)
         c.playback([(1,[144,n,117]) for n in [60,62,64,65]])
         c.results.append(dict(kind='workflow-check',name='play-step-group-'+str(group+1),passed=True))
 
@@ -509,34 +576,34 @@ def editor_step_groups(c):
 
 def note_pattern_selectors(c):
     # Author distinguishable single-note patterns through the normal editor.
-    c.configure();pitches=[60,62,64,65,67,69,71];authored={}
+    c.ui.configure();pitches=[60,62,64,65,67,69,71];authored={}
     for slot in range(1,17):
-        c.tap(5,8);c.tap(slot,1)
+        c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_select',slot)
         if slot==1:
-            for x in (2,3,4):c.tap(x,4)
-        else:c.tap(1,4)
-        c.tap(5,8);offset=(slot-1)%7;c.tap(1,7-offset)
-        authored[slot]=pitches[offset];c.tap(3,8)
+            for x in (2,3,4):c.ui.tap_control('pattern_note_degree',(x,3))
+        else:c.ui.tap_control('pattern_note_degree',(1,3))
+        c.ui.tap_control('pattern_editor');offset=(slot-1)%7;c.ui.tap_control('pattern_note_degree',(1,offset))
+        authored[slot]=pitches[offset];c.ui.tap_control('channel_editor')
     assigned=1
-    c.tap(5,8);c.tap(5,8)
+    c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_editor')
     for pass_index,gesture in enumerate(('shift','hold'),1):
         for slot in range(1,17):
-            if gesture=='shift':editor_shift_tap(c,slot,1)
-            else:editor_range_hold(c,slot,1)
+            if gesture=='shift':editor_shift_tap(c,'pattern_select',slot)
+            else:editor_range_hold(c,'pattern_select',slot)
             offset=(slot-1+pass_index)%7
             assert authored[slot]!=pitches[offset]
-            c.tap(1,7-offset);c.led_values([(1,7-offset)],[12])
-            authored[slot]=pitches[offset];c.tap(3,8)
-            if assigned!=slot:c.tap(assigned,2);c.tap(slot,2)
-            assigned=slot;c.led_values([(slot,2)],[15])
+            c.ui.tap_control('pattern_note_degree',(1,offset));c.ui.expect_leds({('pattern_note_degree',(1,offset)):'active'})
+            authored[slot]=pitches[offset];c.ui.tap_control('channel_editor')
+            if assigned!=slot:c.ui.tap_control('pattern_slot',assigned);c.ui.tap_control('pattern_slot',slot)
+            assigned=slot;c.ui.expect_leds({('pattern_slot',slot):'selected'})
             c.playback([(1,[144,authored[slot],127 if slot==1 else 100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
             c.results.append(dict(kind='pattern-selector',gesture=gesture,slot=slot,pitch=authored[slot],passed=True))
-            c.tap(5,8);c.tap(5,8)
+            c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_editor')
     # Holding a top-row cell must not damage a previously edited pattern.
     # Revisit every assignment after the whole selector/edit history.
-    c.tap(3,8)
+    c.ui.tap_control('channel_editor')
     for slot in range(1,17):
-        if assigned!=slot:c.tap(assigned,2);c.tap(slot,2)
+        if assigned!=slot:c.ui.tap_control('pattern_slot',assigned);c.ui.tap_control('pattern_slot',slot)
         assigned=slot
         c.playback([(1,[144,authored[slot],127 if slot==1 else 100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='pattern-selector-retained',slot=slot,pitch=authored[slot],passed=True))
@@ -544,197 +611,112 @@ def note_pattern_selectors(c):
 
 def editor_hold_boundaries(c):
     import time
-    c.configure();c.tap(5,8);c.tap(5,8)
+    from editor_hold_evidence import record_hold_input_bounds
+    c.ui.configure();c.ui.pattern_editor(view='trigger');c.ui.pattern_editor(view='note',from_view='trigger')
     before=.999999999 if c.clock_mode=='controlled-experimental' else .95
     after=1.000000001 if c.clock_mode=='controlled-experimental' else 1.05
     baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107)]]
-    def hold(x,seconds,expected_long,interrupt=False):
+    def hold(control,seconds,expected_long,interrupt=False):
         logical_start=c.logical_ns;t0=time.monotonic_ns()
-        c.action(type='grid',x=x,y=8,state=1);t1=time.monotonic_ns()
+        c.ui.control_edge(control,True);t1=time.monotonic_ns()
         if interrupt:
-            c.elapse(.5);c.tap(4,3);c.elapse(.6)
+            c.elapse(.5);c.ui.tap_control('pattern_note_degree',(4,4));c.elapse(.6)
         else:c.elapse(seconds)
         t2=time.monotonic_ns();logical_end=c.logical_ns
-        c.action(type='grid',x=x,y=8,state=0);t3=time.monotonic_ns()
+        c.ui.control_edge(control,False);t3=time.monotonic_ns()
         lower=(t2-t1)/1e9;upper=(t3-t0)/1e9
-        c.results.append(dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
+        x = c.ui.control_cell(control)[0]
+        record_hold_input_bounds(c,dict(kind='hold-input-bounds',x=x,interrupted=interrupt,
             expected_long=expected_long,logical_seconds=(logical_end-logical_start)/1e9,
             wall_lower_seconds=lower,wall_upper_seconds=upper))
         if c.clock_mode=='real-time' and not interrupt:
             assert lower>1 if expected_long else upper<1, 'Host input delivery crossed the intended one-second hold boundary'
         c.elapse(.06)
     for label,duration,pitch in [('before',before,72),('after',after,83),('cancelled',0,71)]:
-        c.tap(15,8) # Return the displayed note range to the root page.
-        hold(14,duration,label=='after',interrupt=label=='cancelled')
-        c.tap(4,1);c.led_values([(4,1)],[12])
+        c.ui.tap_control('pattern_note_octave_reset') # Return the displayed note range to the root page.
+        hold('pattern_note_octave_up',duration,label=='after',interrupt=label=='cancelled')
+        c.ui.tap_control('pattern_note_degree',(4,6));c.ui.expect_leds({('pattern_note_degree',(4,6)):'active'})
         c.playback(baseline+[(1,[144,pitch,97])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='note',boundary=label,pitch=pitch,passed=True))
-    c.tap(5,8) # Velocity editor; the fourth note now remains B4.
+    c.ui.pattern_editor(view='velocity',from_view='note') # The fourth note now remains B4.
     for label,duration,velocity in [('before',before,117),('after',after,58),('cancelled',0,127)]:
-        editor_range_hold(c,15,8) # Highest velocity range, independent of old offset.
-        hold(16,duration,label=='after',interrupt=label=='cancelled')
-        c.tap(4,1);c.led_values([(4,1)],[12])
+        editor_range_hold(c,'pattern_velocity_range_reset') # Highest velocity range, independent of old offset.
+        hold('pattern_velocity_range_down',duration,label=='after',interrupt=label=='cancelled')
+        c.ui.tap_control('pattern_velocity_level',(4,7));c.ui.expect_leds({('pattern_velocity_level',(4,7)):'active'})
         c.playback(baseline+[(1,[144,71,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='editor-hold-boundary',editor='velocity',boundary=label,velocity=velocity,passed=True))
-
-
-def pattern_grid_viewer(c):
-    import base64
-    from frame_oracle import render
-    # Independent layout contract:16x4 sequencer dots,7px spacing,35px font.
-    # Levels come only from the authored phrase and declared channel range.
-    def viewer(channel,levels,label):
-        assert len(levels)==64
-        dots=render([(-3+x*7,-2+y*7,levels[(y-4)*16+x-1],'.') for y in range(4,8) for x in range(1,17)],font_size=35,antialias=1)
-        # Official norns core/script.lua resets screen.aa(0) on script load.
-        title=render([(0,9,10,'Channel '+str(channel)+' grid viewer')],antialias=1)
-        def matches(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return (all(actual[(y*128+x)*4+k]==dots[(y*128+x)*4+k] for y in range(20,57) for x in range(120) for k in range(3))
-              and all(actual[(y*128+x)*4+k]==title[(y*128+x)*4+k] for y in range(2,11) for x in range(114) for k in range(3)))
-        row=dict(kind='grid-viewer-frame',channel=channel,label=label,expected_levels=levels,passed=False)
-        c.results.append(row);c.wait(matches);row['passed']=True
-    baseline=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    viewer(1,[15]*4+[2]*60,'wide-range-positive-oracle')
-    c.tap(3,8);c.hold_tap((1,4),(4,4));c.tap(5,8)
-    viewer(1,[15]*4+[0]*60,'shortened-range-clears-outside')
-    c.playback(baseline,cycles=2,timeout=3,settle_seconds=4/3-.1)
-    for channel in range(2,17):
-        c.enc(2,1);viewer(channel,[2]*64,'unassigned-channel')
-    c.enc(2,1);viewer(16,[2]*64,'upper-channel-clamp')
-    c.enc(2,-15);viewer(1,[15]*4+[0]*60,'return-to-short-channel')
-    c.enc(2,-1);viewer(1,[15]*4+[0]*60,'lower-channel-clamp')
-    # Note and velocity editors have separate viewer selections but share the
-    # same drawing/cache component. Page changes must not leak the previous view.
-    c.tap(5,8);viewer(1,[15]*4+[0]*60,'note-page-short-channel')
-    c.enc(2,15);viewer(16,[2]*64,'note-page-channel16')
-    c.tap(5,8);viewer(1,[15]*4+[0]*60,'velocity-page-short-channel')
-    c.enc(2,15);viewer(16,[2]*64,'velocity-page-channel16')
-    c.tap(5,8);viewer(1,[15]*4+[0]*60,'trig-page-retains-own-selection')
-    c.tap(5,8);viewer(16,[2]*64,'note-page-retains-own-selection')
-    c.tap(3,8);c.tap(5,8);viewer(1,[15]*4+[0]*60,'return-from-channel-page')
-    # Viewer selection is independent of the channel's pattern data and route.
-    c.led_values([((s-1)%16+1,(s-1)//16+4) for s in range(1,65)],[15]*4+[2]*60)
-    c.playback(baseline,cycles=2,timeout=3,settle_seconds=4/3-.1)
 
 
 def inactive_note_priority(c,source_slot=1):
     assert source_slot in (1,3)
     def silence(label):
-        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(1.5);c.tap(1,8)
+        before=c.snapshot()['midi_count'];c.ui.play();c.elapse(1.5);c.ui.stop()
         state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
         assert not notes and not state['midi_capture']['outstanding'],notes
         c.results.append(dict(kind='inactive-note-silence',phase=label,seconds=1.5,passed=True))
     def phrase(pitch,velocity,label):
         c.playback([(1,[144,pitch,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
         c.results.append(dict(kind='inactive-note-priority',source_slot=source_slot,phase=label,pitch=pitch,velocity=velocity,passed=True))
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(source_slot,1);c.tap(5,8);c.tap(1,3) # G4 on an inactive step.
-    c.led_values([(1,3)],[12]);c.tap(3,8)
-    if source_slot!=1:c.tap(1,2);c.tap(source_slot,2)
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
+    for x in range(1,5):c.ui.tap_step(x)
+    c.ui.tap_control('pattern_select',source_slot);c.ui.pattern_editor(view='note',from_view='trigger');c.ui.tap_control('pattern_note_degree',(1,4)) # G4 on an inactive step.
+    c.ui.expect_leds({("pattern_note_degree",(1,4)):"active"});c.ui.tap_control('channel_editor')
+    if source_slot!=1:c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',source_slot)
     silence('authored-inactive-pattern')
-    c.tap(5,8);c.tap(2,1);c.tap(1,4);c.tap(3,8)
-    c.tap(source_slot,2);c.tap(2,2)
+    c.ui.pattern_editor(view='trigger');c.ui.tap_control('pattern_select',2);c.ui.tap_step(1);c.ui.tap_control('channel_editor')
+    c.ui.tap_control('pattern_slot',source_slot);c.ui.tap_control('pattern_slot',2)
     phrase(60,100,'rhythm-pattern-alone')
-    c.hold_tap((15,8),(source_slot,2))
-    c.led_values([(source_slot,2),(2,2),(15,8)],[2,15,15])
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,source_slot)
+    c.ui.expect_leds({("pattern_slot",source_slot):"off",
+                      ("pattern_slot",2):"selected",
+                      ("note_merge_mode",None):"selected"})
     phrase(67,100,'unassigned-note-source')
-    c.tap(source_slot,2);phrase(67,100,'assigned-inactive-note-source')
-    c.tap(2,2);c.tap(5,8);c.tap(source_slot,1);c.tap(1,4);c.tap(3,8)
+    c.ui.tap_control('pattern_slot',source_slot);phrase(67,100,'assigned-inactive-note-source')
+    c.ui.tap_control('pattern_slot',2);c.ui.pattern_editor(view='trigger');c.ui.tap_control('pattern_select',source_slot);c.ui.tap_step(1);c.ui.tap_control('channel_editor')
     phrase(67,127 if source_slot==1 else 100,'later-trig-uses-authored-note')
-    c.tap(5,8);c.tap(1,4);c.tap(3,8);silence('trig-removed-note-retained')
+    c.ui.pattern_editor(view='trigger');c.ui.tap_step(1);c.ui.tap_control('channel_editor');silence('trig-removed-note-retained')
 
 
 def priority_field_isolation(c,field,source_slot):
     assert field in ('velocity','length') and source_slot in (1,3)
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(source_slot,1);c.tap(1,4);c.hold_tap((1,4),(3,4))
-    c.led_values([(1,4),(2,4),(3,4)],[15,5,5])
-    c.tap(5,8);c.tap(1,3) # Inactive source will hold G4, velocity107, length3.
-    c.tap(5,8);c.tap(1,3);c.tap(3,8);c.tap(5,8);c.tap(1,4)
-    c.led_values([(1,4),(2,4),(3,4)],[2,2,2])
-    c.tap(2,1);c.tap(1,4);c.tap(3,8);c.tap(1,2);c.tap(2,2)
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
+    for x in range(1,5):c.ui.tap_step(x)
+    c.ui.tap_control('pattern_select',source_slot);c.ui.tap_step(1);c.ui.set_range(1,3)
+    c.ui.expect_steps({1:"selected",2:"in_range",3:"in_range"})
+    c.ui.pattern_editor(view='note',from_view='trigger');c.ui.tap_control('pattern_note_degree',(1,4)) # Inactive source will hold G4, velocity107, length3.
+    c.ui.pattern_editor(view='velocity',from_view='note');c.ui.tap_control('pattern_velocity_level',(1,5));c.ui.tap_control('channel_editor');c.ui.pattern_editor(view='trigger');c.ui.tap_step(1)
+    c.ui.expect_steps({1:"off",2:"off",3:"off"})
+    c.ui.tap_control('pattern_select',2);c.ui.tap_step(1);c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',2)
     base=c.playback([(1,[144,60,100])],cycles=2,timeout=3,settle_seconds=4/3-.1)
     assert_durations(c,base,[1,1])
-    if field=='length':c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.hold_tap((16,8),(source_slot,2));c.led_values([(16,8)],[15])
-    finally:
-        if field=='length':c.action(type='key',n=1,state=0)
+    if field=='length':
+        with c.ui.hold_keys(1):
+            c.elapse(.3);c.ui.hold_control_tap('pattern_length_merge_mode','pattern_slot',None,source_slot);c.ui.expect_leds({("pattern_length_merge_mode",None):"selected"})
+    else:c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',None,source_slot);c.ui.expect_leds({("velocity_merge_mode",None):"selected"})
     velocity=107 if field=='velocity' else 100
     length=3 if field=='length' else 1
     notes=c.playback([(1,[144,60,velocity])],cycles=2,timeout=3,settle_seconds=4/3-.1)
     assert_durations(c,notes,[length,length])
     # The same physical button addresses velocity normally and length with K1.
     # Selecting one priority source must preserve the other merge mode.
-    if field=='velocity':c.action(type='key',n=1,state=1);c.elapse(.3)
-    try:c.led_values([(16,8)],[2])
-    finally:
-        if field=='velocity':c.action(type='key',n=1,state=0)
+    if field=='velocity':
+        with c.ui.hold_keys(1):
+            c.elapse(.3);c.ui.expect_leds({("pattern_length_merge_mode",None):"off"})
+    else:c.ui.expect_leds({("velocity_merge_mode",None):"off"})
     c.results.append(dict(kind='priority-field-isolation',field=field,source_slot=source_slot,pitch=60,velocity=velocity,length_steps=length,passed=True))
 
 
-def inactive_note_positions(c):
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(3,1);c.tap(5,8)
-    pitches=[60,62,64,65,67,69,71]
-    cells=[((s-1)%16+1,(s-1)//16+4) for s in range(1,65)]
-    for page in range(4):
-        c.tap(9+page,8)
-        selections=[(x,7-((page*16+x-1)%7)) for x in range(1,17)]
-        for cell in selections:c.tap(*cell)
-        # Characterisation, not manual text: selected pattern 3 blinks on row 1.
-        # A selected note at that cell is 11/13; all other selected notes stay 12.
-        steady=[cell for cell in selections if cell != (3,1)]
-        c.led_values(steady,[12]*len(steady))
-        if (3,1) in selections:
-            state=c.wait(lambda state: state['grid'][2] in (11,13))
-            c.results.append(dict(kind='selected-note-pattern-blink',cell=[3,1],
-                                  allowed=[11,13],actual=state['grid'][2],passed=True))
-    c.tap(3,8);c.tap(1,2);c.tap(3,2)
-    def silence(label):
-        c.led_values(cells,[2]*64)
-        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(64/3+.1);c.tap(1,8)
-        state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
-        assert not notes and not state['midi_capture']['outstanding'],notes
-        c.results.append(dict(kind='inactive-position-silence',phase=label,steps=64,complete_cycles=2,passed=True))
-    def phrase(label):
-        expected=[(1,[144,pitches[(s-1)%7],100]) for s in range(1,65)]
-        notes=c.playback(expected,cycles=2,timeout=4,settle_seconds=64/3-.1)
-        assert_durations(c,notes,[1]*128)
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        errors=[(b[field]-a[field])/1e9-1/6 for a,b in zip(notes,notes[1:])]
-        assert len(errors)>=128 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
-        c.results.append(dict(kind='inactive-position-playback',phase=label,steps=64,complete_cycles=2,max_spacing_error_seconds=max(abs(x) for x in errors),passed=True))
-    silence('all64-authored-without-trigs')
-    c.tap(5,8);c.tap(2,1)
-    for cell in cells:c.tap(*cell)
-    c.led_values(cells,[15]*64);c.tap(3,8);c.tap(3,2);c.tap(2,2)
-    c.hold_tap((15,8),(3,2));c.led_values([(3,2),(2,2),(15,8)],[2,15,15])
-    phrase('unassigned-priority-source-all64')
-    c.tap(3,2);phrase('assigned-inactive-priority-source-all64')
-    c.tap(2,2);c.tap(5,8);c.tap(3,1)
-    for cell in cells:c.tap(*cell)
-    c.led_values(cells,[15]*64);c.tap(3,8);phrase('all64-later-activated')
-    c.tap(5,8)
-    for cell in cells:c.tap(*cell)
-    c.tap(3,8);silence('all64-trigs-removed-again')
-
-
 def all_note_priorities(c):
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
+    c.ui.configure();c.ui.pattern_editor(view='trigger')
+    for x in range(1,5):c.ui.tap_step(x)
     pitches=[60,62,64,65,67,69,71]
     # Two base-seven digits make a distinct musical fingerprint for each slot.
     for slot in range(1,17):
-        c.tap(slot,1);c.tap(5,8)
-        c.tap(1,7-(slot-1)%7);c.tap(2,7-(slot-1)//7)
-        c.tap(3,8);c.tap(5,8)
-    c.tap(2,1);c.tap(1,4);c.tap(2,4);c.tap(3,8)
-    c.tap(1,2);c.tap(2,2);rhythm=2
+        c.ui.tap_control('pattern_select',slot);c.ui.tap_control('pattern_editor')
+        c.ui.tap_control('pattern_note_degree',(1,(slot-1)%7));c.ui.tap_control('pattern_note_degree',(2,(slot-1)//7))
+        c.ui.tap_control('channel_editor');c.ui.tap_control('pattern_editor')
+    c.ui.tap_control('pattern_select',2);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3));c.ui.tap_control('channel_editor')
+    c.ui.tap_control('pattern_slot',1);c.ui.tap_control('pattern_slot',2);rhythm=2
     def play(slot,assigned):
         velocities=[127,117] if rhythm==1 else [100,100]
         expected=[(1,[144,pitches[(slot-1)%7],velocities[0]]),(1,[144,pitches[(slot-1)//7],velocities[1]])]
@@ -747,27 +729,27 @@ def all_note_priorities(c):
     for slot in range(1,17):
         wanted_rhythm=1 if slot==2 else 2
         if rhythm!=wanted_rhythm:
-            c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
-            c.tap(5,8);c.tap(rhythm,1);c.tap(1,4);c.tap(2,4)
-            c.tap(wanted_rhythm,1);c.tap(1,4);c.tap(2,4);c.tap(3,8)
-            c.led_values([(rhythm,2),(wanted_rhythm,2)],[15,2])
-            c.tap(rhythm,2);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,2])
-            c.tap(wanted_rhythm,2);c.led_values([(rhythm,2),(wanted_rhythm,2)],[2,15]);rhythm=wanted_rhythm
-        c.hold_tap((15,8),(slot,2))
-        c.led_values([(slot,2),(rhythm,2),(15,8)],[2,15,15]);play(slot,False)
-        c.tap(slot,2);c.led_values([(slot,2),(rhythm,2)],[15,15]);play(slot,True)
-        c.tap(slot,2)
+            c.ui.expect_leds({("pattern_slot",rhythm):"selected",("pattern_slot",wanted_rhythm):"off"})
+            c.ui.tap_control('pattern_editor');c.ui.tap_control('pattern_select',rhythm);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3))
+            c.ui.tap_control('pattern_select',wanted_rhythm);c.ui.tap_control('pattern_note_degree',(1,3));c.ui.tap_control('pattern_note_degree',(2,3));c.ui.tap_control('channel_editor')
+            c.ui.expect_leds({("pattern_slot",rhythm):"selected",("pattern_slot",wanted_rhythm):"off"})
+            c.ui.tap_control('pattern_slot',rhythm);c.ui.expect_leds({("pattern_slot",rhythm):"off",("pattern_slot",wanted_rhythm):"off"})
+            c.ui.tap_control('pattern_slot',wanted_rhythm);c.ui.expect_leds({("pattern_slot",rhythm):"off",("pattern_slot",wanted_rhythm):"selected"});rhythm=wanted_rhythm
+        c.ui.hold_control_tap('note_merge_mode','pattern_slot',None,slot)
+        c.ui.expect_leds({("pattern_slot",slot):"off",("pattern_slot",rhythm):"selected",("note_merge_mode",None):"selected"});play(slot,False)
+        c.ui.tap_control('pattern_slot',slot);c.ui.expect_leds({("pattern_slot",slot):"selected",("pattern_slot",rhythm):"selected"});play(slot,True)
+        c.ui.tap_control('pattern_slot',slot)
 
 
 def transpose_global_domain(c):
     """Walk every value exposed by the global transpose fader."""
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure(); c.tap(4,8)
-    c.tap(9,8)  # Direct inner press selects the left endpoint, -12.
+    c.configure(); c.ui.scale_editor()
+    c.ui.tap_control("global_transpose_minimum")  # Direct inner press selects -12.
     values=list(range(-12,13)); velocities=(127,117,107,97)
     for index,value in enumerate(values):
-        if index: c.tap(16,8)  # Repeated right endpoint presses advance by one.
+        if index: c.ui.tap_control("global_transpose_increment")  # Advance one semitone.
         pitches=tuple(base+value for base in (60,62,64,65));before=c.snapshot()
         if index==0:
             startup=[(3,[192,0]),(3,[193,0]),(3,[194,0]),(3,[195,64]),(3,[196,0]),
@@ -775,12 +757,12 @@ def transpose_global_domain(c):
             assert before['midi_count']==10
             assert [(e['port'],e['bytes']) for e in before['midi']]==startup
         capture=MidiWindow(before['midi_count'])
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.control_edge("play_stop", True);c.ui.control_edge("play_stop", False)
         c.elapse(4/3-.1)
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=3)
-        c.action(type='grid',x=1,y=8,state=1)
+        c.ui.control_edge("play_stop", True)
         stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=0)
+        c.ui.control_edge("play_stop", False)
         stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         notes=capture.note_ons();assert 9<=len(notes)<=10,('Observation overshoot',len(notes))
@@ -814,31 +796,33 @@ def transpose_song_copy_isolation(c):
     """Copied song transpose remains isolated and alternates at live boundaries."""
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure();c.tap(4,8);c.hold_tap((1,4),(4,4))
+    c.configure();c.ui.scale_editor();c.ui.set_range(1,4)
     def set_global(value):
-        c.tap(9,8)
-        for _ in range(value+12):c.tap(16,8)
+        c.ui.tap_control("global_transpose_minimum")
+        for _ in range(value+12):c.ui.tap_control("global_transpose_increment")
     set_global(5)
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(2,1);c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.song_editor();c.ui.hold_control_tap("channel", "channel", 1, 2)
+    c.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
+    c.ui.select_channel(2)
+    c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-    c.tap(3,8);c.tap(4,8);set_global(-7)
-    c.tap(6,8);c.led_values([(1,1),(2,1)],[7,15])
-    set_mosaic_options(c,[('Song mode',True)])
-    c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
+    c.ui.menu("channel_editor");c.ui.scale_editor();set_global(-7)
+    c.ui.song_editor();c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
+    c.ui.set_mosaic_option_keys([("song_mode", True)])
+    c.ui.select_channel(1);c.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
     capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge("play_stop", True);c.ui.control_edge("play_stop", False)
     # The note lane emits every24 pulses.  Song slots advance on the full
     # 1,536-pulse global cycle, so this four-step phrase repeats16 times.
     c.elapse(10.8);capture.extend(c.snapshot())
     assert len(capture.note_ons())>=65
-    c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.elapse(10.8);capture.extend(c.snapshot())
     assert len(capture.note_ons())>=129
-    c.led_values([(1,1),(2,1)],[15,7])
-    c.action(type='grid',x=1,y=8,state=1)
+    c.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
+    c.ui.control_edge("play_stop", True)
     stop_lower=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge("play_stop", False)
     stop_upper=c.logical_ns if c.clock_mode=='controlled-experimental' else __import__('time').monotonic_ns()
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
     notes=capture.note_ons();assert 129<=len(notes)<=136,('Observation overshoot',len(notes))
@@ -878,28 +862,33 @@ def transpose_song_copy_isolation(c):
 
 def transpose_song_persistence(c):
     """Independent copied song transposes survive autosave and cold reload."""
-    c.configure();c.tap(4,8)
+    c.configure();c.ui.scale_editor()
     def set_global(driver,value):
-        driver.tap(9,8)
-        for _ in range(value+12):driver.tap(16,8)
+        driver.ui.tap_control("global_transpose_minimum")
+        for _ in range(value+12):driver.ui.tap_control("global_transpose_increment")
     set_global(c,5)
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1)
-    c.led_values([(1,1),(2,1)],[7,15])
+    c.ui.song_editor();c.ui.hold_control_tap("channel", "channel", 1, 2)
+    c.ui.select_channel(2)
+    c.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
     c.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-    c.tap(3,8);c.tap(4,8);set_global(c,-7)
+    c.ui.menu("channel_editor");c.ui.scale_editor();set_global(c,-7)
     saved=c.data_directory/'autosave.ptn';pset=c.data_directory/'autosave.pset'
     c.elapse(59);assert not saved.exists() and not pset.exists()
     c.elapse(2);c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)
     hashes={path.name:digest(path) for path in (saved,pset)}
+    import shutil
+    capture=c.out/'generated-project';capture.mkdir()
+    shutil.copy2(saved,capture/'autosave.ptn')
     c.results.append(dict(kind='transpose-autosave',files=hashes,passed=True))
     c.finish()
     out=c.out/'reloaded';out.mkdir()
     loaded=Driver(out,project_seed=c.data_directory,**c.launch_options)
     try:
-        loaded.tap(6,8);loaded.led_values([(1,1),(2,1)],[7,15])
-        loaded.tap(1,1);loaded.led_values([(1,1),(2,1)],[15,7])
+        loaded.ui.song_editor();loaded.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
+        loaded.ui.select_channel(1);loaded.ui.expect_leds({("channel",1):"selected",("channel",2):"alternate"})
         loaded.playback([(1,[144,n,v]) for n,v in ((65,127),(67,117),(69,107),(70,97))],cycles=2)
-        loaded.tap(6,8);loaded.tap(2,1);loaded.led_values([(1,1),(2,1)],[7,15])
+        loaded.ui.song_editor();loaded.ui.select_channel(2)
+        loaded.ui.expect_leds({("channel",1):"alternate",("channel",2):"selected"})
         loaded.playback([(1,[144,n,v]) for n,v in ((53,127),(55,117),(57,107),(58,97))],cycles=2)
         loaded.results.append(dict(kind='transpose-cold-reload',source_transpose=5,
                                    copy_transpose=-7,source_and_copy_played=True,passed=True))
@@ -907,81 +896,20 @@ def transpose_song_persistence(c):
         loaded.finish()
 
 
-def transpose_global_live_edit(c):
-    """Live global edits affect the next onset without cutting the held note."""
-    import time
-    from midi_window import MidiWindow
-    from note_accounting import note_pairs
-    c.configure();c.tap(4,8)
-    capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=1)
-    c.elapse(.04)
-    def now():
-        return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
-    edit1_lower=now();c.action(type='grid',x=16,y=8,state=1);c.action(type='grid',x=16,y=8,state=0);edit1_upper=now()
-    c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=5)
-    c.elapse(.04)
-    before_second=len(capture.note_ons());assert 5<=before_second<=6
-    edit2_lower=now();c.action(type='grid',x=9,y=8,state=1);c.action(type='grid',x=9,y=8,state=0);edit2_upper=now()
-    c.elapse(1);capture.extend(c.snapshot())
-    c.action(type='grid',x=1,y=8,state=1)
-    stop_lower=now();c.action(type='grid',x=1,y=8,state=0);stop_upper=now()
-    c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
-    notes=capture.note_ons();assert len(notes)>=10
-    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-    edits=((edit1_lower,edit1_upper,1),(edit2_lower,edit2_upper,-12))
-    transposes=[]
-    for note in notes:
-        stamp=note[field]
-        assert not any(lower<=stamp<=upper for lower,upper,value in edits),'Onset occurred inside edit-observation window'
-        transposes.append(0 if stamp<edit1_lower else 1 if stamp<edit2_lower else -12)
-    assert 0 in transposes and 1 in transposes and -12 in transposes
-    bases=(60,62,64,65);velocities=(127,117,107,97)
-    expected=[(1,[144,bases[i%4]+value,velocities[i%4]]) for i,value in enumerate(transposes)]
-    assert [(e['port'],e['bytes']) for e in notes]==expected
-    pairs=note_pairs(capture.events);assert len(pairs)==len(notes) and [on for on,off in pairs]==notes
-    assert all((off['port'],off['bytes'])==(1,[128,on['bytes'][1],on['bytes'][2]]) for on,off in pairs)
-    assert_durations(c,notes[:-1],[1]*(len(notes)-1),events=capture.events)
-    for lower,upper,value in edits:
-        candidates=[pair for pair in pairs if pair[0][field]<lower<pair[1][field]]
-        assert len(candidates)==1 and candidates[0][1][field]>upper
-    nonnotes=[e for e in capture.events if e['bytes'][0]&240 not in (128,144)]
-    assert [(e['port'],e['bytes']) for e in nonnotes[:3]]==[(1,[250]),(2,[250]),(3,[250])]
-    assert [(e['port'],e['bytes']) for e in nonnotes[-3:]]==[(1,[252]),(2,[252]),(3,[252])]
-    programs=nonnotes[3:-3];assert len(programs)==4*len(notes)
-    wanted_programs=[]
-    for value in transposes:wanted_programs.extend(([192,0],[193,0],[194,3],[195,value+64]))
-    assert [(e['port'],e['bytes']) for e in programs]==[(3,b) for b in wanted_programs]
-    for i,note in enumerate(notes):
-        group=programs[4*i:4*i+4]
-        assert group[-1]['index']<note['index'] and (i==0 or group[0]['index']>notes[i-1]['index'])
-        deltas=[note[field]-e[field] for e in group]
-        assert (deltas==[0]*4 if c.clock_mode=='controlled-experimental' else all(0<=d<=2_000_000 for d in deltas))
-    assert len(capture.events)==6*len(notes)+6
-    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    errors=[(note[field]-notes[0][field])/1e9-i/6 for i,note in enumerate(notes)]
-    assert max(abs(error) for error in errors)<=tolerance,errors
-    assert stop_lower<=pairs[-1][1][field]<=stop_upper+int(tolerance*1e9)
-    c.results.append(dict(kind='transpose-global-live-edit',onsets=len(notes),releases=len(pairs),
-                          transposes=transposes,second_edit_after_onsets=before_second,
-                          maximum_phase_error_seconds=max(abs(error) for error in errors),passed=True))
-
-
 def transpose_lock_domain(c):
     """Walk every transpose value exposed by the native scale-page fader."""
-    c.configure(); c.tap(4,8)
-    c.tap(13,8)  # Global +4 distinguishes an absent lock from explicit zero.
+    c.configure(); c.ui.scale_editor()
+    c.ui.tap_control("global_transpose_plus_four")  # Global +4 distinguishes an absent lock from explicit zero.
     # Bound the step-1 lock with an explicit zero lock at step 2 so its
     # persistence cannot hide which authored step supplied each pitch.
-    c.hold_tap((2,4),(12,8))
+    c.ui.hold_control_tap("step", "step_transpose_zero", 2)
     values = list(range(-12,13))
     # Direct inner press selects -12, then the right endpoint advances one
     # semitone per physical press while the step remains the first operand.
-    c.hold_tap((1,4),(9,8))
+    c.ui.hold_control_tap("step", "step_transpose_minimum", 1)
     for index, value in enumerate(values):
         if index:
-            c.hold_tap((1,4),(16,8))
+            c.ui.hold_control_tap("step", "step_transpose_increment", 1)
         expected = [(1,[144,60+value,127]), (1,[144,62,117]),
                     (1,[144,64,107]), (1,[144,65,97])]
         notes = c.playback(expected, cycles=2, timeout=3, settle_seconds=4/3-.1)
@@ -996,9 +924,7 @@ def transpose_lock_domain(c):
                               passed=True))
     # K2 while holding step1 restores global +4 there. Step2 must remain
     # explicitly zero and keep the remaining phrase untransposed.
-    c.action(type='grid',x=1,y=4,state=1)
-    try: c.key(2)
-    finally: c.action(type='grid',x=1,y=4,state=0)
+    with c.ui.hold_step(1): c.ui.press_key(2)
     restored = (64,62,64,65)
     notes = c.playback([(1,[144,p,v]) for p,v in zip(restored,(127,117,107,97))],
                        cycles=2, timeout=3, settle_seconds=4/3-.1)
@@ -1010,15 +936,16 @@ def transpose_lock_domain(c):
 def transpose_scale_octave_composition(c):
     """Compose channel octave, saved scale transpose and persistent step locks."""
     c.configure()
-    c.tap(11,8)  # Channel octave +1.
-    c.tap(4,8)
-    c.tap(13,8)  # Song/global transpose +4; locks below must override it.
+    c.ui.tap_control("channel_octave", 1)  # Channel octave +1.
+    c.ui.scale_editor()
+    c.ui.tap_control("global_transpose_plus_four")  # Song/global transpose +4; locks below must override it.
     # Native scale editor: Quantizer -> Roman -> Transpose, then save +3.
-    c.enc(2,2); c.enc(3,3); c.key(3)
+    c.ui.select_field("scale_transpose", offset=2)
+    c.ui.set_value(3); c.ui.press_key(3)
     # Step locks are persistent until replacement and reset at channel wrap.
-    c.hold_tap((1,4),(9,8))   # -12
-    c.hold_tap((2,4),(12,8))  # explicit 0
-    c.hold_tap((3,4),(15,8))  # +12, persists through step4
+    c.ui.hold_control_tap("step", "step_transpose_minimum", 1)   # -12
+    c.ui.hold_control_tap("step", "step_transpose_zero", 2)  # explicit 0
+    c.ui.hold_control_tap("step", "step_transpose_plus_twelve", 3)  # +12, persists through step4
     pitches = (63,77,91,92)
     notes = c.playback([(1,[144,p,v]) for p,v in zip(pitches,(127,117,107,97))],
                        cycles=3, timeout=5, settle_seconds=2-.1)
@@ -1038,11 +965,11 @@ def transpose_lock_live_clear(c):
     """Clear a future wrap lock while another explicitly-zero step sounds."""
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure(); c.tap(4,8); c.tap(13,8)  # Global +4.
-    c.hold_tap((1,4),(9,8))   # Step1 -12.
-    c.hold_tap((2,4),(12,8))  # Step2 explicit zero bounds persistence.
+    c.configure(); c.ui.scale_editor(); c.ui.tap_control("global_transpose_plus_four")  # Global +4.
+    c.ui.hold_control_tap("step", "step_transpose_minimum", 1)   # Step1 -12.
+    c.ui.hold_control_tap("step", "step_transpose_zero", 2)  # Step2 explicit zero bounds persistence.
     capture = MidiWindow(c.snapshot()['midi_count'])
-    c.tap(1,8)
+    c.ui.play()
     def onsets(state):
         capture.extend(state)
         return capture.note_ons()
@@ -1052,12 +979,10 @@ def transpose_lock_live_clear(c):
                        [144,48,127],[144,62,117]]
     assert [event['bytes'] for event in before[:6]] == expected_before, before
     clear_lower = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
-    c.action(type='grid',x=1,y=4,state=1)
-    try: c.key(2)
-    finally: c.action(type='grid',x=1,y=4,state=0)
+    with c.ui.hold_step(1): c.ui.press_key(2)
     clear_upper = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
     c.wait(lambda state: len(onsets(state)) >= 11, timeout=3)
-    c.tap(1,8)
+    c.ui.stop()
     c.wait(lambda state: capture.extend(state) and not state['midi_capture']['outstanding'])
     notes = capture.note_ons()
     assert 11 <= len(notes) <= 12, ('Unexpected complete onset count', len(notes), notes)
@@ -1105,52 +1030,48 @@ def octave_phrase(c,octaves,phase):
     c.results.append(dict(kind='octave-phrase',phase=phase,octaves=octaves,passed=True))
 
 def channel_octave_controls(c):
-    c.configure()
+    ui=c.ui;ui.configure()
     for octave in (-2,-1,0,1,2,0,0):
-        c.tap(octave+10,8)
-        c.led_values([(x,8) for x in range(8,13)],[15 if x==octave+10 else 2 for x in range(8,13)])
+        ui.set_channel_octave(octave)
+        ui.expect_channel_octave(octave)
         octave_phrase(c,[octave]*4,'global-'+str(octave))
-    c.tap(5,8);c.tap(3,8)
-    c.led_values([(x,8) for x in range(8,13)],[2,2,15,2,2])
+    ui.pattern_editor();ui.channel_editor()
+    ui.expect_channel_octave(0)
     octave_phrase(c,[0]*4,'center-retained-after-navigation')
 
 def octave_lock_precedence(c):
-    c.configure();c.enc(1,-3)
+    ui=c.ui;ui.configure();ui.turn(1,-3)
     def held_feedback(step,octave):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.led_values([(x,8) for x in range(8,13)],[15 if x==octave+10 else 2 for x in range(8,13)])
-        finally:c.action(type='grid',x=step,y=4,state=0)
+        with ui.hold_step(step):ui.expect_channel_octave(octave)
     for global_octave in range(-2,3):
-        c.tap(global_octave+10,8)
+        ui.set_channel_octave(global_octave)
         for locked_octave in range(-2,3):
-            c.hold_tap((2,4),(locked_octave+10,8));held_feedback(2,locked_octave)
+            ui.set_step_octave(2,locked_octave);held_feedback(2,locked_octave)
             octave_phrase(c,[global_octave,locked_octave,global_octave,global_octave],'override-%s-%s'%(global_octave,locked_octave))
-            c.action(type='grid',x=2,y=4,state=1)
-            try:c.key(2)
-            finally:c.action(type='grid',x=2,y=4,state=0)
+            with ui.hold_step(2):ui.press_key(2)
             held_feedback(2,global_octave)
             octave_phrase(c,[global_octave]*4,'cleared-%s-%s'%(global_octave,locked_octave))
-    c.tap(-2+10,8)
+    ui.set_channel_octave(-2)
     # Repeating the same lock selector removes it, including explicit zero.
     for step in range(1,5):
-        c.hold_tap((step,4),(10,8));held_feedback(step,0)
+        ui.set_step_octave(step,0);held_feedback(step,0)
         expected=[-2]*4;expected[step-1]=0
         octave_phrase(c,expected,'zero-lock-step-'+str(step))
-        c.hold_tap((step,4),(10,8));held_feedback(step,-2)
+        ui.set_step_octave(step,0);held_feedback(step,-2)
         octave_phrase(c,[-2]*4,'toggle-clear-step-'+str(step))
 
 
 def octave_all_positions(c):
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
+    ui=c.ui;ui.configure();ui.set_range(1,64);ui.pattern_editor()
     cells=[(i%16+1,i//16+4) for i in range(64)]
-    for cell in cells[4:]:c.tap(*cell)
-    c.tap(5,8)
+    for cell in cells[4:]:ui.tap_step((cell[1]-4)*16+cell[0])
+    ui.pattern_editor()
     for page in range(4):
-        c.tap(9+page,8)
-        for x in range(1,17):c.tap(x,7)
-    c.tap(3,8);c.enc(1,-3)
+        ui.select_pattern_note_page(page+1)
+        for x in range(1,17):ui.tap_pattern_note_fader(x,7)
+    ui.channel_editor();ui.turn(1,-3)
     octaves=[i%5-2 for i in range(64)]
-    for cell,octave in zip(cells,octaves):c.hold_tap(cell,(10+octave,8))
+    for index,octave in enumerate(octaves,1):ui.set_step_octave(index,octave)
     velocities=[127,117,107,97]+[100]*60
     def play(expected_octaves,phase):
         expected=[(1,[144,60+12*octave,velocity]) for octave,velocity in zip(expected_octaves,velocities)]
@@ -1161,93 +1082,30 @@ def octave_all_positions(c):
         assert len(errors)>=128 and all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),errors
         c.results.append(dict(kind='octave-position-playback',phase=phase,octaves=expected_octaves,passed=True))
     for global_octave in (-2,2):
-        c.tap(10+global_octave,8)
-        for cell,octave in zip(cells,octaves):
-            c.action(type='grid',x=cell[0],y=cell[1],state=1)
-            try:c.led_values([(x,8) for x in range(8,13)],[15 if x==10+octave else 2 for x in range(8,13)])
-            finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+        ui.set_channel_octave(global_octave)
+        for index,octave in enumerate(octaves,1):
+            with ui.hold_step(index):ui.expect_channel_octave(octave)
         play(octaves,'all64-override-global-'+str(global_octave))
-    c.action(type='key',n=1,state=1)
-    try:c.elapse(.3);c.key(2)
-    finally:c.action(type='key',n=1,state=0)
-    for cell in cells:
-        c.action(type='grid',x=cell[0],y=cell[1],state=1)
-        try:c.led_values([(x,8) for x in range(8,13)],[2,2,2,2,15])
-        finally:c.action(type='grid',x=cell[0],y=cell[1],state=0)
+    with ui.hold_keys(1):
+        c.elapse(.3);ui.press_key(2)
+    for index in range(1,65):
+        with ui.hold_step(index):ui.expect_channel_octave(2)
     play([2]*64,'all64-cleared-to-global')
 
 
-def integral_clock_divisions(c,slow=False):
-    from fractions import Fraction
-    from midi_window import MidiWindow
-    from frame_oracle import header,matches
-    # Fixed public selector labels; expected seconds follow the musical ratio,
-    # never Mosaic's clock or lattice implementation.
-    labels=['x16','x12','x8','x6','x5.3','x5','x4','x3','x2.6','x2','x1.5','x1.3',
-      '/1','/1.5','/2','/2.6','/3','/4','/5','/5.3','/6','/7','/8','/9','/10','/11','/12','/13','/14','/15','/16',
-      '/17','/19','/21','/23','/24','/25','/27','/29','/32','/40','/48','/56','/64','/96','/101','/128']
-    c.configure();c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-    selected=13;tested=[]
-    for index,label in enumerate(labels,1):
-        number=Fraction(label[1:]);factor=1/number if label[0]=='x' else number
-        pulses=24*factor
-        if pulses.denominator!=1 or (factor>16)!=slow:continue
-        c.enc(3,selected-index);c.key(3);selected=index
-        expected=[(1,[144,n,v]) for n,v in zip([60,62,64,65],[127,117,107,97])]
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);capture.extend(c.snapshot())
-        remaining=float(8*factor/6)
-        # Public controlled advances are bounded to60s. Small chunks retain
-        # responsive clients and preserve that runtime limit in both lanes.
-        while remaining>0:
-            chunk=min(30,remaining);c.elapse(chunk);remaining-=chunk;capture.extend(c.snapshot())
-        c.wait(lambda state:len(capture.extend(state).note_ons())>=9,timeout=3)
-        notes=capture.note_ons()
-        assert [(m['port'],m['bytes']) for m in notes]==[expected[i%4] for i in range(len(notes))],label
-        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        errors=[(m[field]-notes[0][field])/1e9-float(i*factor/6) for i,m in enumerate(notes)]
-        assert all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),(label,errors)
-        assert_durations(c,notes,[float(factor)]*8,events=capture.events)
-        c.results.append(dict(kind='clock-division-phrase',label=label,pulses=int(pulses),period_seconds=float(factor/6),complete_cycles=2,onsets=len(notes),max_phase_error_seconds=max(abs(x) for x in errors),passed=True));tested.append(label)
-    assert len(tested)==(16 if slow else 24),tested
-
-
 def menu_option_row(c,label,value,top=22):
-    import base64
-    from frame_oracle import render
     # Native params draws the full name then the right-aligned value, without
-    # clearing their overlap. Assert the composite row, including both glyphs.
-    expected=render([(0,30,15,label),(None,30,15,value)])
-    indices=[(y*128+x)*4+k for y in range(top,32) for x in range(128) for k in range(3)]
-    def match(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[i]==expected[i] for i in indices)
-    c.wait(match);c.results.append(dict(kind='selected-menu-option-row',label=label,value=value,matched=True))
-
-def set_mosaic_options(c,options):
-    from frame_oracle import selected_line
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
-    c.enc(2,position);c.key(3)
-    for label,enabled in options:
-        # The preceding Parameter locks separator draws its rule at y22.
-        top=23 if label in ('Trigless locks','Snap note masks to scale','Map scale to white keys') else 22
-        c.enc(2,-60)
-        for attempt in range(40):
-            if selected_line(c.snapshot(),label,top=top):break
-            c.enc(2,1)
-        else:raise AssertionError('Required Mosaic option not reached: '+label)
-        c.enc(3,3 if enabled else -3);menu_option_row(c,label,'On' if enabled else 'Off',top=top)
-        c.results.append(dict(kind='mosaic-option-input',label=label,enabled=enabled))
-    c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
+    # clearing their overlap. The UI layer retains that composite row oracle.
+    c.ui.expect_menu_option_row(label,value,top=top)
 
 def repeated_pattern_reset_policy(c,verify_pending=False):
     from midi_window import MidiWindow
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
+    c.ui.configure();c.ui.set_range(1,3)
+    c.ui.channel_page('clock_mods','midi_config');c.ui.turn(3,-11);c.ui.press_key(3)
     for song_on,transition_reset,repeat_reset in ((True,False,False),(True,True,False),(True,False,True),(True,True,True),(False,True,True)):
-        set_mosaic_options(c,[('Song mode',song_on),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(24);capture.extend(c.snapshot())
-        c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        c.ui.set_mosaic_options([('Song mode',song_on),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(24);capture.extend(c.snapshot())
+        c.ui.stop();c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         reset=song_on and repeat_reset
         def append_scheduled(expected,tick):
             origin=(tick//1536)*1536 if reset else 0
@@ -1278,28 +1136,29 @@ def repeated_pattern_reset_policy(c,verify_pending=False):
 def fractional_clock_continuity(c):
     from fractions import Fraction
     from midi_window import MidiWindow
-    from fractional_deadlines import check_segment, reconcile_note_stream
+    from fractional_deadlines import (check_segment, reconcile_note_stream,
+                                      result_input_evidence)
     from automation.input_origin import verified_input_origin
     import json
-    c.configure();c.tap(5,8);c.tap(5,8)
-    for x in range(1,5):c.tap(x,7)
-    c.tap(3,8);c.enc(1,-1)
-    set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
+    c.ui.configure();c.ui.pattern_editor();c.ui.pattern_editor()
+    for x in range(1,5):c.ui.tap_control('cell',(x,7))
+    c.ui.menu('channel_editor');c.ui.turn(1,-1)
+    c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
     ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
     selected=13;segments=[];trigger_action=dict(type='grid',x=1,y=8,state=0)
     for index,label,pulses in ratios:
-        c.enc(3,selected-index);c.key(3);selected=index
+        c.ui.turn(3,selected-index);c.ui.press_key(3);selected=index
         capture=MidiWindow(c.snapshot()['midi_count']);observation_start=len(c.observations)
         # Transport start reconstructs from final settings with one canonical preview.
         seed=Fraction(1,2)
-        c.action(type='grid',x=1,y=8,state=1)
-        logical_start=c.logical_ns;start_ack=c.action(**trigger_action)
+        c.ui.control_edge('play_stop',True)
+        logical_start=c.logical_ns;start_ack=c.ui.control_edge('play_stop',False)
         c.elapse(.06)
         for _ in range(90):
             c.elapse(.5);capture.extend(c.snapshot())
             if len(c.observations)>observation_start+2:del c.observations[observation_start+1:-1]
-        c.action(type='grid',x=1,y=8,state=1)
-        logical_stop=c.logical_ns;stop_ack=c.action(**trigger_action)
+        c.ui.control_edge('play_stop',True)
+        logical_stop=c.logical_ns;stop_ack=c.ui.control_edge('play_stop',False)
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         segments.append(dict(label=label,ratio=[pulses.numerator,pulses.denominator],preview_seed=[seed.numerator,seed.denominator],after=capture.after,cursor=capture.cursor,
             start_ack=start_ack,stop_ack=stop_ack,logical_start=logical_start,logical_stop=logical_stop,
@@ -1319,10 +1178,14 @@ def fractional_clock_continuity(c):
         assert len(submissions)==1
         return verified_input_origin(events,actions,session_id=c.runtime.id,action_id=ack['action_id'],
             expected_action=trigger_action,declared_origin_ns=submissions[0]['monotonic_ns'])
+    verified_inputs=[]
     try:
         c.results.append(reconcile_note_stream(events,segments,kind))
         for segment in segments:
-            start_evidence=input_origin(segment['start_ack']);stop_evidence=input_origin(segment['stop_ack'])
+            start_evidence=input_origin(segment['start_ack'])
+            verified_inputs.append(dict(label=segment['label'],edge='start',evidence=start_evidence))
+            stop_evidence=input_origin(segment['stop_ack'])
+            verified_inputs.append(dict(label=segment['label'],edge='stop',evidence=stop_evidence))
             origin=segment['logical_start'] if controlled else start_evidence['origin_ns']
             stop=segment['logical_stop'] if controlled else stop_evidence['origin_ns']
             applied=stop if controlled else stop_evidence['applied_ns']
@@ -1332,24 +1195,31 @@ def fractional_clock_continuity(c):
             report=check_segment(captured,Fraction(*segment['ratio']),origin,stop,applied,controlled=controlled,preview_seed=Fraction(*segment['preview_seed']))
             assert report['onsets']>=2*segment['ratio'][1]+1
             assert stop-origin>=45_000_000_000, 'Missing45-second timing population'
-            report.update(label=segment['label'],global_boundaries_crossed=4,start_input=start_evidence,stop_input=stop_evidence)
+            report.update(label=segment['label'],global_boundaries_crossed=4,
+                start_input=result_input_evidence(start_evidence,controlled),
+                stop_input=result_input_evidence(stop_evidence,controlled))
             c.results.append(report)
     finally:
+        (c.out/'fractional-clock-input-evidence.json').write_text(json.dumps(dict(
+            clock_mode=c.clock_mode,verified_inputs=verified_inputs),indent=2)+'\n')
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
 def song_transition_reset_policy(c,verify_pending=False):
     from midi_window import MidiWindow
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
+    c.ui.configure();c.ui.set_range(1,3)
+    c.ui.channel_page('clock_mods','midi_config');c.ui.turn(3,-11);c.ui.press_key(3)
+    c.ui.song_editor();c.ui.copy_slot((1,1),(2,1),control='cell')
+    c.ui.expect_leds({('cell',(1,1)):'selected',('cell',(2,1)):'alternate'})
+    c.ui.tap_control('cell',(2,1));c.ui.menu('channel_editor');c.ui.tap_control('shift_reset')
+    c.ui.song_editor();c.ui.tap_control('cell',(1,1))
     for transition_reset,repeat_reset in ((False,False),(True,False),(False,True),(True,True)):
-        set_mosaic_options(c,[('Song mode',True),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
-        c.tap(1,1);c.led_values([(1,1),(2,1)],[15,7])
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
-        c.elapse(10.8);capture.extend(c.snapshot());c.led_values([(1,1),(2,1)],[7,15])
-        c.elapse(10.8);capture.extend(c.snapshot());c.led_values([(1,1),(2,1)],[15,7])
-        c.elapse(1.4);capture.extend(c.snapshot());c.tap(1,8)
+        c.ui.set_mosaic_options([('Song mode',True),('Reset on song seq change',transition_reset),('Reset on pattern repeat',repeat_reset)])
+        c.ui.tap_control('cell',(1,1));c.ui.expect_leds({('cell',(1,1)):'selected',('cell',(2,1)):'alternate'})
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play()
+        c.elapse(10.8);capture.extend(c.snapshot());c.ui.expect_leds({('cell',(1,1)):'alternate',('cell',(2,1)):'selected'})
+        c.elapse(10.8);capture.extend(c.snapshot());c.ui.expect_leds({('cell',(1,1)):'selected',('cell',(2,1)):'alternate'})
+        c.elapse(1.4);capture.extend(c.snapshot());c.ui.stop()
         c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         # Preserve the existing reset predicate, including repeat reset on a
         # changed-pattern boundary; candidate0026 does not redefine that option.
@@ -1375,23 +1245,23 @@ def song_transition_reset_policy(c,verify_pending=False):
 def inactive_shuffle_transition(c,basis=False):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
-    c.configure();c.tap(5,8);c.tap(5,8)
-    for x in range(1,5):c.tap(x,7)
-    c.tap(3,8);c.enc(1,-1);c.enc(3,12);c.key(3)
-    set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',False)])
-    c.tap(6,8);c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8)
+    c.configure();c.ui.pattern_editor();c.ui.pattern_editor()
+    for step in range(49,53):c.ui.tap_step(step)
+    c.ui.channel_editor();c.ui.turn(1,-1);c.ui.turn(3,12);c.ui.press_key(3)
+    c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
+    c.ui.song_editor();c.ui.hold_control_tap('channel','channel',1,2);c.ui.select_channel(2);c.ui.channel_editor()
     # Set either stored Smooth feel or7 basis in Shuffle mode, then return
     # to Swing. Each inactive field is tested independently at transitions.
-    c.enc(2,1);c.enc(3,2);c.key(3)
-    c.enc(2,2 if basis else 1);c.enc(3,2);c.key(3)
-    c.enc(2,-2 if basis else -1);c.enc(3,-1);c.key(3)
-    c.tap(11,8);c.tap(6,8);c.tap(1,1)
-    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
+    c.ui.turn(2,1);c.ui.turn(3,2);c.ui.press_key(3)
+    c.ui.turn(2,2 if basis else 1);c.ui.turn(3,2);c.ui.press_key(3)
+    c.ui.turn(2,-2 if basis else -1);c.ui.turn(3,-1);c.ui.press_key(3)
+    c.ui.tap_control('shift_reset');c.ui.song_editor();c.ui.select_channel(1)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play()
     for i in range(90):
         c.elapse(.5);capture.extend(c.snapshot())
-        if i==22:c.led_values([(1,1),(2,1)],[7,15])
-        if i==44:c.led_values([(1,1),(2,1)],[15,7])
-    c.tap(1,8);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
+        if i==22:c.ui.expect_leds({('channel',1):'alternate',('channel',2):'selected'})
+        if i==44:c.ui.expect_leds({('channel',1):'selected',('channel',2):'alternate'})
+    c.ui.stop();c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
     notes=capture.note_ons();pairs=note_pairs(capture.events)
     assert len(pairs)==len(notes) and len(notes)>4000
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -1400,53 +1270,54 @@ def inactive_shuffle_transition(c,basis=False):
         epoch=(i//1024)%2
         assert note['port']==1 and note['bytes']==[144,60+12*epoch,[127,117,107,97][i%4]],(i,note)
     windows=[(b[field]-a[field])/1e9-3/144 for a,b in zip(notes,notes[2:])]
-    assert max(abs(x) for x in windows)<=tolerance,('Inactive shuffle settings changed Swing timing',max(abs(x) for x in windows))
+    # Logical time is exact, so the controlled lane keeps max<=2e-9 exactly as
+    # before (stalls_allowed=0, ceiling=tolerance reduces to that). Real time
+    # carries the host scheduler's delivery noise, where asserting on the
+    # largest of ~4700 samples tested the host rather than Mosaic: see
+    # swing_window_oracle for the measured distributions.
+    from swing_window_oracle import assert_stable,stall_budget
+    controlled=c.clock_mode=='controlled-experimental'
+    stats=assert_stable(windows,tolerance,'M-TIME inactive shuffle windows',
+        stalls_allowed=0 if controlled else stall_budget(len(windows)),
+        ceiling=tolerance if controlled else 3/144)
     phase=[(note[field]-notes[0][field])/1e9-i/96 for i,note in enumerate(notes)]
     assert max(abs(x) for x in phase)<=1/144+tolerance,('Cumulative phase',max(abs(x) for x in phase))
-    c.results.append(dict(kind='inactive-shuffle-transitions',onsets=len(notes),release_pairs=len(pairs),windows=len(windows),max_window_error_seconds=max(abs(x) for x in windows),passed=True))
+    c.results.append(dict(kind='inactive-shuffle-transitions',onsets=len(notes),release_pairs=len(pairs),windows=len(windows),max_window_error_seconds=stats['max'],p99_window_error_seconds=stats['p99'],median_window_error_seconds=stats['median'],passed=True))
 
 
 def length_mask_display(c,label):
-    import base64
-    from frame_oracle import render
-    expected=render([(75,18,15,'Len'),(75,26,15,label)])
-    indices=[(y*128+x)*4+k for y in range(11,29) for x in range(75,100) for k in range(3)]
-    def matches(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[i]==expected[i] for i in indices)
-    c.wait(matches)
-    c.results.append(dict(kind='length-mask-display',label=label,passed=True))
+    c.ui.expect_field_value('length',label)
 
 def length_mask_boundaries(c):
-    c.configure();c.enc(1,-4);c.enc(2,2)
-    length_mask_display(c,'X');c.enc(3,-3);length_mask_display(c,'X')
-    c.enc(3,89);length_mask_display(c,'128')
-    c.enc(3,3);length_mask_display(c,'128')
-    c.enc(3,-12);length_mask_display(c,'64')
-    c.enc(3,-59);length_mask_display(c,'2')
-    c.enc(3,-10);length_mask_display(c,'1/2')
-    c.enc(3,-8);length_mask_display(c,'X')
+    c.ui.configure();c.ui.channel_page('masks','midi_config',confirm=False);c.ui.select_field('length',offset=2)
+    length_mask_display(c,'X');c.ui.set_value(-3);length_mask_display(c,'X')
+    c.ui.set_value(89);length_mask_display(c,'128')
+    c.ui.set_value(3);length_mask_display(c,'128')
+    c.ui.set_value(-12);length_mask_display(c,'64')
+    c.ui.set_value(-59);length_mask_display(c,'2')
+    c.ui.set_value(-10);length_mask_display(c,'1/2')
+    c.ui.set_value(-8);length_mask_display(c,'X')
 
 
 def pending_mask_lengths(c,long=False):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-1);c.enc(3,-11);c.key(3)
-    c.enc(1,-3);c.enc(2,2);selected=0
+    c.ui.configure();c.ui.set_range(1,3);c.ui.channel_page('clock_mods','midi_config',confirm=False);c.ui.set_value(-11);c.ui.press_key(3)
+    c.ui.channel_page('masks','clock_mods',confirm=False);c.ui.select_field('length',offset=2);selected=0
     choices=[(89,'128',128,True)] if long else [(8,'1/2',.5,False),(8,'1/2',.5,True),(18,'2',2,False),(18,'2',2,True)]
     for index,label,length,reset in choices:
-        c.enc(3,index-selected);selected=index;length_mask_display(c,label)
-        set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',reset)])
+        c.ui.set_value(index-selected);selected=index;length_mask_display(c,label)
+        c.ui.set_mosaic_option_keys([('reset_on_song_seq_change',False),('reset_on_pattern_repeat',reset)])
         length_mask_display(c,label)
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
+        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play()
         seconds=195 if long else 24
         remaining=seconds
         while remaining:
             chunk=min(30,remaining);c.elapse(chunk);capture.extend(c.snapshot());remaining-=chunk
         controlled=c.clock_mode=='controlled-experimental'
         lower=c.logical_ns if controlled else time.monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+        c.ui.gesture([('play_stop',None)],[('play_stop',None)])
         upper=c.logical_ns if controlled else time.monotonic_ns()
         c.elapse(.06);c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
         onsets=[]
@@ -1463,88 +1334,37 @@ def pending_mask_lengths(c,long=False):
 
 
 def parameter_list_label(c,label,wait=True):
-    import base64
-    from frame_oracle import render
-    expected=render([(35,35,5,label)])
-    indices=[(y*128+x)*4+k for y in range(27,37) for x in range(35,128) for k in range(3)]
-    def matches(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[i]==expected[i] for i in indices)
-    if wait:
-        c.wait(matches);c.results.append(dict(kind='parameter-list-label',label=label,passed=True));return True
-    return matches(c.snapshot())
+    return c.ui.expect_list_label(label,wait=wait)
 
-def assign_trig_parameter(c,label):
-    c.key(2);c.enc(3,-50)
-    for attempt in range(50):
-        if parameter_list_label(c,label,wait=False):break
-        c.enc(3,1)
-    else:raise AssertionError('Parameter unavailable through native UI: '+label)
-    parameter_list_label(c,label);c.key(3);c.key(2)
-
-def strum_reset_continuity(c):
-    import time
-    from midi_window import MidiWindow
-    from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(3,4));c.enc(1,-4);c.enc(2,3);c.enc(3,2)  # unset chord masks start from X
-    import base64
-    from frame_oracle import render
-    expected_chord=render([(0,40,15,'Chd1'),(0,48,15,'3rd')])
-    indices=[(y*128+x)*4+k for y in range(33,50) for x in range(25) for k in range(3)]
-    def third_selected(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[i]==expected_chord[i] for i in indices)
-    c.wait(third_selected);c.results.append(dict(kind='chord-mask-screen',label='3rd',passed=True))
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Strum');c.enc(3,8)
-    for reset in (False,True):
-        set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',reset)])
-        capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(24);capture.extend(c.snapshot())
-        controlled=c.clock_mode=='controlled-experimental'
-        lower=c.logical_ns if controlled else time.monotonic_ns()
-        c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-        upper=c.logical_ns if controlled else time.monotonic_ns()
-        # A deferred strum beyond Stop must never sound.
-        c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
-        expected=[]
-        for tick in range(3457):
-            origin=(tick//1536)*1536 if reset else 0
-            if (tick-origin)%216==0:
-                step=((tick-origin)//216)%3;velocity=[127,117,107][step]
-                expected.append((tick,[60,62,64][step],velocity,216))
-                if tick+108<=3456:expected.append((tick+108,[64,65,67][step],velocity,108))
-        # Sort only the independently constructed musical table, never emissions.
-        expected.sort(key=lambda row:row[0])
-        field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes
-        rows=assert_schedule(capture.events,[row[:3] for row in expected],[row[3] for row in expected],field=field,origin=notes[0][field],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
-        c.results.append(dict(kind='native-strum-reset',reset=reset,onsets=len(expected),release_checks=len(rows),scope='Half-step third-degree strum retains the established one-step root gate through resets; no deferred onset after Stop',passed=True))
-
+def assign_trig_parameter(c,label,offset=None):
+    """Select a displayed trig parameter through the UI layer."""
+    return c.ui.assign_trig_parameter(label, offset=offset)
 
 def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=False):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     if fast:assert c.clock_mode=='controlled-experimental','Exact one-pulse arp boundary fixture requires controlled time; real-time family acceptance uses separate scheduling metrics'
-    c.configure();c.hold_tap((1,4),(3,4));c.tap(5,8)
-    if not replacement:c.tap(2,4);c.tap(3,4)
-    c.tap(3,8)
-    c.enc(1,-4);c.enc(2,2);c.enc(3,15 if fractional_gate else 18);length_mask_display(c,'1.25' if fractional_gate else '2')
+    c.configure();c.ui.hold_control_tap('step','step',1,3);c.ui.tap_control('pattern_editor')
+    if not replacement:c.ui.tap_step(2);c.ui.tap_step(3)
+    c.ui.tap_control('channel_editor')
+    c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(15 if fractional_gate else 18);length_mask_display(c,'1.25' if fractional_gate else '2')
     if not (fast or reset):
-        c.enc(2,1);c.enc(3,2)  # unset chord masks start from X
-        if fractional_gate:c.enc(2,1);c.enc(3,4)
-    c.enc(1,3);c.enc(3,0 if fast else -11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,1 if fast else 8)
-    if reset:set_mosaic_options(c,[('Reset on song seq change',False),('Reset on pattern repeat',True)])
+        c.ui.turn(2,1);c.ui.set_value(2)  # unset chord masks start from X
+        if fractional_gate:c.ui.turn(2,1);c.ui.set_value(4)
+    c.ui.turn(1,3);c.ui.set_value(0 if fast else -11);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(1 if fast else 8)
+    if reset:c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',True)])
     seconds=3 if fast else (24 if reset else 10)
     capture=MidiWindow(c.snapshot()['midi_count'])
-    if fast:c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    else:c.tap(1,8)
+    if fast:c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
+    else:c.ui.play()
     # Native rational deadlines round upward to nanoseconds. Include the
     # final planned pulse explicitly; its2ns musical error bound is unchanged.
     c.elapse(seconds+(1e-6 if fast else 0));capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental'
     lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     expected=[];durations=[]
@@ -1571,45 +1391,28 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
     c.results.append(dict(kind='native-arpeggio-half-step',replacement=replacement,fractional_gate=fractional_gate,reset=reset,fast=fast,onsets=len(expected),release_checks=len(rows),passed=True))
 
 
-def parameter_division_bounds(c,parameter):
-    import base64
-    from frame_oracle import render
-    def label(value):
-        expected=render([(0,25,15,value)])
-        indices=[(y*128+x)*4+k for y in range(19,27) for x in range(24) for k in range(3)]
-        def matches(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[i]==expected[i] for i in indices)
-        c.wait(matches);c.results.append(dict(kind='parameter-division-label',parameter=parameter,value=value,passed=True))
-    c.configure();c.enc(1,-3);assign_trig_parameter(c,parameter)
-    label('X');c.enc(3,-3);label('X')
-    c.enc(3,1);label('1/24');c.enc(3,88);label('128')
-    c.enc(3,3);label('128')
-    c.enc(3,-1);label('120');c.enc(3,-88);label('X')
-
-
 def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     assert acceleration in range(-5,6)
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
+    for turns in (2,4,5,7):c.ui.turn(2,1);c.ui.set_value(turns)  # unset chord masks start from X
+    c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio' if arp else 'chord_note_strum');c.ui.set_value(8)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_spread');c.ui.set_value(5)
     if acceleration or explicit_off:
-        c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,2 if explicit_off else acceleration)
+        c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_accel_mod');c.ui.set_value(2 if explicit_off else acceleration)
         if explicit_off:
-            c.action(type='grid',x=1,y=4,state=1)
-            try:c.enc(3,-2)
-            finally:c.action(type='grid',x=1,y=4,state=0)
-    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(18);capture.extend(c.snapshot())
+            c.ui.control_edge('step',True,1)
+            try:c.ui.set_value(-2)
+            finally:c.ui.control_edge('step',False,1)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(18);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental'
     lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     # Codex-arbitrated new contract, not a fit to current implementation:
@@ -1630,13 +1433,13 @@ def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
 
 def arp_empty_masks(c,muted=False):
     from note_accounting import note_pairs
-    c.configure();c.enc(1,-3);assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+    c.configure();c.ui.turn(1,-3);c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
     if muted:
-        c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
-        before=c.snapshot()['midi_count'];c.tap(1,8);c.elapse(.5)
+        c.ui.turn(2,1);c.ui.assign_trig_parameter_key('mute_chord_root');c.ui.set_value(1)
+        before=c.snapshot()['midi_count'];c.ui.play();c.elapse(.5)
         # Silence alone cannot pass: the native input loop and screen must
         # remain responsive while an all-empty muted arp is selected.
-        c.enc(1,3);c.screen_header('Ch. 1 Device Config');c.tap(1,8);c.elapse(.25)
+        c.ui.turn(1,3);c.ui.expect_header_surface('midi_config',channel=1);c.ui.play();c.elapse(.25)
         state=c.snapshot();notes=[m for m in state['midi'] if m['index']>before and m['bytes'][0]&240==144 and m['bytes'][2]>0]
         assert not notes and not state['midi_capture']['outstanding'],'Muted empty arp emitted or retained a voice'
         c.results.append(dict(kind='empty-muted-arp-responsive-silence',passed=True));return
@@ -1645,27 +1448,39 @@ def arp_empty_masks(c,muted=False):
     notes=c.playback(expected,cycles=2,timeout=4,settle_seconds=1.25)
     assert_durations(c,notes,[.5]*16)
     events=[m for m in c.snapshot()['midi'] if m['index']>before]
-    assert len(note_pairs(events))==len(notes),'No-mask ratchet release accounting failed'
-    c.results.append(dict(kind='no-mask-ratchet-compatibility-control',onsets=len(notes),passed=True))
+    pairs=note_pairs(events)
+    onsets=[on for on,off in pairs]
+    assert [m['index'] for m in onsets[:len(notes)]]==[m['index'] for m in notes],'No-mask ratchet release accounting failed'
+    # playback() fixes its notes at the closing onset, but this window runs until
+    # Stop takes effect. In real time that follows observe/tap round trips, so a
+    # further 1/12 s ratchet may legitimately land first: it must continue the
+    # exact cyclic pattern on the ratchet lattice. Controlled time admits none.
+    late=onsets[len(notes):]
+    assert not late or c.clock_mode=='real-time','No-mask ratchet release accounting failed'
+    for i,m in enumerate(late,len(notes)):
+        assert (m['port'],m['bytes'])==expected[i%len(expected)],('Late ratchet onset',i,m)
+        assert abs((m['monotonic_ns']-notes[0]['monotonic_ns'])/1e9-i/12)<=.01,('Late ratchet phase',i,m)
+    c.results.append(dict(kind='no-mask-ratchet-compatibility-control',onsets=len(notes),passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))
 
 def arp_rest_slots(c,internal=False):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
     # Explicit Off values preserve real internal/trailing rest slots in the
     # baseline; this does not depend on Lua's length of a sparse table.
     for turns in (2,0,4 if internal else 0,0):
-        c.enc(2,1)
-        if turns:c.enc(3,turns)
-        else:c.enc(3,1);c.enc(3,-1)
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8);c.elapse(8);capture.extend(c.snapshot())
+        c.ui.turn(2,1)
+        if turns:c.ui.set_value(turns)
+        else:c.ui.set_value(1);c.ui.set_value(-1)
+    c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
+    capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(8);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     slots=(60,64,None,67 if internal else None,None)
@@ -1679,17 +1494,17 @@ def fractional_spread_contract(c):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     assert c.clock_mode=='controlled-experimental','Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented'
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,7);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
+    for turns in (2,4,5,7):c.ui.turn(2,1);c.ui.set_value(turns)  # unset chord masks start from X
+    c.ui.turn(1,3);c.ui.set_value(7);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_spread');c.ui.set_value(5)
     capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     c.elapse(1.500001);capture.extend(c.snapshot());lower=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     upper=c.logical_ns;c.elapse(.25);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     notes=capture.note_ons();assert len(notes)==61,('Fractional arp onset count',len(notes))
     origin=notes[0]['logical_ns'];pitches=(60,64,67,69,72)
@@ -1713,20 +1528,20 @@ def minimum_swung_gap_contract(c,swing):
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     assert c.clock_mode=='controlled-experimental','Exact fractional pulse windows require controlled time until the D20 real-time deadline oracle is implemented'
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,2);c.enc(3,89);length_mask_display(c,'128')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,7);c.key(3)
-    c.enc(2,1);c.enc(3,1);c.key(3)
-    c.enc(2,1);c.enc(3,swing+51);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,1)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,-4)
+    c.configure();c.ui.hold_control_tap('step','step',1,64);c.ui.tap_control('pattern_editor')
+    for x in (2,3,4):c.ui.tap_step(x)
+    c.ui.tap_control('channel_editor');c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.set_value(89);length_mask_display(c,'128')
+    for turns in (2,4,5,7):c.ui.turn(2,1);c.ui.set_value(turns)  # unset chord masks start from X
+    c.ui.turn(1,3);c.ui.set_value(7);c.ui.press_key(3)
+    c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
+    c.ui.turn(2,1);c.ui.set_value(swing+51);c.ui.press_key(3);c.ui.turn(1,-2)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio');c.ui.set_value(8)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_spread');c.ui.set_value(1)
+    c.ui.turn(2,1);c.ui.assign_trig_parameter_key('chord_accel_mod');c.ui.set_value(-4)
     capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     c.elapse(.5);capture.extend(c.snapshot())
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     c.elapse(.25);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     # Four positive spacing gaps; the fifth is negative and must not sound.
     expected=(0,1,4,5,6) if swing<0 else (0,4,5,6,7)
@@ -1762,6 +1577,9 @@ def autosave_restart(c):
     c.elapse(2)
     c.wait(lambda _:saved.is_file() and pset.is_file(),timeout=2)
     assert saved.stat().st_size>0 and pset.stat().st_size>0
+    import shutil
+    capture=c.out/'generated-project';capture.mkdir()
+    shutil.copy2(saved,capture/'autosave.ptn')
     c.results.append(dict(kind='saved-project',files=[dict(name=p.name,sha256=digest(p)) for p in (saved,pset)]))
     c.finish()
     out=c.out/'reloaded';out.mkdir()
@@ -1769,73 +1587,107 @@ def autosave_restart(c):
     try:
         # Read the restored pattern through the visible grid and complete MIDI
         # phrases. Do not re-create notes or inspect the serialized model.
-        loaded.tap(3,8);loaded.tap(5,8)
-        loaded.led_values([(x,4) for x in range(1,5)],[15,15,15,15])
+        loaded.ui.channel_editor();loaded.ui.pattern_editor()
+        loaded.ui.expect_leds({('step',x):'selected' for x in range(1,5)})
         loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
     finally:loaded.finish()
 
 def menu_label(c,text,x=0):
-    from frame_oracle import selected_line
-    c.wait(lambda s:selected_line(s,text,x));c.results.append(dict(kind='selected-menu-label',text=text))
+    c.ui.expect_menu_label(text,x=x)
 
 def menu_value(c,text):
-    from frame_oracle import selected_value
-    c.wait(lambda s:selected_value(s,text));c.results.append(dict(kind='selected-menu-value',text=text))
+    c.ui.expect_menu_value(text)
 
-def route_fixed_note(c,source_position,source_name):
+def route_fixed_note(c,source):
     assert c.profile=='midi-modulation','This case requires actual matrix/toolkit mods'
     c.configure()
-    c.key(1);c.enc(2,1);c.key(3);menu_label(c,'DEVICES > ')
-    c.enc(2,2);menu_label(c,'MODS >');c.key(3);menu_label(c,'MATRIX >',4)
-    c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,v in enumerate(roots) if v['id']=='midi_device_params_group_channel_1')
-    c.enc(2,position);c.key(3);menu_label(c,'Fixed Note')
-    c.key(3);menu_label(c,'rhythm 1')
-    c.enc(2,source_position);menu_label(c,source_name)
-    c.enc(3,100);menu_value(c,'1.00')
+    c.ui.route_fixed_note_from_modulation_source(source)
 
 def toolkit_parameter_group(c,name):
-    c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,v in enumerate(roots) if v['name']==name)
-    c.enc(2,position);c.key(3)
+    # This caller begins on the retained Matrix value screen, unlike the clock
+    # callers which begin in the usual native-menu context. Preserve its
+    # original E1+4, K3 recipe without first backing out with K1.
+    c.ui.turn(1,4);c.ui.press_key(3)
+    c.ui.select_native_parameter_group(name)
 
 def macro_route_clear(c):
-    route_fixed_note(c,12,'macro 1')
-    toolkit_parameter_group(c,'macro 1');menu_label(c,'active')
-    c.enc(2,1);menu_label(c,'value');c.enc(3,100);c.key(1)
+    route_fixed_note(c,'macro_1')
+    toolkit_parameter_group(c,'macro_1');c.ui.expect_native_menu_label('mod_active')
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_value');c.ui.turn(3,100);c.ui.press_key(1)
     c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
     # Return to the retained Matrix source selection, then zero its depth.
-    c.key(1);c.enc(1,-4);c.key(3);c.key(3);c.key(3)
-    menu_label(c,'macro 1');c.key(3);menu_value(c,'-');c.key(1)
+    c.ui.press_key(1);c.ui.turn(1,-4);c.ui.press_key(3);c.ui.press_key(3);c.ui.press_key(3)
+    c.ui.expect_native_menu_label('mod_macro_1');c.ui.press_key(3)
+    c.ui.expect_native_menu_value('modulation_control_1','clear_depth');c.ui.press_key(1)
     c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))])
 
 def held_macro_rebind(c):
     macro_route_clear(c)
     # The macro still holds1. Rebinding must apply it without touching the
     # source or waiting for another source event.
-    c.key(1);menu_label(c,'macro 1');c.enc(3,100);menu_value(c,'1.00');c.key(1)
+    c.ui.press_key(1);c.ui.expect_native_menu_label('mod_macro_1')
+    c.ui.turn(3,100);menu_value(c,'1.00');c.ui.press_key(1)
     c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
 
+def pulse_lfo_real_time(c,notes):
+    # Real time cannot place Play exactly: the press follows unmeasured observe
+    # and action round trips, and Play starts on the next clock pulse. So place
+    # it as closely as possible, then MEASURE each onset's song beat from its
+    # native MIDI timestamp against the native (beats, monotonic_ns) clock read
+    # at the fixed 90BPM, and derive its pitch from the toolkit rule (phase =
+    # beats/4 mod 1; high, fixed note127, while phase<0.5). An onset within one
+    # 24PPQN mod sample plus 10ms of a flip cannot be decided, so re-place Play
+    # (at most three attempts, all recorded); undecided after three fails.
+    import math,time
+    guard=1/24+.01*1.5;lead=0;attempts=[]
+    for attempt in range(3):
+        state=c.snapshot();clock=state['diagnostics'];beat=clock['beats'];before=state['midi_count']
+        target=4*(math.floor(beat/4)+1)+.125;open_loop=max(0,(target-lead-beat)*2/3)
+        # Sleep from the clock read's own native timestamp (host and native share
+        # CLOCK_MONOTONIC), not from observe's return; bounded by the open-loop wait.
+        c.elapse(min(open_loop,max(0,(clock['monotonic_ns']-time.monotonic_ns())/1e9+open_loop)))
+        press=c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
+        def onsets(s):return [m for m in s['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        emitted=onsets(c.wait(lambda s:len(onsets(s))>=16*2+1,8))
+        c.ui.tap_control('play_stop');c.wait(lambda s:s['midi_capture']['outstanding']==[])
+        actual=[(m['port'],m['bytes']) for m in emitted];expected=[];rows=[]
+        for i,m in enumerate(emitted):
+            at=beat+(m['monotonic_ns']-clock['monotonic_ns'])*1.5e-9;phase=at/4%1;margin=min(at%2,2-at%2)
+            note,velocity=notes[i%len(notes)];expected.append((1,[144,127 if phase<.5 else note,velocity]))
+            rows.append(dict(index=i,beat=at,lfo_phase=phase,flip_margin_beats=margin,expected_pitch=expected[-1][1][1],ambiguous=margin<=guard))
+        # A decided onset with the wrong pitch fails even when another is undecided.
+        ambiguous=any(r['ambiguous'] for r in rows);wrong=[r['index'] for r,a,e in zip(rows,actual,expected) if a!=e and not r['ambiguous']]
+        attempts.append(dict(attempt=attempt+1,clock_beats=beat,clock_monotonic_ns=clock['monotonic_ns'],target_beat=target,lead_beats=lead,
+            press_native=(press or {}).get('native'),start_beat=rows[0]['beat'],guard_beats=guard,ambiguous=ambiguous,wrong_decided=wrong,notes=rows,actual=actual))
+        if wrong or not ambiguous:break
+        # Correct the next placement by this attempt's steady-grid error (mod1/4 beat).
+        lead+=(rows[1]['beat']-.25-target+.125)%.25-.125
+    c.results.append(dict(kind='midi',expected=expected,actual=actual,complete_cycles=2,start_beat=rows[0]['beat'],decided=not ambiguous,placement_attempts=attempts))
+    assert not wrong,dict(expected=expected,actual=actual,wrong_decided=wrong)
+    assert not ambiguous,'Every Play placement left an onset within one mod sample of an LFO flip'
+    assert actual==expected,dict(expected=expected,actual=actual)
+    return emitted
+
 def pulse_lfo(c):
-    route_fixed_note(c,4,'lfo 1')
-    toolkit_parameter_group(c,'lfo 1');menu_label(c,'clocked');c.key(3)
-    c.enc(2,1);menu_label(c,'beats');c.enc(3,9)
-    c.enc(2,2);menu_label(c,'shape');c.enc(3,2);c.key(1)
-    # A4-beat pulse with50% width is high for8 sixteenth notes and low for8.
-    # Place playback safely inside the high half using a verified native clock
-    # read (not Mosaic state); E/R jitter and the24PPQN mod sample cannot cross
-    # a half-cycle boundary at this1/8-beat offset.
+    route_fixed_note(c,'lfo_1')
+    toolkit_parameter_group(c,'lfo_1');c.ui.expect_native_menu_label('mod_clocked');c.ui.press_key(3)
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_beats');c.ui.turn(3,9)
+    c.ui.turn(2,2);c.ui.expect_native_menu_label('mod_shape');c.ui.turn(3,2);c.ui.press_key(1)
     import math
-    state=c.snapshot();beat=state['diagnostics']['beats']
-    target=4*(math.floor(beat/4)+1)+.125
-    c.elapse((target-beat)*2/3)
-    expected=[]
     notes=[(60,127),(62,117),(64,107),(65,97)]
-    for i in range(16):
-        note,velocity=notes[i%4];expected.append((1,[144,127 if i<8 else note,velocity]))
-    emitted=c.playback(expected,cycles=2,timeout=8)
+    if c.clock_mode=='real-time':emitted=pulse_lfo_real_time(c,notes)
+    else:
+        # A4-beat pulse with50% width is high for8 sixteenth notes and low for8.
+        # Place playback safely inside the high half using a verified native clock
+        # read (not Mosaic state); E/R jitter and the24PPQN mod sample cannot cross
+        # a half-cycle boundary at this1/8-beat offset.
+        state=c.snapshot();beat=state['diagnostics']['beats']
+        target=4*(math.floor(beat/4)+1)+.125
+        c.elapse((target-beat)*2/3)
+        expected=[]
+        for i in range(16):
+            note,velocity=notes[i%4];expected.append((1,[144,127 if i<8 else note,velocity]))
+        emitted=c.playback(expected,cycles=2,timeout=8)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     # Opening-pulse phase is separately exposed by M-LEN-001. Here check every
     # subsequent onset plus the full LFO period against90BPM, not merely ratios.
@@ -1881,11 +1733,9 @@ def restart_phase_edges(c):
 def midi_clock_transport(c):
     import time
     c.configure()
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    position=next(i for i,v in enumerate(roots) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source')
-    menu_value(c,'internal');c.enc(3,1);menu_value(c,'midi')
+    c.ui.enter_native_levels_menu();c.ui.select_native_parameter_group('clock')
+    c.ui.expect_native_menu_value('clock_source','internal')
+    c.ui.turn(3,1);c.ui.expect_native_menu_value('clock_source','midi')
     def inject(value,at=None):
         action=dict(type='midi',port=1,bytes=[value])
         if at is not None:action['at_monotonic_ns']=at
@@ -1939,11 +1789,11 @@ def midi_clock_transport(c):
         durations.append((off[field]-note[field])/1e9)
     c.results.append(dict(kind='midi-clock-durations',expected_seconds=.15,actual_seconds=durations))
     assert all(abs(d-.15)<=tolerance for d in durations),durations
-    c.enc(3,-1);menu_value(c,'internal')
+    c.ui.turn(3,-1);c.ui.expect_native_menu_value('clock_source','internal')
     # Native clock.lua updates clock_tempo from the external source; returning
     # to internal uses that adopted tempo. Explicitly edit it back to90BPM.
-    c.enc(2,1);menu_label(c,'tempo');menu_value(c,'100')
-    c.enc(3,-10);menu_value(c,'90');c.key(1)
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('clock_tempo');menu_value(c,'100')
+    c.ui.turn(3,-10);menu_value(c,'90');c.ui.press_key(1)
     internal=c.playback([(1,[144,n,v]) for n,v in expected])
     restored=[(m[field]-internal[0][field])/1e9 for m in internal[:9]]
     c.results.append(dict(kind='restored-internal-onsets',actual_seconds=restored))
@@ -1952,9 +1802,8 @@ def midi_clock_transport(c):
 def live_clock_handoff(c):
     import math,time
     next_trig_cutoff(c)
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
+    c.ui.enter_native_levels_menu();c.ui.select_native_parameter_group('clock')
+    c.ui.expect_native_menu_value('clock_source','internal')
     pulse_cursor=0
     controlled=c.clock_mode=='controlled-experimental'
     domain='logical' if controlled else 'monotonic'
@@ -1975,13 +1824,13 @@ def live_clock_handoff(c):
         else:c.wait(lambda s:len(s['midi_input_schedule']['delivered'])>=pulse_cursor)
     pulses(49)
     before=c.snapshot();start_beat=before['diagnostics']['beats'];marker=before['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     pulses(4)
     pending=c.snapshot()
     assert pending['midi_capture']['outstanding'],'No pending note at source switch'
     elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
     assert 0<elapsed_ticks<48,elapsed_ticks
-    switch_ack=c.action(type='enc',n=3,delta=2)
+    switch_ack=c.ui.encoder_event(3,2)
     handoff=c.snapshot();beat=handoff['diagnostics']['beats']
     if not controlled:
         # A pre-input snapshot can precede the audible onset by tens of ms.
@@ -2014,7 +1863,7 @@ def live_clock_handoff(c):
     error_ns=off[field]-expected_off_ns
     c.results.append(dict(kind='pending-note-source-handoff',elapsed_ticks=elapsed_ticks,expected_off_ns=expected_off_ns,actual_off_ns=off[field],error_ns=error_ns))
     assert abs(error_ns)<=(2 if c.clock_mode=='controlled-experimental' else 10000000),c.results[-1]
-    menu_value(c,'midi')
+    c.ui.expect_native_menu_value('clock_source','midi')
     reverse_live_clock_handoff(c)
 
 def reverse_live_clock_handoff(c):
@@ -2022,12 +1871,13 @@ def reverse_live_clock_handoff(c):
     # Establish100BPM on the internal reference while stopped, then return to
     # MIDI. This isolates phase/source transfer from internal24PPQN tempo
     # publication latency; pending tempo changes remain a separate edge case.
-    c.enc(3,-1);menu_value(c,'internal')
+    c.ui.turn(3,-1);c.ui.expect_native_menu_value('clock_source','internal')
     # Set the reference through the norns clock menu. Waiting for clock.lua's
     # once-per-second external-tempo publisher makes this setup phase-dependent.
-    c.enc(2,1);menu_label(c,'tempo');c.enc(3,-300);menu_value(c,'1')
-    c.enc(3,99);menu_value(c,'100')
-    c.enc(2,-1);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi')
+    c.ui.turn(2,1);c.ui.expect_native_menu_label('clock_tempo');c.ui.turn(3,-300);menu_value(c,'1')
+    c.ui.turn(3,99);menu_value(c,'100')
+    c.ui.turn(2,-1);c.ui.expect_native_menu_label('clock_source');c.ui.turn(3,1)
+    c.ui.expect_native_menu_value('clock_source','midi')
     controlled=c.clock_mode=='controlled-experimental'
     domain='logical' if controlled else 'monotonic'
     origin=c.logical_ns if controlled else time.monotonic_ns()+500000000
@@ -2044,12 +1894,12 @@ def reverse_live_clock_handoff(c):
         else:c.wait(lambda s:len(s['midi_input_schedule']['delivered'])>=pulse)
     until(49)
     before=c.snapshot();start_beat=before['diagnostics']['beats'];marker=before['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
     until(53);c.elapse(.001)  # Avoid observing exactly on a strict sync boundary.
     pending=c.snapshot();assert pending['midi_capture']['outstanding']
     elapsed_ticks=math.floor((pending['diagnostics']['beats']-start_beat)*96)
     assert 0<elapsed_ticks<48,elapsed_ticks
-    switch_ack=c.action(type='enc',n=3,delta=-2)
+    switch_ack=c.ui.encoder_event(3,-2)
     handoff=c.snapshot();beat=handoff['diagnostics']['beats']
     if not controlled:
         onset=next(m for m in pending['midi'] if m['index']>marker and m['bytes']==[144,60,127])
@@ -2069,7 +1919,7 @@ def reverse_live_clock_handoff(c):
     # The scheduled MIDI Stop is no longer the selected transport. Internal
     # playback must continue into the next phrase until a physical grid Stop.
     c.wait(lambda state:len(onsets(state))>=4,timeout=2)
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
     state=c.snapshot();notes=onsets(state)
     assert [(m['port'],m['bytes']) for m in notes]==[(1,[144,60,127]),(1,[144,64,107]),(1,[144,67,100]),(1,[144,60,127])],notes
     off=next(m for m in state['midi'] if m['index']>notes[0]['index'] and m['bytes']==[128,60,127])
@@ -2080,437 +1930,98 @@ def reverse_live_clock_handoff(c):
     errors=[e['actual_'+domain+'_ns']-e['intended_'+domain+'_ns'] for e in arrivals]
     c.results.append(dict(kind='reverse-continuous-midi-arrival-errors',time_domain=domain,errors_ns=errors))
     assert len(arrivals)==84 and all(0<=e<=(0 if controlled else 10000000) for e in errors),errors
-    menu_value(c,'internal')
-
-def scale_edit_selection(c):
-    from frame_oracle import header,matches
-    def selected(slot,applied):
-        expected=header('Scale slot '+str(slot)+' ',selected=1,tabs=3)
-        c.wait(lambda state:matches(state,expected))
-        c.results.append(dict(kind='scale-edit-header',slot=slot))
-        levels=[15 if n==applied else 4 if n==slot else 2 for n in range(1,17)]
-        c.led_values([(n,3) for n in range(1,17)],levels)
-    def phrase(pitches):
-        c.playback([(1,[144,p,v]) for p,v in zip(pitches,[127,117,107,97])])
-    def shift_slot(slot):
-        c.action(type='key',n=1,state=1)
-        try:
-            c.elapse(.3)  # Native K1 hold threshold is250ms before script dispatch.
-            c.tap(slot,3)
-        finally:c.action(type='key',n=1,state=0)
-    def long_slot(slot):
-        c.action(type='grid',x=slot,y=3,state=1)
-        try:c.elapse(1.1)
-        finally:c.action(type='grid',x=slot,y=3,state=0)
-        c.elapse(.06)
-    c.configure();c.tap(4,8)
-    selected(1,1)
-    shift_slot(2);selected(2,1)
-    # Root C -> D, saved through E2/E3/K3. Editing an unused scale must not
-    # change playback: the applied C-major scale still governs these notes.
-    c.enc(2,-1);c.enc(3,2);c.key(3)
-    selected(2,1);phrase([60,62,64,65])
-    c.tap(2,3);selected(2,2);phrase([62,64,66,67])
-    # Long-selecting a different editor retains the D-major applied scale.
-    long_slot(3);selected(3,2);phrase([62,64,66,67])
-    # Saving an already applied scale does alter playback, even when selected
-    # through the edit-only gesture. D -> E remains a major scale.
-    shift_slot(2);selected(2,2)
-    c.enc(3,2);c.key(3);phrase([64,66,68,69])
-    # Select another editing slot, then long-press it again. Global off must
-    # restore chromatic relative intervals and clear the editor indicator.
-    long_slot(3);selected(3,2)
-    long_slot(3);selected(0,0);phrase([60,61,62,63])
-    # State can be re-entered following global off; stored scale edits persist.
-    c.tap(2,3);selected(2,2);phrase([64,66,68,69])
+    c.ui.expect_native_menu_value('clock_source','internal')
 
 
-def scale_lock_lifetime(c):
-    from cases import menu_label,menu_value
-    from frame_oracle import selected_line
-    def phrase(pitches):
-        c.playback([(1,[144,p,v]) for p,v in zip(pitches,[127,117,107,97])])
-    def edit_slot(slot,semitones):
-        c.action(type='key',n=1,state=1)
-        try:
-            c.elapse(.3)  # Native K1 hold threshold is250ms before script dispatch.
-            c.tap(slot,3)
-        finally:c.action(type='key',n=1,state=0)
-        c.enc(3,semitones);c.key(3)
-    c.configure();c.tap(4,8);c.enc(2,-1)
-    edit_slot(2,2);edit_slot(3,4)  # Unused D-major and E-major scales.
-    # Global D lock at step1; channel E lock at step2. Four-step channel wraps
-    # repeatedly inside the independent 64-step global scale track.
-    c.hold_tap((1,4),(2,3));c.tap(3,8)
-    c.hold_tap((2,4),(3,3))
-    phrase([62,66,68,69])
-    # Native menu navigation only; the diagnostic root names locate the group,
-    # while rasterized labels and MIDI establish the user-perceived result.
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    roots=c.snapshot()['diagnostics']['parameter_roots']
-    c.enc(2,next(i for i,v in enumerate(roots) if v['id']=='mosaic'))
-    c.key(3)
-    for _ in range(40):
-        if selected_line(c.snapshot(),'Scales lock until ptn end'):break
-        c.enc(2,1)
-    else:raise AssertionError('Scale lifetime control absent from native menu')
-    menu_label(c,'Scales lock until ptn end');menu_value(c,'On')
-    c.enc(3,-1);menu_value(c,'Off');c.key(1)
-    phrase([62,66,66,67])
-    # Remove the channel lock by repeating its physical gesture. The global D
-    # lock must still apply on every channel note with channel hold disabled.
-    c.hold_tap((2,4),(3,3));phrase([62,64,66,67])
-    # Remove global lock too: this restores the C-major default, proving the
-    # preceding D phrase came from global persistence rather than stale state.
-    c.tap(4,8);c.hold_tap((1,4),(2,3));c.tap(3,8)
-    phrase([60,62,64,65])
 
 
-def trig_merge_sets(c):
-    c.configure()
-    c.tap(5,8);c.tap(5,8);c.tap(4,3)  # Pattern1 fourth note F -> G.
-    c.tap(5,8);c.tap(5,8)  # Back to trig editor.
-    c.tap(2,1)
-    for step in (2,4):c.tap(step,4)
-    c.tap(3,8);c.tap(2,2)
-    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
-    notes={1:(60,127),2:(62,117),3:(64,107),4:(67,97)}
-    def phrase(steps):
-        observed=c.playback([(1,[144,*notes[s]]) for s in steps])
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        errors=[]
-        for index,(a,b) in enumerate(zip(observed,observed[1:])):
-            left=steps[index%len(steps)];right=steps[(index+1)%len(steps)]
-            expected=((right-left)%4 or 4)/6
-            errors.append((b[field]-a[field])/1e9-expected)
-        c.results.append(dict(kind='merge-rest-spacing',steps=steps,errors_seconds=errors))
-        assert errors and all(abs(e)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for e in errors),errors
-    def mode(level,steps):
-        c.led_values([(14,8)],[level]);phrase(steps)
-    mode(2,[1,3])  # Exactly one contributing pattern.
-    c.tap(14,8);mode(5,[2,4])  # Two contributors only.
-    c.tap(14,8);mode(8,[1,2,3,4])  # Set union.
-    # A third pattern overlapping step2 distinguishes exactly-one from odd
-    # parity and proves Only accepts two or more contributors.
-    c.tap(5,8);c.tap(3,1)
-    for step in (2,3):c.tap(step,4)
-    c.tap(3,8);c.tap(3,2)
-    c.tap(14,8);mode(2,[1])
-    c.tap(14,8);mode(5,[2,3,4])
-    c.tap(14,8);mode(8,[1,2,3,4])
-    # With one assigned pattern there are no overlaps. Only must be silent,
-    # not keep a stale merged pattern after unassignment.
-    c.tap(2,2);c.tap(3,2);c.tap(14,8);c.tap(14,8)
-    c.led_values([(14,8)],[5]);before=c.snapshot()['midi_count']
-    c.tap(1,8);c.elapse(1.5);c.tap(1,8)
-    state=c.snapshot()
-    emitted=[m for m in state['midi'] if m['index']>before and m['bytes'][0]==144 and m['bytes'][2]>0]
-    assert not emitted,emitted
-    assert not state['midi_capture']['outstanding']
-    c.results.append(dict(kind='only-without-overlap-silent',seconds=1.5))
 
 
-def all_pattern_slots(c):
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)  # Clear only the fixture's initial trigs.
-    pitches=[60,62,64,65,67,69,71]
-    authored={};previous=1
-    cells=[(x,y) for y in range(4,8) for x in range(1,17)]
-    for slot in range(1,17):
-        c.tap(slot,1)
-        # An untouched slot must not inherit the previous slot's authored data.
-        c.led_values(cells,[2]*64)
-        x=1+(slot-1)%4
-        active={(x,4),(slot,5),(17-slot,7)}
-        for cell in sorted(active):c.tap(*cell)
-        c.tap(5,8);c.tap(x,7-(slot-1)%7)
-        c.tap(5,8);c.tap(5,8)
-        expected=[15 if cell in active else 2 for cell in cells]
-        c.led_values(cells,expected);authored[slot]=expected
-        c.tap(3,8)
-        if slot!=previous:
-            c.tap(previous,2);c.tap(slot,2)
-        c.led_values([(slot,2)],[15])
-        # Four-step channel length excludes both deliberately authored outer
-        # trigs. Exactly one pitched event per loop may reach the MIDI port.
-        velocity=[127,117,107,97][x-1] if slot==1 else 100
-        notes=c.playback([(1,[144,pitches[(slot-1)%7],velocity])])
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        errors=[(b[field]-a[field])/1e9-4/6 for a,b in zip(notes,notes[1:])]
-        assert errors and all(abs(e)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for e in errors),errors
-        c.results.append(dict(kind='pattern-slot-playback',slot=slot,pitch=pitches[(slot-1)%7],spacing_errors_seconds=errors))
-        previous=slot;c.tap(5,8)
-    # Revisit every slot after all edits: editing slot16 must not overwrite
-    # previous slots, even where pitches or active short-loop steps coincide.
-    for slot in range(1,17):
-        c.tap(slot,1);c.led_values(cells,authored[slot])
 
 
-def scale_stop_indicator(c):
-    c.configure();c.tap(4,8);c.tap(2,3)
-    c.led_values([(2,3)],[15])
-    c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
-    # Stopping transport does not disable the applied scale. The bright
-    # applied indicator must survive the playing-to-stopped transition.
-    c.led_values([(2,3)],[15])
-    # A held global step displays its own lock, not the stopped default.
-    c.action(type='grid',x=2,y=4,state=1)
-    try:
-        c.tap(3,3);c.led_values([(2,3),(3,3)],[2,15])
-    finally:c.action(type='grid',x=2,y=4,state=0)
-    c.led_values([(2,3),(3,3)],[15,2])
+def deterministic_case_results(case,results,lane='controlled-experimental'):
+    """Keep volatile host telemetry in observations, not controlled result rows."""
+    import copy
+    if lane!='controlled-experimental' or case not in {'M-REC-004','M-REC-032','M-REC-033','M-PANIC-007','M-PANIC-008','M-PANIC-009','M-PANIC-010'}:
+        return results,[]
+    stable=copy.deepcopy(results)
+    recording=case.startswith('M-REC-')
+    result_kind='boundary-active-step-midi-witness' if recording else 'panic-pending-chord'
+    matches=[entry for entry in stable if isinstance(entry,dict) and entry.get('kind')==result_kind]
+    assert len(matches)==1,('%s requires exactly one %s result'%(case,result_kind),len(matches))
+    entry=matches[0]
+    if recording:
+        events=entry.get('events')
+        assert isinstance(events,list) and events,('%s %s result has no events'%(case,result_kind))
+        for index,event in enumerate(events):
+            assert isinstance(event,dict),('%s event %d is malformed'%(case,index))
+            for field in ('preview','active_step_onset','next_step_onset'):
+                midi=event.get(field)
+                assert isinstance(midi,dict) and type(midi.get('monotonic_ns')) is int,('%s event %d %s lacks host monotonic timestamp'%(case,index,field))
+        diagnostic={'case_id':case,'result_kind':result_kind,'raw_events':copy.deepcopy(events)}
+        for event in entry['events']:
+            for field in ('preview','active_step_onset','next_step_onset'):
+                del event[field]['monotonic_ns']
+    else:
+        origins={}
+        for field in ('start_origin','stop_origin'):
+            origin=entry.get(field)
+            assert isinstance(origin,dict),('%s %s is missing'%(case,field))
+            expected={'action_id':str,'origin_ns':int,'applied_ns':int,'input_to_applied_ns':int,'native_sequence':int,'boundary':str}
+            for key,value_type in expected.items():
+                assert type(origin.get(key)) is value_type,('%s %s.%s is missing or malformed'%(case,field,key))
+            origins[field]=copy.deepcopy(origin)
+            entry[field]={'verified':True,'native_sequence':origin['native_sequence'],'boundary':origin['boundary']}
+        diagnostic={'case_id':case,'result_kind':result_kind,'start_origin':origins['start_origin'],'stop_origin':origins['stop_origin']}
+    return stable,[diagnostic]
 
-def channel_long_hold(c):
-    c.configure()
-    c.action(type='grid',x=2,y=4,state=1)
-    try:c.elapse(1.1)
-    finally:c.action(type='grid',x=2,y=4,state=0)
-    c.led_values([(x,4) for x in range(1,5)],[15,15,15,15])
-    c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
-    c.action(type='grid',x=2,y=4,state=1)
-    try:
-        c.elapse(1.1);c.tap(4,4)
-    finally:c.action(type='grid',x=2,y=4,state=0)
-    c.led_values([(x,4) for x in range(1,5)],[0,15,15,15])
-    notes=c.playback([(1,[144,n,v]) for n,v in [(62,117),(64,107),(65,97)]])
-    field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-    gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
-    tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    c.results.append(dict(kind='range-loop-spacing',expected_seconds=1/6,actual_seconds=gaps))
-    assert all(abs(gap-1/6)<=tolerance for gap in gaps),gaps
 
-def adjacent_channel_ranges(c):
-    # Fill every step through the pattern editor. The first four authored
-    # pitches/velocities distinguish step addressing; later steps use C/100.
-    c.configure();c.tap(5,8)
-    cell=lambda step:((step-1)%16+1,(step-1)//16+4)
-    for step in range(5,65):c.tap(*cell(step))
-    c.tap(3,8)
-    cells=[cell(step) for step in range(1,65)]
-    values=[(60,127),(62,117),(64,107),(65,97)]+[(60,100)]*60
-    # Every possible adjacent pair, including all row boundaries and step64.
-    # Ascending ranges are documented; reversed endpoints remain a separate
-    # failure-mode investigation, never silently normalized by this oracle.
-    for start,end in [(s,s+1) for s in range(1,64)]+[(1,64)]:
-        c.hold_tap(cell(start),cell(end))
-        c.led_values(cells,[15 if start<=step<=end else 0 for step in range(1,65)])
-        expected=[(1,[144,n,v]) for n,v in values[start-1:end]]
-        notes=c.playback(expected,cycles=2,timeout=(end-start+1)/3+3)
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
-        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-        c.results.append(dict(kind='adjacent-range',start=start,end=end,expected_gap_seconds=1/6,actual_gaps=gaps))
-        assert all(abs(gap-1/6)<=tolerance for gap in gaps),dict(start=start,end=end,gaps=gaps)
+def reexpress_case_results(context,case):
+    """Install stable controlled acceptance and preserve its exact raw telemetry."""
+    import json
+    stable,diagnostic=deterministic_case_results(case,context.results,lane=context.clock_mode)
+    if not diagnostic:return
+    assert context.observations and isinstance(context.observations[-1],dict),('Missing final observation for case diagnostics',case)
+    context.results=stable
+    context.observations[-1].setdefault('case_result_diagnostics',[]).extend(diagnostic)
+    (context.out/'observations.json').write_text(json.dumps(context.observations,indent=2)+'\n')
 
-def channel_mute_gestures(c):
-    c.configure()
-    phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    def hold(seconds):
-        c.action(type='grid',x=1,y=1,state=1)
-        try:c.elapse(seconds)
-        finally:c.action(type='grid',x=1,y=1,state=0)
-    def shift_mute():
-        c.action(type='key',n=1,state=1)
-        try:
-            c.elapse(.3);c.tap(1,1)
-        finally:c.action(type='key',n=1,state=0)
-    def silence(seconds):
-        before=c.snapshot()['midi_count'];c.elapse(seconds);state=c.snapshot()
-        notes=[m for m in state['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
-        c.results.append(dict(kind='mute-silence',seconds=seconds,new_note_ons=notes))
-        assert not notes,notes
-        assert not state['midi_capture']['outstanding'],'Muted phrase retained active notes'
-    hold(.8);c.led_values([(1,1)],[15]);c.playback(phrase)
-    hold(1.1);c.led_values([(1,1)],[7])
-    c.tap(1,8);silence(1.5);c.tap(1,8)
-    shift_mute();c.led_values([(1,1)],[15]);c.playback(phrase)
-    # Muting and unmuting during playback must leave transport running and
-    # release existing notes; resumed pitches follow the unchanged phrase.
-    c.tap(1,8)
-    c.wait(lambda s:s['midi_capture']['outstanding']!=[])
-    hold(1.1);c.led_values([(1,1)],[7]);silence(1.5)
-    marker=c.snapshot()['midi_count'];shift_mute();c.led_values([(1,1)],[15])
-    def emitted(s):
-        return [m for m in s['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
-    state=c.wait(lambda s:len(emitted(s))>=9)
-    actual=[(m['port'],m['bytes']) for m in emitted(state)]
-    start=phrase.index(actual[0]);expected=[phrase[(start+i)%4] for i in range(len(actual))]
-    assert actual==expected,dict(expected=expected,actual=actual)
-    c.results.append(dict(kind='unmute-live-phrase',expected=expected,actual=actual))
-    c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding'])
 
-def channel_routing_isolation(c):
-    c.configure()
-    phrase=[(60,127),(62,117),(64,107),(65,97)]
-    for channel in range(2,17):
-        c.tap(channel,1)
-        from frame_oracle import header,matches
-        title='Ch. '+str(channel)+' Device Config';expected_header=header(title,selected=5)
-        c.wait(lambda state:matches(state,expected_header))
-        c.results.append(dict(kind='screen-header',expected=title,matched=True))
-        c.enc(3,1) # none -> generic CC device
-        c.enc(2,1);c.enc(3,channel-1) # distinct MIDI channel
-        c.enc(2,1)
-        if channel%2==0:c.enc(3,1) # second virtual port
-        c.key(3);c.tap(1,2);c.hold_tap((1,4),(4,4))
-        c.led_values([(channel,1),(1,2)],[15,15])
-    def verify(active):
-        marker=c.snapshot()['midi_count'];c.tap(1,8)
-        def ons(state):
-            return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
-        if active:
-            state=c.wait(lambda state:all(sum(m['bytes'][0]==143+ch for m in ons(state))>=9 for ch in active),timeout=5)
-        else:
-            c.elapse(1.5);state=c.snapshot()
-        notes=ons(state)
-        assert {m['bytes'][0]-143 for m in notes}==set(active),dict(active=active,actual=[m['bytes'] for m in notes])
-        traces={}
-        for ch in active:
-            trace=[m for m in notes if m['bytes'][0]==143+ch]
-            actual=[(m['port'],m['bytes']) for m in trace]
-            expected=[(1 if ch%2 else 2,[143+ch,*phrase[i%4]]) for i in range(len(trace))]
-            assert actual==expected,dict(channel=ch,expected=expected,actual=actual)
-            field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-            times=[m[field] for m in trace];tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-            assert all(abs((b-a)/1e9-1/6)<=tolerance for a,b in zip(times,times[1:])),dict(channel=ch,times=times)
-            traces[ch]=times
-        # Equal-rate channels must stay aligned; retain within-channel order.
-        if traces:
-            firsts=[times[0] for times in traces.values()]
-            tolerance_ns=2 if c.clock_mode=='controlled-experimental' else 10000000
-            assert max(firsts)-min(firsts)<=tolerance_ns,firsts
-        c.results.append(dict(kind='channel-routing-isolation',active_channels=active,note_on_count=len(notes),times_by_channel=traces))
-        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-    def toggle(ch):
-        c.action(type='key',n=1,state=1)
-        try:
-            c.elapse(.3);c.tap(ch,1)
-        finally:c.action(type='key',n=1,state=0)
-    verify(list(range(1,17)))
-    for ch in range(1,17):
-        toggle(ch);c.led_values([(ch,1)],[7 if ch==16 else 0]);verify(list(range(ch+1,17)))
-    for ch in range(16,0,-1):
-        toggle(ch);c.led_values([(ch,1)],[15 if ch==16 else 2]);verify(list(range(ch,17)))
-
-def memory_navigation(c):
-    from frame_oracle import render
-    import base64
-    c.configure();c.enc(1,-2);c.screen_header('Ch. 1 Memory')
-    baseline=[(60,127),(62,117),(64,107),(65,97)]
-    first=[(72,90),*baseline[1:]]
-    both=[(72,90),(76,80),*baseline[2:]]
-    branch=[(72,90),(62,117),(79,70),(65,97)]
-    def counter(current,total):
-        expected=render([(0,23,15,str(current)),(0,49,15,str(total))],font_size=10,antialias=1)
-        indexes=[(y*128+x)*4+k for y in list(range(13,26))+list(range(39,52)) for x in range(16) for k in range(3)]
-        def match(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[i]==expected[i] for i in indexes)
-        c.wait(match);c.results.append(dict(kind='memory-position',current=current,total=total,frame_matched=True))
-    def phrase(values):c.playback([(1,[144,n,v]) for n,v in values],cycles=2)
-    def record(step,note,velocity):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:
-            c.action(type='midi',port=1,bytes=[144,note,velocity]);c.elapse(.05)
-            c.action(type='midi',port=1,bytes=[128,note,0])
-        finally:c.action(type='grid',x=step,y=4,state=0)
-        c.elapse(.1)
-    counter(0,0);c.key(2);c.key(3);c.enc(3,-3);c.enc(3,3);counter(0,0);phrase(baseline)
-    c.enc(1,-2);c.screen_header('Ch. 1 Note Masks');record(1,72,90);record(2,76,80)
-    c.enc(1,2);counter(2,2);phrase(both)
-    c.enc(3,-1);counter(1,2);phrase(first)
-    c.enc(3,-1);counter(0,2);phrase(baseline)
-    c.enc(3,-3);counter(0,2);phrase(baseline)
-    c.enc(3,1);counter(1,2);phrase(first)
-    c.enc(3,1);counter(2,2);phrase(both)
-    c.enc(3,3);counter(2,2);phrase(both)
-    c.key(2);counter(0,2);phrase(baseline)
-    c.key(3);counter(2,2);phrase(both)
-    c.enc(3,-1);counter(1,2)
-    c.enc(1,-2);record(3,79,70);c.enc(1,2);counter(2,2);phrase(branch)
-    c.key(3);counter(2,2);phrase(branch)
-    c.key(2);counter(0,2);phrase(baseline)
-    c.key(3);counter(2,2);phrase(branch)
-
-def memory_channel_isolation(c):
-    from frame_oracle import header,matches,render
-    import base64
-    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.enc(1,-4)
-    baseline=[(60,127),(62,117),(64,107),(65,97)]
-    edited_one=[(72,90),*baseline[1:]]
-    edited_two=[baseline[0],(79,80),*baseline[2:]]
-    def record(step,note,velocity):
-        c.action(type='grid',x=step,y=4,state=1)
-        try:
-            c.action(type='midi',port=1,bytes=[144,note,velocity]);c.elapse(.05)
-            c.action(type='midi',port=1,bytes=[128,note,0])
-        finally:c.action(type='grid',x=step,y=4,state=0)
-        c.elapse(.1)
-    def history(channel,current,total=1):
-        expected=header('Ch. '+str(channel)+' Memory',selected=3)
-        c.wait(lambda state:matches(state,expected))
-        expected=render([(0,23,15,str(current)),(0,49,15,str(total))],font_size=10,antialias=1)
-        indices=[(y*128+x)*4+k for y in list(range(13,26))+list(range(39,52)) for x in range(16) for k in range(3)]
-        def match(state):
-            pixels=base64.b64decode(state['frame']['pixels_base64'])
-            return all(pixels[i]==expected[i] for i in indices)
-        c.wait(match);c.results.append(dict(kind='channel-history-counter',channel=channel,current=current,total=total))
-    def verify(one,two):
-        marker=c.snapshot()['midi_count'];c.tap(1,8)
-        def notes(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
-        state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=9 for status in (144,145)),timeout=5)
-        observed=notes(state)
-        assert {m['bytes'][0] for m in observed}=={144,145}
-        for port,status,phrase in [(1,144,one),(2,145,two)]:
-            actual=[(m['port'],m['bytes']) for m in observed if m['bytes'][0]==status]
-            expected=[(port,[status,*phrase[i%4]]) for i in range(len(actual))]
-            assert actual==expected,dict(channel=status-143,expected=expected,actual=actual)
-            c.results.append(dict(kind='history-musical-isolation',channel=status-143,expected=expected,actual=actual))
-        c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-    record(2,79,80);c.tap(1,1);record(1,72,90);c.enc(1,2)
-    history(1,1);verify(edited_one,edited_two)
-    c.enc(3,-1);history(1,0);verify(baseline,edited_two)
-    c.tap(2,1);history(2,1);c.key(2);history(2,0);verify(baseline,baseline)
-    c.tap(1,1);history(1,0);c.key(3);history(1,1);verify(edited_one,baseline)
-    c.tap(2,1);history(2,0);c.enc(3,1);history(2,1);verify(edited_one,edited_two)
-    # Switching to an untouched channel and navigating its empty history must
-    # not affect either audible channel or borrow their history counters.
-    c.tap(3,1);history(3,0,0);c.key(2);c.key(3);c.enc(3,-2);c.enc(3,2);history(3,0,0);verify(edited_one,edited_two)
-    c.tap(1,1);history(1,1);c.tap(2,1);history(2,1)
-
-def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False):
+def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps=(2,4),range_start=1,clock_delta=0,rate_factor=1,boundary_witness=False,case_id=None):
     import time
+    ui=c.ui
     c.configure()
+    placement_steps=tuple(expected_steps)
     if boundary_witness:
         # An independent audible channel marks the active step through MIDI.
         # Same four-step range and clock; no application-state oracle.
-        c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-        c.tap(1,2);c.hold_tap((1,4),(4,4))
+        ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+        ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4))
         # Build a separate pattern; channel1's source will be cleared below.
-        c.tap(5,8);c.tap(2,1)
-        for x in range(1,5):c.tap(x,4)
-        c.tap(5,8)
-        for x,y in ((1,7),(2,6),(3,5),(4,4)):c.tap(x,y)
-        c.tap(5,8)
-        for x,y in ((1,1),(2,2),(3,3),(4,4)):c.tap(x,y)
-        c.tap(3,8);c.tap(1,2);c.tap(2,2);c.tap(1,1)
-    c.tap(5,8)
-    if boundary_witness:c.tap(1,1)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(3,8)
+        ui.pattern_editor();ui.tap_control('cell',(2,1))
+        for step in range(1,5):ui.tap_step(step)
+        ui.pattern_editor()
+        for x,y in ((1,7),(2,6),(3,5),(4,4)):ui.tap_control('cell',(x,y))
+        ui.pattern_editor()
+        for x,y in ((1,1),(2,2),(3,3),(4,4)):ui.tap_control('cell',(x,y))
+        ui.channel_editor();ui.tap_control('cell',(1,2));ui.tap_control('cell',(2,2));ui.tap_control('cell',(1,1))
+    ui.pattern_editor()
+    if boundary_witness:ui.tap_control('cell',(1,1))
+    for step in range(1,5):ui.tap_step(step)
+    ui.channel_editor()
     cell=lambda step:((step-1)%16+1,(step-1)//16+4)
-    if range_start!=1:c.hold_tap(cell(range_start),cell(range_start+3))
-    cells=[cell(step) for step in range(1,65)]
-    c.led_values(cells,[2 if range_start<=step<=range_start+3 else 0 for step in range(1,65)])
+    if range_start!=1:ui.hold_control_tap('cell','cell',cell(range_start),cell(range_start+3))
+    ui.expect_steps({
+        step: ('off' if range_start <= step <= range_start + 3 else 'dark')
+        for step in range(1, 65)
+    })
     if clock_delta:
-        from frame_oracle import header,matches
-        c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        c.enc(3,clock_delta);c.key(3)
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+        ui.turn(1,-1);ui.wait_for_header('clock_mods',channel=1)
+        ui.set_value(clock_delta);ui.press_key(3)
+    ui.press_key(1);ui.turn(1,4);ui.press_key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
-    c.enc(2,position);c.key(3);menu_label(c,'source');c.enc(3,1);menu_value(c,'midi');c.key(1)
-    c.tap(2,8) # arm recording through the grid
+    ui.turn(2,position);ui.press_key(3);menu_label(c,'source');ui.set_value(1);menu_value(c,'midi');ui.press_key(1)
+    ui.tap_control('record') # arm recording through the grid
     controlled=c.clock_mode=='controlled-experimental';domain='logical' if controlled else 'monotonic'
     origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
     # 24PPQN at100BPM:25ms pulses,150ms per sixteenth. FA follows49 warmup
@@ -2542,12 +2053,22 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
         for i,m in enumerate(witness):
             assert abs(m[field]-(origin+1250000000+i*150000000))<=(2 if controlled else 10000000),m
         evidence=[]
-        for pitch,step in zip((72,79),expected_steps):
-            active_pitch=phrase[step-1][0]
+        equal_deadline_race=input_offsets==(1400000000,1700000000)
+        if equal_deadline_race and controlled:
+            # README.md, "Arm live record": at an exact deadline, the note
+            # belongs to the prior step when Mosaic processes it first.
+            assert tuple(expected_steps)==(1,3)
+        for i,(pitch,configured_step) in enumerate(zip((72,79),expected_steps)):
             preview=next(m for m in emitted if m['port']==1 and m['bytes'][:2]==[144,pitch])
             prior=[m for m in emitted if m['index']<preview['index'] and m['port']==2 and m['bytes'][0]==145 and m['bytes'][2]>0]
             following=[m for m in emitted if m['index']>preview['index'] and m['port']==2 and m['bytes'][0]==145 and m['bytes'][2]>0]
             assert prior and following,'Missing MIDI step witness'
+            step=configured_step
+            if equal_deadline_race and not controlled:
+                from record_placement_oracle import derive_boundary_recorded_step
+                candidates=((1,2),(3,4))[i]
+                step=derive_boundary_recorded_step(prior[-1]['bytes'][1],following[0]['bytes'][1],candidates)
+            active_pitch=phrase[step-1][0]
             assert prior[-1]['bytes'][1]==active_pitch,dict(preview=preview,prior=prior[-1])
             assert following[0]['bytes'][1]==phrase[step%4][0]
             assert prior[-1][field]<=preview[field]<following[0][field]
@@ -2556,18 +2077,24 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
             if controlled and input_offsets==(1400000000,1700000000):
                 assert following[0][field]-preview[field]==1
             evidence.append(dict(recorded_step=step,preview=preview,active_step_onset=prior[-1],next_step_onset=following[0],gap_to_next_ns=following[0][field]-preview[field]))
+        if equal_deadline_race and not controlled:
+            placement_steps=tuple(item['recorded_step'] for item in evidence)
         c.results.append(dict(kind='boundary-active-step-midi-witness',events=evidence))
-    c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
-    c.led_values(cells,[15 if step in expected_steps else (2 if range_start<=step<=range_start+3 else 0) for step in range(1,65)])
-    c.results.append(dict(kind='recorded-step-placement',expected_steps=list(expected_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
+    c.wait(lambda state:not state['midi_capture']['outstanding']);ui.tap_control('record')
+    ui.expect_steps({
+        step: ('selected' if step in placement_steps else
+               'off' if range_start <= step <= range_start + 3 else 'dark')
+        for step in range(1, 65)
+    })
+    c.results.append(dict(kind='recorded-step-placement',expected_steps=list(placement_steps),input_note_on_offsets_ns=list(input_offsets),clock_step_ns=round(150000000*rate_factor),channel_range=[range_start,range_start+3]))
     # Replay in normal internal clock after disarming; preview MIDI cannot
     # satisfy this oracle because playback takes a fresh capture marker.
-    c.key(1);c.key(3);menu_label(c,'source');c.enc(3,-1);menu_value(c,'internal')
-    c.enc(2,1);menu_label(c,'tempo');c.enc(3,-10);menu_value(c,'90');c.key(1)
+    ui.press_key(1);ui.press_key(3);menu_label(c,'source');ui.set_value(-1);menu_value(c,'internal')
+    ui.turn(2,1);menu_label(c,'tempo');ui.set_value(-10);menu_value(c,'90');ui.press_key(1)
     # Independent step positions define playback order, including wrap input.
-    phrase=sorted(zip(expected_steps,[(1,[144,72,90]),(1,[144,79,80])]))
+    phrase=sorted(zip(placement_steps,[(1,[144,72,90]),(1,[144,79,80])]))
     if boundary_witness:
-        c.tap(2,1);c.tap(2,2);c.tap(1,1)
+        ui.tap_control('cell',(2,1));ui.tap_control('cell',(2,2));ui.tap_control('cell',(1,1))
     notes=c.playback([event for step,event in phrase],cycles=3)
     field='logical_ns' if controlled else 'monotonic_ns'
     gaps=[(b[field]-a[field])/1e9 for a,b in zip(notes,notes[1:])]
@@ -2575,11 +2102,14 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     tolerance=2e-9 if controlled else .01
     assert all(abs(gap-expected)<=tolerance for gap,expected in zip(gaps,expected_gaps)),dict(actual=gaps,expected=expected_gaps)
     c.results.append(dict(kind='recorded-replay-spacing',expected_seconds=expected_gaps,actual_seconds=gaps))
+    if case_id is not None:
+        reexpress_case_results(c,case_id)
 
 def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1,disarm_while_held=False):
-    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
-    c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
+    ui=c.ui
+    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
+    ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
     field='logical_ns' if controlled else 'monotonic_ns'
     state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
@@ -2594,8 +2124,8 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
     c.action(**request)
     if controlled:c.elapse((origin+100000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=1,timeout=2)
-    c.tap(2,1)
-    if disarm_while_held:c.tap(2,8)
+    ui.tap_control('cell',(2,1))
+    if disarm_while_held:ui.tap_control('record')
     marker=c.snapshot()['midi_count']
     if controlled:c.elapse((origin+hold_ns+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==2,timeout=2)
@@ -2608,10 +2138,10 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         # New post-disarm notes may preview, but must not alter channel2 replay.
         c.action(type='midi',port=1,bytes=[144,79,80]);c.elapse(.03)
         c.action(type='midi',port=1,bytes=[128,79,0])
-    c.tap(1,8)
-    if not disarm_while_held:c.tap(2,8)
+    ui.stop()
+    if not disarm_while_held:ui.tap_control('record')
     c.wait(lambda state:not state['midi_capture']['outstanding'])
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    marker=c.snapshot()['midi_count'];ui.play()
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
     state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=13 for status in (144,145)),timeout=5)
     rows=notes(state);field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -2626,48 +2156,7 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
         c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-
-def live_playhead_feedback(c,clock_delta=0):
-    import time
-    c.configure()
-    if clock_delta:
-        from frame_oracle import header,matches
-        c.enc(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        c.enc(3,clock_delta);c.key(3)
-    marker=c.snapshot()['midi_count']
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    controlled=c.clock_mode=='controlled-experimental'
-    field='logical_ns' if controlled else 'monotonic_ns'
-    started=c.logical_ns if controlled else time.monotonic_ns()
-    samples=[];settled=set();last_rows=[]
-    # Grid redraw sleeps50ms. D permits only integer-nanosecond rounding;
-    # R adds the existing10ms scheduler allowance, not a whole extra step.
-    limit=50000002 if controlled else 60000000
-    while (c.logical_ns if controlled else time.monotonic_ns())-started<3000000000:
-        before=c.logical_ns if controlled else time.monotonic_ns()
-        state=c.snapshot()
-        after=c.logical_ns if controlled else time.monotonic_ns()
-        rows=[m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes'][0]==144 and m['bytes'][2]>0]
-        if rows:
-            expected=[[144,n,v] for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-            assert [m['bytes'] for m in rows]==[expected[i%4] for i in range(len(rows))]
-            current=(len(rows)-1)%4+1;previous=(current-2)%4+1
-            visible=[step for step in range(1,65) if state['grid'][48+step-1]==10]
-            assert len(visible)<=1,visible
-            age_low=before-rows[-1][field];age_high=after-rows[-1][field]
-            if visible:assert visible[0] in (current,previous),dict(current=current,visible=visible)
-            if age_low>limit:assert visible==[current],dict(current=current,visible=visible,age_low_ns=age_low,age_high_ns=age_high)
-            if visible==[current]:settled.add(len(rows))
-            samples.append(dict(note_ordinal=len(rows),current_step=current,visible=visible,age_lower_ns=age_low,age_upper_ns=age_high))
-            last_rows=rows
-            if len(rows)>=9 and 9 in settled:break
-        c.elapse(.01 if controlled else .005)
-    assert len(last_rows)>=9 and set(range(1,10))<=settled,dict(notes=len(last_rows),settled=sorted(settled))
-    stale=[x for x in samples if x['visible']!=[x['current_step']]]
-    c.results.append(dict(kind='live-playhead-latency',redraw_period_ns=50000000,maximum_allowed_stale_ns=limit,samples=samples,max_observed_stale_lower_ns=max([x['age_lower_ns'] for x in stale],default=0)))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-    c.led_values([(x,4) for x in range(1,5)],[15]*4)
+    ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 def keyboard_input_channels(c):
     import time
@@ -2694,11 +2183,12 @@ def keyboard_input_channels(c):
     c.results.append(dict(kind='keyboard-input-channel-matrix',input_ports=[1,2],input_channels=list(range(1,17)),release_status_types=[128,144],expected=expected,actual=actual))
 
 def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
-    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
+    ui=c.ui
+    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     for order in ((0,1),(1,0)):
-        c.tap(1,1);marker=c.snapshot()['midi_count']
+        ui.tap_control('cell',(1,1));marker=c.snapshot()['midi_count']
         c.action(type='midi',port=1,bytes=[144,72,90])
-        c.tap(2,1);c.action(type='midi',port=second_port,bytes=[143+second_channel,72,80])
+        ui.tap_control('cell',(2,1));c.action(type='midi',port=second_port,bytes=[143+second_channel,72,80])
         inputs=[(1,1),(second_port,second_channel)]
         expected=[(1,[144,72,90]),(2,[145,72,80])]
         for owner in order:
@@ -2712,8 +2202,9 @@ def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
         c.results.append(dict(kind='overlapping-keyboard-source-isolation',input_sources=inputs,release_order=order,expected=expected,actual=actual))
 
 def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),preview_release_ns=None,release_offsets=(300000000,400000000,500000000)):
-    c.configure();c.tap(2,8)
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    ui=c.ui
+    ui.configure();ui.tap_control('record')
+    marker=c.snapshot()['midi_count'];ui.tap_control('play_stop')
     controlled=c.clock_mode=='controlled-experimental'
     field='logical_ns' if controlled else 'monotonic_ns'
     state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
@@ -2730,7 +2221,7 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
     c.action(**request)
     if controlled:c.elapse((origin+(10000000 if preview_release_ns is not None else 100000000)-c.logical_ns)/1e9)
     else:c.wait(lambda state:sum(event['bytes'][0]==144 and event['bytes'][1] in (72,76,79) for event in state['midi_input_schedule']['delivered'])>=3,timeout=2)
-    c.tap(2,8) # Disarm after all three chord presses; some voices may already be released.
+    ui.tap_control('record') # Disarm after all three chord presses; some voices may already be released.
     if controlled:c.elapse((origin+max(500000000,preview_release_ns or 0)+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==len(events),timeout=2)
     state=c.snapshot()
@@ -2740,8 +2231,8 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
         expected_preview=[(1,[144,83,80]),(1,[128,83,0])]
         c.results.append(dict(kind='post-disarm-preview',expected=expected_preview,actual=preview))
         assert preview==expected_preview,dict(expected=expected_preview,actual=preview)
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    ui.tap_control('play_stop');c.wait(lambda state:not state['midi_capture']['outstanding'])
+    marker=c.snapshot()['midi_count'];ui.tap_control('play_stop')
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0]==144 and m['bytes'][2]>0]
     state=c.wait(lambda state:len(notes(state))>=19,timeout=5)
     rows=notes(state)
@@ -2757,13 +2248,14 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
     tolerance=2e-9 if controlled else .01
     c.results.append(dict(kind='recorded-chord-length',expected=.5,actual=durations,release_order=release_order))
     assert len(durations)==9 and all(abs(value-.5)<=tolerance for value in durations),dict(expected=.5,durations=durations,release_order=release_order)
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    ui.tap_control('play_stop');c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 def recorded_input_sources(c,second_port=2,second_channel=1):
     hold_ns=500000000;expected_duration=.5;release_status=128;input_channel=1;disarm_while_held=False
-    c.configure();c.tap(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    c.tap(1,2);c.hold_tap((1,4),(4,4));c.tap(1,1)
-    c.tap(2,8);marker=c.snapshot()['midi_count'];c.tap(1,8)
+    ui=c.ui
+    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
+    ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
     field='logical_ns' if controlled else 'monotonic_ns'
     state=c.wait(lambda state:any(m['index']>marker and m['port']==1 and m['bytes']==[144,60,127] for m in state['midi']))
@@ -2780,8 +2272,8 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
     c.action(**request)
     if controlled:c.elapse((origin+10000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])>=1,timeout=2)
-    c.tap(2,1)
-    if disarm_while_held:c.tap(2,8)
+    ui.tap_control('cell',(2,1))
+    if disarm_while_held:ui.tap_control('record')
     marker=c.snapshot()['midi_count']
     if controlled:c.elapse((origin+610000000-c.logical_ns)/1e9)
     else:c.wait(lambda state:len(state['midi_input_schedule']['delivered'])==4,timeout=2)
@@ -2794,10 +2286,10 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
         # New post-disarm notes may preview, but must not alter channel2 replay.
         c.action(type='midi',port=1,bytes=[144,79,80]);c.elapse(.03)
         c.action(type='midi',port=1,bytes=[128,79,0])
-    c.tap(1,8)
-    if not disarm_while_held:c.tap(2,8)
+    ui.stop()
+    if not disarm_while_held:ui.tap_control('record')
     c.wait(lambda state:not state['midi_capture']['outstanding'])
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    marker=c.snapshot()['midi_count'];ui.play()
     def notes(state):return [m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
     state=c.wait(lambda state:all(sum(m['bytes'][0]==status for m in notes(state))>=13 for status in (144,145)),timeout=5)
     rows=notes(state);field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
@@ -2812,7 +2304,7 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
         tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
         assert all(abs(value-duration)<=tolerance for value in durations),dict(channel=status-143,durations=durations,expected=duration)
         c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
 
 def keyboard_pitch_range(c):
     import time
@@ -2842,20 +2334,21 @@ def muted_sparse_reverse_arp(c,shape):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4)
-    c.enc(2,1);c.enc(3,51) # Unset -1 -> velocity50.
-    c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
-    c.enc(2,4);c.enc(3,7) # Only mask4 is populated: octave from X; others remain unset.
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
-    c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Velocity Mod');c.enc(3,10)
-    capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns;c.tap(1,8);c.elapse(8.5);capture.extend(c.snapshot())
+    ui=c.ui
+    c.configure();ui.set_range(1,64);ui.pattern_editor()
+    for step in (2,3,4):ui.tap_step(step)
+    ui.channel_editor();ui.turn(1,-4)
+    ui.turn(2,1);ui.set_value(51) # Unset -1 -> velocity50.
+    ui.turn(2,1);ui.set_value(89);length_mask_display(c,'128')
+    ui.turn(2,4);ui.set_value(7) # Only mask4 is populated: octave from X; others remain unset.
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
+    ui.assign_trig_parameter('Chord Note Arpeggio');ui.set_value(8)
+    ui.turn(2,1);ui.assign_trig_parameter('Chord Pattern');ui.set_value(shape)
+    ui.turn(2,1);ui.assign_trig_parameter('Mute Chord Root');ui.set_value(1)
+    ui.turn(2,1);ui.assign_trig_parameter('Chord Velocity Mod');ui.set_value(10)
+    capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns;ui.play();c.elapse(8.5);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     upper=c.logical_ns if controlled else time.monotonic_ns()
     c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     expected=[(0,72,50),(540,72,100),(1080,72,127)]
@@ -2869,25 +2362,26 @@ def arp_rest_live_scale(c,fully_masked=False):
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     assert c.clock_mode=='controlled-experimental','Absolute live-edit schedule requires controlled time until D20 mapping is admitted'
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4)
-    if fully_masked:c.enc(3,61) # Explicit C4 mask, then use full scale processing.
-    c.enc(2,1);c.enc(3,51);c.enc(2,1);c.enc(3,89);length_mask_display(c,'128')
-    c.enc(2,1);c.enc(3,2);c.enc(2,2);c.enc(3,4)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
+    ui=c.ui
+    c.configure();ui.set_range(1,64);ui.pattern_editor()
+    for step in (2,3,4):ui.tap_step(step)
+    ui.channel_editor();ui.turn(1,-4)
+    if fully_masked:ui.set_value(61) # Explicit C4 mask, then use full scale processing.
+    ui.turn(2,1);ui.set_value(51);ui.turn(2,1);ui.set_value(89);length_mask_display(c,'128')
+    ui.turn(2,1);ui.set_value(2);ui.turn(2,2);ui.set_value(4)  # unset chord masks start from X
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
     values=[('Chord Note Arpeggio',8),('Chord Spread',5),('Chord Accel Mod',1),('Chord Velocity Mod',10),('Mute Chord Root',1)]
     if fully_masked:values.append(('Quantise Note Mask',2))
     for index,(label,value) in enumerate(values):
-        if index:c.enc(2,1)
-        assign_trig_parameter(c,label);c.enc(3,value)
+        if index:ui.turn(2,1)
+        ui.assign_trig_parameter(label);ui.set_value(value)
     capture=MidiWindow(c.snapshot()['midi_count']);origin=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     c.elapse(2);capture.extend(c.snapshot())
-    c.tap(4,8);c.enc(2,-1);c.enc(3,2);c.key(3) # Applied scale C-major -> D-major during a rest.
+    ui.scale_editor();ui.turn(2,-1);ui.set_value(2);ui.press_key(3) # Applied scale C-major -> D-major during a rest.
     assert (c.logical_ns-origin)/1e9<4.5,'Scale edit missed its declared rest window'
     c.elapse(14-(c.logical_ns-origin)/1e9);capture.extend(c.snapshot());lower=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     upper=c.logical_ns;c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
     expected=[(162,64,60),(648,69,80),(1782,66,110)]
     rows=assert_schedule(capture.events,expected,[108]*3,field='logical_ns',origin=origin,stop_bounds=(lower,upper),tolerance=2e-9)
@@ -2898,25 +2392,22 @@ def arp_empty_muted_replacement(c):
     import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8);c.tap(4,4);c.tap(3,8)
-    c.enc(1,-4);c.enc(2,2);c.enc(3,22);length_mask_display(c,'3')
-    c.enc(2,1);c.enc(3,1);c.enc(3,-1) # Global chord1 Off from X; other masks unset.
-    for x in (1,3):
-        c.action(type='grid',x=x,y=4,state=1)
-        try:c.enc(3,2) # Third only for the first and replacement trigger.
-        finally:c.action(type='grid',x=x,y=4,state=0)
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,18) # Two-step notes/onsets.
-    c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,1)
-    for x in (1,3):
-        c.action(type='grid',x=x,y=4,state=1)
-        try:c.enc(3,-1)
-        finally:c.action(type='grid',x=x,y=4,state=0)
+    ui=c.ui
+    c.configure();ui.set_range(1,64);ui.pattern_editor();ui.tap_step(4);ui.channel_editor()
+    ui.turn(1,-4);ui.turn(2,2);ui.set_value(22);length_mask_display(c,'3')
+    ui.turn(2,1);ui.set_value(1);ui.set_value(-1) # Global chord1 Off from X; other masks unset.
+    for step in (1,3):
+        with ui.hold_step(step):ui.set_value(2) # Third only for the first and replacement trigger.
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
+    ui.assign_trig_parameter('Chord Note Arpeggio');ui.set_value(18) # Two-step notes/onsets.
+    ui.turn(2,1);ui.assign_trig_parameter('Mute Chord Root');ui.set_value(1)
+    for step in (1,3):
+        with ui.hold_step(step):ui.set_value(-1)
     capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     c.elapse(6.75);capture.extend(c.snapshot())
     controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    ui.gesture([('play_stop',None)],[('play_stop',None)])
     upper=c.logical_ns if controlled else time.monotonic_ns();c.elapse(2);capture.extend(c.snapshot())
     c.wait(lambda state:not state['midi_capture']['outstanding'])
     # Empty-muted trigger at216 cancels the old onset due432, preserving
@@ -2929,214 +2420,24 @@ def arp_empty_muted_replacement(c):
     c.results.append(dict(kind='empty-muted-replacement-release-ownership',onsets=3,releases=len(rows),empty_trigger_pulse=216,old_gate_pulse=648,passed=True))
 
 
-def chord_dashboard_display(c, root_velocity):
-    import base64
-    from frame_oracle import render
-    # Literal user-facing pitches/velocity for MIDI60 +64/67/69/72 (norns labels C3/E3/G3/A3/C4).
-    # Only the three complete root value widgets are compared here. Chord-slot
-    # persistence remains a separate dashboard coverage obligation.
-    expected=render([(0,18,1,'Note'),(0,26,1,'C3'),
-                     (25,18,1,'Vel'),(25,26,1,str(root_velocity)),
-                     (50,18,1,'Len'),(50,26,1,'4.0')])
-    indices=[(y*128+x)*4+k for y in range(11,29) for x in range(75) for k in range(3)]
-    def matches(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[i]==expected[i] for i in indices)
-    c.wait(matches,timeout=.5)
-    c.results.append(dict(kind='chord-root-dashboard',note='C3',velocity=root_velocity,length='4.0',
-                          source='rendered framebuffer',passed=True))
-
-
-def chord_shape_schedule(c,arp,shape,muted,mask_bits=15,velocity=50,modifier=10,extra=None,dashboard=False):
-    import time
-    from midi_window import MidiWindow
-    from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,1);c.enc(3,velocity+1)
-    c.enc(2,1);c.enc(3,26);length_mask_display(c,'4')
-    for i,turns in enumerate((2,4,5,7)):  # unset chord masks start from X
-        c.enc(2,1)
-        if mask_bits&(1<<i):c.enc(3,turns)
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,0 if extra=='disabled' else 8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
-    c.enc(2,1);assign_trig_parameter(c,'Mute Chord Root');c.enc(3,int(muted))
-    c.enc(2,1);assign_trig_parameter(c,'Chord Velocity Mod');c.enc(3,modifier)
-    if extra=='accelerating':
-        c.enc(2,1);assign_trig_parameter(c,'Chord Spread');c.enc(3,5)
-        c.enc(2,1);assign_trig_parameter(c,'Chord Accel Mod');c.enc(3,-1)
-    if dashboard:c.enc(1,4) # Trig Locks to Note Dashboard, stopped.
-    capture=MidiWindow(c.snapshot()['midi_count']);trigger=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    c.elapse(2.625 if extra=='early-stop' else 3.25);capture.extend(c.snapshot());controlled=c.clock_mode=='controlled-experimental'
-    lower=c.logical_ns if controlled else time.monotonic_ns()
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
-    upper=c.logical_ns if controlled else time.monotonic_ns();c.elapse(1);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
-    order={1:(0,1,2,3,4),2:(4,3,2,1,0),3:(0,1,4,2,3),4:(4,1,3,2,0)}[shape]
-    pitches=(60,64,67,69,72)
-    expected=[(ordinal*108,pitches[slot],max(0,min(127,velocity+ordinal*modifier))) for ordinal,slot in enumerate(order) if (slot==0 and not muted) or (slot>0 and mask_bits&(1<<(slot-1)))]
-    if extra=='disabled':expected=[(0,pitch,vel) for _,pitch,vel in expected]
-    elif extra=='accelerating':
-        ticks={0:0,108:162,216:270,324:324}
-        expected=[(ticks[tick],pitch,vel) for tick,pitch,vel in expected if tick in ticks]
-    elif extra=='early-stop':expected=[row for row in expected if row[0]<378]
-    if arp and mask_bits==0:
-        expected=[] if muted else [(i*108,60,max(0,min(127,velocity+i*modifier))) for i in range(5)] # Root-only ratchet, independent of shape.
-    notes=capture.note_ons();assert notes or not expected
-    field='logical_ns' if controlled else 'monotonic_ns'
-    # Real time anchors on the first sounding onset; a velocity-zero root is a
-    # wire-level release and is not among note_ons().
-    audible=[tick for tick,_,vel in expected if vel>0]
-    origin=trigger if controlled else (notes[0][field]-audible[0]/144*1e9 if notes and audible else 0)
-    if not expected:
-        assert not [m for m in capture.events if m['bytes'][0]&240 in (128,144)],'Silent chord emitted MIDI notes/releases'
-        rows=[]
-    elif modifier<0 or any(vel==0 for _,_,vel in expected):
-        # Zero-velocity Note On is a wire-level Note Off; inspect the explicit
-        # zero messages separately instead of pretending they opened voices.
-        ons=[m for m in capture.events if m['bytes'][0]&240==144]
-        offs=[m for m in capture.events if m['bytes'][0]&240==128]
-        assert len(ons)==len(offs)==len(expected),'Velocity-bound MIDI count'
-        tolerance=2e-9 if controlled else .01
-        pending={}
-        for event,(tick,pitch,vel) in zip(ons,expected):
-            assert (event['port'],event['bytes'])==(1,[144,pitch,vel]),('Clamped velocity',event,pitch,vel)
-            assert abs((event[field]-origin)/1e9-tick/144)<=tolerance
-            pending[pitch]=vel
-        for event in offs:
-            pitch=event['bytes'][1];assert pitch in pending,'Duplicate or unrelated velocity release'
-            assert event['port']==1 and event['bytes'][0]==128 and event['bytes'][2] in (0,pending.pop(pitch))
-            assert lower-tolerance*1e9<=event[field]<=upper+tolerance*1e9,'Release outside Stop drain'
-        assert not pending;rows=offs
-    else:
-        rows=assert_schedule(capture.events,expected,[108 if arp else 864]*len(expected),field=field,origin=origin,stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
-    c.results.append(dict(kind='chord-shape-slots',arp=arp,shape=shape,muted=muted,mask_bits=mask_bits,onsets=len(expected),release_checks=len(rows),passed=True))
-
-    if dashboard:chord_dashboard_display(c,max(0,min(127,velocity+(4*modifier if shape in (2,4) else 0))))
-
-def navigation_matrix(c):
-    # Independent six-page model: the pattern key cycles three editors.
-    # Check each intermediate menu state and re-play the authored melody after
-    # every source/destination pair so navigation cannot silently alter music.
-    pages=('channel','scale','trig','note','velocity','song')
-    pattern_pages=('trig','note','velocity')
-    menus={'channel':[15,2,2,2], 'scale':[2,15,2,2],
-           'trig':[2,2,5,2], 'note':[2,2,10,2],
-           'velocity':[2,2,15,2], 'song':[2,2,2,15]}
-    melody=[(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))]
-    c.configure();current='channel';edges=[];presses=0
-    def choose(target):
-        nonlocal current, presses
-        if target in pattern_pages:
-            count=((pattern_pages.index(target)-pattern_pages.index(current))%3 or 3) if current in pattern_pages else pattern_pages.index(target)+1
-            button=5
-        else:
-            count=1;button={'channel':3,'scale':4,'song':6}[target]
-        for _ in range(count):
-            c.tap(button,8);presses+=1
-            if button==5:
-                current=pattern_pages[(pattern_pages.index(current)+1)%3] if current in pattern_pages else 'trig'
-            else:current={3:'channel',4:'scale',6:'song'}[button]
-            c.led_values([(x,8) for x in (3,4,5,6)],menus[current])
-        assert current==target
-    for source in pages:
-        for target in pages:
-            choose(source);choose(target)
-            notes=c.playback(melody,cycles=2)
-            assert len(notes)>=9
-            c.led_values([(x,8) for x in (3,4,5,6)],menus[target])
-            edges.append([source,target])
-    assert len(edges)==36 and len({tuple(edge) for edge in edges})==36
-    c.results.append(dict(kind='navigation-matrix',source_destination_pairs=edges,
-                          menu_presses=presses,melody_checks=36,passed=True))
-
-
-def panic_hold(c, button, source, repeats=1):
-    menus={'channel':[15,2,2,2], 'scale':[2,15,2,2],
-           'trig':[2,2,5,2], 'note':[2,2,10,2],
-           'velocity':[2,2,15,2], 'song':[2,2,2,15]}
-    selected={'channel':3,'scale':4,'trig':5,'note':5,'velocity':5,'song':6}[source]
-    c.tap(3,8)
-    if source in ('trig','note','velocity'):
-        for _ in range(('trig','note','velocity').index(source)+1):c.tap(5,8)
-    elif source!='channel':c.tap(selected,8)
-    menu=menus[source];c.led_values([(x,8) for x in (3,4,5,6)],menu)
-    expected=[[128+channel,note,0] for note in range(128) for channel in range(16)] if button!=selected else []
-    for repeat in range(repeats):
-        after=c.snapshot()['midi_count'];start=len(c.observations)
-        logical_start=c.logical_ns;press_ack=c.action(type='grid',x=button,y=8,state=1)
-        c.elapse(.9);c.snapshot()
-        # Live snapshots drive observation only; full exported MIDI is the oracle.
-        for _ in range(10):
-            c.elapse(.1);c.snapshot()
-            if len(c.observations)>start+2:del c.observations[start+1:-1]
-        c.action(type='grid',x=button,y=8,state=0);c.elapse(.06);cursor=c.snapshot()['midi_count']
-        c.led_values([(x,8) for x in (3,4,5,6)],menu)
-        if not hasattr(c,'panic_windows'):c.panic_windows=[]
-        c.panic_windows.append(dict(type='panic',after=after,cursor=cursor,source=source,
-                                   button=button,repeat=repeat,logical_start=logical_start,press_ack=press_ack))
-
-
-def panic_navigation(c, button):
-    c.configure();panic_hold(c,button,'song');finish_panic_trace(c)
-
-
-def panic_hold_matrix(c):
-    c.configure();pairs=[]
-    for source in ('channel','scale','trig','note','velocity','song'):
-        for button in (3,4,5,6):
-            panic_hold(c,button,source,repeats=2)
-            after=c.snapshot()['midi_count']
-            c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
-            c.panic_windows.append(dict(type='melody',after=after,cursor=c.snapshot()['midi_count']))
-            pairs.append([source,button])
-    assert len(pairs)==24
-    finish_panic_trace(c,dict(kind='panic-hold-matrix',pairs=pairs,holds=48,melody_checks=24,passed=True))
-
-
-
-def finish_panic_trace(c, summary=None):
-    import json
-    from automation.input_origin import verified_input_origin
-    from panic_trace import verify_panic_trace
-    c.finish()
-    try:
-        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
-        actions=[json.loads(line) for line in (c.out/'native/actions.jsonl').read_text().splitlines()]
-        controlled=c.clock_mode=='controlled-experimental'
-        for window in c.panic_windows:
-            if window['type']!='panic':continue
-            ack=window['press_ack']
-            submitted=[e for e in events if e.get('kind')=='input' and e['sequence']==ack['native']['sequence']]
-            assert len(submitted)==1
-            evidence=verified_input_origin(events,actions,session_id=c.runtime.id,action_id=ack['action_id'],
-                expected_action=dict(type='grid',x=window['button'],y=8,state=1),declared_origin_ns=submitted[0]['monotonic_ns'])
-            window['input_origin']=evidence
-            window['minimum_ns']=window['logical_start']+1_000_000_000-2 if controlled else evidence['origin_ns']+900_000_000
-        (c.out/'panic-windows.json').write_text(json.dumps(c.panic_windows,indent=2)+'\n')
-        verify_panic_trace(events,c.panic_windows,11 if controlled else 3,c.results)
-        if summary:c.results.append(summary)
-    finally:
-        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
-
 def panic_live_note_stop(c):
     import json
-    c.configure();c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(6,8);c.tap(1,8);c.elapse(.2)
+    ui=c.ui
+    c.configure();ui.pattern_editor()
+    for step in range(1,5):ui.tap_step(step)
+    ui.song_editor();ui.play();c.elapse(.2)
     before=c.snapshot()['midi_count']
-    c.action(type='grid',x=5,y=8,state=1)
+    ui.control_edge('pattern_editor',True)
     released=False;played=False
     try:
         c.wait(lambda s:any(e['index']>before and e['port']==1 and e['bytes']==[143,24,0] for e in s['midi']),timeout=2)
-        c.action(type='grid',x=5,y=8,state=0);released=True
+        ui.control_edge('pattern_editor',False);released=True
         c.action(type='midi',port=1,bytes=[144,24,100]);played=True
         c.wait(lambda s:any(e['index']>before and e['port']==3 and e['bytes']==[143,127,0] for e in s['midi']),timeout=2)
         c.elapse(.05);stop_before=c.snapshot()['midi_count']
-        c.tap(1,8);c.elapse(.1);stop_after=c.snapshot()['midi_count']
+        ui.stop();c.elapse(.1);stop_after=c.snapshot()['midi_count']
     finally:
-        if not released:c.action(type='grid',x=5,y=8,state=0)
+        if not released:ui.control_edge('pattern_editor',False)
         if played:c.action(type='midi',port=1,bytes=[128,24,0]);c.elapse(.1)
     c.finish()
     try:
@@ -3166,64 +2467,36 @@ def panic_live_note_stop(c):
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
-def panic_overlapping_holds(c, repeats):
-    import json
-    from panic_repeat_trace import verify_restarted_sweeps
-    from panic_trace import verify_panic_trace
-    c.configure();c.tap(6,8)
-    before=c.snapshot()['midi_count'];held=[]
-    try:
-        for button in (3,4,5)[:repeats]:
-            c.action(type='grid',x=button,y=8,state=1);held.append(button);c.elapse(.12)
-        c.elapse(1.9)
-    finally:
-        for button in held:c.action(type='grid',x=button,y=8,state=0)
-    c.elapse(.1);after=c.snapshot()['midi_count']
-    c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
-    melody_before=c.snapshot()['midi_count']
-    c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
-    melody_after=c.snapshot()['midi_count'];c.finish()
-    try:
-        events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
-        midi=[e for e in events if e.get('kind') in (3,11)]
-        assert [e['sequence'] for e in midi]==list(range(1,len(midi)+1))
-        kind=11 if c.clock_mode=='controlled-experimental' else 3
-        assert all(e['kind']==kind for e in midi)
-        c.results.append(verify_restarted_sweeps(midi[before:after],repeats))
-        # Reuse the independent melody oracle on a reindexed copy of that window.
-        melody=[dict(e,sequence=i+1,index=i+1) for i,e in enumerate(midi[melody_before:melody_after])]
-        verify_panic_trace(melody,[dict(type='melody',after=0,cursor=len(melody))],kind,c.results)
-        outside=midi[:before]+midi[after:melody_before]+midi[melody_after:]
-        assert not [e for e in outside if e['bytes'][0]&240 in (128,144)],'Notes outside panic/melody windows'
-        c.results.append(dict(kind='panic-overlap-complete-stream',repeats=repeats,passed=True))
-    finally:
-        (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
-
-
-def panic_pending_chord(c, arp, shape):
+def panic_pending_chord(c, arp, shape, case_id=None):
     import json
     from automation.input_origin import verified_input_origin
     from automation.scheduling_metrics import scheduling_metrics
     from note_schedule import assert_schedule
-    c.configure();c.hold_tap((1,4),(16,7));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
-    c.tap(3,8);c.enc(1,-4);c.enc(2,1);c.enc(3,51)
-    c.enc(2,1);c.enc(3,26);length_mask_display(c,'4')
-    for turns in (2,4,5,7):c.enc(2,1);c.enc(3,turns)  # unset chord masks start from X
-    c.enc(1,3);c.enc(3,-11);c.key(3);c.enc(1,-2)
-    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');c.enc(3,8)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Pattern');c.enc(3,shape)
-    c.enc(2,1);assign_trig_parameter(c,'Chord Velocity Mod');c.enc(3,10)
-    c.tap(6,8);logical_start=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);start_ack=c.action(type='grid',x=1,y=8,state=0)
+    ui=c.ui
+    c.configure();ui.hold_control_tap('cell','cell',(1,4),(16,7));ui.pattern_editor()
+    for step in (2,3,4):ui.tap_step(step)
+    ui.channel_editor();ui.turn(1,-4);ui.turn(2,1);ui.set_value(51)
+    ui.turn(2,1);ui.set_value(26);length_mask_display(c,'4')
+    for turns in (2,4,5,7):ui.turn(2,1);ui.set_value(turns)  # unset chord masks start from X
+    ui.turn(1,3);ui.set_value(-11);ui.press_key(3);ui.turn(1,-2)
+    assign_trig_parameter(c,'Chord Note Arpeggio' if arp else 'Chord Note Strum');ui.set_value(8)
+    ui.turn(2,1);assign_trig_parameter(c,'Chord Pattern');ui.set_value(shape)
+    ui.turn(2,1);assign_trig_parameter(c,'Chord Velocity Mod');ui.set_value(10)
+    ui.song_editor();logical_start=c.logical_ns
+    ui.control_edge('play_stop',True);start_ack=ui.control_edge('play_stop',False)
     c.elapse(.1);panic_before=c.snapshot()['midi_count']
-    c.action(type='grid',x=5,y=8,state=1)
+    ui.control_edge('pattern_editor',True)
     try:c.elapse(1.9)
-    finally:c.action(type='grid',x=5,y=8,state=0)
+    finally:ui.control_edge('pattern_editor',False)
     c.elapse(.06);panic_after=c.snapshot()['midi_count']
-    c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
+    ui.expect_leds({
+        ("channel_editor",None):"off",
+        ("scale_editor",None):"off",
+        ("pattern_editor",None):"off",
+        ("song_editor",None):"selected",
+    })
     c.elapse(1.19);logical_stop=c.logical_ns
-    c.action(type='grid',x=1,y=8,state=1);stop_ack=c.action(type='grid',x=1,y=8,state=0)
+    ui.control_edge('play_stop',True);stop_ack=ui.control_edge('play_stop',False)
     c.elapse(1);c.snapshot();c.finish()
     try:
         events=[json.loads(line) for line in (c.out/'native/native-events.jsonl').read_text().splitlines()]
@@ -3261,15 +2534,22 @@ def panic_pending_chord(c, arp, shape):
             metrics=scheduling_metrics(planned,onset_events)
             assert metrics['within_event_profile'],('Pending chord onset scheduling',metrics)
         c.results.append(dict(kind='panic-pending-chord',arp=arp,shape=shape,sweep_events=len(sweep),onsets=5,releases=len(rows),start_origin=start,stop_origin=stop,metrics=metrics,passed=True))
+        if case_id is not None:
+            reexpress_case_results(c,case_id)
     finally:
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
-from panic_hotplug import panic_hotplug
-from patch_params import patch_boundaries,patch_play_recall
-from patch_matrix import patch_cc_matrix
+from contract.panic_hotplug import (
+    panic_hotplug_removed_before_reconnect_after,
+    panic_hotplug_removed_before_reconnect_during,
+    panic_hotplug_removed_during_reconnect_after,
+    panic_hotplug_removed_during_reconnect_during,
+)
+from patch_params_batch import patch_boundaries,patch_play_recall
+from contract.patch_matrix import patch_cc_matrix
 
-from output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_phrase,doubledecker_audition
+from contract.output_cases import jf_same_voice_overlap, jf_keyboard_ownership, jf_mono_phrase,doubledecker_audition
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
@@ -3281,41 +2561,52 @@ from shuffle_mixed_channels import mixed_shuffle_inheritance
 
 from shuffle_field_inheritance import shuffle_field_inheritance
 
-from song_length_domain import song_length_domain
+from contract.song_length_domain import song_length_domain
 
 from song_length_sparse import sparse_song_lengths
 
-from song_repetitions import song_repetition_domain
+from contract.song_repetitions import song_repetition_domain
 
 from song_tempo import song_tempo_bounds
 
 from external_start_phase import external_start_phase
 
-from external_cold_start import external_cold_start
+from external_cold_start import external_cold_start as ordinary_external_cold_start
+from contract.external_cold_start import external_cold_start, external_cold_start_20
 
-from external_started_handoff import external_started_handoff
+from contract.external_started_handoff import external_started_handoff
 
 from repeated_external_start import repeated_external_start
 
-from acquisition_stop import acquisition_stop
+from contract.acquisition_stop import acquisition_stop
 
-from fast_acquisition import fast_acquisition
+from contract.fast_acquisition import fast_acquisition
 
 from master_clock import master_clock
 
-from master_lifecycle import master_lifecycle
+from contract.master_lifecycle import master_lifecycle
 
 from master_multi_output import master_multi_output
 
 from forwarded_clock import cold_forwarded_clock,warm_forwarded_clock
 
-from continue_spp import continue_spp_unsupported
+from contract.continue_spp import continue_spp_unsupported
 
 from external_clock_faults import external_clock_fault,external_clock_explicit_recovery
 from external_clock_long import long_external_phase
 from external_clock_backlog import external_clock_runtime_backlog
 
 CASES={
+ 'M-MERGE-FOUNDATION-001':dict(run=foundation_workflow,requirements=['MERGE-FOUNDATION'],description='Physical Channel-page workflow enables Foundation with P01 anchors, projects protected/addition trigs and emits literal accented additions over two loops'),
+ 'M-MERGE-PHRASE-001':dict(run=phrase_build_workflow,requirements=['MERGE-PHRASE'],description='Physical Merge Shape workflow applies a two-cycle Build phrase with exact alternating onset sets and exact loop-relative timing over two full phrases'),
+ 'M-HARMONY-REVOICE-001':dict(run=revoice_workflow,requirements=['HARMONY-REVOICE'],description='Physical Masks and Harmony workflow enables Revoice and emits literal two-voice smooth placements over two complete loops'),
+ 'M-HARMONY-PATTERN-001':dict(run=pattern_harmony_workflow,requirements=['HARMONY-PATTERN'],description='Physical A-B-C-B broken-chord and scale-progression workflow maps three recurring identities without chord masks; proves literal pitches, onsets, gates and owned releases through active/Off/re-enable, rest/recovery, probability rejection/recovery, output disconnect/reconnect and copied-song entry; and verifies effective Note-grid projection with source-owned editing'),
+ 'M-HARMONY-PATTERN-CLOCKS-001':dict(run=pattern_harmony_independent_clocks_workflow,requirements=['HARMONY-PATTERN','CH-TEMPO'],description='Two public Pattern Harmony channels at /1 and /2 retain independent C frames in distinct registers with exact MIDI channels, pitches, onset intervals, gates and Stop cleanup'),
+ 'M-HARMONY-PATTERN-BYPASS-001':dict(run=pattern_harmony_delayed_bypass_workflow,requirements=['HARMONY-PATTERN','CHORD-ARP','PARAM-SLOTS'],description='Public reverse arpeggio with leading empty chord slots bypasses Pattern Harmony at the chord-mask boundary with exact legacy pitch, delayed onset, gate and release timing'),
+ 'M-HARMONY-ENSEMBLE-001':dict(run=ensemble_polyrhythm_workflow,requirements=['HARMONY-ENSEMBLE'],description='Physical four-channel Harmony workflow preserves independent masked rhythms and literal roles, then proves local scale and octave bypass with exact ordinary MIDI plus visible reason-specific status'),
+ 'M-HARMONY-PERSIST-001':dict(run=pattern_harmony_persistence_workflow,requirements=['HARMONY-PERSISTENCE'],description='UI-created Pattern Harmony configuration autosaves and a fresh native process cold-loads the same anchored literal output without serializing transient solver history'),
+ 'M-HARMONY-FAILURE-001':dict(run=no_voicing_fallback_workflow,requirements=['HARMONY-FAILURE'],description='A valid but infeasible Pattern register visibly reports NO VOICING and silences only the mapped tone; explicit Legacy fallback restores the unchanged ordinary phrase'),
+ 'M-HARMONY-HELD-001':dict(run=held_step_precedence_workflow,requirements=['HARMONY-HELD-PRECEDENCE'],description='A held-step keyboard edit closes and cancels a dirty Harmony draft, restores the last editable legacy workspace (Trig Locks), records exactly once to the intended step and replays through the unchanged Off path'),
  'M-STARTUP-TRANSPORT-001':dict(run=startup_transport,requirements=['PERSIST-AUTO-001','CLOCK-MIDI-TRANSPORT-001'],description='A fresh start sends no MIDI transport; a start that loads the autosave sends one Stop per connected MIDI port before any input (arbitrated SEM-018)'),
  'M-MAP-PAGE-RETURN-001':dict(run=midi_cc_page_return,requirements=['MAP-CONTROL'],description='A selected-channel mask map on MIDI channel 1, 2 or 16 brings up Note Masks and the channel editor returns to Device Config two seconds later (human decision S10: return on channels 1-16)'),
  'M-MAP-004':dict(run=midi_mapping_held_step,requirements=['MAP-ROUTING','MAP-CONTROL'],description='With a selected-channel step held, a fixed channel-2 velocity map edits channel 2 from its own value and a selected-channel map still edits the held step (arbitrated SEM-017)'),
@@ -3352,7 +2643,7 @@ CASES={
  'M-MEMORY-004':dict(run=memory_wrap,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='5003 held-step keyboard actions wrap the 5000-action history; E3 back two, a new step-2 action, then E3 back and forward restore and reapply exactly that action with the counter and phrases matching'),
  'M-MEMORY-014':dict(run=memory_retained_floor,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='After 5001 edits of one step wrap the 5000-action history, K2 returns to the retained-history floor (the state immediately before the oldest retained action), with the counter and replayed phrase matching README 698-705 (S58)'),
  'M-SONG-TEMPO-001':dict(run=song_tempo_divisions,requirements=['SONG-ADVANCE','SONG-SLOTS','CH-TEMPO'],description='Per-sequence tempo as clock divisions of the global tempo: slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing; exact pitches, octave fingerprints and onset times over two song cycles'),
- 'M-PERSIST-COMBINED-001':dict(run=lambda c:recording_lock_song(c,persist=True),requirements=['SAVE-AUTO','PERSIST-AUTO-001','REC-PARAM-AUTOMATION','SONG-SLOTS'],description='The M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream; tempo is norns system state'),
+ 'M-PERSIST-COMBINED-001':dict(run=recording_lock_song_persisted,requirements=['SAVE-AUTO','PERSIST-AUTO-001','REC-PARAM-AUTOMATION','SONG-SLOTS'],description='The M-TRIPLE-005 combined state (recorded slot 1 locks, copied slot 2, stored patch 65) survives an idle autosave and a cold restart with an identical replay stream; tempo is norns system state'),
  'M-TRIPLE-005':dict(run=recording_lock_song,requirements=['REC-PARAM-AUTOMATION','REC-ARM','LOCK-PARAM-SET','SONG-ADVANCE','SONG-SLOTS'],description='A CC lock edit while recording is armed records slot 1 steps 2..4 through the final step and clears at the song transition: the copied slot 2 keeps its own locks and stored-patch recalls across two song cycles'),
  'M-TRIPLE-004':dict(run=trigless_slide_clock,requirements=['OPT-TRIGLESS','SLIDE-GLOBAL','CLOCK-MIDI-TRANSPORT-001'],description='Trigless silent-destination global slide under an external 24 PPQN clock that steps from 100 to 150 BPM mid-slide: ramp linear in received clock ordinals, arriving with the destination lock; stored-patch recall, exact onsets and balanced gates'),
  'M-REC-SONG-LENGTH-001':dict(run=lambda c:recording_song_transition(c,held_across=True,release_length=True),requirements=['REC-LIVE-NOTES','SONG-ADVANCE'],description='Held note released after song transition retains its complete two-step length in its onset song'),
@@ -3369,8 +2660,8 @@ CASES={
  'M-MERGE-TRIG-002':dict(run=trig_note_merge_matrix,requirements=['MERGE-TRIG-ALL','MERGE-TRIG-SKIP','MERGE-TRIG-ONLY','MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','MERGE-VELOCITY','OPT-PENTATONIC-MERGED'],description='All 3 trig merge modes x 3 note merge modes over two overlapping patterns: only trig-bearing patterns contribute, single contributors pass through, exact pitches, pattern-1 velocities and rest spacing'),
  'M-MAP-002':dict(run=midi_map_entry,requirements=['SETUP-MIDI-MAP-ENTRY','MAP-RANGES','MAP-CONTROL'],description='Create the documented map through the native norns parameter-map menu (learn CC, in 1..2, accumulate), verify the written PMAP, then step the selected channel velocity mask by relative CCs with exact velocities'),
  'M-SETUP-003':dict(run=device_config_defaults,requirements=['SETUP-DEVICE-DEFAULTS','SETUP-DEVICE-DISCOVERY','CH-DEVICE'],description='Custom configs set output defaults on confirmation: a drum config routes channel 1 to port 2, MIDI channel 10, fixed note 36; a polyphonic config routes channel 2 to MIDI channel 5 with its pattern notes'),
- 'M-SETUP-001':dict(run=lambda c:invalid_device_configs(c,'malformed'),requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),
- 'M-SETUP-002':dict(run=lambda c:invalid_device_configs(c,'missing-id'),requirements=['SETUP-DEVICE-INVALID'],description='A config entry without an id beside a valid one: Mosaic boots, plays through the valid device, and the entry is not offered'),
+ 'M-SETUP-001':dict(run=malformed_device_configs,requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),
+ 'M-SETUP-002':dict(run=missing_id_device_configs,requirements=['SETUP-DEVICE-INVALID'],description='A config entry without an id beside a valid one: Mosaic boots, plays through the valid device, and the entry is not offered'),
  'M-SETUP-UNREADABLE-CONFIG-001':dict(run=unreadable_device_config,requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='A config entry that cannot be opened sits between two valid configs: Mosaic boots, plays through the valid device, and the picker offers both valid devices (user decision S7: skip it and load the rest)'),
  'M-MAP-001':dict(run=midi_mapping,requirements=['MAP-CONTROL','MAP-ROUTING','MAP-RANGES'],description='Saved documented PMAP (in 1..2, out -1..1, accumulate): relative binary-offset CCs step the selected channel velocity mask, follow channel selection, and a fixed channel map ignores selection; exact velocities on both ports'),
  'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
@@ -3400,33 +2691,33 @@ CASES={
  'M-SYNC-013':dict(run=warm_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Warmed external clock on port1; Mosaic and forwarded port2 receiver keep absolute input phase'),
  'M-SYNC-011':dict(run=master_multi_output,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Two clock outputs enabled through native menu: independent receiver note phase/count, disabled third port, no note-routing leakage'),
  'M-SYNC-010':dict(run=master_lifecycle,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Master pending/active Start cancellation at zero,1ms,25ms; clock continues, no late notes/Start, no held voices, independent restart phase'),
- 'M-SYNC-LEAD-002':dict(run=lambda c,n='normal':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 130 BPM straight: locks leave at step time at 0, 25 and 50 ms leads'),
- 'M-SYNC-LEAD-003':dict(run=lambda c,n='fast':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 200 BPM straight: 50 ms lead waits for the note-gap midpoint; every note under its own lock'),
- 'M-SYNC-LEAD-004':dict(run=lambda c,n='x4-130':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 130 BPM (29 ms steps): values between one and two leads wait for the midpoint'),
- 'M-SYNC-LEAD-005':dict(run=lambda c,n='x4-200':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 200 BPM (19 ms steps): steps closer than the lead keep each note under its own lock'),
- 'M-SYNC-LEAD-006':dict(run=lambda c,n='x16-130':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x16 channel clock at 130 BPM (7 ms steps): every note under its own lock, spacing and gates unchanged'),
- 'M-SYNC-LEAD-007':dict(run=lambda c,n='swing':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing 40 at x2: uneven gaps apply the midpoint only where notes come together'),
- 'M-SYNC-LEAD-008':dict(run=lambda c,n='swing-negative':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing -40 at 200 BPM: each note under its own lock with unchanged swung spacing'),
- 'M-SYNC-LEAD-009':dict(run=lambda c,n='shuffle':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local Heavy shuffle at x2: each note under its own lock with unchanged shuffled spacing'),
- 'M-SYNC-LEAD-010':dict(run=lambda c,n='swing-toggle':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), swing switched on then off during playback: each note under its own lock throughout'),
- 'M-SYNC-LEAD-011':dict(run=lambda c,n='shuffle-toggle':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), shuffle switched on then off during playback: each note under its own lock throughout'),
- 'M-SYNC-LEAD-012':dict(run=lambda c,n='slides':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), global slide between locks at x4: the lock value is in force at each locked note and slide values follow the previous note'),
- 'M-SYNC-LEAD-013':dict(run=lambda c,n='tempo-change':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), tempo raised from 130 to 200 BPM during playback: each note under its own lock throughout'),
- 'M-SYNC-LEAD-014':dict(run=lambda c,n='resend-off':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), Resend unchanged locks off at 130 BPM: same values, each landing at its documented time'),
- 'M-SYNC-LEAD-015':dict(run=lambda c,n='resend-off-x4-200':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), Resend unchanged locks off with x4 at 200 BPM: every note under its documented value'),
- 'M-SYNC-LEAD-016':dict(run=lambda c,n='range-late':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), a channel range 2-5 under swing: each note under its own step value with unchanged spacing'),
- 'M-SYNC-LEAD-017':dict(run=lambda c,n='range-wrap-slide':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), a slide wrapping from the range end back to its start with Wrap param slides on'),
- 'M-SYNC-LEAD-018':dict(run=lambda c,n='global-cap':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), a global pattern length of 3 capping the channel range: each played step under its own value'),
- 'M-SYNC-LEAD-019':dict(run=lambda c,n='range-live':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), the channel range changed to 2-4 during playback while locked steps play'),
-'M-SYNC-LEAD-020':dict(run=lambda c,n='range-live-off':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), the channel range changed to 4-5 just after step 2 sounds: the excluded step 3 lock is never sent and the Off step keeps step 2 value at every lead'),
+ 'M-SYNC-LEAD-002':dict(run=lock_lead_clock_002_normal,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 130 BPM straight: locks leave at step time at 0, 25 and 50 ms leads'),
+ 'M-SYNC-LEAD-003':dict(run=lock_lead_clock_003_fast,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 200 BPM straight: 50 ms lead waits for the note-gap midpoint; every note under its own lock'),
+ 'M-SYNC-LEAD-004':dict(run=lock_lead_clock_004_x4_130,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 130 BPM (29 ms steps): values between one and two leads wait for the midpoint'),
+ 'M-SYNC-LEAD-005':dict(run=lock_lead_clock_005_x4_200,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 200 BPM (19 ms steps): steps closer than the lead keep each note under its own lock'),
+ 'M-SYNC-LEAD-006':dict(run=lock_lead_clock_006_x16_130,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x16 channel clock at 130 BPM (7 ms steps): every note under its own lock, spacing and gates unchanged'),
+ 'M-SYNC-LEAD-007':dict(run=lock_lead_clock_007_swing,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing 40 at x2: uneven gaps apply the midpoint only where notes come together'),
+ 'M-SYNC-LEAD-008':dict(run=lock_lead_clock_008_swing_negative,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing -40 at 200 BPM: each note under its own lock with unchanged swung spacing'),
+ 'M-SYNC-LEAD-009':dict(run=lock_lead_clock_009_shuffle,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local Heavy shuffle at x2: each note under its own lock with unchanged shuffled spacing'),
+ 'M-SYNC-LEAD-010':dict(run=lock_lead_clock_010_swing_toggle,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), swing switched on then off during playback: each note under its own lock throughout'),
+ 'M-SYNC-LEAD-011':dict(run=lock_lead_clock_011_shuffle_toggle,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), shuffle switched on then off during playback: each note under its own lock throughout'),
+ 'M-SYNC-LEAD-012':dict(run=lock_lead_clock_012_slides,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), global slide between locks at x4: the lock value is in force at each locked note and slide values follow the previous note'),
+ 'M-SYNC-LEAD-013':dict(run=lock_lead_clock_013_tempo_change,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), tempo raised from 130 to 200 BPM during playback: each note under its own lock throughout'),
+ 'M-SYNC-LEAD-014':dict(run=lock_lead_clock_014_resend_off,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), Resend unchanged locks off at 130 BPM: same values, each landing at its documented time'),
+ 'M-SYNC-LEAD-015':dict(run=lock_lead_clock_015_resend_off_x4_200,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), Resend unchanged locks off with x4 at 200 BPM: every note under its documented value'),
+ 'M-SYNC-LEAD-016':dict(run=lock_lead_clock_016_range_late,requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), a channel range 2-5 under swing: each note under its own step value with unchanged spacing'),
+ 'M-SYNC-LEAD-017':dict(run=lock_lead_clock_017_range_wrap_slide,requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), a slide wrapping from the range end back to its start with Wrap param slides on'),
+ 'M-SYNC-LEAD-018':dict(run=lock_lead_clock_018_global_cap,requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), a global pattern length of 3 capping the channel range: each played step under its own value'),
+ 'M-SYNC-LEAD-019':dict(run=lock_lead_clock_019_range_live,requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), the channel range changed to 2-4 during playback while locked steps play'),
+'M-SYNC-LEAD-020':dict(run=lock_lead_clock_020_range_live_off,requirements=['LOCK-PARAM-SET','CH-RANGE'],description='Lock lead time (locks, defaults, Off and trigless values), the channel range changed to 4-5 just after step 2 sounds: the excluded step 3 lock is never sent and the Off step keeps step 2 value at every lead'),
  'M-SYNC-LEAD-001':dict(run=lock_lead_time,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Global lock lead: 25 ms default, values sent a whole pulse or more early, unshifted notes and clock, preserved gates at 0, 5, 10 and 25 ms'),
  'M-SYNC-009':dict(run=master_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Mosaic master: native clock-output menu, Start/Clock/note ordering and independent24PPQN receiver phase across four local start delays'),
  'M-SYNC-008':dict(run=fast_acquisition,requirements=['CLOCK-MIDI-TRANSPORT-001','CH-TEMPO','MIDI-RELEASE-001'],description='Cold20BPM MIDI at x8: reconcile the one unknowable pre-acquisition step at Clock2, preserve subsequent absolute deadlines and balanced gates'),
  'M-SYNC-007':dict(run=acquisition_stop,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],description='Cold20BPM external Start then Stop before Clock2: timely first-note release and no restart as subsequent clocks acquire tempo'),
  'M-SYNC-006':dict(run=repeated_external_start,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],issues=[84],description='Repeated incoming Start during a held note resets to step1 exactly once at the next external Clock, releases the previous note and preserves absolute phase'),
  'M-SYNC-005':dict(run=external_started_handoff,requirements=['CLOCK-LIVE-HANDOFF-001','CLOCK-MIDI-TRANSPORT-001'],description='Incoming Start then MIDI-to-internal source switch preserves phrase order and prevents epoch-driven note bursts'),
- 'M-SYNC-003':dict(run=lambda c:external_cold_start(c,bpm=20),requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold20BPM external clock: first note and all phrase deadlines through initial unknown-tempo acquisition'),
- 'M-SYNC-004':dict(run=lambda c:external_cold_start(c,bpm=300),requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold300BPM external clock: absolute startup, phase and releases'),
+ 'M-SYNC-003':dict(run=external_cold_start_20,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold20BPM external clock: first note and all phrase deadlines through initial unknown-tempo acquisition'),
+ 'M-SYNC-004':dict(run=lambda c:ordinary_external_cold_start(c,bpm=300),requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold300BPM external clock: absolute startup, phase and releases'),
  'M-SYNC-002':dict(run=external_cold_start,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold external Start followed by first-ever24PPQN clock: absolute beat origin, phrase timing and note releases'),
  'M-SYNC-001':dict(run=external_start_phase,requirements=['CLOCK-MIDI-TRANSPORT-001'],issues=[84],description='Warmed external24PPQN clock with four Start phases: step1 sounds exactly once on the first post-Start Clock before step2, with absolute phase and releases'),
  'M-SONG-SETTINGS-002':dict(run=song_tempo_bounds,requirements=['SONG-SETTINGS','SONG-SLOTS'],description='Global tempo30/300 bounds and90 restoration persist across manually selected octave-fingerprinted slots, screen values and exact MIDI gates/phase'),
@@ -3465,13 +2756,13 @@ CASES={
  'M-MERGE-026':dict(run=lambda c:numeric_length_merge(c,1),requirements=['MERGE-LENGTH'],description='Numeric length merging with literal rounded arithmetic, all modes and exact MIDI release timing'),
  'M-MERGE-027':dict(run=lambda c:numeric_length_merge(c,2),requirements=['MERGE-LENGTH'],description='Numeric length merging with literal rounded arithmetic, all modes and exact MIDI release timing'),
  'M-MERGE-024':dict(run=velocity_zero_boundary,requirements=['MERGE-VELOCITY'],description='Zero and negative numeric velocity results clamp without wrapping, with raw MIDI releases and exact timing'),
- 'M-MERGE-043':dict(run=lambda c:numeric_note_merge(c,True,False,harmony=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic False, exact MIDI gates and phase'),
- 'M-MERGE-044':dict(run=lambda c:numeric_note_merge(c,True,True,harmony=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic True, exact MIDI gates and phase'),
- 'M-MERGE-023':dict(run=lambda c:numeric_note_merge(c,True,True,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='All ten reviewed modal pentatonic selections across numeric merge modes, negative degrees, exact MIDI and timing'),
+ 'M-MERGE-043':dict(run=numeric_note_merge_harmony,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic False, exact MIDI gates and phase'),
+ 'M-MERGE-044':dict(run=numeric_note_merge_harmony_pentatonic,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='Merge modes across degree II, two-tone octave rotation, D root and restored C-major cache state; pentatonic True, exact MIDI gates and phase'),
+ 'M-MERGE-023':dict(run=numeric_note_merge_all_pentatonic_scales,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='All ten reviewed modal pentatonic selections across numeric merge modes, negative degrees, exact MIDI and timing'),
  'M-MERGE-022':dict(run=lydian_octave_boundary,requirements=['MERGE-NOTE-AVERAGE','SCALE-EDIT'],description='Rootless Lydian pentatonic nearest-pitch snapping is octave-equivalent for merged degrees -7/0/7'),
  'M-MERGE-021':dict(run=lambda c:numeric_velocity_merge(c,True),requirements=['MERGE-VELOCITY','MERGE-NOTE-PATTERN'],description='Numeric velocity Average/Higher/Lower: rounded means, upper MIDI clamp and unassigned note-priority isolation'),
  'M-MERGE-020':dict(run=lambda c:numeric_velocity_merge(c,False),requirements=['MERGE-VELOCITY','MERGE-NOTE-PATTERN'],description='Numeric velocity Average/Higher/Lower: rounded means, upper MIDI clamp and unassigned note-priority isolation'),
- 'M-MERGE-019':dict(run=lambda c:numeric_note_merge(c,True,False,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='All ten scale types across Average/Higher/Lower, negative degrees and exact MIDI timing with independent interval tables'),
+ 'M-MERGE-019':dict(run=numeric_note_merge_all_scales,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','SCALE-EDIT','PAT-SCALE-RELATIVE','OPT-PENTATONIC-MERGED'],description='All ten scale types across Average/Higher/Lower, negative degrees and exact MIDI timing with independent interval tables'),
  'M-MERGE-018':dict(run=lambda c:merge_rounding(c,extreme=False,pentatonic=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed/extreme note merging with pentatonic=True, exact output beyond editor input range and octave-crossing quantisation'),
  'M-MERGE-017':dict(run=lambda c:merge_rounding(c,extreme=True,pentatonic=True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed/extreme note merging with pentatonic=True, exact output beyond editor input range and octave-crossing quantisation'),
  'M-MERGE-016':dict(run=lambda c:merge_rounding(c,extreme=True,pentatonic=False),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','PAT-SCALE-RELATIVE'],description='Signed/extreme note merging with pentatonic=False, exact output beyond editor input range and octave-crossing quantisation'),
@@ -3479,9 +2770,9 @@ CASES={
  'M-MERGE-014':dict(run=lambda c:merge_rounding(c,False),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER'],description='Signed fractional means with 2 contributors, half ties, equal values, all numeric modes and assignment-order invariance'),
  'M-MERGE-013':dict(run=lambda c:merge_mode_cycle(c,'length'),requirements=['MERGE-LENGTH','MERGE-CONTROL'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible length merge mode'),
  'M-MERGE-012':dict(run=lambda c:merge_mode_cycle(c,'velocity'),requirements=['MERGE-VELOCITY','MERGE-CONTROL'],description='Repeated Average/Higher/Lower/Average control cycles preserve displayed and audible velocity merge mode'),
- 'M-MERGE-011':dict(run=lambda c:numeric_note_merge(c,True,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='Numeric Average/Higher with pentatonic filtering across C major, D major, D minor and restored scale; unassigned velocity source stays isolated'),
+ 'M-MERGE-011':dict(run=numeric_note_merge_pentatonic_velocity,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','SCALE-EDIT','OPT-PENTATONIC-MERGED'],description='Numeric Average/Higher with pentatonic filtering across C major, D major, D minor and restored scale; unassigned velocity source stays isolated'),
  'M-MERGE-009':dict(run=numeric_note_merge,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER'],description='Two assigned patterns: independent Average/Higher degree arithmetic, C-major pitches, velocity priority isolation and exact timing'),
- 'M-MERGE-010':dict(run=lambda c:numeric_note_merge(c,True),requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-VELOCITY'],description='Unassigned velocity-priority source must not contribute notes to numeric merge'),
+ 'M-MERGE-010':dict(run=numeric_note_merge_exclude_foreign_velocity,requirements=['MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-VELOCITY'],description='Unassigned velocity-priority source must not contribute notes to numeric merge'),
  'M-REC-PARAM-027':dict(run=lambda c:recording_lifetime(c,'persistence'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','PERSIST-AUTO-001'],description='Recorded locks and undo position survive autosave and two fresh native processes; persisted redo restores recorded step after restart'),
  'M-REC-PARAM-026':dict(run=lambda c:recording_lifetime(c,'memory-branch'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','MEMORY-NAV'],description='New lock edit after undo branches recorded automation history; latest/undo/redo/past-end preserve independent step2 and cannot resurrect abandoned step4'),
  'M-REC-PARAM-025':dict(run=lambda c:recording_lifetime(c,'memory'),requirements=['REC-PARAM-AUTOMATION','MEMORY-RECORD','MEMORY-NAV'],description='Undo and redo each of three recorded parameter steps: restore overwritten lock96 and unbound defaults, exact disarmed MIDI replay after every action'),
@@ -3513,7 +2804,7 @@ CASES={
  'M-REC-PARAM-020':dict(run=lambda c:recording_lifetime(c,'pending-assignment'),requirements=['REC-PARAM-AUTOMATION','PARAM-SLOTS','CH-DEVICE'],description='Keep pending-assignment unconfirmed across an eligible recording step, then cancel: original-route dirty MIDI and stored replay remain intact'),
  'M-PARAM-027':dict(run=lambda c:cc_encoder_domain(c,configured=False),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Every held-lock CC encoder detent emits exact MIDI0..127, upper clamp, Off and reentry; configured=False'),
  'M-PARAM-026':dict(run=lambda c:cc_encoder_domain(c,configured=True),requirements=['PARAM-SLOTS','PARAM-OFF','LOCK-PARAM-SET'],description='Every held-lock CC encoder detent emits exact MIDI0..127, upper clamp, Off and reentry; configured=True'),
- 'M-REC-PARAM-019':dict(run=lambda c:recording_lifetime(c,'nonselected-wrap',scale_page=True),requirements=['REC-PARAM-AUTOMATION','CH-SELECT','NAV-PAGES'],description='Hold scale editor through global64-step wrap while recording; runtime remains live and paused MIDI automation resumes on return'),
+ 'M-REC-PARAM-019':dict(run=recording_lifetime_nonselected_wrap,requirements=['REC-PARAM-AUTOMATION','CH-SELECT','NAV-PAGES'],description='Hold scale editor through global64-step wrap while recording; runtime remains live and paused MIDI automation resumes on return'),
  'M-REC-PARAM-018':dict(run=lambda c:recording_nrpn(c,-1),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE', 'PARAM-OFF'],description='Record NRPN -1 on port2/channel2 with exact standard bytes, timing, distinct-default replay and unchanged clean-slot CC lock'),
  'M-REC-PARAM-017':dict(run=lambda c:recording_nrpn(c,0),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE', 'PARAM-OFF'],description='Record NRPN 0 on port2/channel2 with exact standard bytes, timing, distinct-default replay and unchanged clean-slot CC lock'),
  'M-REC-PARAM-016':dict(run=lambda c:recording_nrpn(c,253),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE', 'PARAM-OFF'],description='Record NRPN 253 on port2/channel2 with exact standard bytes, timing, distinct-default replay and unchanged clean-slot CC lock'),
@@ -3522,13 +2813,13 @@ CASES={
  'M-REC-PARAM-013':dict(run=lambda c:recording_lifetime(c,'configuration'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-DEVICE'],description='Changing MIDI channel and port resets defaults, device locks and assignments; reassigning before wrap cannot revive stale recording'),
  'M-REC-PARAM-012':dict(run=lambda c:recording_lifetime(c,'same-assignment'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Confirming the same CC assignment preserves pending automation'),
  'M-REC-PARAM-011':dict(run=lambda c:recording_lifetime(c,'reassign'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Changing CC assignment clears pending slot automation; existing locks follow new assignment without dirty-value leakage'),
- 'M-REC-PARAM-010':dict(run=lambda c:recording_lifetime(c,'stop'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'NAV-TRANSPORT'],description='Grid Stop clears pending automation while arm remains enabled; restart preserves previously recorded steps'),
+ 'M-REC-PARAM-010':dict(run=recording_lifetime_stop,requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'NAV-TRANSPORT'],description='Grid Stop clears pending automation while arm remains enabled; restart preserves previously recorded steps'),
  'M-REC-PARAM-009':dict(run=lambda c:recording_lifetime(c,'disarm'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'REC-ARM'],description='Disarm and immediate rearm retire pending automation without rewriting untouched future steps'),
  'M-REC-PARAM-008':dict(run=lambda c:recording_lifetime(c,'nonselected-wrap'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'CH-SELECT'],description='Nonselected channel wrap preserves paused automation for resumption on a later eligible step'),
  'M-REC-PARAM-007':dict(run=lambda c:recording_lifetime(c,'selected-wrap'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'REC-ARM'],description='Selected channel wrap clears retained automation before its start lock sounds'),
  'M-REC-PARAM-006':dict(run=lambda c:live_parameter_recording(c,edit_value=-1),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded Off suppresses conflicting locks through the cycle and remains silent during distinct-default disarmed replay'),
  'M-REC-PARAM-005':dict(run=lambda c:live_parameter_recording(c,edit_value=0),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded zero is active MIDI, replacing a conflicting lock and surviving distinct-default disarmed replay'),
- 'M-REC-PARAM-004':dict(run=lambda c:live_parameter_recording(c,switch_return=True,scale_page=True),requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
+ 'M-REC-PARAM-004':dict(run=live_parameter_recording_scale_page,requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
  'M-REC-PARAM-031':dict(run=recording_ten_slots_trigless,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='All ten CC slots record zero on one trigless rest; Stop before step3 and exact fast replay prove step1/3/4 locks unchanged'),
  'M-REC-PARAM-030':dict(run=recording_trigless_toggle,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Toggle trigless Off/On/Off during recording across rest/rest/active steps, then enable for exact24/48/65/65 stored replay and timing'),
  'M-REC-PARAM-029':dict(run=lambda c:live_parameter_recording(c,probability_zero=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS'],description='Trigless-off recording treats authored probability-zero step3 as eligible despite note silence; exact CC replay distinguishes trigger state from audible outcome'),
@@ -3591,13 +2882,13 @@ CASES={
  'M-PATCH-035':dict(run=patch_slide_live_destination,requirements=['SLIDE-GLOBAL','LOCK-PARAM-SET'],description='Editing destination during active slide applies new endpoint before its note and next cycle uses the new trajectory without stale tail'),
  'M-PATCH-034':dict(run=lambda c:patch_slide_timing(c,step_local=True,global_roundtrip=True),requirements=['SLIDE-STEP','SLIDE-GLOBAL'],description='Global slides enable later locks then switch off while preserving an existing local slide and its exact timing'),
  'M-PATCH-033':dict(run=lambda c:patch_slide_timing(c,step_local=True),requirements=['SLIDE-STEP'],description='Held-step K3 slides only source lock with exact trajectory and endpoint; later lock jumps directly without unwanted global interpolation'),
- 'M-PATCH-032':dict(run=lambda c:patch_slide_live_division(c,repeated_edits=True),requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Repeated confirmed queued rate edits preserve pre-boundary timing and retime active slide continuously to final rate'),
- 'M-PATCH-031':dict(run=lambda c:patch_slide_timing(c,stop_restarts=3),requirements=['SLIDE-GLOBAL','NAV-TRANSPORT'],description='Three active-slide stop/restarts leave no stale MIDI or outstanding notes and retain exact restarted slide timing'),
+ 'M-PATCH-032':dict(run=patch_slide_live_division_repeated_edits,requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Repeated confirmed queued rate edits preserve pre-boundary timing and retime active slide continuously to final rate'),
+ 'M-PATCH-031':dict(run=patch_slide_stop_restarts,requirements=['SLIDE-GLOBAL','NAV-TRANSPORT'],description='Three active-slide stop/restarts leave no stale MIDI or outstanding notes and retain exact restarted slide timing'),
  'M-PATCH-030':dict(run=lambda c:patch_slide_trigless(c,False),requirements=['SLIDE-GLOBAL','OPT-TRIGLESS'],description='Disabled trigless excludes silent lock from slide destination and parameter emission'),
  'M-PATCH-028':dict(run=lambda c:patch_slide_timing(c,off_middle=True),requirements=['PARAM-OFF','SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Explicit Off lock between active slide endpoints emits no sentinel/stored value and does not cancel or distort the MIDI trajectory'),
  'M-PATCH-027':dict(run=patch_slide_song_cutoff,requirements=['SLIDE-GLOBAL','SONG-ADVANCE','SONG-SLOTS'],description='Actual song transition without reset retires old active CC slide at global boundary; new octave fingerprint, phase and explicit lock remain correct'),
- 'M-PATCH-026':dict(run=lambda c:patch_slide_live_division(c,reset=True),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-TEMPO','SONG-ADVANCE'],description='Same-pattern reset during queued rate edit preserves wrapped slide through unowned first step and retargets the actual third-step endpoint'),
- 'M-PATCH-025':dict(run=lambda c:patch_slide_live_division(c,type_switch=True),requirements=['SLIDE-GLOBAL','CH-SWING'],description='Queued Swing-to-Heavy6 change crosses active /3 slide; exact global-boundary retiming, continuous CC and framebuffer readback'),
+ 'M-PATCH-026':dict(run=patch_slide_live_division_reset,requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-TEMPO','SONG-ADVANCE'],description='Same-pattern reset during queued rate edit preserves wrapped slide through unowned first step and retargets the actual third-step endpoint'),
+ 'M-PATCH-025':dict(run=patch_slide_live_division_type_switch,requirements=['SLIDE-GLOBAL','CH-SWING'],description='Queued Swing-to-Heavy6 change crosses active /3 slide; exact global-boundary retiming, continuous CC and framebuffer readback'),
  'M-PATCH-024':dict(run=patch_slide_live_division,requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Queued /3-to-/6 edit applies at global pattern boundary during a slide; preserves continuous CC and independently retimed destination'),
  'M-PATCH-023':dict(run=lambda c:patch_slide_timing(c,wrap=True,shuffle=True),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-SWING'],description='Heavy basis6 full shuffle: independent16/16/16/48pulse onsets, one-gap outgoing slide and three-gap wrapped return'),
  'M-PATCH-021':dict(run=lambda c:patch_slide_timing(c,wrap=True,swing=50),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-SWING'],description='Positive50 swing CC slide over one gap and wrapped return over three gaps; independent36/12pulse onsets and endpoint ordering'),
@@ -3630,301 +2921,301 @@ CASES={
  'M-PATCH-005':dict(run=lambda c:patch_play_recall(c,3),requirements=['CH-PATCH-RECALL'],description='Three actual grid Play/Stop cycles each recall exactly one stored unassigned CC before their first note'),
  'M-PATCH-003':dict(run=patch_play_recall,requirements=['CH-PATCH-RECALL'],description='Play recalls a stored CC that is not assigned to a trig-lock slot before the first note'),
 
- 'M-PANIC-011':dict(run=lambda c:panic_hotplug(c,True,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
- 'M-PANIC-012':dict(run=lambda c:panic_hotplug(c,True,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
- 'M-PANIC-013':dict(run=lambda c:panic_hotplug(c,False,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
- 'M-PANIC-014':dict(run=lambda c:panic_hotplug(c,False,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-011':dict(run=panic_hotplug_removed_before_reconnect_after,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-012':dict(run=panic_hotplug_removed_before_reconnect_during,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-013':dict(run=panic_hotplug_removed_during_reconnect_after,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-014':dict(run=panic_hotplug_removed_during_reconnect_during,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
 
- 'M-PANIC-007':dict(run=lambda c:panic_pending_chord(c,False,1),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
- 'M-PANIC-008':dict(run=lambda c:panic_pending_chord(c,False,2),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
- 'M-PANIC-009':dict(run=lambda c:panic_pending_chord(c,True,1),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
- 'M-PANIC-010':dict(run=lambda c:panic_pending_chord(c,True,2),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
- 'M-PANIC-005':dict(run=lambda c:panic_overlapping_holds(c,2),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Two overlapping long holds restart all port sweeps mid-job, preserve page and melody'),
- 'M-PANIC-006':dict(run=lambda c:panic_overlapping_holds(c,3),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Three overlapping long holds restart all port sweeps twice mid-job, preserve page and melody'),
+ 'M-PANIC-007':dict(run=lambda c:panic_pending_chord(c,False,1,'M-PANIC-007'),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-008':dict(run=lambda c:panic_pending_chord(c,False,2,'M-PANIC-008'),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-009':dict(run=lambda c:panic_pending_chord(c,True,1,'M-PANIC-009'),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-010':dict(run=lambda c:panic_pending_chord(c,True,2,'M-PANIC-010'),requirements=['PANIC-GESTURE','CHORD-ARP'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
+ 'M-PANIC-005':dict(run=panic_overlapping_holds_two,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Two overlapping long holds restart all port sweeps mid-job, preserve page and melody'),
+ 'M-PANIC-006':dict(run=panic_overlapping_holds_three,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Three overlapping long holds restart all port sweeps twice mid-job, preserve page and melody'),
  'M-PANIC-004':dict(run=panic_live_note_stop,requirements=['PANIC-GESTURE'],description='Keyboard note played behind an in-flight panic sweep remains owned by Stop; exact full MIDI trace'),
  'M-PANIC-003':dict(run=panic_hold_matrix,requirements=['PANIC-GESTURE','NAV-PAGES'],description='All24selected-page/held-menu combinations, repeated completed holds, selected-button silence and unchanged melody'),
- 'M-PANIC-001':dict(run=lambda c:panic_navigation(c,3),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected channel navigation: all notes/channels/ports off and no navigation'),
- 'M-PANIC-002':dict(run=lambda c:panic_navigation(c,5),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected pattern navigation: complete per-port panic output and no navigation'),
+ 'M-PANIC-001':dict(run=panic_navigation_channel,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected channel navigation: all notes/channels/ports off and no navigation'),
+ 'M-PANIC-002':dict(run=panic_navigation_pattern,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Hold non-selected pattern navigation: complete per-port panic output and no navigation'),
  'M-NAV-001':dict(run=navigation_matrix,requirements=['NAV-PAGES'],description='All36page transitions, repeated pattern cycles, exact menu LEDs and unchanged MIDI after each transition'),
  'M-GRID-001':dict(run=grid_disconnect_two_key_range,requirements=['CH-RANGE','NAV-PAGES'],description='Native virtual-grid disconnect synthesises a held range release; reconnect restores range LEDs, musical eight-step loop, and a clean menu tap'),
- 'M-DASHBOARD-005':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
- 'M-DASHBOARD-006':dict(run=lambda c:chord_shape_schedule(c,False,2,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
- 'M-DASHBOARD-007':dict(run=lambda c:chord_shape_schedule(c,False,4,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
- 'M-DASHBOARD-008':dict(run=lambda c:chord_shape_schedule(c,False,4,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
- 'M-DASHBOARD-001':dict(run=lambda c:chord_shape_schedule(c,False,1,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape1; exact MIDI remains asserted'),
- 'M-DASHBOARD-002':dict(run=lambda c:chord_shape_schedule(c,False,2,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape2; exact MIDI remains asserted'),
- 'M-DASHBOARD-003':dict(run=lambda c:chord_shape_schedule(c,False,3,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape3; exact MIDI remains asserted'),
- 'M-DASHBOARD-004':dict(run=lambda c:chord_shape_schedule(c,False,4,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape4; exact MIDI remains asserted'),
- 'M-CHORDSHAPE-259':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,extra='early-stop'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
- 'M-CHORDSHAPE-258':dict(run=lambda c:chord_shape_schedule(c,False,2,False,9,extra='disabled'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
- 'M-CHORDSHAPE-257':dict(run=lambda c:chord_shape_schedule(c,False,2,False,9,extra='accelerating'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-SPREAD', 'CHORD-ACCEL'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
- 'M-CHORDVEL-005':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15,velocity=127,modifier=40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 127 with +40: every strummed voice clamps at 127, exact order and releases'),
- 'M-CHORDVEL-006':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15,velocity=1,modifier=-40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 1 with -40: root at 1 and every voice clamps to explicit velocity-zero messages'),
- 'M-CHORDVEL-007':dict(run=lambda c:chord_shape_schedule(c,False,3,False,15,velocity=64,modifier=1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Interior root 64 with +1 across shape 3 order: 64..68 by play ordinal'),
- 'M-CHORDVEL-008':dict(run=lambda c:chord_shape_schedule(c,False,4,False,15,velocity=64,modifier=-1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Interior root 64 with -1 across shape 4 order: 64..60 by play ordinal'),
- 'M-CHORDVEL-009':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,velocity=126,modifier=1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root-last shape 2 from 126 with +1: first voice 126, then clamp at 127 including the root'),
- 'M-CHORDVEL-010':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15,velocity=0,modifier=40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root velocity 0 with +40: explicit zero root message, voices 40/80/120/127'),
- 'M-CHORDVEL-011':dict(run=lambda c:chord_shape_schedule(c,False,2,True,15,velocity=100,modifier=-40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY','CHORD-MUTE-ROOT'],description='Muted root in shape 2 with -40: voices 100/60/20/0 by ordinal, no root message'),
- 'M-CHORDVEL-004':dict(run=lambda c:chord_shape_schedule(c,False,4,False,15,velocity=20,modifier=-10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
- 'M-CHORDVEL-003':dict(run=lambda c:chord_shape_schedule(c,False,4,False,15,velocity=100,modifier=10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
- 'M-CHORDVEL-002':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,velocity=20,modifier=-10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
- 'M-CHORDVEL-001':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15,velocity=100,modifier=10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
- 'M-CHORDSHAPE-256':dict(run=lambda c:chord_shape_schedule(c,True,4,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-255':dict(run=lambda c:chord_shape_schedule(c,True,4,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-254':dict(run=lambda c:chord_shape_schedule(c,True,4,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-253':dict(run=lambda c:chord_shape_schedule(c,True,4,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-252':dict(run=lambda c:chord_shape_schedule(c,True,4,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-251':dict(run=lambda c:chord_shape_schedule(c,True,4,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-250':dict(run=lambda c:chord_shape_schedule(c,True,4,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-249':dict(run=lambda c:chord_shape_schedule(c,True,4,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-248':dict(run=lambda c:chord_shape_schedule(c,True,4,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-247':dict(run=lambda c:chord_shape_schedule(c,True,4,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-246':dict(run=lambda c:chord_shape_schedule(c,True,4,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-245':dict(run=lambda c:chord_shape_schedule(c,True,4,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-244':dict(run=lambda c:chord_shape_schedule(c,True,4,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-243':dict(run=lambda c:chord_shape_schedule(c,True,4,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-242':dict(run=lambda c:chord_shape_schedule(c,True,4,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-241':dict(run=lambda c:chord_shape_schedule(c,True,4,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-240':dict(run=lambda c:chord_shape_schedule(c,True,4,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-239':dict(run=lambda c:chord_shape_schedule(c,True,4,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-238':dict(run=lambda c:chord_shape_schedule(c,True,4,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-237':dict(run=lambda c:chord_shape_schedule(c,True,4,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-236':dict(run=lambda c:chord_shape_schedule(c,True,4,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-235':dict(run=lambda c:chord_shape_schedule(c,True,4,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-234':dict(run=lambda c:chord_shape_schedule(c,True,4,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-233':dict(run=lambda c:chord_shape_schedule(c,True,4,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-232':dict(run=lambda c:chord_shape_schedule(c,True,4,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-231':dict(run=lambda c:chord_shape_schedule(c,True,4,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-230':dict(run=lambda c:chord_shape_schedule(c,True,4,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-229':dict(run=lambda c:chord_shape_schedule(c,True,4,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-228':dict(run=lambda c:chord_shape_schedule(c,True,4,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-227':dict(run=lambda c:chord_shape_schedule(c,True,4,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-226':dict(run=lambda c:chord_shape_schedule(c,True,3,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-225':dict(run=lambda c:chord_shape_schedule(c,True,3,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-224':dict(run=lambda c:chord_shape_schedule(c,True,3,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-223':dict(run=lambda c:chord_shape_schedule(c,True,3,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-222':dict(run=lambda c:chord_shape_schedule(c,True,3,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-221':dict(run=lambda c:chord_shape_schedule(c,True,3,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-220':dict(run=lambda c:chord_shape_schedule(c,True,3,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-219':dict(run=lambda c:chord_shape_schedule(c,True,3,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-218':dict(run=lambda c:chord_shape_schedule(c,True,3,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-217':dict(run=lambda c:chord_shape_schedule(c,True,3,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-216':dict(run=lambda c:chord_shape_schedule(c,True,3,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-215':dict(run=lambda c:chord_shape_schedule(c,True,3,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-214':dict(run=lambda c:chord_shape_schedule(c,True,3,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-213':dict(run=lambda c:chord_shape_schedule(c,True,3,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-212':dict(run=lambda c:chord_shape_schedule(c,True,3,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-211':dict(run=lambda c:chord_shape_schedule(c,True,3,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-210':dict(run=lambda c:chord_shape_schedule(c,True,3,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-209':dict(run=lambda c:chord_shape_schedule(c,True,3,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-208':dict(run=lambda c:chord_shape_schedule(c,True,3,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-207':dict(run=lambda c:chord_shape_schedule(c,True,3,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-206':dict(run=lambda c:chord_shape_schedule(c,True,3,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-205':dict(run=lambda c:chord_shape_schedule(c,True,3,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-204':dict(run=lambda c:chord_shape_schedule(c,True,3,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-203':dict(run=lambda c:chord_shape_schedule(c,True,3,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-202':dict(run=lambda c:chord_shape_schedule(c,True,3,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-201':dict(run=lambda c:chord_shape_schedule(c,True,3,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-200':dict(run=lambda c:chord_shape_schedule(c,True,3,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-199':dict(run=lambda c:chord_shape_schedule(c,True,3,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-198':dict(run=lambda c:chord_shape_schedule(c,True,3,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-197':dict(run=lambda c:chord_shape_schedule(c,True,3,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-196':dict(run=lambda c:chord_shape_schedule(c,True,2,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-195':dict(run=lambda c:chord_shape_schedule(c,True,2,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-194':dict(run=lambda c:chord_shape_schedule(c,True,2,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-193':dict(run=lambda c:chord_shape_schedule(c,True,2,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-192':dict(run=lambda c:chord_shape_schedule(c,True,2,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-191':dict(run=lambda c:chord_shape_schedule(c,True,2,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-190':dict(run=lambda c:chord_shape_schedule(c,True,2,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-189':dict(run=lambda c:chord_shape_schedule(c,True,2,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-188':dict(run=lambda c:chord_shape_schedule(c,True,2,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-187':dict(run=lambda c:chord_shape_schedule(c,True,2,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-186':dict(run=lambda c:chord_shape_schedule(c,True,2,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-185':dict(run=lambda c:chord_shape_schedule(c,True,2,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-184':dict(run=lambda c:chord_shape_schedule(c,True,2,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-183':dict(run=lambda c:chord_shape_schedule(c,True,2,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-182':dict(run=lambda c:chord_shape_schedule(c,True,2,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-181':dict(run=lambda c:chord_shape_schedule(c,True,2,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-180':dict(run=lambda c:chord_shape_schedule(c,True,2,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-179':dict(run=lambda c:chord_shape_schedule(c,True,2,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-178':dict(run=lambda c:chord_shape_schedule(c,True,2,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-177':dict(run=lambda c:chord_shape_schedule(c,True,2,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-176':dict(run=lambda c:chord_shape_schedule(c,True,2,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-175':dict(run=lambda c:chord_shape_schedule(c,True,2,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-174':dict(run=lambda c:chord_shape_schedule(c,True,2,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-173':dict(run=lambda c:chord_shape_schedule(c,True,2,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-172':dict(run=lambda c:chord_shape_schedule(c,True,2,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-171':dict(run=lambda c:chord_shape_schedule(c,True,2,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-170':dict(run=lambda c:chord_shape_schedule(c,True,2,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-169':dict(run=lambda c:chord_shape_schedule(c,True,2,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-168':dict(run=lambda c:chord_shape_schedule(c,True,2,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-167':dict(run=lambda c:chord_shape_schedule(c,True,2,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-166':dict(run=lambda c:chord_shape_schedule(c,True,1,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-165':dict(run=lambda c:chord_shape_schedule(c,True,1,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-164':dict(run=lambda c:chord_shape_schedule(c,True,1,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-163':dict(run=lambda c:chord_shape_schedule(c,True,1,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-162':dict(run=lambda c:chord_shape_schedule(c,True,1,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-161':dict(run=lambda c:chord_shape_schedule(c,True,1,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-160':dict(run=lambda c:chord_shape_schedule(c,True,1,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-159':dict(run=lambda c:chord_shape_schedule(c,True,1,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-158':dict(run=lambda c:chord_shape_schedule(c,True,1,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-157':dict(run=lambda c:chord_shape_schedule(c,True,1,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-156':dict(run=lambda c:chord_shape_schedule(c,True,1,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-155':dict(run=lambda c:chord_shape_schedule(c,True,1,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-154':dict(run=lambda c:chord_shape_schedule(c,True,1,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-153':dict(run=lambda c:chord_shape_schedule(c,True,1,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-152':dict(run=lambda c:chord_shape_schedule(c,True,1,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-151':dict(run=lambda c:chord_shape_schedule(c,True,1,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-150':dict(run=lambda c:chord_shape_schedule(c,True,1,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-149':dict(run=lambda c:chord_shape_schedule(c,True,1,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-148':dict(run=lambda c:chord_shape_schedule(c,True,1,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-147':dict(run=lambda c:chord_shape_schedule(c,True,1,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-146':dict(run=lambda c:chord_shape_schedule(c,True,1,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-145':dict(run=lambda c:chord_shape_schedule(c,True,1,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-144':dict(run=lambda c:chord_shape_schedule(c,True,1,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-143':dict(run=lambda c:chord_shape_schedule(c,True,1,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-142':dict(run=lambda c:chord_shape_schedule(c,True,1,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-141':dict(run=lambda c:chord_shape_schedule(c,True,1,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-140':dict(run=lambda c:chord_shape_schedule(c,True,1,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-139':dict(run=lambda c:chord_shape_schedule(c,True,1,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-138':dict(run=lambda c:chord_shape_schedule(c,True,1,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-137':dict(run=lambda c:chord_shape_schedule(c,True,1,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-136':dict(run=lambda c:chord_shape_schedule(c,False,4,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-135':dict(run=lambda c:chord_shape_schedule(c,False,4,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-134':dict(run=lambda c:chord_shape_schedule(c,False,4,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-133':dict(run=lambda c:chord_shape_schedule(c,False,4,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-132':dict(run=lambda c:chord_shape_schedule(c,False,4,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-131':dict(run=lambda c:chord_shape_schedule(c,False,4,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-130':dict(run=lambda c:chord_shape_schedule(c,False,4,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-129':dict(run=lambda c:chord_shape_schedule(c,False,4,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-128':dict(run=lambda c:chord_shape_schedule(c,False,4,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-127':dict(run=lambda c:chord_shape_schedule(c,False,4,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-126':dict(run=lambda c:chord_shape_schedule(c,False,4,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-125':dict(run=lambda c:chord_shape_schedule(c,False,4,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-124':dict(run=lambda c:chord_shape_schedule(c,False,4,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-123':dict(run=lambda c:chord_shape_schedule(c,False,4,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-122':dict(run=lambda c:chord_shape_schedule(c,False,4,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-121':dict(run=lambda c:chord_shape_schedule(c,False,4,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-120':dict(run=lambda c:chord_shape_schedule(c,False,4,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-119':dict(run=lambda c:chord_shape_schedule(c,False,4,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-118':dict(run=lambda c:chord_shape_schedule(c,False,4,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-117':dict(run=lambda c:chord_shape_schedule(c,False,4,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-116':dict(run=lambda c:chord_shape_schedule(c,False,4,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-115':dict(run=lambda c:chord_shape_schedule(c,False,4,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-114':dict(run=lambda c:chord_shape_schedule(c,False,4,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-113':dict(run=lambda c:chord_shape_schedule(c,False,4,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-112':dict(run=lambda c:chord_shape_schedule(c,False,4,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-111':dict(run=lambda c:chord_shape_schedule(c,False,4,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-110':dict(run=lambda c:chord_shape_schedule(c,False,4,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-109':dict(run=lambda c:chord_shape_schedule(c,False,4,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-108':dict(run=lambda c:chord_shape_schedule(c,False,3,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-107':dict(run=lambda c:chord_shape_schedule(c,False,3,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-106':dict(run=lambda c:chord_shape_schedule(c,False,3,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-105':dict(run=lambda c:chord_shape_schedule(c,False,3,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-104':dict(run=lambda c:chord_shape_schedule(c,False,3,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-103':dict(run=lambda c:chord_shape_schedule(c,False,3,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-102':dict(run=lambda c:chord_shape_schedule(c,False,3,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-101':dict(run=lambda c:chord_shape_schedule(c,False,3,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-100':dict(run=lambda c:chord_shape_schedule(c,False,3,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-099':dict(run=lambda c:chord_shape_schedule(c,False,3,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-098':dict(run=lambda c:chord_shape_schedule(c,False,3,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-097':dict(run=lambda c:chord_shape_schedule(c,False,3,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-096':dict(run=lambda c:chord_shape_schedule(c,False,3,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-095':dict(run=lambda c:chord_shape_schedule(c,False,3,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-094':dict(run=lambda c:chord_shape_schedule(c,False,3,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-093':dict(run=lambda c:chord_shape_schedule(c,False,3,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-092':dict(run=lambda c:chord_shape_schedule(c,False,3,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-091':dict(run=lambda c:chord_shape_schedule(c,False,3,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-090':dict(run=lambda c:chord_shape_schedule(c,False,3,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-089':dict(run=lambda c:chord_shape_schedule(c,False,3,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-088':dict(run=lambda c:chord_shape_schedule(c,False,3,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-087':dict(run=lambda c:chord_shape_schedule(c,False,3,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-086':dict(run=lambda c:chord_shape_schedule(c,False,3,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-085':dict(run=lambda c:chord_shape_schedule(c,False,3,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-084':dict(run=lambda c:chord_shape_schedule(c,False,3,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-083':dict(run=lambda c:chord_shape_schedule(c,False,3,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-082':dict(run=lambda c:chord_shape_schedule(c,False,3,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-081':dict(run=lambda c:chord_shape_schedule(c,False,3,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-080':dict(run=lambda c:chord_shape_schedule(c,False,2,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-079':dict(run=lambda c:chord_shape_schedule(c,False,2,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-078':dict(run=lambda c:chord_shape_schedule(c,False,2,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-077':dict(run=lambda c:chord_shape_schedule(c,False,2,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-076':dict(run=lambda c:chord_shape_schedule(c,False,2,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-075':dict(run=lambda c:chord_shape_schedule(c,False,2,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-074':dict(run=lambda c:chord_shape_schedule(c,False,2,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-073':dict(run=lambda c:chord_shape_schedule(c,False,2,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-072':dict(run=lambda c:chord_shape_schedule(c,False,2,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-071':dict(run=lambda c:chord_shape_schedule(c,False,2,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-070':dict(run=lambda c:chord_shape_schedule(c,False,2,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-069':dict(run=lambda c:chord_shape_schedule(c,False,2,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-068':dict(run=lambda c:chord_shape_schedule(c,False,2,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-067':dict(run=lambda c:chord_shape_schedule(c,False,2,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-066':dict(run=lambda c:chord_shape_schedule(c,False,2,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-065':dict(run=lambda c:chord_shape_schedule(c,False,2,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-064':dict(run=lambda c:chord_shape_schedule(c,False,2,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-063':dict(run=lambda c:chord_shape_schedule(c,False,2,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-062':dict(run=lambda c:chord_shape_schedule(c,False,2,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-061':dict(run=lambda c:chord_shape_schedule(c,False,2,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-060':dict(run=lambda c:chord_shape_schedule(c,False,2,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-059':dict(run=lambda c:chord_shape_schedule(c,False,2,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-058':dict(run=lambda c:chord_shape_schedule(c,False,2,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-057':dict(run=lambda c:chord_shape_schedule(c,False,2,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-056':dict(run=lambda c:chord_shape_schedule(c,False,2,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-055':dict(run=lambda c:chord_shape_schedule(c,False,2,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-054':dict(run=lambda c:chord_shape_schedule(c,False,2,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-053':dict(run=lambda c:chord_shape_schedule(c,False,2,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-052':dict(run=lambda c:chord_shape_schedule(c,False,1,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-051':dict(run=lambda c:chord_shape_schedule(c,False,1,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-050':dict(run=lambda c:chord_shape_schedule(c,False,1,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-049':dict(run=lambda c:chord_shape_schedule(c,False,1,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-048':dict(run=lambda c:chord_shape_schedule(c,False,1,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-047':dict(run=lambda c:chord_shape_schedule(c,False,1,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-046':dict(run=lambda c:chord_shape_schedule(c,False,1,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-045':dict(run=lambda c:chord_shape_schedule(c,False,1,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-044':dict(run=lambda c:chord_shape_schedule(c,False,1,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-043':dict(run=lambda c:chord_shape_schedule(c,False,1,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-042':dict(run=lambda c:chord_shape_schedule(c,False,1,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-041':dict(run=lambda c:chord_shape_schedule(c,False,1,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-040':dict(run=lambda c:chord_shape_schedule(c,False,1,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-039':dict(run=lambda c:chord_shape_schedule(c,False,1,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-038':dict(run=lambda c:chord_shape_schedule(c,False,1,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-037':dict(run=lambda c:chord_shape_schedule(c,False,1,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-036':dict(run=lambda c:chord_shape_schedule(c,False,1,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-035':dict(run=lambda c:chord_shape_schedule(c,False,1,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-034':dict(run=lambda c:chord_shape_schedule(c,False,1,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-033':dict(run=lambda c:chord_shape_schedule(c,False,1,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-032':dict(run=lambda c:chord_shape_schedule(c,False,1,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-031':dict(run=lambda c:chord_shape_schedule(c,False,1,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-030':dict(run=lambda c:chord_shape_schedule(c,False,1,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-029':dict(run=lambda c:chord_shape_schedule(c,False,1,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-028':dict(run=lambda c:chord_shape_schedule(c,False,1,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-027':dict(run=lambda c:chord_shape_schedule(c,False,1,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-026':dict(run=lambda c:chord_shape_schedule(c,False,1,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-025':dict(run=lambda c:chord_shape_schedule(c,False,1,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
- 'M-CHORDSHAPE-024':dict(run=lambda c:chord_shape_schedule(c,False,4,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-023':dict(run=lambda c:chord_shape_schedule(c,False,4,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-022':dict(run=lambda c:chord_shape_schedule(c,False,3,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-021':dict(run=lambda c:chord_shape_schedule(c,False,3,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-020':dict(run=lambda c:chord_shape_schedule(c,False,2,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-019':dict(run=lambda c:chord_shape_schedule(c,False,2,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-018':dict(run=lambda c:chord_shape_schedule(c,False,1,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-017':dict(run=lambda c:chord_shape_schedule(c,False,1,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-016':dict(run=lambda c:chord_shape_schedule(c,True,4,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-015':dict(run=lambda c:chord_shape_schedule(c,True,4,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-014':dict(run=lambda c:chord_shape_schedule(c,True,3,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-013':dict(run=lambda c:chord_shape_schedule(c,True,3,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-012':dict(run=lambda c:chord_shape_schedule(c,True,2,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-011':dict(run=lambda c:chord_shape_schedule(c,True,2,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-010':dict(run=lambda c:chord_shape_schedule(c,True,1,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-009':dict(run=lambda c:chord_shape_schedule(c,True,1,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-008':dict(run=lambda c:chord_shape_schedule(c,False,4,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-007':dict(run=lambda c:chord_shape_schedule(c,False,4,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-006':dict(run=lambda c:chord_shape_schedule(c,False,3,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-005':dict(run=lambda c:chord_shape_schedule(c,False,3,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-004':dict(run=lambda c:chord_shape_schedule(c,False,2,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-003':dict(run=lambda c:chord_shape_schedule(c,False,2,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-002':dict(run=lambda c:chord_shape_schedule(c,False,1,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
- 'M-CHORDSHAPE-001':dict(run=lambda c:chord_shape_schedule(c,False,1,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-DASHBOARD-005':dict(run=chord_shape_case(False,2,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-006':dict(run=chord_shape_case(False,2,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-007':dict(run=chord_shape_case(False,4,False,velocity=100,modifier=10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-008':dict(run=chord_shape_case(False,4,False,velocity=20,modifier=-10,dashboard=True),requirements=['CH-DASHBOARD','CHORD-VELOCITY'],description='Rendered root pitch, clamped velocity boundary and length after exact native MIDI checks'),
+ 'M-DASHBOARD-001':dict(run=chord_shape_case(False,1,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape1; exact MIDI remains asserted'),
+ 'M-DASHBOARD-002':dict(run=chord_shape_case(False,2,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape2; exact MIDI remains asserted'),
+ 'M-DASHBOARD-003':dict(run=chord_shape_case(False,3,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape3; exact MIDI remains asserted'),
+ 'M-DASHBOARD-004':dict(run=chord_shape_case(False,4,False,dashboard=True),requirements=['CH-DASHBOARD','CHORD-SHAPE'],description='Root pitch and velocity rendered after strum shape4; exact MIDI remains asserted'),
+ 'M-CHORDSHAPE-259':dict(run=chord_shape_case(False,2,False,15,extra='early-stop'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
+ 'M-CHORDSHAPE-258':dict(run=chord_shape_case(False,2,False,9,extra='disabled'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
+ 'M-CHORDSHAPE-257':dict(run=chord_shape_case(False,2,False,9,extra='accelerating'),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-SPREAD', 'CHORD-ACCEL'],description="Sparse reverse articulation boundary: negative termination, disabled strum or Stop before pending root"),
+ 'M-CHORDVEL-005':dict(run=chord_shape_case(False,1,False,15,velocity=127,modifier=40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 127 with +40: every strummed voice clamps at 127, exact order and releases'),
+ 'M-CHORDVEL-006':dict(run=chord_shape_case(False,1,False,15,velocity=1,modifier=-40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root 1 with -40: root at 1 and every voice clamps to explicit velocity-zero messages'),
+ 'M-CHORDVEL-007':dict(run=chord_shape_case(False,3,False,15,velocity=64,modifier=1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Interior root 64 with +1 across shape 3 order: 64..68 by play ordinal'),
+ 'M-CHORDVEL-008':dict(run=chord_shape_case(False,4,False,15,velocity=64,modifier=-1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Interior root 64 with -1 across shape 4 order: 64..60 by play ordinal'),
+ 'M-CHORDVEL-009':dict(run=chord_shape_case(False,2,False,15,velocity=126,modifier=1),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root-last shape 2 from 126 with +1: first voice 126, then clamp at 127 including the root'),
+ 'M-CHORDVEL-010':dict(run=chord_shape_case(False,1,False,15,velocity=0,modifier=40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY'],description='Root velocity 0 with +40: explicit zero root message, voices 40/80/120/127'),
+ 'M-CHORDVEL-011':dict(run=chord_shape_case(False,2,True,15,velocity=100,modifier=-40),requirements=['CHORD-STRUM','CHORD-SHAPE','CHORD-VELOCITY','CHORD-MUTE-ROOT'],description='Muted root in shape 2 with -40: voices 100/60/20/0 by ordinal, no root message'),
+ 'M-CHORDVEL-004':dict(run=chord_shape_case(False,4,False,15,velocity=20,modifier=-10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
+ 'M-CHORDVEL-003':dict(run=chord_shape_case(False,4,False,15,velocity=100,modifier=10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
+ 'M-CHORDVEL-002':dict(run=chord_shape_case(False,2,False,15,velocity=20,modifier=-10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
+ 'M-CHORDVEL-001':dict(run=chord_shape_case(False,2,False,15,velocity=100,modifier=10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY'],description="Reverse-root velocity clamps to MIDI bounds, including explicit zero messages and complete Stop drain"),
+ 'M-CHORDSHAPE-256':dict(run=chord_shape_case(True,4,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-255':dict(run=chord_shape_case(True,4,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-254':dict(run=chord_shape_case(True,4,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-253':dict(run=chord_shape_case(True,4,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-252':dict(run=chord_shape_case(True,4,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-251':dict(run=chord_shape_case(True,4,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-250':dict(run=chord_shape_case(True,4,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-249':dict(run=chord_shape_case(True,4,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-248':dict(run=chord_shape_case(True,4,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-247':dict(run=chord_shape_case(True,4,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-246':dict(run=chord_shape_case(True,4,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-245':dict(run=chord_shape_case(True,4,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-244':dict(run=chord_shape_case(True,4,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-243':dict(run=chord_shape_case(True,4,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-242':dict(run=chord_shape_case(True,4,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-241':dict(run=chord_shape_case(True,4,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-240':dict(run=chord_shape_case(True,4,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-239':dict(run=chord_shape_case(True,4,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-238':dict(run=chord_shape_case(True,4,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-237':dict(run=chord_shape_case(True,4,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-236':dict(run=chord_shape_case(True,4,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-235':dict(run=chord_shape_case(True,4,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-234':dict(run=chord_shape_case(True,4,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-233':dict(run=chord_shape_case(True,4,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-232':dict(run=chord_shape_case(True,4,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-231':dict(run=chord_shape_case(True,4,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-230':dict(run=chord_shape_case(True,4,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-229':dict(run=chord_shape_case(True,4,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-228':dict(run=chord_shape_case(True,4,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-227':dict(run=chord_shape_case(True,4,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-226':dict(run=chord_shape_case(True,3,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-225':dict(run=chord_shape_case(True,3,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-224':dict(run=chord_shape_case(True,3,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-223':dict(run=chord_shape_case(True,3,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-222':dict(run=chord_shape_case(True,3,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-221':dict(run=chord_shape_case(True,3,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-220':dict(run=chord_shape_case(True,3,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-219':dict(run=chord_shape_case(True,3,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-218':dict(run=chord_shape_case(True,3,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-217':dict(run=chord_shape_case(True,3,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-216':dict(run=chord_shape_case(True,3,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-215':dict(run=chord_shape_case(True,3,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-214':dict(run=chord_shape_case(True,3,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-213':dict(run=chord_shape_case(True,3,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-212':dict(run=chord_shape_case(True,3,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-211':dict(run=chord_shape_case(True,3,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-210':dict(run=chord_shape_case(True,3,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-209':dict(run=chord_shape_case(True,3,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-208':dict(run=chord_shape_case(True,3,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-207':dict(run=chord_shape_case(True,3,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-206':dict(run=chord_shape_case(True,3,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-205':dict(run=chord_shape_case(True,3,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-204':dict(run=chord_shape_case(True,3,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-203':dict(run=chord_shape_case(True,3,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-202':dict(run=chord_shape_case(True,3,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-201':dict(run=chord_shape_case(True,3,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-200':dict(run=chord_shape_case(True,3,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-199':dict(run=chord_shape_case(True,3,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-198':dict(run=chord_shape_case(True,3,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-197':dict(run=chord_shape_case(True,3,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-196':dict(run=chord_shape_case(True,2,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-195':dict(run=chord_shape_case(True,2,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-194':dict(run=chord_shape_case(True,2,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-193':dict(run=chord_shape_case(True,2,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-192':dict(run=chord_shape_case(True,2,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-191':dict(run=chord_shape_case(True,2,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-190':dict(run=chord_shape_case(True,2,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-189':dict(run=chord_shape_case(True,2,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-188':dict(run=chord_shape_case(True,2,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-187':dict(run=chord_shape_case(True,2,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-186':dict(run=chord_shape_case(True,2,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-185':dict(run=chord_shape_case(True,2,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-184':dict(run=chord_shape_case(True,2,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-183':dict(run=chord_shape_case(True,2,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-182':dict(run=chord_shape_case(True,2,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-181':dict(run=chord_shape_case(True,2,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-180':dict(run=chord_shape_case(True,2,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-179':dict(run=chord_shape_case(True,2,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-178':dict(run=chord_shape_case(True,2,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-177':dict(run=chord_shape_case(True,2,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-176':dict(run=chord_shape_case(True,2,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-175':dict(run=chord_shape_case(True,2,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-174':dict(run=chord_shape_case(True,2,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-173':dict(run=chord_shape_case(True,2,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-172':dict(run=chord_shape_case(True,2,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-171':dict(run=chord_shape_case(True,2,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-170':dict(run=chord_shape_case(True,2,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-169':dict(run=chord_shape_case(True,2,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-168':dict(run=chord_shape_case(True,2,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-167':dict(run=chord_shape_case(True,2,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-166':dict(run=chord_shape_case(True,1,True,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-165':dict(run=chord_shape_case(True,1,True,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-164':dict(run=chord_shape_case(True,1,True,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-163':dict(run=chord_shape_case(True,1,True,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-162':dict(run=chord_shape_case(True,1,True,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-161':dict(run=chord_shape_case(True,1,True,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-160':dict(run=chord_shape_case(True,1,True,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-159':dict(run=chord_shape_case(True,1,True,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-158':dict(run=chord_shape_case(True,1,True,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-157':dict(run=chord_shape_case(True,1,True,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-156':dict(run=chord_shape_case(True,1,True,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-155':dict(run=chord_shape_case(True,1,True,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-154':dict(run=chord_shape_case(True,1,True,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-153':dict(run=chord_shape_case(True,1,True,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-152':dict(run=chord_shape_case(True,1,True,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-151':dict(run=chord_shape_case(True,1,False,14),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-150':dict(run=chord_shape_case(True,1,False,13),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-149':dict(run=chord_shape_case(True,1,False,12),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-148':dict(run=chord_shape_case(True,1,False,11),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-147':dict(run=chord_shape_case(True,1,False,10),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-146':dict(run=chord_shape_case(True,1,False,9),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-145':dict(run=chord_shape_case(True,1,False,8),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-144':dict(run=chord_shape_case(True,1,False,7),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-143':dict(run=chord_shape_case(True,1,False,6),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-142':dict(run=chord_shape_case(True,1,False,5),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-141':dict(run=chord_shape_case(True,1,False,4),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-140':dict(run=chord_shape_case(True,1,False,3),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-139':dict(run=chord_shape_case(True,1,False,2),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-138':dict(run=chord_shape_case(True,1,False,1),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-137':dict(run=chord_shape_case(True,1,False,0),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-136':dict(run=chord_shape_case(False,4,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-135':dict(run=chord_shape_case(False,4,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-134':dict(run=chord_shape_case(False,4,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-133':dict(run=chord_shape_case(False,4,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-132':dict(run=chord_shape_case(False,4,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-131':dict(run=chord_shape_case(False,4,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-130':dict(run=chord_shape_case(False,4,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-129':dict(run=chord_shape_case(False,4,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-128':dict(run=chord_shape_case(False,4,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-127':dict(run=chord_shape_case(False,4,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-126':dict(run=chord_shape_case(False,4,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-125':dict(run=chord_shape_case(False,4,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-124':dict(run=chord_shape_case(False,4,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-123':dict(run=chord_shape_case(False,4,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-122':dict(run=chord_shape_case(False,4,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-121':dict(run=chord_shape_case(False,4,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-120':dict(run=chord_shape_case(False,4,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-119':dict(run=chord_shape_case(False,4,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-118':dict(run=chord_shape_case(False,4,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-117':dict(run=chord_shape_case(False,4,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-116':dict(run=chord_shape_case(False,4,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-115':dict(run=chord_shape_case(False,4,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-114':dict(run=chord_shape_case(False,4,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-113':dict(run=chord_shape_case(False,4,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-112':dict(run=chord_shape_case(False,4,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-111':dict(run=chord_shape_case(False,4,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-110':dict(run=chord_shape_case(False,4,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-109':dict(run=chord_shape_case(False,4,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-108':dict(run=chord_shape_case(False,3,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-107':dict(run=chord_shape_case(False,3,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-106':dict(run=chord_shape_case(False,3,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-105':dict(run=chord_shape_case(False,3,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-104':dict(run=chord_shape_case(False,3,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-103':dict(run=chord_shape_case(False,3,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-102':dict(run=chord_shape_case(False,3,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-101':dict(run=chord_shape_case(False,3,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-100':dict(run=chord_shape_case(False,3,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-099':dict(run=chord_shape_case(False,3,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-098':dict(run=chord_shape_case(False,3,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-097':dict(run=chord_shape_case(False,3,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-096':dict(run=chord_shape_case(False,3,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-095':dict(run=chord_shape_case(False,3,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-094':dict(run=chord_shape_case(False,3,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-093':dict(run=chord_shape_case(False,3,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-092':dict(run=chord_shape_case(False,3,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-091':dict(run=chord_shape_case(False,3,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-090':dict(run=chord_shape_case(False,3,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-089':dict(run=chord_shape_case(False,3,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-088':dict(run=chord_shape_case(False,3,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-087':dict(run=chord_shape_case(False,3,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-086':dict(run=chord_shape_case(False,3,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-085':dict(run=chord_shape_case(False,3,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-084':dict(run=chord_shape_case(False,3,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-083':dict(run=chord_shape_case(False,3,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-082':dict(run=chord_shape_case(False,3,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-081':dict(run=chord_shape_case(False,3,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-080':dict(run=chord_shape_case(False,2,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-079':dict(run=chord_shape_case(False,2,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-078':dict(run=chord_shape_case(False,2,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-077':dict(run=chord_shape_case(False,2,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-076':dict(run=chord_shape_case(False,2,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-075':dict(run=chord_shape_case(False,2,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-074':dict(run=chord_shape_case(False,2,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-073':dict(run=chord_shape_case(False,2,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-072':dict(run=chord_shape_case(False,2,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-071':dict(run=chord_shape_case(False,2,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-070':dict(run=chord_shape_case(False,2,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-069':dict(run=chord_shape_case(False,2,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-068':dict(run=chord_shape_case(False,2,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-067':dict(run=chord_shape_case(False,2,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-066':dict(run=chord_shape_case(False,2,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-065':dict(run=chord_shape_case(False,2,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-064':dict(run=chord_shape_case(False,2,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-063':dict(run=chord_shape_case(False,2,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-062':dict(run=chord_shape_case(False,2,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-061':dict(run=chord_shape_case(False,2,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-060':dict(run=chord_shape_case(False,2,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-059':dict(run=chord_shape_case(False,2,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-058':dict(run=chord_shape_case(False,2,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-057':dict(run=chord_shape_case(False,2,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-056':dict(run=chord_shape_case(False,2,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-055':dict(run=chord_shape_case(False,2,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-054':dict(run=chord_shape_case(False,2,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-053':dict(run=chord_shape_case(False,2,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-052':dict(run=chord_shape_case(False,1,True,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-051':dict(run=chord_shape_case(False,1,True,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-050':dict(run=chord_shape_case(False,1,True,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-049':dict(run=chord_shape_case(False,1,True,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-048':dict(run=chord_shape_case(False,1,True,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-047':dict(run=chord_shape_case(False,1,True,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-046':dict(run=chord_shape_case(False,1,True,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-045':dict(run=chord_shape_case(False,1,True,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-044':dict(run=chord_shape_case(False,1,True,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-043':dict(run=chord_shape_case(False,1,True,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-042':dict(run=chord_shape_case(False,1,True,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-041':dict(run=chord_shape_case(False,1,True,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-040':dict(run=chord_shape_case(False,1,True,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-039':dict(run=chord_shape_case(False,1,True,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-038':dict(run=chord_shape_case(False,1,True,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-037':dict(run=chord_shape_case(False,1,False,14),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-036':dict(run=chord_shape_case(False,1,False,13),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-035':dict(run=chord_shape_case(False,1,False,12),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-034':dict(run=chord_shape_case(False,1,False,11),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-033':dict(run=chord_shape_case(False,1,False,10),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-032':dict(run=chord_shape_case(False,1,False,9),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-031':dict(run=chord_shape_case(False,1,False,7),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-030':dict(run=chord_shape_case(False,1,False,6),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-029':dict(run=chord_shape_case(False,1,False,5),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-028':dict(run=chord_shape_case(False,1,False,4),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-027':dict(run=chord_shape_case(False,1,False,3),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-026':dict(run=chord_shape_case(False,1,False,2),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-025':dict(run=chord_shape_case(False,1,False,0),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Finite chord-mask subset and shape matrix: exact slot timing, muted-root behavior and MIDI releases"),
+ 'M-CHORDSHAPE-024':dict(run=chord_shape_case(False,4,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-023':dict(run=chord_shape_case(False,4,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-022':dict(run=chord_shape_case(False,3,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-021':dict(run=chord_shape_case(False,3,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-020':dict(run=chord_shape_case(False,2,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-019':dict(run=chord_shape_case(False,2,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-018':dict(run=chord_shape_case(False,1,False,8),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-017':dict(run=chord_shape_case(False,1,False,1),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-016':dict(run=chord_shape_case(True,4,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-015':dict(run=chord_shape_case(True,4,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-014':dict(run=chord_shape_case(True,3,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-013':dict(run=chord_shape_case(True,3,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-012':dict(run=chord_shape_case(True,2,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-011':dict(run=chord_shape_case(True,2,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-010':dict(run=chord_shape_case(True,1,True,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-009':dict(run=chord_shape_case(True,1,False,15),requirements=['CHORD-ARP', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-008':dict(run=chord_shape_case(False,4,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-007':dict(run=chord_shape_case(False,4,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-006':dict(run=chord_shape_case(False,3,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-005':dict(run=chord_shape_case(False,3,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-004':dict(run=chord_shape_case(False,2,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-003':dict(run=chord_shape_case(False,2,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-002':dict(run=chord_shape_case(False,1,True,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
+ 'M-CHORDSHAPE-001':dict(run=chord_shape_case(False,1,False,15),requirements=['CHORD-STRUM', 'CHORD-SHAPE', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Exact chord slot order, root muting, velocity ordinal and releases for a full or sparse chord"),
  'M-ARP-014':dict(run=arp_empty_muted_replacement,requirements=['CHORD-ARP', 'CHORD-MUTE-ROOT'],description='Empty-muted trigger cancels old arp onsets while preserving tails and replacement ownership through Stop'),
  'M-ARP-013':dict(controlled_only='Absolute live-edit schedule requires controlled time until D20 mapping is admitted',run=lambda c:arp_rest_live_scale(c,True),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
  'M-ARP-012':dict(controlled_only='Absolute live-edit schedule requires controlled time until D20 mapping is admitted',run=lambda c:arp_rest_live_scale(c,False),requirements=['CHORD-ARP', 'CHORD-SPREAD', 'CHORD-ACCEL', 'CHORD-VELOCITY', 'CHORD-MUTE-ROOT'],description="Rests consume acceleration and velocity ordinals; applied scale edits affect later arp notes through native controls"),
@@ -3961,9 +3252,9 @@ CASES={
  'M-SPREAD-003':dict(run=lambda c:spread_acceleration_contract(c,False,-3),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -3: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-002':dict(run=lambda c:spread_acceleration_contract(c,False,-4),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -4: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-001':dict(run=lambda c:spread_acceleration_contract(c,False,-5),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -5: independent new-contract gap table, nonpositive termination and Stop accounting'),
- 'M-PARAM-003':dict(run=lambda c:parameter_division_bounds(c,'Chord Spread'),requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
- 'M-PARAM-002':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Arpeggio'),requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
- 'M-PARAM-001':dict(run=lambda c:parameter_division_bounds(c,'Chord Note Strum'),requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-003':dict(run=chord_spread_divisions,requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-002':dict(run=chord_note_arpeggio_divisions,requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-001':dict(run=chord_note_strum_divisions,requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-ARP-005':dict(controlled_only='Exact one-pulse arp boundary fixture requires controlled time; real-time family acceptance uses separate scheduling metrics',run=lambda c:arp_basic_timing(c,fast=True),requirements=['CHORD-ARP','CH-TEMPO'],description='Controlled one-pulse1/24 arp: exact note releases through every parent-cycle boundary and Stop, using native UI/MIDI'),
  'M-ARP-004':dict(run=lambda c:arp_basic_timing(c,reset=True),requirements=['CHORD-ARP','OPT-REPEAT-RESET','CH-TEMPO'],description='Repeat resets replace a long arp while an identical-pitch tail is sounding; old gates must not cut replacement voices'),
  'M-ARP-002':dict(run=lambda c:arp_basic_timing(c,replacement=True),requirements=['CHORD-ARP','PARAM-SLOTS','CH-TEMPO'],description='Replacing two-step arpeggios each step must not let old termination release the new generation'),
@@ -3978,8 +3269,8 @@ CASES={
  'M-RANGE-GLOBAL-003':dict(run=offset_range_rates,requirements=['SONG-LENGTH','CH-RANGE','CH-TEMPO'],description='Offset2..4/G2 repeated D/E for ten loops at x3/x2/1/2/3, exact phase and gates beyond three global boundaries'),
  'M-RANGE-GLOBAL-004':dict(run=offset_scale_range_clipping,requirements=['SONG-LENGTH','CH-RANGE','LOCK-SCALE'],description='Scale17 offset2..4 D/E/C locks with global1/2/3 caps and restoration; actual dependent MIDI notes and timing'),
  'M-RANGE-LIVE-002':dict(run=queued_global_length_transitions,requirements=['SONG-LENGTH','CH-RANGE'],description='Queued global4-to2-to3 edits on offset2..4 apply at exact old boundaries, last queued fader value wins, step4 returns, exact uninterrupted MIDI phase/gates and queue tooltip'),
- 'M-RANGE-SAVED-003':dict(run=lambda c:rejected_manual_range(c,recovery='save'),requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves two-channel playback and files; explicit native named Save and reload retain edits and restart autosave'),
- 'M-RANGE-SAVED-004':dict(run=lambda c:rejected_manual_range(c,recovery='new'),requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves current playback and files; explicit New creates silent project and restarts autosave'),
+ 'M-RANGE-SAVED-003':dict(run=rejected_manual_range_save,requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves two-channel playback and files; explicit native named Save and reload retain edits and restart autosave'),
+ 'M-RANGE-SAVED-004':dict(run=rejected_manual_range_new,requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves current playback and files; explicit New creates silent project and restarts autosave'),
  'M-RANGE-SAVED-005':dict(run=saved_range_compatibility,requirements=['CH-RANGE','SAVE-AUTO','PERSIST-AUTO-001'],description='User-authored slot96, valid stored one-step range, exact MIDI gates/phase and grid survive two cold-load/autosave generations'),
  'M-RANGE-SAVED-006':dict(run=lambda c:saved_range_compatibility(c,legacy=True),requirements=['CH-RANGE','SAVE-AUTO','PERSIST-AUTO-001'],description='Legacy sequencer_patterns alias in slot96 with valid one-step range migrates through two cold-load/autosave generations preserving MIDI/grid'),
  'M-PROJECT-LIVE-001':dict(run=lambda c:project_dialog_while_playing(c,'new'),requirements=['SAVE-NAMED','MIDI-RELEASE-001'],description='Native new while two MIDI channels play: pending releases and project-dialog lifetime'),
@@ -3991,10 +3282,10 @@ CASES={
  'M-RANGE-LIVE-001':dict(run=accepted_live_range_transitions,requirements=['CH-RANGE'],description='Accepted range edits while playhead is inside/below/above new bounds: exact next note, three loops, unchanged phase, full releases and stopped range LEDs'),
  'M-RANGE-GLOBAL-001':dict(run=global_range_clipping,requirements=['SONG-LENGTH','CH-RANGE'],description='Global lengths1/2/3/4/64 cap channel1..4,2..4,63..64 by length, preserve endpoint LEDs, restore full range, exact notes/gates/phase'),
  'M-RANGE-REJECT-005':dict(run=rejected_range_channel_isolation,requirements=['CH-RANGE'],description='Reject range edit while two independent routed channels play four/three-step phrases with distinct notes, velocity and fractional lengths; preserve both schedules'),
- 'M-RANGE-REJECT-004':dict(run=lambda c:rejected_range_while_playing(c,True),requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageTrue: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
- 'M-RANGE-REJECT-003':dict(run=lambda c:rejected_range_while_playing(c,False),requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageFalse: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
- 'M-RANGE-REJECT-002':dict(run=lambda c:rejected_range(c,True),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageTrue: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
- 'M-RANGE-REJECT-001':dict(run=lambda c:rejected_range(c,False),requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
+ 'M-RANGE-REJECT-004':dict(run=range_reject_004,requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageTrue: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
+ 'M-RANGE-REJECT-003':dict(run=range_reject_003,requirements=['CH-RANGE'],description='Reversed range attempts during playback on scale-pageFalse: rejection feedback, uninterrupted four-note order and exact musical timing/releases'),
+ 'M-RANGE-REJECT-002':dict(run=range_reject_002,requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageTrue: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
+ 'M-RANGE-REJECT-001':dict(run=range_reject_001,requirements=['CH-RANGE'],description='Reject reversed endpoints on scale-pageFalse: both release sequences preserve prior range and MIDI, exact rejection framebuffer and subsequent valid recovery'),
  'M-MASK-031':dict(run=lambda c:multiheld_keyboard(c,False),requirements=['MASK-STEP-ENTRY','CH-RANGE'],description='Two held grid steps with MIDI edits before/after releasing firstFalse: range2..4, first-held target, remaining-held target and untouched middle step'),
  'M-MASK-032':dict(run=pending_note_mask_song_transition,requirements=['MASK-ATTRIBUTES','MASK-STEP-ENTRY','MEMORY-RECORD','SONG-ADVANCE','SONG-SLOTS'],description='Held-step note-mask encoder edit remains in the song selected at gesture press when automatic song mode advances before release; grid/song indicators, screen, MIDI and song-local undo/redo stay isolated'),
  'M-MASK-HELD-EXTRA-001':dict(run=held_mask_extra_key,requirements=['MASK-STEP-ENTRY','MASK-PRECEDENCE'],description='A held-step velocity turn with a pattern-row key also held locks only the held step, in either press order (README 595-597; human decision S27)'),
@@ -4036,7 +3327,7 @@ CASES={
  'M-TIME-004':dict(run=fractional_clock_continuity,requirements=['CH-TEMPO','OPT-REPEAT-RESET'],description='Every fractional pulse ratio across four global boundaries: rational-window timing, bounded phase and same-pitch release ordering'),
  'M-TIME-003':dict(run=repeated_pattern_reset_policy,requirements=['CH-TEMPO','OPT-REPEAT-RESET','OPT-SEQUENCE-RESET','OPT-SONG-MODE'],description='Real menu reset-option combinations and song mode off at two repeat boundaries, /9 clock and three-note phase witness'),
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
- 'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
+ 'M-TIME-002':dict(run=integral_clock_divisions_slow,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
  'M-TRANS-009':dict(run=transpose_global_live_edit,requirements=['TRANSPOSE-GLOBAL','NAV-TRANSPORT'],description='Two global transpose edits during sounding notes preserve current pitch/gate and change the next onset, exact harmonic-sync programs, releases and phase'),
  'M-TRANS-008':dict(run=transpose_song_persistence,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SAVE-AUTO','PERSIST-AUTO-001'],description='Independent +5/-7 copied song transposes survive the real autosave deadline and a fresh native process with exact restored MIDI and slot LEDs'),
@@ -4077,10 +3368,10 @@ CASES={
  'M-ALG-001':dict(run=euclidean_workflow,requirements=['PAT-ALGORITHM', 'PAT-FADERS', 'PAT-PREVIEW', 'PAT-PAINT', 'PAT-CANCEL', 'PAT-MOVE'],description='Euclidean3-in-8: full-grid two-phase preview, unchanged playback, cancel, shifted XOR paint/repaint, left/reset and dense-fill boundary'),
  'M-PAT-004':dict(run=pattern_duration_controls,requirements=['PAT-DURATION'],description='Length extension/reset and empty-step gestures preserve exact grid and MIDI phrase'),
  'M-PAT-005':dict(run=live_pattern_duration,requirements=['PAT-DURATION'],description='Shorten and extend during playback: pending release unchanged, following onsets use edited length, phrase timing preserved'),
- 'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),
- 'M-PAT-003':dict(run=pattern_duration_domain,requirements=['PAT-DURATION'],description='All64 authored duration endpoints through grid gestures, full length LEDs and independent MIDI durations with stop cleanup'),
- 'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),
- 'M-REC-033':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Two milliseconds after boundary: independent active-step MIDI witness, grid and replay'),
+ 'M-LEN-004':dict(run=lambda c:pattern_duration_domain(c,(4,),4,reexpress_controlled=True),requirements=['PAT-DURATION','MIDI-RELEASE-001'],description='Full-loop same-pitch retrigger must release the previous note before emitting the next note-on'),
+ 'M-PAT-003':dict(run=lambda c:pattern_duration_domain(c,reexpress_controlled=True),requirements=['PAT-DURATION'],description='All64 authored duration endpoints through grid gestures, full length LEDs and independent MIDI durations with stop cleanup'),
+ 'M-REC-032':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3),boundary_witness=True,case_id='M-REC-032'),requirements=['REC-LIVE-NOTES'],description='Two milliseconds before boundary: independent active-step MIDI witness, grid and replay'),
+ 'M-REC-033':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4),boundary_witness=True,case_id='M-REC-033'),requirements=['REC-LIVE-NOTES'],description='Two milliseconds after boundary: independent active-step MIDI witness, grid and replay'),
  'M-MIDI-005':dict(run=keyboard_pitch_range,requirements=['MIDI-RELEASE-001'],description='All128 MIDI pitches at minimum/maximum velocity with both release forms; exact preview and no outstanding notes'),
  'M-REC-030':dict(run=lambda c:recorded_chord_release(c,(72,76,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after root release while second voice remains held; preserve chord and first onset'),
  'M-REC-031':dict(run=lambda c:recorded_chord_release(c,(76,72,79),(0,0,80000000),release_offsets=(40000000,400000000,500000000)),requirements=['REC-LIVE-NOTES','REC-ARM'],description='Add third voice after second voice release while root remains held; preserve all recorded voices'),
@@ -4108,7 +3399,7 @@ CASES={
  'M-MIDI-002':dict(run=keyboard_input_channels,requirements=['MIDI-RELEASE-001','REC-LIVE-NOTES'],description='All16 keyboard input channels across both ports and both release forms produce exact selected-channel preview MIDI with no stuck notes'),
  'M-REC-016':dict(run=lambda c:recorded_note_channel_switch(c,input_channel=16),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Keyboard on MIDI input channel16 records and releases on the selected Mosaic channel independently of its input channel'),
  'M-REC-015':dict(run=lambda c:recorded_note_channel_switch(c,release_status=144),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Velocity-zero Note On releases the original held note and commits its recorded length after channel selection changes'),
- 'M-UI-002':dict(run=lambda c:live_playhead_feedback(c,3),requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Twice-rate live grid playhead follows emitted MIDI within one redraw period across two loops'),
+ 'M-UI-002':dict(run=live_playhead_feedback_twice_rate,requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Twice-rate live grid playhead follows emitted MIDI within one redraw period across two loops'),
  'M-UI-001':dict(run=live_playhead_feedback,requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Live grid playhead follows independently checked emitted MIDI steps within one redraw period; two loops and stopped grid'),
  'M-REC-013':dict(run=lambda c:live_record_placement(c,(1355000000,1505000000),(16,18),15,3,.5),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Twice-rate channel records on its own steps across a grid row; absolute LEDs and independent replay gaps'),
  'M-REC-014':dict(run=lambda c:live_record_placement(c,(1580000000,2180000000),(62,64),61,-2,2),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Half-rate channel records on its own steps near step64; absolute LEDs and independent replay gaps'),
@@ -4122,7 +3413,7 @@ CASES={
  'M-REC-005':dict(run=recorded_note_channel_switch,requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Switch selected channel while recording a held note; release route and recorded length remain on origin channel'),
  'M-REC-002':dict(run=lambda c:live_record_placement(c,(1398000000,1698000000),(1,3)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms before step boundaries belong to preceding steps; recorded grid and replay'),
  'M-REC-003':dict(run=lambda c:live_record_placement(c,(1402000000,1702000000),(2,4)),requirements=['REC-LIVE-NOTES'],description='Live notes2ms after step boundaries belong to new steps; recorded grid and replay'),
- 'M-REC-004':dict(run=lambda c:live_record_placement(c,(1400000000,1700000000),(1,3),boundary_witness=True),requirements=['REC-LIVE-NOTES'],description='Equal-deadline pulse/note uses current active step; transport-anchored independent MIDI witness, grid and disarmed replay'),
+ 'M-REC-004':dict(run=lambda c:live_record_placement(c,(1400000000,1700000000),(1,3),boundary_witness=True,case_id='M-REC-004'),requirements=['REC-LIVE-NOTES'],description='Equal-deadline pulse/note uses current active step; transport-anchored independent MIDI witness, grid and disarmed replay'),
  'M-REC-001':dict(run=live_record_placement,requirements=['REC-LIVE-NOTES'],description='Queued keyboard notes land on independently planned steps under MIDI clock; exact recorded LEDs and disarmed replay MIDI'),
  'M-MEMORY-002':dict(run=memory_channel_isolation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Independent histories on two routed channels sharing a pattern; untouched channel navigation cannot alter either phrase'),
  'M-MEMORY-001':dict(run=memory_navigation,requirements=['MEMORY-NAV','MEMORY-RECORD','REC-KEYBOARD-STEP'],description='Held-step MIDI edits, visible memory counter, undo/redo bounds and history branching verified through exact musical output'),

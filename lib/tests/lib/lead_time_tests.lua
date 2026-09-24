@@ -146,6 +146,16 @@ local function with_midi_lead(run, fallback)
   m_clock=saved.m_clock;clock_lattice=saved.clock_lattice;handle_midi_event_data=saved.handle
   if not ok then error(err,0) end
 end
+
+function test_midi_note_on_reports_the_normalized_emitted_pitch()
+  with_midi_lead(function(out,writes,timers,advance)
+    local emitted
+    out:note_on(200,100,1,1,0,function(pitch)emitted=pitch end)
+    out.flush_output_batch(true)
+    luaunit.assert_equals(emitted,127)
+    luaunit.assert_equals(writes[1][2],{144,127,100})
+  end)
+end
 -- The same 1 ms pulse grid, driven through the MIDI output's batch hooks: each
 -- pulse opens and closes a batch exactly as the lattice does.
 local function output_pulse_grid(out,timers,advance,interval)

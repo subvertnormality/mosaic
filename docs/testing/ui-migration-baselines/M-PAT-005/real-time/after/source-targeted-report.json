@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "eba9f9d28f002dafece7221f702a4064e63672ea",
+  "after_sha": "e58381f099e6a07f6ea4f2040f79483df22b0862",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-PAT-004",
+    "M-PAT-005"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_verb_sources.json"
+    ],
+    "historical_tooling_paths": [
+      "tests/behaviour/ci/compare_ptn_graph.lua",
+      "tests/behaviour/ci/targeted-ui-migration.py",
+      "tests/behaviour/ui_migration_gate.py"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-PAT-004",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PAT-004/real-time/before/00eb66a257eb423c8a5a9d18faab6fae/manifest.json",
+              "manifest_sha256": "665ab549086747b9be7c767776c9733a67b13f8743f91631706810d0b89b9e04",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PAT-004/real-time/after/b3efeb5541714442a926c429984b2ac7/manifest.json",
+              "manifest_sha256": "2d72964ac88b207beac928548353b71e043ad4c8e99f28aed18e0c9e4cc8e5eb",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PAT-004/controlled-experimental/before/926c62cd10454ee6b53f5de45c1bb3bb/manifest.json",
+              "manifest_sha256": "24d87e7cbf7f6b7dcd6e814b5673333254e43729df7104571804fe1f7a6eae9b",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PAT-004/controlled-experimental/after/f7f0066fcb424e00973a2e5646933088/manifest.json",
+              "manifest_sha256": "4609feaa3f854e62ae297a8e17583e351fd750fae0c1d15a88cf88b2684302d1",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-PAT-005",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PAT-005/real-time/before/4b2ba4e7b2404da3b9555146334ccdb3/manifest.json",
+              "manifest_sha256": "39f83920594a0c60736cf5bc582164522498d679e31e8a539b27fd6225720e68",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PAT-005/real-time/after/60c8eb41f5724952830ffcc081b9834d/manifest.json",
+              "manifest_sha256": "5d8e28ac0ada115904f4043d307ae31d245984f3b6df5721ae43d2f8bb314c70",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PAT-005/controlled-experimental/before/3ef10fdd8ab449058a133fec2808ade3/manifest.json",
+              "manifest_sha256": "a69c031c87d185d06db1ce0462f2f5cb5b5746f5b22a899130fc4e695537efc5",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PAT-005/controlled-experimental/after/6ef591750a214bebaf5bfc73ee9377d7/manifest.json",
+              "manifest_sha256": "676c35f39db4ead58f7582f0b2d0849a034bd2e029f5c707cfa37527d708f1ba",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "tooling": {
+    "sha": "66a97db89ccd28bf3f99c6eb8e9214423f80590b",
+    "sha256": {
+      "tests/behaviour/ui_migration_gate.py": "1112d792cfa99d1f73118348b8be77ade4d66381d1b32fc8fa3733c64629a45e",
+      "tests/behaviour/ci/targeted-ui-migration.py": "45902aeef52c94cfc5d52112338287d18f4dd7c4166385a0189728aa6f532f33",
+      "tests/behaviour/ci/compare_ptn_graph.lua": "2c5f793815d0bc4a580a34d8849b3713db22aa055391d6a2cd12962eff23b000"
+    }
+  }
+}

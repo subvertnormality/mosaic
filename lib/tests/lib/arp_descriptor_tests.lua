@@ -61,11 +61,21 @@ function test_arp_descriptor_preserves_root_only_and_empty_muted_results()
   luaunit.assert_equals(root_only[1], {
     note_value = 63,
     octave_mod = -2,
-    transpose = 7
+    transpose = 7,
+    source_id = "root"
   })
   luaunit.assert_equals(#calls, 4)
 
   local empty_muted = build({}, 1, true, 60, -2, 7, 3)
   luaunit.assert_nil(empty_muted)
   luaunit.assert_equals(#calls, 8)
+end
+
+
+function test_arp_descriptor_preserves_source_identity_through_sparse_reordering()
+  local build=arp_descriptor.new(function(i)return 5-i end)
+  local result=build({2,false,7,false},2,false,60,0,0,0)
+  luaunit.assert_equals(result[2].source_id,"chord3")
+  luaunit.assert_equals(result[4].source_id,"chord1")
+  luaunit.assert_equals(result[5].source_id,"root")
 end

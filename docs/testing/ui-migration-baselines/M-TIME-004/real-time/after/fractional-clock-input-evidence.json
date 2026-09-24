@@ -1,0 +1,173 @@
+{
+  "clock_mode": "real-time",
+  "verified_inputs": [
+    {
+      "label": "x16",
+      "edge": "start",
+      "evidence": {
+        "action_id": "a6b8e4afc71648c0826516f8df6d4df7",
+        "native_sequence": 398,
+        "origin_ns": 1212075666317,
+        "applied_ns": 1212077656062,
+        "input_to_applied_ns": 1989745,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x16",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "53e1abd524894e01a8981873fcbc23dd",
+        "native_sequence": 490,
+        "origin_ns": 1260951725910,
+        "applied_ns": 1260979001290,
+        "input_to_applied_ns": 27275380,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "11d53f8330a3408a99a8111e9644c4a3",
+        "native_sequence": 500,
+        "origin_ns": 1261603033657,
+        "applied_ns": 1261604789894,
+        "input_to_applied_ns": 1756237,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "f16f9a30a18b443a9bcc1bf6a45f5093",
+        "native_sequence": 592,
+        "origin_ns": 1311971892386,
+        "applied_ns": 1312009090123,
+        "input_to_applied_ns": 37197737,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5",
+      "edge": "start",
+      "evidence": {
+        "action_id": "e607357400b6452bbf05410b7a58f38c",
+        "native_sequence": 599,
+        "origin_ns": 1312510945937,
+        "applied_ns": 1312513110631,
+        "input_to_applied_ns": 2164694,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "452f2948f4424428a0823647249ed77d",
+        "native_sequence": 691,
+        "origin_ns": 1363107754028,
+        "applied_ns": 1363143678746,
+        "input_to_applied_ns": 35924718,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x2.6",
+      "edge": "start",
+      "evidence": {
+        "action_id": "62873632bf6847029c94517401dfe788",
+        "native_sequence": 700,
+        "origin_ns": 1363671266941,
+        "applied_ns": 1363672940231,
+        "input_to_applied_ns": 1673290,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x2.6",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "e1af8c0711f243ac80d0bcbe1282a9c6",
+        "native_sequence": 792,
+        "origin_ns": 1414308454488,
+        "applied_ns": 1414329626025,
+        "input_to_applied_ns": 21171537,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x1.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "f0509a91756c44608f5a3cd1c4977606",
+        "native_sequence": 801,
+        "origin_ns": 1414856407725,
+        "applied_ns": 1414862948194,
+        "input_to_applied_ns": 6540469,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x1.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "ab5b44ba724f46e8bd961dd692f35c3d",
+        "native_sequence": 893,
+        "origin_ns": 1465389424787,
+        "applied_ns": 1465403857727,
+        "input_to_applied_ns": 14432940,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/2.6",
+      "edge": "start",
+      "evidence": {
+        "action_id": "11cfe4c2beb544ecbc37311e2b3e75e3",
+        "native_sequence": 903,
+        "origin_ns": 1465992239960,
+        "applied_ns": 1465993861701,
+        "input_to_applied_ns": 1621741,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/2.6",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "1d0be746e82e422b91c127f9664db40e",
+        "native_sequence": 995,
+        "origin_ns": 1516397138505,
+        "applied_ns": 1516409439634,
+        "input_to_applied_ns": 12301129,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/5.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "9c58fd91a7564a8eadddf46c7df0152e",
+        "native_sequence": 1005,
+        "origin_ns": 1517002254873,
+        "applied_ns": 1517004050639,
+        "input_to_applied_ns": 1795766,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/5.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "e12d559bafb3446cb3e7d6612f584981",
+        "native_sequence": 1097,
+        "origin_ns": 1567564188841,
+        "applied_ns": 1567575942534,
+        "input_to_applied_ns": 11753693,
+        "boundary": "backend-input-submission"
+      }
+    }
+  ]
+}

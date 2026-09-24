@@ -6,10 +6,27 @@ menu is SETUP-MIDI-MAP-ENTRY and is not claimed here. Inputs are relative
 binary-offset CCs on the emulator MIDI input; outputs are note velocities.
 """
 import shutil
+import re
 from driver import Driver,REPO
 
 def pmap_line(param,cc,value=2):
     return '"%s":"{cc=%d, ch=1, dev=1, in_lo=1, in_hi=2, out_lo=-1, out_hi=1, accum=true, echo=false, value=%d}"\n'%(param,cc,value)
+
+def pmap_semantic_fields(line):
+    """Canonicalise every saved PMAP field while preserving changed values."""
+    match = re.fullmatch(r'"([A-Za-z_][A-Za-z_0-9]*)":"\{(.*)\}"', line)
+    if match is None:
+        raise ValueError('Invalid PMAP row: %r' % line)
+    fields = {}
+    for token in match.group(2).split(','):
+        key, separator, value = token.partition('=')
+        key, value = key.strip(), value.strip()
+        if separator != '=' or not re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*', key) or not value:
+            raise ValueError('Invalid PMAP field: %r' % token)
+        if key in fields:
+            raise ValueError('Duplicate PMAP field: %s' % key)
+        fields[key] = value
+    return dict(parameter=match.group(1), fields=['%s=%s' % item for item in sorted(fields.items())])
 
 def midi_mapping(c):
     c.configure();c.finish()
@@ -22,13 +39,13 @@ def midi_mapping(c):
     try:
         e.configure()
         # Channel 2 on port 2 / MIDI channel 2 playing pattern 1 over steps 1-4.
-        e.tap(2,1);e.enc(3,1);e.enc(2,1);e.enc(3,1);e.enc(2,1);e.enc(3,1);e.key(3)
-        e.tap(1,2);e.hold_tap((1,4),(4,4));e.tap(1,1)
+        e.ui.select_channel(2);e.ui.set_value(1);e.ui.turn(2,1);e.ui.set_value(1);e.ui.turn(2,1);e.ui.set_value(1);e.ui.press_key(3)
+        e.ui.tap_control('pattern_slot',1);e.ui.set_range(1,4);e.ui.select_channel(1)
         def cc(number,value):e.action(type='midi',port=1,bytes=[176,number,value]);e.elapse(.2) # slower than the 0.15 s acceleration window
         def velocities(stage,expected):
-            marker=e.snapshot()['midi_count'];e.tap(1,8)
+            marker=e.snapshot()['midi_count'];e.ui.play()
             state=e.wait(lambda s:sum(1 for m in s['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0)>=8,timeout=4)
-            e.tap(1,8);e.wait(lambda s:not s['midi_capture']['outstanding'])
+            e.ui.stop();e.wait(lambda s:not s['midi_capture']['outstanding'])
             ons=[m for m in state['midi'] if m['index']>marker and m['bytes'][0] in (144,145) and m['bytes'][2]>0]
             for port,wanted in expected.items():
                 seen=[m['bytes'][2] for m in ons if m['port']==port]
@@ -41,44 +58,35 @@ def midi_mapping(c):
         velocities('selected-ch1-plus-11',{1:10,2:pattern})
         cc(20,63);cc(20,63);velocities('selected-ch1-minus-2',{1:8,2:pattern})
         # Selection moves the selected-channel map to channel 2; channel 1 keeps 8.
-        e.tap(2,1);cc(20,65);cc(20,65);cc(20,65);velocities('selected-ch2-plus-3',{1:8,2:2})
+        e.ui.select_channel(2);cc(20,65);cc(20,65);cc(20,65);velocities('selected-ch2-plus-3',{1:8,2:2})
         # The fixed channel-2 map ignores selection.
-        e.tap(1,1);cc(21,65);cc(21,65);velocities('fixed-ch2-plus-2',{1:8,2:4})
+        e.ui.select_channel(1);cc(21,65);cc(21,65);velocities('fixed-ch2-plus-2',{1:8,2:4})
         cc(21,0);velocities('fixed-ch2-value-0-decreases',{1:8,2:3})
     finally:e.finish()
     c.results.append(dict(kind='midi-mapping-session',nested=str(out),passed=True))
 
 def midi_map_entry(c):
     """Create the documented map through the native norns menu, then use it."""
-    from cases import menu_label
-    from frame_oracle import selected_line
     c.configure()
     def hold_k1(n):
-        c.action(type='key',n=1,state=1)
-        try:c.elapse(.4);c.key(n) # menu receives K1 after its 0.25 s threshold
-        finally:c.action(type='key',n=1,state=0)
+        with c.ui.hold_keys(1):
+            c.elapse(.4);c.ui.press_key(n) # menu receives K1 after its 0.25 s threshold
         c.elapse(.1)
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['id']=='mosaic_mask_midi_maps')
-    c.enc(2,position);c.key(3)
-    for _ in range(12):
-        if selected_line(c.snapshot(),'Selected Ch. Velocity',top=23) or selected_line(c.snapshot(),'Selected Ch. Velocity'):break
-        c.enc(2,1)
-    else:raise AssertionError('Mapping parameter not reached')
+    c.ui.seek_native_mapping_parameter('selected_channel_velocity')
     hold_k1(3)          # EDIT -> MAP mode
-    c.key(3)            # open the parameter's map editor on "learn"
-    c.key(3)            # arm learn
+    c.ui.press_key(3)            # open the parameter's map editor on "learn"
+    c.ui.press_key(3)            # arm learn
     c.action(type='midi',port=1,bytes=[176,20,63]);c.elapse(.2) # learned CC 20 (consumed by learn)
-    c.enc(2,5);c.enc(3,1)      # in lo 0 -> 1
-    c.enc(2,1);c.enc(3,-125)   # in hi 127 -> 2
-    c.enc(2,3);c.enc(3,1)      # accum yes
-    c.key(2)                   # assign and write the PMAP
+    c.ui.turn(2,5);c.ui.turn(3,1)      # in lo 0 -> 1
+    c.ui.turn(2,1);c.ui.turn(3,-125)   # in hi 127 -> 2
+    c.ui.turn(2,3);c.ui.turn(3,1)      # accum yes
+    c.ui.press_key(2)                   # assign and write the PMAP
     hold_k1(3)                 # back to EDIT mode
-    c.key(2);c.key(2);c.key(1) # leave the group and the menu
+    c.ui.press_key(2);c.ui.press_key(2);c.ui.press_key(1) # leave the group and the menu
     pmap=(c.data_directory/'mosaic.pmap').read_text()
     line=[l for l in pmap.splitlines() if l.startswith('"sel_ch_vel"')]
     assert len(line)==1 and all(t in line[0] for t in ('cc=20','ch=1','dev=1','in_lo=1','in_hi=2','accum=true')),pmap
-    c.results.append(dict(kind='pmap-entry',line=line[0],passed=True))
+    c.results.append(dict(kind='pmap-entry',source='mosaic.pmap',entry=pmap_semantic_fields(line[0]),passed=True))
     def cc(value):c.action(type='midi',port=1,bytes=[176,20,value]);c.elapse(.2)
     # A fresh map starts below its input range; begin with a decrease (Off stays Off),
     # then five increases reach velocity mask 4 and one decrease gives 3.

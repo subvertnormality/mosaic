@@ -1,0 +1,36 @@
+{
+  "scope": "Diagnostic analysis of the BASS lane over the frozen v12 held-out predictions. Quality diagnosis only; no acceptance claim.",
+  "date": "2026-09-19",
+  "why": "BASS is a higher product priority than OHH, so the lane was analysed to establish whether its failure is recoverable.",
+  "headline": "The BASS onsets are largely detected. The failure is discrimination, not blindness.",
+  "recall_ceiling_at_zero_decoder_floor": {
+    "BASS": {"recall": 0.8142, "matched": 596, "references": 732, "raw_candidates": 2842},
+    "BD": {"recall": 0.8745, "matched": 481, "references": 550, "raw_candidates": 1735},
+    "SD": {"recall": 0.9623, "matched": 511, "references": 531, "raw_candidates": 2046},
+    "CHH": {"recall": 0.9276, "matched": 1473, "references": 1588, "raw_candidates": 2177},
+    "reading": "With every candidate kept, 596 of 732 held-out BASS references are matched, against an actual frozen-gate recall of 0.314. The candidates exist; the confidence ordering fails to separate them. BASS over-generates roughly fourfold."
+  },
+  "false_positive_origin": {
+    "total_false_positives_at_zero_floor": 3041,
+    "coincide_with_BD_onset": {"count": 248, "share": 0.082},
+    "coincide_with_SD_onset": {"count": 365, "share": 0.120},
+    "coincide_with_any_annotated_drum": {"count": 1202, "share": 0.395},
+    "coincide_with_no_annotated_event": {"count": 1839, "share": 0.605},
+    "tolerance_seconds": 0.05,
+    "reading": "Kick bleed is NOT the dominant cause. A majority of false positives align with nothing annotated."
+  },
+  "measurement_caveat": {
+    "unannotated_interference": "The v12 corpus deliberately leaves toms and pedal hats audible but unlabelled (see CORPUS.md). Toms are low and pitched, so the UMXHQ bass stem plausibly carries tom energy that Basic Pitch decodes as a pitched onset. Such detections are scored as BASS false positives by construction.",
+    "consequence": "Measured BASS precision is therefore somewhat pessimistic. This does not rescue the lane, but a like-for-like comparison against a replacement candidate must account for it."
+  },
+  "implementation_note_correcting_a_common_hypothesis": {
+    "claim_examined": "Basic Pitch's DEFAULT_MINIMUM_NOTE_LENGTH_MS of 127.7 merges sixteenth notes at 120 BPM (125 ms) and suppresses recall.",
+    "finding": "Does not apply to this implementation. The pinned runtime does not use Basic Pitch's note decoder. It reads the raw 88-column onset posterior directly and applies its own peak decoder (threshold 0.2 by default, forced to 0.0 for this analysis, gap_frames 8 at 86.13 fps which is about 93 ms).",
+    "conclusion": "Minimum note length is not a factor here. The recall ceiling of 0.8142 independently confirms the decoder is not suppressing the onsets."
+  },
+  "directions_consistent_with_the_measurement": [
+    "The bass stem is noisy rather than the onsets missing, so a cleaner separator should raise precision directly. Demucs is MIT and materially stronger than UMXHQ on bass SDR, but its on-device memory must be measured before it can be considered, since analysis must run standalone on the Norns.",
+    "Pitch persistence is unexploited. A real bass note sustains a stable pitch while percussive bleed does not, and the Basic Pitch posterior already carries per-pitch activation that the current decoder collapses with a max over the bass range. Requiring persistence after an onset is an on-device, no-new-model discriminator.",
+    "Neither direction has been implemented or measured. Both are hypotheses supported by the ceiling and false-positive origin data above."
+  ]
+}

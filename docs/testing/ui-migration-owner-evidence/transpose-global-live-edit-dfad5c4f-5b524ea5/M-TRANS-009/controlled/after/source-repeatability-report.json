@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "dfad5c4fd784605badc11d514145de5958ca8dbd",
+  "after_sha": "5b524ea513f8c0cf2a5fe009050662a21895fa6a",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-TRANS-009"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/transpose_global_live_edit.py": "M-TRANS-009"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/transpose_global_live_edit.py",
+      "case": "M-TRANS-009",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-100771d5adc6443092aa29841e9788ff/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-100771d5adc6443092aa29841e9788ff/manifest.json",
+      "manifest_sha256": "8649a23090b1d2b5657b6dd37bcbaf8274b34c39190325dede112e9a019f6689",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -21,10 +21,18 @@ def midi_mapping_held_step(c):
     e = Driver(out, project_seed=seed, **c.launch_options)
     try:
         e.configure()
-        e.tap(2, 1); e.enc(3, 1); e.enc(2, 1); e.enc(3, 1); e.enc(2, 1); e.enc(3, 1); e.key(3)
-        e.tap(1, 2); e.hold_tap((1, 4), (4, 4)); e.tap(1, 1)        # channel 2 plays pattern 1 on port 2
+        e.ui.select_channel(2)
+        e.ui.set_value(1)
+        e.ui.turn(2, 1)
+        e.ui.set_value(1)
+        e.ui.turn(2, 1)
+        e.ui.set_value(1)
+        e.ui.press_key(3)
+        e.ui.tap_control("pattern_slot", 1)
+        e.ui.set_range(1, 4)
+        e.ui.select_channel(1)        # channel 2 plays pattern 1 on port 2
         def velocities(stage, expected):
-            marker = e.snapshot()['midi_count']; e.tap(1, 8); e.elapse(1.4); e.tap(1, 8)
+            marker = e.snapshot()['midi_count']; e.ui.play(); e.elapse(1.4); e.ui.stop()
             state = e.wait(lambda s: not s['midi_capture']['outstanding'])
             ons = [m for m in state['midi'] if m['index'] > marker and m['bytes'][0] in (144, 145) and m['bytes'][2] > 0]
             actual = {port: [m['bytes'][2] for m in ons if m['port'] == port][:4] for port in (1, 2)}
@@ -33,15 +41,18 @@ def midi_mapping_held_step(c):
         def cc(number, times):
             for _ in range(times): e.action(type='midi', port=1, bytes=[176, number, 65]); e.elapse(.2)
         pattern = [127, 117, 107, 97]
-        e.enc(1, -4); e.enc(2, -5); e.enc(2, 2); e.enc(3, 51)           # Note Masks, Vel: channel 1 mask 50
+        e.ui.channel_page("masks", "midi_config")
+        e.ui.turn(2, -5)
+        e.ui.turn(2, 2)
+        e.ui.set_value(51)           # Note Masks, Vel: channel 1 mask 50
         velocities('channel-1-mask-50', {1: [50] * 4, 2: pattern})
-        e.action(type='grid', x=2, y=4, state=1); e.elapse(.05)
-        try: cc(21, 3)
-        finally: e.action(type='grid', x=2, y=4, state=0)
+        with e.ui.hold_step(2):
+            e.elapse(.05)
+            cc(21, 3)
         e.elapse(.1); velocities('fixed-map-with-held-step', {1: [50] * 4, 2: [2] * 4})
-        e.action(type='grid', x=2, y=4, state=1); e.elapse(.05)
-        try: cc(20, 2)
-        finally: e.action(type='grid', x=2, y=4, state=0)
+        with e.ui.hold_step(2):
+            e.elapse(.05)
+            cc(20, 2)
         e.elapse(.1); velocities('selected-map-with-held-step', {1: [50, 52, 50, 50], 2: [2] * 4})
     finally: e.finish()
     c.results.append(dict(kind='mapping-held-step-session', nested=str(out), passed=True))

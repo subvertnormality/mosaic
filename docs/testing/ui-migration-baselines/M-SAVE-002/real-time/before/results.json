@@ -1,0 +1,89 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "59.5s-idle",
+    "autosave": null,
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "input-restarts",
+    "autosave": null,
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "saved-after-idle",
+    "autosave": [
+      "265c8d36c6136f334779d78ad8e091f6fa4020bf566393df03382d2f92966a2a",
+      "c9d3d14e0170c9c189e179c670a0f8c383ce13c5e14d2a730d70be70b011bde2"
+    ],
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "no-save-while-playing",
+    "autosave": [
+      "265c8d36c6136f334779d78ad8e091f6fa4020bf566393df03382d2f92966a2a",
+      "c9d3d14e0170c9c189e179c670a0f8c383ce13c5e14d2a730d70be70b011bde2"
+    ],
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "stop-restarts",
+    "autosave": [
+      "265c8d36c6136f334779d78ad8e091f6fa4020bf566393df03382d2f92966a2a",
+      "c9d3d14e0170c9c189e179c670a0f8c383ce13c5e14d2a730d70be70b011bde2"
+    ],
+    "passed": true
+  },
+  {
+    "kind": "autosave-idle",
+    "stage": "saved-after-stop",
+    "autosave": [
+      "b071facf383fd635333b64f7006245288ca447f7bbc32fdb66a572be15101d07",
+      "c9d3d14e0170c9c189e179c670a0f8c383ce13c5e14d2a730d70be70b011bde2"
+    ],
+    "passed": true
+  }
+]

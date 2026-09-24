@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35866000557",
+  "source_run_id": "35866000557",
+  "source_revision": "35d628f3485c1efe25039b3be4970d2716f76237",
+  "case": "M-PARAM-014",
+  "lane": "controlled",
+  "clock_mode": "controlled-experimental",
+  "side": "after",
+  "targeted_report_sha256": "11892beb950774f909d3e619c53ebf8980cd0b15b239f2ea21d5f7a26cdba1c3",
+  "repeatability_report_sha256": "4ca7d53e766b01b3135ea316e629977fb4a0cd1632f7af5f96bae6ceaa75c3e5",
+  "manifest": "M-PARAM-014/controlled-experimental/after/63d6b8451ce34e4f9f114d67a1ac845f/manifest.json",
+  "manifest_sha256": "9c640ee17f2599667dfd69619ee3fa25097a9eb2d9aa3fffab3649427edb4fcd",
+  "evidence_sha256": {
+    "recipe.json": "6cb6d952f8ec88c3b088b4e7e9934a49c4a67911965424da6cdef096c71b96a6",
+    "results.json": "f5128f6117eae0a517d23278817e78bbe2cc239b72fe7cba6f94d71b468cbd4b"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI"
+}

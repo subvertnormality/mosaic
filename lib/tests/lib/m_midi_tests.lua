@@ -132,3 +132,19 @@ function test_midi_output_gathers_a_pulse_into_one_write_per_device()
     {"a",{0x90,60,100}},
     {"a",{0x90,62,90}}})
 end
+
+function test_midi_output_reports_actual_emission_only_after_batch_flush()
+  local original_devices=midi_devices;local emitted=0
+  local Device={};Device.__index=Device;function Device:send()end
+  midi_devices={{device=setmetatable({},Device)}}
+  local ok,err=pcall(function()
+    midi_output.begin_output_batch()
+    luaunit.assert_true(midi_output:note_on(60,100,1,1,0,function()emitted=emitted+1 end))
+    luaunit.assert_equals(emitted,0)
+    midi_output.flush_output_batch(true)
+    luaunit.assert_equals(emitted,1)
+    luaunit.assert_false(midi_output:note_on(62,100,1,2,0,function()emitted=emitted+1 end))
+    luaunit.assert_equals(emitted,1)
+  end)
+  midi_devices=original_devices;if not ok then error(err,0)end
+end

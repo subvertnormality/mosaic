@@ -1,0 +1,73 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "length-mask-display",
+    "label": "128",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Note Arpeggio",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Spread",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "Chord Accel Mod",
+    "passed": true
+  },
+  {
+    "kind": "spread-acceleration-contract",
+    "arp": true,
+    "acceleration": 2,
+    "default_off": false,
+    "explicit_off": false,
+    "onsets": 7,
+    "release_checks": 7,
+    "decision": "01a07f50-06ce-76f2-86f5-76414bd23074",
+    "compatibility_claim": "New-contract conformance; historical behavior is preserved only where independently shown",
+    "passed": true
+  }
+]

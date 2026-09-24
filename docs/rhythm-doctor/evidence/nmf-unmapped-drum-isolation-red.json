@@ -1,0 +1,10 @@
+{
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "...F\n======================================================================\nFAIL: test_unmapped_drum_onsets_cannot_make_a_template_isolated (__main__.NmfTemplateTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"C:\\Users\\andy\\Documents\\ChatGPT\\mosaic\\.worktrees\\rhythm-doctor\\mosaic\\tests\\rhythm_doctor\\test_nmf_template.py\", line 29, in test_unmapped_drum_onsets_cannot_make_a_template_isolated\n    self.assertEqual(select_isolated_events(midi_events(path, 'DRUM'), 'BD'), [])\nAssertionError: Lists differ: [0.5] != []\n\nFirst list contains 1 additional elements.\nFirst extra element 0:\n0.5\n\n- [0.5]\n+ []\n\n----------------------------------------------------------------------\nRan 4 tests in 0.008s\n\nFAILED (failures=1)\n",
+  "source_sha256": {
+    "tests\\rhythm_doctor\\test_nmf_template.py": "69d927b55bc118507f7c958216651e108733959f00f82a820b7dd40370e0b3e3",
+    "tools/rhythm_doctor_analysis/nmf_template.py": "b0a6f9def0d356f8ac159130f6f502cd9f5de2251bafdce20ae9387ec3aadf8c"
+  },
+  "scope": "diagnostic template-isolation defect; not production transcription evidence"
+}

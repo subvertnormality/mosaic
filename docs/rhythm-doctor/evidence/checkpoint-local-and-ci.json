@@ -1,0 +1,16 @@
+{
+  "revision": "5b4bf10",
+  "exit_code": 0,
+  "tests": 1710,
+  "failures": 0,
+  "reported_seconds": 26.013,
+  "log_sha256": "4b6882533c9263897c76e9b78970b7253306ec222f5f12abc14908c0c95c8547",
+  "scope": "existing full local Lua suite; not full Rhythm Doctor acceptance",
+  "ci": {
+    "run_id": 35418429234,
+    "url": "https://github.com/subvertnormality/mosaic/actions/runs/35418429234",
+    "full_lua_tests": 1710,
+    "component_groups": 19,
+    "conclusion": "success"
+  }
+}

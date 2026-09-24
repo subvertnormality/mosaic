@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "d37686bbc0965d9201334fdd417d87232b0ea56f",
+  "after_sha": "b08a55ed276d8ca4e34c65c1936ec7692abad13c",
+  "tooling_sha": "66a97db89ccd28bf3f99c6eb8e9214423f80590b",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-MERGE-FOUNDATION-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/foundation_workflow.py": "M-MERGE-FOUNDATION-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/foundation_workflow.py",
+      "case": "M-MERGE-FOUNDATION-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-55397e8dfeaa46778f8e0807166d6e02/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-55397e8dfeaa46778f8e0807166d6e02/manifest.json",
+      "manifest_sha256": "579cf765bcb1f47525726d1db8aa720b1eb6545e3b5c9b43a8f58be1ff8276a4",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

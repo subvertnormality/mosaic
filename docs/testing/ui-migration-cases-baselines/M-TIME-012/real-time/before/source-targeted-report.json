@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "197ec4dec80f38f688ed199bf97394568538953f",
+  "after_sha": "fd1c577d3759767b88ecfc192857fd83643b7bf2",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-TIME-012"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-TIME-012",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIME-012/real-time/before/26ac986c6d4f434295f95d7b7fc0b221/manifest.json",
+              "manifest_sha256": "59e3ebadf545dc744f244da169c3aae2101d642e7711bf9537ad5871db389113"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIME-012/real-time/after/2d6df34cce82447f94ffffbe35ae9df8/manifest.json",
+              "manifest_sha256": "c63e10b5a1879cb38da94f05251e826eed2dcf29c88ba079471b8b99747720f4"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-TIME-012/controlled-experimental/before/a81bce53457944ac9a0e6edf00657de2/manifest.json",
+              "manifest_sha256": "3f3ff94f51d00967b5169eec99fb7b15096b10022195f764b2f1197f7d30fcca"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-TIME-012/controlled-experimental/after/362e7cc03ee8426789ee80c37575ed2b/manifest.json",
+              "manifest_sha256": "749c861372ea40b9b19b5d444cf739fbff3e98aefc5bff3f10cb4cbe730d3e2a"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

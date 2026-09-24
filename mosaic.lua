@@ -44,9 +44,16 @@ local redraw_clock = nil
 local grid_redraw_clock = nil
 local scheduler_clock = nil
 local screen_keep_alive = nil
+local rhythm_doctor_poll_clock = nil
 
 nb = require("mosaic/lib/nb/lib/nb")
 m_clock = include("mosaic/lib/clock/m_clock")
+local rhythm_doctor_runtime_module = include("mosaic/lib/rhythm_doctor/runtime")
+local rhythm_doctor_recorder = include("mosaic/lib/rhythm_doctor/softcut_recorder")
+local rhythm_doctor_analysis_worker_host = include("mosaic/lib/rhythm_doctor/analysis_worker_host")
+local rhythm_doctor_ui_module = include("mosaic/lib/rhythm_doctor/ui_adapter")
+local rhythm_doctor_runtime = nil
+local rhythm_doctor_ui = nil
 local redraw_guard = include("mosaic/lib/clock/redraw_guard")
 pattern = include("mosaic/lib/pattern")
 m_midi = include("mosaic/lib/m_midi")
@@ -58,6 +65,111 @@ g = grid.connect()
 
 local function post_splash_init()
 
+end
+
+-- Read the configured analysis server, honouring the on/off switch so a player
+-- can keep an address saved while working locally.
+local function rhythm_doctor_server_endpoint()
+  -- Called when the analysis worker opens, which is after init() has
+  -- registered these parameters.
+  if params == nil or type(params.get) ~= "function" then return nil end
+  local ok, enabled = pcall(function() return params:get("rhythm_doctor_use_server") end)
+  if not ok or enabled ~= 2 then return nil end
+  local read, endpoint = pcall(function() return params:get("rhythm_doctor_server") end)
+  if not read or type(endpoint) ~= "string" or endpoint:match("^%s*$") then return nil end
+  return (endpoint:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function init_rhythm_doctor()
+  -- Capture runs through softcut, which lives inside crone and is therefore
+  -- already connected to JACK. Opening a JACK client of our own is the one
+  -- thing a norns cannot be relied on to allow: systemd removes the user's
+  -- shared memory when their last login session ends, and JACK's registry goes
+  -- with it, so nothing new can join the graph until jackd restarts.
+  local worker = rhythm_doctor_recorder.host({
+    directory = norns.state.data .. "rhythm-doctor-captures",
+  })
+  local analysis_worker = rhythm_doctor_analysis_worker_host.new({
+    runtime_root = norns.state.data .. "rhythm-doctor-analysis-runtime",
+    -- This optional local-computer profile is deliberately unconfigured by
+    -- default.  A deployment must provide every immutable identity below;
+    -- missing or partial values fail closed and never trigger a download.
+    backend = os.getenv("RHYTHM_DOCTOR_ANALYSIS_BACKEND"),
+    backend_sha256 = os.getenv("RHYTHM_DOCTOR_ANALYSIS_BACKEND_SHA256"),
+    drum_artifact_sha256 = os.getenv("RHYTHM_DOCTOR_DRUM_ARTIFACT_SHA256"),
+    bass_artifact_sha256 = os.getenv("RHYTHM_DOCTOR_BASS_ARTIFACT_SHA256"),
+    -- The shipped classical-DSP backend pins its own source and template
+    -- table instead of model artifacts, and needs no downloads.
+    template_sha256 = os.getenv("RHYTHM_DOCTOR_TEMPLATE_SHA256"),
+    -- The analysis server, if the player has configured one and switched it
+    -- on. An unreachable or slow server is not an error: the capture falls
+    -- back to on-device analysis and the player still gets gates.
+    -- Passed as a provider, not a value. init() builds this host before the
+    -- parameters holding the endpoint are registered, so reading it here
+    -- always found nothing and the player silently got on-device analysis.
+    -- Resolved when the worker opens instead, so the setting also takes
+    -- effect on the next capture rather than the next script reload.
+    remote_endpoint = rhythm_doctor_server_endpoint,
+    transport_factory = function(mailbox_root, result_root)
+      return include("mosaic/lib/rhythm_doctor/analysis_transport").new(mailbox_root, result_root)
+    end,
+  })
+  rhythm_doctor_runtime = rhythm_doctor_runtime_module.new({
+    project_id = norns.state.data .. "autosave.ptn",
+    worker = worker,
+    now = util.time,
+    transport_stopped = function() return not m_clock.is_playing() end,
+    analysis_worker = analysis_worker,
+    -- A save asked for during a capture is deferred rather than refused, and
+    -- declining it stops the autosave timers. Re-prime them once the capture
+    -- has released so the save runs through the ordinary path, with its
+    -- transport, inhibition and project-ownership checks intact.
+    on_deferred_save = function() project.prime_autosave() end,
+    paint = {
+      adapter = { trig_field = "trig_values", velocity_field = "velocity_values", length_field = "lengths", on = 1, off = 0 },
+      read_source = function(target)
+        local song = program.get_song_pattern(target.song_slot)
+        local source = song and song.patterns and song.patterns[target.pattern_id]
+        if not source then return nil, { code = "SOURCE_UNAVAILABLE" } end
+        local snapshot = fn.deep_copy(source)
+        snapshot.revision = pattern.get_source_revision(song, target.pattern_id)
+        return snapshot
+      end,
+      write_source = function(target, snapshot, expected_revision)
+        local song = program.get_song_pattern(target.song_slot)
+        if not song or not song.patterns or not song.patterns[target.pattern_id] then
+          return nil, { code = "SOURCE_UNAVAILABLE" }
+        end
+        if pattern.get_source_revision(song, target.pattern_id) ~= expected_revision then
+          return nil, { code = "PATTERN_CHANGED" }
+        end
+        local saved = fn.deep_copy(snapshot)
+        saved.revision = nil
+        song.patterns[target.pattern_id] = saved
+        song.active = true
+        pattern.update_source_working_patterns(song, target.pattern_id)
+        saved = fn.deep_copy(saved)
+        saved.revision = pattern.get_source_revision(song, target.pattern_id)
+        return saved
+      end,
+      -- write_source schedules every channel that references the shared source.
+      reproject = function() return true end,
+    },
+  })
+  rhythm_doctor_ui = rhythm_doctor_ui_module.new({ runtime = rhythm_doctor_runtime,
+    transport_stopped = function() return not m_clock.is_playing() end })
+  rhythm_doctor_runtime.on_status = function(code, detail)
+    rhythm_doctor_ui:set_status(code, detail)
+    fn.dirty_grid(true); fn.dirty_screen(true)
+  end
+  trigger_edit_page.set_rhythm_doctor(rhythm_doctor_ui)
+  project.set_capture_guard(rhythm_doctor_runtime)
+  rhythm_doctor_poll_clock = clock.run(function()
+    while true do
+      clock.sleep(1/30)
+      rhythm_doctor_ui:poll()
+    end
+  end)
 end
 
 function redraw()
@@ -96,6 +208,7 @@ function init()
   math.randomseed(os.time())
   program.init()
   m_midi.init()
+  init_rhythm_doctor()
   
   grid_connected = g.device~= nil and true or false
   
@@ -210,12 +323,22 @@ function autosave_reset()
   project.reset_autosave()
 end
 
+-- Every route that starts the sequencer has to tell Rhythm Doctor, or a
+-- capture keeps running underneath playback. clock.transport is one route; the
+-- grid Play key is another and does not pass through it. The local/external
+-- distinction stays with each caller: this only announces.
+function transport_started_by_user()
+  if rhythm_doctor_ui then rhythm_doctor_ui:transport_started() end
+end
+
 function clock.transport:start()
+  transport_started_by_user()
   m_clock:start(params:get("clock_source") == 2)
 end
 
 function clock.transport:stop()
   m_clock:stop()
+  if rhythm_doctor_ui then rhythm_doctor_ui:transport_stopped() end
 end
 
 -- -- Debug
@@ -256,5 +379,6 @@ end
 
 -- Restore script-owned vport hooks before norns loads another script.
 function cleanup()
+  if rhythm_doctor_runtime then rhythm_doctor_runtime:cleanup() end
   m_midi.cleanup()
 end

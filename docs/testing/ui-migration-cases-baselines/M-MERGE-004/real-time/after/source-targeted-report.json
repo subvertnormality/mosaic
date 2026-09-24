@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "after_sha": "6d47cb7a6c5e9bc2c5fae1a8d342ca142dbc9a6b",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MERGE-004"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MERGE-004",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-004/real-time/before/2591e0e037bc48a59f0eea619b65e31b/manifest.json",
+              "manifest_sha256": "55877d54a04f888997899e4c88c3462ddc98cb2b89574cb6dd3a2202de7d0b2b"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-004/real-time/after/06ed58f622664e53bd1403e7cedef9aa/manifest.json",
+              "manifest_sha256": "e6616c88cae67600cd8375df93383f83bcfbe2c3d30c27aa6a9e9209b6aa64dc"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-004/controlled-experimental/before/2bcbb8c4ac474f71b305df982a941930/manifest.json",
+              "manifest_sha256": "beb86a0854a5d4c13e8200f5df753fb7b045c96dc9e009f1f4b8938280a843b3"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-004/controlled-experimental/after/ae4e2e82b00c448389fa6cf117befb7a/manifest.json",
+              "manifest_sha256": "7884f603919e6daa8f945c6cf85a83e3f1dc862ba6d9fae21ab082d5aef3b066"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

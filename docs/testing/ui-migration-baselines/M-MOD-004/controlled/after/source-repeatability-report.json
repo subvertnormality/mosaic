@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "midi-modulation",
+  "after_sha": "999aa99a997bfa584b3acac6120aceef974748a2",
+  "selected_cases": [
+    "M-MOD-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/modulation_interactions.py": "M-MOD-004"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/modulation_interactions.py",
+      "case": "M-MOD-004",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-64b15d0d12a549a4889c2004f52afedc/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-64b15d0d12a549a4889c2004f52afedc/manifest.json",
+      "manifest_sha256": "c6a47b184aeac31c8b01b1837c52a0da99f7218ad3b4c54798cf1f7b56881629",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

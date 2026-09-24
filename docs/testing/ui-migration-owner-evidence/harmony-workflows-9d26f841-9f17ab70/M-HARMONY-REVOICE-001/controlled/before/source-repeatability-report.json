@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "9d26f841e9af633ab41a45fe8f2c8517492654f7",
+  "after_sha": "9f17ab70583f60412d7502b4910d4e3e74db6566",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-HARMONY-REVOICE-001",
+    "M-HARMONY-PERSIST-001",
+    "M-HARMONY-ENSEMBLE-001",
+    "M-HARMONY-FAILURE-001",
+    "M-HARMONY-HELD-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/harmony_workflows.py": "M-HARMONY-REVOICE-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/harmony_workflows.py",
+      "case": "M-HARMONY-REVOICE-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-349f32db377d4f0f84d4bb8be9c0dc43/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-349f32db377d4f0f84d4bb8be9c0dc43/manifest.json",
+      "manifest_sha256": "03cd740b9db610901c88746ce2d5828f0dce337edd7f8a0f7278054bd655911d",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

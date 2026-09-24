@@ -1,0 +1,173 @@
+{
+  "clock_mode": "real-time",
+  "verified_inputs": [
+    {
+      "label": "x16",
+      "edge": "start",
+      "evidence": {
+        "action_id": "5301992e76f94694927daa62de308724",
+        "native_sequence": 398,
+        "origin_ns": 711781117594,
+        "applied_ns": 711783027697,
+        "input_to_applied_ns": 1910103,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x16",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "25522796d34a4a3885f51dec7a16a793",
+        "native_sequence": 490,
+        "origin_ns": 760724454684,
+        "applied_ns": 760745451477,
+        "input_to_applied_ns": 20996793,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "ceafe0ce9e0b408d8d918ceccf5779cd",
+        "native_sequence": 500,
+        "origin_ns": 761379230759,
+        "applied_ns": 761381517145,
+        "input_to_applied_ns": 2286386,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "c276e32b744342f8a67d327aa7b223c9",
+        "native_sequence": 592,
+        "origin_ns": 811771681456,
+        "applied_ns": 811811020965,
+        "input_to_applied_ns": 39339509,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5",
+      "edge": "start",
+      "evidence": {
+        "action_id": "1fc24b5f45da47cab6ad5267ec3d849e",
+        "native_sequence": 599,
+        "origin_ns": 812300940932,
+        "applied_ns": 812302745379,
+        "input_to_applied_ns": 1804447,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x5",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "8a2430ed8bd946c58ab3a7b2580bb1b3",
+        "native_sequence": 691,
+        "origin_ns": 863006899010,
+        "applied_ns": 863040205109,
+        "input_to_applied_ns": 33306099,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x2.6",
+      "edge": "start",
+      "evidence": {
+        "action_id": "06e3743e2e62443598476e82097cf19a",
+        "native_sequence": 700,
+        "origin_ns": 863565609227,
+        "applied_ns": 863567995947,
+        "input_to_applied_ns": 2386720,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x2.6",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "df572cc40c754c64a27856b9babe157a",
+        "native_sequence": 792,
+        "origin_ns": 914256763602,
+        "applied_ns": 914283240679,
+        "input_to_applied_ns": 26477077,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x1.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "878a1e10cc704675a4576f0b03c0a1be",
+        "native_sequence": 801,
+        "origin_ns": 914963724305,
+        "applied_ns": 914966241553,
+        "input_to_applied_ns": 2517248,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "x1.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "bd55d3efa70e42f285b13763445f34a7",
+        "native_sequence": 893,
+        "origin_ns": 965705349289,
+        "applied_ns": 965719352007,
+        "input_to_applied_ns": 14002718,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/2.6",
+      "edge": "start",
+      "evidence": {
+        "action_id": "8ec4e6992b044d96b0e435facfbac844",
+        "native_sequence": 903,
+        "origin_ns": 966305472467,
+        "applied_ns": 966307480264,
+        "input_to_applied_ns": 2007797,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/2.6",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "e2630941b6884fec995c56b2f7bb463c",
+        "native_sequence": 995,
+        "origin_ns": 1017032548219,
+        "applied_ns": 1017044402258,
+        "input_to_applied_ns": 11854039,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/5.3",
+      "edge": "start",
+      "evidence": {
+        "action_id": "328e8fb10ede4016818d87d730891a7c",
+        "native_sequence": 1005,
+        "origin_ns": 1017611646385,
+        "applied_ns": 1017613731156,
+        "input_to_applied_ns": 2084771,
+        "boundary": "backend-input-submission"
+      }
+    },
+    {
+      "label": "/5.3",
+      "edge": "stop",
+      "evidence": {
+        "action_id": "35991055e7734ce7bc6f2338fdc107ca",
+        "native_sequence": 1097,
+        "origin_ns": 1068174856732,
+        "applied_ns": 1068186354850,
+        "input_to_applied_ns": 11498118,
+        "boundary": "backend-input-submission"
+      }
+    }
+  ]
+}

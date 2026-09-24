@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "c72991551e2d87377235078805e78a3c59030ced",
+  "after_sha": "c1882e0dc5baa811c685db548219ef83426eadd1",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-MEMORY-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/scale_memory.py": "M-MEMORY-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/scale_memory.py",
+      "case": "M-MEMORY-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-e64d537a040a426b8026fd6b507cf99a/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-e64d537a040a426b8026fd6b507cf99a/manifest.json",
+      "manifest_sha256": "5e151592ceebd52c6a0fd0fdef96d7d91f98109a2fc5d0fc5cc443b8f5de8d4c",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

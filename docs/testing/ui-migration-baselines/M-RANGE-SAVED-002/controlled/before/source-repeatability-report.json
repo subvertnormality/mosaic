@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "54e97371161b9bc7ff5698bf24dfc6dbc7a07d6d",
+  "selected_cases": [
+    "M-RANGE-SAVED-002",
+    "M-RANGE-SAVED-003",
+    "M-RANGE-SAVED-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/persisted_range_rejection.py": "M-RANGE-SAVED-002"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/persisted_range_rejection.py",
+      "case": "M-RANGE-SAVED-002",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-8e97f96ecb08427495f9db2305d510d8/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-8e97f96ecb08427495f9db2305d510d8/manifest.json",
+      "manifest_sha256": "9d4cb51a2ebebff6303d2fa34ec57a62b93efa4b02cf5710cf0404cf2d3084b2",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

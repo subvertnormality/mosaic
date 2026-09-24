@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "bde8cebc5804483c80a8b49704ddb30f0a20cc66",
+  "after_sha": "fcc48ac13a47d4efbea8c25978a3901be56114ab",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-RANGE-SAVED-006"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/persisted_ranges.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/persisted_ranges.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-RANGE-SAVED-006",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-006/real-time/before/2b7bff1e02dd4691a9292c099c0a5cb9/manifest.json",
+              "manifest_sha256": "da20a56493ca17228c271baaee969135ee8f2bd9d9eebd699a450cd50c56699b"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-006/real-time/after/5d9c1a19f4cc40899f4acf2c6d51dc75/manifest.json",
+              "manifest_sha256": "c9ceac543e8544a8cbfe7e49ccce07803b47cf644d871c2559073524fb21a689"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-006/controlled-experimental/before/89112ca20fe24b858c6145aa3758502e/manifest.json",
+              "manifest_sha256": "70def537ea7d6abb771a4a177bd4f6667f683b98a1312194e4697419c3842640"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-RANGE-SAVED-006/controlled-experimental/after/5a8ec85c448046fbaaa49d677506390f/manifest.json",
+              "manifest_sha256": "03788397a7f86b011a434c34f03d16a4bb5f33fc2076d4c18998a355a2efde13"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

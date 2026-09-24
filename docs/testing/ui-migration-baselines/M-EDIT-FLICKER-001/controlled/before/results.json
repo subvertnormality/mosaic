@@ -1,0 +1,245 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "note",
+    "page": "steps 1-16",
+    "chosen": [
+      11,
+      11,
+      11,
+      13,
+      13,
+      11,
+      11,
+      11
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "note",
+    "page": "steps 17-32",
+    "chosen": [
+      13,
+      13,
+      11,
+      11,
+      13,
+      13,
+      13,
+      11
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "note",
+    "page": "steps 33-48",
+    "chosen": [
+      13,
+      13,
+      13,
+      11,
+      11,
+      11,
+      13,
+      13
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "note",
+    "page": "steps 49-64",
+    "chosen": [
+      11,
+      11,
+      13,
+      13,
+      11,
+      11,
+      11,
+      13
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "velocity",
+    "page": "steps 1-16",
+    "chosen": [
+      11,
+      11,
+      11,
+      13,
+      13,
+      13,
+      11,
+      11
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "velocity",
+    "page": "steps 17-32",
+    "chosen": [
+      13,
+      13,
+      11,
+      11,
+      13,
+      13,
+      13,
+      11
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "velocity",
+    "page": "steps 33-48",
+    "chosen": [
+      13,
+      13,
+      13,
+      11,
+      11,
+      11,
+      13,
+      13
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker",
+    "editor": "velocity",
+    "page": "steps 49-64",
+    "chosen": [
+      11,
+      11,
+      13,
+      13,
+      13,
+      11,
+      11,
+      13
+    ],
+    "other": [
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "top-row-flicker-summary",
+    "passed": true
+  }
+]

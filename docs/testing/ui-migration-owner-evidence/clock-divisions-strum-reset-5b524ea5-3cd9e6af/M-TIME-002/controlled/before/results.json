@@ -1,0 +1,1054 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "clock_mods",
+    "channel": 1
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 2.8333333333333335,
+        "actual_seconds": 2.833333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/17",
+    "pulses": 408,
+    "period_seconds": 2.8333333333333335,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 1.000000082740371e-09,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 3.1666666666666665,
+        "actual_seconds": 3.166666667,
+        "error_ms": 3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/19",
+    "pulses": 456,
+    "period_seconds": 3.1666666666666665,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 1.000000082740371e-09,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.500000001,
+        "error_ms": 1.000000082740371e-06
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 3.5,
+        "actual_seconds": 3.5,
+        "error_ms": 0.0
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/21",
+    "pulses": 504,
+    "period_seconds": 3.5,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 1.000000082740371e-09,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 3.8333333333333335,
+        "actual_seconds": 3.833333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/23",
+    "pulses": 552,
+    "period_seconds": 3.8333333333333335,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 6.66666721826914e-10,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.0,
+        "actual_seconds": 4.0,
+        "error_ms": 0.0
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/24",
+    "pulses": 576,
+    "period_seconds": 4.0,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 0.0,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.166666666666667,
+        "actual_seconds": 4.166666667,
+        "error_ms": 3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/25",
+    "pulses": 600,
+    "period_seconds": 4.166666666666667,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 6.66666721826914e-10,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.5,
+        "actual_seconds": 4.5,
+        "error_ms": 0.0
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/27",
+    "pulses": 648,
+    "period_seconds": 4.5,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 0.0,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 4.833333333333333,
+        "actual_seconds": 4.833333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/29",
+    "pulses": 696,
+    "period_seconds": 4.833333333333333,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 6.66666721826914e-10,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 5.333333333333333,
+        "actual_seconds": 5.333333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/32",
+    "pulses": 768,
+    "period_seconds": 5.333333333333333,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 6.66666721826914e-10,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 6.666666666666667,
+        "actual_seconds": 6.666666667,
+        "error_ms": 3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/40",
+    "pulses": 960,
+    "period_seconds": 6.666666666666667,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 6.66666721826914e-10,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 8.0,
+        "actual_seconds": 8.0,
+        "error_ms": 0.0
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/48",
+    "pulses": 1152,
+    "period_seconds": 8.0,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 0.0,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 9.333333333333334,
+        "actual_seconds": 9.333333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/56",
+    "pulses": 1344,
+    "period_seconds": 9.333333333333334,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 6.666738272542716e-10,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666666,
+        "error_ms": -6.66666721826914e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666667,
+        "error_ms": 3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 10.666666666666666,
+        "actual_seconds": 10.666666667,
+        "error_ms": 3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/64",
+    "pulses": 1536,
+    "period_seconds": 10.666666666666666,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 6.666738272542716e-10,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 16.0,
+        "actual_seconds": 16.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 16.0,
+        "actual_seconds": 16.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 16.0,
+        "actual_seconds": 16.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 16.0,
+        "actual_seconds": 16.000000001,
+        "error_ms": 1.000000082740371e-06
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 16.0,
+        "actual_seconds": 15.999999999,
+        "error_ms": -1.000000082740371e-06
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 16.0,
+        "actual_seconds": 16.0,
+        "error_ms": 0.0
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 16.0,
+        "actual_seconds": 16.000000001,
+        "error_ms": 1.000000082740371e-06
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 16.0,
+        "actual_seconds": 16.0,
+        "error_ms": 0.0
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/96",
+    "pulses": 2304,
+    "period_seconds": 16.0,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 1.0000036354540498e-09,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 16.833333333333332,
+        "actual_seconds": 16.833333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/101",
+    "pulses": 2424,
+    "period_seconds": 16.833333333333332,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 1.0000036354540498e-09,
+    "passed": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333334,
+        "error_ms": 6.66666721826914e-07
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333333,
+        "error_ms": -3.33333360913457e-07
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 21.333333333333332,
+        "actual_seconds": 21.333333333,
+        "error_ms": -3.33333360913457e-07
+      }
+    ]
+  },
+  {
+    "kind": "clock-division-phrase",
+    "label": "/128",
+    "pulses": 3072,
+    "period_seconds": 21.333333333333332,
+    "complete_cycles": 2,
+    "onsets": 9,
+    "max_phase_error_seconds": 1.0000036354540498e-09,
+    "passed": true
+  }
+]

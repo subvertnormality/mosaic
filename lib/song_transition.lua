@@ -2,6 +2,9 @@
 -- Dependencies already bound by step stay bound; UI/runtime globals retain their
 -- existing lookup timing. Public step facades remain available to callers.
 local song_transition = {}
+local harmony_config_state = include("mosaic/lib/harmony/config_state")
+local harmony_state = include("mosaic/lib/harmony/state")
+local merge_state = include("mosaic/lib/musical_merge/state")
 
 function song_transition.new(program, m_clock, step)
 local transition = {}
@@ -119,8 +122,18 @@ function transition.process_song_song_patterns()
   -- Check if we've completed one full global pattern length cycle
   if global_step_accumulator > 0 and 
      global_step_accumulator % selected_song_pattern.global_pattern_length == 0 then
+    harmony_config_state.on_pattern_boundary(selected_song_pattern)
+    local merge_affected=merge_state.on_pattern_boundary(selected_song_pattern)
+    for channel in pairs(merge_affected)do pattern.update_working_pattern(channel,selected_song_pattern)end
     
     switch_to_next_song_pattern_func()
+    local manually_selected_number = program.get().selected_song_pattern
+    if manually_selected_number ~= selected_song_pattern_number then
+      local entered=program.get().song_patterns[manually_selected_number]
+      harmony_state.enter_song(selected_song_pattern,entered,false)
+      harmony_config_state.enter_song(entered)
+      merge_state.reset_song(entered)
+    end
     switch_to_next_song_pattern_blink_cancel_func()
     switch_to_next_song_pattern_func = function() end
     -- With song mode off the queued switch above is the whole manual change;
@@ -162,6 +175,12 @@ function transition.process_song_song_patterns()
 
         -- Switch to the next pattern
         program.set_selected_song_pattern(next_song_pattern)
+        harmony_state.enter_song(selected_song_pattern, program.get_selected_song_pattern(),
+          selected_song_pattern_number == next_song_pattern)
+        if selected_song_pattern_number ~= next_song_pattern then
+          harmony_config_state.enter_song(program.get_selected_song_pattern())
+          merge_state.reset_song(program.get_selected_song_pattern())
+        end
         -- Every global pattern reset ends the horizon, including a repeat of the
         -- same pattern: no value resolved before the reset may leave after it.
         m_clock.discard_lookahead()
@@ -213,6 +232,7 @@ function transition.process_song_song_patterns()
       -- Not at the end of all repeats yet, increment repeat count if needed
       if current_repeat < max_repeats then
         program.set_repeat_count(current_repeat + 1)
+        harmony_state.enter_song(selected_song_pattern, selected_song_pattern, true)
       end
     end
   end

@@ -62,6 +62,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
 - [Dig Deeper](#dig-deeper)
   * [Pattern Editor](#pattern-editor)
       - [Adding Trigs](#adding-trigs)
+        + [Rhythm Doctor](#rhythm-doctor)
       - [Adding Notes](#adding-notes)
       - [Adding Velocity](#adding-velocity)
   * [Channel Editor](#channel-editor)
@@ -455,14 +456,160 @@ To set your rhythm, simply tap in steps using the sequencer. Bright steps symbol
 <img alt="Pattern editor step edit buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg" width="300" />
 
 
-Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the four algorithm select buttons. From left to right:
+Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the five algorithm select buttons. From left to right:
 
 * Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
 * Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the Norns screen for more variations.
 * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
+* Button 5: Rhythm Doctor, a capture and paint workflow described below. Recording needs the sequencer stopped; an analysed bank can be used while it plays.
 
-<img alt="Pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
+<img alt="The first four pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
+
+##### Rhythm Doctor
+
+Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
+It keeps one captured bank per project and lets you preview a 64-step window
+from one selected lane before painting it into the selected pattern.
+
+The lanes occupy a block of five columns on each of two rows, starting at
+column 3: lanes one to five on row 2 at columns 3–7, and lanes six to ten on
+row 3 at the same columns. Column 1 of row 2 is Record, column 2 is reserved,
+and columns 12–16 of both rows belong to the algorithm and bank-mask faders and
+are never lanes. A bank analysed on the device declares three lanes — **BD**
+(bass drum), **SD** (snare drum) and **CYM** (hi-hats and cymbals) — so only
+the first three cells light. A remote analysis declares up to ten, which is why
+the block is two rows: a single row would run the later lanes under the
+algorithm fader, where selecting one would also change the algorithm.
+
+Lanes read in kit order rather than alphabetically: kick, snare, hi-hat,
+cymbals and toms fill the top row, and whatever else the analysis separated out
+— bass, guitar, piano, vocals and demucs' residual **OTHER** — follows on the
+bottom row. A lane neither of those names keeps a stable alphabetical place
+after the ones they do, so an unfamiliar backend still puts its columns in the
+same order every time a project loads. A bank saved before this order existed
+is brought forward when it loads, so an older capture does not keep an
+alphabetical grid until it is recorded again.
+
+The lanes describe what can be told apart reliably, not a full drum-kit
+transcription. **CYM** is hats *and* cymbals together because a closed hat and a
+ride are both inharmonic metal with overlapping spectra, and the decay that
+distinguishes them in isolation is buried in a mix; separating them was measured
+and does not work. Bass, open hi-hat and tom have no lane: none could be
+detected reliably enough to paint. Bass was tried and withdrawn — every
+approach either failed to separate a bass note from the kick that hides it, or
+marked the kicks themselves, so the lane only ever restated what BD already
+said.
+
+Recording needs the sequencer stopped, because capture takes over the audio
+input and analysis replaces the bank underneath whatever is on the screen. So
+does Alignment, which re-analyses. Record, capture setup and Alignment do
+nothing while the sequencer runs, and the screen says `STOP SEQUENCER` when
+there is no bank to work on instead.
+
+A bank that has already been analysed stays usable while the sequencer plays.
+Choosing a lane, browsing the recording, changing sensitivity or paint policy,
+and previewing and painting all read a finished bank and write to a pattern,
+which is what the rest of the Trigger Editor already lets you do while playing.
+Starting the sequencer cancels an unfinished capture or analysis and closes a
+capture-setup or alignment draft, but keeps an armed paint preview, so you can
+arm Paint, start the sequencer and commit. Rhythm Doctor does not start or stop
+the sequencer for you.
+
+On an empty bank, press grid column 1, row 2 to begin Record; the press starts
+the action and its release is consumed. Press Record again to stop, or press K3:
+either finishes the capture once the screen says `ENOUGH / REC OR K3`. Until it
+does, the screen says `MORE AUDIO NEEDED`, and pressing Record then asks whether
+to abandon the take instead. Pressing Record on an occupied bank asks whether to
+clear its capture bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that
+were already painted. In a ready bank, use E2 to choose Window bar, Window
+step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
+edit the chosen item. Window bar moves by 16 steps and Window step by one; both
+view the same bounded timeline. Choose Alignment and use E3 to open its tempo,
+start-beat, and fine-start settings; K2 cancels and K3 applies the draft.
+
+Before recording, E2/E3 open a draft setup for Auto or Manual tempo, manual BPM
+(40–240), and Stereo/L/R input; K2 discards the draft and K3 keeps it. The
+current build presents these settings but does not pass manual BPM or the input
+selection to the capture or analysis backend, so they are not an audio-routing
+configuration.
+
+To paint a ready lane, select the destination pattern with the top row, press
+Paint (column 16, row 8) to preview, then press it again to commit. Cancel
+(column 14, row 8) discards the preview. Toggle is the default paint policy;
+Add and Replace are selectable on the Rhythm Doctor screen. Painting does not
+alter the captured bank.
+
+**Finding the phrase.** The analysis estimates where the four-bar phrase
+begins and aligns the gates to it, rather than to the moment you pressed
+Record. In this mode columns 10, 11 and 12 of row 8 browse the recording, and
+they do it with the same gestures that shift a previewed pattern everywhere
+else. A press of column 10 or 12 moves the window one step back or forward.
+Holding either of them covers a whole four-bar phrase in that direction, which
+is exactly the width of the displayed window, so every position reached by
+holding stays aligned with the phrase. A press of column 11 returns to the
+calculated phrase start. E3 still moves by a single bar or step. In every
+other algorithm those three buttons continue to shift a previewed pattern's
+position.
+
+Each move names where it landed, as bar.beat.step, so you can read the window
+position off the tooltip rather than counting presses. A move that the
+recording absorbs -- a step forward when the window is already at the last
+whole phrase, or a return to a phrase start you are already sitting on --
+says so instead of reporting a move that did not happen. If you are painting
+while you browse, the preview follows the window: the grid keeps showing the
+gates under the part of the recording you are looking at.
+
+The phrase estimate is a starting point, not a verdict. The bar the detector
+picks is reliable when the playing announces it -- a crash on the one, or a
+fill closing the bar before -- and genuinely undecidable when every bar is
+identical, which the reported confidence says rather than hides. To move it,
+open ALIGNMENT on the Rhythm Doctor screen and step START BEAT through the
+detected beat grid; the editor opens on the beat the detector chose, so
+confirming without editing keeps its answer.
+
+**Analysis server (advanced).** Analysis runs on the norns by default and
+needs nothing configured. If you run the optional analysis server on a computer
+on the same network, Rhythm Doctor can send the capture there instead and get
+back ten lanes rather than three: KICK, SNARE, TOMS, HIHAT and CYMBALS from a
+model that separates a kit into its pieces, and BASS, GUITAR, PIANO, VOCALS and
+OTHER from the rest of the mix. The melodic lanes carry rhythm and velocity,
+not notes.
+
+Set it up in PARAMS > MOSAIC > Rhythm Doctor: put the address in **Analysis
+server** (for example `http://192.168.1.50:8420`) and switch **Use analysis
+server** on. The switch is separate from the address so you can keep a server
+saved while working locally.
+
+The on-device analysis stays the default and the fallback. If the server is
+switched off, unreachable, slower than its timeout, or returns anything Mosaic
+does not accept, the capture is analysed on the norns instead and you still get
+gates. You lose the extra lanes, not the recording.
+
+The server also tracks the beat with a model trained for it, so on the remote
+path the tempo and the phrase start are usually better than the on-device
+estimate.
+
+`tools/rhythm_doctor_server/README.md` has step-by-step setup, including a
+Windows walkthrough that needs no administrator rights, how to find the
+address to type into the setting, and what to check when captures keep coming
+back with three lanes. Three lanes is the on-device fallback: it is what you
+get whenever the server cannot be reached, so it is the symptom to look for
+rather than an error message.
+
+**Availability:** Mosaic starts a local capture helper when this mode opens,
+and analyses captures with a model-free detector it builds from source the
+first time this mode is used. Nothing is downloaded, no Python packages are
+needed, and there is no configuration to do: the build takes about half a
+minute on a Norns and is then reused. Analysis of a 45-second capture takes
+roughly half a minute on the device.
+
+If no C compiler is available, or the build fails, analysis fails closed with
+`ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery profile can
+still point the analysis worker at its own executable that accepts the worker
+request/result protocol and returns all four lanes, in which case that one is
+used instead. No detector quality, transcription accuracy, or timing
+performance is claimed here.
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.
 
@@ -487,7 +634,7 @@ Opt out of a prepared pattern by using the cancel button:
 
 <img alt="Pattern editor prime and paint cancel button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="300" />
 
-While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes.
+While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes. In Rhythm Doctor these same three buttons browse the recording instead, with the same gestures: a press of the outer two moves the window one step, holding either covers a whole four-bar phrase, and the centre button returns to the calculated start of the phrase.
 
 <img alt="Pattern editor move buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="300" />
 
@@ -1203,6 +1350,120 @@ You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device call
 
 _Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.
 
+
+## Musical Merge and Voice Leading
+
+Mosaic can reshape a channel's merged rhythm and place its notes into stable
+registers without rewriting any source pattern. Both features are optional and
+default to Off, so an older project keeps its original MIDI, timing and random
+behaviour.
+
+On the Channel page, turn E1 through the existing pages in this order: Masks,
+Trig Locks, Memory, Clock Mods, MIDI Config, Note Dashboard, Merge Shape, then
+Harmony. The ends clamp. On Merge Shape and Harmony, E2 selects a row, E3 changes
+a staged value, K3 validates and applies the whole draft, and K2 discards the
+draft. A stopped edit applies immediately. During playback, Merge Shape displays
+`NEXT CYCLE` and activates before the next channel-cycle onset; Harmony displays
+`NEXT PATTERN` and activates at the next global pattern boundary. Stop makes the
+latest applied request active for the next start.
+
+### Merge Shape
+
+![Merge Shape Foundation rhythm settings on Norns](images/merge-shape-foundation.png)
+
+Mode Off uses the saved legacy Skip, Only or All trig merge. Foundation selects
+one assigned pattern as the protected Anchor. Other assigned trig patterns offer
+candidate additions at non-anchor steps; overlaps remain one anchor. Amount
+admits a deterministic, seed-ranked subset, Accent scales addition velocity, and
+Gap suppresses additions within 0–8 circular channel steps of an anchor. Anchor
+velocity remains authored. Explicit channel/step masks still win, probability
+can still reject an onset, and source patterns are never flattened or changed.
+
+Phrase Cycles can be 1, 2, 4 or 8. Flat, Build, Answer and Fill are stored as
+visible per-cycle percentages; changing a percentage makes a Custom curve.
+Fixed repeats the same ranked additions. Per phrase changes ranking only after a
+complete phrase. Each channel loop advances its own CYCLE counter—even with
+polymetric ranges, swing or mute—and Stop restarts at cycle 1.
+
+Keep anchor pitch uses the anchor pattern's relative note on anchor steps before
+normal scale conversion. Addition Target can be Legacy, the full effective
+scale, selected effective degree indices, or the immutable material of an enabled
+Harmony Ensemble group. Targets affect admitted additions only. Note masks,
+random shifts and fixed-note operations keep their existing precedence and show
+a bypass rather than being quantised twice. Nearest-note ties choose the lower
+pitch. A missing/empty target visibly falls back to the legacy pitch.
+
+Foundation ranking is repeatable for the saved seed and grows as a nested set:
+raising Amount cannot remove an already selected addition while source, gap,
+seed and phrase are unchanged. Interlock, phrase fragments, passing-note freedom
+and silence-aware interlock are later MM-08+ designs and are not part of this
+release.
+
+### Harmony
+
+![Harmony Pattern Tone Map on Norns](images/harmony-tone-map.png)
+
+Harmony offers four mutually exclusive channel modes:
+
+- Off follows the ordinary Mosaic pitch path exactly.
+- Revoice takes the actual root and enabled chord-mask voices after Mosaic's
+  pitch-class decisions, preserving their pitch classes and sounding count while
+  choosing legal octaves and assignments.
+- Pattern maps explicit effective relative values in the current merge binding
+  to Bass, Inner1–3 or Top. Repeated mapped values reuse one pitch for the entire
+  harmonic frame; unmapped values remain Raw. Random, fixed, absolute-mask and
+  chord-mask events visibly bypass Pattern. Conflicting aliases fail closed.
+- Ensemble assigns Bass/Inner/Top roles to one to five explicit monophonic
+  channels. Each member retains its own rhythm, velocity, gate, clock and route,
+  but its pitch is replaced by the shared frame. A conflicting local scale lock
+  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`); a channel or
+  step octave override does the same (`LOCAL OCTAVE BYPASS`).
+
+Register rows set inclusive MIDI Low/High, Centre and Preferred leap for every
+role. Smooth prioritises literal common tones and economical movement; Compact
+prioritises register centre/spacing; Independent prioritises movement without a
+common-tone score. Hard options cover crossing, exact unison, strict leap and
+strict bass direction. Bass can be Root, an explicit Inversion tone, Smooth or
+an exact Pedal. Revoice pedals must already be in its input material; only an
+Ensemble group can explicitly allow a non-chord pedal.
+
+The deterministic solver searches every legal pitch-class placement inside the
+configured ranges (up to five voices) and never clamps an illegal result. A frame
+with no solution silences affected mapped voices by default; Legacy fallback is
+explicit. A bounded search reports `BUDGET EXCEEDED` rather than emitting a
+partial answer. Preparing a frame does not change voice history: the first real
+scheduled onset consumes it, while redraws, rests, failed probability, mute and
+missing output do not. Delayed strums and arpeggios keep the pitch snapshot made
+at their onset, and Note Off always releases the pitch and route actually sent.
+
+![Harmony NO VOICING result on Norns](images/harmony-no-voicing.png)
+
+The Channel grid remains the chronological trig/mask surface. Foundation anchors
+and additions therefore appear as active steps there. After a step plays, the
+Pattern Note grid moves that step's bright note LED to the final effective pitch
+that the native 21-position note range can represent. Switch its upper, centred
+or lower seven-note bank as usual to inspect octave placement. Raw and bypassed
+events use the ordinary pre-Harmony position; turning Harmony Off restores the
+ordinary merged/scale positions immediately. An exact pitch outside that native
+range has no false in-range LED and remains available in Result/Note Dashboard.
+
+This display is read-only: touching the projected Note fader still edits its
+selected source-pattern value. Until the changed step plays again, the edited
+source is displayed rather than a stale output. Final Harmony pitches are also
+shown on Note Dashboard/context inspection as planned, scheduled and last-emitted
+values. H05 Result uses its Step row to select one coherent event chain; on Note
+Dashboard, holding a grid step temporarily inspects that step instead of combining
+it with a later delayed event. A step with no recorded event says `NO EVENT` and
+shows no planned or emitted pitch; it never borrows the latest event from another
+step. This readout occupies the bottom two lines of the Note Dashboard, which is
+the row tooltips use, so while a harmony event is being shown there the page
+clears that row and tooltips are not visible on it. Result status names local scale/octave bypasses, explicit Legacy fallback
+and the specific no-voicing reason. For an Ensemble group, any member bypass or failure is
+surfaced even when another member has a valid voicing. The projection never writes
+back into a shared pattern. Copy/save stores
+versioned configuration, not running solver or phrase history. Missing optional
+configuration loads as Off; unknown schema versions reject the project before it
+replaces the active project.
 
 ## Performance Management
 

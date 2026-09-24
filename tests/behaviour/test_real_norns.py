@@ -5,6 +5,7 @@ from real_norns import check_repl_lines,Maiden,MaidenInput,OSC,OutputTrace,Runne
 from hardware_driver import HARDWARE_DRIVER_CAPABILITIES,HARDWARE_PERFORMANCE_RECIPES,HardwareDriver,hardware_applicability,run_hardware_case
 from cases import CASES
 from driver import Driver
+from ui import Ui
 class Fn:
  def __init__(self,call):self.call=call
  def __call__(self,*a):return self.call(*a)
@@ -223,6 +224,8 @@ class Tests(unittest.TestCase):
   self.assertIn('_norns.grid.key(2,1,8,1)',m.commands[-2]);self.assertIn('_norns.grid.key(2,1,8,0)',m.commands[-1])
  def test_hardware_driver_exposes_the_recipe_surface_and_rejects_unknown_actions(self):
   r,_,m=self.r();m.eval=lambda code:"__MOSAIC_TEMPO__120\nmarker";trace=T();driver=HardwareDriver(r,2,'emu-test',trace)
+  self.assertIsInstance(driver.ui,Ui)
+  with patch('hardware_driver.time.sleep'):driver.ui.tap_control('play_stop')
   public={name for name,value in Driver.__dict__.items() if not name.startswith('_') and callable(value)}
   self.assertEqual(public,{'action','elapse','snapshot','wait','tap','key','enc','hold_tap','led_values','screen_header','configure','playback','finish'})
   self.assertTrue(all(callable(getattr(driver,name,None)) for name in public))

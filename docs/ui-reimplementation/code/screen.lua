@@ -1,0 +1,112 @@
+-- Canonical live screen proto-code. Input is already formatted, read-only ViewModel.
+-- No selectors, clocks, random calls, setters or hardware input belong in this module.
+-- draw(v) returns ok,report. It never raises inside redraw: a value that cannot be shown
+-- whole sets ok=false and paints LAYOUT OVERFLOW; the acceptance harness treats that as a fail.
+local art=include('characters')
+local M={}
+local MORE='...' -- value withheld from a cell; the full value is on the same screen's full-width line
+local function text(value,x,y,size,level)
+ screen.font_size(size or 8);screen.level(level or 15);screen.move(x,y);screen.text(tostring(value))
+end
+local function right(value,x,y,level)
+ screen.font_size(8);screen.level(level);screen.move(x,y);screen.text_right(tostring(value))
+end
+local function width(value,size)screen.font_size(size or 8);return(screen.text_extents(tostring(value)))end
+-- Text only (title, scope, labels, status, footer, action/unavailable text). Field values of exact kinds never pass here.
+local function fit(value,w)
+ local v=tostring(value);screen.font_size(8)
+ if screen.text_extents(v)<=w then return v end
+ if screen.text_extents('~')>w then return '' end
+ while #v>0 and screen.text_extents(v..'~')>w do v=v:sub(1,-2) end
+ return v..'~'
+end
+local function exact(f)return f.kind~='action' and f.kind~='unavailable' end
+local function rect(x,y,w,h,level,outline)
+ screen.level(level);screen.rect(x,y,w,h);if outline then screen.stroke()else screen.fill()end
+end
+local function full_value(value,w,x,y)
+ local size=23;screen.font_size(size)
+ while size>8 and screen.text_extents(value)>w do size=size-1;screen.font_size(size)end
+ if screen.text_extents(value)>w then return false end
+ text(value,x,y,size,15);return true
+end
+function M.draw(v)
+ local r={ok=true,reasons={},marked={}}
+ local function fail(why)r.ok=false;r.reasons[#r.reasons+1]=why end
+ screen.clear()
+ if type(v)~='table' or not(v.screen and v.title and v.scope and type(v.fields)=='table' and v.layout)
+  or type(v.selected)~='number' or v.selected<1 or v.selected>math.max(1,#v.fields)then
+  fail('model');text('BAD VIEW MODEL',1,36,8,15);screen.update();return false,r
+ end
+ local selected=v.fields[v.selected];local L=v.layout;local status_y=55
+ -- Selected value on one full-width line: value right-aligned and whole, label shrinks.
+ local function value_line(f,y)
+  local val=tostring(f.value)
+  if width(val)>126 then
+   if exact(f)then fail('value '..tostring(f.id));return end
+   val=fit(val,126)
+  end
+  right(val,127,y,15)
+  local room=126-width(val)-4
+  if room>0 then text(fit(f.label,room),1,y,8,10)end
+ end
+ if L=='overview_masks' or L=='overview_params' then
+  local cols=L=='overview_masks'and 4 or 5;local w=cols==4 and 32 or 25
+  if #v.fields>cols*2 then fail('overview count')end
+  text(fit(v.title,78),1,7,8,15);right(fit(v.scope,45),127,7,9)
+  for k=1,math.min(#v.fields,cols*2)do
+   local f=v.fields[k];local x=((k-1)%cols)*w;local y=9+math.floor((k-1)/cols)*18
+   if k==v.selected then rect(x,y,w-2,17,15,true)end
+   text(fit(f.short_label or f.label,w-5),x+2,y+7,8,k==v.selected and 15 or 9)
+   local c=tostring(f.compact_value or f.value)
+   if (exact(f)and c:find('~',1,true))or width(c)>w-5 then c=MORE;r.marked[#r.marked+1]=f.id end
+   text(c,x+2,y+15,8,13)
+  end
+  status_y=53;if selected then value_line(selected,53)end
+ elseif L=='pattern64' then
+  text(fit(v.title,126),1,7,8,15);text(fit(v.scope,126),1,17,8,7);status_y=17
+  if type(v.cells)~='table' or #v.cells~=64 then fail('cells')else
+   for k,c in ipairs(v.cells)do
+    local x=2+((k-1)%16)*8;local y=24+math.floor((k-1)/16)*8
+    rect(x,y,4,4,c.level)
+    if c.selected then rect(x-1,y-1,6,6,15,true)end
+    if c.playing then rect(x,y+5,4,1,9)end
+   end
+  end
+ elseif L=='detail' then
+  text(fit(v.title,126),1,7,8,15);text(fit(v.scope,126),1,17,8,7);status_y=17
+  local first=math.max(1,math.min(v.selected-1,#v.fields-3))
+  for k=first,math.min(#v.fields,first+3)do
+   local f=v.fields[k];local y=27+(k-first)*9;local on=k==v.selected;local val=tostring(f.value)
+   if on then text('>',0,y,8,15)end
+   -- Values own the row (x 7..126); labels shrink to what is left.
+   if width(val)>119 then
+    if not exact(f)then val=fit(val,119)
+    elseif on then fail('value '..tostring(f.id));val=''
+    else val=MORE;r.marked[#r.marked+1]=f.id end
+   end
+   local room=math.min(72,119-width(val)-4)
+   if room>0 then text(fit(f.label,room),7,y,8,on and 15 or 6)end
+   if val~=''then right(val,126,y,on and 15 or 8)end
+  end
+ else
+  if L~='focused'then fail('layout '..tostring(L))end
+  text(fit(v.title,126),1,7,8,15);text(fit(v.scope,126),1,17,8,7)
+  if selected then
+   text(fit(selected.label,126),1,28,8,10)
+   local val=tostring(selected.value)
+   -- Art yields its region to a long value. Never clip numeric data.
+   if v.art and full_value(val,70,1,48)then art.draw_art(v.art,v.pose or 0)
+   elseif not full_value(val,126,1,48)then
+    if exact(selected)then fail('value '..tostring(selected.id))else text(fit(val,126),1,45,8,15)end
+   end
+   text(fit(v.status or'',126),1,55,8,8)
+  else text('EMPTY',1,40,15,10)end
+ end
+ if not r.ok then rect(0,status_y-7,128,9,0);text('LAYOUT OVERFLOW',1,status_y,8,15)end
+ -- Exactly one footer owner. No overlapping hints/neighbour labels.
+ text(fit(v.footer or'',126),1,63,8,9)
+ screen.update()
+ return r.ok,r
+end
+return M

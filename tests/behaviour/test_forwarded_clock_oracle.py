@@ -1,7 +1,22 @@
 import copy,unittest
 from forwarded_clock import assert_forwarded_receiver
+from contract.forwarded_clock import forwarded_clock_diagnostic
 
 class ForwardedReceiverTests(unittest.TestCase):
+    def test_forwarded_diagnostic_keeps_stimulus_and_delivery_while_stabilising_capture(self):
+        events=[dict(port=2,bytes=[248],logical_ns=123,monotonic_ns=456)]
+        stimulus=[dict(port=1,bytes=[248],at_logical_ns=123)]
+        delivered=[dict(port=1,bytes=[248],logical_ns=123)]
+        result=forwarded_clock_diagnostic(49,123,events,stimulus,delivered,
+                                          'controlled-experimental')
+        self.assertEqual(result,dict(kind='forwarded-clock-diagnostic',warm_ticks=49,
+                                     first_clock_deadline_ns=123,
+                                     events=[dict(port=2,bytes=[248],logical_ns=123)],
+                                     stimulus=stimulus,delivered=delivered))
+        self.assertEqual(events[0]['monotonic_ns'],456)
+        self.assertEqual(forwarded_clock_diagnostic(49,123,events,stimulus,delivered,
+                                                    'real-time')['events'],events)
+
     def fixture(self):
         first=1_000_000_000;events=[dict(index=0,port=2,bytes=[250],logical_ns=first)]
         index=1

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "e482cdff115b3ca5a7e51e30dd1c16ea92a085b9",
+  "selected_cases": [
+    "M-TRIPLE-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/trigless_slide_clock.py": "M-TRIPLE-004"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/trigless_slide_clock.py",
+      "case": "M-TRIPLE-004",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-574582e7aefe4634a946ebdaf7978f8e/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-574582e7aefe4634a946ebdaf7978f8e/manifest.json",
+      "manifest_sha256": "834f9bb979273ef994971d3aef61e023da38062c48fe08251fa9eb16a7b8ad4b",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

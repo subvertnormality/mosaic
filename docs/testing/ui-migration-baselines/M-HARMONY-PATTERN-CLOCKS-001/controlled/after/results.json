@@ -1,0 +1,152 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Clocks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666666,
+        "error_ms": -6.666666663157628e-07
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666667,
+        "error_ms": 3.333333331578814e-07
+      }
+    ]
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 48,
+        "expected_seconds": 0.3333333333333333,
+        "actual_seconds": 0.333333334,
+        "error_ms": 6.666666663157628e-07
+      },
+      {
+        "pitch": 48,
+        "expected_seconds": 0.3333333333333333,
+        "actual_seconds": 0.333333333,
+        "error_ms": -3.3333330540230577e-07
+      },
+      {
+        "pitch": 48,
+        "expected_seconds": 0.3333333333333333,
+        "actual_seconds": 0.333333334,
+        "error_ms": 6.666666663157628e-07
+      }
+    ]
+  },
+  {
+    "kind": "pattern-harmony-independent-public-clocks",
+    "channels": {
+      "1": {
+        "pitch": 60,
+        "interval_seconds": 0.6666666666666666,
+        "gate_seconds": 0.16666666666666666,
+        "onset_count": 5,
+        "max_phase_error_seconds": 1.000000082740371e-09
+      },
+      "2": {
+        "pitch": 48,
+        "interval_seconds": 1.3333333333333333,
+        "gate_seconds": 0.3333333333333333,
+        "onset_count": 3,
+        "max_phase_error_seconds": 6.66666721826914e-10
+      }
+    },
+    "clock_labels": {
+      "1": "/1",
+      "2": "/2"
+    },
+    "stop_bounds": [
+      15010000000,
+      15010000000
+    ],
+    "passed": true
+  }
+]

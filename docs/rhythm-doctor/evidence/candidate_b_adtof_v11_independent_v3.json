@@ -1,0 +1,364 @@
+{
+  "acceptance_claimed": false,
+  "scope": "First held three-drum diagnostic; frozen predictions, independent corrected scoring",
+  "clip_count": 66,
+  "required_lanes_evaluated": [
+    "BD",
+    "SD",
+    "HH"
+  ],
+  "thresholds": {
+    "BD": 0.48657006987548884,
+    "HH": 0.4978641829592112,
+    "SD": 0.6283391375490963
+  },
+  "aggregate": {
+    "BD": {
+      "onset": {
+        "tp": 240,
+        "fp": 164,
+        "fn": 318,
+        "f1": 0.498960498960499
+      },
+      "grid": {
+        "tp": 240,
+        "fp": 163,
+        "fn": 318,
+        "f1": 0.4994797086368366
+      },
+      "absent_clips": 17,
+      "absent_lane_false_positives": 70
+    },
+    "SD": {
+      "onset": {
+        "tp": 240,
+        "fp": 247,
+        "fn": 296,
+        "f1": 0.46920821114369504
+      },
+      "grid": {
+        "tp": 240,
+        "fp": 247,
+        "fn": 296,
+        "f1": 0.46920821114369504
+      },
+      "absent_clips": 18,
+      "absent_lane_false_positives": 18
+    },
+    "HH": {
+      "onset": {
+        "tp": 1120,
+        "fp": 171,
+        "fn": 483,
+        "f1": 0.774015203870076
+      },
+      "grid": {
+        "tp": 1120,
+        "fp": 168,
+        "fn": 483,
+        "f1": 0.774818401937046
+      },
+      "absent_clips": 18,
+      "absent_lane_false_positives": 44
+    }
+  },
+  "strata": {
+    "full_mix": {
+      "BD": {
+        "onset": {
+          "tp": 194,
+          "fp": 92,
+          "fn": 289,
+          "f1": 0.5045513654096229
+        },
+        "grid": {
+          "tp": 194,
+          "fp": 91,
+          "fn": 289,
+          "f1": 0.5052083333333334
+        },
+        "absent_clips": 0,
+        "absent_lane_false_positives": 0
+      },
+      "SD": {
+        "onset": {
+          "tp": 204,
+          "fp": 222,
+          "fn": 271,
+          "f1": 0.4528301886792453
+        },
+        "grid": {
+          "tp": 204,
+          "fp": 222,
+          "fn": 271,
+          "f1": 0.4528301886792453
+        },
+        "absent_clips": 0,
+        "absent_lane_false_positives": 0
+      },
+      "HH": {
+        "onset": {
+          "tp": 987,
+          "fp": 123,
+          "fn": 460,
+          "f1": 0.771998435666797
+        },
+        "grid": {
+          "tp": 987,
+          "fp": 120,
+          "fn": 460,
+          "f1": 0.7729052466718872
+        },
+        "absent_clips": 0,
+        "absent_lane_false_positives": 0
+      }
+    },
+    "isolated": {
+      "BD": {
+        "onset": {
+          "tp": 13,
+          "fp": 11,
+          "fn": 3,
+          "f1": 0.65
+        },
+        "grid": {
+          "tp": 13,
+          "fp": 11,
+          "fn": 3,
+          "f1": 0.65
+        },
+        "absent_clips": 11,
+        "absent_lane_false_positives": 11
+      },
+      "SD": {
+        "onset": {
+          "tp": 11,
+          "fp": 3,
+          "fn": 5,
+          "f1": 0.7333333333333333
+        },
+        "grid": {
+          "tp": 11,
+          "fp": 3,
+          "fn": 5,
+          "f1": 0.7333333333333333
+        },
+        "absent_clips": 11,
+        "absent_lane_false_positives": 3
+      },
+      "HH": {
+        "onset": {
+          "tp": 10,
+          "fp": 12,
+          "fn": 6,
+          "f1": 0.5263157894736842
+        },
+        "grid": {
+          "tp": 10,
+          "fp": 12,
+          "fn": 6,
+          "f1": 0.5263157894736842
+        },
+        "absent_clips": 11,
+        "absent_lane_false_positives": 12
+      }
+    },
+    "sparse": {
+      "BD": {
+        "onset": {
+          "tp": 33,
+          "fp": 61,
+          "fn": 26,
+          "f1": 0.43137254901960786
+        },
+        "grid": {
+          "tp": 33,
+          "fp": 61,
+          "fn": 26,
+          "f1": 0.43137254901960786
+        },
+        "absent_clips": 6,
+        "absent_lane_false_positives": 59
+      },
+      "SD": {
+        "onset": {
+          "tp": 25,
+          "fp": 22,
+          "fn": 20,
+          "f1": 0.5434782608695652
+        },
+        "grid": {
+          "tp": 25,
+          "fp": 22,
+          "fn": 20,
+          "f1": 0.5434782608695652
+        },
+        "absent_clips": 7,
+        "absent_lane_false_positives": 15
+      },
+      "HH": {
+        "onset": {
+          "tp": 123,
+          "fp": 36,
+          "fn": 17,
+          "f1": 0.822742474916388
+        },
+        "grid": {
+          "tp": 123,
+          "fp": 36,
+          "fn": 17,
+          "f1": 0.822742474916388
+        },
+        "absent_clips": 7,
+        "absent_lane_false_positives": 32
+      }
+    }
+  },
+  "silence": {
+    "clip_ids": [
+      "v11-silence-0",
+      "v11-silence-1",
+      "v11-silence-2"
+    ],
+    "metrics": {
+      "BD": {
+        "onset": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "f1": 1.0
+        },
+        "grid": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "f1": 1.0
+        },
+        "absent_clips": 3,
+        "absent_lane_false_positives": 0
+      },
+      "SD": {
+        "onset": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "f1": 1.0
+        },
+        "grid": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "f1": 1.0
+        },
+        "absent_clips": 3,
+        "absent_lane_false_positives": 0
+      },
+      "HH": {
+        "onset": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "f1": 1.0
+        },
+        "grid": {
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "f1": 1.0
+        },
+        "absent_clips": 3,
+        "absent_lane_false_positives": 0
+      }
+    }
+  },
+  "source_sha256": {
+    "manifest.json": "1cd3dc6e86461e78330ea0c885880d3f01131b572183da5a84b3da101a8e5e6b",
+    "v11-report.json": "37c0b2a9e3254ccf77b74e52f826d69ac69166e204bcdc2f018d5b38796914da",
+    "v11-v2-provenance.json": "f48c0f54272bd293b4a3de86c8249a4e6fcb7ef91605b1715608010d696a2db7",
+    "evaluate.py": "813599aa1e8c900a8bfe9b74f6a1eb8a3d7d9a42e5a2a4c0147eb68fed5574e7",
+    "audio_frontend.py": "9cbe7b146bc8e3b965b94a025efd7332e743729cee1881faee8423bf620d3a2b",
+    "checkpoint_epoch_1.pt": "7d12992ed75dad189f05ce5c92f393f1f21b0bdd8e6bb108889e138f5013ca44",
+    "report.json": "49cdb807ddb0e59b1428f638a401592ee1aaacd1a4ee4cc866e01df0e3293b0c",
+    "frozen-input-sha256.json": "5d893ea274a191820ba268fc940e2962daa68a8ee13da47b6351a49e1d41a470",
+    "audit_v3.py": "b444ae056a006fdd795cb616d247ba4c3170a6cadf5fe0c7aef63c51e7ae57d8",
+    "grid_quality.py": "a99217107c8a23effac908a107ba515f858794887c7982b17ea98184f8a6f0f3",
+    "quality.py": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b"
+  },
+  "limitations": [
+    "No BASS/TOM/velocity/performance/physical-device or full-feature acceptance.",
+    "First inference wrote phase-safe input to default PCM16 WAV, adding quantization; preserve this measured configuration.",
+    "Upstream frontend/weight conversion equivalence remains unproven.",
+    "Predictions originally had positional identities; this audit checks frozen order against independently materialized provenance and exact manifest.",
+    "v1 grid derivation hardcoded 48000 Hz and used pre-sample bounds; v2 ad-hoc scorer was untested. Both remain diagnostic invalid/unverified configuration evidence; use this tested v3 scorer.",
+    "Two held kits and rendered accompaniment do not establish real-band generalization."
+  ],
+  "clip_ids": [
+    "v11-full-00",
+    "v11-full-01",
+    "v11-full-02",
+    "v11-full-03",
+    "v11-full-04",
+    "v11-full-05",
+    "v11-full-06",
+    "v11-full-07",
+    "v11-full-08",
+    "v11-full-09",
+    "v11-full-10",
+    "v11-full-11",
+    "v11-full-12",
+    "v11-full-13",
+    "v11-full-14",
+    "v11-full-15",
+    "v11-full-16",
+    "v11-full-17",
+    "v11-full-18",
+    "v11-full-19",
+    "v11-full-20",
+    "v11-full-21",
+    "v11-full-22",
+    "v11-full-23",
+    "v11-full-24",
+    "v11-full-25",
+    "v11-full-26",
+    "v11-full-27",
+    "v11-full-28",
+    "v11-full-29",
+    "v11-full-30",
+    "v11-full-31",
+    "v11-full-32",
+    "v11-full-33",
+    "v11-full-34",
+    "v11-full-35",
+    "v11-full-36",
+    "v11-full-37",
+    "v11-full-38",
+    "v11-full-39",
+    "v11-isolated-0-BD",
+    "v11-sparse-0-BD",
+    "v11-isolated-0-SD",
+    "v11-sparse-0-SD",
+    "v11-isolated-0-HH",
+    "v11-sparse-0-HH",
+    "v11-isolated-0-TOM",
+    "v11-sparse-0-TOM",
+    "v11-isolated-0-BASS",
+    "v11-sparse-0-BASS",
+    "v11-isolated-1-BD",
+    "v11-sparse-1-BD",
+    "v11-isolated-1-SD",
+    "v11-sparse-1-SD",
+    "v11-isolated-1-HH",
+    "v11-sparse-1-HH",
+    "v11-isolated-1-TOM",
+    "v11-sparse-1-TOM",
+    "v11-isolated-1-BASS",
+    "v11-sparse-1-BASS",
+    "v11-silence-0",
+    "v11-silence-1",
+    "v11-silence-2",
+    "v11-clipped",
+    "v11-phase",
+    "v11-unison"
+  ],
+  "raw_audit_sha256": "5bf276d417a7e14a80fd94b89eeb468d37081ba517c6cfe72525dee367087a79"
+}

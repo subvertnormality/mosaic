@@ -1,73 +1,75 @@
 """Native recording lifetime tests; literal MIDI expectations, physical controls."""
 
 def recording_lifetime(c,ending,scale_page=False):
-    from cases import assign_trig_parameter,menu_value,parameter_list_label
-    from patch_params import open_patch_control,turn
+    from note_accounting import continuation_onsets,window_onsets
+    ui = c.ui
     assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration','mute','memory','memory-branch','persistence')
     slide=ending.startswith('slide-')
     value=-1 if ending=='slide-off' else 64
-    open_patch_control(c);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    ui.open_patch_control();ui.turn_patch_control(63);ui.turn_patch_control(1);ui.expect_patch_value(63);ui.leave_native_menu()
+    ui.turn(1,-3);cc1_offset=ui.assign_trig_parameter_key('stored_patch_cc1')
     for step,lock in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,lock+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    if slide:c.key(3)
-    c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2)
-    c.tap(2,8);before=c.snapshot()['midi_count'];c.tap(1,8)
+        ui.control_edge('step',True,index=step)
+        try:c.elapse(.05);ui.encoder_event(3,-126);ui.set_value(lock+1)
+        finally:ui.control_edge('step',False,index=step)
+    if slide:ui.press_key(3)
+    ui.turn(1,2);ui.set_value(-23);ui.press_key(3);ui.turn(1,-2)
+    ui.tap_control('record');before=c.snapshot()['midi_count'];ui.tap_control('play_stop')
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
     c.wait(lambda state:len(notes(state))==1);c.elapse(.5)
     edit=c.snapshot()['midi_count']
-    if value==-1:c.action(type='enc',n=3,delta=-126);c.elapse(.15)
-    else:c.enc(3,1)
+    if value==-1:ui.encoder_event(3,-126);c.elapse(.15)
+    else:ui.set_value(1)
     wanted_steps=4;replay=[24,64,64,64];port=1;channel=0;cc_number=1
     if ending=='mute':
         def shift_mute():
-            c.action(type='key',n=1,state=1)
-            try:c.elapse(.3);c.tap(1,1)
-            finally:c.action(type='key',n=1,state=0)
-        shift_mute();c.led_values([(1,1)],[7])
+            ui.key_edge(1,True)
+            try:c.elapse(.3);ui.tap_control('channel',1)
+            finally:ui.key_edge(1,False)
+        shift_mute();ui.expect_leds({('channel',1):'alternate'})
         marker=c.snapshot()['midi_count'];c.elapse(8)
         quiet=c.snapshot()
         assert not [e for e in quiet['midi'] if e['index']>marker and (e['bytes'][0]&240==176 or (e['bytes'][0]&240==144 and e['bytes'][2]>0))],quiet['midi']
         assert not quiet['midi_capture']['outstanding']
-        shift_mute();c.led_values([(1,1)],[15]);wanted_steps=2
+        shift_mute();ui.expect_leds({('channel',1):'selected'});wanted_steps=2
     elif ending=='selected-wrap':wanted_steps=5
     elif ending=='nonselected-wrap':
-        c.tap(4,8) if scale_page else c.tap(2,1)
+        ui.tap_control('scale_editor') if scale_page else ui.select_channel(2)
         c.wait(lambda state:len(notes(state))>=5,timeout=18)
         c.elapse(.3)
-        c.tap(3,8) if scale_page else c.tap(1,1)
+        ui.tap_control('channel_editor') if scale_page else ui.select_channel(1)
         wanted_steps=8
     elif ending in ('pending-assignment','pending-configuration'):
         c.wait(lambda state:len(notes(state))>=2,timeout=5)
         if ending=='pending-assignment':
-            c.key(2);c.enc(3,1);parameter_list_label(c,'CC 2')
+            ui.press_key(2);ui.set_value(1);ui.expect_trig_parameter_visible('stored_patch_cc2')
         else:
-            c.enc(1,3);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1)
+            ui.turn(1,3);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1)
         # An eligible step occurs with the proposed edit still unconfirmed.
         c.wait(lambda state:len(notes(state))>=3,timeout=5)
-        c.key(2) # Cancel through the real UI.
-        if ending=='pending-configuration':c.enc(1,-3)
+        ui.press_key(2) # Cancel through the real UI.
+        if ending=='pending-configuration':ui.turn(1,-3)
     elif ending in ('disarm','stop','reassign','same-assignment','configuration'):
         c.wait(lambda state:len(notes(state))>=2,timeout=5)
         replay=[24,64,96,65]
-        if ending=='disarm':c.tap(2,8);c.tap(2,8)
+        if ending=='disarm':ui.tap_control('record');ui.tap_control('record')
         elif ending=='stop':
-            c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
-            before=c.snapshot()['midi_count'];edit=before;c.tap(1,8)
+            ui.tap_control('play_stop');c.wait(lambda state:not state['midi_capture']['outstanding'])
+            before=c.snapshot()['midi_count'];edit=before;ui.tap_control('play_stop')
         elif ending in ('reassign','same-assignment'):
-            c.key(2)
-            if ending=='reassign':c.enc(3,1);cc_number=2
-            else:c.enc(3,1);c.enc(3,-1) # Enqueue actual same-assignment confirmation.
-            parameter_list_label(c,'CC '+str(cc_number));c.key(3);c.key(2)
+            ui.press_key(2)
+            if ending=='reassign':ui.set_value(1);cc_number=2
+            else:ui.set_value(1);ui.set_value(-1) # Enqueue actual same-assignment confirmation.
+            ui.expect_trig_parameter_visible('stored_patch_cc%d' % cc_number);ui.press_key(3);ui.press_key(2)
             if ending=='same-assignment':replay=[24,64,64,64]
         else:
-            c.enc(1,3);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3);c.enc(1,-3)
+            ui.turn(1,3);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3);ui.turn(1,-3)
             port=2;channel=1;replay=[65]*4
             # Confirmation clears device locks and resets assignments, including
             # route-only changes. Reassign before wrap to expose latent dirty state.
-            assign_trig_parameter(c,'CC 1')
+            # Reuse the offset found at setup: scanning the parameter list
+            # again here takes longer than the two steps this must fit inside.
+            ui.assign_trig_parameter_key('stored_patch_cc1',offset=cc1_offset)
             assert len(notes(c.snapshot()))<4,'Reassignment missed pre-wrap step4'
     state=c.wait(lambda state:len(notes(state))>=wanted_steps,timeout=18)
     ons=notes(state);assert len(ons)==wanted_steps,ons
@@ -124,54 +126,72 @@ def recording_lifetime(c,ending,scale_page=False):
         wanted=None;replay=[24,-1,-1,-1]
     if wanted is not None:assert actual==wanted,dict(ending=ending,expected=wanted,actual=actual)
     c.results.append(dict(kind='recording-lifetime-live-output',ending=ending,actual=actual,passed=True))
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
-    if slide:c.key(3) # Disable slide through the same UI before lock replay.
+    ui.tap_control('play_stop');c.wait(lambda state:not state['midi_capture']['outstanding']);ui.tap_control('record')
+    if slide:ui.press_key(3) # Disable slide through the same UI before lock replay.
     current=-1 if ending in ('reassign','configuration','slide-off') else 64
-    c.enc(3,65-current)
+    ui.set_value(65-current)
     # Use the native patch menu to prove the new default is independent.
-    c.key(1)
-    if ending=='reassign':c.enc(2,1)
-    menu_value(c,'65');c.key(1)
+    ui.enter_native_menu()
+    if ending=='reassign':ui.turn(2,1)
+    ui.expect_patch_value(65);ui.leave_native_menu()
     start=c.snapshot()['midi_count']
-    played=c.playback([(port,[144+channel,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
-    cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
+    phrase=[(port,[144+channel,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    returned=c.playback(phrase,cycles=2,timeout=36,settle_seconds=30)
+    window=[e for e in c.snapshot()['midi'] if e['index']>start]
+    cc=[e for e in window if e['bytes'][0]&240==176]
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 4 s lattice, preceded by
+    # its own recorded lock exactly as every earlier step.
+    played=window_onsets(window)
+    late=continuation_onsets(c,returned,played,phrase,lambda i:i*4,ending)
     table=replay*2+[replay[0]]
     prefix=([(1,[176,1,64])] if ending=='reassign' else [])+[(port,[176+channel,cc_number,65])]
-    expected=prefix+[(port,[176+channel,cc_number,v]) for v in table if v!=-1]
+    expected=prefix+[(port,[176+channel,cc_number,replay[i%4]]) for i in range(len(played)) if replay[i%4]!=-1]
     assert [(e['port'],e['bytes']) for e in cc]==expected,dict(ending=ending,expected=expected,actual=cc)
     cc=cc[len(prefix):]
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    for i,control in zip([i for i,v in enumerate(table) if v!=-1],cc):
+    for i,control in zip([i for i in range(len(played)) if replay[i%4]!=-1],cc):
         assert control['index']<played[i]['index']
         assert abs((control[field]-played[0][field])/1e9-i*4)<=tolerance
-    c.results.append(dict(kind='recording-lifetime-disarmed-replay',ending=ending,values=table,distinct_default=65,passed=True))
+    c.results.append(dict(kind='recording-lifetime-disarmed-replay',ending=ending,values=table,distinct_default=65,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))
     if ending=='persistence':
         import json
+        import shutil
         from driver import Driver,digest
-        c.enc(1,2);c.enc(3,15);c.key(3) # /6 for fresh-process replay.
+        ui.turn(1,2);ui.turn(3,15);ui.press_key(3) # /6 for fresh-process replay.
         def save(driver):
             driver.elapse(59);driver.elapse(2)
             driver.wait(lambda _:all((driver.data_directory/name).is_file() for name in ('autosave.ptn','autosave.pset')),timeout=3)
+            captured=driver.out/'generated-project';captured.mkdir(exist_ok=True)
+            shutil.copy2(driver.data_directory/'autosave.ptn',captured/'autosave.ptn')
             driver.results.append(dict(kind='recording-autosave-files',files={name:digest(driver.data_directory/name) for name in ('autosave.ptn','autosave.pset')}))
         save(c);c.finish();seed=c.data_directory
         for generation in (1,2):
             out=c.out/('recording-reload-'+str(generation));out.mkdir()
             loaded=Driver(out,project_seed=seed,**c.launch_options)
             try:
-                loaded.tap(3,8);loaded.enc(1,-10);loaded.enc(1,2);loaded.screen_header('Ch. 1 Memory')
+                loaded.ui.tap_control('channel_editor');loaded.ui.turn(1,-10);loaded.ui.turn(1,2);loaded.ui.expect_header('memory',channel=1)
                 def replay(values,stage):
                     start=loaded.snapshot()['midi_count']
-                    played=loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
-                    cc=[e for e in loaded.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
-                    expected=[65]+values*2+[values[0]]
+                    phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+                    returned=loaded.playback(phrase,cycles=2,timeout=12)
+                    window=[e for e in loaded.snapshot()['midi'] if e['index']>start]
+                    cc=[e for e in window if e['bytes'][0]&240==176]
+                    # Real time may admit a further step before Stop: it must continue
+                    # the phrase on the 1 s lattice, preceded by its own stored lock.
+                    played=window_onsets(window)
+                    late=continuation_onsets(loaded,returned,played,phrase,lambda i:i,stage)
+                    expected=[65]+[values[i%4] for i in range(len(played))]
                     assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(generation=generation,stage=stage,expected=expected,actual=cc)
                     for i,event in enumerate(cc[1:]):
                         assert event['index']<played[i]['index']
                         assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
-                    loaded.results.append(dict(kind='recording-fresh-process-replay',generation=generation,stage=stage,values=values,passed=True))
+                    loaded.results.append(dict(kind='recording-fresh-process-replay',generation=generation,stage=stage,values=values,passed=True,
+                                               **({'late_window_onsets':len(late)} if late else {})))
                 replay([24,64,64,64] if generation==1 else [24,64,64,65],'restored')
-                loaded.enc(3,-1 if generation==1 else 1)
+                loaded.ui.turn(3,-1 if generation==1 else 1)
                 replay([24,64,64,65] if generation==1 else [24,64,64,64],'undo' if generation==1 else 'redo')
                 if generation==1:save(loaded)
             finally:loaded.finish()
@@ -182,78 +202,87 @@ def recording_lifetime(c,ending,scale_page=False):
     if ending in ('memory','memory-branch'):
         # Recorded steps2/3/4 are the last three memory actions. Step3
         # overwrote an authored96; steps2/4 were previously unbound.
-        c.enc(1,2);c.enc(3,15);c.key(3);c.enc(1,-1) # /6, Memory page.
-        c.screen_header('Ch. 1 Memory')
+        ui.turn(1,2);ui.turn(3,15);ui.press_key(3);ui.turn(1,-1) # /6, Memory page.
+        ui.expect_header('memory',channel=1)
         stages=[(-1,[24,64,64,65]),(-1,[24,64,96,65]),(-1,[24,65,96,65]),
                 (1,[24,64,96,65]),(1,[24,64,64,65]),(1,[24,64,64,64])]
         for direction,values in stages:
-            c.enc(3,direction);start=c.snapshot()['midi_count']
-            played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
-            cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
-            expected=[65]+values*2+[values[0]]
+            ui.turn(3,direction);start=c.snapshot()['midi_count']
+            phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+            returned=c.playback(phrase,cycles=2,timeout=12)
+            window=[e for e in c.snapshot()['midi'] if e['index']>start]
+            cc=[e for e in window if e['bytes'][0]&240==176]
+            # Real time may admit a further step before Stop: it must continue
+            # the phrase on the 1 s lattice, preceded by its own stored lock.
+            played=window_onsets(window)
+            late=continuation_onsets(c,returned,played,phrase,lambda i:i,(direction,values))
+            expected=[65]+[values[i%4] for i in range(len(played))]
             assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(direction=direction,values=values,actual=cc)
             for i,event in enumerate(cc[1:]):
                 assert event['index']<played[i]['index']
                 assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
-            c.results.append(dict(kind='recording-memory-step-replay',direction=direction,values=values,passed=True))
+            c.results.append(dict(kind='recording-memory-step-replay',direction=direction,values=values,passed=True,
+                                  **({'late_window_onsets':len(late)} if late else {})))
         if ending=='memory-branch':
-            c.enc(3,-2) # Keep recorded step2; undo recorded steps3/4.
-            c.enc(1,-1) # Trig Parameters.
-            c.action(type='grid',x=3,y=4,state=1)
-            try:c.elapse(.05);c.enc(3,1) # Existing96 -> new97, one memory action.
-            finally:c.action(type='grid',x=3,y=4,state=0)
-            c.enc(1,1);c.screen_header('Ch. 1 Memory')
+            ui.turn(3,-2) # Keep recorded step2; undo recorded steps3/4.
+            ui.turn(1,-1) # Trig Parameters.
+            ui.control_edge('step',True,index=3)
+            try:c.elapse(.05);ui.set_value(1) # Existing96 -> new97, one memory action.
+            finally:ui.control_edge('step',False,index=3)
+            ui.turn(1,1);ui.expect_header('memory',channel=1)
             for action,values in [('latest',[24,64,97,65]),('undo',[24,64,96,65]),('redo',[24,64,97,65]),('past-end',[24,64,97,65])]:
-                if action=='latest':c.key(3)
-                else:c.enc(3,-1 if action=='undo' else (1 if action=='redo' else 3))
+                if action=='latest':ui.press_key(3)
+                else:ui.turn(3,-1 if action=='undo' else (1 if action=='redo' else 3))
                 start=c.snapshot()['midi_count']
-                played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
-                cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
-                expected=[65]+values*2+[values[0]]
+                phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+                returned=c.playback(phrase,cycles=2,timeout=12)
+                window=[e for e in c.snapshot()['midi'] if e['index']>start]
+                cc=[e for e in window if e['bytes'][0]&240==176]
+                # Real time may admit a further step before Stop: it must continue
+                # the phrase on the 1 s lattice, preceded by its own stored lock.
+                played=window_onsets(window)
+                late=continuation_onsets(c,returned,played,phrase,lambda i:i,action)
+                expected=[65]+[values[i%4] for i in range(len(played))]
                 assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(action=action,expected=expected,actual=cc)
                 for i,event in enumerate(cc[1:]):
                     assert event['index']<played[i]['index']
                     assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
-                c.results.append(dict(kind='recording-memory-branch-replay',action=action,values=values,passed=True))
+                c.results.append(dict(kind='recording-memory-branch-replay',action=action,values=values,passed=True,
+                                      **({'late_window_onsets':len(late)} if late else {})))
 
 
 
 
 def recording_nrpn(c,value):
-    from cases import assign_trig_parameter,menu_value,menu_label
-    from patch_params import open_patch_control,turn
-    from frame_oracle import selected_line
+    ui = c.ui
     assert value in (253,0,-1)
-    c.configure();c.enc(3,1);c.enc(2,1);c.enc(3,1);c.enc(2,1);c.enc(3,1);c.key(3)
-    open_patch_control(c,configured=True,setup=False)
-    for _ in range(180):
-        if selected_line(c.snapshot(),'NRPN14'):break
-        c.enc(2,1)
-    else:raise AssertionError('NRPN14 patch control not reached')
-    menu_label(c,'NRPN14');turn(c,1);menu_value(c,'126');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'NRPN14')
+    ui.configure();ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.open_patch_control(configured=True,setup=False)
+    ui.seek_patch_parameter('nrpn14',configured=True,open_control=False)
+    ui.turn_patch_control(1);ui.expect_patch_value(126);ui.leave_native_menu()
+    ui.turn(1,-3);ui.assign_trig_parameter_key('stored_patch_nrpn14')
     for step,lock in [(1,126),(3,253)]:
-        c.action(type='grid',x=step,y=4,state=1)
+        ui.control_edge('step',True,index=step)
         try:
-            c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,1 if lock==126 else 2)
-            c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.enc(3,-2 if lock==126 else -4)
-            finally:c.action(type='key',n=1,state=0)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.enc(2,1);assign_trig_parameter(c,'Control 1')
-    c.action(type='grid',x=3,y=4,state=1)
-    try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,97)
-    finally:c.action(type='grid',x=3,y=4,state=0)
-    c.enc(2,-1);c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2)
-    c.tap(2,8);before=c.snapshot()['midi_count'];c.tap(1,8)
+            c.elapse(.05);ui.encoder_event(3,-126);ui.set_value(1 if lock==126 else 2)
+            ui.key_edge(1,True);c.elapse(.3)
+            try:ui.set_value(-2 if lock==126 else -4)
+            finally:ui.key_edge(1,False)
+        finally:ui.control_edge('step',False,index=step)
+    ui.turn(2,1);ui.assign_trig_parameter_key('stored_patch_control1')
+    ui.control_edge('step',True,index=3)
+    try:c.elapse(.05);ui.encoder_event(3,-126);ui.set_value(97)
+    finally:ui.control_edge('step',False,index=3)
+    ui.turn(2,-1);ui.turn(1,2);ui.set_value(-23);ui.press_key(3);ui.turn(1,-2)
+    ui.tap_control('record');before=c.snapshot()['midi_count'];ui.tap_control('play_stop')
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]&240==144 and e['bytes'][2]>0]
     c.wait(lambda state:len(notes(state))==1);c.elapse(.5)
-    edit=c.snapshot()['midi_count'];c.action(type='enc',n=3,delta=-126);c.elapse(.15)
+    edit=c.snapshot()['midi_count'];ui.encoder_event(3,-126);c.elapse(.15)
     if value!=-1:
-        if value==253:c.enc(3,2)
-        c.action(type='key',n=1,state=1);c.elapse(.3)
-        try:c.enc(3,-4 if value==253 else 1)
-        finally:c.action(type='key',n=1,state=0)
+        if value==253:ui.set_value(2)
+        ui.key_edge(1,True);c.elapse(.3)
+        try:ui.set_value(-4 if value==253 else 1)
+        finally:ui.key_edge(1,False)
     state=c.wait(lambda state:len(notes(state))>=4,timeout=14)
     ons=notes(state)
     assert [(e['port'],e['bytes']) for e in ons]==[(2,[145,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
@@ -274,95 +303,60 @@ def recording_nrpn(c,value):
             assert event['index']<ons[step-1]['index']
             assert abs((event[field]-ons[step-1][field])/1e9)<=tolerance
         offset+=count
-    c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding']);c.tap(2,8)
-    c.key(1);menu_value(c,'X' if value==-1 else str(value));turn(c,1)
-    default=value+127;menu_value(c,str(default));c.key(1)
+    ui.tap_control('play_stop');c.wait(lambda state:not state['midi_capture']['outstanding']);ui.tap_control('record')
+    ui.enter_native_menu();ui.expect_patch_value('off' if value==-1 else value);ui.turn_patch_control(1)
+    default=value+127;ui.expect_patch_value(default);ui.leave_native_menu()
     start=c.snapshot()['midi_count']
-    played=c.playback([(2,[145,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
-    cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
+    phrase=[(2,[145,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    returned=c.playback(phrase,cycles=2,timeout=36,settle_seconds=30)
+    window=[e for e in c.snapshot()['midi'] if e['index']>start]
+    cc=[e for e in window if e['bytes'][0]&240==176]
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 4 s lattice, preceded by
+    # its own recorded packet and clean-slot lock exactly as every earlier step.
+    from note_accounting import continuation_onsets,window_onsets
+    played=window_onsets(window)
+    late=continuation_onsets(c,returned,played,phrase,lambda i:i*4,value)
     expected=packet(default);schedule=[]
-    for i,v in enumerate([126,value,value,value]*2+[126]):
+    for i in range(len(played)):
+        v=[126,value,value,value][i%4]
         events=(packet(v) if v!=-1 else [])+([(2,[177,1,96])] if i%4==2 else [])
         expected+=events;schedule.extend([i]*len(events))
     assert [(e['port'],e['bytes']) for e in cc]==expected,dict(value=value,expected=expected,actual=cc)
     for i,event in zip(schedule,cc[4:]):
         assert event['index']<played[i]['index']
         assert abs((event[field]-played[0][field])/1e9-i*4)<=tolerance
-    c.results.append(dict(kind='recording-nrpn-route-and-clean-slot',value=value,port=2,channel=2,distinct_default=default,manual_values=manual,clean_CC1_step3=96,passed=True))
-
-
-def recording_stop_safety(c):
-    from cases import assign_trig_parameter,set_mosaic_options,menu_value
-    from patch_params import open_patch_control,turn
-    c.configure();set_mosaic_options(c,[('Shift press to stop',True)])
-    open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
-    for step,value in [(1,24),(3,96)]:
-        c.action(type='grid',x=step,y=4,state=1)
-        try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-        finally:c.action(type='grid',x=step,y=4,state=0)
-    c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2)
-    c.tap(2,8);before=c.snapshot()['midi_count'];c.tap(1,8)
-    def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
-    c.wait(lambda state:len(notes(state))==1);c.elapse(.5);c.enc(3,1)
-    c.wait(lambda state:len(notes(state))>=2,timeout=5)
-    def long_stop():
-        c.action(type='grid',x=1,y=8,state=1)
-        try:c.elapse(1.2)
-        finally:c.action(type='grid',x=1,y=8,state=0)
-        c.elapse(.06);c.wait(lambda state:not state['midi_capture']['outstanding'])
-    long_stop()
-    before=c.snapshot()['midi_count'];c.tap(1,8)
-    first=c.wait(lambda state:len(notes(state))>=1)
-    actual=[(e['port'],e['bytes']) for e in first['midi'] if e['index']>before and e['bytes'][0]&240==176]
-    expected=[(1,[176,1,64]),(1,[176,1,24])] # Patch recall then unchanged first lock.
-    assert actual==expected,dict(expected=expected,actual=actual,meaning='Long Stop must clear pending recording while arm remains enabled')
-    state=c.wait(lambda state:len(notes(state))>=4,timeout=14)
-    assert [e['bytes'] for e in notes(state)]==[[144,n,v] for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-    cc=[(e['port'],e['bytes']) for e in state['midi'] if e['index']>before and e['bytes'][0]&240==176]
-    assert cc==[(1,[176,1,v]) for v in [64,24,64,96,64]],cc
-    long_stop()
-    # Prove retained arm through a new recorded edit and distinct-default replay.
-    # A Stop implementation which disarms would leave step 2 at its old 64.
-    before=c.snapshot()['midi_count'];c.tap(1,8)
-    c.wait(lambda state:len(notes(state))==1);c.elapse(.5);c.enc(3,1)
-    c.wait(lambda state:len(notes(state))>=2,timeout=5)
-    long_stop();c.tap(2,8) # Explicitly disarm only after the new edit is recorded.
-    c.enc(3,1) # Default 66 differs from recorded 65 and original lock 64.
-    before=c.snapshot()['midi_count'];c.tap(1,8)
-    state=c.wait(lambda state:len(notes(state))>=2,timeout=5)
-    cc=[(e['port'],e['bytes']) for e in state['midi'] if e['index']>before and e['bytes'][0]&240==176]
-    assert cc==[(1,[176,1,v]) for v in [66,24,65]],dict(actual=cc,meaning='Stop retains arm: new step-2 edit survives disarmed replay with a different default')
-    long_stop()
-    c.results.append(dict(kind='recording-stop-safety-long-press-restart',record_arm_retained=True,first_lock=24,recorded_step2=64,untouched_step3=96,new_recorded_step2=65,replay_default=66,passed=True))
+    c.results.append(dict(kind='recording-nrpn-route-and-clean-slot',value=value,port=2,channel=2,distinct_default=default,manual_values=manual,clean_CC1_step3=96,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))
 
 
 def recording_ten_slots_trigless(c):
     """All ten slots record on one rest without changing later locks."""
     import time
-    from cases import assign_trig_parameter,assert_durations,set_mosaic_options
+    from cases import assert_durations
     from midi_window import MidiWindow
-    from note_accounting import note_pairs
-    c.configure();set_mosaic_options(c,[('Trigless locks',True)]);c.enc(1,-3)
+    from note_accounting import continuation_onsets,note_pairs,window_onsets
+    ui=c.ui
+    ui.configure();ui.set_mosaic_option_keys([('trigless_locks',True)]);ui.turn(1,-3)
     for slot in range(1,11):
-        if slot>1:c.enc(2,1)
-        assign_trig_parameter(c,'CC '+str(slot))
+        if slot>1:ui.turn(2,1)
+        ui.assign_stored_patch_control(slot)
         for step,value in enumerate((1,2,3,4),1):
-            c.action(type='grid',x=step,y=4,state=1)
-            try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-            finally:c.action(type='grid',x=step,y=4,state=0)
-    c.enc(2,-9);c.tap(5,8);c.tap(2,4);c.tap(3,8)
-    c.enc(1,2);c.enc(3,-29);c.key(3);c.enc(1,-2) # /48: eight seconds per step.
-    c.tap(2,8);capture=MidiWindow(c.snapshot()['midi_count'])
-    c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+            ui.control_edge('step',True,index=step)
+            try:c.elapse(.05);ui.encoder_event(3,-126);ui.set_value(value+1)
+            finally:ui.control_edge('step',False,index=step)
+    ui.turn(2,-9);ui.tap_control('pattern_editor');ui.tap_step(2);ui.tap_control('channel_editor')
+    ui.turn(1,2);ui.set_value(-29);ui.press_key(3);ui.turn(1,-2) # /48: eight seconds per step.
+    ui.tap_control('record');capture=MidiWindow(c.snapshot()['midi_count'])
+    ui.control_edge('play_stop',True);ui.control_edge('play_stop',False)
     def now():return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
     origin=now();selected=1
     for slot in range(1,11):
-        if slot!=selected:c.enc(2,slot-selected);selected=slot
-        c.enc(3,1) # Off to zero.
+        if slot!=selected:ui.turn(2,slot-selected);selected=slot
+        ui.set_value(1) # Off to zero.
     assert now()<origin+7_500_000_000
     remaining=origin+8_200_000_000-now();assert remaining>0;c.elapse(remaining/1e9)
-    capture.extend(c.snapshot());c.action(type='grid',x=1,y=8,state=1);c.action(type='grid',x=1,y=8,state=0)
+    capture.extend(c.snapshot());ui.control_edge('play_stop',True);ui.control_edge('play_stop',False)
     c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
     notes=capture.note_ons();assert [(e['port'],e['bytes']) for e in notes]==[(1,[144,60,127])]
     pairs=note_pairs(capture.events);assert len(pairs)==1 and pairs[0][0]==notes[0]
@@ -374,21 +368,33 @@ def recording_ten_slots_trigless(c):
     assert [(e['port'],e['bytes']) for e in cc]==expected
     for event in cc[:20]:assert abs((event[field]-notes[0][field])/1e9)<=7.5
     for event in cc[20:]:assert abs((event[field]-notes[0][field])/1e9-8)<=tol
-    c.tap(2,8);c.enc(1,2);c.enc(3,29);c.key(3);c.enc(1,-2)
+    ui.tap_control('record');ui.turn(1,2);ui.set_value(29);ui.press_key(3);ui.turn(1,-2)
     for slot in range(1,11):
-        if slot!=selected:c.enc(2,slot-selected);selected=slot
-        c.action(type='enc',n=3,delta=-126);c.elapse(.15);c.enc(3,6) # Default5.
+        if slot!=selected:ui.turn(2,slot-selected);selected=slot
+        ui.encoder_event(3,-126);c.elapse(.15);ui.set_value(6) # Default5.
     before=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,60,127]),(1,[144,64,107]),(1,[144,65,97])],cycles=2,timeout=6)
+    phrase=[(1,[144,60,127]),(1,[144,64,107]),(1,[144,65,97])]
+    returned=c.playback(phrase,cycles=2,timeout=6)
     events=[e for e in c.snapshot()['midi'] if e['index']>before];cc=[e for e in events if e['bytes'][0]&240==176]
+    # Pattern step2 is a trigless rest: onset ordinal i sounds on lattice step
+    # note_step(i), while every step, rest included, emits its ten-slot group.
+    def note_step(i):return 4*(i//3)+(0,2,3)[i%3]
+    # The window runs until Stop takes effect. In real time further steps may
+    # land first: onsets must continue the phrase on the 1/6 s step lattice,
+    # and only a rest step's group may follow the last onset. Controlled time
+    # admits neither.
+    played=window_onsets(events)
+    late=continuation_onsets(c,returned,played,phrase,lambda i:note_step(i)/6)
+    last=note_step(len(played)-1)
+    steps=last+1+(1 if c.clock_mode=='real-time' and (last+1)%4==1 and len(cc)>10*(last+2) else 0)
     expected=[(1,[176,slot,5]) for slot in range(1,11)]
-    for step in (1,2,3,4,1,2,3,4,1):
-        value=(1,0,3,4)[step-1];expected += [(1,[176,slot,value]) for slot in range(1,11)]
+    for step in range(steps):
+        value=(1,0,3,4)[step%4];expected += [(1,[176,slot,value]) for slot in range(1,11)]
     assert [(e['port'],e['bytes']) for e in cc]==expected
     origin2=played[0][field]
     for index,event in enumerate(cc[10:]):
         assert abs((event[field]-origin2)/1e9-(index//10)/6)<=tol
-    note_steps=(0,2,3,4,6,7,8)
+    note_steps=[note_step(i) for i in range(len(played))]
     for note,step in zip(played,note_steps):
         assert abs((note[field]-origin2)/1e9-step/6)<=tol
         group=cc[10+step*10:20+step*10]
@@ -397,21 +403,23 @@ def recording_ten_slots_trigless(c):
     replay_pairs=note_pairs(events);assert [on for on,off in replay_pairs]==played
     assert_durations(c,played,[1]*(len(played)-1),events=events)
     c.results.append(dict(kind='recording-ten-slot-trigless-rest',slots=10,recorded_step=2,
-                          live_zero_packets=20,replay_values=[1,0,3,4],distinct_default=5,passed=True))
+                          live_zero_packets=20,replay_values=[1,0,3,4],distinct_default=5,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {}),
+                          **({'late_window_rest_groups':steps-last-1} if steps>last+1 else {})))
 
 
 def recording_ten_slots(c):
-    from cases import assign_trig_parameter
-    c.configure();c.enc(1,-3)
+    ui=c.ui
+    ui.configure();ui.turn(1,-3)
     for slot in range(1,11):
-        if slot>1:c.enc(2,1)
-        assign_trig_parameter(c,'CC '+str(slot))
+        if slot>1:ui.turn(2,1)
+        ui.assign_stored_patch_control(slot)
         for step,value in [(1,slot),(3,slot+16)]:
-            c.action(type='grid',x=step,y=4,state=1)
-            try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
-            finally:c.action(type='grid',x=step,y=4,state=0)
-    c.enc(2,-9);c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2)
-    c.tap(2,8);before=c.snapshot()['midi_count'];c.tap(1,8)
+            ui.control_edge('step',True,index=step)
+            try:c.elapse(.05);ui.encoder_event(3,-126);ui.set_value(value+1)
+            finally:ui.control_edge('step',False,index=step)
+    ui.turn(2,-9);ui.turn(1,2);ui.set_value(-23);ui.press_key(3);ui.turn(1,-2)
+    ui.tap_control('record');before=c.snapshot()['midi_count'];ui.tap_control('play_stop')
     def notes(s):return [e for e in s['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]
     def controls(s,marker):return [e for e in s['midi'] if e['index']>marker and e['bytes'][0]&240==176]
     first=c.wait(lambda s:len(notes(s))==1)
@@ -420,8 +428,8 @@ def recording_ten_slots(c):
     def edit_slots(slots,value):
         nonlocal selected
         for slot in slots:
-            if slot!=selected:c.enc(2,slot-selected);selected=slot
-            c.enc(3,value+1) # Each previously unedited default starts at Off=-1.
+            if slot!=selected:ui.turn(2,slot-selected);selected=slot
+            ui.set_value(value+1) # Each previously unedited default starts at Off=-1.
     edit_slots(range(1,11,2),0)
     assert len(notes(c.snapshot()))==1,'Odd-slot edit batch missed step2 deadline'
     marker=c.snapshot()['midi_count'];second=c.wait(lambda s:len(notes(s))>=2,timeout=5)
@@ -440,16 +448,23 @@ def recording_ten_slots(c):
     for event,i in [(e,1) for e in second_cc]+[(e,2+j//10) for j,e in enumerate(cc)]:
         assert event['index']<ons[i]['index']
         assert abs((event[field]-ons[0][field])/1e9-4*i)<=tolerance
-    c.tap(1,8);c.wait(lambda s:not s['midi_capture']['outstanding']);c.tap(2,8)
+    ui.tap_control('play_stop');c.wait(lambda s:not s['midi_capture']['outstanding']);ui.tap_control('record')
     # Give every patch default a distinct value2, proving replay uses stored locks.
     for slot in range(1,11):
-        if slot!=selected:c.enc(2,slot-selected);selected=slot
-        c.enc(3,2 if slot%2 else 1)
+        if slot!=selected:ui.turn(2,slot-selected);selected=slot
+        ui.set_value(2 if slot%2 else 1)
     start=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
-    cc=controls(c.snapshot(),start)
+    phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    returned=c.playback(phrase,cycles=2,timeout=36,settle_seconds=30)
+    state=c.snapshot();cc=controls(state,start)
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 4 s lattice, preceded by
+    # its own ten-slot group exactly as every earlier step.
+    from note_accounting import continuation_onsets,window_onsets
+    played=window_onsets([e for e in state['midi'] if e['index']>start])
+    late=continuation_onsets(c,returned,played,phrase,lambda i:i*4)
     expected=[(1,[176,slot,2]) for slot in range(1,11)]
-    for step in [1,2,3,4]*2+[1]:
+    for step in [i%4+1 for i in range(len(played))]:
         for slot in range(1,11):
             value=slot if step==1 else (0 if slot%2 else (2 if step==2 else 1))
             expected.append((1,[176,slot,value]))
@@ -457,4 +472,5 @@ def recording_ten_slots(c):
     for j,event in enumerate(cc[10:]):
         i=j//10;assert event['index']<played[i]['index']
         assert abs((event[field]-played[0][field])/1e9-4*i)<=tolerance
-    c.results.append(dict(kind='ten-slot-recording-staggered-zero-one',slots=10,odd_edit_before_step=2,even_edit_before_step=3,distinct_default=2,cycles=2,passed=True))
+    c.results.append(dict(kind='ten-slot-recording-staggered-zero-one',slots=10,odd_edit_before_step=2,even_edit_before_step=3,distinct_default=2,cycles=2,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))

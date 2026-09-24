@@ -1,0 +1,676 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock merged to pent.",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Lock merged to pent.",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "expected": [
+      12,
+      12,
+      12,
+      12
+    ],
+    "actual": [
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        7
+      ]
+    ],
+    "expected": [
+      12,
+      12,
+      12,
+      12
+    ],
+    "actual": [
+      12,
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        4,
+        1
+      ]
+    ],
+    "expected": [
+      12,
+      12,
+      12
+    ],
+    "actual": [
+      12,
+      12,
+      12
+    ]
+  },
+  {
+    "kind": "selected-pattern-top-note-blink",
+    "slot": 3,
+    "levels": [
+      11,
+      13
+    ],
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        14,
+        8
+      ]
+    ],
+    "expected": [
+      8
+    ],
+    "actual": [
+      8
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        3,
+        2
+      ]
+    ],
+    "expected": [
+      15,
+      15,
+      2
+    ],
+    "actual": [
+      15,
+      15,
+      2
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        15,
+        8
+      ]
+    ],
+    "expected": [
+      2
+    ],
+    "actual": [
+      2
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166770512,
+        "error_ms": 0.10384533333335222
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165529872,
+        "error_ms": -1.1367946666666628
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166532671,
+        "error_ms": -0.13399566666666418
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165564214,
+        "error_ms": -1.10245266666667
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166785757,
+        "error_ms": 0.11909033333334929
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165481437,
+        "error_ms": -1.1852296666666484
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166666733,
+        "error_ms": 6.633333335392955e-05
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165716718,
+        "error_ms": -0.9499486666666446
+      }
+    ]
+  },
+  {
+    "kind": "numeric-note-merge",
+    "mode": "average",
+    "assigned_patterns": [
+      1,
+      2
+    ],
+    "velocity_source": 1,
+    "pitches": [
+      62,
+      65,
+      69,
+      65
+    ],
+    "passed": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        15,
+        8
+      ]
+    ],
+    "expected": [
+      5
+    ],
+    "actual": [
+      5
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          65,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          76,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          76,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          65,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          76,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          69,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          72,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          76,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166532781,
+        "error_ms": -0.13388566666666657
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166595599,
+        "error_ms": -0.07106766666664655
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165850716,
+        "error_ms": -0.8159506666666483
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16573142,
+        "error_ms": -0.935246666666667
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166868545,
+        "error_ms": 0.2018783333333496
+      },
+      {
+        "pitch": 69,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165598304,
+        "error_ms": -1.0683626666666557
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166864935,
+        "error_ms": 0.1982683333333346
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.165700434,
+        "error_ms": -0.9662326666666499
+      }
+    ]
+  },
+  {
+    "kind": "numeric-note-merge",
+    "mode": "higher",
+    "assigned_patterns": [
+      1,
+      2
+    ],
+    "velocity_source": 1,
+    "pitches": [
+      65,
+      69,
+      72,
+      76
+    ],
+    "passed": true
+  }
+]

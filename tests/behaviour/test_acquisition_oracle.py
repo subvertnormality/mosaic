@@ -1,5 +1,5 @@
 import unittest
-from fast_acquisition import assert_acquisition_release_order
+from contract.fast_acquisition import assert_acquisition_release_order
 
 class AcquisitionOrderTests(unittest.TestCase):
     def test_release_then_onset_at_same_deadline(self):

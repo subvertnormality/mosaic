@@ -1,4 +1,5 @@
 import unittest
+import ast
 from unittest.mock import patch
 
 from heldout_workloads import HELDOUT_CASES, LUA_LOAD_SOURCE, RENDER_PRESSURE_SCHEDULE, recovery_oracle, run_window
@@ -36,9 +37,11 @@ class FakeLane:
 class Tests(unittest.TestCase):
     def test_render_schedule_matches_perf_dense_and_load_chunk_matches_runtime(self):
         with open('perf_dense.py') as handle:
-            text = handle.read().replace(' ', '')
-        for offset, label, gesture in RENDER_PRESSURE_SCHEDULE:
-            self.assertTrue(('(%s,%r,%r)' % (('%.2f' % offset).lstrip('0'), label, gesture)).replace(' ', '') in text, (offset, label))
+            tree = ast.parse(handle.read())
+        assignment = next(node for node in tree.body if isinstance(node, ast.Assign)
+                          and any(isinstance(target, ast.Name) and target.id == 'RENDER_PRESSURE_SCHEDULE'
+                                  for target in node.targets))
+        self.assertEqual(ast.dump(assignment.value), "Name(id='PERFORMANCE_RENDER_PRESSURE_SCHEDULE', ctx=Load())")
         self.assertEqual(LUA_LOAD_SOURCE, "local n = ...\nlocal x = 0\nfor i = 1, n do x = (x + i * 3) % 1000003 end\nreturn x")
 
     def test_window_dispatches_renders_and_loads_in_time_order(self):
@@ -48,7 +51,7 @@ class Tests(unittest.TestCase):
         kinds = [c[0] for c in lane.calls]
         self.assertEqual(kinds.count('load'), 1)
         self.assertEqual(kinds.count('gesture'), len(RENDER_PRESSURE_SCHEDULE))
-        self.assertEqual(lane.calls[kinds.index('load') - 1][:2], ('gesture', 'grid'))  # 4.00 render precedes 4.00 load
+        self.assertEqual(lane.calls[kinds.index('load') - 1], ('gesture', 'control', 'channel_editor', None))  # 4.00 render precedes 4.00 load
         self.assertTrue(result['complete'])
 
     def test_recovery_from_midi_gap_passes_on_timeline_and_fails_when_phase_is_lost(self):

@@ -33,6 +33,13 @@ for _,point in ipairs({{0,1},{1,1},{64,2},{128,2}}) do
   if path=='mosaic/lib/clock/voice_lifetime' then return dofile('lib/clock/voice_lifetime.lua') end
   if path=='mosaic/lib/clock/m_clock' then return clock end
   if path=='mosaic/lib/quantiser' then return {} end
+  -- This contract exercises only song-transition reset/realign decisions.
+  -- Optional pitch/merge collaborators are inert at that boundary but step.lua
+  -- still imports them at module load, so declare that isolation explicitly.
+  if path=='mosaic/lib/harmony/config_state'then return{on_pattern_boundary=function()end,enter_song=function()end}end
+  if path=='mosaic/lib/harmony/state'then return{enter_song=function()end}end
+  if path=='mosaic/lib/musical_merge/state'then return{on_pattern_boundary=function()return{}end,reset_song=function()end}end
+  if path:match('^mosaic/lib/harmony/') or path:match('^mosaic/lib/musical_merge/') then return {} end
   assert(path=='mosaic/lib/clock/divisions',path);return {note_divisions={}}
  end
  channel_edit_page_ui={}
