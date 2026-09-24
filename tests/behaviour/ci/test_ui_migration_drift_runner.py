@@ -44,6 +44,13 @@ class DriftRunnerTests(unittest.TestCase):
         self.assertIn("ui-migration-drill.json", SCRIPT.read_text(encoding="utf-8"))
         self.assertIn("contents: read", workflow)
 
+    def test_ci_drill_uses_pages_with_current_semantic_confirmations(self):
+        workflow = (SCRIPT.parents[3] / ".github/workflows/behaviour.yml").read_text(
+            encoding="utf-8")
+        drift_job = workflow.split("  ui-migration-drift:", 1)[1]
+        self.assertEqual(runner.PAGE_KEYS, ("masks", "merge_shape"))
+        self.assertIn("--pages masks merge_shape \\", drift_job)
+
     def test_swaps_only_the_two_requested_channel_pages(self):
         source = """from collections import OrderedDict
 CHANNEL_PAGES = OrderedDict([

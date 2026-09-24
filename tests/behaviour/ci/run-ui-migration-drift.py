@@ -16,7 +16,7 @@ import sys
 
 
 MAP = "tests/behaviour/ui_map.py"
-PAGE_KEYS = ("note_dashboard", "midi_config")
+PAGE_KEYS = ("masks", "merge_shape")
 
 
 def git(repo, *args, check=True):
