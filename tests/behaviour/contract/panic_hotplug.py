@@ -53,3 +53,19 @@ def panic_hotplug(c,removed_before,reconnect_during):
         assert not [e for e in outside if e['bytes'][0]&240 in (128,144)],'Notes outside declared windows'
         c.results.append(dict(kind='panic-hotplug-complete-stream',fresh_panic_events=6144,keyboard_messages=2,melody_recovered=True,passed=True))
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
+
+
+def panic_hotplug_removed_before_reconnect_after(c):
+    return panic_hotplug(c, True, False)
+
+
+def panic_hotplug_removed_before_reconnect_during(c):
+    return panic_hotplug(c, True, True)
+
+
+def panic_hotplug_removed_during_reconnect_after(c):
+    return panic_hotplug(c, False, False)
+
+
+def panic_hotplug_removed_during_reconnect_during(c):
+    return panic_hotplug(c, False, True)

@@ -2602,7 +2602,12 @@ def panic_pending_chord(c, arp, shape, case_id=None):
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
-from panic_hotplug import panic_hotplug
+from contract.panic_hotplug import (
+    panic_hotplug_removed_before_reconnect_after,
+    panic_hotplug_removed_before_reconnect_during,
+    panic_hotplug_removed_during_reconnect_after,
+    panic_hotplug_removed_during_reconnect_during,
+)
 from patch_params_batch import patch_boundaries,patch_play_recall
 from contract.patch_matrix import patch_cc_matrix
 
@@ -2978,10 +2983,10 @@ CASES={
  'M-PATCH-005':dict(run=lambda c:patch_play_recall(c,3),requirements=['CH-PATCH-RECALL'],description='Three actual grid Play/Stop cycles each recall exactly one stored unassigned CC before their first note'),
  'M-PATCH-003':dict(run=patch_play_recall,requirements=['CH-PATCH-RECALL'],description='Play recalls a stored CC that is not assigned to a trig-lock slot before the first note'),
 
- 'M-PANIC-011':dict(run=lambda c:panic_hotplug(c,True,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
- 'M-PANIC-012':dict(run=lambda c:panic_hotplug(c,True,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
- 'M-PANIC-013':dict(run=lambda c:panic_hotplug(c,False,False),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
- 'M-PANIC-014':dict(run=lambda c:panic_hotplug(c,False,True),requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-011':dict(run=panic_hotplug_removed_before_reconnect_after,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-012':dict(run=panic_hotplug_removed_before_reconnect_during,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal before panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-013':dict(run=panic_hotplug_removed_during_reconnect_after,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect after sweep; restored keyboard, fresh panic and melody'),
+ 'M-PANIC-014':dict(run=panic_hotplug_removed_during_reconnect_during,requirements=['PANIC-GESTURE','NAV-PAGES'],description='Native MIDI removal during panic; reconnect during sweep; restored keyboard, fresh panic and melody'),
 
  'M-PANIC-007':dict(run=lambda c:panic_pending_chord(c,False,1,'M-PANIC-007'),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),
  'M-PANIC-008':dict(run=lambda c:panic_pending_chord(c,False,2,'M-PANIC-008'),requirements=['PANIC-GESTURE','CHORD-STRUM'],description='Panic sweep during active and pending chord voices; complete MIDI accounting and input-origin musical timing'),

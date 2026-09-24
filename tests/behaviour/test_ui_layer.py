@@ -18,6 +18,29 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_panic_hotplug_cases_have_named_contract_owners(self):
+        from unittest.mock import patch, sentinel
+        from cases import CASES
+        import contract.panic_hotplug as owner
+
+        scenarios = {
+            'M-PANIC-011': ('panic_hotplug_removed_before_reconnect_after', True, False),
+            'M-PANIC-012': ('panic_hotplug_removed_before_reconnect_during', True, True),
+            'M-PANIC-013': ('panic_hotplug_removed_during_reconnect_after', False, False),
+            'M-PANIC-014': ('panic_hotplug_removed_during_reconnect_during', False, True),
+        }
+        for case_id, (name, removed_before, reconnect_during) in scenarios.items():
+            with self.subTest(case_id=case_id):
+                run = CASES[case_id]['run']
+                self.assertIs(run, getattr(owner, name))
+                self.assertEqual(run.__module__, owner.__name__)
+                self.assertIsNone(run.__closure__)
+                with patch.object(owner, 'panic_hotplug',
+                                  return_value=sentinel.result) as helper:
+                    self.assertIs(run(sentinel.driver), sentinel.result)
+                helper.assert_called_once_with(sentinel.driver, removed_before,
+                                               reconnect_during)
+
     def test_foundation_workflow_has_independent_contract_owner(self):
         import ast
         import inspect
