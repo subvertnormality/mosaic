@@ -18,6 +18,14 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_memory_redo_encoder_lock_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.memory_redo_encoder_lock as owner
+
+        run = CASES['M-MEMORY-009']['run']
+        self.assertIs(run, owner.memory_redo_encoder_lock)
+        self.assertEqual(run.__module__, 'contract.memory_redo_encoder_lock')
+
     def test_external_sync_cases_have_exact_contract_owners(self):
         from importlib import import_module
         from cases import CASES

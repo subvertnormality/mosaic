@@ -76,7 +76,7 @@ from swing_reset_mid_step import swing_reset_mid_step
 from slide_reset_mid_step import slide_reset_mid_step
 from memory_truncate_isolation import memory_truncate_isolation
 from memory_held_velocity import memory_held_velocity
-from memory_redo_encoder_lock import memory_redo_encoder_lock
+from contract.memory_redo_encoder_lock import memory_redo_encoder_lock
 from memory_redo_chord_merge import memory_redo_chord_merge
 from memory_step_undo import memory_step_undo
 from memory_lock_slide_undo import memory_lock_slide_undo
