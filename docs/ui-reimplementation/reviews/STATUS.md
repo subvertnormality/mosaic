@@ -47,4 +47,16 @@ debt is 0 open. Convergence is blocked only by:
 
 No patch was proposed.
 
+## Status: converged by owner decision (24 September 2026)
+
+The owner accepted the plan as converged after round 2. The tool gate stays
+open on two items:
+
+- the five unverified external claims, whose quoted sources support them;
+- the cold final regression pass.
+
+Both are recorded here as knowingly waived. Paranoia's own lineage state was
+not edited and still reports BLOCKED. Re-running the review in this lineage
+would start from that state.
+
 `LOCAL-PREFLIGHT.md` is an independent, explicitly non-Fable audit.
