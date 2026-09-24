@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "43ab07b22361abbb0218ce24959729d353c44e81",
+  "after_sha": "9162bd0ca7a3acc0b6cb859e72bd294d6e94e431",
+  "tooling_sha": "66a97db89ccd28bf3f99c6eb8e9214423f80590b",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-REC-PARAM-024",
+    "M-REC-PARAM-031"
+  ],
+  "selected_modules": {
+    "tests/behaviour/recording_lifetimes.py": "M-REC-PARAM-024"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/recording_lifetimes.py",
+      "case": "M-REC-PARAM-024",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-ef89101eb9354f78897ea1f7efb46630/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-ef89101eb9354f78897ea1f7efb46630/manifest.json",
+      "manifest_sha256": "639a71e9024c91962a89b75b48857ff26b65395938bf053526cfe9fa216250af",
+      "passed": true
+    }
+  ],
+  "passed": true
+}
