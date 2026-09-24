@@ -1244,11 +1244,11 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("ui_migration_profile:", workflow)
         self.assertIn("options: [base-midi, midi-modulation]", workflow)
         self.assertEqual(workflow.count(
-            "if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}"), 4)
+            "if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}"), 4)
         self.assertIn(
-            "if: ${{ always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}",
+            "if: ${{ always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}",
             workflow)
-        self.assertIn("name: targeted-ui-migration-${{ github.run_id }}", workflow)
+        self.assertIn("targeted-ui-migration-historical' || 'targeted-ui-migration", workflow)
         self.assertIn("--before-sha \"$BEFORE_SHA\"", workflow)
         self.assertIn("--after-sha \"$AFTER_SHA\"", workflow)
         self.assertIn("--case-ids \"$CASE_IDS\"", workflow)
@@ -1258,6 +1258,42 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("actual.get('profile', 'base-midi') == profile", workflow)
         self.assertIn("gate.get('profile', 'base-midi') == profile", workflow)
         self.assertIn("chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods", workflow)
+
+    def test_historical_dispatch_uses_a_clean_sha_pinned_tooling_checkout(self):
+        workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
+        self.assertIn("ui_migration_historical_source:", workflow)
+        self.assertIn("ui_migration_tooling_sha:", workflow)
+        self.assertIn('[[ "$TOOLING_SHA" =~ ^[0-9a-f]{40}$ ]]', workflow)
+        self.assertIn("path: tooling-source", workflow)
+        self.assertIn("ref: ${{ inputs.ui_migration_tooling_sha }}", workflow)
+        self.assertIn('test "$(git -C tooling-source rev-parse HEAD)" = "$TOOLING_SHA"', workflow)
+        self.assertIn('test -z "$(git -C tooling-source status --porcelain)"', workflow)
+        self.assertIn("--historical-source", workflow)
+        self.assertIn("--tooling-root", workflow)
+        self.assertIn("--tooling-sha", workflow)
+        self.assertIn("--historical-source --tooling-root", workflow)
+        self.assertIn("--tooling-sha \"$TOOLING_SHA\"", workflow)
+        self.assertIn("after-source/tests/behaviour/run.py", workflow)
+        self.assertIn("(inputs.ui_migration_targeted || inputs.ui_migration_historical_source)", workflow)
+        self.assertIn('[[ "$HISTORICAL_SOURCE" != "true" || "$TARGETED" == "true" ]]', workflow)
+        self.assertIn('[[ "$HISTORICAL_SOURCE" != "true" ]]', workflow)
+
+    def test_historical_repeat_uses_source_local_runner_and_binds_source_identity(self):
+        workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
+        self.assertIn("tooling_source / 'tests/behaviour/ci/targeted-ui-migration.py'", workflow)
+        self.assertIn("source / 'tests/behaviour/repeat.py'", workflow)
+        self.assertIn("(source / 'tests/behaviour/run.py').is_file()", workflow)
+        self.assertIn("targeted.manifest_behaviour_source_hashes(after_source)", workflow)
+        self.assertIn("actual.get('behaviour_source_sha256')", workflow)
+        self.assertIn("targeted.source_identity(before_source, before_sha)", workflow)
+        self.assertIn("targeted.source_identity(after_source, after_sha)", workflow)
+        self.assertIn("tooling_sha=tooling_sha", workflow)
+        self.assertIn("after-source/tests/behaviour/repeat.py", workflow)
+        repeat_step = workflow.split("      - name: Repeat one candidate case per migrated module\n", 1)[1]
+        repeat_step = repeat_step.split("      - name: Upload partial run evidence", 1)[0]
+        self.assertNotIn("driver.REPO", repeat_step)
+        self.assertNotIn("runpy", repeat_step)
+        self.assertNotIn("sys.executable, '-c'", repeat_step)
 
     def test_targeted_bash_only_steps_declare_bash(self):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()

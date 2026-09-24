@@ -14,6 +14,13 @@ on:
         description: Run only SHA-bound targeted UI-migration gates (not full coverage)
         type: boolean
         default: false
+      ui_migration_historical_source:
+        description: Use a separately pinned current runner for historical before/after sources
+        type: boolean
+        default: false
+      ui_migration_tooling_sha:
+        description: Full 40-character SHA of the committed current tooling checkout
+        type: string
       ui_migration_before_sha:
         description: Full 40-character baseline commit SHA
         type: string
@@ -40,7 +47,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ inputs.ui_migration_drift && format('ui-drift-{0}', github.run_id) || inputs.ui_migration_targeted && format('targeted-ui-{0}', github.run_id) || format('full-behaviour-{0}', github.event.pull_request.number || github.ref) }}
+  group: ${{ inputs.ui_migration_drift && format('ui-drift-{0}', github.run_id) || (inputs.ui_migration_targeted || inputs.ui_migration_historical_source) && format('targeted-ui-{0}', github.run_id) || format('full-behaviour-{0}', github.event.pull_request.number || github.ref) }}
   cancel-in-progress: true
 
 env:
@@ -52,7 +59,7 @@ env:
 jobs:
   base-midi:
     name: Base MIDI shard ${{ matrix.shard }}
-    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -158,7 +165,7 @@ jobs:
 
   midi-modulation:
     name: MIDI modulation profiles
-    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -202,7 +209,7 @@ jobs:
 
   audio-crow:
     name: Audio and Crow/JF profiles
-    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -259,7 +266,7 @@ jobs:
 
   rhythm-doctor:
     name: Rhythm Doctor surface
-    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -303,7 +310,7 @@ jobs:
 
   complete:
     name: Complete behaviour coverage
-    if: ${{ always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
+    if: ${{ always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}
     needs: [base-midi, midi-modulation, audio-crow]
     runs-on: ubuntu-latest
     steps:
@@ -336,7 +343,7 @@ jobs:
 
   targeted-ui-migration:
     name: Targeted UI migration (partial, both lanes)
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.ui_migration_targeted || inputs.ui_migration_historical_source) && !inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -346,14 +353,24 @@ jobs:
       - name: Validate immutable source selections
         shell: bash
         env:
+          TARGETED: ${{ inputs.ui_migration_targeted }}
           BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
           AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
+          HISTORICAL_SOURCE: ${{ inputs.ui_migration_historical_source }}
+          TOOLING_SHA: ${{ inputs.ui_migration_tooling_sha }}
           CASE_IDS: ${{ inputs.ui_migration_case_ids }}
           PROFILE: ${{ inputs.ui_migration_profile }}
         run: |
           [[ "$BEFORE_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$AFTER_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$BEFORE_SHA" != "$AFTER_SHA" ]]
+          if [[ "$HISTORICAL_SOURCE" == "true" ]]; then
+            [[ "$TOOLING_SHA" =~ ^[0-9a-f]{40}$ ]]
+            [[ "$TOOLING_SHA" != "$BEFORE_SHA" && "$TOOLING_SHA" != "$AFTER_SHA" ]]
+          else
+            [[ -z "$TOOLING_SHA" ]]
+          fi
+          [[ "$HISTORICAL_SOURCE" != "true" || "$TARGETED" == "true" ]]
           [[ -n "$CASE_IDS" ]]
           [[ "$PROFILE" == "base-midi" || "$PROFILE" == "midi-modulation" ]]
       - name: Install Git before SHA checkouts
@@ -372,7 +389,30 @@ jobs:
           ref: ${{ inputs.ui_migration_after_sha }}
           path: after-source
           submodules: recursive
+      - name: Check out pinned current tooling
+        if: ${{ inputs.ui_migration_historical_source }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ui_migration_tooling_sha }}
+          path: tooling-source
+          fetch-depth: 1
+          clean: true
+      - name: Verify pinned tooling identity and clean checkout
+        if: ${{ inputs.ui_migration_historical_source }}
+        shell: bash
+        env:
+          TOOLING_SHA: ${{ inputs.ui_migration_tooling_sha }}
+        run: |
+          test "$(git -C tooling-source rev-parse HEAD)" = "$TOOLING_SHA"
+          test -z "$(git -C tooling-source status --porcelain)"
+          test -f tooling-source/tests/behaviour/ci/targeted-ui-migration.py
+          test -f tooling-source/tests/behaviour/ci/prepare-emulator.sh
+          test -f tooling-source/tests/behaviour/repeat.py
+          test -f before-source/tests/behaviour/run.py
+          test -f after-source/tests/behaviour/run.py
+          test -f after-source/tests/behaviour/repeat.py
       - name: Verify candidate has targeted gate runner
+        if: ${{ !inputs.ui_migration_historical_source }}
         run: test -f after-source/tests/behaviour/ci/targeted-ui-migration.py
       - name: Install native runtime dependencies
         run: |
@@ -389,7 +429,13 @@ jobs:
           path: /tmp/monome-emulator/.runtime
           key: monome-emulator-ubuntu20-68ab709-qualified-v9
       - name: Build native runtimes
-        run: after-source/tests/behaviour/ci/prepare-emulator.sh
+        shell: bash
+        env:
+          HISTORICAL_SOURCE: ${{ inputs.ui_migration_historical_source }}
+        run: |
+          runner_root=after-source
+          if [[ "$HISTORICAL_SOURCE" == "true" ]]; then runner_root=tooling-source; fi
+          "$runner_root/tests/behaviour/ci/prepare-emulator.sh"
       - name: Fetch pinned modulation fixtures
         if: ${{ inputs.ui_migration_profile == 'midi-modulation' }}
         run: |
@@ -403,6 +449,9 @@ jobs:
         run: |
           useradd --create-home --shell /bin/bash mosaic-ci
           chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE/before-source" "$GITHUB_WORKSPACE/after-source" "$EMULATOR_ROOT"
+          if [[ -d "$GITHUB_WORKSPACE/tooling-source" ]]; then
+            chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE/tooling-source"
+          fi
           if [[ -d /tmp/mosaic-output-mods ]]; then
             chown -R mosaic-ci:mosaic-ci /tmp/mosaic-output-mods
           fi
@@ -411,6 +460,8 @@ jobs:
         env:
           BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
           AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
+          HISTORICAL_SOURCE: ${{ inputs.ui_migration_historical_source }}
+          TOOLING_SHA: ${{ inputs.ui_migration_tooling_sha }}
           CASE_IDS: ${{ inputs.ui_migration_case_ids }}
           PROFILE: ${{ inputs.ui_migration_profile }}
         run: |
@@ -418,14 +469,22 @@ jobs:
           if [[ "$PROFILE" == "midi-modulation" ]]; then
             profile_args+=(--profile "$PROFILE" --mod-code-root /tmp/mosaic-output-mods --mod-patches)
           fi
+          runner_root=after-source
+          output_root=/tmp/mosaic-ui-targeted
+          historical_args=()
+          if [[ "$HISTORICAL_SOURCE" == "true" ]]; then
+            runner_root=tooling-source
+            output_root=/tmp/mosaic-ui-targeted-historical
+            historical_args+=(--historical-source --tooling-root "$GITHUB_WORKSPACE/tooling-source" --tooling-sha "$TOOLING_SHA")
+          fi
           runuser -u mosaic-ci --preserve-environment -- python3 \
-            "$GITHUB_WORKSPACE/after-source/tests/behaviour/ci/targeted-ui-migration.py" \
+            "$GITHUB_WORKSPACE/$runner_root/tests/behaviour/ci/targeted-ui-migration.py" \
             --before "$GITHUB_WORKSPACE/before-source" --before-sha "$BEFORE_SHA" \
             --after "$GITHUB_WORKSPACE/after-source" --after-sha "$AFTER_SHA" \
-            --case-ids "$CASE_IDS" "${profile_args[@]}" \
+            --case-ids "$CASE_IDS" "${profile_args[@]}" "${historical_args[@]}" \
             --emulator "$EMULATOR_ROOT" \
             --install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
-            --output /tmp/mosaic-ui-targeted
+            --output "$output_root"
       - name: Prepare independent repeat output
         run: |
           mkdir -p "$GITHUB_WORKSPACE/mosaic-behaviour-runs"
@@ -433,6 +492,9 @@ jobs:
       - name: Repeat one candidate case per migrated module
         env:
           AFTER_SHA: ${{ inputs.ui_migration_after_sha }}
+          BEFORE_SHA: ${{ inputs.ui_migration_before_sha }}
+          HISTORICAL_SOURCE: ${{ inputs.ui_migration_historical_source }}
+          TOOLING_SHA: ${{ inputs.ui_migration_tooling_sha }}
           CASE_IDS: ${{ inputs.ui_migration_case_ids }}
           PROFILE: ${{ inputs.ui_migration_profile }}
         run: |
@@ -446,20 +508,33 @@ jobs:
 
           workspace = Path(os.environ['GITHUB_WORKSPACE'])
           source = workspace / 'after-source'
+          after_source = source
+          before_source = workspace / 'before-source'
+          historical = os.environ['HISTORICAL_SOURCE'] == 'true'
+          tooling_source = workspace / ('tooling-source' if historical else 'after-source')
           root = workspace / 'mosaic-behaviour-runs'
-          output = Path('/tmp/mosaic-ui-targeted')
+          output = Path('/tmp/mosaic-ui-targeted-historical' if historical
+                         else '/tmp/mosaic-ui-targeted')
+          before_sha = os.environ['BEFORE_SHA']
           after_sha = os.environ['AFTER_SHA']
+          tooling_sha = os.environ['TOOLING_SHA'] if historical else None
           profile = os.environ['PROFILE']
+          runner_path = tooling_source / 'tests/behaviour/ci/targeted-ui-migration.py'
           spec = importlib.util.spec_from_file_location(
-              'targeted_ui_migration', source / 'tests/behaviour/ci/targeted-ui-migration.py')
+              'targeted_ui_migration', runner_path)
           targeted = importlib.util.module_from_spec(spec)
           spec.loader.exec_module(targeted)
+          source_hashes, source_hash_schema = targeted.manifest_behaviour_source_hashes(after_source)
+          tooling_identity = (targeted.historical_tooling_identity(tooling_source, tooling_sha)
+                              if historical else None)
           cases = targeted.cases_from_input(os.environ['CASE_IDS'])
           gate = json.loads((output / 'targeted-ui-migration.json').read_text())
           targeted.require(gate['passed'] is True and gate['complete_regression_run'] is False
                            and gate['after_sha'] == after_sha and gate['selected_cases'] == cases
                            and gate.get('profile', 'base-midi') == profile,
                            'repeat requires a passing, partial gate for the selected candidate')
+          targeted.require((source / 'tests/behaviour/run.py').is_file(),
+                           'candidate source-local run.py is missing')
           selection = {}
           for case in cases:
               owners = targeted.selected_case_modules(source, [case])
@@ -478,21 +553,24 @@ jobs:
               owner = next(iter(contracts or shims)) if owners else 'tests/behaviour/cases.py'
               selection.setdefault(owner, case)
           report = dict(schema_version=1, complete_regression_run=False, profile=profile,
-                        after_sha=after_sha, selected_cases=cases,
+                        before_sha=before_sha, after_sha=after_sha,
+                        tooling_sha=tooling_sha, source_hash_schema=source_hash_schema,
+                        selected_cases=cases,
                         selected_modules=selection, repeats=[], passed=False)
           try:
               for owner, case in selection.items():
                   row = dict(module=owner, case=case)
                   report['repeats'].append(row)
                   previous = set(root.glob('repeat-*'))
-                  command = [sys.executable, str(source / 'tests/behaviour/repeat.py'),
-                             '--case', case, '--experimental-install',
-                             os.environ['EMULATOR_ROOT'] +
-                             '/.runtime/ci-qualified/runtime/installation.json']
+                  repeat_args = ['--case', case, '--experimental-install',
+                                 os.environ['EMULATOR_ROOT'] +
+                                 '/.runtime/ci-qualified/runtime/installation.json']
                   if profile == 'midi-modulation':
-                      command.extend(['--profile', profile, '--mod-code-root',
-                                      '/tmp/mosaic-output-mods', '--mod-patches'])
-                  completed = subprocess.run(command, cwd=source, text=True,
+                      repeat_args.extend(['--profile', profile, '--mod-code-root',
+                                          '/tmp/mosaic-output-mods', '--mod-patches'])
+                  command = [sys.executable, str(source / 'tests/behaviour/repeat.py'),
+                             *repeat_args]
+                  completed = subprocess.run(command, cwd=after_source, text=True,
                                              capture_output=True)
                   row.update(returncode=completed.returncode, stdout=completed.stdout,
                              stderr=completed.stderr)
@@ -505,6 +583,10 @@ jobs:
                       row['manifest_sha256'] = targeted.sha256(manifest)
                       targeted.require(completed.returncode == 0 and item['passed'] is True,
                                        'three-process repeat failed')
+                      if historical:
+                          targeted.require(tooling_identity == targeted.historical_tooling_identity(
+                              tooling_source, tooling_sha),
+                              'pinned tooling identity changed during repeat')
                       targeted.require(item['case'] == case
                                        and item.get('profile', 'base-midi') == profile
                                        and item.get('mod_patches', False)
@@ -523,18 +605,37 @@ jobs:
                           actual = json.loads(path.read_text())
                           targeted.require(targeted.sha256(path) == run['sha256']
                                            and actual['mosaic_revision'] == after_sha
+                                           and actual.get('behaviour_source_sha256') == source_hashes
                                            and actual['case'] == case
                                                and actual.get('profile', 'base-midi') == profile
                                            and actual['clock_mode'] == 'controlled-experimental'
                                            and actual['passed'] is True
                                            and actual['diagnostic_only'] is True,
                                            'repeat run source, lane or digest mismatch')
+                      targeted.require(targeted.source_identity(before_source, before_sha)
+                                       == before_sha
+                                       and targeted.source_identity(after_source, after_sha)
+                                       == after_sha,
+                                       'source identity changed during repeat')
                       row['passed'] = True
                   except (ValueError, OSError, KeyError, AssertionError) as error:
                       row.update(passed=False, error=str(error))
           finally:
               report['passed'] = len(report['repeats']) == len(selection) and all(
                   row.get('passed') is True for row in report['repeats'])
+              try:
+                  targeted.require(targeted.source_identity(before_source, before_sha)
+                                   == before_sha
+                                   and targeted.source_identity(after_source, after_sha)
+                                   == after_sha,
+                                   'source identity changed after repeats')
+                  if historical:
+                      targeted.require(tooling_identity == targeted.historical_tooling_identity(
+                          tooling_source, tooling_sha),
+                          'pinned tooling identity changed after repeats')
+              except (ValueError, OSError, subprocess.SubprocessError) as error:
+                  report['passed'] = False
+                  report['source_identity_error'] = str(error)
               (output / 'targeted-ui-repeatability.json').write_text(
                   json.dumps(report, indent=2) + '\n')
           raise SystemExit(0 if report['passed'] else 1)
@@ -543,28 +644,28 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: targeted-ui-migration-${{ github.run_id }}
+          name: ${{ inputs.ui_migration_historical_source && 'targeted-ui-migration-historical' || 'targeted-ui-migration' }}-${{ github.run_id }}
           path: |
-            /tmp/mosaic-ui-targeted/targeted-ui-migration.json
-            /tmp/mosaic-ui-targeted/targeted-ui-repeatability.json
-            /tmp/mosaic-ui-targeted/**/process.log
-            /tmp/mosaic-ui-targeted/**/manifest.json
-            /tmp/mosaic-ui-targeted/**/recipe.json
-            /tmp/mosaic-ui-targeted/**/results.json
-            /tmp/mosaic-ui-targeted/**/fractional-clock-input-evidence.json
-            /tmp/mosaic-ui-targeted/**/native/*.log
-            /tmp/mosaic-ui-targeted/**/native/cleanup.json
-            /tmp/mosaic-ui-targeted/**/native/native-events.jsonl
-            /tmp/mosaic-ui-targeted/**/generated-project/autosave.ptn
-            /tmp/mosaic-ui-targeted/**/pre-policy-seed/autosave.ptn
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/targeted-ui-migration.json' || '/tmp/mosaic-ui-targeted/targeted-ui-migration.json' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/targeted-ui-repeatability.json' || '/tmp/mosaic-ui-targeted/targeted-ui-repeatability.json' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/process.log' || '/tmp/mosaic-ui-targeted/**/process.log' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/manifest.json' || '/tmp/mosaic-ui-targeted/**/manifest.json' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/recipe.json' || '/tmp/mosaic-ui-targeted/**/recipe.json' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/results.json' || '/tmp/mosaic-ui-targeted/**/results.json' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/fractional-clock-input-evidence.json' || '/tmp/mosaic-ui-targeted/**/fractional-clock-input-evidence.json' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/native/*.log' || '/tmp/mosaic-ui-targeted/**/native/*.log' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/native/cleanup.json' || '/tmp/mosaic-ui-targeted/**/native/cleanup.json' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/native/native-events.jsonl' || '/tmp/mosaic-ui-targeted/**/native/native-events.jsonl' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/generated-project/autosave.ptn' || '/tmp/mosaic-ui-targeted/**/generated-project/autosave.ptn' }}
+            ${{ inputs.ui_migration_historical_source && '/tmp/mosaic-ui-targeted-historical/**/pre-policy-seed/autosave.ptn' || '/tmp/mosaic-ui-targeted/**/pre-policy-seed/autosave.ptn' }}
             ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/manifest.json
             ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/normalized.json
             ${{ github.workspace }}/mosaic-behaviour-runs/repeat-*/process-*.json
             ${{ github.workspace }}/mosaic-behaviour-runs/*/manifest.json
             ${{ github.workspace }}/mosaic-behaviour-runs/*/**/recipe.json
             ${{ github.workspace }}/mosaic-behaviour-runs/*/**/results.json
-            !/tmp/mosaic-ui-targeted/**/code/**
-            !/tmp/mosaic-ui-targeted/**/data/**
+            ${{ inputs.ui_migration_historical_source && '!/tmp/mosaic-ui-targeted-historical/**/code/**' || '!/tmp/mosaic-ui-targeted/**/code/**' }}
+            ${{ inputs.ui_migration_historical_source && '!/tmp/mosaic-ui-targeted-historical/**/data/**' || '!/tmp/mosaic-ui-targeted/**/data/**' }}
           retention-days: 14
           compression-level: 9
 
@@ -588,10 +689,12 @@ jobs:
         env:
           BASELINE_SHA: ${{ inputs.ui_migration_drift_sha }}
           TARGETED: ${{ inputs.ui_migration_targeted }}
+          HISTORICAL_SOURCE: ${{ inputs.ui_migration_historical_source }}
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           [[ "$BASELINE_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$TARGETED" != "true" ]]
+          [[ "$HISTORICAL_SOURCE" != "true" ]]
           test "$(git rev-parse HEAD)" = "$BASELINE_SHA"
           test -f tests/behaviour/ui_migration_drill.py
           test -f tests/behaviour/ci/run-ui-migration-drift.py

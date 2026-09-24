@@ -19,19 +19,21 @@ class DriftRunnerTests(unittest.TestCase):
             encoding="utf-8")
         self.assertIn("ui_migration_drift:", workflow)
         self.assertIn("ui_migration_drift_sha:", workflow)
+        self.assertIn("ui_migration_historical_source:", workflow)
         self.assertIn(
-            "if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}",
+            "if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}",
             workflow)
         self.assertEqual(workflow.count(
-            "if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}"), 4)
-        self.assertIn("always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift",
+            "if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source }}"), 4)
+        self.assertIn("always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift && !inputs.ui_migration_historical_source",
                       workflow)
         self.assertIn(
-            "if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_targeted && !inputs.ui_migration_drift }}",
+            "if: ${{ github.event_name == 'workflow_dispatch' && (inputs.ui_migration_targeted || inputs.ui_migration_historical_source) && !inputs.ui_migration_drift }}",
             workflow)
         self.assertIn(
             "if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_drift }}",
             workflow)
+        self.assertIn('[[ "$HISTORICAL_SOURCE" != "true" ]]', workflow)
         self.assertIn("name: ui-migration-drift-${{ github.run_id }}", workflow)
         self.assertIn("/tmp/mosaic-ui-drift/standalone/**", workflow)
         self.assertIn("/tmp/mosaic-ui-drift/control/**", workflow)
