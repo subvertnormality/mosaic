@@ -134,7 +134,7 @@ from numeric_merging import merge_transpose_scale_lock
 from numeric_merging import transpose_midi_boundaries
 from recording_lifetimes import recording_ten_slots,recording_ten_slots_trigless
 from contract.recording_stop_safety import recording_stop_safety
-from contract.trig_parameter_interactions import live_parameter_recording as contract_live_parameter_recording
+from contract.trig_parameter_interactions import live_parameter_recording_scale_page
 from trig_parameter_interactions import sparse_editor_domain
 from trig_parameter_interactions import cc_encoder_domain
 from recording_lifetimes import recording_lifetime,recording_nrpn
@@ -3143,7 +3143,7 @@ CASES={
  'M-REC-PARAM-007':dict(run=lambda c:recording_lifetime(c,'selected-wrap'),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS', 'REC-ARM'],description='Selected channel wrap clears retained automation before its start lock sounds'),
  'M-REC-PARAM-006':dict(run=lambda c:live_parameter_recording(c,edit_value=-1),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded Off suppresses conflicting locks through the cycle and remains silent during distinct-default disarmed replay'),
  'M-REC-PARAM-005':dict(run=lambda c:live_parameter_recording(c,edit_value=0),requirements=['REC-PARAM-AUTOMATION', 'PARAM-SLOTS'],description='Recorded zero is active MIDI, replacing a conflicting lock and surviving distinct-default disarmed replay'),
- 'M-REC-PARAM-004':dict(run=lambda c:contract_live_parameter_recording(c,switch_return=True,scale_page=True),requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
+ 'M-REC-PARAM-004':dict(run=live_parameter_recording_scale_page,requirements=['REC-PARAM-AUTOMATION', 'CH-SELECT', 'NAV-PAGES'],description='Scale-page selection pauses channel recording; returning restores retained MIDI before note with unchanged paused locks'),
  'M-REC-PARAM-031':dict(run=recording_ten_slots_trigless,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='All ten CC slots record zero on one trigless rest; Stop before step3 and exact fast replay prove step1/3/4 locks unchanged'),
  'M-REC-PARAM-030':dict(run=recording_trigless_toggle,requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-SLOTS'],description='Toggle trigless Off/On/Off during recording across rest/rest/active steps, then enable for exact24/48/65/65 stored replay and timing'),
  'M-REC-PARAM-029':dict(run=lambda c:live_parameter_recording(c,probability_zero=True,trigless=False),requirements=['REC-PARAM-AUTOMATION','OPT-TRIGLESS','REC-TRIGLESS','PARAM-PROBABILITY','PARAM-SLOTS'],description='Trigless-off recording treats authored probability-zero step3 as eligible despite note silence; exact CC replay distinguishes trigger state from audible outcome'),

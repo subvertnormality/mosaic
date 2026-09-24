@@ -166,3 +166,7 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     if switch_return:
         c.results.append(dict(kind='recording-switch-return-live-replay',live_step4_value=live_value,recorded_step4_value=expected[3],passed=live_value==expected[3]))
         assert live_value==expected[3],dict(live_step4=live_value,recorded_step4=expected[3],meaning='Resumed recorded value must match the value heard at that step')
+
+
+def live_parameter_recording_scale_page(c):
+    return live_parameter_recording(c, switch_return=True, scale_page=True)

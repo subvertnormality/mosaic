@@ -103,10 +103,18 @@ class TrigParameterUiMigrationTests(unittest.TestCase):
 
     def test_page_selection_contract_retains_its_registered_owner(self):
         from cases import CASES
-        from contract.trig_parameter_interactions import live_parameter_recording
+        from unittest.mock import sentinel
+        import contract.trig_parameter_interactions as owner
         from trig_parameter_interactions import live_parameter_recording as ordinary
-        self.assertIs(CASES["M-REC-PARAM-004"]["run"].__globals__[
-            "contract_live_parameter_recording"], live_parameter_recording)
+        run = CASES["M-REC-PARAM-004"]["run"]
+        self.assertIs(run, owner.live_parameter_recording_scale_page)
+        self.assertEqual(run.__module__, 'contract.trig_parameter_interactions')
+        self.assertIsNone(run.__closure__)
+        with patch.object(owner, 'live_parameter_recording',
+                          return_value=sentinel.result) as helper:
+            self.assertIs(run(sentinel.driver), sentinel.result)
+        helper.assert_called_once_with(sentinel.driver,
+                                       switch_return=True, scale_page=True)
         self.assertIs(CASES["M-REC-PARAM-001"]["run"], ordinary)
 
     def test_recording_option_oracle_retains_label_value_and_row(self):
