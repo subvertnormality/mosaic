@@ -18,6 +18,28 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_clock_division_cases_have_exact_contract_owners(self):
+        from unittest.mock import patch, sentinel
+        from cases import CASES
+        import contract.clock_divisions as owner
+
+        self.assertIs(CASES['M-TIME-001']['run'], owner.integral_clock_divisions)
+        slow = CASES['M-TIME-002']['run']
+        self.assertIs(slow, owner.integral_clock_divisions_slow)
+        self.assertIsNone(slow.__closure__)
+        with patch.object(owner, 'integral_clock_divisions',
+                          return_value=sentinel.result) as helper:
+            self.assertIs(slow(sentinel.driver), sentinel.result)
+        helper.assert_called_once_with(sentinel.driver, slow=True)
+
+    def test_strum_reset_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.strum_reset_continuity as owner
+
+        run = CASES['M-TIME-012']['run']
+        self.assertIs(run, owner.strum_reset_continuity)
+        self.assertEqual(run.__module__, 'contract.strum_reset_continuity')
+
     def test_global_transpose_live_edit_has_exact_contract_owner(self):
         from cases import CASES
         import contract.transpose_global_live_edit as owner

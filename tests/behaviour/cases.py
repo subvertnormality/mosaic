@@ -28,6 +28,8 @@ from contract.device_configs import malformed_device_configs, missing_id_device_
 from contract.grid_viewer import pattern_grid_viewer
 from contract.inactive_note_positions import inactive_note_positions
 from contract.transpose_global_live_edit import transpose_global_live_edit
+from contract.clock_divisions import integral_clock_divisions, integral_clock_divisions_slow
+from contract.strum_reset_continuity import strum_reset_continuity
 from contract.navigation_matrix import navigation_matrix
 from contract.parameter_divisions import (
     chord_note_strum_divisions, chord_note_arpeggio_divisions,
@@ -1084,40 +1086,6 @@ def octave_all_positions(c):
     play([2]*64,'all64-cleared-to-global')
 
 
-def integral_clock_divisions(c,slow=False):
-    from fractions import Fraction
-    from midi_window import MidiWindow
-    # Fixed public selector labels; expected seconds follow the musical ratio,
-    # never Mosaic's clock or lattice implementation.
-    labels=['x16','x12','x8','x6','x5.3','x5','x4','x3','x2.6','x2','x1.5','x1.3',
-      '/1','/1.5','/2','/2.6','/3','/4','/5','/5.3','/6','/7','/8','/9','/10','/11','/12','/13','/14','/15','/16',
-      '/17','/19','/21','/23','/24','/25','/27','/29','/32','/40','/48','/56','/64','/96','/101','/128']
-    c.ui.configure();c.ui.channel_page('clock_mods','midi_config')
-    selected=13;tested=[]
-    for index,label in enumerate(labels,1):
-        number=Fraction(label[1:]);factor=1/number if label[0]=='x' else number
-        pulses=24*factor
-        if pulses.denominator!=1 or (factor>16)!=slow:continue
-        c.ui.turn(3,selected-index);c.ui.press_key(3);selected=index
-        expected=[(1,[144,n,v]) for n,v in zip([60,62,64,65],[127,117,107,97])]
-        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();capture.extend(c.snapshot())
-        remaining=float(8*factor/6)
-        # Public controlled advances are bounded to60s. Small chunks retain
-        # responsive clients and preserve that runtime limit in both lanes.
-        while remaining>0:
-            chunk=min(30,remaining);c.elapse(chunk);remaining-=chunk;capture.extend(c.snapshot())
-        c.wait(lambda state:len(capture.extend(state).note_ons())>=9,timeout=3)
-        notes=capture.note_ons()
-        assert [(m['port'],m['bytes']) for m in notes]==[expected[i%4] for i in range(len(notes))],label
-        c.ui.stop();c.wait(lambda state:capture.extend(state) and not state['midi_capture']['outstanding'])
-        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
-        errors=[(m[field]-notes[0][field])/1e9-float(i*factor/6) for i,m in enumerate(notes)]
-        assert all(abs(x)<=(2e-9 if c.clock_mode=='controlled-experimental' else .01) for x in errors),(label,errors)
-        assert_durations(c,notes,[float(factor)]*8,events=capture.events)
-        c.results.append(dict(kind='clock-division-phrase',label=label,pulses=int(pulses),period_seconds=float(factor/6),complete_cycles=2,onsets=len(notes),max_phase_error_seconds=max(abs(x) for x in errors),passed=True));tested.append(label)
-    assert len(tested)==(16 if slow else 24),tested
-
-
 def menu_option_row(c,label,value,top=22):
     # Native params draws the full name then the right-aligned value, without
     # clearing their overlap. The UI layer retains that composite row oracle.
@@ -1381,44 +1349,6 @@ def parameter_list_label(c,label,wait=True):
 def assign_trig_parameter(c,label,offset=None):
     """Select a displayed trig parameter through the UI layer."""
     return c.ui.assign_trig_parameter(label, offset=offset)
-
-def strum_reset_continuity(c):
-    import time
-    from midi_window import MidiWindow
-    from note_schedule import assert_schedule
-    c.configure();c.ui.hold_control_tap('step','step',1,3);c.ui.turn(1,-4);c.ui.turn(2,3);c.ui.set_value(2)  # unset chord masks start from X
-    import base64
-    from frame_oracle import render
-    expected_chord=render([(0,40,15,'Chd1'),(0,48,15,'3rd')])
-    indices=[(y*128+x)*4+k for y in range(33,50) for x in range(25) for k in range(3)]
-    def third_selected(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[i]==expected_chord[i] for i in indices)
-    c.wait(third_selected);c.results.append(dict(kind='chord-mask-screen',label='3rd',passed=True))
-    c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
-    c.ui.assign_trig_parameter_key('chord_note_strum');c.ui.set_value(8)
-    for reset in (False,True):
-        c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',reset)])
-        capture=MidiWindow(c.snapshot()['midi_count']);c.ui.play();c.elapse(24);capture.extend(c.snapshot())
-        controlled=c.clock_mode=='controlled-experimental'
-        lower=c.logical_ns if controlled else time.monotonic_ns()
-        c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
-        upper=c.logical_ns if controlled else time.monotonic_ns()
-        # A deferred strum beyond Stop must never sound.
-        c.elapse(2);capture.extend(c.snapshot());c.wait(lambda state:not state['midi_capture']['outstanding'])
-        expected=[]
-        for tick in range(3457):
-            origin=(tick//1536)*1536 if reset else 0
-            if (tick-origin)%216==0:
-                step=((tick-origin)//216)%3;velocity=[127,117,107][step]
-                expected.append((tick,[60,62,64][step],velocity,216))
-                if tick+108<=3456:expected.append((tick+108,[64,65,67][step],velocity,108))
-        # Sort only the independently constructed musical table, never emissions.
-        expected.sort(key=lambda row:row[0])
-        field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes
-        rows=assert_schedule(capture.events,[row[:3] for row in expected],[row[3] for row in expected],field=field,origin=notes[0][field],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
-        c.results.append(dict(kind='native-strum-reset',reset=reset,onsets=len(expected),release_checks=len(rows),scope='Half-step third-degree strum retains the established one-step root gate through resets; no deferred onset after Stop',passed=True))
-
 
 def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=False):
     import time
@@ -3453,7 +3383,7 @@ CASES={
  'M-TIME-004':dict(run=fractional_clock_continuity,requirements=['CH-TEMPO','OPT-REPEAT-RESET'],description='Every fractional pulse ratio across four global boundaries: rational-window timing, bounded phase and same-pitch release ordering'),
  'M-TIME-003':dict(run=repeated_pattern_reset_policy,requirements=['CH-TEMPO','OPT-REPEAT-RESET','OPT-SEQUENCE-RESET','OPT-SONG-MODE'],description='Real menu reset-option combinations and song mode off at two repeat boundaries, /9 clock and three-note phase witness'),
  'M-TIME-001':dict(run=integral_clock_divisions,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All integral-pulse clock ratios through /16 with exact full-phrase phase and duration checks'),
- 'M-TIME-002':dict(run=lambda c:integral_clock_divisions(c,True),requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
+ 'M-TIME-002':dict(run=integral_clock_divisions_slow,requirements=['CH-TEMPO','NAV-CONFIRM'],description='All slow clock ratios /17 through /128 with exact full-phrase phase and duration checks'),
  'M-OCT-003':dict(run=octave_all_positions,requirements=['CH-GLOBAL-OCTAVE','LOCK-OCTAVE','LOCK-CLEAR-PAGE'],description='All64 octave locks override both global extremes, held-grid feedback and channel-wide clear with full MIDI loops'),
  'M-TRANS-009':dict(run=transpose_global_live_edit,requirements=['TRANSPOSE-GLOBAL','NAV-TRANSPORT'],description='Two global transpose edits during sounding notes preserve current pitch/gate and change the next onset, exact harmonic-sync programs, releases and phase'),
  'M-TRANS-008':dict(run=transpose_song_persistence,requirements=['TRANSPOSE-GLOBAL','SONG-SLOTS','SAVE-AUTO','PERSIST-AUTO-001'],description='Independent +5/-7 copied song transposes survive the real autosave deadline and a fresh native process with exact restored MIDI and slot LEDs'),
