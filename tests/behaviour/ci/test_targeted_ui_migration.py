@@ -1067,8 +1067,11 @@ class TargetedMigrationTests(unittest.TestCase):
         self.assertIn("ui_migration_targeted:", workflow)
         self.assertIn("ui_migration_profile:", workflow)
         self.assertIn("options: [base-midi, midi-modulation]", workflow)
-        self.assertIn("if: ${{ !inputs.ui_migration_targeted }}", workflow)
-        self.assertIn("if: ${{ always() && !inputs.ui_migration_targeted }}", workflow)
+        self.assertEqual(workflow.count(
+            "if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}"), 4)
+        self.assertIn(
+            "if: ${{ always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}",
+            workflow)
         self.assertIn("name: targeted-ui-migration-${{ github.run_id }}", workflow)
         self.assertIn("--before-sha \"$BEFORE_SHA\"", workflow)
         self.assertIn("--after-sha \"$AFTER_SHA\"", workflow)

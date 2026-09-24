@@ -611,6 +611,7 @@ jobs:
           git clone https://github.com/sixolet/toolkit.git /tmp/mosaic-output-mods/toolkit
           git -C /tmp/mosaic-output-mods/toolkit checkout --detach 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
       - name: Prepare unprivileged behaviour user
+        shell: bash
         run: |
           useradd --create-home --shell /bin/bash mosaic-ci
           chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE" "$EMULATOR_ROOT" /tmp/mosaic-output-mods
