@@ -22,6 +22,7 @@ class DriftDrillTests(unittest.TestCase):
         }
         self.registry = {"A", "B", "C"}
         self.pages = ("masks", "memory")
+        self.confirmations = [dict(page="masks", channel=1, expected_header="Ch. 1 Masks")]
 
     def derive(self):
         return derive_cases(self.files, self.registry, self.pages, {"masks", "memory", "clock_mods"})
@@ -80,24 +81,64 @@ class DriftDrillTests(unittest.TestCase):
                 select_repeat(selected, profiles, requested)
 
     def run_manifest(self, case="A"):
-        return dict(case=case, passed=False, failure=dict(type="UiMapError", message="expected masks, observed memory"),
+        return dict(case=case, passed=False, failure=dict(
+                        type="UiMapError", message="expected 'Ch. 1 Masks', observed '<unmatched framebuffer>'",
+                        traceback='Traceback (most recent call last):\n  File "/repo/tests/behaviour/ui.py", line 1101, in confirm_header\n    raise UiMapError(...)\nui.UiMapError: expected \'Ch. 1 Masks\', observed \'<unmatched framebuffer>\'\n'),
                     clock_mode="controlled-experimental", profile="base-midi", diagnostic_only=True,
                     mosaic_revision="scratch", behaviour_source_sha256={"tests/behaviour/ui_map.py": "map-hash"})
 
     def test_run_requires_exact_failure_lane_profile_and_source(self):
         good = self.run_manifest()
-        self.assertEqual(validate_run(good, "A", "base-midi", "scratch", {"tests/behaviour/ui_map.py": "map-hash"})["type"], "UiMapError")
+        self.assertEqual(validate_run(good, "A", "base-midi", "scratch",
+                                      {"tests/behaviour/ui_map.py": "map-hash"},
+                                      self.confirmations)["type"], "UiMapError")
         for change in (dict(passed=True), dict(failure=None), dict(failure=dict(type="AssertionError", message="UiMapError")),
                        dict(clock_mode="real-time"), dict(profile="midi-modulation"), dict(case="B"),
                        dict(mosaic_revision="before"), dict(behaviour_source_sha256={}), dict(diagnostic_only=False)):
             with self.subTest(change=change), self.assertRaises(ValueError):
-                validate_run(dict(good, **change), "A", "base-midi", "scratch", {"tests/behaviour/ui_map.py": "map-hash"})
+                validate_run(dict(good, **change), "A", "base-midi", "scratch",
+                             {"tests/behaviour/ui_map.py": "map-hash"}, self.confirmations)
+
+    def test_run_rejects_unrelated_ui_map_error(self):
+        item = self.run_manifest()
+        item["failure"]["message"] = "unknown channel page: bogus"
+        with self.assertRaises(ValueError):
+            validate_run(item, "A", "base-midi", "scratch",
+                         {"tests/behaviour/ui_map.py": "map-hash"}, self.confirmations)
+
+    def test_run_accepts_module_qualified_exception_traceback(self):
+        item = self.run_manifest()
+        self.assertEqual(validate_run(item, "A", "base-midi", "scratch",
+                                      {"tests/behaviour/ui_map.py": "map-hash"},
+                                      self.confirmations)["type"], "UiMapError")
+
+    def test_run_requires_selected_page_channel_and_innermost_confirmation_frame(self):
+        good = self.run_manifest()
+        variants = (
+            dict(failure=dict(good["failure"], message="expected 'Ch. 2 Masks', observed 'Ch. 2 Memory'")),
+            dict(failure=dict(good["failure"], message="expected 'Ch. 1 Memory', observed 'Ch. 1 Masks'")),
+            dict(failure=dict(good["failure"], message="expected 'Ch. 1 Masks', observed 'Ch. 1 Trig Locks'")),
+            dict(failure=dict(good["failure"], traceback='Traceback (most recent call last):\n  File "tests/behaviour/ui.py", line 1114, in seek_native_parameter_root\n    raise UiMapError(...)\n')),
+            dict(failure=dict(good["failure"], traceback='Traceback (most recent call last):\n  File "/repo/other/ui.py", line 1101, in confirm_header\n    raise UiMapError(...)\nUiMapError: expected \'Ch. 1 Masks\', observed \'<unmatched framebuffer>\'\n')),
+            dict(failure=dict(good["failure"], traceback=good["failure"]["traceback"].replace(
+                "ui.UiMapError: expected \'Ch. 1 Masks\', observed \'<unmatched framebuffer>\'",
+                "ui.UiMapError: unknown channel page: bogus"))),
+            dict(failure=dict(good["failure"], traceback=good["failure"]["traceback"].replace(
+                "ui.UiMapError:", "other.UiMapError:"))),
+            dict(failure=dict(good["failure"], traceback=good["failure"]["traceback"].replace(
+                "ui.UiMapError:", "ui.RuntimeError:"))),
+        )
+        for change in variants:
+            with self.subTest(change=change), self.assertRaises(ValueError):
+                validate_run(dict(good, **change), "A", "base-midi", "scratch",
+                             {"tests/behaviour/ui_map.py": "map-hash"}, self.confirmations)
 
     def test_outcomes_reject_missing_extra_and_duplicate_cases(self):
         for runs in ([self.run_manifest()], [self.run_manifest(), self.run_manifest()],
                      [self.run_manifest(), self.run_manifest("B"), self.run_manifest("C")]):
             with self.subTest(runs=runs), self.assertRaises(ValueError):
-                validate_outcomes({"A", "B"}, runs, {}, "scratch", {"tests/behaviour/ui_map.py": "map-hash"})
+                validate_outcomes({"A": self.confirmations, "B": self.confirmations}, runs, {},
+                                  "scratch", {"tests/behaviour/ui_map.py": "map-hash"})
 
 
 class DriftArtifactTests(unittest.TestCase):
@@ -160,7 +201,8 @@ class DriftArtifactTests(unittest.TestCase):
         item = dict(case="A", profile="base-midi", passed=False, diagnostic_only=True,
                     clock_mode="controlled-experimental", mosaic_revision=self.scratch,
                     behaviour_source_sha256=self.sources, artifacts=artifacts,
-                    failure=dict(type="UiMapError", message="expected masks, observed memory"))
+                    failure=dict(type="UiMapError", message="expected 'Ch. 1 Masks', observed '<unmatched framebuffer>'",
+                                 traceback='Traceback (most recent call last):\n  File "/repo/tests/behaviour/ui.py", line 1101, in confirm_header\n    raise UiMapError(...)\nui.UiMapError: expected \'Ch. 1 Masks\', observed \'<unmatched framebuffer>\'\n'))
         return self.put(folder + "/manifest.json", item)
 
     def repeat_evidence(self):
@@ -213,17 +255,18 @@ class DriftArtifactTests(unittest.TestCase):
 
     def test_repeat_unwraps_actual_first_error_and_rejects_wrong_error_or_missing_run(self):
         repeat = self.repeat_evidence()
-        result = validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources)
+        confirmations = [dict(page="masks", channel=1, expected_header="Ch. 1 Masks")]
+        result = validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources, confirmations)
         self.assertEqual(result["first_error"]["type"], "UiMapError")
         child = self.repo / "repeat-child/manifest.json"
         item = json.loads(child.read_text())
         item["failure"]["type"] = "RuntimeError"
         self.put("repeat-child/manifest.json", item)
         with self.assertRaisesRegex(ValueError, "first error"):
-            validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources)
+            validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources, confirmations)
         child.unlink()
         with self.assertRaises(ValueError):
-            validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources)
+            validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources, confirmations)
 
     def test_repeat_rejects_pass_and_inconsistent_wrapper(self):
         for target, update in (
@@ -236,7 +279,8 @@ class DriftArtifactTests(unittest.TestCase):
                 item = json.loads((self.repo / target).read_text())
                 self.put(target, dict(item, **update))
                 with self.assertRaises(ValueError):
-                    validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources)
+                    validate_repeat(repeat, "A", "base-midi", self.scratch, self.sources,
+                                    [dict(page="masks", channel=1, expected_header="Ch. 1 Masks")])
 
     def test_report_requires_all_actual_artifacts_and_never_overwrites(self):
         output = self.repo / "docs/testing/ui-migration-drill.json"

@@ -8,6 +8,7 @@ import ast
 import hashlib
 import json
 from pathlib import Path, PurePosixPath
+import re
 import subprocess
 
 from ui_baseline_import import verified_pair_files
@@ -104,7 +105,9 @@ def select_repeat(cases, profiles, requested=None):
     return requested or eligible[0]
 
 
-def validate_run(item, case, profile, revision, source_hashes):
+def validate_run(item, case, profile, revision, source_hashes, confirmations):
+    require(isinstance(confirmations, list) and confirmations,
+            "missing committed ui-confirm selection: " + case)
     require(isinstance(item, dict), "run manifest must be an object")
     require(item.get("case") == case, "inconsistent run case: " + case)
     require(item.get("passed") is False, "drill member passed or has no status: " + case)
@@ -117,6 +120,25 @@ def validate_run(item, case, profile, revision, source_hashes):
     require(isinstance(failure, dict) and failure.get("type") == "UiMapError"
             and isinstance(failure.get("message"), str) and failure["message"].strip(),
             "first error is not UiMapError: " + case)
+    frames = re.findall(r'^\s*File "([^"]+)", line \d+, in ([^\n]+)$',
+                        failure.get("traceback", ""), re.MULTILINE)
+    require(frames and frames[-1][1] == "confirm_header"
+            and frames[-1][0].replace("\\", "/").endswith("/tests/behaviour/ui.py"),
+            "UiMapError did not originate in Ui.confirm_header: " + case)
+    traceback = failure["traceback"]
+    final_line = traceback.rstrip("\r\n").splitlines()[-1] if isinstance(traceback, str) and traceback.strip() else ""
+    require(final_line == "ui." + failure["type"] + ": " + failure["message"],
+            "traceback exception differs from run failure: " + case)
+    message = failure["message"]
+    matched = False
+    for confirmation in confirmations:
+        expected = confirmation.get("expected_header") if isinstance(confirmation, dict) else None
+        if not isinstance(expected, str) or not expected:
+            continue
+        if message == "expected %r, observed %r" % (expected, "<unmatched framebuffer>"):
+            matched = True
+            break
+    require(matched, "UiMapError is not a selected ui-confirm header mismatch: " + case)
     return dict(type=failure["type"], message=failure["message"])
 
 
@@ -127,7 +149,8 @@ def validate_outcomes(cases, runs, profiles, revision, source_hashes):
     require(set(ids) == set(cases), "run set differs: missing=%r extra=%r" %
             (sorted(set(cases) - set(ids)), sorted(set(ids) - set(cases))))
     return [dict(case=item["case"], status="failed", first_error=validate_run(
-        item, item["case"], profiles.get(item["case"], "base-midi"), revision, source_hashes))
+        item, item["case"], profiles.get(item["case"], "base-midi"), revision, source_hashes,
+        cases[item["case"]]))
         for item in sorted(runs, key=lambda item: item["case"])]
 
 
@@ -205,6 +228,13 @@ def committed_plan(repo, revision, pages):
     require(set(profiles) <= set(ids), "unknown case in profile map")
     _, page_pairs = page_assignment(ast.parse(git(repo, "show", revision + ":" + MAP)))
     selected = derive_cases(files, ids, pages, dict(page_pairs))
+    titles = {page: value.get("title") for page, value in page_pairs}
+    for confirmations in selected.values():
+        for confirmation in confirmations:
+            title = titles.get(confirmation["page"])
+            require(isinstance(title, str) and title,
+                    "missing committed page title: " + confirmation["page"])
+            confirmation["expected_header"] = "Ch. %s %s" % (confirmation["channel"], title)
     return revision, selected, profiles
 
 
@@ -235,7 +265,7 @@ def load_run(path):
     return item, dict(path=str(path), sha256=sha(raw))
 
 
-def validate_repeat(path, case, profile, revision, sources):
+def validate_repeat(path, case, profile, revision, sources, confirmations):
     path = Path(path).resolve()
     raw, item = read(path)
     require(isinstance(item, dict) and item.get("case") == case and item.get("profile") == profile,
@@ -263,7 +293,7 @@ def validate_repeat(path, case, profile, revision, sources):
     require(summary.get("case") == case and summary.get("passed") is False
             and isinstance(summary.get("manifest"), str), "inconsistent repeat child summary")
     child, child_ref = load_run(summary["manifest"])
-    error = validate_run(child, case, profile, revision, sources)
+    error = validate_run(child, case, profile, revision, sources, confirmations)
     normalized_raw, normalized = read(path.parent / "normalized.json")
     require(normalized == [] and item.get("normalized_sha256") == sha(normalized_raw),
             "inconsistent repeat normalized evidence")
@@ -300,7 +330,8 @@ def main(argv=None):
         references = {item["case"]: ref for item, ref in loaded}
         for row in rows:
             row.update(manifest=references[row["case"]], confirmations=cases[row["case"]])
-        repeated = validate_repeat(args.repeat, repeat_case, profiles.get(repeat_case, "base-midi"), scratch, sources)
+        repeated = validate_repeat(args.repeat, repeat_case, profiles.get(repeat_case, "base-midi"),
+                                   scratch, sources, cases[repeat_case])
         require(repeated["child"]["path"] not in {ref["path"] for item, ref in loaded},
                 "repeat must be a separate fresh-process run")
         report = dict(schema_version=1, passed=True, baseline_revision=revision, scratch_revision=scratch,
