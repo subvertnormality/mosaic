@@ -208,7 +208,7 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
         lanes = row.get("lanes")
         lane_names = ([lane.get("lane") for lane in lanes if isinstance(lane, dict)]
                       if isinstance(lanes, list) else [])
-        require(lane_names in (list(LANES), ["controlled-experimental"]),
+        require(lane_names in (list(LANES), ["controlled-experimental"], ["real-time"]),
                 "case lane rows differ: " + case)
         selected_lanes.update(lane_names)
         for lane_row in lanes:

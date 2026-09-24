@@ -158,9 +158,11 @@ class TargetedMigrationTests(unittest.TestCase):
         selected = targeted.selected_case_lanes(ROOT, ROOT, [
             "M-ARP-005", "M-ARP-012", "M-ARP-013",
             "M-SPREAD-023", "M-SPREAD-026", "M-SPREAD-027",
-            "M-GRID-001",
+            "M-GRID-001", "M-SYNC-023", "M-TIM-005",
         ])
         self.assertEqual(selected, {
+            "M-SYNC-023": ("real-time",),
+            "M-TIM-005": ("real-time",),
             "M-ARP-005": ("controlled-experimental",),
             "M-ARP-012": ("controlled-experimental",),
             "M-ARP-013": ("controlled-experimental",),
@@ -176,6 +178,27 @@ class TargetedMigrationTests(unittest.TestCase):
             before.mkdir()
             after.mkdir()
             for source, registration in ((before, "dict(controlled_only='reason')"),
+                                         (after, "dict()")):
+                case_file = source / "tests/behaviour/cases.py"
+                case_file.parent.mkdir(parents=True)
+                case_file.write_text("CASES = {'M-CASE-001': " + registration + "}\n")
+            with self.assertRaisesRegex(ValueError, "lane applicability differs"):
+                targeted.selected_case_lanes(before, after, ["M-CASE-001"])
+
+    def test_case_cannot_declare_both_lane_restrictions(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            case_file = root / "tests/behaviour/cases.py"
+            case_file.parent.mkdir(parents=True)
+            case_file.write_text("CASES = {'M-CASE-001': dict(controlled_only='a', "
+                                 "real_time_only='b')}\n")
+            with self.assertRaisesRegex(ValueError, "both controlled_only and real_time_only"):
+                targeted.selected_case_lanes(root, root, ["M-CASE-001"])
+
+    def test_real_time_only_applicability_must_match_both_sources(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            before, after = Path(temporary) / "before", Path(temporary) / "after"
+            for source, registration in ((before, "dict(real_time_only='reason')"),
                                          (after, "dict()")):
                 case_file = source / "tests/behaviour/cases.py"
                 case_file.parent.mkdir(parents=True)

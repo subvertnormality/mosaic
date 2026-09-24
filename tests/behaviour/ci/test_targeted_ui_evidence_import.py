@@ -31,10 +31,11 @@ def write_json(path, value):
     path.write_text(json.dumps(value))
 
 
-def fixture(root, profile="base-midi", controlled_only=False, qualified_runtime=False):
+def fixture(root, profile="base-midi", controlled_only=False, qualified_runtime=False,
+            real_time_only=False):
     """A complete selected-lane gate whose native log is intentionally not uploaded."""
     clock_modes = (["controlled-experimental"] if controlled_only
-                   else list(importer.LANES))
+                   else ["real-time"] if real_time_only else list(importer.LANES))
     report = dict(schema_version=1, passed=True, complete_regression_run=False,
                   before_sha=BEFORE, after_sha=AFTER, selected_cases=[CASE],
                   lanes=clock_modes, profile=profile,
@@ -212,6 +213,14 @@ class TargetedEvidenceImportTests(unittest.TestCase):
         dry = self.run_import(dry_run=True)
         self.assertEqual(len(dry["imported"]), 2)
         self.assertTrue(all("/controlled/" in path.replace("\\", "/")
+                            for path in dry["imported"]))
+
+    def test_imports_real_time_only_case_lane_selection(self):
+        shutil.rmtree(self.download)
+        fixture(self.download, real_time_only=True)
+        dry = self.run_import(dry_run=True)
+        self.assertEqual(len(dry["imported"]), 2)
+        self.assertTrue(all("/real-time/" in path.replace("\\", "/")
                             for path in dry["imported"]))
 
     def test_historical_tooling_identity_is_preserved_in_provenance(self):

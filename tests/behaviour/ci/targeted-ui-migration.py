@@ -190,8 +190,12 @@ def registry_profile(root):
     return {name: profile_map.get(name, "base-midi") for name in names}
 
 
-def registry_controlled_only(root, cases):
-    """Read controlled-only declarations from the literal case registry."""
+LANE_RESTRICTIONS = {"controlled_only": ("controlled-experimental",),
+                     "real_time_only": ("real-time",)}
+
+
+def registry_lane_restrictions(root, cases):
+    """Read controlled_only/real_time_only declarations from the literal registry."""
     tree = ast.parse((root / "tests/behaviour/cases.py").read_text())
     registries = [node.value for node in tree.body if isinstance(node, ast.Assign)
                   and any(isinstance(target, ast.Name) and target.id == "CASES"
@@ -210,32 +214,36 @@ def registry_controlled_only(root, cases):
                 and isinstance(definition.func, ast.Name)
                 and definition.func.id == "dict",
                 "unrecognized case registration: " + case)
-        declarations = [item.value for item in definition.keywords
-                        if item.arg == "controlled_only"]
-        require(len(declarations) <= 1,
-                "duplicate controlled_only declaration: " + case)
-        if declarations:
+        restriction = None
+        for keyword in LANE_RESTRICTIONS:
+            declarations = [item.value for item in definition.keywords
+                            if item.arg == keyword]
+            require(len(declarations) <= 1,
+                    "duplicate %s declaration: %s" % (keyword, case))
+            if not declarations:
+                continue
             try:
                 reason = ast.literal_eval(declarations[0])
             except (ValueError, TypeError) as error:
-                raise ValueError("nonliteral controlled_only declaration: " + case) from error
+                raise ValueError("nonliteral %s declaration: %s" % (keyword, case)) from error
             require(isinstance(reason, str) and reason.strip(),
-                    "invalid controlled_only declaration: " + case)
-            selected[case] = True
-        else:
-            selected[case] = False
+                    "invalid %s declaration: %s" % (keyword, case))
+            require(restriction is None,
+                    "case declares both controlled_only and real_time_only: " + case)
+            restriction = keyword
+        selected[case] = restriction
     return selected
 
 
 def selected_case_lanes(before, after, cases):
     """Select lanes from pinned registry metadata, requiring source parity."""
-    before_applicability = registry_controlled_only(before, cases)
-    after_applicability = registry_controlled_only(after, cases)
+    before_applicability = registry_lane_restrictions(before, cases)
+    after_applicability = registry_lane_restrictions(after, cases)
     require(before_applicability == after_applicability,
             "lane applicability differs between before and after registries")
-    return {case: tuple(lane for lane, _ in LANES
-                         if lane == "controlled-experimental" or not controlled_only)
-            for case, controlled_only in before_applicability.items()}
+    return {case: (LANE_RESTRICTIONS[restriction] if restriction
+                   else tuple(lane for lane, _ in LANES))
+            for case, restriction in before_applicability.items()}
 
 
 def selected_case_modules(root, cases):
