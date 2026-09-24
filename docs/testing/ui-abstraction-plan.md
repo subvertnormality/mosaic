@@ -671,7 +671,10 @@ controlled only; `crow-jf`/`nb-audio` cases: real-time only; all others: both):
    `ui_map.py` only. The drill set is every migrated case whose
    `<case>/controlled/after/results.json` has a `ui-confirm` entry for either swapped page
    (real-time-only cases are outside it: they reach the same `ui.py` confirmation code, and
-   the drill tests that code, not the lane). Each case in the set must fail with `UiMapError`
+   the drill tests that code, not the lane). First run every selected case on the unchanged
+   baseline commit in the controlled lane: it must pass and reach the selected page/channel
+   confirmation, with its run artifacts and source identity preserved. A pre-existing failure
+   cannot be credited to the swap. Each case in the set must then fail with `UiMapError`
    in the controlled lane, and one base-midi or midi-modulation member must also fail that
    way under `repeat.py`; a member that passes, or fails any other way, fails the drill. The
    outcome (case, status, first error) is written to `docs/testing/ui-migration-drill.json`
