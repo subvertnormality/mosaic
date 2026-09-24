@@ -4,6 +4,22 @@ from pathlib import Path
 
 
 class PatchParamsUiTests(unittest.TestCase):
+    def test_mixed_slide_capture_ends_at_the_ninth_note_onset(self):
+        from patch_params import _parameter_events_through
+        expected_cc = [24, 36, 48, 60, 72, 84, 96, 24, 36, 48, 60, 72, 84, 96, 24]
+        events = [
+            {'index': index, 'bytes': [176, 1, value]}
+            for index, value in enumerate(expected_cc, 1)
+        ]
+        # This valid next-slide sample can arrive after playback has already
+        # observed the ninth onset. It must not extend the fixed capture.
+        events.append({'index': 17, 'bytes': [176, 1, 36]})
+
+        captured = _parameter_events_through(events, end_index=16)
+
+        self.assertEqual([event['bytes'][2] for event in captured], expected_cc)
+        self.assertEqual([event['bytes'][2] for event in events], expected_cc + [36])
+
     def test_current_patch_seek_preserves_scan_without_added_label_or_setup(self):
         from unittest.mock import patch
         from test_ui import FakeDriver

@@ -938,6 +938,11 @@ def patch_nrpn_slide(c,legacy=False,descending=False,default_off=False):
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
+def _parameter_events_through(events, end_index):
+    """Keep parameter samples captured by the requested playback boundary."""
+    return [event for event in events if event['index'] <= end_index]
+
+
 def patch_mixed_cc_nrpn_slides(c):
     """Run independent step-local CC and global NRPN slides concurrently."""
     from cases import assert_durations
@@ -980,6 +985,7 @@ def patch_mixed_cc_nrpn_slides(c):
     assert_durations(c,notes,[1]*(len(notes)-1),events=events)
 
     parameter_events=[e for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==176]
+    captured_parameter_events=_parameter_events_through(parameter_events,played[-1]['index'])
     programs=[e for e in events if len(e['bytes'])==2 and e['bytes'][0]&240==192]
     releases=[e for e in events if len(e['bytes'])==3 and e['bytes'][0]&240==128]
     transport=[e for e in events if len(e['bytes'])==1]
@@ -995,14 +1001,14 @@ def patch_mixed_cc_nrpn_slides(c):
     assert all(e['port']==1 and len(e['bytes'])==3 and e['bytes'][0]==176 and all(0<=v<=127 for v in e['bytes'][1:]) for e in parameter_events)
     assert all(e['bytes'][1] in (1,99,98,6,38) for e in parameter_events),'Unexpected parameter controller'
 
-    # Parse the complete parameter stream. A standard NRPN packet must be four
-    # consecutive captured MIDI messages; filtering cannot hide an interleave.
+    # Parse the parameter stream through the ninth-onset boundary. A standard
+    # NRPN packet must remain four consecutive captured messages in this window.
     cc=[];nrpn=[];offset=0
-    while offset<len(parameter_events):
-        event=parameter_events[offset]
+    while offset<len(captured_parameter_events):
+        event=captured_parameter_events[offset]
         if event['bytes'][1]==1:
             cc.append(event);offset+=1;continue
-        group=parameter_events[offset:offset+4]
+        group=captured_parameter_events[offset:offset+4]
         assert len(group)==4
         assert [e['bytes'][1] for e in group]==[99,98,6,38]
         assert [e['bytes'][2] for e in group[:2]]==[4,5]
