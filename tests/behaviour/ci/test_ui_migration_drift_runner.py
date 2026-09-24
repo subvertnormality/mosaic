@@ -234,6 +234,20 @@ OTHER = 7
                 manifest.write_text(json.dumps({"artifacts": []}) + "\n", encoding="utf-8")
                 case = command[command.index("--case") + 1]
                 if is_repeat:
+                    # repeat.py's own run.py child lands beside repeat-one.
+                    child = scratch.parent / "mosaic-behaviour-runs" / "child-run"
+                    (child / "code").mkdir(parents=True)
+                    child_link = child / "code" / "mosaic"
+                    child_link.touch()
+                    targets.append(child_link)
+                    child_manifest = child / "manifest.json"
+                    child_manifest.write_text(json.dumps({"artifacts": []}) + "\n",
+                                              encoding="utf-8")
+                    (session / "process-0.json").write_text(json.dumps(dict(
+                        returncode=1, stderr="", stdout=json.dumps(dict(
+                            case=case, passed=False,
+                            manifest=str(child_manifest.resolve()))) + "\n")),
+                        encoding="utf-8")
                     return subprocess.CompletedProcess(command, 1, "", "")
                 artifacts_root = Path(command[command.index("--artifacts") + 1])
                 passed = "control" in artifacts_root.parts
@@ -262,7 +276,9 @@ OTHER = 7
             for index, event in enumerate(events):
                 if isinstance(event, tuple):
                     self.assertEqual(event[0], "unlink")
-                    self.assertEqual(events[index - 1], "process-ended")
+                    previous = events[index - 1]
+                    self.assertTrue(previous == "process-ended"
+                                    or (isinstance(previous, tuple) and previous[0] == "unlink"))
 
     def test_cleanup_preserves_manifest_listed_code_mosaic_evidence(self):
         with tempfile.TemporaryDirectory() as temp:

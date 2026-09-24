@@ -216,6 +216,24 @@ def _unlink_unlisted_generated_code_mosaic(manifest, expected_root):
         return False
 
 
+def _unlink_repeat_child_code_mosaic(process, repeats_root):
+    """Clean the run.py session a repeat.py process record names, if it is a sibling."""
+    try:
+        if process.is_symlink() or not process.is_file():
+            return False
+        with process.open(encoding="utf-8") as stream:
+            lines = str(json.load(stream).get("stdout", "")).strip().splitlines()
+        if not lines:
+            return False
+        manifest = Path(json.loads(lines[-1])["manifest"])
+        if manifest.parent.parent != Path(repeats_root).resolve():
+            return False
+        return _unlink_unlisted_generated_code_mosaic(manifest, repeats_root)
+    except (OSError, ValueError, TypeError, KeyError, AttributeError,
+            json.JSONDecodeError):
+        return False
+
+
 def _run_case(scratch, output, case, profile, install, mod_root, timeout):
     root = output / "standalone" / case
     root.mkdir(parents=True, exist_ok=False)
@@ -286,6 +304,8 @@ def _run_repeat(scratch, output, case, profile, install, mod_root, timeout):
     if not manifest.is_file():
         raise ValueError("repeat.py did not preserve its manifest")
     _unlink_unlisted_generated_code_mosaic(manifest, repeats_root)
+    for process in sorted(created[0].glob("process-*.json")):
+        _unlink_repeat_child_code_mosaic(process, repeats_root)
     write_json_once(output / "repeat-wrapper.json", dict(
         command=command, returncode=completed.returncode,
         stdout=completed.stdout, stderr=completed.stderr,
