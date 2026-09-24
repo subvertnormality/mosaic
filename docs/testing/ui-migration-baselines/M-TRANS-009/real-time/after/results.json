@@ -1,0 +1,127 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166281582,
+        "error_ms": -0.3850846666666463
+      },
+      {
+        "pitch": 63,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166266266,
+        "error_ms": -0.4004006666666615
+      },
+      {
+        "pitch": 65,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16659775,
+        "error_ms": -0.06891666666666851
+      },
+      {
+        "pitch": 66,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166180608,
+        "error_ms": -0.48605866666665
+      },
+      {
+        "pitch": 61,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166321359,
+        "error_ms": -0.34530766666665547
+      },
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166103411,
+        "error_ms": -0.5632556666666511
+      },
+      {
+        "pitch": 52,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166162284,
+        "error_ms": -0.504382666666664
+      },
+      {
+        "pitch": 53,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.16633285,
+        "error_ms": -0.3338166666666531
+      },
+      {
+        "pitch": 48,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166248229,
+        "error_ms": -0.41843766666666005
+      },
+      {
+        "pitch": 50,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166318533,
+        "error_ms": -0.3481336666666668
+      }
+    ]
+  },
+  {
+    "kind": "transpose-global-live-edit",
+    "onsets": 11,
+    "releases": 11,
+    "transposes": [
+      0,
+      1,
+      1,
+      1,
+      1,
+      -12,
+      -12,
+      -12,
+      -12,
+      -12,
+      -12
+    ],
+    "second_edit_after_onsets": 5,
+    "maximum_phase_error_seconds": 0.0003778303333332733,
+    "passed": true
+  }
+]
