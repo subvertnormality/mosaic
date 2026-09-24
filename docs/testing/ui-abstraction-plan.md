@@ -11,9 +11,14 @@ their statements about allowlist membership describe the state at the time.
 
 Acceptance remains open: recent contract-owner extractions need source-SHA-bound
 before/after evidence where the existing pairs predate the move, and panic-navigation
-cases need paired evidence. The actual page-order drift drill and its
-`docs/testing/ui-migration-drill.json` report have not been completed. Full validation
-and CI on the current branch head remain pending. Baseline failures `M-MEMORY-009`,
+cases need paired evidence. An inventory audit also found ordinary cases without
+committed migration pairs in changed owner modules. At least 48 `cases.py` cases
+have directly changed run bodies and lack pairs; the remaining missing cases are
+being checked for actual migration scope. A passing targeted CI report is partial
+evidence, not a substitute for the complete behaviour inventory. The actual
+page-order drift drill and its `docs/testing/ui-migration-drill.json` report have
+not been completed. Full validation and CI on the current branch head remain
+pending. Baseline failures `M-MEMORY-009`,
 `M-SYNC-002`, `M-SYNC-007`, `M-SYNC-008` and `M-SYNC-010` remain classified fail-closed
 as contract cases. This is test-side work only: no change to Mosaic (repo root
 `mosaic.lua`, `lib/`) or to the emulator checkout. `tests/behaviour/driver.py` is
@@ -613,6 +618,14 @@ Evidence lives in `docs/testing/ui-migration-baselines/<case>/<lane>/{before,aft
 `<lane>` is `controlled` or `real-time`, committed with the migration. For every case in a
 module being migrated, in every lane the suite runs it in (`controlled_only` cases:
 controlled only; `crow-jf`/`nb-audio` cases: real-time only; all others: both):
+
+Later owner-only extractions with existing canonical migration pairs keep those pairs
+unchanged. Their additional, exact-source-pinned evidence is stored under
+`docs/testing/ui-migration-owner-evidence/<owner>-<before8>-<after8>/` using the
+same case/lane/before/after layout and strict gate. Provenance records the full
+source revisions, CI run, report and manifest hashes. Targeted reports explicitly
+remain `complete_regression_run: false`; only the aggregate full-suite report may
+establish complete inventory coverage.
 
 1. Before any edit, run the case at the current commit and copy its `recipe.json` and
    `results.json` to `<case>/<lane>/before/`, preserving any nested driver sessions (for
