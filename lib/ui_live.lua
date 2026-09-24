@@ -625,6 +625,12 @@ function ui_live.view_model()
   local focus_id = focus[s.screen]
   for i, f in ipairs(fields) do if f.id == focus_id then index = i end end
   local footer = FOOTER[screen.profile] or ""
+  -- A focused screen shows one field: the footer names its neighbours instead.
+  if screen.layout == "focused" and #fields > 1 then
+    local previous, following = fields[index - 1], fields[index + 1]
+    footer = {left = previous and ("< " .. previous.label) or "| START",
+      right = following and (following.label .. " >") or "END |"}
+  end
   if tooltip and tooltip.text then footer = tostring(tooltip.text) end
   local status = code and (code:upper():gsub("_", " ")) or ""
   local vm = {

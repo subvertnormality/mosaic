@@ -8,7 +8,9 @@ import base64,time
 # The live screen's footer line (lib/ui_render.lua: text at (1,63), level 9)
 # shows the tooltip while it lasts, then the screen's control hints again.
 REGION=[(y*128+x)*4+k for y in range(56,64) for x in range(128) for k in range(3)]
-HINTS={'scale':'E3 SET  K3 APPLY  K2 CANCEL','masks':'E2 MASK  E3 SET',
+# Focused screens name their neighbouring fields instead (left level 7, right
+# right-aligned at x127 level 10): Scale opens on its Scale field.
+HINTS={'scale':('< Root','Degree >'),'masks':'E2 MASK  E3 SET',
        'trig_locks':'E2 SLOT  E3 SET  K2 ASSIGN','memory':'E3 MOVE  K2 UNDO  K3 REDO'}
 
 def tooltip_messages(c):
@@ -18,7 +20,9 @@ def tooltip_messages(c):
     def bottom(state):
         pixels=base64.b64decode(state['frame']['pixels_base64']);return [pixels[i] for i in REGION]
     def footer(text):
-        expected=render([(1,63,9,text)]);return [expected[i] for i in REGION]
+        if isinstance(text,tuple):expected=render([(1,63,7,text[0]),((None,127),63,10,text[1])])
+        else:expected=render([(1,63,9,text)])
+        return [expected[i] for i in REGION]
     def tip(stage,text):
         wanted=footer(text)
         c.wait(lambda s:bottom(s)==wanted)
