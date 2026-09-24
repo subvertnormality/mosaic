@@ -215,8 +215,11 @@ CHANNEL_PAGES = OrderedDict([
         with tempfile.TemporaryDirectory() as temp:
             repo = Path(temp) / "repo"
             repo.mkdir()
-            subprocess.run(["git", "init", "-b", "main"], cwd=repo, check=True,
+            subprocess.run(["git", "init"], cwd=repo, check=True,
                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            subprocess.run(["git", "symbolic-ref", "HEAD", "refs/heads/main"],
+                           cwd=repo, check=True, stdout=subprocess.PIPE,
+                           stderr=subprocess.PIPE)
             (repo / "tests/behaviour").mkdir(parents=True)
             (repo / "tests/behaviour/ui_map.py").write_text(source, encoding="utf-8")
             subprocess.run(["git", "add", "--", "tests/behaviour/ui_map.py"],
