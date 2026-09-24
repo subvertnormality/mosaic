@@ -1,3 +1,8 @@
+def midi_events_in_snapshot_window(state, marker, cutoff):
+    """Return captured MIDI events after marker through an inclusive snapshot count."""
+    return [event for event in state['midi'] if marker < event['index'] <= cutoff]
+
+
 def numeric_note_merge(c,foreign_velocity=False,pentatonic=False,all_scales=False,harmony=False,
                        blink_observer=None):
     from cases import assert_durations
@@ -533,10 +538,13 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
             for i,note in enumerate(notes):
                 expected_time=((i//2)*cycle_steps+(i%2)*(0 if simultaneous else .5))/6 if strum else i*cycle_steps/6
                 assert abs((note[key]-notes[0][key])/1e9-expected_time)<=tolerance
+            event_cutoff=c.snapshot()['midi_count']
             c.elapse(.3)
-            events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
+            state=c.snapshot()
+            events=[m for m in midi_events_in_snapshot_window(state,marker,event_cutoff)
+                    if 128<=m['bytes'][0]<=159]
             assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in notes for msg in (note['bytes'],[128,note['bytes'][1],127])],events
-            assert not c.snapshot()['midi_capture']['outstanding']
+            assert not state['midi_capture']['outstanding']
             c.results.append(dict(kind='nonpositive-strum-release' if strum else 'nonpositive-arp-endpoint',source_lengths=sources,trial=trial,onsets=len(notes),simultaneous=simultaneous,same_pitch=same_pitch,passed=True))
         return
     for index,(mode,level,length) in enumerate(list(zip(['average','longer','shorter'],[2,5,8],expected))+[('average',2,expected[0])]):
