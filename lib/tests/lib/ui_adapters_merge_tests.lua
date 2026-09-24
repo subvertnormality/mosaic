@@ -118,9 +118,8 @@ function test_ui_adapters_merge_conditional_modes_and_cardinality()
     luaunit.assert_not_nil(d.id:match(ui_adapters.spec.field_contracts.merge.repeat_key.pattern))
   end
   luaunit.assert_equals(degrees.descriptors[1].value, "ON")
-  -- Owner characterisation: field_value reads `get() or value`, so an OFF
-  -- boolean draws as NONE today; the adapter keeps that exact text.
-  luaunit.assert_equals(degrees.descriptors[2].value, "NONE")
+  -- An unselected degree is OFF, distinct from NONE (spec: OFF/NONE never collapse).
+  luaunit.assert_equals(degrees.descriptors[2].value, "OFF")
   -- Chord target: one group_id enum descriptor.
   editor:encoder_one(); editor.draft.target = {kind = "chord"}
   open_id(adapter, editor, "pitch"); open_id(adapter, editor, "target_setup")
