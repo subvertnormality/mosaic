@@ -6918,6 +6918,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -6973,6 +6977,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7028,6 +7036,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7083,6 +7095,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7138,6 +7154,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7193,6 +7213,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7248,6 +7272,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7303,6 +7331,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7358,6 +7390,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7413,6 +7449,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -7468,6 +7508,10 @@
       [
         "Merge Shape",
         "M02"
+      ],
+      [
+        "Norns settings",
+        "N04"
       ]
     ],
     "family": "detail",
@@ -9588,6 +9632,10 @@
         "X04"
       ],
       [
+        "Param locks",
+        "X09"
+      ],
+      [
         "Quantiser",
         "X05"
       ],
@@ -9620,6 +9668,10 @@
       [
         "Sequencer",
         "X04"
+      ],
+      [
+        "Param locks",
+        "X09"
       ],
       [
         "Quantiser",
@@ -9656,6 +9708,10 @@
         "X04"
       ],
       [
+        "Param locks",
+        "X09"
+      ],
+      [
         "Quantiser",
         "X05"
       ],
@@ -9688,6 +9744,10 @@
       [
         "Sequencer",
         "X04"
+      ],
+      [
+        "Param locks",
+        "X09"
       ],
       [
         "Quantiser",
@@ -9724,6 +9784,10 @@
         "X04"
       ],
       [
+        "Param locks",
+        "X09"
+      ],
+      [
         "Quantiser",
         "X05"
       ],
@@ -9756,6 +9820,10 @@
       [
         "Sequencer",
         "X04"
+      ],
+      [
+        "Param locks",
+        "X09"
       ],
       [
         "Quantiser",
@@ -10027,11 +10095,11 @@
       ],
       [
         "Manual BPM",
-        "UNAVAIL"
+        "120 LOCAL"
       ],
       [
         "Input",
-        "UNAVAIL"
+        "STEREO LOCAL"
       ]
     ],
     "art": "doctor",
@@ -10054,11 +10122,11 @@
       ],
       [
         "Manual BPM",
-        "UNAVAIL"
+        "120 LOCAL"
       ],
       [
         "Input",
-        "UNAVAIL"
+        "STEREO LOCAL"
       ]
     ],
     "art": "doctor",
@@ -10081,11 +10149,11 @@
       ],
       [
         "Manual BPM",
-        "UNAVAIL"
+        "120 LOCAL"
       ],
       [
         "Input",
-        "UNAVAIL"
+        "STEREO LOCAL"
       ]
     ],
     "art": "doctor",
@@ -10108,11 +10176,11 @@
       ],
       [
         "Manual BPM",
-        "UNAVAIL"
+        "120 LOCAL"
       ],
       [
         "Input",
-        "UNAVAIL"
+        "STEREO LOCAL"
       ]
     ],
     "art": "doctor",
@@ -10242,7 +10310,7 @@
         ""
       ],
       [
-        "K2 keeps recording",
+        "K2 keeps the take",
         ""
       ],
       [
@@ -10269,7 +10337,7 @@
         ""
       ],
       [
-        "K2 keeps recording",
+        "K2 keeps the take",
         ""
       ],
       [
@@ -10296,7 +10364,7 @@
         ""
       ],
       [
-        "K2 keeps recording",
+        "K2 keeps the take",
         ""
       ],
       [
@@ -10323,7 +10391,7 @@
         ""
       ],
       [
-        "K2 keeps recording",
+        "K2 keeps the take",
         ""
       ],
       [
@@ -10342,20 +10410,20 @@
     "context": "P03  TAKE 12.0s",
     "rows": [
       [
-        "Analysing capture",
-        ""
+        "Phase",
+        "ANALYSING"
       ],
       [
-        "BD / SD / CYM",
-        ""
+        "Lanes",
+        "FROM BANK"
       ],
       [
-        "Bank not ready",
-        ""
+        "Bank",
+        "NOT READY"
       ],
       [
-        "Wait for result",
-        ""
+        "Record",
+        "CANCEL?"
       ]
     ],
     "art": "doctor",
@@ -10369,20 +10437,20 @@
     "context": "P03  TAKE 12.0s",
     "rows": [
       [
-        "Analysing capture",
-        ""
+        "Phase",
+        "ANALYSING"
       ],
       [
-        "BD / SD / CYM",
-        ""
+        "Lanes",
+        "FROM BANK"
       ],
       [
-        "Bank not ready",
-        ""
+        "Bank",
+        "NOT READY"
       ],
       [
-        "Wait for result",
-        ""
+        "Record",
+        "CANCEL?"
       ]
     ],
     "art": "doctor",
@@ -10396,20 +10464,20 @@
     "context": "P03  TAKE 12.0s",
     "rows": [
       [
-        "Analysing capture",
-        ""
+        "Phase",
+        "ANALYSING"
       ],
       [
-        "BD / SD / CYM",
-        ""
+        "Lanes",
+        "FROM BANK"
       ],
       [
-        "Bank not ready",
-        ""
+        "Bank",
+        "NOT READY"
       ],
       [
-        "Wait for result",
-        ""
+        "Record",
+        "CANCEL?"
       ]
     ],
     "art": "doctor",
@@ -10423,20 +10491,20 @@
     "context": "P03  TAKE 12.0s",
     "rows": [
       [
-        "Analysing capture",
-        ""
+        "Phase",
+        "ANALYSING"
       ],
       [
-        "BD / SD / CYM",
-        ""
+        "Lanes",
+        "FROM BANK"
       ],
       [
-        "Bank not ready",
-        ""
+        "Bank",
+        "NOT READY"
       ],
       [
-        "Wait for result",
-        ""
+        "Record",
+        "CANCEL?"
       ]
     ],
     "art": "doctor",
@@ -10459,7 +10527,7 @@
       ],
       [
         "Sensitivity",
-        "50"
+        "0.50"
       ],
       [
         "Paint policy",
@@ -10490,7 +10558,7 @@
       ],
       [
         "Sensitivity",
-        "50"
+        "0.50"
       ],
       [
         "Paint policy",
@@ -10521,7 +10589,7 @@
       ],
       [
         "Sensitivity",
-        "50"
+        "0.50"
       ],
       [
         "Paint policy",
@@ -10552,7 +10620,7 @@
       ],
       [
         "Sensitivity",
-        "50"
+        "0.50"
       ],
       [
         "Paint policy",
@@ -10583,7 +10651,7 @@
       ],
       [
         "Sensitivity",
-        "50"
+        "0.50"
       ],
       [
         "Paint policy",
@@ -10760,19 +10828,19 @@
     "context": "P03 CYM  START BEAT",
     "rows": [
       [
+        "Refused",
+        "NOT READY"
+      ],
+      [
         "Start beat",
         "32"
       ],
       [
-        "Not enough audio",
+        "Draft kept",
         ""
       ],
       [
-        "Choose earlier start",
-        ""
-      ],
-      [
-        "Draft remains here",
+        "K2 discards draft",
         ""
       ]
     ],
@@ -10787,19 +10855,19 @@
     "context": "P03 CYM  START BEAT",
     "rows": [
       [
+        "Refused",
+        "NOT READY"
+      ],
+      [
         "Start beat",
         "32"
       ],
       [
-        "Not enough audio",
+        "Draft kept",
         ""
       ],
       [
-        "Choose earlier start",
-        ""
-      ],
-      [
-        "Draft remains here",
+        "K2 discards draft",
         ""
       ]
     ],
@@ -10814,19 +10882,19 @@
     "context": "P03 CYM  START BEAT",
     "rows": [
       [
+        "Refused",
+        "NOT READY"
+      ],
+      [
         "Start beat",
         "32"
       ],
       [
-        "Not enough audio",
+        "Draft kept",
         ""
       ],
       [
-        "Choose earlier start",
-        ""
-      ],
-      [
-        "Draft remains here",
+        "K2 discards draft",
         ""
       ]
     ],
@@ -10841,19 +10909,19 @@
     "context": "P03 CYM  START BEAT",
     "rows": [
       [
+        "Refused",
+        "NOT READY"
+      ],
+      [
         "Start beat",
         "32"
       ],
       [
-        "Not enough audio",
+        "Draft kept",
         ""
       ],
       [
-        "Choose earlier start",
-        ""
-      ],
-      [
-        "Draft remains here",
+        "K2 discards draft",
         ""
       ]
     ],
@@ -10873,7 +10941,7 @@
       ],
       [
         "Window start",
-        "17"
+        "2.1.1"
       ],
       [
         "Destination",
@@ -10900,7 +10968,7 @@
       ],
       [
         "Window start",
-        "17"
+        "2.1.1"
       ],
       [
         "Destination",
@@ -10927,7 +10995,7 @@
       ],
       [
         "Window start",
-        "17"
+        "2.1.1"
       ],
       [
         "Destination",
@@ -10954,7 +11022,7 @@
       ],
       [
         "Window start",
-        "17"
+        "2.1.1"
       ],
       [
         "Destination",
@@ -11084,7 +11152,7 @@
     "context": "P03  CAPTURE BANK",
     "rows": [
       [
-        "Clear BD / SD / CYM?",
+        "Clear all lanes?",
         ""
       ],
       [
@@ -11111,7 +11179,7 @@
     "context": "P03  CAPTURE BANK",
     "rows": [
       [
-        "Clear BD / SD / CYM?",
+        "Clear all lanes?",
         ""
       ],
       [
@@ -11138,7 +11206,7 @@
     "context": "P03  CAPTURE BANK",
     "rows": [
       [
-        "Clear BD / SD / CYM?",
+        "Clear all lanes?",
         ""
       ],
       [
@@ -11165,7 +11233,7 @@
     "context": "P03  CAPTURE BANK",
     "rows": [
       [
-        "Clear BD / SD / CYM?",
+        "Clear all lanes?",
         ""
       ],
       [
@@ -11189,7 +11257,7 @@
   },
   "R11.0": {
     "title": "STOP SEQUENCER",
-    "context": "P03  SD / READY BANK",
+    "context": "P03  SD / NO BANK",
     "rows": [
       [
         "Transport",
@@ -11200,12 +11268,12 @@
         "BLOCKED"
       ],
       [
-        "Lane / window",
-        "BLOCKED"
+        "Lane",
+        "SD"
       ],
       [
-        "Paint",
-        "BLOCKED"
+        "Bank",
+        "NONE"
       ]
     ],
     "art": "none",
@@ -11216,7 +11284,7 @@
   },
   "R11.1": {
     "title": "STOP SEQUENCER",
-    "context": "P03  SD / READY BANK",
+    "context": "P03  SD / NO BANK",
     "rows": [
       [
         "Transport",
@@ -11227,12 +11295,12 @@
         "BLOCKED"
       ],
       [
-        "Lane / window",
-        "BLOCKED"
+        "Lane",
+        "SD"
       ],
       [
-        "Paint",
-        "BLOCKED"
+        "Bank",
+        "NONE"
       ]
     ],
     "art": "none",
@@ -11243,7 +11311,7 @@
   },
   "R11.2": {
     "title": "STOP SEQUENCER",
-    "context": "P03  SD / READY BANK",
+    "context": "P03  SD / NO BANK",
     "rows": [
       [
         "Transport",
@@ -11254,12 +11322,12 @@
         "BLOCKED"
       ],
       [
-        "Lane / window",
-        "BLOCKED"
+        "Lane",
+        "SD"
       ],
       [
-        "Paint",
-        "BLOCKED"
+        "Bank",
+        "NONE"
       ]
     ],
     "art": "none",
@@ -11270,7 +11338,7 @@
   },
   "R11.3": {
     "title": "STOP SEQUENCER",
-    "context": "P03  SD / READY BANK",
+    "context": "P03  SD / NO BANK",
     "rows": [
       [
         "Transport",
@@ -11281,12 +11349,12 @@
         "BLOCKED"
       ],
       [
-        "Lane / window",
-        "BLOCKED"
+        "Lane",
+        "SD"
       ],
       [
-        "Paint",
-        "BLOCKED"
+        "Bank",
+        "NONE"
       ]
     ],
     "art": "none",
@@ -11296,7 +11364,7 @@
     "field": 3
   },
   "R12.0": {
-    "title": "ANALYSIS",
+    "title": "NO BANK",
     "context": "P03  NO NEW BANK",
     "rows": [
       [
@@ -11304,16 +11372,16 @@
         ""
       ],
       [
-        "Check local build",
-        ""
+        "Record",
+        "NEW TAKE"
       ],
       [
-        "Details",
-        ">"
+        "Setup",
+        "E2/E3"
       ],
       [
-        "Retry after recovery",
-        ""
+        "Bank",
+        "NOT WRITTEN"
       ]
     ],
     "art": "doctor",
@@ -11323,7 +11391,7 @@
     "field": 0
   },
   "R12.1": {
-    "title": "ANALYSIS",
+    "title": "NO BANK",
     "context": "P03  NO NEW BANK",
     "rows": [
       [
@@ -11331,16 +11399,16 @@
         ""
       ],
       [
-        "Check local build",
-        ""
+        "Record",
+        "NEW TAKE"
       ],
       [
-        "Details",
-        ">"
+        "Setup",
+        "E2/E3"
       ],
       [
-        "Retry after recovery",
-        ""
+        "Bank",
+        "NOT WRITTEN"
       ]
     ],
     "art": "doctor",
@@ -11350,7 +11418,7 @@
     "field": 1
   },
   "R12.2": {
-    "title": "ANALYSIS",
+    "title": "NO BANK",
     "context": "P03  NO NEW BANK",
     "rows": [
       [
@@ -11358,16 +11426,16 @@
         ""
       ],
       [
-        "Check local build",
-        ""
+        "Record",
+        "NEW TAKE"
       ],
       [
-        "Details",
-        ">"
+        "Setup",
+        "E2/E3"
       ],
       [
-        "Retry after recovery",
-        ""
+        "Bank",
+        "NOT WRITTEN"
       ]
     ],
     "art": "doctor",
@@ -11377,7 +11445,7 @@
     "field": 2
   },
   "R12.3": {
-    "title": "ANALYSIS",
+    "title": "NO BANK",
     "context": "P03  NO NEW BANK",
     "rows": [
       [
@@ -11385,16 +11453,16 @@
         ""
       ],
       [
-        "Check local build",
-        ""
+        "Record",
+        "NEW TAKE"
       ],
       [
-        "Details",
-        ">"
+        "Setup",
+        "E2/E3"
       ],
       [
-        "Retry after recovery",
-        ""
+        "Bank",
+        "NOT WRITTEN"
       ]
     ],
     "art": "doctor",
@@ -11420,8 +11488,8 @@
         "GRID 5,2"
       ],
       [
-        "Other lanes",
-        "NONE"
+        "Selected",
+        "SD"
       ]
     ],
     "art": "none",
@@ -11447,8 +11515,8 @@
         "GRID 5,2"
       ],
       [
-        "Other lanes",
-        "NONE"
+        "Selected",
+        "SD"
       ]
     ],
     "art": "none",
@@ -11474,8 +11542,8 @@
         "GRID 5,2"
       ],
       [
-        "Other lanes",
-        "NONE"
+        "Selected",
+        "SD"
       ]
     ],
     "art": "none",
@@ -11486,30 +11554,30 @@
   },
   "R13.3": {
     "title": "BANK LANES",
-    "context": "P03  BD / SD / CYM",
+    "context": "P03  10 LANES / SERVER",
     "rows": [
       [
-        "BD",
+        "KICK",
         "GRID 3,2"
       ],
       [
-        "SD",
-        "GRID 4,2"
+        "TOMS",
+        "GRID 7,2"
       ],
       [
-        "CYM",
-        "GRID 5,2"
+        "BASS",
+        "GRID 3,3"
       ],
       [
-        "Other lanes",
-        "NONE"
+        "OTHER",
+        "GRID 7,3"
       ]
     ],
     "art": "none",
     "family": "detail",
     "badge": "INFO",
     "screen": "R13",
-    "field": 3
+    "field": 2
   },
   "R14.0": {
     "title": "SETUP LIMITS",
@@ -11517,19 +11585,19 @@
     "rows": [
       [
         "Manual BPM",
-        "UI ONLY"
+        "LOCAL ONLY"
       ],
       [
         "Stereo / L / R",
-        "UI ONLY"
-      ],
-      [
-        "Audio routing",
-        "NOT SET"
+        "LOCAL ONLY"
       ],
       [
         "Backend",
         "LOCAL"
+      ],
+      [
+        "Server",
+        "PARAMS"
       ]
     ],
     "art": "none",
@@ -11544,19 +11612,19 @@
     "rows": [
       [
         "Manual BPM",
-        "UI ONLY"
+        "LOCAL ONLY"
       ],
       [
         "Stereo / L / R",
-        "UI ONLY"
-      ],
-      [
-        "Audio routing",
-        "NOT SET"
+        "LOCAL ONLY"
       ],
       [
         "Backend",
         "LOCAL"
+      ],
+      [
+        "Server",
+        "PARAMS"
       ]
     ],
     "art": "none",
@@ -11571,19 +11639,19 @@
     "rows": [
       [
         "Manual BPM",
-        "UI ONLY"
+        "LOCAL ONLY"
       ],
       [
         "Stereo / L / R",
-        "UI ONLY"
-      ],
-      [
-        "Audio routing",
-        "NOT SET"
+        "LOCAL ONLY"
       ],
       [
         "Backend",
         "LOCAL"
+      ],
+      [
+        "Server",
+        "PARAMS"
       ]
     ],
     "art": "none",
@@ -11598,19 +11666,19 @@
     "rows": [
       [
         "Manual BPM",
-        "UI ONLY"
+        "LOCAL ONLY"
       ],
       [
         "Stereo / L / R",
-        "UI ONLY"
-      ],
-      [
-        "Audio routing",
-        "NOT SET"
+        "LOCAL ONLY"
       ],
       [
         "Backend",
         "LOCAL"
+      ],
+      [
+        "Server",
+        "PARAMS"
       ]
     ],
     "art": "none",
@@ -11620,24 +11688,24 @@
     "field": 3
   },
   "R15.0": {
-    "title": "PREVIEW SHIFT",
-    "context": "P03 CYM  PREVIEW",
+    "title": "BROWSE",
+    "context": "P03 CYM  2.1.1",
     "rows": [
       [
-        "Left",
+        "Back",
         "GRID 10,8"
       ],
       [
-        "Reset",
+        "Phrase start",
         "GRID 11,8"
       ],
       [
-        "Right",
+        "Forward",
         "GRID 12,8"
       ],
       [
-        "Scope",
-        "PREVIEW ONLY"
+        "Window",
+        "2.1.1"
       ]
     ],
     "art": "none",
@@ -11647,24 +11715,24 @@
     "field": 0
   },
   "R15.1": {
-    "title": "PREVIEW SHIFT",
-    "context": "P03 CYM  PREVIEW",
+    "title": "BROWSE",
+    "context": "P03 CYM  2.1.1",
     "rows": [
       [
-        "Left",
+        "Back",
         "GRID 10,8"
       ],
       [
-        "Reset",
+        "Phrase start",
         "GRID 11,8"
       ],
       [
-        "Right",
+        "Forward",
         "GRID 12,8"
       ],
       [
-        "Scope",
-        "PREVIEW ONLY"
+        "Window",
+        "2.1.1"
       ]
     ],
     "art": "none",
@@ -11674,24 +11742,24 @@
     "field": 1
   },
   "R15.2": {
-    "title": "PREVIEW SHIFT",
-    "context": "P03 CYM  PREVIEW",
+    "title": "BROWSE",
+    "context": "P03 CYM  2.1.1",
     "rows": [
       [
-        "Left",
+        "Back",
         "GRID 10,8"
       ],
       [
-        "Reset",
+        "Phrase start",
         "GRID 11,8"
       ],
       [
-        "Right",
+        "Forward",
         "GRID 12,8"
       ],
       [
-        "Scope",
-        "PREVIEW ONLY"
+        "Window",
+        "2.1.1"
       ]
     ],
     "art": "none",
@@ -11701,24 +11769,24 @@
     "field": 2
   },
   "R15.3": {
-    "title": "PREVIEW SHIFT",
-    "context": "P03 CYM  PREVIEW",
+    "title": "BROWSE",
+    "context": "P03 CYM  2.1.1",
     "rows": [
       [
-        "Left",
+        "Back",
         "GRID 10,8"
       ],
       [
-        "Reset",
+        "Phrase start",
         "GRID 11,8"
       ],
       [
-        "Right",
+        "Forward",
         "GRID 12,8"
       ],
       [
-        "Scope",
-        "PREVIEW ONLY"
+        "Window",
+        "2.1.1"
       ]
     ],
     "art": "none",
@@ -14188,5 +14256,113 @@
       ]
     ],
     "art": "none"
+  },
+  "R16.0": {
+    "title": "CANCEL CORRECTION?",
+    "context": "P03  CORRECTING",
+    "rows": [
+      [
+        "Restore previous bank?",
+        ""
+      ],
+      [
+        "Correction discarded",
+        ""
+      ],
+      [
+        "K2 keeps correcting",
+        ""
+      ],
+      [
+        "K3 restores bank",
+        ""
+      ]
+    ],
+    "art": "doctor",
+    "family": "detail",
+    "badge": "CONFIRM",
+    "screen": "R16",
+    "field": 0
+  },
+  "R16.1": {
+    "title": "CANCEL CORRECTION?",
+    "context": "P03  CORRECTING",
+    "rows": [
+      [
+        "Restore previous bank?",
+        ""
+      ],
+      [
+        "Correction discarded",
+        ""
+      ],
+      [
+        "K2 keeps correcting",
+        ""
+      ],
+      [
+        "K3 restores bank",
+        ""
+      ]
+    ],
+    "art": "doctor",
+    "family": "detail",
+    "badge": "CONFIRM",
+    "screen": "R16",
+    "field": 1
+  },
+  "R16.2": {
+    "title": "CANCEL CORRECTION?",
+    "context": "P03  CORRECTING",
+    "rows": [
+      [
+        "Restore previous bank?",
+        ""
+      ],
+      [
+        "Correction discarded",
+        ""
+      ],
+      [
+        "K2 keeps correcting",
+        ""
+      ],
+      [
+        "K3 restores bank",
+        ""
+      ]
+    ],
+    "art": "doctor",
+    "family": "detail",
+    "badge": "CONFIRM",
+    "screen": "R16",
+    "field": 2
+  },
+  "R16.3": {
+    "title": "CANCEL CORRECTION?",
+    "context": "P03  CORRECTING",
+    "rows": [
+      [
+        "Restore previous bank?",
+        ""
+      ],
+      [
+        "Correction discarded",
+        ""
+      ],
+      [
+        "K2 keeps correcting",
+        ""
+      ],
+      [
+        "K3 restores bank",
+        ""
+      ]
+    ],
+    "art": "doctor",
+    "family": "detail",
+    "badge": "CONFIRM",
+    "screen": "R16",
+    "field": 3
   }
 }

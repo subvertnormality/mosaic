@@ -24,7 +24,7 @@ args={
  'model':'claude-fable-5-1',
  'effort':'high',
  'lineage':'mosaic-ui-reimplementation-20260924',
- 'round':1,
+ 'round':2,
  'class_closure':True,
  'propose_patch':True,
 }

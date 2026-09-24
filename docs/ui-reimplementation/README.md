@@ -1,18 +1,22 @@
 # Mosaic UI reimplementation contract
 
 This is the canonical specification for migrating the UI on `codex/1.4.0`.
-Read `../../README.md` as the musical manual. It was read in full against the
-working tree on 24 September 2026; its fingerprint and section-by-section text
-are recorded in `source-inventory.json`. Assume `../testing/ui-abstraction-plan.md`
+Read `../../README.md` as the musical manual. It was read in full against
+commit `56a9ba23` on 24 September 2026; its fingerprint and section-by-section
+text are recorded in `source-inventory.json`, and the validator checks each
+section against the README itself. The baseline is that commit, never a working
+tree: uncommitted copies of inventoried sources invalidate the contract. Assume `../testing/ui-abstraction-plan.md`
 has been completed before beginning implementation.
 
 ## Authority and reading order
 
-1. `spec.json`: machine-readable screen registry, input precedence, effect
-   contracts, source-route translation, physical grid ownership, providers,
+1. `spec.json`: machine-readable screen registry, input precedence and emission,
+   effect contracts, source-route translation, physical grid ownership (including
+   the Rhythm Doctor overlay and `doctor_routes`), task navigators, providers,
    field domains, migration slices and acceptance matrix.
-2. `source-inventory.json`: source fingerprints, every registered grid callback,
-   retained controller/native-setting units and manual-to-screen mappings.
+2. `source-inventory.json`: source fingerprints, every registered grid callback
+   with its branch ledger, retained controller/native-setting units and
+   manual-to-screen mappings.
 3. `code/screen.lua`: executable data-bound layout proto-code. Feed it a
    `ViewModel` following `spec.json#/view_model`; never feed it application state.
 4. `code/atlas.lua`, `code/characters.lua`, `code/visuals.lua` and `fixtures.json`:
@@ -96,7 +100,9 @@ mutation tests, never the implementation readiness gate.
 ## What validation establishes
 
 The validator checks declared references, input ownership ambiguity, source
-identity and the 128-cell partition for every context. Transition tests exercise
+identity, manual sections against the README, field identity, route maps, the
+branch ledger, the Doctor overlay and route table, and the 128-cell partition for
+every context. Transition tests exercise
 navigation, held scope, native ownership, read-only protection and invalidation.
 Lua replay executes every accepted fixture and its data-bound counterpart, plus
 empty states. Synthetic text metrics permit offline execution; they do **not**
