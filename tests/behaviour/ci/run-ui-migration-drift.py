@@ -173,6 +173,8 @@ def _run_case(scratch, output, case, profile, install, mod_root, timeout):
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                timeout=timeout)
     manifest = failed_run_manifest(completed, case)
+    if manifest.name != "manifest.json" or manifest.parent.parent != root.resolve():
+        raise ValueError("run.py manifest is outside standalone artifact root")
     log = dict(command=command, returncode=completed.returncode,
                stdout=completed.stdout, stderr=completed.stderr,
                manifest=str(manifest))

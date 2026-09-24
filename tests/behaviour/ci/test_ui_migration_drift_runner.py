@@ -4,6 +4,7 @@ import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 SCRIPT = Path(__file__).with_name("run-ui-migration-drift.py")
@@ -85,6 +86,44 @@ OTHER = 7
                     args=[], returncode=returncode, stdout=json.dumps(row) + "\n", stderr="")
                 with self.assertRaises(ValueError):
                     runner.failed_run_manifest(completed, "M-ONE")
+
+    def test_standalone_run_rejects_manifest_outside_uploaded_evidence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            manifest = root / "outside" / "manifest.json"
+            manifest.parent.mkdir()
+            manifest.write_text("{}\n", encoding="utf-8")
+            completed = subprocess.CompletedProcess(
+                args=[], returncode=1,
+                stdout=json.dumps(dict(case="M-ONE", passed=False,
+                                       manifest=str(manifest))) + "\n",
+                stderr="")
+            with patch.object(runner.subprocess, "run", return_value=completed):
+                with self.assertRaisesRegex(ValueError, "outside standalone artifact root"):
+                    runner._run_case(root / "scratch", root / "output", "M-ONE",
+                                     "base-midi", "installation.json", None, 10)
+
+    def test_standalone_run_preserves_manifest_inside_uploaded_evidence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "output"
+            manifest = output / "standalone" / "M-ONE" / "run-1" / "manifest.json"
+
+            def fake_run(*args, **kwargs):
+                manifest.parent.mkdir()
+                manifest.write_text("{}\n", encoding="utf-8")
+                return subprocess.CompletedProcess(
+                    args=[], returncode=1,
+                    stdout=json.dumps(dict(case="M-ONE", passed=False,
+                                           manifest=str(manifest))) + "\n",
+                    stderr="")
+
+            with patch.object(runner.subprocess, "run", side_effect=fake_run):
+                self.assertEqual(
+                    runner._run_case(root / "scratch", output, "M-ONE",
+                                     "base-midi", "installation.json", None, 10),
+                    manifest)
+            self.assertTrue((output / "standalone-logs" / "M-ONE.json").is_file())
 
     def test_scratch_commit_changes_only_the_exact_page_order_and_bundles(self):
         source = """from collections import OrderedDict
