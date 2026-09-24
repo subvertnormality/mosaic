@@ -18,6 +18,14 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_navigation_matrix_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.navigation_matrix as owner
+
+        run = CASES['M-NAV-001']['run']
+        self.assertIs(run, owner.navigation_matrix)
+        self.assertEqual(run.__module__, 'contract.navigation_matrix')
+
     def test_mosaic_options_case_callers_use_semantic_ui_verb(self):
         """Keep native-menu seeks out of the six non-contract case bodies."""
         import ast
@@ -82,9 +90,9 @@ class UiLayerGuardTests(unittest.TestCase):
             "muted_sparse_reverse_arp", "arp_rest_live_scale",
             "arp_empty_muted_replacement", "navigation_matrix",
         }
-        contract_tree = _tree(str((BEHAVIOUR / "contract" /
-                                   "playhead_feedback.py").resolve()))
-        functions = {node.name: node for owner in (tree, contract_tree)
+        contract_trees = [_tree(str((BEHAVIOUR / "contract" / name).resolve()))
+                          for name in ("playhead_feedback.py", "navigation_matrix.py")]
+        functions = {node.name: node for owner in (tree, *contract_trees)
                      for node in owner.body
                      if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))}
         self.assertTrue(names <= functions.keys(), names - functions.keys())
