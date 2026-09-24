@@ -1,0 +1,8 @@
+{
+  "scope": "specification reference model only",
+  "case": "test_clean_feature_child_returns_root_before_tasks",
+  "baseline_sha256": "ae526238e494bd76d3b760be9478114e509c5ffd59964781dc6529d2d3a0e6c7",
+  "observed": "M03 E1+ returned N01",
+  "expected": "M02, then next E1+ returns N01",
+  "status": "failed before correction"
+}
