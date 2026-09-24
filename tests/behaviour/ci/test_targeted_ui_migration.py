@@ -236,22 +236,26 @@ class TargetedMigrationTests(unittest.TestCase):
             item = dict(case="M-GRID-001", clock_mode="controlled-experimental",
                         mosaic_revision="a" * 40, profile="base-midi", passed=True,
                         campaign_complete=False, diagnostic_only=True, failure=None,
+                        behaviour_source_sha256={},
                         artifacts=artifacts)
             manifest = run / "manifest.json"
             manifest.write_text(json.dumps(item))
             targeted.verified_manifest(manifest, "M-GRID-001",
-                                       "controlled-experimental", "a" * 40)
+                                       "controlled-experimental", "a" * 40,
+                                       expected_behaviour_source_sha256={})
             for changed in (dict(passed=False), dict(mosaic_revision="b" * 40),
                             dict(diagnostic_only=False), dict(campaign_complete=True)):
                 with self.subTest(changed=changed), self.assertRaises(ValueError):
                     manifest.write_text(json.dumps({**item, **changed}))
                     targeted.verified_manifest(manifest, "M-GRID-001",
-                                               "controlled-experimental", "a" * 40)
+                                               "controlled-experimental", "a" * 40,
+                                               expected_behaviour_source_sha256={})
             manifest.write_text(json.dumps(item))
             (run / "restarted/results.json").write_text("[1]")
             with self.assertRaisesRegex(ValueError, "digest differs"):
                 targeted.verified_manifest(manifest, "M-GRID-001",
-                                           "controlled-experimental", "a" * 40)
+                                           "controlled-experimental", "a" * 40,
+                                           expected_behaviour_source_sha256={})
 
     def test_manifest_binds_requested_non_base_profile(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -261,16 +265,97 @@ class TargetedMigrationTests(unittest.TestCase):
             item = dict(case="M-MOD-001", clock_mode="controlled-experimental",
                         mosaic_revision="a" * 40, profile="midi-modulation", passed=True,
                         campaign_complete=False, diagnostic_only=True, failure=None,
+                        behaviour_source_sha256={},
                         artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
                                    for name in ("recipe.json", "results.json")])
             manifest = run / "manifest.json"
             manifest.write_text(json.dumps(item))
             targeted.verified_manifest(manifest, "M-MOD-001",
                                        "controlled-experimental", "a" * 40,
-                                       profile="midi-modulation")
+                                       profile="midi-modulation",
+                                       expected_behaviour_source_sha256={})
             with self.assertRaisesRegex(ValueError, "profile differs"):
                 targeted.verified_manifest(manifest, "M-MOD-001",
-                                           "controlled-experimental", "a" * 40)
+                                           "controlled-experimental", "a" * 40,
+                                           expected_behaviour_source_sha256={})
+
+    def test_manifest_binds_behavior_source_to_pre_run_snapshot(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            run = Path(temporary)
+            for name in ("recipe.json", "results.json"):
+                (run / name).write_text("[]")
+            expected = {"tests/behaviour/cases.py": "a" * 64}
+            item = dict(case="M-GRID-001", clock_mode="real-time",
+                        mosaic_revision="a" * 40, profile="base-midi", passed=True,
+                        campaign_complete=False, diagnostic_only=False, failure=None,
+                        behaviour_source_sha256=expected,
+                        artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
+                                   for name in ("recipe.json", "results.json")])
+            manifest = run / "manifest.json"
+            manifest.write_text(json.dumps(item))
+            with self.assertRaisesRegex(ValueError, "behaviour_source_sha256"):
+                targeted.verified_manifest(
+                    manifest, "M-GRID-001", "real-time", "a" * 40,
+                    expected_behaviour_source_sha256={
+                        "tests/behaviour/cases.py": "b" * 64})
+
+    def test_execute_rechecks_checkout_cleanliness_after_each_run(self):
+        from types import SimpleNamespace
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            before, after = root / "before", root / "after"
+            for source in (before, after):
+                behaviour = source / "tests/behaviour"
+                behaviour.mkdir(parents=True)
+                (behaviour / "cases.py").write_text("# fixture\n")
+            install = root / "installation.json"
+            install.write_text("{}")
+            output = root / "output"
+            output.mkdir()
+            expected_before = targeted.behaviour_source_hashes(before)
+            args = SimpleNamespace(
+                case_ids="M-GRID-001", before=before, after=after,
+                before_sha="a" * 40, after_sha="b" * 40,
+                profile="base-midi", mod_code_root=None, mod_patches=False,
+                install=install, emulator=root, output=output)
+            state = {"before_run_finished": False}
+
+            def source_identity(source, expected):
+                if source == before and state["before_run_finished"]:
+                    raise ValueError("source checkout is dirty: " + str(source))
+                return expected
+
+            def run_one(source, case, lane, run_output, *rest):
+                run = run_output / "run-1"
+                run.mkdir(parents=True)
+                manifest = run / "manifest.json"
+                manifest.write_text("{}")
+                if source == before:
+                    state["before_run_finished"] = True
+                return 0, manifest
+
+            with patch.object(targeted, "source_identity", side_effect=source_identity), \
+                    patch.object(targeted, "registry_profile",
+                                 return_value={"M-GRID-001": "base-midi"}), \
+                    patch.object(targeted, "selected_case_lanes",
+                                 return_value={"M-GRID-001": ("real-time",)}), \
+                    patch.object(targeted, "check_source_delta", return_value={}), \
+                    patch.object(targeted.subprocess, "check_output", return_value="e" * 40), \
+                    patch.object(targeted, "run_one", side_effect=run_one), \
+                    patch.object(targeted, "verified_manifest") as verify_manifest, \
+                    patch.object(targeted, "check_session_roots", return_value=[]):
+                status = targeted.execute(args)
+
+            report = json.loads((output / "targeted-ui-migration.json").read_text())
+            self.assertEqual(
+                verify_manifest.call_args_list[0].kwargs[
+                    "expected_behaviour_source_sha256"],
+                expected_before)
+            self.assertEqual(status, 1)
+            self.assertFalse(report["passed"])
+            self.assertTrue(any("source checkout is dirty" in error
+                                for error in report["cases"][0]["lanes"][0]["gate_errors"]))
 
     def test_run_command_passes_profile_and_fixture_setup_to_both_lanes(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -341,6 +426,7 @@ class TargetedMigrationTests(unittest.TestCase):
             item = dict(case="M-GRID-001", clock_mode="real-time",
                         mosaic_revision="a" * 40, profile="base-midi", passed=True,
                         campaign_complete=False, diagnostic_only=False, failure=None,
+                        behaviour_source_sha256={},
                         artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
                                    for name in ("recipe.json", "results.json")])
             manifest = run / "manifest.json"
@@ -350,12 +436,16 @@ class TargetedMigrationTests(unittest.TestCase):
                 return path == run / "recipe.json" or original(path)
             with patch.object(Path, "is_symlink", simulated_symlink):
                 with self.assertRaisesRegex(ValueError, "symlinked evidence path"):
-                    targeted.verified_manifest(manifest, "M-GRID-001", "real-time", "a" * 40)
+                    targeted.verified_manifest(
+                        manifest, "M-GRID-001", "real-time", "a" * 40,
+                        expected_behaviour_source_sha256={})
             # A symlinked containing directory is equally unsafe, even when
             # the recipe path itself is a regular file in its target.
             with patch.object(Path, "is_symlink", lambda path: path == run or original(path)):
                 with self.assertRaisesRegex(ValueError, "symlinked evidence path"):
-                    targeted.verified_manifest(manifest, "M-GRID-001", "real-time", "a" * 40)
+                    targeted.verified_manifest(
+                        manifest, "M-GRID-001", "real-time", "a" * 40,
+                        expected_behaviour_source_sha256={})
 
     def test_real_symlinked_recipe_is_not_accepted_when_platform_permits_it(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -372,12 +462,15 @@ class TargetedMigrationTests(unittest.TestCase):
             item = dict(case="M-GRID-001", clock_mode="real-time",
                         mosaic_revision="a" * 40, profile="base-midi", passed=True,
                         campaign_complete=False, diagnostic_only=False, failure=None,
+                        behaviour_source_sha256={},
                         artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
                                    for name in ("recipe.json", "results.json")])
             manifest = run / "manifest.json"
             manifest.write_text(json.dumps(item))
             with self.assertRaisesRegex(ValueError, "symlinked evidence path"):
-                targeted.verified_manifest(manifest, "M-GRID-001", "real-time", "a" * 40)
+                targeted.verified_manifest(
+                    manifest, "M-GRID-001", "real-time", "a" * 40,
+                    expected_behaviour_source_sha256={})
 
     def test_source_delta_rejects_production_and_shared_harness_changes(self):
         production = {"mosaic.lua": ("100644", "blob", "a" * 40),

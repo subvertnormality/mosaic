@@ -47,6 +47,12 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def behaviour_source_hashes(root):
+    """Match run.py's source inventory for the checkout before an emulator run."""
+    return {path.relative_to(root).as_posix(): sha256(path)
+            for path in sorted((root / "tests/behaviour").rglob("*.py"))}
+
+
 def cases_from_input(raw):
     cases = [item.strip() for item in raw.split(",")]
     require(cases and all(CASE.fullmatch(item) for item in cases),
@@ -278,13 +284,18 @@ def require_no_symlink_ancestors(path):
         require(not component.is_symlink(), "symlinked evidence path: " + str(component))
 
 
-def verified_manifest(manifest_path, case, lane, revision, profile="base-midi"):
+def verified_manifest(manifest_path, case, lane, revision, profile="base-midi", *,
+                      expected_behaviour_source_sha256):
     require_no_symlink_ancestors(manifest_path)
     item = json.loads(manifest_path.read_text())
     require(isinstance(item, dict), "run manifest is not an object")
     for key, expected in (("case", case), ("clock_mode", lane),
                           ("mosaic_revision", revision), ("profile", profile)):
         require(item.get(key) == expected, "run manifest %s differs" % key)
+    require(isinstance(expected_behaviour_source_sha256, dict)
+            and isinstance(item.get("behaviour_source_sha256"), dict)
+            and item["behaviour_source_sha256"] == expected_behaviour_source_sha256,
+            "run manifest behaviour_source_sha256 differs from pre-run source")
     require(item.get("campaign_complete") is False and item.get("passed") is True
             and item.get("failure") is None, "before/after run did not pass")
     require(item.get("diagnostic_only") is (lane == "controlled-experimental"),
@@ -396,6 +407,8 @@ def execute(args):
                                                ("after", args.after, after_sha)):
                     output = args.output / case / lane / side
                     try:
+                        source_identity(source, revision)
+                        expected_behaviour_source_sha256 = behaviour_source_hashes(source)
                         status, manifest = run_one(source, case, lane, output, args.install,
                                                    args.profile, args.mod_code_root,
                                                    args.mod_patches)
@@ -403,7 +416,11 @@ def execute(args):
                             manifest=str(manifest.relative_to(args.output)),
                             manifest_sha256=sha256(manifest))
                         require(status == 0, "%s run exited %d" % (side, status))
-                        verified_manifest(manifest, case, lane, revision, args.profile)
+                        verified_manifest(
+                            manifest, case, lane, revision, args.profile,
+                            expected_behaviour_source_sha256=
+                                expected_behaviour_source_sha256)
+                        source_identity(source, revision)
                         roots[side] = manifest.parent
                     except (ValueError, OSError, subprocess.SubprocessError) as error:
                         lane_row["gate_errors"].append("%s: %s" % (side, error))
