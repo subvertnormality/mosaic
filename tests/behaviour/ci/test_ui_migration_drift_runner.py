@@ -14,6 +14,12 @@ SPEC.loader.exec_module(runner)
 
 
 class DriftRunnerTests(unittest.TestCase):
+    def test_exact_text_writer_preserves_lf_bytes(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "evidence.txt"
+            runner.write_exact_text(path, "a\nb\n")
+            self.assertEqual(path.read_bytes(), b"a\nb\n")
+
     def test_workflow_dispatch_drift_job_isolated_from_other_modes(self):
         workflow = (SCRIPT.parents[3] / ".github/workflows/behaviour.yml").read_text(
             encoding="utf-8")

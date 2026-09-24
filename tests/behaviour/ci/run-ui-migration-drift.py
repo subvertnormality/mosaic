@@ -19,6 +19,12 @@ MAP = "tests/behaviour/ui_map.py"
 PAGE_KEYS = ("masks", "merge_shape")
 
 
+def write_exact_text(path, content):
+    """Write evidence without host newline translation (including Python 3.8)."""
+    with path.open("w", encoding="utf-8", newline="") as stream:
+        stream.write(content)
+
+
 def git(repo, *args, check=True):
     result = subprocess.run(["git", *args], cwd=repo, text=True,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -150,7 +156,7 @@ def make_scratch_commit(repo, baseline, pages, branch, scratch):
         git(scratch, "submodule", "update", "--init", "--recursive")
     map_path = scratch / MAP
     original = map_path.read_text(encoding="utf-8")
-    map_path.write_text(swap_channel_pages(original, pages), encoding="utf-8", newline="")
+    write_exact_text(map_path, swap_channel_pages(original, pages))
     git(scratch, "add", "--", MAP)
     git(scratch, "-c", "user.name=github-actions[bot]",
         "-c", "user.email=41898282+github-actions[bot]@users.noreply.github.com",
@@ -164,10 +170,9 @@ def preserve_scratch_commit(repo, output, baseline, scratch_sha, branch):
         "^" + baseline)
     git(repo, "bundle", "verify", str(bundle))
     patch = git(repo, "format-patch", "--stdout", "-1", scratch_sha)
-    (output / "scratch-commit.patch").write_text(patch.stdout, encoding="utf-8", newline="")
-    (output / "scratch-commit.txt").write_text(
-        git(repo, "show", "--format=fuller", "--no-patch", scratch_sha).stdout,
-        encoding="utf-8", newline="")
+    write_exact_text(output / "scratch-commit.patch", patch.stdout)
+    write_exact_text(output / "scratch-commit.txt",
+                     git(repo, "show", "--format=fuller", "--no-patch", scratch_sha).stdout)
     return bundle
 
 
