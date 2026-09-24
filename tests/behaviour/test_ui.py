@@ -528,6 +528,26 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual(pattern_grid_viewer.__module__, 'contract.grid_viewer')
         self.assertIsNone(pattern_grid_viewer.__closure__)
 
+    def test_parameter_division_bounds_have_named_contract_owners(self):
+        from cases import CASES
+        from unittest.mock import patch, sentinel
+        import contract.parameter_divisions as owner
+
+        for case_id, name, parameter in (
+            ('M-PARAM-001', 'chord_note_strum_divisions', 'chord_note_strum'),
+            ('M-PARAM-002', 'chord_note_arpeggio_divisions', 'chord_note_arpeggio'),
+            ('M-PARAM-003', 'chord_spread_divisions', 'chord_spread'),
+        ):
+            with self.subTest(case_id=case_id):
+                run = CASES[case_id]['run']
+                self.assertIs(run, getattr(owner, name))
+                self.assertEqual(run.__module__, 'contract.parameter_divisions')
+                self.assertIsNone(run.__closure__)
+                with patch.object(owner, 'parameter_division_bounds',
+                                  return_value=sentinel.result) as helper:
+                    self.assertIs(run(sentinel.driver), sentinel.result)
+                helper.assert_called_once_with(sentinel.driver, parameter)
+
     def test_editor_range_and_selector_cases_use_semantic_inputs(self):
         source = (BEHAVIOUR / "cases.py").read_text()
         module = ast.parse(source)

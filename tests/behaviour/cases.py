@@ -26,6 +26,10 @@ from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from contract.device_configs import malformed_device_configs, missing_id_device_configs
 from contract.grid_viewer import pattern_grid_viewer
+from contract.parameter_divisions import (
+    chord_note_strum_divisions, chord_note_arpeggio_divisions,
+    chord_spread_divisions,
+)
 from contract.chord_shapes import chord_shape_case
 from device_configs import device_config_defaults
 from unreadable_device_config import unreadable_device_config
@@ -1568,24 +1572,6 @@ def arp_basic_timing(c,replacement=False,fractional_gate=False,reset=False,fast=
     field='logical_ns' if controlled else 'monotonic_ns';notes=capture.note_ons();assert notes
     rows=assert_schedule(capture.events,expected,durations,field=field,origin=notes[0][field],stop_bounds=(lower,upper),tolerance=2e-9 if controlled else .01)
     c.results.append(dict(kind='native-arpeggio-half-step',replacement=replacement,fractional_gate=fractional_gate,reset=reset,fast=fast,onsets=len(expected),release_checks=len(rows),passed=True))
-
-
-def parameter_division_bounds(c,parameter):
-    import base64
-    from frame_oracle import render
-    parameter_label=c.ui.trig_parameter_label(parameter)
-    def label(value):
-        expected=render([(0,25,15,value)])
-        indices=[(y*128+x)*4+k for y in range(19,27) for x in range(24) for k in range(3)]
-        def matches(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[i]==expected[i] for i in indices)
-        c.wait(matches);c.results.append(dict(kind='parameter-division-label',parameter=parameter_label,value=value,passed=True))
-    c.configure();c.ui.turn(1,-3);c.ui.assign_trig_parameter_key(parameter)
-    label('X');c.ui.set_value(-3);label('X')
-    c.ui.set_value(1);label('1/24');c.ui.set_value(88);label('128')
-    c.ui.set_value(3);label('128')
-    c.ui.set_value(-1);label('120');c.ui.set_value(-88);label('X')
 
 
 def spread_acceleration_contract(c,arp,acceleration,explicit_off=False):
@@ -3576,9 +3562,9 @@ CASES={
  'M-SPREAD-003':dict(run=lambda c:spread_acceleration_contract(c,False,-3),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -3: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-002':dict(run=lambda c:spread_acceleration_contract(c,False,-4),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -4: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-001':dict(run=lambda c:spread_acceleration_contract(c,False,-5),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -5: independent new-contract gap table, nonpositive termination and Stop accounting'),
- 'M-PARAM-003':dict(run=lambda c:parameter_division_bounds(c,'chord_spread'),requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
- 'M-PARAM-002':dict(run=lambda c:parameter_division_bounds(c,'chord_note_arpeggio'),requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
- 'M-PARAM-001':dict(run=lambda c:parameter_division_bounds(c,'chord_note_strum'),requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-003':dict(run=chord_spread_divisions,requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-002':dict(run=chord_note_arpeggio_divisions,requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
+ 'M-PARAM-001':dict(run=chord_note_strum_divisions,requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-ARP-005':dict(controlled_only='Exact one-pulse arp boundary fixture requires controlled time; real-time family acceptance uses separate scheduling metrics',run=lambda c:arp_basic_timing(c,fast=True),requirements=['CHORD-ARP','CH-TEMPO'],description='Controlled one-pulse1/24 arp: exact note releases through every parent-cycle boundary and Stop, using native UI/MIDI'),
  'M-ARP-004':dict(run=lambda c:arp_basic_timing(c,reset=True),requirements=['CHORD-ARP','OPT-REPEAT-RESET','CH-TEMPO'],description='Repeat resets replace a long arp while an identical-pitch tail is sounding; old gates must not cut replacement voices'),
  'M-ARP-002':dict(run=lambda c:arp_basic_timing(c,replacement=True),requirements=['CHORD-ARP','PARAM-SLOTS','CH-TEMPO'],description='Replacing two-step arpeggios each step must not let old termination release the new generation'),
