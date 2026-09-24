@@ -577,6 +577,48 @@ class TargetedMigrationTests(unittest.TestCase):
                     Path("before"), Path("after"), ["M-SCALE-LOCK-003"],
                     historical=True)
 
+    def test_historical_allowlist_removal_is_bound_to_selected_changed_owner(self):
+        production = {"mosaic.lua": ("100644", "blob", "a" * 40),
+                      "lib/nb": ("160000", "commit", "b" * 40)}
+        owner = "tests/behaviour/scale_lock_precedence.py"
+        allowlist = "tests/behaviour/ui_migration_allowlist.json"
+        before = {owner: ("100644", "blob", "c" * 40),
+                  allowlist: ("100644", "blob", "d" * 40),
+                  **{path: ("100644", "blob", "1" * 40)
+                     for path in targeted.PINNED_GATE_PATHS}}
+        after = {owner: ("100644", "blob", "e" * 40),
+                 allowlist: ("100644", "blob", "f" * 40),
+                 **{path: ("100644", "blob", "1" * 40)
+                    for path in targeted.PINNED_GATE_PATHS}}
+
+        def compare(old, new, *, historical=True, owner_changed=True):
+            candidate = after if owner_changed else {**after, owner: before[owner]}
+            with patch.object(targeted, "selected_case_modules", return_value={owner}), \
+                    patch.object(targeted, "tree_entries", side_effect=[
+                        production, production, before, candidate]), \
+                    patch.object(targeted.subprocess, "check_output", side_effect=[
+                        json.dumps(old).encode(), json.dumps(new).encode()]):
+                return targeted.check_source_delta(
+                    Path("before"), Path("after"), ["M-SCALE-LOCK-003"],
+                    historical=historical)
+
+        result = compare(["scale_lock_precedence.py", "other.py"], ["other.py"])
+        self.assertEqual(result["historical_allowlist"]["removed_modules"],
+                         ["scale_lock_precedence.py"])
+        self.assertEqual(result["historical_allowlist"]["before_blob"], "d" * 40)
+        self.assertEqual(result["historical_allowlist"]["after_blob"], "f" * 40)
+        for old, new in ((["scale_lock_precedence.py"],
+                          ["scale_lock_precedence.py", "other.py"]),
+                         (["scale_lock_precedence.py", "other.py"],
+                          ["scale_lock_precedence.py"]),
+                         (["scale_lock_precedence.py", "scale_lock_precedence.py"], [])):
+            with self.subTest(old=old, new=new), self.assertRaises(ValueError):
+                compare(old, new)
+        with self.assertRaises(ValueError):
+            compare(["scale_lock_precedence.py"], [], owner_changed=False)
+        with self.assertRaisesRegex(ValueError, "unrelated behaviour harness/fixture"):
+            compare(["scale_lock_precedence.py"], [], historical=False)
+
     def test_historical_tooling_identity_reports_commit_and_all_pinned_hashes(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)

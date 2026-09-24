@@ -37,6 +37,7 @@ PINNED_GATE_PATHS = (
     "tests/behaviour/ci/targeted-ui-migration.py",
     "tests/behaviour/ci/compare_ptn_graph.lua",
 )
+HISTORICAL_ALLOWLIST_PATH = "tests/behaviour/ui_migration_allowlist.json"
 
 
 def require(condition, message):
@@ -317,6 +318,41 @@ def tree_entries(root, *paths):
     return entries
 
 
+def historical_allowlist_removal(before, after, before_tests, after_tests,
+                                 selected_sources, changed_tests):
+    """Admit only selected-owner removals from old migration policy metadata."""
+    path = HISTORICAL_ALLOWLIST_PATH
+    entries = []
+    for side, source, tree in (("before", before, before_tests),
+                               ("after", after, after_tests)):
+        entry = tree.get(path)
+        require(entry is not None and entry[0] == "100644" and entry[1] == "blob",
+                side + " historical allowlist is not a regular tracked JSON file")
+        raw = subprocess.check_output(["git", "cat-file", "blob", entry[2]], cwd=source)
+        try:
+            names = json.loads(raw)
+        except (UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise ValueError(side + " historical allowlist is invalid JSON") from error
+        require(isinstance(names, list) and all(isinstance(name, str)
+                and re.fullmatch(r"[a-z][a-z0-9_]*\.py", name) for name in names)
+                and len(names) == len(set(names)),
+                side + " historical allowlist is not a unique module list")
+        entries.append((entry[2], hashlib.sha256(raw).hexdigest(), set(names)))
+    (before_blob, before_hash, before_names), (after_blob, after_hash, after_names) = entries
+    removed = before_names - after_names
+    require(removed and not after_names - before_names,
+            "historical allowlist must only remove selected modules")
+    selected_owners = {Path(name).name for name in selected_sources
+                       if name.startswith("tests/behaviour/")
+                       and not name.startswith("tests/behaviour/contract/")}
+    require(all(name in selected_owners
+                and "tests/behaviour/" + name in changed_tests for name in removed),
+            "historical allowlist removed an unselected or unchanged owner")
+    return dict(before_blob=before_blob, after_blob=after_blob,
+                before_sha256=before_hash, after_sha256=after_hash,
+                removed_modules=sorted(removed))
+
+
 def check_source_delta(before, after, cases, *, historical=False):
     production_before = tree_entries(before, "mosaic.lua", "lib", ".gitmodules",
                                      "README.md", "cheat_sheet.html")
@@ -351,7 +387,13 @@ def check_source_delta(before, after, cases, *, historical=False):
         require(bool(set(changed_tests) & ui_sources),
                 "UI unit tests changed without selected UI source")
         allowed.update(ui_tests)
+    historical_allowlist = None
+    if historical and HISTORICAL_ALLOWLIST_PATH in changed_tests:
+        historical_allowlist = historical_allowlist_removal(
+            before, after, before_tests, after_tests, selected_sources, changed_tests)
     permitted = allowed | (set(PINNED_GATE_PATHS) if historical else set())
+    if historical_allowlist is not None:
+        permitted.add(HISTORICAL_ALLOWLIST_PATH)
     unexpected = sorted(set(changed_tests) - permitted)
     require(not unexpected, "unrelated behaviour harness/fixture source changed: "
             + ", ".join(unexpected))
@@ -364,6 +406,8 @@ def check_source_delta(before, after, cases, *, historical=False):
                   allowed_behaviour_paths=sorted(allowed))
     if historical:
         result["historical_tooling_paths"] = sorted(PINNED_GATE_PATHS)
+        if historical_allowlist is not None:
+            result["historical_allowlist"] = historical_allowlist
     return result
 
 
