@@ -1507,5 +1507,112 @@ class TargetedMigrationTests(unittest.TestCase):
                     exec(selection_code, namespace)
 
 
+    def test_persisted_project_gate_rejects_symlinked_ptn(self):
+        import hashlib
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            external = root / "outside.ptn"
+            external.write_text('return { { value=7 } }\n')
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                if side == "before":
+                    project.write_bytes(external.read_bytes())
+                else:
+                    try:
+                        project.symlink_to(external)
+                    except OSError as error:
+                        self.skipTest("host cannot create symlinks: " + str(error))
+                project_sha = hashlib.sha256(project.read_bytes()).hexdigest()
+                (run / "results.json").write_text(json.dumps([{
+                    "kind": "patch-autosave",
+                    "files": [{"name": "autosave.ptn", "sha256": project_sha}],
+                }]))
+
+            errors = check_session_roots(root / "before", root / "after",
+                                         "controlled", case="M-PATCH-008")
+            self.assertTrue(any("symlink" in error.lower() for error in errors), errors)
+
+    def test_persisted_project_gate_rejects_symlinked_project_ancestor(self):
+        import hashlib
+        import shutil
+
+        from ui_migration_gate import check_session_roots
+
+        if not (shutil.which("lua5.3") or shutil.which("lua")):
+            self.skipTest("Lua 5.3 runtime unavailable")
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            external_dir = root / "outside/generated-project"
+            external_dir.mkdir(parents=True)
+            external_project = external_dir / "autosave.ptn"
+            external_project.write_text('return { { value=7 } }\n')
+            for side in ("before", "after"):
+                run = root / side
+                run.mkdir()
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                if side == "before":
+                    project.parent.mkdir()
+                    project.write_bytes(external_project.read_bytes())
+                else:
+                    try:
+                        project.parent.symlink_to(external_dir, target_is_directory=True)
+                    except OSError as error:
+                        self.skipTest("host cannot create symlinks: " + str(error))
+                project_sha = hashlib.sha256(project.read_bytes()).hexdigest()
+                (run / "results.json").write_text(json.dumps([
+                    {"kind": "patch-autosave", "files": [{
+                        "name": "autosave.ptn", "sha256": project_sha
+                    }]},
+                ]))
+
+            errors = check_session_roots(root / "before", root / "after",
+                                         "controlled", case="M-PATCH-008")
+            self.assertTrue(any("symlink" in error.lower() for error in errors), errors)
+
+    def test_persisted_project_gate_rejects_mocked_symlink_file_and_ancestor(self):
+        import hashlib
+
+        from ui_migration_gate import check_session_roots
+
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for side in ("before", "after"):
+                run = root / side
+                (run / "generated-project").mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                project = run / "generated-project/autosave.ptn"
+                project.write_text('return { { value=7 } }\n')
+                project_sha = hashlib.sha256(project.read_bytes()).hexdigest()
+                (run / "results.json").write_text(json.dumps([
+                    {"kind": "patch-autosave", "files": [{
+                        "name": "autosave.ptn", "sha256": project_sha
+                    }]},
+                ]))
+
+            after_project = root / "after/generated-project/autosave.ptn"
+            original_is_symlink = Path.is_symlink
+            for mocked_link in (after_project, after_project.parent):
+                def mock_is_symlink(path):
+                    return path == mocked_link or original_is_symlink(path)
+
+                with self.subTest(link=mocked_link):
+                    with patch.object(Path, "is_symlink", mock_is_symlink):
+                        with patch("ui_migration_gate.shutil.which", return_value=None):
+                            errors = check_session_roots(
+                                root / "before", root / "after", "controlled",
+                                case="M-PATCH-008")
+                self.assertTrue(any("after persisted project path contains symlink" in error
+                                    for error in errors), errors)
+
 if __name__ == "__main__":
     unittest.main()

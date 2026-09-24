@@ -177,15 +177,36 @@ PERSISTED_PROJECTS = {
 PROJECT_GRAPH_COMPARATOR = Path(__file__).with_name("ci") / "compare_ptn_graph.lua"
 
 
+def _symlinked_within(path, root):
+    """Return the first symlink from path up through root, if present."""
+    current = path
+    while True:
+        if current.is_symlink():
+            return current
+        if current == root or current.parent == current:
+            return None
+        current = current.parent
+
 def _compare_persisted_projects(before, after, relative_paths):
     errors = []
     raw_hashes = {"before": {}, "after": {}}
     lua = shutil.which("lua5.3") or shutil.which("lua")
-    if not lua:
-        return (["Lua 5.3 runtime unavailable for persisted project graph comparison"],
-                raw_hashes)
+    lua_error_reported = False
     for relative in relative_paths:
         before_project, after_project = before / relative, after / relative
+        before_link = _symlinked_within(before_project, before)
+        after_link = _symlinked_within(after_project, after)
+        if before_link is not None:
+            errors.append("before persisted project path contains symlink: " + str(before_link))
+        if after_link is not None:
+            errors.append("after persisted project path contains symlink: " + str(after_link))
+        if before_link is not None or after_link is not None:
+            continue
+        if not lua:
+            if not lua_error_reported:
+                errors.append("Lua 5.3 runtime unavailable for persisted project graph comparison")
+                lua_error_reported = True
+            continue
         if not before_project.is_file():
             errors.append("before missing persisted project artifact: " + relative)
             continue
