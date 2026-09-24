@@ -12,6 +12,11 @@ class LockLeadOwnerTests(unittest.TestCase):
             (2, 'normal'), (3, 'fast'), (4, 'x4-130'), (5, 'x4-200'),
             (6, 'x16-130'), (7, 'swing'), (8, 'swing-negative'),
             (9, 'shuffle'),
+            (10, 'swing-toggle'), (11, 'shuffle-toggle'), (12, 'slides'),
+            (13, 'tempo-change'), (14, 'resend-off'),
+            (15, 'resend-off-x4-200'), (16, 'range-late'),
+            (17, 'range-wrap-slide'), (18, 'global-cap'),
+            (19, 'range-live'), (20, 'range-live-off'),
         )
         for number, scenario in recipes:
             case_id = 'M-SYNC-LEAD-%03d' % number

@@ -696,3 +696,47 @@ def lock_lead_clock_008_swing_negative(c):
 
 def lock_lead_clock_009_shuffle(c):
     return lock_lead_clock_matrix(c, 'shuffle')
+
+
+def lock_lead_clock_010_swing_toggle(c):
+    return lock_lead_clock_matrix(c, 'swing-toggle')
+
+
+def lock_lead_clock_011_shuffle_toggle(c):
+    return lock_lead_clock_matrix(c, 'shuffle-toggle')
+
+
+def lock_lead_clock_012_slides(c):
+    return lock_lead_clock_matrix(c, 'slides')
+
+
+def lock_lead_clock_013_tempo_change(c):
+    return lock_lead_clock_matrix(c, 'tempo-change')
+
+
+def lock_lead_clock_014_resend_off(c):
+    return lock_lead_clock_matrix(c, 'resend-off')
+
+
+def lock_lead_clock_015_resend_off_x4_200(c):
+    return lock_lead_clock_matrix(c, 'resend-off-x4-200')
+
+
+def lock_lead_clock_016_range_late(c):
+    return lock_lead_clock_matrix(c, 'range-late')
+
+
+def lock_lead_clock_017_range_wrap_slide(c):
+    return lock_lead_clock_matrix(c, 'range-wrap-slide')
+
+
+def lock_lead_clock_018_global_cap(c):
+    return lock_lead_clock_matrix(c, 'global-cap')
+
+
+def lock_lead_clock_019_range_live(c):
+    return lock_lead_clock_matrix(c, 'range-live')
+
+
+def lock_lead_clock_020_range_live_off(c):
+    return lock_lead_clock_matrix(c, 'range-live-off')
