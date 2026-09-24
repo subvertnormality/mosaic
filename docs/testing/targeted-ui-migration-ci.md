@@ -25,8 +25,9 @@ suite, fixture or unrelated case changes reject the pair. If a migration
 genuinely needs a shared change, establish a fresh passing before baseline at
 the new revision; do not widen the comparison as a shortcut.
 
-Each selected case runs independently at both commits in real time and
-controlled time against the pinned emulator. Both lanes use its qualified
+Each selected case runs independently at both commits against the pinned
+emulator, in the lanes its registry entry allows: `controlled_only` cases in
+controlled time, `real_time_only` cases in real time, and all others in both. Both lanes use its qualified
 runtime (`--experimental-install`), as the full campaign's `suite.py` does: the
 emulator's default runtime lacks its JACK, screen-worker and SDL teardown fixes,
 and native matron could exit with SIGSEGV (-11) after a passing real-time run.
@@ -41,7 +42,10 @@ normalized recipes must be identical, controlled results may add only
 `ui-confirm` entries, and real-time result-kind sequences must remain the same.
 Symlinked manifests and evidence paths are rejected before reading or hashing.
 After those gates pass, CI runs `repeat.py` once for a selected candidate case
-from each distinct registered owner module. Each invocation starts three fresh
+from each distinct registered owner module, preferring a case with a controlled
+lane. A module whose selected cases are all `real_time_only` instead runs one case
+three times fresh in real time; all three must pass at the candidate source and
+their normalized root and nested recipes must be identical. Each invocation starts three fresh
 controlled-time processes and compares their normalized recipes and logical
 outputs. The step checks all three run manifests against the candidate commit;
 a failed, missing or mismatched repeat fails the targeted job. Inline cases
