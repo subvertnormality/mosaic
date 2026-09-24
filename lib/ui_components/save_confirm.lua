@@ -45,6 +45,11 @@ function save_confirm.cancel()
   cancel_message = default_cancel_message
 end
 
+-- True while a staged change waits for K3 (read-only; used by lib/ui_adapters).
+function save_confirm.has_pending()
+  return #save_funcs > 0
+end
+
 function save_confirm.set_confirm_message(message)
   confirm_message = message
 end

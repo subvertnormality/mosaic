@@ -745,6 +745,15 @@ function trigger_edit_page.get_rhythm_doctor_model()
   return rhythm_doctor and rhythm_doctor.screen_model and rhythm_doctor:screen_model() or nil
 end
 function trigger_edit_page.set_rhythm_doctor(value) rhythm_doctor = value end
+-- Read-only accessors for lib/ui_adapters/doctor.lua (UI02). They expose the
+-- existing instance and state; they change nothing.
+function trigger_edit_page.get_rhythm_doctor() return rhythm_doctor end
+-- doctor_routes input `preview`: the Paint button armed while algorithm 5 is selected.
+function trigger_edit_page.rhythm_doctor_preview_armed()
+  return trigger_edit_page_algorithm_fader:get_value() == 5 and trigger_edit_page_paint_button:get_state() == 2
+end
+-- The destination an armed preview is built for (the selected song slot and pattern).
+function trigger_edit_page.rhythm_doctor_paint_destination() return rhythm_doctor_target() end
 function trigger_edit_page.handle_rhythm_doctor_key(n, z)
   if not rhythm_doctor or not rhythm_doctor.key then return nil end
   return rhythm_doctor:key(n, z)

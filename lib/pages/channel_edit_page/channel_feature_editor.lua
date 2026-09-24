@@ -57,6 +57,11 @@ local function readonly(label, getter, options)
   return options
 end
 
+-- Every field declaration carries a stable `id` (and `repeat_key` for repeated
+-- fields) in its options table. They are the spec field ids read by
+-- lib/ui_adapters/merge.lua and harmony.lua; the editor itself never reads
+-- them, so rendering and dispatch are unchanged.
+
 local function field_value(field)
   local value = field.get and field.get() or field.value
   if value == nil then return "NONE" end
@@ -89,9 +94,16 @@ local function degree_source_key(channel)
   return table.concat(degree_inventory(channel),",")
 end
 
+-- The draw formatter (OFF/ON, NONE, upper case), shared with the UI02 adapters.
+editor.field_value = field_value
+
 function editor.new(kind)
+  -- generation: owner identity for the UI02 adapters. It increments whenever
+  -- the draft is rebuilt from the model (reload: enter, K2/E1/grid cancel,
+  -- HARMONY_LINK) and whenever apply() commits, so a descriptor target captured
+  -- earlier is refused as stale. Nothing in the editor reads it.
   local self = {kind=kind, screen=kind=="merge"and"M01"or"H01", selected=1,
-    stack={}, dirty=false, status="", selected_step=1, selected_group=1, selected_role=1}
+    stack={}, dirty=false, status="", selected_step=1, selected_group=1, selected_role=1, generation=0}
 
   local function channel_config() return self.kind=="merge"and self.draft or self.channel_drafts[self.channel_number] end
   local function groups()
@@ -113,61 +125,61 @@ function editor.new(kind)
   local function merge_fields()
     local value=self.draft
     if self.screen=="M01"then return{
-      editable("Mode",function()return value.mode end,function(v)value.mode=v end,{values={"off","foundation"}}),
-      action("Rhythm","M02"),action("Phrase","M04"),action("Pitch","M05"),action("Result","M07")}
+      editable("Mode",function()return value.mode end,function(v)value.mode=v end,{id="mode",values={"off","foundation"}}),
+      action("Rhythm","M02",{id="rhythm"}),action("Phrase","M04",{id="phrase"}),action("Pitch","M05",{id="pitch"}),action("Result","M07",{id="result"})}
     elseif self.screen=="M02"then return{
-      editable("Anchor",function()return value.anchor end,function(v)value.anchor=v end,{values=assigned_patterns(self.channel)}),
-      editable("Add amount",function()return value.amount end,function(v)value.amount=v end,{min=0,max=100}),
-      action("Amount detail","M03"),
-      editable("Add accent",function()return value.accent end,function(v)value.accent=v end,{min=0,max=100}),
-      editable("Anchor gap",function()return value.gap end,function(v)value.gap=v end,{min=0,max=8}),
-      editable("Seed",function()return value.seed end,function(v)value.seed=v end,{min=0,max=65535})}
+      editable("Anchor",function()return value.anchor end,function(v)value.anchor=v end,{id="anchor",values=assigned_patterns(self.channel)}),
+      editable("Add amount",function()return value.amount end,function(v)value.amount=v end,{id="add_amount",min=0,max=100}),
+      action("Amount detail","M03",{id="amount_detail"}),
+      editable("Add accent",function()return value.accent end,function(v)value.accent=v end,{id="add_accent",min=0,max=100}),
+      editable("Anchor gap",function()return value.gap end,function(v)value.gap=v end,{id="anchor_gap",min=0,max=8}),
+      editable("Seed",function()return value.seed end,function(v)value.seed=v end,{id="seed",min=0,max=65535})}
     elseif self.screen=="M03"then return{
-      editable("Add amount",function()return value.amount end,function(v)value.amount=v end,{min=0,max=100}),
-      readonly("Eligible",function()local f=self.channel.working_pattern and self.channel.working_pattern.foundation;return f and f.eligible_count or 0 end),
-      readonly("Admitted",function()local f=self.channel.working_pattern and self.channel.working_pattern.foundation;return f and f.admitted_count or 0 end)}
+      editable("Add amount",function()return value.amount end,function(v)value.amount=v end,{id="add_amount",min=0,max=100}),
+      readonly("Eligible",function()local f=self.channel.working_pattern and self.channel.working_pattern.foundation;return f and f.eligible_count or 0 end,{id="eligible"}),
+      readonly("Admitted",function()local f=self.channel.working_pattern and self.channel.working_pattern.foundation;return f and f.admitted_count or 0 end,{id="admitted"})}
     elseif self.screen=="M04"then
       local fields={
         editable("Cycles",function()return value.cycles end,function(v)
           value.cycles=v;if value.shape~="custom"then value.percentages=merge_config.curve(value.shape,v)else
             local p={};for i=1,v do p[i]=value.percentages[i]or 100 end;value.percentages=p end
-        end,{values={1,2,4,8}}),
+        end,{id="cycles",values={1,2,4,8}}),
         editable("Shape",function()return value.shape end,function(v)value.shape=v;if v~="custom"then value.percentages=merge_config.curve(v,value.cycles)end end,
-          {values={"flat","build","answer","fill","custom"}})}
+          {id="shape",values={"flat","build","answer","fill","custom"}})}
       for index=1,value.cycles do fields[#fields+1]=editable("Cycle "..index,function()return value.percentages[index]end,
-        function(v)value.percentages[index]=v;value.shape="custom"end,{min=0,max=100})end
-      fields[#fields+1]=editable("Variation",function()return value.variation end,function(v)value.variation=v end,{values={"fixed","per_phrase"}})
+        function(v)value.percentages[index]=v;value.shape="custom"end,{id="cycle_"..index,repeat_key="cycle_<n>",min=0,max=100})end
+      fields[#fields+1]=editable("Variation",function()return value.variation end,function(v)value.variation=v end,{id="variation",values={"fixed","per_phrase"}})
       return fields
     elseif self.screen=="M05"then return{
-      editable("Keep anchor",function()return value.keep_anchor_pitch end,function(v)value.keep_anchor_pitch=v end,{boolean=true}),
+      editable("Keep anchor",function()return value.keep_anchor_pitch end,function(v)value.keep_anchor_pitch=v end,{id="keep_anchor",boolean=true}),
       editable("Add target",function()return value.target.kind end,function(v)value.target={kind=v};if v=="degrees"then value.target.degrees={1}end end,
-        {values={"legacy","scale","degrees","chord"}}),
-      action("Target setup","M06"),action("Voice leading","HARMONY_LINK")}
+        {id="add_target",values={"legacy","scale","degrees","chord"}}),
+      action("Target setup","M06",{id="target_setup"}),action("Voice leading","HARMONY_LINK",{id="harmony"})}
     elseif self.screen=="M06"then
       if value.target.kind=="degrees"then
         local inventory=harmony_context.scale_pitch_classes(self.channel.step_scale_number or program.get().default_scale or 1,0)
         local selected={};for _,v in ipairs(value.target.degrees or{})do selected[v]=true end
         local fields={};for degree=1,#inventory do fields[#fields+1]=editable("Degree "..degree,function()return selected[degree]or false end,
-          function(on)selected[degree]=on;local d={};for i=1,#inventory do if selected[i]then d[#d+1]=i end end;value.target.degrees=d end,{boolean=true})end
+          function(on)selected[degree]=on;local d={};for i=1,#inventory do if selected[i]then d[#d+1]=i end end;value.target.degrees=d end,{id="degree_"..degree,repeat_key="degree_<n>",boolean=true})end
         return fields
       elseif value.target.kind=="chord"then
         local ids={};for id,g in pairs((self.song.voicing and self.song.voicing.groups)or{})do if g.enabled then ids[#ids+1]=id end end;table.sort(ids)
-        return{editable("Harmony source",function()return value.target.group_id end,function(v)value.target.group_id=v end,{values=ids})}
+        return{editable("Harmony source",function()return value.target.group_id end,function(v)value.target.group_id=v end,{id="group_id",values=ids})}
       end
-      return{readonly("Target",function()return value.target.kind end),readonly("Scope",function()return"ADDITIONS"end)}
+      return{readonly("Target",function()return value.target.kind end,{id="target"}),readonly("Scope",function()return"ADDITIONS"end,{id="scope"})}
     elseif self.screen=="M07"then
       local f=self.channel.working_pattern and self.channel.working_pattern.foundation
-      return{editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{min=1,max=64}),
-        readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end),
-        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"LEGACY"end),action("Reason","M08")}
+      return{editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{id="step",kind="inspection",min=1,max=64}),
+        readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end,{id="role"}),
+        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"LEGACY"end,{id="decision"}),action("Reason","M08",{id="reason"})}
     elseif self.screen=="M08"then
       local f=self.channel.working_pattern and self.channel.working_pattern.foundation
-      return{readonly("Step",function()return self.selected_step end),readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end),
-        readonly("Sources",function()local s=f and f.sources and f.sources[self.selected_step];return s and table.concat(s,",")or"NONE"end),
-        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"ADMITTED"end),
-        readonly("Velocity",function()return f and f.velocities and f.velocities[self.selected_step]end),readonly("Pitch target",function()return value.target.kind end)}
-    elseif self.screen=="M09"then return{readonly("Merge gesture",function()return self.gesture or"NONE"end),
-      readonly("Shape",function()return value.mode=="foundation"and"FOUNDATION ACTIVE"or"LEGACY"end)}end
+      return{readonly("Step",function()return self.selected_step end,{id="step"}),readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end,{id="role"}),
+        readonly("Sources",function()local s=f and f.sources and f.sources[self.selected_step];return s and table.concat(s,",")or"NONE"end,{id="sources"}),
+        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"ADMITTED"end,{id="decision"}),
+        readonly("Velocity",function()return f and f.velocities and f.velocities[self.selected_step]end,{id="velocity"}),readonly("Pitch target",function()return value.target.kind end,{id="pitch_target"})}
+    elseif self.screen=="M09"then return{readonly("Merge gesture",function()return self.gesture or"NONE"end,{id="merge_gesture"}),
+      readonly("Shape",function()return value.mode=="foundation"and"FOUNDATION ACTIVE"or"LEGACY"end,{id="active_shape"})}end
     return{}
   end
 
@@ -209,107 +221,107 @@ function editor.new(kind)
       local function in_owner(action_options)
         action_options=action_options or{};action_options.before=function()select_ensemble_group(value)end;return action_options
       end
-      local fields={editable("Mode",function()return value.mode end,function(v)local prior=value.mode;value.mode=v;if v=="pattern"then if prior=="off"then value.crossing=true end;value.bass.mode="smooth";value.bass.non_chord_pedal=false end end,{values={"off","revoice","pattern","ensemble"}})}
+      local fields={editable("Mode",function()return value.mode end,function(v)local prior=value.mode;value.mode=v;if v=="pattern"then if prior=="off"then value.crossing=true end;value.bass.mode="smooth";value.bass.non_chord_pedal=false end end,{id="mode",values={"off","revoice","pattern","ensemble"}})}
       if value.mode=="ensemble"then
-        fields[#fields+1]=editable("Group",function()return value.group_id or 0 end,function(v)value.group_id=v==0 and nil or v end,{min=0,max=16})
-      else fields[#fields+1]=readonly("Group",function()return"NOT USED"end)end
-      if value.mode=="off"then fields[#fields+1]=readonly("Preset",function()return"NOT USED"end)
+        fields[#fields+1]=editable("Group",function()return value.group_id or 0 end,function(v)value.group_id=v==0 and nil or v end,{id="group",min=0,max=16})
+      else fields[#fields+1]=readonly("Group",function()return"NOT USED"end,{id="group"})end
+      if value.mode=="off"then fields[#fields+1]=readonly("Preset",function()return"NOT USED"end,{id="preset"})
       else fields[#fields+1]=editable("Preset",function()return ensemble and ensemble.preset or value.preset end,
-        function(v)if ensemble then ensemble.preset=v else value.preset=v end end,{values={"smooth","compact","independent"}})end
-      if value.mode=="pattern"then fields[#fields+1]=action("Tone Map","TONE_MAP")end
-      fields[#fields+1]=action("Register","H02",in_owner())
-      fields[#fields+1]=action("Bass","H03",in_owner())
-      fields[#fields+1]=action("Groups","H04")
-      fields[#fields+1]=action("Rules","H08",in_owner())
-      fields[#fields+1]=action("Entry","H09",in_owner())
-      fields[#fields+1]=action("Result","H05",in_owner())
+        function(v)if ensemble then ensemble.preset=v else value.preset=v end end,{id="preset",values={"smooth","compact","independent"}})end
+      if value.mode=="pattern"then fields[#fields+1]=action("Tone Map","TONE_MAP",{id="tone_map"})end
+      fields[#fields+1]=action("Register","H02",in_owner({id="register"}))
+      fields[#fields+1]=action("Bass","H03",in_owner({id="bass"}))
+      fields[#fields+1]=action("Groups","H04",{id="groups"})
+      fields[#fields+1]=action("Rules","H08",in_owner({id="rules"}))
+      fields[#fields+1]=action("Entry","H09",in_owner({id="entry"}))
+      fields[#fields+1]=action("Result","H05",in_owner({id="result"}))
       return fields
     elseif self.screen=="H02"then
       local names=self.context_group and group()and harmony_config.member_roles(#group().members)or{"v1","v2","v3","v4","v5"}
       local name,role=selected_role()
-      return{editable("Role",function()return name end,function(v)for i,n in ipairs(names)do if n==v then self.selected_role=i end end end,{values=names}),
-        editable("Low",function()return role.min end,function(v)role.min=v end,{min=0,max=127}),
-        editable("High",function()return role.max end,function(v)role.max=v end,{min=0,max=127}),
-        editable("Centre",function()return role.centre end,function(v)role.centre=v end,{min=0,max=127}),
-        editable("Preferred leap",function()return role.preferred_leap end,function(v)role.preferred_leap=v end,{min=0,max=127}),
-        editable("Strict leap",function()return role.strict_leap end,function(v)role.strict_leap=v end,{boolean=true})}
+      return{editable("Role",function()return name end,function(v)for i,n in ipairs(names)do if n==v then self.selected_role=i end end end,{id="role",values=names}),
+        editable("Low",function()return role.min end,function(v)role.min=v end,{id="low",min=0,max=127}),
+        editable("High",function()return role.max end,function(v)role.max=v end,{id="high",min=0,max=127}),
+        editable("Centre",function()return role.centre end,function(v)role.centre=v end,{id="centre",min=0,max=127}),
+        editable("Preferred leap",function()return role.preferred_leap end,function(v)role.preferred_leap=v end,{id="preferred_leap",min=0,max=127}),
+        editable("Strict leap",function()return role.strict_leap end,function(v)role.strict_leap=v end,{id="strict_leap",boolean=true})}
     elseif self.screen=="H03"then
       local bass=selected_bass()
       if not self.context_group and value.mode=="pattern"then return{
-        readonly("Mode",function()return"SMOOTH OCTAVE"end),
-        editable("Direction",function()return bass.direction end,function(v)bass.direction=v end,{values={"nearest","ascending","descending"}}),
-        editable("Strict direction",function()return bass.strict_direction end,function(v)bass.strict_direction=v end,{boolean=true}),
-        action("Bass register","H02",{before=function()self.selected_role=1 end})}
+        readonly("Mode",function()return"SMOOTH OCTAVE"end,{id="mode"}),
+        editable("Direction",function()return bass.direction end,function(v)bass.direction=v end,{id="direction",values={"nearest","ascending","descending"}}),
+        editable("Strict direction",function()return bass.strict_direction end,function(v)bass.strict_direction=v end,{id="strict_direction",boolean=true}),
+        action("Bass register","H02",{id="bass_register",before=function()self.selected_role=1 end})}
       end
       local fields={
-        editable("Mode",function()return bass.mode end,function(v)bass.mode=v end,{values={"root","inversion","smooth","pedal"}}),
-        editable("Direction",function()return bass.direction end,function(v)bass.direction=v end,{values={"nearest","ascending","descending"}}),
-        editable("Strict direction",function()return bass.strict_direction end,function(v)bass.strict_direction=v end,{boolean=true}),
-        editable("Pedal pitch",function()return bass.pedal end,function(v)bass.pedal=v end,{min=0,max=127}),
-        editable("Non-chord pedal",function()return bass.non_chord_pedal end,function(v)bass.non_chord_pedal=v end,{boolean=true}),
-        action("Bass register","H02",{before=function()self.selected_role=1 end})}
+        editable("Mode",function()return bass.mode end,function(v)bass.mode=v end,{id="mode",values={"root","inversion","smooth","pedal"}}),
+        editable("Direction",function()return bass.direction end,function(v)bass.direction=v end,{id="direction",values={"nearest","ascending","descending"}}),
+        editable("Strict direction",function()return bass.strict_direction end,function(v)bass.strict_direction=v end,{id="strict_direction",boolean=true}),
+        editable("Pedal pitch",function()return bass.pedal end,function(v)bass.pedal=v end,{id="pedal",min=0,max=127}),
+        editable("Non-chord pedal",function()return bass.non_chord_pedal end,function(v)bass.non_chord_pedal=v end,{id="non_chord_pedal",boolean=true}),
+        action("Bass register","H02",{id="bass_register",before=function()self.selected_role=1 end})}
       if bass.mode=="inversion"then table.insert(fields,2,editable("Tone",function()return bass.tone_id end,
-        function(v)bass.tone_id=v end,{values=tone_values(value)}))end
+        function(v)bass.tone_id=v end,{id="bass_tone",values=tone_values(value)}))end
       return fields
     elseif self.screen=="H04"then
       local ids={};for id in pairs(groups())do ids[#ids+1]=id end;table.sort(ids)
-      local fields={editable("Group",function()return self.selected_group end,function(v)self.selected_group=v;self.context_group=true end,{values=ids}),
-        action("Create group",nil,{invoke=function()local id=1;while groups()[id]do id=id+1 end;if id>16 then self.status="INVALID GROUP LIMIT";return end
+      local fields={editable("Group",function()return self.selected_group end,function(v)self.selected_group=v;self.context_group=true end,{id="group",values=ids}),
+        action("Create group",nil,{id="create_group",invoke=function()local id=1;while groups()[id]do id=id+1 end;if id>16 then self.status="INVALID GROUP LIMIT";return end
           groups()[id]=harmony_config.new_group(self.channel_number);self.selected_group=id;self.context_group=true;mark_dirty()end})}
       if group()then
-        fields[#fields+1]=action("Four-part smooth",nil,{invoke=function()groups()[self.selected_group]=harmony_config.four_part_smooth(self.selected_group,{});mark_dirty()end})
-        fields[#fields+1]=action("Members","H07",{before=function()self.context_group=true end})
-        fields[#fields+1]=action("Source","H10",{before=function()self.context_group=true end})
-        fields[#fields+1]=action("Policies","H08",{before=function()self.context_group=true end})
-        fields[#fields+1]=action("Entry","H09",{before=function()self.context_group=true end})
-        fields[#fields+1]=action("Result","H05",{before=function()self.context_group=true end})
-        fields[#fields+1]=action("Delete group","H04_DELETE")
+        fields[#fields+1]=action("Four-part smooth",nil,{id="four_part_smooth",invoke=function()groups()[self.selected_group]=harmony_config.four_part_smooth(self.selected_group,{});mark_dirty()end})
+        fields[#fields+1]=action("Members","H07",{id="members",before=function()self.context_group=true end})
+        fields[#fields+1]=action("Source","H10",{id="source",before=function()self.context_group=true end})
+        fields[#fields+1]=action("Policies","H08",{id="policies",before=function()self.context_group=true end})
+        fields[#fields+1]=action("Entry","H09",{id="entry",before=function()self.context_group=true end})
+        fields[#fields+1]=action("Result","H05",{id="result",before=function()self.context_group=true end})
+        fields[#fields+1]=action("Delete group","H04_DELETE",{id="delete_group"})
       end;return fields
     elseif self.screen=="H04_DELETE"then
       local affected={};for number,c in pairs(self.channel_drafts)do if c.group_id==self.selected_group then affected[#affected+1]=number end end;table.sort(affected)
-      return{readonly("Delete group",function()return self.selected_group end),readonly("Affected",function()return table.concat(affected,",")end),
-        action("Confirm delete",nil,{invoke=function()
+      return{readonly("Delete group",function()return self.selected_group end,{id="group"}),readonly("Affected",function()return table.concat(affected,",")end,{id="affected"}),
+        action("Confirm delete",nil,{id="confirm_delete",invoke=function()
           local deleted=self.selected_group;groups()[deleted]=nil
           for _,number in ipairs(affected)do self.channel_drafts[number].mode="off";self.channel_drafts[number].group_id=nil end
           for number,merge in pairs(self.merge_drafts)do if merge and merge.target and merge.target.kind=="chord"and merge.target.group_id==deleted then merge.target={kind="legacy"};self.merge_changed[number]=true end end
           mark_dirty();self:apply();back()
         end})}
     elseif self.screen=="H07"then
-      local g=group();if not g then return{readonly("Group",function()return"NONE"end)}end
+      local g=group();if not g then return{readonly("Group",function()return"NONE"end,{id="group"})}end
       local fields={editable("Voice count",function()return #g.members end,function(count)
         local old={};for _,m in ipairs(g.members)do old[m.role]=m.channel end;local default=harmony_config.new_group(self.channel_number).roles.bass
         g.members={};local new_roles={};for _,name in ipairs(harmony_config.member_roles(count))do g.members[#g.members+1]={role=name,channel=old[name]};new_roles[name]=g.roles[name]or copy(default)end;g.roles=new_roles
-      end,{min=1,max=5})}
-      for _,member in ipairs(g.members)do fields[#fields+1]=editable(member.role,function()return member.channel or 0 end,function(v)member.channel=v==0 and nil or v end,{min=0,max=16})end
-      fields[#fields+1]=editable("Group enabled",function()return g.enabled end,function(v)g.enabled=v end,{boolean=true});return fields
+      end,{id="voice_count",min=1,max=5})}
+      for _,member in ipairs(g.members)do fields[#fields+1]=editable(member.role,function()return member.channel or 0 end,function(v)member.channel=v==0 and nil or v end,{id=member.role,repeat_key="<role>",min=0,max=16})end
+      fields[#fields+1]=editable("Group enabled",function()return g.enabled end,function(v)g.enabled=v end,{id="group_enabled",boolean=true});return fields
     elseif self.screen=="H08"then
       local policy=self.context_group and group()or value;local fields={
-        editable("Crossing",function()return policy.crossing end,function(v)policy.crossing=v end,{boolean=true})}
-      if self.context_group then fields[#fields+1]=editable("Pitch-class doubling",function()return policy.pitch_class_doubling~=false end,function(v)policy.pitch_class_doubling=v end,{boolean=true})
-      else fields[#fields+1]=readonly("Pitch-class doubling",function()return"FIXED INPUT"end)end
+        editable("Crossing",function()return policy.crossing end,function(v)policy.crossing=v end,{id="crossing",boolean=true})}
+      if self.context_group then fields[#fields+1]=editable("Pitch-class doubling",function()return policy.pitch_class_doubling~=false end,function(v)policy.pitch_class_doubling=v end,{id="pc_doubling",boolean=true})
+      else fields[#fields+1]=readonly("Pitch-class doubling",function()return"FIXED INPUT"end,{id="pc_doubling"})end
       local tail={
-        editable("Exact unison",function()return policy.exact_unison end,function(v)policy.exact_unison=v end,{boolean=true}),
-        editable("Common tones",function()return policy.common_tone_priority end,function(v)policy.common_tone_priority=v end,{boolean=true}),
-        editable("Upper spacing",function()return policy.upper_spacing or 12 end,function(v)policy.upper_spacing=v end,{min=0,max=127}),
-        editable("Bass separation",function()return policy.bass_separation or 5 end,function(v)policy.bass_separation=v end,{min=0,max=127})}
+        editable("Exact unison",function()return policy.exact_unison end,function(v)policy.exact_unison=v end,{id="exact_unison",boolean=true}),
+        editable("Common tones",function()return policy.common_tone_priority end,function(v)policy.common_tone_priority=v end,{id="common_tones",boolean=true}),
+        editable("Upper spacing",function()return policy.upper_spacing or 12 end,function(v)policy.upper_spacing=v end,{id="upper_spacing",min=0,max=127}),
+        editable("Bass separation",function()return policy.bass_separation or 5 end,function(v)policy.bass_separation=v end,{id="bass_separation",min=0,max=127})}
       for _,field in ipairs(tail)do fields[#fields+1]=field end
-      if self.context_group then fields[#fields+1]=action("Coverage","H10")
-      else fields[#fields+1]=readonly("Coverage",function()return"FIXED INPUT"end)end
+      if self.context_group then fields[#fields+1]=action("Coverage","H10",{id="coverage"})
+      else fields[#fields+1]=readonly("Coverage",function()return"FIXED INPUT"end,{id="coverage"})end
       return fields
-    elseif self.screen=="H09"then local policy=self.context_group and group()or value;local fields={readonly("Start",function()return"ANCHOR"end),
-      editable("Song transition",function()return policy.transition end,function(v)policy.transition=v end,{values={"anchor","continue"}}),
-      editable("Same-slot repeat",function()return policy.repeat_policy end,function(v)policy.repeat_policy=v end,{values={"continue","anchor"}}),
-      editable("Failure fallback",function()return policy.fallback end,function(v)policy.fallback=v end,{values={"silence","legacy"}})}
-      if not self.context_group then fields[#fields+1]=editable("Absolute pitch",function()return value.absolute_pitch_policy end,function(v)value.absolute_pitch_policy=v end,{values={"pin","allow_octave_move"}})end
+    elseif self.screen=="H09"then local policy=self.context_group and group()or value;local fields={readonly("Start",function()return"ANCHOR"end,{id="start"}),
+      editable("Song transition",function()return policy.transition end,function(v)policy.transition=v end,{id="song_transition",values={"anchor","continue"}}),
+      editable("Same-slot repeat",function()return policy.repeat_policy end,function(v)policy.repeat_policy=v end,{id="same_slot_repeat",values={"continue","anchor"}}),
+      editable("Failure fallback",function()return policy.fallback end,function(v)policy.fallback=v end,{id="failure_fallback",values={"silence","legacy"}})}
+      if not self.context_group then fields[#fields+1]=editable("Absolute pitch",function()return value.absolute_pitch_policy end,function(v)value.absolute_pitch_policy=v end,{id="absolute_pitch",values={"pin","allow_octave_move"}})end
       return fields
     elseif self.screen=="H10"then
-      local g=group();if not g then return{readonly("Source",function()return"NO GROUP"end)}end
-      local fields={editable("Source kind",function()return g.source.kind end,function(v)g.source.kind=v;if v=="scale_slot"then g.source.scale_slot=g.source.scale_slot or 1 end end,{values={"global_effective","scale_slot"}})}
-      if g.source.kind=="scale_slot"then fields[#fields+1]=editable("Scale slot",function()return g.source.scale_slot end,function(v)g.source.scale_slot=v end,{min=1,max=16})end
-      fields[#fields+1]=editable("Template count",function()return #g.template.offsets end,function(count)for i=#g.template.offsets+1,count do g.template.offsets[i]=0;g.template.required[i]=false end;while #g.template.offsets>count do table.remove(g.template.offsets);table.remove(g.template.required)end end,{min=1,max=5})
-      fields[#fields+1]=readonly("Root offset",function()return 0 end)
-      for index=2,#g.template.offsets do fields[#fields+1]=editable("Tone "..index,function()return g.template.offsets[index]end,function(v)g.template.offsets[index]=v end,{min=-14,max=14})end
-      for index=1,#g.template.required do fields[#fields+1]=editable("Required "..index,function()return g.template.required[index]end,function(v)g.template.required[index]=v end,{boolean=true})end
+      local g=group();if not g then return{readonly("Source",function()return"NO GROUP"end,{id="source"})}end
+      local fields={editable("Source kind",function()return g.source.kind end,function(v)g.source.kind=v;if v=="scale_slot"then g.source.scale_slot=g.source.scale_slot or 1 end end,{id="source_kind",values={"global_effective","scale_slot"}})}
+      if g.source.kind=="scale_slot"then fields[#fields+1]=editable("Scale slot",function()return g.source.scale_slot end,function(v)g.source.scale_slot=v end,{id="scale_slot",min=1,max=16})end
+      fields[#fields+1]=editable("Template count",function()return #g.template.offsets end,function(count)for i=#g.template.offsets+1,count do g.template.offsets[i]=0;g.template.required[i]=false end;while #g.template.offsets>count do table.remove(g.template.offsets);table.remove(g.template.required)end end,{id="template_count",min=1,max=5})
+      fields[#fields+1]=readonly("Root offset",function()return 0 end,{id="root_offset"})
+      for index=2,#g.template.offsets do fields[#fields+1]=editable("Tone "..index,function()return g.template.offsets[index]end,function(v)g.template.offsets[index]=v end,{id="tone_"..index,repeat_key="tone_<n>",min=-14,max=14})end
+      for index=1,#g.template.required do fields[#fields+1]=editable("Required "..index,function()return g.template.required[index]end,function(v)g.template.required[index]=v end,{id="required_"..index,repeat_key="required_<n>",boolean=true})end
       return fields
     elseif self.screen=="TONE_MAP"then
       local binding=pattern_harmony.binding_key(self.channel)
@@ -318,12 +330,12 @@ function editor.new(kind)
       for _,raw in ipairs((self.channel.working_pattern and self.channel.working_pattern.note_values)or{})do if raw~=nil and not seen[raw]then seen[raw]=true;values[#values+1]=raw end end
       for raw in pairs(map.assignments)do local n=tonumber(raw);if not seen[n]then values[#values+1]=n end end;table.sort(values)
       local fields={};for _,raw in ipairs(values)do fields[#fields+1]=editable("Tone "..raw,function()return map.assignments[tostring(raw)]or"raw"end,
-        function(v)value.pattern_maps[binding]=map;if v=="raw"then map.assignments[tostring(raw)]=nil else map.assignments[tostring(raw)]=v end;map.revision=(map.revision or 0)+1 end,{values={"raw","bass","inner1","inner2","inner3","top"}})end
-      fields[#fields+1]=action("Reset map","TONE_MAP_RESET");return fields
+        function(v)value.pattern_maps[binding]=map;if v=="raw"then map.assignments[tostring(raw)]=nil else map.assignments[tostring(raw)]=v end;map.revision=(map.revision or 0)+1 end,{id="value_"..raw,repeat_key="value_<raw>",values={"raw","bass","inner1","inner2","inner3","top"}})end
+      fields[#fields+1]=action("Reset map","TONE_MAP_RESET",{id="reset_map"});return fields
     elseif self.screen=="TONE_MAP_RESET"then
       local binding=pattern_harmony.binding_key(self.channel)
-      return{readonly("Reset map",function()return binding end),
-        action("Confirm reset",nil,{invoke=function()
+      return{readonly("Reset map",function()return binding end,{id="reset_map"}),
+        action("Confirm reset",nil,{id="confirm_reset",invoke=function()
           local map=value.pattern_maps[binding]or{schema_version=1,revision=0,assignments={}}
           value.pattern_maps[binding]=map;map.assignments={};map.revision=(map.revision or 0)+1
           mark_dirty();back()
@@ -337,7 +349,7 @@ function editor.new(kind)
         active_plan=active_plan or plan
         if plan.status=="local_scale_bypass"or plan.bypass or(plan.status~="ok"and plan.status~="off")then active_plan=plan;break end
       end end
-      local fields={editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{min=1,max=64}),readonly("Status",function()
+      local fields={editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{id="step",kind="inspection",min=1,max=64}),readonly("Status",function()
         if not active_plan then return"NO EVENT"end
         if active_plan.status=="local_scale_bypass"then return"LOCAL SCALE BYPASS"end
         if active_plan.status=="local_octave"then return"LOCAL OCTAVE BYPASS"end
@@ -347,13 +359,14 @@ function editor.new(kind)
         if active_plan.status~="ok"and active_plan.status~="off"then
           return"NO VOICING "..tostring(active_plan.reason or active_plan.status)end
         return active_plan.status=="ok"and"OK"or"OFF"
-      end)}
+      end,{id="status"})}
       for _,entry in ipairs(traces)do local item=entry
-        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." planned",function()return item.trace.planned and item.trace.planned.output end)
-        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." emitted",function()return item.trace.emitted and item.trace.emitted.pitch end)
+        local key=item.role or("ch"..item.channel)
+        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." planned",function()return item.trace.planned and item.trace.planned.output end,{id="planned_"..key,repeat_key="planned_<member>"})
+        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." emitted",function()return item.trace.emitted and item.trace.emitted.pitch end,{id="emitted_"..key,repeat_key="emitted_<member>"})
       end
       if active_plan and active_plan.status~="ok"and not active_plan.bypass then
-        fields[#fields+1]=action("Failure details","H06")
+        fields[#fields+1]=action("Failure details","H06",{id="failure_details"})
       end;return fields
     elseif self.screen=="H06"then
       local active_song=harmony_config_state.effective_song(self.song,self.song.voicing or{schema_version=1,groups={}})
@@ -365,8 +378,8 @@ function editor.new(kind)
         if plan.status=="local_scale_bypass"or plan.bypass or(plan.status~="ok"and plan.status~="off")then active_plan=plan;break end
       end end
       return{readonly("Reason",function()return
-          (active_plan and(active_plan.reason or active_plan.status))or"NO EVENT"end),
-        readonly("Fallback",function()return(active_plan and active_plan.fallback)or"NONE"end),action("Settings","H02")}
+          (active_plan and(active_plan.reason or active_plan.status))or"NO EVENT"end,{id="reason"}),
+        readonly("Fallback",function()return(active_plan and active_plan.fallback)or"NONE"end,{id="fallback"}),action("Settings","H02",{id="settings"})}
     end;return{}
   end
 
@@ -386,6 +399,7 @@ function editor.new(kind)
       end
       self.draft=self.channel_drafts[self.channel_number]
     end;self.before_snapshot=optional_transaction.snapshot(song);self.degree_source_key=degree_source_key(channel);self.dirty=false
+    self.generation=self.generation+1
   end
   function self:enter()self.screen=self.kind=="merge"and"M01"or"H01";self.selected=1;self.stack={};self.context_group=false;self.status="";self:reload()end
   function self:get_fields()return self.kind=="merge"and merge_fields()or harmony_fields()end
@@ -427,7 +441,7 @@ function editor.new(kind)
       local ok,reason=memory.record_optional_config(program.get().selected_song_pattern,affected,self.before_snapshot,after,"pattern")
       if not ok then self.status="INVALID "..tostring(reason);return false end
       self.status=playing and"NEXT PATTERN"or"APPLIED";self.before_snapshot=copy(after)
-    end;self.dirty=false;return true
+    end;self.dirty=false;self.generation=self.generation+1;return true
   end
   function self:key(n)
     if n==2 then if self.dirty then self:reload();self.status="DRAFT CANCELLED"end;if #self.stack>0 then back()end;return true

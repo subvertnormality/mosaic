@@ -1,5 +1,13 @@
 local channel_edit_history = {}
 
+-- Stable UI field ids (docs/ui-reimplementation spec.json screen C03).
+channel_edit_history.fields = {
+  {id = "position", label = "Position"},
+  {id = "selected_event", label = "Selected event"},
+  {id = "undo_available", label = "Undo available"},
+  {id = "redo_available", label = "Redo available"}
+}
+
 function channel_edit_history.new(memory_history_navigator, public_ui)
   local history = {}
   local memory_state = {
