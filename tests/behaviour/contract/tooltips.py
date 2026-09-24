@@ -29,10 +29,10 @@ def tooltip_messages(c):
     c.tap(1,1);tip('select-channel-1','Channel 1 selected')
     c.tap(2,8);tip('record-on','Recording started')
     c.tap(2,8);tip('record-off','Recording stopped')
-    c.enc(1,-2);c.screen_header('Ch. 1 Memory')
+    c.ui.turn(1, -2);c.screen_header('Ch. 1 Memory')
     c.key(3);tip('memory-apply','Ch. 1 memory applied')
     c.key(2);tip('memory-undo','Ch. 1 memory undone')
-    c.enc(1,2)
+    c.ui.turn(1, 2)
     # Expiry without input, measured from the last activation.
     c.tap(4,8);shown=now();tip('before-expiry','Scale Editor')
     cleared('idle-expiry',shown)

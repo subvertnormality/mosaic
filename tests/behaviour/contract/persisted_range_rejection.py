@@ -51,7 +51,7 @@ def select_project_action(c,offset,returning=False,activate=True):
     from frame_oracle import selected_line
     c.key(1)
     if not returning:
-        c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+        c.ui.turn(1, 4);c.key(3);menu_label(c,'LEVELS >')
         position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
         c.enc(2,position);c.key(3)
     # Norns retains the current parameter group when K1 closes the menu.

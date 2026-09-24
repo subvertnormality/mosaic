@@ -18,7 +18,7 @@ CAP = 5000; KEYS = CAP + 3
 
 def memory_wrap(c):
     from frame_oracle import render
-    c.configure(); c.enc(1, -2); c.screen_header('Ch. 1 Memory')
+    c.configure(); c.ui.turn(1, -2); c.screen_header('Ch. 1 Memory')
 
     def counter(current, total):
         expected = render([(0, 23, 15, str(current)), (0, 49, 15, str(total))], font_size=10, antialias=1)
@@ -32,24 +32,24 @@ def memory_wrap(c):
         c.results.append(dict(kind='memory-wrap-phrase', stage=label, notes=values, passed=True))
 
     # One held-step keyboard entry is one memory action (a hold merges its keys).
-    c.enc(1, -2); c.screen_header('Ch. 1 Note Masks')
+    c.ui.turn(1, -2); c.screen_header('Ch. 1 Note Masks')
     for i in range(KEYS):
         note = NOTES[i % len(NOTES)]
         c.action(type='grid', x=1, y=4, state=1)
         try: c.action(type='midi', port=1, bytes=[144, note, 100]); c.action(type='midi', port=1, bytes=[128, note, 0])
         finally: c.action(type='grid', x=1, y=4, state=0)
-    c.elapse(.1); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+    c.elapse(.1); c.ui.turn(1, 2); c.screen_header('Ch. 1 Memory')
     last = NOTES[(KEYS - 1) % len(NOTES)]
     counter(CAP, CAP); phrase('wrapped-latest', (last, 100), BASELINE[1])
     c.enc(3, -2)
     shown = NOTES[(KEYS - 3) % len(NOTES)]
     counter(CAP - 2, CAP); phrase('wrapped-back-two', (shown, 100), BASELINE[1])
     # A new action after moving back continues from the displayed position.
-    c.enc(1, -2); c.screen_header('Ch. 1 Note Masks')
+    c.ui.turn(1, -2); c.screen_header('Ch. 1 Note Masks')
     c.action(type='grid', x=2, y=4, state=1)
     try: c.action(type='midi', port=1, bytes=[144, 84, 60]); c.elapse(.05); c.action(type='midi', port=1, bytes=[128, 84, 0])
     finally: c.action(type='grid', x=2, y=4, state=0)
-    c.elapse(.1); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+    c.elapse(.1); c.ui.turn(1, 2); c.screen_header('Ch. 1 Memory')
     counter(CAP - 1, CAP - 1); phrase('new-action', (shown, 100), (84, 60))
     c.enc(3, -1)
     counter(CAP - 2, CAP - 1); phrase('new-action-undone', (shown, 100), BASELINE[1])
@@ -67,8 +67,8 @@ def memory_retained_floor(c):
     so restoring nil cannot produce a false pass.
     """
     from frame_oracle import render
-    c.configure(); c.enc(1, -2); c.screen_header('Ch. 1 Memory')
-    c.enc(1, -2); c.screen_header('Ch. 1 Note Masks')
+    c.configure(); c.ui.turn(1, -2); c.screen_header('Ch. 1 Memory')
+    c.ui.turn(1, -2); c.screen_header('Ch. 1 Note Masks')
     notes = [72, 74, 76, 77]
     for i in range(CAP + 1):
         note = notes[i % len(notes)]
@@ -78,7 +78,7 @@ def memory_retained_floor(c):
             c.action(type='midi', port=1, bytes=[128, note, 0])
         finally:
             c.action(type='grid', x=1, y=4, state=0)
-    c.elapse(.1); c.enc(1, 2); c.screen_header('Ch. 1 Memory')
+    c.elapse(.1); c.ui.turn(1, 2); c.screen_header('Ch. 1 Memory')
 
     def counter(current, total):
         expected = render([(0, 23, 15, str(current)), (0, 49, 15, str(total))], font_size=10, antialias=1)

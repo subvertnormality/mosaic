@@ -22,7 +22,7 @@ import base64
 def memory_lock_slide_undo(c):
     from cases import assign_trig_parameter
     c.configure(); c.enc(3, 1); c.key(3)
-    c.enc(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
+    c.ui.turn(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
     assign_trig_parameter(c, 'Control 1')
     c.enc(2, 1); assign_trig_parameter(c, 'SparseLow'); c.enc(2, -1)
     field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
@@ -101,9 +101,9 @@ def memory_lock_slide_undo(c):
         assert steps[0][2], ('SparseLow step-1 lock not heard', steps)
     sparse_value = with_slide[0][0][2]
 
-    c.enc(1, 1); c.screen_header('Ch. 1 Memory')
+    c.ui.turn(1, 1); c.screen_header('Ch. 1 Memory')
     c.enc(3, -1)
-    c.enc(1, -1); c.screen_header('Ch. 1 Trig Locks', selected=2)
+    c.ui.turn(1, -1); c.screen_header('Ch. 1 Trig Locks', selected=2)
     undone = heard('after-undo')
     for steps in undone:
         # README 698-703: E3 back one explores the state before the step-1 Control 1 lock ...

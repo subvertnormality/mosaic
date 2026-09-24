@@ -27,10 +27,10 @@ def dashboard_cells(c, candidates):
 def dashboard_channel_select(c):
     absent = {'Note': ['X', '-1'], 'Vel': ['X', '-1'], 'Len': ['X', '-1.0', '-1']}
     c.configure(); c.tap(3, 8)
-    c.enc(1, -20)
+    c.ui.turn(1, -20)
     for _ in range(10):
         if dashboard_cells(c, absent)['labels']: break
-        c.enc(1, 1)
+        c.ui.turn(1, 1)
     else:
         raise AssertionError('Note Dashboard not found')
     for channel in (2, 1):

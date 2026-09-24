@@ -7,7 +7,7 @@ def song_tempo_bounds(c):
     c.configure();c.tap(6,8);c.hold_tap((1,1),(2,1))
     c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
     c.ui.set_mosaic_options([('Song mode',False)])
-    c.enc(1,1) # Global settings, Tempo selected.
+    c.ui.turn(1, 1) # Global settings, Tempo selected.
     def extreme(direction):
         for _ in range(5):c.action(type='enc',n=3,delta=126*direction);c.elapse(.03)
         c.key(3)

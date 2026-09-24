@@ -26,7 +26,7 @@ def lock_lead_time(c):
         try:
             e._set_midi_lead_time(lead,expected=25,capture=lead==25)
             configure_master_output(e)
-            e.key(1);e.enc(1,-3);assign_trig_parameter(e,'CC 1')
+            e.key(1);e.ui.turn(1, -3);assign_trig_parameter(e,'CC 1')
             for step,value in ((1,24),(2,48),(3,24),(4,48)):
                 e.action(type='grid',x=step,y=4,state=1)
                 try:e.elapse(.05);e.action(type='enc',n=3,delta=-126);e.enc(3,value+1)

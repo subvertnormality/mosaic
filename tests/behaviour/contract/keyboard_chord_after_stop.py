@@ -14,8 +14,8 @@ PHRASE = [(62, 117), (64, 107), (65, 97)]      # steps 2-4 from configure()
 
 
 def keyboard_chord_after_stop(c):
-    c.configure(); c.enc(1, -2); c.screen_header('Ch. 1 Memory')
-    c.enc(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
+    c.configure(); c.ui.turn(1, -2); c.screen_header('Ch. 1 Memory')
+    c.ui.turn(1, -2); c.screen_header('Ch. 1 Note Masks', selected=1)
 
     def enter(note, lose_release=False):
         c.action(type='grid', x=1, y=4, state=1)

@@ -12,7 +12,7 @@ def trig_gesture_all_steps(c):
     c.configure()
     c.tap(1, 2)
     c.hold_tap((1, 4), (16, 7))
-    c.enc(1, -4)
+    c.ui.turn(1, -4)
     # No assigned pattern. Required defaults make newly added trigs audible.
     c.enc(3, 61)
     c.enc(2, 1)

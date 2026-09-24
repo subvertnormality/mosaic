@@ -13,14 +13,14 @@ def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=Fal
     if reset:
         c.configure();c.ui.set_mosaic_options([('Song mode',True),('Reset on pattern repeat',True),('Wrap param slides',True)])
     open_patch_control(c,setup=not reset);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.ui.turn(1, -3);assign_trig_parameter(c,'CC 1')
     for step,value in [(4 if reset else 1,24),(3,96)]:
         c.action(type='grid',x=step,y=4,state=1)
         try:
             c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
         finally:c.action(type='grid',x=step,y=4,state=0)
     c.key(3)
-    c.enc(1,2);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+    c.ui.turn(1, 2);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
     c.enc(3,-4);c.key(3) # Initial /3 (index17), committed while stopped.
     if type_switch:
         # Store Heavy6 at100%, then return to Swing before playback.

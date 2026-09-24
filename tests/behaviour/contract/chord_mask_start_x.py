@@ -42,7 +42,7 @@ def settled_cell(c, slot, selected, label):
 
 def chord_mask_start_x(c):
     from cases import assert_durations
-    c.configure(); c.enc(1, -4); c.enc(2, 3)                    # Masks page, Chd1 selected
+    c.configure(); c.ui.turn(1, -4); c.enc(2, 3)                    # Masks page, Chd1 selected
     expect_cell(c, 1, True, 'X', 'unset')
     expect_cell(c, 2, False, 'X', 'unset')
     c.enc(3, 1); up = settled_cell(c, 1, True, '2nd')

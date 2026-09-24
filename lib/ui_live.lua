@@ -250,7 +250,23 @@ hooks["owner.clear_channel_step_locks"] = function() legacy_key(2) end
 hooks["owner.clear_channel_step_masks_keep_defaults"] = function() legacy_key(2) end
 hooks["owner.dispatch_key"] = function(_, event) legacy_key(key_number(event)) end
 
+-- Screens whose owner keeps its own field selection (the page's selectors,
+-- the trig-lock dial): E2 reaches the owner's handler, which moves, clamps and
+-- skips exactly as before, and focus follows the owner's selection.
+local OWNER_SELECTION = {masks = true, parameters = true, clock = true, device = true, scale = true,
+  scale_clock = true, song = true, song_clock = true, trig_options = true}
+
 hooks["focus.move_clamped"] = function(_, event)
+  local screen = screen_entry()
+  if OWNER_SELECTION[screen.profile] and event:match("^E2") and LEGACY_UI[router.state.context] then
+    sync_workspace()
+    legacy_enc(2, current.delta)
+    for _, d in ipairs(describe()) do
+      if d.selected then focus[router.state.screen] = d.id; break end
+    end
+    ui_motion.nudge("focus")
+    return
+  end
   local descriptors = describe()
   if #descriptors == 0 then return end
   local _, index = focused(descriptors)

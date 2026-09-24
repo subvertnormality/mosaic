@@ -59,10 +59,10 @@ def dashboard_chord_slots(c):
         c.results.append(dict(kind='dashboard-chord-slot', **checks[-1]))
 
     def to_dashboard():
-        c.enc(1, 5); c.screen_header('Ch. 1 Note Dashboard', selected=6)
+        c.ui.turn(1, 5); c.screen_header('Ch. 1 Note Dashboard', selected=6)
 
     def to_masks():
-        c.enc(1, -5); c.screen_header('Ch. 1 Note Masks')
+        c.ui.turn(1, -5); c.screen_header('Ch. 1 Note Masks')
 
     chord_label_rows = [(y*128+x)*4+k for y in range(41, 51) for x in range(25) for k in range(3)]
 
@@ -94,7 +94,7 @@ def dashboard_chord_slots(c):
         to_masks()
         return voices[0]
 
-    c.configure(); c.enc(1, -4); c.screen_header('Ch. 1 Note Masks')
+    c.configure(); c.ui.turn(1, -4); c.screen_header('Ch. 1 Note Masks')
 
     # (c) a fresh dashboard: nothing has played.
     to_dashboard()

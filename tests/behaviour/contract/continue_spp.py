@@ -4,7 +4,7 @@ def continue_spp_unsupported(c):
     from cases import menu_label,menu_value
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
-    c.configure();c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    c.configure();c.key(1);c.ui.turn(1, 4);c.key(3);menu_label(c,'LEVELS >')
     roots=c.snapshot()['diagnostics']['parameter_roots']
     position=next(i for i,v in enumerate(roots) if v['name']=='CLOCK')
     c.enc(2,position);c.key(3);menu_label(c,'source')

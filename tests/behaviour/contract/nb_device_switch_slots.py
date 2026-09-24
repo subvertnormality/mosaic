@@ -24,7 +24,7 @@ STALE_FIRST = 'CC 1'
 
 def _open_channel_group(c):
     from cases import menu_label
-    c.key(1); c.enc(1, 4); c.key(3); menu_label(c, 'LEVELS >')
+    c.key(1); c.ui.turn(1, 4); c.key(3); menu_label(c, 'LEVELS >')
     roots = c.snapshot()['diagnostics']['parameter_roots']
     position = next(i for i, v in enumerate(roots) if v['id'] == 'midi_device_params_group_channel_1')
     c.enc(2, position); c.key(3); menu_label(c, 'Fixed Note')      # first visible stock parameter

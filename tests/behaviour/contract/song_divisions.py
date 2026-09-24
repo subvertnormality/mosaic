@@ -24,7 +24,7 @@ def song_tempo_divisions(c):
     for slot, (label, detents, _) in DIVISIONS.items():
         c.tap(6, 8); c.tap(1, 1); c.hold_tap((1, 1), (slot, 1)); c.tap(slot, 1); c.tap(3, 8)
         c.tap(1, 1); c.tap(OCTAVE_KEY[slot], 8)                  # this slot's channel 1 octave
-        c.enc(1, -5); c.enc(1, 3); c.screen_header('Ch. 1 Clocks', selected=4)
+        c.ui.turn(1, -5); c.ui.turn(1, 3); c.screen_header('Ch. 1 Clocks', selected=4)
         c.enc(3, detents); c.key(3)
         expected = render([(0, 26, 15, label)])
         c.wait(lambda s: all(base64.b64decode(s['frame']['pixels_base64'])[(y*128+x)*4+k] == expected[(y*128+x)*4+k]

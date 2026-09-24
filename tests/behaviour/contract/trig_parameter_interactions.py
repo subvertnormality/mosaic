@@ -27,7 +27,7 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     assert not (empty_step and probability_zero)
     if empty_step or probability_zero:c.ui.set_mosaic_options([('Trigless locks',trigless)])
     open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
-    c.enc(1,-3);assign_trig_parameter(c,'CC 1')
+    c.ui.turn(1, -3);assign_trig_parameter(c,'CC 1')
     for step,value in [(1,24),(3,96)]:
         c.action(type='grid',x=step,y=4,state=1)
         try:c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
@@ -40,7 +40,7 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
         c.enc(2,-1)
     if empty_step:
         c.tap(5,8);c.tap(3,4);c.tap(3,8) # Remove note3 through pattern editor.
-    c.enc(1,2);c.enc(3,-23);c.key(3);c.enc(1,-2) # Four seconds per step.
+    c.ui.turn(1, 2);c.enc(3,-23);c.key(3);c.ui.turn(1, -2) # Four seconds per step.
     c.tap(2,8) # Native recording arm.
     before=c.snapshot()['midi_count'];c.tap(1,8)
     def notes(state):return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]

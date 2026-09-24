@@ -3,7 +3,7 @@
 def parameter_fine_gesture(c):
     """Characterise README K1 fine control against cheat-sheet K3 wording."""
     from cases import assign_trig_parameter
-    c.configure();c.enc(3,1);c.key(3);c.enc(1,-3);assign_trig_parameter(c,'NRPN14')
+    c.configure();c.enc(3,1);c.key(3);c.ui.turn(1, -3);assign_trig_parameter(c,'NRPN14')
     before=c.snapshot()['midi_count']
     # K1 held: one physical detent retains the small raw delta.
     c.action(type='key',n=1,state=1);c.elapse(.3)

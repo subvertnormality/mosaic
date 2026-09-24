@@ -4,7 +4,7 @@ import base64
 import contextlib
 import time
 
-from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, CHANNEL_TASKS, HEADERS, OVERVIEW_CELLS,
+from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, CHANNEL_TASKS, HEADERS, OVERVIEW_CELLS, PAGE_RINGS, RING_LANDING, TASK_ROWS,
                     LED_LEVELS, LIVE_SCREENS, MENU, NATIVE_MENU, header_parts,
                     MOSAIC_OPTIONS, MOSAIC_OPTION_ROWS, MIDI_MAPPING_PARAMETERS,
                     NATIVE_MENU_VALUES, PATCH_PARAMETERS,
@@ -199,7 +199,7 @@ class Ui:
         self.driver.key(number)
 
     def turn(self, encoder, detents):
-        if encoder == 1 and detents and self._turn_channel_ring(detents):
+        if encoder == 1 and detents and (self._turn_channel_ring(detents) or self._turn_other_ring(detents)):
             return None
         return self.driver.enc(encoder, detents)
 
@@ -209,21 +209,77 @@ class Ui:
         found = []
 
         def settled(state):
-            if state["diagnostics"].get("menu_mode"):
+            # Recipe doubles carry no framebuffer; the physical E1 stands.
+            if "frame" not in state or state.get("diagnostics", {}).get("menu_mode"):
                 return True
             for page in pages:
                 if self._header_matches(state, page, {"channel": self._channel_hint(state)}):
                     found.append(page)
                     return True
             return False
+        # Recipe doubles without observation keep the physical E1.
+        if not (hasattr(self.driver, "wait") and hasattr(self.driver, "snapshot")):
+            return None
         try:
             self.driver.wait(settled, timeout=timeout)
-        except AssertionError:
+        except (AssertionError, KeyError, TypeError):
             return None
         return found[-1] if found else None
 
     def _channel_hint(self, state):
         return getattr(self, "_channel", 1)
+
+    def _observed_ring(self, timeout=1):
+        """(context, ring index) of a showing non-Channel ring screen, or None."""
+        from frame_oracle import live_header_matches
+        found = []
+
+        def settled(state):
+            if "frame" not in state or state.get("diagnostics", {}).get("menu_mode"):
+                return True
+            for context, ring in PAGE_RINGS.items():
+                landing = RING_LANDING.get(context)
+                candidates = list(enumerate(ring)) + ([(0, landing + (None,))] if landing else [])
+                for index, (screen, title, layout, _task) in candidates:
+                    scope = self._ring_scope(context)
+                    if live_header_matches(state, title, scope, layout):
+                        found.append((context, index))
+                        return True
+            return False
+        if not (hasattr(self.driver, "wait") and hasattr(self.driver, "snapshot")):
+            return None
+        try:
+            self.driver.wait(settled, timeout=timeout)
+        except (AssertionError, KeyError, TypeError):
+            return None
+        return found[-1] if found else None
+
+    def _ring_scope(self, context):
+        from ui_map import live_scope
+        if context == "Scale":
+            return live_scope("scale", slot=getattr(self, "_scale_slot", 1))
+        if context == "Song":
+            return live_scope("song", song_slot=getattr(self, "_song_slot", 1))
+        return live_scope("channel", channel=getattr(self, "_channel", 1))
+
+    def _turn_other_ring(self, detents):
+        """E1 on a Scale, Song or Trig page moves along that page ring (clamped):
+        the target page opens through the context's task navigator."""
+        observed = self._observed_ring()
+        if observed is None:
+            return False
+        context, index = observed
+        ring = PAGE_RINGS[context]
+        target = max(0, min(len(ring) - 1, index + detents))
+        if target != index or RING_LANDING.get(context):
+            screen, title, layout, task = ring[target]
+            rows = TASK_ROWS[context]
+            self.driver.enc(1, 1)
+            self.driver.enc(2, -len(rows))
+            if rows.index(task):
+                self.driver.enc(2, rows.index(task))
+            self.press_key(3)
+        return True
 
     def _turn_channel_ring(self, detents):
         """E1 on a Channel page moves along the page ring the case was written
@@ -409,9 +465,12 @@ class Ui:
         start, end = self.step(1), self.step(4)
         self.driver.hold_tap(start, end)
         self.expect_leds({("pattern_slot", 1): "selected"})
-        # The Channel button follows the remembered edit family. Reaching Channel
-        # Tasks by E1 passes Trig params, so that family is the one remembered.
+        # The Channel button follows the remembered edit family (Trig params,
+        # since Tasks is reached through it); the setup ends on Device as the
+        # recipes that follow it expect.
         self.expect_header("trig_locks", channel=1)
+        self.channel_page("midi_config", confirm=False)
+        self.expect_header("midi_config", channel=1)
 
     def set_mosaic_option_keys(self, options):
         """Resolve stable option keys before the observed-label native UI recipe."""

@@ -65,7 +65,7 @@ def global_range_clipping(c):
     c.configure();c.tap(5,8)
     c.tap(15,7);c.tap(16,7);c.tap(3,8)
     # Distinguish the last two steps through held-step note masks.
-    c.enc(1,-4)
+    c.ui.turn(1, -4)
     for x,turns in [(15,73),(16,75)]:
         c.action(type='grid',x=x,y=7,state=1)
         try:c.enc(3,turns)

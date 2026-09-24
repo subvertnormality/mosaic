@@ -54,7 +54,7 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
     for x in (2, 3, 4):
         c.tap(x, 4)
     c.tap(3, 8)
-    c.enc(1, -4)
+    c.ui.turn(1, -4)
     c.enc(2, 1)
     c.enc(3, velocity + 1)
     c.enc(2, 1)
@@ -64,10 +64,10 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
         c.enc(2, 1)
         if mask_bits & (1 << i):
             c.enc(3, turns)
-    c.enc(1, 3)
+    c.ui.turn(1, 3)
     c.enc(3, -11)
     c.key(3)
-    c.enc(1, -2)
+    c.ui.turn(1, -2)
     _assign_trig_parameter(c, "Chord Note Arpeggio" if arp else "Chord Note Strum")
     c.enc(3, 0 if extra == "disabled" else 8)
     c.enc(2, 1)
@@ -87,7 +87,7 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
         _assign_trig_parameter(c, "Chord Accel Mod")
         c.enc(3, -1)
     if dashboard:
-        c.enc(1, 4)
+        c.ui.turn(1, 4)
     capture = MidiWindow(c.snapshot()["midi_count"])
     trigger = c.logical_ns
     c.action(type="grid", x=1, y=8, state=1)

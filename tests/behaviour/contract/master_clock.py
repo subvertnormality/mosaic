@@ -33,7 +33,7 @@ def assert_master_receiver(events,field,tolerance):
 def configure_master_output(c):
     from cases import menu_label,menu_value
     from midi_window import MidiWindow
-    c.configure();c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+    c.configure();c.key(1);c.ui.turn(1, 4);c.key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
     c.enc(2,position);c.key(3);menu_label(c,'source');menu_value(c,'internal')
     from frame_oracle import selected_line

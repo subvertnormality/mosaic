@@ -263,22 +263,26 @@ class UiMapTests(unittest.TestCase):
             ])
         self.assertEqual(driver.calls, expected)
 
-    def test_trigger_editor_confirmation_header_alias_preserves_selected_tab(self):
+    def test_trigger_editor_confirmation_header_names_its_own_live_screen(self):
+        """P02 (Trig options) is its own live screen, distinct from P01 (Pattern trig)."""
         from ui import Ui
-        from ui_map import HEADERS, header_text
+        from ui_map import HEADERS, header_parts, header_text
 
         self.assertEqual(header_text("trigger_editor_confirmation"),
-                         "Trig editor options")
-        data = HEADERS["trigger_editor_confirmation"]
-        self.assertEqual((data["selected"], data["tabs"]), (2, 2))
-        driver = FakeDriver(states=[{}])
-        with patch("frame_oracle.header", return_value="expected-header") as make_header:
-            with patch("frame_oracle.matches", return_value=True):
-                Ui(driver).expect_header("trigger_editor_confirmation")
-        make_header.assert_called_once_with(
-            "Trig editor options", selected=2, tabs=2)
+                         "TRIG OPTIONS CH01")
+        self.assertEqual(HEADERS["trigger_editor_confirmation"],
+                         {"title": "TRIG OPTIONS", "layout": "focused", "scope": "channel"})
+        self.assertEqual(header_parts("trigger_editor_confirmation", channel=1),
+                         ("TRIG OPTIONS", "CH01", "focused"))
+        self.assertEqual(header_parts("trigger_editor", channel=1),
+                         ("PATTERN TRIG", "CH01", "pattern64"))
+        state = {"frame": {"pixels_base64": "ignored"}}
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
+            Ui(driver).expect_header("trigger_editor_confirmation")
+        live.assert_called_once_with(state, "TRIG OPTIONS", "CH01", "focused")
         self.assertEqual(driver.results, [dict(
-            kind="screen-header", expected="Trig editor options", matched=True)])
+            kind="screen-header", expected="TRIG OPTIONS CH01", matched=True)])
 
     def test_euclidean_workflow_controls_match_raw_baseline_cells(self):
         """Every semantic Euclidean tap retains the original authored cell."""
@@ -936,10 +940,48 @@ class UiInputTests(unittest.TestCase):
         driver = FakeDriver()
         return driver, Ui(driver)
 
-    def test_channel_page_uses_explicit_origin_and_map_offset(self):
+    def test_channel_page_opens_its_mapped_task_row_from_any_origin(self):
+        """E1 to Channel Tasks, E2 clamps to the first row, E2 to the page's row, K3.
+
+        The live UI has no E1 page ring, so the recipe depends only on the
+        target page's Channel Tasks row, never on the page it starts from.
+        """
+        from ui_map import CHANNEL_PAGES, CHANNEL_TASKS
+
+        self.assertEqual(CHANNEL_TASKS, [
+            "masks", "trig_params", "output", "harmony", "clock", "merge", "device",
+            "history", "mask_detail", "trig_detail", "merge_shape", "norns"])
+        rows = {"masks": 0, "trig_locks": 1, "memory": 7, "clock_mods": 4,
+                "midi_config": 6, "note_dashboard": 2, "merge_shape": 10, "harmony": 3}
+        self.assertEqual(set(rows), set(CHANNEL_PAGES))
+        for page, row in rows.items():
+            expected = [("enc", 1, 3), ("enc", 2, -12)]
+            if row:
+                expected.append(("enc", 2, row))
+            expected.append(("key", 3))
+            for origin in [None, *CHANNEL_PAGES]:
+                with self.subTest(page=page, origin=origin):
+                    driver, ui = self.ui()
+                    ui.channel_page(page, origin, confirm=False)
+                    self.assertEqual(driver.calls, expected)
+
+    def test_channel_page_confirms_the_live_header_and_rejects_unknown_pages(self):
+        from ui import UiMapError
+
         driver, ui = self.ui()
-        ui.channel_page("harmony", "masks", confirm=False)
-        self.assertEqual(driver.calls, [("enc", 1, 7)])
+        confirmed = []
+        ui.confirm_header = lambda page, **params: confirmed.append((page, params))
+        ui.channel_page("harmony", "masks", channel=2)
+        self.assertEqual(driver.calls, [
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 3), ("key", 3),
+        ])
+        self.assertEqual(confirmed, [("harmony", {"channel": 2})])
+        for page in ("channel_tasks", "not_a_page"):
+            with self.subTest(page=page):
+                driver, ui = self.ui()
+                with self.assertRaises(UiMapError):
+                    ui.channel_page(page, confirm=False)
+                self.assertEqual(driver.calls, [])
 
     def test_pattern_harmony_clock_page_and_value_verbs_keep_native_recipe(self):
         driver, ui = self.ui()
@@ -949,9 +991,9 @@ class UiInputTests(unittest.TestCase):
         ui.set_value(2)
         ui.select_field("tone_0_role", offset=3)
         self.assertEqual(driver.calls, [
-            ("enc", 1, -1),
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 4), ("key", 3),
             ("enc", 3, -2),
-            ("enc", 1, 4),
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 3), ("key", 3),
             ("enc", 3, 2),
             ("enc", 2, 3),
         ])
@@ -1091,10 +1133,64 @@ class UiInputTests(unittest.TestCase):
             ],
         ))])
 
-    def test_channel_page_can_preserve_a_clamped_boundary_recipe(self):
+    def test_channel_page_ring_turns_clamp_at_the_boundary_through_tasks(self):
+        """A saturating E1 turn on a Channel page opens the clamped ring page through Tasks.
+
+        ``saturate`` no longer changes the recipe: Masks is the first Channel
+        Tasks row, so E2 clamping to the top and K3 open it from any page.
+        """
+        from ui import Ui
+
         driver, ui = self.ui()
         ui.channel_page("masks", "midi_config", confirm=False, saturate=True)
-        self.assertEqual(driver.calls, [("enc", 1, -5)])
+        self.assertEqual(driver.calls, [("enc", 1, 3), ("enc", 2, -12), ("key", 3)])
+
+        class ObservedDriver(FakeDriver):
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                state = next(self._states)
+                if not predicate(state):
+                    raise AssertionError("wait predicate rejected staged state")
+                return state
+
+        def shows(title, scope, layout):
+            return {"frame": {"pixels_base64": "ignored"},
+                    "diagnostics": {"menu_mode": False}, "shows": (title, scope, layout)}
+
+        device = shows("DEVICE", "CH01", "detail")
+        masks = shows("NOTE MASKS", "CH01", "overview_masks")
+        harmony = shows("VOICE LEADING", "CH01", "focused")
+        oracle = lambda state, title, scope, layout: state["shows"] == (title, scope, layout)
+        with patch("frame_oracle.live_header_matches", side_effect=oracle):
+            # Device (ring 5th) turned -5 clamps to Masks: opened through Tasks and awaited.
+            driver = ObservedDriver(states=[device, masks])
+            Ui(driver).turn(1, -5)
+            self.assertEqual(driver.calls, [
+                ("wait", 1),
+                ("enc", 1, 3), ("enc", 2, -12), ("key", 3),
+                ("wait", 3),
+            ])
+            # Already at either end, a saturating turn emits no input at all.
+            for state, detents in ((masks, -5), (harmony, 5)):
+                with self.subTest(detents=detents):
+                    driver = ObservedDriver(states=[state])
+                    Ui(driver).turn(1, detents)
+                    self.assertEqual(driver.calls, [("wait", 1)])
+            # An ordinary ring move: Merge shape -1 is Note dashboard (Output, task row 2).
+            driver = ObservedDriver(states=[shows("MERGE SHAPE", "CH01", "focused"),
+                                            shows("OUTPUT", "CH01", "focused")])
+            Ui(driver).turn(1, -1)
+            self.assertEqual(driver.calls, [
+                ("wait", 1),
+                ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 2), ("key", 3),
+                ("wait", 3),
+            ])
+            # A screen on no page ring (Channel Tasks itself) matches neither the
+            # Channel ring nor another context's ring: the physical E1 stands.
+            tasks = shows("CHANNEL TASKS", "CH01", "detail")
+            driver = ObservedDriver(states=[tasks, tasks])
+            Ui(driver).turn(1, -5)
+            self.assertEqual(driver.calls, [("wait", 1), ("wait", 1), ("enc", 1, -5)])
 
     def test_native_parameters_observes_controlled_menu_mode_before_navigation(self):
         from ui import Ui
@@ -1124,23 +1220,35 @@ class UiInputTests(unittest.TestCase):
         from ui import Ui
 
         class Driver(FakeDriver):
+            # First wait: the menu-mode transition. Second and third waits:
+            # the E1 Channel-ring and other-ring observations, which both stand
+            # down in the native menu so the physical E1 reaches PARAMETERS.
+            menu = {"diagnostics": {"menu_mode": True},
+                    "frame": {"pixels_base64": "ignored"}}
+            staged = [
+                [{"diagnostics": {"menu_mode": False}},
+                 {"diagnostics": {"menu_mode": True}}],
+                [menu],
+                [menu],
+            ]
+            matches = []
+
             def wait(self, predicate, timeout=3):
                 self.calls.append(("wait", timeout))
-                states = [
-                    {"diagnostics": {"menu_mode": False}},
-                    {"diagnostics": {"menu_mode": True}},
-                ]
-                self.matches = [predicate(state) for state in states]
+                states = self.staged[len(self.matches)]
+                self.matches.append([predicate(state) for state in states])
                 return states[-1]
 
         driver = Driver(clock_mode="real-time")
         ui = Ui(driver)
-        with patch.object(ui, "expect_menu_label"):
+        with patch.object(ui, "expect_menu_label"), \
+                patch("frame_oracle.live_header_matches",
+                      side_effect=AssertionError("menu mode must not read a header")):
             ui.open_native_parameters()
         self.assertEqual(driver.calls, [
-            ("key", 1), ("wait", 1), ("enc", 1, 4), ("key", 3),
+            ("key", 1), ("wait", 1), ("wait", 1), ("wait", 1), ("enc", 1, 4), ("key", 3),
         ])
-        self.assertEqual(driver.matches, [False, True])
+        self.assertEqual(driver.matches, [[False, True], [True], [True]])
 
     def test_leave_native_menu_controlled_mode_rejects_still_open(self):
         from ui import Ui, UiMapError
@@ -1224,19 +1332,23 @@ class UiInputTests(unittest.TestCase):
         with self.assertRaises(UiMapError):
             ui.trig_parameter_label("Chord Spread")
 
-    def test_header_surface_verb_keeps_text_only_oracle_and_result(self):
+    def test_header_surface_verb_checks_live_header_oracle_and_result(self):
+        """The surface verb checks the live title row and scope text, exactly."""
         from ui import Ui
 
         driver = FakeDriver(states=[{}])
         ui = Ui(driver)
-        with patch("frame_oracle.header", return_value="expected") as header, \
-                patch("frame_oracle.matches", return_value=True) as matches:
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
             ui.expect_header_surface("midi_config", channel=1)
-        header.assert_called_once_with("Ch. 1 Device Config")
-        matches.assert_called_once_with({}, "expected")
+        live.assert_called_once_with({}, "DEVICE", "CH01", "detail")
         self.assertEqual(driver.results, [{
-            "kind": "screen-header", "expected": "Ch. 1 Device Config", "matched": True
+            "kind": "screen-header", "expected": "DEVICE CH01", "matched": True
         }])
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.live_header_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_header_surface("midi_config", channel=1)
+        self.assertEqual(driver.results, [])
 
     def test_unknown_trig_parameter_key_fails_before_input(self):
         from ui import UiMapError
@@ -1363,12 +1475,13 @@ class UiInputTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "slot must be in 1..10"):
             ui.assign_stored_patch_control(11)
 
-    def test_configure_keeps_the_historical_physical_recipe(self):
+    def test_configure_keeps_its_exact_physical_recipe_through_device_task(self):
         driver, ui = self.ui()
         ui.expect_header = lambda page, **params: driver.calls.append(("header", page, params))
         ui.configure()
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
             ("tap", 5, 8),
@@ -1378,6 +1491,8 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "trig_locks", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
 
@@ -1410,20 +1525,23 @@ class UiInputTests(unittest.TestCase):
         with patch.dict(sys.modules, {"cases": cases}):
             quantised_fixed_table(case, profile="major")
 
-        self.assertEqual(driver.calls[:4], [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+        self.assertEqual(driver.calls[:7], [
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
         ])
-        self.assertEqual(driver.calls[19:24], [
+        self.assertEqual(driver.calls[22:32], [
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "trig_locks", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
-        self.assertEqual(driver.calls[24:26], [
-            ("enc", 1, -3),
+        self.assertEqual(driver.calls[32:37], [
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "quantised_fixed_note"),
         ])
-        self.assertEqual(driver.calls[26:40], [
+        self.assertEqual(driver.calls[37:51], [
             ("enc", 3, delta) for delta in
             (1, 1, 2, 3, 1, 4, 1, 48, 1, 2, 3, 4, 56, 1)
         ])
@@ -1460,13 +1578,16 @@ class UiInputTests(unittest.TestCase):
         ), self.assertRaises(StopAfterSetup):
             seeded_probability(case, probability=99, opportunities=64)
 
-        self.assertEqual(driver.calls[:4], [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+        self.assertEqual(driver.calls[:7], [
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
         ])
-        self.assertEqual(driver.calls[19:24], [
+        self.assertEqual(driver.calls[22:32], [
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "trig_locks", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
         self.assertEqual(selected, [2])
@@ -1504,7 +1625,8 @@ class UiInputTests(unittest.TestCase):
             fixed_note_domain(case, start=0, count=1)
 
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
             ("tap", 5, 8),
@@ -1514,8 +1636,10 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "trig_locks", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
-            ("enc", 1, -3),
+            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "fixed_note"),
             ("enc", 2, 1), ("assign_trig_parameter_key", "quantised_fixed_note"),
             ("enc", 3, 8),
@@ -1544,7 +1668,8 @@ class UiInputTests(unittest.TestCase):
 
         def expected_trace():
             calls = [
-                ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+                ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
                 ("tap", 5, 8),
                 ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
                 ("tap", 5, 8),
@@ -1554,8 +1679,10 @@ class UiInputTests(unittest.TestCase):
                 ("tap", 3, 8), ("tap", 1, 2),
                 ("hold_tap", (1, 4), (4, 4)),
                 ("led_values", [(1, 2)], [15]),
+                ("header", "trig_locks", {"channel": 1}),
+                ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
                 ("header", "midi_config", {"channel": 1}),
-                ("enc", 1, -3),
+                ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
                 ("key", 2), ("enc", 3, -50), ("key", 3), ("key", 2),
                 ("enc", 3, 61),
             ]
@@ -2050,14 +2177,18 @@ class UiObservationTests(unittest.TestCase):
 
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
-        with patch("frame_oracle.header", return_value=b"expected") as header, \
-             patch("frame_oracle.matches", side_effect=lambda observed, expected:
-                   observed is state and expected == b"expected") as matches:
+        with patch("frame_oracle.live_header_matches", side_effect=lambda observed, *expected:
+                   observed is state and expected == ("DEVICE", "CH01", "detail")) as live:
             result = Ui(driver).wait_for_header("midi_config", channel=1)
-        header.assert_called_once_with("Ch. 1 Device Config", selected=5, tabs=8)
-        matches.assert_called_once_with(state, b"expected")
+        live.assert_called_once_with(state, "DEVICE", "CH01", "detail")
         self.assertIs(result, state)
         self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(driver.results, [])
+        # Another channel's scope is a different header: the wait fails closed.
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", side_effect=lambda observed, *expected:
+                   expected == ("DEVICE", "CH01", "detail")), self.assertRaises(AssertionError):
+            Ui(driver).wait_for_header("midi_config", channel=2)
         self.assertEqual(driver.results, [])
 
     def test_expect_scale_slot_header_preserves_exact_oracle_without_result(self):
@@ -2066,12 +2197,15 @@ class UiObservationTests(unittest.TestCase):
 
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
-        with patch("frame_oracle.header", return_value=b"expected") as header, \
-             patch("frame_oracle.matches", return_value=True) as matches:
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
             Ui(driver).expect_scale_slot_header(13)
-        header.assert_called_once_with("Scale slot 13 ", selected=1, tabs=3)
-        matches.assert_called_once_with(state, b"expected")
+        live.assert_called_once_with(state, "SCALE", "SLOT 13", "focused")
         self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(driver.results, [])
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_scale_slot_header(13)
         self.assertEqual(driver.results, [])
 
     def test_expect_steps_keeps_one_atomic_led_values_call(self):
@@ -2117,15 +2251,18 @@ class UiObservationTests(unittest.TestCase):
 
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
-        with patch("frame_oracle.header", return_value=b"expected") as header, \
-             patch("frame_oracle.matches", return_value=True) as matches:
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
             Ui(driver).expect_header("midi_config", channel=1)
-        header.assert_called_once_with("Ch. 1 Device Config", selected=5, tabs=8)
-        matches.assert_called_once_with(state, b"expected")
+        live.assert_called_once_with(state, "DEVICE", "CH01", "detail")
         self.assertEqual(driver.calls, [("wait",)])
         self.assertEqual(driver.results, [
-            {"kind": "screen-header", "expected": "Ch. 1 Device Config", "matched": True}
+            {"kind": "screen-header", "expected": "DEVICE CH01", "matched": True}
         ])
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_header("midi_config", channel=1)
+        self.assertEqual(driver.results, [])
 
     def test_confirmation_uses_one_snapshot_and_records_identity(self):
         from ui import Ui
@@ -2145,8 +2282,8 @@ class UiObservationTests(unittest.TestCase):
         driver = FakeDriver(states=[{"frame": {"pixels_base64": "ignored"}}])
         ui = Ui(driver)
         ui._header_matches = lambda state, page, params: False
-        ui._observed_title = lambda state: "Ch. 3 Memory"
-        with self.assertRaisesRegex(UiMapError, "Ch. 3 Device Config.*Ch. 3 Memory"):
+        ui._observed_title = lambda state: "MEMORY CH03"
+        with self.assertRaisesRegex(UiMapError, "expected 'DEVICE CH03', observed 'MEMORY CH03'"):
             ui.confirm_header("midi_config", channel=3)
 
     def test_pick_device_preserves_seek_recipe_and_result(self):

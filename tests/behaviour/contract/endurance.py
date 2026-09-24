@@ -18,10 +18,10 @@ def endurance_mixed(c,duration=DURATION):
     from frame_oracle import render
     song=build_composition(c)
     # Global tempo 90 -> 120 on the song page's second screen.
-    c.tap(6,8);c.enc(1,1);c.enc(3,BPM-90);c.key(3)
+    c.tap(6,8);c.ui.turn(1, 1);c.enc(3,BPM-90);c.key(3)
     expected=render([(0,26,15,str(BPM))])
     c.wait(lambda s:all(base64.b64decode(s['frame']['pixels_base64'])[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(20,28) for x in range(36) for k in range(3)))
-    c.enc(1,-1);c.tap(3,8)
+    c.ui.turn(1, -1);c.tap(3,8)
     marker=c.snapshot()['midi_count'] # build-phase keyboard monitoring precedes Play
     c.tap(1,8)
     remaining=duration

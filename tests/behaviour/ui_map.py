@@ -101,6 +101,23 @@ LIVE_SCREENS = OrderedDict([
     ("song", {"screen": "A03", "title": "SONG PLAYBACK", "layout": "focused", "scope": "song"}),
 ])
 
+# Non-Channel page rings the cases were written for, each entry the live
+# screen that page became: (screen id, title, layout, task row of its navigator).
+PAGE_RINGS = {
+    "Scale": [("S01", "SCALE", "focused", "scale"), ("S02", "SCALE CLOCK", "focused", "scale_clock"),
+              ("P05", "CHANNEL VIEW", "focused", "channel_view")],
+    "Song": [("A01", "SLOT SETUP", "detail", "slot_setup"), ("A02", "GLOBAL FEEL", "focused", "tempo_feel"),
+             ("P05", "CHANNEL VIEW", "focused", "channel_view")],
+    "Trig": [("P01", "PATTERN TRIG", "pattern64", "pattern"), ("P02", "TRIG OPTIONS", "focused", "options")],
+}
+# Where each context lands from its grid button when that is not ring entry 1.
+RING_LANDING = {"Song": ("A03", "SONG PLAYBACK", "focused")}
+TASK_ROWS = {
+    "Scale": ["scale", "scale_clock", "overview", "channel_view"],
+    "Song": ["playback", "slot_setup", "tempo_feel", "channel_view"],
+    "Trig": ["pattern", "options", "channel_view", "rhythm_doctor"],
+}
+
 # The Channel Tasks rows in their spec order (spec.json#/tasks/rows/N01).
 CHANNEL_TASKS = ["masks", "trig_params", "output", "harmony", "clock", "merge", "device", "history",
                  "mask_detail", "trig_detail", "merge_shape", "norns"]
@@ -596,6 +613,32 @@ def header_text(page, **params):
     except KeyError as error:
         raise KeyError("unknown header key %r" % page) from error
     return data["title"] + " " + live_scope(data["scope"], **params)
+
+
+# Historical header texts cases still name, mapped to the live page they became.
+_HISTORICAL_CHANNEL_TITLES = {
+    "Note Masks": "masks", "Trig Locks": "trig_locks", "Memory": "memory", "Clocks": "clock_mods",
+    "Device Config": "midi_config", "Note Dashboard": "note_dashboard", "Merge Shape": "merge_shape",
+    "Harmony": "harmony",
+}
+
+
+def historical_header(text, selected=None):
+    """(page key, header params) of the live screen an old header text names."""
+    import re
+    match = re.match(r"^Ch\. (\d+) (.+)$", text)
+    if match and match.group(2) in _HISTORICAL_CHANNEL_TITLES:
+        return _HISTORICAL_CHANNEL_TITLES[match.group(2)], {"channel": int(match.group(1))}
+    match = re.match(r"^Scale slot (\d+) ?$", text)
+    if match:
+        return "scale", {"slot": int(match.group(1))}
+    if text == "Trig editor options":
+        return ("trigger_editor_confirmation" if selected == 2 else "trigger_editor"), {}
+    if text == "Note editor options":
+        return "note_editor", {}
+    if text == "Velocity editor options":
+        return "velocity_editor", {}
+    raise KeyError("no live screen for historical header %r" % text)
 
 
 def header_parts(page, **params):

@@ -20,7 +20,7 @@ def nb_param_lock(c):
         c.enc(3, 1)
     else: raise AssertionError('Doubledecker not visible in device picker')
     c.key(3); c.elapse(13)                                        # device applied; upstream startup tone ends
-    c.enc(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
+    c.ui.turn(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
     c.action(type='grid', x=1, y=4, state=1)
     try: c.elapse(.05); c.enc(3, 5)                               # step 1 lock on slot 1 (Shape 1)
     finally: c.action(type='grid', x=1, y=4, state=0)

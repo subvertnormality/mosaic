@@ -56,7 +56,7 @@ def dial_off_display(c):
         c.results.append(dict(kind='dial-off-display', **checks[-1]))
 
     c.configure(); c.enc(3, 1); c.key(3)  # Emulator test device, as patch_params.open_patch_control
-    c.enc(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
+    c.ui.turn(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
 
     # Slot 1: Control 1 (off -1 below min 0). Assigned at its Off default.
     assign_trig_parameter(c, 'Control 1'); c.elapse(2.5)

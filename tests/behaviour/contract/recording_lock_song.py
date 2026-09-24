@@ -22,7 +22,7 @@ def recording_lock_song(c, persist=False):
     from patch_params import open_patch_control, turn
     c.configure()
     open_patch_control(c, setup=False); turn(c, 63); turn(c, 1); menu_value(c, '63'); c.key(1)
-    c.enc(1, -3); assign_trig_parameter(c, 'CC 1')
+    c.ui.turn(1, -3); assign_trig_parameter(c, 'CC 1')
     for step, value in [(1, 24), (3, 96)]:
         c.action(type='grid', x=step, y=4, state=1)
         try: c.elapse(.05); c.action(type='enc', n=3, delta=-126); c.enc(3, value + 1)
@@ -32,12 +32,12 @@ def recording_lock_song(c, persist=False):
     # Song editor page 2: tempo 90 -> 30 (its minimum), before the copy.
     import base64
     from frame_oracle import render
-    c.enc(1, 1); c.enc(3, -60); c.key(3)
+    c.ui.turn(1, 1); c.enc(3, -60); c.key(3)
     expected = render([(0, 26, 15, '30')])
     c.wait(lambda s: all(base64.b64decode(s['frame']['pixels_base64'])[(y*128+x)*4+k] == expected[(y*128+x)*4+k]
                          for y in range(20, 28) for x in range(36) for k in range(3)))
     assert c.snapshot()['diagnostics']['tempo'] == 30
-    c.enc(1, -1)
+    c.ui.turn(1, -1)
     c.hold_tap((1, 1), (2, 1)); c.tap(1, 1); c.tap(3, 8)         # slot 2 = copy of slot 1; play from slot 1
     c.screen_header('Ch. 1 Trig Locks', selected=2)               # still on the trig lock page, CC 1 slot
     c.tap(2, 8)                                                    # arm recording
