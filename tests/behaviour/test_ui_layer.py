@@ -18,6 +18,23 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_foundation_workflow_has_independent_contract_owner(self):
+        import ast
+        import inspect
+        from cases import CASES
+        import harmony_merge_workflow as ordinary
+        import contract.foundation_workflow as owner
+
+        run = CASES['M-MERGE-FOUNDATION-001']['run']
+        self.assertIs(run, owner.foundation_workflow)
+        self.assertEqual(run.__module__, owner.__name__)
+        for name in ('setup_foundation', 'foundation_workflow'):
+            with self.subTest(name=name):
+                self.assertEqual(
+                    ast.dump(ast.parse(inspect.getsource(getattr(owner, name)))),
+                    ast.dump(ast.parse(inspect.getsource(getattr(ordinary, name)))),
+                )
+
     def test_fast_external_acquisition_has_exact_contract_owner(self):
         from cases import CASES
         import contract.fast_acquisition as owner
