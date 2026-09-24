@@ -35,7 +35,7 @@ PYTHON_UNITTEST={'test_acquisition_oracle','test_record_placement_oracle','test_
     'test_forwarded_clock_oracle','test_fractional_stop_boundary','test_jf_oracle','test_master_clock_oracle',
     'test_midi_window','test_note_accounting','test_note_schedule','test_output_profiles','test_panic_hotplug_trace',
     'test_inventory','test_hardening_matrix','test_real_norns','test_hardware_performance','test_lua_test_names','test_lua_syntax','test_perf_input','test_perf_overload','test_panic_repeat_trace','test_panic_trace','test_panic_transport','test_pcm_oracle','test_suite',
-    'test_heldout_workloads','test_perf_campaign','test_lead_timing_oracle','test_pulse_probe','test_fixture_migration','test_hardware_run_options','test_probe_overhead','test_swing_window_oracle','test_persisted_digest','test_ui','test_ui_assign_trig_parameter','test_ui_layer'}
+    'test_heldout_workloads','test_perf_campaign','test_lead_timing_oracle','test_pulse_probe','test_fixture_migration','test_hardware_run_options','test_probe_overhead','test_swing_window_oracle','test_persisted_digest','test_ui','test_ui_assign_trig_parameter','test_ui_layer','test_dense_workload_ui_recipe'}
 PYTHON_UNITTEST.add('test_ui_baseline_import')
 PYTHON_UNITTEST.add('test_ui_migration_drill')
 PYTHON_UNITTEST.add('test_rec_param_input_timing')

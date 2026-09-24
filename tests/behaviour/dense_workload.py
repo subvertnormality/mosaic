@@ -17,35 +17,31 @@ def lock_values(parameter):
     return values
 
 def set_step_value(d, step, value):
-    d.action(type='grid', x=step, y=4, state=1)
-    try:d.elapse(.05);d.action(type='enc', n=3, delta=-126);d.elapse(.15);d.enc(3, value + 1)
-    finally:d.action(type='grid', x=step, y=4, state=0)
+    with d.ui.hold_step(step):
+        d.elapse(.05);d.ui.encoder_event(3, -126);d.elapse(.15);d.ui.set_value(value + 1)
     d.elapse(.1)
 
 def build_project(d,channels,workload='dense',select_parameter=None,select_device=None):
-    d.tap(5,8);d.tap(1,1)
+    d.ui.pattern_editor();d.ui.select_channel(1)
     # Every channel plays this one pattern; the extreme probe trigs every other step.
-    for x in range(1,17,EXTREME_STEP_STRIDE if workload=='extreme' else 1):d.tap(x,4)
-    d.tap(3,8);d.enc(1,4)
+    for step in range(1,17,EXTREME_STEP_STRIDE if workload=='extreme' else 1):d.ui.tap_step(step)
+    d.ui.menu('channel_editor');d.ui.turn(1,4)
     for channel in range(1,channels+1):
-        d.tap(channel,1)
+        d.ui.select_channel(channel)
         if select_device:select_device(d,channel)
-        else:d.enc(3,1)
-        d.enc(2,1)
-        if channel>1:d.enc(3,channel-1)
-        d.key(3);d.tap(1,2);d.hold_tap((1,4),(16,4))
+        else:d.ui.set_value(1)
+        d.ui.turn(2,1)
+        if channel>1:d.ui.set_value(channel-1)
+        d.ui.press_key(3);d.ui.tap_control('pattern_slot',1);d.ui.set_range(1,16)
         if workload=='slides':
-            d.enc(1,-3)
+            d.ui.turn(1,-3)
             if select_parameter:select_parameter(d,'CC 1')
-            else:
-                from cases import assign_trig_parameter
-                assign_trig_parameter(d,'CC 1')
+            else:d.ui.assign_trig_parameter('CC 1')
             for step,value in ((1,0),(9,127)):
-                d.action(type='grid',x=step,y=4,state=1)
-                try:d.elapse(.05);d.action(type='enc',n=3,delta=-126);d.elapse(.15);d.enc(3,value+1)
-                finally:d.action(type='grid',x=step,y=4,state=0)
+                with d.ui.hold_step(step):
+                    d.elapse(.05);d.ui.encoder_event(3,-126);d.elapse(.15);d.ui.set_value(value+1)
                 d.elapse(.1)
-            d.key(3);d.enc(1,3)
+            d.ui.press_key(3);d.ui.turn(1,3)
         if workload=='extreme':
             # A busy project: a four-note chord on every other step of every
             # channel, three locked CC parameters and a sliding fourth. A trig on
@@ -54,43 +50,37 @@ def build_project(d,channels,workload='dense',select_parameter=None,select_devic
             # This is a stress probe, not a certified case: it exists to find
             # where a busy project stops keeping time, so its oracle checks
             # completeness, not exact notes.
-            d.enc(1,-4)
+            d.ui.turn(1,-4)
             for index,turns in enumerate((2,4,5,7)):
-                d.enc(2,1);d.enc(3,turns)
-            d.enc(2,-4);d.enc(1,4)
+                d.ui.turn(2,1);d.ui.set_value(turns)
+            d.ui.turn(2,-4);d.ui.turn(1,4)
             # The hardware fixture maps CC 1-4, so three locked parameters and a
             # slide on the fourth.
             locked=LOCK_PARAMETERS[:3]
-            d.enc(1,-3)
+            d.ui.turn(1,-3)
             for index,parameter in enumerate(locked):
-                if index:d.enc(2,1)
+                if index:d.ui.turn(2,1)
                 label='CC %d'%parameter
                 if select_parameter:select_parameter(d,label)
-                else:
-                    from cases import assign_trig_parameter
-                    assign_trig_parameter(d,label)
-                d.enc(3,LOCK_DEFAULTS[parameter]+1)
+                else:d.ui.assign_trig_parameter(label)
+                d.ui.set_value(LOCK_DEFAULTS[parameter]+1)
                 for step,value in LOCK_STEPS[parameter]:set_step_value(d,step,value)
-            d.enc(2,1)
+            d.ui.turn(2,1)
             if select_parameter:select_parameter(d,'CC 4')
-            else:
-                from cases import assign_trig_parameter
-                assign_trig_parameter(d,'CC 4')
+            else:d.ui.assign_trig_parameter('CC 4')
             for step,value in ((1,0),(9,127)):set_step_value(d,step,value)
-            d.enc(2,-len(locked));d.enc(1,3)
+            d.ui.turn(2,-len(locked));d.ui.turn(1,3)
         if workload=='locks':
-            d.enc(1,-3)
+            d.ui.turn(1,-3)
             for index,parameter in enumerate(LOCK_PARAMETERS):
-                if index:d.enc(2,1)
+                if index:d.ui.turn(2,1)
                 label='CC %d'%parameter
                 if select_parameter:select_parameter(d,label)
-                else:
-                    from cases import assign_trig_parameter
-                    assign_trig_parameter(d,label)
-                d.enc(3,LOCK_DEFAULTS[parameter]+1)
+                else:d.ui.assign_trig_parameter(label)
+                d.ui.set_value(LOCK_DEFAULTS[parameter]+1)
                 for step,value in LOCK_STEPS[parameter]:set_step_value(d,step,value)
-            d.enc(2,-(len(LOCK_PARAMETERS)-1));d.enc(1,3)
-    d.tap(1,1)
+            d.ui.turn(2,-(len(LOCK_PARAMETERS)-1));d.ui.turn(1,3)
+    d.ui.select_channel(1)
 
 def check_slides(emitted,ons,channels,lead_ms=0):
     """Each channel has a complete ordered CC 1 ramp from step 1 to step 9.
