@@ -54,3 +54,15 @@ controlled-time lanes. These records live here together because
 `M-EDIT-004` already has an earlier immutable record in
 `ui-migration-cases-baselines/`. The targeted report remains partial
 (`complete_regression_run: false`).
+
+## Merge LED assertions
+
+The semantic LED reexpression for `M-MERGE-002` through `M-MERGE-008`
+is stored here because earlier canonical migration records already exist in
+`ui-migration-cases-baselines/`; those records were not overwritten. GitHub
+Actions run `35936310155` passed the strict source-delta and repeatability
+gates in real-time and controlled-time lanes for raw source
+`c1882e0dc5baa811c685db548219ef83426eadd1` and semantic source
+`d906b4197bac57b7bd8c4397498668846222db96`. The report marks
+`complete_regression_run: false`; it is selected-case evidence, not a full
+regression campaign.
