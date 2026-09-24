@@ -18,6 +18,29 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_external_cold_start_contract_has_independent_exact_owner(self):
+        import ast
+        import inspect
+        from unittest.mock import patch, sentinel
+        from cases import CASES
+        import external_cold_start as ordinary
+        import contract.external_cold_start as owner
+
+        self.assertIs(CASES['M-SYNC-002']['run'], owner.external_cold_start)
+        self.assertEqual(owner.external_cold_start.__module__, owner.__name__)
+        self.assertEqual(
+            ast.dump(ast.parse(inspect.getsource(owner.external_cold_start))),
+            ast.dump(ast.parse(inspect.getsource(ordinary.external_cold_start))),
+        )
+        self.assertIs(CASES['M-SYNC-003']['run'], owner.external_cold_start_20)
+        with patch.object(owner, 'external_cold_start',
+                          return_value=sentinel.result) as helper:
+            self.assertIs(owner.external_cold_start_20(sentinel.driver),
+                          sentinel.result)
+        helper.assert_called_once_with(sentinel.driver, bpm=20)
+        self.assertIs(CASES['M-SYNC-004']['run'].__globals__[
+            'ordinary_external_cold_start'], ordinary.external_cold_start)
+
     def test_clock_division_cases_have_exact_contract_owners(self):
         from unittest.mock import patch, sentinel
         from cases import CASES

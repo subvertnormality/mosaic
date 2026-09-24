@@ -2627,8 +2627,8 @@ from song_tempo import song_tempo_bounds
 
 from external_start_phase import external_start_phase
 
-from external_cold_start import external_cold_start
-from contract.external_cold_start import external_cold_start_20
+from external_cold_start import external_cold_start as ordinary_external_cold_start
+from contract.external_cold_start import external_cold_start, external_cold_start_20
 
 from contract.external_started_handoff import external_started_handoff
 
@@ -2773,7 +2773,7 @@ CASES={
  'M-SYNC-006':dict(run=repeated_external_start,requirements=['CLOCK-MIDI-TRANSPORT-001','MIDI-RELEASE-001'],issues=[84],description='Repeated incoming Start during a held note resets to step1 exactly once at the next external Clock, releases the previous note and preserves absolute phase'),
  'M-SYNC-005':dict(run=external_started_handoff,requirements=['CLOCK-LIVE-HANDOFF-001','CLOCK-MIDI-TRANSPORT-001'],description='Incoming Start then MIDI-to-internal source switch preserves phrase order and prevents epoch-driven note bursts'),
  'M-SYNC-003':dict(run=external_cold_start_20,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold20BPM external clock: first note and all phrase deadlines through initial unknown-tempo acquisition'),
- 'M-SYNC-004':dict(run=lambda c:external_cold_start(c,bpm=300),requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold300BPM external clock: absolute startup, phase and releases'),
+ 'M-SYNC-004':dict(run=lambda c:ordinary_external_cold_start(c,bpm=300),requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold300BPM external clock: absolute startup, phase and releases'),
  'M-SYNC-002':dict(run=external_cold_start,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Cold external Start followed by first-ever24PPQN clock: absolute beat origin, phrase timing and note releases'),
  'M-SYNC-001':dict(run=external_start_phase,requirements=['CLOCK-MIDI-TRANSPORT-001'],issues=[84],description='Warmed external24PPQN clock with four Start phases: step1 sounds exactly once on the first post-Start Clock before step2, with absolute phase and releases'),
  'M-SONG-SETTINGS-002':dict(run=song_tempo_bounds,requirements=['SONG-SETTINGS','SONG-SLOTS'],description='Global tempo30/300 bounds and90 restoration persist across manually selected octave-fingerprinted slots, screen values and exact MIDI gates/phase'),
