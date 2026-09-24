@@ -210,6 +210,79 @@ OTHER = 7
                                        "base-midi", "installation.json", None, 10),
                     manifest)
 
+    def test_each_run_unlinks_only_unlisted_generated_code_mosaic_symlink(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "output"
+            scratch = root / "execution" / "scratch-source"
+            candidate = root / "candidate"
+            targets = []
+            events = []
+
+            def fake_run(command, **kwargs):
+                events.append("process-ended")
+                is_repeat = str(command[1]).endswith("repeat.py")
+                session = (scratch.parent / "mosaic-behaviour-runs" / "repeat-one"
+                           if is_repeat else Path(command[command.index("--artifacts") + 1])
+                           / "run-one")
+                code = session / "code"
+                code.mkdir(parents=True)
+                link = code / "mosaic"
+                link.touch()  # mocked as a symlink below; no host symlink privilege needed
+                targets.append(link)
+                manifest = session / "manifest.json"
+                manifest.write_text(json.dumps({"artifacts": []}) + "\n", encoding="utf-8")
+                case = command[command.index("--case") + 1]
+                if is_repeat:
+                    return subprocess.CompletedProcess(command, 1, "", "")
+                artifacts_root = Path(command[command.index("--artifacts") + 1])
+                passed = "control" in artifacts_root.parts
+                return subprocess.CompletedProcess(
+                    command, 0 if passed else 1,
+                    json.dumps(dict(case=case, passed=passed, manifest=str(manifest))) + "\n",
+                    "")
+
+            def record_unlink(path, *args, **kwargs):
+                events.append(("unlink", Path(path)))
+
+            with patch.object(runner.subprocess, "run", side_effect=fake_run), \
+                    patch.object(Path, "is_symlink", autospec=True,
+                                 side_effect=lambda self: Path(self) in targets), \
+                    patch.object(Path, "unlink", autospec=True, side_effect=record_unlink):
+                runner._run_control(candidate, output, "M-ONE", "base-midi",
+                                    "installation.json", None, 10)
+                runner._run_case(scratch, output, "M-TWO", "base-midi",
+                                 "installation.json", None, 10)
+                runner._run_repeat(scratch, output, "M-THREE", "base-midi",
+                                   "installation.json", None, 10)
+
+            removed = [event[1] for event in events if isinstance(event, tuple)]
+            self.assertEqual(removed, targets)
+            self.assertEqual(len([event for event in events if event == "process-ended"]), 3)
+            for index, event in enumerate(events):
+                if isinstance(event, tuple):
+                    self.assertEqual(event[0], "unlink")
+                    self.assertEqual(events[index - 1], "process-ended")
+
+    def test_cleanup_preserves_manifest_listed_code_mosaic_evidence(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "control" / "M-ONE"
+            session = root / "run-one"
+            code = session / "code"
+            code.mkdir(parents=True)
+            link = code / "mosaic"
+            link.touch()
+            manifest = session / "manifest.json"
+            manifest.write_text(json.dumps({"artifacts": [
+                {"path": "code/mosaic"}]}), encoding="utf-8")
+
+            with patch.object(Path, "is_symlink", autospec=True,
+                              side_effect=lambda path: Path(path) == link), \
+                    patch.object(Path, "unlink", autospec=True) as unlink:
+                self.assertFalse(runner._unlink_unlisted_generated_code_mosaic(
+                    manifest, root))
+                unlink.assert_not_called()
+
     def test_scratch_commit_changes_only_the_exact_page_order_and_bundles(self):
         source = """from collections import OrderedDict
 CHANNEL_PAGES = OrderedDict([

@@ -9,7 +9,7 @@ import argparse
 import ast
 import json
 import os
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
@@ -183,6 +183,39 @@ def _load_drill_module(repo):
     return ui_migration_drill
 
 
+def _unlink_unlisted_generated_code_mosaic(manifest, expected_root):
+    """Remove only run.py's incidental link, never manifest evidence or its target."""
+    try:
+        manifest = Path(manifest)
+        session = manifest.parent
+        expected_root = Path(expected_root)
+        if (manifest.name != "manifest.json" or manifest.is_symlink()
+                or not manifest.is_file() or session.is_symlink()
+                or session.parent.resolve() != expected_root.resolve()):
+            return False
+        with manifest.open(encoding="utf-8") as stream:
+            inventory = json.load(stream).get("artifacts")
+        if not isinstance(inventory, list):
+            return False
+        for item in inventory:
+            if not isinstance(item, dict) or not isinstance(item.get("path"), str):
+                return False
+            parts = PurePosixPath(item["path"]).parts
+            if (not parts or PurePosixPath(item["path"]).is_absolute()
+                    or ".." in parts or "\\" in item["path"]):
+                return False
+            if parts[:2] == ("code", "mosaic"):
+                return False
+        code = session / "code"
+        link = code / "mosaic"
+        if code.is_symlink() or not code.is_dir() or not link.is_symlink():
+            return False
+        link.unlink()
+        return True
+    except (OSError, ValueError, TypeError, json.JSONDecodeError):
+        return False
+
+
 def _run_case(scratch, output, case, profile, install, mod_root, timeout):
     root = output / "standalone" / case
     root.mkdir(parents=True, exist_ok=False)
@@ -200,6 +233,7 @@ def _run_case(scratch, output, case, profile, install, mod_root, timeout):
     manifest = failed_run_manifest(completed, case)
     if manifest.name != "manifest.json" or manifest.parent.parent != root.resolve():
         raise ValueError("run.py manifest is outside standalone artifact root")
+    _unlink_unlisted_generated_code_mosaic(manifest, root)
     log = dict(command=command, returncode=completed.returncode,
                stdout=completed.stdout, stderr=completed.stderr,
                manifest=str(manifest))
@@ -227,6 +261,7 @@ def _run_control(candidate, output, case, profile, install, mod_root, timeout):
     manifest = successful_run_manifest(completed, case)
     if manifest.name != "manifest.json" or manifest.parent.parent != root.resolve():
         raise ValueError("control manifest is outside uploaded artifact root")
+    _unlink_unlisted_generated_code_mosaic(manifest, root)
     return manifest
 
 
@@ -250,6 +285,7 @@ def _run_repeat(scratch, output, case, profile, install, mod_root, timeout):
     manifest = created[0] / "manifest.json"
     if not manifest.is_file():
         raise ValueError("repeat.py did not preserve its manifest")
+    _unlink_unlisted_generated_code_mosaic(manifest, repeats_root)
     write_json_once(output / "repeat-wrapper.json", dict(
         command=command, returncode=completed.returncode,
         stdout=completed.stdout, stderr=completed.stderr,
