@@ -535,17 +535,30 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
             expected_notes=[(1,[144,64 if same_pitch else 60,127])]+([(1,[144,64,127])] if strum else [])
             notes=c.playback(expected_notes,cycles=2,timeout=8)
             assert_durations(c,notes,[0]*(4 if strum else 2))
+            def expected_time(i):
+                return ((i//2)*cycle_steps+(i%2)*(0 if simultaneous else .5))/6 if strum else i*cycle_steps/6
             for i,note in enumerate(notes):
-                expected_time=((i//2)*cycle_steps+(i%2)*(0 if simultaneous else .5))/6 if strum else i*cycle_steps/6
-                assert abs((note[key]-notes[0][key])/1e9-expected_time)<=tolerance
+                assert abs((note[key]-notes[0][key])/1e9-expected_time(i))<=tolerance
             event_cutoff=c.snapshot()['midi_count']
             c.elapse(.3)
             state=c.snapshot()
             events=[m for m in midi_events_in_snapshot_window(state,marker,event_cutoff)
                     if 128<=m['bytes'][0]<=159]
-            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in notes for msg in (note['bytes'],[128,note['bytes'][1],127])],events
+            onsets=[m for m in events if 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+            assert [m['index'] for m in onsets[:len(notes)]]==[note['index'] for note in notes],events
+            # In real time Stop lands after unmeasured observe/tap round trips, so a
+            # delayed strum voice (0.5 step after the closing onset) can legitimately
+            # fall inside the window. Each such onset must continue the exact cyclic
+            # pattern at its scheduled time; controlled time never admits one.
+            late=onsets[len(notes):]
+            assert not late or c.clock_mode=='real-time',events
+            for i,note in enumerate(late,len(notes)):
+                assert (note['port'],note['bytes'])==expected_notes[i%len(expected_notes)],events
+                assert abs((note[key]-notes[0][key])/1e9-expected_time(i))<=tolerance,events
+            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in onsets for msg in (note['bytes'],[128,note['bytes'][1],127])],events
             assert not state['midi_capture']['outstanding']
-            c.results.append(dict(kind='nonpositive-strum-release' if strum else 'nonpositive-arp-endpoint',source_lengths=sources,trial=trial,onsets=len(notes),simultaneous=simultaneous,same_pitch=same_pitch,passed=True))
+            c.results.append(dict(kind='nonpositive-strum-release' if strum else 'nonpositive-arp-endpoint',source_lengths=sources,trial=trial,onsets=len(notes),simultaneous=simultaneous,same_pitch=same_pitch,passed=True,
+                                  **({'late_window_onsets':len(late)} if late else {})))
         return
     for index,(mode,level,length) in enumerate(list(zip(['average','longer','shorter'],[2,5,8],expected))+[('average',2,expected[0])]):
         if index:
