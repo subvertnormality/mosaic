@@ -44,7 +44,7 @@ from composition_workflow import composition_workflow
 from internal_clock_stall_phase import internal_clock_stall_phase
 from song_mode_flow import song_mode_flow
 from contract.endurance import endurance_mixed
-from lifecycle_cycles import lifecycle_cycles
+from contract.lifecycle_cycles import lifecycle_cycles
 from merge_lock_random import merge_lock_random
 from recording_song_transition import recording_song_transition
 from recorded_same_key_sources import recorded_same_key_sources

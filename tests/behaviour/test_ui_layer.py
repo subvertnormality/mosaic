@@ -18,6 +18,14 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_cold_lifecycle_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.lifecycle_cycles as owner
+
+        run = CASES['M-LIFECYCLE-001']['run']
+        self.assertIs(run, owner.lifecycle_cycles)
+        self.assertEqual(run.__module__, 'contract.lifecycle_cycles')
+
     def test_unreadable_device_config_has_exact_contract_owner(self):
         from cases import CASES
         import contract.unreadable_device_config as owner
