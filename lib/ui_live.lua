@@ -385,6 +385,10 @@ local function reconcile_owner_routes()
     local adapter = ui_adapters.get("doctor")
     local route = adapter and adapter.current_route and adapter.current_route()
     if route and spec.screens[route] then s.screen = route end
+    -- The Doctor owner moves its own field selection with E2: focus follows it.
+    for _, d in ipairs(describe()) do
+      if d.selected then focus[s.screen] = d.id; break end
+    end
   end
   -- K2 in the assignment picker closes the owner's sub-page: follow it back.
   if s.screen == "C07" then
@@ -641,6 +645,16 @@ function ui_live.view_model()
   end
   if tooltip and tooltip.text then footer = tostring(tooltip.text) end
   local status = code and (code:upper():gsub("_", " ")) or ""
+  -- Every Rhythm Doctor screen keeps the owner's lane and status visible
+  -- (providers.doctor.readouts): SETUP / field while setting up, else LANE / status.
+  if s.context == "Trig" and doctor_active() and trigger_edit_page.get_rhythm_doctor_model then
+    local model = trigger_edit_page.get_rhythm_doctor_model()
+    if model and model.setup and model.setup.active then
+      status = "SETUP / " .. tostring(model.setup.field)
+    elseif model then
+      status = (model.lane and (model.lane .. " / ") or "") .. tostring(model.status or model.state or "")
+    end
+  end
   local vm = {
     screen = s.screen, title = screen.title, scope = scope_text(target), fields = fields,
     selected = math.max(1, index), layout = screen.layout, footer = footer, status = status,
