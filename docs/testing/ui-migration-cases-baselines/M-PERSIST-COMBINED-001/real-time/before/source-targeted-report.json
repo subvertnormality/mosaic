@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "6629bd7609bc2d87e9cd966e3d96a952a48d3109",
+  "after_sha": "da944afc00d5cb9b77650ef45cde642deae005aa",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-PERSIST-COMBINED-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract/recording_lock_song.py",
+      "tests/behaviour/test_ui_layer.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract/recording_lock_song.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-PERSIST-COMBINED-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/real-time/before/df6b8c0db6ca4addaecc7077c45e2f24/manifest.json",
+              "manifest_sha256": "d5e6004fa05c9094b5ced6302388d69b6fc24a66d73d0fd0b7f2e9b599e9f0f6"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/real-time/after/83b6d36e2f354f4ba5264708e39ec799/manifest.json",
+              "manifest_sha256": "b49e98af60a74f6e9fb38d824526c699f545d7fa3e669024d9302c9ab5290515"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/controlled-experimental/before/0049c9c6c80945018da539b5768933a3/manifest.json",
+              "manifest_sha256": "84455ff69b77bfe2234145f2467c2bed36cd85d601c4350ed47af9b2fbf7473e"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-PERSIST-COMBINED-001/controlled-experimental/after/5334bfa44797499bb8c9f81cf9a78e54/manifest.json",
+              "manifest_sha256": "ab194e937bce657e3eacdc7dd4e794a0d71d2944e8fea7d966b8f5580fadc535"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
