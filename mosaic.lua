@@ -15,6 +15,7 @@ fn = include("mosaic/lib/helpers/functions")
 scheduler = include("mosaic/lib/scheduler")
 m_grid = include("mosaic/lib/m_grid")
 ui = include("mosaic/lib/ui")
+local ui_splash = include("mosaic/lib/ui_splash")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 m_midi = include("mosaic/lib/m_midi")
 memory = include("mosaic/lib/memory")
@@ -172,6 +173,12 @@ local function init_rhythm_doctor()
   end)
 end
 
+local function draw_application_screen()
+  screen.level(5)
+  screen.font_size(8)
+  ui.redraw()
+end
+
 function redraw()
   screen.clear()
   if fn.dirty_screen() == true then
@@ -184,10 +191,11 @@ function redraw()
       screen.font_face(1)
       screen.update()
     
+    elseif ui_splash.active() then
+      ui_splash.draw(nil, draw_application_screen)
+      screen.update()
     else
-      screen.level(5)
-      screen.font_size(8)
-      ui.redraw()
+      draw_application_screen()
       screen.update()
     end
 
@@ -309,13 +317,25 @@ function init()
   fn.dirty_grid(true)
   fn.dirty_screen(true)
 
+  -- The animated splash runs once the application is ready; input ends it.
+  ui_splash.start()
+  clock.run(function()
+    while ui_splash.advance() do
+      fn.dirty_screen(true)
+      clock.sleep(1 / ui_splash.FPS)
+    end
+    fn.dirty_screen(true)
+  end)
+
 end
 
 function enc(n, d)
+  ui_splash.skip()
   ui.enc(n, d)
 end
 
 function key(n, z)
+  ui_splash.skip()
   ui.key(n, z)
 end
 
