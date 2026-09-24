@@ -1,0 +1,283 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "recording-lifetime-live-output",
+    "ending": "persistence",
+    "actual": [
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ],
+      [
+        1,
+        [
+          176,
+          1,
+          64
+        ]
+      ]
+    ],
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "65"
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "recording-lifetime-disarmed-replay",
+    "ending": "persistence",
+    "values": [
+      24,
+      64,
+      64,
+      64,
+      24,
+      64,
+      64,
+      64,
+      24
+    ],
+    "distinct_default": 65,
+    "passed": true
+  },
+  {
+    "kind": "recording-autosave-files",
+    "files": {
+      "autosave.ptn": "8a7bb83b8031896933e543c7ff039779d2a534050878bdaf5b8df08115ae7fed",
+      "autosave.pset": "6e9b6bb2827905ba3275c364bf0475adae424861cbc9f854a1d62bcd66c46c83"
+    }
+  },
+  {
+    "kind": "recorded-lock-and-history-persistence",
+    "fresh_processes": 2,
+    "undone_position_preserved": true,
+    "passed": true
+  }
+]

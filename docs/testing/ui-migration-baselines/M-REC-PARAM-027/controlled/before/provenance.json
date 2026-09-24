@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/36003045487",
+  "source_run_id": "36003045487",
+  "source_revision": "43ab07b22361abbb0218ce24959729d353c44e81",
+  "case": "M-REC-PARAM-027",
+  "lane": "controlled",
+  "clock_mode": "controlled-experimental",
+  "side": "before",
+  "profile": "base-midi",
+  "targeted_report_sha256": "d28ffc5c7d0e2159ee93cd9b742ddedcfecd6fb0e905b8cc3e5dbba1afa764ef",
+  "repeatability_report_sha256": "8c4abef3c8dd42b0800f83413a28c5d8a2746ee94e3d6f9f66e36c192386bcc8",
+  "manifest": "M-REC-PARAM-027/controlled-experimental/before/29dff745f3aa4d00932e237dde135e5a/manifest.json",
+  "manifest_sha256": "19e94132ae1fd1869f8505bd6e2c04c98e82d1ffe6b70f7eae96507c0413e7ca",
+  "evidence_sha256": {
+    "generated-project/autosave.ptn": "8276285a7f0c7aff853bbd42358d37afe9553fd97b6997f6e14e87870e9be064",
+    "recipe.json": "3d902a6c513f8e03d89f4b7d370520a68c671f35325dca8589b251f98236e526",
+    "recording-reload-1/generated-project/autosave.ptn": "f07d8bbe50c02d68d12cea79161ccd221edc94183672844ab7cfbf90ab1bd8f2",
+    "recording-reload-1/recipe.json": "491f2833a84f628aa78b5da9adc2d4cb343f802fa310fc0589b81e17a606dea1",
+    "recording-reload-1/results.json": "8605677dbf9b1cd09768aac46b88b6c93df2118e04f0b270b133508358bb083f",
+    "recording-reload-2/recipe.json": "d1d2ef4fd2d09e8e031d6af41673bb7d9d959db72c6765cc293e5576ab87825f",
+    "recording-reload-2/results.json": "df0bcdcb8b86910d3bde3f77b1e3d97f92d5a598b2ded7cedc5e26c238583a8c",
+    "results.json": "134850014c9c187af541fbd412398ba4bc9024f94af48d25308bf8d50a95119e"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI",
+  "historical_source": true,
+  "tooling_revision": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "tooling_sha256": {
+    "tests/behaviour/ui_migration_gate.py": "8c847f6f415b5c44ad0c4cbfcb09406fbf0af181f2b63ae48147a462ea790481",
+    "tests/behaviour/ci/targeted-ui-migration.py": "6d10eceb6bb725923b608386d81caa192cfff835a99f8399bac2d8ec441de942",
+    "tests/behaviour/ci/compare_ptn_graph.lua": "2c5f793815d0bc4a580a34d8849b3713db22aa055391d6a2cd12962eff23b000"
+  }
+}
