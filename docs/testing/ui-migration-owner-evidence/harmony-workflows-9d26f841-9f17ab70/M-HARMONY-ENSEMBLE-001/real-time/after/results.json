@@ -1,0 +1,153 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 3 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 4 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "harmony",
+    "channel": 1
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "ensemble-polyrhythm",
+    "role_pitches": {
+      "1": 48,
+      "2": 55,
+      "3": 64,
+      "4": 67
+    },
+    "times_by_channel": {
+      "1": [
+        709316786253,
+        709484070964,
+        709649669988,
+        709816259715,
+        709984314148,
+        710150232683,
+        710316659384,
+        710483635830,
+        710649315331,
+        710817079770,
+        710983135382,
+        711149488704,
+        711316649188
+      ],
+      "2": [
+        709316786253,
+        709649669988,
+        709984314148,
+        710316659384,
+        710649315331,
+        710983135382,
+        711316649188
+      ],
+      "3": [
+        709484070964,
+        709816259715,
+        710150232683,
+        710483635830,
+        710817079770,
+        711149488704
+      ],
+      "4": [
+        709816259715,
+        710483635830,
+        711149488704
+      ]
+    },
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "local-scale-bypass",
+    "channel": 2,
+    "pitches": [
+      64,
+      64,
+      64,
+      64,
+      64
+    ],
+    "status": "LOCAL SCALE BYPASS",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 3 Harmony",
+    "matched": true
+  },
+  {
+    "kind": "local-octave-bypass",
+    "channel": 3,
+    "inspected_step": 2,
+    "pitches": [
+      72,
+      72,
+      72,
+      72,
+      72,
+      72
+    ],
+    "status": "LOCAL OCTAVE BYPASS",
+    "passed": true
+  }
+]
