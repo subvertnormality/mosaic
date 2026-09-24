@@ -520,9 +520,18 @@ class UiMapTests(unittest.TestCase):
             "mute_chord_root": "Mute Chord Root",
         })
 
+    def test_pattern_grid_viewer_has_exact_contract_owner(self):
+        from cases import CASES
+        from contract.grid_viewer import pattern_grid_viewer
+
+        self.assertIs(CASES['M-VIEW-001']['run'], pattern_grid_viewer)
+        self.assertEqual(pattern_grid_viewer.__module__, 'contract.grid_viewer')
+        self.assertIsNone(pattern_grid_viewer.__closure__)
+
     def test_editor_range_and_selector_cases_use_semantic_inputs(self):
         source = (BEHAVIOUR / "cases.py").read_text()
         module = ast.parse(source)
+        contract_module = ast.parse((BEHAVIOUR / "contract" / "grid_viewer.py").read_text())
         names = {
             "editor_shift_tap", "editor_range_hold", "editor_note_ranges",
             "editor_velocity_ranges", "editor_step_groups", "note_pattern_selectors",
@@ -530,7 +539,8 @@ class UiMapTests(unittest.TestCase):
             "priority_field_isolation", "inactive_note_positions", "all_note_priorities",
         }
         raw_methods = {"tap", "action", "hold_tap", "enc", "configure"}
-        functions = [node for node in module.body
+        functions = [node for owner in (module, contract_module)
+                     for node in owner.body
                      if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
                      and node.name in names]
         self.assertEqual({node.name for node in functions}, names)
