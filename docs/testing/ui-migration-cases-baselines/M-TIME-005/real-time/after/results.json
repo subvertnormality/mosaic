@@ -1,0 +1,688 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "ui-confirm",
+    "page": "clock_mods",
+    "channel": 1
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499855876,
+        "error_ms": -0.14412399999996772
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499057399,
+        "error_ms": -0.9426009999999874
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500387517,
+        "error_ms": 0.3875170000000594
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499604017,
+        "error_ms": -0.39598299999998865
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499508042,
+        "error_ms": -0.49195800000001455
+      },
+      {
+        "pitch": 64,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.498952147,
+        "error_ms": -1.0478529999999875
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500436374,
+        "error_ms": 0.4363739999999616
+      },
+      {
+        "pitch": 62,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499053012,
+        "error_ms": -0.9469879999999264
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499207705,
+        "error_ms": -0.7922950000001094
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499517765,
+        "error_ms": -0.4822349999999975
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499720304,
+        "error_ms": -0.27969599999999595
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.49981441,
+        "error_ms": -0.18559000000006876
+      },
+      {
+        "pitch": 72,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499193575,
+        "error_ms": -0.806424999999944
+      },
+      {
+        "pitch": 74,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.500148326,
+        "error_ms": 0.1483259999999209
+      },
+      {
+        "pitch": 76,
+        "expected_seconds": 1.5,
+        "actual_seconds": 1.499543617,
+        "error_ms": -0.45638299999994913
+      }
+    ]
+  },
+  {
+    "kind": "native-song-transition-reset",
+    "transition_reset": false,
+    "repeat_reset": false,
+    "onsets": 16,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1728,
+      1944,
+      2160,
+      2376,
+      2592,
+      2808,
+      3024,
+      3240
+    ],
+    "max_phase_error_seconds": 0.0008426620000001606,
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "native-song-transition-reset",
+    "transition_reset": true,
+    "repeat_reset": false,
+    "onsets": 18,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1536,
+      1752,
+      1968,
+      2184,
+      2400,
+      2616,
+      2832,
+      3048,
+      3072,
+      3288
+    ],
+    "max_phase_error_seconds": 0.0014100593333346012,
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "native-song-transition-reset",
+    "transition_reset": false,
+    "repeat_reset": true,
+    "onsets": 18,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1536,
+      1752,
+      1968,
+      2184,
+      2400,
+      2616,
+      2832,
+      3048,
+      3072,
+      3288
+    ],
+    "max_phase_error_seconds": 0.0013985133333331845,
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on song seq change",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on song seq change",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Reset on pattern repeat",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Reset on pattern repeat",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      7,
+      15
+    ],
+    "actual": [
+      7,
+      15
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ]
+    ],
+    "expected": [
+      15,
+      7
+    ],
+    "actual": [
+      15,
+      7
+    ]
+  },
+  {
+    "kind": "native-song-transition-reset",
+    "transition_reset": true,
+    "repeat_reset": true,
+    "onsets": 18,
+    "expected_pulse_offsets": [
+      0,
+      216,
+      432,
+      648,
+      864,
+      1080,
+      1296,
+      1512,
+      1536,
+      1752,
+      1968,
+      2184,
+      2400,
+      2616,
+      2832,
+      3048,
+      3072,
+      3288
+    ],
+    "max_phase_error_seconds": 0.0011103553333331462,
+    "passed": true
+  }
+]
