@@ -325,7 +325,8 @@ function init()
   fn.dirty_screen(true)
 
   -- The animated splash runs once the application is ready; input ends it.
-  ui_splash.start()
+  -- MOSAIC > UI motion Off skips it along with the other decorative motion.
+  if params:get("ui_motion") ~= 1 then ui_splash.start() end
   clock.run(function()
     while ui_splash.advance() do
       fn.dirty_screen(true)

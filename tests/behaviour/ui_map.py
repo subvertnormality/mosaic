@@ -77,30 +77,69 @@ PATTERN_NOTE_PITCHES = {
     "pattern_note_f": (8, 6),
 }
 
-CHANNEL_PAGES = OrderedDict([
-    ("masks", {"title": "Note Masks"}),
-    ("trig_locks", {"title": "Trig Locks"}),
-    ("memory", {"title": "Memory"}),
-    ("clock_mods", {"title": "Clocks"}),
-    ("midi_config", {"title": "Device Config"}),
-    ("note_dashboard", {"title": "Note Dashboard"}),
-    ("merge_shape", {"title": "Merge Shape"}),
-    ("harmony", {"title": "Harmony"}),
+# Live screens (docs/ui-reimplementation spec.json#/screens). Each stable page
+# key names its screen, title, layout and, for Channel screens, the Channel
+# Tasks row that opens it. Titles and layouts are the spec's; scope text is
+# the renderer's compact identity (CH01, CH01 S02, ...).
+LIVE_SCREENS = OrderedDict([
+    ("masks", {"screen": "C01", "title": "NOTE MASKS", "layout": "overview_masks", "task": "masks"}),
+    ("trig_locks", {"screen": "C02", "title": "TRIG PARAMS", "layout": "overview_params", "task": "trig_params"}),
+    ("memory", {"screen": "C03", "title": "MEMORY", "layout": "detail", "task": "history"}),
+    ("clock_mods", {"screen": "C04", "title": "CLOCK", "layout": "focused", "task": "clock"}),
+    ("midi_config", {"screen": "C05", "title": "DEVICE", "layout": "detail", "task": "device"}),
+    ("note_dashboard", {"screen": "C06", "title": "OUTPUT", "layout": "focused", "task": "output"}),
+    ("merge_shape", {"screen": "M02", "title": "MERGE SHAPE", "layout": "focused", "art": True, "task": "merge_shape"}),
+    ("harmony", {"screen": "H01", "title": "VOICE LEADING", "layout": "focused", "art": True, "task": "harmony"}),
+    ("channel_tasks", {"screen": "N01", "title": "CHANNEL TASKS", "layout": "detail"}),
+    ("assignment", {"screen": "C07", "title": "ASSIGN PARAM", "layout": "detail"}),
+    ("trigger_editor", {"screen": "P01", "title": "PATTERN TRIG", "layout": "pattern64"}),
+    ("trigger_editor_confirmation", {"screen": "P02", "title": "TRIG OPTIONS", "layout": "focused"}),
+    ("note_editor", {"screen": "P03", "title": "PATTERN NOTE", "layout": "focused"}),
+    ("velocity_editor", {"screen": "P04", "title": "PATTERN VELOCITY", "layout": "focused"}),
+    ("scale", {"screen": "S01", "title": "SCALE", "layout": "focused", "scope": "scale"}),
+    ("scale_clock", {"screen": "S02", "title": "SCALE CLOCK", "layout": "focused", "scope": "scale"}),
+    ("song", {"screen": "A03", "title": "SONG PLAYBACK", "layout": "focused", "scope": "song"}),
 ])
 
+# The Channel Tasks rows in their spec order (spec.json#/tasks/rows/N01).
+CHANNEL_TASKS = ["masks", "trig_params", "output", "harmony", "clock", "merge", "device", "history",
+                 "mask_detail", "trig_detail", "merge_shape", "norns"]
+
+# Historical page keys used by cases; each is a live screen.
+CHANNEL_PAGES = OrderedDict(
+    (key, {"title": LIVE_SCREENS[key]["title"]})
+    for key in ("masks", "trig_locks", "memory", "clock_mods", "midi_config",
+                "note_dashboard", "merge_shape", "harmony")
+)
+
+
+def live_scope(scope="channel", channel=1, song_slot=1, held=(), slot=1):
+    """Renderer scope text: CH01 [S02] [ST05 | 3ST]; SLOT 01; SONG 01."""
+    if scope == "scale":
+        parts = ["SLOT %02d" % slot]
+    elif scope == "song":
+        parts = ["SONG %02d" % song_slot]
+    else:
+        parts = ["CH%02d" % channel]
+        if song_slot != 1:
+            parts.append("S%02d" % song_slot)
+    held = list(held)
+    if len(held) == 1:
+        parts.append("ST%02d" % held[0])
+    elif len(held) > 1:
+        parts.append("%dST" % len(held))
+    return " ".join(parts)
+
+
+# Masks overview cells: (1-based cell, short label as the owner's selector names it).
+OVERVIEW_CELLS = {
+    "trig": (1, "Trig"), "note": (2, "Note"), "velocity": (3, "Vel"), "length": (4, "Len"),
+    "chord_1": (5, "Chd1"), "chord_2": (6, "Chd2"), "chord_3": (7, "Chd3"), "chord_4": (8, "Chd4"),
+}
+
 HEADERS = {
-    **{
-        key: {
-            "template": "Ch. {channel} " + value["title"],
-            "selected": index,
-            "tabs": len(CHANNEL_PAGES),
-        }
-        for index, (key, value) in enumerate(CHANNEL_PAGES.items(), 1)
-    },
-    "trigger_editor": {"template": "Trig editor options", "selected": 1, "tabs": 2},
-    "trigger_editor_confirmation": {"template": "Trig editor options", "selected": 2, "tabs": 2},
-    "note_editor": {"template": "Note editor options", "selected": 1, "tabs": 2},
-    "velocity_editor": {"template": "Velocity editor options", "selected": 1, "tabs": 2},
+    key: {"title": data["title"], "layout": data["layout"], "scope": data.get("scope", "channel")}
+    for key, data in LIVE_SCREENS.items()
 }
 
 SCREEN = {
@@ -551,10 +590,17 @@ def grid_partition(page):
 
 
 def header_text(page, **params):
+    """Title and scope a live screen shows for the given identity."""
     try:
-        return HEADERS[page]["template"].format(**params)
+        data = HEADERS[page]
     except KeyError as error:
-        raise KeyError("unknown or incomplete header key %r: %s" % (page, error)) from error
+        raise KeyError("unknown header key %r" % page) from error
+    return data["title"] + " " + live_scope(data["scope"], **params)
+
+
+def header_parts(page, **params):
+    data = HEADERS[page]
+    return data["title"], live_scope(data["scope"], **params), data["layout"]
 NATIVE_PARAMETER_ROOTS = {
     "mosaic": {"field": "id", "value": "mosaic"},
     "channel_1_device_parameters": {

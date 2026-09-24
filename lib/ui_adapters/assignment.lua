@@ -13,7 +13,7 @@
 -- the only editable descriptor and its edit is the owner browse (scroll and
 -- stage the assignment with save_confirm), once per detent with the full delta.
 -- Other items are readonly. Values: CURRENT for the slot's assigned id, else
--- AVAILABLE. K3 (apply) confirms the staged assignment; K2 cancel discards it.
+-- blank, so long parameter names keep the row. K3 (apply) confirms the staged assignment; K2 cancel discards it.
 
 local channel_target = include("mosaic/lib/ui_adapters/channel_target")
 
@@ -52,7 +52,7 @@ return function(ui_adapters, owners)
         id = tostring(item.id),
         label = tostring(item.name or item.id),
         kind = under_cursor and "value" or "readonly",
-        value = item.id == assigned and "CURRENT" or "AVAILABLE",
+        value = item.id == assigned and "CURRENT" or "",
         repeat_key = "<param_id>",
         selected = under_cursor,
         domain = {index = index, parameter_id = item.id, slot = controls().dials:get_selected_index(),

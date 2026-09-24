@@ -141,9 +141,22 @@ end
 local function focused(descriptors, screen_id)
   screen_id = screen_id or router.state.screen
   if #descriptors == 0 then return nil, 0 end
+  -- The assignment picker's owner moves its own list cursor with E3.
+  if spec.screens[screen_id].profile == "assignment" then
+    for index, d in ipairs(descriptors) do
+      if d.kind == "value" then focus[screen_id] = d.id; return d, index end
+    end
+  end
   local id = focus[screen_id]
   for index, d in ipairs(descriptors) do
     if d.id == id then return d, index end
+  end
+  -- A screen's first focus is the owner's own current selection (for example
+  -- the Masks page starts on Note), so a player's first E3 edits what it did.
+  if id == nil then
+    for index, d in ipairs(descriptors) do
+      if d.selected then focus[screen_id] = d.id; return d, index end
+    end
   end
   -- A removed focus clamps to the first field; the pending delta is consumed.
   focus[screen_id] = descriptors[1].id
@@ -334,6 +347,15 @@ local function reconcile_owner_routes()
     local route = adapter and adapter.current_route and adapter.current_route()
     if route and spec.screens[route] then s.screen = route end
   end
+  -- K2 in the assignment picker closes the owner's sub-page: follow it back.
+  if s.screen == "C07" then
+    local parameters = channel_edit_page_ui.adapter_owners().parameters
+    local page = parameters.adapter_controls and parameters.adapter_controls().trig_lock_page
+    if page and not page:is_sub_page_enabled() and current.event == "K2.down" and current.before == "C07" then
+      local frame = table.remove(s.return_stack)
+      s.screen = frame and frame.screen or "C02"
+    end
+  end
   s.modal = MODAL_SCREENS[s.screen] == true
   local adapter, provider = feature_adapter()
   s.dirty = adapter ~= nil and feature_editor(provider).dirty == true
@@ -371,11 +393,13 @@ local function dispatch(event, payload)
     payload.task = payload.task or s.field_id
   end
   local before = s.screen
+  current.event, current.before = event, before
   local ok, err = pcall(router.step, router, event, payload)
   if not ok then
     print("ui_live: " .. tostring(err))
   end
   after_event()
+  current.event = nil
   if router.state.screen ~= before then ui_motion.screen_changed(before, router.state.screen) end
 end
 
@@ -451,12 +475,13 @@ end
 
 local function two(n) return string.format("%02d", n or 0) end
 
--- Compact identity for the title row: CH03, CH03 S02, CH03 ST05, CH03 4ST.
+-- Compact identity for the title row: CH03, CH03 S02, CH03 ST05, CH03 4ST,
+-- SLOT 02 (Scale) or SONG 04 (Song).
 local function scope_text(target)
   local s = router.state
   local parts = {}
   if s.context == "Scale" then
-    parts[#parts + 1] = "SCALE"
+    parts[#parts + 1] = "SLOT " .. two(program.get().selected_scale)
   elseif s.context == "Song" then
     parts[#parts + 1] = "SONG " .. two(target.song_slot)
   else
