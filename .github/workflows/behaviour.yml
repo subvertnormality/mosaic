@@ -28,12 +28,19 @@ on:
         type: choice
         options: [base-midi, midi-modulation]
         default: base-midi
+      ui_migration_drift:
+        description: Run only the controlled channel-page UI drift drill
+        type: boolean
+        default: false
+      ui_migration_drift_sha:
+        description: Full SHA of the committed migration and controlled after evidence
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ inputs.ui_migration_targeted && format('targeted-ui-{0}', github.run_id) || format('full-behaviour-{0}', github.event.pull_request.number || github.ref) }}
+  group: ${{ inputs.ui_migration_drift && format('ui-drift-{0}', github.run_id) || inputs.ui_migration_targeted && format('targeted-ui-{0}', github.run_id) || format('full-behaviour-{0}', github.event.pull_request.number || github.ref) }}
   cancel-in-progress: true
 
 env:
@@ -45,7 +52,7 @@ env:
 jobs:
   base-midi:
     name: Base MIDI shard ${{ matrix.shard }}
-    if: ${{ !inputs.ui_migration_targeted }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -86,7 +93,7 @@ jobs:
       - name: Verify CI partition and aggregation contracts
         if: matrix.shard == 0
         working-directory: tests/behaviour
-        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import
+        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import ci.test_ui_migration_drift_runner
       - name: Fetch output-profile fixtures for fast layers
         if: matrix.shard == 0
         run: |
@@ -151,7 +158,7 @@ jobs:
 
   midi-modulation:
     name: MIDI modulation profiles
-    if: ${{ !inputs.ui_migration_targeted }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -195,7 +202,7 @@ jobs:
 
   audio-crow:
     name: Audio and Crow/JF profiles
-    if: ${{ !inputs.ui_migration_targeted }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -252,7 +259,7 @@ jobs:
 
   rhythm-doctor:
     name: Rhythm Doctor surface
-    if: ${{ !inputs.ui_migration_targeted }}
+    if: ${{ !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -296,7 +303,7 @@ jobs:
 
   complete:
     name: Complete behaviour coverage
-    if: ${{ always() && !inputs.ui_migration_targeted }}
+    if: ${{ always() && !inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
     needs: [base-midi, midi-modulation, audio-crow]
     runs-on: ubuntu-latest
     steps:
@@ -329,7 +336,7 @@ jobs:
 
   targeted-ui-migration:
     name: Targeted UI migration (partial, both lanes)
-    if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_targeted }}
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_targeted && !inputs.ui_migration_drift }}
     runs-on: ubuntu-latest
     container:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
@@ -559,4 +566,89 @@ jobs:
             !/tmp/mosaic-ui-targeted/**/code/**
             !/tmp/mosaic-ui-targeted/**/data/**
           retention-days: 14
+          compression-level: 9
+
+  ui-migration-drift:
+    name: UI migration drift drill (controlled, partial)
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.ui_migration_drift }}
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      options: --shm-size 256m
+    timeout-minutes: 240
+    steps:
+      - name: Check out the committed migration evidence
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ui_migration_drift_sha }}
+          fetch-depth: 0
+          submodules: recursive
+      - name: Trust checkout and validate dispatch inputs
+        shell: bash
+        env:
+          BASELINE_SHA: ${{ inputs.ui_migration_drift_sha }}
+          TARGETED: ${{ inputs.ui_migration_targeted }}
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          [[ "$BASELINE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$TARGETED" != "true" ]]
+          test "$(git rev-parse HEAD)" = "$BASELINE_SHA"
+          test -f tests/behaviour/ui_migration_drill.py
+          test -f tests/behaviour/ci/run-ui-migration-drift.py
+      - *packages
+      - name: Verify the offline drift runner
+        working-directory: tests/behaviour
+        run: python3 -m unittest -v ci.test_ui_migration_drift_runner
+      - *emulator
+      - *cache
+      - name: Build native runtimes
+        run: tests/behaviour/ci/prepare-emulator.sh
+      - name: Fetch pinned modulation fixtures
+        run: |
+          mkdir -p /tmp/mosaic-output-mods
+          git clone https://github.com/sixolet/matrix.git /tmp/mosaic-output-mods/matrix
+          git -C /tmp/mosaic-output-mods/matrix checkout --detach 41e11286bee8dbe48e8746e7a456400f93dc739a
+          git clone https://github.com/sixolet/toolkit.git /tmp/mosaic-output-mods/toolkit
+          git -C /tmp/mosaic-output-mods/toolkit checkout --detach 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
+      - name: Prepare unprivileged behaviour user
+        run: |
+          useradd --create-home --shell /bin/bash mosaic-ci
+          chown -R mosaic-ci:mosaic-ci "$GITHUB_WORKSPACE" "$EMULATOR_ROOT" /tmp/mosaic-output-mods
+      - name: Run and validate the drift drill
+        shell: bash
+        env:
+          BASELINE_SHA: ${{ inputs.ui_migration_drift_sha }}
+        run: |
+          runuser -u mosaic-ci --preserve-environment -- python3 \
+            tests/behaviour/ci/run-ui-migration-drift.py \
+            --repo "$GITHUB_WORKSPACE" \
+            --baseline "$BASELINE_SHA" \
+            --pages note_dashboard midi_config \
+            --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
+            --mod-code-root /tmp/mosaic-output-mods \
+            --output /tmp/mosaic-ui-drift
+      - name: Add validated report to the job summary
+        if: always()
+        shell: bash
+        run: |
+          report=/tmp/mosaic-ui-drift/docs/testing/ui-migration-drill.json
+          if [[ -f "$report" ]]; then
+            cat "$report" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload immutable drift evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-migration-drift-${{ github.run_id }}
+          path: |
+            /tmp/mosaic-ui-drift/drill-selection.json
+            /tmp/mosaic-ui-drift/docs/testing/ui-migration-drill.json
+            /tmp/mosaic-ui-drift/scratch-commit.bundle
+            /tmp/mosaic-ui-drift/scratch-commit.patch
+            /tmp/mosaic-ui-drift/scratch-commit.txt
+            /tmp/mosaic-ui-drift/standalone/**
+            /tmp/mosaic-ui-drift/standalone-logs/**
+            /tmp/mosaic-ui-drift/repeat-wrapper.json
+            /tmp/mosaic-ui-drift/execution/mosaic-behaviour-runs/**
+          retention-days: 30
           compression-level: 9
