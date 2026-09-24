@@ -60,10 +60,27 @@ ALGORITHM_WORKFLOW_CONTROLS = {
     "rhythm_factor_maximum": (10, 3),
     "numeric_prime_one": (15, 2),
 }
+# Live Rhythm Doctor screens (spec doctor_routes, lib/ui_render.lua focused
+# layout with the doctor art). The Doctor's tooltip is the footer, the whole
+# last text row: fit(text, 126) at (1,63) level 9, rows 56..63 (the art ends at
+# row 53). The fifth algorithm with no bank opens R01, titled RHYTHM DR.
 RHYTHM_DOCTOR_SCREEN = {
-    "header": {"bottom": 10},
-    "tooltip": {"left": 0, "right": 100, "top": 55, "bottom": 64},
-    "status": {"left": 0, "right": 97, "top": 15, "bottom": 26},
+    "footer": {"left": 0, "right": 128, "top": 56, "bottom": 64},
+    # Doctor screens by doctor_routes screen id (spec.json#/screens): title and
+    # live layout. Focused Doctor screens carry art, which yields x72.. to it.
+    "screens": {
+        "R01": ("RHYTHM DR", "focused"), "R02": ("CAPTURE", "focused"),
+        "R03": ("CANCEL TAKE?", "detail"), "R04": ("ANALYSIS", "focused"),
+        "R05": ("WINDOW", "focused"), "R06": ("ALIGNMENT", "focused"),
+        "R07": ("ALIGNMENT", "detail"), "R08": ("PAINT", "focused"),
+        "R09": ("PAINT", "focused"), "R10": ("CLEAR BANK?", "detail"),
+        "R11": ("STOP SEQUENCER", "detail"), "R12": ("NO BANK", "detail"),
+        "R13": ("BANK LANES", "detail"), "R14": ("SETUP LIMITS", "detail"),
+        "R15": ("BROWSE", "detail"), "R16": ("CANCEL CORRECTION?", "detail"),
+    },
+    # R01's setup fields (lib/ui_adapters/doctor.lua describe.R01): the old
+    # SETUP / <field> names and the live descriptor labels.
+    "setup_labels": {"TEMPO": "Tempo", "MANUAL BPM": "Manual BPM", "INPUT": "Input"},
 }
 CHANNEL_COUNT = 16
 

@@ -56,12 +56,27 @@ def inject_bank(ptn):
     return done.stdout.strip()
 
 
+# The injected bank's tempo (fixtures/inject_ready_bank.lua); the alignment
+# draft starts from it and every alignment field shows the draft BPM.
+BANK_BPM = "120"
+# K3 on Half tempo halves the draft before it is dispatched; the refused
+# correction keeps that draft, so the retained draft reads 120 / 2.
+HALVED_BPM = "60"
+
+
 def refused_correction_is_visible(c):
     ui = c.ui
-    fifth_algorithm(c)
+    # The old screen's status line read "<lane> / <state>". The live Doctor
+    # screens show the state as their doctor_routes screen (title row) and the
+    # lane on the grid, so the READY claims below assert the WINDOW screen
+    # (row ready: READY, no draft, stopped) and CYM's lane LED.
+    fifth_algorithm(c, route="R05")
+    cym_ready = {"BD": "blink_low", "SD": "blink_low", "CYM": "selected",
+                 "withdrawn_BASS": "dark", "retired": "dark"}
 
     # The reloaded bank is READY without any analysis backend.
-    ui.expect_rhythm_doctor_status("CYM / READY")
+    ui.expect_rhythm_doctor_screen("R05")
+    ui.expect_rhythm_doctor_lanes(cym_ready)
     c.results.append(dict(kind="correction-reload-ready", state="READY",
                           contract="README: a saved bank reloads ready without a backend"))
 
@@ -69,9 +84,10 @@ def refused_correction_is_visible(c):
     for _ in range(4):
         ui.rhythm_doctor_setup_field(DETENT)
         c.elapse(.06)
+    ui.expect_rhythm_doctor_screen("R05", "Alignment", "")
     ui.adjust_rhythm_doctor_setup_value(DETENT)
     c.elapse(.08)
-    ui.expect_rhythm_doctor_status("ALIGNMENT / HALF TEMPO")
+    ui.expect_rhythm_doctor_screen("R06", "Half tempo", BANK_BPM)
     c.results.append(dict(kind="correction-draft-open", field="HALF TEMPO",
                           contract="README: E2 chooses the alignment field, E3 opens the draft"))
 
@@ -79,7 +95,7 @@ def refused_correction_is_visible(c):
     ui.rhythm_doctor_key_edge("apply_correction", True); c.elapse(.04)
     ui.rhythm_doctor_key_edge("apply_correction", False); c.elapse(.12)
     try:
-        ui.expect_rhythm_doctor_status("CAPTURE AUDIO UNAVAILABLE")
+        ui.expect_rhythm_doctor_screen("R07", "Refused", "CAPTURE AUDIO UNAVAILABLE")
     except Exception as error:
         raise AssertionError(
             "a correction refused after reload left the screen unchanged") from error
@@ -88,14 +104,15 @@ def refused_correction_is_visible(c):
 
     # The draft survives the refusal, so the player can edit or cancel it.
     ui.rhythm_doctor_setup_field(DETENT); c.elapse(.08)
-    ui.expect_rhythm_doctor_status("ALIGNMENT / DOUBLE TEMPO")
+    ui.expect_rhythm_doctor_screen("R06", "Double tempo", HALVED_BPM)
     c.results.append(dict(kind="correction-draft-retained", field="DOUBLE TEMPO",
                           contract="a refused correction keeps its draft and clears the refusal"))
 
     # K2 discards it and the bank is still usable.
     ui.rhythm_doctor_key_edge("discard_draft", True)
     ui.rhythm_doctor_key_edge("discard_draft", False); c.elapse(.1)
-    ui.expect_rhythm_doctor_status("CYM / READY")
+    ui.expect_rhythm_doctor_screen("R05")
+    ui.expect_rhythm_doctor_lanes(cym_ready)
     c.results.append(dict(kind="correction-cancelled", state="READY",
                           contract="cancelling a refused correction returns the ready bank"))
 

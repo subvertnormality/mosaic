@@ -913,57 +913,69 @@ class Ui:
                 raise UiMapError("unknown Rhythm Doctor lane LED %r" % lane) from error
         self.expect_leds(mapped)
 
-    def _wait_rhythm_doctor_render(self, commands, region=None, full=False):
-        """Keep exact framebuffer comparisons behind the page-level UI API."""
+    def _wait_rhythm_doctor_render(self, commands, region):
+        """Keep exact framebuffer comparisons (RGB, alpha ignored) behind the page-level UI API."""
         from frame_oracle import render
 
         expected = render(commands)
-        if full:
-            def matches(state):
-                actual = base64.b64decode(state["frame"]["pixels_base64"])
-                return all(actual[index] == expected[index]
-                           for index in range(len(expected)) if index % 4 != 3)
-        elif region is None:
-            width = 128 * 4
-            height = RHYTHM_DOCTOR_SCREEN["header"]["bottom"]
-            expected = expected[:width * height]
+        indices = [(y * 128 + x) * 4 + channel
+                   for y in range(region["top"], region["bottom"])
+                   for x in range(region["left"], region["right"])
+                   for channel in range(3)]
 
-            def matches(state):
-                actual = base64.b64decode(state["frame"]["pixels_base64"])
-                return all(actual[index] == expected[index]
-                           for index in range(len(expected)) if index % 4 != 3)
-        else:
-            indices = [(y * 128 + x) * 4 + channel
-                       for y in range(region["top"], region["bottom"])
-                       for x in range(region["left"], region["right"])
-                       for channel in range(3)]
-
-            def matches(state):
-                actual = base64.b64decode(state["frame"]["pixels_base64"])
-                return all(actual[index] == expected[index] for index in indices)
+        def matches(state):
+            actual = base64.b64decode(state["frame"]["pixels_base64"])
+            return all(actual[index] == expected[index] for index in indices)
 
         return self.driver.wait(matches)
 
-    def expect_rhythm_doctor_header(self):
-        self._wait_rhythm_doctor_render(
-            [(0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m")])
+    @staticmethod
+    def _rhythm_doctor_screen(route):
+        try:
+            return RHYTHM_DOCTOR_SCREEN["screens"][route]
+        except KeyError as error:
+            raise UiMapError("unknown Rhythm Doctor screen %r" % route) from error
+
+    def expect_rhythm_doctor_header(self, route="R01", channel=1):
+        """A Doctor screen's live title row: its doctor_routes title and the channel scope.
+
+        The fifth algorithm with no bank opens R01 (RHYTHM DR); a READY bank opens R05."""
+        from frame_oracle import live_header_matches
+
+        title, layout = self._rhythm_doctor_screen(route)
+        scope = "CH%02d" % channel
+        return self.driver.wait(lambda state: live_header_matches(state, title, scope, layout))
 
     def expect_rhythm_doctor_tooltip(self, text):
-        self._wait_rhythm_doctor_render(
-            [(0, 62, 10, text)], RHYTHM_DOCTOR_SCREEN["tooltip"])
+        """The Doctor's tooltip owns the live footer row, and nothing else is on it."""
+        from frame_oracle import fit
 
-    def expect_rhythm_doctor_setup(self, field, tempo_mode, manual_bpm, input_source):
-        self._wait_rhythm_doctor_render([
-            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
-            (0, 22, 10, "SETUP / " + field),
-            (0, 34, 10, (">" if field == "TEMPO" else " ") + "TEMPO " + tempo_mode.upper()),
-            (0, 46, 10, (">" if field == "MANUAL BPM" else " ") + "MANUAL BPM " + str(manual_bpm)),
-            (0, 58, 10, (">" if field == "INPUT" else " ") + "INPUT " + input_source),
-        ], full=True)
-
-    def expect_rhythm_doctor_status(self, text):
         self._wait_rhythm_doctor_render(
-            [(0, 22, 10, text)], RHYTHM_DOCTOR_SCREEN["status"])
+            [(1, 63, 9, fit(text, 126))], RHYTHM_DOCTOR_SCREEN["footer"])
+
+    def expect_rhythm_doctor_screen(self, route, label=None, value=None, channel=1):
+        """Exact title row of Doctor screen `route` and its selected field's label/value.
+
+        Most Doctor screens are focused with the doctor art, so only the
+        selected field is on screen: its label at (1,28) and its value large at
+        (1,48) within x1..71. Detail Doctor screens (R07 ...) mark it with '>'."""
+        from frame_oracle import live_header_matches, selected_field_matches
+
+        title, layout = self._rhythm_doctor_screen(route)
+        scope = "CH%02d" % channel
+        return self.driver.wait(lambda state: live_header_matches(state, title, scope, layout)
+                                and selected_field_matches(state, layout, label, value, art=True))
+
+    def expect_rhythm_doctor_setup_field(self, field, value):
+        """R01 with setup field `field` (TEMPO / MANUAL BPM / INPUT) selected, showing `value`.
+
+        The old setup screen listed all three rows; the live R01 shows only the
+        selected one, so a recipe asserts each value while its field is selected."""
+        try:
+            label = RHYTHM_DOCTOR_SCREEN["setup_labels"][field]
+        except KeyError as error:
+            raise UiMapError("unknown Rhythm Doctor setup field %r" % field) from error
+        return self.expect_rhythm_doctor_screen("R01", label, str(value))
 
     def wait_for_header(self, page, **params):
         """Wait for an exact mapped live header without adding a result record."""
