@@ -278,7 +278,7 @@ def check_session_roots(before, after, lane, case=None):
 
 
 def check_lane(root, lane):
-    return check_session_roots(root / "before", root / "after", lane)
+    return check_session_roots(root / "before", root / "after", lane, case=root.parent.name)
 
 
 def main(argv=None):

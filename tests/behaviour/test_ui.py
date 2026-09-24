@@ -2168,6 +2168,17 @@ class UiObservationTests(unittest.TestCase):
 
 
 class MigrationGateTests(unittest.TestCase):
+    def test_lane_path_passes_case_identity_to_persisted_project_gate(self):
+        from ui_migration_gate import check_lane
+
+        with tempfile.TemporaryDirectory() as directory:
+            lane = Path(directory) / "M-PATCH-008" / "controlled"
+            lane.mkdir(parents=True)
+            with patch("ui_migration_gate.check_session_roots", return_value=[]) as gate:
+                self.assertEqual(check_lane(lane, "controlled"), [])
+            gate.assert_called_once_with(
+                lane / "before", lane / "after", "controlled", case="M-PATCH-008")
+
     def test_cli_rejects_lane_override_that_disagrees_with_directory(self):
         from ui_migration_gate import main
 

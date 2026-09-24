@@ -15,6 +15,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from ui_baseline_import import files_under, no_symlink, read_bytes, safe_relative
+from ui_migration_gate import PERSISTED_PROJECTS
 
 
 SHA = re.compile(r"[0-9a-f]{40}\Z")
@@ -65,7 +66,7 @@ def report_root(download):
     return reports[0].parent, reports[0]
 
 
-def pair_payload(manifest, session):
+def pair_payload(manifest, session, project_paths=()):
     entries = manifest.get("artifacts")
     require(isinstance(entries, list), "missing manifest artifact inventory")
     listed = {}
@@ -75,22 +76,30 @@ def pair_payload(manifest, session):
         key = path.as_posix()
         require(key not in listed, "duplicate artifact entry: " + key)
         listed[key] = entry
+    projects = {safe_relative(path).as_posix() for path in project_paths}
+    require(projects <= set(listed),
+            "manifest is missing a required persisted project")
     pairs = {key: value for key, value in listed.items()
-             if Path(key).name in NAMES | PRESERVED_SIDECARS}
+             if Path(key).name in NAMES | PRESERVED_SIDECARS or key in projects}
     recipes = {str(Path(key).parent) for key in pairs if Path(key).name == "recipe.json"}
     results = {str(Path(key).parent) for key in pairs if Path(key).name == "results.json"}
     require(recipes == results and "." in recipes,
             "missing or unmatched root/nested recipe/results pairs")
     actual = {path.relative_to(session).as_posix() for path in files_under(session)
-              if path.name in NAMES | PRESERVED_SIDECARS}
+              if path.name in NAMES | PRESERVED_SIDECARS
+              or path.relative_to(session).as_posix() in projects}
     require(actual == set(pairs),
-            "downloaded recipe/results/sidecar set differs from manifest")
+            ("downloaded persisted project/evidence set differs from manifest"
+             if projects else "downloaded recipe/results/sidecar set differs from manifest"))
     payload = {}
     for key, entry in sorted(pairs.items()):
         raw = read_bytes(session / safe_relative(key))
         require(type(entry.get("size")) is int and len(raw) == entry["size"]
                 and digest(raw) == entry.get("sha256"),
                 "evidence size/digest differs: " + key)
+        if key in projects:
+            payload[key] = raw
+            continue
         if Path(key).name in PRESERVED_SIDECARS:
             json_object(raw, key)
             payload[key] = raw
@@ -232,7 +241,8 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                         and manifest.get("diagnostic_only") is
                         (clock_mode == "controlled-experimental"),
                         "manifest source/lane/profile/pass identity differs")
-                payload = pair_payload(manifest, manifest_path.parent)
+                payload = pair_payload(
+                    manifest, manifest_path.parent, PERSISTED_PROJECTS.get(case, ()))
                 target = no_symlink(output / case / lane / side)
                 if case in import_set:
                     require(not target.exists(),

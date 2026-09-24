@@ -7,6 +7,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 SCRIPT = Path(__file__).with_name("targeted_ui_evidence_import.py")
@@ -102,6 +103,49 @@ class TargetedEvidenceImportTests(unittest.TestCase):
         return importer.import_targeted(self.download, self.output, "35802998566",
                                         BEFORE, AFTER, [CASE], dry_run=dry_run,
                                         profile=profile)
+
+    def add_persisted_project_evidence(self):
+        report_path = self.download / "targeted-ui-migration.json"
+        report = json.loads(report_path.read_text())
+        for lane in report["cases"][0]["lanes"]:
+            clock_mode = lane["lane"]
+            for side in ("before", "after"):
+                run = self.download / CASE / clock_mode / side / "session-1"
+                project = run / "generated-project/autosave.ptn"
+                project.parent.mkdir(parents=True, exist_ok=True)
+                project.write_bytes(("project-" + side).encode())
+                manifest_path = run / "manifest.json"
+                manifest = json.loads(manifest_path.read_text())
+                manifest["artifacts"].append(dict(
+                    path="generated-project/autosave.ptn",
+                    size=project.stat().st_size,
+                    sha256=importer.digest(project.read_bytes())))
+                write_json(manifest_path, manifest)
+                lane["runs"][side]["manifest_sha256"] = importer.digest(
+                    manifest_path.read_bytes())
+        write_json(report_path, report)
+
+    def test_imports_manifest_verified_persisted_project_for_strict_gate(self):
+        self.add_persisted_project_evidence()
+        with patch.object(importer, "PERSISTED_PROJECTS",
+                          {CASE: ("generated-project/autosave.ptn",)}, create=True):
+            self.run_import()
+        target = (self.output / CASE / "controlled" / "before" /
+                  "generated-project/autosave.ptn")
+        self.assertEqual(target.read_bytes(), b"project-before")
+        provenance = json.loads((target.parents[1] / "provenance.json").read_text())
+        self.assertEqual(provenance["evidence_sha256"]["generated-project/autosave.ptn"],
+                         importer.digest(target.read_bytes()))
+
+    def test_refuses_missing_required_project_before_any_write(self):
+        self.add_persisted_project_evidence()
+        (self.download / CASE / "real-time" / "before" / "session-1" /
+         "generated-project/autosave.ptn").unlink()
+        with patch.object(importer, "PERSISTED_PROJECTS",
+                          {CASE: ("generated-project/autosave.ptn",)}, create=True):
+            with self.assertRaisesRegex(ValueError, "persisted project"):
+                self.run_import(dry_run=True)
+        self.assertFalse(self.output.exists())
 
     def test_selective_import_validates_existing_witness_without_overwriting_it(self):
         witness = "M-WITNESS-001"
