@@ -47,6 +47,23 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertEqual(raw_calls, [])
         self.assertEqual(len(semantic_calls), 6)
 
+    def test_live_playhead_cases_have_exact_contract_owners(self):
+        from cases import CASES
+        from unittest.mock import patch, sentinel
+        import contract.playhead_feedback as owner
+
+        self.assertIs(CASES['M-UI-001']['run'], owner.live_playhead_feedback)
+        run = CASES['M-UI-002']['run']
+        self.assertIs(run, owner.live_playhead_feedback_twice_rate)
+        for case_id in ('M-UI-001', 'M-UI-002'):
+            self.assertEqual(CASES[case_id]['run'].__module__,
+                             'contract.playhead_feedback')
+        self.assertIsNone(run.__closure__)
+        with patch.object(owner, 'live_playhead_feedback',
+                          return_value=sentinel.result) as helper:
+            self.assertIs(run(sentinel.driver), sentinel.result)
+        helper.assert_called_once_with(sentinel.driver, clock_delta=3)
+
     def test_live_recording_and_panic_cases_use_semantic_inputs(self):
         """Keep case recipes on Ui verbs while preserving their existing oracles."""
         import ast
@@ -65,7 +82,10 @@ class UiLayerGuardTests(unittest.TestCase):
             "muted_sparse_reverse_arp", "arp_rest_live_scale",
             "arp_empty_muted_replacement", "navigation_matrix",
         }
-        functions = {node.name: node for node in tree.body
+        contract_tree = _tree(str((BEHAVIOUR / "contract" /
+                                   "playhead_feedback.py").resolve()))
+        functions = {node.name: node for owner in (tree, contract_tree)
+                     for node in owner.body
                      if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))}
         self.assertTrue(names <= functions.keys(), names - functions.keys())
         for name in sorted(names):

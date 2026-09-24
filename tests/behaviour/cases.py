@@ -30,6 +30,9 @@ from contract.parameter_divisions import (
     chord_note_strum_divisions, chord_note_arpeggio_divisions,
     chord_spread_divisions,
 )
+from contract.playhead_feedback import (
+    live_playhead_feedback, live_playhead_feedback_twice_rate,
+)
 from contract.chord_shapes import chord_shape_case
 from device_configs import device_config_defaults
 from unreadable_device_config import unreadable_device_config
@@ -2289,48 +2292,6 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
     ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
 
-def live_playhead_feedback(c,clock_delta=0):
-    import time
-    ui=c.ui
-    c.configure()
-    if clock_delta:
-        from frame_oracle import header,matches
-        ui.turn(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
-        ui.set_value(clock_delta);ui.press_key(3)
-    marker=c.snapshot()['midi_count']
-    ui.control_edge('play_stop',True);ui.control_edge('play_stop',False)
-    controlled=c.clock_mode=='controlled-experimental'
-    field='logical_ns' if controlled else 'monotonic_ns'
-    started=c.logical_ns if controlled else time.monotonic_ns()
-    samples=[];settled=set();last_rows=[]
-    # Grid redraw sleeps50ms. D permits only integer-nanosecond rounding;
-    # R adds the existing10ms scheduler allowance, not a whole extra step.
-    limit=50000002 if controlled else 60000000
-    while (c.logical_ns if controlled else time.monotonic_ns())-started<3000000000:
-        before=c.logical_ns if controlled else time.monotonic_ns()
-        state=c.snapshot()
-        after=c.logical_ns if controlled else time.monotonic_ns()
-        rows=[m for m in state['midi'] if m['index']>marker and m['port']==1 and m['bytes'][0]==144 and m['bytes'][2]>0]
-        if rows:
-            expected=[[144,n,v] for n,v in [(60,127),(62,117),(64,107),(65,97)]]
-            assert [m['bytes'] for m in rows]==[expected[i%4] for i in range(len(rows))]
-            current=(len(rows)-1)%4+1;previous=(current-2)%4+1
-            visible=[step for step in range(1,65) if state['grid'][48+step-1]==10]
-            assert len(visible)<=1,visible
-            age_low=before-rows[-1][field];age_high=after-rows[-1][field]
-            if visible:assert visible[0] in (current,previous),dict(current=current,visible=visible)
-            if age_low>limit:assert visible==[current],dict(current=current,visible=visible,age_low_ns=age_low,age_high_ns=age_high)
-            if visible==[current]:settled.add(len(rows))
-            samples.append(dict(note_ordinal=len(rows),current_step=current,visible=visible,age_lower_ns=age_low,age_upper_ns=age_high))
-            last_rows=rows
-            if len(rows)>=9 and 9 in settled:break
-        c.elapse(.01 if controlled else .005)
-    assert len(last_rows)>=9 and set(range(1,10))<=settled,dict(notes=len(last_rows),settled=sorted(settled))
-    stale=[x for x in samples if x['visible']!=[x['current_step']]]
-    c.results.append(dict(kind='live-playhead-latency',redraw_period_ns=50000000,maximum_allowed_stale_ns=limit,samples=samples,max_observed_stale_lower_ns=max([x['age_lower_ns'] for x in stale],default=0)))
-    ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
-    c.led_values([(x,4) for x in range(1,5)],[15]*4)
-
 def keyboard_input_channels(c):
     import time
     c.configure();marker=c.snapshot()['midi_count']
@@ -3709,7 +3670,7 @@ CASES={
  'M-MIDI-002':dict(run=keyboard_input_channels,requirements=['MIDI-RELEASE-001','REC-LIVE-NOTES'],description='All16 keyboard input channels across both ports and both release forms produce exact selected-channel preview MIDI with no stuck notes'),
  'M-REC-016':dict(run=lambda c:recorded_note_channel_switch(c,input_channel=16),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Keyboard on MIDI input channel16 records and releases on the selected Mosaic channel independently of its input channel'),
  'M-REC-015':dict(run=lambda c:recorded_note_channel_switch(c,release_status=144),requirements=['REC-LIVE-NOTES','MIDI-RELEASE-001'],description='Velocity-zero Note On releases the original held note and commits its recorded length after channel selection changes'),
- 'M-UI-002':dict(run=lambda c:live_playhead_feedback(c,3),requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Twice-rate live grid playhead follows emitted MIDI within one redraw period across two loops'),
+ 'M-UI-002':dict(run=live_playhead_feedback_twice_rate,requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Twice-rate live grid playhead follows emitted MIDI within one redraw period across two loops'),
  'M-UI-001':dict(run=live_playhead_feedback,requirements=['CLOCK-PHRASE-001','NAV-TRANSPORT'],description='Live grid playhead follows independently checked emitted MIDI steps within one redraw period; two loops and stopped grid'),
  'M-REC-013':dict(run=lambda c:live_record_placement(c,(1355000000,1505000000),(16,18),15,3,.5),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Twice-rate channel records on its own steps across a grid row; absolute LEDs and independent replay gaps'),
  'M-REC-014':dict(run=lambda c:live_record_placement(c,(1580000000,2180000000),(62,64),61,-2,2),requirements=['REC-LIVE-NOTES','CH-RANGE'],description='Half-rate channel records on its own steps near step64; absolute LEDs and independent replay gaps'),
