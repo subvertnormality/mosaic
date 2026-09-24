@@ -1,0 +1,1439 @@
+[
+  {
+    "type": "key",
+    "n": 1,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 1,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -100
+  },
+  {
+    "type": "key",
+    "n": 2,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 2,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": -120
+  },
+  {
+    "type": "key",
+    "n": 2,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 2,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": -2
+  },
+  {
+    "type": "key",
+    "n": 1,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 1,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": 2
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 5,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 5,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 2,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 2,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 5,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 5,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 7,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 7,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 2,
+    "y": 6,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 2,
+    "y": 6,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 5,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 5,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 5,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 5,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 1,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 1,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 2,
+    "y": 2,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 2,
+    "y": 2,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 3,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 3,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 3,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 2,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 2,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 4,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 4,
+    "state": 0
+  },
+  {
+    "type": "key",
+    "n": 1,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 1,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 1,
+    "delta": 2
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 3,
+    "state": 0
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": 2
+  },
+  {
+    "type": "midi_schedule",
+    "schedule_id": 1,
+    "events": [
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774743003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774768003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774793003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774818003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774843003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774868003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774893003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774918003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774943003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774968003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 774993003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775018003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775043003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775068003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775093003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775118003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775143003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775168003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775193003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775218003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775243003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775268003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775293003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775318003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775343003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775368003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775393003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775418003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775443003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775468003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775493003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775518003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775543003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775568003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775593003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775618003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775643003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775668003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775693003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775718003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775743003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775768003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775793003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775818003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775843003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775868003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775893003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775918003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775943003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          250
+        ],
+        "at_monotonic_ns": 775958003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775968003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 775993003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776018003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776043003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776068003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776093003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776118003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776143003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776168003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776193003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776218003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776243003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776268003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776293003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776318003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776343003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776368003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776393003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776418003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776443003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776468003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776493003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776518003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776543003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776568003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776593003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776618003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776643003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776668003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776693003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776718003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776743003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776768003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776793003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776818003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776843003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776868003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776893003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776918003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776943003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776968003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 776993003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777018003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777043003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777068003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777093003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777118003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777143003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777168003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777193003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777218003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777243003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777268003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777293003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777318003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777343003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777368003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777393003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777418003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          248
+        ],
+        "at_monotonic_ns": 777443003256
+      },
+      {
+        "port": 1,
+        "bytes": [
+          252
+        ],
+        "at_monotonic_ns": 777453003256
+      }
+    ]
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 2,
+    "delta": 2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "enc",
+    "n": 3,
+    "delta": -2
+  },
+  {
+    "type": "key",
+    "n": 1,
+    "state": 1
+  },
+  {
+    "type": "key",
+    "n": 1,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 0
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 1
+  },
+  {
+    "type": "grid",
+    "x": 1,
+    "y": 8,
+    "state": 0
+  }
+]
