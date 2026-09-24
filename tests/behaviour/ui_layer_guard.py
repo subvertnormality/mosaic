@@ -63,28 +63,14 @@ def case_modules():
             if path.name not in EXEMPT and not path.name.startswith("test_")]
 
 
-def load_allowlist():
-    path = BEHAVIOUR / "ui_migration_allowlist.json"
-    value = json.loads(path.read_text())
-    if not isinstance(value, list) or not all(isinstance(item, str) for item in value):
-        raise AssertionError("ui_migration_allowlist.json must be a string list")
-    if len(value) != len(set(value)):
-        raise AssertionError("duplicate UI migration allowlist entries")
-    return value
-
-
-def validate_allowlist():
-    allowed = set(load_allowlist())
-    existing = {path.name for path in case_modules()}
+def validate_ui_layer():
+    """Reject raw UI in ordinary case modules or reachable non-contract code."""
     errors = []
-    for stale in sorted(allowed - existing):
-        errors.append("allowlisted module does not exist: " + stale)
     for path in case_modules():
         sites = raw_sites(path)
-        if sites and path.name not in allowed:
-            errors.append("raw UI outside migration allowlist: %s:%s" % (path.name, sites[0][0]))
-        if not sites and path.name in allowed:
-            errors.append("clean module remains in migration allowlist: " + path.name)
+        if sites:
+            errors.append("raw UI outside contract module: %s:%s" %
+                          (path.name, sites[0][0]))
 
     from cases import CASES
     contract = classify_contract_cases(CASES)
@@ -92,11 +78,9 @@ def validate_allowlist():
         if case_id in contract:
             continue
         owner = _source_path(case["run"])
-        if owner is None or owner.name in allowed:
+        if owner is None:
             continue
         dependencies = callable_raw_dependencies(case["run"])
-        dependencies = [item for item in dependencies
-                        if not _dependency_is_allowlisted(item[0], allowed)]
         if dependencies:
             dependency, line, kind = dependencies[0]
             errors.append(
@@ -104,16 +88,6 @@ def validate_allowlist():
                 % (case_id, dependency, line, kind)
             )
     return errors
-
-
-def _dependency_is_allowlisted(qualified_name, allowed):
-    module_name = qualified_name.rsplit(".", 1)[0]
-    try:
-        module = importlib.import_module(module_name)
-        path = Path(inspect.getsourcefile(module)).resolve()
-    except (ImportError, TypeError, ValueError):
-        return False
-    return path.name in allowed
 
 
 def _source_path(function):

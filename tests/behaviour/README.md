@@ -29,9 +29,9 @@ titles, screen regions and LED levels. `frame_oracle.py` consumes that geometry;
 cases do not import it directly unless they are explicit UI contract cases.
 
 `test_ui_layer.py` fails closed when a raw driver call or framebuffer/grid access
-appears outside the temporary `ui_migration_allowlist.json`. It also rejects stale
-allowlist entries, so a module must leave the list in the same change that removes
-its final raw UI dependency. `contract_cases.json` records the fixed contract set
+appears outside `driver.py`, `ui.py`, `frame_oracle.py`, or `contract/`. The temporary
+migration allowlist is gone: every ordinary case module must be UI-independent.
+`contract_cases.json` records the fixed contract set
 and ceiling. `ui_verb_sources.json` identifies shared rendering helpers represented
 exactly by UI verbs.
 

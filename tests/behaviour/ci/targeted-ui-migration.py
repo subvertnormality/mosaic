@@ -27,7 +27,6 @@ UI_SOURCE_ALLOWLIST = {
     "tests/behaviour/ui.py",
     "tests/behaviour/ui_map.py",
     "tests/behaviour/frame_oracle.py",
-    "tests/behaviour/ui_migration_allowlist.json",
     "tests/behaviour/contract_cases.json",
     "tests/behaviour/ui_verb_sources.json",
     "tests/behaviour/ci/test_targeted_ui_migration.py",

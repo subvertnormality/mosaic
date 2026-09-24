@@ -522,10 +522,13 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertEqual(len(channel_three), 1,
                          "ensemble must navigate back to Ch. 3 Harmony")
 
-    def test_allowlist_is_exact_and_fail_closed(self):
-        from ui_layer_guard import validate_allowlist
+    def test_no_migration_allowlist_file(self):
+        self.assertFalse((BEHAVIOUR / "ui_migration_allowlist.json").exists())
 
-        self.assertEqual(validate_allowlist(), [])
+    def test_ui_layer_is_raw_free_outside_contract(self):
+        from ui_layer_guard import validate_ui_layer
+
+        self.assertEqual(validate_ui_layer(), [])
     def test_raw_state_access_is_detected_on_supported_python(self):
         from ui_layer_guard import raw_sites
 
@@ -776,6 +779,18 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertEqual(value["cases"], sorted(classified))
         self.assertEqual(value["ceiling"], 450)
         self.assertGreaterEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
+
+    def test_every_case_owner_matches_the_fixed_contract_inventory(self):
+        import inspect
+        import json
+        from cases import CASES
+
+        expected = set(json.loads((BEHAVIOUR / "contract_cases.json").read_text())["cases"])
+        contract_root = (BEHAVIOUR / "contract").resolve()
+        for case_id, case in CASES.items():
+            with self.subTest(case_id=case_id):
+                source = Path(inspect.getsourcefile(case["run"])).resolve()
+                self.assertEqual(source.parent == contract_root, case_id in expected)
 
 
 class DurationMigrationTests(unittest.TestCase):
