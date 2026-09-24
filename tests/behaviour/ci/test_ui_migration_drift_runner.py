@@ -54,8 +54,8 @@ class DriftRunnerTests(unittest.TestCase):
         workflow = (SCRIPT.parents[3] / ".github/workflows/behaviour.yml").read_text(
             encoding="utf-8")
         drift_job = workflow.split("  ui-migration-drift:", 1)[1]
-        self.assertEqual(runner.PAGE_KEYS, ("masks", "merge_shape"))
-        self.assertIn("--pages masks merge_shape \\", drift_job)
+        self.assertEqual(runner.PAGE_KEYS, ("memory", "merge_shape"))
+        self.assertIn("--pages memory merge_shape \\", drift_job)
 
     def test_ci_drill_installs_git_before_sha_checkout(self):
         workflow = (SCRIPT.parents[3] / ".github/workflows/behaviour.yml").read_text(

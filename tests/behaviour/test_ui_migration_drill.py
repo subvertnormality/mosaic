@@ -34,6 +34,28 @@ class DriftDrillTests(unittest.TestCase):
         self.assertEqual(set(result), {"A", "B"})
         self.assertEqual(result["B"][0]["session"], "restarted")
 
+    def test_internal_page_pair_excludes_boundary_and_stale_confirmations(self):
+        # Characterisation of the committed selection at 66a97db: the
+        # chosen internal pages avoid the saturating Masks navigation and
+        # the stale Note Dashboard confirmation in the held-Harmony case.
+        pages = {
+            "M-MERGE-FOUNDATION-001": "merge_shape",
+            "M-MERGE-PHRASE-001": "merge_shape",
+            "M-HARMONY-HELD-001": "note_dashboard",
+            "M-TIME-013": "masks",
+        }
+        files = {}
+        for case, page in pages.items():
+            files[f"{case}/controlled/after/recipe.json"] = b"[]"
+            files[f"{case}/controlled/after/results.json"] = json.dumps([
+                dict(kind="ui-confirm", page=page, channel=1)
+            ]).encode()
+        selected = derive_cases(
+            files, set(pages), ("memory", "merge_shape"),
+            {"masks", "memory", "merge_shape", "note_dashboard"})
+        self.assertEqual(set(selected), {
+            "M-MERGE-FOUNDATION-001", "M-MERGE-PHRASE-001"})
+
     def test_multiple_confirmations_select_case_once(self):
         self.files["A/controlled/after/results.json"] = json.dumps([
             dict(kind="ui-confirm", page="masks", channel=1),

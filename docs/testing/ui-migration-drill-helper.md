@@ -10,7 +10,7 @@ that exact revision, using the two channel-editor page keys to be swapped:
 
 ```sh
 python3 tests/behaviour/ui_migration_drill.py \
-  --baseline FINAL_MIGRATION_SHA --pages masks memory --list
+  --baseline FINAL_MIGRATION_SHA --pages memory merge_shape --list
 ```
 
 The list is derived from every committed `controlled/after/results.json`,
@@ -37,7 +37,7 @@ validation. The default is the first eligible case in sorted order.
 ```sh
 python3 tests/behaviour/ui_migration_drill.py \
   --baseline FINAL_MIGRATION_SHA --scratch SWAP_COMMIT_SHA \
-  --pages masks memory \
+  --pages memory merge_shape \
   --run /absolute/path/to/first-run/manifest.json \
   --run /absolute/path/to/next-run/manifest.json \
   --repeat /absolute/path/to/repeat-output/manifest.json

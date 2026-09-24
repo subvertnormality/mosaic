@@ -727,7 +727,7 @@ jobs:
             tests/behaviour/ci/run-ui-migration-drift.py \
             --repo "$GITHUB_WORKSPACE" \
             --baseline "$BASELINE_SHA" \
-            --pages masks merge_shape \
+            --pages memory merge_shape \
             --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json" \
             --mod-code-root /tmp/mosaic-output-mods \
             --output /tmp/mosaic-ui-drift

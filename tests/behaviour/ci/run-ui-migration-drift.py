@@ -16,7 +16,7 @@ import sys
 
 
 MAP = "tests/behaviour/ui_map.py"
-PAGE_KEYS = ("masks", "merge_shape")
+PAGE_KEYS = ("memory", "merge_shape")
 
 
 def write_exact_text(path, content):
