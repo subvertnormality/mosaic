@@ -170,6 +170,11 @@ class Ui:
             self.driver.enc(2, rows.index(task))
         self.press_key(3)
 
+    def view_channel(self, delta):
+        """Move a pattern page's viewed channel (E3 on View channel); the
+        selected channel does not change."""
+        return self.turn(3, delta)
+
     def trig_options(self):
         """Open Trig options (P02), where E3 sets the tresillo multiplier."""
         self.open_task("Trig", "options")
