@@ -664,3 +664,35 @@ def lock_lead_clock_matrix(c, name):
         summary[str(lead)] = compare(name, condition, lead, runs[lead], runs[0], field, controlled)
     c.results.append(dict(kind='lock-lead-clock-matrix', condition=name, leads=list(LEADS), checked=summary, passed=True))
     (c.out / 'results.json').write_text(json.dumps(c.results, indent=2) + '\n')
+
+
+def lock_lead_clock_002_normal(c):
+    return lock_lead_clock_matrix(c, 'normal')
+
+
+def lock_lead_clock_003_fast(c):
+    return lock_lead_clock_matrix(c, 'fast')
+
+
+def lock_lead_clock_004_x4_130(c):
+    return lock_lead_clock_matrix(c, 'x4-130')
+
+
+def lock_lead_clock_005_x4_200(c):
+    return lock_lead_clock_matrix(c, 'x4-200')
+
+
+def lock_lead_clock_006_x16_130(c):
+    return lock_lead_clock_matrix(c, 'x16-130')
+
+
+def lock_lead_clock_007_swing(c):
+    return lock_lead_clock_matrix(c, 'swing')
+
+
+def lock_lead_clock_008_swing_negative(c):
+    return lock_lead_clock_matrix(c, 'swing-negative')
+
+
+def lock_lead_clock_009_shuffle(c):
+    return lock_lead_clock_matrix(c, 'shuffle')

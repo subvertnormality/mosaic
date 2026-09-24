@@ -155,6 +155,12 @@ from patch_params import patch_adjacent_locks
 from patch_params import patch_lock_precedence
 from patch_params import patch_duplicate_slot_lock
 from contract.lock_lead_clock_matrix import lock_lead_clock_matrix
+from contract.lock_lead_clock_matrix import (
+    lock_lead_clock_002_normal, lock_lead_clock_003_fast,
+    lock_lead_clock_004_x4_130, lock_lead_clock_005_x4_200,
+    lock_lead_clock_006_x16_130, lock_lead_clock_007_swing,
+    lock_lead_clock_008_swing_negative, lock_lead_clock_009_shuffle,
+)
 from patch_params import patch_sparse_range
 from patch_params import patch_restart
 from patch_params_batch2 import patch_nrpn_bytes
@@ -3040,14 +3046,14 @@ CASES={
  'M-SYNC-013':dict(run=warm_forwarded_clock,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Warmed external clock on port1; Mosaic and forwarded port2 receiver keep absolute input phase'),
  'M-SYNC-011':dict(run=master_multi_output,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Two clock outputs enabled through native menu: independent receiver note phase/count, disabled third port, no note-routing leakage'),
  'M-SYNC-010':dict(run=master_lifecycle,requirements=['CLOCK-MIDI-TRANSPORT-001'],description='Master pending/active Start cancellation at zero,1ms,25ms; clock continues, no late notes/Start, no held voices, independent restart phase'),
- 'M-SYNC-LEAD-002':dict(run=lambda c,n='normal':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 130 BPM straight: locks leave at step time at 0, 25 and 50 ms leads'),
- 'M-SYNC-LEAD-003':dict(run=lambda c,n='fast':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 200 BPM straight: 50 ms lead waits for the note-gap midpoint; every note under its own lock'),
- 'M-SYNC-LEAD-004':dict(run=lambda c,n='x4-130':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 130 BPM (29 ms steps): values between one and two leads wait for the midpoint'),
- 'M-SYNC-LEAD-005':dict(run=lambda c,n='x4-200':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 200 BPM (19 ms steps): steps closer than the lead keep each note under its own lock'),
- 'M-SYNC-LEAD-006':dict(run=lambda c,n='x16-130':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x16 channel clock at 130 BPM (7 ms steps): every note under its own lock, spacing and gates unchanged'),
- 'M-SYNC-LEAD-007':dict(run=lambda c,n='swing':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing 40 at x2: uneven gaps apply the midpoint only where notes come together'),
- 'M-SYNC-LEAD-008':dict(run=lambda c,n='swing-negative':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing -40 at 200 BPM: each note under its own lock with unchanged swung spacing'),
- 'M-SYNC-LEAD-009':dict(run=lambda c,n='shuffle':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local Heavy shuffle at x2: each note under its own lock with unchanged shuffled spacing'),
+ 'M-SYNC-LEAD-002':dict(run=lock_lead_clock_002_normal,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 130 BPM straight: locks leave at step time at 0, 25 and 50 ms leads'),
+ 'M-SYNC-LEAD-003':dict(run=lock_lead_clock_003_fast,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), 200 BPM straight: 50 ms lead waits for the note-gap midpoint; every note under its own lock'),
+ 'M-SYNC-LEAD-004':dict(run=lock_lead_clock_004_x4_130,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 130 BPM (29 ms steps): values between one and two leads wait for the midpoint'),
+ 'M-SYNC-LEAD-005':dict(run=lock_lead_clock_005_x4_200,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x4 channel clock at 200 BPM (19 ms steps): steps closer than the lead keep each note under its own lock'),
+ 'M-SYNC-LEAD-006':dict(run=lock_lead_clock_006_x16_130,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), x16 channel clock at 130 BPM (7 ms steps): every note under its own lock, spacing and gates unchanged'),
+ 'M-SYNC-LEAD-007':dict(run=lock_lead_clock_007_swing,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing 40 at x2: uneven gaps apply the midpoint only where notes come together'),
+ 'M-SYNC-LEAD-008':dict(run=lock_lead_clock_008_swing_negative,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local swing -40 at 200 BPM: each note under its own lock with unchanged swung spacing'),
+ 'M-SYNC-LEAD-009':dict(run=lock_lead_clock_009_shuffle,requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), local Heavy shuffle at x2: each note under its own lock with unchanged shuffled spacing'),
  'M-SYNC-LEAD-010':dict(run=lambda c,n='swing-toggle':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), swing switched on then off during playback: each note under its own lock throughout'),
  'M-SYNC-LEAD-011':dict(run=lambda c,n='shuffle-toggle':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), shuffle switched on then off during playback: each note under its own lock throughout'),
  'M-SYNC-LEAD-012':dict(run=lambda c,n='slides':lock_lead_clock_matrix(c,n),requirements=['LOCK-PARAM-SET','CLOCK-MIDI-TRANSPORT-001'],description='Lock lead time (locks, defaults, Off and trigless values), global slide between locks at x4: the lock value is in force at each locked note and slide values follow the previous note'),
