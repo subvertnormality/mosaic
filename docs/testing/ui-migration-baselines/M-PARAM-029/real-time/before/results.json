@@ -1,0 +1,354 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "SparseHigh",
+    "passed": true
+  },
+  {
+    "kind": "native-sparse-singleton-editor-domain",
+    "domain": "SparseHigh",
+    "operations": [
+      {
+        "direction": 1,
+        "value": null,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 127,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 126,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 125,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 124,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 123,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 122,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 121,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 120,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 119,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 118,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 117,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 116,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 115,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 114,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 113,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 112,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 111,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 110,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 109,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 108,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 107,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 106,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 105,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 104,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 103,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 102,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 101,
+        "fine": false
+      },
+      {
+        "direction": -1,
+        "value": 100,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 100,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 101,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 102,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 103,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 104,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 105,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 106,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 107,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 108,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 109,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 110,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 111,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 112,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 113,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 114,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 115,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 116,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 117,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 118,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 119,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 120,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 121,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 122,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 123,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 124,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 125,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": 126,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": 127,
+        "fine": true
+      },
+      {
+        "direction": 1,
+        "value": null,
+        "fine": false
+      },
+      {
+        "direction": 1,
+        "value": null,
+        "fine": true
+      },
+      {
+        "direction": -1,
+        "value": 127,
+        "fine": false
+      }
+    ],
+    "clamp_and_Off": true,
+    "passed": true
+  }
+]
