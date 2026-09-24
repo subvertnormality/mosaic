@@ -1,7 +1,8 @@
 # Plan: a UI layer that makes the behaviour cases robust to UI change
 
-Status: final validation in progress on `codex/1.4.0` (implementation started
-2026-09-21), not complete. The semantic UI layer, migration comparator, contract
+Status: implementation and migration evidence complete on `codex/1.4.0`
+(implementation started 2026-09-21); final acceptance is green full behaviour and main
+CI at the branch head. The semantic UI layer, migration comparator, contract
 classifier and raw-UI guard are implemented. The migration allowlist has been removed;
 the guard now requires ordinary registered cases to be free of reachable raw UI calls.
 `tests/behaviour/contract_cases.json` records 405 contract cases against a ceiling of
@@ -9,17 +10,32 @@ the guard now requires ordinary registered cases to be free of reachable raw UI 
 `M-PARAM-DIAL-OFF-001`. The progress notes below preserve historical checkpoints;
 their statements about allowlist membership describe the state at the time.
 
-Acceptance remains open: recent contract-owner extractions need source-SHA-bound
-before/after evidence where the existing pairs predate the move, and panic-navigation
-cases need paired evidence. An inventory audit also found 219 ordinary `cases.py`-owned
-cases without committed migration pairs. At least 48 have directly changed run bodies;
-shared-helper and cross-module reachability are being checked for the rest. Section 6's
-module-level rule remains the acceptance criterion, including cases with unchanged
-bodies in a migrated owner module. A passing targeted CI report is partial
-evidence, not a substitute for the complete behaviour inventory. The actual
-page-order drift drill and its `docs/testing/ui-migration-drill.json` report have
-not been completed. Full validation and CI on the current branch head remain
-pending. Baseline failures `M-MEMORY-009`,
+Evidence inventory (2026-09-24): all 432 ordinary registered cases (837 registered,
+405 contract) have a strict canonical pair in
+`docs/testing/ui-migration-baselines/<case>/<lane>/{before,after}/` for every lane the
+suite runs them in (`controlled_only`: controlled; `real_time_only`: real time; all
+others: both). Each pair was produced by a SHA-bound targeted CI run whose source delta
+is limited to the case's UI migration, re-verified offline by the importer and
+`ui_migration_gate.py` (948 canonical and 52 owner-evidence lane directories all pass). Where no historical pair could isolate the migration, a
+committed evidence-baseline commit re-expresses only the affected UI calls in their
+pre-migration raw form and the next commit restores HEAD byte-for-byte:
+`c01d7c2d`→`fe8e1d80` (numeric length merges, whose first migrated candidate failed
+its own `step<length` LED oracle) and `06e75221`→`2a2f62e8` (M-SYNC-022, M-SYNC-023,
+M-MIDI-REPEAT-001, M-MIDI-002 and M-MIDI-005, which reach UI only through
+`configure`/`_configure_midi_source`, migrated in 9f951611 before the gate tooling
+existed). Contract-owner extractions whose cases already had canonical pairs before the
+move have owner evidence under `docs/testing/ui-migration-owner-evidence/` (foundation,
+panic navigation and hotplug, harmony workflows, endurance, persisted range rejection,
+recording stop safety, grid viewer, autosave idle, transpose live edit, and clock
+divisions/strum reset). Contract cases with no canonical pair spanning their move,
+fail-closed baselines, and real-time-only crow-jf/nb-audio contract cases are outside
+section 6, which covers cases in migrated modules. Targeted real-time lanes run on the
+emulator's qualified runtime, as the full campaign does; the default runtime's teardown
+races made native matron exit -11 after passing runs, and such exits remain hard
+failures. Failed targeted reports are kept as failures and never imported. The
+page-order drift drill passed (`docs/testing/ui-migration-drill.json`, run
+35996131530). A passing targeted report remains partial evidence; acceptance is the
+full behaviour and main CI at the branch head. Baseline failures `M-MEMORY-009`,
 `M-SYNC-002`, `M-SYNC-007`, `M-SYNC-008` and `M-SYNC-010` remain classified fail-closed
 as contract cases. This is test-side work only: no change to Mosaic (repo root
 `mosaic.lua`, `lib/`) or to the emulator checkout. `tests/behaviour/driver.py` is
@@ -618,7 +634,8 @@ empties it.
 Evidence lives in `docs/testing/ui-migration-baselines/<case>/<lane>/{before,after}/`, where
 `<lane>` is `controlled` or `real-time`, committed with the migration. For every case in a
 module being migrated, in every lane the suite runs it in (`controlled_only` cases:
-controlled only; `crow-jf`/`nb-audio` cases: real-time only; all others: both):
+controlled only; `real_time_only` and `crow-jf`/`nb-audio` cases: real-time only; all
+others: both):
 
 Later owner-only extractions with existing canonical migration pairs keep those pairs
 unchanged. Their additional, exact-source-pinned evidence is stored under
