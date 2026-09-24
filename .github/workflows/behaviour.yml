@@ -678,6 +678,7 @@ jobs:
       options: --shm-size 256m
     timeout-minutes: 240
     steps:
+      - *packages
       - name: Check out the committed migration evidence
         uses: actions/checkout@v4
         with:
@@ -698,7 +699,6 @@ jobs:
           test "$(git rev-parse HEAD)" = "$BASELINE_SHA"
           test -f tests/behaviour/ui_migration_drill.py
           test -f tests/behaviour/ci/run-ui-migration-drift.py
-      - *packages
       - name: Verify the offline drift runner
         working-directory: tests/behaviour
         run: python3 -m unittest -v ci.test_ui_migration_drift_runner
