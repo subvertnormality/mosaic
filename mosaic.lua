@@ -182,6 +182,8 @@ end
 function redraw()
   screen.clear()
   if fn.dirty_screen() == true then
+    -- Clear the flag first: a frame that is still animating asks for the next one.
+    fn.dirty_screen(false)
     if ui_splash_screen_active then
       screen.level(15)
       screen.move(60, 38)
@@ -190,7 +192,6 @@ function redraw()
       screen.text("m°")
       screen.font_face(1)
       screen.update()
-    
     elseif ui_splash.active() then
       ui_splash.draw(nil, draw_application_screen)
       screen.update()
@@ -198,8 +199,6 @@ function redraw()
       draw_application_screen()
       screen.update()
     end
-
-    fn.dirty_screen(false)
   end
 end
 
@@ -261,6 +260,8 @@ function init()
     function()
       while true do
         clock.sleep(1/30)
+        -- norns keeps a short K1 tap for itself; the menu change is how the UI learns of it.
+        if ui_live and ui_live.installed() then ui_live.native_changed(_menu ~= nil and _menu.mode == true) end
         if fn.dirty_screen() then screen_guard.run(redraw) end
       end
     end
@@ -312,6 +313,12 @@ function init()
 
   ui.init()
   m_grid.init()
+  -- A grid press also ends the splash; the press itself is handled as usual.
+  local grid_key = g.key
+  g.key = function(x, y, z)
+    ui_splash.skip()
+    grid_key(x, y, z)
+  end
   m_clock.init()
   ui_splash_screen_active = false
   fn.dirty_grid(true)

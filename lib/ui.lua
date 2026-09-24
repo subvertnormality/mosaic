@@ -11,6 +11,7 @@ song_edit_page_ui = include("mosaic/lib/pages/song_edit_page/song_edit_page_ui")
 
 tooltip = include("mosaic/lib/ui_components/tooltip")
 save_confirm = include("mosaic/lib/ui_components/save_confirm")
+ui_live = include("mosaic/lib/ui_live")
 
 is_key1_down = false
 is_key2_down = false
@@ -32,35 +33,20 @@ function ui.init()
   velocity_edit_page_ui.init()
   trigger_edit_page_ui.init()
   song_edit_page_ui.init()
+
+  -- The live UI wraps the page owners above; they keep their state and handlers.
+  ui_live.install()
 end
 
 function ui.redraw()
   if not program then
     return
   end
-
-  screen.font_size(8)
-  screen.font_face(1)
-  screen.level(10)
-  screen.move(120, 9)
-  screen.text("m")
-  draw:handle_ui(program.get_selected_page())
+  ui_live.redraw()
 end
 
 function ui.enc(n, d)
-  if program.get_selected_page() == pages.pages.channel_edit_page then
-    channel_edit_page_ui.enc(n, d)
-  elseif program.get_selected_page() == pages.pages.scale_edit_page then
-    scale_edit_page_ui.enc(n, d)
-  elseif program.get_selected_page() == pages.pages.trigger_edit_page then
-    trigger_edit_page_ui.enc(n, d)
-  elseif program.get_selected_page() == pages.pages.note_edit_page then
-    note_edit_page_ui.enc(n, d)
-  elseif program.get_selected_page() == pages.pages.velocity_edit_page then
-    velocity_edit_page_ui.enc(n, d)
-  elseif program.get_selected_page() == pages.pages.song_edit_page then
-    song_edit_page_ui.enc(n, d)
-  end
+  ui_live.enc(n, d)
 end
 
 function ui.key(n, z)
@@ -83,19 +69,7 @@ function ui.key(n, z)
     is_key3_down = false
   end
 
-  if pages.pages.channel_edit_page == program.get_selected_page() then
-    channel_edit_page_ui.key(n, z)
-  elseif pages.pages.scale_edit_page == program.get_selected_page() then
-    scale_edit_page_ui.key(n, z)
-  elseif pages.pages.velocity_edit_page == program.get_selected_page() then
-    -- velocity_edit_page_ui.key(n, z)
-  elseif pages.pages.note_edit_page == program.get_selected_page() then
-    -- note_edit_page_ui.key(n, z)
-  elseif pages.pages.trigger_edit_page == program.get_selected_page() then
-    trigger_edit_page_ui.key(n, z)
-  elseif pages.pages.song_edit_page == program.get_selected_page() then
-    song_edit_page_ui.key(n, z)
-  end
+  ui_live.key(n, z)
 
 end
 
