@@ -1,13 +1,12 @@
 """Global tempo bounds and cross-slot persistence through real norns controls."""
 def song_tempo_bounds(c):
     import base64,time
-    from cases import set_mosaic_options
     from frame_oracle import render
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     c.configure();c.tap(6,8);c.hold_tap((1,1),(2,1))
     c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
-    set_mosaic_options(c,[('Song mode',False)])
+    c.ui.set_mosaic_options([('Song mode',False)])
     c.enc(1,1) # Global settings, Tempo selected.
     def extreme(direction):
         for _ in range(5):c.action(type='enc',n=3,delta=126*direction);c.elapse(.03)

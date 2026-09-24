@@ -220,7 +220,7 @@ class UiLayerGuardTests(unittest.TestCase):
         self.assertEqual(run.__module__, 'contract.navigation_matrix')
 
     def test_mosaic_options_case_callers_use_semantic_ui_verb(self):
-        """Keep native-menu seeks out of the six non-contract case bodies."""
+        """Keep Mosaic option seeks on the semantic UI verb."""
         import ast
 
         tree = ast.parse((BEHAVIOUR / "cases.py").read_text())
@@ -229,7 +229,11 @@ class UiLayerGuardTests(unittest.TestCase):
             "song_transition_reset_policy", "inactive_shuffle_transition",
             "strum_reset_continuity", "arp_basic_timing",
         }
-        functions = [node for node in tree.body
+        contract_tree = ast.parse(
+            (BEHAVIOUR / "contract" / "strum_reset_continuity.py").read_text()
+        )
+        functions = [node for owner in (tree, contract_tree)
+                     for node in owner.body
                      if isinstance(node, ast.FunctionDef) and node.name in names]
         self.assertEqual({node.name for node in functions}, names)
         calls = [node for function in functions for node in ast.walk(function)
@@ -247,6 +251,94 @@ class UiLayerGuardTests(unittest.TestCase):
 
         self.assertEqual(raw_calls, [])
         self.assertEqual(len(semantic_calls), 6)
+
+    def test_all_mosaic_option_callers_use_the_ui_owner(self):
+        import ast
+        import cases
+
+        self.assertFalse(hasattr(cases, "set_mosaic_options"))
+        names = (
+            "contract/lock_lead_clock_matrix.py", "contract/stop_safety.py",
+            "contract/song_tempo.py", "contract/song_repetitions.py",
+            "contract/patch_params.py", "contract/trig_parameter_interactions.py",
+            "trig_parameter_interactions.py",
+        )
+        for relative in names:
+            tree = ast.parse((BEHAVIOUR / relative).read_text())
+            with self.subTest(module=relative):
+                helper_imports = [node for node in ast.walk(tree)
+                                  if isinstance(node, ast.ImportFrom)
+                                  and node.module == "cases"
+                                  and any(alias.name == "set_mosaic_options"
+                                          for alias in node.names)]
+                helper_calls = [node for node in ast.walk(tree)
+                                if isinstance(node, ast.Call)
+                                and isinstance(node.func, ast.Name)
+                                and node.func.id == "set_mosaic_options"]
+                self.assertEqual(helper_imports, [])
+                self.assertEqual(helper_calls, [])
+
+    def test_remaining_case_led_oracles_use_mapped_ui_controls(self):
+        import ast
+        from ui_layer_guard import raw_sites
+
+        tree = ast.parse((BEHAVIOUR / "cases.py").read_text())
+        functions = {node.name: node for node in tree.body
+                     if isinstance(node, ast.FunctionDef)}
+
+        def led_expectations(name):
+            calls = [node for node in ast.walk(functions[name])
+                     if isinstance(node, ast.Call)
+                     and isinstance(node.func, ast.Attribute)
+                     and node.func.attr == "expect_leds"]
+            return [ast.literal_eval(call.args[0]) for call in calls]
+
+        self.assertEqual(led_expectations("four_notes"), [
+            {("pattern_note", (4, 3)): "active"},
+            {("pattern_select", 1): "blink_low"},
+            {("pattern_select", 1): "off"},
+        ])
+        menu = functions["panic_pending_chord"]
+        menu_checks = [node for node in ast.walk(menu)
+                       if isinstance(node, ast.Call)
+                       and isinstance(node.func, ast.Attribute)
+                       and node.func.attr == "expect_leds"]
+        self.assertEqual([ast.literal_eval(node.args[0]) for node in menu_checks], [{
+            ("channel_editor", None): "off",
+            ("scale_editor", None): "off",
+            ("pattern_editor", None): "off",
+            ("song_editor", None): "selected",
+        }])
+        for name in ("four_notes", "panic_pending_chord"):
+            raw_leds = [node for node in ast.walk(functions[name])
+                        if isinstance(node, ast.Call)
+                        and isinstance(node.func, ast.Attribute)
+                        and node.func.attr == "led_values"]
+            self.assertEqual(raw_leds, [], name)
+        self.assertEqual(raw_sites(BEHAVIOUR / "cases.py"), [])
+
+    def test_live_record_header_wait_uses_semantic_ui_without_result_change(self):
+        import ast
+
+        tree = ast.parse((BEHAVIOUR / "cases.py").read_text())
+        function = next(node for node in tree.body
+                        if isinstance(node, ast.FunctionDef)
+                        and node.name == "live_record_placement")
+        waits = [node for node in ast.walk(function)
+                 if isinstance(node, ast.Call)
+                 and isinstance(node.func, ast.Attribute)
+                 and node.func.attr == "wait_for_header"
+                 and node.args and isinstance(node.args[0], ast.Constant)
+                 and node.args[0].value == "clock_mods"
+                 and any(keyword.arg == "channel"
+                         and isinstance(keyword.value, ast.Constant)
+                         and keyword.value.value == 1
+                         for keyword in node.keywords)]
+        raw_imports = [node for node in ast.walk(function)
+                       if isinstance(node, ast.ImportFrom)
+                       and node.module == "frame_oracle"]
+        self.assertEqual(len(waits), 1)
+        self.assertEqual(raw_imports, [])
 
     def test_live_playhead_cases_have_exact_contract_owners(self):
         from cases import CASES

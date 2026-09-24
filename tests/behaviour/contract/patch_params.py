@@ -8,10 +8,10 @@ def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=Fal
     assert not (type_switch and reset)
     """Queued /3 -> /6 edit crosses an active slide at the pattern boundary."""
     import math
-    from cases import menu_value,assign_trig_parameter,set_mosaic_options
+    from cases import menu_value,assign_trig_parameter
     from frame_oracle import header,matches
     if reset:
-        c.configure();set_mosaic_options(c,[('Song mode',True),('Reset on pattern repeat',True),('Wrap param slides',True)])
+        c.configure();c.ui.set_mosaic_options([('Song mode',True),('Reset on pattern repeat',True),('Wrap param slides',True)])
     open_patch_control(c,setup=not reset);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
     c.enc(1,-3);assign_trig_parameter(c,'CC 1')
     for step,value in [(4 if reset else 1,24),(3,96)]:

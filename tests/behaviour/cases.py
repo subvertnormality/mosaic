@@ -199,12 +199,13 @@ def four_notes(c):
     c.configure()
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]])
     c.ui.pattern_editor();c.ui.pattern_editor();c.ui.tap_pattern_note_position((4,3))
-    c.led_values([(4,3)],[12])
+    c.ui.expect_leds({("pattern_note",(4,3)):"active"})
     c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(67,97)]])
     # Selected pattern's top LED deliberately alternates 3-1 / 3+1.
     # Observe both states, then compare the same visible phase in both clocks.
     # Do not mask this LED or weaken the full-grid admission comparison.
-    c.led_values([(1,1)],[4]);c.led_values([(1,1)],[2])
+    c.ui.expect_leds({("pattern_select",1):"blink_low"})
+    c.ui.expect_leds({("pattern_select",1):"off"})
     c.results.append(dict(kind='selected-pattern-blink-cycle',levels=[4,2],passed=True))
 
 def next_trig_cutoff(c):
@@ -1096,23 +1097,6 @@ def menu_option_row(c,label,value,top=22):
     # clearing their overlap. The UI layer retains that composite row oracle.
     c.ui.expect_menu_option_row(label,value,top=top)
 
-def set_mosaic_options(c,options):
-    from frame_oracle import selected_line
-    c.key(1);c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
-    position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
-    c.enc(2,position);c.key(3)
-    for label,enabled in options:
-        # The preceding Parameter locks separator draws its rule at y22.
-        top=23 if label in ('Trigless locks','Snap note masks to scale','Map scale to white keys') else 22
-        c.enc(2,-60)
-        for attempt in range(40):
-            if selected_line(c.snapshot(),label,top=top):break
-            c.enc(2,1)
-        else:raise AssertionError('Required Mosaic option not reached: '+label)
-        c.enc(3,3 if enabled else -3);menu_option_row(c,label,'On' if enabled else 'Off',top=top)
-        c.results.append(dict(kind='mosaic-option-input',label=label,enabled=enabled))
-    c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
-
 def repeated_pattern_reset_policy(c,verify_pending=False):
     from midi_window import MidiWindow
     c.ui.configure();c.ui.set_range(1,3)
@@ -1978,8 +1962,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
         for step in range(1, 65)
     })
     if clock_delta:
-        from frame_oracle import header,matches
-        ui.turn(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+        ui.turn(1,-1);ui.wait_for_header('clock_mods',channel=1)
         ui.set_value(clock_delta);ui.press_key(3)
     ui.press_key(1);ui.turn(1,4);ui.press_key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
@@ -2452,7 +2435,12 @@ def panic_pending_chord(c, arp, shape, case_id=None):
     try:c.elapse(1.9)
     finally:ui.control_edge('pattern_editor',False)
     c.elapse(.06);panic_after=c.snapshot()['midi_count']
-    c.led_values([(x,8) for x in (3,4,5,6)],[2,2,2,15])
+    ui.expect_leds({
+        ("channel_editor",None):"off",
+        ("scale_editor",None):"off",
+        ("pattern_editor",None):"off",
+        ("song_editor",None):"selected",
+    })
     c.elapse(1.19);logical_stop=c.logical_ns
     ui.control_edge('play_stop',True);stop_ack=ui.control_edge('play_stop',False)
     c.elapse(1);c.snapshot();c.finish()

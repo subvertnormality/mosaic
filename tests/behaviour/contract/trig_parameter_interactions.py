@@ -21,11 +21,11 @@ def assert_immediate_cc_on_edit(control,receipt):
 
 
 def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=False,edit_value=64,trigless=True,probability_zero=False):
-    from cases import assign_trig_parameter,menu_label,menu_value,set_mosaic_options
+    from cases import assign_trig_parameter,menu_label,menu_value
     from patch_params import open_patch_control,turn
     c.configure()
     assert not (empty_step and probability_zero)
-    if empty_step or probability_zero:set_mosaic_options(c,[('Trigless locks',trigless)])
+    if empty_step or probability_zero:c.ui.set_mosaic_options([('Trigless locks',trigless)])
     open_patch_control(c,setup=False);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
     c.enc(1,-3);assign_trig_parameter(c,'CC 1')
     for step,value in [(1,24),(3,96)]:
@@ -133,7 +133,7 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
         c.key(1);c.key(2);c.enc(2,-60);menu_label(c,'LEVELS >');c.key(2);c.key(1)
         # Reveal the silent step's stored value during replay. If recording while
         # disabled overwrote it, the expected96 below becomes64 and fails.
-        set_mosaic_options(c,[('Trigless locks',True)])
+        c.ui.set_mosaic_options([('Trigless locks',True)])
     # Disarmed playback proves the future steps were actually recorded, not
     # merely suppressed during the recording pass. Step1 already sounded before
     # the edit; steps2..4 receive64 through the end of this channel cycle.

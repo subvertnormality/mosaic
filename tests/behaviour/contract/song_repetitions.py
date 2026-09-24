@@ -1,13 +1,12 @@
 """Per-slot repetition counts checked by independent octave fingerprints."""
 def song_repetition_domain(c):
     import base64,time
-    from cases import set_mosaic_options
     from frame_oracle import render
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     c.configure();c.tap(6,8);c.tap(2,7);c.tap(8,7)
     c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
-    set_mosaic_options(c,[('Song mode',True),('Reset on song seq change',True),('Reset on pattern repeat',True)])
+    c.ui.set_mosaic_options([('Song mode',True),('Reset on song seq change',True),('Reset on pattern repeat',True)])
     previous=1
     for repeats in range(1,17):
         c.tap(1,1);c.enc(3,repeats-previous);c.key(3);previous=repeats

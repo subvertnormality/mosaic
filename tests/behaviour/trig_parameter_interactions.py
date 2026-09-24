@@ -472,7 +472,7 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
 def recording_trigless_toggle(c):
     """Mid-recording option changes use authored-trigger eligibility immediately."""
     import time
-    from cases import assert_durations,menu_label,menu_option_row,set_mosaic_options
+    from cases import assert_durations,menu_label,menu_option_row
     from midi_window import MidiWindow
     from note_accounting import note_pairs
     c.ui.configure();c.ui.set_mosaic_option_keys([('trigless_locks',False)])

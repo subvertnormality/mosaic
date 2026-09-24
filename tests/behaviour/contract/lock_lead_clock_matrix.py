@@ -183,7 +183,7 @@ def open_clocks(c):
 
 def build(c, condition):
     """Channel 1 steps 1-5 with the documented value pattern and the condition's clock."""
-    from cases import assign_trig_parameter, set_mosaic_options
+    from cases import assign_trig_parameter
     configure_master_output(c)
     leave_menu_home(c)  # configure_master_output leaves the menu inside CLOCK.
     options = []
@@ -192,7 +192,7 @@ def build(c, condition):
     if condition.get('wrap'):
         options.append(('Wrap param slides', True))
     if options:
-        set_mosaic_options(c, options)
+        c.ui.set_mosaic_options(options)
     start, end = condition.get('range', (1, 5))
     c.hold_tap((start, 4), (end, 4))  # Channel range; step 5 has no trig.
     if condition.get('global_length'):
