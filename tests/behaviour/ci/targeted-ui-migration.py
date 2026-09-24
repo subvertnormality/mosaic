@@ -322,12 +322,12 @@ def historical_allowlist_removal(before, after, before_tests, after_tests,
                                  selected_sources, changed_tests):
     """Admit only selected-owner removals from old migration policy metadata."""
     path = HISTORICAL_ALLOWLIST_PATH
-    entries = []
-    for side, source, tree in (("before", before, before_tests),
-                               ("after", after, after_tests)):
-        entry = tree.get(path)
-        require(entry is not None and entry[0] == "100644" and entry[1] == "blob",
-                side + " historical allowlist is not a regular tracked JSON file")
+    before_entry = before_tests.get(path)
+    require(before_entry is not None and before_entry[0] == "100644"
+            and before_entry[1] == "blob",
+            "before historical allowlist is not a regular tracked JSON file")
+
+    def read_allowlist(side, source, entry):
         raw = subprocess.check_output(["git", "cat-file", "blob", entry[2]], cwd=source)
         try:
             names = json.loads(raw)
@@ -337,8 +337,19 @@ def historical_allowlist_removal(before, after, before_tests, after_tests,
                 and re.fullmatch(r"[a-z][a-z0-9_]*\.py", name) for name in names)
                 and len(names) == len(set(names)),
                 side + " historical allowlist is not a unique module list")
-        entries.append((entry[2], hashlib.sha256(raw).hexdigest(), set(names)))
-    (before_blob, before_hash, before_names), (after_blob, after_hash, after_names) = entries
+        return entry[2], hashlib.sha256(raw).hexdigest(), set(names)
+
+    before_blob, before_hash, before_names = read_allowlist("before", before, before_entry)
+    after_entry = after_tests.get(path)
+    if after_entry is None:
+        # The plan removes the file in the same change that empties its final
+        # entries. Model absence as an empty list, then apply the same selected-
+        # and-changed-owner check to every entry that disappeared.
+        after_blob, after_hash, after_names = None, None, set()
+    else:
+        require(after_entry[0] == "100644" and after_entry[1] == "blob",
+                "after historical allowlist is not a regular tracked JSON file")
+        after_blob, after_hash, after_names = read_allowlist("after", after, after_entry)
     removed = before_names - after_names
     require(removed and not after_names - before_names,
             "historical allowlist must only remove selected modules")

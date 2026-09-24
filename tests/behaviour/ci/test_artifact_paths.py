@@ -14,6 +14,15 @@ def upload_patterns():
             for block in blocks if '/runs/**/recipe.json' in block]
 
 
+def resolve_historical_expression(pattern, historical):
+    expression = re.fullmatch(
+        r"\$\{\{\s*inputs\.ui_migration_historical_source\s*&&\s*"
+        r"'([^']+)'\s*\|\|\s*'([^']+)'\s*\}\}", pattern)
+    if expression:
+        return expression.group(1 if historical else 2)
+    return pattern
+
+
 def selected_files(patterns, root):
     # upload-artifact@v4 follows symlinks, as does recursive glob.glob.
     selected = set()
@@ -37,36 +46,41 @@ class Tests(unittest.TestCase):
         selected = [block for block in blocks
                     if '/tmp/mosaic-ui-targeted/targeted-ui-migration.json' in block]
         self.assertEqual(len(selected), 1)
-        patterns = [line.strip() for line in selected[0].splitlines()
-                    if 'mosaic-ui-targeted' in line]
-        with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
-            run = root / 'mosaic-ui-targeted/M-TEST-001/real-time/after/session'
-            native = run / 'native'
-            native.mkdir(parents=True)
-            for name in ('matron.log', 'crone.log', 'cleanup.json',
-                         'native-events.jsonl'):
-                (native / name).write_text(name)
-            for folder in ('code', 'data'):
-                path = run / folder
-                path.mkdir()
-                (path / 'private.json').write_text('private')
-            for folder in ('generated-project', 'pre-policy-seed'):
-                path = run / folder
-                path.mkdir()
-                (path / 'autosave.ptn').write_text('generated fixture')
-                (path / 'autosave.pset').write_text('generated numeric fixture')
-            actual = selected_files(patterns, root)
-            prefix = 'mosaic-ui-targeted/M-TEST-001/real-time/after/session/'
-            self.assertTrue({prefix + 'native/' + name for name in
-                             ('matron.log', 'crone.log', 'cleanup.json',
-                              'native-events.jsonl')} <= actual)
-            self.assertEqual({name for name in actual if name.endswith('autosave.ptn')},
-                             {prefix + 'generated-project/autosave.ptn',
-                              prefix + 'pre-policy-seed/autosave.ptn'})
-            self.assertFalse(any(name.endswith('autosave.pset') for name in actual))
-            self.assertFalse(any('/code/' in name or '/data/' in name
-                                 for name in actual))
+        source_patterns = [line.strip() for line in selected[0].splitlines()
+                           if 'mosaic-ui-targeted' in line]
+        for historical in (False, True):
+            with self.subTest(historical=historical), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                upload_root = ('mosaic-ui-targeted-historical' if historical
+                               else 'mosaic-ui-targeted')
+                patterns = [resolve_historical_expression(pattern, historical)
+                            for pattern in source_patterns]
+                run = root / upload_root / 'M-TEST-001/real-time/after/session'
+                native = run / 'native'
+                native.mkdir(parents=True)
+                for name in ('matron.log', 'crone.log', 'cleanup.json',
+                             'native-events.jsonl'):
+                    (native / name).write_text(name)
+                for folder in ('code', 'data'):
+                    path = run / folder
+                    path.mkdir()
+                    (path / 'private.json').write_text('private')
+                for folder in ('generated-project', 'pre-policy-seed'):
+                    path = run / folder
+                    path.mkdir()
+                    (path / 'autosave.ptn').write_text('generated fixture')
+                    (path / 'autosave.pset').write_text('generated numeric fixture')
+                actual = selected_files(patterns, root)
+                prefix = upload_root + '/M-TEST-001/real-time/after/session/'
+                self.assertTrue({prefix + 'native/' + name for name in
+                                 ('matron.log', 'crone.log', 'cleanup.json',
+                                  'native-events.jsonl')} <= actual)
+                self.assertEqual({name for name in actual if name.endswith('autosave.ptn')},
+                                 {prefix + 'generated-project/autosave.ptn',
+                                  prefix + 'pre-policy-seed/autosave.ptn'})
+                self.assertFalse(any(name.endswith('autosave.pset') for name in actual))
+                self.assertFalse(any('/code/' in name or '/data/' in name
+                                     for name in actual))
 
     def test_uploads_fractional_clock_input_evidence(self):
         workflow = WORKFLOW.read_text()

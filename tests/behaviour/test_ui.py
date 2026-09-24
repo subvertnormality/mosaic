@@ -2168,6 +2168,26 @@ class UiObservationTests(unittest.TestCase):
 
 
 class MigrationGateTests(unittest.TestCase):
+    def test_cli_rejects_lane_override_that_disagrees_with_directory(self):
+        from ui_migration_gate import main
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "controlled"
+            path.mkdir()
+            with self.assertRaises(SystemExit) as raised:
+                main([str(path), "--lane", "real-time"])
+        self.assertEqual(raised.exception.code, 2)
+
+    def test_cli_accepts_lane_matching_directory(self):
+        from ui_migration_gate import main
+
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "controlled"
+            path.mkdir()
+            with self.assertRaises(SystemExit) as raised:
+                main([str(path), "--lane", "controlled"])
+        self.assertEqual(raised.exception.code, 1)
+
     def test_normalize_removes_monotonic_origin_recursively(self):
         from ui_migration_gate import normalize_recipe
 

@@ -88,6 +88,18 @@ def source_state(root=REPO,exclude_runner=False):
     if exclude_runner:state.update(files=files,runner_sha256=sha((root/RUNNER).read_bytes()))
     return state
 
+def runtime_source_state(emulator,norns):
+    """Capture the emulator checkout and the norns Lua tree used by a suite run."""
+    emulator=Path(emulator).resolve();norns=Path(norns).resolve()
+    return dict(emulator=source_state(emulator),
+                norns_source=dict(path=str(norns),revision=git('rev-parse','HEAD',cwd=norns).strip(),
+                                  lua_tree_sha256=tree_digest(norns/'lua')))
+
+def same_runtime_sources(started,current):
+    """Fail closed unless both runtime identities still match their start snapshots."""
+    required=('emulator','norns_source')
+    return all(key in started and key in current and started[key]==current[key] for key in required)
+
 def same_tested_tree(recorded):
     """True if this checkout is the tree a suite report tested, runner aside."""
     if 'files' in recorded:return source_state(exclude_runner=True)['files']==recorded['files']
@@ -332,8 +344,8 @@ def run(args):
     selected=[c for c in registry if not args.case_pattern or re.search(args.case_pattern,c)]
     if not selected:raise SystemExit('Case selection is empty')
     before=source_state(exclude_runner=True)
-    identity=dict(mosaic=before,emulator=source_state(Path(args.emulator).resolve()),
-        norns_source=dict(path=str(norns),revision=git('rev-parse','HEAD',cwd=norns).strip(),lua_tree_sha256=tree_digest(norns/'lua')),
+    runtime_before=runtime_source_state(args.emulator,norns)
+    identity=dict(mosaic=before,**runtime_before,
         experimental_install=dict(path=args.experimental_install,sha256=sha(Path(args.experimental_install).read_bytes()),
             lock_sha256=json.loads(Path(args.experimental_install).read_text()).get('lock_sha256')) if args.experimental_install else None,
         argv=sys.argv[1:],python=sys.version.split()[0])
@@ -372,7 +384,10 @@ def run(args):
         if len(results)%10==0:write(out/'suite.json',dict(report,status='running',layers=layers,cases=results,not_run=not_run))
     execute_lanes(lane_jobs,budget,run_one,on_done,concurrent_lanes=not args.sequential_lanes)
     after=source_state(exclude_runner=True)
-    stable=after['files']==before['files'] and after['runner_sha256']==before['runner_sha256']
+    runtime_after=runtime_source_state(args.emulator,norns)
+    runtime_stable=same_runtime_sources(runtime_before,runtime_after)
+    stable=(after['files']==before['files'] and after['runner_sha256']==before['runner_sha256']
+            and runtime_stable)
     results.sort(key=lambda r:(args.lanes.index(r['lane']),r['case']))
     layer_rows=[r for rows in layers.values() for r in (rows if isinstance(rows,list) else [rows])]
     requirements={}
@@ -386,14 +401,15 @@ def run(args):
         layer_items=len(layer_rows),layer_items_failed=[r['name'] for r in layer_rows if r['passed'] is False],
         layer_items_not_run=[r['name'] for r in layer_rows if r['passed'] is None],
         not_run=len(not_run),required_not_run=len(required_not_run),fast_layers_skipped=args.skip_fast_layers,
-        sources_stable=stable)
+        sources_stable=stable,runtime_sources_stable=runtime_stable)
     passed=(stable and not summary['case_runs_failed'] and not summary['layer_items_failed'] and results and
             len(results)==len(jobs))
     complete=(passed and not summary['layer_items_not_run'] and not required_not_run and not args.case_pattern and
               not args.skip_fast_layers and set(args.lanes)==set(LANES))
     write(out/'suite.json',dict(report,status='finished',finished=time.strftime('%Y-%m-%dT%H:%M:%S%z'),
         passed=bool(passed),complete_regression_run=bool(complete),summary=summary,layers=layers,cases=results,
-        not_run=not_run,requirements=requirements,sources_after={k:v for k,v in after.items() if k!='files'}))
+        not_run=not_run,requirements=requirements,sources_after={k:v for k,v in after.items() if k!='files'},
+        runtime_sources_after=runtime_after))
     print(json.dumps(dict(suite=str(out/'suite.json'),passed=bool(passed),complete=bool(complete),
         failed_case_runs=len(summary['case_runs_failed']),failed_layer_items=summary['layer_items_failed'])))
     return 0 if passed else 1
@@ -414,6 +430,9 @@ def rerun(args):
     if report.get('status')!='finished':raise SystemExit('Suite has not finished')
     if not same_tested_tree(report['identity']['mosaic']):
         raise SystemExit('Tested tree differs from the suite run; rerun from the same tree')
+    runtime_before=runtime_source_state(args.emulator,report['identity']['norns_source']['path'])
+    if not same_runtime_sources(report['identity'],runtime_before):
+        raise SystemExit('Runtime sources differ from the suite run; rerun from the same sources')
     env=dict(os.environ,MONOME_EMULATOR=str(Path(args.emulator).resolve()))
     artifacts=source.parent/'serial-rerun';artifacts.mkdir(exist_ok=False)
     rows=[]
@@ -425,12 +444,16 @@ def rerun(args):
         rows.append(dict(again,first_attempt=row,first_attempt_class=kind,
                          load_sensitive=bool(again['passed']) and kind=='case',
                          startup_retry=bool(again['passed']) and kind=='native-startup'))
+    runtime_after=runtime_source_state(args.emulator,report['identity']['norns_source']['path'])
+    runtime_stable=same_runtime_sources(runtime_before,runtime_after)
     summary=dict(report['summary'],case_runs_passed=sum(r['passed'] for r in rows),
                  case_runs_failed=[dict(case=r['case'],lane=r['lane']) for r in rows if not r['passed']],
                  load_sensitive=[dict(case=r['case'],lane=r['lane']) for r in rows if r.get('load_sensitive')],
                  startup_retries=[dict(case=r['case'],lane=r['lane']) for r in rows if r.get('startup_retry')],
-                 serial_rerun_sources_stable=same_tested_tree(report['identity']['mosaic']))
+                 serial_rerun_sources_stable=same_tested_tree(report['identity']['mosaic']),
+                 serial_rerun_runtime_sources_stable=runtime_stable)
     passed=(report['summary']['sources_stable'] and summary['serial_rerun_sources_stable'] and
+            summary['serial_rerun_runtime_sources_stable'] and
             not summary['case_runs_failed'] and not summary['layer_items_failed'] and len(rows)==len(report['cases']))
     effective=dict(report,cases=rows,summary=summary,passed=bool(passed),
                    complete_regression_run=bool(passed and report.get('complete_regression_run') is not None and

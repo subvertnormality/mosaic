@@ -286,7 +286,9 @@ def main(argv=None):
     parser.add_argument("path", type=Path)
     parser.add_argument("--lane", choices=("controlled", "real-time"))
     args = parser.parse_args(argv)
-    lane = args.lane or args.path.name
+    lane = args.path.name
+    if args.lane is not None and args.lane != lane:
+        parser.error("--lane must match the lane directory name %r" % lane)
     errors = check_lane(args.path, lane)
     if errors:
         parser.exit(1, "\n".join(errors) + "\n")
