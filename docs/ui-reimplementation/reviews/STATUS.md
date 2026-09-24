@@ -35,9 +35,16 @@ changes, K2 backs out, K3 confirms, a hold shows the edit family then returns),
 are listed in
 `spec.json#/test_migration/documented_interaction_changes`.
 
-## Round 2
+## Round 2 (24 September 2026)
 
-Pending. `../tools/run_paranoia_fable.py` is set to round 2 of the same lineage.
-Run it from a clean committed checkout with the paranoia-local virtualenv Python.
+Same lineage, `model=claude-opus-5-5`, `effort=high`, against `fe6dc8c9`. The
+result is `plan-round2-claude-opus-5-5.md`. It raised no findings, and structural
+debt is 0 open. Convergence is blocked only by:
+
+- five external norns claims left unverified. Their quoted sources support them:
+  monome docs, and `lua/core/menu.lua` `_norns.key` for K1;
+- a required cold final regression pass.
+
+No patch was proposed.
 
 `LOCAL-PREFLIGHT.md` is an independent, explicitly non-Fable audit.

@@ -21,7 +21,7 @@ args={
   'Do not modify files.'),
  'stakes':'Grid-first norns sequencer. This is a planning review. A lower-power executor should be able to implement without musical regressions or missing UI functions. No production UI changes are authorized in this review.',
  'engine':'claude',
- 'model':'claude-fable-5-1',
+ 'model':'claude-opus-5-5',
  'effort':'high',
  'lineage':'mosaic-ui-reimplementation-20260924',
  'round':2,
@@ -38,5 +38,5 @@ except Exception as exc:
 if result.lstrip().startswith('[paranoia-local error]'):
  print('PARANOIA DID NOT RUN: '+result.strip(),file=sys.stderr,flush=True)
  raise SystemExit(2)
-(OUT/'fable-plan-round1.md').write_text(result,encoding='utf8')
-print('Saved '+str(OUT/'fable-plan-round1.md'),flush=True)
+(OUT/f"plan-round{args['round']}-{args['model']}.md").write_text(result,encoding='utf8')
+print('Saved '+str(OUT/f"plan-round{args['round']}-{args['model']}.md"),flush=True)

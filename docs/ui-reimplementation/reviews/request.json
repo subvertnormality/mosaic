@@ -1,13 +1,13 @@
 {
-  "repo_path": "/mnt/c/Users/andy/Documents/ChatGPT/mosaic",
-  "plan_path": "/mnt/c/Users/andy/Documents/ChatGPT/mosaic/docs/ui-reimplementation/IMPLEMENTATION.md",
+  "repo_path": "/home/andy/mosaic-review",
+  "plan_path": "/home/andy/mosaic-review/docs/ui-reimplementation/IMPLEMENTATION.md",
   "context": "Review the complete Mosaic UI migration contract, not an implementation. Read docs/ui-reimplementation/README.md and spec.json, including source_route_map, feature_action_edges, input_algebra, grid ownership, view_model, acceptance_matrix and source-inventory.json. Inspect actual README.md and current Lua owners. Assume docs/testing/ui-abstraction-plan.md has already been completed, as the user directed. Focus on functions silently lost, wrong source route translations, invalid input priority, grid-first fidelity, native ownership, dynamic fields, scope/return behavior, overlap and the feasibility of implementing screens from proto-code. Every material finding should have a minimal suggested patch to the plan/spec, with source evidence. Do not modify files.",
   "stakes": "Grid-first norns sequencer. This is a planning review. A lower-power executor should be able to implement without musical regressions or missing UI functions. No production UI changes are authorized in this review.",
   "engine": "claude",
-  "model": "claude-fable-5-1",
+  "model": "claude-opus-5-5",
   "effort": "high",
   "lineage": "mosaic-ui-reimplementation-20260924",
-  "round": 1,
+  "round": 2,
   "class_closure": true,
   "propose_patch": true
 }
