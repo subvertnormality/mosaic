@@ -1,0 +1,384 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Wrap param slides",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Wrap param slides",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          62,
+          117
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          64,
+          107
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          65,
+          97
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          127
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "slide-musical-time",
+    "from_value": 24,
+    "to_value": 96,
+    "step_distance": 2,
+    "off_middle": false,
+    "step_local": false,
+    "swing": null,
+    "shuffle": null,
+    "clock_ratio": "x5.3",
+    "planned_onsets": [
+      0.0,
+      0.027777777777777776,
+      0.0625,
+      0.09027777777777778,
+      0.125,
+      0.1527777777777778,
+      0.1875,
+      0.2152777777777778,
+      0.25,
+      0.2777777777777778
+    ],
+    "checks": [
+      {
+        "cycle": 0,
+        "elapsed": 0.055376882,
+        "value": 88,
+        "ideal": 87.794168064,
+        "error": 0.2058319359999956
+      },
+      {
+        "cycle": 0,
+        "elapsed": 0.062969746,
+        "value": 96,
+        "ideal": 96,
+        "error": 0
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.047860321,
+        "value": 40,
+        "ideal": 40.864910208000005,
+        "error": 0.8649102080000048
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.061910442,
+        "value": 24,
+        "ideal": 24.679170815999996,
+        "error": 0.6791708159999956
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.041715983,
+        "value": 72,
+        "ideal": 72.056812416,
+        "error": 0.056812415999999644
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.062667997,
+        "value": 96,
+        "ideal": 96,
+        "error": 0
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.034095758,
+        "value": 56,
+        "ideal": 56.721686784000006,
+        "error": 0.7216867840000063
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.06196248,
+        "value": 24,
+        "ideal": 24.619223039999994,
+        "error": 0.6192230399999943
+      }
+    ],
+    "passed": true
+  },
+  {
+    "kind": "slide-timing-samples",
+    "samples": [
+      {
+        "cycle": 0,
+        "elapsed": 0.055376882,
+        "value": 88,
+        "ideal": 87.794168064,
+        "error": 0.2058319359999956
+      },
+      {
+        "cycle": 0,
+        "elapsed": 0.062969746,
+        "value": 96,
+        "ideal": 96,
+        "error": 0
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.047860321,
+        "value": 40,
+        "ideal": 40.864910208000005,
+        "error": 0.8649102080000048
+      },
+      {
+        "cycle": 0,
+        "wrapped": true,
+        "elapsed": 0.061910442,
+        "value": 24,
+        "ideal": 24.679170815999996,
+        "error": 0.6791708159999956
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.041715983,
+        "value": 72,
+        "ideal": 72.056812416,
+        "error": 0.056812415999999644
+      },
+      {
+        "cycle": 1,
+        "elapsed": 0.062667997,
+        "value": 96,
+        "ideal": 96,
+        "error": 0
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.034095758,
+        "value": 56,
+        "ideal": 56.721686784000006,
+        "error": 0.7216867840000063
+      },
+      {
+        "cycle": 1,
+        "wrapped": true,
+        "elapsed": 0.06196248,
+        "value": 24,
+        "ideal": 24.619223039999994,
+        "error": 0.6192230399999943
+      }
+    ]
+  }
+]
