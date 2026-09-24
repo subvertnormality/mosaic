@@ -363,7 +363,8 @@ class UiMapTests(unittest.TestCase):
         module = ast.parse(source)
         names = {
             "autosave_restart", "route_fixed_note", "toolkit_parameter_group",
-            "macro_route_clear", "held_macro_rebind", "pulse_lfo", "phrase_timing",
+            "macro_route_clear", "held_macro_rebind", "pulse_lfo", "pulse_lfo_real_time",
+            "phrase_timing",
             "restart_phase_edges", "midi_clock_transport", "live_clock_handoff",
             "reverse_live_clock_handoff",
         }

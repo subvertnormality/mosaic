@@ -1617,24 +1617,65 @@ def held_macro_rebind(c):
     c.ui.turn(3,100);menu_value(c,'1.00');c.ui.press_key(1)
     c.playback([(1,[144,127,v]) for v in (127,117,107,97)])
 
+def pulse_lfo_real_time(c,notes):
+    # Real time cannot place Play exactly: the press follows unmeasured observe
+    # and action round trips, and Play starts on the next clock pulse. So place
+    # it as closely as possible, then MEASURE each onset's song beat from its
+    # native MIDI timestamp against the native (beats, monotonic_ns) clock read
+    # at the fixed 90BPM, and derive its pitch from the toolkit rule (phase =
+    # beats/4 mod 1; high, fixed note127, while phase<0.5). An onset within one
+    # 24PPQN mod sample plus 10ms of a flip cannot be decided, so re-place Play
+    # (at most three attempts, all recorded); undecided after three fails.
+    import math,time
+    guard=1/24+.01*1.5;lead=0;attempts=[]
+    for attempt in range(3):
+        state=c.snapshot();clock=state['diagnostics'];beat=clock['beats'];before=state['midi_count']
+        target=4*(math.floor(beat/4)+1)+.125;open_loop=max(0,(target-lead-beat)*2/3)
+        # Sleep from the clock read's own native timestamp (host and native share
+        # CLOCK_MONOTONIC), not from observe's return; bounded by the open-loop wait.
+        c.elapse(min(open_loop,max(0,(clock['monotonic_ns']-time.monotonic_ns())/1e9+open_loop)))
+        press=c.ui.control_edge('play_stop',True);c.ui.control_edge('play_stop',False)
+        def onsets(s):return [m for m in s['midi'] if m['index']>before and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
+        emitted=onsets(c.wait(lambda s:len(onsets(s))>=16*2+1,8))
+        c.ui.tap_control('play_stop');c.wait(lambda s:s['midi_capture']['outstanding']==[])
+        actual=[(m['port'],m['bytes']) for m in emitted];expected=[];rows=[]
+        for i,m in enumerate(emitted):
+            at=beat+(m['monotonic_ns']-clock['monotonic_ns'])*1.5e-9;phase=at/4%1;margin=min(at%2,2-at%2)
+            note,velocity=notes[i%len(notes)];expected.append((1,[144,127 if phase<.5 else note,velocity]))
+            rows.append(dict(index=i,beat=at,lfo_phase=phase,flip_margin_beats=margin,expected_pitch=expected[-1][1][1],ambiguous=margin<=guard))
+        # A decided onset with the wrong pitch fails even when another is undecided.
+        ambiguous=any(r['ambiguous'] for r in rows);wrong=[r['index'] for r,a,e in zip(rows,actual,expected) if a!=e and not r['ambiguous']]
+        attempts.append(dict(attempt=attempt+1,clock_beats=beat,clock_monotonic_ns=clock['monotonic_ns'],target_beat=target,lead_beats=lead,
+            press_native=(press or {}).get('native'),start_beat=rows[0]['beat'],guard_beats=guard,ambiguous=ambiguous,wrong_decided=wrong,notes=rows,actual=actual))
+        if wrong or not ambiguous:break
+        # Correct the next placement by this attempt's steady-grid error (mod1/4 beat).
+        lead+=(rows[1]['beat']-.25-target+.125)%.25-.125
+    c.results.append(dict(kind='midi',expected=expected,actual=actual,complete_cycles=2,start_beat=rows[0]['beat'],decided=not ambiguous,placement_attempts=attempts))
+    assert not wrong,dict(expected=expected,actual=actual,wrong_decided=wrong)
+    assert not ambiguous,'Every Play placement left an onset within one mod sample of an LFO flip'
+    assert actual==expected,dict(expected=expected,actual=actual)
+    return emitted
+
 def pulse_lfo(c):
     route_fixed_note(c,'lfo_1')
     toolkit_parameter_group(c,'lfo_1');c.ui.expect_native_menu_label('mod_clocked');c.ui.press_key(3)
     c.ui.turn(2,1);c.ui.expect_native_menu_label('mod_beats');c.ui.turn(3,9)
     c.ui.turn(2,2);c.ui.expect_native_menu_label('mod_shape');c.ui.turn(3,2);c.ui.press_key(1)
-    # A4-beat pulse with50% width is high for8 sixteenth notes and low for8.
-    # Place playback safely inside the high half using a verified native clock
-    # read (not Mosaic state); E/R jitter and the24PPQN mod sample cannot cross
-    # a half-cycle boundary at this1/8-beat offset.
     import math
-    state=c.snapshot();beat=state['diagnostics']['beats']
-    target=4*(math.floor(beat/4)+1)+.125
-    c.elapse((target-beat)*2/3)
-    expected=[]
     notes=[(60,127),(62,117),(64,107),(65,97)]
-    for i in range(16):
-        note,velocity=notes[i%4];expected.append((1,[144,127 if i<8 else note,velocity]))
-    emitted=c.playback(expected,cycles=2,timeout=8)
+    if c.clock_mode=='real-time':emitted=pulse_lfo_real_time(c,notes)
+    else:
+        # A4-beat pulse with50% width is high for8 sixteenth notes and low for8.
+        # Place playback safely inside the high half using a verified native clock
+        # read (not Mosaic state); E/R jitter and the24PPQN mod sample cannot cross
+        # a half-cycle boundary at this1/8-beat offset.
+        state=c.snapshot();beat=state['diagnostics']['beats']
+        target=4*(math.floor(beat/4)+1)+.125
+        c.elapse((target-beat)*2/3)
+        expected=[]
+        for i in range(16):
+            note,velocity=notes[i%4];expected.append((1,[144,127 if i<8 else note,velocity]))
+        emitted=c.playback(expected,cycles=2,timeout=8)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     # Opening-pulse phase is separately exposed by M-LEN-001. Here check every
     # subsequent onset plus the full LFO period against90BPM, not merely ratios.
