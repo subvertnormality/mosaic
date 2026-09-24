@@ -11,10 +11,11 @@ their statements about allowlist membership describe the state at the time.
 
 Acceptance remains open: recent contract-owner extractions need source-SHA-bound
 before/after evidence where the existing pairs predate the move, and panic-navigation
-cases need paired evidence. An inventory audit also found ordinary cases without
-committed migration pairs in changed owner modules. At least 48 `cases.py` cases
-have directly changed run bodies and lack pairs; the remaining missing cases are
-being checked for actual migration scope. A passing targeted CI report is partial
+cases need paired evidence. An inventory audit also found 219 ordinary `cases.py`-owned
+cases without committed migration pairs. At least 48 have directly changed run bodies;
+shared-helper and cross-module reachability are being checked for the rest. Section 6's
+module-level rule remains the acceptance criterion, including cases with unchanged
+bodies in a migrated owner module. A passing targeted CI report is partial
 evidence, not a substitute for the complete behaviour inventory. The actual
 page-order drift drill and its `docs/testing/ui-migration-drill.json` report have
 not been completed. Full validation and CI on the current branch head remain
