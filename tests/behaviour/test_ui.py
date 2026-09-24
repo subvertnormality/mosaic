@@ -2427,27 +2427,13 @@ class RecordingLifetimeInputTests(unittest.TestCase):
 
 class MemoryUiMapTests(unittest.TestCase):
     def test_memory_counter_map_locks_captured_render_and_disjoint_geometry(self):
-        from ui_map import SCREEN
+        """Memory's Position counter is the live detail row: four disjoint row bands."""
+        from frame_oracle import DETAIL_ROWS
 
-        self.assertEqual(SCREEN["memory_position"], {
-            "frame_width": 128,
-            "frame_height": 64,
-            "channels": 3,
-            "bytes_per_pixel": 4,
-            "font_size": 10,
-            "antialias": 1,
-            "level": 15,
-            "bands": {
-                "current": {
-                    "left": 0, "right": 16, "top": 13, "bottom": 26,
-                    "x": 0, "baseline": 23,
-                },
-                "total": {
-                    "left": 0, "right": 16, "top": 39, "bottom": 52,
-                    "x": 0, "baseline": 49,
-                },
-            },
-        })
+        self.assertEqual(DETAIL_ROWS, (27, 36, 45, 54))
+        bands = [(y - 7, y + 2) for y in DETAIL_ROWS]
+        self.assertTrue(all(0 <= top < bottom <= 64 for top, bottom in bands))
+        self.assertTrue(all(first[1] <= second[0] for first, second in zip(bands, bands[1:])))
 
     def test_project_menu_map_locks_distinct_save_and_normal_rows(self):
         from ui_map import SCREEN
@@ -2489,70 +2475,93 @@ class MemoryUiVerbTests(unittest.TestCase):
 
     @staticmethod
     def frame_bytes():
-        from ui_map import SCREEN
-
-        data = SCREEN["memory_position"]
-        return data["frame_width"] * data["frame_height"] * data["bytes_per_pixel"]
+        return 128 * 64 * 4
 
     def test_memory_position_waits_once_and_keeps_result_shape(self):
         from ui import Ui
-        from ui_map import SCREEN
 
         payload = bytes(self.frame_bytes())
         driver = self.Driver(payload)
         ui = Ui(driver)
-        with patch("frame_oracle.render", return_value=payload) as render:
+        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
             ui.expect_memory_position(2, 5)
-        bands = SCREEN["memory_position"]["bands"]
-        self.assertEqual(render.call_args.args[0], [
-            [bands["current"]["x"], bands["current"]["baseline"], 15, "2"],
-            [bands["total"]["x"], bands["total"]["baseline"], 15, "5"],
+            ui.expect_memory_position(3, 5, channel=2)
+        state = {"frame": {"pixels_base64": base64.b64encode(payload).decode()}}
+        self.assertEqual(oracle.call_args_list, [
+            unittest.mock.call(state, "detail", "Position", "2 of 5"),
+            unittest.mock.call(state, "detail", "Position", "3 of 5"),
         ])
-        self.assertEqual(render.call_args.kwargs, {"font_size": 10, "antialias": 1})
-        self.assertEqual(driver.calls, [("wait",)])
-        self.assertEqual(driver.results, [{
-            "kind": "memory-position", "current": 2,
-            "total": 5, "frame_matched": True,
-        }])
+        self.assertEqual(driver.calls, [("wait",), ("wait",)])
+        self.assertEqual(driver.results, [
+            {"kind": "memory-position", "current": 2, "total": 5, "frame_matched": True},
+            {"kind": "memory-position", "current": 3, "total": 5, "frame_matched": True,
+             "channel": 2},
+        ])
+        driver = self.Driver(payload)
+        with patch("frame_oracle.selected_field_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_memory_position(2, 5)
+        self.assertEqual(driver.results, [])
 
     def test_memory_position_wait_only_returns_state_without_a_result(self):
         from ui import Ui
 
         payload = bytes(self.frame_bytes())
         driver = self.Driver(payload)
-        with patch("frame_oracle.render", return_value=payload):
+        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
             state = Ui(driver).wait_memory_position(2, 5)
+        oracle.assert_called_once_with(state, "detail", "Position", "2 of 5")
         self.assertEqual(state["frame"]["pixels_base64"],
                          base64.b64encode(payload).decode())
         self.assertEqual(driver.calls, [("wait",)])
         self.assertEqual(driver.results, [])
+        driver = self.Driver(payload)
+        with patch("frame_oracle.selected_field_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).wait_memory_position(2, 5)
+        self.assertEqual(driver.results, [])
 
     def test_memory_position_ignores_outside_pixels(self):
+        """A rendered Position row matches at every detail baseline; pixels outside it are ignored."""
+        from frame_oracle import DETAIL_ROWS, _detail_row
         from ui import Ui
 
-        expected = bytes(self.frame_bytes())
-        outside = bytearray(expected)
-        outside[0] = 7
-        driver = self.Driver(bytes(outside))
-        with patch("frame_oracle.render", return_value=expected):
-            Ui(driver).expect_memory_position(2, 2)
-        self.assertTrue(driver.results[0]["frame_matched"])
+        for y in DETAIL_ROWS:
+            with self.subTest(baseline=y):
+                expected = _detail_row("Position", "2 of 5", y)
+                outside = bytearray(expected)
+                row_top = 0 if y - 7 > 0 else y + 2
+                outside[(row_top * 128 + 5) * 4] ^= 0x7f
+                for payload in (expected, bytes(outside)):
+                    driver = self.Driver(payload)
+                    Ui(driver).expect_memory_position(2, 5)
+                    self.assertEqual(driver.results, [{
+                        "kind": "memory-position", "current": 2,
+                        "total": 5, "frame_matched": True,
+                    }])
+                # The same frame is not another count.
+                with self.assertRaises(AssertionError):
+                    Ui(self.Driver(expected)).expect_memory_position(2, 6)
 
     def test_memory_position_rejects_a_changed_pixel_in_each_counter_band(self):
+        """One changed pixel in the row's label or its "2 of 5" value fails closed."""
+        from frame_oracle import DETAIL_ROWS, _detail_row
         from ui import Ui
-        from ui_map import SCREEN
 
-        data = SCREEN["memory_position"]
-        expected = bytes(self.frame_bytes())
-        for band_name, band in data["bands"].items():
-            with self.subTest(band=band_name):
-                changed = bytearray(expected)
-                index = ((band["top"] * 128 + band["left"]) * 4)
-                changed[index] = 7
-                driver = self.Driver(bytes(changed))
-                with patch("frame_oracle.render", return_value=expected):
+        for y in DETAIL_ROWS:
+            expected = _detail_row("Position", "2 of 5", y)
+            lit = [(row, col) for row in range(y - 7, y + 2) for col in range(128)
+                   if expected[(row * 128 + col) * 4]]
+            label = next(cell for cell in lit if 7 <= cell[1] < 64)
+            value = next(cell for cell in lit if cell[1] >= 64)
+            for part, (row, col) in (("label", label), ("value", value)):
+                with self.subTest(baseline=y, part=part):
+                    changed = bytearray(expected)
+                    changed[(row * 128 + col) * 4] ^= 0x7f
+                    driver = self.Driver(bytes(changed))
                     with self.assertRaises(AssertionError):
-                        Ui(driver).expect_memory_position(2, 2)
+                        Ui(driver).expect_memory_position(2, 5)
+                    self.assertEqual(driver.results, [])
 
     def test_record_key_keeps_delay_inside_held_step(self):
         from ui import Ui
