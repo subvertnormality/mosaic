@@ -18,6 +18,14 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_fast_external_acquisition_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.fast_acquisition as owner
+
+        run = CASES['M-SYNC-008']['run']
+        self.assertIs(run, owner.fast_acquisition)
+        self.assertEqual(run.__module__, owner.__name__)
+
     def test_external_cold_start_contract_has_independent_exact_owner(self):
         import ast
         import inspect

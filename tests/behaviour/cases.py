@@ -2636,7 +2636,7 @@ from repeated_external_start import repeated_external_start
 
 from contract.acquisition_stop import acquisition_stop
 
-from fast_acquisition import fast_acquisition
+from contract.fast_acquisition import fast_acquisition
 
 from master_clock import master_clock
 
