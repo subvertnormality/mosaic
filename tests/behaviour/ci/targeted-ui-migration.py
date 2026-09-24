@@ -8,6 +8,7 @@ Every failed run and gate still leaves its original manifest and recipe/result f
 import argparse
 import ast
 import hashlib
+import importlib.util
 import json
 import os
 import re
@@ -51,6 +52,88 @@ def behaviour_source_hashes(root):
     """Match run.py's source inventory for the checkout before an emulator run."""
     return {path.relative_to(root).as_posix(): sha256(path)
             for path in sorted((root / "tests/behaviour").rglob("*.py"))}
+
+
+def manifest_behaviour_source_hashes(root):
+    """Mirror only statically recognized source-hash inventories used by run.py."""
+    run_path = root / "tests/behaviour/run.py"
+    require(run_path.is_file(), "source checkout lacks tests/behaviour/run.py")
+    tree = ast.parse(run_path.read_text())
+    assignments = [node.value for node in ast.walk(tree)
+                   if isinstance(node, ast.keyword)
+                   and node.arg == "behaviour_source_sha256"]
+    require(len(assignments) == 1,
+            "source run.py has no unique behaviour source hash inventory")
+    inventory = assignments[0]
+
+    def is_name(node, name):
+        return isinstance(node, ast.Name) and node.id == name
+
+    def valid_inventory_expression(node, method, path_name, root_name, path_constructor):
+        if not isinstance(node, ast.DictComp) or len(node.generators) != 1:
+            return False
+        generator = node.generators[0]
+        if not is_name(generator.target, path_name):
+            return False
+        key = node.key
+        if not (isinstance(key, ast.Call) and isinstance(key.func, ast.Attribute)
+                and key.func.attr == "as_posix" and not key.args
+                and isinstance(key.func.value, ast.Call)
+                and isinstance(key.func.value.func, ast.Attribute)
+                and key.func.value.func.attr == "relative_to"
+                and is_name(key.func.value.func.value, path_name)
+                and len(key.func.value.args) == 1
+                and is_name(key.func.value.args[0], root_name)):
+            return False
+        value = node.value
+        if not (isinstance(value, ast.Call) and isinstance(value.func, ast.Name)
+                and value.func.id == "digest" and len(value.args) == 1
+                and is_name(value.args[0], path_name)):
+            return False
+        iterator = generator.iter
+        if not (isinstance(iterator, ast.Call) and isinstance(iterator.func, ast.Name)
+                and iterator.func.id == "sorted" and len(iterator.args) == 1):
+            return False
+        glob = iterator.args[0]
+        if not (isinstance(glob, ast.Call) and isinstance(glob.func, ast.Attribute)
+                and glob.func.attr == method and len(glob.args) == 1
+                and isinstance(glob.args[0], ast.Constant)
+                and glob.args[0].value == "*.py"):
+            return False
+        directory = glob.func.value
+        if path_constructor:
+            if not (isinstance(directory, ast.BinOp) and isinstance(directory.op, ast.Div)
+                    and isinstance(directory.left, ast.Call)
+                    and isinstance(directory.left.func, ast.Name)
+                    and directory.left.func.id == "Path" and len(directory.left.args) == 1
+                    and is_name(directory.left.args[0], root_name)
+                    and isinstance(directory.right, ast.Constant)
+                    and directory.right.value == "tests/behaviour"):
+                return False
+            return True
+        return (isinstance(directory, ast.BinOp) and isinstance(directory.op, ast.Div)
+                and is_name(directory.left, root_name)
+                and isinstance(directory.right, ast.Constant)
+                and directory.right.value == "tests/behaviour")
+
+    if isinstance(inventory, ast.Call) and isinstance(inventory.func, ast.Name) \
+            and inventory.func.id == "behaviour_source_hashes" and len(inventory.args) == 1:
+        functions = [node for node in tree.body if isinstance(node, ast.FunctionDef)
+                     and node.name == "behaviour_source_hashes"]
+        require(len(functions) == 1 and len(functions[0].body) == 1
+                and isinstance(functions[0].body[0], ast.Return)
+                and valid_inventory_expression(functions[0].body[0].value,
+                                               "rglob", "path", "repo", True),
+                "unrecognized recursive behaviour source hash schema")
+        return behaviour_source_hashes(root), "recursive-python-v1"
+
+    if isinstance(inventory, ast.DictComp):
+        require(valid_inventory_expression(inventory, "glob", "p", "REPO", False),
+                "unrecognized shallow behaviour source hash schema")
+        paths = sorted((root / "tests/behaviour").glob("*.py"))
+        return ({path.relative_to(root).as_posix(): sha256(path) for path in paths},
+                "top-level-python-v1")
+    raise ValueError("unrecognized behaviour source hash schema in source run.py")
 
 
 def cases_from_input(raw):
@@ -234,7 +317,7 @@ def tree_entries(root, *paths):
     return entries
 
 
-def check_source_delta(before, after, cases):
+def check_source_delta(before, after, cases, *, historical=False):
     production_before = tree_entries(before, "mosaic.lua", "lib", ".gitmodules",
                                      "README.md", "cheat_sheet.html")
     production_after = tree_entries(after, "mosaic.lua", "lib", ".gitmodules",
@@ -249,9 +332,10 @@ def check_source_delta(before, after, cases):
             + ", ".join(changed_production))
     before_tests = tree_entries(before, "tests/behaviour")
     after_tests = tree_entries(after, "tests/behaviour")
-    for path in PINNED_GATE_PATHS:
-        require(path in before_tests and before_tests[path] == after_tests.get(path),
-                "targeted gate/runner differs or is absent between source commits: " + path)
+    if not historical:
+        for path in PINNED_GATE_PATHS:
+            require(path in before_tests and before_tests[path] == after_tests.get(path),
+                    "targeted gate/runner differs or is absent between source commits: " + path)
     selected_sources = selected_case_modules(before, cases) \
         | selected_case_modules(after, cases)
     allowed = UI_SOURCE_ALLOWLIST | selected_sources
@@ -267,7 +351,8 @@ def check_source_delta(before, after, cases):
         require(bool(set(changed_tests) & ui_sources),
                 "UI unit tests changed without selected UI source")
         allowed.update(ui_tests)
-    unexpected = sorted(set(changed_tests) - allowed)
+    permitted = allowed | (set(PINNED_GATE_PATHS) if historical else set())
+    unexpected = sorted(set(changed_tests) - permitted)
     require(not unexpected, "unrelated behaviour harness/fixture source changed: "
             + ", ".join(unexpected))
     for side, entries in (("before", before_tests), ("after", after_tests)):
@@ -275,8 +360,45 @@ def check_source_delta(before, after, cases):
                         and entries[path][0] not in ("100644", "100755"))
         require(not unsafe, "%s changed behaviour source is not a regular file: %s" %
                 (side, ", ".join(unsafe)))
-    return dict(production_tree_unchanged=True, changed_behaviour_paths=changed_tests,
-                allowed_behaviour_paths=sorted(allowed))
+    result = dict(production_tree_unchanged=True, changed_behaviour_paths=changed_tests,
+                  allowed_behaviour_paths=sorted(allowed))
+    if historical:
+        result["historical_tooling_paths"] = sorted(PINNED_GATE_PATHS)
+    return result
+
+
+def historical_tooling_identity(root, expected):
+    """Verify the clean pinned checkout that supplies the current comparison gate."""
+    actual = source_identity(root, expected)
+    hashes = {}
+    for relative in PINNED_GATE_PATHS:
+        path = root / relative
+        require(path.is_file(), "pinned tooling file is missing: " + relative)
+        require(not path.is_symlink(), "pinned tooling file is a symlink: " + relative)
+        entry = tree_entries(root, relative).get(relative)
+        require(entry is not None and entry[0] in ("100644", "100755")
+                and entry[1] == "blob",
+                "pinned tooling file is not a regular tracked file: " + relative)
+        worktree_blob = subprocess.check_output(
+            ["git", "hash-object", "--", str(path)], cwd=root, text=True).strip()
+        require(worktree_blob == entry[2],
+                "pinned tooling file differs from committed blob: " + relative)
+        hashes[relative] = sha256(path)
+    return dict(sha=actual, sha256=hashes)
+
+
+def load_historical_gate(root):
+    """Load the current gate from the already verified tooling checkout."""
+    gate_path = root / "tests/behaviour/ui_migration_gate.py"
+    spec = importlib.util.spec_from_file_location(
+        "mosaic_pinned_ui_migration_gate", gate_path)
+    require(spec is not None and spec.loader is not None,
+            "cannot load pinned UI migration gate")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    require(callable(getattr(module, "check_session_roots", None)),
+            "pinned UI migration gate has no check_session_roots")
+    return module.check_session_roots
 
 
 def require_no_symlink_ancestors(path):
@@ -367,6 +489,24 @@ def execute(args):
     before_sha = source_identity(args.before, args.before_sha)
     after_sha = source_identity(args.after, args.after_sha)
     require(before_sha != after_sha, "before and after commits must differ")
+    historical = bool(getattr(args, "historical_source", False))
+    tooling_root = getattr(args, "tooling_root", None)
+    tooling_sha = getattr(args, "tooling_sha", None)
+    tooling_identity = None
+    gate_check = check_session_roots
+    if historical:
+        require(tooling_root is not None and tooling_sha is not None,
+                "historical-source mode requires --tooling-root and --tooling-sha")
+        require(tooling_root.resolve() not in (args.before.resolve(), args.after.resolve()),
+                "historical tooling checkout must be distinct from source checkouts")
+        tooling_identity = historical_tooling_identity(tooling_root, tooling_sha)
+        require(sha256(Path(__file__).resolve())
+                == tooling_identity["sha256"][PINNED_GATE_PATHS[1]],
+                "running targeted gate/runner differs from pinned tooling checkout")
+        gate_check = load_historical_gate(tooling_root)
+    else:
+        require(tooling_root is None and tooling_sha is None,
+                "--tooling-root and --tooling-sha require --historical-source")
     require(args.profile in ("base-midi", "midi-modulation"),
             "unsupported targeted profile: " + args.profile)
     if args.profile == "midi-modulation":
@@ -385,7 +525,8 @@ def execute(args):
     case_lanes = selected_case_lanes(args.before, args.after, cases)
     report_lanes = [lane for lane, _ in LANES
                     if any(lane in selected for selected in case_lanes.values())]
-    source_delta = check_source_delta(args.before, args.after, cases)
+    source_delta = check_source_delta(args.before, args.after, cases,
+                                     historical=historical)
     require(args.install.is_file(), "missing qualified controlled-time installation")
     emulator_sha = subprocess.check_output(
         ["git", "rev-parse", "HEAD"], cwd=args.emulator, text=True).strip()
@@ -394,6 +535,8 @@ def execute(args):
                   emulator_sha=emulator_sha, selected_cases=cases,
                   source_delta=source_delta,
                   lanes=report_lanes, cases=[], passed=False)
+    if historical:
+        report["tooling"] = tooling_identity
     try:
         for case in cases:
             row = dict(case=case, lanes=[])
@@ -408,13 +551,15 @@ def execute(args):
                     output = args.output / case / lane / side
                     try:
                         source_identity(source, revision)
-                        expected_behaviour_source_sha256 = behaviour_source_hashes(source)
+                        (expected_behaviour_source_sha256,
+                         source_hash_schema) = manifest_behaviour_source_hashes(source)
                         status, manifest = run_one(source, case, lane, output, args.install,
                                                    args.profile, args.mod_code_root,
                                                    args.mod_patches)
                         lane_row["runs"][side] = dict(returncode=status,
                             manifest=str(manifest.relative_to(args.output)),
-                            manifest_sha256=sha256(manifest))
+                            manifest_sha256=sha256(manifest),
+                            behaviour_source_hash_schema=source_hash_schema)
                         require(status == 0, "%s run exited %d" % (side, status))
                         verified_manifest(
                             manifest, case, lane, revision, args.profile,
@@ -425,8 +570,20 @@ def execute(args):
                     except (ValueError, OSError, subprocess.SubprocessError) as error:
                         lane_row["gate_errors"].append("%s: %s" % (side, error))
                 if len(roots) == 2:
-                    lane_row["gate_errors"].extend(check_session_roots(
-                        roots["before"], roots["after"], gate_lane, case=case))
+                    try:
+                        if historical:
+                            require(historical_tooling_identity(tooling_root, tooling_sha)
+                                    == tooling_identity,
+                                    "pinned tooling identity changed during migration run")
+                        gate_errors = gate_check(
+                            roots["before"], roots["after"], gate_lane, case=case)
+                        if historical:
+                            require(historical_tooling_identity(tooling_root, tooling_sha)
+                                    == tooling_identity,
+                                    "pinned tooling identity changed during migration gate")
+                        lane_row["gate_errors"].extend(gate_errors)
+                    except (ValueError, OSError, subprocess.SubprocessError) as error:
+                        lane_row["gate_errors"].append("tooling: " + str(error))
     finally:
         report["passed"] = (len(report["cases"]) == len(cases) and all(
             len(row["lanes"]) == len(case_lanes[row["case"]]) and all(
@@ -454,6 +611,12 @@ def main(argv=None):
     parser.add_argument("--emulator", type=Path, required=True)
     parser.add_argument("--install", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--historical-source", action="store_true",
+                        help="allow old source commits to omit current gate tooling")
+    parser.add_argument("--tooling-root", type=Path,
+                        help="clean pinned current checkout used for historical gating")
+    parser.add_argument("--tooling-sha",
+                        help="full commit SHA of the pinned historical gate tooling")
     args = parser.parse_args(argv)
     try:
         return execute(args)

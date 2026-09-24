@@ -309,6 +309,12 @@ class TargetedMigrationTests(unittest.TestCase):
                 behaviour = source / "tests/behaviour"
                 behaviour.mkdir(parents=True)
                 (behaviour / "cases.py").write_text("# fixture\n")
+                (behaviour / "run.py").write_text(
+                    "from pathlib import Path\n"
+                    "def behaviour_source_hashes(repo):\n"
+                    "    return {path.relative_to(repo).as_posix(): digest(path) "
+                    "for path in sorted((Path(repo) / 'tests/behaviour').rglob('*.py'))}\n"
+                    "manifest = dict(behaviour_source_sha256=behaviour_source_hashes(REPO))\n")
             install = root / "installation.json"
             install.write_text("{}")
             output = root / "output"
@@ -542,6 +548,83 @@ class TargetedMigrationTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "not a regular file"):
                     targeted.check_source_delta(
                         Path("before"), Path("after"), ["M-SCALE-LOCK-003"])
+
+    def test_historical_source_delta_exempts_only_the_three_tooling_paths(self):
+        production = {"mosaic.lua": ("100644", "blob", "a" * 40),
+                      "lib/nb": ("160000", "commit", "b" * 40)}
+        case_file = "tests/behaviour/scale_lock_precedence.py"
+        before = {case_file: ("100644", "blob", "c" * 40),
+                  **{path: ("100644", "blob", "d" * 40)
+                     for path in targeted.PINNED_GATE_PATHS}}
+        after = {case_file: ("100644", "blob", "e" * 40)}
+        with patch.object(targeted, "selected_case_modules", return_value={case_file}), \
+                patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, before, after]):
+            result = targeted.check_source_delta(
+                Path("before"), Path("after"), ["M-SCALE-LOCK-003"], historical=True)
+        self.assertEqual(result["changed_behaviour_paths"],
+                         sorted([case_file, *targeted.PINNED_GATE_PATHS]))
+        self.assertEqual(result["historical_tooling_paths"],
+                         sorted(targeted.PINNED_GATE_PATHS))
+
+        unrelated = "tests/behaviour/driver.py"
+        with patch.object(targeted, "selected_case_modules", return_value={case_file}), \
+                patch.object(targeted, "tree_entries", side_effect=[
+                    production, production, before,
+                    {**after, unrelated: ("100644", "blob", "f" * 40)}]):
+            with self.assertRaisesRegex(ValueError, "unrelated behaviour harness/fixture"):
+                targeted.check_source_delta(
+                    Path("before"), Path("after"), ["M-SCALE-LOCK-003"],
+                    historical=True)
+
+    def test_historical_tooling_identity_reports_commit_and_all_pinned_hashes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for relative in targeted.PINNED_GATE_PATHS:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(relative)
+            tracked = {relative: ("100644", "blob", "c" * 40)
+                       for relative in targeted.PINNED_GATE_PATHS}
+            with patch.object(targeted, "source_identity", return_value="a" * 40), \
+                    patch.object(targeted, "tree_entries", return_value=tracked), \
+                    patch.object(targeted.subprocess, "check_output", return_value="c" * 40):
+                identity = targeted.historical_tooling_identity(root, "a" * 40)
+            self.assertEqual(identity["sha"], "a" * 40)
+            self.assertEqual(set(identity["sha256"]), set(targeted.PINNED_GATE_PATHS))
+            self.assertEqual(identity["sha256"][targeted.PINNED_GATE_PATHS[0]],
+                             targeted.sha256(root / targeted.PINNED_GATE_PATHS[0]))
+
+    def test_historical_gate_uses_comparator_beside_pinned_gate_module(self):
+        gate = targeted.load_historical_gate(ROOT)
+        comparator = Path(gate.__globals__["PROJECT_GRAPH_COMPARATOR"])
+        self.assertEqual(comparator, ROOT / targeted.PINNED_GATE_PATHS[2])
+        self.assertTrue(comparator.is_file())
+
+    def test_historical_runpy_shallow_hash_schema_is_reproduced_exactly(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            behaviour = root / "tests/behaviour"
+            (behaviour / "contract").mkdir(parents=True)
+            (behaviour / "cases.py").write_text("CASES = {}\n")
+            (behaviour / "contract/selected.py").write_text("def selected(): pass\n")
+            (behaviour / "run.py").write_text(
+                "manifest=dict(behaviour_source_sha256="
+                "{p.relative_to(REPO).as_posix():digest(p) "
+                "for p in sorted((REPO/'tests/behaviour').glob('*.py'))})\n")
+            hashes, schema = targeted.manifest_behaviour_source_hashes(root)
+        self.assertEqual(schema, "top-level-python-v1")
+        self.assertEqual(set(hashes), {"tests/behaviour/cases.py", "tests/behaviour/run.py"})
+
+    def test_unrecognized_runpy_hash_schema_fails_closed(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            behaviour = root / "tests/behaviour"
+            behaviour.mkdir(parents=True)
+            (behaviour / "run.py").write_text(
+                "manifest=dict(behaviour_source_sha256=load_from_manifest())\n")
+            with self.assertRaisesRegex(ValueError, "unrecognized behaviour source hash schema"):
+                targeted.manifest_behaviour_source_hashes(root)
 
     def test_inline_case_source_permits_its_ui_regression(self):
         production = {"mosaic.lua": ("100644", "blob", "a" * 40),
