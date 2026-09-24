@@ -18,6 +18,22 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_external_sync_cases_have_exact_contract_owners(self):
+        from importlib import import_module
+        from cases import CASES
+
+        owners = {
+            'M-SYNC-005': 'external_started_handoff',
+            'M-SYNC-007': 'acquisition_stop',
+            'M-SYNC-010': 'master_lifecycle',
+        }
+        for case_id, name in owners.items():
+            with self.subTest(case=case_id):
+                module = import_module('contract.' + name)
+                run = CASES[case_id]['run']
+                self.assertIs(run, getattr(module, name))
+                self.assertEqual(run.__module__, module.__name__)
+
     def test_cold_lifecycle_has_exact_contract_owner(self):
         from cases import CASES
         import contract.lifecycle_cycles as owner

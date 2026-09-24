@@ -2807,17 +2807,17 @@ from external_start_phase import external_start_phase
 from external_cold_start import external_cold_start
 from contract.external_cold_start import external_cold_start_20
 
-from external_started_handoff import external_started_handoff
+from contract.external_started_handoff import external_started_handoff
 
 from repeated_external_start import repeated_external_start
 
-from acquisition_stop import acquisition_stop
+from contract.acquisition_stop import acquisition_stop
 
 from fast_acquisition import fast_acquisition
 
 from master_clock import master_clock
 
-from master_lifecycle import master_lifecycle
+from contract.master_lifecycle import master_lifecycle
 
 from master_multi_output import master_multi_output
 
