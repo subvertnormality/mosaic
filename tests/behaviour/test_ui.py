@@ -478,13 +478,18 @@ class UiMapTests(unittest.TestCase):
 
         source = (BEHAVIOUR / "cases.py").read_text()
         module = ast.parse(source)
+        owners = (
+            module,
+            ast.parse((BEHAVIOUR / "contract" / "strum_reset_continuity.py").read_text()),
+            ast.parse((BEHAVIOUR / "contract" / "parameter_divisions.py").read_text()),
+        )
         names = {
             "assign_trig_parameter", "strum_reset_continuity", "arp_basic_timing",
             "parameter_division_bounds", "spread_acceleration_contract",
             "arp_empty_masks", "arp_rest_slots", "fractional_spread_contract",
             "minimum_swung_gap_contract",
         }
-        functions = {node.name: node for node in module.body
+        functions = {node.name: node for owner in owners for node in owner.body
                      if isinstance(node, ast.FunctionDef) and node.name in names}
         self.assertEqual(set(functions), names)
         raw_sites = {
@@ -551,7 +556,10 @@ class UiMapTests(unittest.TestCase):
     def test_editor_range_and_selector_cases_use_semantic_inputs(self):
         source = (BEHAVIOUR / "cases.py").read_text()
         module = ast.parse(source)
-        contract_module = ast.parse((BEHAVIOUR / "contract" / "grid_viewer.py").read_text())
+        contract_modules = (
+            ast.parse((BEHAVIOUR / "contract" / "grid_viewer.py").read_text()),
+            ast.parse((BEHAVIOUR / "contract" / "inactive_note_positions.py").read_text()),
+        )
         names = {
             "editor_shift_tap", "editor_range_hold", "editor_note_ranges",
             "editor_velocity_ranges", "editor_step_groups", "note_pattern_selectors",
@@ -559,7 +567,7 @@ class UiMapTests(unittest.TestCase):
             "priority_field_isolation", "inactive_note_positions", "all_note_priorities",
         }
         raw_methods = {"tap", "action", "hold_tap", "enc", "configure"}
-        functions = [node for owner in (module, contract_module)
+        functions = [node for owner in (module, *contract_modules)
                      for node in owner.body
                      if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
                      and node.name in names]
