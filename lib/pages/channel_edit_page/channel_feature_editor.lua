@@ -63,7 +63,9 @@ end
 -- them, so rendering and dispatch are unchanged.
 
 local function field_value(field)
-  local value = field.get and field.get() or field.value
+  -- A false boolean is OFF, not missing: `get() or value` would turn it into NONE.
+  local value
+  if field.get then value = field.get() else value = field.value end
   if value == nil then return "NONE" end
   if type(value) == "boolean" then return value and "ON" or "OFF" end
   return tostring(value):upper()

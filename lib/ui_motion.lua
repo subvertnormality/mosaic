@@ -18,6 +18,8 @@ local WIPE_FRAMES, POP_FRAMES, BLINK_FRAMES = 6, 6, 3
 local BLINK_EVERY = 4.5 -- seconds between blinks while a character is shown
 
 local wipe, pop, pop_strength = 0, 0, 1
+local GLIDE_FRAMES = 4
+local glide = {frames = 0, from = nil, to = nil, screen = nil, selected = nil}
 local last_blink, blink = nil, 0
 
 local function now()
@@ -48,7 +50,7 @@ function ui_motion.pose()
 end
 
 function ui_motion.busy()
-  return wipe > 0 or pop > 0 or blink > 0
+  return wipe > 0 or pop > 0 or blink > 0 or glide.frames > 0
 end
 
 -- Mosaic's mark: four small tiles at the right of the title row. They rest
@@ -71,6 +73,36 @@ local function draw_mark(active)
   end
 end
 
+-- Overview grids: the selection outline glides from the cell it left to the
+-- new one. The renderer always draws the real outline; this is a faint ghost.
+local function cell_rect(layout, selected)
+  local columns, width = 4, 32
+  if layout == "overview_params" then columns, width = 5, 25 end
+  local x = ((selected - 1) % columns) * width
+  local y = 9 + math.floor((selected - 1) / columns) * 18
+  return x, y, width - 2, 17
+end
+
+local function track_glide(vm)
+  local overview = vm.layout == "overview_masks" or vm.layout == "overview_params"
+  if not overview then glide.screen, glide.selected, glide.frames = nil, nil, 0; return end
+  if glide.screen == vm.screen and glide.selected ~= vm.selected and glide.selected then
+    glide.from = {cell_rect(vm.layout, glide.selected)}
+    glide.to = {cell_rect(vm.layout, vm.selected)}
+    glide.frames = GLIDE_FRAMES
+  end
+  glide.screen, glide.selected = vm.screen, vm.selected
+end
+
+local function draw_glide()
+  local t = 1 - glide.frames / GLIDE_FRAMES
+  local e = 1 - (1 - t) * (1 - t)
+  local a, b = glide.from, glide.to
+  screen.level(5)
+  screen.rect(a[1] + (b[1] - a[1]) * e, a[2] + (b[2] - a[2]) * e, a[3], a[4])
+  screen.stroke()
+end
+
 local function draw_wipe()
   -- Body tiles (8x8) still covering the new screen: columns uncover left to right.
   local uncovered = math.floor(16 * (1 - wipe / WIPE_FRAMES) + 0.5)
@@ -88,7 +120,7 @@ end
 -- while something moves.
 function ui_motion.draw(vm, render)
   if not ui_motion.enabled() then
-    wipe, pop, blink = 0, 0, 0
+    wipe, pop, blink, glide.frames = 0, 0, 0, 0
     vm.pose = 0
     local ok, report = render(vm)
     draw_mark(false)
@@ -103,8 +135,10 @@ function ui_motion.draw(vm, render)
     blink, last_blink = 0, nil
   end
   vm.pose = ui_motion.pose()
+  track_glide(vm)
   local ok, report = render(vm)
   local moving = ui_motion.busy()
+  if glide.frames > 0 then draw_glide(); glide.frames = glide.frames - 1 end
   if wipe > 0 then draw_wipe(); wipe = wipe - 1 end
   draw_mark(pop > 0)
   if pop > 0 then pop = pop - 1 end

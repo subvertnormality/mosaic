@@ -104,8 +104,13 @@ function M.draw(v)
   else text('EMPTY',1,40,15,10)end
  end
  if not r.ok then rect(0,status_y-7,128,9,0);text('LAYOUT OVERFLOW',1,status_y,8,15)end
- -- Exactly one footer owner. No overlapping hints/neighbour labels.
- text(fit(v.footer or'',126),1,63,8,9)
+ -- Exactly one footer owner. No overlapping hints/neighbour labels. A table
+ -- footer names the neighbouring fields: left '< prev' (or '| START'), right
+ -- 'next >' (or 'END |'), each fitted to its half.
+ if type(v.footer)=='table' then
+  text(fit(v.footer.left or'',61),1,63,8,7)
+  right(fit(v.footer.right or'',61),127,63,10)
+ else text(fit(v.footer or'',126),1,63,8,9)end
  screen.update()
  return r.ok,r
 end

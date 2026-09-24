@@ -675,3 +675,67 @@ function test_ui_live_failing_descriptor_read_does_not_raise_out_of_ui_live()
     luaunit.assert_equals(screen(), "C02")
   end)
 end
+
+-- Rhythm Doctor (README.md "Rhythm Doctor") -------------------------------------------------
+
+-- The real Rhythm Doctor UI controller over a minimal runtime fake (the shape
+-- tests/rhythm_doctor/test_app_surface.lua uses): no capture, no bank, stopped.
+local function fake_doctor()
+  local Adapter = include("mosaic/lib/rhythm_doctor/ui_adapter")
+  local runtime = {machine = {}}
+  for _, name in ipairs({"start_capture", "record_action", "confirm_modal", "finish"}) do
+    runtime[name] = function() return {code = "OK"} end
+  end
+  return Adapter.new({runtime = runtime, transport_stopped = function() return true end})
+end
+
+-- Wraps page_ui[name] to count calls; returns the log and a restore function.
+local function spy(page_ui, name)
+  local calls, real = {}, page_ui[name]
+  page_ui[name] = function(...)
+    calls[#calls + 1] = {...}
+    return real(...)
+  end
+  return calls, function() page_ui[name] = real end
+end
+
+function test_ui_live_doctor_dispatch_reaches_the_trig_page_encoder_and_key_once()
+  live.isolated(function(env)
+    trigger_edit_page.set_rhythm_doctor(fake_doctor())
+    -- G03 onto the Trig page, then the algorithm fader's fifth cell (16, 2)
+    -- selects Rhythm Doctor through the page's own press handler; G23 is the
+    -- outcome m_grid reports for it.
+    press_page(pages.pages.trigger_edit_page, "G03")
+    luaunit.assert_equals(screen(), "P01")
+    live.press_trigger_page(16, 2)
+    luaunit.assert_equals(trigger_edit_page.get_algorithm(), 5)
+    ui_live.grid_outcome("G23")
+    luaunit.assert_equals(ui_live.state().context, "Trig")
+    -- doctor_routes resolves the screen from the owner's own state.
+    local doctor = include("mosaic/lib/ui_adapters/doctor")(include("mosaic/lib/ui_adapters"),
+      {trigger_edit_page = trigger_edit_page})
+    luaunit.assert_equals(screen(), doctor.current_route())
+    luaunit.assert_equals(screen(), "R01") -- EMPTY, no modal, no draft, stopped
+
+    local enc_calls, restore_enc = spy(trigger_edit_page_ui, "enc")
+    local key_calls, restore_key = spy(trigger_edit_page_ui, "key")
+    local ok, err = pcall(function()
+      ui.enc(2, -1)
+      luaunit.assert_equals(enc_calls, {{2, -1}})
+      ui.enc(3, 1)
+      luaunit.assert_equals(enc_calls, {{2, -1}, {3, 1}})
+      luaunit.assert_equals(key_calls, {})
+      ui.key(3, 1)
+      luaunit.assert_equals(key_calls, {{3, 1}})
+      ui.key(3, 0)
+      ui.key(2, 1)
+      luaunit.assert_equals(key_calls, {{3, 1}, {2, 1}})
+      ui.key(2, 0)
+      luaunit.assert_equals(key_calls, {{3, 1}, {2, 1}}) -- releases are not forwarded
+      luaunit.assert_equals(#enc_calls, 2)
+      luaunit.assert_equals(ui_live.state().context, "Trig")
+    end)
+    restore_enc(); restore_key()
+    if not ok then error(err, 0) end
+  end, {before_ui = live.load_real_trigger_page})
+end

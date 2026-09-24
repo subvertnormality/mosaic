@@ -305,11 +305,19 @@ hooks["feedback.read_only"] = function() say(FEEDBACK.read_only) end
 hooks["feedback.confirmation_owns_input"] = function() say(FEEDBACK.confirmation_owns_input) end
 hooks["feedback.stale_target"] = function() say(FEEDBACK.stale_target) end
 hooks["feedback.grid_offline"] = function() say(FEEDBACK.grid_offline) end
+-- Where each Norns settings row lives in the norns menu, opened by a short K1
+-- (the script never opens the system menu itself). Compact to fit the footer.
+local NATIVE_ROUTES = {
+  X01 = "PARAMS>MOSAIC>PROJECT", X04 = "PARAMS>MOSAIC>SEQUENCER",
+  X09 = "PARAMS>MOSAIC>PARAM LOCKS", X05 = "PARAMS>MOSAIC>QUANTISER",
+  X06 = "PARAMS>MIDI MAPS", X07 = "PARAMS>MOSAIC CH n", X08 = "PARAMS>CLOCK + SYSTEM>MODS",
+}
+
 hooks["feedback.native_route"] = function()
   local descriptors = describe()
   local d = focused(descriptors)
-  local route = d and d.domain and (d.domain.native_route or d.domain.destination)
-  say(route and ("K1 > PARAMS > " .. tostring(route)) or "K1 > PARAMS")
+  local destination = d and d.domain and d.domain.destination
+  say(NATIVE_ROUTES[destination] or "PARAMS")
 end
 
 hooks["owner.invoke_selected"] = function()
@@ -625,6 +633,12 @@ function ui_live.view_model()
   local focus_id = focus[s.screen]
   for i, f in ipairs(fields) do if f.id == focus_id then index = i end end
   local footer = FOOTER[screen.profile] or ""
+  -- A focused screen shows one field: the footer names its neighbours instead.
+  if screen.layout == "focused" and #fields > 1 then
+    local previous, following = fields[index - 1], fields[index + 1]
+    footer = {left = previous and ("< " .. previous.label) or "| START",
+      right = following and (following.label .. " >") or "END |"}
+  end
   if tooltip and tooltip.text then footer = tostring(tooltip.text) end
   local status = code and (code:upper():gsub("_", " ")) or ""
   local vm = {

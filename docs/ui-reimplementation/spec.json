@@ -23725,7 +23725,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "f5542214fe1523e7573eeca4d12ab99c4165370df2c3763fb38ef4869a8fdbb6"
+      "sha256": "0f79caf4e5761826337f75f89640c69000881b166d20fce01fdb514dc03a8d3e"
     }
   },
   "guardrails": [
@@ -31792,7 +31792,7 @@
       "fields": "Field[] from describe(target)",
       "selected": "1-based visible field ordinal",
       "layout": "focused|detail|overview_masks|overview_params|pattern64",
-      "footer": "one formatted binding/status line"
+      "footer": "one formatted binding/status line, or {left, right} neighbour labels on a focused screen ('< prev' / 'next >', '| START' / 'END |')"
     },
     "Field": {
       "id": "stable provider field key",

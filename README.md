@@ -360,7 +360,7 @@ The controls work the same way on every screen:
 - **K2** goes back, or cancels a staged change or a question.
 - A short **K1** tap opens the norns system menu. Holding K1 is the shift key for grid and screen gestures.
 
-Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge, Device, History, Mask detail, Trig detail, Merge Shape and Norns settings. Scale tasks: Scale, Scale clock, Overview and Channel view. Pattern tasks: Pattern, Options, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view.
+Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge, Device, History, Mask detail, Trig detail, Merge Shape and Norns settings. Scale tasks: Scale, Scale clock, Overview and Channel view. Pattern tasks: Pattern, Options, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. Norns settings, the last Channel task, lists where each group of norns parameters lives; press K3 on a row to see its menu path, then tap K1 to open the norns menu.
 
 <img alt="Norns Channel tasks screen" src="images/norns/channel-tasks.png" width="384" />
 
