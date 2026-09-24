@@ -535,6 +535,10 @@ jobs:
                            'repeat requires a passing, partial gate for the selected candidate')
           targeted.require((source / 'tests/behaviour/run.py').is_file(),
                            'candidate source-local run.py is missing')
+          # Plan section 6 item 4: repeat a controlled-lane case per module with
+          # repeat.py; a module whose selected cases are all real-time only gets
+          # three fresh real-time runs with identical normalized recipes instead.
+          case_lanes = targeted.selected_case_lanes(before_source, after_source, cases)
           selection = {}
           for case in cases:
               owners = targeted.selected_case_modules(source, [case])
@@ -551,7 +555,63 @@ jobs:
                                     Path(next(iter(shims))).name == Path(next(iter(contracts))).name),
                                'ambiguous or unrelated owner for ' + case)
               owner = next(iter(contracts or shims)) if owners else 'tests/behaviour/cases.py'
-              selection.setdefault(owner, case)
+              current = selection.get(owner)
+              if current is None or ('controlled-experimental' not in case_lanes[current]
+                                     and 'controlled-experimental' in case_lanes[case]):
+                  selection[owner] = case
+          sys.path.insert(0, str(tooling_source / 'tests/behaviour'))
+          gate_spec = importlib.util.spec_from_file_location(
+              'targeted_repeat_gate', tooling_source / 'tests/behaviour/ui_migration_gate.py')
+          gate_module = importlib.util.module_from_spec(gate_spec)
+          gate_spec.loader.exec_module(gate_module)
+          install = os.environ['EMULATOR_ROOT'] + '/.runtime/ci-qualified/runtime/installation.json'
+
+          def real_time_repeat(case, row):
+              """Three fresh real-time processes: all pass, normalized recipes equal."""
+              base = root / ('rt-repeat-' + case)
+              targeted.require(not base.exists(), 'real-time repeat output exists')
+              traces = []
+              for index in range(3):
+                  output_dir = base / str(index)
+                  output_dir.mkdir(parents=True)
+                  command = [sys.executable, str(source / 'tests/behaviour/run.py'),
+                             '--case', case, '--artifacts', str(output_dir),
+                             '--clock-mode', 'real-time', '--experimental-install', install]
+                  if profile == 'midi-modulation':
+                      command.extend(['--profile', profile, '--mod-code-root',
+                                      '/tmp/mosaic-output-mods', '--mod-patches'])
+                  environment = os.environ.copy()
+                  environment['MOSAIC_BEHAVIOUR_INSTALLATION'] = install
+                  completed = subprocess.run(command, cwd=after_source, text=True,
+                                             capture_output=True, env=environment)
+                  manifests = list(output_dir.glob('*/manifest.json'))
+                  targeted.require(completed.returncode == 0 and len(manifests) == 1,
+                                   'real-time repeat process %d failed' % index)
+                  path = manifests[0]
+                  actual = json.loads(path.read_text())
+                  targeted.require(actual['mosaic_revision'] == after_sha
+                                   and actual.get('behaviour_source_sha256') == source_hashes
+                                   and actual['case'] == case
+                                   and actual.get('profile', 'base-midi') == profile
+                                   and actual['clock_mode'] == 'real-time'
+                                   and actual['passed'] is True
+                                   and actual['diagnostic_only'] is True,
+                                   'real-time repeat source, lane or result mismatch')
+                  recipes = {}
+                  for recipe in sorted(path.parent.rglob('recipe.json')):
+                      relative = recipe.relative_to(path.parent)
+                      if {'code', 'data'} & set(relative.parts):
+                          continue
+                      recipes[relative.as_posix()] = gate_module.normalize_recipe(
+                          json.loads(recipe.read_text()))
+                  targeted.require('recipe.json' in recipes, 'real-time repeat lacks recipe')
+                  traces.append(recipes)
+                  row.setdefault('runs', []).append(dict(
+                      manifest=str(path.relative_to(workspace)),
+                      sha256=targeted.sha256(path)))
+              targeted.require(traces[0] == traces[1] == traces[2],
+                               'fresh real-time processes produced different normalized recipes')
+              row.update(lane='real-time', returncode=0)
           report = dict(schema_version=1, complete_regression_run=False, profile=profile,
                         before_sha=before_sha, after_sha=after_sha,
                         tooling_sha=tooling_sha, source_hash_schema=source_hash_schema,
@@ -561,6 +621,24 @@ jobs:
               for owner, case in selection.items():
                   row = dict(module=owner, case=case)
                   report['repeats'].append(row)
+                  if 'controlled-experimental' not in case_lanes[case]:
+                      try:
+                          real_time_repeat(case, row)
+                          targeted.require(targeted.source_identity(before_source, before_sha)
+                                           == before_sha
+                                           and targeted.source_identity(after_source, after_sha)
+                                           == after_sha,
+                                           'source identity changed during repeat')
+                          if historical:
+                              targeted.require(tooling_identity == targeted.historical_tooling_identity(
+                                  tooling_source, tooling_sha),
+                                  'pinned tooling identity changed during repeat')
+                          row['passed'] = True
+                      except (ValueError, OSError, KeyError, AssertionError,
+                              subprocess.SubprocessError) as error:
+                          row.update(passed=False, error=str(error))
+                      continue
+                  row['lane'] = 'controlled-experimental'
                   previous = set(root.glob('repeat-*'))
                   repeat_args = ['--case', case, '--experimental-install',
                                  os.environ['EMULATOR_ROOT'] +

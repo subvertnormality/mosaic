@@ -1474,7 +1474,14 @@ class TargetedMigrationTests(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/behaviour.yml").read_text()
         self.assertIn("Repeat one candidate case per migrated module", workflow)
         self.assertIn("targeted.selected_case_modules(source, [case])", workflow)
-        self.assertIn("selection.setdefault(owner, case)", workflow)
+        self.assertIn("case_lanes = targeted.selected_case_lanes(before_source, after_source, cases)",
+                      workflow)
+        self.assertIn("'controlled-experimental' in case_lanes[case]", workflow)
+        # A module with only real-time-only cases repeats three fresh real-time runs.
+        self.assertIn("if 'controlled-experimental' not in case_lanes[case]:", workflow)
+        self.assertIn("'--clock-mode', 'real-time', '--experimental-install', install", workflow)
+        self.assertIn("traces[0] == traces[1] == traces[2]", workflow)
+        self.assertIn("actual['clock_mode'] == 'real-time'", workflow)
         self.assertIn("len(item['runs']) == 3", workflow)
         self.assertIn("actual['mosaic_revision'] == after_sha", workflow)
         self.assertIn("item.get('profile', 'base-midi') == profile", workflow)
@@ -1496,7 +1503,8 @@ class TargetedMigrationTests(unittest.TestCase):
                             and isinstance(node.value.func, ast.Attribute)
                             and node.value.func.attr == "run"
                             for node in repeat_loop.body))
-        profile_branch = next(node for node in repeat_loop.body if isinstance(node, ast.If))
+        profile_branch = next(node for node in repeat_loop.body if isinstance(node, ast.If)
+                              and "profile" in ast.dump(node.test))
         command_assignment = next(node for node in repeat_loop.body
                                   if isinstance(node, ast.Assign)
                                   and any(isinstance(target, ast.Name)
