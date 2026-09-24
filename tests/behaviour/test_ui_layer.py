@@ -70,8 +70,8 @@ class UiLayerGuardTests(unittest.TestCase):
 
     def test_foundation_workflow_has_independent_contract_owner(self):
         import ast
-        import hashlib
         import inspect
+        from ast_digest import ast_digest
         from cases import CASES
         import harmony_merge_workflow as ordinary
         import contract.foundation_workflow as owner
@@ -85,9 +85,10 @@ class UiLayerGuardTests(unittest.TestCase):
         )
         self.assertFalse(hasattr(ordinary, 'foundation_workflow'))
         node = ast.parse(inspect.getsource(owner.foundation_workflow)).body[0]
+        # Interpreter-stable digest of the same AST (CI runs Python 3.8).
         self.assertEqual(
-            hashlib.sha256(ast.dump(node).encode()).hexdigest(),
-            '882f873000774d842b13edd80a68f6e9c6f0972e5ad7dd04a42d5a016b242537',
+            ast_digest(node),
+            'cb0a4e08ce7744679ddaee200b4a60b9c2b5c5d40a293e53240beec0b3fb49e2',
         )
 
     def test_fast_external_acquisition_has_exact_contract_owner(self):

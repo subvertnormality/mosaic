@@ -12,8 +12,8 @@ from contract.harmony_workflows import pattern_harmony_persistence_workflow
 class HarmonyPersistenceOracleTests(unittest.TestCase):
     def test_five_harmony_cases_have_exact_contract_owners(self):
         import ast
-        import hashlib
         import inspect
+        from ast_digest import ast_digest
         from cases import CASES
         import contract.harmony_workflows as owner
         import harmony_merge_workflow as original
@@ -31,22 +31,22 @@ class HarmonyPersistenceOracleTests(unittest.TestCase):
                 self.assertIs(run, getattr(owner, name))
                 self.assertEqual(run.__module__, owner.__name__)
                 self.assertIsNone(run.__closure__)
-        # Hashes of FunctionDef ASTs at 9d26f841, before the exact move.
+        # Interpreter-stable digests (ast_digest) of FunctionDef ASTs at 9d26f841,
+        # before the exact move; CI runs Python 3.8.
         source_hashes = {
-            'playback_note_messages': '2668a8e1136a8789af9ac7f7bdb4a291668d4e0355d9af0860a45115fbbc39b9',
-            'revoice_workflow': 'cb7434ef16036ea4c05699ae203eb36503f2b7b5201b3cabf622bbfb4b2a08b6',
-            'setup_pattern_harmony': '978b9cf5c3e8c139533bc8809b8311baec6eba3a767e4f73095a01f12f4395b5',
-            'pattern_harmony_persistence_workflow': 'a255d5aea15901fedfb3a730087b705be4951370134971ced97226d7d4d458fe',
-            'ensemble_polyrhythm_workflow': 'a85967ab52239a99767c71a35b010a330ffbf473bc7aa60f768f0653df38e5ac',
-            'no_voicing_fallback_workflow': '8a286ba45b8f540213135ba1861daabf3bdaecb8b6dee5e760eb688487f1dcf8',
-            'held_step_precedence_workflow': '5a12453f73f9aea7fcd8d9ab7bd7448a4143c2b8ebb62491a5dd5233e332369c',
+            'playback_note_messages': '15f8f3fc07b90038a1d8813e56b814975242f7b15d54ac9af2b4f249ed504218',
+            'revoice_workflow': 'c3d3c344b33ad56a5743d342578b8bb60993bd75052833639b0049f1e0eccae4',
+            'setup_pattern_harmony': '15c6639c39907455e9a711879ffd894e9aa08428ac950e21bfe39d98b95e27ba',
+            'pattern_harmony_persistence_workflow': 'f9a393dafc184d8ec3145c4247b6ec1d1af6c62b45a3030971514bbb231a2aab',
+            'ensemble_polyrhythm_workflow': '834cc837fa60ad83f1c6b9a24c5da9a6b334694e39629ca5b936964a5f06d2e0',
+            'no_voicing_fallback_workflow': '56cf8b65cfeb789b9dede676c6408aeaf35cdff82dbc3f0e3fcaf7e944ec94ba',
+            'held_step_precedence_workflow': '1c5a913d8c9261ebe54905df561085f5152eeeed0a4b7d793ba9085edca21b65',
         }
         for name, expected_hash in source_hashes.items():
             with self.subTest(source=name):
                 self.assertFalse(hasattr(original, name))
                 self.assertEqual(
-                    hashlib.sha256(ast.dump(ast.parse(inspect.getsource(
-                        getattr(owner, name))).body[0]).encode()).hexdigest(),
+                    ast_digest(ast.parse(inspect.getsource(getattr(owner, name))).body[0]),
                     expected_hash,
                 )
 
