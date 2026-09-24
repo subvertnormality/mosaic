@@ -1,6 +1,7 @@
 """Native recording lifetime tests; literal MIDI expectations, physical controls."""
 
 def recording_lifetime(c,ending,scale_page=False):
+    from note_accounting import continuation_onsets,window_onsets
     ui = c.ui
     assert ending in ('selected-wrap','nonselected-wrap','disarm','stop','reassign','same-assignment','configuration','slide-active','slide-off','pending-assignment','pending-configuration','mute','memory','memory-branch','persistence')
     slide=ending.startswith('slide-')
@@ -134,19 +135,27 @@ def recording_lifetime(c,ending,scale_page=False):
     if ending=='reassign':ui.turn(2,1)
     ui.expect_patch_value(65);ui.leave_native_menu()
     start=c.snapshot()['midi_count']
-    played=c.playback([(port,[144+channel,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
-    cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
+    phrase=[(port,[144+channel,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    returned=c.playback(phrase,cycles=2,timeout=36,settle_seconds=30)
+    window=[e for e in c.snapshot()['midi'] if e['index']>start]
+    cc=[e for e in window if e['bytes'][0]&240==176]
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 4 s lattice, preceded by
+    # its own recorded lock exactly as every earlier step.
+    played=window_onsets(window)
+    late=continuation_onsets(c,returned,played,phrase,lambda i:i*4,ending)
     table=replay*2+[replay[0]]
     prefix=([(1,[176,1,64])] if ending=='reassign' else [])+[(port,[176+channel,cc_number,65])]
-    expected=prefix+[(port,[176+channel,cc_number,v]) for v in table if v!=-1]
+    expected=prefix+[(port,[176+channel,cc_number,replay[i%4]]) for i in range(len(played)) if replay[i%4]!=-1]
     assert [(e['port'],e['bytes']) for e in cc]==expected,dict(ending=ending,expected=expected,actual=cc)
     cc=cc[len(prefix):]
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    for i,control in zip([i for i,v in enumerate(table) if v!=-1],cc):
+    for i,control in zip([i for i in range(len(played)) if replay[i%4]!=-1],cc):
         assert control['index']<played[i]['index']
         assert abs((control[field]-played[0][field])/1e9-i*4)<=tolerance
-    c.results.append(dict(kind='recording-lifetime-disarmed-replay',ending=ending,values=table,distinct_default=65,passed=True))
+    c.results.append(dict(kind='recording-lifetime-disarmed-replay',ending=ending,values=table,distinct_default=65,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))
     if ending=='persistence':
         import json
         import shutil
@@ -166,14 +175,21 @@ def recording_lifetime(c,ending,scale_page=False):
                 loaded.ui.tap_control('channel_editor');loaded.ui.turn(1,-10);loaded.ui.turn(1,2);loaded.ui.expect_header('memory',channel=1)
                 def replay(values,stage):
                     start=loaded.snapshot()['midi_count']
-                    played=loaded.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
-                    cc=[e for e in loaded.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
-                    expected=[65]+values*2+[values[0]]
+                    phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+                    returned=loaded.playback(phrase,cycles=2,timeout=12)
+                    window=[e for e in loaded.snapshot()['midi'] if e['index']>start]
+                    cc=[e for e in window if e['bytes'][0]&240==176]
+                    # Real time may admit a further step before Stop: it must continue
+                    # the phrase on the 1 s lattice, preceded by its own stored lock.
+                    played=window_onsets(window)
+                    late=continuation_onsets(loaded,returned,played,phrase,lambda i:i,stage)
+                    expected=[65]+[values[i%4] for i in range(len(played))]
                     assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(generation=generation,stage=stage,expected=expected,actual=cc)
                     for i,event in enumerate(cc[1:]):
                         assert event['index']<played[i]['index']
                         assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
-                    loaded.results.append(dict(kind='recording-fresh-process-replay',generation=generation,stage=stage,values=values,passed=True))
+                    loaded.results.append(dict(kind='recording-fresh-process-replay',generation=generation,stage=stage,values=values,passed=True,
+                                               **({'late_window_onsets':len(late)} if late else {})))
                 replay([24,64,64,64] if generation==1 else [24,64,64,65],'restored')
                 loaded.ui.turn(3,-1 if generation==1 else 1)
                 replay([24,64,64,65] if generation==1 else [24,64,64,64],'undo' if generation==1 else 'redo')
@@ -192,14 +208,21 @@ def recording_lifetime(c,ending,scale_page=False):
                 (1,[24,64,96,65]),(1,[24,64,64,65]),(1,[24,64,64,64])]
         for direction,values in stages:
             ui.turn(3,direction);start=c.snapshot()['midi_count']
-            played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
-            cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
-            expected=[65]+values*2+[values[0]]
+            phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+            returned=c.playback(phrase,cycles=2,timeout=12)
+            window=[e for e in c.snapshot()['midi'] if e['index']>start]
+            cc=[e for e in window if e['bytes'][0]&240==176]
+            # Real time may admit a further step before Stop: it must continue
+            # the phrase on the 1 s lattice, preceded by its own stored lock.
+            played=window_onsets(window)
+            late=continuation_onsets(c,returned,played,phrase,lambda i:i,(direction,values))
+            expected=[65]+[values[i%4] for i in range(len(played))]
             assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(direction=direction,values=values,actual=cc)
             for i,event in enumerate(cc[1:]):
                 assert event['index']<played[i]['index']
                 assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
-            c.results.append(dict(kind='recording-memory-step-replay',direction=direction,values=values,passed=True))
+            c.results.append(dict(kind='recording-memory-step-replay',direction=direction,values=values,passed=True,
+                                  **({'late_window_onsets':len(late)} if late else {})))
         if ending=='memory-branch':
             ui.turn(3,-2) # Keep recorded step2; undo recorded steps3/4.
             ui.turn(1,-1) # Trig Parameters.
@@ -211,14 +234,21 @@ def recording_lifetime(c,ending,scale_page=False):
                 if action=='latest':ui.press_key(3)
                 else:ui.turn(3,-1 if action=='undo' else (1 if action=='redo' else 3))
                 start=c.snapshot()['midi_count']
-                played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=12)
-                cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
-                expected=[65]+values*2+[values[0]]
+                phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+                returned=c.playback(phrase,cycles=2,timeout=12)
+                window=[e for e in c.snapshot()['midi'] if e['index']>start]
+                cc=[e for e in window if e['bytes'][0]&240==176]
+                # Real time may admit a further step before Stop: it must continue
+                # the phrase on the 1 s lattice, preceded by its own stored lock.
+                played=window_onsets(window)
+                late=continuation_onsets(c,returned,played,phrase,lambda i:i,action)
+                expected=[65]+[values[i%4] for i in range(len(played))]
                 assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected],dict(action=action,expected=expected,actual=cc)
                 for i,event in enumerate(cc[1:]):
                     assert event['index']<played[i]['index']
                     assert abs((event[field]-played[0][field])/1e9-i)<=tolerance
-                c.results.append(dict(kind='recording-memory-branch-replay',action=action,values=values,passed=True))
+                c.results.append(dict(kind='recording-memory-branch-replay',action=action,values=values,passed=True,
+                                      **({'late_window_onsets':len(late)} if late else {})))
 
 
 
@@ -277,17 +307,27 @@ def recording_nrpn(c,value):
     ui.enter_native_menu();ui.expect_patch_value('off' if value==-1 else value);ui.turn_patch_control(1)
     default=value+127;ui.expect_patch_value(default);ui.leave_native_menu()
     start=c.snapshot()['midi_count']
-    played=c.playback([(2,[145,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
-    cc=[e for e in c.snapshot()['midi'] if e['index']>start and e['bytes'][0]&240==176]
+    phrase=[(2,[145,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    returned=c.playback(phrase,cycles=2,timeout=36,settle_seconds=30)
+    window=[e for e in c.snapshot()['midi'] if e['index']>start]
+    cc=[e for e in window if e['bytes'][0]&240==176]
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 4 s lattice, preceded by
+    # its own recorded packet and clean-slot lock exactly as every earlier step.
+    from note_accounting import continuation_onsets,window_onsets
+    played=window_onsets(window)
+    late=continuation_onsets(c,returned,played,phrase,lambda i:i*4,value)
     expected=packet(default);schedule=[]
-    for i,v in enumerate([126,value,value,value]*2+[126]):
+    for i in range(len(played)):
+        v=[126,value,value,value][i%4]
         events=(packet(v) if v!=-1 else [])+([(2,[177,1,96])] if i%4==2 else [])
         expected+=events;schedule.extend([i]*len(events))
     assert [(e['port'],e['bytes']) for e in cc]==expected,dict(value=value,expected=expected,actual=cc)
     for i,event in zip(schedule,cc[4:]):
         assert event['index']<played[i]['index']
         assert abs((event[field]-played[0][field])/1e9-i*4)<=tolerance
-    c.results.append(dict(kind='recording-nrpn-route-and-clean-slot',value=value,port=2,channel=2,distinct_default=default,manual_values=manual,clean_CC1_step3=96,passed=True))
+    c.results.append(dict(kind='recording-nrpn-route-and-clean-slot',value=value,port=2,channel=2,distinct_default=default,manual_values=manual,clean_CC1_step3=96,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))
 
 
 def recording_ten_slots_trigless(c):
@@ -295,7 +335,7 @@ def recording_ten_slots_trigless(c):
     import time
     from cases import assert_durations
     from midi_window import MidiWindow
-    from note_accounting import note_pairs
+    from note_accounting import continuation_onsets,note_pairs,window_onsets
     ui=c.ui
     ui.configure();ui.set_mosaic_option_keys([('trigless_locks',True)]);ui.turn(1,-3)
     for slot in range(1,11):
@@ -333,16 +373,28 @@ def recording_ten_slots_trigless(c):
         if slot!=selected:ui.turn(2,slot-selected);selected=slot
         ui.encoder_event(3,-126);c.elapse(.15);ui.set_value(6) # Default5.
     before=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,60,127]),(1,[144,64,107]),(1,[144,65,97])],cycles=2,timeout=6)
+    phrase=[(1,[144,60,127]),(1,[144,64,107]),(1,[144,65,97])]
+    returned=c.playback(phrase,cycles=2,timeout=6)
     events=[e for e in c.snapshot()['midi'] if e['index']>before];cc=[e for e in events if e['bytes'][0]&240==176]
+    # Pattern step2 is a trigless rest: onset ordinal i sounds on lattice step
+    # note_step(i), while every step, rest included, emits its ten-slot group.
+    def note_step(i):return 4*(i//3)+(0,2,3)[i%3]
+    # The window runs until Stop takes effect. In real time further steps may
+    # land first: onsets must continue the phrase on the 1/6 s step lattice,
+    # and only a rest step's group may follow the last onset. Controlled time
+    # admits neither.
+    played=window_onsets(events)
+    late=continuation_onsets(c,returned,played,phrase,lambda i:note_step(i)/6)
+    last=note_step(len(played)-1)
+    steps=last+1+(1 if c.clock_mode=='real-time' and (last+1)%4==1 and len(cc)>10*(last+2) else 0)
     expected=[(1,[176,slot,5]) for slot in range(1,11)]
-    for step in (1,2,3,4,1,2,3,4,1):
-        value=(1,0,3,4)[step-1];expected += [(1,[176,slot,value]) for slot in range(1,11)]
+    for step in range(steps):
+        value=(1,0,3,4)[step%4];expected += [(1,[176,slot,value]) for slot in range(1,11)]
     assert [(e['port'],e['bytes']) for e in cc]==expected
     origin2=played[0][field]
     for index,event in enumerate(cc[10:]):
         assert abs((event[field]-origin2)/1e9-(index//10)/6)<=tol
-    note_steps=(0,2,3,4,6,7,8)
+    note_steps=[note_step(i) for i in range(len(played))]
     for note,step in zip(played,note_steps):
         assert abs((note[field]-origin2)/1e9-step/6)<=tol
         group=cc[10+step*10:20+step*10]
@@ -351,7 +403,9 @@ def recording_ten_slots_trigless(c):
     replay_pairs=note_pairs(events);assert [on for on,off in replay_pairs]==played
     assert_durations(c,played,[1]*(len(played)-1),events=events)
     c.results.append(dict(kind='recording-ten-slot-trigless-rest',slots=10,recorded_step=2,
-                          live_zero_packets=20,replay_values=[1,0,3,4],distinct_default=5,passed=True))
+                          live_zero_packets=20,replay_values=[1,0,3,4],distinct_default=5,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {}),
+                          **({'late_window_rest_groups':steps-last-1} if steps>last+1 else {})))
 
 
 def recording_ten_slots(c):
@@ -400,10 +454,17 @@ def recording_ten_slots(c):
         if slot!=selected:ui.turn(2,slot-selected);selected=slot
         ui.set_value(2 if slot%2 else 1)
     start=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]],cycles=2,timeout=36,settle_seconds=30)
-    cc=controls(c.snapshot(),start)
+    phrase=[(1,[144,n,v]) for n,v in [(60,127),(62,117),(64,107),(65,97)]]
+    returned=c.playback(phrase,cycles=2,timeout=36,settle_seconds=30)
+    state=c.snapshot();cc=controls(state,start)
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 4 s lattice, preceded by
+    # its own ten-slot group exactly as every earlier step.
+    from note_accounting import continuation_onsets,window_onsets
+    played=window_onsets([e for e in state['midi'] if e['index']>start])
+    late=continuation_onsets(c,returned,played,phrase,lambda i:i*4)
     expected=[(1,[176,slot,2]) for slot in range(1,11)]
-    for step in [1,2,3,4]*2+[1]:
+    for step in [i%4+1 for i in range(len(played))]:
         for slot in range(1,11):
             value=slot if step==1 else (0 if slot%2 else (2 if step==2 else 1))
             expected.append((1,[176,slot,value]))
@@ -411,4 +472,5 @@ def recording_ten_slots(c):
     for j,event in enumerate(cc[10:]):
         i=j//10;assert event['index']<played[i]['index']
         assert abs((event[field]-played[0][field])/1e9-4*i)<=tolerance
-    c.results.append(dict(kind='ten-slot-recording-staggered-zero-one',slots=10,odd_edit_before_step=2,even_edit_before_step=3,distinct_default=2,cycles=2,passed=True))
+    c.results.append(dict(kind='ten-slot-recording-staggered-zero-one',slots=10,odd_edit_before_step=2,even_edit_before_step=3,distinct_default=2,cycles=2,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))

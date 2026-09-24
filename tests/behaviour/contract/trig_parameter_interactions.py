@@ -138,31 +138,45 @@ def live_parameter_recording(c,switch_return=False,empty_step=False,scale_page=F
     # merely suppressed during the recording pass. Step1 already sounded before
     # the edit; steps2..4 receive64 through the end of this channel cycle.
     before=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,n,v]) for n,v in phrase],cycles=2,timeout=36,settle_seconds=30)
-    cc=[e for e in c.snapshot()['midi'] if e['index']>before and e['bytes'][0]==176]
+    returned=c.playback([(1,[144,n,v]) for n,v in phrase],cycles=2,timeout=36,settle_seconds=30)
+    replay_events=[e for e in c.snapshot()['midi'] if e['index']>before]
+    cc=[e for e in replay_events if e['bytes'][0]==176]
     values=([24,65,96,64] if switch_return else [24,edit_value,96,edit_value] if empty_step and not trigless else [24,edit_value,edit_value,edit_value])
     expected=values*2+[24]
-    emitted_steps=[i for i,value in enumerate(expected) if value!=-1]
-    assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in [65]+expected if v!=-1]
+    assert len(returned)==(7 if silent_step else 9)
+    # The window runs until Stop takes effect. In real time a further step may
+    # land first: an onset must continue the phrase on the 4 s step lattice
+    # (a silent pattern step3 has none), and only a silent step's lock may
+    # follow the last onset. Controlled time admits neither.
+    from note_accounting import continuation_onsets,window_onsets
+    def note_step(i):return 4*(i//3)+(0,1,3)[i%3] if silent_step else i
+    played=window_onsets(replay_events)
+    late=continuation_onsets(c,returned,played,[(1,[144,n,v]) for n,v in phrase],lambda i:note_step(i)*4)
+    def stream(steps):return [values[i%4] for i in range(steps)]
+    steps=note_step(len(played)-1)+1
+    if (c.clock_mode=='real-time' and silent_step and steps%4==2
+            and len(cc)>1+len([v for v in stream(steps) if v!=-1])):steps+=1
+    emitted_steps=[i for i,value in enumerate(stream(steps)) if value!=-1]
+    assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in [65]+stream(steps) if v!=-1]
     cc=cc[1:] # Stored patch recall is separate from per-step lock dispatch.
     assert len(cc)==len(emitted_steps)
-    assert len(played)==(7 if silent_step else 9)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
-    replay_events=[e for e in c.snapshot()['midi'] if e['index']>before]
     replay_pairs=note_pairs(replay_events);assert [on for on,off in replay_pairs]==played
     assert_durations(c,played,[24]*(len(played)-1),events=replay_events)
     origin=played[0][field]
     for i,control in zip(emitted_steps,cc):
         assert abs((control[field]-origin)/1e9-i*4)<=tolerance,dict(step=i,control=control,origin=origin)
-    note_steps=[i for i in range(9) if not silent_step or i%4!=2]
+    note_steps=[note_step(i) for i in range(len(played))]
     notes_by_step=dict(zip(note_steps,played))
     for i,control in zip(emitted_steps,cc):
         if i not in notes_by_step:continue
         note=notes_by_step[i]
         assert control['index']<note['index']
         assert abs((control[field]-note[field])/1e9)<=tolerance
-    c.results.append(dict(kind='recorded-parameter-disarmed-replay',values=expected,distinct_patch_default=65,passed=True))
+    c.results.append(dict(kind='recorded-parameter-disarmed-replay',values=expected,distinct_patch_default=65,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {}),
+                          **({'late_window_silent_locks':steps-note_step(len(played)-1)-1} if steps>note_step(len(played)-1)+1 else {})))
     if switch_return:
         c.results.append(dict(kind='recording-switch-return-live-replay',live_step4_value=live_value,recorded_step4_value=expected[3],passed=live_value==expected[3]))
         assert live_value==expected[3],dict(live_step4=live_value,recorded_step4=expected[3],meaning='Resumed recorded value must match the value heard at that step')

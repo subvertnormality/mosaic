@@ -110,7 +110,7 @@ def parameter_lock_during_playback(c):
 def parameter_slot_limit(c):
     """E2 clamps at the ten real slots; endpoint locks keep their routes."""
     from cases import assert_durations
-    from note_accounting import note_pairs
+    from note_accounting import continuation_onsets,note_pairs,window_onsets
     c.ui.configure();c.ui.channel_page('trig_locks','midi_config',confirm=False)
     for slot in range(1,11):
         if slot>1:c.ui.turn(2,1)
@@ -121,17 +121,25 @@ def parameter_slot_limit(c):
     c.ui.turn(2,20);lock(1,0)   # Must remain slot10; no slot11 exists.
     c.ui.turn(2,-20);lock(2,1)  # Must clamp back to slot1; no slot0 exists.
     before=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
+    phrase=[(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))]
+    notes=c.playback(phrase,cycles=2)
     events=[e for e in c.snapshot()['midi'] if e['index']>before]
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 1/6 s lattice, with its
+    # own step lock, timing and release.
+    played=window_onsets(events)
+    late=continuation_onsets(c,notes,played,phrase,lambda i:i/6)
     cc=[e for e in events if e['bytes'][0]&240==176]
-    expected=[(0,(1,[176,10,0])),(1,(1,[176,1,1])),(4,(1,[176,10,0])),(5,(1,[176,1,1])),(8,(1,[176,10,0]))]
+    expected=[(ordinal,(1,[176,10,0]) if ordinal%4==0 else (1,[176,1,1])) for ordinal in range(len(played)) if ordinal%4<2]
     assert [(e['port'],e['bytes']) for e in cc]==[payload for ordinal,payload in expected]
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns';tol=2e-9 if c.clock_mode=='controlled-experimental' else .01
     origin=played[0][field]
     for event,(ordinal,payload) in zip(cc,expected):assert abs((event[field]-origin)/1e9-ordinal/6)<=tol
-    for event,note in ((cc[0],played[0]),(cc[1],played[1]),(cc[2],played[4]),(cc[3],played[5]),(cc[4],played[8])):
+    for event,(ordinal,payload) in zip(cc,expected):
+        note=played[ordinal]
         assert event['index']<note['index'] and abs((event[field]-note[field])/1e9)<=tol
     pairs=note_pairs(events);assert [on for on,off in pairs]==played
     assert_durations(c,played,[1]*(len(played)-1),events=events)
     c.results.append(dict(kind='parameter-slot-limit',assigned_slots=10,upper_route_cc=10,lower_route_cc=1,
-                          upper_and_lower_clamped=True,passed=True))
+                          upper_and_lower_clamped=True,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))

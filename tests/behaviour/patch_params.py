@@ -946,7 +946,7 @@ def _parameter_events_through(events, end_index):
 def patch_mixed_cc_nrpn_slides(c):
     """Run independent step-local CC and global NRPN slides concurrently."""
     from cases import assert_durations
-    from note_accounting import note_pairs
+    from note_accounting import continuation_onsets,note_pairs,window_onsets
 
     open_patch_control(c,True)
     c.ui.press_key(1);c.ui.channel_page('trig_locks', 'midi_config', confirm=False)
@@ -977,10 +977,15 @@ def patch_mixed_cc_nrpn_slides(c):
     c.ui.press_key(3)
 
     before=c.snapshot()['midi_count']
-    played=c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
+    phrase=[(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))]
+    played=c.playback(phrase,cycles=2)
     events=[e for e in c.snapshot()['midi'] if e['index']>before]
-    notes=[e for e in events if e['bytes'][0]==144 and e['bytes'][2]>0]
-    assert notes==played and len(notes)>=9
+    notes=window_onsets(events)
+    # The window runs until Stop takes effect. In real time a further step may
+    # sound first: it must continue the phrase on the 1/6 s lattice, and is
+    # then held to the release, program, timing and classification checks below.
+    late=continuation_onsets(c,played,notes,phrase,lambda i:i/6)
+    assert len(notes)>=9
     pairs=note_pairs(events);assert [on for on,off in pairs]==notes
     assert_durations(c,notes,[1]*(len(notes)-1),events=events)
 
@@ -1059,7 +1064,8 @@ def patch_mixed_cc_nrpn_slides(c):
         assert abs((next_nrpn['last'][field]-next_source[field])/1e9)<=tolerance
         checks.append(dict(cycle=cycle,cc_samples=6,nrpn_samples=6,sample_period_seconds=1/18))
     c.results.append(dict(kind='mixed-cc-nrpn-slides',cc_mode='step-local',nrpn_mode='global',
-                          encoding_independent=True,cycles=2,checks=checks,passed=True))
+                          encoding_independent=True,cycles=2,checks=checks,passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))
 
 
 def patch_configured_off_lock(c,high=False,default_kind=None):

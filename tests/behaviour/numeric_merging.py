@@ -569,15 +569,23 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
         notes=c.playback([(1,[144,60,127])],cycles=2,timeout=8)
         assert_durations(c,notes,[length]*2)
         for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*cycle_steps/6)<=tolerance
+        late=[]
         if variant>=3:
+            from note_accounting import continuation_onsets,window_onsets
             events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
-            assert len(events)==2*len(notes),events
-            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in notes for msg in (note['bytes'],[128,note['bytes'][1],127])],events
-        c.results.append(dict(kind='numeric-length-merge',source_steps=sources,mode=mode,expected_steps=length,passed=True))
+            # This window runs until Stop takes effect: in real time a further
+            # cycle may legitimately sound first, exactly on the cycle lattice.
+            onsets=window_onsets(events)
+            late=continuation_onsets(c,notes,onsets,[(1,[144,60,127])],lambda i:i*cycle_steps/6,events)
+            assert len(events)==2*len(onsets),events
+            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for note in onsets for msg in (note['bytes'],[128,note['bytes'][1],127])],events
+        c.results.append(dict(kind='numeric-length-merge',source_steps=sources,mode=mode,expected_steps=length,passed=True,
+                              **({'late_window_onsets':len(late)} if late else {})))
 
 
 def fractional_length_mask_merge(c,variant=0,hierarchy=False):
     from cases import assert_durations
+    from note_accounting import continuation_onsets,window_onsets
     sources,merged,detents,label,mask=[([2,4],[3,5,1],8,'1/2',.5),([1,4],[3,6,0],1,'1/24',1/24),([2,4],[3,5,1],15,'1.25',1.25)][variant]
     c.ui.configure();c.ui.set_range(1,8);c.ui.menu('pattern_editor')
     for step in (2,3,4):c.ui.tap_step(step)
@@ -615,8 +623,12 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
                 assert_durations(c,notes,[1.25]*2)
                 for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*8/6)<=tolerance
                 events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
-                assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
-                c.results.append(dict(kind='step-length-mask-precedence',mode=mode,channel_active=channel_active,expected_steps=1.25,passed=True))
+                # Real time may admit a further cycle before Stop, exactly on the 8-step lattice.
+                onsets=window_onsets(events)
+                late=continuation_onsets(c,notes,onsets,[(1,[144,60,127])],lambda i:i*8/6,events)
+                assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in onsets for msg in ([144,60,127],[128,60,127])],events
+                c.results.append(dict(kind='step-length-mask-precedence',mode=mode,channel_active=channel_active,expected_steps=1.25,passed=True,
+                                      **({'late_window_onsets':len(late)} if late else {})))
             c.ui.set_value(detents);c.ui.expect_field_value('length',label)
             with c.ui.hold_step(1):c.ui.press_key(2)
             c.elapse(.06);c.ui.expect_field_value('length',label)
@@ -629,6 +641,10 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
             assert_durations(c,notes,[duration]*2)
             for i,note in enumerate(notes):assert abs((note[key]-notes[0][key])/1e9-i*8/6)<=tolerance
             events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
-            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
-            c.results.append(dict(kind='fractional-length-mask-merge',sources=sources,mode=mode,masked=masked,expected_steps=duration,passed=True))
+            # Real time may admit a further cycle before Stop, exactly on the 8-step lattice.
+            onsets=window_onsets(events)
+            late=continuation_onsets(c,notes,onsets,[(1,[144,60,127])],lambda i:i*8/6,events)
+            assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in onsets for msg in ([144,60,127],[128,60,127])],events
+            c.results.append(dict(kind='fractional-length-mask-merge',sources=sources,mode=mode,masked=masked,expected_steps=duration,passed=True,
+                                  **({'late_window_onsets':len(late)} if late else {})))
         c.ui.set_value(detents);c.ui.expect_field_value('length',label)

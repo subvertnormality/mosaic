@@ -4,7 +4,7 @@ import math
 
 def modulated_cc_lock_precedence(c):
     from cases import assert_durations
-    from note_accounting import note_pairs
+    from note_accounting import continuation_onsets,note_pairs,window_onsets
 
     def label(key):
         c.ui.expect_native_menu_label(key)
@@ -71,8 +71,14 @@ def modulated_cc_lock_precedence(c):
 
     def phase(default,label):
         start=c.snapshot()['midi_count']
-        notes=c.playback([(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))],cycles=2)
+        phrase=[(1,[144,n,v]) for n,v in ((60,127),(62,117),(64,107),(65,97))]
+        played=c.playback(phrase,cycles=2)
         events=[e for e in c.snapshot()['midi'] if e['index']>start]
+        # The window runs until Stop takes effect. In real time a further step
+        # may sound first: it must continue the phrase on the 1/6 s lattice, and
+        # is then held to every lock, timing, release and transport check below.
+        notes=window_onsets(events)
+        late=continuation_onsets(c,played,notes,phrase,lambda i:i/6,label)
         cc=[e for e in events if e['bytes'] and e['bytes'][0]&240==176]
         expected=[default]+[24 if i%4==0 else 48 if i%4==2 else default for i in range(len(notes))]
         assert [(e['port'],e['bytes']) for e in cc]==[(1,[176,1,v]) for v in expected]
@@ -92,7 +98,8 @@ def modulated_cc_lock_precedence(c):
         pairs=note_pairs(events);assert [on for on,off in pairs]==notes
         assert_durations(c,notes,[1]*(len(notes)-1),events=events)
         c.results.append(dict(kind='modulated-cc-lock-phase',phase=label,default=default,
-                              locks={1:24,3:48},cc_values=expected,passed=True))
+                              locks={1:24,3:48},cc_values=expected,passed=True,
+                              **({'late_window_onsets':len(late)} if late else {})))
 
     phase(96,'positive-depth')
 
