@@ -134,7 +134,7 @@ OVERVIEWS={'overview_masks','overview_params'}
 def live_header(title,scope,layout):
     """Expected title row (and scope line) for a live screen, rows 0..18."""
     if layout in OVERVIEWS:
-        commands=[(1,7,15,fit(title,78)),((None,127),7,9,fit(scope,45))]
+        commands=[(1,7,15,fit(title,78)),((None,118),7,9,fit(scope,45))]
         rows=8  # row 8 carries the selected cell's outline
     else:
         commands=[(1,7,15,fit(title,126)),(1,17,7,fit(scope,126))]

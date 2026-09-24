@@ -2,7 +2,8 @@
 --
 -- * A screen change reveals the new body tile by tile, left to right (the
 --   splash's mosaic, in miniature).
--- * A value change, focus move or apply pops the little tile in the title bar.
+-- * A value change, focus move or apply runs a light around Mosaic's little
+--   four-tile mark in the title bar.
 -- * Characters blink now and then.
 --
 -- Motion is decorative only (spec layout_contract.motion). It never delays or
@@ -50,20 +51,23 @@ function ui_motion.busy()
   return wipe > 0 or pop > 0 or blink > 0
 end
 
-local function draw_pop()
-  -- A tile that swells past its size and settles, top right of the title bar.
-  local t = 1 - pop / POP_FRAMES
-  local size = t < 0.5 and (2 + 8 * t) or (6 - 4 * (t - 0.5))
-  size = math.floor(size * (pop_strength == 2 and 1.2 or 1) + 0.5)
-  local cx, cy = 124, 3
-  screen.level(math.max(3, math.floor(15 * (1 - t * 0.6))))
-  screen.rect(cx - size / 2, cy - size / 2, size, size)
-  screen.fill()
-  if pop_strength == 2 and t > 0.3 then
-    -- Apply scatters two sparks.
-    screen.level(math.floor(10 * (1 - t)))
-    screen.rect(cx - 7, cy + 1, 1, 1); screen.fill()
-    screen.rect(cx + 4, cy + 3, 1, 1); screen.fill()
+-- Mosaic's mark: four small tiles at the right of the title row. They rest
+-- dim; a change lights them one after another, clockwise, and an apply adds a
+-- second, brighter lap.
+local MARK = {{121, 1}, {124, 1}, {124, 4}, {121, 4}}
+local MARK_REST = {3, 6, 3, 6}
+
+local function draw_mark(active)
+  local t = active and (1 - pop / POP_FRAMES) or nil
+  for index, tile in ipairs(MARK) do
+    local level = MARK_REST[index]
+    if t then
+      local lit = math.floor(t * #MARK * pop_strength) % #MARK + 1
+      if lit == index then level = 15 elseif (lit % #MARK) + 1 == index then level = 9 end
+    end
+    screen.level(level)
+    screen.rect(tile[1], tile[2], 2, 2)
+    screen.fill()
   end
 end
 
@@ -86,7 +90,9 @@ function ui_motion.draw(vm, render)
   if not ui_motion.enabled() then
     wipe, pop, blink = 0, 0, 0
     vm.pose = 0
-    return render(vm)
+    local ok, report = render(vm)
+    draw_mark(false)
+    return ok, report
   end
   -- The once-a-second screen refresh is enough to notice a blink is due.
   if vm.art then
@@ -100,7 +106,8 @@ function ui_motion.draw(vm, render)
   local ok, report = render(vm)
   local moving = ui_motion.busy()
   if wipe > 0 then draw_wipe(); wipe = wipe - 1 end
-  if pop > 0 then draw_pop(); pop = pop - 1 end
+  draw_mark(pop > 0)
+  if pop > 0 then pop = pop - 1 end
   if blink > 0 then blink = blink - 1 end
   -- Any frame with motion asks for another, so the last one is always clean.
   if moving then fn.dirty_screen(true) end

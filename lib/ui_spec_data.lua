@@ -10679,7 +10679,7 @@ return {
           7,
         },
         ["scope_right"] = {
-          127,
+          118,
           7,
         },
         ["label_baseline_offset"] = 7,
@@ -10709,7 +10709,7 @@ return {
           7,
         },
         ["scope_right"] = {
-          127,
+          118,
           7,
         },
         ["label_baseline_offset"] = 7,
@@ -10735,6 +10735,7 @@ return {
     ["motion"] = "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), screen-change and value-change easing. It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame.",
     ["performance"] = "dirty-driven existing refresh cadence; no rendering allocations proportional to project size or musical recomputation",
     ["specimen_rule"] = "screen.lua is the data-bound layout reference; atlas/characters/visuals retain accepted illustrative recipes. Fixture constants never supply application values. Decorative art only. Data diagrams require explicit snapshot bindings, described in diagram_contracts.",
+    ["brand_mark"] = "Four 2px tiles at x121..126, y1..6 on every live screen: Mosaic's mark. Rest levels 3/6/3/6; lit in sequence by decorative motion. Scope text ends at x118 so the mark never overlaps text.",
   },
   ["field_contracts"] = {
     ["masks"] = {

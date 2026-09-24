@@ -53,7 +53,7 @@ function M.draw(v)
  if L=='overview_masks' or L=='overview_params' then
   local cols=L=='overview_masks'and 4 or 5;local w=cols==4 and 32 or 25
   if #v.fields>cols*2 then fail('overview count')end
-  text(fit(v.title,78),1,7,8,15);right(fit(v.scope,45),127,7,9)
+  text(fit(v.title,78),1,7,8,15);right(fit(v.scope,45),118,7,9)
   for k=1,math.min(#v.fields,cols*2)do
    local f=v.fields[k];local x=((k-1)%cols)*w;local y=9+math.floor((k-1)/cols)*18
    if k==v.selected then rect(x,y,w-2,17,15,true)end
