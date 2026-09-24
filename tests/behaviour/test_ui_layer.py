@@ -366,6 +366,8 @@ class UiLayerGuardTests(unittest.TestCase):
     def test_saved_range_rejection_contracts_have_one_owner(self):
         from cases import CASES
         from cases import rejected_manual_range
+        import contract.persisted_range_rejection as owner
+        from unittest.mock import patch, sentinel
 
         case_ids = {"M-RANGE-SAVED-001", "M-RANGE-SAVED-002"}
         self.assertEqual(
@@ -374,6 +376,19 @@ class UiLayerGuardTests(unittest.TestCase):
         )
         self.assertEqual(rejected_manual_range.__module__,
                          "contract.persisted_range_rejection")
+        for case_id, name, recovery in (
+            ('M-RANGE-SAVED-003', 'rejected_manual_range_save', 'save'),
+            ('M-RANGE-SAVED-004', 'rejected_manual_range_new', 'new'),
+        ):
+            with self.subTest(case_id=case_id):
+                run = CASES[case_id]['run']
+                self.assertIs(run, getattr(owner, name))
+                self.assertEqual(run.__module__, 'contract.persisted_range_rejection')
+                self.assertIsNone(run.__closure__)
+                with patch.object(owner, 'rejected_manual_range',
+                                  return_value=sentinel.result) as helper:
+                    self.assertIs(run(sentinel.driver), sentinel.result)
+                helper.assert_called_once_with(sentinel.driver, recovery=recovery)
 
     def test_contract_classifier_follows_helpers_and_baseline_failures(self):
         from cases import CASES

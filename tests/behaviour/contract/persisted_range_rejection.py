@@ -161,3 +161,11 @@ def rejected_manual_range(c,recovery="load"):
     c.wait(lambda _:(c.data_directory/'autosave.ptn').stat().st_mtime_ns>before)
     assert digest(bad)==preserved['broken.ptn']
     c.results.append(dict(kind='manual-range-rejection-playing',routes=2,edited_after_rejection=True,files_preserved=True,recovery_action=recovery,autosave_reenabled=True,passed=True))
+
+
+def rejected_manual_range_save(c):
+    return rejected_manual_range(c, recovery='save')
+
+
+def rejected_manual_range_new(c):
+    return rejected_manual_range(c, recovery='new')

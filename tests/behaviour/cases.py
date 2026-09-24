@@ -90,7 +90,10 @@ from contract.parameter_lock_domain import parameter_fine_gesture
 from contract.dial_off_display import dial_off_display
 from project_dialog_lifecycle import project_dialog_while_playing
 from persisted_ranges import saved_range_compatibility
-from contract.persisted_range_rejection import rejected_manual_range,rejected_saved_range
+from contract.persisted_range_rejection import (
+    rejected_manual_range, rejected_saved_range,
+    rejected_manual_range_save, rejected_manual_range_new,
+)
 from contract.range_rejection import queued_global_length_transitions
 from contract.range_rejection import range_reject_001,range_reject_002,range_reject_003,range_reject_004
 from range_rejection import offset_scale_range_clipping
@@ -3590,8 +3593,8 @@ CASES={
  'M-RANGE-GLOBAL-003':dict(run=offset_range_rates,requirements=['SONG-LENGTH','CH-RANGE','CH-TEMPO'],description='Offset2..4/G2 repeated D/E for ten loops at x3/x2/1/2/3, exact phase and gates beyond three global boundaries'),
  'M-RANGE-GLOBAL-004':dict(run=offset_scale_range_clipping,requirements=['SONG-LENGTH','CH-RANGE','LOCK-SCALE'],description='Scale17 offset2..4 D/E/C locks with global1/2/3 caps and restoration; actual dependent MIDI notes and timing'),
  'M-RANGE-LIVE-002':dict(run=queued_global_length_transitions,requirements=['SONG-LENGTH','CH-RANGE'],description='Queued global4-to2-to3 edits on offset2..4 apply at exact old boundaries, last queued fader value wins, step4 returns, exact uninterrupted MIDI phase/gates and queue tooltip'),
- 'M-RANGE-SAVED-003':dict(run=lambda c:rejected_manual_range(c,recovery='save'),requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves two-channel playback and files; explicit native named Save and reload retain edits and restart autosave'),
- 'M-RANGE-SAVED-004':dict(run=lambda c:rejected_manual_range(c,recovery='new'),requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves current playback and files; explicit New creates silent project and restarts autosave'),
+ 'M-RANGE-SAVED-003':dict(run=rejected_manual_range_save,requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves two-channel playback and files; explicit native named Save and reload retain edits and restart autosave'),
+ 'M-RANGE-SAVED-004':dict(run=rejected_manual_range_new,requirements=['CH-RANGE','SAVE-NAMED','SAVE-AUTO'],description='Rejected load preserves current playback and files; explicit New creates silent project and restarts autosave'),
  'M-RANGE-SAVED-005':dict(run=saved_range_compatibility,requirements=['CH-RANGE','SAVE-AUTO','PERSIST-AUTO-001'],description='User-authored slot96, valid stored one-step range, exact MIDI gates/phase and grid survive two cold-load/autosave generations'),
  'M-RANGE-SAVED-006':dict(run=lambda c:saved_range_compatibility(c,legacy=True),requirements=['CH-RANGE','SAVE-AUTO','PERSIST-AUTO-001'],description='Legacy sequencer_patterns alias in slot96 with valid one-step range migrates through two cold-load/autosave generations preserving MIDI/grid'),
  'M-PROJECT-LIVE-001':dict(run=lambda c:project_dialog_while_playing(c,'new'),requirements=['SAVE-NAMED','MIDI-RELEASE-001'],description='Native new while two MIDI channels play: pending releases and project-dialog lifetime'),
