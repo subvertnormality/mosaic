@@ -17,7 +17,7 @@ from contract.keyboard_chord_after_stop import keyboard_chord_after_stop
 from contract.stop_safety import shift_press_to_stop
 from memory_truncate import memory_truncate
 from elektron_program_changes import elektron_program_changes
-from autosave_idle import autosave_idle_lifecycle
+from contract.autosave_idle import autosave_idle_lifecycle
 from named_save import named_save_load
 from channel_scale_display import channel_active_scale_display
 from memory_scale_lock_display import memory_scale_lock_display

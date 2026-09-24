@@ -18,6 +18,14 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_idle_autosave_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.autosave_idle as owner
+
+        run = CASES['M-SAVE-002']['run']
+        self.assertIs(run, owner.autosave_idle_lifecycle)
+        self.assertEqual(run.__module__, 'contract.autosave_idle')
+
     def test_navigation_matrix_has_exact_contract_owner(self):
         from cases import CASES
         import contract.navigation_matrix as owner
