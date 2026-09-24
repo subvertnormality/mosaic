@@ -110,8 +110,13 @@ PAGE_RINGS = {
              ("P05", "CHANNEL VIEW", "focused", "channel_view")],
     "Trig": [("P01", "PATTERN TRIG", "pattern64", "pattern"), ("P02", "TRIG OPTIONS", "focused", "options")],
 }
-# Where each context lands from its grid button when that is not ring entry 1.
-RING_LANDING = {"Song": ("A03", "SONG PLAYBACK", "focused")}
+# Other live screens that stand for a ring entry: where a context lands from
+# its grid button (Song) and the Trig page's grid-follow variants.
+RING_ALIASES = {
+    "Song": {0: [("A03", "SONG PLAYBACK", "focused")]},
+    "Trig": {0: [("P06", "TRIG ALGORITHM", "focused"), ("P07", "PAINT PREVIEW", "focused"),
+                 ("P08", "TRIG STEP EDIT", "focused")]},
+}
 TASK_ROWS = {
     "Scale": ["scale", "scale_clock", "overview", "channel_view"],
     "Song": ["playback", "slot_setup", "tempo_feel", "channel_view"],

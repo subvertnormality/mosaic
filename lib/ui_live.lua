@@ -456,6 +456,15 @@ end
 function ui_live.grid_outcome(flow_id, extra)
   local payload = {flow_id = flow_id}
   for key, value in pairs(extra or {}) do payload[key] = value end
+  -- Flow alternatives read the page as its context name and the Trig algorithm.
+  payload.page = CONTEXT_OF_PAGE[program.get_selected_page()] or payload.page
+  if payload.algorithm == nil and trigger_edit_page and trigger_edit_page.get_algorithm then
+    payload.algorithm = trigger_edit_page.get_algorithm()
+  end
+  -- Choosing a song slot while stopped opens its setup (G36 selected_stopped).
+  if flow_id == "G36" and payload.outcome == nil and not m_clock.is_playing() then
+    payload.outcome = "selected_stopped"
+  end
   local flow = spec.flows[flow_id]
   if flow and flow.routes == "doctor_routes" then
     local adapter = ui_adapters.get("doctor")
@@ -491,6 +500,19 @@ end
 
 local function two(n) return string.format("%02d", n or 0) end
 
+-- The grid viewer each context's pattern screens show (P01, P03, P04, P05).
+local VIEWER_OWNER = {
+  Trig = function() return trigger_edit_page_ui end, Note = function() return note_edit_page_ui end,
+  Velocity = function() return velocity_edit_page_ui end, Scale = function() return scale_edit_page_ui end,
+  Song = function() return song_edit_page_ui end,
+}
+
+local function viewer()
+  local owner = VIEWER_OWNER[router.state.context]
+  local page_ui = owner and owner()
+  return page_ui and page_ui.adapter_owners and page_ui.adapter_owners().grid_viewer
+end
+
 -- Compact identity for the title row: CH03, CH03 S02, CH03 ST05, CH03 4ST,
 -- SLOT 02 (Scale) or SONG 04 (Song).
 local function scope_text(target)
@@ -501,7 +523,9 @@ local function scope_text(target)
   elseif s.context == "Song" then
     parts[#parts + 1] = "SONG " .. two(target.song_slot)
   else
-    parts[#parts + 1] = "CH" .. two(target.channel)
+    -- Pattern screens name the channel their viewer shows.
+    local view = spec.screens[s.screen].layout == "pattern64" and viewer()
+    parts[#parts + 1] = "CH" .. two(view and view.selected_channel or target.channel)
     if (target.song_slot or 1) ~= 1 then parts[#parts + 1] = "S" .. two(target.song_slot) end
   end
   local held = target.held or {}
@@ -523,19 +547,21 @@ local FOOTER = {
   doctor = "E2 FIELD  E3 SET", confirmation = "K3 CONFIRM  K2 CANCEL", native = "K1 PARAMS",
 }
 
+-- 64 cells of the viewed channel exactly as the grid viewer draws its steps,
+-- with held steps outlined and the playing step underlined.
 local function cells(target)
-  local result = {}
-  local selected = program.get_selected_pattern and program.get_selected_pattern()
+  local view = viewer()
+  local levels = view and view:levels() or {}
   local held = {}
   for _, s in ipairs(target.held or {}) do held[s] = true end
-  local playing_step = nil
-  if m_clock and m_clock.is_playing and m_clock.is_playing() then
-    local channel = program.get_selected_channel and program.get_selected_channel()
+  local playing_step
+  if view and m_clock and m_clock.is_playing and m_clock.is_playing() then
+    local channel = program.get_channel(program.get().selected_song_pattern, view.selected_channel)
     playing_step = channel and channel.current_step
   end
+  local result = {}
   for k = 1, 64 do
-    local on = selected and selected.trig_values and selected.trig_values[k] == 1
-    result[k] = {level = on and 12 or 2, selected = held[k] == true, playing = playing_step == k}
+    result[k] = {level = levels[k] or 0, selected = held[k] == true, playing = playing_step == k}
   end
   return result
 end

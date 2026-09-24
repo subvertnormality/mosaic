@@ -456,11 +456,12 @@ def tresillo_rhythm(c,length,steps):
 def tresillo_multipliers(c):
     tresillo_setup(c);c.results.append(dict(kind='workflow-check',name='tresillo-input-setup',passed=True))
     for i,(length,steps) in enumerate(TRESILLO_STEPS.items()):
-        if i:c.ui.turn(3,1)
+        # The Pattern button lands on the pattern; the multiplier is on Trig options.
+        if i:c.ui.trig_options();c.ui.turn(3,1)
         tresillo_rhythm(c,length,steps);c.results.append(dict(kind='workflow-check',name='multiplier-'+str(length),passed=True))
 
 def tresillo_drum_boundary(c):
-    tresillo_setup(c);c.ui.tap_control("drum_bank",2);c.ui.turn(3,7)
+    tresillo_setup(c);c.ui.tap_control("drum_bank",2);c.ui.trig_options();c.ui.turn(3,7)
     tresillo_rhythm(c,64,list(range(1,65,8)));c.results.append(dict(kind='workflow-check',name='drum-bank-64-step-tresillo',passed=True))
 
 

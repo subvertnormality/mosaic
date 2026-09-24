@@ -2452,7 +2452,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "pattern64",
         "model": "ViewModel",
         "art": null
       },
@@ -2564,7 +2564,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "pattern64",
         "model": "ViewModel",
         "art": null
       },
@@ -2685,7 +2685,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "Shared existing viewer replacement in Trig/Note/Velocity/Scale/Song groups. E1 group tabs when root. E2 selects a field; View channel is first. E3 on View channel moves the viewer channel 1..16 of the owning context (field_contracts.viewer, replaces old E2); E3 elsewhere none. K2 returns if opened as detail; K3 no action. K1 unchanged. VIEW selection never writes selected_channel.",
-      "state_explanation": "Show64cells as4x16within x2..125,y19..46, levelbrightness from actual sequencer abstraction, cleared each frame. A selected channel label sits above and range/status below. No stale cells on shorter ranges or mute; header retains owning grid context. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "Show64cells as4x16within x2..125,y19..46, levelbrightness from actual sequencer abstraction, cleared each frame. A selected channel label sits above and range/status below. No stale cells on shorter ranges or mute; header retains owning grid context. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Live layout (owner decision 24 September 2026): P03, P04 and P05 draw the viewed channel as 64 cells like P01, so every grid-viewer page keeps its picture; E3 still moves view_channel.",
       "parent": "N01",
       "entry_flow_ids": [
         "NAV.Scale.P05",
@@ -2698,7 +2698,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "pattern64",
         "model": "ViewModel",
         "art": null
       },

@@ -4,7 +4,7 @@ import base64
 import contextlib
 import time
 
-from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, CHANNEL_TASKS, HEADERS, OVERVIEW_CELLS, PAGE_RINGS, RING_LANDING, TASK_ROWS,
+from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, CHANNEL_TASKS, HEADERS, OVERVIEW_CELLS, PAGE_RINGS, RING_ALIASES, TASK_ROWS,
                     LED_LEVELS, LIVE_SCREENS, MENU, NATIVE_MENU, header_parts,
                     MOSAIC_OPTIONS, MOSAIC_OPTION_ROWS, MIDI_MAPPING_PARAMETERS,
                     NATIVE_MENU_VALUES, PATCH_PARAMETERS,
@@ -161,6 +161,20 @@ class Ui:
         for _ in range(taps):
             self.tap_control("pattern_editor")
 
+    def open_task(self, context, task):
+        """Open a task row of a non-Channel context's navigator (E1, E2 row, K3)."""
+        rows = TASK_ROWS[context]
+        self.driver.enc(1, 1)
+        self.driver.enc(2, -len(rows))
+        if rows.index(task):
+            self.driver.enc(2, rows.index(task))
+        self.press_key(3)
+
+    def trig_options(self):
+        """Open Trig options (P02), where E3 sets the tresillo multiplier."""
+        self.open_task("Trig", "options")
+        self.wait_for_header("trigger_editor_confirmation")
+
     def song_editor(self):
         self.tap_control("song_editor")
 
@@ -238,12 +252,13 @@ class Ui:
             if "frame" not in state or state.get("diagnostics", {}).get("menu_mode"):
                 return True
             for context, ring in PAGE_RINGS.items():
-                landing = RING_LANDING.get(context)
-                candidates = list(enumerate(ring)) + ([(0, landing + (None,))] if landing else [])
-                for index, (screen, title, layout, _task) in candidates:
+                candidates = [(index, entry[:3]) for index, entry in enumerate(ring)]
+                for index, aliases in RING_ALIASES.get(context, {}).items():
+                    candidates += [(index, alias) for alias in aliases]
+                for index, (screen, title, layout) in candidates:
                     scope = self._ring_scope(context)
                     if live_header_matches(state, title, scope, layout):
-                        found.append((context, index))
+                        found.append((context, index, screen))
                         return True
             return False
         if not (hasattr(self.driver, "wait") and hasattr(self.driver, "snapshot")):
@@ -268,17 +283,11 @@ class Ui:
         observed = self._observed_ring()
         if observed is None:
             return False
-        context, index = observed
+        context, index, showing = observed
         ring = PAGE_RINGS[context]
         target = max(0, min(len(ring) - 1, index + detents))
-        if target != index or RING_LANDING.get(context):
-            screen, title, layout, task = ring[target]
-            rows = TASK_ROWS[context]
-            self.driver.enc(1, 1)
-            self.driver.enc(2, -len(rows))
-            if rows.index(task):
-                self.driver.enc(2, rows.index(task))
-            self.press_key(3)
+        if ring[target][0] != showing:
+            self.open_task(context, ring[target][3])
         return True
 
     def _turn_channel_ring(self, detents):

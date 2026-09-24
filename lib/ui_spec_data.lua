@@ -340,7 +340,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "P03",
       ["parent"] = "N03",
-      ["layout"] = "focused",
+      ["layout"] = "pattern64",
       ["art"] = nil,
       ["fields"] = {
         "view_channel",
@@ -359,7 +359,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "P04",
       ["parent"] = "N03",
-      ["layout"] = "focused",
+      ["layout"] = "pattern64",
       ["art"] = nil,
       ["fields"] = {
         "view_channel",
@@ -382,7 +382,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "P05",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "pattern64",
       ["art"] = nil,
       ["fields"] = {
         "view_channel",

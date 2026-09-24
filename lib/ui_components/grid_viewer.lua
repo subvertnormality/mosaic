@@ -53,6 +53,26 @@ function grid_viewer:draw()
   screen.text("Channel " .. self.selected_channel .. " grid viewer")
 end
 
+-- The 64 step levels (grid rows 4..7) the viewer draws for its channel, from
+-- the same sequencer drawing path as draw(). Read-only for the live screen.
+function grid_viewer:levels()
+  local state = grid_abstraction.get_screen_state()
+  for x = 1, 16 do
+    local column = state[x]
+    for y = 4, 7 do
+      column[y] = 0
+    end
+  end
+  screen_view_sequencer:draw(program.get_channel(program.get().selected_song_pattern, self.selected_channel), grid_abstraction.seq)
+  local levels = {}
+  for y = 4, 7 do
+    for x = 1, 16 do
+      levels[#levels + 1] = state[x][y] or 0
+    end
+  end
+  return levels
+end
+
 function grid_viewer:next_channel()
   self.selected_channel = self.selected_channel + 1
   if self.selected_channel > 16 then
