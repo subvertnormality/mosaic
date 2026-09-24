@@ -577,6 +577,47 @@ class TargetedMigrationTests(unittest.TestCase):
                     Path("before"), Path("after"), ["M-SCALE-LOCK-003"],
                     historical=True)
 
+    def test_historical_harmony_oracle_transition_is_exact_and_owner_bound(self):
+        production = {"mosaic.lua": ("100644", "blob", "a" * 40),
+                      "lib/nb": ("160000", "commit", "b" * 40)}
+        old_owner = "tests/behaviour/harmony_merge_workflow.py"
+        new_owner = "tests/behaviour/contract/harmony_workflows.py"
+        oracle = "tests/behaviour/test_harmony_persistence_oracle.py"
+        before = {"tests/behaviour/cases.py": ("100644", "blob", "c" * 40),
+                  old_owner: ("100644", "blob", "d" * 40),
+                  oracle: ("100644", "blob", "99a67dc31837652e5964b6509370260d43520a1b"),
+                  **{path: ("100644", "blob", "3" * 40)
+                     for path in targeted.PINNED_GATE_PATHS}}
+        after = {"tests/behaviour/cases.py": ("100644", "blob", "e" * 40),
+                 old_owner: ("100644", "blob", "f" * 40),
+                 new_owner: ("100644", "blob", "1" * 40),
+                 oracle: ("100644", "blob", "d151c2958aad3be193d01dd343c7e10f91cd0e2a"),
+                 **{path: ("100644", "blob", "3" * 40)
+                    for path in targeted.PINNED_GATE_PATHS}}
+        cases = ["M-HARMONY-REVOICE-001", "M-HARMONY-PERSIST-001",
+                 "M-HARMONY-ENSEMBLE-001", "M-HARMONY-FAILURE-001",
+                 "M-HARMONY-HELD-001"]
+
+        def compare(selected, candidate=after, *, historical=True):
+            with patch.object(targeted, "selected_case_modules", side_effect=[
+                    {old_owner}, {new_owner}]), \
+                    patch.object(targeted, "tree_entries", side_effect=[
+                        production, production, before, candidate]):
+                return targeted.check_source_delta(Path("before"), Path("after"),
+                                                   selected, historical=historical)
+
+        result = compare(cases)
+        self.assertEqual(result["historical_harmony_oracle"]["before_blob"],
+                         before[oracle][2])
+        self.assertEqual(result["historical_harmony_oracle"]["after_blob"],
+                         after[oracle][2])
+        with self.assertRaisesRegex(ValueError, "unrelated behaviour harness/fixture"):
+            compare(cases, historical=False)
+        with self.assertRaises(ValueError):
+            compare(cases[:-1])
+        with self.assertRaises(ValueError):
+            compare(cases, {**after, oracle: ("100644", "blob", "2" * 40)})
+
     def test_historical_allowlist_removal_is_bound_to_selected_changed_owner(self):
         production = {"mosaic.lua": ("100644", "blob", "a" * 40),
                       "lib/nb": ("160000", "commit", "b" * 40)}

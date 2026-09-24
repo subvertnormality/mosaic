@@ -38,6 +38,16 @@ PINNED_GATE_PATHS = (
     "tests/behaviour/ci/compare_ptn_graph.lua",
 )
 HISTORICAL_ALLOWLIST_PATH = "tests/behaviour/ui_migration_allowlist.json"
+HARMONY_ORACLE_PATH = "tests/behaviour/test_harmony_persistence_oracle.py"
+HARMONY_OWNER_CASES = frozenset({
+    "M-HARMONY-REVOICE-001", "M-HARMONY-PERSIST-001",
+    "M-HARMONY-ENSEMBLE-001", "M-HARMONY-FAILURE-001",
+    "M-HARMONY-HELD-001",
+})
+HARMONY_ORACLE_BLOBS = (
+    "99a67dc31837652e5964b6509370260d43520a1b",
+    "d151c2958aad3be193d01dd343c7e10f91cd0e2a",
+)
 
 
 def require(condition, message):
@@ -402,6 +412,25 @@ def check_source_delta(before, after, cases, *, historical=False):
     if historical and HISTORICAL_ALLOWLIST_PATH in changed_tests:
         historical_allowlist = historical_allowlist_removal(
             before, after, before_tests, after_tests, selected_sources, changed_tests)
+    historical_harmony_oracle = None
+    if (historical and HARMONY_ORACLE_PATH in changed_tests
+            and set(cases) == HARMONY_OWNER_CASES):
+        old_owner = "tests/behaviour/harmony_merge_workflow.py"
+        new_owner = "tests/behaviour/contract/harmony_workflows.py"
+        if ({old_owner, new_owner} <= selected_sources
+                and {old_owner, new_owner} <= set(changed_tests)
+                and before_tests.get(HARMONY_ORACLE_PATH)
+                    == ("100644", "blob", HARMONY_ORACLE_BLOBS[0])
+                and after_tests.get(HARMONY_ORACLE_PATH)
+                    == ("100644", "blob", HARMONY_ORACLE_BLOBS[1])):
+            # This exact test edit retargets the persistence oracle to its
+            # extracted owner and pins the five moved function ASTs. No other
+            # harness edit is exempted from the historical source gate.
+            allowed.add(HARMONY_ORACLE_PATH)
+            historical_harmony_oracle = dict(
+                path=HARMONY_ORACLE_PATH,
+                before_blob=HARMONY_ORACLE_BLOBS[0],
+                after_blob=HARMONY_ORACLE_BLOBS[1])
     permitted = allowed | (set(PINNED_GATE_PATHS) if historical else set())
     if historical_allowlist is not None:
         permitted.add(HISTORICAL_ALLOWLIST_PATH)
@@ -419,6 +448,8 @@ def check_source_delta(before, after, cases, *, historical=False):
         result["historical_tooling_paths"] = sorted(PINNED_GATE_PATHS)
         if historical_allowlist is not None:
             result["historical_allowlist"] = historical_allowlist
+        if historical_harmony_oracle is not None:
+            result["historical_harmony_oracle"] = historical_harmony_oracle
     return result
 
 
