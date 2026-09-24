@@ -1282,3 +1282,76 @@ class Ui:
         except KeyError as error:
             raise UiMapError("unknown Mosaic option/value: " + str(option)) from error
         self.expect_menu_option_row(label, value, top=top)
+
+    # ---- Output (C06) verbs; channel select and Masks value line (dashboard/mask/map family) ----
+    def select_channel_on_page(self, channel, page):
+        """Select ``channel`` on the grid and keep working on Channel ``page``.
+
+        The retired UI kept the showing Channel page across a grid channel
+        select; the live UI returns to the remembered family (C01/C02). The
+        same page is reopened through Channel Tasks and its header confirmed.
+        """
+        self.select_channel(channel)
+        self.channel_page(page, channel=channel)
+
+    def _output_label(self, field):
+        from ui_map import OUTPUT_FIELDS
+        try:
+            return OUTPUT_FIELDS[field]
+        except KeyError as error:
+            raise UiMapError("unknown output field: " + str(field)) from error
+
+    def select_output_field(self, field):
+        """E2 focuses one C06 OUTPUT field: clamp to the first, then move to it."""
+        from ui_map import OUTPUT_FIELDS
+        self._output_label(field)
+        index = list(OUTPUT_FIELDS).index(field)
+        self.turn(2, -len(OUTPUT_FIELDS))
+        if index:
+            self.turn(2, index)
+
+    def expect_output_field(self, field, value, select=True):
+        """C06 OUTPUT shows only its selected field: select ``field`` (E2), then
+        wait for its exact label and large value on the focused layout."""
+        from frame_oracle import selected_field_matches
+        label = self._output_label(field)
+        if select:
+            self.select_output_field(field)
+        self.driver.wait(lambda state: selected_field_matches(state, "focused", label, value))
+        self.driver.results.append(dict(kind="output-field", field=field, label=label, value=str(value), passed=True))
+
+    def output_field_value(self, field, candidates, select=True):
+        """The one candidate the selected C06 field shows ('?' none, 'a|b' several).
+
+        Waits for the field's label first, so the value read is that field's."""
+        from frame_oracle import selected_field_matches
+        label = self._output_label(field)
+        if select:
+            self.select_output_field(field)
+        self.driver.wait(lambda state: selected_field_matches(state, "focused", label))
+        state = self.driver.snapshot()
+        hits = [str(v) for v in candidates if selected_field_matches(state, "focused", label, v)]
+        return hits[0] if len(hits) == 1 else ("?" if not hits else "|".join(hits))
+
+    def _mask_label(self, field):
+        from ui_map import MASK_LABELS
+        try:
+            return MASK_LABELS[field]
+        except KeyError as error:
+            raise UiMapError("unknown mask field: " + str(field)) from error
+
+    def selected_mask_value(self, field, candidates):
+        """The one candidate on C01's selected value line for ``field`` ('?' when
+        ``field`` is not selected or shows none; 'a|b' when several match)."""
+        from frame_oracle import selected_field_matches
+        label = self._mask_label(field)
+        state = self.driver.snapshot()
+        hits = [str(v) for v in candidates if selected_field_matches(state, "overview_masks", label, v)]
+        return hits[0] if len(hits) == 1 else ("?" if not hits else "|".join(hits))
+
+    def expect_selected_mask(self, field, value):
+        """C01 has ``field`` selected and its value line shows ``value`` exactly."""
+        from frame_oracle import selected_field_matches
+        label = self._mask_label(field)
+        self.driver.wait(lambda state: selected_field_matches(state, "overview_masks", label, value))
+        self.driver.results.append(dict(kind="selected-mask", field=field, label=label, value=str(value), passed=True))

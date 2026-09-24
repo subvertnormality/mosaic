@@ -9,7 +9,8 @@ def mask_clear_attributes(c,attribute,defaults=False,other_channel=False,chord_s
     ui.configure()
     if other_channel:
         assert defaults and attribute in ('note','trig')
-        ui.select_channel(2);ui.set_value(1);ui.select_field('midi_channel',offset=1);ui.set_value(1)
+        # The live grid channel select returns to the Channel family; reopen Device (C05).
+        ui.select_channel_on_page(2,'midi_config');ui.set_value(1);ui.select_field('midi_channel',offset=1);ui.set_value(1)
         ui.select_field('default_velocity',offset=1);ui.set_value(1);ui.press_key(3)
         ui.tap_control('pattern_slot',1);ui.set_range(1,4)
         ui.channel_page('masks','midi_config',channel=2)

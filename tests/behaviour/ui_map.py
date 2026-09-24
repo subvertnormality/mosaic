@@ -158,6 +158,19 @@ OVERVIEW_CELLS = {
     "trig": (1, "Trig"), "note": (2, "Note"), "velocity": (3, "Vel"), "length": (4, "Len"),
     "chord_1": (5, "Chd1"), "chord_2": (6, "Chd2"), "chord_3": (7, "Chd3"), "chord_4": (8, "Chd4"),
 }
+# Masks full labels, shown on the selected field's value line (channel_edit_masks.fields).
+MASK_LABELS = {
+    "trig": "Trig", "note": "Note", "velocity": "Velocity", "length": "Length",
+    "chord_1": "Chord 1", "chord_2": "Chord 2", "chord_3": "Chord 3", "chord_4": "Chord 4",
+}
+
+# C06 OUTPUT (Note Dashboard) fields in descriptor order with their labels
+# (lib/ui_adapters/read_only.lua readers.C06). E2 moves focus, clamped.
+OUTPUT_FIELDS = OrderedDict([
+    ("root", "Root"), ("chord", "Chord"), ("velocity", "Velocity"), ("length", "Length"),
+    ("inspected_step", "Step"), ("provenance", "Source"), ("planned_pitch", "Planned"),
+    ("scheduled_pitch", "Scheduled"), ("emitted_pitch", "Emitted"), ("bypass", "Bypass"),
+])
 
 HEADERS = {
     key: {"title": data["title"], "layout": data["layout"], "scope": data.get("scope", "channel")}
