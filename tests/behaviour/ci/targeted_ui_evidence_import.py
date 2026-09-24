@@ -2,6 +2,8 @@
 
 Harness characterisation outside README. Only the uploaded recipe/results subset
 can be revalidated offline; CI validated the full manifest inventory before upload.
+When a selected contract witness already has canonical evidence, --import-case
+can write only missing cases after validating every selected case and repeat.
 """
 
 import argparse
@@ -107,7 +109,7 @@ def pair_payload(manifest, session):
 
 
 def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
-                    dry_run=False, profile="base-midi"):
+                    dry_run=False, profile="base-midi", import_cases=None):
     """Validate the entire selected artifact before creating any destination."""
     require(isinstance(run_id, str) and re.fullmatch(r"[1-9][0-9]*", run_id),
             "run ID must be a positive decimal number")
@@ -119,6 +121,15 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
     require(isinstance(case_ids, list) and case_ids
             and all(isinstance(case, str) and CASE.fullmatch(case) for case in case_ids)
             and len(set(case_ids)) == len(case_ids), "invalid or duplicate selected cases")
+    if import_cases is None:
+        import_cases = case_ids
+    require(isinstance(import_cases, list) and import_cases
+            and all(isinstance(case, str) and CASE.fullmatch(case)
+                    for case in import_cases)
+            and len(set(import_cases)) == len(import_cases)
+            and set(import_cases) <= set(case_ids),
+            "import cases must be a nonempty unique subset of selected cases")
+    import_set = set(import_cases)
     download, output = no_symlink(download), no_symlink(output)
     require(download != output and download not in output.parents
             and output not in download.parents, "download and output must be disjoint")
@@ -223,7 +234,9 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                         "manifest source/lane/profile/pass identity differs")
                 payload = pair_payload(manifest, manifest_path.parent)
                 target = no_symlink(output / case / lane / side)
-                require(not target.exists(), "existing evidence will not be overwritten: " + str(target))
+                if case in import_set:
+                    require(not target.exists(),
+                            "existing evidence will not be overwritten: " + str(target))
                 provenance = dict(schema_version=1, source_run=
                                   "https://github.com/subvertnormality/mosaic/actions/runs/" + run_id,
                                   source_run_id=run_id, source_revision=revision,
@@ -244,7 +257,8 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                 payload["source-targeted-report.json"] = report_raw
                 payload["source-repeatability-report.json"] = read_bytes(repeat_path)
                 payload["provenance.json"] = (json.dumps(provenance, indent=2) + "\n").encode()
-                plans.append((target, payload))
+                if case in import_set:
+                    plans.append((target, payload))
     require(report.get("lanes") == [lane for lane in LANES if lane in selected_lanes],
             "targeted report lane summary differs from case rows")
     if not dry_run:
@@ -258,6 +272,7 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                 with destination.open("xb") as handle:
                     handle.write(raw)
     return dict(dry_run=dry_run, source_run_id=run_id,
+                validated_cases=case_ids, import_cases=import_cases,
                 imported=[str(target) for target, _ in plans],
                 complete_regression_run=False)
 
@@ -271,13 +286,16 @@ def main(argv=None):
     parser.add_argument("--before-sha", required=True)
     parser.add_argument("--after-sha", required=True)
     parser.add_argument("--case", action="append", dest="cases", required=True)
+    parser.add_argument("--import-case", action="append", dest="import_cases",
+                        help="Import only this case after validating every --case")
     parser.add_argument("--profile", choices=PROFILES, default="base-midi")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
     try:
         result = import_targeted(args.download, args.output, args.run_id,
                                  args.before_sha, args.after_sha, args.cases,
-                                 dry_run=args.dry_run, profile=args.profile)
+                                 dry_run=args.dry_run, profile=args.profile,
+                                 import_cases=args.import_cases)
     except (ValueError, OSError) as error:
         parser.exit(1, "Targeted evidence import refused: %s\n" % error)
     print(json.dumps(result, indent=2))

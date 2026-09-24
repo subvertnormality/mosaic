@@ -1,7 +1,9 @@
 """Harness characterisation outside README: immutable targeted CI evidence import."""
 
 import importlib.util
+import copy
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
@@ -100,6 +102,53 @@ class TargetedEvidenceImportTests(unittest.TestCase):
         return importer.import_targeted(self.download, self.output, "35802998566",
                                         BEFORE, AFTER, [CASE], dry_run=dry_run,
                                         profile=profile)
+
+    def test_selective_import_validates_existing_witness_without_overwriting_it(self):
+        witness = "M-WITNESS-001"
+        shutil.copytree(self.download / CASE, self.download / witness)
+        report_path = self.download / "targeted-ui-migration.json"
+        report = json.loads(report_path.read_text())
+        row = copy.deepcopy(report["cases"][0])
+        row["case"] = witness
+        for lane in row["lanes"]:
+            for side in ("before", "after"):
+                run = lane["runs"][side]
+                original = Path(run["manifest"])
+                relative = Path(witness) / original.relative_to(CASE)
+                path = self.download / relative
+                manifest = json.loads(path.read_text())
+                manifest["case"] = witness
+                write_json(path, manifest)
+                run["manifest"] = relative.as_posix()
+                run["manifest_sha256"] = importer.digest(path.read_bytes())
+        report["selected_cases"] = [CASE, witness]
+        report["cases"].append(row)
+        write_json(report_path, report)
+        repeat_path = self.download / "targeted-ui-repeatability.json"
+        repeat = json.loads(repeat_path.read_text())
+        repeat["selected_cases"] = [CASE, witness]
+        write_json(repeat_path, repeat)
+
+        existing = self.output / witness / "controlled" / "before"
+        existing.mkdir(parents=True)
+        (existing / "sentinel").write_text("untouched")
+        imported = importer.import_targeted(
+            self.download, self.output, "35802998566", BEFORE, AFTER,
+            [CASE, witness], import_cases=[CASE])
+        self.assertEqual(len(imported["imported"]), 4)
+        self.assertEqual((existing / "sentinel").read_text(), "untouched")
+        self.assertFalse((self.output / witness / "real-time").exists())
+        self.assertTrue((self.output / CASE / "controlled/after/provenance.json").is_file())
+
+        (self.download / witness / "controlled-experimental/after/session-1/results.json").write_text("tampered")
+        with self.assertRaisesRegex(ValueError, "digest differs"):
+            importer.import_targeted(self.download, self.root / "another-output",
+                                     "35802998566", BEFORE, AFTER, [CASE, witness],
+                                     import_cases=[CASE], dry_run=True)
+        with self.assertRaisesRegex(ValueError, "import cases"):
+            importer.import_targeted(self.download, self.root / "another-output",
+                                     "35802998566", BEFORE, AFTER, [CASE, witness],
+                                     import_cases=["M-UNKNOWN-001"], dry_run=True)
 
     def test_imports_requested_non_default_profile(self):
         fixture(self.download, profile="midi-modulation")
