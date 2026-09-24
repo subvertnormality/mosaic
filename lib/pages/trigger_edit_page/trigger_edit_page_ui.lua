@@ -208,4 +208,14 @@ function trigger_edit_page_ui:refresh()
   trigger_edit_page_ui.refresh_tresillo()
 end
 
+-- The existing owner instances, for lib/ui_adapters (UI02). Adapters wrap
+-- these objects; they do not copy their state.
+function trigger_edit_page_ui.adapter_owners()
+  return {
+    pages = pages,
+    grid_viewer = grid_viewer,
+    tresillo_mult = tresillo_mult
+  }
+end
+
 return trigger_edit_page_ui

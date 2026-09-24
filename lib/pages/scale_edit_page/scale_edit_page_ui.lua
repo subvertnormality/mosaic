@@ -362,4 +362,20 @@ function scale_edit_page_ui.select_scale_page_by_index(index)
   end
 end
 
+-- The existing owner instances, for lib/ui_adapters (UI02). Adapters wrap
+-- these objects; they do not copy their state.
+function scale_edit_page_ui.adapter_owners()
+  return {
+    pages = scales_pages,
+    page_to_index = scales_page_to_index,
+    grid_viewer = grid_viewer,
+    quantizer_vertical_scroll_selector = quantizer_vertical_scroll_selector,
+    romans_vertical_scroll_selector = romans_vertical_scroll_selector,
+    notes_vertical_scroll_selector = notes_vertical_scroll_selector,
+    transpose_vertical_scroll_selector = transpose_vertical_scroll_selector,
+    rotation_vertical_scroll_selector = rotation_vertical_scroll_selector,
+    clock_mod_list_selector = clock_mod_list_selector
+  }
+end
+
 return scale_edit_page_ui
