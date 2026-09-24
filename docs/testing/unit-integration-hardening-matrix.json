@@ -34,7 +34,7 @@
  "counts": {
   "requirements": 158,
   "production_lua_modules": 160,
-  "unit_integration_files": 117,
+  "unit_integration_files": 118,
   "domains": 17
  },
  "coverage_language": {
@@ -438,6 +438,7 @@
     "lib/tests/lib/ui_components_tests.lua",
     "lib/tests/lib/ui_grid_outcomes_tests.lua",
     "lib/tests/lib/ui_live_tests.lua",
+    "lib/tests/lib/ui_motion_tests.lua",
     "lib/tests/lib/ui_router_tests.lua",
     "lib/tests/lib/ui_splash_tests.lua"
    ],
