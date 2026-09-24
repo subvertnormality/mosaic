@@ -500,33 +500,34 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
     from cases import assert_durations
     sources,expected=[([2,4],[3,5,1]),([3,4],[4,5,2]),([2,2,5],[3,6,1]),([1,2],[2,3,0]),([1,4],[3,6,0]),([2,2,8],[4,10,0])][variant]
     cycle_steps=16 if variant>=3 else 8
-    c.configure();c.hold_tap((1,4),(cycle_steps,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
+    c.ui.configure();c.ui.set_range(1,cycle_steps);c.ui.menu('pattern_editor')
+    for step in (2,3,4):c.ui.tap_step(step)
     for slot,length in enumerate(sources,1):
-        c.tap(slot,1)
-        if slot>1:c.tap(1,4)
-        if length>1:c.hold_tap((1,4),(length,4))
-        c.led_values([(x,4) for x in range(1,cycle_steps+1)],[15]+[5]*(length-1)+[2]*(cycle_steps-length))
-    c.tap(3,8)
-    for slot in range(2,len(sources)+1):c.tap(slot,2)
-    c.tap(14,8);c.tap(14,8)
-    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
+        c.ui.tap_control('pattern_select',slot)
+        if slot>1:c.ui.tap_step(1)
+        if length>1:c.ui.set_range(1,length)
+        c.ui.expect_steps({step:('selected' if step==1 else 'in_range' if step<=length else 'off')
+                           for step in range(1,cycle_steps+1)})
+    c.ui.menu('channel_editor')
+    for slot in range(2,len(sources)+1):c.ui.tap_control('pattern_slot',slot)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=1)
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     if arp or strum:
         from cases import assign_trig_parameter
         assert variant in (3,4)
-        c.action(type='key',n=1,state=1);c.elapse(.3)
-        try:
-            c.tap(16,8);c.tap(16,8);c.led_values([(16,8)],[8])
-        finally:c.action(type='key',n=1,state=0)
+        with c.ui.hold_keys(1):
+            c.elapse(.3);c.ui.tap_control('velocity_merge_mode');c.ui.tap_control('velocity_merge_mode')
+            c.ui.expect_leds({('velocity_merge_mode',None):'medium'})
         if strum:
-            c.enc(1,-4);c.enc(2,3);c.enc(3,2) # First chord mask from X: degree2, E64.
-            c.enc(1,1);assign_trig_parameter(c,'Chord Note Strum');c.enc(3,0 if simultaneous else 8)
+            c.ui.turn(1,-4);c.ui.turn(2,3);c.ui.set_value(2) # First chord mask from X: degree2, E64.
+            c.ui.turn(1,1);c.ui.assign_trig_parameter('Chord Note Strum');c.ui.set_value(0 if simultaneous else 8)
             if same_pitch:
-                c.enc(2,1);assign_trig_parameter(c,'Fixed Note');c.enc(3,65) # Fixed root E64 equals the chord E64.
+                c.ui.turn(2,1);c.ui.assign_trig_parameter('Fixed Note');c.ui.set_value(65) # Fixed root E64 equals the chord E64.
         else:
-            c.enc(1,-3);assign_trig_parameter(c,'Chord Note Arpeggio');c.enc(3,8)
+            c.ui.turn(1,-3);c.ui.assign_trig_parameter('Chord Note Arpeggio');c.ui.set_value(8)
         # Half-step ratchet selected, but nonpositive parent gate ends at onset.
         # Repeat transport to expose retained arp jobs and duplicate releases.
         for trial in range(2):
@@ -548,9 +549,9 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
         return
     for index,(mode,level,length) in enumerate(list(zip(['average','longer','shorter'],[2,5,8],expected))+[('average',2,expected[0])]):
         if index:
-            c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.tap(16,8);c.led_values([(16,8)],[level])
-            finally:c.action(type='key',n=1,state=0)
+            with c.ui.hold_keys(1):
+                c.elapse(.3);c.ui.tap_control('velocity_merge_mode')
+                c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
         marker=c.snapshot()['midi_count']
         notes=c.playback([(1,[144,60,127])],cycles=2,timeout=8)
         assert_durations(c,notes,[length]*2)
@@ -563,38 +564,39 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
 
 
 def fractional_length_mask_merge(c,variant=0,hierarchy=False):
-    from cases import assert_durations,length_mask_display
+    from cases import assert_durations
     sources,merged,detents,label,mask=[([2,4],[3,5,1],8,'1/2',.5),([1,4],[3,6,0],1,'1/24',1/24),([2,4],[3,5,1],15,'1.25',1.25)][variant]
-    c.configure();c.hold_tap((1,4),(8,4));c.tap(5,8)
-    for x in (2,3,4):c.tap(x,4)
+    c.ui.configure();c.ui.set_range(1,8);c.ui.menu('pattern_editor')
+    for step in (2,3,4):c.ui.tap_step(step)
     for slot,length in enumerate(sources,1):
-        c.tap(slot,1)
-        if slot>1:c.tap(1,4)
-        if length>1:c.hold_tap((1,4),(length,4))
-        c.led_values([(x,4) for x in range(1,9)],[15]+[5]*(length-1)+[2]*(8-length))
-    c.tap(3,8);c.tap(2,2);c.tap(14,8);c.tap(14,8)
-    c.hold_tap((15,8),(1,2));c.hold_tap((16,8),(1,2))
-    c.enc(1,-4);c.enc(2,2);length_mask_display(c,'X')
-    c.enc(3,detents);length_mask_display(c,label)
+        c.ui.tap_control('pattern_select',slot)
+        if slot>1:c.ui.tap_step(1)
+        if length>1:c.ui.set_range(1,length)
+        c.ui.expect_steps({step:('selected' if step==1 else 'in_range' if step<=length else 'off')
+                           for step in range(1,9)})
+    c.ui.menu('channel_editor');c.ui.tap_control('pattern_slot',2)
+    c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
+    c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=1)
+    c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
+    c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.expect_field_value('length','X')
+    c.ui.set_value(detents);c.ui.expect_field_value('length',label)
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     modes=list(zip(['average','longer','shorter'],[2,5,8],merged))+[('average',2,merged[0])]
     for index,(mode,level,unmasked) in enumerate(modes):
         if index:
-            c.action(type='key',n=1,state=1);c.elapse(.3)
-            try:c.tap(16,8);c.led_values([(16,8)],[level])
-            finally:c.action(type='key',n=1,state=0)
+            with c.ui.hold_keys(1):
+                c.elapse(.3);c.ui.tap_control('velocity_merge_mode')
+                c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
         if hierarchy:
             assert variant==0
-            c.action(type='grid',x=1,y=4,state=1)
-            try:
-                length_mask_display(c,label);c.enc(3,15-detents);length_mask_display(c,'1.25')
-            finally:c.action(type='grid',x=1,y=4,state=0)
-            c.elapse(.06);length_mask_display(c,label)
+            with c.ui.hold_step(1):
+                c.ui.expect_field_value('length',label);c.ui.set_value(15-detents);c.ui.expect_field_value('length','1.25')
+            c.elapse(.06);c.ui.expect_field_value('length',label)
             # An explicit step mask remains in force whether or not the
             # channel default exists. Clearing it later must reveal that default.
             for channel_active in (True,False):
-                if not channel_active:c.enc(3,-detents);length_mask_display(c,'X')
+                if not channel_active:c.ui.set_value(-detents);c.ui.expect_field_value('length','X')
                 marker=c.snapshot()['midi_count']
                 notes=c.playback([(1,[144,60,127])],cycles=2,timeout=5)
                 assert_durations(c,notes,[1.25]*2)
@@ -602,15 +604,13 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
                 events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
                 assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
                 c.results.append(dict(kind='step-length-mask-precedence',mode=mode,channel_active=channel_active,expected_steps=1.25,passed=True))
-            c.enc(3,detents);length_mask_display(c,label)
-            c.action(type='grid',x=1,y=4,state=1)
-            try:c.key(2)
-            finally:c.action(type='grid',x=1,y=4,state=0)
-            c.elapse(.06);length_mask_display(c,label)
+            c.ui.set_value(detents);c.ui.expect_field_value('length',label)
+            with c.ui.hold_step(1):c.ui.press_key(2)
+            c.elapse(.06);c.ui.expect_field_value('length',label)
         # Change merge mode while the mask is active, then remove the mask.
         for masked,duration in [(True,mask),(False,unmasked)]:
-            if not masked:c.enc(3,-detents);length_mask_display(c,'X')
-            else:length_mask_display(c,label)
+            if not masked:c.ui.set_value(-detents);c.ui.expect_field_value('length','X')
+            else:c.ui.expect_field_value('length',label)
             marker=c.snapshot()['midi_count']
             notes=c.playback([(1,[144,60,127])],cycles=2,timeout=5)
             assert_durations(c,notes,[duration]*2)
@@ -618,4 +618,4 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
             events=[m for m in c.snapshot()['midi'] if m['index']>marker and 128<=m['bytes'][0]<=159]
             assert [(m['port'],m['bytes']) for m in events]==[(1,msg) for _ in notes for msg in ([144,60,127],[128,60,127])],events
             c.results.append(dict(kind='fractional-length-mask-merge',sources=sources,mode=mode,masked=masked,expected_steps=duration,passed=True))
-        c.enc(3,detents);length_mask_display(c,label)
+        c.ui.set_value(detents);c.ui.expect_field_value('length',label)
