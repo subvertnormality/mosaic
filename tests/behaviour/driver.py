@@ -120,9 +120,11 @@ class Driver:
     def key(self,n):
         self.action(type='key',n=n,state=1);self.action(type='key',n=n,state=0);self.elapse(.06)
     def enc(self,n,steps):
+        receipt=None
         for _ in range(abs(steps)):
-            self.elapse(.05);self.action(type='enc',n=n,delta=2 if steps>0 else -2)
+            self.elapse(.05);receipt=self.action(type='enc',n=n,delta=2 if steps>0 else -2)
         self.elapse(.15)
+        return receipt
     def hold_tap(self,first,last):
         self.action(type='grid',x=first[0],y=first[1],state=1)
         try:self.tap(*last)

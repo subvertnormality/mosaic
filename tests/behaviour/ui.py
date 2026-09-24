@@ -191,7 +191,7 @@ class Ui:
         self.driver.key(number)
 
     def turn(self, encoder, detents):
-        self.driver.enc(encoder, detents)
+        return self.driver.enc(encoder, detents)
 
     def encoder_event(self, encoder, delta):
         """Emit one native encoder event with no synthetic detent timing."""
@@ -213,7 +213,7 @@ class Ui:
                                   state=1 if pressed else 0)
 
     def set_value(self, delta):
-        self.turn(3, delta)
+        return self.turn(3, delta)
 
     def tap_control(self, control, index=None):
         return self.driver.tap(*control_cell(control, index))

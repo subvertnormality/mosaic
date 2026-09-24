@@ -20,6 +20,18 @@ class FakeDriver:
 
 
 class RecordedEditInputTiming(unittest.TestCase):
+    def test_semantic_value_edit_returns_last_applied_receipt_without_recipe_drift(self):
+        from driver import Driver
+
+        driver = FakeDriver()
+        driver.enc = Driver.enc.__get__(driver, FakeDriver)
+        self.assertIs(driver.ui.set_value(1), driver.receipt)
+        self.assertEqual(driver.calls, [
+            ('elapse', .05),
+            ('action', {'type': 'enc', 'n': 3, 'delta': 2}),
+            ('elapse', .15),
+        ])
+
     def test_receipt_preserves_single_encoder_step_recipe(self):
         driver = FakeDriver()
         self.assertIs(recorded_edit_receipt(driver), driver.receipt)

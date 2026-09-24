@@ -488,7 +488,7 @@ def recording_trigless_toggle(c):
     c.ui.gesture([('play_stop',None)],[('play_stop',None)])
     def now():return c.logical_ns if c.clock_mode=='controlled-experimental' else time.monotonic_ns()
     origin=now();c.elapse(.5)
-    c.ui.set_value(1) # Timed live edit64 to65.
+    edit_receipt=c.ui.set_value(1) # Timed live edit64 to65.
     def reach(seconds):
         remaining=origin+round(seconds*1e9)-now();assert remaining>0
         c.elapse(remaining/1e9)
@@ -512,7 +512,11 @@ def recording_trigless_toggle(c):
     live_cc=[e for e in capture.events if e['bytes'][0]&240==176]
     assert [(e['port'],e['bytes']) for e in live_cc]==[(1,[176,1,v]) for v in (64,24,65,65,65,24)]
     offsets=[(e[field]-notes[0][field])/1e9 for e in live_cc]
-    for actual,wanted in zip(offsets,(0,0,.55,16,24,32)):assert abs(actual-wanted)<=tol,(offsets,wanted)
+    for index,(actual,wanted) in enumerate(zip(offsets,(0,0,.55,16,24,32))):
+        if index==2 and c.clock_mode!='controlled-experimental':
+            assert_immediate_cc_on_edit(live_cc[index],edit_receipt)
+        else:
+            assert abs(actual-wanted)<=tol,(offsets,wanted)
     for control,note in ((live_cc[1],notes[0]),(live_cc[4],notes[1]),(live_cc[5],notes[2])):
         assert control['index']<note['index'] and abs((control[field]-note[field])/1e9)<=tol
     c.ui.set_value(3);c.ui.expect_mosaic_option('trigless_locks',True)
