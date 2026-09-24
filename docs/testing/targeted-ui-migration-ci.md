@@ -26,7 +26,15 @@ genuinely needs a shared change, establish a fresh passing before baseline at
 the new revision; do not widen the comparison as a shortcut.
 
 Each selected case runs independently at both commits in real time and
-controlled time against the pinned emulator. Both runs must pass and their
+controlled time against the pinned emulator. Both lanes use its qualified
+runtime (`--experimental-install`), as the full campaign's `suite.py` does: the
+emulator's default runtime lacks its JACK, screen-worker and SDL teardown fixes,
+and native matron could exit with SIGSEGV (-11) after a passing real-time run.
+A nonzero native exit remains a hard failure. Reports record
+`runtime: {"real-time": "qualified", "controlled-experimental": "qualified"}`;
+the importer requires every run in such a report to carry the qualified
+(`diagnostic_only: true`) marker, and treats reports without the field as
+earlier default-runtime real-time evidence. Both runs must pass and their
 manifest source identities and artifact digests must validate. The existing
 strict migration gate then checks every root and nested recipe/results session:
 normalized recipes must be identical, controlled results may add only

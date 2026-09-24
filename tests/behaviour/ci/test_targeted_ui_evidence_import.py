@@ -31,7 +31,7 @@ def write_json(path, value):
     path.write_text(json.dumps(value))
 
 
-def fixture(root, profile="base-midi", controlled_only=False):
+def fixture(root, profile="base-midi", controlled_only=False, qualified_runtime=False):
     """A complete selected-lane gate whose native log is intentionally not uploaded."""
     clock_modes = (["controlled-experimental"] if controlled_only
                    else list(importer.LANES))
@@ -39,6 +39,8 @@ def fixture(root, profile="base-midi", controlled_only=False):
                   before_sha=BEFORE, after_sha=AFTER, selected_cases=[CASE],
                   lanes=clock_modes, profile=profile,
                   source_delta={"production_tree_unchanged": True}, cases=[])
+    if qualified_runtime:
+        report["runtime"] = dict(importer.QUALIFIED_RUNTIME)
     row = dict(case=CASE, lanes=[])
     report["cases"].append(row)
     for clock_mode in clock_modes:
@@ -60,7 +62,8 @@ def fixture(root, profile="base-midi", controlled_only=False):
             manifest = dict(schema_version=1, mosaic_revision=sha, case=CASE,
                             clock_mode=clock_mode, profile=profile, passed=True,
                             failure=None, campaign_complete=False,
-                            diagnostic_only=(clock_mode == "controlled-experimental"),
+                            diagnostic_only=(qualified_runtime
+                                             or clock_mode == "controlled-experimental"),
                             artifacts=artifacts)
             write_json(run / "manifest.json", manifest)
             relative = (run / "manifest.json").relative_to(root).as_posix()
@@ -321,6 +324,49 @@ class TargetedEvidenceImportTests(unittest.TestCase):
         write_json(repeat, {**data, "passed": False})
         with self.assertRaisesRegex(ValueError, "repeatability"):
             self.run_import()
+
+    def set_real_time_diagnostic_marker(self, value):
+        report_path = self.download / "targeted-ui-migration.json"
+        report = json.loads(report_path.read_text())
+        for side in ("before", "after"):
+            manifest_path = (self.download / CASE / "real-time" / side /
+                             "session-1/manifest.json")
+            write_json(manifest_path, {**json.loads(manifest_path.read_text()),
+                                       "diagnostic_only": value})
+            report["cases"][0]["lanes"][0]["runs"][side]["manifest_sha256"] = \
+                importer.digest(manifest_path.read_bytes())
+        write_json(report_path, report)
+
+    def test_qualified_runtime_report_imports_qualified_real_time_runs(self):
+        shutil.rmtree(self.download)
+        fixture(self.download, qualified_runtime=True)
+        self.run_import()
+        self.assertTrue((self.output / CASE / "real-time/after/results.json").is_file())
+
+    def test_qualified_runtime_report_refuses_default_runtime_real_time_run(self):
+        shutil.rmtree(self.download)
+        fixture(self.download, qualified_runtime=True)
+        self.set_real_time_diagnostic_marker(False)
+        with self.assertRaisesRegex(ValueError, "identity differs"):
+            self.run_import()
+        self.assertFalse(self.output.exists())
+
+    def test_legacy_report_refuses_undeclared_qualified_real_time_run(self):
+        self.set_real_time_diagnostic_marker(True)
+        with self.assertRaisesRegex(ValueError, "identity differs"):
+            self.run_import()
+        self.assertFalse(self.output.exists())
+
+    def test_refuses_unknown_runtime_identity(self):
+        path = self.download / "targeted-ui-migration.json"
+        report = json.loads(path.read_text())
+        for runtime in ({"real-time": "default", "controlled-experimental": "qualified"},
+                        "qualified", None):
+            with self.subTest(runtime=runtime):
+                write_json(path, {**report, "runtime": runtime})
+                with self.assertRaisesRegex(ValueError, "runtime identity"):
+                    self.run_import()
+        self.assertFalse(self.output.exists())
 
     def test_refuses_manifest_identity_and_report_digest_mismatch(self):
         manifest = (self.download / CASE / "real-time" /

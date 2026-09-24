@@ -26,6 +26,9 @@ SIDES = ("before", "after")
 NAMES = {"recipe.json", "results.json"}
 PRESERVED_SIDECARS = {"fractional-clock-input-evidence.json"}
 PROFILES = ("base-midi", "midi-modulation")
+# Reports without a runtime field predate qualified real-time runs: only their
+# controlled lane was launched with --experimental-install.
+QUALIFIED_RUNTIME = {"real-time": "qualified", "controlled-experimental": "qualified"}
 HISTORICAL_TOOLING_PATHS = (
     "tests/behaviour/ui_migration_gate.py",
     "tests/behaviour/ci/targeted-ui-migration.py",
@@ -170,6 +173,9 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
             and repeat.get("selected_cases") == case_ids
             and ("profile" not in repeat or repeat.get("profile") == profile),
             "candidate three-process repeatability report did not pass")
+    require("runtime" not in report or report["runtime"] == QUALIFIED_RUNTIME,
+            "targeted runtime identity differs")
+    qualified_real_time = "runtime" in report
     historical = "historical_tooling_paths" in source_delta
     tooling = report.get("tooling")
     if historical:
@@ -239,7 +245,7 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                         and manifest.get("failure") is None
                         and manifest.get("campaign_complete") is False
                         and manifest.get("diagnostic_only") is
-                        (clock_mode == "controlled-experimental"),
+                        (qualified_real_time or clock_mode == "controlled-experimental"),
                         "manifest source/lane/profile/pass identity differs")
                 payload = pair_payload(
                     manifest, manifest_path.parent, PERSISTED_PROJECTS.get(case, ()))

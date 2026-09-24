@@ -257,6 +257,26 @@ class TargetedMigrationTests(unittest.TestCase):
                                            "controlled-experimental", "a" * 40,
                                            expected_behaviour_source_sha256={})
 
+    def test_real_time_manifest_must_come_from_the_qualified_runtime(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            run = Path(temporary)
+            for name in ("recipe.json", "results.json"):
+                (run / name).write_text("[]")
+            item = dict(case="M-GRID-001", clock_mode="real-time",
+                        mosaic_revision="a" * 40, profile="base-midi", passed=True,
+                        campaign_complete=False, diagnostic_only=True, failure=None,
+                        behaviour_source_sha256={},
+                        artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
+                                   for name in ("recipe.json", "results.json")])
+            manifest = run / "manifest.json"
+            manifest.write_text(json.dumps(item))
+            targeted.verified_manifest(manifest, "M-GRID-001", "real-time", "a" * 40,
+                                       expected_behaviour_source_sha256={})
+            manifest.write_text(json.dumps({**item, "diagnostic_only": False}))
+            with self.assertRaisesRegex(ValueError, "qualified runtime"):
+                targeted.verified_manifest(manifest, "M-GRID-001", "real-time", "a" * 40,
+                                           expected_behaviour_source_sha256={})
+
     def test_manifest_binds_requested_non_base_profile(self):
         with tempfile.TemporaryDirectory() as temporary:
             run = Path(temporary)
@@ -287,7 +307,7 @@ class TargetedMigrationTests(unittest.TestCase):
             expected = {"tests/behaviour/cases.py": "a" * 64}
             item = dict(case="M-GRID-001", clock_mode="real-time",
                         mosaic_revision="a" * 40, profile="base-midi", passed=True,
-                        campaign_complete=False, diagnostic_only=False, failure=None,
+                        campaign_complete=False, diagnostic_only=True, failure=None,
                         behaviour_source_sha256=expected,
                         artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
                                    for name in ("recipe.json", "results.json")])
@@ -385,10 +405,8 @@ class TargetedMigrationTests(unittest.TestCase):
                                      str(fixture))
                     self.assertIn("--mod-patches", command)
                     self.assertEqual(env["MOSAIC_BEHAVIOUR_INSTALLATION"], str(install))
-                    if lane == "controlled-experimental":
-                        self.assertIn("--experimental-install", command)
-                    else:
-                        self.assertNotIn("--experimental-install", command)
+                    self.assertEqual(
+                        command[command.index("--experimental-install") + 1], str(install))
                     return type("Completed", (), {"returncode": 0})()
                 with patch.object(targeted.subprocess, "run", side_effect=launch):
                     status, manifest = targeted.run_one(
@@ -431,7 +449,7 @@ class TargetedMigrationTests(unittest.TestCase):
             (run / "results.json").write_text("[]")
             item = dict(case="M-GRID-001", clock_mode="real-time",
                         mosaic_revision="a" * 40, profile="base-midi", passed=True,
-                        campaign_complete=False, diagnostic_only=False, failure=None,
+                        campaign_complete=False, diagnostic_only=True, failure=None,
                         behaviour_source_sha256={},
                         artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
                                    for name in ("recipe.json", "results.json")])
@@ -467,7 +485,7 @@ class TargetedMigrationTests(unittest.TestCase):
             (run / "results.json").write_text("[]")
             item = dict(case="M-GRID-001", clock_mode="real-time",
                         mosaic_revision="a" * 40, profile="base-midi", passed=True,
-                        campaign_complete=False, diagnostic_only=False, failure=None,
+                        campaign_complete=False, diagnostic_only=True, failure=None,
                         behaviour_source_sha256={},
                         artifacts=[dict(path=name, sha256=targeted.sha256(run / name), size=2)
                                    for name in ("recipe.json", "results.json")])

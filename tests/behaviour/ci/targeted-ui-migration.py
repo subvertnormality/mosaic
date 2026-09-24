@@ -32,6 +32,7 @@ UI_SOURCE_ALLOWLIST = {
     "tests/behaviour/ui_verb_sources.json",
     "tests/behaviour/ci/test_targeted_ui_migration.py",
 }
+QUALIFIED_RUNTIME = {"real-time": "qualified", "controlled-experimental": "qualified"}
 PINNED_GATE_PATHS = (
     "tests/behaviour/ui_migration_gate.py",
     "tests/behaviour/ci/targeted-ui-migration.py",
@@ -506,8 +507,8 @@ def verified_manifest(manifest_path, case, lane, revision, profile="base-midi", 
             "run manifest behaviour_source_sha256 differs from pre-run source")
     require(item.get("campaign_complete") is False and item.get("passed") is True
             and item.get("failure") is None, "before/after run did not pass")
-    require(item.get("diagnostic_only") is (lane == "controlled-experimental"),
-            "run diagnostic marker differs")
+    require(item.get("diagnostic_only") is True,
+            "run was not launched on the qualified runtime")
     artifacts = item.get("artifacts")
     require(isinstance(artifacts, list), "missing artifact digest inventory")
     seen = set()
@@ -551,9 +552,12 @@ def run_one(source, case, lane, output, install, profile="base-midi",
             mod_code_root=None, mod_patches=False):
     output.mkdir(parents=True, exist_ok=False)
     command = [sys.executable, str(source / "tests/behaviour/run.py"),
-               "--case", case, "--artifacts", str(output), "--clock-mode", lane]
-    if lane == "controlled-experimental":
-        command.extend(("--experimental-install", str(install)))
+               "--case", case, "--artifacts", str(output), "--clock-mode", lane,
+               # Both lanes use the qualified runtime, as suite.py does for the
+               # full campaign. The emulator's default runtime lacks its JACK,
+               # screen-worker and SDL teardown fixes, so matron can SIGSEGV
+               # after a passing real-time run; that remains a hard failure.
+               "--experimental-install", str(install)]
     if profile != "base-midi":
         command.extend(("--profile", profile, "--mod-code-root", str(mod_code_root)))
         if mod_patches:
@@ -618,7 +622,8 @@ def execute(args):
         ["git", "rev-parse", "HEAD"], cwd=args.emulator, text=True).strip()
     report = dict(schema_version=1, complete_regression_run=False, profile=args.profile,
                   before_sha=before_sha, after_sha=after_sha,
-                  emulator_sha=emulator_sha, selected_cases=cases,
+                  emulator_sha=emulator_sha, runtime=QUALIFIED_RUNTIME,
+                  selected_cases=cases,
                   source_delta=source_delta,
                   lanes=report_lanes, cases=[], passed=False)
     if historical:
