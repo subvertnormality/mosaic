@@ -1,10 +1,46 @@
 """Long external-master phase and drift regression."""
-from external_clock_faults import TICK_NS,_actual_delivery,_assert_notes,_configure_midi_source,_schedule
+from external_clock_faults import TICK_NS,_actual_delivery,_assert_notes,_schedule
+
+
+def _configure_raw(c):
+    # Raw primitive copy of 4108035 Driver.configure (pre-semantic UI layer).
+    c.tap(3,8);c.enc(1,4);c.enc(3,1);c.key(3);c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(5,8)
+    for x,y in ((1,7),(2,6),(3,5),(4,4)):c.tap(x,y)
+    c.tap(5,8)
+    for x,y in ((1,1),(2,2),(3,3),(4,4)):c.tap(x,y)
+    c.tap(3,8);c.tap(1,2);c.hold_tap((1,4),(4,4))
+    c.led_values([(1,2)],[15]);c.screen_header('Ch. 1 Device Config')
+
+
+def _menu_label_raw(c, text, x=0):
+    from frame_oracle import selected_line
+    c.wait(lambda s: selected_line(s, text, x)); c.results.append(dict(kind='selected-menu-label', text=text))
+
+
+def _menu_value_raw(c, text):
+    from frame_oracle import selected_value
+    c.wait(lambda s: selected_value(s, text)); c.results.append(dict(kind='selected-menu-value', text=text))
+
+
+def _configure_midi_source_raw(c):
+    # Raw primitive copy of 4108035 external_clock_faults._configure_midi_source.
+    _configure_raw(c); c.key(1); c.enc(1, 4); c.key(3); _menu_label_raw(c, 'LEVELS >')
+    position = next(index for index, value in enumerate(c.snapshot()['diagnostics']['parameter_roots'])
+                    if value['name'] == 'CLOCK')
+    c.enc(2, position); c.key(3); _menu_label_raw(c, 'source'); _menu_value_raw(c, 'internal')
+    c.enc(3, 1); _menu_value_raw(c, 'midi')
+    # Native norns defaults clock input to all connected devices. Select vport1
+    # explicitly so the port2 prelude is a meaningful routing negative.
+    # The long selected label scrolls horizontally in the native menu, so the
+    # stable proof of this setting is its routing effect below, not OCR text.
+    c.enc(2, 11); c.enc(3, 2)
 
 
 def long_external_phase(c):
     import time
-    _configure_midi_source(c)
+    _configure_midi_source_raw(c)
     controlled=c.clock_mode=='controlled-experimental'
     domain='logical' if controlled else 'monotonic';key='at_'+domain+'_ns';field=domain+'_ns'
     now=c.logical_ns if controlled else time.monotonic_ns()

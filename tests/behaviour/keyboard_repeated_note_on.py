@@ -11,8 +11,20 @@ Both release forms (Note Off, and Note On with velocity zero) are exercised.
 """
 
 
+def _configure_raw(c):
+    # Raw primitive copy of 4108035 Driver.configure (pre-semantic UI layer).
+    c.tap(3,8);c.enc(1,4);c.enc(3,1);c.key(3);c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(5,8)
+    for x,y in ((1,7),(2,6),(3,5),(4,4)):c.tap(x,y)
+    c.tap(5,8)
+    for x,y in ((1,1),(2,2),(3,3),(4,4)):c.tap(x,y)
+    c.tap(3,8);c.tap(1,2);c.hold_tap((1,4),(4,4))
+    c.led_values([(1,2)],[15]);c.screen_header('Ch. 1 Device Config')
+
+
 def keyboard_repeated_note_on(c):
-    c.configure()
+    _configure_raw(c)
     for release in (128, 144):
         marker = c.snapshot()['midi_count']
         c.action(type='midi', port=1, bytes=[144, 72, 90]); c.elapse(.05)

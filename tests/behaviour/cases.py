@@ -2146,9 +2146,20 @@ def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,releas
         c.results.append(dict(kind='recording-origin-channel',channel=status-143,expected=expected,actual=actual,durations=durations,expected_duration=duration))
     ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
 
+def _configure_raw(c):
+    # Raw primitive copy of 4108035 Driver.configure (pre-semantic UI layer).
+    c.tap(3,8);c.enc(1,4);c.enc(3,1);c.key(3);c.tap(5,8)
+    for x in range(1,5):c.tap(x,4)
+    c.tap(5,8)
+    for x,y in ((1,7),(2,6),(3,5),(4,4)):c.tap(x,y)
+    c.tap(5,8)
+    for x,y in ((1,1),(2,2),(3,3),(4,4)):c.tap(x,y)
+    c.tap(3,8);c.tap(1,2);c.hold_tap((1,4),(4,4))
+    c.led_values([(1,2)],[15]);c.screen_header('Ch. 1 Device Config')
+
 def keyboard_input_channels(c):
     import time
-    c.configure();marker=c.snapshot()['midi_count']
+    _configure_raw(c);marker=c.snapshot()['midi_count']
     controlled=c.clock_mode=='controlled-experimental';field='logical_ns' if controlled else 'monotonic_ns'
     origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
     events=[];expected=[];ordinal=0
@@ -2296,7 +2307,7 @@ def recorded_input_sources(c,second_port=2,second_channel=1):
 
 def keyboard_pitch_range(c):
     import time
-    c.configure();marker=c.snapshot()['midi_count']
+    _configure_raw(c);marker=c.snapshot()['midi_count']
     controlled=c.clock_mode=='controlled-experimental';field='logical_ns' if controlled else 'monotonic_ns'
     origin=c.logical_ns+100000000 if controlled else time.monotonic_ns()+500000000
     events=[];expected=[];ordinal=0
