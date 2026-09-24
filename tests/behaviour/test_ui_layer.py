@@ -456,7 +456,8 @@ class UiLayerGuardTests(unittest.TestCase):
         import inspect
         import textwrap
 
-        from harmony_merge_workflow import revoice_workflow, setup_foundation
+        from harmony_merge_workflow import setup_foundation
+        from contract.harmony_workflows import revoice_workflow
 
         for run, page in ((setup_foundation, "merge_shape"),
                           (revoice_workflow, "harmony")):
@@ -482,7 +483,7 @@ class UiLayerGuardTests(unittest.TestCase):
         import inspect
         import textwrap
 
-        from harmony_merge_workflow import (
+        from contract.harmony_workflows import (
             ensemble_polyrhythm_workflow, held_step_precedence_workflow,
             no_voicing_fallback_workflow,
         )
