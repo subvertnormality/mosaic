@@ -32,3 +32,11 @@ def invalid_device_configs(c,scenario):
         e.results.append(dict(kind='device-config-discovery',scenario=scenario,picker=names,passed=True))
     finally:e.finish()
     c.results.append(dict(kind='device-config-session',scenario=scenario,passed=True))
+
+
+def malformed_device_configs(c):
+    return invalid_device_configs(c, 'malformed')
+
+
+def missing_id_device_configs(c):
+    return invalid_device_configs(c, 'missing-id')

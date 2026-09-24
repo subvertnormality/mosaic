@@ -24,7 +24,7 @@ from memory_scale_lock_display import memory_scale_lock_display
 from contract.tooltips import tooltip_messages
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
-from contract.device_configs import invalid_device_configs
+from contract.device_configs import malformed_device_configs, missing_id_device_configs
 from contract.chord_shapes import chord_shape_case
 from device_configs import device_config_defaults
 from unreadable_device_config import unreadable_device_config
@@ -3009,8 +3009,8 @@ CASES={
  'M-MERGE-TRIG-002':dict(run=trig_note_merge_matrix,requirements=['MERGE-TRIG-ALL','MERGE-TRIG-SKIP','MERGE-TRIG-ONLY','MERGE-NOTE-AVERAGE','MERGE-NOTE-HIGHER','MERGE-NOTE-LOWER','MERGE-VELOCITY','OPT-PENTATONIC-MERGED'],description='All 3 trig merge modes x 3 note merge modes over two overlapping patterns: only trig-bearing patterns contribute, single contributors pass through, exact pitches, pattern-1 velocities and rest spacing'),
  'M-MAP-002':dict(run=midi_map_entry,requirements=['SETUP-MIDI-MAP-ENTRY','MAP-RANGES','MAP-CONTROL'],description='Create the documented map through the native norns parameter-map menu (learn CC, in 1..2, accumulate), verify the written PMAP, then step the selected channel velocity mask by relative CCs with exact velocities'),
  'M-SETUP-003':dict(run=device_config_defaults,requirements=['SETUP-DEVICE-DEFAULTS','SETUP-DEVICE-DISCOVERY','CH-DEVICE'],description='Custom configs set output defaults on confirmation: a drum config routes channel 1 to port 2, MIDI channel 10, fixed note 36; a polyphonic config routes channel 2 to MIDI channel 5 with its pattern notes'),
- 'M-SETUP-001':dict(run=lambda c:invalid_device_configs(c,'malformed'),requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),
- 'M-SETUP-002':dict(run=lambda c:invalid_device_configs(c,'missing-id'),requirements=['SETUP-DEVICE-INVALID'],description='A config entry without an id beside a valid one: Mosaic boots, plays through the valid device, and the entry is not offered'),
+ 'M-SETUP-001':dict(run=malformed_device_configs,requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='Malformed, empty and object-shaped config files beside a valid one: Mosaic boots, plays through the valid device, and the picker lists none of the invalid files'),
+ 'M-SETUP-002':dict(run=missing_id_device_configs,requirements=['SETUP-DEVICE-INVALID'],description='A config entry without an id beside a valid one: Mosaic boots, plays through the valid device, and the entry is not offered'),
  'M-SETUP-UNREADABLE-CONFIG-001':dict(run=unreadable_device_config,requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='A config entry that cannot be opened sits between two valid configs: Mosaic boots, plays through the valid device, and the picker offers both valid devices (user decision S7: skip it and load the rest)'),
  'M-MAP-001':dict(run=midi_mapping,requirements=['MAP-CONTROL','MAP-ROUTING','MAP-RANGES'],description='Saved documented PMAP (in 1..2, out -1..1, accumulate): relative binary-offset CCs step the selected channel velocity mask, follow channel selection, and a fixed channel map ignores selection; exact velocities on both ports'),
  'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
