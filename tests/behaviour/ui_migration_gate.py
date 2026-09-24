@@ -264,6 +264,23 @@ def check_session_roots(before, after, lane, case=None):
             after_values=_read(after / session / "results.json")
         except ValueError as error:
             errors.append(str(error));continue
+        if lane == "controlled":
+            known_kinds = set(PERSISTED_RESULT_KINDS.values())
+            for side, values in (("before", before_values), ("after", after_values)):
+                if not isinstance(values, list):
+                    continue
+                observed = {entry.get("kind") for entry in values
+                            if isinstance(entry, dict)
+                            and isinstance(entry.get("kind"), str)
+                            and entry.get("kind") in known_kinds}
+                for kind in sorted(observed):
+                    matching_cases = {candidate for candidate, result_kind
+                                      in PERSISTED_RESULT_KINDS.items()
+                                      if result_kind == kind}
+                    if case not in matching_cases:
+                        errors.append("%s results contain persisted kind %r but case identity %r "
+                                      "does not match a case registered for that kind"
+                                      % (side, kind, case))
         if persisted_kind:
             persisted_result_counts["before"] += sum(
                 isinstance(entry, dict) and entry.get("kind") == persisted_kind

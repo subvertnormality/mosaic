@@ -1614,5 +1614,26 @@ class TargetedMigrationTests(unittest.TestCase):
                 self.assertTrue(any("after persisted project path contains symlink" in error
                                     for error in errors), errors)
 
+    def test_check_lane_requires_identity_for_persisted_results_only(self):
+        from ui_migration_gate import check_lane
+
+        with tempfile.TemporaryDirectory() as temporary:
+            lane = Path(temporary) / "renamed-case" / "controlled"
+            for side in ("before", "after"):
+                run = lane / side
+                run.mkdir(parents=True)
+                (run / "recipe.json").write_text("[]")
+                (run / "results.json").write_text(json.dumps([{"kind": "midi"}]))
+
+            self.assertEqual(check_lane(lane, "controlled"), [])
+            for side in ("before", "after"):
+                (lane / side / "results.json").write_text(json.dumps([
+                    {"kind": "patch-autosave", "files": []},
+                ]))
+
+            errors = check_lane(lane, "controlled")
+            self.assertTrue(any("case identity" in error.lower() for error in errors),
+                            errors)
+
 if __name__ == "__main__":
     unittest.main()
