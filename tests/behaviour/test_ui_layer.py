@@ -18,6 +18,23 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_inactive_note_positions_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.inactive_note_positions as owner
+
+        run = CASES['M-PAT-006']['run']
+        self.assertIs(run, owner.inactive_note_positions)
+        self.assertEqual(run.__module__, 'contract.inactive_note_positions')
+
+    def test_contract_duration_oracle_matches_existing_helper(self):
+        import ast
+        import inspect
+        from cases import assert_durations as existing
+        from contract.duration_assertions import assert_durations as contract
+
+        self.assertEqual(ast.dump(ast.parse(inspect.getsource(contract))),
+                         ast.dump(ast.parse(inspect.getsource(existing))))
+
     def test_memory_redo_encoder_lock_has_exact_contract_owner(self):
         from cases import CASES
         import contract.memory_redo_encoder_lock as owner
