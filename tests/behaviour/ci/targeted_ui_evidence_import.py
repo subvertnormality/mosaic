@@ -16,12 +16,18 @@ from ui_baseline_import import files_under, no_symlink, read_bytes, safe_relativ
 
 
 SHA = re.compile(r"[0-9a-f]{40}\Z")
+SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 CASE = re.compile(r"M-[A-Z0-9][A-Z0-9.-]*\Z")
 LANES = {"real-time": "real-time", "controlled-experimental": "controlled"}
 SIDES = ("before", "after")
 NAMES = {"recipe.json", "results.json"}
 PRESERVED_SIDECARS = {"fractional-clock-input-evidence.json"}
 PROFILES = ("base-midi", "midi-modulation")
+HISTORICAL_TOOLING_PATHS = (
+    "tests/behaviour/ui_migration_gate.py",
+    "tests/behaviour/ci/targeted-ui-migration.py",
+    "tests/behaviour/ci/compare_ptn_graph.lua",
+)
 
 
 def require(condition, message):
@@ -144,6 +150,22 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
             and repeat.get("selected_cases") == case_ids
             and ("profile" not in repeat or repeat.get("profile") == profile),
             "candidate three-process repeatability report did not pass")
+    historical = "historical_tooling_paths" in source_delta
+    tooling = report.get("tooling")
+    if historical:
+        require(source_delta["historical_tooling_paths"] == sorted(HISTORICAL_TOOLING_PATHS)
+                and isinstance(tooling, dict) and set(tooling) == {"sha", "sha256"}
+                and isinstance(tooling["sha"], str) and SHA.fullmatch(tooling["sha"])
+                and tooling["sha"] not in (before_sha, after_sha)
+                and isinstance(tooling["sha256"], dict)
+                and set(tooling["sha256"]) == set(HISTORICAL_TOOLING_PATHS)
+                and all(isinstance(value, str) and SHA256.fullmatch(value)
+                        for value in tooling["sha256"].values())
+                and repeat.get("tooling_sha") == tooling["sha"],
+                "historical tooling identity differs or is incomplete")
+    else:
+        require(tooling is None and repeat.get("tooling_sha") is None,
+                "unexpected historical tooling identity")
     modules, repeats = repeat.get("selected_modules"), repeat.get("repeats")
     require(isinstance(modules, dict) and modules
             and set(modules.values()) <= set(case_ids)
@@ -214,6 +236,10 @@ def import_targeted(download, output, run_id, before_sha, after_sha, case_ids,
                                   evidence_sha256={key: digest(raw) for key, raw in payload.items()},
                                   complete_regression_run=False,
                                   verification_scope="uploaded recipe/results subset; full inventory validated by CI")
+                if historical:
+                    provenance.update(historical_source=True,
+                                      tooling_revision=tooling["sha"],
+                                      tooling_sha256=tooling["sha256"])
                 payload["source-manifest.json"] = manifest_raw
                 payload["source-targeted-report.json"] = report_raw
                 payload["source-repeatability-report.json"] = read_bytes(repeat_path)

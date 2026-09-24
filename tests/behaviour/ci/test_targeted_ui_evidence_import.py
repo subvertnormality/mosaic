@@ -15,6 +15,12 @@ spec.loader.exec_module(importer)
 CASE = "M-PROJECT-LIVE-001"
 BEFORE = "a" * 40
 AFTER = "b" * 40
+TOOLING = "c" * 40
+TOOLING_PATHS = (
+    "tests/behaviour/ui_migration_gate.py",
+    "tests/behaviour/ci/targeted-ui-migration.py",
+    "tests/behaviour/ci/compare_ptn_graph.lua",
+)
 
 
 def write_json(path, value):
@@ -68,6 +74,19 @@ def fixture(root, profile="base-midi", controlled_only=False):
     return report
 
 
+def historical_fixture(root):
+    report = fixture(root)
+    report["source_delta"]["historical_tooling_paths"] = sorted(TOOLING_PATHS)
+    report["tooling"] = dict(
+        sha=TOOLING, sha256={path: "d" * 64 for path in TOOLING_PATHS})
+    write_json(root / "targeted-ui-migration.json", report)
+    repeat_path = root / "targeted-ui-repeatability.json"
+    repeat = json.loads(repeat_path.read_text())
+    repeat["tooling_sha"] = TOOLING
+    write_json(repeat_path, repeat)
+    return report
+
+
 class TargetedEvidenceImportTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -98,6 +117,33 @@ class TargetedEvidenceImportTests(unittest.TestCase):
         self.assertEqual(len(dry["imported"]), 2)
         self.assertTrue(all("/controlled/" in path.replace("\\", "/")
                             for path in dry["imported"]))
+
+    def test_historical_tooling_identity_is_preserved_in_provenance(self):
+        historical_fixture(self.download)
+        self.run_import()
+        provenance = json.loads((self.output / CASE / "controlled" /
+                                 "before/provenance.json").read_text())
+        self.assertEqual(provenance["tooling_revision"], TOOLING)
+        self.assertEqual(provenance["tooling_sha256"],
+                         {path: "d" * 64 for path in TOOLING_PATHS})
+
+    def test_historical_tooling_identity_must_match_repeat_report(self):
+        historical_fixture(self.download)
+        repeat_path = self.download / "targeted-ui-repeatability.json"
+        repeat = json.loads(repeat_path.read_text())
+        repeat["tooling_sha"] = "e" * 40
+        write_json(repeat_path, repeat)
+        with self.assertRaisesRegex(ValueError, "tooling"):
+            self.run_import(dry_run=True)
+        self.assertFalse(self.output.exists())
+
+    def test_historical_report_without_pinned_hashes_is_rejected(self):
+        report = historical_fixture(self.download)
+        del report["tooling"]["sha256"]
+        write_json(self.download / "targeted-ui-migration.json", report)
+        with self.assertRaisesRegex(ValueError, "tooling"):
+            self.run_import(dry_run=True)
+        self.assertFalse(self.output.exists())
 
     def test_refuses_report_or_manifest_profile_mismatch(self):
         fixture(self.download, profile="midi-modulation")
