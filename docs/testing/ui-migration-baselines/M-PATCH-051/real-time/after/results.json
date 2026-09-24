@@ -1,0 +1,75 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "Control 1"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "NRPN14"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "X"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "126"
+  },
+  {
+    "kind": "pre-policy-project-fixture",
+    "removed_fields": [
+      "nrpn_policy_version",
+      "nrpn_stored_modes"
+    ],
+    "sha256": "a7bb6afbe58851277ae92971f260cbb7b2e31cb7e86effbecdeaf73eef0fee31",
+    "numeric_values_unchanged": true
+  },
+  {
+    "kind": "nrpn-persisted-mode-native",
+    "legacy": true,
+    "passed": true
+  }
+]

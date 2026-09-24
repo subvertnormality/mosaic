@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35990411356",
+  "source_run_id": "35990411356",
+  "source_revision": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "case": "M-PATCH-051",
+  "lane": "controlled",
+  "clock_mode": "controlled-experimental",
+  "side": "after",
+  "profile": "base-midi",
+  "targeted_report_sha256": "d9050b582375fe572f1d95ad2b9c0615df1b978ce6eaa65ceb6b4e8cb8914d65",
+  "repeatability_report_sha256": "1700ac8a674d7a77fcd858bd79f8b77bbe29b7647bcc0330413f5066cee6ba95",
+  "manifest": "M-PATCH-051/controlled-experimental/after/cad4c9b0256c4fc5aa42367636404882/manifest.json",
+  "manifest_sha256": "e733f6182cf3f0e8847a26c8b2862740795c204a65e325f6695b6511690d901c",
+  "evidence_sha256": {
+    "nrpn-reload-1/recipe.json": "96eaeed4eb50c9056dd6a25998fe6380cc29487d66c7bd6b6cabae3f2d7a7131",
+    "nrpn-reload-1/results.json": "74d8a39f5c78ce850e134240c5bf0b90f200c32c9241d1b8a1ab35b16b3e118b",
+    "nrpn-reload-2/recipe.json": "812b87a67880b9e61855bab24df556f109499faa48c520ed42bacb1168756bee",
+    "nrpn-reload-2/results.json": "ded54b23e87257cbcdc3577f174c7f05d561f0d605f1071fc820395c3ccaaf91",
+    "pre-policy-seed/autosave.ptn": "de17f7f949dd2447e30d61c6aafb4f3dcb1727e059aaa7d64e8d738e2543c4dc",
+    "recipe.json": "c94acb11ca47e159be2a262c689a8f1ef00a8193c68a614dc3f08ab14e22c8ea",
+    "results.json": "89a2cd7109559e2ce400ee80dbdad5fa55e65df432d0506c09b28a459c1153eb"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI",
+  "historical_source": true,
+  "tooling_revision": "3e6943cd94c70d08fa052a7af9bb652512dfd036",
+  "tooling_sha256": {
+    "tests/behaviour/ui_migration_gate.py": "1112d792cfa99d1f73118348b8be77ade4d66381d1b32fc8fa3733c64629a45e",
+    "tests/behaviour/ci/targeted-ui-migration.py": "b33afab0d2f59ba826968d0aa4f3bfb8fcce2762d8b4365191d612752dd196f9",
+    "tests/behaviour/ci/compare_ptn_graph.lua": "2c5f793815d0bc4a580a34d8849b3713db22aa055391d6a2cd12962eff23b000"
+  }
+}
