@@ -52,10 +52,25 @@ class PatchParamsUiTests(unittest.TestCase):
 
     def test_literal_patch_contracts_have_contract_owners(self):
         from cases import CASES
+        from unittest.mock import patch, sentinel
+        import contract.patch_params as owner
         from contract.patch_params import patch_slide_live_division, patch_slide_stop_restarts
         self.assertEqual(patch_slide_live_division.__module__, 'contract.patch_params')
         self.assertIs(CASES['M-PATCH-024']['run'], patch_slide_live_division)
         self.assertIs(CASES['M-PATCH-031']['run'], patch_slide_stop_restarts)
+        for case_id, name, option in (
+            ('M-PATCH-025', 'patch_slide_live_division_type_switch', 'type_switch'),
+            ('M-PATCH-026', 'patch_slide_live_division_reset', 'reset'),
+            ('M-PATCH-032', 'patch_slide_live_division_repeated_edits', 'repeated_edits'),
+        ):
+            with self.subTest(case_id=case_id):
+                run = CASES[case_id]['run']
+                self.assertIs(run, getattr(owner, name))
+                self.assertEqual(run.__module__, 'contract.patch_params')
+                self.assertIsNone(run.__closure__)
+                with patch.object(owner, 'patch_slide_live_division', return_value=sentinel.result) as helper:
+                    self.assertIs(run(sentinel.driver), sentinel.result)
+                helper.assert_called_once_with(sentinel.driver, **{option: True})
 
 
 if __name__ == '__main__':

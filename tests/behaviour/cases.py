@@ -145,7 +145,11 @@ from patch_params import patch_clear_mask_boundary
 from patch_params import patch_slide_live_destination
 from patch_params import patch_slide_trigless
 from patch_params import patch_slide_song_cutoff
-from contract.patch_params import patch_slide_live_division, patch_slide_stop_restarts
+from contract.patch_params import (
+    patch_slide_live_division, patch_slide_live_division_type_switch,
+    patch_slide_live_division_reset, patch_slide_live_division_repeated_edits,
+    patch_slide_stop_restarts,
+)
 from patch_params import patch_slide_timing
 from patch_params import patch_adjacent_locks
 from patch_params import patch_lock_precedence
@@ -3227,13 +3231,13 @@ CASES={
  'M-PATCH-035':dict(run=patch_slide_live_destination,requirements=['SLIDE-GLOBAL','LOCK-PARAM-SET'],description='Editing destination during active slide applies new endpoint before its note and next cycle uses the new trajectory without stale tail'),
  'M-PATCH-034':dict(run=lambda c:patch_slide_timing(c,step_local=True,global_roundtrip=True),requirements=['SLIDE-STEP','SLIDE-GLOBAL'],description='Global slides enable later locks then switch off while preserving an existing local slide and its exact timing'),
  'M-PATCH-033':dict(run=lambda c:patch_slide_timing(c,step_local=True),requirements=['SLIDE-STEP'],description='Held-step K3 slides only source lock with exact trajectory and endpoint; later lock jumps directly without unwanted global interpolation'),
- 'M-PATCH-032':dict(run=lambda c:patch_slide_live_division(c,repeated_edits=True),requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Repeated confirmed queued rate edits preserve pre-boundary timing and retime active slide continuously to final rate'),
+ 'M-PATCH-032':dict(run=patch_slide_live_division_repeated_edits,requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Repeated confirmed queued rate edits preserve pre-boundary timing and retime active slide continuously to final rate'),
  'M-PATCH-031':dict(run=patch_slide_stop_restarts,requirements=['SLIDE-GLOBAL','NAV-TRANSPORT'],description='Three active-slide stop/restarts leave no stale MIDI or outstanding notes and retain exact restarted slide timing'),
  'M-PATCH-030':dict(run=lambda c:patch_slide_trigless(c,False),requirements=['SLIDE-GLOBAL','OPT-TRIGLESS'],description='Disabled trigless excludes silent lock from slide destination and parameter emission'),
  'M-PATCH-028':dict(run=lambda c:patch_slide_timing(c,off_middle=True),requirements=['PARAM-OFF','SLIDE-GLOBAL','CH-PATCH-SENTINEL'],description='Explicit Off lock between active slide endpoints emits no sentinel/stored value and does not cancel or distort the MIDI trajectory'),
  'M-PATCH-027':dict(run=patch_slide_song_cutoff,requirements=['SLIDE-GLOBAL','SONG-ADVANCE','SONG-SLOTS'],description='Actual song transition without reset retires old active CC slide at global boundary; new octave fingerprint, phase and explicit lock remain correct'),
- 'M-PATCH-026':dict(run=lambda c:patch_slide_live_division(c,reset=True),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-TEMPO','SONG-ADVANCE'],description='Same-pattern reset during queued rate edit preserves wrapped slide through unowned first step and retargets the actual third-step endpoint'),
- 'M-PATCH-025':dict(run=lambda c:patch_slide_live_division(c,type_switch=True),requirements=['SLIDE-GLOBAL','CH-SWING'],description='Queued Swing-to-Heavy6 change crosses active /3 slide; exact global-boundary retiming, continuous CC and framebuffer readback'),
+ 'M-PATCH-026':dict(run=patch_slide_live_division_reset,requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-TEMPO','SONG-ADVANCE'],description='Same-pattern reset during queued rate edit preserves wrapped slide through unowned first step and retargets the actual third-step endpoint'),
+ 'M-PATCH-025':dict(run=patch_slide_live_division_type_switch,requirements=['SLIDE-GLOBAL','CH-SWING'],description='Queued Swing-to-Heavy6 change crosses active /3 slide; exact global-boundary retiming, continuous CC and framebuffer readback'),
  'M-PATCH-024':dict(run=patch_slide_live_division,requirements=['SLIDE-GLOBAL','CH-TEMPO'],description='Queued /3-to-/6 edit applies at global pattern boundary during a slide; preserves continuous CC and independently retimed destination'),
  'M-PATCH-023':dict(run=lambda c:patch_slide_timing(c,wrap=True,shuffle=True),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-SWING'],description='Heavy basis6 full shuffle: independent16/16/16/48pulse onsets, one-gap outgoing slide and three-gap wrapped return'),
  'M-PATCH-021':dict(run=lambda c:patch_slide_timing(c,wrap=True,swing=50),requirements=['SLIDE-GLOBAL','OPT-SLIDE-WRAP','CH-SWING'],description='Positive50 swing CC slide over one gap and wrapped return over three gaps; independent36/12pulse onsets and endpoint ordering'),

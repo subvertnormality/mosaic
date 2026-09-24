@@ -98,6 +98,18 @@ def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=Fal
         (c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 
+def patch_slide_live_division_type_switch(c):
+    return patch_slide_live_division(c, type_switch=True)
+
+
+def patch_slide_live_division_reset(c):
+    return patch_slide_live_division(c, reset=True)
+
+
+def patch_slide_live_division_repeated_edits(c):
+    return patch_slide_live_division(c, repeated_edits=True)
+
+
 def patch_slide_stop_restarts(c):
     from patch_params import patch_slide_timing
     return patch_slide_timing(c, stop_restarts=3)
