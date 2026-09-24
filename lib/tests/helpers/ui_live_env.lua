@@ -2,7 +2,7 @@
 -- program model, lib/ui.lua (every page UI, tooltip, save_confirm and
 -- ui_live), each page's init and ui_live.install(). Only the hardware and the
 -- sequencing collaborators the pages call outward (screen, metro, clock,
--- m_clock, device_map, m_midi, recorder, pattern, step, param_manager) are
+-- m_clock, device_map, m_midi, pattern, step, param_manager) are
 -- recording stubs. `isolated` snapshots _G and restores it afterwards, even
 -- when the body fails; include() is dofile, so every scenario starts fresh.
 
@@ -25,6 +25,7 @@ local function stub_params(env)
     song_mode = 2, tresillo_amount = 3, all_scales_lock_to_pentatonic = 1
   }
   env.param_values = values
+  env.param_objects = {}
   local store = {}
   local p = {lookup = {}, params = {}}
   function p:get(id)
@@ -35,11 +36,13 @@ local function stub_params(env)
   end
   function p:set(id, value)
     if type(id) == "number" then store[id].value = value; return end
+    if env.param_objects[id] then p.lookup[id] = p.lookup[id] or id end
     values[id] = value
     env.calls[#env.calls + 1] = {"params.set", id, value}
   end
   function p:string(id) return tostring(values[id]) end
-  function p:lookup_param() return nil end
+  -- Parameter objects a scenario registers in env.param_objects (id -> table).
+  function p:lookup_param(id) return env.param_objects[id] end
   function p:t() return 1 end
   function p:add(args)
     store[#store + 1] = {id = args and args.id, value = 0}
@@ -54,7 +57,9 @@ local function stub_params(env)
   return p
 end
 
+-- The shape device_descriptors.load_devices gives: None first.
 local DEVICES = {
+  {id = "none", name = "None", type = "none"},
   {id = "midi", name = "MIDI", type = "midi"},
   {id = "fixed", name = "Fixed", type = "midi", default_midi_channel = 10, default_midi_device = 1},
 }
@@ -99,9 +104,10 @@ local function install_stubs(env, before)
     get_midi_outs = function() return {{name = "port one", value = 1}, {name = "port two", value = 2}} end,
     midi_devices_connected = function() return true end,
   }
-  recorder = setmetatable({}, {__index = function(_, key) return record(env, "recorder." .. key) end})
   pattern = setmetatable({}, {__index = function(_, key) return record(env, "pattern." .. key) end})
-  step = setmetatable({queue_for_pattern_change = function(f) env.queued = env.queued or {}; env.queued[#env.queued + 1] = f end},
+  step = setmetatable({queue_for_pattern_change = function(f) env.queued = env.queued or {}; env.queued[#env.queued + 1] = f end,
+    -- No queued jump: the next slot is the current one (A03 reads it).
+    calculate_next_selected_song_pattern = function() return program.get().selected_song_pattern end},
     {__index = function(_, key) return record(env, "step." .. key) end})
   norns_param_state_handler = {
     get_original_param_state = function() return {} end,
@@ -110,6 +116,8 @@ local function install_stubs(env, before)
   trigger_edit_page = {get_algorithm = function() return env.algorithm end}
 
   local real_include = before.include
+  -- The real recorder: held-step edits stage their step locks here.
+  recorder = real_include("mosaic/lib/recorder")
   local STUBS = {
     ["mosaic/lib/m_midi"] = function() return m_midi end,
     ["mosaic/lib/devices/param_manager"] = function()
@@ -142,9 +150,13 @@ function ui_live_env.isolated(body, options)
     fn.dirty_screen = function() end
     fn.dirty_grid = function() end
     program.init()
+    -- Another suite's m_clock.init may have left its lock edit listener on the
+    -- shared program module; with none, a lock edit behaves as it always has.
+    program.set_lock_edit_listener(nil)
     install_stubs(env, before)
     program.set_selected_page(options.page or pages.pages.channel_edit_page)
     env.ui = include("mosaic/lib/ui")
+    ui = env.ui
     env.ui.init()
     body(env)
   end)

@@ -345,9 +345,30 @@ The pattern editor button cycles through three pages, accessible by pressing the
 
 ### Norns Menu Navigation
 
-Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you press K2 or navigate away from the page without applying, the change will be cancelled.
+The Norns screen follows the grid. Press a global menu button and the screen shows that page. Select a channel and the screen shows it. Hold one or more steps and the Channel screen shows the masks or trig params of exactly those steps, then returns to where you were when you let go. Most of the time you play the grid and glance at the screen; you only navigate the screen to reach settings.
 
-In general, the K3 button is used to confirm changes, K2 is used to cancel, and K1 is held to access shift functions.
+<img alt="Norns Note Masks screen" src="images/norns/note-masks.png" width="384" />
+
+Every screen has the same parts. The title row names the screen and its scope: the channel (`CH03`), the song slot when it is not the first (`S02`), and any held steps (`ST05` for one step, `3ST` for several). The selected field is outlined or marked with `>`, and its whole value is always shown, on the bottom line of a grid of fields or in large type on a single-field screen. The last line lists the controls for the screen, or shows a tooltip after a grid action. The four small tiles at the right of the title row are _Mosaic_'s mark; they light up in turn when something changes.
+
+The controls work the same way on every screen:
+
+- **E1** moves between the main screens and the page's task list. On the Channel page, E1 moves from Masks to Trig params to Channel tasks and back. On every other page, E1 opens the page's task list.
+- **E2** chooses a field, or a row in a task list.
+- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.
+- **K3** opens the chosen task, applies a staged change, or confirms a question.
+- **K2** goes back, or cancels a staged change or a question.
+- A short **K1** tap opens the norns system menu. Holding K1 is the shift key for grid and screen gestures.
+
+Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge, Device, History, Mask detail, Trig detail, Merge Shape and Norns settings. Scale tasks: Scale, Scale clock, Overview and Channel view. Pattern tasks: Pattern, Options, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view.
+
+<img alt="Norns Channel tasks screen" src="images/norns/channel-tasks.png" width="384" />
+
+Some settings are staged before they take effect. Device, clock, scale and song settings show your change straight away but only apply when you press K3. K2, or leaving the screen with E1, cancels a staged change without touching what is already playing. [Merge Shape and Harmony](#musical-merge-and-voice-leading) keep a whole draft in the same way.
+
+When _Mosaic_ starts, a mosaic of tiles lays itself down across the screen, row by row, then lifts away to leave the _Mosaic_ name, which fades into the first screen. Any key, encoder or grid press skips it. The start-up animation, screen transitions and the characters' blinks can be turned off with [UI Motion](#ui-motion).
+
+<img alt="Mosaic start-up animation" src="images/norns/splash.png" width="384" />
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -360,7 +381,7 @@ For a detailed reference on the layout of your Norns device, consult the officia
 
 ### Tooltips
 
-Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip.
+Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip. When no tooltip is showing, the bottom line lists the controls for the current screen.
 
 ### External MIDI Transport
 
@@ -607,8 +628,8 @@ roughly half a minute on the device.
 If no C compiler is available, or the build fails, analysis fails closed with
 `ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery profile can
 still point the analysis worker at its own executable that accepts the worker
-request/result protocol and returns all four lanes, in which case that one is
-used instead. No detector quality, transcription accuracy, or timing
+request/result protocol and returns the lanes it declares, in which case that
+one is used instead. No detector quality, transcription accuracy, or timing
 performance is claimed here.
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.
@@ -638,7 +659,7 @@ While previewing a new pattern, use the move controls to shift its position. The
 
 <img alt="Pattern editor move buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="300" />
 
-On the Norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is a useful context for editing your pattern. Use E2 to select channels. On page 2 you can select trig editor options. Currently, this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
+On the Norns screen, Pattern Trig shows the viewed channel's steps as 64 cells. This is the merged version of the channel and is a useful context for editing your pattern. Use E3 to view another channel; it does not change the selected channel. Choose Options from the pattern task list (E1) to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -673,7 +694,7 @@ Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data mi
 
 The gentle flicker on the top row indicates the currently chosen pattern.  If you wish to explore a different pattern, press and hold or shift press (holding K1) on the top row.
 
-On the Norns screen, you'll find the channel grid visualizer. Use E2 to select the current channel.
+On the Norns screen, Pattern Note shows the viewed channel's steps as 64 cells. Use E3 to view another channel.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -689,7 +710,7 @@ Now let's look at the velocity editor, which functions similarly to the note pag
 
 The velocity editor spans two vertical pages: the first displays velocities from 127 down to 68, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
 
-On the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.
+On the Norns screen, Pattern Velocity shows the viewed channel's steps as 64 cells. Use E3 to view another channel.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -879,15 +900,15 @@ Length merge modes are set by holding shift (K1) and pressing the velocity merge
 
 #### Note Dashboard
 
-On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.
+Choose Output from Channel tasks to see the last played notes on the currently selected channel. Hold a step to see what that step plays instead, including the stages of a [Harmony](#harmony) event.
 
 #### Clocks, Swing and Shuffle
 
-You can easily adjust the tempo of your entire composition directly from the song editor page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
+You can easily adjust the tempo of your entire composition directly from the song editor page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels on the Clock screen (Channel tasks, then Clock). This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
 
 Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echoes' excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a "feel" and a "basis". Each channel can have an independent setting, giving endless possibilities. 
 
-Note: If a channel's swing/shuffle settings are not set ("X"), they will take the global setting which is set on the song editor page global settings page. Selecting "X" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.
+Note: If a channel's swing/shuffle settings are not set ("X"), they will take the global setting, which is set on the Song page's Tempo and feel screen. Selecting "X" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -900,10 +921,9 @@ Note: If a channel's swing/shuffle settings are not set ("X"), they will take th
 
 _Mosaic_'s memory retains all masks and trig lock actions, including those recorded using the record function. You can navigate this memory using Norns' encoder.
 
-To access _Mosaic_'s memory, open the channel editor and navigate to the Memory page on the Norns screen. On this page, each remembered action is represented as an icon, with the most recent action displayed on the right.
+To access _Mosaic_'s memory, open the channel editor and choose History from Channel tasks. The Memory screen shows your position in the channel's memory, the selected action, and how many actions you can still undo and redo.
 
-- Notes are shown as icons, while dots indicate the length added to those notes.
-- Use E3 to scroll left and explore past actions or scroll right to move towards more recent actions.
+- Use E3 to step back through past actions or forward towards more recent ones.
 - Press K3 to jump directly to the latest action.
 - Press K2 to return to the beginning of the memory.
 
@@ -953,11 +973,11 @@ To mute a channel on your sequencer, press and hold the select button for the de
 
 Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. Trig params are unique to a song pattern, allowing drastic transitions when moving from one section to another. Each channel can have up to 10 trig params assigned, and each trig param can be [trig locked](#locks) independently. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. 
 
-In the second user interface page of the channel editor on the Norns screen, you will encounter a variety of parameters. Here's how to navigate and manipulate these settings:
+The Trig params screen of the channel editor shows all ten slots at once, with the selected slot's full name and value on its bottom line. Here's how to navigate and manipulate these settings:
 
-* **Page Navigation**: Use E1 to switch between pages.
-* **Changing Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3. To fine tune, rotate E3 whilst holding K1.
-* **Activating Parameters**: To activate a different parameter within the same slot, press K2.
+* **Screen Navigation**: Use E1 to move between Masks, Trig params and Channel tasks. Trig detail, in Channel tasks, shows the selected slot on its own.
+* **Changing Parameters**: To select a slot, turn E2. Adjust its value by rotating E3. To fine tune, rotate E3 whilst holding K1.
+* **Activating Parameters**: To activate a different parameter within the same slot, press K2 to open the parameter list, turn E3 to browse, press K3 to assign, and press K2 to return.
 * **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create "trig locks" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.
 * **Default Parameter Values**: A pre-set parameter value is transmitted to your selected device on steps without a trig lock, unless the value is off or a parameter slide is active.
 * **Handling Off Settings**: An explicit MIDI parameter lock set to "off" sends no value for that parameter on that step. It does not resend the previous lock or restore the default, so the device keeps its last received value. An off lock does not itself cancel a parameter slide that is already running; that slide may continue sending values.
@@ -1050,7 +1070,7 @@ The Fully Quantise Mask param controls whether note masks on a step are fully qu
 
 Access the scale editor by pressing the second global menu button.
 
-When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
+When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Scale screen to adjust the root, scale, degree, rotation and transposition for the selected scale: E2 chooses a setting, E3 changes it, K3 applies it and K2 cancels. The title row names the slot being edited.
 
 <img alt="Scale editor scale slot select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="300" />
 
@@ -1130,8 +1150,10 @@ The song sequence's length can be adjusted using the fader located at the lower 
 
 #### Navigating the Norns Display
 
-**Page 1**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.
-**Page 2**: Set the tempo to match the mood you want, from a soothing lullaby to a fast-paced track.
+The Song page opens on **Playback**, which shows the playing slot and the one that comes next. Choose the other screens from Song tasks (E1).
+
+**Slot setup**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.
+**Tempo and feel**: Set the tempo to match the mood you want, from a soothing lullaby to a fast-paced track, and the global swing or shuffle.
 
 ## Locks
 
@@ -1146,7 +1168,7 @@ Device parameters can be locked on a per-step basis. To set a param trig lock:
 
 To clear parameter trig locks from a specific step:
 
-1. On the channel editor, navigate to the trig lock page on the Norns screen.
+1. On the channel editor, show Trig params on the Norns screen (E1).
 2. Hold the step with trig locks and press K2.
 
 To clear all parameter trig locks from a channel:
@@ -1189,7 +1211,7 @@ Masks can also be locked on a per-step basis. To set a mask trig lock:
 
 To clear mask locks from a specific step:
 
-1. On the channel editor, navigate to the Masks page on the Norns screen..
+1. On the channel editor, show Masks on the Norns screen (E1).
 2. Hold the step with mask locks and press K2.
 
 To clear all mask trig locks from a channel:
@@ -1342,6 +1364,12 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 
 "Honour scale transpose" is off by default. Enabling this setting means the current scale's transpose option will affect the MIDI keyboard mapping.
 
+#### Screen Options
+
+##### UI Motion
+
+Turns decorative screen motion on or off: the start-up animation, the tile transition between screens, the light running round _Mosaic_'s mark, and the characters' blinks (**PARAMS > MOSAIC > UI motion**, default On). Motion never delays input, hides a value for more than a moment or changes timing.
+
 ### Sinfonion Connect
 
 You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).
@@ -1358,11 +1386,11 @@ registers without rewriting any source pattern. Both features are optional and
 default to Off, so an older project keeps its original MIDI, timing and random
 behaviour.
 
-On the Channel page, turn E1 through the existing pages in this order: Masks,
-Trig Locks, Memory, Clock Mods, MIDI Config, Note Dashboard, Merge Shape, then
-Harmony. The ends clamp. On Merge Shape and Harmony, E2 selects a row, E3 changes
-a staged value, K3 validates and applies the whole draft, and K2 discards the
-draft. A stopped edit applies immediately. During playback, Merge Shape displays
+Open Merge Shape or Harmony from Channel tasks. E2 selects a row, E3 changes a
+staged value, K3 on a row marked with an arrow opens it, and K3 elsewhere
+validates and applies the whole draft. K2 discards the draft, or returns from a
+row you opened to the one it came from. E1 returns to the first screen of the
+feature, discarding an unapplied draft, and from there to Channel tasks. A stopped edit applies immediately. During playback, Merge Shape displays
 `NEXT CYCLE` and activates before the next channel-cycle onset; Harmony displays
 `NEXT PATTERN` and activates at the next global pattern boundary. Stop makes the
 latest applied request active for the next start.

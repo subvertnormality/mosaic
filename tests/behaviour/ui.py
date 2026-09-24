@@ -1071,30 +1071,11 @@ class Ui:
         self.driver.results.append(dict(kind="selected-menu-value", text=value))
 
     def wait_memory_position(self, current, total):
-        """Wait for the exact memory counters without adding a result record."""
-        from frame_oracle import render
+        """Wait for Memory's selected Position row to read "<current> of <total>"."""
+        from frame_oracle import selected_field_matches
 
-        data = SCREEN["memory_position"]
-        bands = data["bands"]
-        expected = render([
-            [bands["current"]["x"], bands["current"]["baseline"],
-             data["level"], str(current)],
-            [bands["total"]["x"], bands["total"]["baseline"],
-             data["level"], str(total)],
-        ], font_size=data["font_size"], antialias=data["antialias"])
-        indices = [
-            (y * data["frame_width"] + x) * data["bytes_per_pixel"] + channel
-            for band in bands.values()
-            for y in range(band["top"], band["bottom"])
-            for x in range(band["left"], band["right"])
-            for channel in range(data["channels"])
-        ]
-
-        def matches(state):
-            actual = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(actual[index] == expected[index] for index in indices)
-
-        return self.driver.wait(matches)
+        return self.driver.wait(lambda state: selected_field_matches(
+            state, "detail", "Position", "%d of %d" % (current, total)))
 
     def expect_memory_position(self, current, total, channel=None):
         self.wait_memory_position(current, total)

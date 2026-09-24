@@ -224,13 +224,28 @@ end
 
 local hooks = {}
 
-hooks["owner.cancel_unapplied"] = function()
+hooks["owner.cancel_unapplied"] = function(_, event)
   local adapter, provider = feature_adapter()
   if adapter then
     local editor = feature_editor(provider)
-    if editor and editor.dirty then adapter:cancel(adapter.owner_token and adapter.owner_token()) end
+    if event == "K2.down" then
+      -- The feature's own K2: discard an unapplied draft, then back out of a
+      -- child route (channel_feature_editor key(2)).
+      editor:key(2)
+    elseif editor and editor.dirty then
+      editor:reload()
+    end
   elseif save_confirm.has_pending() then
     save_confirm.cancel()
+  end
+end
+
+-- E1 on a feature screen: a draft or child returns to the clean root; the
+-- clean root moves on to Channel tasks (the router already chose which).
+hooks["feature.return_then_tasks"] = function()
+  local screen = spec.screens[router.state.screen]
+  if screen.provider == "merge" or screen.provider == "harmony" then
+    feature_editor(screen.provider):enter()
   end
 end
 
@@ -398,11 +413,28 @@ local function after_event()
   fn.dirty_screen(true)
 end
 
+local dispatch_event
+
+-- Input handling never raises into norns or the grid path: a failure is
+-- logged and the screen is re-synchronised with its owners.
 local function dispatch(event, payload)
   if not installed then return end
+  local ok, err = pcall(dispatch_event, event, payload)
+  if not ok then
+    print("ui_live: " .. tostring(err))
+    pcall(after_event)
+  end
+end
+
+dispatch_event = function(event, payload)
   sync_context()
   reconcile_owner_routes()
-  sync_field_state()
+  -- A screen whose fields cannot be read still takes navigation input.
+  local read, problem = pcall(sync_field_state)
+  if not read then
+    print("ui_live: " .. tostring(problem))
+    router.state.field_id, router.state.field_kind = nil, "unavailable"
+  end
   local s = router.state
   if screen_entry().profile == "tasks" and (event == "K3.down") then
     payload = payload or {}
