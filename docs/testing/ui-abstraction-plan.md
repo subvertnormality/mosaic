@@ -1,29 +1,23 @@
 # Plan: a UI layer that makes the behaviour cases robust to UI change
 
-Status: in progress on `codex/1.4.0` (implementation started 2026-09-21). The
-map/verb foundation, migration comparator, static allowlist guard and shared
-frame-oracle migration are implemented. `midi_cc_page_return.py`,
-`startup_transport.py`, `scale_cache.py`, `elektron_two_ports.py`,
-`gesture_release_order.py`, `midi_mapping_held_step.py`, `external_start_phase.py`,
-`song_divisions.py`, `song_length_domain.py`, `song_repetitions.py`, `stop_safety.py`,
-`tooltip_autosave.py` and `tooltips.py` are now byte-identically extracted into
-`contract/`, with controlled and real-time before/after evidence, strict gates, and a
-representative controlled repeat for each module. `M-SONG-SETTINGS-002` remains in its
-original location and allowlist: its release-deadline oracle failed in both the original
-and isolated serial real-time runs, whose manifests are preserved outside the committed
-baseline. `song_tempo.py`,
-`song_slot_copy.py`, `held_mask_extra_key.py` and
-`persisted_fixture_builder.py` are clean; registered cases have controlled and
-real-time before/after evidence plus three-process controlled repeats. The raw Cairo
-oracle is extracted under `contract/`. Baseline failures `M-MEMORY-009`, `M-SYNC-002`,
-`M-SYNC-007`, `M-SYNC-008` and `M-SYNC-010` are classified fail-closed as contract
-cases. The guard follows case
-call graphs into shared helpers and rejects raw dependencies whose defining module is
-not still allowlisted. Broader family migration,
-case-body contract extraction and the drift drill remain. Test-side only:
-no change to Mosaic (repo root `mosaic.lua`, `lib/`) and none to the emulator checkout.
-`tests/behaviour/driver.py` is this suite's own driver over the emulator's public client, so
-it is in scope.
+Status: final validation in progress on `codex/1.4.0` (implementation started
+2026-09-21), not complete. The semantic UI layer, migration comparator, contract
+classifier and raw-UI guard are implemented. The migration allowlist has been removed;
+the guard now requires ordinary registered cases to be free of reachable raw UI calls.
+`tests/behaviour/contract_cases.json` records 405 contract cases against a ceiling of
+450, including the formerly allowlisted `M-SONG-SETTINGS-002` and
+`M-PARAM-DIAL-OFF-001`. The progress notes below preserve historical checkpoints;
+their statements about allowlist membership describe the state at the time.
+
+Acceptance remains open: recent contract-owner extractions need source-SHA-bound
+before/after evidence where the existing pairs predate the move, and panic-navigation
+cases need paired evidence. The actual page-order drift drill and its
+`docs/testing/ui-migration-drill.json` report have not been completed. Full validation
+and CI on the current branch head remain pending. Baseline failures `M-MEMORY-009`,
+`M-SYNC-002`, `M-SYNC-007`, `M-SYNC-008` and `M-SYNC-010` remain classified fail-closed
+as contract cases. This is test-side work only: no change to Mosaic (repo root
+`mosaic.lua`, `lib/`) or to the emulator checkout. `tests/behaviour/driver.py` is
+this suite's own driver over the emulator's public client, so it is in scope.
 
 The external-clock-fault family (`external_clock_faults.py`) is UI-independent across the
 seven registered cases `M-SYNC-015` through `M-SYNC-021` (jitter, one missing clock, one
