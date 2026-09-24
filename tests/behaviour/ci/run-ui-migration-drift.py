@@ -184,7 +184,8 @@ def _run_case(scratch, output, case, profile, install, mod_root, timeout):
 
 def _run_repeat(scratch, output, case, profile, install, mod_root, timeout):
     repeats_root = scratch.parent / "mosaic-behaviour-runs"
-    before = set(repeats_root.glob("repeat-*")) if repeats_root.exists() else set()
+    repeats_root.mkdir(parents=True, exist_ok=False)
+    before = set()
     command = [sys.executable, str(scratch / "tests/behaviour/repeat.py"),
                "--case", case, "--experimental-install", install]
     if profile == "midi-modulation":

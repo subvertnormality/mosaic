@@ -125,6 +125,26 @@ OTHER = 7
                     manifest)
             self.assertTrue((output / "standalone-logs" / "M-ONE.json").is_file())
 
+    def test_repeat_prepares_the_output_parent_required_by_repeat_py(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            scratch = root / "execution" / "scratch-source"
+            repeats = scratch.parent / "mosaic-behaviour-runs"
+            manifest = repeats / "repeat-one" / "manifest.json"
+
+            def fake_run(*args, **kwargs):
+                self.assertTrue(repeats.is_dir(), "repeat.py output parent is absent")
+                manifest.parent.mkdir()
+                manifest.write_text("{}\n", encoding="utf-8")
+                return subprocess.CompletedProcess(args=[], returncode=1,
+                                                   stdout="", stderr="")
+
+            with patch.object(runner.subprocess, "run", side_effect=fake_run):
+                self.assertEqual(
+                    runner._run_repeat(scratch, root / "output", "M-ONE",
+                                       "base-midi", "installation.json", None, 10),
+                    manifest)
+
     def test_scratch_commit_changes_only_the_exact_page_order_and_bundles(self):
         source = """from collections import OrderedDict
 CHANNEL_PAGES = OrderedDict([
