@@ -1448,8 +1448,20 @@ def arp_empty_masks(c,muted=False):
     notes=c.playback(expected,cycles=2,timeout=4,settle_seconds=1.25)
     assert_durations(c,notes,[.5]*16)
     events=[m for m in c.snapshot()['midi'] if m['index']>before]
-    assert len(note_pairs(events))==len(notes),'No-mask ratchet release accounting failed'
-    c.results.append(dict(kind='no-mask-ratchet-compatibility-control',onsets=len(notes),passed=True))
+    pairs=note_pairs(events)
+    onsets=[on for on,off in pairs]
+    assert [m['index'] for m in onsets[:len(notes)]]==[m['index'] for m in notes],'No-mask ratchet release accounting failed'
+    # playback() fixes its notes at the closing onset, but this window runs until
+    # Stop takes effect. In real time that follows observe/tap round trips, so a
+    # further 1/12 s ratchet may legitimately land first: it must continue the
+    # exact cyclic pattern on the ratchet lattice. Controlled time admits none.
+    late=onsets[len(notes):]
+    assert not late or c.clock_mode=='real-time','No-mask ratchet release accounting failed'
+    for i,m in enumerate(late,len(notes)):
+        assert (m['port'],m['bytes'])==expected[i%len(expected)],('Late ratchet onset',i,m)
+        assert abs((m['monotonic_ns']-notes[0]['monotonic_ns'])/1e9-i/12)<=.01,('Late ratchet phase',i,m)
+    c.results.append(dict(kind='no-mask-ratchet-compatibility-control',onsets=len(notes),passed=True,
+                          **({'late_window_onsets':len(late)} if late else {})))
 
 def arp_rest_slots(c,internal=False):
     import time
