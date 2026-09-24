@@ -1,50 +1,14 @@
 """External MIDI Stop must preempt stale musical work after runtime overload."""
 import time
 
-from external_clock_faults import TICK_NS, _actual_delivery, _schedule
-
-
-def _configure_raw(c):
-    # Raw primitive copy of 4108035 Driver.configure (pre-semantic UI layer).
-    c.tap(3,8);c.enc(1,4);c.enc(3,1);c.key(3);c.tap(5,8)
-    for x in range(1,5):c.tap(x,4)
-    c.tap(5,8)
-    for x,y in ((1,7),(2,6),(3,5),(4,4)):c.tap(x,y)
-    c.tap(5,8)
-    for x,y in ((1,1),(2,2),(3,3),(4,4)):c.tap(x,y)
-    c.tap(3,8);c.tap(1,2);c.hold_tap((1,4),(4,4))
-    c.led_values([(1,2)],[15]);c.screen_header('Ch. 1 Device Config')
-
-
-def _menu_label_raw(c, text, x=0):
-    from frame_oracle import selected_line
-    c.wait(lambda s: selected_line(s, text, x)); c.results.append(dict(kind='selected-menu-label', text=text))
-
-
-def _menu_value_raw(c, text):
-    from frame_oracle import selected_value
-    c.wait(lambda s: selected_value(s, text)); c.results.append(dict(kind='selected-menu-value', text=text))
-
-
-def _configure_midi_source_raw(c):
-    # Raw primitive copy of 4108035 external_clock_faults._configure_midi_source.
-    _configure_raw(c); c.key(1); c.enc(1, 4); c.key(3); _menu_label_raw(c, 'LEVELS >')
-    position = next(index for index, value in enumerate(c.snapshot()['diagnostics']['parameter_roots'])
-                    if value['name'] == 'CLOCK')
-    c.enc(2, position); c.key(3); _menu_label_raw(c, 'source'); _menu_value_raw(c, 'internal')
-    c.enc(3, 1); _menu_value_raw(c, 'midi')
-    # Native norns defaults clock input to all connected devices. Select vport1
-    # explicitly so the port2 prelude is a meaningful routing negative.
-    # The long selected label scrolls horizontally in the native menu, so the
-    # stable proof of this setting is its routing effect below, not OCR text.
-    c.enc(2, 11); c.enc(3, 2)
+from external_clock_faults import TICK_NS, _actual_delivery, _configure_midi_source, _schedule
 
 
 def external_clock_runtime_backlog(c):
     # A wall-clock stall models the constrained norns Lua event thread. Controlled
     # time deliberately has no wall-clock execution cost, so this case is real-time only.
     assert c.clock_mode == 'real-time', 'Runtime backlog is a real-time-only boundary'
-    _configure_midi_source_raw(c)
+    _configure_midi_source(c)
     now = time.monotonic_ns()
     origin = now + 1_750_000_000
     warm_origin = origin - 1_250_000_000
