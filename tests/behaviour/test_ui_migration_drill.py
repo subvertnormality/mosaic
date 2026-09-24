@@ -183,7 +183,9 @@ class DriftArtifactTests(unittest.TestCase):
         nested = "tests/behaviour/contract/nested_probe.py"
         self.assertIn(nested, self.sources)
         expected = {
-            path.relative_to(self.repo).as_posix(): sha(path.read_bytes())
+            path.relative_to(self.repo).as_posix(): sha(subprocess.check_output(
+                ["git", "show", "HEAD:" + path.relative_to(self.repo).as_posix()],
+                cwd=self.repo))
             for path in sorted((self.repo / "tests/behaviour").rglob("*.py"))
         }
         self.assertEqual(self.sources, expected)
