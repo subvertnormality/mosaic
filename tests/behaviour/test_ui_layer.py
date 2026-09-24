@@ -18,6 +18,14 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_unreadable_device_config_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.unreadable_device_config as owner
+
+        run = CASES['M-SETUP-UNREADABLE-CONFIG-001']['run']
+        self.assertIs(run, owner.unreadable_device_config)
+        self.assertEqual(run.__module__, 'contract.unreadable_device_config')
+
     def test_idle_autosave_has_exact_contract_owner(self):
         from cases import CASES
         import contract.autosave_idle as owner

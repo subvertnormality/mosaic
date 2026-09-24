@@ -36,7 +36,7 @@ from contract.playhead_feedback import (
 )
 from contract.chord_shapes import chord_shape_case
 from device_configs import device_config_defaults
-from unreadable_device_config import unreadable_device_config
+from contract.unreadable_device_config import unreadable_device_config
 from trig_note_merge import trig_note_merge_matrix
 from scale_lock_precedence import scale_lock_precedence
 from step_slides import step_slide_variants
