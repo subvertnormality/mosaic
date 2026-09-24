@@ -145,6 +145,38 @@ jobs:
           if [ $status -ne 0 ]; then
             runuser -u mosaic-ci --preserve-environment -- python3 tests/behaviour/suite.py rerun "/tmp/mosaic-behaviour-base-${{ matrix.shard }}/suite.json"               --emulator "$EMULATOR_ROOT"               --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"
           fi
+      - name: Collect failed-run native diagnostics
+        if: always()
+        env:
+          SHARD_ROOT: /tmp/mosaic-behaviour-base-${{ matrix.shard }}
+        run: |
+          python3 - <<'PY'
+          # Failed real-time placements cannot be measured from recipe/results
+          # alone; keep the native action/event logs and observations of failed
+          # runs (first attempt and serial rerun) without code or data trees.
+          import json, os, shutil
+          from pathlib import Path
+          root = Path(os.environ['SHARD_ROOT'])
+          target = root / 'failed-evidence'
+          sessions = set()
+          for name in ('suite.json', 'suite-effective.json'):
+              path = root / name
+              if path.is_file():
+                  for row in json.loads(path.read_text()).get('cases', []):
+                      if not row.get('passed') and row.get('manifest'):
+                          sessions.add(Path(row['manifest']).parent)
+          sessions.update(path.parent for path in (root / 'serial-rerun').glob('**/manifest.json'))
+          for session in sorted(sessions):
+              if not session.is_dir() or root not in session.parents:
+                  continue
+              relative = session.relative_to(root)
+              for item in session.rglob('*'):
+                  parts = item.relative_to(session).parts
+                  if item.is_file() and not item.is_symlink() and not {'code', 'data'} & set(parts):
+                      destination = target / relative / item.relative_to(session)
+                      destination.parent.mkdir(parents=True, exist_ok=True)
+                      shutil.copyfile(item, destination)
+          PY
       - name: Upload shard report
         if: always()
         uses: actions/upload-artifact@v4
@@ -158,6 +190,7 @@ jobs:
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/runs/**/fractional-clock-input-evidence.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/serial-rerun/**/manifest.json
             /tmp/mosaic-behaviour-base-${{ matrix.shard }}/logs/**
+            /tmp/mosaic-behaviour-base-${{ matrix.shard }}/failed-evidence/**
             !/tmp/mosaic-behaviour-base-${{ matrix.shard }}/**/code/**
             !/tmp/mosaic-behaviour-base-${{ matrix.shard }}/**/data/**
           retention-days: 7
