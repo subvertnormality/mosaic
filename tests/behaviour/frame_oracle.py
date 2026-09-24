@@ -98,9 +98,12 @@ def selected_value(state,text):
 # route for the selected field. Levels and baselines are the renderer's.
 _extent_cache={}
 
-def text_width(label,size=8):
-    """Native screen.text_extents width (cairo ink width) at a font size."""
-    key=(label,size)
+def text_width(label,size=8,antialias=None):
+    """Native screen.text_extents width (cairo ink width) at a font size.
+
+    `antialias` measures with that cairo font antialias option; hinting makes a
+    large size's width depend on it (STEREO at 21: 70 default, 72 unhinted)."""
+    key=(label,size,antialias)
     if key not in _extent_cache:
         ft,ca=(C.CDLL('libfreetype.so.6'),C.CDLL('libcairo.so.2')) if _font_state is None else _font_state[:2]
         render([(0,0,0,'')])  # ensure the font face exists
@@ -110,7 +113,11 @@ def text_width(label,size=8):
         ptr=C.c_void_p;integer=C.c_int;double=C.c_double
         surface=bind(ca,'cairo_image_surface_create',[integer,integer,integer],ptr)(0,1,1)
         context=bind(ca,'cairo_create',[ptr],ptr)(surface)
+        options=bind(ca,'cairo_font_options_create',[],ptr)()
         try:
+            if antialias is not None:
+                bind(ca,'cairo_font_options_set_antialias',[ptr,integer])(options,antialias)
+                bind(ca,'cairo_set_font_options',[ptr,ptr])(context,options)
             bind(ca,'cairo_set_font_face',[ptr,ptr])(context,fontface)
             bind(ca,'cairo_set_font_size',[ptr,double])(context,size)
             extents=(double*6)()
@@ -119,6 +126,7 @@ def text_width(label,size=8):
         finally:
             bind(ca,'cairo_destroy',[ptr])(context)
             bind(ca,'cairo_surface_destroy',[ptr])(surface)
+            bind(ca,'cairo_font_options_destroy',[ptr])(options)
     return _extent_cache[key]
 
 def fit(label,width):
@@ -166,9 +174,12 @@ def _detail_row(label,value,y):
     return render(commands)
 
 def _focused_size(value,width):
+    # ui_render full_value(): the largest size <= 23 whose native width fits.
+    # Large values are drawn unhinted (render(..., antialias=1)), and the native
+    # measurement agrees with that, not with the default-option width.
     size=23
-    while size>8 and text_width(value,size)>width:size-=1
-    return size if text_width(value,size)<=width else None
+    while size>8 and text_width(value,size,1)>width:size-=1
+    return size if text_width(value,size,1)<=width else None
 
 def selected_field_matches(state,layout,label=None,value=None,art=False):
     """True when the selected field shows `label` and/or `value` on its layout's full-value route."""
@@ -204,7 +215,7 @@ def selected_field_matches(state,layout,label=None,value=None,art=False):
         size=_focused_size(value,width)
         if size is None and art:size=_focused_size(value,126)
         if size is None:return False
-        right=int(text_width(value,size))+2
+        right=int(text_width(value,size,1))+2
         ok=_region_matches(actual,render([(1,48,15,value,size)],antialias=1),30,50,0,min(128,1+right))
     return ok
 

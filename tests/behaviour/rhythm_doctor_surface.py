@@ -16,8 +16,8 @@ from driver import Driver
 from rhythm_doctor import fifth_algorithm
 
 
-def setup_frame(c, field, mode, bpm, input_source):
-    c.ui.expect_rhythm_doctor_setup(field, mode, bpm, input_source)
+def setup_field(c, field, value):
+    c.ui.expect_rhythm_doctor_setup_field(field, value)
 
 
 def stopped_setup_controls(c):
@@ -26,30 +26,52 @@ def stopped_setup_controls(c):
     # two raw detents are one logical encoder step at this boundary.
     detent = 2
     ui = c.ui
+    # The old setup screen listed Tempo, Manual BPM and Input together. The
+    # live R01 is a focused screen that shows only the field E2 selected, so
+    # every value the old frames asserted is asserted here while its own field
+    # is selected. The extra E2 visits only move the field cursor; they open
+    # the same draft and edit nothing.
     # E2/E3 edit a draft. K2 must discard every field together.
     ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
-    setup_frame(c, "INPUT", "auto", 120, "STEREO")
+    setup_field(c, "INPUT", "STEREO")
+    ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
+    setup_field(c, "MANUAL BPM", 120)
+    ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
+    setup_field(c, "TEMPO", "AUTO")
+    ui.rhythm_doctor_setup_field(detent); c.elapse(.06)
+    setup_field(c, "MANUAL BPM", 120)
+    ui.rhythm_doctor_setup_field(detent); c.elapse(.06)
+    setup_field(c, "INPUT", "STEREO")
     ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
-    setup_frame(c, "INPUT", "auto", 120, "L")
+    setup_field(c, "INPUT", "L")
     ui.rhythm_doctor_setup_field(-detent); ui.adjust_rhythm_doctor_setup_value(7 * detent); c.elapse(.06)
-    setup_frame(c, "MANUAL BPM", "auto", 127, "L")
+    setup_field(c, "MANUAL BPM", 127)
     ui.rhythm_doctor_setup_field(-detent); ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
-    setup_frame(c, "TEMPO", "manual", 127, "L")
+    setup_field(c, "TEMPO", "MANUAL")
     ui.rhythm_doctor_key_edge("discard_draft", True)
     ui.rhythm_doctor_key_edge("discard_draft", False); c.elapse(.06)
 
     # Reopen the draft from the unchanged Auto/120/Stereo values, then commit a
     # manual configuration and prove the committed values seed the next draft.
+    # Each field is read before its E3 so the discarded 127 and L are proven gone.
     ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
-    setup_frame(c, "TEMPO", "manual", 120, "STEREO")
-    ui.rhythm_doctor_setup_field(detent); ui.adjust_rhythm_doctor_setup_value(7 * detent); c.elapse(.06)
-    setup_frame(c, "MANUAL BPM", "manual", 127, "STEREO")
-    ui.rhythm_doctor_setup_field(detent); ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
-    setup_frame(c, "INPUT", "manual", 127, "L")
+    setup_field(c, "TEMPO", "MANUAL")
+    ui.rhythm_doctor_setup_field(detent); c.elapse(.06)
+    setup_field(c, "MANUAL BPM", 120)
+    ui.adjust_rhythm_doctor_setup_value(7 * detent); c.elapse(.06)
+    setup_field(c, "MANUAL BPM", 127)
+    ui.rhythm_doctor_setup_field(detent); c.elapse(.06)
+    setup_field(c, "INPUT", "STEREO")
+    ui.adjust_rhythm_doctor_setup_value(detent); c.elapse(.06)
+    setup_field(c, "INPUT", "L")
     ui.rhythm_doctor_key_edge("apply_correction", True)
     ui.rhythm_doctor_key_edge("apply_correction", False); c.elapse(.06)
     ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
-    setup_frame(c, "MANUAL BPM", "manual", 127, "L")
+    setup_field(c, "MANUAL BPM", 127)
+    ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
+    setup_field(c, "TEMPO", "MANUAL")
+    ui.rhythm_doctor_setup_field(-detent); c.elapse(.06)
+    setup_field(c, "INPUT", "L")
     ui.rhythm_doctor_key_edge("discard_draft", True)
     ui.rhythm_doctor_key_edge("discard_draft", False); c.elapse(.06)
     c.results.append(dict(kind="rhythm-doctor-setup", tempo="manual", manual_bpm=127,

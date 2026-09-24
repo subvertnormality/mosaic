@@ -2717,63 +2717,72 @@ class ProjectActionUiVerbTests(unittest.TestCase):
         ])
 
     def test_rhythm_doctor_screen_verbs_keep_exact_rendered_regions(self):
-        from ui import Ui
+        from ui import Ui, UiMapError
 
-        driver = FakeDriver()
+        driver = FakeDriver(states=[{"frame": None}] * 5)
         ui = Ui(driver)
-        with patch.object(ui, "_wait_rhythm_doctor_render") as observe:
-            ui.expect_rhythm_doctor_header()
-            ui.expect_rhythm_doctor_tooltip("NOT_READY")
-            ui.expect_rhythm_doctor_setup("INPUT", "auto", 120, "STEREO")
-            ui.expect_rhythm_doctor_status("CYM / READY")
+        headers, fields = [], []
 
-        self.assertEqual(observe.call_args_list[0].args[0], [
-            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
+        def header(state, title, scope, layout):
+            headers.append((title, scope, layout))
+            return True
+
+        def field(state, layout, label, value, art=False):
+            fields.append((layout, label, value, art))
+            return True
+
+        with patch.object(ui, "_wait_rhythm_doctor_render") as observe, \
+                patch("frame_oracle.live_header_matches", side_effect=header), \
+                patch("frame_oracle.selected_field_matches", side_effect=field):
+            ui.expect_rhythm_doctor_header()
+            ui.expect_rhythm_doctor_header("R05", channel=3)
+            ui.expect_rhythm_doctor_tooltip("NOT_READY")
+            ui.expect_rhythm_doctor_setup_field("MANUAL BPM", 127)
+            ui.expect_rhythm_doctor_screen("R07", "Refused", "CAPTURE AUDIO UNAVAILABLE")
+            ui.expect_rhythm_doctor_screen("R05")
+
+        self.assertEqual(headers, [
+            ("RHYTHM DR", "CH01", "focused"), ("WINDOW", "CH03", "focused"),
+            ("RHYTHM DR", "CH01", "focused"), ("ALIGNMENT", "CH01", "detail"),
+            ("WINDOW", "CH01", "focused"),
         ])
-        self.assertEqual(observe.call_args_list[0].kwargs, {})
-        self.assertEqual(observe.call_args_list[1].args[0], [(0, 62, 10, "NOT_READY")])
-        self.assertEqual(observe.call_args_list[1].args[1],
-                         {"left": 0, "right": 100, "top": 55, "bottom": 64})
-        self.assertEqual(observe.call_args_list[2].args[0], [
-            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
-            (0, 22, 10, "SETUP / INPUT"), (0, 34, 10, " TEMPO AUTO"),
-            (0, 46, 10, " MANUAL BPM 120"), (0, 58, 10, ">INPUT STEREO"),
+        self.assertEqual(fields, [
+            ("focused", "Manual BPM", "127", True),
+            ("detail", "Refused", "CAPTURE AUDIO UNAVAILABLE", True),
+            ("focused", None, None, True),
         ])
-        self.assertEqual(observe.call_args_list[2].kwargs, {"full": True})
-        self.assertEqual(observe.call_args_list[3].args[0], [(0, 22, 10, "CYM / READY")])
-        self.assertEqual(observe.call_args_list[3].args[1],
-                         {"left": 0, "right": 97, "top": 15, "bottom": 26})
+        self.assertEqual(observe.call_args_list[0].args[0], [(1, 63, 9, "NOT_READY")])
+        self.assertEqual(observe.call_args_list[0].args[1],
+                         {"left": 0, "right": 128, "top": 56, "bottom": 64})
+        with self.assertRaises(UiMapError):
+            ui.expect_rhythm_doctor_header("R99")
+        with self.assertRaises(UiMapError):
+            ui.expect_rhythm_doctor_setup_field("LANE", "CYM")
         self.assertEqual(driver.results, [])
 
-    def test_rhythm_doctor_pixel_verbs_preserve_rgb_only_regions(self):
+    def test_rhythm_doctor_footer_oracle_is_rgb_exact_over_the_whole_row(self):
         import base64
         from ui import Ui
 
         expected = bytes(128 * 64 * 4)
-        actual = bytearray(expected)
-        # The legacy frame oracle deliberately ignores alpha. Its tooltip
-        # oracle also ignores pixels to the right of the text-owning region.
-        for y in range(64):
-            for x in range(128):
-                alpha = (y * 128 + x) * 4 + 3
-                actual[alpha] = 255
-        actual[(60 * 128 + 110) * 4] = 9
-        driver = FakeDriver(states=[{
-            "frame": {"pixels_base64": base64.b64encode(actual).decode("ascii")},
-        }])
-        ui = Ui(driver)
-        with patch("frame_oracle.render", return_value=expected):
-            ui.expect_rhythm_doctor_tooltip("NOT_READY")
 
-        inside_region = bytearray(actual)
-        inside_region[(60 * 128 + 10) * 4] = 9
-        driver = FakeDriver(states=[{
-            "frame": {"pixels_base64": base64.b64encode(inside_region).decode("ascii")},
-        }])
-        ui = Ui(driver)
-        with patch("frame_oracle.render", return_value=expected), \
-                self.assertRaises(AssertionError):
-            ui.expect_rhythm_doctor_tooltip("NOT_READY")
+        def frame(*pixels):
+            actual = bytearray(expected)
+            # Alpha is ignored, as in every framebuffer oracle.
+            for index in range(3, len(actual), 4):
+                actual[index] = 255
+            for x, y in pixels:
+                actual[(y * 128 + x) * 4] = 9
+            return {"frame": {"pixels_base64": base64.b64encode(actual).decode("ascii")}}
+
+        # Row 55 is the status line, above the footer row.
+        with patch("frame_oracle.render", return_value=expected):
+            Ui(FakeDriver(states=[frame((10, 55))])).expect_rhythm_doctor_tooltip("NOT_READY")
+        # The footer owns the whole row: stray text at either end fails.
+        for pixel in ((10, 60), (120, 60), (0, 56), (127, 63)):
+            with self.subTest(pixel=pixel), patch("frame_oracle.render", return_value=expected), \
+                    self.assertRaises(AssertionError):
+                Ui(FakeDriver(states=[frame(pixel)])).expect_rhythm_doctor_tooltip("NOT_READY")
 
 
     def test_midi_mask_recording_verb_preserves_native_edge_and_timing_recipe(self):
