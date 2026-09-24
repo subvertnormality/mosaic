@@ -41,6 +41,33 @@ class UiLayerGuardTests(unittest.TestCase):
                 helper.assert_called_once_with(sentinel.driver, removed_before,
                                                reconnect_during)
 
+    def test_panic_navigation_cases_have_exact_contract_owners(self):
+        from unittest.mock import patch, sentinel
+        from cases import CASES
+        import contract.panic_navigation as owner
+
+        scenarios = {
+            'M-PANIC-001': ('panic_navigation_channel', 'panic_navigation', 3),
+            'M-PANIC-002': ('panic_navigation_pattern', 'panic_navigation', 5),
+            'M-PANIC-003': ('panic_hold_matrix', 'panic_hold_matrix', None),
+            'M-PANIC-005': ('panic_overlapping_holds_two',
+                            'panic_overlapping_holds', 2),
+            'M-PANIC-006': ('panic_overlapping_holds_three',
+                            'panic_overlapping_holds', 3),
+        }
+        for case_id, (name, helper_name, argument) in scenarios.items():
+            with self.subTest(case_id=case_id):
+                run = CASES[case_id]['run']
+                self.assertIs(run, getattr(owner, name))
+                self.assertEqual(run.__module__, owner.__name__)
+                self.assertIsNone(run.__closure__)
+                if argument is None:
+                    continue
+                with patch.object(owner, helper_name,
+                                  return_value=sentinel.result) as helper:
+                    self.assertIs(run(sentinel.driver), sentinel.result)
+                helper.assert_called_once_with(sentinel.driver, argument)
+
     def test_foundation_workflow_has_independent_contract_owner(self):
         import ast
         import inspect
@@ -257,7 +284,8 @@ class UiLayerGuardTests(unittest.TestCase):
             "arp_empty_muted_replacement", "navigation_matrix",
         }
         contract_trees = [_tree(str((BEHAVIOUR / "contract" / name).resolve()))
-                          for name in ("playhead_feedback.py", "navigation_matrix.py")]
+                          for name in ("playhead_feedback.py", "navigation_matrix.py",
+                                       "panic_navigation.py")]
         functions = {node.name: node for owner in (tree, *contract_trees)
                      for node in owner.body
                      if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))}
