@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/36003089745",
+  "source_run_id": "36003089745",
+  "source_revision": "460b1d1e5469bd747625635f7debb7e17b3d6290",
+  "case": "M-ARP-002",
+  "lane": "real-time",
+  "clock_mode": "real-time",
+  "side": "before",
+  "profile": "base-midi",
+  "targeted_report_sha256": "e3a3c0b2a5517a7092b4ae70d764fd665bf68107cfea7d01f490064e96353745",
+  "repeatability_report_sha256": "c5ca63bca81addd12983df6bfb016ac46da562cb29dfee019be8529a51cd09f7",
+  "manifest": "M-ARP-002/real-time/before/e54482410d2d43de97e61e480e1b07f0/manifest.json",
+  "manifest_sha256": "980119e352506903fe0e318bf2da8d120540faff133310c905381dd1ab2cbfff",
+  "evidence_sha256": {
+    "recipe.json": "475bf09fe5b0a2733ce54994c7158c57ddf6e144585e47dc62fd1cb99449497c",
+    "results.json": "41ec3cd5f80894f5092a7da89552dce1143e9cc7a59a426cd9d799f2a857a21c"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI",
+  "historical_source": true,
+  "tooling_revision": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "tooling_sha256": {
+    "tests/behaviour/ui_migration_gate.py": "8c847f6f415b5c44ad0c4cbfcb09406fbf0af181f2b63ae48147a462ea790481",
+    "tests/behaviour/ci/targeted-ui-migration.py": "6d10eceb6bb725923b608386d81caa192cfff835a99f8399bac2d8ec441de942",
+    "tests/behaviour/ci/compare_ptn_graph.lua": "2c5f793815d0bc4a580a34d8849b3713db22aa055391d6a2cd12962eff23b000"
+  }
+}
