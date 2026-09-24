@@ -18,6 +18,14 @@ def _case_reaching_raw_helper(driver):
 
 
 class UiLayerGuardTests(unittest.TestCase):
+    def test_global_transpose_live_edit_has_exact_contract_owner(self):
+        from cases import CASES
+        import contract.transpose_global_live_edit as owner
+
+        run = CASES['M-TRANS-009']['run']
+        self.assertIs(run, owner.transpose_global_live_edit)
+        self.assertEqual(run.__module__, 'contract.transpose_global_live_edit')
+
     def test_inactive_note_positions_has_exact_contract_owner(self):
         from cases import CASES
         import contract.inactive_note_positions as owner
