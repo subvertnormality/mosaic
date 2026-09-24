@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "c01d7c2d29271f03ea57647fe7fec7218e820ab9",
+  "after_sha": "fe8e1d80e956fe7e3143f9b07c019ced18f883fd",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MERGE-039",
+    "M-MERGE-040",
+    "M-MERGE-041",
+    "M-MERGE-042"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/numeric_merging.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/numeric_merging.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MERGE-039",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-039/real-time/before/0d6d3887ff8746938e2a2ab41e87ae8b/manifest.json",
+              "manifest_sha256": "dac9d1395cfa390f84df21a2272c874f1a6abf776c8d6422926978975e029433",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-039/real-time/after/fbaffe585d664ad9a89f9bd3aefdbda5/manifest.json",
+              "manifest_sha256": "4006775bcd1bdbde3706680de96a2e991e913a6219e73dce422a7c4a3cbcf18c",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-039/controlled-experimental/before/f8ad55d7743c4946be04d376e034d281/manifest.json",
+              "manifest_sha256": "51ae5628b802af7bac3dd9409a473c0d07e951daa4474ec89a155a3de5fe20cb",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-039/controlled-experimental/after/956da5c979b843f2af719f3e655c8210/manifest.json",
+              "manifest_sha256": "fb2a2de92eb10570e703f69e6cecae1b9c44e48182386705f684ca0bd765628f",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-040",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-040/real-time/before/25c057693077407cba9b95088e89e3e9/manifest.json",
+              "manifest_sha256": "bc3bbc0a94c6949d3c358286a4aedf4af438d5c9d7ea366c9e8ae5bb2e93d59a",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-040/real-time/after/f73c4783bc8b4e718a2ba9a8703ccbf2/manifest.json",
+              "manifest_sha256": "cb1221d826eaed5aa9eb18ca3af382624979e216f9acd4c63cbbc3debefe0c79",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-040/controlled-experimental/before/463f1b75c52f45fd95a281f052340cce/manifest.json",
+              "manifest_sha256": "64fb1939c8108483669bff4a5b3903a2cd8171044efe8e7fe7e003ac111c1648",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-040/controlled-experimental/after/ecc686c7743f4b47a99a3f6e7d7de8f6/manifest.json",
+              "manifest_sha256": "cb352508c5d0cce597fc0f66104fa338845d29ce2fc32fbaba497f0e4cb49da3",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-041",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-041/real-time/before/cb6282a775b841bfb66e2b05eaa6df0a/manifest.json",
+              "manifest_sha256": "6c62d9c32aab83aeb12c249cc4ccd775a4bf6d343fa6eb88da4ffecba7be41e6",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-041/real-time/after/f31839a026a34f99b94161a531c721d1/manifest.json",
+              "manifest_sha256": "b8d3ff6e7805b5dbe3626a5701904789f2169786f3f94d33b26bfea8731f1c6d",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-041/controlled-experimental/before/677eeffba72c4b308685fd32e33e2f8a/manifest.json",
+              "manifest_sha256": "5dc2a1f77be13cbed3de648c506c89083a657e744aacb0694398748c04add74c",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-041/controlled-experimental/after/5f3e532e191e49ec97f1bde4355f4cab/manifest.json",
+              "manifest_sha256": "a9803c185ae1e529ed1cb0085689f571975f0d10cb89857fae9418e21ff22a67",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-042",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-042/real-time/before/b1d6344b066b4c748d2e53f6370d21fa/manifest.json",
+              "manifest_sha256": "02cd25e04f208772978187cfe9f8b8728bbbf4c19390190aa0db2eea4a7a6f9d",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-042/real-time/after/209b964e40b94f8096cc6eaba4133085/manifest.json",
+              "manifest_sha256": "6e8ecedc88a012751e139504fcce91a28ad01bce0730a633c986370a1bb2b549",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-042/controlled-experimental/before/30c3ab39707e4cdeb83af75fc0aad766/manifest.json",
+              "manifest_sha256": "1db42c0408ffcb267fab8010c843d196a2ac479031f7ffdab0be56f94d444c6f",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-042/controlled-experimental/after/c91871e021074fc68c01d08f1fbfffec/manifest.json",
+              "manifest_sha256": "5620eb3b1b2ce420743ac00116d632488148e2a0e1619655043efef8255abb91",
+              "behaviour_source_hash_schema": "recursive-python-v1"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}
