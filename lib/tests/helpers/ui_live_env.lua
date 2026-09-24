@@ -155,6 +155,8 @@ function ui_live_env.isolated(body, options)
     program.set_lock_edit_listener(nil)
     install_stubs(env, before)
     program.set_selected_page(options.page or pages.pages.channel_edit_page)
+    -- Owners ui_live.install() binds at install time (e.g. the real trigger page).
+    if options.before_ui then options.before_ui(env) end
     env.ui = include("mosaic/lib/ui")
     ui = env.ui
     env.ui.init()
@@ -170,6 +172,25 @@ function ui_live_env.isolated(body, options)
     if rawget(_G, k) ~= v then _G[k] = v end
   end
   if not ok then error(err, 0) end
+end
+
+-- The real trigger page (lib/m_grid.lua loads it the same way) with its press
+-- handlers registered on a real press module, in place of the get_algorithm
+-- stub. Use as options.before_ui so ui_live.install() binds it.
+function ui_live_env.load_real_trigger_page(env)
+  include("mosaic/lib/controls/fader")
+  include("mosaic/lib/controls/sequencer")
+  include("mosaic/lib/controls/button")
+  press = include("mosaic/lib/press")
+  trigger_edit_page = include("mosaic/lib/pages/trigger_edit_page/trigger_edit_page")
+  trigger_edit_page.register_press()
+  env.trigger_page = trigger_edit_page
+end
+
+-- A trigger-page grid press through the handlers the page registered (the
+-- page part of press:handle, which m_grid calls for a short press).
+function ui_live_env.press_trigger_page(x, y)
+  for _, handler in ipairs(press.handlers["trigger_edit_page"] or {}) do handler(x, y) end
 end
 
 -- Holds grid steps (1..64) the way m_grid reports pressed keys: {x, y} with
