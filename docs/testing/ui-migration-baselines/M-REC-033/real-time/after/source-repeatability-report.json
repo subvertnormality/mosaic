@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "b0ec2185cc2008fa11ea292f1a7f84441de0e8a0",
+  "after_sha": "9d26f841e9af633ab41a45fe8f2c8517492654f7",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-PANIC-007",
+    "M-PANIC-008",
+    "M-PANIC-009",
+    "M-PANIC-010",
+    "M-PAT-001",
+    "M-REC-001",
+    "M-REC-002",
+    "M-REC-003",
+    "M-REC-004",
+    "M-REC-008",
+    "M-REC-009",
+    "M-REC-010",
+    "M-REC-011",
+    "M-REC-012",
+    "M-REC-013",
+    "M-REC-014",
+    "M-REC-032",
+    "M-REC-033",
+    "M-OPT-STOP-001",
+    "M-PARAM-004",
+    "M-PATCH-024",
+    "M-REC-PARAM-004",
+    "M-SONG-SETTINGS-001",
+    "M-SONG-SETTINGS-002",
+    "M-SYNC-LEAD-002"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-PANIC-007",
+    "tests/behaviour/contract/stop_safety.py": "M-OPT-STOP-001",
+    "tests/behaviour/trig_parameter_interactions.py": "M-PARAM-004",
+    "tests/behaviour/contract/patch_params.py": "M-PATCH-024",
+    "tests/behaviour/contract/trig_parameter_interactions.py": "M-REC-PARAM-004",
+    "tests/behaviour/contract/song_repetitions.py": "M-SONG-SETTINGS-001",
+    "tests/behaviour/contract/song_tempo.py": "M-SONG-SETTINGS-002",
+    "tests/behaviour/contract/lock_lead_clock_matrix.py": "M-SYNC-LEAD-002"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-PANIC-007",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-e731fedfae3a466f8d47a044ca7cca33/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-e731fedfae3a466f8d47a044ca7cca33/manifest.json",
+      "manifest_sha256": "513ce21d519640f6ccf9f35bb339e6613fb91138318dc2fdffdcebdde200128a",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/stop_safety.py",
+      "case": "M-OPT-STOP-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-8e22af21a2ab4178ae8aa31657bdb89f/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-8e22af21a2ab4178ae8aa31657bdb89f/manifest.json",
+      "manifest_sha256": "1476cf18abeb46664fcadc1cea1845b0d63124def5d8928f5695569ecf60d466",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/trig_parameter_interactions.py",
+      "case": "M-PARAM-004",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-97cea9a55d144e08b8a2c7607bea05a6/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-97cea9a55d144e08b8a2c7607bea05a6/manifest.json",
+      "manifest_sha256": "b43ceed0e4deb03e7298b6cb6487e99a97c347e0b5c251f193a5cacc199a6a7c",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/patch_params.py",
+      "case": "M-PATCH-024",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-e609f3d65c4a40cb8e2344e423dd1be9/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-e609f3d65c4a40cb8e2344e423dd1be9/manifest.json",
+      "manifest_sha256": "8689d89c1c68e808a459b714658a77111a90832a563b6b1d27a374e5a4a98c44",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/trig_parameter_interactions.py",
+      "case": "M-REC-PARAM-004",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-bfc6325a206745549e7b558de4d248b6/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-bfc6325a206745549e7b558de4d248b6/manifest.json",
+      "manifest_sha256": "7453c11ab08fd4d64dc432abcc85b5a0548556bbeb4960e20467678ce93c45bc",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/song_repetitions.py",
+      "case": "M-SONG-SETTINGS-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-124b9427f3d94bf9a18e493c024e8ef2/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-124b9427f3d94bf9a18e493c024e8ef2/manifest.json",
+      "manifest_sha256": "991397a569a51d3d6daf2fd2a4806ee0b9843331b25fbec455ba679994fcdbce",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/song_tempo.py",
+      "case": "M-SONG-SETTINGS-002",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-342314edda5349d089bce5e8060bf8f0/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-342314edda5349d089bce5e8060bf8f0/manifest.json",
+      "manifest_sha256": "0ed96bcb6ec6559246075c2cc93a1dee218e614d7b7b681a193ebe8191cd466d",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/lock_lead_clock_matrix.py",
+      "case": "M-SYNC-LEAD-002",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-383e2d61624f465aa27244070b3e704c/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-383e2d61624f465aa27244070b3e704c/manifest.json",
+      "manifest_sha256": "a8980eb6249c772c769b04b0315a79cb80293fc1578407e6b799410f43a99573",
+      "passed": true
+    }
+  ],
+  "passed": true
+}
