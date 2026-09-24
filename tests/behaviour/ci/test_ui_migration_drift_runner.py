@@ -34,6 +34,8 @@ class DriftRunnerTests(unittest.TestCase):
             workflow)
         self.assertIn("name: ui-migration-drift-${{ github.run_id }}", workflow)
         self.assertIn("/tmp/mosaic-ui-drift/standalone/**", workflow)
+        self.assertIn("/tmp/mosaic-ui-drift/control/**", workflow)
+        self.assertIn("/tmp/mosaic-ui-drift/control-logs/**", workflow)
         self.assertIn("/tmp/mosaic-ui-drift/execution/mosaic-behaviour-runs/**", workflow)
         self.assertNotIn("/tmp/mosaic-ui-drift/execution/scratch-source/**", workflow)
         self.assertIn("scratch-commit.bundle", SCRIPT.read_text(encoding="utf-8"))
@@ -86,6 +88,47 @@ OTHER = 7
                     args=[], returncode=returncode, stdout=json.dumps(row) + "\n", stderr="")
                 with self.assertRaises(ValueError):
                     runner.failed_run_manifest(completed, "M-ONE")
+
+    def test_control_requires_successful_matching_run(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            output = root / "output"
+            manifest = output / "control" / "M-ONE" / "run-1" / "manifest.json"
+
+            def fake_run(*args, **kwargs):
+                manifest.parent.mkdir(parents=True)
+                manifest.write_text("{}\n", encoding="utf-8")
+                self.assertIn("--clock-mode", args[0])
+                self.assertIn("controlled-experimental", args[0])
+                return subprocess.CompletedProcess(
+                    args=[], returncode=0,
+                    stdout=json.dumps(dict(case="M-ONE", passed=True,
+                                           manifest=str(manifest))) + "\n", stderr="")
+
+            with patch.object(runner.subprocess, "run", side_effect=fake_run):
+                self.assertEqual(runner._run_control(
+                    root / "candidate", output, "M-ONE", "base-midi",
+                    "installation.json", None, 10), manifest)
+            self.assertTrue((output / "control-logs" / "M-ONE.json").is_file())
+
+    def test_control_rejects_failure_and_manifest_outside_upload(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            outside = root / "outside" / "manifest.json"
+            outside.parent.mkdir()
+            outside.write_text("{}\n", encoding="utf-8")
+            for status, passed in ((1, False), (0, True)):
+                completed = subprocess.CompletedProcess(
+                    args=[], returncode=status,
+                    stdout=json.dumps(dict(case="M-ONE", passed=passed,
+                                           manifest=str(outside))) + "\n", stderr="")
+                with self.subTest(status=status, passed=passed), patch.object(
+                        runner.subprocess, "run", return_value=completed):
+                    with self.assertRaises(ValueError):
+                        runner._run_control(root / "candidate", root / ("output-" + str(status)),
+                                            "M-ONE", "base-midi", "installation.json", None, 10)
+                    log = root / ("output-" + str(status)) / "control-logs" / "M-ONE.json"
+                    self.assertEqual(json.loads(log.read_text())["returncode"], status)
 
     def test_standalone_run_rejects_manifest_outside_uploaded_evidence(self):
         with tempfile.TemporaryDirectory() as temp:

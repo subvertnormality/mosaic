@@ -117,6 +117,26 @@ def failed_run_manifest(completed, case):
     return path
 
 
+def successful_run_manifest(completed, case):
+    """Require a normal successful control run from the unchanged candidate."""
+    if completed.returncode != 0:
+        raise ValueError("unmodified control run did not pass: " + case)
+    rows = []
+    for line in completed.stdout.splitlines():
+        try:
+            value = json.loads(line)
+        except ValueError:
+            continue
+        if isinstance(value, dict) and "manifest" in value:
+            rows.append(value)
+    if len(rows) != 1 or rows[0].get("case") != case or rows[0].get("passed") is not True:
+        raise ValueError("control summary did not identify one passing case: " + case)
+    path = Path(rows[0]["manifest"]).resolve()
+    if not path.is_file():
+        raise ValueError("control run did not preserve its manifest: " + str(path))
+    return path
+
+
 def write_json_once(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("x", encoding="utf-8") as stream:
@@ -179,6 +199,29 @@ def _run_case(scratch, output, case, profile, install, mod_root, timeout):
                stdout=completed.stdout, stderr=completed.stderr,
                manifest=str(manifest))
     write_json_once(output / "standalone-logs" / (case + ".json"), log)
+    return manifest
+
+
+def _run_control(candidate, output, case, profile, install, mod_root, timeout):
+    root = output / "control" / case
+    root.mkdir(parents=True, exist_ok=False)
+    command = [sys.executable, str(candidate / "tests/behaviour/run.py"),
+               "--case", case, "--artifacts", str(root),
+               "--clock-mode", "controlled-experimental",
+               "--experimental-install", install, "--profile", profile]
+    if profile == "midi-modulation":
+        if not mod_root or not Path(mod_root).is_dir():
+            raise ValueError("midi-modulation controls require --mod-code-root")
+        command.extend(["--mod-code-root", mod_root, "--mod-patches"])
+    completed = subprocess.run(command, cwd=candidate, text=True,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               timeout=timeout)
+    write_json_once(output / "control-logs" / (case + ".json"), dict(
+        command=command, returncode=completed.returncode,
+        stdout=completed.stdout, stderr=completed.stderr))
+    manifest = successful_run_manifest(completed, case)
+    if manifest.name != "manifest.json" or manifest.parent.parent != root.resolve():
+        raise ValueError("control manifest is outside uploaded artifact root")
     return manifest
 
 
@@ -253,6 +296,12 @@ def main(argv=None):
                      repeat_profile=repeat_profile)
     write_json_once(output / "drill-selection.json", selection)
 
+    control_manifests = []
+    for case in selected:
+        control_manifests.append(_run_control(
+            repo, output, case, selected_profiles[case], args.experimental_install,
+            args.mod_code_root, args.run_timeout))
+
     branch = "codex/ui-drift-" + args.branch_suffix
     scratch = execution / "scratch-source"
     scratch_sha = make_scratch_commit(repo, baseline, args.pages, branch, scratch)
@@ -272,6 +321,8 @@ def main(argv=None):
     validator_args = ["--repo", str(repo), "--baseline", baseline,
                       "--scratch", scratch_sha, "--pages", *args.pages,
                       "--repeat", str(repeat_manifest), "--output", str(report)]
+    for path in control_manifests:
+        validator_args.extend(["--control", str(path)])
     for path in run_manifests:
         validator_args.extend(["--run", str(path)])
     drill.main(validator_args)

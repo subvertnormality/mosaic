@@ -265,6 +265,54 @@ def load_run(path):
     return item, dict(path=str(path), sha256=sha(raw))
 
 
+def committed_sources(repo, revision):
+    """Hash every Python source in the committed behaviour tree."""
+    revision = git(repo, "rev-parse", "--verify", revision + "^{commit}").decode().strip()
+    paths = git(repo, "ls-tree", "-r", "--name-only", revision,
+                "tests/behaviour").decode().splitlines()
+    return {path: sha(raw) for path, raw in blobs(repo, revision, [
+        path for path in paths if path.endswith(".py")]).items()}
+
+
+def validate_controls(cases, controls, profiles, revision, source_hashes):
+    """Require one verified, successful controlled run per committed case."""
+    loaded = [load_run(path) for path in controls]
+    ids = [item.get("case") for item, ref in loaded]
+    require(all(isinstance(case, str) for case in ids), "missing control case")
+    require(len(ids) == len(set(ids)), "duplicate control case")
+    require(set(ids) == set(cases), "control set differs: missing=%r extra=%r" %
+            (sorted(set(cases) - set(ids)), sorted(set(ids) - set(cases))))
+    rows = []
+    for item, ref in sorted(loaded, key=lambda pair: pair[0]["case"]):
+        case = item["case"]
+        require(item.get("passed") is True, "baseline control did not pass: " + case)
+        require("failure" in item and item["failure"] is None,
+                "baseline control has a failure or missing failure field: " + case)
+        require(item.get("mosaic_revision") == revision,
+                "wrong/missing baseline revision: " + case)
+        require(item.get("clock_mode") == "controlled-experimental",
+                "wrong/missing controlled lane: " + case)
+        require(item.get("diagnostic_only") is True,
+                "missing controlled diagnostic marker: " + case)
+        require("profile" in item and item["profile"] == profiles.get(case, "base-midi"),
+                "wrong/missing profile: " + case)
+        require(item.get("behaviour_source_sha256") == source_hashes,
+                "wrong/missing baseline behaviour sources: " + case)
+        sessions = {}
+        for confirmation in cases[case]:
+            session = confirmation["session"]
+            if session not in sessions:
+                _, sessions[session] = read(Path(ref["path"]).parent / session / "results.json")
+            require(any(isinstance(entry, dict) and entry.get("kind") == "ui-confirm"
+                        and entry.get("page") == confirmation["page"]
+                        and entry.get("channel") == confirmation["channel"]
+                        for entry in sessions[session]),
+                    "baseline control missing selected ui-confirm: %s/%s/%s" %
+                    (case, session, confirmation["page"]))
+        rows.append(dict(case=case, status="passed", manifest=ref))
+    return rows
+
+
 def validate_repeat(path, case, profile, revision, sources, confirmations):
     path = Path(path).resolve()
     raw, item = read(path)
@@ -310,6 +358,8 @@ def main(argv=None):
     parser.add_argument("--list", action="store_true", help="derive members only; never writes drill evidence")
     parser.add_argument("--scratch", help="commit containing only the page-order swap relative to baseline")
     parser.add_argument("--run", action="append", default=[], type=Path, help="one actual run.py manifest per drill member")
+    parser.add_argument("--control", action="append", default=[], type=Path,
+                        help="one passing baseline run.py manifest per drill member")
     parser.add_argument("--repeat", type=Path, help="actual repeat.py manifest")
     parser.add_argument("--repeat-case", help="eligible drill member; default first sorted eligible ID")
     parser.add_argument("--output", type=Path, help="default REPO/docs/testing/ui-migration-drill.json; never overwritten")
@@ -318,12 +368,15 @@ def main(argv=None):
         revision, cases, profiles = committed_plan(args.repo, args.baseline, args.pages)
         repeat_case = select_repeat(cases, profiles, args.repeat_case)
         if args.list:
-            require(not args.run and not args.repeat and not args.output and not args.scratch,
+            require(not args.run and not args.control and not args.repeat and not args.output and not args.scratch,
                     "--list cannot accept run, scratch or output evidence")
             print(json.dumps(dict(baseline_revision=revision, pages=args.pages,
                                   cases=cases, repeat_case=repeat_case), indent=2))
             return 0
-        require(args.scratch and args.run and args.repeat, "actual scratch, run and repeat evidence required")
+        require(args.scratch and args.run and args.control and args.repeat,
+                "actual scratch, baseline control, run and repeat evidence required")
+        baseline_sources = committed_sources(args.repo, revision)
+        controls = validate_controls(cases, args.control, profiles, revision, baseline_sources)
         scratch, sources = verify_swap(args.repo, revision, args.scratch, args.pages)
         loaded = [load_run(path) for path in args.run]
         rows = validate_outcomes(cases, [item for item, ref in loaded], profiles, scratch, sources)
@@ -337,7 +390,7 @@ def main(argv=None):
         report = dict(schema_version=1, passed=True, baseline_revision=revision, scratch_revision=scratch,
                       swapped_pages=args.pages, lane="controlled-experimental",
                       complete_regression_run=False, cases=rows, repeat=repeated,
-                      behaviour_source_sha256=sources)
+                      controls=controls, behaviour_source_sha256=sources)
         output = args.output or args.repo / "docs/testing/ui-migration-drill.json"
         with output.open("x", encoding="utf-8") as stream:
             json.dump(report, stream, indent=2)

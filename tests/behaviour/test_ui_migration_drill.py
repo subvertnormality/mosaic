@@ -6,7 +6,8 @@ import tempfile
 import unittest
 
 from ui_migration_drill import (derive_cases, select_repeat, validate_run, validate_outcomes,
-                                committed_plan, verify_swap, validate_repeat, main, sha)
+                                committed_plan, verify_swap, validate_repeat, validate_controls,
+                                committed_sources, main, sha)
 
 
 class DriftDrillTests(unittest.TestCase):
@@ -22,7 +23,8 @@ class DriftDrillTests(unittest.TestCase):
         }
         self.registry = {"A", "B", "C"}
         self.pages = ("masks", "memory")
-        self.confirmations = [dict(page="masks", channel=1, expected_header="Ch. 1 Masks")]
+        self.confirmations = [dict(session=".", page="masks", channel=1,
+                                   expected_header="Ch. 1 Masks")]
 
     def derive(self):
         return derive_cases(self.files, self.registry, self.pages, {"masks", "memory", "clock_mods"})
@@ -163,6 +165,9 @@ class DriftArtifactTests(unittest.TestCase):
         self.put(root + "results.json", [dict(kind="ui-confirm", page="masks", channel=1)])
         self.commit()
         self.baseline = self.git("rev-parse", "HEAD")
+        self.baseline_sources = committed_sources(self.repo, self.baseline)
+        self.confirmations = [dict(session=".", page="masks", channel=1,
+                                   expected_header="Ch. 1 Masks")]
         self.put("tests/behaviour/ui_map.py",
                  self.map_source.replace('[("masks", {"title": "Masks"}), ("memory", {"title": "Memory"})]',
                                          '[("memory", {"title": "Memory"}), ("masks", {"title": "Masks"})]'))
@@ -204,6 +209,65 @@ class DriftArtifactTests(unittest.TestCase):
                     failure=dict(type="UiMapError", message="expected 'Ch. 1 Masks', observed '<unmatched framebuffer>'",
                                  traceback='Traceback (most recent call last):\n  File "/repo/tests/behaviour/ui.py", line 1101, in confirm_header\n    raise UiMapError(...)\nui.UiMapError: expected \'Ch. 1 Masks\', observed \'<unmatched framebuffer>\'\n'))
         return self.put(folder + "/manifest.json", item)
+
+    def control_evidence(self, folder="control-run", results=None, **overrides):
+        if results is None:
+            results = [dict(kind="ui-confirm", page="masks", channel=1)]
+        artifacts = []
+        for name, data in (("recipe.json", [dict(type="enc", n=1, delta=1)]), ("results.json", results)):
+            path = self.put(folder + "/" + name, data)
+            raw = path.read_bytes()
+            artifacts.append(dict(path=name, size=len(raw), sha256=sha(raw)))
+        item = dict(case="A", profile="base-midi", passed=True, failure=None,
+                    diagnostic_only=True, clock_mode="controlled-experimental",
+                    mosaic_revision=self.baseline, behaviour_source_sha256=self.baseline_sources,
+                    artifacts=artifacts)
+        item.update(overrides)
+        return self.put(folder + "/manifest.json", item)
+
+    def test_controls_require_complete_exact_passing_baseline_set(self):
+        control = self.control_evidence()
+        rows = validate_controls({"A": self.confirmations}, [control], {}, self.baseline,
+                                 self.baseline_sources)
+        self.assertEqual(rows, [dict(case="A", status="passed",
+                                     manifest=dict(path=str(control.resolve()),
+                                                   sha256=sha(control.read_bytes())))])
+        for controls in ([], [control, control]):
+            with self.subTest(controls=controls), self.assertRaises(ValueError):
+                validate_controls({"A": self.confirmations, "B": self.confirmations}, controls,
+                                  {}, self.baseline, self.baseline_sources)
+
+    def test_controls_reject_failed_wrong_source_or_wrong_case(self):
+        cases = {"A": self.confirmations}
+        for override in (dict(passed=False), dict(failure=dict(type="UiMapError", message="bad")),
+                         dict(behaviour_source_sha256={}), dict(case="B")):
+            with self.subTest(override=override):
+                control = self.control_evidence("control-" + str(len(list(self.repo.glob("control-*/manifest.json")))),
+                                                **override)
+                with self.assertRaises(ValueError):
+                    validate_controls(cases, [control], {}, self.baseline, self.baseline_sources)
+
+    def test_controls_require_explicit_success_fields(self):
+        for missing in ("failure", "profile"):
+            with self.subTest(missing=missing):
+                control = self.control_evidence("control-missing-" + missing)
+                item = json.loads(control.read_text())
+                item.pop(missing)
+                control.write_text(json.dumps(item))
+                with self.assertRaises(ValueError):
+                    validate_controls({"A": self.confirmations}, [control], {}, self.baseline,
+                                      self.baseline_sources)
+
+    def test_controls_must_reach_the_committed_selected_confirmation(self):
+        for label, results in (
+                ("absent", []),
+                ("wrong-page", [dict(kind="ui-confirm", page="memory", channel=1)]),
+                ("wrong-channel", [dict(kind="ui-confirm", page="masks", channel=2)])):
+            with self.subTest(label=label):
+                control = self.control_evidence("control-" + label, results=results)
+                with self.assertRaisesRegex(ValueError, "selected ui-confirm"):
+                    validate_controls({"A": self.confirmations}, [control], {}, self.baseline,
+                                      self.baseline_sources)
 
     def repeat_evidence(self):
         child = self.run_evidence("repeat-child")
@@ -289,13 +353,16 @@ class DriftArtifactTests(unittest.TestCase):
             main(prefix)
         self.assertFalse(output.exists())
         run, repeat = self.run_evidence("ordinary-run"), self.repeat_evidence()
+        control = self.control_evidence()
         command = prefix + ["--scratch", self.scratch, "--run", str(run), "--repeat", str(repeat)]
+        command += ["--control", str(control)]
         self.assertEqual(main(command), 0)
         original = output.read_bytes()
         report = json.loads(original)
         self.assertTrue(report["passed"])
         self.assertFalse(report["complete_regression_run"])
         self.assertEqual(report["cases"][0]["first_error"]["type"], "UiMapError")
+        self.assertEqual(report["controls"][0]["status"], "passed")
         with self.assertRaises(SystemExit):
             main(command)
         self.assertEqual(output.read_bytes(), original)

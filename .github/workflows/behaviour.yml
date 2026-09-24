@@ -647,6 +647,8 @@ jobs:
             /tmp/mosaic-ui-drift/scratch-commit.bundle
             /tmp/mosaic-ui-drift/scratch-commit.patch
             /tmp/mosaic-ui-drift/scratch-commit.txt
+            /tmp/mosaic-ui-drift/control/**
+            /tmp/mosaic-ui-drift/control-logs/**
             /tmp/mosaic-ui-drift/standalone/**
             /tmp/mosaic-ui-drift/standalone-logs/**
             /tmp/mosaic-ui-drift/repeat-wrapper.json
