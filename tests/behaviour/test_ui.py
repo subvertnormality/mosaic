@@ -951,12 +951,12 @@ class UiInputTests(unittest.TestCase):
 
         self.assertEqual(CHANNEL_TASKS, [
             "masks", "trig_params", "output", "harmony", "clock", "merge", "device",
-            "history", "merge_shape", "norns"])
+            "history", "merge_shape"])
         rows = {"masks": 0, "trig_locks": 1, "memory": 7, "clock_mods": 4,
                 "midi_config": 6, "note_dashboard": 2, "merge_shape": 8, "harmony": 3}
         self.assertEqual(set(rows), set(CHANNEL_PAGES))
         for page, row in rows.items():
-            expected = [("enc", 1, 3), ("enc", 2, -10)]
+            expected = [("enc", 1, 3), ("enc", 2, -9)]
             if row:
                 expected.append(("enc", 2, row))
             expected.append(("key", 3))
@@ -974,7 +974,7 @@ class UiInputTests(unittest.TestCase):
         ui.confirm_header = lambda page, **params: confirmed.append((page, params))
         ui.channel_page("harmony", "masks", channel=2)
         self.assertEqual(driver.calls, [
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 3), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 3), ("key", 3),
         ])
         self.assertEqual(confirmed, [("harmony", {"channel": 2})])
         for page in ("channel_tasks", "not_a_page"):
@@ -992,9 +992,9 @@ class UiInputTests(unittest.TestCase):
         ui.set_value(2)
         ui.select_field("tone_0_role", offset=3)
         self.assertEqual(driver.calls, [
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 4), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 4), ("key", 3),
             ("enc", 3, -2),
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 3), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 3), ("key", 3),
             ("enc", 3, 2),
             ("enc", 2, 3),
         ])
@@ -1144,7 +1144,7 @@ class UiInputTests(unittest.TestCase):
 
         driver, ui = self.ui()
         ui.channel_page("masks", "midi_config", confirm=False, saturate=True)
-        self.assertEqual(driver.calls, [("enc", 1, 3), ("enc", 2, -10), ("key", 3)])
+        self.assertEqual(driver.calls, [("enc", 1, 3), ("enc", 2, -9), ("key", 3)])
 
         class ObservedDriver(FakeDriver):
             def wait(self, predicate, timeout=3):
@@ -1168,7 +1168,7 @@ class UiInputTests(unittest.TestCase):
             Ui(driver).turn(1, -5)
             self.assertEqual(driver.calls, [
                 ("wait", 1),
-                ("enc", 1, 3), ("enc", 2, -10), ("key", 3),
+                ("enc", 1, 3), ("enc", 2, -9), ("key", 3),
                 ("wait", 3),
             ])
             # Already at either end, a saturating turn emits no input at all.
@@ -1183,7 +1183,7 @@ class UiInputTests(unittest.TestCase):
             Ui(driver).turn(1, -1)
             self.assertEqual(driver.calls, [
                 ("wait", 1),
-                ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 2), ("key", 3),
+                ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 2), ("key", 3),
                 ("wait", 3),
             ])
             # A screen on no page ring (Channel Tasks itself) matches neither the
@@ -1481,7 +1481,7 @@ class UiInputTests(unittest.TestCase):
         ui.expect_header = lambda page, **params: driver.calls.append(("header", page, params))
         ui.configure()
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
@@ -1493,7 +1493,7 @@ class UiInputTests(unittest.TestCase):
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
             ("header", "merge_detail", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
 
@@ -1527,7 +1527,7 @@ class UiInputTests(unittest.TestCase):
             quantised_fixed_table(case, profile="major")
 
         self.assertEqual(driver.calls[:7], [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
         ])
         self.assertEqual(driver.calls[22:32], [
@@ -1535,11 +1535,11 @@ class UiInputTests(unittest.TestCase):
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
             ("header", "merge_detail", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
         self.assertEqual(driver.calls[32:37], [
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 1), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "quantised_fixed_note"),
         ])
         self.assertEqual(driver.calls[37:51], [
@@ -1580,7 +1580,7 @@ class UiInputTests(unittest.TestCase):
             seeded_probability(case, probability=99, opportunities=64)
 
         self.assertEqual(driver.calls[:7], [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
         ])
         self.assertEqual(driver.calls[22:32], [
@@ -1588,7 +1588,7 @@ class UiInputTests(unittest.TestCase):
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
             ("header", "merge_detail", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
         self.assertEqual(selected, [2])
@@ -1626,7 +1626,7 @@ class UiInputTests(unittest.TestCase):
             fixed_note_domain(case, start=0, count=1)
 
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
@@ -1638,9 +1638,9 @@ class UiInputTests(unittest.TestCase):
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
             ("header", "merge_detail", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 1), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "fixed_note"),
             ("enc", 2, 1), ("assign_trig_parameter_key", "quantised_fixed_note"),
             ("enc", 3, 8),
@@ -1669,7 +1669,7 @@ class UiInputTests(unittest.TestCase):
 
         def expected_trace():
             calls = [
-                ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+                ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
                 ("tap", 5, 8),
                 ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
@@ -1681,9 +1681,9 @@ class UiInputTests(unittest.TestCase):
                 ("hold_tap", (1, 4), (4, 4)),
                 ("led_values", [(1, 2)], [15]),
                 ("header", "merge_detail", {"channel": 1}),
-                ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
+                ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
                 ("header", "midi_config", {"channel": 1}),
-                ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 1), ("key", 3),
+                ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 1), ("key", 3),
                 ("key", 2), ("enc", 3, -50), ("key", 3), ("key", 2),
                 ("enc", 3, 61),
             ]

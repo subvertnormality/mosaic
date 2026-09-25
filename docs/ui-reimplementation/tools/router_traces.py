@@ -111,6 +111,28 @@ def build():
             except (ValueError, KeyError):
                 steps.append({'set': {}, 'event': 'K3.down', 'payload': {}, 'error': True})
             walks.append({'start': deepcopy(start), 'steps': steps})
+    # Every rule once, from a state its own guard describes, so no rule's
+    # coverage depends on the random walks.
+    profile_screen = {}
+    for sid in sorted(spec['screens']):
+        profile_screen.setdefault(spec['screens'][sid]['profile'], sid)
+    for rule in spec['input_algebra']['rules']:
+        when = rule['when']
+        pick = lambda v: v[0] if isinstance(v, list) else v
+        sid = pick(when['screen']) if 'screen' in when else profile_screen.get(pick(when.get('profile')), 'C01')
+        context = pick(when['context']) if 'context' in when else model.contexts(spec, sid)[0]
+        if context not in model.contexts(spec, sid):
+            continue
+        start = model.initial(sid, context)
+        for key in ('native', 'modal', 'held', 'shift', 'dirty', 'field_kind'):
+            if key in when:
+                start[key] = pick(when[key])
+        try:
+            if model.select(spec, start, rule['event'])['id'] != rule['id']:
+                continue
+        except (ValueError, KeyError):
+            continue
+        walks.append({'start': deepcopy(start), 'steps': walk(spec, rnd, edges, deepcopy(start), 1, rule['event'])})
     for _ in range(WALKS):
         context = rnd.choice(sorted(spec['contexts']))
         start = model.initial(spec['contexts'][context], context)
