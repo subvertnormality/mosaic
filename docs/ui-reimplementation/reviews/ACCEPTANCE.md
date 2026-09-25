@@ -1,18 +1,17 @@
 # UI acceptance coverage (spec.json#/acceptance_matrix A01..A19)
 
 Status of each acceptance item against the behaviour cases that exist on
-`codex/ui-accept-sweep` (tests/behaviour/cases.py and its modules), plus the Lua
+`codex/ui-reimplementation` (tests/behaviour/cases.py and its modules), plus the Lua
 integration tests where they are the only evidence. "Covered" means a
 registered behaviour case drives the live app through public input and checks
 the visible and musical result the item names. Everything the item names that
 no case checks is listed under "Uncovered", honestly, including the parts a
 passing case only reaches halfway.
 
-The live-UI acceptance cases for A01, A02, A03, A10, A11 and A19 are being
-written in parallel as `M-UIACC-A01-001` and siblings in
-`tests/behaviour/contract/live_ui_acceptance.py` on another branch. They are
-named below as planned, not as evidence: until they land and pass in both
-lanes, those items remain uncovered by a live-UI acceptance case.
+The live-UI acceptance cases `M-UIACC-A01-001`, `-A02-`, `-A03-`, `-A10-`,
+`-A11-` and `-A19-001` (`tests/behaviour/contract/live_ui_acceptance.py`) are
+committed and, per their author, pass in both lanes. `M-UIACC-A18-001` passes in
+both lanes on this branch.
 
 Legend: RT = real-time lane, CT = controlled-experimental lane.
 
@@ -20,58 +19,54 @@ Legend: RT = real-time lane, CT = controlled-experimental lane.
 
 | Item | Subject | Status |
 |---|---|---|
-| A01 | E1 family navigation C01/C02/N01 | partial (M-LIVEUI-TASKS-001); acceptance case pending |
-| A02 | held steps + K1+K2 clear, release order | partial (mask/memory cases); acceptance case pending |
-| A03 | assignment picker, K2 cancel, K3 apply, slides | partial (param/patch cases); acceptance case pending |
-| A04 | Merge Shape field domains, Apply stopped/running, drafts | partial (musical only) |
+| A01 | E1 family navigation C01/C02/N01 | covered (M-UIACC-A01-001) |
+| A02 | held steps + K1+K2 clear, release order | covered (M-UIACC-A02-001) |
+| A03 | assignment picker, K2 cancel, K3 apply, slides | covered (M-UIACC-A03-001) |
+| A04 | Merge Shape field domains, Apply stopped/running, drafts | partial (musical; screens by A18) |
 | A05 | Harmony groups 16/17, validation, delete confirm | mostly uncovered |
-| A06 | Tone map binding, reset draft | uncovered |
+| A06 | Tone map binding, reset draft | mostly uncovered (screens by A18) |
 | A07 | event inspection H05/H06/H15/H16/H18 | partial (M-HARMONY-ENSEMBLE/FAILURE) |
 | A08 | Rhythm Doctor lifecycle R01..R16 | uncovered by registered cases |
 | A09 | Rhythm Doctor lanes, browse, paint | uncovered by registered cases |
-| A10 | Norns follows channel/pattern/mute/merge gestures | partial; acceptance case pending |
-| A11 | pattern pages, generators, viewer channel | partial (musical); acceptance case pending |
+| A10 | Norns follows channel/pattern/mute/merge gestures | covered (M-UIACC-A10-001) |
+| A11 | pattern pages, generators, viewer channel | mostly covered (M-UIACC-A11-001 + musical cases) |
 | A12 | Scale S01..S05 | partial (musical); S04/S05 unreachable |
 | A13 | Song A01..A03 | musical semantics covered; screen scopes partial |
 | A14 | external transport, panic | musical/transport covered; screen side partial |
 | A15 | lock lead time | covered (musical and native value) |
 | A16 | native menus, persistence | largely covered |
 | A17 | device, dynamic params, live lock recording | musical covered; screen identity partial |
-| A18 | native screen sweep | M-UIACC-A18-001 (this branch), with known defects |
-| A19 | C06 output inspection | partial; acceptance case pending |
+| A18 | native screen sweep | covered for reachable screens (M-UIACC-A18-001) |
+| A19 | C06 output inspection | covered (M-UIACC-A19-001) |
 
 ## A01 — E1 moves Masks, Trig params and Channel tasks
 
 Screens C01, C02, N01. MAN.015/016.
 
-- Covered: `M-LIVEUI-TASKS-001` (E1 +/- across C01, C02, N01 including both
-  clamps; exact live headers), `M-LIVEUI-FOLLOW-001` (the Channel button returns
-  to the remembered family). `M-UIACC-A18-001` also checks C01, C02 and N01 frames
-  and that N01 clamps on its last row.
-- Uncovered: "E1 large positive twice" (one large delta per detent is not sent:
-  the driver only sends +/-2 per event), "C02 restored with remembered field",
-  and the musical clause "no output/state/RNG mutation" (no MIDI/RNG assertion
-  accompanies the navigation). Planned: `M-UIACC-A01-001`.
+- Covered: `M-UIACC-A01-001` (E1 at Masks clamps for one detent and one large
+  event; a large positive event moves one family at a time; negative E1 at
+  Channel tasks restores Trig params with its remembered slot; no MIDI, mask or
+  LED change and the phrase replays exactly). Also `M-LIVEUI-TASKS-001`,
+  `M-LIVEUI-FOLLOW-001` and the A18 sweep.
+- Uncovered: RNG state is not observed directly (only through the exact phrase
+  replay).
 
 ## A02 — held steps 1 and 64, K1+K2, release in either order
 
-- Covered musically: mask and memory clearing cases (`M-MASK-*`, `M-MEMORY-*`,
-  `M-TRANS-003`) clear held-step locks and keep channel defaults;
-  `M-LIVEUI-FOLLOW-001` checks the held scope (ST05) and restore on release.
-- Uncovered: the exact pair 1 and 64 held together with K1+K2, both release
-  orders with the restored family checked on screen, and "unheld locks
-  unchanged" asserted in the same case. Planned: `M-UIACC-A02-001`.
+- Covered: `M-UIACC-A02-001` (steps 1 and 64 held, K1+K2 clears only the held
+  steps on Masks and on Trig params; channel defaults and unheld locks stay on
+  screen and in MIDI; both release orders restore the family at channel scope).
+  Musical clearing cases `M-MASK-*`, `M-MEMORY-*`, `M-TRANS-003`.
+- Uncovered: nothing named by the item beyond these.
 
 ## A03 — assignment picker (C07)
 
-- Covered musically: `M-PARAM-*`, `M-PATCH-*` (CC/NRPN encodings, Off policy,
-  order), `M-REC-PARAM-011/012/020` (assignment change vs pending recording,
-  confirmed same assignment, unconfirmed cancel), `M-SLIDE-STEP-001`.
-  `M-UIACC-A18-001` opens C07 from C02 with K2, browses with E3 and assigns
-  "Quantised Fixed Note" with K3.
-- Uncovered: "same target slot" after browsing then K2 cancel on screen,
-  "discarded candidate" frame check, repeat K3 apply, and hold-step K3 slide
-  marker on the live screen. Planned: `M-UIACC-A03-001`.
+- Covered: `M-UIACC-A03-001` (the picker opened from slot 2 keeps its target
+  slot; K2 discards an unapplied browse; K3 applies and repeats idempotently;
+  Off sends no CC; held step + K3 slides CC1 between locks in order). Musical:
+  `M-PARAM-*`, `M-PATCH-*` (CC/NRPN encodings, wrap), `M-REC-PARAM-011/012/020`.
+- Uncovered: NRPN and wrap policy are proven by the musical cases, not inside
+  the picker case.
 
 ## A04 — Merge Shape screens M02/M03/M04/M06/M07/M12/M13/M14
 
@@ -99,11 +94,10 @@ Screens C01, C02, N01. MAN.015/016.
 ## A06 — Tone map (H11/H19)
 
 - Covered: `M-HARMONY-PATTERN-001` (pattern mode maps identities musically);
-  `M-UIACC-A18-001` opens H11 and H19 and cancels.
+  `M-UIACC-A18-001` opens H11 and H19 (Reset map "PAT 1 / AVERAGE") and cancels.
 - Uncovered: selecting a different source binding, editing the map, Reset
   cancel/confirm effect on the draft, "reset remains draft until owner Apply",
-  and the "other binding maps unchanged" musical clause. H19 currently paints
-  LAYOUT OVERFLOW (defect D3 below).
+  and the "other binding maps unchanged" musical clause.
 
 ## A07 — event inspection (H05/H06/H15/H16/H18)
 
@@ -130,8 +124,8 @@ Screens C01, C02, N01. MAN.015/016.
   and clear (R10/R12), stale question after completion/transport start,
   transport start in each state (R11), READY editing while playing (R05),
   setup draft keep/discard (R01/R14), server ten-lane bank and fallback,
-  disconnect, leave/re-enter algorithm 5. Also: K3 on Pattern tasks >
-  Rhythm Doctor does not open R01 (defect D5).
+  disconnect, leave/re-enter algorithm 5. (The sweep opens R01 from Pattern
+  tasks and from the grid.)
 
 ## A09 — Rhythm Doctor lanes, browse and paint
 
@@ -144,25 +138,25 @@ Screens C01, C02, N01. MAN.015/016.
 
 ## A10 — Norns follows channel, pattern, dual range, mute and merge gestures
 
-- Covered: `M-LIVEUI-FOLLOW-001` (page buttons, channel select, held steps),
-  `M-NAV-001` (all 36 page transitions, menu LEDs, unchanged MIDI),
-  `M-MUTE-001`, `M-CHANNEL-001`, `M-RANGE-*`, `M-MERGE-TRIG-002` and the numeric
-  merge cases (merge arithmetic unchanged), `M-GESTURE-ORDER-001`.
-- Uncovered: the screen resolving to C09 after assign/remove pattern and merge
-  taps, and dual range in both release orders checked on screen; M09 is not
-  observable (defect D7). Planned: `M-UIACC-A10-001`.
+- Covered: `M-UIACC-A10-001` (channel selection, pattern add/remove, trig and
+  note merge gestures, mute by shift and long press, both dual-range release
+  orders keep Masks with footer feedback; a held note merge + unassigned pattern
+  shows Merge detail without assigning it; LEDs and merged MIDI follow the
+  README arithmetic). Also `M-LIVEUI-FOLLOW-001`, `M-NAV-001`, `M-MUTE-001`,
+  `M-MERGE-TRIG-002` and the numeric merge cases.
+- Uncovered: M09 (the merge gesture screen inside Merge Shape) is shown and hidden
+  within one short press, so no case observes it.
 
 ## A11 — pattern pages and viewer channel
 
-- Covered musically: `M-ALG-001..004` (Euclidean, tresillo, drum banks, numeric
-  masks), `M-ALG-PAINT-RACE-001`, `M-EDIT-*` (note/velocity ranges, banks,
-  fader extremes), `M-PAT-*`, `M-VIEW-001` (independent screen grid, 16 viewer
-  selections, clamps, unchanged MIDI). `M-UIACC-A18-001` reaches P01..P08, P05 in
-  Scale/Trig/Song, both algorithm variants on P06, Paint preview, Trig step edit.
-- Uncovered: E3 on view_channel at 1 and 16 on P01/P03/P04/P05/S03 with the
-  label and "never writes selected_channel/MIDI/RNG" asserted live; source select
-  K1/long; duplicate source banks. E2 on Trig options moves the viewer channel
-  (defect D4), contrary to "E2 moves field focus only". Planned: `M-UIACC-A11-001`.
+- Covered: `M-UIACC-A11-001` (E3 on View channel on P01/P03/P04/P05/S03, clamped
+  1..16 and kept per context; E2 and E3 off the field change nothing; no MIDI;
+  the selected channel stays 1 and a later grid step edit plays on channel 1).
+  Musical: `M-ALG-001..004`, `M-ALG-PAINT-RACE-001`, `M-EDIT-*`, `M-PAT-*`,
+  `M-VIEW-001`. The A18 sweep reaches P01..P08 and checks that E2 on Trig options
+  moves its own focus and leaves the viewer on channel 01.
+- Uncovered: source select K1/long and duplicate source banks as live-screen
+  checks; generator input roles/unused inputs on P06 (P06 lists algorithms only).
 
 ## A12 — Scale S01..S05
 
@@ -175,8 +169,7 @@ Screens C01, C02, N01. MAN.015/016.
 - Uncovered: "clear current slot", "hold global steps then scale/transpose/
   octave" on the live scope text, all-song confirm/cancel (S05 is never shown:
   no router path sets it), S04 (never shown), and the explicit
-  edit/applied/locked scope on screen. S01's footer names Pentatonic as a
-  neighbour, but E2 never reaches it.
+  edit/applied/locked scope on screen.
 
 ## A13 — Song A01..A03
 
@@ -246,58 +239,61 @@ Screens C01, C02, N01. MAN.015/016.
   and CT. It opens 50 live screens through public input and, on each, checks
   the exact title and scope, that LAYOUT OVERFLOW is not painted on the layout's
   overflow line, that the footer (rows 56..63) is exactly the hints, the
-  focused-screen neighbour labels or a named tooltip, and the selected field's
-  whole value on its full-value route. Includes a long parameter name
-  ("Quantised Fixed Note": fitted "QUAN" cell, whole name on the value line and
-  on C13; "Quantised Fixed~" in the picker), a long raw value
-  (GLOBAL_EFFECTIVE), NONE/X/NO EVENT/0 sentinels, maximum values (MIDI channel
-  CC16, Add amount 100, Anchor gap 8) and minimums (Seed 0).
+  focused-screen neighbour labels E2 can reach, or a named tooltip, and the
+  selected field's whole value on its full-value route. Includes a long
+  parameter name ("Quantised Fixed Note": fitted "QUAN" cell, whole name on the
+  value line and on C13; "Quantised Fixed~" in the picker), long raw values
+  (GLOBAL_EFFECTIVE, "PAT 1 / AVERAGE" on the tone-map reset question), OFF,
+  NONE, X, NO EVENT and 0 kept distinct, maximum values (MIDI channel CC16, Add
+  amount 100, Anchor gap 8), minimum Seed 0, and values at the 70 px art
+  boundary (NEAREST, PATTERN).
 - Screens reached: C01..C07, C09, C12, C13, M02, M03, M05, M06, M07, M12, M13,
   M14, H01..H05, H07..H11, H17, H19, S01..S03, P01..P08, A01..A03, N01..N05,
-  R01, and the norns menu round trip.
+  R01 (from the grid and from Pattern tasks), and the norns menu round trip.
 - Not reachable through public input on this build (no router path sets
   them): C08, C10, C11, S04, S05, M04, M08, M09 (shown and hidden within one
-  release), M10 (the Voice leading link lands on H01), M11, H06 (needs a voicing
+  press), M10 (the Voice leading link lands on H01), M11, H06 (needs a voicing
   failure), H12..H16, H18, F01..F08, X01..X09 (native), R02..R16 (need capture
   or analysis).
-- Uncovered: "empty descriptor list", art pose 1 (the blink is time-based and
-  not selected), "decorative art never replaces status" beyond the frames seen,
-  values at the art boundary (see defect D6), and Seed 65535.
-- Known defects asserted strictly (the case fails if one stops reproducing): D1,
-  D2, D3, D4, D5 below. D6 is an oracle discrepancy; NEAREST (H03) and PATTERN
-  (H01) are checked by label only.
+- Uncovered: "empty descriptor list", art pose 1 (the blink is time-based),
+  and Seed 65535 (E3 moves one per event).
 
 ## A19 — C06 output inspection
 
-- Covered: `M-DASHBOARD-001..008` (root pitch, velocity, length rendered after
-  exact MIDI), `M-DASHBOARD-SELECT-001`, `M-DASHBOARD-CHORD-001`.
-  `M-UIACC-A18-001` checks every C06 field with no event (NO EVENT for Step and
-  every stage, X X X X chord, velocity 0).
-- Uncovered: held step in rows 4..7 while on C06, provenance/planned/scheduled/
-  emitted/bypass for a held step, "no provenance for NO EVENT step", E3/K3 on
-  every field, and the no-solve/RNG/MIDI clause. With no event the Root reads
-  C-2 (the dashboard's initial note) rather than NO EVENT. Planned:
-  `M-UIACC-A19-001`.
+- Covered: `M-UIACC-A19-001` (Output shows the latest played event; a held step
+  is inspected in place with provenance, planned, scheduled, emitted and bypass;
+  a step with no event shows NO EVENT; release returns to the latest event; E3/K3
+  on every field send no MIDI and change no LED, selection or music). Also
+  `M-DASHBOARD-001..008` and the A18 sweep (every C06 field with no event).
+- Uncovered: with no event yet, Root reads C-2 (the dashboard's initial note)
+  rather than NO EVENT; no case pins either way.
 
 ## Defects found by the sweep
 
-- D1: feature editor booleans that are false render NONE, not OFF
-  (`channel_feature_editor.lua` field_value: `field.get and field.get() or
-  field.value` drops `false`). Keep anchor, Strict leap, Strict direction,
-  Non-chord pedal, Crossing, Exact unison, Group enabled. OFF and NONE collapse.
-- D2: K2 on read-only feature children does not go back: Merge Result (M05),
-  Merge Reason (M14) and Harmony Result (H05) stay on screen; only E1 leaves.
-- D3: H19 RESET TONE MAP? paints LAYOUT OVERFLOW (the selected Reset map value is
-  too wide for the detail row).
-- D4: E2 on Trig options (P02) moves the Trig grid viewer's channel (legacy
-  enc(2) on the Trig page), so P05 then shows another channel.
-- D5: K3 on Pattern tasks > Rhythm Doctor does nothing ("task not enterable
-  rhythm_doctor": the router's row filter never sees the algorithm).
-- D6: frame_oracle's text width disagrees with native text_extents at the art
-  boundary (NEAREST at 19 px: oracle 73 px, native fits 70).
-- D7: M09 is never observable: the merge-mode short press shows it and the same
-  release hides it.
-- Also noted: N04 K3 shows "K1 > PARAMS > X01" (an internal screen id);
-  C09 shows "E1 TASKS" although E1 is inert there; C07's hint is fitted to
-  "E3 CHOOSE  K3 ASSIGN  K2 B~"; M05 says Decision LEGACY while M14 says
-  ADMITTED for the same step; P06 leaves unselected algorithms blank.
+Fixed on `codex/ui-reimplementation` ("Fix the screen sweep's findings" and the
+commits before it); the sweep now asserts the fixed behaviour exactly:
+
+- False feature booleans rendered NONE; they now read OFF (asserted on Keep
+  anchor, Strict leap, Strict direction, Non-chord pedal, Crossing, Exact unison,
+  Group enabled).
+- K2 did not leave read-only feature screens; M14 now returns to M05, M05 to
+  M02 and H05 to H01.
+- H19 painted LAYOUT OVERFLOW; its Reset map value now reads "PAT 1 / AVERAGE",
+  whole.
+- E2 on Trig options moved the Trig viewer channel; P02 focus now moves and P05
+  still shows CH01.
+- K3 on Pattern tasks > Rhythm Doctor did nothing; it now opens R01.
+- frame_oracle measured text above 8 px antialiased; NEAREST and PATTERN are now
+  checked by value.
+- Also fixed: N04's native hint no longer names an internal screen id; C08/C09/
+  S04 footers say K2 BACK; the picker hint is "E3 PICK  K3 SET  K2 BACK";
+  focused footers on owner-selection screens name only neighbours E2 reaches.
+
+Still open:
+
+- After K3 then K2 on the Reset map question (H19) and K2 back to Voice leading,
+  the first E1 stays on the clean root (a stale return frame) and a second E1 is
+  needed to reach Channel tasks. The sweep turns E1 twice there.
+- M05 says Decision LEGACY while M14 says ADMITTED for the same step; P06 leaves
+  unselected algorithms blank; P07's fields all read NONE (paint state is not
+  exposed to the adapter).

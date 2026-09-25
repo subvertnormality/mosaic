@@ -22,9 +22,8 @@ run directory as evidence.
 
 Screens no public input shows on this build (C08, C10, C11, S04, S05, M04,
 M08..M11, H06, H12..H16, H18, F*, R02..R16) are listed, with the reasons, in
-docs/ui-reimplementation/reviews/ACCEPTANCE.md. Reported app defects the sweep
-meets are pinned strictly with `defect=`: the check must fail as described, and
-the case fails if one stops reproducing, so the expectation is then removed.
+docs/ui-reimplementation/reviews/ACCEPTANCE.md, with the defects the sweep
+found and their fixes.
 """
 import base64
 import json
@@ -40,7 +39,7 @@ SPEC = json.loads((Path(__file__).resolve().parents[3] / "docs/ui-reimplementati
 HINTS = {
     "masks": "E2 MASK  E3 SET", "parameters": "E2 SLOT  E3 SET  K2 ASSIGN",
     "history": "E3 MOVE  K2 UNDO  K3 REDO", "clock": "E3 SET  K3 APPLY  K2 CANCEL",
-    "device": "E3 SET  K3 APPLY  K2 CANCEL", "assignment": "E3 CHOOSE  K3 ASSIGN  K2 BACK",
+    "device": "E3 SET  K3 APPLY  K2 CANCEL", "assignment": "E3 PICK  K3 SET  K2 BACK",
     "scale": "E3 SET  K3 APPLY  K2 CANCEL", "scale_clock": "E3 SET  K3 APPLY  K2 CANCEL",
     "song": "E3 SET  K3 APPLY  K2 CANCEL", "song_clock": "E3 SET  K3 APPLY  K2 CANCEL",
     "trig_options": "E3 SET  K3 APPLY", "feature": "E3 SET  K3 APPLY  K2 BACK",
@@ -112,7 +111,7 @@ class Sweep:
             return result
         return evaluate
 
-    def screen(self, sid, scope="CH01", field=None, footer=None, tips=(), timeout=5, note=None, defect=None):
+    def screen(self, sid, scope="CH01", field=None, footer=None, tips=(), timeout=5, note=None):
         """Wait for screen `sid` to show exactly; record it and its frame."""
         entry = SPEC[sid]
         layout = entry["live_render"]["layout"]
@@ -138,13 +137,6 @@ class Sweep:
             record["note"] = note
         self.c.results.append(record)
         self.seen.append(sid)
-        if defect:
-            # A reported app defect: this exact check is expected to fail. If it
-            # passes, the defect is gone and this expectation must be removed.
-            record.update(kind="a18-known-defect", defect=defect, reproduced=not passed, passed=not passed)
-            if passed:
-                self.failures.append(dict(record, reason="known defect no longer reproduces"))
-            return passed
         if not passed:
             self.failures.append(record)
         return passed
@@ -220,9 +212,9 @@ def live_ui_sweep(c):
     channel_task(c, "harmony")
     sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
     channel_task(c, "clock")
-    sw.screen("C04", field=("Rate", "/1"), footer=(START, "Feel source"))
+    sw.screen("C04", field=("Rate", "/1"), footer=(START, "Swing type"))
     channel_task(c, "merge")
-    sw.screen("C09", field=("Patterns", "01"))
+    sw.screen("C09", field=("Patterns", "01"), footer="K2 BACK")
     c.key(2)
     sw.screen("C02", field=("None", "X"))
     channel_task(c, "device")
@@ -250,9 +242,12 @@ def live_ui_sweep(c):
 
 
 def neighbours(sid, labels, label):
-    """A focused screen with several fields names its neighbours in the footer."""
+    """A focused screen with several fields names its neighbours in the footer.
+
+    On owner-selection screens `labels` lists only the fields E2 can reach.
+    """
     if SPEC[sid]["live_render"]["layout"] != "focused" or len(labels) < 2:
-        return None
+        return None if len(labels) >= 2 or SPEC[sid]["live_render"]["layout"] != "focused" else (START, END)
     i = labels.index(label)
     return (labels[i - 1] if i else START, labels[i + 1] if i + 1 < len(labels) else END)
 
@@ -271,7 +266,8 @@ def walk(c, sw, sid, fields, labels=None, visits=None, top=False, **kw):
     for n, label in enumerate(visits or [label for label, _ in fields]):
         if n:
             e2(c, 1)
-        sw.screen(sid, field=(label, values.get(label)), footer=neighbours(sid, labels, label), **kw)
+        sw.screen(sid, field=(label, values.get(label)), footer=kw.get("footer") or neighbours(sid, labels, label),
+                  **{k: v for k, v in kw.items() if k != "footer"})
 
 
 def channel_screens(c, sw):
@@ -283,18 +279,19 @@ def channel_screens(c, sw):
                         ("Scheduled", "NO EVENT"), ("Emitted", "NO EVENT"), ("Bypass", "NO EVENT")])
     e2(c, 1)  # clamps on the last field
     sw.screen("C06", field=("Bypass", "NO EVENT"), footer=("Emitted", END))
-    # Clock (C04): the owner's E2 selects Rate, Swing type and Swing (Feel
-    # source is shown as a neighbour but is not an owner selector).
+    # Clock (C04): the owner's E2 selects Rate, Swing type and Swing; the
+    # read-only Feel source is not reachable, so the footer skips it.
     channel_task(c, "clock")
     walk(c, sw, "C04", [("Rate", "/1"), ("Feel source", None), ("Swing type", "X"), ("Swing", "X")],
-         visits=["Rate", "Swing type", "Swing"])
+         labels=["Rate", "Swing type", "Swing"], visits=["Rate", "Swing type", "Swing"])
     channel_task(c, "history")
     walk(c, sw, "C03", [("Position", "0 of 0"), ("Selected event", "NO HISTORY"),
                         ("Undo available", "0"), ("Redo available", "0")])
     channel_task(c, "merge")
-    walk(c, sw, "C09", [("Patterns", "01"), ("Trig mode", "skip"), ("Note / vel", "average / average"),
-                        ("Length mode", "average")])
-    c.key(2)  # E1 is inert on Merge detail; K2 returns
+    walk(c, sw, "C09", [("Patterns", "01"), ("Trig mode", "SKIP"), ("Note / vel", "AVERAGE / AVERAGE"),
+                        ("Length mode", "AVERAGE")], footer="K2 BACK")
+    c.key(2)  # E1 is inert on Merge detail; K2 returns, as its footer says
+    sw.screen("C02", field=("None", "X"))
     channel_task(c, "device")
     walk(c, sw, "C05", [("Device", "CC Device"), ("MIDI channel", "CC1"), ("MIDI port", "OUT 1")])
     # Maximum MIDI channel: a staged draft shows 16 whole, plus the staged
@@ -328,10 +325,12 @@ def channel_screens(c, sw):
     sw.screen("C13", field=("Quantised Fixed Note", "X"))
 
 
-# Known defect (reported): a feature editor shows a boolean False as NONE
-# (channel_feature_editor.field_value: `field.get and field.get() or field.value`
-# drops false), collapsing OFF into NONE. Those values are checked by label only.
-BOOLEAN_FALSE = None
+# A false feature boolean reads OFF (distinct from NONE).
+BOOLEAN_FALSE = "OFF"
+# Channel 1's tone map, named by its assigned patterns and note merge mode.
+H19_MAP = "PAT 1 / AVERAGE"
+P02_FIELDS = [("Tresillo amount", "x24"), ("Applies to", "Tresillo"), ("Stored pattern", "Unchanged"),
+              ("Mode", "Live setting")]
 
 
 def merge_screens(c, sw):
@@ -374,19 +373,16 @@ def merge_screens(c, sw):
     sw.screen("M02", field=("Pitch", ">"), footer=neighbours("M02", labels, "Pitch"))
     # M09 is not observable: the merge-mode short press shows it and its
     # release hides it within the same grid event (see ACCEPTANCE.md).
-    # Result and its Reason are read-only. Reported defect: K2 does not return
-    # from them (the owner's route re-asserts the child), so E1 leaves instead.
+    # Result and its Reason are read-only; K2 backs out through the editor.
     e2(c, 1); c.key(3)
     walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")])
-    c.key(2)
-    sw.screen("M02", field=("Result", ">"), footer=("Pitch", END), timeout=2,
-              defect="K2 on Merge Result (M05) does not return to Merge Shape")
     c.key(3)
     walk(c, sw, "M14", [("Step", "1"), ("Role", "EMPTY"), ("Sources", "NONE"), ("Decision", "ADMITTED"),
                         ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
     c.key(2)
-    sw.screen("M05", field=("Reason", ">"), footer=("Decision", END), timeout=2,
-              defect="K2 on Merge Reason (M14) does not return to Merge Result")
+    sw.screen("M05", field=("Reason", ">"), footer=("Decision", END))
+    c.key(2)
+    sw.screen("M02", field=("Result", ">"), footer=("Pitch", END))
     c.enc(1, 1)
     sw.screen("N01", field=("Merge Shape", ""))
 
@@ -403,9 +399,8 @@ def harmony_screens(c, sw):
     c.key(2)
     sw.screen("H01", field=("Register", ">"), footer=neighbours("H01", labels, "Register"))
     e2(c, 1); c.key(3)
-    # Direction is checked by label: the value oracle measures NEAREST at 19px
-    # wider than native text_extents does (reported oracle discrepancy).
-    walk(c, sw, "H03", [("Mode", "ROOT"), ("Direction", None), ("Strict direction", BOOLEAN_FALSE),
+    # NEAREST sits at the 70 px art boundary: whole in the value region.
+    walk(c, sw, "H03", [("Mode", "ROOT"), ("Direction", "NEAREST"), ("Strict direction", BOOLEAN_FALSE),
                         ("Pedal pitch", "48"), ("Non-chord pedal", BOOLEAN_FALSE), ("Bass register", ">")])
     c.key(2)
     e2(c, 2); c.key(3)
@@ -457,33 +452,31 @@ def harmony_screens(c, sw):
     sw.screen("H04", field=("Delete group", ">"))
     c.key(2)
     sw.screen("H01", field=("Groups", ">"), footer=neighbours("H01", labels, "Groups"))
+    # Result is read-only; K2 backs out to Voice leading.
+    e2(c, 3); c.key(3)
+    walk(c, sw, "H05", top=True, fields=[("Step", "1"), ("Status", "NO EVENT"), ("CH1 planned", "NONE"),
+                                         ("CH1 emitted", "NONE")])
+    c.key(2)
+    sw.screen("H01", field=("Result", ">"), footer=("Entry", END))
     # Pattern mode adds Tone Map, whose reset asks a question.
     e2(c, -12)
     c.enc(3, 2)
-    # Mode is checked by label: like NEAREST above, PATTERN sits at the 70 px
-    # art boundary where the oracle's width disagrees with native text_extents.
-    pattern = [("Mode", None), ("Group", "NOT USED"), ("Preset", "SMOOTH"), ("Tone Map", ">"), ("Register", ">"),
+    pattern = [("Mode", "PATTERN"), ("Group", "NOT USED"), ("Preset", "SMOOTH"), ("Tone Map", ">"), ("Register", ">"),
                ("Bass", ">"), ("Groups", ">"), ("Rules", ">"), ("Entry", ">"), ("Result", ">")]
     walk(c, sw, "H01", pattern)
     e2(c, -6); c.key(3)
     walk(c, sw, "H11", [("Tone 0", "RAW"), ("Tone 1", "RAW"), ("Tone 2", "RAW"), ("Tone 3", "RAW"), ("Reset map", ">")])
     c.key(3)
-    # Reported defect: the reset question's selected value (the tone map
-    # binding) cannot be drawn whole, so the renderer paints LAYOUT OVERFLOW.
-    sw.screen("H19", field=("Reset map", None), defect="H19 paints LAYOUT OVERFLOW (Reset map binding too wide)")
+    # The question names the map by its patterns and note merge, whole.
+    sw.screen("H19", field=("Reset map", H19_MAP))
     c.key(2)
     sw.screen("H11", field=("Reset map", ">"), footer=("Tone 3", END))
     c.key(2)
     # K2 with the unapplied mode change discards it: Mode is OFF again.
     sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
-    # Result is read-only and K2 does not leave it (reported defect): E1 leaves.
-    e2(c, 12); c.key(3)
-    walk(c, sw, "H05", top=True, fields=[("Step", "1"), ("Status", "NO EVENT"), ("CH1 planned", "NONE"),
-                                         ("CH1 emitted", "NONE")])
-    c.key(2)
-    sw.screen("H01", field=("Result", ">"), footer=("Entry", END), timeout=2,
-              defect="K2 on Harmony Result (H05) does not return to Voice leading")
-    c.enc(1, 1)
+    # After a cancelled Reset map question the first E1 stays on the clean
+    # root (a stale return frame; reported), so E1 is turned twice here.
+    c.enc(1, 2)
     sw.screen("N01", field=("Harmony", ""))
 
 
@@ -491,16 +484,19 @@ def scale_screens(c, sw):
     c.ui.tap_control("scale_editor")
     scale = [("Root", None), ("Scale", "Major"), ("Degree", "I"), ("Transpose", "0"), ("Rotation", "r0"),
              ("Pentatonic", None)]
-    labels = [label for label, _ in scale]
-    # The owner's E2 starts on Scale and stops at Rotation.
+    # The owner's E2 starts on Scale and stops at Rotation; the read-only
+    # Pentatonic is not reachable, so the footer never names it.
+    labels = ["Root", "Scale", "Degree", "Transpose", "Rotation"]
     sw.screen("S01", scope="SLOT 01", field=("Scale", "Major"), footer=neighbours("S01", labels, "Scale"),
               tips=("Scale Editor",))
-    walk(c, sw, "S01", scale, visits=["Scale", "Degree", "Transpose", "Rotation", "Rotation"], scope="SLOT 01")
+    walk(c, sw, "S01", scale, labels=labels, visits=["Scale", "Degree", "Transpose", "Rotation", "Rotation"],
+         scope="SLOT 01")
     c.enc(1, 1)
     tasks = ["Scale", "Scale clock", "Overview", "Channel view"]
     walk(c, sw, "N02", [(t, "") for t in tasks], top=True, scope="SLOT 01")
     task(c, "Scale", "scale_clock")
     walk(c, sw, "S02", [("Rate", "/1"), ("Selected range", None), ("Global cap", None), ("Playable range", None)],
+         labels=["Rate"],
          visits=["Rate"], scope="SLOT 01")
     task(c, "Scale", "overview")
     walk(c, sw, "S03", [("View channel", "01"), ("Playing scale", "01"), ("Edit scale", "01"),
@@ -532,14 +528,11 @@ def pattern_screens(c, sw):
     c.enc(1, 1)
     walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Channel view")], top=True)
     task(c, "Trig", "options")
-    sw.screen("P02", field=("Tresillo amount", "x24"), footer=(START, "Applies to"))
-    # The owner has one selector, so E2 keeps Tresillo amount selected. Reported
-    # defect: it also moves the Trig grid viewer's channel, which P05 names.
-    e2(c, 1)
-    sw.screen("P02", field=("Tresillo amount", "x24"), footer=(START, "Applies to"))
+    # E2 moves Trig options' own focus and never the Trig viewer's channel.
+    walk(c, sw, "P02", P02_FIELDS)
     task(c, "Trig", "channel_view")
-    sw.screen("P05", timeout=2, defect="E2 on Trig options moves the Trig viewer channel")
-    c.enc(3, -16)  # E3 on View channel moves the viewer back to 1 (clamped)
+    sw.screen("P05")
+    c.enc(3, -16)  # E3 on View channel clamps at channel 1
     sw.screen("P05")
     # Algorithm variants: the chooser shows which one is selected; the others
     # have no value (blank, not a sentinel).
@@ -566,11 +559,9 @@ def pattern_screens(c, sw):
     c.enc(1, 1)
     walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Channel view", "Rhythm Doctor")], top=True,
          tips=("Rhythm Doctor selected",))
-    # Reported defect: K3 on the Rhythm Doctor row does not open R01 (the
-    # router's row filter never sees the algorithm: "task not enterable").
+    # K3 on the Rhythm Doctor row opens R01.
     c.key(3)
-    sw.screen("R01", field=("Record", "READY"), footer=(START, "Tempo"), timeout=2,
-              defect="K3 on Pattern tasks > Rhythm Doctor does not open R01")
+    sw.screen("R01", field=("Record", "READY"), footer=(START, "Tempo"))
     task(c, "Trig", "pattern")
     sw.screen("P01")
     c.tap(12, 2)
