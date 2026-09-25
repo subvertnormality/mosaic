@@ -198,6 +198,48 @@ function test_ui_live_channel_tasks_e1_from_an_entered_task_returns_to_n01()
   end
 end
 
+-- Mapped selected-channel mask CCs (lib/devices/midi_mapping_params.lua,
+-- characterised under human decision S10): Note Masks shows, then the channel
+-- editor returns to its screen two seconds after the CC (lib/devices/midi_input.lua).
+function test_ui_live_mapped_mask_cc_shows_note_masks_then_returns_to_the_screen()
+  live.isolated(function()
+    open_task("device")
+    luaunit.assert_equals(screen(), "C05")
+    luaunit.assert_true(ui_live.show_masks_briefly())
+    luaunit.assert_equals(screen(), "C01")
+    luaunit.assert_equals(channel_page(), 1)
+    -- A second CC during the visit keeps the original screen to return to.
+    luaunit.assert_true(ui_live.show_masks_briefly())
+    luaunit.assert_true(ui_live.end_brief_masks())
+    luaunit.assert_equals(screen(), "C05")
+    luaunit.assert_equals(channel_page(), 5)
+    luaunit.assert_false(ui_live.end_brief_masks())
+  end)
+end
+
+function test_ui_live_navigation_during_a_mapped_mask_visit_is_not_undone()
+  live.isolated(function()
+    open_task("device")
+    ui_live.show_masks_briefly()
+    ui.enc(1, 1)
+    luaunit.assert_equals(screen(), "C02")
+    ui_live.end_brief_masks()
+    luaunit.assert_equals(screen(), "C02")
+    luaunit.assert_equals(channel_page(), 2)
+  end)
+end
+
+function test_ui_live_mapped_mask_cc_leaves_a_held_step_screen_alone()
+  live.isolated(function()
+    open_task("device")
+    ui_live.grid_hold({5})
+    local held = screen()
+    luaunit.assert_false(ui_live.show_masks_briefly())
+    luaunit.assert_equals(screen(), held)
+    ui_live.grid_hold({})
+  end)
+end
+
 function test_ui_live_channel_tasks_e3_does_not_edit_and_e2_clamps_to_the_rows()
   live.isolated(function()
     ui.enc(1, 1); ui.enc(1, 1)

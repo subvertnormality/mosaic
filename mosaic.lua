@@ -337,13 +337,17 @@ function init()
 
 end
 
+-- README "Autosave": only an idle Mosaic autosaves, so norns input restarts the
+-- idle period as grid presses do (lib/press.lua).
 function enc(n, d)
   ui_splash.skip()
+  if project then autosave_reset() end
   ui.enc(n, d)
 end
 
 function key(n, z)
   ui_splash.skip()
+  if project then autosave_reset() end
   ui.key(n, z)
 end
 

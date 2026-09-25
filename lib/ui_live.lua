@@ -453,6 +453,7 @@ local function after_event()
 end
 
 local dispatch_event
+local peek -- a mapped-CC Note Masks visit (ui_live.show_masks_briefly)
 
 -- Input handling never raises into norns or the grid path: a failure is
 -- logged and the screen is re-synchronised with its owners.
@@ -491,7 +492,10 @@ dispatch_event = function(event, payload)
   end
   after_event()
   current.event = nil
-  if router.state.screen ~= before then ui_motion.screen_changed(before, router.state.screen) end
+  if router.state.screen ~= before then
+    ui_motion.screen_changed(before, router.state.screen)
+    peek = nil
+  end
 end
 
 -- Norns input ------------------------------------------------------------------------------
@@ -526,6 +530,39 @@ function ui_live.grid_hold(steps)
     presentation_held = false
     dispatch("hold.end")
   end
+end
+
+-- A mapped selected-channel mask CC shows Note Masks while the Channel page is
+-- open, and the channel editor returns two seconds after the last such CC
+-- (lib/devices/midi_input.lua; characterised under human decision S10). The
+-- mapping param is the owner here, as the feature editors are for their routes:
+-- the screen follows it without passing through the input algebra.
+
+function ui_live.show_masks_briefly()
+  if not installed then return false end
+  local s = router.state
+  if s.context ~= "Channel" or s.native or s.modal or presentation_held then return false end
+  if s.screen ~= "C01" then
+    peek = {back = s.screen}
+    s.screen = "C01"
+    after_event()
+    ui_motion.screen_changed(peek.back, "C01")
+  end
+  return true
+end
+
+function ui_live.end_brief_masks()
+  local p = peek
+  peek = nil
+  if not (installed and p) then return false end
+  local s = router.state
+  -- Only while Note Masks is still showing: navigation since the CC wins.
+  if s.screen == "C01" and s.context == "Channel" and not s.native and not s.modal then
+    s.screen = p.back
+    after_event()
+    ui_motion.screen_changed("C01", p.back)
+  end
+  return true
 end
 
 function ui_live.grid_outcome(flow_id, extra)
