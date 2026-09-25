@@ -397,6 +397,9 @@ local function reconcile_owner_routes()
     local route = editor and editor:get_screen()
     local mapped = route and ui_adapters.translate_route(screen.provider, route)
     if mapped and spec.screens[mapped] and mapped ~= s.screen then s.screen = mapped end
+    -- Back at the editor's clean root, frames pushed by its child routes and
+    -- questions are spent: the next E1 leaves for tasks.
+    if editor and #(editor.stack or {}) == 0 and (s.screen == "M02" or s.screen == "H01") then s.return_stack = {} end
   end
   if s.context == "Trig" and doctor_active() and (screen.provider == "doctor" or MODAL_SCREENS[s.screen]) then
     local adapter = ui_adapters.get("doctor")

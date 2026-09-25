@@ -474,9 +474,9 @@ def harmony_screens(c, sw):
     c.key(2)
     # K2 with the unapplied mode change discards it: Mode is OFF again.
     sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
-    # After a cancelled Reset map question the first E1 stays on the clean
-    # root (a stale return frame; reported), so E1 is turned twice here.
-    c.enc(1, 2)
+    # From the clean root one E1 detent leaves for Channel tasks, also after a
+    # cancelled Reset map question (its return frame is spent).
+    c.enc(1, 1)
     sw.screen("N01", field=("Harmony", ""))
 
 
