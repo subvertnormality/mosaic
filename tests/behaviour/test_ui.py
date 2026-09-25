@@ -2858,5 +2858,69 @@ class RhythmDoctorSurfaceRecipeTests(unittest.TestCase):
         ])
 
 
+class OutputFieldVerbTests(unittest.TestCase):
+    """Output (C06) verbs, channel select on a page, and the Masks value line."""
+
+    def test_expect_output_field_selects_by_e2_then_matches_label_and_value(self):
+        from ui import Ui
+        driver = FakeDriver(states=[{}])
+        ui = Ui(driver)
+        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
+            ui.expect_output_field("velocity", 110)
+        self.assertEqual(driver.calls, [("enc", 2, -10), ("enc", 2, 2), ("wait",)])
+        self.assertEqual(oracle.call_args.args[1:], ("focused", "Velocity", 110))
+        self.assertEqual(driver.results, [dict(kind="output-field", field="velocity", label="Velocity",
+                                               value="110", passed=True)])
+
+    def test_expect_output_field_first_field_needs_only_the_clamp(self):
+        from ui import Ui
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_field_matches", return_value=True):
+            Ui(driver).expect_output_field("root", "C3")
+        self.assertEqual(driver.calls, [("enc", 2, -10), ("wait",)])
+
+    def test_expect_output_field_fails_closed(self):
+        from ui import Ui, UiMapError
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_field_matches", return_value=False):
+            with self.assertRaises(AssertionError):
+                Ui(driver).expect_output_field("length", "4.0")
+        self.assertEqual(driver.results, [])
+        with self.assertRaises(UiMapError):
+            Ui(FakeDriver()).expect_output_field("note", "C3")
+
+    def test_output_field_value_names_the_single_matching_candidate(self):
+        from ui import Ui
+        driver = FakeDriver(states=[{}, {}])
+        shown = lambda state, layout, label, value=None: value in (None, "X")
+        with patch("frame_oracle.selected_field_matches", side_effect=shown):
+            self.assertEqual(Ui(driver).output_field_value("length", ["X", "-1.0"], select=False), "X")
+        driver = FakeDriver(states=[{}, {}])
+        with patch("frame_oracle.selected_field_matches", side_effect=lambda s, l, lab, v=None: v is None):
+            self.assertEqual(Ui(driver).output_field_value("root", ["X"]), "?")
+        self.assertEqual(driver.calls[:1], [("enc", 2, -10)])
+
+    def test_select_channel_on_page_reopens_the_page_through_tasks(self):
+        from ui import Ui
+        ui = Ui(FakeDriver())
+        with patch.object(ui, "select_channel") as select, patch.object(ui, "channel_page") as page, \
+                patch.object(ui, "expect_header") as header:
+            ui.select_channel_on_page(2, "midi_config")
+        select.assert_called_once_with(2)
+        page.assert_called_once_with("midi_config", channel=2, confirm=False)
+        header.assert_called_once_with("midi_config", channel=2)
+
+    def test_selected_mask_value_reads_the_full_label_value_line(self):
+        from ui import Ui
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_field_matches",
+                   side_effect=lambda s, layout, label, value: (layout, label, value) == ("overview_masks", "Chord 1", "2nd")):
+            self.assertEqual(Ui(driver).selected_mask_value("chord_1", ["X", "2nd", "-7th"]), "2nd")
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
+            Ui(driver).expect_selected_mask("chord_2", "-7th")
+        self.assertEqual(oracle.call_args.args[1:], ("overview_masks", "Chord 2", "-7th"))
+
+
 if __name__ == "__main__":
     unittest.main()

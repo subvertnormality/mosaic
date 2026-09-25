@@ -1,9 +1,7 @@
 """Contract-owned chord-shape cases and their exact physical MIDI oracle."""
 
-import base64
 import time
 
-from frame_oracle import render
 from midi_window import MidiWindow
 from note_schedule import assert_schedule
 
@@ -28,19 +26,12 @@ def _assign_trig_parameter(c, label, offset=None):
 
 
 def chord_dashboard_display(c, root_velocity):
-    expected = render(
-        [(0, 18, 1, "Note"), (0, 26, 1, "C3"),
-         (25, 18, 1, "Vel"), (25, 26, 1, str(root_velocity)),
-         (50, 18, 1, "Len"), (50, 26, 1, "4.0")]
-    )
-    indices = [(y * 128 + x) * 4 + k
-               for y in range(11, 29) for x in range(75) for k in range(3)]
-
-    def matches(state):
-        actual = base64.b64decode(state["frame"]["pixels_base64"])
-        return all(actual[i] == expected[i] for i in indices)
-
-    c.wait(matches, timeout=.5)
+    # C06 OUTPUT (the Note Dashboard) shows one field at a time: each fact the
+    # old Note/Vel/Len cells showed is asserted as its field's exact label and
+    # large value after E2 selects it (selection moves focus only).
+    c.ui.expect_output_field("root", "C3")
+    c.ui.expect_output_field("velocity", str(root_velocity))
+    c.ui.expect_output_field("length", "4.0")
     c.results.append(dict(kind="chord-root-dashboard", note="C3",
                           velocity=root_velocity, length="4.0",
                           source="rendered framebuffer", passed=True))
