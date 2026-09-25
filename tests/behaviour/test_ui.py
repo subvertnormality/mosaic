@@ -275,7 +275,7 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual(header_parts("trigger_editor_confirmation", channel=1),
                          ("TRIG OPTIONS", "CH01", "focused"))
         self.assertEqual(header_parts("trigger_editor", channel=1),
-                         ("PATTERN TRIG", "CH01", "pattern64"))
+                         ("PATTERN TRIG", "PAT01 CH01", "pattern64"))
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
         with patch("frame_oracle.live_header_matches", return_value=True) as live:
@@ -951,12 +951,12 @@ class UiInputTests(unittest.TestCase):
 
         self.assertEqual(CHANNEL_TASKS, [
             "masks", "trig_params", "output", "harmony", "clock", "merge", "device",
-            "history", "mask_detail", "trig_detail", "merge_shape", "norns"])
+            "history", "merge_shape", "norns"])
         rows = {"masks": 0, "trig_locks": 1, "memory": 7, "clock_mods": 4,
-                "midi_config": 6, "note_dashboard": 2, "merge_shape": 10, "harmony": 3}
+                "midi_config": 6, "note_dashboard": 2, "merge_shape": 8, "harmony": 3}
         self.assertEqual(set(rows), set(CHANNEL_PAGES))
         for page, row in rows.items():
-            expected = [("enc", 1, 3), ("enc", 2, -12)]
+            expected = [("enc", 1, 3), ("enc", 2, -10)]
             if row:
                 expected.append(("enc", 2, row))
             expected.append(("key", 3))
@@ -974,7 +974,7 @@ class UiInputTests(unittest.TestCase):
         ui.confirm_header = lambda page, **params: confirmed.append((page, params))
         ui.channel_page("harmony", "masks", channel=2)
         self.assertEqual(driver.calls, [
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 3), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 3), ("key", 3),
         ])
         self.assertEqual(confirmed, [("harmony", {"channel": 2})])
         for page in ("channel_tasks", "not_a_page"):
@@ -992,9 +992,9 @@ class UiInputTests(unittest.TestCase):
         ui.set_value(2)
         ui.select_field("tone_0_role", offset=3)
         self.assertEqual(driver.calls, [
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 4), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 4), ("key", 3),
             ("enc", 3, -2),
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 3), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 3), ("key", 3),
             ("enc", 3, 2),
             ("enc", 2, 3),
         ])
@@ -1144,7 +1144,7 @@ class UiInputTests(unittest.TestCase):
 
         driver, ui = self.ui()
         ui.channel_page("masks", "midi_config", confirm=False, saturate=True)
-        self.assertEqual(driver.calls, [("enc", 1, 3), ("enc", 2, -12), ("key", 3)])
+        self.assertEqual(driver.calls, [("enc", 1, 3), ("enc", 2, -10), ("key", 3)])
 
         class ObservedDriver(FakeDriver):
             def wait(self, predicate, timeout=3):
@@ -1168,7 +1168,7 @@ class UiInputTests(unittest.TestCase):
             Ui(driver).turn(1, -5)
             self.assertEqual(driver.calls, [
                 ("wait", 1),
-                ("enc", 1, 3), ("enc", 2, -12), ("key", 3),
+                ("enc", 1, 3), ("enc", 2, -10), ("key", 3),
                 ("wait", 3),
             ])
             # Already at either end, a saturating turn emits no input at all.
@@ -1179,11 +1179,11 @@ class UiInputTests(unittest.TestCase):
                     self.assertEqual(driver.calls, [("wait", 1)])
             # An ordinary ring move: Merge shape -1 is Note dashboard (Output, task row 2).
             driver = ObservedDriver(states=[shows("MERGE SHAPE", "CH01", "focused"),
-                                            shows("OUTPUT", "CH01", "focused")])
+                                            shows("OUTPUT", "CH01", "dashboard")])
             Ui(driver).turn(1, -1)
             self.assertEqual(driver.calls, [
                 ("wait", 1),
-                ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 2), ("key", 3),
+                ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 2), ("key", 3),
                 ("wait", 3),
             ])
             # A screen on no page ring (Channel Tasks itself) matches neither the
@@ -1481,7 +1481,7 @@ class UiInputTests(unittest.TestCase):
         ui.expect_header = lambda page, **params: driver.calls.append(("header", page, params))
         ui.configure()
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
@@ -1492,8 +1492,8 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "masks", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
 
@@ -1527,19 +1527,19 @@ class UiInputTests(unittest.TestCase):
             quantised_fixed_table(case, profile="major")
 
         self.assertEqual(driver.calls[:7], [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
         ])
         self.assertEqual(driver.calls[22:32], [
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "masks", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
         self.assertEqual(driver.calls[32:37], [
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "quantised_fixed_note"),
         ])
         self.assertEqual(driver.calls[37:51], [
@@ -1580,15 +1580,15 @@ class UiInputTests(unittest.TestCase):
             seeded_probability(case, probability=99, opportunities=64)
 
         self.assertEqual(driver.calls[:7], [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
         ])
         self.assertEqual(driver.calls[22:32], [
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "masks", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
         self.assertEqual(selected, [2])
@@ -1626,7 +1626,7 @@ class UiInputTests(unittest.TestCase):
             fixed_note_domain(case, start=0, count=1)
 
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
@@ -1637,10 +1637,10 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "masks", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
-            ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
+            ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "fixed_note"),
             ("enc", 2, 1), ("assign_trig_parameter_key", "quantised_fixed_note"),
             ("enc", 3, 8),
@@ -1669,7 +1669,7 @@ class UiInputTests(unittest.TestCase):
 
         def expected_trace():
             calls = [
-                ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+                ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
             ("enc", 3, 1), ("key", 3),
                 ("tap", 5, 8),
                 ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
@@ -1680,10 +1680,10 @@ class UiInputTests(unittest.TestCase):
                 ("tap", 3, 8), ("tap", 1, 2),
                 ("hold_tap", (1, 4), (4, 4)),
                 ("led_values", [(1, 2)], [15]),
-                ("header", "masks", {"channel": 1}),
-                ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
+                ("header", "merge_detail", {"channel": 1}),
+                ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 6), ("key", 3),
                 ("header", "midi_config", {"channel": 1}),
-                ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
+                ("enc", 1, 3), ("enc", 2, -10), ("enc", 2, 1), ("key", 3),
                 ("key", 2), ("enc", 3, -50), ("key", 3), ("key", 2),
                 ("enc", 3, 61),
             ]
@@ -2874,44 +2874,53 @@ class RhythmDoctorSurfaceRecipeTests(unittest.TestCase):
 class OutputFieldVerbTests(unittest.TestCase):
     """Output (C06) verbs, channel select on a page, and the Masks value line."""
 
-    def test_expect_output_field_selects_by_e2_then_matches_label_and_value(self):
+    def test_expect_output_field_waits_for_its_own_dashboard_row(self):
         from ui import Ui
         driver = FakeDriver(states=[{}])
-        ui = Ui(driver)
-        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
-            ui.expect_output_field("velocity", 110)
-        self.assertEqual(driver.calls, [("enc", 2, -10), ("enc", 2, 2), ("wait",)])
-        self.assertEqual(oracle.call_args.args[1:], ("focused", "Velocity", 110))
-        self.assertEqual(driver.results, [dict(kind="output-field", field="velocity", label="Velocity",
-                                               value="110", passed=True)])
-
-    def test_expect_output_field_first_field_needs_only_the_clamp(self):
-        from ui import Ui
+        with patch("frame_oracle.dashboard_row_matches", return_value=True) as oracle:
+            Ui(driver).expect_output_field("vel_len", "110 / 4.0")
+        # No input: a dashboard has nothing to select.
+        self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(oracle.call_args.args[1:], (2, "Vel / Len", "110 / 4.0"))
+        self.assertEqual(driver.results, [dict(kind="output-field", field="vel_len", label="Vel / Len",
+                                               value="110 / 4.0", passed=True)])
         driver = FakeDriver(states=[{}])
-        with patch("frame_oracle.selected_field_matches", return_value=True):
-            Ui(driver).expect_output_field("root", "C3")
-        self.assertEqual(driver.calls, [("enc", 2, -10), ("wait",)])
+        with patch("frame_oracle.dashboard_row_matches", return_value=True) as oracle:
+            Ui(driver).expect_output_field("bypass", "NONE")
+        self.assertEqual(oracle.call_args.args[1:], (6, "Bypass", "NONE"))
 
     def test_expect_output_field_fails_closed(self):
         from ui import Ui, UiMapError
         driver = FakeDriver(states=[{}])
-        with patch("frame_oracle.selected_field_matches", return_value=False):
+        with patch("frame_oracle.dashboard_row_matches", return_value=False):
             with self.assertRaises(AssertionError):
-                Ui(driver).expect_output_field("length", "4.0")
+                Ui(driver).expect_output_field("note", "C3 X X X X")
         self.assertEqual(driver.results, [])
-        with self.assertRaises(UiMapError):
-            Ui(FakeDriver()).expect_output_field("note", "C3")
+        # The retired single-field names are not rows any more.
+        for retired in ("root", "velocity", "length", "chord"):
+            with self.assertRaises(UiMapError):
+                Ui(FakeDriver()).expect_output_field(retired, "C3")
 
     def test_output_field_value_names_the_single_matching_candidate(self):
         from ui import Ui
-        driver = FakeDriver(states=[{}, {}])
-        shown = lambda state, layout, label, value=None: value in (None, "X")
-        with patch("frame_oracle.selected_field_matches", side_effect=shown):
-            self.assertEqual(Ui(driver).output_field_value("length", ["X", "-1.0"], select=False), "X")
-        driver = FakeDriver(states=[{}, {}])
-        with patch("frame_oracle.selected_field_matches", side_effect=lambda s, l, lab, v=None: v is None):
-            self.assertEqual(Ui(driver).output_field_value("root", ["X"]), "?")
-        self.assertEqual(driver.calls[:1], [("enc", 2, -10)])
+        shown = lambda state, index, label, value: (index, label, value) == (2, "Vel / Len", "X / X")
+        with patch("frame_oracle.dashboard_row_matches", side_effect=shown):
+            self.assertEqual(Ui(FakeDriver(states=[{}])).output_field_value("vel_len", ["X / X", "0 / 0"]), "X / X")
+            self.assertEqual(Ui(FakeDriver(states=[{}])).output_field_value("note", ["X / X"]), "?")
+        with patch("frame_oracle.dashboard_row_matches", return_value=True):
+            self.assertEqual(Ui(FakeDriver(states=[{}])).output_field_value("step", ["A", "B"]), "A|B")
+
+    def test_output_rows_render_exactly_on_the_dashboard(self):
+        """The real row oracle, not a double: row 1 Note and row 2 Vel / Len."""
+        from frame_oracle import render, fit, text_width
+        from ui import Ui
+        commands = []
+        for k, (label, value) in enumerate((("Note", "C3 X X X X"), ("Vel / Len", "127 / 1.0")), start=1):
+            commands += [(1, 8 + 8 * k, 7, fit(label, 126 - text_width(value) - 4)), ((None, 127), 8 + 8 * k, 15, value)]
+        state = {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+        Ui(FakeDriver(states=[state])).expect_output_field("note", "C3 X X X X")
+        self.assertEqual(Ui(FakeDriver(states=[state])).output_field_value("vel_len", ["127 / 1.0", "127 / 4.0"]),
+                         "127 / 1.0")
 
     def test_select_channel_on_page_reopens_the_page_through_tasks(self):
         from ui import Ui

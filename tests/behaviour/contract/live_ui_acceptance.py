@@ -204,8 +204,8 @@ def _no_notes_while_playing(c, seconds, stage):
 # A01: E1 opens Channel tasks on the row it came from; rows move one per event, clamped; each
 # family keeps its remembered field; held steps still switch families; no music changes.
 
-CHANNEL_TASK_LABELS = ('Masks', 'Trig params', 'Output', 'Harmony', 'Clock', 'Merge', 'Device', 'History',
-                       'Mask detail', 'Trig detail', 'Merge Shape', 'Norns settings')
+CHANNEL_TASK_LABELS = ('Masks', 'Trig params', 'Output', 'Harmony', 'Clock', 'Merge modes', 'Device', 'History',
+                       'Merge Shape', 'Norns settings')
 
 
 def _e1_event(c, delta):
@@ -272,7 +272,7 @@ def ui_accept_a01(c):
     c.key(3)
     ui.expect_header('masks', channel=1)
     _expect_masks(c, x8, 3, 'Velocity', 'X', 'c01-field-kept')
-    # Last row: eleven large events reach Norns settings one row at a time; the next clamps.
+    # Last row: nine large events reach Norns settings one row at a time; the next clamps.
     _e1_event(c, 20)
     _task_row(c, 'Masks', 'c01-large-e1-opens-tasks-only')
     for label in CHANNEL_TASK_LABELS[1:]:
@@ -528,10 +528,12 @@ CHANNEL_ROW = [(x, 1) for x in range(1, 17)]
 
 
 def ui_accept_a10(c):
-    """README Adding Patterns to Channels / Merge Modes / Channel Length / Muting Channels:
-    each grid action on the Channel page keeps the Masks screen (feedback on the footer),
-    channel selection moves the scope, a held note-merge + pattern slot shows Merge detail
-    without assigning the pattern, and merged MIDI follows the README arithmetic."""
+    """README Norns Menu Navigation / Adding Patterns to Channels / Merge Modes / Channel Length /
+    Muting Channels: a pattern assignment or merge button on the Channel page shows Merge detail
+    with the changed row chosen, and K2 returns to Masks with its field (usability audit 25
+    September 2026); channel selection, mutes and ranges keep Masks with footer feedback (a mute
+    shows in the scope); a held note-merge + pattern slot shows Merge detail without assigning
+    the pattern; merged MIDI follows the README arithmetic."""
     ui = c.ui
     c.configure()
     c.playback(MELODY, cycles=2)
@@ -554,18 +556,17 @@ def ui_accept_a10(c):
     ui.select_channel(1)
     ui.expect_header('masks', channel=1)
     c.led_values(CHANNEL_ROW, [15] + [2] * 15)
-    # Remove pattern 1 then add pattern 2: feedback only, screen retained.
+    # Remove pattern 1 then add pattern 2: each shows Merge detail on Patterns (the new
+    # assignment) with the tooltip; K2 returns to Masks.
     ui.tap_control('pattern_slot', 1)
-    _expect_footer(c, 'Pattern 1 removed from ch. 1', 'remove-1')
-    ui.expect_header('masks', channel=1)
+    _merge_follow(c, 'Patterns', 'NONE', 'Pattern 1 removed from ch. 1', 'remove-1')
     c.led_values(PATTERN_ROW, [2] * 16)
     ui.tap_control('pattern_slot', 2)
-    _expect_footer(c, 'Pattern 2 added to ch. 1', 'add-2')
+    _merge_follow(c, 'Patterns', '02', 'Pattern 2 added to ch. 1', 'add-2')
     c.led_values(PATTERN_ROW, [2, 15] + [2] * 14)
     c.playback(_melody([(60, 100), (60, 100)]), cycles=2)  # pattern 2 alone
     ui.tap_control('pattern_slot', 1)
-    _expect_footer(c, 'Pattern 1 added to ch. 1', 'add-1')
-    ui.expect_header('masks', channel=1)
+    _merge_follow(c, 'Patterns', '01 02', 'Pattern 1 added to ch. 1', 'add-1')
     _expect_masks(c, x8, 2, 'Note', 'X', 'field-kept-after-patterns')
     c.led_values(PATTERN_ROW, [15, 15] + [2] * 14)
     # Merge detail shows the full assignment and the current modes.
@@ -577,18 +578,17 @@ def ui_accept_a10(c):
     _expect_detail(c, 'Trig mode', 'SKIP', 'merge-trig-mode-default')
     # Skip: trigs only where exactly one pattern has one (steps 3 and 4).
     c.playback(_melody([(64, 107), (65, 97)]), cycles=2)
-    c.key(2)  # C09: E1 disabled; K2 returns to the remembered Channel family (Masks)
+    c.key(2)  # K2 returns to the remembered Channel family (Masks)
     ui.expect_header('masks', channel=1)
-    # Trig merge (14,8) cycles Skip -> Only -> All; each is footer feedback on Masks.
+    # Trig merge (14,8) cycles Skip -> Only -> All; each shows Merge detail on Trig mode.
     ui.tap_control('trig_merge_mode')
-    _expect_footer(c, 'Only trig merge mode', 'trig-only')
-    ui.expect_header('masks', channel=1)
+    _merge_follow(c, 'Trig mode', 'ONLY', 'Only trig merge mode', 'trig-only')
     # Only: steps where both patterns trig; velocity average rounds half up:
     # (127+100)/2 = 113.5 -> 114, (117+100)/2 = 108.5 -> 109; note average (0+0)/2 = 0 -> C4,
     # (1+0)/2 = 0.5 -> 1 -> D4 (README Note/Velocity Merge Modes: Average).
     c.playback(_melody([(60, 114), (62, 109)]), cycles=2)
     ui.tap_control('trig_merge_mode')
-    _expect_footer(c, 'All trig merge mode', 'trig-all')
+    _merge_follow(c, 'Trig mode', 'ALL', 'All trig merge mode', 'trig-all')
     all_average = [(60, 114), (62, 109), (64, 107), (65, 97)]
     c.playback(_melody(all_average), cycles=2)
     # Held note merge + an unassigned pattern (3): Merge detail follows, the pattern is a
@@ -619,15 +619,17 @@ def ui_accept_a10(c):
     c.key(2)
     ui.expect_header('masks', channel=1)
     c.playback(_melody(PATTERN_NOTES), cycles=2)
-    # Mute: K1 + channel select mutes immediately; the screen stays on Masks CH01.
+    # Mute: K1 + channel select mutes immediately; the screen stays on Masks, and its scope
+    # shows the mute (CH01 MUTE).
     _shift_channel(c, 1)
     _expect_footer(c, 'Channel 1 muted', 'mute-shift')
-    ui.expect_header('masks', channel=1)
+    ui.expect_header('masks', channel=1, mute=True)
     # README: the button dims; selected and muted shows level 7 (characterisation).
     c.led_values(CHANNEL_ROW, [7] + [2] * 15)
     _no_notes_while_playing(c, 1.5, 'shift-mute')
     _shift_channel(c, 1)
     _expect_footer(c, 'Channel 1 unmuted', 'unmute-shift')
+    ui.expect_header('masks', channel=1)
     c.led_values(CHANNEL_ROW, [15] + [2] * 15)
     # Long press (1 s) on another channel mutes it without moving the scope.
     with ui.hold_control('channel', 4):
@@ -652,6 +654,16 @@ def ui_accept_a10(c):
     c.playback(_melody([(60, 114), (60, 109)]), cycles=2)
     _expect_masks(c, x8, 2, 'Note', 'X', 'field-kept-at-end')
     c.results.append(dict(kind='a10-summary', passed=True))
+
+
+def _merge_follow(c, label, value, tooltip, stage):
+    """A Channel-page merge/assignment tap shows Merge detail (C09) with the row it changed
+    chosen and the action's tooltip; K2 returns to Masks (usability audit 25 September 2026)."""
+    _live_header(c, 'MERGE DETAIL', 'CH01', 'detail', stage)
+    _expect_detail(c, label, value, stage)
+    _expect_footer(c, tooltip, stage)
+    c.key(2)
+    c.ui.expect_header('masks', channel=1)
 
 
 def _shift_channel(c, channel):
@@ -694,6 +706,12 @@ def ui_accept_a11(c):
     marker = c.snapshot()['midi_count']
 
     def viewer(title, scope, cells, stage):
+        if title != 'CHANNEL VIEW':
+            # The pattern editor names the edited pattern (1) before the viewed channel and
+            # draws that pattern's trigs (steps 1-4) at 15 over the viewed channel, which is
+            # capped at level 3 as context (usability audit 25 September 2026).
+            scope = 'PAT01 ' + scope
+            cells = [15 if k < 4 else min(level, 3) for k, level in enumerate(cells)]
         _wait_frame(c, lambda s: live_header_matches(s, title, scope, 'pattern64') and _viewer_cells(s, cells),
                     'pattern-viewer', title=title, scope=scope, stage=stage)
     ui.tap_control('pattern_editor')
@@ -738,11 +756,12 @@ def ui_accept_a11(c):
     c.enc(3, -1)
     viewer('CHANNEL VIEW', 'CH01', CH01_CELLS, 'p05-lower-clamp')
     # S03 (Scale overview) is a dashboard without a channel viewer (owner decision
-    # 25 September 2026): its four rows show at once, and E2/E3 change nothing on it.
+    # 25 September 2026): its five rows show at once, and E2/E3 change nothing on it.
     ui.tap_control('scale_editor')
     ui.expect_header('scale', slot=1)
     ui.open_task('Scale', 'overview')
-    s03 = [('Playing scale', '01'), ('Edit scale', '01'), ('Step / range', '01 / 01..64'), ('Transpose', '0')]
+    s03 = [('Playing scale', '01'), ('Edit scale', '01'), ('Step / range', '01 / 01..64'), ('Transpose', '0'),
+           ('Step lock', 'NONE')]
     ui.expect_dashboard('scale_overview', s03, slot=1)
     c.enc(3, 15); c.enc(2, 1); c.enc(3, -3)
     ui.expect_dashboard('scale_overview', s03, slot=1)
@@ -784,32 +803,38 @@ def ui_accept_a11(c):
 # ---------------------------------------------------------------------------------------------
 # A19: Output (C06) inspects the latest event, or a held step in place, without side effects.
 
-C06_FIELDS = ('Root', 'Chord', 'Velocity', 'Length', 'Step', 'Source', 'Planned', 'Scheduled',
-              'Emitted', 'Bypass')
-
-
-def _event_values(step):
-    """Characterised C06 values for a played step of the configure() phrase: SRC/M are the
-    source and merged note values (scale degrees 0..3), S/H the scale and harmony pitches."""
+def _event_rows(step, held=False):
+    """Characterised C06 dashboard rows for a played step of the configure() phrase: the note
+    and its four chord voices, velocity / length, the step (HELD while inspected), SRC/M the
+    source and merged note values (scale degrees 0..3), S/H the scale and harmony pitches, and
+    planned > scheduled > emitted pitch."""
     note, velocity = PHRASE[step - 1]
-    return {'Root': NOTE_NAMES[note], 'Chord': 'X X X X', 'Velocity': str(velocity), 'Length': '1.0',
-            'Step': 'STEP%02d' % step,
-            'Source': 'SRC%d M%d S%d H%d' % (step - 1, step - 1, note, note),
-            'Planned': str(note), 'Scheduled': str(note), 'Emitted': str(note), 'Bypass': 'NONE'}
+    return [('Note', NOTE_NAMES[note] + ' X X X X'), ('Vel / Len', '%d / 1.0' % velocity),
+            ('Step', 'STEP%02d' % step + (' HELD' if held else '')),
+            ('Source', 'SRC%d M%d S%d H%d' % (step - 1, step - 1, note, note)),
+            ('Pitch', '%d>%d>%d' % (note, note, note)), ('Bypass', 'NONE')]
+
+
+def _no_event_rows(shown, step=None):
+    """A step with no event: the note rows keep what they show, every event stage reads
+    NO EVENT (the step names the held step when one is inspected)."""
+    return shown[:2] + [('Step', 'STEP%02d HELD' % step if step else 'NO EVENT')] + [
+        (label, 'NO EVENT') for label in ('Source', 'Pitch', 'Bypass')]
 
 
 def ui_accept_a19(c):
     """README Note Dashboard / Harmony: Output shows the last played notes of the selected
-    channel; holding a step shows what that step plays (provenance, planned, scheduled,
-    emitted, bypass) in place; a step without an event borrows nothing; release returns to
-    the latest event. Inspection sends no MIDI and changes no selection or music."""
+    channel on one dashboard (note and chord, velocity / length, step, provenance, planned >
+    scheduled > emitted pitch, bypass); holding a step shows what that step plays in place; a
+    step without an event borrows nothing; release returns to the latest event. E2/E3/K3 and
+    inspection send no MIDI and change no selection, LED or music."""
     ui = c.ui
     c.configure()
     ui.tap_control('channel_editor')
     ui.channel_page('note_dashboard', confirm=False)
     ui.expect_header('note_dashboard', channel=1)
-    c.enc(2, -12); c.enc(2, 4)
-    _expect_focused(c, 'Step', 'NO EVENT', 'before-play')
+    fresh = [('Note', 'C-2 X X X X'), ('Vel / Len', '0 / 0')]
+    ui.expect_dashboard('note_dashboard', _no_event_rows(fresh), channel=1)
     start = c.snapshot()['midi_count']
     c.playback(MELODY, cycles=2)
     state = c.snapshot()
@@ -819,47 +844,32 @@ def ui_accept_a19(c):
     marker = c.snapshot()['midi_count']
     grid_before = _grid(c)
     ui.expect_header('note_dashboard', channel=1)
-
-    def fields(values, stage, e3_k3=False):
-        c.enc(2, -12)
-        for index, label in enumerate(C06_FIELDS):
-            if index:
-                c.enc(2, 1)
-            _expect_focused(c, label, values[label], stage + '-' + label)
-            if e3_k3:
-                c.enc(3, 1); c.enc(3, -2)
-                _expect_focused(c, label, values[label], stage + '-e3-' + label)
-                c.key(3)
-                ui.expect_header('note_dashboard', channel=1)
-                _expect_focused(c, label, values[label], stage + '-k3-' + label)
-    latest_values = _event_values(latest)
-    fields(latest_values, 'latest', e3_k3=True)
-    # Held step with an event (row 4) and with none (rows 5..7): inspected in place on C06.
-    c.enc(2, -12); c.enc(2, 5)
-    _expect_focused(c, 'Source', latest_values['Source'], 'source-latest')
+    latest_rows = _event_rows(latest)
+    ui.expect_dashboard('note_dashboard', latest_rows, channel=1)
+    # E2, E3 and K3 on the dashboard change nothing (no cursor, no edit).
+    for encoder, delta in ((2, 3), (3, 1), (3, -2), (2, -5)):
+        c.enc(encoder, delta)
+        ui.expect_dashboard('note_dashboard', latest_rows, channel=1)
+    c.key(3)
+    ui.expect_header('note_dashboard', channel=1)
+    ui.expect_dashboard('note_dashboard', latest_rows, channel=1)
+    # Held step with an event: inspected in place on C06.
     held_step = 2 if latest != 2 else 3
     with ui.hold_step(held_step):
         ui.expect_header('note_dashboard', channel=1, held=(held_step,))
-        held_values = _event_values(held_step)
-        _expect_focused(c, 'Source', held_values['Source'], 'held-source')
-        for label in ('Planned', 'Scheduled', 'Emitted', 'Bypass'):
-            c.enc(2, 1)
-            _expect_focused(c, label, held_values[label], 'held-' + label)
-        # (E3/K3 while a step is held are the Channel edit gestures G10: they open the
-        # edit family, so inspection here uses E2 only.)
-        c.enc(2, -4)
-        _expect_focused(c, 'Source', held_values['Source'], 'held-source-again')
+        # The event rows (step, source, pitch, bypass) are the held step's; the Note and
+        # Vel / Len rows keep the last played note (characterisation: they are the channel's
+        # note displays, not the inspected event).
+        held_rows = latest_rows[:2] + _event_rows(held_step, held=True)[2:]
+        ui.expect_dashboard('note_dashboard', held_rows, channel=1, held=(held_step,))
     ui.expect_header('note_dashboard', channel=1)
-    _expect_focused(c, 'Source', latest_values['Source'], 'latest-after-release')
+    ui.expect_dashboard('note_dashboard', latest_rows, channel=1)
     for step in (40, 64):
         with ui.hold_step(step):
             ui.expect_header('note_dashboard', channel=1, held=(step,))
-            _expect_focused(c, 'Source', 'NO EVENT', 'no-event-step%d' % step)
-            c.enc(2, 4)
-            _expect_focused(c, 'Bypass', 'NO EVENT', 'no-event-bypass-step%d' % step)
-            c.enc(2, -4)
+            ui.expect_dashboard('note_dashboard', _no_event_rows(latest_rows, step), channel=1, held=(step,))
         ui.expect_header('note_dashboard', channel=1)
-        _expect_focused(c, 'Source', latest_values['Source'], 'latest-after-step%d' % step)
+        ui.expect_dashboard('note_dashboard', latest_rows, channel=1)
     # Inspection sent nothing, moved no selection, changed no LED.
     _silent_midi(c, marker, 'c06-inspection')
     _expect_grid(c, grid_before, 'c06-inspection')

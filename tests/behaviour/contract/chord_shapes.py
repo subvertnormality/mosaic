@@ -25,14 +25,23 @@ def _assign_trig_parameter(c, label, offset=None):
     return offset
 
 
-def chord_dashboard_display(c, root_velocity):
-    # C06 OUTPUT (the Note Dashboard) shows one field at a time: each fact the
-    # old Note/Vel/Len cells showed is asserted as its field's exact label and
-    # large value after E2 selects it (selection moves focus only).
-    c.ui.expect_output_field("root", "C3")
-    c.ui.expect_output_field("velocity", str(root_velocity))
-    c.ui.expect_output_field("length", "4.0")
-    c.results.append(dict(kind="chord-root-dashboard", note="C3",
+NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+
+def _norns_name(n):
+    """musicutil.note_num_to_name(n, true): C3 is MIDI 60."""
+    return NOTE_NAMES[n % 12] + str(n // 12 - 2)
+
+
+def chord_dashboard_display(c, root_velocity, voices):
+    # C06 OUTPUT (the Note Dashboard) is a dashboard: its Note row shows the root
+    # and the four chord voices sent (X for a slot that sent none), its Vel / Len
+    # row the root velocity and length. Each row is asserted whole and exactly;
+    # the root, velocity and length facts the old cells showed are within them.
+    note = " ".join(["C3"] + [_norns_name(v) if v is not None else "X" for v in voices])
+    c.ui.expect_output_field("note", note)
+    c.ui.expect_output_field("vel_len", "%d / 4.0" % root_velocity)
+    c.results.append(dict(kind="chord-root-dashboard", note="C3", chord=note,
                           velocity=root_velocity, length="4.0",
                           source="rendered framebuffer", passed=True))
 
@@ -152,8 +161,10 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
                           muted=muted, mask_bits=mask_bits,
                           onsets=len(expected), release_checks=len(rows), passed=True))
     if dashboard:
+        # Chord slots 1..4 send pitches[1..4] when their mask bit is set.
+        voices = [pitches[slot] if mask_bits & (1 << (slot - 1)) else None for slot in range(1, 5)]
         chord_dashboard_display(c, max(0, min(127,
-                              velocity + (4 * modifier if shape in (2, 4) else 0))))
+                              velocity + (4 * modifier if shape in (2, 4) else 0))), voices)
 
 
 def chord_shape_case(*args, **kwargs):

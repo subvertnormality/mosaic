@@ -23,7 +23,10 @@ run directory as evidence.
 Screens no public input shows on this build (C08, C10, C11, S04, S05, M04,
 M08..M11, H06, H12..H16, H18, F*, R02..R16) are listed, with the reasons, in
 docs/ui-reimplementation/reviews/ACCEPTANCE.md, with the defects the sweep
-found and their fixes.
+found and their fixes. Since the owner feedback of 25 September 2026, C12/C13
+(Mask detail, Trig detail) are no longer Channel tasks and M14 (Merge reason)
+has no cursor to open it from on the Merge result dashboard. Dashboards are
+checked whole (every row, no cursor) with frame_oracle.dashboard_matches.
 """
 import base64
 import json
@@ -31,7 +34,8 @@ import struct
 import zlib
 from pathlib import Path
 
-from frame_oracle import fit, live_header_matches, render, selected_field_matches, overview_cell_matches
+from frame_oracle import (dashboard_matches, fit, live_header_matches, render, selected_field_matches,
+                          overview_cell_matches)
 
 SPEC = json.loads((Path(__file__).resolve().parents[3] / "docs/ui-reimplementation/spec.json").read_text())["screens"]
 
@@ -47,9 +51,12 @@ HINTS = {
     "confirmation": "K3 CONFIRM  K2 CANCEL", "native": "K1 PARAMS",
 }
 # lib/ui_render.lua: the line LAYOUT OVERFLOW would be painted on, per layout.
-OVERFLOW_Y = {"overview_masks": 53, "overview_params": 53, "pattern64": 17, "detail": 17, "focused": 55}
+OVERFLOW_Y = {"overview_masks": 53, "overview_params": 53, "pattern64": 17, "detail": 17, "focused": 55,
+              "dashboard": 7}
 FOOTER_ROWS = range(56, 64)
 START, END = object(), object()
+# The pattern editor's scope names the edited pattern before the viewed channel.
+PAT = "PAT01 CH01"
 
 
 def _pixels(state):
@@ -90,28 +97,33 @@ class Sweep:
         self.frames = Path(c.out) / "screens"
         self.frames.mkdir(exist_ok=True)
 
-    def checks(self, sid, scope, field, footers):
+    def checks(self, sid, scope, field, footers, rows=None):
         entry = SPEC[sid]
         live = entry["live_render"]
         layout = live["layout"]
         overflow = render([(1, OVERFLOW_Y[layout], 15, "LAYOUT OVERFLOW")])
         wanted = [footer_render(f) for f in footers]
         y = OVERFLOW_Y[layout]
+        # A dashboard's sixth row (baseline 56) reaches row 57; the footer text is 58..63.
+        footer_rows = range(58, 64) if layout == "dashboard" else FOOTER_ROWS
 
         def evaluate(state):
             actual = _pixels(state)
             result = {
                 "header": live_header_matches(state, entry["title"], scope, layout),
                 "no_overflow": not _same(actual, overflow, range(y - 7, y + 2)),
-                "footer": any(_same(actual, w, FOOTER_ROWS) for w in wanted),
+                "footer": any(_same(actual, w, footer_rows) for w in wanted),
             }
+            if rows is not None:
+                # A dashboard: every row at once, exactly, and no cursor.
+                result["dashboard"] = dashboard_matches(state, entry["title"], scope, rows)
             if field is not None and field != (None, None):
                 label, value = field
                 result["field"] = selected_field_matches(state, layout, label, value, art=bool(live.get("art")))
             return result
         return evaluate
 
-    def screen(self, sid, scope="CH01", field=None, footer=None, tips=(), timeout=5, note=None):
+    def screen(self, sid, scope="CH01", field=None, footer=None, tips=(), timeout=5, note=None, rows=None):
         """Wait for screen `sid` to show exactly; record it and its frame."""
         entry = SPEC[sid]
         layout = entry["live_render"]["layout"]
@@ -119,7 +131,9 @@ class Sweep:
             footer = HINTS[entry["profile"]]
         # Idle autosave may announce itself on any screen (M-TOOLTIP-002).
         footers = [footer] + list(tips) + ["Autosaved"]
-        evaluate = self.checks(sid, scope, field, footers)
+        if layout == "dashboard":
+            assert field is None and rows is not None, (sid, "a dashboard is checked by its rows")
+        evaluate = self.checks(sid, scope, field, footers, rows)
         state = None
         try:
             state = self.c.wait(lambda s: all(evaluate(s).values()), timeout=timeout)
@@ -131,7 +145,8 @@ class Sweep:
         _png(_pixels(state), self.frames / ("%03d-%s.png" % (self.count, sid)))
         passed = all(outcome.values())
         record = dict(kind="a18-screen", screen=sid, title=entry["title"], scope=scope, layout=layout,
-                      field=list(field) if field else None, checks=outcome, frame="%03d-%s.png" % (self.count, sid),
+                      field=list(field) if field else None, rows=[list(r) for r in rows] if rows else None,
+                      checks=outcome, frame="%03d-%s.png" % (self.count, sid),
                       passed=passed)
         if note:
             record["note"] = note
@@ -192,14 +207,14 @@ def live_ui_sweep(c):
     sw.screen("C05", field=("Device", None), tips=("Channel 1 length changed",))
 
     # Channel: family and Channel tasks ---------------------------------------------------------
+    # The Channel button returns to the remembered family, Masks: configure never
+    # passed Trig params (E1 opens Channel tasks from any screen).
     ui.tap_control("channel_editor")
-    sw.screen("C02", field=("None", "X"), tips=("Channel Editor",))
-    c.enc(1, -1)
     sw.screen("C01", field=("Note", "X"), tips=("Channel Editor",))
-    c.enc(1, 1); c.enc(1, 1)
-    sw.screen("N01", field=("Device", ""), tips=("Channel Editor",))
-    rows = ["Masks", "Trig params", "Output", "Harmony", "Clock", "Merge", "Device", "History",
-            "Mask detail", "Trig detail", "Merge Shape", "Norns settings"]
+    c.enc(1, 1)
+    sw.screen("N01", field=("Masks", ""), tips=("Channel Editor",))
+    rows = ["Masks", "Trig params", "Output", "Harmony", "Clock", "Merge modes", "Device", "History",
+            "Merge Shape", "Norns settings"]
     e2(c, -12)
     for index, label in enumerate(rows):
         sw.screen("N01", field=(label, ""), tips=("Channel Editor",))
@@ -208,7 +223,7 @@ def live_ui_sweep(c):
     sw.screen("N01", field=("Norns settings", ""), tips=("Channel Editor",))
 
     channel_task(c, "output")
-    sw.screen("C06", field=("Root", None), footer=(START, "Chord"))
+    sw.screen("C06", rows=C06_NO_EVENT)
     channel_task(c, "harmony")
     sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
     channel_task(c, "clock")
@@ -216,21 +231,17 @@ def live_ui_sweep(c):
     channel_task(c, "merge")
     sw.screen("C09", field=("Patterns", "01"), footer="K2 BACK")
     c.key(2)
-    sw.screen("C02", field=("None", "X"))
+    sw.screen("C01", field=("Note", "X"))
     channel_task(c, "device")
     sw.screen("C05", field=("Device", None))
     channel_task(c, "history")
     sw.screen("C03", field=("Position", "0 of 0"))
-    channel_task(c, "mask_detail")
-    sw.screen("C12", field=("Note", "X"))
-    channel_task(c, "trig_detail")
-    sw.screen("C13", field=("None", "X"))
     channel_task(c, "merge_shape")
     sw.screen("M02", field=("Mode", "OFF"), footer=(START, "Rhythm"))
     channel_task(c, "norns")
     sw.screen("N04", field=("Projects", ""))
     c.key(2)
-    sw.screen("C02", field=("None", "X"))
+    sw.screen("C01", field=("Note", "X"))
     channel_screens(c, sw)
     merge_screens(c, sw)
     harmony_screens(c, sw)
@@ -271,14 +282,13 @@ def walk(c, sw, sid, fields, labels=None, visits=None, top=False, **kw):
 
 
 def channel_screens(c, sw):
-    # Output (C06) with no event yet: the dashboard values and every event stage
-    # read NO EVENT, distinct from X (no chord mask) and 0 (velocity).
+    # Output (C06) with no event yet: a dashboard of six rows; every event stage
+    # reads NO EVENT, distinct from X (no chord mask) and 0 (velocity). E2 and E3
+    # change nothing on it.
     channel_task(c, "output")
-    walk(c, sw, "C06", [("Root", None), ("Chord", "X X X X"), ("Velocity", "0"), ("Length", None),
-                        ("Step", "NO EVENT"), ("Source", "NO EVENT"), ("Planned", "NO EVENT"),
-                        ("Scheduled", "NO EVENT"), ("Emitted", "NO EVENT"), ("Bypass", "NO EVENT")])
-    e2(c, 1)  # clamps on the last field
-    sw.screen("C06", field=("Bypass", "NO EVENT"), footer=("Emitted", END))
+    sw.screen("C06", rows=C06_NO_EVENT)
+    e2(c, 3); c.enc(3, 2)
+    sw.screen("C06", rows=C06_NO_EVENT)
     # Clock (C04): the owner's E2 selects Rate, Swing type and Swing; the
     # read-only Feel source is not reachable, so the footer skips it.
     channel_task(c, "clock")
@@ -290,8 +300,8 @@ def channel_screens(c, sw):
     channel_task(c, "merge")
     walk(c, sw, "C09", [("Patterns", "01"), ("Trig mode", "SKIP"), ("Note / vel", "AVERAGE / AVERAGE"),
                         ("Length mode", "AVERAGE")], footer="K2 BACK")
-    c.key(2)  # E1 is inert on Merge detail; K2 returns, as its footer says
-    sw.screen("C02", field=("None", "X"))
+    c.key(2)  # K2 returns, as its footer says, to the remembered family (Masks)
+    sw.screen("C01", field=("Note", "X"))
     channel_task(c, "device")
     walk(c, sw, "C05", [("Device", "CC Device"), ("MIDI channel", "CC1"), ("MIDI port", "OUT 1")])
     # Maximum MIDI channel: a staged draft shows 16 whole, plus the staged
@@ -321,16 +331,17 @@ def channel_screens(c, sw):
     c.key(2)
     sw.screen("C02", field=("Quantised Fixed Note", "X"))
     sw.cell("overview_params", 1, "QUAN", "X")
-    channel_task(c, "trig_detail")
-    sw.screen("C13", field=("Quantised Fixed Note", "X"))
 
 
 # A false feature boolean reads OFF (distinct from NONE).
 BOOLEAN_FALSE = "OFF"
 # Channel 1's tone map, named by its assigned patterns and note merge mode.
 H19_MAP = "PAT 1 / AVERAGE"
-P02_FIELDS = [("Tresillo amount", "x24"), ("Applies to", "Tresillo"), ("Stored pattern", "Unchanged"),
-              ("Mode", "Live setting")]
+# Trig options keeps only the tresillo amount (owner decision 25 September 2026).
+P02_FIELDS = [("Tresillo amount", "x24")]
+# C06 before any event (usability audit 25 September 2026: six dashboard rows).
+C06_NO_EVENT = [("Note", "C-2 X X X X"), ("Vel / Len", "0 / 0"), ("Step", "NO EVENT"),
+                ("Source", "NO EVENT"), ("Pitch", "NO EVENT"), ("Bypass", "NO EVENT")]
 
 
 def merge_screens(c, sw):
@@ -373,14 +384,14 @@ def merge_screens(c, sw):
     sw.screen("M02", field=("Pitch", ">"), footer=neighbours("M02", labels, "Pitch"))
     # M09 is not observable: the merge-mode short press shows it and its
     # release hides it within the same grid event (see ACCEPTANCE.md).
-    # Result and its Reason are read-only; K2 backs out through the editor.
+    # Result is a read-only dashboard; K2 backs out through the editor. Its
+    # Reason row (M14) has no cursor to open it from on the dashboard: K3 there
+    # stays on Result (reported with the owner feedback, 25 September 2026).
     e2(c, 1); c.key(3)
-    walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")])
-    c.key(3)
-    walk(c, sw, "M14", [("Step", "1"), ("Role", "EMPTY"), ("Sources", "NONE"), ("Decision", "ADMITTED"),
-                        ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
-    c.key(2)
-    sw.screen("M05", field=("Reason", ">"), footer=("Decision", END))
+    m05 = [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")]
+    sw.screen("M05", rows=m05)
+    e2(c, 3); c.key(3)
+    sw.screen("M05", rows=m05)
     c.key(2)
     sw.screen("M02", field=("Result", ">"), footer=("Pitch", END))
     c.enc(1, 1)
@@ -452,10 +463,10 @@ def harmony_screens(c, sw):
     sw.screen("H04", field=("Delete group", ">"))
     c.key(2)
     sw.screen("H01", field=("Groups", ">"), footer=neighbours("H01", labels, "Groups"))
-    # Result is read-only; K2 backs out to Voice leading.
+    # Result is a read-only dashboard; K2 backs out to Voice leading.
     e2(c, 3); c.key(3)
-    walk(c, sw, "H05", top=True, fields=[("Step", "1"), ("Status", "NO EVENT"), ("CH1 planned", "NONE"),
-                                         ("CH1 emitted", "NONE")])
+    sw.screen("H05", rows=[("Step", "1"), ("Status", "NO EVENT"), ("CH1 planned", "NONE"),
+                           ("CH1 emitted", "NONE")])
     c.key(2)
     sw.screen("H01", field=("Result", ">"), footer=("Entry", END))
     # Pattern mode adds Tone Map, whose reset asks a question.
@@ -492,25 +503,29 @@ def scale_screens(c, sw):
     walk(c, sw, "S01", scale, labels=labels, visits=["Scale", "Degree", "Transpose", "Rotation", "Rotation"],
          scope="SLOT 01")
     c.enc(1, 1)
-    tasks = ["Scale", "Scale clock", "Overview", "Channel view"]
+    # E1 opens Scale tasks on the Scale row; Channel view is no longer a Scale task.
+    sw.screen("N02", scope="SLOT 01", field=("Scale", ""))
+    tasks = ["Scale", "Scale clock", "Overview"]
     walk(c, sw, "N02", [(t, "") for t in tasks], top=True, scope="SLOT 01")
     task(c, "Scale", "scale_clock")
-    walk(c, sw, "S02", [("Rate", "/1"), ("Selected range", None), ("Global cap", None), ("Playable range", None)],
-         labels=["Rate"],
-         visits=["Rate"], scope="SLOT 01")
+    # Scale clock is a detail screen: every row shows; the owner's E2 stays on Rate.
+    sw.screen("S02", field=("Rate", "/1"), scope="SLOT 01")
+    for y, label, value in ((36, "Selected range", "01..64"), (45, "Global cap", "64"),
+                            (54, "Playable range", "01..64")):
+        sw.row(y, label, value)
+    e2(c, 2)
+    sw.screen("S02", field=("Rate", "/1"), scope="SLOT 01")
     task(c, "Scale", "overview")
-    walk(c, sw, "S03", [("View channel", "01"), ("Playing scale", "01"), ("Edit scale", "01"),
-                        ("Step / range", "01 / 01..64"), ("Transpose", "0")], scope="SLOT 01")
-    task(c, "Scale", "channel_view")
-    sw.screen("P05", scope="SLOT 01")
+    sw.screen("S03", scope="SLOT 01", rows=[("Playing scale", "01"), ("Edit scale", "01"),
+                                            ("Step / range", "01 / 01..64"), ("Transpose", "0"),
+                                            ("Step lock", "NONE")])
 
 
 def song_screens(c, sw):
     c.ui.tap_control("song_editor")
-    playback = [("Automatic", "01 > 01"), ("Queued jump", "NONE"), ("Manual", "NONE"), ("Empty-slot loop", "NONE")]
-    sw.screen("A03", scope="SONG 01", field=("Automatic", "01 > 01"), footer=(START, "Queued jump"),
-              tips=("Song Editor",))
-    walk(c, sw, "A03", playback, scope="SONG 01")
+    playback = [("Playing", "SONG 01"), ("Next", "SONG 01"), ("Pass", "1 / 1"), ("Global length", "64"),
+                ("Song mode", "AUTO")]
+    sw.screen("A03", scope="SONG 01", rows=playback, tips=("Song Editor",))
     task(c, "Song", "slot_setup")
     walk(c, sw, "A01", [("Repeats", "1"), ("Song mode", "On")], scope="SONG 01")
     task(c, "Song", "tempo_feel")
@@ -524,59 +539,75 @@ def song_screens(c, sw):
 
 def pattern_screens(c, sw):
     c.ui.tap_control("pattern_editor")
-    sw.screen("P01", tips=("Trig Editor",))
+    sw.screen("P01", scope=PAT, tips=("Trig Editor",))
     c.enc(1, 1)
-    walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Channel view")], top=True)
+    walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Algorithm", "Channel view")], top=True)
     task(c, "Trig", "options")
-    # E2 moves Trig options' own focus and never the Trig viewer's channel.
-    walk(c, sw, "P02", P02_FIELDS)
+    # Trig options has one field (so its footer is the control hints); E2 moves
+    # nothing, never the Trig viewer's channel.
+    sw.screen("P02", field=P02_FIELDS[0])
+    e2(c, 2)
+    sw.screen("P02", field=P02_FIELDS[0])
     task(c, "Trig", "channel_view")
     sw.screen("P05")
     c.enc(3, -16)  # E3 on View channel clamps at channel 1
     sw.screen("P05")
-    # Algorithm variants: the chooser shows which one is selected; the others
-    # have no value (blank, not a sentinel).
+    # Algorithm picker: the algorithm in use reads SELECTED, the others are
+    # blank (not a sentinel); a grid press lands on the pressed algorithm. The
+    # footer shows the grid inputs of the algorithm in use (characterisation).
     c.tap(12, 2)
-    algorithms = [("Drum", "SELECTED"), ("Tresillo", ""), ("Euclidean", ""), ("Numeric", "")]
-    walk(c, sw, "P06", algorithms, tips=("Drum algorithm selected",))
+    algorithms = ["Drum", "Tresillo", "Euclidean", "Numeric", "Rhythm Doctor"]
+    sw.screen("P06", field=("Drum", "SELECTED"), tips=("Drum algorithm selected",), footer="BANK RND  PAT 1")
+    # Once the tooltip has gone, the footer is the grid inputs alone.
+    sw.screen("P06", field=("Drum", "SELECTED"), footer="BANK RND  PAT 1", timeout=10)
+    for label in algorithms[1:]:
+        e2(c, 1)
+        sw.screen("P06", field=(label, ""), tips=("Drum algorithm selected",), footer="BANK RND  PAT 1")
     c.tap(13, 2)
-    walk(c, sw, "P06", [("Drum", ""), ("Tresillo", "SELECTED"), ("Euclidean", ""), ("Numeric", "")], top=True,
-         tips=("Tresillo algorithm selected",))
-    # Paint preview: the adapter does not expose paint state (every field NONE).
+    sw.screen("P06", field=("Tresillo", "SELECTED"), tips=("Tresillo algorithm selected",),
+              footer="BANK RND  P1 1  P2 1")
+    sw.screen("P06", field=("Tresillo", "SELECTED"), footer="BANK RND  P1 1  P2 1", timeout=10)
+    c.tap(12, 2)
+    # Paint preview: the preview's real state on one dashboard.
     c.tap(16, 8)
-    paint = [(label, "NONE") for label in ("Preview", "Shift left", "Shift reset", "Shift right", "Cancel", "Save")]
-    walk(c, sw, "P07", paint, tips=("Painting pattern",))
-    sw.screen("P07", field=("Save", "NONE"), footer=("Cancel", END))
+    sw.screen("P07", rows=[("Preview", "PAINTING"), ("Algorithm", "Drum"), ("Shift", "0"), ("Trigs", "0")],
+              tips=("Painting pattern",))
     c.tap(14, 8)
-    # Trig step edit while a trig step is held and another is pressed.
+    sw.screen("P07", rows=[("Preview", "OFF"), ("Algorithm", "Drum"), ("Shift", "0"), ("Trigs", "NONE")],
+              tips=("Painting cancelled",))
+    # Trig step edit while a trig step is held and another is pressed. The
+    # dashboard's title-row scope is fitted to 45 px (the held step's part is
+    # cut: reported with the owner feedback, 25 September 2026).
     c.action(type="grid", x=1, y=4, state=1)
     c.tap(3, 4)
-    sw.screen("P08", scope="CH01 ST01", tips=("Note length set",))
+    sw.screen("P08", scope="PAT01 CH01 ST01", tips=("Note length set",),
+              rows=[("Toggle", "STEP01 ON"), ("Length", "01..03"), ("Reset length", "STEP01"),
+                    ("Pattern select", "PAT01")])
     c.action(type="grid", x=1, y=4, state=0)
     # Rhythm Doctor (algorithm 5): R01 at rest, READY.
     c.tap(16, 2)
     sw.screen("R01", field=("Record", "READY"), footer=(START, "Tempo"), tips=("Rhythm Doctor selected",))
     c.enc(1, 1)
-    walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Channel view", "Rhythm Doctor")], top=True,
-         tips=("Rhythm Doctor selected",))
+    walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Algorithm", "Channel view", "Rhythm Doctor")],
+         top=True, tips=("Rhythm Doctor selected",))
     # K3 on the Rhythm Doctor row opens R01.
     c.key(3)
     sw.screen("R01", field=("Record", "READY"), footer=(START, "Tempo"))
     task(c, "Trig", "pattern")
-    sw.screen("P01")
+    sw.screen("P01", scope=PAT)
     c.tap(12, 2)
     c.ui.tap_control("pattern_editor")
-    sw.screen("P03", tips=("Note Editor",))
+    sw.screen("P03", scope=PAT, tips=("Note Editor",))
     c.enc(1, 1)
     walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Channel view")], top=True)
     e2(c, -3); c.key(3)
-    sw.screen("P03")
+    sw.screen("P03", scope=PAT)
     c.ui.tap_control("pattern_editor")
-    sw.screen("P04", tips=("Velocity Editor",))
+    sw.screen("P04", scope=PAT, tips=("Velocity Editor",))
 
 
 def native_menu(c, sw):
     """A short K1 opens the norns menu and a second closes it; the live screen returns unchanged."""
     c.ui.enter_native_menu()
     c.ui.leave_native_menu()
-    sw.screen("P04")
+    sw.screen("P04", scope=PAT)

@@ -104,18 +104,18 @@ LIVE_SCREENS = OrderedDict([
     ("memory", {"screen": "C03", "title": "MEMORY", "layout": "detail", "task": "history"}),
     ("clock_mods", {"screen": "C04", "title": "CLOCK", "layout": "focused", "task": "clock"}),
     ("midi_config", {"screen": "C05", "title": "DEVICE", "layout": "detail", "task": "device"}),
-    ("note_dashboard", {"screen": "C06", "title": "OUTPUT", "layout": "focused", "task": "output"}),
+    ("note_dashboard", {"screen": "C06", "title": "OUTPUT", "layout": "dashboard", "task": "output"}),
     ("merge_shape", {"screen": "M02", "title": "MERGE SHAPE", "layout": "focused", "art": True, "task": "merge_shape"}),
     ("harmony", {"screen": "H01", "title": "VOICE LEADING", "layout": "focused", "art": True, "task": "harmony"}),
     ("channel_tasks", {"screen": "N01", "title": "CHANNEL TASKS", "layout": "detail"}),
     ("merge_detail", {"screen": "C09", "title": "MERGE DETAIL", "layout": "detail"}),
     ("assignment", {"screen": "C07", "title": "ASSIGN PARAM", "layout": "detail"}),
-    ("trigger_editor", {"screen": "P01", "title": "PATTERN TRIG", "layout": "pattern64"}),
+    ("trigger_editor", {"screen": "P01", "title": "PATTERN TRIG", "layout": "pattern64", "scope": "pattern"}),
     ("trigger_editor_confirmation", {"screen": "P02", "title": "TRIG OPTIONS", "layout": "focused"}),
-    ("note_editor", {"screen": "P03", "title": "PATTERN NOTE", "layout": "pattern64"}),
-    ("velocity_editor", {"screen": "P04", "title": "PATTERN VELOCITY", "layout": "pattern64"}),
+    ("note_editor", {"screen": "P03", "title": "PATTERN NOTE", "layout": "pattern64", "scope": "pattern"}),
+    ("velocity_editor", {"screen": "P04", "title": "PATTERN VELOCITY", "layout": "pattern64", "scope": "pattern"}),
     ("scale", {"screen": "S01", "title": "SCALE", "layout": "focused", "scope": "scale"}),
-    ("scale_clock", {"screen": "S02", "title": "SCALE CLOCK", "layout": "focused", "scope": "scale"}),
+    ("scale_clock", {"screen": "S02", "title": "SCALE CLOCK", "layout": "detail", "scope": "scale"}),
     ("song", {"screen": "A03", "title": "SONG PLAYBACK", "layout": "dashboard", "scope": "song"}),
     ("scale_overview", {"screen": "S03", "title": "SCALE OVERVIEW", "layout": "dashboard", "scope": "scale"}),
     ("trig_algorithm", {"screen": "P06", "title": "TRIG ALGORITHM", "layout": "detail"}),
@@ -123,6 +123,8 @@ LIVE_SCREENS = OrderedDict([
     ("channel_view", {"screen": "P05", "title": "CHANNEL VIEW", "layout": "pattern64"}),
     ("scale_tasks", {"screen": "N02", "title": "SCALE TASKS", "layout": "detail", "scope": "scale"}),
     ("pattern_tasks", {"screen": "N03", "title": "PATTERN TASKS", "layout": "detail"}),
+    ("scale_source", {"screen": "S04", "title": "SCALE SOURCE", "layout": "dashboard"}),
+    ("trig_step_edit", {"screen": "P08", "title": "TRIG STEP EDIT", "layout": "dashboard", "scope": "pattern"}),
     # Merge Shape and Harmony child screens (their feature editor's routes).
     ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
     ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
@@ -137,7 +139,7 @@ LIVE_SCREENS = OrderedDict([
 # screen that page became: (screen id, title, layout, task row of its navigator).
 PAGE_RINGS = {
     # Channel view is no longer a Scale task (owner decision 25 September 2026).
-    "Scale": [("S01", "SCALE", "focused", "scale"), ("S02", "SCALE CLOCK", "focused", "scale_clock")],
+    "Scale": [("S01", "SCALE", "focused", "scale"), ("S02", "SCALE CLOCK", "detail", "scale_clock")],
     "Song": [("A01", "SLOT SETUP", "detail", "slot_setup"), ("A02", "GLOBAL FEEL", "focused", "tempo_feel"),
              ("P05", "CHANNEL VIEW", "pattern64", "channel_view")],
     "Trig": [("P01", "PATTERN TRIG", "pattern64", "pattern"), ("P02", "TRIG OPTIONS", "focused", "options")],
@@ -147,7 +149,7 @@ PAGE_RINGS = {
 RING_ALIASES = {
     "Song": {0: [("A03", "SONG PLAYBACK", "dashboard")]},
     "Trig": {0: [("P06", "TRIG ALGORITHM", "detail"), ("P07", "PAINT PREVIEW", "dashboard"),
-                 ("P08", "TRIG STEP EDIT", "pattern64")]},
+                 ("P08", "TRIG STEP EDIT", "dashboard")]},
 }
 TASK_ROWS = {
     "Scale": ["scale", "scale_clock", "overview"],
@@ -156,8 +158,10 @@ TASK_ROWS = {
 }
 
 # The Channel Tasks rows in their spec order (spec.json#/tasks/rows/N01).
+# Mask detail / Trig detail left the list and Merge became Merge modes (usability audit
+# 25 September 2026).
 CHANNEL_TASKS = ["masks", "trig_params", "output", "harmony", "clock", "merge", "device", "history",
-                 "mask_detail", "trig_detail", "merge_shape", "norns"]
+                 "merge_shape", "norns"]
 
 # Historical page keys used by cases; each is a live screen.
 CHANNEL_PAGES = OrderedDict(
@@ -167,19 +171,37 @@ CHANNEL_PAGES = OrderedDict(
 )
 
 
-def live_scope(scope="channel", channel=1, song_slot=1, held=(), slot=1):
-    """Renderer scope text: CH01 [S02] [ST05 | 3ST]; SLOT 01; SONG 01."""
+def _signed(n):
+    return ("+" if n > 0 else "") + str(n)
+
+
+def live_scope(scope="channel", channel=1, song_slot=1, held=(), slot=1, pattern=1, mute=False,
+               octave=0, step_octave=0):
+    """Renderer scope text (lib/ui_live.lua scope_text): CH01 [S02] [MUTE] [OCT+1]
+    [ST05 [O-1] | 3ST]; the pattern editor PAT02 CH01 ...; SLOT 01; SONG 01.
+
+    ``mute``/``octave`` and a held step's ``step_octave`` lock are Channel-page
+    parts only; the pattern editor (``scope="pattern"``) names the edited
+    pattern before its viewed ``channel``."""
     if scope == "scale":
         parts = ["SLOT %02d" % slot]
     elif scope == "song":
         parts = ["SONG %02d" % song_slot]
     else:
-        parts = ["CH%02d" % channel]
+        parts = ["PAT%02d" % pattern] if scope == "pattern" else []
+        parts.append("CH%02d" % channel)
         if song_slot != 1:
             parts.append("S%02d" % song_slot)
+        if scope == "channel":
+            if mute:
+                parts.append("MUTE")
+            if octave:
+                parts.append("OCT" + _signed(octave))
     held = list(held)
     if len(held) == 1:
         parts.append("ST%02d" % held[0])
+        if scope == "channel" and step_octave:
+            parts.append("O" + _signed(step_octave))
     elif len(held) > 1:
         parts.append("%dST" % len(held))
     return " ".join(parts)
@@ -196,12 +218,12 @@ MASK_LABELS = {
     "chord_1": "Chord 1", "chord_2": "Chord 2", "chord_3": "Chord 3", "chord_4": "Chord 4",
 }
 
-# C06 OUTPUT (Note Dashboard) fields in descriptor order with their labels
-# (lib/ui_adapters/read_only.lua readers.C06). E2 moves focus, clamped.
+# C06 OUTPUT (Note Dashboard) rows in descriptor order with their labels
+# (lib/ui_adapters/read_only.lua readers.C06). A dashboard: every row shows at
+# once, row n at baseline 8 + 8n, nothing to select.
 OUTPUT_FIELDS = OrderedDict([
-    ("root", "Root"), ("chord", "Chord"), ("velocity", "Velocity"), ("length", "Length"),
-    ("inspected_step", "Step"), ("provenance", "Source"), ("planned_pitch", "Planned"),
-    ("scheduled_pitch", "Scheduled"), ("emitted_pitch", "Emitted"), ("bypass", "Bypass"),
+    ("note", "Note"), ("vel_len", "Vel / Len"), ("step", "Step"), ("source", "Source"),
+    ("pitch", "Pitch"), ("bypass", "Bypass"),
 ])
 
 HEADERS = {

@@ -18,15 +18,15 @@ The X marker is characterisation (as in M-DASHBOARD-SELECT-001), not manual text
 read pixel-exactly against rendered candidates. All observations are recorded before the
 assertions run.
 
-C06 OUTPUT (the live Note Dashboard) shows one field at a time. Its Chord field shows the four
-slots' values in slot order, space separated, so each check reads that field exactly (label
-and value) after E2 selects it: "<Chd1> X X X". On the Masks page (C01) the Chd1 mask label is
-read from the selected field's value line ("Chord 1", exact value).
+C06 OUTPUT (the live Note Dashboard) is a dashboard. Its Note row shows the root, then the four
+chord slots' values in slot order, space separated; each check reads that whole row exactly:
+"C-1 <Chd1> X X X" after a play (the root is the Note mask C-1). On the Masks page (C01) the
+Chd1 mask label is read from the selected field's value line ("Chord 1", exact value).
 """
 
 NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-TOP_FIELDS = (('Note', 'root'), ('Vel', 'velocity'), ('Len', 'length'))
 ROOT = 12
+FRESH_ROOTS = ['X', 'C-2', '0', '-1']  # recorded only: characterisation, not asserted
 
 
 def note_name(n):
@@ -34,13 +34,18 @@ def note_name(n):
     return NAMES[n % 12] + str(n//12 - 2)
 
 
-def chord_field(c, expected):
-    """The Chord field shows exactly `expected`; else what it shows among the slot candidates."""
-    try:
-        c.ui.expect_output_field('chord', expected)
-        return expected
+def chord_field(c, expected, roots):
+    """The four chord slots of the Note row (after its root, one of `roots`): exactly
+    `expected` when shown, else what they show among the slot candidates ('?' none)."""
+    rows = {root + ' ' + chords: chords for root in roots for chords in dict.fromkeys([expected, 'X X X X'])}
+    from frame_oracle import dashboard_row_matches
+    wanted = [r for r, chords in rows.items() if chords == expected]
+    try:  # the Note row is row 1 of the dashboard; let the screen settle on the expected row
+        c.wait(lambda s: any(dashboard_row_matches(s, 1, 'Note', r) for r in wanted))
     except AssertionError:
-        return c.ui.output_field_value('chord', [expected, 'X X X X'], select=False)
+        pass
+    shown = c.ui.output_field_value('note', list(rows))
+    return rows.get(shown, shown)
 
 
 def dashboard_chord_slots(c):
@@ -75,7 +80,7 @@ def dashboard_chord_slots(c):
         # Setup sanity: the root and exactly one chord voice sounded.
         assert ROOT in ons and len(voices) == 1, ('Unexpected notes for Chd1 ' + label, ons)
         expected = ' '.join([note_name(voices[0])] + ['X'] * 3)
-        shown = chord_field(c, expected)
+        shown = chord_field(c, expected, [note_name(ROOT)])
         c.results.append(dict(kind='dashboard-chord-play', mask=label, sent=sorted(set(ons)), chord=shown))
         check('Chd1 sent voice, Chd2..Chd4 X after playing ' + label, shown, expected,
               'README 679 + human decision S51 (X is characterisation)')
@@ -86,9 +91,9 @@ def dashboard_chord_slots(c):
 
     # (c) a fresh dashboard: nothing has played.
     to_dashboard()
-    fresh = chord_field(c, 'X X X X')
-    top = {name: c.ui.output_field_value(field, ['X', 'C-2', '0', '0.0', '-1', '-1.0'])
-           for name, field in TOP_FIELDS}
+    fresh = chord_field(c, 'X X X X', FRESH_ROOTS)
+    top = {'note': c.ui.output_field_value('note', [r + ' X X X X' for r in FRESH_ROOTS]),
+           'vel_len': c.ui.output_field_value('vel_len', ['X / X', '0 / 0', '-1 / -1.0', '0 / 0.0'])}
     c.results.append(dict(kind='dashboard-fresh', chords=fresh, top=top,
                           note='Note/Vel/Len recorded only: characterisation, not asserted'))
     check('Fresh dashboard chord slots', fresh, 'X X X X',

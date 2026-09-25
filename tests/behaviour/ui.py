@@ -289,7 +289,7 @@ class Ui:
                 for index, aliases in RING_ALIASES.get(context, {}).items():
                     candidates += [(index, alias) for alias in aliases]
                 for index, (screen, title, layout) in candidates:
-                    scope = self._ring_scope(context)
+                    scope = self._ring_scope(context, screen)
                     if live_header_matches(state, title, scope, layout):
                         found.append((context, index, screen))
                         return True
@@ -302,8 +302,12 @@ class Ui:
             return None
         return found[-1] if found else None
 
-    def _ring_scope(self, context):
+    def _ring_scope(self, context, screen=None):
         from ui_map import live_scope
+        if screen in ("P01", "P03", "P04", "P08"):
+            # The pattern editor names the edited pattern before the viewed channel.
+            return live_scope("pattern", channel=getattr(self, "_channel", 1),
+                              pattern=getattr(self, "_pattern", 1))
         if context == "Scale":
             return live_scope("scale", slot=getattr(self, "_scale_slot", 1))
         if context == "Song":
@@ -362,6 +366,8 @@ class Ui:
         return self.turn(3, delta)
 
     def tap_control(self, control, index=None):
+        if control == "pattern_select" and index is not None:
+            self._pattern = index  # the pattern editor's scope names it (PAT02 CH01)
         return self.driver.tap(*control_cell(control, index))
 
     def tap_step(self, step):
@@ -507,10 +513,11 @@ class Ui:
         start, end = self.step(1), self.step(4)
         self.driver.hold_tap(start, end)
         self.expect_leds({("pattern_slot", 1): "selected"})
-        # The Channel button follows the remembered edit family (Masks: E1
-        # opens Channel tasks straight from Masks, never passing Trig params);
-        # the setup ends on Device as the recipes that follow it expect.
-        self.expect_header("masks", channel=1)
+        # Assigning pattern 1 shows Merge detail (C09) focused on Patterns, and
+        # the range gesture keeps it (usability audit 25 September 2026); E1
+        # opens Channel tasks from it, and the setup ends on Device as the
+        # recipes that follow it expect.
+        self.expect_header("merge_detail", channel=1)
         self.channel_page("midi_config", confirm=False)
         self.expect_header("midi_config", channel=1)
 
@@ -1374,43 +1381,28 @@ class Ui:
         # A waited header: the controlled clock redraws only as time advances.
         self.expect_header(page, channel=channel)
 
-    def _output_label(self, field):
+    def _output_row(self, field):
+        """(1-based dashboard row, label) of a C06 OUTPUT row."""
         from ui_map import OUTPUT_FIELDS
         try:
-            return OUTPUT_FIELDS[field]
-        except KeyError as error:
+            return list(OUTPUT_FIELDS).index(field) + 1, OUTPUT_FIELDS[field]
+        except (KeyError, ValueError) as error:
             raise UiMapError("unknown output field: " + str(field)) from error
 
-    def select_output_field(self, field):
-        """E2 focuses one C06 OUTPUT field: clamp to the first, then move to it."""
-        from ui_map import OUTPUT_FIELDS
-        self._output_label(field)
-        index = list(OUTPUT_FIELDS).index(field)
-        self.turn(2, -len(OUTPUT_FIELDS))
-        if index:
-            self.turn(2, index)
-
-    def expect_output_field(self, field, value, select=True):
-        """C06 OUTPUT shows only its selected field: select ``field`` (E2), then
-        wait for its exact label and large value on the focused layout."""
-        from frame_oracle import selected_field_matches
-        label = self._output_label(field)
-        if select:
-            self.select_output_field(field)
-        self.driver.wait(lambda state: selected_field_matches(state, "focused", label, value))
+    def expect_output_field(self, field, value):
+        """C06 OUTPUT is a dashboard: wait for ``field``'s own row to show its exact
+        label and whole ``value`` (e.g. note 'C3 X X X X', vel_len '110 / 4.0')."""
+        from frame_oracle import dashboard_row_matches
+        index, label = self._output_row(field)
+        self.driver.wait(lambda state: dashboard_row_matches(state, index, label, value))
         self.driver.results.append(dict(kind="output-field", field=field, label=label, value=str(value), passed=True))
 
-    def output_field_value(self, field, candidates, select=True):
-        """The one candidate the selected C06 field shows ('?' none, 'a|b' several).
-
-        Waits for the field's label first, so the value read is that field's."""
-        from frame_oracle import selected_field_matches
-        label = self._output_label(field)
-        if select:
-            self.select_output_field(field)
-        self.driver.wait(lambda state: selected_field_matches(state, "focused", label))
+    def output_field_value(self, field, candidates):
+        """The one candidate ``field``'s C06 row shows exactly ('?' none, 'a|b' several)."""
+        from frame_oracle import dashboard_row_matches
+        index, label = self._output_row(field)
         state = self.driver.snapshot()
-        hits = [str(v) for v in candidates if selected_field_matches(state, "focused", label, v)]
+        hits = [str(v) for v in candidates if dashboard_row_matches(state, index, label, v)]
         return hits[0] if len(hits) == 1 else ("?" if not hits else "|".join(hits))
 
     def _mask_label(self, field):
