@@ -6,8 +6,7 @@ def live_playhead_feedback(c,clock_delta=0):
     ui=c.ui
     c.configure()
     if clock_delta:
-        from frame_oracle import header,matches
-        ui.turn(1,-1);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+        ui.turn(1,-1);ui.expect_header('clock_mods',channel=1)
         ui.set_value(clock_delta);ui.press_key(3)
     marker=c.snapshot()['midi_count']
     ui.control_edge('play_stop',True);ui.control_edge('play_stop',False)

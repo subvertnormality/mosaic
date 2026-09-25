@@ -9,8 +9,7 @@ def mixed_shuffle_inheritance(c):
     ui.configure()
 
     # Channel 2 uses port 2/channel 2 and the same four-step pattern as channel 1.
-    ui.select_channel(2)
-    ui.channel_page("midi_config", channel=2)  # channel select shows C01/C02; Device opens from Tasks
+    ui.select_channel_on_page(2, "midi_config")
     ui.set_value(1)       # Device-config E3: MIDI port.
     ui.turn(2, 1)         # Device-config E2: next context-dependent field.
     ui.set_value(1)       # Device-config E3: MIDI channel.

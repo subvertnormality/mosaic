@@ -3,7 +3,7 @@
 def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reassign=False):
     from cases import assert_durations
     c.ui.configure()
-    c.ui.select_channel(2);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
+    c.ui.select_channel_on_page(2,'midi_config');c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
     c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.turn(1,-3)
     def lock(step,value):
         with c.ui.hold_step(step):

@@ -506,7 +506,7 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual({name for name, node in functions.items()
                           if any(site[1] == "state:frame"
                                  for site in _raw_sites_in_node(node))},
-                         {"strum_reset_continuity", "parameter_division_bounds"})
+                         {"parameter_division_bounds"})
 
         forbidden_labels = {
             "Chord Note Arpeggio", "Chord Note Strum", "Chord Spread",
@@ -2920,6 +2920,54 @@ class OutputFieldVerbTests(unittest.TestCase):
         with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
             Ui(driver).expect_selected_mask("chord_2", "-7th")
         self.assertEqual(oracle.call_args.args[1:], ("overview_masks", "Chord 2", "-7th"))
+
+
+# ---- Group C (ranges, saves, song, timing) ----
+class GroupCUiTests(unittest.TestCase):
+    def test_real_time_e1_after_bare_k1_waits_for_the_native_menu(self):
+        """A bare K1 then E1 is the native menu's E1 once the menu shows; the
+        page ring is not read from a Mosaic screen that has not yet redrawn."""
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                state = {"diagnostics": {"menu_mode": True}}
+                if not predicate(state):
+                    raise AssertionError("predicate did not match")
+                return state
+
+        driver = Driver(clock_mode="real-time")
+        with patch("frame_oracle.live_header_matches",
+                   side_effect=AssertionError("menu E1 must not read a header")):
+            ui = Ui(driver)
+            ui.press_key(1)
+            ui.turn(1, 4)
+        self.assertEqual(driver.calls, [("key", 1), ("wait", .5), ("enc", 1, 4)])
+
+    def test_e1_after_other_input_or_controlled_k1_keeps_the_ring_path(self):
+        from ui import Ui
+
+        # Controlled lane: the snapshot already reflects the key; no extra wait.
+        driver = FakeDriver()
+        ui = Ui(driver)
+        with patch.object(Ui, "_turn_channel_ring", return_value=False), \
+                patch.object(Ui, "_turn_other_ring", return_value=False):
+            ui.press_key(1)
+            ui.turn(1, 4)
+            ui.press_key(3)
+            ui.turn(1, -1)
+        self.assertEqual(driver.calls, [("key", 1), ("enc", 1, 4), ("key", 3), ("enc", 1, -1)])
+
+    def test_footer_oracle_renders_tooltip_and_neighbour_pairs(self):
+        import frame_oracle
+        calls = []
+        with patch.object(frame_oracle, "render", side_effect=lambda commands: calls.append(commands) or b""), \
+                patch.object(frame_oracle, "fit", side_effect=lambda text, width: text):
+            frame_oracle.footer("End must follow start")
+            frame_oracle.footer(("< Root", "Degree >"))
+        self.assertEqual(calls, [[(1, 63, 9, "End must follow start")],
+                                 [(1, 63, 7, "< Root"), ((None, 127), 63, 10, "Degree >")]])
 
 
 if __name__ == "__main__":

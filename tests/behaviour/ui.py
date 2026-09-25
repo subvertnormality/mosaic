@@ -216,11 +216,34 @@ class Ui:
 
     def press_key(self, number):
         self.driver.key(number)
+        self._after_key1 = number == 1
 
     def turn(self, encoder, detents):
-        if encoder == 1 and detents and (self._turn_channel_ring(detents) or self._turn_other_ring(detents)):
-            return None
+        after_key1, self._after_key1 = getattr(self, "_after_key1", False), False
+        if encoder == 1 and detents:
+            # A bare K1 opens the native menu; the E1 that follows it is the
+            # menu's own. Observe the mode change before reading the page ring,
+            # or a not-yet-redrawn Mosaic screen is mistaken for a ring page.
+            if after_key1 and self._native_menu_opened():
+                return self.driver.enc(encoder, detents)
+            if self._turn_channel_ring(detents) or self._turn_other_ring(detents):
+                return None
         return self.driver.enc(encoder, detents)
+
+    def _native_menu_opened(self, timeout=.5):
+        """Real time only: True once the native menu shows after a bare K1.
+
+        A controlled snapshot already reflects the key, so the ring
+        observation itself stands down in the menu; recipe doubles keep
+        their recorded calls."""
+        if getattr(self.driver, "clock_mode", None) != "real-time" or not hasattr(self.driver, "wait"):
+            return False
+        opened = lambda state: state.get("diagnostics", {}).get("menu_mode") is True
+        try:
+            self.driver.wait(opened, timeout=timeout)
+            return True
+        except (AssertionError, KeyError, TypeError, StopIteration):
+            return False
 
     def _observed_channel_page(self, timeout=1):
         """The Channel page ring key whose live header is showing, or None."""
@@ -583,6 +606,7 @@ class Ui:
 
     def _observe_native_menu_mode(self, expected):
         """Confirm a key-driven mode change without advancing controlled time."""
+        self._after_key1 = False  # the mode is observed here; E1 needs no second look
         predicate = lambda state: state["diagnostics"]["menu_mode"] is expected
         if self.driver.clock_mode == "real-time":
             return self.driver.wait(predicate, timeout=1)
