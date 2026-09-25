@@ -9019,7 +9019,7 @@
    "line": 1434,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
-   "sha256": "8a996af846d47e3cc9311d85669deb0deefab5e6c10df4be595d758baf3b0bec"
+   "sha256": "12ded7f3aaf7ba63bbcff39124a98eea9c414f4ebeefa61f5f5f79ee9a71a4b9"
   },
   {
    "status": "pending-visual-spec-reconciliation",
@@ -9027,7 +9027,7 @@
    "line": 1469,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
-   "sha256": "e022139bfc0c830cc0474d458c9b11fa1c8933a8d7dc3f2d72c119a840697530"
+   "sha256": "0fe4c567709024da60bbfb7a3ffc53504c0351170e841ce2dcd53178a39205c4"
   }
  ],
  "integration_basis": {

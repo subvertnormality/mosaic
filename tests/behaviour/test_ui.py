@@ -3051,6 +3051,33 @@ class DashboardOracleTests(unittest.TestCase):
         self.assertFalse(live_header_matches(state, "PAINT PREVIEW", "CH01", "detail"))
 
 
+class ConfirmHeaderScopeTests(unittest.TestCase):
+    """Navigation confirmation tolerates a Channel page's mute/octave scope parts;
+    expect_header stays exact."""
+
+    def test_confirm_accepts_mute_and_octave_parts_only_on_channel_pages(self):
+        from ui import Ui
+        shown = {"scope": None}
+        oracle = lambda state, title, scope, layout: scope == shown["scope"]
+        with patch("frame_oracle.live_header_matches", side_effect=oracle):
+            ui = Ui(FakeDriver())
+            for scope in ("CH01", "CH01 OCT+2", "CH01 MUTE", "CH01 MUTE OCT-1"):
+                shown["scope"] = scope
+                self.assertTrue(ui._confirm_matches({}, "masks", {"channel": 1}), scope)
+            for scope in ("CH02", "CH01 OCT+3", "CH01 ST05"):
+                shown["scope"] = scope
+                self.assertFalse(ui._confirm_matches({}, "masks", {"channel": 1}), scope)
+            # A stated octave is exact; a non-Channel scope has no such parts.
+            shown["scope"] = "CH01 OCT+2"
+            self.assertFalse(ui._confirm_matches({}, "masks", {"channel": 1, "octave": 1}))
+            shown["scope"] = "SLOT 01 OCT+1"
+            self.assertFalse(ui._confirm_matches({}, "scale", {"slot": 1}))
+            driver = FakeDriver(states=[{}])
+            shown["scope"] = "CH01 OCT+2"
+            with self.assertRaises(AssertionError):
+                Ui(driver).expect_header("masks", channel=1)
+
+
 class PromptRouteVerbTests(unittest.TestCase):
     """Deadline-bound routes: one saturating native event, then the same rows."""
 

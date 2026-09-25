@@ -304,7 +304,10 @@ class Ui:
 
     def _ring_scope(self, context, screen=None):
         from ui_map import live_scope
-        if screen in ("P01", "P03", "P04", "P08"):
+        if screen == "P08":
+            # Trig step edit names the pattern and the held step (no held step here).
+            return live_scope("pattern_step", pattern=getattr(self, "_pattern", 1))
+        if screen in ("P01", "P03", "P04"):
             # The pattern editor names the edited pattern before the viewed channel.
             return live_scope("pattern", channel=getattr(self, "_channel", 1),
                               pattern=getattr(self, "_pattern", 1))
@@ -1226,6 +1229,18 @@ class Ui:
     def _observed_title(self, state):
         return "<unmatched framebuffer>"
 
+    def _confirm_matches(self, state, page, params):
+        """Navigation confirmation: the page's title and identity. A Channel page's scope
+        also names the channel's mute and octave (CH01 MUTE OCT+1) when set, which
+        navigation does not change and the caller may not have stated; the case's own
+        expect_header calls stay exact."""
+        if self._header_matches(state, page, params):
+            return True
+        if HEADERS[page]["scope"] != "channel" or "mute" in params or "octave" in params:
+            return False
+        return any(self._header_matches(state, page, dict(params, mute=mute, octave=octave))
+                   for mute in (False, True) for octave in (-2, -1, 0, 1, 2) if mute or octave)
+
     def confirm_header(self, page, **params):
         expected = header_text(page, **params)
         if self.driver.clock_mode == "real-time":
@@ -1233,7 +1248,7 @@ class Ui:
             state = None
             while time.monotonic() < deadline:
                 state = self.driver.snapshot()
-                if self._header_matches(state, page, params):
+                if self._confirm_matches(state, page, params):
                     break
                 time.sleep(.03)
             else:
@@ -1244,7 +1259,7 @@ class Ui:
             # by a short decorative wipe drawn frame by frame (ui_motion
             # WIPE_FRAMES); let at most one logical second run for it.
             for _ in range(33):
-                if self._header_matches(state, page, params):
+                if self._confirm_matches(state, page, params):
                     break
                 self.driver.elapse(.03)
                 state = self.driver.snapshot()

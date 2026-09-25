@@ -668,7 +668,7 @@ def pending_parameter_lock_song_transition(c):
     c.ui.menu('channel_editor')
 
     def select_slot(slot):
-        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',slot);c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1,song_slot=slot) # Live scope names the song slot (CH01 S02).
+        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',slot);c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1,song_slot=slot,octave=1 if slot==2 else 0) # Live scope names the song slot and its channel octave (CH01 S02 OCT+1).
     # A distinct unheld default separates locks from ordinary values in both slots.
     for slot in (1,2):
         select_slot(slot)

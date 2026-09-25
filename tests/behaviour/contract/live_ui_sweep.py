@@ -24,8 +24,8 @@ Screens no public input shows on this build (C08, C10, C11, S04, S05, M04,
 M08..M11, H06, H12..H16, H18, F*, R02..R16) are listed, with the reasons, in
 docs/ui-reimplementation/reviews/ACCEPTANCE.md, with the defects the sweep
 found and their fixes. Since the owner feedback of 25 September 2026, C12/C13
-(Mask detail, Trig detail) are no longer Channel tasks and M14 (Merge reason)
-has no cursor to open it from on the Merge result dashboard. Dashboards are
+(Mask detail, Trig detail) are no longer Channel tasks; M14 (Merge reason)
+is reached from Merge result's Reason row. Dashboards are
 checked whole (every row, no cursor) with frame_oracle.dashboard_matches.
 """
 import base64
@@ -384,14 +384,14 @@ def merge_screens(c, sw):
     sw.screen("M02", field=("Pitch", ">"), footer=neighbours("M02", labels, "Pitch"))
     # M09 is not observable: the merge-mode short press shows it and its
     # release hides it within the same grid event (see ACCEPTANCE.md).
-    # Result is a read-only dashboard; K2 backs out through the editor. Its
-    # Reason row (M14) has no cursor to open it from on the dashboard: K3 there
-    # stays on Result (reported with the owner feedback, 25 September 2026).
+    # Result and its Reason are read-only; K2 backs out through the editor.
     e2(c, 1); c.key(3)
-    m05 = [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")]
-    sw.screen("M05", rows=m05)
-    e2(c, 3); c.key(3)
-    sw.screen("M05", rows=m05)
+    walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")])
+    c.key(3)
+    walk(c, sw, "M14", [("Step", "1"), ("Role", "EMPTY"), ("Sources", "NONE"), ("Decision", "ADMITTED"),
+                        ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
+    c.key(2)
+    sw.screen("M05", field=("Reason", ">"))
     c.key(2)
     sw.screen("M02", field=("Result", ">"), footer=("Pitch", END))
     c.enc(1, 1)
@@ -575,12 +575,11 @@ def pattern_screens(c, sw):
     c.tap(14, 8)
     sw.screen("P07", rows=[("Preview", "OFF"), ("Algorithm", "Drum"), ("Shift", "0"), ("Trigs", "NONE")],
               tips=("Painting cancelled",))
-    # Trig step edit while a trig step is held and another is pressed. The
-    # dashboard's title-row scope is fitted to 45 px (the held step's part is
-    # cut: reported with the owner feedback, 25 September 2026).
+    # Trig step edit while a trig step is held and another is pressed: its scope is
+    # the pattern and the held step.
     c.action(type="grid", x=1, y=4, state=1)
     c.tap(3, 4)
-    sw.screen("P08", scope="PAT01 CH01 ST01", tips=("Note length set",),
+    sw.screen("P08", scope="PAT01 ST01", tips=("Note length set",),
               rows=[("Toggle", "STEP01 ON"), ("Length", "01..03"), ("Reset length", "STEP01"),
                     ("Pattern select", "PAT01")])
     c.action(type="grid", x=1, y=4, state=0)

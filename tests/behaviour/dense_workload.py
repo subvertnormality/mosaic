@@ -33,6 +33,9 @@ def build_project(d,channels,workload='dense',select_parameter=None,select_devic
         d.ui.turn(2,1)
         if channel>1:d.ui.set_value(channel-1)
         d.ui.press_key(3);d.ui.tap_control('pattern_slot',1);d.ui.set_range(1,16)
+        # The pattern slot tap shows Merge detail (grid actions show what they changed):
+        # return to Device, where the rest of this recipe (and the next channel) starts.
+        d.ui.channel_page('midi_config',channel=channel,confirm=False)
         if workload=='slides':
             d.ui.turn(1,-3)
             if select_parameter:select_parameter(d,'CC 1')
