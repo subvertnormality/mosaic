@@ -30,9 +30,9 @@
  "manual": "README.md",
  "manual_sha256": "f0a226db12bcd5d16009ebf66eaec858348d986a6c6cd3404d2f2c7d222c9579",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "06e875e6713b2fe1d01067263b80539ff2a05cd143733745c959ff6193468063",
+ "inventory_sha256": "632f71855b9b63456a0b57f5025ee02dd7b6d377e10195ed229ff5d6d239c91c",
  "counts": {
-  "requirements": 164,
+  "requirements": 165,
   "production_lua_modules": 160,
   "unit_integration_files": 118,
   "domains": 17
@@ -344,6 +344,7 @@
     "UI-ACCEPT-A03",
     "UI-ACCEPT-A10",
     "UI-ACCEPT-A11",
+    "UI-ACCEPT-A18",
     "UI-ACCEPT-A19"
    ],
    "production_modules": [
