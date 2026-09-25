@@ -309,10 +309,12 @@ def held_step_precedence_workflow(c):
     c.ui.expect_header("note_dashboard", channel=1)
     with c.ui.hold_step(2):
         # Output (C06) is a dashboard that inspects the held step in place: its Step
-        # row names it and its Pitch row is planned > scheduled > emitted of step 2.
+        # row names it, its Pitch row is step 2's scale pitch (no harmony moved it:
+        # the Revoice draft was cancelled) and Sent the note sent, D3 (MIDI 62).
         c.ui.expect_header("note_dashboard", channel=1, held=(2,))
         c.ui.expect_output_field("step", "STEP02 HELD")
-        c.ui.expect_output_field("pitch", "62>62>62")
+        c.ui.expect_output_field("pitch", "D3")
+        c.ui.expect_output_field("sent", "D3")
     c.results.append(dict(kind='held-step-precedence',
                           draft_cancelled=True, gesture_routed_once=True,
                           selected_event_chain='step2:P62/S62/E62', passed=True))

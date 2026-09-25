@@ -803,28 +803,31 @@ def ui_accept_a11(c):
 # A19: Output (C06) inspects the latest event, or a held step in place, without side effects.
 
 def _event_rows(step, held=False):
-    """Characterised C06 dashboard rows for a played step of the configure() phrase: the note
-    and its four chord voices, velocity / length, the step (HELD while inspected), SRC/M the
-    source and merged note values (scale degrees 0..3), S/H the scale and harmony pitches, and
-    planned > scheduled > emitted pitch."""
+    """C06 dashboard rows for a played step of the configure() phrase (no chord voice plays):
+    the note, velocity / length, the step (HELD while inspected), the pattern degree (0..3,
+    signed; no merge changed it), the scale pitch (no harmony moved it) and the note sent, as
+    musicutil.note_num_to_name(n, true) names them."""
     note, velocity = PHRASE[step - 1]
-    return [('Note', NOTE_NAMES[note] + ' X X X X'), ('Vel / Len', '%d / 1.0' % velocity),
+    degree = step - 1
+    return [('Note', NOTE_NAMES[note]), ('Vel / Len', '%d / 1.0' % velocity),
             ('Step', 'STEP%02d' % step + (' HELD' if held else '')),
-            ('Source', 'SRC%d M%d S%d H%d' % (step - 1, step - 1, note, note)),
-            ('Pitch', '%d>%d>%d' % (note, note, note)), ('Bypass', 'NONE')]
+            ('Degree', '+%d' % degree if degree > 0 else str(degree)),
+            ('Pitch', NOTE_NAMES[note]), ('Sent', NOTE_NAMES[note])]
 
 
-def _no_event_rows(shown, step=None):
-    """A step with no event: the note rows keep what they show, every event stage reads
-    NO EVENT (the step names the held step when one is inspected)."""
-    return shown[:2] + [('Step', 'STEP%02d HELD' % step if step else 'NO EVENT')] + [
-        (label, 'NO EVENT') for label in ('Source', 'Pitch', 'Bypass')]
+def _no_event_rows(step=None):
+    """No event at all (or a held step without one): every row reads NO EVENT, the step
+    row names the held step when one is inspected."""
+    rows = [(label, 'NO EVENT') for label in ('Note', 'Vel / Len', 'Step', 'Degree', 'Pitch', 'Sent')]
+    if step:
+        rows[2] = ('Step', 'STEP%02d HELD' % step)
+    return rows
 
 
 def ui_accept_a19(c):
     """README Note Dashboard / Harmony: Output shows the last played notes of the selected
-    channel on one dashboard (note and chord, velocity / length, step, provenance, planned >
-    scheduled > emitted pitch, bypass); holding a step shows what that step plays in place; a
+    channel on one dashboard (note and chord voices, velocity / length, step, pattern degree,
+    scale pitch, note sent); nothing played reads NO EVENT; holding a step shows what that step plays in place; a
     step without an event borrows nothing; release returns to the latest event. E2/E3/K3 and
     inspection send no MIDI and change no selection, LED or music."""
     ui = c.ui
@@ -832,8 +835,7 @@ def ui_accept_a19(c):
     ui.tap_control('channel_editor')
     ui.channel_page('note_dashboard', confirm=False)
     ui.expect_header('note_dashboard', channel=1)
-    fresh = [('Note', 'C-2 X X X X'), ('Vel / Len', '0 / 0')]
-    ui.expect_dashboard('note_dashboard', _no_event_rows(fresh), channel=1)
+    ui.expect_dashboard('note_dashboard', _no_event_rows(), channel=1)
     start = c.snapshot()['midi_count']
     c.playback(MELODY, cycles=2)
     state = c.snapshot()
@@ -856,7 +858,7 @@ def ui_accept_a19(c):
     held_step = 2 if latest != 2 else 3
     with ui.hold_step(held_step):
         ui.expect_header('note_dashboard', channel=1, held=(held_step,))
-        # The event rows (step, source, pitch, bypass) are the held step's; the Note and
+        # The event rows (step, degree, pitch, sent) are the held step's; the Note and
         # Vel / Len rows keep the last played note (characterisation: they are the channel's
         # note displays, not the inspected event).
         held_rows = latest_rows[:2] + _event_rows(held_step, held=True)[2:]
@@ -866,7 +868,7 @@ def ui_accept_a19(c):
     for step in (40, 64):
         with ui.hold_step(step):
             ui.expect_header('note_dashboard', channel=1, held=(step,))
-            ui.expect_dashboard('note_dashboard', _no_event_rows(latest_rows, step), channel=1, held=(step,))
+            ui.expect_dashboard('note_dashboard', _no_event_rows(step), channel=1, held=(step,))
         ui.expect_header('note_dashboard', channel=1)
         ui.expect_dashboard('note_dashboard', latest_rows, channel=1)
     # Inspection sent nothing, moved no selection, changed no LED.

@@ -282,9 +282,8 @@ def walk(c, sw, sid, fields, labels=None, visits=None, top=False, **kw):
 
 
 def channel_screens(c, sw):
-    # Output (C06) with no event yet: a dashboard of six rows; every event stage
-    # reads NO EVENT, distinct from X (no chord mask) and 0 (velocity). E2 and E3
-    # change nothing on it.
+    # Output (C06) with no event yet: a dashboard of six rows, every one NO EVENT
+    # (not the owner's default C-2). E2 and E3 change nothing on it.
     channel_task(c, "output")
     sw.screen("C06", rows=C06_NO_EVENT)
     e2(c, 3); c.enc(3, 2)
@@ -340,8 +339,8 @@ H19_MAP = "PAT 1 / AVERAGE"
 # Trig options keeps only the tresillo amount (owner decision 25 September 2026).
 P02_FIELDS = [("Tresillo amount", "x24")]
 # C06 before any event (usability audit 25 September 2026: six dashboard rows).
-C06_NO_EVENT = [("Note", "C-2 X X X X"), ("Vel / Len", "0 / 0"), ("Step", "NO EVENT"),
-                ("Source", "NO EVENT"), ("Pitch", "NO EVENT"), ("Bypass", "NO EVENT")]
+C06_NO_EVENT = [("Note", "NO EVENT"), ("Vel / Len", "NO EVENT"), ("Step", "NO EVENT"),
+                ("Degree", "NO EVENT"), ("Pitch", "NO EVENT"), ("Sent", "NO EVENT")]
 
 
 def merge_screens(c, sw):

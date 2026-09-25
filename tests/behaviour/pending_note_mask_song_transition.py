@@ -167,8 +167,9 @@ def pending_note_mask_song_transition(c):
     )
     ui.menu("channel_editor")
     ui.channel_page("masks", "midi_config", channel=1, confirm=False)
-    # The live scope also shows the post-transition song slot (CH01 S02).
-    ui.expect_header("masks", channel=1, song_slot=2)
+    # The live scope also shows the post-transition song slot and slot 2's
+    # channel octave fingerprint (CH01 S02 OCT+1).
+    ui.expect_header("masks", channel=1, song_slot=2, octave=1)
 
     # Required fingerprints: the held step belongs to song A, while song B
     # retains its copied octave fingerprint. The unfixed target leak writes 0

@@ -946,6 +946,12 @@ def transpose_scale_octave_composition(c):
     c.ui.tap_control("channel_octave", 1)  # Channel octave +1.
     c.ui.scale_editor()
     c.ui.tap_control("global_transpose_plus_four")  # Song/global transpose +4; locks below must override it.
+    # Global transposition shows Scale overview with its Transpose row (grid actions show what
+    # they changed, 25 September 2026); the Scale screen reopens through Scale tasks.
+    c.ui.expect_header("scale_overview", slot=1)
+    c.ui.expect_dashboard_row("Transpose", "+4")
+    c.ui.open_task("Scale", "scale")
+    c.ui.expect_header("scale", slot=1)
     # Native scale editor: Quantizer -> Roman -> Transpose, then save +3.
     c.ui.select_field("scale_transpose", offset=2)
     c.ui.set_value(3); c.ui.press_key(3)

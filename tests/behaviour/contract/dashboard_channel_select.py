@@ -2,22 +2,22 @@
 channel mode you can see the last played notes on the currently selected channel").
 
 Selecting a channel on the grid resets the dashboard to "no note played". No note has
-velocity -1 or length -1, so the Vel and Len cells must show the same absence marker the
-Note cell shows, "X" (the marker itself is characterisation, not manual text). After the
-channel plays, the cells show a played note's values again.
+velocity -1 or length -1, so the note and its velocity and length must all show the same
+absence marker. After the channel plays, they show a played note's values again.
 
-C06 OUTPUT (the live Note Dashboard) is a dashboard: the old Note cell is the first token
-of its Note row (the root, then the four chord voices) and the old Vel and Len cells are its
-Vel / Len row ("<vel> / <len>"); each row is read exactly, whole. A grid channel select returns
-the live screen to the remembered Channel family, so OUTPUT is reopened through Channel Tasks
-(navigation only) before it is read.
+C06 OUTPUT (the live Note Dashboard) is a dashboard: the old Note cell is its Note row (the
+note, then the chord voices that play) and the old Vel and Len cells are its Vel / Len row
+("<vel> / <len>"); each row is read exactly, whole. With nothing played both read NO EVENT
+(the owner's absence marker since 25 September 2026, characterisation; it was X). A grid
+channel select returns the live screen to the remembered Channel family, so OUTPUT is
+reopened through Channel Tasks (navigation only) before it is read.
 """
 
-ABSENT = {'note': 'X X X X X', 'vel_len': 'X / X'}
+ABSENT = {'note': 'NO EVENT', 'vel_len': 'NO EVENT'}
 
 
 def dashboard_rows(c):
-    """The Note and Vel / Len rows: 'X' (absent) for each of their cells, else '?'."""
+    """The Note and Vel / Len rows: NO EVENT (nothing played) when shown, else '?'."""
     return {field: c.ui.output_field_value(field, [value]) for field, value in ABSENT.items()}
 
 

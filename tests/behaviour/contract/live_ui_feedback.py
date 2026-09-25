@@ -169,8 +169,7 @@ def live_ui_dashboards(c):
     # Output (C06): six rows, before any event.
     ui.tap_control('channel_editor')
     ui.channel_page('note_dashboard', confirm=False)
-    output = [('Note', 'C-2 X X X X'), ('Vel / Len', '0 / 0'), ('Step', 'NO EVENT'), ('Source', 'NO EVENT'),
-              ('Pitch', 'NO EVENT'), ('Bypass', 'NO EVENT')]
+    output = [(label, 'NO EVENT') for label in ('Note', 'Vel / Len', 'Step', 'Degree', 'Pitch', 'Sent')]
     ui.expect_dashboard('note_dashboard', output, channel=1)
     # Scale overview (S03): five rows, no View channel, no cursor; E2/E3 change nothing.
     ui.tap_control('scale_editor')

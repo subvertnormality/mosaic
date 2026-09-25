@@ -1406,7 +1406,7 @@ class Ui:
 
     def expect_output_field(self, field, value):
         """C06 OUTPUT is a dashboard: wait for ``field``'s own row to show its exact
-        label and whole ``value`` (e.g. note 'C3 X X X X', vel_len '110 / 4.0')."""
+        label and whole ``value`` (e.g. note 'C3 E3 G3', vel_len '110 / 4.0')."""
         from frame_oracle import dashboard_row_matches
         index, label = self._output_row(field)
         self.driver.wait(lambda state: dashboard_row_matches(state, index, label, value))

@@ -223,8 +223,8 @@ MASK_LABELS = {
 # (lib/ui_adapters/read_only.lua readers.C06). A dashboard: every row shows at
 # once, row n at baseline 8 + 8n, nothing to select.
 OUTPUT_FIELDS = OrderedDict([
-    ("note", "Note"), ("vel_len", "Vel / Len"), ("step", "Step"), ("source", "Source"),
-    ("pitch", "Pitch"), ("bypass", "Bypass"),
+    ("note", "Note"), ("vel_len", "Vel / Len"), ("step", "Step"), ("degree", "Degree"),
+    ("pitch", "Pitch"), ("sent", "Sent"),
 ])
 
 HEADERS = {

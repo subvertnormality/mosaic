@@ -8,7 +8,7 @@ import time
 
 # Live footer (frame_oracle.footer): the tooltip at (1,63) level 9 while it
 # lasts; cleared means the footer shows exactly the screen's own hints again.
-HINTS = {'scale': ('< Root', 'Degree >'), 'trig_locks': 'E2 SLOT  E3 SET  K2 ASSIGN'}
+HINTS = {'scale': ('< Root', 'Degree >'), 'masks': 'E2 MASK  E3 SET'}
 
 
 def tooltip_autosave(c):
@@ -35,10 +35,12 @@ def tooltip_autosave(c):
     c.configure()
     for x, name in ((4, 'Scale Editor'), (6, 'Song Editor'), (3, 'Channel Editor')):
         c.tap(x, 8); tip('page-' + name, name)
-    cleared('channel-editor', now(), 'trig_locks')
+    # The Channel button shows the remembered family: Masks (Channel tasks opens straight
+    # from Masks, so Trig params was never shown).
+    cleared('channel-editor', now(), 'masks')
     ptn = c.data_directory/'autosave.ptn'
     c.elapse(30); c.elapse(25)                                    # idle since the last page tap, below 60 s
     shown = tip('autosaved', 'Autosaved', within=10)
     assert ptn.is_file(), 'Idle autosave missing'
-    cleared('autosaved', shown, 'trig_locks')
+    cleared('autosaved', shown, 'masks')
     c.tap(4, 8); shown = tip('after-autosave', 'Scale Editor'); cleared('after-autosave', shown, 'scale')
