@@ -160,29 +160,52 @@ return function(ui_adapters, owners)
     for i = 1, 4 do voices[i] = shown(displays.chords[i]); raw[i] = displays.chords[i].value end
     local snap = cap.snapshot
     local planned = snap.planned
-    local note = shown(displays.note) .. " " .. table.concat(voices, " ")
+    -- The note and only the chord voices that play (an unplayed slot shows X).
+    local played = {shown(displays.note)}
+    for i = 1, 4 do if voices[i] ~= "X" then played[#played + 1] = voices[i] end end
     local provenance = {event_id = planned and planned.event_id, held = cap.inspected_step ~= nil}
     local step = cap.inspected_step or (planned and planned.step)
     local descriptors = {
-      readonly("note", "Note", note, {raw = displays.note.value, voices = voices, chord_raw = raw}),
+      readonly("note", "Note", table.concat(played, " "), {raw = displays.note.value, voices = voices, chord_raw = raw}),
       readonly("vel_len", "Vel / Len", shown(displays.velocity) .. " / " .. shown(displays.length),
         {velocity = displays.velocity.value, length = displays.length.value}),
       readonly("step", "Step", step and (step_label(step) .. (provenance.held and " HELD" or "")) or "NO EVENT",
         {step = step, held = provenance.held, event_id = provenance.event_id}),
     }
     if not planned then
-      for _, f in ipairs({{"source", "Source"}, {"pitch", "Pitch"}, {"bypass", "Bypass"}}) do
+      -- Nothing has played: the owner's default note (C-2) is not an event.
+      descriptors[1].value, descriptors[2].value = "NO EVENT", "NO EVENT"
+      for _, f in ipairs({{"degree", "Degree"}, {"pitch", "Pitch"}, {"sent", "Sent"}}) do
         descriptors[#descriptors + 1] = readonly(f[1], f[2], "NO EVENT", provenance)
       end
       return descriptors
     end
-    descriptors[#descriptors + 1] = readonly("source", "Source",
-      "SRC" .. tostring(planned.source or "-") .. " M" .. tostring(planned.merge or "-") ..
-      " S" .. tostring(planned.scale or "-") .. " H" .. tostring(planned.harmony or "-"), provenance)
-    -- Planned > scheduled > emitted pitch of the same event.
-    descriptors[#descriptors + 1] = readonly("pitch", "Pitch", tostring(planned.output or "-") .. ">" ..
-      stage_pitch(snap, snap.scheduled) .. ">" .. stage_pitch(snap, snap.emitted), provenance)
-    descriptors[#descriptors + 1] = readonly("bypass", "Bypass", planned.bypass and tostring(planned.bypass) or "NONE", provenance)
+    -- How the note got its pitch, in the player's terms: the pattern degree
+    -- (and what merging made of it), the pitch in the scale (and the harmony's
+    -- pitch when it moved it), and the note actually sent.
+    local function degree(v) return v and signed(v) or "-" end
+    local degree_text = degree(planned.source)
+    if planned.merge ~= nil and planned.merge ~= planned.source then degree_text = degree_text .. " > " .. degree(planned.merge) .. " MERGED" end
+    local pitch_text = planned.scale and note_name(planned.scale) or "-"
+    if planned.harmony and planned.scale and planned.harmony ~= planned.scale then
+      pitch_text = pitch_text .. " > " .. note_name(planned.harmony) .. " HARMONY"
+    end
+    local SILENT = {muted = "MUTED", rest = "REST", missing_output = "NO OUTPUT"}
+    local sent
+    if SILENT[planned.bypass or ""] then
+      sent = SILENT[planned.bypass]
+    elseif snap.emitted and snap.emitted.pitch and (snap.emitted.event_id == nil or snap.emitted.event_id == planned.event_id) then
+      sent = note_name(snap.emitted.pitch)
+    else
+      sent = "NOT YET"
+    end
+    descriptors[#descriptors + 1] = readonly("degree", "Degree", degree_text,
+      {source = planned.source, merge = planned.merge, event_id = planned.event_id})
+    descriptors[#descriptors + 1] = readonly("pitch", "Pitch", pitch_text,
+      {scale = planned.scale, harmony = planned.harmony, output = planned.output, event_id = planned.event_id,
+        scheduled = stage_pitch(snap, snap.scheduled), bypass = planned.bypass})
+    descriptors[#descriptors + 1] = readonly("sent", "Sent", sent,
+      {emitted = snap.emitted and snap.emitted.pitch, bypass = planned.bypass, event_id = planned.event_id})
     return descriptors
   end
 

@@ -55,6 +55,8 @@ end
 function test_ui_adapters_read_only_c06_values_are_what_the_note_dashboard_draws()
   dashboard(function(env)
     env.ui.set_note_dashboard_values({note = 64, velocity = 96, length = 0.25, chords = {67, 0, 74}})
+    -- The dashboard values belong to a played event.
+    env.inspection.plan(env.song, harness.SELECTED, {step = 1, source = 0, merge = 0, scale = 64, harmony = 64, output = 64})
     local frame = env.draw()
     local outcome = env.adapter:describe("C06", "C06", target("C06"))
     luaunit.assert_true(outcome.ok)
@@ -65,7 +67,8 @@ function test_ui_adapters_read_only_c06_values_are_what_the_note_dashboard_draws
     -- One dashboard row each (usability audit 25 September 2026): Note is the root
     -- then the four chord voices; Vel / Len pairs velocity and length.
     -- MIDI note 0 is a played voice; an unplayed slot is X (bugs.json dashboard-chord-slots)
-    luaunit.assert_equals(v.note, musicutil.note_num_to_name(64, true) .. " " .. table.concat(voices, " "))
+    -- Only the chord voices that play are listed (the fourth slot is unplayed).
+    luaunit.assert_equals(v.note, musicutil.note_num_to_name(64, true) .. " " .. table.concat({voices[1], voices[2], voices[3]}, " "))
     luaunit.assert_equals(v.vel_len, "96 / 0.25")
     for _, text in ipairs({musicutil.note_num_to_name(64, true), "96", "0.25", voices[1], voices[2], voices[3], voices[4]}) do
       luaunit.assert_str_contains(frame, " " .. text .. "\n")
@@ -81,11 +84,11 @@ function test_ui_adapters_read_only_c06_provenance_is_the_dashboard_line_from_on
     local frame = env.draw()
     local v = values(env.adapter:describe("C06", "C06", target("C06")))
     luaunit.assert_equals(v.step, "STEP05")
-    luaunit.assert_equals(v.source, "SRC3 M2 S64 H64")
-    -- Planned > scheduled > emitted pitch of the one event.
-    luaunit.assert_equals(v.pitch, "65>65>66")
-    luaunit.assert_equals(v.bypass, "NONE")
-    luaunit.assert_str_contains(frame, v.source)
+    -- Pattern degree 3, merged to 2; scale pitch 64 with harmony 64 (unchanged); sent 66.
+    luaunit.assert_equals(v.degree, "+3 > +2 MERGED")
+    local musicutil = require("musicutil")
+    luaunit.assert_equals(v.pitch, musicutil.note_num_to_name(64, true))
+    luaunit.assert_equals(v.sent, musicutil.note_num_to_name(66, true))
     luaunit.assert_str_contains(frame, "P65 S65 E66")
   end)
 end
@@ -96,12 +99,11 @@ function test_ui_adapters_read_only_c06_held_step_inspects_that_step_not_the_lat
     env.inspection.plan(env.song, harness.SELECTED, {step = 6, source = 2, output = 62, bypass = "muted"})
     local latest = values(env.adapter:describe("C06", "C06", target("C06")))
     luaunit.assert_equals(latest.step, "STEP06")
-    luaunit.assert_equals(latest.bypass, "muted")
+    luaunit.assert_equals(latest.sent, "MUTED")
     env.pressed = {{5, 4}}
     local held = values(env.adapter:describe("C06", "C06", target("C06")))
     luaunit.assert_equals(held.step, "STEP05 HELD")
-    luaunit.assert_equals(held.pitch, "60>->-")
-    luaunit.assert_equals(held.bypass, "NONE")
+    luaunit.assert_equals(held.sent, "NOT YET") -- nothing sent for step 5 yet
     luaunit.assert_str_contains(env.draw(), "P60 S- E-")
   end)
 end
@@ -109,10 +111,12 @@ end
 function test_ui_adapters_read_only_c06_reads_no_event_when_the_inspection_is_empty()
   dashboard(function(env)
     local v = values(env.adapter:describe("C06", "C06", target("C06")))
-    for _, id in ipairs({"step", "source", "pitch", "bypass"}) do
+    for _, id in ipairs({"step", "degree", "pitch", "sent"}) do
       luaunit.assert_equals(v[id], "NO EVENT", id)
     end
-    luaunit.assert_str_contains(v.note, " X X X X")
+    -- Nothing played: every row says so, not the owner's default C-2.
+    luaunit.assert_equals(v.note, "NO EVENT")
+    luaunit.assert_equals(v.vel_len, "NO EVENT")
     luaunit.assert_equals(ids(env.adapter:describe("C06", "C06", target("C06"))), ui_adapters.spec.screens.C06.fields)
   end)
 end
@@ -128,8 +132,9 @@ function test_ui_adapters_read_only_c06_takes_one_snapshot_per_describe_and_mark
     local adapter = read_only_factory(env.ui_adapters, {pages = {channel = env.owners}, inspection = fake})
     local v = values(adapter:describe("C06", "C06", target("C06")))
     luaunit.assert_equals(calls, 1)
-    -- Scheduled belongs to another event: STALE between planned and emitted.
-    luaunit.assert_equals(v.pitch, "60>STALE>60")
+    -- A stage from another event is never shown as this event's: scheduled is
+    -- kept STALE in the row's data; the emitted pitch of this event is sent.
+    luaunit.assert_equals(values(adapter:describe("C06", "C06", target("C06"))).sent, "C3")
   end)
 end
 

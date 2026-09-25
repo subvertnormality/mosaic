@@ -3,12 +3,12 @@
 
 local ui_splash = include("mosaic/lib/ui_splash")
 
-local function tiles_at(t)
+local logo = ui_splash.logo
+
+local function blocks_at(t)
   local count = 0
-  for row = 0, 7 do
-    for column = 0, 15 do
-      if ui_splash.tile(column, row, t) then count = count + 1 end
-    end
+  for index = 1, #logo.blocks do
+    if ui_splash.block(index, t) then count = count + 1 end
   end
   return count
 end
@@ -26,29 +26,45 @@ local function with_recording_screen(body)
   return calls
 end
 
-function test_ui_splash_tiles_lay_row_by_row_left_to_right()
-  luaunit.assert_equals(tiles_at(0), 0)
-  luaunit.assert_true(tiles_at(0.03) >= 1)
-  -- Within a row, a tile to the right never appears before one to its left.
-  for row = 0, 7 do
-    for column = 1, 15 do
-      for t = 0, 1, 1 / 60 do
-        if ui_splash.tile(column, row, t) then luaunit.assert_not_nil(ui_splash.tile(column - 1, row, t)) end
+function test_ui_splash_draws_the_logo_blocks_in_its_own_shades()
+  -- Nine rows of dots and pills, 15 columns, in the logo's five shades.
+  luaunit.assert_equals(logo.rows, 9)
+  luaunit.assert_equals(logo.columns, 15)
+  local shades, pills = {}, 0
+  for _, b in ipairs(logo.blocks) do
+    shades[b.level] = true
+    if b.last > b.first then pills = pills + 1 end
+  end
+  luaunit.assert_equals(shades, {[2] = true, [4] = true, [6] = true, [9] = true, [15] = true})
+  luaunit.assert_true(pills >= 20, "pill bars as well as dots")
+  luaunit.assert_equals(#logo.letters, 6) -- m o s a i c
+end
+
+function test_ui_splash_blocks_lay_row_by_row_left_to_right()
+  luaunit.assert_equals(blocks_at(0), 0)
+  luaunit.assert_true(blocks_at(0.03) >= 1)
+  for a, first in ipairs(logo.blocks) do
+    for b, second in ipairs(logo.blocks) do
+      -- Within a row, a block to the right never appears before one to its left;
+      -- a lower row trails the row above, so it never overtakes the block above it.
+      local later = second.first > first.first and second.row >= first.row
+        or (second.row > first.row and second.first >= first.first)
+      if later then
+        for t = 0, 1.1, 1 / 60 do
+          if ui_splash.block(b, t) then luaunit.assert_not_nil(ui_splash.block(a, t), a .. " before " .. b) end
+        end
       end
     end
   end
-  -- A later row never starts before the row above has begun.
-  luaunit.assert_nil(ui_splash.tile(0, 1, 0.05))
-  luaunit.assert_not_nil(ui_splash.tile(0, 1, 0.07))
-  luaunit.assert_equals(tiles_at(0.95), 128)
+  luaunit.assert_equals(blocks_at(1.1), #logo.blocks)
 end
 
-function test_ui_splash_tiles_lift_to_leave_the_word_which_then_fades()
-  luaunit.assert_equals(ui_splash.letter_level(1, 0.9), 0)
-  luaunit.assert_equals(tiles_at(1.7), 0)
-  for index = 1, 6 do luaunit.assert_equals(ui_splash.letter_level(index, 1.8), 15) end
+function test_ui_splash_blocks_lift_to_leave_the_word_which_then_fades()
+  luaunit.assert_equals(ui_splash.letter_level(1, 1.1), 0)
+  luaunit.assert_equals(blocks_at(1.9), 0)
+  for index = 1, 6 do luaunit.assert_equals(ui_splash.letter_level(index, 1.95), 15) end
   -- Letters fade one after another, left to right.
-  luaunit.assert_true(ui_splash.letter_level(1, 2.2) < ui_splash.letter_level(6, 2.2))
+  luaunit.assert_true(ui_splash.letter_level(1, 2.5) < ui_splash.letter_level(6, 2.5))
   for index = 1, 6 do luaunit.assert_equals(ui_splash.letter_level(index, ui_splash.DURATION), 0) end
 end
 
@@ -77,7 +93,7 @@ function test_ui_splash_draws_without_randomness_and_hands_over_to_the_ui()
   luaunit.assert_true(ui_drawn > 0)
   -- Before the fade, the application screen is not drawn underneath.
   ui_drawn = 0
-  with_recording_screen(function() ui_splash.draw(1.2, draw_ui) end)
+  with_recording_screen(function() ui_splash.draw(1.5, draw_ui) end)
   luaunit.assert_equals(ui_drawn, 0)
   -- The same time always draws the same frame.
   local a = with_recording_screen(function() ui_splash.draw(0.5) end)

@@ -1033,7 +1033,7 @@
         {
           "id": "note",
           "label": "Note",
-          "example": "E4 0 2 4 0",
+          "example": "E4 G4 B4",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
@@ -1073,13 +1073,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "source",
-          "label": "Source",
-          "example": "SRC1 M- S1 H-",
+          "id": "degree",
+          "label": "Degree",
+          "example": "+2 > +3 MERGED",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "source"
+            "field": "degree"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -1089,7 +1089,7 @@
         {
           "id": "pitch",
           "label": "Pitch",
-          "example": "64>64>64",
+          "example": "E4 > G4 HARMONY",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
@@ -1101,13 +1101,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "bypass",
-          "label": "Bypass",
-          "example": "NONE",
+          "id": "sent",
+          "label": "Sent",
+          "example": "G4",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "bypass"
+            "field": "sent"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -1121,7 +1121,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Information only: every output fact on one dashboard, no cursor. E1 opens Channel tasks; K2 returns to the Channel family (owner decision 25 September 2026, usability audit).",
+      "controls_explanation": "Information only, in the player's terms: the last note and the chord voices it played, velocity and length, the step, the pattern degree (and what merging made of it), the pitch in the scale (and the harmony's pitch when it moved it), and the note actually sent or why none was (MUTED, REST). Holding a step shows that step. E1 opens Channel tasks (owner decision 25 September 2026: the planned/scheduled/emitted pipeline and SRC/M/S/H codes were unreadable).",
       "state_explanation": "Label LAST for emitted playback, PREVIEW for deterministic stopped evaluation, and PENDING for uncomputed stochastic output. Never draw a previous note as the next result. Root muted, unused chord slots, missing device, zero velocity and skipped trig have explicit states. Five voices paginate; never squeeze five pitch labels into one row. Held-step provenance (existing): with a grid key held in rows 4..7 the first such step is inspected, otherwise the latest event; harmony_inspection.snapshot supplies source/merge/scale/harmony provenance, planned output, scheduled and emitted pitch and bypass (channel_edit_page_ui.lua:259-293). A step with no recorded event shows no provenance and never borrows another step's event. The hold must be observed on C06 without navigation (hold policy observe_in_place). Display observation must not advance random generators or emit preview MIDI. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [

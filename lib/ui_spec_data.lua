@@ -126,9 +126,9 @@ return {
         "note",
         "vel_len",
         "step",
-        "source",
+        "degree",
         "pitch",
-        "bypass",
+        "sent",
       },
     },
     ["C07"] = {

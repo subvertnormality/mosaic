@@ -366,7 +366,7 @@ Task lists name everything a page can show. Channel tasks: Masks, Trig params, O
 
 Some settings are staged before they take effect. Device, clock, scale and song settings show your change straight away but only apply when you press K3. K2, or leaving the screen with E1, cancels a staged change without touching what is already playing. [Merge Shape and Harmony](#musical-merge-and-voice-leading) keep a whole draft in the same way.
 
-When _Mosaic_ starts, a mosaic of tiles lays itself down across the screen, row by row, then lifts away to leave the _Mosaic_ name, which fades into the first screen. Any key, encoder or grid press skips it. Screens change instantly, without a transition. The start-up animation and the characters' movement can be turned off with [UI Motion](#ui-motion).
+When _Mosaic_ starts, the dots and bars of the _Mosaic_ logo lay themselves down across the screen, row by row, then lift away to leave the _mosaic_ wordmark, which fades into the first screen. Any key, encoder or grid press skips it. Screens change instantly, without a transition. The start-up animation and the characters' movement can be turned off with [UI Motion](#ui-motion).
 
 <img alt="Mosaic start-up animation" src="images/norns/splash.png" width="384" />
 
@@ -902,7 +902,7 @@ Length merge modes are set by holding shift (K1) and pressing the velocity merge
 
 #### Note Dashboard
 
-Choose Output from Channel tasks to see the last played notes on the currently selected channel, all on one screen: the note and its chord voices, velocity and length, the step, where the note came from, its planned, scheduled and sent pitch, and any bypass. Hold a step to see what that step plays instead, including the stages of a [Harmony](#harmony) event.
+Choose Output from Channel tasks to see the last note the selected channel played, all on one screen: **Note** is the note and the chord voices it played, **Vel / Len** its velocity and length, **Step** the step it came from, **Degree** the pattern degree (and what merging made of it, for example `+2 > +3 MERGED`), **Pitch** the pitch in the scale (and the harmony's pitch when Harmony moved it, for example `E4 > G4 HARMONY`), and **Sent** the note actually sent, or why none was (`MUTED`, `REST`). Hold a step to see what that step plays instead, including the stages of a [Harmony](#harmony) event.
 
 #### Clocks, Swing and Shuffle
 

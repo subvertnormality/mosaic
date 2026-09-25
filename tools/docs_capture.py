@@ -63,7 +63,7 @@ def main():
             driver.ui.turn(3, 1)
             driver.elapse(0.5)
             write_png(out / "note-masks.png", frame(driver))
-            driver.enc(1, 2)
+            driver.enc(1, 1)  # E1 opens Channel tasks on Masks
             driver.enc(2, 1)
             driver.elapse(0.5)
             write_png(out / "channel-tasks.png", frame(driver))
