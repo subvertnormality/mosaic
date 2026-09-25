@@ -7945,6 +7945,19 @@
    ],
    "status": "partial-domain-coverage",
    "domain": "Covered: NO EVENT before playback; after playback every Output field shows the latest played step (root, chord, velocity, length, step, source, planned, scheduled, emitted, bypass) and E3 and K3 on each field change nothing; holding a played step inspects it in place (header STnn, provenance to bypass via E2), steps 40 and 64 show NO EVENT, release returns to the latest event; no MIDI, all LEDs unchanged, K2 returns to the Channel family at channel scope and the phrase replays exactly. Not covered: Harmony stages (bypass other than NONE), PREVIEW/PENDING labels, five-voice pagination; E3/K3 while a step is held are the G10 edit gestures and open the edit family, so they are not inspection. K2 returns to the remembered family (Trig params here), not always Masks as the C06 control text says."
+  },
+  {
+   "id": "UI-ACCEPT-A18",
+   "sections": [
+    "MAN-015",
+    "MAN-016"
+   ],
+   "statement": "Every screen shows the same parts: the title row names the screen and its scope, the selected field's whole value is always shown, and the last line lists the controls for the screen or shows a tooltip; no screen draws a layout overflow.",
+   "cases": [
+    "M-UIACC-A18-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "50 live screens reached through public input (Channel C01-C07, C09, C12, C13 and the norns menu round trip; Merge M02, M03, M05-M07, M12-M14; Harmony H01-H05, H07-H11, H17, H19; Scale S01-S03; Pattern P01-P08 with two algorithm variants; Song A01-A03; tasks N01-N05; Rhythm Doctor R01) with header, overflow line, footer owner and selected value; long names, NONE/X/NO EVENT/0 sentinels and maximum values. Remaining: screens no public input shows on this build (C08, C10, C11, S04, S05, M04, M08-M11, H06, H12-H16, H18, F01-F08, R02-R16), art pose 1, Seed 65535, and the known defects the case pins (docs/ui-reimplementation/reviews/ACCEPTANCE.md)."
   }
  ],
  "statement_mappings": [

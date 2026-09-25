@@ -269,7 +269,7 @@ hooks["owner.dispatch_key"] = function(_, event) legacy_key(key_number(event)) e
 -- the trig-lock dial): E2 reaches the owner's handler, which moves, clamps and
 -- skips exactly as before, and focus follows the owner's selection.
 local OWNER_SELECTION = {masks = true, parameters = true, clock = true, device = true, scale = true,
-  scale_clock = true, song = true, song_clock = true, trig_options = true}
+  scale_clock = true, song = true, song_clock = true}
 
 hooks["focus.move_clamped"] = function(_, event)
   local screen = screen_entry()
@@ -468,6 +468,10 @@ dispatch_event = function(event, payload)
   if screen_entry().profile == "tasks" and (event == "K3.down") then
     payload = payload or {}
     payload.task = payload.task or s.field_id
+    -- Rows such as Rhythm Doctor are shown only for the current algorithm.
+    if payload.algorithm == nil and trigger_edit_page and trigger_edit_page.get_algorithm then
+      payload.algorithm = trigger_edit_page.get_algorithm()
+    end
   end
   local before = s.screen
   current.event, current.before = event, before
@@ -601,7 +605,7 @@ end
 local FOOTER = {
   masks = "E2 MASK  E3 SET", parameters = "E2 SLOT  E3 SET  K2 ASSIGN", history = "E3 MOVE  K2 UNDO  K3 REDO",
   clock = "E3 SET  K3 APPLY  K2 CANCEL", device = "E3 SET  K3 APPLY  K2 CANCEL",
-  assignment = "E3 CHOOSE  K3 ASSIGN  K2 BACK", scale = "E3 SET  K3 APPLY  K2 CANCEL",
+  assignment = "E3 PICK  K3 SET  K2 BACK", scale = "E3 SET  K3 APPLY  K2 CANCEL",
   scale_clock = "E3 SET  K3 APPLY  K2 CANCEL", song = "E3 SET  K3 APPLY  K2 CANCEL",
   song_clock = "E3 SET  K3 APPLY  K2 CANCEL", trig_options = "E3 SET  K3 APPLY",
   feature = "E3 SET  K3 APPLY  K2 BACK", tasks = "E2 CHOOSE  K3 OPEN", read_only = "E1 TASKS",
@@ -654,9 +658,18 @@ function ui_live.view_model()
   local focus_id = focus[s.screen]
   for i, f in ipairs(fields) do if f.id == focus_id then index = i end end
   local footer = FOOTER[screen.profile] or ""
+  -- Detail inspectors ignore E1; K2 returns to where they were opened from.
+  if s.screen == "C08" or s.screen == "C09" or s.screen == "S04" then footer = "K2 BACK" end
   -- A focused screen shows one field: the footer names its neighbours instead.
   if screen.layout == "focused" and #fields > 1 then
-    local previous, following = fields[index - 1], fields[index + 1]
+    -- Owner-selection screens move E2 over their editable fields only.
+    local reach, at = fields, index
+    if OWNER_SELECTION[screen.profile] then
+      reach = {}
+      for _, f in ipairs(fields) do if f.kind == "value" or f.kind == "action" or f.id == fields[index].id then reach[#reach + 1] = f end end
+      for i, f in ipairs(reach) do if f.id == fields[index].id then at = i end end
+    end
+    local previous, following = reach[at - 1], reach[at + 1]
     footer = {left = previous and ("< " .. previous.label) or "| START",
       right = following and (following.label .. " >") or "END |"}
   end
