@@ -25,10 +25,11 @@ def dashboard_cells(c, candidates):
 def dashboard_channel_select(c):
     absent = {'Note': ['X', '-1'], 'Vel': ['X', '-1'], 'Len': ['X', '-1.0', '-1']}
     c.configure(); c.tap(3, 8)
-    c.ui.channel_page('note_dashboard')
+    c.ui.channel_page('note_dashboard', confirm=False); c.ui.expect_header('note_dashboard', channel=1)
     for channel in (2, 1):
         c.tap(channel, 1); c.elapse(.3)
-        c.ui.channel_page('note_dashboard', channel=channel)
+        c.ui.channel_page('note_dashboard', channel=channel, confirm=False)
+        c.ui.expect_header('note_dashboard', channel=channel)
         cells = dashboard_cells(c, absent)
         c.results.append(dict(kind='dashboard-after-channel-select', channel=channel, **cells))
         assert cells == {'Note': 'X', 'Vel': 'X', 'Len': 'X'}, ('Dashboard after selecting channel %d' % channel, cells)

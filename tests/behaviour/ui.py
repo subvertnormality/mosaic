@@ -1292,7 +1292,9 @@ class Ui:
         same page is reopened through Channel Tasks and its header confirmed.
         """
         self.select_channel(channel)
-        self.channel_page(page, channel=channel)
+        self.channel_page(page, channel=channel, confirm=False)
+        # A waited header: the controlled clock redraws only as time advances.
+        self.expect_header(page, channel=channel)
 
     def _output_label(self, field):
         from ui_map import OUTPUT_FIELDS

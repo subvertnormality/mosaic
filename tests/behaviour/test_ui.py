@@ -2879,10 +2879,12 @@ class OutputFieldVerbTests(unittest.TestCase):
     def test_select_channel_on_page_reopens_the_page_through_tasks(self):
         from ui import Ui
         ui = Ui(FakeDriver())
-        with patch.object(ui, "select_channel") as select, patch.object(ui, "channel_page") as page:
+        with patch.object(ui, "select_channel") as select, patch.object(ui, "channel_page") as page, \
+                patch.object(ui, "expect_header") as header:
             ui.select_channel_on_page(2, "midi_config")
         select.assert_called_once_with(2)
-        page.assert_called_once_with("midi_config", channel=2)
+        page.assert_called_once_with("midi_config", channel=2, confirm=False)
+        header.assert_called_once_with("midi_config", channel=2)
 
     def test_selected_mask_value_reads_the_full_label_value_line(self):
         from ui import Ui
