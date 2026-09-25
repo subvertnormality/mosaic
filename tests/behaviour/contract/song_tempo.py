@@ -12,6 +12,9 @@ def song_tempo_bounds(c):
         c.key(3)
     for label,slot,bpm,edit in [('minimum',1,30,-1),('minimum-other-slot',2,30,0),('maximum',2,300,1),('maximum-other-slot',1,300,0),('restore',1,90,2),('restored-other-slot',2,90,0)]:
         c.tap(slot,1)
+        # A stopped slot select shows that slot's Slot Setup (spec flow G36);
+        # Tempo is on Global Feel, where the old Global settings page stayed.
+        c.ui.open_task('Song','tempo_feel')
         if edit in (-1,1):extreme(edit)
         elif edit==2:extreme(-1);c.enc(3,60);c.key(3)
         # Global Feel (A02) shows the slot's Tempo as its focused selected field.
