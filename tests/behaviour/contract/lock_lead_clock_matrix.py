@@ -198,7 +198,10 @@ def build(c, condition):
     c.hold_tap((start, 4), (end, 4))  # Channel range; step 5 has no trig.
     if condition.get('global_length'):
         set_global_length(c, condition['global_length'])
-    c.ui.turn(1, -3); assign_trig_parameter(c, 'CC 1')
+    # The Channel button (in set_global_length) lands on the remembered family,
+    # not the last page, so Trig params is opened by name rather than by E1 -3.
+    c.ui.channel_page('trig_locks', confirm=False); c.ui.wait_for_header('trig_locks', channel=1)
+    assign_trig_parameter(c, 'CC 1')
     c.enc(3, DEFAULT + 1)  # Default Parameter Values: from Off to 20.
     for step, value in STEP_LOCKS:
         if value is None:
