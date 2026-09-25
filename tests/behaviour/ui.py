@@ -1400,3 +1400,16 @@ class Ui:
         label = self._mask_label(field)
         self.driver.wait(lambda state: selected_field_matches(state, "overview_masks", label, value))
         self.driver.results.append(dict(kind="selected-mask", field=field, label=label, value=str(value), passed=True))
+
+    # ---- Recording / Memory / numeric merging family ----
+
+    def leave_merge_detail(self, channel=1):
+        """Leave Merge detail (C09) for the Channel family with the Channel button.
+
+        A held merge-mode button + pattern tap (flow G19) follows to Merge
+        detail and it stays after the release (acceptance A10); the retired UI
+        stayed on the Channel page. The Channel button (G01) returns to the
+        remembered family and clears the return frames: K2 on C09 pops one
+        frame per follow, and a second follow from C09 pushes C09 itself."""
+        self.wait_for_header("merge_detail", channel=channel)
+        self.tap_control("channel_editor")

@@ -2922,5 +2922,32 @@ class OutputFieldVerbTests(unittest.TestCase):
         self.assertEqual(oracle.call_args.args[1:], ("overview_masks", "Chord 2", "-7th"))
 
 
+class OverviewCellMarkerOracleTests(unittest.TestCase):
+    """The C02 slide / held-lock marker oracle (frame_oracle.overview_cell_marker)."""
+
+    @staticmethod
+    def state(commands):
+        from frame_oracle import render
+        return {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+
+    def test_reads_the_letter_drawn_in_the_cells_top_right_corner(self):
+        from frame_oracle import overview_cell_marker
+
+        # Trig params cells are 25 px wide from y9: cell 1's marker is drawn at (19,16),
+        # cell 7's (second row, second column) at (44,34).
+        for letter in ("S", "L"):
+            with self.subTest(letter=letter):
+                self.assertEqual(overview_cell_marker(self.state([(19, 16, 15, letter)]), "overview_params", 1), letter)
+                self.assertEqual(overview_cell_marker(self.state([(44, 34, 15, letter)]), "overview_params", 7), letter)
+
+    def test_no_marker_or_another_cells_marker_is_none(self):
+        from frame_oracle import overview_cell_marker
+
+        self.assertIsNone(overview_cell_marker(self.state([]), "overview_params", 1))
+        self.assertIsNone(overview_cell_marker(self.state([(44, 16, 15, "S")]), "overview_params", 1))
+        # A dimmer letter is not the marker.
+        self.assertIsNone(overview_cell_marker(self.state([(19, 16, 9, "S")]), "overview_params", 1))
+
+
 if __name__ == "__main__":
     unittest.main()
