@@ -30,12 +30,8 @@ def recording_lock_song(c, persist=False):
     c.tap(6, 8); c.tap(2, 7)
     for _ in range(3): c.tap(8, 7)                               # global length 4
     # Song editor page 2: tempo 90 -> 30 (its minimum), before the copy.
-    import base64
-    from frame_oracle import render
     c.ui.turn(1, 1); c.enc(3, -60); c.key(3)
-    expected = render([(0, 26, 15, '30')])
-    c.wait(lambda s: all(base64.b64decode(s['frame']['pixels_base64'])[(y*128+x)*4+k] == expected[(y*128+x)*4+k]
-                         for y in range(20, 28) for x in range(36) for k in range(3)))
+    c.ui.expect_selected_field('focused', 'Tempo', '30')          # Global feel (A02) shows the applied tempo
     assert c.snapshot()['diagnostics']['tempo'] == 30
     c.ui.turn(1, -1)
     c.hold_tap((1, 1), (2, 1)); c.tap(1, 1); c.tap(3, 8)         # slot 2 = copy of slot 1; play from slot 1

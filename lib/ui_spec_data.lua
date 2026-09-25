@@ -81,7 +81,7 @@ return {
       ["existing_route"] = "C04",
       ["parent"] = "N01",
       ["layout"] = "focused",
-      ["art"] = nil,
+      ["art"] = "metronome",
       ["fields"] = {
         "rate",
         "feel_source",
@@ -223,7 +223,7 @@ return {
       ["existing_route"] = "S02",
       ["parent"] = "N02",
       ["layout"] = "focused",
-      ["art"] = nil,
+      ["art"] = "metronome",
       ["fields"] = {
         "rate",
         "selected_range",
@@ -420,7 +420,7 @@ return {
       ["existing_route"] = "A02",
       ["parent"] = "N05",
       ["layout"] = "focused",
-      ["art"] = nil,
+      ["art"] = "metronome",
       ["fields"] = {
         "tempo",
         "swing_type",
@@ -649,7 +649,7 @@ return {
       ["existing_route"] = "F01",
       ["parent"] = "N01",
       ["layout"] = "focused",
-      ["art"] = nil,
+      ["art"] = "metronome",
       ["fields"] = {
         "active_rate",
         "draft_rate",

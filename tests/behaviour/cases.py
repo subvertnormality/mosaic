@@ -2006,7 +2006,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     if boundary_witness:
         # An independent audible channel marks the active step through MIDI.
         # Same four-step range and clock; no application-state oracle.
-        ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+        ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
         ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4))
         # Build a separate pattern; channel1's source will be cleared below.
         ui.pattern_editor();ui.tap_control('cell',(2,1))
@@ -2027,7 +2027,9 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
         for step in range(1, 65)
     })
     if clock_delta:
-        ui.turn(1,-1);ui.wait_for_header('clock_mods',channel=1)
+        # The Channel button returns to the remembered edit family, not Device;
+        # Clock (the page before Device) opens through Channel Tasks.
+        ui.channel_page('clock_mods',confirm=False);ui.wait_for_header('clock_mods',channel=1)
         ui.set_value(clock_delta);ui.press_key(3)
     ui.press_key(1);ui.turn(1,4);ui.press_key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
@@ -2118,7 +2120,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
 
 def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1,disarm_while_held=False):
     ui=c.ui
-    c.configure();ui.select_channel_on_page(2,'midi_config');ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
     ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
@@ -2195,7 +2197,7 @@ def keyboard_input_channels(c):
 
 def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
     ui=c.ui
-    c.configure();ui.select_channel_on_page(2,'midi_config');ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     for order in ((0,1),(1,0)):
         ui.tap_control('cell',(1,1));marker=c.snapshot()['midi_count']
         c.action(type='midi',port=1,bytes=[144,72,90])
@@ -2264,7 +2266,7 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
 def recorded_input_sources(c,second_port=2,second_channel=1):
     hold_ns=500000000;expected_duration=.5;release_status=128;input_channel=1;disarm_while_held=False
     ui=c.ui
-    c.configure();ui.select_channel_on_page(2,'midi_config');ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
     ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'

@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "f0a226db12bcd5d16009ebf66eaec858348d986a6c6cd3404d2f2c7d222c9579",
+ "manual_sha256": "9b15119b60233185976cf22231c630dfbff19bf94aa024e3fa7982a12f876ea2",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1478,7 +1478,7 @@
    "level": 5,
    "start_line": 1368,
    "end_line": 1371,
-   "text_sha256": "d92d4413788291966d1407dd9ecadd5a3e75ca387b04a1e851daabcfcf46eab2"
+   "text_sha256": "4f2f5e76ab3c5968b5b1a8a7ab2d2a431ba53eb573b2559ac32f7101070abfb3"
   },
   {
    "id": "MAN-108",
@@ -1607,7 +1607,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "f0a226db12bcd5d16009ebf66eaec858348d986a6c6cd3404d2f2c7d222c9579"
+   "sha256": "9b15119b60233185976cf22231c630dfbff19bf94aa024e3fa7982a12f876ea2"
   },
   {
    "path": "cheat_sheet.html",
@@ -7957,7 +7957,7 @@
     "M-UIACC-A18-001"
    ],
    "status": "partial-domain-coverage",
-   "domain": "50 live screens reached through public input (Channel C01-C07, C09, C12, C13 and the norns menu round trip; Merge M02, M03, M05-M07, M12-M14; Harmony H01-H05, H07-H11, H17, H19; Scale S01-S03; Pattern P01-P08 with two algorithm variants; Song A01-A03; tasks N01-N05; Rhythm Doctor R01) with header, overflow line, footer owner and selected value; long names, NONE/X/NO EVENT/0 sentinels and maximum values. Remaining: screens no public input shows on this build (C08, C10, C11, S04, S05, M04, M08-M11, H06, H12-H16, H18, F01-F08, R02-R16), art pose 1, Seed 65535, and the known defects the case pins (docs/ui-reimplementation/reviews/ACCEPTANCE.md)."
+   "domain": "50 live screens reached through public input (Channel C01-C07, C09, C12, C13 and the norns menu round trip; Merge M02, M03, M05-M07, M12-M14; Harmony H01-H05, H07-H11, H17, H19; Scale S01-S03; Pattern P01-P08 with two algorithm variants; Song A01-A03; tasks N01-N05; Rhythm Doctor R01) with header, overflow line, footer owner and selected value; long names, NONE/X/NO EVENT/0 sentinels and maximum values. Remaining: screens no public input shows on this build (C08, C10, C11, S04, S05, M04, M08-M11, H06, H12-H16, H18, F01-F08, R02-R16), art pose 1, Seed 65535 (docs/ui-reimplementation/reviews/ACCEPTANCE.md)."
   }
  ],
  "statement_mappings": [

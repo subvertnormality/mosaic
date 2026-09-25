@@ -63,13 +63,16 @@ def recording_lifetime(c,ending,scale_page=False):
             ui.expect_trig_parameter_visible('stored_patch_cc%d' % cc_number);ui.press_key(3);ui.press_key(2)
             if ending=='same-assignment':replay=[24,64,64,64]
         else:
-            ui.turn(1,3);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3);ui.turn(1,-3)
+            # Device and Trig params open through Channel Tasks; the prompt
+            # routes keep the reassignment inside the two steps it must fit in.
+            ui.channel_page_promptly('midi_config');ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+            ui.channel_page_promptly('trig_locks')
             port=2;channel=1;replay=[65]*4
             # Confirmation clears device locks and resets assignments, including
             # route-only changes. Reassign before wrap to expose latent dirty state.
             # Reuse the offset found at setup: scanning the parameter list
             # again here takes longer than the two steps this must fit inside.
-            ui.assign_trig_parameter_key('stored_patch_cc1',offset=cc1_offset)
+            ui.assign_trig_parameter_promptly('stored_patch_cc1',cc1_offset)
             assert len(notes(c.snapshot()))<4,'Reassignment missed pre-wrap step4'
     state=c.wait(lambda state:len(notes(state))>=wanted_steps,timeout=18)
     ons=notes(state);assert len(ons)==wanted_steps,ons
