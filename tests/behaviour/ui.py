@@ -1290,3 +1290,26 @@ class Ui:
         except KeyError as error:
             raise UiMapError("unknown Mosaic option/value: " + str(option)) from error
         self.expect_menu_option_row(label, value, top=top)
+
+    # ---- Harmony / Merge Shape family (live feature screens M02..M14, H01..H19) ----
+    # The feature editors own their routes; the live UI shows them as focused
+    # (one selected row) or detail (rows) screens and remembers each screen's
+    # focus, so recipes select a row from a saturated position.
+
+    def feature_root(self):
+        """E1 on a Merge Shape/Harmony child (or a dirty root) returns to the
+        clean feature root, discarding an unapplied draft (one detent)."""
+        self.driver.enc(1, 1)
+
+    def select_row(self, name, row):
+        """Select a detail/focused screen's ``row`` (0-based) from its first row."""
+        self.select_field(name, saturate=-24, then=row)
+
+    def expect_selected_field(self, layout, label=None, value=None, art=False):
+        """The selected field shows ``label``/``value`` on its layout's exact route."""
+        from frame_oracle import selected_field_matches
+
+        self.driver.wait(lambda state: selected_field_matches(
+            state, layout, label, value, art))
+        self.driver.results.append(dict(kind="selected-field", layout=layout,
+                                        label=label, value=value, matched=True))

@@ -85,10 +85,11 @@ class UiLayerGuardTests(unittest.TestCase):
         )
         self.assertFalse(hasattr(ordinary, 'foundation_workflow'))
         node = ast.parse(inspect.getsource(owner.foundation_workflow)).body[0]
-        # Interpreter-stable digest of the same AST (CI runs Python 3.8).
+        # Interpreter-stable digest of the same AST (CI runs Python 3.8), as
+        # migrated to the live UI's focused Rhythm screen.
         self.assertEqual(
             ast_digest(node),
-            'cb0a4e08ce7744679ddaee200b4a60b9c2b5c5d40a293e53240beec0b3fb49e2',
+            '1c6172676fe1640e887a17fc07da3ea1b05772ef271da25d3afa2d4f055a6282',
         )
 
     def test_fast_external_acquisition_has_exact_contract_owner(self):
