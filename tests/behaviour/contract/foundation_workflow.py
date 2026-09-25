@@ -29,7 +29,7 @@ def foundation_workflow(c):
     c.ui.expect_selected_field("focused", "Add accent", "70", art=True)
     # The footer carries status/transport tooltips that vary by lane. Bind the
     # stable editor body; MIDI below separately proves the active result.
-    documentation_frame(c, 'a59829bdac7f23ec04f084d34b63b798f04a9e7e032e707fb33bcee6f1be41f3',
+    documentation_frame(c, '7e00869b95cd393028d1a6371708b36c02b83f2e710aa5b64534d24f3fad9301',
                         'images/merge-shape-foundation.png', stable_rows=55)
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (62, 117), (64, 107), (65, 97), (60, 70), (60, 70))]
