@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "e4219c4d4db958e72685ded247a1bc6d1096b837cc3a7cb2bb87823b345b042d",
+ "manual_sha256": "10e8ee84bad453b3e88929fcc23eddd519a64e8ef07f48c287510d3920699ed9",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1539,15 +1539,15 @@
    "title": "Harmony",
    "level": 3,
    "start_line": 1431,
-   "end_line": 1496,
-   "text_sha256": "d993a9dfd1f4c16c1b03c048140683acc7cae254446a3d2cc8e134c9d6cc1f93"
+   "end_line": 1497,
+   "text_sha256": "4a421af50e0a65c5e5b076f705fc076245283c75cec4080271b8751dd14cb9a3"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1497,
-   "end_line": 1508,
+   "start_line": 1498,
+   "end_line": 1509,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1559,8 +1559,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1509,
-   "end_line": 1518,
+   "start_line": 1510,
+   "end_line": 1519,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1570,8 +1570,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1519,
-   "end_line": 1522,
+   "start_line": 1520,
+   "end_line": 1523,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1581,8 +1581,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1523,
-   "end_line": 1529,
+   "start_line": 1524,
+   "end_line": 1530,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1607,7 +1607,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "e4219c4d4db958e72685ded247a1bc6d1096b837cc3a7cb2bb87823b345b042d"
+   "sha256": "10e8ee84bad453b3e88929fcc23eddd519a64e8ef07f48c287510d3920699ed9"
   },
   {
    "path": "cheat_sheet.html",
