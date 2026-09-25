@@ -336,7 +336,11 @@ function editor.new(kind)
       fields[#fields+1]=action("Reset map","TONE_MAP_RESET",{id="reset_map"});return fields
     elseif self.screen=="TONE_MAP_RESET"then
       local binding=pattern_harmony.binding_key(self.channel)
-      return{readonly("Reset map",function()return binding end,{id="reset_map"}),
+      -- The map being reset, as the player knows it: its patterns and note merge.
+      local parts={};for part in binding:gmatch("[^|]+")do parts[#parts+1]=part end
+      local merge=parts[3]and(parts[3]:match("^pattern_number_(%d+)$")and("PAT "..parts[3]:match("(%d+)$"))or parts[3]:upper())or"AVERAGE"
+      local shown="PAT "..((parts[2]and parts[2]~="")and parts[2]or"NONE").." / "..merge
+      return{readonly("Reset map",function()return shown end,{id="reset_map"}),
         action("Confirm reset",nil,{id="confirm_reset",invoke=function()
           local map=value.pattern_maps[binding]or{schema_version=1,revision=0,assignments={}}
           value.pattern_maps[binding]=map;map.assignments={};map.revision=(map.revision or 0)+1
