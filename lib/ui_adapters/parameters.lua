@@ -63,10 +63,17 @@ return function(ui_adapters, owners)
       local lock_param = channel.trig_lock_params[n] or {}
       local text, state = dial_text(dial)
       if not lock_param.param_id then state = "none" end
-      local held_slide = false
+      local held_slide, held_lock = false, false
       for _, s in ipairs(held) do
         if program.get_step_param_slide(channel, s, n) then held_slide = true end
+        local bank = channel.step_trig_lock_banks and channel.step_trig_lock_banks[s]
+        if bank and bank[n] ~= nil then held_lock = true end
       end
+      local channel_slide = program.get_channel_param_slide(channel, n) and true or false
+      -- Cell marker: S a slide (held step, or channel-wide with nothing held), L a
+      -- lock on a held step (spec C02: "L indicates a lock in held scope, S a slide").
+      local marker = nil
+      if held_slide or (#held == 0 and channel_slide) then marker = "S" elseif held_lock then marker = "L" end
       descriptors[#descriptors + 1] = {
         id = channel_edit_parameters.slot_field_id(n),
         label = (lock_param.name and lock_param.name ~= "") and lock_param.name or tostring(dial.top_label),
@@ -84,9 +91,10 @@ return function(ui_adapters, owners)
           min = dial.min_value, max = dial.max_value, off = dial.off_value,
           enum = dial.ui_labels, raw = dial.value, state = state,
           bottom_label = dial.bottom_label,
-          channel_slide = program.get_channel_param_slide(channel, n) and true or false,
-          held_slide = held_slide
+          channel_slide = channel_slide,
+          held_slide = held_slide, held_lock = held_lock
         },
+        marker = marker,
         edit = function(delta)
           return channel_target.per_detent(delta, function(d)
             return controller.handle_trig_lock_param_change_by_direction(d, program.get_selected_channel(), n)

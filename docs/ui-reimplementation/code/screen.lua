@@ -57,7 +57,9 @@ function M.draw(v)
   for k=1,math.min(#v.fields,cols*2)do
    local f=v.fields[k];local x=((k-1)%cols)*w;local y=9+math.floor((k-1)/cols)*18
    if k==v.selected then rect(x,y,w-2,17,15,true)end
-   text(fit(f.short_label or f.label,w-5),x+2,y+7,8,k==v.selected and 15 or 9)
+   text(fit(f.short_label or f.label,f.marker and w-11 or w-5),x+2,y+7,8,k==v.selected and 15 or 9)
+   -- A one-letter state marker (S slide, L held lock) owns the cell's top-right corner.
+   if f.marker then rect(x+w-6,y+1,4,7,0);text(f.marker,x+w-6,y+7,8,15)end
    local c=tostring(f.compact_value or f.value)
    if (exact(f)and c:find('~',1,true))or width(c)>w-5 then c=MORE;r.marked[#r.marked+1]=f.id end
    text(c,x+2,y+15,8,13)

@@ -23725,7 +23725,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "0f79caf4e5761826337f75f89640c69000881b166d20fce01fdb514dc03a8d3e"
+      "sha256": "0bfdf63f731ec2ef3938187fba3741f9d345ab7e29270557230ec39727755012"
     }
   },
   "guardrails": [
@@ -31803,7 +31803,8 @@
       "kind": "value|readonly|action|inspection|unavailable",
       "visible": "boolean",
       "enabled": "boolean",
-      "domain": "exact original owner descriptor; do not infer from formatted string"
+      "domain": "exact original owner descriptor; do not infer from formatted string",
+      "marker": "optional one-letter overview cell state: S slide, L lock in held scope (C02); drawn at the cell's top-right corner"
     },
     "optional": {
       "cells": "64 Cell entries: level0..15,selected bool,playing bool; present only pattern64",

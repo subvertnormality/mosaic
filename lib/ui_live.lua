@@ -630,7 +630,7 @@ function ui_live.view_model()
     -- Task rows are destinations, not values: their screen ids stay internal.
     local value = screen.profile == "tasks" and "" or (d.value or "")
     fields[#fields + 1] = {id = d.id, label = d.label, short_label = d.short_label, value = value,
-      compact_value = d.compact_value, kind = kind, visible = true, enabled = d.enabled}
+      compact_value = d.compact_value, kind = kind, visible = true, enabled = d.enabled, marker = d.marker}
     ::continue::
   end
   local index = 1

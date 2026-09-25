@@ -514,7 +514,7 @@ def ui_accept_a10(c):
     c.enc(2, -6)
     _expect_detail(c, 'Patterns', '01 02', 'merge-patterns')
     c.enc(2, 1)
-    _expect_detail(c, 'Trig mode', 'skip', 'merge-trig-mode-default')
+    _expect_detail(c, 'Trig mode', 'SKIP', 'merge-trig-mode-default')
     # Skip: trigs only where exactly one pattern has one (steps 3 and 4).
     c.playback(_melody([(64, 107), (65, 97)]), cycles=2)
     c.key(2)  # C09: E1 disabled; K2 returns to the Channel family (Trig params, passed on the way in)
@@ -540,11 +540,11 @@ def ui_accept_a10(c):
         ui.tap_control('pattern_slot', 3)
         _live_header(c, 'MERGE DETAIL', 'CH01', 'detail', 'note-merge-source')
         _expect_footer(c, 'Note merge mode pattern 3', 'note-merge-3')  # characterisation
-    # Merge detail keeps its own row (Trig mode); the assignment is still patterns 1 and 2.
-    # (Selecting the Note / vel row here paints LAYOUT OVERFLOW: its value
-    # "pattern_number_3 / average" is wider than the row; reported as an app bug, so the
-    # source row is not selected by this case.)
-    _expect_detail(c, 'Trig mode', 'all', 'follow-keeps-merge-row')
+    # Merge detail keeps its own row (Trig mode); the assignment is still patterns 1 and 2,
+    # and the note merge source reads as the manual names it.
+    _expect_detail(c, 'Trig mode', 'ALL', 'follow-keeps-merge-row')
+    c.enc(2, 1)
+    _expect_detail(c, 'Note / vel', 'PAT 3 / AVERAGE', 'note-merge-source-row')
     c.enc(2, -3)
     _expect_detail(c, 'Patterns', '01 02', 'source-not-assigned')
     c.led_values(PATTERN_ROW, [15, 15] + [2] * 14)

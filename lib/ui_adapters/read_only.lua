@@ -216,15 +216,23 @@ return function(ui_adapters, owners)
   end
 
   -- C09: the selected channel's legacy merge modes, as stored.
+  -- Merge modes as the manual names them: SKIP, AVERAGE, PAT 3 (never an engine id).
+  local function merge_mode(mode)
+    if mode == nil then return "NONE" end
+    local number = tostring(mode):match("^pattern_number_(%d+)$")
+    if number then return "PAT " .. number end
+    return (tostring(mode):gsub("_", " "):upper())
+  end
+
   function readers.C09()
     local channel = src("program").get_selected_channel()
     local patterns, numbers = pattern_list(channel)
     return {
       readonly("patterns", "Patterns", patterns, {patterns = numbers}),
-      readonly("trig_mode", "Trig mode", tostring(channel.trig_merge_mode or "NONE")),
-      readonly("note_vel", "Note / vel", tostring(channel.note_merge_mode or "NONE") .. " / " ..
-        tostring(channel.velocity_merge_mode or "NONE")),
-      readonly("length_mode", "Length mode", tostring(channel.length_merge_mode or "NONE"))
+      readonly("trig_mode", "Trig mode", merge_mode(channel.trig_merge_mode), {raw = channel.trig_merge_mode}),
+      readonly("note_vel", "Note / vel", merge_mode(channel.note_merge_mode) .. " / " ..
+        merge_mode(channel.velocity_merge_mode), {note = channel.note_merge_mode, velocity = channel.velocity_merge_mode}),
+      readonly("length_mode", "Length mode", merge_mode(channel.length_merge_mode), {raw = channel.length_merge_mode})
     }
   end
 
