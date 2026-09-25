@@ -1186,7 +1186,15 @@ class Ui:
                 raise UiMapError("expected %r, observed %r" % (expected, self._observed_title(state)))
         else:
             state = self.driver.snapshot()
-            if not self._header_matches(state, page, params):
+            # A newly opened screen's body (scope line included) is uncovered
+            # by a short decorative wipe drawn frame by frame (ui_motion
+            # WIPE_FRAMES); let at most one logical second run for it.
+            for _ in range(33):
+                if self._header_matches(state, page, params):
+                    break
+                self.driver.elapse(.03)
+                state = self.driver.snapshot()
+            else:
                 raise UiMapError("expected %r, observed %r" % (expected, self._observed_title(state)))
         self.driver.results.append(dict(kind="ui-confirm", page=page, **params))
     def seek_native_parameter_root(self, root):

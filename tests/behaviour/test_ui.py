@@ -2279,12 +2279,27 @@ class UiObservationTests(unittest.TestCase):
     def test_confirmation_fails_closed_with_expected_and_observed_title(self):
         from ui import Ui, UiMapError
 
-        driver = FakeDriver(states=[{"frame": {"pixels_base64": "ignored"}}])
+        driver = FakeDriver(states=[{"frame": {"pixels_base64": "ignored"}}] * 34)
         ui = Ui(driver)
         ui._header_matches = lambda state, page, params: False
         ui._observed_title = lambda state: "MEMORY CH03"
         with self.assertRaisesRegex(UiMapError, "expected 'DEVICE CH03', observed 'MEMORY CH03'"):
             ui.confirm_header("midi_config", channel=3)
+        # Controlled time runs one bounded logical second for the screen wipe.
+        self.assertEqual(driver.calls.count(("elapse", .03)), 33)
+        self.assertEqual(driver.results, [])
+
+    def test_controlled_confirmation_lets_the_screen_wipe_finish(self):
+        from ui import Ui
+
+        wiped, settled = {"frame": "wipe"}, {"frame": "settled"}
+        driver = FakeDriver(states=[wiped, wiped, settled])
+        ui = Ui(driver)
+        ui._header_matches = lambda state, page, params: state is settled
+        ui.confirm_header("harmony", channel=1)
+        self.assertEqual(driver.calls, [("snapshot",), ("elapse", .03), ("snapshot",),
+                                        ("elapse", .03), ("snapshot",)])
+        self.assertEqual(driver.results, [{"kind": "ui-confirm", "page": "harmony", "channel": 1}])
 
     def test_pick_device_preserves_seek_recipe_and_result(self):
         from ui import Ui
