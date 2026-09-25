@@ -27,7 +27,9 @@ def trigless_slide_clock(c):
     c.ui.tap_control('pattern_editor'); c.ui.tap_step(3); c.ui.tap_control('channel_editor')
     c.ui.open_patch_control(setup=False); c.ui.turn_patch_control(63); c.ui.turn_patch_control(1)
     c.ui.expect_patch_value(63); c.ui.press_key(1)
-    c.ui.turn(1, -3); c.ui.assign_trig_parameter_key('stored_patch_cc1')
+    # The Channel button returned to the remembered family, not Device; Trig params opens through Tasks.
+    c.ui.channel_page('trig_locks', confirm=False); c.ui.wait_for_header('trig_locks', channel=1)
+    c.ui.assign_trig_parameter_key('stored_patch_cc1')
     for step, value in [(1, 24), (3, 96)]:
         with c.ui.hold_step(step):
             c.elapse(.05); c.ui.encoder_event(3, -126); c.ui.turn(3, value + 1)

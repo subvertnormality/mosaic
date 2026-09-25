@@ -36,10 +36,10 @@ def memory_truncate_isolation(c):
     ui.channel_page("memory", "midi_config", confirm=False)
     record(c, ui, 1, 1, 72, 90); record(c, ui, 1, 2, 76, 80); counter(ui, 1, 2, 2)
     ui.select_channel(2); record(c, ui, 2, 1, 67, 70); counter(ui, 2, 1, 1)
-    ui.select_channel(1); counter(ui, 1, 2, 2)
+    ui.select_channel_on_page(1, "memory"); counter(ui, 1, 2, 2)
     shift(c, ui, 3); counter(ui, 1, 0, 0)                               # K1+K3: channel 1 forgets its history
-    ui.select_channel(2); counter(ui, 2, 1, 1); ui.turn(3, -1); counter(ui, 2, 0, 1)   # channel 2 keeps and undoes
-    ui.select_channel(1); counter(ui, 1, 0, 0); c.playback(applied, cycles=2)
+    ui.select_channel_on_page(2, "memory"); counter(ui, 2, 1, 1); ui.turn(3, -1); counter(ui, 2, 0, 1)   # channel 2 keeps and undoes
+    ui.select_channel_on_page(1, "memory"); counter(ui, 1, 0, 0); c.playback(applied, cycles=2)
     marks = {p.name: p.stat().st_mtime_ns for p in c.data_directory.glob('autosave.*')}
     for _ in range(3): c.elapse(21)
     c.wait(lambda _: all((c.data_directory/n).is_file() and (c.data_directory/n).stat().st_mtime_ns != marks.get(n)
@@ -53,7 +53,7 @@ def memory_truncate_isolation(c):
         # Preserve the physical cold-restart page route: exactly -5, then +2.
         d_ui.turn(1, -5); d_ui.turn(1, 2)
         counter(d_ui, 1, 0, 0); d.playback(applied, cycles=2)
-        d_ui.select_channel(2); counter(d_ui, 2, 0, 1)
+        d_ui.select_channel_on_page(2, "memory"); counter(d_ui, 2, 0, 1)
     except Exception:
         try: d.finish()
         except Exception: pass
