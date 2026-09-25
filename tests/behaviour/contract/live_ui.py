@@ -8,14 +8,24 @@ splash is checked structurally (tile coverage), never by an image.
 """
 import base64
 
-TILE_CENTRES = [(column * 8 + 3, row * 8 + 3) for row in range(8) for column in range(16)]
+import re
+from pathlib import Path
+
+# The splash draws the logo's blocks (lib/ui_splash_logo.lua, generated from
+# images/logo.svg): dots and pills on a 15 x 9 grid of 8 x 7 px cells from x 4.
+_LOGO = (Path(__file__).resolve().parents[3] / "lib" / "ui_splash_logo.lua").read_text()
+_BLOCKS = [tuple(int(v) for v in m) for m in re.findall(
+    r"\{row = (\d+), first = (\d+), last = (\d+), level = \d+\}", _LOGO)]
+TILE_CENTRES = [(4 + column * 8 + 3, row * 7 + 3)
+                for row, first, last in _BLOCKS for column in range(first, last + 1)]
 
 
 def _lit_tiles(state):
-    """Tiles whose centre and inner corners (+/-2 px) are all lit: a laid tile,
-    never a letter stroke of the revealed name."""
+    """Logo block cells whose 4 x 4 core is lit at its centre and corners: a laid
+    block, never a letter stroke of the revealed wordmark."""
     pixels = base64.b64decode(state["frame"]["pixels_base64"])
-    points = ((0, 0), (-2, -2), (2, -2), (-2, 2), (2, 2))
+    # A dot's centre is a pixel corner (x, y): its 4 x 4 core is pixels x-2..x+1.
+    points = ((-1, -1), (-2, -2), (1, -2), (-2, 1), (1, 1))
     return sum(1 for x, y in TILE_CENTRES
                if all(pixels[((y + dy) * 128 + x + dx) * 4] > 0 for dx, dy in points))
 
@@ -70,7 +80,7 @@ def live_ui_tasks(c):
 
 
 def live_ui_splash(c):
-    """README: tiles lay down, lift to leave the name, then the first screen; input skips it."""
+    """README: the logo's blocks lay down, lift to leave the wordmark, then the first screen; input skips it."""
     from driver import Driver
 
     c.finish()
@@ -89,7 +99,8 @@ def live_ui_splash(c):
                 assert _lit_tiles(state) < 16, "splash still showing after input"
                 d.results.append(dict(kind="splash-skipped", passed=True))
             else:
-                d.wait(lambda s: _lit_tiles(s) >= 96, timeout=3)
+                # The whole logo: every cell a block covers is lit at once.
+                d.wait(lambda s: _lit_tiles(s) == len(TILE_CENTRES), timeout=3)
                 d.results.append(dict(kind="splash-tiles", passed=True))
                 d.wait(lambda s: _lit_tiles(s) < 8, timeout=3)
                 d.results.append(dict(kind="splash-lifted", passed=True))

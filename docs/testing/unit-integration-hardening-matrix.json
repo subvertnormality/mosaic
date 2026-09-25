@@ -28,12 +28,12 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "e32cad55f73d95ab418e7dd28c0e94b2b57e2c1915345e666209dbcc8c883d63",
+ "manual_sha256": "bd06f127770425f1227e64ad179c3e2fa87018448324cc2068b3b240e4712c34",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "3ed5f5d9ad4e232ac19846682c93a4ae17b4916b11e6b6869205c0b7b163aa7a",
+ "inventory_sha256": "66c6c93d69acfe12d5f1fc47a74d1e14aab9167dd584bb18b139594584b31d01",
  "counts": {
   "requirements": 170,
-  "production_lua_modules": 160,
+  "production_lua_modules": 161,
   "unit_integration_files": 119,
   "domains": 17
  },
@@ -423,7 +423,8 @@
     "lib/ui_render.lua",
     "lib/ui_router.lua",
     "lib/ui_spec_data.lua",
-    "lib/ui_splash.lua"
+    "lib/ui_splash.lua",
+    "lib/ui_splash_logo.lua"
    ],
    "existing_unit_integration_files": [
     "lib/tests/lib/channel_edit_page_ui_delta_killers_tests.lua",
