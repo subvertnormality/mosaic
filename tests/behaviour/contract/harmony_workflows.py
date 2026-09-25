@@ -186,9 +186,10 @@ def ensemble_polyrhythm_workflow(c):
     c.ui.channel_page("harmony", channel=2)
     c.ui.expect_header("harmony", channel=2)
     c.ui.select_row("result", 8); c.ui.press_key(3)
-    # Result (H05) is a dashboard: its Status row reads exactly.
+    # Result (H05, detail): select its Status row to read it exactly.
     c.ui.expect_header("harmony_result", channel=2)
-    c.ui.expect_dashboard_row("Status", "LOCAL SCALE BYPASS")
+    c.ui.select_row("status", 1)
+    c.ui.expect_selected_field("detail", "Status", "LOCAL SCALE BYPASS")
     c.results.append(dict(kind='local-scale-bypass', channel=2,
                           pitches=local_pitches, status='LOCAL SCALE BYPASS', passed=True))
 
@@ -211,10 +212,11 @@ def ensemble_polyrhythm_workflow(c):
     c.ui.expect_header("harmony", channel=3, octave=1)
     c.ui.select_row("result", 8); c.ui.press_key(3)
     c.ui.expect_header("harmony_result", channel=3, octave=1)
-    # H05 is a dashboard: E3 moves the inspected step; its Step and Status rows read exactly.
-    c.ui.set_value(1)
-    c.ui.expect_dashboard_row("Step", "2")
-    c.ui.expect_dashboard_row("Status", "LOCAL OCTAVE BYPASS")
+    # H05 (detail): E3 on Step moves the inspected step; Status read on its own row.
+    c.ui.select_row("step", 0); c.ui.set_value(1)
+    c.ui.expect_selected_field("detail", "Step", "2")
+    c.ui.select_row("status", 1)
+    c.ui.expect_selected_field("detail", "Status", "LOCAL OCTAVE BYPASS")
     c.results.append(dict(kind='local-octave-bypass', channel=3, inspected_step=2,
                           pitches=octave_pitches, status='LOCAL OCTAVE BYPASS', passed=True))
 def setup_no_voicing(c):
@@ -245,29 +247,40 @@ def setup_no_voicing(c):
     c.ui.expect_header("harmony_result", channel=1)
 
 
-def h05_rows(step, status, planned, emitted, failure):
-    """H05 VOICE MOVEMENT is a dashboard (owner feedback 25 September 2026): every row at
-    once; a failed event adds its Failure details row."""
-    rows = [("Step", str(step)), ("Status", status), ("CH1 planned", planned), ("CH1 emitted", emitted)]
+def h05_rows(step, status, voice, failure):
+    """H05 VOICE MOVEMENT (detail): Step, Status, one row per voice (planned > sent as note
+    names, or NO EVENT), and Failure details when the event failed."""
+    rows = [("Step", str(step)), ("Status", status), ("CH1", voice)]
     return rows + ([("Failure details", ">")] if failure else [])
+
+
+def expect_h05(c, rows):
+    """Select each H05 row from the first (E2) and read its exact label and value on the
+    detail layout, then return the cursor to Step, where E3 moves the inspected step."""
+    c.ui.select_row("step", 0)
+    for index, (label, value) in enumerate(rows):
+        if index:
+            c.ui.turn(2, 1)
+        c.ui.expect_selected_field("detail", label, value)
+    c.ui.turn(2, -len(rows))
+    c.ui.expect_selected_field("detail", "Step", rows[0][1])
 
 
 def no_voicing_fallback_workflow(c):
     setup_no_voicing(c)
-    # H05 is a dashboard: the whole screen is read at once, exactly. E3 still
-    # moves the inspected step (E2 has nothing to choose).
-    c.ui.expect_dashboard("harmony_result", h05_rows(1, "NO VOICING RANGE", "NONE", "NONE", True), channel=1)
+    # H05 (detail): every row read exactly; E3 on Step moves the inspected step.
+    expect_h05(c, h05_rows(1, "NO VOICING RANGE", "NO EVENT", True))
     c.results.append(dict(kind='no-voicing-visible', reason='range', passed=True))
-    # Playback is stopped, so the dashboard is stable in real and controlled time.
-    documentation_frame(c, 'd5508f2f1a4a9ed2addf153a59b6b871106ba2f18448cf181c3e89a9cd603e3f',
+    # Playback is stopped, so the screen is stable in real and controlled time.
+    documentation_frame(c, 'ac08de427648a592db225720b6d6118195bc43876d7a13c5d10265b0eb6f803f',
                         'images/harmony-no-voicing.png', stable_rows=55)
-    c.ui.set_value(1)  # H05 Step 2: select one coherent event chain.
-    c.ui.expect_dashboard("harmony_result", h05_rows(2, "NO VOICING RANGE", "62", "62", True), channel=1)
+    c.ui.set_value(1)  # H05 Step 2: select one coherent event chain (D3 planned and sent).
+    expect_h05(c, h05_rows(2, "NO VOICING RANGE", "D3 > D3", True))
     c.ui.set_value(3)
-    c.ui.expect_dashboard("harmony_result", h05_rows(5, "NO EVENT", "NONE", "NONE", False), channel=1)
+    expect_h05(c, h05_rows(5, "NO EVENT", "NO EVENT", False))
     c.results.append(dict(kind='unrecorded-step-inspection', step=5, status='NO EVENT', passed=True))
     c.ui.set_value(-4)  # back to step 1
-    c.ui.expect_dashboard("harmony_result", h05_rows(1, "NO VOICING RANGE", "NONE", "NONE", True), channel=1)
+    expect_h05(c, h05_rows(1, "NO VOICING RANGE", "NO EVENT", True))
     # K2 returns from the Result child to the Harmony root.
     c.ui.press_key(2); c.ui.expect_header("harmony", channel=1)
     c.ui.select_row("entry", 8); c.ui.press_key(3)   # Entry / Failure
@@ -280,7 +293,8 @@ def no_voicing_fallback_workflow(c):
     c.playback(legacy, cycles=2, timeout=6)
     c.ui.feature_root(); c.ui.select_row("result", 9); c.ui.press_key(3)
     c.ui.expect_header("harmony_result", channel=1)
-    c.ui.expect_dashboard_row("Status", "LEGACY RANGE")
+    c.ui.select_row("status", 1)
+    c.ui.expect_selected_field("detail", "Status", "LEGACY RANGE")
     c.results.append(dict(kind='explicit-legacy-fallback', passed=True))
 def held_step_precedence_workflow(c):
     c.configure()

@@ -129,7 +129,7 @@ LIVE_SCREENS = OrderedDict([
     ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
     ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
     ("harmony_ensemble", {"screen": "H04", "title": "ENSEMBLE", "layout": "detail"}),
-    ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "dashboard"}),
+    ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "detail"}),
     ("harmony_members", {"screen": "H07", "title": "MEMBERS", "layout": "detail"}),
     ("harmony_entry", {"screen": "H09", "title": "ENTRY / FAILURE", "layout": "detail"}),
     ("harmony_tone_map", {"screen": "H11", "title": "TONE MAP", "layout": "focused", "art": True}),

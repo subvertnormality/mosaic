@@ -460,10 +460,10 @@ def harmony_screens(c, sw):
     sw.screen("H04", field=("Delete group", ">"))
     c.key(2)
     sw.screen("H01", field=("Groups", ">"), footer=neighbours("H01", labels, "Groups"))
-    # Result is a read-only dashboard; K2 backs out to Voice leading.
+    # Result (detail): Step, Status and one planned > sent row per voice; K2 backs out
+    # to Voice leading.
     e2(c, 3); c.key(3)
-    sw.screen("H05", rows=[("Step", "1"), ("Status", "NO EVENT"), ("CH1 planned", "NONE"),
-                           ("CH1 emitted", "NONE")])
+    walk(c, sw, "H05", top=True, fields=[("Step", "1"), ("Status", "NO EVENT"), ("CH1", "NO EVENT")])
     c.key(2)
     sw.screen("H01", field=("Result", ">"), footer=("Entry", END))
     # Pattern mode adds Tone Map, whose reset asks a question.

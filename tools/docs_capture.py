@@ -89,9 +89,9 @@ def _tone_map(driver):
 
 
 def _no_voicing(driver):
-    from contract.harmony_workflows import h05_rows, setup_no_voicing
+    from contract.harmony_workflows import expect_h05, h05_rows, setup_no_voicing
     setup_no_voicing(driver)
-    driver.ui.expect_dashboard("harmony_result", h05_rows(1, "NO VOICING RANGE", "NONE", "NONE", True), channel=1)
+    expect_h05(driver, h05_rows(1, "NO VOICING RANGE", "NO EVENT", True))
 
 
 # README images bound by a behaviour case's documentation_frame (first 55 rows):
