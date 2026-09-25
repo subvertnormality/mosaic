@@ -146,10 +146,16 @@ OVERVIEWS={'overview_masks','overview_params'}
 # Layouts whose scope shares the title row, right-aligned at x118 level 9.
 TITLE_ROW_SCOPE=OVERVIEWS|{'dashboard'}
 
+def _title_row_scope_width(title,layout):
+    """Overviews fit the scope to 45 px; a dashboard gives it the room its
+    title leaves, at least 45 px (lib/ui_render.lua)."""
+    if layout=='dashboard':return max(45,112-text_width(fit(title,78)))
+    return 45
+
 def live_header(title,scope,layout):
     """Expected title row (and scope line) for a live screen, rows 0..18."""
     if layout in TITLE_ROW_SCOPE:
-        commands=[(1,7,15,fit(title,78)),((None,118),7,9,fit(scope,45))]
+        commands=[(1,7,15,fit(title,78)),((None,118),7,9,fit(scope,_title_row_scope_width(title,layout)))]
         rows=8  # row 8 carries an overview's selected cell outline
     else:
         commands=[(1,7,15,fit(title,126)),(1,17,7,fit(scope,126))]
@@ -277,7 +283,7 @@ def dashboard_matches(state,title,scope,rows):
     """The whole dashboard: title row, then exactly `rows` ((label, value) in
     order) and nothing else above the footer (no cursor, no other row). The
     title row's top-right mark tiles (x118..) are motion accents."""
-    commands=[(1,7,15,fit(title,78)),((None,118),7,9,fit(scope,45))]
+    commands=[(1,7,15,fit(title,78)),((None,118),7,9,fit(scope,_title_row_scope_width(title,'dashboard')))]
     for index,(label,value) in enumerate(rows,start=1):
         commands+=_dashboard_row_commands(label,value,DASHBOARD_ROWS[index-1])
     expected=render(commands)

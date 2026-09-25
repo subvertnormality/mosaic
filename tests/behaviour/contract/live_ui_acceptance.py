@@ -395,10 +395,9 @@ def ui_accept_a02(c):
         with ui.hold_step(step):
             ui.expect_header('trig_locks', channel=1, held=(step,))
             _set_lock(c, int(value))
-            # No marker yet (characterisation): a lock made while the step is held is a
-            # pending history portion until release (recorder.add_trig_lock_event_portion);
-            # the 'L' marker reads committed locks, so it shows from the next hold on.
-            _expect_params(c, [('CC1', value, None)] + none, 1, 'CC 1', value, 'cc-lock-step%d' % step)
+            # 'L' at once: a lock made while the step is held is that step's lock even
+            # before release commits its history portion (recorder.add_trig_lock_event_portion).
+            _expect_params(c, [('CC1', value, 'L')] + none, 1, 'CC 1', value, 'cc-lock-step%d' % step)
     ui.expect_header('trig_locks', channel=1)
 
     def heard(stage, step_ccs):
@@ -487,7 +486,7 @@ def ui_accept_a03(c):
     with ui.hold_step(1):
         ui.expect_header('trig_locks', channel=1, held=(1,))
         _set_lock(c, 10)
-        slots[1] = ('CC1', '10', None)  # pending until release: no 'L' yet (see A02)
+        slots[1] = ('CC1', '10', 'L')  # the held step's lock, shown at once (see A02)
         _expect_params(c, slots, 2, 'CC 1', '10', 'step1-lock')
         c.key(3)
         ui.expect_header('trig_locks', channel=1, held=(1,))
@@ -495,7 +494,7 @@ def ui_accept_a03(c):
         _expect_params(c, slots, 2, 'CC 1', '10', 'step1-slide-keeps-value')
     with ui.hold_step(3):
         _set_lock(c, 40)
-        slots[1] = ('CC1', '40', None)  # a new pending lock, no slide of its own: no marker
+        slots[1] = ('CC1', '40', 'L')  # the held step's new lock, no slide of its own: L
         _expect_params(c, slots, 2, 'CC 1', '40', 'step3-lock')
     ui.expect_header('trig_locks', channel=1)
     window = _play_window(c, 9)

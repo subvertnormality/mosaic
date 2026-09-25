@@ -68,6 +68,11 @@ return function(ui_adapters, owners)
         if program.get_step_param_slide(channel, s, n) then held_slide = true end
         local bank = channel.step_trig_lock_banks and channel.step_trig_lock_banks[s]
         if bank and bank[n] ~= nil then held_lock = true end
+        -- A lock made while the step is held is staged until release; it is
+        -- already this step's lock, so it shows L at once.
+        local staged = recorder and recorder.trig_lock_events and recorder.trig_lock_events[channel.number]
+        staged = staged and staged[s]
+        if staged and staged.data and staged.data.parameter == n then held_lock = true end
       end
       local channel_slide = program.get_channel_param_slide(channel, n) and true or false
       -- Cell marker: S a slide (held step, or channel-wide with nothing held), L a

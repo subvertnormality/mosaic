@@ -124,7 +124,7 @@ LIVE_SCREENS = OrderedDict([
     ("scale_tasks", {"screen": "N02", "title": "SCALE TASKS", "layout": "detail", "scope": "scale"}),
     ("pattern_tasks", {"screen": "N03", "title": "PATTERN TASKS", "layout": "detail"}),
     ("scale_source", {"screen": "S04", "title": "SCALE SOURCE", "layout": "dashboard"}),
-    ("trig_step_edit", {"screen": "P08", "title": "TRIG STEP EDIT", "layout": "dashboard", "scope": "pattern"}),
+    ("trig_step_edit", {"screen": "P08", "title": "TRIG STEP EDIT", "layout": "dashboard", "scope": "pattern_step"}),
     # Merge Shape and Harmony child screens (their feature editor's routes).
     ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
     ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
@@ -188,8 +188,9 @@ def live_scope(scope="channel", channel=1, song_slot=1, held=(), slot=1, pattern
     elif scope == "song":
         parts = ["SONG %02d" % song_slot]
     else:
-        parts = ["PAT%02d" % pattern] if scope == "pattern" else []
-        parts.append("CH%02d" % channel)
+        parts = ["PAT%02d" % pattern] if scope in ("pattern", "pattern_step") else []
+        if scope != "pattern_step":
+            parts.append("CH%02d" % channel)
         if song_slot != 1:
             parts.append("S%02d" % song_slot)
         if scope == "channel":

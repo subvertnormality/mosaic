@@ -80,7 +80,8 @@ function M.draw(v)
  elseif L=='dashboard' then
   -- Information only: every field on one screen, no cursor. Scope shares the
   -- title row; up to six rows, label left, whole value right-aligned.
-  text(fit(v.title,78),1,7,8,15);right(fit(v.scope,45),118,7,9);status_y=7
+  -- The scope takes the room the title leaves (at least 45 px).
+  local t=fit(v.title,78);text(t,1,7,8,15);right(fit(v.scope,math.max(45,112-width(t))),118,7,9);status_y=7
   if #v.fields>6 then fail('dashboard count')end
   for k=1,math.min(#v.fields,6)do
    local f=v.fields[k];local y=8+k*8;local val=tostring(f.value)

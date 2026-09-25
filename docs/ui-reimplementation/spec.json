@@ -12478,7 +12478,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "dashboard",
+        "layout": "detail",
         "model": "ViewModel",
         "art": null
       },
@@ -23571,7 +23571,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "ba654ed0c066583304d12be0dea4374073f780fc236dc1f85728dd3864312555"
+      "sha256": "c84ede83654a2ec1e56edebfb680f603605b870a23f304d19cb0db52aba3178e"
     }
   },
   "guardrails": [

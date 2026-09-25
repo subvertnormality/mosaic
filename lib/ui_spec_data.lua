@@ -1669,7 +1669,7 @@ return {
       ["provider"] = "merge",
       ["existing_route"] = "M07",
       ["parent"] = "N01",
-      ["layout"] = "dashboard",
+      ["layout"] = "detail",
       ["art"] = nil,
       ["fields"] = {
         "step",

@@ -696,7 +696,8 @@ local function scope_text(target)
     -- Pattern screens name the channel their viewer shows.
     local view = spec.screens[s.screen].layout == "pattern64" and viewer()
     if PATTERN_EDITOR[s.screen] then parts[#parts + 1] = "PAT" .. two(program.get().selected_pattern) end
-    parts[#parts + 1] = "CH" .. two(view and view.selected_channel or target.channel)
+    -- Trig step edit is about the pattern's step, not a channel.
+    if s.screen ~= "P08" then parts[#parts + 1] = "CH" .. two(view and view.selected_channel or target.channel) end
     if (target.song_slot or 1) ~= 1 then parts[#parts + 1] = "S" .. two(target.song_slot) end
     if s.context == "Channel" then
       local channel = program.get_channel(target.song_slot or program.get().selected_song_pattern, target.channel)
