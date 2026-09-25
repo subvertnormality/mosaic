@@ -586,8 +586,8 @@ end
 -- The field each grid action changes, on the screen its flow shows.
 local FLOW_FIELD = {
   G07 = "patterns", G09 = "trig", G12 = "channel_lock", G13 = "channel_lock",
-  G16 = "trig_mode", G17 = "note_vel",
-  G18 = function() return is_key1_down and "length_mode" or "note_vel" end,
+  G16 = "trig_mode", G17 = "note_mode",
+  G18 = function() return is_key1_down and "length_mode" or "velocity_mode" end,
   G33 = "transpose", G34 = "step_lock", G35 = "selected_range", G37 = "global_length",
 }
 
@@ -712,7 +712,7 @@ local FOOTER = {
   assignment = "E3 PICK  K3 SET  K2 BACK", scale = "E3 SET  K3 APPLY  K2 CANCEL",
   scale_clock = "E3 SET  K3 APPLY  K2 CANCEL", song = "E3 SET  K3 APPLY  K2 CANCEL",
   song_clock = "E3 SET  K3 APPLY  K2 CANCEL", trig_options = "E3 SET  K3 APPLY",
-  feature = "E3 SET  K3 APPLY  K2 BACK", tasks = "E2 CHOOSE  K3 OPEN", read_only = "E1 TASKS",
+  feature = "E3 SET  K3 APPLY  K2 BACK", merge_modes = "E2 MODE  E3 SET  K2 BACK", tasks = "E2 CHOOSE  K3 OPEN", read_only = "E1 TASKS",
   doctor = "E2 FIELD  E3 SET", confirmation = "K3 CONFIRM  K2 CANCEL", native = "K1 PARAMS",
 }
 
@@ -808,7 +808,7 @@ function ui_live.view_model()
   for i, f in ipairs(fields) do if f.id == focus_id then index = i end end
   local footer = FOOTER[screen.profile] or ""
   -- Detail inspectors ignore E1; K2 returns to where they were opened from.
-  if s.screen == "C08" or s.screen == "C09" or s.screen == "S04" then footer = "K2 BACK" end
+  if s.screen == "C08" or s.screen == "S04" then footer = "K2 BACK" end
   -- A focused screen shows one field: the footer names its neighbours instead.
   if screen.layout == "focused" and #fields > 1 then
     -- Owner-selection screens move E2 over their editable fields only.

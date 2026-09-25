@@ -246,15 +246,41 @@ return function(ui_adapters, owners)
     return (tostring(mode):gsub("_", " "):upper())
   end
 
+  -- The modes each merge button cycles, then the held button + pattern modes.
+  local MERGE_OPTIONS = {trig = {"skip", "only", "all"}}
+  do
+    local shaped = {"average", "up", "down"}
+    for n = 1, 16 do shaped[#shaped + 1] = "pattern_number_" .. n end
+    MERGE_OPTIONS.note, MERGE_OPTIONS.velocity, MERGE_OPTIONS.length = shaped, shaped, shaped
+  end
+
+  -- A merge mode row: E3 steps through the modes the grid can set (clamped),
+  -- and the channel page applies it as its merge button does.
+  local function merge_mode_field(channel, kind, id, label)
+    local options, current = MERGE_OPTIONS[kind], channel[kind .. "_merge_mode"]
+    local index = 1
+    for k, option in ipairs(options) do if option == current then index = k end end
+    return {id = id, label = label, kind = "value", value = merge_mode(current),
+      domain = {raw = current, min = 1, max = #options, index = index},
+      edit = function(delta)
+        local owner = src("channel_edit_page")
+        if not (owner and owner.set_merge_mode) then return nil end
+        local step = math.max(1, math.min(#options, index + (delta > 0 and 1 or -1)))
+        if step ~= index then owner.set_merge_mode(kind, options[step]) end
+        return merge_mode(options[step])
+      end}
+  end
+
   function readers.C09()
     local channel = src("program").get_selected_channel()
     local patterns, numbers = pattern_list(channel)
     return {
+      -- Patterns are assigned on the grid's pattern row.
       readonly("patterns", "Patterns", patterns, {patterns = numbers}),
-      readonly("trig_mode", "Trig mode", merge_mode(channel.trig_merge_mode), {raw = channel.trig_merge_mode}),
-      readonly("note_vel", "Note / vel", merge_mode(channel.note_merge_mode) .. " / " ..
-        merge_mode(channel.velocity_merge_mode), {note = channel.note_merge_mode, velocity = channel.velocity_merge_mode}),
-      readonly("length_mode", "Length mode", merge_mode(channel.length_merge_mode), {raw = channel.length_merge_mode})
+      merge_mode_field(channel, "trig", "trig_mode", "Trig mode"),
+      merge_mode_field(channel, "note", "note_mode", "Note mode"),
+      merge_mode_field(channel, "velocity", "velocity_mode", "Velocity mode"),
+      merge_mode_field(channel, "length", "length_mode", "Length mode")
     }
   end
 

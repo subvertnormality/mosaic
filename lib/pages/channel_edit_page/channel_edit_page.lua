@@ -552,6 +552,21 @@ function channel_edit_page.register_press()
   )
 end
 
+-- Sets the selected channel's merge mode from the norns screen (Merge modes,
+-- C09) exactly as its grid merge button or held button + pattern does: the
+-- channel's mode, the button's state and the working patterns follow.
+-- kind: "trig", "note", "velocity" or "length"; mode: "skip" / "only" / "all"
+-- for trig, "average" / "up" / "down" / "pattern_number_<n>" for the others.
+function channel_edit_page.set_merge_mode(kind, mode)
+  local target_song = program.get_selected_song_pattern()
+  local target_channel = program.get_selected_channel()
+  target_channel[kind .. "_merge_mode"] = mode
+  channel_edit_page.refresh_merge_buttons()
+  target_song.active = true
+  pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+  fn.dirty_grid(true)
+end
+
 function channel_edit_page.refresh_merge_buttons()
   local trig_merge_mode = program.get_selected_channel().trig_merge_mode
   local note_merge_mode = program.get_selected_channel().note_merge_mode

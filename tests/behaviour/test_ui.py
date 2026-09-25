@@ -3113,7 +3113,7 @@ class PromptRouteVerbTests(unittest.TestCase):
         with patch("frame_oracle.live_header_matches", return_value=True) as header:
             Ui(driver).leave_merge_detail()
         self.assertEqual(driver.calls, [("wait",), ("tap", *control_cell("channel_editor"))])
-        self.assertEqual(header.call_args.args[1:], ("MERGE DETAIL", "CH01", "detail"))
+        self.assertEqual(header.call_args.args[1:], ("MERGE MODES", "CH01", "detail"))
 
 
 # ---- Group C (ranges, saves, song, timing) ----

@@ -159,6 +159,11 @@ local function model_env(body)
     env.trig_page = {get_algorithm = function() return env.algorithm end,
       select_algorithm = function(n) env.selected_algorithms[#env.selected_algorithms + 1] = n; env.algorithm = n; return true end,
       paint_state = function() return env.paint end}
+    env.merge_sets = {}
+    env.channel_page = {set_merge_mode = function(kind, mode)
+      env.merge_sets[#env.merge_sets + 1] = kind .. "=" .. mode
+      program.get_selected_channel()[kind .. "_merge_mode"] = mode
+    end}
     env.pages = {
       note = include("mosaic/lib/pages/note_edit_page/note_edit_page_ui"),
       velocity = include("mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui"),
@@ -172,7 +177,7 @@ local function model_env(body)
     env.inspection = include("mosaic/lib/harmony/inspection")
     env.inspection.reset()
     env.adapter = read_only_factory(ui_adapters, {pages = owner_pages, params = env.params_owner,
-      trigger_edit_page = env.trig_page, inspection = env.inspection, step = step or include("mosaic/lib/step"),
+      trigger_edit_page = env.trig_page, channel_edit_page = env.channel_page, inspection = env.inspection, step = step or include("mosaic/lib/step"),
       device_map = {get_device = function(id) return {name = "Dev " .. id} end}})
     body(env)
   end)
@@ -249,7 +254,9 @@ function test_ui_adapters_read_only_program_screens_read_the_model()
     local c09 = values(env.adapter:describe("C09", "C09", target("C09")))
     luaunit.assert_equals(c09.patterns, "01 03")
     luaunit.assert_equals(c09.trig_mode, "ONLY")
-    luaunit.assert_equals(c09.note_vel, "AVERAGE / AVERAGE")
+    luaunit.assert_equals(c09.note_mode, "AVERAGE")
+    luaunit.assert_equals(c09.velocity_mode, "AVERAGE")
+    luaunit.assert_equals(c09.length_mode, "AVERAGE")
     local f05 = values(env.adapter:describe("F05", "F05", target("F05")))
     luaunit.assert_equals(f05.patterns, "01 03")
     luaunit.assert_equals(f05.note_mask, require("musicutil").note_num_to_name(64, true))
@@ -308,6 +315,27 @@ function test_ui_adapters_read_only_p06_k3_selects_the_chosen_algorithm_through_
     luaunit.assert_equals(env.adapter:describe("P06", "P06", t).descriptors[3].value, "SELECTED")
     luaunit.assert_true(env.adapter:invoke("euclidean", t).ok)
     luaunit.assert_equals(env.selected_algorithms, {3})
+  end)
+end
+
+-- C09 Merge modes (owner decision 2026-09-25): E3 steps a mode through what the
+-- grid merge button (and held button + pattern) can set, through the channel
+-- page exactly once per detent, clamped; the pattern list is shown only.
+function test_ui_adapters_read_only_c09_e3_steps_merge_modes_through_the_channel_page()
+  model_env(function(env)
+    local t = target("C09")
+    program.get_selected_channel().trig_merge_mode = "skip"
+    luaunit.assert_true(env.adapter:edit("trig_mode", 1, t).ok)
+    luaunit.assert_true(env.adapter:edit("trig_mode", 1, t).ok)
+    luaunit.assert_true(env.adapter:edit("trig_mode", 1, t).ok) -- clamped at ALL
+    luaunit.assert_equals(env.merge_sets, {"trig=only", "trig=all"})
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", t)).trig_mode, "ALL")
+    program.get_selected_channel().note_merge_mode = "down"
+    luaunit.assert_true(env.adapter:edit("note_mode", 1, t).ok)
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", t)).note_mode, "PAT 1")
+    luaunit.assert_true(env.adapter:edit("velocity_mode", -1, t).ok) -- already the first
+    luaunit.assert_equals(env.merge_sets, {"trig=only", "trig=all", "note=pattern_number_1"})
+    luaunit.assert_false(env.adapter:edit("patterns", 1, t).ok)
   end)
 end
 
