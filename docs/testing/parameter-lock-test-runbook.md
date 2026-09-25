@@ -40,17 +40,24 @@ MONOME_EMULATOR=$EMU python3 tests/behaviour/run.py --case M-SYNC-LEAD-002 \
 ### A.3 The device
 
 Address `we@10.42.0.1` over a wifi hotspot. **Password auth only — no SSH key.**
+The password is the public norns default, `sleep` (the owner confirmed it may be
+documented).
 
-**Credential handling is a hard rule.** Credentials must never appear in source,
-command-line arguments, logs or committed artifacts. The sanctioned method is a
-temporary askpass file for an SSH ControlMaster, deleted immediately:
+Still keep it off command lines and out of logs and artifacts, so it never lands in
+process listings or evidence. The sanctioned method is a temporary askpass file for
+an SSH ControlMaster, deleted immediately:
 
 ```
-A=$SCRATCH/.ap$$; umask 077; printf '#!/bin/sh\necho <secret>\n' > $A; chmod 700 $A
+A=$SCRATCH/.ap$$; umask 077; printf '#!/bin/sh\necho sleep\n' > $A; chmod 700 $A
 SSH_ASKPASS=$A SSH_ASKPASS_REQUIRE=force DISPLAY=:0 \
-  ssh -MNf -o StrictHostKeyChecking=no -o ControlPersist=yes -S $SOCK we@10.42.0.1
+  ssh -MNf -o StrictHostKeyChecking=no -o ControlPersist=yes -S $SOCK we@10.42.0.1 </dev/null
 rm -f $A
 ```
+
+- `$SOCK` must be a short path: a Unix socket path over 108 bytes fails silently
+  and the next command reports "Control socket connect ... No such file".
+- Do not pipe the master's output (e.g. into `grep`): the backgrounded master holds
+  the pipe open and the command never returns, so the `rm` never runs.
 
 All later commands reuse `-S $SOCK`. **The master dies periodically** (it did twice
 in one session) and every device operation fails with ssh exit 255 until it is
