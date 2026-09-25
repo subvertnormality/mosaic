@@ -1,7 +1,7 @@
 """Live norns screen contracts (README "Norns Menu Navigation").
 
 The screen follows the grid, every Channel screen is reachable through Channel
-tasks, E1 moves Masks <-> Trig params <-> Channel tasks, and the start-up
+tasks, E1 opens the page's task list from any screen, and the start-up
 animation lays tiles, reveals the name and hands over to the first screen, or
 is skipped by any input. Headers are checked with the live header oracle; the
 splash is checked structurally (tile coverage), never by an image.
@@ -36,10 +36,11 @@ def live_ui_follow(c):
         ui.expect_header("masks", channel=3, held=(5,))
         c.results.append(dict(kind="held-scope", step=5, passed=True))
     ui.expect_header("masks", channel=3)
-    # From another Channel screen, a hold shows the remembered family, then returns.
+    # From another Channel screen, a hold shows the remembered family (Masks: E1 opens
+    # Channel tasks straight from it, so Trig params was never shown), then returns.
     ui.channel_page("clock_mods", channel=3)
     with ui.hold_step(9):
-        ui.expect_header("trig_locks", channel=3, held=(9,))
+        ui.expect_header("masks", channel=3, held=(9,))
     ui.expect_header("clock_mods", channel=3)
     c.results.append(dict(kind="hold-returns-to-parent", screen="clock_mods", passed=True))
 
