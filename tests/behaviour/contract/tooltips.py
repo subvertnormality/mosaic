@@ -50,11 +50,13 @@ def tooltip_messages(c):
     cleared('idle-expiry',shown,'scale')
     # Replacement: an immediate second activation replaces the first and owns the expiry.
     c.tap(3,8);c.tap(2,1);shown=now();tip('replaced','Channel 2 selected')
-    cleared('replacement-expiry',shown,'trig_locks')
+    # The Channel button shows the remembered family: Masks (Channel tasks opens straight
+    # from Masks, so Trig params was never shown).
+    cleared('replacement-expiry',shown,'masks')
     c.tap(1,1);tip('select-channel-1-again','Channel 1 selected')
     # While playing, transport tooltips appear and a later one still clears.
     c.tap(1,8);tip('play','Starting playback')
     c.tap(2,1);shown=now();tip('select-while-playing','Channel 2 selected')
-    cleared('playing-expiry',shown,'trig_locks')
+    cleared('playing-expiry',shown,'masks')
     c.tap(1,1);c.tap(1,8);tip('stop','Stopping playback')
     c.wait(lambda s:not s['midi_capture']['outstanding'])

@@ -547,7 +547,9 @@ def memory_channel_isolation(c):
     ui.press_key(3)
     ui.tap_control("pattern_slot", 1)
     ui.set_range(1, 4)
-    ui.turn(1, -4)
+    # The pattern slot tap shows Merge detail; Note Masks (the old E1 -4 from Device)
+    # opens through Channel tasks.
+    ui.channel_page("masks", channel=2)
     baseline = [(60, 127), (62, 117), (64, 107), (65, 97)]
     edited_one = [(72, 90), *baseline[1:]]
     edited_two = [baseline[0], (79, 80), *baseline[2:]]

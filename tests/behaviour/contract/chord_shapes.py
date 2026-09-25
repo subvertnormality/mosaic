@@ -35,10 +35,10 @@ def _norns_name(n):
 
 def chord_dashboard_display(c, root_velocity, voices):
     # C06 OUTPUT (the Note Dashboard) is a dashboard: its Note row shows the root
-    # and the four chord voices sent (X for a slot that sent none), its Vel / Len
-    # row the root velocity and length. Each row is asserted whole and exactly;
-    # the root, velocity and length facts the old cells showed are within them.
-    note = " ".join(["C3"] + [_norns_name(v) if v is not None else "X" for v in voices])
+    # and then only the chord voices that played, in slot order; its Vel / Len row
+    # the root velocity and length. Each row is asserted whole and exactly; the
+    # root, velocity and length facts the old cells showed are within them.
+    note = " ".join(["C3"] + [_norns_name(v) for v in voices if v is not None])
     c.ui.expect_output_field("note", note)
     c.ui.expect_output_field("vel_len", "%d / 4.0" % root_velocity)
     c.results.append(dict(kind="chord-root-dashboard", note="C3", chord=note,

@@ -24,8 +24,8 @@ Screens no public input shows on this build (C08, C10, C11, S04, S05, M04,
 M08..M11, H06, H12..H16, H18, F*, R02..R16) are listed, with the reasons, in
 docs/ui-reimplementation/reviews/ACCEPTANCE.md, with the defects the sweep
 found and their fixes. Since the owner feedback of 25 September 2026, C12/C13
-(Mask detail, Trig detail) are no longer Channel tasks and M14 (Merge reason)
-has no cursor to open it from on the Merge result dashboard. Dashboards are
+(Mask detail, Trig detail) are no longer Channel tasks; M14 (Merge reason)
+is reached from Merge result's Reason row. Dashboards are
 checked whole (every row, no cursor) with frame_oracle.dashboard_matches.
 """
 import base64
@@ -128,7 +128,8 @@ class Sweep:
         entry = SPEC[sid]
         layout = entry["live_render"]["layout"]
         if footer is None:
-            footer = HINTS[entry["profile"]]
+            # Channel tasks names K1 for the norns parameters (Norns settings is gone).
+            footer = "K3 OPEN  K1 PARAMS" if sid == "N01" else HINTS[entry["profile"]]
         # Idle autosave may announce itself on any screen (M-TOOLTIP-002).
         footers = [footer] + list(tips) + ["Autosaved"]
         if layout == "dashboard":
@@ -213,14 +214,15 @@ def live_ui_sweep(c):
     sw.screen("C01", field=("Note", "X"), tips=("Channel Editor",))
     c.enc(1, 1)
     sw.screen("N01", field=("Masks", ""), tips=("Channel Editor",))
+    # Norns settings (N04) left the list (owner, 25 September 2026): its footer names K1.
     rows = ["Masks", "Trig params", "Output", "Harmony", "Clock", "Merge modes", "Device", "History",
-            "Merge Shape", "Norns settings"]
+            "Merge Shape"]
     e2(c, -12)
     for index, label in enumerate(rows):
         sw.screen("N01", field=(label, ""), tips=("Channel Editor",))
         e2(c, 1)
     e2(c, 1)  # clamps on the last row
-    sw.screen("N01", field=("Norns settings", ""), tips=("Channel Editor",))
+    sw.screen("N01", field=("Merge Shape", ""), tips=("Channel Editor",))
 
     channel_task(c, "output")
     sw.screen("C06", rows=C06_NO_EVENT)
@@ -238,10 +240,6 @@ def live_ui_sweep(c):
     sw.screen("C03", field=("Position", "0 of 0"))
     channel_task(c, "merge_shape")
     sw.screen("M02", field=("Mode", "OFF"), footer=(START, "Rhythm"))
-    channel_task(c, "norns")
-    sw.screen("N04", field=("Projects", ""))
-    c.key(2)
-    sw.screen("C01", field=("Note", "X"))
     channel_screens(c, sw)
     merge_screens(c, sw)
     harmony_screens(c, sw)
@@ -282,9 +280,8 @@ def walk(c, sw, sid, fields, labels=None, visits=None, top=False, **kw):
 
 
 def channel_screens(c, sw):
-    # Output (C06) with no event yet: a dashboard of six rows; every event stage
-    # reads NO EVENT, distinct from X (no chord mask) and 0 (velocity). E2 and E3
-    # change nothing on it.
+    # Output (C06) with no event yet: a dashboard of six rows, every one NO EVENT
+    # (not the owner's default C-2). E2 and E3 change nothing on it.
     channel_task(c, "output")
     sw.screen("C06", rows=C06_NO_EVENT)
     e2(c, 3); c.enc(3, 2)
@@ -340,8 +337,8 @@ H19_MAP = "PAT 1 / AVERAGE"
 # Trig options keeps only the tresillo amount (owner decision 25 September 2026).
 P02_FIELDS = [("Tresillo amount", "x24")]
 # C06 before any event (usability audit 25 September 2026: six dashboard rows).
-C06_NO_EVENT = [("Note", "C-2 X X X X"), ("Vel / Len", "0 / 0"), ("Step", "NO EVENT"),
-                ("Source", "NO EVENT"), ("Pitch", "NO EVENT"), ("Bypass", "NO EVENT")]
+C06_NO_EVENT = [("Note", "NO EVENT"), ("Vel / Len", "NO EVENT"), ("Step", "NO EVENT"),
+                ("Degree", "NO EVENT"), ("Pitch", "NO EVENT"), ("Sent", "NO EVENT")]
 
 
 def merge_screens(c, sw):
@@ -384,14 +381,14 @@ def merge_screens(c, sw):
     sw.screen("M02", field=("Pitch", ">"), footer=neighbours("M02", labels, "Pitch"))
     # M09 is not observable: the merge-mode short press shows it and its
     # release hides it within the same grid event (see ACCEPTANCE.md).
-    # Result is a read-only dashboard; K2 backs out through the editor. Its
-    # Reason row (M14) has no cursor to open it from on the dashboard: K3 there
-    # stays on Result (reported with the owner feedback, 25 September 2026).
+    # Result and its Reason are read-only; K2 backs out through the editor.
     e2(c, 1); c.key(3)
-    m05 = [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")]
-    sw.screen("M05", rows=m05)
-    e2(c, 3); c.key(3)
-    sw.screen("M05", rows=m05)
+    walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")])
+    c.key(3)
+    walk(c, sw, "M14", [("Step", "1"), ("Role", "EMPTY"), ("Sources", "NONE"), ("Decision", "ADMITTED"),
+                        ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
+    c.key(2)
+    sw.screen("M05", field=("Reason", ">"))
     c.key(2)
     sw.screen("M02", field=("Result", ">"), footer=("Pitch", END))
     c.enc(1, 1)
@@ -575,12 +572,11 @@ def pattern_screens(c, sw):
     c.tap(14, 8)
     sw.screen("P07", rows=[("Preview", "OFF"), ("Algorithm", "Drum"), ("Shift", "0"), ("Trigs", "NONE")],
               tips=("Painting cancelled",))
-    # Trig step edit while a trig step is held and another is pressed. The
-    # dashboard's title-row scope is fitted to 45 px (the held step's part is
-    # cut: reported with the owner feedback, 25 September 2026).
+    # Trig step edit while a trig step is held and another is pressed: its scope is
+    # the pattern and the held step.
     c.action(type="grid", x=1, y=4, state=1)
     c.tap(3, 4)
-    sw.screen("P08", scope="PAT01 CH01 ST01", tips=("Note length set",),
+    sw.screen("P08", scope="PAT01 ST01", tips=("Note length set",),
               rows=[("Toggle", "STEP01 ON"), ("Length", "01..03"), ("Reset length", "STEP01"),
                     ("Pattern select", "PAT01")])
     c.action(type="grid", x=1, y=4, state=0)

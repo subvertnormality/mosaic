@@ -2886,18 +2886,18 @@ class OutputFieldVerbTests(unittest.TestCase):
                                                value="110 / 4.0", passed=True)])
         driver = FakeDriver(states=[{}])
         with patch("frame_oracle.dashboard_row_matches", return_value=True) as oracle:
-            Ui(driver).expect_output_field("bypass", "NONE")
-        self.assertEqual(oracle.call_args.args[1:], (6, "Bypass", "NONE"))
+            Ui(driver).expect_output_field("sent", "C3")
+        self.assertEqual(oracle.call_args.args[1:], (6, "Sent", "C3"))
 
     def test_expect_output_field_fails_closed(self):
         from ui import Ui, UiMapError
         driver = FakeDriver(states=[{}])
         with patch("frame_oracle.dashboard_row_matches", return_value=False):
             with self.assertRaises(AssertionError):
-                Ui(driver).expect_output_field("note", "C3 X X X X")
+                Ui(driver).expect_output_field("note", "C3 E3 G3")
         self.assertEqual(driver.results, [])
         # The retired single-field names are not rows any more.
-        for retired in ("root", "velocity", "length", "chord"):
+        for retired in ("root", "velocity", "length", "chord", "source", "bypass"):
             with self.assertRaises(UiMapError):
                 Ui(FakeDriver()).expect_output_field(retired, "C3")
 
@@ -2915,10 +2915,10 @@ class OutputFieldVerbTests(unittest.TestCase):
         from frame_oracle import render, fit, text_width
         from ui import Ui
         commands = []
-        for k, (label, value) in enumerate((("Note", "C3 X X X X"), ("Vel / Len", "127 / 1.0")), start=1):
+        for k, (label, value) in enumerate((("Note", "C3 E3 G3"), ("Vel / Len", "127 / 1.0")), start=1):
             commands += [(1, 8 + 8 * k, 7, fit(label, 126 - text_width(value) - 4)), ((None, 127), 8 + 8 * k, 15, value)]
         state = {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
-        Ui(FakeDriver(states=[state])).expect_output_field("note", "C3 X X X X")
+        Ui(FakeDriver(states=[state])).expect_output_field("note", "C3 E3 G3")
         self.assertEqual(Ui(FakeDriver(states=[state])).output_field_value("vel_len", ["127 / 1.0", "127 / 4.0"]),
                          "127 / 1.0")
 
@@ -3049,6 +3049,33 @@ class DashboardOracleTests(unittest.TestCase):
         state = self.screen([])
         self.assertTrue(live_header_matches(state, "PAINT PREVIEW", "CH01", "dashboard"))
         self.assertFalse(live_header_matches(state, "PAINT PREVIEW", "CH01", "detail"))
+
+
+class ConfirmHeaderScopeTests(unittest.TestCase):
+    """Navigation confirmation tolerates a Channel page's mute/octave scope parts;
+    expect_header stays exact."""
+
+    def test_confirm_accepts_mute_and_octave_parts_only_on_channel_pages(self):
+        from ui import Ui
+        shown = {"scope": None}
+        oracle = lambda state, title, scope, layout: scope == shown["scope"]
+        with patch("frame_oracle.live_header_matches", side_effect=oracle):
+            ui = Ui(FakeDriver())
+            for scope in ("CH01", "CH01 OCT+2", "CH01 MUTE", "CH01 MUTE OCT-1"):
+                shown["scope"] = scope
+                self.assertTrue(ui._confirm_matches({}, "masks", {"channel": 1}), scope)
+            for scope in ("CH02", "CH01 OCT+3", "CH01 ST05"):
+                shown["scope"] = scope
+                self.assertFalse(ui._confirm_matches({}, "masks", {"channel": 1}), scope)
+            # A stated octave is exact; a non-Channel scope has no such parts.
+            shown["scope"] = "CH01 OCT+2"
+            self.assertFalse(ui._confirm_matches({}, "masks", {"channel": 1, "octave": 1}))
+            shown["scope"] = "SLOT 01 OCT+1"
+            self.assertFalse(ui._confirm_matches({}, "scale", {"slot": 1}))
+            driver = FakeDriver(states=[{}])
+            shown["scope"] = "CH01 OCT+2"
+            with self.assertRaises(AssertionError):
+                Ui(driver).expect_header("masks", channel=1)
 
 
 class PromptRouteVerbTests(unittest.TestCase):

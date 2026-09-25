@@ -12,7 +12,9 @@ def trig_gesture_all_steps(c):
     c.configure()
     c.tap(1, 2)
     c.hold_tap((1, 4), (16, 7))
-    c.ui.turn(1, -4)
+    # The pattern slot tap shows Merge detail (grid actions show what they changed);
+    # Note Masks opens through Channel tasks, as the old E1 -4 from Device reached it.
+    c.ui.channel_page('masks')
     # No assigned pattern. Required defaults make newly added trigs audible.
     c.enc(3, 61)
     c.enc(2, 1)

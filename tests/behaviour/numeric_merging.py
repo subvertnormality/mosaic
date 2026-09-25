@@ -617,6 +617,12 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
             with c.ui.hold_keys(1):
                 c.elapse(.3);c.ui.tap_control('velocity_merge_mode')
                 c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
+            # K1 + velocity merge (the length mode) shows Merge detail on Length mode (grid
+            # actions show what they changed); K2 returns to Note Masks and its Length field.
+            c.ui.expect_header('merge_detail',channel=1)
+            # The owner's stored names (characterisation): longer is up, shorter is down.
+            c.ui.expect_selected_field('detail','Length mode',{'average':'AVERAGE','longer':'UP','shorter':'DOWN'}[mode])
+            c.ui.press_key(2);c.ui.wait_for_header('masks',channel=1)
         if hierarchy:
             assert variant==0
             with c.ui.hold_step(1):

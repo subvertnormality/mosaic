@@ -18,6 +18,8 @@ def pending_note_mask_song_transition(c):
     ui = c.ui
     ui.configure()
 
+    slot_octave = {}
+
     def select_slot(slot):
         ui.song_editor()
         ui.tap_control("song_pattern_slot", slot)
@@ -31,8 +33,9 @@ def pending_note_mask_song_transition(c):
         # Preserve the source's explicit screen_header result rather than
         # replacing it with channel_page's ui-confirm result.
         ui.channel_page("masks", "midi_config", channel=1, confirm=False)
-        # The live scope names a song slot other than 1 (CH01 S02).
-        ui.expect_header("masks", channel=1, song_slot=slot)
+        # The live scope names a song slot other than 1 and slot 2's channel octave
+        # fingerprint, once it is set (CH01 S02 OCT+1).
+        ui.expect_header("masks", channel=1, song_slot=slot, octave=slot_octave.get(slot, 0))
 
     def onsets(state, after):
         return [
@@ -87,6 +90,7 @@ def pending_note_mask_song_transition(c):
     )
     ui.menu("channel_editor")
     ui.tap_control("channel_octave", 1)  # Slot 2 octave fingerprint.
+    slot_octave[2] = 1
 
     select_slot(1)
     controlled = c.clock_mode == "controlled-experimental"
@@ -167,8 +171,9 @@ def pending_note_mask_song_transition(c):
     )
     ui.menu("channel_editor")
     ui.channel_page("masks", "midi_config", channel=1, confirm=False)
-    # The live scope also shows the post-transition song slot (CH01 S02).
-    ui.expect_header("masks", channel=1, song_slot=2)
+    # The live scope also shows the post-transition song slot and slot 2's
+    # channel octave fingerprint (CH01 S02 OCT+1).
+    ui.expect_header("masks", channel=1, song_slot=2, octave=1)
 
     # Required fingerprints: the held step belongs to song A, while song B
     # retains its copied octave fingerprint. The unfixed target leak writes 0

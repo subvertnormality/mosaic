@@ -946,6 +946,12 @@ def transpose_scale_octave_composition(c):
     c.ui.tap_control("channel_octave", 1)  # Channel octave +1.
     c.ui.scale_editor()
     c.ui.tap_control("global_transpose_plus_four")  # Song/global transpose +4; locks below must override it.
+    # Global transposition shows Scale overview with its Transpose row (grid actions show what
+    # they changed, 25 September 2026); the Scale screen reopens through Scale tasks.
+    c.ui.expect_header("scale_overview", slot=1)
+    c.ui.expect_dashboard_row("Transpose", "+4")
+    c.ui.open_task("Scale", "scale")
+    c.ui.expect_header("scale", slot=1)
     # Native scale editor: Quantizer -> Roman -> Transpose, then save +3.
     c.ui.select_field("scale_transpose", offset=2)
     c.ui.set_value(3); c.ui.press_key(3)
@@ -2683,7 +2689,7 @@ CASES={
  'M-LIVEUI-FOLLOW-001':dict(run=live_ui_follow,requirements=['NAV-SCREEN-FOLLOW'],description='The screen follows grid page buttons (Pattern cycle included), channel selection and held steps: a held step scopes the edit family (ST05) and release restores the screen it came from (README Norns Menu Navigation)'),
  'M-LIVEUI-TASKS-001':dict(run=live_ui_tasks,requirements=['NAV-TASKS'],description='E1 opens Channel tasks from Masks and Trig params on the row it came from; E1 and E2 scroll the rows, clamped; Channel tasks opens every Channel screen (README Norns Menu Navigation)'),
  'M-LIVEUI-SPLASH-001':dict(run=live_ui_splash,requirements=['NAV-SPLASH'],description='At start the tiles lay down, lift away and hand over to the first screen; any input skips the animation (README Norns Menu Navigation)'),
- 'M-UIACC-A01-001':dict(run=ui_accept_a01,requirements=['UI-ACCEPT-A01'],description='Acceptance A01: E1 (one detent or one large event, either way) at Masks or Trig params opens Channel tasks on the row it came from; in the list E1 moves one row per event (large events too), clamped at Masks and Norns settings, and K3 opens the row; each family keeps its selected field when reopened; a held step makes E1 switch Masks <-> Trig params (clamped); no MIDI, mask or LED change and the phrase replays exactly (README Norns Menu Navigation, Grid Menu Navigation)'),
+ 'M-UIACC-A01-001':dict(run=ui_accept_a01,requirements=['UI-ACCEPT-A01'],description='Acceptance A01: E1 (one detent or one large event, either way) at Masks or Trig params opens Channel tasks on the row it came from; in the list E1 moves one row per event (large events too), clamped at Masks and Merge Shape, and K3 opens the row; each family keeps its selected field when reopened; a held step makes E1 switch Masks <-> Trig params (clamped); no MIDI, mask or LED change and the phrase replays exactly (README Norns Menu Navigation, Grid Menu Navigation)'),
  'M-UIACC-A02-001':dict(run=ui_accept_a02,requirements=['UI-ACCEPT-A02'],description='Acceptance A02: with steps 1 and 64 held, K1+K2 clears only the held steps on Masks and on Trig params; channel defaults and unheld locks stay (screen and MIDI), both release orders restore the family at channel scope (README Removing Masks, Mask Locks, Trig Param Locks)'),
  'M-UIACC-A03-001':dict(run=ui_accept_a03,requirements=['UI-ACCEPT-A03'],description='Acceptance A03: the parameter picker opened from slot 2 keeps its target slot; K2 discards an unapplied browse; K3 applies and repeats idempotently; Off sends no CC; held step + K3 slides CC1 from its lock to the next lock, sent in order (README Trig Param Locks, Param Slides)'),
  'M-UIACC-A10-001':dict(run=ui_accept_a10,requirements=['UI-ACCEPT-A10'],description='Acceptance A10: pattern add/remove and trig merge taps show Merge detail with the changed row chosen and the tooltip, K2 returns to Masks with its field; channel selection, mute (shift, shown in the scope, and long press) and both dual-range release orders keep Masks with footer feedback; a held note merge + unassigned pattern shows Merge detail without assigning it; pattern/channel LEDs and merged MIDI follow the README arithmetic (README Norns Menu Navigation, Adding Patterns to Channels, Merge Modes, Channel Length, Muting Channels)'),

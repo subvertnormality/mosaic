@@ -4,7 +4,9 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
     from cases import assert_durations
     c.ui.configure()
     c.ui.select_channel_on_page(2,'midi_config');c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
-    c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.turn(1,-3)
+    # The pattern slot tap shows Merge detail; Trig params (the old E1 -3 from Device) opens
+    # through Channel tasks.
+    c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.channel_page('trig_locks',channel=2)
     def lock(step,value):
         with c.ui.hold_step(step):
             c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)

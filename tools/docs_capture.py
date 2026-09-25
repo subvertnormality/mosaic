@@ -2,11 +2,12 @@
 
 Run from the worktree with MONOME_EMULATOR set:
     python3 tools/docs_capture.py                          (images/norns/*)
-    python3 tools/docs_capture.py merge-shape-foundation   (images/merge-shape-foundation.png)
+    python3 tools/docs_capture.py merge-shape-foundation   (images/<name>.png; also
+    harmony-tone-map, harmony-no-voicing)
 Each image is the native framebuffer at 3x, written under images/norns/ (or images/).
-The merge-shape-foundation capture drives the same state as M-MERGE-FOUNDATION-001
-(contract/foundation_workflow.py) and prints the sha256 of the first 55 framebuffer rows,
-which that case records. The
+A named case image (CASE_IMAGES) drives the same state as the behaviour case that binds it
+with documentation_frame and prints the sha256 of the first 55 framebuffer rows, which that
+case records. The
 matching screens are asserted semantically by the live-UI behaviour cases
 (tests/behaviour/contract/live_ui.py); an image never replaces those assertions.
 """
@@ -74,21 +75,45 @@ def main():
             print("wrote", final / image.name)
 
 
-def capture_foundation():
-    """images/merge-shape-foundation.png: the applied Foundation Rhythm screen with Add
-    accent selected, exactly as M-MERGE-FOUNDATION-001 reaches it. The most frequent frame
-    over two seconds is kept, so a decorative blink is never the one captured."""
+def _foundation(driver):
+    from contract.foundation_workflow import setup_foundation
+    setup_foundation(driver)
+    driver.ui.select_field("add_amount", offset=1)
+    driver.ui.select_field("add_accent", offset=2)
+    driver.ui.expect_selected_field("focused", "Add accent", "70", art=True)
+
+
+def _tone_map(driver):
+    from contract.harmony_workflows import setup_pattern_harmony
+    setup_pattern_harmony(driver)
+
+
+def _no_voicing(driver):
+    from contract.harmony_workflows import h05_rows, setup_no_voicing
+    setup_no_voicing(driver)
+    driver.ui.expect_dashboard("harmony_result", h05_rows(1, "NO VOICING RANGE", "NONE", "NONE", True), channel=1)
+
+
+# README images bound by a behaviour case's documentation_frame (first 55 rows):
+# name -> the case's own setup up to the documented frame.
+CASE_IMAGES = {
+    "merge-shape-foundation": _foundation,   # M-MERGE-FOUNDATION-001
+    "harmony-tone-map": _tone_map,           # M-HARMONY-PERSIST-001
+    "harmony-no-voicing": _no_voicing,       # M-HARMONY-FAILURE-001
+}
+
+
+def capture_case_image(name):
+    """images/<name>.png exactly as its case reaches it. The most frequent frame over two
+    seconds is kept, so a decorative blink is never the one captured; prints the sha256 of
+    the first 55 framebuffer rows, which the case records."""
     import collections
     import hashlib
-    from contract.foundation_workflow import setup_foundation
     rows = 55
     with tempfile.TemporaryDirectory() as scratch, tempfile.TemporaryDirectory() as staged:
         driver = Driver(Path(scratch))
         try:
-            setup_foundation(driver)
-            driver.ui.select_field("add_amount", offset=1)
-            driver.ui.select_field("add_accent", offset=2)
-            driver.ui.expect_selected_field("focused", "Add accent", "70", art=True)
+            CASE_IMAGES[name](driver)
             frames = collections.Counter()
             seen = {}
             for _ in range(40):
@@ -98,18 +123,18 @@ def capture_foundation():
                 seen[key] = pixels
                 time.sleep(0.05)
             key, count = frames.most_common(1)[0]
-            staged_png = Path(staged) / "merge-shape-foundation.png"
+            staged_png = Path(staged) / (name + ".png")
             write_png(staged_png, seen[key])
         finally:
             driver.finish()
-        target = REPO / "images" / "merge-shape-foundation.png"
+        target = REPO / "images" / (name + ".png")
         target.write_bytes(staged_png.read_bytes())
         print("wrote", target)
         print("first %d rows sha256 %s (%d of %d samples)" % (rows, key, count, sum(frames.values())))
 
 
 if __name__ == "__main__":
-    if sys.argv[1:] == ["merge-shape-foundation"]:
-        capture_foundation()
+    if sys.argv[1:2] and sys.argv[1] in CASE_IMAGES:
+        capture_case_image(sys.argv[1])
     else:
         main()

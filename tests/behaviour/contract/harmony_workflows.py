@@ -30,14 +30,16 @@ def setup_pattern_harmony(c):
     c.configure()
     # Put the legacy material two octaves above the Bass role's legal register.
     c.ui.tap_control("shift_right")
-    # The octave shift shows Note Masks (the screen follows the grid), so
-    # open Harmony through Channel tasks rather than the old page ring.
+    # The octave shift (channel octave +2) shows Note Masks (the screen follows the grid),
+    # so open Harmony through Channel tasks rather than the old page ring. The Channel
+    # scope names the octave (CH01 OCT+2).
     # Harmony: Pattern, then map the recurring written tone 0 to the Bass role.
-    c.ui.channel_page("harmony", channel=1); c.ui.expect_header("harmony", channel=1)
+    c.ui.channel_page("harmony", channel=1, confirm=False)
+    c.ui.expect_header("harmony", channel=1, octave=2)
     c.ui.turn(3, 2)
     c.ui.turn(2, 3); c.ui.press_key(3)
     c.ui.turn(3, 1); c.ui.press_key(3)
-    c.ui.expect_header("harmony_tone_map", channel=1)
+    c.ui.expect_header("harmony_tone_map", channel=1, octave=2)
     # Tone Map is a focused screen: its selected tone row shows the applied role.
     c.ui.expect_selected_field("focused", "Tone 0", "BASS", art=True)
 def revoice_workflow(c):
@@ -60,7 +62,7 @@ def pattern_harmony_persistence_workflow(c):
     from persisted_ranges import serializer_source
     setup_pattern_harmony(c)
     # The footer carries the apply status and neighbour hints; bind the body.
-    documentation_frame(c, '86484afec0974166f3d22cb0a9d71c9ccb5d154e4efca1122120efd94cc5fa58',
+    documentation_frame(c, 'd10719a8677a82215c280ca12af8334ca9144ce691e0b45d661cdb085890af7b',
                         'images/harmony-tone-map.png', stable_rows=55)
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (86, 117), (88, 107), (89, 97))]
@@ -184,10 +186,9 @@ def ensemble_polyrhythm_workflow(c):
     c.ui.channel_page("harmony", channel=2)
     c.ui.expect_header("harmony", channel=2)
     c.ui.select_row("result", 8); c.ui.press_key(3)
-    # Result (H05) is focused: select its Status row to read it.
+    # Result (H05) is a dashboard: its Status row reads exactly.
     c.ui.expect_header("harmony_result", channel=2)
-    c.ui.select_row("status", 1)
-    c.ui.expect_selected_field("focused", "Status", "LOCAL SCALE BYPASS", art=True)
+    c.ui.expect_dashboard_row("Status", "LOCAL SCALE BYPASS")
     c.results.append(dict(kind='local-scale-bypass', channel=2,
                           pitches=local_pitches, status='LOCAL SCALE BYPASS', passed=True))
 
@@ -206,16 +207,19 @@ def ensemble_polyrhythm_workflow(c):
     assert octave_pitches == [72, 72, 72, 72, 72, 72], octave_pitches
     c.ui.stop(); c.wait(lambda value: value['midi_capture']['outstanding'] == [])
     c.ui.channel_page("harmony", "midi_config", channel=3, confirm=False)
-    c.ui.expect_header("harmony", channel=3)
+    # Channel 3's octave (+1) shows in its Channel scope (CH03 OCT+1).
+    c.ui.expect_header("harmony", channel=3, octave=1)
     c.ui.select_row("result", 8); c.ui.press_key(3)
-    c.ui.expect_header("harmony_result", channel=3)
-    c.ui.select_row("step", 0); c.ui.set_value(1)
-    c.ui.expect_selected_field("focused", "Step", "2", art=True)
-    c.ui.select_row("status", 1)
-    c.ui.expect_selected_field("focused", "Status", "LOCAL OCTAVE BYPASS", art=True)
+    c.ui.expect_header("harmony_result", channel=3, octave=1)
+    # H05 is a dashboard: E3 moves the inspected step; its Step and Status rows read exactly.
+    c.ui.set_value(1)
+    c.ui.expect_dashboard_row("Step", "2")
+    c.ui.expect_dashboard_row("Status", "LOCAL OCTAVE BYPASS")
     c.results.append(dict(kind='local-octave-bypass', channel=3, inspected_step=2,
                           pitches=octave_pitches, status='LOCAL OCTAVE BYPASS', passed=True))
-def no_voicing_fallback_workflow(c):
+def setup_no_voicing(c):
+    """Harmony Pattern with a Bass register that excludes C, tone 0 mapped to Bass, two
+    silent-mapped cycles played; ends on Result (H05) showing step 1."""
     c.configure(); c.ui.channel_page("harmony", "midi_config", channel=1)
     c.ui.expect_header("harmony", channel=1)
     c.ui.set_value(2)                # Pattern
@@ -239,27 +243,31 @@ def no_voicing_fallback_workflow(c):
     c.playback(silent_mapped, cycles=2, timeout=6)
     c.ui.feature_root(); c.ui.select_row("result", 9); c.ui.press_key(3)  # Result
     c.ui.expect_header("harmony_result", channel=1)
-    # H05 is a focused screen: select Status to read it. (The retired region
-    # oracle stopped at x108, so it bound 'NO VOICING RANGE' exactly.)
-    c.ui.select_row("status", 1)
-    c.ui.expect_selected_field("focused", "Status", "NO VOICING RANGE", art=True)
+
+
+def h05_rows(step, status, planned, emitted, failure):
+    """H05 VOICE MOVEMENT is a dashboard (owner feedback 25 September 2026): every row at
+    once; a failed event adds its Failure details row."""
+    rows = [("Step", str(step)), ("Status", status), ("CH1 planned", planned), ("CH1 emitted", emitted)]
+    return rows + ([("Failure details", ">")] if failure else [])
+
+
+def no_voicing_fallback_workflow(c):
+    setup_no_voicing(c)
+    # H05 is a dashboard: the whole screen is read at once, exactly. E3 still
+    # moves the inspected step (E2 has nothing to choose).
+    c.ui.expect_dashboard("harmony_result", h05_rows(1, "NO VOICING RANGE", "NONE", "NONE", True), channel=1)
     c.results.append(dict(kind='no-voicing-visible', reason='range', passed=True))
-    # Playback is stopped, so both the semantic status and last-emitted rows are
-    # stable in real and controlled time; the footer names neighbour rows.
-    documentation_frame(c, '6a06e7cde0f7d2a784aa32575f57609df73910e0f9d4be005e9cdd5e57a641ad',
+    # Playback is stopped, so the dashboard is stable in real and controlled time.
+    documentation_frame(c, 'd5508f2f1a4a9ed2addf153a59b6b871106ba2f18448cf181c3e89a9cd603e3f',
                         'images/harmony-no-voicing.png', stable_rows=55)
-    c.ui.select_row("step", 0); c.ui.set_value(1)  # H05 Step 2: select one coherent event chain.
-    c.ui.expect_selected_field("focused", "Step", "2", art=True)
-    c.ui.select_row("ch1_planned", 2)
-    c.ui.expect_selected_field("focused", "CH1 planned", "62", art=True)
-    c.ui.select_row("step", 0); c.ui.set_value(3)
-    c.ui.expect_selected_field("focused", "Step", "5", art=True)
-    c.ui.select_row("status", 1)
-    c.ui.expect_selected_field("focused", "Status", "NO EVENT", art=True)
-    c.ui.select_row("ch1_planned", 2)
-    c.ui.expect_selected_field("focused", "CH1 planned", "NONE", art=True)
+    c.ui.set_value(1)  # H05 Step 2: select one coherent event chain.
+    c.ui.expect_dashboard("harmony_result", h05_rows(2, "NO VOICING RANGE", "62", "62", True), channel=1)
+    c.ui.set_value(3)
+    c.ui.expect_dashboard("harmony_result", h05_rows(5, "NO EVENT", "NONE", "NONE", False), channel=1)
     c.results.append(dict(kind='unrecorded-step-inspection', step=5, status='NO EVENT', passed=True))
-    c.ui.select_row("step", 0); c.ui.set_value(-4)
+    c.ui.set_value(-4)  # back to step 1
+    c.ui.expect_dashboard("harmony_result", h05_rows(1, "NO VOICING RANGE", "NONE", "NONE", True), channel=1)
     # K2 returns from the Result child to the Harmony root.
     c.ui.press_key(2); c.ui.expect_header("harmony", channel=1)
     c.ui.select_row("entry", 8); c.ui.press_key(3)   # Entry / Failure
@@ -272,8 +280,7 @@ def no_voicing_fallback_workflow(c):
     c.playback(legacy, cycles=2, timeout=6)
     c.ui.feature_root(); c.ui.select_row("result", 9); c.ui.press_key(3)
     c.ui.expect_header("harmony_result", channel=1)
-    c.ui.select_row("status", 1)
-    c.ui.expect_selected_field("focused", "Status", "LEGACY RANGE", art=True)
+    c.ui.expect_dashboard_row("Status", "LEGACY RANGE")
     c.results.append(dict(kind='explicit-legacy-fallback', passed=True))
 def held_step_precedence_workflow(c):
     c.configure()
@@ -284,9 +291,10 @@ def held_step_precedence_workflow(c):
     c.ui.expect_selected_field("focused", "Mode", "REVOICE", art=True)
     try:
         with c.ui.hold_step(1):
-            # The held step shows the last editable legacy workspace (Trig
-            # params, the old Trig Locks) scoped to the held step.
-            c.ui.expect_header("trig_locks", channel=1, held=(1,))
+            # The held step shows the remembered edit family scoped to the held
+            # step: Masks, since E1 opens Channel tasks straight from Masks and
+            # Trig params was never shown in this session.
+            c.ui.expect_header("masks", channel=1, held=(1,))
             c.action(type='midi', port=1, bytes=[144, 72, 90]); c.elapse(.05)
             c.action(type='midi', port=1, bytes=[128, 72, 0])
     finally:
@@ -300,14 +308,13 @@ def held_step_precedence_workflow(c):
     c.ui.channel_page("note_dashboard", "trig_locks", channel=1)
     c.ui.expect_header("note_dashboard", channel=1)
     with c.ui.hold_step(2):
-        # Output (C06) inspects the held step in place and shows one field at
-        # a time: select each stage of step 2's event chain.
+        # Output (C06) is a dashboard that inspects the held step in place: its Step
+        # row names it, its Pitch row is step 2's scale pitch (no harmony moved it:
+        # the Revoice draft was cancelled) and Sent the note sent, D3 (MIDI 62).
         c.ui.expect_header("note_dashboard", channel=1, held=(2,))
-        c.ui.select_row("inspected_step", 4)
-        c.ui.expect_selected_field("focused", "Step", "STEP02")
-        for row, label in ((6, "Planned"), (7, "Scheduled"), (8, "Emitted")):
-            c.ui.select_row(label.lower(), row)
-            c.ui.expect_selected_field("focused", label, "62")
+        c.ui.expect_output_field("step", "STEP02 HELD")
+        c.ui.expect_output_field("pitch", "D3")
+        c.ui.expect_output_field("sent", "D3")
     c.results.append(dict(kind='held-step-precedence',
                           draft_cancelled=True, gesture_routed_once=True,
                           selected_event_chain='step2:P62/S62/E62', passed=True))
