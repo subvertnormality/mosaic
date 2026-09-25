@@ -13,10 +13,18 @@ class PresentationContract(unittest.TestCase):
   for event in ['E1+','E2-','E3+','K2.down','K3.down']:
    state=initial();state.update(native=True,modal=True,held=True)
    after,ops,_=step(S,state,event);self.assertEqual([o['op']for o in ops],['native.dispatch'])
- def test_channel_family_edges(self):
-  state=initial()
-  for ev,dest in [('E1-','C01'),('E1+','C02'),('E1+','N01'),('E1+','N01'),('E1-','C02'),('E1-','C01')]:
-   state,_,_=step(S,state,ev);self.assertEqual(state['screen'],dest)
+ def test_channel_e1_opens_tasks_and_scrolls_them(self):
+  # Owner decision 25 September 2026: E1 opens Channel tasks, as on every page.
+  for start in ['C01','C02','C04']:
+   for ev in ['E1+','E1-']:
+    after,_,_=step(S,initial(start),ev);self.assertEqual(after['screen'],'N01',(start,ev))
+  for ev in ['E1+','E1-']:
+   after,ops,_=step(S,initial('N01'),ev)
+   self.assertEqual(after['screen'],'N01');self.assertEqual([o['op']for o in ops],['focus.move_clamped'])
+ def test_held_e1_still_switches_edit_families(self):
+  state=initial();state.update(held=True)
+  state,_,_=step(S,state,'E1+');self.assertEqual(state['screen'],'C02')
+  state,_,_=step(S,state,'E1-');self.assertEqual(state['screen'],'C01')
  def test_readonly_never_edits(self):
   for sid,screen in S['screens'].items():
    if screen['profile']=='read_only':

@@ -85,11 +85,7 @@ def step(spec,state,event,payload=None):
   elif op=='scope.restore_family':s['screen']=family()
   elif op=='scope.follow':
    if s['context']=='Channel'and spec['screens'][s['screen']]['hold_policy']=='follow_family':s['screen']=family()
-  elif op=='family.navigate':
-   s['screen']={'C01':{'E1-':'C01','E1+':'C02'},'C02':{'E1-':'C01','E1+':'N01'}}[s['screen']][event]
-   if s['screen']in ['C01','C02']:s['family']='parameters'if s['screen']=='C02'else'masks'
   elif op=='family.switch_clamped':s['screen']='C02'if event=='E1+'else'C01';s['family']='parameters'if s['screen']=='C02'else'masks'
-  elif op=='tasks.channel_exit_or_clamp':s['screen']='C02'if event=='E1-'else'N01'
   elif op=='tasks.open':s['screen']=spec['tasks']['navigators'][s['context']]
   elif op=='tasks.enter_selected':
    rows={x['id']:x for x in task_rows(spec,s,payload)}

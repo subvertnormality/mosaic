@@ -45,13 +45,23 @@ def live_ui_follow(c):
 
 
 def live_ui_tasks(c):
-    """README: E1 moves Masks, Trig params and Channel tasks; tasks open every Channel screen."""
+    """README: E1 opens the page's task list from any screen, on the row of the
+    screen it came from; E1 or E2 moves through the rows; K3 opens every Channel screen."""
     ui = c.ui
     ui.tap_control("channel_editor"); ui.expect_header("masks", channel=1)
-    for delta, page in ((1, "trig_locks"), (1, "channel_tasks"), (1, "channel_tasks"),
-                        (-1, "trig_locks"), (-1, "masks"), (-1, "masks")):
-        c.enc(1, delta); ui.expect_header(page, channel=1)
-        c.results.append(dict(kind="e1-family", delta=delta, page=page, passed=True))
+    c.enc(1, 1); ui.expect_header("channel_tasks", channel=1); ui.expect_task_row("Masks")
+    c.results.append(dict(kind="e1-opens-tasks", source="masks", passed=True))
+    # Both encoders scroll the list, one row per detent, clamped at the ends.
+    for encoder, delta, row in ((1, 1, "Trig params"), (1, 1, "Output"), (2, 1, "Harmony"),
+                                (2, -1, "Output"), (1, -1, "Trig params")):
+        c.enc(encoder, delta); ui.expect_header("channel_tasks", channel=1); ui.expect_task_row(row)
+        c.results.append(dict(kind="task-scroll", encoder=encoder, delta=delta, row=row, passed=True))
+    c.enc(1, -3); ui.expect_task_row("Masks")
+    c.enc(2, 1); c.key(3); ui.expect_header("trig_locks", channel=1)
+    # From Trig params, E1 (either way) opens the list again on Trig params.
+    c.enc(1, -1); ui.expect_header("channel_tasks", channel=1); ui.expect_task_row("Trig params")
+    c.results.append(dict(kind="e1-opens-tasks", source="trig_locks", passed=True))
+    c.key(3); ui.expect_header("trig_locks", channel=1)
     for page in ("memory", "clock_mods", "midi_config", "note_dashboard", "merge_shape", "harmony",
                  "masks", "trig_locks"):
         ui.channel_page(page)

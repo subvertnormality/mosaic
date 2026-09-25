@@ -55,8 +55,8 @@ mutation, modifier precedence and release behavior. After it resolves, emit one
 read-only outcome. Norns follows that outcome; it must not execute it again.
 The grid's existing renderer continues to own musical LED state.
 
-Channel E1 progresses Masks → Trig parameters → Tasks, one stop per input;
-negative movement reverses and clamps. E2 selects a field; E3 edits through its
+E1 opens the page's task list from any screen, the Channel page included; in a
+task list E1 and E2 move through the rows. E2 selects a field; E3 edits through its
 original owner. Held steps establish the exact edit scope and override a feature
 draft before clear/slide/edit. Native menus own norns controls while open.
 Playback, MIDI and queue updates change displayed data without stealing focus.

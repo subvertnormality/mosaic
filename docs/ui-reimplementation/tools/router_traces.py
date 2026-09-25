@@ -98,6 +98,19 @@ def build():
                 start['shift'] = rnd.random() < 0.3
                 start['held'] = rnd.random() < 0.2
                 walks.append({'start': deepcopy(start), 'steps': walk(spec, rnd, edges, start, SHORT, event)})
+    # Every feature action edge is taken once by K3 on its row, not left to chance.
+    for sid in sorted(edges):
+        for field_id in edges[sid]:
+            start = model.initial(sid, model.contexts(spec, sid)[0])
+            start.update(field_kind='action', field_id=field_id)
+            steps = []
+            try:
+                after, ops, rule = model.step(spec, deepcopy(start), 'K3.down', {})
+                steps.append({'set': {}, 'event': 'K3.down', 'payload': {}, 'rule': rule,
+                              'ops': [o['op'] for o in ops], 'diff': diff(start, after)})
+            except (ValueError, KeyError):
+                steps.append({'set': {}, 'event': 'K3.down', 'payload': {}, 'error': True})
+            walks.append({'start': deepcopy(start), 'steps': steps})
     for _ in range(WALKS):
         context = rnd.choice(sorted(spec['contexts']))
         start = model.initial(spec['contexts'][context], context)

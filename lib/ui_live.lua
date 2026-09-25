@@ -364,6 +364,14 @@ hooks["tasks.open"] = function()
   if screen and (screen.provider == "merge" or screen.provider == "harmony") then
     feature_editor(screen.provider):enter()
   end
+  -- The task list opens on the row of the screen it was opened from, so E1
+  -- shows where you are and K3 goes straight back.
+  local s = router.state
+  if spec.tasks.rows[s.screen] then
+    for _, row in ipairs(router:task_rows()) do
+      if ui_router.row_screen(row, s.context) == current.before then focus[s.screen] = row.id; break end
+    end
+  end
 end
 
 -- Modal questions stay with their owners; K3/K2 reach the owner once.

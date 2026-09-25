@@ -54,18 +54,56 @@ function test_ui_motion_off_draws_only_the_resting_mark_and_asks_for_no_frames()
   end)
 end
 
-function test_ui_motion_screen_change_reveals_then_settles_on_the_plain_frame()
+-- Owner decision 2026-09-25: screens change without a transition.
+function test_ui_motion_screen_change_draws_the_new_screen_at_once()
   with_motion(2, function(dirty)
     ui_motion.screen_changed()
-    local first = frame(vm("C02"))
-    luaunit.assert_true(count(first, "rect") > 4)
-    local frames = 1
-    while ui_motion.busy() do frame(vm("C02")); frames = frames + 1 end
-    luaunit.assert_true(frames <= 8)
-    -- The settled frame is the renderer's plus the resting mark only.
-    local settled = frame(vm("C02"))
-    luaunit.assert_equals(count(settled, "rect"), 4)
-    luaunit.assert_true(dirty() >= frames - 1)
+    luaunit.assert_false(ui_motion.busy())
+    local first, rendered = frame(vm("C02"))
+    luaunit.assert_equals(rendered, 1)
+    -- The renderer's frame plus the resting mark: nothing covers the screen.
+    luaunit.assert_equals(count(first, "rect"), 4)
+    luaunit.assert_equals(dirty(), 0)
+  end)
+end
+
+-- The glide's shadow rectangles, frame by frame, as {x, y}.
+local function glide_path(from, to)
+  frame(vm("C01", from))
+  while ui_motion.busy() do frame(vm("C01", from)) end
+  local path = {}
+  for _ = 1, 12 do
+    local calls = frame(vm("C01", to))
+    for index, call in ipairs(calls) do
+      if call[1] == "rect" and calls[index + 1] and calls[index + 1][1] == "stroke" then
+        path[#path + 1] = {call[2], call[3]}
+      end
+    end
+    if not ui_motion.busy() then break end
+  end
+  return path
+end
+
+function test_ui_motion_selection_shadow_travels_diagonally_between_rows()
+  with_motion(2, function()
+    -- Cell 4 (top right) to cell 5 (bottom left) on the masks overview.
+    local path = glide_path(4, 5)
+    luaunit.assert_true(#path >= 4, "a visible glide")
+    local start_x, start_y, end_x, end_y = 96, 9, 0, 27
+    for index, point in ipairs(path) do
+      local x, y = point[1], point[2]
+      -- Never parked on the cell it left.
+      luaunit.assert_false(x == start_x and y == start_y, "frame " .. index)
+      if index > 1 then
+        -- x and y move together every frame: a diagonal, never an L.
+        luaunit.assert_true(x < path[index - 1][1], "x moves on frame " .. index)
+        luaunit.assert_true(y > path[index - 1][2], "y moves on frame " .. index)
+      end
+      -- On the straight line between the two cells.
+      local along = (start_x - x) / (start_x - end_x)
+      luaunit.assert_true(math.abs((y - start_y) - along * (end_y - start_y)) < 0.01, "on the line " .. index)
+    end
+    luaunit.assert_equals(path[#path], {end_x, end_y})
   end)
 end
 

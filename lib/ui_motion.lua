@@ -1,24 +1,26 @@
 -- Presentation motion for the live screen: small, playful and never in the way.
 --
--- * A screen change reveals the new body tile by tile, left to right (the
---   splash's mosaic, in miniature).
+-- * A screen change is instant: no transition over the new screen.
+-- * On overview grids the selection's shadow glides from the cell it left to
+--   the new one along the straight line between them (diagonally when it moves
+--   between rows).
 -- * A value change, focus move or apply runs a light around Mosaic's little
 --   four-tile mark in the title bar.
 -- * Characters blink now and then.
 --
 -- Motion is decorative only (spec layout_contract.motion). It never delays or
--- consumes input, hides a value for at most WIPE_FRAMES frames, uses no
+-- consumes input, never hides a value, uses no
 -- math.random and drives no MIDI or grid LED. Animation advances one step per
 -- drawn frame, so it is identical in real and controlled time. The native
 -- MOSAIC > UI motion parameter turns it off; captures then use the settled frame.
 
 local ui_motion = {}
 
-local WIPE_FRAMES, POP_FRAMES, BLINK_FRAMES = 6, 6, 3
+local POP_FRAMES, BLINK_FRAMES = 6, 3
 local BLINK_EVERY = 4.5 -- seconds between blinks while a character is shown
 
-local wipe, pop, pop_strength = 0, 0, 1
-local GLIDE_FRAMES = 4
+local pop, pop_strength = 0, 1
+local GLIDE_FRAMES = 7
 local glide = {frames = 0, from = nil, to = nil, screen = nil, selected = nil}
 local dial = {key = nil, shown = nil, target = nil}
 -- A changed focused value rolls up into place over a few frames.
@@ -38,9 +40,8 @@ function ui_motion.enabled()
   return true
 end
 
-function ui_motion.screen_changed()
-  if ui_motion.enabled() then wipe = WIPE_FRAMES end
-end
+-- Screens change without a transition (owner decision 2026-09-25).
+function ui_motion.screen_changed() end
 
 -- kind: "value", "focus", "apply" or "status".
 function ui_motion.nudge(kind)
@@ -54,7 +55,7 @@ function ui_motion.pose()
 end
 
 function ui_motion.busy()
-  return wipe > 0 or pop > 0 or blink > 0 or glide.frames > 0
+  return pop > 0 or blink > 0 or glide.frames > 0
     or (dial.target ~= nil and dial.shown ~= dial.target) or roll.frames > 0
 end
 
@@ -99,33 +100,28 @@ local function track_glide(vm)
   glide.screen, glide.selected = vm.screen, vm.selected
 end
 
-local function draw_glide()
-  local t = 1 - glide.frames / GLIDE_FRAMES
-  local e = 1 - (1 - t) * (1 - t)
+-- The shadow is already on its way in the first frame and eases in and out,
+-- moving x and y together so a move between rows travels diagonally.
+local function glide_position(frames_left)
+  local t = 1 - (frames_left - 1) / GLIDE_FRAMES
+  local e = t * t * (3 - 2 * t)
   local a, b = glide.from, glide.to
-  screen.level(5)
-  screen.rect(a[1] + (b[1] - a[1]) * e, a[2] + (b[2] - a[2]) * e, a[3], a[4])
-  screen.stroke()
+  return a[1] + (b[1] - a[1]) * e, a[2] + (b[2] - a[2]) * e
 end
 
-local function draw_wipe()
-  -- Body tiles (8x8) still covering the new screen: columns uncover left to right.
-  local uncovered = math.floor(16 * (1 - wipe / WIPE_FRAMES) + 0.5)
-  for column = uncovered, 15 do
-    for row = 1, 6 do
-      local shade = ((column * 7 + row * 3) % 4) + 1
-      screen.level(column == uncovered and shade + 3 or 0)
-      screen.rect(column * 8, row * 8 + 1, column == uncovered and 7 or 8, column == uncovered and 7 or 8)
-      screen.fill()
-    end
-  end
+local function draw_glide()
+  local a = glide.from
+  local x, y = glide_position(glide.frames)
+  screen.level(5)
+  screen.rect(x, y, a[3], a[4])
+  screen.stroke()
 end
 
 -- Draws one frame: the renderer, then any overlay, and keeps frames coming
 -- while something moves.
 function ui_motion.draw(vm, render)
   if not ui_motion.enabled() then
-    wipe, pop, blink, glide.frames = 0, 0, 0, 0
+    pop, blink, glide.frames = 0, 0, 0
     dial.shown, dial.target, roll.frames = nil, nil, 0
     vm.pose, vm.motion = 0, nil
     local ok, report = render(vm)
@@ -161,7 +157,6 @@ function ui_motion.draw(vm, render)
   -- A character keeping time asks for frames for as long as it moves.
   local moving = ui_motion.busy() or vm.motion ~= nil
   if glide.frames > 0 then draw_glide(); glide.frames = glide.frames - 1 end
-  if wipe > 0 then draw_wipe(); wipe = wipe - 1 end
   draw_mark(pop > 0)
   if pop > 0 then pop = pop - 1 end
   if blink > 0 then blink = blink - 1 end

@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "9b15119b60233185976cf22231c630dfbff19bf94aa024e3fa7982a12f876ea2",
+ "manual_sha256": "6c44ed373e894f6172db49afe7b60404515af173bbf640270d7c5e036153fd76",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -198,7 +198,7 @@
    "level": 3,
    "start_line": 345,
    "end_line": 380,
-   "text_sha256": "1ad78ac3590179ff65e89836338ac298a43c56b8a7e5b2a9a01594a64f32a62a",
+   "text_sha256": "8b0787040d6080a4518af4a8a38f7b590c0080669d5e3111965dc85f55fa0a1a",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "NAV-CONFIRM"
@@ -769,7 +769,7 @@
    "level": 3,
    "start_line": 971,
    "end_line": 992,
-   "text_sha256": "56f2c7289356a422598ac012cdba1f6884c62c3afe67d8a3e46816538a1c625a",
+   "text_sha256": "f7a44c49a81ab502d2eb03929b93f8dd750b656dc9244f7a7792b5bb5d8c9962",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "PARAM-OFF",
@@ -1080,7 +1080,7 @@
    "level": 3,
    "start_line": 1161,
    "end_line": 1185,
-   "text_sha256": "dc3cbf9682fe0271832a082bd28405a0c9ccb7ab0e5e78b699a452c36b7d2b93",
+   "text_sha256": "3eef50c96d0a03aff3953c7755c7d0a33854b58b7d33bbecc593e0b31425564e",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "LOCK-PARAM-CLEAR",
@@ -1108,7 +1108,7 @@
    "level": 3,
    "start_line": 1204,
    "end_line": 1228,
-   "text_sha256": "ad535ab152a8f075eb85e1f29d76ed86644980fb790e3cbe384954723fe161cc",
+   "text_sha256": "107d3bfc2b51c496700a7454e66ee498f6c88a3fd8e80f0817a858922d3a039c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "LOCK-MASK"
@@ -1478,7 +1478,7 @@
    "level": 5,
    "start_line": 1368,
    "end_line": 1371,
-   "text_sha256": "4f2f5e76ab3c5968b5b1a8a7ab2d2a431ba53eb573b2559ac32f7101070abfb3"
+   "text_sha256": "9d7f10ebdc73babfe733241403eff56def61fd59e4a172eb06c8c806b2803997"
   },
   {
    "id": "MAN-108",
@@ -1607,7 +1607,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "9b15119b60233185976cf22231c630dfbff19bf94aa024e3fa7982a12f876ea2"
+   "sha256": "6c44ed373e894f6172db49afe7b60404515af173bbf640270d7c5e036153fd76"
   },
   {
    "path": "cheat_sheet.html",

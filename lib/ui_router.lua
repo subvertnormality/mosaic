@@ -140,7 +140,6 @@ local function find_edge(spec, screen, field_id)
   end
 end
 
-local FAMILY_NAVIGATION = {C01 = {["E1-"] = "C01", ["E1+"] = "C02"}, C02 = {["E1-"] = "C01", ["E1+"] = "N01"}}
 
 -- Applies one event. Returns the effect list (each {op, target}) and the rule id.
 -- A failed event (unhandled input, tie, bad context) leaves the state unchanged.
@@ -214,14 +213,9 @@ function Router:apply_event(event, payload)
       s.screen = family()
     elseif op == "scope.follow" then
       if s.context == "Channel" and self:screen_entry().hold_policy == "follow_family" then s.screen = family() end
-    elseif op == "family.navigate" then
-      s.screen = FAMILY_NAVIGATION[s.screen][event]
-      set_family_from_screen()
     elseif op == "family.switch_clamped" then
       s.screen = event == "E1+" and "C02" or "C01"
       s.family = s.screen == "C02" and "parameters" or "masks"
-    elseif op == "tasks.channel_exit_or_clamp" then
-      s.screen = event == "E1-" and "C02" or "N01"
     elseif op == "tasks.open" then
       s.screen = spec.tasks.navigators[s.context]
     elseif op == "tasks.enter_selected" then

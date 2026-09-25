@@ -353,7 +353,7 @@ Every screen has the same parts. The title row names the screen and its scope: t
 
 The controls work the same way on every screen:
 
-- **E1** moves between the main screens and the page's task list. On the Channel page, E1 moves from Masks to Trig params to Channel tasks and back. On every other page, E1 opens the page's task list.
+- **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.
 - **E2** chooses a field, or a row in a task list.
 - **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.
 - **K3** opens the chosen task, applies a staged change, or confirms a question.
@@ -366,7 +366,7 @@ Task lists name everything a page can show. Channel tasks: Masks, Trig params, O
 
 Some settings are staged before they take effect. Device, clock, scale and song settings show your change straight away but only apply when you press K3. K2, or leaving the screen with E1, cancels a staged change without touching what is already playing. [Merge Shape and Harmony](#musical-merge-and-voice-leading) keep a whole draft in the same way.
 
-When _Mosaic_ starts, a mosaic of tiles lays itself down across the screen, row by row, then lifts away to leave the _Mosaic_ name, which fades into the first screen. Any key, encoder or grid press skips it. The start-up animation, screen transitions and the characters' blinks can be turned off with [UI Motion](#ui-motion).
+When _Mosaic_ starts, a mosaic of tiles lays itself down across the screen, row by row, then lifts away to leave the _Mosaic_ name, which fades into the first screen. Any key, encoder or grid press skips it. Screens change instantly, without a transition. The start-up animation and the characters' movement can be turned off with [UI Motion](#ui-motion).
 
 <img alt="Mosaic start-up animation" src="images/norns/splash.png" width="384" />
 
@@ -975,7 +975,7 @@ Most devices in _Mosaic_ feature a set of trig params that alters either the qua
 
 The Trig params screen of the channel editor shows all ten slots at once, with the selected slot's full name and value on its bottom line. Here's how to navigate and manipulate these settings:
 
-* **Screen Navigation**: Use E1 to move between Masks, Trig params and Channel tasks. Trig detail, in Channel tasks, shows the selected slot on its own.
+* **Screen Navigation**: Use E1 to open Channel tasks, then choose Masks, Trig params or another screen with E2 and open it with K3. Trig detail, in Channel tasks, shows the selected slot on its own.
 * **Changing Parameters**: To select a slot, turn E2. Adjust its value by rotating E3. To fine tune, rotate E3 whilst holding K1.
 * **Activating Parameters**: To activate a different parameter within the same slot, press K2 to open the parameter list, turn E3 to browse, press K3 to assign, and press K2 to return.
 * **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create "trig locks" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.
@@ -1168,7 +1168,7 @@ Device parameters can be locked on a per-step basis. To set a param trig lock:
 
 To clear parameter trig locks from a specific step:
 
-1. On the channel editor, show Trig params on the Norns screen (E1).
+1. On the channel editor, show Trig params on the Norns screen (Channel tasks, E1).
 2. Hold the step with trig locks and press K2.
 
 To clear all parameter trig locks from a channel:
@@ -1211,7 +1211,7 @@ Masks can also be locked on a per-step basis. To set a mask trig lock:
 
 To clear mask locks from a specific step:
 
-1. On the channel editor, show Masks on the Norns screen (E1).
+1. On the channel editor, show Masks on the Norns screen (Channel tasks, E1).
 2. Hold the step with mask locks and press K2.
 
 To clear all mask trig locks from a channel:
@@ -1368,7 +1368,7 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 
 ##### UI Motion
 
-Turns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On): the start-up animation, the tile transition between screens, the light running round _Mosaic_'s mark, the selection gliding across the Masks and Trig params grids, values rolling into place, and the characters. The Rhythm Doctor dances to the tempo of the captured bank, the Merge Shape garden sways and the Harmony choir bobs while the sequencer plays, and a metronome swings on the clock and tempo screens. A single numeric value, such as a mask or trig param, also shows a small dial of where it sits in its range, beside the value itself. Motion never delays input, hides a value for more than a moment or changes timing; with it off, every screen is still.
+Turns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On): the start-up animation, the light running round _Mosaic_'s mark, the selection's shadow gliding across the Masks and Trig params grids (diagonally when it changes row), values rolling into place, and the characters. The Rhythm Doctor dances to the tempo of the captured bank, the Merge Shape garden sways and the Harmony choir bobs while the sequencer plays, and a metronome swings on the clock and tempo screens. A single numeric value, such as a mask or trig param, also shows a small dial of where it sits in its range, beside the value itself. Motion never delays input, hides a value for more than a moment or changes timing; with it off, every screen is still.
 
 ### Sinfonion Connect
 

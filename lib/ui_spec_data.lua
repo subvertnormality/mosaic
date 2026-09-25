@@ -3930,31 +3930,6 @@ return {
         ["priority"] = 100,
       },
       {
-        ["id"] = "channel.family.E1-",
-        ["event"] = "E1-",
-        ["when"] = {
-          ["screen"] = {
-            "C01",
-            "C02",
-          },
-        },
-        ["effects"] = {
-          "family.navigate",
-        },
-        ["priority"] = 300,
-      },
-      {
-        ["id"] = "channel.tasks.E1-",
-        ["event"] = "E1-",
-        ["when"] = {
-          ["screen"] = "N01",
-        },
-        ["effects"] = {
-          "tasks.channel_exit_or_clamp",
-        },
-        ["priority"] = 300,
-      },
-      {
         ["id"] = "feature.return.E1-",
         ["event"] = "E1-",
         ["when"] = {
@@ -4000,31 +3975,6 @@ return {
           "tasks.open",
         },
         ["priority"] = 100,
-      },
-      {
-        ["id"] = "channel.family.E1+",
-        ["event"] = "E1+",
-        ["when"] = {
-          ["screen"] = {
-            "C01",
-            "C02",
-          },
-        },
-        ["effects"] = {
-          "family.navigate",
-        },
-        ["priority"] = 300,
-      },
-      {
-        ["id"] = "channel.tasks.E1+",
-        ["event"] = "E1+",
-        ["when"] = {
-          ["screen"] = "N01",
-        },
-        ["effects"] = {
-          "tasks.channel_exit_or_clamp",
-        },
-        ["priority"] = 300,
       },
       {
         ["id"] = "feature.return.E1+",
@@ -10732,7 +10682,7 @@ return {
       },
     },
     ["text"] = "full labels in detail; exact (numeric) values are never cropped or abbreviated: every layout with fields gives the selected value a whole full-width route on the same screen (focused value_region, detail selected row, overview full_value_line); cells use the '...' more-marker; overflow paints LAYOUT OVERFLOW and fails acceptance; absent event is NO EVENT; Off/Inherit/None/Mixed/zero distinct",
-    ["motion"] = "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), screen-change and value-change easing. It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame.",
+    ["motion"] = "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame.",
     ["performance"] = "dirty-driven existing refresh cadence; no rendering allocations proportional to project size or musical recomputation",
     ["specimen_rule"] = "screen.lua is the data-bound layout reference; atlas/characters/visuals retain accepted illustrative recipes. Fixture constants never supply application values. Decorative art only. Data diagrams require explicit snapshot bindings, described in diagram_contracts.",
     ["brand_mark"] = "Four 2px tiles at x121..126, y1..6 on every live screen: Mosaic's mark. Rest levels 3/6/3/6; lit in sequence by decorative motion. Scope text ends at x118 so the mark never overlaps text.",

@@ -375,7 +375,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E2 selects one of eight always-visible masks; E3 edits immediately. K2 while steps are held clears their masks; K1+K2 clears channel masks. K1 retains modifiers. E1 directly moves Masks → Trig params → Tasks, clamped; while steps are held only the two edit families are reachable; optional Mask detail is a separate task, not K3. All eight values remain visible while editing.",
+      "controls_explanation": "E2 selects one of eight always-visible masks; E3 edits immediately. K2 while steps are held clears their masks; K1+K2 clears channel masks. K1 retains modifiers. E1 opens Channel tasks (owner decision 25 September 2026: every page's E1 opens its task list); while steps are held E1 switches between the two edit families; optional Mask detail is a separate task, not K3. All eight values remain visible while editing.",
       "state_explanation": "No held steps: CHANNEL. One: STEP05. Multiple: 3 HELD and MIXED when values differ. INHERIT is absence, never numeric zero. Trig displays INHERIT/OFF/ON; length uses the existing division label. Chord 1..4 retain all existing signed degree values and existing clear semantics. Last grid release returns scope to CHANNEL; inspection never latches edit scope. Overview restored after audit. Selection outline is distinct from L step-lock and S slide indicators. X means inheritance, not zero. Held scope returns to Channel on release. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -5655,7 +5655,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Proposed Channel E1 order: Masks → Trig params → Tasks, clamped, one destination per delivered encoder event. Held steps restrict E1 to the two editors. In Tasks, E2 selects and K3 opens setup; negative E1 returns to Trig params. This replaces the current eight-page strip.",
+      "controls_explanation": "Channel E1 opens Channel tasks from any Channel screen, as every page's E1 opens its task list (owner decision 25 September 2026, replacing Masks → Trig params → Tasks). Held steps restrict E1 to switching between the two editors. In Tasks, E1 or E2 moves through the rows and K3 opens one. This replaces the old eight-page strip.",
       "state_explanation": "Remaining entries Merge detail, Device, History scroll. This is a task chooser, not a sequence of editing pages. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -24153,31 +24153,6 @@
         "priority": 100
       },
       {
-        "id": "channel.family.E1-",
-        "event": "E1-",
-        "when": {
-          "screen": [
-            "C01",
-            "C02"
-          ]
-        },
-        "effects": [
-          "family.navigate"
-        ],
-        "priority": 300
-      },
-      {
-        "id": "channel.tasks.E1-",
-        "event": "E1-",
-        "when": {
-          "screen": "N01"
-        },
-        "effects": [
-          "tasks.channel_exit_or_clamp"
-        ],
-        "priority": 300
-      },
-      {
         "id": "feature.return.E1-",
         "event": "E1-",
         "when": {
@@ -24223,31 +24198,6 @@
           "tasks.open"
         ],
         "priority": 100
-      },
-      {
-        "id": "channel.family.E1+",
-        "event": "E1+",
-        "when": {
-          "screen": [
-            "C01",
-            "C02"
-          ]
-        },
-        "effects": [
-          "family.navigate"
-        ],
-        "priority": 300
-      },
-      {
-        "id": "channel.tasks.E1+",
-        "event": "E1+",
-        "when": {
-          "screen": "N01"
-        },
-        "effects": [
-          "tasks.channel_exit_or_clamp"
-        ],
-        "priority": 300
       },
       {
         "id": "feature.return.E1+",
@@ -25201,18 +25151,6 @@
       "must_not": "evaluate music in renderer, infer target from stale focus, apply a draft without its owner",
       "target": "state.target captured at input dispatch",
       "algorithm": "Retain raw key state updates and existing modifier/short-K1 recognition exactly once."
-    },
-    "family.navigate": {
-      "kind": "owner_adapter",
-      "must_not": "evaluate music in renderer, infer target from stale focus, apply a draft without its owner",
-      "target": "state.target captured at input dispatch",
-      "algorithm": "C01 negative clamps, positive C02; C02 negative C01, positive N01; sign only, no skip from large delta."
-    },
-    "tasks.channel_exit_or_clamp": {
-      "kind": "presentation",
-      "must_not": "evaluate music in renderer, infer target from stale focus, apply a draft without its owner",
-      "target": "state.target captured at input dispatch",
-      "algorithm": "N01 E1 negative C02; positive stays N01. E2 navigates tasks."
     },
     "feature.return_then_tasks": {
       "kind": "owner_adapter",
@@ -31776,7 +31714,7 @@
       }
     },
     "text": "full labels in detail; exact (numeric) values are never cropped or abbreviated: every layout with fields gives the selected value a whole full-width route on the same screen (focused value_region, detail selected row, overview full_value_line); cells use the '...' more-marker; overflow paints LAYOUT OVERFLOW and fails acceptance; absent event is NO EVENT; Off/Inherit/None/Mixed/zero distinct",
-    "motion": "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), screen-change and value-change easing. It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame.",
+    "motion": "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame.",
     "performance": "dirty-driven existing refresh cadence; no rendering allocations proportional to project size or musical recomputation",
     "specimen_rule": "screen.lua is the data-bound layout reference; atlas/characters/visuals retain accepted illustrative recipes. Fixture constants never supply application values. Decorative art only. Data diagrams require explicit snapshot bindings, described in diagram_contracts.",
     "brand_mark": "Four 2px tiles at x121..126, y1..6 on every live screen: Mosaic's mark. Rest levels 3/6/3/6; lit in sequence by decorative motion. Scope text ends at x118 so the mark never overlaps text."

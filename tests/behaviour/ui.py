@@ -1170,6 +1170,10 @@ class Ui:
         self.driver.results.append(dict(kind="length-mask-display" if field == "length" else "overview-cell",
                                         field=field, label=value, passed=True))
 
+    def expect_task_row(self, label):
+        """The task list's selected row ('>' marker) is ``label``; task rows carry no value."""
+        self.expect_selected_field("detail", label=label, value="")
+
     def expect_list_label(self, label, wait=True):
         """The picker cursor row (C07) shows ``label``; the row value is blank or CURRENT."""
         from frame_oracle import selected_field_matches
