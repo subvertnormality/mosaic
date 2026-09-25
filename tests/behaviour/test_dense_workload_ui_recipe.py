@@ -95,7 +95,7 @@ def raw_recipe(driver, channels, workload, selector=raw_select_parameter):
         # The pattern slot tap shows Merge detail (25 September 2026); Device reopens
         # through Channel tasks (E1, E2 to the top, E2 to Device, K3).
         driver.enc(1, 3)
-        driver.enc(2, -10)
+        driver.enc(2, -9)
         driver.enc(2, 6)
         driver.key(3)
 

@@ -7871,7 +7871,7 @@
     "M-UIACC-A01-001"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Covered: E1 (one detent either way, and one large single event) from C01 and C02 opens N01 on Masks / Trig params; in N01 large single E1 events move one row each, E1 clamps at Masks (one detent and a large event) and at Norns settings (large event and one detent), K3 opens the row; Trig params keeps slot 3 and Masks keeps Velocity when reopened through the list; held step 5 E1 switches C02 <-> C01 clamped; no MIDI during navigation, all 128 grid LEDs and all eight mask values unchanged, and the configure() phrase replays exactly before and after. Not covered: RNG state (the phrase has no random source), other contexts' task lists (M-LIVEUI-DASH-001 covers Scale tasks)."
+   "domain": "Covered: E1 (one detent either way, and one large single event) from C01 and C02 opens N01 on Masks / Trig params; in N01 large single E1 events move one row each, E1 clamps at Masks (one detent and a large event) and at Merge Shape, the last row since Norns settings was removed (large event and one detent), K3 opens the row; Trig params keeps slot 3 and Masks keeps Velocity when reopened through the list; held step 5 E1 switches C02 <-> C01 clamped; no MIDI during navigation, all 128 grid LEDs and all eight mask values unchanged, and the configure() phrase replays exactly before and after. Not covered: RNG state (the phrase has no random source), other contexts' task lists (M-LIVEUI-DASH-001 covers Scale tasks)."
   },
   {
    "id": "UI-ACCEPT-A02",
@@ -8021,7 +8021,7 @@
     "M-UIACC-A18-001"
    ],
    "status": "partial-domain-coverage",
-   "domain": "50 live screens reached through public input (Channel C01-C07, C09, C12, C13 and the norns menu round trip; Merge M02, M03, M05-M07, M12-M14; Harmony H01-H05, H07-H11, H17, H19; Scale S01-S03; Pattern P01-P08 with two algorithm variants; Song A01-A03; tasks N01-N05; Rhythm Doctor R01) with header, overflow line, footer owner and selected value; long names, NONE/X/NO EVENT/0 sentinels and maximum values. Remaining: screens no public input shows on this build (C08, C10, C11, S04, S05, M04, M08-M11, H06, H12-H16, H18, F01-F08, R02-R16), art pose 1, Seed 65535 (docs/ui-reimplementation/reviews/ACCEPTANCE.md)."
+   "domain": "50 live screens reached through public input (Channel C01-C07, C09 and the norns menu round trip (C12/C13 and N04 left the Channel tasks, 25 September 2026); Merge M02, M03, M05-M07, M12-M14; Harmony H01-H05, H07-H11, H17, H19; Scale S01-S03; Pattern P01-P08 with the five-row algorithm picker; Song A01-A03; tasks N01-N03, N05; dashboards (C06, S03, A03, H05, P07, P08) checked whole, every row and no cursor; Rhythm Doctor R01) with header, overflow line, footer owner and selected value; long names, NONE/X/NO EVENT/0 sentinels and maximum values. Remaining: screens no public input shows on this build (C08, C10, C11, S04, S05, M04, M08-M11, H06, H12-H16, H18, F01-F08, R02-R16), art pose 1, Seed 65535 (docs/ui-reimplementation/reviews/ACCEPTANCE.md)."
   }
  ],
  "statement_mappings": [

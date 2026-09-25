@@ -128,7 +128,8 @@ class Sweep:
         entry = SPEC[sid]
         layout = entry["live_render"]["layout"]
         if footer is None:
-            footer = HINTS[entry["profile"]]
+            # Channel tasks names K1 for the norns parameters (Norns settings is gone).
+            footer = "K3 OPEN  K1 PARAMS" if sid == "N01" else HINTS[entry["profile"]]
         # Idle autosave may announce itself on any screen (M-TOOLTIP-002).
         footers = [footer] + list(tips) + ["Autosaved"]
         if layout == "dashboard":
@@ -213,14 +214,15 @@ def live_ui_sweep(c):
     sw.screen("C01", field=("Note", "X"), tips=("Channel Editor",))
     c.enc(1, 1)
     sw.screen("N01", field=("Masks", ""), tips=("Channel Editor",))
+    # Norns settings (N04) left the list (owner, 25 September 2026): its footer names K1.
     rows = ["Masks", "Trig params", "Output", "Harmony", "Clock", "Merge modes", "Device", "History",
-            "Merge Shape", "Norns settings"]
+            "Merge Shape"]
     e2(c, -12)
     for index, label in enumerate(rows):
         sw.screen("N01", field=(label, ""), tips=("Channel Editor",))
         e2(c, 1)
     e2(c, 1)  # clamps on the last row
-    sw.screen("N01", field=("Norns settings", ""), tips=("Channel Editor",))
+    sw.screen("N01", field=("Merge Shape", ""), tips=("Channel Editor",))
 
     channel_task(c, "output")
     sw.screen("C06", rows=C06_NO_EVENT)
@@ -238,10 +240,6 @@ def live_ui_sweep(c):
     sw.screen("C03", field=("Position", "0 of 0"))
     channel_task(c, "merge_shape")
     sw.screen("M02", field=("Mode", "OFF"), footer=(START, "Rhythm"))
-    channel_task(c, "norns")
-    sw.screen("N04", field=("Projects", ""))
-    c.key(2)
-    sw.screen("C01", field=("Note", "X"))
     channel_screens(c, sw)
     merge_screens(c, sw)
     harmony_screens(c, sw)
