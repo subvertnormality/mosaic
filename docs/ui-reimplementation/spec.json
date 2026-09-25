@@ -73,7 +73,7 @@
         },
         {
           "id": "merge",
-          "label": "Merge",
+          "label": "Merge modes",
           "screen": "C09"
         },
         {
@@ -85,16 +85,6 @@
           "id": "history",
           "label": "History",
           "screen": "C03"
-        },
-        {
-          "id": "mask_detail",
-          "label": "Mask detail",
-          "screen": "C12"
-        },
-        {
-          "id": "trig_detail",
-          "label": "Trig detail",
-          "screen": "C13"
         },
         {
           "id": "merge_shape",
@@ -1041,13 +1031,13 @@
       },
       "fields": [
         {
-          "id": "root",
-          "label": "Root",
-          "example": "E4  64",
+          "id": "note",
+          "label": "Note",
+          "example": "E4 0 2 4 0",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "root"
+            "field": "note"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -1055,13 +1045,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "chord",
-          "label": "Chord",
-          "example": "G4 B4 D5",
+          "id": "vel_len",
+          "label": "Vel / Len",
+          "example": "96 / 1/4",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "chord"
+            "field": "vel_len"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -1069,107 +1059,46 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "velocity",
-          "label": "Velocity",
-          "example": "96",
-          "binding": {
-            "provider": "read_only",
-            "target": "selected_object",
-            "field": "velocity"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "length",
-          "label": "Length",
-          "example": "1/4",
-          "binding": {
-            "provider": "read_only",
-            "target": "selected_object",
-            "field": "length"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "inspected_step",
+          "id": "step",
           "label": "Step",
-          "example": "STEP05",
+          "example": "ST05 HELD",
           "binding": {
             "provider": "read_only",
-            "target": "harmony_inspection.snapshot",
-            "field": "inspected_step"
+            "target": "selected_object",
+            "field": "step"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
-          "visibility": "snapshot.planned ~= nil (otherwise the two provenance lines are not drawn)",
-          "width_policy": "fit_value_then_detail",
-          "source": "lib/pages/channel_edit_page/channel_edit_page_ui.lua:259-293 via harmony_inspection.snapshot(selected_song_pattern, selected_channel, step): first held grid key in rows 4..7 (fn.calc_grid_count), else latest event"
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "provenance",
+          "id": "source",
           "label": "Source",
-          "example": "SRC3 M2 S1 H-",
+          "example": "SRC1 M- S1 H-",
           "binding": {
             "provider": "read_only",
-            "target": "harmony_inspection.snapshot",
-            "field": "provenance"
+            "target": "selected_object",
+            "field": "source"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
-          "visibility": "snapshot.planned ~= nil (otherwise the two provenance lines are not drawn)",
-          "width_policy": "fit_value_then_detail",
-          "source": "lib/pages/channel_edit_page/channel_edit_page_ui.lua:259-293 via harmony_inspection.snapshot(selected_song_pattern, selected_channel, step): snapshot.planned.source / merge / scale / harmony"
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "planned_pitch",
-          "label": "Planned",
-          "example": "64",
+          "id": "pitch",
+          "label": "Pitch",
+          "example": "64>64>64",
           "binding": {
             "provider": "read_only",
-            "target": "harmony_inspection.snapshot",
-            "field": "planned_pitch"
+            "target": "selected_object",
+            "field": "pitch"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
-          "visibility": "snapshot.planned ~= nil (otherwise the two provenance lines are not drawn)",
-          "width_policy": "fit_value_then_detail",
-          "source": "lib/pages/channel_edit_page/channel_edit_page_ui.lua:259-293 via harmony_inspection.snapshot(selected_song_pattern, selected_channel, step): snapshot.planned.output"
-        },
-        {
-          "id": "scheduled_pitch",
-          "label": "Scheduled",
-          "example": "64",
-          "binding": {
-            "provider": "read_only",
-            "target": "harmony_inspection.snapshot",
-            "field": "scheduled_pitch"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "snapshot.planned ~= nil (otherwise the two provenance lines are not drawn)",
-          "width_policy": "fit_value_then_detail",
-          "source": "lib/pages/channel_edit_page/channel_edit_page_ui.lua:259-293 via harmony_inspection.snapshot(selected_song_pattern, selected_channel, step): snapshot.scheduled.pitch"
-        },
-        {
-          "id": "emitted_pitch",
-          "label": "Emitted",
-          "example": "64",
-          "binding": {
-            "provider": "read_only",
-            "target": "harmony_inspection.snapshot",
-            "field": "emitted_pitch"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "snapshot.planned ~= nil (otherwise the two provenance lines are not drawn)",
-          "width_policy": "fit_value_then_detail",
-          "source": "lib/pages/channel_edit_page/channel_edit_page_ui.lua:259-293 via harmony_inspection.snapshot(selected_song_pattern, selected_channel, step): snapshot.emitted.pitch"
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
         },
         {
           "id": "bypass",
@@ -1177,14 +1106,13 @@
           "example": "NONE",
           "binding": {
             "provider": "read_only",
-            "target": "harmony_inspection.snapshot",
+            "target": "selected_object",
             "field": "bypass"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
-          "visibility": "snapshot.planned ~= nil (otherwise the two provenance lines are not drawn)",
-          "width_policy": "fit_value_then_detail",
-          "source": "lib/pages/channel_edit_page/channel_edit_page_ui.lua:259-293 via harmony_inspection.snapshot(selected_song_pattern, selected_channel, step): snapshot.planned.bypass"
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -1193,7 +1121,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E1 opens/moves the named context task navigator. E2 selects root, individual four chord voices, velocity, length or a provenance row for explanation. E3 no musical edit. K2 returns to C01. K3 has no action: the current Note Dashboard has no source-detail route (no-held K3 only runs save_confirm.confirm(), channel_edit_navigation.lua:197-231); C08 and C09 are reached by their own entries, not from C06. K1 retains grid modifiers and native menu. Holding a grid step in rows 4..7 inspects that step in place (see state).",
+      "controls_explanation": "Information only: every output fact on one dashboard, no cursor. E1 opens Channel tasks; K2 returns to the Channel family (owner decision 25 September 2026, usability audit).",
       "state_explanation": "Label LAST for emitted playback, PREVIEW for deterministic stopped evaluation, and PENDING for uncomputed stochastic output. Never draw a previous note as the next result. Root muted, unused chord slots, missing device, zero velocity and skipped trig have explicit states. Five voices paginate; never squeeze five pitch labels into one row. Held-step provenance (existing): with a grid key held in rows 4..7 the first such step is inspected, otherwise the latest event; harmony_inspection.snapshot supplies source/merge/scale/harmony provenance, planned output, scheduled and emitted pitch and bypass (channel_edit_page_ui.lua:259-293). A step with no recorded event shows no provenance and never borrows another step's event. The hold must be observed on C06 without navigation (hold policy observe_in_place). Display observation must not advance random generators or emit preview MIDI. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -1203,7 +1131,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -1392,7 +1320,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Opened only by the typed owner outcome SCREEN.C08 (no current gesture route; C06 K3 is not an entry). E1 disabled; E2 scrolls all source stages/full-name lines; E3 read-only. K2 returns to exact parent focus; K3 no action. K1 unchanged. Grid page/channel change exits detail; held steps are observed, not latched for editing.",
+      "controls_explanation": "Opened only by the typed owner outcome SCREEN.C08 (no current gesture route; C06 K3 is not an entry). E1 opens the task list; E2 scrolls all source stages/full-name lines; E3 read-only. K2 returns to exact parent focus; K3 no action. K1 unchanged. Grid page/channel change exits detail; held steps are observed, not latched for editing.",
       "state_explanation": "Only show proven stages: merge, mask origin, octave lock, effective scale origin, rotation/degree/transpose, snap/full-mask, quantised fixed note, final fixed note, stochastic modifier, actual emitted result. Suppressed stages say BYPASSED, unknown result says NOT PLAYED. Pattern relative degree is not falsely labelled an absolute note before quantisation. Example screenshot uses a simple no-transpose fixture. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -1499,7 +1427,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Read-only detail reached from Channel tasks (NAV.Channel.C09) and the merge grid outcomes G07/G16-G19; not from C06 K3. E1 disabled; E2 scrolls four merge domains and contributing patterns; E3 no edit; K2 back; K3 no action; K1 unchanged. All merge edits stay on their existing grid controls.",
+      "controls_explanation": "Read-only detail reached from Channel tasks (NAV.Channel.C09) and the merge grid outcomes G07/G16-G19; not from C06 K3. E1 opens Channel tasks (usability audit 25 September 2026); formerly disabled; E2 scrolls four merge domains and contributing patterns; E3 no edit; K2 back; K3 no action; K1 unchanged. All merge edits stay on their existing grid controls.",
       "state_explanation": "List all 16 selected pattern slots with wrapping/paging. Show exact engine mode labels and effective step values, not a claim that merged scale material is a conventional chord. No selection: NONE. Random merge output is last observed/unknown until evaluated without advancing RNG. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -1762,7 +1690,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "metronome"
       },
@@ -1854,6 +1782,20 @@
           "missing": "NONE",
           "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "step_lock",
+          "label": "Step lock",
+          "example": "NONE",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "step_lock"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -1869,7 +1811,8 @@
         "G12",
         "G13",
         "G34",
-        "NAV.Scale.S03"
+        "NAV.Scale.S03",
+        "G33"
       ],
       "grid_example": null,
       "live_render": {
@@ -1976,17 +1919,19 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Child of S03. E1 disabled; E2 source rows; E3 none; K2 back; K3 none; K1 unchanged. Grid navigation exits without musical mutation.",
+      "controls_explanation": "Child of S03. E1 opens the task list; E2 source rows; E3 none; K2 back; K3 none; K1 unchanged. Grid navigation exits without musical mutation.",
       "state_explanation": "Never invoke a state-mutating scale resolver for drawing. Use a read-only snapshot of applied state. Display lifetime: channel wrap or next eligible trig; global locks until replacement/global wrap. Probability rejection does not falsely clear channel source. Scale merging gets exact scale material and provenance, not guessed Roman analysis. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N02",
       "entry_flow_ids": [
-        "SCREEN.S04"
+        "SCREEN.S04",
+        "G12",
+        "G13"
       ],
       "grid_example": null,
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "detail",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -2463,20 +2408,6 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "effective_vel",
-          "label": "Effective vel",
-          "example": "96 PREVIEW",
-          "binding": {
-            "provider": "read_only",
-            "target": "selected_object",
-            "field": "effective_vel"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
           "id": "used_by",
           "label": "Used by",
           "example": "CH02 CH06",
@@ -2846,13 +2777,13 @@
       },
       "fields": [
         {
-          "id": "automatic",
-          "label": "Automatic",
-          "example": "03 > 04",
+          "id": "playing",
+          "label": "Playing",
+          "example": "SONG 01",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "automatic"
+            "field": "playing"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -2860,13 +2791,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "queued_jump",
-          "label": "Queued jump",
-          "example": "03 > 07",
+          "id": "next",
+          "label": "Next",
+          "example": "SONG 02",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "queued_jump"
+            "field": "next"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -2874,13 +2805,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "manual",
-          "label": "Manual",
-          "example": "03 HOLD",
+          "id": "pass",
+          "label": "Pass",
+          "example": "1 / 4",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "manual"
+            "field": "pass"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -2888,13 +2819,27 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "empty_slot_loop",
-          "label": "Empty-slot loop",
-          "example": "04 > 01",
+          "id": "global_length",
+          "label": "Global length",
+          "example": "64",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "empty_slot_loop"
+            "field": "global_length"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "mode",
+          "label": "Song mode",
+          "example": "AUTO",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "mode"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -2908,7 +2853,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Read-only playback. Browser Inspect cycles scenario examples, not new E2 settings. E1 reaches Slot setup and Tempo/feel; grid retains selection/copy/length controls.",
+      "controls_explanation": "Information only: the playing slot, the next one, the pass within its repeats, the global pattern length and whether song mode advances. The grid global-length fader lands here (owner decision 25 September 2026, usability audit).",
       "state_explanation": "Playing and automatic-next/queued targets are distinct. Live Pass2/4 differs from configured Repeats4. Manual mode has no auto-next arrow. Loop fixture assumes filled01..04 and empty05; actual engine state supplies production targets. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N05",
       "entry_flow_ids": [
@@ -5495,7 +5440,7 @@
         },
         {
           "id": "merge",
-          "label": "Merge",
+          "label": "Merge modes",
           "example": "C09",
           "binding": {
             "provider": "tasks",
@@ -5529,34 +5474,6 @@
             "provider": "tasks",
             "target": "selected_object",
             "field": "history"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "mask_detail",
-          "label": "Mask detail",
-          "example": "C12",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "mask_detail"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "trig_detail",
-          "label": "Trig detail",
-          "example": "C13",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "trig_detail"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -7187,7 +7104,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "pattern64",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -16730,8 +16647,8 @@
         "screen": "C09",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Feedback only on the current screen (tooltip \"Pattern n added/removed\"); C09 shows the full assignment when opened.",
-        "navigation": "retain",
+        "lifetime": "Feedback only on the current screen (tooltip \"Pattern n added/removed\"); C09 shows the full assignment when opened. (owner decision 25 September 2026, usability audit)",
+        "navigation": "temporary",
         "target_binding": "resolved_outcome",
         "return_policy": "next_deliberate_action",
         "alternatives": [],
@@ -16934,10 +16851,10 @@
       "new": {
         "gesture": "retained",
         "entry": "resolved_grid_outcome",
-        "screen": "S03",
+        "screen": "S04",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Persistent summary after tap; no activation caused by display",
+        "lifetime": "Persistent summary after tap; no activation caused by display (owner decision 25 September 2026, usability audit)",
         "navigation": "replace",
         "target_binding": "resolved_outcome",
         "return_policy": "next_deliberate_action",
@@ -16974,10 +16891,10 @@
       "new": {
         "gesture": "retained",
         "entry": "resolved_grid_outcome",
-        "screen": "S03",
+        "screen": "S04",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Temporary; return to held editor when secondary key releases",
+        "lifetime": "Temporary; return to held editor when secondary key releases (owner decision 25 September 2026, usability audit)",
         "navigation": "temporary",
         "target_binding": "resolved_outcome",
         "return_policy": "generation_checked_stack",
@@ -17097,8 +17014,8 @@
         "screen": "C09",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445).",
-        "navigation": "retain",
+        "lifetime": "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445). (owner decision 25 September 2026, usability audit)",
+        "navigation": "temporary",
         "target_binding": "resolved_outcome",
         "return_policy": "next_deliberate_action",
         "alternatives": [
@@ -17147,8 +17064,8 @@
         "screen": "C09",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445).",
-        "navigation": "retain",
+        "lifetime": "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445). (owner decision 25 September 2026, usability audit)",
+        "navigation": "temporary",
         "target_binding": "resolved_outcome",
         "return_policy": "next_deliberate_action",
         "alternatives": [
@@ -17197,8 +17114,8 @@
         "screen": "C09",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445).",
-        "navigation": "retain",
+        "lifetime": "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445). (owner decision 25 September 2026, usability audit)",
+        "navigation": "temporary",
         "target_binding": "resolved_outcome",
         "return_policy": "next_deliberate_action",
         "alternatives": [
@@ -17845,10 +17762,10 @@
       "new": {
         "gesture": "retained",
         "entry": "resolved_grid_outcome",
-        "screen": "S01",
+        "screen": "S03",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Persistent; zero navigation",
+        "lifetime": "Persistent; zero navigation (owner decision 25 September 2026, usability audit)",
         "navigation": "replace",
         "target_binding": "resolved_outcome",
         "return_policy": "next_deliberate_action",
@@ -24093,21 +24010,6 @@
         "priority": 200
       },
       {
-        "id": "detail.E1-",
-        "event": "E1-",
-        "when": {
-          "screen": [
-            "C08",
-            "C09",
-            "S04"
-          ]
-        },
-        "effects": [
-          "noop"
-        ],
-        "priority": 200
-      },
-      {
         "id": "task.move.E1-",
         "event": "E1-",
         "when": {
@@ -24136,21 +24038,6 @@
         },
         "effects": [
           "feature.return_then_tasks"
-        ],
-        "priority": 200
-      },
-      {
-        "id": "detail.E1+",
-        "event": "E1+",
-        "when": {
-          "screen": [
-            "C08",
-            "C09",
-            "S04"
-          ]
-        },
-        "effects": [
-          "noop"
         ],
         "priority": 200
       },

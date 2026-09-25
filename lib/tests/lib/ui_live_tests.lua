@@ -178,7 +178,7 @@ end
 local TASK_ROWS = {
   {"masks", "C01", 1}, {"trig_params", "C02", 2}, {"output", "C06", 6}, {"harmony", "H01", 8},
   {"clock", "C04", 4}, {"merge", "C09", 6}, {"device", "C05", 5}, {"history", "C03", 3},
-  {"mask_detail", "C12", 1}, {"trig_detail", "C13", 2}, {"merge_shape", "M02", 7}, {"norns", "N04", 1},
+  {"merge_shape", "M02", 7}, {"norns", "N04", 1},
 }
 
 function test_ui_live_channel_tasks_e2_k3_enters_every_row_and_the_legacy_sub_page_follows()
@@ -194,7 +194,7 @@ function test_ui_live_channel_tasks_e2_k3_enters_every_row_and_the_legacy_sub_pa
 end
 
 function test_ui_live_channel_tasks_e1_from_an_entered_task_returns_to_n01()
-  for _, id in ipairs({"output", "harmony", "clock", "device", "history", "mask_detail", "trig_detail", "merge_shape"}) do
+  for _, id in ipairs({"output", "harmony", "clock", "device", "history", "merge", "merge_shape"}) do
     live.isolated(function()
       open_task(id)
       local entered = screen()

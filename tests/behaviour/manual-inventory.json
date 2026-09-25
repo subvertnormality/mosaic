@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "de7e31822d38f7dcc99ef94fbfe22ec31d35fd7338f798f4924be46a0af492a1",
+ "manual_sha256": "e32cad55f73d95ab418e7dd28c0e94b2b57e2c1915345e666209dbcc8c883d63",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -198,7 +198,7 @@
    "level": 3,
    "start_line": 345,
    "end_line": 380,
-   "text_sha256": "97ccd31fcdd9545809b6125a18c10e7413597c2cfd37bae2713f2674df1ce893",
+   "text_sha256": "73f0299b49b9d03f50d70758e9c39a01626196289a77cecc24ce6e6a36c7569c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "NAV-CONFIRM"
@@ -429,7 +429,7 @@
    "level": 5,
    "start_line": 491,
    "end_line": 671,
-   "text_sha256": "1a66378e6faa682024828ab39086d39f0003e12164353db900480ff93cb93724",
+   "text_sha256": "2ed5e5f52a5517c3b371fb08057d79500a1afacf0405dff12dac4d8d1441abe4",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "RD-LANES",
@@ -695,7 +695,7 @@
    "level": 4,
    "start_line": 902,
    "end_line": 905,
-   "text_sha256": "6e12ab7156e15e700e6914006b47bb1db6dc39378ff5c983db697fc17a30ee5a",
+   "text_sha256": "4a8b6b43cc9b9c18eeaec5bf71d61d6f93b060055413894884f05bf218698a7f",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "CH-DASHBOARD"
@@ -769,7 +769,7 @@
    "level": 3,
    "start_line": 973,
    "end_line": 994,
-   "text_sha256": "f7a44c49a81ab502d2eb03929b93f8dd750b656dc9244f7a7792b5bb5d8c9962",
+   "text_sha256": "bcdb41380cf7abebcd34923ecbc21deb642629b49b44ac93a2f214db42385ff0",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "PARAM-OFF",
@@ -1056,7 +1056,7 @@
    "level": 4,
    "start_line": 1152,
    "end_line": 1158,
-   "text_sha256": "aab79965c8452cdc3b27470acf18a2f7ee9042964f738194eb9818c7e904e4b2",
+   "text_sha256": "8d7712162f080264c3263de40b9b3b25a7d525c48929abad1ea6e133afa77cb5",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "SONG-SETTINGS"
@@ -1607,7 +1607,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "de7e31822d38f7dcc99ef94fbfe22ec31d35fd7338f798f4924be46a0af492a1"
+   "sha256": "e32cad55f73d95ab418e7dd28c0e94b2b57e2c1915345e666209dbcc8c883d63"
   },
   {
    "path": "cheat_sheet.html",

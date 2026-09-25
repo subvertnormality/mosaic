@@ -120,18 +120,14 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "C06",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
-        "root",
-        "chord",
-        "velocity",
-        "length",
-        "inspected_step",
-        "provenance",
-        "planned_pitch",
-        "scheduled_pitch",
-        "emitted_pitch",
+        "note",
+        "vel_len",
+        "step",
+        "source",
+        "pitch",
         "bypass",
       },
     },
@@ -222,7 +218,7 @@ return {
       ["provider"] = "scale_clock",
       ["existing_route"] = "S02",
       ["parent"] = "N02",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "metronome",
       ["fields"] = {
         "rate",
@@ -249,6 +245,7 @@ return {
         "edit_scale",
         "step_range",
         "transpose",
+        "step_lock",
       },
     },
     ["S04"] = {
@@ -262,7 +259,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "S04",
       ["parent"] = "N02",
-      ["layout"] = "detail",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "channel_lock",
@@ -360,7 +357,6 @@ return {
       ["fields"] = {
         "view_channel",
         "velocity",
-        "effective_vel",
         "used_by",
       },
     },
@@ -435,10 +431,11 @@ return {
       ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
-        "automatic",
-        "queued_jump",
-        "manual",
-        "empty_slot_loop",
+        "playing",
+        "next",
+        "pass",
+        "global_length",
+        "mode",
       },
     },
     ["X01"] = {
@@ -937,8 +934,6 @@ return {
         "merge",
         "device",
         "history",
-        "mask_detail",
-        "trig_detail",
         "merge_shape",
         "norns",
       },
@@ -1195,7 +1190,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "P08",
       ["parent"] = "N03",
-      ["layout"] = "pattern64",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "toggle",
@@ -2082,7 +2077,7 @@ return {
         },
         {
           ["id"] = "merge",
-          ["label"] = "Merge",
+          ["label"] = "Merge modes",
           ["screen"] = "C09",
         },
         {
@@ -2094,16 +2089,6 @@ return {
           ["id"] = "history",
           ["label"] = "History",
           ["screen"] = "C03",
-        },
-        {
-          ["id"] = "mask_detail",
-          ["label"] = "Mask detail",
-          ["screen"] = "C12",
-        },
-        {
-          ["id"] = "trig_detail",
-          ["label"] = "Trig detail",
-          ["screen"] = "C13",
         },
         {
           ["id"] = "merge_shape",
@@ -3938,21 +3923,6 @@ return {
         ["priority"] = 200,
       },
       {
-        ["id"] = "detail.E1-",
-        ["event"] = "E1-",
-        ["when"] = {
-          ["screen"] = {
-            "C08",
-            "C09",
-            "S04",
-          },
-        },
-        ["effects"] = {
-          "noop",
-        },
-        ["priority"] = 200,
-      },
-      {
         ["id"] = "task.move.E1-",
         ["event"] = "E1-",
         ["when"] = {
@@ -3981,21 +3951,6 @@ return {
         },
         ["effects"] = {
           "feature.return_then_tasks",
-        },
-        ["priority"] = 200,
-      },
-      {
-        ["id"] = "detail.E1+",
-        ["event"] = "E1+",
-        ["when"] = {
-          ["screen"] = {
-            "C08",
-            "C09",
-            "S04",
-          },
-        },
-        ["effects"] = {
-          "noop",
         },
         ["priority"] = 200,
       },
@@ -11146,8 +11101,8 @@ return {
       ["screen"] = "C09",
       ["field"] = "outcome.field_id",
       ["scope"] = "outcome.target",
-      ["lifetime"] = "Feedback only on the current screen (tooltip \"Pattern n added/removed\"); C09 shows the full assignment when opened.",
-      ["navigation"] = "retain",
+      ["lifetime"] = "Feedback only on the current screen (tooltip \"Pattern n added/removed\"); C09 shows the full assignment when opened. (owner decision 25 September 2026, usability audit)",
+      ["navigation"] = "temporary",
       ["target_binding"] = "resolved_outcome",
       ["return_policy"] = "next_deliberate_action",
       ["alternatives"] = {},
@@ -11220,10 +11175,10 @@ return {
     ["G12"] = {
       ["gesture"] = "retained",
       ["entry"] = "resolved_grid_outcome",
-      ["screen"] = "S03",
+      ["screen"] = "S04",
       ["field"] = "outcome.field_id",
       ["scope"] = "outcome.target",
-      ["lifetime"] = "Persistent summary after tap; no activation caused by display",
+      ["lifetime"] = "Persistent summary after tap; no activation caused by display (owner decision 25 September 2026, usability audit)",
       ["navigation"] = "replace",
       ["target_binding"] = "resolved_outcome",
       ["return_policy"] = "next_deliberate_action",
@@ -11234,10 +11189,10 @@ return {
     ["G13"] = {
       ["gesture"] = "retained",
       ["entry"] = "resolved_grid_outcome",
-      ["screen"] = "S03",
+      ["screen"] = "S04",
       ["field"] = "outcome.field_id",
       ["scope"] = "outcome.target",
-      ["lifetime"] = "Temporary; return to held editor when secondary key releases",
+      ["lifetime"] = "Temporary; return to held editor when secondary key releases (owner decision 25 September 2026, usability audit)",
       ["navigation"] = "temporary",
       ["target_binding"] = "resolved_outcome",
       ["return_policy"] = "generation_checked_stack",
@@ -11279,8 +11234,8 @@ return {
       ["screen"] = "C09",
       ["field"] = "outcome.field_id",
       ["scope"] = "outcome.target",
-      ["lifetime"] = "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445).",
-      ["navigation"] = "retain",
+      ["lifetime"] = "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445). (owner decision 25 September 2026, usability audit)",
+      ["navigation"] = "temporary",
       ["target_binding"] = "resolved_outcome",
       ["return_policy"] = "next_deliberate_action",
       ["alternatives"] = {
@@ -11303,8 +11258,8 @@ return {
       ["screen"] = "C09",
       ["field"] = "outcome.field_id",
       ["scope"] = "outcome.target",
-      ["lifetime"] = "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445).",
-      ["navigation"] = "retain",
+      ["lifetime"] = "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445). (owner decision 25 September 2026, usability audit)",
+      ["navigation"] = "temporary",
       ["target_binding"] = "resolved_outcome",
       ["return_policy"] = "next_deliberate_action",
       ["alternatives"] = {
@@ -11327,8 +11282,8 @@ return {
       ["screen"] = "C09",
       ["field"] = "outcome.field_id",
       ["scope"] = "outcome.target",
-      ["lifetime"] = "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445).",
-      ["navigation"] = "retain",
+      ["lifetime"] = "Feedback only; retain the current screen. With a Merge owner screen open, M09 is temporary and the gesture end (hold.end) restores the prior merge screen (channel_feature_editor.lua:444-445). (owner decision 25 September 2026, usability audit)",
+      ["navigation"] = "temporary",
       ["target_binding"] = "resolved_outcome",
       ["return_policy"] = "next_deliberate_action",
       ["alternatives"] = {
@@ -11585,10 +11540,10 @@ return {
     ["G33"] = {
       ["gesture"] = "retained",
       ["entry"] = "resolved_grid_outcome",
-      ["screen"] = "S01",
+      ["screen"] = "S03",
       ["field"] = "outcome.field_id",
       ["scope"] = "outcome.target",
-      ["lifetime"] = "Persistent; zero navigation",
+      ["lifetime"] = "Persistent; zero navigation (owner decision 25 September 2026, usability audit)",
       ["navigation"] = "replace",
       ["target_binding"] = "resolved_outcome",
       ["return_policy"] = "next_deliberate_action",
