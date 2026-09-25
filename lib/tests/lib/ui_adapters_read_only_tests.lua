@@ -62,12 +62,12 @@ function test_ui_adapters_read_only_c06_values_are_what_the_note_dashboard_draws
     local musicutil = require("musicutil")
     local voices = {musicutil.note_num_to_name(67, true), musicutil.note_num_to_name(0, true),
       musicutil.note_num_to_name(74, true), "X"}
-    luaunit.assert_equals(v.root, musicutil.note_num_to_name(64, true))
+    -- One dashboard row each (usability audit 25 September 2026): Note is the root
+    -- then the four chord voices; Vel / Len pairs velocity and length.
     -- MIDI note 0 is a played voice; an unplayed slot is X (bugs.json dashboard-chord-slots)
-    luaunit.assert_equals(v.chord, table.concat(voices, " "))
-    luaunit.assert_equals(v.velocity, "96")
-    luaunit.assert_equals(v.length, "0.25")
-    for _, text in ipairs({v.root, v.velocity, v.length, voices[1], voices[2], voices[3], voices[4]}) do
+    luaunit.assert_equals(v.note, musicutil.note_num_to_name(64, true) .. " " .. table.concat(voices, " "))
+    luaunit.assert_equals(v.vel_len, "96 / 0.25")
+    for _, text in ipairs({musicutil.note_num_to_name(64, true), "96", "0.25", voices[1], voices[2], voices[3], voices[4]}) do
       luaunit.assert_str_contains(frame, " " .. text .. "\n")
     end
   end)
@@ -80,14 +80,13 @@ function test_ui_adapters_read_only_c06_provenance_is_the_dashboard_line_from_on
     env.inspection.emitted(env.song, harness.SELECTED, 66, "a")
     local frame = env.draw()
     local v = values(env.adapter:describe("C06", "C06", target("C06")))
-    luaunit.assert_equals(v.inspected_step, "STEP05")
-    luaunit.assert_equals(v.provenance, "SRC3 M2 S64 H64")
-    luaunit.assert_equals(v.planned_pitch, "65")
-    luaunit.assert_equals(v.scheduled_pitch, "65")
-    luaunit.assert_equals(v.emitted_pitch, "66")
+    luaunit.assert_equals(v.step, "STEP05")
+    luaunit.assert_equals(v.source, "SRC3 M2 S64 H64")
+    -- Planned > scheduled > emitted pitch of the one event.
+    luaunit.assert_equals(v.pitch, "65>65>66")
     luaunit.assert_equals(v.bypass, "NONE")
-    luaunit.assert_str_contains(frame, v.provenance)
-    luaunit.assert_str_contains(frame, "P" .. v.planned_pitch .. " S" .. v.scheduled_pitch .. " E" .. v.emitted_pitch)
+    luaunit.assert_str_contains(frame, v.source)
+    luaunit.assert_str_contains(frame, "P65 S65 E66")
   end)
 end
 
@@ -96,13 +95,12 @@ function test_ui_adapters_read_only_c06_held_step_inspects_that_step_not_the_lat
     env.inspection.plan(env.song, harness.SELECTED, {step = 5, source = 1, output = 60})
     env.inspection.plan(env.song, harness.SELECTED, {step = 6, source = 2, output = 62, bypass = "muted"})
     local latest = values(env.adapter:describe("C06", "C06", target("C06")))
-    luaunit.assert_equals(latest.inspected_step, "STEP06")
+    luaunit.assert_equals(latest.step, "STEP06")
     luaunit.assert_equals(latest.bypass, "muted")
     env.pressed = {{5, 4}}
     local held = values(env.adapter:describe("C06", "C06", target("C06")))
-    luaunit.assert_equals(held.inspected_step, "STEP05")
-    luaunit.assert_equals(held.planned_pitch, "60")
-    luaunit.assert_equals(held.scheduled_pitch, "-")
+    luaunit.assert_equals(held.step, "STEP05 HELD")
+    luaunit.assert_equals(held.pitch, "60>->-")
     luaunit.assert_equals(held.bypass, "NONE")
     luaunit.assert_str_contains(env.draw(), "P60 S- E-")
   end)
@@ -111,10 +109,10 @@ end
 function test_ui_adapters_read_only_c06_reads_no_event_when_the_inspection_is_empty()
   dashboard(function(env)
     local v = values(env.adapter:describe("C06", "C06", target("C06")))
-    for _, id in ipairs({"inspected_step", "provenance", "planned_pitch", "scheduled_pitch", "emitted_pitch", "bypass"}) do
+    for _, id in ipairs({"step", "source", "pitch", "bypass"}) do
       luaunit.assert_equals(v[id], "NO EVENT", id)
     end
-    luaunit.assert_equals(v.chord, "X X X X")
+    luaunit.assert_str_contains(v.note, " X X X X")
     luaunit.assert_equals(ids(env.adapter:describe("C06", "C06", target("C06"))), ui_adapters.spec.screens.C06.fields)
   end)
 end
@@ -130,8 +128,8 @@ function test_ui_adapters_read_only_c06_takes_one_snapshot_per_describe_and_mark
     local adapter = read_only_factory(env.ui_adapters, {pages = {channel = env.owners}, inspection = fake})
     local v = values(adapter:describe("C06", "C06", target("C06")))
     luaunit.assert_equals(calls, 1)
-    luaunit.assert_equals(v.scheduled_pitch, "STALE")
-    luaunit.assert_equals(v.emitted_pitch, "60")
+    -- Scheduled belongs to another event: STALE between planned and emitted.
+    luaunit.assert_equals(v.pitch, "60>STALE>60")
   end)
 end
 
@@ -270,10 +268,14 @@ function test_ui_adapters_read_only_program_screens_read_the_model()
     luaunit.assert_equals(p01.focus_01_16, "STEP05")
     luaunit.assert_equals(p01.focus_17_32, "NONE")
     local a03 = values(env.adapter:describe("A03", "A03", target("A03")))
-    luaunit.assert_equals(a03.automatic, "01 > 01")
-    luaunit.assert_equals(a03.manual, "NONE")
+    luaunit.assert_equals(a03.playing, "SONG 01")
+    luaunit.assert_equals(a03.next, "SONG 01")
+    luaunit.assert_equals(a03.mode, "AUTO")
+    luaunit.assert_equals(a03.global_length, "64")
     env.params.song_mode = 1
-    luaunit.assert_equals(values(env.adapter:describe("A03", "A03", target("A03"))).manual, "01 HOLD")
+    a03 = values(env.adapter:describe("A03", "A03", target("A03")))
+    luaunit.assert_equals(a03.next, "HOLD")
+    luaunit.assert_equals(a03.mode, "MANUAL")
     local s03 = values(env.adapter:describe("S03", "S03", target("S03")))
     luaunit.assert_equals(s03.edit_scale, "01")
     luaunit.assert_equals(s03.transpose, "0")

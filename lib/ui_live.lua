@@ -596,6 +596,14 @@ function ui_live.end_brief_masks()
   return true
 end
 
+-- The field each grid action changes, on the screen its flow shows.
+local FLOW_FIELD = {
+  G07 = "patterns", G09 = "trig", G12 = "channel_lock", G13 = "channel_lock",
+  G16 = "trig_mode", G17 = "note_vel",
+  G18 = function() return is_key1_down and "length_mode" or "note_vel" end,
+  G33 = "transpose", G34 = "step_lock", G35 = "selected_range", G37 = "global_length",
+}
+
 function ui_live.grid_outcome(flow_id, extra)
   local payload = {flow_id = flow_id}
   for key, value in pairs(extra or {}) do payload[key] = value end
@@ -618,7 +626,17 @@ function ui_live.grid_outcome(flow_id, extra)
   local selected = program.get()
   payload.target = payload.target or {channel = selected.selected_channel, song_slot = selected.selected_song_pattern,
     step_set = held_steps()}
+  -- The screen a grid action shows opens on the field that action changed
+  -- (spec flows: field = outcome.field_id).
+  local field_id = payload.field_id or FLOW_FIELD[flow_id]
+  if type(field_id) == "function" then field_id = field_id(payload) end
   dispatch("grid.outcome", payload)
+  local screen_id = router.state.screen
+  if field_id and screen_id then
+    for _, d in ipairs(describe()) do
+      if d.id == field_id then focus[screen_id] = field_id; sync_field_state(); fn.dirty_screen(true); break end
+    end
+  end
 end
 
 function ui_live.grid_disconnect()
@@ -656,8 +674,17 @@ local function viewer()
   return page_ui and page_ui.adapter_owners and page_ui.adapter_owners().grid_viewer
 end
 
+-- The pattern editor screens, which show the pattern being edited over the
+-- viewed channel; Channel view (P05) shows the channel alone.
+local PATTERN_EDITOR = {P01 = true, P03 = true, P04 = true, P08 = true}
+
+local function signed_octave(n) return (n > 0 and "+" or "") .. n end
+
 -- Compact identity for the title row: CH03, CH03 S02, CH03 ST05, CH03 4ST,
--- SLOT 02 (Scale) or SONG 04 (Song).
+-- SLOT 02 (Scale) or SONG 04 (Song). Channel screens add MUTE and a non-zero
+-- channel octave (OCT+1), a held step its octave lock (O-1), and the pattern
+-- editor names its pattern before the viewed channel (PAT02 CH01), so a grid
+-- change to any of them is visible (usability audit 25 September 2026).
 local function scope_text(target)
   local s = router.state
   local parts = {}
@@ -668,12 +695,23 @@ local function scope_text(target)
   else
     -- Pattern screens name the channel their viewer shows.
     local view = spec.screens[s.screen].layout == "pattern64" and viewer()
+    if PATTERN_EDITOR[s.screen] then parts[#parts + 1] = "PAT" .. two(program.get().selected_pattern) end
     parts[#parts + 1] = "CH" .. two(view and view.selected_channel or target.channel)
     if (target.song_slot or 1) ~= 1 then parts[#parts + 1] = "S" .. two(target.song_slot) end
+    if s.context == "Channel" then
+      local channel = program.get_channel(target.song_slot or program.get().selected_song_pattern, target.channel)
+      if channel and channel.mute then parts[#parts + 1] = "MUTE" end
+      if channel and (channel.octave or 0) ~= 0 then parts[#parts + 1] = "OCT" .. signed_octave(channel.octave) end
+    end
   end
   local held = target.held or {}
   if #held == 1 then
     parts[#parts + 1] = "ST" .. two(held[1])
+    if s.context == "Channel" then
+      local channel = program.get_channel(target.song_slot or program.get().selected_song_pattern, target.channel)
+      local lock = channel and program.get_step_octave_trig_lock(channel, held[1])
+      if lock and lock ~= 0 then parts[#parts + 1] = "O" .. signed_octave(lock) end
+    end
   elseif #held > 1 then
     parts[#parts + 1] = #held .. "ST"
   end
@@ -692,6 +730,17 @@ local FOOTER = {
 
 -- 64 cells of the viewed channel exactly as the grid viewer draws its steps,
 -- with held steps outlined and the playing step underlined.
+local BANKS = {"RND", "BD", "SD", "CH", "OH"}
+local function generator_footer()
+  local inputs = trigger_edit_page and trigger_edit_page.generator_inputs and trigger_edit_page.generator_inputs()
+  if not inputs then return nil end
+  local a, bank = inputs.algorithm, "BANK " .. (BANKS[inputs.bank] or "-")
+  if a == 1 then return bank .. "  PAT " .. inputs.pattern1
+  elseif a == 2 or a == 4 then return bank .. "  P1 " .. inputs.pattern1 .. "  P2 " .. inputs.pattern2
+  elseif a == 3 then return "FILL " .. inputs.pattern1 .. "  LEN " .. inputs.pattern2 end
+  return nil
+end
+
 local function cells(target)
   local view = viewer()
   local levels = view and view:levels() or {}
@@ -702,9 +751,17 @@ local function cells(target)
     local channel = program.get_channel(program.get().selected_song_pattern, view.selected_channel)
     playing_step = channel and channel.current_step
   end
+  -- The pattern editor draws the pattern being edited brightly over the viewed
+  -- channel, which stays as dim context, so a trig tapped on the grid shows.
+  local pattern = PATTERN_EDITOR[router.state.screen] and program.get_selected_pattern()
   local result = {}
   for k = 1, 64 do
-    result[k] = {level = levels[k] or 0, selected = held[k] == true, playing = playing_step == k}
+    local level = levels[k] or 0
+    if pattern then
+      level = math.min(level, 3)
+      if pattern.trig_values[k] == 1 then level = 15 end
+    end
+    result[k] = {level = level, selected = held[k] == true, playing = playing_step == k}
   end
   return result
 end
@@ -777,6 +834,9 @@ function ui_live.view_model()
     footer = {left = previous and ("< " .. previous.label) or "| START",
       right = following and (following.label .. " >") or "END |"}
   end
+  -- The algorithm picker's footer shows the inputs the grid faders set for the
+  -- algorithm in use, so a pattern or bank press there is visible.
+  if s.screen == "P06" then footer = generator_footer() or footer end
   if tooltip and tooltip.text then footer = tostring(tooltip.text) end
   local status = code and (code:upper():gsub("_", " ")) or ""
   -- Every Rhythm Doctor screen keeps the owner's lane and status visible

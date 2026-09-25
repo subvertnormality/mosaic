@@ -160,29 +160,28 @@ return function(ui_adapters, owners)
     for i = 1, 4 do voices[i] = shown(displays.chords[i]); raw[i] = displays.chords[i].value end
     local snap = cap.snapshot
     local planned = snap.planned
-    local descriptors = {
-      readonly("root", "Root", shown(displays.note), {raw = displays.note.value}),
-      readonly("chord", "Chord", table.concat(voices, " "), {voices = voices, raw = raw}),
-      readonly("velocity", "Velocity", shown(displays.velocity), {raw = displays.velocity.value}),
-      readonly("length", "Length", shown(displays.length), {raw = displays.length.value})
-    }
+    local note = shown(displays.note) .. " " .. table.concat(voices, " ")
     local provenance = {event_id = planned and planned.event_id, held = cap.inspected_step ~= nil}
     local step = cap.inspected_step or (planned and planned.step)
-    descriptors[#descriptors + 1] = readonly("inspected_step", "Step",
-      step and step_label(step) or "NO EVENT", {step = step, held = provenance.held, event_id = provenance.event_id})
+    local descriptors = {
+      readonly("note", "Note", note, {raw = displays.note.value, voices = voices, chord_raw = raw}),
+      readonly("vel_len", "Vel / Len", shown(displays.velocity) .. " / " .. shown(displays.length),
+        {velocity = displays.velocity.value, length = displays.length.value}),
+      readonly("step", "Step", step and (step_label(step) .. (provenance.held and " HELD" or "")) or "NO EVENT",
+        {step = step, held = provenance.held, event_id = provenance.event_id}),
+    }
     if not planned then
-      for _, f in ipairs({{"provenance", "Source"}, {"planned_pitch", "Planned"}, {"scheduled_pitch", "Scheduled"},
-        {"emitted_pitch", "Emitted"}, {"bypass", "Bypass"}}) do
+      for _, f in ipairs({{"source", "Source"}, {"pitch", "Pitch"}, {"bypass", "Bypass"}}) do
         descriptors[#descriptors + 1] = readonly(f[1], f[2], "NO EVENT", provenance)
       end
       return descriptors
     end
-    descriptors[#descriptors + 1] = readonly("provenance", "Source",
+    descriptors[#descriptors + 1] = readonly("source", "Source",
       "SRC" .. tostring(planned.source or "-") .. " M" .. tostring(planned.merge or "-") ..
       " S" .. tostring(planned.scale or "-") .. " H" .. tostring(planned.harmony or "-"), provenance)
-    descriptors[#descriptors + 1] = readonly("planned_pitch", "Planned", tostring(planned.output or "-"), provenance)
-    descriptors[#descriptors + 1] = readonly("scheduled_pitch", "Scheduled", stage_pitch(snap, snap.scheduled), provenance)
-    descriptors[#descriptors + 1] = readonly("emitted_pitch", "Emitted", stage_pitch(snap, snap.emitted), provenance)
+    -- Planned > scheduled > emitted pitch of the same event.
+    descriptors[#descriptors + 1] = readonly("pitch", "Pitch", tostring(planned.output or "-") .. ">" ..
+      stage_pitch(snap, snap.scheduled) .. ">" .. stage_pitch(snap, snap.emitted), provenance)
     descriptors[#descriptors + 1] = readonly("bypass", "Bypass", planned.bypass and tostring(planned.bypass) or "NONE", provenance)
     return descriptors
   end
@@ -244,7 +243,7 @@ return function(ui_adapters, owners)
 
   -- S03: the global scale track (channel 17). Last applied numbers only; the
   -- mutating scale resolver is never called.
-  function readers.S03()
+  function readers.S03(_, cap)
     local program = src("program")
     local data = program.get()
     local track = program.get_channel(data.selected_song_pattern, 17)
@@ -255,7 +254,11 @@ return function(ui_adapters, owners)
       readonly("edit_scale", "Edit scale", scale_number(data.selected_scale)),
       readonly("step_range", "Step / range", (current and two(current) or "NONE") .. " / " .. two(first) .. ".." .. two(last),
         {step = current, first = first, last = last}),
-      readonly("transpose", "Transpose", signed(program.get_transpose()))
+      readonly("transpose", "Transpose", signed(program.get_transpose())),
+      -- A held scale-track step's own scale lock (G34), else NONE.
+      readonly("step_lock", "Step lock", cap.inspected_step and
+        (step_label(cap.inspected_step) .. " " .. scale_number(program.get_step_scale_trig_lock(track, cap.inspected_step)))
+        or "NONE", {step = cap.inspected_step})
     }
   end
 
@@ -339,7 +342,6 @@ return function(ui_adapters, owners)
     return {
       view,
       readonly("velocity", "Velocity", s and tostring(pattern.velocity_values[s]) or "NONE", {step = s}),
-      unavailable("effective_vel", "Effective vel", "needs_solver"),
       readonly("used_by", "Used by", #users > 0 and table.concat(users, " ") or "NONE", {channels = users})
     }
   end
@@ -365,20 +367,24 @@ return function(ui_adapters, owners)
   -- A03: song playback. The queued jump is kept inside song_transition and
   -- only reachable through calculate_next_selected_song_pattern, which also
   -- answers the automatic next, so it cannot be shown apart.
+  -- A03: song playback on one dashboard. The queued manual jump is kept inside
+  -- song_transition and cannot be read apart from the automatic next, so Next
+  -- shows what the engine will play next.
   function readers.A03()
     local program, params, step = src("program"), src("params"), src("step")
     local current = program.get().selected_song_pattern
     local song_mode = params:get("song_mode") == 2
-    local next_number = step.calculate_next_selected_song_pattern()
     local song = program.get_selected_song_pattern()
+    local next_number = song_mode and step.calculate_next_selected_song_pattern() or nil
     -- repeat_count read directly: program.get_repeat_count() writes a default.
-    local pass = {pass = program.get().repeat_count, repeats = song.repeats}
+    local pass, repeats = program.get().repeat_count, song.repeats
     return {
-      readonly("automatic", "Automatic", song_mode and (two(current) .. " > " .. two(next_number)) or "NONE", pass),
-      unavailable("queued_jump", "Queued jump", "queue_not_readable"),
-      readonly("manual", "Manual", song_mode and "NONE" or (two(current) .. " HOLD")),
-      readonly("empty_slot_loop", "Empty-slot loop", (song_mode and next_number < current) and
-        (two(current) .. " > " .. two(next_number)) or "NONE")
+      readonly("playing", "Playing", "SONG " .. two(current), {slot = current}),
+      readonly("next", "Next", next_number and ("SONG " .. two(next_number)) or "HOLD", {slot = next_number}),
+      readonly("pass", "Pass", tostring(pass or 1) .. " / " .. tostring(repeats or 1), {pass = pass, repeats = repeats}),
+      readonly("global_length", "Global length", tostring(song.global_pattern_length or 64),
+        {length = song.global_pattern_length}),
+      readonly("mode", "Song mode", song_mode and "AUTO" or "MANUAL", {song_mode = song_mode})
     }
   end
 

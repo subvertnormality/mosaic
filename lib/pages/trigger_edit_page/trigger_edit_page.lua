@@ -752,6 +752,17 @@ end
 
 function trigger_edit_page.get_algorithm() return trigger_edit_page_algorithm_fader:get_value() end
 
+-- The generator inputs the grid faders set for the algorithm in use (rows 2
+-- and 3), for the Trig Algorithm screen (P06).
+function trigger_edit_page.generator_inputs()
+  return {
+    algorithm = trigger_edit_page_algorithm_fader:get_value(),
+    pattern1 = trigger_edit_page_pattern1_fader:get_value(),
+    pattern2 = trigger_edit_page_pattern2_fader:get_value(),
+    bank = trigger_edit_page_bankmask_fader:get_value(),
+  }
+end
+
 -- The paint preview as the Paint Preview screen (P07) shows it: whether one is
 -- showing on the grid, the algorithm it comes from, the shift applied, and
 -- how many steps it triggers. Reads only; never builds a pattern.
