@@ -506,7 +506,9 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual({name for name, node in functions.items()
                           if any(site[1] == "state:frame"
                                  for site in _raw_sites_in_node(node))},
-                         {"strum_reset_continuity", "parameter_division_bounds"})
+                         # parameter_division_bounds reads its value through
+                         # ui.expect_selected_field (live full value line).
+                         {"strum_reset_continuity"})
 
         forbidden_labels = {
             "Chord Note Arpeggio", "Chord Note Strum", "Chord Spread",
@@ -2304,20 +2306,32 @@ class UiObservationTests(unittest.TestCase):
     def test_pick_device_preserves_seek_recipe_and_result(self):
         from ui import Ui
 
-        expected = bytes(128 * 64 * 4)
-        states = [
-            {"frame": {"pixels_base64": base64.b64encode(bytes([1]) * len(expected)).decode()}},
-            {"frame": {"pixels_base64": base64.b64encode(expected).decode()}},
-        ]
-        driver = FakeDriver(states=states)
-        with patch("frame_oracle.render", return_value=expected):
+        other, shown = {"frame": "other"}, {"frame": "shown"}
+        driver = FakeDriver(states=[other, shown])
+        seen = []
+
+        def matches(state, layout, label, value):
+            seen.append((layout, label, value))
+            return state is shown
+        with patch("frame_oracle.selected_field_matches", side_effect=matches):
             Ui(driver).pick_device("Digitakt")
+        self.assertEqual(seen, [("detail", "Device", "Digitakt")] * 2)
         self.assertEqual(driver.calls, [
             ("snapshot",), ("enc", 3, 1), ("snapshot",), ("key", 3),
         ])
         self.assertEqual(driver.results, [
             {"kind": "device-picker-frame", "label": "Digitakt", "matched": True}
         ])
+
+    def test_shown_device_names_only_an_unambiguous_row(self):
+        from ui import Ui
+
+        ui = Ui(FakeDriver(states=[]))
+        with patch("frame_oracle.selected_field_matches",
+                   side_effect=lambda state, layout, label, value: value in state["names"]):
+            self.assertEqual(ui.shown_device(["None", "Digitakt"], {"names": ["Digitakt"]}), "Digitakt")
+            self.assertEqual(ui.shown_device(["None", "Digitakt"], {"names": []}), "?")
+            self.assertEqual(ui.shown_device(["A", "B"], {"names": ["A", "B"]}), "?")
 
 
 class MigrationGateTests(unittest.TestCase):

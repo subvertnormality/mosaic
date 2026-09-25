@@ -1,19 +1,14 @@
 """Raw device-picker rendering contracts for invalid configuration discovery."""
-import base64
-
 from device_configs import VALID,boot_with
 
 
 def picker_names(e,candidates):
-    """Walk the device picker and identify entries by their rendered pixels."""
-    from frame_oracle import render
-    patterns={name:render([(10,35,15,name)]) for name in candidates}
-    indices=[(y*128+x)*4+k for y in range(27,37) for x in range(10,58) for k in range(3)]
+    """Walk the device picker and identify entries by the selected Device row
+    of the live Device screen (C05), whose whole value is the entry's name."""
     e.enc(3,-40);seen=[]
     for _ in range(len(candidates)+4):
-        pixels=base64.b64decode(e.snapshot()['frame']['pixels_base64'])
-        hit=[n for n,p in patterns.items() if all(pixels[i]==p[i] for i in indices)]
-        if hit and (not seen or seen[-1]!=hit[0]):seen.append(hit[0])
+        hit=e.ui.shown_device(candidates)
+        if hit!='?' and (not seen or seen[-1]!=hit):seen.append(hit)
         e.enc(3,1)
     e.key(2) # leave the pending device selection unconfirmed
     return seen

@@ -9,7 +9,6 @@ def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=Fal
     """Queued /3 -> /6 edit crosses an active slide at the pattern boundary."""
     import math
     from cases import menu_value,assign_trig_parameter
-    from frame_oracle import header,matches
     if reset:
         c.configure();c.ui.set_mosaic_options([('Song mode',True),('Reset on pattern repeat',True),('Wrap param slides',True)])
     open_patch_control(c,setup=not reset);turn(c,63);turn(c,1);menu_value(c,'63');c.key(1)
@@ -20,7 +19,7 @@ def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=Fal
             c.elapse(.05);c.action(type='enc',n=3,delta=-126);c.enc(3,value+1)
         finally:c.action(type='grid',x=step,y=4,state=0)
     c.key(3)
-    c.ui.turn(1, 2);c.wait(lambda state:matches(state,header('Ch. 1 Clocks',selected=4)))
+    c.ui.turn(1, 2);c.ui.wait_for_header('clock_mods', channel=1)
     c.enc(3,-4);c.key(3) # Initial /3 (index17), committed while stopped.
     if type_switch:
         # Store Heavy6 at100%, then return to Swing before playback.
@@ -39,16 +38,10 @@ def patch_slide_live_division(c,type_switch=False,reset=False,repeated_edits=Fal
         # /6 -> /4 -> /6 -> /4 -> /6: only final /6 governs future onsets.
         for delta in (1,-1,1,-1):
             c.enc(3,delta);c.key(3)
-    import base64
-    from frame_oracle import render
+    # The Clock screen (C04) shows the selected field's label and its whole
+    # (staged, queued) value large: Rate /6, or Swing type Shuffle.
     label='Shuffle' if type_switch else '/6'
-    xpos=70 if type_switch else 0
-    expected_rate=render([(xpos,26,15,label)])
-    pixels=[(y*128+x)*4+k for y in range(20,30) for x in range(xpos,128 if type_switch else 48) for k in range(3)]
-    def rate_readback(state):
-        frame=base64.b64decode(state['frame']['pixels_base64'])
-        return all(frame[i]==expected_rate[i] for i in pixels)
-    c.wait(rate_readback)
+    c.ui.expect_selected_field('focused',label='Swing type' if type_switch else 'Rate',value=label)
     c.results.append(dict(kind='clock-rate-readback',value=label,passed=True))
     def notes(state):
         return [e for e in state['midi'] if e['index']>before and e['bytes'][0]==144 and e['bytes'][2]>0]

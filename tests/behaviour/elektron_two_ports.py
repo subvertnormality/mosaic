@@ -24,7 +24,7 @@ def elektron_two_ports(c):
     e = Driver(out, project_seed=seed, **c.launch_options)
     try:
         e.configure(); pick_device(e, 'Digitakt')
-        e.ui.select_channel(2); e.ui.expect_header('midi_config', channel=2); pick_device(e, 'Syntakt')
+        e.ui.select_channel_on_page(2, 'midi_config'); pick_device(e, 'Syntakt')
         e.ui.select_channel(1)
         e.ui.song_editor()
         e.ui.copy_slot(1, 2, control='song_pattern_slot')

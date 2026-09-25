@@ -613,7 +613,7 @@ def patch_clear_mask_boundary(c,inverse=False,single=False,copy_isolation=False)
     finally:(c.out/'results.json').write_text(json.dumps(c.results,indent=2)+'\n')
 
 def patch_channel_clear_isolation(c):
-    c.configure();c.ui.tap_control('channel', 2)
+    c.configure();c.ui.select_channel_on_page(2, 'midi_config')
     c.ui.turn(3, 1);c.ui.turn(2, 1);c.ui.turn(3, 1);c.ui.turn(2, 1);c.ui.turn(3, 1);c.ui.press_key(3)
     c.ui.tap_control('pattern_slot', 1);c.ui.hold_control_tap('step', 'step', held_index=1, target_index=4);c.ui.channel_page('trig_locks', 'midi_config', confirm=False)
     for channel,values,octave in [(2,(40,80),-1),(1,(24,96),1)]:

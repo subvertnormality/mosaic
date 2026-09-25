@@ -1155,25 +1155,27 @@ class Ui:
         return True
 
     def pick_device(self, name):
-        from frame_oracle import render
-
-        data = SCREEN["device_picker"]
-        expected = render([(data["x"], data["baseline"], data["level"], name)])
-        indices = [(y * 128 + x) * 4 + channel
-                   for y in range(data["top"], data["bottom"])
-                   for x in range(data["left"], data["right"])
-                   for channel in range(3)]
-        def visible(state):
-            pixels = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(pixels[index] == expected[index] for index in indices)
+        """Turn the Device screen's (C05) selected Device row with E3 until it
+        shows ``name`` exactly (detail row: '>' marker, label, whole value),
+        then apply with K3."""
         for _ in range(40):
-            if visible(self.driver.snapshot()):
+            if self.shown_device([name]) == name:
                 break
             self.turn(3, 1)
         else:
             raise UiMapError("Device not visible in picker: " + name)
         self.press_key(3)
         self.driver.results.append(dict(kind="device-picker-frame", label=name, matched=True))
+
+    def shown_device(self, candidates, state=None):
+        """The one candidate the selected Device row (C05) shows exactly; '?'
+        when none (or more than one) matches."""
+        from frame_oracle import selected_field_matches
+
+        state = self.driver.snapshot() if state is None else state
+        hits = [name for name in candidates
+                if selected_field_matches(state, "detail", "Device", name)]
+        return hits[0] if len(hits) == 1 else "?"
 
     def _header_matches(self, state, page, params):
         from frame_oracle import live_header_matches

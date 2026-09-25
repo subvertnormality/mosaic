@@ -28,7 +28,7 @@ def device_config_defaults(c):
         ui=e.ui
         ui.configure()
         pick_device(e,'Custom Drum') # defaults: port 2, MIDI channel 10, fixed note 36
-        ui.select_channel(2);ui.expect_header('midi_config',channel=2)
+        ui.select_channel_on_page(2,'midi_config')
         pick_device(e,'Custom Poly') # default MIDI channel 5; port from the selector (first output)
         ui.tap_control('pattern_slot',1);ui.set_range(1,4);ui.select_channel(1)
         marker=e.snapshot()['midi_count'];ui.play()
