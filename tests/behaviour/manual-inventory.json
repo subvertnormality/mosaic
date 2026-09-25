@@ -7841,7 +7841,7 @@
    "sections": [
     "MAN-015"
    ],
-   "statement": "E1 moves between Masks, Trig params and Channel tasks and clamps at the ends; every Channel screen opens from Channel tasks.",
+   "statement": "E1 opens the page's task list from any screen, on the row of the screen it came from; in a task list E1 or E2 moves through the rows and K3 opens the chosen one; every Channel screen opens from Channel tasks.",
    "cases": [
     "M-LIVEUI-TASKS-001"
    ],
@@ -7866,12 +7866,12 @@
     "MAN-014",
     "MAN-015"
    ],
-   "statement": "E1 on the Channel family moves one destination per encoder event (Masks, Trig params, Channel tasks), clamped at both ends and never skipping a family; each family keeps its selected field; navigation never changes output, masks or grid LEDs.",
+   "statement": "E1 on Masks or Trig params opens Channel tasks on the row of the screen it came from; in the list E1 moves one row per encoder event, clamped at both ends and never skipping; each family keeps its selected field; with a step held E1 switches Masks <-> Trig params; navigation never changes output, masks or grid LEDs.",
    "cases": [
     "M-UIACC-A01-001"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Covered: E1 at Masks negative (one detent and one large single event) clamps with the selected Masks field kept; single large positive events move Masks -> Trig params -> Channel tasks one family per event; E1+ clamps at Channel tasks; E1- (large and one detent) at Channel tasks returns to Trig params with its remembered slot; no MIDI during navigation, all 128 grid LEDs and all eight mask values unchanged, and the configure() phrase replays exactly before and after. Not covered: RNG state (the phrase has no random source, so RNG mutation is not observable), the held-step E1 restriction and other contexts' E1 navigators."
+   "domain": "Covered: E1 (one detent either way, and one large single event) from C01 and C02 opens N01 on Masks / Trig params; in N01 large single E1 events move one row each, E1 clamps at Masks (one detent and a large event) and at Norns settings (large event and one detent), K3 opens the row; Trig params keeps slot 3 and Masks keeps Velocity when reopened through the list; held step 5 E1 switches C02 <-> C01 clamped; no MIDI during navigation, all 128 grid LEDs and all eight mask values unchanged, and the configure() phrase replays exactly before and after. Not covered: RNG state (the phrase has no random source), other contexts' task lists (M-LIVEUI-DASH-001 covers Scale tasks)."
   },
   {
    "id": "UI-ACCEPT-A02",
@@ -7931,7 +7931,7 @@
     "M-UIACC-A11-001"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Covered: E3 on View channel on Pattern trig, note and velocity (1, 6, 16, both clamps, per-page state kept across the Pattern cycle), Channel view in the Trig context (shares the Trig viewer) and in the Scale context, Scale overview (focused View channel 01..16 clamped, E2 to Playing scale and E3 there inert, value kept); exact 64-cell viewer frames and headers; no MIDI, selected channel stays 1 (header and LEDs), the phrase replays exactly and a later held-step velocity lock plays on channel 1. Not covered: generator algorithms (Drum, Tresillo, Euclidean, Numeric, Doctor), source select K1/long, bank 1/4, fader min/max, duplicate source banks, paint preview apply/cancel, the Song-context channel view; RNG is not observable."
+   "domain": "Covered: E3 on View channel on Pattern trig, note and velocity (1, 6, 16, both clamps, per-page state kept across the Pattern cycle), Channel view in the Trig context (shares the Trig viewer) and in the Scale context, Scale overview (focused View channel 01..16 clamped, E2 to Playing scale and E3 there inert, value kept); exact 64-cell viewer frames and headers; no MIDI, selected channel stays 1 (header and LEDs), the phrase replays exactly and a later held-step velocity lock plays on channel 1. Not covered: generator algorithms (Drum, Tresillo, Euclidean, Numeric, Doctor), source select K1/long, bank 1/4, fader min/max, duplicate source banks, paint preview apply/cancel, the Song-context channel view; RNG is not observable. Since 25 September 2026: E2 moves no focus on 64-cell screens (E3 after E2 still turns the viewed channel), Scale overview is a viewer-less dashboard (E2/E3 change nothing), and the Song-context Channel view shows its own viewer."
   },
   {
    "id": "UI-ACCEPT-A19",
@@ -7945,6 +7945,70 @@
    ],
    "status": "partial-domain-coverage",
    "domain": "Covered: NO EVENT before playback; after playback every Output field shows the latest played step (root, chord, velocity, length, step, source, planned, scheduled, emitted, bypass) and E3 and K3 on each field change nothing; holding a played step inspects it in place (header STnn, provenance to bypass via E2), steps 40 and 64 show NO EVENT, release returns to the latest event; no MIDI, all LEDs unchanged, K2 returns to the Channel family at channel scope and the phrase replays exactly. Not covered: Harmony stages (bypass other than NONE), PREVIEW/PENDING labels, five-voice pagination; E3/K3 while a step is held are the G10 edit gestures and open the edit family, so they are not inspection. K2 returns to the remembered family (Trig params here), not always Masks as the C06 control text says."
+  },
+  {
+   "id": "UI-FEEDBACK-ALGORITHM",
+   "sections": [
+    "MAN-030",
+    "MAN-115"
+   ],
+   "statement": "Pressing an algorithm button shows the Trig Algorithm screen with the algorithm in use marked SELECTED; E2 moves through the five algorithms and K3 selects one exactly as its grid button does; choosing Rhythm Doctor opens the Doctor; Algorithm in the pattern task list opens the same screen.",
+   "cases": [
+    "M-LIVEUI-ALGO-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: a grid press lands on the pressed algorithm (SELECTED), E2 one row per detent clamped at Drum, K3 selects Drum then Euclidean (row SELECTED, tooltip, grid algorithm fader LEDs exact) and the next prime previews with the selected algorithm (Paint Preview names it and the previewed cells differ); Pattern tasks > Algorithm opens on the algorithm in use; K3 on Rhythm Doctor opens R01. Not covered: Tresillo and Numeric selection by K3, K3 on the algorithm already in use, selection while playing."
+  },
+  {
+   "id": "UI-FEEDBACK-PAINT",
+   "sections": [
+    "MAN-030"
+   ],
+   "statement": "Pressing prime, cancel or a move button shows the Paint Preview screen: whether a preview is showing, the algorithm it comes from, the shift, and how many steps it triggers.",
+   "cases": [
+    "M-LIVEUI-PAINT-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: Euclidean prime on an empty pattern (PAINTING, Euclidean, 0, Trigs equal to the preview cells the grid lights in the same frame), shift right/left/left/reset (+1, 0, -1, 0 with the previewed cells moved by exactly that many steps), cancel (OFF, NONE, no preview cell). Not covered: paint (save), Rhythm Doctor paint, shifts wrapping past the pattern length other than by one step."
+  },
+  {
+   "id": "UI-FEEDBACK-DASHBOARDS",
+   "sections": [
+    "MAN-015",
+    "MAN-049",
+    "MAN-076"
+   ],
+   "statement": "Screens that only show information, such as Scale overview, Song playback and Output, list every value at once with no cursor; Scale tasks are Scale, Scale clock and Overview; Trig options holds the tresillo multiplier only.",
+   "cases": [
+    "M-LIVEUI-DASH-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: Output (six rows, no event), Scale overview (five rows, no View channel; E2/E3 change nothing) and Song playback (five rows) checked as whole screens; Scale tasks rows exactly Scale, Scale clock, Overview (clamped both ends, opened on Overview); Trig options a single Tresillo amount field with control-hint footer. Not covered: F02, F07, H05, H12, M05, P07/P08 dashboards (P07 in M-LIVEUI-PAINT-001, the rest in M-UIACC-A18-001 where reachable)."
+  },
+  {
+   "id": "UI-FEEDBACK-VIEW-CHANNEL",
+   "sections": [
+    "MAN-030"
+   ],
+   "statement": "On the 64-cell pattern screens E3 views another channel; it does not change the selected channel, and E2 moves no focus there.",
+   "cases": [
+    "M-LIVEUI-VIEW-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: Channel view (P05) and Pattern Trig (P01): E3 as the first input after opening, and E3 after E2 in both directions, move the viewed channel (scope); the Trig viewer is shared by P05 and P01; the selected channel stays 1 (LEDs, Masks scope). Not covered: P03/P04/P08 (M-UIACC-A11-001 covers P03/P04 clamps)."
+  },
+  {
+   "id": "UI-FEEDBACK-GRID-FOCUS",
+   "sections": [
+    "MAN-015",
+    "MAN-075"
+   ],
+   "statement": "A grid action brings up the screen that shows what it changed, with that value chosen: a merge button shows Merge modes on its row (K2 returns), a tapped pattern trig shows on Pattern Trig, and the song length fader shows Song playback.",
+   "cases": [
+    "M-LIVEUI-FOCUS-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: trig merge taps on Masks show Merge detail on Trig mode (ONLY, ALL) and K2 returns to Masks; a step tap on an empty pattern 2 lights that cell at 15 over the capped channel context (PAT02 CH01); the global length fader shows Song playback with Global length 63 then 64. Not covered: note/velocity/length merge buttons (M-UIACC-A10-001 covers pattern assignment and trig merge), scale locks (S04), transposition (S03)."
   },
   {
    "id": "UI-ACCEPT-A18",

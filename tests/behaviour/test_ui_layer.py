@@ -89,7 +89,7 @@ class UiLayerGuardTests(unittest.TestCase):
         # migrated to the live UI's focused Rhythm screen.
         self.assertEqual(
             ast_digest(node),
-            '1c6172676fe1640e887a17fc07da3ea1b05772ef271da25d3afa2d4f055a6282',
+            'c542abe278e1bc1b1e36134ffa78efe3ef9d2cbf07a3fad6fd7615e2a37d6d4c',
         )
 
     def test_fast_external_acquisition_has_exact_contract_owner(self):
@@ -784,7 +784,7 @@ class UiLayerGuardTests(unittest.TestCase):
         from ui_layer_guard import classify_contract_cases
         classified = classify_contract_cases(CASES)
         self.assertEqual(value["cases"], sorted(classified))
-        self.assertEqual(value["ceiling"], 460)
+        self.assertEqual(value["ceiling"], 470)
         self.assertGreaterEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
 
     def test_every_case_owner_matches_the_fixed_contract_inventory(self):

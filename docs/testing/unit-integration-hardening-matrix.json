@@ -30,9 +30,9 @@
  "manual": "README.md",
  "manual_sha256": "e32cad55f73d95ab418e7dd28c0e94b2b57e2c1915345e666209dbcc8c883d63",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "efc9dec63d44b793ccae29c8f697647ec20df686f7dd4f8bf5c3ab3b14c252d2",
+ "inventory_sha256": "8c1c74a372d7ac3f1c2e23b81429dc93a35660c3e87e2814f80574989c2612df",
  "counts": {
-  "requirements": 165,
+  "requirements": 170,
   "production_lua_modules": 160,
   "unit_integration_files": 119,
   "domains": 17
@@ -345,7 +345,12 @@
     "UI-ACCEPT-A10",
     "UI-ACCEPT-A11",
     "UI-ACCEPT-A18",
-    "UI-ACCEPT-A19"
+    "UI-ACCEPT-A19",
+    "UI-FEEDBACK-ALGORITHM",
+    "UI-FEEDBACK-DASHBOARDS",
+    "UI-FEEDBACK-GRID-FOCUS",
+    "UI-FEEDBACK-PAINT",
+    "UI-FEEDBACK-VIEW-CHANNEL"
    ],
    "production_modules": [
     "lib/controls/button.lua",
