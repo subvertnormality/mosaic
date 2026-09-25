@@ -5192,7 +5192,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "dashboard",
+        "layout": "detail",
         "model": "ViewModel",
         "art": null
       },

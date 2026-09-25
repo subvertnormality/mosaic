@@ -1480,8 +1480,9 @@ range has no false in-range LED and remains available in Result/Note Dashboard.
 This display is read-only: touching the projected Note fader still edits its
 selected source-pattern value. Until the changed step plays again, the edited
 source is displayed rather than a stale output. Final Harmony pitches are also
-shown on Note Dashboard/context inspection as planned, scheduled and last-emitted
-values. H05 Result uses its Step row to select one coherent event chain; on Note
+shown on Output (its Pitch and Sent rows) and on Harmony's Result screen, one row
+per voice as the planned and sent note (`C3 > C3`). Result uses its Step row to
+select one coherent event chain; on Note
 Dashboard, holding a grid step temporarily inspects that step instead of combining
 it with a later delayed event. A step with no recorded event says `NO EVENT` and
 shows no planned or emitted pitch; it never borrows the latest event from another

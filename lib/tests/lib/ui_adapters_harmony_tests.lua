@@ -112,7 +112,7 @@ function test_ui_adapters_harmony_child_routes_cover_owner_fields()
     groups = {"group", "create_group"},
     rules = {"crossing", "pc_doubling", "exact_unison", "common_tones", "upper_spacing", "bass_separation", "coverage"},
     entry = {"start", "song_transition", "same_slot_repeat", "failure_fallback", "absolute_pitch"},
-    result = {"step", "status", "planned_ch1", "emitted_ch1"}
+    result = {"step", "status", "planned_ch1"}
   }
   for id, fields in pairs(expected) do
     invoke(adapter, editor, id)
@@ -172,18 +172,18 @@ function test_ui_adapters_harmony_result_and_failure_details()
   harmony_inspection.plan(song, 1, {step = 1, status = "no_solution", reason = "range", fallback = "silence"})
   invoke(adapter, editor, "result")
   local fields, outcome = assert_parity(adapter, editor)
-  luaunit.assert_equals(fields, {"step", "status", "planned_ch1", "emitted_ch1", "failure_details"})
+  luaunit.assert_equals(fields, {"step", "status", "planned_ch1", "failure_details"})
   luaunit.assert_equals(outcome.descriptors[1].kind, "inspection")
   luaunit.assert_equals(outcome.descriptors[2].value, "NO VOICING RANGE")
   invoke(adapter, editor, "failure_details")
   luaunit.assert_equals(assert_parity(adapter, editor), {"reason", "fallback", "settings"})
-  -- Group result: planned/emitted per member role.
+  -- Group result: one planned > sent row per member role.
   local song2 = setup(); ensemble_song(song2)
   local group_adapter, group_editor = build()
   group_editor.context_group = true; group_editor.selected_group = 1
   group_editor.screen = "H05"
-  luaunit.assert_equals(assert_parity(group_adapter, group_editor), {"step", "status", "planned_bass", "emitted_bass",
-    "planned_inner1", "emitted_inner1", "planned_inner2", "emitted_inner2", "planned_top", "emitted_top"})
+  luaunit.assert_equals(assert_parity(group_adapter, group_editor), {"step", "status", "planned_bass",
+    "planned_inner1", "planned_inner2", "planned_top"})
 end
 
 function test_ui_adapters_harmony_edit_and_apply_match_the_old_path()

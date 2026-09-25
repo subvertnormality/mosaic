@@ -366,10 +366,16 @@ function editor.new(kind)
           return"NO VOICING "..tostring(active_plan.reason or active_plan.status)end
         return active_plan.status=="ok"and"OK"or"OFF"
       end,{id="status"})}
+      -- One row per voice, planned > sent pitch as note names, so a four-part
+      -- ensemble fits the screen (usability audit 25 September 2026).
+      local function pitch_name(n)return n and require("musicutil").note_num_to_name(n,true)or"-"end
       for _,entry in ipairs(traces)do local item=entry
         local key=item.role or("ch"..item.channel)
-        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." planned",function()return item.trace.planned and item.trace.planned.output end,{id="planned_"..key,repeat_key="planned_<member>"})
-        fields[#fields+1]=readonly((item.role or("CH"..item.channel)).." emitted",function()return item.trace.emitted and item.trace.emitted.pitch end,{id="emitted_"..key,repeat_key="emitted_<member>"})
+        fields[#fields+1]=readonly(item.role or("CH"..item.channel),function()
+          local planned,emitted=item.trace.planned and item.trace.planned.output,item.trace.emitted and item.trace.emitted.pitch
+          if planned==nil and emitted==nil then return"NO EVENT"end
+          return pitch_name(planned).." > "..pitch_name(emitted)
+        end,{id="planned_"..key,repeat_key="planned_<member>"})
       end
       if active_plan and active_plan.status~="ok"and not active_plan.bypass then
         fields[#fields+1]=action("Failure details","H06",{id="failure_details"})

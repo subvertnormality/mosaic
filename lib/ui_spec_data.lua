@@ -886,7 +886,7 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "H05",
       ["parent"] = "N01",
-      ["layout"] = "dashboard",
+      ["layout"] = "detail",
       ["art"] = nil,
       ["fields"] = {
         "bass",
