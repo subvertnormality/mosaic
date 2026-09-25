@@ -349,6 +349,23 @@ hooks["modal.cancel"] = function() ui_live.answer_modal(2) end
 
 hooks["route.C07"] = function() end
 
+-- Read-only feature screens (Merge result, Harmony result/failure) belong to
+-- the feature editor's stack: K2 backs out through the editor, and leaving
+-- for tasks returns the editor to its root, so neither is pulled back.
+hooks["return.parent"] = function(_, event)
+  local screen = spec.screens[current.before or ""]
+  if event == "K2.down" and screen and screen.profile == "read_only"
+    and (screen.provider == "merge" or screen.provider == "harmony") and not variant[current.before] then
+    feature_editor(screen.provider):key(2)
+  end
+end
+hooks["tasks.open"] = function()
+  local screen = spec.screens[current.before or ""]
+  if screen and (screen.provider == "merge" or screen.provider == "harmony") then
+    feature_editor(screen.provider):enter()
+  end
+end
+
 -- Modal questions stay with their owners; K3/K2 reach the owner once.
 function ui_live.answer_modal(n)
   local id = router.state.screen
