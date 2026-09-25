@@ -8934,7 +8934,7 @@
    "line": 1400,
    "reference": "images/merge-shape-foundation.png",
    "path": "images/merge-shape-foundation.png",
-   "sha256": "f559fc5055d51cb5b95e5a0cc9410b7cb893a21af950671bf6d0cd02832df946"
+   "sha256": "b8fe5f89678f6554544f99c03d410f6195b54aa968c31a842ae8945282cc5709"
   },
   {
    "status": "pending-visual-spec-reconciliation",
@@ -8942,7 +8942,7 @@
    "line": 1432,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
-   "sha256": "f6fab690cad2c607cb491a16d7f9ab6f935625de44e73112eac9d2de83dff264"
+   "sha256": "8a996af846d47e3cc9311d85669deb0deefab5e6c10df4be595d758baf3b0bec"
   },
   {
    "status": "pending-visual-spec-reconciliation",
@@ -8950,7 +8950,7 @@
    "line": 1467,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
-   "sha256": "f8596e80fd4461e8e61976a5c07b08c802cfcf87beb4acafd22daf14b6a6ebdd"
+   "sha256": "e022139bfc0c830cc0474d458c9b11fa1c8933a8d7dc3f2d72c119a840697530"
   }
  ],
  "integration_basis": {

@@ -30,7 +30,7 @@
  "manual": "README.md",
  "manual_sha256": "f0a226db12bcd5d16009ebf66eaec858348d986a6c6cd3404d2f2c7d222c9579",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "a4262e41f086bb6164bd014144655aab2de50f67e46fcbfcaa3bfd00ef4e593a",
+ "inventory_sha256": "06e875e6713b2fe1d01067263b80539ff2a05cd143733745c959ff6193468063",
  "counts": {
   "requirements": 164,
   "production_lua_modules": 160,

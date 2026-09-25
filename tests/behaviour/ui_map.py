@@ -116,6 +116,14 @@ LIVE_SCREENS = OrderedDict([
     ("scale", {"screen": "S01", "title": "SCALE", "layout": "focused", "scope": "scale"}),
     ("scale_clock", {"screen": "S02", "title": "SCALE CLOCK", "layout": "focused", "scope": "scale"}),
     ("song", {"screen": "A03", "title": "SONG PLAYBACK", "layout": "focused", "scope": "song"}),
+    # Merge Shape and Harmony child screens (their feature editor's routes).
+    ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
+    ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
+    ("harmony_ensemble", {"screen": "H04", "title": "ENSEMBLE", "layout": "detail"}),
+    ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "focused", "art": True}),
+    ("harmony_members", {"screen": "H07", "title": "MEMBERS", "layout": "detail"}),
+    ("harmony_entry", {"screen": "H09", "title": "ENTRY / FAILURE", "layout": "detail"}),
+    ("harmony_tone_map", {"screen": "H11", "title": "TONE MAP", "layout": "focused", "art": True}),
 ])
 
 # Non-Channel page rings the cases were written for, each entry the live

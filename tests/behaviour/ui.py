@@ -1198,7 +1198,15 @@ class Ui:
                 raise UiMapError("expected %r, observed %r" % (expected, self._observed_title(state)))
         else:
             state = self.driver.snapshot()
-            if not self._header_matches(state, page, params):
+            # A newly opened screen's body (scope line included) is uncovered
+            # by a short decorative wipe drawn frame by frame (ui_motion
+            # WIPE_FRAMES); let at most one logical second run for it.
+            for _ in range(33):
+                if self._header_matches(state, page, params):
+                    break
+                self.driver.elapse(.03)
+                state = self.driver.snapshot()
+            else:
                 raise UiMapError("expected %r, observed %r" % (expected, self._observed_title(state)))
         self.driver.results.append(dict(kind="ui-confirm", page=page, **params))
     def seek_native_parameter_root(self, root):
@@ -1294,3 +1302,26 @@ class Ui:
         except KeyError as error:
             raise UiMapError("unknown Mosaic option/value: " + str(option)) from error
         self.expect_menu_option_row(label, value, top=top)
+
+    # ---- Harmony / Merge Shape family (live feature screens M02..M14, H01..H19) ----
+    # The feature editors own their routes; the live UI shows them as focused
+    # (one selected row) or detail (rows) screens and remembers each screen's
+    # focus, so recipes select a row from a saturated position.
+
+    def feature_root(self):
+        """E1 on a Merge Shape/Harmony child (or a dirty root) returns to the
+        clean feature root, discarding an unapplied draft (one detent)."""
+        self.driver.enc(1, 1)
+
+    def select_row(self, name, row):
+        """Select a detail/focused screen's ``row`` (0-based) from its first row."""
+        self.select_field(name, saturate=-24, then=row)
+
+    def expect_selected_field(self, layout, label=None, value=None, art=False):
+        """The selected field shows ``label``/``value`` on its layout's exact route."""
+        from frame_oracle import selected_field_matches
+
+        self.driver.wait(lambda state: selected_field_matches(
+            state, layout, label, value, art))
+        self.driver.results.append(dict(kind="selected-field", layout=layout,
+                                        label=label, value=value, matched=True))

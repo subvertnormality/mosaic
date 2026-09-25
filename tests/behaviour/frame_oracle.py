@@ -115,6 +115,11 @@ def text_width(label,size=8,antialias=None):
         context=bind(ca,'cairo_create',[ptr],ptr)(surface)
         options=bind(ca,'cairo_font_options_create',[],ptr)()
         try:
+            # Native large (>8) text is drawn and measured unantialiased, whose
+            # hinted metrics are wider than the default (13px 'NO VOICING RANGE'
+            # measures 130, not 122), so the renderer's size search differs.
+            if antialias is None and size>8:
+                antialias=1
             if antialias is not None:
                 bind(ca,'cairo_font_options_set_antialias',[ptr,integer])(options,antialias)
                 bind(ca,'cairo_set_font_options',[ptr,ptr])(context,options)
