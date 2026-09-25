@@ -400,6 +400,12 @@
     "M-TRIPLE-005",
     "M-UI-001",
     "M-UI-002",
+    "M-UIACC-A01-001",
+    "M-UIACC-A02-001",
+    "M-UIACC-A03-001",
+    "M-UIACC-A10-001",
+    "M-UIACC-A11-001",
+    "M-UIACC-A19-001",
     "M-VIEW-001",
     "M-XA-001-JF",
     "M-XA-002-AUDIO",
@@ -409,5 +415,5 @@
     "M-XA-006-NB-CHORD-ACCEL",
     "M-XA-007-NB-SWITCH-SLOTS"
   ],
-  "ceiling": 450
+  "ceiling": 460
 }

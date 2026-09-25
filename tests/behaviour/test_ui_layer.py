@@ -783,7 +783,7 @@ class UiLayerGuardTests(unittest.TestCase):
         from ui_layer_guard import classify_contract_cases
         classified = classify_contract_cases(CASES)
         self.assertEqual(value["cases"], sorted(classified))
-        self.assertEqual(value["ceiling"], 450)
+        self.assertEqual(value["ceiling"], 460)
         self.assertGreaterEqual(value["ceiling"], (len(classified) * 11 + 9) // 10)
 
     def test_every_case_owner_matches_the_fixed_contract_inventory(self):
