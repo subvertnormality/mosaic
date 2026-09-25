@@ -634,6 +634,32 @@ local function cells(target)
   return result
 end
 
+-- Where a focused value is a plain number in a range, its position (0..1) for
+-- the value dial; lists, Off and Inherit sentinels get no dial.
+local function dial_fraction(d)
+  if not d or d.kind ~= "value" then return nil end
+  local domain = d.domain or {}
+  local raw, low, high = tonumber(domain.raw), tonumber(domain.min), tonumber(domain.max)
+  if not (raw and low and high) or high <= low or domain.enum or domain.values then return nil end
+  if (domain.off ~= nil and raw == domain.off) or (domain.inherit ~= nil and raw == domain.inherit) then return nil end
+  return math.max(0, math.min(1, (raw - low) / (high - low)))
+end
+
+-- A beat for the characters: the Doctor dances to the analysed tempo (a
+-- steady 96 without one); the others keep time only while the sequencer runs.
+local function art_motion(art)
+  if not art or not ui_motion.enabled() then return nil end
+  if art == "doctor" or art == "window" then
+    local model = trigger_edit_page and trigger_edit_page.get_rhythm_doctor_model and trigger_edit_page.get_rhythm_doctor_model()
+    local tempo = model and tonumber(model.tempo) or 96
+    return {beat = util.time() * tempo / 60}
+  end
+  if m_clock and m_clock.is_playing and m_clock.is_playing() and clock and clock.get_beats then
+    return {beat = clock.get_beats()}
+  end
+  return nil
+end
+
 function ui_live.view_model()
   local s = router.state
   local screen = screen_entry()
@@ -694,6 +720,13 @@ function ui_live.view_model()
     art = screen.art, pose = ui_motion.pose()
   }
   if screen.layout == "pattern64" then vm.cells = cells(target) end
+  vm.motion = art_motion(screen.art)
+  vm.active = s.dirty ~= true
+  if screen.layout == "focused" and not screen.art then
+    local d = focused(descriptors)
+    vm.dial = dial_fraction(d)
+    vm.dial_key = d and (s.screen .. ":" .. d.id)
+  end
   return vm
 end
 

@@ -24,11 +24,12 @@ local function exact(f)return f.kind~='action' and f.kind~='unavailable' end
 local function rect(x,y,w,h,level,outline)
  screen.level(level);screen.rect(x,y,w,h);if outline then screen.stroke()else screen.fill()end
 end
-local function full_value(value,w,x,y)
+-- dy: a few pixels while a new value rolls into place (decorative motion).
+local function full_value(value,w,x,y,dy)
  local size=23;screen.font_size(size)
  while size>8 and screen.text_extents(value)>w do size=size-1;screen.font_size(size)end
  if screen.text_extents(value)>w then return false end
- text(value,x,y,size,15);return true
+ text(value,x,y+(dy or 0),size,15);return true
 end
 function M.draw(v)
  local r={ok=true,reasons={},marked={}}
@@ -98,8 +99,12 @@ function M.draw(v)
    text(fit(selected.label,126),1,28,8,10)
    local val=tostring(selected.value)
    -- Art yields its region to a long value. Never clip numeric data.
-   if v.art and full_value(val,70,1,48)then art.draw_art(v.art,v.pose or 0)
-   elseif not full_value(val,126,1,48)then
+   -- The art region holds a character (in time when v.motion has a beat) or a
+   -- value dial; either yields the region to a value that needs the width.
+   if (v.art or v.dial) and full_value(val,70,1,48,v.value_dy)then
+    if v.art then art.draw_art(v.art,v.pose or 0,v.active,v.motion)
+    elseif art.draw_dial then art.draw_dial(v.dial)end
+   elseif not full_value(val,126,1,48,v.value_dy)then
     if exact(selected)then fail('value '..tostring(selected.id))else text(fit(val,126),1,45,8,15)end
    end
    text(fit(v.status or'',126),1,55,8,8)
