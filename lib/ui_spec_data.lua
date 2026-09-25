@@ -935,7 +935,6 @@ return {
         "device",
         "history",
         "merge_shape",
-        "norns",
       },
     },
     ["N02"] = {
@@ -1197,28 +1196,6 @@ return {
         "length",
         "reset_length",
         "pattern_select",
-      },
-    },
-    ["N04"] = {
-      ["title"] = "NORNS SETTINGS",
-      ["context"] = {
-        "Channel",
-      },
-      ["profile"] = "tasks",
-      ["hold_policy"] = "follow_family",
-      ["provider"] = "tasks",
-      ["existing_route"] = "N04",
-      ["parent"] = "N01",
-      ["layout"] = "detail",
-      ["art"] = nil,
-      ["fields"] = {
-        "projects",
-        "sequencer",
-        "param_locks",
-        "quantiser",
-        "midi_mapping",
-        "device_params",
-        "clock_mods",
       },
     },
     ["N05"] = {
@@ -2039,7 +2016,7 @@ return {
     ["Song"] = "A03",
   },
   ["tasks"] = {
-    ["authority"] = "Only source of navigator rows, order, labels and destinations. A navigator screen field list equals its rows (id, label) in order. K3 on a row enters row.screen, or row.screen[state.context] when it is keyed by context; the router never changes state.context from a task. contexts limits a row to those contexts; visible_when hides it (hidden rows are not selectable). A row with native instead of screen is a route hint: K3 shows feedback.native_route and never opens the system menu.",
+    ["authority"] = "Only source of navigator rows, order, labels and destinations. A navigator screen field list equals its rows (id, label) in order. K3 on a row enters row.screen, or row.screen[state.context] when it is keyed by context; the router never changes state.context from a task. contexts limits a row to those contexts; visible_when hides it (hidden rows are not selectable).",
     ["navigators"] = {
       ["Channel"] = "N01",
       ["Scale"] = "N02",
@@ -2094,11 +2071,6 @@ return {
           ["id"] = "merge_shape",
           ["label"] = "Merge Shape",
           ["screen"] = "M02",
-        },
-        {
-          ["id"] = "norns",
-          ["label"] = "Norns settings",
-          ["screen"] = "N04",
         },
       },
       ["N02"] = {
@@ -2161,43 +2133,6 @@ return {
           },
         },
       },
-      ["N04"] = {
-        {
-          ["id"] = "projects",
-          ["label"] = "Projects",
-          ["native"] = "X01",
-        },
-        {
-          ["id"] = "sequencer",
-          ["label"] = "Sequencer",
-          ["native"] = "X04",
-        },
-        {
-          ["id"] = "param_locks",
-          ["label"] = "Param locks",
-          ["native"] = "X09",
-        },
-        {
-          ["id"] = "quantiser",
-          ["label"] = "Quantiser",
-          ["native"] = "X05",
-        },
-        {
-          ["id"] = "midi_mapping",
-          ["label"] = "MIDI mapping",
-          ["native"] = "X06",
-        },
-        {
-          ["id"] = "device_params",
-          ["label"] = "Device params",
-          ["native"] = "X07",
-        },
-        {
-          ["id"] = "clock_mods",
-          ["label"] = "Clock / mods",
-          ["native"] = "X08",
-        },
-      },
       ["N05"] = {
         {
           ["id"] = "playback",
@@ -2225,7 +2160,7 @@ return {
       "N01 keeps Masks and Trig params rows (E1 also reaches them); every Channel task stays reachable from one list.",
       "N03 pattern row resolves by context: Trig P01, Note P03, Velocity P04. Options is Trig-only.",
       "N03 Rhythm Doctor row is Trig-only and visible only when the channel algorithm is 5 (the Doctor UI exists only then: trigger_edit_page_ui.lua:71,148,193); it inspects, it never selects the generator.",
-      "N04 is entered from N01 (row norns). Its rows are native route hints for PARAMS sections; X09 (Parameter locks, application_parameters.lua:89-90) was missing and is added. X02/X03 stay children of X01.",
+      "Norns settings (N04, native route hints) is removed (owner decision 25 September 2026): it only printed menu paths. Channel tasks' footer points to K1 PARAMS; the native screens X01-X09 are the PARAMS menu itself.",
     },
   },
   ["source_route_map"] = {
@@ -4128,17 +4063,6 @@ return {
           "owner.edit_existing",
         },
         ["priority"] = 100,
-      },
-      {
-        ["id"] = "tasks.native_hint",
-        ["event"] = "K3.down",
-        ["when"] = {
-          ["screen"] = "N04",
-        },
-        ["effects"] = {
-          "feedback.native_route",
-        },
-        ["priority"] = 310,
       },
       {
         ["id"] = "tasks.enter",
@@ -13948,19 +13872,6 @@ return {
       ["alternatives"] = {},
       ["invalidates_return"] = false,
     },
-    ["SCREEN.N04"] = {
-      ["gesture"] = "typed owner outcome / explicit action descriptor",
-      ["entry"] = "tasks",
-      ["screen"] = "N04",
-      ["field"] = "outcome.field_id",
-      ["scope"] = "outcome.target",
-      ["lifetime"] = "return stack or state receipt",
-      ["navigation"] = "replace",
-      ["target_binding"] = "explicit_current_identity",
-      ["return_policy"] = "next_deliberate_action",
-      ["alternatives"] = {},
-      ["invalidates_return"] = false,
-    },
     ["SCREEN.N05"] = {
       ["gesture"] = "typed owner outcome / explicit action descriptor",
       ["entry"] = "tasks",
@@ -14852,19 +14763,6 @@ return {
       ["gesture"] = "E1 tasks; E2 select stable key; K3 open",
       ["entry"] = "Channel",
       ["screen"] = "C02",
-      ["field"] = "remembered_valid_field",
-      ["scope"] = "explicit_edit_identity",
-      ["lifetime"] = "until deliberate navigation or grid owner supersedes",
-      ["navigation"] = "replace",
-      ["target_binding"] = "explicit_current_identity",
-      ["return_policy"] = "next_deliberate_action",
-      ["alternatives"] = {},
-      ["invalidates_return"] = false,
-    },
-    ["NAV.Channel.N04"] = {
-      ["gesture"] = "E1 tasks; E2 select stable key; K3 open",
-      ["entry"] = "Channel",
-      ["screen"] = "N04",
       ["field"] = "remembered_valid_field",
       ["scope"] = "explicit_edit_identity",
       ["lifetime"] = "until deliberate navigation or grid owner supersedes",

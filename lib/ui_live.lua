@@ -316,19 +316,6 @@ hooks["feedback.stale_target"] = function() say(FEEDBACK.stale_target) end
 hooks["feedback.grid_offline"] = function() say(FEEDBACK.grid_offline) end
 -- Where each Norns settings row lives in the norns menu, opened by a short K1
 -- (the script never opens the system menu itself). Compact to fit the footer.
-local NATIVE_ROUTES = {
-  X01 = "PARAMS>MOSAIC>PROJECT", X04 = "PARAMS>MOSAIC>SEQUENCER",
-  X09 = "PARAMS>MOSAIC>PARAM LOCKS", X05 = "PARAMS>MOSAIC>QUANTISER",
-  X06 = "PARAMS>MIDI MAPS", X07 = "PARAMS>MOSAIC CH n", X08 = "PARAMS>CLOCK + SYSTEM>MODS",
-}
-
-hooks["feedback.native_route"] = function()
-  local descriptors = describe()
-  local d = focused(descriptors)
-  local destination = d and d.domain and d.domain.destination
-  say(NATIVE_ROUTES[destination] or "PARAMS")
-end
-
 hooks["owner.invoke_selected"] = function()
   local descriptors, _, target = describe()
   local d = focused(descriptors)
@@ -838,6 +825,8 @@ function ui_live.view_model()
   -- The algorithm picker's footer shows the inputs the grid faders set for the
   -- algorithm in use, so a pattern or bank press there is visible.
   if s.screen == "P06" then footer = generator_footer() or footer end
+  -- Norns' own settings are in its PARAMS menu (owner decision 2026-09-25).
+  if s.screen == "N01" then footer = "K3 OPEN  K1 PARAMS" end
   if tooltip and tooltip.text then footer = tostring(tooltip.text) end
   local status = code and (code:upper():gsub("_", " ")) or ""
   -- Every Rhythm Doctor screen keeps the owner's lane and status visible

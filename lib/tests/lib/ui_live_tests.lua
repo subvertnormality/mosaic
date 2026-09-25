@@ -173,12 +173,11 @@ end
 -- Channel Tasks ---------------------------------------------------------------------
 
 -- Each N01 row: its screen and the legacy channel sub-page (channel_page_to_index)
--- the owner shows for it. N04 (norns settings) keeps the page it came from
--- (Masks, where E1 opened the list).
+-- the owner shows for it.
 local TASK_ROWS = {
   {"masks", "C01", 1}, {"trig_params", "C02", 2}, {"output", "C06", 6}, {"harmony", "H01", 8},
   {"clock", "C04", 4}, {"merge", "C09", 6}, {"device", "C05", 5}, {"history", "C03", 3},
-  {"merge_shape", "M02", 7}, {"norns", "N04", 1},
+  {"merge_shape", "M02", 7},
 }
 
 function test_ui_live_channel_tasks_e2_k3_enters_every_row_and_the_legacy_sub_page_follows()
@@ -257,7 +256,7 @@ function test_ui_live_channel_tasks_e3_does_not_edit_and_e2_clamps_to_the_rows()
     ui.enc(2, -9) -- clamps to the first row
     luaunit.assert_equals(ui_live.state().field_id, "masks")
     ui.enc(2, 99) -- clamps to the last row
-    luaunit.assert_equals(ui_live.state().field_id, "norns")
+    luaunit.assert_equals(ui_live.state().field_id, "merge_shape")
   end)
 end
 

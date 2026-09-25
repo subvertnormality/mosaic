@@ -35,7 +35,7 @@
     "Song": "A03"
   },
   "tasks": {
-    "authority": "Only source of navigator rows, order, labels and destinations. A navigator screen field list equals its rows (id, label) in order. K3 on a row enters row.screen, or row.screen[state.context] when it is keyed by context; the router never changes state.context from a task. contexts limits a row to those contexts; visible_when hides it (hidden rows are not selectable). A row with native instead of screen is a route hint: K3 shows feedback.native_route and never opens the system menu.",
+    "authority": "Only source of navigator rows, order, labels and destinations. A navigator screen field list equals its rows (id, label) in order. K3 on a row enters row.screen, or row.screen[state.context] when it is keyed by context; the router never changes state.context from a task. contexts limits a row to those contexts; visible_when hides it (hidden rows are not selectable).",
     "navigators": {
       "Channel": "N01",
       "Scale": "N02",
@@ -90,11 +90,6 @@
           "id": "merge_shape",
           "label": "Merge Shape",
           "screen": "M02"
-        },
-        {
-          "id": "norns",
-          "label": "Norns settings",
-          "screen": "N04"
         }
       ],
       "N02": [
@@ -157,43 +152,6 @@
           }
         }
       ],
-      "N04": [
-        {
-          "id": "projects",
-          "label": "Projects",
-          "native": "X01"
-        },
-        {
-          "id": "sequencer",
-          "label": "Sequencer",
-          "native": "X04"
-        },
-        {
-          "id": "param_locks",
-          "label": "Param locks",
-          "native": "X09"
-        },
-        {
-          "id": "quantiser",
-          "label": "Quantiser",
-          "native": "X05"
-        },
-        {
-          "id": "midi_mapping",
-          "label": "MIDI mapping",
-          "native": "X06"
-        },
-        {
-          "id": "device_params",
-          "label": "Device params",
-          "native": "X07"
-        },
-        {
-          "id": "clock_mods",
-          "label": "Clock / mods",
-          "native": "X08"
-        }
-      ],
       "N05": [
         {
           "id": "playback",
@@ -221,7 +179,7 @@
       "N01 keeps Masks and Trig params rows (E1 also reaches them); every Channel task stays reachable from one list.",
       "N03 pattern row resolves by context: Trig P01, Note P03, Velocity P04. Options is Trig-only.",
       "N03 Rhythm Doctor row is Trig-only and visible only when the channel algorithm is 5 (the Doctor UI exists only then: trigger_edit_page_ui.lua:71,148,193); it inspects, it never selects the generator.",
-      "N04 is entered from N01 (row norns). Its rows are native route hints for PARAMS sections; X09 (Parameter locks, application_parameters.lua:89-90) was missing and is added. X02/X03 stay children of X01."
+      "Norns settings (N04, native route hints) is removed (owner decision 25 September 2026): it only printed menu paths. Channel tasks' footer points to K1 PARAMS; the native screens X01-X09 are the PARAMS menu itself."
     ]
   },
   "screens": {
@@ -5493,20 +5451,6 @@
           "missing": "NONE",
           "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "norns",
-          "label": "Norns settings",
-          "example": "N04",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "norns"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -7117,157 +7061,6 @@
         "mutation": "none during draw"
       },
       "hold_policy": "observe_in_place"
-    },
-    "N04": {
-      "id": "N04",
-      "title": "NORNS SETTINGS",
-      "context": "Channel",
-      "profile": "tasks",
-      "provider": "tasks",
-      "existing_route": "N04",
-      "render": {
-        "program": "atlas",
-        "function": "draw",
-        "model": "ScreenModel",
-        "specimens": [
-          "N04.0",
-          "N04.1",
-          "N04.2",
-          "N04.3",
-          "N04.4",
-          "N04.5"
-        ],
-        "role": "accepted specimen reference; constants are examples, not live bindings"
-      },
-      "fields": [
-        {
-          "id": "projects",
-          "label": "Projects",
-          "example": "X01",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "projects"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "sequencer",
-          "label": "Sequencer",
-          "example": "X04",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "sequencer"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "param_locks",
-          "label": "Param locks",
-          "example": "X09",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "param_locks"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "quantiser",
-          "label": "Quantiser",
-          "example": "X05",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "quantiser"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "midi_mapping",
-          "label": "MIDI mapping",
-          "example": "X06",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "midi_mapping"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "device_params",
-          "label": "Device params",
-          "example": "X07",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "device_params"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "clock_mods",
-          "label": "Clock / mods",
-          "example": "X08",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "clock_mods"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        }
-      ],
-      "dynamic_fields": {
-        "source": "provider.describe(target)",
-        "order": "existing_descriptor_order",
-        "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
-        "empty": "EMPTY; E3/K3 no mutation"
-      },
-      "controls_explanation": "Short K1 opens the official norns menu. Navigate to PARAMS and the Mosaic groups with native panel controls. This screen is a route summary, not a replacement native menu.",
-      "state_explanation": "General settings are system-owned. A held K1 remains a modifier. Native text entry/file selection/PMAP keep their own controls. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
-      "parent": "N01",
-      "entry_flow_ids": [
-        "SCREEN.N04"
-      ],
-      "grid_example": null,
-      "live_render": {
-        "program": "screen",
-        "function": "draw",
-        "layout": "detail",
-        "model": "ViewModel",
-        "art": null
-      },
-      "binding": {
-        "provider": "tasks",
-        "route": "N04",
-        "field_inventory": "provider.describe(target); field_contracts supplements retained fields",
-        "target": "captured dispatch target",
-        "snapshot": "same generation as scope",
-        "mutation": "none during draw"
-      },
-      "hold_policy": "follow_family"
     },
     "N05": {
       "id": "N05",
@@ -21785,40 +21578,6 @@
         "non_mutating_draw"
       ]
     },
-    "SCREEN.N04": {
-      "id": "SCREEN.N04",
-      "kind": "owner_state",
-      "intent": "NORNS SETTINGS",
-      "old": {
-        "source": "lib/ui.lua",
-        "gesture": "existing owner state/action"
-      },
-      "new": {
-        "gesture": "typed owner outcome / explicit action descriptor",
-        "entry": "tasks",
-        "screen": "N04",
-        "field": "outcome.field_id",
-        "scope": "outcome.target",
-        "lifetime": "return stack or state receipt",
-        "navigation": "replace",
-        "target_binding": "explicit_current_identity",
-        "return_policy": "next_deliberate_action",
-        "alternatives": [],
-        "invalidates_return": false
-      },
-      "action": "read_owner_snapshot",
-      "follow": "General settings are system-owned. A held K1 remains a modifier. Native text entry/file selection/PMAP keep their own controls. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
-      "replacement": "coded_presentation",
-      "preserves": [
-        "musical_state",
-        "target_identity"
-      ],
-      "tests": [
-        "owner_route",
-        "return_path",
-        "non_mutating_draw"
-      ]
-    },
     "SCREEN.N05": {
       "id": "SCREEN.N05",
       "kind": "owner_state",
@@ -23440,42 +23199,6 @@
         "held_does_not_apply"
       ]
     },
-    "NAV.Channel.N04": {
-      "id": "NAV.Channel.N04",
-      "kind": "task_route",
-      "intent": "NORNS SETTINGS",
-      "old": {
-        "source": "context page/detail controller",
-        "gesture": "linear E1 page strip / existing child"
-      },
-      "new": {
-        "gesture": "E1 tasks; E2 select stable key; K3 open",
-        "entry": "Channel",
-        "screen": "N04",
-        "field": "remembered_valid_field",
-        "scope": "explicit_edit_identity",
-        "lifetime": "until deliberate navigation or grid owner supersedes",
-        "navigation": "replace",
-        "target_binding": "explicit_current_identity",
-        "return_policy": "next_deliberate_action",
-        "alternatives": [],
-        "invalidates_return": false
-      },
-      "action": "cancel_unapplied_owner_then_enter",
-      "follow": "Route summary of native PARAMS sections; K3 on a row shows the K1 route, never opens the menu.",
-      "replacement": "changed_navigation",
-      "preserves": [
-        "functionality",
-        "transaction_boundary",
-        "native_ids"
-      ],
-      "tests": [
-        "reachable",
-        "return_path",
-        "cancel_dirty",
-        "held_does_not_apply"
-      ]
-    },
     "NAV.Trig.R01": {
       "id": "NAV.Trig.R01",
       "kind": "task_route",
@@ -24215,17 +23938,6 @@
           "owner.edit_existing"
         ],
         "priority": 100
-      },
-      {
-        "id": "tasks.native_hint",
-        "event": "K3.down",
-        "when": {
-          "screen": "N04"
-        },
-        "effects": [
-          "feedback.native_route"
-        ],
-        "priority": 310
       },
       {
         "id": "tasks.enter",
@@ -25141,12 +24853,6 @@
       "must_not": "evaluate music in renderer, infer target from stale focus, apply a draft without its owner",
       "target": "state.target captured at input dispatch",
       "algorithm": "Set visible feedback to grid_offline while preserving current target and owner."
-    },
-    "feedback.native_route": {
-      "kind": "presentation",
-      "must_not": "evaluate music in renderer, infer target from stale focus, apply a draft without its owner",
-      "target": "state.target captured at input dispatch",
-      "algorithm": "Show the native route of the selected N04 row (short K1, PARAMS, MOSAIC, section). Never open the system menu from script code."
     },
     "owner.before_if_present": {
       "must_not": "evaluate music in renderer, infer target from stale focus, apply a draft without its owner",
@@ -32373,7 +32079,6 @@
         "P06",
         "P07",
         "P08",
-        "N04",
         "N05",
         "C11",
         "C12",

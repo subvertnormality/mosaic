@@ -161,7 +161,7 @@ TASK_ROWS = {
 # Mask detail / Trig detail left the list and Merge became Merge modes (usability audit
 # 25 September 2026).
 CHANNEL_TASKS = ["masks", "trig_params", "output", "harmony", "clock", "merge", "device", "history",
-                 "merge_shape", "norns"]
+                 "merge_shape"]
 
 # Historical page keys used by cases; each is a live screen.
 CHANNEL_PAGES = OrderedDict(

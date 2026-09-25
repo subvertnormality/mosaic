@@ -69,27 +69,22 @@ return function(ui_adapters, owners)
     return true
   end
 
-  -- The screen a row opens, or its native route hint.
+  -- The screen a row opens.
   local function destination(row, context)
-    if row.native then return row.native, true end
-    if type(row.screen) == "table" then return row.screen[context], false end
-    return row.screen, false
+    if type(row.screen) == "table" then return row.screen[context] end
+    return row.screen
   end
 
   local function descriptor(row, context)
-    local dest, native = destination(row, context)
+    local dest = destination(row, context)
     if dest == nil then return nil end
     return {
       id = row.id,
       label = row.label,
       kind = "action",
       value = dest,
-      domain = {destination = dest, native = native, context = context},
+      domain = {destination = dest, context = context},
       invoke = function()
-        if native then
-          return ui_adapters.outcome({code = "native_route", destination = dest, native = true,
-            feedback = "native_route"})
-        end
         return ui_adapters.outcome({code = "open_screen", destination = dest, context = context})
       end
     }

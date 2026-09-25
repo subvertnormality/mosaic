@@ -25,7 +25,7 @@ end
 
 function test_ui_adapters_tasks_navigator_fields_equal_the_spec_rows_in_order()
   local adapter = tasks_factory(ui_adapters)
-  for _, route in ipairs({"N01", "N02", "N04", "N05"}) do
+  for _, route in ipairs({"N01", "N02", "N05"}) do
     local outcome = describe(adapter, route)
     luaunit.assert_true(outcome.ok, route)
     luaunit.assert_equals(ids(outcome), row_ids(ui_adapters.spec.tasks.rows[route]), route)
@@ -73,15 +73,6 @@ function test_ui_adapters_tasks_invoke_names_the_destination_without_navigating(
   luaunit.assert_equals(outcome.field, "harmony")
   local trig = adapter:invoke("pattern", {source_route = "N03", screen = "N03", context = "Trig"})
   luaunit.assert_equals(trig.destination, "P01")
-end
-
-function test_ui_adapters_tasks_native_rows_are_route_hints_with_feedback()
-  local adapter = tasks_factory(ui_adapters)
-  local outcome = adapter:invoke("param_locks", {source_route = "N04", screen = "N04"})
-  luaunit.assert_true(outcome.ok)
-  luaunit.assert_equals(outcome.code, "native_route")
-  luaunit.assert_equals(outcome.destination, "X09")
-  luaunit.assert_equals(outcome.feedback, "native_route")
 end
 
 function test_ui_adapters_tasks_m01_lists_its_fields_from_the_channel_rows()
