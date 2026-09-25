@@ -304,3 +304,76 @@ def _pattern_cells(c, levels, stage):
     c.results.append(row)
     c.wait(matches)
     row['passed'] = True
+
+
+# ---------------------------------------------------------------------------------------------
+# Merge modes (C09) are selectable on the norns (owner request 25 September 2026).
+
+_PHRASE_MERGE = {
+    # configure() pattern 1 (C4 D4 E4 F4 at 127/117/107/97 on steps 1-4) merged with pattern 2
+    # (trigs on steps 1 and 2, note 0 = C4, velocity 100); the same arithmetic as acceptance A10.
+    'skip': [(64, 107), (65, 97)],                       # trigs where exactly one pattern has one
+    'all': [(60, 114), (62, 109), (64, 107), (65, 97)],  # every trig; note/velocity average
+    'all_note_pat2': [(60, 114), (60, 109), (60, 107), (60, 97)],  # notes from pattern 2
+}
+_TRIG_LED = {'SKIP': 2, 'ONLY': 5, 'ALL': 8}  # trig merge button (14,8): off / in range / medium
+
+
+def live_ui_merge_modes(c):
+    """README Merge Modes: Merge modes opens from Channel tasks; E2 chooses Trig, Note,
+    Velocity or Length mode (Patterns stays grid-assigned); E3 steps a mode through what its
+    grid button can set, clamped, exactly as the button does: the trig merge button LED
+    follows SKIP -> ONLY -> ALL and the channel's MIDI follows the chosen modes."""
+    ui = c.ui
+    c.configure()
+    ui.tap_control('pattern_editor')
+    ui.tap_control('pattern_select', 2)
+    ui.tap_step(1); ui.tap_step(2)
+    ui.tap_control('channel_editor')
+    ui.tap_control('pattern_slot', 2)
+    ui.expect_header('merge_detail', channel=1)
+    ui.expect_selected_field('detail', 'Patterns', '01 02')
+    c.key(2)
+    ui.expect_header('masks', channel=1)
+    melody = lambda pairs: [(1, [144, n, v]) for n, v in pairs]
+
+    def trig_mode(value):
+        ui.expect_header('merge_detail', channel=1)
+        ui.expect_selected_field('detail', 'Trig mode', value)
+        c.led_values([(14, 8)], [_TRIG_LED[value]])
+        c.results.append(dict(kind='merge-mode', row='Trig mode', value=value, passed=True))
+
+    ui.open_channel_task('merge')
+    _expect_footer(c, 'E2 MODE  E3 SET  K2 BACK')
+    c.enc(2, -6)
+    ui.expect_selected_field('detail', 'Patterns', '01 02')
+    c.enc(3, 1)  # Patterns is read-only: nothing changes
+    ui.expect_selected_field('detail', 'Patterns', '01 02')
+    c.enc(2, 1)
+    trig_mode('SKIP')
+    c.playback(melody(_PHRASE_MERGE['skip']), cycles=2)
+    c.enc(3, -1)
+    trig_mode('SKIP')  # clamped at the first mode
+    for value in ('ONLY', 'ALL', 'ALL'):  # the last detent clamps at All
+        c.enc(3, 1)
+        trig_mode(value)
+    c.playback(melody(_PHRASE_MERGE['all']), cycles=2)
+    # Note mode: Average -> Up -> Down -> PAT 1 -> PAT 2 (pattern 2 supplies every note), then back.
+    c.enc(2, 1)
+    ui.expect_selected_field('detail', 'Note mode', 'AVERAGE')
+    for value in ('UP', 'DOWN', 'PAT 1', 'PAT 2'):
+        c.enc(3, 1)
+        ui.expect_selected_field('detail', 'Note mode', value)
+    c.playback(melody(_PHRASE_MERGE['all_note_pat2']), cycles=2)
+    c.enc(3, -1)
+    ui.expect_selected_field('detail', 'Note mode', 'PAT 1')
+    for value in ('DOWN', 'UP', 'AVERAGE', 'AVERAGE'):  # the last detent clamps at Average
+        c.enc(3, -1)
+        ui.expect_selected_field('detail', 'Note mode', value)
+    c.playback(melody(_PHRASE_MERGE['all']), cycles=2)
+    # The trig mode set here is the grid's: the next button press continues from All to Skip.
+    c.key(2)
+    ui.expect_header('masks', channel=1)
+    ui.tap_control('trig_merge_mode')
+    trig_mode('SKIP')
+    c.results.append(dict(kind='live-ui-merge-modes-summary', passed=True))

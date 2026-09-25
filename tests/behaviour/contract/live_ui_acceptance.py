@@ -570,7 +570,7 @@ def ui_accept_a10(c):
     c.led_values(PATTERN_ROW, [15, 15] + [2] * 14)
     # Merge detail shows the full assignment and the current modes.
     ui.open_channel_task('merge')
-    _live_header(c, 'MERGE DETAIL', 'CH01', 'detail', 'merge-detail')
+    _live_header(c, 'MERGE MODES', 'CH01', 'detail', 'merge-detail')
     c.enc(2, -6)
     _expect_detail(c, 'Patterns', '01 02', 'merge-patterns')
     c.enc(2, 1)
@@ -595,13 +595,13 @@ def ui_accept_a10(c):
     with ui.hold_control('note_merge_mode'):
         c.elapse(.2)
         ui.tap_control('pattern_slot', 3)
-        _live_header(c, 'MERGE DETAIL', 'CH01', 'detail', 'note-merge-source')
+        _live_header(c, 'MERGE MODES', 'CH01', 'detail', 'note-merge-source')
         _expect_footer(c, 'Note merge mode pattern 3', 'note-merge-3')  # characterisation
     # Merge detail keeps its own row (Trig mode); the assignment is still patterns 1 and 2,
     # and the note merge source reads as the manual names it.
     _expect_detail(c, 'Trig mode', 'ALL', 'follow-keeps-merge-row')
     c.enc(2, 1)
-    _expect_detail(c, 'Note / vel', 'PAT 3 / AVERAGE', 'note-merge-source-row')
+    _expect_detail(c, 'Note mode', 'PAT 3', 'note-merge-source-row')
     c.enc(2, -3)
     _expect_detail(c, 'Patterns', '01 02', 'source-not-assigned')
     c.led_values(PATTERN_ROW, [15, 15] + [2] * 14)
@@ -658,7 +658,7 @@ def ui_accept_a10(c):
 def _merge_follow(c, label, value, tooltip, stage):
     """A Channel-page merge/assignment tap shows Merge detail (C09) with the row it changed
     chosen and the action's tooltip; K2 returns to Masks (usability audit 25 September 2026)."""
-    _live_header(c, 'MERGE DETAIL', 'CH01', 'detail', stage)
+    _live_header(c, 'MERGE MODES', 'CH01', 'detail', stage)
     _expect_detail(c, label, value, stage)
     _expect_footer(c, tooltip, stage)
     c.key(2)

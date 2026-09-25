@@ -46,7 +46,7 @@ HINTS = {
     "device": "E3 SET  K3 APPLY  K2 CANCEL", "assignment": "E3 PICK  K3 SET  K2 BACK",
     "scale": "E3 SET  K3 APPLY  K2 CANCEL", "scale_clock": "E3 SET  K3 APPLY  K2 CANCEL",
     "song": "E3 SET  K3 APPLY  K2 CANCEL", "song_clock": "E3 SET  K3 APPLY  K2 CANCEL",
-    "trig_options": "E3 SET  K3 APPLY", "feature": "E3 SET  K3 APPLY  K2 BACK",
+    "trig_options": "E3 SET  K3 APPLY", "merge_modes": "E2 MODE  E3 SET  K2 BACK", "feature": "E3 SET  K3 APPLY  K2 BACK",
     "tasks": "E2 CHOOSE  K3 OPEN", "read_only": "E1 TASKS", "doctor": "E2 FIELD  E3 SET",
     "confirmation": "K3 CONFIRM  K2 CANCEL", "native": "K1 PARAMS",
 }
@@ -231,7 +231,7 @@ def live_ui_sweep(c):
     channel_task(c, "clock")
     sw.screen("C04", field=("Rate", "/1"), footer=(START, "Swing type"))
     channel_task(c, "merge")
-    sw.screen("C09", field=("Patterns", "01"), footer="K2 BACK")
+    sw.screen("C09", field=("Patterns", "01"))
     c.key(2)
     sw.screen("C01", field=("Note", "X"))
     channel_task(c, "device")
@@ -295,8 +295,8 @@ def channel_screens(c, sw):
     walk(c, sw, "C03", [("Position", "0 of 0"), ("Selected event", "NO HISTORY"),
                         ("Undo available", "0"), ("Redo available", "0")])
     channel_task(c, "merge")
-    walk(c, sw, "C09", [("Patterns", "01"), ("Trig mode", "SKIP"), ("Note / vel", "AVERAGE / AVERAGE"),
-                        ("Length mode", "AVERAGE")], footer="K2 BACK")
+    walk(c, sw, "C09", [("Patterns", "01"), ("Trig mode", "SKIP"), ("Note mode", "AVERAGE"),
+                        ("Velocity mode", "AVERAGE"), ("Length mode", "AVERAGE")])
     c.key(2)  # K2 returns, as its footer says, to the remembered family (Masks)
     sw.screen("C01", field=("Note", "X"))
     channel_task(c, "device")

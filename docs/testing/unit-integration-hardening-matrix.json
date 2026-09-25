@@ -30,9 +30,9 @@
  "manual": "README.md",
  "manual_sha256": "e4219c4d4db958e72685ded247a1bc6d1096b837cc3a7cb2bb87823b345b042d",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "3613d8ba12fbd99d6d364f958127ccba9b9147a97232b4579bb570a9c90f98b1",
+ "inventory_sha256": "f2ecb100e104cc00b6d38be0cc6c9d8e6b698a873128a0e291ac9d72f84ac149",
  "counts": {
-  "requirements": 170,
+  "requirements": 171,
   "production_lua_modules": 161,
   "unit_integration_files": 119,
   "domains": 17
@@ -349,6 +349,7 @@
     "UI-FEEDBACK-ALGORITHM",
     "UI-FEEDBACK-DASHBOARDS",
     "UI-FEEDBACK-GRID-FOCUS",
+    "UI-FEEDBACK-MERGE-MODES",
     "UI-FEEDBACK-PAINT",
     "UI-FEEDBACK-VIEW-CHANNEL"
    ],

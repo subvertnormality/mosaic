@@ -22,8 +22,10 @@ def song_tempo_divisions(c):
     for slot, (label, detents, _) in DIVISIONS.items():
         c.tap(6, 8); c.tap(1, 1); c.hold_tap((1, 1), (slot, 1)); c.tap(slot, 1); c.tap(3, 8)
         c.tap(1, 1); c.tap(OCTAVE_KEY[slot], 8)                  # this slot's channel 1 octave
-        # The old E1 -5/+3 reached Clocks; Tasks opens it. The live scope names the song slot.
-        c.ui.channel_page('clock_mods', confirm=False); c.ui.expect_header('clock_mods', channel=1, song_slot=slot)
+        # The old E1 -5/+3 reached Clocks; Tasks opens it. The live scope names the song slot
+        # and this slot's channel octave (CH01 S02 OCT+1).
+        c.ui.channel_page('clock_mods', confirm=False)
+        c.ui.expect_header('clock_mods', channel=1, song_slot=slot, octave=OCTAVE[slot])
         c.enc(3, detents); c.key(3)
         c.ui.expect_selected_field('focused', label='Rate', value=label)
         c.results.append(dict(kind='slot-clock-division', slot=slot, label=label, passed=True))

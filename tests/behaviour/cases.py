@@ -27,7 +27,7 @@ from contract.live_ui_acceptance import (ui_accept_a01, ui_accept_a02, ui_accept
                                          ui_accept_a11, ui_accept_a19)
 from contract.live_ui_sweep import live_ui_sweep
 from contract.live_ui_feedback import (live_ui_algorithm, live_ui_paint, live_ui_dashboards, live_ui_view_channel,
-                                        live_ui_grid_focus)
+                                        live_ui_grid_focus, live_ui_merge_modes)
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from contract.device_configs import malformed_device_configs, missing_id_device_configs
@@ -2701,6 +2701,7 @@ CASES={
  'M-LIVEUI-DASH-001':dict(run=live_ui_dashboards,requirements=['UI-FEEDBACK-DASHBOARDS'],description='Output, Scale overview and Song playback show every row at once with no cursor (whole-screen oracle; E2/E3 change nothing); Scale tasks are exactly Scale, Scale clock, Overview; Trig options has only the tresillo amount (README Norns Menu Navigation, Note Dashboard, Navigating the Norns Display)'),
  'M-LIVEUI-VIEW-001':dict(run=live_ui_view_channel,requirements=['UI-FEEDBACK-VIEW-CHANNEL'],description='On Channel view and Pattern Trig, E3 turns the viewed channel as the first input after opening and after E2 (which moves no focus); the selected channel stays 1 (README Adding Trigs)'),
  'M-LIVEUI-FOCUS-001':dict(run=live_ui_grid_focus,requirements=['UI-FEEDBACK-GRID-FOCUS'],description='Grid actions show what they changed: trig merge on Masks shows Merge detail on Trig mode and K2 returns; a Pattern Trig step tap lights that cell over the dim channel context (PAT02 CH01); the song length fader shows Song playback with the exact global length (README Norns Menu Navigation, Adjusting Song Sequence Length)'),
+ 'M-LIVEUI-MERGEMODES-001':dict(run=live_ui_merge_modes,requirements=['UI-FEEDBACK-MERGE-MODES'],description='Merge modes opens from Channel tasks; Patterns is read-only; E3 steps Trig mode SKIP -> ONLY -> ALL (clamped both ends) with the trig merge button LED following, and Note mode through UP, DOWN, PAT 1, PAT 2 and back (clamped); the merged MIDI follows each chosen mode exactly and the grid button continues from the mode set on the norns (README Merge Modes)'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
  'M-SCALE-MEMORY-DISPLAY-001':dict(run=memory_scale_lock_display,requirements=["CH-ACTIVE-SCALE-DISPLAY"],issues=[85],description='User-created channel scale lock on step 3 stays represented on the Memory page; its unlocked neighbour and the Trig Locks page are raw-grid controls (issue #85 characterisation)'),

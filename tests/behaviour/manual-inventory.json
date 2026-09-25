@@ -8011,6 +8011,19 @@
    "domain": "Covered: trig merge taps on Masks show Merge detail on Trig mode (ONLY, ALL) and K2 returns to Masks; a step tap on an empty pattern 2 lights that cell at 15 over the capped channel context (PAT02 CH01); the global length fader shows Song playback with Global length 63 then 64. Not covered: note/velocity/length merge buttons (M-UIACC-A10-001 covers pattern assignment and trig merge), scale locks (S04), transposition (S03)."
   },
   {
+   "id": "UI-FEEDBACK-MERGE-MODES",
+   "sections": [
+    "MAN-044",
+    "MAN-015"
+   ],
+   "statement": "Merge modes, in Channel tasks, shows the channel's patterns and its trig, note, velocity and length merge modes; E2 chooses a mode and E3 steps it through the modes its grid button can set, applied exactly as the button does.",
+   "cases": [
+    "M-LIVEUI-MERGEMODES-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: Patterns read-only; Trig mode SKIP/ONLY/ALL with both clamps, the trig merge button LED and exact merged MIDI for Skip and All; Note mode AVERAGE/UP/DOWN/PAT 1/PAT 2 and back with both clamps and exact MIDI for PAT 2 and Average; the grid button continues from the norns-set mode. Not covered: velocity and length rows, PAT 3..16, K1 length gesture from the norns."
+  },
+  {
    "id": "UI-ACCEPT-A18",
    "sections": [
     "MAN-015",
