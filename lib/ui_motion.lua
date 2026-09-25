@@ -20,6 +20,10 @@ local BLINK_EVERY = 4.5 -- seconds between blinks while a character is shown
 local wipe, pop, pop_strength = 0, 0, 1
 local GLIDE_FRAMES = 4
 local glide = {frames = 0, from = nil, to = nil, screen = nil, selected = nil}
+local dial = {key = nil, shown = nil, target = nil}
+-- A changed focused value rolls up into place over a few frames.
+local ROLL_FRAMES = 3
+local roll = {key = nil, value = nil, frames = 0}
 local last_blink, blink = nil, 0
 
 local function now()
@@ -51,6 +55,7 @@ end
 
 function ui_motion.busy()
   return wipe > 0 or pop > 0 or blink > 0 or glide.frames > 0
+    or (dial.target ~= nil and dial.shown ~= dial.target) or roll.frames > 0
 end
 
 -- Mosaic's mark: four small tiles at the right of the title row. They rest
@@ -121,7 +126,8 @@ end
 function ui_motion.draw(vm, render)
   if not ui_motion.enabled() then
     wipe, pop, blink, glide.frames = 0, 0, 0, 0
-    vm.pose = 0
+    dial.shown, dial.target, roll.frames = nil, nil, 0
+    vm.pose, vm.motion = 0, nil
     local ok, report = render(vm)
     draw_mark(false)
     return ok, report
@@ -136,8 +142,24 @@ function ui_motion.draw(vm, render)
   end
   vm.pose = ui_motion.pose()
   track_glide(vm)
+  if vm.layout == "focused" and vm.fields and vm.fields[vm.selected] then
+    local field = vm.fields[vm.selected]
+    local key = vm.screen .. ":" .. tostring(field.id)
+    if roll.key == key and roll.value ~= field.value then roll.frames = ROLL_FRAMES end
+    roll.key, roll.value = key, field.value
+    if roll.frames > 0 then vm.value_dy = roll.frames; roll.frames = roll.frames - 1 end
+  end
+  -- The dial needle sweeps to a new value instead of jumping.
+  if vm.dial then
+    if dial.key ~= vm.dial_key or dial.shown == nil then dial.key, dial.shown = vm.dial_key, vm.dial end
+    dial.target = vm.dial
+    dial.shown = dial.shown + (dial.target - dial.shown) * 0.45
+    if math.abs(dial.target - dial.shown) < 0.004 then dial.shown = dial.target end
+    vm.dial = dial.shown
+  end
   local ok, report = render(vm)
-  local moving = ui_motion.busy()
+  -- A character keeping time asks for frames for as long as it moves.
+  local moving = ui_motion.busy() or vm.motion ~= nil
   if glide.frames > 0 then draw_glide(); glide.frames = glide.frames - 1 end
   if wipe > 0 then draw_wipe(); wipe = wipe - 1 end
   draw_mark(pop > 0)

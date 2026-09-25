@@ -235,3 +235,14 @@ def overview_cell_matches(state,layout,index,short_label,value):
         expected=render([(x+2,y+7,level,fit(short_label,width-5)),(x+2,y+15,13,shown)])
         if _region_matches(actual,expected,y+1,y+16,x+1,x+width-3):return True
     return False
+
+def overview_cell_marker(state,layout,index):
+    """The one-letter state marker in an overview cell's top-right corner:
+    'S' (a slide), 'L' (a lock on a held step) or None. The renderer clears a
+    4x7 box at (x+w-6, y+1) and draws the letter at (x+w-6, y+7), level 15."""
+    columns,width=(4,32) if layout=='overview_masks' else (5,25)
+    x=((index-1)%columns)*width;y=9+((index-1)//columns)*18
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    for letter in ('S','L'):
+        if _region_matches(actual,render([(x+width-6,y+7,15,letter)]),y+1,y+8,x+width-6,x+width-2):return letter
+    return None

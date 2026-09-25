@@ -2936,5 +2936,97 @@ class OutputFieldVerbTests(unittest.TestCase):
         self.assertEqual(oracle.call_args.args[1:], ("overview_masks", "Chord 2", "-7th"))
 
 
+class OverviewCellMarkerOracleTests(unittest.TestCase):
+    """The C02 slide / held-lock marker oracle (frame_oracle.overview_cell_marker)."""
+
+    @staticmethod
+    def state(commands):
+        from frame_oracle import render
+        return {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+
+    def test_reads_the_letter_drawn_in_the_cells_top_right_corner(self):
+        from frame_oracle import overview_cell_marker
+
+        # Trig params cells are 25 px wide from y9: cell 1's marker is drawn at (19,16),
+        # cell 7's (second row, second column) at (44,34).
+        for letter in ("S", "L"):
+            with self.subTest(letter=letter):
+                self.assertEqual(overview_cell_marker(self.state([(19, 16, 15, letter)]), "overview_params", 1), letter)
+                self.assertEqual(overview_cell_marker(self.state([(44, 34, 15, letter)]), "overview_params", 7), letter)
+
+    def test_no_marker_or_another_cells_marker_is_none(self):
+        from frame_oracle import overview_cell_marker
+
+        self.assertIsNone(overview_cell_marker(self.state([]), "overview_params", 1))
+        self.assertIsNone(overview_cell_marker(self.state([(44, 16, 15, "S")]), "overview_params", 1))
+        # A dimmer letter is not the marker.
+        self.assertIsNone(overview_cell_marker(self.state([(19, 16, 9, "S")]), "overview_params", 1))
+
+
+class PromptRouteVerbTests(unittest.TestCase):
+    """Deadline-bound routes: one saturating native event, then the same rows."""
+
+    def test_channel_page_promptly_saturates_tasks_with_one_event(self):
+        from ui import Ui
+        from ui_map import CHANNEL_TASKS
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.live_header_matches", return_value=True) as header:
+            Ui(driver).channel_page_promptly("midi_config", channel=2)
+        self.assertEqual(driver.calls, [
+            ("enc", 1, 3),
+            ("action", {"type": "enc", "n": 2, "delta": -2 * len(CHANNEL_TASKS)}),
+            ("elapse", .15),
+            ("enc", 2, CHANNEL_TASKS.index("device")),
+            ("key", 3),
+            ("wait",),
+        ])
+        self.assertEqual(header.call_args.args[1:], ("DEVICE", "CH02", "detail"))
+
+    def test_channel_page_promptly_first_row_needs_no_row_turn(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.live_header_matches", return_value=True):
+            Ui(driver).channel_page_promptly("masks")
+        self.assertNotIn(("enc", 2, 0), driver.calls)
+        self.assertEqual(driver.calls[-2:], [("key", 3), ("wait",)])
+
+    def test_assign_trig_parameter_promptly_saturates_then_moves_the_offset(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.selected_field_matches", return_value=True) as row:
+            self.assertEqual(Ui(driver).assign_trig_parameter_promptly("stored_patch_cc1", 15), 15)
+        self.assertEqual(driver.calls, [
+            ("key", 2),
+            ("action", {"type": "enc", "n": 3, "delta": -126}),
+            ("elapse", .15),
+            ("enc", 3, 15),
+            ("wait",),
+            ("key", 3),
+            ("key", 2),
+        ])
+        self.assertEqual(row.call_args.args[1:3], ("detail", "CC 1"))
+        self.assertEqual(driver.results, [dict(kind="parameter-list-label", label="CC 1", passed=True)])
+
+    def test_unknown_page_is_a_map_error(self):
+        from ui import Ui, UiMapError
+
+        with self.assertRaises(UiMapError):
+            Ui(FakeDriver()).channel_page_promptly("no_such_page")
+
+
+    def test_leave_merge_detail_confirms_c09_then_taps_the_channel_button(self):
+        from ui import Ui
+        from ui_map import control_cell
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.live_header_matches", return_value=True) as header:
+            Ui(driver).leave_merge_detail()
+        self.assertEqual(driver.calls, [("wait",), ("tap", *control_cell("channel_editor"))])
+        self.assertEqual(header.call_args.args[1:], ("MERGE DETAIL", "CH01", "detail"))
+
+
 if __name__ == "__main__":
     unittest.main()

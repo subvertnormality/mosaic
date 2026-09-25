@@ -1402,3 +1402,50 @@ class Ui:
         label = self._mask_label(field)
         self.driver.wait(lambda state: selected_field_matches(state, "overview_masks", label, value))
         self.driver.results.append(dict(kind="selected-mask", field=field, label=label, value=str(value), passed=True))
+
+    # ---- Recording / Memory / numeric merging family ----
+
+    def leave_merge_detail(self, channel=1):
+        """Leave Merge detail (C09) for the Channel family with the Channel button.
+
+        A held merge-mode button + pattern tap (flow G19) follows to Merge
+        detail and it stays after the release (acceptance A10); the retired UI
+        stayed on the Channel page. The Channel button (G01) returns to the
+        remembered family and clears the return frames: K2 on C09 pops one
+        frame per follow, and a second follow from C09 pushes C09 itself."""
+        self.wait_for_header("merge_detail", channel=channel)
+        self.tap_control("channel_editor")
+
+    def channel_page_promptly(self, page, channel=1):
+        """Open Channel ``page`` through Tasks inside a musical deadline.
+
+        As channel_page, but the Tasks list is saturated to its first row by
+        one native E2 event (the navigator clamps a large delta) rather than
+        one detent per row, so the route costs a fixed ~0.2 s."""
+        try:
+            row = CHANNEL_TASKS.index(LIVE_SCREENS[page]["task"])
+        except (KeyError, ValueError) as error:
+            raise UiMapError("unknown channel page: %s" % page) from error
+        self.driver.enc(1, 3)
+        self.encoder_event(2, -2 * len(CHANNEL_TASKS))
+        self.driver.elapse(.15)
+        if row:
+            self.driver.enc(2, row)
+        self.press_key(3)
+        self.wait_for_header(page, channel=channel)
+
+    def assign_trig_parameter_promptly(self, parameter, offset):
+        """Assign a trig parameter at a verified picker offset inside a musical
+        deadline: one native E3 event saturates the picker at its first row
+        (as assign_trig_parameter's 50 detents do), then ``offset`` detents."""
+        label = self.trig_parameter_label(parameter)
+        self.press_key(2)
+        self.encoder_event(3, -126)
+        self.driver.elapse(.15)
+        if offset:
+            self.turn(3, offset)
+        self.expect_list_label(label)
+        self.press_key(3)
+        self.press_key(2)
+        return offset
+

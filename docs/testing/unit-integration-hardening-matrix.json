@@ -28,13 +28,13 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "f0a226db12bcd5d16009ebf66eaec858348d986a6c6cd3404d2f2c7d222c9579",
+ "manual_sha256": "9b15119b60233185976cf22231c630dfbff19bf94aa024e3fa7982a12f876ea2",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "2e195302002d592891f4b1062b034454d1736171b2bd6d5fd731262f9bed7c57",
+ "inventory_sha256": "3af5ba943096ba84741606b34314cf01faf7ed37032e8df0733049226db2a449",
  "counts": {
   "requirements": 165,
   "production_lua_modules": 160,
-  "unit_integration_files": 118,
+  "unit_integration_files": 119,
   "domains": 17
  },
  "coverage_language": {
@@ -442,6 +442,7 @@
     "lib/tests/lib/ui_adapters_tasks_tests.lua",
     "lib/tests/lib/ui_adapters_tests.lua",
     "lib/tests/lib/ui_adapters_trig_options_tests.lua",
+    "lib/tests/lib/ui_characters_tests.lua",
     "lib/tests/lib/ui_components_tests.lua",
     "lib/tests/lib/ui_grid_outcomes_tests.lua",
     "lib/tests/lib/ui_live_tests.lua",

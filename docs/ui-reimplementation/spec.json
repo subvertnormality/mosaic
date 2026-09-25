@@ -913,7 +913,7 @@
         "function": "draw",
         "layout": "focused",
         "model": "ViewModel",
-        "art": null
+        "art": "metronome"
       },
       "binding": {
         "provider": "clock",
@@ -1761,7 +1761,7 @@
         "function": "draw",
         "layout": "focused",
         "model": "ViewModel",
-        "art": null
+        "art": "metronome"
       },
       "binding": {
         "provider": "scale_clock",
@@ -2870,7 +2870,7 @@
         "function": "draw",
         "layout": "focused",
         "model": "ViewModel",
-        "art": null
+        "art": "metronome"
       },
       "binding": {
         "provider": "song_clock",
@@ -3999,7 +3999,7 @@
         "function": "draw",
         "layout": "focused",
         "model": "ViewModel",
-        "art": null
+        "art": "metronome"
       },
       "binding": {
         "provider": "clock",
@@ -23725,7 +23725,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "0bfdf63f731ec2ef3938187fba3741f9d345ab7e29270557230ec39727755012"
+      "sha256": "a921b8de6ac5d153e679bdf45a46897ef2ca8fa07e780b34c2cc6e847c4026fc"
     }
   },
   "guardrails": [
@@ -31809,8 +31809,10 @@
     "optional": {
       "cells": "64 Cell entries: level0..15,selected bool,playing bool; present only pattern64",
       "status": "pending/active/error provenance string",
-      "art": "doctor|window|garden|choir|register; decorative, not data",
-      "pose": "0 default;1 blink only"
+      "art": "doctor|window|garden|choir|register|metronome; decorative, not data. With `motion` {beat} the character keeps time (Doctor: analysed tempo; others: the running clock); at rest it is the atlas pose",
+      "pose": "0 default;1 blink only",
+      "dial": "0..1 position of a plain numeric focused value in its owner range, drawn as a dial in the art region; never replaces the value text",
+      "value_dy": "0..3 px: a changed focused value rolls up into place (decorative motion only)"
     },
     "binding_algorithm": [
       "Capture target and immutable snapshot once per draw.",
