@@ -3,14 +3,8 @@ def strum_reset_continuity(c):
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     c.configure();c.ui.hold_control_tap('step','step',1,3);c.ui.turn(1,-4);c.ui.turn(2,3);c.ui.set_value(2)  # unset chord masks start from X
-    import base64
-    from frame_oracle import render
-    expected_chord=render([(0,40,15,'Chd1'),(0,48,15,'3rd')])
-    indices=[(y*128+x)*4+k for y in range(33,50) for x in range(25) for k in range(3)]
-    def third_selected(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[i]==expected_chord[i] for i in indices)
-    c.wait(third_selected);c.results.append(dict(kind='chord-mask-screen',label='3rd',passed=True))
+    # Note Masks shows the selected Chord 1 mask's full label and value.
+    c.ui.expect_selected_field('overview_masks',label='Chord 1',value='3rd');c.results.append(dict(kind='chord-mask-screen',label='3rd',passed=True))
     c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
     c.ui.assign_trig_parameter_key('chord_note_strum');c.ui.set_value(8)
     for reset in (False,True):

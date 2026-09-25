@@ -1,10 +1,9 @@
 """Exact range feedback and clipping contracts."""
-import base64
 
 
 def rejected_range(c,scale_page=False):
     from cases import assert_durations
-    from frame_oracle import render
+    from frame_oracle import footer_matches
     c.configure()
     if scale_page:c.tap(4,8)
     c.hold_tap((2,4),(4,4));c.elapse(.15)
@@ -22,10 +21,8 @@ def rejected_range(c,scale_page=False):
         before=c.snapshot()['grid'][48:112]
         events=[(4,1),(2,1),(2,0),(4,0)] if sequence=='held4-release2' else [(2,1),(4,1),(2,0),(4,0)]
         for x,z in events:c.action(type='grid',x=x,y=4,state=z)
-        expected=render([(0,62,10,'End must follow start')])
-        def feedback(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+        # Live footer tooltip (frame_oracle.footer): exact text, whole footer line.
+        def feedback(state):return footer_matches(state,'End must follow start')
         c.wait(feedback);c.wait(lambda state:state['grid'][48:112]==before)
         c.results.append(dict(kind='range-rejection-feedback',scale_page=scale_page,sequence=sequence,prior_grid=before,passed=True))
         verify(2,sequence)
@@ -35,7 +32,7 @@ def rejected_range(c,scale_page=False):
 
 def rejected_range_while_playing(c,scale_page=False):
     from cases import assert_durations
-    from frame_oracle import render
+    from frame_oracle import footer_matches
     c.configure()
     if scale_page:c.tap(4,8)
     marker=c.snapshot()['midi_count'];c.tap(1,8)
@@ -43,10 +40,8 @@ def rejected_range_while_playing(c,scale_page=False):
     c.wait(lambda state:len(notes(state))>=5)
     for events in [[(4,1),(2,1),(2,0),(4,0)],[(2,1),(4,1),(2,0),(4,0)]]:
         for x,z in events:c.action(type='grid',x=x,y=4,state=z)
-        expected=render([(0,62,10,'End must follow start')])
-        def feedback(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+        # Live footer tooltip (frame_oracle.footer): exact text, whole footer line.
+        def feedback(state):return footer_matches(state,'End must follow start')
         c.wait(feedback);c.elapse(.3)
     state=c.wait(lambda state:len(notes(state))>=17);emitted=notes(state)
     phrase=[[144,60,127],[144,62,117],[144,64,107],[144,65,97]]
@@ -61,7 +56,7 @@ def rejected_range_while_playing(c,scale_page=False):
 
 def global_range_clipping(c):
     from cases import assert_durations
-    from frame_oracle import render
+    from frame_oracle import footer_matches
     c.configure();c.tap(5,8)
     c.tap(15,7);c.tap(16,7);c.tap(3,8)
     # Distinguish the last two steps through held-step note masks.
@@ -81,10 +76,8 @@ def global_range_clipping(c):
             c.tap(7 if length==64 else 2,7)
             if length!=64:
                 for _ in range(length-1):c.tap(8,7)
-            expected=render([(0,62,10,'Global pattern length: '+str(length))])
-            def feedback(state):
-                actual=base64.b64decode(state['frame']['pixels_base64'])
-                return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+            # Live footer tooltip (frame_oracle.footer): exact text, whole footer line.
+            def feedback(state):return footer_matches(state,'Global pattern length: '+str(length))
             c.wait(feedback);c.tap(3,8)
             # LEDs show the playable range, capped by global length. Restoring
             # global length must expose the previously selected endpoints again.
@@ -101,17 +94,15 @@ def global_range_clipping(c):
 
 def queued_global_length_transitions(c):
     from cases import assert_durations
-    from frame_oracle import render
+    from frame_oracle import footer_matches
     c.configure();c.hold_tap((2,4),(4,4));c.tap(6,8)
     c.tap(2,7)
     for _ in range(3):c.tap(8,7)
     marker=[c.snapshot()['midi_count']];c.tap(1,8)
     def emitted(state):return [m for m in state['midi'] if m['index']>marker[0] and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
     def shown(text):
-        expected=render([(0,62,10,text)])
-        def feedback(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+        # Live footer tooltip (frame_oracle.footer): exact text, whole footer line.
+        def feedback(state):return footer_matches(state,text)
         return feedback
     def queued(length,before_count):
         c.tap(2,7)

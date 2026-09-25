@@ -1,7 +1,6 @@
 """Global tempo bounds and cross-slot persistence through real norns controls."""
 def song_tempo_bounds(c):
-    import base64,time
-    from frame_oracle import render
+    import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     c.configure();c.tap(6,8);c.hold_tap((1,1),(2,1))
@@ -15,11 +14,8 @@ def song_tempo_bounds(c):
         c.tap(slot,1)
         if edit in (-1,1):extreme(edit)
         elif edit==2:extreme(-1);c.enc(3,60);c.key(3)
-        expected=render([(0,26,15,str(bpm))])
-        def feedback(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(20,28) for x in range(0,36) for k in range(3))
-        c.wait(feedback)
+        # Global Feel (A02) shows the slot's Tempo as its focused selected field.
+        c.ui.expect_selected_field('focused',label='Tempo',value=str(bpm))
         capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=7)
         controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()

@@ -23,6 +23,7 @@ def pattern_boundary_edit(c):
     # This is the same tested second-channel device recipe used by
     # shuffle_mixed_channels.py, applied to the last channel in the rebuild sweep.
     ui.select_channel(16)
+    ui.channel_page('midi_config', channel=16)  # channel select shows C01/C02; Device opens from Tasks
     ui.set_value(1); ui.select_field('midi_channel', offset=1); ui.set_value(1)
     ui.select_field('default_velocity', offset=1); ui.set_value(1); ui.press_key(3)
     ui.tap_control('pattern_slot', 1); ui.set_range(1, 4)

@@ -3,7 +3,7 @@
 def rejected_range_channel_isolation(c):
     from cases import assert_durations
     c.ui.configure()
-    c.ui.select_channel(2);c.ui.turn(3,1);c.ui.turn(2,1);c.ui.turn(3,1);c.ui.turn(2,1);c.ui.turn(3,1);c.ui.press_key(3)
+    c.ui.select_channel(2);c.ui.channel_page('midi_config',channel=2);c.ui.turn(3,1);c.ui.turn(2,1);c.ui.turn(3,1);c.ui.turn(2,1);c.ui.turn(3,1);c.ui.press_key(3)
     c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,3);c.ui.channel_page('masks','midi_config',confirm=False)
     for index,(global_turns,local_turns) in enumerate([(80,2),(41,20),(8,7)]):
         if index:c.ui.turn(2,1)

@@ -1073,7 +1073,7 @@ def octave_all_positions(c):
     for page in range(4):
         ui.select_pattern_note_page(page+1)
         for x in range(1,17):ui.tap_pattern_note_fader(x,7)
-    ui.channel_editor();ui.turn(1,-3)
+    ui.channel_editor();ui.channel_page('trig_locks')  # the page the old E1 -3 from Device reached
     octaves=[i%5-2 for i in range(64)]
     for index,octave in enumerate(octaves,1):ui.set_step_octave(index,octave)
     velocities=[127,117,107,97]+[100]*60
@@ -1146,7 +1146,7 @@ def fractional_clock_continuity(c):
     import json
     c.ui.configure();c.ui.pattern_editor();c.ui.pattern_editor()
     for x in range(1,5):c.ui.tap_control('cell',(x,7))
-    c.ui.menu('channel_editor');c.ui.turn(1,-1)
+    c.ui.menu('channel_editor');c.ui.channel_page('clock_mods')  # the old E1 -1 from Device reached Clocks
     c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
     ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
     selected=13;segments=[];trigger_action=dict(type='grid',x=1,y=8,state=0)
@@ -1251,9 +1251,11 @@ def inactive_shuffle_transition(c,basis=False):
     from note_accounting import note_pairs
     c.configure();c.ui.pattern_editor();c.ui.pattern_editor()
     for step in range(49,53):c.ui.tap_step(step)
-    c.ui.channel_editor();c.ui.turn(1,-1);c.ui.turn(3,12);c.ui.press_key(3)
+    # The old E1 -1 from Device reached Clocks; the live UI opens it from Tasks.
+    c.ui.channel_editor();c.ui.channel_page('clock_mods');c.ui.turn(3,12);c.ui.press_key(3)
     c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
     c.ui.song_editor();c.ui.hold_control_tap('channel','channel',1,2);c.ui.select_channel(2);c.ui.channel_editor()
+    c.ui.channel_page('clock_mods',channel=2)  # the old Channel button returned to the last page (Clocks)
     # Set either stored Smooth feel or7 basis in Shuffle mode, then return
     # to Swing. Each inactive field is tested independently at transitions.
     c.ui.turn(2,1);c.ui.turn(3,2);c.ui.press_key(3)
@@ -2111,7 +2113,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
 
 def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1,disarm_while_held=False):
     ui=c.ui
-    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.tap_control('cell',(2,1));ui.channel_page('midi_config',channel=2);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
     ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
@@ -2188,7 +2190,7 @@ def keyboard_input_channels(c):
 
 def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
     ui=c.ui
-    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.tap_control('cell',(2,1));ui.channel_page('midi_config',channel=2);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     for order in ((0,1),(1,0)):
         ui.tap_control('cell',(1,1));marker=c.snapshot()['midi_count']
         c.action(type='midi',port=1,bytes=[144,72,90])
@@ -2257,7 +2259,7 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
 def recorded_input_sources(c,second_port=2,second_channel=1):
     hold_ns=500000000;expected_duration=.5;release_status=128;input_channel=1;disarm_while_held=False
     ui=c.ui
-    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.tap_control('cell',(2,1));ui.channel_page('midi_config',channel=2);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
     ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
