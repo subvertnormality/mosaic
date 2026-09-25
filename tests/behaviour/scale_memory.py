@@ -385,8 +385,7 @@ def channel_routing_isolation(c):
     ui.configure()
     phrase = [(60, 127), (62, 117), (64, 107), (65, 97)]
     for channel in range(2, 17):
-        ui.select_channel(channel)
-        ui.expect_header("midi_config", channel=channel)
+        ui.select_channel_on_page(channel, "midi_config")
         ui.turn(3, 1)  # none -> generic CC device
         ui.turn(2, 1)
         ui.turn(3, channel - 1)  # distinct MIDI channel

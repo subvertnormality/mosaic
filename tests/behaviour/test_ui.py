@@ -506,9 +506,8 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual({name for name, node in functions.items()
                           if any(site[1] == "state:frame"
                                  for site in _raw_sites_in_node(node))},
-                         # parameter_division_bounds reads its value through
-                         # ui.expect_selected_field (live full value line).
-                         {"strum_reset_continuity"})
+                         # Both frame readers now go through ui verbs.
+                         set())
 
         forbidden_labels = {
             "Chord Note Arpeggio", "Chord Note Strum", "Chord Spread",
@@ -3026,6 +3025,81 @@ class PromptRouteVerbTests(unittest.TestCase):
             Ui(driver).leave_merge_detail()
         self.assertEqual(driver.calls, [("wait",), ("tap", *control_cell("channel_editor"))])
         self.assertEqual(header.call_args.args[1:], ("MERGE DETAIL", "CH01", "detail"))
+
+
+# ---- Group C (ranges, saves, song, timing) ----
+class GroupCUiTests(unittest.TestCase):
+    def test_real_time_e1_after_bare_k1_waits_for_the_native_menu(self):
+        """A bare K1 then E1 is the native menu's E1 once the menu shows; the
+        page ring is not read from a Mosaic screen that has not yet redrawn."""
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            # The first observation predates the key; the menu then stays open.
+            modes = [False, True, True, True, True]
+
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                for mode in self.modes:
+                    state = {"diagnostics": {"menu_mode": mode}}
+                    if predicate(state):
+                        return state
+                raise AssertionError("predicate did not match")
+
+        driver = Driver(clock_mode="real-time")
+        with patch("frame_oracle.live_header_matches",
+                   side_effect=AssertionError("menu E1 must not read a header")):
+            ui = Ui(driver)
+            ui.press_key(1)
+            ui.turn(1, 4)
+        self.assertEqual(driver.calls, [("key", 1), ("wait", 1.5), ("enc", 1, 4)])
+
+    def test_real_time_e1_after_closing_k1_waits_then_reads_the_ring(self):
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            # The menu is still open at first, then closes and stays closed.
+            modes = [True, False, False, False, False]
+
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                for mode in self.modes:
+                    state = {"diagnostics": {"menu_mode": mode}}
+                    if predicate(state):
+                        return state
+                raise AssertionError("predicate did not match")
+
+        driver = Driver(clock_mode="real-time")
+        ui = Ui(driver)
+        with patch.object(Ui, "_turn_channel_ring", return_value=True) as ring:
+            ui.press_key(1)
+            ui.turn(1, 1)
+        ring.assert_called_once_with(1)
+        self.assertEqual(driver.calls, [("key", 1), ("wait", 1.5)])
+
+    def test_e1_after_other_input_or_controlled_k1_keeps_the_ring_path(self):
+        from ui import Ui
+
+        # Controlled lane: the snapshot already reflects the key; no extra wait.
+        driver = FakeDriver()
+        ui = Ui(driver)
+        with patch.object(Ui, "_turn_channel_ring", return_value=False), \
+                patch.object(Ui, "_turn_other_ring", return_value=False):
+            ui.press_key(1)
+            ui.turn(1, 4)
+            ui.press_key(3)
+            ui.turn(1, -1)
+        self.assertEqual(driver.calls, [("key", 1), ("enc", 1, 4), ("key", 3), ("enc", 1, -1)])
+
+    def test_footer_oracle_renders_tooltip_and_neighbour_pairs(self):
+        import frame_oracle
+        calls = []
+        with patch.object(frame_oracle, "render", side_effect=lambda commands: calls.append(commands) or b""), \
+                patch.object(frame_oracle, "fit", side_effect=lambda text, width: text):
+            frame_oracle.footer("End must follow start")
+            frame_oracle.footer(("< Root", "Degree >"))
+        self.assertEqual(calls, [[(1, 63, 9, "End must follow start")],
+                                 [(1, 63, 7, "< Root"), ((None, 127), 63, 10, "Degree >")]])
 
 
 if __name__ == "__main__":

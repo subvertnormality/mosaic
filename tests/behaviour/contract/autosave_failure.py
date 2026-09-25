@@ -7,7 +7,7 @@ directory fails and autosave stays suspended; a successful named save resumes it
 Part A is characterisation, not manual text: when no suspension is in force, a
 failed idle autosave writes nothing and the next input restarts the idle period.
 """
-import base64, json, os, shutil, stat, subprocess
+import json, os, shutil, stat, subprocess
 from pathlib import Path
 from driver import digest
 from persisted_digest import project_digest
@@ -15,7 +15,7 @@ from persisted_digest import project_digest
 
 def autosave_failure(c):
     from contract.persisted_range_rejection import select_project_action, select_project_file
-    from frame_oracle import render
+    from frame_oracle import footer_matches
     c.configure()
     data = c.data_directory
     source = json.loads(Path(c.launch_options['experimental_install']).read_text())['source']
@@ -43,9 +43,8 @@ def autosave_failure(c):
                       "local channel=saved[2].song_patterns[1].channels[1];channel.start_trig={4,4};channel.end_trig={2,4};assert(tab.save(saved,path)==nil)")
     subprocess.run(['lua5.3', str(script), source, str(broken)], check=True)
     select_project_file(c, 'broken.ptn'); c.key(3); c.key(1)
-    expected = render([(0, 62, 10, 'Slot 1 ch 1 reversed')])
-    c.wait(lambda s: all(base64.b64decode(s['frame']['pixels_base64'])[(y*128+x)*4+k] == expected[(y*128+x)*4+k]
-                         for y in range(55, 64) for x in range(128) for k in range(3)))
+    # Live footer tooltip (frame_oracle.footer): exact text, whole footer line.
+    c.wait(lambda s: footer_matches(s, 'Slot 1 ch 1 reversed'))
     def stamps(): return {n: (data/n).stat().st_mtime_ns for n in ('autosave.ptn', 'autosave.pset')}
     suspended = stamps()
     c.tap(3, 8); idle(61.5); assert stamps() == suspended, 'Autosave ran while suspended by a rejected load'

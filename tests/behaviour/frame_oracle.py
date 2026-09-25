@@ -246,3 +246,25 @@ def overview_cell_marker(state,layout,index):
     for letter in ('S','L'):
         if _region_matches(actual,render([(x+width-6,y+7,15,letter)]),y+1,y+8,x+width-6,x+width-2):return letter
     return None
+
+# ---- Live footer (group C: ranges, saves, song, tooltips) ----
+# lib/ui_render.lua draws the footer line at (1,63): the current tooltip at
+# level 9 while it lasts, else the screen's control hints (level 9) or, on
+# focused screens without hints, its neighbour fields ('< prev' left at
+# level 7, 'next >' right-aligned at x127 level 10).
+FOOTER_ROWS=(56,64)
+
+def footer(text):
+    """Expected frame for footer `text` (a tooltip/hint string, or a
+    (left, right) neighbour pair)."""
+    if isinstance(text,tuple):
+        commands=[]
+        if text[0]:commands.append((1,63,7,text[0]))
+        if text[1]:commands.append(((None,127),63,10,text[1]))
+        return render(commands)
+    return render([(1,63,9,fit(text,126))])
+
+def footer_matches(state,text):
+    """The whole footer line shows exactly `text` and nothing else."""
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    return _region_matches(actual,footer(text),*FOOTER_ROWS)

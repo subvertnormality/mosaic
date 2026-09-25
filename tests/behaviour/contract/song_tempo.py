@@ -1,7 +1,6 @@
 """Global tempo bounds and cross-slot persistence through real norns controls."""
 def song_tempo_bounds(c):
-    import base64,time
-    from frame_oracle import render
+    import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     c.configure();c.tap(6,8);c.hold_tap((1,1),(2,1))
@@ -13,13 +12,13 @@ def song_tempo_bounds(c):
         c.key(3)
     for label,slot,bpm,edit in [('minimum',1,30,-1),('minimum-other-slot',2,30,0),('maximum',2,300,1),('maximum-other-slot',1,300,0),('restore',1,90,2),('restored-other-slot',2,90,0)]:
         c.tap(slot,1)
+        # A stopped slot select shows that slot's Slot Setup (spec flow G36);
+        # Tempo is on Global Feel, where the old Global settings page stayed.
+        c.ui.open_task('Song','tempo_feel')
         if edit in (-1,1):extreme(edit)
         elif edit==2:extreme(-1);c.enc(3,60);c.key(3)
-        expected=render([(0,26,15,str(bpm))])
-        def feedback(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(20,28) for x in range(0,36) for k in range(3))
-        c.wait(feedback)
+        # Global Feel (A02) shows the slot's Tempo as its focused selected field.
+        c.ui.expect_selected_field('focused',label='Tempo',value=str(bpm))
         capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=9,timeout=7)
         controlled=c.clock_mode=='controlled-experimental';lower=c.logical_ns if controlled else time.monotonic_ns()

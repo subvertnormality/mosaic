@@ -57,7 +57,7 @@ def build_composition(c,check=None):
     ui.expect_leds({('trig_merge_mode',None):'medium'})
     ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
     check('merge-all-average',[(CH1_ALL,{},0)])
-    ui.select_channel(2);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    ui.select_channel_on_page(2,'midi_config');ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('pattern_slot',2);ui.set_range(1,4)
     ui.channel_page('masks','midi_config',channel=2,confirm=False)
     ui.expect_header('masks',channel=2)
