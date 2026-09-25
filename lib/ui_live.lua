@@ -441,8 +441,11 @@ end
 local function after_event()
   -- A follow made while already on its screen (a second merge gesture on
   -- Merge detail) must not leave a frame that returns to the same screen.
+  -- (A hold keeps its own frame: release returns to where it began.)
   local stack = router.state.return_stack
-  while #stack > 0 and stack[#stack].screen == router.state.screen do table.remove(stack) end
+  while current.event == "grid.outcome" and #stack > 0 and stack[#stack].screen == router.state.screen do
+    table.remove(stack)
+  end
   reconcile_owner_routes()
   sync_workspace()
   sync_field_state()
