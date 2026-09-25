@@ -23,6 +23,7 @@ from channel_scale_display import channel_active_scale_display
 from memory_scale_lock_display import memory_scale_lock_display
 from contract.tooltips import tooltip_messages
 from contract.live_ui import live_ui_follow, live_ui_tasks, live_ui_splash
+from contract.live_ui_sweep import live_ui_sweep
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from contract.device_configs import malformed_device_configs, missing_id_device_configs
@@ -2670,6 +2671,7 @@ CASES={
  'M-LIVEUI-FOLLOW-001':dict(run=live_ui_follow,requirements=['NAV-SCREEN-FOLLOW'],description='The screen follows grid page buttons (Pattern cycle included), channel selection and held steps: a held step scopes the edit family (ST05) and release restores the screen it came from (README Norns Menu Navigation)'),
  'M-LIVEUI-TASKS-001':dict(run=live_ui_tasks,requirements=['NAV-TASKS'],description='E1 moves Masks, Trig params and Channel tasks and clamps at both ends; Channel tasks opens every Channel screen (README Norns Menu Navigation)'),
  'M-LIVEUI-SPLASH-001':dict(run=live_ui_splash,requirements=['NAV-SPLASH'],description='At start the tiles lay down, lift away and hand over to the first screen; any input skips the animation (README Norns Menu Navigation)'),
+ 'M-UIACC-A18-001':dict(run=live_ui_sweep,requirements=['UI-ACCEPT-A18'],description='A18 native screen sweep: every live screen reachable through public input shows its exact title and scope, no LAYOUT OVERFLOW, one footer owner (hints, neighbour labels or a tooltip) and, where known, the selected field whole on its full-value route; long names, OFF/X sentinels and maximum values included (README Norns Menu Navigation, Tooltips)'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
  'M-SCALE-MEMORY-DISPLAY-001':dict(run=memory_scale_lock_display,requirements=["CH-ACTIVE-SCALE-DISPLAY"],issues=[85],description='User-created channel scale lock on step 3 stays represented on the Memory page; its unlocked neighbour and the Trig Locks page are raw-grid controls (issue #85 characterisation)'),

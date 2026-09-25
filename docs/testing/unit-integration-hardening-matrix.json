@@ -30,9 +30,9 @@
  "manual": "README.md",
  "manual_sha256": "459e85e04558931e72e659c0878a35f3aca6c72bb6abccd333c484a29d42bc02",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "a3dda87a12a8bd0a38054dc2fef26cb01af8643d74138f5ff843a6933683e3f0",
+ "inventory_sha256": "789d8df817de8ba47ce4df9f5cde17d17932b2ba21c270efaf65a36d51086223",
  "counts": {
-  "requirements": 158,
+  "requirements": 159,
   "production_lua_modules": 160,
   "unit_integration_files": 117,
   "domains": 17
@@ -338,7 +338,8 @@
     "NAV-SPLASH",
     "NAV-TASKS",
     "NAV-TOOLTIPS",
-    "NAV-TRANSPORT"
+    "NAV-TRANSPORT",
+    "UI-ACCEPT-A18"
    ],
    "production_modules": [
     "lib/controls/button.lua",
