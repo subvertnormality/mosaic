@@ -48,11 +48,6 @@ return function(ui_adapters, owners)
           owners.pages:select_page(OPTIONS_PAGE)
           return ui().enc(3, delta)
         end},
-      {id = "applies_to", label = "Applies to", kind = "readonly", value = "Tresillo",
-        domain = {algorithm = TRESILLO_ALGORITHM, selected_algorithm = selected_algorithm,
-          active = selected_algorithm == TRESILLO_ALGORITHM}},
-      {id = "stored_pattern", label = "Stored pattern", kind = "readonly", value = "Unchanged"},
-      {id = "mode", label = "Mode", kind = "readonly", value = "Live setting", domain = {commit = "immediate"}}
     }
   end
 

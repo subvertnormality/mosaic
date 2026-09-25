@@ -245,15 +245,12 @@ return function(ui_adapters, owners)
   -- S03: the global scale track (channel 17). Last applied numbers only; the
   -- mutating scale resolver is never called.
   function readers.S03()
-    local viewer = view_channel("Scale")
-    if not viewer then return nil, "no_viewer" end
     local program = src("program")
     local data = program.get()
     local track = program.get_channel(data.selected_song_pattern, 17)
     local current = program.get_current_step_for_channel(17)
     local first, last = program.get_channel_step_bounds(track)
     return {
-      viewer,
       readonly("playing_scale", "Playing scale", scale_number(program.get_channel_step_scale_number(17))),
       readonly("edit_scale", "Edit scale", scale_number(data.selected_scale)),
       readonly("step_range", "Step / range", (current and two(current) or "NONE") .. " / " .. two(first) .. ".." .. two(last),
@@ -451,27 +448,45 @@ return function(ui_adapters, owners)
     }
   end
 
-  local ALGORITHMS = {{"drum", "Drum"}, {"tresillo", "Tresillo"}, {"euclidean", "Euclidean"}, {"numeric", "Numeric"}}
+  local ALGORITHMS = {{"drum", "Drum"}, {"tresillo", "Tresillo"}, {"euclidean", "Euclidean"},
+    {"numeric", "Numeric"}, {"rhythm_doctor", "Rhythm Doctor"}}
 
+  -- P06: the trig algorithm picker. The algorithm in use reads SELECTED; K3
+  -- selects the chosen row exactly as its grid fader key does.
   function readers.P06()
     local trig = src("trigger_edit_page")
     local algorithm = trig and trig.get_algorithm and trig.get_algorithm() or nil
     local descriptors = {}
     for n, a in ipairs(ALGORITHMS) do
-      local d = readonly(a[1], a[2], algorithm == n and "SELECTED" or "", {algorithm = n})
-      d.selected = algorithm == n
-      descriptors[#descriptors + 1] = d
+      descriptors[#descriptors + 1] = {id = a[1], label = a[2], kind = "action",
+        value = algorithm == n and "SELECTED" or "", domain = {algorithm = n, selected = algorithm == n},
+        invoke = function()
+          if not (trig and trig.select_algorithm) then return {ok = false, code = "no_owner"} end
+          if algorithm == n then return {ok = true, status = "SELECTED"} end
+          return {ok = trig.select_algorithm(n) == true}
+        end}
     end
     return descriptors
   end
 
+  local function signed_shift(n)
+    if n == nil then return "NONE" end
+    if n > 0 then return "+" .. n end
+    return tostring(n)
+  end
+
+  -- P07: the paint preview the grid is showing (trigger_edit_page.paint_state).
   function readers.P07()
-    local descriptors = {}
-    for _, f in ipairs({{"preview", "Preview"}, {"shift_left", "Shift left"}, {"shift_reset", "Shift reset"},
-      {"shift_right", "Shift right"}, {"cancel", "Cancel"}, {"save", "Save"}}) do
-      descriptors[#descriptors + 1] = unavailable(f[1], f[2], "paint_state_not_exposed")
-    end
-    return descriptors
+    local trig = src("trigger_edit_page")
+    local state = trig and trig.paint_state and trig.paint_state()
+    if not state then return nil, "no_owner" end
+    return {
+      readonly("preview", "Preview", state.painting and "PAINTING" or "OFF", {painting = state.painting}),
+      readonly("algorithm", "Algorithm", ALGORITHMS[state.algorithm] and ALGORITHMS[state.algorithm][2] or "NONE",
+        {algorithm = state.algorithm}),
+      readonly("shift", "Shift", signed_shift(state.shift), {shift = state.shift}),
+      readonly("trigs", "Trigs", state.painting and tostring(state.trigs) or "NONE", {trigs = state.trigs})
+    }
   end
 
   function readers.P08(_, cap)

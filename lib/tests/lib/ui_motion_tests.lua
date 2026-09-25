@@ -128,3 +128,25 @@ function test_ui_motion_nudge_lights_the_mark_for_a_few_frames()
     luaunit.assert_true(frames >= 3 and frames <= 8)
   end)
 end
+
+-- CI evidence (run 36111246733): leaving a dial or a rolling value mid-motion
+-- kept busy() true, so a static screen redrew every frame for ever.
+function test_ui_motion_leaving_a_dial_or_roll_mid_motion_lets_the_screen_rest()
+  with_motion(2, function(dirty)
+    local focused = {screen = "C04", selected = 1, layout = "focused", dial = 0.1, dial_key = "C04:rate",
+      fields = {{id = "rate", value = "/2"}}}
+    frame(focused)
+    focused.dial = 0.9
+    focused.fields[1].value = "/6"
+    frame(focused)
+    luaunit.assert_true(ui_motion.busy(), "dial sweeping and value rolling")
+    -- Straight to a static overview with neither.
+    local frames = 0
+    repeat frames = frames + 1; frame(vm("C02", 1)) until not ui_motion.busy() or frames > 20
+    luaunit.assert_false(ui_motion.busy())
+    luaunit.assert_true(frames <= 8, "settled in " .. frames .. " frames")
+    local before = dirty()
+    frame(vm("C02", 1)); frame(vm("C02", 1))
+    luaunit.assert_equals(dirty(), before, "a resting screen asks for no more frames")
+  end)
+end

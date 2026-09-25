@@ -151,7 +151,11 @@ local function model_env(body)
   }, function()
     program.init()
     env.params_owner = {get = function(_, id) return env.params[id] end}
-    env.trig_page = {get_algorithm = function() return env.algorithm end}
+    env.selected_algorithms = {}
+    env.paint = {painting = false, algorithm = 1, algorithm_name = "Drum algorithm", shift = 0, trigs = 0}
+    env.trig_page = {get_algorithm = function() return env.algorithm end,
+      select_algorithm = function(n) env.selected_algorithms[#env.selected_algorithms + 1] = n; env.algorithm = n; return true end,
+      paint_state = function() return env.paint end}
     env.pages = {
       note = include("mosaic/lib/pages/note_edit_page/note_edit_page_ui"),
       velocity = include("mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui"),
@@ -274,8 +278,29 @@ function test_ui_adapters_read_only_program_screens_read_the_model()
     luaunit.assert_equals(s03.edit_scale, "01")
     luaunit.assert_equals(s03.transpose, "0")
     local p06 = env.adapter:describe("P06", "P06", target("P06"))
-    luaunit.assert_true(p06.descriptors[1].selected)
-    luaunit.assert_false(p06.descriptors[2].selected)
+    luaunit.assert_equals(ids(p06), {"drum", "tresillo", "euclidean", "numeric", "rhythm_doctor"})
+    luaunit.assert_equals(p06.descriptors[1].value, "SELECTED")
+    luaunit.assert_equals(p06.descriptors[2].value, "")
+    local p07 = values(env.adapter:describe("P07", "P07", target("P07")))
+    luaunit.assert_equals(p07, {preview = "OFF", algorithm = "Drum", shift = "0", trigs = "NONE"})
+    env.paint = {painting = true, algorithm = 3, algorithm_name = "Euclidean algorithm", shift = -2, trigs = 5}
+    p07 = values(env.adapter:describe("P07", "P07", target("P07")))
+    luaunit.assert_equals(p07, {preview = "PAINTING", algorithm = "Euclidean", shift = "-2", trigs = "5"})
+  end)
+end
+
+-- P06 is the algorithm picker (owner decision 2026-09-25): K3 on a row selects it
+-- through the owner exactly once; the one in use needs no second selection.
+function test_ui_adapters_read_only_p06_k3_selects_the_chosen_algorithm_through_the_owner()
+  model_env(function(env)
+    env.algorithm = 1
+    local t = target("P06")
+    local outcome = env.adapter:invoke("euclidean", t)
+    luaunit.assert_true(outcome.ok, tostring(outcome.code))
+    luaunit.assert_equals(env.selected_algorithms, {3})
+    luaunit.assert_equals(env.adapter:describe("P06", "P06", t).descriptors[3].value, "SELECTED")
+    luaunit.assert_true(env.adapter:invoke("euclidean", t).ok)
+    luaunit.assert_equals(env.selected_algorithms, {3})
   end)
 end
 

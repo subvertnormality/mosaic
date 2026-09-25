@@ -349,7 +349,7 @@ The Norns screen follows the grid. Press a global menu button and the screen sho
 
 <img alt="Norns Note Masks screen" src="images/norns/note-masks.png" width="384" />
 
-Every screen has the same parts. The title row names the screen and its scope: the channel (`CH03`), the song slot when it is not the first (`S02`), and any held steps (`ST05` for one step, `3ST` for several). The selected field is outlined or marked with `>`, and its whole value is always shown, on the bottom line of a grid of fields or in large type on a single-field screen. The last line lists the controls for the screen, or shows a tooltip after a grid action. The four small tiles at the right of the title row are _Mosaic_'s mark; they light up in turn when something changes.
+Every screen has the same parts. The title row names the screen and its scope: the channel (`CH03`), the song slot when it is not the first (`S02`), and any held steps (`ST05` for one step, `3ST` for several). The selected field is outlined or marked with `>`, and its whole value is always shown, on the bottom line of a grid of fields or in large type on a single-field screen. The last line lists the controls for the screen, or shows a tooltip after a grid action. Screens that only show information, such as Scale overview, Song playback and Paint preview, list every value at once with no cursor. The four small tiles at the right of the title row are _Mosaic_'s mark; they light up in turn when something changes.
 
 The controls work the same way on every screen:
 
@@ -360,7 +360,7 @@ The controls work the same way on every screen:
 - **K2** goes back, or cancels a staged change or a question.
 - A short **K1** tap opens the norns system menu. Holding K1 is the shift key for grid and screen gestures.
 
-Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge, Device, History, Mask detail, Trig detail, Merge Shape and Norns settings. Scale tasks: Scale, Scale clock, Overview and Channel view. Pattern tasks: Pattern, Options, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. Norns settings, the last Channel task, lists where each group of norns parameters lives; press K3 on a row to see its menu path, then tap K1 to open the norns menu.
+Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge, Device, History, Mask detail, Trig detail, Merge Shape and Norns settings. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. Norns settings, the last Channel task, lists where each group of norns parameters lives; press K3 on a row to see its menu path, then tap K1 to open the norns menu.
 
 <img alt="Norns Channel tasks screen" src="images/norns/channel-tasks.png" width="384" />
 
@@ -484,6 +484,8 @@ Craft unique rhythms using a variety of built-in algorithms. The algorithm is se
 * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
 * Button 5: Rhythm Doctor, a capture and paint workflow described below. Recording needs the sequencer stopped; an analysed bank can be used while it plays.
+
+Pressing an algorithm button shows the Trig Algorithm screen on the norns, with the algorithm in use marked SELECTED. You can also choose there: E2 moves through the five algorithms and K3 selects one, exactly as its grid button does. Choosing Rhythm Doctor opens the Doctor. Algorithm, in the pattern task list, opens the same screen.
 
 <img alt="The first four pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
 
@@ -655,11 +657,11 @@ Opt out of a prepared pattern by using the cancel button:
 
 <img alt="Pattern editor prime and paint cancel button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="300" />
 
-While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes. In Rhythm Doctor these same three buttons browse the recording instead, with the same gestures: a press of the outer two moves the window one step, holding either covers a whole four-bar phrase, and the centre button returns to the calculated start of the phrase.
+While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes. Pressing prime, cancel or a move button shows the Paint Preview screen on the norns: whether a preview is showing, the algorithm it comes from, the shift, and how many steps it triggers. In Rhythm Doctor these same three buttons browse the recording instead, with the same gestures: a press of the outer two moves the window one step, holding either covers a whole four-bar phrase, and the centre button returns to the calculated start of the phrase.
 
 <img alt="Pattern editor move buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="300" />
 
-On the Norns screen, Pattern Trig shows the viewed channel's steps as 64 cells. This is the merged version of the channel and is a useful context for editing your pattern. Use E3 to view another channel; it does not change the selected channel. Choose Options from the pattern task list (E1) to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
+On the Norns screen, Pattern Trig shows the viewed channel's steps as 64 cells. This is the merged version of the channel and is a useful context for editing your pattern. Use E3 to view another channel; it does not change the selected channel. Choose Options from the pattern task list (E1) to edit the tresillo multiplier in use; a new multiplier takes effect the next time you prime the tresillo algorithm. Experiment with different values to get wildly different results with the tresillo algorithm.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">

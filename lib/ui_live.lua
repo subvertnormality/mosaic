@@ -147,6 +147,12 @@ local function focused(descriptors, screen_id)
       if d.kind == "value" then focus[screen_id] = d.id; return d, index end
     end
   end
+  -- A 64-cell pattern screen shows only its viewed channel: E3 always turns it.
+  if spec.screens[screen_id].layout == "pattern64" then
+    for index, d in ipairs(descriptors) do
+      if d.id == "view_channel" then focus[screen_id] = d.id; return d, index end
+    end
+  end
   local id = focus[screen_id]
   for index, d in ipairs(descriptors) do
     if d.id == id then return d, index end
@@ -282,6 +288,9 @@ hooks["focus.move_clamped"] = function(_, event)
     ui_motion.nudge("focus")
     return
   end
+  -- Nothing to choose where the fields are not shown one by one: a 64-cell
+  -- pattern screen (its viewed channel only) or a dashboard (every field at once).
+  if screen.layout == "pattern64" or screen.layout == "dashboard" then return end
   local descriptors = describe()
   if #descriptors == 0 then return end
   local _, index = focused(descriptors)
@@ -326,6 +335,10 @@ hooks["owner.invoke_selected"] = function()
   if not d then return end
   local outcome = ui_adapters.get(screen_entry().provider):invoke(d.id, target)
   if not outcome.ok then say(outcome.status or outcome.code) end
+  -- Choosing the Rhythm Doctor on the algorithm picker opens the Doctor, as
+  -- its grid key does (G23 with algorithm 5).
+  if router.state.screen == "P06" and trigger_edit_page and trigger_edit_page.get_algorithm
+    and trigger_edit_page.get_algorithm() == 5 then router.state.screen = "R01" end
 end
 
 hooks["owner.validate_apply"] = function()
@@ -446,6 +459,13 @@ local function sync_context()
   end
 end
 
+-- The algorithm picker opens, and follows the grid, on the algorithm in use.
+local ALGORITHM_FIELDS = {"drum", "tresillo", "euclidean", "numeric", "rhythm_doctor"}
+local function focus_selected_algorithm()
+  local algorithm = trigger_edit_page and trigger_edit_page.get_algorithm and trigger_edit_page.get_algorithm()
+  if ALGORITHM_FIELDS[algorithm] then focus.P06 = ALGORITHM_FIELDS[algorithm] end
+end
+
 local function after_event()
   -- A follow made while already on its screen (a second merge gesture on
   -- Merge detail) must not leave a frame that returns to the same screen.
@@ -455,6 +475,9 @@ local function after_event()
     table.remove(stack)
   end
   reconcile_owner_routes()
+  if router.state.screen == "P06" and (current.event == "grid.outcome" or current.before ~= "P06") then
+    focus_selected_algorithm()
+  end
   sync_workspace()
   sync_field_state()
   fn.dirty_screen(true)

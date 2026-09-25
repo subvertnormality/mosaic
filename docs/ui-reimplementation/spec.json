@@ -122,11 +122,6 @@
           "id": "overview",
           "label": "Overview",
           "screen": "S03"
-        },
-        {
-          "id": "channel_view",
-          "label": "Channel view",
-          "screen": "P05"
         }
       ],
       "N03": [
@@ -143,6 +138,14 @@
           "id": "options",
           "label": "Options",
           "screen": "P02",
+          "contexts": [
+            "Trig"
+          ]
+        },
+        {
+          "id": "algorithm",
+          "label": "Algorithm",
+          "screen": "P06",
           "contexts": [
             "Trig"
           ]
@@ -1797,22 +1800,6 @@
       },
       "fields": [
         {
-          "id": "view_channel",
-          "label": "View channel",
-          "example": "02",
-          "binding": {
-            "provider": "read_only",
-            "target": "view_state",
-            "field": "view_channel"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail",
-          "kind": "inspection",
-          "domain": "1..16 clamped (field_contracts.viewer)"
-        },
-        {
           "id": "playing_scale",
           "label": "Playing scale",
           "example": "03",
@@ -1888,7 +1875,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -2280,48 +2267,6 @@
           "missing": "NONE",
           "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "applies_to",
-          "label": "Applies to",
-          "example": "Generator",
-          "binding": {
-            "provider": "trig_options",
-            "target": "selected_object",
-            "field": "applies_to"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "stored_pattern",
-          "label": "Stored pattern",
-          "example": "Unchanged",
-          "binding": {
-            "provider": "trig_options",
-            "target": "selected_object",
-            "field": "stored_pattern"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "mode",
-          "label": "Mode",
-          "example": "LIVE SETTING",
-          "binding": {
-            "provider": "trig_options",
-            "target": "selected_object",
-            "field": "mode"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -2583,7 +2528,6 @@
       "id": "P05",
       "title": "CHANNEL VIEW",
       "context": [
-        "Scale",
         "Trig",
         "Note",
         "Velocity",
@@ -2688,7 +2632,6 @@
       "state_explanation": "Show64cells as4x16within x2..125,y19..46, levelbrightness from actual sequencer abstraction, cleared each frame. A selected channel label sits above and range/status below. No stale cells on shorter ranges or mute; header retains owning grid context. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Live layout (owner decision 24 September 2026): P03, P04 and P05 draw the viewed channel as 64 cells like P01, so every grid-viewer page keeps its picture; E3 still moves view_channel.",
       "parent": "N01",
       "entry_flow_ids": [
-        "NAV.Scale.P05",
         "NAV.Trig.P05",
         "NAV.Note.P05",
         "NAV.Velocity.P05",
@@ -2978,7 +2921,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -4104,7 +4047,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -4660,7 +4603,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -5332,9 +5275,9 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
-        "art": "choir"
+        "art": null
       },
       "binding": {
         "provider": "harmony",
@@ -5740,20 +5683,6 @@
           "missing": "NONE",
           "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "channel_view",
-          "label": "Channel view",
-          "example": "P05",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "channel_view"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -5832,6 +5761,20 @@
             "provider": "tasks",
             "target": "selected_object",
             "field": "options"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "algorithm",
+          "label": "Algorithm",
+          "example": "P06",
+          "binding": {
+            "provider": "tasks",
+            "target": "selected_object",
+            "field": "algorithm"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -6690,7 +6633,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -6941,7 +6884,7 @@
         {
           "id": "drum",
           "label": "Drum",
-          "example": "BANK / PAT1",
+          "example": "SELECTED",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
@@ -6955,7 +6898,7 @@
         {
           "id": "tresillo",
           "label": "Tresillo",
-          "example": "PAT1 / PAT2",
+          "example": "",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
@@ -6969,7 +6912,7 @@
         {
           "id": "euclidean",
           "label": "Euclidean",
-          "example": "FILL / LENGTH",
+          "example": "",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
@@ -6983,11 +6926,25 @@
         {
           "id": "numeric",
           "label": "Numeric",
-          "example": "PRIME / PAT",
+          "example": "",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
             "field": "numeric"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "rhythm_doctor",
+          "label": "Rhythm Doctor",
+          "example": "",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "rhythm_doctor"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -7001,7 +6958,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Grid row2 columns12..16 selects Drum/Tresillo/Euclidean/Numeric/Doctor. Doctor replaces rows 2-3 columns 1-10 and row 3 columns 12-16 with grid.doctor_override (Record, bank-driven lanes, inert remainder) and row 8 columns 10-12 with phrase browse. Row2 columns1..10 is Pattern1 or Fill; row3 columns1..10 is Pattern2 or Length. Row3 columns12..16 selects bank/prime where applicable. These remain grid controls, not new encoder edits.",
+      "controls_explanation": "E2 moves through the five trig algorithms; the one in use reads SELECTED. K3 selects the chosen algorithm exactly as its grid key does, and the grid shows it. Choosing Rhythm Doctor opens the Doctor. A grid algorithm press shows this screen with the pressed algorithm chosen (owner decision 25 September 2026).",
       "state_explanation": "Selection feedback names the algorithm and only applicable inputs. Euclidean ignores bank. Pattern2 is not a Drum input. Feedback follows the existing grid gesture and does not activate paint by itself. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
@@ -7013,7 +6970,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": null
       },
@@ -7052,7 +7009,7 @@
         {
           "id": "preview",
           "label": "Preview",
-          "example": "UNSAVED",
+          "example": "PAINTING",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
@@ -7064,13 +7021,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "shift_left",
-          "label": "Shift left",
-          "example": "-1",
+          "id": "algorithm",
+          "label": "Algorithm",
+          "example": "Drum",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "shift_left"
+            "field": "algorithm"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -7078,27 +7035,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "shift_reset",
-          "label": "Shift reset",
-          "example": "0",
-          "binding": {
-            "provider": "read_only",
-            "target": "selected_object",
-            "field": "shift_reset"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "shift_right",
-          "label": "Shift right",
+          "id": "shift",
+          "label": "Shift",
           "example": "+1",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "shift_right"
+            "field": "shift"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -7106,27 +7049,13 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "cancel",
-          "label": "Cancel",
-          "example": "UNCHANGED",
+          "id": "trigs",
+          "label": "Trigs",
+          "example": "12",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "cancel"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "save",
-          "label": "Save",
-          "example": "COMMITTED",
-          "binding": {
-            "provider": "read_only",
-            "target": "selected_object",
-            "field": "save"
+            "field": "trigs"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -7140,7 +7069,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Grid (16,8) enters paint preview; press again to save. While previewing, (10,8)/(11,8)/(12,8) shift left/reset/right; (14,8) cancels. Existing grid semantics remain.",
+      "controls_explanation": "Shows the paint preview the grid is showing: whether one is showing, the algorithm it comes from, the shift applied by the shift keys and how many steps it triggers. Paint, cancel and the shift keys stay on the grid (owner decision 25 September 2026, replacing per-button rows that had no value).",
       "state_explanation": "Display unsaved pattern distinctly from stored trigs. Cancel restores committed view. Selection outside paint reports configuration without pretending a saved pattern changed. Native images are presentation examples, not algorithm-output acceptance. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
@@ -7151,7 +7080,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -12632,7 +12561,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "dashboard",
         "model": "ViewModel",
         "art": null
       },
@@ -20319,42 +20248,6 @@
         "held_does_not_apply"
       ]
     },
-    "NAV.Scale.P05": {
-      "id": "NAV.Scale.P05",
-      "kind": "task_route",
-      "intent": "CHANNEL VIEW",
-      "old": {
-        "source": "context page/detail controller",
-        "gesture": "linear E1 page strip / existing child"
-      },
-      "new": {
-        "gesture": "E1 tasks; E2 select stable key; K3 open",
-        "entry": "Scale",
-        "screen": "P05",
-        "field": "remembered_valid_field",
-        "scope": "explicit_edit_identity",
-        "lifetime": "until deliberate navigation or grid owner supersedes",
-        "navigation": "replace",
-        "target_binding": "explicit_current_identity",
-        "return_policy": "next_deliberate_action",
-        "alternatives": [],
-        "invalidates_return": false
-      },
-      "action": "cancel_unapplied_owner_then_enter",
-      "follow": "setup explicit; grid identifiable actions bypass tasks",
-      "replacement": "changed_navigation",
-      "preserves": [
-        "functionality",
-        "transaction_boundary",
-        "native_ids"
-      ],
-      "tests": [
-        "reachable",
-        "return_path",
-        "cancel_dirty",
-        "held_does_not_apply"
-      ]
-    },
     "NAV.Trig.P01": {
       "id": "NAV.Trig.P01",
       "kind": "task_route",
@@ -23704,6 +23597,42 @@
         "cancel_dirty",
         "held_does_not_apply"
       ]
+    },
+    "NAV.Trig.P06": {
+      "id": "NAV.Trig.P06",
+      "kind": "task_route",
+      "intent": "TRIG ALGORITHM",
+      "old": {
+        "source": "context page/detail controller",
+        "gesture": "linear E1 page strip / existing child"
+      },
+      "new": {
+        "gesture": "E1 tasks; E2 select stable key; K3 open",
+        "entry": "Trig",
+        "screen": "P06",
+        "field": "remembered_valid_field",
+        "scope": "explicit_edit_identity",
+        "lifetime": "until deliberate navigation or grid owner supersedes",
+        "navigation": "replace",
+        "target_binding": "explicit_current_identity",
+        "return_policy": "next_deliberate_action",
+        "alternatives": [],
+        "invalidates_return": false
+      },
+      "action": "cancel_unapplied_owner_then_enter",
+      "follow": "setup explicit; grid identifiable actions bypass tasks",
+      "replacement": "changed_navigation",
+      "preserves": [
+        "functionality",
+        "transaction_boundary",
+        "native_ids"
+      ],
+      "tests": [
+        "reachable",
+        "return_path",
+        "cancel_dirty",
+        "held_does_not_apply"
+      ]
     }
   },
   "programs": {
@@ -23725,7 +23654,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "a921b8de6ac5d153e679bdf45a46897ef2ca8fa07e780b34c2cc6e847c4026fc"
+      "sha256": "ba654ed0c066583304d12be0dea4374073f780fc236dc1f85728dd3864312555"
     }
   },
   "guardrails": [
@@ -31561,9 +31490,6 @@
         ],
         "P05": [
           "view_channel:inspection1..16"
-        ],
-        "S03": [
-          "view_channel:inspection1..16"
         ]
       },
       "state": "One grid_viewer instance per existing page, each with its own selected_channel initialised to 1, not persisted and never linked to program.selected_channel: Trig (trigger_edit_page_ui.lua:11), Note (note_edit_page_ui.lua:8), Velocity (velocity_edit_page_ui.lua:5), Scale (scale_edit_page_ui.lua:11), Song (song_edit_page_ui.lua:10). A screen's view_channel reads and moves the instance of its grid context; P05 uses the instance of the context it was opened from (Trig/Note/Velocity/Scale/Song).",
@@ -31711,6 +31637,37 @@
         "columns": 16,
         "status_y": 63,
         "overflow_status": 17
+      },
+      "dashboard": {
+        "title": [
+          1,
+          7
+        ],
+        "scope_right": [
+          118,
+          7
+        ],
+        "row_baselines": [
+          16,
+          24,
+          32,
+          40,
+          48,
+          56
+        ],
+        "count": 6,
+        "label": [
+          1,
+          "level 7, shrinks to fit"
+        ],
+        "value": [
+          "right-aligned at x127",
+          "level 15, whole"
+        ],
+        "cursor": null,
+        "overflow_status": 7,
+        "neighbours_y": 63,
+        "rule": "Information-only screens show every field at once (owner decision 25 September 2026). No selection cursor."
       }
     },
     "text": "full labels in detail; exact (numeric) values are never cropped or abbreviated: every layout with fields gives the selected value a whole full-width route on the same screen (focused value_region, detail selected row, overview full_value_line); cells use the '...' more-marker; overflow paints LAYOUT OVERFLOW and fails acceptance; absent event is NO EVENT; Off/Inherit/None/Mixed/zero distinct",

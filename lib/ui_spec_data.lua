@@ -242,10 +242,9 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "S03",
       ["parent"] = "N02",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
-        "view_channel",
         "playing_scale",
         "edit_scale",
         "step_range",
@@ -325,9 +324,6 @@ return {
       ["art"] = nil,
       ["fields"] = {
         "tresillo_amount",
-        "applies_to",
-        "stored_pattern",
-        "mode",
       },
     },
     ["P03"] = {
@@ -371,7 +367,6 @@ return {
     ["P05"] = {
       ["title"] = "CHANNEL VIEW",
       ["context"] = {
-        "Scale",
         "Trig",
         "Note",
         "Velocity",
@@ -437,7 +432,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "A03",
       ["parent"] = "N05",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "automatic",
@@ -667,7 +662,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "F02",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "active_rate",
@@ -777,7 +772,7 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "F07",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "take",
@@ -893,8 +888,8 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "H05",
       ["parent"] = "N01",
-      ["layout"] = "focused",
-      ["art"] = "choir",
+      ["layout"] = "dashboard",
+      ["art"] = nil,
       ["fields"] = {
         "bass",
         "inner_1",
@@ -964,7 +959,6 @@ return {
         "scale",
         "scale_clock",
         "overview",
-        "channel_view",
       },
     },
     ["N03"] = {
@@ -984,6 +978,7 @@ return {
       ["fields"] = {
         "pattern",
         "options",
+        "algorithm",
         "channel_view",
         "rhythm_doctor",
       },
@@ -1104,7 +1099,7 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "H05",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "frame_a",
@@ -1161,13 +1156,14 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "P06",
       ["parent"] = "N03",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = nil,
       ["fields"] = {
         "drum",
         "tresillo",
         "euclidean",
         "numeric",
+        "rhythm_doctor",
       },
     },
     ["P07"] = {
@@ -1180,15 +1176,13 @@ return {
       ["provider"] = "read_only",
       ["existing_route"] = "P07",
       ["parent"] = "N03",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "preview",
-        "shift_left",
-        "shift_reset",
-        "shift_right",
-        "cancel",
-        "save",
+        "algorithm",
+        "shift",
+        "trigs",
       },
     },
     ["P08"] = {
@@ -1680,7 +1674,7 @@ return {
       ["provider"] = "merge",
       ["existing_route"] = "M07",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "dashboard",
       ["art"] = nil,
       ["fields"] = {
         "step",
@@ -2138,11 +2132,6 @@ return {
           ["label"] = "Overview",
           ["screen"] = "S03",
         },
-        {
-          ["id"] = "channel_view",
-          ["label"] = "Channel view",
-          ["screen"] = "P05",
-        },
       },
       ["N03"] = {
         {
@@ -2158,6 +2147,14 @@ return {
           ["id"] = "options",
           ["label"] = "Options",
           ["screen"] = "P02",
+          ["contexts"] = {
+            "Trig",
+          },
+        },
+        {
+          ["id"] = "algorithm",
+          ["label"] = "Algorithm",
+          ["screen"] = "P06",
           ["contexts"] = {
             "Trig",
           },
@@ -10680,6 +10677,37 @@ return {
         ["status_y"] = 63,
         ["overflow_status"] = 17,
       },
+      ["dashboard"] = {
+        ["title"] = {
+          1,
+          7,
+        },
+        ["scope_right"] = {
+          118,
+          7,
+        },
+        ["row_baselines"] = {
+          16,
+          24,
+          32,
+          40,
+          48,
+          56,
+        },
+        ["count"] = 6,
+        ["label"] = {
+          1,
+          "level 7, shrinks to fit",
+        },
+        ["value"] = {
+          "right-aligned at x127",
+          "level 15, whole",
+        },
+        ["cursor"] = nil,
+        ["overflow_status"] = 7,
+        ["neighbours_y"] = 63,
+        ["rule"] = "Information-only screens show every field at once (owner decision 25 September 2026). No selection cursor.",
+      },
     },
     ["text"] = "full labels in detail; exact (numeric) values are never cropped or abbreviated: every layout with fields gives the selected value a whole full-width route on the same screen (focused value_region, detail selected row, overview full_value_line); cells use the '...' more-marker; overflow paints LAYOUT OVERFLOW and fails acceptance; absent event is NO EVENT; Off/Inherit/None/Mixed/zero distinct",
     ["motion"] = "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame.",
@@ -10982,9 +11010,6 @@ return {
           "view_channel:inspection1..16",
         },
         ["P05"] = {
-          "view_channel:inspection1..16",
-        },
-        ["S03"] = {
           "view_channel:inspection1..16",
         },
       },
@@ -13357,19 +13382,6 @@ return {
       ["alternatives"] = {},
       ["invalidates_return"] = false,
     },
-    ["NAV.Scale.P05"] = {
-      ["gesture"] = "E1 tasks; E2 select stable key; K3 open",
-      ["entry"] = "Scale",
-      ["screen"] = "P05",
-      ["field"] = "remembered_valid_field",
-      ["scope"] = "explicit_edit_identity",
-      ["lifetime"] = "until deliberate navigation or grid owner supersedes",
-      ["navigation"] = "replace",
-      ["target_binding"] = "explicit_current_identity",
-      ["return_policy"] = "next_deliberate_action",
-      ["alternatives"] = {},
-      ["invalidates_return"] = false,
-    },
     ["NAV.Trig.P01"] = {
       ["gesture"] = "E1 tasks; E2 select stable key; K3 open",
       ["entry"] = "Trig",
@@ -14922,6 +14934,19 @@ return {
       ["when"] = {
         ["algorithm"] = 5,
       },
+    },
+    ["NAV.Trig.P06"] = {
+      ["gesture"] = "E1 tasks; E2 select stable key; K3 open",
+      ["entry"] = "Trig",
+      ["screen"] = "P06",
+      ["field"] = "remembered_valid_field",
+      ["scope"] = "explicit_edit_identity",
+      ["lifetime"] = "until deliberate navigation or grid owner supersedes",
+      ["navigation"] = "replace",
+      ["target_binding"] = "explicit_current_identity",
+      ["return_policy"] = "next_deliberate_action",
+      ["alternatives"] = {},
+      ["invalidates_return"] = false,
     },
   },
 }

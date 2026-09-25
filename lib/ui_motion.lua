@@ -144,6 +144,9 @@ function ui_motion.draw(vm, render)
     if roll.key == key and roll.value ~= field.value then roll.frames = ROLL_FRAMES end
     roll.key, roll.value = key, field.value
     if roll.frames > 0 then vm.value_dy = roll.frames; roll.frames = roll.frames - 1 end
+  else
+    -- Left mid-roll: nothing is rolling on this screen, so stop asking for frames.
+    roll.key, roll.value, roll.frames = nil, nil, 0
   end
   -- The dial needle sweeps to a new value instead of jumping.
   if vm.dial then
@@ -152,6 +155,9 @@ function ui_motion.draw(vm, render)
     dial.shown = dial.shown + (dial.target - dial.shown) * 0.45
     if math.abs(dial.target - dial.shown) < 0.004 then dial.shown = dial.target end
     vm.dial = dial.shown
+  else
+    -- Left mid-sweep: a dial no longer shown must not keep the screen redrawing.
+    dial.key, dial.shown, dial.target = nil, nil, nil
   end
   local ok, report = render(vm)
   -- A character keeping time asks for frames for as long as it moves.

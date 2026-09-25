@@ -47,20 +47,20 @@ function test_ui_adapters_tasks_n03_resolves_the_pattern_row_by_context_and_hide
   local velocity = describe(adapter, "N03", {context = "Velocity"})
   luaunit.assert_equals(velocity.descriptors[1].domain.destination, "P04")
   local trig = describe(adapter, "N03", {context = "Trig", state = {algorithm = 1}})
-  luaunit.assert_equals(ids(trig), {"pattern", "options", "channel_view"})
+  luaunit.assert_equals(ids(trig), {"pattern", "options", "algorithm", "channel_view"})
   luaunit.assert_equals(trig.descriptors[1].value, "P01")
 end
 
 function test_ui_adapters_tasks_rhythm_doctor_row_follows_the_trig_algorithm_owner_state()
   local algorithm = 1
   local adapter = tasks_factory(ui_adapters, {state = function() return {algorithm = algorithm} end})
-  luaunit.assert_equals(ids(describe(adapter, "N03", {context = "Trig"})), {"pattern", "options", "channel_view"})
+  luaunit.assert_equals(ids(describe(adapter, "N03", {context = "Trig"})), {"pattern", "options", "algorithm", "channel_view"})
   algorithm = 5
   local outcome = describe(adapter, "N03", {context = "Trig"})
   luaunit.assert_equals(ids(outcome), ui_adapters.spec.screens.N03.fields)
-  luaunit.assert_equals(outcome.descriptors[4].domain.destination, "R01")
+  luaunit.assert_equals(outcome.descriptors[5].domain.destination, "R01")
   -- no state source at all: the conditional row stays hidden
-  luaunit.assert_equals(ids(describe(tasks_factory(ui_adapters), "N03", {context = "Trig"})), {"pattern", "options", "channel_view"})
+  luaunit.assert_equals(ids(describe(tasks_factory(ui_adapters), "N03", {context = "Trig"})), {"pattern", "options", "algorithm", "channel_view"})
 end
 
 function test_ui_adapters_tasks_invoke_names_the_destination_without_navigating()

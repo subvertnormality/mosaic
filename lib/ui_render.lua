@@ -77,6 +77,20 @@ function M.draw(v)
     if c.playing then rect(x,y+5,4,1,9)end
    end
   end
+ elseif L=='dashboard' then
+  -- Information only: every field on one screen, no cursor. Scope shares the
+  -- title row; up to six rows, label left, whole value right-aligned.
+  text(fit(v.title,78),1,7,8,15);right(fit(v.scope,45),118,7,9);status_y=7
+  if #v.fields>6 then fail('dashboard count')end
+  for k=1,math.min(#v.fields,6)do
+   local f=v.fields[k];local y=8+k*8;local val=tostring(f.value)
+   if width(val)>126 then
+    if exact(f)then fail('value '..tostring(f.id));val=''else val=fit(val,126)end
+   end
+   local room=126-width(val)-4
+   if room>0 then text(fit(f.label,room),1,y,8,7)end
+   if val~=''then right(val,127,y,15)end
+  end
  elseif L=='detail' then
   text(fit(v.title,126),1,7,8,15);text(fit(v.scope,126),1,17,8,7);status_y=17
   local first=math.max(1,math.min(v.selected-1,#v.fields-3))
