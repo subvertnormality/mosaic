@@ -1304,9 +1304,9 @@
     },
     "C09": {
       "id": "C09",
-      "title": "MERGE DETAIL",
+      "title": "MERGE MODES",
       "context": "Channel",
-      "profile": "read_only",
+      "profile": "merge_modes",
       "provider": "read_only",
       "existing_route": "C09",
       "render": {
@@ -1351,13 +1351,27 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "note_vel",
-          "label": "Note / vel",
-          "example": "AVG / AVG",
+          "id": "note_mode",
+          "label": "Note mode",
+          "example": "AVERAGE",
           "binding": {
             "provider": "read_only",
             "target": "selected_object",
-            "field": "note_vel"
+            "field": "note_mode"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "velocity_mode",
+          "label": "Velocity mode",
+          "example": "AVERAGE",
+          "binding": {
+            "provider": "read_only",
+            "target": "selected_object",
+            "field": "velocity_mode"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -1385,7 +1399,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Read-only detail reached from Channel tasks (NAV.Channel.C09) and the merge grid outcomes G07/G16-G19; not from C06 K3. E1 opens Channel tasks (usability audit 25 September 2026); formerly disabled; E2 scrolls four merge domains and contributing patterns; E3 no edit; K2 back; K3 no action; K1 unchanged. All merge edits stay on their existing grid controls.",
+      "controls_explanation": "Merge modes for the selected channel. E2 chooses a row; E3 steps a mode through the modes its grid merge button (and held button + pattern) can set, applied at once as that button does. Patterns are assigned on the grid pattern row and are shown only. K2 returns; E1 opens Channel tasks (owner decision 25 September 2026).",
       "state_explanation": "List all 16 selected pattern slots with wrapping/paging. Show exact engine mode labels and effective step values, not a claim that merged scale material is a conventional chord. No selection: NONE. Random merge output is last observed/unknown until evaluated without advancing RNG. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [

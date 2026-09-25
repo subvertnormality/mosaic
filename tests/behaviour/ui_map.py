@@ -108,7 +108,7 @@ LIVE_SCREENS = OrderedDict([
     ("merge_shape", {"screen": "M02", "title": "MERGE SHAPE", "layout": "focused", "art": True, "task": "merge_shape"}),
     ("harmony", {"screen": "H01", "title": "VOICE LEADING", "layout": "focused", "art": True, "task": "harmony"}),
     ("channel_tasks", {"screen": "N01", "title": "CHANNEL TASKS", "layout": "detail"}),
-    ("merge_detail", {"screen": "C09", "title": "MERGE DETAIL", "layout": "detail"}),
+    ("merge_detail", {"screen": "C09", "title": "MERGE MODES", "layout": "detail"}),
     ("assignment", {"screen": "C07", "title": "ASSIGN PARAM", "layout": "detail"}),
     ("trigger_editor", {"screen": "P01", "title": "PATTERN TRIG", "layout": "pattern64", "scope": "pattern"}),
     ("trigger_editor_confirmation", {"screen": "P02", "title": "TRIG OPTIONS", "layout": "focused"}),

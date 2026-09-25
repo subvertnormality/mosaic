@@ -169,11 +169,11 @@ return {
       },
     },
     ["C09"] = {
-      ["title"] = "MERGE DETAIL",
+      ["title"] = "MERGE MODES",
       ["context"] = {
         "Channel",
       },
-      ["profile"] = "read_only",
+      ["profile"] = "merge_modes",
       ["hold_policy"] = "observe_in_place",
       ["provider"] = "read_only",
       ["existing_route"] = "C09",
@@ -183,7 +183,8 @@ return {
       ["fields"] = {
         "patterns",
         "trig_mode",
-        "note_vel",
+        "note_mode",
+        "velocity_mode",
         "length_mode",
       },
     },

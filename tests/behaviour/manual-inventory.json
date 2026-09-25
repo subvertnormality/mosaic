@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "b0bb0d97c20ac5615d35829010848b565eb1d2d2afabe7c1d6217b2abe4ca467",
+ "manual_sha256": "e4219c4d4db958e72685ded247a1bc6d1096b837cc3a7cb2bb87823b345b042d",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -198,7 +198,7 @@
    "level": 3,
    "start_line": 345,
    "end_line": 380,
-   "text_sha256": "fe1890723f23f4411bfb302eb24a4d6087b638b1dfd74897d9b91e1313f85da7",
+   "text_sha256": "2d2dab0ac85f5329d69f7bfc1e54b58b44da1a7915c324b8678a5322056c47f6",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "NAV-CONFIRM"
@@ -1607,7 +1607,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "b0bb0d97c20ac5615d35829010848b565eb1d2d2afabe7c1d6217b2abe4ca467"
+   "sha256": "e4219c4d4db958e72685ded247a1bc6d1096b837cc3a7cb2bb87823b345b042d"
   },
   {
    "path": "cheat_sheet.html",

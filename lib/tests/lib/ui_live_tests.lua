@@ -246,6 +246,39 @@ function test_ui_live_mapped_mask_cc_leaves_a_held_step_screen_alone()
   end)
 end
 
+-- Merge modes (C09, owner decision 2026-09-25): E3 sets a mode the way the
+-- grid merge button does, on the selected channel.
+function test_ui_live_merge_modes_e3_sets_the_channel_merge_mode()
+  live.isolated(function()
+    open_task("merge")
+    luaunit.assert_equals(screen(), "C09")
+    local channel = program.get_selected_channel()
+    local before = channel.trig_merge_mode
+    choose_task("trig_mode")
+    ui.enc(3, 1)
+    luaunit.assert_not_equals(channel.trig_merge_mode, before)
+    luaunit.assert_equals(ui_live.state().field_id, "trig_mode")
+    choose_task("length_mode")
+    ui.enc(3, 1)
+    luaunit.assert_equals(channel.length_merge_mode, "up")
+    ui.enc(3, -1)
+    luaunit.assert_equals(channel.length_merge_mode, "average")
+    -- The pattern list is assigned on the grid, not here.
+    local patterns = channel.selected_patterns
+    choose_task("patterns")
+    ui.enc(3, 1)
+    luaunit.assert_equals(channel.selected_patterns, patterns)
+    tap(2) -- K2 back to the Channel family
+    luaunit.assert_equals(screen(), "C01")
+  end, {before_ui = function()
+    -- The grid page module the app loads with m_grid (the merge buttons' owner).
+    fader = include("mosaic/lib/controls/fader")
+    button = include("mosaic/lib/controls/button")
+    sequencer = include("mosaic/lib/controls/sequencer")
+    channel_edit_page = include("mosaic/lib/pages/channel_edit_page/channel_edit_page")
+  end})
+end
+
 function test_ui_live_channel_tasks_e3_does_not_edit_and_e2_clamps_to_the_rows()
   live.isolated(function()
     ui.enc(1, 1)
