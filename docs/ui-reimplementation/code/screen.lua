@@ -101,9 +101,16 @@ function M.draw(v)
    -- Art yields its region to a long value. Never clip numeric data.
    -- The art region holds a character (in time when v.motion has a beat) or a
    -- value dial; either yields the region to a value that needs the width.
-   if (v.art or v.dial) and full_value(val,70,1,48,v.value_dy)then
-    if v.art then art.draw_art(v.art,v.pose or 0,v.active,v.motion)
-    elseif art.draw_dial then art.draw_dial(v.dial)end
+   -- A dial or the metronome only decorates: the value keeps the size it has
+   -- with the whole width, and the decoration shows only if that leaves x75+ free.
+   local decor=v.dial or v.art=='metronome'
+   local natural=23;screen.font_size(natural)
+   while natural>8 and screen.text_extents(val)>126 do natural=natural-1;screen.font_size(natural)end
+   if decor and screen.text_extents(val)<=70 and full_value(val,126,1,48,v.value_dy)then
+    if v.dial then if art.draw_dial then art.draw_dial(v.dial)end else art.draw_art(v.art,v.pose or 0,v.active,v.motion)end
+   elseif decor and full_value(val,126,1,48,v.value_dy)then
+   elseif v.art and not decor and full_value(val,70,1,48,v.value_dy)then
+    art.draw_art(v.art,v.pose or 0,v.active,v.motion)
    elseif not full_value(val,126,1,48,v.value_dy)then
     if exact(selected)then fail('value '..tostring(selected.id))else text(fit(val,126),1,45,8,15)end
    end

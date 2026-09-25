@@ -23725,7 +23725,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "c88e5f8873717f4ddc87d0b4a4edc011e36d72ba20feb985d541eae6c9b0a271"
+      "sha256": "a921b8de6ac5d153e679bdf45a46897ef2ca8fa07e780b34c2cc6e847c4026fc"
     }
   },
   "guardrails": [
