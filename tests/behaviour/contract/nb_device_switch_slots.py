@@ -54,13 +54,8 @@ def nb_device_switch_slots(c):
     assert sent and all(port == 1 and b[0] == 176 and b[1] == 1 for port, b in sent), ('CC 1 before the switch', sent)
     c.results.append(dict(kind='device-param-control', label=STALE_FIRST, sent=sent, passed=True))
     c.key(2); c.key(1); c.screen_header('Ch. 1 Device Config')
-    expected = render([(10, 35, 15, 'Jf Kit')])
-    indices = [(y*128+x)*4+k for y in range(27, 37) for x in range(10, 62) for k in range(3)]
-    for _ in range(40):
-        if all(base64.b64decode(c.snapshot()['frame']['pixels_base64'])[i] == expected[i] for i in indices): break
-        c.enc(3, 1)
-    else: raise AssertionError('Jf Kit not visible in device picker')  # README 542
-    c.key(3); c.elapse(1)
+    # The selected Device row (C05) shows the name exactly; K3 applies it.
+    c.ui.pick_device('Jf Kit');c.elapse(1)
     # The norns menu reopens on the params list where it was left, on channel 1's group, now
     # named after the new device.
     from cases import menu_label

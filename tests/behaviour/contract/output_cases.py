@@ -6,17 +6,8 @@ from jf_oracle import verify_unplayed,verify_session_export
 def jf_mono_phrase(c):
     assert c.profile in ('crow-jf','mixed-outputs'), 'JF output profile required'
     c.configure();c.screen_header('Ch. 1 Device Config')
-    expected=render([(10,35,15,'Jf N 1')])
-    indices=[(y*128+x)*4+k for y in range(27,37) for x in range(10,62) for k in range(3)]
-    def selected(state):
-        pixels=base64.b64decode(state['frame']['pixels_base64'])
-        return all(pixels[i]==expected[i] for i in indices)
-    for attempt in range(40):
-        if selected(c.snapshot()):break
-        c.enc(3,1)
-    else:raise AssertionError('JF mono voice1 not visible in device picker')
-    c.results.append(dict(kind='device-picker-frame',label='Jf N 1',matched=True))
-    c.key(3)
+    # The selected Device row (C05) shows the name exactly; K3 applies it.
+    c.ui.pick_device('Jf N 1')
     cursor=0;seen=[]
     def drain():
         nonlocal cursor
@@ -65,16 +56,8 @@ def doubledecker_audition(c):
     import hashlib
     assert c.profile in ('nb-audio','mixed-outputs'),'Audio output profile required'
     c.configure();c.screen_header('Ch. 1 Device Config')
-    expected=render([(10,35,15,'Doubledecker')])
-    indices=[(y*128+x)*4+k for y in range(27,37) for x in range(10,62) for k in range(3)]
-    def selected(state):
-        pixels=base64.b64decode(state['frame']['pixels_base64'])
-        return all(pixels[i]==expected[i] for i in indices)
-    for attempt in range(40):
-        if selected(c.snapshot()):break
-        c.enc(3,1)
-    else:raise AssertionError('Doubledecker not visible in device picker')
-    c.key(3);c.elapse(13) # Upstream startup diagnostic tone is outside measurement.
+    # The selected Device row (C05) shows the name exactly; K3 applies it.
+    c.ui.pick_device('Doubledecker');c.elapse(13) # Upstream startup diagnostic tone is outside measurement.
     def capture(label):
         job=c.runtime.capture_start(1)
         deadline=time.monotonic()+5
@@ -113,19 +96,10 @@ def doubledecker_audition(c):
 
 def select_visible_player(c,label):
     """Select by independently rendered display text, never a saved option index."""
-    expected=render([(10,35,15,label)])
-    indices=[(y*128+x)*4+k for y in range(27,37) for x in range(10,62) for k in range(3)]
-    def selected():
-        pixels=base64.b64decode(c.snapshot()['frame']['pixels_base64'])
-        return all(pixels[i]==expected[i] for i in indices)
     # Return to the first device using the same encoder as a user.
     c.enc(3,-40)
-    for _ in range(40):
-        if selected():break
-        c.enc(3,1)
-    else:raise AssertionError('Player not visible: '+label)
-    c.results.append(dict(kind='device-picker-frame',label=label,matched=True))
-    c.key(3);c.elapse(.3)
+    # The selected Device row (C05) shows the name exactly; K3 applies it.
+    c.ui.pick_device(label);c.elapse(.3)
 
 
 def jf_keyboard_ownership(c):
@@ -149,7 +123,8 @@ def jf_keyboard_ownership(c):
     midi_start=c.snapshot()['midi_count']
     for voices in ((1,2),(3,4),(5,6)):
         for channel,voice in zip((1,16),voices):
-            c.tap(channel,1);c.screen_header('Ch. '+str(channel)+' Device Config',selected=5)
+            # A channel select shows the remembered family; reopen Device for it.
+            c.ui.select_channel_on_page(channel,'midi_config')
             select_visible_player(c,'Jf N '+str(voice))
         # Both selectors are compatible music-mode mono voices. No transport/recording.
         c.elapse(.5);drain();verify_unplayed(trace[accounted:],'startup' if accounted==0 else 'selection');accounted=len(trace)
@@ -193,7 +168,7 @@ def jf_same_voice_overlap(c):
         verify_packets(trace[start:],expected,first_sequence=trace[start-1]['sequence']+1 if start else 1)
     marker=c.snapshot()['midi_count']
     for voice in range(1,7):
-        c.tap(1,1);select_visible_player(c,'Jf N '+str(voice));c.elapse(.5);drain();verify_unplayed(trace[accounted:],'startup' if accounted==0 else 'selection');accounted=len(trace)
+        c.ui.select_channel_on_page(1,'midi_config');select_visible_player(c,'Jf N '+str(voice));c.elapse(.5);drain();verify_unplayed(trace[accounted:],'startup' if accounted==0 else 'selection');accounted=len(trace)
         for order in ((0,1),(1,0)):
             c.tap(1,1);start=len(trace);expected=[]
             for port,status in ((1,144),(2,159)):

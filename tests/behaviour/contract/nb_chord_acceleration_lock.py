@@ -19,13 +19,8 @@ def nb_chord_acceleration_lock(c):
     from frame_oracle import render
     assert c.profile == 'nb-audio', 'nb-audio profile required'
     c.configure(); c.screen_header('Ch. 1 Device Config')
-    expected = render([(10, 35, 15, 'Doubledecker')])
-    indices = [(y*128+x)*4+k for y in range(27, 37) for x in range(10, 62) for k in range(3)]
-    for _ in range(40):
-        if all(base64.b64decode(c.snapshot()['frame']['pixels_base64'])[i] == expected[i] for i in indices): break
-        c.enc(3, 1)
-    else: raise AssertionError('Doubledecker not visible in device picker')  # README 542
-    c.key(3); c.elapse(13)                                        # device applied; upstream startup tone ends
+    # The selected Device row (C05) shows the name exactly; K3 applies it.
+    c.ui.pick_device('Doubledecker');c.elapse(13)                                        # device applied; upstream startup tone ends
     c.ui.turn(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
     assign_trig_parameter(c, 'Chord Accel Mod')                   # slot 1 (README 749-756)
     c.action(type='grid', x=1, y=4, state=1)
