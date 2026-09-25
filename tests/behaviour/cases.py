@@ -1091,6 +1091,9 @@ def octave_all_positions(c):
         for index,octave in enumerate(octaves,1):
             with ui.hold_step(index):ui.expect_channel_octave(octave)
         play(octaves,'all64-override-global-'+str(global_octave))
+    # The global octave tap shows the octave on Note Masks (spec flow G14); the
+    # README's channel clear (K1+K2) belongs to Trig params, where the old UI stayed.
+    ui.channel_page('trig_locks')
     with ui.hold_keys(1):
         c.elapse(.3);ui.press_key(2)
     for index in range(1,65):

@@ -2930,12 +2930,16 @@ class GroupCUiTests(unittest.TestCase):
         from ui import Ui
 
         class Driver(FakeDriver):
+            # The first observation predates the key; the menu then stays open.
+            modes = [False, True, True, True, True]
+
             def wait(self, predicate, timeout=3):
                 self.calls.append(("wait", timeout))
-                state = {"diagnostics": {"menu_mode": True}}
-                if not predicate(state):
-                    raise AssertionError("predicate did not match")
-                return state
+                for mode in self.modes:
+                    state = {"diagnostics": {"menu_mode": mode}}
+                    if predicate(state):
+                        return state
+                raise AssertionError("predicate did not match")
 
         driver = Driver(clock_mode="real-time")
         with patch("frame_oracle.live_header_matches",
@@ -2943,7 +2947,30 @@ class GroupCUiTests(unittest.TestCase):
             ui = Ui(driver)
             ui.press_key(1)
             ui.turn(1, 4)
-        self.assertEqual(driver.calls, [("key", 1), ("wait", .5), ("enc", 1, 4)])
+        self.assertEqual(driver.calls, [("key", 1), ("wait", 1.5), ("enc", 1, 4)])
+
+    def test_real_time_e1_after_closing_k1_waits_then_reads_the_ring(self):
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            # The menu is still open at first, then closes and stays closed.
+            modes = [True, False, False, False, False]
+
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                for mode in self.modes:
+                    state = {"diagnostics": {"menu_mode": mode}}
+                    if predicate(state):
+                        return state
+                raise AssertionError("predicate did not match")
+
+        driver = Driver(clock_mode="real-time")
+        ui = Ui(driver)
+        with patch.object(Ui, "_turn_channel_ring", return_value=True) as ring:
+            ui.press_key(1)
+            ui.turn(1, 1)
+        ring.assert_called_once_with(1)
+        self.assertEqual(driver.calls, [("key", 1), ("wait", 1.5)])
 
     def test_e1_after_other_input_or_controlled_k1_keeps_the_ring_path(self):
         from ui import Ui

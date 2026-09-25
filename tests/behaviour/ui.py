@@ -221,29 +221,34 @@ class Ui:
     def turn(self, encoder, detents):
         after_key1, self._after_key1 = getattr(self, "_after_key1", False), False
         if encoder == 1 and detents:
-            # A bare K1 opens the native menu; the E1 that follows it is the
-            # menu's own. Observe the mode change before reading the page ring,
-            # or a not-yet-redrawn Mosaic screen is mistaken for a ring page.
+            # A bare K1 opens or closes the native menu. Let the mode settle
+            # before reading the page ring: a Mosaic screen not yet covered (or
+            # a menu not yet closed) must not decide what this E1 means.
             if after_key1 and self._native_menu_opened():
                 return self.driver.enc(encoder, detents)
             if self._turn_channel_ring(detents) or self._turn_other_ring(detents):
                 return None
         return self.driver.enc(encoder, detents)
 
-    def _native_menu_opened(self, timeout=.5):
-        """Real time only: True once the native menu shows after a bare K1.
+    def _native_menu_opened(self, polls=4, timeout=1.5):
+        """Real time only: after a bare K1, wait until the native menu mode reads
+        the same on ``polls`` consecutive observations; True if it is open.
 
         A controlled snapshot already reflects the key, so the ring
         observation itself stands down in the menu; recipe doubles keep
         their recorded calls."""
         if getattr(self.driver, "clock_mode", None) != "real-time" or not hasattr(self.driver, "wait"):
             return False
-        opened = lambda state: state.get("diagnostics", {}).get("menu_mode") is True
+        seen = []
+
+        def settled(state):
+            seen.append(state.get("diagnostics", {}).get("menu_mode"))
+            return len(seen) >= polls and len(set(seen[-polls:])) == 1
         try:
-            self.driver.wait(opened, timeout=timeout)
-            return True
+            self.driver.wait(settled, timeout=timeout)
         except (AssertionError, KeyError, TypeError, StopIteration):
             return False
+        return seen[-1] is True
 
     def _observed_channel_page(self, timeout=1):
         """The Channel page ring key whose live header is showing, or None."""
