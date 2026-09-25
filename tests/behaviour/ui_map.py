@@ -112,16 +112,22 @@ LIVE_SCREENS = OrderedDict([
     ("assignment", {"screen": "C07", "title": "ASSIGN PARAM", "layout": "detail"}),
     ("trigger_editor", {"screen": "P01", "title": "PATTERN TRIG", "layout": "pattern64"}),
     ("trigger_editor_confirmation", {"screen": "P02", "title": "TRIG OPTIONS", "layout": "focused"}),
-    ("note_editor", {"screen": "P03", "title": "PATTERN NOTE", "layout": "focused"}),
-    ("velocity_editor", {"screen": "P04", "title": "PATTERN VELOCITY", "layout": "focused"}),
+    ("note_editor", {"screen": "P03", "title": "PATTERN NOTE", "layout": "pattern64"}),
+    ("velocity_editor", {"screen": "P04", "title": "PATTERN VELOCITY", "layout": "pattern64"}),
     ("scale", {"screen": "S01", "title": "SCALE", "layout": "focused", "scope": "scale"}),
     ("scale_clock", {"screen": "S02", "title": "SCALE CLOCK", "layout": "focused", "scope": "scale"}),
-    ("song", {"screen": "A03", "title": "SONG PLAYBACK", "layout": "focused", "scope": "song"}),
+    ("song", {"screen": "A03", "title": "SONG PLAYBACK", "layout": "dashboard", "scope": "song"}),
+    ("scale_overview", {"screen": "S03", "title": "SCALE OVERVIEW", "layout": "dashboard", "scope": "scale"}),
+    ("trig_algorithm", {"screen": "P06", "title": "TRIG ALGORITHM", "layout": "detail"}),
+    ("paint_preview", {"screen": "P07", "title": "PAINT PREVIEW", "layout": "dashboard"}),
+    ("channel_view", {"screen": "P05", "title": "CHANNEL VIEW", "layout": "pattern64"}),
+    ("scale_tasks", {"screen": "N02", "title": "SCALE TASKS", "layout": "detail", "scope": "scale"}),
+    ("pattern_tasks", {"screen": "N03", "title": "PATTERN TASKS", "layout": "detail"}),
     # Merge Shape and Harmony child screens (their feature editor's routes).
     ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
     ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
     ("harmony_ensemble", {"screen": "H04", "title": "ENSEMBLE", "layout": "detail"}),
-    ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "focused", "art": True}),
+    ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "dashboard"}),
     ("harmony_members", {"screen": "H07", "title": "MEMBERS", "layout": "detail"}),
     ("harmony_entry", {"screen": "H09", "title": "ENTRY / FAILURE", "layout": "detail"}),
     ("harmony_tone_map", {"screen": "H11", "title": "TONE MAP", "layout": "focused", "art": True}),
@@ -130,23 +136,23 @@ LIVE_SCREENS = OrderedDict([
 # Non-Channel page rings the cases were written for, each entry the live
 # screen that page became: (screen id, title, layout, task row of its navigator).
 PAGE_RINGS = {
-    "Scale": [("S01", "SCALE", "focused", "scale"), ("S02", "SCALE CLOCK", "focused", "scale_clock"),
-              ("P05", "CHANNEL VIEW", "focused", "channel_view")],
+    # Channel view is no longer a Scale task (owner decision 25 September 2026).
+    "Scale": [("S01", "SCALE", "focused", "scale"), ("S02", "SCALE CLOCK", "focused", "scale_clock")],
     "Song": [("A01", "SLOT SETUP", "detail", "slot_setup"), ("A02", "GLOBAL FEEL", "focused", "tempo_feel"),
-             ("P05", "CHANNEL VIEW", "focused", "channel_view")],
+             ("P05", "CHANNEL VIEW", "pattern64", "channel_view")],
     "Trig": [("P01", "PATTERN TRIG", "pattern64", "pattern"), ("P02", "TRIG OPTIONS", "focused", "options")],
 }
 # Other live screens that stand for a ring entry: where a context lands from
 # its grid button (Song) and the Trig page's grid-follow variants.
 RING_ALIASES = {
-    "Song": {0: [("A03", "SONG PLAYBACK", "focused")]},
-    "Trig": {0: [("P06", "TRIG ALGORITHM", "focused"), ("P07", "PAINT PREVIEW", "focused"),
-                 ("P08", "TRIG STEP EDIT", "focused")]},
+    "Song": {0: [("A03", "SONG PLAYBACK", "dashboard")]},
+    "Trig": {0: [("P06", "TRIG ALGORITHM", "detail"), ("P07", "PAINT PREVIEW", "dashboard"),
+                 ("P08", "TRIG STEP EDIT", "pattern64")]},
 }
 TASK_ROWS = {
-    "Scale": ["scale", "scale_clock", "overview", "channel_view"],
+    "Scale": ["scale", "scale_clock", "overview"],
     "Song": ["playback", "slot_setup", "tempo_feel", "channel_view"],
-    "Trig": ["pattern", "options", "channel_view", "rhythm_doctor"],
+    "Trig": ["pattern", "options", "algorithm", "channel_view", "rhythm_doctor"],
 }
 
 # The Channel Tasks rows in their spec order (spec.json#/tasks/rows/N01).

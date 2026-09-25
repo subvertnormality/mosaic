@@ -143,12 +143,14 @@ def fit(label,width):
     return label+'~'
 
 OVERVIEWS={'overview_masks','overview_params'}
+# Layouts whose scope shares the title row, right-aligned at x118 level 9.
+TITLE_ROW_SCOPE=OVERVIEWS|{'dashboard'}
 
 def live_header(title,scope,layout):
     """Expected title row (and scope line) for a live screen, rows 0..18."""
-    if layout in OVERVIEWS:
+    if layout in TITLE_ROW_SCOPE:
         commands=[(1,7,15,fit(title,78)),((None,118),7,9,fit(scope,45))]
-        rows=8  # row 8 carries the selected cell's outline
+        rows=8  # row 8 carries an overview's selected cell outline
     else:
         commands=[(1,7,15,fit(title,126)),(1,17,7,fit(scope,126))]
         rows=19
@@ -246,6 +248,41 @@ def overview_cell_marker(state,layout,index):
     for letter in ('S','L'):
         if _region_matches(actual,render([(x+width-6,y+7,15,letter)]),y+1,y+8,x+width-6,x+width-2):return letter
     return None
+
+# ---- Dashboard layout (lib/ui_render.lua L=='dashboard') ----
+# Information-only screens list every field at once with no cursor: title at
+# (1,7) level 15, scope right-aligned at x118 level 9 on the title row, then up
+# to six rows at baselines 16..56: the label at x1 level 7, fitted to
+# 126-width(value)-4, and the whole value right-aligned at x127 level 15.
+DASHBOARD_ROWS=(16,24,32,40,48,56)
+
+def _dashboard_row_commands(label,value,y):
+    value=str(value)
+    commands=[]
+    room=126-text_width(value)-4
+    if room>0:commands.append((1,y,7,fit(label,room)))
+    if value!='':commands.append(((None,127),y,15,value))
+    return commands
+
+def dashboard_row_matches(state,index,label,value):
+    """Dashboard row `index` (1-based) shows exactly `label` and `value`.
+
+    The 8 px font draws from baseline-5 to baseline+1; the row's band
+    baseline-6..baseline+1 holds nothing else (rows are 8 px apart)."""
+    y=DASHBOARD_ROWS[index-1]
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    return _region_matches(actual,render(_dashboard_row_commands(label,value,y)),y-6,y+2,0,128)
+
+def dashboard_matches(state,title,scope,rows):
+    """The whole dashboard: title row, then exactly `rows` ((label, value) in
+    order) and nothing else above the footer (no cursor, no other row). The
+    title row's top-right mark tiles (x118..) are motion accents."""
+    commands=[(1,7,15,fit(title,78)),((None,118),7,9,fit(scope,45))]
+    for index,(label,value) in enumerate(rows,start=1):
+        commands+=_dashboard_row_commands(label,value,DASHBOARD_ROWS[index-1])
+    expected=render(commands)
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    return _region_matches(actual,expected,0,8,0,118) and _region_matches(actual,expected,8,58,0,128)
 
 # ---- Live footer (group C: ranges, saves, song, tooltips) ----
 # lib/ui_render.lua draws the footer line at (1,63): the current tooltip at

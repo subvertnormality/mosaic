@@ -1492,7 +1492,7 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "trig_locks", {"channel": 1}),
+            ("header", "masks", {"channel": 1}),
             ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
@@ -1534,7 +1534,7 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "trig_locks", {"channel": 1}),
+            ("header", "masks", {"channel": 1}),
             ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
@@ -1587,7 +1587,7 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "trig_locks", {"channel": 1}),
+            ("header", "masks", {"channel": 1}),
             ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
@@ -1637,7 +1637,7 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
-            ("header", "trig_locks", {"channel": 1}),
+            ("header", "masks", {"channel": 1}),
             ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
             ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
@@ -1680,7 +1680,7 @@ class UiInputTests(unittest.TestCase):
                 ("tap", 3, 8), ("tap", 1, 2),
                 ("hold_tap", (1, 4), (4, 4)),
                 ("led_values", [(1, 2)], [15]),
-                ("header", "trig_locks", {"channel": 1}),
+                ("header", "masks", {"channel": 1}),
                 ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 6), ("key", 3),
                 ("header", "midi_config", {"channel": 1}),
                 ("enc", 1, 3), ("enc", 2, -12), ("enc", 2, 1), ("key", 3),
@@ -2960,6 +2960,86 @@ class OverviewCellMarkerOracleTests(unittest.TestCase):
         self.assertIsNone(overview_cell_marker(self.state([(44, 16, 15, "S")]), "overview_params", 1))
         # A dimmer letter is not the marker.
         self.assertIsNone(overview_cell_marker(self.state([(19, 16, 9, "S")]), "overview_params", 1))
+
+
+class DashboardOracleTests(unittest.TestCase):
+    """The dashboard layout oracle (frame_oracle.dashboard_row_matches /
+    dashboard_matches) and its verbs (Ui.expect_dashboard_row / expect_dashboard)."""
+
+    @staticmethod
+    def state(commands):
+        from frame_oracle import render
+        return {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+
+    @staticmethod
+    def screen(rows, title="PAINT PREVIEW", scope="CH01", extra=()):
+        """Draw a dashboard the way lib/ui_render.lua does, independently of the oracle."""
+        from frame_oracle import fit, text_width
+        commands = [(1, 7, 15, title), ((None, 118), 7, 9, scope)]
+        for k, (label, value) in enumerate(rows, start=1):
+            y = 8 + k * 8
+            commands.append((1, y, 7, fit(label, 126 - text_width(value) - 4)))
+            commands.append(((None, 127), y, 15, value))
+        return DashboardOracleTests.state(commands + list(extra))
+
+    ROWS = [("Preview", "PAINTING"), ("Algorithm", "Euclidean"), ("Shift", "+1"), ("Trigs", "12")]
+
+    def test_row_matches_only_its_own_label_value_and_row(self):
+        from frame_oracle import dashboard_row_matches
+        state = self.screen(self.ROWS)
+        for index, (label, value) in enumerate(self.ROWS, start=1):
+            self.assertTrue(dashboard_row_matches(state, index, label, value))
+        self.assertFalse(dashboard_row_matches(state, 3, "Shift", "-1"))
+        self.assertFalse(dashboard_row_matches(state, 2, "Shift", "+1"))
+        self.assertFalse(dashboard_row_matches(state, 4, "Trigs", "1"))
+        self.assertFalse(dashboard_row_matches(state, 5, "Trigs", "12"))
+
+    def test_row_levels_are_exact(self):
+        from frame_oracle import dashboard_row_matches
+        # The label at the value's level 15 (a selected-looking row) is not a dashboard row.
+        state = self.state([(1, 16, 15, "Preview"), ((None, 127), 16, 15, "OFF")])
+        self.assertFalse(dashboard_row_matches(state, 1, "Preview", "OFF"))
+        state = self.state([(1, 16, 7, "Preview"), ((None, 127), 16, 15, "OFF")])
+        self.assertTrue(dashboard_row_matches(state, 1, "Preview", "OFF"))
+
+    def test_whole_dashboard_rejects_a_cursor_extra_row_or_wrong_scope(self):
+        from frame_oracle import dashboard_matches
+        self.assertTrue(dashboard_matches(self.screen(self.ROWS), "PAINT PREVIEW", "CH01", self.ROWS))
+        cursor = self.screen(self.ROWS, extra=[(0, 24, 15, ">")])
+        self.assertFalse(dashboard_matches(cursor, "PAINT PREVIEW", "CH01", self.ROWS))
+        extra = self.screen(self.ROWS + [("View channel", "01")])
+        self.assertFalse(dashboard_matches(extra, "PAINT PREVIEW", "CH01", self.ROWS))
+        self.assertFalse(dashboard_matches(self.screen(self.ROWS), "PAINT PREVIEW", "CH02", self.ROWS))
+        # The title row's mark tiles (x118..) are motion accents, not text.
+        tiles = self.screen(self.ROWS, extra=[(121, 5, 15, ".")])
+        self.assertTrue(dashboard_matches(tiles, "PAINT PREVIEW", "CH01", self.ROWS))
+
+    def test_expect_dashboard_row_finds_the_row(self):
+        from ui import Ui
+        driver = FakeDriver(states=[self.screen(self.ROWS)])
+        self.assertEqual(Ui(driver).expect_dashboard_row("Shift", "+1"), 3)
+        self.assertEqual(driver.results[-1]["row"], 3)
+        driver = FakeDriver(states=[self.screen(self.ROWS)])
+        with self.assertRaises(AssertionError):
+            Ui(driver).expect_dashboard_row("Shift", "-1")
+
+    def test_expect_dashboard_checks_the_page_title_scope_and_rows(self):
+        from ui import Ui, UiMapError
+        rows = [("Playing scale", "01"), ("Edit scale", "01")]
+        driver = FakeDriver(states=[self.screen(rows, "SCALE OVERVIEW", "SLOT 01")])
+        Ui(driver).expect_dashboard("scale_overview", rows, slot=1)
+        self.assertEqual(driver.results[-1]["rows"], [list(r) for r in rows])
+        driver = FakeDriver(states=[self.screen(rows, "SCALE OVERVIEW", "SLOT 01")])
+        with self.assertRaises(AssertionError):
+            Ui(driver).expect_dashboard("scale_overview", rows, slot=2)
+        with self.assertRaises(UiMapError):
+            Ui(FakeDriver()).expect_dashboard("masks", rows)
+
+    def test_live_header_puts_a_dashboard_scope_on_the_title_row(self):
+        from frame_oracle import live_header_matches
+        state = self.screen([])
+        self.assertTrue(live_header_matches(state, "PAINT PREVIEW", "CH01", "dashboard"))
+        self.assertFalse(live_header_matches(state, "PAINT PREVIEW", "CH01", "detail"))
 
 
 class PromptRouteVerbTests(unittest.TestCase):

@@ -507,10 +507,10 @@ class Ui:
         start, end = self.step(1), self.step(4)
         self.driver.hold_tap(start, end)
         self.expect_leds({("pattern_slot", 1): "selected"})
-        # The Channel button follows the remembered edit family (Trig params,
-        # since Tasks is reached through it); the setup ends on Device as the
-        # recipes that follow it expect.
-        self.expect_header("trig_locks", channel=1)
+        # The Channel button follows the remembered edit family (Masks: E1
+        # opens Channel tasks straight from Masks, never passing Trig params);
+        # the setup ends on Device as the recipes that follow it expect.
+        self.expect_header("masks", channel=1)
         self.channel_page("midi_config", confirm=False)
         self.expect_header("midi_config", channel=1)
 
@@ -1482,3 +1482,35 @@ class Ui:
         self.press_key(2)
         return offset
 
+
+    # ---- Owner feedback 25 September 2026: dashboards, task rows (live_ui_feedback family) ----
+    # Information-only screens (S03, A03, F02, F07, H05, H12, M05, P07) use the
+    # dashboard layout: every field at once, label left, value right, no cursor.
+
+    def expect_dashboard_row(self, label, value):
+        """Some dashboard row shows exactly ``label`` and ``value``; returns its 1-based index."""
+        from frame_oracle import DASHBOARD_ROWS, dashboard_row_matches
+        found = []
+
+        def matches(state):
+            for index in range(1, len(DASHBOARD_ROWS) + 1):
+                if dashboard_row_matches(state, index, label, value):
+                    found.append(index)
+                    return True
+            return False
+        self.driver.wait(matches)
+        self.driver.results.append(dict(kind="dashboard-row", label=label, value=value,
+                                        row=found[-1], passed=True))
+        return found[-1]
+
+    def expect_dashboard(self, page, rows, **params):
+        """The whole dashboard ``page`` (a ui_map header key) shows its title row and
+        exactly ``rows`` ((label, value) in order), nothing else and no cursor."""
+        from frame_oracle import dashboard_matches
+        title, scope, layout = header_parts(page, **params)
+        if layout != "dashboard":
+            raise UiMapError("%s is not a dashboard screen" % page)
+        rows = [(label, str(value)) for label, value in rows]
+        self.driver.wait(lambda state: dashboard_matches(state, title, scope, rows))
+        self.driver.results.append(dict(kind="dashboard", title=title, scope=scope,
+                                        rows=[list(row) for row in rows], passed=True))
