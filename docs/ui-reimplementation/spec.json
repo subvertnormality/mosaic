@@ -16367,19 +16367,11 @@
         "screen": "C01",
         "field": "outcome.field_id",
         "scope": "outcome.target",
-        "lifetime": "Primary; do not jump to Device",
-        "navigation": "replace",
+        "lifetime": "Keep the screen shown; it follows the newly selected channel (owner decision 26 September 2026, replacing the jump to the remembered Masks/Trig params family). Merge Shape and Harmony reopen their editor for the new channel.",
+        "navigation": "retain",
         "target_binding": "resolved_outcome",
         "return_policy": "next_deliberate_action",
-        "alternatives": [
-          {
-            "when": {
-              "family": "parameters"
-            },
-            "screen": "C02",
-            "priority": 10
-          }
-        ],
+        "alternatives": [],
         "invalidates_return": true,
         "context": "Channel"
       },

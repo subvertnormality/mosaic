@@ -82,8 +82,21 @@ return function(ui_adapters, owners)
 
   local function held_steps()
     local grid = src("m_grid")
+    local keys = grid and grid.get_pressed_keys and grid.get_pressed_keys() or {}
     local steps = {}
-    for _, key in ipairs(grid and grid.get_pressed_keys and grid.get_pressed_keys() or {}) do
+    -- The page's own step layout when the grid owner knows it (note/velocity
+    -- faders address the page shown); a key in rows 4..7 keeps its position.
+    if grid and grid.held_steps then
+      for _, step in ipairs(grid.held_steps()) do
+        local entry = {step = step}
+        for _, key in ipairs(keys) do
+          if key[2] >= 4 and key[2] <= 7 and fn.calc_grid_count(key[1], key[2]) == step then entry.x, entry.y = key[1], key[2] end
+        end
+        steps[#steps + 1] = entry
+      end
+      return steps
+    end
+    for _, key in ipairs(keys) do
       if key[2] >= 4 and key[2] <= 7 then steps[#steps + 1] = {step = fn.calc_grid_count(key[1], key[2]), x = key[1], y = key[2]} end
     end
     return steps
@@ -260,7 +273,13 @@ return function(ui_adapters, owners)
     local options, current = MERGE_OPTIONS[kind], channel[kind .. "_merge_mode"]
     local index = 1
     for k, option in ipairs(options) do if option == current then index = k end end
-    return {id = id, label = label, kind = "value", value = merge_mode(current),
+    -- Merge Shape (Foundation) decides the trigs: the saved trig merge mode is
+    -- kept for when it is off, and the row says which is in charge.
+    local shown = merge_mode(current)
+    if kind == "trig" and channel.musical_merge and channel.musical_merge.mode == "foundation" then
+      shown = "SHAPE (" .. shown .. ")"
+    end
+    return {id = id, label = label, kind = "value", value = shown,
       domain = {raw = current, min = 1, max = #options, index = index},
       edit = function(delta)
         local owner = src("channel_edit_page")

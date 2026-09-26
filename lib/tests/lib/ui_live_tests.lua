@@ -279,6 +279,25 @@ function test_ui_live_merge_modes_e3_sets_the_channel_merge_mode()
   end})
 end
 
+-- Owner decision 2026-09-26: a grid channel select keeps the norns screen,
+-- which follows the new channel; Merge Shape reopens for that channel.
+function test_ui_live_grid_channel_select_keeps_the_screen_for_the_new_channel()
+  live.isolated(function()
+    open_task("clock")
+    luaunit.assert_equals(screen(), "C04")
+    program.get().selected_channel = 3
+    ui_live.grid_outcome("G05")
+    luaunit.assert_equals(screen(), "C04")
+    luaunit.assert_equals(ui_live.view_model().scope, "CH03")
+    open_task("merge_shape")
+    local root = screen()
+    program.get().selected_channel = 5
+    ui_live.grid_outcome("G05")
+    luaunit.assert_equals(screen(), root)
+    luaunit.assert_equals(channel_edit_page_ui.adapter_owners().feature_editors.merge.channel_number, 5)
+  end)
+end
+
 function test_ui_live_channel_tasks_e3_does_not_edit_and_e2_clamps_to_the_rows()
   live.isolated(function()
     ui.enc(1, 1)

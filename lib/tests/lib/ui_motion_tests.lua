@@ -29,9 +29,9 @@ end
 local function frame(model)
   local calls, restore = recording_screen()
   local rendered = 0
-  local ok = pcall(ui_motion.draw, model, function() rendered = rendered + 1 end)
+  local ok, err = pcall(ui_motion.draw, model, function() rendered = rendered + 1 end)
   restore()
-  assert(ok)
+  assert(ok, err)
   return calls, rendered
 end
 
@@ -148,5 +148,34 @@ function test_ui_motion_leaving_a_dial_or_roll_mid_motion_lets_the_screen_rest()
     local before = dirty()
     frame(vm("C02", 1)); frame(vm("C02", 1))
     luaunit.assert_equals(dirty(), before, "a resting screen asks for no more frames")
+  end)
+end
+
+-- A character keeping time redraws on its own tick (at most 12 a second), not
+-- every frame: full redraws must not crowd the sequencer on the norns.
+function test_ui_motion_characters_redraw_on_a_capped_tick_not_every_frame()
+  with_motion(2, function(dirty)
+    local saved_clock = clock
+    local runs, sleeps = {}, {}
+    clock = {run = function(f) local co = coroutine.create(f); runs[#runs + 1] = co; return co end,
+      sleep = function(t) sleeps[#sleeps + 1] = t; coroutine.yield() end}
+    local ok, err = pcall(function()
+      local dancing = {screen = "R01", selected = 1, layout = "focused", motion = {beat = 1.2},
+        fields = {{id = "a", value = "1"}}}
+      frame(dancing); frame(dancing)
+      while ui_motion.busy() do frame(dancing) end
+      local before = dirty()
+      frame(dancing)
+      luaunit.assert_equals(dirty(), before, "a dancing frame asks for no frame of its own")
+      luaunit.assert_equals(#runs, 1)
+      coroutine.resume(runs[1]); coroutine.resume(runs[1])
+      luaunit.assert_equals(sleeps[1], 1 / 12)
+      luaunit.assert_true(dirty() > before, "the tick asks for the next pose")
+      frame({screen = "C01", selected = 1, layout = "overview_masks"})
+      for _ = 1, 3 do coroutine.resume(runs[1]) end
+      luaunit.assert_equals(coroutine.status(runs[1]), "dead")
+    end)
+    clock = saved_clock
+    if not ok then error(err, 0) end
   end)
 end

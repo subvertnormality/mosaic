@@ -28,13 +28,13 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "4397bd33b1cf8d7035ff63ec4695ef3d8c2d21191725557f0e2d74cdf6376b6f",
+ "manual_sha256": "b981b4d2120f5ae37ba3becb4b7256f91c94452bb18117924be9c6a71e535807",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "07f4a3d2d50a29f23d0f69b81ebc0b6e94a954e91ef69c773316a5872bcfd92f",
+ "inventory_sha256": "4bfe561f613061688f860a97ab3131b9a4248b26513edc34b3c4e71386d243f3",
  "counts": {
   "requirements": 171,
   "production_lua_modules": 161,
-  "unit_integration_files": 120,
+  "unit_integration_files": 121,
   "domains": 17
  },
  "coverage_language": {
@@ -432,6 +432,7 @@
     "lib/tests/lib/channel_edit_page_ui_mutation_killers_tests.lua",
     "lib/tests/lib/grid_controls_tests.lua",
     "lib/tests/lib/grid_input_tests.lua",
+    "lib/tests/lib/optional_config_equivalence_tests.lua",
     "lib/tests/lib/ui_adapters_assignment_tests.lua",
     "lib/tests/lib/ui_adapters_clock_tests.lua",
     "lib/tests/lib/ui_adapters_confirmation_tests.lua",

@@ -359,13 +359,37 @@ local function notify_outcome(phase, x, y, page_before, extra)
   if flow_id then ui_live.grid_outcome(flow_id, payload) end
 end
 
+-- The steps the held keys address, in each page's own layout: rows 4..7 are
+-- steps 1..64 on the Channel, Scale and Trig pages; on the Note and Velocity
+-- pages each column's fader (rows 1..7) is a step of the page shown (1-16 ..
+-- 49-64). Other keys hold no step.
+local function held_steps_for_page()
+  local page = program.get_selected_page()
+  local steps = {}
+  local fader_page = (page == pages.pages.note_edit_page and note_edit_page)
+    or (page == pages.pages.velocity_edit_page and velocity_edit_page) or nil
+  for _, key in ipairs(pressed_keys) do
+    if fader_page then
+      if key[2] >= 1 and key[2] <= 7 then
+        local step = (fader_page.get_step_offset and fader_page.get_step_offset() or 0) + key[1]
+        local seen = false
+        for _, s in ipairs(steps) do if s == step then seen = true end end
+        if not seen then steps[#steps + 1] = step end
+      end
+    elseif page == pages.pages.channel_edit_page or page == pages.pages.scale_edit_page
+      or page == pages.pages.trigger_edit_page then
+      if key[2] >= 4 and key[2] <= 7 then steps[#steps + 1] = fn.calc_grid_count(key[1], key[2]) end
+    end
+  end
+  return steps
+end
+
+-- The steps the held keys address on the current page (read only).
+function m_grid.held_steps() return held_steps_for_page() end
+
 local function notify_hold()
   if not ui_live or not ui_live.installed or not ui_live.installed() then return end
-  local steps = {}
-  for _, key in ipairs(pressed_keys) do
-    if key[2] >= 4 and key[2] <= 7 then steps[#steps + 1] = fn.calc_grid_count(key[1], key[2]) end
-  end
-  ui_live.grid_hold(steps)
+  ui_live.grid_hold(held_steps_for_page())
 end
 
 local function algorithm()

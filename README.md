@@ -1401,7 +1401,7 @@ latest applied request active for the next start.
 
 ![Merge Shape Foundation rhythm settings on Norns](images/merge-shape-foundation.png)
 
-Mode Off uses the saved legacy Skip, Only or All trig merge. Foundation selects
+Mode Off uses the saved legacy Skip, Only or All trig merge. While Foundation is on it decides the channel's trigs instead: the Merge modes screen shows the trig mode as `SHAPE (ONLY)` and the grid trig merge button's tooltip says Merge Shape is in use; the saved trig mode applies again when Merge Shape is off. Note, velocity and length merge modes still apply. Foundation selects
 one assigned pattern as the protected Anchor. Other assigned trig patterns offer
 candidate additions at non-anchor steps; overlaps remain one anchor. Amount
 admits a deterministic, seed-ranked subset, Accent scales addition velocity, and

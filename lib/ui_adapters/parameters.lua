@@ -42,6 +42,12 @@ local function dial_text(dial)
   return tostring(fn.clean_number(value)), "set"
 end
 
+local function cell_label(dial)
+  local top, bottom = tostring(dial.top_label or ""), tostring(dial.bottom_label or "")
+  local label = bottom ~= "" and (top .. " " .. bottom) or top
+  return fn and fn.title_case and fn.title_case(label) or label
+end
+
 return function(ui_adapters, owners)
   local controller = owners.parameters
   local m_params = owners.m_params
@@ -82,7 +88,9 @@ return function(ui_adapters, owners)
       descriptors[#descriptors + 1] = {
         id = channel_edit_parameters.slot_field_id(n),
         label = (lock_param.name and lock_param.name ~= "") and lock_param.name or tostring(dial.top_label),
-        short_label = tostring(dial.top_label),
+        -- Both parts of the dial's name, as the old dial drew them on two lines
+        -- ("Filter Cutoff"); the cell scrolls it when too narrow.
+        short_label = cell_label(dial),
         kind = "value",
         value = text,
         repeat_key = "slot_<n>",

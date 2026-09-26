@@ -17,7 +17,16 @@ end
 
 function transaction.validate(song,snapshot)
   if type(snapshot)~="table"or type(snapshot.channels)~="table"then return nil,"optional configuration snapshot"end
-  local shadow=copy(song);shadow.voicing=copy(snapshot.voicing)
+  -- Validation only reads, so the shadow shares everything but the optional
+  -- configuration under test: shallow song and channel tables with that
+  -- configuration copied in. (A deep copy of the whole song, patterns and locks
+  -- included, made every apply stall the sequencer on the norns.)
+  local shadow={}
+  for key,value in pairs(song)do shadow[key]=value end
+  shadow.voicing=copy(snapshot.voicing);shadow.channels={}
+  for number,channel in pairs(song.channels or{})do
+    local c={};for key,value in pairs(channel)do c[key]=value end;shadow.channels[number]=c
+  end
   for number=1,16 do
     if type(snapshot.channels[number])~="table"then return nil,"channel "..number.." optional configuration"end
     shadow.channels[number].voicing=copy(snapshot.channels[number].voicing)
@@ -33,13 +42,32 @@ function transaction.validate(song,snapshot)
   return true
 end
 
-local function changed(left,right)
-  local function encode(value)
-    if type(value)~="table"then return tostring(value)end;local keys={};for key in pairs(value)do keys[#keys+1]=key end
-    table.sort(keys,function(a,b)return tostring(a)<tostring(b)end);local out={"{"};for _,key in ipairs(keys)do out[#out+1]=tostring(key);out[#out+1]="=";out[#out+1]=encode(value[key]);out[#out+1]=";"end;out[#out+1]="}";return table.concat(out)
-  end
-  return encode(left)~=encode(right)
+local function encode(value)
+  if type(value)~="table"then return tostring(value)end;local keys={};for key in pairs(value)do keys[#keys+1]=key end
+  table.sort(keys,function(a,b)return tostring(a)<tostring(b)end);local out={"{"};for _,key in ipairs(keys)do out[#out+1]=tostring(key);out[#out+1]="=";out[#out+1]=encode(value[key]);out[#out+1]=";"end;out[#out+1]="}";return table.concat(out)
 end
+-- Values compare as their encodings do (keys and scalars by tostring), but
+-- walked directly: serialising and sorting whole tables on every apply stalled
+-- the sequencer on the norns. Keys that print alike fall back to the encoding.
+local function same(left,right)
+  local lt,rt=type(left)=="table",type(right)=="table"
+  if not lt and not rt then return tostring(left)==tostring(right)end
+  if lt~=rt then return encode(left)==encode(right)end
+  if left==right then return true end
+  local keyed,count={},0
+  for key,value in pairs(left)do
+    local name=tostring(key);if keyed[name]~=nil then return encode(left)==encode(right)end
+    keyed[name]=value;count=count+1
+  end
+  local seen,seen_count={},0
+  for key,value in pairs(right)do
+    local name=tostring(key);if seen[name]then return encode(left)==encode(right)end
+    seen[name]=true;seen_count=seen_count+1
+    local mine=keyed[name];if mine==nil or not same(mine,value)then return false end
+  end
+  return seen_count==count
+end
+local function changed(left,right)return not same(left,right)end
 transaction.equivalent=function(left,right)return not changed(left,right)end
 
 -- Apply only the paths this transaction originally changed.  A later edit on

@@ -339,6 +339,20 @@ function test_ui_adapters_read_only_c09_e3_steps_merge_modes_through_the_channel
   end)
 end
 
+-- Merge Shape (Foundation) decides the trigs; Merge modes says so (owner
+-- question 26 September 2026) and keeps the saved mode for when it is off.
+function test_ui_adapters_read_only_c09_trig_mode_names_merge_shape_when_it_decides_the_trigs()
+  model_env(function(env)
+    local channel = program.get_selected_channel()
+    channel.trig_merge_mode = "only"
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "ONLY")
+    channel.musical_merge = {schema_version = 1, mode = "foundation"}
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "SHAPE (ONLY)")
+    channel.musical_merge = {schema_version = 1, mode = "off"}
+    luaunit.assert_equals(values(env.adapter:describe("C09", "C09", target("C09"))).trig_mode, "ONLY")
+  end)
+end
+
 -- field_contracts.viewer ----------------------------------------------------------
 
 local function viewer_parity(context, page_key, route)

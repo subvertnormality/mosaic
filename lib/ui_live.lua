@@ -92,6 +92,8 @@ end
 -- Target ---------------------------------------------------------------------------
 
 local function held_steps()
+  -- The page's own step layout (m_grid.held_steps: note/velocity faders too).
+  if m_grid.held_steps then return m_grid.held_steps() end
   local steps = {}
   local keys = m_grid.get_pressed_keys and m_grid.get_pressed_keys() or {}
   for _, key in ipairs(keys) do
@@ -618,6 +620,21 @@ function ui_live.grid_outcome(flow_id, extra)
   local field_id = payload.field_id or FLOW_FIELD[flow_id]
   if type(field_id) == "function" then field_id = field_id(payload) end
   dispatch("grid.outcome", payload)
+  -- A channel select keeps the screen (G05 retains). Merge Shape and Harmony
+  -- are per-channel editors: reopen the editor, at its first screen, for the
+  -- newly selected channel (the grid press has already left the old draft).
+  if flow_id == "G05" then
+    local shown = spec.screens[router.state.screen]
+    if shown and (shown.provider == "merge" or shown.provider == "harmony") and shown.context ~= nil then
+      local editor = feature_editor(shown.provider)
+      if editor then
+        editor:enter()
+        router.state.screen = shown.provider == "merge" and "M02" or "H01"
+        router.state.return_stack = {}
+        after_event()
+      end
+    end
+  end
   local screen_id = router.state.screen
   if field_id and screen_id then
     for _, d in ipairs(describe()) do

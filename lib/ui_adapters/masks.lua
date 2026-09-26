@@ -42,7 +42,9 @@ return function(ui_adapters, owners)
       descriptors[#descriptors + 1] = {
         id = field.id,
         label = field.label,
-        short_label = selector.name,
+        -- The whole name in the cell (it scrolls when the cell is too narrow):
+        -- "Velocity", "Chord 1", not "Vel" / "Chd1" (owner request 26 September 2026).
+        short_label = field.label,
         kind = "value",
         value = selector.view_transform_func(raw),
         selected = selector:is_selected(),

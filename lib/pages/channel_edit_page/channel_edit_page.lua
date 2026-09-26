@@ -357,6 +357,12 @@ function channel_edit_page.register_press()
           )
         end
 
+        -- Merge Shape (Foundation) decides this channel's trigs: say so, the
+        -- saved mode applies again when Merge Shape is off.
+        if target_channel.musical_merge and target_channel.musical_merge.mode == "foundation" then
+          tooltip:show("Trig merge " .. target_channel.trig_merge_mode .. ": Merge Shape in use")
+        end
+
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
         channel_edit_page_ui.show_merge_gesture("TRIG " .. string.upper(target_channel.trig_merge_mode))

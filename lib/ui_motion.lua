@@ -81,6 +81,25 @@ end
 
 function ui_motion.marquee_phase() return marquee.phase end
 
+-- Characters keeping time (the Doctor, garden, choir, metronome) redraw on their
+-- own tick, at most ART_FPS a second, rather than every frame: a full-screen
+-- redraw is costly on the norns and must not crowd the sequencer while it plays.
+local ART_FPS = 12
+local art = {active = false, clock = nil}
+
+local function art_clock()
+  if art.clock or not (clock and clock.run and clock.sleep) then return end
+  art.clock = clock.run(function()
+    while art.active do
+      clock.sleep(1 / ART_FPS)
+      if art.active and fn and fn.dirty_screen then fn.dirty_screen(true) end
+    end
+    art.clock = nil
+  end)
+end
+
+function ui_motion.art_fps() return ART_FPS end
+
 function ui_motion.busy()
   return pop > 0 or blink > 0 or glide.frames > 0
     or (dial.target ~= nil and dial.shown ~= dial.target) or roll.frames > 0
@@ -149,6 +168,7 @@ end
 function ui_motion.draw(vm, render)
   if not ui_motion.enabled() then
     marquee.cut, marquee.next_move = false, nil
+    art.active = false
     pop, blink, glide.frames = 0, 0, 0
     dial.shown, dial.target, roll.frames = nil, nil, 0
     vm.pose, vm.motion = 0, nil
@@ -198,8 +218,10 @@ function ui_motion.draw(vm, render)
   marquee.cut = type(report) == "table" and report.cut == true
   marquee.next_move = marquee.cut and report.next_move or nil
   if marquee.cut then marquee_clock() end
-  -- A character keeping time asks for frames for as long as it moves.
-  local moving = ui_motion.busy() or vm.motion ~= nil
+  -- A character keeping time is redrawn by the art tick while it moves.
+  art.active = vm.motion ~= nil
+  if art.active then art_clock() end
+  local moving = ui_motion.busy()
   if glide.frames > 0 then draw_glide(); glide.frames = glide.frames - 1 end
   draw_mark(pop > 0)
   if pop > 0 then pop = pop - 1 end
