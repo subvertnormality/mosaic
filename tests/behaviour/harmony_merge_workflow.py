@@ -137,7 +137,8 @@ def pattern_harmony_independent_clocks_workflow(c):
 
     # Route Channel 2 to MIDI channel 2, select Pattern 2, and set its public
     # channel clock from /1 to /2. Channel 1 remains /1. The Channel button
-    # returns to the remembered edit family, so Device opens through Tasks.
+    # returns to the remembered edit family (a grid select keeps it), so
+    # Device opens through Tasks.
     c.ui.select_channel(2); c.ui.channel_page("midi_config", channel=2)
     c.ui.expect_header("midi_config", channel=2)
     c.ui.set_value(1); c.ui.turn(2, 1); c.ui.set_value(1); c.ui.press_key(3)
@@ -160,8 +161,8 @@ def pattern_harmony_independent_clocks_workflow(c):
     c.ui.expect_header("harmony_register", channel=2)
     c.ui.select_row("high", 2); c.ui.set_value(-5); c.ui.press_key(3)
     c.ui.feature_root(); c.ui.expect_header("harmony", channel=2)
-    # A grid channel select returns to the edit family; reopen Harmony.
-    c.ui.select_channel(1); c.ui.channel_page("harmony", channel=1)
+    # A grid channel select on Voice leading opens it (H01) for channel 1 (G05).
+    c.ui.select_channel(1)
     c.ui.expect_header("harmony", channel=1)
     c.ui.select_row("mode", 0); c.ui.set_value(2); c.ui.select_row("tone_map", 3)
     c.ui.press_key(3); c.ui.expect_header("harmony_tone_map", channel=1)

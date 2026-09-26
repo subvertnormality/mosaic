@@ -208,16 +208,30 @@ def live_scope(scope="channel", channel=1, song_slot=1, held=(), slot=1, pattern
     return " ".join(parts)
 
 
-# Masks overview cells: (1-based cell, short label as the owner's selector names it).
+# Masks overview cells: (1-based cell, the whole mask name the cell shows; it
+# scrolls when the cell is too narrow; owner request 26 September 2026, was
+# "Vel", "Len", "Chd1" .. "Chd4").
 OVERVIEW_CELLS = {
-    "trig": (1, "Trig"), "note": (2, "Note"), "velocity": (3, "Vel"), "length": (4, "Len"),
-    "chord_1": (5, "Chd1"), "chord_2": (6, "Chd2"), "chord_3": (7, "Chd3"), "chord_4": (8, "Chd4"),
+    "trig": (1, "Trig"), "note": (2, "Note"), "velocity": (3, "Velocity"), "length": (4, "Length"),
+    "chord_1": (5, "Chord 1"), "chord_2": (6, "Chord 2"), "chord_3": (7, "Chord 3"), "chord_4": (8, "Chord 4"),
 }
 # Masks full labels, shown on the selected field's value line (channel_edit_masks.fields).
 MASK_LABELS = {
     "trig": "Trig", "note": "Note", "velocity": "Velocity", "length": "Length",
     "chord_1": "Chord 1", "chord_2": "Chord 2", "chord_3": "Chord 3", "chord_4": "Chord 4",
 }
+
+
+
+def trig_param_cell_label(top, bottom=""):
+    """A Trig params overview cell's label (lib/ui_adapters/parameters.lua
+    cell_label): both parts of the parameter's short name, as the old dial drew
+    them on two lines, title-cased like fn.title_case ("CC1" -> "Cc1",
+    "QUAN" + "NOTE" -> "Quan Note"); owner request 26 September 2026."""
+    import re
+    label = "%s %s" % (top, bottom) if bottom else str(top)
+    return re.sub(r"([A-Za-z])([A-Za-z0-9_']*)", lambda m: m.group(1).upper() + m.group(2).lower(), label)
+
 
 # C06 OUTPUT (Note Dashboard) rows in descriptor order with their labels
 # (lib/ui_adapters/read_only.lua readers.C06). A dashboard: every row shows at

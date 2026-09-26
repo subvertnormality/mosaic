@@ -377,3 +377,167 @@ def live_ui_merge_modes(c):
     ui.tap_control('trig_merge_mode')
     trig_mode('SKIP')
     c.results.append(dict(kind='live-ui-merge-modes-summary', passed=True))
+
+
+# ---------------------------------------------------------------------------------------------
+# Owner feedback from the device, 26 September 2026.
+
+CHANNEL_ROW = [(x, 1) for x in range(1, 17)]
+
+
+def _selected_channel_leds(c, channel):
+    """The channel row lights exactly the selected channel (15), every other at 2."""
+    c.led_values(CHANNEL_ROW, [15 if x == channel else 2 for x in range(1, 17)])
+
+
+def live_ui_channel_select(c):
+    """README Norns Menu Navigation (a grid channel select keeps the norns screen, which
+    follows the new channel): Device and Clock stay with the new channel's scope and its own
+    values, never jumping to Masks or Trig params; Harmony and Merge Shape reopen their
+    editor root (Voice leading, Merge Shape) for the new channel, even from a child screen."""
+    ui = c.ui
+    c.configure()  # ends on Device (C05) for channel 1, which drives the configured CC Device
+    ui.expect_header('midi_config', channel=1)
+    ui.expect_selected_field('detail', 'Device', 'CC Device')
+    # Device: channel 2 has no device; the screen stays Device and shows channel 2's.
+    ui.select_channel(2)
+    ui.expect_header('midi_config', channel=2)
+    ui.expect_selected_field('detail', 'Device', 'None')
+    _selected_channel_leds(c, 2)
+    ui.select_channel(1)
+    ui.expect_header('midi_config', channel=1)
+    ui.expect_selected_field('detail', 'Device', 'CC Device')
+    c.results.append(dict(kind='channel-select-keeps-device', passed=True))
+    # Clock: set channel 2's rate from the Clock screen it stayed on, then each select shows
+    # the selected channel's own rate on the same screen.
+    ui.channel_page('clock_mods', channel=1)
+    ui.expect_selected_field('focused', 'Rate', '/1', art=True)
+    ui.select_channel(2)
+    ui.expect_header('clock_mods', channel=2)
+    ui.expect_selected_field('focused', 'Rate', '/1', art=True)
+    ui.set_value(-2); ui.press_key(3)
+    ui.expect_selected_field('focused', 'Rate', '/2', art=True)
+    ui.select_channel(1)
+    ui.expect_header('clock_mods', channel=1)
+    ui.expect_selected_field('focused', 'Rate', '/1', art=True)
+    _selected_channel_leds(c, 1)
+    ui.select_channel(2)
+    ui.expect_header('clock_mods', channel=2)
+    ui.expect_selected_field('focused', 'Rate', '/2', art=True)
+    c.results.append(dict(kind='channel-select-keeps-clock', passed=True))
+    # Harmony: from its Register child on channel 2, a select shows Voice leading (H01) for
+    # channel 1; from the root the same.
+    ui.channel_page('harmony', channel=2)
+    ui.select_row('register', 3); ui.press_key(3)
+    ui.expect_header('harmony_register', channel=2)
+    ui.select_channel(1)
+    ui.expect_header('harmony', channel=1)
+    ui.select_channel(2)
+    ui.expect_header('harmony', channel=2)
+    c.results.append(dict(kind='channel-select-reopens-voice-leading', passed=True))
+    # Merge Shape: from its Rhythm child on channel 2, a select shows Merge Shape (M02) for
+    # channel 1.
+    ui.channel_page('merge_shape', channel=2)
+    ui.select_row('rhythm', 1); ui.press_key(3)
+    ui.expect_header('merge_rhythm', channel=2)
+    ui.select_channel(1)
+    ui.expect_header('merge_shape', channel=1)
+    _selected_channel_leds(c, 1)
+    c.results.append(dict(kind='channel-select-reopens-merge-shape', passed=True))
+    c.results.append(dict(kind='live-ui-channel-select-summary', passed=True))
+
+
+def _note_page_buttons(c, page):
+    """Pattern Note/Velocity page buttons (9..12, 8): the page shown at 15, the others at 3."""
+    c.led_values([(8 + k, 8) for k in range(1, 5)], [15 if k == page else 3 for k in range(1, 5)])
+
+
+def live_ui_note_page_step(c):
+    """README Adding Notes / Adding Velocity: on the Pattern Note and Velocity pages a held
+    fader key is the step it edits on the 16-step page shown: column 6 on page 49-64 is step 54
+    (header ST54, cell 54 outlined), not the channel-page position 22; the edit lands on step
+    54 and the grid stays on page 49-64."""
+    ui = c.ui
+    ui.pattern_editor('trigger')
+    ui.expect_header('trigger_editor')
+    ui.pattern_editor('note', from_view='trigger')
+    ui.expect_header('note_editor')
+    ui.select_pattern_note_page(4)
+    _note_page_buttons(c, 4)
+    with ui.hold_control('pattern_note_fader', (6, 5)):
+        ui.expect_header('note_editor', held=(54,))
+        ui.expect_outlined_step(54)
+    ui.expect_header('note_editor')
+    # The press set step 54 (row 5 at offset 7: value 12, note 14 - 12); the screen shows the
+    # held step's scope while held and the edit's tooltip after the release.
+    _expect_footer(c, 'Step 54 note set to 2')
+    # A tap sets step 54's note (row 3: value 10, note 4); the fader and page stay on 49-64.
+    ui.tap_control('pattern_note_fader', (6, 3))
+    _expect_footer(c, 'Step 54 note set to 4')
+    c.led_values([(6, y) for y in (3, 5)], [12, 1])
+    _note_page_buttons(c, 4)
+    c.results.append(dict(kind='note-page-held-step', step=54, passed=True))
+    # Velocity keeps its own page (1-16) until page 4 is chosen; then column 6 is step 54 too.
+    ui.pattern_editor('velocity', from_view='note')
+    ui.expect_header('velocity_editor')
+    ui.select_pattern_note_page(4)
+    _note_page_buttons(c, 4)
+    with ui.hold_control('pattern_note_fader', (6, 5)):
+        ui.expect_header('velocity_editor', held=(54,))
+        ui.expect_outlined_step(54)
+    ui.expect_header('velocity_editor')
+    _note_page_buttons(c, 4)
+    c.results.append(dict(kind='velocity-page-held-step', step=54, passed=True))
+    c.results.append(dict(kind='live-ui-note-page-step-summary', passed=True))
+
+
+# Foundation (contract.foundation_workflow.setup_foundation): pattern 1 plays C4 D4 E4 F4 on
+# steps 1-4 (127/117/107/97), pattern 2 has trigs on steps 5 and 7 (note 0 = C4, velocity 100),
+# loop 1-8. Merge Shape's additions at 5 and 7 carry its Add accent 70; the legacy All merge
+# plays pattern 2's own velocity 100 there.
+_SHAPE_PHRASE = [(1, [144, n, v]) for n, v in ((60, 127), (62, 117), (64, 107), (65, 97), (60, 70), (60, 70))]
+_ALL_PHRASE = [(1, [144, n, v]) for n, v in ((60, 127), (62, 117), (64, 107), (65, 97), (60, 100), (60, 100))]
+
+
+def live_ui_merge_shape_trig_mode(c):
+    """README Merge Shape: while Foundation is on it decides the channel's trigs; Merge modes
+    shows the trig mode as SHAPE (<mode>) and the trig merge button's tooltip says Merge Shape
+    is in use; the saved trig mode applies again when Merge Shape is off."""
+    from contract.foundation_workflow import setup_foundation
+    ui = c.ui
+    setup_foundation(c)  # Foundation applied through the Merge Shape editor (M02 -> M03 -> K3)
+    ui.tap_control('channel_editor')
+    ui.open_channel_task('merge')
+    ui.expect_header('merge_detail', channel=1)
+    c.enc(2, -6); c.enc(2, 1)
+    ui.expect_selected_field('detail', 'Trig mode', 'SHAPE (SKIP)')
+    c.key(2)
+    for mode, value, led in (('only', 'ONLY', 5), ('all', 'ALL', 8)):
+        ui.expect_header('masks', channel=1)
+        ui.tap_control('trig_merge_mode')
+        ui.expect_header('merge_detail', channel=1)
+        ui.expect_selected_field('detail', 'Trig mode', 'SHAPE (%s)' % value)
+        _expect_footer(c, 'Trig merge %s: Merge Shape in use' % mode)
+        c.led_values([(14, 8)], [led])
+        c.results.append(dict(kind='shape-trig-mode', value=value, passed=True))
+        c.key(2)
+    # Merge Shape still decides the trigs with the saved mode at All.
+    c.playback(_SHAPE_PHRASE, cycles=2)
+    # Mode Off on Merge Shape (applied): the saved All applies and reads plainly.
+    ui.channel_page('merge_shape', channel=1)
+    ui.select_row('mode', 0)
+    ui.set_value(-1)
+    ui.expect_selected_field('focused', 'Mode', 'OFF', art=True)
+    ui.press_key(3)
+    ui.open_channel_task('merge')
+    ui.expect_header('merge_detail', channel=1)
+    c.enc(2, -6); c.enc(2, 1)
+    ui.expect_selected_field('detail', 'Trig mode', 'ALL')
+    c.playback(_ALL_PHRASE, cycles=2)
+    c.key(2)
+    ui.expect_header('masks', channel=1)
+    ui.tap_control('trig_merge_mode')
+    ui.expect_selected_field('detail', 'Trig mode', 'SKIP')
+    _expect_footer(c, 'Skip trig merge mode')
+    c.led_values([(14, 8)], [2])
+    c.results.append(dict(kind='live-ui-merge-shape-trig-mode-summary', passed=True))

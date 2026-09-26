@@ -16,6 +16,7 @@ import base64
 
 from midi_window import MidiWindow
 from frame_oracle import any_marquee_phase
+from ui_map import trig_param_cell_label
 
 # configure(): steps 1-4 play C4 D4 E4 F4 at velocities 127/117/107/97 on port 1, MIDI channel 1.
 PHRASE = ((60, 127), (62, 117), (64, 107), (65, 97))
@@ -89,7 +90,13 @@ def _overview_selection(state, layout, cells, selected):
     return True
 
 
-MASK_LABELS = ('Trig', 'Note', 'Vel', 'Len', 'Chd1', 'Chd2', 'Chd3', 'Chd4')
+# Each Masks cell names its whole mask (owner request 26 September 2026; it scrolls when the
+# cell is too narrow, which _overview_selection follows on the shared marquee phase).
+MASK_LABELS = ('Trig', 'Note', 'Velocity', 'Length', 'Chord 1', 'Chord 2', 'Chord 3', 'Chord 4')
+# A Trig params cell names both parts of the parameter's short name, title-cased (CC 1's
+# descriptors are "CC1" and ""): ui_map.trig_param_cell_label.
+CC1_CELL = trig_param_cell_label('CC1')
+NONE_CELL = trig_param_cell_label('None')
 
 
 def _expect_masks(c, values, selected, label, value, stage):
@@ -258,7 +265,7 @@ def ui_accept_a01(c):
     c.key(3)
     ui.expect_header('trig_locks', channel=1)
     c.enc(2, -12); c.enc(2, 2)
-    slots = [('None', 'X')] * 10
+    slots = [(NONE_CELL, 'X')] * 10
     _expect_params(c, slots, 3, 'None', 'X', 'c02-select-slot3')
     # E1 positive (one detent) at C02 opens the list on Trig params; K3 goes straight back.
     c.enc(1, 1)
@@ -391,15 +398,15 @@ def ui_accept_a02(c):
     c.enc(2, -12)
     ui.assign_trig_parameter('CC 1')
     ui.expect_header('trig_locks', channel=1)
-    none = [('None', 'X')] * 9
-    _expect_params(c, [('CC1', 'X')] + none, 1, 'CC 1', 'X', 'cc1-assigned')
+    none = [(NONE_CELL, 'X')] * 9
+    _expect_params(c, [(CC1_CELL, 'X')] + none, 1, 'CC 1', 'X', 'cc1-assigned')
     for step, value in ((1, '10'), (3, '20'), (64, '30')):
         with ui.hold_step(step):
             ui.expect_header('trig_locks', channel=1, held=(step,))
             _set_lock(c, int(value))
             # 'L' at once: a lock made while the step is held is that step's lock even
             # before release commits its history portion (recorder.add_trig_lock_event_portion).
-            _expect_params(c, [('CC1', value, 'L')] + none, 1, 'CC 1', value, 'cc-lock-step%d' % step)
+            _expect_params(c, [(CC1_CELL, value, 'L')] + none, 1, 'CC 1', value, 'cc-lock-step%d' % step)
     ui.expect_header('trig_locks', channel=1)
 
     def heard(stage, step_ccs):
@@ -419,19 +426,19 @@ def ui_accept_a02(c):
     try:
         ui.expect_header('trig_locks', channel=1, held=(1, 64))
         _shift_key(c, 2)
-        _expect_params(c, [('CC1', 'X')] + none, 1, 'CC 1', 'X', 'held-cc-cleared')
+        _expect_params(c, [(CC1_CELL, 'X')] + none, 1, 'CC 1', 'X', 'held-cc-cleared')
         # Release order two: 1 first, 64 still held.
         _release(c, 1)
         ui.expect_header('trig_locks', channel=1, held=(64,))
-        _expect_params(c, [('CC1', 'X')] + none, 1, 'CC 1', 'X', 'step64-cc-cleared')
+        _expect_params(c, [(CC1_CELL, 'X')] + none, 1, 'CC 1', 'X', 'step64-cc-cleared')
     finally:
         _release(c, 1, 64)
     ui.expect_header('trig_locks', channel=1)
-    _expect_params(c, [('CC1', 'X')] + none, 1, 'CC 1', 'X', 'cc-default-still-off')
+    _expect_params(c, [(CC1_CELL, 'X')] + none, 1, 'CC 1', 'X', 'cc-default-still-off')
     c.led_values(_step_cells(), range_leds)
     with ui.hold_step(3):
         # 'L': the held step has a (committed) lock in this slot.
-        _expect_params(c, [('CC1', '20', 'L')] + none, 1, 'CC 1', '20', 'unheld-cc-lock-kept')
+        _expect_params(c, [(CC1_CELL, '20', 'L')] + none, 1, 'CC 1', '20', 'unheld-cc-lock-kept')
     heard('after-held-cc-clear', [None, None, 20, None])
     # The Masks channel default and the unheld step-2 mask survived the Trig params clear.
     ui.channel_page('masks')
@@ -451,7 +458,7 @@ def ui_accept_a03(c):
     ui.tap_control('channel_editor')
     ui.channel_page('trig_locks')
     c.enc(2, -12); c.enc(2, 1)
-    none10 = [('None', 'X')] * 10
+    none10 = [(NONE_CELL, 'X')] * 10
     _expect_params(c, none10, 2, 'None', 'X', 'target-slot2')
     c.key(2)
     ui.expect_header('assignment', channel=1)
@@ -477,7 +484,7 @@ def ui_accept_a03(c):
     _expect_detail(c, 'CC 2', '', 'browse-after-apply')
     c.key(2)
     ui.expect_header('trig_locks', channel=1)
-    slots = [('None', 'X'), ('CC1', 'X')] + [('None', 'X')] * 8
+    slots = [(NONE_CELL, 'X'), (CC1_CELL, 'X')] + [(NONE_CELL, 'X')] * 8
     _expect_params(c, slots, 2, 'CC 1', 'X', 'applied-to-slot2-browse-discarded')
     # Off policy: an assigned CC with default X sends no CC at all.
     window = _play_window(c, 9)
@@ -488,15 +495,15 @@ def ui_accept_a03(c):
     with ui.hold_step(1):
         ui.expect_header('trig_locks', channel=1, held=(1,))
         _set_lock(c, 10)
-        slots[1] = ('CC1', '10', 'L')  # the held step's lock, shown at once (see A02)
+        slots[1] = (CC1_CELL, '10', 'L')  # the held step's lock, shown at once (see A02)
         _expect_params(c, slots, 2, 'CC 1', '10', 'step1-lock')
         c.key(3)
         ui.expect_header('trig_locks', channel=1, held=(1,))
-        slots[1] = ('CC1', '10', 'S')  # the held step now slides (S takes the corner from L)
+        slots[1] = (CC1_CELL, '10', 'S')  # the held step now slides (S takes the corner from L)
         _expect_params(c, slots, 2, 'CC 1', '10', 'step1-slide-keeps-value')
     with ui.hold_step(3):
         _set_lock(c, 40)
-        slots[1] = ('CC1', '40', 'L')  # the held step's new lock, no slide of its own: L
+        slots[1] = (CC1_CELL, '40', 'L')  # the held step's new lock, no slide of its own: L
         _expect_params(c, slots, 2, 'CC 1', '40', 'step3-lock')
     ui.expect_header('trig_locks', channel=1)
     window = _play_window(c, 9)
@@ -515,7 +522,7 @@ def ui_accept_a03(c):
         assert four == [(144, 65, 97)], cycle
     c.results.append(dict(kind='cc-slide', cycles=cycles, passed=True))
     # The slide never moved the assignment: slot 1 is still unassigned, slot 2 still CC 1.
-    slots[1] = ('CC1', 'X')
+    slots[1] = (CC1_CELL, 'X')
     _expect_params(c, slots, 2, 'CC 1', 'X', 'slot-assignment-kept')
     c.results.append(dict(kind='a03-summary', passed=True))
 

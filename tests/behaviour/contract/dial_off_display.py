@@ -18,6 +18,9 @@ screen has no bar and keeps showing the number, so the settled check reads '0'. 
 observations are recorded before the assertions run.
 """
 
+from ui_map import trig_param_cell_label
+
+
 def dial_value(c, slot, label, selected, short_label=None, candidates=('X', '0', '-1')):
     """The slot's shown value on the live Trig params overview (C02), read
     exactly: the selected slot on the full value line beside its parameter
@@ -84,7 +87,7 @@ def dial_off_display(c):
     check('CCdefault settled at Off', dial_value(c, 3, 'CCdefault', True), 'X', 'README 546 "default -1" + human decision S62')
 
     # The other dials keep their display once deselected; the parameters stay Off.
-    check('Control 1 still Off when deselected', dial_value(c, 1, 'Control 1', False, short_label='CC'), 'X', 'README 546 + human decision S20')
+    check('Control 1 still Off when deselected', dial_value(c, 1, 'Control 1', False, short_label=trig_param_cell_label('CC', '1')), 'X', 'README 546 + human decision S20')
     notes, cc = play_cycle(c)
     check('Both Off: notes play and no CC1 is sent', (notes > 0, cc), (True, []), 'README 546, 761')
 

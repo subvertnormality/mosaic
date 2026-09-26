@@ -39,7 +39,7 @@ def midi_mapping(c):
     try:
         e.configure()
         # Channel 2 on port 2 / MIDI channel 2 playing pattern 1 over steps 1-4.
-        # The live grid channel select returns to the Channel family; reopen Device (C05).
+        # configure() ends on Device (C05); a grid channel select keeps it for channel 2 (G05).
         e.ui.select_channel_on_page(2,'midi_config');e.ui.set_value(1);e.ui.turn(2,1);e.ui.set_value(1);e.ui.turn(2,1);e.ui.set_value(1);e.ui.press_key(3)
         e.ui.tap_control('pattern_slot',1);e.ui.set_range(1,4);e.ui.select_channel(1)
         def cc(number,value):e.action(type='midi',port=1,bytes=[176,number,value]);e.elapse(.2) # slower than the 0.15 s acceleration window

@@ -3263,3 +3263,57 @@ class MarqueeOracleTests(unittest.TestCase):
             return frame_oracle.fit(label, 60) == text
         self.assertTrue(shows(frames[-1]))
         self.assertFalse(shows("not the label"))
+
+
+class OwnerFeedback26SeptemberTests(unittest.TestCase):
+    """Owner feedback from the device, 26 September 2026: cell names, pattern-page steps."""
+
+    def test_trig_param_cell_label_joins_and_title_cases_like_the_adapter(self):
+        from ui_map import trig_param_cell_label
+        self.assertEqual(trig_param_cell_label("CC1"), "Cc1")
+        self.assertEqual(trig_param_cell_label("QUAN", "NOTE"), "Quan Note")
+        self.assertEqual(trig_param_cell_label("CC", "1"), "Cc 1")
+        self.assertEqual(trig_param_cell_label("None", ""), "None")
+        self.assertEqual(trig_param_cell_label("FILTER", "CUTOFF"), "Filter Cutoff")
+
+    def test_masks_cells_name_the_whole_mask(self):
+        from ui_map import MASK_LABELS, OVERVIEW_CELLS
+        self.assertEqual({field: label for field, (_, label) in OVERVIEW_CELLS.items()}, MASK_LABELS)
+
+    def _pattern_frame(self, outlined=(), extra=()):
+        pixels = bytearray(128 * 64 * 4)
+        from frame_oracle import _pattern_ring
+        for step in outlined:
+            for x, y in _pattern_ring(step):
+                pixels[(y * 128 + x) * 4:(y * 128 + x) * 4 + 3] = b"\xff\xff\xff"
+        for x, y in extra:
+            pixels[(y * 128 + x) * 4:(y * 128 + x) * 4 + 3] = b"\xff\xff\xff"
+        return {"frame": {"pixels_base64": base64.b64encode(bytes(pixels)).decode()}}
+
+    def test_pattern_outline_ring_is_the_native_stroke_of_cell_54(self):
+        from frame_oracle import _pattern_ring
+        ring = set(_pattern_ring(54))
+        # Cell 54 is column 6, fourth row: square (42, 48); ring x 40..46, y 46..52.
+        self.assertEqual(len(ring), 24)
+        self.assertEqual({x for x, _ in ring}, set(range(40, 47)))
+        self.assertEqual({y for _, y in ring}, set(range(46, 53)))
+        self.assertNotIn((42, 48), ring)
+
+    def test_pattern_outline_matches_exactly_one_outlined_cell(self):
+        from frame_oracle import pattern_outline_matches
+        self.assertTrue(pattern_outline_matches(self._pattern_frame((54,)), 54))
+        self.assertFalse(pattern_outline_matches(self._pattern_frame((54,)), 22))
+        self.assertFalse(pattern_outline_matches(self._pattern_frame((54, 22)), 54))
+        self.assertFalse(pattern_outline_matches(self._pattern_frame(()), 54))
+        # A partial ring is no outline; a lit square or playing mark is outside every ring.
+        self.assertFalse(pattern_outline_matches(self._pattern_frame((), extra=[(40, 46)]), 54))
+        self.assertTrue(pattern_outline_matches(self._pattern_frame((54,), extra=[(42, 48), (42, 53)]), 54))
+
+    def test_expect_outlined_step_waits_on_the_oracle_and_rejects_bad_steps(self):
+        from ui import Ui, UiMapError
+        driver = FakeDriver(states=[self._pattern_frame((54,))])
+        Ui(driver).expect_outlined_step(54)
+        self.assertEqual(driver.results[-1], dict(kind="pattern-outline", step=54, passed=True))
+        for bad in (0, 65, "54"):
+            with self.assertRaises(UiMapError):
+                Ui(FakeDriver()).expect_outlined_step(bad)
