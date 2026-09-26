@@ -23,7 +23,7 @@ def offset_range_rates(c):
     ui = c.ui
     ui.configure(); ui.set_range(2, 4); ui.song_editor()
     ui.tap_control('global_pattern_length', 2); ui.tap_control('global_pattern_length', 8); ui.menu('channel_editor')
-    ui.turn(1, -1); selected = 13
+    ui.channel_page('clock_mods'); selected = 13  # the old E1 -1 from Device reached Clocks
     for index, label, factor in [(8, 'x3', 1 / 3), (10, 'x2', .5),
                                  (13, '/1', 1), (15, '/2', 2), (17, '/3', 3)]:
         ui.turn(3, selected - index); ui.press_key(3); selected = index

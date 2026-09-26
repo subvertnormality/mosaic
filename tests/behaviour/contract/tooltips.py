@@ -5,7 +5,13 @@ implementation messages, pinned so a refactor cannot silently change them.
 """
 import base64,time
 
-REGION=[(y*128+x)*4+k for y in range(55,64) for x in range(128) for k in range(3)]
+# The live screen's footer line (lib/ui_render.lua: text at (1,63), level 9)
+# shows the tooltip while it lasts, then the screen's control hints again.
+REGION=[(y*128+x)*4+k for y in range(56,64) for x in range(128) for k in range(3)]
+# Focused screens name their neighbouring fields instead (left level 7, right
+# right-aligned at x127 level 10): Scale opens on its Scale field.
+HINTS={'scale':('< Root','Degree >'),'masks':'E2 MASK  E3 SET',
+       'trig_locks':'E2 SLOT  E3 SET  K2 ASSIGN','memory':'E3 MOVE  K2 UNDO  K3 REDO'}
 
 def tooltip_messages(c):
     from frame_oracle import render
@@ -13,12 +19,18 @@ def tooltip_messages(c):
     def now():return c.logical_ns if controlled else time.monotonic_ns()
     def bottom(state):
         pixels=base64.b64decode(state['frame']['pixels_base64']);return [pixels[i] for i in REGION]
+    def footer(text):
+        if isinstance(text,tuple):expected=render([(1,63,7,text[0]),((None,127),63,10,text[1])])
+        else:expected=render([(1,63,9,text)])
+        return [expected[i] for i in REGION]
     def tip(stage,text):
-        expected=render([(0,62,10,text)]);wanted=[expected[i] for i in REGION]
+        wanted=footer(text)
         c.wait(lambda s:bottom(s)==wanted)
         c.results.append(dict(kind='tooltip',stage=stage,text=text,passed=True))
-    def cleared(stage,shown_at):
-        c.wait(lambda s:not any(bottom(s)),timeout=5)
+    def cleared(stage,shown_at,screen):
+        # Cleared means the footer shows exactly the screen's own hints again.
+        wanted=footer(HINTS[screen])
+        c.wait(lambda s:bottom(s)==wanted,timeout=5)
         lifetime=(now()-shown_at)/1e9
         c.results.append(dict(kind='tooltip-cleared',stage=stage,measured_lifetime_seconds=round(lifetime,3),passed=True))
         return lifetime
@@ -29,20 +41,22 @@ def tooltip_messages(c):
     c.tap(1,1);tip('select-channel-1','Channel 1 selected')
     c.tap(2,8);tip('record-on','Recording started')
     c.tap(2,8);tip('record-off','Recording stopped')
-    c.enc(1,-2);c.screen_header('Ch. 1 Memory')
+    c.ui.channel_page('memory');c.screen_header('Ch. 1 Memory')
     c.key(3);tip('memory-apply','Ch. 1 memory applied')
     c.key(2);tip('memory-undo','Ch. 1 memory undone')
-    c.enc(1,2)
+    c.ui.channel_page('midi_config')
     # Expiry without input, measured from the last activation.
     c.tap(4,8);shown=now();tip('before-expiry','Scale Editor')
-    cleared('idle-expiry',shown)
+    cleared('idle-expiry',shown,'scale')
     # Replacement: an immediate second activation replaces the first and owns the expiry.
     c.tap(3,8);c.tap(2,1);shown=now();tip('replaced','Channel 2 selected')
-    cleared('replacement-expiry',shown)
+    # The Channel button shows the remembered family: Masks (Channel tasks opens straight
+    # from Masks, so Trig params was never shown).
+    cleared('replacement-expiry',shown,'masks')
     c.tap(1,1);tip('select-channel-1-again','Channel 1 selected')
     # While playing, transport tooltips appear and a later one still clears.
     c.tap(1,8);tip('play','Starting playback')
     c.tap(2,1);shown=now();tip('select-while-playing','Channel 2 selected')
-    cleared('playing-expiry',shown)
+    cleared('playing-expiry',shown,'masks')
     c.tap(1,1);c.tap(1,8);tip('stop','Stopping playback')
     c.wait(lambda s:not s['midi_capture']['outstanding'])

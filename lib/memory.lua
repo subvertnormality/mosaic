@@ -370,7 +370,8 @@ function memory.record_optional_config(song_pattern,affected,before,after,bounda
   end
   local transaction={type="optional_config",song_pattern=song_pattern,affected=affected_set,
     before=fn.deep_copy(before),after=fn.deep_copy(after),boundary=boundary or"channel",sequence=next_sequence(),applied=false}
-  ok,reason=optional_config_transaction.apply_transition(song,before,after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,transaction.boundary)
+  -- `after` was validated above: apply does not validate the same configuration again.
+  ok,reason=optional_config_transaction.apply_transition(song,before,after,m_clock and m_clock.is_playing and m_clock.is_playing()or false,transaction.boundary,true)
   if not ok then return nil,reason end
   transaction.applied=true;runtime_history().transactions[#runtime_history().transactions+1]=transaction
   return true

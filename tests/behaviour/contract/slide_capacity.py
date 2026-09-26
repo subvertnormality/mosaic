@@ -8,22 +8,20 @@ every channel 1 slide must still pass through an intermediate value. Characteris
 not manual text: slides are sampled every 1/36 s at 90 BPM (a 1/12 s ramp has two
 or more samples) and capacity is a fixed ring of 1024 actions.
 """
-import base64, json
+import json
 
 SLOTS = 9; WINDOW_S = 25
 
 
 def slide_capacity(c):
     from cases import assign_trig_parameter
-    from frame_oracle import render, header, matches
 
     def clock_rate(detents, label):
-        c.enc(1, 2); c.wait(lambda s: matches(s, header('Ch. %d Clocks' % channel, selected=4)))
+        c.ui.turn(1, 2); c.ui.wait_for_header('clock_mods', channel=channel)
         c.enc(3, detents); c.key(3)
-        expected = render([(0, 26, 15, label)])
-        pixels = [(y*128+x)*4+k for y in range(20, 30) for x in range(48) for k in range(3)]
-        c.wait(lambda s: all(base64.b64decode(s['frame']['pixels_base64'])[i] == expected[i] for i in pixels))
-        c.enc(1, -2)
+        # The live Clock screen (C04) shows its selected Rate field whole.
+        c.ui.expect_selected_field('focused', 'Rate', label)
+        c.ui.turn(1, -2)
 
     def lock(step, value):
         x, y = (step - 1) % 16 + 1, 4 + (step - 1) // 16
@@ -31,7 +29,7 @@ def slide_capacity(c):
         try: c.elapse(.05); c.action(type='enc', n=3, delta=-126); c.enc(3, value + 1)
         finally: c.action(type='grid', x=x, y=y, state=0)
 
-    c.configure(); c.enc(1, -3)
+    c.configure(); c.ui.turn(1, -3)
     channel = 1
     c.hold_tap((1, 4), (2, 4))                                    # channel 1 steps 1-2
     for slot in range(1, SLOTS + 1):
@@ -40,9 +38,10 @@ def slide_capacity(c):
         lock(1, 0); lock(2, 127); c.key(3)                        # global slide on for this slot
     clock_rate(3, 'x2')
     channel = 2
-    c.tap(2, 1); c.enc(1, 3); c.screen_header('Ch. 2 Device Config', selected=5)
+    # A channel tap lands on the remembered family, not the page it was made on; Device opens through Tasks.
+    c.ui.select_channel_on_page(2, 'midi_config'); c.screen_header('Ch. 2 Device Config', selected=5)
     c.enc(3, 1); c.key(3)                                         # the same device configure() gives channel 1
-    c.enc(1, -3); c.screen_header('Ch. 2 Trig Locks', selected=2); c.enc(2, -20)
+    c.ui.turn(1, -3); c.screen_header('Ch. 2 Trig Locks', selected=2); c.enc(2, -20)
     assign_trig_parameter(c, 'CC 20')                             # same MIDI channel as channel 1: a distinct CC
     lock(1, 0); lock(24, 127); c.key(3)
     clock_rate(-10, '/8')

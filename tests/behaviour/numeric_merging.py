@@ -522,12 +522,17 @@ def numeric_length_merge(c,variant=0,arp=False,strum=False,simultaneous=False,sa
             c.elapse(.3);c.ui.tap_control('velocity_merge_mode');c.ui.tap_control('velocity_merge_mode')
             c.ui.expect_leds({('velocity_merge_mode',None):'medium'})
         if strum:
-            c.ui.turn(1,-4);c.ui.turn(2,3);c.ui.set_value(2) # First chord mask from X: degree2, E64.
+            # The merge-mode gestures leave the live UI on Merge detail (C09), not on
+            # the Channel page they were made from; the Channel button leaves it and Note Masks opens through Tasks.
+            c.ui.leave_merge_detail();c.ui.channel_page('masks',confirm=False);c.ui.wait_for_header('masks',channel=1)
+            c.ui.turn(2,3);c.ui.set_value(2) # First chord mask from X: degree2, E64.
             c.ui.turn(1,1);c.ui.assign_trig_parameter('Chord Note Strum');c.ui.set_value(0 if simultaneous else 8)
             if same_pitch:
                 c.ui.turn(2,1);c.ui.assign_trig_parameter('Fixed Note');c.ui.set_value(65) # Fixed root E64 equals the chord E64.
         else:
-            c.ui.turn(1,-3);c.ui.assign_trig_parameter('Chord Note Arpeggio');c.ui.set_value(8)
+            # The Channel button leaves Merge detail (C09); Trig params opens through Tasks.
+            c.ui.leave_merge_detail();c.ui.channel_page('trig_locks',confirm=False);c.ui.wait_for_header('trig_locks',channel=1)
+            c.ui.assign_trig_parameter('Chord Note Arpeggio');c.ui.set_value(8)
         # Half-step ratchet selected, but nonpositive parent gate ends at onset.
         # Repeat transport to expose retained arp jobs and duplicate releases.
         for trial in range(2):
@@ -599,7 +604,10 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
     c.ui.tap_control('trig_merge_mode');c.ui.tap_control('trig_merge_mode')
     c.ui.hold_control_tap('note_merge_mode','pattern_slot',target_index=1)
     c.ui.hold_control_tap('velocity_merge_mode','pattern_slot',target_index=1)
-    c.ui.turn(1,-4);c.ui.turn(2,2);c.ui.expect_field_value('length','X')
+    # The merge-mode gestures leave the live UI on Merge detail (C09); the Channel button leaves it and
+    # Note Masks opens through Tasks.
+    c.ui.leave_merge_detail();c.ui.channel_page('masks',confirm=False);c.ui.wait_for_header('masks',channel=1)
+    c.ui.turn(2,2);c.ui.expect_field_value('length','X')
     c.ui.set_value(detents);c.ui.expect_field_value('length',label)
     key='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
@@ -609,6 +617,12 @@ def fractional_length_mask_merge(c,variant=0,hierarchy=False):
             with c.ui.hold_keys(1):
                 c.elapse(.3);c.ui.tap_control('velocity_merge_mode')
                 c.ui.expect_leds({('velocity_merge_mode',None):{2:'off',5:'in_range',8:'medium'}[level]})
+            # K1 + velocity merge (the length mode) shows Merge detail on Length mode (grid
+            # actions show what they changed); K2 returns to Note Masks and its Length field.
+            c.ui.expect_header('merge_detail',channel=1)
+            # The owner's stored names (characterisation): longer is up, shorter is down.
+            c.ui.expect_selected_field('detail','Length mode',{'average':'AVERAGE','longer':'UP','shorter':'DOWN'}[mode])
+            c.ui.press_key(2);c.ui.wait_for_header('masks',channel=1)
         if hierarchy:
             assert variant==0
             with c.ui.hold_step(1):

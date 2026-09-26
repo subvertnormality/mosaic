@@ -430,7 +430,7 @@ test("the dancing doctor holds the free space and yields it to an overlay", func
   end
 end)
 
-test("the application encoder route opens stopped setup from Rhythm Doctor", function()
+test("the Trig page encoder route opens stopped setup from Rhythm Doctor", function()
   -- This covers the same public norns route as `enc(2, -1)`: application UI,
   -- Trigger Editor UI, Trigger Editor ownership, then the adapter.  The exact
   -- negative delta selects INPUT from the initial TEMPO field.
@@ -478,27 +478,14 @@ test("the application encoder route opens stopped setup from Rhythm Doctor", fun
     return assert(modules[path], path)
   end
   fn.dirty_screen = function() observed.dirty = observed.dirty + 1 end
-  local trigger_ui = dofile(root .. "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua")
-  pages = { pages = {channel_edit_page = 2, scale_edit_page = 3, trigger_edit_page = 4,
-    note_edit_page = 5, velocity_edit_page = 6, song_edit_page = 7} }
-  program.get_selected_page = function() return pages.pages.trigger_edit_page end
-  include = function(path)
-    local modules = {
-      ["mosaic/lib/pages/channel_edit_page/channel_edit_page_ui"] = {},
-      ["mosaic/lib/pages/scale_edit_page/scale_edit_page_ui"] = {},
-      ["mosaic/lib/pages/velocity_edit_page/velocity_edit_page_ui"] = {},
-      ["mosaic/lib/pages/note_edit_page/note_edit_page_ui"] = {},
-      ["mosaic/lib/pages/trigger_edit_page/trigger_edit_page_ui"] = trigger_ui,
-      ["mosaic/lib/pages/song_edit_page/song_edit_page_ui"] = {},
-      ["mosaic/lib/ui_components/tooltip"] = {},
-      ["mosaic/lib/ui_components/save_confirm"] = {},
-    }
-    return assert(modules[path], path)
-  end
-  local application_ui = dofile(root .. "lib/ui.lua")
+  -- The live UI (lib/ui_live.lua) forwards E2/E3 on a Rhythm Doctor screen to
+  -- this page's own encoder handler exactly once (doctor.dispatch); that hop is
+  -- covered by lib/tests/lib/ui_live_tests.lua. Here the page handler itself
+  -- must open the stopped setup draft.
+  local ok, trigger_ui = pcall(dofile, root .. "lib/pages/trigger_edit_page/trigger_edit_page_ui.lua")
   include = old_include
-
-  application_ui.enc(2, -1)
+  assert(ok, trigger_ui)
+  trigger_ui.enc(2, -1)
   local model = doctor:screen_model()
   check(model.setup.active, "public encoder input must open the setup draft")
   equal(model.setup.field, "INPUT")

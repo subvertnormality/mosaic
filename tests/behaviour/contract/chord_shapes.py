@@ -1,9 +1,7 @@
 """Contract-owned chord-shape cases and their exact physical MIDI oracle."""
 
-import base64
 import time
 
-from frame_oracle import render
 from midi_window import MidiWindow
 from note_schedule import assert_schedule
 
@@ -27,21 +25,23 @@ def _assign_trig_parameter(c, label, offset=None):
     return offset
 
 
-def chord_dashboard_display(c, root_velocity):
-    expected = render(
-        [(0, 18, 1, "Note"), (0, 26, 1, "C3"),
-         (25, 18, 1, "Vel"), (25, 26, 1, str(root_velocity)),
-         (50, 18, 1, "Len"), (50, 26, 1, "4.0")]
-    )
-    indices = [(y * 128 + x) * 4 + k
-               for y in range(11, 29) for x in range(75) for k in range(3)]
+NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-    def matches(state):
-        actual = base64.b64decode(state["frame"]["pixels_base64"])
-        return all(actual[i] == expected[i] for i in indices)
 
-    c.wait(matches, timeout=.5)
-    c.results.append(dict(kind="chord-root-dashboard", note="C3",
+def _norns_name(n):
+    """musicutil.note_num_to_name(n, true): C3 is MIDI 60."""
+    return NOTE_NAMES[n % 12] + str(n // 12 - 2)
+
+
+def chord_dashboard_display(c, root_velocity, voices):
+    # C06 OUTPUT (the Note Dashboard) is a dashboard: its Note row shows the root
+    # and then only the chord voices that played, in slot order; its Vel / Len row
+    # the root velocity and length. Each row is asserted whole and exactly; the
+    # root, velocity and length facts the old cells showed are within them.
+    note = " ".join(["C3"] + [_norns_name(v) for v in voices if v is not None])
+    c.ui.expect_output_field("note", note)
+    c.ui.expect_output_field("vel_len", "%d / 4.0" % root_velocity)
+    c.results.append(dict(kind="chord-root-dashboard", note="C3", chord=note,
                           velocity=root_velocity, length="4.0",
                           source="rendered framebuffer", passed=True))
 
@@ -54,7 +54,7 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
     for x in (2, 3, 4):
         c.tap(x, 4)
     c.tap(3, 8)
-    c.enc(1, -4)
+    c.ui.turn(1, -4)
     c.enc(2, 1)
     c.enc(3, velocity + 1)
     c.enc(2, 1)
@@ -64,10 +64,10 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
         c.enc(2, 1)
         if mask_bits & (1 << i):
             c.enc(3, turns)
-    c.enc(1, 3)
+    c.ui.turn(1, 3)
     c.enc(3, -11)
     c.key(3)
-    c.enc(1, -2)
+    c.ui.turn(1, -2)
     _assign_trig_parameter(c, "Chord Note Arpeggio" if arp else "Chord Note Strum")
     c.enc(3, 0 if extra == "disabled" else 8)
     c.enc(2, 1)
@@ -87,7 +87,7 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
         _assign_trig_parameter(c, "Chord Accel Mod")
         c.enc(3, -1)
     if dashboard:
-        c.enc(1, 4)
+        c.ui.turn(1, 4)
     capture = MidiWindow(c.snapshot()["midi_count"])
     trigger = c.logical_ns
     c.action(type="grid", x=1, y=8, state=1)
@@ -161,8 +161,10 @@ def chord_shape_schedule(c, arp, shape, muted, mask_bits=15, velocity=50,
                           muted=muted, mask_bits=mask_bits,
                           onsets=len(expected), release_checks=len(rows), passed=True))
     if dashboard:
+        # Chord slots 1..4 send pitches[1..4] when their mask bit is set.
+        voices = [pitches[slot] if mask_bits & (1 << (slot - 1)) else None for slot in range(1, 5)]
         chord_dashboard_display(c, max(0, min(127,
-                              velocity + (4 * modifier if shape in (2, 4) else 0))))
+                              velocity + (4 * modifier if shape in (2, 4) else 0))), voices)
 
 
 def chord_shape_case(*args, **kwargs):

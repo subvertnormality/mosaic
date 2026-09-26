@@ -385,8 +385,7 @@ def channel_routing_isolation(c):
     ui.configure()
     phrase = [(60, 127), (62, 117), (64, 107), (65, 97)]
     for channel in range(2, 17):
-        ui.select_channel(channel)
-        ui.expect_header("midi_config", channel=channel)
+        ui.select_channel_on_page(channel, "midi_config")
         ui.turn(3, 1)  # none -> generic CC device
         ui.turn(2, 1)
         ui.turn(3, channel - 1)  # distinct MIDI channel
@@ -539,7 +538,7 @@ def memory_navigation(c):
 def memory_channel_isolation(c):
     ui = c.ui
     ui.configure()
-    ui.select_channel(2)
+    ui.select_channel_on_page(2,"midi_config")
     ui.turn(3, 1)
     ui.turn(2, 1)
     ui.turn(3, 1)
@@ -548,7 +547,9 @@ def memory_channel_isolation(c):
     ui.press_key(3)
     ui.tap_control("pattern_slot", 1)
     ui.set_range(1, 4)
-    ui.turn(1, -4)
+    # The pattern slot tap shows Merge detail; Note Masks (the old E1 -4 from Device)
+    # opens through Channel tasks.
+    ui.channel_page("masks", channel=2)
     baseline = [(60, 127), (62, 117), (64, 107), (65, 97)]
     edited_one = [(72, 90), *baseline[1:]]
     edited_two = [baseline[0], (79, 80), *baseline[2:]]
@@ -598,24 +599,24 @@ def memory_channel_isolation(c):
     ui.turn(3, -1)
     history(1, 0)
     verify(baseline, edited_two)
-    ui.select_channel(2)
+    ui.select_channel_on_page(2, "memory")
     history(2, 1)
     ui.press_key(2)
     history(2, 0)
     verify(baseline, baseline)
-    ui.select_channel(1)
+    ui.select_channel_on_page(1, "memory")
     history(1, 0)
     ui.press_key(3)
     history(1, 1)
     verify(edited_one, baseline)
-    ui.select_channel(2)
+    ui.select_channel_on_page(2, "memory")
     history(2, 0)
     ui.turn(3, 1)
     history(2, 1)
     verify(edited_one, edited_two)
     # Switching to an untouched channel and navigating its empty history must
     # not affect either audible channel or borrow their history counters.
-    ui.select_channel(3)
+    ui.select_channel_on_page(3, "memory")
     history(3, 0, 0)
     ui.press_key(2)
     ui.press_key(3)
@@ -623,7 +624,7 @@ def memory_channel_isolation(c):
     ui.turn(3, 2)
     history(3, 0, 0)
     verify(edited_one, edited_two)
-    ui.select_channel(1)
+    ui.select_channel_on_page(1, "memory")
     history(1, 1)
-    ui.select_channel(2)
+    ui.select_channel_on_page(2, "memory")
     history(2, 1)

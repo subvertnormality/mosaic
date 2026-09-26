@@ -15,6 +15,7 @@ fn = include("mosaic/lib/helpers/functions")
 scheduler = include("mosaic/lib/scheduler")
 m_grid = include("mosaic/lib/m_grid")
 ui = include("mosaic/lib/ui")
+local ui_splash = include("mosaic/lib/ui_splash")
 sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 m_midi = include("mosaic/lib/m_midi")
 memory = include("mosaic/lib/memory")
@@ -172,9 +173,17 @@ local function init_rhythm_doctor()
   end)
 end
 
+local function draw_application_screen()
+  screen.level(5)
+  screen.font_size(8)
+  ui.redraw()
+end
+
 function redraw()
   screen.clear()
   if fn.dirty_screen() == true then
+    -- Clear the flag first: a frame that is still animating asks for the next one.
+    fn.dirty_screen(false)
     if ui_splash_screen_active then
       screen.level(15)
       screen.move(60, 38)
@@ -183,15 +192,13 @@ function redraw()
       screen.text("m°")
       screen.font_face(1)
       screen.update()
-    
+    elseif ui_splash.active() then
+      ui_splash.draw(nil, draw_application_screen)
+      screen.update()
     else
-      screen.level(5)
-      screen.font_size(8)
-      ui.redraw()
+      draw_application_screen()
       screen.update()
     end
-
-    fn.dirty_screen(false)
   end
 end
 
@@ -253,6 +260,8 @@ function init()
     function()
       while true do
         clock.sleep(1/30)
+        -- norns keeps a short K1 tap for itself; the menu change is how the UI learns of it.
+        if ui_live and ui_live.installed() then ui_live.native_changed(_menu ~= nil and _menu.mode == true) end
         if fn.dirty_screen() then screen_guard.run(redraw) end
       end
     end
@@ -304,18 +313,41 @@ function init()
 
   ui.init()
   m_grid.init()
+  -- A grid press also ends the splash; the press itself is handled as usual.
+  local grid_key = g.key
+  g.key = function(x, y, z)
+    ui_splash.skip()
+    grid_key(x, y, z)
+  end
   m_clock.init()
   ui_splash_screen_active = false
   fn.dirty_grid(true)
   fn.dirty_screen(true)
 
+  -- The animated splash runs once the application is ready; input ends it.
+  -- MOSAIC > UI motion Off skips it along with the other decorative motion.
+  if params:get("ui_motion") ~= 1 then ui_splash.start() end
+  clock.run(function()
+    while ui_splash.advance() do
+      fn.dirty_screen(true)
+      clock.sleep(1 / ui_splash.FPS)
+    end
+    fn.dirty_screen(true)
+  end)
+
 end
 
+-- README "Autosave": only an idle Mosaic autosaves, so norns input restarts the
+-- idle period as grid presses do (lib/press.lua).
 function enc(n, d)
+  ui_splash.skip()
+  if project then autosave_reset() end
   ui.enc(n, d)
 end
 
 function key(n, z)
+  ui_splash.skip()
+  if project then autosave_reset() end
   ui.key(n, z)
 end
 

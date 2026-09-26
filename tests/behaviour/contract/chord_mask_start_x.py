@@ -7,42 +7,41 @@ away from X: up to the 2nd, down to the 7th below. Channel 1 plays C D E F (C ma
 scale degree above and the scale degree below. The chord labels ("X", "2nd", "-7th") are
 characterisation, not manual text.
 """
-import base64
 
 LABELS = ["--oct", "--2nd", "--3rd", "--4th", "--5th", "--6th", "--7th", "-oct", "-2nd", "-3rd",
           "-4th", "-5th", "-6th", "-7th", "X", "2nd", "3rd", "4th", "5th", "6th", "7th", "+oct",
           "+2nd", "+3rd", "+4th", "+5th", "+6th", "+7th", "++oct"]
 
 
-def chord_cell(state, slot, selected):
-    from frame_oracle import render
-    x, name, level = (slot - 1) * 25, 'Chd%d' % slot, 15 if selected else 1
-    pixels = base64.b64decode(state['frame']['pixels_base64'])
-    idx = [(y * 128 + xx) * 4 + k for y in range(33, 51) for xx in range(x, x + 24) for k in range(3)]
-    hits = [t for t in LABELS if all(pixels[i] == render([(x, 40, level, name), (x, 48, level, t)])[i] for i in idx)]
-    return hits[0] if len(hits) == 1 else ('?' if not hits else '|'.join(hits))
-
-
+# Live Masks page (C01): a selected slot is read from the selected field's value line
+# ("Chord N" and its exact value); an unselected slot from its own overview cell ("Chord N" too).
 def expect_cell(c, slot, selected, label, stage):
+    field = 'chord_%d' % slot
     try:
-        c.wait(lambda s: chord_cell(s, slot, selected) == label)
+        if selected:
+            c.ui.expect_selected_mask(field, label)
+        else:
+            c.ui.expect_field_value(field, label)
     except AssertionError:
-        raise AssertionError('Chd%d after %s' % (slot, stage), dict(expected=label, shown=chord_cell(c.snapshot(), slot, selected)))
+        shown = c.ui.selected_mask_value(field, LABELS) if selected else '?'
+        raise AssertionError('Chd%d after %s' % (slot, stage), dict(expected=label, shown=shown))
     c.results.append(dict(kind='chord-mask-cell', slot=slot, stage=stage, label=label, passed=True))
 
 
 def settled_cell(c, slot, selected, label):
-    """The cell's label once it shows `label`, or what it shows after the wait expires."""
+    """The selected slot's label once it shows `label`, or what it shows after the wait expires."""
+    assert selected
+    field = 'chord_%d' % slot
     try:
-        c.wait(lambda s: chord_cell(s, slot, selected) == label)
+        c.ui.expect_selected_mask(field, label)
     except AssertionError:
         pass
-    return chord_cell(c.snapshot(), slot, selected)
+    return c.ui.selected_mask_value(field, LABELS)
 
 
 def chord_mask_start_x(c):
     from cases import assert_durations
-    c.configure(); c.enc(1, -4); c.enc(2, 3)                    # Masks page, Chd1 selected
+    c.configure(); c.ui.turn(1, -4); c.enc(2, 3)                    # Masks page, Chd1 selected
     expect_cell(c, 1, True, 'X', 'unset')
     expect_cell(c, 2, False, 'X', 'unset')
     c.enc(3, 1); up = settled_cell(c, 1, True, '2nd')

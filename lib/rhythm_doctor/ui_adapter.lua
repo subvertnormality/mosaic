@@ -25,6 +25,11 @@ Adapter.MAX_LANE_COLUMNS = Adapter.LANE_ROW_WIDTH * #Adapter.LANE_ROWS
 Adapter.SETUP_FIELDS = { "TEMPO", "MANUAL BPM", "INPUT" }
 Adapter.READY_FIELDS = { "WINDOW BAR", "WINDOW STEP", "SENSITIVITY", "PAINT POLICY", "ALIGNMENT" }
 Adapter.ALIGNMENT_FIELDS = { "HALF TEMPO", "DOUBLE TEMPO", "EXACT BPM", "START BEAT", "FINE START" }
+-- Stable descriptor ids (docs/ui-reimplementation spec field ids), index for
+-- index with the field lists above. Presentation only; nothing here reads them.
+Adapter.SETUP_FIELD_IDS = { "tempo", "manual_bpm", "input" }
+Adapter.READY_FIELD_IDS = { "window_bar", "window_step", "sensitivity", "paint_policy", "alignment" }
+Adapter.ALIGNMENT_FIELD_IDS = { "half_tempo", "double_tempo", "exact_bpm", "start_beat", "fine_start" }
 Adapter.PAINT_POLICIES = { "toggle", "add", "replace" }
 Adapter.MIN_BPM, Adapter.MAX_BPM = 40, 240
 -- Mirrors Bank.WINDOW_CELLS. The displayed window is one four-bar phrase, so

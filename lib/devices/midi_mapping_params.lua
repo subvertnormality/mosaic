@@ -59,7 +59,9 @@ function mapping.setup()
         end
         params:set("sel_ch_" .. (param == 1 and "trig" or param == 2 and "note" or param == 3 and "vel" or param == 4 and "len" or param == 5 and "ch1" or param == 6 and "ch2" or param == 7 and "ch3" or param == 8 and "ch4"), 0, true)
 
-        if (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 1) then
+        if ui_live and ui_live.installed() then
+          if program.get_selected_page() == 2 then ui_live.show_masks_briefly() end
+        elseif (program.get_selected_page() == 2) and (channel_edit_page_ui.get_selected_page() ~= 1) then
           channel_edit_page_ui.select_mask_page()
         end
 

@@ -13,10 +13,18 @@ class PresentationContract(unittest.TestCase):
   for event in ['E1+','E2-','E3+','K2.down','K3.down']:
    state=initial();state.update(native=True,modal=True,held=True)
    after,ops,_=step(S,state,event);self.assertEqual([o['op']for o in ops],['native.dispatch'])
- def test_channel_family_edges(self):
-  state=initial()
-  for ev,dest in [('E1-','C01'),('E1+','C02'),('E1+','N01'),('E1+','N01'),('E1-','C02'),('E1-','C01')]:
-   state,_,_=step(S,state,ev);self.assertEqual(state['screen'],dest)
+ def test_channel_e1_opens_tasks_and_scrolls_them(self):
+  # Owner decision 25 September 2026: E1 opens Channel tasks, as on every page.
+  for start in ['C01','C02','C04']:
+   for ev in ['E1+','E1-']:
+    after,_,_=step(S,initial(start),ev);self.assertEqual(after['screen'],'N01',(start,ev))
+  for ev in ['E1+','E1-']:
+   after,ops,_=step(S,initial('N01'),ev)
+   self.assertEqual(after['screen'],'N01');self.assertEqual([o['op']for o in ops],['focus.move_clamped'])
+ def test_held_e1_still_switches_edit_families(self):
+  state=initial();state.update(held=True)
+  state,_,_=step(S,state,'E1+');self.assertEqual(state['screen'],'C02')
+  state,_,_=step(S,state,'E1-');self.assertEqual(state['screen'],'C01')
  def test_readonly_never_edits(self):
   for sid,screen in S['screens'].items():
    if screen['profile']=='read_only':
@@ -79,13 +87,18 @@ class PresentationContract(unittest.TestCase):
  def test_hold_on_setup_follows_family_and_restores(self):
   after=run(initial('C04'),('hold.begin',{'steps':[3]}));self.assertEqual(after['screen'],'C01')
   self.assertEqual(run(after,'hold.end')['screen'],'C04')
- def test_merge_mode_taps_do_not_steal_workspace(self):
+ def test_merge_mode_taps_show_merge_detail_and_k2_returns(self):
+  # Usability audit 25 September 2026: the tap shows the mode it changed (C09), K2 goes back.
+  for fid in ['G07','G16','G17','G18']:
+   after,_,_=step(S,initial('C01'),'grid.outcome',{'flow_id':fid});self.assertEqual(after['screen'],'C09')
+   self.assertEqual([f['screen']for f in after['return_stack']],['C01'])
+   self.assertEqual(run(after,'K2.down')['screen'],'C01')
   for fid in ['G16','G17','G18']:
-   after,_,_=step(S,initial('C01'),'grid.outcome',{'flow_id':fid});self.assertEqual(after['screen'],'C01');self.assertEqual(after['return_stack'],[])
    after,_,_=step(S,initial('M02'),'grid.outcome',{'flow_id':fid});self.assertEqual(after['screen'],'M09')
    self.assertEqual(run(after,'hold.end')['screen'],'M02')
   state=initial('C02');state['family']='parameters'
-  after,_,_=step(S,state,'grid.outcome',{'flow_id':'G07'});self.assertEqual(after['screen'],'C02')
+  after,_,_=step(S,state,'grid.outcome',{'flow_id':'G07'});self.assertEqual(after['screen'],'C09')
+  self.assertEqual(run(after,'K2.down')['screen'],'C02')
  def test_k1_k3_on_trig_params_is_noop(self):
   state=initial('C02');state['family']='parameters';state=run(state,'K1.down')
   _,ops,rid=step(S,state,'K3.down');self.assertEqual(rid,'param.slide.shift');self.assertEqual([o['op']for o in ops],['noop'])

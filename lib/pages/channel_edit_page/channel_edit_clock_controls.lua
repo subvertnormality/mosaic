@@ -1,5 +1,17 @@
 local channel_edit_clock_controls = {}
 
+-- Stable UI field ids (docs/ui-reimplementation spec.json screen C04), in the
+-- owner's E2 order. `control` names the controls entry; `swing_type` is the
+-- effective swing/shuffle type draw() and navigate() show the field for.
+channel_edit_clock_controls.fields = {
+  {id = "rate", label = "Rate", control = "clock_mod_list_selector"},
+  {id = "swing_type", label = "Swing type", control = "swing_shuffle_type_selector"},
+  {id = "swing", label = "Swing", control = "swing_selector", swing_type = 1},
+  {id = "shuffle_feel", label = "Shuffle feel", control = "shuffle_feel_selector", swing_type = 2},
+  {id = "shuffle_basis", label = "Shuffle basis", control = "shuffle_basis_selector", swing_type = 2},
+  {id = "shuffle_amount", label = "Shuffle amount", control = "shuffle_amount_selector", swing_type = 2}
+}
+
 function channel_edit_clock_controls.new(controls, public_ui, refreshers)
   local controller = {}
 

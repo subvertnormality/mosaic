@@ -143,7 +143,7 @@ def advanced_slide_locks(condition):
 
 def set_tempo(c, bpm):
     from cases import menu_label, menu_value
-    c.key(1); c.enc(1, 4); c.key(3); menu_label(c, 'LEVELS >')
+    c.key(1); c.ui.turn(1, 4); c.key(3); menu_label(c, 'LEVELS >')
     position = next(i for i, v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name'] == 'CLOCK')
     c.enc(2, position); c.key(3); menu_label(c, 'source')
     c.enc(2, 1); menu_label(c, 'tempo')
@@ -156,14 +156,16 @@ def set_global_length(c, length):
     """Set the song's global pattern length from its grid fader (README Adjusting
     Song Sequence Length: it caps how much of a channel's range plays)."""
     import base64
-    from frame_oracle import render
+    from frame_oracle import fit, render, variants
     c.tap(6, 8); c.tap(2, 7)
     for _ in range(length - 1):
         c.tap(8, 7)
-    expected = render([(0, 62, 10, 'Global pattern length: ' + str(length))])
+    # The tooltip owns the live footer line: fit(text, 126) at (1,63), level 9.
+    frames = variants(lambda: render([(1, 63, 9, fit('Global pattern length: ' + str(length), 126))]))
     def feedback(state):
         actual = base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[(y * 128 + x) * 4 + k] == expected[(y * 128 + x) * 4 + k] for y in range(55, 64) for x in range(128) for k in range(3))
+        return any(all(actual[(y * 128 + x) * 4 + k] == expected[(y * 128 + x) * 4 + k] for y in range(56, 64)
+                       for x in range(128) for k in range(3)) for expected in frames)
     c.wait(feedback)
     c.tap(3, 8)
 
@@ -173,12 +175,12 @@ def leave_menu_home(c):
     on the HOME page, as the lead-time setup does, so later menu paths start there."""
     from cases import menu_label
     c.key(2); c.action(type='enc', n=2, delta=-120); c.elapse(.15); menu_label(c, 'LEVELS >'); c.key(2)
-    c.enc(1, -4); c.key(1)
+    c.ui.turn(1, -4); c.key(1)
 
 
 def open_clocks(c):
-    from frame_oracle import header, matches
-    c.wait(lambda state: matches(state, header('Ch. 1 Clocks', selected=4)))
+    """Channel 1's Clock screen (C04) is showing: the live header, exact."""
+    c.ui.wait_for_header('clock_mods', channel=1)
 
 
 def build(c, condition):
@@ -197,7 +199,10 @@ def build(c, condition):
     c.hold_tap((start, 4), (end, 4))  # Channel range; step 5 has no trig.
     if condition.get('global_length'):
         set_global_length(c, condition['global_length'])
-    c.enc(1, -3); assign_trig_parameter(c, 'CC 1')
+    # The Channel button (in set_global_length) lands on the remembered family,
+    # not the last page, so Trig params is opened by name rather than by E1 -3.
+    c.ui.channel_page('trig_locks', confirm=False); c.ui.wait_for_header('trig_locks', channel=1)
+    assign_trig_parameter(c, 'CC 1')
     c.enc(3, DEFAULT + 1)  # Default Parameter Values: from Off to 20.
     for step, value in STEP_LOCKS:
         if value is None:
@@ -211,7 +216,7 @@ def build(c, condition):
             c.action(type='grid', x=step, y=4, state=0)
     if condition.get('slide'):
         c.key(3)  # README Param Slides: K3 toggles the selected parameter's global slide.
-    c.enc(1, 2); open_clocks(c)
+    c.ui.turn(1, 2); open_clocks(c)
     clock = condition.get('clock')
     if clock:
         c.enc(3, CLOCK_INDEX['/1'] - CLOCK_INDEX[clock]); c.key(3)

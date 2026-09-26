@@ -4,7 +4,8 @@ import base64
 import contextlib
 import time
 
-from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, HEADERS, LED_LEVELS, MENU, NATIVE_MENU,
+from ui_map import (CHANNEL_COUNT, CHANNEL_PAGES, CHANNEL_TASKS, HEADERS, OVERVIEW_CELLS, PAGE_RINGS, RING_ALIASES, TASK_ROWS,
+                    LED_LEVELS, LIVE_SCREENS, MENU, NATIVE_MENU, header_parts,
                     MOSAIC_OPTIONS, MOSAIC_OPTION_ROWS, MIDI_MAPPING_PARAMETERS,
                     NATIVE_MENU_VALUES, PATCH_PARAMETERS,
                     PATCH_PARAMETER_VALUES, RHYTHM_DOCTOR_CONTROLS,
@@ -128,31 +129,56 @@ class Ui:
     def menu(self, button):
         self.tap_control(button)
 
-    def channel_page(self, page, from_page, channel=1, confirm=True, saturate=False):
-        names = list(CHANNEL_PAGES)
+    def channel_page(self, page, from_page=None, channel=1, confirm=True, saturate=False):
+        """Open a Channel screen through Channel Tasks (E1 to tasks, E2 row, K3).
+
+        ``from_page`` and ``saturate`` described the retired E1 page ring; the
+        live UI reaches every Channel screen through its named task instead.
+        """
         try:
-            target = names.index(page)
-            origin = names.index(from_page)
-        except ValueError as error:
+            task = LIVE_SCREENS[page]["task"]
+        except KeyError as error:
             raise UiMapError("unknown channel page: %s" % error) from error
-        delta = target - origin
-        if saturate:
-            if target == 0 and delta < 0:
-                delta -= 1
-            elif target == len(names) - 1 and delta > 0:
-                delta += 1
-            else:
-                raise UiMapError("saturating channel navigation needs a boundary target")
-        if delta:
-            self.driver.enc(1, delta)
+        self.open_channel_task(task)
         if confirm:
             self.confirm_header(page, channel=channel)
+
+    def open_channel_task(self, task):
+        """E1 reaches Channel Tasks from any Channel screen; E2 picks the row; K3 opens it."""
+        try:
+            row = CHANNEL_TASKS.index(task)
+        except ValueError as error:
+            raise UiMapError("unknown channel task: %s" % task) from error
+        self.driver.enc(1, 3)
+        self.driver.enc(2, -len(CHANNEL_TASKS))
+        if row:
+            self.driver.enc(2, row)
+        self.press_key(3)
 
     def pattern_editor(self, view="trigger", from_view=None):
         order = ["trigger", "note", "velocity"]
         taps = 1 if from_view is None else (order.index(view) - order.index(from_view)) % len(order)
         for _ in range(taps):
             self.tap_control("pattern_editor")
+
+    def open_task(self, context, task):
+        """Open a task row of a non-Channel context's navigator (E1, E2 row, K3)."""
+        rows = TASK_ROWS[context]
+        self.driver.enc(1, 1)
+        self.driver.enc(2, -len(rows))
+        if rows.index(task):
+            self.driver.enc(2, rows.index(task))
+        self.press_key(3)
+
+    def view_channel(self, delta):
+        """Move a pattern page's viewed channel (E3 on View channel); the
+        selected channel does not change."""
+        return self.turn(3, delta)
+
+    def trig_options(self):
+        """Open Trig options (P02), where E3 sets the tresillo multiplier."""
+        self.open_task("Trig", "options")
+        self.wait_for_header("trigger_editor_confirmation")
 
     def song_editor(self):
         self.tap_control("song_editor")
@@ -164,7 +190,15 @@ class Ui:
         self.tap_control("scale_editor")
 
     def select_channel(self, channel):
+        """Select ``channel`` with its grid key (row 1). The norns screen that was
+        showing stays and follows the new channel (flow G05, owner decision 26
+        September 2026): Masks stays Masks, Clock stays Clock; Merge Shape and
+        Harmony reopen their editor root (M02/H01) for the new channel. It no
+        longer jumps to the remembered Masks/Trig params family, so a recipe that
+        needs Masks or Trig params after a select from another screen opens it
+        (channel_page)."""
         self.tap_control("channel", channel)
+        self._channel = channel
 
     def select_song_slot(self, slot):
         self.tap_control("song_slot", slot)
@@ -189,9 +223,135 @@ class Ui:
 
     def press_key(self, number):
         self.driver.key(number)
+        self._after_key1 = number == 1
 
     def turn(self, encoder, detents):
+        after_key1, self._after_key1 = getattr(self, "_after_key1", False), False
+        if encoder == 1 and detents:
+            # A bare K1 opens or closes the native menu. Let the mode settle
+            # before reading the page ring: a Mosaic screen not yet covered (or
+            # a menu not yet closed) must not decide what this E1 means.
+            if after_key1 and self._native_menu_opened():
+                return self.driver.enc(encoder, detents)
+            if self._turn_channel_ring(detents) or self._turn_other_ring(detents):
+                return None
         return self.driver.enc(encoder, detents)
+
+    def _native_menu_opened(self, polls=4, timeout=1.5):
+        """Real time only: after a bare K1, wait until the native menu mode reads
+        the same on ``polls`` consecutive observations; True if it is open.
+
+        A controlled snapshot already reflects the key, so the ring
+        observation itself stands down in the menu; recipe doubles keep
+        their recorded calls."""
+        if getattr(self.driver, "clock_mode", None) != "real-time" or not hasattr(self.driver, "wait"):
+            return False
+        seen = []
+
+        def settled(state):
+            seen.append(state.get("diagnostics", {}).get("menu_mode"))
+            return len(seen) >= polls and len(set(seen[-polls:])) == 1
+        try:
+            self.driver.wait(settled, timeout=timeout)
+        except (AssertionError, KeyError, TypeError, StopIteration):
+            return False
+        return seen[-1] is True
+
+    def _observed_channel_page(self, timeout=1):
+        """The Channel page ring key whose live header is showing, or None."""
+        pages = list(CHANNEL_PAGES)
+        found = []
+
+        def settled(state):
+            # Recipe doubles carry no framebuffer; the physical E1 stands.
+            if "frame" not in state or state.get("diagnostics", {}).get("menu_mode"):
+                return True
+            for page in pages:
+                if self._header_matches(state, page, {"channel": self._channel_hint(state)}):
+                    found.append(page)
+                    return True
+            return False
+        # Recipe doubles without observation keep the physical E1.
+        if not (hasattr(self.driver, "wait") and hasattr(self.driver, "snapshot")):
+            return None
+        try:
+            self.driver.wait(settled, timeout=timeout)
+        except (AssertionError, KeyError, TypeError):
+            return None
+        return found[-1] if found else None
+
+    def _channel_hint(self, state):
+        return getattr(self, "_channel", 1)
+
+    def _observed_ring(self, timeout=1):
+        """(context, ring index) of a showing non-Channel ring screen, or None."""
+        from frame_oracle import live_header_matches
+        found = []
+
+        def settled(state):
+            if "frame" not in state or state.get("diagnostics", {}).get("menu_mode"):
+                return True
+            for context, ring in PAGE_RINGS.items():
+                candidates = [(index, entry[:3]) for index, entry in enumerate(ring)]
+                for index, aliases in RING_ALIASES.get(context, {}).items():
+                    candidates += [(index, alias) for alias in aliases]
+                for index, (screen, title, layout) in candidates:
+                    scope = self._ring_scope(context, screen)
+                    if live_header_matches(state, title, scope, layout):
+                        found.append((context, index, screen))
+                        return True
+            return False
+        if not (hasattr(self.driver, "wait") and hasattr(self.driver, "snapshot")):
+            return None
+        try:
+            self.driver.wait(settled, timeout=timeout)
+        except (AssertionError, KeyError, TypeError):
+            return None
+        return found[-1] if found else None
+
+    def _ring_scope(self, context, screen=None):
+        from ui_map import live_scope
+        if screen == "P08":
+            # Trig step edit names the pattern and the held step (no held step here).
+            return live_scope("pattern_step", pattern=getattr(self, "_pattern", 1))
+        if screen in ("P01", "P03", "P04"):
+            # The pattern editor names the edited pattern before the viewed channel.
+            return live_scope("pattern", channel=getattr(self, "_channel", 1),
+                              pattern=getattr(self, "_pattern", 1))
+        if context == "Scale":
+            return live_scope("scale", slot=getattr(self, "_scale_slot", 1))
+        if context == "Song":
+            return live_scope("song", song_slot=getattr(self, "_song_slot", 1))
+        return live_scope("channel", channel=getattr(self, "_channel", 1))
+
+    def _turn_other_ring(self, detents):
+        """E1 on a Scale, Song or Trig page moves along that page ring (clamped):
+        the target page opens through the context's task navigator."""
+        observed = self._observed_ring()
+        if observed is None:
+            return False
+        context, index, showing = observed
+        ring = PAGE_RINGS[context]
+        target = max(0, min(len(ring) - 1, index + detents))
+        if ring[target][0] != showing:
+            self.open_task(context, ring[target][3])
+        return True
+
+    def _turn_channel_ring(self, detents):
+        """E1 on a Channel page moves along the page ring the case was written
+        for (Masks .. Harmony, clamped at both ends). The live UI reaches each
+        page through Channel Tasks, so the same musical page is opened.
+        Native menus and every other screen keep the physical E1."""
+        page = self._observed_channel_page()
+        if page is None:
+            return False
+        ring = list(CHANNEL_PAGES)
+        index = ring.index(page)
+        target = max(0, min(len(ring) - 1, index + detents))
+        if target != index:
+            self.channel_page(ring[target], confirm=False)
+            self.wait_for_header(ring[target], channel=self._channel_hint(None))
+        return True
 
     def encoder_event(self, encoder, delta):
         """Emit one native encoder event with no synthetic detent timing."""
@@ -216,6 +376,8 @@ class Ui:
         return self.turn(3, delta)
 
     def tap_control(self, control, index=None):
+        if control == "pattern_select" and index is not None:
+            self._pattern = index  # the pattern editor's scope names it (PAT02 CH01)
         return self.driver.tap(*control_cell(control, index))
 
     def tap_step(self, step):
@@ -342,9 +504,9 @@ class Ui:
         self.driver.elapse(release_tail_seconds)
 
     def configure(self):
-        """Canonical four-note setup, preserving the historical input recipe."""
+        """Canonical four-note setup: the Device screen's device map moves one entry and applies."""
         self.tap_control("channel_editor")
-        self.turn(1, 4)
+        self.open_channel_task("device")
         self.set_value(1)
         self.press_key(3)
         self.tap_control("pattern_editor")
@@ -361,6 +523,12 @@ class Ui:
         start, end = self.step(1), self.step(4)
         self.driver.hold_tap(start, end)
         self.expect_leds({("pattern_slot", 1): "selected"})
+        # Assigning pattern 1 shows Merge detail (C09) focused on Patterns, and
+        # the range gesture keeps it (usability audit 25 September 2026); E1
+        # opens Channel tasks from it, and the setup ends on Device as the
+        # recipes that follow it expect.
+        self.expect_header("merge_detail", channel=1)
+        self.channel_page("midi_config", confirm=False)
         self.expect_header("midi_config", channel=1)
 
     def set_mosaic_option_keys(self, options):
@@ -460,6 +628,7 @@ class Ui:
 
     def _observe_native_menu_mode(self, expected):
         """Confirm a key-driven mode change without advancing controlled time."""
+        self._after_key1 = False  # the mode is observed here; E1 needs no second look
         predicate = lambda state: state["diagnostics"]["menu_mode"] is expected
         if self.driver.clock_mode == "real-time":
             return self.driver.wait(predicate, timeout=1)
@@ -790,96 +959,13 @@ class Ui:
                 raise UiMapError("unknown Rhythm Doctor lane LED %r" % lane) from error
         self.expect_leds(mapped)
 
-    def _wait_rhythm_doctor_render(self, commands, region=None, full=False):
-        """Keep exact framebuffer comparisons behind the page-level UI API."""
-        from frame_oracle import render
+    def _wait_rhythm_doctor_render(self, commands, region):
+        """Keep exact framebuffer comparisons (RGB, alpha ignored) behind the page-level UI API."""
+        from frame_oracle import render, variants
 
-        expected = render(commands)
-        if full:
-            def matches(state):
-                actual = base64.b64decode(state["frame"]["pixels_base64"])
-                return all(actual[index] == expected[index]
-                           for index in range(len(expected)) if index % 4 != 3)
-        elif region is None:
-            width = 128 * 4
-            height = RHYTHM_DOCTOR_SCREEN["header"]["bottom"]
-            expected = expected[:width * height]
-
-            def matches(state):
-                actual = base64.b64decode(state["frame"]["pixels_base64"])
-                return all(actual[index] == expected[index]
-                           for index in range(len(expected)) if index % 4 != 3)
-        else:
-            indices = [(y * 128 + x) * 4 + channel
-                       for y in range(region["top"], region["bottom"])
-                       for x in range(region["left"], region["right"])
-                       for channel in range(3)]
-
-            def matches(state):
-                actual = base64.b64decode(state["frame"]["pixels_base64"])
-                return all(actual[index] == expected[index] for index in indices)
-
-        return self.driver.wait(matches)
-
-    def expect_rhythm_doctor_header(self):
-        self._wait_rhythm_doctor_render(
-            [(0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m")])
-
-    def expect_rhythm_doctor_tooltip(self, text):
-        self._wait_rhythm_doctor_render(
-            [(0, 62, 10, text)], RHYTHM_DOCTOR_SCREEN["tooltip"])
-
-    def expect_rhythm_doctor_setup(self, field, tempo_mode, manual_bpm, input_source):
-        self._wait_rhythm_doctor_render([
-            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
-            (0, 22, 10, "SETUP / " + field),
-            (0, 34, 10, (">" if field == "TEMPO" else " ") + "TEMPO " + tempo_mode.upper()),
-            (0, 46, 10, (">" if field == "MANUAL BPM" else " ") + "MANUAL BPM " + str(manual_bpm)),
-            (0, 58, 10, (">" if field == "INPUT" else " ") + "INPUT " + input_source),
-        ], full=True)
-
-    def expect_rhythm_doctor_status(self, text):
-        self._wait_rhythm_doctor_render(
-            [(0, 22, 10, text)], RHYTHM_DOCTOR_SCREEN["status"])
-
-    def wait_for_header(self, page, **params):
-        """Wait for an exact mapped header without adding a result record."""
-        from frame_oracle import header, matches
-
-        data = HEADERS[page]
-        text = header_text(page, **params)
-        expected = header(text, selected=data["selected"], tabs=data["tabs"])
-        return self.driver.wait(lambda state: matches(state, expected))
-
-    def expect_header(self, page, **params):
-        text = header_text(page, **params)
-        self.wait_for_header(page, **params)
-        self.driver.results.append(dict(kind="screen-header", expected=text, matched=True))
-
-    def expect_header_surface(self, page, **params):
-        """Check the mapped header using the legacy text-only screen oracle."""
-        from frame_oracle import header, matches
-
-        text = header_text(page, **params)
-        expected = header(text)
-        self.driver.wait(lambda state: matches(state, expected))
-        self.driver.results.append(dict(kind="screen-header", expected=text, matched=True))
-
-    def expect_scale_slot_header(self, slot):
-        """Wait for the exact scale-slot header without adding a result record."""
-        from frame_oracle import header, matches
-
-        text = "Scale slot %d " % slot
-        expected = header(text, selected=1, tabs=3)
-        self.driver.wait(lambda state: matches(state, expected))
-
-    def matches_header(self, page, **params):
-        return self._header_matches(self.driver.snapshot(), page, params)
-
-    def _expect_render(self, commands, region, result):
-        from frame_oracle import render
-
-        expected = render(commands)
+        # A builder of commands is re-run at every marquee phase (cut text scrolls).
+        build = commands if callable(commands) else (lambda: commands)
+        frames = variants(lambda: render(build()))
         indices = [(y * 128 + x) * 4 + channel
                    for y in range(region["top"], region["bottom"])
                    for x in range(region["left"], region["right"])
@@ -887,7 +973,95 @@ class Ui:
 
         def matches(state):
             actual = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(actual[index] == expected[index] for index in indices)
+            return any(all(actual[index] == expected[index] for index in indices) for expected in frames)
+
+        return self.driver.wait(matches)
+
+    @staticmethod
+    def _rhythm_doctor_screen(route):
+        try:
+            return RHYTHM_DOCTOR_SCREEN["screens"][route]
+        except KeyError as error:
+            raise UiMapError("unknown Rhythm Doctor screen %r" % route) from error
+
+    def expect_rhythm_doctor_header(self, route="R01", channel=1):
+        """A Doctor screen's live title row: its doctor_routes title and the channel scope.
+
+        The fifth algorithm with no bank opens R01 (RHYTHM DR); a READY bank opens R05."""
+        from frame_oracle import live_header_matches
+
+        title, layout = self._rhythm_doctor_screen(route)
+        scope = "CH%02d" % channel
+        return self.driver.wait(lambda state: live_header_matches(state, title, scope, layout))
+
+    def expect_rhythm_doctor_tooltip(self, text):
+        """The Doctor's tooltip owns the live footer row, and nothing else is on it."""
+        from frame_oracle import fit
+
+        self._wait_rhythm_doctor_render(
+            lambda: [(1, 63, 9, fit(text, 126))], RHYTHM_DOCTOR_SCREEN["footer"])
+
+    def expect_rhythm_doctor_screen(self, route, label=None, value=None, channel=1):
+        """Exact title row of Doctor screen `route` and its selected field's label/value.
+
+        Most Doctor screens are focused with the doctor art, so only the
+        selected field is on screen: its label at (1,28) and its value large at
+        (1,48) within x1..71. Detail Doctor screens (R07 ...) mark it with '>'."""
+        from frame_oracle import live_header_matches, selected_field_matches
+
+        title, layout = self._rhythm_doctor_screen(route)
+        scope = "CH%02d" % channel
+        return self.driver.wait(lambda state: live_header_matches(state, title, scope, layout)
+                                and selected_field_matches(state, layout, label, value, art=True))
+
+    def expect_rhythm_doctor_setup_field(self, field, value):
+        """R01 with setup field `field` (TEMPO / MANUAL BPM / INPUT) selected, showing `value`.
+
+        The old setup screen listed all three rows; the live R01 shows only the
+        selected one, so a recipe asserts each value while its field is selected."""
+        try:
+            label = RHYTHM_DOCTOR_SCREEN["setup_labels"][field]
+        except KeyError as error:
+            raise UiMapError("unknown Rhythm Doctor setup field %r" % field) from error
+        return self.expect_rhythm_doctor_screen("R01", label, str(value))
+
+    def wait_for_header(self, page, **params):
+        """Wait for an exact mapped live header without adding a result record."""
+        from frame_oracle import live_header_matches
+
+        title, scope, layout = header_parts(page, **params)
+        return self.driver.wait(lambda state: live_header_matches(state, title, scope, layout))
+
+    def expect_header(self, page, **params):
+        text = header_text(page, **params)
+        self.wait_for_header(page, **params)
+        self.driver.results.append(dict(kind="screen-header", expected=text, matched=True))
+
+    def expect_header_surface(self, page, **params):
+        """Check the mapped live header (title row and scope)."""
+        self.expect_header(page, **params)
+
+    def expect_scale_slot_header(self, slot):
+        """Wait for the Scale screen header naming the selected scale slot."""
+        self.wait_for_header("scale", slot=slot)
+
+    def matches_header(self, page, **params):
+        return self._header_matches(self.driver.snapshot(), page, params)
+
+    def _expect_render(self, commands, region, result):
+        from frame_oracle import render, variants
+
+        # A builder of commands is re-run at every marquee phase (cut text scrolls).
+        build = commands if callable(commands) else (lambda: commands)
+        frames = variants(lambda: render(build()))
+        indices = [(y * 128 + x) * 4 + channel
+                   for y in range(region["top"], region["bottom"])
+                   for x in range(region["left"], region["right"])
+                   for channel in range(3)]
+
+        def matches(state):
+            actual = base64.b64decode(state["frame"]["pixels_base64"])
+            return any(all(actual[index] == expected[index] for index in indices) for expected in frames)
 
         state = self.driver.wait(matches)
         self.driver.results.append(result)
@@ -964,30 +1138,11 @@ class Ui:
         self.driver.results.append(dict(kind="selected-menu-value", text=value))
 
     def wait_memory_position(self, current, total):
-        """Wait for the exact memory counters without adding a result record."""
-        from frame_oracle import render
+        """Wait for Memory's selected Position row to read "<current> of <total>"."""
+        from frame_oracle import selected_field_matches
 
-        data = SCREEN["memory_position"]
-        bands = data["bands"]
-        expected = render([
-            [bands["current"]["x"], bands["current"]["baseline"],
-             data["level"], str(current)],
-            [bands["total"]["x"], bands["total"]["baseline"],
-             data["level"], str(total)],
-        ], font_size=data["font_size"], antialias=data["antialias"])
-        indices = [
-            (y * data["frame_width"] + x) * data["bytes_per_pixel"] + channel
-            for band in bands.values()
-            for y in range(band["top"], band["bottom"])
-            for x in range(band["left"], band["right"])
-            for channel in range(data["channels"])
-        ]
-
-        def matches(state):
-            actual = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(actual[index] == expected[index] for index in indices)
-
-        return self.driver.wait(matches)
+        return self.driver.wait(lambda state: selected_field_matches(
+            state, "detail", "Position", "%d of %d" % (current, total)))
 
     def expect_memory_position(self, current, total, channel=None):
         self.wait_memory_position(current, total)
@@ -1026,29 +1181,26 @@ class Ui:
         )
 
     def expect_field_value(self, field, value):
-        if field != "length":
-            raise UiMapError("unknown field oracle: " + str(field))
-        data = SCREEN["length_field"]
-        return self._expect_render(
-            [(data["x"], data["label_baseline"], data["level"], data["label"]),
-             (data["x"], data["value_baseline"], data["level"], value)],
-            data,
-            dict(kind="length-mask-display", label=value, passed=True),
-        )
+        """Wait for an overview cell's own label and value (Masks: C01)."""
+        from frame_oracle import overview_cell_matches
+        try:
+            index, short_label = OVERVIEW_CELLS[field]
+        except KeyError as error:
+            raise UiMapError("unknown field oracle: " + str(field)) from error
+        self.driver.wait(lambda state: overview_cell_matches(state, "overview_masks", index, short_label, value))
+        self.driver.results.append(dict(kind="length-mask-display" if field == "length" else "overview-cell",
+                                        field=field, label=value, passed=True))
+
+    def expect_task_row(self, label):
+        """The task list's selected row ('>' marker) is ``label``; task rows carry no value."""
+        self.expect_selected_field("detail", label=label, value="")
 
     def expect_list_label(self, label, wait=True):
-        from frame_oracle import render
-
-        data = SCREEN["parameter_list"]
-        expected = render([(data["x"], data["baseline"], data["level"], label)])
-        indices = [(y * 128 + x) * 4 + channel
-                   for y in range(data["top"], data["bottom"])
-                   for x in range(data["left"], data["right"])
-                   for channel in range(3)]
+        """The picker cursor row (C07) shows ``label``; the row value is blank or CURRENT."""
+        from frame_oracle import selected_field_matches
 
         def matches(state):
-            actual = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(actual[index] == expected[index] for index in indices)
+            return any(selected_field_matches(state, "detail", label, value) for value in ("", "CURRENT"))
 
         if not wait:
             return matches(self.driver.snapshot())
@@ -1057,19 +1209,11 @@ class Ui:
         return True
 
     def pick_device(self, name):
-        from frame_oracle import render
-
-        data = SCREEN["device_picker"]
-        expected = render([(data["x"], data["baseline"], data["level"], name)])
-        indices = [(y * 128 + x) * 4 + channel
-                   for y in range(data["top"], data["bottom"])
-                   for x in range(data["left"], data["right"])
-                   for channel in range(3)]
-        def visible(state):
-            pixels = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(pixels[index] == expected[index] for index in indices)
+        """Turn the Device screen's (C05) selected Device row with E3 until it
+        shows ``name`` exactly (detail row: '>' marker, label, whole value),
+        then apply with K3."""
         for _ in range(40):
-            if visible(self.driver.snapshot()):
+            if self.shown_device([name]) == name:
                 break
             self.turn(3, 1)
         else:
@@ -1077,15 +1221,36 @@ class Ui:
         self.press_key(3)
         self.driver.results.append(dict(kind="device-picker-frame", label=name, matched=True))
 
-    def _header_matches(self, state, page, params):
-        from frame_oracle import header, matches
+    def shown_device(self, candidates, state=None):
+        """The one candidate the selected Device row (C05) shows exactly; '?'
+        when none (or more than one) matches."""
+        from frame_oracle import selected_field_matches
 
-        data = HEADERS[page]
-        expected = header(header_text(page, **params), selected=data["selected"], tabs=data["tabs"])
-        return matches(state, expected)
+        state = self.driver.snapshot() if state is None else state
+        hits = [name for name in candidates
+                if selected_field_matches(state, "detail", "Device", name)]
+        return hits[0] if len(hits) == 1 else "?"
+
+    def _header_matches(self, state, page, params):
+        from frame_oracle import live_header_matches
+
+        title, scope, layout = header_parts(page, **params)
+        return live_header_matches(state, title, scope, layout)
 
     def _observed_title(self, state):
         return "<unmatched framebuffer>"
+
+    def _confirm_matches(self, state, page, params):
+        """Navigation confirmation: the page's title and identity. A Channel page's scope
+        also names the channel's mute and octave (CH01 MUTE OCT+1) when set, which
+        navigation does not change and the caller may not have stated; the case's own
+        expect_header calls stay exact."""
+        if self._header_matches(state, page, params):
+            return True
+        if HEADERS[page]["scope"] != "channel" or "mute" in params or "octave" in params:
+            return False
+        return any(self._header_matches(state, page, dict(params, mute=mute, octave=octave))
+                   for mute in (False, True) for octave in (-2, -1, 0, 1, 2) if mute or octave)
 
     def confirm_header(self, page, **params):
         expected = header_text(page, **params)
@@ -1094,14 +1259,22 @@ class Ui:
             state = None
             while time.monotonic() < deadline:
                 state = self.driver.snapshot()
-                if self._header_matches(state, page, params):
+                if self._confirm_matches(state, page, params):
                     break
                 time.sleep(.03)
             else:
                 raise UiMapError("expected %r, observed %r" % (expected, self._observed_title(state)))
         else:
             state = self.driver.snapshot()
-            if not self._header_matches(state, page, params):
+            # A newly opened screen's body (scope line included) is uncovered
+            # by a short decorative wipe drawn frame by frame (ui_motion
+            # WIPE_FRAMES); let at most one logical second run for it.
+            for _ in range(33):
+                if self._confirm_matches(state, page, params):
+                    break
+                self.driver.elapse(.03)
+                state = self.driver.snapshot()
+            else:
                 raise UiMapError("expected %r, observed %r" % (expected, self._observed_title(state)))
         self.driver.results.append(dict(kind="ui-confirm", page=page, **params))
     def seek_native_parameter_root(self, root):
@@ -1197,3 +1370,178 @@ class Ui:
         except KeyError as error:
             raise UiMapError("unknown Mosaic option/value: " + str(option)) from error
         self.expect_menu_option_row(label, value, top=top)
+
+    # ---- Harmony / Merge Shape family (live feature screens M02..M14, H01..H19) ----
+    # The feature editors own their routes; the live UI shows them as focused
+    # (one selected row) or detail (rows) screens and remembers each screen's
+    # focus, so recipes select a row from a saturated position.
+
+    def feature_root(self):
+        """E1 on a Merge Shape/Harmony child (or a dirty root) returns to the
+        clean feature root, discarding an unapplied draft (one detent)."""
+        self.driver.enc(1, 1)
+
+    def select_row(self, name, row):
+        """Select a detail/focused screen's ``row`` (0-based) from its first row."""
+        self.select_field(name, saturate=-24, then=row)
+
+    def expect_selected_field(self, layout, label=None, value=None, art=False):
+        """The selected field shows ``label``/``value`` on its layout's exact route."""
+        from frame_oracle import selected_field_matches
+
+        self.driver.wait(lambda state: selected_field_matches(
+            state, layout, label, value, art))
+        self.driver.results.append(dict(kind="selected-field", layout=layout,
+                                        label=label, value=value, matched=True))
+
+    # ---- Output (C06) verbs; channel select and Masks value line (dashboard/mask/map family) ----
+    def select_channel_on_page(self, channel, page):
+        """Select ``channel`` on the grid and keep working on Channel ``page``.
+
+        A grid select keeps the showing screen (G05), so from ``page`` itself
+        this only re-confirms it; the page is still (re)opened through Channel
+        Tasks so the call does not depend on the screen showing before the
+        select, and its header is confirmed for the new channel.
+        """
+        self.select_channel(channel)
+        self.channel_page(page, channel=channel, confirm=False)
+        # A waited header: the controlled clock redraws only as time advances.
+        self.expect_header(page, channel=channel)
+
+    def _output_row(self, field):
+        """(1-based dashboard row, label) of a C06 OUTPUT row."""
+        from ui_map import OUTPUT_FIELDS
+        try:
+            return list(OUTPUT_FIELDS).index(field) + 1, OUTPUT_FIELDS[field]
+        except (KeyError, ValueError) as error:
+            raise UiMapError("unknown output field: " + str(field)) from error
+
+    def expect_output_field(self, field, value):
+        """C06 OUTPUT is a dashboard: wait for ``field``'s own row to show its exact
+        label and whole ``value`` (e.g. note 'C3 E3 G3', vel_len '110 / 4.0')."""
+        from frame_oracle import dashboard_row_matches
+        index, label = self._output_row(field)
+        self.driver.wait(lambda state: dashboard_row_matches(state, index, label, value))
+        self.driver.results.append(dict(kind="output-field", field=field, label=label, value=str(value), passed=True))
+
+    def output_field_value(self, field, candidates):
+        """The one candidate ``field``'s C06 row shows exactly ('?' none, 'a|b' several)."""
+        from frame_oracle import dashboard_row_matches
+        index, label = self._output_row(field)
+        state = self.driver.snapshot()
+        hits = [str(v) for v in candidates if dashboard_row_matches(state, index, label, v)]
+        return hits[0] if len(hits) == 1 else ("?" if not hits else "|".join(hits))
+
+    def _mask_label(self, field):
+        from ui_map import MASK_LABELS
+        try:
+            return MASK_LABELS[field]
+        except KeyError as error:
+            raise UiMapError("unknown mask field: " + str(field)) from error
+
+    def selected_mask_value(self, field, candidates):
+        """The one candidate on C01's selected value line for ``field`` ('?' when
+        ``field`` is not selected or shows none; 'a|b' when several match)."""
+        from frame_oracle import selected_field_matches
+        label = self._mask_label(field)
+        state = self.driver.snapshot()
+        hits = [str(v) for v in candidates if selected_field_matches(state, "overview_masks", label, v)]
+        return hits[0] if len(hits) == 1 else ("?" if not hits else "|".join(hits))
+
+    def expect_selected_mask(self, field, value):
+        """C01 has ``field`` selected and its value line shows ``value`` exactly."""
+        from frame_oracle import selected_field_matches
+        label = self._mask_label(field)
+        self.driver.wait(lambda state: selected_field_matches(state, "overview_masks", label, value))
+        self.driver.results.append(dict(kind="selected-mask", field=field, label=label, value=str(value), passed=True))
+
+    # ---- Recording / Memory / numeric merging family ----
+
+    def leave_merge_detail(self, channel=1):
+        """Leave Merge detail (C09) for the Channel family with the Channel button.
+
+        A held merge-mode button + pattern tap (flow G19) follows to Merge
+        detail and it stays after the release (acceptance A10); the retired UI
+        stayed on the Channel page. The Channel button (G01) returns to the
+        remembered family and clears the return frames: K2 on C09 pops one
+        frame per follow, and a second follow from C09 pushes C09 itself."""
+        self.wait_for_header("merge_detail", channel=channel)
+        self.tap_control("channel_editor")
+
+    def channel_page_promptly(self, page, channel=1):
+        """Open Channel ``page`` through Tasks inside a musical deadline.
+
+        As channel_page, but the Tasks list is saturated to its first row by
+        one native E2 event (the navigator clamps a large delta) rather than
+        one detent per row, so the route costs a fixed ~0.2 s."""
+        try:
+            row = CHANNEL_TASKS.index(LIVE_SCREENS[page]["task"])
+        except (KeyError, ValueError) as error:
+            raise UiMapError("unknown channel page: %s" % page) from error
+        self.driver.enc(1, 3)
+        self.encoder_event(2, -2 * len(CHANNEL_TASKS))
+        self.driver.elapse(.15)
+        if row:
+            self.driver.enc(2, row)
+        self.press_key(3)
+        self.wait_for_header(page, channel=channel)
+
+    def assign_trig_parameter_promptly(self, parameter, offset):
+        """Assign a trig parameter at a verified picker offset inside a musical
+        deadline: one native E3 event saturates the picker at its first row
+        (as assign_trig_parameter's 50 detents do), then ``offset`` detents."""
+        label = self.trig_parameter_label(parameter)
+        self.press_key(2)
+        self.encoder_event(3, -126)
+        self.driver.elapse(.15)
+        if offset:
+            self.turn(3, offset)
+        self.expect_list_label(label)
+        self.press_key(3)
+        self.press_key(2)
+        return offset
+
+
+    # ---- Owner feedback 25 September 2026: dashboards, task rows (live_ui_feedback family) ----
+    # Information-only screens (S03, A03, F02, F07, H05, H12, M05, P07) use the
+    # dashboard layout: every field at once, label left, value right, no cursor.
+
+    def expect_dashboard_row(self, label, value):
+        """Some dashboard row shows exactly ``label`` and ``value``; returns its 1-based index."""
+        from frame_oracle import DASHBOARD_ROWS, dashboard_row_matches
+        found = []
+
+        def matches(state):
+            for index in range(1, len(DASHBOARD_ROWS) + 1):
+                if dashboard_row_matches(state, index, label, value):
+                    found.append(index)
+                    return True
+            return False
+        self.driver.wait(matches)
+        self.driver.results.append(dict(kind="dashboard-row", label=label, value=value,
+                                        row=found[-1], passed=True))
+        return found[-1]
+
+    def expect_dashboard(self, page, rows, **params):
+        """The whole dashboard ``page`` (a ui_map header key) shows its title row and
+        exactly ``rows`` ((label, value) in order), nothing else and no cursor."""
+        from frame_oracle import dashboard_matches
+        title, scope, layout = header_parts(page, **params)
+        if layout != "dashboard":
+            raise UiMapError("%s is not a dashboard screen" % page)
+        rows = [(label, str(value)) for label, value in rows]
+        self.driver.wait(lambda state: dashboard_matches(state, title, scope, rows))
+        self.driver.results.append(dict(kind="dashboard", title=title, scope=scope,
+                                        rows=[list(row) for row in rows], passed=True))
+
+
+    # ---- Owner feedback 26 September 2026: channel select, pattern-page steps (live_ui_feedback family) ----
+
+    def expect_outlined_step(self, step):
+        """A 64-cell pattern screen (Pattern Trig/Note/Velocity, Channel view)
+        outlines exactly cell ``step`` (the held step): frame_oracle.pattern_outline_matches."""
+        from frame_oracle import pattern_outline_matches
+        if type(step) is not int or not 1 <= step <= 64:
+            raise UiMapError("pattern step must be an integer in 1..64")
+        self.driver.wait(lambda state: pattern_outline_matches(state, step))
+        self.driver.results.append(dict(kind="pattern-outline", step=step, passed=True))

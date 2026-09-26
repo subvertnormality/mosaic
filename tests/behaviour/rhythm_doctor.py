@@ -13,7 +13,9 @@ import traceback
 from driver import Driver
 
 
-def fifth_algorithm(c):
+def fifth_algorithm(c, route="R01"):
+    """Enter algorithm five; `route` is the Doctor screen it opens (R01 with no
+    bank, R05 WINDOW with a READY bank), whose exact title row is asserted."""
     ui = c.ui
     ui.tap_control("pattern_editor")
     # Exercise legacy enum positions through ordinary input before selecting 5.
@@ -27,7 +29,7 @@ def fifth_algorithm(c):
                               contract="PLAN.md: first four algorithms keep IDs and controls"))
     ui.select_rhythm_doctor_algorithm("rhythm_doctor")
     try:
-        ui.expect_rhythm_doctor_header()
+        ui.expect_rhythm_doctor_header(route)
     except Exception as error:
         raise AssertionError("RD-04: fifth algorithm button must display RHYTHM DOCTOR") from error
     c.results.append(dict(kind="screen-header", expected="RHYTHM DOCTOR", matched=True,

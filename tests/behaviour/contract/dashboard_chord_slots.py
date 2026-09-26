@@ -17,13 +17,19 @@ which never play, must show X (c); a fresh dashboard shows X in all four chord s
 The X marker is characterisation (as in M-DASHBOARD-SELECT-001), not manual text. Cells are
 read pixel-exactly against rendered candidates. All observations are recorded before the
 assertions run.
+
+C06 OUTPUT (the live Note Dashboard) is a dashboard (owner feedback 25 September 2026). Its Note
+row shows the root, then only the chord voices that played, in slot order, space separated (an
+unplayed slot is left out rather than shown as X); each check reads that whole row exactly:
+"C-1 <Chd1>" after a play (the root is the Note mask C-1), so Chd2..Chd4 not playing is the
+absence of any further voice. A fresh dashboard, where nothing has played, reads NO EVENT
+(characterisation). On the Masks page (C01) the Chd1 mask label is read from the selected
+field's value line ("Chord 1", exact value).
 """
-import base64
 
 NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
-CHORD_CELLS = (('Chd1', 0), ('Chd2', 25), ('Chd3', 50), ('Chd4', 75))
-TOP_CELLS = (('Note', 0), ('Vel', 25), ('Len', 50))
 ROOT = 12
+FRESH = 'NO EVENT'  # the whole Note row before anything plays (characterisation)
 
 
 def note_name(n):
@@ -31,27 +37,18 @@ def note_name(n):
     return NAMES[n % 12] + str(n//12 - 2)
 
 
-def read_cells(c, cells, baseline, candidates):
-    from frame_oracle import render
-    pixels = base64.b64decode(c.snapshot()['frame']['pixels_base64'])
-    out = {}
-    for name, x in cells:
-        idx = [(y*128+xx)*4+k for y in range(baseline-7, baseline+3) for xx in range(x, x+24) for k in range(3)]
-        hit = []
-        for t in candidates:
-            expected = render([(x, baseline, 1, t)])
-            if all(pixels[i] == expected[i] for i in idx):
-                hit.append(t)
-        out[name] = hit[0] if len(hit) == 1 else ('?' if not hit else '|'.join(hit))
-    return out
-
-
-def chord_cells(c):
-    return read_cells(c, CHORD_CELLS, 48, ['X'] + [note_name(n) for n in range(-24, 128)])
+def note_row(c, expected, others=()):
+    """The whole Note row: exactly `expected` when shown, else which of `others` it shows
+    ('?' none of them)."""
+    from frame_oracle import dashboard_row_matches
+    try:  # the Note row is row 1 of the dashboard; let the screen settle on the expected row
+        c.wait(lambda s: dashboard_row_matches(s, 1, 'Note', expected))
+    except AssertionError:
+        pass
+    return c.ui.output_field_value('note', list(dict.fromkeys([expected, *others])))
 
 
 def dashboard_chord_slots(c):
-    from frame_oracle import render
     checks = []
 
     def check(label, actual, expected, cite):
@@ -59,19 +56,15 @@ def dashboard_chord_slots(c):
         c.results.append(dict(kind='dashboard-chord-slot', **checks[-1]))
 
     def to_dashboard():
-        c.enc(1, 5); c.screen_header('Ch. 1 Note Dashboard', selected=6)
+        c.ui.turn(1, 5); c.screen_header('Ch. 1 Note Dashboard', selected=6)
 
     def to_masks():
-        c.enc(1, -5); c.screen_header('Ch. 1 Note Masks')
-
-    chord_label_rows = [(y*128+x)*4+k for y in range(41, 51) for x in range(25) for k in range(3)]
+        c.ui.turn(1, -5); c.screen_header('Ch. 1 Note Masks')
 
     def chord_mask(label, direction):
-        expected = render([(0, 40, 15, 'Chd1'), (0, 48, 15, label)])
         for _ in range(20):
             c.elapse(.15)  # let the screen redraw after the previous detent
-            actual = base64.b64decode(c.snapshot()['frame']['pixels_base64'])
-            if all(actual[i] == expected[i] for i in chord_label_rows):
+            if c.ui.selected_mask_value('chord_1', [label]) == label:
                 c.results.append(dict(kind='chord-mask-screen', label=label, passed=True)); return
             c.enc(3, direction)
         raise AssertionError('Chd1 mask label not reached: ' + label)
@@ -84,26 +77,28 @@ def dashboard_chord_slots(c):
         ons = [m['bytes'][1] for m in c.snapshot()['midi']
                if m['index'] > marker and m['bytes'][0] & 0xF0 == 0x90 and m['bytes'][2] > 0]
         voices = sorted(set(ons) - {ROOT})
-        cells = chord_cells(c)
-        c.results.append(dict(kind='dashboard-chord-play', mask=label, sent=sorted(set(ons)), cells=cells))
         # Setup sanity: the root and exactly one chord voice sounded.
         assert ROOT in ons and len(voices) == 1, ('Unexpected notes for Chd1 ' + label, ons)
-        check('Chd1 after playing ' + label, cells['Chd1'], note_name(voices[0]), 'README 679 + human decision S51')
-        check('Chd2..Chd4 after playing ' + label, [cells[k] for k in ('Chd2', 'Chd3', 'Chd4')], ['X']*3,
-              'README 679 + human decision S51 (X is characterisation)')
+        # The root, then the one voice sent; no further voice (Chd2..Chd4 never play).
+        expected = note_name(ROOT) + ' ' + note_name(voices[0])
+        shown = note_row(c, expected, [note_name(ROOT), FRESH])
+        c.results.append(dict(kind='dashboard-chord-play', mask=label, sent=sorted(set(ons)), note_row=shown))
+        check('Chd1 sent voice and no other voice after playing ' + label, shown, expected,
+              'README 679 + human decision S51')
         to_masks()
         return voices[0]
 
-    c.configure(); c.enc(1, -4); c.screen_header('Ch. 1 Note Masks')
+    c.configure(); c.ui.turn(1, -4); c.screen_header('Ch. 1 Note Masks')
 
     # (c) a fresh dashboard: nothing has played.
     to_dashboard()
-    fresh = chord_cells(c)
-    top = read_cells(c, TOP_CELLS, 26, ['X', 'C-2', '0', '0.0', '-1', '-1.0'])
-    c.results.append(dict(kind='dashboard-fresh', chords=fresh, top=top,
-                          note='Note/Vel/Len recorded only: characterisation, not asserted'))
-    check('Fresh dashboard chord slots', [fresh[k] for k, _ in CHORD_CELLS], ['X']*4,
-          'README 679 + human decision S51 (X is characterisation)')
+    fresh = note_row(c, FRESH)
+    top = {'vel_len': c.ui.output_field_value('vel_len', [FRESH, '0 / 0'])}
+    c.results.append(dict(kind='dashboard-fresh', note_row=fresh, top=top))
+    check('Fresh dashboard: nothing played', fresh, FRESH,
+          'README 679 + human decision S51 (NO EVENT is characterisation)')
+    check('Fresh dashboard Vel / Len: nothing played', top['vel_len'], FRESH,
+          'README 679 (NO EVENT is characterisation)')
     to_masks()
 
     c.enc(3, 13)  # Note mask X -> C-1 (MIDI 12), as the S51 probe

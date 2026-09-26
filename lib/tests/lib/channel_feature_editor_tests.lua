@@ -152,7 +152,7 @@ function test_harmony_result_unrecorded_step_is_empty_instead_of_showing_stale_s
   harmony_inspection.plan(song,1,{step=2,status="ok",output=62,role_pitches={v1=62}})
   open_label(value,"Result")
   luaunit.assert_equals(select_label(value,"Status").get(),"NO EVENT")
-  luaunit.assert_nil(select_label(value,"CH1 planned").get())
+  luaunit.assert_equals(select_label(value,"CH1").get(),"NO EVENT")
   luaunit.assert_error(function()select_label(value,"Failure details")end)
 end
 
@@ -193,10 +193,12 @@ function test_harmony_result_step_selector_reads_one_coherent_event_chain()
   harmony_inspection.plan(song,1,first);harmony_inspection.scheduled(song,1,60,"root",first);harmony_inspection.emitted(song,1,60,"root",first)
   harmony_inspection.plan(song,1,second);harmony_inspection.scheduled(song,1,62,"root",second);harmony_inspection.emitted(song,1,62,"root",second)
   local value=feature_editor.new("harmony");value:enter();open_label(value,"Result")
-  luaunit.assert_equals(select_label(value,"CH1 planned").get(),60)
+  -- One row per voice: planned > sent, as note names (60 and 62).
+  local musicutil=require("musicutil")
+  local c,d=musicutil.note_num_to_name(60,true),musicutil.note_num_to_name(62,true)
+  luaunit.assert_equals(select_label(value,"CH1").get(),c.." > "..c)
   select_label(value,"Step").set(2)
-  luaunit.assert_equals(select_label(value,"CH1 planned").get(),62)
-  luaunit.assert_equals(select_label(value,"CH1 emitted").get(),62)
+  luaunit.assert_equals(select_label(value,"CH1").get(),d.." > "..d)
 end
 
 function test_harmony_tone_map_is_per_binding_staged_and_cancelled_without_source_mutation()

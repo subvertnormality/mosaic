@@ -2,7 +2,7 @@
 local application_parameters = {}
 
 function application_parameters.register(project_actions)
-  params:add_group("mosaic", "MOSAIC", 39)
+  params:add_group("mosaic", "MOSAIC", 41)
   params:add_separator("Pattern project management")
   params:add_trigger("save_p", "< Save project")
   params:set_action(
@@ -129,6 +129,10 @@ function application_parameters.register(project_actions)
   params:add_option("midi_honour_rotation", "Honour scale rotations", {"Off", "On"}, 1)
   params:add_option("midi_honour_degree", "Honour scale degree", {"Off", "On"}, 1)
   params:add_option("midi_honour_transpose", "Honour scale transpose", {"Off", "On"}, 1)
+  params:add_separator("Screen")
+  -- Decorative screen motion (splash, tile transitions, character blinks).
+  -- Presentation only: it never changes timing, input or music.
+  params:add_option("ui_motion", "UI motion", {"Off", "On"}, 2)
 
 end
 

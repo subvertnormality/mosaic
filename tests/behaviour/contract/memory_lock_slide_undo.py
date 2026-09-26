@@ -16,13 +16,12 @@ slide, and a lock set there afterwards slides toward step 3.
 Input sequence from the 2026-09-11 probe (probe_locks.py s34, the 'other-history' order).
 Every check runs before the case fails, so a baseline run reports each one.
 """
-import base64
 
 
 def memory_lock_slide_undo(c):
     from cases import assign_trig_parameter
     c.configure(); c.enc(3, 1); c.key(3)
-    c.enc(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
+    c.ui.turn(1, -3); c.screen_header('Ch. 1 Trig Locks', selected=2)
     assign_trig_parameter(c, 'Control 1')
     c.enc(2, 1); assign_trig_parameter(c, 'SparseLow'); c.enc(2, -1)
     field = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
@@ -50,10 +49,11 @@ def memory_lock_slide_undo(c):
         c.elapse(.3)
 
     def outline(state):
-        # Slot 1 dial's step-slide outline: its top edge (row 11) and right edge (column 22).
-        p = base64.b64decode(state['frame']['pixels_base64'])
-        lit = lambda x, y: p[(y * 128 + x) * 4 + 2] > 0
-        return all(lit(x, 11) for x in range(2, 21)) and all(lit(22, y) for y in range(13, 30))
+        # The live Trig params overview (C02) marks a slide on the held step with
+        # 'S' in slot 1's cell corner (an unslid lock there reads 'L'); the old
+        # dial's step-slide outline showed the same fact.
+        from frame_oracle import overview_cell_marker
+        return overview_cell_marker(state, 'overview_params', 1) == 'S'
 
     def held_outline(step, label):
         c.action(type='grid', x=step, y=4, state=1)
@@ -101,9 +101,9 @@ def memory_lock_slide_undo(c):
         assert steps[0][2], ('SparseLow step-1 lock not heard', steps)
     sparse_value = with_slide[0][0][2]
 
-    c.enc(1, 1); c.screen_header('Ch. 1 Memory')
+    c.ui.turn(1, 1); c.screen_header('Ch. 1 Memory')
     c.enc(3, -1)
-    c.enc(1, -1); c.screen_header('Ch. 1 Trig Locks', selected=2)
+    c.ui.turn(1, -1); c.screen_header('Ch. 1 Trig Locks', selected=2)
     undone = heard('after-undo')
     for steps in undone:
         # README 698-703: E3 back one explores the state before the step-1 Control 1 lock ...

@@ -60,10 +60,27 @@ ALGORITHM_WORKFLOW_CONTROLS = {
     "rhythm_factor_maximum": (10, 3),
     "numeric_prime_one": (15, 2),
 }
+# Live Rhythm Doctor screens (spec doctor_routes, lib/ui_render.lua focused
+# layout with the doctor art). The Doctor's tooltip is the footer, the whole
+# last text row: fit(text, 126) at (1,63) level 9, rows 56..63 (the art ends at
+# row 53). The fifth algorithm with no bank opens R01, titled RHYTHM DR.
 RHYTHM_DOCTOR_SCREEN = {
-    "header": {"bottom": 10},
-    "tooltip": {"left": 0, "right": 100, "top": 55, "bottom": 64},
-    "status": {"left": 0, "right": 97, "top": 15, "bottom": 26},
+    "footer": {"left": 0, "right": 128, "top": 56, "bottom": 64},
+    # Doctor screens by doctor_routes screen id (spec.json#/screens): title and
+    # live layout. Focused Doctor screens carry art, which yields x72.. to it.
+    "screens": {
+        "R01": ("RHYTHM DR", "focused"), "R02": ("CAPTURE", "focused"),
+        "R03": ("CANCEL TAKE?", "detail"), "R04": ("ANALYSIS", "focused"),
+        "R05": ("WINDOW", "focused"), "R06": ("ALIGNMENT", "focused"),
+        "R07": ("ALIGNMENT", "detail"), "R08": ("PAINT", "focused"),
+        "R09": ("PAINT", "focused"), "R10": ("CLEAR BANK?", "detail"),
+        "R11": ("STOP SEQUENCER", "detail"), "R12": ("NO BANK", "detail"),
+        "R13": ("BANK LANES", "detail"), "R14": ("SETUP LIMITS", "detail"),
+        "R15": ("BROWSE", "detail"), "R16": ("CANCEL CORRECTION?", "detail"),
+    },
+    # R01's setup fields (lib/ui_adapters/doctor.lua describe.R01): the old
+    # SETUP / <field> names and the live descriptor labels.
+    "setup_labels": {"TEMPO": "Tempo", "MANUAL BPM": "Manual BPM", "INPUT": "Input"},
 }
 CHANNEL_COUNT = 16
 
@@ -77,30 +94,156 @@ PATTERN_NOTE_PITCHES = {
     "pattern_note_f": (8, 6),
 }
 
-CHANNEL_PAGES = OrderedDict([
-    ("masks", {"title": "Note Masks"}),
-    ("trig_locks", {"title": "Trig Locks"}),
-    ("memory", {"title": "Memory"}),
-    ("clock_mods", {"title": "Clocks"}),
-    ("midi_config", {"title": "Device Config"}),
-    ("note_dashboard", {"title": "Note Dashboard"}),
-    ("merge_shape", {"title": "Merge Shape"}),
-    ("harmony", {"title": "Harmony"}),
+# Live screens (docs/ui-reimplementation spec.json#/screens). Each stable page
+# key names its screen, title, layout and, for Channel screens, the Channel
+# Tasks row that opens it. Titles and layouts are the spec's; scope text is
+# the renderer's compact identity (CH01, CH01 S02, ...).
+LIVE_SCREENS = OrderedDict([
+    ("masks", {"screen": "C01", "title": "NOTE MASKS", "layout": "overview_masks", "task": "masks"}),
+    ("trig_locks", {"screen": "C02", "title": "TRIG PARAMS", "layout": "overview_params", "task": "trig_params"}),
+    ("memory", {"screen": "C03", "title": "MEMORY", "layout": "detail", "task": "history"}),
+    ("clock_mods", {"screen": "C04", "title": "CLOCK", "layout": "focused", "task": "clock"}),
+    ("midi_config", {"screen": "C05", "title": "DEVICE", "layout": "detail", "task": "device"}),
+    ("note_dashboard", {"screen": "C06", "title": "OUTPUT", "layout": "dashboard", "task": "output"}),
+    ("merge_shape", {"screen": "M02", "title": "MERGE SHAPE", "layout": "focused", "art": True, "task": "merge_shape"}),
+    ("harmony", {"screen": "H01", "title": "VOICE LEADING", "layout": "focused", "art": True, "task": "harmony"}),
+    ("channel_tasks", {"screen": "N01", "title": "CHANNEL TASKS", "layout": "detail"}),
+    ("merge_detail", {"screen": "C09", "title": "MERGE MODES", "layout": "detail"}),
+    ("assignment", {"screen": "C07", "title": "ASSIGN PARAM", "layout": "detail"}),
+    ("trigger_editor", {"screen": "P01", "title": "PATTERN TRIG", "layout": "pattern64", "scope": "pattern"}),
+    ("trigger_editor_confirmation", {"screen": "P02", "title": "TRIG OPTIONS", "layout": "focused"}),
+    ("note_editor", {"screen": "P03", "title": "PATTERN NOTE", "layout": "pattern64", "scope": "pattern"}),
+    ("velocity_editor", {"screen": "P04", "title": "PATTERN VELOCITY", "layout": "pattern64", "scope": "pattern"}),
+    ("scale", {"screen": "S01", "title": "SCALE", "layout": "focused", "scope": "scale"}),
+    ("scale_clock", {"screen": "S02", "title": "SCALE CLOCK", "layout": "detail", "scope": "scale"}),
+    ("song", {"screen": "A03", "title": "SONG PLAYBACK", "layout": "dashboard", "scope": "song"}),
+    ("scale_overview", {"screen": "S03", "title": "SCALE OVERVIEW", "layout": "dashboard", "scope": "scale"}),
+    ("trig_algorithm", {"screen": "P06", "title": "TRIG ALGORITHM", "layout": "detail"}),
+    ("paint_preview", {"screen": "P07", "title": "PAINT PREVIEW", "layout": "dashboard"}),
+    ("channel_view", {"screen": "P05", "title": "CHANNEL VIEW", "layout": "pattern64"}),
+    ("scale_tasks", {"screen": "N02", "title": "SCALE TASKS", "layout": "detail", "scope": "scale"}),
+    ("pattern_tasks", {"screen": "N03", "title": "PATTERN TASKS", "layout": "detail"}),
+    ("scale_source", {"screen": "S04", "title": "SCALE SOURCE", "layout": "dashboard"}),
+    ("trig_step_edit", {"screen": "P08", "title": "TRIG STEP EDIT", "layout": "dashboard", "scope": "pattern_step"}),
+    # Merge Shape and Harmony child screens (their feature editor's routes).
+    ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
+    ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
+    ("harmony_ensemble", {"screen": "H04", "title": "ENSEMBLE", "layout": "detail"}),
+    ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "detail"}),
+    ("harmony_members", {"screen": "H07", "title": "MEMBERS", "layout": "detail"}),
+    ("harmony_entry", {"screen": "H09", "title": "ENTRY / FAILURE", "layout": "detail"}),
+    ("harmony_tone_map", {"screen": "H11", "title": "TONE MAP", "layout": "focused", "art": True}),
+])
+
+# Non-Channel page rings the cases were written for, each entry the live
+# screen that page became: (screen id, title, layout, task row of its navigator).
+PAGE_RINGS = {
+    # Channel view is no longer a Scale task (owner decision 25 September 2026).
+    "Scale": [("S01", "SCALE", "focused", "scale"), ("S02", "SCALE CLOCK", "detail", "scale_clock")],
+    "Song": [("A01", "SLOT SETUP", "detail", "slot_setup"), ("A02", "GLOBAL FEEL", "focused", "tempo_feel"),
+             ("P05", "CHANNEL VIEW", "pattern64", "channel_view")],
+    "Trig": [("P01", "PATTERN TRIG", "pattern64", "pattern"), ("P02", "TRIG OPTIONS", "focused", "options")],
+}
+# Other live screens that stand for a ring entry: where a context lands from
+# its grid button (Song) and the Trig page's grid-follow variants.
+RING_ALIASES = {
+    "Song": {0: [("A03", "SONG PLAYBACK", "dashboard")]},
+    "Trig": {0: [("P06", "TRIG ALGORITHM", "detail"), ("P07", "PAINT PREVIEW", "dashboard"),
+                 ("P08", "TRIG STEP EDIT", "dashboard")]},
+}
+TASK_ROWS = {
+    "Scale": ["scale", "scale_clock", "overview"],
+    "Song": ["playback", "slot_setup", "tempo_feel", "channel_view"],
+    "Trig": ["pattern", "options", "algorithm", "channel_view", "rhythm_doctor"],
+}
+
+# The Channel Tasks rows in their spec order (spec.json#/tasks/rows/N01).
+# Mask detail / Trig detail left the list and Merge became Merge modes (usability audit
+# 25 September 2026).
+CHANNEL_TASKS = ["masks", "trig_params", "output", "harmony", "clock", "merge", "device", "history",
+                 "merge_shape"]
+
+# Historical page keys used by cases; each is a live screen.
+CHANNEL_PAGES = OrderedDict(
+    (key, {"title": LIVE_SCREENS[key]["title"]})
+    for key in ("masks", "trig_locks", "memory", "clock_mods", "midi_config",
+                "note_dashboard", "merge_shape", "harmony")
+)
+
+
+def _signed(n):
+    return ("+" if n > 0 else "") + str(n)
+
+
+def live_scope(scope="channel", channel=1, song_slot=1, held=(), slot=1, pattern=1, mute=False,
+               octave=0, step_octave=0):
+    """Renderer scope text (lib/ui_live.lua scope_text): CH01 [S02] [MUTE] [OCT+1]
+    [ST05 [O-1] | 3ST]; the pattern editor PAT02 CH01 ...; SLOT 01; SONG 01.
+
+    ``mute``/``octave`` and a held step's ``step_octave`` lock are Channel-page
+    parts only; the pattern editor (``scope="pattern"``) names the edited
+    pattern before its viewed ``channel``."""
+    if scope == "scale":
+        parts = ["SLOT %02d" % slot]
+    elif scope == "song":
+        parts = ["SONG %02d" % song_slot]
+    else:
+        parts = ["PAT%02d" % pattern] if scope in ("pattern", "pattern_step") else []
+        if scope != "pattern_step":
+            parts.append("CH%02d" % channel)
+        if song_slot != 1:
+            parts.append("S%02d" % song_slot)
+        if scope == "channel":
+            if mute:
+                parts.append("MUTE")
+            if octave:
+                parts.append("OCT" + _signed(octave))
+    held = list(held)
+    if len(held) == 1:
+        parts.append("ST%02d" % held[0])
+        if scope == "channel" and step_octave:
+            parts.append("O" + _signed(step_octave))
+    elif len(held) > 1:
+        parts.append("%dST" % len(held))
+    return " ".join(parts)
+
+
+# Masks overview cells: (1-based cell, the whole mask name the cell shows; it
+# scrolls when the cell is too narrow; owner request 26 September 2026, was
+# "Vel", "Len", "Chd1" .. "Chd4").
+OVERVIEW_CELLS = {
+    "trig": (1, "Trig"), "note": (2, "Note"), "velocity": (3, "Velocity"), "length": (4, "Length"),
+    "chord_1": (5, "Chord 1"), "chord_2": (6, "Chord 2"), "chord_3": (7, "Chord 3"), "chord_4": (8, "Chord 4"),
+}
+# Masks full labels, shown on the selected field's value line (channel_edit_masks.fields).
+MASK_LABELS = {
+    "trig": "Trig", "note": "Note", "velocity": "Velocity", "length": "Length",
+    "chord_1": "Chord 1", "chord_2": "Chord 2", "chord_3": "Chord 3", "chord_4": "Chord 4",
+}
+
+
+
+def trig_param_cell_label(top, bottom=""):
+    """A Trig params overview cell's label (lib/ui_adapters/parameters.lua
+    cell_label): both parts of the parameter's short name, as the old dial drew
+    them on two lines, title-cased like fn.title_case ("CC1" -> "Cc1",
+    "QUAN" + "NOTE" -> "Quan Note"); owner request 26 September 2026."""
+    import re
+    label = "%s %s" % (top, bottom) if bottom else str(top)
+    return re.sub(r"([A-Za-z])([A-Za-z0-9_']*)", lambda m: m.group(1).upper() + m.group(2).lower(), label)
+
+
+# C06 OUTPUT (Note Dashboard) rows in descriptor order with their labels
+# (lib/ui_adapters/read_only.lua readers.C06). A dashboard: every row shows at
+# once, row n at baseline 8 + 8n, nothing to select.
+OUTPUT_FIELDS = OrderedDict([
+    ("note", "Note"), ("vel_len", "Vel / Len"), ("step", "Step"), ("degree", "Degree"),
+    ("pitch", "Pitch"), ("sent", "Sent"),
 ])
 
 HEADERS = {
-    **{
-        key: {
-            "template": "Ch. {channel} " + value["title"],
-            "selected": index,
-            "tabs": len(CHANNEL_PAGES),
-        }
-        for index, (key, value) in enumerate(CHANNEL_PAGES.items(), 1)
-    },
-    "trigger_editor": {"template": "Trig editor options", "selected": 1, "tabs": 2},
-    "trigger_editor_confirmation": {"template": "Trig editor options", "selected": 2, "tabs": 2},
-    "note_editor": {"template": "Note editor options", "selected": 1, "tabs": 2},
-    "velocity_editor": {"template": "Velocity editor options", "selected": 1, "tabs": 2},
+    key: {"title": data["title"], "layout": data["layout"], "scope": data.get("scope", "channel")}
+    for key, data in LIVE_SCREENS.items()
 }
 
 SCREEN = {
@@ -551,10 +694,43 @@ def grid_partition(page):
 
 
 def header_text(page, **params):
+    """Title and scope a live screen shows for the given identity."""
     try:
-        return HEADERS[page]["template"].format(**params)
+        data = HEADERS[page]
     except KeyError as error:
-        raise KeyError("unknown or incomplete header key %r: %s" % (page, error)) from error
+        raise KeyError("unknown header key %r" % page) from error
+    return data["title"] + " " + live_scope(data["scope"], **params)
+
+
+# Historical header texts cases still name, mapped to the live page they became.
+_HISTORICAL_CHANNEL_TITLES = {
+    "Note Masks": "masks", "Trig Locks": "trig_locks", "Memory": "memory", "Clocks": "clock_mods",
+    "Device Config": "midi_config", "Note Dashboard": "note_dashboard", "Merge Shape": "merge_shape",
+    "Harmony": "harmony",
+}
+
+
+def historical_header(text, selected=None):
+    """(page key, header params) of the live screen an old header text names."""
+    import re
+    match = re.match(r"^Ch\. (\d+) (.+)$", text)
+    if match and match.group(2) in _HISTORICAL_CHANNEL_TITLES:
+        return _HISTORICAL_CHANNEL_TITLES[match.group(2)], {"channel": int(match.group(1))}
+    match = re.match(r"^Scale slot (\d+) ?$", text)
+    if match:
+        return "scale", {"slot": int(match.group(1))}
+    if text == "Trig editor options":
+        return ("trigger_editor_confirmation" if selected == 2 else "trigger_editor"), {}
+    if text == "Note editor options":
+        return "note_editor", {}
+    if text == "Velocity editor options":
+        return "velocity_editor", {}
+    raise KeyError("no live screen for historical header %r" % text)
+
+
+def header_parts(page, **params):
+    data = HEADERS[page]
+    return data["title"], live_scope(data["scope"], **params), data["layout"]
 NATIVE_PARAMETER_ROOTS = {
     "mosaic": {"field": "id", "value": "mosaic"},
     "channel_1_device_parameters": {

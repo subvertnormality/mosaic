@@ -8,7 +8,6 @@ channel 1 at step 1 and applies its own division for its four global steps:
 slot 2 sounds steps 1-2 at 1/3 s, slot 3 plays steps 1-4 twice at 1/12 s (a
 channel cannot exceed the global length and repeats, README 917), and slot 1 returns at 1/6 s.
 """
-import base64
 
 PHRASE = [(60, 127), (62, 117), (64, 107), (65, 97)]
 # Selector order on the Clocks page: /1 is index 13; negative E3 moves toward slower divisions.
@@ -17,18 +16,18 @@ OCTAVE = {1: 0, 2: 1, 3: 2}; OCTAVE_KEY = {2: 11, 3: 12}
 
 
 def song_tempo_divisions(c):
-    from frame_oracle import render
     c.configure()
     c.tap(6, 8); c.tap(2, 7)
     for _ in range(3): c.tap(8, 7)                               # global length 4
     for slot, (label, detents, _) in DIVISIONS.items():
         c.tap(6, 8); c.tap(1, 1); c.hold_tap((1, 1), (slot, 1)); c.tap(slot, 1); c.tap(3, 8)
         c.tap(1, 1); c.tap(OCTAVE_KEY[slot], 8)                  # this slot's channel 1 octave
-        c.enc(1, -5); c.enc(1, 3); c.screen_header('Ch. 1 Clocks', selected=4)
+        # The old E1 -5/+3 reached Clocks; Tasks opens it. The live scope names the song slot
+        # and this slot's channel octave (CH01 S02 OCT+1).
+        c.ui.channel_page('clock_mods', confirm=False)
+        c.ui.expect_header('clock_mods', channel=1, song_slot=slot, octave=OCTAVE[slot])
         c.enc(3, detents); c.key(3)
-        expected = render([(0, 26, 15, label)])
-        c.wait(lambda s: all(base64.b64decode(s['frame']['pixels_base64'])[(y*128+x)*4+k] == expected[(y*128+x)*4+k]
-                             for y in range(20, 30) for x in range(48) for k in range(3)))
+        c.ui.expect_selected_field('focused', label='Rate', value=label)
         c.results.append(dict(kind='slot-clock-division', slot=slot, label=label, passed=True))
     c.tap(6, 8); c.tap(1, 1); c.tap(3, 8)                        # play from slot 1
     plan = []                                                     # (global-step time, pitch, velocity)

@@ -20,6 +20,9 @@ local note15to21_fade_button = fade_button:new(14, 8, 0, 14, "down")  -- Top but
 
 
 
+-- The first step of the 16-step page the faders show (0, 16, 32 or 48).
+function note_edit_page.get_step_offset() return horizontal_offset end
+
 function note_edit_page.init()
   for s = 1, 64 do
     faders["step" .. s .. "_fader"] = vertical_fader:new(s, 1, 21)

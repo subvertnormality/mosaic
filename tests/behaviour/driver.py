@@ -136,9 +136,11 @@ class Driver:
         state=self.wait(lambda s:[s['grid'][i] for i in indexes]==expected)
         self.results.append(dict(kind='grid',cells=cells,expected=expected,actual=[state['grid'][i] for i in indexes]))
     def screen_header(self,text,selected=None):
-        from frame_oracle import header,matches
-        expected=header(text,selected=selected);self.wait(lambda s:matches(s,expected))
-        self.results.append(dict(kind='screen-header',expected=text,matched=True))
+        """Wait for the live screen a historical header text names (ui_map.historical_header)."""
+        from ui_map import historical_header
+        page,params=historical_header(text,selected)
+        self.ui.wait_for_header(page,**params)
+        self.results.append(dict(kind='screen-header',expected=text,page=page,matched=True))
     def _set_midi_lead_time(self,value,expected=None,capture=False):
         from cases import menu_label,menu_option_row
         from frame_oracle import selected_line

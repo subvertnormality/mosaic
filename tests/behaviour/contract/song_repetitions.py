@@ -1,20 +1,18 @@
 """Per-slot repetition counts checked by independent octave fingerprints."""
 def song_repetition_domain(c):
-    import base64,time
-    from frame_oracle import render
+    import time
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     c.configure();c.tap(6,8);c.tap(2,7);c.tap(8,7)
     c.hold_tap((1,1),(2,1));c.tap(2,1);c.tap(3,8);c.tap(11,8);c.tap(6,8);c.tap(1,1)
     c.ui.set_mosaic_options([('Song mode',True),('Reset on song seq change',True),('Reset on pattern repeat',True)])
+    # The Song button lands on Song Playback (A03); Repeats is on Slot Setup (A01),
+    # which stays showing while the grid selects slot 1.
+    c.ui.open_task('Song','slot_setup');c.ui.expect_selected_field('focused',label='Repeats')
     previous=1
     for repeats in range(1,17):
         c.tap(1,1);c.enc(3,repeats-previous);c.key(3);previous=repeats
-        expected=render([(0,37,15,str(repeats))])
-        def feedback(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(31,39) for x in range(0,32) for k in range(3))
-        c.wait(feedback)
+        c.ui.expect_selected_field('focused',label='Repeats',value=str(repeats))
         capture=MidiWindow(c.snapshot()['midi_count']);c.tap(1,8)
         target=2*repeats+3
         c.wait(lambda state:capture.extend(state) and len(capture.note_ons())>=target,timeout=10)

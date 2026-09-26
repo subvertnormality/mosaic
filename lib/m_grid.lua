@@ -307,6 +307,7 @@ function m_grid.init()
     if trigger_edit_page and trigger_edit_page.disconnect_rhythm_doctor then trigger_edit_page.disconnect_rhythm_doctor() end
     dual_in_progress = false
     m_grid.alert_disconnect()
+    if ui_live and ui_live.installed and ui_live.installed() then ui_live.grid_disconnect() end
   end
 
 end
@@ -340,10 +341,87 @@ function m_grid.set_menu_button_state()
   end
 end
 
+-- Read-only presentation notifications (docs/ui-reimplementation UI03). Each is
+-- sent after the original handler of its phase has returned; nothing here runs
+-- a handler again or changes musical state.
+local ui_outcomes = nil
+local function notify_outcome(phase, x, y, page_before, extra)
+  if not ui_live or not ui_live.installed or not ui_live.installed() then return end
+  if ui_outcomes == nil then
+    local ok, module = pcall(include, "mosaic/lib/ui_grid_outcomes")
+    ui_outcomes = ok and module or false
+  end
+  if not ui_outcomes then return end
+  local event = {phase = phase, x = x, y = y, page_before = page_before, page_after = program.get_selected_page(),
+    shift = is_key1_down == true, pressed = pressed_keys, playing = m_clock.is_playing()}
+  for key, value in pairs(extra or {}) do event[key] = value end
+  local flow_id, payload = ui_outcomes.classify(event)
+  if flow_id then ui_live.grid_outcome(flow_id, payload) end
+end
+
+-- The steps the held keys address, in each page's own layout: rows 4..7 are
+-- steps 1..64 on the Channel, Scale and Trig pages; on the Note and Velocity
+-- pages each column's fader (rows 1..7) is a step of the page shown (1-16 ..
+-- 49-64). Other keys hold no step.
+local function held_steps_for_page()
+  local page = program.get_selected_page()
+  local steps = {}
+  local fader_page = (page == pages.pages.note_edit_page and note_edit_page)
+    or (page == pages.pages.velocity_edit_page and velocity_edit_page) or nil
+  for _, key in ipairs(pressed_keys) do
+    if fader_page then
+      if key[2] >= 1 and key[2] <= 7 then
+        local step = (fader_page.get_step_offset and fader_page.get_step_offset() or 0) + key[1]
+        local seen = false
+        for _, s in ipairs(steps) do if s == step then seen = true end end
+        if not seen then steps[#steps + 1] = step end
+      end
+    elseif page == pages.pages.channel_edit_page or page == pages.pages.scale_edit_page
+      or page == pages.pages.trigger_edit_page then
+      if key[2] >= 4 and key[2] <= 7 then steps[#steps + 1] = fn.calc_grid_count(key[1], key[2]) end
+    end
+  end
+  return steps
+end
+
+-- The steps the held keys address on the current page (read only).
+function m_grid.held_steps() return held_steps_for_page() end
+
+local function notify_hold()
+  if not ui_live or not ui_live.installed or not ui_live.installed() then return end
+  ui_live.grid_hold(held_steps_for_page())
+end
+
+local function algorithm()
+  return trigger_edit_page and trigger_edit_page.get_algorithm and trigger_edit_page.get_algorithm() or nil
+end
+
+-- Owner state the classifier needs from before the handler ran (read only).
+local function before_state(x, y)
+  local state = {algorithm_before = algorithm(), playing_before = m_clock.is_playing(),
+    stop_safety = params:get("stop_safety") == 2}
+  if channel_edit_page_ui and channel_edit_page_ui.adapter_owners then
+    local selected = channel_edit_page_ui.adapter_owners().channel_pages:get_selected_page()
+    state.feature_editor_open = program.get_selected_page() == pages.pages.channel_edit_page and (selected == 7 or selected == 8)
+  end
+  if y >= 4 and y <= 7 then
+    local selected_pattern = program.get_selected_pattern and program.get_selected_pattern()
+    local step = fn.calc_grid_count(x, y)
+    state.step_has_trig = selected_pattern ~= nil and selected_pattern.trig_values[step] == 1
+  end
+  local doctor = trigger_edit_page and trigger_edit_page.get_rhythm_doctor and trigger_edit_page.get_rhythm_doctor()
+  if doctor and doctor.lane_at then state.lane_hit = doctor:lane_at(x, y) ~= nil end
+  if trigger_edit_page and trigger_edit_page.rhythm_doctor_preview_armed then
+    state.paint_armed = trigger_edit_page.rhythm_doctor_preview_armed() == true
+  end
+  return state
+end
+
 function m_grid.pre_press(x, y)
   local claimed = press:handle_pre(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
+  notify_hold()
   return claimed
 end
 
@@ -351,19 +429,24 @@ function m_grid.post_press(x, y)
   press:handle_post(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
+  notify_hold()
 end
 
 function m_grid.short_press(x, y)
+  local page_before, before = program.get_selected_page(), before_state(x, y)
   press:handle(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
+  notify_outcome("short", x, y, page_before, before)
 end
 
 function m_grid.long_press(x, y)
   clock.sleep(1)
   m_grid.long_press_active[x][y] = true
+  local page_before, before = program.get_selected_page(), before_state(x, y)
   press:handle_long(program.get_selected_page(), x, y)
   fn.dirty_grid(true)
+  notify_outcome("long", x, y, page_before, before)
 end
 
 -- True when key (x, y) was pressed after key (x2, y2) during the current gesture.
@@ -373,9 +456,12 @@ function m_grid.pressed_after(x, y, x2, y2)
 end
 
 function m_grid.dual_press(x, y, x2, y2)
+  local page_before, before = program.get_selected_page(), before_state(x, y)
   press:handle_dual(program.get_selected_page(), x, y, x2, y2)
   fn.dirty_grid(true)
   fn.dirty_screen(true)
+  before.held_x, before.held_y = x, y
+  notify_outcome("dual", x2, y2, page_before, before)
 end
 
 function m_grid.redraw()

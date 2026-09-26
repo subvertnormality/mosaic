@@ -247,6 +247,15 @@ def validate(s=None,inventory=None,check_sources=True):
      try:select(s,state,event)
      except (ValueError,KeyError)as e:failures.add(str(e))
  errors.extend(sorted(failures))
+ # The runtime Lua copy of the routing data must be regenerated with the spec.
+ runtime=REPO/'lib/ui_spec_data.lua'
+ if runtime.is_file():
+  import export_runtime
+  require(runtime.read_text(encoding='utf8')==export_runtime.build(),'lib/ui_spec_data.lua is stale')
+ traces=ROOT/'generated/router-traces.json'
+ if traces.is_file():
+  import router_traces
+  require(traces.read_text(encoding='utf8')==router_traces.build(),'generated/router-traces.json is stale')
  return errors
 if __name__=='__main__':
  errors=validate(check_sources='--skip-source-fingerprints'not in sys.argv)

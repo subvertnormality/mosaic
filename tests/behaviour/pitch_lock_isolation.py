@@ -3,8 +3,10 @@
 def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reassign=False):
     from cases import assert_durations
     c.ui.configure()
-    c.ui.select_channel(2);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
-    c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.turn(1,-3)
+    c.ui.select_channel_on_page(2,'midi_config');c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
+    # The pattern slot tap shows Merge detail; Trig params (the old E1 -3 from Device) opens
+    # through Channel tasks.
+    c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.channel_page('trig_locks',channel=2)
     def lock(step,value):
         with c.ui.hold_step(step):
             c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
@@ -66,7 +68,7 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
         c.ui.select_channel(1);c.ui.turn(1,1);c.ui.expect_header('memory',channel=1)
         c.ui.press_key(2);verify([60]*4,two,'undo-first-channel-only')
         c.ui.press_key(3);verify(one,two,'redo-first-channel-extreme-locks')
-        c.ui.select_channel(2);c.ui.expect_header('memory',channel=2)
+        c.ui.select_channel_on_page(2,'memory')
         c.ui.press_key(2);verify(one,[65]*4,'undo-second-channel-only')
         c.ui.press_key(3);verify(one,two,'redo-second-channel-quantised-and-zero')
         c.ui.press_key(2);c.ui.turn(1,-1);lock(4,72);c.ui.turn(1,1)
@@ -74,7 +76,7 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
         verify(one,[65,65,65,72],'new-edit-discards-second-channel-redo')
         c.ui.press_key(2);verify(one,[65]*4,'branched-history-start')
         c.ui.press_key(3);verify(one,[65,65,65,72],'branched-history-end')
-        c.ui.select_channel(1);c.ui.press_key(2);verify([60]*4,[65,65,65,72],'other-history-survives-branch')
+        c.ui.select_channel_on_page(1,'memory');c.ui.press_key(2);verify([60]*4,[65,65,65,72],'other-history-survives-branch')
         c.ui.press_key(3);verify(one,[65,65,65,72],'other-history-redo-survives-branch')
         if persistence:
             from driver import Driver,digest
@@ -100,7 +102,7 @@ def pitch_lock_isolation(c,song_copy=False,history=False,persistence=False,reass
                         save_idle(loaded)
                     else:
                         loaded.ui.press_key(3);verify(one,[65,65,65,72],'redo-after-undone-cold-save',loaded)
-                        loaded.ui.select_channel(2);loaded.ui.expect_header('memory',channel=2)
+                        loaded.ui.select_channel_on_page(2,'memory')
                         loaded.ui.press_key(2);verify(one,[65]*4,'other-channel-undo-after-two-boots',loaded)
                         loaded.ui.press_key(3);verify(one,[65,65,65,72],'discarded-redo-does-not-return-after-boots',loaded)
                     loaded.results.append(dict(kind='pitch-lock-history-cold-generation',generation=generation,passed=True))

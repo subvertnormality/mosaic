@@ -203,7 +203,7 @@ def seeded_probability(c,probability=50,opportunities=64):
     # A second channel carries the same authored four-step phrase at100%.
     # Its raw MIDI output independently exposes every opportunity, including
     # the first accepted note's position and the complete rejected tail.
-    c.ui.select_channel(2);c.ui.expect_header('midi_config',channel=2)
+    c.ui.select_channel_on_page(2,'midi_config')
     c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
     c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.expect_leds({('channel',2):'selected',('pattern_slot',1):'selected'})
     c.ui.select_channel(1);c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False);c.ui.assign_trig_parameter_key('trig_probability');c.ui.set_value(probability+1)
@@ -240,7 +240,7 @@ def probability_midi_locks(c,trigless=True,nrpn=False):
     c.ui.configure()
     if nrpn:c.ui.set_value(1);c.ui.press_key(3) # Generic CC -> existing configured NRPN fixture.
     c.ui.set_mosaic_option_keys([('trigless_locks',trigless)])
-    c.ui.select_channel(2);c.ui.expect_header('midi_config',channel=2)
+    c.ui.select_channel_on_page(2,'midi_config')
     c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.turn(2,1);c.ui.set_value(1);c.ui.press_key(3)
     c.ui.tap_control('pattern_slot',1);c.ui.set_range(1,4);c.ui.select_channel(1);c.ui.channel_page('trig_locks',from_page='midi_config',confirm=False)
     c.ui.assign_trig_parameter_key('nrpn14' if nrpn else 'stored_patch_cc1')
@@ -668,7 +668,7 @@ def pending_parameter_lock_song_transition(c):
     c.ui.menu('channel_editor')
 
     def select_slot(slot):
-        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',slot);c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1)
+        c.ui.song_editor();c.ui.tap_control('song_pattern_slot',slot);c.ui.menu('channel_editor');c.ui.expect_header('trig_locks',channel=1,song_slot=slot,octave=1 if slot==2 else 0) # Live scope names the song slot and its channel octave (CH01 S02 OCT+1).
     # A distinct unheld default separates locks from ordinary values in both slots.
     for slot in (1,2):
         select_slot(slot)

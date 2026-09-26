@@ -22,6 +22,13 @@ from named_save import named_save_load
 from channel_scale_display import channel_active_scale_display
 from memory_scale_lock_display import memory_scale_lock_display
 from contract.tooltips import tooltip_messages
+from contract.live_ui import live_ui_follow, live_ui_tasks, live_ui_splash
+from contract.live_ui_acceptance import (ui_accept_a01, ui_accept_a02, ui_accept_a03, ui_accept_a10,
+                                         ui_accept_a11, ui_accept_a19)
+from contract.live_ui_sweep import live_ui_sweep
+from contract.live_ui_feedback import (live_ui_algorithm, live_ui_paint, live_ui_dashboards, live_ui_view_channel,
+                                        live_ui_grid_focus, live_ui_merge_modes, live_ui_channel_select,
+                                        live_ui_note_page_step, live_ui_merge_shape_trig_mode)
 from sinfonion_software import sinfonion_software
 from midi_mapping import midi_mapping,midi_map_entry
 from contract.device_configs import malformed_device_configs, missing_id_device_configs
@@ -456,11 +463,12 @@ def tresillo_rhythm(c,length,steps):
 def tresillo_multipliers(c):
     tresillo_setup(c);c.results.append(dict(kind='workflow-check',name='tresillo-input-setup',passed=True))
     for i,(length,steps) in enumerate(TRESILLO_STEPS.items()):
-        if i:c.ui.turn(3,1)
+        # The Pattern button lands on the pattern; the multiplier is on Trig options.
+        if i:c.ui.trig_options();c.ui.turn(3,1)
         tresillo_rhythm(c,length,steps);c.results.append(dict(kind='workflow-check',name='multiplier-'+str(length),passed=True))
 
 def tresillo_drum_boundary(c):
-    tresillo_setup(c);c.ui.tap_control("drum_bank",2);c.ui.turn(3,7)
+    tresillo_setup(c);c.ui.tap_control("drum_bank",2);c.ui.trig_options();c.ui.turn(3,7)
     tresillo_rhythm(c,64,list(range(1,65,8)));c.results.append(dict(kind='workflow-check',name='drum-bank-64-step-tresillo',passed=True))
 
 
@@ -939,6 +947,12 @@ def transpose_scale_octave_composition(c):
     c.ui.tap_control("channel_octave", 1)  # Channel octave +1.
     c.ui.scale_editor()
     c.ui.tap_control("global_transpose_plus_four")  # Song/global transpose +4; locks below must override it.
+    # Global transposition shows Scale overview with its Transpose row (grid actions show what
+    # they changed, 25 September 2026); the Scale screen reopens through Scale tasks.
+    c.ui.expect_header("scale_overview", slot=1)
+    c.ui.expect_dashboard_row("Transpose", "+4")
+    c.ui.open_task("Scale", "scale")
+    c.ui.expect_header("scale", slot=1)
     # Native scale editor: Quantizer -> Roman -> Transpose, then save +3.
     c.ui.select_field("scale_transpose", offset=2)
     c.ui.set_value(3); c.ui.press_key(3)
@@ -1069,7 +1083,7 @@ def octave_all_positions(c):
     for page in range(4):
         ui.select_pattern_note_page(page+1)
         for x in range(1,17):ui.tap_pattern_note_fader(x,7)
-    ui.channel_editor();ui.turn(1,-3)
+    ui.channel_editor();ui.channel_page('trig_locks')  # the page the old E1 -3 from Device reached
     octaves=[i%5-2 for i in range(64)]
     for index,octave in enumerate(octaves,1):ui.set_step_octave(index,octave)
     velocities=[127,117,107,97]+[100]*60
@@ -1086,6 +1100,9 @@ def octave_all_positions(c):
         for index,octave in enumerate(octaves,1):
             with ui.hold_step(index):ui.expect_channel_octave(octave)
         play(octaves,'all64-override-global-'+str(global_octave))
+    # The global octave tap shows the octave on Note Masks (spec flow G14); the
+    # README's channel clear (K1+K2) belongs to Trig params, where the old UI stayed.
+    ui.channel_page('trig_locks')
     with ui.hold_keys(1):
         c.elapse(.3);ui.press_key(2)
     for index in range(1,65):
@@ -1142,7 +1159,7 @@ def fractional_clock_continuity(c):
     import json
     c.ui.configure();c.ui.pattern_editor();c.ui.pattern_editor()
     for x in range(1,5):c.ui.tap_control('cell',(x,7))
-    c.ui.menu('channel_editor');c.ui.turn(1,-1)
+    c.ui.menu('channel_editor');c.ui.channel_page('clock_mods')  # the old E1 -1 from Device reached Clocks
     c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
     ratios=[(1,'x16',Fraction(3,2)),(5,'x5.3',Fraction(240,53)),(6,'x5',Fraction(24,5)),(9,'x2.6',Fraction(120,13)),(12,'x1.3',Fraction(240,13)),(16,'/2.6',Fraction(312,5)),(20,'/5.3',Fraction(636,5))]
     selected=13;segments=[];trigger_action=dict(type='grid',x=1,y=8,state=0)
@@ -1247,9 +1264,12 @@ def inactive_shuffle_transition(c,basis=False):
     from note_accounting import note_pairs
     c.configure();c.ui.pattern_editor();c.ui.pattern_editor()
     for step in range(49,53):c.ui.tap_step(step)
-    c.ui.channel_editor();c.ui.turn(1,-1);c.ui.turn(3,12);c.ui.press_key(3)
+    # The old E1 -1 from Device reached Clocks; the live UI opens it from Tasks.
+    c.ui.channel_editor();c.ui.channel_page('clock_mods');c.ui.turn(3,12);c.ui.press_key(3)
     c.ui.set_mosaic_options([('Reset on song seq change',False),('Reset on pattern repeat',False)])
-    c.ui.song_editor();c.ui.hold_control_tap('channel','channel',1,2);c.ui.select_channel(2);c.ui.channel_editor()
+    c.ui.song_editor();c.ui.hold_control_tap('channel','channel',1,2);c.ui.tap_control('song_pattern_slot',2);c.ui.channel_editor()
+    # On the Song page cell (2,1) selects song slot 2; the old Channel button returned to Clocks.
+    c.ui.channel_page('clock_mods',confirm=False);c.ui.expect_header('clock_mods',channel=1,song_slot=2)
     # Set either stored Smooth feel or7 basis in Shuffle mode, then return
     # to Swing. Each inactive field is tested independently at transitions.
     c.ui.turn(2,1);c.ui.turn(3,2);c.ui.press_key(3)
@@ -1995,7 +2015,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
     if boundary_witness:
         # An independent audible channel marks the active step through MIDI.
         # Same four-step range and clock; no application-state oracle.
-        ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+        ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
         ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4))
         # Build a separate pattern; channel1's source will be cleared below.
         ui.pattern_editor();ui.tap_control('cell',(2,1))
@@ -2016,7 +2036,9 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
         for step in range(1, 65)
     })
     if clock_delta:
-        ui.turn(1,-1);ui.wait_for_header('clock_mods',channel=1)
+        # The Channel button returns to the remembered edit family, not Device;
+        # Clock (the page before Device) opens through Channel Tasks.
+        ui.channel_page('clock_mods',confirm=False);ui.wait_for_header('clock_mods',channel=1)
         ui.set_value(clock_delta);ui.press_key(3)
     ui.press_key(1);ui.turn(1,4);ui.press_key(3);menu_label(c,'LEVELS >')
     position=next(i for i,v in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if v['name']=='CLOCK')
@@ -2107,7 +2129,7 @@ def live_record_placement(c,input_offsets=(1430000000,1730000000),expected_steps
 
 def recorded_note_channel_switch(c,hold_ns=500000000,expected_duration=.5,release_status=128,input_channel=1,disarm_while_held=False):
     ui=c.ui
-    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
     ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
@@ -2184,7 +2206,7 @@ def keyboard_input_channels(c):
 
 def overlapping_keyboard_sources(c,second_port=2,second_channel=1):
     ui=c.ui
-    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     for order in ((0,1),(1,0)):
         ui.tap_control('cell',(1,1));marker=c.snapshot()['midi_count']
         c.action(type='midi',port=1,bytes=[144,72,90])
@@ -2253,7 +2275,7 @@ def recorded_chord_release(c,release_order=(76,79,72),onset_offsets=(0,0,0),prev
 def recorded_input_sources(c,second_port=2,second_channel=1):
     hold_ns=500000000;expected_duration=.5;release_status=128;input_channel=1;disarm_while_held=False
     ui=c.ui
-    c.configure();ui.tap_control('cell',(2,1));ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
+    c.configure();ui.select_channel_on_page(2,"midi_config");ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.turn(2,1);ui.set_value(1);ui.press_key(3)
     ui.tap_control('cell',(1,2));ui.hold_control_tap('cell','cell',(1,4),(4,4));ui.tap_control('cell',(1,1))
     ui.tap_control('record');marker=c.snapshot()['midi_count'];ui.play()
     controlled=c.clock_mode=='controlled-experimental'
@@ -2665,6 +2687,25 @@ CASES={
  'M-SETUP-UNREADABLE-CONFIG-001':dict(run=unreadable_device_config,requirements=['SETUP-DEVICE-INVALID','SETUP-DEVICE-DISCOVERY'],description='A config entry that cannot be opened sits between two valid configs: Mosaic boots, plays through the valid device, and the picker offers both valid devices (user decision S7: skip it and load the rest)'),
  'M-MAP-001':dict(run=midi_mapping,requirements=['MAP-CONTROL','MAP-ROUTING','MAP-RANGES'],description='Saved documented PMAP (in 1..2, out -1..1, accumulate): relative binary-offset CCs step the selected channel velocity mask, follow channel selection, and a fixed channel map ignores selection; exact velocities on both ports'),
  'M-SIN-001':dict(run=sinfonion_software,requirements=['SIN-SOFTWARE'],description='Norns2sinfonion port: exact init sequence; no traffic while stopped; channel 1-4 program changes per scale step following the applied root, global transpose and a scale-track lock'),
+ 'M-LIVEUI-FOLLOW-001':dict(run=live_ui_follow,requirements=['NAV-SCREEN-FOLLOW'],description='The screen follows grid page buttons (Pattern cycle included), channel selection and held steps: a held step scopes the edit family (ST05) and release restores the screen it came from (README Norns Menu Navigation)'),
+ 'M-LIVEUI-TASKS-001':dict(run=live_ui_tasks,requirements=['NAV-TASKS'],description='E1 opens Channel tasks from Masks and Trig params on the row it came from; E1 and E2 scroll the rows, clamped; Channel tasks opens every Channel screen (README Norns Menu Navigation)'),
+ 'M-LIVEUI-SPLASH-001':dict(run=live_ui_splash,requirements=['NAV-SPLASH'],description='At start the tiles lay down, lift away and hand over to the first screen; any input skips the animation (README Norns Menu Navigation)'),
+ 'M-UIACC-A01-001':dict(run=ui_accept_a01,requirements=['UI-ACCEPT-A01'],description='Acceptance A01: E1 (one detent or one large event, either way) at Masks or Trig params opens Channel tasks on the row it came from; in the list E1 moves one row per event (large events too), clamped at Masks and Merge Shape, and K3 opens the row; each family keeps its selected field when reopened; a held step makes E1 switch Masks <-> Trig params (clamped); no MIDI, mask or LED change and the phrase replays exactly (README Norns Menu Navigation, Grid Menu Navigation)'),
+ 'M-UIACC-A02-001':dict(run=ui_accept_a02,requirements=['UI-ACCEPT-A02'],description='Acceptance A02: with steps 1 and 64 held, K1+K2 clears only the held steps on Masks and on Trig params; channel defaults and unheld locks stay (screen and MIDI), both release orders restore the family at channel scope (README Removing Masks, Mask Locks, Trig Param Locks)'),
+ 'M-UIACC-A03-001':dict(run=ui_accept_a03,requirements=['UI-ACCEPT-A03'],description='Acceptance A03: the parameter picker opened from slot 2 keeps its target slot; K2 discards an unapplied browse; K3 applies and repeats idempotently; Off sends no CC; held step + K3 slides CC1 from its lock to the next lock, sent in order (README Trig Param Locks, Param Slides)'),
+ 'M-UIACC-A10-001':dict(run=ui_accept_a10,requirements=['UI-ACCEPT-A10'],description='Acceptance A10: pattern add/remove and trig merge taps show Merge detail with the changed row chosen and the tooltip, K2 returns to Masks with its field; channel selection, mute (shift, shown in the scope, and long press) and both dual-range release orders keep Masks with footer feedback; a held note merge + unassigned pattern shows Merge detail without assigning it; pattern/channel LEDs and merged MIDI follow the README arithmetic (README Norns Menu Navigation, Adding Patterns to Channels, Merge Modes, Channel Length, Muting Channels)'),
+ 'M-UIACC-A11-001':dict(run=ui_accept_a11,requirements=['UI-ACCEPT-A11'],description='Acceptance A11: E3 moves the viewed channel on P01/P03/P04/P05 (Trig and Song contexts), clamped 1..16 and kept per context, also after E2, which moves no focus on 64-cell screens; Scale overview is a dashboard without a viewer where E2/E3 change nothing; no MIDI, the selected channel stays 1 and a later grid step edit plays on channel 1 (README Adding Trigs, Adding Notes, Adding Velocity, Rhythm Doctor)'),
+ 'M-UIACC-A19-001':dict(run=ui_accept_a19,requirements=['UI-ACCEPT-A19'],description='Acceptance A19: Output is one dashboard of the latest played event (note and chord, vel / len, step, source, planned>scheduled>emitted pitch, bypass); a held step shows its event rows in place (STEPnn HELD), a step with no event shows NO EVENT, release returns to the latest event; E2/E3/K3 and inspection send no MIDI and change no LED, selection or music (README Note Dashboard, Harmony)'),
+ 'M-UIACC-A18-001':dict(run=live_ui_sweep,requirements=['UI-ACCEPT-A18'],description='A18 native screen sweep: every live screen reachable through public input shows its exact title and scope, no LAYOUT OVERFLOW, one footer owner (hints, neighbour labels or a tooltip) and, where known, the selected field whole on its full-value route; long names, OFF/X sentinels and maximum values included (README Norns Menu Navigation, Tooltips)'),
+ 'M-LIVEUI-ALGO-001':dict(run=live_ui_algorithm,requirements=['UI-FEEDBACK-ALGORITHM'],description='A grid algorithm press shows Trig Algorithm on that algorithm (SELECTED); E2 moves the rows, K3 selects exactly as the grid key (row SELECTED, tooltip, grid fader LEDs) and the next prime previews with it (Paint Preview names it, previewed cells differ); Pattern tasks > Algorithm opens the picker; K3 on Rhythm Doctor opens the Doctor (README Adding Trigs, Rhythm Doctor)'),
+ 'M-LIVEUI-PAINT-001':dict(run=live_ui_paint,requirements=['UI-FEEDBACK-PAINT'],description='Prime shows Paint Preview (PAINTING, algorithm, shift 0, Trigs equal to the preview cells the grid lights); shift right/left/left/reset show +1/0/-1/0 and move the previewed cells by that many steps; cancel shows OFF and NONE with no preview cell (README Adding Trigs)'),
+ 'M-LIVEUI-DASH-001':dict(run=live_ui_dashboards,requirements=['UI-FEEDBACK-DASHBOARDS'],description='Output, Scale overview and Song playback show every row at once with no cursor (whole-screen oracle; E2/E3 change nothing); Scale tasks are exactly Scale, Scale clock, Overview; Trig options has only the tresillo amount (README Norns Menu Navigation, Note Dashboard, Navigating the Norns Display)'),
+ 'M-LIVEUI-VIEW-001':dict(run=live_ui_view_channel,requirements=['UI-FEEDBACK-VIEW-CHANNEL'],description='On Channel view and Pattern Trig, E3 turns the viewed channel as the first input after opening and after E2 (which moves no focus); the selected channel stays 1 (README Adding Trigs)'),
+ 'M-LIVEUI-FOCUS-001':dict(run=live_ui_grid_focus,requirements=['UI-FEEDBACK-GRID-FOCUS'],description='Grid actions show what they changed: trig merge on Masks shows Merge detail on Trig mode and K2 returns; a Pattern Trig step tap lights that cell over the dim channel context (PAT02 CH01); the song length fader shows Song playback with the exact global length (README Norns Menu Navigation, Adjusting Song Sequence Length)'),
+ 'M-LIVEUI-MERGEMODES-001':dict(run=live_ui_merge_modes,requirements=['UI-FEEDBACK-MERGE-MODES'],description='Merge modes opens from Channel tasks; Patterns is read-only; E3 steps Trig mode SKIP -> ONLY -> ALL (clamped both ends) with the trig merge button LED following, and Note mode through UP, DOWN, PAT 1, PAT 2 and back (clamped); the merged MIDI follows each chosen mode exactly and the grid button continues from the mode set on the norns (README Merge Modes)'),
+ 'M-LIVEUI-CHSELECT-001':dict(run=live_ui_channel_select,requirements=['UI-FEEDBACK-CHANNEL-SELECT'],description='A grid channel select keeps the norns screen for the new channel: Device (CC Device / None) and Clock (/1 / /2) stay with the selected channel\'s scope and values; from a Harmony or Merge Shape child the editor root (Voice leading, Merge Shape) opens for the new channel (README Norns Menu Navigation)'),
+ 'M-LIVEUI-NOTESTEP-001':dict(run=live_ui_note_page_step,requirements=['UI-FEEDBACK-NOTE-PAGE-STEP'],description='On Pattern Note and Velocity page 49-64 a held fader key in column 6 is step 54: header ST54 and cell 54 outlined (not ST22); a tap sets step 54\'s note (tooltip) and the grid stays on page 49-64 (README Adding Notes, Adding Velocity)'),
+ 'M-LIVEUI-SHAPETRIG-001':dict(run=live_ui_merge_shape_trig_mode,requirements=['UI-FEEDBACK-MERGE-SHAPE-TRIG'],description='With Merge Shape Foundation applied, Merge modes reads SHAPE (SKIP/ONLY/ALL) and the trig merge button tooltip says Merge Shape is in use while the Foundation additions (velocity 70) still play; after Mode Off the saved All reads plainly and plays pattern 2 at 100, and the button tooltip is the plain one (README Merge Shape)'),
  'M-TOOLTIP-001':dict(run=tooltip_messages,requirements=['NAV-TOOLTIPS'],description='Bottom-screen tooltips for page changes, channel selection, record, memory apply/undo and transport, with replacement and clearing without input while stopped and playing; exact texts characterised'),
  'M-SCALE-DISPLAY-001':dict(run=channel_active_scale_display,requirements=['CH-ACTIVE-SCALE-DISPLAY','LOCK-SCALE','SCALE-SELECT'],description='Channel page scale row: stopped shows the applied slot; playing follows the active slot including a step-3 scale lock (with its exact phrase); stop restores the applied slot; global off lights only the locked step'),
  'M-SCALE-MEMORY-DISPLAY-001':dict(run=memory_scale_lock_display,requirements=["CH-ACTIVE-SCALE-DISPLAY"],issues=[85],description='User-created channel scale lock on step 3 stays represented on the Memory page; its unlocked neighbour and the Trig Locks page are raw-grid controls (issue #85 characterisation)'),

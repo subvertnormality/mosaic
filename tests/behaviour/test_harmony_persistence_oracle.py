@@ -31,16 +31,19 @@ class HarmonyPersistenceOracleTests(unittest.TestCase):
                 self.assertIs(run, getattr(owner, name))
                 self.assertEqual(run.__module__, owner.__name__)
                 self.assertIsNone(run.__closure__)
-        # Interpreter-stable digests (ast_digest) of FunctionDef ASTs at 9d26f841,
-        # before the exact move; CI runs Python 3.8.
+        # Interpreter-stable digests (ast_digest) of FunctionDef ASTs; CI runs
+        # Python 3.8. Unchanged functions keep their 9d26f841 (pre-move)
+        # digests; the others pin their live-UI migration (Channel tasks,
+        # focused-screen field oracles; 25 September 2026 dashboard/detail rows,
+        # channel-octave scope and one planned > sent row per voice).
         source_hashes = {
             'playback_note_messages': '15f8f3fc07b90038a1d8813e56b814975242f7b15d54ac9af2b4f249ed504218',
             'revoice_workflow': 'c3d3c344b33ad56a5743d342578b8bb60993bd75052833639b0049f1e0eccae4',
-            'setup_pattern_harmony': '15c6639c39907455e9a711879ffd894e9aa08428ac950e21bfe39d98b95e27ba',
-            'pattern_harmony_persistence_workflow': 'f9a393dafc184d8ec3145c4247b6ec1d1af6c62b45a3030971514bbb231a2aab',
-            'ensemble_polyrhythm_workflow': '834cc837fa60ad83f1c6b9a24c5da9a6b334694e39629ca5b936964a5f06d2e0',
-            'no_voicing_fallback_workflow': '56cf8b65cfeb789b9dede676c6408aeaf35cdff82dbc3f0e3fcaf7e944ec94ba',
-            'held_step_precedence_workflow': '1c5a913d8c9261ebe54905df561085f5152eeeed0a4b7d793ba9085edca21b65',
+            'setup_pattern_harmony': 'cf50f9e6dd7980965bc5f3b2fe77efb122302668809d29d5dc2297fd112a7523',
+            'pattern_harmony_persistence_workflow': '55cb04854f2688df167806e83dfbdad4f079b93c72b57a7f39b05ffe357fa899',
+            'ensemble_polyrhythm_workflow': 'd07e29b5c09794797e29d774381465568373410294cdefedfffda1bb4d3b14a1',
+            'no_voicing_fallback_workflow': 'def020ee1ac22e01507fa616d4e9bb850365eae9e959b662b7cf124223243dff',
+            'held_step_precedence_workflow': '03edaef1a80402c4b48bfdd3156b1f74265d854270f526b658859aeffeef0ce3',
         }
         for name, expected_hash in source_hashes.items():
             with self.subTest(source=name):

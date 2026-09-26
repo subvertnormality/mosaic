@@ -23,7 +23,7 @@ def syntakt_pedal_params(c):
     e = Driver(out, project_seed=seed, **c.launch_options)
     try:
         e.configure(); pick_device(e, 'Syntakt')
-        e.enc(1, -3); e.screen_header('Ch. 1 Trig Locks', selected=2)
+        e.ui.turn(1, -3); e.screen_header('Ch. 1 Trig Locks', selected=2)
 
         def assign(label):
             e.key(2); e.enc(3, -150)

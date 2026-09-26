@@ -2,7 +2,7 @@
 import base64,shutil,subprocess
 from pathlib import Path
 from driver import Driver,digest
-from frame_oracle import render
+from frame_oracle import footer_matches,render
 from persisted_ranges import serializer_source
 
 def rejected_load_preservation_result(deadline, checked_files):
@@ -24,10 +24,8 @@ def rejected_saved_range(c):
     # would cover it; the loaded project already stores the lead set before saving.
     out=c.out/'rejected-load';out.mkdir();loaded=Driver(out,project_seed=seed,**dict(c.launch_options,midi_lead_time_ms=None))
     try:
-        expected=render([(0,62,10,'Slot 1 ch 1 reversed')])
-        def feedback(state):
-            actual=base64.b64decode(state['frame']['pixels_base64'])
-            return all(actual[(y*128+x)*4+k]==expected[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+        # Live footer tooltip (frame_oracle.footer): exact text, whole footer line.
+        def feedback(state):return footer_matches(state,'Slot 1 ch 1 reversed')
         loaded.wait(feedback)
         for deadline in [1,2]:
             # Inputs must not release the autosave inhibition latch.
@@ -51,7 +49,7 @@ def select_project_action(c,offset,returning=False,activate=True):
     from frame_oracle import selected_line
     c.key(1)
     if not returning:
-        c.enc(1,4);c.key(3);menu_label(c,'LEVELS >')
+        c.ui.turn(1, 4);c.key(3);menu_label(c,'LEVELS >')
         position=next(i for i,value in enumerate(c.snapshot()['diagnostics']['parameter_roots']) if value['id']=='mosaic')
         c.enc(2,position);c.key(3)
     # Norns retains the current parameter group when K1 closes the menu.
@@ -92,10 +90,8 @@ def rejected_manual_range(c,recovery="load"):
     def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
     c.wait(lambda state:len(emitted(state))>=8)
     c.key(3);c.key(1)
-    expected_frame=render([(0,62,10,'Slot 1 ch 17 reversed')])
-    def feedback(state):
-        actual=base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[(y*128+x)*4+k]==expected_frame[(y*128+x)*4+k] for y in range(55,64) for x in range(128) for k in range(3))
+    # Live footer tooltip (frame_oracle.footer): exact text, whole footer line.
+    def feedback(state):return footer_matches(state,'Slot 1 ch 17 reversed')
     c.wait(feedback)
     state=c.wait(lambda state:all(sum(m['port']==port for m in emitted(state))>=17 for port in [1,2]),5)
     notes=emitted(state);c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])

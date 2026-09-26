@@ -836,4 +836,32 @@ function channel_edit_page_ui.should_show_step_has_trig_lock(channel, step)
 end
 
 
+-- The existing owner instances, for lib/ui_adapters (UI02). Adapters wrap
+-- these objects; they do not copy their state.
+function channel_edit_page_ui.adapter_owners()
+  return {
+    channel_pages = channel_pages,
+    channel_page_to_index = channel_page_to_index,
+    mask_selectors = mask_selectors,
+    mask_handlers = mask_handlers,
+    note_displays = note_displays,
+    m_params = m_params,
+    dials = dials,
+    clock_mod_list_selector = clock_mod_list_selector,
+    swing_shuffle_type_selector = swing_shuffle_type_selector,
+    swing_selector = swing_selector,
+    shuffle_feel_selector = shuffle_feel_selector,
+    shuffle_basis_selector = shuffle_basis_selector,
+    shuffle_amount_selector = shuffle_amount_selector,
+    midi_device_vertical_scroll_selector = midi_device_vertical_scroll_selector,
+    midi_channel_vertical_scroll_selector = midi_channel_vertical_scroll_selector,
+    param_select_vertical_scroll_selector = param_select_vertical_scroll_selector,
+    parameters = channel_edit_parameters_controller,
+    clock_controls = channel_edit_clock_controls_controller,
+    history = channel_edit_history_controller,
+    navigation = channel_edit_navigation_controller,
+    feature_editors = {merge = merge_feature_editor, harmony = harmony_feature_editor}
+  }
+end
+
 return channel_edit_page_ui

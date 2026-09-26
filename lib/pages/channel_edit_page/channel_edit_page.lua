@@ -357,6 +357,12 @@ function channel_edit_page.register_press()
           )
         end
 
+        -- Merge Shape (Foundation) decides this channel's trigs: say so, the
+        -- saved mode applies again when Merge Shape is off.
+        if target_channel.musical_merge and target_channel.musical_merge.mode == "foundation" then
+          tooltip:show("Trig merge " .. target_channel.trig_merge_mode .. ": Merge Shape in use")
+        end
+
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
         channel_edit_page_ui.show_merge_gesture("TRIG " .. string.upper(target_channel.trig_merge_mode))
@@ -550,6 +556,21 @@ function channel_edit_page.register_press()
       end
     end
   )
+end
+
+-- Sets the selected channel's merge mode from the norns screen (Merge modes,
+-- C09) exactly as its grid merge button or held button + pattern does: the
+-- channel's mode, the button's state and the working patterns follow.
+-- kind: "trig", "note", "velocity" or "length"; mode: "skip" / "only" / "all"
+-- for trig, "average" / "up" / "down" / "pattern_number_<n>" for the others.
+function channel_edit_page.set_merge_mode(kind, mode)
+  local target_song = program.get_selected_song_pattern()
+  local target_channel = program.get_selected_channel()
+  target_channel[kind .. "_merge_mode"] = mode
+  channel_edit_page.refresh_merge_buttons()
+  target_song.active = true
+  pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+  fn.dirty_grid(true)
 end
 
 function channel_edit_page.refresh_merge_buttons()

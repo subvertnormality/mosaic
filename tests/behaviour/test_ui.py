@@ -263,22 +263,26 @@ class UiMapTests(unittest.TestCase):
             ])
         self.assertEqual(driver.calls, expected)
 
-    def test_trigger_editor_confirmation_header_alias_preserves_selected_tab(self):
+    def test_trigger_editor_confirmation_header_names_its_own_live_screen(self):
+        """P02 (Trig options) is its own live screen, distinct from P01 (Pattern trig)."""
         from ui import Ui
-        from ui_map import HEADERS, header_text
+        from ui_map import HEADERS, header_parts, header_text
 
         self.assertEqual(header_text("trigger_editor_confirmation"),
-                         "Trig editor options")
-        data = HEADERS["trigger_editor_confirmation"]
-        self.assertEqual((data["selected"], data["tabs"]), (2, 2))
-        driver = FakeDriver(states=[{}])
-        with patch("frame_oracle.header", return_value="expected-header") as make_header:
-            with patch("frame_oracle.matches", return_value=True):
-                Ui(driver).expect_header("trigger_editor_confirmation")
-        make_header.assert_called_once_with(
-            "Trig editor options", selected=2, tabs=2)
+                         "TRIG OPTIONS CH01")
+        self.assertEqual(HEADERS["trigger_editor_confirmation"],
+                         {"title": "TRIG OPTIONS", "layout": "focused", "scope": "channel"})
+        self.assertEqual(header_parts("trigger_editor_confirmation", channel=1),
+                         ("TRIG OPTIONS", "CH01", "focused"))
+        self.assertEqual(header_parts("trigger_editor", channel=1),
+                         ("PATTERN TRIG", "PAT01 CH01", "pattern64"))
+        state = {"frame": {"pixels_base64": "ignored"}}
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
+            Ui(driver).expect_header("trigger_editor_confirmation")
+        live.assert_called_once_with(state, "TRIG OPTIONS", "CH01", "focused")
         self.assertEqual(driver.results, [dict(
-            kind="screen-header", expected="Trig editor options", matched=True)])
+            kind="screen-header", expected="TRIG OPTIONS CH01", matched=True)])
 
     def test_euclidean_workflow_controls_match_raw_baseline_cells(self):
         """Every semantic Euclidean tap retains the original authored cell."""
@@ -502,7 +506,8 @@ class UiMapTests(unittest.TestCase):
         self.assertEqual({name for name, node in functions.items()
                           if any(site[1] == "state:frame"
                                  for site in _raw_sites_in_node(node))},
-                         {"strum_reset_continuity", "parameter_division_bounds"})
+                         # Both frame readers now go through ui verbs.
+                         set())
 
         forbidden_labels = {
             "Chord Note Arpeggio", "Chord Note Strum", "Chord Spread",
@@ -936,10 +941,48 @@ class UiInputTests(unittest.TestCase):
         driver = FakeDriver()
         return driver, Ui(driver)
 
-    def test_channel_page_uses_explicit_origin_and_map_offset(self):
+    def test_channel_page_opens_its_mapped_task_row_from_any_origin(self):
+        """E1 to Channel Tasks, E2 clamps to the first row, E2 to the page's row, K3.
+
+        The live UI has no E1 page ring, so the recipe depends only on the
+        target page's Channel Tasks row, never on the page it starts from.
+        """
+        from ui_map import CHANNEL_PAGES, CHANNEL_TASKS
+
+        self.assertEqual(CHANNEL_TASKS, [
+            "masks", "trig_params", "output", "harmony", "clock", "merge", "device",
+            "history", "merge_shape"])
+        rows = {"masks": 0, "trig_locks": 1, "memory": 7, "clock_mods": 4,
+                "midi_config": 6, "note_dashboard": 2, "merge_shape": 8, "harmony": 3}
+        self.assertEqual(set(rows), set(CHANNEL_PAGES))
+        for page, row in rows.items():
+            expected = [("enc", 1, 3), ("enc", 2, -9)]
+            if row:
+                expected.append(("enc", 2, row))
+            expected.append(("key", 3))
+            for origin in [None, *CHANNEL_PAGES]:
+                with self.subTest(page=page, origin=origin):
+                    driver, ui = self.ui()
+                    ui.channel_page(page, origin, confirm=False)
+                    self.assertEqual(driver.calls, expected)
+
+    def test_channel_page_confirms_the_live_header_and_rejects_unknown_pages(self):
+        from ui import UiMapError
+
         driver, ui = self.ui()
-        ui.channel_page("harmony", "masks", confirm=False)
-        self.assertEqual(driver.calls, [("enc", 1, 7)])
+        confirmed = []
+        ui.confirm_header = lambda page, **params: confirmed.append((page, params))
+        ui.channel_page("harmony", "masks", channel=2)
+        self.assertEqual(driver.calls, [
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 3), ("key", 3),
+        ])
+        self.assertEqual(confirmed, [("harmony", {"channel": 2})])
+        for page in ("channel_tasks", "not_a_page"):
+            with self.subTest(page=page):
+                driver, ui = self.ui()
+                with self.assertRaises(UiMapError):
+                    ui.channel_page(page, confirm=False)
+                self.assertEqual(driver.calls, [])
 
     def test_pattern_harmony_clock_page_and_value_verbs_keep_native_recipe(self):
         driver, ui = self.ui()
@@ -949,9 +992,9 @@ class UiInputTests(unittest.TestCase):
         ui.set_value(2)
         ui.select_field("tone_0_role", offset=3)
         self.assertEqual(driver.calls, [
-            ("enc", 1, -1),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 4), ("key", 3),
             ("enc", 3, -2),
-            ("enc", 1, 4),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 3), ("key", 3),
             ("enc", 3, 2),
             ("enc", 2, 3),
         ])
@@ -1091,10 +1134,64 @@ class UiInputTests(unittest.TestCase):
             ],
         ))])
 
-    def test_channel_page_can_preserve_a_clamped_boundary_recipe(self):
+    def test_channel_page_ring_turns_clamp_at_the_boundary_through_tasks(self):
+        """A saturating E1 turn on a Channel page opens the clamped ring page through Tasks.
+
+        ``saturate`` no longer changes the recipe: Masks is the first Channel
+        Tasks row, so E2 clamping to the top and K3 open it from any page.
+        """
+        from ui import Ui
+
         driver, ui = self.ui()
         ui.channel_page("masks", "midi_config", confirm=False, saturate=True)
-        self.assertEqual(driver.calls, [("enc", 1, -5)])
+        self.assertEqual(driver.calls, [("enc", 1, 3), ("enc", 2, -9), ("key", 3)])
+
+        class ObservedDriver(FakeDriver):
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                state = next(self._states)
+                if not predicate(state):
+                    raise AssertionError("wait predicate rejected staged state")
+                return state
+
+        def shows(title, scope, layout):
+            return {"frame": {"pixels_base64": "ignored"},
+                    "diagnostics": {"menu_mode": False}, "shows": (title, scope, layout)}
+
+        device = shows("DEVICE", "CH01", "detail")
+        masks = shows("NOTE MASKS", "CH01", "overview_masks")
+        harmony = shows("VOICE LEADING", "CH01", "focused")
+        oracle = lambda state, title, scope, layout: state["shows"] == (title, scope, layout)
+        with patch("frame_oracle.live_header_matches", side_effect=oracle):
+            # Device (ring 5th) turned -5 clamps to Masks: opened through Tasks and awaited.
+            driver = ObservedDriver(states=[device, masks])
+            Ui(driver).turn(1, -5)
+            self.assertEqual(driver.calls, [
+                ("wait", 1),
+                ("enc", 1, 3), ("enc", 2, -9), ("key", 3),
+                ("wait", 3),
+            ])
+            # Already at either end, a saturating turn emits no input at all.
+            for state, detents in ((masks, -5), (harmony, 5)):
+                with self.subTest(detents=detents):
+                    driver = ObservedDriver(states=[state])
+                    Ui(driver).turn(1, detents)
+                    self.assertEqual(driver.calls, [("wait", 1)])
+            # An ordinary ring move: Merge shape -1 is Note dashboard (Output, task row 2).
+            driver = ObservedDriver(states=[shows("MERGE SHAPE", "CH01", "focused"),
+                                            shows("OUTPUT", "CH01", "dashboard")])
+            Ui(driver).turn(1, -1)
+            self.assertEqual(driver.calls, [
+                ("wait", 1),
+                ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 2), ("key", 3),
+                ("wait", 3),
+            ])
+            # A screen on no page ring (Channel Tasks itself) matches neither the
+            # Channel ring nor another context's ring: the physical E1 stands.
+            tasks = shows("CHANNEL TASKS", "CH01", "detail")
+            driver = ObservedDriver(states=[tasks, tasks])
+            Ui(driver).turn(1, -5)
+            self.assertEqual(driver.calls, [("wait", 1), ("wait", 1), ("enc", 1, -5)])
 
     def test_native_parameters_observes_controlled_menu_mode_before_navigation(self):
         from ui import Ui
@@ -1124,23 +1221,35 @@ class UiInputTests(unittest.TestCase):
         from ui import Ui
 
         class Driver(FakeDriver):
+            # First wait: the menu-mode transition. Second and third waits:
+            # the E1 Channel-ring and other-ring observations, which both stand
+            # down in the native menu so the physical E1 reaches PARAMETERS.
+            menu = {"diagnostics": {"menu_mode": True},
+                    "frame": {"pixels_base64": "ignored"}}
+            staged = [
+                [{"diagnostics": {"menu_mode": False}},
+                 {"diagnostics": {"menu_mode": True}}],
+                [menu],
+                [menu],
+            ]
+            matches = []
+
             def wait(self, predicate, timeout=3):
                 self.calls.append(("wait", timeout))
-                states = [
-                    {"diagnostics": {"menu_mode": False}},
-                    {"diagnostics": {"menu_mode": True}},
-                ]
-                self.matches = [predicate(state) for state in states]
+                states = self.staged[len(self.matches)]
+                self.matches.append([predicate(state) for state in states])
                 return states[-1]
 
         driver = Driver(clock_mode="real-time")
         ui = Ui(driver)
-        with patch.object(ui, "expect_menu_label"):
+        with patch.object(ui, "expect_menu_label"), \
+                patch("frame_oracle.live_header_matches",
+                      side_effect=AssertionError("menu mode must not read a header")):
             ui.open_native_parameters()
         self.assertEqual(driver.calls, [
-            ("key", 1), ("wait", 1), ("enc", 1, 4), ("key", 3),
+            ("key", 1), ("wait", 1), ("wait", 1), ("wait", 1), ("enc", 1, 4), ("key", 3),
         ])
-        self.assertEqual(driver.matches, [False, True])
+        self.assertEqual(driver.matches, [[False, True], [True], [True]])
 
     def test_leave_native_menu_controlled_mode_rejects_still_open(self):
         from ui import Ui, UiMapError
@@ -1224,19 +1333,23 @@ class UiInputTests(unittest.TestCase):
         with self.assertRaises(UiMapError):
             ui.trig_parameter_label("Chord Spread")
 
-    def test_header_surface_verb_keeps_text_only_oracle_and_result(self):
+    def test_header_surface_verb_checks_live_header_oracle_and_result(self):
+        """The surface verb checks the live title row and scope text, exactly."""
         from ui import Ui
 
         driver = FakeDriver(states=[{}])
         ui = Ui(driver)
-        with patch("frame_oracle.header", return_value="expected") as header, \
-                patch("frame_oracle.matches", return_value=True) as matches:
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
             ui.expect_header_surface("midi_config", channel=1)
-        header.assert_called_once_with("Ch. 1 Device Config")
-        matches.assert_called_once_with({}, "expected")
+        live.assert_called_once_with({}, "DEVICE", "CH01", "detail")
         self.assertEqual(driver.results, [{
-            "kind": "screen-header", "expected": "Ch. 1 Device Config", "matched": True
+            "kind": "screen-header", "expected": "DEVICE CH01", "matched": True
         }])
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.live_header_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_header_surface("midi_config", channel=1)
+        self.assertEqual(driver.results, [])
 
     def test_unknown_trig_parameter_key_fails_before_input(self):
         from ui import UiMapError
@@ -1363,12 +1476,13 @@ class UiInputTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError, "slot must be in 1..10"):
             ui.assign_stored_patch_control(11)
 
-    def test_configure_keeps_the_historical_physical_recipe(self):
+    def test_configure_keeps_its_exact_physical_recipe_through_device_task(self):
         driver, ui = self.ui()
         ui.expect_header = lambda page, **params: driver.calls.append(("header", page, params))
         ui.configure()
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
             ("tap", 5, 8),
@@ -1378,6 +1492,8 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
 
@@ -1410,20 +1526,23 @@ class UiInputTests(unittest.TestCase):
         with patch.dict(sys.modules, {"cases": cases}):
             quantised_fixed_table(case, profile="major")
 
-        self.assertEqual(driver.calls[:4], [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+        self.assertEqual(driver.calls[:7], [
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
         ])
-        self.assertEqual(driver.calls[19:24], [
+        self.assertEqual(driver.calls[22:32], [
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
-        self.assertEqual(driver.calls[24:26], [
-            ("enc", 1, -3),
+        self.assertEqual(driver.calls[32:37], [
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "quantised_fixed_note"),
         ])
-        self.assertEqual(driver.calls[26:40], [
+        self.assertEqual(driver.calls[37:51], [
             ("enc", 3, delta) for delta in
             (1, 1, 2, 3, 1, 4, 1, 48, 1, 2, 3, 4, 56, 1)
         ])
@@ -1460,13 +1579,16 @@ class UiInputTests(unittest.TestCase):
         ), self.assertRaises(StopAfterSetup):
             seeded_probability(case, probability=99, opportunities=64)
 
-        self.assertEqual(driver.calls[:4], [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+        self.assertEqual(driver.calls[:7], [
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
         ])
-        self.assertEqual(driver.calls[19:24], [
+        self.assertEqual(driver.calls[22:32], [
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
         ])
         self.assertEqual(selected, [2])
@@ -1504,7 +1626,8 @@ class UiInputTests(unittest.TestCase):
             fixed_note_domain(case, start=0, count=1)
 
         self.assertEqual(driver.calls, [
-            ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+            ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
             ("tap", 5, 8),
             ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
             ("tap", 5, 8),
@@ -1514,8 +1637,10 @@ class UiInputTests(unittest.TestCase):
             ("tap", 3, 8), ("tap", 1, 2),
             ("hold_tap", (1, 4), (4, 4)),
             ("led_values", [(1, 2)], [15]),
+            ("header", "merge_detail", {"channel": 1}),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
             ("header", "midi_config", {"channel": 1}),
-            ("enc", 1, -3),
+            ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 1), ("key", 3),
             ("assign_trig_parameter_key", "fixed_note"),
             ("enc", 2, 1), ("assign_trig_parameter_key", "quantised_fixed_note"),
             ("enc", 3, 8),
@@ -1544,7 +1669,8 @@ class UiInputTests(unittest.TestCase):
 
         def expected_trace():
             calls = [
-                ("tap", 3, 8), ("enc", 1, 4), ("enc", 3, 1), ("key", 3),
+                ("tap", 3, 8), ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
+            ("enc", 3, 1), ("key", 3),
                 ("tap", 5, 8),
                 ("tap", 1, 4), ("tap", 2, 4), ("tap", 3, 4), ("tap", 4, 4),
                 ("tap", 5, 8),
@@ -1554,8 +1680,10 @@ class UiInputTests(unittest.TestCase):
                 ("tap", 3, 8), ("tap", 1, 2),
                 ("hold_tap", (1, 4), (4, 4)),
                 ("led_values", [(1, 2)], [15]),
+                ("header", "merge_detail", {"channel": 1}),
+                ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 6), ("key", 3),
                 ("header", "midi_config", {"channel": 1}),
-                ("enc", 1, -3),
+                ("enc", 1, 3), ("enc", 2, -9), ("enc", 2, 1), ("key", 3),
                 ("key", 2), ("enc", 3, -50), ("key", 3), ("key", 2),
                 ("enc", 3, 61),
             ]
@@ -2050,14 +2178,18 @@ class UiObservationTests(unittest.TestCase):
 
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
-        with patch("frame_oracle.header", return_value=b"expected") as header, \
-             patch("frame_oracle.matches", side_effect=lambda observed, expected:
-                   observed is state and expected == b"expected") as matches:
+        with patch("frame_oracle.live_header_matches", side_effect=lambda observed, *expected:
+                   observed is state and expected == ("DEVICE", "CH01", "detail")) as live:
             result = Ui(driver).wait_for_header("midi_config", channel=1)
-        header.assert_called_once_with("Ch. 1 Device Config", selected=5, tabs=8)
-        matches.assert_called_once_with(state, b"expected")
+        live.assert_called_once_with(state, "DEVICE", "CH01", "detail")
         self.assertIs(result, state)
         self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(driver.results, [])
+        # Another channel's scope is a different header: the wait fails closed.
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", side_effect=lambda observed, *expected:
+                   expected == ("DEVICE", "CH01", "detail")), self.assertRaises(AssertionError):
+            Ui(driver).wait_for_header("midi_config", channel=2)
         self.assertEqual(driver.results, [])
 
     def test_expect_scale_slot_header_preserves_exact_oracle_without_result(self):
@@ -2066,12 +2198,15 @@ class UiObservationTests(unittest.TestCase):
 
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
-        with patch("frame_oracle.header", return_value=b"expected") as header, \
-             patch("frame_oracle.matches", return_value=True) as matches:
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
             Ui(driver).expect_scale_slot_header(13)
-        header.assert_called_once_with("Scale slot 13 ", selected=1, tabs=3)
-        matches.assert_called_once_with(state, b"expected")
+        live.assert_called_once_with(state, "SCALE", "SLOT 13", "focused")
         self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(driver.results, [])
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_scale_slot_header(13)
         self.assertEqual(driver.results, [])
 
     def test_expect_steps_keeps_one_atomic_led_values_call(self):
@@ -2117,15 +2252,18 @@ class UiObservationTests(unittest.TestCase):
 
         state = {"frame": {"pixels_base64": "ignored"}}
         driver = FakeDriver(states=[state])
-        with patch("frame_oracle.header", return_value=b"expected") as header, \
-             patch("frame_oracle.matches", return_value=True) as matches:
+        with patch("frame_oracle.live_header_matches", return_value=True) as live:
             Ui(driver).expect_header("midi_config", channel=1)
-        header.assert_called_once_with("Ch. 1 Device Config", selected=5, tabs=8)
-        matches.assert_called_once_with(state, b"expected")
+        live.assert_called_once_with(state, "DEVICE", "CH01", "detail")
         self.assertEqual(driver.calls, [("wait",)])
         self.assertEqual(driver.results, [
-            {"kind": "screen-header", "expected": "Ch. 1 Device Config", "matched": True}
+            {"kind": "screen-header", "expected": "DEVICE CH01", "matched": True}
         ])
+        driver = FakeDriver(states=[state])
+        with patch("frame_oracle.live_header_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_header("midi_config", channel=1)
+        self.assertEqual(driver.results, [])
 
     def test_confirmation_uses_one_snapshot_and_records_identity(self):
         from ui import Ui
@@ -2142,30 +2280,57 @@ class UiObservationTests(unittest.TestCase):
     def test_confirmation_fails_closed_with_expected_and_observed_title(self):
         from ui import Ui, UiMapError
 
-        driver = FakeDriver(states=[{"frame": {"pixels_base64": "ignored"}}])
+        driver = FakeDriver(states=[{"frame": {"pixels_base64": "ignored"}}] * 34)
         ui = Ui(driver)
         ui._header_matches = lambda state, page, params: False
-        ui._observed_title = lambda state: "Ch. 3 Memory"
-        with self.assertRaisesRegex(UiMapError, "Ch. 3 Device Config.*Ch. 3 Memory"):
+        ui._observed_title = lambda state: "MEMORY CH03"
+        with self.assertRaisesRegex(UiMapError, "expected 'DEVICE CH03', observed 'MEMORY CH03'"):
             ui.confirm_header("midi_config", channel=3)
+        # Controlled time runs one bounded logical second for the screen wipe.
+        self.assertEqual(driver.calls.count(("elapse", .03)), 33)
+        self.assertEqual(driver.results, [])
+
+    def test_controlled_confirmation_lets_the_screen_wipe_finish(self):
+        from ui import Ui
+
+        wiped, settled = {"frame": "wipe"}, {"frame": "settled"}
+        driver = FakeDriver(states=[wiped, wiped, settled])
+        ui = Ui(driver)
+        ui._header_matches = lambda state, page, params: state is settled
+        ui.confirm_header("harmony", channel=1)
+        self.assertEqual(driver.calls, [("snapshot",), ("elapse", .03), ("snapshot",),
+                                        ("elapse", .03), ("snapshot",)])
+        self.assertEqual(driver.results, [{"kind": "ui-confirm", "page": "harmony", "channel": 1}])
 
     def test_pick_device_preserves_seek_recipe_and_result(self):
         from ui import Ui
 
-        expected = bytes(128 * 64 * 4)
-        states = [
-            {"frame": {"pixels_base64": base64.b64encode(bytes([1]) * len(expected)).decode()}},
-            {"frame": {"pixels_base64": base64.b64encode(expected).decode()}},
-        ]
-        driver = FakeDriver(states=states)
-        with patch("frame_oracle.render", return_value=expected):
+        other, shown = {"frame": "other"}, {"frame": "shown"}
+        driver = FakeDriver(states=[other, shown])
+        seen = []
+
+        def matches(state, layout, label, value):
+            seen.append((layout, label, value))
+            return state is shown
+        with patch("frame_oracle.selected_field_matches", side_effect=matches):
             Ui(driver).pick_device("Digitakt")
+        self.assertEqual(seen, [("detail", "Device", "Digitakt")] * 2)
         self.assertEqual(driver.calls, [
             ("snapshot",), ("enc", 3, 1), ("snapshot",), ("key", 3),
         ])
         self.assertEqual(driver.results, [
             {"kind": "device-picker-frame", "label": "Digitakt", "matched": True}
         ])
+
+    def test_shown_device_names_only_an_unambiguous_row(self):
+        from ui import Ui
+
+        ui = Ui(FakeDriver(states=[]))
+        with patch("frame_oracle.selected_field_matches",
+                   side_effect=lambda state, layout, label, value: value in state["names"]):
+            self.assertEqual(ui.shown_device(["None", "Digitakt"], {"names": ["Digitakt"]}), "Digitakt")
+            self.assertEqual(ui.shown_device(["None", "Digitakt"], {"names": []}), "?")
+            self.assertEqual(ui.shown_device(["A", "B"], {"names": ["A", "B"]}), "?")
 
 
 class MigrationGateTests(unittest.TestCase):
@@ -2290,27 +2455,13 @@ class RecordingLifetimeInputTests(unittest.TestCase):
 
 class MemoryUiMapTests(unittest.TestCase):
     def test_memory_counter_map_locks_captured_render_and_disjoint_geometry(self):
-        from ui_map import SCREEN
+        """Memory's Position counter is the live detail row: four disjoint row bands."""
+        from frame_oracle import DETAIL_ROWS
 
-        self.assertEqual(SCREEN["memory_position"], {
-            "frame_width": 128,
-            "frame_height": 64,
-            "channels": 3,
-            "bytes_per_pixel": 4,
-            "font_size": 10,
-            "antialias": 1,
-            "level": 15,
-            "bands": {
-                "current": {
-                    "left": 0, "right": 16, "top": 13, "bottom": 26,
-                    "x": 0, "baseline": 23,
-                },
-                "total": {
-                    "left": 0, "right": 16, "top": 39, "bottom": 52,
-                    "x": 0, "baseline": 49,
-                },
-            },
-        })
+        self.assertEqual(DETAIL_ROWS, (27, 36, 45, 54))
+        bands = [(y - 7, y + 2) for y in DETAIL_ROWS]
+        self.assertTrue(all(0 <= top < bottom <= 64 for top, bottom in bands))
+        self.assertTrue(all(first[1] <= second[0] for first, second in zip(bands, bands[1:])))
 
     def test_project_menu_map_locks_distinct_save_and_normal_rows(self):
         from ui_map import SCREEN
@@ -2352,70 +2503,93 @@ class MemoryUiVerbTests(unittest.TestCase):
 
     @staticmethod
     def frame_bytes():
-        from ui_map import SCREEN
-
-        data = SCREEN["memory_position"]
-        return data["frame_width"] * data["frame_height"] * data["bytes_per_pixel"]
+        return 128 * 64 * 4
 
     def test_memory_position_waits_once_and_keeps_result_shape(self):
         from ui import Ui
-        from ui_map import SCREEN
 
         payload = bytes(self.frame_bytes())
         driver = self.Driver(payload)
         ui = Ui(driver)
-        with patch("frame_oracle.render", return_value=payload) as render:
+        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
             ui.expect_memory_position(2, 5)
-        bands = SCREEN["memory_position"]["bands"]
-        self.assertEqual(render.call_args.args[0], [
-            [bands["current"]["x"], bands["current"]["baseline"], 15, "2"],
-            [bands["total"]["x"], bands["total"]["baseline"], 15, "5"],
+            ui.expect_memory_position(3, 5, channel=2)
+        state = {"frame": {"pixels_base64": base64.b64encode(payload).decode()}}
+        self.assertEqual(oracle.call_args_list, [
+            unittest.mock.call(state, "detail", "Position", "2 of 5"),
+            unittest.mock.call(state, "detail", "Position", "3 of 5"),
         ])
-        self.assertEqual(render.call_args.kwargs, {"font_size": 10, "antialias": 1})
-        self.assertEqual(driver.calls, [("wait",)])
-        self.assertEqual(driver.results, [{
-            "kind": "memory-position", "current": 2,
-            "total": 5, "frame_matched": True,
-        }])
+        self.assertEqual(driver.calls, [("wait",), ("wait",)])
+        self.assertEqual(driver.results, [
+            {"kind": "memory-position", "current": 2, "total": 5, "frame_matched": True},
+            {"kind": "memory-position", "current": 3, "total": 5, "frame_matched": True,
+             "channel": 2},
+        ])
+        driver = self.Driver(payload)
+        with patch("frame_oracle.selected_field_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).expect_memory_position(2, 5)
+        self.assertEqual(driver.results, [])
 
     def test_memory_position_wait_only_returns_state_without_a_result(self):
         from ui import Ui
 
         payload = bytes(self.frame_bytes())
         driver = self.Driver(payload)
-        with patch("frame_oracle.render", return_value=payload):
+        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
             state = Ui(driver).wait_memory_position(2, 5)
+        oracle.assert_called_once_with(state, "detail", "Position", "2 of 5")
         self.assertEqual(state["frame"]["pixels_base64"],
                          base64.b64encode(payload).decode())
         self.assertEqual(driver.calls, [("wait",)])
         self.assertEqual(driver.results, [])
+        driver = self.Driver(payload)
+        with patch("frame_oracle.selected_field_matches", return_value=False), \
+                self.assertRaises(AssertionError):
+            Ui(driver).wait_memory_position(2, 5)
+        self.assertEqual(driver.results, [])
 
     def test_memory_position_ignores_outside_pixels(self):
+        """A rendered Position row matches at every detail baseline; pixels outside it are ignored."""
+        from frame_oracle import DETAIL_ROWS, _detail_row
         from ui import Ui
 
-        expected = bytes(self.frame_bytes())
-        outside = bytearray(expected)
-        outside[0] = 7
-        driver = self.Driver(bytes(outside))
-        with patch("frame_oracle.render", return_value=expected):
-            Ui(driver).expect_memory_position(2, 2)
-        self.assertTrue(driver.results[0]["frame_matched"])
+        for y in DETAIL_ROWS:
+            with self.subTest(baseline=y):
+                expected = _detail_row("Position", "2 of 5", y)
+                outside = bytearray(expected)
+                row_top = 0 if y - 7 > 0 else y + 2
+                outside[(row_top * 128 + 5) * 4] ^= 0x7f
+                for payload in (expected, bytes(outside)):
+                    driver = self.Driver(payload)
+                    Ui(driver).expect_memory_position(2, 5)
+                    self.assertEqual(driver.results, [{
+                        "kind": "memory-position", "current": 2,
+                        "total": 5, "frame_matched": True,
+                    }])
+                # The same frame is not another count.
+                with self.assertRaises(AssertionError):
+                    Ui(self.Driver(expected)).expect_memory_position(2, 6)
 
     def test_memory_position_rejects_a_changed_pixel_in_each_counter_band(self):
+        """One changed pixel in the row's label or its "2 of 5" value fails closed."""
+        from frame_oracle import DETAIL_ROWS, _detail_row
         from ui import Ui
-        from ui_map import SCREEN
 
-        data = SCREEN["memory_position"]
-        expected = bytes(self.frame_bytes())
-        for band_name, band in data["bands"].items():
-            with self.subTest(band=band_name):
-                changed = bytearray(expected)
-                index = ((band["top"] * 128 + band["left"]) * 4)
-                changed[index] = 7
-                driver = self.Driver(bytes(changed))
-                with patch("frame_oracle.render", return_value=expected):
+        for y in DETAIL_ROWS:
+            expected = _detail_row("Position", "2 of 5", y)
+            lit = [(row, col) for row in range(y - 7, y + 2) for col in range(128)
+                   if expected[(row * 128 + col) * 4]]
+            label = next(cell for cell in lit if 7 <= cell[1] < 64)
+            value = next(cell for cell in lit if cell[1] >= 64)
+            for part, (row, col) in (("label", label), ("value", value)):
+                with self.subTest(baseline=y, part=part):
+                    changed = bytearray(expected)
+                    changed[(row * 128 + col) * 4] ^= 0x7f
+                    driver = self.Driver(bytes(changed))
                     with self.assertRaises(AssertionError):
-                        Ui(driver).expect_memory_position(2, 2)
+                        Ui(driver).expect_memory_position(2, 5)
+                    self.assertEqual(driver.results, [])
 
     def test_record_key_keeps_delay_inside_held_step(self):
         from ui import Ui
@@ -2571,63 +2745,72 @@ class ProjectActionUiVerbTests(unittest.TestCase):
         ])
 
     def test_rhythm_doctor_screen_verbs_keep_exact_rendered_regions(self):
-        from ui import Ui
+        from ui import Ui, UiMapError
 
-        driver = FakeDriver()
+        driver = FakeDriver(states=[{"frame": None}] * 5)
         ui = Ui(driver)
-        with patch.object(ui, "_wait_rhythm_doctor_render") as observe:
-            ui.expect_rhythm_doctor_header()
-            ui.expect_rhythm_doctor_tooltip("NOT_READY")
-            ui.expect_rhythm_doctor_setup("INPUT", "auto", 120, "STEREO")
-            ui.expect_rhythm_doctor_status("CYM / READY")
+        headers, fields = [], []
 
-        self.assertEqual(observe.call_args_list[0].args[0], [
-            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
+        def header(state, title, scope, layout):
+            headers.append((title, scope, layout))
+            return True
+
+        def field(state, layout, label, value, art=False):
+            fields.append((layout, label, value, art))
+            return True
+
+        with patch.object(ui, "_wait_rhythm_doctor_render") as observe, \
+                patch("frame_oracle.live_header_matches", side_effect=header), \
+                patch("frame_oracle.selected_field_matches", side_effect=field):
+            ui.expect_rhythm_doctor_header()
+            ui.expect_rhythm_doctor_header("R05", channel=3)
+            ui.expect_rhythm_doctor_tooltip("NOT_READY")
+            ui.expect_rhythm_doctor_setup_field("MANUAL BPM", 127)
+            ui.expect_rhythm_doctor_screen("R07", "Refused", "CAPTURE AUDIO UNAVAILABLE")
+            ui.expect_rhythm_doctor_screen("R05")
+
+        self.assertEqual(headers, [
+            ("RHYTHM DR", "CH01", "focused"), ("WINDOW", "CH03", "focused"),
+            ("RHYTHM DR", "CH01", "focused"), ("ALIGNMENT", "CH01", "detail"),
+            ("WINDOW", "CH01", "focused"),
         ])
-        self.assertEqual(observe.call_args_list[0].kwargs, {})
-        self.assertEqual(observe.call_args_list[1].args[0], [(0, 62, 10, "NOT_READY")])
-        self.assertEqual(observe.call_args_list[1].args[1],
-                         {"left": 0, "right": 100, "top": 55, "bottom": 64})
-        self.assertEqual(observe.call_args_list[2].args[0], [
-            (0, 9, 10, "RHYTHM DOCTOR"), (120, 9, 10, "m"),
-            (0, 22, 10, "SETUP / INPUT"), (0, 34, 10, " TEMPO AUTO"),
-            (0, 46, 10, " MANUAL BPM 120"), (0, 58, 10, ">INPUT STEREO"),
+        self.assertEqual(fields, [
+            ("focused", "Manual BPM", "127", True),
+            ("detail", "Refused", "CAPTURE AUDIO UNAVAILABLE", True),
+            ("focused", None, None, True),
         ])
-        self.assertEqual(observe.call_args_list[2].kwargs, {"full": True})
-        self.assertEqual(observe.call_args_list[3].args[0], [(0, 22, 10, "CYM / READY")])
-        self.assertEqual(observe.call_args_list[3].args[1],
-                         {"left": 0, "right": 97, "top": 15, "bottom": 26})
+        self.assertEqual(observe.call_args_list[0].args[0](), [(1, 63, 9, "NOT_READY")])
+        self.assertEqual(observe.call_args_list[0].args[1],
+                         {"left": 0, "right": 128, "top": 56, "bottom": 64})
+        with self.assertRaises(UiMapError):
+            ui.expect_rhythm_doctor_header("R99")
+        with self.assertRaises(UiMapError):
+            ui.expect_rhythm_doctor_setup_field("LANE", "CYM")
         self.assertEqual(driver.results, [])
 
-    def test_rhythm_doctor_pixel_verbs_preserve_rgb_only_regions(self):
+    def test_rhythm_doctor_footer_oracle_is_rgb_exact_over_the_whole_row(self):
         import base64
         from ui import Ui
 
         expected = bytes(128 * 64 * 4)
-        actual = bytearray(expected)
-        # The legacy frame oracle deliberately ignores alpha. Its tooltip
-        # oracle also ignores pixels to the right of the text-owning region.
-        for y in range(64):
-            for x in range(128):
-                alpha = (y * 128 + x) * 4 + 3
-                actual[alpha] = 255
-        actual[(60 * 128 + 110) * 4] = 9
-        driver = FakeDriver(states=[{
-            "frame": {"pixels_base64": base64.b64encode(actual).decode("ascii")},
-        }])
-        ui = Ui(driver)
-        with patch("frame_oracle.render", return_value=expected):
-            ui.expect_rhythm_doctor_tooltip("NOT_READY")
 
-        inside_region = bytearray(actual)
-        inside_region[(60 * 128 + 10) * 4] = 9
-        driver = FakeDriver(states=[{
-            "frame": {"pixels_base64": base64.b64encode(inside_region).decode("ascii")},
-        }])
-        ui = Ui(driver)
-        with patch("frame_oracle.render", return_value=expected), \
-                self.assertRaises(AssertionError):
-            ui.expect_rhythm_doctor_tooltip("NOT_READY")
+        def frame(*pixels):
+            actual = bytearray(expected)
+            # Alpha is ignored, as in every framebuffer oracle.
+            for index in range(3, len(actual), 4):
+                actual[index] = 255
+            for x, y in pixels:
+                actual[(y * 128 + x) * 4] = 9
+            return {"frame": {"pixels_base64": base64.b64encode(actual).decode("ascii")}}
+
+        # Row 55 is the status line, above the footer row.
+        with patch("frame_oracle.render", return_value=expected):
+            Ui(FakeDriver(states=[frame((10, 55))])).expect_rhythm_doctor_tooltip("NOT_READY")
+        # The footer owns the whole row: stray text at either end fails.
+        for pixel in ((10, 60), (120, 60), (0, 56), (127, 63)):
+            with self.subTest(pixel=pixel), patch("frame_oracle.render", return_value=expected), \
+                    self.assertRaises(AssertionError):
+                Ui(FakeDriver(states=[frame(pixel)])).expect_rhythm_doctor_tooltip("NOT_READY")
 
 
     def test_midi_mask_recording_verb_preserves_native_edge_and_timing_recipe(self):
@@ -2688,5 +2871,449 @@ class RhythmDoctorSurfaceRecipeTests(unittest.TestCase):
         ])
 
 
+class OutputFieldVerbTests(unittest.TestCase):
+    """Output (C06) verbs, channel select on a page, and the Masks value line."""
+
+    def test_expect_output_field_waits_for_its_own_dashboard_row(self):
+        from ui import Ui
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.dashboard_row_matches", return_value=True) as oracle:
+            Ui(driver).expect_output_field("vel_len", "110 / 4.0")
+        # No input: a dashboard has nothing to select.
+        self.assertEqual(driver.calls, [("wait",)])
+        self.assertEqual(oracle.call_args.args[1:], (2, "Vel / Len", "110 / 4.0"))
+        self.assertEqual(driver.results, [dict(kind="output-field", field="vel_len", label="Vel / Len",
+                                               value="110 / 4.0", passed=True)])
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.dashboard_row_matches", return_value=True) as oracle:
+            Ui(driver).expect_output_field("sent", "C3")
+        self.assertEqual(oracle.call_args.args[1:], (6, "Sent", "C3"))
+
+    def test_expect_output_field_fails_closed(self):
+        from ui import Ui, UiMapError
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.dashboard_row_matches", return_value=False):
+            with self.assertRaises(AssertionError):
+                Ui(driver).expect_output_field("note", "C3 E3 G3")
+        self.assertEqual(driver.results, [])
+        # The retired single-field names are not rows any more.
+        for retired in ("root", "velocity", "length", "chord", "source", "bypass"):
+            with self.assertRaises(UiMapError):
+                Ui(FakeDriver()).expect_output_field(retired, "C3")
+
+    def test_output_field_value_names_the_single_matching_candidate(self):
+        from ui import Ui
+        shown = lambda state, index, label, value: (index, label, value) == (2, "Vel / Len", "X / X")
+        with patch("frame_oracle.dashboard_row_matches", side_effect=shown):
+            self.assertEqual(Ui(FakeDriver(states=[{}])).output_field_value("vel_len", ["X / X", "0 / 0"]), "X / X")
+            self.assertEqual(Ui(FakeDriver(states=[{}])).output_field_value("note", ["X / X"]), "?")
+        with patch("frame_oracle.dashboard_row_matches", return_value=True):
+            self.assertEqual(Ui(FakeDriver(states=[{}])).output_field_value("step", ["A", "B"]), "A|B")
+
+    def test_output_rows_render_exactly_on_the_dashboard(self):
+        """The real row oracle, not a double: row 1 Note and row 2 Vel / Len."""
+        from frame_oracle import render, fit, text_width
+        from ui import Ui
+        commands = []
+        for k, (label, value) in enumerate((("Note", "C3 E3 G3"), ("Vel / Len", "127 / 1.0")), start=1):
+            commands += [(1, 8 + 8 * k, 7, fit(label, 126 - text_width(value) - 4)), ((None, 127), 8 + 8 * k, 15, value)]
+        state = {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+        Ui(FakeDriver(states=[state])).expect_output_field("note", "C3 E3 G3")
+        self.assertEqual(Ui(FakeDriver(states=[state])).output_field_value("vel_len", ["127 / 1.0", "127 / 4.0"]),
+                         "127 / 1.0")
+
+    def test_select_channel_on_page_reopens_the_page_through_tasks(self):
+        from ui import Ui
+        ui = Ui(FakeDriver())
+        with patch.object(ui, "select_channel") as select, patch.object(ui, "channel_page") as page, \
+                patch.object(ui, "expect_header") as header:
+            ui.select_channel_on_page(2, "midi_config")
+        select.assert_called_once_with(2)
+        page.assert_called_once_with("midi_config", channel=2, confirm=False)
+        header.assert_called_once_with("midi_config", channel=2)
+
+    def test_selected_mask_value_reads_the_full_label_value_line(self):
+        from ui import Ui
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_field_matches",
+                   side_effect=lambda s, layout, label, value: (layout, label, value) == ("overview_masks", "Chord 1", "2nd")):
+            self.assertEqual(Ui(driver).selected_mask_value("chord_1", ["X", "2nd", "-7th"]), "2nd")
+        driver = FakeDriver(states=[{}])
+        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
+            Ui(driver).expect_selected_mask("chord_2", "-7th")
+        self.assertEqual(oracle.call_args.args[1:], ("overview_masks", "Chord 2", "-7th"))
+
+
+class OverviewCellMarkerOracleTests(unittest.TestCase):
+    """The C02 slide / held-lock marker oracle (frame_oracle.overview_cell_marker)."""
+
+    @staticmethod
+    def state(commands):
+        from frame_oracle import render
+        return {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+
+    def test_reads_the_letter_drawn_in_the_cells_top_right_corner(self):
+        from frame_oracle import overview_cell_marker
+
+        # Trig params cells are 25 px wide from y9: cell 1's marker is drawn at (19,16),
+        # cell 7's (second row, second column) at (44,34).
+        for letter in ("S", "L"):
+            with self.subTest(letter=letter):
+                self.assertEqual(overview_cell_marker(self.state([(19, 16, 15, letter)]), "overview_params", 1), letter)
+                self.assertEqual(overview_cell_marker(self.state([(44, 34, 15, letter)]), "overview_params", 7), letter)
+
+    def test_no_marker_or_another_cells_marker_is_none(self):
+        from frame_oracle import overview_cell_marker
+
+        self.assertIsNone(overview_cell_marker(self.state([]), "overview_params", 1))
+        self.assertIsNone(overview_cell_marker(self.state([(44, 16, 15, "S")]), "overview_params", 1))
+        # A dimmer letter is not the marker.
+        self.assertIsNone(overview_cell_marker(self.state([(19, 16, 9, "S")]), "overview_params", 1))
+
+
+class DashboardOracleTests(unittest.TestCase):
+    """The dashboard layout oracle (frame_oracle.dashboard_row_matches /
+    dashboard_matches) and its verbs (Ui.expect_dashboard_row / expect_dashboard)."""
+
+    @staticmethod
+    def state(commands):
+        from frame_oracle import render
+        return {"frame": {"pixels_base64": base64.b64encode(render(commands)).decode()}}
+
+    @staticmethod
+    def screen(rows, title="PAINT PREVIEW", scope="CH01", extra=()):
+        """Draw a dashboard the way lib/ui_render.lua does, independently of the oracle."""
+        from frame_oracle import fit, text_width
+        commands = [(1, 7, 15, title), ((None, 118), 7, 9, scope)]
+        for k, (label, value) in enumerate(rows, start=1):
+            y = 8 + k * 8
+            commands.append((1, y, 7, fit(label, 126 - text_width(value) - 4)))
+            commands.append(((None, 127), y, 15, value))
+        return DashboardOracleTests.state(commands + list(extra))
+
+    ROWS = [("Preview", "PAINTING"), ("Algorithm", "Euclidean"), ("Shift", "+1"), ("Trigs", "12")]
+
+    def test_row_matches_only_its_own_label_value_and_row(self):
+        from frame_oracle import dashboard_row_matches
+        state = self.screen(self.ROWS)
+        for index, (label, value) in enumerate(self.ROWS, start=1):
+            self.assertTrue(dashboard_row_matches(state, index, label, value))
+        self.assertFalse(dashboard_row_matches(state, 3, "Shift", "-1"))
+        self.assertFalse(dashboard_row_matches(state, 2, "Shift", "+1"))
+        self.assertFalse(dashboard_row_matches(state, 4, "Trigs", "1"))
+        self.assertFalse(dashboard_row_matches(state, 5, "Trigs", "12"))
+
+    def test_row_levels_are_exact(self):
+        from frame_oracle import dashboard_row_matches
+        # The label at the value's level 15 (a selected-looking row) is not a dashboard row.
+        state = self.state([(1, 16, 15, "Preview"), ((None, 127), 16, 15, "OFF")])
+        self.assertFalse(dashboard_row_matches(state, 1, "Preview", "OFF"))
+        state = self.state([(1, 16, 7, "Preview"), ((None, 127), 16, 15, "OFF")])
+        self.assertTrue(dashboard_row_matches(state, 1, "Preview", "OFF"))
+
+    def test_whole_dashboard_rejects_a_cursor_extra_row_or_wrong_scope(self):
+        from frame_oracle import dashboard_matches
+        self.assertTrue(dashboard_matches(self.screen(self.ROWS), "PAINT PREVIEW", "CH01", self.ROWS))
+        cursor = self.screen(self.ROWS, extra=[(0, 24, 15, ">")])
+        self.assertFalse(dashboard_matches(cursor, "PAINT PREVIEW", "CH01", self.ROWS))
+        extra = self.screen(self.ROWS + [("View channel", "01")])
+        self.assertFalse(dashboard_matches(extra, "PAINT PREVIEW", "CH01", self.ROWS))
+        self.assertFalse(dashboard_matches(self.screen(self.ROWS), "PAINT PREVIEW", "CH02", self.ROWS))
+        # The title row's mark tiles (x118..) are motion accents, not text.
+        tiles = self.screen(self.ROWS, extra=[(121, 5, 15, ".")])
+        self.assertTrue(dashboard_matches(tiles, "PAINT PREVIEW", "CH01", self.ROWS))
+
+    def test_expect_dashboard_row_finds_the_row(self):
+        from ui import Ui
+        driver = FakeDriver(states=[self.screen(self.ROWS)])
+        self.assertEqual(Ui(driver).expect_dashboard_row("Shift", "+1"), 3)
+        self.assertEqual(driver.results[-1]["row"], 3)
+        driver = FakeDriver(states=[self.screen(self.ROWS)])
+        with self.assertRaises(AssertionError):
+            Ui(driver).expect_dashboard_row("Shift", "-1")
+
+    def test_expect_dashboard_checks_the_page_title_scope_and_rows(self):
+        from ui import Ui, UiMapError
+        rows = [("Playing scale", "01"), ("Edit scale", "01")]
+        driver = FakeDriver(states=[self.screen(rows, "SCALE OVERVIEW", "SLOT 01")])
+        Ui(driver).expect_dashboard("scale_overview", rows, slot=1)
+        self.assertEqual(driver.results[-1]["rows"], [list(r) for r in rows])
+        driver = FakeDriver(states=[self.screen(rows, "SCALE OVERVIEW", "SLOT 01")])
+        with self.assertRaises(AssertionError):
+            Ui(driver).expect_dashboard("scale_overview", rows, slot=2)
+        with self.assertRaises(UiMapError):
+            Ui(FakeDriver()).expect_dashboard("masks", rows)
+
+    def test_live_header_puts_a_dashboard_scope_on_the_title_row(self):
+        from frame_oracle import live_header_matches
+        state = self.screen([])
+        self.assertTrue(live_header_matches(state, "PAINT PREVIEW", "CH01", "dashboard"))
+        self.assertFalse(live_header_matches(state, "PAINT PREVIEW", "CH01", "detail"))
+
+
+class ConfirmHeaderScopeTests(unittest.TestCase):
+    """Navigation confirmation tolerates a Channel page's mute/octave scope parts;
+    expect_header stays exact."""
+
+    def test_confirm_accepts_mute_and_octave_parts_only_on_channel_pages(self):
+        from ui import Ui
+        shown = {"scope": None}
+        oracle = lambda state, title, scope, layout: scope == shown["scope"]
+        with patch("frame_oracle.live_header_matches", side_effect=oracle):
+            ui = Ui(FakeDriver())
+            for scope in ("CH01", "CH01 OCT+2", "CH01 MUTE", "CH01 MUTE OCT-1"):
+                shown["scope"] = scope
+                self.assertTrue(ui._confirm_matches({}, "masks", {"channel": 1}), scope)
+            for scope in ("CH02", "CH01 OCT+3", "CH01 ST05"):
+                shown["scope"] = scope
+                self.assertFalse(ui._confirm_matches({}, "masks", {"channel": 1}), scope)
+            # A stated octave is exact; a non-Channel scope has no such parts.
+            shown["scope"] = "CH01 OCT+2"
+            self.assertFalse(ui._confirm_matches({}, "masks", {"channel": 1, "octave": 1}))
+            shown["scope"] = "SLOT 01 OCT+1"
+            self.assertFalse(ui._confirm_matches({}, "scale", {"slot": 1}))
+            driver = FakeDriver(states=[{}])
+            shown["scope"] = "CH01 OCT+2"
+            with self.assertRaises(AssertionError):
+                Ui(driver).expect_header("masks", channel=1)
+
+
+class PromptRouteVerbTests(unittest.TestCase):
+    """Deadline-bound routes: one saturating native event, then the same rows."""
+
+    def test_channel_page_promptly_saturates_tasks_with_one_event(self):
+        from ui import Ui
+        from ui_map import CHANNEL_TASKS
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.live_header_matches", return_value=True) as header:
+            Ui(driver).channel_page_promptly("midi_config", channel=2)
+        self.assertEqual(driver.calls, [
+            ("enc", 1, 3),
+            ("action", {"type": "enc", "n": 2, "delta": -2 * len(CHANNEL_TASKS)}),
+            ("elapse", .15),
+            ("enc", 2, CHANNEL_TASKS.index("device")),
+            ("key", 3),
+            ("wait",),
+        ])
+        self.assertEqual(header.call_args.args[1:], ("DEVICE", "CH02", "detail"))
+
+    def test_channel_page_promptly_first_row_needs_no_row_turn(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.live_header_matches", return_value=True):
+            Ui(driver).channel_page_promptly("masks")
+        self.assertNotIn(("enc", 2, 0), driver.calls)
+        self.assertEqual(driver.calls[-2:], [("key", 3), ("wait",)])
+
+    def test_assign_trig_parameter_promptly_saturates_then_moves_the_offset(self):
+        from ui import Ui
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.selected_field_matches", return_value=True) as row:
+            self.assertEqual(Ui(driver).assign_trig_parameter_promptly("stored_patch_cc1", 15), 15)
+        self.assertEqual(driver.calls, [
+            ("key", 2),
+            ("action", {"type": "enc", "n": 3, "delta": -126}),
+            ("elapse", .15),
+            ("enc", 3, 15),
+            ("wait",),
+            ("key", 3),
+            ("key", 2),
+        ])
+        self.assertEqual(row.call_args.args[1:3], ("detail", "CC 1"))
+        self.assertEqual(driver.results, [dict(kind="parameter-list-label", label="CC 1", passed=True)])
+
+    def test_unknown_page_is_a_map_error(self):
+        from ui import Ui, UiMapError
+
+        with self.assertRaises(UiMapError):
+            Ui(FakeDriver()).channel_page_promptly("no_such_page")
+
+
+    def test_leave_merge_detail_confirms_c09_then_taps_the_channel_button(self):
+        from ui import Ui
+        from ui_map import control_cell
+
+        driver = FakeDriver(states=[{"frame": {}}])
+        with patch("frame_oracle.live_header_matches", return_value=True) as header:
+            Ui(driver).leave_merge_detail()
+        self.assertEqual(driver.calls, [("wait",), ("tap", *control_cell("channel_editor"))])
+        self.assertEqual(header.call_args.args[1:], ("MERGE MODES", "CH01", "detail"))
+
+
+# ---- Group C (ranges, saves, song, timing) ----
+class GroupCUiTests(unittest.TestCase):
+    def test_real_time_e1_after_bare_k1_waits_for_the_native_menu(self):
+        """A bare K1 then E1 is the native menu's E1 once the menu shows; the
+        page ring is not read from a Mosaic screen that has not yet redrawn."""
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            # The first observation predates the key; the menu then stays open.
+            modes = [False, True, True, True, True]
+
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                for mode in self.modes:
+                    state = {"diagnostics": {"menu_mode": mode}}
+                    if predicate(state):
+                        return state
+                raise AssertionError("predicate did not match")
+
+        driver = Driver(clock_mode="real-time")
+        with patch("frame_oracle.live_header_matches",
+                   side_effect=AssertionError("menu E1 must not read a header")):
+            ui = Ui(driver)
+            ui.press_key(1)
+            ui.turn(1, 4)
+        self.assertEqual(driver.calls, [("key", 1), ("wait", 1.5), ("enc", 1, 4)])
+
+    def test_real_time_e1_after_closing_k1_waits_then_reads_the_ring(self):
+        from ui import Ui
+
+        class Driver(FakeDriver):
+            # The menu is still open at first, then closes and stays closed.
+            modes = [True, False, False, False, False]
+
+            def wait(self, predicate, timeout=3):
+                self.calls.append(("wait", timeout))
+                for mode in self.modes:
+                    state = {"diagnostics": {"menu_mode": mode}}
+                    if predicate(state):
+                        return state
+                raise AssertionError("predicate did not match")
+
+        driver = Driver(clock_mode="real-time")
+        ui = Ui(driver)
+        with patch.object(Ui, "_turn_channel_ring", return_value=True) as ring:
+            ui.press_key(1)
+            ui.turn(1, 1)
+        ring.assert_called_once_with(1)
+        self.assertEqual(driver.calls, [("key", 1), ("wait", 1.5)])
+
+    def test_e1_after_other_input_or_controlled_k1_keeps_the_ring_path(self):
+        from ui import Ui
+
+        # Controlled lane: the snapshot already reflects the key; no extra wait.
+        driver = FakeDriver()
+        ui = Ui(driver)
+        with patch.object(Ui, "_turn_channel_ring", return_value=False), \
+                patch.object(Ui, "_turn_other_ring", return_value=False):
+            ui.press_key(1)
+            ui.turn(1, 4)
+            ui.press_key(3)
+            ui.turn(1, -1)
+        self.assertEqual(driver.calls, [("key", 1), ("enc", 1, 4), ("key", 3), ("enc", 1, -1)])
+
+    def test_footer_oracle_renders_tooltip_and_neighbour_pairs(self):
+        import frame_oracle
+        calls = []
+        with patch.object(frame_oracle, "render", side_effect=lambda commands: calls.append(commands) or b""), \
+                patch.object(frame_oracle, "fit", side_effect=lambda text, width: text):
+            frame_oracle.footer("End must follow start")
+            frame_oracle.footer(("< Root", "Degree >"))
+        self.assertEqual(calls, [[(1, 63, 9, "End must follow start")],
+                                 [(1, 63, 7, "< Root"), ((None, 127), 63, 10, "Degree >")]])
+
+
 if __name__ == "__main__":
     unittest.main()
+
+
+class MarqueeOracleTests(unittest.TestCase):
+    """frame_oracle mirrors lib/ui_render.lua fit(): cut text scrolls right to left
+    on the shared marquee phase (tests/lib/ui_marquee_tests.lua pins the renderer)."""
+
+    def test_fit_scrolls_on_the_marquee_phase_like_the_renderer(self):
+        import frame_oracle
+        label = "Trig probability mod"
+        width = frame_oracle.text_width(label) - 1
+        static = frame_oracle.fit(label, width)
+        self.assertTrue(static.endswith("~"))
+        seen = []
+        for phase in range(0, 2 * frame_oracle.MARQUEE_REST + len(label) + 2):
+            frame_oracle._marquee['phase'] = phase
+            try:
+                seen.append(frame_oracle.fit(label, width))
+            finally:
+                frame_oracle._marquee['phase'] = None
+        # One character too long (n = 1): rests 8 ticks on the static cut, then
+        # shows the whole end for its rest, then starts again (period 2*8+1).
+        rest = frame_oracle.MARQUEE_REST
+        self.assertEqual(seen[:rest], [static] * rest)
+        self.assertEqual(seen[rest:2 * rest + 1], [label[1:]] * (rest + 1))
+        self.assertEqual(seen[2 * rest + 1], static)
+        self.assertEqual(frame_oracle.fit(label, width), static)  # static again outside a phase
+
+    def test_variants_and_any_phase_only_widen_for_cut_text(self):
+        import frame_oracle
+        short = frame_oracle.variants(lambda: frame_oracle.fit("Cutoff", 60))
+        self.assertEqual(short, ["Cutoff"])
+        label = "A rather long parameter name"
+        frames = frame_oracle.variants(lambda: frame_oracle.fit(label, 60))
+        self.assertGreater(len(frames), 2)
+        self.assertEqual(frames[0], frame_oracle.fit(label, 60))
+        calls = []
+
+        @frame_oracle.any_marquee_phase
+        def shows(text):
+            calls.append(frame_oracle._marquee['phase'])
+            return frame_oracle.fit(label, 60) == text
+        self.assertTrue(shows(frames[-1]))
+        self.assertFalse(shows("not the label"))
+
+
+class OwnerFeedback26SeptemberTests(unittest.TestCase):
+    """Owner feedback from the device, 26 September 2026: cell names, pattern-page steps."""
+
+    def test_trig_param_cell_label_joins_and_title_cases_like_the_adapter(self):
+        from ui_map import trig_param_cell_label
+        self.assertEqual(trig_param_cell_label("CC1"), "Cc1")
+        self.assertEqual(trig_param_cell_label("QUAN", "NOTE"), "Quan Note")
+        self.assertEqual(trig_param_cell_label("CC", "1"), "Cc 1")
+        self.assertEqual(trig_param_cell_label("None", ""), "None")
+        self.assertEqual(trig_param_cell_label("FILTER", "CUTOFF"), "Filter Cutoff")
+
+    def test_masks_cells_name_the_whole_mask(self):
+        from ui_map import MASK_LABELS, OVERVIEW_CELLS
+        self.assertEqual({field: label for field, (_, label) in OVERVIEW_CELLS.items()}, MASK_LABELS)
+
+    def _pattern_frame(self, outlined=(), extra=()):
+        pixels = bytearray(128 * 64 * 4)
+        from frame_oracle import _pattern_ring
+        for step in outlined:
+            for x, y in _pattern_ring(step):
+                pixels[(y * 128 + x) * 4:(y * 128 + x) * 4 + 3] = b"\xff\xff\xff"
+        for x, y in extra:
+            pixels[(y * 128 + x) * 4:(y * 128 + x) * 4 + 3] = b"\xff\xff\xff"
+        return {"frame": {"pixels_base64": base64.b64encode(bytes(pixels)).decode()}}
+
+    def test_pattern_outline_ring_is_the_native_stroke_of_cell_54(self):
+        from frame_oracle import _pattern_ring
+        ring = set(_pattern_ring(54))
+        # Cell 54 is column 6, fourth row: square (42, 48); ring x 40..46, y 46..52.
+        self.assertEqual(len(ring), 24)
+        self.assertEqual({x for x, _ in ring}, set(range(40, 47)))
+        self.assertEqual({y for _, y in ring}, set(range(46, 53)))
+        self.assertNotIn((42, 48), ring)
+
+    def test_pattern_outline_matches_exactly_one_outlined_cell(self):
+        from frame_oracle import pattern_outline_matches
+        self.assertTrue(pattern_outline_matches(self._pattern_frame((54,)), 54))
+        self.assertFalse(pattern_outline_matches(self._pattern_frame((54,)), 22))
+        self.assertFalse(pattern_outline_matches(self._pattern_frame((54, 22)), 54))
+        self.assertFalse(pattern_outline_matches(self._pattern_frame(()), 54))
+        # A partial ring is no outline; a lit square or playing mark is outside every ring.
+        self.assertFalse(pattern_outline_matches(self._pattern_frame((), extra=[(40, 46)]), 54))
+        self.assertTrue(pattern_outline_matches(self._pattern_frame((54,), extra=[(42, 48), (42, 53)]), 54))
+
+    def test_expect_outlined_step_waits_on_the_oracle_and_rejects_bad_steps(self):
+        from ui import Ui, UiMapError
+        driver = FakeDriver(states=[self._pattern_frame((54,))])
+        Ui(driver).expect_outlined_step(54)
+        self.assertEqual(driver.results[-1], dict(kind="pattern-outline", step=54, passed=True))
+        for bad in (0, 65, "54"):
+            with self.assertRaises(UiMapError):
+                Ui(FakeDriver()).expect_outlined_step(bad)

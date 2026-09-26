@@ -38,7 +38,7 @@ def scale_lock_precedence(c):
     ui.set_mosaic_option_keys([('scale_lock_until_pattern_end',False)])
     phrase('hold-off-next-trig-clears',[3,4,4,4])
     # A probability-rejected trig does not clear the channel lock.
-    ui.turn(1,-3);ui.assign_trig_parameter_key('trig_probability')
+    ui.channel_page('trig_locks');ui.assign_trig_parameter_key('trig_probability')
     with ui.hold_step(2):
         c.elapse(.05);ui.encoder_event(3,-126);c.elapse(.15);ui.turn(3,1) # step 2 probability 0
     c.elapse(.15)

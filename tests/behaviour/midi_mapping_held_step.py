@@ -21,7 +21,8 @@ def midi_mapping_held_step(c):
     e = Driver(out, project_seed=seed, **c.launch_options)
     try:
         e.configure()
-        e.ui.select_channel(2)
+        # configure() ends on Device (C05); a grid channel select keeps it for channel 2 (G05).
+        e.ui.select_channel_on_page(2, 'midi_config')
         e.ui.set_value(1)
         e.ui.turn(2, 1)
         e.ui.set_value(1)

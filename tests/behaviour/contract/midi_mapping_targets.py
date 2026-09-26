@@ -30,8 +30,8 @@ def midi_mapping_targets(c):
         try:
             e.configure()
             open_patch_control(e, setup=False); turn(e, 63); turn(e, 1); menu_value(e, '63'); e.key(1)
-            e.enc(1, -3); assign_trig_parameter(e, 'CC 1')
-            e.enc(1, -1); e.screen_header('Ch. 1 Note Masks')
+            e.ui.turn(1, -3); assign_trig_parameter(e, 'CC 1')
+            e.ui.turn(1, -1); e.screen_header('Ch. 1 Note Masks')
             for step, note in ((1, 72), (2, 76)):                  # two memory actions
                 e.action(type='grid', x=step, y=4, state=1)
                 try: e.action(type='midi', port=1, bytes=[144, note, 90]); e.elapse(.05); e.action(type='midi', port=1, bytes=[128, note, 0])
@@ -44,9 +44,9 @@ def midi_mapping_targets(c):
                 cc(22, 65, 13); cc(23, 65, 8); cc(24, 65, 2); e.elapse(2.5); cc(25, 63, 1); e.elapse(2.5)
             else:
                 e.enc(2, -5); e.enc(2, 1); e.enc(3, 13); e.enc(2, 2); e.enc(3, 8)   # Note, then Len
-                e.enc(1, 1); e.screen_header('Ch. 1 Trig Locks', selected=2); e.enc(2, -10); e.enc(3, 2)
-                e.enc(1, 1); e.screen_header('Ch. 1 Memory'); e.enc(3, -1)
-            e.tap(3, 8); e.enc(1, -5); e.enc(1, 2); e.screen_header('Ch. 1 Memory')
+                e.ui.turn(1, 1); e.screen_header('Ch. 1 Trig Locks', selected=2); e.enc(2, -10); e.enc(3, 2)
+                e.ui.turn(1, 1); e.screen_header('Ch. 1 Memory'); e.enc(3, -1)
+            e.tap(3, 8); e.ui.turn(1, -5); e.ui.turn(1, 2); e.screen_header('Ch. 1 Memory')
             frame = base64.b64decode(e.snapshot()['frame']['pixels_base64'])
             counter = bytes(frame[(y*128+x)*4] for y in list(range(13, 26))+list(range(39, 52)) for x in range(16))
             edits = [m['bytes'] for m in e.snapshot()['midi'] if m['index'] > marker and m['bytes'][0] == 176]
