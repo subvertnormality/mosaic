@@ -134,13 +134,68 @@ def text_width(label,size=8,antialias=None):
             bind(ca,'cairo_font_options_destroy',[ptr])(options)
     return _extent_cache[key]
 
+# Marquee (lib/ui_render.lua fit): cut text scrolls right to left on a shared
+# phase: it rests MARQUEE_REST ticks, drops one character per tick until its end
+# shows, rests, and starts again. Phase None is the static cut (motion off, or
+# the first MARQUEE_REST ticks). Matchers try the static frame, then, only when a
+# text was cut, every phase: each expected frame is still exact.
+MARQUEE_REST=8
+MARQUEE_PHASES=range(1,2*MARQUEE_REST+96)
+_marquee={'phase':None,'cut':False}
+
+def marquee_offset(n,phase):
+    q=phase%(2*MARQUEE_REST+n)
+    return 0 if q<MARQUEE_REST else min(n,q-MARQUEE_REST+1)
+
 def fit(label,width):
-    """ui_render fit(): whole text, else trimmed with a trailing ~, else empty."""
+    """ui_render fit(): whole text, else (at the current marquee phase) the
+    scrolled text, else trimmed with a trailing ~, else empty."""
     label=str(label)
     if text_width(label)<=width:return label
     if text_width('~')>width:return ''
+    _marquee['cut']=True
+    phase=_marquee['phase']
+    if phase is not None:
+        n=0
+        while n<len(label) and text_width(label[n:])>width:n+=1
+        label=label[marquee_offset(n,phase):]
+        if text_width(label)<=width:return label
     while label and text_width(label+'~')>width:label=label[:-1]
     return label+'~'
+
+def any_marquee_phase(predicate):
+    """True when `predicate` holds at the static phase or, if it cut any text,
+    at some marquee phase."""
+    import functools
+    @functools.wraps(predicate)
+    def wrapped(*args,**kwargs):
+        if _marquee['phase'] is not None:return predicate(*args,**kwargs)
+        _marquee['cut']=False
+        if predicate(*args,**kwargs):return True
+        if not _marquee['cut']:return False
+        try:
+            for phase in MARQUEE_PHASES:
+                _marquee['phase']=phase
+                if predicate(*args,**kwargs):return True
+            return False
+        finally:
+            _marquee['phase']=None
+    return wrapped
+
+def variants(build):
+    """Every distinct expected frame build() makes: the static one and, when it
+    cuts a text, each marquee phase's. For callers that compare a fixed frame."""
+    _marquee['cut']=False
+    frames=[build()]
+    if _marquee['cut']:
+        try:
+            for phase in MARQUEE_PHASES:
+                _marquee['phase']=phase
+                frame=build()
+                if frame not in frames:frames.append(frame)
+        finally:
+            _marquee['phase']=None
+    return frames
 
 OVERVIEWS={'overview_masks','overview_params'}
 # Layouts whose scope shares the title row, right-aligned at x118 level 9.
@@ -170,6 +225,7 @@ def _region_matches(actual,expected,top,bottom,left=0,right=128):
                 return False
     return True
 
+@any_marquee_phase
 def live_header_matches(state,title,scope,layout):
     expected,rows=live_header(title,scope,layout)
     actual=base64.b64decode(state['frame']['pixels_base64'])
@@ -194,6 +250,7 @@ def _focused_size(value,width):
     while size>8 and text_width(value,size,1)>width:size-=1
     return size if text_width(value,size,1)<=width else None
 
+@any_marquee_phase
 def selected_field_matches(state,layout,label=None,value=None,art=False):
     """True when the selected field shows `label` and/or `value` on its layout's full-value route."""
     actual=base64.b64decode(state['frame']['pixels_base64'])
@@ -232,6 +289,7 @@ def selected_field_matches(state,layout,label=None,value=None,art=False):
         ok=_region_matches(actual,render([(1,48,15,value,size)],antialias=1),30,50,0,min(128,1+right))
     return ok
 
+@any_marquee_phase
 def overview_cell_matches(state,layout,index,short_label,value):
     """An overview cell shows its short label (selected or not) and compact value."""
     columns,width=(4,32) if layout=='overview_masks' else (5,25)
@@ -270,6 +328,7 @@ def _dashboard_row_commands(label,value,y):
     if value!='':commands.append(((None,127),y,15,value))
     return commands
 
+@any_marquee_phase
 def dashboard_row_matches(state,index,label,value):
     """Dashboard row `index` (1-based) shows exactly `label` and `value`.
 
@@ -279,6 +338,7 @@ def dashboard_row_matches(state,index,label,value):
     actual=base64.b64decode(state['frame']['pixels_base64'])
     return _region_matches(actual,render(_dashboard_row_commands(label,value,y)),y-6,y+2,0,128)
 
+@any_marquee_phase
 def dashboard_matches(state,title,scope,rows):
     """The whole dashboard: title row, then exactly `rows` ((label, value) in
     order) and nothing else above the footer (no cursor, no other row). The
@@ -307,6 +367,7 @@ def footer(text):
         return render(commands)
     return render([(1,63,9,fit(text,126))])
 
+@any_marquee_phase
 def footer_matches(state,text):
     """The whole footer line shows exactly `text` and nothing else."""
     actual=base64.b64decode(state['frame']['pixels_base64'])

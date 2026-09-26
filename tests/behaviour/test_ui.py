@@ -2779,7 +2779,7 @@ class ProjectActionUiVerbTests(unittest.TestCase):
             ("detail", "Refused", "CAPTURE AUDIO UNAVAILABLE", True),
             ("focused", None, None, True),
         ])
-        self.assertEqual(observe.call_args_list[0].args[0], [(1, 63, 9, "NOT_READY")])
+        self.assertEqual(observe.call_args_list[0].args[0](), [(1, 63, 9, "NOT_READY")])
         self.assertEqual(observe.call_args_list[0].args[1],
                          {"left": 0, "right": 128, "top": 56, "bottom": 64})
         with self.assertRaises(UiMapError):
@@ -3220,3 +3220,46 @@ class GroupCUiTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class MarqueeOracleTests(unittest.TestCase):
+    """frame_oracle mirrors lib/ui_render.lua fit(): cut text scrolls right to left
+    on the shared marquee phase (tests/lib/ui_marquee_tests.lua pins the renderer)."""
+
+    def test_fit_scrolls_on_the_marquee_phase_like_the_renderer(self):
+        import frame_oracle
+        label = "Trig probability mod"
+        width = frame_oracle.text_width(label) - 1
+        static = frame_oracle.fit(label, width)
+        self.assertTrue(static.endswith("~"))
+        seen = []
+        for phase in range(0, 2 * frame_oracle.MARQUEE_REST + len(label) + 2):
+            frame_oracle._marquee['phase'] = phase
+            try:
+                seen.append(frame_oracle.fit(label, width))
+            finally:
+                frame_oracle._marquee['phase'] = None
+        # One character too long (n = 1): rests 8 ticks on the static cut, then
+        # shows the whole end for its rest, then starts again (period 2*8+1).
+        rest = frame_oracle.MARQUEE_REST
+        self.assertEqual(seen[:rest], [static] * rest)
+        self.assertEqual(seen[rest:2 * rest + 1], [label[1:]] * (rest + 1))
+        self.assertEqual(seen[2 * rest + 1], static)
+        self.assertEqual(frame_oracle.fit(label, width), static)  # static again outside a phase
+
+    def test_variants_and_any_phase_only_widen_for_cut_text(self):
+        import frame_oracle
+        short = frame_oracle.variants(lambda: frame_oracle.fit("Cutoff", 60))
+        self.assertEqual(short, ["Cutoff"])
+        label = "A rather long parameter name"
+        frames = frame_oracle.variants(lambda: frame_oracle.fit(label, 60))
+        self.assertGreater(len(frames), 2)
+        self.assertEqual(frames[0], frame_oracle.fit(label, 60))
+        calls = []
+
+        @frame_oracle.any_marquee_phase
+        def shows(text):
+            calls.append(frame_oracle._marquee['phase'])
+            return frame_oracle.fit(label, 60) == text
+        self.assertTrue(shows(frames[-1]))
+        self.assertFalse(shows("not the label"))

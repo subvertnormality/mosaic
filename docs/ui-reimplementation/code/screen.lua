@@ -13,10 +13,33 @@ local function right(value,x,y,level)
 end
 local function width(value,size)screen.font_size(size or 8);return(screen.text_extents(tostring(value)))end
 -- Text only (title, scope, labels, status, footer, action/unavailable text). Field values of exact kinds never pass here.
+-- Marquee (owner request 26 September 2026): text too wide for its room
+-- scrolls right to left so it can be read in full. With a phase (ticks from
+-- ui_motion; nil when motion is off) it rests MARQUEE_REST ticks on its start,
+-- drops one character per tick until its end shows, rests on the end, and starts
+-- again. Every cut text shares the phase, so a frame follows from it exactly.
+local MARQUEE_REST=8
+local phase,cut,next_move=nil,false,nil
+local function marquee_offset(n,p)
+ local q=p%(2*MARQUEE_REST+n)
+ if q<MARQUEE_REST then return 0 end
+ return math.min(n,q-MARQUEE_REST+1)
+end
 local function fit(value,w)
  local v=tostring(value);screen.font_size(8)
  if screen.text_extents(v)<=w then return v end
  if screen.text_extents('~')>w then return '' end
+ cut=true
+ if phase then
+  local n=0;while n<#v and screen.text_extents(v:sub(n+1))>w do n=n+1 end
+  local k=marquee_offset(n,phase)
+  -- Ticks until this text next moves (on its rests it stays still).
+  local q=phase%(2*MARQUEE_REST+n);local d=1
+  if q<MARQUEE_REST then d=MARQUEE_REST-q elseif q>=MARQUEE_REST+n then d=2*MARQUEE_REST+n-q end
+  if not next_move or d<next_move then next_move=d end
+  v=v:sub(k+1)
+  if screen.text_extents(v)<=w then return v end
+ end
  while #v>0 and screen.text_extents(v..'~')>w do v=v:sub(1,-2) end
  return v..'~'
 end
@@ -33,6 +56,7 @@ local function full_value(value,w,x,y,dy)
 end
 function M.draw(v)
  local r={ok=true,reasons={},marked={}}
+ phase,cut,next_move=type(v)=='table'and v.marquee or nil,false,nil
  local function fail(why)r.ok=false;r.reasons[#r.reasons+1]=why end
  screen.clear()
  if type(v)~='table' or not(v.screen and v.title and v.scope and type(v.fields)=='table' and v.layout)
@@ -141,6 +165,8 @@ function M.draw(v)
   right(fit(v.footer.right or'',61),127,63,10)
  else text(fit(v.footer or'',126),1,63,8,9)end
  screen.update()
+ -- Whether any text is cut, and in how many marquee ticks one next moves.
+ r.cut,r.next_move=cut,next_move
  return r.ok,r
 end
 return M

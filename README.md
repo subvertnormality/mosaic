@@ -1370,7 +1370,7 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 
 ##### UI Motion
 
-Turns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On): the start-up animation, the light running round _Mosaic_'s mark, the selection's shadow gliding across the Masks and Trig params grids (diagonally when it changes row), values rolling into place, and the characters. The Rhythm Doctor dances to the tempo of the captured bank, the Merge Shape garden sways and the Harmony choir bobs while the sequencer plays, and a metronome swings on the clock and tempo screens. A single numeric value, such as a mask or trig param, also shows a small dial of where it sits in its range, beside the value itself. Motion never delays input, hides a value for more than a moment or changes timing; with it off, every screen is still.
+Turns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On): the start-up animation, the light running round _Mosaic_'s mark, the selection's shadow gliding across the Masks and Trig params grids (diagonally when it changes row), names and values too long for their space scrolling right to left so you can read them in full, values rolling into place, and the characters. The Rhythm Doctor dances to the tempo of the captured bank, the Merge Shape garden sways and the Harmony choir bobs while the sequencer plays, and a metronome swings on the clock and tempo screens. A single numeric value, such as a mask or trig param, also shows a small dial of where it sits in its range, beside the value itself. Motion never delays input, hides a value for more than a moment or changes timing; with it off, every screen is still.
 
 ### Sinfonion Connect
 

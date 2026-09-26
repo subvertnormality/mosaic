@@ -34,7 +34,7 @@ import struct
 import zlib
 from pathlib import Path
 
-from frame_oracle import (dashboard_matches, fit, live_header_matches, render, selected_field_matches,
+from frame_oracle import (dashboard_matches, fit, live_header_matches, render, selected_field_matches, variants,
                           overview_cell_matches)
 
 SPEC = json.loads((Path(__file__).resolve().parents[3] / "docs/ui-reimplementation/spec.json").read_text())["screens"]
@@ -102,7 +102,8 @@ class Sweep:
         live = entry["live_render"]
         layout = live["layout"]
         overflow = render([(1, OVERFLOW_Y[layout], 15, "LAYOUT OVERFLOW")])
-        wanted = [footer_render(f) for f in footers]
+        # Every marquee phase of each footer (cut text scrolls).
+        wanted = [frame for f in footers for frame in variants(lambda f=f: footer_render(f))]
         y = OVERFLOW_Y[layout]
         # A dashboard's sixth row (baseline 56) reaches row 57; the footer text is 58..63.
         footer_rows = range(58, 64) if layout == "dashboard" else FOOTER_ROWS
@@ -161,10 +162,10 @@ class Sweep:
         """A detail row that is not selected: label level 6 at x7, value right at x126 level 8."""
         from frame_oracle import text_width
         room = min(72, 119 - text_width(value) - 4)
-        expected = render([(7, y, 6, fit(label, room)), ((None, 126), y, 8, value)])
+        frames = variants(lambda: render([(7, y, 6, fit(label, room)), ((None, 126), y, 8, value)]))
         ok = True
         try:
-            self.c.wait(lambda s: _same(_pixels(s), expected, range(y - 7, y + 2)))
+            self.c.wait(lambda s: any(_same(_pixels(s), expected, range(y - 7, y + 2)) for expected in frames))
         except AssertionError:
             ok = False
             self.failures.append(dict(kind="a18-row", y=y, label=label, value=value))

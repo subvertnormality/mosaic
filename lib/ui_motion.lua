@@ -54,6 +54,33 @@ function ui_motion.pose()
   return blink > 0 and 1 or 0
 end
 
+-- Marquee (lib/ui_render.lua fit): cut text scrolls on a 10 Hz tick that runs
+-- only while something is cut, and asks for a frame only when a text moves, so
+-- a resting screen stays still. The phase restarts with the screen or selection.
+local MARQUEE_TICK = 0.1
+local marquee = {phase = 0, key = nil, cut = false, next_move = nil, clock = nil, generation = 0}
+
+local function marquee_clock()
+  if marquee.clock or not (clock and clock.run and clock.sleep) then return end
+  marquee.clock = clock.run(function()
+    while marquee.cut and marquee.next_move do
+      local generation, ticks = marquee.generation, marquee.next_move
+      clock.sleep(ticks * MARQUEE_TICK)
+      if not marquee.cut then break end
+      if generation == marquee.generation then
+        marquee.phase = marquee.phase + ticks
+        marquee.next_move = nil
+        if fn and fn.dirty_screen then fn.dirty_screen(true) end
+      end
+      -- The frame just asked for reports when the next move is due.
+      while marquee.cut and not marquee.next_move do clock.sleep(MARQUEE_TICK) end
+    end
+    marquee.clock = nil
+  end)
+end
+
+function ui_motion.marquee_phase() return marquee.phase end
+
 function ui_motion.busy()
   return pop > 0 or blink > 0 or glide.frames > 0
     or (dial.target ~= nil and dial.shown ~= dial.target) or roll.frames > 0
@@ -121,6 +148,7 @@ end
 -- while something moves.
 function ui_motion.draw(vm, render)
   if not ui_motion.enabled() then
+    marquee.cut, marquee.next_move = false, nil
     pop, blink, glide.frames = 0, 0, 0
     dial.shown, dial.target, roll.frames = nil, nil, 0
     vm.pose, vm.motion = 0, nil
@@ -159,7 +187,17 @@ function ui_motion.draw(vm, render)
     -- Left mid-sweep: a dial no longer shown must not keep the screen redrawing.
     dial.key, dial.shown, dial.target = nil, nil, nil
   end
+  -- Marquee: the phase restarts with the screen or selection; the renderer's
+  -- report keeps the tick running while text is cut.
+  local marquee_key = tostring(vm.screen) .. ":" .. tostring(vm.selected)
+  if marquee.key ~= marquee_key then
+    marquee.key, marquee.phase, marquee.generation = marquee_key, 0, marquee.generation + 1
+  end
+  vm.marquee = marquee.phase
   local ok, report = render(vm)
+  marquee.cut = type(report) == "table" and report.cut == true
+  marquee.next_move = marquee.cut and report.next_move or nil
+  if marquee.cut then marquee_clock() end
   -- A character keeping time asks for frames for as long as it moves.
   local moving = ui_motion.busy() or vm.motion ~= nil
   if glide.frames > 0 then draw_glide(); glide.frames = glide.frames - 1 end

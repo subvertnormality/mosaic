@@ -28,13 +28,13 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "10e8ee84bad453b3e88929fcc23eddd519a64e8ef07f48c287510d3920699ed9",
+ "manual_sha256": "4397bd33b1cf8d7035ff63ec4695ef3d8c2d21191725557f0e2d74cdf6376b6f",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "d648e5bbd18437e356d00c68e49d800f314b0a450ea946a906564d658492acee",
+ "inventory_sha256": "07f4a3d2d50a29f23d0f69b81ebc0b6e94a954e91ef69c773316a5872bcfd92f",
  "counts": {
   "requirements": 171,
   "production_lua_modules": 161,
-  "unit_integration_files": 119,
+  "unit_integration_files": 120,
   "domains": 17
  },
  "coverage_language": {
@@ -453,6 +453,7 @@
     "lib/tests/lib/ui_components_tests.lua",
     "lib/tests/lib/ui_grid_outcomes_tests.lua",
     "lib/tests/lib/ui_live_tests.lua",
+    "lib/tests/lib/ui_marquee_tests.lua",
     "lib/tests/lib/ui_motion_tests.lua",
     "lib/tests/lib/ui_router_tests.lua",
     "lib/tests/lib/ui_splash_tests.lua"

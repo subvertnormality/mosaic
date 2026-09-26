@@ -156,15 +156,16 @@ def set_global_length(c, length):
     """Set the song's global pattern length from its grid fader (README Adjusting
     Song Sequence Length: it caps how much of a channel's range plays)."""
     import base64
-    from frame_oracle import fit, render
+    from frame_oracle import fit, render, variants
     c.tap(6, 8); c.tap(2, 7)
     for _ in range(length - 1):
         c.tap(8, 7)
     # The tooltip owns the live footer line: fit(text, 126) at (1,63), level 9.
-    expected = render([(1, 63, 9, fit('Global pattern length: ' + str(length), 126))])
+    frames = variants(lambda: render([(1, 63, 9, fit('Global pattern length: ' + str(length), 126))]))
     def feedback(state):
         actual = base64.b64decode(state['frame']['pixels_base64'])
-        return all(actual[(y * 128 + x) * 4 + k] == expected[(y * 128 + x) * 4 + k] for y in range(56, 64) for x in range(128) for k in range(3))
+        return any(all(actual[(y * 128 + x) * 4 + k] == expected[(y * 128 + x) * 4 + k] for y in range(56, 64)
+                       for x in range(128) for k in range(3)) for expected in frames)
     c.wait(feedback)
     c.tap(3, 8)
 

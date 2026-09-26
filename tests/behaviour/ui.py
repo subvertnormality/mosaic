@@ -954,9 +954,11 @@ class Ui:
 
     def _wait_rhythm_doctor_render(self, commands, region):
         """Keep exact framebuffer comparisons (RGB, alpha ignored) behind the page-level UI API."""
-        from frame_oracle import render
+        from frame_oracle import render, variants
 
-        expected = render(commands)
+        # A builder of commands is re-run at every marquee phase (cut text scrolls).
+        build = commands if callable(commands) else (lambda: commands)
+        frames = variants(lambda: render(build()))
         indices = [(y * 128 + x) * 4 + channel
                    for y in range(region["top"], region["bottom"])
                    for x in range(region["left"], region["right"])
@@ -964,7 +966,7 @@ class Ui:
 
         def matches(state):
             actual = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(actual[index] == expected[index] for index in indices)
+            return any(all(actual[index] == expected[index] for index in indices) for expected in frames)
 
         return self.driver.wait(matches)
 
@@ -990,7 +992,7 @@ class Ui:
         from frame_oracle import fit
 
         self._wait_rhythm_doctor_render(
-            [(1, 63, 9, fit(text, 126))], RHYTHM_DOCTOR_SCREEN["footer"])
+            lambda: [(1, 63, 9, fit(text, 126))], RHYTHM_DOCTOR_SCREEN["footer"])
 
     def expect_rhythm_doctor_screen(self, route, label=None, value=None, channel=1):
         """Exact title row of Doctor screen `route` and its selected field's label/value.
@@ -1040,9 +1042,11 @@ class Ui:
         return self._header_matches(self.driver.snapshot(), page, params)
 
     def _expect_render(self, commands, region, result):
-        from frame_oracle import render
+        from frame_oracle import render, variants
 
-        expected = render(commands)
+        # A builder of commands is re-run at every marquee phase (cut text scrolls).
+        build = commands if callable(commands) else (lambda: commands)
+        frames = variants(lambda: render(build()))
         indices = [(y * 128 + x) * 4 + channel
                    for y in range(region["top"], region["bottom"])
                    for x in range(region["left"], region["right"])
@@ -1050,7 +1054,7 @@ class Ui:
 
         def matches(state):
             actual = base64.b64decode(state["frame"]["pixels_base64"])
-            return all(actual[index] == expected[index] for index in indices)
+            return any(all(actual[index] == expected[index] for index in indices) for expected in frames)
 
         state = self.driver.wait(matches)
         self.driver.results.append(result)

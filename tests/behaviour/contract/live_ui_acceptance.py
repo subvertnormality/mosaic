@@ -15,6 +15,7 @@ domain text in manual-inventory.json says so; nothing here stands in for it.
 import base64
 
 from midi_window import MidiWindow
+from frame_oracle import any_marquee_phase
 
 # configure(): steps 1-4 play C4 D4 E4 F4 at velocities 127/117/107/97 on port 1, MIDI channel 1.
 PHRASE = ((60, 127), (62, 117), (64, 107), (65, 97))
@@ -54,6 +55,7 @@ def _live_header(c, title, scope, layout, stage):
                 title=title, scope=scope, stage=stage)
 
 
+@any_marquee_phase
 def _overview_selection(state, layout, cells, selected):
     """Every overview cell shows its short label and compact value; only
     ``selected`` (1-based) draws its label at the selection level 15, every
