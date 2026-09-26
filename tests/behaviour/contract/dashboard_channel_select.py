@@ -9,8 +9,8 @@ C06 OUTPUT (the live Note Dashboard) is a dashboard: the old Note cell is its No
 note, then the chord voices that play) and the old Vel and Len cells are its Vel / Len row
 ("<vel> / <len>"); each row is read exactly, whole. With nothing played both read NO EVENT
 (the owner's absence marker since 25 September 2026, characterisation; it was X). A grid
-channel select returns the live screen to the remembered Channel family, so OUTPUT is
-reopened through Channel Tasks (navigation only) before it is read.
+channel select keeps OUTPUT showing, now for the new channel (G05, owner decision 26
+September 2026), so it is read straight after the select with no navigation between.
 """
 
 ABSENT = {'note': 'NO EVENT', 'vel_len': 'NO EVENT'}
@@ -26,7 +26,6 @@ def dashboard_channel_select(c):
     c.ui.channel_page('note_dashboard', confirm=False); c.ui.expect_header('note_dashboard', channel=1)
     for channel in (2, 1):
         c.tap(channel, 1); c.elapse(.3)
-        c.ui.channel_page('note_dashboard', channel=channel, confirm=False)
         c.ui.expect_header('note_dashboard', channel=channel)
         for field, value in ABSENT.items():
             c.ui.expect_output_field(field, value)

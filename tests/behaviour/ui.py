@@ -190,6 +190,13 @@ class Ui:
         self.tap_control("scale_editor")
 
     def select_channel(self, channel):
+        """Select ``channel`` with its grid key (row 1). The norns screen that was
+        showing stays and follows the new channel (flow G05, owner decision 26
+        September 2026): Masks stays Masks, Clock stays Clock; Merge Shape and
+        Harmony reopen their editor root (M02/H01) for the new channel. It no
+        longer jumps to the remembered Masks/Trig params family, so a recipe that
+        needs Masks or Trig params after a select from another screen opens it
+        (channel_page)."""
         self.tap_control("channel", channel)
         self._channel = channel
 
@@ -1391,9 +1398,10 @@ class Ui:
     def select_channel_on_page(self, channel, page):
         """Select ``channel`` on the grid and keep working on Channel ``page``.
 
-        The retired UI kept the showing Channel page across a grid channel
-        select; the live UI returns to the remembered family (C01/C02). The
-        same page is reopened through Channel Tasks and its header confirmed.
+        A grid select keeps the showing screen (G05), so from ``page`` itself
+        this only re-confirms it; the page is still (re)opened through Channel
+        Tasks so the call does not depend on the screen showing before the
+        select, and its header is confirmed for the new channel.
         """
         self.select_channel(channel)
         self.channel_page(page, channel=channel, confirm=False)
@@ -1525,3 +1533,15 @@ class Ui:
         self.driver.wait(lambda state: dashboard_matches(state, title, scope, rows))
         self.driver.results.append(dict(kind="dashboard", title=title, scope=scope,
                                         rows=[list(row) for row in rows], passed=True))
+
+
+    # ---- Owner feedback 26 September 2026: channel select, pattern-page steps (live_ui_feedback family) ----
+
+    def expect_outlined_step(self, step):
+        """A 64-cell pattern screen (Pattern Trig/Note/Velocity, Channel view)
+        outlines exactly cell ``step`` (the held step): frame_oracle.pattern_outline_matches."""
+        from frame_oracle import pattern_outline_matches
+        if type(step) is not int or not 1 <= step <= 64:
+            raise UiMapError("pattern step must be an integer in 1..64")
+        self.driver.wait(lambda state: pattern_outline_matches(state, step))
+        self.driver.results.append(dict(kind="pattern-outline", step=step, passed=True))

@@ -123,7 +123,7 @@ def jf_keyboard_ownership(c):
     midi_start=c.snapshot()['midi_count']
     for voices in ((1,2),(3,4),(5,6)):
         for channel,voice in zip((1,16),voices):
-            # A channel select shows the remembered family; reopen Device for it.
+            # A grid select keeps the shown screen (G05); Device is confirmed for the channel.
             c.ui.select_channel_on_page(channel,'midi_config')
             select_visible_player(c,'Jf N '+str(voice))
         # Both selectors are compatible music-mode mono voices. No transport/recording.

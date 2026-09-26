@@ -8024,6 +8024,45 @@
    "domain": "Covered: Patterns read-only; Trig mode SKIP/ONLY/ALL with both clamps, the trig merge button LED and exact merged MIDI for Skip and All; Note mode AVERAGE/UP/DOWN/PAT 1/PAT 2 and back with both clamps and exact MIDI for PAT 2 and Average; the grid button continues from the norns-set mode. Not covered: velocity and length rows, PAT 3..16, K1 length gesture from the norns."
   },
   {
+   "id": "UI-FEEDBACK-CHANNEL-SELECT",
+   "sections": [
+    "MAN-015",
+    "MAN-033"
+   ],
+   "statement": "A grid channel select keeps the norns screen that is showing, which follows the newly selected channel's scope and values; Merge Shape and Harmony reopen their editor (Merge Shape, Voice leading) for the new channel.",
+   "cases": [
+    "M-LIVEUI-CHSELECT-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: Device (channel 1 CC Device, channel 2 None) and Clock (Rate /1 and /2) keep their screen with the selected channel's scope and value both ways, with the channel row LEDs; from Harmony Register (H02) and Merge Shape Rhythm (M03) a select opens Voice leading (H01) / Merge Shape (M02) for the new channel. Masks is covered by M-LIVEUI-FOLLOW-001 and M-UIACC-A10-001. Not covered: Memory, Output, Merge modes, Channel tasks and Trig params kept across a select; a select with a dirty Merge Shape/Harmony draft; channels 3..16."
+  },
+  {
+   "id": "UI-FEEDBACK-NOTE-PAGE-STEP",
+   "sections": [
+    "MAN-031",
+    "MAN-032"
+   ],
+   "statement": "On the Pattern Note and Velocity pages a held fader key is the step it edits on the 16-step page shown: the screen scopes and outlines that step.",
+   "cases": [
+    "M-LIVEUI-NOTESTEP-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: page 49-64, column 6 held on the Note page (ST54, cell 54 outlined, tooltip Step 54 note set to 2) and on the Velocity page (ST54, cell 54 outlined); a tap on the same column sets step 54 (tooltip, fader LED) with the page buttons still on 49-64. Not covered: pages 1-16..33-48, several held faders, holds on rows 1-2 and 6-7 of other columns."
+  },
+  {
+   "id": "UI-FEEDBACK-MERGE-SHAPE-TRIG",
+   "sections": [
+    "MAN-120",
+    "MAN-044"
+   ],
+   "statement": "While Merge Shape Foundation decides a channel's trigs, Merge modes shows the trig mode as SHAPE (<mode>) and the grid trig merge button's tooltip says Merge Shape is in use; the saved trig mode applies again when Merge Shape is off.",
+   "cases": [
+    "M-LIVEUI-SHAPETRIG-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Covered: Foundation applied through the Merge Shape editor; Trig mode SHAPE (SKIP), SHAPE (ONLY), SHAPE (ALL) with the Merge Shape in use tooltips and trig merge LEDs; Foundation MIDI (additions at accent 70) with the saved mode at All; Mode Off applied reads ALL and plays the legacy All merge (pattern 2 at 100); the next press is Skip with the plain tooltip. Not covered: other Merge Shape modes, Merge Shape on channels other than 1."
+  },
+  {
    "id": "UI-ACCEPT-A18",
    "sections": [
     "MAN-015",

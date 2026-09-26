@@ -34,6 +34,8 @@ import struct
 import zlib
 from pathlib import Path
 
+from ui_map import trig_param_cell_label
+
 from frame_oracle import (dashboard_matches, fit, live_header_matches, render, selected_field_matches, variants,
                           overview_cell_matches)
 
@@ -316,7 +318,7 @@ def channel_screens(c, sw):
     sw.screen("C05", field=("MIDI port", "OUT 1"))
     sw.row(36, "MIDI channel", "CC1")
     # Assignment picker (C07) and a long parameter name on the Trig params
-    # overview: the cell fits a short label; the full value line names it whole.
+    # overview: the cell shows the short name; the full value line names it whole.
     channel_task(c, "trig_params")
     c.key(2)
     sw.screen("C07", field=("None", ""))
@@ -328,7 +330,8 @@ def channel_screens(c, sw):
     c.key(3)
     c.key(2)
     sw.screen("C02", field=("Quantised Fixed Note", "X"))
-    sw.cell("overview_params", 1, "QUAN", "X")
+    # The cell names both parts of the short name, QUAN + NOTE, title-cased (it scrolls).
+    sw.cell("overview_params", 1, trig_param_cell_label("QUAN", "NOTE"), "X")
 
 
 # A false feature boolean reads OFF (distinct from NONE).

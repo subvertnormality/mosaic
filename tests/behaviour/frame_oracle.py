@@ -372,3 +372,25 @@ def footer_matches(state,text):
     """The whole footer line shows exactly `text` and nothing else."""
     actual=base64.b64decode(state['frame']['pixels_base64'])
     return _region_matches(actual,footer(text),*FOOTER_ROWS)
+
+# ---- 64-cell pattern screens: the held/selected step's outline ----
+# lib/ui_render.lua pattern64: cell k's 4x4 square is at (2+((k-1)%16)*8,
+# 24+((k-1)//16)*8); a selected cell adds rect(x-1,y-1,6,6,15) stroked, which
+# the native screen draws as the one-pixel ring x-2..x+4, y-2..y+4 at level 15.
+# Rings of neighbouring cells never touch (8 px pitch) and a playing mark
+# (x..x+3, y+5) lies outside them.
+
+def _pattern_ring(step):
+    x,y=2+((step-1)%16)*8,24+((step-1)//16)*8
+    return [(px,py) for py in range(y-2,y+5) for px in range(x-2,x+5)
+            if px in (x-2,x+4) or py in (y-2,y+4)]
+
+def pattern_outline_matches(state,step):
+    """A pattern64 screen outlines exactly cell `step`: its whole ring is level
+    15 and every other cell's ring is dark."""
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    for k in range(1,65):
+        want=255 if k==step else 0
+        if any(actual[(py*128+px)*4+c]!=want for px,py in _pattern_ring(k) for c in range(3)):
+            return False
+    return True

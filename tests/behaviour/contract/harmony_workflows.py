@@ -110,12 +110,12 @@ def ensemble_polyrhythm_workflow(c):
     c.ui.press_key(3)                     # Save the disabled, fully assigned group.
 
     # Opt each member into Ensemble/group 1 through its own Harmony page.
-    # A grid channel select returns to the edit family, so each member's
-    # Harmony opens through Channel tasks.
+    # A grid channel select on Voice leading opens it (H01) for the newly
+    # selected member (G05, owner decision 26 September 2026).
     c.ui.feature_root()
     for channel in range(1, 5):
         if channel > 1:
-            c.ui.select_channel(channel); c.ui.channel_page("harmony", channel=channel)
+            c.ui.select_channel(channel); c.ui.expect_header("harmony", channel=channel)
         c.ui.turn(2, -20)
         c.ui.set_value(3); c.ui.turn(2, 1); c.ui.set_value(1); c.ui.press_key(3)
 
@@ -196,7 +196,7 @@ def ensemble_polyrhythm_workflow(c):
     # A member-local octave setting is another explicit Ensemble conflict.
     # Channel 3 must use its ordinary +1-octave pitch instead of the shared
     # role, and H05 must name the exact bypass. The grid channel select
-    # leaves Result for channel 3's edit family, as the old E1 turns did.
+    # on Result opens Voice leading (H01) for channel 3 (G05).
     c.ui.select_channel(3)
     c.ui.tap_control("shift_reset"); c.elapse(.1)
     marker = c.snapshot()['midi_count']; c.ui.play()

@@ -14,7 +14,7 @@ LABELS = ["--oct", "--2nd", "--3rd", "--4th", "--5th", "--6th", "--7th", "-oct",
 
 
 # Live Masks page (C01): a selected slot is read from the selected field's value line
-# ("Chord N" and its exact value); an unselected slot from its own overview cell (Chd N).
+# ("Chord N" and its exact value); an unselected slot from its own overview cell ("Chord N" too).
 def expect_cell(c, slot, selected, label, stage):
     field = 'chord_%d' % slot
     try:
