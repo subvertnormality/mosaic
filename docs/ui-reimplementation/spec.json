@@ -23300,7 +23300,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "a88a85e6149c1526028f571c83cd9f7d9ccbdc0e99e5c60572f50f79ecdbac4b"
+      "sha256": "6562906956ea359e64383d6a92e241ff66a36ea5b6b8c3b714493d06f4125a79"
     }
   },
   "guardrails": [

@@ -13,7 +13,21 @@ end
 local function right(value,x,y,level)
  screen.font_size(8);screen.level(level);screen.move(x,y);screen.text_right(tostring(value))
 end
-local function width(value,size)screen.font_size(size or 8);return(screen.text_extents(tostring(value)))end
+-- Widths at the 8 px text size are measured once per string: the marquee and
+-- fit measure cut text character by character every frame, and each native
+-- measurement is costly on the norns. (The cache is bounded.)
+local extents8,extents8_count,extents8_screen={},0,nil
+local function width8(v)
+ if extents8_screen~=screen then extents8,extents8_count,extents8_screen={},0,screen end
+ local w=extents8[v]
+ if w==nil then
+  screen.font_size(8);w=screen.text_extents(v)
+  if extents8_count>=1024 then extents8,extents8_count={},0 end
+  extents8[v]=w;extents8_count=extents8_count+1
+ end
+ return w
+end
+local function width(value,size)if size==nil or size==8 then return width8(tostring(value))end;screen.font_size(size);return(screen.text_extents(tostring(value)))end
 -- Text only (title, scope, labels, status, footer, action/unavailable text). Field values of exact kinds never pass here.
 -- Marquee (owner request 26 September 2026): text too wide for its room
 -- scrolls right to left so it can be read in full. With a phase (ticks from
@@ -28,21 +42,21 @@ local function marquee_offset(n,p)
  return math.min(n,q-MARQUEE_REST+1)
 end
 local function fit(value,w)
- local v=tostring(value);screen.font_size(8)
- if screen.text_extents(v)<=w then return v end
- if screen.text_extents('~')>w then return '' end
+ local v=tostring(value)
+ if width8(v)<=w then return v end
+ if width8('~')>w then return '' end
  cut=true
  if phase then
-  local n=0;while n<#v and screen.text_extents(v:sub(n+1))>w do n=n+1 end
+  local n=0;while n<#v and width8(v:sub(n+1))>w do n=n+1 end
   local k=marquee_offset(n,phase)
   -- Ticks until this text next moves (on its rests it stays still).
   local q=phase%(2*MARQUEE_REST+n);local d=1
   if q<MARQUEE_REST then d=MARQUEE_REST-q elseif q>=MARQUEE_REST+n then d=2*MARQUEE_REST+n-q end
   if not next_move or d<next_move then next_move=d end
   v=v:sub(k+1)
-  if screen.text_extents(v)<=w then return v end
+  if width8(v)<=w then return v end
  end
- while #v>0 and screen.text_extents(v..'~')>w do v=v:sub(1,-2) end
+ while #v>0 and width8(v..'~')>w do v=v:sub(1,-2) end
  return v..'~'
 end
 local function exact(f)return f.kind~='action' and f.kind~='unavailable' end
