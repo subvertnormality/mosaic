@@ -421,6 +421,9 @@ function editor.new(kind)
     if n==2 then self.selected=clamp(self.selected+direction(delta),1,#fields)
     elseif n==3 then if edit_field(fields[self.selected],delta)then mark_dirty()end end;fn.dirty_screen(true)
   end
+  -- `after` is built from copies and is this editor's alone (the history and the
+  -- song keep their own copies), so it becomes the next baseline without
+  -- another copy.
   function self:apply()
     if not self.dirty then self.status="UNCHANGED";return true end
     local song,channel=current_song_channel();local playing=m_clock and m_clock.is_playing and m_clock.is_playing()or false
@@ -440,7 +443,7 @@ function editor.new(kind)
       local after=copy(self.before_snapshot);after.channels[channel.number].musical_merge=copy(self.draft)
       ok,reason=memory.record_optional_config(program.get().selected_song_pattern,{channel.number},self.before_snapshot,after,"channel")
       if not ok then self.status="INVALID "..tostring(reason);return false end
-      self.status=playing and"NEXT CYCLE"or"APPLIED";self.before_snapshot=copy(after)
+      self.status=playing and"NEXT CYCLE"or"APPLIED";self.before_snapshot=after
     else
       local after=copy(self.before_snapshot);after.voicing=copy(self.song_draft)
       local affected={};local set={}
@@ -453,7 +456,7 @@ function editor.new(kind)
       if not optional_transaction.equivalent(self.before_snapshot.voicing,after.voicing)then group_members(self.before_snapshot.voicing);group_members(after.voicing);add(self.channel_number)end
       local ok,reason=memory.record_optional_config(program.get().selected_song_pattern,affected,self.before_snapshot,after,"pattern")
       if not ok then self.status="INVALID "..tostring(reason);return false end
-      self.status=playing and"NEXT PATTERN"or"APPLIED";self.before_snapshot=copy(after)
+      self.status=playing and"NEXT PATTERN"or"APPLIED";self.before_snapshot=after
     end;self.dirty=false;self.generation=self.generation+1;return true
   end
   function self:key(n)
