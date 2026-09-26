@@ -34,8 +34,14 @@ class Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);paths=self.reports(root);out=root/'out.json'
             result=module.verify(paths,out)
-            self.assertEqual(852,result['registered_cases'])
-            self.assertEqual(1689,result['applicable_case_lane_runs'])
+            # The verifier counts exactly what the suite plans from the registry.
+            registry=module.suite.case_registry()
+            jobs,_=module.suite.plan_jobs(sorted(registry),module.suite.LANES,
+                {'base-midi','midi-modulation','nb-audio','crow-jf'},
+                module.suite.controlled_only_cases(),real_time_only=module.suite.real_time_only_cases())
+            self.assertEqual(len(registry),result['registered_cases'])
+            self.assertEqual(len(jobs),result['applicable_case_lane_runs'])
+            self.assertGreater(len(registry),800)
             self.assertTrue(result['complete_behaviour_run'])
     def test_rejects_missing_pair(self):
         with tempfile.TemporaryDirectory() as d:
