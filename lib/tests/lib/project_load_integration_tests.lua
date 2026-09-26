@@ -148,6 +148,24 @@ function test_autosave_primed_while_stopped_does_not_stop_playback_started_befor
   luaunit.assert_equals(c.count.writes,writes+1,"A later quiet minute still saves")
 end
 
+-- README "Autosave": an idle autosave does not interrupt the stopped transport.
+-- Stopping it again sent MIDI Stop to every port and released notes being
+-- played live from a keyboard mid-phrase (M-OPT-KEYS-001 on CI).
+function test_idle_autosave_while_stopped_saves_without_stopping_the_transport()
+  local c=load_context()
+  c.env.autosave_reset()
+  c.state.playing=false;c.prime()
+  local writes,stops,resets=c.count.writes,c.count.stop,c.count.reset
+  c.autosave()
+  luaunit.assert_equals(c.count.writes,writes+1,"The idle project was not saved")
+  luaunit.assert_equals(c.count.stop,stops,"Autosave stopped the stopped transport")
+  luaunit.assert_equals(c.count.reset,resets,"Autosave reset the stopped transport")
+  -- A manual save still stops and resets, as before.
+  luaunit.assert_true(c.save("manual"))
+  luaunit.assert_equals(c.count.stop,stops+1)
+  luaunit.assert_equals(c.count.reset,resets+1)
+end
+
 function test_missing_startup_is_normal_but_unreadable_manual_load_is_rejected()
   local c=load_context();luaunit.assert_false(c.load("fixture/autosave.ptn",true))
   luaunit.assert_equals(#c.state.messages,0);luaunit.assert_equals(c.count.stop,0)
@@ -264,8 +282,10 @@ function test_rhythm_doctor_project_save_blocks_before_transport_and_serializati
     luaunit.assert_equals(c.count.stop, 0, state)
     m:resources_released(owner, true)
     luaunit.assert_equals(c.count.writes, 1, state)
-    luaunit.assert_equals(c.count.stop, 1, state)
-    luaunit.assert_equals(c.count.reset, 1, state)
+    -- The deferred save is an autosave on a stopped transport: it saves
+    -- without stopping it again (see the idle autosave test above).
+    luaunit.assert_equals(c.count.stop, 0, state)
+    luaunit.assert_equals(c.count.reset, 0, state)
     m:transport_stopped()
     luaunit.assert_equals(c.count.writes, 1, "Deferred saves coalesce: " .. state)
   end

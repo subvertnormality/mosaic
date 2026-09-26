@@ -132,8 +132,13 @@ local function save_project(txt, automatic)
       return false
     end
   end
-  m_clock:stop()
-  m_clock:reset()
+  -- Idle autosave runs only while stopped, and the stopped transport is already
+  -- reset. Stopping again would send MIDI Stop and release notes being played
+  -- live from a keyboard, so only a manual or playing save stops the transport.
+  if not automatic or m_clock.is_playing() then
+    m_clock:stop()
+    m_clock:reset()
+  end
   print("Saving project as " .. txt)
   local project_data = program.prepare_for_save()
   local project_path = norns.state.data .. txt .. ".ptn"
