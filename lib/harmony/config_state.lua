@@ -36,8 +36,27 @@ function config_state.effective_channel(song, channel, requested)
   return record(song, channel, requested).active
 end
 
+-- Exactly equal values (same types and contents).
+local function equal(left, right)
+  if left == right then return true end
+  if type(left) ~= "table" or type(right) ~= "table" then return false end
+  for key, item in pairs(left) do if not equal(item, right[key]) then return false end end
+  for key in pairs(right) do if left[key] == nil then return false end end
+  return true
+end
+
+-- A request that would leave the record exactly as it is: nothing to copy.
+-- (An apply requests every channel; copying unchanged ones cost milliseconds
+-- on the norns.) Playing, the request queues it; stopped, it is active.
+local function settled(value, requested, playing)
+  if not equal(value.requested, requested) then return false end
+  if playing then return value.queued ~= nil and equal(value.queued, requested) end
+  return value.queued == nil and equal(value.active, requested)
+end
+
 function config_state.request_channel(song, channel, requested, playing)
   local value = record(song, channel, requested)
+  if settled(value, requested, playing) then return playing and "queued" or "applied" end
   value.requested = copy(requested)
   if playing then
     value.queued = copy(requested)
@@ -62,6 +81,7 @@ end
 
 function config_state.request_song(song, requested, playing)
   local value = song_record(song, requested)
+  if settled(value, requested, playing) then return playing and "queued" or "applied" end
   value.requested = copy(requested)
   if playing then value.queued=copy(requested); return "queued" end
   value.active=copy(requested); value.queued=nil; return "applied"

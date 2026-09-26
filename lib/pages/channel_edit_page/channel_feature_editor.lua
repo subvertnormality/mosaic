@@ -424,7 +424,8 @@ function editor.new(kind)
   function self:apply()
     if not self.dirty then self.status="UNCHANGED";return true end
     local song,channel=current_song_channel();local playing=m_clock and m_clock.is_playing and m_clock.is_playing()or false
-    local live=optional_transaction.snapshot(song)
+    -- Compared only: a view of the live configuration, not a copy.
+    local live=optional_transaction.view(song)
     if not optional_transaction.equivalent(live,self.before_snapshot)then self.status="INVALID STALE DRAFT";return false end
     if self.kind=="merge"then
       local ok,reason=merge_config.validate(self.draft)
