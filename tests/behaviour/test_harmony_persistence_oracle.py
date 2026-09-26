@@ -34,15 +34,16 @@ class HarmonyPersistenceOracleTests(unittest.TestCase):
         # Interpreter-stable digests (ast_digest) of FunctionDef ASTs; CI runs
         # Python 3.8. Unchanged functions keep their 9d26f841 (pre-move)
         # digests; the others pin their live-UI migration (Channel tasks,
-        # focused-screen field oracles).
+        # focused-screen field oracles; 25 September 2026 dashboard/detail rows,
+        # channel-octave scope and one planned > sent row per voice).
         source_hashes = {
             'playback_note_messages': '15f8f3fc07b90038a1d8813e56b814975242f7b15d54ac9af2b4f249ed504218',
             'revoice_workflow': 'c3d3c344b33ad56a5743d342578b8bb60993bd75052833639b0049f1e0eccae4',
-            'setup_pattern_harmony': '490e9ff1bea594e1cd763e7cfe5061cdb97e95365d102543440e34109dc6b1ab',
-            'pattern_harmony_persistence_workflow': '1ac6d4f1e2a4d0bf55c98f3e32b3c45bd513a4a3fae602e9438bbd50b6d948ef',
-            'ensemble_polyrhythm_workflow': '17a1156f3adead2c1bc5b5b13fd268f04fc003fadd6d3c43b060e9df58a2c6b3',
-            'no_voicing_fallback_workflow': 'b3ef8e85f21c259bb6e499824a9e516d1cd2e4dbde5b63416ae7b9e16e009aa0',
-            'held_step_precedence_workflow': '3df4fb5e9ac3b1ed4fefebf05830522fcc8bf0311355be4433cf9b1efe9ef9ba',
+            'setup_pattern_harmony': 'cf50f9e6dd7980965bc5f3b2fe77efb122302668809d29d5dc2297fd112a7523',
+            'pattern_harmony_persistence_workflow': '55cb04854f2688df167806e83dfbdad4f079b93c72b57a7f39b05ffe357fa899',
+            'ensemble_polyrhythm_workflow': '3f720d2a1bf5dc9bd8f13289875ad12322ebded27a7cfe00cee58cfd919dd3ac',
+            'no_voicing_fallback_workflow': 'def020ee1ac22e01507fa616d4e9bb850365eae9e959b662b7cf124223243dff',
+            'held_step_precedence_workflow': '03edaef1a80402c4b48bfdd3156b1f74265d854270f526b658859aeffeef0ce3',
         }
         for name, expected_hash in source_hashes.items():
             with self.subTest(source=name):
