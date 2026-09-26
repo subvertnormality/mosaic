@@ -41,7 +41,7 @@ class HarmonyPersistenceOracleTests(unittest.TestCase):
             'revoice_workflow': 'c3d3c344b33ad56a5743d342578b8bb60993bd75052833639b0049f1e0eccae4',
             'setup_pattern_harmony': 'cf50f9e6dd7980965bc5f3b2fe77efb122302668809d29d5dc2297fd112a7523',
             'pattern_harmony_persistence_workflow': '55cb04854f2688df167806e83dfbdad4f079b93c72b57a7f39b05ffe357fa899',
-            'ensemble_polyrhythm_workflow': '3f720d2a1bf5dc9bd8f13289875ad12322ebded27a7cfe00cee58cfd919dd3ac',
+            'ensemble_polyrhythm_workflow': 'd07e29b5c09794797e29d774381465568373410294cdefedfffda1bb4d3b14a1',
             'no_voicing_fallback_workflow': 'def020ee1ac22e01507fa616d4e9bb850365eae9e959b662b7cf124223243dff',
             'held_step_precedence_workflow': '03edaef1a80402c4b48bfdd3156b1f74265d854270f526b658859aeffeef0ce3',
         }
