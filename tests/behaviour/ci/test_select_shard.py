@@ -83,6 +83,19 @@ class Tests(unittest.TestCase):
         flat=[case for shard in shards for case in shard]
         self.assertEqual(len(flat),len(set(flat)))
         self.assertEqual(set(flat),set(module.select('base-midi',0,1)))
+    def test_sequential_shards_are_disjoint_exhaustive_and_balanced_by_lane_sum(self):
+        # CI runs the two lanes one after the other in 24 shards.
+        shards=[module.select('base-midi',i,24,True) for i in range(24)]
+        flat=[case for shard in shards for case in shard]
+        self.assertEqual(len(flat),len(set(flat)))
+        self.assertEqual(set(flat),set(module.select('base-midi',0,1)))
+        timing=json.loads((HERE/'shard-durations.json').read_text())
+        weights=timing['cases_ms']
+        grouped=module.partition(sorted(weights),24,weights,timing['shard_zero_overhead_ms'],sequential=True)
+        sums=[sum(sum(weights[c]) for c in group)+(timing['shard_zero_overhead_ms'] if i==0 else 0)
+              for i,group in enumerate(grouped)]
+        # Greedy longest-first: the spread is at most one case.
+        self.assertLessEqual(max(sums)-min(sums),max(sum(pair) for pair in weights.values()))
     def test_special_profiles_are_selected_exactly(self):
         self.assertEqual(4,len(module.select('midi-modulation',0,1)))
         self.assertEqual(3,len(module.select('nb-audio',0,1)))

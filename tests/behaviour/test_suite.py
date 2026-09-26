@@ -54,7 +54,10 @@ class FailureClassTests(unittest.TestCase):
     def test_native_startup_is_not_a_case_result(self):
         crone='ContractError: crone exited -6; /x/crone.log; cleanup also failed'
         timeout='ContractError: sclang did not reach AudioContext: initPolls; inspect /x'
-        self.assertEqual([suite.failure_class(dict(failure=f)) for f in (crone,timeout)],['native-startup']*2)
+        supercollider='ContractError: script error: SUPERCOLLIDER FAIL; logs: /tmp/x/sessions/b677'
+        self.assertEqual([suite.failure_class(dict(failure=f)) for f in (crone,timeout,supercollider)],['native-startup']*3)
+        # Any other script error is the case's own.
+        self.assertEqual(suite.failure_class(dict(failure='ContractError: script error: attempt to index nil; logs: /x')),'case')
         for failure in ("AssertionError: ('Onset phase', 0, 19255089)",None,'ContractError: midi_drop'):
             self.assertEqual(suite.failure_class(dict(failure=failure)),'case')
 

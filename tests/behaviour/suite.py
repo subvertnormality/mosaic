@@ -415,7 +415,10 @@ def run(args):
         failed_case_runs=len(summary['case_runs_failed']),failed_layer_items=summary['layer_items_failed'])))
     return 0 if passed else 1
 
-STARTUP_FAILURE=re.compile(r'^ContractError: (?:(?:jack|crone|sclang|matron) exited|.* did not reach )')
+# Native startup failures, before the case's own script runs: an exited server,
+# a readiness timeout, or matron reporting that SuperCollider did not come up
+# in time (norns' "SUPERCOLLIDER FAIL" script error at boot).
+STARTUP_FAILURE=re.compile(r'^ContractError: (?:(?:jack|crone|sclang|matron) exited|.* did not reach )|^ContractError: script error: SUPERCOLLIDER FAIL;')
 
 def failure_class(row):
     """Separate native startup failures from failures of the case itself."""
