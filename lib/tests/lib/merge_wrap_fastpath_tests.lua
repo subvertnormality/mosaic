@@ -561,8 +561,12 @@ local function stats()
     plan_hits = counts.plan_hits, plan_misses = counts.plan_misses}
 end
 
--- Write garbage through every table of a returned build: a later hit must
--- not see it.
+-- Write garbage through everything of a returned build the application
+-- may write: the working-pattern arrays (written in place by
+-- program.update_working_pattern_for_step and the memory event handlers) and
+-- the plan's top level (the build adds its own fields there). A later hit
+-- must not see it. Plan sub-tables are immutable (see the read-only guard
+-- below), so they are not scribbled.
 local function scribble(result)
   for _, field in ipairs({"trig_values", "lengths", "note_values", "note_mask_values", "velocity_values"}) do
     for s = 1, 64 do result[field][s] = -99 end
@@ -570,13 +574,8 @@ local function scribble(result)
   result.merged_notes[1] = "scribbled"
   local plan = result.foundation
   if plan then
-    for key, value in pairs(plan) do
-      if type(value) == "table" and key ~= "config" and key ~= "interlock" and key ~= "anchor_notes" then
-        for inner in pairs(value) do
-          if type(value[inner]) == "table" then value[inner][1] = "scribbled" else value[inner] = "scribbled" end
-        end
-      end
-    end
+    for key in pairs(plan) do plan[key] = "scribbled" end
+    plan.extra = "scribbled"
   end
 end
 
@@ -834,7 +833,7 @@ function test_merge_wrap_plan_memo_hits_only_with_equal_key_filters_and_sources(
   assert_plan(song, 2, true, "unchanged at last")
 end
 
-function test_merge_wrap_plan_memo_hits_return_independent_plans()
+function test_merge_wrap_plan_memo_hits_return_independent_plan_top_levels()
   local song = memo_song()
   local first = assert_plan(song, 2, false, "first build")
   local pristine = build(reference_merge, song, 2)
@@ -844,6 +843,10 @@ function test_merge_wrap_plan_memo_hits_return_independent_plans()
   scribble(second)
   local third = assert_plan(song, 2, true, "after scribbling a hit plan")
   luaunit.assert_nil(difference(third, pristine))
-  luaunit.assert_false(third.foundation.sources == second.foundation.sources)
-  luaunit.assert_false(third.foundation.sources[1] == second.foundation.sources[1])
+  -- Each hit has its own top level; the sub-tables are the stored plan's,
+  -- shared by design (immutable after foundation.plan).
+  luaunit.assert_false(third.foundation == second.foundation)
+  local fourth = assert_plan(song, 2, true, "unchanged")
+  luaunit.assert_true(fourth.foundation.sources == third.foundation.sources)
+  luaunit.assert_true(fourth.foundation.roles == third.foundation.roles)
 end

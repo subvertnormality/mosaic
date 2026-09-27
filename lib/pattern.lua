@@ -492,36 +492,19 @@ local function same_filters(saved, filters)
   return true
 end
 
--- A deep copy of a plan result, which shares no table with it. Plans are
--- per-field maps of per-step lists (three levels); those levels are copied
--- inline, anything deeper recursively.
-local function copy_tree(value)
-  if type(value) ~= "table" then return value end
-  local result = {}
-  for key, inner in pairs(value) do result[key] = copy_tree(inner) end
-  return result
-end
-
+-- The plan a hit returns: a fresh top-level table (the build adds its own
+-- interlock, cycle, phrase, config, anchor_notes and markers there) whose
+-- sub-tables (trigs, roles, reasons, velocities, sources, reason_lists and
+-- their per-step lists) are shared with the stored plan and with earlier
+-- builds' plans. Rule: plan sub-tables are immutable once foundation.plan
+-- has built them. Nothing in Mosaic writes them (step.handle,
+-- harmony pitch resolution, the Merge Shape Result/Reason screens,
+-- merge_structure.markers and merge_display only read them);
+-- merge_wrap_pulse_share_tests.lua runs those paths with the sub-tables made
+-- read-only. A writer added later must copy first.
 local function copy_plan(plan)
   local result = {}
-  for key, field in pairs(plan) do
-    if type(field) == "table" then
-      local copy = {}
-      for step, entry in pairs(field) do
-        if type(entry) == "table" then
-          local list = {}
-          for index, item in pairs(entry) do
-            if type(item) == "table" then item = copy_tree(item) end
-            list[index] = item
-          end
-          entry = list
-        end
-        copy[step] = entry
-      end
-      field = copy
-    end
-    result[key] = field
-  end
+  for key, value in pairs(plan) do result[key] = value end
   return result
 end
 

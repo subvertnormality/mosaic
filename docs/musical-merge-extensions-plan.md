@@ -316,8 +316,11 @@ rebuilds for the follower's own edits recompute from the same inputs.
   song slot, channel, binding, ranking phrase, ranking version) are equal by
   value and subtype and the Interlock filters are the same ordered list with
   exactly the same blocked sets. A hit returns a fresh copy of the pristine
-  stored result, so nothing written to a returned working pattern or plan
-  reaches the memo. Every other build (edits, sweeps, Start, load) runs in
+  merged pattern, so nothing written to a returned working pattern reaches
+  the memo, and a plan with a fresh top level (the build adds its own
+  fields there) whose sub-tables are shared: plan sub-tables are immutable
+  once `foundation.plan` has built them (no Mosaic code writes them; a test
+  plays, inspects and renders Result/Reason with them read-only). Every other build (edits, sweeps, Start, load) runs in
   full.
   Within one lattice pulse (the token m_clock's wrap branch passes down, a
   fresh table per `Lattice:pulse_all`, so a pulse that raises shares nothing

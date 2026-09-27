@@ -6,7 +6,8 @@
 -- representative wraps with every shortcut recomputed and compared
 -- (pattern.wrap_share_check), compare the output with sharing off, and pin
 -- that writes between pulses and an error inside a pulse never reach a later
--- pulse's shortcuts.
+-- pulse's shortcuts. They also guard the rule that Foundation plan
+-- sub-tables are immutable once built (the wrap memo shares them).
 
 local merge_state = include("mosaic/lib/musical_merge/state")
 local merge_timeline = include("mosaic/lib/musical_merge/timeline")
@@ -291,4 +292,167 @@ function test_merge_pulse_share_an_error_inside_a_pulse_does_not_leak_sharing()
   pattern.update_working_pattern = original
   pattern.wrap_share_check = false
   if not ok then pcall(stop_transport); error(err, 0) end
+end
+
+-- Plan sub-tables are immutable after foundation.plan (the wrap memo shares
+-- them between builds). Every plan built while `body` runs gets read-only
+-- sub-tables that record any write; reads behave as before.
+local function read_only(value, writes, path, cache)
+  if type(value) ~= "table" then return value end
+  if cache[value] then return cache[value] end
+  local proxy = {}
+  cache[value] = proxy
+  setmetatable(proxy, {
+    __index = function(_, key) return read_only(value[key], writes, path .. "." .. tostring(key), cache) end,
+    __newindex = function(_, key) writes[#writes + 1] = path .. "." .. tostring(key) end,
+    __len = function() return #value end,
+    __pairs = function()
+      return function(_, key)
+        local next_key, item = next(value, key)
+        return next_key, read_only(item, writes, path .. "." .. tostring(next_key), cache)
+      end, proxy, nil
+    end,
+  })
+  return proxy
+end
+
+local function with_read_only_plans(body)
+  local builder = pattern.get_and_merge_patterns
+  local foundation
+  for index = 1, 300 do
+    local name, value = debug.getupvalue(builder, index)
+    if name == nil then break end
+    if name == "foundation" then foundation = value; break end
+  end
+  assert(foundation, "pattern.lua's foundation module")
+  local plan = foundation.plan
+  local writes, cache = {}, setmetatable({}, {__mode = "k"})
+  foundation.plan = function(args)
+    local result = plan(args)
+    for key, value in pairs(result) do
+      if type(value) == "table" then result[key] = read_only(value, writes, key, cache) end
+    end
+    return result
+  end
+  local ok, err = pcall(body)
+  foundation.plan = plan
+  if not ok then error(err, 0) end
+  return writes
+end
+
+function test_merge_plan_sub_tables_are_never_written_by_playback()
+  local W = workload()
+  local function configure() W.configure("WORST", "enabled") end
+  local function between(pulse, song) if pulse == 24 * 20 + 5 then toggle_leader_anchor(W, song, 1) end end
+  local plain = play(configure, 24 * 64 * 2 + 12, between)
+  local guarded
+  local writes = with_read_only_plans(function() guarded = play(configure, 24 * 64 * 2 + 12, between) end)
+  luaunit.assert_equals(writes, {})
+  luaunit.assert_equals(guarded, plain)
+end
+
+-- Structure markers (merge_structure.markers over the plan roles), kept
+-- anchor pitch and the Harmony Pattern path of step.lua (plan roles read per
+-- position), played through step.handle.
+function test_merge_plan_sub_tables_are_never_written_by_structure_and_harmony_paths()
+  local harmony_config = include("mosaic/lib/harmony/config")
+  local harmony_inspection = include("mosaic/lib/harmony/inspection")
+  local function run()
+    local song = dense_project()
+    for number, trigs in pairs({[1] = {1, 5, 9}, [2] = {3, 5, 7, 13}}) do
+      local value = program.initialise_default_pattern()
+      for _, position in ipairs(trigs) do value.trig_values[position] = 1; value.note_values[position] = position % 7 end
+      song.patterns[number] = value
+    end
+    local group = harmony_config.four_part_smooth(1, {9, 10, 11, 12})
+    group.enabled = true
+    song.voicing = {schema_version = 1, groups = {[1] = group}}
+    local channel = song.channels[1]
+    channel.selected_patterns = {[1] = true, [2] = true}
+    channel.end_trig = {16, 4}
+    local merge = merge_config.new()
+    merge.mode, merge.anchor, merge.keep_anchor_pitch = "foundation", 1, true
+    merge.structure = {markers = "anchors", group_id = 1}
+    channel.musical_merge = merge
+    channel.voicing = harmony_config.new_channel("pattern")
+    channel.voicing.roles.v1 = {min = 48, max = 59, centre = 53, preferred_leap = 127, strict_leap = false, enabled = true}
+    pattern.update_working_pattern(1, song)
+    midi_event_log = {}
+    for _, position in ipairs({1, 3, 5, 7, 9, 13}) do step.handle(1, position) end
+    local planned = {}
+    for position = 1, 16 do
+      local snapshot = harmony_inspection.snapshot(song, 1, position)
+      planned[position] = snapshot and snapshot.planned and snapshot.planned.status or false
+    end
+    return {note_log(), planned, channel.working_pattern.foundation.markers}
+  end
+  local plain = run()
+  local guarded
+  local writes = with_read_only_plans(function() guarded = run() end)
+  luaunit.assert_equals(writes, {})
+  luaunit.assert_true(deep_equal(guarded[1], plain[1]))
+  luaunit.assert_true(deep_equal(guarded[2], plain[2]))
+  luaunit.assert_true(deep_equal(guarded[3], plain[3]))
+  luaunit.assert_true(next(plain[3]) ~= nil, "markers present")
+end
+
+-- The Merge Shape Result and Reason screens (and merge_display) read every
+-- plan field of every step.
+function test_merge_plan_sub_tables_are_never_written_by_the_result_and_reason_screens()
+  local feature_editor = include("mosaic/lib/pages/channel_edit_page/channel_feature_editor")
+  local function fields_of(value)
+    local result = {}
+    for index, field in ipairs(value:get_fields()) do
+      result[index] = field.label .. "=" .. tostring(feature_editor.field_value(field))
+    end
+    return result
+  end
+  local function open(value, label)
+    for index, field in ipairs(value:get_fields()) do
+      if field.label == label then value.selected = index; value:key(3); return end
+    end
+    error("missing " .. label)
+  end
+  local function step_field(value)
+    for _, field in ipairs(value:get_fields()) do if field.label == "Step" then return field end end
+  end
+  local function run()
+    program.init(); globals.reset(); params.reset(); m_clock.init(); merge_state.reset()
+    program.set_selected_song_pattern(1)
+    local song = program.get_song_pattern(1)
+    for number, trigs in pairs({[1] = {1, 5, 9, 13}, [2] = {2, 3, 5, 6, 7, 11, 14}}) do
+      for _, position in ipairs(trigs) do song.patterns[number].trig_values[position] = 1 end
+    end
+    local channel = song.channels[1]
+    channel.selected_patterns = {[1] = true, [2] = true}
+    song.channels[2].selected_patterns = {[1] = true}
+    local config = merge_config.new()
+    config.mode, config.anchor, config.gap, config.amount = "foundation", 1, 1, 50
+    config.interlock = {leader = 2, window = 1}
+    channel.musical_merge = config
+    local leader = merge_config.new()
+    leader.mode, leader.anchor = "foundation", 1
+    song.channels[2].musical_merge = leader
+    pattern.update_working_pattern(2, song)
+    pattern.update_working_pattern(1, song)
+    program.get().selected_channel = 1
+    local value = feature_editor.new("merge")
+    value:enter()
+    open(value, "Result")
+    local seen = {}
+    for position = 1, 16 do
+      step_field(value).set(position)
+      seen[#seen + 1] = fields_of(value)
+      open(value, "Reason")
+      seen[#seen + 1] = fields_of(value)
+      value:encoder_one()
+      open(value, "Result")
+    end
+    return seen
+  end
+  local plain = run()
+  local guarded
+  local writes = with_read_only_plans(function() guarded = run() end)
+  luaunit.assert_equals(writes, {})
+  luaunit.assert_equals(guarded, plain)
 end
