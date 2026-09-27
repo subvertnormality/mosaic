@@ -45,6 +45,11 @@ Everything not stated here keeps the MM-01…MM-07 contracts in
   and nested keys, collisions with each new field, Foundation enabled, and
   absent/explicit Off configurations. Compare pattern values, emitted MIDI,
   RNG consumption and lead-enabled lookahead with the pinned v1 baseline.
+  The pinned baseline is `lib/tests/fixtures/merge_v1_baseline/`: v1 projects
+  saved by `f908a553`'s own project save and that revision's observations,
+  captured by `capture.sh` under the `f908a553` harness and identified by
+  `MANIFEST.lua`; `lib/tests/lib/merge_v1_baseline_oracle_tests.lua` replays
+  them through the candidate's production load/save and never regenerates them.
   New v2 fields and defaults:
   - `mode`: `off | foundation | fragments` (was `off | foundation`).
   - `interlock = {leader = nil, window = 0}`: leader channel 1..16 or nil

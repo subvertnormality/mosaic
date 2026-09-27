@@ -34,7 +34,7 @@
  "counts": {
   "requirements": 177,
   "production_lua_modules": 170,
-  "unit_integration_files": 129,
+  "unit_integration_files": 130,
   "domains": 17
  },
  "coverage_language": {
@@ -84,7 +84,8 @@
    "interaction_strategy": "Pure exhaustive solver/planner checks feed scheduler integration and physical grid/norns workflows; exact MIDI and active grid projection are independent acceptance oracles.",
    "residual_gaps": [
     "MM-12 Space (silence-aware interlock) is deferred as residual MM-12 (docs/musical-merge-extensions-plan.md \u00a76.3, owner: the Mosaic maintainer): no engine, UI or manual claim; the reserved space schema field is validated and inert, and the README states Space is not part of this release. MM-12-AUDIBLE, the proposal's audible-silence entry gate, stays OPEN.",
-    "Fragments, Interlock and Structure (MM-08..MM-11) have physical behaviour cases (M-MERGE-FRAGMENTS-001, M-MERGE-INTERLOCK-001, M-MERGE-STRUCTURE-001) for one representative configuration each; their remaining domains (short/offset loops, Keep anchor, unequal clock divisions and loop lengths, RESYNC/PLAN LIMIT bypasses, Every 4/Every 8 markers, CHORD MISSING and MARKER PRIORITY with Revoice/Ensemble) are unit/integration evidence only."
+    "Fragments, Interlock and Structure (MM-08..MM-11) have physical behaviour cases (M-MERGE-FRAGMENTS-001, M-MERGE-INTERLOCK-001, M-MERGE-STRUCTURE-001) for one representative configuration each; their remaining domains (short/offset loops, Keep anchor, unequal clock divisions and loop lengths, RESYNC/PLAN LIMIT bypasses, Every 4/Every 8 markers, CHORD MISSING and MARKER PRIORITY with Revoice/Ensemble) are unit/integration evidence only.",
+    "Off/v1 exactness (docs/musical-merge-extensions-plan.md \u00a70) is judged against an independent base oracle: lib/tests/fixtures/merge_v1_baseline holds v1 projects saved by f908a553's own project save and that revision's observations (working patterns, complete MIDI traces with pulses, RNG draws, lead-25 lock lookahead), captured by capture.sh under the f908a553 harness and pinned by MANIFEST.lua sha256s; merge_v1_baseline_oracle_tests.lua loads them through the candidate's production load (check + migrate via project_lifecycle), saves v2, reloads v2 and compares exactly. The oracle covers five representative projects, not every v1 configuration."
    ],
    "requirement_ids": [
     "MERGE-FOUNDATION",
@@ -149,7 +150,8 @@
     "lib/tests/lib/musical_merge_structure_tests.lua",
     "lib/tests/lib/musical_merge_timeline_tests.lua",
     "lib/tests/lib/optional_config_persistence_tests.lua",
-    "lib/tests/lib/voice_lifetime_tests.lua"
+    "lib/tests/lib/voice_lifetime_tests.lua",
+    "lib/tests/lib/merge_v1_baseline_oracle_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-MERGE-FOUNDATION-001",
