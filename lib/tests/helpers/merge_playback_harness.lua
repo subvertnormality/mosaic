@@ -1,5 +1,5 @@
--- Scheduler-level playback harness shared by the MM-09 Interlock and MM-12
--- Space tests. Nominal onset times are counted in lattice pulses per step
+-- Scheduler-level playback harness of the MM-09 Interlock tests. Nominal
+-- onset times are counted in lattice pulses per step
 -- (d · 384), exact for the clock mods used there.
 local merge_timeline = include("mosaic/lib/musical_merge/timeline")
 

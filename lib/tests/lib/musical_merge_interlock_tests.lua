@@ -205,8 +205,8 @@ function test_interlock_x5_3_and_div_5_3_pairs_are_exact()
 end
 
 -- §1.4 large ratios and the fallback: more than 64 leader cycles in the
--- support bypasses the whole admission with PLAN LIMIT and the unfiltered
--- Foundation result.
+-- support bypasses Interlock with PLAN LIMIT; the Foundation result is the
+-- one without Interlock.
 function test_interlock_large_ratio_falls_back_with_plan_limit()
   local song = setup({follower_mod = {name = "/128", value = 128, type = "clock_division"},
     follower_last = 64, leader_mod = {name = "x16", value = 16, type = "clock_multiplication"},
@@ -214,26 +214,33 @@ function test_interlock_large_ratio_falls_back_with_plan_limit()
   local result = build(song, FOLLOWER)
   luaunit.assert_equals(result.foundation.interlock.status, "PLAN LIMIT")
   luaunit.assert_equals(result.foundation.interlock.blocked, {})
+  -- Support [0, 63·8] against leader cycles of 1/4: 2017 cycles counted.
+  luaunit.assert_equals(result.foundation.interlock.cycles, 2017)
+  luaunit.assert_equals(result.foundation.interlock.anchors, 0)
+  luaunit.assert_equals(result.foundation.interlock.plan_builds, 0)
   local plain = without_interlock(song)
   luaunit.assert_equals(result.trig_values, plain.trig_values)
   luaunit.assert_equals(result.foundation.eligible_count, plain.foundation.eligible_count)
 end
 
--- §1.4 budget: at most 8 distinct leader plans per admission. A per-phrase
--- leader draws a new plan identity every cycle; fixed variation shares one.
-function test_interlock_more_than_eight_distinct_leader_plans_is_plan_limit()
+-- §1.4 single budget: 64 leader cycles; there is no plan budget any more. A
+-- per-phrase leader (a new phrase position every cycle) is supported exactly
+-- like a fixed one: its anchors do not depend on the phrase (§1.2.3).
+function test_interlock_per_phrase_leader_has_no_plan_budget()
   local x4 = {name = "x4", value = 4, type = "clock_multiplication"}
-  local song = setup({follower_mod = D1, follower_last = 16, leader_mod = x4, leader_last = 4,
-    leader_anchors = {1}, leader_config = foundation(1, {variation = "per_phrase"})})
-  local result = build(song, FOLLOWER)
-  luaunit.assert_equals(result.foundation.interlock.status, "PLAN LIMIT")
-  song = setup({follower_mod = D1, follower_last = 16, leader_mod = x4, leader_last = 4,
-    leader_anchors = {1}})
-  result = build(song, FOLLOWER)
-  luaunit.assert_equals(result.foundation.interlock.status, "ok")
-  -- Leader cycle length 4/64 = 1/16: an anchor at every follower onset.
-  luaunit.assert_equals(#blocked_steps(result), 16)
-  luaunit.assert_equals(result.foundation.interlock.cycles, 17)
+  for _, variation in ipairs({"per_phrase", "fixed"}) do
+    local song = setup({follower_mod = D1, follower_last = 16, leader_mod = x4, leader_last = 4,
+      leader_anchors = {1}, leader_config = foundation(1, {variation = variation, cycles = 8, shape = "build",
+        percentages = {13, 25, 38, 50, 63, 75, 88, 100}})})
+    local admission = build(song, FOLLOWER).foundation.interlock
+    luaunit.assert_equals(admission.status, "ok", variation)
+    -- Leader cycle length 4/64 = 1/16: an anchor at every follower onset;
+    -- support [0, 15/16] meets leader cycles 0..15.
+    luaunit.assert_equals(#blocked_steps(build(song, FOLLOWER)), 16, variation)
+    luaunit.assert_equals(admission.cycles, 16, variation)
+    luaunit.assert_equals(admission.anchors, 16, variation)
+    luaunit.assert_equals(admission.plan_builds, 0, variation)
+  end
 end
 
 -- §1.5: a leader cycle whose configuration is Off, or Foundation with a
@@ -253,27 +260,83 @@ function test_interlock_leader_off_and_missing_contribute_no_anchors()
   luaunit.assert_equals(build(song, FOLLOWER).foundation.interlock.status, "LEADER OFF")
 end
 
--- §1.2.3 Leader cycle plan: the output of the same get_and_merge_patterns
--- code with configuration, cycle and phrase passed explicitly; equal to the
--- live build whenever merge_state holds the same phrase position.
-function test_interlock_leader_plan_is_the_working_pattern_build_with_explicit_phrase()
-  local song = setup({leader_config = foundation(1, {cycles = 2, shape = "custom", percentages = {40, 100},
-    variation = "per_phrase", amount = 60})})
-  local leader = song.channels[LEADER]
-  local saved = leader.musical_merge
-  local predictions = {}
-  for boundaries = 0, 5 do predictions[boundaries] = merge_state.predict(song, LEADER, saved, boundaries) end
-  for boundaries = 0, 5 do
-    local predicted = predictions[boundaries]
-    local direct = pattern_module.get_and_merge_patterns(LEADER, leader.trig_merge_mode, leader.note_merge_mode,
-      leader.velocity_merge_mode, leader.length_merge_mode, song, nil,
-      {config = predicted.config, cycle = predicted.cycle, phrase = predicted.phrase})
-    luaunit.assert_equals(direct.foundation.cycle, predicted.cycle)
-    luaunit.assert_equals(direct.foundation.phrase, predicted.phrase)
-    local live = build(song, LEADER)
-    luaunit.assert_equals(live, direct, "boundary " .. boundaries)
-    merge_state.on_cycle_boundary(song, LEADER, saved)
+-- §1.2.3 Leader anchors for cycle i: read directly from the currently stored
+-- anchor pattern under the governing configuration, equal to the positions
+-- foundation.plan marks `anchor` for the same configuration and stored data,
+-- for every configuration shape the Interlock suite uses (and a few more):
+-- offset and one-step ranges, phrase shapes, per-phrase variation, gap,
+-- partial Amount, Accent zero, masks, missing/unassigned anchor, Off,
+-- Fragments and a v1 Foundation configuration.
+function test_interlock_direct_leader_anchors_equal_foundation_plan_anchors()
+  local v1 = {schema_version = 1, mode = "foundation", anchor = 1, amount = 30, accent = 55, gap = 1, seed = 5,
+    ranking_version = 1, cycles = 2, shape = "custom", percentages = {20, 90}, variation = "per_phrase",
+    keep_anchor_pitch = false, target = {kind = "legacy"}}
+  local fragments = merge_config.new(); fragments.mode = "fragments"
+  local shapes = {
+    {label = "default", config = foundation(1)},
+    {label = "changed anchor", config = foundation(5)},
+    {label = "phrase", config = foundation(1, {cycles = 2, shape = "custom", percentages = {40, 100},
+      variation = "per_phrase", amount = 60})},
+    {label = "gap amount accent", config = foundation(1, {gap = 3, amount = 17, accent = 0, seed = 77})},
+    {label = "offset range", config = foundation(1), first = 5, last = 20},
+    {label = "one step", config = foundation(1), first = 1, last = 1},
+    {label = "masks", config = foundation(1), masks = true},
+    {label = "unassigned anchor", config = foundation(7)},
+    {label = "off", config = merge_config.new()},
+    {label = "fragments", config = fragments},
+    {label = "v1", config = v1}
+  }
+  local query = include("mosaic/lib/musical_merge/leader_query")
+  for _, shape in ipairs(shapes) do
+    local song, follower, leader = setup({leader_config = shape.config, leader_anchors = {1, 3, 6, 9, 17, 20}})
+    set_range(leader, shape.first or 1, shape.last or 4)
+    if shape.masks then
+      leader.step_trig_masks[1] = 0; leader.step_trig_masks[2] = 1; leader.trig_mask = 1
+    end
+    merge_state.reset()
+    local plan = build(song, LEADER).foundation
+    local frame = query.frame({song = song, channel = FOLLOWER, first = 1, last = 8}, LEADER)
+    local direct = query.anchors(frame, shape.config)
+    if plan == nil then
+      luaunit.assert_false(direct, shape.label)
+    elseif plan.status ~= "ok" then
+      luaunit.assert_nil(direct, shape.label)
+    else
+      local expected = {}
+      for index = 1, frame.l_count do
+        if plan.roles[frame.l_first + index - 1] == "anchor" then expected[#expected + 1] = index end
+      end
+      luaunit.assert_equals(direct, expected, shape.label)
+    end
+    -- The admission reads the same set and builds nothing.
+    local admission = build(song, FOLLOWER).foundation.interlock
+    luaunit.assert_equals(admission.plan_builds, 0, shape.label)
   end
+end
+
+-- §1.2.3 acceptance: an admission performs zero leader-plan builds. The
+-- follower build is the only get_and_merge_patterns call, over a support of
+-- many leader cycles with per-phrase variation and a predicted queued change.
+function test_interlock_admission_performs_zero_leader_plan_builds()
+  local x4 = {name = "x4", value = 4, type = "clock_multiplication"}
+  local song = setup({follower_mod = D1, follower_last = 64, leader_mod = x4, leader_last = 4, leader_anchors = {1},
+    window = 0, leader_config = foundation(1, {cycles = 4, shape = "build", percentages = {25, 50, 75, 100},
+      variation = "per_phrase"})})
+  merge_state.request(song, LEADER, foundation(5, {variation = "per_phrase"}), false)
+  local original = pattern_module.get_and_merge_patterns
+  local calls = {}
+  pattern_module.get_and_merge_patterns = function(channel, ...)
+    calls[#calls + 1] = channel
+    return original(channel, ...)
+  end
+  local ok, result = pcall(build, song, FOLLOWER)
+  pattern_module.get_and_merge_patterns = original
+  if not ok then error(result, 0) end
+  luaunit.assert_equals(calls, {FOLLOWER})
+  local admission = result.foundation.interlock
+  luaunit.assert_equals(admission.status, "ok")
+  luaunit.assert_equals(admission.plan_builds, 0)
+  luaunit.assert_equals(admission.cycles, 64)
 end
 
 -- §3 candidate pipeline: gap, then Interlock, every applicable reason kept
@@ -739,4 +802,161 @@ function test_interlock_yielding_sweep_interleavings_keep_the_last_build()
   end)
   scheduler = saved_scheduler
   if not ok then error(err, 0) end
+end
+
+-- ---------------------------------------------------------------------------
+-- §1.4 last-onset support endpoint and the single 64-cycle budget.
+
+local function odd_steps()
+  local steps = {}
+  for step = 1, 63, 2 do steps[#steps + 1] = step end
+  return steps
+end
+
+local function reason_count(result, reason)
+  return #reason_steps(result, reason)
+end
+
+-- PERF-MERGE-HW-WORST shape: a 64-step /1 follower against a one-step /1
+-- leader with an anchor there. The support [0, 63/16] (the last onset, not
+-- the cycle end) meets exactly 64 leader cycles: supported, 64 anchors, zero
+-- builds, and every one of the 31 candidate additions is removed.
+function test_interlock_last_onset_support_worst_shape_is_exactly_the_budget()
+  local song = setup({follower_mod = D1, follower_last = 64, leader_mod = D1, leader_last = 1,
+    leader_anchors = {1}, follower_anchors = {1}, candidates = odd_steps(), window = 0})
+  local result = build(song, FOLLOWER)
+  local admission = result.foundation.interlock
+  luaunit.assert_equals(admission.status, "ok")
+  luaunit.assert_equals(admission.cycles, 64)
+  luaunit.assert_equals(admission.anchors, 64)
+  luaunit.assert_equals(admission.plan_builds, 0)
+  luaunit.assert_equals(reason_count(result, "INTERLOCK CH02"), 31)
+  luaunit.assert_equals(result.foundation.eligible_count, 0)
+  luaunit.assert_equals(additions(result), {})
+  -- One more follower step of window reaches leader cycle 64: PLAN LIMIT,
+  -- with Interlock bypassed and the result of Interlock off.
+  song = setup({follower_mod = D1, follower_last = 64, leader_mod = D1, leader_last = 1,
+    leader_anchors = {1}, follower_anchors = {1}, candidates = odd_steps(), window = 1})
+  result = build(song, FOLLOWER)
+  admission = result.foundation.interlock
+  luaunit.assert_equals(admission.status, "PLAN LIMIT")
+  luaunit.assert_equals(admission.cycles, 65)
+  luaunit.assert_equals(admission.plan_builds, 0)
+  luaunit.assert_equals(reason_count(result, "INTERLOCK CH02"), 0)
+  luaunit.assert_equals(result.foundation.eligible_count, 31)
+  luaunit.assert_equals(result.foundation.admitted_count, 31)
+end
+
+-- The same endpoint while playing, in follower cycle j = 1: support
+-- [64/16, 127/16] meets leader cycles 64..127.
+function test_interlock_last_onset_support_worst_shape_in_a_later_cycle()
+  local song, follower = setup({follower_mod = D1, follower_last = 64, leader_mod = D1, leader_last = 1,
+    leader_anchors = {1}, follower_anchors = {1}, candidates = odd_steps(), window = 0})
+  m_clock.init(); m_clock:start()
+  pulses(24 * 64 + 1)
+  luaunit.assert_equals(merge_timeline.k(FOLLOWER), 1)
+  local admission = follower.working_pattern.foundation.interlock
+  luaunit.assert_equals(admission.status, "ok")
+  luaunit.assert_equals(admission.cycles, 64)
+  luaunit.assert_equals(admission.anchors, 64)
+  luaunit.assert_equals(reason_count(follower.working_pattern, "INTERLOCK CH02"), 31)
+  stop_transport()
+end
+
+-- ---------------------------------------------------------------------------
+-- §1.2 unsupported-admission fallback: RESYNC and PLAN LIMIT bypass Interlock
+-- only; gap, eligibility, ranking, phrase-adjusted Amount, Accent and masks
+-- run exactly as with Interlock off.
+
+local function assert_same_as_interlock_off(result, plain, label)
+  local plan, off = result.foundation, plain.foundation
+  for step = 1, 64 do
+    luaunit.assert_equals(plan.reasons[step], off.reasons[step], label .. " reason " .. step)
+    luaunit.assert_equals(plan.roles[step], off.roles[step], label .. " role " .. step)
+    for _, reason in ipairs(plan.reason_lists[step] or {}) do
+      luaunit.assert_false(reason:find("^INTERLOCK") ~= nil, label .. " interlock reason " .. step)
+    end
+  end
+  luaunit.assert_equals(plan.eligible_count, off.eligible_count, label)
+  luaunit.assert_equals(plan.admitted_count, off.admitted_count, label)
+  luaunit.assert_equals(additions(result), additions(plain), label)
+  luaunit.assert_equals(result.trig_values, plain.trig_values, label)
+  luaunit.assert_equals(result.velocity_values, plain.velocity_values, label)
+end
+
+local function fallback_config()
+  return foundation(3, {gap = 2, amount = 40, seed = 321, interlock = {leader = LEADER, window = 0}})
+end
+
+function test_interlock_plan_limit_fallback_matches_interlock_off_with_gap_and_amount()
+  local song, follower = setup({follower_mod = {name = "/128", value = 128, type = "clock_division"},
+    follower_last = 32, follower_anchors = {3, 20}, leader_mod = {name = "x16", value = 16,
+    type = "clock_multiplication"}, leader_last = 64, leader_anchors = {1, 3, 5, 7, 9},
+    follower_config = fallback_config()})
+  follower.step_trig_masks[21] = 1
+  local result = build(song, FOLLOWER)
+  luaunit.assert_equals(result.foundation.interlock.status, "PLAN LIMIT")
+  local plain = without_interlock(song)
+  luaunit.assert_true(#reason_steps(result, "gap") > 0)
+  luaunit.assert_true(result.foundation.admitted_count > 0)
+  luaunit.assert_true(result.foundation.admitted_count < result.foundation.eligible_count)
+  assert_same_as_interlock_off(result, plain, "plan limit")
+  -- The same configuration within the budget does filter.
+  song = setup({follower_mod = D1, follower_last = 32, follower_anchors = {3, 20}, leader_mod = D1,
+    leader_last = 4, leader_anchors = {2}, follower_config = fallback_config()})
+  luaunit.assert_true(reason_count(build(song, FOLLOWER), "INTERLOCK CH02") > 0)
+end
+
+function test_interlock_resync_fallback_matches_interlock_off_with_gap_and_amount()
+  local song, follower = setup({follower_mod = D1, follower_last = 32, follower_anchors = {3, 20},
+    leader_mod = D1, leader_last = 4, leader_anchors = {2}, global_length = 64,
+    follower_config = fallback_config()})
+  m_clock.init(); m_clock:start(); pulses(24 * 2)
+  luaunit.assert_true(reason_count(follower.working_pattern, "INTERLOCK CH02") > 0)
+  m_clock.set_channel_division(LEADER, m_clock.calculate_divisor({value = 2, type = "clock_division"}))
+  local result = follower.working_pattern
+  luaunit.assert_equals(result.foundation.interlock.status, "RESYNC")
+  luaunit.assert_equals(result.foundation.interlock.plan_builds, 0)
+  luaunit.assert_true(#reason_steps(result, "gap") > 0)
+  luaunit.assert_true(result.foundation.admitted_count < result.foundation.eligible_count)
+  local plain = without_interlock(song)
+  assert_same_as_interlock_off(result, plain, "resync")
+  stop_transport()
+end
+
+-- ---------------------------------------------------------------------------
+-- PERF-MERGE-HW-DENSE shape at host level: an x16 64-step leader with an
+-- anchor on every step; a /4 64-step follower whose assigned anchor pattern
+-- is empty and whose second source has every step (64 candidates). d_f / d_l
+-- = 64, so each follower step lasts one leader cycle: 64 cycles, 4,096
+-- anchors, every candidate on a leader step-1 anchor.
+function test_interlock_dense_shape_counts_and_leader_step_one_toggle()
+  local all = {}
+  for step = 1, 64 do all[#all + 1] = step end
+  local options = {follower_mod = {name = "/4", value = 4, type = "clock_division"}, follower_last = 64,
+    follower_anchors = {}, leader_mod = {name = "x16", value = 16, type = "clock_multiplication"},
+    leader_last = 64, leader_anchors = all, window = 0}
+  local song = setup(options)
+  local result = build(song, FOLLOWER)
+  local admission = result.foundation.interlock
+  luaunit.assert_equals(admission.status, "ok")
+  luaunit.assert_equals(admission.cycles, 64)
+  luaunit.assert_equals(admission.anchors, 4096)
+  luaunit.assert_equals(admission.plan_builds, 0)
+  luaunit.assert_equals(reason_count(result, "INTERLOCK CH02"), 64)
+  luaunit.assert_equals(result.foundation.eligible_count, 0)
+  luaunit.assert_equals(result.foundation.admitted_count, 0)
+  -- Leader step-1 anchor trig off: no follower onset meets an anchor.
+  song.patterns[1].trig_values[1] = 0
+  pattern_module.update_source_working_patterns(song, 1)
+  result = song.channels[FOLLOWER].working_pattern
+  admission = result.foundation.interlock
+  luaunit.assert_equals(admission.status, "ok")
+  luaunit.assert_equals(admission.cycles, 64)
+  luaunit.assert_equals(admission.anchors, 4032)
+  luaunit.assert_equals(admission.plan_builds, 0)
+  luaunit.assert_equals(reason_count(result, "INTERLOCK CH02"), 0)
+  luaunit.assert_equals(result.foundation.eligible_count, 64)
+  luaunit.assert_equals(result.foundation.admitted_count, 64)
+  luaunit.assert_equals(#additions(result), 64)
 end
