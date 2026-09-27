@@ -740,7 +740,9 @@ end
 
 
 
-local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_for_source, process_func, frozen_pitches, consume_harmony, route_available)
+-- structural_root: with Harmony Off, a snapped Structure marker root, which
+-- the root voice plays instead of recomputing the unsnapped pitch (plan §4).
+local function handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root, note_on_for_source, process_func, frozen_pitches, consume_harmony, route_available, structural_root)
   local c = note_container.channel
   local channel = program.get_channel(program.get().selected_song_pattern, c)
   local release_ids = {}
@@ -772,7 +774,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
   local initial = sequenced_chord_notes[1]
   if initial then
     local note
-    if frozen_sequence~=nil then note=frozen_sequence[1]else
+    if frozen_sequence~=nil then note=frozen_sequence[1]
+    elseif structural_root and initial.source_id=="root" then note=structural_root else
       note=process_func(initial.note_value,initial.octave_mod,initial.transpose,channel.step_scale_number)
     end
     if note then
@@ -799,7 +802,8 @@ local function handle_arp(note_container, unprocessed_note_container, chord_note
     -- Every slot consumes time and acceleration, including trailing rests.
     if note_to_play then
       local note
-      if frozen_sequence~=nil then note=frozen_sequence[arp_note[c]]else
+      if frozen_sequence~=nil then note=frozen_sequence[arp_note[c]]
+      elseif structural_root and note_to_play.source_id=="root" then note=structural_root else
         note=process_func(note_to_play.note_value,note_to_play.octave_mod,note_to_play.transpose,channel.step_scale_number)
       end
       if note then
@@ -1079,6 +1083,12 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     m_midi.has_device(note_container.midi_device))
   local planned_root = harmony_pitches and harmony_pitches.root
   if harmony_pitches == nil then planned_root = note_container.note end
+  -- Plan §4: grid inspection and MIDI consume the same final root decision.
+  -- With Harmony Off a snapped marker root is that decision, so delayed and
+  -- arpeggiated root voices play it rather than recomputing the unsnapped
+  -- pitch. Every other root keeps the legacy recomputation.
+  local structural_root = harmony_pitches == nil and unprocessed_note_container.marker_priority and
+    note_container.note or nil
   local function resolve_grid_value(value)
     if unprocessed_note_container.is_mask then
       return quantiser.process_with_mask_params(value,unprocessed_note_container.octave_mod,
@@ -1138,7 +1148,7 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   if arp_division then
     handle_arp(note_container, unprocessed_note_container, chord_notes, arp_division, 
               chord_strum_pattern, chord_velocity_mod, chord_spread, chord_acceleration, mute_root,
-              note_on_for_source, process_func, harmony_pitches, consume_harmony, route_available)
+              note_on_for_source, process_func, harmony_pitches, consume_harmony, route_available, structural_root)
     return
   end
 
@@ -1243,6 +1253,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
         local processed_note
         if harmony_pitches ~= nil then
           processed_note = harmony_pitches.root
+        elseif structural_root then
+          processed_note = structural_root
         else
           processed_note = process_func(unprocessed_note_container.note_value + random_shift,
             unprocessed_note_container.octave_mod, unprocessed_note_container.transpose,

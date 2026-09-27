@@ -242,6 +242,104 @@ function test_structure_marker_inspection_grid_and_midi_agree()
   luaunit.assert_equals(between.output, pitches[2])
 end
 
+-- Review D2 (§4 Shared pitch resolution, Downstream Harmony "Grid inspection
+-- and MIDI must consume the same final root decision"): with Harmony Off a
+-- reverse strum (patterns 2 and 4) sounds the root last from a delayed
+-- callback. That callback must play the marker's snapped root, root-only or
+-- with a local chord, while explicit bypasses and Structure Off keep the
+-- legacy recomputation. Channel 1 plays raw 1 (62) at marker step 1; C-E-G
+-- snaps it to 60. The local chord voice (offset 2, raw 3 = 65) is governed by
+-- existing playback and not snapped.
+local function note_division_index(value)
+  local divisions = include("mosaic/lib/clock/divisions")
+  for index, division in ipairs(divisions.note_divisions) do if division.value == value then return index end end
+  error("no note division " .. tostring(value))
+end
+
+local function strum_step_one(channel, pattern_number, chord_offset, arp)
+  channel.trig_lock_params[6] = {id = "chord_strum_pattern", param_id = "test_strum_pattern"}
+  program.add_step_param_trig_lock(1, 6, pattern_number)
+  channel.trig_lock_params[7] = {id = "chord_strum", param_id = "test_strum"}
+  program.add_step_param_trig_lock(1, 7, note_division_index(1/4))
+  if arp then
+    channel.trig_lock_params[8] = {id = "chord_arp", param_id = "test_arp"}
+    program.add_step_param_trig_lock(1, 8, note_division_index(1/4))
+  end
+  channel.chord_one_mask = chord_offset
+end
+
+-- Every note-on of channel 1 from step 1 and its delayed callbacks (a 1/4
+-- strum delays the last voice by less than 96 pulses). The fixture has a trig
+-- only at step 1 of a 16-step loop, so no later onset of the loop sounds.
+local STRUM_PULSES = 96
+local function strummed(song)
+  local before = #midi_note_on_events
+  step.handle(1, 1)
+  for _ = 1, STRUM_PULSES do m_clock.get_clock_lattice():pulse() end
+  local pitches = {}
+  for index = before + 1, #midi_note_on_events do pitches[#pitches + 1] = midi_note_on_events[index][1] end
+  return pitches, harmony_inspection.snapshot(song, 1, 1).planned
+end
+
+function test_structure_reverse_strum_delayed_root_keeps_snapped_marker_root()
+  local fixture = {anchors = {1}, additions = {}, raws = {[1] = 1}}
+  for _, pattern_number in ipairs({2, 4}) do
+    for _, chord_offset in ipairs({0, 2}) do
+      local label = "pattern " .. pattern_number .. " chord " .. chord_offset
+      local song, channel = structure_song(with(fixture, {markers = "every_4"}))
+      strum_step_one(channel, pattern_number, chord_offset)
+      local pitches, planned = strummed(song)
+      -- The root sounds last, after any chord voice.
+      luaunit.assert_equals(#pitches, chord_offset == 0 and 1 or 2, label)
+      luaunit.assert_equals(pitches[#pitches], 60, label)
+      if chord_offset ~= 0 then luaunit.assert_equals(pitches[1], 65, label) end
+      luaunit.assert_equals({planned.structural_status, planned.output}, {"marker", 60}, label)
+      local grid_value = harmony_grid_projection.value(song, 1, 1, 1, 1)
+      luaunit.assert_equals(quantiser.process(grid_value, 0, 0, 1, false), pitches[#pitches], label)
+      -- Structure Off keeps the legacy delayed root.
+      song, channel = structure_song(with(fixture, {markers = "off"}))
+      strum_step_one(channel, pattern_number, chord_offset)
+      pitches = strummed(song)
+      luaunit.assert_equals(pitches[#pitches], 62, label .. " off")
+    end
+  end
+end
+
+-- An explicit pitch bypass at the marker keeps the complete legacy path in
+-- the delayed callback too: the same root as Structure Off.
+function test_structure_reverse_strum_delayed_root_bypass_matches_legacy()
+  local fixture = {anchors = {1}, additions = {}, raws = {[1] = 1}}
+  local results = {}
+  for _, markers in ipairs({"off", "every_4"}) do
+    local _, channel = structure_song(with(fixture, {markers = markers}))
+    strum_step_one(channel, 2, 0)
+    channel.step_note_masks[1] = 61
+    local song = program.get_song_pattern(1); pattern_model.update_working_pattern(1, song)
+    local pitches, planned = strummed(song)
+    results[markers] = pitches
+    if markers == "off" then luaunit.assert_nil(planned.structural_status)
+    else luaunit.assert_equals(planned.structural_status, "note_mask") end
+  end
+  luaunit.assert_equals(results.every_4, results.off)
+  luaunit.assert_equals(#results.off, 1)
+end
+
+-- The same final-root rule for an arpeggiated marker step with Harmony Off:
+-- the root voice the arp sounds is the snapped marker root.
+function test_structure_arp_root_voice_keeps_snapped_marker_root()
+  local fixture = {anchors = {1}, additions = {}, raws = {[1] = 1}}
+  local song, channel = structure_song(with(fixture, {markers = "every_4"}))
+  strum_step_one(channel, 1, 0, true)
+  local pitches, planned = strummed(song)
+  luaunit.assert_equals(planned.output, 60)
+  luaunit.assert_true(#pitches >= 1)
+  luaunit.assert_equals(pitches[1], 60)
+  song, channel = structure_song(with(fixture, {markers = "off"}))
+  strum_step_one(channel, 1, 0, true)
+  pitches = strummed(song)
+  luaunit.assert_equals(pitches[1], 62)
+end
+
 -- §4 Chord source: a missing or disabled group bypasses snapping (and the
 -- Addition Target) with CHORD MISSING; the next source revision recovers.
 function test_structure_missing_group_is_visible_legacy_and_recovers()
