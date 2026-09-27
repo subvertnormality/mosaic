@@ -591,7 +591,7 @@ def run_merge_performance(runner,case_id,grid_device,device_map_id,source,trace=
         driver.ui.pattern_editor();driver.ui.tap_control('pattern_select',1);driver.ui.expect_steps({x:'selected' for x in range(1,17)})
         # Routing is proven on the unmodified dense project, before Merge Shape.
         preflight=functional_preflight(runner,driver,trace,spec)
-        merge_eval(runner,merge_workloads.install_chunk(),'__MERGE_WORKLOAD__true')
+        merge_eval(runner,merge_workloads.install_command(),'__MERGE_WORKLOAD__true')
         merge_eval(runner,'print(_MOSAIC_MERGE_WORKLOAD.install(%d))'%merge_workloads.LEADER_PATTERN,'__MERGE_REC_INSTALLED__');installed=True
         off=run_merge_window(runner,driver,trace,spec,'off',transport_log)
         enabled_sampler=sampler or (OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler())

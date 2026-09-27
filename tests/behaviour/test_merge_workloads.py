@@ -151,6 +151,18 @@ class WorkloadChunk(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'ASCII'):
             mw.lua_string_literal('café')
 
+    def test_install_command_fits_the_matron_repl_line_and_names_the_installed_file(self):
+        from real_norns import REPL_LINE_LIMIT, check_repl_lines
+        command = mw.install_command()
+        self.assertIn(mw.DEVICE_WORKLOAD_PATH, command)
+        self.assertTrue(mw.DEVICE_WORKLOAD_PATH.endswith('/' + mw.WORKLOAD_LUA.relative_to(mw.WORKLOAD_LUA.parents[2]).as_posix()))
+        payload = (command + "; print('__MOSAIC_HW_0000000000000000__')\n").encode() + b'\0'
+        check_repl_lines(payload)
+        self.assertLess(len(command) + 40, REPL_LINE_LIMIT)
+        # The inline chunk this replaces is longer than one REPL line.
+        with self.assertRaises(ValueError):
+            check_repl_lines((mw.install_chunk() + '\n').encode() + b'\0')
+
     def test_install_chunk_loads_the_workload_in_plain_lua(self):
         if not shutil.which('lua'):
             self.skipTest('lua interpreter unavailable')

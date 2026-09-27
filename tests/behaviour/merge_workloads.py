@@ -100,6 +100,17 @@ def lua_string_literal(text):
     return '"' + text.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n').replace('\t', '\\t') + '"'
 
 
+# The runner installs the committed tree at this path with a verified hash
+# manifest, so the workload is loaded from the device with dofile: sent inline
+# it is one ~10 KB Maiden line, beyond matron's 4096-byte REPL buffer.
+DEVICE_WORKLOAD_PATH = '/home/we/dust/code/mosaic/tests/behaviour/merge_device_workload.lua'
+
+
+def install_command(path=DEVICE_WORKLOAD_PATH):
+    """Maiden command loading the installed workload file (one short line)."""
+    return "dofile(%s); print('__MERGE_WORKLOAD__'..tostring(_MOSAIC_MERGE_WORKLOAD ~= nil))" % lua_string_literal(path)
+
+
 def install_chunk(text=None):
     """Maiden command defining _MOSAIC_MERGE_WORKLOAD from the workload file."""
     text = WORKLOAD_LUA.read_text() if text is None else text
