@@ -191,14 +191,21 @@ function M.draw(v)
  -- footer names the neighbouring fields: left '< prev' (or '| START'), right
  -- 'next >' (or 'END |'), each fitted to its half. A {hints} footer (a row
  -- that opens a child screen: 'K3 OPEN RHYTHM', then the screen's other
- -- hints) keeps its first hint and each later one, two spaces apart, only
- -- while the whole line fits.
+ -- hints, two spaces apart) is drawn whole when it fits. Otherwise the row
+ -- name goes first (owner decision 27 September 2026): the first hint becomes
+ -- its short form ('K3 OPEN') and each later hint is kept only while the line
+ -- still fits.
  if more then
  elseif type(v.footer)=='table' and type(v.footer.hints)=='table' then
-  local line=tostring(v.footer.hints[1] or'')
-  for k=2,#v.footer.hints do
-   local longer=line..'  '..tostring(v.footer.hints[k])
-   if width(longer)<=126 then line=longer end
+  local h=v.footer.hints
+  local line=tostring(h[1] or'')
+  for k=2,#h do line=line..'  '..tostring(h[k])end
+  if width(line)>126 then
+   line=tostring(v.footer.short or h[1] or'')
+   for k=2,#h do
+    local longer=line..'  '..tostring(h[k])
+    if width(longer)<=126 then line=longer end
+   end
   end
   text(fit(line,126),1,63,8,9)
  elseif type(v.footer)=='table' then

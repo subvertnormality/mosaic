@@ -738,7 +738,9 @@ local FOOTER = {
 -- not say that K3 reveals more). While it is selected the footer names it,
 -- K3 OPEN <LABEL>, followed by the screen's hints that still apply there:
 -- K3 now opens and E3 has nothing to set on the row, so those are left out.
--- The renderer keeps each later hint only while the line fits.
+-- The renderer draws the line whole when it fits; otherwise the row name goes
+-- first (owner decision 27 September 2026: `short`, K3 OPEN, then the other
+-- hints) and only then each later hint that no longer fits.
 local OPEN_VALUE = "OPEN >"
 local function opens_child(d) return d.kind == "action" and d.opens ~= nil end
 local function open_footer(label, hints)
@@ -748,7 +750,7 @@ local function open_footer(label, hints)
     local key = hint:sub(1, 2)
     if hint ~= "" and key ~= "K3" and key ~= "E3" then result[#result + 1] = hint end
   end
-  return {hints = result}
+  return {hints = result, short = "K3 OPEN"}
 end
 
 -- 64 cells of the viewed channel exactly as the grid viewer draws its steps,

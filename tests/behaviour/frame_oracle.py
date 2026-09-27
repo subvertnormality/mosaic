@@ -456,16 +456,19 @@ def footer(text):
 
 # A row whose K3 opens a child screen shows OPEN > (owner decision 27 September
 # 2026); while it is selected the footer names it, 'K3 OPEN <LABEL>', then the
-# screen's hints other than its K3 and E3 ones, each kept only while the whole
-# line (two spaces between hints) fits 126 px (lib/ui_live.lua open_footer,
-# lib/ui_render.lua {hints} footer).
+# screen's hints other than its K3 and E3 ones, two spaces apart. If that line
+# is wider than 126 px the row name goes first (owner decision 27 September
+# 2026): 'K3 OPEN' then each later hint kept only while the line fits
+# (lib/ui_live.lua open_footer, lib/ui_render.lua {hints} footer).
 OPEN_VALUE='OPEN >'
 
 def open_footer(label,hints=''):
     """The footer text while child row `label` is selected on a screen whose
     control hints are `hints` ('E3 SET  K3 APPLY  K2 BACK')."""
     rest=[h for h in hints.split('  ') if h and h[:2] not in ('K3','E3')]
-    line='K3 OPEN '+label.upper()
+    line='  '.join(['K3 OPEN '+label.upper()]+rest)
+    if text_width(line)<=126:return line
+    line='K3 OPEN'
     for hint in rest:
         if text_width(line+'  '+hint)<=126:line=line+'  '+hint
     return line

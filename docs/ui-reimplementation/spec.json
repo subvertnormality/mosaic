@@ -23300,7 +23300,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "e31d76224d48d7e83975250da9c5ee0a9718552c4f0afc5b512ea066e5abcd04"
+      "sha256": "6304fe780ed4382e24d0afd85692ba96a534016425e685e90f857be767c65463"
     }
   },
   "guardrails": [
@@ -31292,7 +31292,7 @@
       "fields": "Field[] from describe(target)",
       "selected": "1-based visible field ordinal",
       "layout": "focused|detail|overview_masks|overview_params|pattern64",
-      "footer": "one formatted binding/status line, or {left, right} neighbour labels on a focused screen ('< prev' / 'next >', '| START' / 'END |'), or {hints} while the selected field opens a child screen: 'K3 OPEN <LABEL>' then the screen's other hints, each later hint kept only while the whole line (two spaces between hints) fits 126 px"
+      "footer": "one formatted binding/status line, or {left, right} neighbour labels on a focused screen ('< prev' / 'next >', '| START' / 'END |'), or {hints, short} while the selected field opens a child screen: 'K3 OPEN <LABEL>' then the screen's other hints (two spaces between hints), drawn whole when it fits 126 px; otherwise the row name goes first (owner decision 27 September 2026): short ('K3 OPEN') then each later hint kept only while the line fits"
     },
     "Field": {
       "id": "stable provider field key",
@@ -31322,7 +31322,7 @@
       "Filter descriptors where visible is false. Retain selection by stable id; if removed clamp prior ordinal and consume the pending edit delta.",
       "Set kind from descriptor; all non-action/non-inspection fields of read_only screens become readonly.",
       "Format domain and sentinel values with existing owner formatter. Do not parse labels into commands.",
-      "An action descriptor with `opens` (the screen its K3 opens) is a child row: value 'OPEN >', and while selected the footer is {hints = {'K3 OPEN ' .. upper(label), ...}} followed by the screen's hints except its K3 and E3 hints (owner decision 27 September 2026: a bare '>' did not say that K3 reveals more). Routes to a confirmation screen (Delete group, Reset map), inline actions and confirmations are not child rows.",
+      "An action descriptor with `opens` (the screen its K3 opens) is a child row: value 'OPEN >', and while selected the footer is {hints = {'K3 OPEN ' .. upper(label), ...}, short = 'K3 OPEN'} followed by the screen's hints except its K3 and E3 hints (owner decision 27 September 2026: a bare '>' did not say that K3 reveals more). Routes to a confirmation screen (Delete group, Reset map), inline actions and confirmations are not child rows.",
       "Use explicit short_label and compact_value metadata. If unavailable show full label/value in focused detail; do not substitute another parameter.",
       "Select the declared layout; title/scope/status come from captured target and snapshot. No fixture numeric string is a binding.",
       "Rendering does not advance clocks, consume random numbers, query a new solver result or change selection."
@@ -31332,7 +31332,7 @@
       "numeric": "An exact value must fit at native 8px in the full 126px width (focused may use a larger size). The selected exact value is drawn whole on the same screen: focused value_region (art yields), detail selected row (label shrinks), overview full_value_line. Otherwise LAYOUT OVERFLOW and ok=false; no numeric truncation.",
       "cells": "An overview cell or unselected detail row whose value does not fit shows the more-marker '...' (not ~); selecting the field shows it whole on the full-width route of the same screen.",
       "text": "~ denotes abbreviated non-value text (title, scope, label, status, footer, action/unavailable text); the full form must be accessible through the existing detail route.",
-      "footer": "single owner; held scope > modal > error > draft/queued > normal binding. A {hints} footer draws its first hint (fitted like other footer text) and each later hint only while the line fits.",
+      "footer": "single owner; held scope > modal > error > draft/queued > normal binding. A {hints} footer draws the whole line when it fits; otherwise it drops the row name first (short replaces the first hint) and then each later hint that does not fit (the result is fitted like other footer text).",
       "long_names": "detail views use short labels with separate full owner name on selection; no scrolling animation required.",
       "certification": "Offline replay uses synthetic metrics and is a runtime/route check only; A18 'full numeric value' is certified with native screen.text_extents."
     },

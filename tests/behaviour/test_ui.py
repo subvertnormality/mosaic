@@ -3286,7 +3286,11 @@ class GroupCUiTests(unittest.TestCase):
         import frame_oracle
         with patch.object(frame_oracle, "text_width", side_effect=lambda text, *a, **k: 5 * len(text)):
             self.assertEqual(frame_oracle.open_footer("Rhythm", "E3 SET  K3 APPLY  K2 BACK"), "K3 OPEN RHYTHM  K2 BACK")
-            self.assertEqual(frame_oracle.open_footer("Failure details", "E1 TASKS"), "K3 OPEN FAILURE DETAILS")
+            # The row name goes first (owner decision 27 September 2026), then later hints.
+            self.assertEqual(frame_oracle.open_footer("Failure details", "E1 TASKS"), "K3 OPEN  E1 TASKS")
+            self.assertEqual(frame_oracle.open_footer("Trig params", "K3 OPEN  K1 PARAMS"), "K3 OPEN  K1 PARAMS")
+            self.assertEqual(frame_oracle.open_footer("Reason", "K2 BACK TO THE VERY START  E1 TASKS"),
+                             "K3 OPEN  E1 TASKS")
             self.assertEqual(frame_oracle.open_footer("Masks", "K3 OPEN  K1 PARAMS"), "K3 OPEN MASKS  K1 PARAMS")
             self.assertEqual(frame_oracle.open_footer("Scale", "E2 CHOOSE  K3 OPEN"), "K3 OPEN SCALE  E2 CHOOSE")
         self.assertEqual(frame_oracle.OPEN_VALUE, "OPEN >")
