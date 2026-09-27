@@ -3735,7 +3735,8 @@
     "M-MEMORY-014",
     "M-REC-PARAM-025",
     "M-REC-PARAM-026",
-    "M-MEMORY-012"
+    "M-MEMORY-012",
+    "M-MERGE-STRUCTURE-005"
    ],
    "status": "partial-domain-coverage",
    "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-MEMORY-007 (E and D, 3 fresh D repeats): K1+K3 truncation forgets only its own channel's history (0 of 0) while another channel keeps 1 of 1 and still undoes; both positions and the applied masks survive idle autosave and a cold restart (persistence is characterisation, as M-MEMORY-006). M-MEMORY-008 (E and D): stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; suspected defect S15 (velocity written before the release commits) is not reproduced and the case stays as a regression guard. M-MEMORY-009 (E and D, 3 fresh D repeats): redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702). The baseline silenced the step until the next edit (defect memory-redo-working-pattern, fixed).",
@@ -6244,7 +6245,8 @@
     "M-RANGE-SAVED-004",
     "M-SAVE-NAMED-001",
     "M-MEMORY-005",
-    "M-SAVE-FAIL-001"
+    "M-SAVE-FAIL-001",
+    "M-MERGE-STRUCTURE-005"
    ],
    "status": "partial-domain-coverage",
    "domain": "M-SAVE-NAMED-001 (E and D, 3 fresh D repeats): save with the default name and with a typed name (one character appended through the native text entry), idle autosave leaves both named saves byte-identical, cancel writes nothing, re-saving the default name overwrites only it, and loading each name restores its exact phrase in-session. M-PROJECT-LIVE-001..004 cover dialogs while playing. Remaining: long/empty/non-ASCII names, delete in text entry, corrupt/missing/unwritable files at load and save. M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-SAVE-FAIL-001 (E and D, 3 fresh D repeats): while a rejected load suspends autosave, a named save into a read-only project directory fails and autosave stays suspended; a successful named save resumes it (file writes, not bytes, are the evidence). Characterised: an unsuspended failed idle autosave is retried after the next input. A failed save that resumes autosave is detected.",
@@ -7658,7 +7660,8 @@
    "cases": [
     "M-MERGE-INTERLOCK-001",
     "M-MERGE-INTERLOCK-002",
-    "M-MERGE-INTERLOCK-003"
+    "M-MERGE-INTERLOCK-003",
+    "M-MERGE-INTERLOCK-004"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical two-channel workflows at /1 on 8-step loops. M-MERGE-INTERLOCK-001: Window 0 and 2 in literal MIDI (both channels) and on the grid, a Window change queued while playing that lands whole at a loop boundary with a cancelled later draft, and an on-screen CHANNEL IS A LEADER refusal. M-MERGE-INTERLOCK-002 (plan 1.3 freshness, E and D): a leader source edit mid-cycle (halfway through step 6, scheduled through the public input path) removes the follower's coinciding addition in that same loop and a follower edit mid-cycle admits its new addition in that loop, in exact two-channel MIDI and on the playing channel grid; with a 25 ms lock lead and Trigless locks off the edit withdraws the removed addition's already planned CC lock (a mutation dropping the follower lookahead invalidation fails it). M-MERGE-INTERLOCK-003 (plan 1.2.1, review D6, E and D): a /2 confirmed on the Clock screen for the follower, then for its leader, lands at a 13-step global pattern boundary mid-cycle (song mode off) and the follower plays its removed addition from that moment, before its next wrap, with RESYNC on the Interlock screen and Result and every addition on the grid; exact retimed onsets; a stopped Clock change replans the first loop after Start and Start clears RESYNC. Pure/integration tests only: PLAN LIMIT, RESYNC after loop-range and non-realigning song changes, swing/shuffle invariance, callback order, yielding-sweep races and unequal leader/follower loop lengths under edits.",
@@ -7691,7 +7694,9 @@
    "cases": [
     "M-MERGE-STRUCTURE-001",
     "M-MERGE-STRUCTURE-002",
-    "M-MERGE-STRUCTURE-003"
+    "M-MERGE-STRUCTURE-003",
+    "M-MERGE-STRUCTURE-004",
+    "M-MERGE-STRUCTURE-005"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical workflows with a C-E-G group and Anchors markers. M-MERGE-STRUCTURE-001: literal snapped MIDI, then Delete group through its confirmation restores authored pitches. M-MERGE-STRUCTURE-002 (E and D): snapped roots agree in MIDI, on Pattern 1's note grid, on Merge Result (MARKER CHORD G01) and Voice leading Result; a reverse strum (Chord Pattern <- and <-->) on marker steps plays the snapped root 16 pulses late with Harmony Off (review D2); a Harmony Pattern mapped value that snaps at a marker but not between markers is silent at both under Silence and Legacy fallbacks with NO VOICING SOURCE_CONFLICT shown (review D7). M-MERGE-STRUCTURE-003 (E and D): disabling, then deleting, the group while playing keeps channels 1 (6 steps) and 2 (5 steps) snapping through earlier wraps until the global pattern boundary and plays authored pitches after it (Markers OFF), and a Merge Shape edit made while the deletion waits shows NEXT PATTERN and lands with it (review D1). Pure/integration tests only: Every 4/Every 8 markers, CHORD MISSING, MARKER PRIORITY with Revoice/Ensemble, arp roots, undo/redo, stale drafts, Stop settlement and save/reload of the lifecycle.",
@@ -7719,7 +7724,8 @@
    "sections": [],
    "statement": "Revoice preserves Mosaic's resolved chord pitch-class material while deterministically placing every sounding source in configured registers.",
    "cases": [
-    "M-HARMONY-REVOICE-001"
+    "M-HARMONY-REVOICE-001",
+    "M-MERGE-STRUCTURE-004"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical Masks/Harmony workflow covers a two-voice progression with literal pitches over complete loops; unit/integration coverage adds five voices, Pattern, Ensemble, bass policies, failure, frozen arp and lifecycle boundaries.",
@@ -7748,7 +7754,8 @@
     "M-HARMONY-PATTERN-001",
     "M-HARMONY-PATTERN-CLOCKS-001",
     "M-HARMONY-PATTERN-BYPASS-001",
-    "M-MERGE-STRUCTURE-002"
+    "M-MERGE-STRUCTURE-002",
+    "M-MERGE-STRUCTURE-004"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical Pattern Note, Scale, Harmony, Tone Map and Register controls author A-B-C-B, apply a C-major to C-minor progression without chord masks, constrain three stable role identities, project every represented final pitch, retain a legal common tone, edit the source layer, reveal exact ordinary grid/MIDI when disabled, and recover the saved mapping when re-enabled. Public companion workflows cover two independent Pattern channels at unequal clocks and a delayed reverse-arpeggio chord-mask bypass. Unit and integration coverage adds Raw wide leaps, binding identity, runtime alias-conflict recovery, out-of-range handling and fallback.",

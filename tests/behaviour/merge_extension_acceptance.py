@@ -707,3 +707,269 @@ def structure_lifecycle_workflow(c):
     c.ui.select_row("pitch", 3); c.ui.press_key(3)
     c.ui.select_row("structure", 3); c.ui.press_key(3)
     c.ui.expect_selected_field("detail", "Markers", "OFF")
+
+
+# Interlock: unequal leader and follower loops under a burst of edits ---------------------
+
+LEADER_LOOP = 6
+
+
+def _unequal_expectation(until, edit_step, adds_old, adds_new, leader_old, leader_new):
+    """Independent model of README Interlock at Window 0 with both channels at
+    /1 from Start: follower channel 1 loops 8 steps (P01 anchors at 1-4,
+    additions at the follower steps in ``adds``), leader channel 2 loops 6
+    steps (anchors at the leader steps in ``leader``). An addition is removed
+    exactly when a leader anchor sounds at the same step time; both channels
+    use the edited patterns for every step after ``edit_step``."""
+    events = []
+    for t in range(until + 1):
+        new = edit_step is not None and t > edit_step
+        follower, leader = t % LOOP + 1, t % LEADER_LOOP + 1
+        adds = adds_new if new else adds_old
+        anchors = leader_new if new else leader_old
+        if follower in P1:
+            events.append((t, 1) + P1[follower])
+        elif follower in adds and leader not in anchors:
+            events.append((t, 1) + ADDITION)
+        if leader in anchors:
+            events.append((t, 2, 60, 100))
+    return sorted(events)
+
+
+def interlock_unequal_workflow(c):
+    """README Interlock, plan §1.2.3 and §1.3: a 6-step leader (anchor at its
+    step 3) and an 8-step follower (additions at 5 and 7) meet at different
+    places each loop, so which addition is removed changes from loop to loop in
+    musical time from Start. While playing, one burst of grid taps inside a
+    single step adds a leader anchor (its step 5) and then a follower addition
+    (step 6); every later step of both channels follows the edited patterns at
+    once. Checked against an independent model over six follower loops in
+    exact MIDI, and on the stopped channel grid."""
+    two_patterns(c, (5, 7))
+    c.ui.tap_control("pattern_editor"); c.ui.select_channel(3); c.ui.tap_step(3)
+    c.ui.tap_control("channel_editor")
+    c.ui.select_channel(2)
+    c.ui.channel_page("midi_config", channel=2)
+    c.ui.set_value(1); c.ui.turn(2, 1); c.ui.set_value(1); c.ui.press_key(3)
+    c.ui.tap_control("pattern_slot", 3)
+    c.ui.hold_control_tap("step", "step", held_index=1, target_index=LEADER_LOOP)
+    foundation_on(c, 2)
+    c.ui.select_channel(1)
+    foundation_on(c, 1)
+    c.ui.select_row("interlock", 6); c.ui.press_key(3)
+    c.ui.expect_header("merge_interlock", channel=1)
+    c.ui.select_row("interlock_leader", 0); c.ui.turn(3, 1)
+    c.ui.expect_selected_field("detail", "Leader", "CH02")
+    c.ui.press_key(3)
+    c.ui.expect_footer_text("APPLIED")
+    # Stopped, the grid shows the first loop: the leader anchor sounds at step
+    # time 2 (and 8), neither of the additions' times 4 and 6.
+    loop_leds(c, {1, 2, 3, 4, 5, 7})
+    c.ui.tap_control("pattern_editor"); c.ui.select_channel(3)      # Pattern 3 in the editor
+
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: onset_count(k, 1, P1[1]) >= 2, timeout=5)
+    origin = capture.note_ons(1)[0][field(c)]
+    step_ns = round(STEP * 1e9)
+    # The burst in follower loop 3, step 3 (step time 26), all releases (where
+    # the grid applies a tap) before step time 27: Pattern 3 step 5, then
+    # Pattern 2 selected, then Pattern 2 step 6.
+    edit_step = 26
+    at = origin + edit_step * step_ns + round(.15 * step_ns)
+    schedule = getattr(c, 'merge_acceptance_schedule', 0) + 1
+    c.merge_acceptance_schedule = schedule
+    c.ui.grid_events_at([(at, "step", 5, 1), (at + 25_000_000, "step", 5, 0),
+                         (at + 40_000_000, "channel", 2, 1), (at + 65_000_000, "channel", 2, 0),
+                         (at + 80_000_000, "step", 6, 1), (at + 105_000_000, "step", 6, 0)],
+                        schedule_id=schedule)
+    until = 6 * LOOP - 1
+    capture.until(lambda k: (now_ns(c) - origin) / 1e9 / STEP > until + 1, timeout=until * STEP + 10)
+    stop_and_drain(c, capture)
+    key, allowed = field(c), tolerance(c)
+    actual = []
+    for m in capture.note_ons():
+        t = (m[key] - origin) / 1e9 / STEP
+        if t <= until + .5:
+            assert abs(t - round(t)) * STEP <= allowed, dict(event=m['data'], step_time=t)
+            actual.append((round(t), m['channel'], m['data'][0], m['data'][1]))
+    expected = _unequal_expectation(until, edit_step, {5, 7}, {5, 6, 7}, {3}, {3, 5})
+    assert sorted(actual) == expected, dict(missing=sorted(set(expected) - set(actual)),
+                                            extra=sorted(set(actual) - set(expected)))
+    # Stopped again, the grid shows the edited first loop: the leader anchors
+    # at step times 2 and 4 remove the addition at step 5 (time 4) only.
+    c.ui.tap_control("channel_editor"); c.ui.select_channel(1)
+    loop_leds(c, {1, 2, 3, 4, 6, 7})
+    c.results.append(dict(kind='interlock-unequal-loops', follower_loop=LOOP, leader_loop=LEADER_LOOP,
+                          edit_step=edit_step, onsets=len(expected), tolerance_seconds=allowed, passed=True))
+
+
+# Structure: marker sets, conflict recovery and Revoice priority ---------------------------
+
+def capture_loop_notes(c, loops=1):
+    """From stopped: channel 1's note-ons over ``loops`` loops and the next
+    step 1, as (loop, step, pitch, velocity), each on its step's time."""
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 1 and (now_ns(c) - k.note_ons(1)[0][field(c)]) / 1e9
+                  > (loops * LOOP + .5) * STEP, timeout=5 + loops * LOOP * STEP * 2)
+    stop_and_drain(c, capture)
+    key, allowed = field(c), tolerance(c)
+    ons = capture.note_ons(1)
+    origin = ons[0][key]
+    notes = []
+    for m in ons:
+        t = (m[key] - origin) / 1e9 / STEP
+        if t > loops * LOOP + .5:
+            break
+        assert abs(t - round(t)) * STEP <= allowed, dict(event=m['data'], step_time=t)
+        index = round(t)
+        notes.append((index // LOOP, index % LOOP + 1, m['data'][0], m['data'][1]))
+    return notes
+
+
+def structure_screen(c, markers_turn=0):
+    """Merge Shape > Pitch > Structure on channel 1; turn Markers by
+    ``markers_turn`` and apply when nonzero."""
+    c.ui.channel_page("merge_shape", channel=1)
+    c.ui.select_row("pitch", 3); c.ui.press_key(3)
+    c.ui.select_row("structure", 3); c.ui.press_key(3)
+    c.ui.expect_header("merge_structure", channel=1)
+    c.ui.select_row("structure_markers", 0)
+    if markers_turn:
+        c.ui.turn(3, markers_turn); c.ui.press_key(3)
+        c.ui.expect_footer_text("APPLIED")
+
+
+def set_note_degree(c, pattern, step, degree):
+    c.ui.tap_control("pattern_editor"); c.ui.select_channel(pattern); c.ui.tap_control("pattern_editor")
+    c.ui.tap_control("pattern_note_degree", (step, degree))
+    c.ui.tap_control("channel_editor")
+
+
+def structure_harmony_workflow(c):
+    """README Structure: Every 4 and Every 8 mark steps 1, 5… and 1… of the
+    loop, whatever plays there, and only those snap; after a Harmony Pattern
+    mapped-value conflict is resolved the mapped value sounds again; with
+    Harmony Revoice a snapped marker keeps its chord tone and Harmony's
+    Result says MARKER PRIORITY."""
+    structure_setup(c)
+    set_note_degree(c, 2, 5, 1)          # Pattern 2 step 5 plays D, not C
+    # Every 4: markers at 1 and 5. Step 5's D (an addition) snaps to C (tie
+    # between C and E: the lower); anchors 2 and 4 are no longer markers.
+    structure_screen(c, 1)
+    c.ui.expect_selected_field("detail", "Markers", "EVERY 4")
+    authored = {1: (60, 127), 2: (62, 117), 3: (64, 107), 4: (65, 97)}
+    play_structure(c, pitches=authored, additions={5: (60, 70), 7: ADDITION},
+                   kind='structure-every-4')
+    # Every 8: only step 1; step 5 plays its own D.
+    structure_screen(c, 1)
+    c.ui.expect_selected_field("detail", "Markers", "EVERY 8")
+    play_structure(c, pitches=authored, additions={5: (62, 70), 7: ADDITION},
+                   kind='structure-every-8')
+
+    # Anchors again; Harmony Pattern maps value 1 (D) to Bass. The marker at
+    # step 2 (D, snapped to C) and the addition at step 5 (D) disagree, so
+    # value 1 is silent at both (README Structure) ...
+    structure_screen(c, -2)
+    c.ui.expect_selected_field("detail", "Markers", "ANCHORS")
+    c.ui.channel_page("harmony", channel=1)
+    c.ui.select_row("mode", 0); c.ui.set_value(2)
+    c.ui.select_row("tone_map", 3); c.ui.press_key(3)
+    c.ui.expect_header("harmony_tone_map", channel=1)
+    c.ui.select_row("value_1", 1); c.ui.set_value(1)
+    c.ui.expect_selected_field("focused", "Tone 1", "BASS", art=True)
+    c.ui.press_key(3)
+    c.ui.expect_footer_text("APPLIED")
+    play_structure(c, silent=(2, 5), additions={5: (62, 70), 7: ADDITION}, kind='structure-conflict')
+    # ... and once step 5 plays C again, value 1 occurs only at the marker:
+    # it sounds there again with the snapped pitch class C (README Harmony
+    # Pattern: a placement keeps the resolved pitch class; the octave is the
+    # Bass register's, so only the class and velocity are asserted).
+    set_note_degree(c, 2, 5, 0)
+    notes = capture_loop_notes(c)
+    at = {(loop, step): (pitch, velocity) for loop, step, pitch, velocity in notes}
+    assert (0, 2) in at and at[(0, 2)][0] % 12 == 0 and at[(0, 2)][1] == 117, dict(step_2=at.get((0, 2)), notes=notes)
+    for step, want in ((1, SNAPPED[1]), (3, SNAPPED[3]), (4, SNAPPED[4]), (5, ADDITION), (7, ADDITION)):
+        assert at.get((0, step)) == want, dict(step=step, want=want, got=at.get((0, step)), notes=notes)
+    harmony_result(c, [(2, 1, "Status", "MAPPED")])
+    c.results.append(dict(kind='structure-conflict-recovered', step_2=list(at[(0, 2)]), passed=True))
+
+    # Harmony Revoice: the snapped marker roots keep their chord tones (C C E
+    # E) and Result names the marker priority.
+    c.ui.channel_page("harmony", channel=1)
+    c.ui.select_row("mode", 0); c.ui.set_value(1); c.ui.press_key(3)
+    c.ui.expect_footer_text("APPLIED")
+    notes = capture_loop_notes(c)
+    at = {(loop, step): (pitch, velocity) for loop, step, pitch, velocity in notes}
+    for step in (1, 2, 3, 4):
+        assert at.get((0, step)) == SNAPPED[step], dict(step=step, want=SNAPPED[step], got=at.get((0, step)))
+    harmony_result(c, [(2, 1, "Status", "MARKER PRIORITY"), (4, 1, "Status", "MARKER PRIORITY")])
+    c.results.append(dict(kind='structure-revoice-marker-priority', passed=True))
+
+
+# Structure: undo, redo, Stop settlement and save/reload of a group deletion ---------------
+
+def _delete_group(c):
+    c.ui.channel_page("harmony", channel=1)
+    c.ui.select_row("groups", 5); c.ui.press_key(3)
+    c.ui.select_row("delete_group", 8); c.ui.press_key(3)
+    c.ui.expect_header("harmony_delete_group", channel=1)
+    c.ui.press_key(3)
+
+
+def _markers(c, value):
+    structure_screen(c)
+    c.ui.expect_selected_field("detail", "Markers", value)
+
+
+def _memory(c, detents):
+    """Channel Memory (README Memory): E3 steps back (-) or forward (+)."""
+    c.ui.channel_page("memory", channel=1)
+    c.ui.turn(3, detents)
+
+
+def structure_history_workflow(c):
+    """README Structure with Memory (undo and redo) and save and load: a group
+    deletion that turned Markers Off is undone and redone as one step each; a
+    deletion made while playing and settled by Stop is Off at the next Start;
+    a saved project with markers reloads with them. Pitches are checked in
+    MIDI (snapped C C E E with markers, authored C D E F without)."""
+    structure_setup(c)
+    authored = dict(P1)
+    _delete_group(c)
+    _markers(c, "OFF")
+    play_structure(c, pitches=authored, kind='structure-deleted')
+    _memory(c, -1)                                   # undo the deletion
+    _markers(c, "ANCHORS")
+    play_structure(c, kind='structure-undo')
+    _memory(c, 1)                                    # redo it
+    _markers(c, "OFF")
+    play_structure(c, pitches=authored, kind='structure-redo')
+    _memory(c, -1)
+    _markers(c, "ANCHORS")
+
+    # Delete while playing, then Stop before the pattern boundary: Stop
+    # settles the change, so the next Start plays authored pitches at once.
+    c.ui.channel_page("harmony", channel=1)
+    c.ui.select_row("groups", 5); c.ui.press_key(3)
+    c.ui.select_row("delete_group", 8)
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 2, timeout=5)
+    c.ui.press_key(3)
+    c.ui.expect_header("harmony_delete_group", channel=1)
+    c.ui.press_key(3)
+    stop_and_drain(c, capture)
+    _markers(c, "OFF")
+    play_structure(c, pitches=authored, kind='structure-stop-settled')
+
+    # Save with markers, turn them off, load: markers and snapped pitches return.
+    _memory(c, -1)
+    _markers(c, "ANCHORS")
+    c.ui.select_project_action('save'); c.ui.press_key(3); c.ui.press_key(1)
+    structure_screen(c, -1)
+    c.ui.expect_selected_field("detail", "Markers", "OFF")
+    c.ui.select_project_file('new.ptn', returning=True); c.ui.press_key(3); c.ui.press_key(1)
+    _markers(c, "ANCHORS")
+    play_structure(c, kind='structure-reloaded')
