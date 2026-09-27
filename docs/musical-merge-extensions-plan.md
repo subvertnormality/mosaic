@@ -257,49 +257,30 @@ rebuilds for the follower's own edits recompute from the same inputs.
   admission — the sweep rebuilds from live data, so the last build wins). Each
   asserts the retained admission until replacement, the lookahead invalidation,
   and that grid LEDs and emitted MIDI agree at every step.
-- **Leader-plan cache (performance).** A leader plan is a pure function of the
-  leader's inputs, so it is cached across builds under a key that names every
-  input:
-  `(slot table, leader, origin serial, input epoch of the leader,
-  governing segment identity, cycle_in_phrase, ranking phrase)`.
-  - The **input epoch** of a channel is a counter bumped by every rebuild
-    *request* that is not the clock's own wrap rebuild: each channel marked in
-    `update_working_patterns` (including the all-channel facade and
-    `update_source_working_patterns`), `update_working_pattern` without
-    `at_wrap`, `rebuild_followers`, stopped applies and history restores. These
-    are exactly the paths by which any edit already reaches the leader's own
-    working pattern; an edit that bypassed them would already leave the leader
-    playing stale data, so the cache adds no new staleness class. A test sweeps
-    every existing caller of those functions (grep-enumerated) and asserts the
-    epoch moves, and a property test mutates each stored input field of a
-    channel through its public editor path and asserts a cache miss.
-  - The **segment identity** is the logged segment's own table (segments are
-    immutable once logged) or, for a predicted segment, a key built from the
-    predicted configuration's canonical serialisation, cycle and phrase.
-  - The Space articulation snapshot and gate list are cached with the plan under
-    the same key plus the articulation reader's inputs epoch (the same counter,
-    also bumped by parameter-lock and stock-parameter edits on that channel).
-  - Entries for other origin serials are dropped at each origin; at most 64
-    entries per leader are kept (least recently used dropped first).
-  - Hit or miss never changes a result: tests compute every admission with the
-    cache cleared and with it warm and assert identical plans.
-- **Prewarm (performance).** After a follower's wrap has admitted cycle `j`, a
-  background `clock.run` coroutine computes the leader plans the admission of
-  cycle `j + 1` will need, one plan per resume (yielding between builds), and
-  stores them in the cache. It only writes cache entries under the same keys the
-  synchronous path would use, so it cannot change any decision; if an edit bumps
-  an epoch meanwhile, its entries are simply never hit. The coroutine is
-  cancelled at Stop, origin change or when a newer prewarm for the same
-  follower starts. With the cache warm, the synchronous work in the wrap
-  callback is the membership checks of §1.4 and cache lookups only; with it
-  cold (first cycle after an edit), it is the full §1.4 budget, as before.
-- **Device budget.** Acceptance on the norns (tests/behaviour/real_norns.py
-  performance lane or an equivalent timing probe) measures the synchronous
-  follower build at wrap in the worst supported configuration (two leaders,
-  eight per-phrase plans each, 64-step follower) cold and warm, and the
-  steady-state case (one leader, one cycle). The warm and steady-state builds
-  must not change onset timing compared with Merge Shape Off beyond the
-  existing device timing tolerances; the cold figure is reported.
+- **Where leader plans come from (performance).** No cross-build cache exists.
+  - **Interlock needs no plan build.** Its input is the leader's anchors: the
+    anchor pattern's trigs inside the leader's playable range under the governing
+    segment's configuration (§3), before masks. These are read directly from the
+    stored anchor pattern for every leader cycle, logged or predicted — a scan
+    of at most 64 values per distinct anchor configuration.
+  - **Space uses the leader's own working pattern for cycles it has played.**
+    For the leader's current cycle `k_l` the plan is `channel.working_pattern`
+    itself — the table the leader plays from, including in-place writes (mask
+    edits, recording, memory restore write into it without a rebuild,
+    `lib/models/program.lua:839-858`, `lib/memory/event_handlers.lua:81-121`).
+    At each leader wrap the cycle log stores a reference to the working pattern
+    the leader held at the end of that cycle, which is the plan for logged
+    cycles `i < k_l`. So for played cycles the follower sees exactly what the
+    leader played, with no build and no invalidation question.
+  - **Only predicted cycles `i > k_l` are built**, through the same
+    `get_and_merge_patterns` path with explicit configuration, cycle and phrase,
+    memoised within one admission only (shared by both filters).
+  - **Freshness of in-place leader writes.** A leader write that does not go
+    through a rebuild request reaches a follower at the follower's next build
+    (its wrap at the latest), because the follower reads the leader's working
+    pattern when it builds. Rebuild requests keep the immediate propagation
+    above. Either way the follower's grid and MIDI read its one working pattern
+    and agree.
 - **While stopped** `j = 0` and `k_l = 0`: the stopped grid preview shows what
   the first cycle after Start will play, using any queued/requested
   configuration as the entry at 0.
@@ -325,18 +306,22 @@ patterns of the slot (assigned or not: unassigned priority sources feed the
 length merge) and `M` the largest channel or step length-mask value. Every
 length transformation is bounded as follows (`lib/pattern.lua:33-58, 181-220`):
 `effective_lengths` only shortens, to `min(L, distance)` with the distance a
-whole number of steps ≥ 1, so every merge operand lies in `[min(a, 1), A]`;
-priority copies an operand (≤ `A`); `down` and `average` are ≤ the largest
-operand (≤ `A`); `up` is `average + (max − min) ≤ A + (A − min(a, 1))`;
-fragment composition only shortens authored values (≤ `A`); a mask replaces
-the value (≤ `M`). `fn.average_table_values` rounds its result half up to an
-integer, which can add less than 1/2 when a stored length is fractional; the
-working pattern's default length is 1 where no length merge applies. So
+whole number of steps ≥ 1, so every merge operand lies in `[min(a, 1), A]`.
+`fn.average_table_values` rounds the mean half up to an integer, so the rounded
+average `r` satisfies `r ≤ A + 1/2`, and `r ≤ A` when every operand is an
+integer (the mean of integers ≤ `A` rounds to at most `A`). Then: priority
+copies an operand (≤ `A`); `average` is `r ≤ A + h`; `down` is
+`min − (r − min) ≤ min ≤ A`; `up` is `r + (max − min) ≤ A + h + A − min(a, 1)`;
+fragment composition only shortens authored values (≤ `A`); a mask replaces the
+value (≤ `M`); the working pattern's default length is 1 where no length merge
+applies. So
 `L_max = max(2A − min(a, 1) + h, M, 1)` with `h = 1/2` if any stored length is
 fractional, else 0 (a scan of at most 16 × 64 + 65 values). Example: stored
 lengths 10 and 10 where one is clipped to 1 give operands {1, 10} and
 `up` = round(5.5) + 9 = 15 ≤ 2·10 − 1 = 19; {1, 1.9, 1.9} merges up to 2.9,
-which the `h` term covers. A plan length above `L_max` is `PLAN LIMIT`. Any length
+which the `h` term covers. A plan length above `L_max` is `PLAN LIMIT`.
+Regression cases: a fractional average, a fractional `down`, an exact-half
+average and the examples above. Any length
 path added later must extend this table or Space bypasses with `PLAN LIMIT`.
 `S_max` is the largest strum tail (§6.1) over the
 channel's strum settings and every trig-locked value of a strum parameter on the
@@ -353,16 +338,37 @@ with reserved duration `g` has `a ≤ o < a + g` (half-open). Leader cycles in t
 support are enumerated explicitly (no periodic shortcut), because consecutive
 cycles can differ by phrase and configuration.
 
-Budget, checked before any work: at most 64 leader cycles in the support and at
-most 8 distinct leader plans (distinct configuration entry × cycle_in_phrase ×
-ranking phrase) per admission; membership checks are then at most
-64 × 64 × 64. If a bound would be exceeded the whole admission falls back to the
-unfiltered Foundation result with `PLAN LIMIT`, deterministic and visible, and
-never evidence of silence. Tests: both horizon edges, exact endpoints, origin
-clipping, an Interlock-only anchor in the preceding cycle, a preceding-cycle
-`up`-merged gate longer than every stored length (the {1, 10} case), long gates and strum
-tails carried in over several cycles with changing phrases and configurations,
-large ratios and the fallback.
+**Budget (the single authority; §3, §6 and §7 refer to it).** Per follower
+admission, counted across both filters together:
+- at most **64 leader cycles** in each filter's support interval;
+- at most **`B_build` distinct predicted leader-plan builds** in total, where a
+  plan shared by Interlock and Space counts once and Interlock itself needs
+  none; `B_build = 2` (a named constant, lowered by the device acceptance below
+  if needed, never raised without a new device measurement);
+- membership checks at most 64 follower candidates × the leader onsets in the
+  evaluated cycles.
+If any bound would be exceeded, **both** filters bypass for that follower cycle
+with `PLAN LIMIT` and the admission is the unfiltered Foundation result,
+deterministic and visible, never evidence of silence. `GATE INPUT UNAVAILABLE`
+bypasses Space only. Acceptance: exactly-at-limit and one-over-limit for each
+bound, with one shared leader and with two distinct leaders; both horizon
+edges, exact endpoints, origin clipping, an Interlock-only anchor in the
+preceding cycle, a preceding-cycle `up`-merged gate longer than every stored
+length, long gates and strum tails carried in over several cycles with changing
+phrases and configurations, large ratios and the fallback.
+
+**Device acceptance (timing oracle).** `tests/behaviour/hardware_performance.py`
+gains cases `PERF-MERGE-HW-STEADY` (16 channels at 130 bpm, the PERF-002
+dense workload, with channel 2 following channel 1 through Interlock and
+Space, one-cycle Fixed leader) and `PERF-MERGE-HW-WORST` (same workload, two
+followers each using two distinct Build-shaped per-phrase leaders, 64-step
+followers, so every wrap needs `B_build` builds). Both must pass the existing
+`TIMING_THRESHOLDS` gates (event timing, sustained and hard service, step
+jitter) unchanged. If `PERF-MERGE-HW-WORST` fails, `B_build` is lowered (to 1,
+then 0 — Space then bypasses with `PLAN LIMIT` whenever a predicted cycle is
+needed) until it passes; the resulting constant and both reports are recorded.
+Until the device run has passed, the delivery report states the host figures
+only and makes no device-timing claim.
 
 
 ### 1.5 Dependency rules
