@@ -914,6 +914,38 @@ def structure_harmony_workflow(c):
     c.results.append(dict(kind='structure-revoice-marker-priority', passed=True))
 
 
+def structure_ensemble_priority_workflow(c):
+    """README Structure and Harmony Ensemble: a snapped marker root survives
+    the enabled group's one-voice Ensemble routing and Result names priority."""
+    structure_setup(c)
+    c.ui.channel_page("harmony", channel=1)
+    c.ui.select_row("mode", 0); c.ui.set_value(3)
+    c.ui.expect_selected_field("detail", "Mode", "ENSEMBLE")
+    c.ui.select_row("group", 1); c.ui.set_value(1)
+    c.ui.expect_selected_field("detail", "Group", "1")
+    c.ui.press_key(3)
+    c.ui.expect_footer_text("APPLIED")
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 4, timeout=5)
+    ons = capture.note_ons(1)[:4]
+    key, allowed = field(c), tolerance(c)
+    origin = ons[0][key]
+    expected = [(60, 127), (60, 117), (64, 107), (64, 97)]
+    actual = [(m['data'][0], m['data'][1]) for m in ons]
+    assert actual == expected, dict(actual=actual, expected=expected)
+    for index, event in enumerate(ons):
+        seconds = (event[key] - origin) / 1e9
+        assert abs(seconds - index * STEP) <= allowed, dict(step=index + 1, seconds=seconds)
+    stop_and_drain(c, capture)
+    harmony_result(c, [(1, 1, "Status", "MARKER PRIORITY"),
+                       (2, 1, "Status", "MARKER PRIORITY"),
+                       (3, 1, "Status", "MARKER PRIORITY"),
+                       (4, 1, "Status", "MARKER PRIORITY")])
+    c.results.append(dict(kind="structure-ensemble-marker-priority", expected=expected,
+                          tolerance_seconds=allowed, passed=True))
+
+
 # Structure: undo, redo, Stop settlement and save/reload of a group deletion ---------------
 
 def _delete_group(c):

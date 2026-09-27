@@ -7700,10 +7700,11 @@
     "M-MERGE-STRUCTURE-002",
     "M-MERGE-STRUCTURE-003",
     "M-MERGE-STRUCTURE-004",
-    "M-MERGE-STRUCTURE-005"
+    "M-MERGE-STRUCTURE-005",
+    "M-MERGE-STRUCTURE-006"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Public-input workflows with a C-E-G group and Anchors, Every 4 and Every 8 markers. M-MERGE-STRUCTURE-001: literal snapped MIDI, then Delete group through its confirmation restores authored pitches. M-MERGE-STRUCTURE-002 (E and D): snapped roots agree in MIDI, on Pattern 1's note grid, on Merge Result (MARKER CHORD G01) and Voice leading Result; a reverse strum (Chord Pattern <- and <-->) on marker steps plays the snapped root 16 pulses late with Harmony Off (review D2); a Harmony Pattern mapped value that snaps at a marker but not between markers is silent at both under Silence and Legacy fallbacks with NO VOICING SOURCE_CONFLICT shown (review D7). M-MERGE-STRUCTURE-003 (E and D): disabling, then deleting, the group while playing keeps channels 1 (6 steps) and 2 (5 steps) snapping through earlier wraps until the global pattern boundary and plays authored pitches after it (Markers OFF), and a Merge Shape edit made while the deletion waits shows NEXT PATTERN and lands with it (review D1). M-MERGE-STRUCTURE-004 (E and D): Every 4/Every 8 markers, Harmony Pattern conflict silence and recovery, and Revoice MARKER PRIORITY in MIDI and on the norns screen. M-MERGE-STRUCTURE-005 (E and D): group deletion undo/redo through Memory, Stop settlement, and save/reload of markers with MIDI and screen checks. Pure/integration tests only: CHORD MISSING, MARKER PRIORITY with Ensemble, arp roots and stale drafts.",
+   "domain": "Public-input workflows with a C-E-G group and Anchors, Every 4 and Every 8 markers. M-MERGE-STRUCTURE-001: literal snapped MIDI, then Delete group through its confirmation restores authored pitches. M-MERGE-STRUCTURE-002 (E and D): snapped roots agree in MIDI, on Pattern 1's note grid, on Merge Result (MARKER CHORD G01) and Voice leading Result; a reverse strum (Chord Pattern <- and <-->) on marker steps plays the snapped root 16 pulses late with Harmony Off (review D2); a Harmony Pattern mapped value that snaps at a marker but not between markers is silent at both under Silence and Legacy fallbacks with NO VOICING SOURCE_CONFLICT shown (review D7). M-MERGE-STRUCTURE-003 (E and D): disabling, then deleting, the group while playing keeps channels 1 (6 steps) and 2 (5 steps) snapping through earlier wraps until the global pattern boundary and plays authored pitches after it (Markers OFF), and a Merge Shape edit made while the deletion waits shows NEXT PATTERN and lands with it (review D1). M-MERGE-STRUCTURE-004 (E and D): Every 4/Every 8 markers, Harmony Pattern conflict silence and recovery, and Revoice MARKER PRIORITY in MIDI and on the norns screen. M-MERGE-STRUCTURE-005 (E and D): group deletion undo/redo through Memory, Stop settlement, and save/reload of markers with MIDI and screen checks. Pure/integration tests only: CHORD MISSING, MARKER PRIORITY with Ensemble, arp roots and stale drafts. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes.",
    "oracles": [
     "literal MIDI pitches and velocities",
     "exact loop-relative onset steps",
@@ -7791,10 +7792,11 @@
    "sections": [],
    "statement": "Ensemble assigns stable group roles to explicit channels while retaining every member's independent rhythm, velocity and route.",
    "cases": [
-    "M-HARMONY-ENSEMBLE-001"
+    "M-HARMONY-ENSEMBLE-001",
+    "M-MERGE-STRUCTURE-006"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure.",
+   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes.",
    "oracles": [
     "literal per-channel MIDI pitches",
     "independent rhythmic intervals",

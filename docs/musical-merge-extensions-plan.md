@@ -902,15 +902,15 @@ Public-input cases now cover unequal leader/follower loops under a burst of
 edits (M-MERGE-INTERLOCK-004); Every 4/Every 8 markers, Harmony Pattern
 conflict recovery and Revoice MARKER PRIORITY (M-MERGE-STRUCTURE-004);
 and group deletion undo/redo, Stop settlement and save/reload
-(M-MERGE-STRUCTURE-005), in controlled-time and real-time lanes.
+(M-MERGE-STRUCTURE-005), plus Ensemble marker priority
+(M-MERGE-STRUCTURE-006), in controlled-time and real-time lanes.
 
 Remaining scope — behaviour verified by Lua unit/integration tests
 (named in H16) but not yet by public-input emulator cases: Interlock
 yielding-sweep interleavings (an edit between the leader's and follower's
 rebuilds, stale sweep completion), PLAN LIMIT, RESYNC after loop-range
 and non-realigning song changes, swing/shuffle invariance and reversed
-callback order; Structure CHORD MISSING, MARKER PRIORITY with Ensemble,
-arp roots and stale drafts.
+callback order; Structure CHORD MISSING, arp roots and stale drafts.
 
 Acceptance boundary: each scenario above gains a behaviour case through grid,
 norns key/encoder or MIDI input observing MIDI and grid LEDs or the screen, in
