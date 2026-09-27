@@ -387,6 +387,20 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
 All (STEADY, WORST, EDIT, DENSE, DENSE-EDIT) must pass before release; until the device runs pass, the delivery report
 states host figures only and the feature is not released.
 
+**Status (device qualification OUTSTANDING, release-gating).** The five cases
+are implemented in `tests/behaviour/hardware_performance.py` (dispatch to
+`run_merge_performance`) with the workload chunk
+`tests/behaviour/merge_device_workload.lua` and the pure oracles in
+`tests/behaviour/merge_workloads.py`. Host evidence only: the same chunk runs
+against the production modules in `lib/tests/lib/merge_device_workload_tests.lua`
+(admission counts, zero plan builds, follower wrap alignment, in-cycle edit
+propagation) and `tests/behaviour/test_merge_workloads.py` covers the case
+definitions, capture durations, admission/propagation/Start-latency oracles
+and the run orchestration against fakes. No physical norns run has taken
+place. The device qualification remains OUTSTANDING and release-gating until
+source-identified device reports of all five cases pass (owner: repository
+maintainer).
+
 ### 1.5 Dependency rules
 
 (Edges are Interlock leaders only; the inert `space` field creates none.)
