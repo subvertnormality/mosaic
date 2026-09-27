@@ -29,4 +29,11 @@ function pitch_target.resolve(pitch, options)
   return harmony_context.nearest_pitch(pitch, pitch_classes), "targeted"
 end
 
+-- Structural marker snapping (plan §4): the converted pitch moves to the
+-- nearest pitch of an explicit chord's pitch classes, the lower one on ties.
+function pitch_target.snap_to_chord(pitch, chord_pitch_classes)
+  if pitch == nil then return nil end
+  return harmony_context.nearest_pitch(pitch, chord_pitch_classes)
+end
+
 return pitch_target

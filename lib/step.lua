@@ -15,9 +15,9 @@ local harmony_context = include("mosaic/lib/harmony/context")
 local pattern_harmony = include("mosaic/lib/harmony/pattern")
 local harmony_inspection = include("mosaic/lib/harmony/inspection")
 local harmony_grid_projection = include("mosaic/lib/harmony/grid_projection")
-local merge_pitch_target = include("mosaic/lib/musical_merge/pitch_target")
 local musical_merge_state = include("mosaic/lib/musical_merge/state")
 local musical_merge_config = include("mosaic/lib/musical_merge/config")
+local merge_structure = include("mosaic/lib/musical_merge/structure")
 local m_clock = include("mosaic/lib/clock/m_clock")
 local play_note, play_arp_note = include("mosaic/lib/clock/voice_lifetime").new(m_clock)
 
@@ -848,6 +848,18 @@ local function ensemble_source_context(group, song_number)
   return source_scale,transpose,harmony_context.group_material(group,source_scale,transpose,pentatonic)
 end
 
+-- The immutable material of an enabled Ensemble group in the active song
+-- configuration, or nil. Shared by the explicit chord Addition Target and the
+-- structural marker chord (plan §4 Chord source).
+local function group_chord_pitch_classes(group_id,song)
+  local song_voicing=harmony_config_state.effective_song(song,song.voicing or{schema_version=1,groups={}})
+  local group=song_voicing.groups[group_id]
+  if group and group.enabled then
+    local _,_,context=ensemble_source_context(group,program.get().selected_song_pattern)
+    return context.pitch_classes
+  end
+end
+
 local function structural_target_context(target,scale_number,transpose,song)
   local scale_pitches=harmony_context.scale_pitch_classes(scale_number,transpose)
   if not target or target.kind=="legacy"then return false,scale_pitches end
@@ -857,14 +869,20 @@ local function structural_target_context(target,scale_number,transpose,song)
     return false,scale_pitches
   end
   if target.kind=="chord"then
-    local song_voicing=harmony_config_state.effective_song(song,song.voicing or{schema_version=1,groups={}})
-    local group=song_voicing.groups[target.group_id]
-    if group and group.enabled then
-      local _,_,context=ensemble_source_context(group,program.get().selected_song_pattern)
-      return #context.pitch_classes>0,scale_pitches,context.pitch_classes
-    end
+    local pitch_classes=group_chord_pitch_classes(target.group_id,song)
+    if pitch_classes then return #pitch_classes>0,scale_pitches,pitch_classes end
   end
   return false,scale_pitches
+end
+
+-- Without a Foundation plan every position takes the legacy path (read only).
+local LEGACY_STRUCTURAL_POLICY = merge_structure.policy({})
+
+-- The active structural markers of a working pattern's Foundation plan: the
+-- structure settings and marker set, or nil when Structure is inactive.
+local function active_markers(foundation)
+  local settings=foundation and foundation.markers and merge_structure.active(foundation.config)
+  if settings then return settings,foundation.markers end
 end
 
 function step.prepare_harmony_group_frames(deferred, count)
@@ -920,7 +938,15 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
 
   local frame, pitches, consume
   local active_fallback=config.fallback
+  -- Plan §4 Downstream Harmony: a successfully snapped marker root keeps its
+  -- chord tone. Revoice and Ensemble step aside (after their own explicit
+  -- bypasses) and the ordinary pitches sound.
+  local function marker_priority()
+    return {pitches=legacy,status="marker_priority",reason=merge_structure.reason("marker_priority"),
+      fallback=active_fallback}
+  end
   if config.mode == "revoice" then
+    if unprocessed.marker_priority then return marker_priority() end
     local material = {}
     for _, source in ipairs(sources) do
       material[#material + 1] = {id=source.id, pc=source.pitch % 12, required=true}
@@ -943,18 +969,23 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     local resolved,conflicts={},{ }
     local all_pentatonic=fn.param_value("all_scales_lock_to_pentatonic")==2
     local merged_pentatonic=fn.param_value("merged_lock_to_pentatonic")==2
+    -- The same per-position policy step.handle uses (plan §4 Shared pitch
+    -- resolution): markers from the working-pattern build, their chord from the
+    -- active group material, the Addition Target between them.
+    local structure_settings,markers=active_markers(foundation)
+    local marker_material=structure_settings and group_chord_pitch_classes(structure_settings.group_id,song)
+    local target_context={target=target,scale_pitch_classes=scale_pitch_classes,chord_material=chord_material}
     for step_number,raw in ipairs(channel.working_pattern.note_values or{})do
       local role=foundation and foundation.roles and foundation.roles[step_number]
-      local structural=role=="addition"and target.kind~="legacy"
+      local policy=merge_structure.policy({marker=markers and markers[step_number]or false,role=role,
+        target=target,target_available=target_available,marker_material=marker_material})
       local source_raw=role=="anchor"and active_merge and active_merge.keep_anchor_pitch and
         foundation.anchor_notes and foundation.anchor_notes[step_number]or raw
-      local pentatonic=all_pentatonic or(not(structural and target_available)and merged_pentatonic and
+      local pentatonic=all_pentatonic or(not policy.suppress_merged_pentatonic and merged_pentatonic and
         (channel.working_pattern.merged_notes or{})[step_number])
       local pitch=quantiser.process(source_raw,unprocessed.octave_mod,unprocessed.transpose,
         channel.step_scale_number,pentatonic)
-      if structural then pitch=merge_pitch_target.resolve(pitch,{eligible=true,config=target,
-        scale_pitch_classes=scale_pitch_classes,
-        chord_material=chord_material})end
+      pitch=merge_structure.resolve(policy,pitch,target_context)
       if resolved[raw]~=nil and pitch~=nil and resolved[raw]%12~=pitch%12 then conflicts[raw]=true
       elseif resolved[raw]==nil then resolved[raw]=pitch end
     end
@@ -973,6 +1004,7 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     if has_local_chord or unprocessed.pattern_bypass or unprocessed.ensemble_bypass then
       return {pitches=legacy,status=unprocessed.pattern_bypass or unprocessed.ensemble_bypass or"chord_mask",fallback=active_fallback}
     end
+    if unprocessed.marker_priority then return marker_priority() end
     local active_song_voicing = harmony_config_state.effective_song(song,
       song.voicing or {schema_version=1, groups={}})
     local groups = active_song_voicing and active_song_voicing.groups or {}
@@ -1098,14 +1130,17 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     reason=harmony and(harmony.reason or harmony.status)or"off",
     role_pitches=harmony and harmony.role_pitches or nil,
     structural_status=unprocessed_note_container.structural_status,
+    structural_reason=unprocessed_note_container.structural_reason,
     -- A failed solve is the feature's strict-silence result, not a bypass.
     -- Reserve BYPASS for frames that deliberately use the ordinary pitch path.
     bypass=(harmony and({chord_mask=true,note_mask=true,random=true,quantised_fixed=true,
-      fixed=true,local_scale_bypass=true,local_octave=true,missing_output=true})[harmony.status]and harmony.status)or
+      fixed=true,local_scale_bypass=true,local_octave=true,missing_output=true,
+      marker_priority=true})[harmony.status]and harmony.status)or
       (unprocessed_note_container.structural_status and
        unprocessed_note_container.structural_status~="targeted" and
        unprocessed_note_container.structural_status~="legacy" and
        unprocessed_note_container.structural_status~="ineligible" and
+       unprocessed_note_container.structural_status~="marker" and
        unprocessed_note_container.structural_status)or nil,
     fallback=harmony and harmony.fallback or nil
   }
@@ -1398,10 +1433,21 @@ function step.handle(c, current_step, prepared)
                   
     local target_available,target_scale_pitches,target_chord_material=structural_target_context(
       merge_config and merge_config.target,channel.step_scale_number,transpose,program.get_selected_song_pattern())
-    local structural_target = foundation_role == "addition" and merge_config and merge_config.target and
-      merge_config.target.kind ~= "legacy"and target_available and not structural_bypass
+    -- Plan §4: the per-position structural policy, selected before scale
+    -- conversion and shared with the Harmony Pattern material loop.
+    local structure_settings, markers = active_markers(foundation)
+    local is_marker = markers and markers[current_step] or false
+    local structural_policy = foundation and merge_structure.policy({
+      marker = is_marker,
+      role = foundation_role,
+      bypass = structural_bypass,
+      target = merge_config and merge_config.target,
+      target_available = target_available,
+      marker_material = is_marker and
+        group_chord_pitch_classes(structure_settings.group_id, program.get_selected_song_pattern()) or nil
+    }) or LEGACY_STRUCTURAL_POLICY
     local do_pentatonic = fn.param_value("all_scales_lock_to_pentatonic") == 2 or 
-                         (not structural_target and fn.param_value("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
+                         (not structural_policy.suppress_merged_pentatonic and fn.param_value("merged_lock_to_pentatonic") == 2 and working_pattern.merged_notes[current_step]) or
                          (fn.param_value("random_lock_to_pentatonic") == 2 and random_shift ~= 0)            
 
     -- Only note masks read the fully-quantise setting (see pitch_resolution).
@@ -1432,15 +1478,15 @@ function step.handle(c, current_step, prepared)
     end
 
     local structural_status
-    if merge_config and foundation_role == "addition" then
-      note, structural_status = merge_pitch_target.resolve(note, {
-        eligible=true,
-        bypass=structural_bypass,
-        config=merge_config.target,
+    if merge_config and structural_policy.kind ~= "legacy" then
+      note, structural_status = merge_structure.resolve(structural_policy, note, {
+        target=merge_config.target,
         scale_pitch_classes=target_scale_pitches,
         chord_material=target_chord_material
       })
     end
+    local structural_reason = merge_structure.reason(structural_status,
+      structure_settings and structure_settings.group_id)
 
 
     local device = device_map.get_device(devices.device_map)
@@ -1471,6 +1517,8 @@ function step.handle(c, current_step, prepared)
           transpose = transpose, random_shift = random_shift, is_mask = is_mask,
           fully_quantise_mask = fully_quantise_mask, do_pentatonic = do_pentatonic,
           structural_status = structural_status,
+          structural_reason = structural_reason,
+          marker_priority = structural_status == "marker",
           pattern_bypass = is_mask and "note_mask" or random_shift ~= 0 and "random" or
             used_quantised_fixed and "quantised_fixed" or used_fixed and "fixed" or nil,
           ensemble_bypass = octave_mod ~= 0 and "local_octave" or nil,

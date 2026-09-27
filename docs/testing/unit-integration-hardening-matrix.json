@@ -33,8 +33,8 @@
  "inventory_sha256": "75cc0a7196015826e6f552897b4ef70fe06d8300a2076d0aea707e9cf49841ae",
  "counts": {
   "requirements": 174,
-  "production_lua_modules": 162,
-  "unit_integration_files": 122,
+  "production_lua_modules": 163,
+  "unit_integration_files": 124,
   "domains": 17
  },
  "coverage_language": {
@@ -109,6 +109,7 @@
     "lib/musical_merge/fragments.lua",
     "lib/musical_merge/pitch_target.lua",
     "lib/musical_merge/state.lua",
+    "lib/musical_merge/structure.lua",
     "lib/optional_config_transaction.lua",
     "lib/pages/channel_edit_page/channel_feature_editor.lua"
    ],
@@ -129,6 +130,8 @@
     "lib/tests/lib/musical_merge_pattern_integration_tests.lua",
     "lib/tests/lib/musical_merge_pitch_target_tests.lua",
     "lib/tests/lib/musical_merge_state_tests.lua",
+    "lib/tests/lib/musical_merge_structure_integration_tests.lua",
+    "lib/tests/lib/musical_merge_structure_tests.lua",
     "lib/tests/lib/optional_config_persistence_tests.lua",
     "lib/tests/lib/voice_lifetime_tests.lua"
    ],

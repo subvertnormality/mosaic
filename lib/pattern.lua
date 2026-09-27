@@ -6,6 +6,7 @@ local foundation = include("mosaic/lib/musical_merge/foundation")
 local merge_state = include("mosaic/lib/musical_merge/state")
 local merge_config = include("mosaic/lib/musical_merge/config")
 local fragments = include("mosaic/lib/musical_merge/fragments")
+local merge_structure = include("mosaic/lib/musical_merge/structure")
 
 local program = program
 
@@ -272,6 +273,13 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
       foundation_result.config = merge_settings
       foundation_result.anchor_notes = patterns[merge_settings.anchor] and
         patterns[merge_settings.anchor].note_values or nil
+      -- Plan §4 Markers: explicit structural positions of this plan, read by
+      -- step.handle and the Harmony Pattern loop through one shared policy.
+      local structure_settings = merge_structure.active(merge_settings)
+      if structure_settings and foundation_result.status == "ok" then
+        foundation_result.markers = merge_structure.markers(structure_settings.markers,
+          merge_structure.positions(effective_start, effective_end), foundation_result.roles)
+      end
       merged_pattern.foundation = foundation_result
     else
       -- Plan §2: a separate mode, never the Foundation planner. Shape
