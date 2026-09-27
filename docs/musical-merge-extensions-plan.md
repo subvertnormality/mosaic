@@ -289,9 +289,14 @@ whole number of steps ≥ 1, so every merge operand lies in `[min(a, 1), A]`;
 priority copies an operand (≤ `A`); `down` and `average` are ≤ the largest
 operand (≤ `A`); `up` is `average + (max − min) ≤ A + (A − min(a, 1))`;
 fragment composition only shortens authored values (≤ `A`); a mask replaces
-the value (≤ `M`). So `L_max = max(2A − min(a, 1), M)` (a scan of at most
-16 × 64 + 65 values). Example: stored lengths 10 and 10 where one is clipped to
-1 give operands {1, 10} and `up` = 14.5 ≤ 2·10 − 1 = 19. Any length
+the value (≤ `M`). `fn.average_table_values` rounds its result half up to an
+integer, which can add less than 1/2 when a stored length is fractional; the
+working pattern's default length is 1 where no length merge applies. So
+`L_max = max(2A − min(a, 1) + h, M, 1)` with `h = 1/2` if any stored length is
+fractional, else 0 (a scan of at most 16 × 64 + 65 values). Example: stored
+lengths 10 and 10 where one is clipped to 1 give operands {1, 10} and
+`up` = round(5.5) + 9 = 15 ≤ 2·10 − 1 = 19; {1, 1.9, 1.9} merges up to 2.9,
+which the `h` term covers. A plan length above `L_max` is `PLAN LIMIT`. Any length
 path added later must extend this table or Space bypasses with `PLAN LIMIT`.
 `S_max` is the largest strum tail (§6.1) over the
 channel's strum settings and every trig-locked value of a strum parameter on the
