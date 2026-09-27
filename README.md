@@ -1525,7 +1525,12 @@ was snapped (or, before it plays, will be), `CHORD MISSING`, or the instruction
 that kept its own pitch, such as `BYPASS NOTE MASK`, `BYPASS RANDOM`,
 `BYPASS FIXED` or `BYPASS QUANTISED FIXED`. When a leader is set,
 Result adds an Interlock row, and a queued change the loop boundary refused is
-shown as `Rejected`.
+shown as `Rejected`. Reason is one screen of six rows: Step, Role with the
+step's source patterns (`ADDITION P1,2`), Decision, Interlock, Velocity and
+Pitch target. Its Interlock row is kept apart from the reasons: `ON` while
+Interlock filters, `OFF` without a leader, or the bypass in force, such as
+`RESYNC` or `PLAN LIMIT`, in which case gap and Amount still decide the step
+as if Interlock were off.
 
 Silence-aware interlock (Space: leaving room while another channel's notes are
 still sounding) is not part of this release.

@@ -515,7 +515,7 @@ function test_merge_fragments_result_and_reason_name_the_fragment_from_one()
   luaunit.assert_equals(select_label(value,"Decision").get(),string.format("FRAGMENT 1 P%02d",source))
   luaunit.assert_equals(select_label(value,"Pitch target").get(),"NOT USED")
   if source==2 then
-    luaunit.assert_equals(select_label(value,"Role").get(),"fragment")
+    luaunit.assert_equals(select_label(value,"Role").get(),"fragment P2")
     luaunit.assert_equals(select_label(value,"Velocity").get(),33)
   end
 end
@@ -583,7 +583,40 @@ function test_merge_reason_lists_every_rejection_reason_in_order()
   luaunit.assert_equals(feature_editor.field_value(select_label(value,"Decision")),"GAP, INTERLOCK")
   open_label(value,"Reason")
   luaunit.assert_equals(feature_editor.field_value(select_label(value,"Decision")),"GAP, INTERLOCK")
-  luaunit.assert_equals(select_label(value,"Sources").get(),"2")
+  luaunit.assert_equals(select_label(value,"Role").get(),"EMPTY P2")
+end
+
+-- Review D9 (plan §1.2 fallback, §3 "its bypass status is displayed
+-- separately", §5 "Result and Reason expose RESYNC ... PLAN LIMIT"): the
+-- Reason dashboard (six rows) shows the Interlock admission in its own row
+-- next to the ordered rejection reasons; the role row names the sources.
+function test_merge_reason_shows_interlock_bypass_separately_from_reasons()
+  for _, status in ipairs({"RESYNC", "PLAN LIMIT"}) do
+    local song,channel=setup()
+    channel.working_pattern.foundation={status="ok",config={mode="foundation"},roles={[5]="addition"},reasons={[5]="gap"},
+      reason_lists={[5]={"gap"}},sources={[5]={2,3}},velocities={},interlock={status=status,blocked={}}}
+    local value=feature_editor.new("merge");value:enter();open_label(value,"Result")
+    select_label(value,"Step").set(5)
+    luaunit.assert_equals(select_label(value,"Interlock").get(),status)
+    open_label(value,"Reason")
+    luaunit.assert_equals(labels(value),{"Step","Role","Decision","Interlock","Velocity","Pitch target"})
+    luaunit.assert_equals(feature_editor.field_value(select_label(value,"Decision")),"GAP")
+    luaunit.assert_equals(select_label(value,"Interlock").get(),status)
+    luaunit.assert_equals(select_label(value,"Role").get(),"addition P2,3")
+  end
+  -- Filtering, no leader, and Fragments (Interlock is Foundation-only).
+  local song,channel=setup()
+  channel.working_pattern.foundation={status="ok",roles={},reasons={},reason_lists={[5]={"gap","INTERLOCK CH02"}},
+    sources={},velocities={},interlock={status="ok",blocked={[5]=true}}}
+  local value=feature_editor.new("merge");value:enter();open_label(value,"Result");select_label(value,"Step").set(5)
+  open_label(value,"Reason")
+  luaunit.assert_equals(feature_editor.field_value(select_label(value,"Decision")),"GAP, INTERLOCK")
+  luaunit.assert_equals(select_label(value,"Interlock").get(),"ON")
+  luaunit.assert_equals(select_label(value,"Role").get(),"EMPTY")
+  channel.working_pattern.foundation.interlock=nil
+  luaunit.assert_equals(select_label(value,"Interlock").get(),"OFF")
+  channel.working_pattern.foundation=nil;channel.working_pattern.fragments={status="ok",roles={},reasons={},sources={}}
+  luaunit.assert_equals(select_label(value,"Interlock").get(),"NOT USED")
 end
 
 function test_merge_structure_screen_sets_markers_and_an_enabled_group()

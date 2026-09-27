@@ -402,7 +402,8 @@ def merge_screens(c, sw):
     walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")])
     c.key(3)
     # Merge reason is information only: one dashboard of six rows.
-    sw.screen("M14", rows=[("Step", "1"), ("Role", "EMPTY"), ("Sources", "NONE"), ("Decision", "ADMITTED"),
+    # Role names its sources; Interlock has its own row (review D9, plan §3).
+    sw.screen("M14", rows=[("Step", "1"), ("Role", "EMPTY"), ("Decision", "ADMITTED"), ("Interlock", "OFF"),
                            ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
     c.key(2)
     sw.screen("M05", field=("Reason", ">"))

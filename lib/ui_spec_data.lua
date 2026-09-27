@@ -1950,8 +1950,8 @@ return {
       ["fields"] = {
         "step",
         "role",
-        "sources",
         "decision",
+        "interlock",
         "velocity",
         "pitch_target",
       },
@@ -10821,8 +10821,8 @@ return {
         ["M14"] = {
           "step",
           "role",
-          "sources",
           "decision",
+          "interlock",
           "velocity",
           "pitch_target",
         },

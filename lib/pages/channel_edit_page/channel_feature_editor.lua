@@ -259,9 +259,14 @@ function editor.new(kind)
       return fields
     elseif self.screen=="M08"then
       local f=active_plan();local fragment_plan=self.channel.working_pattern and self.channel.working_pattern.fragments
-      return{readonly("Step",function()return self.selected_step end,{id="step"}),readonly("Role",function()return plan_role(f,self.selected_step)end,{id="role"}),
-        readonly("Sources",function()local s=f and f.sources and f.sources[self.selected_step];return s and table.concat(s,",")or"NONE"end,{id="sources"}),
+      -- One dashboard of six rows (information only). Role names its source
+      -- patterns (ADDITION P2,3) so the Interlock admission has its own row,
+      -- separate from the ordered rejection reasons in Decision (plan §3).
+      return{readonly("Step",function()return self.selected_step end,{id="step"}),readonly("Role",function()
+          local role=plan_role(f,self.selected_step);local s=f and f.sources and f.sources[self.selected_step]
+          return(s and #s>0)and(role.." P"..table.concat(s,","))or role end,{id="role"}),
         readonly("Decision",function()return plan_decision(f,self.selected_step,"ADMITTED")end,{id="decision"}),
+        readonly("Interlock",function()if fragment_plan then return"NOT USED"end;return admission("interlock")end,{id="interlock"}),
         readonly("Velocity",function()return f and f.velocities and f.velocities[self.selected_step]end,{id="velocity"}),
         readonly("Pitch target",function()
           if fragment_plan then return"NOT USED"end

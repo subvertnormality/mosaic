@@ -13990,15 +13990,15 @@
       ],
       [
         "Role",
-        "ADDITION"
-      ],
-      [
-        "Sources",
-        "1,2"
+        "ADDITION P1,2"
       ],
       [
         "Decision",
         "ADMITTED"
+      ],
+      [
+        "Interlock",
+        "ON"
       ],
       [
         "Velocity",

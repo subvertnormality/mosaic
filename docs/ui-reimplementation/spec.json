@@ -15370,25 +15370,11 @@
         {
           "id": "role",
           "label": "Role",
-          "example": "ADDITION",
+          "example": "ADDITION P1,2",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
             "field": "role"
-          },
-          "type": "provider_descriptor",
-          "visibility": "descriptor.visible",
-          "missing": "NONE",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "sources",
-          "label": "Sources",
-          "example": "1,2",
-          "binding": {
-            "provider": "merge",
-            "target": "selected_object",
-            "field": "sources"
           },
           "type": "provider_descriptor",
           "visibility": "descriptor.visible",
@@ -15403,6 +15389,20 @@
             "provider": "merge",
             "target": "selected_object",
             "field": "decision"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "interlock",
+          "label": "Interlock",
+          "example": "RESYNC",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "interlock"
           },
           "type": "provider_descriptor",
           "visibility": "descriptor.visible",
@@ -15456,7 +15456,7 @@
         "mutation": "none during draw"
       },
       "hold_policy": "follow_family",
-      "state_explanation": "Information only: a dashboard of six rows. Decision lists every rejection reason of the candidate in pipeline order (gap, then Interlock; plan §3), a Fragments step names its fragment from 1 and its source (FRAGMENT 1 P03) or KEPT ANCHOR, and Pitch target shows a Structure marker's chord decision (MARKER CHORD G01, CHORD MISSING) or NOT USED in Fragments mode."
+      "state_explanation": "Information only: a dashboard of six rows. Role names the step's role and its source patterns (ADDITION P1,2). Decision lists every rejection reason of the candidate in pipeline order (gap, then Interlock; plan §3), and a Fragments step names its fragment from 1 and its source (FRAGMENT 1 P03) or KEPT ANCHOR. Interlock shows the admission separately from those reasons: ON while it filters, else its visible bypass (RESYNC, PLAN LIMIT, LEADER OFF, LEADER MISSING), OFF without a leader and NOT USED in Fragments mode (plan §1.2, §3). Pitch target shows a Structure marker's chord decision (MARKER CHORD G01, CHORD MISSING, or the explicit bypass that kept its pitch such as BYPASS NOTE MASK) or NOT USED in Fragments mode."
     },
     "H19": {
       "id": "H19",
@@ -31293,8 +31293,8 @@
         "M14": [
           "step",
           "role",
-          "sources",
           "decision",
+          "interlock",
           "velocity",
           "pitch_target"
         ],
