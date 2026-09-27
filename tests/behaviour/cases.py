@@ -993,7 +993,11 @@ def transpose_lock_live_clear(c):
                        [144,48,127],[144,62,117]]
     assert [event['bytes'] for event in before[:6]] == expected_before, before
     clear_lower = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
-    with c.ui.hold_step(1): c.ui.press_key(2)
+    # K2 is pressed and released inside the step hold with no settle time:
+    # press_key's 60 ms settle landed inside the measured window, so on a slow
+    # runner the gesture outlasted the 1/6 s note it must fall within although
+    # the clear itself happened 40 ms into it.
+    with c.ui.hold_step(1), c.ui.hold_keys(2): pass
     clear_upper = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
     c.wait(lambda state: len(onsets(state)) >= 11, timeout=3)
     c.ui.stop()
