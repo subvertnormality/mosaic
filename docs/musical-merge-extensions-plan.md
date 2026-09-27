@@ -257,30 +257,27 @@ rebuilds for the follower's own edits recompute from the same inputs.
   admission — the sweep rebuilds from live data, so the last build wins). Each
   asserts the retained admission until replacement, the lookahead invalidation,
   and that grid LEDs and emitted MIDI agree at every step.
-- **Where leader plans come from (performance).** No cross-build cache exists.
-  - **Interlock needs no plan build.** Its input is the leader's anchors: the
-    anchor pattern's trigs inside the leader's playable range under the governing
-    segment's configuration (§3), before masks. These are read directly from the
-    stored anchor pattern for every leader cycle, logged or predicted — a scan
-    of at most 64 values per distinct anchor configuration.
-  - **Space uses the leader's own working pattern for cycles it has played.**
-    For the leader's current cycle `k_l` the plan is `channel.working_pattern`
-    itself — the table the leader plays from, including in-place writes (mask
-    edits, recording, memory restore write into it without a rebuild,
-    `lib/models/program.lua:839-858`, `lib/memory/event_handlers.lua:81-121`).
-    At each leader wrap the cycle log stores a reference to the working pattern
-    the leader held at the end of that cycle, which is the plan for logged
-    cycles `i < k_l`. So for played cycles the follower sees exactly what the
-    leader played, with no build and no invalidation question.
-  - **Only predicted cycles `i > k_l` are built**, through the same
-    `get_and_merge_patterns` path with explicit configuration, cycle and phrase,
-    memoised within one admission only (shared by both filters).
-  - **Freshness of in-place leader writes.** A leader write that does not go
-    through a rebuild request reaches a follower at the follower's next build
-    (its wrap at the latest), because the follower reads the leader's working
-    pattern when it builds. Rebuild requests keep the immediate propagation
-    above. Either way the follower's grid and MIDI read its one working pattern
-    and agree.
+- **Where leader plans come from (performance).** Every leader plan, for
+  played and predicted cycles alike, is built through the same
+  `get_and_merge_patterns` path with the governing segment's configuration,
+  cycle and phrase (§1.2.3), memoised only within one admission and shared by
+  both filters. There is no cross-build cache and no reuse of the leader's live
+  working pattern, so no invalidation or history-retention question arises;
+  inputs are the song data at the follower's build.
+  - **Interlock needs no plan build.** Its input is the leader's anchors, which
+    by §3 are the anchor pattern's trigs inside the leader's playable range
+    under the governing configuration, before masks. They are read directly
+    from the stored anchor pattern — the same values `foundation.plan` marks as
+    `anchor` from the same inputs. A test asserts equality with plan-derived
+    anchors for every configuration shape in the Interlock suite.
+  - **In-place leader writes** (mask edits, recording and memory restore write
+    into a working pattern without a rebuild request,
+    `lib/models/program.lua:839-858`, `lib/memory/event_handlers.lua:81-121`)
+    change the stored data those writes also persist; the follower sees them at
+    its next build (its wrap at the latest), because it rebuilds leader plans
+    from song data. Regression: an in-place mask write on the leader mid-cycle
+    is reflected in the follower's next admission and not before; grid and MIDI
+    of the follower agree throughout.
 - **While stopped** `j = 0` and `k_l = 0`: the stopped grid preview shows what
   the first cycle after Start will play, using any queued/requested
   configuration as the entry at 0.
@@ -341,10 +338,12 @@ cycles can differ by phrase and configuration.
 **Budget (the single authority; §3, §6 and §7 refer to it).** Per follower
 admission, counted across both filters together:
 - at most **64 leader cycles** in each filter's support interval;
-- at most **`B_build` distinct predicted leader-plan builds** in total, where a
-  plan shared by Interlock and Space counts once and Interlock itself needs
-  none; `B_build = 2` (a named constant, lowered by the device acceptance below
-  if needed, never raised without a new device measurement);
+- at most **`B_build` distinct leader-plan builds** in total (played and
+  predicted cycles alike), where a plan shared by both filters counts once and
+  Interlock itself needs none; `B_build = 2` (a named constant, lowered by the
+  device acceptance below if needed, never raised without a new device
+  measurement). With `B_build = 0` Space always bypasses with `PLAN LIMIT` and
+  Interlock is unaffected — the bounded visible fallback;
 - membership checks at most 64 follower candidates × the leader onsets in the
   evaluated cycles.
 If any bound would be exceeded, **both** filters bypass for that follower cycle
@@ -358,17 +357,25 @@ length, long gates and strum tails carried in over several cycles with changing
 phrases and configurations, large ratios and the fallback.
 
 **Device acceptance (timing oracle).** `tests/behaviour/hardware_performance.py`
-gains cases `PERF-MERGE-HW-STEADY` (16 channels at 130 bpm, the PERF-002
-dense workload, with channel 2 following channel 1 through Interlock and
-Space, one-cycle Fixed leader) and `PERF-MERGE-HW-WORST` (same workload, two
-followers each using two distinct Build-shaped per-phrase leaders, 64-step
-followers, so every wrap needs `B_build` builds). Both must pass the existing
-`TIMING_THRESHOLDS` gates (event timing, sustained and hard service, step
-jitter) unchanged. If `PERF-MERGE-HW-WORST` fails, `B_build` is lowered (to 1,
-then 0 — Space then bypasses with `PLAN LIMIT` whenever a predicted cycle is
-needed) until it passes; the resulting constant and both reports are recorded.
-Until the device run has passed, the delivery report states the host figures
-only and makes no device-timing claim.
+gains three cases, all on the PERF-002 dense workload at 130 bpm with 16
+channels, each judged by the existing `TIMING_THRESHOLDS` gates (event timing,
+sustained and hard service, step jitter) unchanged:
+- `PERF-MERGE-HW-STEADY`: channel 2 follows channel 1 through Interlock and
+  Space; one-cycle Fixed leader.
+- `PERF-MERGE-HW-WORST`: 15 followers (channels 2–16), each with Interlock and
+  Space on two distinct Build-shaped per-phrase leaders arranged so every
+  follower wrap needs `B_build` builds, 64-step followers — the maximum
+  supported aggregate load. The capture window starts at Start, so the first
+  admissions after Start are included.
+- `PERF-MERGE-HW-EDIT`: the WORST configuration with a leader source edit
+  applied through the grid every two bars during the capture (rebuild requests
+  and yielding sweeps included).
+The release gate is that all three pass. If WORST or EDIT fails, `B_build` is
+lowered (to 1, then 0) until they pass; at 0 Space bypasses with `PLAN LIMIT`
+whenever it would need a plan, which is visible on Result/Reason and in the
+manual. The constant, the reports and the chosen fallback are recorded. Until
+these device runs pass, the feature is not released and the delivery report
+states host figures only.
 
 
 ### 1.5 Dependency rules
@@ -663,6 +670,20 @@ From the leader's cycle plans `leader_plan(i)` (§1.2; its final working pattern
   Space record unavailable with `GATE INPUT UNAVAILABLE`; never assume zero.
   Changes after capture cannot mutate the record and use the publication and
   admission rules of §1.3.
+  **Stored inputs only.** During playback, parameter locks and slides write the
+  live values of articulation parameters from clock callbacks, so a live read
+  would depend on which callback ran last. The snapshot therefore reads only
+  song data and values that change solely through user edits: chord masks,
+  root mute, arp selection, the channel's stock articulation values, and the
+  stored per-step lock values. A leader channel on which **any** step carries a
+  trig lock, slot value or slide for a strum/chord articulation parameter
+  (strum pattern, division, spread, acceleration, chord masks as parameters),
+  or whose articulation parameter is modulated or mapped, has its Space record
+  unavailable (`GATE INPUT UNAVAILABLE`, Space bypassed, Interlock unaffected).
+  Such values are then never read live. Regression: a lock on the leader's strum
+  division makes Space bypass with that reason in both callback orders; the
+  same leader without the lock yields identical admissions in both orders.
+  Articulation edits through the UI reach followers at their next build (§1.3).
 - **Strum:** use the existing chord ordering and strum descriptors to enumerate
   the fixed root/chord slots, including reverse root-only strums, sparse chord
   masks and muted roots. Ignore omitted voices and nil/invalid descriptor
@@ -675,8 +696,8 @@ From the leader's cycle plans `leader_plan(i)` (§1.2; its final working pattern
   the record unavailable rather than publishing an underestimated tail.
   Bind tests to the actual descriptor outputs for forward/reverse patterns,
   sparse slots, root-only reverse strums, root mute, negative acceleration,
-  invalid gaps, per-step locks and changing captured inputs. Assert no RNG or
-  lock side effects while constructing the record.
+  invalid gaps, the per-step-lock bypass above and changing captured inputs.
+  Assert no RNG or lock side effects while constructing the record.
 - **Arp:** an arp is bounded by the gate length already, so it adds nothing.
 - **Cancel:** Stop, mute, panic and note-off cancellation are runtime events
   and never shorten a planned gate.
