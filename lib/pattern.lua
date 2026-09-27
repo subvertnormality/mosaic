@@ -371,11 +371,19 @@ local function memo_valid(entry, channel, modes, pattern_channel, patterns, puls
     position = position + 3
   end
   if position ~= #trace then return false end
+  -- The steps 1..64 whose trig mask is 1 are exactly the saved ones (masks
+  -- are sparse: visit only the set entries).
   local masks = program.get_step_trig_masks(channel)
-  local positive = entry.positive
-  for s = 1, 64 do
-    if (masks ~= nil and masks[s] == 1) ~= positive[s] then return false end
+  local positive, count = entry.positive, 0
+  if masks ~= nil then
+    for s, value in pairs(masks) do
+      if value == 1 and math_type(s) == "integer" and s >= 1 and s <= 64 then
+        if not positive[s] then return false end
+        count = count + 1
+      end
+    end
   end
+  if count ~= entry.positive_count then return false end
   local sources = entry.sources
   local stats = pattern.wrap_memo_stats
   for index = 1, #sources do
@@ -394,14 +402,13 @@ local function memo_valid(entry, channel, modes, pattern_channel, patterns, puls
   return true
 end
 
--- Steps 1..64 are copied explicitly: a nil value (a hole) must not shorten
--- the copy as unpack's length would.
+-- Steps 1..64 are copied explicitly (table.move over the fixed range): a nil
+-- value (a hole) must not shorten the copy as unpack's length would.
+local table_move = table.move
 local function copy_merged(merged)
   local result = {}
   for _, field in ipairs(MERGED_FIELDS) do
-    local values, copy = merged[field], {}
-    for s = 1, 64 do copy[s] = values[s] end
-    result[field] = copy
+    result[field] = table_move(merged[field], 1, 64, 1, {})
   end
   local notes_merged = {}
   for key, value in pairs(merged.merged_notes) do notes_merged[key] = value end
@@ -426,6 +433,8 @@ local function memo_legacy_merge(channel, modes, selected_song_pattern, pulse)
   local trace = {}
   local merged, masks = legacy_merge(channel, modes[1], modes[2], modes[3], modes[4], selected_song_pattern, nil, trace)
   local positive = positive_masks(masks)
+  local positive_count = 0
+  for s = 1, 64 do if positive[s] then positive_count = positive_count + 1 end end
   -- A priority mode reads its source's whole arrays.
   local every = false
   for index = 2, 4 do if modes[index] and extract_pattern_number(modes[index]) then every = true end end
@@ -438,7 +447,7 @@ local function memo_legacy_merge(channel, modes, selected_song_pattern, pulse)
   if not by_channel then by_channel = {}; legacy_memo[selected_song_pattern] = by_channel end
   by_channel[channel] = sources and {
     modes = {modes[1], modes[2], modes[3], modes[4]}, trace = trace, sources = sources,
-    positive = positive, channel_table = pattern_channel, patterns = patterns,
+    positive = positive, positive_count = positive_count, channel_table = pattern_channel, patterns = patterns,
     merged = copy_merged(merged)
   } or nil
   return merged, false
@@ -470,9 +479,9 @@ local function copy_filters(filters)
   if not filters then return nil end
   local result = {}
   for index, filter in ipairs(filters) do
-    local blocked = {}
-    for step, value in pairs(filter.blocked) do blocked[step] = value end
-    result[index] = {reason = filter.reason, blocked = blocked}
+    local blocked, count = {}, 0
+    for step, value in pairs(filter.blocked) do blocked[step] = value; count = count + 1 end
+    result[index] = {reason = filter.reason, blocked = blocked, count = count}
   end
   return result
 end
@@ -483,12 +492,13 @@ local function same_filters(saved, filters)
   for index, filter in ipairs(filters) do
     local other = saved[index]
     if other.reason ~= filter.reason then return false end
+    -- Every entry equal and as many entries: the same set.
+    local count, saved_blocked = 0, other.blocked
     for step, value in pairs(filter.blocked) do
-      if other.blocked[step] ~= value then return false end
+      if saved_blocked[step] ~= value then return false end
+      count = count + 1
     end
-    for step in pairs(other.blocked) do
-      if filter.blocked[step] == nil then return false end
-    end
+    if count ~= other.count then return false end
   end
   return true
 end
@@ -768,11 +778,10 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   local trig_values, note_mask_values = merged_pattern.trig_values, merged_pattern.note_mask_values
   local velocity_values, merged_lengths = merged_pattern.velocity_values, merged_pattern.lengths
   if foundation_trigs then
-    for s = 1, 64 do trig_values[s] = foundation_trigs[s] end
-    local foundation_velocities = foundation_result.velocities
-    for s = 1, 64 do
-      local velocity = foundation_velocities[s]
-      if velocity ~= nil then velocity_values[s] = velocity end
+    table_move(foundation_trigs, 1, 64, 1, trig_values)
+    -- Plan velocities are set only at planned steps: visit those.
+    for s, velocity in pairs(foundation_result.velocities) do
+      if math_type(s) == "integer" and s >= 1 and s <= 64 then velocity_values[s] = velocity end
     end
   end
   local trig_mask, note_mask = channel_data.trig_mask, channel_data.note_mask
