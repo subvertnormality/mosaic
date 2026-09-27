@@ -1014,6 +1014,19 @@ class Ui:
         return self.driver.wait(lambda state: live_header_matches(state, title, scope, layout)
                                 and selected_field_matches(state, layout, label, value, art=True))
 
+    def expect_rhythm_doctor_child_row(self, route, label):
+        """Doctor screen `route` with the row `label` selected, a row whose K3
+        opens a child screen: it reads OPEN > and the footer names it beside the
+        Doctor's other hints (owner decision 27 September 2026)."""
+        from frame_oracle import OPEN_VALUE, footer_matches, open_footer
+
+        self.expect_rhythm_doctor_screen(route, label, OPEN_VALUE)
+        text = open_footer(label, "E2 FIELD  E3 SET")
+        # A tooltip owns the footer for its 3 s lifetime; the hints follow it.
+        self.driver.wait(lambda state: footer_matches(state, text), timeout=5)
+        self.driver.results.append(dict(kind="child-row", screen=route, label=label,
+                                        value=OPEN_VALUE, footer=text, passed=True))
+
     def expect_rhythm_doctor_setup_field(self, field, value):
         """R01 with setup field `field` (TEMPO / MANUAL BPM / INPUT) selected, showing `value`.
 

@@ -8460,7 +8460,7 @@
         {
           "id": "alignment",
           "label": "Alignment",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "doctor",
             "target": "selected_object",
@@ -8478,7 +8478,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "doctor_routes rows ready and ready_playing (READY, no armed preview, no modal or draft when stopped). E2 selects Window bar / Window step / Sensitivity / Paint policy / Alignment (wrapping); E3 edits: Window bar +-16 cells and Window step +-1 cell per detent through runtime:set_window_start (bounded by Bank.with_window_start to whole 64-cell windows), Sensitivity +-0.05 for the current lane (0..1), Paint policy cycles Toggle/Add/Replace, Alignment opens the alignment draft (R06) - stopped only, STOP_SEQUENCER while playing. Grid (10/12,8) browse and (11,8) phrase start (G46, R15); lane cells (G41, R13); Paint (16,8) arms a preview (G42, R08); Record asks to clear the bank (R10, stopped only). K2/K3 do nothing here.",
+      "controls_explanation": "doctor_routes rows ready and ready_playing (READY, no armed preview, no modal or draft when stopped). E2 selects Window bar / Window step / Sensitivity / Paint policy / Alignment (wrapping); E3 edits: Window bar +-16 cells and Window step +-1 cell per detent through runtime:set_window_start (bounded by Bank.with_window_start to whole 64-cell windows), Sensitivity +-0.05 for the current lane (0..1), Paint policy cycles Toggle/Add/Replace, Alignment opens the alignment draft (R06) - stopped only, STOP_SEQUENCER while playing. Grid (10/12,8) browse and (11,8) phrase start (G46, R15); lane cells (G41, R13); Paint (16,8) arms a preview (G42, R08); Record asks to clear the bank (R10, stopped only). K3 on Alignment opens the draft through the same owner path as E3 (owner decision 27 September 2026: it is a child row, shown OPEN >, footer K3 OPEN ALIGNMENT); elsewhere K2/K3 do nothing here.",
       "state_explanation": "Everything on this screen except Alignment works while the sequencer plays (field_contracts.doctor.transport_gate). Lane switching keeps the window; sensitivity belongs to the selected lane. Each window, sensitivity or policy change bumps the adapter window revision, so an already armed preview then fails to commit with STALE_PREVIEW until it is retaken. This fixture assumes a bank long enough for steps 17-80. Scope and status keep providers.doctor.readouts. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N03",
       "entry_flow_ids": [
@@ -31012,7 +31012,7 @@
         "window_step:+-1 cell per detent, same bounds",
         "sensitivity:current lane 0..1 by0.05",
         "policy:toggle|add|replace (cycle)",
-        "alignment:E3 opens the draft from the bank; stopped only"
+        "alignment:E3 or K3 opens the draft from the bank (one owner path; K3 by owner decision 27 September 2026); stopped only"
       ],
       "alignment": [
         "half_tempo:K3 halves the draft BPM then applies",
@@ -31031,7 +31031,7 @@
           "Record (1,2) press: start capture, finish, and raising any question (Adapter:record_pressed; runtime start_capture/finish_capture/request_record_action)",
           "K2/K3 in every case: answering a question, keeping/discarding setup or alignment drafts, K3 Finish (Adapter:key; runtime confirm_modal)",
           "setup E2/E3 (Adapter:enc outside READY)",
-          "opening Alignment (E3 on the Alignment field) and applying it (runtime apply_alignment/begin_reanalysis)"
+          "opening Alignment (E3 or K3 on the Alignment field) and applying it (runtime apply_alignment/begin_reanalysis)"
         ],
         "ready_bank_while_playing": [
           "E2 READY field select and E3 Window bar / Window step / Sensitivity / Paint policy (Adapter:enc, ui_adapter.lua:239)",

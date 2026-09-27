@@ -912,3 +912,31 @@ function test_ui_live_doctor_dispatch_reaches_the_trig_page_encoder_and_key_once
     if not ok then error(err, 0) end
   end, {before_ui = live.load_real_trigger_page})
 end
+
+-- Owner decision 27 September 2026: on the READY editor (R05) the Alignment row
+-- opens a child screen, so it shows OPEN >, the footer names it, and K3 opens
+-- the alignment draft (R06) as E3 does (README "Rhythm Doctor").
+function test_ui_live_doctor_alignment_row_shows_open_and_k3_opens_it()
+  local saved_time = util.time
+  util.time = function() return 0 end -- the Doctor's window art keeps time
+  live.isolated(function(env)
+    local doctor = fake_doctor()
+    doctor.runtime.machine = {state = "READY", bank = {bpm = 120, timeline_cells = 64, window_start = 0,
+      source = {beat_positions = {1, 2, 3}}, sensitivities = {BD = 0.5, SD = 0.5, CYM = 0.5},
+      lanes = {BD = {}, SD = {}, CYM = {}}}}
+    trigger_edit_page.set_rhythm_doctor(doctor)
+    press_page(pages.pages.trigger_edit_page, "G03")
+    live.press_trigger_page(16, 2)
+    ui_live.grid_outcome("G23")
+    luaunit.assert_equals(screen(), "R05")
+    for _ = 1, 4 do ui.enc(2, 1) end
+    luaunit.assert_equals(ui_live.state().field_id, "alignment")
+    luaunit.assert_equals(vm_field("alignment").value, "OPEN >")
+    tooltip.text = false -- past the 3 s tip that announced the algorithm
+    luaunit.assert_equals(ui_live.view_model().footer.hints, {"K3 OPEN ALIGNMENT", "E2 FIELD"})
+    tap(3)
+    luaunit.assert_equals(screen(), "R06")
+    luaunit.assert_true(doctor.alignment_draft ~= nil)
+  end, {before_ui = live.load_real_trigger_page})
+  util.time = saved_time
+end

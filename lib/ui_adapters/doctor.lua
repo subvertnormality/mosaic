@@ -261,9 +261,11 @@ return function(ui_adapters, owners)
       {id = "paint_policy", label = "Paint policy", kind = "value", selected = selected == "paint_policy",
         value = string.upper(tostring(model.paint_policy or "toggle")), domain = {enum = Adapter.PAINT_POLICIES},
         edit = encoder_edit(A, ids, "ready_field", "paint_policy")},
-      -- E3 on Alignment opens the draft; the owner refuses it while playing.
+      -- E3 or K3 on Alignment opens the draft (one owner path); the owner
+      -- refuses it while playing. It opens a child screen, so the live UI
+      -- shows it OPEN > (owner decision 27 September 2026).
       {id = "alignment", label = "Alignment", kind = "action", selected = selected == "alignment",
-        domain = {opens = "R06", stopped_only = true},
+        opens = "R06", domain = {opens = "R06", stopped_only = true},
         invoke = function()
           local refused = select_field(A, ids, "ready_field", "alignment")
           if refused then return wrap(refused) end

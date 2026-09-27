@@ -548,8 +548,9 @@ clear its capture bank. K2 cancels that question and K3 confirms it; clearing ke
 were already painted. In a ready bank, use E2 to choose Window bar, Window
 step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
 edit the chosen item. Window bar moves by 16 steps and Window step by one; both
-view the same bounded timeline. Choose Alignment and use E3 to open its tempo,
-start-beat, and fine-start settings; K2 cancels and K3 applies the draft.
+view the same bounded timeline. Alignment shows `OPEN >`: choose it and press
+K3 (or turn E3) to open its tempo, start-beat, and fine-start settings; K2
+cancels and K3 applies the draft.
 
 Before recording, E2/E3 open a draft setup for Auto or Manual tempo, manual BPM
 (40–240), and Stereo/L/R input; K2 discards the draft and K3 keeps it. The

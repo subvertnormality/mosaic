@@ -10820,7 +10820,7 @@ return {
         "window_step:+-1 cell per detent, same bounds",
         "sensitivity:current lane 0..1 by0.05",
         "policy:toggle|add|replace (cycle)",
-        "alignment:E3 opens the draft from the bank; stopped only",
+        "alignment:E3 or K3 opens the draft from the bank (one owner path; K3 by owner decision 27 September 2026); stopped only",
       },
       ["alignment"] = {
         "half_tempo:K3 halves the draft BPM then applies",
@@ -10839,7 +10839,7 @@ return {
           "Record (1,2) press: start capture, finish, and raising any question (Adapter:record_pressed; runtime start_capture/finish_capture/request_record_action)",
           "K2/K3 in every case: answering a question, keeping/discarding setup or alignment drafts, K3 Finish (Adapter:key; runtime confirm_modal)",
           "setup E2/E3 (Adapter:enc outside READY)",
-          "opening Alignment (E3 on the Alignment field) and applying it (runtime apply_alignment/begin_reanalysis)",
+          "opening Alignment (E3 or K3 on the Alignment field) and applying it (runtime apply_alignment/begin_reanalysis)",
         },
         ["ready_bank_while_playing"] = {
           "E2 READY field select and E3 Window bar / Window step / Sensitivity / Paint policy (Adapter:enc, ui_adapter.lua:239)",

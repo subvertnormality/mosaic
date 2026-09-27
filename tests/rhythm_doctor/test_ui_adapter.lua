@@ -371,6 +371,32 @@ test("alignment is a K3-applied draft with explicit half/double actions and K2 c
   equal(c.adapter:key(2, 1).code, "ALIGNMENT_CANCELLED")
 end)
 
+-- Owner decision 27 September 2026: Alignment is a row that opens a child
+-- screen, so K3 opens it as E3 always has (README "Rhythm Doctor"); on the
+-- other READY fields K3 still does nothing, and a running sequencer refuses it.
+test("K3 on Alignment opens the draft exactly as E3 does", function()
+  local function ready()
+    local c = context(); c.runtime.machine.state = "READY"
+    c.runtime.machine.bank = { bpm = 120, timeline_cells = 96, window_start = 0, capture_start_sample = 10,
+      capture_end_sample = 1000, origin_sample = 100, sample_rate = 100, source = { beat_positions = { 100, 200, 300 } },
+      sensitivities = { BD = 0, SD = 0, CYM = 0 }, lanes = { BD = {}, SD = {}, CYM = {} } }
+    return c
+  end
+  local c = ready()
+  equal(c.adapter:key(3, 1).code, "UNCLAIMED", "K3 on Window bar does nothing")
+  for _ = 1, 4 do c.adapter:enc(2, 1) end
+  equal(c.adapter:screen_model().ready.field, "ALIGNMENT")
+  equal(c.adapter:key(3, 1).code, "ALIGNMENT_OPENED")
+  check(c.adapter:screen_model().alignment.active, "K3 opened the alignment draft")
+  equal(c.adapter:screen_model().alignment.field, "HALF TEMPO")
+  equal(#c.calls, 0, "opening the draft asks nothing of the runtime")
+  local playing = ready(); playing.set_stopped(false)
+  for _ = 1, 4 do playing.adapter:enc(2, 1) end
+  equal(playing.adapter:key(3, 1).code, "STOP_SEQUENCER")
+  equal(playing.adapter:enc(3, 1).code, "STOP_SEQUENCER", "E3 refuses it the same way")
+  check(not playing.adapter:screen_model().alignment.active, "no draft while playing")
+end)
+
 test("a rejected correction says so instead of looking unchanged", function()
   -- apply_alignment can refuse - the retained audio is gone after a reload or
   -- Save As, for one - and the draft is deliberately kept so the player does
