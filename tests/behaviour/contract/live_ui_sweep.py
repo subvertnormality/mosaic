@@ -352,9 +352,15 @@ def merge_screens(c, sw):
     walk(c, sw, "M02", shape)
     e2(c, -3); c.key(3)
     rhythm = [("Anchor", "NONE"), ("Add amount", "100"), ("Amount detail", ">"), ("Add accent", "70"),
-              ("Anchor gap", "0"), ("Seed", "0")]
+              ("Anchor gap", "0"), ("Seed", "0"), ("Interlock", ">")]
     walk(c, sw, "M03", rhythm)
     rlabels = [label for label, _ in rhythm]
+    # Interlock (M16, plan docs/musical-merge-extensions-plan.md §5): no leader.
+    c.key(3)
+    walk(c, sw, "M16", [("Leader", "OFF"), ("Window", "0"), ("Status", "OFF")])
+    c.key(2)
+    sw.screen("M03", field=("Interlock", ">"), footer=neighbours("M03", rlabels, "Interlock"))
+    e2(c, -1)
     # Minimum seed clamps; the anchor gap reaches its maximum 8; the amount
     # stays at its maximum 100. Each stays whole in the value region.
     c.enc(3, -1)
@@ -375,8 +381,14 @@ def merge_screens(c, sw):
     c.key(2)
     sw.screen("M02", field=("Phrase", ">"), footer=neighbours("M02", labels, "Phrase"))
     e2(c, 1); c.key(3)
-    pitch = [("Keep anchor", BOOLEAN_FALSE), ("Add target", "LEGACY"), ("Target setup", ">"), ("Voice leading", ">")]
+    pitch = [("Keep anchor", BOOLEAN_FALSE), ("Add target", "LEGACY"), ("Target setup", ">"), ("Structure", ">"),
+             ("Voice leading", ">")]
     walk(c, sw, "M07", pitch)
+    # Structure (M18): markers Off hide the chord group.
+    e2(c, -1); c.key(3)
+    walk(c, sw, "M18", [("Markers", "OFF")])
+    c.key(2)
+    sw.screen("M07", field=("Structure", ">"), footer=neighbours("M07", [l for l, _ in pitch], "Structure"))
     e2(c, -1); c.key(3)
     walk(c, sw, "M13", [("Target", "LEGACY"), ("Scope", "ADDITIONS")])
     c.key(2)
@@ -389,12 +401,22 @@ def merge_screens(c, sw):
     e2(c, 1); c.key(3)
     walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")])
     c.key(3)
-    walk(c, sw, "M14", [("Step", "1"), ("Role", "EMPTY"), ("Sources", "NONE"), ("Decision", "ADMITTED"),
-                        ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
+    # Merge reason is information only: one dashboard of six rows.
+    sw.screen("M14", rows=[("Step", "1"), ("Role", "EMPTY"), ("Sources", "NONE"), ("Decision", "ADMITTED"),
+                           ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
     c.key(2)
     sw.screen("M05", field=("Reason", ">"))
     c.key(2)
     sw.screen("M02", field=("Result", ">"), footer=("Pitch", END))
+    # Mode Fragments (plan §5): Rhythm opens Fragments (M15), whose Anchor row
+    # appears only with Keep anchor. K2 cancels the staged draft.
+    e2(c, -4); c.enc(3, 2)
+    sw.screen("M02", field=("Mode", "FRAGMENTS"), footer=(START, "Rhythm"))
+    e2(c, 1); c.key(3)
+    walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", BOOLEAN_FALSE), ("Seed", "0")], top=True)
+    e2(c, -1); c.enc(3, 1)
+    walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", "ON"), ("Anchor", "NONE"), ("Seed", "0")], top=True)
+    c.key(2)
     c.enc(1, 1)
     sw.screen("N01", field=("Merge Shape", ""))
 

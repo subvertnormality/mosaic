@@ -23,6 +23,7 @@
 -- target fields read: context (P05 and snapshot routes: which grid context
 -- owns the viewer: Trig, Note, Velocity, Scale or Song).
 local musicutil = require("musicutil")
+local merge_display = include("mosaic/lib/musical_merge/display")
 
 return function(ui_adapters, owners)
   owners = owners or {}
@@ -273,12 +274,12 @@ return function(ui_adapters, owners)
     local options, current = MERGE_OPTIONS[kind], channel[kind .. "_merge_mode"]
     local index = 1
     for k, option in ipairs(options) do if option == current then index = k end end
-    -- Merge Shape (Foundation) decides the trigs: the saved trig merge mode is
-    -- kept for when it is off, and the row says which is in charge.
+    -- Merge Shape decides what it takes over (Foundation: trigs; Fragments:
+    -- trigs, notes, velocities and lengths): the saved mode is kept for when
+    -- it is off, and the row says which is in charge.
     local shown = merge_mode(current)
-    if kind == "trig" and channel.musical_merge and channel.musical_merge.mode == "foundation" then
-      shown = "SHAPE (" .. shown .. ")"
-    end
+    local prefix = merge_display.shape_prefix(channel.musical_merge and channel.musical_merge.mode, kind)
+    if prefix then shown = prefix .. " (" .. shown .. ")" end
     return {id = id, label = label, kind = "value", value = shown,
       domain = {raw = current, min = 1, max = #options, index = index},
       edit = function(delta)

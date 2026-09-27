@@ -8,6 +8,7 @@ local harmony_inspection=include("mosaic/lib/harmony/inspection")
 local harmony_context = include("mosaic/lib/harmony/context")
 local pattern_harmony = include("mosaic/lib/harmony/pattern")
 local optional_transaction=include("mosaic/lib/optional_config_transaction")
+local merge_display=include("mosaic/lib/musical_merge/display")
 
 -- Transactional controller for the two appended Channel pages. Rendering is
 -- intentionally native and small; musical state changes only in apply().
@@ -125,18 +126,53 @@ function editor.new(kind)
     return parent~=nil
   end
 
+  -- The active plan the grid and MIDI read (Foundation or Fragments).
+  local function active_plan()
+    local wp=self.channel.working_pattern
+    return wp and(wp.fragments or wp.foundation)
+  end
+  local function plan_role(f,step)return f and f.roles and f.roles[step]or"EMPTY"end
+  local function plan_decision(f,step,fallback)
+    if not f then return fallback end
+    local list=f.reason_lists and f.reason_lists[step]
+    return merge_display.reasons(list)or merge_display.reason(f.reasons and f.reasons[step])or
+      (f.status~="ok"and merge_display.status(merge_display.reason(f.reason)or f.status))or f.status or fallback
+  end
+  -- The structural pitch decision at a step: the played event's own reason
+  -- (MARKER CHORD Gnn, CHORD MISSING, a bypass), else the planned marker.
+  local function structure_pitch(step)
+    local wp=self.channel.working_pattern;local f=wp and wp.foundation
+    local settings=merge_structure.active(f and f.config)
+    if not(settings and f.markers and f.markers[step])then return nil end
+    local event=harmony_inspection.snapshot(self.song,self.channel_number,step).planned
+    if event and event.structural_reason then return merge_display.reason(event.structural_reason)end
+    return merge_display.reason(merge_structure.reason("marker",settings.group_id))
+  end
+  local function leader_field(label,feature,id)
+    return editable(label,function()return merge_display.leader(self.draft[feature].leader)end,
+      function(v)self.draft[feature].leader=merge_display.leader_number(v)end,{id=id,values=merge_display.leader_values(self.channel_number)})
+  end
+  local function admission(feature)
+    local wp=self.channel.working_pattern;local f=wp and wp.foundation
+    return merge_display.admission(f and f[feature])
+  end
+
   local function merge_fields()
     local value=self.draft
+    local fragments=value.mode=="fragments"
     if self.screen=="M01"then return{
-      editable("Mode",function()return value.mode end,function(v)value.mode=v end,{id="mode",values={"off","foundation"}}),
-      action("Rhythm","M02",{id="rhythm"}),action("Phrase","M04",{id="phrase"}),action("Pitch","M05",{id="pitch"}),action("Result","M07",{id="result"})}
+      editable("Mode",function()return value.mode end,function(v)value.mode=v end,{id="mode",values={"off","foundation","fragments"}}),
+      -- Plan §5: in Fragments mode Rhythm opens the Fragments screen.
+      fragments and action("Rhythm","FRAGMENTS",{id="fragments"})or action("Rhythm","M02",{id="rhythm"}),
+      action("Phrase","M04",{id="phrase"}),action("Pitch","M05",{id="pitch"}),action("Result","M07",{id="result"})}
     elseif self.screen=="M02"then return{
       editable("Anchor",function()return value.anchor end,function(v)value.anchor=v end,{id="anchor",values=assigned_patterns(self.channel)}),
       editable("Add amount",function()return value.amount end,function(v)value.amount=v end,{id="add_amount",min=0,max=100}),
       action("Amount detail","M03",{id="amount_detail"}),
       editable("Add accent",function()return value.accent end,function(v)value.accent=v end,{id="add_accent",min=0,max=100}),
       editable("Anchor gap",function()return value.gap end,function(v)value.gap=v end,{id="anchor_gap",min=0,max=8}),
-      editable("Seed",function()return value.seed end,function(v)value.seed=v end,{id="seed",min=0,max=65535})}
+      editable("Seed",function()return value.seed end,function(v)value.seed=v end,{id="seed",min=0,max=65535}),
+      action("Interlock","INTERLOCK",{id="interlock"})}
     elseif self.screen=="M03"then return{
       editable("Add amount",function()return value.amount end,function(v)value.amount=v end,{id="add_amount",min=0,max=100}),
       readonly("Eligible",function()local f=self.channel.working_pattern and self.channel.working_pattern.foundation;return f and f.eligible_count or 0 end,{id="eligible"}),
@@ -146,18 +182,25 @@ function editor.new(kind)
         editable("Cycles",function()return value.cycles end,function(v)
           value.cycles=v;if value.shape~="custom"then value.percentages=merge_config.curve(value.shape,v)else
             local p={};for i=1,v do p[i]=value.percentages[i]or 100 end;value.percentages=p end
-        end,{id="cycles",values={1,2,4,8}}),
-        editable("Shape",function()return value.shape end,function(v)value.shape=v;if v~="custom"then value.percentages=merge_config.curve(v,value.cycles)end end,
-          {id="shape",values={"flat","build","answer","fill","custom"}})}
-      for index=1,value.cycles do fields[#fields+1]=editable("Cycle "..index,function()return value.percentages[index]end,
-        function(v)value.percentages[index]=v;value.shape="custom"end,{id="cycle_"..index,repeat_key="cycle_<n>",min=0,max=100})end
+        end,{id="cycles",values={1,2,4,8}})}
+      -- Plan §2.2: shape percentages do not apply to fragments.
+      if not fragments then
+        fields[#fields+1]=editable("Shape",function()return value.shape end,function(v)value.shape=v;if v~="custom"then value.percentages=merge_config.curve(v,value.cycles)end end,
+          {id="shape",values={"flat","build","answer","fill","custom"}})
+        for index=1,value.cycles do fields[#fields+1]=editable("Cycle "..index,function()return value.percentages[index]end,
+          function(v)value.percentages[index]=v;value.shape="custom"end,{id="cycle_"..index,repeat_key="cycle_<n>",min=0,max=100})end
+      end
       fields[#fields+1]=editable("Variation",function()return value.variation end,function(v)value.variation=v end,{id="variation",values={"fixed","per_phrase"}})
       return fields
-    elseif self.screen=="M05"then return{
+    elseif self.screen=="M05"then
+      -- Plan §5: in Fragments mode Pitch shows only the Harmony link.
+      if fragments then return{action("Voice leading","HARMONY_LINK",{id="harmony"})}end
+      return{
       editable("Keep anchor",function()return value.keep_anchor_pitch end,function(v)value.keep_anchor_pitch=v end,{id="keep_anchor",boolean=true}),
       editable("Add target",function()return value.target.kind end,function(v)value.target={kind=v};if v=="degrees"then value.target.degrees={1}end end,
         {id="add_target",values={"legacy","scale","degrees","chord"}}),
-      action("Target setup","M06",{id="target_setup"}),action("Voice leading","HARMONY_LINK",{id="harmony"})}
+      action("Target setup","M06",{id="target_setup"}),action("Structure","STRUCTURE",{id="structure"}),
+      action("Voice leading","HARMONY_LINK",{id="harmony"})}
     elseif self.screen=="M06"then
       if value.target.kind=="degrees"then
         local inventory=harmony_context.scale_pitch_classes(self.channel.step_scale_number or program.get().default_scale or 1,0)
@@ -170,19 +213,59 @@ function editor.new(kind)
         return{editable("Harmony source",function()return value.target.group_id end,function(v)value.target.group_id=v end,{id="group_id",values=ids})}
       end
       return{readonly("Target",function()return value.target.kind end,{id="target"}),readonly("Scope",function()return"ADDITIONS"end,{id="scope"})}
+    elseif self.screen=="FRAGMENTS"then
+      -- Plan §2: Size, Keep anchor, Anchor (only with Keep anchor), Seed.
+      local settings=value.fragments
+      local fields={
+        editable("Size",function()return settings.size end,function(v)settings.size=v end,{id="fragment_size",values={4,8,16}}),
+        editable("Keep anchor",function()return settings.keep_anchor end,function(v)settings.keep_anchor=v end,{id="fragment_keep_anchor",boolean=true})}
+      if settings.keep_anchor then
+        fields[#fields+1]=editable("Anchor",function()return value.anchor end,function(v)value.anchor=v end,{id="fragment_anchor",values=assigned_patterns(self.channel)})
+      end
+      fields[#fields+1]=editable("Seed",function()return value.seed end,function(v)value.seed=v end,{id="seed",min=0,max=65535})
+      return fields
+    elseif self.screen=="INTERLOCK"then
+      -- Plan §3 with §0's domains: a leader channel (never this one) and a
+      -- 0..4 step window. Apply rejects a chain (§1.5).
+      return{leader_field("Leader","interlock","interlock_leader"),
+        editable("Window",function()return value.interlock.window end,function(v)value.interlock.window=v end,{id="interlock_window",min=0,max=4}),
+        readonly("Status",function()return admission("interlock")end,{id="interlock_status"})}
+    elseif self.screen=="STRUCTURE"then
+      -- Plan §4: explicit markers and an enabled Harmony Ensemble chord group.
+      local structure=value.structure
+      local ids={};for id,g in pairs((self.song.voicing and self.song.voicing.groups)or{})do if g.enabled then ids[#ids+1]=id end end;table.sort(ids)
+      local fields={editable("Markers",function()return merge_display.markers(structure.markers)end,function(v)
+        structure.markers=merge_display.marker_kind(v)
+        if structure.markers=="off"then structure.group_id=nil elseif structure.group_id==nil then structure.group_id=ids[1]end
+      end,{id="structure_markers",values=merge_display.marker_values})}
+      if structure.markers~="off"then
+        fields[#fields+1]=editable("Chord group",function()return structure.group_id end,function(v)structure.group_id=v end,{id="structure_group",values=ids})
+      end
+      return fields
     elseif self.screen=="M07"then
-      local f=self.channel.working_pattern and self.channel.working_pattern.foundation
-      return{editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{id="step",kind="inspection",min=1,max=64}),
-        readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end,{id="role"}),
-        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"LEGACY"end,{id="decision"}),action("Reason","M08",{id="reason"})}
+      local f=active_plan()
+      local fields={editable("Step",function()return self.selected_step end,function(v)self.selected_step=v end,{id="step",kind="inspection",min=1,max=64}),
+        readonly("Role",function()return plan_role(f,self.selected_step)end,{id="role"}),
+        readonly("Decision",function()return plan_decision(f,self.selected_step,"LEGACY")end,{id="decision"}),action("Reason","M08",{id="reason"})}
+      -- Plan §5: the Interlock admission and its visible bypass, the
+      -- structural pitch at a marker and a queue the boundary rejected (§1.5).
+      local wp=self.channel.working_pattern;local foundation=wp and wp.foundation
+      if foundation and foundation.interlock then fields[#fields+1]=readonly("Interlock",function()return admission("interlock")end,{id="interlock"})end
+      if structure_pitch(self.selected_step)then fields[#fields+1]=readonly("Pitch",function()return structure_pitch(self.selected_step)end,{id="pitch"})end
+      local record=merge_state.peek(self.song,self.channel_number)
+      if record and record.rejected then fields[#fields+1]=readonly("Rejected",function()return record.rejected end,{id="rejected"})end
+      return fields
     elseif self.screen=="M08"then
-      local f=self.channel.working_pattern and self.channel.working_pattern.foundation
-      return{readonly("Step",function()return self.selected_step end,{id="step"}),readonly("Role",function()return f and f.roles and f.roles[self.selected_step]or"EMPTY"end,{id="role"}),
+      local f=active_plan();local fragment_plan=self.channel.working_pattern and self.channel.working_pattern.fragments
+      return{readonly("Step",function()return self.selected_step end,{id="step"}),readonly("Role",function()return plan_role(f,self.selected_step)end,{id="role"}),
         readonly("Sources",function()local s=f and f.sources and f.sources[self.selected_step];return s and table.concat(s,",")or"NONE"end,{id="sources"}),
-        readonly("Decision",function()return f and f.reasons and f.reasons[self.selected_step]or(f and f.status)or"ADMITTED"end,{id="decision"}),
-        readonly("Velocity",function()return f and f.velocities and f.velocities[self.selected_step]end,{id="velocity"}),readonly("Pitch target",function()return value.target.kind end,{id="pitch_target"})}
+        readonly("Decision",function()return plan_decision(f,self.selected_step,"ADMITTED")end,{id="decision"}),
+        readonly("Velocity",function()return f and f.velocities and f.velocities[self.selected_step]end,{id="velocity"}),
+        readonly("Pitch target",function()
+          if fragment_plan then return"NOT USED"end
+          return structure_pitch(self.selected_step)or value.target.kind end,{id="pitch_target"})}
     elseif self.screen=="M09"then return{readonly("Merge gesture",function()return self.gesture or"NONE"end,{id="merge_gesture"}),
-      readonly("Shape",function()return value.mode=="foundation"and"FOUNDATION ACTIVE"or"LEGACY"end,{id="active_shape"})}end
+      readonly("Shape",function()return value.mode=="foundation"and"FOUNDATION ACTIVE"or fragments and"FRAGMENTS ACTIVE"or"LEGACY"end,{id="active_shape"})}end
     return{}
   end
 
@@ -282,7 +365,14 @@ function editor.new(kind)
       end;return fields
     elseif self.screen=="H04_DELETE"then
       local affected={};for number,c in pairs(self.channel_drafts)do if c.group_id==self.selected_group then affected[#affected+1]=number end end;table.sort(affected)
-      return{readonly("Delete group",function()return self.selected_group end,{id="group"}),readonly("Affected",function()return table.concat(affected,",")end,{id="affected"}),
+      -- Every channel the deletion changes: Harmony members, and Merge Shape
+      -- chord targets and Structure markers naming the group (plan §4).
+      local shown={};local listed={};for _,number in ipairs(affected)do shown[#shown+1]=number;listed[number]=true end
+      for number,merge in pairs(self.merge_drafts)do if not listed[number]and merge and(
+        (merge.target and merge.target.kind=="chord"and merge.target.group_id==self.selected_group)or
+        (merge.structure and merge.structure.markers~="off"and merge.structure.group_id==self.selected_group))then shown[#shown+1]=number end end
+      table.sort(shown)
+      return{readonly("Delete group",function()return self.selected_group end,{id="group"}),readonly("Affected",function()return table.concat(shown,",")end,{id="affected"}),
         action("Confirm delete",nil,{id="confirm_delete",invoke=function()
           local deleted=self.selected_group;groups()[deleted]=nil
           for _,number in ipairs(affected)do self.channel_drafts[number].mode="off";self.channel_drafts[number].group_id=nil end
@@ -360,6 +450,9 @@ function editor.new(kind)
         if not active_plan then return"NO EVENT"end
         if active_plan.status=="local_scale_bypass"then return"LOCAL SCALE BYPASS"end
         if active_plan.status=="local_octave"then return"LOCAL OCTAVE BYPASS"end
+        -- A snapped Structure marker root keeps its chord tone (plan §4): the
+        -- Harmony step-aside is not a failure, whatever the fallback policy.
+        if active_plan.status=="marker_priority"then return"MARKER PRIORITY"end
         if active_plan.fallback=="legacy"and active_plan.status~="ok"and active_plan.status~="off"then
           return"LEGACY "..tostring(active_plan.reason or active_plan.status)end
         if active_plan.bypass then return"BYPASS "..tostring(active_plan.bypass)end
@@ -440,7 +533,8 @@ function editor.new(kind)
         if degree_source_key(channel)~=self.degree_source_key then ok,reason=nil,"degree source changed"
         else for _,degree in ipairs(self.draft.target.degrees or{})do if inventory[degree]==nil then ok,reason=nil,"degree unavailable"break end end end
       end
-      if ok and self.draft.mode=="foundation"and not channel.selected_patterns[self.draft.anchor]then ok,reason=nil,"anchor not assigned"end
+      if ok and(self.draft.mode=="foundation"or(self.draft.mode=="fragments"and self.draft.fragments.keep_anchor))and
+        not channel.selected_patterns[self.draft.anchor]then ok,reason=nil,"anchor not assigned"end
       if ok and self.draft.target.kind=="chord"then local g=song.voicing and song.voicing.groups[self.draft.target.group_id];if not(g and g.enabled)then ok,reason=nil,"chord source unavailable"end end
       if ok and self.draft.structure.markers~="off"and not merge_structure.group_available(song.voicing,self.draft.structure.group_id)then ok,reason=nil,"structure group unavailable"end
       if not ok then self.status="INVALID "..tostring(reason);return false end

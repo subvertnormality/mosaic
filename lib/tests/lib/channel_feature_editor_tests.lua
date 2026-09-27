@@ -431,3 +431,230 @@ function test_merge_editor_keeps_saved_v2_fragments_fields_through_an_edit()
   luaunit.assert_equals({channel.musical_merge.mode, channel.musical_merge.fragments.size, channel.musical_merge.seed},
     {"fragments", 16, 5})
 end
+
+-- Merge shape extensions (docs/musical-merge-extensions-plan.md §5; README
+-- "Merge Shape"): the Fragments, Interlock and Structure screens, the reasons
+-- the Result and Reason screens show, and Apply's rejections.
+
+local merge_config = include("mosaic/lib/musical_merge/config")
+local merge_display = include("mosaic/lib/musical_merge/display")
+
+local function labels(value)
+  local result = {}
+  for index, field in ipairs(value:get_fields()) do result[index] = field.label end
+  return result
+end
+
+function test_merge_display_translates_engine_reasons_for_the_norns_font()
+  -- The font has no '·' glyph and players count fragments from 1.
+  luaunit.assert_equals(merge_display.reason("FRAGMENT 0 \194\183 P03"), "FRAGMENT 1 P03")
+  luaunit.assert_equals(merge_display.reason("FRAGMENT 11 \194\183 P16"), "FRAGMENT 12 P16")
+  luaunit.assert_equals(merge_display.reason("MARKER \194\183 CHORD G02"), "MARKER CHORD G02")
+  luaunit.assert_equals(merge_display.reason("KEPT ANCHOR"), "KEPT ANCHOR")
+  luaunit.assert_nil(merge_display.reason(nil))
+  luaunit.assert_equals(merge_display.reasons({"INTERLOCK CH02"}), "INTERLOCK CH02")
+  luaunit.assert_equals(merge_display.reasons({"gap", "INTERLOCK CH02"}), "gap, INTERLOCK")
+  luaunit.assert_nil(merge_display.reasons({}))
+  luaunit.assert_equals(merge_display.admission(nil), "OFF")
+  luaunit.assert_equals(merge_display.admission({status = "ok"}), "ON")
+  luaunit.assert_equals(merge_display.admission({status = "RESYNC"}), "RESYNC")
+  luaunit.assert_equals(merge_display.leader_values(3)[1], "off")
+  luaunit.assert_equals(#merge_display.leader_values(3), 16)
+  for _, shown in ipairs(merge_display.leader_values(3)) do luaunit.assert_not_equals(shown, "ch03") end
+  luaunit.assert_equals(merge_display.leader_number("ch07"), 7)
+  luaunit.assert_nil(merge_display.leader_number("off"))
+  luaunit.assert_equals(merge_display.shape_prefix("foundation", "trig"), "SHAPE")
+  luaunit.assert_nil(merge_display.shape_prefix("foundation", "note"))
+  for _, kind in ipairs({"trig", "note", "velocity", "length"}) do
+    luaunit.assert_equals(merge_display.shape_prefix("fragments", kind), "FRAGMENTS")
+  end
+  luaunit.assert_nil(merge_display.shape_prefix("off", "trig"))
+end
+
+function test_merge_fragments_mode_routes_rhythm_to_fragments_and_hides_foundation_rows()
+  local _,channel=setup();channel.selected_patterns[1]=true;channel.selected_patterns[2]=true
+  local value=feature_editor.new("merge");value:enter()
+  value:enc(3,1);value:enc(3,1)
+  luaunit.assert_equals(value.draft.mode,"fragments")
+  open_label(value,"Rhythm");luaunit.assert_equals(value:get_screen(),"FRAGMENTS")
+  luaunit.assert_equals(labels(value),{"Size","Keep anchor","Seed"})
+  select_label(value,"Size");value:enc(3,1);luaunit.assert_equals(value.draft.fragments.size,16)
+  select_label(value,"Keep anchor");value:enc(3,1)
+  luaunit.assert_equals(labels(value),{"Size","Keep anchor","Anchor","Seed"})
+  -- Keep anchor needs an assigned anchor (plan §2.3): Apply refuses without one.
+  luaunit.assert_false(value:key(3));luaunit.assert_equals(value.status,"INVALID merge anchor")
+  select_label(value,"Anchor");value:enc(3,1);luaunit.assert_equals(value.draft.anchor,1)
+  luaunit.assert_true(value:key(3));luaunit.assert_equals(value.status,"APPLIED")
+  luaunit.assert_equals(channel.musical_merge.mode,"fragments")
+  luaunit.assert_equals(channel.musical_merge.fragments,{size=16,keep_anchor=true})
+  value:encoder_one();open_label(value,"Phrase");luaunit.assert_equals(labels(value),{"Cycles","Variation"})
+  value:encoder_one();open_label(value,"Pitch");luaunit.assert_equals(labels(value),{"Voice leading"})
+end
+
+function test_merge_fragments_keep_anchor_rejects_an_unassigned_anchor()
+  local _,channel=setup();channel.selected_patterns[2]=true
+  local value=feature_editor.new("merge");value:enter()
+  value.draft.mode="fragments";value.draft.fragments.keep_anchor=true;value.draft.anchor=1;value.dirty=true
+  luaunit.assert_false(value:key(3));luaunit.assert_equals(value.status,"INVALID anchor not assigned")
+  luaunit.assert_nil(channel.musical_merge)
+end
+
+function test_merge_fragments_result_and_reason_name_the_fragment_from_one()
+  local song,channel=setup();channel.selected_patterns[1]=true;channel.selected_patterns[2]=true
+  local start=fn.calc_grid_count(channel.start_trig[1],channel.start_trig[2])
+  song.patterns[2].trig_values[start]=1;song.patterns[2].velocity_values[start]=33
+  local config=merge_config.new();config.mode="fragments";config.fragments.size=4
+  channel.musical_merge=config;pattern.update_working_patterns(song,{[1]=true})
+  local plan=channel.working_pattern.fragments
+  luaunit.assert_equals(plan.status,"ok")
+  local source=plan.fragments[1].source
+  local value=feature_editor.new("merge");value:enter();open_label(value,"Result")
+  select_label(value,"Step").set(start)
+  luaunit.assert_equals(select_label(value,"Decision").get(),string.format("FRAGMENT 1 P%02d",source))
+  open_label(value,"Reason")
+  luaunit.assert_equals(select_label(value,"Decision").get(),string.format("FRAGMENT 1 P%02d",source))
+  luaunit.assert_equals(select_label(value,"Pitch target").get(),"NOT USED")
+  if source==2 then
+    luaunit.assert_equals(select_label(value,"Role").get(),"fragment")
+    luaunit.assert_equals(select_label(value,"Velocity").get(),33)
+  end
+end
+
+function test_merge_fragments_without_patterns_shows_assign_pattern()
+  local song,channel=setup()
+  local config=merge_config.new();config.mode="fragments";channel.musical_merge=config
+  pattern.update_working_patterns(song,{[1]=true})
+  local value=feature_editor.new("merge");value:enter();open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Decision").get(),"ASSIGN PATTERN")
+end
+
+function test_merge_interlock_screen_edits_leader_and_window_and_apply_rejects_a_chain()
+  local song,channel=setup();channel.selected_patterns[1]=true
+  local leader=song.channels[2];leader.selected_patterns[1]=true
+  local chained=merge_config.new();chained.mode="foundation";chained.anchor=1;chained.interlock.leader=3
+  leader.musical_merge=chained
+  local value=feature_editor.new("merge");value:enter()
+  value.draft.mode="foundation";value.draft.anchor=1
+  open_label(value,"Rhythm");open_label(value,"Interlock")
+  luaunit.assert_equals(value:get_screen(),"INTERLOCK")
+  luaunit.assert_equals(labels(value),{"Leader","Window","Status"})
+  local leader_field=select_label(value,"Leader")
+  luaunit.assert_equals(feature_editor.field_value(leader_field),"OFF")
+  -- Every other channel is listed; this one never is.
+  for _,shown in ipairs(leader_field.values)do luaunit.assert_not_equals(shown,"ch01")end
+  value:enc(3,1);luaunit.assert_equals(value.draft.interlock.leader,2)
+  luaunit.assert_equals(feature_editor.field_value(select_label(value,"Leader")),"CH02")
+  select_label(value,"Window");value:enc(3,1);value:enc(3,1);value:enc(3,1);value:enc(3,1);value:enc(3,1)
+  luaunit.assert_equals(value.draft.interlock.window,4)
+  -- Channel 2 already follows channel 3 (plan §1.5).
+  luaunit.assert_false(value:key(3));luaunit.assert_equals(value.status,"INVALID LEADER HAS LEADER")
+  luaunit.assert_nil(channel.musical_merge)
+  luaunit.assert_true(value.dirty)
+  -- A channel that is a leader cannot follow.
+  leader.musical_merge=nil;song.channels[3].musical_merge=merge_config.new()
+  song.channels[3].musical_merge.interlock.leader=1
+  value:reload();value.draft.mode="foundation";value.draft.anchor=1;value.draft.interlock.leader=2;value.dirty=true
+  luaunit.assert_false(value:key(3));luaunit.assert_equals(value.status,"INVALID CHANNEL IS A LEADER")
+  song.channels[3].musical_merge=nil
+  value:reload();value.draft.mode="foundation";value.draft.anchor=1;value.draft.interlock.leader=2;value.dirty=true
+  luaunit.assert_true(value:key(3));luaunit.assert_equals(channel.musical_merge.interlock,{leader=2,window=0})
+end
+
+function test_merge_result_shows_interlock_admission_and_a_rejected_queue()
+  local song,channel=setup();channel.selected_patterns[1]=true;song.channels[2].selected_patterns[1]=true
+  local config=merge_config.new();config.mode="foundation";config.anchor=1;config.interlock.leader=2
+  channel.musical_merge=config;pattern.update_working_patterns(song,{[1]=true})
+  local value=feature_editor.new("merge");value:enter();open_label(value,"Result")
+  local shown=select_label(value,"Interlock").get()
+  luaunit.assert_equals(shown,merge_display.admission(channel.working_pattern.foundation.interlock))
+  luaunit.assert_error(function()select_label(value,"Rejected")end)
+  merge_state.effective(song,1,config).queued=nil
+  merge_state.peek(song,1).rejected="LEADER HAS LEADER"
+  value:encoder_one();open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Rejected").get(),"LEADER HAS LEADER")
+end
+
+function test_merge_reason_lists_every_rejection_reason_in_order()
+  local song,channel=setup()
+  channel.working_pattern.foundation={status="ok",roles={},reasons={[5]="gap"},reason_lists={[5]={"gap","INTERLOCK CH02"}},
+    sources={[5]={2}},velocities={}}
+  local value=feature_editor.new("merge");value:enter();open_label(value,"Result")
+  select_label(value,"Step").set(5)
+  luaunit.assert_equals(feature_editor.field_value(select_label(value,"Decision")),"GAP, INTERLOCK")
+  open_label(value,"Reason")
+  luaunit.assert_equals(feature_editor.field_value(select_label(value,"Decision")),"GAP, INTERLOCK")
+  luaunit.assert_equals(select_label(value,"Sources").get(),"2")
+end
+
+function test_merge_structure_screen_sets_markers_and_an_enabled_group()
+  local song,channel=setup();channel.selected_patterns[1]=true
+  local group=harmony_config.four_part_smooth(2,{1,2,3,4});group.enabled=true
+  local disabled=harmony_config.four_part_smooth(1,{5,6,7,8});disabled.enabled=false
+  song.voicing={schema_version=1,groups={[1]=disabled,[2]=group}}
+  local value=feature_editor.new("merge");value:enter()
+  value.draft.mode="foundation";value.draft.anchor=1
+  open_label(value,"Pitch");open_label(value,"Structure")
+  luaunit.assert_equals(value:get_screen(),"STRUCTURE")
+  luaunit.assert_equals(labels(value),{"Markers"})
+  luaunit.assert_equals(feature_editor.field_value(select_label(value,"Markers")),"OFF")
+  value:enc(3,1);value:enc(3,1)
+  luaunit.assert_equals(value.draft.structure,{markers="every_4",group_id=2})
+  luaunit.assert_equals(feature_editor.field_value(select_label(value,"Markers")),"EVERY 4")
+  luaunit.assert_equals(select_label(value,"Chord group").values,{2})
+  luaunit.assert_true(value:key(3));luaunit.assert_equals(channel.musical_merge.structure,{markers="every_4",group_id=2})
+  -- Markers Off stores no group (plan §4).
+  select_label(value,"Markers");value:enc(3,-1);value:enc(3,-1)
+  luaunit.assert_equals(value.draft.structure.markers,"off");luaunit.assert_nil(value.draft.structure.group_id)
+  luaunit.assert_equals(labels(value),{"Markers"})
+end
+
+function test_merge_structure_apply_requires_an_enabled_group()
+  local song,channel=setup();channel.selected_patterns[1]=true
+  local value=feature_editor.new("merge");value:enter()
+  value.draft.mode="foundation";value.draft.anchor=1
+  open_label(value,"Pitch");open_label(value,"Structure");value:enc(3,1)
+  luaunit.assert_equals(value.draft.structure.markers,"anchors");luaunit.assert_nil(value.draft.structure.group_id)
+  luaunit.assert_false(value:key(3));luaunit.assert_not_nil(value.status:match("^INVALID"))
+  luaunit.assert_nil(channel.musical_merge)
+end
+
+function test_merge_reason_shows_the_structural_marker_decision()
+  local song,channel=setup();channel.selected_patterns[1]=true
+  local group=harmony_config.four_part_smooth(1,{1,2,3,4});group.enabled=true
+  song.voicing={schema_version=1,groups={[1]=group}}
+  local config=merge_config.new();config.mode="foundation";config.anchor=1;config.structure={markers="every_4",group_id=1}
+  channel.musical_merge=config;pattern.update_working_patterns(song,{[1]=true})
+  local start=fn.calc_grid_count(channel.start_trig[1],channel.start_trig[2])
+  local value=feature_editor.new("merge");value:enter();open_label(value,"Result")
+  select_label(value,"Step").set(start)
+  luaunit.assert_equals(select_label(value,"Pitch").get(),"MARKER CHORD G01")
+  harmony_inspection.plan(song,1,{step=start,status="off",structural_status="chord_missing",structural_reason="CHORD MISSING"})
+  open_label(value,"Reason")
+  luaunit.assert_equals(select_label(value,"Pitch target").get(),"CHORD MISSING")
+  value:encoder_one();open_label(value,"Result");select_label(value,"Step").set(start+1)
+  luaunit.assert_error(function()select_label(value,"Pitch")end)
+end
+
+function test_harmony_result_names_marker_priority_whatever_the_fallback()
+  local song=setup();local value=feature_editor.new("harmony");value:enter()
+  harmony_inspection.plan(song,1,{step=1,status="marker_priority",reason="MARKER PRIORITY",bypass="marker_priority",
+    fallback="legacy",output=60})
+  open_label(value,"Result")
+  luaunit.assert_equals(select_label(value,"Status").get(),"MARKER PRIORITY")
+end
+
+function test_harmony_group_delete_lists_merge_structure_and_target_references()
+  local song=setup();local group=harmony_config.four_part_smooth(1,{1,2});group.enabled=true
+  song.voicing={schema_version=1,groups={[1]=group}}
+  song.channels[1].voicing=harmony_config.new_channel("ensemble");song.channels[1].voicing.group_id=1
+  local marked=merge_config.new();marked.structure={markers="anchors",group_id=1};song.channels[5].musical_merge=marked
+  local targeted=merge_config.new();targeted.target={kind="chord",group_id=1};song.channels[7].musical_merge=targeted
+  local value=feature_editor.new("harmony");value:enter()
+  open_label(value,"Groups");open_label(value,"Delete group")
+  luaunit.assert_equals(value:get_screen(),"H04_DELETE")
+  luaunit.assert_equals(select_label(value,"Affected").get(),"1,5,7")
+  open_label(value,"Confirm delete")
+  luaunit.assert_equals(song.channels[5].musical_merge.structure,{markers="off"})
+  luaunit.assert_equals(song.channels[7].musical_merge.target,{kind="legacy"})
+  luaunit.assert_equals(song.channels[1].voicing.mode,"off")
+end

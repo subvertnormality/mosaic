@@ -33,7 +33,7 @@
  "inventory_sha256": "75cc0a7196015826e6f552897b4ef70fe06d8300a2076d0aea707e9cf49841ae",
  "counts": {
   "requirements": 174,
-  "production_lua_modules": 169,
+  "production_lua_modules": 170,
   "unit_integration_files": 129,
   "domains": 17
  },
@@ -107,6 +107,7 @@
     "lib/musical_merge/common_time.lua",
     "lib/musical_merge/config.lua",
     "lib/musical_merge/dependency.lua",
+    "lib/musical_merge/display.lua",
     "lib/musical_merge/foundation.lua",
     "lib/musical_merge/fragments.lua",
     "lib/musical_merge/interlock.lua",

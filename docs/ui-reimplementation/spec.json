@@ -11360,6 +11360,20 @@
           "width_policy": "fit_value_then_detail"
         },
         {
+          "id": "fragments",
+          "label": "Rhythm",
+          "example": ">",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "fragments"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
           "id": "phrase",
           "label": "Phrase",
           "example": ">",
@@ -11409,7 +11423,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "E2 selects the visible field; E3 edits. K2 cancels the whole draft; K3 on a value applies the whole draft. K3 on an action opens it. E1 cancels/returns to root, then Tasks.",
-      "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Mode Fragments (plan docs/musical-merge-extensions-plan.md §2/§5) replaces the Rhythm route with the Fragments screen (field `fragments`, label Rhythm) and leaves Pitch with only the Voice leading link; Phrase shows Cycles and Variation only.",
       "parent": "N01",
       "entry_flow_ids": [
         "NAV.Channel.M02"
@@ -11665,6 +11679,20 @@
           "type": "provider_descriptor",
           "missing": "NONE",
           "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "interlock",
+          "label": "Interlock",
+          "example": ">",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "interlock"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
           "width_policy": "fit_value_then_detail"
         }
       ],
@@ -12138,6 +12166,48 @@
           "missing": "NONE",
           "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "interlock",
+          "label": "Interlock",
+          "example": "ON",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "interlock"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "pitch",
+          "label": "Pitch",
+          "example": "MARKER CHORD G01",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "pitch"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "rejected",
+          "label": "Rejected",
+          "example": "LEADER HAS LEADER",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "rejected"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
         }
       ],
       "dynamic_fields": {
@@ -12147,7 +12217,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "E2 selects Step, E3 changes inspection step. E2 selects Reason, K3 opens provenance. The browser field inspector only changes selection.",
-      "state_explanation": "All 64 native cells are shown. Counts are illustrative active-state fixtures, not computed from a draft. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
+      "state_explanation": "All 64 native cells are shown. Counts are illustrative active-state fixtures, not computed from a draft. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. An Interlock row appears when the active Foundation configuration names a leader: ON while the filter applies, else its visible bypass (RESYNC, PLAN LIMIT, LEADER OFF, LEADER MISSING). Pitch appears at a Structure marker; Rejected names a queued change the channel boundary refused (LEADER HAS LEADER, CHANNEL IS A LEADER).",
       "parent": "N01",
       "entry_flow_ids": [
         "SCREEN.M05"
@@ -12640,6 +12710,20 @@
           "type": "provider_descriptor",
           "missing": "NONE",
           "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "structure",
+          "label": "Structure",
+          "example": ">",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "structure"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
           "width_policy": "fit_value_then_detail"
         },
         {
@@ -15265,7 +15349,7 @@
         "program": "screen",
         "function": "draw",
         "model": "ViewModel",
-        "layout": "detail",
+        "layout": "dashboard",
         "art": null
       },
       "fields": [
@@ -15371,7 +15455,8 @@
         "field_inventory": "existing owner descriptors",
         "mutation": "none during draw"
       },
-      "hold_policy": "follow_family"
+      "hold_policy": "follow_family",
+      "state_explanation": "Information only: a dashboard of six rows. Decision lists every rejection reason of the candidate in pipeline order (gap, then Interlock; plan §3), a Fragments step names its fragment from 1 and its source (FRAGMENT 1 P03) or KEPT ANCHOR, and Pitch target shows a Structure marker's chord decision (MARKER CHORD G01, CHORD MISSING) or NOT USED in Fragments mode."
     },
     "H19": {
       "id": "H19",
@@ -15683,6 +15768,270 @@
         "modal_cancel_correction"
       ],
       "hold_policy": "observe_in_place"
+    },
+    "M15": {
+      "id": "M15",
+      "title": "FRAGMENTS",
+      "context": "Channel",
+      "profile": "feature",
+      "provider": "merge",
+      "existing_route": "FRAGMENTS",
+      "render": {
+        "program": "atlas",
+        "function": "draw",
+        "model": "ScreenModel",
+        "specimens": [
+          "M15.0"
+        ],
+        "role": "specimen reference"
+      },
+      "live_render": {
+        "program": "screen",
+        "function": "draw",
+        "model": "ViewModel",
+        "layout": "detail",
+        "art": null
+      },
+      "fields": [
+        {
+          "id": "fragment_size",
+          "label": "Size",
+          "example": "8",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "fragment_size"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "fragment_keep_anchor",
+          "label": "Keep anchor",
+          "example": "ON",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "fragment_keep_anchor"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "fragment_anchor",
+          "label": "Anchor",
+          "example": "1",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "fragment_anchor"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "seed",
+          "label": "Seed",
+          "example": "0",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "seed"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        }
+      ],
+      "dynamic_fields": {
+        "source": "provider.describe(target)",
+        "order": "existing_descriptor_order",
+        "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
+        "empty": "EMPTY"
+      },
+      "parent": "M02",
+      "entry_flow_ids": [
+        "SCREEN.M15"
+      ],
+      "binding": {
+        "provider": "merge",
+        "route": "FRAGMENTS",
+        "target": "captured dispatch target",
+        "field_inventory": "existing owner descriptors",
+        "mutation": "none during draw"
+      },
+      "hold_policy": "follow_family",
+      "controls_explanation": "E2 selects a row; E3 edits it. K3 applies the whole Merge Shape draft; K2 cancels a draft or returns. E1 cancels/returns to root, then Tasks.",
+      "state_explanation": "Plan §2: fragment Size 4/8/16 from the channel's own start step, Keep anchor Off/On, Anchor (assigned patterns, shown only with Keep anchor) and Seed. Each fragment plays one assigned pattern's own trigs, notes, velocities and lengths; the legacy note/velocity/length merge modes do not apply."
+    },
+    "M16": {
+      "id": "M16",
+      "title": "INTERLOCK",
+      "context": "Channel",
+      "profile": "feature",
+      "provider": "merge",
+      "existing_route": "INTERLOCK",
+      "render": {
+        "program": "atlas",
+        "function": "draw",
+        "model": "ScreenModel",
+        "specimens": [
+          "M16.0"
+        ],
+        "role": "specimen reference"
+      },
+      "live_render": {
+        "program": "screen",
+        "function": "draw",
+        "model": "ViewModel",
+        "layout": "detail",
+        "art": null
+      },
+      "fields": [
+        {
+          "id": "interlock_leader",
+          "label": "Leader",
+          "example": "CH02",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "interlock_leader"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "interlock_window",
+          "label": "Window",
+          "example": "1",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "interlock_window"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "interlock_status",
+          "label": "Status",
+          "example": "ON",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "interlock_status"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        }
+      ],
+      "dynamic_fields": {
+        "source": "provider.describe(target)",
+        "order": "existing_descriptor_order",
+        "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
+        "empty": "EMPTY"
+      },
+      "parent": "M03",
+      "entry_flow_ids": [
+        "SCREEN.M16"
+      ],
+      "binding": {
+        "provider": "merge",
+        "route": "INTERLOCK",
+        "target": "captured dispatch target",
+        "field_inventory": "existing owner descriptors",
+        "mutation": "none during draw"
+      },
+      "hold_policy": "follow_family",
+      "controls_explanation": "E2 selects a row; E3 edits it. K3 applies the whole Merge Shape draft; K2 cancels a draft or returns. E1 cancels/returns to root, then Tasks.",
+      "state_explanation": "Plan §3/§1.5: Leader OFF or another channel, Window 0..4 follower steps. Additions within the window of a leader anchor are removed (INTERLOCK CHnn). Every other channel is listed; Apply rejects a chain with LEADER HAS LEADER or CHANNEL IS A LEADER. Status shows ON or the visible bypass of the active build."
+    },
+    "M18": {
+      "id": "M18",
+      "title": "STRUCTURE",
+      "context": "Channel",
+      "profile": "feature",
+      "provider": "merge",
+      "existing_route": "STRUCTURE",
+      "render": {
+        "program": "atlas",
+        "function": "draw",
+        "model": "ScreenModel",
+        "specimens": [
+          "M18.0"
+        ],
+        "role": "specimen reference"
+      },
+      "live_render": {
+        "program": "screen",
+        "function": "draw",
+        "model": "ViewModel",
+        "layout": "detail",
+        "art": null
+      },
+      "fields": [
+        {
+          "id": "structure_markers",
+          "label": "Markers",
+          "example": "EVERY 4",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "structure_markers"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "structure_group",
+          "label": "Chord group",
+          "example": "1",
+          "binding": {
+            "provider": "merge",
+            "target": "selected_object",
+            "field": "structure_group"
+          },
+          "type": "provider_descriptor",
+          "visibility": "descriptor.visible",
+          "missing": "NONE",
+          "width_policy": "fit_value_then_detail"
+        }
+      ],
+      "dynamic_fields": {
+        "source": "provider.describe(target)",
+        "order": "existing_descriptor_order",
+        "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
+        "empty": "EMPTY"
+      },
+      "parent": "M07",
+      "entry_flow_ids": [
+        "SCREEN.M18"
+      ],
+      "binding": {
+        "provider": "merge",
+        "route": "STRUCTURE",
+        "target": "captured dispatch target",
+        "field_inventory": "existing owner descriptors",
+        "mutation": "none during draw"
+      },
+      "hold_policy": "follow_family",
+      "controls_explanation": "E2 selects a row; E3 edits it. K3 applies the whole Merge Shape draft; K2 cancels a draft or returns. E1 cancels/returns to root, then Tasks.",
+      "state_explanation": "Plan §4: explicit Markers Off/Anchors/Every 4/Every 8 snap marker onsets to an enabled Harmony Ensemble group's chord (Chord group, shown while markers are on). Apply requires an enabled group; deleting or disabling it turns the markers Off in the same transaction."
     }
   },
   "providers": {
@@ -23279,6 +23628,60 @@
         "cancel_dirty",
         "held_does_not_apply"
       ]
+    },
+    "SCREEN.M15": {
+      "id": "SCREEN.M15",
+      "kind": "owner_route",
+      "intent": "FRAGMENTS",
+      "old": {
+        "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
+        "route": "FRAGMENTS"
+      },
+      "new": {
+        "screen": "M15",
+        "navigation": "replace",
+        "alternatives": [],
+        "target_binding": "explicit_current_identity",
+        "return_policy": "generation_checked_stack",
+        "invalidates_return": false
+      },
+      "action": "preserve_owner_action"
+    },
+    "SCREEN.M16": {
+      "id": "SCREEN.M16",
+      "kind": "owner_route",
+      "intent": "INTERLOCK",
+      "old": {
+        "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
+        "route": "INTERLOCK"
+      },
+      "new": {
+        "screen": "M16",
+        "navigation": "replace",
+        "alternatives": [],
+        "target_binding": "explicit_current_identity",
+        "return_policy": "generation_checked_stack",
+        "invalidates_return": false
+      },
+      "action": "preserve_owner_action"
+    },
+    "SCREEN.M18": {
+      "id": "SCREEN.M18",
+      "kind": "owner_route",
+      "intent": "STRUCTURE",
+      "old": {
+        "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
+        "route": "STRUCTURE"
+      },
+      "new": {
+        "screen": "M18",
+        "navigation": "replace",
+        "alternatives": [],
+        "target_binding": "explicit_current_identity",
+        "return_policy": "generation_checked_stack",
+        "invalidates_return": false
+      },
+      "action": "preserve_owner_action"
     }
   },
   "programs": {
@@ -30831,8 +31234,8 @@
     "merge": {
       "route_fields": {
         "M02": [
-          "mode",
-          "Rhythm->M03",
+          "mode:off|foundation|fragments",
+          "Rhythm->M03 (Foundation/Off) or Rhythm->M15 (Fragments, field fragments)",
           "Phrase->M06",
           "Pitch->M07",
           "Result->M05"
@@ -30843,7 +31246,8 @@
           "Amount detail->M12",
           "accent:int0..100",
           "gap:int0..8",
-          "seed:int0..65535"
+          "seed:int0..65535",
+          "Interlock->M16"
         ],
         "M04": [
           "active_amount:readonly",
@@ -30853,21 +31257,25 @@
         ],
         "M06": [
           "cycles:1|2|4|8",
-          "shape:flat|build|answer|fill|custom",
-          "percentages[cycles]:int0..100",
+          "shape:flat|build|answer|fill|custom (not in Fragments)",
+          "percentages[cycles]:int0..100 (not in Fragments)",
           "variation:fixed|per_phrase"
         ],
         "M07": [
           "keep_anchor_pitch:bool",
           "target:legacy|scale|degrees|chord",
           "Target setup->M13",
-          "harmony: cross-owner link to Harmony root (feature_action_edges M07.harmony)"
+          "Structure->M18",
+          "harmony: cross-owner link to Harmony root (feature_action_edges M07.harmony); the only row in Fragments mode"
         ],
         "M05": [
           "step:inspection1..64",
           "role:readonly_active",
           "decision:readonly_active",
-          "Reason->M14"
+          "Reason->M14",
+          "interlock:readonly_active (when a leader is configured)",
+          "pitch:readonly_active (at a Structure marker)",
+          "rejected:readonly (boundary rejection, plan §1.5)"
         ],
         "M09": [
           "merge_gesture",
@@ -30889,9 +31297,24 @@
           "decision",
           "velocity",
           "pitch_target"
+        ],
+        "M15": [
+          "fragments.size:4|8|16",
+          "fragments.keep_anchor:bool",
+          "anchor:assigned_patterns (only with keep_anchor)",
+          "seed:int0..65535"
+        ],
+        "M16": [
+          "interlock.leader:off|other channel 1..16",
+          "interlock.window:int0..4",
+          "interlock_status:readonly_active"
+        ],
+        "M18": [
+          "structure.markers:off|anchors|every_4|every_8",
+          "structure.group_id:enabled Harmony group (while markers on)"
         ]
       },
-      "transaction": "all fields one owner draft; assigned-anchor/effective-target/stale snapshot validated on Apply",
+      "transaction": "all fields one owner draft; assigned-anchor/effective-target/stale snapshot validated on Apply; one-way leader dependencies (LEADER HAS LEADER / CHANNEL IS A LEADER) and an enabled Structure group validated on Apply (plan §1.5, §4)",
       "repeat_key": {
         "template": "degree_<n>",
         "pattern": "^degree_[1-9][0-9]*$",
@@ -31387,7 +31810,10 @@
       "M06": "M13",
       "M07": "M05",
       "M08": "M14",
-      "M09": "M09"
+      "M09": "M09",
+      "FRAGMENTS": "M15",
+      "INTERLOCK": "M16",
+      "STRUCTURE": "M18"
     },
     "harmony": {
       "H01": "H01",
@@ -31624,7 +32050,10 @@
         "M07",
         "M12",
         "M13",
-        "M14"
+        "M14",
+        "M15",
+        "M16",
+        "M18"
       ],
       "inputs": [
         "edit each field domain boundary",
@@ -32125,7 +32554,10 @@
         "M12",
         "M13",
         "M14",
-        "H19"
+        "H19",
+        "M15",
+        "M16",
+        "M18"
       ],
       "inputs": [
         "empty descriptor list",
@@ -32816,6 +33248,72 @@
       "line": 369,
       "binding_rule": "Assign a stable id beside this exact action declaration; label is source evidence, never runtime dispatch key.",
       "field_id": "settings",
+      "kind": "route"
+    },
+    {
+      "from": "M02",
+      "field_label_reference": "Rhythm",
+      "old_owner_route": "M01",
+      "old_action_route": "FRAGMENTS",
+      "to": "M15",
+      "event": "K3.down",
+      "guard": {
+        "field_kind": "action",
+        "descriptor_enabled": true
+      },
+      "effects": [
+        "owner.before_if_present",
+        "return.push",
+        "owner.open_translated_route"
+      ],
+      "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
+      "line": 166,
+      "binding_rule": "Assign a stable id beside this exact action declaration; label is source evidence, never runtime dispatch key.",
+      "field_id": "fragments",
+      "kind": "route"
+    },
+    {
+      "from": "M03",
+      "field_label_reference": "Interlock",
+      "old_owner_route": "M02",
+      "old_action_route": "INTERLOCK",
+      "to": "M16",
+      "event": "K3.down",
+      "guard": {
+        "field_kind": "action",
+        "descriptor_enabled": true
+      },
+      "effects": [
+        "owner.before_if_present",
+        "return.push",
+        "owner.open_translated_route"
+      ],
+      "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
+      "line": 175,
+      "binding_rule": "Assign a stable id beside this exact action declaration; label is source evidence, never runtime dispatch key.",
+      "field_id": "interlock",
+      "kind": "route"
+    },
+    {
+      "from": "M07",
+      "field_label_reference": "Structure",
+      "old_owner_route": "M05",
+      "old_action_route": "STRUCTURE",
+      "to": "M18",
+      "event": "K3.down",
+      "guard": {
+        "field_kind": "action",
+        "descriptor_enabled": true
+      },
+      "effects": [
+        "owner.before_if_present",
+        "return.push",
+        "owner.open_translated_route"
+      ],
+      "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
+      "line": 202,
+      "binding_rule": "Assign a stable id beside this exact action declaration; label is source evidence, never runtime dispatch key.",
+      "field_id": "structure",
       "kind": "route"
     }
   ],

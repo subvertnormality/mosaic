@@ -9617,234 +9617,6 @@
     "footer": "E2 focus E3 draft",
     "family": "musical"
   },
-  "N04.0": {
-    "screen": "N04",
-    "field": 0,
-    "title": "NORNS SETTINGS",
-    "context": "K1 SHORT / HANDOFF",
-    "rows": [
-      [
-        "Projects",
-        "X01"
-      ],
-      [
-        "Sequencer",
-        "X04"
-      ],
-      [
-        "Param locks",
-        "X09"
-      ],
-      [
-        "Quantiser",
-        "X05"
-      ],
-      [
-        "MIDI mapping",
-        "X06"
-      ],
-      [
-        "Device params",
-        "X07"
-      ],
-      [
-        "Clock / mods",
-        "X08"
-      ]
-    ],
-    "footer": "E2 focus E3 draft",
-    "family": "detail"
-  },
-  "N04.1": {
-    "screen": "N04",
-    "field": 1,
-    "title": "NORNS SETTINGS",
-    "context": "K1 SHORT / HANDOFF",
-    "rows": [
-      [
-        "Projects",
-        "X01"
-      ],
-      [
-        "Sequencer",
-        "X04"
-      ],
-      [
-        "Param locks",
-        "X09"
-      ],
-      [
-        "Quantiser",
-        "X05"
-      ],
-      [
-        "MIDI mapping",
-        "X06"
-      ],
-      [
-        "Device params",
-        "X07"
-      ],
-      [
-        "Clock / mods",
-        "X08"
-      ]
-    ],
-    "footer": "E2 focus E3 draft",
-    "family": "detail"
-  },
-  "N04.2": {
-    "screen": "N04",
-    "field": 2,
-    "title": "NORNS SETTINGS",
-    "context": "K1 SHORT / HANDOFF",
-    "rows": [
-      [
-        "Projects",
-        "X01"
-      ],
-      [
-        "Sequencer",
-        "X04"
-      ],
-      [
-        "Param locks",
-        "X09"
-      ],
-      [
-        "Quantiser",
-        "X05"
-      ],
-      [
-        "MIDI mapping",
-        "X06"
-      ],
-      [
-        "Device params",
-        "X07"
-      ],
-      [
-        "Clock / mods",
-        "X08"
-      ]
-    ],
-    "footer": "E2 focus E3 draft",
-    "family": "detail"
-  },
-  "N04.3": {
-    "screen": "N04",
-    "field": 3,
-    "title": "NORNS SETTINGS",
-    "context": "K1 SHORT / HANDOFF",
-    "rows": [
-      [
-        "Projects",
-        "X01"
-      ],
-      [
-        "Sequencer",
-        "X04"
-      ],
-      [
-        "Param locks",
-        "X09"
-      ],
-      [
-        "Quantiser",
-        "X05"
-      ],
-      [
-        "MIDI mapping",
-        "X06"
-      ],
-      [
-        "Device params",
-        "X07"
-      ],
-      [
-        "Clock / mods",
-        "X08"
-      ]
-    ],
-    "footer": "E2 focus E3 draft",
-    "family": "detail"
-  },
-  "N04.4": {
-    "screen": "N04",
-    "field": 4,
-    "title": "NORNS SETTINGS",
-    "context": "K1 SHORT / HANDOFF",
-    "rows": [
-      [
-        "Projects",
-        "X01"
-      ],
-      [
-        "Sequencer",
-        "X04"
-      ],
-      [
-        "Param locks",
-        "X09"
-      ],
-      [
-        "Quantiser",
-        "X05"
-      ],
-      [
-        "MIDI mapping",
-        "X06"
-      ],
-      [
-        "Device params",
-        "X07"
-      ],
-      [
-        "Clock / mods",
-        "X08"
-      ]
-    ],
-    "footer": "E2 focus E3 draft",
-    "family": "detail"
-  },
-  "N04.5": {
-    "screen": "N04",
-    "field": 5,
-    "title": "NORNS SETTINGS",
-    "context": "K1 SHORT / HANDOFF",
-    "rows": [
-      [
-        "Projects",
-        "X01"
-      ],
-      [
-        "Sequencer",
-        "X04"
-      ],
-      [
-        "Param locks",
-        "X09"
-      ],
-      [
-        "Quantiser",
-        "X05"
-      ],
-      [
-        "MIDI mapping",
-        "X06"
-      ],
-      [
-        "Device params",
-        "X07"
-      ],
-      [
-        "Clock / mods",
-        "X08"
-      ]
-    ],
-    "footer": "E2 focus E3 draft",
-    "family": "detail"
-  },
   "N05.0": {
     "screen": "N05",
     "field": 0,
@@ -14364,5 +14136,71 @@
     "badge": "CONFIRM",
     "screen": "R16",
     "field": 3
+  },
+  "M15.0": {
+    "screen": "M15",
+    "field": 0,
+    "title": "FRAGMENTS",
+    "context": "CH01",
+    "family": "detail",
+    "rows": [
+      [
+        "Size",
+        "8"
+      ],
+      [
+        "Keep anchor",
+        "ON"
+      ],
+      [
+        "Anchor",
+        "1"
+      ],
+      [
+        "Seed",
+        "0"
+      ]
+    ],
+    "art": "none"
+  },
+  "M16.0": {
+    "screen": "M16",
+    "field": 0,
+    "title": "INTERLOCK",
+    "context": "CH01",
+    "family": "detail",
+    "rows": [
+      [
+        "Leader",
+        "CH02"
+      ],
+      [
+        "Window",
+        "1"
+      ],
+      [
+        "Status",
+        "ON"
+      ]
+    ],
+    "art": "none"
+  },
+  "M18.0": {
+    "screen": "M18",
+    "field": 0,
+    "title": "STRUCTURE",
+    "context": "CH01",
+    "family": "detail",
+    "rows": [
+      [
+        "Markers",
+        "EVERY 4"
+      ],
+      [
+        "Chord group",
+        "1"
+      ]
+    ],
+    "art": "none"
   }
 }

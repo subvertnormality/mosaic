@@ -127,6 +127,13 @@ LIVE_SCREENS = OrderedDict([
     ("trig_step_edit", {"screen": "P08", "title": "TRIG STEP EDIT", "layout": "dashboard", "scope": "pattern_step"}),
     # Merge Shape and Harmony child screens (their feature editor's routes).
     ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
+    ("merge_phrase", {"screen": "M06", "title": "PHRASE", "layout": "focused"}),
+    ("merge_pitch", {"screen": "M07", "title": "PITCH", "layout": "focused", "art": True}),
+    ("merge_result", {"screen": "M05", "title": "MERGE RESULT", "layout": "detail"}),
+    ("merge_reason", {"screen": "M14", "title": "MERGE REASON", "layout": "dashboard"}),
+    ("merge_fragments", {"screen": "M15", "title": "FRAGMENTS", "layout": "detail"}),
+    ("merge_interlock", {"screen": "M16", "title": "INTERLOCK", "layout": "detail"}),
+    ("merge_structure", {"screen": "M18", "title": "STRUCTURE", "layout": "detail"}),
     ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
     ("harmony_ensemble", {"screen": "H04", "title": "ENSEMBLE", "layout": "detail"}),
     ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "detail"}),

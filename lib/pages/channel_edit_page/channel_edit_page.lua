@@ -61,6 +61,21 @@ local length_merge_mode_button =
 )
 local channel_octave_fader = fader:new(8, 8, 5, 5)
 local channel_scale_fader = fader:new(1, 3, 16, 16)
+local merge_display -- lib/musical_merge/display, loaded on first use
+
+-- Merge Shape takes over some merge buttons (Foundation: trig; Fragments:
+-- trig, note, velocity and length). The button still saves its mode, which
+-- applies again when Merge Shape is off; the tooltip says which is in charge.
+local function shape_in_use(target_channel, kind)
+  merge_display = merge_display or include("mosaic/lib/musical_merge/display")
+  local owner = merge_display.shape_owner(target_channel.musical_merge and target_channel.musical_merge.mode, kind)
+  if owner then
+    local mode = target_channel[kind .. "_merge_mode"]
+    local number = tostring(mode):match("^pattern_number_(%d+)$")
+    tooltip:show(kind:sub(1, 1):upper() .. kind:sub(2) .. " merge " .. (number and ("pattern " .. number) or mode) ..
+      ": " .. owner .. " in use")
+  end
+end
 
 function channel_edit_page.init()
 
@@ -357,11 +372,7 @@ function channel_edit_page.register_press()
           )
         end
 
-        -- Merge Shape (Foundation) decides this channel's trigs: say so, the
-        -- saved mode applies again when Merge Shape is off.
-        if target_channel.musical_merge and target_channel.musical_merge.mode == "foundation" then
-          tooltip:show("Trig merge " .. target_channel.trig_merge_mode .. ": Merge Shape in use")
-        end
+        shape_in_use(target_channel, "trig")
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
@@ -405,6 +416,7 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        shape_in_use(target_channel, "note")
         channel_edit_page_ui.show_merge_gesture("NOTE " .. string.upper(target_channel.note_merge_mode))
 
       end
@@ -444,6 +456,7 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        shape_in_use(target_channel, "velocity")
         channel_edit_page_ui.show_merge_gesture("VELOCITY " .. string.upper(target_channel.velocity_merge_mode))
 
       end
@@ -484,6 +497,7 @@ function channel_edit_page.register_press()
 
         target_song.active = true
         pattern.update_working_patterns(target_song, {[target_channel.number] = true})
+        shape_in_use(target_channel, "length")
         channel_edit_page_ui.show_merge_gesture("LENGTH " .. string.upper(target_channel.length_merge_mode))
       end
     end
@@ -524,6 +538,7 @@ function channel_edit_page.register_press()
           tooltip:show(
             "Note merge mode pattern " ..x2
           )
+          shape_in_use(target_channel, "note")
         end
         if velocity_merge_mode_button:is_this(x, y) and not is_key1_down then
           target_channel.velocity_merge_mode = "pattern_number_" .. x2
@@ -533,6 +548,7 @@ function channel_edit_page.register_press()
           tooltip:show(
             "Velocity merge mode pattern " ..x2
           )
+          shape_in_use(target_channel, "velocity")
         end
         if length_merge_mode_button:is_this(x, y) and is_key1_down then
           target_channel.length_merge_mode = "pattern_number_" .. x2
@@ -542,6 +558,7 @@ function channel_edit_page.register_press()
           tooltip:show(
             "Length merge mode pattern " ..x2
           )
+          shape_in_use(target_channel, "length")
         end
       end
     end
