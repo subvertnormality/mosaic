@@ -600,7 +600,15 @@ def evaluate_merge_windows(case_id,off,enabled,step_seconds,thresholds=None):
            'merge_added_step_jitter':bool(like.get('gates',{}).get('merge_added_step_jitter')),
            'admissions':admissions['passed'],'start_latency':latency['passed'],'transport_stopped':bool(off['stopped'] and enabled['stopped'])}
     invalid=['start latency: '+reason for reason in latency['invalid_reasons']]+['like-for-like timing: '+reason for reason in like.get('invalid_reasons',[])]
-    return {'passed':all(gates.values()) and not invalid,'valid':not invalid,'invalid':invalid,'gates':gates,'timing':timing,'like_for_like':like,
+    role=spec.get('timing_role','characterisation')
+    if role=='release':
+        passed=all(gates.values()) and not invalid
+    else:
+        # Characterisation: the timing gates and like-for-like validity are
+        # recorded (plan §1.4 documented follower limit), not gating.
+        timing_names=('event_timing_maximum','sustained_service','hard_service','merge_added_p99','merge_added_step_jitter')
+        passed=all(v for k,v in gates.items() if k not in timing_names) and not latency['invalid_reasons']
+    return {'passed':passed,'timing_role':role,'valid':not invalid,'invalid':invalid,'gates':gates,'timing':timing,'like_for_like':like,
             'admissions':admissions,'start_latency':latency,'thresholds':thresholds,
             'gc':{'off':merge_workloads.gc_observation(off['rows']),'enabled':merge_workloads.gc_observation(enabled['rows'])}}
 

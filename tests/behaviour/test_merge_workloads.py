@@ -455,6 +455,29 @@ class Verdict(unittest.TestCase):
                                             'merge_added_p99': True, 'merge_added_step_jitter': False,
                                             'admissions': True, 'start_latency': False, 'transport_stopped': True})
 
+    def test_characterisation_cases_record_timing_but_release_cases_gate_on_it(self):
+        # Plan §1.4: STEADY is the release timing gate; WORST/EDIT/DENSE/
+        # DENSE-EDIT record timing (documented follower limit) while
+        # admissions, propagation, Start latency and transport still gate.
+        self.assertEqual(CASES['PERF-MERGE-HW-STEADY']['timing_role'], 'release')
+        for case in ('PERF-MERGE-HW-WORST', 'PERF-MERGE-HW-EDIT', 'PERF-MERGE-HW-DENSE', 'PERF-MERGE-HW-DENSE-EDIT'):
+            self.assertEqual(CASES[case]['timing_role'], 'characterisation', case)
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
+        late = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
+        late['state']['midi'] = worst_midi(100_006_000_000, seconds, late=[(0, 64, 12_000_000)] + [(c, 1, 12_000_000) for c in range(1, 16)])
+        verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, late, 15 / 130)
+        self.assertFalse(verdict['gates']['merge_added_step_jitter'])
+        self.assertTrue(verdict['gates']['start_latency'])
+        self.assertTrue(verdict['passed'])
+        self.assertEqual(verdict['timing_role'], 'characterisation')
+        saved = CASES['PERF-MERGE-HW-WORST']['timing_role']
+        try:
+            CASES['PERF-MERGE-HW-WORST']['timing_role'] = 'release'
+            self.assertFalse(hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, late, 15 / 130)['passed'])
+        finally:
+            CASES['PERF-MERGE-HW-WORST']['timing_role'] = saved
+
     def test_start_latency_is_measured_from_the_key_up_against_the_same_first_step(self):
         seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
         off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)

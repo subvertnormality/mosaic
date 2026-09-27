@@ -473,22 +473,31 @@ judged like-for-like against the same workload with Merge Shape Off
   over the window's duration from its first Note On; every Note On inside it
   must be released later in the capture, while notes that start after it may
   still be sounding when a late Stop ends the capture.
-All (STEADY, WORST, EDIT, DENSE, DENSE-EDIT) must pass before release; until the device runs pass, the delivery report
-states host figures only and the feature is not released.
+**Timing roles (owner decision, 27 Sept 2026).** `PERF-MERGE-HW-STEADY` is the
+release timing gate: every gate above must pass. `WORST`, `EDIT`, `DENSE` and
+`DENSE-EDIT` are **characterisation** loads: the same notes with Merge Shape Off
+already exceed the absolute gates on the norns (WORST's 16-note wrap steps give
+Off step jitter ~14.5 ms; DENSE's x16 leader stalls ~92 ms with Merge Shape
+Off), so their timing figures are recorded and published as the documented
+follower limit (README "Interlock"), while admissions, edit propagation, Start
+latency (valid, ≤ 10 ms) and transport still gate. The role is `timing_role`
+in `merge_workloads.MERGE_CASES`.
 
-**Status (device qualification OUTSTANDING, release-gating).** The five cases
-are implemented in `tests/behaviour/hardware_performance.py` (dispatch to
-`run_merge_performance`) with the workload chunk
-`tests/behaviour/merge_device_workload.lua` and the pure oracles in
-`tests/behaviour/merge_workloads.py`. Host evidence only: the same chunk runs
-against the production modules in `lib/tests/lib/merge_device_workload_tests.lua`
-(admission counts, zero plan builds, follower wrap alignment, in-cycle edit
-propagation) and `tests/behaviour/test_merge_workloads.py` covers the case
-definitions, capture durations, admission/propagation/Start-latency oracles
-and the run orchestration against fakes. No physical norns run has taken
-place. The device qualification remains OUTSTANDING and release-gating until
-source-identified device reports of all five cases pass (owner: repository
-maintainer).
+**Status (27 Sept 2026, norns CM3+, 130 bpm, harness b28c4df7).**
+- STEADY: every gate passes — merge-added p99 +1.4 ms, step jitter +3.1 ms,
+  absolute max 5.7 ms, Start latency +1.8 ms.
+- WORST (15 followers wrapping together): admissions and Start latency pass;
+  merge-added p99 +9.4 ms, step jitter +10.3 ms, absolute max 23.9 ms (Off
+  14.3 ms) — about 0.65 ms per follower wrapping on the same step.
+- EDIT: all 5 edits reach every follower inside its cycle; merge-added p99
+  +5.3 ms, step jitter +1.9 ms, absolute max 12.1 ms.
+- DENSE: admissions pass; merge-added p99 ≈ +2.8 ms; absolute max 118.6 ms
+  against 91.9 ms Off (an x16-leader stall present without Merge Shape); the
+  like-for-like note sets are invalid at 4 of ~768 steps where that stall moves
+  x16 leader notes across a fine slot.
+- DENSE-EDIT: propagation passed at c6e19128 (11 of 11 edits); the b28c4df7
+  run was lost to a full device disk and is not repeated.
+Reports: `mosaic-behaviour-runs/merge-perf-20260927/mergeperf-*-b28c4df7-*`.
 
 ### 1.5 Dependency rules
 

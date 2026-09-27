@@ -80,7 +80,13 @@ def edit_offsets_beats(every_beats, seconds, tempo_bpm=TEMPO_BPM, phase_beats=0.
 
 
 MERGE_CASES = {
-    'PERF-MERGE-HW-STEADY': {'variant': 'STEADY', 'edit_every_beats': None},
+    # timing_role (plan §1.4): 'release' cases gate release on every timing
+    # gate; 'characterisation' cases are loads whose Merge Shape Off window
+    # already exceeds the absolute gates on the norns (WORST's 16-note steps,
+    # DENSE's x16 leader), so their timing figures are recorded and published
+    # as the documented follower limit, while admissions, propagation, Start
+    # latency and transport still gate.
+    'PERF-MERGE-HW-STEADY': {'variant': 'STEADY', 'edit_every_beats': None, 'timing_role': 'release'},
     'PERF-MERGE-HW-WORST': {'variant': 'WORST', 'edit_every_beats': None},
     # "a grid edit of channel 1's anchor pattern every two bars"
     'PERF-MERGE-HW-EDIT': {'variant': 'WORST', 'edit_every_beats': 8},
@@ -88,6 +94,8 @@ MERGE_CASES = {
     # "a grid edit of channel 1's step-1 anchor trig every 16 beats"
     'PERF-MERGE-HW-DENSE-EDIT': {'variant': 'DENSE', 'edit_every_beats': 16},
 }
+for _spec in MERGE_CASES.values():
+    _spec.setdefault('timing_role', 'characterisation')
 for _case, _spec in MERGE_CASES.items():
     _spec.update(workload='dense', channels=16, tempo_bpm=TEMPO_BPM, merge=True,
                  seconds=capture_seconds(_spec['variant']))

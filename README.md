@@ -1487,6 +1487,12 @@ follower plays all of its admitted additions for that loop and shows why.
 Status on the Interlock screen and the Interlock row on Result show `ON` or the
 bypass.
 
+Interlock's planning runs when a follower wraps its loop. On a norns each
+follower that wraps on the same step adds about 0.7 ms to that step, so a few
+followers wrapping together are inaudible, while every channel following one
+leader and wrapping together (15 followers) can make that step land about
+10 ms late. Stagger follower loop lengths or wraps if you need very many.
+
 #### Structure
 
 ![Merge Shape Structure settings on Norns](images/merge-shape-structure.png)

@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "f969d3a74a6487f35982565464d95242902e7db38a3b76d1c946c9928a36259c",
+ "manual_sha256": "24300f77d63176a049c3e940c70b41f57446945bee2fc3505f07f3be4e477cc3",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1554,8 +1554,8 @@
    "title": "Interlock",
    "level": 4,
    "start_line": 1462,
-   "end_line": 1488,
-   "text_sha256": "cd54e9b8709e0607e40d998966ae576addff2056a1e886dc994d03eed87df591"
+   "end_line": 1494,
+   "text_sha256": "3a75ef8e7f03ad6f62e5690036c7f16a9789fb288efbcba56a2d62df4dd4237a"
   },
   {
    "id": "MAN-124",
@@ -1566,8 +1566,8 @@
    "status": "unreviewed",
    "title": "Structure",
    "level": 4,
-   "start_line": 1489,
-   "end_line": 1515,
+   "start_line": 1495,
+   "end_line": 1521,
    "text_sha256": "c0c74ff6ff8e5210d8b3f1ef2a338be574343ba95aedbfe6f2359b1b5bd365fd"
   },
   {
@@ -1581,8 +1581,8 @@
    "status": "unreviewed",
    "title": "Result and Reason",
    "level": 4,
-   "start_line": 1516,
-   "end_line": 1536,
+   "start_line": 1522,
+   "end_line": 1542,
    "text_sha256": "bb960d435bc92e322ca4d461ce674e885f09a0452ac4a110a5b1d6600cec6d63"
   },
   {
@@ -1592,16 +1592,16 @@
    "status": "unreviewed",
    "title": "Harmony",
    "level": 3,
-   "start_line": 1537,
-   "end_line": 1603,
+   "start_line": 1543,
+   "end_line": 1609,
    "text_sha256": "4a421af50e0a65c5e5b076f705fc076245283c75cec4080271b8751dd14cb9a3"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1604,
-   "end_line": 1615,
+   "start_line": 1610,
+   "end_line": 1621,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1613,8 +1613,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1616,
-   "end_line": 1625,
+   "start_line": 1622,
+   "end_line": 1631,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1624,8 +1624,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1626,
-   "end_line": 1629,
+   "start_line": 1632,
+   "end_line": 1635,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1635,8 +1635,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1630,
-   "end_line": 1636,
+   "start_line": 1636,
+   "end_line": 1642,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1661,7 +1661,7 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "f969d3a74a6487f35982565464d95242902e7db38a3b76d1c946c9928a36259c"
+   "sha256": "24300f77d63176a049c3e940c70b41f57446945bee2fc3505f07f3be4e477cc3"
   },
   {
    "path": "cheat_sheet.html",
@@ -9237,7 +9237,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1492,
+   "line": 1498,
    "reference": "images/merge-shape-structure.png",
    "path": "images/merge-shape-structure.png",
    "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223"
@@ -9245,7 +9245,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1540,
+   "line": 1546,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
    "sha256": "12ded7f3aaf7ba63bbcff39124a98eea9c414f4ebeefa61f5f5f79ee9a71a4b9"
@@ -9253,7 +9253,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1575,
+   "line": 1581,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
    "sha256": "a65f55953ac382fb71ac5edf96e3bd4bd2589fe89fa67670326e42627048b33e"
