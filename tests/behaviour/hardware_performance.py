@@ -532,6 +532,13 @@ def merge_recorder_rows(runner):
     if len(rows)!=count or [row['index'] for row in rows]!=list(range(1,count+1)):raise AssertionError(('Merge recorder dump incomplete',count,len(rows)))
     return rows
 
+def merge_tap(driver,control,index=None):
+    """A PERF-MERGE-HW tap (Play/Stop, pattern select, the step-1 edit): timed
+    on the norns (HardwareDriver.device_tap), so Maiden reply stalls cannot
+    turn it into a long press. Returns the dispatch row."""
+    from ui_map import control_cell
+    return driver.device_tap(*control_cell(control,index))
+
 def run_merge_window(runner,driver,trace,spec,mode,transport_log,sampler=None):
     """One same-session window: configure (stopped), play, edit, stop, read."""
     from ui_map import control_cell
@@ -539,23 +546,23 @@ def run_merge_window(runner,driver,trace,spec,mode,transport_log,sampler=None):
     readback=merge_eval(runner,"print(_MOSAIC_MERGE_WORKLOAD.configure('%s','%s'))"%(variant,mode),'__MERGE_CONFIG__%s|%s|'%(variant,mode))
     # Both modes leave the Trigger editor on the leader's anchor pattern, so
     # the Start-latency comparison differs only in Merge Shape.
-    driver.ui.tap_control('pattern_select',merge_workloads.LEADER_PATTERN)
+    merge_tap(driver,'pattern_select',merge_workloads.LEADER_PATTERN)
     merge_eval(runner,'print(_MOSAIC_MERGE_WORKLOAD.reset())','__MERGE_REC_RESET__')
     # Both windows capture the same duration: the like-for-like gates compare
     # the same steps, wraps included.
     seconds=spec['seconds']
     edits=[]
     trace.reset();sampler=sampler or NoResourceSampler();sampler.start();time.sleep(.25)
-    started_ns=time.monotonic_ns();play_tap=driver.ui.play()
+    started_ns=time.monotonic_ns();play_tap=merge_tap(driver,'play_stop')
     if mode=='enabled' and spec.get('edit_every_beats'):
         beat_seconds=60.0/driver.tempo_bpm
         for offset in merge_workloads.edit_offsets_beats(spec['edit_every_beats'],seconds,driver.tempo_bpm,merge_workloads.follower_step_beats(variant)/2):
             target=started_ns+round(offset*beat_seconds*1e9);remaining=target-time.monotonic_ns()
             if remaining>0:time.sleep(remaining/1e9)
-            before=time.monotonic_ns();driver.ui.tap_step(1);edits.append({'offset_beats':offset,'target_ns':target,'dispatch_started_ns':before,'dispatch_ended_ns':time.monotonic_ns()})
+            before=time.monotonic_ns();merge_tap(driver,'step',1);edits.append({'offset_beats':offset,'target_ns':target,'dispatch_started_ns':before,'dispatch_ended_ns':time.monotonic_ns()})
     remaining=started_ns+round(seconds*1e9)-time.monotonic_ns()
     if remaining>0:time.sleep(remaining/1e9)
-    stop_tap=driver.ui.stop();driver.elapse(.3);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+    stop_tap=merge_tap(driver,'play_stop');driver.elapse(.3);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
     stopped=stopped_after_window(runner,transport_log)
     rows=merge_recorder_rows(runner)
     return {'mode':mode,'seconds':seconds,'readback':readback.strip()[-2000:],'state':state,'rows':rows,'edits_dispatched':edits,'transport_taps':{'play':play_tap,'stop':stop_tap},
@@ -582,8 +589,10 @@ def evaluate_merge_windows(case_id,off,enabled,step_seconds,thresholds=None):
     # against an Off baseline that plays the same first step; otherwise the
     # comparison is invalid, which fails the case as invalid, not on timing.
     cluster=merge_workloads.start_cluster_ns(variant,round(step_seconds*1e9))
-    latency=merge_workloads.start_latency_verdict(merge_workloads.start_latency(enabled['rows'],enabled['state']['midi'],enabled['play_cell'],cluster),
-                                                  merge_workloads.start_latency(off['rows'],off['state']['midi'],off['play_cell'],cluster),thresholds)
+    measured=min(enabled['seconds'],off['seconds'])
+    latency=merge_workloads.start_latency_verdict(
+        merge_workloads.start_measure(enabled['rows'],enabled['state']['midi'],enabled['play_cell'],cluster,variant,measured,step_seconds,thresholds,merge_workloads.leader_step_one_skip(variant)),
+        merge_workloads.start_measure(off['rows'],off['state']['midi'],off['play_cell'],cluster,variant,measured,step_seconds,thresholds),thresholds)
     tg=timing.get('gates',{})
     gates={'event_timing_maximum':bool(timing.get('timing')) and timing['timing']['maximum_ns']<=thresholds['maximum_ns'],
            'sustained_service':bool(tg.get('sustained_service')),'hard_service':bool(tg.get('hard_service')),
