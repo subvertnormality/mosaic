@@ -495,6 +495,31 @@ end
 
 -- Feature editors -------------------------------------------------------------------------
 
+-- README Harmony "Groups": Delete group asks first; K3 on the question
+-- deletes the group (its named Confirm delete action) whichever row the
+-- question shows selected, and K2 keeps it.
+function test_ui_live_delete_group_question_k3_deletes_and_k2_keeps_the_group()
+  live.isolated(function()
+    local song = program.get_selected_song_pattern()
+    local config = include("mosaic/lib/harmony/config")
+    local group = config.new_group(1); group.enabled = true
+    song.voicing = {schema_version = 1, groups = {[1] = group}}
+    open_task("harmony")
+    choose_task("groups"); tap(3)
+    luaunit.assert_equals(screen(), "H04")
+    choose_task("delete_group"); tap(3)
+    luaunit.assert_equals(screen(), "H17")
+    tap(2)
+    luaunit.assert_equals(screen(), "H04")
+    luaunit.assert_not_nil(song.voicing.groups[1])
+    choose_task("delete_group"); tap(3)
+    luaunit.assert_equals(screen(), "H17")
+    tap(3)
+    luaunit.assert_nil(song.voicing.groups[1])
+    luaunit.assert_equals(screen(), "H04")
+  end)
+end
+
 function test_ui_live_harmony_h01_e3_edits_the_draft_k3_applies_and_k2_on_the_root_stays()
   live.isolated(function()
     local c = program.get_selected_channel()
