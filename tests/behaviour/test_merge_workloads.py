@@ -30,14 +30,18 @@ def build(index, time, pulse, channel, k, expectation, leader_trig):
             'candidates': candidates, 'removed': removed, 'other': other, 'leader_trig': leader_trig}
 
 
-def key(index, time, cell, leader_trig, k):
-    return {'kind': 2, 'index': index, 'time': time, 'pulse': 0, 'x': cell[0], 'y': cell[1], 'leader_trig': leader_trig,
+def key(index, time, cell, leader_trig, k, kind=2):
+    """A recorder grid row: kind 2 key-down, 3 key-up."""
+    return {'kind': kind, 'index': index, 'time': time, 'pulse': 0, 'x': cell[0], 'y': cell[1], 'leader_trig': leader_trig,
             'k': {c: k for c in range(2, 17)}}
 
 
 def worst_rows(wraps=3, edits=(), start=100.0, cycle_s=64 * 15 / 130):
     """Recorder rows of a WORST/EDIT window: Start, per-cycle wraps of all 15
-    followers on one pulse, and each edit followed by an in-cycle rebuild."""
+    followers on one pulse, and each edit followed by an in-cycle rebuild.
+    An edit is a step-1 tap as the device records it: Mosaic applies the tap
+    on its release, so the key-down row still shows the old leader trig and
+    the key-up row (placed before the rebuilds it causes) the new one."""
     rows = []
     state = 1
 
@@ -53,8 +57,9 @@ def worst_rows(wraps=3, edits=(), start=100.0, cycle_s=64 * 15 / 130):
         wrap_time = start + k * cycle_s
         while pending and pending[0] < wrap_time:
             at = pending.pop(0)
-            state = 1 - state
             add(key(0, at, STEP1, state, k - 1))
+            state = 1 - state
+            add(key(0, at + .04, STEP1, state, k - 1, kind=3))
             for c in range(2, 17):
                 add(build(0, at + .01, 5, c, k - 1, mw.VARIANTS['WORST']['on' if state else 'off'](k - 1), state))
         for c in range(2, 17):
@@ -174,8 +179,10 @@ class WorkloadChunk(unittest.TestCase):
 
     def test_dump_lines_parse_into_build_and_key_rows(self):
         output = '\n'.join(['noise', '__MERGE_ROW__1|2,12.500000000,7,1,8,4,-1,1,1,1,1,1,1,1,1,1,1,1,1,1,1',
-                            '__MERGE_ROW__2|1,12.600000000,8,3,1,1,64,64,0,0,0,31,31,0,1'])
+                            '__MERGE_ROW__2|1,12.600000000,8,3,1,1,64,64,0,0,0,31,31,0,1',
+                            '__MERGE_ROW__3|3,12.700000000,9,1,4,0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2'])
         rows = mw.parse_rows(output)
+        self.assertEqual((rows[2]['kind'], rows[2]['x'], rows[2]['y'], rows[2]['leader_trig'], rows[2]['k'][9]), (3, 1, 4, 0, 2))
         self.assertEqual((rows[0]['kind'], rows[0]['x'], rows[0]['y'], rows[0]['leader_trig'], rows[0]['k'][2], rows[0]['k'][16]),
                          (2, 1, 8, 4, -1, 1))
         self.assertEqual(mw._admission_tuple(rows[1]), (1, 64, 64, 0, 31, 31, 0, 0, 0))
@@ -221,12 +228,26 @@ class AdmissionOracle(unittest.TestCase):
         self.assertEqual(report['edits'], 3)
         self.assertEqual(len(report['propagation']), 45)
 
+    def test_an_edit_is_the_step_key_edge_after_which_the_leader_trig_changed(self):
+        cycle = 64 * 15 / 130
+        rows = worst_rows(edits=[100 + cycle * .4])
+        down, up = [row for row in rows if row['kind'] in (2, 3) and (row['x'], row['y']) == STEP1]
+        # As on the device (63da3611 PERF-MERGE-HW-EDIT): the key-down row
+        # still shows the old trig; the release applied the edit.
+        self.assertEqual((down['kind'], down['leader_trig'], up['kind'], up['leader_trig']), (2, 1, 3, 0))
+        report = mw.admission_oracle('WORST', rows, STEP1)
+        self.assertEqual(report['edits'], 1)
+        self.assertEqual({entry['edit_row'] for entry in report['propagation']}, {up['index']})
+        # A key-down alone (no release recorded) is not an edit.
+        report = mw.admission_oracle('WORST', [row for row in rows if row is not up], STEP1)
+        self.assertEqual(report['edits'], 0)
+
     def test_a_stale_or_late_propagation_fails(self):
         cycle = 64 * 15 / 130
         rows = worst_rows(edits=[100 + cycle * .4])
         # The first follower build after the edit still shows the old anchors.
-        edit = next(row for row in rows if row['kind'] == 2 and (row['x'], row['y']) == STEP1)
-        stale = next(row for row in rows if row['index'] > edit['index'] and row['channel'] == 4)
+        edit = next(row for row in rows if row['kind'] == 3 and (row['x'], row['y']) == STEP1)
+        stale = next(row for row in rows if row['index'] > edit['index'] and row['kind'] == 1 and row['channel'] == 4)
         stale['leader_trig'] = 1
         stale.update(dict(zip(('status', 'cycles', 'anchors', 'plan_builds', 'candidates', 'removed', 'other', 'eligible', 'admitted'),
                               mw.VARIANTS['WORST']['on'](0))))
@@ -372,7 +393,7 @@ class FakeRecorderMaiden:
                 if row['kind'] == 1:
                     values = [str(row[name]) if name != 'time' else '%.9f' % row['time'] for name in mw.BUILD_FIELDS]
                 else:
-                    values = ['2', '%.9f' % row['time'], str(row['pulse']), str(row['x']), str(row['y']), str(row['leader_trig'])] + \
+                    values = [str(row['kind']), '%.9f' % row['time'], str(row['pulse']), str(row['x']), str(row['y']), str(row['leader_trig'])] + \
                              [str(row['k'][c]) for c in range(2, 17)]
                 lines.append('__MERGE_ROW__%d|%s' % (row['index'], ','.join(values)))
             return '\n'.join(lines)

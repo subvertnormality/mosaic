@@ -122,7 +122,7 @@ BUILD_FIELDS = ('kind', 'time', 'pulse', 'channel', 'k', 'status', 'cycles', 'an
 
 
 def parse_rows(output):
-    """Recorder dump lines -> dict rows (build and grid key-down rows)."""
+    """Recorder dump lines -> dict rows (build, grid key-down and key-up rows)."""
     rows = []
     for line in output.splitlines():
         if not line.startswith('__MERGE_ROW__'):
@@ -132,8 +132,8 @@ def parse_rows(output):
         kind = int(values[0])
         if kind == 1:
             row = {name: (float(v) if name == 'time' else int(v)) for name, v in zip(BUILD_FIELDS, values)}
-        elif kind == 2:
-            row = {'kind': 2, 'time': float(values[1]), 'pulse': int(values[2]), 'x': int(values[3]), 'y': int(values[4]),
+        elif kind in (2, 3):
+            row = {'kind': kind, 'time': float(values[1]), 'pulse': int(values[2]), 'x': int(values[3]), 'y': int(values[4]),
                    'leader_trig': int(values[5]), 'k': {c: int(v) for c, v in zip(range(2, 17), values[6:])}}
         else:
             raise ValueError('unknown recorder row kind %r' % kind)
@@ -191,13 +191,15 @@ def admission_oracle(variant, rows, step_cell, minimum_wraps=2, follower_step_se
             complete_wraps += 1
     if complete_wraps < minimum_wraps:
         failures.append({'kind': 'capture-too-short', 'complete_wraps': complete_wraps, 'required': minimum_wraps})
-    # Edits: grid key-downs on the step-1 cell that changed the leader trig.
+    # Edits: grid key edges on the step-1 cell after which the leader trig
+    # changed. Mosaic applies a tap on its release, so on the device the
+    # key-up row carries the edit (the key-down row still shows the old trig).
     edits = []
     state = None
     for row in rows:
         if row['kind'] == 1 and state is None:
             state = row['leader_trig']
-        if row['kind'] == 2 and (row['x'], row['y']) == tuple(step_cell):
+        if row['kind'] in (2, 3) and (row['x'], row['y']) == tuple(step_cell):
             previous = state
             state = row['leader_trig']
             if previous is not None and state != previous:

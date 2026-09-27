@@ -232,3 +232,127 @@ function test_merge_device_workload_off_mode_has_no_merge_configuration()
     luaunit.assert_equals(song.channels[1].clock_mods.name, variant == "DENSE" and "x16" or "/1")
   end
 end
+
+-- The device runner edits by grid taps: runner.synthetic_grid evaluates
+-- _norns.grid.key(id, x, y, 1) and, 0.04 s later, _norns.grid.key(id, x, y, 0)
+-- (hardware_performance.run_merge_window -> Ui.tap_step -> hardware_tap).
+-- Here the same two calls reach the real m_grid key handler, press module and
+-- Trigger editor, through the stock norns routing (_norns.grid.key -> the
+-- connected vport's key). Pages Mosaic does not reach in these taps are
+-- inert stand-ins; the long-press timer (clock.sleep(1)) does not elapse
+-- during a 0.04 s tap. Every global the grid modules set is restored.
+local function with_real_grid(body)
+  local saved_globals = {}
+  for name, value in pairs(_G) do saved_globals[name] = value end
+  local saved_norns_grid, saved_run, saved_cancel = _norns.grid, clock.run, clock.cancel
+  local real_include = include
+  local function inert_page()
+    return {init = function() end, register_press = function() end, register_draws = function() end}
+  end
+  local inert = {
+    ["mosaic/lib/pages/channel_edit_page/channel_edit_page"] = inert_page(),
+    ["mosaic/lib/pages/song_edit_page/song_edit_page"] = inert_page(),
+    ["mosaic/lib/pages/scale_edit_page/scale_edit_page"] = inert_page(),
+    ["mosaic/lib/pages/note_edit_page/note_edit_page"] = inert_page(),
+    ["mosaic/lib/pages/velocity_edit_page/velocity_edit_page"] = inert_page(),
+  }
+  local vport = {all = function() end, refresh = function() end, led = function() end}
+  local ok, err = pcall(function()
+    include = function(path) return inert[path] or real_include(path) end
+    grid = {connect = function() return vport end}
+    g = vport
+    tooltip = {show = function() end}
+    save_confirm = {cancel = function() end}
+    autosave_reset = function() end
+    local m_grid_under_test = include("mosaic/lib/m_grid")
+    m_grid_under_test.init()
+    include = real_include
+    luaunit.assert_is_function(vport.key)
+    -- Stock norns lua/core/grid.lua: the key callback of the device's vport.
+    _norns.grid = {key = function(id, x, y, z) if vport.key then vport.key(x, y, z) end end}
+    local timers = 0
+    clock.run = function() timers = timers + 1; return timers end
+    clock.cancel = function() end
+    body(function(x, y, z) return _norns.grid.key(1, x, y, z) end)
+  end)
+  _norns.grid, clock.run, clock.cancel = saved_norns_grid, saved_run, saved_cancel
+  for name in pairs(_G) do if saved_globals[name] == nil then rawset(_G, name, nil) end end
+  for name, value in pairs(saved_globals) do rawset(_G, name, value) end
+  if not ok then error(err, 0) end
+end
+
+local STEP_ONE = {1, 4}       -- control_cell('step', 1)
+local PATTERN_SELECT_Y = 1    -- control_cell('pattern_select', n) = (n, 1)
+
+function test_merge_device_workload_records_grid_tap_edits_with_their_effect()
+  local W = workload()
+  local followers = followers_2_to_16()
+  local rows, taps = nil, {}
+  local song = dense_project()
+  with_real_grid(function(key)
+    W.configure("WORST", "enabled")
+    program.set_selected_page(pages.pages.trigger_edit_page)
+    -- As the runner: the Trigger editor on the leader's anchor pattern, by a tap.
+    key(W.LEADER_PATTERN, PATTERN_SELECT_Y, 1); key(W.LEADER_PATTERN, PATTERN_SELECT_Y, 0)
+    luaunit.assert_equals(program.get().selected_pattern, W.LEADER_PATTERN)
+    luaunit.assert_equals(W.install(W.LEADER_PATTERN), "__MERGE_REC_INSTALLED__2")
+    local ok, failure = pcall(function()
+      m_clock:start()
+      -- Step-1 taps inside follower cycles 0, 0 and 1; each held two pulses
+      -- (0.04 s at 130 bpm is about two 24 ppqn pulses).
+      local downs = {24 * 20 + 5, 24 * 40 + 5, 24 * 84 + 5}
+      for pulse = 1, 24 * 64 * 2 + 12 do
+        for _, at in ipairs(downs) do
+          if pulse == at then
+            taps[#taps + 1] = {before = song.patterns[W.LEADER_PATTERN].trig_values[1]}
+            key(STEP_ONE[1], STEP_ONE[2], 1)
+          elseif pulse == at + 2 then
+            key(STEP_ONE[1], STEP_ONE[2], 0)
+            taps[#taps].after = song.patterns[W.LEADER_PATTERN].trig_values[1]
+          end
+        end
+        m_clock.get_clock_lattice():pulse()
+      end
+      stop_transport()
+    end)
+    rows = W.rows()
+    W.remove()
+    if not ok then error(failure, 0) end
+  end)
+  -- The taps are real edits: each toggles the leader's anchor trig.
+  luaunit.assert_equals(#taps, 3)
+  luaunit.assert_equals({taps[1].before, taps[1].after, taps[2].after, taps[3].after}, {1, 0, 1, 0})
+  -- The recorder sees every edge on the step cell, and the leader trig it
+  -- reports changes on the edge that applied the edit.
+  local edges, edits, state = {}, {}, nil
+  for index, row in ipairs(rows) do
+    if row[1] == 1 then
+      state = row[15]
+    elseif (row[1] == 2 or row[1] == 3) and row[4] == STEP_ONE[1] and row[5] == STEP_ONE[2] then
+      edges[#edges + 1] = row[1]
+      -- The device oracle's rule (merge_workloads.admission_oracle): an edit
+      -- is a step-cell key row whose leader trig differs from the state before.
+      if state ~= nil and row[6] ~= state then
+        local k = {}
+        for c = 2, 16 do k[c] = row[5 + c] end
+        edits[#edits + 1] = {index = index, state = row[6], k = k}
+      end
+      state = row[6]
+    end
+  end
+  luaunit.assert_equals(#edits, 3)
+  luaunit.assert_equals(edges, {2, 3, 2, 3, 2, 3})
+  luaunit.assert_equals({edits[1].state, edits[2].state, edits[3].state}, {0, 1, 0})
+  -- Propagation from the recorded edit: every follower's next build shows the
+  -- new state, inside the follower's current cycle.
+  for _, edit in ipairs(edits) do
+    for channel in pairs(followers) do
+      local first
+      for index = edit.index + 1, #rows do
+        if rows[index][1] == 1 and rows[index][4] == channel then first = rows[index]; break end
+      end
+      luaunit.assert_not_nil(first, "ch" .. channel .. " rebuilt after the edit")
+      luaunit.assert_equals({first[15], first[5]}, {edit.state, edit.k[channel]}, "ch" .. channel)
+    end
+  end
+end

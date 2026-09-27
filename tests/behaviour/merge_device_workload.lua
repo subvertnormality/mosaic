@@ -14,7 +14,10 @@
 --   install(leader_pattern)  admission and
 --       input recorder: every Foundation build of channels 1..16 (the record
 --       working_pattern.foundation.interlock publishes, reduced to counts),
---       and every grid key-down with its native util.time() stamp.
+--       and every grid key edge with its native util.time() stamp and the
+--       leader's anchor trig as it stands once Mosaic has handled the edge.
+--       Mosaic applies a tap on its release (m_grid short press), so a trig
+--       edit shows on the key-up row, not the key-down row.
 --   reset(), dump(first, last), count(), remove()
 --
 -- Pattern slots: 1 is the PERF-002 dense pattern (a trig on steps 1..16),
@@ -152,11 +155,13 @@ end
 
 local STATUS = {ok = 1, RESYNC = 2, ["PLAN LIMIT"] = 3, ["LEADER OFF"] = 4, ["LEADER MISSING"] = 5}
 
--- Row kinds: 1 build, 2 grid key-down.
+-- Row kinds: 1 build, 2 grid key-down, 3 grid key-up.
 -- build: {1, time, pulse, channel, k, status, cycles, anchors, plan_builds,
 --         eligible, admitted, candidates, interlock_removed, other_reasons,
 --         leader_trig}  (status 0: no Interlock record)
--- key:   {2, time, pulse, x, y, leader_trig, k2 .. k16}
+-- key:   {2 or 3, time, pulse, x, y, leader_trig, k2 .. k16}; time, pulse
+--        and the row's position are the edge's arrival (before the builds it
+--        causes); leader_trig and k are read after Mosaic handled it.
 function W.install(leader_pattern)
   if rawget(_G, "_MOSAIC_MERGE_REC") then error("merge recorder already installed") end
   local R = {rows = {}, n = 0, limit = 20000, originals = {}, leader_pattern = leader_pattern or W.LEADER_PATTERN}
@@ -196,12 +201,20 @@ function W.install(leader_pattern)
     R.originals[#R.originals + 1] = {grid_table, "key", key}
     grid_table.key = function(id, x, y, z, ...)
       local stamp = now()
-      local results = table.pack(key(id, x, y, z, ...))
-      if z == 1 and R.n < R.limit then
-        local row = {2, stamp, transport_pulse(), x, y, leader_trig()}
+      -- The edge takes its place in the row order on arrival, before the
+      -- builds it causes (a tap rebuilds the leader's followers inside the
+      -- key handler); its leader trig and counters are then read after it.
+      local row
+      if (z == 1 or z == 0) and R.n < R.limit then
+        row = {z == 1 and 2 or 3, stamp, transport_pulse(), x, y, leader_trig()}
         for c = 2, 16 do row[#row + 1] = registry_k(c) end
         R.n = R.n + 1
         R.rows[R.n] = row
+      end
+      local results = table.pack(key(id, x, y, z, ...))
+      if row then
+        row[6] = leader_trig()
+        for c = 2, 16 do row[5 + c] = registry_k(c) end
       end
       return table.unpack(results, 1, results.n)
     end
