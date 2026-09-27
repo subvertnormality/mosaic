@@ -117,10 +117,20 @@ pulse (17 → 1 today; tests also run it reversed).
 An admission is *supported* when neither the follower nor the leader has
 `resync` set and no `PLAN LIMIT` applies. For every supported admission the
 result is independent of sprocket callback order within a pulse and of swing
-and shuffle, and equals what the replayed leader schedule plays. Every
-unsupported admission bypasses both filters for that follower cycle with a
-visible reason (`RESYNC` or `PLAN LIMIT`); no claim is made for it beyond being
-the unfiltered Foundation result.
+and shuffle, and equals what the replayed leader schedule plays.
+
+**Unsupported-admission fallback (the one authoritative rule; §1.4, §1.5 and §3
+defer to it).** An unsupported admission bypasses **Interlock only** for that
+follower cycle, with the visible status `RESYNC` or `PLAN LIMIT` shown on
+Result/Reason separately from any rejection reason. Everything else of the
+Foundation pipeline runs normally and exactly as with Interlock off: gap
+filtering and its `gap` reasons, the eligible set, FNV ranking, phrase-adjusted
+Amount, Accent and masks. No other claim is made for an unsupported admission.
+Acceptance, for each of `RESYNC` and `PLAN LIMIT`, with a nonzero gap and
+partial Amount: the gap-rejected positions and reasons, the eligible and
+admitted counts and positions equal those of the same configuration with
+Interlock off, no `INTERLOCK` reason is recorded, and the bypass status is
+shown.
 
 #### 1.2.1 Transport-wide counters (state machine)
 
@@ -307,8 +317,8 @@ enumerated explicitly, because consecutive cycles can differ in configuration.
 cycles** in the support, and membership checks at most 64 follower candidates ×
 the leader anchors in those cycles. No leader plan is built. If the cycle bound
 would be exceeded (for example follower `/128` against leader `x16` with a
-one-step loop) Interlock bypasses for that follower cycle with `PLAN LIMIT` and
-the admission is the unfiltered Foundation result, deterministic and visible.
+one-step loop) the admission is unsupported with `PLAN LIMIT` and follows the
+fallback rule of §1.2 (Interlock bypassed; gap and the rest unchanged).
 Acceptance: exactly-at-limit and one-over-limit, both horizon edges, exact
 endpoints, origin clipping, an anchor in the preceding cycle within the window,
 large ratios and the fallback.
@@ -406,8 +416,8 @@ states host figures only and the feature is not released.
   `LEADER MISSING` when no evaluated leader cycle contributed anchors.
 - **First cycle after Start.** Leader cycle 0 exists from the origin, so the
   follower's first cycle is filtered like any other; there is no waiting cycle.
-- **Resync** (§1.2.1) on either channel, or `PLAN LIMIT`, bypasses both filters
-  for the follower's cycle with that reason shown on Result/Reason.
+- **Resync** (§1.2.1) on either channel, or `PLAN LIMIT`, makes the admission
+  unsupported; the fallback rule of §1.2 applies (Interlock bypassed only).
 
 ## 2. MM-08 Phrase fragments
 
@@ -491,7 +501,9 @@ onsets** in common time. Anchors of either channel are never changed.
   `T + (i−1)·d_f`, the candidate is removed with reason `INTERLOCK CHnn` if any
   projected leader anchor onset `a` satisfies
   `|a − onset| ≤ window · d_f`. Window 0 means exactly coincident nominal onsets.
-- **Authoritative candidate pipeline for both filters.** Construct the raw
+- **Authoritative candidate pipeline (gap and Interlock).** For an unsupported
+  admission the Interlock predicate is simply absent, per the §1.2 fallback
+  rule. Construct the raw
   assigned-source union and protected anchors as Foundation does today. For
   each non-anchor candidate, evaluate gap and Interlock independently
   against the same immutable admission inputs. Store every applicable rejection
