@@ -893,6 +893,32 @@ excluded only by an explicit eligibility condition and visible manual/UI scope.
 Until that contract and its later implementation evidence pass review, README,
 cheat sheet, captures and acceptance reports must retain the narrower claim.
 
+### 6.4 Residual MM-ACC-PUBLIC (public-input acceptance not yet automated)
+
+Owner: the Mosaic maintainer (repository owner). Status: OPEN, recorded in
+`docs/testing/unit-integration-hardening-matrix.json` H16 `residual_gaps`.
+
+Scope — scenarios whose behaviour is implemented and verified by Lua
+unit/integration tests (named in H16) but not yet by public-input emulator
+cases: Interlock yielding-sweep interleavings (an edit between the leader's and
+follower's rebuilds, stale sweep completion), unequal leader/follower loop
+lengths under edits, PLAN LIMIT, RESYNC after loop-range and non-realigning
+song changes, swing/shuffle invariance and reversed callback order; Structure
+conflict recovery, MARKER PRIORITY with Revoice/Ensemble, CHORD MISSING,
+Every 4/Every 8 markers, arp roots, lifecycle undo/redo, stale drafts, Stop
+settlement and save/reload.
+
+Acceptance boundary: each scenario above gains a behaviour case through grid,
+norns key/encoder or MIDI input observing MIDI and grid LEDs or the screen, in
+the controlled-time and real-time lanes where applicable, registered in
+`tests/behaviour/cases.py` and the manual inventory, with red evidence on a
+revision lacking the behaviour where one exists.
+
+Delivery restriction: until closed, no release note, README text or
+acceptance report may claim public-input acceptance for these scenarios; the
+1.4 release notes list MM-ACC-PUBLIC with MM-12 as open residuals, and the
+README makes no statement beyond what the named behaviour cases assert.
+
 ## 7. Delivery cards and acceptance
 
 Each card: red-green tests first (unit/integration for planners and state,
