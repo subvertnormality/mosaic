@@ -123,7 +123,7 @@ def fragments_workflow(c, capture=False):
     two_patterns(c, (3, 6))
     c.ui.channel_page("merge_shape", channel=1)
     c.ui.turn(3, 1); c.ui.turn(3, 1)            # Mode: Fragments (staged)
-    c.ui.expect_selected_field("focused", "Mode", "FRAGMENTS", art=True)
+    c.ui.expect_selected_field("detail", "Mode", "FRAGMENTS")
     c.ui.turn(2, 1); c.ui.press_key(3)          # Rhythm opens Fragments
     c.ui.expect_header("merge_fragments", channel=1)
     c.ui.turn(3, -1)                             # Size 8 -> 4
