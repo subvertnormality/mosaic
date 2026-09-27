@@ -99,7 +99,13 @@ function test_musical_merge_config_v2_new_field_domains()
     {function(v) v.interlock.leader = 17 end, "merge interlock"},
     {function(v) v.interlock.window = 5 end, "merge interlock"},
     {function(v) v.interlock.window = 1.5 end, "merge interlock"},
-    {function(v) v.space.leader = 1;v.space.release = 4 end, true},
+    -- §0: space is reserved and inert; only {leader = nil, release = 0}.
+    {function(v) v.space.leader = 1;v.space.release = 4 end, "merge space"},
+    {function(v) v.space.leader = 2 end, "merge space"},
+    {function(v) v.space.release = 1 end, "merge space"},
+    {function(v) v.space.release = 0.5 end, "merge space"},
+    {function(v) v.space.release = nil end, "merge space"},
+    {function(v) v.space = nil end, "merge space"},
     {function(v) v.space.leader = 17 end, "merge space"},
     {function(v) v.space.release = -1 end, "merge space"},
     {function(v) v.fragments.size = 16;v.fragments.keep_anchor = true;v.anchor = 2 end, true},
@@ -127,6 +133,7 @@ function test_musical_merge_config_v2_leader_cannot_name_its_own_channel()
   luaunit.assert_equals(({config.validate(value, 5)})[2], "merge interlock")
   value = config.new();value.space.leader = 9
   luaunit.assert_equals(({config.validate(value, 9)})[2], "merge space")
+  luaunit.assert_equals(({config.validate(value, 4)})[2], "merge space")
 end
 
 function test_musical_merge_config_v2_schema_is_closed_at_every_level()
@@ -210,4 +217,20 @@ function test_musical_merge_config_canonicalization_is_idempotent_and_rejects_be
   luaunit.assert_equals({config.canonicalize("off")}, {nil, "merge schema version"})
   local unknown = config.new();unknown.extra = 1
   luaunit.assert_equals({config.canonicalize(unknown)}, {nil, "merge field"})
+end
+
+-- §0 / §6: the reserved `space` field is inert. Canonicalization of v2 keeps
+-- only the inert value (a fresh table) and rejects anything else; a v1 key
+-- named `space` is discarded whatever it holds.
+function test_musical_merge_config_space_field_is_reserved_and_inert()
+  local value = config.new()
+  local canonical = config.canonicalize(value)
+  luaunit.assert_equals(canonical.space, {leader = nil, release = 0})
+  luaunit.assert_false(canonical.space == value.space)
+  for _, space in ipairs({{leader = 3, release = 0}, {leader = nil, release = 2}, {leader = 3, release = 4}}) do
+    local bad = config.new();bad.space = space
+    luaunit.assert_equals({config.canonicalize(bad, 1)}, {nil, "merge space"})
+  end
+  local v1 = v1_foundation();v1.space = {leader = 2, release = 4}
+  luaunit.assert_equals(config.canonicalize(v1).space, {leader = nil, release = 0})
 end

@@ -1,7 +1,8 @@
 -- One-way leader dependencies (MM-09). Contract:
--- docs/musical-merge-extensions-plan.md §1.5. README "Merge Shape" still
--- defers Interlock and Space to MM-11, so every assertion is a
--- characterisation of that approved plan, outside the current manual.
+-- docs/musical-merge-extensions-plan.md §1.5: edges are Interlock leaders
+-- only; the reserved `space` field (§0, §6) is inert, creates no edge, and any
+-- non-inert value is rejected at apply, load and history restore. Every
+-- assertion is a characterisation of that approved plan.
 
 local merge_config = include("mosaic/lib/musical_merge/config")
 local merge_state = include("mosaic/lib/musical_merge/state")
@@ -11,11 +12,17 @@ local transaction = include("mosaic/lib/optional_config_transaction")
 local validation = include("mosaic/lib/project_validation")
 local pattern_module = include("mosaic/lib/pattern")
 
-local function follower(interlock_leader, space_leader)
+local function follower(interlock_leader)
   local value = merge_config.new()
   value.mode, value.anchor = "foundation", 1
   value.interlock = {leader = interlock_leader, window = 0}
-  value.space = {leader = space_leader, release = 0}
+  return value
+end
+
+-- A configuration carrying a non-inert `space` value (as the reverted MM-12
+-- engine could have saved).
+local function with_space(value, space)
+  value.space = space
   return value
 end
 
@@ -26,17 +33,20 @@ local function edges(graph)
 end
 
 function test_dependency_check_accepts_one_way_graphs_and_rejects_chains()
-  luaunit.assert_true(dependency.check(edges({[1] = follower(2), [3] = follower(2, 2), [4] = follower(nil, 5)})))
+  luaunit.assert_true(dependency.check(edges({[1] = follower(2), [3] = follower(2), [4] = follower(5)})))
   luaunit.assert_equals({dependency.check(edges({[1] = follower(2), [2] = follower(3)}))},
     {nil, "LEADER HAS LEADER", 2})
   -- The proposing channel that is itself a leader.
   luaunit.assert_equals({dependency.check(edges({[1] = follower(2), [2] = follower(3)}), {[2] = true})},
     {nil, "CHANNEL IS A LEADER", 2})
-  -- Both features count; configured edges count while their feature is inactive.
-  local inactive = follower(nil, 3); inactive.mode = "off"
+  -- Configured edges count while their feature is inactive.
+  local inactive = follower(3); inactive.mode = "off"
   luaunit.assert_equals({dependency.check(edges({[1] = follower(2), [2] = inactive}))}, {nil, "LEADER HAS LEADER", 2})
-  luaunit.assert_equals({dependency.check(edges({[5] = follower(nil, 6), [6] = follower(5)}))},
+  luaunit.assert_equals({dependency.check(edges({[5] = follower(6), [6] = follower(5)}))},
     {nil, "LEADER HAS LEADER", 5})
+  -- The space field is not an edge, whatever it holds.
+  luaunit.assert_equals(dependency.leaders(with_space(follower(nil), {leader = 3, release = 2})), {})
+  luaunit.assert_equals(dependency.leaders(with_space(follower(2), {leader = 3, release = 0})), {2})
   luaunit.assert_equals({dependency.check({{4, 4}})}, {nil, "LEADER HAS LEADER", 4})
   -- v1 keys never had semantics.
   luaunit.assert_equals(dependency.leaders({schema_version = 1, interlock = {leader = 2}}), {})
@@ -99,8 +109,14 @@ function test_dependency_stopped_transaction_validates_the_resulting_snapshot()
     {nil, "CHANNEL IS A LEADER"})
   luaunit.assert_equals({transaction.validate(song, with(song, {[3] = follower(1)}), false)},
     {nil, "LEADER HAS LEADER"})
-  luaunit.assert_equals({transaction.validate(song, with(song, {[3] = follower(nil, 1)}), false)},
-    {nil, "LEADER HAS LEADER"})
+  -- A non-inert space value is rejected at apply, before any mutation.
+  for _, space in ipairs({{leader = 1, release = 0}, {leader = nil, release = 2}, {leader = 4, release = 4}}) do
+    luaunit.assert_equals({transaction.validate(song, with(song, {[3] = with_space(follower(nil), space)}), false)},
+      {nil, "merge space"})
+    luaunit.assert_equals({transaction.apply(song, with(song, {[3] = with_space(follower(nil), space)}), false)},
+      {nil, "merge space"})
+    luaunit.assert_nil(song.channels[3].musical_merge)
+  end
   luaunit.assert_true(transaction.apply(song, with(song, {[1] = merge_config.new(), [2] = follower(1)}), false))
   luaunit.assert_equals(song.channels[2].musical_merge.interlock.leader, 1)
 end
@@ -141,7 +157,7 @@ end
 function test_dependency_queued_edges_and_queued_replacement_count()
   local song = setup()
   m_clock.init(); m_clock:start()
-  luaunit.assert_true(transaction.apply(song, with(song, {[3] = follower(nil, 4)}), true, "channel"))
+  luaunit.assert_true(transaction.apply(song, with(song, {[3] = follower(4)}), true, "channel"))
   luaunit.assert_equals({transaction.apply(song, with(song, {[4] = follower(5)}), true, "channel")},
     {nil, "CHANNEL IS A LEADER"})
   -- Replace the queue before it lands: the requested and queued edges are
@@ -206,9 +222,9 @@ function test_dependency_project_validation_rejects_chains()
   for number = 1, 17 do channels[number] = {start_trig = {1, 4}, end_trig = {16, 4}} end
   local saved = {"fixture", {song_patterns = {[1] = {global_pattern_length = 64, channels = channels}}}}
   channels[1].musical_merge = follower(2)
-  channels[3].musical_merge = follower(nil, 2)
+  channels[3].musical_merge = follower(2)
   luaunit.assert_true(validation.check(saved))
-  channels[2].musical_merge = follower(nil, 4)
+  channels[2].musical_merge = follower(4)
   luaunit.assert_equals({validation.check(saved)}, {nil, "Slot 1 ch 2 LEADER HAS LEADER"})
   channels[2].musical_merge = nil
   channels[5].musical_merge = follower(1)
@@ -218,6 +234,71 @@ function test_dependency_project_validation_rejects_chains()
     ranking_version = 1, cycles = 1, shape = "flat", percentages = {100}, variation = "fixed",
     keep_anchor_pitch = false, target = {kind = "legacy"}, interlock = {leader = 1, window = 0}}
   luaunit.assert_true(validation.check(saved))
+end
+
+-- Load: a saved v2 slot whose `space` is not exactly the inert value is
+-- rejected before migration or any mutation; a v1 colliding key is discarded.
+function test_dependency_project_validation_rejects_non_inert_space()
+  local channels = {}
+  for number = 1, 17 do channels[number] = {start_trig = {1, 4}, end_trig = {16, 4}} end
+  local saved = {"fixture", {song_patterns = {[1] = {global_pattern_length = 64, channels = channels}}}}
+  channels[3].musical_merge = follower(nil)
+  luaunit.assert_true(validation.check(saved))
+  for _, space in ipairs({{leader = 2, release = 0}, {leader = nil, release = 1}, {leader = nil},
+    {leader = nil, release = 0, extra = 1}, "off"}) do
+    local value = with_space(follower(nil), space)
+    channels[3].musical_merge = value
+    luaunit.assert_equals({validation.check(saved)}, {nil, "Slot 1 merge space"})
+    luaunit.assert_equals({validation.migrate(saved)}, {nil, "Slot 1 merge space"})
+    luaunit.assert_is(channels[3].musical_merge, value)
+  end
+  channels[3].musical_merge = {schema_version = 1, mode = "off", amount = 100, accent = 70, gap = 0, seed = 0,
+    ranking_version = 1, cycles = 1, shape = "flat", percentages = {100}, variation = "fixed",
+    keep_anchor_pitch = false, target = {kind = "legacy"}, space = {leader = 2, release = 3}}
+  luaunit.assert_true(validation.check(saved))
+end
+
+-- The runtime feature history (memory.lua keeps it private): reached through
+-- memory.undo's upvalues, only so a test can plant a stale entry.
+local function feature_history()
+  local function upvalue(func, name)
+    for index = 1, 64 do
+      local key, value = debug.getupvalue(func, index)
+      if key == nil then return nil end
+      if key == name then return value end
+    end
+  end
+  local latest = upvalue(memory.undo, "latest_feature_undo")
+  local runtime = upvalue(latest, "runtime_history")
+  return runtime()
+end
+
+-- History restore: an undo or redo whose stored snapshot carries a non-inert
+-- `space` (a history recorded by the reverted MM-12 engine) is refused before
+-- mutation.
+function test_dependency_history_restore_rejects_non_inert_space()
+  local song = setup()
+  local slot = program.get().selected_song_pattern
+  local before = transaction.snapshot(song)
+  local after = with(song, {[3] = follower(nil)})
+  luaunit.assert_true(memory.record_optional_config(slot, {3}, before, after, "channel"))
+  local transactions = feature_history().transactions
+  local recorded = transactions[#transactions]
+  luaunit.assert_equals(song.channels[3].musical_merge.mode, "foundation")
+  -- Undo target (before) planted with a Space edge.
+  recorded.before.channels[3].musical_merge = with_space(follower(nil), {leader = 4, release = 1})
+  luaunit.assert_false(memory.undo(3) == true)
+  luaunit.assert_true(recorded.applied)
+  luaunit.assert_equals(song.channels[3].musical_merge.mode, "foundation")
+  luaunit.assert_equals(song.channels[3].musical_merge.space, {leader = nil, release = 0})
+  -- Redo target (after) planted likewise.
+  recorded.before.channels[3].musical_merge = nil
+  luaunit.assert_true(memory.undo(3))
+  luaunit.assert_nil(song.channels[3].musical_merge)
+  recorded.after.channels[3].musical_merge = with_space(follower(nil), {leader = 4, release = 0})
+  luaunit.assert_false(memory.redo(3) == true)
+  luaunit.assert_false(recorded.applied)
+  luaunit.assert_nil(song.channels[3].musical_merge)
 end
 
 -- Boundary activation verifies the invariant before mutation; an unexpected

@@ -1,7 +1,7 @@
 -- One-way leader dependencies (docs/musical-merge-extensions-plan.md §1.5).
 --
--- A channel names at most one Interlock leader and one Space leader (possibly
--- the same channel), never itself. A channel that has a leader cannot itself
+-- Edges are Interlock leaders only: the reserved `space` field is inert (plan
+-- §0, §6) and creates none. A channel names at most one leader, never itself. A channel that has a leader cannot itself
 -- be a leader, which forbids chains and therefore every cycle. Configured
 -- edges count whether or not their feature is active. Pure: nothing here reads
 -- live state.
@@ -14,12 +14,8 @@ dependency.CHANNEL_IS_A_LEADER = "CHANNEL IS A LEADER"
 -- never had semantics, plan §0).
 function dependency.leaders(config)
   if type(config) ~= "table" or config.schema_version ~= 2 then return {} end
-  local result = {}
-  local first = type(config.interlock) == "table" and config.interlock.leader or nil
-  local second = type(config.space) == "table" and config.space.leader or nil
-  if first ~= nil then result[#result + 1] = first end
-  if second ~= nil and second ~= first then result[#result + 1] = second end
-  return result
+  local leader = type(config.interlock) == "table" and config.interlock.leader or nil
+  return leader ~= nil and {leader} or {}
 end
 
 -- Add every edge follower -> leader of `config` for channel `number` to `edges`.

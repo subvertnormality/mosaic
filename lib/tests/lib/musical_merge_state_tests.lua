@@ -188,7 +188,6 @@ function test_musical_merge_state_v2_non_epoch_fields_keep_phrase_position()
   for _, change in ipairs({
     function(v) v.fragments.keep_anchor = true end,
     function(v) v.interlock.window = 2 end,
-    function(v) v.space.release = 3 end,
     function(v) v.structure.markers = "every_4";v.structure.group_id = 2 end,
     function(v) v.amount = 10 end
   }) do
