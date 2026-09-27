@@ -30,12 +30,15 @@ query.checked_mul, query.checked_add = checked_mul, checked_add
 
 -- The governing segment of leader cycle i (§1.2.3): logged when its boundary
 -- has been applied (i <= k_l), otherwise predicted by replaying the pending
--- boundaries from a pure copy of the leader's merge_state record. Returns
--- config (false for Off), cycle, phrase; nil when a needed log entry is gone.
-local function segment(song, leader, saved, i, k_l, running)
+-- boundaries from a pure copy of the leader's merge_state record. `predictor`
+-- is the admission's one incremental walk (merge_state.predictor): segments
+-- are asked for in ascending i, so each pending boundary is replayed once.
+-- Returns config (false for Off), cycle, phrase; nil when a needed log entry
+-- is gone.
+local function segment(song, leader, saved, i, k_l, running, predictor)
   if running then
     if i <= k_l then return timeline.segment(leader, i) end
-    local predicted = merge_state.predict(song, leader, saved, i - k_l)
+    local predicted = predictor.at(i - k_l)
     return predicted.config or false, predicted.cycle, predicted.phrase
   end
   -- Stopped (§1.3): k_l = 0; the requested (or queued) configuration is the
@@ -45,7 +48,7 @@ local function segment(song, leader, saved, i, k_l, running)
     if record then return record.queued or record.active or false, record.cycle, record.phrase end
     return saved or false, 1, 0
   end
-  local predicted = merge_state.predict(song, leader, saved, i)
+  local predicted = predictor.at(i)
   return predicted.config or false, predicted.cycle, predicted.phrase
 end
 
@@ -129,7 +132,8 @@ function query.cycle_count(frame, low, high)
 end
 
 -- The leader cycles meeting [low, high] with their governing segments
--- ({i, config, cycle, phrase}; config false for Off). Returns the list, or
+-- ({i, config, cycle, phrase}; config false for Off), in ascending i, with
+-- frame.predictor holding the walk (its `replays` count). Returns the list, or
 -- nil, PLAN LIMIT and the counted cycles when the 64-cycle budget would be
 -- exceeded or a needed log entry is gone.
 function query.segments(frame, low, high)
@@ -137,8 +141,13 @@ function query.segments(frame, low, high)
   if count > query.MAX_LEADER_CYCLES then return nil, query.PLAN_LIMIT, count end
   local first_cycle = low // frame.pl
   local segments = {}
+  -- One incremental prediction walk per admission (not shared across
+  -- followers: a boundary replay reads the song-wide dependency edges, so a
+  -- complete cross-admission cache key is not available).
+  local predictor = merge_state.predictor(frame.song, frame.leader, frame.saved)
+  frame.predictor = predictor
   for i = first_cycle, first_cycle + count - 1 do
-    local config, cycle, phrase = segment(frame.song, frame.leader, frame.saved, i, frame.k_l, frame.running)
+    local config, cycle, phrase = segment(frame.song, frame.leader, frame.saved, i, frame.k_l, frame.running, predictor)
     if config == nil then return nil, query.PLAN_LIMIT, count end
     segments[#segments + 1] = {i = i, config = config, cycle = cycle, phrase = phrase}
   end

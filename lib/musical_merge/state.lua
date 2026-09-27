@@ -197,11 +197,18 @@ local function owes_boundary(saved, record)
   return active ~= nil and active.mode ~= nil and active.mode ~= "off"
 end
 
--- A pure copy of a channel's record after replaying `boundaries` pending
--- channel boundaries, each exactly as m_clock applies it: on_cycle_boundary
--- runs only when the channel has a saved configuration or merge state.
--- Nothing live is changed. Returns {config, cycle, phrase}.
-function state.predict(song, channel, saved, boundaries)
+-- An incremental predictor over a channel's pending boundaries (plan
+-- §1.2.3): a pure copy of the channel's record, carried forward one boundary
+-- at a time, each exactly as m_clock applies it (on_cycle_boundary runs only
+-- when the channel has a saved configuration or merge state). `at(n)` returns
+-- {config, cycle, phrase} after n boundaries; n must not decrease between
+-- calls, so walking the pending boundaries of one query in ascending order
+-- replays each boundary once (O(n), not O(n²)). `replays` counts the
+-- boundaries walked. Nothing live is changed. Each boundary is the same
+-- deterministic step state.predict replays, and the live song state it reads
+-- (activation_violation's edge union) does not change during a query, so the
+-- result for every n equals state.predict(song, channel, saved, n).
+function state.predictor(song, channel, saved)
   local live = state.peek(song, channel)
   local record
   if live then
@@ -209,10 +216,24 @@ function state.predict(song, channel, saved, boundaries)
   else
     record = {active = saved, cycle = 1, phrase = 0}
   end
-  for _ = 1, boundaries do
-    if owes_boundary(saved, record) then cycle_boundary(song, channel, record) end
+  local predictor = {walked = 0, replays = 0}
+  function predictor.at(boundaries)
+    if boundaries < predictor.walked then error("merge_state predictor: boundaries decreased", 2) end
+    while predictor.walked < boundaries do
+      if owes_boundary(saved, record) then cycle_boundary(song, channel, record) end
+      predictor.walked = predictor.walked + 1
+      predictor.replays = predictor.replays + 1
+    end
+    return {config = record.active, cycle = record.cycle, phrase = record.phrase}
   end
-  return {config = record.active, cycle = record.cycle, phrase = record.phrase}
+  return predictor
+end
+
+-- A pure copy of a channel's record after replaying `boundaries` pending
+-- channel boundaries (a fresh predictor walked once). Returns {config, cycle,
+-- phrase}.
+function state.predict(song, channel, saved, boundaries)
+  return state.predictor(song, channel, saved).at(boundaries)
 end
 
 function state.effective(song, channel, requested)

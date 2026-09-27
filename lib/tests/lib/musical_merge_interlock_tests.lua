@@ -960,3 +960,55 @@ function test_interlock_dense_shape_counts_and_leader_step_one_toggle()
   luaunit.assert_equals(result.foundation.admitted_count, 64)
   luaunit.assert_equals(#additions(result), 64)
 end
+
+-- §1.2.3 incremental prediction: one admission replays each pending leader
+-- boundary at most once (replays <= cycles in the support; the former
+-- per-cycle replay walked 1 + 2 + … + 63 = 2016 boundaries for this DENSE
+-- support), and its governing segments equal a from-scratch per-cycle
+-- replay (merge_state.predict) for a per-phrase leader with a queued
+-- epoch-restarting change.
+function test_interlock_prediction_replays_each_pending_boundary_once()
+  local all = {}
+  for step = 1, 64 do all[#all + 1] = step end
+  local song = setup({follower_mod = {name = "/4", value = 4, type = "clock_division"}, follower_last = 64,
+    follower_anchors = {}, leader_mod = {name = "x16", value = 16, type = "clock_multiplication"},
+    leader_last = 64, leader_anchors = all, window = 0,
+    leader_config = foundation(1, {cycles = 4, shape = "build", percentages = {25, 50, 75, 100},
+      variation = "per_phrase"})})
+  local admission = build(song, FOLLOWER).foundation.interlock
+  luaunit.assert_equals(admission.status, "ok")
+  luaunit.assert_equals(admission.cycles, 64)
+  -- Stopped: cycle 0 is the entry at 0; cycles 1..63 are predicted.
+  luaunit.assert_equals(admission.prediction_replays, 63)
+
+  local query = include("mosaic/lib/musical_merge/leader_query")
+  merge_state.request(song, LEADER, foundation(5, {cycles = 2, shape = "custom", percentages = {50, 100},
+    variation = "per_phrase", seed = 3}), false)
+  local frame = query.frame({song = song, channel = FOLLOWER, first = 1, last = 64}, LEADER)
+  local segments = query.segments(frame, 0, 63 * frame.df)
+  luaunit.assert_equals(#segments, 64)
+  luaunit.assert_true(frame.predictor.replays <= #segments)
+  local saved = song.channels[LEADER].musical_merge
+  for index = 2, #segments do
+    local entry = segments[index]
+    local predicted = merge_state.predict(song, LEADER, saved, entry.i)
+    luaunit.assert_equals({entry.config, entry.cycle, entry.phrase},
+      {predicted.config, predicted.cycle, predicted.phrase}, "cycle " .. entry.i)
+  end
+
+  -- Running, in a later follower cycle: logged cycles replay nothing, and the
+  -- predicted remainder at most once each.
+  song = setup({follower_mod = D1, follower_last = 64, leader_mod = D1, leader_last = 1,
+    leader_anchors = {1}, follower_anchors = {1}, candidates = odd_steps(), window = 0,
+    leader_config = foundation(1, {cycles = 8, shape = "build", percentages = {13, 25, 38, 50, 63, 75, 88, 100},
+      variation = "per_phrase"})})
+  local follower = song.channels[FOLLOWER]
+  m_clock.init(); m_clock:start()
+  pulses(24 * 64 + 5)
+  admission = follower.working_pattern.foundation.interlock
+  luaunit.assert_equals(admission.status, "ok")
+  luaunit.assert_equals(admission.cycles, 64)
+  luaunit.assert_true(admission.prediction_replays <= admission.cycles)
+  luaunit.assert_true(admission.prediction_replays > 0)
+  stop_transport()
+end

@@ -20,6 +20,8 @@
 --               admission bypassed before the support was known.
 --   anchors     leader anchors in the evaluated cycles (before the origin end).
 --   plan_builds leader plans built by the admission: always 0 (§1.2.3).
+--   prediction_replays  pending leader boundaries replayed by the admission's
+--               one incremental prediction walk (at most `cycles`).
 --   blocked     {[step] = true} for follower playable steps within the window
 --               of a leader anchor; empty for every status but "ok".
 --   leader, window, reason ("INTERLOCK CHnn").
@@ -53,7 +55,7 @@ end
 
 local function record(leader, window, status, cycles)
   return {leader = leader, window = window, status = status, blocked = {}, reason = interlock.reason(leader),
-    cycles = cycles or 0, anchors = 0, plan_builds = 0}
+    cycles = cycles or 0, anchors = 0, plan_builds = 0, prediction_replays = 0}
 end
 
 -- ctx: song, channel (follower), config (follower's active configuration),
@@ -85,8 +87,13 @@ function interlock.admission(ctx)
   end
 
   local segments, failure, counted = query.segments(frame, low, high)
-  if not segments then return record(leader, window, failure, counted) end
+  if not segments then
+    local bypassed = record(leader, window, failure, counted)
+    bypassed.prediction_replays = frame.predictor and frame.predictor.replays or 0
+    return bypassed
+  end
   result.cycles = #segments
+  result.prediction_replays = frame.predictor.replays
 
   -- Leader anchor onsets of every evaluated cycle, ascending (cycles ascend
   -- and each cycle's onsets lie inside it). Anchor indices depend only on
