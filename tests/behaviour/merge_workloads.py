@@ -118,7 +118,8 @@ def install_chunk(text=None):
 
 
 BUILD_FIELDS = ('kind', 'time', 'pulse', 'channel', 'k', 'status', 'cycles', 'anchors', 'plan_builds',
-                'eligible', 'admitted', 'candidates', 'removed', 'other', 'leader_trig')
+                'eligible', 'admitted', 'candidates', 'removed', 'other', 'leader_trig',
+                'build_us', 'heap_kb', 'heap_delta_bytes')
 
 
 def parse_rows(output):
@@ -227,17 +228,60 @@ def admission_oracle(variant, rows, step_cell, minimum_wraps=2, follower_step_se
             'edits': len(edits), 'propagation': propagation, 'failures': failures[:50], 'failure_count': len(failures)}
 
 
-def start_latency_ns(rows, events, play_cell):
-    """Start input's native stamp (grid key-down on Play, util.time) to the
-    first emitted Note On, on the same device clock as the MIDI trace."""
-    presses = [row for row in rows if row['kind'] == 2 and (row['x'], row['y']) == tuple(play_cell)]
-    if not presses:
+def _note_ons(events):
+    return [e for e in events if len(e['bytes']) >= 3 and e['bytes'][0] & 240 == 144 and e['bytes'][2] > 0]
+
+
+def start_edges(rows, play_cell):
+    """Native stamps (s) of the Start input's key-down and of its key-up, the
+    edge Mosaic acts on (a grid tap is applied on release); the key-up is None
+    when it was not recorded."""
+    cell = tuple(play_cell)
+    downs = [row for row in rows if row['kind'] == 2 and (row['x'], row['y']) == cell]
+    if not downs:
         raise AssertionError('No Start input was recorded')
-    start_ns = round(presses[0]['time'] * 1e9)
-    ons = [e['monotonic_ns'] for e in events if len(e['bytes']) >= 3 and e['bytes'][0] & 240 == 144 and e['bytes'][2] > 0 and e['monotonic_ns'] >= start_ns]
+    down = downs[0]
+    ups = [row for row in rows if row['kind'] == 3 and (row['x'], row['y']) == cell and row['index'] > down['index']]
+    return down['time'], (ups[0]['time'] if ups else None)
+
+
+def start_latency_ns(rows, events, play_cell):
+    """Start input's key-down stamp (util.time) to the first emitted Note On,
+    on the same device clock as the MIDI trace."""
+    start_ns = round(start_edges(rows, play_cell)[0] * 1e9)
+    ons = [e['monotonic_ns'] for e in _note_ons(events) if e['monotonic_ns'] >= start_ns]
     if not ons:
         raise AssertionError('No Note On after the Start input')
     return min(ons) - start_ns
+
+
+def first_step_notes(events, after_ns, cluster_ns):
+    """The first step's note set after `after_ns`: (MIDI channel, pitch) of
+    every Note On within `cluster_ns` of the first one, sorted."""
+    ons = sorted((e for e in _note_ons(events) if e['monotonic_ns'] >= after_ns), key=lambda e: e['monotonic_ns'])
+    if not ons:
+        return []
+    first = ons[0]['monotonic_ns']
+    return sorted({(e['bytes'][0] & 15, e['bytes'][1]) for e in ons if e['monotonic_ns'] - first < cluster_ns})
+
+
+def start_latency(rows, events, play_cell, cluster_ns):
+    """One window's Start measurement: latency from the key-down and from the
+    key-up to the first Note On, and the first step's note set."""
+    down, up = start_edges(rows, play_cell)
+    down_ns = round(down * 1e9)
+    ons = [e['monotonic_ns'] for e in _note_ons(events) if e['monotonic_ns'] >= down_ns]
+    if not ons:
+        raise AssertionError('No Note On after the Start input')
+    first = min(ons)
+    up_ns = round(up * 1e9) if up is not None else None
+    return {'from_key_down_ns': first - down_ns, 'from_key_up_ns': first - up_ns if up_ns is not None else None,
+            'first_step': [list(note) for note in first_step_notes(events, down_ns, cluster_ns)]}
+
+
+def start_cluster_ns(variant, step_ns):
+    """Half the finest onset grid of the variant: notes of one step's burst."""
+    return min(channel_grids(variant, step_ns).values()) // 2
 
 
 def start_latency_gate(enabled_ns, off_ns, thresholds):
@@ -245,6 +289,42 @@ def start_latency_gate(enabled_ns, off_ns, thresholds):
     bound = thresholds['step_jitter_maximum_ns']
     return {'enabled_ns': enabled_ns, 'off_ns': off_ns, 'difference_ns': enabled_ns - off_ns, 'bound_ns': bound,
             'passed': enabled_ns - off_ns <= bound}
+
+
+def start_latency_verdict(enabled, off, thresholds):
+    """§1.4 Start latency, measured from the acting edge (key-up). Valid only
+    when the Off baseline plays the same first step (channels and pitches)
+    as the enabled window and both key-ups were recorded; an invalid
+    comparison is reported as such, not as a timing pass or fail. The
+    key-down figures are kept for reference."""
+    reasons = []
+    if enabled['first_step'] != off['first_step']:
+        reasons.append('first-step note sets differ')
+    if enabled['from_key_up_ns'] is None or off['from_key_up_ns'] is None:
+        reasons.append('Start key-up not recorded')
+    result = {'edge': 'key-up', 'valid': not reasons, 'invalid_reasons': reasons,
+              'first_step': {'enabled': enabled['first_step'], 'off': off['first_step']},
+              'key_down': start_latency_gate(enabled['from_key_down_ns'], off['from_key_down_ns'], thresholds)}
+    if reasons:
+        result.update({'enabled_ns': enabled['from_key_up_ns'], 'off_ns': off['from_key_up_ns'], 'passed': False})
+        return result
+    result.update(start_latency_gate(enabled['from_key_up_ns'], off['from_key_up_ns'], thresholds))
+    return result
+
+
+def gc_observation(rows):
+    """Build cost and GC evidence from the recorder's build rows: builds whose
+    heap shrank across them had a GC step inside."""
+    builds = [row for row in rows if row['kind'] == 1 and 'build_us' in row]
+    if not builds:
+        return None
+    stepped = [row for row in builds if row['heap_delta_bytes'] < 0]
+    ordered = sorted(row['build_us'] for row in builds)
+    return {'builds': len(builds), 'builds_with_gc_step': len(stepped),
+            'build_us_median': ordered[len(ordered) // 2], 'build_us_max': ordered[-1],
+            'build_us_max_with_gc_step': max((row['build_us'] for row in stepped), default=None),
+            'build_us_max_without_gc_step': max((row['build_us'] for row in builds if row['heap_delta_bytes'] >= 0), default=None),
+            'heap_kb_max': max(row['heap_kb'] for row in builds)}
 
 
 def _percentile(values, percent):
@@ -260,24 +340,34 @@ def channel_grids(variant, step_ns):
     return grids
 
 
-def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, optional_skip=None):
-    """Timing of merge output on its own onset grids, judged by the unchanged
-    thresholds. The origin is the first Note On. Channels whose grid is wider
-    than twice the maximum gate are placed on their nearest grid onset (a
-    placement error can only exceed the maximum gate); finer grids (the x16
-    leader) are walked note by note, one onset per note, where
-    ``optional_skip(channel, slot)`` names onsets that may be silent (the
-    leader's toggled step 1). Simultaneous expected onsets form a service
-    cluster; sixteenth boundaries carry step jitter."""
+# Plan §1.4 like-for-like gates: the enabled window's p99 lateness and step
+# jitter may exceed the Off window's (same session, same notes) by at most this.
+MERGE_ADDED_BOUND_NS = 5_000_000
+
+
+def place_notes(events, variant, seconds, step_seconds, thresholds, optional_skip=None):
+    """Place every Note On on its channel's onset grid.
+
+    Slots are counted from the first Note On. The grid origin is then the
+    robust one: shifted by the median signed placement error, so the grid
+    follows the steady clock phase rather than the first note (the Start
+    burst leaves late and would otherwise bias every later error). Channels
+    whose grid is wider than twice the maximum gate are placed on their
+    nearest grid onset (a placement error can only exceed the maximum gate);
+    finer grids (the x16 leader) are walked note by note, one onset per note,
+    where ``optional_skip(channel, slot)`` names onsets that may be silent
+    (the leader's toggled step 1). Each placed note carries its sixteenth
+    step, fine slot, channel, pitch and velocity."""
     step_ns = round(step_seconds * 1e9)
     grids = channel_grids(variant, step_ns)
+    finest = min(grids.values())
     ons = [e for e in events if len(e['bytes']) >= 3 and e['bytes'][0] & 240 == 144 and e['bytes'][2] > 0]
     offs = [e for e in events if len(e['bytes']) >= 3 and (e['bytes'][0] & 240 == 128 or (e['bytes'][0] & 240 == 144 and e['bytes'][2] == 0))]
     assert ons, 'No Note On captured'
     assert all(e['port'] == 1 for e in ons), 'Note On outside port 1'
     assert len(offs) == len(ons), ('Unbalanced releases', len(ons), len(offs))
-    origin = ons[0]['monotonic_ns']
-    end = origin + round(seconds * 1e9)
+    first = ons[0]['monotonic_ns']
+    end = first + round(seconds * 1e9)
     placed = []
     by_channel = {}
     for event in ons:
@@ -286,7 +376,7 @@ def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, opti
         grid = grids.get(channel, step_ns)
         slot = None
         for event in notes:
-            offset = event['monotonic_ns'] - origin
+            offset = event['monotonic_ns'] - first
             if grid / 2 > thresholds['maximum_ns']:
                 slot = round(offset / grid)
             elif slot is None:
@@ -297,20 +387,32 @@ def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, opti
                     choices = [nxt, nxt + 1]
                     nxt = min(choices, key=lambda s: abs(offset - s * grid))
                 slot = nxt
-            expected = origin + slot * grid
-            if expected < end:
-                placed.append({'channel': channel, 'expected_ns': expected, 'actual_ns': event['monotonic_ns'],
-                               'error_ns': event['monotonic_ns'] - expected})
+            nominal = slot * grid
+            if first + nominal < end:
+                placed.append({'channel': channel, 'nominal_ns': nominal, 'step': nominal // step_ns,
+                               'fine': nominal // finest, 'pitch': event['bytes'][1], 'velocity': event['bytes'][2],
+                               'actual_ns': event['monotonic_ns'], 'error_ns': event['monotonic_ns'] - first - nominal})
     assert placed, 'No Note On inside the capture'
-    errors = [row['error_ns'] for row in placed]
-    absolute = [abs(x) for x in errors]
+    shift = sorted(row['error_ns'] for row in placed)[(len(placed) - 1) // 2]
+    for row in placed:
+        row['error_ns'] -= shift
+        row['expected_ns'] = first + shift + row['nominal_ns']
+    return {'placed': placed, 'origin_ns': first + shift, 'origin_shift_ns': shift, 'step_ns': step_ns,
+            'note_ons': len(ons), 'note_offs': len(offs)}
+
+
+def timing_metrics(placement, seconds, step_seconds, thresholds, steps=None):
+    """Lateness, service and step jitter of placed notes (optionally only
+    those in the given sixteenth steps), with the absolute gates."""
+    step_ns = placement['step_ns']
+    placed = [row for row in placement['placed'] if steps is None or row['step'] in steps]
+    assert placed, 'No Note On in the compared steps'
+    absolute = [abs(row['error_ns']) for row in placed]
     timing = {name: _percentile(absolute, p) for name, p in (('p50_ns', 50), ('p95_ns', 95), ('p99_ns', 99), ('maximum_ns', 100))}
     # Sixteenth groups, as the dense oracle: one stalled step is tolerated.
     groups = {}
     for row in placed:
-        groups.setdefault((row['expected_ns'] - origin) // step_ns, []).append(row)
-    expected_steps = int(seconds / step_seconds)
-    assert abs(len(groups) - expected_steps) <= 2, ('Step count', len(groups), expected_steps)
+        groups.setdefault(row['step'], []).append(row)
     worst = {k: max(abs(r['error_ns']) for r in rows) for k, rows in groups.items()}
     stalled = max(worst, key=worst.get)
     others = [abs(r['error_ns']) for k, rows in groups.items() if k != stalled for r in rows]
@@ -318,15 +420,14 @@ def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, opti
                  'p99_ns': _percentile(others, 99) if others else timing['p99_ns']}
     clusters = {}
     for row in placed:
-        clusters.setdefault(row['expected_ns'], []).append(row['actual_ns'])
+        clusters.setdefault(row['nominal_ns'], []).append(row['actual_ns'])
     spans = [max(v) - min(v) for v in clusters.values()]
     service = {name: _percentile(spans, p) for name, p in (('p50_ns', 50), ('p95_ns', 95), ('p99_ns', 99), ('maximum_ns', 100))}
     service.update(p99_deadline_fraction=service['p99_ns'] / step_ns, maximum_deadline_fraction=service['maximum_ns'] / step_ns)
     boundary = {}
     for row in placed:
-        if (row['expected_ns'] - origin) % step_ns == 0:
-            k = (row['expected_ns'] - origin) // step_ns
-            boundary[k] = min(boundary.get(k, row['actual_ns']), row['actual_ns'])
+        if row['nominal_ns'] % step_ns == 0:
+            boundary[row['step']] = min(boundary.get(row['step'], row['actual_ns']), row['actual_ns'])
     intervals = [boundary[k + 1] - boundary[k] for k in sorted(boundary) if k + 1 in boundary]
     jitter = [abs(value - step_ns) for value in intervals]
     step_jitter = ({name: _percentile(jitter, p) for name, p in (('p50_ns', 50), ('p95_ns', 95), ('p99_ns', 99), ('maximum_ns', 100))}
@@ -339,10 +440,93 @@ def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, opti
         'hard_service': service['maximum_deadline_fraction'] <= thresholds['service_maximum_deadline_fraction'],
         'step_jitter': step_jitter['p95_ns'] <= thresholds['step_jitter_p95_ns'] and step_jitter['maximum_ns'] <= thresholds['step_jitter_maximum_ns'],
     }
-    return {'passed': all(gates.values()), 'steps': len(groups), 'note_ons': len(ons), 'note_offs': len(offs),
-            'placed_note_ons': len(placed), 'timing': timing, 'timing_one_stall_tolerated': tolerance,
-            'final_phase_error_ns': final_phase, 'service': service, 'step_jitter': step_jitter,
-            'skipped_deadlines': sum(value > step_ns * 1.5 for value in intervals), 'gates': gates, 'thresholds': thresholds}
+    return {'passed': all(gates.values()), 'steps': len(groups), 'placed_note_ons': len(placed), 'timing': timing,
+            'timing_one_stall_tolerated': tolerance, 'final_phase_error_ns': final_phase, 'service': service,
+            'step_jitter': step_jitter, 'skipped_deadlines': sum(value > step_ns * 1.5 for value in intervals),
+            'origin_shift_ns': placement['origin_shift_ns'], 'gates': gates}
+
+
+def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, optional_skip=None):
+    """Absolute timing of one window's merge output on its own onset grids
+    (robust origin, see place_notes), judged by the unchanged thresholds.
+    Simultaneous expected onsets form a service cluster; sixteenth
+    boundaries carry step jitter."""
+    placement = place_notes(events, variant, seconds, step_seconds, thresholds, optional_skip)
+    report = timing_metrics(placement, seconds, step_seconds, thresholds)
+    expected_steps = int(seconds / step_seconds)
+    assert abs(report['steps'] - expected_steps) <= 2, ('Step count', report['steps'], expected_steps)
+    report.update(note_ons=placement['note_ons'], note_offs=placement['note_offs'])
+    return report
+
+
+def step_note_sets(placement):
+    """Sixteenth step -> sorted (fine slot, channel, pitch, velocity) notes."""
+    result = {}
+    for row in placement['placed']:
+        result.setdefault(row['step'], []).append((row['fine'], row['channel'], row['pitch'], row['velocity']))
+    return {step: sorted(notes) for step, notes in result.items()}
+
+
+def leader_off_steps(rows, step_cell, origin_ns, step_ns):
+    """Sixteenth steps (from origin_ns) that overlap, widened by one step, a
+    time when the enabled window's leader anchor was toggled off (edits)."""
+    state = None
+    intervals, off_since = [], None
+    for row in rows:
+        if row['kind'] == 1:
+            if state is None:
+                state = row['leader_trig']
+                if state == 0:
+                    off_since = row['time']
+            continue
+        if row['kind'] in (2, 3) and (row['x'], row['y']) == tuple(step_cell):
+            if state == 1 and row['leader_trig'] == 0:
+                off_since = row['time']
+            elif state == 0 and row['leader_trig'] == 1 and off_since is not None:
+                intervals.append((off_since, row['time']))
+                off_since = None
+            state = row['leader_trig']
+    if off_since is not None:
+        intervals.append((off_since, float('inf')))
+    excluded = set()
+    for start, stop in intervals:
+        first = int((round(start * 1e9) - origin_ns) // step_ns) - 1
+        last = int((round(stop * 1e9) - origin_ns) // step_ns) + 1 if stop != float('inf') else 10 ** 9
+        excluded.update(range(max(first, 0), min(last, 10 ** 6) + 1))
+    return excluded
+
+
+def like_for_like_timing(enabled_events, off_events, variant, seconds, step_seconds, thresholds,
+                         optional_skip=None, enabled_rows=None, step_cell=None):
+    """Plan §1.4: merge-added lateness and step jitter, enabled − Off, over
+    the sixteenth steps both windows captured, excluding steps where the
+    enabled leader's anchor was toggled off by an edit (the Off window plays
+    the leader-on notes). Invalid when any compared step's note set
+    (fine slot, channel, pitch, velocity) differs between the windows."""
+    enabled = place_notes(enabled_events, variant, seconds, step_seconds, thresholds, optional_skip)
+    off = place_notes(off_events, variant, seconds, step_seconds, thresholds)
+    enabled_sets, off_sets = step_note_sets(enabled), step_note_sets(off)
+    last = min(max(enabled_sets), max(off_sets))
+    excluded = set()
+    if enabled_rows is not None and step_cell is not None:
+        excluded = {k for k in leader_off_steps(enabled_rows, step_cell, enabled['origin_ns'], enabled['step_ns']) if k <= last}
+    compared = [k for k in range(0, last + 1) if k not in excluded]
+    differing = [k for k in compared if enabled_sets.get(k, []) != off_sets.get(k, [])]
+    reasons = ['note sets differ at %d compared steps (first %s)' % (len(differing), differing[:5])] if differing else []
+    result = {'valid': not reasons and bool(compared), 'invalid_reasons': reasons if compared else ['no compared steps'],
+              'compared_steps': len(compared), 'excluded_steps': sorted(excluded)[:200], 'excluded_step_count': len(excluded),
+              'bound_ns': MERGE_ADDED_BOUND_NS}
+    if not result['valid']:
+        return result
+    steps = set(compared)
+    e = timing_metrics(enabled, seconds, step_seconds, thresholds, steps)
+    o = timing_metrics(off, seconds, step_seconds, thresholds, steps)
+    added = {'p99_ns': e['timing_one_stall_tolerated']['p99_ns'] - o['timing_one_stall_tolerated']['p99_ns'],
+             'step_jitter_maximum_ns': e['step_jitter']['maximum_ns'] - o['step_jitter']['maximum_ns']}
+    result.update(enabled=e, off=o, merge_added=added,
+                  gates={'merge_added_p99': added['p99_ns'] <= MERGE_ADDED_BOUND_NS,
+                         'merge_added_step_jitter': added['step_jitter_maximum_ns'] <= MERGE_ADDED_BOUND_NS})
+    return result
 
 
 def leader_step_one_skip(variant):

@@ -27,7 +27,8 @@ def build(index, time, pulse, channel, k, expectation, leader_trig):
     status, cycles, anchors, plan_builds, candidates, removed, other, eligible, admitted = expectation
     return {'kind': 1, 'index': index, 'time': time, 'pulse': pulse, 'channel': channel, 'k': k, 'status': status,
             'cycles': cycles, 'anchors': anchors, 'plan_builds': plan_builds, 'eligible': eligible, 'admitted': admitted,
-            'candidates': candidates, 'removed': removed, 'other': other, 'leader_trig': leader_trig}
+            'candidates': candidates, 'removed': removed, 'other': other, 'leader_trig': leader_trig,
+            'build_us': 900, 'heap_kb': 2048, 'heap_delta_bytes': 4096}
 
 
 def key(index, time, cell, leader_trig, k, kind=2):
@@ -49,7 +50,8 @@ def worst_rows(wraps=3, edits=(), start=100.0, cycle_s=64 * 15 / 130):
         row['index'] = len(rows) + 1
         rows.append(row)
 
-    add(key(0, start, PLAY, state, -99))
+    add(key(0, start - .04, PLAY, state, -99))
+    add(key(0, start, PLAY, state, -99, kind=3))   # Start acts on the key-up
     for c in range(1, 17):
         add(build(0, start + .001, 0, c, -99, (0,) * 9 if c == 1 else mw.VARIANTS['WORST']['on'](-99), state))
     pending = sorted(edits)
@@ -321,10 +323,24 @@ class TimingOracle(unittest.TestCase):
         report = mw.merge_timing_oracle(events, 'DENSE', seconds, 15 / 130, TIMING_THRESHOLDS, mw.leader_step_one_skip('DENSE'))
         self.assertAlmostEqual(report['timing']['maximum_ns'], 5_000_000, delta=1_000)
         self.assertTrue(report['passed'], report['gates'])
-        # A dropped note shifts every later one and fails.
+        # A dropped note shifts every later one onto the next slot: the
+        # like-for-like comparison with a window that played it is invalid.
         dropped = note_events({0: leader[:300] + leader[301:]}, length_ns=3_000_000)
-        report = mw.merge_timing_oracle(dropped, 'DENSE', seconds, 15 / 130, TIMING_THRESHOLDS, mw.leader_step_one_skip('DENSE'))
-        self.assertFalse(report['passed'])
+        like = mw.like_for_like_timing(dropped, events, 'DENSE', seconds, 15 / 130, TIMING_THRESHOLDS, mw.leader_step_one_skip('DENSE'))
+        self.assertFalse(like['valid'])
+
+    def test_the_grid_origin_follows_the_steady_phase_not_a_late_start_burst(self):
+        # The device's Start burst (16 notes) left 12.7 ms after its slot while
+        # every later step was on time: anchoring the grid on the first note
+        # made every later note read 12.7 ms early (c6e19128 WORST p99 13.8 ms).
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        events = worst_midi(1_000_000_000, seconds, late=[(c, 0, 12_700_000) for c in range(16)])
+        report = mw.merge_timing_oracle(events, 'WORST', seconds, 15 / 130, TIMING_THRESHOLDS)
+        self.assertEqual(report['origin_shift_ns'], -12_700_000)
+        self.assertEqual(report['timing']['p50_ns'], 0)
+        self.assertEqual(report['timing']['maximum_ns'], 12_700_000)          # the burst itself
+        self.assertEqual(report['timing_one_stall_tolerated']['p99_ns'], 0)  # everything else on time
+        self.assertEqual(report['final_phase_error_ns'], 0)
 
     def test_unbalanced_releases_fail(self):
         events = worst_midi(1_000_000_000, 8.0)
@@ -333,26 +349,132 @@ class TimingOracle(unittest.TestCase):
             mw.merge_timing_oracle(events, 'WORST', 8.0, 15 / 130, TIMING_THRESHOLDS)
 
 
+def start_rows(at):
+    """An Off window's recorder rows: the Play key-down and its key-up at `at`."""
+    return [key(1, at - .04, PLAY, 1, -99), key(2, at, PLAY, 1, -99, kind=3)]
+
+
 def window(mode, seconds, latency_ns, rows, midi_origin_ns):
     return {'mode': mode, 'seconds': seconds, 'rows': rows, 'state': {'midi': worst_midi(midi_origin_ns, seconds)},
             'stopped': True, 'step_cell': STEP1, 'play_cell': PLAY}
 
 
+class LikeForLike(unittest.TestCase):
+    SECONDS = CASES['PERF-MERGE-HW-WORST']['seconds']
+
+    def compare(self, enabled_late=None, off_late=None, rows=None, enabled=None, off=None):
+        enabled = enabled or worst_midi(100_000_000_000, self.SECONDS, late=enabled_late)
+        off = off or worst_midi(50_000_000_000, self.SECONDS, late=off_late)
+        return mw.like_for_like_timing(enabled, off, 'WORST', self.SECONDS, 15 / 130, TIMING_THRESHOLDS,
+                                       None, rows, STEP1 if rows else None)
+
+    def test_the_same_notes_on_time_add_nothing(self):
+        report = self.compare()
+        self.assertTrue(report['valid'])
+        self.assertEqual(report['merge_added'], {'p99_ns': 0, 'step_jitter_maximum_ns': 0})
+        self.assertTrue(all(report['gates'].values()))
+        self.assertGreater(report['compared_steps'], 180)
+
+    def test_merge_added_step_jitter_is_enabled_minus_off(self):
+        wrap = [(c, 1, 12_000_000) for c in range(1, 16)] + [(0, 64, 12_000_000)]
+        # Off: the same 16-note wrap step late by 7 ms (the base note path).
+        off_wrap = [(c, 1, 7_000_000) for c in range(1, 16)] + [(0, 64, 7_000_000)]
+        report = self.compare(enabled_late=wrap, off_late=off_wrap)
+        self.assertTrue(report['valid'])
+        self.assertEqual(report['merge_added']['step_jitter_maximum_ns'], 5_000_000)
+        self.assertTrue(report['gates']['merge_added_step_jitter'])
+        wrap = [(c, 1, 13_000_000) for c in range(1, 16)] + [(0, 64, 13_000_000)]
+        report = self.compare(enabled_late=wrap, off_late=off_wrap)
+        self.assertEqual(report['merge_added']['step_jitter_maximum_ns'], 6_000_000)
+        self.assertFalse(report['gates']['merge_added_step_jitter'])
+        self.assertEqual(report['enabled']['step_jitter']['maximum_ns'], 13_000_000)   # absolute, reported
+
+    def test_different_notes_on_a_compared_step_make_the_comparison_invalid(self):
+        enabled = worst_midi(100_000_000_000, self.SECONDS)
+        # One follower note with another velocity at step 64.
+        for event in enabled:
+            if event['bytes'][0] == 144 + 5 and event['monotonic_ns'] > 100_000_000_000 + 60 * STEP_NS:
+                event['bytes'] = [144 + 5, 60, 90]
+                break
+        report = self.compare(enabled=enabled)
+        self.assertFalse(report['valid'])
+        self.assertEqual(report['invalid_reasons'], ['note sets differ at 1 compared steps (first [64])'])
+
+    def test_steps_with_the_leader_toggled_off_by_an_edit_are_excluded(self):
+        cycle = 64 * 15 / 130
+        rows = worst_rows(edits=[100 + cycle * .4, 100 + cycle * .8], start=100.0)
+        enabled = worst_midi(100_000_000_000, self.SECONDS)
+        off_from, off_to = 100_000_000_000 + round(cycle * .4e9) + 40_000_000, 100_000_000_000 + round(cycle * .8e9) + 40_000_000
+        kept = [e for e in enabled if not (e['bytes'][0] & 15 == 0 and off_from <= e['monotonic_ns'] < off_to)]
+        kept = [e for e in kept if e['bytes'][0] & 240 == 144 or
+                any(on['bytes'][0] & 15 == e['bytes'][0] & 15 and on['monotonic_ns'] == e['monotonic_ns'] - 20_000_000
+                    for on in kept if on['bytes'][0] & 240 == 144)]
+        report = self.compare(rows=rows, enabled=kept)
+        self.assertTrue(report['valid'], report['invalid_reasons'])
+        self.assertGreater(report['excluded_step_count'], 20)
+        self.assertFalse(self.compare(enabled=kept)['valid'])   # without the exclusion
+
+
 class Verdict(unittest.TestCase):
     def test_all_gates_combine_and_the_start_latency_bound_is_enforced(self):
         seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
-        off = window('off', 8.0, 0, [key(1, 50.0, PLAY, 1, -99)], 50_004_000_000)
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
         enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
         self.assertTrue(verdict['passed'], verdict['gates'])
         self.assertEqual(verdict['start_latency']['difference_ns'], 2_000_000)
         slow = window('enabled', seconds, 0, worst_rows(), 100_015_000_000)
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, slow, 15 / 130)
-        self.assertEqual(verdict['gates'], {'timing': True, 'admissions': True, 'start_latency': False, 'transport_stopped': True})
+        self.assertEqual(verdict['gates'], {'event_timing_maximum': True, 'sustained_service': True, 'hard_service': True,
+                                            'merge_added_p99': True, 'merge_added_step_jitter': True,
+                                            'admissions': True, 'start_latency': False, 'transport_stopped': True})
+
+    def test_start_latency_is_measured_from_the_key_up_against_the_same_first_step(self):
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
+        enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
+        verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
+        latency = verdict['start_latency']
+        self.assertEqual((latency['edge'], latency['valid'], latency['enabled_ns'], latency['off_ns']),
+                         ('key-up', True, 6_000_000, 4_000_000))
+        # The key-down figures are kept: 40 ms earlier in both windows.
+        self.assertEqual((latency['key_down']['enabled_ns'], latency['key_down']['off_ns']), (46_000_000, 44_000_000))
+        self.assertEqual(latency['first_step']['enabled'], [[c, 60] for c in range(16)])
+        self.assertTrue(verdict['valid'] and verdict['passed'])
+
+    def test_a_different_first_step_in_the_off_window_makes_the_case_invalid(self):
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
+        # The Off window's step 1 plays the leader only (legacy skip).
+        first = min(e['monotonic_ns'] for e in off['state']['midi'])
+        off['state']['midi'] = [e for e in off['state']['midi'] if not (e['monotonic_ns'] < first + 30_000_000 and e['bytes'][0] & 15 != 0)]
+        enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
+        verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
+        self.assertFalse(verdict['valid'])
+        self.assertFalse(verdict['passed'])
+        self.assertEqual(verdict['invalid'], ['start latency: first-step note sets differ',
+                                              'like-for-like timing: note sets differ at 1 compared steps (first [0])'])
+        self.assertEqual(verdict['start_latency']['first_step']['off'], [[0, 60]])
+        # Timing and admissions are judged as usual.
+        self.assertTrue(verdict['gates']['admissions'])
+
+    def test_a_start_without_a_recorded_key_up_is_invalid(self):
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, [key(1, 49.96, PLAY, 1, -99)], 50_004_000_000)
+        enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
+        verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
+        self.assertEqual(verdict['invalid'], ['start latency: Start key-up not recorded'])
+
+    def test_gc_observation_separates_builds_with_a_gc_step(self):
+        rows = worst_rows()
+        rows[3]['heap_delta_bytes'], rows[3]['build_us'] = -65536, 5000
+        report = mw.gc_observation(rows)
+        self.assertEqual((report['builds_with_gc_step'], report['build_us_max_with_gc_step'],
+                          report['build_us_max_without_gc_step']), (1, 5000, 900))
 
     def test_an_edit_case_requires_every_scheduled_edit(self):
         seconds = CASES['PERF-MERGE-HW-EDIT']['seconds']
-        off = window('off', 8.0, 0, [key(1, 50.0, PLAY, 1, -99)], 50_004_000_000)
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
         enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-EDIT', off, enabled, 15 / 130)
         self.assertFalse(verdict['gates']['admissions'])
@@ -442,7 +564,7 @@ class FakeMergeDriver:
 class DeviceRunOrchestration(unittest.TestCase):
     def run_case(self, case_id, enabled_rows):
         seconds = CASES[case_id]['seconds']
-        windows = {'off': {'rows': [key(1, 50.0, PLAY, 1, -99)], 'midi': worst_midi(50_004_000_000, 8.0)},
+        windows = {'off': {'rows': start_rows(50.0), 'midi': worst_midi(50_004_000_000, 8.0)},
                    'enabled': {'rows': enabled_rows, 'midi': worst_midi(100_006_000_000, seconds)}}
         FakeMergeDriver.windows = windows
         maiden = FakeRecorderMaiden(windows)

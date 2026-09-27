@@ -47,7 +47,7 @@ local function dense_project()
 end
 
 local FIELDS = {"kind", "time", "pulse", "channel", "k", "status", "cycles", "anchors", "plan_builds",
-  "eligible", "admitted", "candidates", "removed", "other", "leader_trig"}
+  "eligible", "admitted", "candidates", "removed", "other", "leader_trig", "build_us", "heap_kb", "heap_delta_bytes"}
 
 local function builds(rows, channel)
   local result = {}
@@ -354,5 +354,123 @@ function test_merge_device_workload_records_grid_tap_edits_with_their_effect()
       luaunit.assert_not_nil(first, "ch" .. channel .. " rebuilt after the edit")
       luaunit.assert_equals({first[15], first[5]}, {edit.state, edit.k[channel]}, "ch" .. channel)
     end
+  end
+end
+
+-- The device row pattern of PERF-MERGE-HW-WORST at c2ad05a9: every wrap pulse
+-- builds the 15 followers and the leader, and each global pattern end (song
+-- mode on, the norns default) also sweeps all 16 channels
+-- (song_transition: update_working_patterns, one channel per scheduler tick
+-- after the pulse; the host scheduler mock runs the sweep at once). The sweep also heals working patterns patched in place
+-- (memory event handlers), so it stays; it must be cheap: every follower
+-- build after the stopped configuration, from the first wrap after Start on,
+-- is served by the content-validated memo (legacy merge and plan).
+function test_merge_device_workload_wrap_and_song_end_sweep_builds_hit_the_memo()
+  local W = workload()
+  dense_project()
+  params:set("song_mode", 2)
+  W.configure("WORST", "enabled")
+  local builds = {}
+  local lattice
+  local ok, err = pcall(function()
+    local memo = pattern.wrap_memo_stats
+    local merge = pattern.get_and_merge_patterns
+    pattern.get_and_merge_patterns = function(c, ...)
+      local legacy, plan = memo.legacy_hits, memo.plan_hits
+      local result = merge(c, ...)
+      builds[#builds + 1] = {pulse = lattice and lattice.transport or -1, channel = c,
+        -- A wrap build carries the pulse token (get_and_merge_patterns' 9th argument).
+        in_pulse = type(select(8, ...)) == "table",
+        legacy_hit = memo.legacy_hits > legacy, plan_hit = memo.plan_hits > plan}
+      return result
+    end
+    m_clock:start()
+    lattice = m_clock.get_clock_lattice()
+    for _ = 1, 24 * 64 * 2 + 12 do
+      if scheduler and scheduler.update then scheduler.update() end   -- between pulses
+      lattice:pulse()
+    end
+    pattern.get_and_merge_patterns = merge
+    stop_transport()
+  end)
+  params:set("song_mode", nil)
+  if not ok then error(err, 0) end
+  local wraps, sweeps = {}, {}
+  for _, row in ipairs(builds) do
+    if row.channel >= 2 then
+      local into = row.in_pulse and wraps or sweeps
+      into[row.pulse] = into[row.pulse] or {}
+      into[row.pulse][#into[row.pulse] + 1] = row
+      luaunit.assert_true(row.legacy_hit and row.plan_hit,
+        string.format("ch%d at pulse %d (%s) served by the memo", row.channel, row.pulse, row.in_pulse and "wrap" or "sweep"))
+    end
+  end
+  -- Two wraps after Start, each with its 15 follower builds and one sweep.
+  local wrap_pulses, sweep_pulses = {}, {}
+  for pulse, rows in pairs(wraps) do wrap_pulses[#wrap_pulses + 1] = pulse; luaunit.assert_equals(#rows, 15, "wrap " .. pulse) end
+  for pulse, rows in pairs(sweeps) do sweep_pulses[#sweep_pulses + 1] = pulse; luaunit.assert_equals(#rows, 15, "sweep " .. pulse) end
+  table.sort(wrap_pulses); table.sort(sweep_pulses)
+  luaunit.assert_equals(wrap_pulses, {24 * 64 + 1, 24 * 64 * 2 + 1})
+  luaunit.assert_equals(sweep_pulses, {24 * 64 + 1, 24 * 64 * 2 + 1})
+end
+
+-- Plan §1.4 like-for-like gates: the Off window plays the enabled window's
+-- notes for the whole capture. configure("off") renders the enabled working
+-- patterns into legacy sources (and asserts the rebuilt Off patterns equal
+-- them); here both windows are played and every note (pulse, channel, pitch,
+-- velocity) must be the same, merged-pentatonic lock on (the norns default).
+local function played_notes(W, variant, mode, pulses)
+  dense_project()
+  params:set("merged_lock_to_pentatonic", 2)
+  W.configure(variant, mode)
+  midi_event_log = {}
+  local ok, err = pcall(function()
+    m_clock:start()
+    for _ = 1, pulses do m_clock.get_clock_lattice():pulse() end
+    stop_transport()
+  end)
+  params:set("merged_lock_to_pentatonic", nil)
+  if not ok then error(err, 0) end
+  local notes = {}
+  for _, event in ipairs(midi_event_log) do
+    if event.kind == "note_on" then notes[#notes + 1] = table.concat({event.pulse, event.c, event.a, event.b}, ":") end
+  end
+  table.sort(notes)
+  return notes
+end
+
+function test_merge_device_workload_off_window_plays_the_enabled_notes_throughout()
+  local W = workload()
+  for _, case in ipairs({{"STEADY", 24 * 16 * 3}, {"WORST", 24 * 64 * 2 + 12}, {"DENSE", 96 * 64 + 96 * 4}}) do
+    local variant, pulses = case[1], case[2]
+    local enabled = played_notes(W, variant, "enabled", pulses)
+    luaunit.assert_true(#enabled > 0, variant)
+    luaunit.assert_equals(played_notes(W, variant, "off", pulses), enabled, variant)
+  end
+end
+
+function test_merge_device_workload_off_window_renders_into_spare_slots_without_merge()
+  local W = workload()
+  local song = dense_project()
+  local readback = W.configure("WORST", "off")
+  for number = 1, 16 do luaunit.assert_nil(song.channels[number].musical_merge) end
+  -- Leader: one rendered source; followers: the rendered pattern and its
+  -- merged-step companion (source B), shared by all 15.
+  luaunit.assert_not_nil(readback:find("1:none/slot9/", 1, true), readback)
+  luaunit.assert_not_nil(readback:find("16:none/slot10+11/", 1, true), readback)
+  luaunit.assert_equals(song.channels[2].trig_merge_mode, "all")
+  -- The workload's own slots and the dense pattern are left as the enabled
+  -- window configures them.
+  luaunit.assert_equals(song.patterns[1].trig_values[16], 1)
+end
+
+function test_merge_device_workload_build_rows_carry_build_time_and_heap()
+  local W = workload()
+  local rows = builds(play(W, "STEADY", 24 * 16 + 12), 2)
+  luaunit.assert_true(#rows > 0)
+  for _, row in ipairs(rows) do
+    luaunit.assert_true(row.build_us >= 0)
+    luaunit.assert_true(row.heap_kb > 0)
+    luaunit.assert_equals(math.type(row.heap_delta_bytes), "integer")
   end
 end

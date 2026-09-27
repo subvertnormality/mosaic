@@ -762,16 +762,27 @@ function test_merge_wrap_memo_hits_return_independent_copies()
   luaunit.assert_false(third.merged_notes == second.merged_notes)
 end
 
-function test_merge_wrap_memo_is_used_only_by_the_wrap_rebuild()
+-- Every working-pattern build of pattern.lua (edits, follower rebuilds,
+-- sweeps, the wrap) seeds and uses the memo; a seeded entry is used only
+-- after full validation. A direct get_and_merge_patterns call without the
+-- memo argument neither reads nor writes it.
+function test_merge_wrap_memo_is_seeded_and_used_by_every_build()
   local song = memo_song()
   local before = stats()
-  pattern_under_test.update_working_pattern(2, song)
   build(pattern_under_test.get_and_merge_patterns, song, 2)
   luaunit.assert_equals(stats(), before)
-  pattern_under_test.update_working_pattern(2, song, true)
-  pattern_under_test.update_working_pattern(2, song, true)
+  pattern_under_test.update_working_pattern(2, song)          -- an edit rebuild seeds
+  pattern_under_test.update_working_pattern(2, song, true)    -- the wrap hits
   local after = stats()
   luaunit.assert_equals({after.hits - before.hits, after.misses - before.misses}, {1, 1})
+  luaunit.assert_nil(difference(song.channels[2].working_pattern, build(reference_merge, song, 2)))
+  -- A sweep build hits too, and a change still misses.
+  pattern_under_test.update_working_patterns(song, {[2] = true})
+  if scheduler and scheduler.update then scheduler.update() end
+  song.patterns[1].velocity_values[5] = 3
+  pattern_under_test.update_working_pattern(2, song, true)
+  local last = stats()
+  luaunit.assert_equals({last.hits - after.hits, last.misses - after.misses}, {1, 1})
   luaunit.assert_nil(difference(song.channels[2].working_pattern, build(reference_merge, song, 2)))
 end
 

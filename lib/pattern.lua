@@ -222,7 +222,8 @@ local function legacy_merge(channel, trig_merge_mode, note_merge_mode, velocity_
   return merged_pattern, merge_step_trig_masks
 end
 
--- Memo of legacy_merge for the clock's synchronous wrap rebuild
+-- Memo of legacy_merge for every working-pattern build of this module (the
+-- clock's wrap rebuild, edits, follower rebuilds, sweeps; seeded by each)
 -- (docs/musical-merge-extensions-plan.md §1.3 performance). Source arrays
 -- and step masks are written in place without any rebuild request
 -- (program.update_working_pattern_for_step, the memory event handlers), so
@@ -370,11 +371,19 @@ local function memo_valid(entry, channel, modes, pattern_channel, patterns, puls
     position = position + 3
   end
   if position ~= #trace then return false end
+  -- The steps 1..64 whose trig mask is 1 are exactly the saved ones (masks
+  -- are sparse: visit only the set entries).
   local masks = program.get_step_trig_masks(channel)
-  local positive = entry.positive
-  for s = 1, 64 do
-    if (masks ~= nil and masks[s] == 1) ~= positive[s] then return false end
+  local positive, count = entry.positive, 0
+  if masks ~= nil then
+    for s, value in pairs(masks) do
+      if value == 1 and math_type(s) == "integer" and s >= 1 and s <= 64 then
+        if not positive[s] then return false end
+        count = count + 1
+      end
+    end
   end
+  if count ~= entry.positive_count then return false end
   local sources = entry.sources
   local stats = pattern.wrap_memo_stats
   for index = 1, #sources do
@@ -393,14 +402,13 @@ local function memo_valid(entry, channel, modes, pattern_channel, patterns, puls
   return true
 end
 
--- Steps 1..64 are copied explicitly: a nil value (a hole) must not shorten
--- the copy as unpack's length would.
+-- Steps 1..64 are copied explicitly (table.move over the fixed range): a nil
+-- value (a hole) must not shorten the copy as unpack's length would.
+local table_move = table.move
 local function copy_merged(merged)
   local result = {}
   for _, field in ipairs(MERGED_FIELDS) do
-    local values, copy = merged[field], {}
-    for s = 1, 64 do copy[s] = values[s] end
-    result[field] = copy
+    result[field] = table_move(merged[field], 1, 64, 1, {})
   end
   local notes_merged = {}
   for key, value in pairs(merged.merged_notes) do notes_merged[key] = value end
@@ -425,6 +433,8 @@ local function memo_legacy_merge(channel, modes, selected_song_pattern, pulse)
   local trace = {}
   local merged, masks = legacy_merge(channel, modes[1], modes[2], modes[3], modes[4], selected_song_pattern, nil, trace)
   local positive = positive_masks(masks)
+  local positive_count = 0
+  for s = 1, 64 do if positive[s] then positive_count = positive_count + 1 end end
   -- A priority mode reads its source's whole arrays.
   local every = false
   for index = 2, 4 do if modes[index] and extract_pattern_number(modes[index]) then every = true end end
@@ -437,7 +447,7 @@ local function memo_legacy_merge(channel, modes, selected_song_pattern, pulse)
   if not by_channel then by_channel = {}; legacy_memo[selected_song_pattern] = by_channel end
   by_channel[channel] = sources and {
     modes = {modes[1], modes[2], modes[3], modes[4]}, trace = trace, sources = sources,
-    positive = positive, channel_table = pattern_channel, patterns = patterns,
+    positive = positive, positive_count = positive_count, channel_table = pattern_channel, patterns = patterns,
     merged = copy_merged(merged)
   } or nil
   return merged, false
@@ -469,9 +479,9 @@ local function copy_filters(filters)
   if not filters then return nil end
   local result = {}
   for index, filter in ipairs(filters) do
-    local blocked = {}
-    for step, value in pairs(filter.blocked) do blocked[step] = value end
-    result[index] = {reason = filter.reason, blocked = blocked}
+    local blocked, count = {}, 0
+    for step, value in pairs(filter.blocked) do blocked[step] = value; count = count + 1 end
+    result[index] = {reason = filter.reason, blocked = blocked, count = count}
   end
   return result
 end
@@ -482,12 +492,13 @@ local function same_filters(saved, filters)
   for index, filter in ipairs(filters) do
     local other = saved[index]
     if other.reason ~= filter.reason then return false end
+    -- Every entry equal and as many entries: the same set.
+    local count, saved_blocked = 0, other.blocked
     for step, value in pairs(filter.blocked) do
-      if other.blocked[step] ~= value then return false end
+      if saved_blocked[step] ~= value then return false end
+      count = count + 1
     end
-    for step in pairs(other.blocked) do
-      if filter.blocked[step] == nil then return false end
-    end
+    if count ~= other.count then return false end
   end
   return true
 end
@@ -590,13 +601,31 @@ local function admission(song, channel, config, first, last, pulse)
   return result
 end
 
--- memo: the wrap rebuild (content-validated memo). pulse: the lattice pulse
--- token of that rebuild, when it runs inside a pulse (m_clock's wrap branch).
+-- One mask layer over steps 1..64: the step mask where one is set (truthy),
+-- else the channel-wide value when one applies. Without a channel-wide value
+-- only the steps holding a step mask are written.
+local function apply_mask_layer(values, step_masks, channel_value)
+  if channel_value ~= nil then
+    for s = 1, 64 do
+      local mask = step_masks[s]
+      if mask then values[s] = mask else values[s] = channel_value end
+    end
+    return
+  end
+  for s, mask in pairs(step_masks) do
+    if mask and math_type(s) == "integer" and s >= 1 and s <= 64 then values[s] = mask end
+  end
+end
+
+-- memo: serve and seed the content-validated memo (every build of this
+-- module passes it; a memo build ignores effective_lengths_cache and, on a
+-- miss, derives the lengths from the sources themselves). pulse: the lattice
+-- pulse token of a wrap rebuild inside a pulse (m_clock's wrap branch).
 function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, memo, pulse)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern, legacy_hit
   local share = memo and type(pulse) == "table" and pattern.wrap_share and pulse or nil
-  if memo and not effective_lengths_cache then
+  if memo then
     merged_pattern, legacy_hit = memo_legacy_merge(channel,
       {trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode}, selected_song_pattern, share)
   else
@@ -739,11 +768,22 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
   end
 
-  -- Loop invariants hoisted; nothing below writes the channel or the plan.
+  -- The final layer: the plan's trigs and velocities, then the step masks,
+  -- else the channel masks. Each step's writes are independent of every
+  -- other step's, so the layers are applied one after another; when no
+  -- channel-wide mask applies only the steps that have a step mask are
+  -- visited (1..64 integer keys; `false` never applies). Nothing below
+  -- writes the channel or the plan.
   local foundation_trigs = foundation_result and foundation_result.status == "ok" and foundation_result.trigs
-  local foundation_velocities = foundation_trigs and foundation_result.velocities
   local trig_values, note_mask_values = merged_pattern.trig_values, merged_pattern.note_mask_values
   local velocity_values, merged_lengths = merged_pattern.velocity_values, merged_pattern.lengths
+  if foundation_trigs then
+    table_move(foundation_trigs, 1, 64, 1, trig_values)
+    -- Plan velocities are set only at planned steps: visit those.
+    for s, velocity in pairs(foundation_result.velocities) do
+      if math_type(s) == "integer" and s >= 1 and s <= 64 then velocity_values[s] = velocity end
+    end
+  end
   local trig_mask, note_mask = channel_data.trig_mask, channel_data.note_mask
   local velocity_mask = channel_data.velocity_mask
   if not (trig_mask and trig_mask ~= -1) then trig_mask = nil end
@@ -751,40 +791,16 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   if not (velocity_mask and velocity_mask ~= -1) then velocity_mask = nil end
   -- (sic) lengths_mask: the existing condition, kept exactly.
   local length_mask_applies = channel_data.length_mask and channel_data.lengths_mask ~= -1
-  for s = 1, 64 do
-    if foundation_trigs then
-      trig_values[s] = foundation_trigs[s]
-      local velocity = foundation_velocities[s]
-      if velocity ~= nil then velocity_values[s] = velocity end
+  apply_mask_layer(trig_values, step_trig_masks, trig_mask)
+  apply_mask_layer(note_mask_values, step_note_masks, note_mask)
+  apply_mask_layer(velocity_values, step_velocity_masks, velocity_mask)
+  if length_mask_applies then
+    for s = 1, 64 do
+      local mask = step_length_masks[s]
+      if mask then merged_lengths[s] = mask else merged_lengths[s] = program.get_length_mask(channel_data) end
     end
-
-    local mask = step_trig_masks[s]
-    if mask then
-      trig_values[s] = mask
-    elseif trig_mask then
-      trig_values[s] = trig_mask
-    end
-
-    mask = step_note_masks[s]
-    if mask then
-      note_mask_values[s] = mask
-    elseif note_mask then
-      note_mask_values[s] = note_mask
-    end
-
-    mask = step_velocity_masks[s]
-    if mask then
-      velocity_values[s] = mask
-    elseif velocity_mask then
-      velocity_values[s] = velocity_mask
-    end
-
-    mask = step_length_masks[s]
-    if mask then
-      merged_lengths[s] = mask
-    elseif length_mask_applies then
-      merged_lengths[s] = program.get_length_mask(channel_data)
-    end
+  else
+    apply_mask_layer(merged_lengths, step_length_masks, nil)
   end
 
   return merged_pattern
@@ -855,7 +871,7 @@ function pattern.update_working_patterns(song_pattern, affected_channels)
             if state.dirty[c] and (followers[c] == true) == (pass == 2) then
               local revision = state.revision[c]
               local channel = target.channels[c]
-              local result = build_working_pattern(c, target, channel, state.effective_lengths_cache)
+              local result = build_working_pattern(c, target, channel, state.effective_lengths_cache, true)
               if working_pattern_updates[target] == state
                 and state.revision[c] == revision and target.channels[c] == channel then
                 channel.working_pattern = result
@@ -916,7 +932,7 @@ function pattern.rebuild_followers(song_pattern, leaders)
   if not song_pattern then return end
   for c in pairs(pattern.followers_of(song_pattern, leaders)) do
     invalidate_lookahead(c)
-    rebuild(c, song_pattern)
+    rebuild(c, song_pattern, true)
   end
 end
 
@@ -931,7 +947,7 @@ function pattern.update_working_pattern(c, song_pattern, at_wrap, pulse)
   local state = working_pattern_updates[song_pattern]
   if state then state.effective_lengths_cache = {} end
   -- The wrap rebuild serves unchanged inputs from the content-validated memo.
-  rebuild(c, song_pattern, at_wrap == true, at_wrap == true and pulse or nil)
+  rebuild(c, song_pattern, true, at_wrap == true and pulse or nil)
   -- Plan §1.3: leader edits reach followers.
   if not at_wrap then pattern.rebuild_followers(song_pattern, {[c] = true}) end
 end

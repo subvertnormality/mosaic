@@ -21,7 +21,8 @@
 --   reset(), dump(first, last), count(), remove()
 --
 -- Pattern slots: 1 is the PERF-002 dense pattern (a trig on steps 1..16),
--- left untouched. The workload writes slots 3, 5, 6, 7 and 8.
+-- left untouched. The workload writes slots 3, 5, 6, 7 and 8, and in the Off
+-- window slots 9 and up (the rendered patterns, below).
 -- ASCII only: the chunk travels as a Lua string literal.
 
 local W = {}
@@ -100,29 +101,129 @@ local function plan(variant)
   return result
 end
 
-function W.configure(variant, mode)
-  assert(mode == "enabled" or mode == "off", "mode")
-  assert(not m_clock.is_playing(), "configure while stopped")
-  local target = song()
-  local value = plan(variant)
+local RENDER_FIELDS = {"trig_values", "note_values", "velocity_values", "lengths", "note_mask_values"}
+W.FIRST_RENDER_SLOT = 9
+
+-- Apply the variant's patterns, channels and (enabled) merge configuration.
+local function apply(target, value, enabled)
   target.global_pattern_length = 64
   for number, steps in pairs(value.patterns) do set_pattern(target, number, steps) end
   for number, channel in pairs(value.channels) do
     set_channel(target, number, channel[1], channel[2], channel[3], channel[4])
+    target.channels[number].trig_merge_mode = "skip"
   end
   local transaction = include("mosaic/lib/optional_config_transaction")
   local snapshot = transaction.snapshot(target)
   for number = 1, 16 do
     local channel = value.channels[number]
-    snapshot.channels[number].musical_merge = mode == "enabled" and channel and channel[5] or nil
+    snapshot.channels[number].musical_merge = enabled and channel and channel[5] or nil
   end
   assert(transaction.apply(target, snapshot, false, "channel"))
+end
+
+local function rendered_equal(left, right, first, last)
+  for s = first, last do
+    if left.trig_values[s] ~= right.trig_values[s] then return false end
+    if left.trig_values[s] == 1 then
+      for _, field in ipairs({"note_values", "velocity_values", "lengths", "note_mask_values"}) do
+        if left[field][s] ~= right[field][s] then return false end
+      end
+    end
+  end
+  return true
+end
+
+-- The Off window (plan section 1.4, like-for-like): the same channels, ranges
+-- and clock mods with no merge configuration, each workload channel playing
+-- the enabled window's working pattern rendered into spare slots (from the
+-- stopped build: the steady state of every fixed configuration here, the
+-- leader's anchor on). Source A holds the rendered trigs and values; where
+-- the enabled build merged several sources (merged_notes, which selects the
+-- merged-pentatonic lock), source B repeats those steps with the same
+-- values, so the legacy average of two equal values reproduces both the
+-- value and the merged flag. Trig mode "all" unions A and B (B is a subset).
+-- configure asserts the rebuilt Off working patterns equal the rendered ones.
+local function render_off(target, value)
+  apply(target, value, true)
+  local numbers = {}
+  for number in pairs(value.channels) do numbers[#numbers + 1] = number end
+  table.sort(numbers)
+  for _, number in ipairs(numbers) do pattern.update_working_pattern(number, target) end
+  local by_content, next_slot, sources, rendered = {}, W.FIRST_RENDER_SLOT, {}, {}
+  local function slot_for(content, kind)
+    local parts = {kind}
+    for _, field in ipairs(RENDER_FIELDS) do
+      for s = 1, 64 do parts[#parts + 1] = tostring(content[field][s]) end
+    end
+    local key = table.concat(parts, ",")
+    local slot = by_content[key]
+    if not slot then
+      assert(next_slot <= 16, "render slots exhausted")
+      slot, next_slot = next_slot, next_slot + 1
+      by_content[key] = slot
+      local source = target.patterns[slot]
+      for _, field in ipairs(RENDER_FIELDS) do
+        for s = 1, 64 do source[field][s] = content[field][s] end
+      end
+    end
+    return slot
+  end
+  for _, number in ipairs(numbers) do
+    local wp = target.channels[number].working_pattern
+    local a, b, merged = {}, {}, {}
+    for _, field in ipairs(RENDER_FIELDS) do a[field], b[field] = {}, {} end
+    for s = 1, 64 do
+      for _, field in ipairs(RENDER_FIELDS) do a[field][s] = wp[field][s]; b[field][s] = wp[field][s] end
+      merged[s] = wp.merged_notes[s] == true and wp.trig_values[s] == 1
+      if not merged[s] then b.trig_values[s] = 0 end
+    end
+    local list = {slot_for(a, "A")}
+    if next(wp.merged_notes) then list[2] = slot_for(b, "B") end
+    sources[number] = list
+    rendered[number] = {pattern = a, merged = merged}
+  end
+  local off = {patterns = {}, channels = {}}
+  for number, channel in pairs(value.channels) do
+    off.channels[number] = {sources[number], channel[2], channel[3], channel[4], nil}
+  end
+  apply(target, off, false)
+  for _, number in ipairs(numbers) do
+    local channel = target.channels[number]
+    channel.trig_merge_mode = "all"
+    channel.note_merge_mode, channel.velocity_merge_mode, channel.length_merge_mode = "average", "average", "average"
+    pattern.update_working_pattern(number, target)
+    local range = value.channels[number]
+    local wp = channel.working_pattern
+    assert(rendered_equal(wp, rendered[number].pattern, range[2], range[3]),
+      "Off window channel " .. number .. " does not play the enabled window's notes")
+    for s = range[2], range[3] do
+      assert((wp.merged_notes[s] == true and wp.trig_values[s] == 1) == rendered[number].merged[s],
+        "Off window channel " .. number .. " merged flag differs at step " .. s)
+    end
+  end
+  local slots = {}
+  for number, list in pairs(sources) do slots[number] = table.concat(list, "+") end
+  return slots
+end
+
+function W.configure(variant, mode)
+  assert(mode == "enabled" or mode == "off", "mode")
+  assert(not m_clock.is_playing(), "configure while stopped")
+  local target = song()
+  local value = plan(variant)
+  local slots
+  if mode == "off" then
+    slots = render_off(target, value)
+  else
+    apply(target, value, true)
+  end
   pattern.update_working_patterns(target)
   local parts = {}
   for number = 1, 16 do
     local merge = target.channels[number].musical_merge
     parts[#parts + 1] = number .. ":" .. (merge and (merge.mode .. "/" .. tostring(merge.anchor) .. "/" ..
       tostring(merge.interlock.leader) .. "/" .. merge.interlock.window) or "none") .. "/" ..
+      (slots and slots[number] and ("slot" .. slots[number] .. "/") or "") ..
       target.channels[number].clock_mods.name
   end
   return "__MERGE_CONFIG__" .. variant .. "|" .. mode .. "|" .. table.concat(parts, ";")
@@ -158,7 +259,10 @@ local STATUS = {ok = 1, RESYNC = 2, ["PLAN LIMIT"] = 3, ["LEADER OFF"] = 4, ["LE
 -- Row kinds: 1 build, 2 grid key-down, 3 grid key-up.
 -- build: {1, time, pulse, channel, k, status, cycles, anchors, plan_builds,
 --         eligible, admitted, candidates, interlock_removed, other_reasons,
---         leader_trig}  (status 0: no Interlock record)
+--         leader_trig, build_us, heap_kb, heap_delta_bytes}  (status 0: no
+--         Interlock record). build_us: the build's own duration; heap_kb: Lua
+--         heap after it; heap_delta_bytes: heap change across it (negative
+--         when a GC step freed memory inside the build).
 -- key:   {2 or 3, time, pulse, x, y, leader_trig, k2 .. k16}; time, pulse
 --        and the row's position are the edge's arrival (before the builds it
 --        causes); leader_trig and k are read after Mosaic handled it.
@@ -171,8 +275,11 @@ function W.install(leader_pattern)
   end
   local merge = pattern.get_and_merge_patterns
   R.originals[#R.originals + 1] = {pattern, "get_and_merge_patterns", merge}
+  local gc_count = collectgarbage
   pattern.get_and_merge_patterns = function(c, ...)
+    local heap_before, started = gc_count("count"), now()
     local result = merge(c, ...)
+    local finished, heap_after = now(), gc_count("count")
     local f = result and result.foundation
     if f and R.n < R.limit then
       local i = f.interlock
@@ -191,7 +298,9 @@ function W.install(leader_pattern)
       R.n = R.n + 1
       R.rows[R.n] = {1, now(), transport_pulse(), c, registry_k(c), i and (STATUS[i.status] or 9) or 0,
         i and i.cycles or -1, i and i.anchors or -1, i and i.plan_builds or -1,
-        f.eligible_count or -1, f.admitted_count or -1, candidates, removed, other, leader_trig()}
+        f.eligible_count or -1, f.admitted_count or -1, candidates, removed, other, leader_trig(),
+        math.floor((finished - started) * 1e6), math.floor(heap_after),
+        math.floor((heap_after - heap_before) * 1024)}
     end
     return result
   end
