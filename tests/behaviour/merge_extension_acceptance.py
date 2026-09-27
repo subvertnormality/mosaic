@@ -305,12 +305,15 @@ def _retime_expectation(retimed):
 def _retime_phase(c, retimed):
     capture = Capture(c)
     c.ui.play()
+    # Stage /2 on the Clock screen late in loop 0 (after the leader's step-7
+    # anchor), then confirm it as soon as the follower's loop 1 has begun:
+    # no build of the follower happens between the confirmation and the
+    # pattern boundary (step 13).
+    capture.until(lambda k: onset_count(k, 2, (60, 100)) >= 1, timeout=5)
+    c.ui.set_value(-2)
     capture.until(lambda k: onset_count(k, 1, P1[1]) >= 2, timeout=5)
     origin = capture.note_ons(1)[0][field(c)]
-    # Loop 1 of the follower has begun; confirm /2 on the Clock screen before
-    # the pattern boundary (step 13). No build of the follower happens between
-    # this confirmation and the boundary.
-    c.ui.set_value(-2); c.ui.press_key(3)
+    c.ui.press_key(3)
     confirmed = (now_ns(c) - origin) / 1e9 / STEP
     assert confirmed < BOUNDARY - .5, dict(confirmed_step=confirmed, boundary=BOUNDARY)
     capture.until(lambda k: onset_count(k, 1, P1[1]) >= 3, timeout=6)
@@ -682,7 +685,7 @@ def structure_lifecycle_workflow(c):
     c.ui.select_channel(1)
 
     # Delete while playing; then a Merge Shape edit on channel 1 (Add accent
-    # 70 -> 50) waits for the same pattern boundary.
+    # 70 -> 68) waits for the same pattern boundary.
     c.ui.channel_page("harmony", channel=1)
     c.ui.select_row("groups", 5); c.ui.press_key(3)
     c.ui.select_row("delete_group", 8)
@@ -691,13 +694,15 @@ def structure_lifecycle_workflow(c):
         c.ui.expect_header("harmony_delete_group", channel=1)
         c.ui.expect_selected_field("detail", "Delete group", "1")
         c.ui.press_key(3)
+        # Short E2 clamps (M02 has five rows, M03 seven) keep the whole
+        # gesture well inside the first pattern in real time.
         c.ui.channel_page("merge_shape", channel=1)
-        c.ui.select_row("rhythm", 1); c.ui.press_key(3)
-        c.ui.select_row("add_accent", 3); c.ui.turn(3, -20)
-        c.ui.expect_selected_field("focused", "Add accent", "50", art=True)
+        c.ui.select_field("rhythm", saturate=-6, then=1); c.ui.press_key(3)
+        c.ui.select_field("add_accent", saturate=-8, then=3); c.ui.turn(3, -2)
+        c.ui.expect_selected_field("focused", "Add accent", "68", art=True)
         c.ui.press_key(3)
         c.ui.expect_footer_text("NEXT PATTERN")
-    _lifecycle_play(c, delete_and_edit, accent_after=50, kind='structure-group-deleted-with-edit')
+    _lifecycle_play(c, delete_and_edit, accent_after=68, kind='structure-group-deleted-with-edit')
     c.ui.channel_page("merge_shape", channel=1)
     c.ui.select_row("pitch", 3); c.ui.press_key(3)
     c.ui.select_row("structure", 3); c.ui.press_key(3)
