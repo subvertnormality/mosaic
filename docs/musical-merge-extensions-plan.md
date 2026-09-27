@@ -333,11 +333,21 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
 - `PERF-MERGE-HW-DENSE`: maximum anchors per admission. Channel 1 is a
   Foundation leader `x16` with a 64-step range and an anchor pattern with a
   trig on every step; channels 2–16 are Foundation followers `/4` with 64-step
-  ranges, anchor on step 1, a second source with trigs on every other step,
-  window 0. Since `d_f / d_l = 64`, each admission's support meets exactly 64
-  leader cycles and 4,096 anchors. Per admission the test asserts: supported,
-  cycle count 64, anchor count 4,096, zero leader-plan builds, every candidate
-  addition removed with `INTERLOCK CH01`; all 15 followers wrap together.
+  ranges, anchor on step 1 and a second source with trigs on **every** step
+  (63 candidates, the maximum), window 0. Since `d_f / d_l = 64`, each follower
+  step lasts exactly one leader cycle, so each admission's support meets exactly
+  64 leader cycles and 4,096 anchors, and every follower onset coincides with a
+  leader step-1 anchor. Per admission the test asserts: supported, cycle count
+  64, anchor count 4,096, zero leader-plan builds, all 63 candidates removed
+  with `INTERLOCK CH01`; all 15 followers wrap together.
+- `PERF-MERGE-HW-DENSE-EDIT`: DENSE plus a grid edit of channel 1's step-1
+  anchor trig every 16 beats, alternately off and on (rebuild requests,
+  follower propagation and yielding sweeps under maximum work). Per follower
+  admission, in both states: supported, cycle count 64, zero builds; trig on:
+  4,096 anchors and all 63 candidates removed; trig off: 4,032 anchors, no
+  candidate coincides with an anchor, so no Interlock rejection and — with gap 0,
+  Amount 100, Accent 70, no masks — eligible = admitted = 63. Every follower
+  shows the new state at its first admission after each edit.
 - `PERF-MERGE-HW-EDIT`: WORST plus a grid edit of channel 1's anchor pattern
   every two bars that toggles its single trig off and on again (the
   configuration stays legal and the support unchanged). Assertions are
@@ -349,13 +359,16 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
   that every one of the 15 followers shows the new state at its first admission
   after each edit (propagation), rebuild requests and yielding sweeps included.
 - **Capture duration:** every case captures at least three complete cycles of
-  its slowest follower (DENSE: `/4` × 64 steps = 16 beats per cycle, so at
-  least 48 beats ≈ 22 s at 130 bpm), overriding the 8 s default.
+  its slowest follower, computed from §1.1 step durations (a `/1` step is one
+  sixteenth, a `/4` step one beat): WORST and EDIT 3 × 16 beats = 48 beats
+  (≈ 22 s at 130 bpm); DENSE and DENSE-EDIT 3 × 64 beats = 192 beats
+  (≈ 88.6 s); STEADY 3 × 4 beats, raised to the 8 s default. This overrides the
+  8 s default where longer.
 - **Start latency:** each case also measures the time from the Start input's
   native timestamp to the first emitted Note On and compares it with the same
   workload with Merge Shape Off, captured in the same session. It passes when
   the difference is at most the `step_jitter_maximum_ns` threshold (10 ms).
-All must pass before release; until the device runs pass, the delivery report
+All (STEADY, WORST, EDIT, DENSE, DENSE-EDIT) must pass before release; until the device runs pass, the delivery report
 states host figures only and the feature is not released.
 
 ### 1.5 Dependency rules
