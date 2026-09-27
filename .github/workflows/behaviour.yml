@@ -100,7 +100,7 @@ jobs:
       - name: Verify CI partition and aggregation contracts
         if: matrix.shard == 0
         working-directory: tests/behaviour
-        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import ci.test_ui_migration_drift_runner
+        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import ci.test_ui_migration_drift_runner ci.test_workflow_counts
       - name: Fetch output-profile fixtures for fast layers
         if: matrix.shard == 0
         run: |
@@ -363,7 +363,9 @@ jobs:
           MONOME_EMULATOR: /tmp/identity-only
         run: |
           mapfile -t suites < <(find reports -name suite.json -type f | sort)
-          test "${#suites[@]}" -eq 18
+          # Base MIDI shards (the matrix above) plus the modulation and
+          # audio/Crow reports; ci/test_workflow_counts.py ties the two.
+          test "${#suites[@]}" -eq 26
           python3 tests/behaviour/ci/verify-full.py --output full-behaviour-report.json "${suites[@]}"
           cat full-behaviour-report.json >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
