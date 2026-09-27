@@ -546,3 +546,216 @@ function test_merge_wrap_fastpath_build_matches_the_pre_change_build()
   luaunit.assert_true(foundation_ok > 200, foundation_ok)
   luaunit.assert_true(interlocked > 20, interlocked)
 end
+
+-- The wrap rebuild's memo -------------------------------------------------
+
+local event_handlers = include("mosaic/lib/memory/event_handlers").new(program, fn)
+
+local function wrap_build(song, c)
+  return build(pattern_under_test.get_and_merge_patterns, song, c, nil, true)
+end
+
+local function stats()
+  local counts = pattern_under_test.wrap_memo_stats
+  return {hits = counts.legacy_hits, misses = counts.legacy_misses}
+end
+
+-- Write garbage through every table of a returned build: a later hit must
+-- not see it.
+local function scribble(result)
+  for _, field in ipairs({"trig_values", "lengths", "note_values", "note_mask_values", "velocity_values"}) do
+    for s = 1, 64 do result[field][s] = -99 end
+  end
+  result.merged_notes[1] = "scribbled"
+  local plan = result.foundation
+  if plan then
+    for key, value in pairs(plan) do
+      if type(value) == "table" and key ~= "config" and key ~= "interlock" and key ~= "anchor_notes" then
+        for inner in pairs(value) do
+          if type(value[inner]) == "table" then value[inner][1] = "scribbled" else value[inner] = "scribbled" end
+        end
+      end
+    end
+  end
+end
+
+-- Mutations between wraps, each as the application makes it: in place,
+-- without a rebuild request.
+local function mutate(random, song, c)
+  local channel = song.channels[c]
+  local numbers = {}
+  for number in pairs(channel.selected_patterns) do numbers[#numbers + 1] = number end
+  table.sort(numbers)
+  local source = song.patterns[numbers[random(#numbers)]]
+  local s = random(1, 64)
+  local kind = random(14)
+  if kind == 1 then source.trig_values[s] = source.trig_values[s] == 1 and 0 or 1
+  elseif kind == 2 then source.trig_values[s] = source.trig_values[s] == 1 and true or 1
+  elseif kind == 3 then
+    local field = ({"note_values", "velocity_values", "lengths", "note_mask_values"})[random(4)]
+    source[field][s] = random_value(random, 1, 12)
+  elseif kind == 4 then
+    -- Same value, other number subtype.
+    local field = ({"note_values", "velocity_values", "lengths", "note_mask_values"})[random(4)]
+    local value = source[field][s]
+    if math.type(value) == "integer" then source[field][s] = value + 0.0
+    elseif math.type(value) == "float" and value == math.floor(value) then source[field][s] = math.tointeger(value) end
+  elseif kind == 5 then
+    -- memory event handler (apply_event): masks and the working pattern in place.
+    event_handlers.note_mask.apply_event(channel, s,
+      {step = s, trig = random(3) == 1 and -1 or random(0, 1), velocity = random(1, 127)}, "apply")
+  elseif kind == 6 then
+    event_handlers.note_mask.restore_state(channel, {step = s}, {trig_mask = random(2) == 1 and 1 or nil,
+      working_pattern = {trig_value = 1, note_value = 3, velocity_value = 5, length = 2}})
+  elseif kind == 7 then
+    program.update_working_pattern_for_step(channel, s, 1, 7, 9, 3)
+  elseif kind == 8 then channel.note_merge_mode = random_mode(random)
+  elseif kind == 9 then channel.trig_merge_mode = TRIG_MODES[random(#TRIG_MODES)]
+  elseif kind == 10 then channel.selected_patterns[random(1, 16)] = random(3) > 1
+  elseif kind == 11 then merge_state_module.on_cycle_boundary(song, c, channel.musical_merge)
+  end
+  -- kinds 12..14: nothing changes (the steady-state wrap)
+end
+
+function test_merge_wrap_memo_matches_the_pre_change_build_across_in_place_edits()
+  local random = math.random
+  math.randomseed(4242)
+  local before = stats()
+  for case = 1, 80 do
+    local song = random_song(random)
+    local channels = {random(1, 16), random(1, 16), random(1, 16)}
+    for wrap = 1, 12 do
+      for _, c in ipairs(channels) do
+        local expected = build(reference_merge, song, c)
+        local actual = wrap_build(song, c)
+        local found = difference(actual, expected)
+        if found then luaunit.fail(string.format("case %d wrap %d channel %d %s", case, wrap, c, found)) end
+        scribble(actual)
+        if random(2) == 1 then mutate(random, song, c) end
+      end
+    end
+  end
+  merge_state_module.reset()
+  local after = stats()
+  -- Both paths are exercised.
+  luaunit.assert_true(after.hits - before.hits > 1200, after.hits - before.hits)
+  luaunit.assert_true(after.misses - before.misses > 500, after.misses - before.misses)
+end
+
+-- A fixed song whose channel 2 merges sources 1 and 2 under Foundation.
+local function memo_song()
+  program.init()
+  merge_state_module.reset()
+  program.set_selected_song_pattern(1)
+  local song = program.get_song_pattern(1)
+  for _, step in ipairs({1, 5, 9, 13}) do song.patterns[1].trig_values[step] = 1 end
+  for _, step in ipairs({3, 7, 11}) do song.patterns[2].trig_values[step] = 1 end
+  local channel = song.channels[2]
+  channel.selected_patterns = {[1] = true, [2] = true}
+  channel.trig_merge_mode, channel.note_merge_mode = "all", "average"
+  channel.velocity_merge_mode, channel.length_merge_mode = "average", "average"
+  channel.start_trig, channel.end_trig = {1, 4}, {16, 4}
+  channel.musical_merge = merge_config.new()
+  channel.musical_merge.mode = "foundation"
+  channel.musical_merge.anchor = 1
+  channel.musical_merge.amount = 50
+  return song, channel
+end
+
+-- Builds at the wrap; asserts the result equals the pre-change build and
+-- whether it was served from the memo.
+local function assert_wrap(song, hit, label)
+  local before = stats()
+  local actual = wrap_build(song, 2)
+  local expected = build(reference_merge, song, 2)
+  luaunit.assert_nil(difference(actual, expected), label)
+  local after = stats()
+  luaunit.assert_equals({after.hits - before.hits, after.misses - before.misses}, hit and {1, 0} or {0, 1}, label)
+  return actual
+end
+
+function test_merge_wrap_memo_serves_an_unchanged_wrap_and_misses_on_every_input_change()
+  local song, channel = memo_song()
+  local sources = song.patterns
+  assert_wrap(song, false, "first build")
+  assert_wrap(song, true, "unchanged")
+  local changes = {
+    {"source trig written in place", function() sources[2].trig_values[15] = 1 end},
+    {"source trig 1 -> true", function() sources[2].trig_values[15] = true end},
+    {"velocity at a trig step", function() sources[1].velocity_values[5] = 64 end},
+    {"note at a trig step", function() sources[2].note_values[3] = 4 end},
+    {"length at a trig step", function() sources[2].lengths[7] = 2 end},
+    {"note mask value at a trig step", function() sources[1].note_mask_values[9] = 3 end},
+    {"integer -> float of equal value", function() sources[1].velocity_values[5] = 64.0 end},
+    {"float -> integer of equal value", function() sources[1].velocity_values[5] = 64 end},
+    {"positive step trig mask (event handler)", function()
+      event_handlers.note_mask.apply_event(channel, 20, {step = 20, trig = 1}, "apply")
+    end},
+    {"positive step trig mask cleared (restore_state)", function()
+      event_handlers.note_mask.restore_state(channel, {step = 20}, {working_pattern =
+        {trig_value = 0, note_value = 0, velocity_value = 100, length = 1}})
+    end},
+    {"note merge mode", function() channel.note_merge_mode = "up" end},
+    {"trig merge mode", function() channel.trig_merge_mode = "skip" end},
+    {"pattern priority", function() channel.velocity_merge_mode = "pattern_number_3" end},
+    {"priority source value off the trig steps", function() sources[3].velocity_values[40] = 11 end},
+    {"assignment enabled -> disabled", function() channel.selected_patterns[2] = false end},
+    {"assignment added", function() channel.selected_patterns[4] = true end},
+    {"source table replaced", function() sources[4] = {trig_values = {}, note_values = {}, velocity_values = {},
+      lengths = {}, note_mask_values = {}}
+      for s = 1, 64 do
+        sources[4].trig_values[s], sources[4].note_values[s], sources[4].velocity_values[s] = 0, 0, 100
+        sources[4].lengths[s], sources[4].note_mask_values[s] = 1, -1
+      end
+    end},
+  }
+  for _, change in ipairs(changes) do
+    change[2]()
+    assert_wrap(song, false, change[1])
+    assert_wrap(song, true, change[1] .. ", then unchanged")
+  end
+end
+
+function test_merge_wrap_memo_ignores_nothing_legacy_reads_but_stays_exact()
+  local song, channel = memo_song()
+  assert_wrap(song, false, "first build")
+  -- Values legacy_merge never reads (off the trig and positive-mask steps,
+  -- no priority mode), masks applied after it, and the working pattern
+  -- itself: a hit, and still exactly the pre-change build.
+  song.patterns[1].velocity_values[40] = 3
+  assert_wrap(song, true, "velocity off the read steps")
+  event_handlers.note_mask.apply_event(channel, 5, {step = 5, velocity = 33, note = 2, length = 3}, "apply")
+  assert_wrap(song, true, "value masks (event handler)")
+  event_handlers.note_mask.apply_event(channel, 6, {step = 6, trig = 0}, "apply")
+  assert_wrap(song, true, "a zero step trig mask")
+  program.update_working_pattern_for_step(channel, 9, 0, 5, 1, 4)
+  local rebuilt = assert_wrap(song, true, "working pattern written in place")
+  luaunit.assert_equals(rebuilt.trig_values[9], 1)
+end
+
+function test_merge_wrap_memo_hits_return_independent_copies()
+  local song = memo_song()
+  local first = assert_wrap(song, false, "first build")
+  local pristine = build(reference_merge, song, 2)
+  scribble(first)
+  local second = assert_wrap(song, true, "after scribbling the miss result")
+  luaunit.assert_nil(difference(second, pristine))
+  scribble(second)
+  local third = assert_wrap(song, true, "after scribbling a hit result")
+  luaunit.assert_nil(difference(third, pristine))
+  luaunit.assert_false(third.trig_values == second.trig_values)
+  luaunit.assert_false(third.merged_notes == second.merged_notes)
+end
+
+function test_merge_wrap_memo_is_used_only_by_the_wrap_rebuild()
+  local song = memo_song()
+  local before = stats()
+  pattern_under_test.update_working_pattern(2, song)
+  build(pattern_under_test.get_and_merge_patterns, song, 2)
+  luaunit.assert_equals(stats(), before)
+  pattern_under_test.update_working_pattern(2, song, true)
+  pattern_under_test.update_working_pattern(2, song, true)
+  local after = stats()
+  luaunit.assert_equals({after.hits - before.hits, after.misses - before.misses}, {1, 1})
+  luaunit.assert_nil(difference(song.channels[2].working_pattern, build(reference_merge, song, 2)))
+end

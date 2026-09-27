@@ -77,8 +77,9 @@ local function extract_pattern_number(merge_mode)
   return nil
 end
 
-function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache)
-  local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
+-- The legacy (pre-Foundation, pre-mask) merge of a channel's sources.
+-- `trace`, when given, receives the visit order of the sources.
+local function legacy_merge(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, selected_song_pattern, effective_lengths_cache, trace)
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
     lengths = {unpack(default_lengths)},
@@ -135,6 +136,7 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
 
   for pattern_number, pattern_enabled in pairs(patterns_to_process) do
     local pattern = patterns[pattern_number]
+    if trace then trace[#trace + 1] = pattern_number; trace[#trace + 1] = pattern_enabled; trace[#trace + 1] = pattern end
     local source_lengths = effective_lengths_cache and effective_lengths_cache[pattern_number]
     if not source_lengths then
       source_lengths = effective_lengths(pattern)
@@ -208,12 +210,6 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   -- Trig collection may copy another pattern's values. Apply explicit priorities
   -- after that collection so table iteration order cannot overwrite the choice.
 
-  local step_trig_masks = pattern_channel.step_trig_masks or {}
-  local step_note_masks = pattern_channel.step_note_masks or {}
-  local step_velocity_masks = pattern_channel.step_velocity_masks or {}
-  local step_length_masks = pattern_channel.step_length_masks or {}
-  local channel_data = pattern_channel
-
   for s = 1, 64 do
     do_mode_calculation(note_merge_mode, s, notes, merged_pattern.note_values)
     do_mode_calculation(velocity_merge_mode, s, velocities, merged_pattern.velocity_values)
@@ -223,6 +219,182 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if velocity_priority then merged_pattern.velocity_values[s] = patterns[velocity_priority].velocity_values[s] end
     if length_priority then merged_pattern.lengths[s] = priority_lengths[s] end
   end
+  return merged_pattern, merge_step_trig_masks
+end
+
+-- Memo of legacy_merge for the clock's synchronous wrap rebuild
+-- (docs/musical-merge-extensions-plan.md §1.3 performance). Source arrays
+-- and step masks are written in place without any rebuild request
+-- (program.update_working_pattern_for_step, the memory event handlers), so
+-- an entry is never trusted because nothing asked for a rebuild: it is
+-- validated on every use against a copy of each input value legacy_merge,
+-- and foundation.plan after it, can read:
+--   * the merge modes, and the source visit order as legacy_merge builds it
+--     (number, enabled value and source table identity, in pairs order);
+--   * each source's trig class at every step: == 1 (what legacy_merge
+--     reads), == true (what foundation.plan also accepts), or neither;
+--   * the positive step trig masks (== 1, the only test legacy_merge makes);
+--   * note, velocity, length and note-mask values at every step they can be
+--     read: the source's trig steps (1 or true) and positive-mask steps, or
+--     all 64 when a pattern-priority mode reads whole arrays; compared by
+--     value and by number subtype (math.type).
+-- A hit returns a fresh copy of the pristine merged pattern stored at the
+-- miss; nothing the caller does to the result reaches the entry.
+local legacy_memo = setmetatable({}, {__mode = "k"})
+local math_type = math.type
+local VALUE_FIELDS = {"note_values", "velocity_values", "lengths", "note_mask_values"}
+local MERGED_FIELDS = {"trig_values", "lengths", "note_values", "note_mask_values", "velocity_values"}
+
+-- Hit and miss counts of the wrap memo, for tests and profiling.
+pattern.wrap_memo_stats = {legacy_hits = 0, legacy_misses = 0}
+
+-- The trig class of a source value: 1 (== 1), 2 (== true) or 0.
+local function trig_class(value)
+  if value == 1 then return 1 end
+  if value == true then return 2 end
+  return 0
+end
+
+local function positive_masks(masks)
+  local result = {}
+  for s = 1, 64 do result[s] = masks ~= nil and masks[s] == 1 end
+  return result
+end
+
+local function snapshot_source(source, positive, every)
+  local trigs = source.trig_values
+  if type(trigs) ~= "table" then return nil end
+  local classes, steps = {}, {}
+  for s = 1, 64 do
+    local class = trig_class(trigs[s])
+    classes[s] = class
+    if every or class ~= 0 or positive[s] then steps[#steps + 1] = s end
+  end
+  local saved = {source = source, classes = classes, steps = steps}
+  for _, field in ipairs(VALUE_FIELDS) do
+    local values = source[field]
+    if type(values) ~= "table" then return nil end
+    local copy = {}
+    for index = 1, #steps do copy[index] = values[steps[index]] end
+    saved[field] = copy
+  end
+  return saved
+end
+
+local function memo_valid(entry, channel, modes, pattern_channel, patterns)
+  for index = 1, 4 do if entry.modes[index] ~= modes[index] then return false end end
+  -- The visit order of the sources, built exactly as legacy_merge builds it.
+  local order = {}
+  for number, enabled in pairs(pattern_channel.selected_patterns) do order[number] = enabled end
+  for index = 2, 4 do
+    local mode = modes[index]
+    local number = mode and extract_pattern_number(mode)
+    if number and order[number] == nil then order[number] = false end
+  end
+  local trace, position = entry.trace, 0
+  for number, enabled in pairs(order) do
+    if trace[position + 1] ~= number or trace[position + 2] ~= enabled or trace[position + 3] ~= patterns[number] then
+      return false
+    end
+    position = position + 3
+  end
+  if position ~= #trace then return false end
+  local masks = program.get_step_trig_masks(channel)
+  local positive = entry.positive
+  for s = 1, 64 do
+    if (masks ~= nil and masks[s] == 1) ~= positive[s] then return false end
+  end
+  local sources = entry.sources
+  for index = 1, #sources do
+    local saved = sources[index]
+    local trigs, classes = saved.source.trig_values, saved.classes
+    if type(trigs) ~= "table" then return false end
+    for s = 1, 64 do
+      local value = trigs[s]
+      local class = value == 1 and 1 or value == true and 2 or 0
+      if class ~= classes[s] then return false end
+    end
+    -- Classes and masks are equal, so the read steps are the saved ones.
+    local steps = saved.steps
+    for _, field in ipairs(VALUE_FIELDS) do
+      local values, copy = saved.source[field], saved[field]
+      if type(values) ~= "table" then return false end
+      for i = 1, #steps do
+        local u, v = values[steps[i]], copy[i]
+        if u ~= v or math_type(u) ~= math_type(v) then return false end
+      end
+    end
+  end
+  return true
+end
+
+-- Steps 1..64 are copied explicitly: a nil value (a hole) must not shorten
+-- the copy as unpack's length would.
+local function copy_merged(merged)
+  local result = {}
+  for _, field in ipairs(MERGED_FIELDS) do
+    local values, copy = merged[field], {}
+    for s = 1, 64 do copy[s] = values[s] end
+    result[field] = copy
+  end
+  local notes_merged = {}
+  for key, value in pairs(merged.merged_notes) do notes_merged[key] = value end
+  result.merged_notes = notes_merged
+  return result
+end
+
+-- legacy_merge, served from the memo when every input equals the entry's.
+-- Returns the merged pattern and whether it came from the memo.
+local function memo_legacy_merge(channel, modes, selected_song_pattern)
+  local pattern_channel = selected_song_pattern.channels[channel]
+  local patterns = selected_song_pattern.patterns
+  local by_channel = legacy_memo[selected_song_pattern]
+  local entry = by_channel and by_channel[channel]
+  local stats = pattern.wrap_memo_stats
+  if entry and entry.channel_table == pattern_channel and entry.patterns == patterns and
+    memo_valid(entry, channel, modes, pattern_channel, patterns) then
+    stats.legacy_hits = stats.legacy_hits + 1
+    return copy_merged(entry.merged), true
+  end
+  stats.legacy_misses = stats.legacy_misses + 1
+  local trace = {}
+  local merged, masks = legacy_merge(channel, modes[1], modes[2], modes[3], modes[4], selected_song_pattern, nil, trace)
+  local positive = positive_masks(masks)
+  -- A priority mode reads its source's whole arrays.
+  local every = false
+  for index = 2, 4 do if modes[index] and extract_pattern_number(modes[index]) then every = true end end
+  local sources = {}
+  for index = 3, #trace, 3 do
+    local saved = snapshot_source(trace[index], positive, every)
+    if not saved then sources = nil; break end
+    sources[#sources + 1] = saved
+  end
+  if not by_channel then by_channel = {}; legacy_memo[selected_song_pattern] = by_channel end
+  by_channel[channel] = sources and {
+    modes = {modes[1], modes[2], modes[3], modes[4]}, trace = trace, sources = sources,
+    positive = positive, channel_table = pattern_channel, patterns = patterns,
+    merged = copy_merged(merged)
+  } or nil
+  return merged, false
+end
+
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, memo)
+  local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
+  local merged_pattern
+  if memo and not effective_lengths_cache then
+    merged_pattern = memo_legacy_merge(channel,
+      {trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode}, selected_song_pattern)
+  else
+    merged_pattern = legacy_merge(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode,
+      length_merge_mode, selected_song_pattern, effective_lengths_cache)
+  end
+  local pattern_channel = selected_song_pattern.channels[channel]
+  local patterns = selected_song_pattern.patterns
+  local step_trig_masks = pattern_channel.step_trig_masks or {}
+  local step_note_masks = pattern_channel.step_note_masks or {}
+  local step_velocity_masks = pattern_channel.step_velocity_masks or {}
+  local step_length_masks = pattern_channel.step_length_masks or {}
+  local channel_data = pattern_channel
 
   local requested_merge_settings = pattern_channel.musical_merge or merge_config.new()
   local merge_runtime = merge_state.effective(selected_song_pattern, channel, requested_merge_settings)
@@ -425,7 +597,7 @@ local function invalidate_lookahead(c)
   if scheduler then scheduler:invalidate(c, nil, nil) end
 end
 
-local function build_working_pattern(c, song_pattern, channel_pattern, effective_lengths_cache)
+local function build_working_pattern(c, song_pattern, channel_pattern, effective_lengths_cache, memo)
   return pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,
@@ -433,7 +605,8 @@ local function build_working_pattern(c, song_pattern, channel_pattern, effective
     channel_pattern.velocity_merge_mode,
     channel_pattern.length_merge_mode,
     song_pattern,
-    effective_lengths_cache
+    effective_lengths_cache,
+    memo
   )
 end
 
@@ -505,9 +678,9 @@ function pattern.update_source_working_patterns(song_pattern, source_number)
   pattern.update_working_patterns(song_pattern, affected)
 end
 
-local function rebuild(c, song_pattern)
+local function rebuild(c, song_pattern, memo)
   local channel_pattern = song_pattern.channels[c]
-  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern)
+  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern, nil, memo)
 end
 
 -- Rebuild, synchronously, every follower of a channel in `leaders` (every
@@ -528,7 +701,8 @@ function pattern.update_working_pattern(c, song_pattern, at_wrap)
   -- Do not let a pending sweep retain pre-edit lengths after this ingress.
   local state = working_pattern_updates[song_pattern]
   if state then state.effective_lengths_cache = {} end
-  rebuild(c, song_pattern)
+  -- The wrap rebuild serves unchanged inputs from the content-validated memo.
+  rebuild(c, song_pattern, at_wrap == true)
   -- Plan §1.3: leader edits reach followers.
   if not at_wrap then pattern.rebuild_followers(song_pattern, {[c] = true}) end
 end
