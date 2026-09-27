@@ -333,20 +333,21 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
 - `PERF-MERGE-HW-DENSE`: maximum anchors per admission. Channel 1 is a
   Foundation leader `x16` with a 64-step range and an anchor pattern with a
   trig on every step; channels 2–16 are Foundation followers `/4` with 64-step
-  ranges, anchor on step 1 and a second source with trigs on **every** step
-  (63 candidates, the maximum), window 0. Since `d_f / d_l = 64`, each follower
+  ranges, an assigned anchor pattern with **no** trigs and a second source with
+  trigs on **every** step (64 candidates, the maximum: no position is an
+  anchor), window 0. Since `d_f / d_l = 64`, each follower
   step lasts exactly one leader cycle, so each admission's support meets exactly
   64 leader cycles and 4,096 anchors, and every follower onset coincides with a
   leader step-1 anchor. Per admission the test asserts: supported, cycle count
-  64, anchor count 4,096, zero leader-plan builds, all 63 candidates removed
-  with `INTERLOCK CH01`; all 15 followers wrap together.
+  64, leader anchor count 4,096, zero leader-plan builds, all 64 candidates
+  removed with `INTERLOCK CH01`; all 15 followers wrap together.
 - `PERF-MERGE-HW-DENSE-EDIT`: DENSE plus a grid edit of channel 1's step-1
   anchor trig every 16 beats, alternately off and on (rebuild requests,
   follower propagation and yielding sweeps under maximum work). Per follower
   admission, in both states: supported, cycle count 64, zero builds; trig on:
-  4,096 anchors and all 63 candidates removed; trig off: 4,032 anchors, no
-  candidate coincides with an anchor, so no Interlock rejection and — with gap 0,
-  Amount 100, Accent 70, no masks — eligible = admitted = 63. Every follower
+  4,096 leader anchors and all 64 candidates removed; trig off: 4,032 leader
+  anchors, no candidate coincides with an anchor, so no Interlock rejection
+  and — with gap 0, Amount 100, Accent 70, no masks — eligible = admitted = 64. Every follower
   shows the new state at its first admission after each edit.
 - `PERF-MERGE-HW-EDIT`: WORST plus a grid edit of channel 1's anchor pattern
   every two bars that toggles its single trig off and on again (the
