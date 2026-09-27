@@ -30,7 +30,7 @@
  "manual": "README.md",
  "manual_sha256": "f969d3a74a6487f35982565464d95242902e7db38a3b76d1c946c9928a36259c",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "d0d958142e6bdb36bb28c29f2f09319975755e5127c73049a27bbedf48bcefcf",
+ "inventory_sha256": "a8a79a1768f640e07198201602ceba82cc81adc122d265365ca1f30291486621",
  "counts": {
   "requirements": 177,
   "production_lua_modules": 170,
@@ -84,7 +84,7 @@
    "interaction_strategy": "Pure exhaustive solver/planner checks feed scheduler integration and physical grid/norns workflows; exact MIDI and active grid projection are independent acceptance oracles.",
    "residual_gaps": [
     "MM-12 Space (silence-aware interlock) is deferred as residual MM-12 (docs/musical-merge-extensions-plan.md \u00a76.3, owner: the Mosaic maintainer): no engine, UI or manual claim; the reserved space schema field is validated and inert, and the README states Space is not part of this release. MM-12-AUDIBLE, the proposal's audible-silence entry gate, stays OPEN.",
-    "Fragments, Interlock and Structure (MM-08..MM-11) have physical behaviour cases (M-MERGE-FRAGMENTS-001, M-MERGE-INTERLOCK-001, M-MERGE-STRUCTURE-001) for one representative configuration each; their remaining domains (short/offset loops, Keep anchor, unequal clock divisions and loop lengths, RESYNC/PLAN LIMIT bypasses, Every 4/Every 8 markers, CHORD MISSING and MARKER PRIORITY with Revoice/Ensemble) are unit/integration evidence only.",
+    "Fragments, Interlock and Structure (MM-08..MM-11) have physical behaviour cases in both lanes. Fragments (M-MERGE-FRAGMENTS-001) covers one representative configuration; short/offset loops, Keep anchor and masks are unit/integration evidence only. Interlock: M-MERGE-INTERLOCK-001 (Window 0/2, queued Window, chain refusal), M-MERGE-INTERLOCK-002 (plan \u00a71.3: leader and follower grid edits mid-cycle reach the follower in that loop in MIDI and on the grid; a 25 ms lock lead edit withdraws the removed addition's planned lock) and M-MERGE-INTERLOCK-003 (plan \u00a71.2.1: follower and leader Clock retimes landing mid-cycle at the pattern boundary show RESYNC on the Interlock screen, Result and grid and restore additions before the follower's next wrap; a stopped Clock change replans the first loop). Unit/integration evidence only for Interlock: PLAN LIMIT, RESYNC after loop-range and non-realigning song changes, swing/shuffle invariance, reversed callback order, yielding-sweep races (edit between leader and follower rebuilds, stale sweep completion) and unequal leader/follower loop lengths under edits. Structure: M-MERGE-STRUCTURE-001 (Anchors snap, Delete group restores), M-MERGE-STRUCTURE-002 (marker root MIDI = note grid = Merge Result and Voice leading Result; reverse-strum delayed root with Harmony Off; mapped marker/non-marker conflict silent under Silence and Legacy fallbacks with the conflict shown) and M-MERGE-STRUCTURE-003 (disable and delete while playing with 6- and 5-step channel loops keep markers paired until the pattern boundary; a Merge Shape edit waiting with the deletion shows NEXT PATTERN). Unit/integration evidence only for Structure: Every 4/Every 8 markers, CHORD MISSING, MARKER PRIORITY with Revoice/Ensemble, arp root voices, lifecycle undo/redo, stale drafts, Stop settlement and save/reload.",
     "Off/v1 exactness (docs/musical-merge-extensions-plan.md \u00a70) is judged against an independent base oracle: lib/tests/fixtures/merge_v1_baseline holds v1 projects saved by f908a553's own project save and that revision's observations (working patterns, complete MIDI traces with pulses, RNG draws, lead-25 lock lookahead), captured by capture.sh under the f908a553 harness and pinned by MANIFEST.lua sha256s; merge_v1_baseline_oracle_tests.lua loads them through the candidate's production load (check + migrate via project_lifecycle), saves v2, reloads v2 and compares exactly. The oracle covers five representative projects, not every v1 configuration.",
     "Interlock device acceptance (plan \u00a71.4: PERF-MERGE-HW-STEADY, -WORST, -EDIT, -DENSE, -DENSE-EDIT) is implemented in tests/behaviour/hardware_performance.py and merge_workloads.py with host-verified semantics (merge_device_workload_tests.lua, test_merge_workloads.py) but has never run on a physical norns. The device qualification is OUTSTANDING and release-gating until source-identified device reports of all five cases pass (owner: repository maintainer); host figures do not stand in for it."
    ],
@@ -172,7 +172,11 @@
     "M-HARMONY-HELD-001",
     "M-MERGE-FRAGMENTS-001",
     "M-MERGE-INTERLOCK-001",
-    "M-MERGE-STRUCTURE-001"
+    "M-MERGE-STRUCTURE-001",
+    "M-MERGE-INTERLOCK-002",
+    "M-MERGE-INTERLOCK-003",
+    "M-MERGE-STRUCTURE-002",
+    "M-MERGE-STRUCTURE-003"
    ],
    "status": "implemented"
   },
