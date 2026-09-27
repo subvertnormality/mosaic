@@ -74,7 +74,7 @@ Everything not stated here keeps the MM-01…MM-07 contracts in
   mute and route failures never feed back into any plan, including another
   channel's.
 
-## 1. Common musical time (used by MM-09 Interlock and MM-12 Space)
+## 1. Common musical time (used by MM-09 Interlock)
 
 ### 1.1 Nominal time
 
@@ -215,7 +215,7 @@ onset), so it holds with swing and shuffle and independent of host timing.
   configuration, a first enable mid-play; and, for global activations, a
   nominally earlier leader onset delayed past the activation and a nominally
   later onset advanced before it (swing and shuffle, both directions, reversed
-  callback order, Space gates carried in), asserting the bypass from queue time
+  callback order), asserting the bypass from queue time
   through the next origin and recovery when the queue is withdrawn; supported
   results are identical and equal what the leader then plays.
 - **User edits between prediction and activation.** If the leader's queued
@@ -230,7 +230,7 @@ onset), so it holds with swing and shuffle and independent of host timing.
 
 ### 1.3 Freshness: when a follower plans
 
-**Authoritative rule:** a follower's Interlock/Space admission is computed
+**Authoritative rule:** a follower's Interlock admission is computed
 inside its ordinary working-pattern build, for its current cycle `j = k_f`
 (output window `[j·P_f, (j+1)·P_f)`), every time that build runs. Grid
 projection and MIDI read that one build, so they always agree. Mid-cycle
@@ -257,27 +257,20 @@ rebuilds for the follower's own edits recompute from the same inputs.
   admission — the sweep rebuilds from live data, so the last build wins). Each
   asserts the retained admission until replacement, the lookahead invalidation,
   and that grid LEDs and emitted MIDI agree at every step.
-- **Where leader plans come from (performance).** Every leader plan, for
-  played and predicted cycles alike, is built through the same
-  `get_and_merge_patterns` path with the governing segment's configuration,
-  cycle and phrase (§1.2.3), memoised only within one admission and shared by
-  both filters. There is no cross-build cache and no reuse of the leader's live
-  working pattern, so no invalidation or history-retention question arises;
-  inputs are the song data at the follower's build.
-  - **Interlock needs no plan build.** Its input is the leader's anchors, which
-    by §3 are the anchor pattern's trigs inside the leader's playable range
-    under the governing configuration, before masks. They are read directly
-    from the stored anchor pattern — the same values `foundation.plan` marks as
-    `anchor` from the same inputs. A test asserts equality with plan-derived
-    anchors for every configuration shape in the Interlock suite.
-  - **In-place leader writes** (mask edits, recording and memory restore write
-    into a working pattern without a rebuild request,
-    `lib/models/program.lua:839-858`, `lib/memory/event_handlers.lua:81-121`)
-    change the stored data those writes also persist; the follower sees them at
-    its next build (its wrap at the latest), because it rebuilds leader plans
-    from song data. Regression: an in-place mask write on the leader mid-cycle
-    is reflected in the follower's next admission and not before; grid and MIDI
-    of the follower agree throughout.
+- **What Interlock reads (performance).** Interlock builds no leader plan.
+  Its input is the leader's anchors, which by §3 are the anchor pattern's trigs
+  inside the leader's playable range under the governing configuration, before
+  masks. For every leader cycle in the support, logged or predicted, they are
+  read directly from the **currently stored** anchor pattern and the governing
+  segment's configuration — the same values `foundation.plan` marks as `anchor`
+  from the same inputs (a test asserts equality for every configuration shape in
+  the Interlock suite). Interlock is defined against the leader's anchors as
+  currently stored, projected over the support; it does not reconstruct an
+  anchor pattern as it was before a later edit. Anchor-pattern edits go through
+  `update_source_working_patterns`, which rebuilds the leader and so its
+  followers (above); any other anchor-pattern write reaches the follower at its
+  next build. Cost per admission: at most 64 leader cycles × 64 stored anchor
+  values plus the membership checks.
 - **While stopped** `j = 0` and `k_l = 0`: the stopped grid preview shows what
   the first cycle after Start will play, using any queued/requested
   configuration as the entry at 0.
@@ -292,91 +285,30 @@ rebuilds for the follower's own edits recompute from the same inputs.
 
 The follower cycle is the output horizon, not the complete query. Leader cycles
 are evaluated over the **support** interval
-`[j·P_f − B, (j+1)·P_f + window·d_f]`, clipped at the origin (no leader cycles
-before 0), where `B = max(window·d_f, G)` and `G` is an upper bound on any
-Space reservation, computed **before** enumeration from song data alone:
+`[j·P_f − window·d_f, (j+1)·P_f + window·d_f]`, clipped at the origin (no leader
+cycles before 0), so an anchor in the preceding or following leader cycle
+within the window is found. For an output onset `o`, Interlock inspects leader
+anchors in `[o − window·d_f, o + window·d_f]`. Leader cycles in the support are
+enumerated explicitly, because consecutive cycles can differ in configuration.
 
-`G = (L_max + S_max)·d_l + release·d_f`. `L_max` is a proven upper bound on
-every effective length the leader can produce, from stored values only. Let
-`A` and `a` be the largest and smallest length values stored in any of the 16
-patterns of the slot (assigned or not: unassigned priority sources feed the
-length merge) and `M` the largest channel or step length-mask value. Every
-length transformation is bounded as follows (`lib/pattern.lua:33-58, 181-220`):
-`effective_lengths` only shortens, to `min(L, distance)` with the distance a
-whole number of steps ≥ 1, so every merge operand lies in `[min(a, 1), A]`.
-`fn.average_table_values` rounds the mean half up to an integer, so the rounded
-average `r` satisfies `r ≤ A + 1/2`, and `r ≤ A` when every operand is an
-integer (the mean of integers ≤ `A` rounds to at most `A`). Then: priority
-copies an operand (≤ `A`); `average` is `r ≤ A + h`; `down` is
-`min − (r − min) ≤ min ≤ A`; `up` is `r + (max − min) ≤ A + h + A − min(a, 1)`;
-fragment composition only shortens authored values (≤ `A`); a mask replaces the
-value (≤ `M`); the working pattern's default length is 1 where no length merge
-applies. So
-`L_max = max(2A − min(a, 1) + h, M, 1)` with `h = 1/2` if any stored length is
-fractional, else 0 (a scan of at most 16 × 64 + 65 values). Example: stored
-lengths 10 and 10 where one is clipped to 1 give operands {1, 10} and
-`up` = round(5.5) + 9 = 15 ≤ 2·10 − 1 = 19; {1, 1.9, 1.9} merges up to 2.9,
-which the `h` term covers. A plan length above `L_max` is `PLAN LIMIT`.
-Regression cases: a fractional average, a fractional `down`, an exact-half
-average and the examples above. Any length
-path added later must extend this table or Space bypasses with `PLAN LIMIT`.
-`S_max` is the largest strum tail (§6.1) over the
-channel's strum settings and every trig-locked value of a strum parameter on the
-channel; if any strum input is locked to a value whose tail cannot be computed
-without executing playback, `S_max` is the largest tail the descriptor can
-produce for the channel's chord slots at the slowest strum division. Bound
-construction is at most ~1,200 value reads and runs before enumeration. With
-Space off, `G = 0`. Interlock alone uses `B = window·d_f`, so an
-anchor in the preceding leader cycle within the window is found.
-
-For an output onset `o`, Interlock inspects leader anchors in
-`[o − window·d_f, o + window·d_f]`; Space blocks `o` when some gate onset `a`
-with reserved duration `g` has `a ≤ o < a + g` (half-open). Leader cycles in the
-support are enumerated explicitly (no periodic shortcut), because consecutive
-cycles can differ by phrase and configuration.
-
-**Budget (the single authority; §3, §6 and §7 refer to it).** Per follower
-admission, counted across both filters together:
-- at most **64 leader cycles** in each filter's support interval;
-- at most **`B_build` distinct leader-plan builds** in total (played and
-  predicted cycles alike), where a plan shared by both filters counts once and
-  Interlock itself needs none; `B_build = 2` (a named constant, lowered by the
-  device acceptance below if needed, never raised without a new device
-  measurement). With `B_build = 0` Space always bypasses with `PLAN LIMIT` and
-  Interlock is unaffected — the bounded visible fallback;
-- membership checks at most 64 follower candidates × the leader onsets in the
-  evaluated cycles.
-If any bound would be exceeded, **both** filters bypass for that follower cycle
-with `PLAN LIMIT` and the admission is the unfiltered Foundation result,
-deterministic and visible, never evidence of silence. `GATE INPUT UNAVAILABLE`
-bypasses Space only. Acceptance: exactly-at-limit and one-over-limit for each
-bound, with one shared leader and with two distinct leaders; both horizon
-edges, exact endpoints, origin clipping, an Interlock-only anchor in the
-preceding cycle, a preceding-cycle `up`-merged gate longer than every stored
-length, long gates and strum tails carried in over several cycles with changing
-phrases and configurations, large ratios and the fallback.
+**Budget (single authority).** Per follower admission: at most **64 leader
+cycles** in the support, and membership checks at most 64 follower candidates ×
+the leader anchors in those cycles. No leader plan is built. If the cycle bound
+would be exceeded (for example follower `/128` against leader `x16` with a
+one-step loop) Interlock bypasses for that follower cycle with `PLAN LIMIT` and
+the admission is the unfiltered Foundation result, deterministic and visible.
+Acceptance: exactly-at-limit and one-over-limit, both horizon edges, exact
+endpoints, origin clipping, an anchor in the preceding cycle within the window,
+large ratios and the fallback.
 
 **Device acceptance (timing oracle).** `tests/behaviour/hardware_performance.py`
-gains three cases, all on the PERF-002 dense workload at 130 bpm with 16
-channels, each judged by the existing `TIMING_THRESHOLDS` gates (event timing,
-sustained and hard service, step jitter) unchanged:
-- `PERF-MERGE-HW-STEADY`: channel 2 follows channel 1 through Interlock and
-  Space; one-cycle Fixed leader.
-- `PERF-MERGE-HW-WORST`: 15 followers (channels 2–16), each with Interlock and
-  Space on two distinct Build-shaped per-phrase leaders arranged so every
-  follower wrap needs `B_build` builds, 64-step followers — the maximum
-  supported aggregate load. The capture window starts at Start, so the first
-  admissions after Start are included.
-- `PERF-MERGE-HW-EDIT`: the WORST configuration with a leader source edit
-  applied through the grid every two bars during the capture (rebuild requests
-  and yielding sweeps included).
-The release gate is that all three pass. If WORST or EDIT fails, `B_build` is
-lowered (to 1, then 0) until they pass; at 0 Space bypasses with `PLAN LIMIT`
-whenever it would need a plan, which is visible on Result/Reason and in the
-manual. The constant, the reports and the chosen fallback are recorded. Until
-these device runs pass, the feature is not released and the delivery report
-states host figures only.
-
+gains cases on the PERF-002 dense workload at 130 bpm with 16 channels, each
+judged by the existing `TIMING_THRESHOLDS` gates unchanged:
+`PERF-MERGE-HW-STEADY` (channel 2 follows channel 1), `PERF-MERGE-HW-WORST`
+(channels 2–16 all follow channel 1 with 64-step followers and window 4, capture
+from Start) and `PERF-MERGE-HW-EDIT` (WORST plus a leader anchor-pattern edit
+through the grid every two bars). All three must pass before release; until the
+device runs pass, the delivery report states host figures only.
 
 ### 1.5 Dependency rules
 
@@ -403,8 +335,7 @@ states host figures only.
   Every intermediate active graph must satisfy the same one-way invariant.
 - The leader must be in the same song slot. If the leader's configuration for
   a queried cycle is Off, or Foundation with a missing anchor, that leader
-  cycle contributes no anchors to Interlock (its gates still count for Space:
-  a leader in legacy merge still sounds). The follower shows `LEADER OFF` or
+  cycle contributes no anchors to Interlock. The follower shows `LEADER OFF` or
   `LEADER MISSING` when no evaluated leader cycle contributed anchors.
 - **First cycle after Start.** Leader cycle 0 exists from the origin, so the
   follower's first cycle is filtered like any other; there is no waiting cycle.
@@ -495,22 +426,22 @@ onsets** in common time. Anchors of either channel are never changed.
   `|a − onset| ≤ window · d_f`. Window 0 means exactly coincident nominal onsets.
 - **Authoritative candidate pipeline for both filters.** Construct the raw
   assigned-source union and protected anchors as Foundation does today. For
-  each non-anchor candidate, evaluate gap, Interlock and Space independently
+  each non-anchor candidate, evaluate gap and Interlock independently
   against the same immutable admission inputs. Store every applicable rejection
   reason in that order; M14 shows the ordered list and any single-reason
   projection uses its first entry. A disabled or visibly bypassed filter adds
   no rejection, and its bypass status is displayed separately. Candidates
-  surviving all three predicates form the eligible set. Apply the existing
+  surviving both predicates form the eligible set. Apply the existing
   FNV ranking and tie-break, existing phrase-adjusted Amount calculation and
   existing Accent behavior to that set, then apply explicit masks last.
   M03 Eligible is the surviving candidate count and Admitted is the count
   selected before masks; Accent zero retains its existing zero-admission
   behavior. Amount-rejected survivors receive the existing amount/accent
   reason. Anchors are never put through these candidate filters.
-  With immutable source, leader records, windows, release, gap, seed, phrase
+  With immutable source, leader anchors, window, gap, seed, phrase
   and nonzero Accent, increasing Amount cannot remove an admitted addition.
   Masks can override the result and are outside that nested-set claim.
-  Acceptance must combine both leaders with non-100-percent Amount, overlapping
+  Acceptance must combine gap and Interlock with non-100-percent Amount, overlapping
   rejection reasons, Accent zero and mask overrides, asserting exact eligible
   and admitted counts as well as selected positions.
 - Swing, shuffle and host timing never change a supported admission (§1.2); unsupported ones bypass visibly.
@@ -610,11 +541,11 @@ an explicit chord; additions between markers keep their free target.
     the Harmony link.
   - Fragments screen: Size 4/8/16, Keep anchor Off/On, Anchor (assigned
     patterns, shown only with Keep anchor), Seed.
-  - M03 Rhythm (Foundation) gains `Interlock ›` and `Space ›` rows opening two
-    child screens. Their editable domains derive from §0. The Space screen is
-    titled `Space · nominal gates` and displays `NOT AUDIBLE SILENCE`; Result
-    and Reason expose startup, missing-plan and `PLAN LIMIT` bypasses. Invalid
-    leaders are listed but Apply rejects them according to §1.5.
+  - M03 Rhythm (Foundation) gains an `Interlock ›` row opening its child
+    screen (Leader, Window). Its editable domains derive from §0. Result and
+    Reason expose `RESYNC`, `LEADER OFF`, `LEADER MISSING` and `PLAN LIMIT`
+    bypasses. Invalid leaders are listed but Apply rejects them according to
+    §1.5. There is no Space screen (§6).
   - M07 Pitch gains `Structure ›` → Structure screen: Markers
     Off/Anchors/Every 4/Every 8, Chord group (enabled groups).
   - M05/M14 Result and Reason show the new roles/reasons.
@@ -624,11 +555,26 @@ an explicit chord; additions between markers keep their free target.
 - README "Merge Shape" replaces the MM-08+ deferral paragraph with a
   subsection per feature (with emulator captures), and the cheat sheet gains
   the new rows. Manual inventory requirements MERGE-FRAGMENTS,
-  MERGE-INTERLOCK, MERGE-STRUCTURE and MERGE-SPACE are added. MERGE-SPACE and
-  all captions must state the nominal-occupancy scope, bypasses and sustain
-  limitation in §6; they must not claim the audible-silence entry gate passed.
+  MERGE-INTERLOCK and MERGE-STRUCTURE are added. The README keeps a one-line
+  statement that silence-aware interlock (Space) is not part of this release.
 
-## 6. MM-12 Space (nominal planned occupancy)
+## 6. MM-12 Space — DEFERRED (residual MM-12)
+
+**Not part of this delivery.** Plan review rounds 13–14 established that
+filtering a follower against a leader's *sounding* gates needs the leader's
+played lengths and articulation as they were when each gate started. Rebuilding
+them from current song data is wrong after an edit (a shortened note would free
+space that was still sounding), live articulation values are written by lock
+and slide callbacks, and the worst-case plan building is unmeasured on the
+device. The engine implemented at `b8fd72e5` was reverted (`627f3d6e`); the
+`interlock.space` field remains reserved in the v2 schema (validated,
+defaulting to no leader, no behaviour, no UI). A future design must first
+specify historical ownership and retention of leader gate inputs, their writer
+inventory, and a device-measured budget, and pass plan review, before any code.
+The text below is retained as design notes for that work, not as a contract of
+this delivery; the `space` schema field and its dependency edges stay inert.
+
+### 6.0 Former contract (design notes only)
 
 Foundation only, separate from onset interlock (separate leader and fields).
 Both predicates participate in the authoritative candidate pipeline in §3.
@@ -747,6 +693,6 @@ suite and affected behaviour lanes.
 | MM-08 Fragments | §2, schema v2 + migration | Layout for N = 1, 3, 4, 7, 8, 16, 17, 64 and sizes 4/8/16 with nonzero start; sequence reproducibility per seed; Fixed vs Per-phrase across 3 phrases; authored data preserved subject to §2.3's fragment-only length rule; every §2.3 boundary/mask case; keep-anchor precedence; complete §0 migration round trips and baseline equivalence. Behaviour: grid/MIDI agree for two cycles, both lanes. |
 | MM-09 Interlock | §1, §3 | Exact whole-note conversion assertions from §1.1 against sprocket divisions; nominal-time tests for the listed modifier pairs, unequal ranges, realign and division change; same-pulse order independence with changing records and reversed sprocket order; first-cycle behavior; §1.5 active/requested/queued graph transitions and history; §1.4 edge, carry-in, large-ratio and budget cases; exact §3 combined-filter counts and nested sets. Swing/shuffle invariance; resync bypass after division, range and non-realigning slot changes; activation-history queries at, before and after the leader's own boundary in the same pulse; epoch-derived phrase equality with merge_state; leader plan built by the same get_and_merge_patterns path. Behaviour compares the admitted nominal plan with grid positions and corresponding emitted MIDI events, without claiming actual-time nonoverlap. |
 | MM-10 Structure | §4 | Marker sets; chord snapping with ties; bypass precedence; between-marker additions unchanged; exact legacy binding/map preservation and active suffix behavior; missing-group recovery; complete reference lifecycle cases; shared playback/Pattern resolution, repeated-value conflicts and downstream Harmony precedence. Behaviour: successfully snapped marker root events preserve a chord pitch class in MIDI and grid inspection; mapped conflicts fail closed; generated chord/arp voices are outside that assertion. |
-| MM-11 UI/docs | §5 | Screens through runtime input; apply/queue/cancel and atomic group lifecycle; reasons on M14; nominal Space scope and visible bypasses; README/cheat sheet/images; spec validate/replay green. |
-| MM-12 nominal Space | §6 | Final masked lengths; playback-equivalent immutable articulation inputs and descriptor tails; half-open ends, release margin, zero lengths, probability-independence and complete §1.4 support/budget cases. Behaviour in both lanes: an admitted unmasked candidate is outside every selected nominal reserved interval; bypass status is visible. No audible-silence assertion; MM-12-AUDIBLE remains open. |
+| MM-11 UI/docs | §5 | Screens through runtime input; apply/queue/cancel and atomic group lifecycle; reasons on M14; README/cheat sheet/images (README states Space is not available); spec validate/replay green. |
+| MM-12 Space | §6 | **Deferred** (residual MM-12): no engine, UI or manual claim in this delivery; the reserved `space` schema field is validated and inert. |
 | Integrated | all | Full Lua suite, affected behaviour lanes, Paranoia branch review; resolve confirmed BLOCKER/FATAL/MAJOR findings or route permitted deferred obligations to named durable residuals with owner and acceptance boundary. |
