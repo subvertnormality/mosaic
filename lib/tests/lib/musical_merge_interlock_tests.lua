@@ -612,6 +612,125 @@ function test_interlock_follower_global_queue_bypasses_from_queue_time()
   stop_transport()
 end
 
+-- Review D1 (§1.2.3, §4 Reference lifecycle): a pending global activation
+-- keeps its shared boundary when a later ordinary (channel-boundary) request
+-- replaces it, and a request that restores the active configuration
+-- withdraws it. Recording lookahead is declared below; these tests use a
+-- local copy so they can sit with the other global-activation cases.
+local function recording_calls()
+  local calls = {}
+  local previous = m_clock.lookahead_scheduler
+  m_clock.lookahead_scheduler = {invalidate = function(_, channel, step, slot)
+    calls[#calls + 1] = {channel, step, slot}
+  end}
+  return calls, function() m_clock.lookahead_scheduler = previous end
+end
+
+local function whole_channel_invalidated(calls, channel)
+  for _, call in ipairs(calls) do if call[1] == channel and call[2] == nil then return true end end
+  return false
+end
+
+local function apply_merge(song, number, value, boundary)
+  local snapshot = transaction.snapshot(song)
+  snapshot.channels[number].musical_merge = value
+  luaunit.assert_true(transaction.apply(song, snapshot, true, boundary))
+end
+
+-- Queue time replaces the follower's next-onset lookahead too (§1.2.3).
+function test_interlock_follower_global_queue_invalidates_follower_lookahead()
+  local song = setup({follower_mod = D1, leader_mod = D1, global_length = 16})
+  m_clock.init(); m_clock:start(); pulses(24)
+  local calls, restore = recording_calls()
+  apply_merge(song, FOLLOWER, foundation(3, {amount = 40, interlock = {leader = LEADER, window = 0}}), "pattern")
+  restore()
+  luaunit.assert_true(whole_channel_invalidated(calls, FOLLOWER))
+  stop_transport()
+end
+
+-- The follower's own pending global activation, replaced by an ordinary
+-- edit: still one pattern-boundary activation. The follower's shorter wraps
+-- before the boundary change nothing; the bypass holds until the boundary and
+-- the sticky resync continues it.
+function test_interlock_channel_edit_over_follower_pending_global_keeps_pattern_boundary()
+  local song, follower = setup({follower_mod = D1, follower_last = 3, leader_mod = D1, leader_last = 4,
+    global_length = 16})
+  m_clock.init(); m_clock:start(); pulses(24)
+  apply_merge(song, FOLLOWER, foundation(3, {amount = 40, interlock = {leader = LEADER, window = 0}}), "pattern")
+  apply_merge(song, FOLLOWER, foundation(3, {amount = 30, interlock = {leader = LEADER, window = 0}}), "channel")
+  local record = merge_state.peek(song, FOLLOWER)
+  luaunit.assert_nil(record.queued)
+  luaunit.assert_equals(record.global_queued.amount, 30)
+  luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "RESYNC")
+  local wraps, previous, landed = 0, program.get_current_step_for_channel(FOLLOWER), false
+  for _ = 1, 24 * 16 do
+    pulses(1)
+    local current = program.get_current_step_for_channel(FOLLOWER)
+    if current < previous then wraps = wraps + 1 end
+    previous = current
+    luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "RESYNC")
+    local amount = merge_state.effective(song, FOLLOWER, follower.musical_merge).config.amount
+    if record.global_queued then
+      luaunit.assert_false(landed)
+      luaunit.assert_equals(amount, 100)
+    else
+      landed = true
+      luaunit.assert_equals(amount, 30)
+    end
+  end
+  luaunit.assert_true(landed)
+  luaunit.assert_true(wraps >= 3)
+  stop_transport()
+end
+
+-- The same on the leader: its wraps before the boundary do not land the edit.
+function test_interlock_channel_edit_over_leader_pending_global_keeps_pattern_boundary()
+  local song, follower = setup({follower_mod = D1, follower_last = 6, leader_mod = D1, leader_last = 3,
+    global_length = 16})
+  m_clock.init(); m_clock:start(); pulses(24)
+  apply_merge(song, LEADER, foundation(5), "pattern")
+  apply_merge(song, LEADER, foundation(5, {amount = 30}), "channel")
+  local record = merge_state.peek(song, LEADER)
+  luaunit.assert_nil(record.queued)
+  luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "RESYNC")
+  local landed = false
+  for _ = 1, 24 * 16 do
+    pulses(1)
+    luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "RESYNC")
+    local active = merge_state.effective(song, LEADER, song.channels[LEADER].musical_merge).config
+    if record.global_queued then
+      luaunit.assert_false(landed)
+      luaunit.assert_equals({active.anchor, active.amount}, {1, 100})
+    else
+      landed = true
+      luaunit.assert_equals({active.anchor, active.amount}, {5, 30})
+    end
+  end
+  luaunit.assert_true(landed)
+  stop_transport()
+end
+
+-- An ordinary request restoring the follower's active configuration
+-- withdraws its pending global activation, leaves no channel queue, and
+-- rebuilds the follower (with its lookahead) back into the supported domain.
+function test_interlock_channel_request_withdrawing_follower_global_rebuilds_follower()
+  local song, follower = setup({follower_mod = D1, leader_mod = D1, global_length = 16})
+  m_clock.init(); m_clock:start(); pulses(24)
+  local original = merge_config.canonicalize(follower.musical_merge)
+  apply_merge(song, FOLLOWER, foundation(3, {amount = 40, interlock = {leader = LEADER, window = 0}}), "pattern")
+  luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "RESYNC")
+  local calls, restore = recording_calls()
+  apply_merge(song, FOLLOWER, original, "channel")
+  restore()
+  local record = merge_state.peek(song, FOLLOWER)
+  luaunit.assert_nil(record.global_queued)
+  luaunit.assert_nil(record.queued)
+  luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "ok")
+  luaunit.assert_true(whole_channel_invalidated(calls, FOLLOWER))
+  luaunit.assert_false(merge_timeline.resync(FOLLOWER))
+  stop_transport()
+end
+
 -- §1.2.1 resync bypass after a division change, a range change and a
 -- non-realigning slot change, visible as RESYNC, never filtering.
 function test_interlock_resync_after_division_range_and_slot_changes()

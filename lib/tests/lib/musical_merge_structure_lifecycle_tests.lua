@@ -16,6 +16,7 @@ local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local transaction = include("mosaic/lib/optional_config_transaction")
 local validation = include("mosaic/lib/project_validation")
 local structure = include("mosaic/lib/musical_merge/structure")
+local pattern_model = include("mosaic/lib/pattern")
 
 local function group(members)
   local value = harmony_config.four_part_smooth(1, members or {9, 10, 11, 12})
@@ -291,6 +292,148 @@ function test_structure_later_channel_request_replaces_pending_global_repair()
   stop_transport()
   luaunit.assert_equals(merge_state.effective(song, 2, song.channels[2].musical_merge).config,
     song.channels[2].musical_merge)
+end
+
+-- Review D1: a normal merge edit made while a cross-feature repair (or its
+-- undo restoration) is pending stays with the shared pattern boundary. It
+-- replaces the pending global request, leaves no channel queue, reports NEXT
+-- PATTERN, and neither channel's earlier (unequal) wraps activate the
+-- repaired or restored references before the group change. Audible: channel
+-- 2 plays raw 1 (62) at its every_4 marker, snapped to C (60) while the group
+-- and markers are active and paired.
+local function channel_pitches(before)
+  local result = {}
+  for index = before + 1, #midi_note_on_events do
+    local event = midi_note_on_events[index]
+    result[event[3]] = result[event[3]] or {}
+    table.insert(result[event[3]], event[1])
+  end
+  return result
+end
+
+local function amount_edit(number, amount)
+  select_channel(number)
+  local value = feature_editor.new("merge"); value:enter()
+  value.draft.amount = amount; value.dirty = true
+  luaunit.assert_true(value:key(3))
+  return value
+end
+
+local function run_to_pattern_boundary(song, expect_before, expect_after, label)
+  local wraps, boundary_seen = {[2] = 0, [3] = 0}, false
+  local previous = {[2] = program.get_current_step_for_channel(2), [3] = program.get_current_step_for_channel(3)}
+  local heard = {before = {}, after = {}}
+  for _ = 1, 16 * 24 + 48 do
+    local count = #midi_note_on_events
+    pulses(1)
+    for number = 2, 3 do
+      local current = program.get_current_step_for_channel(number)
+      if current < previous[number] then wraps[number] = wraps[number] + 1 end
+      previous[number] = current
+    end
+    assert_paired(song, label .. " pulse")
+    local switched = expect_after.groups(active_groups(song))
+    if switched then boundary_seen = true else luaunit.assert_false(boundary_seen, label) end
+    local expected = switched and expect_after or expect_before
+    for number = 2, 3 do
+      local config = merge_state.effective(song, number, song.channels[number].musical_merge).config
+      luaunit.assert_equals(config.structure, expected.structure[number], label .. " channel " .. number)
+      luaunit.assert_equals(config.amount, expected.amount[number], label .. " amount " .. number)
+    end
+    for _, pitch in ipairs(channel_pitches(count)[2] or {}) do
+      table.insert(switched and heard.after or heard.before, pitch)
+    end
+  end
+  luaunit.assert_true(boundary_seen, label)
+  luaunit.assert_true(wraps[2] >= 3, label)
+  luaunit.assert_true(wraps[3] >= 1, label)
+  return heard
+end
+
+local function marker_raws(song)
+  for _, position in ipairs({1, 5, 9, 13}) do song.patterns[1].note_values[position] = 1 end
+  for number = 2, 3 do program.get().devices[number].midi_channel = number end
+  for number = 2, 3 do pattern_model.update_working_pattern(number, song) end
+end
+
+local function repair_then_amount_edit(repair, label)
+  local song = setup(); marker_raws(song)
+  m_clock:start()
+  local value = repair(1)
+  luaunit.assert_equals(value.status, "NEXT PATTERN", label)
+  local edit = amount_edit(2, 40)
+  luaunit.assert_equals(edit.status, "NEXT PATTERN", label)
+  local record = merge_state.peek(song, 2)
+  luaunit.assert_nil(record.queued, label .. " no channel queue")
+  luaunit.assert_equals(record.global_queued.amount, 40, label)
+  luaunit.assert_equals(record.global_queued.structure, {markers = "off"}, label)
+  local on = {markers = "every_4", group_id = 1}
+  local heard = run_to_pattern_boundary(song, {
+    structure = {[2] = on, [3] = {markers = "every_8", group_id = 1}}, amount = {[2] = 100, [3] = 100}
+  }, {
+    groups = function(groups) return not structure.group_available({groups = groups}, 1) end,
+    structure = {[2] = {markers = "off"}, [3] = {markers = "off"}}, amount = {[2] = 40, [3] = 100}
+  }, label)
+  luaunit.assert_true(#heard.before >= 3, label)
+  for _, pitch in ipairs(heard.before) do luaunit.assert_equals(pitch, 60, label .. " snapped before") end
+  stop_transport()
+  luaunit.assert_equals(merge_state.effective(song, 2, song.channels[2].musical_merge).config,
+    song.channels[2].musical_merge)
+  assert_paired(song, label .. " after stop")
+end
+
+function test_structure_amount_edit_during_pending_delete_waits_for_pattern_boundary()
+  repair_then_amount_edit(delete_group, "delete")
+end
+
+function test_structure_amount_edit_during_pending_disable_waits_for_pattern_boundary()
+  repair_then_amount_edit(disable_group, "disable")
+end
+
+-- The same for an undo restoration: the restored references must not reach
+-- channel 2's wrap before the restored group reaches the pattern boundary.
+function test_structure_amount_edit_during_pending_undo_restoration_waits_for_pattern_boundary()
+  local song = setup(); marker_raws(song)
+  delete_group(1)
+  m_clock:start()
+  memory.undo(2)
+  luaunit.assert_nil(active_groups(song)[1])
+  local edit = amount_edit(2, 40)
+  luaunit.assert_equals(edit.status, "NEXT PATTERN")
+  luaunit.assert_nil(merge_state.peek(song, 2).queued)
+  local heard = run_to_pattern_boundary(song, {
+    structure = {[2] = {markers = "off"}, [3] = {markers = "off"}}, amount = {[2] = 100, [3] = 100}
+  }, {
+    groups = function(groups) return structure.group_available({groups = groups}, 1) end,
+    structure = {[2] = {markers = "every_4", group_id = 1}, [3] = {markers = "every_8", group_id = 1}},
+    amount = {[2] = 40, [3] = 100}
+  }, "undo")
+  luaunit.assert_true(#heard.before >= 3)
+  for _, pitch in ipairs(heard.before) do luaunit.assert_equals(pitch, 62, "unsnapped before") end
+  for _, pitch in ipairs(heard.after) do luaunit.assert_equals(pitch, 60, "snapped after") end
+  stop_transport()
+end
+
+-- An edit that restores the active configuration withdraws the pending
+-- global request without leaving a channel queue: undoing both the Amount
+-- edit and the deletion before the boundary changes nothing at any wrap.
+function test_structure_undo_of_edit_and_delete_withdraws_pending_global_request()
+  local song = setup()
+  m_clock:start()
+  delete_group(1)
+  amount_edit(2, 40)
+  memory.undo(2)
+  local record = merge_state.peek(song, 2)
+  luaunit.assert_nil(record.queued)
+  luaunit.assert_equals(record.global_queued.amount, 100)
+  luaunit.assert_equals(record.global_queued.structure, {markers = "off"})
+  memory.undo(2)
+  luaunit.assert_nil(record.queued)
+  luaunit.assert_nil(record.global_queued)
+  merge_state.on_cycle_boundary(song, 2, song.channels[2].musical_merge)
+  luaunit.assert_equals(active_structure(song, 2), {markers = "every_4", group_id = 1})
+  assert_paired(song, "withdrawn")
+  stop_transport()
 end
 
 -- Undo while playing restores group and references through the same boundary.

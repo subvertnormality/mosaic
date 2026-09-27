@@ -1505,6 +1505,9 @@ Apply needs an enabled group while Markers is on. If the group becomes
 unavailable during playback the markers play their ordinary pitch and Result
 says `CHORD MISSING`. Deleting or disabling the group turns Markers Off for every
 channel that uses it in the same change; Delete group lists those channels first.
+During playback that change waits for the next pattern boundary, and a Merge
+Shape edit applied to one of those channels before then waits with it and shows
+`NEXT PATTERN` instead of `NEXT CYCLE`.
 A snapped marker keeps its chord tone when Harmony Revoice or Ensemble would move
 it: Harmony's Result says `MARKER PRIORITY`.
 

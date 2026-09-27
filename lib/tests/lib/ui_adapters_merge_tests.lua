@@ -330,6 +330,41 @@ function test_ui_adapters_merge_snapshot_variants_are_immutable_and_skip_get_fie
   luaunit.assert_equals(adapter:describe("M02", "snapshot:M02", {source_route = "snapshot:M02"}).code, "foreign_route")
 end
 
+-- Review D1 (plan §4 Reference lifecycle): an edit applied while a
+-- cross-feature (pattern-boundary) request is pending for the channel keeps
+-- that boundary. The adapter reports NEXT PATTERN with the global boundary,
+-- M04 shows the pending amount as not yet active and M09 does not claim the
+-- next channel cycle. Characterisation outside the manual.
+function test_ui_adapters_merge_apply_over_pending_global_reports_next_pattern()
+  local adapter, editor, song, channel = fresh({1})
+  editor.draft.mode, editor.draft.anchor, editor.dirty = "foundation", 1, true
+  luaunit.assert_equals(adapter:apply(adapter.owner_token()).status, "APPLIED")
+  m_clock:start()
+  -- The pending repair a group delete would queue for this channel.
+  local repaired = fn.deep_copy(channel.musical_merge); repaired.seed = 3
+  merge_state.request_global(song, 1, repaired, true)
+  channel.musical_merge = repaired
+  editor:reload()
+  editor.draft.amount, editor.dirty = 60, true
+  local applied = adapter:apply(adapter.owner_token())
+  luaunit.assert_true(applied.ok)
+  luaunit.assert_equals(applied.code, "queued")
+  luaunit.assert_equals(applied.status, "NEXT PATTERN")
+  luaunit.assert_equals(applied.commit_boundary, "global_pattern_boundary")
+  local m04 = adapter:describe("M04", "snapshot:M04", {source_route = "snapshot:M04"})
+  luaunit.assert_equals({m04.descriptors[1].value, m04.descriptors[2].value, m04.descriptors[3].value,
+    m04.descriptors[4].value}, {"100", "60", "ON", "OFF"})
+  local m09 = adapter:describe("M09", "snapshot:M09", {source_route = "snapshot:M09"})
+  luaunit.assert_equals(m09.descriptors[2].value, "60")
+  luaunit.assert_equals(m09.descriptors[4].value, "OFF")
+  -- A later ordinary edit with nothing pending still reports NEXT CYCLE.
+  merge_state.on_pattern_boundary(song)
+  editor:reload(); editor.draft.amount, editor.dirty = 50, true
+  local later = adapter:apply(adapter.owner_token())
+  luaunit.assert_equals({later.status, later.commit_boundary}, {"NEXT CYCLE", "channel_cycle"})
+  luaunit.assert_equals(adapter:describe("M09", "snapshot:M09", {source_route = "snapshot:M09"}).descriptors[4].value, "ON")
+end
+
 function test_ui_adapters_merge_chord_group_source_lists_enabled_groups()
   local adapter, editor, song = fresh({1})
   local group = harmony_config.new_group(1); group.enabled = true

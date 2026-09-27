@@ -138,7 +138,7 @@ function transaction.apply(song,snapshot,playing,boundary,validated)
   -- The previous merge settings are only compared, so they are read in place
   -- (each is compared before its channel is replaced below).
   local before=transaction.view(song)
-  local changed_channels
+  local changed_channels,global_channels
   song.voicing=copy(snapshot.voicing)
   harmony_config_state.request_song(song,snapshot.voicing or{schema_version=1,groups={}},playing)
   for number=1,16 do
@@ -148,6 +148,12 @@ function transaction.apply(song,snapshot,playing,boundary,validated)
     if changed(before.channels[number].musical_merge,merge)then
       song.channels[number].musical_merge=merge
       local requested=merge or merge_config.new()
+      -- A request at the pattern boundary, or one replacing or withdrawing a
+      -- pending one, changes whether this channel's admissions bypass (§1.2.3).
+      local record=merge_state.peek(song,number)
+      if boundary=="pattern"or(record and record.global_queued)then
+        global_channels=global_channels or{};global_channels[number]=true
+      end
       if boundary=="pattern"then merge_state.request_global(song,number,requested,playing)else merge_state.request(song,number,requested,playing)end
       if not playing and pattern and pattern.update_working_pattern then pattern.update_working_pattern(number,song)end
       changed_channels=changed_channels or{};changed_channels[number]=true
@@ -155,13 +161,19 @@ function transaction.apply(song,snapshot,playing,boundary,validated)
   end
   -- Plan §1.3: a queued apply on a leader rebuilds its followers, so their
   -- predictions follow the new queue; a queued global activation rebuilds the
-  -- affected follower itself, which bypasses from queue time (§1.2.3).
+  -- affected follower itself, replacing its admission and next-onset
+  -- lookahead with the bypass from queue time (§1.2.3). Replacing or
+  -- withdrawing a pending global activation rebuilds it the same way.
   -- (Stopped, update_working_pattern above already propagates.)
   if playing and changed_channels and pattern and pattern.rebuild_followers then
     pattern.rebuild_followers(song,changed_channels)
-    if boundary=="pattern"then
+    if global_channels then
       local followers=pattern.followers_of(song)
-      for number in pairs(changed_channels)do if followers[number]then pattern.update_working_pattern(number,song)end end
+      local scheduler=m_clock and m_clock.lookahead_scheduler
+      for number in pairs(global_channels)do if followers[number]then
+        if scheduler then scheduler:invalidate(number,nil,nil)end
+        pattern.update_working_pattern(number,song)
+      end end
     end
   end
   return true

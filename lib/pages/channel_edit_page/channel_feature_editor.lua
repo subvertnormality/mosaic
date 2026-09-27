@@ -541,7 +541,13 @@ function editor.new(kind)
       local after=copy(self.before_snapshot);after.channels[channel.number].musical_merge=copy(self.draft)
       ok,reason=memory.record_optional_config(program.get().selected_song_pattern,{channel.number},self.before_snapshot,after,"channel")
       if not ok then self.status="INVALID "..tostring(reason);return false end
-      self.status=playing and"NEXT CYCLE"or"APPLIED";self.before_snapshot=after
+      -- A request that replaced a pending cross-feature one keeps its shared
+      -- pattern boundary (plan §4 Reference lifecycle); one that restored the
+      -- active configuration is already in force.
+      local record=playing and merge_state.peek(song,channel.number)
+      self.status=not playing and"APPLIED"or(record and record.global_queued and"NEXT PATTERN")or
+        (record and record.queued and"NEXT CYCLE")or"APPLIED"
+      self.before_snapshot=after
     else
       -- Plan §4 Reference lifecycle: a Structure reference to a group this
       -- draft deletes or disables turns markers Off in the same transaction.

@@ -202,6 +202,9 @@ function shared.new(ui_adapters, provider, editor, options)
     if target ~= nil and not target_valid(target) then return ui_adapters.fail("stale_target", identity) end
     local ok = editor:apply()
     local status = editor.status
+    -- A merge edit that replaced a pending cross-feature request keeps its
+    -- shared pattern boundary (plan §4 Reference lifecycle).
+    if status == "NEXT PATTERN" then identity.commit_boundary = "global_pattern_boundary" end
     local code = not ok and "invalid" or status == "UNCHANGED" and "unchanged" or status == "APPLIED" and "applied" or "queued"
     local outcome = ok and ui_adapters.outcome(identity) or ui_adapters.fail(code, identity)
     outcome.code, outcome.status, outcome.result = code, status, ok

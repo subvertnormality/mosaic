@@ -106,13 +106,17 @@ function state.reset_song(song) songs[song]=nil end
 function state.request(song, channel, requested, playing)
   local record = record_for(song, channel, requested)
   if playing then
-    record.queued = deep_copy(requested)
-    -- A later request supersedes a pending cross-feature one: the boundary
-    -- (or Stop) must not land the older snapshot over it. One that restores
-    -- the active configuration withdraws it: no change inside the cycle ever
-    -- happens (plan §1.2.3).
+    -- A later request supersedes a pending cross-feature one, but keeps its
+    -- shared pattern boundary: landing it at an earlier channel wrap would
+    -- activate repaired or restored references before the group change they
+    -- pair with (plan §4 Reference lifecycle). One that restores the active
+    -- configuration withdraws it without leaving a channel queue: no change
+    -- inside the cycle ever happens (plan §1.2.3).
     if record.global_queued then
       record.global_queued = not same(requested, record.active) and deep_copy(requested) or nil
+      record.queued = nil
+    else
+      record.queued = deep_copy(requested)
     end
     return "queued"
   end

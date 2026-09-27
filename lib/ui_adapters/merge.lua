@@ -5,7 +5,9 @@
 -- Channel page already drives. Routes are OLD owner routes (M01..M09,
 -- source_route_map.merge); describe(M01) yields the fields of new screen M02.
 -- Commit boundary: channel_cycle (editor:apply() records the transaction; while
--- playing the owner reports NEXT CYCLE). HARMONY_LINK ("Voice leading", field
+-- playing the owner reports NEXT CYCLE, or NEXT PATTERN with
+-- global_pattern_boundary when the edit replaced a pending cross-feature
+-- request). HARMONY_LINK ("Voice leading", field
 -- `harmony`) is a cross_owner_link: invoking it runs the owner's existing
 -- reload + channel_edit_page_ui.select_harmony_page() and leaves no return frame.
 -- Visual variants M04, M08, M09 and M11 are described only from snapshot:<id>.
@@ -41,7 +43,7 @@ local variants = {
     {id = "draft_edits_discarded", label = "Draft edits discarded", read = function(s) return format(s.status == "DRAFT CANCELLED") end},
     {id = "queued_amount", label = "Queued amount", read = function(s) return amount(s.queued) end},
     {id = "active_amount", label = "Active amount", read = function(s) return amount(s.active) end},
-    {id = "next_channel_cycle", label = "Next channel cycle", read = function(s) return format(s.queued ~= nil) end}
+    {id = "next_channel_cycle", label = "Next channel cycle", read = function(s) return format(s.queued ~= nil and not s.global_queued) end}
   },
   M11 = {
     {id = "mode", label = "Mode", read = function(s) return format(s.draft.mode) end},
@@ -59,7 +61,12 @@ return function(ui_adapters, owners)
     capture = function(owner, snap)
       local effective = merge_state.effective(owner.song, owner.channel_number,
         owner.channel.musical_merge or merge_config.new())
-      snap.active, snap.queued = shared.copy(effective.config), shared.copy(effective.queued)
+      -- A pending cross-feature request is the queued configuration too; it
+      -- lands at the pattern boundary, not the next channel cycle.
+      local record = merge_state.peek(owner.song, owner.channel_number)
+      local global = record and record.global_queued
+      snap.active, snap.queued = shared.copy(effective.config), shared.copy(effective.queued or global)
+      snap.global_queued = global ~= nil
     end
   })
 end
