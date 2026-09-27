@@ -341,36 +341,51 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
   end
 
+  -- Loop invariants hoisted; nothing below writes the channel or the plan.
+  local foundation_trigs = foundation_result and foundation_result.status == "ok" and foundation_result.trigs
+  local foundation_velocities = foundation_trigs and foundation_result.velocities
+  local trig_values, note_mask_values = merged_pattern.trig_values, merged_pattern.note_mask_values
+  local velocity_values, merged_lengths = merged_pattern.velocity_values, merged_pattern.lengths
+  local trig_mask, note_mask = channel_data.trig_mask, channel_data.note_mask
+  local velocity_mask = channel_data.velocity_mask
+  if not (trig_mask and trig_mask ~= -1) then trig_mask = nil end
+  if not (note_mask and note_mask ~= -1) then note_mask = nil end
+  if not (velocity_mask and velocity_mask ~= -1) then velocity_mask = nil end
+  -- (sic) lengths_mask: the existing condition, kept exactly.
+  local length_mask_applies = channel_data.length_mask and channel_data.lengths_mask ~= -1
   for s = 1, 64 do
-    if foundation_result and foundation_result.status == "ok" then
-      merged_pattern.trig_values[s] = foundation_result.trigs[s]
-      if foundation_result.velocities[s] ~= nil then
-        merged_pattern.velocity_values[s] = foundation_result.velocities[s]
-      end
+    if foundation_trigs then
+      trig_values[s] = foundation_trigs[s]
+      local velocity = foundation_velocities[s]
+      if velocity ~= nil then velocity_values[s] = velocity end
     end
 
-    if step_trig_masks[s] then
-      merged_pattern.trig_values[s] = step_trig_masks[s]
-    elseif channel_data.trig_mask and channel_data.trig_mask ~= -1 then
-      merged_pattern.trig_values[s] = channel_data.trig_mask
+    local mask = step_trig_masks[s]
+    if mask then
+      trig_values[s] = mask
+    elseif trig_mask then
+      trig_values[s] = trig_mask
     end
 
-    if step_note_masks[s] then
-      merged_pattern.note_mask_values[s] = step_note_masks[s]
-    elseif channel_data.note_mask and channel_data.note_mask ~= -1 then
-      merged_pattern.note_mask_values[s] = channel_data.note_mask
+    mask = step_note_masks[s]
+    if mask then
+      note_mask_values[s] = mask
+    elseif note_mask then
+      note_mask_values[s] = note_mask
     end
 
-    if step_velocity_masks[s] then
-      merged_pattern.velocity_values[s] = step_velocity_masks[s]
-    elseif channel_data.velocity_mask and channel_data.velocity_mask ~= -1 then
-      merged_pattern.velocity_values[s] = channel_data.velocity_mask
+    mask = step_velocity_masks[s]
+    if mask then
+      velocity_values[s] = mask
+    elseif velocity_mask then
+      velocity_values[s] = velocity_mask
     end
 
-    if step_length_masks[s] then
-      merged_pattern.lengths[s] = step_length_masks[s]
-    elseif channel_data.length_mask and channel_data.lengths_mask ~= -1 then
-      merged_pattern.lengths[s] = program.get_length_mask(channel_data)
+    mask = step_length_masks[s]
+    if mask then
+      merged_lengths[s] = mask
+    elseif length_mask_applies then
+      merged_lengths[s] = program.get_length_mask(channel_data)
     end
   end
 
