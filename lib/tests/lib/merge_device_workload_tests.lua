@@ -356,3 +356,60 @@ function test_merge_device_workload_records_grid_tap_edits_with_their_effect()
     end
   end
 end
+
+-- The device row pattern of PERF-MERGE-HW-WORST at c2ad05a9: every wrap pulse
+-- builds the 15 followers and the leader, and each global pattern end (song
+-- mode on, the norns default) also sweeps all 16 channels
+-- (song_transition: update_working_patterns, one channel per scheduler tick
+-- after the pulse; the host scheduler mock runs the sweep at once). The sweep also heals working patterns patched in place
+-- (memory event handlers), so it stays; it must be cheap: every follower
+-- build after the stopped configuration, from the first wrap after Start on,
+-- is served by the content-validated memo (legacy merge and plan).
+function test_merge_device_workload_wrap_and_song_end_sweep_builds_hit_the_memo()
+  local W = workload()
+  dense_project()
+  params:set("song_mode", 2)
+  W.configure("WORST", "enabled")
+  local builds = {}
+  local lattice
+  local ok, err = pcall(function()
+    local memo = pattern.wrap_memo_stats
+    local merge = pattern.get_and_merge_patterns
+    pattern.get_and_merge_patterns = function(c, ...)
+      local legacy, plan = memo.legacy_hits, memo.plan_hits
+      local result = merge(c, ...)
+      builds[#builds + 1] = {pulse = lattice and lattice.transport or -1, channel = c,
+        -- A wrap build carries the pulse token (get_and_merge_patterns' 9th argument).
+        in_pulse = type(select(8, ...)) == "table",
+        legacy_hit = memo.legacy_hits > legacy, plan_hit = memo.plan_hits > plan}
+      return result
+    end
+    m_clock:start()
+    lattice = m_clock.get_clock_lattice()
+    for _ = 1, 24 * 64 * 2 + 12 do
+      if scheduler and scheduler.update then scheduler.update() end   -- between pulses
+      lattice:pulse()
+    end
+    pattern.get_and_merge_patterns = merge
+    stop_transport()
+  end)
+  params:set("song_mode", nil)
+  if not ok then error(err, 0) end
+  local wraps, sweeps = {}, {}
+  for _, row in ipairs(builds) do
+    if row.channel >= 2 then
+      local into = row.in_pulse and wraps or sweeps
+      into[row.pulse] = into[row.pulse] or {}
+      into[row.pulse][#into[row.pulse] + 1] = row
+      luaunit.assert_true(row.legacy_hit and row.plan_hit,
+        string.format("ch%d at pulse %d (%s) served by the memo", row.channel, row.pulse, row.in_pulse and "wrap" or "sweep"))
+    end
+  end
+  -- Two wraps after Start, each with its 15 follower builds and one sweep.
+  local wrap_pulses, sweep_pulses = {}, {}
+  for pulse, rows in pairs(wraps) do wrap_pulses[#wrap_pulses + 1] = pulse; luaunit.assert_equals(#rows, 15, "wrap " .. pulse) end
+  for pulse, rows in pairs(sweeps) do sweep_pulses[#sweep_pulses + 1] = pulse; luaunit.assert_equals(#rows, 15, "sweep " .. pulse) end
+  table.sort(wrap_pulses); table.sort(sweep_pulses)
+  luaunit.assert_equals(wrap_pulses, {24 * 64 + 1, 24 * 64 * 2 + 1})
+  luaunit.assert_equals(sweep_pulses, {24 * 64 + 1, 24 * 64 * 2 + 1})
+end

@@ -297,11 +297,13 @@ rebuilds for the follower's own edits recompute from the same inputs.
   values plus the membership checks.
 - **Wrap-rebuild memo (performance).** No leader state or leader plan is
   cached across pulses: every pulse recomputes the Interlock admission
-  (above) from live data. Only the clock's synchronous rebuild at a channel's
-  own wrap (`update_working_pattern(c, song, true, pulse)`) may reuse
-  follower-side work, from a memo per song pattern and channel that is
-  validated by **content** on every use. Rebuild requests are not relied on: source arrays
-  and step masks are written in place without one
+  (above) from live data. Every working-pattern build (edits, follower
+  rebuilds, sweeps, stopped applies and the clock's wrap rebuild
+  `update_working_pattern(c, song, true, pulse)`) seeds and may reuse
+  follower-side work from a memo per song pattern and channel that is
+  validated by **content** on every use, so the first wrap after Start is
+  served by what the stopped builds computed. Rebuild requests are not
+  relied on: source arrays and step masks are written in place without one
   (`program.update_working_pattern_for_step`, the memory event handlers).
   The legacy source merge (before Foundation and masks) is reused only when
   its merge modes, its source visit order (number, enabled value and source
@@ -320,8 +322,7 @@ rebuilds for the follower's own edits recompute from the same inputs.
   the memo, and a plan with a fresh top level (the build adds its own
   fields there) whose sub-tables are shared: plan sub-tables are immutable
   once `foundation.plan` has built them (no Mosaic code writes them; a test
-  plays, inspects and renders Result/Reason with them read-only). Every other build (edits, sweeps, Start, load) runs in
-  full.
+  plays, inspects and renders Result/Reason with them read-only).
   Within one lattice pulse (the token m_clock's wrap branch passes down, a
   fresh table per `Lattice:pulse_all`, so a pulse that raises shares nothing
   with the next) the followers that wrap together also share work: equal

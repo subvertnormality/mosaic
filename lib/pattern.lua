@@ -222,7 +222,8 @@ local function legacy_merge(channel, trig_merge_mode, note_merge_mode, velocity_
   return merged_pattern, merge_step_trig_masks
 end
 
--- Memo of legacy_merge for the clock's synchronous wrap rebuild
+-- Memo of legacy_merge for every working-pattern build of this module (the
+-- clock's wrap rebuild, edits, follower rebuilds, sweeps; seeded by each)
 -- (docs/musical-merge-extensions-plan.md §1.3 performance). Source arrays
 -- and step masks are written in place without any rebuild request
 -- (program.update_working_pattern_for_step, the memory event handlers), so
@@ -590,13 +591,15 @@ local function admission(song, channel, config, first, last, pulse)
   return result
 end
 
--- memo: the wrap rebuild (content-validated memo). pulse: the lattice pulse
--- token of that rebuild, when it runs inside a pulse (m_clock's wrap branch).
+-- memo: serve and seed the content-validated memo (every build of this
+-- module passes it; a memo build ignores effective_lengths_cache and, on a
+-- miss, derives the lengths from the sources themselves). pulse: the lattice
+-- pulse token of a wrap rebuild inside a pulse (m_clock's wrap branch).
 function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, memo, pulse)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern, legacy_hit
   local share = memo and type(pulse) == "table" and pattern.wrap_share and pulse or nil
-  if memo and not effective_lengths_cache then
+  if memo then
     merged_pattern, legacy_hit = memo_legacy_merge(channel,
       {trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode}, selected_song_pattern, share)
   else
@@ -855,7 +858,7 @@ function pattern.update_working_patterns(song_pattern, affected_channels)
             if state.dirty[c] and (followers[c] == true) == (pass == 2) then
               local revision = state.revision[c]
               local channel = target.channels[c]
-              local result = build_working_pattern(c, target, channel, state.effective_lengths_cache)
+              local result = build_working_pattern(c, target, channel, state.effective_lengths_cache, true)
               if working_pattern_updates[target] == state
                 and state.revision[c] == revision and target.channels[c] == channel then
                 channel.working_pattern = result
@@ -916,7 +919,7 @@ function pattern.rebuild_followers(song_pattern, leaders)
   if not song_pattern then return end
   for c in pairs(pattern.followers_of(song_pattern, leaders)) do
     invalidate_lookahead(c)
-    rebuild(c, song_pattern)
+    rebuild(c, song_pattern, true)
   end
 end
 
@@ -931,7 +934,7 @@ function pattern.update_working_pattern(c, song_pattern, at_wrap, pulse)
   local state = working_pattern_updates[song_pattern]
   if state then state.effective_lengths_cache = {} end
   -- The wrap rebuild serves unchanged inputs from the content-validated memo.
-  rebuild(c, song_pattern, at_wrap == true, at_wrap == true and pulse or nil)
+  rebuild(c, song_pattern, true, at_wrap == true and pulse or nil)
   -- Plan §1.3: leader edits reach followers.
   if not at_wrap then pattern.rebuild_followers(song_pattern, {[c] = true}) end
 end
