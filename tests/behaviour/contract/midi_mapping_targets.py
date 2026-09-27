@@ -64,7 +64,14 @@ def midi_mapping_targets(c):
     assert mapped['edits'] == encoders['edits'], dict(mapped=mapped['edits'], encoders=encoders['edits'])
     assert mapped['counter'] == encoders['counter'], 'Memory position differs'
     notes = lambda r: [b for _, b in r['stream'] if b[0] == 144]
-    assert notes(mapped) and notes(mapped) == notes(encoders), dict(mapped=notes(mapped), encoders=notes(encoders))
     if c.clock_mode == 'controlled-experimental':
+        assert notes(mapped) and notes(mapped) == notes(encoders), dict(mapped=notes(mapped), encoders=notes(encoders))
         assert mapped['stream'] == encoders['stream'], 'Timed note/CC streams differ'
+    else:
+        # Real time: the 1.4 s host window between the Play and Stop taps can
+        # end either side of a note (9 vs 10 notes seen on CI), which is not
+        # what this case characterises. Two complete four-step loops (8 notes)
+        # must be played in both sessions and be identical.
+        assert len(notes(mapped)) >= 8 and len(notes(encoders)) >= 8, dict(mapped=notes(mapped), encoders=notes(encoders))
+        assert notes(mapped)[:8] == notes(encoders)[:8], dict(mapped=notes(mapped), encoders=notes(encoders))
     c.results.append(dict(kind='midi-mapping-targets', targets=[p for p, _ in MAP], notes=[b[1] for b in notes(mapped)][:8], passed=True))
