@@ -33,7 +33,7 @@
  "inventory_sha256": "75cc0a7196015826e6f552897b4ef70fe06d8300a2076d0aea707e9cf49841ae",
  "counts": {
   "requirements": 174,
-  "production_lua_modules": 167,
+  "production_lua_modules": 169,
   "unit_integration_files": 129,
   "domains": 17
  },
@@ -110,10 +110,12 @@
     "lib/musical_merge/foundation.lua",
     "lib/musical_merge/fragments.lua",
     "lib/musical_merge/interlock.lua",
+    "lib/musical_merge/leader_query.lua",
     "lib/musical_merge/pitch_target.lua",
     "lib/musical_merge/state.lua",
     "lib/musical_merge/structure.lua",
     "lib/musical_merge/timeline.lua",
+    "lib/musical_resolution/articulation.lua",
     "lib/optional_config_transaction.lua",
     "lib/pages/channel_edit_page/channel_feature_editor.lua"
    ],
@@ -1217,6 +1219,7 @@
     "lib/clock/m_clock.lua",
     "lib/clock/voice_lifetime.lua",
     "lib/musical_resolution/arp_descriptor.lua",
+    "lib/musical_resolution/articulation.lua",
     "lib/musical_resolution/chord_order.lua",
     "lib/musical_resolution/strum_descriptor.lua",
     "lib/recorder.lua",

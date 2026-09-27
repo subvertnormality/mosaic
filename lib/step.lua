@@ -7,6 +7,7 @@ local stock_parameter = include("mosaic/lib/musical_resolution/stock_parameter")
 local pitch_resolution = include("mosaic/lib/musical_resolution/pitch_resolution")
 local arp_descriptor = include("mosaic/lib/musical_resolution/arp_descriptor")
 local strum_descriptor = include("mosaic/lib/musical_resolution/strum_descriptor")
+local resolve_articulation = include("mosaic/lib/musical_resolution/articulation").resolve
 local quantiser = include("mosaic/lib/quantiser")
 local harmony_state = include("mosaic/lib/harmony/state")
 local harmony_config = include("mosaic/lib/harmony/config")
@@ -21,7 +22,6 @@ local merge_structure = include("mosaic/lib/musical_merge/structure")
 local m_clock = include("mosaic/lib/clock/m_clock")
 local play_note, play_arp_note = include("mosaic/lib/clock/voice_lifetime").new(m_clock)
 
-local divisions = include("mosaic/lib/clock/divisions")
 
 local step = {}
 local persistent_channel_step_scale_numbers = {
@@ -37,7 +37,6 @@ local step_scale_number = 0
 
 
 
-local note_divisions = divisions.note_divisions
 
 random = math.random
 
@@ -1046,35 +1045,12 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local c = note_container.channel
   local event_song = program.get_selected_song_pattern()
   
-  -- Check if root note should be muted
-  local mute_root = stock("mute_root_note") == 1
+  -- The articulation inputs, resolved by the one reader the Space gate
+  -- snapshot shares (lib/musical_resolution/articulation.lua).
+  local mute_root, chord_one, chord_two, chord_three, chord_four, has_chord_notes,
+    chord_strum_pattern, arp_division, chord_division, chord_velocity_mod, chord_spread,
+    chord_acceleration = resolve_articulation(channel, current_step, stock)
 
-  -- Cache frequently accessed values
-  local step_chord_masks = channel.step_chord_masks[current_step]
-  local chord_one = step_chord_masks and step_chord_masks[1] or channel.chord_one_mask
-  local chord_two = step_chord_masks and step_chord_masks[2] or channel.chord_two_mask
-  local chord_three = step_chord_masks and step_chord_masks[3] or channel.chord_three_mask
-  local chord_four = step_chord_masks and step_chord_masks[4] or channel.chord_four_mask
-  -- A chord slot sounds only with a non-zero note (see strum_descriptor).
-  local has_chord_notes = (chord_one and chord_one ~= 0) or (chord_two and chord_two ~= 0) or
-    (chord_three and chord_three ~= 0) or (chord_four and chord_four ~= 0)
-  
-  -- Cache params early
-  local chord_strum_pattern = stock("chord_strum_pattern")
-  local chord_arp = note_divisions[stock("chord_arp")]
-  local arp_division = chord_arp and chord_arp.value
-  -- Strum timing and chord velocity only shape arps, sounding chord notes and a
-  -- delayed root; a plain single note never reads them.
-  local chord_division, chord_velocity_mod, chord_spread, chord_acceleration = nil, nil, 0, 0
-  if arp_division or has_chord_notes or
-      (not mute_root and (chord_strum_pattern == 2 or chord_strum_pattern == 4)) then
-    local chord_strum = note_divisions[stock("chord_strum")]
-    chord_division = chord_strum and chord_strum.value
-    chord_velocity_mod = stock("chord_velocity_modifier")
-    chord_spread = stock("chord_spread") or 0
-    chord_acceleration = stock("chord_acceleration") or 0
-  end
-  
   -- Cache note processing values
   local note_value = unprocessed_note_container.note_value
   local octave_mod = unprocessed_note_container.octave_mod
@@ -1091,10 +1067,6 @@ local function handle_note(device, current_step, note_container, unprocessed_not
     end
   else
     process_func = quantiser.process
-  end
-
-  if chord_spread ~= 0 then
-    chord_spread = divisions.note_division_values[chord_spread]
   end
 
   -- Plain single notes need no chord table or chord dashboard values.

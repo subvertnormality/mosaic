@@ -109,19 +109,8 @@ local function without_interlock(song)
   return result
 end
 
-local function pulses(count)
-  for _ = 1, count do m_clock.get_clock_lattice():pulse() end
-end
-
-local function stop_transport()
-  local saved_nb, saved_handler, saved_stop = rawget(_G, "nb"), rawget(_G, "norns_param_state_handler"), m_midi.stop
-  rawset(_G, "nb", {stop_all = function() end})
-  rawset(_G, "norns_param_state_handler", include("mosaic/lib/devices/norns_param_state_handler"))
-  m_midi.stop = function() end
-  local ok, err = pcall(function() m_clock:stop() end)
-  rawset(_G, "nb", saved_nb); rawset(_G, "norns_param_state_handler", saved_handler); m_midi.stop = saved_stop
-  if not ok then error(err, 0) end
-end
+local harness = include("mosaic/lib/tests/helpers/merge_playback_harness")
+local pulses, stop_transport = harness.pulses, harness.stop_transport
 
 -- §3 window 0: exactly coincident nominal onsets. Follower x2 (1/32), leader
 -- /1 (1/16) anchors at steps 1 and 3 = 0 and 4/32: follower positions 1 and 5.
@@ -373,86 +362,13 @@ end
 -- Scheduler level. Nominal onset times are counted in lattice pulses per step
 -- (d · 384), exact for the clock mods used here.
 
-local function pulses_per_step(mod)
-  return math.floor(384 / m_clock.calculate_divisor(mod) / 4 + 0.5)
-end
-
-local function reverse_channel_order()
-  local order = m_clock.get_clock_lattice().sprocket_pulse_order[2]
-  local reversed = {}
-  for index = #order, 1, -1 do reversed[#reversed + 1] = order[index] end
-  m_clock.get_clock_lattice().sprocket_pulse_order[2] = reversed
-end
-
--- Plays `total` pulses and records, per onset of the follower and leader:
--- nominal time, step, the working pattern's role/reasons and whether MIDI
--- sounded, plus the follower's admission for every follower cycle.
 local function play(song, total, options)
   options = options or {}
-  m_clock.init()
-  local mods = {[FOLLOWER] = song.channels[FOLLOWER].clock_mods, [LEADER] = song.channels[LEADER].clock_mods}
-  local log = {[FOLLOWER] = {}, [LEADER] = {}}
-  local cycles = {}
-  local counts = {[FOLLOWER] = 0, [LEADER] = 0}
-  local notes_before = #midi_note_on_events
-  -- Fresh sprockets count onsets from 0; Start sounds the first onset.
-  local function observe()
-    local sounded = {}
-    for index = notes_before + 1, #midi_note_on_events do sounded[midi_note_on_events[index][3]] = true end
-    for _, number in ipairs({FOLLOWER, LEADER}) do
-      local count = m_clock["channel_" .. number .. "_clock"].onset_count or 0
-      if count > counts[number] then
-        counts[number] = count
-        local current = program.get_current_step_for_channel(number)
-        local working = song.channels[number].working_pattern
-        log[number][#log[number] + 1] = {
-          time = (count - 1) * pulses_per_step(mods[number]), step = current,
-          role = working.foundation and working.foundation.roles[current],
-          reasons = working.foundation and working.foundation.reason_lists and working.foundation.reason_lists[current],
-          trig = working.trig_values[current], sounded = sounded[number] == true,
-          k = merge_timeline.k(number)
-        }
-        if number == FOLLOWER then
-          local k = merge_timeline.k(FOLLOWER)
-          local admission = working.foundation and working.foundation.interlock
-          if admission and not cycles[k] then
-            local blocked = {}
-            for step in pairs(admission.blocked) do blocked[#blocked + 1] = step end
-            table.sort(blocked)
-            cycles[k] = {status = admission.status, blocked = table.concat(blocked, ",")}
-          end
-        end
-      end
-    end
-  end
-  m_clock:start()
-  if options.reversed then reverse_channel_order() end
-  for _, number in ipairs({FOLLOWER, LEADER}) do
-    if options.swing then m_clock.set_channel_swing(number, options.swing) end
-    if options.shuffle then
-      m_clock.set_swing_shuffle_type(number, 2); m_clock.set_channel_shuffle_feel(number, 1)
-      m_clock.set_channel_shuffle_basis(number, 1); m_clock.set_channel_shuffle_amount(number, 60)
-    end
-  end
-  observe()
-  for pulse = 1, total do
-    if options.at_pulse then options.at_pulse(pulse) end
-    notes_before = #midi_note_on_events
-    pulses(1)
-    observe()
-  end
-  stop_transport()
-  return log, cycles
+  options.follower, options.leader = FOLLOWER, LEADER
+  return harness.play(song, total, options)
 end
 
--- Grid (working pattern) and MIDI agree at every onset.
-local function assert_grid_and_midi_agree(log, label)
-  for number, onsets in pairs(log) do
-    for index, onset in ipairs(onsets) do
-      luaunit.assert_equals(onset.sounded, onset.trig == 1, label .. " ch" .. number .. " onset " .. index)
-    end
-  end
-end
+local assert_grid_and_midi_agree = harness.assert_grid_and_midi_agree
 
 -- Supported results equal what the leader then plays: no admitted addition is
 -- within the window of an anchor the leader played, and every Interlock
