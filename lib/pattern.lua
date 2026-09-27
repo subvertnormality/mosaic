@@ -427,15 +427,38 @@ local function same_filters(saved, filters)
   return true
 end
 
--- A plan result is a tree of plain tables (per-step lists under per-field
--- maps); the copy shares no table with it.
-local function copy_plan(value)
+-- A deep copy of a plan result, which shares no table with it. Plans are
+-- per-field maps of per-step lists (three levels); those levels are copied
+-- inline, anything deeper recursively.
+local function copy_tree(value)
   if type(value) ~= "table" then return value end
   local result = {}
-  for key, inner in pairs(value) do result[key] = copy_plan(inner) end
+  for key, inner in pairs(value) do result[key] = copy_tree(inner) end
   return result
 end
 
+local function copy_plan(plan)
+  local result = {}
+  for key, field in pairs(plan) do
+    if type(field) == "table" then
+      local copy = {}
+      for step, entry in pairs(field) do
+        if type(entry) == "table" then
+          local list = {}
+          for index, item in pairs(entry) do
+            if type(item) == "table" then item = copy_tree(item) end
+            list[index] = item
+          end
+          entry = list
+        end
+        copy[step] = entry
+      end
+      field = copy
+    end
+    result[key] = field
+  end
+  return result
+end
 
 function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, memo)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
