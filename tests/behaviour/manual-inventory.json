@@ -7632,10 +7632,11 @@
    ],
    "statement": "Fragments mode splits the channel loop from its start step into fragments of 4, 8 or 16 steps; each fragment plays one assigned pattern's own trigs, notes, velocities and lengths, chosen repeatably by the saved seed, without legacy note/velocity/length merging, and the grid shows what MIDI plays.",
    "cases": [
-    "M-MERGE-FRAGMENTS-001"
+    "M-MERGE-FRAGMENTS-001",
+    "M-MERGE-FRAGMENTS-002"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Physical Merge Shape workflow on an 8-step loop of two patterns with Size 4 and seeds 0 and 1: literal MIDI and exact loop-relative timing over two loops against the channel grid; pure tests cover layouts, short/offset loops, Keep anchor, the fragment length resolver and masks.",
+   "domain": "Physical Merge Shape workflows cover Size 4 and seeds 0/1 on an eight-step loop, plus a six-step loop shorter than Size 8 with Keep anchor Off/On, literal MIDI and grid output. Pure tests cover offset loops, the fragment length resolver and masks.",
    "oracles": [
     "Public grid LEDs",
     "literal MIDI pitches and velocities",

@@ -31,7 +31,7 @@ def _note_ons(state, before):
     return result
 
 
-def _placed(c, ons):
+def _placed(c, ons, loop=LOOP):
     """Each onset as (loop, step, midi channel, pitch, velocity): its nominal
     position counted from the first onset, which is step 1 of loop 0 after a
     Start. An onset off the step lattice fails."""
@@ -43,7 +43,7 @@ def _placed(c, ons):
         seconds = (m[field] - ons[0][field]) / 1e9
         index = round(seconds / STEP_SECONDS)
         errors.append(seconds - index * STEP_SECONDS)
-        placed.append((index // LOOP, index % LOOP + 1, m['bytes'][0] - 143, m['bytes'][1], m['bytes'][2]))
+        placed.append((index // loop, index % loop + 1, m['bytes'][0] - 143, m['bytes'][1], m['bytes'][2]))
     assert all(abs(e) <= tolerance for e in errors), dict(errors=errors, tolerance=tolerance)
     return placed, tolerance
 
@@ -52,7 +52,7 @@ def _loop_events(events, loop):
     return [(loop, step, channel, pitch, velocity) for step, channel, pitch, velocity in sorted(events)]
 
 
-def play_loops(c, events, loops=2, kind='merge-extension-loops', **record):
+def play_loops(c, events, loops=2, kind='merge-extension-loops', loop=LOOP, **record):
     """From stopped: exactly ``loops`` loops of ``events`` ((step, midi channel,
     pitch, velocity) per loop) and the next loop's first onset, in order, on
     their exact steps; then Stop with every note released."""
@@ -60,16 +60,16 @@ def play_loops(c, events, loops=2, kind='merge-extension-loops', **record):
     before = c.snapshot()['midi_count']
     c.ui.play()
     state = c.wait(lambda value: len(_note_ons(value, before)) >= len(expected),
-                   timeout=2 + (loops + 1) * LOOP * STEP_SECONDS * 2)
+                   timeout=2 + (loops + 1) * loop * STEP_SECONDS * 2)
     ons = _note_ons(state, before)[:len(expected)]
-    placed, tolerance = _placed(c, ons)
+    placed, tolerance = _placed(c, ons, loop=loop)
     # The first onset defines step 1: shift when the loop starts later.
     first = expected[0][1]
-    placed = [(lp + (st + first - 2) // LOOP, (st + first - 2) % LOOP + 1, ch, p, v) for lp, st, ch, p, v in placed]
+    placed = [(lp + (st + first - 2) // loop, (st + first - 2) % loop + 1, ch, p, v) for lp, st, ch, p, v in placed]
     assert placed == expected, dict(expected=expected, actual=placed)
     c.ui.stop()
     c.wait(lambda value: value['midi_capture']['outstanding'] == [])
-    c.results.append(dict(kind=kind, loops=loops, loop_steps=LOOP, expected=[list(e) for e in expected],
+    c.results.append(dict(kind=kind, loops=loops, loop_steps=loop, expected=[list(e) for e in expected],
                           tolerance_seconds=tolerance, passed=True, **record))
 
 
@@ -150,6 +150,39 @@ def fragments_workflow(c, capture=False):
     play_loops(c, [(s, 1, n, v) for s, (n, v) in P1.items()] + [(6, 1, 60, 100)],
                kind='fragments-seed-1', seed=1)
     loop_leds(c, {1, 2, 3, 4, 6})
+
+
+def fragments_short_loop_workflow(c):
+    """README Fragments: a loop shorter than Size is one fragment; Keep anchor
+    fills only empty trig positions and the fragment source wins on overlap."""
+    two_patterns(c, (3, 6))
+    c.ui.hold_control_tap("step", "step", held_index=1, target_index=6)
+    c.ui.channel_page("merge_shape", channel=1)
+    c.ui.select_row("mode", 0); c.ui.turn(3, 2)
+    c.ui.expect_selected_field("detail", "Mode", "FRAGMENTS")
+    c.ui.select_row("rhythm", 1); c.ui.press_key(3)
+    c.ui.expect_header("merge_fragments", channel=1)
+    c.ui.expect_selected_field("detail", "Size", "8")
+    c.ui.press_key(3)
+    c.ui.expect_footer_text("APPLIED")
+    c.ui.expect_steps({step: "selected" if step in (3, 6) else "off" if step <= 6 else "dark"
+                       for step in range(1, 17)})
+    play_loops(c, [(3, 1, 60, 100), (6, 1, 60, 100)], loop=6,
+               kind="fragments-short-loop", size=8, keep_anchor=False)
+    c.ui.select_row("keep_anchor", 1); c.ui.turn(3, 1)
+    c.ui.expect_selected_field("detail", "Keep anchor", "ON")
+    c.ui.select_row("anchor", 2)
+    c.ui.expect_selected_field("detail", "Anchor", "NONE")
+    c.ui.turn(3, 1)
+    c.ui.expect_selected_field("detail", "Anchor", "1")
+    c.ui.press_key(3)
+    c.ui.expect_footer_text("APPLIED")
+    expected = [(1, 1, 60, 127), (2, 1, 62, 117), (3, 1, 60, 100),
+                (4, 1, 65, 97), (6, 1, 60, 100)]
+    c.ui.expect_steps({step: "selected" if step in (1, 2, 3, 4, 6) else "off" if step <= 6 else "dark"
+                       for step in range(1, 17)})
+    play_loops(c, expected, loop=6, kind="fragments-short-loop-keep-anchor",
+               size=8, keep_anchor=True)
 
 
 # Interlock -------------------------------------------------------------------------
