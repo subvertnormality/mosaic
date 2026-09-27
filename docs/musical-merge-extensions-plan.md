@@ -330,13 +330,27 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
   per admission: status supported (not `PLAN LIMIT`), cycle count 64, anchor
   count 64, zero leader-plan builds, and every candidate addition removed with
   `INTERLOCK CH01`; all 15 followers wrap on the same pulse.
+- `PERF-MERGE-HW-DENSE`: maximum anchors per admission. Channel 1 is a
+  Foundation leader `x16` with a 64-step range and an anchor pattern with a
+  trig on every step; channels 2–16 are Foundation followers `/4` with 64-step
+  ranges, anchor on step 1, a second source with trigs on every other step,
+  window 0. Since `d_f / d_l = 64`, each admission's support meets exactly 64
+  leader cycles and 4,096 anchors. Per admission the test asserts: supported,
+  cycle count 64, anchor count 4,096, zero leader-plan builds, every candidate
+  addition removed with `INTERLOCK CH01`; all 15 followers wrap together.
 - `PERF-MERGE-HW-EDIT`: WORST plus a grid edit of channel 1's anchor pattern
-  every two bars during the capture that toggles its single trig off and on
-  again (so the configuration stays legal and the same support applies);
-  the test asserts each edit propagates to all 15 followers (their next
-  admissions report zero anchors while the trig is off and 64 after) with the
-  same per-admission assertions as WORST, rebuild requests and yielding sweeps
-  included.
+  every two bars that toggles its single trig off and on again (the
+  configuration stays legal and the support unchanged). Assertions are
+  state-dependent, per follower admission: in both states supported, cycle
+  count 64 and zero leader-plan builds; with the trig on, 64 anchors and every
+  candidate removed with `INTERLOCK CH01`; with the trig off, 0 anchors, no
+  Interlock rejection, and — with gap 0, Amount 100, Accent 70 and no masks —
+  eligible = admitted = the follower's 31 candidate additions. The test asserts
+  that every one of the 15 followers shows the new state at its first admission
+  after each edit (propagation), rebuild requests and yielding sweeps included.
+- **Capture duration:** every case captures at least three complete cycles of
+  its slowest follower (DENSE: `/4` × 64 steps = 16 beats per cycle, so at
+  least 48 beats ≈ 22 s at 130 bpm), overriding the 8 s default.
 - **Start latency:** each case also measures the time from the Start input's
   native timestamp to the first emitted Note On and compares it with the same
   workload with Merge Shape Off, captured in the same session. It passes when
