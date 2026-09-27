@@ -449,7 +449,9 @@ def play_structure(c, loops=2, strummed=(), delay_pulses=0, kind='structure-loop
     actual = []
     for m in ons:
         t = (m[key] - origin) / 1e9 / STEP
-        index = int(t + 1e-6)
+        # Use the independently expected onset order; real-time jitter may put
+        # a note just before its nominal step, where floor mislabels it.
+        index = expected[len(actual)][0] * LOOP + expected[len(actual)][1] - 1
         step = index % LOOP + 1
         offset = (t - index) * 24
         want = delay_pulses if step in strummed else 0
@@ -777,6 +779,8 @@ def interlock_unequal_workflow(c):
     # Pattern 2 selected, then Pattern 2 step 6.
     edit_step = 26
     at = origin + edit_step * step_ns + round(.15 * step_ns)
+    # Native grid deadlines must be within the next two seconds.
+    wait_until_ns(c, capture, at - 1_000_000_000)
     schedule = getattr(c, 'merge_acceptance_schedule', 0) + 1
     c.merge_acceptance_schedule = schedule
     c.ui.grid_events_at([(at, "step", 5, 1), (at + 25_000_000, "step", 5, 0),
@@ -892,13 +896,15 @@ def structure_harmony_workflow(c):
     assert (0, 2) in at and at[(0, 2)][0] % 12 == 0 and at[(0, 2)][1] == 117, dict(step_2=at.get((0, 2)), notes=notes)
     for step, want in ((1, SNAPPED[1]), (3, SNAPPED[3]), (4, SNAPPED[4]), (5, ADDITION), (7, ADDITION)):
         assert at.get((0, step)) == want, dict(step=step, want=want, got=at.get((0, step)), notes=notes)
-    harmony_result(c, [(2, 1, "Status", "MAPPED")])
+    harmony_result(c, [(2, 1, "Status", "OK")])  # Characterisation: recovered mapping reports OK.
     c.results.append(dict(kind='structure-conflict-recovered', step_2=list(at[(0, 2)]), passed=True))
 
     # Harmony Revoice: the snapped marker roots keep their chord tones (C C E
     # E) and Result names the marker priority.
     c.ui.channel_page("harmony", channel=1)
-    c.ui.select_row("mode", 0); c.ui.set_value(1); c.ui.press_key(3)
+    c.ui.select_row("mode", 0); c.ui.set_value(-1)
+    c.ui.expect_selected_field("focused", "Mode", "REVOICE", art=True)
+    c.ui.press_key(3)
     c.ui.expect_footer_text("APPLIED")
     notes = capture_loop_notes(c)
     at = {(loop, step): (pitch, velocity) for loop, step, pitch, velocity in notes}

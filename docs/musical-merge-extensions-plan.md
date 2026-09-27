@@ -893,20 +893,24 @@ excluded only by an explicit eligibility condition and visible manual/UI scope.
 Until that contract and its later implementation evidence pass review, README,
 cheat sheet, captures and acceptance reports must retain the narrower claim.
 
-### 6.4 Residual MM-ACC-PUBLIC (public-input acceptance not yet automated)
+### 6.4 Residual MM-ACC-PUBLIC (remaining public-input acceptance)
 
 Owner: the Mosaic maintainer (repository owner). Status: OPEN, recorded in
 `docs/testing/unit-integration-hardening-matrix.json` H16 `residual_gaps`.
 
-Scope — scenarios whose behaviour is implemented and verified by Lua
-unit/integration tests (named in H16) but not yet by public-input emulator
-cases: Interlock yielding-sweep interleavings (an edit between the leader's and
-follower's rebuilds, stale sweep completion), unequal leader/follower loop
-lengths under edits, PLAN LIMIT, RESYNC after loop-range and non-realigning
-song changes, swing/shuffle invariance and reversed callback order; Structure
-conflict recovery, MARKER PRIORITY with Revoice/Ensemble, CHORD MISSING,
-Every 4/Every 8 markers, arp roots, lifecycle undo/redo, stale drafts, Stop
-settlement and save/reload.
+Public-input cases now cover unequal leader/follower loops under a burst of
+edits (M-MERGE-INTERLOCK-004); Every 4/Every 8 markers, Harmony Pattern
+conflict recovery and Revoice MARKER PRIORITY (M-MERGE-STRUCTURE-004);
+and group deletion undo/redo, Stop settlement and save/reload
+(M-MERGE-STRUCTURE-005), in controlled-time and real-time lanes.
+
+Remaining scope — behaviour verified by Lua unit/integration tests
+(named in H16) but not yet by public-input emulator cases: Interlock
+yielding-sweep interleavings (an edit between the leader's and follower's
+rebuilds, stale sweep completion), PLAN LIMIT, RESYNC after loop-range
+and non-realigning song changes, swing/shuffle invariance and reversed
+callback order; Structure CHORD MISSING, MARKER PRIORITY with Ensemble,
+arp roots and stale drafts.
 
 Acceptance boundary: each scenario above gains a behaviour case through grid,
 norns key/encoder or MIDI input observing MIDI and grid LEDs or the screen, in
