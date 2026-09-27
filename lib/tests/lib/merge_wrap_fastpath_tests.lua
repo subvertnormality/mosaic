@@ -557,7 +557,8 @@ end
 
 local function stats()
   local counts = pattern_under_test.wrap_memo_stats
-  return {hits = counts.legacy_hits, misses = counts.legacy_misses}
+  return {hits = counts.legacy_hits, misses = counts.legacy_misses,
+    plan_hits = counts.plan_hits, plan_misses = counts.plan_misses}
 end
 
 -- Write garbage through every table of a returned build: a later hit must
@@ -588,7 +589,7 @@ local function mutate(random, song, c)
   table.sort(numbers)
   local source = song.patterns[numbers[random(#numbers)]]
   local s = random(1, 64)
-  local kind = random(14)
+  local kind = random(16)
   if kind == 1 then source.trig_values[s] = source.trig_values[s] == 1 and 0 or 1
   elseif kind == 2 then source.trig_values[s] = source.trig_values[s] == 1 and true or 1
   elseif kind == 3 then
@@ -613,8 +614,21 @@ local function mutate(random, song, c)
   elseif kind == 9 then channel.trig_merge_mode = TRIG_MODES[random(#TRIG_MODES)]
   elseif kind == 10 then channel.selected_patterns[random(1, 16)] = random(3) > 1
   elseif kind == 11 then merge_state_module.on_cycle_boundary(song, c, channel.musical_merge)
+  elseif kind == 12 then
+    -- The active configuration's plan inputs, in place (key fields).
+    local record = merge_state_module.peek(song, c)
+    local active = record and record.active
+    if type(active) == "table" then
+      local field = ({"amount", "seed", "gap", "accent", "anchor"})[random(5)]
+      if field == "anchor" then active.anchor = random(1, 16)
+      elseif random(4) == 1 and math.type(active[field]) == "integer" then active[field] = active[field] + 0.0
+      else active[field] = random(0, field == "gap" and 3 or 100) end
+    end
+  elseif kind == 13 then
+    -- Any source, often another channel's (an Interlock leader's anchors).
+    song.patterns[random(1, 16)].trig_values[s] = random(0, 1)
   end
-  -- kinds 12..14: nothing changes (the steady-state wrap)
+  -- kind 14: nothing changes (the steady-state wrap)
 end
 
 function test_merge_wrap_memo_matches_the_pre_change_build_across_in_place_edits()
@@ -640,6 +654,8 @@ function test_merge_wrap_memo_matches_the_pre_change_build_across_in_place_edits
   -- Both paths are exercised.
   luaunit.assert_true(after.hits - before.hits > 1200, after.hits - before.hits)
   luaunit.assert_true(after.misses - before.misses > 500, after.misses - before.misses)
+  luaunit.assert_true(after.plan_hits - before.plan_hits > 300, after.plan_hits - before.plan_hits)
+  luaunit.assert_true(after.plan_misses - before.plan_misses > 300, after.plan_misses - before.plan_misses)
 end
 
 -- A fixed song whose channel 2 merges sources 1 and 2 under Foundation.
@@ -758,4 +774,76 @@ function test_merge_wrap_memo_is_used_only_by_the_wrap_rebuild()
   local after = stats()
   luaunit.assert_equals({after.hits - before.hits, after.misses - before.misses}, {1, 1})
   luaunit.assert_nil(difference(song.channels[2].working_pattern, build(reference_merge, song, 2)))
+end
+
+-- The Foundation plan memo -------------------------------------------------
+
+-- Builds at the wrap; asserts exactness and whether the plan came from the memo.
+local function assert_plan(song, c, hit, label)
+  local before = stats()
+  local actual = wrap_build(song, c)
+  luaunit.assert_nil(difference(actual, build(reference_merge, song, c)), label)
+  local after = stats()
+  luaunit.assert_equals({after.plan_hits - before.plan_hits, after.plan_misses - before.plan_misses},
+    hit and {1, 0} or {0, 1}, label)
+  return actual
+end
+
+function test_merge_wrap_plan_memo_hits_only_with_equal_key_filters_and_sources()
+  local song, channel = memo_song()
+  -- Channel 2 follows channel 3, whose Foundation anchor is source 5.
+  local leader = song.channels[3]
+  leader.selected_patterns = {[5] = true}
+  leader.musical_merge = merge_config.new()
+  leader.musical_merge.mode, leader.musical_merge.anchor = "foundation", 5
+  song.patterns[5].trig_values[3] = 1
+  channel.musical_merge.interlock = {leader = 3, window = 0}
+  channel.musical_merge.variation, channel.musical_merge.cycles = "per_phrase", 1
+  local first = assert_plan(song, 2, false, "first build")
+  luaunit.assert_equals(first.foundation.interlock.status, "ok")
+  luaunit.assert_true(first.foundation.interlock.blocked[3])
+  assert_plan(song, 2, true, "unchanged")
+  local active = merge_state_module.peek(song, 2).active
+  local changes = {
+    {"amount", function() active.amount = 100 end},
+    {"seed", function() active.seed = 9 end},
+    {"seed integer -> float", function() active.seed = 9.0 end},
+    {"gap", function() active.gap = 1 end},
+    {"accent", function() active.accent = 0 end},
+    {"loop end", function() channel.end_trig = {12, 4} end},
+    {"Interlock blocked set (leader anchor written in place)", function() song.patterns[5].trig_values[7] = 1 end},
+    {"Interlock window", function() active.interlock.window = 1 end},
+    {"ranking phrase (a cycle boundary)", function() merge_state_module.on_cycle_boundary(song, 2, channel.musical_merge) end},
+  }
+  for _, change in ipairs(changes) do
+    change[2]()
+    assert_plan(song, 2, false, change[1])
+    assert_plan(song, 2, true, change[1] .. ", then unchanged")
+  end
+  -- A source change misses the legacy memo, so the plan is rebuilt with it.
+  song.patterns[2].trig_values[15] = 1
+  assert_plan(song, 2, false, "source trig")
+  -- The anchor source's velocity at an anchor step the plan reads.
+  song.patterns[1].velocity_values[1] = 17
+  assert_plan(song, 2, false, "anchor velocity")
+  -- A `true` anchor trig: legacy_merge ignores it, the plan reads it and its velocity.
+  song.patterns[1].trig_values[30] = true
+  assert_plan(song, 2, false, "true anchor trig")
+  song.patterns[1].velocity_values[30] = 5
+  assert_plan(song, 2, false, "velocity at a true anchor trig")
+  assert_plan(song, 2, true, "unchanged at last")
+end
+
+function test_merge_wrap_plan_memo_hits_return_independent_plans()
+  local song = memo_song()
+  local first = assert_plan(song, 2, false, "first build")
+  local pristine = build(reference_merge, song, 2)
+  scribble(first)
+  local second = assert_plan(song, 2, true, "after scribbling the miss plan")
+  luaunit.assert_nil(difference(second, pristine))
+  scribble(second)
+  local third = assert_plan(song, 2, true, "after scribbling a hit plan")
+  luaunit.assert_nil(difference(third, pristine))
+  luaunit.assert_false(third.foundation.sources == second.foundation.sources)
+  luaunit.assert_false(third.foundation.sources[1] == second.foundation.sources[1])
 end

@@ -246,7 +246,7 @@ local VALUE_FIELDS = {"note_values", "velocity_values", "lengths", "note_mask_va
 local MERGED_FIELDS = {"trig_values", "lengths", "note_values", "note_mask_values", "velocity_values"}
 
 -- Hit and miss counts of the wrap memo, for tests and profiling.
-pattern.wrap_memo_stats = {legacy_hits = 0, legacy_misses = 0}
+pattern.wrap_memo_stats = {legacy_hits = 0, legacy_misses = 0, plan_hits = 0, plan_misses = 0}
 
 -- The trig class of a source value: 1 (== 1), 2 (== true) or 0.
 local function trig_class(value)
@@ -378,11 +378,70 @@ local function memo_legacy_merge(channel, modes, selected_song_pattern)
   return merged, false
 end
 
+-- Memo of foundation.plan for the same wrap rebuild. Its inputs besides the
+-- key below and the filters are the sources' trigs and velocities and the
+-- merged velocities, which a legacy-memo hit has just validated, so a plan
+-- entry is used only on such a hit (it belongs to that legacy entry, and a
+-- legacy miss replaces the entry and drops it) and only when all 12 key
+-- fields are equal by value and number subtype and the Interlock filters are
+-- the same ordered list with exactly the same blocked sets.
+local function legacy_entry(song_pattern, channel)
+  local by_channel = legacy_memo[song_pattern]
+  return by_channel and by_channel[channel]
+end
+
+local function same_plan_key(left, right)
+  for index = 1, 12 do
+    local u, v = left[index], right[index]
+    if u ~= v or math_type(u) ~= math_type(v) then return false end
+  end
+  return true
+end
+
+-- Filters as foundation.plan reads them: nil, or an ordered list of
+-- {reason, blocked set}.
+local function copy_filters(filters)
+  if not filters then return nil end
+  local result = {}
+  for index, filter in ipairs(filters) do
+    local blocked = {}
+    for step, value in pairs(filter.blocked) do blocked[step] = value end
+    result[index] = {reason = filter.reason, blocked = blocked}
+  end
+  return result
+end
+
+local function same_filters(saved, filters)
+  if saved == nil or filters == nil then return saved == nil and filters == nil end
+  if #saved ~= #filters then return false end
+  for index, filter in ipairs(filters) do
+    local other = saved[index]
+    if other.reason ~= filter.reason then return false end
+    for step, value in pairs(filter.blocked) do
+      if other.blocked[step] ~= value then return false end
+    end
+    for step in pairs(other.blocked) do
+      if filter.blocked[step] == nil then return false end
+    end
+  end
+  return true
+end
+
+-- A plan result is a tree of plain tables (per-step lists under per-field
+-- maps); the copy shares no table with it.
+local function copy_plan(value)
+  if type(value) ~= "table" then return value end
+  local result = {}
+  for key, inner in pairs(value) do result[key] = copy_plan(inner) end
+  return result
+end
+
+
 function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, memo)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
-  local merged_pattern
+  local merged_pattern, legacy_hit
   if memo and not effective_lengths_cache then
-    merged_pattern = memo_legacy_merge(channel,
+    merged_pattern, legacy_hit = memo_legacy_merge(channel,
       {trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode}, selected_song_pattern)
   else
     merged_pattern = legacy_merge(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode,
@@ -442,24 +501,38 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
           filters[1] = {reason = interlock_result.reason, blocked = interlock_result.blocked}
         end
       end
-      foundation_result = foundation.plan({
-        filters = filters,
-        start_step = effective_start,
-        end_step = effective_end,
-        anchor = merge_settings.anchor,
-        source_trigs = source_trigs,
-        source_velocities = source_velocities,
-        merged_velocities = merged_pattern.velocity_values,
-        amount = effective_amount,
-        accent = merge_settings.accent,
-        gap = merge_settings.gap,
-        seed = merge_settings.seed,
-        song_slot = song_slot,
-        channel = channel,
-        binding = binding,
-        phrase = merge_runtime.ranking_phrase or 0,
-        ranking_version = merge_settings.ranking_version
-      })
+      local plan_key = memo and {effective_start, effective_end, merge_settings.anchor, effective_amount,
+        merge_settings.accent, merge_settings.gap, merge_settings.seed, song_slot, channel, binding,
+        merge_runtime.ranking_phrase or 0, merge_settings.ranking_version}
+      local entry = memo and legacy_entry(selected_song_pattern, channel)
+      if legacy_hit and entry and entry.plan and same_plan_key(entry.plan_key, plan_key) and
+        same_filters(entry.plan_filters, filters) then
+        pattern.wrap_memo_stats.plan_hits = pattern.wrap_memo_stats.plan_hits + 1
+        foundation_result = copy_plan(entry.plan)
+      else
+        foundation_result = foundation.plan({
+          filters = filters,
+          start_step = effective_start,
+          end_step = effective_end,
+          anchor = merge_settings.anchor,
+          source_trigs = source_trigs,
+          source_velocities = source_velocities,
+          merged_velocities = merged_pattern.velocity_values,
+          amount = effective_amount,
+          accent = merge_settings.accent,
+          gap = merge_settings.gap,
+          seed = merge_settings.seed,
+          song_slot = song_slot,
+          channel = channel,
+          binding = binding,
+          phrase = merge_runtime.ranking_phrase or 0,
+          ranking_version = merge_settings.ranking_version
+        })
+        if entry then
+          pattern.wrap_memo_stats.plan_misses = pattern.wrap_memo_stats.plan_misses + 1
+          entry.plan, entry.plan_key, entry.plan_filters = copy_plan(foundation_result), plan_key, copy_filters(filters)
+        end
+      end
       foundation_result.interlock = interlock_result
       foundation_result.cycle = cycle
       foundation_result.cycles = merge_settings.cycles or 1

@@ -310,9 +310,15 @@ rebuilds for the follower's own edits recompute from the same inputs.
   note, velocity, length and note-mask values at every step the merge or
   `foundation.plan` can read (trig and positive-mask steps; all 64 under a
   pattern-priority mode) equal the stored copy, numbers also by subtype
-  (`math.type`). A hit returns a fresh copy of the pristine stored result, so
-  nothing written to a returned working pattern reaches the memo. Every other
-  build (edits, sweeps, Start, load) runs in full.
+  (`math.type`). The Foundation plan is then reused only on such a hit (a
+  miss replaces the entry and drops its plan) and when its 12 remaining
+  inputs (loop start and end, anchor, effective amount, accent, gap, seed,
+  song slot, channel, binding, ranking phrase, ranking version) are equal by
+  value and subtype and the Interlock filters are the same ordered list with
+  exactly the same blocked sets. A hit returns a fresh copy of the pristine
+  stored result, so nothing written to a returned working pattern or plan
+  reaches the memo. Every other build (edits, sweeps, Start, load) runs in
+  full.
 - **While stopped** `j = 0` and `k_l = 0`: the stopped grid preview shows what
   the first cycle after Start will play, using any queued/requested
   configuration as the entry at 0.
