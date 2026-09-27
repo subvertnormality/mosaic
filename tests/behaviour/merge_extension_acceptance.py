@@ -1055,3 +1055,32 @@ def interlock_plan_limit_workflow(c):
     c.results.append(dict(kind="interlock-plan-limit-bypass", status="PLAN LIMIT",
                           last_step=64, last_note=[60, 70], tolerance_seconds=allowed,
                           passed=True))
+
+
+def interlock_range_resync_workflow(c):
+    """README Interlock: a playing leader range change makes the follower
+    show RESYNC and releases its formerly blocked addition in MIDI and grid."""
+    interlock_pair(c, leader_step=5)
+    c.ui.song_editor(); c.ui.tap_control("global_pattern_length", 3)
+    c.ui.expect_dashboard_row("Global length", "13")
+    c.ui.channel_editor()
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: onset_count(k, 2, (60, 100)) >= 1, timeout=5)
+    c.ui.select_channel(2)
+    c.ui.set_range(1, 6)
+    c.ui.select_channel(1)
+    capture.until(lambda k: len(k.note_ons(1)) >= 12, timeout=8)
+    interlock_screen(c)
+    c.ui.expect_selected_field("detail", "Status", "RESYNC")
+    result_interlock(c, "RESYNC")
+    c.ui.expect_steps({5: "selected", 7: "selected"})
+    stop_and_drain(c, capture)
+    ons = capture.note_ons(1)
+    first = ons[0][field(c)]
+    placed = place(c, ons, first)
+    first_cycle = {(loop, step, channel, pitch, velocity) for loop, step, channel, pitch, velocity in placed}
+    assert (0, 5, 1, 60, 70) not in first_cycle, placed
+    assert (1, 5, 1, 60, 70) in first_cycle, placed
+    c.results.append(dict(kind="interlock-range-resync", released_step=5,
+                          tolerance_seconds=tolerance(c), passed=True))
