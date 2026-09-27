@@ -4,12 +4,17 @@ local function round_half_up(value)
   return math.floor(value + 0.5)
 end
 
-local function fnv1a(text)
-  local hash = 2166136261
+-- FNV-1a is sequential: hashing a text continued from the hash of a prefix
+-- equals hashing the whole concatenation.
+local function fnv1a_continue(hash, text)
   for index = 1, #text do
     hash = ((hash ~ string.byte(text, index)) * 16777619) & 0xffffffff
   end
   return hash
+end
+
+local function fnv1a(text)
+  return fnv1a_continue(2166136261, text)
 end
 
 local function loop_steps(first, last)
@@ -29,17 +34,24 @@ local function circular_distance(index_a, index_b, length)
   return math.min(distance, length - distance)
 end
 
-local function rank_key(args, step)
-  local identity = table.concat({
+-- The hash of the identity prefix "version|seed|slot|channel|binding|phrase|"
+-- shared by every candidate of one plan.
+local function rank_prefix(args)
+  return fnv1a(table.concat({
     args.ranking_version or 1,
     args.seed or 0,
     args.song_slot or 1,
     args.channel or 1,
     args.binding or "",
     args.phrase or 0,
-    step
-  }, "|")
-  return fnv1a(identity)
+    ""
+  }, "|"))
+end
+
+-- fnv1a(table.concat({version, seed, slot, channel, binding, phrase, step}, "|")).
+-- tostring and table.concat format a number identically (luaO_tostring).
+local function rank_key(args, step, prefix)
+  return fnv1a_continue(prefix or rank_prefix(args), tostring(step))
 end
 
 local function addition_velocity(value, accent)
@@ -96,6 +108,7 @@ function foundation.plan(args)
   if filters then result.reason_lists = {} end
 
   local candidates = {}
+  local prefix
   for _, step in ipairs(steps) do
     if not result.roles[step] then
       local contributors = {}
@@ -132,9 +145,10 @@ function foundation.plan(args)
           if list then result.reason_lists[step] = list end
           result.sources[step] = contributors
         else
+          prefix = prefix or rank_prefix(args)
           candidates[#candidates + 1] = {
             step = step,
-            rank = rank_key(args, step),
+            rank = rank_key(args, step, prefix),
             sources = contributors
           }
         end
