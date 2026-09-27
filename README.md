@@ -356,11 +356,11 @@ The controls work the same way on every screen:
 - **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.
 - **E2** chooses a field, or a row in a task list.
 - **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.
-- **K3** opens the chosen task, applies a staged change, or confirms a question.
+- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`.
 - **K2** goes back, or cancels a staged change or a question.
 - A short **K1** tap opens the norns system menu. Holding K1 is the shift key for grid and screen gestures.
 
-Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge modes, Device, History and Merge Shape. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. _Mosaic_'s other settings, such as projects, sequencer options, MIDI mapping and each channel's device parameters, are in the norns PARAMS menu under MOSAIC: tap K1 to open it, as the Channel tasks footer reminds you.
+Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge modes, Device, History and Merge Shape. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. _Mosaic_'s other settings, such as projects, sequencer options, MIDI mapping and each channel's device parameters, are in the norns PARAMS menu under MOSAIC: tap K1 to open it, as the Channel tasks footer reminds you (`K1 PARAMS`, beside the chosen task's name when it leaves room).
 
 <img alt="Norns Channel tasks screen" src="images/norns/channel-tasks.png" width="384" />
 
@@ -1391,8 +1391,10 @@ default to Off, so an older project keeps its original MIDI, timing and random
 behaviour.
 
 Open Merge Shape or Harmony from Channel tasks. E2 selects a row, E3 changes a
-staged value, K3 on a row marked with an arrow opens it, and K3 elsewhere
-validates and applies the whole draft. K2 discards the draft, or returns from a
+staged value, K3 on a row marked `OPEN >` opens it (the last line names it, for
+example `K3 OPEN RHYTHM`), and K3 elsewhere validates and applies the whole draft.
+Rows that carry out an action instead, such as Create group, Four-part smooth,
+Delete group and Reset map (the last two ask first), keep a plain `>`. K2 discards the draft, or returns from a
 row you opened to the one it came from. E1 returns to the first screen of the
 feature, discarding an unapplied draft, and from there to Channel tasks. A stopped edit applies immediately. During playback, Merge Shape displays
 `NEXT CYCLE` and activates before the next channel-cycle onset; Harmony displays

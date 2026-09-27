@@ -189,8 +189,18 @@ function M.draw(v)
  if not r.ok then rect(0,status_y-7,128,9,0);text('LAYOUT OVERFLOW',1,status_y,8,15)end
  -- Exactly one footer owner. No overlapping hints/neighbour labels. A table
  -- footer names the neighbouring fields: left '< prev' (or '| START'), right
- -- 'next >' (or 'END |'), each fitted to its half.
+ -- 'next >' (or 'END |'), each fitted to its half. A {hints} footer (a row
+ -- that opens a child screen: 'K3 OPEN RHYTHM', then the screen's other
+ -- hints) keeps its first hint and each later one, two spaces apart, only
+ -- while the whole line fits.
  if more then
+ elseif type(v.footer)=='table' and type(v.footer.hints)=='table' then
+  local line=tostring(v.footer.hints[1] or'')
+  for k=2,#v.footer.hints do
+   local longer=line..'  '..tostring(v.footer.hints[k])
+   if width(longer)<=126 then line=longer end
+  end
+  text(fit(line,126),1,63,8,9)
  elseif type(v.footer)=='table' then
   text(fit(v.footer.left or'',61),1,63,8,7)
   right(fit(v.footer.right or'',61),127,63,10)

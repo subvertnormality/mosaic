@@ -249,9 +249,11 @@ def setup_no_voicing(c):
 
 def h05_rows(step, status, voice, failure):
     """H05 VOICE MOVEMENT (detail): Step, Status, one row per voice (planned > sent as note
-    names, or NO EVENT), and Failure details when the event failed."""
+    names, or NO EVENT), and Failure details when the event failed; K3 opens it, so it
+    shows OPEN > (owner decision 27 September 2026)."""
+    from frame_oracle import OPEN_VALUE
     rows = [("Step", str(step)), ("Status", status), ("CH1", voice)]
-    return rows + ([("Failure details", ">")] if failure else [])
+    return rows + ([("Failure details", OPEN_VALUE)] if failure else [])
 
 
 def expect_h05(c, rows):
@@ -272,7 +274,7 @@ def no_voicing_fallback_workflow(c):
     expect_h05(c, h05_rows(1, "NO VOICING RANGE", "NO EVENT", True))
     c.results.append(dict(kind='no-voicing-visible', reason='range', passed=True))
     # Playback is stopped, so the screen is stable in real and controlled time.
-    documentation_frame(c, 'ac08de427648a592db225720b6d6118195bc43876d7a13c5d10265b0eb6f803f',
+    documentation_frame(c, '52c9016ad80d1d7c92a9e6d8b97109f21b5450f6453cff5758774e552b5eeef2',
                         'images/harmony-no-voicing.png', stable_rows=55)
     c.ui.set_value(1)  # H05 Step 2: select one coherent event chain (D3 planned and sent).
     expect_h05(c, h05_rows(2, "NO VOICING RANGE", "D3 > D3", True))

@@ -454,6 +454,22 @@ def footer(text):
         return render(commands)
     return render([(1,63,9,fit(text,126))])
 
+# A row whose K3 opens a child screen shows OPEN > (owner decision 27 September
+# 2026); while it is selected the footer names it, 'K3 OPEN <LABEL>', then the
+# screen's hints other than its K3 and E3 ones, each kept only while the whole
+# line (two spaces between hints) fits 126 px (lib/ui_live.lua open_footer,
+# lib/ui_render.lua {hints} footer).
+OPEN_VALUE='OPEN >'
+
+def open_footer(label,hints=''):
+    """The footer text while child row `label` is selected on a screen whose
+    control hints are `hints` ('E3 SET  K3 APPLY  K2 BACK')."""
+    rest=[h for h in hints.split('  ') if h and h[:2] not in ('K3','E3')]
+    line='K3 OPEN '+label.upper()
+    for hint in rest:
+        if text_width(line+'  '+hint)<=126:line=line+'  '+hint
+    return line
+
 @any_marquee_phase
 def footer_matches(state,text):
     """The whole footer line shows exactly `text` and nothing else."""

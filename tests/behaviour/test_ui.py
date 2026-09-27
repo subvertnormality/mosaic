@@ -3279,6 +3279,18 @@ class GroupCUiTests(unittest.TestCase):
         self.assertEqual(calls, [[(1, 63, 9, "End must follow start")],
                                  [(1, 63, 7, "< Root"), ((None, 127), 63, 10, "Degree >")]])
 
+    def test_open_footer_names_the_child_row_and_keeps_the_hints_that_fit(self):
+        # lib/ui_live.lua open_footer + lib/ui_render.lua {hints} footer (owner
+        # decision 27 September 2026); 5 px per character here, like
+        # lib/tests/lib/ui_render_footer_hints_tests.lua.
+        import frame_oracle
+        with patch.object(frame_oracle, "text_width", side_effect=lambda text, *a, **k: 5 * len(text)):
+            self.assertEqual(frame_oracle.open_footer("Rhythm", "E3 SET  K3 APPLY  K2 BACK"), "K3 OPEN RHYTHM  K2 BACK")
+            self.assertEqual(frame_oracle.open_footer("Failure details", "E1 TASKS"), "K3 OPEN FAILURE DETAILS")
+            self.assertEqual(frame_oracle.open_footer("Masks", "K3 OPEN  K1 PARAMS"), "K3 OPEN MASKS  K1 PARAMS")
+            self.assertEqual(frame_oracle.open_footer("Scale", "E2 CHOOSE  K3 OPEN"), "K3 OPEN SCALE  E2 CHOOSE")
+        self.assertEqual(frame_oracle.OPEN_VALUE, "OPEN >")
+
 
 if __name__ == "__main__":
     unittest.main()

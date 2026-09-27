@@ -1192,8 +1192,10 @@ class Ui:
                                         field=field, label=value, passed=True))
 
     def expect_task_row(self, label):
-        """The task list's selected row ('>' marker) is ``label``; task rows carry no value."""
-        self.expect_selected_field("detail", label=label, value="")
+        """The task list's selected row ('>' marker) is ``label``; every task row
+        opens its screen on K3, so its value is OPEN > (owner decision 27 September 2026)."""
+        from frame_oracle import OPEN_VALUE
+        self.expect_selected_field("detail", label=label, value=OPEN_VALUE)
 
     def expect_list_label(self, label, wait=True):
         """The picker cursor row (C07) shows ``label``; the row value is blank or CURRENT."""

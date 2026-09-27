@@ -588,6 +588,81 @@ function test_ui_live_harmony_child_route_k3_opens_register_and_k2_returns()
   end)
 end
 
+-- Owner decision 27 September 2026 (device feedback): a row whose K3 opens a
+-- child screen shows OPEN > on the right, and while it is selected the footer
+-- names it (K3 OPEN RHYTHM) beside the screen's other hints that still apply.
+-- A row whose K3 performs an action keeps its wording and the screen's footer.
+-- Characterisation of README "Musical Merge and Voice Leading" (K3 on a row
+-- marked OPEN > opens it) and "Norns Menu Navigation" (task lists).
+local function vm_field(id)
+  for _, f in ipairs(ui_live.view_model().fields) do if f.id == id then return f end end
+end
+
+function test_ui_live_merge_child_rows_show_open_and_the_footer_names_the_selected_one()
+  live.isolated(function()
+    open_task("merge_shape")
+    luaunit.assert_equals(screen(), "M02")
+    choose_task("mode")
+    luaunit.assert_not_equals(vm_field("mode").value, "OPEN >")
+    for _, id in ipairs({"rhythm", "phrase", "pitch", "result"}) do
+      luaunit.assert_equals(vm_field(id).value, "OPEN >", id)
+      luaunit.assert_equals(vm_field(id).kind, "action", id)
+    end
+    -- On Mode (a value) the focused screen keeps its neighbour footer.
+    luaunit.assert_equals(ui_live.view_model().footer, {left = "| START", right = "Rhythm >"})
+    choose_task("rhythm")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN RHYTHM", "K2 BACK"}})
+    choose_task("result")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN RESULT", "K2 BACK"}})
+    tap(3)
+    luaunit.assert_equals(screen(), "M05")
+    choose_task("reason")
+    luaunit.assert_equals(vm_field("reason").value, "OPEN >")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN REASON", "E1 TASKS"}})
+    tap(2)
+    choose_task("pitch")
+    tap(3)
+    luaunit.assert_equals(screen(), "M07")
+    choose_task("harmony")
+    luaunit.assert_equals(vm_field("harmony").value, "OPEN >")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN VOICE LEADING", "K2 BACK"}})
+  end)
+end
+
+function test_ui_live_harmony_action_rows_keep_their_wording_and_footer()
+  live.isolated(function()
+    open_task("harmony")
+    choose_task("groups")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN GROUPS", "K2 BACK"}})
+    tap(3)
+    luaunit.assert_equals(screen(), "H04")
+    choose_task("create_group")
+    luaunit.assert_equals(vm_field("create_group").value, ">")
+    luaunit.assert_equals(ui_live.view_model().footer, "E3 SET  K3 APPLY  K2 BACK")
+    tap(3) -- creates group 1
+    luaunit.assert_equals(vm_field("four_part_smooth").value, ">")
+    luaunit.assert_equals(vm_field("delete_group").value, ">")
+    for _, id in ipairs({"members", "source", "policies", "entry", "result"}) do
+      luaunit.assert_equals(vm_field(id).value, "OPEN >", id)
+    end
+    choose_task("delete_group")
+    luaunit.assert_equals(ui_live.view_model().footer, "E3 SET  K3 APPLY  K2 BACK")
+    choose_task("members")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN MEMBERS", "K2 BACK"}})
+  end)
+end
+
+function test_ui_live_task_rows_show_open_and_the_footer_names_the_chosen_task()
+  live.isolated(function()
+    ui.enc(1, 1)
+    luaunit.assert_equals(screen(), "N01")
+    for _, f in ipairs(ui_live.view_model().fields) do luaunit.assert_equals(f.value, "OPEN >", f.id) end
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN MASKS", "K1 PARAMS"}})
+    choose_task("merge_shape")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN MERGE SHAPE", "K1 PARAMS"}})
+  end)
+end
+
 -- Grid outcomes (page buttons) --------------------------------------------------------------
 
 local function press_page(page, flow_id, extra)

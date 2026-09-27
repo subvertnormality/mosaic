@@ -5343,7 +5343,7 @@
         {
           "id": "masks",
           "label": "Masks",
-          "example": "C01",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5357,7 +5357,7 @@
         {
           "id": "trig_params",
           "label": "Trig params",
-          "example": "C02",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5371,7 +5371,7 @@
         {
           "id": "output",
           "label": "Output",
-          "example": "C06",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5385,7 +5385,7 @@
         {
           "id": "harmony",
           "label": "Harmony",
-          "example": "H01",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5399,7 +5399,7 @@
         {
           "id": "clock",
           "label": "Clock",
-          "example": "C04",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5413,7 +5413,7 @@
         {
           "id": "merge",
           "label": "Merge modes",
-          "example": "C09",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5427,7 +5427,7 @@
         {
           "id": "device",
           "label": "Device",
-          "example": "C05",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5441,7 +5441,7 @@
         {
           "id": "history",
           "label": "History",
-          "example": "C03",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5455,7 +5455,7 @@
         {
           "id": "merge_shape",
           "label": "Merge Shape",
-          "example": "M02",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5520,7 +5520,7 @@
         {
           "id": "scale",
           "label": "Scale",
-          "example": "S01",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5534,7 +5534,7 @@
         {
           "id": "scale_clock",
           "label": "Scale clock",
-          "example": "S02",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5548,7 +5548,7 @@
         {
           "id": "overview",
           "label": "Overview",
-          "example": "S03",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5617,7 +5617,7 @@
         {
           "id": "pattern",
           "label": "Pattern",
-          "example": "P01",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5631,7 +5631,7 @@
         {
           "id": "options",
           "label": "Options",
-          "example": "P02",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5645,7 +5645,7 @@
         {
           "id": "algorithm",
           "label": "Algorithm",
-          "example": "P06",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5659,7 +5659,7 @@
         {
           "id": "channel_view",
           "label": "Channel view",
-          "example": "P05",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -5673,7 +5673,7 @@
         {
           "id": "rhythm_doctor",
           "label": "Rhythm Doctor",
-          "example": "R01",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -7099,7 +7099,7 @@
         {
           "id": "playback",
           "label": "Playback",
-          "example": "A03",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -7113,7 +7113,7 @@
         {
           "id": "slot_setup",
           "label": "Slot setup",
-          "example": "A01",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -7127,7 +7127,7 @@
         {
           "id": "tempo_feel",
           "label": "Tempo / feel",
-          "example": "A02",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -7141,7 +7141,7 @@
         {
           "id": "channel_view",
           "label": "Channel view",
-          "example": "P05",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -11069,7 +11069,7 @@
         {
           "id": "output",
           "label": "Output",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -11083,7 +11083,7 @@
         {
           "id": "clock",
           "label": "Clock",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -11097,7 +11097,7 @@
         {
           "id": "merge_shape",
           "label": "Merge Shape",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -11111,7 +11111,7 @@
         {
           "id": "harmony",
           "label": "Harmony",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -11125,7 +11125,7 @@
         {
           "id": "device",
           "label": "Device",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -11139,7 +11139,7 @@
         {
           "id": "history",
           "label": "History",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "tasks",
             "target": "selected_object",
@@ -11348,7 +11348,7 @@
         {
           "id": "rhythm",
           "label": "Rhythm",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -11362,7 +11362,7 @@
         {
           "id": "phrase",
           "label": "Phrase",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -11376,7 +11376,7 @@
         {
           "id": "pitch",
           "label": "Pitch",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -11390,7 +11390,7 @@
         {
           "id": "result",
           "label": "Result",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -11656,7 +11656,7 @@
         {
           "id": "active_result",
           "label": "Active result",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -12128,7 +12128,7 @@
         {
           "id": "reason",
           "label": "Reason",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -12631,7 +12631,7 @@
         {
           "id": "target_setup",
           "label": "Target setup",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -12645,7 +12645,7 @@
         {
           "id": "harmony",
           "label": "Harmony",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "merge",
             "target": "selected_object",
@@ -13325,7 +13325,7 @@
         {
           "id": "tone_map",
           "label": "Tone Map",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "harmony",
             "target": "selected_object",
@@ -13339,7 +13339,7 @@
         {
           "id": "register",
           "label": "Register",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "harmony",
             "target": "selected_object",
@@ -13353,7 +13353,7 @@
         {
           "id": "result",
           "label": "Result",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "harmony",
             "target": "selected_object",
@@ -14091,7 +14091,7 @@
         {
           "id": "source_chain",
           "label": "Source chain",
-          "example": ">",
+          "example": "OPEN >",
           "binding": {
             "provider": "harmony",
             "target": "selected_object",
@@ -23300,7 +23300,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "14960ab4fec935c675a15835daff7a36fe8acd70a09ca7246cca5d8d36b8f5e0"
+      "sha256": "e31d76224d48d7e83975250da9c5ee0a9718552c4f0afc5b512ea066e5abcd04"
     }
   },
   "guardrails": [
@@ -31292,7 +31292,7 @@
       "fields": "Field[] from describe(target)",
       "selected": "1-based visible field ordinal",
       "layout": "focused|detail|overview_masks|overview_params|pattern64",
-      "footer": "one formatted binding/status line, or {left, right} neighbour labels on a focused screen ('< prev' / 'next >', '| START' / 'END |')"
+      "footer": "one formatted binding/status line, or {left, right} neighbour labels on a focused screen ('< prev' / 'next >', '| START' / 'END |'), or {hints} while the selected field opens a child screen: 'K3 OPEN <LABEL>' then the screen's other hints, each later hint kept only while the whole line (two spaces between hints) fits 126 px"
     },
     "Field": {
       "id": "stable provider field key",
@@ -31305,7 +31305,8 @@
       "visible": "boolean",
       "enabled": "boolean",
       "domain": "exact original owner descriptor; do not infer from formatted string",
-      "marker": "optional one-letter overview cell state: S slide, L lock in held scope (C02); drawn at the cell's top-right corner"
+      "marker": "optional one-letter overview cell state: S slide, L lock in held scope (C02); drawn at the cell's top-right corner",
+      "opens": "true on an action field whose K3 opens a child screen (its descriptor names the screen in `opens`; feature_action_edges route/cross_owner_link to a non-confirmation screen, every task row). Its value is 'OPEN >' (owner decision 27 September 2026); an action field whose K3 performs an action keeps its owner wording"
     },
     "optional": {
       "cells": "64 Cell entries: level0..15,selected bool,playing bool; present only pattern64",
@@ -31321,6 +31322,7 @@
       "Filter descriptors where visible is false. Retain selection by stable id; if removed clamp prior ordinal and consume the pending edit delta.",
       "Set kind from descriptor; all non-action/non-inspection fields of read_only screens become readonly.",
       "Format domain and sentinel values with existing owner formatter. Do not parse labels into commands.",
+      "An action descriptor with `opens` (the screen its K3 opens) is a child row: value 'OPEN >', and while selected the footer is {hints = {'K3 OPEN ' .. upper(label), ...}} followed by the screen's hints except its K3 and E3 hints (owner decision 27 September 2026: a bare '>' did not say that K3 reveals more). Routes to a confirmation screen (Delete group, Reset map), inline actions and confirmations are not child rows.",
       "Use explicit short_label and compact_value metadata. If unavailable show full label/value in focused detail; do not substitute another parameter.",
       "Select the declared layout; title/scope/status come from captured target and snapshot. No fixture numeric string is a binding.",
       "Rendering does not advance clocks, consume random numbers, query a new solver result or change selection."
@@ -31330,7 +31332,7 @@
       "numeric": "An exact value must fit at native 8px in the full 126px width (focused may use a larger size). The selected exact value is drawn whole on the same screen: focused value_region (art yields), detail selected row (label shrinks), overview full_value_line. Otherwise LAYOUT OVERFLOW and ok=false; no numeric truncation.",
       "cells": "An overview cell or unselected detail row whose value does not fit shows the more-marker '...' (not ~); selecting the field shows it whole on the full-width route of the same screen.",
       "text": "~ denotes abbreviated non-value text (title, scope, label, status, footer, action/unavailable text); the full form must be accessible through the existing detail route.",
-      "footer": "single owner; held scope > modal > error > draft/queued > normal binding.",
+      "footer": "single owner; held scope > modal > error > draft/queued > normal binding. A {hints} footer draws its first hint (fitted like other footer text) and each later hint only while the line fits.",
       "long_names": "detail views use short labels with separate full owner name on selection; no scrolling animation required.",
       "certification": "Offline replay uses synthetic metrics and is a runtime/route check only; A18 'full numeric value' is certified with native screen.text_extents."
     },
@@ -31492,7 +31494,8 @@
         "An adapter rejects describe() with an error outcome for a source_route it does not own (not a key of its source_route_map entry, not snapshot:<its screen>); it never returns an empty descriptor list for a foreign route. merge_fields returns {} for H01, so describe(merge, H01) is an error.",
         "Cross-owner links (feature_action_edges kind cross_owner_link) are not routes: the source owner cancels its draft and the target owner's enter() runs (owner.enter_root). No return frame joins the two owners.",
         "For a source_route_map entry with route_kind descriptor_filter, source_route is a view key: the adapter describes the single owner descriptor set and applies views[source_route].filter (all | selected | assigned_parameter_id_prefix value) and requires (held | draft | pending_confirmation). The key is never passed to the owner and never selects a second owner state.",
-        "snapshot:<screen> routes exist only for screens listed in visual_variants; they read an immutable owner snapshot and are never passed to get_fields."
+        "snapshot:<screen> routes exist only for screens listed in visual_variants; they read an immutable owner snapshot and are never passed to get_fields.",
+        "An action descriptor whose K3 opens a child screen sets `opens` to that screen id (feature editors: route and cross_owner_link edges whose destination is not a confirmation screen; tasks: every row). The live view model shows it as a child row; the descriptor's own value is unchanged."
       ]
     },
     "edit": {

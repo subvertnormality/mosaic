@@ -102,6 +102,12 @@ function shared.new(ui_adapters, provider, editor, options)
         d.domain = {edge = edge, route = field.route,
           destination = edge == "route" and translate(field.route) or (edge == "cross_owner_link" and "H01" or nil),
           target_owner = edge == "cross_owner_link" and "harmony" or nil}
+        -- A row whose K3 opens a child screen names it (owner decision 27
+        -- September 2026: the live UI shows it OPEN >). A route to a question
+        -- (Delete group, Reset map) and an inline action perform an action.
+        local destination = d.domain.destination
+        local entry = destination and ui_adapters.spec.screens[destination]
+        if entry and entry.profile ~= "confirmation" then d.opens = destination end
         d.invoke = function()
           local was_dirty = editor.dirty
           editor.selected = index

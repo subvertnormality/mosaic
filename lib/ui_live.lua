@@ -733,6 +733,24 @@ local FOOTER = {
   doctor = "E2 FIELD  E3 SET", confirmation = "K3 CONFIRM  K2 CANCEL", native = "K1 PARAMS",
 }
 
+-- A row whose K3 opens a child screen (its descriptor names it in `opens`)
+-- shows OPEN > on the right (owner decision 27 September 2026: a bare > did
+-- not say that K3 reveals more). While it is selected the footer names it,
+-- K3 OPEN <LABEL>, followed by the screen's hints that still apply there:
+-- K3 now opens and E3 has nothing to set on the row, so those are left out.
+-- The renderer keeps each later hint only while the line fits.
+local OPEN_VALUE = "OPEN >"
+local function opens_child(d) return d.kind == "action" and d.opens ~= nil end
+local function open_footer(label, hints)
+  local result = {"K3 OPEN " .. string.upper(tostring(label))}
+  -- A screen's hints are separated by two spaces ("E3 SET  K3 APPLY  K2 BACK").
+  for hint in string.gmatch((hints or "") .. "  ", "(.-)  ") do
+    local key = hint:sub(1, 2)
+    if hint ~= "" and key ~= "K3" and key ~= "E3" then result[#result + 1] = hint end
+  end
+  return {hints = result}
+end
+
 -- 64 cells of the viewed channel exactly as the grid viewer draws its steps,
 -- with held steps outlined and the playing step underlined.
 local BANKS = {"RND", "BD", "SD", "CH", "OH"}
@@ -816,8 +834,10 @@ function ui_live.view_model()
     if screen.profile == "read_only" and kind ~= "action" and kind ~= "inspection" then kind = "readonly" end
     -- Task rows are destinations, not values: their screen ids stay internal.
     local value = screen.profile == "tasks" and "" or (d.value or "")
+    if opens_child(d) then value = OPEN_VALUE end
     fields[#fields + 1] = {id = d.id, label = d.label, short_label = d.short_label, bottom_label = d.bottom_label, value = value,
-      compact_value = d.compact_value, kind = kind, visible = true, enabled = d.enabled, marker = d.marker}
+      compact_value = d.compact_value, kind = kind, visible = true, enabled = d.enabled, marker = d.marker,
+      opens = opens_child(d) or nil}
     ::continue::
   end
   local index = 1
@@ -826,8 +846,13 @@ function ui_live.view_model()
   local footer = FOOTER[screen.profile] or ""
   -- Detail inspectors ignore E1; K2 returns to where they were opened from.
   if s.screen == "C08" or s.screen == "S04" then footer = "K2 BACK" end
+  -- Norns' own settings are in its PARAMS menu (owner decision 2026-09-25).
+  if s.screen == "N01" then footer = "K3 OPEN  K1 PARAMS" end
+  local chosen = fields[index]
+  if chosen and chosen.opens then
+    footer = open_footer(chosen.label, footer)
   -- A focused screen shows one field: the footer names its neighbours instead.
-  if screen.layout == "focused" and #fields > 1 then
+  elseif screen.layout == "focused" and #fields > 1 then
     -- Owner-selection screens move E2 over their editable fields only.
     local reach, at = fields, index
     if OWNER_SELECTION[screen.profile] then
@@ -842,8 +867,6 @@ function ui_live.view_model()
   -- The algorithm picker's footer shows the inputs the grid faders set for the
   -- algorithm in use, so a pattern or bank press there is visible.
   if s.screen == "P06" then footer = generator_footer() or footer end
-  -- Norns' own settings are in its PARAMS menu (owner decision 2026-09-25).
-  if s.screen == "N01" then footer = "K3 OPEN  K1 PARAMS" end
   if tooltip and tooltip.text then footer = tostring(tooltip.text) end
   local status = code and (code:upper():gsub("_", " ")) or ""
   -- Every Rhythm Doctor screen keeps the owner's lane and status visible

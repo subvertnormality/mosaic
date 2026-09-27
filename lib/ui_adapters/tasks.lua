@@ -83,6 +83,7 @@ return function(ui_adapters, owners)
       label = row.label,
       kind = "action",
       value = dest,
+      opens = dest, -- every task row opens its screen on K3
       domain = {destination = dest, context = context},
       invoke = function()
         return ui_adapters.outcome({code = "open_screen", destination = dest, context = context})
