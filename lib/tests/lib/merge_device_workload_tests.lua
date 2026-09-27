@@ -47,7 +47,7 @@ local function dense_project()
 end
 
 local FIELDS = {"kind", "time", "pulse", "channel", "k", "status", "cycles", "anchors", "plan_builds",
-  "eligible", "admitted", "candidates", "removed", "other", "leader_trig"}
+  "eligible", "admitted", "candidates", "removed", "other", "leader_trig", "build_us", "heap_kb", "heap_delta_bytes"}
 
 local function builds(rows, channel)
   local result = {}
@@ -412,4 +412,52 @@ function test_merge_device_workload_wrap_and_song_end_sweep_builds_hit_the_memo(
   table.sort(wrap_pulses); table.sort(sweep_pulses)
   luaunit.assert_equals(wrap_pulses, {24 * 64 + 1, 24 * 64 * 2 + 1})
   luaunit.assert_equals(sweep_pulses, {24 * 64 + 1, 24 * 64 * 2 + 1})
+end
+
+-- Plan §1.4 Start latency compares the enabled window with the same workload
+-- with Merge Shape Off; the Off window's followers use a legacy trig merge
+-- mode chosen so the first step plays the same notes (channels and pitches).
+local function first_step(W, variant, mode, trig_override)
+  dense_project()
+  W.configure(variant, mode)
+  if trig_override then
+    for c = 1, 16 do program.get_song_pattern(1).channels[c].trig_merge_mode = trig_override end
+    pattern.update_working_patterns(program.get_song_pattern(1))
+  end
+  local before = #midi_note_on_events
+  local notes = {}
+  local ok, err = pcall(function()
+    m_clock:start()   -- plays the first step (the lattice's immediate first pulse)
+    for index = before + 1, #midi_note_on_events do
+      local event = midi_note_on_events[index]
+      notes[#notes + 1] = event[3] .. ":" .. event[1]
+    end
+    stop_transport()
+  end)
+  if not ok then error(err, 0) end
+  table.sort(notes)
+  return notes
+end
+
+function test_merge_device_workload_off_window_plays_the_enabled_first_step()
+  local W = workload()
+  for _, variant in ipairs({"STEADY", "WORST", "DENSE"}) do
+    local enabled = first_step(W, variant, "enabled")
+    luaunit.assert_true(#enabled > 0, variant)
+    luaunit.assert_equals(first_step(W, variant, "off"), enabled, variant)
+  end
+  -- The previous Off baseline (legacy "skip" everywhere) played a different
+  -- first step: WORST's patterns 7 and 8 coincide on step 1 and cancel.
+  luaunit.assert_not_equals(first_step(W, "WORST", "off", "skip"), first_step(W, "WORST", "enabled"))
+end
+
+function test_merge_device_workload_build_rows_carry_build_time_and_heap()
+  local W = workload()
+  local rows = builds(play(W, "STEADY", 24 * 16 + 12), 2)
+  luaunit.assert_true(#rows > 0)
+  for _, row in ipairs(rows) do
+    luaunit.assert_true(row.build_us >= 0)
+    luaunit.assert_true(row.heap_kb > 0)
+    luaunit.assert_equals(math.type(row.heap_delta_bytes), "integer")
+  end
 end

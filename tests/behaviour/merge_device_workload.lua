@@ -76,24 +76,31 @@ local function foundation(anchor, leader, window)
   return value
 end
 
--- {patterns = {slot = steps}, channels = {number = {patterns, first, last, mod, merge}}}
+-- {patterns = {slot = steps}, channels = {number = {patterns, first, last, mod, merge, off_trig}}}
+-- off_trig: the channel's legacy trig merge mode in the Off window, chosen so
+-- the Off window plays the same step-1 note set as the enabled window (plan
+-- section 1.4 Start latency compares like with like). The enabled window keeps the
+-- default "skip" (Foundation replaces the legacy trigs).
 local function plan(variant)
   if variant == "STEADY" then
     -- The leader's anchor pattern is W.LEADER_PATTERN in every variant: the
     -- recorder's leader_trig reads that pattern's step 1.
     return {patterns = {[W.LEADER_PATTERN] = {1, 5, 9, 13}, [6] = {1, 9}},
-      channels = {[1] = {{W.LEADER_PATTERN, 1}, 1, 16, "/1", foundation(W.LEADER_PATTERN)},
-        [2] = {{6, 1}, 1, 16, "/1", foundation(6, LEADER, 1)}}}
+      channels = {[1] = {{W.LEADER_PATTERN, 1}, 1, 16, "/1", foundation(W.LEADER_PATTERN), "all"},
+        [2] = {{6, 1}, 1, 16, "/1", foundation(6, LEADER, 1), "all"}}}
   end
   local result = {channels = {}}
   if variant == "WORST" then
     result.patterns = {[W.LEADER_PATTERN] = {1}, [7] = {1}, [8] = odd(1, 63)}
-    result.channels[1] = {{W.LEADER_PATTERN}, 1, 1, "/1", foundation(W.LEADER_PATTERN)}
-    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/1", foundation(7, LEADER, 0)} end
+    -- Step 1: every follower's anchor (patterns 7 and 8 coincide): "all".
+    result.channels[1] = {{W.LEADER_PATTERN}, 1, 1, "/1", foundation(W.LEADER_PATTERN), "all"}
+    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/1", foundation(7, LEADER, 0), "all"} end
   elseif variant == "DENSE" then
     result.patterns = {[W.LEADER_PATTERN] = range(1, 64), [7] = {}, [8] = range(1, 64)}
-    result.channels[1] = {{W.LEADER_PATTERN}, 1, 64, "x16", foundation(W.LEADER_PATTERN)}
-    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/4", foundation(7, LEADER, 0)} end
+    -- Step 1: the followers' only candidate is blocked by the leader's anchor
+    -- (pattern 7 is empty): silent, which "only" reproduces.
+    result.channels[1] = {{W.LEADER_PATTERN}, 1, 64, "x16", foundation(W.LEADER_PATTERN), "all"}
+    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/4", foundation(7, LEADER, 0), "only"} end
   else
     error("unknown merge workload variant " .. tostring(variant))
   end
@@ -109,6 +116,7 @@ function W.configure(variant, mode)
   for number, steps in pairs(value.patterns) do set_pattern(target, number, steps) end
   for number, channel in pairs(value.channels) do
     set_channel(target, number, channel[1], channel[2], channel[3], channel[4])
+    target.channels[number].trig_merge_mode = mode == "off" and channel[6] or "skip"
   end
   local transaction = include("mosaic/lib/optional_config_transaction")
   local snapshot = transaction.snapshot(target)
@@ -123,6 +131,7 @@ function W.configure(variant, mode)
     local merge = target.channels[number].musical_merge
     parts[#parts + 1] = number .. ":" .. (merge and (merge.mode .. "/" .. tostring(merge.anchor) .. "/" ..
       tostring(merge.interlock.leader) .. "/" .. merge.interlock.window) or "none") .. "/" ..
+      tostring(target.channels[number].trig_merge_mode) .. "/" ..
       target.channels[number].clock_mods.name
   end
   return "__MERGE_CONFIG__" .. variant .. "|" .. mode .. "|" .. table.concat(parts, ";")
@@ -158,7 +167,10 @@ local STATUS = {ok = 1, RESYNC = 2, ["PLAN LIMIT"] = 3, ["LEADER OFF"] = 4, ["LE
 -- Row kinds: 1 build, 2 grid key-down, 3 grid key-up.
 -- build: {1, time, pulse, channel, k, status, cycles, anchors, plan_builds,
 --         eligible, admitted, candidates, interlock_removed, other_reasons,
---         leader_trig}  (status 0: no Interlock record)
+--         leader_trig, build_us, heap_kb, heap_delta_bytes}  (status 0: no
+--         Interlock record). build_us: the build's own duration; heap_kb: Lua
+--         heap after it; heap_delta_bytes: heap change across it (negative
+--         when a GC step freed memory inside the build).
 -- key:   {2 or 3, time, pulse, x, y, leader_trig, k2 .. k16}; time, pulse
 --        and the row's position are the edge's arrival (before the builds it
 --        causes); leader_trig and k are read after Mosaic handled it.
@@ -171,8 +183,11 @@ function W.install(leader_pattern)
   end
   local merge = pattern.get_and_merge_patterns
   R.originals[#R.originals + 1] = {pattern, "get_and_merge_patterns", merge}
+  local gc_count = collectgarbage
   pattern.get_and_merge_patterns = function(c, ...)
+    local heap_before, started = gc_count("count"), now()
     local result = merge(c, ...)
+    local finished, heap_after = now(), gc_count("count")
     local f = result and result.foundation
     if f and R.n < R.limit then
       local i = f.interlock
@@ -191,7 +206,9 @@ function W.install(leader_pattern)
       R.n = R.n + 1
       R.rows[R.n] = {1, now(), transport_pulse(), c, registry_k(c), i and (STATUS[i.status] or 9) or 0,
         i and i.cycles or -1, i and i.anchors or -1, i and i.plan_builds or -1,
-        f.eligible_count or -1, f.admitted_count or -1, candidates, removed, other, leader_trig()}
+        f.eligible_count or -1, f.admitted_count or -1, candidates, removed, other, leader_trig(),
+        math.floor((finished - started) * 1e6), math.floor(heap_after),
+        math.floor((heap_after - heap_before) * 1024)}
     end
     return result
   end

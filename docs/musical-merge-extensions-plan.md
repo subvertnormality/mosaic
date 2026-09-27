@@ -422,9 +422,19 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
   (≈ 88.6 s); STEADY 3 × 4 beats, raised to the 8 s default. This overrides the
   8 s default where longer.
 - **Start latency:** each case also measures the time from the Start input's
-  native timestamp to the first emitted Note On and compares it with the same
-  workload with Merge Shape Off, captured in the same session. It passes when
-  the difference is at most the `step_jitter_maximum_ns` threshold (10 ms).
+  acting edge (the Play key-up: Mosaic applies a grid tap on release), by its
+  native timestamp, to the first emitted Note On, and compares it with the
+  same workload with Merge Shape Off, captured in the same session. The Off
+  baseline plays the same step-1 note set as the enabled window: its
+  followers use a legacy trig merge mode chosen per variant (`all` for
+  STEADY and WORST, where the enabled step 1 plays every anchor; `only` for
+  the DENSE followers, silent on step 1 because the leader's anchor blocks
+  their only candidate). The harness checks that the first step's note set
+  (MIDI channels and pitches) is identical in both windows; if it is not, or
+  a Start key-up was not recorded, the case is invalid (reported as such,
+  not as a timing pass or fail). It passes when the key-up difference is at
+  most the `step_jitter_maximum_ns` threshold (10 ms); the key-down figures
+  are reported alongside.
 All (STEADY, WORST, EDIT, DENSE, DENSE-EDIT) must pass before release; until the device runs pass, the delivery report
 states host figures only and the feature is not released.
 

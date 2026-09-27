@@ -27,7 +27,8 @@ def build(index, time, pulse, channel, k, expectation, leader_trig):
     status, cycles, anchors, plan_builds, candidates, removed, other, eligible, admitted = expectation
     return {'kind': 1, 'index': index, 'time': time, 'pulse': pulse, 'channel': channel, 'k': k, 'status': status,
             'cycles': cycles, 'anchors': anchors, 'plan_builds': plan_builds, 'eligible': eligible, 'admitted': admitted,
-            'candidates': candidates, 'removed': removed, 'other': other, 'leader_trig': leader_trig}
+            'candidates': candidates, 'removed': removed, 'other': other, 'leader_trig': leader_trig,
+            'build_us': 900, 'heap_kb': 2048, 'heap_delta_bytes': 4096}
 
 
 def key(index, time, cell, leader_trig, k, kind=2):
@@ -49,7 +50,8 @@ def worst_rows(wraps=3, edits=(), start=100.0, cycle_s=64 * 15 / 130):
         row['index'] = len(rows) + 1
         rows.append(row)
 
-    add(key(0, start, PLAY, state, -99))
+    add(key(0, start - .04, PLAY, state, -99))
+    add(key(0, start, PLAY, state, -99, kind=3))   # Start acts on the key-up
     for c in range(1, 17):
         add(build(0, start + .001, 0, c, -99, (0,) * 9 if c == 1 else mw.VARIANTS['WORST']['on'](-99), state))
     pending = sorted(edits)
@@ -333,6 +335,11 @@ class TimingOracle(unittest.TestCase):
             mw.merge_timing_oracle(events, 'WORST', 8.0, 15 / 130, TIMING_THRESHOLDS)
 
 
+def start_rows(at):
+    """An Off window's recorder rows: the Play key-down and its key-up at `at`."""
+    return [key(1, at - .04, PLAY, 1, -99), key(2, at, PLAY, 1, -99, kind=3)]
+
+
 def window(mode, seconds, latency_ns, rows, midi_origin_ns):
     return {'mode': mode, 'seconds': seconds, 'rows': rows, 'state': {'midi': worst_midi(midi_origin_ns, seconds)},
             'stopped': True, 'step_cell': STEP1, 'play_cell': PLAY}
@@ -341,7 +348,7 @@ def window(mode, seconds, latency_ns, rows, midi_origin_ns):
 class Verdict(unittest.TestCase):
     def test_all_gates_combine_and_the_start_latency_bound_is_enforced(self):
         seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
-        off = window('off', 8.0, 0, [key(1, 50.0, PLAY, 1, -99)], 50_004_000_000)
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
         enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
         self.assertTrue(verdict['passed'], verdict['gates'])
@@ -350,9 +357,51 @@ class Verdict(unittest.TestCase):
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, slow, 15 / 130)
         self.assertEqual(verdict['gates'], {'timing': True, 'admissions': True, 'start_latency': False, 'transport_stopped': True})
 
+    def test_start_latency_is_measured_from_the_key_up_against_the_same_first_step(self):
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
+        enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
+        verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
+        latency = verdict['start_latency']
+        self.assertEqual((latency['edge'], latency['valid'], latency['enabled_ns'], latency['off_ns']),
+                         ('key-up', True, 6_000_000, 4_000_000))
+        # The key-down figures are kept: 40 ms earlier in both windows.
+        self.assertEqual((latency['key_down']['enabled_ns'], latency['key_down']['off_ns']), (46_000_000, 44_000_000))
+        self.assertEqual(latency['first_step']['enabled'], [[c, 60] for c in range(16)])
+        self.assertTrue(verdict['valid'] and verdict['passed'])
+
+    def test_a_different_first_step_in_the_off_window_makes_the_case_invalid(self):
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
+        # The Off window's step 1 plays the leader only (legacy skip).
+        first = min(e['monotonic_ns'] for e in off['state']['midi'])
+        off['state']['midi'] = [e for e in off['state']['midi'] if not (e['monotonic_ns'] < first + 1_000_000 and e['bytes'][0] & 15 != 0)]
+        enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
+        verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
+        self.assertFalse(verdict['valid'])
+        self.assertFalse(verdict['passed'])
+        self.assertEqual(verdict['invalid'], ['start latency: first-step note sets differ'])
+        self.assertEqual(verdict['start_latency']['first_step']['off'], [[0, 60]])
+        # Timing and admissions are judged as usual.
+        self.assertTrue(verdict['gates']['admissions'])
+
+    def test_a_start_without_a_recorded_key_up_is_invalid(self):
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, [key(1, 49.96, PLAY, 1, -99)], 50_004_000_000)
+        enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
+        verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
+        self.assertEqual(verdict['invalid'], ['start latency: Start key-up not recorded'])
+
+    def test_gc_observation_separates_builds_with_a_gc_step(self):
+        rows = worst_rows()
+        rows[3]['heap_delta_bytes'], rows[3]['build_us'] = -65536, 5000
+        report = mw.gc_observation(rows)
+        self.assertEqual((report['builds_with_gc_step'], report['build_us_max_with_gc_step'],
+                          report['build_us_max_without_gc_step']), (1, 5000, 900))
+
     def test_an_edit_case_requires_every_scheduled_edit(self):
         seconds = CASES['PERF-MERGE-HW-EDIT']['seconds']
-        off = window('off', 8.0, 0, [key(1, 50.0, PLAY, 1, -99)], 50_004_000_000)
+        off = window('off', 8.0, 0, start_rows(50.0), 50_004_000_000)
         enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-EDIT', off, enabled, 15 / 130)
         self.assertFalse(verdict['gates']['admissions'])
@@ -442,7 +491,7 @@ class FakeMergeDriver:
 class DeviceRunOrchestration(unittest.TestCase):
     def run_case(self, case_id, enabled_rows):
         seconds = CASES[case_id]['seconds']
-        windows = {'off': {'rows': [key(1, 50.0, PLAY, 1, -99)], 'midi': worst_midi(50_004_000_000, 8.0)},
+        windows = {'off': {'rows': start_rows(50.0), 'midi': worst_midi(50_004_000_000, 8.0)},
                    'enabled': {'rows': enabled_rows, 'midi': worst_midi(100_006_000_000, seconds)}}
         FakeMergeDriver.windows = windows
         maiden = FakeRecorderMaiden(windows)

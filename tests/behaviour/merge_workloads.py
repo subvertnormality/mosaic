@@ -118,7 +118,8 @@ def install_chunk(text=None):
 
 
 BUILD_FIELDS = ('kind', 'time', 'pulse', 'channel', 'k', 'status', 'cycles', 'anchors', 'plan_builds',
-                'eligible', 'admitted', 'candidates', 'removed', 'other', 'leader_trig')
+                'eligible', 'admitted', 'candidates', 'removed', 'other', 'leader_trig',
+                'build_us', 'heap_kb', 'heap_delta_bytes')
 
 
 def parse_rows(output):
@@ -227,17 +228,60 @@ def admission_oracle(variant, rows, step_cell, minimum_wraps=2, follower_step_se
             'edits': len(edits), 'propagation': propagation, 'failures': failures[:50], 'failure_count': len(failures)}
 
 
-def start_latency_ns(rows, events, play_cell):
-    """Start input's native stamp (grid key-down on Play, util.time) to the
-    first emitted Note On, on the same device clock as the MIDI trace."""
-    presses = [row for row in rows if row['kind'] == 2 and (row['x'], row['y']) == tuple(play_cell)]
-    if not presses:
+def _note_ons(events):
+    return [e for e in events if len(e['bytes']) >= 3 and e['bytes'][0] & 240 == 144 and e['bytes'][2] > 0]
+
+
+def start_edges(rows, play_cell):
+    """Native stamps (s) of the Start input's key-down and of its key-up, the
+    edge Mosaic acts on (a grid tap is applied on release); the key-up is None
+    when it was not recorded."""
+    cell = tuple(play_cell)
+    downs = [row for row in rows if row['kind'] == 2 and (row['x'], row['y']) == cell]
+    if not downs:
         raise AssertionError('No Start input was recorded')
-    start_ns = round(presses[0]['time'] * 1e9)
-    ons = [e['monotonic_ns'] for e in events if len(e['bytes']) >= 3 and e['bytes'][0] & 240 == 144 and e['bytes'][2] > 0 and e['monotonic_ns'] >= start_ns]
+    down = downs[0]
+    ups = [row for row in rows if row['kind'] == 3 and (row['x'], row['y']) == cell and row['index'] > down['index']]
+    return down['time'], (ups[0]['time'] if ups else None)
+
+
+def start_latency_ns(rows, events, play_cell):
+    """Start input's key-down stamp (util.time) to the first emitted Note On,
+    on the same device clock as the MIDI trace."""
+    start_ns = round(start_edges(rows, play_cell)[0] * 1e9)
+    ons = [e['monotonic_ns'] for e in _note_ons(events) if e['monotonic_ns'] >= start_ns]
     if not ons:
         raise AssertionError('No Note On after the Start input')
     return min(ons) - start_ns
+
+
+def first_step_notes(events, after_ns, cluster_ns):
+    """The first step's note set after `after_ns`: (MIDI channel, pitch) of
+    every Note On within `cluster_ns` of the first one, sorted."""
+    ons = sorted((e for e in _note_ons(events) if e['monotonic_ns'] >= after_ns), key=lambda e: e['monotonic_ns'])
+    if not ons:
+        return []
+    first = ons[0]['monotonic_ns']
+    return sorted({(e['bytes'][0] & 15, e['bytes'][1]) for e in ons if e['monotonic_ns'] - first < cluster_ns})
+
+
+def start_latency(rows, events, play_cell, cluster_ns):
+    """One window's Start measurement: latency from the key-down and from the
+    key-up to the first Note On, and the first step's note set."""
+    down, up = start_edges(rows, play_cell)
+    down_ns = round(down * 1e9)
+    ons = [e['monotonic_ns'] for e in _note_ons(events) if e['monotonic_ns'] >= down_ns]
+    if not ons:
+        raise AssertionError('No Note On after the Start input')
+    first = min(ons)
+    up_ns = round(up * 1e9) if up is not None else None
+    return {'from_key_down_ns': first - down_ns, 'from_key_up_ns': first - up_ns if up_ns is not None else None,
+            'first_step': [list(note) for note in first_step_notes(events, down_ns, cluster_ns)]}
+
+
+def start_cluster_ns(variant, step_ns):
+    """Half the finest onset grid of the variant: notes of one step's burst."""
+    return min(channel_grids(variant, step_ns).values()) // 2
 
 
 def start_latency_gate(enabled_ns, off_ns, thresholds):
@@ -245,6 +289,42 @@ def start_latency_gate(enabled_ns, off_ns, thresholds):
     bound = thresholds['step_jitter_maximum_ns']
     return {'enabled_ns': enabled_ns, 'off_ns': off_ns, 'difference_ns': enabled_ns - off_ns, 'bound_ns': bound,
             'passed': enabled_ns - off_ns <= bound}
+
+
+def start_latency_verdict(enabled, off, thresholds):
+    """§1.4 Start latency, measured from the acting edge (key-up). Valid only
+    when the Off baseline plays the same first step (channels and pitches)
+    as the enabled window and both key-ups were recorded; an invalid
+    comparison is reported as such, not as a timing pass or fail. The
+    key-down figures are kept for reference."""
+    reasons = []
+    if enabled['first_step'] != off['first_step']:
+        reasons.append('first-step note sets differ')
+    if enabled['from_key_up_ns'] is None or off['from_key_up_ns'] is None:
+        reasons.append('Start key-up not recorded')
+    result = {'edge': 'key-up', 'valid': not reasons, 'invalid_reasons': reasons,
+              'first_step': {'enabled': enabled['first_step'], 'off': off['first_step']},
+              'key_down': start_latency_gate(enabled['from_key_down_ns'], off['from_key_down_ns'], thresholds)}
+    if reasons:
+        result.update({'enabled_ns': enabled['from_key_up_ns'], 'off_ns': off['from_key_up_ns'], 'passed': False})
+        return result
+    result.update(start_latency_gate(enabled['from_key_up_ns'], off['from_key_up_ns'], thresholds))
+    return result
+
+
+def gc_observation(rows):
+    """Build cost and GC evidence from the recorder's build rows: builds whose
+    heap shrank across them had a GC step inside."""
+    builds = [row for row in rows if row['kind'] == 1 and 'build_us' in row]
+    if not builds:
+        return None
+    stepped = [row for row in builds if row['heap_delta_bytes'] < 0]
+    ordered = sorted(row['build_us'] for row in builds)
+    return {'builds': len(builds), 'builds_with_gc_step': len(stepped),
+            'build_us_median': ordered[len(ordered) // 2], 'build_us_max': ordered[-1],
+            'build_us_max_with_gc_step': max((row['build_us'] for row in stepped), default=None),
+            'build_us_max_without_gc_step': max((row['build_us'] for row in builds if row['heap_delta_bytes'] >= 0), default=None),
+            'heap_kb_max': max(row['heap_kb'] for row in builds)}
 
 
 def _percentile(values, percent):

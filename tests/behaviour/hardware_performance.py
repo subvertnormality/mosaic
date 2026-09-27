@@ -569,10 +569,17 @@ def evaluate_merge_windows(case_id,off,enabled,step_seconds,thresholds=None):
     if admissions['edits']!=expected_edits:admissions['passed']=False;admissions['failures'].append({'kind':'edits','observed':admissions['edits'],'expected':expected_edits})
     try:timing=merge_workloads.merge_timing_oracle(enabled['state']['midi'],variant,enabled['seconds'],step_seconds,thresholds,merge_workloads.leader_step_one_skip(variant))
     except AssertionError as error:timing={'passed':False,'failure':repr(error)[:2000]}
-    latency=merge_workloads.start_latency_gate(merge_workloads.start_latency_ns(enabled['rows'],enabled['state']['midi'],enabled['play_cell']),
-                                               merge_workloads.start_latency_ns(off['rows'],off['state']['midi'],off['play_cell']),thresholds)
+    # §1.4 Start latency: from the Play key-up (the edge Mosaic acts on)
+    # against an Off baseline that plays the same first step; otherwise the
+    # comparison is invalid, which fails the case as invalid, not on timing.
+    cluster=merge_workloads.start_cluster_ns(variant,round(step_seconds*1e9))
+    latency=merge_workloads.start_latency_verdict(merge_workloads.start_latency(enabled['rows'],enabled['state']['midi'],enabled['play_cell'],cluster),
+                                                  merge_workloads.start_latency(off['rows'],off['state']['midi'],off['play_cell'],cluster),thresholds)
     gates={'timing':timing['passed'],'admissions':admissions['passed'],'start_latency':latency['passed'],'transport_stopped':bool(off['stopped'] and enabled['stopped'])}
-    return {'passed':all(gates.values()),'gates':gates,'timing':timing,'admissions':admissions,'start_latency':latency,'thresholds':thresholds}
+    invalid=['start latency: '+reason for reason in latency['invalid_reasons']]
+    return {'passed':all(gates.values()) and not invalid,'valid':not invalid,'invalid':invalid,'gates':gates,'timing':timing,
+            'admissions':admissions,'start_latency':latency,'thresholds':thresholds,
+            'gc':{'off':merge_workloads.gc_observation(off['rows']),'enabled':merge_workloads.gc_observation(enabled['rows'])}}
 
 def run_merge_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,resource_sampler=True,project_fixture=None,save_project_fixture=None,seed=0):
     """PERF-MERGE-HW-*: the dense project, Merge Shape Off then the §1.4
@@ -605,7 +612,7 @@ def run_merge_performance(runner,case_id,grid_device,device_map_id,source,trace=
                'off_window_seconds':off['seconds'],'tempo_bpm':driver.tempo_bpm,'host_window_ns':enabled['host_window_ns'],'oracle':verdict,
                'edits_dispatched':enabled['edits_dispatched'],'resources':resource_metrics(recording) if recording else None,'runtime_identity':recording['identity'] if recording else None,
                'source_identity':source_identity(source),'run_identity':{'fixture_id':case_id,'fixture_files':fixture_manifest.get('files'),'midi_lock_lead_time':0,'timing_contract':'legacy-delay-v1','seed':seed,'clock_source':'internal','port':1,'capture_backend':'stock-norns-output-trace'},
-               'transport_checks':transport_log,'passed':verdict['passed'],'qualification_eligible':False,
+               'transport_checks':transport_log,'passed':verdict['passed'],'valid':verdict['valid'],'qualification_eligible':False,
                'release_gate':'docs/musical-merge-extensions-plan.md 1.4: all of STEADY, WORST, EDIT, DENSE and DENSE-EDIT must pass on a physical norns before release',
                'limitations':['Merge Shape is configured through the production modules over Maiden while stopped; the edits are grid taps.',
                               'The admission recorder wraps pattern.get_and_merge_patterns and _norns.grid.key for the whole session, in both windows.',
