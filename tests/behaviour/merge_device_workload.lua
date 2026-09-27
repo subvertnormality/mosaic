@@ -76,8 +76,10 @@ end
 -- {patterns = {slot = steps}, channels = {number = {patterns, first, last, mod, merge}}}
 local function plan(variant)
   if variant == "STEADY" then
-    return {patterns = {[5] = {1, 5, 9, 13}, [6] = {1, 9}},
-      channels = {[1] = {{5, 1}, 1, 16, "/1", foundation(5)},
+    -- The leader's anchor pattern is W.LEADER_PATTERN in every variant: the
+    -- recorder's leader_trig reads that pattern's step 1.
+    return {patterns = {[W.LEADER_PATTERN] = {1, 5, 9, 13}, [6] = {1, 9}},
+      channels = {[1] = {{W.LEADER_PATTERN, 1}, 1, 16, "/1", foundation(W.LEADER_PATTERN)},
         [2] = {{6, 1}, 1, 16, "/1", foundation(6, LEADER, 1)}}}
   end
   local result = {channels = {}}

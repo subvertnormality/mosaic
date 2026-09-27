@@ -133,6 +133,9 @@ function test_merge_device_workload_steady_admissions_follow_the_plan()
     -- removes 10 of the 14 candidates; Amount 100 admits the other 4.
     luaunit.assert_equals({row.candidates, row.removed, row.other, row.eligible, row.admitted},
       {14, 10, 0, 4, 4}, "k=" .. row.k)
+    -- The recorder must see the leader's real anchor (step 1 of its anchor
+    -- pattern): the device oracle picks its expectation from this.
+    luaunit.assert_equals(row.leader_trig, 1, "k=" .. row.k)
     seen_k[row.k] = true
   end
   luaunit.assert_true(seen_k[1] and seen_k[2] and seen_k[3], "three wraps observed")
