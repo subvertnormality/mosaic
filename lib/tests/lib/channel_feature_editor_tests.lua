@@ -635,6 +635,53 @@ function test_merge_reason_shows_the_structural_marker_decision()
   luaunit.assert_error(function()select_label(value,"Pitch")end)
 end
 
+-- Review D8 (plan §4 "Explicit note-mask, random, fixed and quantised-fixed
+-- bypasses retain the complete existing legacy path"): a marker event whose
+-- pitch bypassed Structure snapping is reported as that bypass on Result and
+-- Reason, never as the marker chord it did not use. The planned-marker preview
+-- is kept for a marker with no played event. Played through step.handle.
+function test_merge_result_and_reason_report_a_marker_bypass_not_the_marker_chord()
+  local cases = {
+    {name = "note_mask", shown = "BYPASS NOTE MASK", setup = function(channel, start) channel.step_note_masks[start] = 61 end},
+    {name = "random", shown = "BYPASS RANDOM", setup = function(channel, start)
+      channel.trig_lock_params[1] = {id = "bipolar_random_note", param_id = "test_random"}
+      program.add_step_param_trig_lock(start, 1, 4) end},
+    {name = "fixed", shown = "BYPASS FIXED", setup = function(channel, start)
+      channel.trig_lock_params[3] = {id = "fixed_note", param_id = "test_fixed"}
+      program.add_step_param_trig_lock(start, 3, 63) end},
+    {name = "quantised_fixed", shown = "BYPASS QUANTISED FIXED", setup = function(channel, start)
+      channel.trig_lock_params[3] = {id = "quantised_fixed_note", param_id = "test_fixed"}
+      program.add_step_param_trig_lock(start, 3, 63) end},
+  }
+  local original_random = random
+  local ok, err = pcall(function()
+    for _, case in ipairs(cases) do
+      local song, channel = setup(); harmony_inspection.reset(); channel.selected_patterns[1] = true
+      local group = harmony_config.four_part_smooth(1, {1, 2, 3, 4}); group.enabled = true
+      song.voicing = {schema_version = 1, groups = {[1] = group}}
+      local config = merge_config.new(); config.mode = "foundation"; config.anchor = 1
+      config.structure = {markers = "every_4", group_id = 1}
+      channel.musical_merge = config
+      local start = fn.calc_grid_count(channel.start_trig[1], channel.start_trig[2])
+      song.patterns[1].trig_values[start] = 1; song.patterns[1].note_values[start] = 1
+      case.setup(channel, start); pattern.update_working_patterns(song, {[1] = true})
+      local value = feature_editor.new("merge"); value:enter(); open_label(value, "Result")
+      select_label(value, "Step").set(start)
+      -- Not yet played: the planned marker.
+      luaunit.assert_equals(select_label(value, "Pitch").get(), "MARKER CHORD G01", case.name)
+      random = function() return 1 end
+      step.handle(1, start)
+      random = original_random
+      luaunit.assert_equals(harmony_inspection.snapshot(song, 1, start).planned.structural_status, case.name)
+      luaunit.assert_equals(select_label(value, "Pitch").get(), case.shown, case.name)
+      open_label(value, "Reason")
+      luaunit.assert_equals(select_label(value, "Pitch target").get(), case.shown, case.name)
+    end
+  end)
+  random = original_random
+  if not ok then error(err, 0) end
+end
+
 function test_harmony_result_names_marker_priority_whatever_the_fallback()
   local song=setup();local value=feature_editor.new("harmony");value:enter()
   harmony_inspection.plan(song,1,{step=1,status="marker_priority",reason="MARKER PRIORITY",bypass="marker_priority",

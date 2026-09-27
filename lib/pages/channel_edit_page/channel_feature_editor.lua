@@ -138,14 +138,16 @@ function editor.new(kind)
     return merge_display.reasons(list)or merge_display.reason(f.reasons and f.reasons[step])or
       (f.status~="ok"and merge_display.status(merge_display.reason(f.reason)or f.status))or f.status or fallback
   end
-  -- The structural pitch decision at a step: the played event's own reason
-  -- (MARKER CHORD Gnn, CHORD MISSING, a bypass), else the planned marker.
+  -- The structural pitch decision at a step: the played event's own
+  -- decision (MARKER CHORD Gnn, CHORD MISSING, or the explicit bypass whose
+  -- pitch skipped the snap), else the planned marker of an unplayed step.
   local function structure_pitch(step)
     local wp=self.channel.working_pattern;local f=wp and wp.foundation
     local settings=merge_structure.active(f and f.config)
     if not(settings and f.markers and f.markers[step])then return nil end
     local event=harmony_inspection.snapshot(self.song,self.channel_number,step).planned
-    if event and event.structural_reason then return merge_display.reason(event.structural_reason)end
+    local played=event and merge_display.structural(event.structural_status,event.structural_reason)
+    if played then return played end
     return merge_display.reason(merge_structure.reason("marker",settings.group_id))
   end
   local function leader_field(label,feature,id)

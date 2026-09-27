@@ -1520,7 +1520,10 @@ Result shows each step's role (anchor, addition or fragment) and decision, and
 Reason shows every reason an addition was left out, in order: `GAP`, then
 `INTERLOCK CH02`; several reasons are named together (`GAP, INTERLOCK`). A
 fragment step names its fragment and source, such as `FRAGMENT 1 P03` or
-`KEPT ANCHOR`; a marker step shows `MARKER CHORD G01`. When a leader is set,
+`KEPT ANCHOR`; a Structure marker step shows `MARKER CHORD G01` when its pitch
+was snapped (or, before it plays, will be), `CHORD MISSING`, or the instruction
+that kept its own pitch, such as `BYPASS NOTE MASK`, `BYPASS RANDOM`,
+`BYPASS FIXED` or `BYPASS QUANTISED FIXED`. When a leader is set,
 Result adds an Interlock row, and a queued change the loop boundary refused is
 shown as `Rejected`.
 

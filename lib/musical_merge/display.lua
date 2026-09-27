@@ -35,6 +35,17 @@ function display.status(status)
   return (tostring(status):gsub("_", " "))
 end
 
+-- A played event's structural pitch decision at a marker: its reason
+-- (MARKER CHORD G01, CHORD MISSING) or, when an explicit pitch instruction
+-- kept the legacy path, that bypass (BYPASS NOTE MASK, BYPASS RANDOM,
+-- BYPASS FIXED, BYPASS QUANTISED FIXED). nil when the event has none.
+local STRUCTURAL_BYPASSES = {note_mask = true, random = true, fixed = true, quantised_fixed = true}
+function display.structural(status, reason)
+  if reason ~= nil then return display.reason(reason) end
+  if STRUCTURAL_BYPASSES[status] then return "BYPASS " .. string.upper(display.status(status)) end
+  return nil
+end
+
 -- An Interlock admission as the Result and Interlock screens show it: ON
 -- while it filters, else its visible bypass (RESYNC, PLAN LIMIT, LEADER OFF,
 -- LEADER MISSING). Absent: OFF.
