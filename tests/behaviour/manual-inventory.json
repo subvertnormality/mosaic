@@ -3918,7 +3918,8 @@
     "M-REC-PARAM-028",
     "M-PARAM-DIAL-OFF-001",
     "M-PATCH-065",
-    "M-PATCH-066"
+    "M-PATCH-066",
+    "M-PARAM-CHORD-X-001"
    ],
    "status": "in_progress",
    "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -5232,7 +5233,8 @@
     "M-CHORDVEL-008",
     "M-CHORDVEL-009",
     "M-CHORDVEL-010",
-    "M-CHORDVEL-011"
+    "M-CHORDVEL-011",
+    "M-PARAM-CHORD-X-001"
    ],
    "status": "partial-domain-coverage",
    "domain": "Every selector, sparse voices, repeated pitches, mute-root and acceleration. Status corrected 2026-09-11 from \"unimplemented\", a label that predates the 276 registered cases.",
@@ -5520,7 +5522,8 @@
     "M-CHORDSHAPE-254",
     "M-CHORDSHAPE-255",
     "M-CHORDSHAPE-256",
-    "M-CHORDVEL-011"
+    "M-CHORDVEL-011",
+    "M-PARAM-CHORD-X-001"
    ],
    "status": "in_progress",
    "domain": "No chord/sparse/full; root duplicated in a chord voice; strum/arp/ratchet; pending releases.",

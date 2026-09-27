@@ -689,3 +689,40 @@ def pending_parameter_lock_song_transition(c):
     slot1=replay(1,[60,62,64,65],0)
     slot2=replay(2,[72,74,76,77],96)
     c.results.append(dict(kind='pending-parameter-lock-song-transition',slot1=slot1,slot2=slot2,held_value=0,passed=True))
+
+
+def chord_pattern_x_root(c):
+    """An assigned Chord Pattern at X, or step-locked to X, keeps every root.
+
+    README "Mute Root Note": only that param silences a chord root. README
+    "Chord Shape Modifier": the pattern orders the chord's voices. README
+    "Default Parameter Values": an off value is no value. So X, the pattern's
+    off value, plays exactly as an unassigned Chord Pattern. The simultaneous
+    voice order under "<-" (chord, then root) is characterisation."""
+    from cases import assert_durations
+    c.ui.configure()
+    c.ui.channel_page('masks',from_page='midi_config',confirm=False)
+    c.ui.select_field('chord_1',saturate=-8,then=4);c.ui.set_value(2)  # unset chord masks start from X
+    c.ui.channel_page('trig_locks',from_page='masks',confirm=False)
+    roots,chords,velocities=[60,62,64,65],[64,65,67,69],[127,117,107,97]
+    def verify(root_first,stage):
+        phrase=[]
+        for root,chord,velocity,first in zip(roots,chords,velocities,root_first):
+            pair=[root,chord] if first else [chord,root]
+            phrase+=[(1,[144,pitch,velocity]) for pitch in pair]
+        notes=c.playback(phrase,cycles=2,timeout=4);assert_durations(c,notes,[1]*16)
+        field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
+        tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
+        errors=[(note[field]-notes[0][field])/1e9-(i//2)/6 for i,note in enumerate(notes)]
+        assert all(abs(error)<=tolerance for error in errors),(stage,errors)
+        c.results.append(dict(kind='chord-pattern-x-root',stage=stage,root_first=root_first,timing_errors=errors,passed=True))
+    def lock_x(step):
+        with c.ui.hold_step(step):
+            c.elapse(.05);c.ui.encoder_event(3,-126);c.elapse(.15)
+        c.elapse(.15)
+    verify([True]*4,'unassigned')
+    c.ui.assign_trig_parameter_key('chord_pattern')
+    verify([True]*4,'assigned-channel-X')
+    c.ui.set_value(2);verify([False]*4,'channel-reverse')
+    lock_x(1);lock_x(3);verify([True,False,True,False],'step-X-locks-over-reverse')
+    c.ui.set_value(-2);verify([True]*4,'step-X-locks-with-channel-X')
