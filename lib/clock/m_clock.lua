@@ -895,8 +895,19 @@ function m_clock.set_channel_division(channel_number, division)
   if clock.division ~= previous then
     retime_channel(channel_number, clock)
     -- Plan §1.2.1: a timing change resyncs the channel until the next origin.
-    if channel_number ~= 17 and merge_timeline.set_resync(channel_number) then
-      pattern.rebuild_followers(program.get_selected_song_pattern(), {[channel_number] = true})
+    -- A retimed follower's admission is replaced now (§1.2 fallback), even
+    -- when an earlier timing check already made its resync sticky; the
+    -- rebuild reaches its own followers too. retime_channel has already
+    -- invalidated its lookahead. A channel in no Interlock relation rebuilds
+    -- nothing.
+    if channel_number ~= 17 and merge_timeline.running() then
+      merge_timeline.set_resync(channel_number)
+      local song = program.get_selected_song_pattern()
+      if pattern.followers_of(song)[channel_number] then
+        pattern.update_working_pattern(channel_number, song)
+      else
+        pattern.rebuild_followers(song, {[channel_number] = true})
+      end
     end
   end
 end

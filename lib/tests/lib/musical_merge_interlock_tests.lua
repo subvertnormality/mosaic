@@ -765,6 +765,106 @@ function test_interlock_resync_after_division_range_and_slot_changes()
   stop_transport()
 end
 
+-- Review D6 (§1.2 fallback, §1.2.1 timing change, §1.3 freshness): the
+-- channel page applies a clock-mod change while playing at the next pattern
+-- boundary (channel_edit_clock_controls.update_clock_mods: clock_mods now,
+-- set_channel_division queued for the pattern change). Retiming a follower
+-- there must replace its admission immediately with the RESYNC bypass,
+-- restoring the additions Interlock removed, before the follower's next wrap;
+-- grid and MIDI agree at every onset. Follower /1 six-step loop wraps at 6,
+-- 12, 18; the global boundary is 16.
+local D2 = {name = "/2", value = 2, type = "clock_division"}
+
+local function retime_like_the_channel_page(song, number, mods, on_applied)
+  song.channels[number].clock_mods = mods
+  step.queue_for_pattern_change(function()
+    m_clock.set_channel_division(number, m_clock.calculate_divisor(mods))
+    on_applied()
+  end)
+end
+
+local function retime_follower_at_boundary(options)
+  local song, follower = setup({follower_mod = D1, follower_last = 6, leader_mod = D1, leader_last = 4,
+    leader_anchors = {1, 3}, window = 0, global_length = 16, candidates = {1, 2, 3, 4, 5, 6}})
+  if options.chained then
+    -- Channel 3 follows the follower with a 2-step loop: its wrap rebuild
+    -- checks the follower's timing and makes RESYNC sticky before the retime.
+    local third = song.channels[3]
+    third.clock_mods = D1; set_range(third, 1, 2)
+    third.selected_patterns = {[3] = true, [4] = true}
+    third.musical_merge = foundation(3, {interlock = {leader = FOLLOWER, window = 0}})
+    pattern_module.update_working_pattern(3, song)
+  end
+  local plain = without_interlock(song)
+  m_clock.init(); m_clock:start()
+  local function accumulator() return program.get().global_step_accumulator or 0 end
+  local guard = 0
+  -- Follower cycle 2 starts at master step 13; the queued retime runs at the
+  -- pattern boundary (master step 16), before the follower's wrap at 19.
+  while (merge_timeline.k(FOLLOWER) or 0) < 2 do pulses(1); guard = guard + 1; assert(guard < 24 * 40) end
+  luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "ok")
+  luaunit.assert_true(#blocked_steps(follower.working_pattern) > 0)
+  local retimed = false
+  retime_like_the_channel_page(song, FOLLOWER, D2, function() retimed = true end)
+  if options.chained then
+    while accumulator() < 15 do pulses(1) end
+    luaunit.assert_true(merge_timeline.resync(FOLLOWER))
+  end
+  local k = merge_timeline.k(FOLLOWER)
+  local counted = m_clock["channel_" .. FOLLOWER .. "_clock"].onset_count or 0
+  local crossed, checked = false, 0
+  guard = 0
+  while merge_timeline.k(FOLLOWER) == k do
+    local before = #midi_note_on_events
+    pulses(1); guard = guard + 1; assert(guard < 24 * 64)
+    if not crossed and retimed then
+      crossed = true
+      -- Immediately after the boundary, before the follower's next wrap.
+      luaunit.assert_equals(merge_timeline.k(FOLLOWER), k)
+      luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "RESYNC")
+      luaunit.assert_equals(follower.working_pattern.foundation.interlock.blocked, {})
+      luaunit.assert_equals(follower.working_pattern.trig_values, plain.trig_values)
+      luaunit.assert_equals(reason_steps(follower.working_pattern, "interlock"), {})
+    end
+    local count = m_clock["channel_" .. FOLLOWER .. "_clock"].onset_count or 0
+    if crossed and count > counted and merge_timeline.k(FOLLOWER) == k then
+      local sounded = false
+      for index = before + 1, #midi_note_on_events do
+        if midi_note_on_events[index][3] == FOLLOWER then sounded = true end
+      end
+      local current = program.get_current_step_for_channel(FOLLOWER)
+      luaunit.assert_equals(sounded, follower.working_pattern.trig_values[current] == 1, "onset step " .. current)
+      checked = checked + 1
+    end
+    counted = count
+  end
+  luaunit.assert_true(crossed)
+  luaunit.assert_true(checked >= 1)
+  stop_transport()
+end
+
+function test_interlock_follower_retimed_at_pattern_boundary_bypasses_immediately()
+  retime_follower_at_boundary({})
+end
+
+-- The same when an earlier timing check (a dependent's rebuild) already made
+-- the follower's RESYNC sticky: the retime still replaces its admission.
+function test_interlock_follower_retimed_after_sticky_resync_bypasses_immediately()
+  retime_follower_at_boundary({chained = true})
+end
+
+-- A retime of a channel with no Interlock relation rebuilds nothing.
+function test_interlock_retiming_an_unrelated_channel_rebuilds_nothing()
+  local song, follower = setup({follower_mod = D1, leader_mod = D1, global_length = 16})
+  m_clock.init(); m_clock:start(); pulses(24)
+  local working = {}
+  for number = 1, 16 do working[number] = song.channels[number].working_pattern end
+  m_clock.set_channel_division(5, m_clock.calculate_divisor(D2))
+  for number = 1, 16 do luaunit.assert_is(song.channels[number].working_pattern, working[number], number) end
+  luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "ok")
+  stop_transport()
+end
+
 -- §1.4 an Interlock-only anchor in the preceding leader cycle within the
 -- window is found (follower cycle 1 starts at 8/16; the leader's cycle-1
 -- anchor at 7/16 is within one follower step).
