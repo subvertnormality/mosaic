@@ -1084,3 +1084,62 @@ def interlock_range_resync_workflow(c):
     assert (1, 5, 1, 60, 70) in first_cycle, placed
     c.results.append(dict(kind="interlock-range-resync", released_step=5,
                           tolerance_seconds=tolerance(c), passed=True))
+
+
+def interlock_swing_invariance_workflow(c):
+    """README Interlock and Clocks: local Swing 25 moves onset times, but
+    Interlock still removes the coincident addition from the nominal plan."""
+    interlock_pair(c, leader_step=5)
+    c.ui.channel_page('clock_mods', channel=1, confirm=False)
+    c.ui.select_field('swing', offset=1); c.ui.set_value(1); c.ui.press_key(3)
+    c.ui.select_field('swing_x', offset=1); c.ui.set_value(25 + 51); c.ui.press_key(3)
+    interlock_screen(c)
+    c.ui.expect_selected_field('detail', 'Status', 'ON')
+    c.ui.expect_steps({5: 'off', 7: 'selected'})
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 6, timeout=5)
+    ons = capture.note_ons(1)[:6]
+    key, allowed = field(c), tolerance(c)
+    origin = ons[0][key]
+    expected = [(0, 60, 127), (30, 62, 117), (48, 64, 107),
+                (78, 65, 97), (144, 60, 70), (192, 60, 127)]
+    for event, (pulse, pitch, velocity) in zip(ons, expected):
+        assert tuple(event['data']) == (pitch, velocity), dict(event=event, expected=(pitch, velocity))
+        assert abs((event[key] - origin) / 1e9 - pulse / 144) <= allowed, dict(pulse=pulse, event=event)
+    stop_and_drain(c, capture)
+    c.results.append(dict(kind='interlock-swing-invariance', swing=25,
+                          expected=[list(e) for e in expected], tolerance_seconds=allowed,
+                          passed=True))
+
+
+def interlock_shuffle_invariance_workflow(c):
+    """README Interlock and Shuffle: Smooth 9 at 50 moves onsets but the
+    nominal leader anchor still removes the coincident follower addition."""
+    interlock_pair(c, leader_step=5)
+    c.ui.channel_page('clock_mods', 'midi_config', channel=1, confirm=False)
+    c.ui.select_field('shuffle', offset=1); c.ui.set_value(2); c.ui.press_key(3)
+    c.ui.select_field('shuffle_feel', offset=1); c.ui.set_value(2); c.ui.press_key(3)
+    c.ui.select_field('shuffle_basis', offset=1); c.ui.set_value(1); c.ui.press_key(3)
+    c.ui.select_field('shuffle_amount', offset=1); c.ui.set_value(-101); c.ui.press_key(3)
+    c.ui.set_value(50); c.ui.press_key(3)
+    interlock_screen(c)
+    c.ui.expect_selected_field('detail', 'Status', 'ON')
+    c.ui.expect_steps({5: 'off', 7: 'selected'})
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 6, timeout=5)
+    ons = capture.note_ons(1)[:6]
+    key, allowed = field(c), tolerance(c)
+    origin = ons[0][key]
+    # Smooth, basis 9, amount 50 has successive independent pulse onsets
+    # 0,26,48,71,96,122,144,167,192; steps 5/6/8 are absent here.
+    expected = [(0, 60, 127), (26, 62, 117), (48, 64, 107),
+                (71, 65, 97), (144, 60, 70), (192, 60, 127)]
+    for event, (pulse, pitch, velocity) in zip(ons, expected):
+        assert tuple(event['data']) == (pitch, velocity), dict(event=event, expected=(pitch, velocity))
+        assert abs((event[key] - origin) / 1e9 - pulse / 144) <= allowed, dict(pulse=pulse, event=event)
+    stop_and_drain(c, capture)
+    c.results.append(dict(kind='interlock-shuffle-invariance', feel='Smooth', basis=9,
+                          amount=50, expected=[list(e) for e in expected],
+                          tolerance_seconds=allowed, passed=True))
