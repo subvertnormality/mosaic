@@ -21,6 +21,13 @@ HARDWARE_PERFORMANCE_RECIPES={
         'available_boundaries':['HardwareDriver controls','OutputTrace MIDI timestamps','grid driver trace','screen screenshots'],
         'capability_gaps':['bounded repeatable on-device load generator','CPU/throttling/resource samples bracketing the load','frame/grid revision counters','device-specific threshold calibration'],
     },
+    'merge_workloads.py':{
+        'status':'implemented-unverified','hardware_verified':False,'adaptation':'release-gating-device-acceptance',
+        'cases':['PERF-MERGE-HW-STEADY','PERF-MERGE-HW-WORST','PERF-MERGE-HW-EDIT','PERF-MERGE-HW-DENSE','PERF-MERGE-HW-DENSE-EDIT'],
+        'comparable_metrics':['onset timing on each channel grid with the unchanged thresholds','simultaneous-onset service span','sixteenth step jitter','per-admission Interlock semantics','edit propagation','follower wrap alignment','Start latency against Merge Shape Off in the same session'],
+        'available_boundaries':['HardwareDriver controls','OutputTrace MIDI timestamps','admission/grid-input recorder (util.time)'],
+        'capability_gaps':['No device report yet: the device qualification is OUTSTANDING and release-gating until source-identified reports of all five cases pass (owner: repository maintainer).'],
+    },
     'perf_storage.py':{
         'status':'excluded','adaptation':'not-sequencer-timing',
         'reason':'The current recipe defines no storage-speed threshold or sequencer timing correlation; include only if a measured storage stall affects musical output.',

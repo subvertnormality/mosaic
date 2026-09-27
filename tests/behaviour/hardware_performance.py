@@ -25,6 +25,10 @@ CASES={
 }
 from heldout_workloads import HELDOUT_CASES,LUA_LOAD_SOURCE,recovery_oracle,run_window
 CASES.update(HELDOUT_CASES)
+# Interlock device acceptance (docs/musical-merge-extensions-plan.md §1.4):
+# release-gating, OUTSTANDING until source-identified device reports pass.
+import merge_workloads
+CASES.update(merge_workloads.MERGE_CASES)
 TIMING_THRESHOLDS={'p99_ns':10_000_000,'maximum_ns':50_000_000,'final_phase_ns':20_000_000,'service_p99_deadline_fraction':.5,'service_maximum_deadline_fraction':1.0,'step_jitter_p95_ns':5_000_000,'step_jitter_maximum_ns':10_000_000}
 def percentile(values,percent):
     ordered=sorted(values);return ordered[(percent*len(ordered)+99)//100-1]
@@ -376,6 +380,12 @@ def project_fixture_name(case_id):
 
 def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,thread_sampler=None,windows=1,timing_trace=False,resource_sampler=True,native_screen_trace=False,redraw_count_trace=False,project_fixture=None,save_project_fixture=None,lead_ms=None,probe_mode='off',seed=0,measured_steps=None,probe_schedule=None,seed_schedule=None,timing_contract='legacy-delay-v1'):
     if case_id not in CASES:raise ValueError('Unknown hardware performance case: '+case_id)
+    if CASES[case_id].get('merge'):
+        # The plan's section 1.4 cases fix their window, lead and contract;
+        # options that would change what is measured are refused, not ignored.
+        if windows!=1 or timing_trace or thread_sampler or measured_steps is not None or probe_schedule or seed_schedule or probe_mode!='off' or (lead_ms or 0)!=0 or timing_contract!='legacy-delay-v1':
+            raise ValueError(case_id+' runs one window at lead 0 with the legacy-delay-v1 contract and no probes')
+        return run_merge_performance(runner,case_id,grid_device,device_map_id,source,trace=trace,sampler=sampler,resource_sampler=resource_sampler,project_fixture=project_fixture,save_project_fixture=save_project_fixture,seed=seed)
     if type(windows) is not int or windows < 1:raise ValueError('windows must be positive')
     if measured_steps is not None and (type(measured_steps) is not int or measured_steps < 1):raise ValueError('measured_steps must be positive')
     if probe_schedule is not None:
@@ -502,3 +512,106 @@ def run_hardware_performance(runner,case_id,grid_device,device_map_id,source,tra
                 try:timings.remove()
                 except Exception:pass
             driver.finish()
+
+
+MERGE_RECORDER_CHUNK=400
+
+def merge_eval(runner,code,marker):
+    """Evaluate a workload call and require its marker in the reply."""
+    output=runner.maiden.eval(code,allow_lua_error=False)
+    if marker not in output:raise AssertionError('Merge workload call failed: '+code[:120]+' -> '+output[-600:])
+    return output
+
+def merge_recorder_rows(runner):
+    """Read the admission/input recorder after a window, in chunks."""
+    import re
+    match=re.search(r'__MERGE_REC_COUNT__(\d+)',merge_eval(runner,'print(_MOSAIC_MERGE_WORKLOAD.count())','__MERGE_REC_COUNT__'))
+    count=int(match.group(1));rows=[]
+    for first in range(1,count+1,MERGE_RECORDER_CHUNK):
+        rows+=merge_workloads.parse_rows(runner.maiden.eval('print(_MOSAIC_MERGE_WORKLOAD.dump(%d,%d))'%(first,first+MERGE_RECORDER_CHUNK-1),allow_lua_error=False))
+    if len(rows)!=count or [row['index'] for row in rows]!=list(range(1,count+1)):raise AssertionError(('Merge recorder dump incomplete',count,len(rows)))
+    return rows
+
+def run_merge_window(runner,driver,trace,spec,mode,transport_log,sampler=None):
+    """One same-session window: configure (stopped), play, edit, stop, read."""
+    from ui_map import control_cell
+    variant=spec['variant'];ready_to_play(runner,driver,transport_log)
+    readback=merge_eval(runner,"print(_MOSAIC_MERGE_WORKLOAD.configure('%s','%s'))"%(variant,mode),'__MERGE_CONFIG__%s|%s|'%(variant,mode))
+    # Both modes leave the Trigger editor on the leader's anchor pattern, so
+    # the Start-latency comparison differs only in Merge Shape.
+    driver.ui.tap_control('pattern_select',merge_workloads.LEADER_PATTERN)
+    merge_eval(runner,'print(_MOSAIC_MERGE_WORKLOAD.reset())','__MERGE_REC_RESET__')
+    seconds=spec['seconds'] if mode=='enabled' else merge_workloads.DEFAULT_SECONDS
+    edits=[]
+    trace.reset();sampler=sampler or NoResourceSampler();sampler.start();time.sleep(.25)
+    started_ns=time.monotonic_ns();play_tap=driver.ui.play()
+    if mode=='enabled' and spec.get('edit_every_beats'):
+        beat_seconds=60.0/driver.tempo_bpm
+        for offset in merge_workloads.edit_offsets_beats(spec['edit_every_beats'],seconds,driver.tempo_bpm,merge_workloads.follower_step_beats(variant)/2):
+            target=started_ns+round(offset*beat_seconds*1e9);remaining=target-time.monotonic_ns()
+            if remaining>0:time.sleep(remaining/1e9)
+            before=time.monotonic_ns();driver.ui.tap_step(1);edits.append({'offset_beats':offset,'target_ns':target,'dispatch_started_ns':before,'dispatch_ended_ns':time.monotonic_ns()})
+    remaining=started_ns+round(seconds*1e9)-time.monotonic_ns()
+    if remaining>0:time.sleep(remaining/1e9)
+    stop_tap=driver.ui.stop();driver.elapse(.3);state=driver.snapshot();ended_ns=time.monotonic_ns();recording=sampler.stop()
+    stopped=stopped_after_window(runner,transport_log)
+    rows=merge_recorder_rows(runner)
+    return {'mode':mode,'seconds':seconds,'readback':readback.strip()[-2000:],'state':state,'rows':rows,'edits_dispatched':edits,'transport_taps':{'play':play_tap,'stop':stop_tap},
+            'host_window_ns':ended_ns-started_ns,'recording':recording,'stopped':stopped,'step_cell':control_cell('step',1),'play_cell':control_cell('play_stop')}
+
+def evaluate_merge_windows(case_id,off,enabled,step_seconds,thresholds=None):
+    """The §1.4 verdict from two same-session windows (pure; unit tested)."""
+    thresholds=thresholds or TIMING_THRESHOLDS;spec=CASES[case_id];variant=spec['variant']
+    follower_step_seconds=merge_workloads.follower_step_beats(variant)*4*step_seconds
+    admissions=merge_workloads.admission_oracle(variant,enabled['rows'],enabled['step_cell'],follower_step_seconds=follower_step_seconds)
+    expected_edits=len(merge_workloads.edit_offsets_beats(spec['edit_every_beats'],enabled['seconds'],15/step_seconds,merge_workloads.follower_step_beats(variant)/2)) if spec.get('edit_every_beats') else 0
+    admissions['expected_edits']=expected_edits
+    if admissions['edits']!=expected_edits:admissions['passed']=False;admissions['failures'].append({'kind':'edits','observed':admissions['edits'],'expected':expected_edits})
+    try:timing=merge_workloads.merge_timing_oracle(enabled['state']['midi'],variant,enabled['seconds'],step_seconds,thresholds,merge_workloads.leader_step_one_skip(variant))
+    except AssertionError as error:timing={'passed':False,'failure':repr(error)[:2000]}
+    latency=merge_workloads.start_latency_gate(merge_workloads.start_latency_ns(enabled['rows'],enabled['state']['midi'],enabled['play_cell']),
+                                               merge_workloads.start_latency_ns(off['rows'],off['state']['midi'],off['play_cell']),thresholds)
+    gates={'timing':timing['passed'],'admissions':admissions['passed'],'start_latency':latency['passed'],'transport_stopped':bool(off['stopped'] and enabled['stopped'])}
+    return {'passed':all(gates.values()),'gates':gates,'timing':timing,'admissions':admissions,'start_latency':latency,'thresholds':thresholds}
+
+def run_merge_performance(runner,case_id,grid_device,device_map_id,source,trace=None,sampler=None,resource_sampler=True,project_fixture=None,save_project_fixture=None,seed=0):
+    """PERF-MERGE-HW-*: the dense project, Merge Shape Off then the §1.4
+    configuration, in one session; judged by the unchanged thresholds, the
+    per-admission semantics and the Start-latency bound."""
+    spec=dict(CASES[case_id]);trace=trace or __import__('real_norns').OutputTrace(runner.maiden)
+    driver=HardwareDriver(runner,grid_device,device_map_id,trace,capture_screens=False,artifact_prefix=case_id.lower());transport_log=[];installed=False
+    try:
+        if abs(driver.tempo_bpm-spec['tempo_bpm'])>.01:raise AssertionError('%s runs at %s bpm but the norns clock is at %s'%(case_id,spec['tempo_bpm'],driver.tempo_bpm))
+        fixture_manifest=check_project_fixture(project_fixture,case_id) if project_fixture is not None else {}
+        if project_fixture is None:
+            build_project(driver,spec['channels'],spec['workload'],select_fixture_parameter,lambda d,channel:d.ui.set_value(runner.device_map_index(device_map_id,channel)-1))
+        set_lock_lead(driver,0);runner.maiden.eval('math.randomseed(%d)'%seed)
+        if project_fixture is None and save_project_fixture:
+            runner.fetch_project(save_project_fixture);write_fixture_manifest(save_project_fixture,case_id,spec,source,seed=seed)
+        driver.ui.pattern_editor();driver.ui.tap_control('pattern_select',1);driver.ui.expect_steps({x:'selected' for x in range(1,17)})
+        # Routing is proven on the unmodified dense project, before Merge Shape.
+        preflight=functional_preflight(runner,driver,trace,spec)
+        merge_eval(runner,merge_workloads.install_command(),'__MERGE_WORKLOAD__true')
+        merge_eval(runner,'print(_MOSAIC_MERGE_WORKLOAD.install(%d))'%merge_workloads.LEADER_PATTERN,'__MERGE_REC_INSTALLED__');installed=True
+        off=run_merge_window(runner,driver,trace,spec,'off',transport_log)
+        enabled_sampler=sampler or (OnDeviceResourceSampler(runner.ssh,spec['seconds']+1.5) if resource_sampler else NoResourceSampler())
+        enabled=run_merge_window(runner,driver,trace,spec,'enabled',transport_log,enabled_sampler)
+        for window in (off,enabled):
+            (runner.out/('performance-raw-%s.json'%window['mode'])).write_text(json.dumps({key:value for key,value in window.items() if key!='recording'},indent=2)+'\n')
+        verdict=evaluate_merge_windows(case_id,off,enabled,driver.expected_step_seconds)
+        (runner.out/'preflight.json').write_text(json.dumps(preflight,indent=2)+'\n')
+        recording=enabled['recording']
+        value={'schema_version':1,'case':case_id,'variant':spec['variant'],'workload':spec['workload'],'channels':spec['channels'],'requested_window_seconds':spec['seconds'],
+               'off_window_seconds':off['seconds'],'tempo_bpm':driver.tempo_bpm,'host_window_ns':enabled['host_window_ns'],'oracle':verdict,
+               'edits_dispatched':enabled['edits_dispatched'],'resources':resource_metrics(recording) if recording else None,'runtime_identity':recording['identity'] if recording else None,
+               'source_identity':source_identity(source),'run_identity':{'fixture_id':case_id,'fixture_files':fixture_manifest.get('files'),'midi_lock_lead_time':0,'timing_contract':'legacy-delay-v1','seed':seed,'clock_source':'internal','port':1,'capture_backend':'stock-norns-output-trace'},
+               'transport_checks':transport_log,'passed':verdict['passed'],'qualification_eligible':False,
+               'release_gate':'docs/musical-merge-extensions-plan.md 1.4: all of STEADY, WORST, EDIT, DENSE and DENSE-EDIT must pass on a physical norns before release',
+               'limitations':['Merge Shape is configured through the production modules over Maiden while stopped; the edits are grid taps.',
+                              'The admission recorder wraps pattern.get_and_merge_patterns and _norns.grid.key for the whole session, in both windows.',
+                              'Diagnostic until source-identified device reports of every PERF-MERGE-HW case pass: the device qualification is outstanding (owner: repository maintainer).']}
+        return value
+    finally:
+        try:
+            if installed:runner.maiden.eval('print(_MOSAIC_MERGE_WORKLOAD.remove())',allow_lua_error=True)
+        finally:driver.finish()
