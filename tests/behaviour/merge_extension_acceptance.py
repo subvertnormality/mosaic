@@ -1143,3 +1143,73 @@ def interlock_shuffle_invariance_workflow(c):
     c.results.append(dict(kind='interlock-shuffle-invariance', feel='Smooth', basis=9,
                           amount=50, expected=[list(e) for e in expected],
                           tolerance_seconds=allowed, passed=True))
+
+
+def structure_arp_root_workflow(c):
+    """README Structure and Chord Arpeggio: every ratcheted root of a marker
+    uses the snapped pitch, including notes delivered after its trigger."""
+    structure_setup(c)
+    # README Chord Arpeggio: with no chord masks, the unmuted root is a
+    # one-slot ratchet; half-step division repeats it twice per step.
+    c.ui.channel_page('trig_locks', channel=1)
+    c.ui.assign_trig_parameter_key('chord_note_arpeggio')
+    c.ui.set_value(8)
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 8, timeout=5)
+    ons = capture.note_ons(1)[:8]
+    key, allowed = field(c), tolerance(c)
+    origin = ons[0][key]
+    expected = [(0, 60, 127), (12, 60, 127),
+                (24, 60, 117), (36, 60, 117),
+                (48, 64, 107), (60, 64, 107),
+                (72, 64, 97), (84, 64, 97)]
+    for event, (pulse, pitch, velocity) in zip(ons, expected):
+        assert tuple(event['data']) == (pitch, velocity), dict(event=event, expected=(pitch, velocity))
+        assert abs((event[key] - origin) / 1e9 - pulse / 144) <= allowed, dict(pulse=pulse, event=event)
+    stop_and_drain(c, capture)
+    merge_result_pitch(c, (2, 4), 'MARKER CHORD G01')
+    c.results.append(dict(kind='structure-arp-marker-root', expected=[list(e) for e in expected],
+                          tolerance_seconds=allowed, passed=True))
+
+
+def interlock_song_resync_workflow(c):
+    """README Interlock and Reset at Song Editor Pattern Change: a live
+    non-resetting song transition bypasses the stale nominal Interlock plan."""
+    interlock_pair(c, leader_step=7)
+    c.ui.set_mosaic_option_keys([('song_mode', True),
+                                 ('reset_on_song_seq_change', False),
+                                 ('reset_on_pattern_repeat', False)])
+    # Slot 1 ends after step 13, between steps 5 and 7 of the follower loop.
+    c.ui.song_editor()
+    c.ui.tap_control('global_pattern_length', 3)
+    c.ui.expect_dashboard_row('Global length', '13')
+    c.ui.copy_slot(1, 2, control='song_pattern_slot')
+    c.ui.tap_control('song_pattern_slot', 2)
+    # Give the second slot enough time for native screen inspection.
+    for _ in range(3): c.ui.tap_control('global_pattern_length', 8)
+    c.ui.expect_dashboard_row('Global length', '16')
+    c.ui.tap_control('song_pattern_slot', 1)
+    c.ui.menu('channel_editor')
+    interlock_screen(c)
+    c.ui.expect_selected_field('detail', 'Status', 'ON')
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 12, timeout=5)
+    c.ui.expect_selected_field('detail', 'Status', 'RESYNC')
+    c.ui.expect_steps({5: 'selected', 7: 'selected'})
+    ons = capture.note_ons(1)[:12]
+    key, allowed = field(c), tolerance(c)
+    origin = ons[0][key]
+    expected = [(0, 60, 127), (24, 62, 117), (48, 64, 107),
+                (72, 65, 97), (96, 60, 70),
+                (192, 60, 127), (216, 62, 117), (240, 64, 107),
+                (264, 65, 97), (288, 60, 70), (336, 60, 70),
+                (384, 60, 127)]
+    for event, (pulse, pitch, velocity) in zip(ons, expected):
+        assert tuple(event['data']) == (pitch, velocity), dict(event=event, expected=(pitch, velocity))
+        assert abs((event[key] - origin) / 1e9 - pulse / 144) <= allowed, dict(pulse=pulse, event=event)
+    result_interlock(c, 'RESYNC')
+    stop_and_drain(c, capture)
+    c.results.append(dict(kind='interlock-song-resync', expected=[list(e) for e in expected],
+                          tolerance_seconds=allowed, passed=True))

@@ -319,6 +319,7 @@
     "M-MERGE-044",
     "M-MERGE-FOUNDATION-001",
     "M-MERGE-FRAGMENTS-001",
+    "M-MERGE-FRAGMENTS-002",
     "M-MERGE-INTERLOCK-001",
     "M-MERGE-STRUCTURE-001",
     "M-NAV-001",
@@ -428,5 +429,5 @@
     "M-XA-006-NB-CHORD-ACCEL",
     "M-XA-007-NB-SWITCH-SLOTS"
   ],
-  "ceiling": 470
+  "ceiling": 471
 }

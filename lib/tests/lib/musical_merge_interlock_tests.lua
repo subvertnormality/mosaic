@@ -760,6 +760,10 @@ function test_interlock_resync_after_division_range_and_slot_changes()
   pulses(24 * 8 + 1)
   luaunit.assert_equals(program.get().selected_song_pattern, 2)
   for number = 1, 16 do luaunit.assert_true(merge_timeline.resync(number), number) end
+  -- README Interlock: RESYNC bypass reaches the newly entered song slot before
+  -- its next channel wrap; the next MIDI onset uses this working pattern.
+  luaunit.assert_equals(second.channels[FOLLOWER].working_pattern.foundation.interlock.status, "RESYNC")
+  luaunit.assert_equals(second.channels[FOLLOWER].working_pattern.trig_values[1], 1)
   pulses(24 * 8)
   luaunit.assert_equals(second.channels[FOLLOWER].working_pattern.foundation.interlock.status, "RESYNC")
   stop_transport()

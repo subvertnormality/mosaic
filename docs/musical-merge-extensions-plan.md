@@ -893,34 +893,45 @@ excluded only by an explicit eligibility condition and visible manual/UI scope.
 Until that contract and its later implementation evidence pass review, README,
 cheat sheet, captures and acceptance reports must retain the narrower claim.
 
-### 6.4 Residual MM-ACC-PUBLIC (remaining public-input acceptance)
+### 6.4 Public-input acceptance assessment
 
-Owner: the Mosaic maintainer (repository owner). Status: OPEN, recorded in
-`docs/testing/unit-integration-hardening-matrix.json` H16 `residual_gaps`.
+Owner: the Mosaic maintainer. Status: CLOSED for reachable player behaviour.
+The complete required emulator campaign remains a CI release gate.
 
-Public-input cases now cover unequal leader/follower loops under a burst of
-edits (M-MERGE-INTERLOCK-004), visible PLAN LIMIT bypass at the 65-cycle boundary (M-MERGE-INTERLOCK-005), playing loop-range RESYNC (M-MERGE-INTERLOCK-006), and nominal Interlock decisions under Swing and Shuffle (M-MERGE-INTERLOCK-007/008); Every 4/Every 8 markers, Harmony Pattern
-conflict recovery and Revoice MARKER PRIORITY (M-MERGE-STRUCTURE-004);
-and group deletion undo/redo, Stop settlement and save/reload
-(M-MERGE-STRUCTURE-005), plus Ensemble marker priority
-(M-MERGE-STRUCTURE-006), in controlled-time and real-time lanes.
+Public-input cases cover unequal leader/follower loops and a grid-edit burst
+(M-MERGE-INTERLOCK-004), visible PLAN LIMIT bypass (005), playing loop-range
+RESYNC (006), nominal Interlock decisions under Swing and Shuffle (007/008),
+and a non-resetting song transition mid-channel-loop with immediate RESYNC,
+released MIDI step and grid feedback (009). Structure cases cover Every 4 and
+Every 8 markers, Harmony Pattern conflict/recovery and Revoice priority (004),
+group deletion undo/redo, Stop and save/reload (005), Ensemble priority (006),
+and snapped roots in delayed half-step arp notes (007). Fragments 001/002 cover
+seed changes, short loops, Keep anchor Off/On and source overlap. Each new case
+runs through public grid/norns input and checks exact MIDI plus visible screen
+or grid feedback in both controlled-time and real-time lanes.
 
-Remaining scope — behaviour verified by Lua unit/integration tests
-(named in H16) but not yet by public-input emulator cases: Interlock
-yielding-sweep interleavings (an edit between the leader's and follower's
-rebuilds, stale sweep completion), RESYNC after non-realigning song changes and reversed
-callback order; Structure CHORD MISSING, arp roots and stale drafts.
+Four remaining invariants require state or ordering that public grid, key,
+encoder and MIDI input cannot select precisely:
 
-Acceptance boundary: each scenario above gains a behaviour case through grid,
-norns key/encoder or MIDI input observing MIDI and grid LEDs or the screen, in
-the controlled-time and real-time lanes where applicable, registered in
-`tests/behaviour/cases.py` and the manual inventory, with red evidence on a
-revision lacking the behaviour where one exists.
+- Leader/follower yielding-sweep interleavings and stale sweep completion are
+  forced with a manual scheduler in
+  `test_interlock_yielding_sweep_interleavings_keep_the_last_build`; the public
+  grid-edit burst in Interlock 004 checks the resulting audible/grid behaviour.
+- Reversed sprocket callback order is selected directly in
+  `musical_merge_interlock_tests.lua`; public timing cases 004 and 007/008 check
+  note output without depending on callback order.
+- `CHORD MISSING` is an invalid group-reference state induced directly in
+  `test_structure_missing_group_is_visible_legacy_and_recovers`; public group
+  disable/delete transactions are covered by Structure 003/005.
+- A stale unapplied editor draft is retained across a competing transaction in
+  `musical_merge_structure_lifecycle_tests.lua`; public queued edits, Stop,
+  deletion, history and save/reload are covered by Structure 003/005.
 
-Delivery restriction: until closed, no release note, README text or
-acceptance report may claim public-input acceptance for these scenarios; the
-1.4 release notes list MM-ACC-PUBLIC with MM-12 as open residuals, and the
-README makes no statement beyond what the named behaviour cases assert.
+These internal invariants remain unit/integration acceptance, with no claim of
+public-input acceptance for their unselectable intermediate state. The public
+behaviour campaign is comprehensive for reachable player workflows and has a
+fixed case inventory across the CI shards and required profiles. MM-12 Space
+remains deferred separately under §6.3.
 
 ## 7. Delivery cards and acceptance
 

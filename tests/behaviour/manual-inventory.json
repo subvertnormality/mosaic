@@ -4578,7 +4578,8 @@
     "M-PANIC-009",
     "M-PANIC-010",
     "M-MERGE-031",
-    "M-MERGE-032"
+    "M-MERGE-032",
+    "M-MERGE-STRUCTURE-007"
    ],
    "status": "in_progress",
    "domain": "Sparse/full/no masks ratchet; last-boundary voice; all divisions; shape/velocity; repeated pitches. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate.",
@@ -5835,7 +5836,8 @@
     "M-PARAM-047",
     "M-MASK-032",
     "M-REC-SONG-LENGTH-001",
-    "M-REC-SONG-LENGTH-002"
+    "M-REC-SONG-LENGTH-002",
+    "M-MERGE-INTERLOCK-009"
    ],
    "status": "in_progress",
    "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed). M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected. M-SONG-QUEUE-STOP-001 (E and D, 3 fresh D repeats): a slot or global length queued during playback and interrupted by Stop is discarded (arbitrated SEM-015); the next Play follows song mode from the playing slot; a length set while stopped applies to that slot only. The baseline applied the stale queue at the next Play (defect song-queue-discard-on-stop, fixed). M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time. M-PAT-BOUNDARY-001 (E and D red at a complete channel-16 tap 30 ms before the boundary; E and D green at 80 ms): both grid callbacks finish before the boundary, yet the edit must still be heard the next time its slot plays; open defect pattern-edit-before-song-boundary now has a qualified two-lane baseline for an isolated fix.",
@@ -6347,7 +6349,8 @@
    "cases": [
     "M-SONG-FLOW-001",
     "M-TIME-003",
-    "M-TRANS-007"
+    "M-TRANS-007",
+    "M-MERGE-INTERLOCK-009"
    ],
    "status": "in_progress",
    "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
@@ -6378,7 +6381,8 @@
     "M-TIME-008",
     "M-TIME-009",
     "M-TIME-013",
-    "M-TIME-014"
+    "M-TIME-014",
+    "M-MERGE-INTERLOCK-009"
    ],
    "status": "in_progress",
    "domain": "Every channel length/start; coprime divisions; pending notes; scale track. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time.",
@@ -7672,10 +7676,11 @@
     "M-MERGE-INTERLOCK-005",
     "M-MERGE-INTERLOCK-006",
     "M-MERGE-INTERLOCK-007",
-    "M-MERGE-INTERLOCK-008"
+    "M-MERGE-INTERLOCK-008",
+    "M-MERGE-INTERLOCK-009"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Public-input two-channel workflows at /1, including unequal loops. M-MERGE-INTERLOCK-001: Window 0 and 2 in literal MIDI (both channels) and on the grid, a Window change queued while playing that lands whole at a loop boundary with a cancelled later draft, and an on-screen CHANNEL IS A LEADER refusal. M-MERGE-INTERLOCK-002 (plan 1.3 freshness, E and D): a leader source edit mid-cycle (halfway through step 6, scheduled through the public input path) removes the follower's coinciding addition in that same loop and a follower edit mid-cycle admits its new addition in that loop, in exact two-channel MIDI and on the playing channel grid; with a 25 ms lock lead and Trigless locks off the edit withdraws the removed addition's already planned CC lock (a mutation dropping the follower lookahead invalidation fails it). M-MERGE-INTERLOCK-003 (plan 1.2.1, review D6, E and D): a /2 confirmed on the Clock screen for the follower, then for its leader, lands at a 13-step global pattern boundary mid-cycle (song mode off) and the follower plays its removed addition from that moment, before its next wrap, with RESYNC on the Interlock screen and Result and every addition on the grid; exact retimed onsets; a stopped Clock change replans the first loop after Start and Start clears RESYNC. M-MERGE-INTERLOCK-004 (E and D): unequal 6-step leader and 8-step follower loops, then a leader/follower grid-edit burst within one step, checked against an independent MIDI model and the channel grid. Pure/integration tests only: RESYNC after non-realigning song changes, reversed callback order and yielding-sweep races. M-MERGE-INTERLOCK-005 covers visible PLAN LIMIT and exact last-step MIDI fallback at the 65-cycle boundary in both lanes. M-MERGE-INTERLOCK-006 covers playing loop-range RESYNC with visible status, grid and exact MIDI in both lanes. M-MERGE-INTERLOCK-007/008 cover invariant nominal Interlock decisions under local Swing 25 and Shuffle Smooth 9 at 50, with exact audible pulse timing, visible status and grid in both lanes.",
+   "domain": "Public-input two-channel workflows at /1, including unequal loops. M-MERGE-INTERLOCK-001: Window 0 and 2 in literal MIDI (both channels) and on the grid, a Window change queued while playing that lands whole at a loop boundary with a cancelled later draft, and an on-screen CHANNEL IS A LEADER refusal. M-MERGE-INTERLOCK-002 (plan 1.3 freshness, E and D): a leader source edit mid-cycle (halfway through step 6, scheduled through the public input path) removes the follower's coinciding addition in that same loop and a follower edit mid-cycle admits its new addition in that loop, in exact two-channel MIDI and on the playing channel grid; with a 25 ms lock lead and Trigless locks off the edit withdraws the removed addition's already planned CC lock (a mutation dropping the follower lookahead invalidation fails it). M-MERGE-INTERLOCK-003 (plan 1.2.1, review D6, E and D): a /2 confirmed on the Clock screen for the follower, then for its leader, lands at a 13-step global pattern boundary mid-cycle (song mode off) and the follower plays its removed addition from that moment, before its next wrap, with RESYNC on the Interlock screen and Result and every addition on the grid; exact retimed onsets; a stopped Clock change replans the first loop after Start and Start clears RESYNC. M-MERGE-INTERLOCK-004 (E and D): unequal 6-step leader and 8-step follower loops, then a leader/follower grid-edit burst within one step, checked against an independent MIDI model and the channel grid. Scheduler-only unit/integration evidence: reversed callback order and yielding-sweep races; public grid-edit bursts and timing modifiers exercise their player-visible results. M-MERGE-INTERLOCK-005 covers visible PLAN LIMIT and exact last-step MIDI fallback at the 65-cycle boundary in both lanes. M-MERGE-INTERLOCK-006 covers playing loop-range RESYNC with visible status, grid and exact MIDI in both lanes. M-MERGE-INTERLOCK-007/008 cover invariant nominal Interlock decisions under local Swing 25 and Shuffle Smooth 9 at 50, with exact audible pulse timing, visible status and grid in both lanes. M-MERGE-INTERLOCK-009 covers a non-resetting 13-step song transition mid 8-step channel loop, immediate RESYNC and a released step 7, with exact MIDI, grid and screen in both lanes.",
    "oracles": [
     "Public grid LEDs",
     "literal MIDI on two channels",
@@ -7708,10 +7713,11 @@
     "M-MERGE-STRUCTURE-003",
     "M-MERGE-STRUCTURE-004",
     "M-MERGE-STRUCTURE-005",
-    "M-MERGE-STRUCTURE-006"
+    "M-MERGE-STRUCTURE-006",
+    "M-MERGE-STRUCTURE-007"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Public-input workflows with a C-E-G group and Anchors, Every 4 and Every 8 markers. M-MERGE-STRUCTURE-001: literal snapped MIDI, then Delete group through its confirmation restores authored pitches. M-MERGE-STRUCTURE-002 (E and D): snapped roots agree in MIDI, on Pattern 1's note grid, on Merge Result (MARKER CHORD G01) and Voice leading Result; a reverse strum (Chord Pattern <- and <-->) on marker steps plays the snapped root 16 pulses late with Harmony Off (review D2); a Harmony Pattern mapped value that snaps at a marker but not between markers is silent at both under Silence and Legacy fallbacks with NO VOICING SOURCE_CONFLICT shown (review D7). M-MERGE-STRUCTURE-003 (E and D): disabling, then deleting, the group while playing keeps channels 1 (6 steps) and 2 (5 steps) snapping through earlier wraps until the global pattern boundary and plays authored pitches after it (Markers OFF), and a Merge Shape edit made while the deletion waits shows NEXT PATTERN and lands with it (review D1). M-MERGE-STRUCTURE-004 (E and D): Every 4/Every 8 markers, Harmony Pattern conflict silence and recovery, and Revoice MARKER PRIORITY in MIDI and on the norns screen. M-MERGE-STRUCTURE-005 (E and D): group deletion undo/redo through Memory, Stop settlement, and save/reload of markers with MIDI and screen checks. Pure/integration tests only: CHORD MISSING, MARKER PRIORITY with Ensemble, arp roots and stale drafts. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes.",
+   "domain": "Public-input workflows with a C-E-G group and Anchors, Every 4 and Every 8 markers. M-MERGE-STRUCTURE-001: literal snapped MIDI, then Delete group through its confirmation restores authored pitches. M-MERGE-STRUCTURE-002 (E and D): snapped roots agree in MIDI, on Pattern 1's note grid, on Merge Result (MARKER CHORD G01) and Voice leading Result; a reverse strum (Chord Pattern <- and <-->) on marker steps plays the snapped root 16 pulses late with Harmony Off (review D2); a Harmony Pattern mapped value that snaps at a marker but not between markers is silent at both under Silence and Legacy fallbacks with NO VOICING SOURCE_CONFLICT shown (review D7). M-MERGE-STRUCTURE-003 (E and D): disabling, then deleting, the group while playing keeps channels 1 (6 steps) and 2 (5 steps) snapping through earlier wraps until the global pattern boundary and plays authored pitches after it (Markers OFF), and a Merge Shape edit made while the deletion waits shows NEXT PATTERN and lands with it (review D1). M-MERGE-STRUCTURE-004 (E and D): Every 4/Every 8 markers, Harmony Pattern conflict silence and recovery, and Revoice MARKER PRIORITY in MIDI and on the norns screen. M-MERGE-STRUCTURE-005 (E and D): group deletion undo/redo through Memory, Stop settlement, and save/reload of markers with MIDI and screen checks. Internal-state unit/integration evidence: CHORD MISSING and stale drafts; public deletion/history and playing edits exercise their player-visible results. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes. M-MERGE-STRUCTURE-007 covers half-step arp ratchets on snapped marker roots with exact MIDI and visible Result in both lanes.",
    "oracles": [
     "literal MIDI pitches and velocities",
     "exact loop-relative onset steps",
@@ -7803,7 +7809,7 @@
     "M-MERGE-STRUCTURE-006"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes.",
+   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes. M-MERGE-STRUCTURE-007 covers half-step arp ratchets on snapped marker roots with exact MIDI and visible Result in both lanes.",
    "oracles": [
     "literal per-channel MIDI pitches",
     "independent rhythmic intervals",
