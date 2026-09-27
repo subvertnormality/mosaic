@@ -49,8 +49,10 @@ Everything not stated here keeps the MM-01…MM-07 contracts in
   - `mode`: `off | foundation | fragments` (was `off | foundation`).
   - `interlock = {leader = nil, window = 0}`: leader channel 1..16 or nil
     (off); window 0..4 follower steps.
-  - `space = {leader = nil, release = 0}`: nominal-occupancy leader 1..16 or nil;
-    release 0..4 follower steps of extra margin after a planned leader gate ends.
+  - `space = {leader = nil, release = 0}`: **reserved and inert in this
+    delivery** (§6): v2 validation accepts only exactly this value (leader nil,
+    release 0) and rejects anything else, so no Space edge, admission or UI can
+    exist; v1 keys that collide with it are discarded by migration as above.
   - `fragments = {size = 8, keep_anchor = false}`: size 4 | 8 | 16.
   - `structure = {markers = "off", group_id = nil}`: markers
     `off | anchors | every_4 | every_8`; group_id an enabled Harmony Ensemble
@@ -223,10 +225,17 @@ onset), so it holds with swing and shuffle and independent of host timing.
   change and rebuilds the followers (1.3); already-emitted follower onsets are
   not recalled.
 - **Phrase position** is the governing segment's (`cycle`, `phrase`).
-- **Leader cycle plan** `leader_plan(i)`: the output of the same
-  `pattern.get_and_merge_patterns` code with configuration, cycle and phrase
-  passed explicitly instead of read from `merge_state`. Source patterns,
-  assignment, masks and merge modes are read live (1.3 says when).
+- **Leader anchors for cycle `i`** (the one authoritative definition; §1.3,
+  §1.4, §3 and §7 derive from it): if the governing segment's configuration is
+  Foundation with a valid anchor pattern, the positions `p` in the leader's
+  playable range where the **currently stored** anchor pattern has a trig;
+  otherwise none. Nothing else of the leader is read. This equals the set
+  `foundation.plan` marks `anchor` for the same configuration and stored data,
+  which a test asserts; no leader working pattern or plan is built. The existing
+  recursive leader-plan ingress in the MM-09 implementation
+  (`leader_query` building leader plans through `get_and_merge_patterns` with
+  `merge_override`, `lib/pattern.lua:265-279`) is replaced by this anchor reader,
+  and acceptance asserts that an admission performs zero leader-plan builds.
 
 ### 1.3 Freshness: when a follower plans
 
@@ -304,13 +313,30 @@ large ratios and the fallback.
 **Device acceptance (timing oracle).** `tests/behaviour/hardware_performance.py`
 gains cases on the PERF-002 dense workload at 130 bpm with 16 channels, each
 judged by the existing `TIMING_THRESHOLDS` gates unchanged:
-`PERF-MERGE-HW-STEADY` (channel 2 follows channel 1), `PERF-MERGE-HW-WORST`
-(channels 2–16 all follow channel 1 with 64-step followers and window 4, capture
-from Start) and `PERF-MERGE-HW-EDIT` (WORST plus a leader anchor-pattern edit
-through the grid every two bars). All three must pass before release; until the
-device runs pass, the delivery report states host figures only.
+- `PERF-MERGE-HW-STEADY`: channel 2 (Foundation, two sources) follows
+  channel 1 (Foundation, 16-step anchor with 4 anchors) through Interlock,
+  window 1, both `/1`.
+- `PERF-MERGE-HW-WORST`: the maximum supported admission work. Channel 1 is a
+  Foundation leader with a one-step playable range `/1` whose anchor pattern has
+  a trig there, so every leader cycle has one anchor; channels 2–16 are
+  Foundation followers `/1` with 64-step ranges, two assigned sources with trigs
+  on every step and window 0, so each follower admission evaluates exactly the
+  64-cycle budget (the test asserts the admission's reported cycle count is 64
+  and its plan-build count 0) and 64 × 64 membership checks, at every follower
+  wrap, with all 15 wrapping on the same pulse.
+- `PERF-MERGE-HW-EDIT`: WORST plus a grid edit of channel 1's anchor pattern
+  every two bars during the capture (rebuild requests, follower propagation and
+  yielding sweeps included).
+- **Start latency:** each case also measures the time from the Start input's
+  native timestamp to the first emitted Note On and compares it with the same
+  workload with Merge Shape Off, captured in the same session. It passes when
+  the difference is at most the `step_jitter_maximum_ns` threshold (10 ms).
+All must pass before release; until the device runs pass, the delivery report
+states host figures only and the feature is not released.
 
 ### 1.5 Dependency rules
+
+(Edges are Interlock leaders only; the inert `space` field creates none.)
 
 - A channel can name at most one interlock leader and at most one space
   leader (possibly the same channel). It cannot name itself.
@@ -416,10 +442,10 @@ For each position `p` in fragment `k` with chosen source `s`:
 Foundation only. The follower's **additions** avoid the leader's **anchor
 onsets** in common time. Anchors of either channel are never changed.
 
-- Leader anchors are the positions with Foundation role `anchor` in the leader's
-  cycle plan (§1.2): the anchor pattern's trigs inside the leader's playable range,
-  before masks and probability (the planned structural onsets, not whether they
-  sounded).
+- Leader anchors are as defined in §1.2.3 (the currently stored anchor
+  pattern's trigs inside the leader's playable range under the governing
+  configuration, before masks and probability — the planned structural onsets,
+  not whether they sounded).
 - For each follower candidate addition at position `p_i` with nominal onset
   `T + (i−1)·d_f`, the candidate is removed with reason `INTERLOCK CHnn` if any
   projected leader anchor onset `a` satisfies
@@ -662,9 +688,24 @@ come from §1.2–§1.3, not a separate Space
 rule. Unavailable articulation snapshots visibly bypass Space for that cycle;
 no bypass result may be reported as proof of silence.
 
-### 6.3 Durable residual MM-12-AUDIBLE
+### 6.3 Durable residual MM-12 (Space) and MM-12-AUDIBLE
 
-Owner: the MM-12 delivery maintainer. Status: OPEN, blocking any release claim
+**MM-12 (Space) — owner: the Mosaic maintainer (repository owner), recorded in
+`docs/testing/unit-integration-hardening-matrix.json` domain H16
+`residual_gaps` and in the README's statement that Space is not part of this
+release. Status: OPEN, deferred; no code, UI or manual claim exists.** Its
+acceptance boundary, before any implementation: a new plan section that passes
+Paranoia plan review and specifies (1) historical ownership, publication and
+retention of every leader gate input (pattern lengths after merges and masks,
+chord masks, root mute, strum/arp articulation) as it was when each gate
+started, with a complete dependency-to-writer inventory (mask edits, recording,
+apply/restore, undo/redo, lock writes and clears, assignment replacement,
+parameter changes) and visible bypass where history is missing; (2)
+callback-order independence for those inputs; (3) a device-measured work budget
+with the `hardware_performance.py` timing gates. Only then may an
+implementation card be opened.
+
+**MM-12-AUDIBLE** — Owner: the same. Status: OPEN, blocking any release claim
 that Mosaic has met the proposal's silence-aware interlock entry gate. The
 nominal-occupancy implementation above may be reviewed under its narrower
 name, but cannot close this residual.
@@ -691,7 +732,7 @@ suite and affected behaviour lanes.
 | Card | Scope | Acceptance |
 |---|---|---|
 | MM-08 Fragments | §2, schema v2 + migration | Layout for N = 1, 3, 4, 7, 8, 16, 17, 64 and sizes 4/8/16 with nonzero start; sequence reproducibility per seed; Fixed vs Per-phrase across 3 phrases; authored data preserved subject to §2.3's fragment-only length rule; every §2.3 boundary/mask case; keep-anchor precedence; complete §0 migration round trips and baseline equivalence. Behaviour: grid/MIDI agree for two cycles, both lanes. |
-| MM-09 Interlock | §1, §3 | Exact whole-note conversion assertions from §1.1 against sprocket divisions; nominal-time tests for the listed modifier pairs, unequal ranges, realign and division change; same-pulse order independence with changing records and reversed sprocket order; first-cycle behavior; §1.5 active/requested/queued graph transitions and history; §1.4 edge, carry-in, large-ratio and budget cases; exact §3 combined-filter counts and nested sets. Swing/shuffle invariance; resync bypass after division, range and non-realigning slot changes; activation-history queries at, before and after the leader's own boundary in the same pulse; epoch-derived phrase equality with merge_state; leader plan built by the same get_and_merge_patterns path. Behaviour compares the admitted nominal plan with grid positions and corresponding emitted MIDI events, without claiming actual-time nonoverlap. |
+| MM-09 Interlock | §1, §3 | Exact whole-note conversion assertions from §1.1 against sprocket divisions; nominal-time tests for the listed modifier pairs, unequal ranges, realign and division change; same-pulse order independence with changing records and reversed sprocket order; first-cycle behavior; §1.5 active/requested/queued graph transitions and history; §1.4 edge, carry-in, large-ratio and budget cases; exact §3 combined-filter counts and nested sets. Swing/shuffle invariance; resync bypass after division, range and non-realigning slot changes; activation-history queries at, before and after the leader's own boundary in the same pulse; epoch-derived phrase equality with merge_state; direct anchor reads equal plan-derived anchors and every admission performs zero leader-plan builds; the `space` field accepts only its inert value. Behaviour compares the admitted nominal plan with grid positions and corresponding emitted MIDI events, without claiming actual-time nonoverlap. |
 | MM-10 Structure | §4 | Marker sets; chord snapping with ties; bypass precedence; between-marker additions unchanged; exact legacy binding/map preservation and active suffix behavior; missing-group recovery; complete reference lifecycle cases; shared playback/Pattern resolution, repeated-value conflicts and downstream Harmony precedence. Behaviour: successfully snapped marker root events preserve a chord pitch class in MIDI and grid inspection; mapped conflicts fail closed; generated chord/arp voices are outside that assertion. |
 | MM-11 UI/docs | §5 | Screens through runtime input; apply/queue/cancel and atomic group lifecycle; reasons on M14; README/cheat sheet/images (README states Space is not available); spec validate/replay green. |
 | MM-12 Space | §6 | **Deferred** (residual MM-12): no engine, UI or manual claim in this delivery; the reserved `space` schema field is validated and inert. |
