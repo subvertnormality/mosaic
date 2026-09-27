@@ -591,6 +591,22 @@ local function admission(song, channel, config, first, last, pulse)
   return result
 end
 
+-- One mask layer over steps 1..64: the step mask where one is set (truthy),
+-- else the channel-wide value when one applies. Without a channel-wide value
+-- only the steps holding a step mask are written.
+local function apply_mask_layer(values, step_masks, channel_value)
+  if channel_value ~= nil then
+    for s = 1, 64 do
+      local mask = step_masks[s]
+      if mask then values[s] = mask else values[s] = channel_value end
+    end
+    return
+  end
+  for s, mask in pairs(step_masks) do
+    if mask and math_type(s) == "integer" and s >= 1 and s <= 64 then values[s] = mask end
+  end
+end
+
 -- memo: serve and seed the content-validated memo (every build of this
 -- module passes it; a memo build ignores effective_lengths_cache and, on a
 -- miss, derives the lengths from the sources themselves). pulse: the lattice
@@ -742,11 +758,23 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
   end
 
-  -- Loop invariants hoisted; nothing below writes the channel or the plan.
+  -- The final layer: the plan's trigs and velocities, then the step masks,
+  -- else the channel masks. Each step's writes are independent of every
+  -- other step's, so the layers are applied one after another; when no
+  -- channel-wide mask applies only the steps that have a step mask are
+  -- visited (1..64 integer keys; `false` never applies). Nothing below
+  -- writes the channel or the plan.
   local foundation_trigs = foundation_result and foundation_result.status == "ok" and foundation_result.trigs
-  local foundation_velocities = foundation_trigs and foundation_result.velocities
   local trig_values, note_mask_values = merged_pattern.trig_values, merged_pattern.note_mask_values
   local velocity_values, merged_lengths = merged_pattern.velocity_values, merged_pattern.lengths
+  if foundation_trigs then
+    for s = 1, 64 do trig_values[s] = foundation_trigs[s] end
+    local foundation_velocities = foundation_result.velocities
+    for s = 1, 64 do
+      local velocity = foundation_velocities[s]
+      if velocity ~= nil then velocity_values[s] = velocity end
+    end
+  end
   local trig_mask, note_mask = channel_data.trig_mask, channel_data.note_mask
   local velocity_mask = channel_data.velocity_mask
   if not (trig_mask and trig_mask ~= -1) then trig_mask = nil end
@@ -754,40 +782,16 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   if not (velocity_mask and velocity_mask ~= -1) then velocity_mask = nil end
   -- (sic) lengths_mask: the existing condition, kept exactly.
   local length_mask_applies = channel_data.length_mask and channel_data.lengths_mask ~= -1
-  for s = 1, 64 do
-    if foundation_trigs then
-      trig_values[s] = foundation_trigs[s]
-      local velocity = foundation_velocities[s]
-      if velocity ~= nil then velocity_values[s] = velocity end
+  apply_mask_layer(trig_values, step_trig_masks, trig_mask)
+  apply_mask_layer(note_mask_values, step_note_masks, note_mask)
+  apply_mask_layer(velocity_values, step_velocity_masks, velocity_mask)
+  if length_mask_applies then
+    for s = 1, 64 do
+      local mask = step_length_masks[s]
+      if mask then merged_lengths[s] = mask else merged_lengths[s] = program.get_length_mask(channel_data) end
     end
-
-    local mask = step_trig_masks[s]
-    if mask then
-      trig_values[s] = mask
-    elseif trig_mask then
-      trig_values[s] = trig_mask
-    end
-
-    mask = step_note_masks[s]
-    if mask then
-      note_mask_values[s] = mask
-    elseif note_mask then
-      note_mask_values[s] = note_mask
-    end
-
-    mask = step_velocity_masks[s]
-    if mask then
-      velocity_values[s] = mask
-    elseif velocity_mask then
-      velocity_values[s] = velocity_mask
-    end
-
-    mask = step_length_masks[s]
-    if mask then
-      merged_lengths[s] = mask
-    elseif length_mask_applies then
-      merged_lengths[s] = program.get_length_mask(channel_data)
-    end
+  else
+    apply_mask_layer(merged_lengths, step_length_masks, nil)
   end
 
   return merged_pattern
