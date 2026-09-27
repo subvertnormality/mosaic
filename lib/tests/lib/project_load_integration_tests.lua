@@ -66,6 +66,7 @@ local function load_context(capture_guard)
     ["mosaic/lib/devices/device_map"]={get_device=function() return {} end},
     ["mosaic/lib/memory"]={init=function() count.memory_init=count.memory_init+1 end},
     ["mosaic/lib/musical_merge/state"]={reset=function() end},
+    ["mosaic/lib/musical_merge/timeline"]={stop=function() end},
     ["mosaic/lib/harmony/config_state"]={reset=function() end},
     ["mosaic/lib/harmony/state"]={reset=function() end},
     ["mosaic/lib/harmony/inspection"]={reset=function() end}}

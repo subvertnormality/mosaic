@@ -360,7 +360,8 @@ end
 
 function memory.record_optional_config(song_pattern,affected,before,after,boundary)
   local song=program.get_song_pattern(song_pattern)
-  local ok,reason=optional_config_transaction.validate(song,after);if not ok then return nil,reason end
+  local playing=m_clock and m_clock.is_playing and m_clock.is_playing()or false
+  local ok,reason=optional_config_transaction.validate(song,after,playing);if not ok then return nil,reason end
   -- Applying an unchanged draft is a successful no-op, not an undoable edit.
   if optional_config_transaction.equivalent(before,after) then return true end
   discard_feature_redo();local affected_set={}

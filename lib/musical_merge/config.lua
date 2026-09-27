@@ -128,7 +128,7 @@ end
 
 -- The closed, recursive schema_version 2 validator. `channel`, when known,
 -- rejects a leader naming its own channel. (The one-way dependency graph of
--- plan §1.5 is validated by the Interlock card.)
+-- plan §1.5 spans channels: musical_merge/dependency.lua.)
 function config.validate(value, channel)
   if type(value) ~= "table" or value.schema_version ~= 2 then
     return nil, "merge schema version"

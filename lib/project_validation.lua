@@ -7,6 +7,7 @@ end
 local harmony_config = include("mosaic/lib/harmony/config")
 local merge_config = include("mosaic/lib/musical_merge/config")
 local merge_structure = include("mosaic/lib/musical_merge/structure")
+local merge_dependency = include("mosaic/lib/musical_merge/dependency")
 local rhythm_doctor_persistence = dependency("rhythm_doctor.bank_persistence", "mosaic/lib/rhythm_doctor/bank_persistence")
 
 local function integer(value, low, high)
@@ -37,6 +38,7 @@ function validation.check(saved)
     if type(song.channels) ~= "table" then return nil, prefix .. " channels" end
     local harmony_ok, harmony_reason = harmony_config.validate_song(song)
     if not harmony_ok then return nil, prefix .. " " .. harmony_reason end
+    local edges = {}
     for number = 1, 17 do
       local channel = song.channels[number]
       local label = prefix .. " ch " .. number
@@ -63,8 +65,12 @@ function validation.check(saved)
           not merge_structure.group_available(song.voicing, merge.structure.group_id) then
           return nil, label .. " merge structure group unavailable"
         end
+        if number <= 16 then merge_dependency.add(edges, number, merge) end
       end
     end
+    -- Plan §1.5: a loaded slot must hold a one-way leader graph.
+    local graph_ok, graph_reason, graph_channel = merge_dependency.check(edges)
+    if not graph_ok then return nil, prefix .. " ch " .. graph_channel .. " " .. graph_reason end
   end
   local rhythm_ok, rhythm_reason = rhythm_doctor_persistence.validate(data.rhythm_doctor)
   if not rhythm_ok then return nil, rhythm_reason == "UNKNOWN_BANK_SCHEMA" and "Unknown Rhythm Doctor bank" or "Invalid Rhythm Doctor bank" end

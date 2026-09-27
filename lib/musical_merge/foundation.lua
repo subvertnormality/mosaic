@@ -91,6 +91,10 @@ function foundation.plan(args)
     end
   end
 
+  -- Ordered candidate filters; nil when none is configured (Off stays exact).
+  local filters = args.filters
+  if filters then result.reason_lists = {} end
+
   local candidates = {}
   for _, step in ipairs(steps) do
     if not result.roles[step] then
@@ -112,8 +116,20 @@ function foundation.plan(args)
             end
           end
         end
+        -- Plan §3 candidate pipeline: gap, then each candidate filter
+        -- (Interlock, later Space) evaluated independently against the same
+        -- immutable inputs; every applicable reason is kept, in that order.
+        local list
+        if filters then
+          list = blocked and {"gap"} or {}
+          for _, filter in ipairs(filters) do
+            if filter.blocked[step] then list[#list + 1] = filter.reason end
+          end
+          blocked = #list > 0
+        end
         if blocked then
-          result.reasons[step] = "gap"
+          result.reasons[step] = list and list[1] or "gap"
+          if list then result.reason_lists[step] = list end
           result.sources[step] = contributors
         else
           candidates[#candidates + 1] = {
@@ -149,6 +165,7 @@ function foundation.plan(args)
         args.merged_velocities and args.merged_velocities[step], accent)
     else
       result.reasons[step] = accent == 0 and "accent" or "amount"
+      if filters then result.reason_lists[step] = {result.reasons[step]} end
     end
   end
 

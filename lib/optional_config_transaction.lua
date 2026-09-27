@@ -3,6 +3,7 @@ local harmony_config_state=include("mosaic/lib/harmony/config_state")
 local merge_config=include("mosaic/lib/musical_merge/config")
 local merge_state=include("mosaic/lib/musical_merge/state")
 local merge_structure=include("mosaic/lib/musical_merge/structure")
+local merge_dependency=include("mosaic/lib/musical_merge/dependency")
 local transaction={}
 
 local function copy(value,seen)
@@ -25,7 +26,11 @@ function transaction.view(song)
   return result
 end
 
-function transaction.validate(song,snapshot)
+-- playing: while the transport runs, the one-way dependency check (plan §1.5)
+-- uses the union of configured edges in the active, requested, per-channel
+-- queued and global queued snapshots and the proposed replacement; stopped,
+-- the resulting snapshot alone.
+function transaction.validate(song,snapshot,playing)
   if type(snapshot)~="table"or type(snapshot.channels)~="table"then return nil,"optional configuration snapshot"end
   -- Validation only reads, so the shadow shares everything but the optional
   -- configuration under test: shallow song and channel tables with that
@@ -44,6 +49,7 @@ function transaction.validate(song,snapshot)
     shadow.channels[number].musical_merge=snapshot.channels[number].musical_merge
   end
   local ok,reason=harmony_config.validate_song(shadow);if not ok then return nil,reason end
+  local edges,proposed={},{}
   for number=1,16 do local merge=shadow.channels[number].musical_merge;if merge then
     -- Version 1 (for example from a live project built before migration) is
     -- validated through its canonical v2 form; apply stores that form.
@@ -56,7 +62,25 @@ function transaction.validate(song,snapshot)
     if merge.structure.markers~="off"and not merge_structure.group_available(shadow.voicing,merge.structure.group_id)then
       return nil,"channel "..number.." structure group unavailable"
     end
+    merge_dependency.add(edges,number,merge)
   end end
+  -- The channels whose edges this transaction proposes to change.
+  for number=1,16 do
+    local live=song.channels and song.channels[number]and song.channels[number].musical_merge
+    local proposed_leaders=merge_dependency.leaders(snapshot.channels[number].musical_merge)
+    local live_leaders=merge_dependency.leaders(live)
+    if table.concat(proposed_leaders,",")~=table.concat(live_leaders,",")then proposed[number]=true end
+    if playing then
+      merge_dependency.add(edges,number,live)
+      local record=merge_state.peek(song,number)
+      if record then
+        merge_dependency.add(edges,number,record.active);merge_dependency.add(edges,number,record.queued)
+        merge_dependency.add(edges,number,record.global_queued)
+      end
+    end
+  end
+  local graph_ok,graph_reason=merge_dependency.check(edges,proposed)
+  if not graph_ok then return nil,graph_reason end
   return true
 end
 
@@ -109,11 +133,12 @@ end
 -- `snapshot` against this song, so it is not validated a second time.
 function transaction.apply(song,snapshot,playing,boundary,validated)
   if not validated then
-    local ok,reason=transaction.validate(song,snapshot);if not ok then return nil,reason end
+    local ok,reason=transaction.validate(song,snapshot,playing);if not ok then return nil,reason end
   end
   -- The previous merge settings are only compared, so they are read in place
   -- (each is compared before its channel is replaced below).
   local before=transaction.view(song)
+  local changed_channels
   song.voicing=copy(snapshot.voicing)
   harmony_config_state.request_song(song,snapshot.voicing or{schema_version=1,groups={}},playing)
   for number=1,16 do
@@ -125,6 +150,18 @@ function transaction.apply(song,snapshot,playing,boundary,validated)
       local requested=merge or merge_config.new()
       if boundary=="pattern"then merge_state.request_global(song,number,requested,playing)else merge_state.request(song,number,requested,playing)end
       if not playing and pattern and pattern.update_working_pattern then pattern.update_working_pattern(number,song)end
+      changed_channels=changed_channels or{};changed_channels[number]=true
+    end
+  end
+  -- Plan §1.3: a queued apply on a leader rebuilds its followers, so their
+  -- predictions follow the new queue; a queued global activation rebuilds the
+  -- affected follower itself, which bypasses from queue time (§1.2.3).
+  -- (Stopped, update_working_pattern above already propagates.)
+  if playing and changed_channels and pattern and pattern.rebuild_followers then
+    pattern.rebuild_followers(song,changed_channels)
+    if boundary=="pattern"then
+      local followers=pattern.followers_of(song)
+      for number in pairs(changed_channels)do if followers[number]then pattern.update_working_pattern(number,song)end end
     end
   end
   return true

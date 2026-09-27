@@ -7,6 +7,8 @@ local merge_state = include("mosaic/lib/musical_merge/state")
 local merge_config = include("mosaic/lib/musical_merge/config")
 local fragments = include("mosaic/lib/musical_merge/fragments")
 local merge_structure = include("mosaic/lib/musical_merge/structure")
+local interlock = include("mosaic/lib/musical_merge/interlock")
+local merge_dependency = include("mosaic/lib/musical_merge/dependency")
 
 local program = program
 
@@ -75,7 +77,10 @@ local function extract_pattern_number(merge_mode)
   return nil
 end
 
-function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache)
+-- merge_override (plan §1.2.3 leader cycle plan): {config, cycle, phrase}
+-- passed explicitly instead of read from merge_state. A plan built this way
+-- never runs an admission of its own.
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, merge_override)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
@@ -222,8 +227,15 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if length_priority then merged_pattern.lengths[s] = priority_lengths[s] end
   end
 
-  local requested_merge_settings = pattern_channel.musical_merge or merge_config.new()
-  local merge_runtime = merge_state.effective(selected_song_pattern, channel, requested_merge_settings)
+  local merge_runtime
+  if merge_override then
+    local config = merge_override.config or nil
+    merge_runtime = {config = config, cycle = merge_override.cycle or 1, phrase = merge_override.phrase or 0,
+      ranking_phrase = config and config.variation == "per_phrase" and merge_override.phrase or 0}
+  else
+    local requested_merge_settings = pattern_channel.musical_merge or merge_config.new()
+    merge_runtime = merge_state.effective(selected_song_pattern, channel, requested_merge_settings)
+  end
   local merge_settings = merge_runtime and merge_runtime.config
   local merge_version = merge_settings and merge_settings.schema_version
   local foundation_result, fragments_result
@@ -250,7 +262,29 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if foundation_mode then
       local cycle_percentage = merge_settings.percentages and merge_settings.percentages[cycle] or 100
       local effective_amount = foundation.round_half_up((merge_settings.amount or 100) * cycle_percentage / 100)
+      -- Plan §3: the Interlock admission for this build's cycle. The leader's
+      -- cycle plans come from this same function with their configuration,
+      -- cycle and phrase passed explicitly. Space (MM-12) slots in after it.
+      local filters, interlock_result
+      if not merge_override and interlock.settings(merge_settings) then
+        interlock_result = interlock.admission({
+          song = selected_song_pattern, channel = channel, config = merge_settings,
+          first = effective_start, last = effective_end,
+          leader_plan = function(leader, config, leader_cycle, leader_phrase)
+            local leader_channel = selected_song_pattern.channels[leader]
+            return pattern.get_and_merge_patterns(leader, leader_channel.trig_merge_mode,
+              leader_channel.note_merge_mode, leader_channel.velocity_merge_mode,
+              leader_channel.length_merge_mode, selected_song_pattern, effective_lengths_cache,
+              {config = config, cycle = leader_cycle, phrase = leader_phrase})
+          end
+        })
+        filters = {}
+        if interlock_result.status == "ok" then
+          filters[1] = {reason = interlock_result.reason, blocked = interlock_result.blocked}
+        end
+      end
       foundation_result = foundation.plan({
+        filters = filters,
         start_step = effective_start,
         end_step = effective_end,
         anchor = merge_settings.anchor,
@@ -267,6 +301,7 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
         phrase = merge_runtime.ranking_phrase or 0,
         ranking_version = merge_settings.ranking_version
       })
+      foundation_result.interlock = interlock_result
       foundation_result.cycle = cycle
       foundation_result.cycles = merge_settings.cycles or 1
       foundation_result.phrase = merge_runtime.phrase or 0
@@ -357,6 +392,37 @@ end
 
 local working_pattern_updates = setmetatable({}, {__mode = "k"})
 
+-- Plan §1.3 / §1.5: the leaders a configuration names (Interlock or Space),
+-- counted whether or not their feature is active.
+local function add_leaders(config, number, leaders, into)
+  for _, leader in ipairs(merge_dependency.leaders(config)) do
+    if leaders == nil or leaders[leader] then into[number] = true end
+  end
+end
+
+-- Channels whose saved, active or queued configuration follows a channel in
+-- `leaders` (every leader when nil). Empty when no leader is configured in the
+-- slot, so Off adds no rebuilds.
+function pattern.followers_of(song_pattern, leaders)
+  local result = {}
+  for c = 1, 16 do
+    local channel = song_pattern.channels[c]
+    add_leaders(channel and channel.musical_merge, c, leaders, result)
+    local record = merge_state.peek(song_pattern, c)
+    if record then
+      add_leaders(record.active, c, leaders, result)
+      add_leaders(record.queued, c, leaders, result)
+      add_leaders(record.global_queued, c, leaders, result)
+    end
+  end
+  return result
+end
+
+local function invalidate_lookahead(c)
+  local scheduler = m_clock and m_clock.lookahead_scheduler
+  if scheduler then scheduler:invalidate(c, nil, nil) end
+end
+
 local function build_working_pattern(c, song_pattern, channel_pattern, effective_lengths_cache)
   return pattern.get_and_merge_patterns(
     c,
@@ -379,17 +445,22 @@ function pattern.update_working_patterns(song_pattern, affected_channels)
     state = {dirty = {}, revision = {}}
     state.update = scheduler.debounce(function()
       repeat
-        for c = 1, 16 do
-          if state.dirty[c] then
-            local revision = state.revision[c]
-            local channel = target.channels[c]
-            local result = build_working_pattern(c, target, channel, state.effective_lengths_cache)
-            if working_pattern_updates[target] == state
-              and state.revision[c] == revision and target.channels[c] == channel then
-              channel.working_pattern = result
-              state.dirty[c] = nil
+        -- Leaders before their followers (plan §1.3); without followers this
+        -- is the original 1..16 order.
+        local followers = pattern.followers_of(target)
+        for pass = 1, next(followers) and 2 or 1 do
+          for c = 1, 16 do
+            if state.dirty[c] and (followers[c] == true) == (pass == 2) then
+              local revision = state.revision[c]
+              local channel = target.channels[c]
+              local result = build_working_pattern(c, target, channel, state.effective_lengths_cache)
+              if working_pattern_updates[target] == state
+                and state.revision[c] == revision and target.channels[c] == channel then
+                channel.working_pattern = result
+                state.dirty[c] = nil
+              end
+              coroutine.yield()
             end
-            coroutine.yield()
           end
         end
       until next(state.dirty) == nil
@@ -400,9 +471,13 @@ function pattern.update_working_patterns(song_pattern, affected_channels)
   -- At most the song's 16 source length arrays live for this request.
   -- Any request invalidates them, including a no-op or mask-only request.
   state.effective_lengths_cache = {}
+  -- Plan §1.3: a rebuilt leader adds its followers to the same rebuild set,
+  -- with the lookahead invalidation an edit to the follower itself receives.
+  local followers = affected_channels and pattern.followers_of(target, affected_channels) or {}
   local requested = false
   for c = 1, 16 do
-    if not affected_channels or affected_channels[c] then
+    if not affected_channels or affected_channels[c] or followers[c] then
+      if followers[c] and not (affected_channels and affected_channels[c]) then invalidate_lookahead(c) end
       state.dirty[c] = true
       state.revision[c] = (state.revision[c] or 0) + 1
       requested = true
@@ -428,13 +503,32 @@ function pattern.update_source_working_patterns(song_pattern, source_number)
   pattern.update_working_patterns(song_pattern, affected)
 end
 
-function pattern.update_working_pattern(c, song_pattern)
+local function rebuild(c, song_pattern)
+  local channel_pattern = song_pattern.channels[c]
+  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern)
+end
+
+-- Rebuild, synchronously, every follower of a channel in `leaders` (every
+-- follower in the slot when nil), invalidating each follower's lookahead.
+function pattern.rebuild_followers(song_pattern, leaders)
+  if not song_pattern then return end
+  for c in pairs(pattern.followers_of(song_pattern, leaders)) do
+    invalidate_lookahead(c)
+    rebuild(c, song_pattern)
+  end
+end
+
+-- at_wrap: the clock's own rebuild at the channel's loop wrap. That plans the
+-- channel's new cycle, which its followers' admissions already predicted
+-- (plan §1.2.3), so it is not an edit and does not propagate.
+function pattern.update_working_pattern(c, song_pattern, at_wrap)
   -- Legacy synchronous callers may have changed source arrays directly.
   -- Do not let a pending sweep retain pre-edit lengths after this ingress.
   local state = working_pattern_updates[song_pattern]
   if state then state.effective_lengths_cache = {} end
-  local channel_pattern = song_pattern.channels[c]
-  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern)
+  rebuild(c, song_pattern)
+  -- Plan §1.3: leader edits reach followers.
+  if not at_wrap then pattern.rebuild_followers(song_pattern, {[c] = true}) end
 end
 
 return pattern

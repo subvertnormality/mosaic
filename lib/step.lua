@@ -1558,6 +1558,8 @@ step.queue_for_pattern_change = song_transition.queue_for_pattern_change
 step.at_end_of_current_song_pattern = song_transition.at_end_of_current_song_pattern
 
 step.process_song_song_patterns = song_transition.process_song_song_patterns
+step.origin_end_boundary = song_transition.origin_end_boundary
+step.next_slot_after_repeats = song_transition.next_slot_after_repeats
 
 function step.sinfonian_sync(s)
   local global_step_scale_number = program.get_step_scale_trig_lock(program.get_channel(program.get().selected_song_pattern, 17), step)

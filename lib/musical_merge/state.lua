@@ -1,3 +1,5 @@
+local dependency = include("mosaic/lib/musical_merge/dependency")
+
 local state = {}
 
 local registry = rawget(_G, "__mosaic_merge_runtime_state")
@@ -65,6 +67,36 @@ local function advance(record)
   end
 end
 
+local function same(left, right)
+  if type(left) ~= "table" or type(right) ~= "table" then return left == right end
+  for key, value in pairs(left) do if not same(value, right[key]) then return false end end
+  for key in pairs(right) do if left[key] == nil then return false end end
+  return true
+end
+
+-- Plan §1.5: every intermediate active graph is one-way. Edges are configured
+-- leaders, counted whether or not their feature is active.
+local function active_of(song, values, number)
+  local record = values and values[number]
+  if record then return record.active end
+  local channel = type(song) == "table" and type(song.channels) == "table" and song.channels[number]
+  return type(channel) == "table" and channel.musical_merge or nil
+end
+
+-- nil when making `candidate` channel `channel`'s active configuration keeps
+-- the active graph one-way; otherwise the rejection reason.
+local function activation_violation(song, channel, candidate)
+  local values = songs[song]
+  local edges = {}
+  for number = 1, 16 do
+    dependency.add(edges, number, number == channel and candidate or active_of(song, values, number))
+  end
+  local ok, reason = dependency.check(edges, {[channel] = true})
+  if ok then return nil end
+  return reason
+end
+state.activation_violation = activation_violation
+
 function state.reset()
   for song in pairs(songs) do songs[song]=nil end
 end
@@ -76,8 +108,12 @@ function state.request(song, channel, requested, playing)
   if playing then
     record.queued = deep_copy(requested)
     -- A later request supersedes a pending cross-feature one: the boundary
-    -- (or Stop) must not land the older snapshot over it.
-    if record.global_queued then record.global_queued = deep_copy(requested) end
+    -- (or Stop) must not land the older snapshot over it. One that restores
+    -- the active configuration withdraws it: no change inside the cycle ever
+    -- happens (plan §1.2.3).
+    if record.global_queued then
+      record.global_queued = not same(requested, record.active) and deep_copy(requested) or nil
+    end
     return "queued"
   end
   local restart = starts_new_epoch(record.active, requested)
@@ -93,7 +129,12 @@ function state.request_global(song, channel, requested, playing)
   local record=record_for(song,channel,requested)
   -- The global request replaces a pending per-channel one, so an older queue
   -- cannot land at an earlier channel wrap (plan §4 Reference lifecycle).
-  if playing then record.global_queued=deep_copy(requested);record.queued=nil;return "queued"end
+  -- Restoring the active configuration (undo before the boundary) withdraws
+  -- the pending global change instead of queueing an identical one.
+  if playing then
+    record.global_queued=not same(requested,record.active)and deep_copy(requested)or nil
+    record.queued=nil;return "queued"
+  end
   local restart=starts_new_epoch(record.active,requested);record.active=deep_copy(requested)
   record.queued,record.global_queued=nil,nil;if restart then record.cycle,record.phrase=1,0 end
   return "applied"
@@ -102,27 +143,76 @@ end
 function state.on_pattern_boundary(song)
   local values=songs[song];local affected={};if not values then return affected end
   for channel,record in pairs(values)do if record.global_queued then
-    local restart=starts_new_epoch(record.active,record.global_queued)
-    record.active=record.global_queued;record.global_queued=nil;record.queued=nil
-    if restart then record.cycle,record.phrase=1,0 end
-    affected[channel]=true
+    -- Plan §1.5: verify the invariant before mutation; a violation retains the
+    -- previous active snapshot with the rejection reason.
+    local violation=activation_violation(song,channel,record.global_queued)
+    record.rejected=violation
+    if not violation then
+      local restart=starts_new_epoch(record.active,record.global_queued)
+      record.active=record.global_queued;record.global_queued=nil;record.queued=nil
+      if restart then record.cycle,record.phrase=1,0 end
+      affected[channel]=true
+    end
   end end
   return affected
 end
 
-function state.on_cycle_boundary(song, channel, requested)
-  local record = record_for(song, channel, requested)
+-- One channel boundary, exactly as the clock applies it at a wrap. Shared by
+-- the live boundary and the pure replay used for prediction (plan §1.2.3).
+local function cycle_boundary(song, channel, record)
   if record.queued then
-    local restart = starts_new_epoch(record.active, record.queued)
-    record.active = record.queued
-    record.queued = nil
-    if restart then
-      record.cycle, record.phrase = 1, 0
-      return true
+    local violation = activation_violation(song, channel, record.queued)
+    record.rejected = violation
+    if not violation then
+      local restart = starts_new_epoch(record.active, record.queued)
+      record.active = record.queued
+      record.queued = nil
+      if restart then
+        record.cycle, record.phrase = 1, 0
+        return true
+      end
     end
   end
   advance(record)
   return false
+end
+
+function state.on_cycle_boundary(song, channel, requested)
+  return cycle_boundary(song, channel, record_for(song, channel, requested))
+end
+
+-- The existing record, without creating one (effective creates records).
+function state.peek(song, channel)
+  local values = songs[song]
+  return values and values[channel] or nil
+end
+
+-- Whether the clock runs on_cycle_boundary for this record at a wrap: a saved
+-- configuration, or merge state it owes work to (state.has; m_clock wrap).
+local function owes_boundary(saved, record)
+  if saved ~= nil then return true end
+  if not record then return false end
+  if record.queued ~= nil then return true end
+  local active = record.active
+  return active ~= nil and active.mode ~= nil and active.mode ~= "off"
+end
+
+-- A pure copy of a channel's record after replaying `boundaries` pending
+-- channel boundaries, each exactly as m_clock applies it: on_cycle_boundary
+-- runs only when the channel has a saved configuration or merge state.
+-- Nothing live is changed. Returns {config, cycle, phrase}.
+function state.predict(song, channel, saved, boundaries)
+  local live = state.peek(song, channel)
+  local record
+  if live then
+    record = {active = live.active, queued = live.queued, cycle = live.cycle, phrase = live.phrase}
+  else
+    record = {active = saved, cycle = 1, phrase = 0}
+  end
+  for _ = 1, boundaries do
+    if owes_boundary(saved, record) then cycle_boundary(song, channel, record) end
+  end
+  return {config = record.active, cycle = record.cycle, phrase = record.phrase}
 end
 
 function state.effective(song, channel, requested)
