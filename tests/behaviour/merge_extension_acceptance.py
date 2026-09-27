@@ -1011,3 +1011,47 @@ def structure_history_workflow(c):
     c.ui.select_project_file('new.ptn', returning=True); c.ui.press_key(3); c.ui.press_key(1)
     _markers(c, "ANCHORS")
     play_structure(c, kind='structure-reloaded')
+
+
+def interlock_plan_limit_workflow(c):
+    """README Interlock: a 64-step follower with a two-step leader and
+    Window 1 exceeds the 64-cycle plan; Interlock bypasses visibly."""
+    two_patterns(c, (64,))
+    c.ui.set_range(1, 64)
+    c.ui.tap_control("pattern_editor"); c.ui.select_channel(3); c.ui.tap_step(1)
+    c.ui.tap_control("channel_editor")
+    c.ui.select_channel(2)
+    c.ui.channel_page("midi_config", channel=2)
+    c.ui.set_value(1); c.ui.turn(2, 1); c.ui.set_value(1); c.ui.press_key(3)
+    c.ui.tap_control("pattern_slot", 3)
+    c.ui.set_range(1, 2)
+    foundation_on(c, 2)
+    c.ui.select_channel(1)
+    foundation_on(c, 1)
+    c.ui.channel_page("clock_mods", channel=1, confirm=False)
+    c.ui.set_value(-2); c.ui.press_key(3)  # follower /2, twice the step duration
+    c.ui.channel_page("merge_shape", channel=1)
+    c.ui.select_row("rhythm", 1); c.ui.press_key(3)
+    c.ui.select_row("interlock", 6); c.ui.press_key(3)
+    c.ui.expect_header("merge_interlock", channel=1)
+    c.ui.select_row("interlock_leader", 0); c.ui.turn(3, 1)
+    c.ui.select_row("interlock_window", 1); c.ui.turn(3, 1)
+    c.ui.press_key(3)
+    c.ui.expect_footer_text("APPLIED")
+    interlock_screen(c)
+    c.ui.expect_selected_field("detail", "Status", "PLAN LIMIT")
+    result_interlock(c, "PLAN LIMIT")
+    c.ui.expect_steps({64: "selected"})
+    capture = Capture(c)
+    c.ui.play()
+    capture.until(lambda k: len(k.note_ons(1)) >= 5, timeout=30)
+    ons = capture.note_ons(1)
+    key, allowed = field(c), tolerance(c)
+    origin = ons[0][key]
+    last = next((m for m in ons if m['data'][0] == 60 and m['data'][1] == 70), None)
+    assert last is not None, ons
+    assert abs((last[key] - origin) / 1e9 - 63 * 2 * STEP) <= allowed
+    stop_and_drain(c, capture)
+    c.results.append(dict(kind="interlock-plan-limit-bypass", status="PLAN LIMIT",
+                          last_step=64, last_note=[60, 70], tolerance_seconds=allowed,
+                          passed=True))

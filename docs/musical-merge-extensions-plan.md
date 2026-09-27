@@ -899,7 +899,7 @@ Owner: the Mosaic maintainer (repository owner). Status: OPEN, recorded in
 `docs/testing/unit-integration-hardening-matrix.json` H16 `residual_gaps`.
 
 Public-input cases now cover unequal leader/follower loops under a burst of
-edits (M-MERGE-INTERLOCK-004); Every 4/Every 8 markers, Harmony Pattern
+edits (M-MERGE-INTERLOCK-004), and visible PLAN LIMIT bypass at the 65-cycle boundary (M-MERGE-INTERLOCK-005); Every 4/Every 8 markers, Harmony Pattern
 conflict recovery and Revoice MARKER PRIORITY (M-MERGE-STRUCTURE-004);
 and group deletion undo/redo, Stop settlement and save/reload
 (M-MERGE-STRUCTURE-005), plus Ensemble marker priority
@@ -908,7 +908,7 @@ and group deletion undo/redo, Stop settlement and save/reload
 Remaining scope — behaviour verified by Lua unit/integration tests
 (named in H16) but not yet by public-input emulator cases: Interlock
 yielding-sweep interleavings (an edit between the leader's and follower's
-rebuilds, stale sweep completion), PLAN LIMIT, RESYNC after loop-range
+rebuilds, stale sweep completion), RESYNC after loop-range
 and non-realigning song changes, swing/shuffle invariance and reversed
 callback order; Structure CHORD MISSING, arp roots and stale drafts.
 
