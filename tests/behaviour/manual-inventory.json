@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "24300f77d63176a049c3e940c70b41f57446945bee2fc3505f07f3be4e477cc3",
+ "manual_sha256": "ddb1817fb393de7c28702b3594c337b3002e3705a92c78b99ee8cad6767755f5",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -198,7 +198,7 @@
    "level": 3,
    "start_line": 345,
    "end_line": 380,
-   "text_sha256": "2d2dab0ac85f5329d69f7bfc1e54b58b44da1a7915c324b8678a5322056c47f6",
+   "text_sha256": "f36c9175503fca0303b879ac55c68f9f95edf00520431f103a19d3c5ade14e9f",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "NAV-CONFIRM"
@@ -428,8 +428,8 @@
    "title": "Rhythm Doctor",
    "level": 5,
    "start_line": 491,
-   "end_line": 671,
-   "text_sha256": "2ed5e5f52a5517c3b371fb08057d79500a1afacf0405dff12dac4d8d1441abe4",
+   "end_line": 672,
+   "text_sha256": "40647f8bfbfcfb729d0ec819b9971bd2cdf76a55eb4d81206c7aad09672c5d57",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "RD-LANES",
@@ -446,8 +446,8 @@
    "id": "MAN-031",
    "title": "Adding Notes",
    "level": 4,
-   "start_line": 672,
-   "end_line": 707,
+   "start_line": 673,
+   "end_line": 708,
    "text_sha256": "247dd8d7e94985b05098d572d74a1819ac5250d716782dfd861439fc8e333f14",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -466,8 +466,8 @@
    "id": "MAN-032",
    "title": "Adding Velocity",
    "level": 4,
-   "start_line": 708,
-   "end_line": 722,
+   "start_line": 709,
+   "end_line": 723,
    "text_sha256": "4645f929a70566e335b266204b54e24a9653f08c61b90a33166c78cb6c804067",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -480,8 +480,8 @@
    "id": "MAN-033",
    "title": "Channel Editor",
    "level": 3,
-   "start_line": 723,
-   "end_line": 735,
+   "start_line": 724,
+   "end_line": 736,
    "text_sha256": "17efe19834fd5f84ac8d905c0cbbcfb936bc83b594c8ca27d9bd29b493ef29f1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -493,8 +493,8 @@
    "id": "MAN-034",
    "title": "Devices",
    "level": 4,
-   "start_line": 736,
-   "end_line": 746,
+   "start_line": 737,
+   "end_line": 747,
    "text_sha256": "f416516e58e326f35c93581dc476a9898fe0c3f3f9ed3c468bca1ca73195fcf6",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -506,8 +506,8 @@
    "id": "MAN-035",
    "title": "MIDI Sound Sources",
    "level": 5,
-   "start_line": 747,
-   "end_line": 752,
+   "start_line": 748,
+   "end_line": 753,
    "text_sha256": "89169e670534434d971ae303aeb6fdfc5377c229c1078e373e5b5f246d2930eb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -519,8 +519,8 @@
    "id": "MAN-036",
    "title": "Norns Sound Sources with n.b.",
    "level": 5,
-   "start_line": 753,
-   "end_line": 768,
+   "start_line": 754,
+   "end_line": 769,
    "text_sha256": "cf69cc2e19481bf2be072c05b96a1160e11a75aec64a4a864dd89f7d7f7390d8",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -530,8 +530,8 @@
    "id": "MAN-037",
    "title": "Device Parameters",
    "level": 4,
-   "start_line": 769,
-   "end_line": 779,
+   "start_line": 770,
+   "end_line": 780,
    "text_sha256": "52ba5d77a27314e1a79ef4b742162d71511284414426d2791da86ecefaf32c92",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -544,8 +544,8 @@
    "id": "MAN-038",
    "title": "Adding Patterns to Channels",
    "level": 4,
-   "start_line": 780,
-   "end_line": 792,
+   "start_line": 781,
+   "end_line": 793,
    "text_sha256": "bed3b0532206401ab32351008247f26b7efcb254482dd6feb994aff4ea8ce815",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -557,8 +557,8 @@
    "id": "MAN-039",
    "title": "Masks",
    "level": 4,
-   "start_line": 793,
-   "end_line": 805,
+   "start_line": 794,
+   "end_line": 806,
    "text_sha256": "513d26ff5a4fff4619a6e028d856ba0dccc6f5b5d80c46062d6c40760ba79268",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -571,8 +571,8 @@
    "id": "MAN-040",
    "title": "Adding Trig Masks",
    "level": 5,
-   "start_line": 806,
-   "end_line": 817,
+   "start_line": 807,
+   "end_line": 818,
    "text_sha256": "14eb7aedb79c929a2c625492f7a81828c5779889458d92f9e38eb2b2cac3e07d",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -584,9 +584,9 @@
    "id": "MAN-041",
    "title": "Adding Melodic Notes over Harmony and Drums",
    "level": 5,
-   "start_line": 818,
-   "end_line": 823,
-   "text_sha256": "3236048f2988263f13fde3a7f718c9f8e9000db0441760a6e062b96a8d34e14d",
+   "start_line": 819,
+   "end_line": 824,
+   "text_sha256": "0cc497a8c2edb72c57bad5b5e2ee0c51475f2a5c9928815895b84e7213576b21",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "MASK-PRECEDENCE",
@@ -598,8 +598,8 @@
    "id": "MAN-042",
    "title": "Adding Chords",
    "level": 5,
-   "start_line": 824,
-   "end_line": 829,
+   "start_line": 825,
+   "end_line": 830,
    "text_sha256": "4f47c2c4008b0fbcb8955fc9e48b73bfe488557325a3cdcdb25be13d8b0845e8",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -611,8 +611,8 @@
    "id": "MAN-043",
    "title": "Removing Masks",
    "level": 5,
-   "start_line": 830,
-   "end_line": 841,
+   "start_line": 831,
+   "end_line": 842,
    "text_sha256": "ba82df18e08ebbac095b84129bb0d95521bf4d1fc20fa07c306085e15c41ac7c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -625,8 +625,8 @@
    "id": "MAN-044",
    "title": "Merge Modes",
    "level": 4,
-   "start_line": 842,
-   "end_line": 854,
+   "start_line": 843,
+   "end_line": 855,
    "text_sha256": "3873e18f2771907bac76f937d917639a4df1ada3d34de252ee7cf400bf414f64",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -636,8 +636,8 @@
    "id": "MAN-045",
    "title": "Trig Merge Modes",
    "level": 5,
-   "start_line": 855,
-   "end_line": 864,
+   "start_line": 856,
+   "end_line": 865,
    "text_sha256": "838f3597035c39f17f4f5cf5586cd7537076f135b645763fceb10ef88eac82ee",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -651,8 +651,8 @@
    "id": "MAN-046",
    "title": "Note Merge Modes",
    "level": 5,
-   "start_line": 865,
-   "end_line": 877,
+   "start_line": 866,
+   "end_line": 878,
    "text_sha256": "3b7732216e0ea9e1d2a3c072feaa9f59bb694af7ca41ee44f550d4c61e4eb391",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -667,8 +667,8 @@
    "id": "MAN-047",
    "title": "Velocity Merge Modes",
    "level": 5,
-   "start_line": 878,
-   "end_line": 888,
+   "start_line": 879,
+   "end_line": 889,
    "text_sha256": "f7290cc1a7a35465c84cc6f020c562a10af5110c4dc0051a22e0a6d5b2e84672",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -680,8 +680,8 @@
    "id": "MAN-048",
    "title": "Length Merge Modes",
    "level": 5,
-   "start_line": 889,
-   "end_line": 901,
+   "start_line": 890,
+   "end_line": 902,
    "text_sha256": "a0d7346461fff3277d86e44f88b2b7074d42a07256b8ed1a501044a60833cbd1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -693,8 +693,8 @@
    "id": "MAN-049",
    "title": "Note Dashboard",
    "level": 4,
-   "start_line": 902,
-   "end_line": 905,
+   "start_line": 903,
+   "end_line": 906,
    "text_sha256": "3734d8a0ee967badbf0a741802dede468b0721fb6a25eef5c5149d61bf9489ea",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -706,8 +706,8 @@
    "id": "MAN-050",
    "title": "Clocks, Swing and Shuffle",
    "level": 4,
-   "start_line": 906,
-   "end_line": 920,
+   "start_line": 907,
+   "end_line": 921,
    "text_sha256": "6a040a5a2490af1ac77df1effe58020063f25f2072c68666cf51bbce5e950054",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -726,8 +726,8 @@
    "id": "MAN-051",
    "title": "Memory (undo and redo)",
    "level": 4,
-   "start_line": 921,
-   "end_line": 941,
+   "start_line": 922,
+   "end_line": 942,
    "text_sha256": "3e1a2f500dff2329c467913cb9d97b31240732edd30eb082f5fdf34d9e3c087c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -741,8 +741,8 @@
    "id": "MAN-052",
    "title": "Channel Length",
    "level": 4,
-   "start_line": 942,
-   "end_line": 959,
+   "start_line": 943,
+   "end_line": 960,
    "text_sha256": "ce85e7fc9080983aebed704622a8f69da5df19cd573f1ca10dc30214ee3232c1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -754,8 +754,8 @@
    "id": "MAN-053",
    "title": "Muting Channels",
    "level": 4,
-   "start_line": 960,
-   "end_line": 972,
+   "start_line": 961,
+   "end_line": 973,
    "text_sha256": "d4693f6a37a0edf2f58ff8b48568995924a75ba9b69589d756f46a71588c7bc9",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -767,9 +767,9 @@
    "id": "MAN-054",
    "title": "Trig Parameters",
    "level": 3,
-   "start_line": 973,
-   "end_line": 994,
-   "text_sha256": "bcdb41380cf7abebcd34923ecbc21deb642629b49b44ac93a2f214db42385ff0",
+   "start_line": 974,
+   "end_line": 997,
+   "text_sha256": "d5592d12b5e7c507b4bab8886787308e2783c5346785d57ec00378e0a67b4183",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "PARAM-OFF",
@@ -781,8 +781,8 @@
    "id": "MAN-055",
    "title": "Sequencer Params",
    "level": 4,
-   "start_line": 995,
-   "end_line": 998,
+   "start_line": 998,
+   "end_line": 1001,
    "text_sha256": "5b7bd6f92824c01002ca8fff6a995fed732b5dd84e58df1d2db112c0c5c5561c",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -792,8 +792,8 @@
    "id": "MAN-056",
    "title": "Trig Probability",
    "level": 5,
-   "start_line": 999,
-   "end_line": 1002,
+   "start_line": 1002,
+   "end_line": 1005,
    "text_sha256": "6345e2014ace2bf5b0c75dc224c429f3ed59dd0287bcace2123d415740b2d020",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -805,8 +805,8 @@
    "id": "MAN-057",
    "title": "Fixed Note",
    "level": 5,
-   "start_line": 1003,
-   "end_line": 1006,
+   "start_line": 1006,
+   "end_line": 1009,
    "text_sha256": "5e80c36332bb3bde2b5c766dca144d2f440a9b93f6685b38c6e6ac9c74edc9e7",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -818,8 +818,8 @@
    "id": "MAN-058",
    "title": "Quantised Fixed Note",
    "level": 5,
-   "start_line": 1007,
-   "end_line": 1010,
+   "start_line": 1010,
+   "end_line": 1013,
    "text_sha256": "b4291012d2edb193e1d8230576a4d545489f0fb0e315b0b67bdfcbf02bbd9e89",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -831,8 +831,8 @@
    "id": "MAN-059",
    "title": "Random Note",
    "level": 5,
-   "start_line": 1011,
-   "end_line": 1014,
+   "start_line": 1014,
+   "end_line": 1017,
    "text_sha256": "43e4bbd83e0d0189095f844f48e1fabafa1051ffb2019a9155bb4d0c7bdded2a",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -844,8 +844,8 @@
    "id": "MAN-060",
    "title": "Random Twos Note",
    "level": 5,
-   "start_line": 1015,
-   "end_line": 1018,
+   "start_line": 1018,
+   "end_line": 1021,
    "text_sha256": "9da9f1100341333ad65bd7faaa787a1603644cda384d1339e515182f59b21ca5",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -857,8 +857,8 @@
    "id": "MAN-061",
    "title": "Chord Strum",
    "level": 5,
-   "start_line": 1019,
-   "end_line": 1022,
+   "start_line": 1022,
+   "end_line": 1025,
    "text_sha256": "9b9dc1490387e933020beca0b013e5d22754e84ee11fd7b9b586d7d7f4bce4a2",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -870,8 +870,8 @@
    "id": "MAN-062",
    "title": "Chord Arpeggio",
    "level": 5,
-   "start_line": 1023,
-   "end_line": 1032,
+   "start_line": 1026,
+   "end_line": 1035,
    "text_sha256": "1cfa612aa9df7502564124367b78cea6db4f477e1a5b7820323401b24b3ccdce",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -883,8 +883,8 @@
    "id": "MAN-063",
    "title": "Chord Acceleration",
    "level": 5,
-   "start_line": 1033,
-   "end_line": 1049,
+   "start_line": 1036,
+   "end_line": 1052,
    "text_sha256": "9516fc6e1a31a17bd608dd443db02944defb5e62870178af3ec22d02ae28a708",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -896,8 +896,8 @@
    "id": "MAN-064",
    "title": "Chord Spread",
    "level": 5,
-   "start_line": 1050,
-   "end_line": 1053,
+   "start_line": 1053,
+   "end_line": 1056,
    "text_sha256": "7ad4157066b524b9c4fceda4170659c7f0d85b3621b0e0bb3d0864e2fc29fc90",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -909,8 +909,8 @@
    "id": "MAN-065",
    "title": "Chord Velocity Modifier",
    "level": 5,
-   "start_line": 1054,
-   "end_line": 1057,
+   "start_line": 1057,
+   "end_line": 1060,
    "text_sha256": "7dd51af2cf1b90014f30f83d9a36f7caafb63f87269a3ee08d7a57e544b035eb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -922,8 +922,8 @@
    "id": "MAN-066",
    "title": "Chord Shape Modifier",
    "level": 5,
-   "start_line": 1058,
-   "end_line": 1061,
+   "start_line": 1061,
+   "end_line": 1064,
    "text_sha256": "5a13c29f0b3ddc6ed3279973efddf8d887f699391d94f7ca15dedc6002a38b38",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -935,8 +935,8 @@
    "id": "MAN-067",
    "title": "Mute Root Note",
    "level": 5,
-   "start_line": 1062,
-   "end_line": 1065,
+   "start_line": 1065,
+   "end_line": 1068,
    "text_sha256": "88111a4c6b3d6cf200a2303fdaa69094327fb6c6d8ee04850c5d882e1108cb01",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -948,8 +948,8 @@
    "id": "MAN-068",
    "title": "Fully Quantise Mask",
    "level": 5,
-   "start_line": 1066,
-   "end_line": 1069,
+   "start_line": 1069,
+   "end_line": 1072,
    "text_sha256": "4bd6d1bcf77c8050c6e26126dae7926ad1e3f0da0a6ede6f900ec34d8dd44749",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -961,8 +961,8 @@
    "id": "MAN-069",
    "title": "Scale Editor",
    "level": 3,
-   "start_line": 1070,
-   "end_line": 1092,
+   "start_line": 1073,
+   "end_line": 1095,
    "text_sha256": "ad970acc3c36b9df104157eedcc6c4392305e8763f63efc114cc85c99a6d696f",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -976,8 +976,8 @@
    "id": "MAN-070",
    "title": "Transposition",
    "level": 4,
-   "start_line": 1093,
-   "end_line": 1105,
+   "start_line": 1096,
+   "end_line": 1108,
    "text_sha256": "5336961e5456d860865534b599798373ec80018a8203669d9f0d1a52e3fd8742",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -989,8 +989,8 @@
    "id": "MAN-071",
    "title": "Song Editor",
    "level": 3,
-   "start_line": 1106,
-   "end_line": 1117,
+   "start_line": 1109,
+   "end_line": 1120,
    "text_sha256": "cdae67432e7bf5e54a432c6a3c472d981faae4fd2880f8c3e9197acc63e5db4b",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1002,8 +1002,8 @@
    "id": "MAN-072",
    "title": "Button Indicators",
    "level": 4,
-   "start_line": 1118,
-   "end_line": 1123,
+   "start_line": 1121,
+   "end_line": 1126,
    "text_sha256": "be3fc63e1627c5f9cc57a52cb50eb44ae1f247f0aaa67962766821a91309d06b",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1015,8 +1015,8 @@
    "id": "MAN-073",
    "title": "Interacting with Slots",
    "level": 4,
-   "start_line": 1124,
-   "end_line": 1131,
+   "start_line": 1127,
+   "end_line": 1134,
    "text_sha256": "072a47fe0374c191133c4e53c319ca79377ad2f09ddef8f5c980d12d66199689",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1028,8 +1028,8 @@
    "id": "MAN-074",
    "title": "Song Mode Operations",
    "level": 4,
-   "start_line": 1132,
-   "end_line": 1135,
+   "start_line": 1135,
+   "end_line": 1138,
    "text_sha256": "8d805187ee9019217468edf12d3c615b1ffea37c60ca17808c311049443b79f2",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1041,8 +1041,8 @@
    "id": "MAN-075",
    "title": "Adjusting Song Sequence Length",
    "level": 4,
-   "start_line": 1136,
-   "end_line": 1151,
+   "start_line": 1139,
+   "end_line": 1154,
    "text_sha256": "2d86d97021b2582174e3e867a7e5e27daadc1ab46283510d116c6efda3711bc3",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1054,8 +1054,8 @@
    "id": "MAN-076",
    "title": "Navigating the Norns Display",
    "level": 4,
-   "start_line": 1152,
-   "end_line": 1158,
+   "start_line": 1155,
+   "end_line": 1161,
    "text_sha256": "8d7712162f080264c3263de40b9b3b25a7d525c48929abad1ea6e133afa77cb5",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1067,8 +1067,8 @@
    "id": "MAN-077",
    "title": "Locks",
    "level": 2,
-   "start_line": 1159,
-   "end_line": 1162,
+   "start_line": 1162,
+   "end_line": 1165,
    "text_sha256": "d6b36696cd868adb542b004eaf87c165c3e05e4e4cdaa037adeab3001206b8cb",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1078,8 +1078,8 @@
    "id": "MAN-078",
    "title": "Trig Param Locks",
    "level": 3,
-   "start_line": 1163,
-   "end_line": 1187,
+   "start_line": 1166,
+   "end_line": 1190,
    "text_sha256": "3eef50c96d0a03aff3953c7755c7d0a33854b58b7d33bbecc593e0b31425564e",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1092,8 +1092,8 @@
    "id": "MAN-079",
    "title": "Param Slides",
    "level": 4,
-   "start_line": 1188,
-   "end_line": 1205,
+   "start_line": 1191,
+   "end_line": 1208,
    "text_sha256": "2ba111203cec78292fed4bbd58780461fb34800f48d93e3b59d66a1e5f633b53",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1106,8 +1106,8 @@
    "id": "MAN-080",
    "title": "Mask Locks",
    "level": 3,
-   "start_line": 1206,
-   "end_line": 1230,
+   "start_line": 1209,
+   "end_line": 1233,
    "text_sha256": "107d3bfc2b51c496700a7454e66ee498f6c88a3fd8e80f0817a858922d3a039c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1119,8 +1119,8 @@
    "id": "MAN-081",
    "title": "Scale Locks",
    "level": 3,
-   "start_line": 1231,
-   "end_line": 1249,
+   "start_line": 1234,
+   "end_line": 1252,
    "text_sha256": "cf5abf336ea77377a81dbc2dee556fdfa50c78f1eaeb1c0ed7a6929caea07b09",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1132,8 +1132,8 @@
    "id": "MAN-082",
    "title": "Transposition Locks",
    "level": 3,
-   "start_line": 1250,
-   "end_line": 1263,
+   "start_line": 1253,
+   "end_line": 1266,
    "text_sha256": "1460b116233a23b003c8b8fe57c4f0f89223f6b83805fd7ccae04aff59f5ed73",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1145,8 +1145,8 @@
    "id": "MAN-083",
    "title": "Octave Locks",
    "level": 3,
-   "start_line": 1264,
-   "end_line": 1275,
+   "start_line": 1267,
+   "end_line": 1278,
    "text_sha256": "049b9380f75ab62c2c6c5431015f141fbf56f55526c5f94d4fb4ddf7fce804ff",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1158,8 +1158,8 @@
    "id": "MAN-084",
    "title": "Save and Load",
    "level": 2,
-   "start_line": 1276,
-   "end_line": 1283,
+   "start_line": 1279,
+   "end_line": 1286,
    "text_sha256": "037991ed7ca9958389ddb78f420698c7de846ecd171b932d9c5f9b7b5cbab656",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1173,8 +1173,8 @@
    "id": "MAN-085",
    "title": "Options",
    "level": 3,
-   "start_line": 1284,
-   "end_line": 1287,
+   "start_line": 1287,
+   "end_line": 1290,
    "text_sha256": "804652c99130b6e05e1674aee0ccb9b0911c3a814e1cfc17eee7d17930e33912",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1184,8 +1184,8 @@
    "id": "MAN-086",
    "title": "Sequencer Options",
    "level": 4,
-   "start_line": 1288,
-   "end_line": 1289,
+   "start_line": 1291,
+   "end_line": 1292,
    "text_sha256": "62b109384a5bdaa837429ca58f271923454d08b303d4a9c201eb9631c1b2c17b",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1195,8 +1195,8 @@
    "id": "MAN-087",
    "title": "Shift press stop",
    "level": 5,
-   "start_line": 1290,
-   "end_line": 1293,
+   "start_line": 1293,
+   "end_line": 1296,
    "text_sha256": "41bbc1b85ee606f3dad9e8eb6da930633549c161707906efa2fc259c71d02af5",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1208,8 +1208,8 @@
    "id": "MAN-088",
    "title": "Song Mode",
    "level": 5,
-   "start_line": 1294,
-   "end_line": 1297,
+   "start_line": 1297,
+   "end_line": 1300,
    "text_sha256": "f23336e64501c742cde537f4ecc5df1b8d83293c6687c9117aa37f270ffa1ebb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1221,8 +1221,8 @@
    "id": "MAN-089",
    "title": "Reset at Song Editor Pattern Change",
    "level": 5,
-   "start_line": 1298,
-   "end_line": 1301,
+   "start_line": 1301,
+   "end_line": 1304,
    "text_sha256": "38cf83228d1b01c9cd84eae77de4d746495d7f9f66caac547ef1224e683c684a",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1234,8 +1234,8 @@
    "id": "MAN-090",
    "title": "Reset at Pattern Repeat",
    "level": 5,
-   "start_line": 1302,
-   "end_line": 1305,
+   "start_line": 1305,
+   "end_line": 1308,
    "text_sha256": "3995abf998e5d234142e01c2dbf6f8a6f5bd65d965289c75b4a23354d0b1e368",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1247,8 +1247,8 @@
    "id": "MAN-091",
    "title": "Parameter Slides Wrap",
    "level": 5,
-   "start_line": 1306,
-   "end_line": 1309,
+   "start_line": 1309,
+   "end_line": 1312,
    "text_sha256": "1126b92230a10a63aa1cb785c248fd602cde00bd79d9ee0db70ef471eb8f069b",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1260,8 +1260,8 @@
    "id": "MAN-092",
    "title": "Elektron Program Changes",
    "level": 5,
-   "start_line": 1310,
-   "end_line": 1313,
+   "start_line": 1313,
+   "end_line": 1316,
    "text_sha256": "1cba70fdce2ca5bb2ad162f362319a1e064d77556ef2ce6703674d96f3abe8de",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1273,8 +1273,8 @@
    "id": "MAN-093",
    "title": "Elektron Program Change Channel",
    "level": 5,
-   "start_line": 1314,
-   "end_line": 1317,
+   "start_line": 1317,
+   "end_line": 1320,
    "text_sha256": "d20a2bca639e7721431fb5ced41c2ee67dc4b6000635eca3523d0e9d47ea47c1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1286,8 +1286,8 @@
    "id": "MAN-094",
    "title": "Parameter Lock Options",
    "level": 4,
-   "start_line": 1318,
-   "end_line": 1319,
+   "start_line": 1321,
+   "end_line": 1322,
    "text_sha256": "eb807418d84eae137ff8d7539ae2e5c95f8f88b99db7a2a6edf07d7e22c8d02a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1297,8 +1297,8 @@
    "id": "MAN-095",
    "title": "Trigless Locks",
    "level": 5,
-   "start_line": 1320,
-   "end_line": 1323,
+   "start_line": 1323,
+   "end_line": 1326,
    "text_sha256": "68986f0fa56d488e241131fc44c8cc7ab250ee2e2c11d7ab77ab0a8446f18d0c",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1310,8 +1310,8 @@
    "id": "MAN-096",
    "title": "Quantiser Options",
    "level": 4,
-   "start_line": 1324,
-   "end_line": 1325,
+   "start_line": 1327,
+   "end_line": 1328,
    "text_sha256": "71cff99220f53087fa5f5af920c346fea5ff43a8b6bc81e5a033509edf174874",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1321,8 +1321,8 @@
    "id": "MAN-097",
    "title": "Snap Note Masks to Scale",
    "level": 5,
-   "start_line": 1326,
-   "end_line": 1329,
+   "start_line": 1329,
+   "end_line": 1332,
    "text_sha256": "00eea8b20f2428b91dded6ee8e27d333201bf035e8adb88a3f2647912d97d127",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1334,8 +1334,8 @@
    "id": "MAN-098",
    "title": "Quantise Note Masks",
    "level": 5,
-   "start_line": 1330,
-   "end_line": 1333,
+   "start_line": 1333,
+   "end_line": 1336,
    "text_sha256": "eaa7a26cc59730712354f00158d3aee68e047106ca779b043618532cdb65d888",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1347,8 +1347,8 @@
    "id": "MAN-099",
    "title": "Scales Lock Until Pattern End",
    "level": 5,
-   "start_line": 1334,
-   "end_line": 1337,
+   "start_line": 1337,
+   "end_line": 1340,
    "text_sha256": "da8498011d5eae9759a4b2b04d31e68e4d592fdb25a95bc9c28e306a4462c73e",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1360,8 +1360,8 @@
    "id": "MAN-100",
    "title": "Lock All to Pentatonic",
    "level": 5,
-   "start_line": 1338,
-   "end_line": 1341,
+   "start_line": 1341,
+   "end_line": 1344,
    "text_sha256": "af037466acd892dec1c4f2e818fa161081d3309bcd3fc530d42f9e131b7368b1",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1373,8 +1373,8 @@
    "id": "MAN-101",
    "title": "Lock Random to Pentatonic",
    "level": 5,
-   "start_line": 1342,
-   "end_line": 1345,
+   "start_line": 1345,
+   "end_line": 1348,
    "text_sha256": "7f245bbcdcd317be8f0035988ff10f0738150feb5834064db63f6306c22b7659",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1386,8 +1386,8 @@
    "id": "MAN-102",
    "title": "Lock Merged to Pentatonic",
    "level": 5,
-   "start_line": 1346,
-   "end_line": 1349,
+   "start_line": 1349,
+   "end_line": 1352,
    "text_sha256": "d5ba3e6bd470acc257b1e2d9ae925a9fee14d104e3426ab2cf3266791e927eb4",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1399,8 +1399,8 @@
    "id": "MAN-103",
    "title": "MIDI Controller Options",
    "level": 4,
-   "start_line": 1350,
-   "end_line": 1351,
+   "start_line": 1353,
+   "end_line": 1354,
    "text_sha256": "669023112eee3c6b79e78753c55ef07530a73d307e8bda1601da8a9851397b8f",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1410,8 +1410,8 @@
    "id": "MAN-104",
    "title": "Map Scale to White Keys",
    "level": 5,
-   "start_line": 1352,
-   "end_line": 1355,
+   "start_line": 1355,
+   "end_line": 1358,
    "text_sha256": "8b71583873d815aa7592538200cbac5da5b3e4630a3e0209f2d4a8b14f0225ed",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1423,8 +1423,8 @@
    "id": "MAN-105",
    "title": "Honor Scale Rotations",
    "level": 5,
-   "start_line": 1356,
-   "end_line": 1359,
+   "start_line": 1359,
+   "end_line": 1362,
    "text_sha256": "4382eff70dbb6472724d3d1a0a825b88cca2dd0daf6c5cf5b1bd61dec39b08ba",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1436,8 +1436,8 @@
    "id": "MAN-106",
    "title": "Honor Scale Degree",
    "level": 5,
-   "start_line": 1360,
-   "end_line": 1363,
+   "start_line": 1363,
+   "end_line": 1366,
    "text_sha256": "820ae209d5121b182c7213e76e8b9e83ec4d62e14b8fb8d56a30a0e1ac8455bb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1449,8 +1449,8 @@
    "id": "MAN-107",
    "title": "Honour Scale Transpose",
    "level": 5,
-   "start_line": 1364,
-   "end_line": 1367,
+   "start_line": 1367,
+   "end_line": 1370,
    "text_sha256": "c1a9d97479c644a3c988dd8f79dbe8528a42cdd23b56462eebf9c30afc8f0dac",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1465,8 +1465,8 @@
    "status": "unreviewed",
    "title": "Screen Options",
    "level": 4,
-   "start_line": 1368,
-   "end_line": 1369,
+   "start_line": 1371,
+   "end_line": 1372,
    "text_sha256": "8f83cb2835a050d0e98e975bbb46a3874d7ae7119617f1715ee7c8b6a32bc85f"
   },
   {
@@ -1476,16 +1476,16 @@
    "status": "unreviewed",
    "title": "UI Motion",
    "level": 5,
-   "start_line": 1370,
-   "end_line": 1373,
-   "text_sha256": "d1da9c79d464b9483fc7d5a7cb49470e3c66e24ac45b02ba5331d3b69ea708dc"
+   "start_line": 1373,
+   "end_line": 1376,
+   "text_sha256": "e49c66fe5878b834618b2d66159a51ccc6e24fef6d3c8ebf4a7c95ca277ca9cb"
   },
   {
    "id": "MAN-108",
    "title": "Sinfonion Connect",
    "level": 3,
-   "start_line": 1374,
-   "end_line": 1377,
+   "start_line": 1377,
+   "end_line": 1380,
    "text_sha256": "d4cbd415db5e6c577bf2a170c6c583727f414d7030ba7823a665b1fc005d3d06",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1497,8 +1497,8 @@
    "id": "MAN-109",
    "title": "LFOs and Modulation",
    "level": 3,
-   "start_line": 1378,
-   "end_line": 1382,
+   "start_line": 1381,
+   "end_line": 1385,
    "text_sha256": "247817a1e4ef185b4be509a053544ef510ba4fd93d4566db639b408970638edc",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1516,9 +1516,9 @@
    "status": "unreviewed",
    "title": "Musical Merge and Voice Leading",
    "level": 2,
-   "start_line": 1383,
-   "end_line": 1398,
-   "text_sha256": "878a065b79497e2ad2f533b4b6f3f10ad529ab2dd2583585da9df7f937764311"
+   "start_line": 1386,
+   "end_line": 1404,
+   "text_sha256": "88a3a3c0b7f27fb005d0d274b969b6b9b92840bdf3a780623e41dce087b17375"
   },
   {
    "id": "MAN-120",
@@ -1527,8 +1527,8 @@
    "status": "unreviewed",
    "title": "Merge Shape",
    "level": 3,
-   "start_line": 1399,
-   "end_line": 1432,
+   "start_line": 1405,
+   "end_line": 1438,
    "text_sha256": "933f79f1fe28520bb80b36bfdf4fd1d03f9c8dc5443c242486991338d88484b0"
   },
   {
@@ -1540,8 +1540,8 @@
    "status": "unreviewed",
    "title": "Fragments",
    "level": 4,
-   "start_line": 1433,
-   "end_line": 1461,
+   "start_line": 1439,
+   "end_line": 1467,
    "text_sha256": "c7d5fc635927aa0227c427757c7a94eb4f6162b4e522402725041ba3989b4c26"
   },
   {
@@ -1553,8 +1553,8 @@
    "status": "unreviewed",
    "title": "Interlock",
    "level": 4,
-   "start_line": 1462,
-   "end_line": 1494,
+   "start_line": 1468,
+   "end_line": 1500,
    "text_sha256": "3a75ef8e7f03ad6f62e5690036c7f16a9789fb288efbcba56a2d62df4dd4237a"
   },
   {
@@ -1566,8 +1566,8 @@
    "status": "unreviewed",
    "title": "Structure",
    "level": 4,
-   "start_line": 1495,
-   "end_line": 1521,
+   "start_line": 1501,
+   "end_line": 1527,
    "text_sha256": "c0c74ff6ff8e5210d8b3f1ef2a338be574343ba95aedbfe6f2359b1b5bd365fd"
   },
   {
@@ -1581,8 +1581,8 @@
    "status": "unreviewed",
    "title": "Result and Reason",
    "level": 4,
-   "start_line": 1522,
-   "end_line": 1542,
+   "start_line": 1528,
+   "end_line": 1548,
    "text_sha256": "bb960d435bc92e322ca4d461ce674e885f09a0452ac4a110a5b1d6600cec6d63"
   },
   {
@@ -1592,16 +1592,16 @@
    "status": "unreviewed",
    "title": "Harmony",
    "level": 3,
-   "start_line": 1543,
-   "end_line": 1609,
+   "start_line": 1549,
+   "end_line": 1615,
    "text_sha256": "4a421af50e0a65c5e5b076f705fc076245283c75cec4080271b8751dd14cb9a3"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1610,
-   "end_line": 1621,
+   "start_line": 1616,
+   "end_line": 1627,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1613,8 +1613,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1622,
-   "end_line": 1631,
+   "start_line": 1628,
+   "end_line": 1637,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1624,8 +1624,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1632,
-   "end_line": 1635,
+   "start_line": 1638,
+   "end_line": 1641,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1635,8 +1635,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1636,
-   "end_line": 1642,
+   "start_line": 1642,
+   "end_line": 1648,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1661,11 +1661,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "24300f77d63176a049c3e940c70b41f57446945bee2fc3505f07f3be4e477cc3"
+   "sha256": "ddb1817fb393de7c28702b3594c337b3002e3705a92c78b99ee8cad6767755f5"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "f6dafe76ae3a6958ec94111ec5dc127fbad74c92793c8fe768430feea21732f7"
+   "sha256": "ac00c1c70e12237f246a4b486a3c71e69229d83bc7f7ae8d9f2d9ba3027f00de"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -3974,7 +3974,8 @@
     "M-REC-PARAM-028",
     "M-PARAM-DIAL-OFF-001",
     "M-PATCH-065",
-    "M-PATCH-066"
+    "M-PATCH-066",
+    "M-PARAM-CHORD-X-001"
    ],
    "status": "in_progress",
    "domain": "All slots/types, reassign with existing locks, per-song isolation, limits; E1/E2/E3 and fine-control gesture.",
@@ -5289,7 +5290,8 @@
     "M-CHORDVEL-008",
     "M-CHORDVEL-009",
     "M-CHORDVEL-010",
-    "M-CHORDVEL-011"
+    "M-CHORDVEL-011",
+    "M-PARAM-CHORD-X-001"
    ],
    "status": "partial-domain-coverage",
    "domain": "Every selector, sparse voices, repeated pitches, mute-root and acceleration. Status corrected 2026-09-11 from \"unimplemented\", a label that predates the 276 registered cases.",
@@ -5577,7 +5579,8 @@
     "M-CHORDSHAPE-254",
     "M-CHORDSHAPE-255",
     "M-CHORDSHAPE-256",
-    "M-CHORDVEL-011"
+    "M-CHORDVEL-011",
+    "M-PARAM-CHORD-X-001"
    ],
    "status": "in_progress",
    "domain": "No chord/sparse/full; root duplicated in a chord voice; strum/arp/ratchet; pending releases.",
@@ -8705,7 +8708,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 956,
+    "line": 957,
     "sha256": "b331207dc3fff2a3336775def30f8f201f96d917b4115e537a060a6d465f7a35",
     "text": "            <li>E3: Adjust values (hold K1 for fine control)</li>"
    },
@@ -8717,7 +8720,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 957,
+    "line": 958,
     "sha256": "3cb9230ae95eedb508a858f4c83651b66db19c1c21e88ba8a6d688c0cc361781",
     "text": "Step + K2: Clear locks of type based on currently selected page on step"
    },
@@ -8729,7 +8732,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 958,
+    "line": 959,
     "sha256": "33ebda00b32167821956b9c6a7d1f6426dbcb771e70ea96e02a70ae086fd9f8f",
     "text": "K1 + K2: Clear all locks of type based on currently selected page on channel"
    },
@@ -8741,7 +8744,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 963,
+    "line": 964,
     "sha256": "8d3cc4bf13f3767182a7a683dbf062eafd16b6adb025b20ca4b49cdc3e414235",
     "text": "Hold step + turn E3: Create parameter lock"
    },
@@ -8753,7 +8756,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 964,
+    "line": 965,
     "sha256": "0a6a39221fff4ce2379f6edc67bcec3cefabd09c09585b077903bd99f386e19b",
     "text": "Hold step + press scale: Create scale lock"
    },
@@ -8765,7 +8768,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 965,
+    "line": 966,
     "sha256": "af5114b16a94e0c8e91777b45da451fbe40bbabe1d3234df1798b6b14b10565f",
     "text": "Hold step + press transpose: Create transpose lock"
    },
@@ -8777,7 +8780,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 966,
+    "line": 967,
     "sha256": "629de72658af093afab650317087e6f62fea7f899e3a3e6f54a91f261107d22a",
     "text": "Hold step + press octave: Create octave lock"
    },
@@ -8789,7 +8792,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 971,
+    "line": 972,
     "sha256": "d26914e30eb8761193537f907bcf7e2ebd25f9f7be406470564a231fa9b34917",
     "text": "Hold K1 + press step: Add/remove trig mask"
    },
@@ -8801,7 +8804,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 972,
+    "line": 973,
     "sha256": "f31a39f69b184cdc9d04251d6dda29bf4ad79a6ae8c0fe96653287f179ad63cd",
     "text": "Hold step on mask page: Set note/velocity/length"
    },
@@ -8813,7 +8816,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 986,
+    "line": 987,
     "sha256": "68401e25c996474787fc409cbb5455e91a47119499f30069183fdb226982a4a4",
     "text": "Add/Remove trig: Hold K1 + press step"
    },
@@ -8825,7 +8828,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 987,
+    "line": 988,
     "sha256": "d8005b4d2f8094c582ce3432acc82bff41549c2482a4f3290896e2eb7362ed77",
     "text": "Clear lock: Hold step + K2"
    },
@@ -8837,7 +8840,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 988,
+    "line": 989,
     "sha256": "3618a1aeeb2c55ddb3692c712db969b1c7d404686fc8d7a7da0bc85a6af611f6",
     "text": "Clear all locks of selected page type: Hold K1 + K2"
    },
@@ -8849,7 +8852,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 989,
+    "line": 990,
     "sha256": "5b8259476fca0571040fefac0871f18090a697cb9f4d216156ab686f948d2a76",
     "text": "Global set: Press without holding step"
    },
@@ -8862,7 +8865,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 990,
+    "line": 991,
     "sha256": "917526b6468131273844b69e97c7f3921250b15200b25593751c7171902c1e50",
     "text": "Change a slot's param: on Trig params press K2, E3 to browse, K3 to assign, K2 to return."
    },
@@ -8874,7 +8877,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 991,
+    "line": 992,
     "sha256": "6782e433156c192f4f69bc3f244d78cc4d35327530ca62308a54c536ee85064a",
     "text": "Save action: K3"
    },
@@ -8886,7 +8889,7 @@
   {
    "source": {
     "path": "cheat_sheet.html",
-    "line": 992,
+    "line": 993,
     "sha256": "6fd82b6a79f314b475f686ad265c6df7c39c064ecd0337b95266e9c3f12b8924",
     "text": "Cancel action: K2"
    },
@@ -8991,7 +8994,7 @@
    "line": 350,
    "reference": "images/norns/note-masks.png",
    "path": "images/norns/note-masks.png",
-   "sha256": "f015d551286b90d2281b3068814f98e26706e507f6d295407d3da521becf767d"
+   "sha256": "4761f6d2868d2920a20fb7ef2829bf0bbe3c80dd05a8095442e6fa4f45cc7510"
   },
   {
    "status": "pending-visual-spec-reconciliation",
@@ -8999,7 +9002,7 @@
    "line": 365,
    "reference": "images/norns/channel-tasks.png",
    "path": "images/norns/channel-tasks.png",
-   "sha256": "cedefe3f5bb3f7890a6a667131999e43fe18f71cff19af1de47be9fc95ff12ee"
+   "sha256": "20e937a2231acf61db20020394e4a951cb3e9b68cd1b4cad9c465a79bbcc7f2d"
   },
   {
    "status": "pending-visual-spec-reconciliation",
@@ -9035,7 +9038,7 @@
   },
   {
    "source": "README.md",
-   "line": 642,
+   "line": 643,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/bank-pattern-select-fader.svg",
@@ -9043,7 +9046,7 @@
   },
   {
    "source": "README.md",
-   "line": 643,
+   "line": 644,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-pattern-2-select-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/bank-pattern-2-select-fader.svg",
@@ -9051,7 +9054,7 @@
   },
   {
    "source": "README.md",
-   "line": 648,
+   "line": 649,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/bank-select-buttons.svg",
@@ -9059,7 +9062,7 @@
   },
   {
    "source": "README.md",
-   "line": 652,
+   "line": 653,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/arm-paint-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/arm-paint-button.svg",
@@ -9067,7 +9070,7 @@
   },
   {
    "source": "README.md",
-   "line": 658,
+   "line": 659,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg",
@@ -9075,7 +9078,7 @@
   },
   {
    "source": "README.md",
-   "line": 662,
+   "line": 663,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg",
@@ -9083,7 +9086,7 @@
   },
   {
    "source": "README.md",
-   "line": 683,
+   "line": 684,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-select-faders.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/note_editor/note-select-faders.svg",
@@ -9091,7 +9094,7 @@
   },
   {
    "source": "README.md",
-   "line": 689,
+   "line": 690,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-step-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/note_editor/note-step-select-buttons.svg",
@@ -9099,7 +9102,7 @@
   },
   {
    "source": "README.md",
-   "line": 693,
+   "line": 694,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/note_editor/note-value-range-select-faders.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/pattern_editor/note_editor/note-value-range-select-faders.svg",
@@ -9107,7 +9110,7 @@
   },
   {
    "source": "README.md",
-   "line": 728,
+   "line": 729,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/channel-select-buttons.svg",
@@ -9115,7 +9118,7 @@
   },
   {
    "source": "README.md",
-   "line": 785,
+   "line": 786,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/pattern-assign-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/pattern-assign-buttons.svg",
@@ -9123,7 +9126,7 @@
   },
   {
    "source": "README.md",
-   "line": 847,
+   "line": 848,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/merge-mode-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/merge-mode-buttons.svg",
@@ -9131,7 +9134,7 @@
   },
   {
    "source": "README.md",
-   "line": 864,
+   "line": 865,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/trigger-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/trigger-merge-mode-select-button.svg",
@@ -9139,7 +9142,7 @@
   },
   {
    "source": "README.md",
-   "line": 877,
+   "line": 878,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/note-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/note-merge-mode-select-button.svg",
@@ -9147,7 +9150,7 @@
   },
   {
    "source": "README.md",
-   "line": 888,
+   "line": 889,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
@@ -9155,7 +9158,7 @@
   },
   {
    "source": "README.md",
-   "line": 901,
+   "line": 902,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/velocity-length-merge-mode-select-button.svg",
@@ -9163,7 +9166,7 @@
   },
   {
    "source": "README.md",
-   "line": 949,
+   "line": 950,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-sequencer-step-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/channel-sequencer-step-buttons.svg",
@@ -9171,15 +9174,23 @@
   },
   {
    "source": "README.md",
-   "line": 965,
+   "line": 966,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/channel_editor/channel-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/channel_editor/channel-select-buttons.svg",
    "sha256": "2f748d5630ec2ccd8918779886002e72595384d64e1e4471e77f1b550eac1d4f"
   },
   {
+   "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1077,
+   "line": 981,
+   "reference": "images/norns/trig-params.png",
+   "path": "images/norns/trig-params.png",
+   "sha256": "2e867683ec1516bb48ed3609d081c630a63994404824e1a00f027281ab59e8c9"
+  },
+  {
+   "source": "README.md",
+   "line": 1080,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/scale_editor/scale-slot-select-buttons.svg",
@@ -9187,7 +9198,7 @@
   },
   {
    "source": "README.md",
-   "line": 1083,
+   "line": 1086,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-step-buttons.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/scale_editor/scale-step-buttons.svg",
@@ -9195,7 +9206,7 @@
   },
   {
    "source": "README.md",
-   "line": 1098,
+   "line": 1101,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/transposition-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/scale_editor/transposition-fader.svg",
@@ -9203,7 +9214,7 @@
   },
   {
    "source": "README.md",
-   "line": 1131,
+   "line": 1134,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-pattern-slot-button.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/song_editor/song-pattern-slot-button.svg",
@@ -9211,7 +9222,7 @@
   },
   {
    "source": "README.md",
-   "line": 1144,
+   "line": 1147,
    "reference": "https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/song_editor/song-slot-pattern-length-fader.svg",
    "status": "pending-visual-spec-reconciliation",
    "path": "images/Grid/song_editor/song-slot-pattern-length-fader.svg",
@@ -9220,7 +9231,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1402,
+   "line": 1408,
    "reference": "images/merge-shape-foundation.png",
    "path": "images/merge-shape-foundation.png",
    "sha256": "5f6160d49785b1e79c60ee65157ca7e373d57e1ef6abe1c565019e7e9fa0fe21"
@@ -9228,7 +9239,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1436,
+   "line": 1442,
    "reference": "images/merge-shape-fragments.png",
    "path": "images/merge-shape-fragments.png",
    "sha256": "7984c43100cc0c290f1f9639d32ed0aae7102f10c0d7efa03e8c3f3afa6f014a"
@@ -9236,7 +9247,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1465,
+   "line": 1471,
    "reference": "images/merge-shape-interlock.png",
    "path": "images/merge-shape-interlock.png",
    "sha256": "533d8bbbb5553040db390a0dd79c89873fd58a37b1f8d8a1a218c62bbbb5f4e2"
@@ -9244,7 +9255,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1498,
+   "line": 1504,
    "reference": "images/merge-shape-structure.png",
    "path": "images/merge-shape-structure.png",
    "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223"
@@ -9252,7 +9263,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1546,
+   "line": 1552,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
    "sha256": "12ded7f3aaf7ba63bbcff39124a98eea9c414f4ebeefa61f5f5f79ee9a71a4b9"
@@ -9260,10 +9271,10 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1581,
+   "line": 1587,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
-   "sha256": "a65f55953ac382fb71ac5edf96e3bd4bd2589fe89fa67670326e42627048b33e"
+   "sha256": "f55f4b3fb68a92d1721a928b3e587ba0716dc174ab05a9cf1e4bb6d094eac7ea"
   }
  ],
  "integration_basis": {

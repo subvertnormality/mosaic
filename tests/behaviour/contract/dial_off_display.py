@@ -12,7 +12,7 @@ Seeded Emulator test device (tests/behaviour/config/emu-midi.json):
   Trig Probability, stock, off inside its range (control)
 
 Each slot's value is read pixel-exactly on the live Trig params overview (C02): the selected
-slot's whole value on the full value line, another slot's in its cell, compared with rendered
+(outlined) slot's value in its cell, another slot's in its cell under its two short labels, compared with rendered
 candidate texts; '?' is anything else. The old dial settled from a number to a bar; the live
 screen has no bar and keeps showing the number, so the settled check reads '0'. All
 observations are recorded before the assertions run.
@@ -23,8 +23,9 @@ from ui_map import trig_param_cell_label
 
 def dial_value(c, slot, label, selected, short_label=None, candidates=('X', '0', '-1')):
     """The slot's shown value on the live Trig params overview (C02), read
-    exactly: the selected slot on the full value line beside its parameter
-    name, another slot in its own cell under its short label. '?' is none."""
+    exactly: the selected (outlined) slot's value (a value too wide for its
+    cell: on the footer row beside its parameter name), another slot in its
+    own cell with its two short labels. '?' is none."""
     from frame_oracle import overview_cell_matches, selected_field_matches
     state = c.snapshot()
     if selected:

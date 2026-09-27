@@ -66,9 +66,22 @@ def main():
             driver.elapse(0.5)
             write_png(out / "note-masks.png", frame(driver))
             driver.enc(1, 1)  # E1 opens Channel tasks on Masks
-            driver.enc(2, 1)
-            driver.elapse(0.5)
+            driver.enc(2, 2)  # Output: its footer has room for K1 PARAMS too
+            # Past the page tooltip (3 s): the footer names what K3 opens.
+            driver.elapse(3.5)
             write_png(out / "channel-tasks.png", frame(driver))
+            # Trig params: each slot's two short names above and below its value.
+            driver.ui.channel_page("trig_locks", confirm=False)
+            driver.ui.assign_trig_parameter_key("quantised_fixed_note")
+            driver.ui.set_value(3)
+            driver.ui.turn(2, 1)
+            driver.ui.assign_trig_parameter_key("chord_note_strum")
+            driver.ui.set_value(1)
+            driver.ui.turn(2, 1)
+            driver.ui.assign_trig_parameter_key("trig_probability")
+            driver.ui.turn(2, -2)
+            driver.elapse(3.5)  # past the assignment tooltip: the footer lists the controls
+            write_png(out / "trig-params.png", frame(driver))
         finally:
             driver.finish()
         for image in sorted(out.glob("*.png")):

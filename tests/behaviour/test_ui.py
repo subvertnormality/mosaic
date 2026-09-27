@@ -1160,7 +1160,7 @@ class UiInputTests(unittest.TestCase):
 
         device = shows("DEVICE", "CH01", "detail")
         masks = shows("NOTE MASKS", "CH01", "overview_masks")
-        harmony = shows("VOICE LEADING", "CH01", "focused")
+        harmony = shows("VOICE LEADING", "CH01", "detail")
         oracle = lambda state, title, scope, layout: state["shows"] == (title, scope, layout)
         with patch("frame_oracle.live_header_matches", side_effect=oracle):
             # Device (ring 5th) turned -5 clamps to Masks: opened through Tasks and awaited.
@@ -1178,7 +1178,7 @@ class UiInputTests(unittest.TestCase):
                     Ui(driver).turn(1, detents)
                     self.assertEqual(driver.calls, [("wait", 1)])
             # An ordinary ring move: Merge shape -1 is Note dashboard (Output, task row 2).
-            driver = ObservedDriver(states=[shows("MERGE SHAPE", "CH01", "focused"),
+            driver = ObservedDriver(states=[shows("MERGE SHAPE", "CH01", "detail"),
                                             shows("OUTPUT", "CH01", "dashboard")])
             Ui(driver).turn(1, -1)
             self.assertEqual(driver.calls, [
@@ -2956,16 +2956,17 @@ class OutputFieldVerbTests(unittest.TestCase):
         page.assert_called_once_with("midi_config", channel=2, confirm=False)
         header.assert_called_once_with("midi_config", channel=2)
 
-    def test_selected_mask_value_reads_the_full_label_value_line(self):
+    def test_selected_mask_value_reads_the_selected_cell(self):
         from ui import Ui
         driver = FakeDriver(states=[{}])
-        with patch("frame_oracle.selected_field_matches",
-                   side_effect=lambda s, layout, label, value: (layout, label, value) == ("overview_masks", "Chord 1", "2nd")):
+        wanted = ("overview_masks", 5, "Chd1", "2nd", "Chord 1")
+        with patch("frame_oracle.overview_selected_cell_matches",
+                   side_effect=lambda s, layout, index, short, value, label: (layout, index, short, value, label) == wanted):
             self.assertEqual(Ui(driver).selected_mask_value("chord_1", ["X", "2nd", "-7th"]), "2nd")
         driver = FakeDriver(states=[{}])
-        with patch("frame_oracle.selected_field_matches", return_value=True) as oracle:
+        with patch("frame_oracle.overview_selected_cell_matches", return_value=True) as oracle:
             Ui(driver).expect_selected_mask("chord_2", "-7th")
-        self.assertEqual(oracle.call_args.args[1:], ("overview_masks", "Chord 2", "-7th"))
+        self.assertEqual(oracle.call_args.args[1:], ("overview_masks", 6, "Chd2", "-7th", "Chord 2"))
 
 
 class OverviewCellMarkerOracleTests(unittest.TestCase):
@@ -2979,20 +2980,81 @@ class OverviewCellMarkerOracleTests(unittest.TestCase):
     def test_reads_the_letter_drawn_in_the_cells_top_right_corner(self):
         from frame_oracle import overview_cell_marker
 
-        # Trig params cells are 25 px wide from y9: cell 1's marker is drawn at (19,16),
-        # cell 7's (second row, second column) at (44,34).
+        # Trig params cells are 25 px wide from row top 9, 24 px apart: cell 1's marker is
+        # drawn at (17,15), cell 7's (second row, second column) at (42,39).
         for letter in ("S", "L"):
             with self.subTest(letter=letter):
-                self.assertEqual(overview_cell_marker(self.state([(19, 16, 15, letter)]), "overview_params", 1), letter)
-                self.assertEqual(overview_cell_marker(self.state([(44, 34, 15, letter)]), "overview_params", 7), letter)
+                self.assertEqual(overview_cell_marker(self.state([(17, 15, 15, letter)]), "overview_params", 1), letter)
+                self.assertEqual(overview_cell_marker(self.state([(42, 39, 15, letter)]), "overview_params", 7), letter)
 
     def test_no_marker_or_another_cells_marker_is_none(self):
         from frame_oracle import overview_cell_marker
 
         self.assertIsNone(overview_cell_marker(self.state([]), "overview_params", 1))
-        self.assertIsNone(overview_cell_marker(self.state([(44, 16, 15, "S")]), "overview_params", 1))
+        self.assertIsNone(overview_cell_marker(self.state([(42, 15, 15, "S")]), "overview_params", 1))
         # A dimmer letter is not the marker.
-        self.assertIsNone(overview_cell_marker(self.state([(19, 16, 9, "S")]), "overview_params", 1))
+        self.assertIsNone(overview_cell_marker(self.state([(17, 15, 9, "S")]), "overview_params", 1))
+
+
+class OverviewCellOracleTests(unittest.TestCase):
+    """Overview dial cells (frame_oracle.overview_cell_matches /
+    overview_selected_cell_matches / selected_field_matches): three static
+    lines, top label, value, bottom label, as the old dial drew them (owner
+    decision 27 September 2026); characterisation of lib/ui_render.lua."""
+
+    @staticmethod
+    def state(commands, outline=None):
+        from frame_oracle import render, _outline_pixels
+        pixels = bytearray(render(commands))
+        if outline:
+            for x, y in _outline_pixels(*outline):
+                pixels[(y * 128 + x) * 4:(y * 128 + x) * 4 + 3] = b"\xff\xff\xff"
+        return {"frame": {"pixels_base64": base64.b64encode(bytes(pixels)).decode()}}
+
+    def test_a_cell_shows_its_top_label_value_and_bottom_label_on_three_lines(self):
+        from frame_oracle import overview_cell_matches
+        # Cell 7 of Trig params: x 25, row top 33; baselines 39, 46, 53.
+        drawn = self.state([(27, 39, 9, "Quan"), (27, 46, 13, "X"), (27, 53, 9, "Note")])
+        self.assertTrue(overview_cell_matches(drawn, "overview_params", 7, ("Quan", "Note"), "X"))
+        self.assertFalse(overview_cell_matches(drawn, "overview_params", 7, ("Quan", ""), "X"))
+        self.assertFalse(overview_cell_matches(drawn, "overview_params", 7, "Quan Note", "X"))
+        self.assertFalse(overview_cell_matches(drawn, "overview_params", 2, ("Quan", "Note"), "X"))
+
+    def test_a_long_label_is_trimmed_statically_never_scrolled(self):
+        import frame_oracle
+        from frame_oracle import overview_cell_matches, trim, text_width
+        label = "Abcdefghij"
+        cut = trim(label, 19)
+        self.assertTrue(cut and text_width(cut) <= 19 and label.startswith(cut) and cut != label)
+        drawn = self.state([(2, 15, 9, cut), (2, 22, 13, "1")])
+        self.assertTrue(overview_cell_matches(drawn, "overview_params", 1, label, "1"))
+        # No marquee phase is ever tried for a cell.
+        with patch.object(frame_oracle, "marquee_offset", side_effect=AssertionError("scrolled")):
+            overview_cell_matches(self.state([]), "overview_params", 1, label, "1")
+
+    def test_the_selected_cell_is_the_outlined_one(self):
+        from frame_oracle import selected_field_matches, overview_selected_cell_matches
+        cell = [(2, 15, 15, "Trig"), (2, 22, 13, "Y")]
+        outlined = self.state(cell, outline=("overview_masks", 1))
+        self.assertTrue(selected_field_matches(outlined, "overview_masks", "Trig", "Y"))
+        self.assertTrue(overview_selected_cell_matches(outlined, "overview_masks", 1, "Trig", "Y", "Trig"))
+        self.assertFalse(overview_selected_cell_matches(outlined, "overview_masks", 1, "Trig", "N", "Trig"))
+        self.assertFalse(selected_field_matches(self.state(cell), "overview_masks", "Trig", "Y"))
+        self.assertFalse(overview_selected_cell_matches(
+            self.state(cell, outline=("overview_masks", 2)), "overview_masks", 1, "Trig", "Y", "Trig"))
+
+    def test_a_selected_value_too_wide_for_its_cell_is_on_the_footer_row(self):
+        from frame_oracle import selected_field_matches, text_width
+        value = "Sawtooth wave"
+        self.assertGreater(text_width(value), 19)
+        room = 126 - text_width(value) - 4
+        cell = [(2, 15, 15, "Wave"), (2, 22, 13, "...")]
+        footer = [((None, 127), 63, 15, value), (1, 63, 10, "Waveform")]
+        self.assertGreater(room, text_width("Waveform"))
+        full = self.state(cell + footer, outline=("overview_params", 1))
+        self.assertTrue(selected_field_matches(full, "overview_params", "Waveform", value))
+        self.assertFalse(selected_field_matches(self.state(cell, outline=("overview_params", 1)),
+                                                "overview_params", "Waveform", value))
 
 
 class DashboardOracleTests(unittest.TestCase):
@@ -3241,6 +3303,22 @@ class GroupCUiTests(unittest.TestCase):
         self.assertEqual(calls, [[(1, 63, 9, "End must follow start")],
                                  [(1, 63, 7, "< Root"), ((None, 127), 63, 10, "Degree >")]])
 
+    def test_open_footer_names_the_child_row_and_keeps_the_hints_that_fit(self):
+        # lib/ui_live.lua open_footer + lib/ui_render.lua {hints} footer (owner
+        # decision 27 September 2026); 5 px per character here, like
+        # lib/tests/lib/ui_render_footer_hints_tests.lua.
+        import frame_oracle
+        with patch.object(frame_oracle, "text_width", side_effect=lambda text, *a, **k: 5 * len(text)):
+            self.assertEqual(frame_oracle.open_footer("Rhythm", "E3 SET  K3 APPLY  K2 BACK"), "K3 OPEN RHYTHM  K2 BACK")
+            # The row name goes first (owner decision 27 September 2026), then later hints.
+            self.assertEqual(frame_oracle.open_footer("Failure details", "E1 TASKS"), "K3 OPEN  E1 TASKS")
+            self.assertEqual(frame_oracle.open_footer("Trig params", "K3 OPEN  K1 PARAMS"), "K3 OPEN  K1 PARAMS")
+            self.assertEqual(frame_oracle.open_footer("Reason", "K2 BACK TO THE VERY START  E1 TASKS"),
+                             "K3 OPEN  E1 TASKS")
+            self.assertEqual(frame_oracle.open_footer("Masks", "K3 OPEN  K1 PARAMS"), "K3 OPEN MASKS  K1 PARAMS")
+            self.assertEqual(frame_oracle.open_footer("Scale", "E2 CHOOSE  K3 OPEN"), "K3 OPEN SCALE  E2 CHOOSE")
+        self.assertEqual(frame_oracle.OPEN_VALUE, "OPEN >")
+
 
 if __name__ == "__main__":
     unittest.main()
@@ -3292,17 +3370,25 @@ class MarqueeOracleTests(unittest.TestCase):
 class OwnerFeedback26SeptemberTests(unittest.TestCase):
     """Owner feedback from the device, 26 September 2026: cell names, pattern-page steps."""
 
-    def test_trig_param_cell_label_joins_and_title_cases_like_the_adapter(self):
+    def test_trig_param_cell_label_is_the_two_title_cased_descriptors(self):
+        # Owner decision 27 September 2026: the first above the value, the second below.
         from ui_map import trig_param_cell_label
-        self.assertEqual(trig_param_cell_label("CC1"), "Cc1")
-        self.assertEqual(trig_param_cell_label("QUAN", "NOTE"), "Quan Note")
-        self.assertEqual(trig_param_cell_label("CC", "1"), "Cc 1")
-        self.assertEqual(trig_param_cell_label("None", ""), "None")
-        self.assertEqual(trig_param_cell_label("FILTER", "CUTOFF"), "Filter Cutoff")
+        self.assertEqual(trig_param_cell_label("CC1"), ("Cc1", ""))
+        self.assertEqual(trig_param_cell_label("QUAN", "NOTE"), ("Quan", "Note"))
+        self.assertEqual(trig_param_cell_label("CC", "1"), ("Cc", "1"))
+        self.assertEqual(trig_param_cell_label("None", ""), ("None", ""))
+        self.assertEqual(trig_param_cell_label("FLTR", "CTOF"), ("Fltr", "Ctof"))
 
-    def test_masks_cells_name_the_whole_mask(self):
+    def test_masks_cells_use_the_old_masks_page_names(self):
+        # Owner decision 27 September 2026: the purpose-written short names, static.
+        import re
         from ui_map import MASK_LABELS, OVERVIEW_CELLS
-        self.assertEqual({field: label for field, (_, label) in OVERVIEW_CELLS.items()}, MASK_LABELS)
+        source = (Path(__file__).resolve().parents[2] / "lib/pages/channel_edit_page/channel_edit_masks.lua").read_text()
+        fields = re.findall(r'\{id = "(\w+)",[^}]*?label = "([^"]+)", short_label = "([^"]+)"', source)
+        self.assertEqual({field: short for field, _, short in fields},
+                         {field: label for field, (_, label) in OVERVIEW_CELLS.items()})
+        self.assertEqual({field: full for field, full, _ in fields}, MASK_LABELS)
+        self.assertEqual([OVERVIEW_CELLS[field][0] for field, _, _ in fields], list(range(1, 9)))
 
     def _pattern_frame(self, outlined=(), extra=()):
         pixels = bytearray(128 * 64 * 4)

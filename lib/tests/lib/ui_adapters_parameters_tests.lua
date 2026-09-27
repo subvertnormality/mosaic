@@ -63,6 +63,28 @@ function test_ui_adapters_parameters_empty_slots_are_none_and_off_is_x()
   end)
 end
 
+-- README "Trig Parameters": a slot's cell shows the device spec's two short
+-- descriptors, the first above the value and the second below, title-cased as
+-- the old dial drew them (owner decision 27 September 2026); the long name is
+-- the descriptor label.
+function test_ui_adapters_parameters_cell_labels_are_the_two_device_descriptors()
+  h.isolated(function(env)
+    h.setup_rich(env)
+    env.channel.trig_lock_params[1].short_descriptor_1 = "FLTR"
+    env.channel.trig_lock_params[1].short_descriptor_2 = "CTOF"
+    env.channel.trig_lock_params[1].name = "Filter Cutoff"
+    h.start(env)
+    env.ui.select_trig_page()
+    local d = h.by_id(describe(env, h.adapter(env, "parameters"), "C02"))
+    luaunit.assert_equals(d.slot_1.short_label, "Fltr")
+    luaunit.assert_equals(d.slot_1.bottom_label, "Ctof")
+    luaunit.assert_equals(d.slot_1.label, "Filter Cutoff")
+    -- A parameter with one descriptor has an empty second line.
+    luaunit.assert_equals(d.slot_2.short_label, "L2")
+    luaunit.assert_equals(d.slot_2.bottom_label, "")
+  end)
+end
+
 function test_ui_adapters_parameters_views_filter_by_chord_prefix_selection_and_hold()
   h.isolated(function(env)
     h.setup_rich(env)

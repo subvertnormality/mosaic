@@ -1,12 +1,13 @@
 """Literal rendered selector bounds for the three chord division parameters
-(the selected slot's value on the live Trig params full value line)."""
+(the selected, outlined slot's value on the live Trig params overview)."""
 
 
 def parameter_division_bounds(c,parameter):
     parameter_label=c.ui.trig_parameter_label(parameter)
     def label(value):
-        # The selected slot's whole value on the Trig params overview's full
-        # value line (C02), beside the assigned parameter's name.
+        # The selected slot's whole value in its outlined cell on the Trig params
+        # overview (C02); a value too wide for the cell: on the footer row
+        # beside the assigned parameter's name.
         c.ui.expect_selected_field('overview_params',label=parameter_label,value=value)
         c.results.append(dict(kind='parameter-division-label',parameter=parameter_label,value=value,passed=True))
     c.configure();c.ui.turn(1,-3);c.ui.assign_trig_parameter_key(parameter)

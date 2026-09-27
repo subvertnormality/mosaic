@@ -903,7 +903,7 @@ def structure_harmony_workflow(c):
     # E) and Result names the marker priority.
     c.ui.channel_page("harmony", channel=1)
     c.ui.select_row("mode", 0); c.ui.set_value(-1)
-    c.ui.expect_selected_field("focused", "Mode", "REVOICE", art=True)
+    c.ui.expect_selected_field("detail", "Mode", "REVOICE")
     c.ui.press_key(3)
     c.ui.expect_footer_text("APPLIED")
     notes = capture_loop_notes(c)

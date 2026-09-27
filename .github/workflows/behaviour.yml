@@ -100,7 +100,7 @@ jobs:
       - name: Verify CI partition and aggregation contracts
         if: matrix.shard == 0
         working-directory: tests/behaviour
-        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import ci.test_ui_migration_drift_runner
+        run: python3 -m unittest -v ci.test_select_shard ci.test_verify_full ci.test_artifact_paths ci.test_targeted_ui_migration ci.test_targeted_ui_evidence_import ci.test_ui_migration_drift_runner ci.test_workflow_counts
       - name: Fetch output-profile fixtures for fast layers
         if: matrix.shard == 0
         run: |
@@ -217,9 +217,11 @@ jobs:
           git clone https://github.com/sixolet/toolkit.git /tmp/mosaic-output-mods/toolkit
           git -C /tmp/mosaic-output-mods/toolkit checkout --detach 2e9fb56fe7b2b25bd6a0d80c40e82f7a7f9368a7
       - name: Run every modulation case in both lanes
+        # One lane after the other, as in the base shards: a concurrent
+        # controlled lane steals CPU from the real-time lane's LFO placement.
         run: |
           pattern="$(python3 tests/behaviour/ci/select-shard.py --profile midi-modulation)"
-          python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-modulation --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"             --lanes real-time,controlled-experimental --profiles midi-modulation             --mod-code-root midi-modulation=/tmp/mosaic-output-mods             --mod-patches --case-pattern "$pattern" --skip-fast-layers
+          python3 tests/behaviour/suite.py run             --output /tmp/mosaic-behaviour-modulation --emulator "$EMULATOR_ROOT"             --norns-source "$EMULATOR_ROOT/.runtime/deps/norns"             --experimental-install "$EMULATOR_ROOT/.runtime/ci-qualified/runtime/installation.json"             --lanes real-time,controlled-experimental --profiles midi-modulation             --mod-code-root midi-modulation=/tmp/mosaic-output-mods             --mod-patches --case-pattern "$pattern" --skip-fast-layers --sequential-lanes
       - name: Upload modulation report
         if: always()
         uses: actions/upload-artifact@v4
@@ -361,7 +363,9 @@ jobs:
           MONOME_EMULATOR: /tmp/identity-only
         run: |
           mapfile -t suites < <(find reports -name suite.json -type f | sort)
-          test "${#suites[@]}" -eq 18
+          # Base MIDI shards (the matrix above) plus the modulation and
+          # audio/Crow reports; ci/test_workflow_counts.py ties the two.
+          test "${#suites[@]}" -eq 26
           python3 tests/behaviour/ci/verify-full.py --output full-behaviour-report.json "${suites[@]}"
           cat full-behaviour-report.json >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4

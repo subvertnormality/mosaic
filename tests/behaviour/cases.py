@@ -996,7 +996,11 @@ def transpose_lock_live_clear(c):
                        [144,48,127],[144,62,117]]
     assert [event['bytes'] for event in before[:6]] == expected_before, before
     clear_lower = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
-    with c.ui.hold_step(1): c.ui.press_key(2)
+    # K2 is pressed and released inside the step hold with no settle time:
+    # press_key's 60 ms settle landed inside the measured window, so on a slow
+    # runner the gesture outlasted the 1/6 s note it must fall within although
+    # the clear itself happened 40 ms into it.
+    with c.ui.hold_step(1), c.ui.hold_keys(2): pass
     clear_upper = c.logical_ns if c.clock_mode == 'controlled-experimental' else __import__('time').monotonic_ns()
     c.wait(lambda state: len(onsets(state)) >= 11, timeout=3)
     c.ui.stop()
@@ -2578,7 +2582,7 @@ from contract.output_cases import jf_same_voice_overlap, jf_keyboard_ownership, 
 
 from patch_params import patch_nrpn_restart,patch_nrpn_boundary_matrix,patch_nrpn_slide,patch_configured_off_lock
 
-from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording,recording_trigless_toggle,pending_parameter_lock_song_transition
+from trig_parameter_interactions import fixed_note_domain,quantised_fixed_table,stock_pitch_lock_inheritance,competing_pitch_locks,probability_endpoint_locks,seeded_probability,probability_midi_locks,live_parameter_recording,recording_trigless_toggle,pending_parameter_lock_song_transition,chord_pattern_x_root
 
 from shuffle_inheritance import shuffle_type_inheritance,live_shuffle_type_inheritance
 
@@ -3306,6 +3310,7 @@ CASES={
  'M-SPREAD-003':dict(run=lambda c:spread_acceleration_contract(c,False,-3),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -3: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-002':dict(run=lambda c:spread_acceleration_contract(c,False,-4),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -4: independent new-contract gap table, nonpositive termination and Stop accounting'),
  'M-SPREAD-001':dict(run=lambda c:spread_acceleration_contract(c,False,-5),requirements=['CHORD-STRUM', 'CHORD-SPREAD', 'CHORD-ACCEL', 'PARAM-SLOTS'],description='Strum with quarter-step Spread and Accel -5: independent new-contract gap table, nonpositive termination and Stop accounting'),
+ 'M-PARAM-CHORD-X-001':dict(run=chord_pattern_x_root,requirements=['CHORD-SHAPE','CHORD-MUTE-ROOT','PARAM-SLOTS'],description='Chord Pattern assigned at X, or step-locked to X, plays every root exactly as unassigned; only Mute Root silences a root'),
  'M-PARAM-003':dict(run=chord_spread_divisions,requirements=['PARAM-SLOTS', 'CHORD-SPREAD'],description='Chord Spread selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-PARAM-002':dict(run=chord_note_arpeggio_divisions,requirements=['PARAM-SLOTS', 'CHORD-ARP'],description='Chord Note Arpeggio selector exposes only supported musical divisions, clamps both ends and returns to Off'),
  'M-PARAM-001':dict(run=chord_note_strum_divisions,requirements=['PARAM-SLOTS', 'CHORD-STRUM'],description='Chord Note Strum selector exposes only supported musical divisions, clamps both ends and returns to Off'),

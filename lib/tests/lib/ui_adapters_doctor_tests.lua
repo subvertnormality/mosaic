@@ -546,6 +546,33 @@ function test_ui_adapters_doctor_invokes_match_the_key_and_grid_paths()
   compare_invoke("capture_enough", "R02", "finish", function(env) env.ui.key(3, 1) end)
 end
 
+-- Owner decision 27 September 2026: Alignment opens a child screen (R06), so
+-- its descriptor names it and K3 reaches the same owner code as E3.
+-- Characterisation of README "Rhythm Doctor" (K3 or E3 on Alignment).
+local function select_alignment(env)
+  local index
+  for i, v in ipairs(DoctorUI.READY_FIELD_IDS) do if v == "alignment" then index = i end end
+  if env.doctor.ready_field ~= index then env.ui.enc(2, index - env.doctor.ready_field) end
+end
+
+function test_ui_adapters_doctor_alignment_opens_r06_on_k3_as_on_e3()
+  with_env({}, function(env)
+    put(env, "ready")
+    local d = by_id(env.adapter:describe("R05", "R05", target("R05")))
+    luaunit.assert_equals(d.alignment.opens, "R06")
+    local r12 = by_id(env.adapter:describe("R12", "R12", target("R12")))
+    luaunit.assert_nil(r12.setup.opens) -- Setup stays a read-only row
+  end)
+  compare_invoke("ready", "R05", "alignment", function(env) select_alignment(env); env.ui.key(3, 1) end)
+  compare_invoke("ready_playing", "R05", "alignment", function(env) select_alignment(env); env.ui.key(3, 1) end)
+  with_env({}, function(env)
+    put(env, "ready")
+    select_alignment(env)
+    env.ui.key(3, 1)
+    luaunit.assert_equals(env.adapter.current_route(), "R06")
+  end)
+end
+
 function test_ui_adapters_doctor_finish_after_enough_audio_reaches_the_owner()
   with_env({}, function(env)
     put(env, "capture")

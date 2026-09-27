@@ -10307,7 +10307,7 @@
       ],
       [
         "Alignment",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "window",
@@ -10338,7 +10338,7 @@
       ],
       [
         "Alignment",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "window",
@@ -10369,7 +10369,7 @@
       ],
       [
         "Alignment",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "window",
@@ -10400,7 +10400,7 @@
       ],
       [
         "Alignment",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "window",
@@ -10431,7 +10431,7 @@
       ],
       [
         "Alignment",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "window",
@@ -11573,27 +11573,27 @@
     "rows": [
       [
         "Output",
-        ">"
+        "OPEN >"
       ],
       [
         "Clock",
-        ">"
+        "OPEN >"
       ],
       [
         "Merge Shape",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ],
       [
         "Device",
-        ">"
+        "OPEN >"
       ],
       [
         "History",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11608,27 +11608,27 @@
     "rows": [
       [
         "Output",
-        ">"
+        "OPEN >"
       ],
       [
         "Clock",
-        ">"
+        "OPEN >"
       ],
       [
         "Merge Shape",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ],
       [
         "Device",
-        ">"
+        "OPEN >"
       ],
       [
         "History",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11643,27 +11643,27 @@
     "rows": [
       [
         "Output",
-        ">"
+        "OPEN >"
       ],
       [
         "Clock",
-        ">"
+        "OPEN >"
       ],
       [
         "Merge Shape",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ],
       [
         "Device",
-        ">"
+        "OPEN >"
       ],
       [
         "History",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11678,27 +11678,27 @@
     "rows": [
       [
         "Output",
-        ">"
+        "OPEN >"
       ],
       [
         "Clock",
-        ">"
+        "OPEN >"
       ],
       [
         "Merge Shape",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ],
       [
         "Device",
-        ">"
+        "OPEN >"
       ],
       [
         "History",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11713,27 +11713,27 @@
     "rows": [
       [
         "Output",
-        ">"
+        "OPEN >"
       ],
       [
         "Clock",
-        ">"
+        "OPEN >"
       ],
       [
         "Merge Shape",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ],
       [
         "Device",
-        ">"
+        "OPEN >"
       ],
       [
         "History",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11748,27 +11748,27 @@
     "rows": [
       [
         "Output",
-        ">"
+        "OPEN >"
       ],
       [
         "Clock",
-        ">"
+        "OPEN >"
       ],
       [
         "Merge Shape",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ],
       [
         "Device",
-        ">"
+        "OPEN >"
       ],
       [
         "History",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11787,19 +11787,19 @@
       ],
       [
         "Rhythm",
-        ">"
+        "OPEN >"
       ],
       [
         "Phrase",
-        ">"
+        "OPEN >"
       ],
       [
         "Pitch",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11818,19 +11818,19 @@
       ],
       [
         "Rhythm",
-        ">"
+        "OPEN >"
       ],
       [
         "Phrase",
-        ">"
+        "OPEN >"
       ],
       [
         "Pitch",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11849,19 +11849,19 @@
       ],
       [
         "Rhythm",
-        ">"
+        "OPEN >"
       ],
       [
         "Phrase",
-        ">"
+        "OPEN >"
       ],
       [
         "Pitch",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11880,19 +11880,19 @@
       ],
       [
         "Rhythm",
-        ">"
+        "OPEN >"
       ],
       [
         "Phrase",
-        ">"
+        "OPEN >"
       ],
       [
         "Pitch",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11911,19 +11911,19 @@
       ],
       [
         "Rhythm",
-        ">"
+        "OPEN >"
       ],
       [
         "Phrase",
-        ">"
+        "OPEN >"
       ],
       [
         "Pitch",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11958,7 +11958,7 @@
       ],
       [
         "Active result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -11993,7 +11993,7 @@
       ],
       [
         "Active result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12028,7 +12028,7 @@
       ],
       [
         "Active result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12063,7 +12063,7 @@
       ],
       [
         "Active result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12098,7 +12098,7 @@
       ],
       [
         "Active result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12133,7 +12133,7 @@
       ],
       [
         "Active result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12268,7 +12268,7 @@
       ],
       [
         "Reason",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "result",
@@ -12295,7 +12295,7 @@
       ],
       [
         "Reason",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "result",
@@ -12322,7 +12322,7 @@
       ],
       [
         "Reason",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "result",
@@ -12349,7 +12349,7 @@
       ],
       [
         "Reason",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "result",
@@ -12645,11 +12645,11 @@
       ],
       [
         "Target setup",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12672,11 +12672,11 @@
       ],
       [
         "Target setup",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12699,11 +12699,11 @@
       ],
       [
         "Target setup",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12726,11 +12726,11 @@
       ],
       [
         "Target setup",
-        ">"
+        "OPEN >"
       ],
       [
         "Harmony",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12965,15 +12965,15 @@
       ],
       [
         "Tone Map",
-        ">"
+        "OPEN >"
       ],
       [
         "Register",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -12992,15 +12992,15 @@
       ],
       [
         "Tone Map",
-        ">"
+        "OPEN >"
       ],
       [
         "Register",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -13019,15 +13019,15 @@
       ],
       [
         "Tone Map",
-        ">"
+        "OPEN >"
       ],
       [
         "Register",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -13046,15 +13046,15 @@
       ],
       [
         "Tone Map",
-        ">"
+        "OPEN >"
       ],
       [
         "Register",
-        ">"
+        "OPEN >"
       ],
       [
         "Result",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "garden",
@@ -13305,7 +13305,7 @@
       ],
       [
         "Source chain",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "choir",
@@ -13340,7 +13340,7 @@
       ],
       [
         "Source chain",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "choir",
@@ -13375,7 +13375,7 @@
       ],
       [
         "Source chain",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "choir",
@@ -13410,7 +13410,7 @@
       ],
       [
         "Source chain",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "choir",
@@ -13445,7 +13445,7 @@
       ],
       [
         "Source chain",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "choir",
@@ -13480,7 +13480,7 @@
       ],
       [
         "Source chain",
-        ">"
+        "OPEN >"
       ]
     ],
     "art": "choir",

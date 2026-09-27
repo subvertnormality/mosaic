@@ -873,7 +873,7 @@
     <div class="command-text"><strong>Rhythm Doctor (stopped only):</strong> Select column 16, row 2. Row 2: column 1 Record; column 2 reserved; columns 3–5 select BD, SD, CYM (hats and cymbals). Columns 6 and 7 are inert. Starting Mosaic stops an unfinished capture/analysis and clears its paint preview.</div>
   </div>
   <div class="command">
-    <div class="command-text"><strong>Rhythm Doctor setup and paint:</strong> Before capture, E2 selects Auto/Manual tempo, manual BPM, or Stereo/L/R and E3 edits; K2 discards the setup draft and K3 keeps it. With a ready bank, E2/E3 select/edit bar or step window, lane sensitivity, paint policy, and alignment. Paint (16,8) previews then commits; Cancel (14,8) discards; Shift/Reset/Shift are 10/11/12,8 during preview.</div>
+    <div class="command-text"><strong>Rhythm Doctor setup and paint:</strong> Before capture, E2 selects Auto/Manual tempo, manual BPM, or Stereo/L/R and E3 edits; K2 discards the setup draft and K3 keeps it. With a ready bank, E2/E3 select/edit bar or step window, lane sensitivity, and paint policy; K3 (or E3) on Alignment opens its draft. Paint (16,8) previews then commits; Cancel (14,8) discards; Shift/Reset/Shift are 10/11/12,8 during preview.</div>
   </div>
   <div class="command">
     <div class="command-text"><strong>Rhythm Doctor availability:</strong> analysis uses a model-free detector Mosaic builds from source on first use, with no downloads or configuration. Without a C compiler it reports <code>ANALYSIS_BACKEND_UNAVAILABLE</code>; the input choice is not audio routing. No analysis quality or performance is claimed.</div>
@@ -953,6 +953,7 @@
           <ul>
             <li>E1: Masks, Trig params, Channel tasks (other pages: open tasks)</li>
             <li>E2: Choose a field or task</li>
+            <li>K3: Open the chosen task or OPEN &gt; row (the last line names it), apply, or confirm</li>
             <li>E3: Adjust values (hold K1 for fine control)</li>
             <li>Step + K2: Clear locks of type based on currently selected page on step</li>
             <li>K1 + K2: Clear all locks of type based on currently selected page on channel</li>
@@ -1035,7 +1036,7 @@
       <div>
         <strong>Channel page order</strong>
         <p>Masks → Trig Locks → Memory → Clock Mods → MIDI Config → Note Dashboard → Merge Shape → Harmony</p>
-        <p>Channel tasks · E2 field · E3 draft · K3 apply or open · K2 back or cancel</p>
+        <p>Channel tasks · Merge Shape and Voice leading list every row · E2 field · E3 draft · K3 opens an OPEN &gt; row, else applies · K2 back or cancel</p>
       </div>
       <div>
         <strong>Foundation</strong>

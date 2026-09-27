@@ -36,8 +36,8 @@ from pathlib import Path
 
 from ui_map import trig_param_cell_label
 
-from frame_oracle import (dashboard_matches, fit, live_header_matches, render, selected_field_matches, variants,
-                          overview_cell_matches)
+from frame_oracle import (OPEN_VALUE, dashboard_matches, fit, live_header_matches, open_footer, render,
+                          selected_field_matches, variants, overview_cell_matches)
 
 SPEC = json.loads((Path(__file__).resolve().parents[3] / "docs/ui-reimplementation/spec.json").read_text())["screens"]
 
@@ -52,10 +52,31 @@ HINTS = {
     "tasks": "E2 CHOOSE  K3 OPEN", "read_only": "E1 TASKS", "doctor": "E2 FIELD  E3 SET",
     "confirmation": "K3 CONFIRM  K2 CANCEL", "native": "K1 PARAMS",
 }
+# A row whose K3 opens a child screen (owner decision 27 September 2026).
+OPEN = OPEN_VALUE
+
+
+def hints(sid):
+    """The screen's own control hints (lib/ui_live.lua FOOTER and its overrides)."""
+    if sid == "N01":
+        # Channel tasks names K1 for the norns parameters (Norns settings is gone).
+        return "K3 OPEN  K1 PARAMS"
+    return HINTS[SPEC[sid]["profile"]]
+
+
+def child_footer(sid, field):
+    """While a child row is selected the footer names it: K3 OPEN <LABEL>, then
+    the screen's other hints that fit (frame_oracle.open_footer)."""
+    if field and len(field) == 2 and field[1] == OPEN:
+        return open_footer(field[0], hints(sid))
+    return None
+
+
 # lib/ui_render.lua: the line LAYOUT OVERFLOW would be painted on, per layout.
 OVERFLOW_Y = {"overview_masks": 53, "overview_params": 53, "pattern64": 17, "detail": 17, "focused": 55,
               "dashboard": 7}
-FOOTER_ROWS = range(56, 64)
+# Row 56 is the bottom edge of a selected second-row overview cell's outline.
+FOOTER_ROWS = range(57, 64)
 START, END = object(), object()
 # The pattern editor's scope names the edited pattern before the viewed channel.
 PAT = "PAT01 CH01"
@@ -131,8 +152,7 @@ class Sweep:
         entry = SPEC[sid]
         layout = entry["live_render"]["layout"]
         if footer is None:
-            # Channel tasks names K1 for the norns parameters (Norns settings is gone).
-            footer = "K3 OPEN  K1 PARAMS" if sid == "N01" else HINTS[entry["profile"]]
+            footer = child_footer(sid, field) or hints(sid)
         # Idle autosave may announce itself on any screen (M-TOOLTIP-002).
         footers = [footer] + list(tips) + ["Autosaved"]
         if layout == "dashboard":
@@ -216,21 +236,21 @@ def live_ui_sweep(c):
     ui.tap_control("channel_editor")
     sw.screen("C01", field=("Note", "X"), tips=("Channel Editor",))
     c.enc(1, 1)
-    sw.screen("N01", field=("Masks", ""), tips=("Channel Editor",))
+    sw.screen("N01", field=("Masks", OPEN), tips=("Channel Editor",))
     # Norns settings (N04) left the list (owner, 25 September 2026): its footer names K1.
     rows = ["Masks", "Trig params", "Output", "Harmony", "Clock", "Merge modes", "Device", "History",
             "Merge Shape"]
     e2(c, -12)
     for index, label in enumerate(rows):
-        sw.screen("N01", field=(label, ""), tips=("Channel Editor",))
+        sw.screen("N01", field=(label, OPEN), tips=("Channel Editor",))
         e2(c, 1)
     e2(c, 1)  # clamps on the last row
-    sw.screen("N01", field=("Merge Shape", ""), tips=("Channel Editor",))
+    sw.screen("N01", field=("Merge Shape", OPEN), tips=("Channel Editor",))
 
     channel_task(c, "output")
     sw.screen("C06", rows=C06_NO_EVENT)
     channel_task(c, "harmony")
-    sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
+    sw.screen("H01", field=("Mode", "OFF"))
     channel_task(c, "clock")
     sw.screen("C04", field=("Rate", "/1"), footer=(START, "Swing type"))
     channel_task(c, "merge")
@@ -242,7 +262,7 @@ def live_ui_sweep(c):
     channel_task(c, "history")
     sw.screen("C03", field=("Position", "0 of 0"))
     channel_task(c, "merge_shape")
-    sw.screen("M02", field=("Mode", "OFF"), footer=(START, "Rhythm"))
+    sw.screen("M02", field=("Mode", "OFF"))
     channel_screens(c, sw)
     merge_screens(c, sw)
     harmony_screens(c, sw)
@@ -278,7 +298,9 @@ def walk(c, sw, sid, fields, labels=None, visits=None, top=False, **kw):
     for n, label in enumerate(visits or [label for label, _ in fields]):
         if n:
             e2(c, 1)
-        sw.screen(sid, field=(label, values.get(label)), footer=kw.get("footer") or neighbours(sid, labels, label),
+        field = (label, values.get(label))
+        footer = kw.get("footer") or child_footer(sid, field) or neighbours(sid, labels, label)
+        sw.screen(sid, field=field, footer=footer,
                   **{k: v for k, v in kw.items() if k != "footer"})
 
 
@@ -318,7 +340,7 @@ def channel_screens(c, sw):
     sw.screen("C05", field=("MIDI port", "OUT 1"))
     sw.row(36, "MIDI channel", "CC1")
     # Assignment picker (C07) and a long parameter name on the Trig params
-    # overview: the cell shows the short name; the full value line names it whole.
+    # overview: the cell shows the device's two short descriptors, static.
     channel_task(c, "trig_params")
     c.key(2)
     sw.screen("C07", field=("None", ""))
@@ -330,7 +352,8 @@ def channel_screens(c, sw):
     c.key(3)
     c.key(2)
     sw.screen("C02", field=("Quantised Fixed Note", "X"))
-    # The cell names both parts of the short name, QUAN + NOTE, title-cased (it scrolls).
+    # The cell shows QUAN above the value and NOTE below, title-cased like the old
+    # dial and never scrolled (owner decision 27 September 2026).
     sw.cell("overview_params", 1, trig_param_cell_label("QUAN", "NOTE"), "X")
 
 
@@ -347,19 +370,19 @@ C06_NO_EVENT = [("Note", "NO EVENT"), ("Vel / Len", "NO EVENT"), ("Step", "NO EV
 
 def merge_screens(c, sw):
     channel_task(c, "merge_shape")
-    shape = [("Mode", "OFF"), ("Rhythm", ">"), ("Phrase", ">"), ("Pitch", ">"), ("Result", ">")]
+    shape = [("Mode", "OFF"), ("Rhythm", OPEN), ("Phrase", OPEN), ("Pitch", OPEN), ("Result", OPEN)]
     labels = [label for label, _ in shape]
     walk(c, sw, "M02", shape)
     e2(c, -3); c.key(3)
-    rhythm = [("Anchor", "NONE"), ("Add amount", "100"), ("Amount detail", ">"), ("Add accent", "70"),
-              ("Anchor gap", "0"), ("Seed", "0"), ("Interlock", ">")]
+    rhythm = [("Anchor", "NONE"), ("Add amount", "100"), ("Amount detail", OPEN), ("Add accent", "70"),
+              ("Anchor gap", "0"), ("Seed", "0"), ("Interlock", OPEN)]
     walk(c, sw, "M03", rhythm)
     rlabels = [label for label, _ in rhythm]
     # Interlock (M16, plan docs/musical-merge-extensions-plan.md §5): no leader.
     c.key(3)
     walk(c, sw, "M16", [("Leader", "OFF"), ("Window", "0"), ("Status", "OFF")])
     c.key(2)
-    sw.screen("M03", field=("Interlock", ">"), footer=neighbours("M03", rlabels, "Interlock"))
+    sw.screen("M03", field=("Interlock", OPEN))
     e2(c, -1)
     # Minimum seed clamps; the anchor gap reaches its maximum 8; the amount
     # stays at its maximum 100. Each stays whole in the value region.
@@ -372,78 +395,78 @@ def merge_screens(c, sw):
     e2(c, 1); c.key(3)
     walk(c, sw, "M12", [("Add amount", "100"), ("Eligible", "0"), ("Admitted", "0")])
     c.key(2)
-    sw.screen("M03", field=("Amount detail", ">"), footer=neighbours("M03", rlabels, "Amount detail"))
+    sw.screen("M03", field=("Amount detail", OPEN))
     # K2 with a dirty draft discards it and returns to the root's launching row.
     c.key(2)
-    sw.screen("M02", field=("Rhythm", ">"), footer=neighbours("M02", labels, "Rhythm"))
+    sw.screen("M02", field=("Rhythm", OPEN))
     e2(c, 1); c.key(3)
     walk(c, sw, "M06", [("Cycles", "1"), ("Shape", "FLAT"), ("Cycle 1", "100"), ("Variation", "FIXED")])
     c.key(2)
-    sw.screen("M02", field=("Phrase", ">"), footer=neighbours("M02", labels, "Phrase"))
+    sw.screen("M02", field=("Phrase", OPEN))
     e2(c, 1); c.key(3)
-    pitch = [("Keep anchor", BOOLEAN_FALSE), ("Add target", "LEGACY"), ("Target setup", ">"), ("Structure", ">"),
-             ("Voice leading", ">")]
+    pitch = [("Keep anchor", BOOLEAN_FALSE), ("Add target", "LEGACY"), ("Target setup", OPEN), ("Structure", OPEN),
+             ("Voice leading", OPEN)]
     walk(c, sw, "M07", pitch)
     # Structure (M18): markers Off hide the chord group.
     e2(c, -1); c.key(3)
     walk(c, sw, "M18", [("Markers", "OFF")])
     c.key(2)
-    sw.screen("M07", field=("Structure", ">"), footer=neighbours("M07", [l for l, _ in pitch], "Structure"))
+    sw.screen("M07", field=("Structure", OPEN))
     e2(c, -1); c.key(3)
     walk(c, sw, "M13", [("Target", "LEGACY"), ("Scope", "ADDITIONS")])
     c.key(2)
-    sw.screen("M07", field=("Target setup", ">"), footer=neighbours("M07", [l for l, _ in pitch], "Target setup"))
+    sw.screen("M07", field=("Target setup", OPEN))
     c.key(2)
-    sw.screen("M02", field=("Pitch", ">"), footer=neighbours("M02", labels, "Pitch"))
+    sw.screen("M02", field=("Pitch", OPEN))
     # M09 is not observable: the merge-mode short press shows it and its
     # release hides it within the same grid event (see ACCEPTANCE.md).
     # Result and its Reason are read-only; K2 backs out through the editor.
     e2(c, 1); c.key(3)
-    walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", ">")])
+    walk(c, sw, "M05", [("Step", "1"), ("Role", "EMPTY"), ("Decision", "LEGACY"), ("Reason", OPEN)])
     c.key(3)
     # Merge reason is information only: one dashboard of six rows.
     # Role names its sources; Interlock has its own row (review D9, plan §3).
     sw.screen("M14", rows=[("Step", "1"), ("Role", "EMPTY"), ("Decision", "ADMITTED"), ("Interlock", "OFF"),
                            ("Velocity", "NONE"), ("Pitch target", "LEGACY")])
     c.key(2)
-    sw.screen("M05", field=("Reason", ">"))
+    sw.screen("M05", field=("Reason", OPEN))
     c.key(2)
-    sw.screen("M02", field=("Result", ">"), footer=("Pitch", END))
+    sw.screen("M02", field=("Result", OPEN))
     # Mode Fragments (plan §5): Rhythm opens Fragments (M15), whose Anchor row
     # appears only with Keep anchor. K2 cancels the staged draft.
     e2(c, -4); c.enc(3, 2)
-    sw.screen("M02", field=("Mode", "FRAGMENTS"), footer=(START, "Rhythm"))
+    sw.screen("M02", field=("Mode", "FRAGMENTS"))
     e2(c, 1); c.key(3)
     walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", BOOLEAN_FALSE), ("Seed", "0")], top=True)
     e2(c, -1); c.enc(3, 1)
     walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", "ON"), ("Anchor", "NONE"), ("Seed", "0")], top=True)
     c.key(2)
     c.enc(1, 1)
-    sw.screen("N01", field=("Merge Shape", ""))
+    sw.screen("N01", field=("Merge Shape", OPEN))
 
 
 def harmony_screens(c, sw):
     channel_task(c, "harmony")
-    root = [("Mode", "OFF"), ("Group", "NOT USED"), ("Preset", "NOT USED"), ("Register", ">"), ("Bass", ">"),
-            ("Groups", ">"), ("Rules", ">"), ("Entry", ">"), ("Result", ">")]
+    root = [("Mode", "OFF"), ("Group", "NOT USED"), ("Preset", "NOT USED"), ("Register", OPEN), ("Bass", OPEN),
+            ("Groups", OPEN), ("Rules", OPEN), ("Entry", OPEN), ("Result", OPEN)]
     labels = [label for label, _ in root]
     walk(c, sw, "H01", root)
     e2(c, -5); c.key(3)
     walk(c, sw, "H02", [("Role", "V1"), ("Low", "24"), ("High", "60"), ("Centre", "48"), ("Preferred leap", "12"),
                         ("Strict leap", BOOLEAN_FALSE)])
     c.key(2)
-    sw.screen("H01", field=("Register", ">"), footer=neighbours("H01", labels, "Register"))
+    sw.screen("H01", field=("Register", OPEN))
     e2(c, 1); c.key(3)
     # NEAREST sits at the 70 px art boundary: whole in the value region.
     walk(c, sw, "H03", [("Mode", "ROOT"), ("Direction", "NEAREST"), ("Strict direction", BOOLEAN_FALSE),
-                        ("Pedal pitch", "48"), ("Non-chord pedal", BOOLEAN_FALSE), ("Bass register", ">")])
+                        ("Pedal pitch", "48"), ("Non-chord pedal", BOOLEAN_FALSE), ("Bass register", OPEN)])
     c.key(2)
     e2(c, 2); c.key(3)
     rules = [("Crossing", BOOLEAN_FALSE), ("Pitch-class doubling", "FIXED INPUT"), ("Exact unison", BOOLEAN_FALSE),
              ("Common tones", "ON"), ("Upper spacing", "12"), ("Bass separation", "5"), ("Coverage", "FIXED INPUT")]
     walk(c, sw, "H08", rules)
     c.key(2)
-    sw.screen("H01", field=("Rules", ">"), footer=neighbours("H01", labels, "Rules"))
+    sw.screen("H01", field=("Rules", OPEN))
     e2(c, 1); c.key(3)
     walk(c, sw, "H09", [("Start", "ANCHOR"), ("Song transition", "ANCHOR"), ("Same-slot repeat", "CONTINUE"),
                         ("Failure fallback", "SILENCE"), ("Absolute pitch", "PIN")])
@@ -453,31 +476,31 @@ def harmony_screens(c, sw):
     e2(c, -2); c.key(3)
     walk(c, sw, "H04", [("Group", "1"), ("Create group", ">")])
     c.key(3)
-    group = [("Group", "1"), ("Create group", ">"), ("Four-part smooth", ">"), ("Members", ">"), ("Source", ">"),
-             ("Policies", ">"), ("Entry", ">"), ("Result", ">"), ("Delete group", ">")]
+    group = [("Group", "1"), ("Create group", ">"), ("Four-part smooth", ">"), ("Members", OPEN), ("Source", OPEN),
+             ("Policies", OPEN), ("Entry", OPEN), ("Result", OPEN), ("Delete group", ">")]
     sw.screen("H04", field=("Create group", ">"))
     e2(c, -1); c.key(3)
     sw.screen("H04", field=("Group", "1"), tips=("APPLIED",))
     e2(c, 3); c.key(3)
     walk(c, sw, "H07", [("Voice count", "1"), ("bass", "1"), ("Group enabled", BOOLEAN_FALSE)], tips=("APPLIED",))
     c.key(2)
-    sw.screen("H04", field=("Members", ">"), tips=("APPLIED",))
+    sw.screen("H04", field=("Members", OPEN), tips=("APPLIED",))
     e2(c, 1); c.key(3)
     # A long raw value keeps its whole width; the label shrinks.
     walk(c, sw, "H10", [("Source kind", "GLOBAL_EFFECTIVE"), ("Template count", "1"), ("Root offset", "0"),
                         ("Required 1", "ON")])
     c.key(2)
-    sw.screen("H04", field=("Source", ">"))
+    sw.screen("H04", field=("Source", OPEN))
     e2(c, 1); c.key(3)
     walk(c, sw, "H08", top=True, fields=[("Crossing", BOOLEAN_FALSE), ("Pitch-class doubling", "ON"), ("Exact unison", BOOLEAN_FALSE),
-                        ("Common tones", "ON"), ("Upper spacing", "12"), ("Bass separation", "5"), ("Coverage", ">")])
+                        ("Common tones", "ON"), ("Upper spacing", "12"), ("Bass separation", "5"), ("Coverage", OPEN)])
     c.key(2)
-    sw.screen("H04", field=("Policies", ">"))
+    sw.screen("H04", field=("Policies", OPEN))
     e2(c, 1); c.key(3)
     walk(c, sw, "H09", [("Start", "ANCHOR"), ("Song transition", "ANCHOR"), ("Same-slot repeat", "CONTINUE"),
                         ("Failure fallback", "SILENCE")])
     c.key(2)
-    sw.screen("H04", field=("Entry", ">"))
+    sw.screen("H04", field=("Entry", OPEN))
     e2(c, 2); c.key(3)
     # A question owns E2/E3 (K3 CONFIRM  K2 CANCEL); the first row stays selected.
     sw.screen("H17", field=("Delete group", "1"))
@@ -486,18 +509,18 @@ def harmony_screens(c, sw):
     c.key(2)
     sw.screen("H04", field=("Delete group", ">"))
     c.key(2)
-    sw.screen("H01", field=("Groups", ">"), footer=neighbours("H01", labels, "Groups"))
+    sw.screen("H01", field=("Groups", OPEN))
     # Result (detail): Step, Status and one planned > sent row per voice; K2 backs out
     # to Voice leading.
     e2(c, 3); c.key(3)
     walk(c, sw, "H05", top=True, fields=[("Step", "1"), ("Status", "NO EVENT"), ("CH1", "NO EVENT")])
     c.key(2)
-    sw.screen("H01", field=("Result", ">"), footer=("Entry", END))
+    sw.screen("H01", field=("Result", OPEN))
     # Pattern mode adds Tone Map, whose reset asks a question.
     e2(c, -12)
     c.enc(3, 2)
-    pattern = [("Mode", "PATTERN"), ("Group", "NOT USED"), ("Preset", "SMOOTH"), ("Tone Map", ">"), ("Register", ">"),
-               ("Bass", ">"), ("Groups", ">"), ("Rules", ">"), ("Entry", ">"), ("Result", ">")]
+    pattern = [("Mode", "PATTERN"), ("Group", "NOT USED"), ("Preset", "SMOOTH"), ("Tone Map", OPEN), ("Register", OPEN),
+               ("Bass", OPEN), ("Groups", OPEN), ("Rules", OPEN), ("Entry", OPEN), ("Result", OPEN)]
     walk(c, sw, "H01", pattern)
     e2(c, -6); c.key(3)
     walk(c, sw, "H11", [("Tone 0", "RAW"), ("Tone 1", "RAW"), ("Tone 2", "RAW"), ("Tone 3", "RAW"), ("Reset map", ">")])
@@ -508,11 +531,11 @@ def harmony_screens(c, sw):
     sw.screen("H11", field=("Reset map", ">"), footer=("Tone 3", END))
     c.key(2)
     # K2 with the unapplied mode change discards it: Mode is OFF again.
-    sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
+    sw.screen("H01", field=("Mode", "OFF"))
     # From the clean root one E1 detent leaves for Channel tasks, also after a
     # cancelled Reset map question (its return frame is spent).
     c.enc(1, 1)
-    sw.screen("N01", field=("Harmony", ""))
+    sw.screen("N01", field=("Harmony", OPEN))
 
 
 def scale_screens(c, sw):
@@ -528,9 +551,9 @@ def scale_screens(c, sw):
          scope="SLOT 01")
     c.enc(1, 1)
     # E1 opens Scale tasks on the Scale row; Channel view is no longer a Scale task.
-    sw.screen("N02", scope="SLOT 01", field=("Scale", ""))
+    sw.screen("N02", scope="SLOT 01", field=("Scale", OPEN))
     tasks = ["Scale", "Scale clock", "Overview"]
-    walk(c, sw, "N02", [(t, "") for t in tasks], top=True, scope="SLOT 01")
+    walk(c, sw, "N02", [(t, OPEN) for t in tasks], top=True, scope="SLOT 01")
     task(c, "Scale", "scale_clock")
     # Scale clock is a detail screen: every row shows; the owner's E2 stays on Rate.
     sw.screen("S02", field=("Rate", "/1"), scope="SLOT 01")
@@ -557,7 +580,7 @@ def song_screens(c, sw):
     task(c, "Song", "channel_view")
     sw.screen("P05", scope="SONG 01")
     c.enc(1, 1)
-    walk(c, sw, "N05", [(t, "") for t in ("Playback", "Slot setup", "Tempo / feel", "Channel view")],
+    walk(c, sw, "N05", [(t, OPEN) for t in ("Playback", "Slot setup", "Tempo / feel", "Channel view")],
          top=True, scope="SONG 01")
 
 
@@ -565,7 +588,7 @@ def pattern_screens(c, sw):
     c.ui.tap_control("pattern_editor")
     sw.screen("P01", scope=PAT, tips=("Trig Editor",))
     c.enc(1, 1)
-    walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Algorithm", "Channel view")], top=True)
+    walk(c, sw, "N03", [(t, OPEN) for t in ("Pattern", "Options", "Algorithm", "Channel view")], top=True)
     task(c, "Trig", "options")
     # Trig options has one field (so its footer is the control hints); E2 moves
     # nothing, never the Trig viewer's channel.
@@ -611,7 +634,7 @@ def pattern_screens(c, sw):
     c.tap(16, 2)
     sw.screen("R01", field=("Record", "READY"), footer=(START, "Tempo"), tips=("Rhythm Doctor selected",))
     c.enc(1, 1)
-    walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Options", "Algorithm", "Channel view", "Rhythm Doctor")],
+    walk(c, sw, "N03", [(t, OPEN) for t in ("Pattern", "Options", "Algorithm", "Channel view", "Rhythm Doctor")],
          top=True, tips=("Rhythm Doctor selected",))
     # K3 on the Rhythm Doctor row opens R01.
     c.key(3)
@@ -622,7 +645,7 @@ def pattern_screens(c, sw):
     c.ui.tap_control("pattern_editor")
     sw.screen("P03", scope=PAT, tips=("Note Editor",))
     c.enc(1, 1)
-    walk(c, sw, "N03", [(t, "") for t in ("Pattern", "Channel view")], top=True)
+    walk(c, sw, "N03", [(t, OPEN) for t in ("Pattern", "Channel view")], top=True)
     e2(c, -3); c.key(3)
     sw.screen("P03", scope=PAT)
     c.ui.tap_control("pattern_editor")

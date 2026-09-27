@@ -355,3 +355,31 @@ function test_ui_adapters_harmony_snapshot_variants_read_one_immutable_event()
   luaunit.assert_equals(adapter:describe("H18", "snapshot:H18",
     {source_route = "snapshot:H18", snapshot = ui_adapters.spec}).code, "foreign_snapshot")
 end
+
+-- Owner decision 27 September 2026: a row whose K3 opens a child screen names
+-- it (`opens`); a row whose K3 performs an action (create, preset, a route to
+-- a Delete/Reset question, a confirmation) does not.
+local function opens(outcome)
+  local result = {}
+  for _, d in ipairs(outcome.descriptors) do result[d.id] = d.opens or false end
+  return result
+end
+
+function test_ui_adapters_harmony_child_rows_name_the_screen_they_open_and_actions_do_not()
+  local adapter, editor = fresh()
+  editor.draft.mode = "pattern"
+  local _, root = assert_parity(adapter, editor)
+  luaunit.assert_equals(opens(root), {mode = false, group = false, preset = false, tone_map = "H11",
+    register = "H02", bass = "H03", groups = "H04", rules = "H08", entry = "H09", result = "H05"})
+  invoke(adapter, editor, "groups")
+  invoke(adapter, editor, "create_group")
+  local _, group = assert_parity(adapter, editor)
+  luaunit.assert_equals(opens(group), {group = false, create_group = false, four_part_smooth = false,
+    members = "H07", source = "H10", policies = "H08", entry = "H09", result = "H05", delete_group = false})
+  invoke(adapter, editor, "delete_group")
+  local _, question = assert_parity(adapter, editor)
+  for id, value in pairs(opens(question)) do luaunit.assert_false(value, id) end
+  editor:encoder_one(); editor.draft.mode = "pattern"; invoke(adapter, editor, "tone_map")
+  local _, map = assert_parity(adapter, editor)
+  luaunit.assert_false(opens(map).reset_map)
+end

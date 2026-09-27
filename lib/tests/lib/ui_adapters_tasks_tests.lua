@@ -118,3 +118,17 @@ function test_ui_adapters_tasks_refuses_a_stale_generation()
   luaunit.assert_false(outcome.ok)
   luaunit.assert_equals(outcome.code, "stale_generation")
 end
+
+-- Owner decision 27 September 2026: every task row opens a screen on K3, so
+-- its descriptor names it (`opens`) and the live UI shows OPEN >.
+function test_ui_adapters_tasks_every_row_names_the_screen_it_opens()
+  local adapter = tasks_factory(ui_adapters, {state = function() return {algorithm = 5} end})
+  for _, route in ipairs({"N01", "N02", "N05", "M01"}) do
+    for _, d in ipairs(describe(adapter, route).descriptors) do
+      luaunit.assert_equals(d.opens, d.domain.destination, route .. " " .. d.id)
+      luaunit.assert_not_nil(d.opens, route .. " " .. d.id)
+    end
+  end
+  local trig = describe(adapter, "N03", {context = "Trig"})
+  luaunit.assert_equals(trig.descriptors[1].opens, "P01")
+end

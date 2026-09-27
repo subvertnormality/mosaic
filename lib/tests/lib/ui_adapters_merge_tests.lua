@@ -376,3 +376,27 @@ function test_ui_adapters_merge_chord_group_source_lists_enabled_groups()
   luaunit.assert_true(adapter:edit("group_id", 1, target(editor), editor.generation).ok)
   luaunit.assert_equals(editor.draft.target.group_id, 2)
 end
+
+-- Owner decision 27 September 2026: a row whose K3 opens a child screen says
+-- so (the live UI shows OPEN > and names it in the footer). The descriptor
+-- names the screen it opens; every other row has no `opens`.
+local function opens(outcome)
+  local result = {}
+  for _, d in ipairs(outcome.descriptors) do result[d.id] = d.opens or false end
+  return result
+end
+
+function test_ui_adapters_merge_child_rows_name_the_screen_they_open()
+  local adapter, editor = fresh({1, 2})
+  luaunit.assert_equals(opens(assert_parity(adapter, editor)),
+    {mode = false, rhythm = "M03", phrase = "M06", pitch = "M07", result = "M05"})
+  open_id(adapter, editor, "rhythm")
+  luaunit.assert_equals(opens(assert_parity(adapter, editor)),
+    {anchor = false, add_amount = false, amount_detail = "M12", add_accent = false, anchor_gap = false, seed = false, interlock = "M16"})
+  editor:encoder_one(); open_id(adapter, editor, "pitch")
+  -- Voice leading leaves Merge for the Harmony root: it opens H01 too.
+  luaunit.assert_equals(opens(assert_parity(adapter, editor)),
+    {keep_anchor = false, add_target = false, target_setup = "M13", structure = "M18", harmony = "H01"})
+  editor:encoder_one(); open_id(adapter, editor, "result")
+  luaunit.assert_equals(opens(assert_parity(adapter, editor)).reason, "M14")
+end

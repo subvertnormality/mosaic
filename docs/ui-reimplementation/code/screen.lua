@@ -1,8 +1,10 @@
--- Canonical live screen proto-code. Input is already formatted, read-only ViewModel.
+-- Live screen renderer (docs/ui-reimplementation code/screen.lua). Input is an already
+-- formatted, read-only ViewModel built by lib/ui_live.lua. The caller clears and
+-- updates the screen, so motion overlays can be drawn on top.
 -- No selectors, clocks, random calls, setters or hardware input belong in this module.
 -- draw(v) returns ok,report. It never raises inside redraw: a value that cannot be shown
 -- whole sets ok=false and paints LAYOUT OVERFLOW; the acceptance harness treats that as a fail.
-local art=include('characters')
+local art=include('mosaic/lib/ui_characters')
 local M={}
 local MORE='...' -- value withheld from a cell; the full value is on the same screen's full-width line
 local function text(value,x,y,size,level)
@@ -57,6 +59,13 @@ local function fit(value,w)
  while #v>0 and width8(v..'~')>w do v=v:sub(1,-2) end
  return v..'~'
 end
+-- Overview dial cells never scroll (owner decision 27 September 2026): a label
+-- wider than its room is cut from the end, as the old dial's screen.text_trim did.
+local function trim(value,w)
+ local v=tostring(value or'')
+ while #v>0 and width8(v)>w do v=v:sub(1,-2)end
+ return v
+end
 local function exact(f)return f.kind~='action' and f.kind~='unavailable' end
 local function rect(x,y,w,h,level,outline)
  screen.level(level);screen.rect(x,y,w,h);if outline then screen.stroke()else screen.fill()end
@@ -72,12 +81,11 @@ function M.draw(v)
  local r={ok=true,reasons={},marked={}}
  phase,cut,next_move=type(v)=='table'and v.marquee or nil,false,nil
  local function fail(why)r.ok=false;r.reasons[#r.reasons+1]=why end
- screen.clear()
  if type(v)~='table' or not(v.screen and v.title and v.scope and type(v.fields)=='table' and v.layout)
   or type(v.selected)~='number' or v.selected<1 or v.selected>math.max(1,#v.fields)then
-  fail('model');text('BAD VIEW MODEL',1,36,8,15);screen.update();return false,r
+  fail('model');text('BAD VIEW MODEL',1,36,8,15);return false,r
  end
- local selected=v.fields[v.selected];local L=v.layout;local status_y=55
+ local selected=v.fields[v.selected];local L=v.layout;local status_y=55;local more=false
  -- Selected value on one full-width line: value right-aligned and whole, label shrinks.
  local function value_line(f,y)
   local val=tostring(f.value)
@@ -93,17 +101,25 @@ function M.draw(v)
   local cols=L=='overview_masks'and 4 or 5;local w=cols==4 and 32 or 25
   if #v.fields>cols*2 then fail('overview count')end
   text(fit(v.title,78),1,7,8,15);right(fit(v.scope,45),118,7,9)
+  -- Each cell draws the old dial's three lines 7 px apart: its top label, the
+  -- value and its bottom label (row tops 9 and 33, baselines +6, +13, +20), all
+  -- static. The outline (rows y-1..y+23, columns x-1..x+w-3) keeps a blank
+  -- pixel between it and every glyph, so text owns x+2..x+w-7.
   for k=1,math.min(#v.fields,cols*2)do
-   local f=v.fields[k];local x=((k-1)%cols)*w;local y=9+math.floor((k-1)/cols)*18
-   if k==v.selected then rect(x,y,w-2,17,15,true)end
-   text(fit(f.short_label or f.label,f.marker and w-11 or w-5),x+2,y+7,8,k==v.selected and 15 or 9)
+   local f=v.fields[k];local x=((k-1)%cols)*w;local y=9+math.floor((k-1)/cols)*24
+   local level=k==v.selected and 15 or 9
+   if k==v.selected then rect(x,y,w-2,24,15,true)end
+   text(trim(f.short_label or f.label,f.marker and w-11 or w-6),x+2,y+6,8,level)
    -- A one-letter state marker (S slide, L held lock) owns the cell's top-right corner.
-   if f.marker then rect(x+w-6,y+1,4,7,0);text(f.marker,x+w-6,y+7,8,15)end
+   if f.marker then rect(x+w-8,y+1,4,6,0);text(f.marker,x+w-8,y+6,8,15)end
    local c=tostring(f.compact_value or f.value)
-   if (exact(f)and c:find('~',1,true))or width(c)>w-5 then c=MORE;r.marked[#r.marked+1]=f.id end
-   text(c,x+2,y+15,8,13)
+   if (exact(f)and c:find('~',1,true))or width(c)>w-6 then c=MORE;r.marked[#r.marked+1]=f.id;if k==v.selected then more=true end end
+   text(c,x+2,y+13,8,13)
+   if f.bottom_label and f.bottom_label~=''then text(trim(f.bottom_label,w-6),x+2,y+20,8,level)end
   end
-  status_y=53;if selected then value_line(selected,53)end
+  -- A selected cell showing the more-marker hands the footer row to its
+  -- whole value (label left, value right-aligned).
+  status_y=53;if more then value_line(selected,63)end
  elseif L=='pattern64' then
   text(fit(v.title,126),1,7,8,15);text(fit(v.scope,126),1,17,8,7);status_y=17
   if type(v.cells)~='table' or #v.cells~=64 then fail('cells')else
@@ -173,12 +189,29 @@ function M.draw(v)
  if not r.ok then rect(0,status_y-7,128,9,0);text('LAYOUT OVERFLOW',1,status_y,8,15)end
  -- Exactly one footer owner. No overlapping hints/neighbour labels. A table
  -- footer names the neighbouring fields: left '< prev' (or '| START'), right
- -- 'next >' (or 'END |'), each fitted to its half.
- if type(v.footer)=='table' then
+ -- 'next >' (or 'END |'), each fitted to its half. A {hints} footer (a row
+ -- that opens a child screen: 'K3 OPEN RHYTHM', then the screen's other
+ -- hints, two spaces apart) is drawn whole when it fits. Otherwise the row
+ -- name goes first (owner decision 27 September 2026): the first hint becomes
+ -- its short form ('K3 OPEN') and each later hint is kept only while the line
+ -- still fits.
+ if more then
+ elseif type(v.footer)=='table' and type(v.footer.hints)=='table' then
+  local h=v.footer.hints
+  local line=tostring(h[1] or'')
+  for k=2,#h do line=line..'  '..tostring(h[k])end
+  if width(line)>126 then
+   line=tostring(v.footer.short or h[1] or'')
+   for k=2,#h do
+    local longer=line..'  '..tostring(h[k])
+    if width(longer)<=126 then line=longer end
+   end
+  end
+  text(fit(line,126),1,63,8,9)
+ elseif type(v.footer)=='table' then
   text(fit(v.footer.left or'',61),1,63,8,7)
   right(fit(v.footer.right or'',61),127,63,10)
  else text(fit(v.footer or'',126),1,63,8,9)end
- screen.update()
  -- Whether any text is cut, and in how many marquee ticks one next moves.
  r.cut,r.next_move=cut,next_move
  return r.ok,r

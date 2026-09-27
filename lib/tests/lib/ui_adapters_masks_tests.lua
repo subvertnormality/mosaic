@@ -31,6 +31,24 @@ function test_ui_adapters_masks_describes_the_eight_selectors_as_the_page_shows_
   end)
 end
 
+-- README "Masks": each cell names its mask with the old Masks page's short
+-- names (Vel, Len, Chd1..) so it fits its cell without scrolling (owner decision
+-- 27 September 2026); the whole name stays the descriptor label.
+function test_ui_adapters_masks_cells_use_the_old_short_names()
+  h.isolated(function(env)
+    h.start(env)
+    local d = h.by_id(describe(env, h.adapter(env, "masks"), "C01"))
+    local expected = {trig = {"Trig", "Trig"}, note = {"Note", "Note"}, velocity = {"Vel", "Velocity"},
+      length = {"Len", "Length"}, chord_1 = {"Chd1", "Chord 1"}, chord_2 = {"Chd2", "Chord 2"},
+      chord_3 = {"Chd3", "Chord 3"}, chord_4 = {"Chd4", "Chord 4"}}
+    for id, names in pairs(expected) do
+      luaunit.assert_equals(d[id].short_label, names[1], id)
+      luaunit.assert_equals(d[id].label, names[2], id)
+      luaunit.assert_nil(d[id].bottom_label, id)
+    end
+  end)
+end
+
 function test_ui_adapters_masks_unset_masks_are_inherit_not_zero()
   h.isolated(function(env)
     h.start(env)

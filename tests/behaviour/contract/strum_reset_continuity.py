@@ -3,8 +3,8 @@ def strum_reset_continuity(c):
     from midi_window import MidiWindow
     from note_schedule import assert_schedule
     c.configure();c.ui.hold_control_tap('step','step',1,3);c.ui.turn(1,-4);c.ui.turn(2,3);c.ui.set_value(2)  # unset chord masks start from X
-    # Note Masks shows the selected Chord 1 mask's full label and value.
-    c.ui.expect_selected_field('overview_masks',label='Chord 1',value='3rd');c.results.append(dict(kind='chord-mask-screen',label='3rd',passed=True))
+    # Note Masks shows the selected Chord 1 mask's cell (Chd1) with its value.
+    c.ui.expect_selected_mask('chord_1','3rd');c.results.append(dict(kind='chord-mask-screen',label='3rd',passed=True))
     c.ui.turn(1,3);c.ui.set_value(-11);c.ui.press_key(3);c.ui.turn(1,-2)
     c.ui.assign_trig_parameter_key('chord_note_strum');c.ui.set_value(8)
     for reset in (False,True):

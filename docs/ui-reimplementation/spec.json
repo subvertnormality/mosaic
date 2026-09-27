@@ -4764,7 +4764,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "choir"
       },
@@ -11422,7 +11422,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E2 selects the visible field; E3 edits. K2 cancels the whole draft; K3 on a value applies the whole draft. K3 on an action opens it. E1 cancels/returns to root, then Tasks.",
+      "controls_explanation": "E2 selects the visible field; E3 edits. K2 cancels the whole draft; K3 on a value applies the whole draft. K3 on an action opens it. E1 cancels/returns to root, then Tasks. Shown as a list (detail layout: every row, the selected one marked >; owner decision 27 September 2026) because most rows open child screens (OPEN >).",
       "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Mode Fragments (plan docs/musical-merge-extensions-plan.md §2/§5) replaces the Rhythm route with the Fragments screen (field `fragments`, label Rhythm) and leaves Pitch with only the Voice leading link; Phrase shows Cycles and Variation only.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -11561,7 +11561,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "garden"
       },
@@ -23703,7 +23703,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "6562906956ea359e64383d6a92e241ff66a36ea5b6b8c3b714493d06f4125a79"
+      "sha256": "42b867fea1375344f3fe44bdaa66e724851bd5265c0f2bc2c1a86374c07c754e"
     }
   },
   "guardrails": [

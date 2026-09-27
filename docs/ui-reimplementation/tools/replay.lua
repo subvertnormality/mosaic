@@ -2,12 +2,15 @@
 local root=arg[1] or 'docs/ui-reimplementation'
 local modules={}
 function include(name)
- if not modules[name] then modules[name]=assert(loadfile(root..'/code/'..name..'.lua'))()end
+ if not modules[name] then
+  local path = name == 'mosaic/lib/ui_characters' and 'lib/ui_characters.lua' or (root..'/code/'..name..'.lua')
+  modules[name]=assert(loadfile(path))()
+ end
  return modules[name]
 end
 local ops={};local font=8
 screen={}
-for _,name in ipairs({'clear','level','move','text','text_right','rect','fill','line','stroke','circle','update'})do
+for _,name in ipairs({'clear','level','move','text','text_right','rect','fill','line','stroke','circle','arc','update'})do
  screen[name]=function(...)local row={name,...};for _,v in ipairs(row)do if type(v)=='number'then assert(v==v and math.abs(v)<100000,'nonfinite op')end end;ops[#ops+1]=row end
 end
 function screen.font_size(n)font=n;ops[#ops+1]={'font_size',n}end

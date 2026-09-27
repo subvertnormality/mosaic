@@ -239,6 +239,16 @@ end
 -- browsing it, choosing a lane, changing sensitivity and painting stay
 -- available while the sequencer runs -- which is what the rest of the Trigger
 -- Editor already allows.
+-- E3 or K3 on the READY editor's Alignment row opens the alignment draft
+-- (R06; K3 by owner decision 27 September 2026, as other rows that open a
+-- child screen). Alignment dispatches a re-analysis, which is capture work: it
+-- needs the recorder and replaces the bank the player is looking at.
+local function open_alignment(self)
+  if not stopped(self) then return outcome("STOP_SEQUENCER") end
+  if not begin_alignment(self) then return outcome("ALIGNMENT_UNAVAILABLE") end
+  return outcome("ALIGNMENT_OPENED")
+end
+
 function Adapter:enc(n, d)
   if n ~= 2 and n ~= 3 then return outcome("UNCLAIMED") end
   if not stopped(self) and state_of(self) ~= "READY" then return outcome("STOP_SEQUENCER") end
@@ -294,11 +304,7 @@ function Adapter:enc(n, d)
       touch_window(self)
       return outcome("PAINT_POLICY_UPDATED", { policy = self.paint_policy })
     elseif field == "ALIGNMENT" then
-      -- Alignment dispatches a re-analysis, which is capture work: it needs
-      -- the recorder and replaces the bank the player is looking at.
-      if not stopped(self) then return outcome("STOP_SEQUENCER") end
-      if not begin_alignment(self) then return outcome("ALIGNMENT_UNAVAILABLE") end
-      return outcome("ALIGNMENT_OPENED")
+      return open_alignment(self)
     end
   end
   if not setup_available(self) then return outcome("SETUP_UNAVAILABLE") end
@@ -660,6 +666,9 @@ function Adapter:key(n, z)
   if self.setup_draft then
     if n == 2 then return self:cancel_setup() end
     return self:confirm_setup()
+  end
+  if n == 3 and state_of(self) == "READY" and Adapter.READY_FIELDS[self.ready_field] == "ALIGNMENT" then
+    return open_alignment(self)
   end
   if n == 3 and capture_states[state_of(self)] then
     if self:finish_eligible() ~= true then return outcome("MORE_AUDIO_NEEDED") end

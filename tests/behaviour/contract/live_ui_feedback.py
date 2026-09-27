@@ -527,7 +527,7 @@ def live_ui_merge_shape_trig_mode(c):
     ui.channel_page('merge_shape', channel=1)
     ui.select_row('mode', 0)
     ui.set_value(-1)
-    ui.expect_selected_field('focused', 'Mode', 'OFF', art=True)
+    ui.expect_selected_field('detail', 'Mode', 'OFF')  # Merge Shape is a list
     ui.press_key(3)
     ui.open_channel_task('merge')
     ui.expect_header('merge_detail', channel=1)

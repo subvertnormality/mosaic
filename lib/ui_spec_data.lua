@@ -808,7 +808,7 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "H01",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "choir",
       ["fields"] = {
         "mode",
@@ -1587,7 +1587,7 @@ return {
       ["provider"] = "merge",
       ["existing_route"] = "M01",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "garden",
       ["fields"] = {
         "mode",

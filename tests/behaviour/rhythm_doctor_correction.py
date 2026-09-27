@@ -84,7 +84,9 @@ def refused_correction_is_visible(c):
     for _ in range(4):
         ui.rhythm_doctor_setup_field(DETENT)
         c.elapse(.06)
-    ui.expect_rhythm_doctor_screen("R05", "Alignment", "")
+    # Alignment opens a child screen, so it reads OPEN > and the footer names
+    # what K3 opens (owner decision 27 September 2026).
+    ui.expect_rhythm_doctor_child_row("R05", "Alignment")
     ui.adjust_rhythm_doctor_setup_value(DETENT)
     c.elapse(.08)
     ui.expect_rhythm_doctor_screen("R06", "Half tempo", BANK_BPM)
@@ -115,6 +117,18 @@ def refused_correction_is_visible(c):
     ui.expect_rhythm_doctor_lanes(cym_ready)
     c.results.append(dict(kind="correction-cancelled", state="READY",
                           contract="cancelling a refused correction returns the ready bank"))
+
+    # K3 on Alignment opens a fresh draft from the bank, as E3 does, and K2
+    # discards it again (owner decision 27 September 2026).
+    ui.expect_rhythm_doctor_child_row("R05", "Alignment")
+    ui.rhythm_doctor_key_edge("apply_correction", True); c.elapse(.04)
+    ui.rhythm_doctor_key_edge("apply_correction", False); c.elapse(.12)
+    ui.expect_rhythm_doctor_screen("R06", "Half tempo", BANK_BPM)
+    c.results.append(dict(kind="correction-draft-open-k3", field="HALF TEMPO",
+                          contract="README: K3 on Alignment opens the draft, as E3 does"))
+    ui.rhythm_doctor_key_edge("discard_draft", True)
+    ui.rhythm_doctor_key_edge("discard_draft", False); c.elapse(.1)
+    ui.expect_rhythm_doctor_child_row("R05", "Alignment")
 
 
 def main():

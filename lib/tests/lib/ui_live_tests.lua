@@ -747,6 +747,137 @@ function test_ui_live_harmony_child_route_k3_opens_register_and_k2_returns()
   end)
 end
 
+-- Owner decision 27 September 2026 (device feedback): a row whose K3 opens a
+-- child screen shows OPEN > on the right, and while it is selected the footer
+-- names it (K3 OPEN RHYTHM) beside the screen's other hints that still apply.
+-- A row whose K3 performs an action keeps its wording and the screen's footer.
+-- Characterisation of README "Musical Merge and Voice Leading" (K3 on a row
+-- marked OPEN > opens it) and "Norns Menu Navigation" (task lists).
+local function vm_field(id)
+  for _, f in ipairs(ui_live.view_model().fields) do if f.id == id then return f end end
+end
+
+function test_ui_live_merge_child_rows_show_open_and_the_footer_names_the_selected_one()
+  live.isolated(function()
+    open_task("merge_shape")
+    luaunit.assert_equals(screen(), "M02")
+    choose_task("mode")
+    luaunit.assert_not_equals(vm_field("mode").value, "OPEN >")
+    for _, id in ipairs({"rhythm", "phrase", "pitch", "result"}) do
+      luaunit.assert_equals(vm_field(id).value, "OPEN >", id)
+      luaunit.assert_equals(vm_field(id).kind, "action", id)
+    end
+    -- Merge Shape is a list (owner decision 27 September 2026): on Mode (a
+    -- value) the footer is the screen's own hints, not neighbour labels.
+    luaunit.assert_equals(ui_live.view_model().footer, "E3 SET  K3 APPLY  K2 BACK")
+    choose_task("rhythm")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN RHYTHM", "K2 BACK"}, short = "K3 OPEN"})
+    choose_task("result")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN RESULT", "K2 BACK"}, short = "K3 OPEN"})
+    tap(3)
+    luaunit.assert_equals(screen(), "M05")
+    choose_task("reason")
+    luaunit.assert_equals(vm_field("reason").value, "OPEN >")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN REASON", "E1 TASKS"}, short = "K3 OPEN"})
+    tap(2)
+    choose_task("pitch")
+    tap(3)
+    luaunit.assert_equals(screen(), "M07")
+    choose_task("harmony")
+    luaunit.assert_equals(vm_field("harmony").value, "OPEN >")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN VOICE LEADING", "K2 BACK"}, short = "K3 OPEN"})
+  end)
+end
+
+-- Owner decision 27 September 2026: Merge Shape (M02) and Voice leading (H01)
+-- are mostly rows that open child screens, so they are lists (the detail
+-- layout: rows with the selected one marked >), not one big focused value.
+-- Characterisation of README "Musical Merge and Voice Leading".
+local function drawn_rows(vm)
+  -- `screen` in this file is the router-screen helper: swap the global.
+  local saved = _G.screen
+  local texts, x, y = {}, 0, 0
+  _G.screen = setmetatable({
+    text_extents = function(t) return #tostring(t) * 5, 8 end,
+    move = function(nx, ny) x, y = nx, ny end,
+    text = function(t) texts[#texts + 1] = {x = x, y = y, text = tostring(t)} end,
+    text_right = function(t) texts[#texts + 1] = {x = x, y = y, text = tostring(t), right = true} end,
+  }, {__index = function() return function() end end})
+  local ok, err = xpcall(include("mosaic/lib/ui_render").draw, debug.traceback, vm)
+  _G.screen = saved
+  if not ok then error(err, 0) end
+  local rows = {}
+  for _, t in ipairs(texts) do
+    if t.y >= 27 and t.y <= 54 then
+      rows[t.y] = rows[t.y] or {}
+      if t.text == ">" and t.x == 0 then rows[t.y].selected = true
+      elseif t.right then rows[t.y].value = t.text
+      else rows[t.y].label = t.text end
+    end
+  end
+  return rows
+end
+
+function test_ui_live_merge_shape_and_voice_leading_are_lists()
+  live.isolated(function()
+    open_task("merge_shape")
+    luaunit.assert_equals(screen(), "M02")
+    local vm = ui_live.view_model()
+    luaunit.assert_equals(vm.layout, "detail")
+    luaunit.assert_equals(#vm.fields, 5)
+    luaunit.assert_equals(drawn_rows(vm), {
+      [27] = {selected = true, label = "Mode", value = "OFF"}, [36] = {label = "Rhythm", value = "OPEN >"},
+      [45] = {label = "Phrase", value = "OPEN >"}, [54] = {label = "Pitch", value = "OPEN >"}})
+    choose_task("result")
+    vm = ui_live.view_model()
+    luaunit.assert_equals(drawn_rows(vm)[54], {selected = true, label = "Result", value = "OPEN >"})
+    luaunit.assert_nil(vm.dial)
+
+    open_task("harmony")
+    luaunit.assert_equals(screen(), "H01")
+    vm = ui_live.view_model()
+    luaunit.assert_equals(vm.layout, "detail")
+    luaunit.assert_equals(vm.footer, "E3 SET  K3 APPLY  K2 BACK")
+    luaunit.assert_equals(drawn_rows(vm)[27], {selected = true, label = "Mode", value = "OFF"})
+    choose_task("register")
+    luaunit.assert_equals(ui_live.view_model().footer.hints[1], "K3 OPEN REGISTER")
+  end)
+end
+
+function test_ui_live_harmony_action_rows_keep_their_wording_and_footer()
+  live.isolated(function()
+    open_task("harmony")
+    choose_task("groups")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN GROUPS", "K2 BACK"}, short = "K3 OPEN"})
+    tap(3)
+    luaunit.assert_equals(screen(), "H04")
+    choose_task("create_group")
+    luaunit.assert_equals(vm_field("create_group").value, ">")
+    luaunit.assert_equals(ui_live.view_model().footer, "E3 SET  K3 APPLY  K2 BACK")
+    tap(3) -- creates group 1
+    luaunit.assert_equals(vm_field("four_part_smooth").value, ">")
+    luaunit.assert_equals(vm_field("delete_group").value, ">")
+    for _, id in ipairs({"members", "source", "policies", "entry", "result"}) do
+      luaunit.assert_equals(vm_field(id).value, "OPEN >", id)
+    end
+    choose_task("delete_group")
+    luaunit.assert_equals(ui_live.view_model().footer, "E3 SET  K3 APPLY  K2 BACK")
+    choose_task("members")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN MEMBERS", "K2 BACK"}, short = "K3 OPEN"})
+  end)
+end
+
+function test_ui_live_task_rows_show_open_and_the_footer_names_the_chosen_task()
+  live.isolated(function()
+    ui.enc(1, 1)
+    luaunit.assert_equals(screen(), "N01")
+    for _, f in ipairs(ui_live.view_model().fields) do luaunit.assert_equals(f.value, "OPEN >", f.id) end
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN MASKS", "K1 PARAMS"}, short = "K3 OPEN"})
+    choose_task("merge_shape")
+    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN MERGE SHAPE", "K1 PARAMS"}, short = "K3 OPEN"})
+  end)
+end
+
 -- Grid outcomes (page buttons) --------------------------------------------------------------
 
 local function press_page(page, flow_id, extra)
@@ -995,4 +1126,32 @@ function test_ui_live_doctor_dispatch_reaches_the_trig_page_encoder_and_key_once
     restore_enc(); restore_key()
     if not ok then error(err, 0) end
   end, {before_ui = live.load_real_trigger_page})
+end
+
+-- Owner decision 27 September 2026: on the READY editor (R05) the Alignment row
+-- opens a child screen, so it shows OPEN >, the footer names it, and K3 opens
+-- the alignment draft (R06) as E3 does (README "Rhythm Doctor").
+function test_ui_live_doctor_alignment_row_shows_open_and_k3_opens_it()
+  local saved_time = util.time
+  util.time = function() return 0 end -- the Doctor's window art keeps time
+  live.isolated(function(env)
+    local doctor = fake_doctor()
+    doctor.runtime.machine = {state = "READY", bank = {bpm = 120, timeline_cells = 64, window_start = 0,
+      source = {beat_positions = {1, 2, 3}}, sensitivities = {BD = 0.5, SD = 0.5, CYM = 0.5},
+      lanes = {BD = {}, SD = {}, CYM = {}}}}
+    trigger_edit_page.set_rhythm_doctor(doctor)
+    press_page(pages.pages.trigger_edit_page, "G03")
+    live.press_trigger_page(16, 2)
+    ui_live.grid_outcome("G23")
+    luaunit.assert_equals(screen(), "R05")
+    for _ = 1, 4 do ui.enc(2, 1) end
+    luaunit.assert_equals(ui_live.state().field_id, "alignment")
+    luaunit.assert_equals(vm_field("alignment").value, "OPEN >")
+    tooltip.text = false -- past the 3 s tip that announced the algorithm
+    luaunit.assert_equals(ui_live.view_model().footer.hints, {"K3 OPEN ALIGNMENT", "E2 FIELD"})
+    tap(3)
+    luaunit.assert_equals(screen(), "R06")
+    luaunit.assert_true(doctor.alignment_draft ~= nil)
+  end, {before_ui = live.load_real_trigger_page})
+  util.time = saved_time
 end

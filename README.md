@@ -349,18 +349,18 @@ The Norns screen follows the grid. Press a global menu button and the screen sho
 
 <img alt="Norns Note Masks screen" src="images/norns/note-masks.png" width="384" />
 
-Every screen has the same parts. The title row names the screen and its scope: the channel (`CH03`), the song slot when it is not the first (`S02`), and any held steps (`ST05` for one step, `3ST` for several). A Channel screen also shows `MUTE` when the channel is muted, its octave when it is not 0 (`OCT+1`), and a held step's octave lock (`O-1`); the pattern editor names the pattern it edits before the channel it shows (`PAT02 CH01`). The selected field is outlined or marked with `>`, and its whole value is always shown, on the bottom line of a grid of fields or in large type on a single-field screen. The last line lists the controls for the screen, or shows a tooltip after a grid action. A grid action brings up the screen that shows what it changed, with that value chosen: a merge button or a pattern assignment shows Merge modes (where E2 and E3 also change the trig, note, velocity and length merge modes, including the pattern-priority ones), a channel scale lock shows Scale source, global transposition and scale-track locks show Scale overview, and the song length fader shows Song playback. K2 or E1 then carries on from there. Screens that only show information, such as Scale overview, Song playback and Paint preview, list every value at once with no cursor. The four small tiles at the right of the title row are _Mosaic_'s mark; they light up in turn when something changes.
+Every screen has the same parts. The title row names the screen and its scope: the channel (`CH03`), the song slot when it is not the first (`S02`), and any held steps (`ST05` for one step, `3ST` for several). A Channel screen also shows `MUTE` when the channel is muted, its octave when it is not 0 (`OCT+1`), and a held step's octave lock (`O-1`); the pattern editor names the pattern it edits before the channel it shows (`PAT02 CH01`). The selected field is outlined or marked with `>`, and its whole value is always shown: in its cell on a grid of fields (on the last line instead, beside its full name, when the cell is too narrow and shows `...`), or in large type on a single-field screen. The last line lists the controls for the screen, or shows a tooltip after a grid action. A grid action brings up the screen that shows what it changed, with that value chosen: a merge button or a pattern assignment shows Merge modes (where E2 and E3 also change the trig, note, velocity and length merge modes, including the pattern-priority ones), a channel scale lock shows Scale source, global transposition and scale-track locks show Scale overview, and the song length fader shows Song playback. K2 or E1 then carries on from there. Screens that only show information, such as Scale overview, Song playback and Paint preview, list every value at once with no cursor. The four small tiles at the right of the title row are _Mosaic_'s mark; they light up in turn when something changes.
 
 The controls work the same way on every screen:
 
 - **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.
 - **E2** chooses a field, or a row in a task list.
 - **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.
-- **K3** opens the chosen task, applies a staged change, or confirms a question.
+- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`; when the name would crowd out the screen's other controls it just says `K3 OPEN`.
 - **K2** goes back, or cancels a staged change or a question.
 - A short **K1** tap opens the norns system menu. Holding K1 is the shift key for grid and screen gestures.
 
-Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge modes, Device, History and Merge Shape. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. _Mosaic_'s other settings, such as projects, sequencer options, MIDI mapping and each channel's device parameters, are in the norns PARAMS menu under MOSAIC: tap K1 to open it, as the Channel tasks footer reminds you.
+Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge modes, Device, History and Merge Shape. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. _Mosaic_'s other settings, such as projects, sequencer options, MIDI mapping and each channel's device parameters, are in the norns PARAMS menu under MOSAIC: tap K1 to open it, as the Channel tasks footer reminds you (`K1 PARAMS`, beside the chosen task's name when it fits).
 
 <img alt="Norns Channel tasks screen" src="images/norns/channel-tasks.png" width="384" />
 
@@ -548,8 +548,9 @@ clear its capture bank. K2 cancels that question and K3 confirms it; clearing ke
 were already painted. In a ready bank, use E2 to choose Window bar, Window
 step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
 edit the chosen item. Window bar moves by 16 steps and Window step by one; both
-view the same bounded timeline. Choose Alignment and use E3 to open its tempo,
-start-beat, and fine-start settings; K2 cancels and K3 applies the draft.
+view the same bounded timeline. Alignment shows `OPEN >`: choose it and press
+K3 (or turn E3) to open its tempo, start-beat, and fine-start settings; K2
+cancels and K3 applies the draft.
 
 Before recording, E2/E3 open a draft setup for Auto or Manual tempo, manual BPM
 (40–240), and Stereo/L/R input; K2 discards the draft and K3 keeps it. The
@@ -818,7 +819,7 @@ You can quickly add trig masks to your sequence by shift pressing (hold K1) the 
 
 ##### Adding Melodic Notes over Harmony and Drums
 
-To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
+To add a mask to your sequence, start by accessing the mask page on your Norns device. It shows the eight masks by short name, each above its value: `Trig`, `Note`, `Vel` (velocity), `Len` (length) and `Chd1` to `Chd4` (the four chord notes). Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
 
 You can apply masks to all steps in a channel by setting the mask value without holding down a step. It's possible, for example, to add a chord note to every trigger, or set a fixed velocity for every trigger, or even turn on or off every trigger. The default mask value will apply to all steps that don't have a specific mask lock set.
 
@@ -975,7 +976,9 @@ To mute a channel on your sequencer, press and hold the select button for the de
 
 Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. Trig params are unique to a song pattern, allowing drastic transitions when moving from one section to another. Each channel can have up to 10 trig params assigned, and each trig param can be [trig locked](#locks) independently. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. 
 
-The Trig params screen of the channel editor shows all ten slots at once, with the selected slot's full name and value on its bottom line. Here's how to navigate and manipulate these settings:
+The Trig params screen of the channel editor shows all ten slots at once. Each slot shows its parameter's two short names from the device definition, the first above the value and the second below, so together they name the parameter (for example `Quan` over `Note` for Quantised Fixed Note). The names stay still; one too long for its slot is cut short. A value too wide for its slot shows `...`, and while that slot is selected its full name and whole value take the last line. Here's how to navigate and manipulate these settings:
+
+<img alt="Norns Trig params screen" src="images/norns/trig-params.png" width="384" />
 
 * **Screen Navigation**: Use E1 to open Channel tasks, then choose Masks, Trig params or another screen with E2 and open it with K3.
 * **Changing Parameters**: To select a slot, turn E2. Adjust its value by rotating E3. To fine tune, rotate E3 whilst holding K1.
@@ -1370,7 +1373,7 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 
 ##### UI Motion
 
-Turns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On): the start-up animation, the light running round _Mosaic_'s mark, the selection's shadow gliding across the Masks and Trig params grids (diagonally when it changes row), names and values too long for their space scrolling right to left so you can read them in full, values rolling into place, and the characters. The Rhythm Doctor dances to the tempo of the captured bank, the Merge Shape garden sways and the Harmony choir bobs while the sequencer plays, and a metronome swings on the clock and tempo screens. A single numeric value, such as a mask or trig param, also shows a small dial of where it sits in its range, beside the value itself. Motion never delays input, hides a value for more than a moment or changes timing; with it off, every screen is still.
+Turns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On): the start-up animation, the light running round _Mosaic_'s mark, the selection's shadow gliding across the Masks and Trig params grids (diagonally when it changes row), names and values too long for their space scrolling right to left so you can read them in full (the names in the Masks and Trig params grids stay still), values rolling into place, and the characters. The Rhythm Doctor dances to the tempo of the captured bank, the Merge Shape garden sways and the Harmony choir bobs while the sequencer plays, and a metronome swings on the clock and tempo screens. A single numeric value, such as a mask or trig param, also shows a small dial of where it sits in its range, beside the value itself. Motion never delays input, hides a value for more than a moment or changes timing; with it off, every screen is still.
 
 ### Sinfonion Connect
 
@@ -1388,9 +1391,12 @@ registers without rewriting any source pattern. Both features are optional and
 default to Off, so an older project keeps its original MIDI, timing and random
 behaviour.
 
-Open Merge Shape or Harmony from Channel tasks. E2 selects a row, E3 changes a
-staged value, K3 on a row marked with an arrow opens it, and K3 elsewhere
-validates and applies the whole draft. K2 discards the draft, or returns from a
+Open Merge Shape or Harmony from Channel tasks. Their first screens, Merge
+Shape and Voice leading, are lists: each row shows its value or `OPEN >`, and the
+chosen row is marked `>`. E2 selects a row, E3 changes a staged value, K3 on a row marked `OPEN >` opens it (the last line names it, for
+example `K3 OPEN RHYTHM`), and K3 elsewhere validates and applies the whole draft.
+Rows that carry out an action instead, such as Create group, Four-part smooth,
+Delete group and Reset map (the last two ask first), keep a plain `>`. K2 discards the draft, or returns from a
 row you opened to the one it came from. E1 returns to the first screen of the
 feature, discarding an unapplied draft, and from there to Channel tasks. A stopped edit applies immediately. During playback, Merge Shape displays
 `NEXT CYCLE` and activates before the next channel-cycle onset; Harmony displays

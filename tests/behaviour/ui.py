@@ -1023,6 +1023,19 @@ class Ui:
         return self.driver.wait(lambda state: live_header_matches(state, title, scope, layout)
                                 and selected_field_matches(state, layout, label, value, art=True))
 
+    def expect_rhythm_doctor_child_row(self, route, label):
+        """Doctor screen `route` with the row `label` selected, a row whose K3
+        opens a child screen: it reads OPEN > and the footer names it beside the
+        Doctor's other hints (owner decision 27 September 2026)."""
+        from frame_oracle import OPEN_VALUE, footer_matches, open_footer
+
+        self.expect_rhythm_doctor_screen(route, label, OPEN_VALUE)
+        text = open_footer(label, "E2 FIELD  E3 SET")
+        # A tooltip owns the footer for its 3 s lifetime; the hints follow it.
+        self.driver.wait(lambda state: footer_matches(state, text), timeout=5)
+        self.driver.results.append(dict(kind="child-row", screen=route, label=label,
+                                        value=OPEN_VALUE, footer=text, passed=True))
+
     def expect_rhythm_doctor_setup_field(self, field, value):
         """R01 with setup field `field` (TEMPO / MANUAL BPM / INPUT) selected, showing `value`.
 
@@ -1201,8 +1214,10 @@ class Ui:
                                         field=field, label=value, passed=True))
 
     def expect_task_row(self, label):
-        """The task list's selected row ('>' marker) is ``label``; task rows carry no value."""
-        self.expect_selected_field("detail", label=label, value="")
+        """The task list's selected row ('>' marker) is ``label``; every task row
+        opens its screen on K3, so its value is OPEN > (owner decision 27 September 2026)."""
+        from frame_oracle import OPEN_VALUE
+        self.expect_selected_field("detail", label=label, value=OPEN_VALUE)
 
     def expect_list_label(self, label, wait=True):
         """The picker cursor row (C07) shows ``label``; the row value is blank or CURRENT."""
@@ -1448,20 +1463,30 @@ class Ui:
         except KeyError as error:
             raise UiMapError("unknown mask field: " + str(field)) from error
 
+    def _mask_cell(self, field):
+        try:
+            return OVERVIEW_CELLS[field]
+        except KeyError as error:
+            raise UiMapError("unknown mask field: " + str(field)) from error
+
     def selected_mask_value(self, field, candidates):
-        """The one candidate on C01's selected value line for ``field`` ('?' when
+        """The one candidate shown by C01's selected cell for ``field`` ('?' when
         ``field`` is not selected or shows none; 'a|b' when several match)."""
-        from frame_oracle import selected_field_matches
+        from frame_oracle import overview_selected_cell_matches
         label = self._mask_label(field)
+        index, short_label = self._mask_cell(field)
         state = self.driver.snapshot()
-        hits = [str(v) for v in candidates if selected_field_matches(state, "overview_masks", label, v)]
+        hits = [str(v) for v in candidates
+                if overview_selected_cell_matches(state, "overview_masks", index, short_label, v, label)]
         return hits[0] if len(hits) == 1 else ("?" if not hits else "|".join(hits))
 
     def expect_selected_mask(self, field, value):
-        """C01 has ``field`` selected and its value line shows ``value`` exactly."""
-        from frame_oracle import selected_field_matches
+        """C01 has ``field``'s cell selected, showing its name and ``value`` exactly
+        (a value too wide for the cell: on the footer row beside the full name)."""
+        from frame_oracle import overview_selected_cell_matches
         label = self._mask_label(field)
-        self.driver.wait(lambda state: selected_field_matches(state, "overview_masks", label, value))
+        index, short_label = self._mask_cell(field)
+        self.driver.wait(lambda state: overview_selected_cell_matches(state, "overview_masks", index, short_label, value, label))
         self.driver.results.append(dict(kind="selected-mask", field=field, label=label, value=str(value), passed=True))
 
     # ---- Recording / Memory / numeric merging family ----

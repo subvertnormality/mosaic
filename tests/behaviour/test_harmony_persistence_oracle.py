@@ -35,15 +35,17 @@ class HarmonyPersistenceOracleTests(unittest.TestCase):
         # Python 3.8. Unchanged functions keep their 9d26f841 (pre-move)
         # digests; the others pin their live-UI migration (Channel tasks,
         # focused-screen field oracles; 25 September 2026 dashboard/detail rows,
-        # channel-octave scope and one planned > sent row per voice).
+        # channel-octave scope and one planned > sent row per voice; 27 September
+        # 2026 the re-captured NO VOICING image, whose Failure details row shows OPEN >,
+        # and Voice leading drawn as a list of its rows).
         source_hashes = {
             'playback_note_messages': '15f8f3fc07b90038a1d8813e56b814975242f7b15d54ac9af2b4f249ed504218',
             'revoice_workflow': 'c3d3c344b33ad56a5743d342578b8bb60993bd75052833639b0049f1e0eccae4',
             'setup_pattern_harmony': 'cf50f9e6dd7980965bc5f3b2fe77efb122302668809d29d5dc2297fd112a7523',
             'pattern_harmony_persistence_workflow': '55cb04854f2688df167806e83dfbdad4f079b93c72b57a7f39b05ffe357fa899',
             'ensemble_polyrhythm_workflow': 'd07e29b5c09794797e29d774381465568373410294cdefedfffda1bb4d3b14a1',
-            'no_voicing_fallback_workflow': 'def020ee1ac22e01507fa616d4e9bb850365eae9e959b662b7cf124223243dff',
-            'held_step_precedence_workflow': '03edaef1a80402c4b48bfdd3156b1f74265d854270f526b658859aeffeef0ce3',
+            'no_voicing_fallback_workflow': 'fe7500378df9b51ac353eccea43ea0e11500e9ace48940207d7bcfada16ba35e',
+            'held_step_precedence_workflow': 'bd8130c0b08f2422a5baec7bdb666ec04c96c41b9af1d27f01f552934ef0ff4e',
         }
         for name, expected_hash in source_hashes.items():
             with self.subTest(source=name):
