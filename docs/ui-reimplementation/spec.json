@@ -23300,7 +23300,7 @@
     "screen": {
       "file": "code/screen.lua",
       "kind": "live_view_model_proto_code",
-      "sha256": "6562906956ea359e64383d6a92e241ff66a36ea5b6b8c3b714493d06f4125a79"
+      "sha256": "14960ab4fec935c675a15835daff7a36fe8acd70a09ca7246cca5d8d36b8f5e0"
     }
   },
   "guardrails": [
@@ -31177,9 +31177,9 @@
         "width": 32,
         "row_tops": [
           9,
-          27
+          33
         ],
-        "slot_height": 17,
+        "slot_height": 24,
         "count": 8,
         "title": [
           1,
@@ -31189,17 +31189,20 @@
           118,
           7
         ],
-        "label_baseline_offset": 7,
-        "value_baseline_offset": 15,
+        "label_baseline_offset": 6,
+        "value_baseline_offset": 13,
         "full_value_line": [
           1,
-          46,
+          57,
           127,
-          55
+          63
         ],
-        "full_value_baseline": 53,
+        "full_value_baseline": 63,
         "overflow_status": 53,
-        "neighbours_y": 63
+        "neighbours_y": 63,
+        "bottom_label_baseline_offset": 20,
+        "full_value_rule": "the footer row carries the selected field's label and whole value only while its cell shows the '...' more-marker; otherwise the owner's footer",
+        "cell_text": "three static lines 7 px apart, as the old dial drew them (owner decision 27 September 2026): short_label (top), value, bottom_label; text owns x+2..x+w-5 and labels wider than that are cut from the end like screen.text_trim, never scrolled; the S/L marker sits at x+w-8; the stroked outline (rows y-1..y+23, columns x-1..x+w-3) keeps a blank pixel to every glyph"
       },
       "overview_params": {
         "columns": 5,
@@ -31207,9 +31210,9 @@
         "width": 25,
         "row_tops": [
           9,
-          27
+          33
         ],
-        "slot_height": 17,
+        "slot_height": 24,
         "count": 10,
         "title": [
           1,
@@ -31219,17 +31222,20 @@
           118,
           7
         ],
-        "label_baseline_offset": 7,
-        "value_baseline_offset": 15,
+        "label_baseline_offset": 6,
+        "value_baseline_offset": 13,
         "full_value_line": [
           1,
-          46,
+          57,
           127,
-          55
+          63
         ],
-        "full_value_baseline": 53,
+        "full_value_baseline": 63,
         "overflow_status": 53,
-        "neighbours_y": 63
+        "neighbours_y": 63,
+        "bottom_label_baseline_offset": 20,
+        "full_value_rule": "the footer row carries the selected field's label and whole value only while its cell shows the '...' more-marker; otherwise the owner's footer",
+        "cell_text": "three static lines 7 px apart, as the old dial drew them (owner decision 27 September 2026): short_label (top), value, bottom_label; text owns x+2..x+w-5 and labels wider than that are cut from the end like screen.text_trim, never scrolled; the S/L marker sits at x+w-8; the stroked outline (rows y-1..y+23, columns x-1..x+w-3) keeps a blank pixel to every glyph"
       },
       "pattern64": {
         "rows": 4,
@@ -31269,8 +31275,8 @@
         "rule": "Information-only screens show every field at once (owner decision 25 September 2026). No selection cursor."
       }
     },
-    "text": "full labels in detail; exact (numeric) values are never cropped or abbreviated: every layout with fields gives the selected value a whole full-width route on the same screen (focused value_region, detail selected row, overview full_value_line); cells use the '...' more-marker; overflow paints LAYOUT OVERFLOW and fails acceptance; absent event is NO EVENT; Off/Inherit/None/Mixed/zero distinct",
-    "motion": "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame. Text too wide for its room scrolls right to left so it can be read in full (owner request 26 September 2026): on a 10 Hz tick shared by every cut text it rests 8 ticks, drops one character per tick until its end shows, rests 8 ticks and starts again; the phase restarts with the screen or selection, a frame is drawn only when a text moves, and with motion off text is cut statically with ~.",
+    "text": "full labels in detail; exact (numeric) values are never cropped or abbreviated: every layout with fields gives the selected value a whole full-width route on the same screen (focused value_region, detail selected row, overview full_value_line (the footer row while the selected cell shows the more-marker)); cells use the '...' more-marker; overflow paints LAYOUT OVERFLOW and fails acceptance; absent event is NO EVENT; Off/Inherit/None/Mixed/zero distinct",
+    "motion": "on by default, off with the native MOSAIC > UI motion parameter (owner decision 24 September 2026, replacing 'off by default'). Motion is decorative and presentation-only: the start-up splash, character poses (blink, tap), selection glide and value-change easing. Screens change without a transition (owner decision 25 September 2026). It never delays input, never hides a value for longer than one animation (at most 0.25 s outside the splash), consumes no math.random and drives no MIDI or grid LED. Captures and acceptance use the settled frame. Text too wide for its room scrolls right to left so it can be read in full (owner request 26 September 2026): on a 10 Hz tick shared by every cut text it rests 8 ticks, drops one character per tick until its end shows, rests 8 ticks and starts again; the phase restarts with the screen or selection, a frame is drawn only when a text moves, and with motion off text is cut statically with ~. Overview dial cells (C01, C02) never scroll: their labels are cut statically from the end (owner decision 27 September 2026).",
     "performance": "dirty-driven existing refresh cadence; no rendering allocations proportional to project size or musical recomputation",
     "specimen_rule": "screen.lua is the data-bound layout reference; atlas/characters/visuals retain accepted illustrative recipes. Fixture constants never supply application values. Decorative art only. Data diagrams require explicit snapshot bindings, described in diagram_contracts.",
     "brand_mark": "Four 2px tiles at x121..126, y1..6 on every live screen: Mosaic's mark. Rest levels 3/6/3/6; lit in sequence by decorative motion. Scope text ends at x118 so the mark never overlaps text."
@@ -31291,7 +31297,8 @@
     "Field": {
       "id": "stable provider field key",
       "label": "string",
-      "short_label": "metadata abbreviation, never substring-based dispatch",
+      "short_label": "metadata abbreviation, never substring-based dispatch; an overview cell's top line (C02: the device's first short descriptor; C01: the old Masks page name)",
+      "bottom_label": "optional overview cell third line (C02: the device's second short descriptor, empty when it has none)",
       "value": "formatted string retaining OFF/INHERIT/NONE/MIXED/0 distinction",
       "compact_value": "text metadata only; ~ signals abbreviated text. For exact kinds it must be the whole formatted value or absent (a ~ inside it is refused and shown as the more-marker); it never replaces value on the full-value route",
       "kind": "value|readonly|action|inspection|unavailable",

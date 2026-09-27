@@ -55,7 +55,8 @@ HINTS = {
 # lib/ui_render.lua: the line LAYOUT OVERFLOW would be painted on, per layout.
 OVERFLOW_Y = {"overview_masks": 53, "overview_params": 53, "pattern64": 17, "detail": 17, "focused": 55,
               "dashboard": 7}
-FOOTER_ROWS = range(56, 64)
+# Row 56 is the bottom edge of a selected second-row overview cell's outline.
+FOOTER_ROWS = range(57, 64)
 START, END = object(), object()
 # The pattern editor's scope names the edited pattern before the viewed channel.
 PAT = "PAT01 CH01"
@@ -318,7 +319,7 @@ def channel_screens(c, sw):
     sw.screen("C05", field=("MIDI port", "OUT 1"))
     sw.row(36, "MIDI channel", "CC1")
     # Assignment picker (C07) and a long parameter name on the Trig params
-    # overview: the cell shows the short name; the full value line names it whole.
+    # overview: the cell shows the device's two short descriptors, static.
     channel_task(c, "trig_params")
     c.key(2)
     sw.screen("C07", field=("None", ""))
@@ -330,7 +331,8 @@ def channel_screens(c, sw):
     c.key(3)
     c.key(2)
     sw.screen("C02", field=("Quantised Fixed Note", "X"))
-    # The cell names both parts of the short name, QUAN + NOTE, title-cased (it scrolls).
+    # The cell shows QUAN above the value and NOTE below, title-cased like the old
+    # dial and never scrolled (owner decision 27 September 2026).
     sw.cell("overview_params", 1, trig_param_cell_label("QUAN", "NOTE"), "X")
 
 

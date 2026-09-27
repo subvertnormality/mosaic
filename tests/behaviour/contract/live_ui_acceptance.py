@@ -15,7 +15,6 @@ domain text in manual-inventory.json says so; nothing here stands in for it.
 import base64
 
 from midi_window import MidiWindow
-from frame_oracle import any_marquee_phase
 from ui_map import trig_param_cell_label
 
 # configure(): steps 1-4 play C4 D4 E4 F4 at velocities 127/117/107/97 on port 1, MIDI channel 1.
@@ -56,51 +55,43 @@ def _live_header(c, title, scope, layout, stage):
                 title=title, scope=scope, stage=stage)
 
 
-@any_marquee_phase
 def _overview_selection(state, layout, cells, selected):
-    """Every overview cell shows its short label and compact value; only
-    ``selected`` (1-based) draws its label at the selection level 15, every
-    other label at 9 (lib/ui_render.lua overview layouts).
+    """Every overview cell shows its labels and compact value; only
+    ``selected`` (1-based) is outlined and draws its labels at the selection
+    level 15, every other cell's at 9 (lib/ui_render.lua overview layouts).
 
-    A cell is (label, value) or (label, value, marker): ``marker`` is the
-    one-letter state marker the renderer draws in the cell's top-right corner
-    ('L' a lock on a held step, 'S' a slide; None or absent: no marker). With a
-    marker the label is fitted to w-11 and the letter drawn at (x+w-6, y+7)
-    level 15; each cell's whole region is compared, so a marker that is not
-    expected (or a missing one) fails the cell."""
-    from frame_oracle import render, fit, _region_matches
-    columns, width = (4, 32) if layout == 'overview_masks' else (5, 25)
+    A cell is (label, value) or (label, value, marker): ``label`` is the top
+    label or a (top, bottom) pair, and ``marker`` the one-letter state marker
+    the renderer draws in the cell's top-right corner ('L' a lock on a held
+    step, 'S' a slide; None or absent: no marker). Each cell's whole region
+    inside its outline is compared, so a marker that is not expected (or a
+    missing one) fails the cell. Cell text is static (never scrolled)."""
+    from frame_oracle import render, _region_matches, overview_cell_commands, overview_cell_region, _selected_overview_index
     commands = []
     for index, cell in enumerate(cells, start=1):
         label, value = cell[:2]
         marker = cell[2] if len(cell) > 2 else None
-        x = ((index - 1) % columns) * width
-        y = 9 + ((index - 1) // columns) * 18
-        commands.append((x + 2, y + 7, 15 if index == selected else 9, fit(label, width - 11 if marker else width - 5)))
-        if marker:
-            commands.append((x + width - 6, y + 7, 15, marker))
-        commands.append((x + 2, y + 15, 13, str(value)))
+        commands += overview_cell_commands(layout, index, label, value, marker, index == selected)
     expected = render(commands)
     actual = base64.b64decode(state['frame']['pixels_base64'])
-    for index in range(1, len(cells) + 1):
-        x = ((index - 1) % columns) * width
-        y = 9 + ((index - 1) // columns) * 18
-        if not _region_matches(actual, expected, y + 1, y + 16, x + 1, x + width - 3):
-            return False
-    return True
+    if _selected_overview_index(actual, layout) != selected:
+        return False
+    return all(_region_matches(actual, expected, *overview_cell_region(layout, index))
+               for index in range(1, len(cells) + 1))
 
 
-# Each Masks cell names its whole mask (owner request 26 September 2026; it scrolls when the
-# cell is too narrow, which _overview_selection follows on the shared marquee phase).
-MASK_LABELS = ('Trig', 'Note', 'Velocity', 'Length', 'Chord 1', 'Chord 2', 'Chord 3', 'Chord 4')
-# A Trig params cell names both parts of the parameter's short name, title-cased (CC 1's
-# descriptors are "CC1" and ""): ui_map.trig_param_cell_label.
+# Each Masks cell shows the old Masks page's name for it, static (owner decision
+# 27 September 2026; channel_edit_masks.fields short_label).
+MASK_LABELS = ('Trig', 'Note', 'Vel', 'Len', 'Chd1', 'Chd2', 'Chd3', 'Chd4')
+# A Trig params cell shows the parameter's two short descriptors, title-cased, above
+# and below its value (CC 1's descriptors are "CC1" and ""): ui_map.trig_param_cell_label.
 CC1_CELL = trig_param_cell_label('CC1')
 NONE_CELL = trig_param_cell_label('None')
 
 
 def _expect_masks(c, values, selected, label, value, stage):
-    """C01: all eight cells, the selected cell and its full value line."""
+    """C01: all eight cells and the selected cell (its value, or with the more-marker the
+    footer row naming ``label`` beside the whole value)."""
     from frame_oracle import selected_field_matches
     cells = list(zip(MASK_LABELS, values))
     _wait_frame(c, lambda s: _overview_selection(s, 'overview_masks', cells, selected)
@@ -109,7 +100,8 @@ def _expect_masks(c, values, selected, label, value, stage):
 
 
 def _expect_params(c, cells, selected, label, value, stage):
-    """C02: all ten slots, the selected slot and its full value line."""
+    """C02: all ten slots and the selected slot (its value, or with the more-marker the
+    footer row naming ``label`` beside the whole value)."""
     from frame_oracle import selected_field_matches
     _wait_frame(c, lambda s: _overview_selection(s, 'overview_params', cells, selected)
                 and selected_field_matches(s, 'overview_params', label, value),

@@ -42,10 +42,12 @@ local function dial_text(dial)
   return tostring(fn.clean_number(value)), "set"
 end
 
-local function cell_label(dial)
-  local top, bottom = tostring(dial.top_label or ""), tostring(dial.bottom_label or "")
-  local label = bottom ~= "" and (top .. " " .. bottom) or top
-  return fn and fn.title_case and fn.title_case(label) or label
+-- The device spec's two short descriptors, title-cased as the old dial drew
+-- them: the first above the value, the second below (owner decision 27
+-- September 2026). Written together they stand for the long name.
+local function descriptor_label(text)
+  text = tostring(text or "")
+  return fn and fn.title_case and fn.title_case(text) or text
 end
 
 return function(ui_adapters, owners)
@@ -88,9 +90,10 @@ return function(ui_adapters, owners)
       descriptors[#descriptors + 1] = {
         id = channel_edit_parameters.slot_field_id(n),
         label = (lock_param.name and lock_param.name ~= "") and lock_param.name or tostring(dial.top_label),
-        -- Both parts of the dial's name, as the old dial drew them on two lines
-        -- ("Filter Cutoff"); the cell scrolls it when too narrow.
-        short_label = cell_label(dial),
+        -- The cell's first and third lines, as the old dial drew them ("Fltr"
+        -- above the value, "Ctof" below); trimmed, never scrolled.
+        short_label = descriptor_label(dial.top_label),
+        bottom_label = descriptor_label(dial.bottom_label),
         kind = "value",
         value = text,
         repeat_key = "slot_<n>",

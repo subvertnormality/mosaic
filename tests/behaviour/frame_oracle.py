@@ -269,13 +269,11 @@ def selected_field_matches(state,layout,label=None,value=None,art=False):
                 if _region_matches(actual,expected,y-7,y+2,126-w,127) and _region_matches(actual,expected,y-7,y+2,0,6):return True
         return False
     if layout in OVERVIEWS:
-        commands=[]
-        if value is not None:commands.append(((None,127),53,15,value))
-        if label is not None:
-            room=126-(text_width(value) if value is not None else 0)-4
-            commands.append((1,53,10,fit(label,room)))
-        expected=render(commands)
-        return _region_matches(actual,expected,46,55,0,128)
+        # The outlined cell shows the value; only a value too wide for the cell
+        # (the '...' more-marker) also puts `label` and the whole value on the
+        # footer row. The cell's own labels: overview_cell_matches.
+        index=_selected_overview_index(actual,layout)
+        return index is not None and _overview_selected_value(actual,layout,index,label,value)
     # focused
     ok=True
     if label is not None:
@@ -289,28 +287,114 @@ def selected_field_matches(state,layout,label=None,value=None,art=False):
         ok=_region_matches(actual,render([(1,48,15,value,size)],antialias=1),30,50,0,min(128,1+right))
     return ok
 
-@any_marquee_phase
-def overview_cell_matches(state,layout,index,short_label,value):
-    """An overview cell shows its short label (selected or not) and compact value."""
+# ---- Overview dial cells (lib/ui_render.lua overview layouts) ----
+# Cell k of a masks (4 x 32 px) or trig params (5 x 25 px) grid starts at
+# x=((k-1)%columns)*width, row top y=9+((k-1)//columns)*24. It draws the old
+# dial's three static lines (owner decision 27 September 2026): the top label
+# at (x+2, y+6), the value at (x+2, y+13) level 13 and the bottom label at
+# (x+2, y+20); labels are level 15 in the selected cell, else 9. Text owns
+# x+2..x+w-5: a label wider than that is cut from the end (trim, like
+# screen.text_trim) and never scrolls; a value wider than that shows '...'.
+# A marker letter sits at (x+w-8, y+6) and cuts the top label to w-11. The
+# selected cell's outline rect(x, y, w-2, 24) is stroked by the native screen
+# as rows y-1..y+23, columns x-1..x+w-3, level 15.
+OVERVIEW_ROW_PITCH=24
+
+def overview_cell_origin(layout,index):
     columns,width=(4,32) if layout=='overview_masks' else (5,25)
-    x=((index-1)%columns)*width;y=9+((index-1)//columns)*18
+    return ((index-1)%columns)*width,9+((index-1)//columns)*OVERVIEW_ROW_PITCH,width
+
+def trim(label,width):
+    """ui_render trim(): cut from the end until it fits; never scrolled."""
+    label=str(label)
+    while label and text_width(label)>width:label=label[:-1]
+    return label
+
+def overview_cell_value(value,width):
     value=str(value)
-    shown=value if ('~' not in value and text_width(value)<=width-5) else '...'
+    return value if ('~' not in value and text_width(value)<=width-6) else '...'
+
+def _cell_labels(short_label):
+    """A cell's (top, bottom) labels from a string (top only) or a pair."""
+    if isinstance(short_label,(tuple,list)):
+        top,bottom=short_label
+        return str(top),str(bottom or '')
+    return str(short_label),''
+
+def overview_cell_commands(layout,index,short_label,value,marker=None,selected=False):
+    x,y,width=overview_cell_origin(layout,index)
+    top,bottom=_cell_labels(short_label)
+    level=15 if selected else 9
+    commands=[(x+2,y+6,level,trim(top,width-11 if marker else width-6))]
+    if marker:commands.append((x+width-8,y+6,15,marker))
+    commands.append((x+2,y+13,13,overview_cell_value(value,width)))
+    if bottom:commands.append((x+2,y+20,level,trim(bottom,width-6)))
+    return commands
+
+def overview_cell_region(layout,index):
+    """Inside the cell's outline: (top, bottom, left, right) for _region_matches."""
+    x,y,width=overview_cell_origin(layout,index)
+    return y,y+23,x,x+width-3
+
+def overview_cell_matches(state,layout,index,short_label,value,marker=None):
+    """An overview cell shows exactly its labels (a top label string, or a
+    (top, bottom) pair), its value (or '...') and `marker`, selected or not.
+    Cell text is static: no marquee phase is tried."""
     actual=base64.b64decode(state['frame']['pixels_base64'])
-    for level in (15,9):
-        expected=render([(x+2,y+7,level,fit(short_label,width-5)),(x+2,y+15,13,shown)])
-        if _region_matches(actual,expected,y+1,y+16,x+1,x+width-3):return True
-    return False
+    region=overview_cell_region(layout,index)
+    return any(_region_matches(actual,render(overview_cell_commands(layout,index,short_label,value,marker,selected)),*region)
+               for selected in (True,False))
+
+def _outline_pixels(layout,index):
+    x,y,width=overview_cell_origin(layout,index)
+    left,right,top,bottom=x-1,x+width-3,y-1,y+23
+    return [(px,py) for py in range(top,bottom+1) for px in range(max(0,left),right+1)
+            if px in (left,right) or py in (top,bottom)]
+
+def _selected_overview_index(actual,layout):
+    """The one cell whose whole outline is lit at level 15, or None."""
+    count=8 if layout=='overview_masks' else 10
+    lit=[index for index in range(1,count+1)
+         if all(actual[(py*128+px)*4+c]==255 for px,py in _outline_pixels(layout,index) for c in range(3))]
+    return lit[0] if len(lit)==1 else None
+
+def overview_selected_value_line(label,value):
+    """The footer row while the selected cell shows '...': the label at x1
+    level 10 fitted beside the whole value right-aligned at x127 level 15."""
+    value=str(value)
+    commands=[((None,127),63,15,value)]
+    room=126-text_width(value)-4
+    if label is not None and room>0:commands.append((1,63,10,fit(label,room)))
+    return render(commands)
+
+def _overview_selected_value(actual,layout,index,label,value):
+    if value is None:return True
+    x,y,width=overview_cell_origin(layout,index)
+    shown=overview_cell_value(value,width)
+    # The value line alone: capitals y+8..y+12, descenders to y+14.
+    if not _region_matches(actual,render([(x+2,y+13,13,shown)]),y+8,y+15,x,x+width-3):return False
+    if shown!='...':return True
+    return _region_matches(actual,overview_selected_value_line(label,value),*FOOTER_ROWS)
+
+@any_marquee_phase
+def overview_selected_cell_matches(state,layout,index,short_label,value,label=None,marker=None):
+    """Cell `index` is the selected (outlined) cell and shows its labels at the
+    selection level and `value`; a value shown as '...' is on the footer row
+    with the field's full `label`."""
+    actual=base64.b64decode(state['frame']['pixels_base64'])
+    if _selected_overview_index(actual,layout)!=index:return False
+    expected=render(overview_cell_commands(layout,index,short_label,value,marker,True))
+    if not _region_matches(actual,expected,*overview_cell_region(layout,index)):return False
+    return _overview_selected_value(actual,layout,index,label,value)
 
 def overview_cell_marker(state,layout,index):
     """The one-letter state marker in an overview cell's top-right corner:
     'S' (a slide), 'L' (a lock on a held step) or None. The renderer clears a
-    4x7 box at (x+w-6, y+1) and draws the letter at (x+w-6, y+7), level 15."""
-    columns,width=(4,32) if layout=='overview_masks' else (5,25)
-    x=((index-1)%columns)*width;y=9+((index-1)//columns)*18
+    4x6 box at (x+w-8, y+1) and draws the letter at (x+w-8, y+6), level 15."""
+    x,y,width=overview_cell_origin(layout,index)
     actual=base64.b64decode(state['frame']['pixels_base64'])
     for letter in ('S','L'):
-        if _region_matches(actual,render([(x+width-6,y+7,15,letter)]),y+1,y+8,x+width-6,x+width-2):return letter
+        if _region_matches(actual,render([(x+width-8,y+6,15,letter)]),y,y+7,x+width-8,x+width-4):return letter
     return None
 
 # ---- Dashboard layout (lib/ui_render.lua L=='dashboard') ----
@@ -354,8 +438,11 @@ def dashboard_matches(state,title,scope,rows):
 # lib/ui_render.lua draws the footer line at (1,63): the current tooltip at
 # level 9 while it lasts, else the screen's control hints (level 9) or, on
 # focused screens without hints, its neighbour fields ('< prev' left at
-# level 7, 'next >' right-aligned at x127 level 10).
-FOOTER_ROWS=(56,64)
+# level 7, 'next >' right-aligned at x127 level 10). An overview whose
+# selected cell shows '...' puts that field's label and whole value there
+# instead. The band starts at row 57: row 56 is the bottom edge of a selected
+# second-row overview cell's outline, above the footer's blank row 57.
+FOOTER_ROWS=(57,64)
 
 def footer(text):
     """Expected frame for footer `text` (a tooltip/hint string, or a

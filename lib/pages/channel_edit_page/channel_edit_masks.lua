@@ -5,15 +5,17 @@ local channel_edit_masks = {}
 -- mask_selectors entry (`chord` indexes mask_selectors.chords), `handler` the
 -- handlers function E3 reaches for it and `inherit` the selector value the
 -- owner shows as X (an unset mask). `contract_id` is the field_contracts name.
+-- `short_label` is the name the old Masks page drew above each value; the
+-- overview cell shows it (owner decision 27 September 2026).
 channel_edit_masks.fields = {
-  {id = "trig", label = "Trig", selector = "trig", handler = "handle_trig_mask_change", inherit = -1},
-  {id = "note", label = "Note", selector = "note", handler = "handle_note_mask_change", inherit = -1},
-  {id = "velocity", label = "Velocity", selector = "velocity", handler = "handle_velocity_mask_change", inherit = -1},
-  {id = "length", label = "Length", selector = "length", handler = "handle_length_mask_change", inherit = 0},
-  {id = "chord_1", contract_id = "chord_one", label = "Chord 1", chord = 1, handler = "handle_chord_mask_one_change", inherit = 0},
-  {id = "chord_2", contract_id = "chord_two", label = "Chord 2", chord = 2, handler = "handle_chord_mask_two_change", inherit = 0},
-  {id = "chord_3", contract_id = "chord_three", label = "Chord 3", chord = 3, handler = "handle_chord_mask_three_change", inherit = 0},
-  {id = "chord_4", contract_id = "chord_four", label = "Chord 4", chord = 4, handler = "handle_chord_mask_four_change", inherit = 0}
+  {id = "trig", label = "Trig", short_label = "Trig", selector = "trig", handler = "handle_trig_mask_change", inherit = -1},
+  {id = "note", label = "Note", short_label = "Note", selector = "note", handler = "handle_note_mask_change", inherit = -1},
+  {id = "velocity", label = "Velocity", short_label = "Vel", selector = "velocity", handler = "handle_velocity_mask_change", inherit = -1},
+  {id = "length", label = "Length", short_label = "Len", selector = "length", handler = "handle_length_mask_change", inherit = 0},
+  {id = "chord_1", contract_id = "chord_one", label = "Chord 1", short_label = "Chd1", chord = 1, handler = "handle_chord_mask_one_change", inherit = 0},
+  {id = "chord_2", contract_id = "chord_two", label = "Chord 2", short_label = "Chd2", chord = 2, handler = "handle_chord_mask_two_change", inherit = 0},
+  {id = "chord_3", contract_id = "chord_three", label = "Chord 3", short_label = "Chd3", chord = 3, handler = "handle_chord_mask_three_change", inherit = 0},
+  {id = "chord_4", contract_id = "chord_four", label = "Chord 4", short_label = "Chd4", chord = 4, handler = "handle_chord_mask_four_change", inherit = 0}
 }
 
 function channel_edit_masks.new(mask_selectors, public_handlers, divisions)

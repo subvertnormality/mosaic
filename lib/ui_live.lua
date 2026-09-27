@@ -816,7 +816,7 @@ function ui_live.view_model()
     if screen.profile == "read_only" and kind ~= "action" and kind ~= "inspection" then kind = "readonly" end
     -- Task rows are destinations, not values: their screen ids stay internal.
     local value = screen.profile == "tasks" and "" or (d.value or "")
-    fields[#fields + 1] = {id = d.id, label = d.label, short_label = d.short_label, value = value,
+    fields[#fields + 1] = {id = d.id, label = d.label, short_label = d.short_label, bottom_label = d.bottom_label, value = value,
       compact_value = d.compact_value, kind = kind, visible = true, enabled = d.enabled, marker = d.marker}
     ::continue::
   end

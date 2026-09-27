@@ -131,8 +131,8 @@ local function cell_rect(layout, selected)
   local columns, width = 4, 32
   if layout == "overview_params" then columns, width = 5, 25 end
   local x = ((selected - 1) % columns) * width
-  local y = 9 + math.floor((selected - 1) / columns) * 18
-  return x, y, width - 2, 17
+  local y = 9 + math.floor((selected - 1) / columns) * 24
+  return x, y, width - 2, 24
 end
 
 local function track_glide(vm)

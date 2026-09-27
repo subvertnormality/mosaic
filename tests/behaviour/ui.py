@@ -1439,20 +1439,30 @@ class Ui:
         except KeyError as error:
             raise UiMapError("unknown mask field: " + str(field)) from error
 
+    def _mask_cell(self, field):
+        try:
+            return OVERVIEW_CELLS[field]
+        except KeyError as error:
+            raise UiMapError("unknown mask field: " + str(field)) from error
+
     def selected_mask_value(self, field, candidates):
-        """The one candidate on C01's selected value line for ``field`` ('?' when
+        """The one candidate shown by C01's selected cell for ``field`` ('?' when
         ``field`` is not selected or shows none; 'a|b' when several match)."""
-        from frame_oracle import selected_field_matches
+        from frame_oracle import overview_selected_cell_matches
         label = self._mask_label(field)
+        index, short_label = self._mask_cell(field)
         state = self.driver.snapshot()
-        hits = [str(v) for v in candidates if selected_field_matches(state, "overview_masks", label, v)]
+        hits = [str(v) for v in candidates
+                if overview_selected_cell_matches(state, "overview_masks", index, short_label, v, label)]
         return hits[0] if len(hits) == 1 else ("?" if not hits else "|".join(hits))
 
     def expect_selected_mask(self, field, value):
-        """C01 has ``field`` selected and its value line shows ``value`` exactly."""
-        from frame_oracle import selected_field_matches
+        """C01 has ``field``'s cell selected, showing its name and ``value`` exactly
+        (a value too wide for the cell: on the footer row beside the full name)."""
+        from frame_oracle import overview_selected_cell_matches
         label = self._mask_label(field)
-        self.driver.wait(lambda state: selected_field_matches(state, "overview_masks", label, value))
+        index, short_label = self._mask_cell(field)
+        self.driver.wait(lambda state: overview_selected_cell_matches(state, "overview_masks", index, short_label, value, label))
         self.driver.results.append(dict(kind="selected-mask", field=field, label=label, value=str(value), passed=True))
 
     # ---- Recording / Memory / numeric merging family ----

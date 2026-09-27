@@ -89,7 +89,7 @@ function test_ui_motion_selection_shadow_travels_diagonally_between_rows()
     -- Cell 4 (top right) to cell 5 (bottom left) on the masks overview.
     local path = glide_path(4, 5)
     luaunit.assert_true(#path >= 4, "a visible glide")
-    local start_x, start_y, end_x, end_y = 96, 9, 0, 27
+    local start_x, start_y, end_x, end_y = 96, 9, 0, 33
     for index, point in ipairs(path) do
       local x, y = point[1], point[2]
       -- Never parked on the cell it left.
