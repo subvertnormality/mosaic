@@ -44,7 +44,9 @@ function transaction.validate(song,snapshot)
   end
   local ok,reason=harmony_config.validate_song(shadow);if not ok then return nil,reason end
   for number=1,16 do local merge=shadow.channels[number].musical_merge;if merge then
-    ok,reason=merge_config.validate(merge);if not ok then return nil,reason end
+    -- Version 1 (for example from a live project built before migration) is
+    -- validated through its canonical v2 form; apply stores that form.
+    merge,reason=merge_config.canonicalize(merge,number);if not merge then return nil,reason end
     if merge.target.kind=="chord"then local group=shadow.voicing and shadow.voicing.groups[merge.target.group_id]
       if not(group and group.enabled)then return nil,"channel "..number.." chord source unavailable"end
     end
@@ -111,9 +113,10 @@ function transaction.apply(song,snapshot,playing,boundary,validated)
   for number=1,16 do
     local target=snapshot.channels[number];song.channels[number].voicing=copy(target.voicing)
     harmony_config_state.request_channel(song,number,target.voicing or harmony_config.new_channel(),playing)
-    if changed(before.channels[number].musical_merge,target.musical_merge)then
-      song.channels[number].musical_merge=copy(target.musical_merge)
-      local requested=target.musical_merge or merge_config.new()
+    local merge=target.musical_merge and assert(merge_config.canonicalize(target.musical_merge,number))
+    if changed(before.channels[number].musical_merge,merge)then
+      song.channels[number].musical_merge=merge
+      local requested=merge or merge_config.new()
       if boundary=="pattern"then merge_state.request_global(song,number,requested,playing)else merge_state.request(song,number,requested,playing)end
       if not playing and pattern and pattern.update_working_pattern then pattern.update_working_pattern(number,song)end
     end
@@ -122,9 +125,26 @@ function transaction.apply(song,snapshot,playing,boundary,validated)
 end
 
 
+-- The same snapshot with each merge configuration in canonical form (a
+-- configuration that cannot be canonicalized is kept so validation rejects it),
+-- so a v1 history entry and its stored v2 form compare as equal.
+local function canonical_view(snapshot)
+  if type(snapshot)~="table"or type(snapshot.channels)~="table"then return snapshot end
+  local result={};for key,value in pairs(snapshot)do result[key]=value end;result.channels={}
+  for number,channel in pairs(snapshot.channels)do
+    if type(channel)=="table"and channel.musical_merge~=nil then
+      local c={};for key,value in pairs(channel)do c[key]=value end
+      c.musical_merge=merge_config.canonicalize(channel.musical_merge,number)or channel.musical_merge
+      result.channels[number]=c
+    else result.channels[number]=channel end
+  end
+  return result
+end
+
 function transaction.apply_transition(song,expected,target,playing,boundary,target_validated)
+  expected,target=canonical_view(expected),canonical_view(target)
   -- transition_value only reads the live configuration and copies what it returns.
-  local live=transaction.view(song)
+  local live=canonical_view(transaction.view(song))
   local patched=transition_value(live,expected,target)
   return transaction.apply(song,patched,playing,boundary,target_validated and same(patched,target))
 end

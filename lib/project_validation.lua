@@ -47,9 +47,10 @@ function validation.check(saved)
       -- Equal endpoints are valid stored data; only their grid gesture is absent.
       if first > last then return nil, label .. " reversed" end
       if channel.musical_merge ~= nil then
-        local merge_ok, merge_reason = merge_config.validate(channel.musical_merge)
-        if not merge_ok then return nil, prefix .. " " .. merge_reason end
-        local target = channel.musical_merge.target
+        -- Version 1 is accepted here through its canonical v2 form.
+        local merge, merge_reason = merge_config.canonicalize(channel.musical_merge, number)
+        if not merge then return nil, prefix .. " " .. merge_reason end
+        local target = merge.target
         if target and target.kind == "chord" then
           local groups = song.voicing and song.voicing.groups
           if not groups or not groups[target.group_id] then
@@ -61,6 +62,26 @@ function validation.check(saved)
   end
   local rhythm_ok, rhythm_reason = rhythm_doctor_persistence.validate(data.rhythm_doctor)
   if not rhythm_ok then return nil, rhythm_reason == "UNKNOWN_BANK_SCHEMA" and "Unknown Rhythm Doctor bank" or "Invalid Rhythm Doctor bank" end
+  return true
+end
+
+-- Replace every saved merge configuration with its canonical v2 form, in place.
+-- Only for detached decoded data that `check` accepted, before it reaches the
+-- live project: nothing is changed unless every configuration migrates.
+function validation.migrate(saved)
+  local songs = saved[2].song_patterns or saved[2].sequencer_patterns
+  local replacements = {}
+  for slot, song in pairs(songs) do
+    for number = 1, 17 do
+      local channel = song.channels[number]
+      if channel.musical_merge ~= nil then
+        local merge, reason = merge_config.canonicalize(channel.musical_merge, number)
+        if not merge then return nil, "Slot " .. slot .. " " .. reason end
+        replacements[#replacements + 1] = {channel, merge}
+      end
+    end
+  end
+  for _, replacement in ipairs(replacements) do replacement[1].musical_merge = replacement[2] end
   return true
 end
 

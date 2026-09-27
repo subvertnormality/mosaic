@@ -43,10 +43,16 @@ local function same_percentages(left, right)
   return true
 end
 
+-- A v1 configuration (no fragments table) has the v2 default size.
+local function fragment_size(value)
+  return value.fragments and value.fragments.size or 8
+end
+
 local function starts_new_epoch(left, right)
   if not left or not right then return true end
   return left.cycles ~= right.cycles or left.variation ~= right.variation or
-    left.seed ~= right.seed or not same_percentages(left.percentages, right.percentages)
+    left.seed ~= right.seed or not same_percentages(left.percentages, right.percentages) or
+    (left.mode or "off") ~= (right.mode or "off") or fragment_size(left) ~= fragment_size(right)
 end
 
 local function advance(record)

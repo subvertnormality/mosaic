@@ -365,3 +365,38 @@ function test_rhythm_doctor_project_replace_latest_request_wins_and_cleanup_disc
     luaunit.assert_equals(c.count.memory_init, cleanup and 0 or 1)
   end
 end
+
+-- README "Musical Merge and Voice Leading": unknown schema versions reject the
+-- project before it replaces the active project. Plan §0 (characterisation):
+-- the load path migrates v1 merge configuration to canonical v2 on the detached
+-- decoded data before any live mutation.
+local function v1_merge_fixture()
+  local saved=load_fixture()
+  saved[2].song_patterns[1].channels[2].musical_merge={schema_version=1,mode="foundation",anchor=1,amount=50,
+    accent=70,gap=0,seed=12,ranking_version=1,cycles=1,shape="flat",percentages={100},variation="fixed",
+    keep_anchor_pitch=false,target={kind="chord",group_id=3,extra=1},fragments="collides",unknown=true}
+  saved[2].song_patterns[1].voicing={schema_version=1,groups={[3]=include("mosaic/lib/harmony/config").new_group(3)}}
+  return saved
+end
+
+function test_load_migrates_v1_merge_configuration_before_replacing_the_project()
+  local merge=include("mosaic/lib/musical_merge/config")
+  local c=load_context();c.state.files["fixture/v1.ptn"]=v1_merge_fixture()
+  luaunit.assert_true(c.load("fixture/v1.ptn"))
+  local stored=c.state.store.song_patterns[1].channels[2].musical_merge
+  local expected=merge.new();expected.mode,expected.anchor,expected.amount,expected.seed="foundation",1,50,12
+  expected.target={kind="chord",group_id=3}
+  luaunit.assert_equals(stored,expected)
+  luaunit.assert_nil(c.state.store.song_patterns[1].channels[1].musical_merge)
+end
+
+function test_load_rejects_unknown_v2_merge_field_without_touching_the_live_project()
+  local merge=include("mosaic/lib/musical_merge/config")
+  local c=load_context();local bad=load_fixture()
+  bad[2].song_patterns[1].channels[2].musical_merge=merge.new();bad[2].song_patterns[1].channels[2].musical_merge.later=1
+  c.state.files["fixture/v2bad.ptn"]=bad
+  luaunit.assert_false(c.load("fixture/v2bad.ptn"))
+  luaunit.assert_is(c.state.store,c.original);luaunit.assert_true(c.state.playing)
+  for _,name in ipairs({"stop","reset","init","set"}) do luaunit.assert_equals(c.count[name],0) end
+  luaunit.assert_equals(c.state.messages[#c.state.messages],"Slot 1 merge field")
+end

@@ -155,3 +155,62 @@ function test_musical_merge_a_queued_removal_still_reports_state()
   luaunit.assert_true(state.has(song, 6) and true or false,
     "a channel winding merge down still needs its cycle boundary")
 end
+
+-- docs/musical-merge-extensions-plan.md §0 Activation (characterisation of the
+-- approved plan; README documents only the existing phrase fields): changing
+-- mode, fragments.size or the fragment identity fields (seed, variation,
+-- cycles) starts a new phrase epoch; other v2 fields keep the phrase position.
+local function advanced(song, channel, requested, count)
+  for _ = 1, count do state.on_cycle_boundary(song, channel, requested) end
+end
+
+function test_musical_merge_state_v2_mode_and_fragment_size_changes_start_a_new_epoch()
+  for _, change in ipairs({
+    function(v) v.mode = "fragments" end,
+    function(v) v.mode = "off" end,
+    function(v) v.fragments.size = 16 end,
+    function(v) v.seed = 9 end,
+    function(v) v.variation = "fixed" end
+  }) do
+    state.reset()
+    local song, old = {}, value(4, "per_phrase")
+    advanced(song, 5, old, 5)
+    luaunit.assert_equals({state.effective(song, 5, old).cycle, state.effective(song, 5, old).phrase}, {2, 1})
+    local replacement = value(4, "per_phrase");change(replacement)
+    state.request(song, 5, replacement, true)
+    luaunit.assert_true(state.on_cycle_boundary(song, 5, old))
+    local current = state.effective(song, 5, old)
+    luaunit.assert_equals({current.cycle, current.phrase}, {1, 0})
+  end
+end
+
+function test_musical_merge_state_v2_non_epoch_fields_keep_phrase_position()
+  for _, change in ipairs({
+    function(v) v.fragments.keep_anchor = true end,
+    function(v) v.interlock.window = 2 end,
+    function(v) v.space.release = 3 end,
+    function(v) v.structure.markers = "every_4";v.structure.group_id = 2 end,
+    function(v) v.amount = 10 end
+  }) do
+    state.reset()
+    local song, old = {}, value(4, "per_phrase")
+    advanced(song, 6, old, 5)
+    local replacement = value(4, "per_phrase");change(replacement)
+    state.request(song, 6, replacement, true)
+    luaunit.assert_false(state.on_cycle_boundary(song, 6, old))
+    local current = state.effective(song, 6, old)
+    luaunit.assert_equals({current.cycle, current.phrase}, {3, 1})
+  end
+end
+
+function test_musical_merge_state_migrated_v1_request_is_not_a_new_epoch()
+  state.reset()
+  local song = {}
+  local v1 = {schema_version = 1, mode = "foundation", anchor = 1, amount = 100, accent = 70, gap = 0, seed = 0,
+    ranking_version = 1, cycles = 4, shape = "flat", percentages = {100, 100, 100, 100}, variation = "per_phrase",
+    keep_anchor_pitch = false, target = {kind = "legacy"}}
+  advanced(song, 7, v1, 5)
+  state.request(song, 7, config.canonicalize(v1), false)
+  local current = state.effective(song, 7, v1)
+  luaunit.assert_equals({current.cycle, current.phrase}, {2, 1})
+end

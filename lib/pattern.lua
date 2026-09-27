@@ -5,6 +5,7 @@ local quantiser = include("mosaic/lib/quantiser")
 local foundation = include("mosaic/lib/musical_merge/foundation")
 local merge_state = include("mosaic/lib/musical_merge/state")
 local merge_config = include("mosaic/lib/musical_merge/config")
+local fragments = include("mosaic/lib/musical_merge/fragments")
 
 local program = program
 
@@ -223,8 +224,12 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
   local requested_merge_settings = pattern_channel.musical_merge or merge_config.new()
   local merge_runtime = merge_state.effective(selected_song_pattern, channel, requested_merge_settings)
   local merge_settings = merge_runtime and merge_runtime.config
-  local foundation_result
-  if merge_settings and merge_settings.schema_version == 1 and merge_settings.mode == "foundation" then
+  local merge_version = merge_settings and merge_settings.schema_version
+  local foundation_result, fragments_result
+  -- Canonical v2 keeps every v1 Foundation behaviour; Fragments exists only in v2.
+  local foundation_mode = (merge_version == 1 or merge_version == 2) and merge_settings.mode == "foundation"
+  local fragments_mode = merge_version == 2 and merge_settings.mode == "fragments"
+  if foundation_mode or fragments_mode then
     local source_trigs, source_velocities, binding_parts = {}, {}, {}
     for pattern_number, enabled in pairs(pattern_channel.selected_patterns) do
       if enabled then
@@ -235,36 +240,75 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     end
     table.sort(binding_parts)
     local cycle = merge_runtime.cycle or 1
-    local cycle_percentage = merge_settings.percentages and merge_settings.percentages[cycle] or 100
-    local effective_amount = foundation.round_half_up((merge_settings.amount or 100) * cycle_percentage / 100)
     local effective_start=fn.calc_grid_count(pattern_channel.start_trig[1],pattern_channel.start_trig[2])
     local effective_end=fn.calc_grid_count(pattern_channel.end_trig[1],pattern_channel.end_trig[2])
     effective_end=math.min(effective_end,effective_start+(selected_song_pattern.global_pattern_length or 64)-1)
-    foundation_result = foundation.plan({
-      start_step = effective_start,
-      end_step = effective_end,
-      anchor = merge_settings.anchor,
-      source_trigs = source_trigs,
-      source_velocities = source_velocities,
-      merged_velocities = merged_pattern.velocity_values,
-      amount = effective_amount,
-      accent = merge_settings.accent,
-      gap = merge_settings.gap,
-      seed = merge_settings.seed,
-      song_slot = selected_song_pattern.number or program.get().selected_song_pattern or 1,
-      channel = channel,
-      binding = table.concat(binding_parts, ",") .. "|" .. tostring(note_merge_mode) .. "|" ..
-        tostring(velocity_merge_mode) .. "|" .. tostring(length_merge_mode),
-      phrase = merge_runtime.ranking_phrase or 0,
-      ranking_version = merge_settings.ranking_version
-    })
-    foundation_result.cycle = cycle
-    foundation_result.cycles = merge_settings.cycles or 1
-    foundation_result.phrase = merge_runtime.phrase or 0
-    foundation_result.config = merge_settings
-    foundation_result.anchor_notes = patterns[merge_settings.anchor] and
-      patterns[merge_settings.anchor].note_values or nil
-    merged_pattern.foundation = foundation_result
+    local song_slot = selected_song_pattern.number or program.get().selected_song_pattern or 1
+    local binding = table.concat(binding_parts, ",") .. "|" .. tostring(note_merge_mode) .. "|" ..
+      tostring(velocity_merge_mode) .. "|" .. tostring(length_merge_mode)
+    if foundation_mode then
+      local cycle_percentage = merge_settings.percentages and merge_settings.percentages[cycle] or 100
+      local effective_amount = foundation.round_half_up((merge_settings.amount or 100) * cycle_percentage / 100)
+      foundation_result = foundation.plan({
+        start_step = effective_start,
+        end_step = effective_end,
+        anchor = merge_settings.anchor,
+        source_trigs = source_trigs,
+        source_velocities = source_velocities,
+        merged_velocities = merged_pattern.velocity_values,
+        amount = effective_amount,
+        accent = merge_settings.accent,
+        gap = merge_settings.gap,
+        seed = merge_settings.seed,
+        song_slot = song_slot,
+        channel = channel,
+        binding = binding,
+        phrase = merge_runtime.ranking_phrase or 0,
+        ranking_version = merge_settings.ranking_version
+      })
+      foundation_result.cycle = cycle
+      foundation_result.cycles = merge_settings.cycles or 1
+      foundation_result.phrase = merge_runtime.phrase or 0
+      foundation_result.config = merge_settings
+      foundation_result.anchor_notes = patterns[merge_settings.anchor] and
+        patterns[merge_settings.anchor].note_values or nil
+      merged_pattern.foundation = foundation_result
+    else
+      -- Plan §2: a separate mode, never the Foundation planner. Shape
+      -- percentages, Amount, Accent and Gap do not apply.
+      local fragment_settings = merge_settings.fragments or {}
+      fragments_result = fragments.plan({
+        start_step = effective_start,
+        end_step = effective_end,
+        size = fragment_settings.size or 8,
+        candidates = binding_parts,
+        patterns = patterns,
+        seed = merge_settings.seed,
+        song_slot = song_slot,
+        channel = channel,
+        binding = binding,
+        phrase = merge_runtime.ranking_phrase or 0,
+        cycle = cycle,
+        keep_anchor = fragment_settings.keep_anchor == true,
+        anchor = merge_settings.anchor
+      })
+      fragments_result.cycle = cycle
+      fragments_result.cycles = merge_settings.cycles or 1
+      fragments_result.phrase = merge_runtime.phrase or 0
+      fragments_result.config = merge_settings
+      merged_pattern.fragments = fragments_result
+      if fragments_result.status == "ok" then
+        -- Inside a fragment the legacy note/velocity/length merge modes and
+        -- merged-pentatonic do not apply: every value is the source's own.
+        merged_pattern.merged_notes = {}
+        for s = 1, 64 do merged_pattern.trig_values[s] = fragments_result.trigs[s] end
+        for _, s in ipairs(fragments_result.positions) do
+          merged_pattern.note_values[s] = fragments_result.notes[s]
+          merged_pattern.velocity_values[s] = fragments_result.velocities[s]
+          merged_pattern.lengths[s] = fragments_result.lengths[s]
+        end
+      end
+    end
   end
 
   for s = 1, 64 do

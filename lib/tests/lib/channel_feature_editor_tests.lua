@@ -398,3 +398,36 @@ function test_optional_config_bulk_redo_reports_refusal_instead_of_retrying()
   luaunit.assert_equals(memory.get_event_count(1), memory.get_total_event_count(1),
     "a bulk redo with nothing left to redo is a no-op")
 end
+
+-- README.md Channel pages: K3 applies the whole validated draft. Plan §0
+-- (characterisation): a live v1 configuration is edited as its canonical v2 form,
+-- and a saved v2 Fragments configuration is kept intact by an unrelated edit.
+function test_merge_editor_drafts_live_v1_configuration_as_canonical_v2()
+  local song, channel = setup()
+  channel.selected_patterns[1] = true
+  channel.musical_merge = {schema_version=1,mode="foundation",anchor=1,amount=100,accent=70,gap=0,seed=0,
+    ranking_version=1,cycles=1,shape="flat",percentages={100},variation="fixed",keep_anchor_pitch=false,
+    target={kind="legacy"},unknown=true}
+  local value = feature_editor.new("merge")
+  value:enter()
+  luaunit.assert_equals(value.draft.schema_version, 2)
+  luaunit.assert_nil(value.draft.unknown)
+  value.draft.amount, value.dirty = 40, true
+  luaunit.assert_true(value:key(3))
+  luaunit.assert_equals(channel.musical_merge.schema_version, 2)
+  luaunit.assert_equals(channel.musical_merge.amount, 40)
+  luaunit.assert_equals(merge_state.effective(song, 1, channel.musical_merge).config.amount, 40)
+end
+
+function test_merge_editor_keeps_saved_v2_fragments_fields_through_an_edit()
+  local _, channel = setup()
+  channel.selected_patterns[1] = true
+  channel.musical_merge = include("mosaic/lib/musical_merge/config").new()
+  channel.musical_merge.mode, channel.musical_merge.fragments.size = "fragments", 16
+  local value = feature_editor.new("merge")
+  value:enter()
+  value.draft.seed, value.dirty = 5, true
+  luaunit.assert_true(value:key(3))
+  luaunit.assert_equals({channel.musical_merge.mode, channel.musical_merge.fragments.size, channel.musical_merge.seed},
+    {"fragments", 16, 5})
+end

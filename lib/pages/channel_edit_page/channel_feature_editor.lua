@@ -399,7 +399,9 @@ function editor.new(kind)
     local song,channel=current_song_channel();self.song,self.channel,self.channel_number=song,channel,channel.number
     if self.kind=="merge"then
       local effective=merge_state.effective(song,channel.number,channel.musical_merge or merge_config.new())
-      self.draft=copy(effective.queued or channel.musical_merge or merge_config.new())
+      local source=effective.queued or channel.musical_merge or merge_config.new()
+      -- A live v1 configuration is drafted in its canonical v2 form.
+      self.draft=merge_config.canonicalize(source,channel.number)or copy(source)
     else
       harmony_config_state.effective_song(song,song.voicing or{schema_version=1,groups={}})
       self.song_draft=copy(song.voicing or{schema_version=1,groups={}});self.channel_drafts={};self.merge_drafts={};self.merge_changed={}
@@ -431,7 +433,7 @@ function editor.new(kind)
     local live=optional_transaction.view(song)
     if not optional_transaction.equivalent(live,self.before_snapshot)then self.status="INVALID STALE DRAFT";return false end
     if self.kind=="merge"then
-      local ok,reason=merge_config.validate(self.draft)
+      local ok,reason=merge_config.validate(self.draft,channel.number)
       if ok and self.draft.target.kind=="degrees"then
         local inventory=degree_inventory(channel)
         if degree_source_key(channel)~=self.degree_source_key then ok,reason=nil,"degree source changed"
