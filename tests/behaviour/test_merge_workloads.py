@@ -342,6 +342,31 @@ class TimingOracle(unittest.TestCase):
         self.assertEqual(report['timing_one_stall_tolerated']['p99_ns'], 0)  # everything else on time
         self.assertEqual(report['final_phase_error_ns'], 0)
 
+    def test_step_count_is_only_required_without_edits(self):
+        # An EDIT window: the leader anchor is off for a stretch, so those
+        # steps carry no note at all (device PERF-MERGE-HW-EDIT b28c4df7).
+        seconds = 8.0
+        step_ns = int(15 / 130 * 1e9)
+        events = worst_midi(1_000_000_000, seconds)
+        start = 1_000_000_000 + 20 * step_ns
+        end = 1_000_000_000 + 40 * step_ns
+        on = {}
+        kept = []
+        for e in events:
+            status = e['bytes'][0] & 0xF0
+            key = (e['bytes'][0] & 0x0F, e['bytes'][1])
+            if status == 144 and start <= e['monotonic_ns'] < end:
+                on[key] = on.get(key, 0) + 1
+                continue
+            if status == 128 and on.get(key):
+                on[key] -= 1
+                continue
+            kept.append(e)
+        with self.assertRaisesRegex(AssertionError, 'Step count'):
+            mw.merge_timing_oracle(kept, 'WORST', seconds, 15 / 130, TIMING_THRESHOLDS)
+        report = mw.merge_timing_oracle(kept, 'WORST', seconds, 15 / 130, TIMING_THRESHOLDS, step_count=False)
+        self.assertLess(report['steps'], int(seconds / (15 / 130)) - 2)
+
     def test_unbalanced_releases_fail(self):
         events = worst_midi(1_000_000_000, 8.0)
         events = [e for e in events if not (e['bytes'][0] == 128 + 3)]

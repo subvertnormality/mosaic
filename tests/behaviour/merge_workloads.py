@@ -503,15 +503,18 @@ def timing_metrics(placement, seconds, step_seconds, thresholds, steps=None):
             'origin_shift_ns': placement['origin_shift_ns'], 'gates': gates}
 
 
-def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, optional_skip=None):
+def merge_timing_oracle(events, variant, seconds, step_seconds, thresholds, optional_skip=None, step_count=True):
     """Absolute timing of one window's merge output on its own onset grids
     (robust origin, see place_notes), judged by the unchanged thresholds.
     Simultaneous expected onsets form a service cluster; sixteenth
     boundaries carry step jitter."""
     placement = place_notes(events, variant, seconds, step_seconds, thresholds, optional_skip)
     report = timing_metrics(placement, seconds, step_seconds, thresholds)
-    expected_steps = int(seconds / step_seconds)
-    assert abs(report['steps'] - expected_steps) <= 2, ('Step count', report['steps'], expected_steps)
+    # EDIT cases toggle the leader's anchor off, which legitimately empties
+    # whole steps; their content is checked by the like-for-like note sets.
+    if step_count:
+        expected_steps = int(seconds / step_seconds)
+        assert abs(report['steps'] - expected_steps) <= 2, ('Step count', report['steps'], expected_steps)
     report.update(note_ons=placement['note_ons'], note_offs=placement['note_offs'])
     return report
 

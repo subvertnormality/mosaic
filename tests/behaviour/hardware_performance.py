@@ -578,7 +578,7 @@ def evaluate_merge_windows(case_id,off,enabled,step_seconds,thresholds=None):
     if admissions['edits']!=expected_edits:admissions['passed']=False;admissions['failures'].append({'kind':'edits','observed':admissions['edits'],'expected':expected_edits})
     # Absolute timing of the enabled window, robust grid origin: kept for
     # information; its maximum and service gates still apply.
-    try:timing=merge_workloads.merge_timing_oracle(enabled['state']['midi'],variant,enabled['seconds'],step_seconds,thresholds,merge_workloads.leader_step_one_skip(variant))
+    try:timing=merge_workloads.merge_timing_oracle(enabled['state']['midi'],variant,enabled['seconds'],step_seconds,thresholds,merge_workloads.leader_step_one_skip(variant),step_count=not spec.get('edit_every_beats'))
     except AssertionError as error:timing={'passed':False,'failure':repr(error)[:2000],'gates':{}}
     # §1.4 like-for-like: p99 lateness and step jitter as merge-added
     # (enabled − Off, same session, same notes on the compared steps).
