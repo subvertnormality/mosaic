@@ -865,6 +865,30 @@ function test_interlock_retiming_an_unrelated_channel_rebuilds_nothing()
   stop_transport()
 end
 
+-- Review D5 (§1.3 "While stopped": the stopped preview shows what the first
+-- cycle after Start will play). A Clock change applied while stopped
+-- (channel_edit_clock_controls.update_clock_mods sets clock_mods and the
+-- division at once) replans the follower, whether the follower or its leader
+-- was retimed: its working pattern equals a fresh build. Found by the
+-- behaviour case M-MERGE-INTERLOCK-003, where Start otherwise played an
+-- addition coinciding with a leader anchor for the whole first loop.
+function test_interlock_stopped_retime_replans_the_follower()
+  for _, case in ipairs({{FOLLOWER, D1}, {LEADER, X2}}) do
+    local number, mods = case[1], case[2]
+    local song, follower = setup({global_length = 16})
+    m_clock.init()
+    local before = blocked_steps(follower.working_pattern)
+    song.channels[number].clock_mods = mods
+    m_clock.set_channel_division(number, m_clock.calculate_divisor(mods))
+    local fresh = build(song, FOLLOWER)
+    luaunit.assert_not_equals(blocked_steps(fresh), before, "fixture must change the admission")
+    luaunit.assert_equals(blocked_steps(follower.working_pattern), blocked_steps(fresh), number)
+    luaunit.assert_equals(follower.working_pattern.trig_values, fresh.trig_values, number)
+    luaunit.assert_equals(follower.working_pattern.foundation.interlock.status, "ok", number)
+    luaunit.assert_false(merge_timeline.resync(number))
+  end
+end
+
 -- §1.4 an Interlock-only anchor in the preceding leader cycle within the
 -- window is found (follower cycle 1 starts at 8/16; the leader's cycle-1
 -- anchor at 7/16 is within one follower step).

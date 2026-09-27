@@ -902,9 +902,11 @@ function m_clock.set_channel_division(channel_number, division)
     -- when an earlier timing check already made its resync sticky; the
     -- rebuild reaches its own followers too. retime_channel has already
     -- invalidated its lookahead. A channel in no Interlock relation rebuilds
-    -- nothing.
-    if channel_number ~= 17 and merge_timeline.running() then
-      merge_timeline.set_resync(channel_number)
+    -- nothing. While stopped (a Clock change applies at once) there is no
+    -- origin to resync, but the stopped preview, which the first cycle after
+    -- Start plays (§1.3), is replanned the same way.
+    if channel_number ~= 17 then
+      if merge_timeline.running() then merge_timeline.set_resync(channel_number) end
       local song = program.get_selected_song_pattern()
       if pattern.followers_of(song)[channel_number] then
         pattern.update_working_pattern(channel_number, song)
