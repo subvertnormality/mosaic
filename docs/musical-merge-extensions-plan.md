@@ -257,9 +257,49 @@ rebuilds for the follower's own edits recompute from the same inputs.
   admission — the sweep rebuilds from live data, so the last build wins). Each
   asserts the retained admission until replacement, the lookahead invalidation,
   and that grid LEDs and emitted MIDI agree at every step.
-- **No persistent cache.** Leader plans are memoised only within one admission
-  (keyed by configuration entry, cycle_in_phrase and ranking phrase), so there
-  is no cross-build cache to invalidate. Cost is bounded by §1.4.
+- **Leader-plan cache (performance).** A leader plan is a pure function of the
+  leader's inputs, so it is cached across builds under a key that names every
+  input:
+  `(slot table, leader, origin serial, input epoch of the leader,
+  governing segment identity, cycle_in_phrase, ranking phrase)`.
+  - The **input epoch** of a channel is a counter bumped by every rebuild
+    *request* that is not the clock's own wrap rebuild: each channel marked in
+    `update_working_patterns` (including the all-channel facade and
+    `update_source_working_patterns`), `update_working_pattern` without
+    `at_wrap`, `rebuild_followers`, stopped applies and history restores. These
+    are exactly the paths by which any edit already reaches the leader's own
+    working pattern; an edit that bypassed them would already leave the leader
+    playing stale data, so the cache adds no new staleness class. A test sweeps
+    every existing caller of those functions (grep-enumerated) and asserts the
+    epoch moves, and a property test mutates each stored input field of a
+    channel through its public editor path and asserts a cache miss.
+  - The **segment identity** is the logged segment's own table (segments are
+    immutable once logged) or, for a predicted segment, a key built from the
+    predicted configuration's canonical serialisation, cycle and phrase.
+  - The Space articulation snapshot and gate list are cached with the plan under
+    the same key plus the articulation reader's inputs epoch (the same counter,
+    also bumped by parameter-lock and stock-parameter edits on that channel).
+  - Entries for other origin serials are dropped at each origin; at most 64
+    entries per leader are kept (least recently used dropped first).
+  - Hit or miss never changes a result: tests compute every admission with the
+    cache cleared and with it warm and assert identical plans.
+- **Prewarm (performance).** After a follower's wrap has admitted cycle `j`, a
+  background `clock.run` coroutine computes the leader plans the admission of
+  cycle `j + 1` will need, one plan per resume (yielding between builds), and
+  stores them in the cache. It only writes cache entries under the same keys the
+  synchronous path would use, so it cannot change any decision; if an edit bumps
+  an epoch meanwhile, its entries are simply never hit. The coroutine is
+  cancelled at Stop, origin change or when a newer prewarm for the same
+  follower starts. With the cache warm, the synchronous work in the wrap
+  callback is the membership checks of §1.4 and cache lookups only; with it
+  cold (first cycle after an edit), it is the full §1.4 budget, as before.
+- **Device budget.** Acceptance on the norns (tests/behaviour/real_norns.py
+  performance lane or an equivalent timing probe) measures the synchronous
+  follower build at wrap in the worst supported configuration (two leaders,
+  eight per-phrase plans each, 64-step follower) cold and warm, and the
+  steady-state case (one leader, one cycle). The warm and steady-state builds
+  must not change onset timing compared with Merge Shape Off beyond the
+  existing device timing tolerances; the cold figure is reported.
 - **While stopped** `j = 0` and `k_l = 0`: the stopped grid preview shows what
   the first cycle after Start will play, using any queued/requested
   configuration as the entry at 0.
