@@ -296,11 +296,11 @@ rebuilds for the follower's own edits recompute from the same inputs.
   next build. Cost per admission: at most 64 leader cycles × 64 stored anchor
   values plus the membership checks.
 - **Wrap-rebuild memo (performance).** No leader state or leader plan is
-  cached across builds: every build recomputes the Interlock admission
+  cached across pulses: every pulse recomputes the Interlock admission
   (above) from live data. Only the clock's synchronous rebuild at a channel's
-  own wrap (`update_working_pattern(c, song, true)`) may reuse follower-side
-  work, from a memo per song pattern and channel that is validated by
-  **content** on every use. Rebuild requests are not relied on: source arrays
+  own wrap (`update_working_pattern(c, song, true, pulse)`) may reuse
+  follower-side work, from a memo per song pattern and channel that is
+  validated by **content** on every use. Rebuild requests are not relied on: source arrays
   and step masks are written in place without one
   (`program.update_working_pattern_for_step`, the memory event handlers).
   The legacy source merge (before Foundation and masks) is reused only when
@@ -319,6 +319,19 @@ rebuilds for the follower's own edits recompute from the same inputs.
   stored result, so nothing written to a returned working pattern or plan
   reaches the memo. Every other build (edits, sweeps, Start, load) runs in
   full.
+  Within one lattice pulse (the token m_clock's wrap branch passes down, a
+  fresh table per `Lattice:pulse_all`, so a pulse that raises shares nothing
+  with the next) the followers that wrap together also share work: equal
+  source snapshots are one object, validated once per pulse, and one
+  Interlock admission serves every follower whose key matches. The key holds
+  every admission input that code running inside a pulse can write (the
+  follower and leader merge_state records, the timeline counters, resync
+  flags and origin serial, the song table and slot, the origin end); the
+  rest (pattern data, ranges, clock mods, assignments, saved configurations)
+  is written only by input handlers and editors, which never run inside a
+  pulse (a pulse runs to completion in one coroutine). Never shared: a
+  global queue on either channel or a queued leader configuration. The
+  follower's timing check runs on every build.
 - **While stopped** `j = 0` and `k_l = 0`: the stopped grid preview shows what
   the first cycle after Start will play, using any queued/requested
   configuration as the entry at 0.

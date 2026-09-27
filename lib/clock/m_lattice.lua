@@ -296,7 +296,19 @@ function Lattice:pulse()
   if probe then probe:record(1, probe.pulse, 0, 0, 2) end
 end
 
+-- One pulse's sprocket work. `pulse_token` is a fresh table for each call
+-- and nil outside it: the wrap rebuilds of one pulse may share work under it
+-- (pattern.lua wrap memo). A pulse that raises leaves its token behind, but
+-- the next pulse_all replaces it before any sprocket runs, so nothing is
+-- shared across pulses.
 function Lattice:pulse_all()
+  self.pulse_token = {}
+  local result = self:pulse_all_sprockets()
+  self.pulse_token = nil
+  return result
+end
+
+function Lattice:pulse_all_sprockets()
   if self.enabled then
     -- Parameter values resolved ahead of their own step leave here, inside a
     -- pulse the sequencer was already running and before this pulse's own work.

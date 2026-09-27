@@ -632,7 +632,10 @@ function m_clock.init()
         if merged then
           local scheduler = m_clock.lookahead_scheduler
           if scheduler then scheduler:invalidate(channel_number, current_step, nil) end
-          pattern.update_working_pattern(channel_number, song_pattern, true)
+          -- The pulse token lets the followers wrapping on this pulse share
+          -- their leader's admission (pattern.lua wrap memo).
+          pattern.update_working_pattern(channel_number, song_pattern, true,
+            clock_lattice and clock_lattice.pulse_token)
         end
         
         -- The global scale channel has no MIDI parameter recorder bank.

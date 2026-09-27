@@ -240,13 +240,30 @@ end
 --     value and by number subtype (math.type).
 -- A hit returns a fresh copy of the pristine merged pattern stored at the
 -- miss; nothing the caller does to the result reaches the entry.
+--
+-- Within one lattice pulse (the `pulse` token m_clock's wrap branch passes
+-- down; a fresh table per Lattice:pulse_all), a source snapshot that equals
+-- another entry's is shared (interned), and a snapshot validated once in the
+-- pulse is not validated again. Sound because a pulse runs to completion in
+-- one coroutine without yielding, and no code that runs inside a pulse
+-- writes source arrays: only input handlers and editors do (grid pages,
+-- Rhythm Doctor, memory undo/redo, project load), and they never run
+-- inside a pulse. Step masks are per channel and always validated.
 local legacy_memo = setmetatable({}, {__mode = "k"})
 local math_type = math.type
 local VALUE_FIELDS = {"note_values", "velocity_values", "lengths", "note_mask_values"}
 local MERGED_FIELDS = {"trig_values", "lengths", "note_values", "note_mask_values", "velocity_values"}
 
 -- Hit and miss counts of the wrap memo, for tests and profiling.
-pattern.wrap_memo_stats = {legacy_hits = 0, legacy_misses = 0, plan_hits = 0, plan_misses = 0}
+pattern.wrap_memo_stats = {legacy_hits = 0, legacy_misses = 0, plan_hits = 0, plan_misses = 0,
+  shared_validations = 0, shared_admissions = 0, share_checks = 0}
+
+-- Tests only: when true, every in-pulse shortcut (a skipped source
+-- validation, a shared admission) is also recomputed and compared, raising
+-- on any difference.
+pattern.wrap_share_check = false
+-- Tests only: false turns the in-pulse sharing off (the differential baseline).
+pattern.wrap_share = true
 
 -- The trig class of a source value: 1 (== 1), 2 (== true) or 0.
 local function trig_class(value)
@@ -261,7 +278,7 @@ local function positive_masks(masks)
   return result
 end
 
-local function snapshot_source(source, positive, every)
+local function snapshot_values(source, positive, every)
   local trigs = source.trig_values
   if type(trigs) ~= "table" then return nil end
   local classes, steps = {}, {}
@@ -281,7 +298,61 @@ local function snapshot_source(source, positive, every)
   return saved
 end
 
-local function memo_valid(entry, channel, modes, pattern_channel, patterns)
+local function same_snapshot(a, b)
+  local steps, other_steps = a.steps, b.steps
+  if #steps ~= #other_steps then return false end
+  for s = 1, 64 do if a.classes[s] ~= b.classes[s] then return false end end
+  for i = 1, #steps do if steps[i] ~= other_steps[i] then return false end end
+  for _, field in ipairs(VALUE_FIELDS) do
+    local x, y = a[field], b[field]
+    for i = 1, #steps do
+      local u, v = x[i], y[i]
+      if u ~= v or math_type(u) ~= math_type(v) then return false end
+    end
+  end
+  return true
+end
+
+-- Snapshots by source table; equal snapshots are one object, so the
+-- followers of one leader that merge the same sources validate it once per
+-- pulse.
+local interned = setmetatable({}, {__mode = "k"})
+
+local function snapshot_source(source, positive, every)
+  local saved = snapshot_values(source, positive, every)
+  if not saved then return nil end
+  local list = interned[source]
+  if not list then list = setmetatable({}, {__mode = "v"}); interned[source] = list end
+  for _, other in pairs(list) do
+    if same_snapshot(other, saved) then return other end
+  end
+  list[#list + 1] = saved
+  return saved
+end
+
+-- Whether a source still holds a snapshot's values.
+local function source_matches(saved)
+  local trigs, classes = saved.source.trig_values, saved.classes
+  if type(trigs) ~= "table" then return false end
+  for s = 1, 64 do
+    local value = trigs[s]
+    local class = value == 1 and 1 or value == true and 2 or 0
+    if class ~= classes[s] then return false end
+  end
+  -- Classes are equal, so the read steps are the saved ones.
+  local steps = saved.steps
+  for _, field in ipairs(VALUE_FIELDS) do
+    local values, copy = saved.source[field], saved[field]
+    if type(values) ~= "table" then return false end
+    for i = 1, #steps do
+      local u, v = values[steps[i]], copy[i]
+      if u ~= v or math_type(u) ~= math_type(v) then return false end
+    end
+  end
+  return true
+end
+
+local function memo_valid(entry, channel, modes, pattern_channel, patterns, pulse)
   for index = 1, 4 do if entry.modes[index] ~= modes[index] then return false end end
   -- The visit order of the sources, built exactly as legacy_merge builds it.
   local order = {}
@@ -305,24 +376,18 @@ local function memo_valid(entry, channel, modes, pattern_channel, patterns)
     if (masks ~= nil and masks[s] == 1) ~= positive[s] then return false end
   end
   local sources = entry.sources
+  local stats = pattern.wrap_memo_stats
   for index = 1, #sources do
     local saved = sources[index]
-    local trigs, classes = saved.source.trig_values, saved.classes
-    if type(trigs) ~= "table" then return false end
-    for s = 1, 64 do
-      local value = trigs[s]
-      local class = value == 1 and 1 or value == true and 2 or 0
-      if class ~= classes[s] then return false end
-    end
-    -- Classes and masks are equal, so the read steps are the saved ones.
-    local steps = saved.steps
-    for _, field in ipairs(VALUE_FIELDS) do
-      local values, copy = saved.source[field], saved[field]
-      if type(values) ~= "table" then return false end
-      for i = 1, #steps do
-        local u, v = values[steps[i]], copy[i]
-        if u ~= v or math_type(u) ~= math_type(v) then return false end
+    if pulse and saved.valid_pulse == pulse then
+      stats.shared_validations = stats.shared_validations + 1
+      if pattern.wrap_share_check then
+        stats.share_checks = stats.share_checks + 1
+        if not source_matches(saved) then error("wrap memo: a source changed inside a pulse", 2) end
       end
+    else
+      if not source_matches(saved) then return false end
+      if pulse then saved.valid_pulse = pulse end
     end
   end
   return true
@@ -345,14 +410,14 @@ end
 
 -- legacy_merge, served from the memo when every input equals the entry's.
 -- Returns the merged pattern and whether it came from the memo.
-local function memo_legacy_merge(channel, modes, selected_song_pattern)
+local function memo_legacy_merge(channel, modes, selected_song_pattern, pulse)
   local pattern_channel = selected_song_pattern.channels[channel]
   local patterns = selected_song_pattern.patterns
   local by_channel = legacy_memo[selected_song_pattern]
   local entry = by_channel and by_channel[channel]
   local stats = pattern.wrap_memo_stats
   if entry and entry.channel_table == pattern_channel and entry.patterns == patterns and
-    memo_valid(entry, channel, modes, pattern_channel, patterns) then
+    memo_valid(entry, channel, modes, pattern_channel, patterns, pulse) then
     stats.legacy_hits = stats.legacy_hits + 1
     return copy_merged(entry.merged), true
   end
@@ -460,12 +525,97 @@ local function copy_plan(plan)
   return result
 end
 
-function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, memo)
+-- The Interlock admission shared by the wrap rebuilds of one lattice pulse
+-- (the `pulse` token). Every admission input that code running inside a
+-- pulse can write is in the key: the merge_state records of follower and
+-- leader, the timeline counters, resync flags and origin serial, the song
+-- slot and table, and the origin end (song transitions run inside pulses).
+-- Leader data only input handlers and editors write (anchor pattern trigs,
+-- ranges, clock mods, assignments, the saved configuration) cannot change
+-- within a pulse. Never shared: a global queue on either channel or a
+-- queued leader configuration (the prediction then reads the song-wide
+-- dependency edges). The follower's timing check, with its sticky resync
+-- side effect, runs on every build.
+local timeline = include("mosaic/lib/musical_merge/timeline")
+local shared_admission = {}
+local ADMISSION_KEY_SIZE = 21
+
+local function same_admission_key(left, right)
+  for index = 1, ADMISSION_KEY_SIZE do
+    local u, v = left[index], right[index]
+    if u ~= v or math_type(u) ~= math_type(v) then return false end
+  end
+  return true
+end
+
+local function admission_key(song, follower, config, first, last)
+  local leader, window = interlock.settings(config)
+  if not leader then return nil end
+  local follower_record, leader_record = merge_state.peek(song, follower), merge_state.peek(song, leader)
+  if (follower_record and follower_record.global_queued) or leader_record and
+    (leader_record.global_queued or leader_record.queued ~= nil) then
+    return nil
+  end
+  local running = timeline.running()
+  local j, k_l, leader_resync = 0, 0, false
+  if running then
+    if not timeline.check_timing(song, follower) then return nil end
+    local follower_log, leader_log = timeline.channel(follower), timeline.channel(leader)
+    j, k_l = follower_log and follower_log.k, leader_log and leader_log.k
+    leader_resync = leader_log and leader_log.resync or false
+  end
+  local mods = song.channels[follower].clock_mods
+  local transition = step and step.origin_end_boundary
+  local ending = transition and transition(timeline.elapsed_master()) or false
+  return {song, leader, window, first, last, running, j, k_l, leader_resync, timeline.serial(),
+    leader_record ~= nil, leader_record and leader_record.active or false,
+    leader_record and leader_record.cycle or false, leader_record and leader_record.phrase or false,
+    type(mods) == "table" and mods.type or false, type(mods) == "table" and mods.value or false,
+    ending, program.get().selected_song_pattern, song.global_pattern_length or false,
+    config.schema_version, config.mode}
+end
+
+local function deep_equal(left, right)
+  if type(left) ~= "table" or type(right) ~= "table" then
+    return left == right and math_type(left) == math_type(right)
+  end
+  for key, value in pairs(left) do if not deep_equal(value, right[key]) then return false end end
+  for key in pairs(right) do if left[key] == nil then return false end end
+  return true
+end
+
+local function admission(song, channel, config, first, last, pulse)
+  local key = pulse and admission_key(song, channel, config, first, last)
+  if key and shared_admission.pulse == pulse and same_admission_key(shared_admission.key, key) then
+    local stats = pattern.wrap_memo_stats
+    stats.shared_admissions = stats.shared_admissions + 1
+    if pattern.wrap_share_check then
+      stats.share_checks = stats.share_checks + 1
+      local fresh = interlock.admission({song = song, channel = channel, config = config, first = first, last = last})
+      if not deep_equal(fresh, shared_admission.result) then
+        error("wrap memo: a shared admission differs from its recomputation (channel " .. channel .. ")", 2)
+      end
+    end
+    return shared_admission.result
+  end
+  local result = interlock.admission({song = song, channel = channel, config = config, first = first, last = last})
+  if key then
+    shared_admission.pulse, shared_admission.key, shared_admission.result = pulse, key, result
+  elseif shared_admission.pulse ~= pulse then
+    shared_admission.pulse, shared_admission.key, shared_admission.result = nil, nil, nil
+  end
+  return result
+end
+
+-- memo: the wrap rebuild (content-validated memo). pulse: the lattice pulse
+-- token of that rebuild, when it runs inside a pulse (m_clock's wrap branch).
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, memo, pulse)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern, legacy_hit
+  local share = memo and type(pulse) == "table" and pattern.wrap_share and pulse or nil
   if memo and not effective_lengths_cache then
     merged_pattern, legacy_hit = memo_legacy_merge(channel,
-      {trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode}, selected_song_pattern)
+      {trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode}, selected_song_pattern, share)
   else
     merged_pattern = legacy_merge(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode,
       length_merge_mode, selected_song_pattern, effective_lengths_cache)
@@ -515,10 +665,7 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
       -- off (§1.2 unsupported-admission fallback).
       local filters, interlock_result
       if interlock.settings(merge_settings) then
-        interlock_result = interlock.admission({
-          song = selected_song_pattern, channel = channel, config = merge_settings,
-          first = effective_start, last = effective_end
-        })
+        interlock_result = admission(selected_song_pattern, channel, merge_settings, effective_start, effective_end, share)
         filters = {}
         if interlock_result.status == interlock.SUPPORTED then
           filters[1] = {reason = interlock_result.reason, blocked = interlock_result.blocked}
@@ -693,7 +840,7 @@ local function invalidate_lookahead(c)
   if scheduler then scheduler:invalidate(c, nil, nil) end
 end
 
-local function build_working_pattern(c, song_pattern, channel_pattern, effective_lengths_cache, memo)
+local function build_working_pattern(c, song_pattern, channel_pattern, effective_lengths_cache, memo, pulse)
   return pattern.get_and_merge_patterns(
     c,
     channel_pattern.trig_merge_mode,
@@ -702,7 +849,8 @@ local function build_working_pattern(c, song_pattern, channel_pattern, effective
     channel_pattern.length_merge_mode,
     song_pattern,
     effective_lengths_cache,
-    memo
+    memo,
+    pulse
   )
 end
 
@@ -774,9 +922,9 @@ function pattern.update_source_working_patterns(song_pattern, source_number)
   pattern.update_working_patterns(song_pattern, affected)
 end
 
-local function rebuild(c, song_pattern, memo)
+local function rebuild(c, song_pattern, memo, pulse)
   local channel_pattern = song_pattern.channels[c]
-  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern, nil, memo)
+  channel_pattern.working_pattern = build_working_pattern(c, song_pattern, channel_pattern, nil, memo, pulse)
 end
 
 -- Rebuild, synchronously, every follower of a channel in `leaders` (every
@@ -791,14 +939,16 @@ end
 
 -- at_wrap: the clock's own rebuild at the channel's loop wrap. That plans the
 -- channel's new cycle, which its followers' admissions already predicted
--- (plan §1.2.3), so it is not an edit and does not propagate.
-function pattern.update_working_pattern(c, song_pattern, at_wrap)
+-- (plan §1.2.3), so it is not an edit and does not propagate. pulse: the
+-- lattice pulse token of that wrap (Lattice.pulse_token), which lets the
+-- rebuilds of one pulse share work (see the wrap memo).
+function pattern.update_working_pattern(c, song_pattern, at_wrap, pulse)
   -- Legacy synchronous callers may have changed source arrays directly.
   -- Do not let a pending sweep retain pre-edit lengths after this ingress.
   local state = working_pattern_updates[song_pattern]
   if state then state.effective_lengths_cache = {} end
   -- The wrap rebuild serves unchanged inputs from the content-validated memo.
-  rebuild(c, song_pattern, at_wrap == true)
+  rebuild(c, song_pattern, at_wrap == true, at_wrap == true and pulse or nil)
   -- Plan §1.3: leader edits reach followers.
   if not at_wrap then pattern.rebuild_followers(song_pattern, {[c] = true}) end
 end
