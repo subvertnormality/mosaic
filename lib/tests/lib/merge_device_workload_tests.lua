@@ -414,41 +414,54 @@ function test_merge_device_workload_wrap_and_song_end_sweep_builds_hit_the_memo(
   luaunit.assert_equals(sweep_pulses, {24 * 64 + 1, 24 * 64 * 2 + 1})
 end
 
--- Plan §1.4 Start latency compares the enabled window with the same workload
--- with Merge Shape Off; the Off window's followers use a legacy trig merge
--- mode chosen so the first step plays the same notes (channels and pitches).
-local function first_step(W, variant, mode, trig_override)
+-- Plan §1.4 like-for-like gates: the Off window plays the enabled window's
+-- notes for the whole capture. configure("off") renders the enabled working
+-- patterns into legacy sources (and asserts the rebuilt Off patterns equal
+-- them); here both windows are played and every note (pulse, channel, pitch,
+-- velocity) must be the same, merged-pentatonic lock on (the norns default).
+local function played_notes(W, variant, mode, pulses)
   dense_project()
+  params:set("merged_lock_to_pentatonic", 2)
   W.configure(variant, mode)
-  if trig_override then
-    for c = 1, 16 do program.get_song_pattern(1).channels[c].trig_merge_mode = trig_override end
-    pattern.update_working_patterns(program.get_song_pattern(1))
-  end
-  local before = #midi_note_on_events
-  local notes = {}
+  midi_event_log = {}
   local ok, err = pcall(function()
-    m_clock:start()   -- plays the first step (the lattice's immediate first pulse)
-    for index = before + 1, #midi_note_on_events do
-      local event = midi_note_on_events[index]
-      notes[#notes + 1] = event[3] .. ":" .. event[1]
-    end
+    m_clock:start()
+    for _ = 1, pulses do m_clock.get_clock_lattice():pulse() end
     stop_transport()
   end)
+  params:set("merged_lock_to_pentatonic", nil)
   if not ok then error(err, 0) end
+  local notes = {}
+  for _, event in ipairs(midi_event_log) do
+    if event.kind == "note_on" then notes[#notes + 1] = table.concat({event.pulse, event.c, event.a, event.b}, ":") end
+  end
   table.sort(notes)
   return notes
 end
 
-function test_merge_device_workload_off_window_plays_the_enabled_first_step()
+function test_merge_device_workload_off_window_plays_the_enabled_notes_throughout()
   local W = workload()
-  for _, variant in ipairs({"STEADY", "WORST", "DENSE"}) do
-    local enabled = first_step(W, variant, "enabled")
+  for _, case in ipairs({{"STEADY", 24 * 16 * 3}, {"WORST", 24 * 64 * 2 + 12}, {"DENSE", 96 * 64 + 96 * 4}}) do
+    local variant, pulses = case[1], case[2]
+    local enabled = played_notes(W, variant, "enabled", pulses)
     luaunit.assert_true(#enabled > 0, variant)
-    luaunit.assert_equals(first_step(W, variant, "off"), enabled, variant)
+    luaunit.assert_equals(played_notes(W, variant, "off", pulses), enabled, variant)
   end
-  -- The previous Off baseline (legacy "skip" everywhere) played a different
-  -- first step: WORST's patterns 7 and 8 coincide on step 1 and cancel.
-  luaunit.assert_not_equals(first_step(W, "WORST", "off", "skip"), first_step(W, "WORST", "enabled"))
+end
+
+function test_merge_device_workload_off_window_renders_into_spare_slots_without_merge()
+  local W = workload()
+  local song = dense_project()
+  local readback = W.configure("WORST", "off")
+  for number = 1, 16 do luaunit.assert_nil(song.channels[number].musical_merge) end
+  -- Leader: one rendered source; followers: the rendered pattern and its
+  -- merged-step companion (source B), shared by all 15.
+  luaunit.assert_not_nil(readback:find("1:none/slot9/", 1, true), readback)
+  luaunit.assert_not_nil(readback:find("16:none/slot10+11/", 1, true), readback)
+  luaunit.assert_equals(song.channels[2].trig_merge_mode, "all")
+  -- The workload's own slots and the dense pattern are left as the enabled
+  -- window configures them.
+  luaunit.assert_equals(song.patterns[1].trig_values[16], 1)
 end
 
 function test_merge_device_workload_build_rows_carry_build_time_and_heap()

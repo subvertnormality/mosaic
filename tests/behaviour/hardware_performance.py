@@ -541,7 +541,9 @@ def run_merge_window(runner,driver,trace,spec,mode,transport_log,sampler=None):
     # the Start-latency comparison differs only in Merge Shape.
     driver.ui.tap_control('pattern_select',merge_workloads.LEADER_PATTERN)
     merge_eval(runner,'print(_MOSAIC_MERGE_WORKLOAD.reset())','__MERGE_REC_RESET__')
-    seconds=spec['seconds'] if mode=='enabled' else merge_workloads.DEFAULT_SECONDS
+    # Both windows capture the same duration: the like-for-like gates compare
+    # the same steps, wraps included.
+    seconds=spec['seconds']
     edits=[]
     trace.reset();sampler=sampler or NoResourceSampler();sampler.start();time.sleep(.25)
     started_ns=time.monotonic_ns();play_tap=driver.ui.play()
@@ -567,17 +569,29 @@ def evaluate_merge_windows(case_id,off,enabled,step_seconds,thresholds=None):
     expected_edits=len(merge_workloads.edit_offsets_beats(spec['edit_every_beats'],enabled['seconds'],15/step_seconds,merge_workloads.follower_step_beats(variant)/2)) if spec.get('edit_every_beats') else 0
     admissions['expected_edits']=expected_edits
     if admissions['edits']!=expected_edits:admissions['passed']=False;admissions['failures'].append({'kind':'edits','observed':admissions['edits'],'expected':expected_edits})
+    # Absolute timing of the enabled window, robust grid origin: kept for
+    # information; its maximum and service gates still apply.
     try:timing=merge_workloads.merge_timing_oracle(enabled['state']['midi'],variant,enabled['seconds'],step_seconds,thresholds,merge_workloads.leader_step_one_skip(variant))
-    except AssertionError as error:timing={'passed':False,'failure':repr(error)[:2000]}
+    except AssertionError as error:timing={'passed':False,'failure':repr(error)[:2000],'gates':{}}
+    # §1.4 like-for-like: p99 lateness and step jitter as merge-added
+    # (enabled − Off, same session, same notes on the compared steps).
+    try:like=merge_workloads.like_for_like_timing(enabled['state']['midi'],off['state']['midi'],variant,min(enabled['seconds'],off['seconds']),step_seconds,thresholds,
+                                                   merge_workloads.leader_step_one_skip(variant),enabled['rows'],enabled['step_cell'])
+    except AssertionError as error:like={'valid':False,'invalid_reasons':['timing capture: '+repr(error)[:300]]}
     # §1.4 Start latency: from the Play key-up (the edge Mosaic acts on)
     # against an Off baseline that plays the same first step; otherwise the
     # comparison is invalid, which fails the case as invalid, not on timing.
     cluster=merge_workloads.start_cluster_ns(variant,round(step_seconds*1e9))
     latency=merge_workloads.start_latency_verdict(merge_workloads.start_latency(enabled['rows'],enabled['state']['midi'],enabled['play_cell'],cluster),
                                                   merge_workloads.start_latency(off['rows'],off['state']['midi'],off['play_cell'],cluster),thresholds)
-    gates={'timing':timing['passed'],'admissions':admissions['passed'],'start_latency':latency['passed'],'transport_stopped':bool(off['stopped'] and enabled['stopped'])}
-    invalid=['start latency: '+reason for reason in latency['invalid_reasons']]
-    return {'passed':all(gates.values()) and not invalid,'valid':not invalid,'invalid':invalid,'gates':gates,'timing':timing,
+    tg=timing.get('gates',{})
+    gates={'event_timing_maximum':bool(timing.get('timing')) and timing['timing']['maximum_ns']<=thresholds['maximum_ns'],
+           'sustained_service':bool(tg.get('sustained_service')),'hard_service':bool(tg.get('hard_service')),
+           'merge_added_p99':bool(like.get('gates',{}).get('merge_added_p99')),
+           'merge_added_step_jitter':bool(like.get('gates',{}).get('merge_added_step_jitter')),
+           'admissions':admissions['passed'],'start_latency':latency['passed'],'transport_stopped':bool(off['stopped'] and enabled['stopped'])}
+    invalid=['start latency: '+reason for reason in latency['invalid_reasons']]+['like-for-like timing: '+reason for reason in like.get('invalid_reasons',[])]
+    return {'passed':all(gates.values()) and not invalid,'valid':not invalid,'invalid':invalid,'gates':gates,'timing':timing,'like_for_like':like,
             'admissions':admissions,'start_latency':latency,'thresholds':thresholds,
             'gc':{'off':merge_workloads.gc_observation(off['rows']),'enabled':merge_workloads.gc_observation(enabled['rows'])}}
 

@@ -21,7 +21,8 @@
 --   reset(), dump(first, last), count(), remove()
 --
 -- Pattern slots: 1 is the PERF-002 dense pattern (a trig on steps 1..16),
--- left untouched. The workload writes slots 3, 5, 6, 7 and 8.
+-- left untouched. The workload writes slots 3, 5, 6, 7 and 8, and in the Off
+-- window slots 9 and up (the rendered patterns, below).
 -- ASCII only: the chunk travels as a Lua string literal.
 
 local W = {}
@@ -76,35 +77,133 @@ local function foundation(anchor, leader, window)
   return value
 end
 
--- {patterns = {slot = steps}, channels = {number = {patterns, first, last, mod, merge, off_trig}}}
--- off_trig: the channel's legacy trig merge mode in the Off window, chosen so
--- the Off window plays the same step-1 note set as the enabled window (plan
--- section 1.4 Start latency compares like with like). The enabled window keeps the
--- default "skip" (Foundation replaces the legacy trigs).
+-- {patterns = {slot = steps}, channels = {number = {patterns, first, last, mod, merge}}}
 local function plan(variant)
   if variant == "STEADY" then
     -- The leader's anchor pattern is W.LEADER_PATTERN in every variant: the
     -- recorder's leader_trig reads that pattern's step 1.
     return {patterns = {[W.LEADER_PATTERN] = {1, 5, 9, 13}, [6] = {1, 9}},
-      channels = {[1] = {{W.LEADER_PATTERN, 1}, 1, 16, "/1", foundation(W.LEADER_PATTERN), "all"},
-        [2] = {{6, 1}, 1, 16, "/1", foundation(6, LEADER, 1), "all"}}}
+      channels = {[1] = {{W.LEADER_PATTERN, 1}, 1, 16, "/1", foundation(W.LEADER_PATTERN)},
+        [2] = {{6, 1}, 1, 16, "/1", foundation(6, LEADER, 1)}}}
   end
   local result = {channels = {}}
   if variant == "WORST" then
     result.patterns = {[W.LEADER_PATTERN] = {1}, [7] = {1}, [8] = odd(1, 63)}
-    -- Step 1: every follower's anchor (patterns 7 and 8 coincide): "all".
-    result.channels[1] = {{W.LEADER_PATTERN}, 1, 1, "/1", foundation(W.LEADER_PATTERN), "all"}
-    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/1", foundation(7, LEADER, 0), "all"} end
+    result.channels[1] = {{W.LEADER_PATTERN}, 1, 1, "/1", foundation(W.LEADER_PATTERN)}
+    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/1", foundation(7, LEADER, 0)} end
   elseif variant == "DENSE" then
     result.patterns = {[W.LEADER_PATTERN] = range(1, 64), [7] = {}, [8] = range(1, 64)}
-    -- Step 1: the followers' only candidate is blocked by the leader's anchor
-    -- (pattern 7 is empty): silent, which "only" reproduces.
-    result.channels[1] = {{W.LEADER_PATTERN}, 1, 64, "x16", foundation(W.LEADER_PATTERN), "all"}
-    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/4", foundation(7, LEADER, 0), "only"} end
+    result.channels[1] = {{W.LEADER_PATTERN}, 1, 64, "x16", foundation(W.LEADER_PATTERN)}
+    for number = 2, 16 do result.channels[number] = {{7, 8}, 1, 64, "/4", foundation(7, LEADER, 0)} end
   else
     error("unknown merge workload variant " .. tostring(variant))
   end
   return result
+end
+
+local RENDER_FIELDS = {"trig_values", "note_values", "velocity_values", "lengths", "note_mask_values"}
+W.FIRST_RENDER_SLOT = 9
+
+-- Apply the variant's patterns, channels and (enabled) merge configuration.
+local function apply(target, value, enabled)
+  target.global_pattern_length = 64
+  for number, steps in pairs(value.patterns) do set_pattern(target, number, steps) end
+  for number, channel in pairs(value.channels) do
+    set_channel(target, number, channel[1], channel[2], channel[3], channel[4])
+    target.channels[number].trig_merge_mode = "skip"
+  end
+  local transaction = include("mosaic/lib/optional_config_transaction")
+  local snapshot = transaction.snapshot(target)
+  for number = 1, 16 do
+    local channel = value.channels[number]
+    snapshot.channels[number].musical_merge = enabled and channel and channel[5] or nil
+  end
+  assert(transaction.apply(target, snapshot, false, "channel"))
+end
+
+local function rendered_equal(left, right, first, last)
+  for s = first, last do
+    if left.trig_values[s] ~= right.trig_values[s] then return false end
+    if left.trig_values[s] == 1 then
+      for _, field in ipairs({"note_values", "velocity_values", "lengths", "note_mask_values"}) do
+        if left[field][s] ~= right[field][s] then return false end
+      end
+    end
+  end
+  return true
+end
+
+-- The Off window (plan section 1.4, like-for-like): the same channels, ranges
+-- and clock mods with no merge configuration, each workload channel playing
+-- the enabled window's working pattern rendered into spare slots (from the
+-- stopped build: the steady state of every fixed configuration here, the
+-- leader's anchor on). Source A holds the rendered trigs and values; where
+-- the enabled build merged several sources (merged_notes, which selects the
+-- merged-pentatonic lock), source B repeats those steps with the same
+-- values, so the legacy average of two equal values reproduces both the
+-- value and the merged flag. Trig mode "all" unions A and B (B is a subset).
+-- configure asserts the rebuilt Off working patterns equal the rendered ones.
+local function render_off(target, value)
+  apply(target, value, true)
+  local numbers = {}
+  for number in pairs(value.channels) do numbers[#numbers + 1] = number end
+  table.sort(numbers)
+  for _, number in ipairs(numbers) do pattern.update_working_pattern(number, target) end
+  local by_content, next_slot, sources, rendered = {}, W.FIRST_RENDER_SLOT, {}, {}
+  local function slot_for(content, kind)
+    local parts = {kind}
+    for _, field in ipairs(RENDER_FIELDS) do
+      for s = 1, 64 do parts[#parts + 1] = tostring(content[field][s]) end
+    end
+    local key = table.concat(parts, ",")
+    local slot = by_content[key]
+    if not slot then
+      assert(next_slot <= 16, "render slots exhausted")
+      slot, next_slot = next_slot, next_slot + 1
+      by_content[key] = slot
+      local source = target.patterns[slot]
+      for _, field in ipairs(RENDER_FIELDS) do
+        for s = 1, 64 do source[field][s] = content[field][s] end
+      end
+    end
+    return slot
+  end
+  for _, number in ipairs(numbers) do
+    local wp = target.channels[number].working_pattern
+    local a, b, merged = {}, {}, {}
+    for _, field in ipairs(RENDER_FIELDS) do a[field], b[field] = {}, {} end
+    for s = 1, 64 do
+      for _, field in ipairs(RENDER_FIELDS) do a[field][s] = wp[field][s]; b[field][s] = wp[field][s] end
+      merged[s] = wp.merged_notes[s] == true and wp.trig_values[s] == 1
+      if not merged[s] then b.trig_values[s] = 0 end
+    end
+    local list = {slot_for(a, "A")}
+    if next(wp.merged_notes) then list[2] = slot_for(b, "B") end
+    sources[number] = list
+    rendered[number] = {pattern = a, merged = merged}
+  end
+  local off = {patterns = {}, channels = {}}
+  for number, channel in pairs(value.channels) do
+    off.channels[number] = {sources[number], channel[2], channel[3], channel[4], nil}
+  end
+  apply(target, off, false)
+  for _, number in ipairs(numbers) do
+    local channel = target.channels[number]
+    channel.trig_merge_mode = "all"
+    channel.note_merge_mode, channel.velocity_merge_mode, channel.length_merge_mode = "average", "average", "average"
+    pattern.update_working_pattern(number, target)
+    local range = value.channels[number]
+    local wp = channel.working_pattern
+    assert(rendered_equal(wp, rendered[number].pattern, range[2], range[3]),
+      "Off window channel " .. number .. " does not play the enabled window's notes")
+    for s = range[2], range[3] do
+      assert((wp.merged_notes[s] == true and wp.trig_values[s] == 1) == rendered[number].merged[s],
+        "Off window channel " .. number .. " merged flag differs at step " .. s)
+    end
+  end
+  local slots = {}
+  for number, list in pairs(sources) do slots[number] = table.concat(list, "+") end
+  return slots
 end
 
 function W.configure(variant, mode)
@@ -112,26 +211,19 @@ function W.configure(variant, mode)
   assert(not m_clock.is_playing(), "configure while stopped")
   local target = song()
   local value = plan(variant)
-  target.global_pattern_length = 64
-  for number, steps in pairs(value.patterns) do set_pattern(target, number, steps) end
-  for number, channel in pairs(value.channels) do
-    set_channel(target, number, channel[1], channel[2], channel[3], channel[4])
-    target.channels[number].trig_merge_mode = mode == "off" and channel[6] or "skip"
+  local slots
+  if mode == "off" then
+    slots = render_off(target, value)
+  else
+    apply(target, value, true)
   end
-  local transaction = include("mosaic/lib/optional_config_transaction")
-  local snapshot = transaction.snapshot(target)
-  for number = 1, 16 do
-    local channel = value.channels[number]
-    snapshot.channels[number].musical_merge = mode == "enabled" and channel and channel[5] or nil
-  end
-  assert(transaction.apply(target, snapshot, false, "channel"))
   pattern.update_working_patterns(target)
   local parts = {}
   for number = 1, 16 do
     local merge = target.channels[number].musical_merge
     parts[#parts + 1] = number .. ":" .. (merge and (merge.mode .. "/" .. tostring(merge.anchor) .. "/" ..
       tostring(merge.interlock.leader) .. "/" .. merge.interlock.window) or "none") .. "/" ..
-      tostring(target.channels[number].trig_merge_mode) .. "/" ..
+      (slots and slots[number] and ("slot" .. slots[number] .. "/") or "") ..
       target.channels[number].clock_mods.name
   end
   return "__MERGE_CONFIG__" .. variant .. "|" .. mode .. "|" .. table.concat(parts, ";")

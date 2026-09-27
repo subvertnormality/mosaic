@@ -371,7 +371,8 @@ large ratios and the fallback.
 
 **Device acceptance (timing oracle).** `tests/behaviour/hardware_performance.py`
 gains cases on the PERF-002 dense workload at 130 bpm with 16 channels, each
-judged by the existing `TIMING_THRESHOLDS` gates unchanged:
+judged like-for-like against the same workload with Merge Shape Off
+(**Timing gates** below):
 - `PERF-MERGE-HW-STEADY`: channel 2 (Foundation, two sources) follows
   channel 1 (Foundation, 16-step anchor with 4 anchors) through Interlock,
   window 1, both `/1`.
@@ -421,18 +422,41 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
   (≈ 22 s at 130 bpm); DENSE and DENSE-EDIT 3 × 64 beats = 192 beats
   (≈ 88.6 s); STEADY 3 × 4 beats, raised to the 8 s default. This overrides the
   8 s default where longer.
+- **Off baseline (same notes).** Each case plays two windows of the same
+  capture duration in one session: Merge Shape Off, then enabled. The Off
+  window keeps the channels, ranges and clock mods and removes every merge
+  configuration; each workload channel plays the enabled window's working
+  pattern (its stopped build, the steady state of these fixed
+  configurations with the leader's anchor on) rendered into spare pattern
+  slots as legacy sources: source A holds the rendered trigs, notes,
+  velocities, lengths and note masks; where the enabled build averaged
+  several sources (the merged-pentatonic flag) source B repeats those steps
+  with the same values; trig merge mode `all`, value modes `average`. The
+  workload asserts the rebuilt Off working patterns equal the rendered ones.
+- **Grid origin.** Each window's notes are placed on their channel grids
+  counted from the first Note On, and the grid origin is then shifted by the
+  median signed placement error, so it follows the steady clock phase: a
+  late Start burst (16 notes leaving together) no longer makes every later
+  note read early.
+- **Compared steps and validity.** The sixteenth steps captured by both
+  windows are compared, except, in the EDIT cases, steps within one step of
+  a time when the enabled leader's anchor was toggled off (from the recorder's
+  step-cell key rows; the Off window always plays the anchor-on notes). On
+  every compared step the note set — fine grid slot, MIDI channel, pitch and
+  velocity — must be identical in both windows; otherwise the case is
+  **invalid** (reported as such, not as a timing pass or fail).
+- **Timing gates.** Absolute, on the enabled window: event-timing maximum at
+  most 50 ms, and the sustained and hard service gates unchanged. Merge-added,
+  over the compared steps (enabled − Off, same session, same notes): p99
+  lateness (the one-stall-tolerant p99 of absolute placement error) at most
+  5 ms, and step-jitter maximum at most 5 ms. The absolute p99, step jitter
+  and final phase of both windows are reported for information.
 - **Start latency:** each case also measures the time from the Start input's
   acting edge (the Play key-up: Mosaic applies a grid tap on release), by its
-  native timestamp, to the first emitted Note On, and compares it with the
-  same workload with Merge Shape Off, captured in the same session. The Off
-  baseline plays the same step-1 note set as the enabled window: its
-  followers use a legacy trig merge mode chosen per variant (`all` for
-  STEADY and WORST, where the enabled step 1 plays every anchor; `only` for
-  the DENSE followers, silent on step 1 because the leader's anchor blocks
-  their only candidate). The harness checks that the first step's note set
-  (MIDI channels and pitches) is identical in both windows; if it is not, or
-  a Start key-up was not recorded, the case is invalid (reported as such,
-  not as a timing pass or fail). It passes when the key-up difference is at
+  native timestamp, to the first emitted Note On, in both windows. The
+  harness checks that the first step's note set (MIDI channels and pitches)
+  is identical in both windows; if it is not, or a Start key-up was not
+  recorded, the case is invalid. It passes when the key-up difference is at
   most the `step_jitter_maximum_ns` threshold (10 ms); the key-down figures
   are reported alongside.
 All (STEADY, WORST, EDIT, DENSE, DENSE-EDIT) must pass before release; until the device runs pass, the delivery report
