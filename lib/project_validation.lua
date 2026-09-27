@@ -6,6 +6,7 @@ local function dependency(name, path)
 end
 local harmony_config = include("mosaic/lib/harmony/config")
 local merge_config = include("mosaic/lib/musical_merge/config")
+local merge_structure = include("mosaic/lib/musical_merge/structure")
 local rhythm_doctor_persistence = dependency("rhythm_doctor.bank_persistence", "mosaic/lib/rhythm_doctor/bank_persistence")
 
 local function integer(value, low, high)
@@ -56,6 +57,11 @@ function validation.check(saved)
           if not groups or not groups[target.group_id] then
             return nil, label .. " merge target group missing"
           end
+        end
+        -- Markers on need an existing enabled group (plan §4 Chord source).
+        if merge.structure.markers ~= "off" and
+          not merge_structure.group_available(song.voicing, merge.structure.group_id) then
+          return nil, label .. " merge structure group unavailable"
         end
       end
     end

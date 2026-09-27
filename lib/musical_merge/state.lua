@@ -75,6 +75,9 @@ function state.request(song, channel, requested, playing)
   local record = record_for(song, channel, requested)
   if playing then
     record.queued = deep_copy(requested)
+    -- A later request supersedes a pending cross-feature one: the boundary
+    -- (or Stop) must not land the older snapshot over it.
+    if record.global_queued then record.global_queued = deep_copy(requested) end
     return "queued"
   end
   local restart = starts_new_epoch(record.active, requested)
@@ -88,7 +91,9 @@ end
 -- activate with the shared song-pattern snapshot, not an earlier channel wrap.
 function state.request_global(song, channel, requested, playing)
   local record=record_for(song,channel,requested)
-  if playing then record.global_queued=deep_copy(requested);return "queued"end
+  -- The global request replaces a pending per-channel one, so an older queue
+  -- cannot land at an earlier channel wrap (plan §4 Reference lifecycle).
+  if playing then record.global_queued=deep_copy(requested);record.queued=nil;return "queued"end
   local restart=starts_new_epoch(record.active,requested);record.active=deep_copy(requested)
   record.queued,record.global_queued=nil,nil;if restart then record.cycle,record.phrase=1,0 end
   return "applied"

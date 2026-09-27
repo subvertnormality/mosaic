@@ -2,6 +2,7 @@ local harmony_config=include("mosaic/lib/harmony/config")
 local harmony_config_state=include("mosaic/lib/harmony/config_state")
 local merge_config=include("mosaic/lib/musical_merge/config")
 local merge_state=include("mosaic/lib/musical_merge/state")
+local merge_structure=include("mosaic/lib/musical_merge/structure")
 local transaction={}
 
 local function copy(value,seen)
@@ -49,6 +50,11 @@ function transaction.validate(song,snapshot)
     merge,reason=merge_config.canonicalize(merge,number);if not merge then return nil,reason end
     if merge.target.kind=="chord"then local group=shadow.voicing and shadow.voicing.groups[merge.target.group_id]
       if not(group and group.enabled)then return nil,"channel "..number.." chord source unavailable"end
+    end
+    -- Plan §4: markers on need an existing enabled group (whatever the mode:
+    -- the stored reference is what is saved).
+    if merge.structure.markers~="off"and not merge_structure.group_available(shadow.voicing,merge.structure.group_id)then
+      return nil,"channel "..number.." structure group unavailable"
     end
   end end
   return true

@@ -1,5 +1,6 @@
 local merge_config = include("mosaic/lib/musical_merge/config")
 local merge_state = include("mosaic/lib/musical_merge/state")
+local merge_structure = include("mosaic/lib/musical_merge/structure")
 local harmony_config = include("mosaic/lib/harmony/config")
 local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local harmony_state = include("mosaic/lib/harmony/state")
@@ -441,12 +442,18 @@ function editor.new(kind)
       end
       if ok and self.draft.mode=="foundation"and not channel.selected_patterns[self.draft.anchor]then ok,reason=nil,"anchor not assigned"end
       if ok and self.draft.target.kind=="chord"then local g=song.voicing and song.voicing.groups[self.draft.target.group_id];if not(g and g.enabled)then ok,reason=nil,"chord source unavailable"end end
+      if ok and self.draft.structure.markers~="off"and not merge_structure.group_available(song.voicing,self.draft.structure.group_id)then ok,reason=nil,"structure group unavailable"end
       if not ok then self.status="INVALID "..tostring(reason);return false end
       local after=copy(self.before_snapshot);after.channels[channel.number].musical_merge=copy(self.draft)
       ok,reason=memory.record_optional_config(program.get().selected_song_pattern,{channel.number},self.before_snapshot,after,"channel")
       if not ok then self.status="INVALID "..tostring(reason);return false end
       self.status=playing and"NEXT CYCLE"or"APPLIED";self.before_snapshot=after
     else
+      -- Plan §4 Reference lifecycle: a Structure reference to a group this
+      -- draft deletes or disables turns markers Off in the same transaction.
+      for number,merge in pairs(self.merge_drafts)do
+        if merge_structure.repair(merge,self.song_draft.groups)then self.merge_changed[number]=true end
+      end
       local after=copy(self.before_snapshot);after.voicing=copy(self.song_draft)
       local affected={};local set={}
       local function add(number)if number and not set[number]then set[number]=true;affected[#affected+1]=number end end
