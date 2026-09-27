@@ -294,9 +294,12 @@ rebuilds for the follower's own edits recompute from the same inputs.
 
 The follower cycle is the output horizon, not the complete query. Leader cycles
 are evaluated over the **support** interval
-`[j·P_f − window·d_f, (j+1)·P_f + window·d_f]`, clipped at the origin (no leader
-cycles before 0), so an anchor in the preceding or following leader cycle
-within the window is found. For an output onset `o`, Interlock inspects leader
+`[j·P_f − window·d_f, j·P_f + (N_f − 1)·d_f + window·d_f]` — from the follower's
+first onset to its last onset, widened by the window — clipped at the origin
+(no leader cycles before 0) and at a known origin end, so an anchor in the
+preceding or following leader cycle within the window is found. The number of
+leader cycles counted is `floor(high / P_l) − floor(low / P_l) + 1` over that
+closed interval. For an output onset `o`, Interlock inspects leader
 anchors in `[o − window·d_f, o + window·d_f]`. Leader cycles in the support are
 enumerated explicitly, because consecutive cycles can differ in configuration.
 
@@ -319,14 +322,21 @@ judged by the existing `TIMING_THRESHOLDS` gates unchanged:
 - `PERF-MERGE-HW-WORST`: the maximum supported admission work. Channel 1 is a
   Foundation leader with a one-step playable range `/1` whose anchor pattern has
   a trig there, so every leader cycle has one anchor; channels 2–16 are
-  Foundation followers `/1` with 64-step ranges, two assigned sources with trigs
-  on every step and window 0, so each follower admission evaluates exactly the
-  64-cycle budget (the test asserts the admission's reported cycle count is 64
-  and its plan-build count 0) and 64 × 64 membership checks, at every follower
-  wrap, with all 15 wrapping on the same pulse.
+  Foundation followers `/1` with 64-step ranges, anchor pattern with a trig on
+  step 1 and a second assigned source with trigs on every other step, window 0.
+  Each follower admission's support is `[64j/16, (64j + 63)/16]`, which meets
+  leader cycles `64j … 64j + 63` — exactly the 64-cycle budget, 64 anchors —
+  and every follower candidate coincides with a leader anchor. The test asserts,
+  per admission: status supported (not `PLAN LIMIT`), cycle count 64, anchor
+  count 64, zero leader-plan builds, and every candidate addition removed with
+  `INTERLOCK CH01`; all 15 followers wrap on the same pulse.
 - `PERF-MERGE-HW-EDIT`: WORST plus a grid edit of channel 1's anchor pattern
-  every two bars during the capture (rebuild requests, follower propagation and
-  yielding sweeps included).
+  every two bars during the capture that toggles its single trig off and on
+  again (so the configuration stays legal and the same support applies);
+  the test asserts each edit propagates to all 15 followers (their next
+  admissions report zero anchors while the trig is off and 64 after) with the
+  same per-admission assertions as WORST, rebuild requests and yielding sweeps
+  included.
 - **Start latency:** each case also measures the time from the Start input's
   native timestamp to the first emitted Note On and compares it with the same
   workload with Merge Shape Off, captured in the same session. It passes when
@@ -338,10 +348,13 @@ states host figures only and the feature is not released.
 
 (Edges are Interlock leaders only; the inert `space` field creates none.)
 
-- A channel can name at most one interlock leader and at most one space
-  leader (possibly the same channel). It cannot name itself.
+- A channel can name at most one Interlock leader (`interlock.leader`). It
+  cannot name itself. Every rule and test in this section is about Interlock
+  edges; the inert `space` field (§0) is not an edge, and validation tests
+  assert that any non-inert `space` value is rejected at apply, load and
+  history restore.
 - **One-way only:** a channel that has a leader cannot itself be a leader
-  (for either feature). This forbids chains and therefore every cycle. Apply
+  (Interlock). This forbids chains and therefore every cycle. Apply
   rejects a violating draft with `LEADER HAS LEADER` or `CHANNEL IS A LEADER`;
   project validation rejects a loaded slot containing one.
   While playing, validation uses the union of configured dependency edges in
@@ -356,7 +369,7 @@ states host figures only and the feature is not released.
   and project validation, including history restoration. Boundary activation
   must verify the invariant before mutation; an unexpected violation retains
   the previous active snapshot and displays the rejection reason. Tests must
-  cover both features, different channel lengths, a slow-channel removal
+  cover Interlock edges, different channel lengths, a slow-channel removal
   followed by a fast-channel addition, queued replacement, Stop, undo and redo.
   Every intermediate active graph must satisfy the same one-way invariant.
 - The leader must be in the same song slot. If the leader's configuration for
@@ -593,8 +606,9 @@ them from current song data is wrong after an edit (a shortened note would free
 space that was still sounding), live articulation values are written by lock
 and slide callbacks, and the worst-case plan building is unmeasured on the
 device. The engine implemented at `b8fd72e5` was reverted (`627f3d6e`); the
-`interlock.space` field remains reserved in the v2 schema (validated,
-defaulting to no leader, no behaviour, no UI). A future design must first
+`space` field (top level of the v2 merge configuration, §0) remains reserved:
+it accepts only `{leader = nil, release = 0}`, with no behaviour, no edges and
+no UI. A future design must first
 specify historical ownership and retention of leader gate inputs, their writer
 inventory, and a device-measured budget, and pass plan review, before any code.
 The text below is retained as design notes for that work, not as a contract of
