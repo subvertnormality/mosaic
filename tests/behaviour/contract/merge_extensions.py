@@ -344,3 +344,54 @@ def structure_workflow(c, capture=False):
 FRAGMENTS_FRAME = '760b9f276791a959a98a73441d88f534d9f77730fad051d93dd890841581689b'
 INTERLOCK_FRAME = 'de6e77eb93ebd84d696def4c0862dd49140f3447b745fd92d445ab3c014615a7'
 STRUCTURE_FRAME = 'f2250df79def76419e0054c5295e2183b3f889513bc2bce77bed46af702f8095'
+
+
+def fragments_offset_mask_workflow(c):
+    """README Fragments: count Size from an offset loop start, then let an
+    explicit trig mask suppress a chosen source onset and X restore it."""
+    two_patterns(c, (3, 6, 9))
+    c.ui.set_range(3, 10)
+    c.ui.channel_page('merge_shape', channel=1)
+    c.ui.select_row('mode', 0); c.ui.turn(3, 2)
+    c.ui.select_row('rhythm', 1); c.ui.press_key(3)
+    c.ui.expect_header('merge_fragments', channel=1)
+    c.ui.select_row('size', 0); c.ui.turn(3, -1)
+    c.ui.select_row('seed', 2); c.ui.turn(3, 1); c.ui.press_key(3)
+    c.ui.expect_selected_field('detail', 'Seed', '1')
+    def check(events, kind, **record):
+        # Channel range 3..10: compare absolute step and MIDI, then the next
+        # loop's step 3. The ordinary play_loops helper assumes start step 1.
+        wanted = [(cycle, step, pitch, velocity)
+                  for cycle in range(2) for step, _, pitch, velocity in events]
+        wanted += [(2, events[0][0], events[0][2], events[0][3])]
+        before = c.snapshot()['midi_count']
+        c.ui.play()
+        state = c.wait(lambda value: len(_note_ons(value, before)) >= len(wanted), timeout=7)
+        ons = _note_ons(state, before)[:len(wanted)]
+        key = 'logical_ns' if c.clock_mode == 'controlled-experimental' else 'monotonic_ns'
+        allowed = 2e-9 if c.clock_mode == 'controlled-experimental' else .02
+        origin = ons[0][key]
+        for event, (cycle, step, pitch, velocity) in zip(ons, wanted):
+            assert event['bytes'] == [144, pitch, velocity], dict(event=event, expected=(pitch, velocity))
+            seconds = (event[key] - origin) / 1e9
+            assert abs(seconds - (cycle * 8 + step - 3) * STEP_SECONDS) <= allowed, dict(
+                cycle=cycle, step=step, seconds=seconds)
+        c.ui.stop()
+        c.wait(lambda value: value['midi_capture']['outstanding'] == [])
+        c.results.append(dict(kind=kind, expected=[list(e) for e in wanted],
+                              tolerance_seconds=allowed, passed=True, **record))
+
+    # Seed 1 chooses P01 for 3..6 and P02 for 7..10. The source note and
+    # velocity survive; the fragment boundary follows the channel start.
+    original = [(3, 1, 64, 107), (4, 1, 65, 97), (9, 1, 60, 100)]
+    c.ui.expect_steps({3: 'selected', 4: 'selected', 9: 'selected',
+                       6: 'off', 7: 'off', 8: 'off'})
+    check(original, 'fragments-offset-loop', start=3, size=4, seed=1)
+    c.ui.channel_page('masks', channel=1)
+    c.ui.select_field('trig', offset=-1)
+    with c.ui.hold_step(4): c.ui.set_value(1)  # X -> N (README Masks)
+    c.ui.expect_steps({3: 'selected', 4: 'off', 9: 'selected'})
+    check([original[0], original[2]], 'fragments-explicit-trig-mask', masked_step=4)
+    with c.ui.hold_step(4): c.ui.set_value(-1)  # N -> X
+    c.ui.expect_steps({3: 'selected', 4: 'selected', 9: 'selected'})
+    check(original, 'fragments-mask-cleared', masked_step=None)

@@ -905,8 +905,9 @@ and a non-resetting song transition mid-channel-loop with immediate RESYNC,
 released MIDI step and grid feedback (009). Structure cases cover Every 4 and
 Every 8 markers, Harmony Pattern conflict/recovery and Revoice priority (004),
 group deletion undo/redo, Stop and save/reload (005), Ensemble priority (006),
-and snapped roots in delayed half-step arp notes (007). Fragments 001/002 cover
-seed changes, short loops, Keep anchor Off/On and source overlap. Each new case
+and snapped roots in delayed half-step arp notes (007). Fragments 001/002/003 cover
+seed changes, short and offset loops, Keep anchor Off/On, source overlap and
+explicit trig-mask suppression and restoration. Each new case
 runs through public grid/norns input and checks exact MIDI plus visible screen
 or grid feedback in both controlled-time and real-time lanes.
 
