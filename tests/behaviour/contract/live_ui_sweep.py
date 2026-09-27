@@ -250,7 +250,7 @@ def live_ui_sweep(c):
     channel_task(c, "output")
     sw.screen("C06", rows=C06_NO_EVENT)
     channel_task(c, "harmony")
-    sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
+    sw.screen("H01", field=("Mode", "OFF"))
     channel_task(c, "clock")
     sw.screen("C04", field=("Rate", "/1"), footer=(START, "Swing type"))
     channel_task(c, "merge")
@@ -262,7 +262,7 @@ def live_ui_sweep(c):
     channel_task(c, "history")
     sw.screen("C03", field=("Position", "0 of 0"))
     channel_task(c, "merge_shape")
-    sw.screen("M02", field=("Mode", "OFF"), footer=(START, "Rhythm"))
+    sw.screen("M02", field=("Mode", "OFF"))
     channel_screens(c, sw)
     merge_screens(c, sw)
     harmony_screens(c, sw)
@@ -508,7 +508,7 @@ def harmony_screens(c, sw):
     sw.screen("H11", field=("Reset map", ">"), footer=("Tone 3", END))
     c.key(2)
     # K2 with the unapplied mode change discards it: Mode is OFF again.
-    sw.screen("H01", field=("Mode", "OFF"), footer=(START, "Group"))
+    sw.screen("H01", field=("Mode", "OFF"))
     # From the clean root one E1 detent leaves for Channel tasks, also after a
     # cancelled Reset map question (its return frame is spent).
     c.enc(1, 1)

@@ -105,8 +105,9 @@ LIVE_SCREENS = OrderedDict([
     ("clock_mods", {"screen": "C04", "title": "CLOCK", "layout": "focused", "task": "clock"}),
     ("midi_config", {"screen": "C05", "title": "DEVICE", "layout": "detail", "task": "device"}),
     ("note_dashboard", {"screen": "C06", "title": "OUTPUT", "layout": "dashboard", "task": "output"}),
-    ("merge_shape", {"screen": "M02", "title": "MERGE SHAPE", "layout": "focused", "art": True, "task": "merge_shape"}),
-    ("harmony", {"screen": "H01", "title": "VOICE LEADING", "layout": "focused", "art": True, "task": "harmony"}),
+    # Lists of their rows (owner decision 27 September 2026).
+    ("merge_shape", {"screen": "M02", "title": "MERGE SHAPE", "layout": "detail", "task": "merge_shape"}),
+    ("harmony", {"screen": "H01", "title": "VOICE LEADING", "layout": "detail", "task": "harmony"}),
     ("channel_tasks", {"screen": "N01", "title": "CHANNEL TASKS", "layout": "detail"}),
     ("merge_detail", {"screen": "C09", "title": "MERGE MODES", "layout": "detail"}),
     ("assignment", {"screen": "C07", "title": "ASSIGN PARAM", "layout": "detail"}),

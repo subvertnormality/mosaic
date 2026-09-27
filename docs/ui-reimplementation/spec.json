@@ -4754,7 +4754,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E1 task navigator; E2 field; E3 draft; K2 cancel; K3 validate/apply; K1 native/shift. No grid change.",
+      "controls_explanation": "E1 task navigator; E2 field; E3 draft; K2 cancel; K3 validate/apply; K1 native/shift. No grid change. Shown as a list (detail layout: every row, the selected one marked >; owner decision 27 September 2026) because most rows open child screens (OPEN >).",
       "state_explanation": "Off bypasses the adapter. Active, queued, bypass and no solution are distinct. New feature, not an existing Mosaic screen. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -4764,7 +4764,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "choir"
       },
@@ -11408,7 +11408,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "E2 selects the visible field; E3 edits. K2 cancels the whole draft; K3 on a value applies the whole draft. K3 on an action opens it. E1 cancels/returns to root, then Tasks.",
+      "controls_explanation": "E2 selects the visible field; E3 edits. K2 cancels the whole draft; K3 on a value applies the whole draft. K3 on an action opens it. E1 cancels/returns to root, then Tasks. Shown as a list (detail layout: every row, the selected one marked >; owner decision 27 September 2026) because most rows open child screens (OPEN >).",
       "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -11547,7 +11547,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "garden"
       },

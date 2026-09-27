@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "f78bcd6c0fbb7c5ab4bc4cad87d47e2f3280ee7f4368ad2f30adad53f69c4ab8",
+ "manual_sha256": "029df62ddcbe4833b69bafe86ae46879e400f46bc4c0a9fa88ffcfec416f1dfc",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1517,8 +1517,8 @@
    "title": "Musical Merge and Voice Leading",
    "level": 2,
    "start_line": 1386,
-   "end_line": 1403,
-   "text_sha256": "36984177e22739b5e93b4f74eaa72aa8b75ddb387e3f938ae3de4cc690d00d25"
+   "end_line": 1404,
+   "text_sha256": "88a3a3c0b7f27fb005d0d274b969b6b9b92840bdf3a780623e41dce087b17375"
   },
   {
    "id": "MAN-120",
@@ -1527,8 +1527,8 @@
    "status": "unreviewed",
    "title": "Merge Shape",
    "level": 3,
-   "start_line": 1404,
-   "end_line": 1435,
+   "start_line": 1405,
+   "end_line": 1436,
    "text_sha256": "7aee68c7b799d079b215871f9773202629c3643d5e7dac0cf9ad4085ec20c84f"
   },
   {
@@ -1538,16 +1538,16 @@
    "status": "unreviewed",
    "title": "Harmony",
    "level": 3,
-   "start_line": 1436,
-   "end_line": 1502,
+   "start_line": 1437,
+   "end_line": 1503,
    "text_sha256": "4a421af50e0a65c5e5b076f705fc076245283c75cec4080271b8751dd14cb9a3"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1503,
-   "end_line": 1514,
+   "start_line": 1504,
+   "end_line": 1515,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1559,8 +1559,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1515,
-   "end_line": 1524,
+   "start_line": 1516,
+   "end_line": 1525,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1570,8 +1570,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1525,
-   "end_line": 1528,
+   "start_line": 1526,
+   "end_line": 1529,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1581,8 +1581,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1529,
-   "end_line": 1535,
+   "start_line": 1530,
+   "end_line": 1536,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1607,11 +1607,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "f78bcd6c0fbb7c5ab4bc4cad87d47e2f3280ee7f4368ad2f30adad53f69c4ab8"
+   "sha256": "029df62ddcbe4833b69bafe86ae46879e400f46bc4c0a9fa88ffcfec416f1dfc"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "c2dc5db079514c307f2d0b7cfcea1f3ed8a50b0a024f85e113c5d3419028cd8c"
+   "sha256": "b942f697d733c9acb333b205b30d0c89638a7ba026866ae610d2c1529f83c19c"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -9068,7 +9068,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1407,
+   "line": 1408,
    "reference": "images/merge-shape-foundation.png",
    "path": "images/merge-shape-foundation.png",
    "sha256": "5f6160d49785b1e79c60ee65157ca7e373d57e1ef6abe1c565019e7e9fa0fe21"
@@ -9076,7 +9076,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1439,
+   "line": 1440,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
    "sha256": "12ded7f3aaf7ba63bbcff39124a98eea9c414f4ebeefa61f5f5f79ee9a71a4b9"
@@ -9084,7 +9084,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1474,
+   "line": 1475,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
    "sha256": "f55f4b3fb68a92d1721a928b3e587ba0716dc174ab05a9cf1e4bb6d094eac7ea"

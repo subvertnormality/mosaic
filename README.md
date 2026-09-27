@@ -1391,8 +1391,9 @@ registers without rewriting any source pattern. Both features are optional and
 default to Off, so an older project keeps its original MIDI, timing and random
 behaviour.
 
-Open Merge Shape or Harmony from Channel tasks. E2 selects a row, E3 changes a
-staged value, K3 on a row marked `OPEN >` opens it (the last line names it, for
+Open Merge Shape or Harmony from Channel tasks. Their first screens, Merge
+Shape and Voice leading, are lists: each row shows its value or `OPEN >`, and the
+chosen row is marked `>`. E2 selects a row, E3 changes a staged value, K3 on a row marked `OPEN >` opens it (the last line names it, for
 example `K3 OPEN RHYTHM`), and K3 elsewhere validates and applies the whole draft.
 Rows that carry out an action instead, such as Create group, Four-part smooth,
 Delete group and Reset map (the last two ask first), keep a plain `>`. K2 discards the draft, or returns from a

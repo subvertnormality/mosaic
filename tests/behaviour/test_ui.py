@@ -1160,7 +1160,7 @@ class UiInputTests(unittest.TestCase):
 
         device = shows("DEVICE", "CH01", "detail")
         masks = shows("NOTE MASKS", "CH01", "overview_masks")
-        harmony = shows("VOICE LEADING", "CH01", "focused")
+        harmony = shows("VOICE LEADING", "CH01", "detail")
         oracle = lambda state, title, scope, layout: state["shows"] == (title, scope, layout)
         with patch("frame_oracle.live_header_matches", side_effect=oracle):
             # Device (ring 5th) turned -5 clamps to Masks: opened through Tasks and awaited.
@@ -1178,7 +1178,7 @@ class UiInputTests(unittest.TestCase):
                     Ui(driver).turn(1, detents)
                     self.assertEqual(driver.calls, [("wait", 1)])
             # An ordinary ring move: Merge shape -1 is Note dashboard (Output, task row 2).
-            driver = ObservedDriver(states=[shows("MERGE SHAPE", "CH01", "focused"),
+            driver = ObservedDriver(states=[shows("MERGE SHAPE", "CH01", "detail"),
                                             shows("OUTPUT", "CH01", "dashboard")])
             Ui(driver).turn(1, -1)
             self.assertEqual(driver.calls, [

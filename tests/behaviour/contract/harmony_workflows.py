@@ -304,7 +304,7 @@ def held_step_precedence_workflow(c):
     c.ui.channel_page("harmony", "masks", channel=1)
     c.ui.expect_header("harmony", channel=1)
     c.ui.set_value(1)  # Dirty Revoice draft; deliberately do not Apply.
-    c.ui.expect_selected_field("focused", "Mode", "REVOICE", art=True)
+    c.ui.expect_selected_field("detail", "Mode", "REVOICE")  # Voice leading is a list
     try:
         with c.ui.hold_step(1):
             # The held step shows the remembered edit family scoped to the held
@@ -317,7 +317,7 @@ def held_step_precedence_workflow(c):
         c.elapse(.1)
     # Releasing the hold returns to Harmony, whose draft was cancelled.
     c.ui.expect_header("harmony", channel=1)
-    c.ui.expect_selected_field("focused", "Mode", "OFF", art=True)
+    c.ui.expect_selected_field("detail", "Mode", "OFF")
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((72, 90), (62, 117), (64, 107), (65, 97))]
     c.playback(expected, cycles=2, timeout=6)
