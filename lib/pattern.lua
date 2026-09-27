@@ -8,8 +8,6 @@ local merge_config = include("mosaic/lib/musical_merge/config")
 local fragments = include("mosaic/lib/musical_merge/fragments")
 local merge_structure = include("mosaic/lib/musical_merge/structure")
 local interlock = include("mosaic/lib/musical_merge/interlock")
-local space = include("mosaic/lib/musical_merge/space")
-local leader_query = include("mosaic/lib/musical_merge/leader_query")
 local merge_dependency = include("mosaic/lib/musical_merge/dependency")
 
 local program = program
@@ -264,13 +262,12 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if foundation_mode then
       local cycle_percentage = merge_settings.percentages and merge_settings.percentages[cycle] or 100
       local effective_amount = foundation.round_half_up((merge_settings.amount or 100) * cycle_percentage / 100)
-      -- Plan §3/§6: the Interlock and Space admissions for this build's
-      -- cycle, in that order. The leaders' cycle plans come from this same
-      -- function with their configuration, cycle and phrase passed explicitly,
-      -- memoised within this build only.
-      local filters, interlock_result, space_result, plan_builds
-      if not merge_override and (interlock.settings(merge_settings) or space.settings(merge_settings)) then
-        local admission = {
+      -- Plan §3: the Interlock admission for this build's cycle. The leader's
+      -- cycle plans come from this same function with their configuration,
+      -- cycle and phrase passed explicitly. Space (MM-12) slots in after it.
+      local filters, interlock_result
+      if not merge_override and interlock.settings(merge_settings) then
+        interlock_result = interlock.admission({
           song = selected_song_pattern, channel = channel, config = merge_settings,
           first = effective_start, last = effective_end,
           leader_plan = function(leader, config, leader_cycle, leader_phrase)
@@ -280,29 +277,10 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
               leader_channel.length_merge_mode, selected_song_pattern, effective_lengths_cache,
               {config = config, cycle = leader_cycle, phrase = leader_phrase})
           end
-        }
-        interlock_result = interlock.admission(admission)
-        -- §1.2: an unsupported admission (RESYNC, PLAN LIMIT) bypasses both
-        -- filters for the follower's cycle with that reason.
-        local unsupported = interlock_result and leader_query.unsupported(interlock_result.status) and
-          interlock_result.status
-        if unsupported then
-          local leader, release = space.settings(merge_settings)
-          if leader then space_result = space.bypass(leader, release, unsupported) end
-        else
-          space_result = space.admission(admission)
-          if space_result and leader_query.unsupported(space_result.status) and interlock_result then
-            interlock_result.status, interlock_result.blocked = space_result.status, {}
-          end
-        end
-        -- Leader plans built synchronously by this build (for measurement).
-        plan_builds = admission.plan_builds or 0
+        })
         filters = {}
-        if interlock_result and interlock_result.status == "ok" then
-          filters[#filters + 1] = {reason = interlock_result.reason, blocked = interlock_result.blocked}
-        end
-        if space_result and space_result.status == "ok" then
-          filters[#filters + 1] = {reason = space_result.reason, blocked = space_result.blocked}
+        if interlock_result.status == "ok" then
+          filters[1] = {reason = interlock_result.reason, blocked = interlock_result.blocked}
         end
       end
       foundation_result = foundation.plan({
@@ -324,8 +302,6 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
         ranking_version = merge_settings.ranking_version
       })
       foundation_result.interlock = interlock_result
-      foundation_result.space = space_result
-      foundation_result.leader_plan_builds = plan_builds
       foundation_result.cycle = cycle
       foundation_result.cycles = merge_settings.cycles or 1
       foundation_result.phrase = merge_runtime.phrase or 0
