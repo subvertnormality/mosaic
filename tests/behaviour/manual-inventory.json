@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "b981b4d2120f5ae37ba3becb4b7256f91c94452bb18117924be9c6a71e535807",
+ "manual_sha256": "a7913e553124c4897d6300bceedc479c0acfb85e99dc6400fc307228a9d902b8",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1528,8 +1528,62 @@
    "title": "Merge Shape",
    "level": 3,
    "start_line": 1399,
-   "end_line": 1430,
-   "text_sha256": "7aee68c7b799d079b215871f9773202629c3643d5e7dac0cf9ad4085ec20c84f"
+   "end_line": 1432,
+   "text_sha256": "933f79f1fe28520bb80b36bfdf4fd1d03f9c8dc5443c242486991338d88484b0"
+  },
+  {
+   "id": "MAN-122",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-FRAGMENTS"
+   ],
+   "status": "unreviewed",
+   "title": "Fragments",
+   "level": 4,
+   "start_line": 1433,
+   "end_line": 1461,
+   "text_sha256": "c7d5fc635927aa0227c427757c7a94eb4f6162b4e522402725041ba3989b4c26"
+  },
+  {
+   "id": "MAN-123",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-INTERLOCK"
+   ],
+   "status": "unreviewed",
+   "title": "Interlock",
+   "level": 4,
+   "start_line": 1462,
+   "end_line": 1488,
+   "text_sha256": "cd54e9b8709e0607e40d998966ae576addff2056a1e886dc994d03eed87df591"
+  },
+  {
+   "id": "MAN-124",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-STRUCTURE"
+   ],
+   "status": "unreviewed",
+   "title": "Structure",
+   "level": 4,
+   "start_line": 1489,
+   "end_line": 1509,
+   "text_sha256": "c046b7213f15549762087495bd2315227b43e05a2afc440ccdca638334b78612"
+  },
+  {
+   "id": "MAN-125",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-FRAGMENTS",
+    "MERGE-INTERLOCK",
+    "MERGE-STRUCTURE"
+   ],
+   "status": "unreviewed",
+   "title": "Result and Reason",
+   "level": 4,
+   "start_line": 1510,
+   "end_line": 1522,
+   "text_sha256": "a57c44dc31cbaeb476533087f5b40754bd06999e1dffae94eabdabcf52eb09b9"
   },
   {
    "id": "MAN-121",
@@ -1538,16 +1592,16 @@
    "status": "unreviewed",
    "title": "Harmony",
    "level": 3,
-   "start_line": 1431,
-   "end_line": 1497,
+   "start_line": 1523,
+   "end_line": 1589,
    "text_sha256": "4a421af50e0a65c5e5b076f705fc076245283c75cec4080271b8751dd14cb9a3"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1498,
-   "end_line": 1509,
+   "start_line": 1590,
+   "end_line": 1601,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1559,8 +1613,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1510,
-   "end_line": 1519,
+   "start_line": 1602,
+   "end_line": 1611,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1570,8 +1624,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1520,
-   "end_line": 1523,
+   "start_line": 1612,
+   "end_line": 1615,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1581,8 +1635,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1524,
-   "end_line": 1530,
+   "start_line": 1616,
+   "end_line": 1622,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1607,11 +1661,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "b981b4d2120f5ae37ba3becb4b7256f91c94452bb18117924be9c6a71e535807"
+   "sha256": "a7913e553124c4897d6300bceedc479c0acfb85e99dc6400fc307228a9d902b8"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "7a7fd0b184484c046bcc1f9d0d48fdf9406dce34fe47df4f06b9a7fba6f3841d"
+   "sha256": "038d6991ab28f5fb1df320a0bbfb2b1f6e9c4a877163ef727f74a50928ba6b32"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -7563,6 +7617,92 @@
    }
   },
   {
+   "id": "MERGE-FRAGMENTS",
+   "sections": [
+    "MAN-122",
+    "MAN-125"
+   ],
+   "statement": "Fragments mode splits the channel loop from its start step into fragments of 4, 8 or 16 steps; each fragment plays one assigned pattern's own trigs, notes, velocities and lengths, chosen repeatably by the saved seed, without legacy note/velocity/length merging, and the grid shows what MIDI plays.",
+   "cases": [
+    "M-MERGE-FRAGMENTS-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Physical Merge Shape workflow on an 8-step loop of two patterns with Size 4 and seeds 0 and 1: literal MIDI and exact loop-relative timing over two loops against the channel grid; pure tests cover layouts, short/offset loops, Keep anchor, the fragment length resolver and masks.",
+   "oracles": [
+    "Public grid LEDs",
+    "literal MIDI pitches and velocities",
+    "exact loop-relative onset steps",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1434,
+    "end_line": 1462,
+    "text": "Merge Shape Fragments"
+   }
+  },
+  {
+   "id": "MERGE-INTERLOCK",
+   "sections": [
+    "MAN-123",
+    "MAN-125"
+   ],
+   "statement": "Interlock removes a follower's Foundation additions within Window steps of its leader channel's planned anchors in common time, never removes anchors, refuses dependency chains on Apply, and shows its status and bypasses on the Result screen.",
+   "cases": [
+    "M-MERGE-INTERLOCK-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Physical two-channel workflow at /1 on 8-step loops: Window 0 and 2 in literal MIDI (both channels) and on the grid, a Window change queued while playing that lands whole at a loop boundary with a cancelled later draft, and an on-screen CHANNEL IS A LEADER refusal; pure/integration tests cover common time, resync, budgets, swing and callback order.",
+   "oracles": [
+    "Public grid LEDs",
+    "literal MIDI on two channels",
+    "exact loop-relative onset steps",
+    "visible Apply status"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1463,
+    "end_line": 1489,
+    "text": "Merge Shape Interlock"
+   }
+  },
+  {
+   "id": "MERGE-STRUCTURE",
+   "sections": [
+    "MAN-124",
+    "MAN-125"
+   ],
+   "statement": "Structure markers (Anchors, Every 4, Every 8) snap marker onsets to the nearest pitch class of an enabled Harmony group's chord (ties lower) while additions between markers keep their target, and deleting or disabling the group turns the markers Off in the same transaction.",
+   "cases": [
+    "M-MERGE-STRUCTURE-001"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Physical workflow builds a C-E-G group, sets Anchors markers and checks literal snapped MIDI pitches, then deletes the group through its confirmation and checks the authored pitches return; pure/integration tests cover every marker kind, bypass precedence, Pattern identity and the reference lifecycle.",
+   "oracles": [
+    "literal MIDI pitches and velocities",
+    "exact loop-relative onset steps",
+    "visible Affected channels and Markers OFF"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1490,
+    "end_line": 1510,
+    "text": "Merge Shape Structure"
+   }
+  },
+  {
    "id": "HARMONY-REVOICE",
    "sections": [],
    "statement": "Revoice preserves Mosaic's resolved chord pitch-class material while deterministically placing every sounding source in configured registers.",
@@ -9068,7 +9208,31 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1434,
+   "line": 1436,
+   "reference": "images/merge-shape-fragments.png",
+   "path": "images/merge-shape-fragments.png",
+   "sha256": "7984c43100cc0c290f1f9639d32ed0aae7102f10c0d7efa03e8c3f3afa6f014a"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1465,
+   "reference": "images/merge-shape-interlock.png",
+   "path": "images/merge-shape-interlock.png",
+   "sha256": "533d8bbbb5553040db390a0dd79c89873fd58a37b1f8d8a1a218c62bbbb5f4e2"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1492,
+   "reference": "images/merge-shape-structure.png",
+   "path": "images/merge-shape-structure.png",
+   "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1526,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
    "sha256": "12ded7f3aaf7ba63bbcff39124a98eea9c414f4ebeefa61f5f5f79ee9a71a4b9"
@@ -9076,7 +9240,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1469,
+   "line": 1561,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
    "sha256": "a65f55953ac382fb71ac5edf96e3bd4bd2589fe89fa67670326e42627048b33e"

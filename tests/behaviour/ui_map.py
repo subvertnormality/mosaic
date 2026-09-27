@@ -140,6 +140,7 @@ LIVE_SCREENS = OrderedDict([
     ("harmony_members", {"screen": "H07", "title": "MEMBERS", "layout": "detail"}),
     ("harmony_entry", {"screen": "H09", "title": "ENTRY / FAILURE", "layout": "detail"}),
     ("harmony_tone_map", {"screen": "H11", "title": "TONE MAP", "layout": "focused", "art": True}),
+    ("harmony_delete_group", {"screen": "H17", "title": "DELETE GROUP?", "layout": "detail"}),
 ])
 
 # Non-Channel page rings the cases were written for, each entry the live

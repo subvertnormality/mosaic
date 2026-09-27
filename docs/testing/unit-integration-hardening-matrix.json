@@ -28,11 +28,11 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "b981b4d2120f5ae37ba3becb4b7256f91c94452bb18117924be9c6a71e535807",
+ "manual_sha256": "a7913e553124c4897d6300bceedc479c0acfb85e99dc6400fc307228a9d902b8",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "75cc0a7196015826e6f552897b4ef70fe06d8300a2076d0aea707e9cf49841ae",
+ "inventory_sha256": "1faecb4173df6b15d3a4fc104bf570773db8554dcce286acbc9cca0b5143b09e",
  "counts": {
-  "requirements": 174,
+  "requirements": 177,
   "production_lua_modules": 170,
   "unit_integration_files": 129,
   "domains": 17
@@ -83,11 +83,15 @@
    ],
    "interaction_strategy": "Pure exhaustive solver/planner checks feed scheduler integration and physical grid/norns workflows; exact MIDI and active grid projection are independent acceptance oracles.",
    "residual_gaps": [
-    "MM-08+ interlock, fragments, passing-note freedom and silence-aware interlock are explicitly deferred by the approved plan."
+    "MM-12 Space (silence-aware interlock) is deferred as residual MM-12 (docs/musical-merge-extensions-plan.md \u00a76.3, owner: the Mosaic maintainer): no engine, UI or manual claim; the reserved space schema field is validated and inert, and the README states Space is not part of this release. MM-12-AUDIBLE, the proposal's audible-silence entry gate, stays OPEN.",
+    "Fragments, Interlock and Structure (MM-08..MM-11) have physical behaviour cases (M-MERGE-FRAGMENTS-001, M-MERGE-INTERLOCK-001, M-MERGE-STRUCTURE-001) for one representative configuration each; their remaining domains (short/offset loops, Keep anchor, unequal clock divisions and loop lengths, RESYNC/PLAN LIMIT bypasses, Every 4/Every 8 markers, CHORD MISSING and MARKER PRIORITY with Revoice/Ensemble) are unit/integration evidence only."
    ],
    "requirement_ids": [
     "MERGE-FOUNDATION",
     "MERGE-PHRASE",
+    "MERGE-FRAGMENTS",
+    "MERGE-INTERLOCK",
+    "MERGE-STRUCTURE",
     "HARMONY-REVOICE",
     "HARMONY-PATTERN",
     "HARMONY-ENSEMBLE",
@@ -157,7 +161,10 @@
     "M-HARMONY-ENSEMBLE-001",
     "M-HARMONY-PERSIST-001",
     "M-HARMONY-FAILURE-001",
-    "M-HARMONY-HELD-001"
+    "M-HARMONY-HELD-001",
+    "M-MERGE-FRAGMENTS-001",
+    "M-MERGE-INTERLOCK-001",
+    "M-MERGE-STRUCTURE-001"
    ],
    "status": "implemented"
   },

@@ -104,6 +104,7 @@ from contract.dashboard_chord_slots import dashboard_chord_slots
 from harmony_merge_workflow import phrase_build_workflow,pattern_harmony_workflow,pattern_harmony_independent_clocks_workflow,pattern_harmony_delayed_bypass_workflow
 from contract.harmony_workflows import revoice_workflow,pattern_harmony_persistence_workflow,ensemble_polyrhythm_workflow,no_voicing_fallback_workflow,held_step_precedence_workflow
 from contract.foundation_workflow import foundation_workflow
+from contract.merge_extensions import fragments_workflow,interlock_workflow,structure_workflow
 from gesture_release_order import gesture_release_order
 from midi_mapping_held_step import midi_mapping_held_step
 from midi_cc_page_return import midi_cc_page_return
@@ -2620,6 +2621,9 @@ from external_clock_backlog import external_clock_runtime_backlog
 
 CASES={
  'M-MERGE-FOUNDATION-001':dict(run=foundation_workflow,requirements=['MERGE-FOUNDATION'],description='Physical Channel-page workflow enables Foundation with P01 anchors, projects protected/addition trigs and emits literal accented additions over two loops'),
+ 'M-MERGE-FRAGMENTS-001':dict(run=fragments_workflow,requirements=['MERGE-FRAGMENTS'],description='Physical Merge Shape workflow selects Fragments (Size 4) on an 8-step loop of two patterns: each fragment plays its own source pattern\'s trigs, notes and velocities (no legacy averaging), the saved seed chooses the sources (seed 0 then seed 1), and the channel grid shows exactly the trigs MIDI plays over two exact loops (README Merge Shape Fragments)'),
+ 'M-MERGE-INTERLOCK-001':dict(run=interlock_workflow,requirements=['MERGE-INTERLOCK'],description='Physical Interlock workflow: a follower\'s Foundation addition coinciding with its leader channel\'s anchor is removed (Window 0) and a Window of 2 also removes the one two steps away, in MIDI and on the grid; the Window change queued while playing lands whole at a loop boundary and a cancelled later draft does not retract it; making the leader follow its follower is refused on screen with CHANNEL IS A LEADER (README Merge Shape Interlock)'),
+ 'M-MERGE-STRUCTURE-001':dict(run=structure_workflow,requirements=['MERGE-STRUCTURE'],description='Physical Structure workflow: with Anchors markers and an enabled C-E-G Harmony group, anchor onsets snap to the nearest chord pitch class (ties lower) in MIDI while additions keep their pitch; deleting the group asks first, lists the channel and turns the markers Off in the same transaction, restoring the authored pitches (README Merge Shape Structure)'),
  'M-MERGE-PHRASE-001':dict(run=phrase_build_workflow,requirements=['MERGE-PHRASE'],description='Physical Merge Shape workflow applies a two-cycle Build phrase with exact alternating onset sets and exact loop-relative timing over two full phrases'),
  'M-HARMONY-REVOICE-001':dict(run=revoice_workflow,requirements=['HARMONY-REVOICE'],description='Physical Masks and Harmony workflow enables Revoice and emits literal two-voice smooth placements over two complete loops'),
  'M-HARMONY-PATTERN-001':dict(run=pattern_harmony_workflow,requirements=['HARMONY-PATTERN'],description='Physical A-B-C-B broken-chord and scale-progression workflow maps three recurring identities without chord masks; proves literal pitches, onsets, gates and owned releases through active/Off/re-enable, rest/recovery, probability rejection/recovery, output disconnect/reconnect and copied-song entry; and verifies effective Note-grid projection with source-owned editing'),
