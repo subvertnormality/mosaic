@@ -34,7 +34,7 @@
  "counts": {
   "requirements": 177,
   "production_lua_modules": 170,
-  "unit_integration_files": 131,
+  "unit_integration_files": 132,
   "domains": 17
  },
  "coverage_language": {
@@ -153,7 +153,8 @@
     "lib/tests/lib/optional_config_persistence_tests.lua",
     "lib/tests/lib/voice_lifetime_tests.lua",
     "lib/tests/lib/merge_v1_baseline_oracle_tests.lua",
-    "lib/tests/lib/merge_device_workload_tests.lua"
+    "lib/tests/lib/merge_device_workload_tests.lua",
+    "lib/tests/lib/merge_interlock_fastpath_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-MERGE-FOUNDATION-001",

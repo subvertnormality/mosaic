@@ -86,57 +86,136 @@ function interlock.admission(ctx)
     return result
   end
 
-  local segments, failure, counted = query.segments(frame, low, high)
-  if not segments then
+  local configs, failure, counted, first_cycle = query.segment_configs(frame, low, high)
+  if not configs then
     local bypassed = record(leader, window, failure, counted)
     bypassed.prediction_replays = frame.predictor and frame.predictor.replays or 0
     return bypassed
   end
-  result.cycles = #segments
+  local cycle_count = counted
+  result.cycles = cycle_count
   result.prediction_replays = frame.predictor.replays
 
-  -- Leader anchor onsets of every evaluated cycle, ascending (cycles ascend
-  -- and each cycle's onsets lie inside it). Anchor indices depend only on
-  -- the governing configuration's anchor, read once per configuration.
-  local by_config, anchors, contributed, missing = {}, {}, 0, false
-  local ending = frame.ending
-  for _, entry in ipairs(segments) do
-    local indices = by_config[entry.config]
-    if indices == nil then
-      indices = query.anchors(frame, entry.config)
-      if indices == nil then indices = "missing" end
-      by_config[entry.config] = indices
-    end
-    if indices == "missing" then
-      missing = true
-    elseif indices then
-      contributed = contributed + 1
-      local base = checked_mul(entry.i, pl)
-      if not base then return record(leader, window, interlock.PLAN_LIMIT, #segments) end
-      for _, index in ipairs(indices) do
-        local onset = base + (index - 1) * dl
-        if not ending or onset < ending then anchors[#anchors + 1] = onset end
+  -- Leader anchor onsets of every evaluated cycle i are i·P_l + (n − 1)·d_l
+  -- for the anchor indices n of its governing configuration (read once per
+  -- configuration), before the origin end. They are not materialised: per
+  -- configuration a prefix count over the indices answers "how many anchors
+  -- with index in [a, b]" in O(1), which gives both the anchor count and,
+  -- per follower onset, whether an anchor lies within the window.
+  local l_count, ending = frame.l_count, frame.ending
+  local span = (l_count - 1) * dl
+  local by_config, prefixes, contributed, missing, total = {}, {}, 0, false, 0
+  local materialise = false
+  -- When the last cycle's last onset is representable every earlier one is
+  -- (i >= 0, P_l > 0): the per-cycle checks below cannot fail.
+  local last_base = checked_mul(first_cycle + cycle_count - 1, pl)
+  local checked = not (last_base and checked_add(last_base, span))
+  for n = 1, cycle_count do
+    local config = configs[n]
+    local prefix = by_config[config]
+    if prefix == nil then
+      local indices = query.anchors(frame, config)
+      if indices == nil then
+        prefix = "missing"
+      elseif indices then
+        prefix = {0}
+        local have, next_index = 0, 1
+        for index = 1, l_count do
+          if indices[next_index] == index then have = have + 1; next_index = next_index + 1 end
+          prefix[index + 1] = have
+        end
+      else
+        prefix = false
       end
+      by_config[config] = prefix
+    end
+    if prefix == "missing" then
+      missing = true
+    elseif prefix then
+      contributed = contributed + 1
+      local base
+      if checked then
+        base = checked_mul(first_cycle + n - 1, pl)
+        if not base then return record(leader, window, interlock.PLAN_LIMIT, cycle_count) end
+        -- An onset past maxinteger wraps in the materialised form; keep it.
+        if not checked_add(base, span) then materialise = true end
+      else
+        base = (first_cycle + n - 1) * pl
+      end
+      local limit = l_count
+      if ending then
+        local before = (ending - base - 1) // dl + 1
+        if before < limit then limit = before end
+      end
+      if limit > 0 then total = total + prefix[limit + 1] end
+      prefixes[n] = prefix
     end
   end
-  result.anchors = #anchors
+  result.anchors = total
   if contributed == 0 then
     result.status = missing and interlock.LEADER_MISSING or interlock.LEADER_OFF
     return result
   end
 
+  if materialise then
+    local anchors = {}
+    for n = 1, cycle_count do
+      local prefix = prefixes[n]
+      if prefix then
+        local base = (first_cycle + n - 1) * pl
+        for index = 1, l_count do
+          if prefix[index + 1] ~= prefix[index] then
+            local onset = base + (index - 1) * dl
+            if not ending or onset < ending then anchors[#anchors + 1] = onset end
+          end
+        end
+      end
+    end
+    local count = #anchors
+    result.anchors = count
+    for index = 1, frame.f_count do
+      local onset = start + (index - 1) * df
+      local lo, hi = 1, count + 1
+      while lo < hi do
+        local mid = (lo + hi) // 2
+        if anchors[mid] < onset - w then lo = mid + 1 else hi = mid end
+      end
+      if lo <= count and anchors[lo] <= onset + w then
+        result.blocked[ctx.first + index - 1] = true
+      end
+    end
+    return result
+  end
+
   -- |a − o| <= window·d_f for any anchor a blocks the candidate at onset o.
-  local count = #anchors
+  -- Cycle i holds onsets [i·P_l, (i + 1)·P_l), so only cycles
+  -- floor((o − w) / P_l) .. floor((o + w) / P_l) can hold such an anchor.
+  local last_cycle = first_cycle + cycle_count - 1
+  local blocked, first = result.blocked, ctx.first
   for index = 1, frame.f_count do
     local onset = start + (index - 1) * df
-    -- The first anchor >= onset − w.
-    local lo, hi = 1, count + 1
-    while lo < hi do
-      local mid = (lo + hi) // 2
-      if anchors[mid] < onset - w then lo = mid + 1 else hi = mid end
-    end
-    if lo <= count and anchors[lo] <= onset + w then
-      result.blocked[ctx.first + index - 1] = true
+    local from, to = onset - w, onset + w
+    local i_low, i_high = from // pl, to // pl
+    if i_low < first_cycle then i_low = first_cycle end
+    if i_high > last_cycle then i_high = last_cycle end
+    for i = i_low, i_high do
+      local prefix = prefixes[i - first_cycle + 1]
+      if prefix then
+        local base = i * pl
+        -- Indices n (1-based) with from <= base + (n − 1)·d_l <= to.
+        local n_low = -((base - from) // dl) + 1
+        local n_high = (to - base) // dl + 1
+        if n_low < 1 then n_low = 1 end
+        if n_high > l_count then n_high = l_count end
+        if ending then
+          local before = (ending - base - 1) // dl + 1
+          if before < n_high then n_high = before end
+        end
+        if n_low <= n_high and prefix[n_high + 1] > prefix[n_low] then
+          blocked[first + index - 1] = true
+          break
+        end
+      end
     end
   end
   return result

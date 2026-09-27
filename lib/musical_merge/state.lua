@@ -221,14 +221,49 @@ function state.predictor(song, channel, saved)
     record = {active = saved, cycle = 1, phrase = 0}
   end
   local predictor = {walked = 0, replays = 0}
+  local function walk(boundaries)
+    while predictor.walked < boundaries do
+      local remaining = boundaries - predictor.walked
+      if record.queued == nil and remaining > 1 then
+        -- Without a queued configuration every boundary is advance() alone
+        -- (cycle_boundary) or nothing (owes_boundary is then constant), so
+        -- the remaining boundaries are replayed in closed form: the same
+        -- cycle/phrase as `remaining` single steps.
+        if owes_boundary(saved, record) then
+          local cycles = record.active and record.active.cycles or 1
+          local cycle, phrase = record.cycle, record.phrase
+          if math.type(cycles) == "integer" and math.type(cycle) == "integer" and
+            math.type(phrase) == "integer" and cycles >= 1 and cycle >= 1 and cycle <= cycles then
+            local elapsed = cycle - 1 + remaining
+            record.cycle, record.phrase = elapsed % cycles + 1, phrase + elapsed // cycles
+          else
+            for _ = 1, remaining do cycle_boundary(song, channel, record) end
+          end
+        end
+        predictor.walked = boundaries
+        predictor.replays = predictor.replays + remaining
+      else
+        if owes_boundary(saved, record) then cycle_boundary(song, channel, record) end
+        predictor.walked = predictor.walked + 1
+        predictor.replays = predictor.replays + 1
+      end
+    end
+  end
   function predictor.at(boundaries)
     if boundaries < predictor.walked then error("merge_state predictor: boundaries decreased", 2) end
-    while predictor.walked < boundaries do
-      if owes_boundary(saved, record) then cycle_boundary(song, channel, record) end
-      predictor.walked = predictor.walked + 1
-      predictor.replays = predictor.replays + 1
-    end
+    walk(boundaries)
     return {config = record.active, cycle = record.cycle, phrase = record.phrase}
+  end
+  -- Whether every later boundary keeps the configuration (none is queued).
+  function predictor.settled()
+    return record.queued == nil
+  end
+  -- The governing configuration only (at(boundaries).config), without the
+  -- result table: the Interlock admission's per-cycle query.
+  function predictor.config_at(boundaries)
+    if boundaries < predictor.walked then error("merge_state predictor: boundaries decreased", 2) end
+    walk(boundaries)
+    return record.active
   end
   return predictor
 end

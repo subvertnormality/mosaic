@@ -135,7 +135,9 @@ end
 -- ({i, config, cycle, phrase}; config false for Off), in ascending i, with
 -- frame.predictor holding the walk (its `replays` count). Returns the list, or
 -- nil, PLAN LIMIT and the counted cycles when the 64-cycle budget would be
--- exceeded or a needed log entry is gone.
+-- exceeded or a needed log entry is gone. The admission uses
+-- query.segment_configs; this full form is kept for diagnostics and as the
+-- reference the differential tests compare it with.
 function query.segments(frame, low, high)
   local count = query.cycle_count(frame, low, high)
   if count > query.MAX_LEADER_CYCLES then return nil, query.PLAN_LIMIT, count end
@@ -152,6 +154,50 @@ function query.segments(frame, low, high)
     segments[#segments + 1] = {i = i, config = config, cycle = cycle, phrase = phrase}
   end
   return segments
+end
+
+-- The governing configuration alone of leader cycle i (segment's first
+-- value, without the predictor's result table).
+local function segment_config(song, leader, saved, i, k_l, running, predictor)
+  if running then
+    if i <= k_l then return (timeline.segment(leader, i)) end
+    return predictor.config_at(i - k_l) or false
+  end
+  if i == 0 then
+    local record = merge_state.peek(song, leader)
+    if record then return record.queued or record.active or false end
+    return saved or false
+  end
+  return predictor.config_at(i) or false
+end
+
+-- query.segments reduced to what the admission reads: the governing
+-- configurations of cycles first_cycle .. first_cycle + count - 1 as a
+-- 1-based array (false for Off), with the same budget, failure and predictor
+-- walk. Returns configs, nil, count, first_cycle; or nil, PLAN LIMIT, count.
+function query.segment_configs(frame, low, high)
+  local count = query.cycle_count(frame, low, high)
+  if count > query.MAX_LEADER_CYCLES then return nil, query.PLAN_LIMIT, count end
+  local first_cycle = low // frame.pl
+  local configs = {}
+  local predictor = merge_state.predictor(frame.song, frame.leader, frame.saved)
+  frame.predictor = predictor
+  local song, leader, saved, k_l, running = frame.song, frame.leader, frame.saved, frame.k_l, frame.running
+  for n = 1, count do
+    local i = first_cycle + n - 1
+    local config = segment_config(song, leader, saved, i, k_l, running, predictor)
+    if config == nil then return nil, query.PLAN_LIMIT, count end
+    configs[n] = config
+    -- Once a cycle is predicted every later one is; with nothing queued they
+    -- all keep this configuration. One walk to the last replays the rest.
+    if n < count and (running and i > k_l or not running and i > 0) and predictor.settled() then
+      local last = first_cycle + count - 1
+      predictor.config_at(running and last - k_l or last)
+      for rest = n + 1, count do configs[rest] = config end
+      break
+    end
+  end
+  return configs, nil, count, first_cycle
 end
 
 -- Leader anchors for a cycle governed by `config` (§1.2.3, the one

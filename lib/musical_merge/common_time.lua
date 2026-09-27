@@ -133,6 +133,10 @@ local function decimal_text(value)
 end
 common_time.decimal_text = decimal_text
 
+-- Exact multipliers by clock-mod type and value (a pure function of both;
+-- a float and an integer key of equal value give the same decimal text).
+local multipliers = {clock_multiplication = {}, clock_division = {}}
+
 -- The multiplier m of a clock mod ({type, value}) as an exact rational.
 function common_time.multiplier(clock_mod)
   if type(clock_mod) ~= "table" then return rational(1, 1) end
@@ -143,11 +147,22 @@ function common_time.multiplier(clock_mod)
   if type(value) ~= "number" or value <= 0 or value ~= value or value == math.huge then
     return nil, UNSUPPORTED
   end
+  local known = multipliers[clock_mod.type]
+  local cached = known[value]
+  if cached == nil then
+    cached = common_time.exact_multiplier(clock_mod.type, value) or false
+    known[value] = cached
+  end
+  if not cached then return nil, UNSUPPORTED end
+  return {cached[1], cached[2]}
+end
+
+function common_time.exact_multiplier(kind, value)
   local text = decimal_text(value)
   if not text then return nil, UNSUPPORTED end
   local exact = common_time.from_decimal(text)
   if not exact or exact[1] == 0 then return nil, UNSUPPORTED end
-  if clock_mod.type == "clock_division" then return common_time.inverse(exact) end
+  if kind == "clock_division" then return common_time.inverse(exact) end
   return exact
 end
 
