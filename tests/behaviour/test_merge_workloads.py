@@ -422,11 +422,12 @@ class Verdict(unittest.TestCase):
         enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
         self.assertTrue(verdict['passed'], verdict['gates'])
-        self.assertEqual(verdict['start_latency']['difference_ns'], 2_000_000)
-        slow = window('enabled', seconds, 0, worst_rows(), 100_015_000_000)
+        self.assertEqual(verdict['start_latency']['key_up']['difference_ns'], 2_000_000)
+        slow = window('enabled', seconds, 0, worst_rows(), 0)
+        slow['state']['midi'] = worst_midi(100_006_000_000, seconds, late=[(c, 0, 10_001_000) for c in range(16)])
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, slow, 15 / 130)
         self.assertEqual(verdict['gates'], {'event_timing_maximum': True, 'sustained_service': True, 'hard_service': True,
-                                            'merge_added_p99': True, 'merge_added_step_jitter': True,
+                                            'merge_added_p99': True, 'merge_added_step_jitter': False,
                                             'admissions': True, 'start_latency': False, 'transport_stopped': True})
 
     def test_start_latency_is_measured_from_the_key_up_against_the_same_first_step(self):
@@ -435,12 +436,51 @@ class Verdict(unittest.TestCase):
         enabled = window('enabled', seconds, 0, worst_rows(), 100_006_000_000)
         verdict = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)
         latency = verdict['start_latency']
+        # Gated: the first step's lateness against each window's own grid
+        # (both on time here); the key-up and key-down figures and the grid
+        # phase after the key-up are reported.
         self.assertEqual((latency['edge'], latency['valid'], latency['enabled_ns'], latency['off_ns']),
-                         ('key-up', True, 6_000_000, 4_000_000))
-        # The key-down figures are kept: 40 ms earlier in both windows.
+                         ('key-up', True, 0, 0))
+        self.assertEqual((latency['key_up']['enabled_ns'], latency['key_up']['off_ns']), (6_000_000, 4_000_000))
         self.assertEqual((latency['key_down']['enabled_ns'], latency['key_down']['off_ns']), (46_000_000, 44_000_000))
+        self.assertEqual(latency['grid_phase_after_key_up_ns'], {'enabled': 6_000_000, 'off': 4_000_000})
         self.assertEqual(latency['first_step']['enabled'], [[c, 60] for c in range(16)])
         self.assertTrue(verdict['valid'] and verdict['passed'])
+
+    def test_start_latency_ignores_the_clock_phase_after_the_key_up(self):
+        # Device STEADY b8e515a3: key-up to the first note 69.7 ms enabled
+        # and 58.3 ms Off (+11.4 ms), but the enabled grid itself began 9.4 ms
+        # later after its key-up; against their own grids the first steps
+        # left 2.9 and 0.9 ms late.
+        seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
+        off = window('off', 8.0, 0, start_rows(50.0), 0)
+        off['state']['midi'] = worst_midi(50_057_400_000, 8.0, late=[(c, 0, 900_000) for c in range(16)])
+        enabled = window('enabled', seconds, 0, worst_rows(), 0)
+        enabled['state']['midi'] = worst_midi(100_066_800_000, seconds, late=[(c, 0, 2_900_000) for c in range(16)])
+        latency = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)['start_latency']
+        self.assertEqual(latency['key_up']['difference_ns'], 11_400_000)
+        self.assertFalse(latency['key_up']['passed'])
+        self.assertEqual((latency['enabled_ns'], latency['off_ns'], latency['difference_ns']), (2_900_000, 900_000, 2_000_000))
+        self.assertTrue(latency['passed'])
+        # A first step 11 ms later against its own grid than Off's fails.
+        enabled['state']['midi'] = worst_midi(100_066_800_000, seconds, late=[(c, 0, 11_901_000) for c in range(16)])
+        latency = hardware_performance.evaluate_merge_windows('PERF-MERGE-HW-WORST', off, enabled, 15 / 130)['start_latency']
+        self.assertEqual(latency['difference_ns'], 11_001_000)
+        self.assertFalse(latency['passed'])
+
+    def test_a_late_stop_that_extends_the_capture_is_analysed_on_the_window(self):
+        # Device STEADY b8e515a3 Off: the Stop's key-up reached the norns 30 s
+        # late, so the capture ran on and ended with notes still sounding.
+        seconds = 8.0
+        events = worst_midi(1_000_000_000, 38.0)
+        tail = max(e['monotonic_ns'] for e in events if e['bytes'][0] & 240 == 144)
+        events = [e for e in events if not (e['bytes'][0] & 240 == 128 and e['monotonic_ns'] > tail)]
+        report = mw.merge_timing_oracle([e for e in events], 'WORST', seconds, 15 / 130, TIMING_THRESHOLDS)
+        self.assertEqual(report['timing']['maximum_ns'], 0)
+        # Inside the window every note must still be released.
+        inside = [e for e in events if not (e['bytes'][0] == 128 + 3)]
+        with self.assertRaisesRegex(AssertionError, 'Unbalanced releases'):
+            mw.merge_timing_oracle(inside, 'WORST', seconds, 15 / 130, TIMING_THRESHOLDS)
 
     def test_a_different_first_step_in_the_off_window_makes_the_case_invalid(self):
         seconds = CASES['PERF-MERGE-HW-WORST']['seconds']
@@ -539,6 +579,11 @@ class FakeMergeDriver:
     def tap(self, x, y):
         self.taps.append((x, y))
 
+    def device_tap(self, x, y, hold=.04):
+        self.taps.append((x, y))
+        self.device_taps = getattr(self, 'device_taps', 0) + 1
+        return {'type': 'grid-tap', 'x': x, 'y': y, 'hold_s': hold, 'host_monotonic_ns': 0, 'host_completion_ns': 0}
+
     def action(self, **kwargs):
         pass
 
@@ -559,6 +604,28 @@ class FakeMergeDriver:
 
     def finish(self):
         self.finished += 1
+
+
+class DeviceTimedTap(unittest.TestCase):
+    def test_the_release_is_scheduled_on_the_norns_in_the_same_evaluation(self):
+        import types
+        from hardware_driver import HardwareDriver
+        sent = []
+        fake = types.SimpleNamespace(runner=types.SimpleNamespace(maiden=types.SimpleNamespace(eval=lambda code: sent.append(code) or '')),
+                                     grid_device=2, recipe=[], elapse=lambda seconds: None)
+        row = HardwareDriver.device_tap(fake, 1, 8)
+        self.assertEqual(len(sent), 1)
+        self.assertEqual((row['x'], row['y'], row['hold_s']), (1, 8, .04))
+        # Run the evaluation with a norns-like clock: the key-down now, the
+        # key-up after the clock sleeps the hold.
+        script = ("local log = {}\n_norns = {grid = {key = function(id, x, y, z) log[#log + 1] = table.concat({id, x, y, z}, ',') end}}\n"
+                  "local pending\nclock = {run = function(f) pending = coroutine.create(f); coroutine.resume(pending) end,"
+                  " sleep = function(s) log[#log + 1] = 'sleep ' .. s; coroutine.yield() end}\n"
+                  + sent[0] + "\nlog[#log + 1] = 'returned'\ncoroutine.resume(pending)\nprint(table.concat(log, ';'))\n")
+        with tempfile.NamedTemporaryFile('w', suffix='.lua', delete=False) as handle:
+            handle.write(script)
+        output = subprocess.check_output(['lua', handle.name]).decode().strip()
+        self.assertEqual(output, '2,1,8,1;sleep 0.04;returned;2,1,8,0')
 
 
 class DeviceRunOrchestration(unittest.TestCase):
@@ -608,6 +675,9 @@ class DeviceRunOrchestration(unittest.TestCase):
         edits = [100 + (8.125 + 8 * n) * 60 / 130 for n in range(5)]
         value, maiden, driver, build, out = self.run_case('PERF-MERGE-HW-EDIT', worst_rows(edits=edits))
         self.assertEqual(driver.taps.count(STEP1), 5)
+        # Every window tap (pattern select, Play, the edits, Stop) is timed on
+        # the norns, so a stalled Maiden reply cannot make it a long press.
+        self.assertEqual(driver.device_taps, 3 + 3 + 5)
         self.assertEqual(len(value['edits_dispatched']), 5)
         self.assertTrue(value['oracle']['gates']['admissions'], value['oracle']['admissions']['failures'])
         self.assertEqual(value['oracle']['admissions']['edits'], 5)

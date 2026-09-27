@@ -451,14 +451,28 @@ judged like-for-like against the same workload with Merge Shape Off
   lateness (the one-stall-tolerant p99 of absolute placement error) at most
   5 ms, and step-jitter maximum at most 5 ms. The absolute p99, step jitter
   and final phase of both windows are reported for information.
-- **Start latency:** each case also measures the time from the Start input's
-  acting edge (the Play key-up: Mosaic applies a grid tap on release), by its
-  native timestamp, to the first emitted Note On, in both windows. The
-  harness checks that the first step's note set (MIDI channels and pitches)
-  is identical in both windows; if it is not, or a Start key-up was not
-  recorded, the case is invalid. It passes when the key-up difference is at
-  most the `step_jitter_maximum_ns` threshold (10 ms); the key-down figures
-  are reported alongside.
+- **Start latency:** each case measures, in both windows, the time from the
+  Start input's acting edge (the Play key-up: Mosaic applies a grid tap on
+  release), by its native timestamp, to the first emitted Note On. That time
+  contains the phase at which the clock's first pulse falls after the key-up,
+  which varies between otherwise identical windows (device STEADY: the grid
+  began 57–67 ms after the key-up) and is not merge work: Start builds
+  nothing and prepares the transport identically with Merge Shape on or off.
+  The gate therefore compares how late each window's first step left
+  relative to its own steady grid (the robust origin above): it passes when
+  enabled − Off is at most the `step_jitter_maximum_ns` threshold (10 ms).
+  The key-up and key-down times and each grid's phase after the key-up are
+  reported. The harness checks that the first step's note set (MIDI channels
+  and pitches) is identical in both windows; if it is not, or a Start key-up
+  was not recorded, the case is invalid.
+- **Taps and capture.** Every tap of a window (pattern select, Play, the
+  EDIT step-1 edits, Stop) is one Maiden evaluation that presses the key and
+  schedules its release 40 ms later on a norns clock, so a stalled Maiden
+  reply cannot turn it into a long press (a host-timed Stop whose release
+  arrived 30 s late did, and the transport kept playing). Timing is analysed
+  over the window's duration from its first Note On; every Note On inside it
+  must be released later in the capture, while notes that start after it may
+  still be sounding when a late Stop ends the capture.
 All (STEADY, WORST, EDIT, DENSE, DENSE-EDIT) must pass before release; until the device runs pass, the delivery report
 states host figures only and the feature is not released.
 

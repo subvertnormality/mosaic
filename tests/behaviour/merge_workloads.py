@@ -291,25 +291,62 @@ def start_latency_gate(enabled_ns, off_ns, thresholds):
             'passed': enabled_ns - off_ns <= bound}
 
 
+def first_step_lateness(events, variant, seconds, step_seconds, thresholds, optional_skip=None):
+    """How late the first step's notes left relative to the window's own
+    steady grid (robust origin): the latest step-0 placement error, and the
+    grid's step-0 time."""
+    placement = place_notes(events, variant, seconds, step_seconds, thresholds, optional_skip)
+    errors = [row['error_ns'] for row in placement['placed'] if row['step'] == 0]
+    return {'lateness_ns': max(errors) if errors else None, 'grid_origin_ns': placement['origin_ns']}
+
+
 def start_latency_verdict(enabled, off, thresholds):
-    """§1.4 Start latency, measured from the acting edge (key-up). Valid only
-    when the Off baseline plays the same first step (channels and pitches)
-    as the enabled window and both key-ups were recorded; an invalid
-    comparison is reported as such, not as a timing pass or fail. The
-    key-down figures are kept for reference."""
+    """§1.4 Start latency. The key-up (acting edge) to first Note On time
+    contains the phase at which the clock's first pulse falls after the
+    key-up, which varies from run to run (device STEADY: the grid began 57 to
+    67 ms after the key-up in otherwise identical windows) and is not merge
+    work: Start builds nothing and prepares the transport identically with
+    Merge Shape on or off. The gate therefore compares how late each
+    window's first step left relative to its own steady grid (robust
+    origin), enabled − Off; the key-up and key-down figures and each grid's
+    phase after the key-up are reported. Valid only when the Off baseline
+    plays the same first step (channels and pitches) and both key-ups were
+    recorded."""
     reasons = []
     if enabled['first_step'] != off['first_step']:
         reasons.append('first-step note sets differ')
     if enabled['from_key_up_ns'] is None or off['from_key_up_ns'] is None:
         reasons.append('Start key-up not recorded')
-    result = {'edge': 'key-up', 'valid': not reasons, 'invalid_reasons': reasons,
+    if enabled.get('first_step_lateness_ns') is None or off.get('first_step_lateness_ns') is None:
+        reasons.append('first step not placed')
+    result = {'edge': 'key-up', 'measure': 'first-step lateness against the steady grid', 'valid': not reasons,
+              'invalid_reasons': reasons,
               'first_step': {'enabled': enabled['first_step'], 'off': off['first_step']},
-              'key_down': start_latency_gate(enabled['from_key_down_ns'], off['from_key_down_ns'], thresholds)}
+              'key_up': (start_latency_gate(enabled['from_key_up_ns'], off['from_key_up_ns'], thresholds)
+                         if enabled['from_key_up_ns'] is not None and off['from_key_up_ns'] is not None else None),
+              'key_down': start_latency_gate(enabled['from_key_down_ns'], off['from_key_down_ns'], thresholds),
+              'grid_phase_after_key_up_ns': {'enabled': enabled.get('grid_phase_after_key_up_ns'),
+                                             'off': off.get('grid_phase_after_key_up_ns')}}
     if reasons:
-        result.update({'enabled_ns': enabled['from_key_up_ns'], 'off_ns': off['from_key_up_ns'], 'passed': False})
+        result.update({'enabled_ns': enabled.get('first_step_lateness_ns'), 'off_ns': off.get('first_step_lateness_ns'), 'passed': False})
         return result
-    result.update(start_latency_gate(enabled['from_key_up_ns'], off['from_key_up_ns'], thresholds))
+    result.update(start_latency_gate(enabled['first_step_lateness_ns'], off['first_step_lateness_ns'], thresholds))
     return result
+
+
+def start_measure(rows, events, play_cell, cluster_ns, variant, seconds, step_seconds, thresholds, optional_skip=None):
+    """start_latency plus the first step's lateness against the window's own
+    steady grid and that grid's phase after the key-up."""
+    report = start_latency(rows, events, play_cell, cluster_ns)
+    try:
+        lateness = first_step_lateness(events, variant, seconds, step_seconds, thresholds, optional_skip)
+    except AssertionError:
+        lateness = {'lateness_ns': None, 'grid_origin_ns': None}
+    report['first_step_lateness_ns'] = lateness['lateness_ns']
+    up = start_edges(rows, play_cell)[1]
+    report['grid_phase_after_key_up_ns'] = (lateness['grid_origin_ns'] - round(up * 1e9)
+                                            if up is not None and lateness['grid_origin_ns'] is not None else None)
+    return report
 
 
 def gc_observation(rows):
@@ -345,6 +382,22 @@ def channel_grids(variant, step_ns):
 MERGE_ADDED_BOUND_NS = 5_000_000
 
 
+def _unreleased_before(events, end_ns):
+    """Note Ons before end_ns without a later release of the same channel and
+    pitch (releases pair with the oldest open note, first in first out)."""
+    opened = {}
+    ordered = sorted((e for e in events if len(e['bytes']) >= 3), key=lambda e: (e['monotonic_ns'], e.get('index', 0)))
+    for event in ordered:
+        status, pitch, velocity = event['bytes'][0], event['bytes'][1], event['bytes'][2]
+        key = (status & 15, pitch)
+        if status & 240 == 144 and velocity > 0:
+            opened.setdefault(key, []).append(event)
+        elif status & 240 == 128 or (status & 240 == 144 and velocity == 0):
+            if opened.get(key):
+                opened[key].pop(0)
+    return sorted((e for notes in opened.values() for e in notes if e['monotonic_ns'] < end_ns), key=lambda e: e['monotonic_ns'])
+
+
 def place_notes(events, variant, seconds, step_seconds, thresholds, optional_skip=None):
     """Place every Note On on its channel's onset grid.
 
@@ -365,9 +418,13 @@ def place_notes(events, variant, seconds, step_seconds, thresholds, optional_ski
     offs = [e for e in events if len(e['bytes']) >= 3 and (e['bytes'][0] & 240 == 128 or (e['bytes'][0] & 240 == 144 and e['bytes'][2] == 0))]
     assert ons, 'No Note On captured'
     assert all(e['port'] == 1 for e in ons), 'Note On outside port 1'
-    assert len(offs) == len(ons), ('Unbalanced releases', len(ons), len(offs))
     first = ons[0]['monotonic_ns']
     end = first + round(seconds * 1e9)
+    # Every Note On inside the analysed window must be released later in the
+    # capture. A capture that runs past the window (a late Stop) may end with
+    # notes that started after the window still sounding.
+    unreleased = _unreleased_before(events, end)
+    assert not unreleased, ('Unbalanced releases', len(unreleased), [e['index'] for e in unreleased[:5]])
     placed = []
     by_channel = {}
     for event in ons:
