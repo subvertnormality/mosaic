@@ -188,7 +188,6 @@ function test_musical_merge_state_v2_non_epoch_fields_keep_phrase_position()
   for _, change in ipairs({
     function(v) v.fragments.keep_anchor = true end,
     function(v) v.interlock.window = 2 end,
-    function(v) v.space.release = 3 end,
     function(v) v.structure.markers = "every_4";v.structure.group_id = 2 end,
     function(v) v.amount = 10 end
   }) do
@@ -213,4 +212,83 @@ function test_musical_merge_state_migrated_v1_request_is_not_a_new_epoch()
   state.request(song, 7, config.canonicalize(v1), false)
   local current = state.effective(song, 7, v1)
   luaunit.assert_equals({current.cycle, current.phrase}, {2, 1})
+end
+
+-- Plan §1.2.3 prediction: the incremental walk (one predictor, boundaries
+-- asked for in ascending order) equals a from-scratch per-cycle replay
+-- (state.predict) at every boundary count, for random pending queues,
+-- epoch-restarting and non-epoch queued changes, queued removals, queues
+-- rejected by the dependency graph (retried every boundary), missing records,
+-- saved-but-unrecorded channels and Off leaders.
+function test_musical_merge_state_incremental_predictor_equals_per_cycle_replay()
+  local rng = 20260927
+  local function random(n)
+    rng = (rng * 1103515245 + 12345) % 2147483648
+    return rng % n + 1
+  end
+  local function random_config()
+    local kind = random(6)
+    if kind == 1 then return nil end
+    if kind == 2 then return config.new() end
+    local cycles = ({1, 2, 4, 8})[random(4)]
+    local result = value(cycles, random(2) == 1 and "fixed" or "per_phrase")
+    result.seed = random(3) - 1
+    result.amount = random(100)
+    if kind == 3 then result.mode = "fragments"; result.fragments.size = ({4, 8, 16})[random(3)] end
+    if kind == 4 then result.interlock = {leader = random(2) == 1 and 3 or 4, window = 0} end
+    return result
+  end
+  local LEADER = 4
+  for case = 1, 300 do
+    state.reset()
+    local song = {channels = {}}
+    for number = 1, 16 do song.channels[number] = {} end
+    -- Channel 3 sometimes follows 4, so a queued Interlock edge on 4 is
+    -- rejected (CHANNEL IS A LEADER) at every replayed boundary.
+    if random(2) == 1 then
+      local follower = value(1); follower.interlock = {leader = LEADER, window = 0}
+      state.effective(song, 3, follower)
+    end
+    local saved = random_config()
+    local shape = random(4)
+    if shape > 1 then
+      local initial = random_config() or saved or value(2)
+      state.effective(song, LEADER, initial)
+      for _ = 1, random(11) - 1 do state.on_cycle_boundary(song, LEADER, initial) end
+      if shape >= 3 then
+        local queued = random_config() or config.new()
+        -- Often an edge 4 -> 3, rejected while channel 3 follows 4.
+        if random(3) == 1 then queued = value(2); queued.interlock = {leader = 3, window = 0} end
+        state.request(song, LEADER, queued, true)
+      end
+      if shape == 4 then
+        -- A queue that restores the active configuration (withdrawal) or a
+        -- second, superseding request.
+        state.request(song, LEADER, random(2) == 1 and initial or (random_config() or config.new()), true)
+      end
+    end
+    local before = state.peek(song, LEADER)
+    local snapshot = before and {active = before.active, queued = before.queued, cycle = before.cycle,
+      phrase = before.phrase, rejected = before.rejected}
+    local predictor = state.predictor(song, LEADER, saved)
+    for boundaries = 0, 70 do
+      local label = "case " .. case .. " boundaries " .. boundaries
+      luaunit.assert_equals(predictor.at(boundaries), state.predict(song, LEADER, saved, boundaries), label)
+    end
+    luaunit.assert_equals(predictor.replays, 70)
+    -- Asking again for the same count replays nothing.
+    predictor.at(70)
+    luaunit.assert_equals(predictor.replays, 70)
+    -- Nothing live changed.
+    local after = state.peek(song, LEADER)
+    luaunit.assert_equals(after and {active = after.active, queued = after.queued, cycle = after.cycle,
+      phrase = after.phrase, rejected = after.rejected}, snapshot, "case " .. case)
+  end
+end
+
+function test_musical_merge_state_predictor_rejects_a_decreasing_walk()
+  state.reset()
+  local predictor = state.predictor({}, 1, value(2))
+  predictor.at(3)
+  luaunit.assert_error(function() predictor.at(2) end)
 end

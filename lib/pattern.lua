@@ -77,10 +77,7 @@ local function extract_pattern_number(merge_mode)
   return nil
 end
 
--- merge_override (plan §1.2.3 leader cycle plan): {config, cycle, phrase}
--- passed explicitly instead of read from merge_state. A plan built this way
--- never runs an admission of its own.
-function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache, merge_override)
+function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mode, velocity_merge_mode, length_merge_mode, song_pattern, effective_lengths_cache)
   local selected_song_pattern = song_pattern or program.get_selected_song_pattern()
   local merged_pattern = {
     trig_values = {unpack(default_trig_values)},
@@ -227,15 +224,8 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if length_priority then merged_pattern.lengths[s] = priority_lengths[s] end
   end
 
-  local merge_runtime
-  if merge_override then
-    local config = merge_override.config or nil
-    merge_runtime = {config = config, cycle = merge_override.cycle or 1, phrase = merge_override.phrase or 0,
-      ranking_phrase = config and config.variation == "per_phrase" and merge_override.phrase or 0}
-  else
-    local requested_merge_settings = pattern_channel.musical_merge or merge_config.new()
-    merge_runtime = merge_state.effective(selected_song_pattern, channel, requested_merge_settings)
-  end
+  local requested_merge_settings = pattern_channel.musical_merge or merge_config.new()
+  local merge_runtime = merge_state.effective(selected_song_pattern, channel, requested_merge_settings)
   local merge_settings = merge_runtime and merge_runtime.config
   local merge_version = merge_settings and merge_settings.schema_version
   local foundation_result, fragments_result
@@ -262,24 +252,21 @@ function pattern.get_and_merge_patterns(channel, trig_merge_mode, note_merge_mod
     if foundation_mode then
       local cycle_percentage = merge_settings.percentages and merge_settings.percentages[cycle] or 100
       local effective_amount = foundation.round_half_up((merge_settings.amount or 100) * cycle_percentage / 100)
-      -- Plan §3: the Interlock admission for this build's cycle. The leader's
-      -- cycle plans come from this same function with their configuration,
-      -- cycle and phrase passed explicitly. Space (MM-12) slots in after it.
+      -- Plan §3: the Interlock admission for this build's cycle. It reads the
+      -- leader's stored anchors directly and builds no leader plan (§1.2.3).
+      -- Its record is published as foundation.interlock (fields documented
+      -- in musical_merge/interlock.lua). Every bypass status (RESYNC, PLAN
+      -- LIMIT, LEADER OFF, LEADER MISSING) adds no filter: gap, eligibility,
+      -- ranking, Amount, Accent and masks then run exactly as with Interlock
+      -- off (§1.2 unsupported-admission fallback).
       local filters, interlock_result
-      if not merge_override and interlock.settings(merge_settings) then
+      if interlock.settings(merge_settings) then
         interlock_result = interlock.admission({
           song = selected_song_pattern, channel = channel, config = merge_settings,
-          first = effective_start, last = effective_end,
-          leader_plan = function(leader, config, leader_cycle, leader_phrase)
-            local leader_channel = selected_song_pattern.channels[leader]
-            return pattern.get_and_merge_patterns(leader, leader_channel.trig_merge_mode,
-              leader_channel.note_merge_mode, leader_channel.velocity_merge_mode,
-              leader_channel.length_merge_mode, selected_song_pattern, effective_lengths_cache,
-              {config = config, cycle = leader_cycle, phrase = leader_phrase})
-          end
+          first = effective_start, last = effective_end
         })
         filters = {}
-        if interlock_result.status == "ok" then
+        if interlock_result.status == interlock.SUPPORTED then
           filters[1] = {reason = interlock_result.reason, blocked = interlock_result.blocked}
         end
       end
@@ -392,8 +379,8 @@ end
 
 local working_pattern_updates = setmetatable({}, {__mode = "k"})
 
--- Plan §1.3 / §1.5: the leaders a configuration names (Interlock or Space),
--- counted whether or not their feature is active.
+-- Plan §1.3 / §1.5: the Interlock leader a configuration names, counted
+-- whether or not the feature is active.
 local function add_leaders(config, number, leaders, into)
   for _, leader in ipairs(merge_dependency.leaders(config)) do
     if leaders == nil or leaders[leader] then into[number] = true end

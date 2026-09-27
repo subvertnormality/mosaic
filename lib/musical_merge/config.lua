@@ -149,9 +149,11 @@ function config.validate(value, channel)
     not leader(interlock.leader, channel) or not integer(interlock.window, 0, 4) then
     return nil, "merge interlock"
   end
+  -- Plan §0/§6: `space` is reserved and inert in this delivery; only exactly
+  -- {leader = nil, release = 0} is accepted, so no Space edge or admission exists.
   local space = value.space
   if type(space) ~= "table" or not only_keys(space, {leader = true, release = true}) or
-    not leader(space.leader, channel) or not integer(space.release, 0, 4) then
+    space.leader ~= nil or not integer(space.release, 0, 0) then
     return nil, "merge space"
   end
   local fragments = value.fragments
@@ -219,7 +221,7 @@ function config.canonicalize(value, channel)
   if not ok then return nil, reason end
   local result = copy_common(value, config.new())
   result.interlock = {leader = value.interlock.leader, window = value.interlock.window}
-  result.space = {leader = value.space.leader, release = value.space.release}
+  -- config.new() already holds the only valid (inert) space value.
   result.fragments = {size = value.fragments.size, keep_anchor = value.fragments.keep_anchor}
   -- An inactive group has no semantics: markers Off stores no group.
   result.structure = {markers = value.structure.markers,

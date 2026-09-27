@@ -1,23 +1,22 @@
--- The leader query shared by Interlock (MM-09) and Space (MM-12):
--- docs/musical-merge-extensions-plan.md §1.2.3 (evaluating a leader cycle) and
--- §1.4 (query support and bounded work).
+-- The leader query of MM-09 Interlock: docs/musical-merge-extensions-plan.md
+-- §1.2.3 (evaluating a leader cycle, leader anchors for cycle i) and §1.4
+-- (query support and bounded work).
 --
 -- A follower's admission runs inside its working-pattern build for its current
 -- cycle j = k_f and reads only song data, merge_state records and the
 -- transport-owned counters and cycle logs (§1.2), never another channel's
--- callback-visible runtime state or emitted result. Each filter asks for the
--- leader cycles over its own support; the budget (64 leader cycles, 8 distinct
--- leader plans) is checked before any plan is built, and leader plans are
--- memoised only within one working-pattern build (ctx.plan_memo).
+-- callback-visible runtime state or emitted result. No leader plan or working
+-- pattern is ever built: a leader cycle's anchors are read directly from the
+-- currently stored anchor pattern under the cycle's governing configuration
+-- (§1.2.3). The single budget is 64 leader cycles per admission (§1.4).
 local common_time = include("mosaic/lib/musical_merge/common_time")
 local merge_state = include("mosaic/lib/musical_merge/state")
 local timeline = include("mosaic/lib/musical_merge/timeline")
 
 local query = {}
 
--- §1.4 budget, checked before any plan is built.
+-- §1.4 budget (single authority): leader cycles per admission.
 query.MAX_LEADER_CYCLES = 64
-query.MAX_LEADER_PLANS = 8
 
 query.RESYNC = "RESYNC"
 query.PLAN_LIMIT = "PLAN LIMIT"
@@ -25,20 +24,21 @@ query.PLAN_LIMIT = "PLAN LIMIT"
 local checked_mul, checked_add = common_time.checked_mul, common_time.checked_add
 query.checked_mul, query.checked_add = checked_mul, checked_add
 
--- Whether a status is an unsupported admission (§1.2): it bypasses both
--- filters for the follower's cycle.
-function query.unsupported(status)
-  return status == query.RESYNC or status == query.PLAN_LIMIT
-end
+-- RESYNC and PLAN LIMIT are the unsupported admissions (§1.2): they bypass
+-- Interlock only, for the follower's cycle; the rest of the Foundation
+-- pipeline runs as with Interlock off.
 
 -- The governing segment of leader cycle i (§1.2.3): logged when its boundary
 -- has been applied (i <= k_l), otherwise predicted by replaying the pending
--- boundaries from a pure copy of the leader's merge_state record. Returns
--- config (false for Off), cycle, phrase; nil when a needed log entry is gone.
-local function segment(song, leader, saved, i, k_l, running)
+-- boundaries from a pure copy of the leader's merge_state record. `predictor`
+-- is the admission's one incremental walk (merge_state.predictor): segments
+-- are asked for in ascending i, so each pending boundary is replayed once.
+-- Returns config (false for Off), cycle, phrase; nil when a needed log entry
+-- is gone.
+local function segment(song, leader, saved, i, k_l, running, predictor)
   if running then
     if i <= k_l then return timeline.segment(leader, i) end
-    local predicted = merge_state.predict(song, leader, saved, i - k_l)
+    local predicted = predictor.at(i - k_l)
     return predicted.config or false, predicted.cycle, predicted.phrase
   end
   -- Stopped (§1.3): k_l = 0; the requested (or queued) configuration is the
@@ -48,16 +48,8 @@ local function segment(song, leader, saved, i, k_l, running)
     if record then return record.queued or record.active or false, record.cycle, record.phrase end
     return saved or false, 1, 0
   end
-  local predicted = merge_state.predict(song, leader, saved, i)
+  local predicted = predictor.at(i)
   return predicted.config or false, predicted.cycle, predicted.phrase
-end
-
--- The distinct-plan identity (§1.4): configuration entry × cycle_in_phrase ×
--- ranking phrase. An Off (or legacy) cycle's plan never depends on the phrase.
-function query.plan_key(config, cycle, phrase)
-  if not config then return "off" end
-  local ranking = config.variation == "per_phrase" and phrase or 0
-  return tostring(config) .. "|" .. tostring(cycle) .. "|" .. tostring(ranking)
 end
 
 -- The common frame of one follower/leader query, or nil and the bypass status.
@@ -133,45 +125,60 @@ function query.clip(frame, low, high)
   return low, high
 end
 
--- The leader cycles meeting [low, high] with their governing segments. A
--- segment gets a plan key when `counts(config)` is true; distinct keys are
--- budgeted. Returns the list, or nil and PLAN LIMIT.
-function query.segments(frame, low, high, counts)
-  local pl = frame.pl
-  local first_cycle, last_cycle = low // pl, high // pl
-  if last_cycle - first_cycle + 1 > query.MAX_LEADER_CYCLES then return nil, query.PLAN_LIMIT end
-  local segments, keys, distinct = {}, {}, 0
-  for i = first_cycle, last_cycle do
-    local config, cycle, phrase = segment(frame.song, frame.leader, frame.saved, i, frame.k_l, frame.running)
-    if config == nil then return nil, query.PLAN_LIMIT end
-    local entry = {i = i, config = config, cycle = cycle, phrase = phrase}
-    if counts(config) then
-      local key = query.plan_key(config, cycle, phrase)
-      entry.key = key
-      if not keys[key] then
-        keys[key] = true
-        distinct = distinct + 1
-        if distinct > query.MAX_LEADER_PLANS then return nil, query.PLAN_LIMIT end
-      end
-    end
-    segments[#segments + 1] = entry
+-- The number of leader cycles meeting the closed interval [low, high] (§1.4):
+-- floor(high / P_l) − floor(low / P_l) + 1 (low >= 0 after clipping).
+function query.cycle_count(frame, low, high)
+  return high // frame.pl - low // frame.pl + 1
+end
+
+-- The leader cycles meeting [low, high] with their governing segments
+-- ({i, config, cycle, phrase}; config false for Off), in ascending i, with
+-- frame.predictor holding the walk (its `replays` count). Returns the list, or
+-- nil, PLAN LIMIT and the counted cycles when the 64-cycle budget would be
+-- exceeded or a needed log entry is gone.
+function query.segments(frame, low, high)
+  local count = query.cycle_count(frame, low, high)
+  if count > query.MAX_LEADER_CYCLES then return nil, query.PLAN_LIMIT, count end
+  local first_cycle = low // frame.pl
+  local segments = {}
+  -- One incremental prediction walk per admission (not shared across
+  -- followers: a boundary replay reads the song-wide dependency edges, so a
+  -- complete cross-admission cache key is not available).
+  local predictor = merge_state.predictor(frame.song, frame.leader, frame.saved)
+  frame.predictor = predictor
+  for i = first_cycle, first_cycle + count - 1 do
+    local config, cycle, phrase = segment(frame.song, frame.leader, frame.saved, i, frame.k_l, frame.running, predictor)
+    if config == nil then return nil, query.PLAN_LIMIT, count end
+    segments[#segments + 1] = {i = i, config = config, cycle = cycle, phrase = phrase}
   end
   return segments
 end
 
--- The leader cycle plan of a segment, memoised within the working-pattern
--- build that owns ctx.plan_memo (shared by both filters for one leader).
-function query.plan(ctx, frame, entry)
-  local memo = ctx.plan_memo
-  if not memo then memo = {}; ctx.plan_memo = memo end
-  local key = frame.leader .. "|" .. entry.key
-  local plan = memo[key]
-  if plan == nil then
-    plan = ctx.leader_plan(frame.leader, entry.config or nil, entry.cycle, entry.phrase) or false
-    memo[key] = plan
-    ctx.plan_builds = (ctx.plan_builds or 0) + 1
+-- Leader anchors for a cycle governed by `config` (§1.2.3, the one
+-- authoritative definition): when the configuration is Foundation with a valid
+-- anchor pattern (assigned to the leader, as foundation.plan requires), the
+-- 1-based indices n into the leader's playable range where the currently
+-- stored anchor pattern has a trig; before masks and probability. Returns the
+-- ascending index list; false for a non-Foundation (Off) configuration; nil
+-- for Foundation with a missing anchor. This equals the set foundation.plan
+-- marks `anchor` for the same configuration and stored data, and reads
+-- nothing else of the leader; its phrase position cannot change it.
+function query.anchors(frame, config)
+  if type(config) ~= "table" or config.mode ~= "foundation" or
+    (config.schema_version ~= 1 and config.schema_version ~= 2) then return false end
+  if (config.ranking_version or 1) ~= 1 then return nil end
+  local anchor = config.anchor
+  local leader_channel = frame.song.channels[frame.leader]
+  local assigned = leader_channel.selected_patterns
+  local source = anchor ~= nil and assigned and assigned[anchor] and frame.song.patterns[anchor]
+  local trigs = source and source.trig_values
+  if type(trigs) ~= "table" then return nil end
+  local result = {}
+  for index = 1, frame.l_count do
+    local value = trigs[frame.l_first + index - 1]
+    if value == 1 or value == true then result[#result + 1] = index end
   end
-  return plan or nil
+  return result
 end
 
 return query

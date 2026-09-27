@@ -1045,8 +1045,8 @@ local function handle_note(device, current_step, note_container, unprocessed_not
   local c = note_container.channel
   local event_song = program.get_selected_song_pattern()
   
-  -- The articulation inputs, resolved by the one reader the Space gate
-  -- snapshot shares (lib/musical_resolution/articulation.lua).
+  -- The articulation inputs, resolved by one reader
+  -- (lib/musical_resolution/articulation.lua).
   local mute_root, chord_one, chord_two, chord_three, chord_four, has_chord_notes,
     chord_strum_pattern, arp_division, chord_division, chord_velocity_mod, chord_spread,
     chord_acceleration = resolve_articulation(channel, current_step, stock)

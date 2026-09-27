@@ -1,9 +1,10 @@
 -- The articulation inputs of one step: chord slots, root mute, strum pattern,
 -- arp selection and strum timing, resolved from a stock reader exactly as step
--- playback reads them. Shared by step.lua's note path and the Space gate
--- snapshot (docs/musical-merge-extensions-plan.md §6.1), so both resolve the
--- same channel values, per-step overrides, parameter-slot values and stock
--- precedence, and convert division/spread indices through the same tables.
+-- playback reads them, for step.lua's note path. (Extracted for the MM-12 Space
+-- gate snapshot, which is deferred: docs/musical-merge-extensions-plan.md §6.)
+-- It resolves channel values, per-step overrides, parameter-slot values and
+-- stock precedence, and converts division/spread indices through the division
+-- tables.
 --
 -- `stock(kind)` is the only reader; every read happens in the order and under
 -- the conditions playback has always used, so a remembering resolver answers

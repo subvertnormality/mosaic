@@ -117,7 +117,7 @@ function foundation.plan(args)
           end
         end
         -- Plan §3 candidate pipeline: gap, then each candidate filter
-        -- (Interlock, later Space) evaluated independently against the same
+        -- (Interlock) evaluated independently against the same
         -- immutable inputs; every applicable reason is kept, in that order.
         local list
         if filters then
