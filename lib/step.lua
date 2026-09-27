@@ -999,6 +999,15 @@ local function prepare_harmony(current_step, note_container, unprocessed, channe
     local binding = pattern_harmony.binding_key(channel,active_merge)
     frame = pattern_harmony.prepare(song, channel.number,
       harmony_revision("pattern", channel, unprocessed,resolved_sources), binding, resolved, config,conflicts)
+    -- Plan §4 Downstream Harmony: with markers active, a mapped raw value
+    -- that resolves to different pitch classes has no single mapped pitch and
+    -- fails closed under either fallback; a Legacy fallback would emit a
+    -- guessed pitch. Only this event's frame changes: the saved fallback and
+    -- Structure Off keep their existing behaviour.
+    if structure_settings and frame.status == "source_conflict" then
+      frame.fallback = "silence"
+      active_fallback = "silence"
+    end
     local mapped = frame.mapped and frame.mapped[mapping_value]
     pitches = {root=pattern_harmony.pitch_for(frame, mapping_value, note_container.note)}
     if mapped then consume = function() harmony_state.consume_revoice(song, channel.number, frame) end end

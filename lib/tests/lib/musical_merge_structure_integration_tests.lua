@@ -391,6 +391,53 @@ function test_structure_pattern_repeated_value_across_marker_boundary_fails_clos
   luaunit.assert_equals({planned.status, planned.output}, {"ok", pitches[1]})
 end
 
+-- Review D7: the same fail-closed result under the Legacy fallback. A mapped
+-- raw value that a marker and a non-marker position resolve differently has
+-- no single mapped pitch, so it is silent (not the event's legacy pitch) at
+-- both positions, grid and inspection agree, and recovery restores the
+-- mapped pitch. Unmapped values keep their per-event pitch.
+function test_structure_pattern_mapped_conflict_fails_closed_under_legacy_fallback()
+  local voicing = pattern_voicing(); voicing.fallback = "legacy"
+  local fixture = {anchors = {1}, additions = {2, 3}, raws = {[1] = 1, [2] = 1, [3] = 4}, markers = "every_4",
+    voicing = voicing}
+  local song, channel = structure_song(fixture)
+  channel.voicing.pattern_maps[pattern_harmony.binding_key(channel)] =
+    {schema_version = 1, revision = 1, assignments = {["1"] = "bass"}}
+  local pitches = play({1, 2, 3})
+  luaunit.assert_equals(pitches, {67})     -- only unmapped raw 4 (G) sounds
+  for _, position in ipairs({1, 2}) do
+    local planned = harmony_inspection.snapshot(song, 1, position).planned
+    luaunit.assert_equals(planned.status, "source_conflict", position)
+    luaunit.assert_nil(planned.output, position)
+    local _, kind = harmony_grid_projection.value(song, 1, position, 1, 1)
+    luaunit.assert_not_equals(kind, "ordinary", position)
+  end
+  luaunit.assert_equals(harmony_inspection.snapshot(song, 1, 3).planned.output, 67)
+  -- The saved fallback is unchanged.
+  luaunit.assert_equals(channel.voicing.fallback, "legacy")
+  song.patterns[1].note_values[2], song.patterns[2].note_values[2] = 2, 2
+  pattern_model.update_working_pattern(1, song)
+  pitches = play({1})
+  luaunit.assert_equals(#pitches, 1)
+  luaunit.assert_equals(pitches[1] % 12, 0)
+  luaunit.assert_equals(harmony_inspection.snapshot(song, 1, 1).planned.status, "ok")
+end
+
+-- Structure Off keeps the existing Legacy-fallback behaviour for a mapped
+-- source conflict (merged-pentatonic here): the event's legacy pitch sounds.
+function test_structure_off_mapped_conflict_legacy_fallback_is_unchanged()
+  local voicing = pattern_voicing(); voicing.fallback = "legacy"
+  local _, channel = structure_song({anchors = {5, 6}, additions = {5}, raws = {[5] = 3, [6] = 3},
+    markers = "off", voicing = voicing})
+  params:set("merged_lock_to_pentatonic", 2)
+  channel.voicing.pattern_maps[pattern_harmony.binding_key(channel)] =
+    {schema_version = 1, revision = 1, assignments = {["3"] = "bass"}}
+  luaunit.assert_equals(play({5, 6}), {64, 65})
+  local song = program.get_song_pattern(1)
+  luaunit.assert_equals(harmony_inspection.snapshot(song, 1, 5).planned.status, "source_conflict")
+  params:set("merged_lock_to_pentatonic", 1)
+end
+
 function test_structure_pattern_unmapped_repeated_value_keeps_per_event_pitch()
   local fixture = {anchors = {1}, additions = {2}, raws = {[1] = 1, [2] = 1, [3] = 4},
     markers = "every_4", voicing = pattern_voicing()}

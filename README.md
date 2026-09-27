@@ -1509,7 +1509,10 @@ During playback that change waits for the next pattern boundary, and a Merge
 Shape edit applied to one of those channels before then waits with it and shows
 `NEXT PATTERN` instead of `NEXT CYCLE`.
 A snapped marker keeps its chord tone when Harmony Revoice or Ensemble would move
-it: Harmony's Result says `MARKER PRIORITY`.
+it: Harmony's Result says `MARKER PRIORITY`. With Harmony Pattern, a mapped note
+value that snaps to a different pitch class at a marker than it plays between
+markers has no single mapped pitch, so it is silent at both, whichever fallback
+is chosen; unmapped values keep their own pitch.
 
 #### Result and Reason
 
