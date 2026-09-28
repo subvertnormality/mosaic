@@ -62,11 +62,6 @@
           "screen": "C06"
         },
         {
-          "id": "harmony",
-          "label": "Harmony",
-          "screen": "H01"
-        },
-        {
           "id": "clock",
           "label": "Clock",
           "screen": "C04"
@@ -77,6 +72,16 @@
           "screen": "C09"
         },
         {
+          "id": "merge_shape",
+          "label": "Merge Shape",
+          "screen": "M02"
+        },
+        {
+          "id": "harmony",
+          "label": "Harmony",
+          "screen": "H01"
+        },
+        {
           "id": "device",
           "label": "Device",
           "screen": "C05"
@@ -85,11 +90,6 @@
           "id": "history",
           "label": "History",
           "screen": "C03"
-        },
-        {
-          "id": "merge_shape",
-          "label": "Merge Shape",
-          "screen": "M02"
         }
       ],
       "N02": [
@@ -4871,7 +4871,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "register"
       },
@@ -4978,7 +4978,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "register"
       },
@@ -5383,20 +5383,6 @@
           "width_policy": "fit_value_then_detail"
         },
         {
-          "id": "harmony",
-          "label": "Harmony",
-          "example": "H01",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "harmony"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
           "id": "clock",
           "label": "Clock",
           "example": "C04",
@@ -5425,6 +5411,34 @@
           "width_policy": "fit_value_then_detail"
         },
         {
+          "id": "merge_shape",
+          "label": "Merge Shape",
+          "example": "M02",
+          "binding": {
+            "provider": "tasks",
+            "target": "selected_object",
+            "field": "merge_shape"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
+          "id": "harmony",
+          "label": "Harmony",
+          "example": "H01",
+          "binding": {
+            "provider": "tasks",
+            "target": "selected_object",
+            "field": "harmony"
+          },
+          "type": "provider_descriptor",
+          "missing": "NONE",
+          "visibility": "descriptor.visible",
+          "width_policy": "fit_value_then_detail"
+        },
+        {
           "id": "device",
           "label": "Device",
           "example": "C05",
@@ -5446,20 +5460,6 @@
             "provider": "tasks",
             "target": "selected_object",
             "field": "history"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "merge_shape",
-          "label": "Merge Shape",
-          "example": "M02",
-          "binding": {
-            "provider": "tasks",
-            "target": "selected_object",
-            "field": "merge_shape"
           },
           "type": "provider_descriptor",
           "missing": "NONE",
@@ -6401,7 +6401,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "choir"
       },
@@ -6615,7 +6615,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "register"
       },
@@ -11423,7 +11423,7 @@
         "empty": "EMPTY; E3/K3 no mutation"
       },
       "controls_explanation": "E2 selects the visible field; E3 edits. K2 cancels the whole draft; K3 on a value applies the whole draft. K3 on an action opens it. E1 cancels/returns to root, then Tasks. Shown as a list (detail layout: every row, the selected one marked >; owner decision 27 September 2026) because most rows open child screens (OPEN >).",
-      "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Mode Fragments (plan docs/musical-merge-extensions-plan.md §2/§5) replaces the Rhythm route with the Fragments screen (field `fragments`, label Rhythm) and leaves Pitch with only the Voice leading link; Phrase shows Cycles and Variation only.",
+      "state_explanation": "Mode Off restores saved legacy merge policy at the declared boundary. It does not erase source patterns. Character motion is decorative and can be disabled; exact values, scope and neighbour labels are stationary. Native presentation fixture, not integrated playback. Grid-follow navigation is proposed; this atlas is a presentation fixture, not an application input simulator. Mode Fragments (plan docs/musical-merge-extensions-plan.md §2/§5) replaces the Rhythm route with the Fragments screen (field `fragments`, label Rhythm) and hides Pitch; Phrase shows Cycles and Variation only.",
       "parent": "N01",
       "entry_flow_ids": [
         "NAV.Channel.M02"
@@ -11841,7 +11841,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "garden"
       },
@@ -12636,7 +12636,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": null
       },
@@ -12724,20 +12724,6 @@
           "type": "provider_descriptor",
           "visibility": "descriptor.visible",
           "missing": "NONE",
-          "width_policy": "fit_value_then_detail"
-        },
-        {
-          "id": "harmony",
-          "label": "Harmony",
-          "example": ">",
-          "binding": {
-            "provider": "merge",
-            "target": "selected_object",
-            "field": "harmony"
-          },
-          "type": "provider_descriptor",
-          "missing": "NONE",
-          "visibility": "descriptor.visible",
           "width_policy": "fit_value_then_detail"
         }
       ],
@@ -12886,7 +12872,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "garden"
       },
@@ -13455,7 +13441,7 @@
         "removed_focus": "same semantic id else clamp previous ordinal; consume pending delta",
         "empty": "EMPTY; E3/K3 no mutation"
       },
-      "controls_explanation": "Same controls as H01 (harmony owner, route H01). Shown only on arrival through the Merge Pitch 'Voice leading' action (edge M07/HARMONY_LINK). E2 field; E3 Harmony draft; K3 on an action opens it, on a value applies Harmony only. K2 never returns to Merge: the link left no return frame.",
+      "controls_explanation": "Retired compatibility specimen. Harmony is reached directly from Channel tasks; Merge Pitch has no cross-owner link.",
       "state_explanation": "Presentation variant of H01. The Merge draft was discarded by the owner's reload(); the 'SHAPE CANCELLED' receipt is shown only when owner.cancel_unapplied reported a discarded draft, and drops on the next input. An accepted Merge queue remains intact. Do not imply cross-feature atomic Apply; Harmony keeps its next-pattern boundary. All H01 descriptors remain reachable even though the specimen shows four rows. Character motion is decorative and can be disabled.",
       "parent": "N01",
       "entry_flow_ids": [
@@ -13830,7 +13816,7 @@
       "live_render": {
         "program": "screen",
         "function": "draw",
-        "layout": "focused",
+        "layout": "detail",
         "model": "ViewModel",
         "art": "garden"
       },
@@ -32773,44 +32759,6 @@
       "kind": "route"
     },
     {
-      "from": "M07",
-      "field_label_reference": "Voice leading",
-      "old_owner_route": "M05",
-      "old_action_route": "HARMONY_LINK",
-      "to": "H01",
-      "event": "K3.down",
-      "guard": {
-        "field_kind": "action",
-        "descriptor_enabled": true
-      },
-      "effects": [
-        "owner.before_if_present",
-        "owner.cancel_unapplied",
-        "return.invalidate",
-        "owner.enter_root"
-      ],
-      "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
-      "line": 145,
-      "binding_rule": "Cross-owner link, not a route. HARMONY_LINK is never written to the merge screen variable and is absent from source_route_map.merge. The merge draft is discarded silently (reload), Harmony is entered fresh at H01 with an empty stack, and no return frame to M07 exists; K2 on H01 never returns to Merge.",
-      "field_id": "harmony",
-      "kind": "cross_owner_link",
-      "target_owner": "harmony",
-      "handler": {
-        "source": "lib/pages/channel_edit_page/channel_feature_editor.lua",
-        "line": 434,
-        "code": "field.route==\"HARMONY_LINK\" then self:reload(); channel_edit_page_ui.select_harmony_page()"
-      },
-      "enter": {
-        "source": "lib/pages/channel_edit_page/channel_edit_navigation.lua",
-        "lines": [
-          291,
-          296
-        ],
-        "code": "if grid_key_is_held() then return false end; feature_editors.harmony:enter(); select Harmony page"
-      },
-      "held": "unreachable from K3: channel_edit_navigation.lua:112-115 hands held K2/K3 to the legacy workspace before feature:key, so held.K3.down wins; owner.enter_root still refuses (no navigation) if a grid key is held"
-    },
-    {
       "from": "M05",
       "field_label_reference": "Reason",
       "old_owner_route": "M07",
@@ -33336,7 +33284,7 @@
     "F06": "mask locked scope",
     "F07": "transport and record status",
     "F08": "parameter locked scope",
-    "M10": "H01 entered from the Merge Pitch 'Voice leading' link (edge M07/HARMONY_LINK); route H01, harmony descriptors, optional SHAPE CANCELLED receipt"
+    "M10": "Retired compatibility specimen; not reachable from the Merge Pitch menu."
   },
   "baseline_policy": {
     "source": "working tree snapshots, including preexisting changes; commit hash alone insufficient",

@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "ddb1817fb393de7c28702b3594c337b3002e3705a92c78b99ee8cad6767755f5",
+ "manual_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -198,7 +198,7 @@
    "level": 3,
    "start_line": 345,
    "end_line": 380,
-   "text_sha256": "f36c9175503fca0303b879ac55c68f9f95edf00520431f103a19d3c5ade14e9f",
+   "text_sha256": "971fefc89d55776f43cc75b35abd73b557ce2c0901936ad6f68a129a5886074e",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
     "NAV-CONFIRM"
@@ -1518,7 +1518,7 @@
    "level": 2,
    "start_line": 1386,
    "end_line": 1404,
-   "text_sha256": "88a3a3c0b7f27fb005d0d274b969b6b9b92840bdf3a780623e41dce087b17375"
+   "text_sha256": "6a479eda156d86bf66a0c1d2a377462887f5cca7fb8cad2d4b7c0c7ecabb6554"
   },
   {
    "id": "MAN-120",
@@ -1528,8 +1528,8 @@
    "title": "Merge Shape",
    "level": 3,
    "start_line": 1405,
-   "end_line": 1438,
-   "text_sha256": "933f79f1fe28520bb80b36bfdf4fd1d03f9c8dc5443c242486991338d88484b0"
+   "end_line": 1440,
+   "text_sha256": "8c913c8c176aedf2ef59b9cee92c023cd4066aed7c104ed4643695058df2c3f4"
   },
   {
    "id": "MAN-122",
@@ -1540,9 +1540,9 @@
    "status": "unreviewed",
    "title": "Fragments",
    "level": 4,
-   "start_line": 1439,
-   "end_line": 1467,
-   "text_sha256": "c7d5fc635927aa0227c427757c7a94eb4f6162b4e522402725041ba3989b4c26"
+   "start_line": 1441,
+   "end_line": 1468,
+   "text_sha256": "1bdb40a724ed6a598f520461bac7ae1c8dec34830d3d6ed8c76a2f8d5ce6631a"
   },
   {
    "id": "MAN-123",
@@ -1553,8 +1553,8 @@
    "status": "unreviewed",
    "title": "Interlock",
    "level": 4,
-   "start_line": 1468,
-   "end_line": 1500,
+   "start_line": 1469,
+   "end_line": 1501,
    "text_sha256": "3a75ef8e7f03ad6f62e5690036c7f16a9789fb288efbcba56a2d62df4dd4237a"
   },
   {
@@ -1566,8 +1566,8 @@
    "status": "unreviewed",
    "title": "Structure",
    "level": 4,
-   "start_line": 1501,
-   "end_line": 1527,
+   "start_line": 1502,
+   "end_line": 1528,
    "text_sha256": "c0c74ff6ff8e5210d8b3f1ef2a338be574343ba95aedbfe6f2359b1b5bd365fd"
   },
   {
@@ -1581,8 +1581,8 @@
    "status": "unreviewed",
    "title": "Result and Reason",
    "level": 4,
-   "start_line": 1528,
-   "end_line": 1548,
+   "start_line": 1529,
+   "end_line": 1549,
    "text_sha256": "bb960d435bc92e322ca4d461ce674e885f09a0452ac4a110a5b1d6600cec6d63"
   },
   {
@@ -1592,16 +1592,16 @@
    "status": "unreviewed",
    "title": "Harmony",
    "level": 3,
-   "start_line": 1549,
-   "end_line": 1615,
-   "text_sha256": "4a421af50e0a65c5e5b076f705fc076245283c75cec4080271b8751dd14cb9a3"
+   "start_line": 1550,
+   "end_line": 1618,
+   "text_sha256": "745dce1fb57a252fda5ca69b22994403776394537ef77153b37b4d70c1698ae8"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1616,
-   "end_line": 1627,
+   "start_line": 1619,
+   "end_line": 1630,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1613,8 +1613,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1628,
-   "end_line": 1637,
+   "start_line": 1631,
+   "end_line": 1640,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1624,8 +1624,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1638,
-   "end_line": 1641,
+   "start_line": 1641,
+   "end_line": 1644,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1635,8 +1635,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1642,
-   "end_line": 1648,
+   "start_line": 1645,
+   "end_line": 1651,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1661,11 +1661,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "ddb1817fb393de7c28702b3594c337b3002e3705a92c78b99ee8cad6767755f5"
+   "sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "ac00c1c70e12237f246a4b486a3c71e69229d83bc7f7ae8d9f2d9ba3027f00de"
+   "sha256": "edf0df405c75727a8ff29a16d3640b71af2c6bfe4b5ddb5db603474e02bed561"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -9021,7 +9021,7 @@
    "line": 365,
    "reference": "images/norns/channel-tasks.png",
    "path": "images/norns/channel-tasks.png",
-   "sha256": "20e937a2231acf61db20020394e4a951cb3e9b68cd1b4cad9c465a79bbcc7f2d"
+   "sha256": "4ffbe21dc50e5b2b9bbd261f9fb64d005df495f5c08e111d640fe816e36f68b2"
   },
   {
    "status": "pending-visual-spec-reconciliation",
@@ -9251,14 +9251,22 @@
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
    "line": 1408,
-   "reference": "images/merge-shape-foundation.png",
-   "path": "images/merge-shape-foundation.png",
-   "sha256": "5f6160d49785b1e79c60ee65157ca7e373d57e1ef6abe1c565019e7e9fa0fe21"
+   "reference": "images/merge-shape-phrase.png",
+   "path": "images/merge-shape-phrase.png",
+   "sha256": "1035cc59a67748a7500a9e36ce43411a4edd73dc77f470e15f9e7f4b2fa3410c"
   },
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1442,
+   "line": 1410,
+   "reference": "images/merge-shape-foundation.png",
+   "path": "images/merge-shape-foundation.png",
+   "sha256": "1dac205f0379af973f62703cc49507cddacea68d019fcac9a172d46ec7ea9850"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1444,
    "reference": "images/merge-shape-fragments.png",
    "path": "images/merge-shape-fragments.png",
    "sha256": "7984c43100cc0c290f1f9639d32ed0aae7102f10c0d7efa03e8c3f3afa6f014a"
@@ -9266,7 +9274,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1471,
+   "line": 1472,
    "reference": "images/merge-shape-interlock.png",
    "path": "images/merge-shape-interlock.png",
    "sha256": "533d8bbbb5553040db390a0dd79c89873fd58a37b1f8d8a1a218c62bbbb5f4e2"
@@ -9274,7 +9282,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1504,
+   "line": 1505,
    "reference": "images/merge-shape-structure.png",
    "path": "images/merge-shape-structure.png",
    "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223"
@@ -9282,15 +9290,23 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1552,
-   "reference": "images/harmony-tone-map.png",
-   "path": "images/harmony-tone-map.png",
-   "sha256": "12ded7f3aaf7ba63bbcff39124a98eea9c414f4ebeefa61f5f5f79ee9a71a4b9"
+   "line": 1553,
+   "reference": "images/harmony-register.png",
+   "path": "images/harmony-register.png",
+   "sha256": "73482ae4abfb0bb1964c08aa65ee04215cef7a778a31761f6f661517d82104b1"
   },
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1587,
+   "line": 1555,
+   "reference": "images/harmony-tone-map.png",
+   "path": "images/harmony-tone-map.png",
+   "sha256": "9ada7d5dfae6b9d849e19f4228b1475459595d3f9eefe57af08ef87904e6f823"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1590,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
    "sha256": "f55f4b3fb68a92d1721a928b3e587ba0716dc174ab05a9cf1e4bb6d094eac7ea"

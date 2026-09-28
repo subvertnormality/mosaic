@@ -164,12 +164,14 @@ class PresentationContract(unittest.TestCase):
  def test_doctor_overlay_gap_is_detected(self):
   altered=deepcopy(S);altered['grid']['doctor_override']['cells'].pop(3)
   self.assertTrue(any('doctor overlay gap'in e for e in validate(altered,check_sources=False)))
- def test_harmony_link_discards_merge_draft_and_enters_root(self):
-  state=initial('M07');state.update(dirty=True,field_kind='action',field_id='harmony')
-  state['return_stack']=[{'screen':'M02','field_id':'pitch','target':deepcopy(state['target']),'generation':0}]
-  after,ops,rule=step(S,state,'K3.down')
-  self.assertEqual(rule,'feature.action');self.assertFalse(after['dirty']);self.assertEqual(after['return_stack'],[]);self.assertEqual(after['screen'],'H01')
-  self.assertEqual([o['op']for o in ops],['owner.invoke_selected','owner.before_if_present','owner.cancel_unapplied','return.invalidate','owner.enter_root'])
+ def test_merge_pitch_has_no_harmony_detour(self):
+  fields=[f['id'] for f in S['screens']['M07']['fields']]
+  self.assertEqual(fields,['keep_anchor','add_target','target_setup','structure'])
+  self.assertFalse(any(e.get('from')=='M07' and e.get('to')=='H01'
+                       for e in S['feature_action_edges']))
+  tasks=[r['id'] for r in S['tasks']['rows']['N01']]
+  self.assertEqual(tasks[tasks.index('merge'):tasks.index('merge')+3],
+                   ['merge','merge_shape','harmony'])
  def test_route_action_pushes_exact_parent(self):
   state=initial('M07');state.update(dirty=True,field_kind='action',field_id='target_setup')
   after,_,_=step(S,state,'K3.down');self.assertEqual(after['screen'],'M13');self.assertEqual(after['return_stack'][-1]['screen'],'M07');self.assertTrue(after['dirty'])
@@ -182,9 +184,9 @@ class PresentationContract(unittest.TestCase):
  def test_foreign_existing_route_is_detected(self):
   altered=deepcopy(S);altered['screens']['M10']['provider']='merge';altered['screens']['M10']['binding']['provider']='merge'
   self.assertTrue(any(e.startswith('existing_route not in source_route_map M10')for e in validate(altered,check_sources=False)))
- def test_cross_owner_link_never_in_route_map(self):
-  altered=deepcopy(S);altered['source_route_map']['merge']['HARMONY_LINK']='H01'
-  self.assertIn('cross-owner link in source route map M07.harmony',validate(altered,check_sources=False))
+ def test_retired_harmony_link_is_not_a_merge_route(self):
+  self.assertNotIn('HARMONY_LINK',S['source_route_map']['merge'])
+  self.assertNotIn('harmony',[f['id'] for f in S['screens']['M07']['fields']])
  def test_view_channel_is_inspection_only(self):
   for sid in S['field_contracts']['viewer']['screens']:
    state=initial(sid,contexts(S,sid)[0]);state.update(field_id='view_channel',field_kind=field_kind(S,sid,'view_channel'))

@@ -360,7 +360,7 @@ The controls work the same way on every screen:
 - **K2** goes back, or cancels a staged change or a question.
 - A short **K1** tap opens the norns system menu. Holding K1 is the shift key for grid and screen gestures.
 
-Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Harmony, Clock, Merge modes, Device, History and Merge Shape. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. _Mosaic_'s other settings, such as projects, sequencer options, MIDI mapping and each channel's device parameters, are in the norns PARAMS menu under MOSAIC: tap K1 to open it, as the Channel tasks footer reminds you (`K1 PARAMS`, beside the chosen task's name when it fits).
+Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Clock, Merge modes, Merge Shape, Harmony, Device and History. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. _Mosaic_'s other settings, such as projects, sequencer options, MIDI mapping and each channel's device parameters, are in the norns PARAMS menu under MOSAIC: tap K1 to open it, as the Channel tasks footer reminds you (`K1 PARAMS`, beside the chosen task's name when it fits).
 
 <img alt="Norns Channel tasks screen" src="images/norns/channel-tasks.png" width="384" />
 
@@ -1391,7 +1391,7 @@ registers without rewriting any source pattern. Both features are optional and
 default to Off, so an older project keeps its original MIDI, timing and random
 behaviour.
 
-Open Merge Shape or Harmony from Channel tasks. Their first screens, Merge
+Merge modes, Merge Shape and Harmony are consecutive Channel tasks. Open Merge Shape or Harmony there. Their screens use vertical lists, including Rhythm, Phrase, Pitch and the Harmony settings. Their first screens, Merge
 Shape and Voice leading, are lists: each row shows its value or `OPEN >`, and the
 chosen row is marked `>`. E2 selects a row, E3 changes a staged value, K3 on a row marked `OPEN >` opens it (the last line names it, for
 example `K3 OPEN RHYTHM`), and K3 elsewhere validates and applies the whole draft.
@@ -1404,6 +1404,8 @@ feature, discarding an unapplied draft, and from there to Channel tasks. A stopp
 latest applied request active for the next start.
 
 ### Merge Shape
+
+![Merge Shape Phrase settings in a vertical list on Norns](images/merge-shape-phrase.png)
 
 ![Merge Shape Foundation rhythm settings on Norns](images/merge-shape-foundation.png)
 
@@ -1462,8 +1464,7 @@ to legacy merging and Result says `ASSIGN PATTERN`.
 
 Phrase shows only Cycles and Variation in this mode. Fixed repeats the same
 fragment sources every phrase; Per phrase draws new ones for each phrase.
-Shape percentages, Amount, Accent and Gap do not apply, and Pitch offers only the
-Voice leading link. Explicit masks still win and probability can still reject an
+Shape percentages, Amount, Accent and Gap do not apply. Fragments hides Pitch; choose the adjacent Harmony task directly for voice leading. Explicit masks still win and probability can still reject an
 onset. The channel grid shows exactly the trigs the fragments play.
 
 #### Interlock
@@ -1548,6 +1549,8 @@ Silence-aware interlock (Space: leaving room while another channel's notes are
 still sounding) is not part of this release.
 
 ### Harmony
+
+![Harmony Register settings in a vertical list on Norns](images/harmony-register.png)
 
 ![Harmony Pattern Tone Map on Norns](images/harmony-tone-map.png)
 

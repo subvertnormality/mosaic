@@ -84,7 +84,7 @@ function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   editor:encoder_one(); open_id(adapter, editor, "phrase")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"cycles", "shape", "cycle_1", "variation"})
   editor:encoder_one(); open_id(adapter, editor, "pitch")
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"keep_anchor", "add_target", "target_setup", "structure", "harmony"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"keep_anchor", "add_target", "target_setup", "structure"})
   open_id(adapter, editor, "structure")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"structure_markers"})
   editor:key(2)
@@ -100,12 +100,12 @@ function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"merge_gesture", "active_shape"})
   editor:hide_merge_gesture()
   -- Plan §5: Mode Fragments replaces Rhythm with the Fragments screen, Phrase
-  -- keeps Cycles and Variation, and Pitch keeps only the Harmony link.
+  -- keeps Cycles and Variation, and Pitch is omitted.
   editor:encoder_one()
   adapter:edit("mode", 1, target(editor), editor.generation)
   adapter:edit("mode", 1, target(editor), editor.generation)
   luaunit.assert_equals(editor.draft.mode, "fragments")
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "pitch", "result"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "result"})
   open_id(adapter, editor, "fragments")
   luaunit.assert_equals(editor.screen, "FRAGMENTS")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"fragment_size", "fragment_keep_anchor", "seed"})
@@ -117,8 +117,8 @@ function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   editor.draft.mode = "fragments"
   open_id(adapter, editor, "phrase")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"cycles", "variation"})
-  editor:key(2); open_id(adapter, editor, "pitch")
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"harmony"})
+  editor:key(2)
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "result"})
 end
 
 function test_ui_adapters_merge_conditional_modes_and_cardinality()
@@ -193,37 +193,11 @@ function test_ui_adapters_merge_route_action_runs_owner_open_and_translates()
   luaunit.assert_equals(phrase.screen, "M06")
 end
 
-function test_ui_adapters_merge_voice_leading_is_a_cross_owner_link()
-  local song = setup({1})
-  local merge = feature_editor.new("merge"); merge:enter()
-  local harmony = feature_editor.new("harmony"); harmony:enter()
-  harmony.screen, harmony.stack = "H02", {{screen = "H01", selected = 1}}
-  local selected
-  local saved = channel_edit_page_ui
-  channel_edit_page_ui = {select_harmony_page = function() harmony:enter(); selected = true; return true end}
-  local adapter = merge_adapter_factory(ui_adapters, {feature_editors = {merge = merge, harmony = harmony}})
-  local ok, err = pcall(function()
-    adapter:edit("mode", 1, target(merge), merge.generation)
-    open_id(adapter, merge, "pitch")
-    local link = describe(adapter, merge).descriptors[5]
-    luaunit.assert_equals(link.id, "harmony")
-    luaunit.assert_equals(link.domain.edge, "cross_owner_link")
-    luaunit.assert_equals(link.domain.destination, "H01")
-    local stale = target(merge); local generation = merge.generation
-    local outcome = open_id(adapter, merge, "harmony")
-    luaunit.assert_true(outcome.result.cancel_unapplied)
-    luaunit.assert_false(outcome.result.return_frame)
-    luaunit.assert_true(selected)
-    luaunit.assert_false(merge.dirty)
-    luaunit.assert_equals(merge.draft.mode, "off")
-    luaunit.assert_equals(merge.screen, "M05")
-    luaunit.assert_equals(harmony.screen, "H01")
-    luaunit.assert_equals(harmony.stack, {})
-    luaunit.assert_equals(adapter:edit("add_target", 1, stale, generation).code, "stale_generation")
-  end)
-  channel_edit_page_ui = saved
-  luaunit.assert_nil(song.channels[1].musical_merge)
-  if not ok then error(err, 0) end
+function test_ui_adapters_merge_pitch_has_no_harmony_detour()
+  local adapter, editor = fresh({1})
+  open_id(adapter, editor, "pitch")
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)),
+    {"keep_anchor", "add_target", "target_setup", "structure"})
 end
 
 function test_ui_adapters_merge_foreign_and_non_live_routes_are_error_outcomes()
@@ -394,9 +368,8 @@ function test_ui_adapters_merge_child_rows_name_the_screen_they_open()
   luaunit.assert_equals(opens(assert_parity(adapter, editor)),
     {anchor = false, add_amount = false, amount_detail = "M12", add_accent = false, anchor_gap = false, seed = false, interlock = "M16"})
   editor:encoder_one(); open_id(adapter, editor, "pitch")
-  -- Voice leading leaves Merge for the Harmony root: it opens H01 too.
   luaunit.assert_equals(opens(assert_parity(adapter, editor)),
-    {keep_anchor = false, add_target = false, target_setup = "M13", structure = "M18", harmony = "H01"})
+    {keep_anchor = false, add_target = false, target_setup = "M13", structure = "M18"})
   editor:encoder_one(); open_id(adapter, editor, "result")
   luaunit.assert_equals(opens(assert_parity(adapter, editor)).reason, "M14")
 end

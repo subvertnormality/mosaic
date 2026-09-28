@@ -35,6 +35,7 @@ import zlib
 from pathlib import Path
 
 from ui_map import trig_param_cell_label
+from contract.merge_extensions import expect_detail_row
 
 from frame_oracle import (OPEN_VALUE, dashboard_matches, fit, live_header_matches, open_footer, render,
                           selected_field_matches, variants, overview_cell_matches)
@@ -238,14 +239,14 @@ def live_ui_sweep(c):
     c.enc(1, 1)
     sw.screen("N01", field=("Masks", OPEN), tips=("Channel Editor",))
     # Norns settings (N04) left the list (owner, 25 September 2026): its footer names K1.
-    rows = ["Masks", "Trig params", "Output", "Harmony", "Clock", "Merge modes", "Device", "History",
-            "Merge Shape"]
+    rows = ["Masks", "Trig params", "Output", "Clock", "Merge modes", "Merge Shape",
+            "Harmony", "Device", "History"]
     e2(c, -12)
     for index, label in enumerate(rows):
         sw.screen("N01", field=(label, OPEN), tips=("Channel Editor",))
         e2(c, 1)
     e2(c, 1)  # clamps on the last row
-    sw.screen("N01", field=("Merge Shape", OPEN), tips=("Channel Editor",))
+    sw.screen("N01", field=("History", OPEN), tips=("Channel Editor",))
 
     channel_task(c, "output")
     sw.screen("C06", rows=C06_NO_EVENT)
@@ -404,11 +405,12 @@ def merge_screens(c, sw):
     c.key(2)
     sw.screen("M02", field=("Phrase", OPEN))
     e2(c, 1); c.key(3)
-    pitch = [("Keep anchor", BOOLEAN_FALSE), ("Add target", "LEGACY"), ("Target setup", OPEN), ("Structure", OPEN),
-             ("Voice leading", OPEN)]
+    pitch = [("Keep anchor", BOOLEAN_FALSE), ("Add target", "LEGACY"), ("Target setup", OPEN), ("Structure", OPEN)]
+    # README Merge Shape: Structure is the last Pitch row; Harmony is an adjacent task.
+    expect_detail_row(c, 3, "Structure", OPEN)
     walk(c, sw, "M07", pitch)
     # Structure (M18): markers Off hide the chord group.
-    e2(c, -1); c.key(3)
+    c.key(3)
     walk(c, sw, "M18", [("Markers", "OFF")])
     c.key(2)
     sw.screen("M07", field=("Structure", OPEN))
@@ -436,6 +438,8 @@ def merge_screens(c, sw):
     # appears only with Keep anchor. K2 cancels the staged draft.
     e2(c, -4); c.enc(3, 2)
     sw.screen("M02", field=("Mode", "FRAGMENTS"))
+    # README Merge Shape Fragments: the fourth row is Result, not a Pitch detour.
+    expect_detail_row(c, 3, "Result", OPEN)
     e2(c, 1); c.key(3)
     walk(c, sw, "M15", [("Size", "8"), ("Keep anchor", BOOLEAN_FALSE), ("Seed", "0")], top=True)
     e2(c, -1); c.enc(3, 1)
@@ -528,7 +532,7 @@ def harmony_screens(c, sw):
     # The question names the map by its patterns and note merge, whole.
     sw.screen("H19", field=("Reset map", H19_MAP))
     c.key(2)
-    sw.screen("H11", field=("Reset map", ">"), footer=("Tone 3", END))
+    sw.screen("H11", field=("Reset map", ">"))
     c.key(2)
     # K2 with the unapplied mode change discards it: Mode is OFF again.
     sw.screen("H01", field=("Mode", "OFF"))

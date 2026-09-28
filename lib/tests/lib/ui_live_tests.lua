@@ -308,7 +308,7 @@ function test_ui_live_channel_tasks_e3_does_not_edit_and_e2_clamps_to_the_rows()
     ui.enc(2, -9) -- clamps to the first row
     luaunit.assert_equals(ui_live.state().field_id, "masks")
     ui.enc(2, 99) -- clamps to the last row
-    luaunit.assert_equals(ui_live.state().field_id, "merge_shape")
+    luaunit.assert_equals(ui_live.state().field_id, "history")
   end)
 end
 
@@ -621,7 +621,7 @@ function test_ui_live_merge_fragments_mode_opens_fragments_and_k3_applies_it()
     ui.enc(3, 1); ui.enc(3, 1)
     luaunit.assert_equals(vm_field("mode").value, "FRAGMENTS")
     -- Rhythm now opens the Fragments screen.
-    luaunit.assert_equals(field_ids(), {"mode", "fragments", "phrase", "pitch", "result"})
+    luaunit.assert_equals(field_ids(), {"mode", "fragments", "phrase", "result"})
     choose_task("fragments")
     tap(3)
     luaunit.assert_equals(screen(), "M15")
@@ -672,7 +672,7 @@ function test_ui_live_merge_structure_screen_is_reached_from_pitch()
     open_task("merge_shape")
     choose_task("pitch"); tap(3)
     luaunit.assert_equals(screen(), "M07")
-    luaunit.assert_equals(field_ids(), {"keep_anchor", "add_target", "target_setup", "structure", "harmony"})
+    luaunit.assert_equals(field_ids(), {"keep_anchor", "add_target", "target_setup", "structure"})
     choose_task("structure"); tap(3)
     luaunit.assert_equals(screen(), "M18")
     luaunit.assert_equals(ui_live.view_model().title, "STRUCTURE")
@@ -783,9 +783,7 @@ function test_ui_live_merge_child_rows_show_open_and_the_footer_names_the_select
     choose_task("pitch")
     tap(3)
     luaunit.assert_equals(screen(), "M07")
-    choose_task("harmony")
-    luaunit.assert_equals(vm_field("harmony").value, "OPEN >")
-    luaunit.assert_equals(ui_live.view_model().footer, {hints = {"K3 OPEN VOICE LEADING", "K2 BACK"}, short = "K3 OPEN"})
+    luaunit.assert_nil(vm_field("harmony"))
   end)
 end
 
@@ -816,6 +814,33 @@ local function drawn_rows(vm)
     end
   end
   return rows
+end
+
+-- README "Norns Menu Navigation" and "Merge Shape": related Channel tasks
+-- are adjacent, and editable Merge Shape/Harmony screens show vertical rows.
+function test_ui_live_merge_and_harmony_menu_order_and_layout()
+  live.isolated(function()
+    ui.enc(1, 1)
+    luaunit.assert_equals(field_ids(), {"masks", "trig_params", "output", "clock",
+      "merge", "merge_shape", "harmony", "device", "history"})
+    choose_task("merge_shape");tap(3)
+    luaunit.assert_equals(field_ids(), {"mode", "rhythm", "phrase", "pitch", "result"})
+    for _, pair in ipairs({{"rhythm", "M03"}, {"phrase", "M06"}, {"pitch", "M07"}}) do
+      choose_task(pair[1]);tap(3)
+      local vm=ui_live.view_model()
+      luaunit.assert_equals(screen(), pair[2])
+      luaunit.assert_equals(vm.layout, "detail")
+      luaunit.assert_not_nil(drawn_rows(vm)[27])
+      tap(2)
+    end
+    open_task("harmony")
+    for _, pair in ipairs({{"register", "H02"}, {"bass", "H03"}}) do
+      choose_task(pair[1]);tap(3)
+      luaunit.assert_equals(screen(), pair[2])
+      luaunit.assert_equals(ui_live.view_model().layout, "detail")
+      tap(2)
+    end
+  end)
 end
 
 function test_ui_live_merge_shape_and_voice_leading_are_lists()
