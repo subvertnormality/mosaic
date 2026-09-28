@@ -26,6 +26,19 @@ local function open_label(value, label)
   select_label(value,label);value:key(3)
 end
 
+function test_feature_editor_e2_large_turn_selects_visible_row()
+  setup()
+  for _, kind in ipairs({"merge", "harmony"}) do
+    local value = feature_editor.new(kind)
+    value:enter()
+    local last = #value:get_fields()
+    value:enc(2, 24)
+    luaunit.assert_equals(value.selected, last, kind .. " E2 positive")
+    value:enc(2, -24)
+    luaunit.assert_equals(value.selected, 1, kind .. " E2 negative")
+  end
+end
+
 function test_channel_merge_shape_editor_cancel_discards_complete_draft()
   local _, channel = setup()
   local value = feature_editor.new("merge")

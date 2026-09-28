@@ -521,7 +521,7 @@ function editor.new(kind)
   function self:get_screen()return self.screen end
   function self:enc(n,delta)
     local fields=self:get_fields();if #fields==0 then return end
-    if n==2 then self.selected=clamp(self.selected+direction(delta),1,#fields)
+    if n==2 then self.selected=clamp(self.selected+delta,1,#fields)
     elseif n==3 then if edit_field(fields[self.selected],delta)then mark_dirty()end end;fn.dirty_screen(true)
   end
   -- `after` is built from copies and is this editor's alone (the history and the

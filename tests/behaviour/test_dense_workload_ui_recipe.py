@@ -96,7 +96,7 @@ def raw_recipe(driver, channels, workload, selector=raw_select_parameter):
         # through Channel tasks (E1, E2 to the top, E2 to Device, K3).
         driver.enc(1, 3)
         driver.enc(2, -9)
-        driver.enc(2, 6)
+        driver.enc(2, 7)
         driver.key(3)
 
         def step_value(step, value):

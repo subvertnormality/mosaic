@@ -41,8 +41,8 @@ class HarmonyPersistenceOracleTests(unittest.TestCase):
         source_hashes = {
             'playback_note_messages': '15f8f3fc07b90038a1d8813e56b814975242f7b15d54ac9af2b4f249ed504218',
             'revoice_workflow': 'c3d3c344b33ad56a5743d342578b8bb60993bd75052833639b0049f1e0eccae4',
-            'setup_pattern_harmony': 'cf50f9e6dd7980965bc5f3b2fe77efb122302668809d29d5dc2297fd112a7523',
-            'pattern_harmony_persistence_workflow': '55cb04854f2688df167806e83dfbdad4f079b93c72b57a7f39b05ffe357fa899',
+            'setup_pattern_harmony': '8925b4cce413ac9b432e5ef55bea29da14d6c853990bd879d8fc31659e1eebfc',
+            'pattern_harmony_persistence_workflow': '4481ac7da164d5f3b2188aa42f8e4d665c347d279798da9158b2bc184ef1882f',
             'ensemble_polyrhythm_workflow': 'd07e29b5c09794797e29d774381465568373410294cdefedfffda1bb4d3b14a1',
             'no_voicing_fallback_workflow': 'fe7500378df9b51ac353eccea43ea0e11500e9ace48940207d7bcfada16ba35e',
             'held_step_precedence_workflow': 'bd8130c0b08f2422a5baec7bdb666ec04c96c41b9af1d27f01f552934ef0ff4e',
