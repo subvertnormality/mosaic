@@ -3,7 +3,8 @@
 Run from the worktree with MONOME_EMULATOR set:
     python3 tools/docs_capture.py                          (images/norns/*)
     python3 tools/docs_capture.py merge-shape-foundation   (images/<name>.png; also
-    harmony-tone-map, harmony-no-voicing)
+    harmony-tone-map, harmony-no-voicing, merge-shape-fragments, merge-shape-interlock,
+    merge-shape-structure)
 Each image is the native framebuffer at 3x, written under images/norns/ (or images/).
 A named case image (CASE_IMAGES) drives the same state as the behaviour case that binds it
 with documentation_frame and prints the sha256 of the first 55 framebuffer rows, which that
@@ -107,12 +108,22 @@ def _no_voicing(driver):
     expect_h05(driver, h05_rows(1, "NO VOICING RANGE", "NO EVENT", True))
 
 
+def _merge_extension(name):
+    def run(driver):
+        from contract import merge_extensions
+        getattr(merge_extensions, name + "_workflow")(driver, capture=True)
+    return run
+
+
 # README images bound by a behaviour case's documentation_frame (first 55 rows):
 # name -> the case's own setup up to the documented frame.
 CASE_IMAGES = {
     "merge-shape-foundation": _foundation,   # M-MERGE-FOUNDATION-001
     "harmony-tone-map": _tone_map,           # M-HARMONY-PERSIST-001
     "harmony-no-voicing": _no_voicing,       # M-HARMONY-FAILURE-001
+    "merge-shape-fragments": _merge_extension("fragments"),   # M-MERGE-FRAGMENTS-001
+    "merge-shape-interlock": _merge_extension("interlock"),   # M-MERGE-INTERLOCK-001
+    "merge-shape-structure": _merge_extension("structure"),   # M-MERGE-STRUCTURE-001
 }
 
 

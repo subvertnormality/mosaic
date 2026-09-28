@@ -495,6 +495,31 @@ end
 
 -- Feature editors -------------------------------------------------------------------------
 
+-- README Harmony "Groups": Delete group asks first; K3 on the question
+-- deletes the group (its named Confirm delete action) whichever row the
+-- question shows selected, and K2 keeps it.
+function test_ui_live_delete_group_question_k3_deletes_and_k2_keeps_the_group()
+  live.isolated(function()
+    local song = program.get_selected_song_pattern()
+    local config = include("mosaic/lib/harmony/config")
+    local group = config.new_group(1); group.enabled = true
+    song.voicing = {schema_version = 1, groups = {[1] = group}}
+    open_task("harmony")
+    choose_task("groups"); tap(3)
+    luaunit.assert_equals(screen(), "H04")
+    choose_task("delete_group"); tap(3)
+    luaunit.assert_equals(screen(), "H17")
+    tap(2)
+    luaunit.assert_equals(screen(), "H04")
+    luaunit.assert_not_nil(song.voicing.groups[1])
+    choose_task("delete_group"); tap(3)
+    luaunit.assert_equals(screen(), "H17")
+    tap(3)
+    luaunit.assert_nil(song.voicing.groups[1])
+    luaunit.assert_equals(screen(), "H04")
+  end)
+end
+
 function test_ui_live_harmony_h01_e3_edits_the_draft_k3_applies_and_k2_on_the_root_stays()
   live.isolated(function()
     local c = program.get_selected_channel()
@@ -570,6 +595,140 @@ function test_ui_live_merge_child_k2_with_a_draft_cancels_it_and_returns()
     luaunit.assert_false(editor.dirty)
     luaunit.assert_nil(c.musical_merge)
   end)
+end
+
+-- Merge shape extensions (docs/musical-merge-extensions-plan.md §5, README
+-- "Merge Shape"): the new screens are reached and edited through norns input
+-- and the same owner transaction as every Merge Shape screen.
+
+local function assign(numbers)
+  local c = program.get_selected_channel()
+  c.selected_patterns = c.selected_patterns or {}
+  for _, n in ipairs(numbers) do c.selected_patterns[n] = true end
+  return c
+end
+
+local function vm_field(id)
+  for _, f in ipairs(ui_live.view_model().fields) do if f.id == id then return f end end
+end
+
+function test_ui_live_merge_fragments_mode_opens_fragments_and_k3_applies_it()
+  live.isolated(function()
+    local c = assign({1, 2})
+    local editor = owners().feature_editors.merge
+    open_task("merge_shape")
+    choose_task("mode")
+    ui.enc(3, 1); ui.enc(3, 1)
+    luaunit.assert_equals(vm_field("mode").value, "FRAGMENTS")
+    -- Rhythm now opens the Fragments screen.
+    luaunit.assert_equals(field_ids(), {"mode", "fragments", "phrase", "pitch", "result"})
+    choose_task("fragments")
+    tap(3)
+    luaunit.assert_equals(screen(), "M15")
+    luaunit.assert_equals(editor:get_screen(), "FRAGMENTS")
+    luaunit.assert_equals(ui_live.view_model().title, "FRAGMENTS")
+    luaunit.assert_equals(ui_live.view_model().layout, "detail")
+    choose_task("fragment_size")
+    ui.enc(3, -1)
+    luaunit.assert_equals(vm_field("fragment_size").value, "4")
+    tap(3)
+    luaunit.assert_equals(c.musical_merge.mode, "fragments")
+    luaunit.assert_equals(c.musical_merge.fragments.size, 4)
+    luaunit.assert_equals(tooltip.text, "APPLIED")
+    tap(2)
+    luaunit.assert_equals(screen(), "M02")
+  end)
+end
+
+function test_ui_live_merge_interlock_screen_sets_a_leader_and_shows_the_rejection()
+  live.isolated(function()
+    local c = assign({1})
+    program.get_channel(program.get().selected_song_pattern, 2).selected_patterns[1] = true
+    local config = include("mosaic/lib/musical_merge/config")
+    local leader = config.new(); leader.interlock.leader = 3
+    program.get_channel(program.get().selected_song_pattern, 2).musical_merge = leader
+    open_task("merge_shape")
+    choose_task("mode"); ui.enc(3, 1)
+    choose_task("rhythm"); tap(3)
+    luaunit.assert_equals(screen(), "M03")
+    choose_task("anchor"); ui.enc(3, 1)
+    choose_task("interlock"); tap(3)
+    luaunit.assert_equals(screen(), "M16")
+    luaunit.assert_equals(ui_live.view_model().title, "INTERLOCK")
+    choose_task("interlock_leader"); ui.enc(3, 1)
+    luaunit.assert_equals(vm_field("interlock_leader").value, "CH02")
+    tap(3)
+    -- Channel 2 follows channel 3: Apply refuses, the draft stays (plan §1.5).
+    luaunit.assert_equals(tooltip.text, "INVALID LEADER HAS LEADER")
+    luaunit.assert_nil(c.musical_merge)
+    luaunit.assert_equals(screen(), "M16")
+    luaunit.assert_true(owners().feature_editors.merge.dirty)
+  end)
+end
+
+function test_ui_live_merge_structure_screen_is_reached_from_pitch()
+  live.isolated(function()
+    assign({1})
+    open_task("merge_shape")
+    choose_task("pitch"); tap(3)
+    luaunit.assert_equals(screen(), "M07")
+    luaunit.assert_equals(field_ids(), {"keep_anchor", "add_target", "target_setup", "structure", "harmony"})
+    choose_task("structure"); tap(3)
+    luaunit.assert_equals(screen(), "M18")
+    luaunit.assert_equals(ui_live.view_model().title, "STRUCTURE")
+    choose_task("structure_markers"); ui.enc(3, 1)
+    luaunit.assert_equals(vm_field("structure_markers").value, "ANCHORS")
+    tap(2)
+    luaunit.assert_equals(screen(), "M07")
+  end)
+end
+
+-- The Reason screen is information only: one dashboard of six rows.
+function test_ui_live_merge_reason_is_a_six_row_dashboard()
+  live.isolated(function()
+    assign({1})
+    open_task("merge_shape")
+    choose_task("result"); tap(3)
+    luaunit.assert_equals(screen(), "M05")
+    choose_task("reason"); tap(3)
+    luaunit.assert_equals(screen(), "M14")
+    local vm = ui_live.view_model()
+    luaunit.assert_equals(vm.layout, "dashboard")
+    luaunit.assert_equals(#vm.fields, 6)
+    tap(2)
+    luaunit.assert_equals(screen(), "M05")
+  end)
+end
+
+-- Fragments takes over every merge button (plan §2.3): Merge modes and the
+-- button's tooltip say so, and the saved mode waits for Mode Off.
+function test_ui_live_fragments_merge_buttons_say_fragments_is_in_use()
+  live.isolated(function()
+    local c = assign({1, 2})
+    local config = include("mosaic/lib/musical_merge/config").new()
+    config.mode = "fragments"; c.musical_merge = config
+    channel_edit_page.init()
+    channel_edit_page.register_press()
+    for _, handler in ipairs(press.handlers["channel_edit_page"] or {}) do handler(15, 8) end
+    luaunit.assert_equals(c.note_merge_mode, "up")
+    luaunit.assert_equals(tooltip.text, "Note merge up: Fragments in use")
+    ui_live.grid_outcome("G17")
+    luaunit.assert_equals(screen(), "C09")
+    luaunit.assert_equals(vm_field("note_mode").value, "FRAGMENTS (UP)")
+    luaunit.assert_equals(vm_field("trig_mode").value, "FRAGMENTS (" .. c.trig_merge_mode:upper() .. ")")
+    c.musical_merge.mode = "foundation"
+    for _, handler in ipairs(press.handlers["channel_edit_page"] or {}) do handler(15, 8) end
+    luaunit.assert_equals(tooltip.text, "Lower note merge mode")
+    luaunit.assert_equals(vm_field("note_mode").value, "DOWN")
+    for _, handler in ipairs(press.handlers["channel_edit_page"] or {}) do handler(14, 8) end
+    luaunit.assert_equals(tooltip.text, "Trig merge " .. c.trig_merge_mode .. ": Merge Shape in use")
+  end, {before_ui = function()
+    fader = include("mosaic/lib/controls/fader")
+    button = include("mosaic/lib/controls/button")
+    sequencer = include("mosaic/lib/controls/sequencer")
+    press = include("mosaic/lib/press")
+    channel_edit_page = include("mosaic/lib/pages/channel_edit_page/channel_edit_page")
+  end})
 end
 
 function test_ui_live_harmony_child_route_k3_opens_register_and_k2_returns()

@@ -8,11 +8,13 @@ local harmony_modules = {
   ['mosaic/lib/harmony/config_state'] = true,
   ['mosaic/lib/harmony/state'] = true,
   ['mosaic/lib/harmony/inspection'] = true,
+  ['mosaic/lib/musical_merge/timeline'] = true,
 }
 local resets = {}
 include = function(path)
   assert(harmony_modules[path], 'unexpected include: ' .. tostring(path))
-  return { reset = function() resets[path] = (resets[path] or 0) + 1 end }
+  local function called() resets[path] = (resets[path] or 0) + 1 end
+  return { reset = called, stop = called }
 end
 local lifecycle = dofile('lib/project_lifecycle.lua')
 include = nil
@@ -50,6 +52,7 @@ test('new project notifies capture runtime after program replacement', function(
   equal(project.new(), true)
   equal(table.concat(trace, ','), 'prepare,program,memory,loaded')
   equal(loaded[1], 'new:1')
+  equal(resets['mosaic/lib/musical_merge/timeline'], 1, 'new project stops the merge timeline')
 end)
 
 if #failures > 0 then io.stderr:write(table.concat(failures, '\n') .. '\n'); os.exit(1) end

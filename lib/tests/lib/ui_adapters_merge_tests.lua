@@ -74,13 +74,20 @@ function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   local adapter, editor = fresh({1, 2})
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "rhythm", "phrase", "pitch", "result"})
   open_id(adapter, editor, "rhythm")
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"anchor", "add_amount", "amount_detail", "add_accent", "anchor_gap", "seed"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"anchor", "add_amount", "amount_detail", "add_accent", "anchor_gap", "seed",
+    "interlock"})
+  open_id(adapter, editor, "interlock")
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"interlock_leader", "interlock_window", "interlock_status"})
+  editor:key(2)
   open_id(adapter, editor, "amount_detail")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"add_amount", "eligible", "admitted"})
   editor:encoder_one(); open_id(adapter, editor, "phrase")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"cycles", "shape", "cycle_1", "variation"})
   editor:encoder_one(); open_id(adapter, editor, "pitch")
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"keep_anchor", "add_target", "target_setup", "harmony"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"keep_anchor", "add_target", "target_setup", "structure", "harmony"})
+  open_id(adapter, editor, "structure")
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"structure_markers"})
+  editor:key(2)
   open_id(adapter, editor, "target_setup")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"target", "scope"})
   editor:encoder_one(); open_id(adapter, editor, "result")
@@ -88,9 +95,30 @@ function test_ui_adapters_merge_descriptor_ids_cover_every_owner_route()
   luaunit.assert_equals(ids(result), {"step", "role", "decision", "reason"})
   luaunit.assert_equals(result.descriptors[1].kind, "inspection")
   open_id(adapter, editor, "reason")
-  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"step", "role", "sources", "decision", "velocity", "pitch_target"})
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"step", "role", "decision", "interlock", "velocity", "pitch_target"})
   editor:show_merge_gesture("TRIG SKIP")
   luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"merge_gesture", "active_shape"})
+  editor:hide_merge_gesture()
+  -- Plan §5: Mode Fragments replaces Rhythm with the Fragments screen, Phrase
+  -- keeps Cycles and Variation, and Pitch keeps only the Harmony link.
+  editor:encoder_one()
+  adapter:edit("mode", 1, target(editor), editor.generation)
+  adapter:edit("mode", 1, target(editor), editor.generation)
+  luaunit.assert_equals(editor.draft.mode, "fragments")
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"mode", "fragments", "phrase", "pitch", "result"})
+  open_id(adapter, editor, "fragments")
+  luaunit.assert_equals(editor.screen, "FRAGMENTS")
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"fragment_size", "fragment_keep_anchor", "seed"})
+  adapter:edit("fragment_keep_anchor", 1, target(editor), editor.generation)
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"fragment_size", "fragment_keep_anchor", "fragment_anchor", "seed"})
+  -- K2 cancels the whole draft (and returns); stage Fragments again on the root.
+  editor:key(2)
+  luaunit.assert_equals(editor.draft.mode, "off")
+  editor.draft.mode = "fragments"
+  open_id(adapter, editor, "phrase")
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"cycles", "variation"})
+  editor:key(2); open_id(adapter, editor, "pitch")
+  luaunit.assert_equals(ids(assert_parity(adapter, editor)), {"harmony"})
 end
 
 function test_ui_adapters_merge_conditional_modes_and_cardinality()
@@ -177,7 +205,7 @@ function test_ui_adapters_merge_voice_leading_is_a_cross_owner_link()
   local ok, err = pcall(function()
     adapter:edit("mode", 1, target(merge), merge.generation)
     open_id(adapter, merge, "pitch")
-    local link = describe(adapter, merge).descriptors[4]
+    local link = describe(adapter, merge).descriptors[5]
     luaunit.assert_equals(link.id, "harmony")
     luaunit.assert_equals(link.domain.edge, "cross_owner_link")
     luaunit.assert_equals(link.domain.destination, "H01")
@@ -302,6 +330,41 @@ function test_ui_adapters_merge_snapshot_variants_are_immutable_and_skip_get_fie
   luaunit.assert_equals(adapter:describe("M02", "snapshot:M02", {source_route = "snapshot:M02"}).code, "foreign_route")
 end
 
+-- Review D1 (plan §4 Reference lifecycle): an edit applied while a
+-- cross-feature (pattern-boundary) request is pending for the channel keeps
+-- that boundary. The adapter reports NEXT PATTERN with the global boundary,
+-- M04 shows the pending amount as not yet active and M09 does not claim the
+-- next channel cycle. Characterisation outside the manual.
+function test_ui_adapters_merge_apply_over_pending_global_reports_next_pattern()
+  local adapter, editor, song, channel = fresh({1})
+  editor.draft.mode, editor.draft.anchor, editor.dirty = "foundation", 1, true
+  luaunit.assert_equals(adapter:apply(adapter.owner_token()).status, "APPLIED")
+  m_clock:start()
+  -- The pending repair a group delete would queue for this channel.
+  local repaired = fn.deep_copy(channel.musical_merge); repaired.seed = 3
+  merge_state.request_global(song, 1, repaired, true)
+  channel.musical_merge = repaired
+  editor:reload()
+  editor.draft.amount, editor.dirty = 60, true
+  local applied = adapter:apply(adapter.owner_token())
+  luaunit.assert_true(applied.ok)
+  luaunit.assert_equals(applied.code, "queued")
+  luaunit.assert_equals(applied.status, "NEXT PATTERN")
+  luaunit.assert_equals(applied.commit_boundary, "global_pattern_boundary")
+  local m04 = adapter:describe("M04", "snapshot:M04", {source_route = "snapshot:M04"})
+  luaunit.assert_equals({m04.descriptors[1].value, m04.descriptors[2].value, m04.descriptors[3].value,
+    m04.descriptors[4].value}, {"100", "60", "ON", "OFF"})
+  local m09 = adapter:describe("M09", "snapshot:M09", {source_route = "snapshot:M09"})
+  luaunit.assert_equals(m09.descriptors[2].value, "60")
+  luaunit.assert_equals(m09.descriptors[4].value, "OFF")
+  -- A later ordinary edit with nothing pending still reports NEXT CYCLE.
+  merge_state.on_pattern_boundary(song)
+  editor:reload(); editor.draft.amount, editor.dirty = 50, true
+  local later = adapter:apply(adapter.owner_token())
+  luaunit.assert_equals({later.status, later.commit_boundary}, {"NEXT CYCLE", "channel_cycle"})
+  luaunit.assert_equals(adapter:describe("M09", "snapshot:M09", {source_route = "snapshot:M09"}).descriptors[4].value, "ON")
+end
+
 function test_ui_adapters_merge_chord_group_source_lists_enabled_groups()
   local adapter, editor, song = fresh({1})
   local group = harmony_config.new_group(1); group.enabled = true
@@ -329,11 +392,11 @@ function test_ui_adapters_merge_child_rows_name_the_screen_they_open()
     {mode = false, rhythm = "M03", phrase = "M06", pitch = "M07", result = "M05"})
   open_id(adapter, editor, "rhythm")
   luaunit.assert_equals(opens(assert_parity(adapter, editor)),
-    {anchor = false, add_amount = false, amount_detail = "M12", add_accent = false, anchor_gap = false, seed = false})
+    {anchor = false, add_amount = false, amount_detail = "M12", add_accent = false, anchor_gap = false, seed = false, interlock = "M16"})
   editor:encoder_one(); open_id(adapter, editor, "pitch")
   -- Voice leading leaves Merge for the Harmony root: it opens H01 too.
   luaunit.assert_equals(opens(assert_parity(adapter, editor)),
-    {keep_anchor = false, add_target = false, target_setup = "M13", harmony = "H01"})
+    {keep_anchor = false, add_target = false, target_setup = "M13", structure = "M18", harmony = "H01"})
   editor:encoder_one(); open_id(adapter, editor, "result")
   luaunit.assert_equals(opens(assert_parity(adapter, editor)).reason, "M14")
 end

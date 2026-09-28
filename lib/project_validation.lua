@@ -6,6 +6,8 @@ local function dependency(name, path)
 end
 local harmony_config = include("mosaic/lib/harmony/config")
 local merge_config = include("mosaic/lib/musical_merge/config")
+local merge_structure = include("mosaic/lib/musical_merge/structure")
+local merge_dependency = include("mosaic/lib/musical_merge/dependency")
 local rhythm_doctor_persistence = dependency("rhythm_doctor.bank_persistence", "mosaic/lib/rhythm_doctor/bank_persistence")
 
 local function integer(value, low, high)
@@ -36,6 +38,7 @@ function validation.check(saved)
     if type(song.channels) ~= "table" then return nil, prefix .. " channels" end
     local harmony_ok, harmony_reason = harmony_config.validate_song(song)
     if not harmony_ok then return nil, prefix .. " " .. harmony_reason end
+    local edges = {}
     for number = 1, 17 do
       local channel = song.channels[number]
       local label = prefix .. " ch " .. number
@@ -47,20 +50,50 @@ function validation.check(saved)
       -- Equal endpoints are valid stored data; only their grid gesture is absent.
       if first > last then return nil, label .. " reversed" end
       if channel.musical_merge ~= nil then
-        local merge_ok, merge_reason = merge_config.validate(channel.musical_merge)
-        if not merge_ok then return nil, prefix .. " " .. merge_reason end
-        local target = channel.musical_merge.target
+        -- Version 1 is accepted here through its canonical v2 form.
+        local merge, merge_reason = merge_config.canonicalize(channel.musical_merge, number)
+        if not merge then return nil, prefix .. " " .. merge_reason end
+        local target = merge.target
         if target and target.kind == "chord" then
           local groups = song.voicing and song.voicing.groups
           if not groups or not groups[target.group_id] then
             return nil, label .. " merge target group missing"
           end
         end
+        -- Markers on need an existing enabled group (plan §4 Chord source).
+        if merge.structure.markers ~= "off" and
+          not merge_structure.group_available(song.voicing, merge.structure.group_id) then
+          return nil, label .. " merge structure group unavailable"
+        end
+        if number <= 16 then merge_dependency.add(edges, number, merge) end
       end
     end
+    -- Plan §1.5: a loaded slot must hold a one-way leader graph.
+    local graph_ok, graph_reason, graph_channel = merge_dependency.check(edges)
+    if not graph_ok then return nil, prefix .. " ch " .. graph_channel .. " " .. graph_reason end
   end
   local rhythm_ok, rhythm_reason = rhythm_doctor_persistence.validate(data.rhythm_doctor)
   if not rhythm_ok then return nil, rhythm_reason == "UNKNOWN_BANK_SCHEMA" and "Unknown Rhythm Doctor bank" or "Invalid Rhythm Doctor bank" end
+  return true
+end
+
+-- Replace every saved merge configuration with its canonical v2 form, in place.
+-- Only for detached decoded data that `check` accepted, before it reaches the
+-- live project: nothing is changed unless every configuration migrates.
+function validation.migrate(saved)
+  local songs = saved[2].song_patterns or saved[2].sequencer_patterns
+  local replacements = {}
+  for slot, song in pairs(songs) do
+    for number = 1, 17 do
+      local channel = song.channels[number]
+      if channel.musical_merge ~= nil then
+        local merge, reason = merge_config.canonicalize(channel.musical_merge, number)
+        if not merge then return nil, "Slot " .. slot .. " " .. reason end
+        replacements[#replacements + 1] = {channel, merge}
+      end
+    end
+  end
+  for _, replacement in ipairs(replacements) do replacement[1].musical_merge = replacement[2] end
   return true
 end
 

@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "manual": "README.md",
- "manual_sha256": "4c2750c79cb9df591011aeab8f7c764453efde0dadb90c38bc7dc1b0ed41579d",
+ "manual_sha256": "ddb1817fb393de7c28702b3594c337b3002e3705a92c78b99ee8cad6767755f5",
  "base_revision": "160d1ea7506773e65f298094e11d005dcb568dff",
  "status": "incomplete",
  "sections": [
@@ -1528,8 +1528,62 @@
    "title": "Merge Shape",
    "level": 3,
    "start_line": 1405,
-   "end_line": 1436,
-   "text_sha256": "7aee68c7b799d079b215871f9773202629c3643d5e7dac0cf9ad4085ec20c84f"
+   "end_line": 1438,
+   "text_sha256": "933f79f1fe28520bb80b36bfdf4fd1d03f9c8dc5443c242486991338d88484b0"
+  },
+  {
+   "id": "MAN-122",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-FRAGMENTS"
+   ],
+   "status": "unreviewed",
+   "title": "Fragments",
+   "level": 4,
+   "start_line": 1439,
+   "end_line": 1467,
+   "text_sha256": "c7d5fc635927aa0227c427757c7a94eb4f6162b4e522402725041ba3989b4c26"
+  },
+  {
+   "id": "MAN-123",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-INTERLOCK"
+   ],
+   "status": "unreviewed",
+   "title": "Interlock",
+   "level": 4,
+   "start_line": 1468,
+   "end_line": 1500,
+   "text_sha256": "3a75ef8e7f03ad6f62e5690036c7f16a9789fb288efbcba56a2d62df4dd4237a"
+  },
+  {
+   "id": "MAN-124",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-STRUCTURE"
+   ],
+   "status": "unreviewed",
+   "title": "Structure",
+   "level": 4,
+   "start_line": 1501,
+   "end_line": 1527,
+   "text_sha256": "c0c74ff6ff8e5210d8b3f1ef2a338be574343ba95aedbfe6f2359b1b5bd365fd"
+  },
+  {
+   "id": "MAN-125",
+   "classification": "statement-mapped-pending-audit",
+   "requirements": [
+    "MERGE-FRAGMENTS",
+    "MERGE-INTERLOCK",
+    "MERGE-STRUCTURE"
+   ],
+   "status": "unreviewed",
+   "title": "Result and Reason",
+   "level": 4,
+   "start_line": 1528,
+   "end_line": 1548,
+   "text_sha256": "bb960d435bc92e322ca4d461ce674e885f09a0452ac4a110a5b1d6600cec6d63"
   },
   {
    "id": "MAN-121",
@@ -1538,16 +1592,16 @@
    "status": "unreviewed",
    "title": "Harmony",
    "level": 3,
-   "start_line": 1437,
-   "end_line": 1503,
+   "start_line": 1549,
+   "end_line": 1615,
    "text_sha256": "4a421af50e0a65c5e5b076f705fc076245283c75cec4080271b8751dd14cb9a3"
   },
   {
    "id": "MAN-110",
    "title": "Performance Management",
    "level": 2,
-   "start_line": 1504,
-   "end_line": 1515,
+   "start_line": 1616,
+   "end_line": 1627,
    "text_sha256": "2339d7aa51b78d650bb9b889e7632cbd86b8fa511cfedc535375b75b4f724dcb",
    "classification": "statement-mapped-pending-audit",
    "requirements": [
@@ -1559,8 +1613,8 @@
    "id": "MAN-111",
    "title": "Development",
    "level": 2,
-   "start_line": 1516,
-   "end_line": 1525,
+   "start_line": 1628,
+   "end_line": 1637,
    "text_sha256": "8c3b1ad59f66d9ab249c3d2e653f740cced8af812dc1d9ac5def6ddf978db52a",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1570,8 +1624,8 @@
    "id": "MAN-112",
    "title": "Roadmap",
    "level": 3,
-   "start_line": 1526,
-   "end_line": 1529,
+   "start_line": 1638,
+   "end_line": 1641,
    "text_sha256": "da8d3ae59e97d40903f6731d70231c6200f4bf73d82624cf53d3c743a0dcd547",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1581,8 +1635,8 @@
    "id": "MAN-113",
    "title": "Interesting Components for Norns Script Developers",
    "level": 3,
-   "start_line": 1530,
-   "end_line": 1536,
+   "start_line": 1642,
+   "end_line": 1648,
    "text_sha256": "465d3d45405ca787cb2bc63d8e1581467c575467a373a2f300f7ac72c8838a06",
    "classification": "pending-statement-reconciliation",
    "requirements": [],
@@ -1607,11 +1661,11 @@
  "manual_sources": [
   {
    "path": "README.md",
-   "sha256": "4c2750c79cb9df591011aeab8f7c764453efde0dadb90c38bc7dc1b0ed41579d"
+   "sha256": "ddb1817fb393de7c28702b3594c337b3002e3705a92c78b99ee8cad6767755f5"
   },
   {
    "path": "cheat_sheet.html",
-   "sha256": "b942f697d733c9acb333b205b30d0c89638a7ba026866ae610d2c1529f83c19c"
+   "sha256": "ac00c1c70e12237f246a4b486a3c71e69229d83bc7f7ae8d9f2d9ba3027f00de"
   },
   {
    "url": "https://t.ly/h-Wsw",
@@ -2817,7 +2871,8 @@
     "M-MEMORY-010",
     "M-MASK-CHORD-X-001",
     "M-MASK-OFF-001",
-    "M-MASK-032"
+    "M-MASK-032",
+    "M-MERGE-FRAGMENTS-003"
    ],
    "status": "in_progress",
    "domain": "Native MASK002-018 cover each attribute, nonempty defaults, routed second-channel isolation, silent trig fallback, all four chord slots independently and together, steps63/64, and clearing completed live chord recording. Exact MIDI notes, velocities, durations and phrase timing validated in both clocks. Remaining: full64-step population, simultaneous held steps, other sequence isolation, clearing while recorded voices remain held, comprehensive screen/grid lock indicators, and additional attribute boundary/sentinel combinations. Length mask/merge hierarchy is separately covered by MERGE039-042. No full-domain completion claim. MASK018 validates completed live chord recording followed by held-step clear: source note/velocity/length restored, chord voices removed, neighbouring override preserved, then channel clear restores original phrase in both clocks. M-SAVE-LENGTH-001 (E and D, 3 fresh D repeats): a channel length mask of 1/3 and a step mask of 5/6 display and play the same after idle autosave and a cold restart. The baseline showed X after reload (defect length-index-after-reload, fixed). M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time. M-MEMORY-008 (E and D): stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; suspected defect S15 (velocity written before the release commits) is not reproduced and the case stays as a regression guard. M-MEMORY-009 (E and D, 3 fresh D repeats): redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702). The baseline silenced the step until the next edit (defect memory-redo-working-pattern, fixed).",
@@ -2965,7 +3020,8 @@
     "M-MASK-017",
     "M-MERGE-042",
     "M-MASK-HELD-EXTRA-001",
-    "M-MASK-OFF-001"
+    "M-MASK-OFF-001",
+    "M-MERGE-FRAGMENTS-003"
    ],
    "status": "partial-domain-coverage",
    "domain": "Nonempty trig/note/velocity/length/chord defaults and step overrides validated in both clocks, including clear-step fallback, length default removal/restoration and routed channel isolation. Playing edits and comprehensive display assertions remain pending.",
@@ -3494,7 +3550,11 @@
     "M-SYNC-008",
     "M-SONG-TEMPO-001",
     "M-HARMONY-PATTERN-CLOCKS-001",
-    "M-SLIDE-RESET-001"
+    "M-SLIDE-RESET-001",
+    "M-MERGE-INTERLOCK-003",
+    "M-MERGE-INTERLOCK-006",
+    "M-MERGE-INTERLOCK-007",
+    "M-MERGE-INTERLOCK-008"
    ],
    "status": "in_progress",
    "domain": "All legal divisions; min/max/odd tempos; coprime channels; sequence changes. M-TIME-001/002 add every integral-pulse ratio at90BPM, confirmed through E3/K3 with full MIDI phase and durations; validation pending. Fractional pulse rates, tempo bounds, live edits, cancellation and channel/sequence interactions remain required. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-004 adds all seven fractional-pulse ratios across four global boundaries with rational-window, phase and release-order checks; validation pending. Tempo bounds, actual song transitions and live ratio edits remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. Confirmed channel clock edits queue to the global pattern boundary while playing; stopped edits apply immediately. M-PATCH-024/026 cover queued rate changes during active slides; full live-edit domain remains incomplete. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected.",
@@ -3680,7 +3740,8 @@
     "M-MEMORY-014",
     "M-REC-PARAM-025",
     "M-REC-PARAM-026",
-    "M-MEMORY-012"
+    "M-MEMORY-012",
+    "M-MERGE-STRUCTURE-005"
    ],
    "status": "partial-domain-coverage",
    "domain": "Empty/single/full histories; bounds; alternating undo/redo; playback. M-MEMORY-004 (E and D, 3 fresh D repeats): 5003 held-step actions wrap the 5000-action history (the cap is characterisation); E3 back two, a new action, then E3 back and forward restore and reapply exactly that action. The baseline replayed the wrong action (defect memory-wrap-logical-slot, fixed). M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-MEMORY-006 (E and D, 3 fresh D repeats), characterisation: two recorded mask actions survive idle autosave and a cold restart; the Memory page shows 2 of 2 and E3 undoes and redoes the restored actions. Skipping memory deserialisation on load is detected. M-MAP-003 (E and D, 3 fresh D repeats): mapped selected-channel note mask, length mask, trig param slot 1 and memory CCs make the same edits as the page encoders (identical CC edits, memory position and timed note/CC stream; equivalence characterisation). Routing the note-mask map to velocity is detected. M-MEMORY-007 (E and D, 3 fresh D repeats): K1+K3 truncation forgets only its own channel's history (0 of 0) while another channel keeps 1 of 1 and still undoes; both positions and the applied masks survive idle autosave and a cold restart (persistence is characterisation, as M-MEMORY-006). M-MEMORY-008 (E and D): stepping memory back over a held-step velocity lock restores the previous velocity, also after a working-pattern rebuild; suspected defect S15 (velocity written before the release commits) is not reproduced and the case stays as a regression guard. M-MEMORY-009 (E and D, 3 fresh D repeats): redo of an encoder-made held-step note or velocity lock returns to the locked state, immediately and after a working-pattern rebuild (README 697-702). The baseline silenced the step until the next edit (defect memory-redo-working-pattern, fixed).",
@@ -4330,7 +4391,8 @@
     "M-CHORDVEL-008",
     "M-CHORDVEL-009",
     "M-CHORDVEL-010",
-    "M-CHORDVEL-011"
+    "M-CHORDVEL-011",
+    "M-MERGE-STRUCTURE-002"
    ],
    "status": "in_progress",
    "domain": "0..4 extra voices; each division; scale change before/on/after voice deadline; stop/cancel. Native033/034 cover zero/negative delayed-strum release deadlines, balanced raw MIDI and repeated transport in both modes. Actual-step/lattice integration covers simultaneous distinct and same-pitch On/Off order; broader native simultaneous-voice cases remain separate. Native035-038 now validate simultaneous distinct/same-pitch zero/negative voices with exact interleaved On/Off order and repeated transport in both modes.",
@@ -4518,7 +4580,8 @@
     "M-PANIC-009",
     "M-PANIC-010",
     "M-MERGE-031",
-    "M-MERGE-032"
+    "M-MERGE-032",
+    "M-MERGE-STRUCTURE-007"
    ],
    "status": "in_progress",
    "domain": "Sparse/full/no masks ratchet; last-boundary voice; all divisions; shape/velocity; repeated pitches. Native031/032 validate zero/negative parent arp endpoints, suppression of future ratchets and exact balanced releases across repeated transport in both modes. Delayed strum and simultaneous-voice interactions remain separate.",
@@ -5775,7 +5838,8 @@
     "M-PARAM-047",
     "M-MASK-032",
     "M-REC-SONG-LENGTH-001",
-    "M-REC-SONG-LENGTH-002"
+    "M-REC-SONG-LENGTH-002",
+    "M-MERGE-INTERLOCK-009"
    ],
    "status": "in_progress",
    "domain": "Repetition min/max; empty gaps; first/last slot; selection before/on/after completion; multiple queued choices. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed). M-TRIPLE-002 (E and D, 3 fresh D repeats), plan stress triple recording x song transition: live recording under a 100 BPM MIDI clock across a slot 1 -> 2 transition; a note on slot 1 step 2 and one on slot 2 step 2 replay only in their own slot at the exact step. M-TRIPLE-003 (E and D, 3 fresh D repeats): a note pressed on slot 1 step 4 and released after the transition records on slot 1 step 4, the step and slot active at its first press. The baseline stored it on slot 2 (defect record-slot-at-first-press, fixed). M-TRIPLE-005 (E and D, 3 fresh D repeats), plan stress triple recording x lock edit x song transition: a CC edit while armed on slot 1 step 1 records steps 2..4 (overwriting the step 3 lock) and clears at the song transition; the copied slot 2 keeps its locks over two song cycles, and a disarmed replay with the stored patch at 65 separates recorded locks from recalls. Disabling the wrap clear is detected. M-SONG-TEMPO-001 (E and D, 3 fresh D repeats): per-sequence tempo as clock divisions of the global tempo (SEM-014): slots at /1, /2 and x2 restart channel 1 at each song transition and play their own step spacing, wrapping at the global length; exact pitches, octave fingerprints and onset times over two song cycles. Not applying the slot division at the transition is detected. M-SONG-QUEUE-STOP-001 (E and D, 3 fresh D repeats): a slot or global length queued during playback and interrupted by Stop is discarded (arbitrated SEM-015); the next Play follows song mode from the playing slot; a length set while stopped applies to that slot only. The baseline applied the stale queue at the next Play (defect song-queue-discard-on-stop, fixed). M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time. M-PAT-BOUNDARY-001 (E and D red at a complete channel-16 tap 30 ms before the boundary; E and D green at 80 ms): both grid callbacks finish before the boundary, yet the edit must still be heard the next time its slot plays; open defect pattern-edit-before-song-boundary now has a qualified two-lane baseline for an isolated fix.",
@@ -6191,7 +6255,8 @@
     "M-RANGE-SAVED-004",
     "M-SAVE-NAMED-001",
     "M-MEMORY-005",
-    "M-SAVE-FAIL-001"
+    "M-SAVE-FAIL-001",
+    "M-MERGE-STRUCTURE-005"
    ],
    "status": "partial-domain-coverage",
    "domain": "M-SAVE-NAMED-001 (E and D, 3 fresh D repeats): save with the default name and with a typed name (one character appended through the native text entry), idle autosave leaves both named saves byte-identical, cancel writes nothing, re-saving the default name overwrites only it, and loading each name restores its exact phrase in-session. M-PROJECT-LIVE-001..004 cover dialogs while playing. Remaining: long/empty/non-ASCII names, delete in text entry, corrupt/missing/unwritable files at load and save. M-MEMORY-005 (E and D, 3 fresh D repeats): after two recorded mask actions, + New starts with an empty memory (0 of 0) and E3 replays nothing. The baseline kept the previous project's history (defect new-project-memory, fixed). M-SAVE-FAIL-001 (E and D, 3 fresh D repeats): while a rejected load suspends autosave, a named save into a read-only project directory fails and autosave stays suspended; a successful named save resumes it (file writes, not bytes, are the evidence). Characterised: an unsuspended failed idle autosave is retried after the next input. A failed save that resumes autosave is detected.",
@@ -6286,7 +6351,8 @@
    "cases": [
     "M-SONG-FLOW-001",
     "M-TIME-003",
-    "M-TRANS-007"
+    "M-TRANS-007",
+    "M-MERGE-INTERLOCK-009"
    ],
    "status": "in_progress",
    "domain": "Fresh boot/default; enable/disable before/on/after transition; explicit selection while off. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-SONG-FLOW-001 (E and D, 3 fresh D repeats), global length 2, filled slots 1/2/4/5 fingerprinted by octave: default song mode loops each group at its empty slot; a live selection waits for the sequence boundary; of two selections the later is executed (characterised); song mode off holds the slot while honouring a manual selection; re-enabling resumes song order (baseline defect: stale queue, fixed).",
@@ -6317,7 +6383,8 @@
     "M-TIME-008",
     "M-TIME-009",
     "M-TIME-013",
-    "M-TIME-014"
+    "M-TIME-014",
+    "M-MERGE-INTERLOCK-009"
    ],
    "status": "in_progress",
    "domain": "Every channel length/start; coprime divisions; pending notes; scale track. M-TIME-003 adds native reset-option combinations on repeats and song mode off; validation pending. Actual song transitions, pending voices under reset and fractional rates remain required. M-TIME-005 adds copied song slots with octave fingerprints and actual transitions under all reset flag combinations; validation pending. Remaining slots, changed divisions, queued choices and pending voices under reset remain required. M-TIME-013 (E and D, 3 fresh D repeats): with Reset at Song Sequence Change on, a 3-step note sounding across a song transition keeps its full length (README 805) while the next slot starts its step 1 on time.",
@@ -6451,7 +6518,8 @@
     "M-REC-PARAM-030",
     "M-REC-PARAM-029",
     "M-REC-PARAM-028",
-    "M-TRIPLE-004"
+    "M-TRIPLE-004",
+    "M-MERGE-INTERLOCK-002"
    ],
    "status": "in_progress",
    "domain": "Fresh boot vs manual recording prose default; off/on; parameter/mask/slide and probability0. M-TRIPLE-004 (E and D, 3 fresh D repeats), plan stress triple trigless x slide x external-clock change: a global CC slide to a silent trigless lock under a 24 PPQN clock that steps from 100 to 150 BPM mid-slide arrives with the destination lock (README 964) and, as characterisation beyond the manual, stays linear in received clock ordinals; stored-patch recall, exact onsets and balanced gates. A slide timed by seconds at the start tempo is detected.",
@@ -7566,11 +7634,119 @@
    }
   },
   {
+   "id": "MERGE-FRAGMENTS",
+   "sections": [
+    "MAN-122",
+    "MAN-125"
+   ],
+   "statement": "Fragments mode splits the channel loop from its start step into fragments of 4, 8 or 16 steps; each fragment plays one assigned pattern's own trigs, notes, velocities and lengths, chosen repeatably by the saved seed, without legacy note/velocity/length merging, and the grid shows what MIDI plays.",
+   "cases": [
+    "M-MERGE-FRAGMENTS-001",
+    "M-MERGE-FRAGMENTS-002",
+    "M-MERGE-FRAGMENTS-003"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Physical Merge Shape workflows cover Size 4 and seeds 0/1 on an eight-step loop; a six-step loop shorter than Size 8 with Keep anchor Off/On and source-wins overlap; and an offset 3..10 loop cut into Size 4 fragments with explicit trig-mask N suppression and X restoration. Every public case checks literal MIDI and grid output in controlled-time and real-time lanes. Pure tests additionally cover the fragment length resolver and wider seed/offset combinations.",
+   "oracles": [
+    "Public grid LEDs",
+    "literal MIDI pitches and velocities",
+    "exact loop-relative onset steps",
+    "balanced releases"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1434,
+    "end_line": 1462,
+    "text": "Merge Shape Fragments"
+   }
+  },
+  {
+   "id": "MERGE-INTERLOCK",
+   "sections": [
+    "MAN-123",
+    "MAN-125"
+   ],
+   "statement": "Interlock removes a follower's Foundation additions within Window steps of its leader channel's planned anchors in common time, never removes anchors, refuses dependency chains on Apply, and shows its status and bypasses on the Result screen.",
+   "cases": [
+    "M-MERGE-INTERLOCK-001",
+    "M-MERGE-INTERLOCK-002",
+    "M-MERGE-INTERLOCK-003",
+    "M-MERGE-INTERLOCK-004",
+    "M-MERGE-INTERLOCK-005",
+    "M-MERGE-INTERLOCK-006",
+    "M-MERGE-INTERLOCK-007",
+    "M-MERGE-INTERLOCK-008",
+    "M-MERGE-INTERLOCK-009"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Public-input two-channel workflows at /1, including unequal loops. M-MERGE-INTERLOCK-001: Window 0 and 2 in literal MIDI (both channels) and on the grid, a Window change queued while playing that lands whole at a loop boundary with a cancelled later draft, and an on-screen CHANNEL IS A LEADER refusal. M-MERGE-INTERLOCK-002 (plan 1.3 freshness, E and D): a leader source edit mid-cycle (halfway through step 6, scheduled through the public input path) removes the follower's coinciding addition in that same loop and a follower edit mid-cycle admits its new addition in that loop, in exact two-channel MIDI and on the playing channel grid; with a 25 ms lock lead and Trigless locks off the edit withdraws the removed addition's already planned CC lock (a mutation dropping the follower lookahead invalidation fails it). M-MERGE-INTERLOCK-003 (plan 1.2.1, review D6, E and D): a /2 confirmed on the Clock screen for the follower, then for its leader, lands at a 13-step global pattern boundary mid-cycle (song mode off) and the follower plays its removed addition from that moment, before its next wrap, with RESYNC on the Interlock screen and Result and every addition on the grid; exact retimed onsets; a stopped Clock change replans the first loop after Start and Start clears RESYNC. M-MERGE-INTERLOCK-004 (E and D): unequal 6-step leader and 8-step follower loops, then a leader/follower grid-edit burst within one step, checked against an independent MIDI model and the channel grid. Scheduler-only unit/integration evidence: reversed callback order and yielding-sweep races; public grid-edit bursts and timing modifiers exercise their player-visible results. M-MERGE-INTERLOCK-005 covers visible PLAN LIMIT and exact last-step MIDI fallback at the 65-cycle boundary in both lanes. M-MERGE-INTERLOCK-006 covers playing loop-range RESYNC with visible status, grid and exact MIDI in both lanes. M-MERGE-INTERLOCK-007/008 cover invariant nominal Interlock decisions under local Swing 25 and Shuffle Smooth 9 at 50, with exact audible pulse timing, visible status and grid in both lanes. M-MERGE-INTERLOCK-009 covers a non-resetting 13-step song transition mid 8-step channel loop, immediate RESYNC and a released step 7, with exact MIDI, grid and screen in both lanes.",
+   "oracles": [
+    "Public grid LEDs",
+    "literal MIDI on two channels",
+    "exact loop-relative onset steps",
+    "visible Apply status",
+    "Interlock Status and Result Interlock rows",
+    "lock CC timing under lead"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1463,
+    "end_line": 1489,
+    "text": "Merge Shape Interlock"
+   }
+  },
+  {
+   "id": "MERGE-STRUCTURE",
+   "sections": [
+    "MAN-124",
+    "MAN-125"
+   ],
+   "statement": "Structure markers (Anchors, Every 4, Every 8) snap marker onsets to the nearest pitch class of an enabled Harmony group's chord (ties lower) while additions between markers keep their target, and deleting or disabling the group turns the markers Off in the same transaction.",
+   "cases": [
+    "M-MERGE-STRUCTURE-001",
+    "M-MERGE-STRUCTURE-002",
+    "M-MERGE-STRUCTURE-003",
+    "M-MERGE-STRUCTURE-004",
+    "M-MERGE-STRUCTURE-005",
+    "M-MERGE-STRUCTURE-006",
+    "M-MERGE-STRUCTURE-007"
+   ],
+   "status": "partial-domain-coverage",
+   "domain": "Public-input workflows with a C-E-G group and Anchors, Every 4 and Every 8 markers. M-MERGE-STRUCTURE-001: literal snapped MIDI, then Delete group through its confirmation restores authored pitches. M-MERGE-STRUCTURE-002 (E and D): snapped roots agree in MIDI, on Pattern 1's note grid, on Merge Result (MARKER CHORD G01) and Voice leading Result; a reverse strum (Chord Pattern <- and <-->) on marker steps plays the snapped root 16 pulses late with Harmony Off (review D2); a Harmony Pattern mapped value that snaps at a marker but not between markers is silent at both under Silence and Legacy fallbacks with NO VOICING SOURCE_CONFLICT shown (review D7). M-MERGE-STRUCTURE-003 (E and D): disabling, then deleting, the group while playing keeps channels 1 (6 steps) and 2 (5 steps) snapping through earlier wraps until the global pattern boundary and plays authored pitches after it (Markers OFF), and a Merge Shape edit made while the deletion waits shows NEXT PATTERN and lands with it (review D1). M-MERGE-STRUCTURE-004 (E and D): Every 4/Every 8 markers, Harmony Pattern conflict silence and recovery, and Revoice MARKER PRIORITY in MIDI and on the norns screen. M-MERGE-STRUCTURE-005 (E and D): group deletion undo/redo through Memory, Stop settlement, and save/reload of markers with MIDI and screen checks. Internal-state unit/integration evidence: CHORD MISSING and stale drafts; public deletion/history and playing edits exercise their player-visible results. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes. M-MERGE-STRUCTURE-007 covers half-step arp ratchets on snapped marker roots with exact MIDI and visible Result in both lanes.",
+   "oracles": [
+    "literal MIDI pitches and velocities",
+    "exact loop-relative onset steps",
+    "visible Affected channels and Markers OFF",
+    "Pattern note grid",
+    "Merge Result and Voice leading Result rows",
+    "visible NEXT PATTERN"
+   ],
+   "lanes": [
+    "E",
+    "D"
+   ],
+   "source": {
+    "path": "README.md",
+    "line": 1490,
+    "end_line": 1510,
+    "text": "Merge Shape Structure"
+   }
+  },
+  {
    "id": "HARMONY-REVOICE",
    "sections": [],
    "statement": "Revoice preserves Mosaic's resolved chord pitch-class material while deterministically placing every sounding source in configured registers.",
    "cases": [
-    "M-HARMONY-REVOICE-001"
+    "M-HARMONY-REVOICE-001",
+    "M-MERGE-STRUCTURE-004"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical Masks/Harmony workflow covers a two-voice progression with literal pitches over complete loops; unit/integration coverage adds five voices, Pattern, Ensemble, bass policies, failure, frozen arp and lifecycle boundaries.",
@@ -7598,7 +7774,9 @@
    "cases": [
     "M-HARMONY-PATTERN-001",
     "M-HARMONY-PATTERN-CLOCKS-001",
-    "M-HARMONY-PATTERN-BYPASS-001"
+    "M-HARMONY-PATTERN-BYPASS-001",
+    "M-MERGE-STRUCTURE-002",
+    "M-MERGE-STRUCTURE-004"
    ],
    "status": "partial-domain-coverage",
    "domain": "Physical Pattern Note, Scale, Harmony, Tone Map and Register controls author A-B-C-B, apply a C-major to C-minor progression without chord masks, constrain three stable role identities, project every represented final pitch, retain a legal common tone, edit the source layer, reveal exact ordinary grid/MIDI when disabled, and recover the saved mapping when re-enabled. Public companion workflows cover two independent Pattern channels at unequal clocks and a delayed reverse-arpeggio chord-mask bypass. Unit and integration coverage adds Raw wide leaps, binding identity, runtime alias-conflict recovery, out-of-range handling and fallback.",
@@ -7630,10 +7808,11 @@
    "sections": [],
    "statement": "Ensemble assigns stable group roles to explicit channels while retaining every member's independent rhythm, velocity and route.",
    "cases": [
-    "M-HARMONY-ENSEMBLE-001"
+    "M-HARMONY-ENSEMBLE-001",
+    "M-MERGE-STRUCTURE-006"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure.",
+   "domain": "Physical controls create, assign and enable a four-member group; distinct trig-mask rhythms retain exact velocities, timing, routes and literal role pitches. Conflicting local scale and octave settings prove ordinary member pitches plus visible reason-specific bypass status. Unit/integration coverage adds frame revision, callback order, rests and failure. M-MERGE-STRUCTURE-006 covers Ensemble marker priority with exact MIDI timing and visible Result in both lanes. M-MERGE-STRUCTURE-007 covers half-step arp ratchets on snapped marker roots with exact MIDI and visible Result in both lanes.",
    "oracles": [
     "literal per-channel MIDI pitches",
     "independent rhythmic intervals",
@@ -9079,7 +9258,31 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1440,
+   "line": 1442,
+   "reference": "images/merge-shape-fragments.png",
+   "path": "images/merge-shape-fragments.png",
+   "sha256": "7984c43100cc0c290f1f9639d32ed0aae7102f10c0d7efa03e8c3f3afa6f014a"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1471,
+   "reference": "images/merge-shape-interlock.png",
+   "path": "images/merge-shape-interlock.png",
+   "sha256": "533d8bbbb5553040db390a0dd79c89873fd58a37b1f8d8a1a218c62bbbb5f4e2"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1504,
+   "reference": "images/merge-shape-structure.png",
+   "path": "images/merge-shape-structure.png",
+   "sha256": "4fbf43e3e5a53b6ba8a92116f3e006432b7a1329e2f2437565b649ffce7bb223"
+  },
+  {
+   "status": "pending-visual-spec-reconciliation",
+   "source": "README.md",
+   "line": 1552,
    "reference": "images/harmony-tone-map.png",
    "path": "images/harmony-tone-map.png",
    "sha256": "12ded7f3aaf7ba63bbcff39124a98eea9c414f4ebeefa61f5f5f79ee9a71a4b9"
@@ -9087,7 +9290,7 @@
   {
    "status": "pending-visual-spec-reconciliation",
    "source": "README.md",
-   "line": 1475,
+   "line": 1587,
    "reference": "images/harmony-no-voicing.png",
    "path": "images/harmony-no-voicing.png",
    "sha256": "f55f4b3fb68a92d1721a928b3e587ba0716dc174ab05a9cf1e4bb6d094eac7ea"

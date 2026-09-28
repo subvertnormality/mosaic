@@ -1,4 +1,5 @@
 local harmony_state = include("mosaic/lib/harmony/state")
+local merge_structure = include("mosaic/lib/musical_merge/structure")
 
 local pattern_harmony = {}
 local role_order = {bass=1, inner1=2, inner2=3, inner3=4, top=5}
@@ -21,12 +22,19 @@ function pattern_harmony.binding_key(channel, effective_merge)
     if enabled then patterns[#patterns + 1] = number end
   end
   table.sort(patterns)
-  return table.concat({
+  local merge = effective_merge or channel.musical_merge
+  local key = table.concat({
     "pattern-binding-v1",
     table.concat(patterns, ","),
     channel.note_merge_mode or "average",
-    target_identity(effective_merge or channel.musical_merge)
+    target_identity(merge)
   }, "|")
+  -- Plan §4 Persisted Pattern identity: only enabled markers on an active
+  -- Foundation configuration select their own map; Structure Off keeps the
+  -- byte-identical legacy key, so its saved map returns with it.
+  local structure = merge_structure.identity(merge)
+  if structure then key = key .. "|" .. structure end
+  return key
 end
 
 local function role_config(channel, role_name, material_id)

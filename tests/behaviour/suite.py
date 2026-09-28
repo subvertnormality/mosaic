@@ -57,6 +57,7 @@ PYTHON_UNITTEST.add('test_driver_wait')
 PYTHON_UNITTEST.add('test_autosave_failure_import')
 PYTHON_UNITTEST.add('test_device_config_owner')
 PYTHON_UNITTEST.add('test_lock_lead_owner')
+PYTHON_UNITTEST.add('test_merge_workloads')
 PYTHON_NEEDS_OUTPUT_MODS={'test_output_profiles'}
 PYTHON_SCRIPT={'test_nrpn_legacy_serializer':'norns-source-and-artifact-directory'}
 # Cases whose code asserts a non-base profile. Base cases are everything else.

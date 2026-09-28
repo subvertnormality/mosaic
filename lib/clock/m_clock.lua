@@ -6,6 +6,7 @@ local step_cursor = include("mosaic/lib/clock/step_cursor")
 local parameter_preview = include("mosaic/lib/clock/parameter_preview")
 local merge_state = include("mosaic/lib/musical_merge/state")
 local merge_config = include("mosaic/lib/musical_merge/config")
+local merge_timeline = include("mosaic/lib/musical_merge/timeline")
 
 m_clock = {}
 clock_lattice = {}
@@ -453,6 +454,7 @@ end
 local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local harmony_state = include("mosaic/lib/harmony/state")
 local function settle_optional_state_on_stop()
+  merge_timeline.stop()
   local affected=merge_state.stop_all();harmony_config_state.stop_all();harmony_state.reset()
   for song,channels in pairs(affected)do for channel in pairs(channels)do
     if type(song)=="table"and type(song.patterns)=="table"and type(song.channels)=="table"and
@@ -615,12 +617,25 @@ function m_clock.init()
       current_step = selected_step
 
       if wrapped then
-        if channel_number ~= 17 and(channel.musical_merge or merge_state.has(song_pattern,channel_number))then
+        local merged = channel_number ~= 17 and (channel.musical_merge or merge_state.has(song_pattern,channel_number))
+        if merged then
           merge_state.on_cycle_boundary(song_pattern, channel_number,
             channel.musical_merge or merge_config.new())
+        end
+        -- Plan §1.2.1/§1.2.2: every channel counts its elapsed cycle and logs
+        -- the segment it starts, merge enabled or not, before its own rebuild
+        -- plans the cycle. Bookkeeping only: no musical output changes.
+        if channel_number ~= 17 and merge_timeline.on_wrap(song_pattern, channel_number, channel,
+          song_pattern.global_pattern_length, clock.onset_count or 0) then
+          pattern.rebuild_followers(song_pattern, {[channel_number] = true})
+        end
+        if merged then
           local scheduler = m_clock.lookahead_scheduler
           if scheduler then scheduler:invalidate(channel_number, current_step, nil) end
-          pattern.update_working_pattern(channel_number, song_pattern)
+          -- The pulse token lets the followers wrapping on this pulse share
+          -- their leader's admission (pattern.lua wrap memo).
+          pattern.update_working_pattern(channel_number, song_pattern, true,
+            clock_lattice and clock_lattice.pulse_token)
         end
         
         -- The global scale channel has no MIDI parameter recorder bank.
@@ -782,7 +797,11 @@ end
 -- init/reset. Realignment resets fractional carry and phase without rebuilding
 -- every sprocket on the MIDI Start callback's first-clock deadline.
 function m_clock.prepare_start()
-  if not clock_lattice then return m_clock.init() end
+  if not clock_lattice then
+    m_clock.init()
+    merge_timeline.start(program.get_selected_song_pattern())
+    return
+  end
   local song_pattern = program.get().selected_song_pattern
   clock_lattice.pattern_length = program.get_selected_song_pattern().global_pattern_length
   for channel_number = 1, 17 do
@@ -807,6 +826,8 @@ function m_clock.prepare_start()
   -- A device that was left holding a value while the transport was stopped may
   -- have been changed by hand; start by sending each slot again.
   step.forget_sent_lock_values()
+  -- Plan §1.2.1 Start: a new common origin for every channel.
+  merge_timeline.start(program.get_selected_song_pattern())
 end
 
 
@@ -874,7 +895,26 @@ function m_clock.set_channel_division(channel_number, division)
   local previous = clock.division
   local div_value = 1 / (division * 4)
   clock:set_division(div_value)
-  if clock.division ~= previous then retime_channel(channel_number, clock) end
+  if clock.division ~= previous then
+    retime_channel(channel_number, clock)
+    -- Plan §1.2.1: a timing change resyncs the channel until the next origin.
+    -- A retimed follower's admission is replaced now (§1.2 fallback), even
+    -- when an earlier timing check already made its resync sticky; the
+    -- rebuild reaches its own followers too. retime_channel has already
+    -- invalidated its lookahead. A channel in no Interlock relation rebuilds
+    -- nothing. While stopped (a Clock change applies at once) there is no
+    -- origin to resync, but the stopped preview, which the first cycle after
+    -- Start plays (§1.3), is replanned the same way.
+    if channel_number ~= 17 then
+      if merge_timeline.running() then merge_timeline.set_resync(channel_number) end
+      local song = program.get_selected_song_pattern()
+      if pattern.followers_of(song)[channel_number] then
+        pattern.update_working_pattern(channel_number, song)
+      else
+        pattern.rebuild_followers(song, {[channel_number] = true})
+      end
+    end
+  end
 end
 
 function m_clock.get_channel_division(channel_number)

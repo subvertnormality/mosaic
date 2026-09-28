@@ -1001,6 +1001,15 @@ class Ui:
         self._wait_rhythm_doctor_render(
             lambda: [(1, 63, 9, fit(text, 126))], RHYTHM_DOCTOR_SCREEN["footer"])
 
+    def expect_footer_text(self, text):
+        """A tooltip (an Apply status such as APPLIED or INVALID ...) owns the
+        live footer row (lib/ui_live.lua view_model), and nothing else is on it."""
+        from frame_oracle import fit
+
+        self._wait_rhythm_doctor_render(
+            lambda: [(1, 63, 9, fit(text, 126))], RHYTHM_DOCTOR_SCREEN["footer"])
+        self.driver.results.append(dict(kind="footer-text", text=text, matched=True))
+
     def expect_rhythm_doctor_screen(self, route, label=None, value=None, channel=1):
         """Exact title row of Doctor screen `route` and its selected field's label/value.
 

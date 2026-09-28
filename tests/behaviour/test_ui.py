@@ -2813,6 +2813,30 @@ class ProjectActionUiVerbTests(unittest.TestCase):
                 Ui(FakeDriver(states=[frame(pixel)])).expect_rhythm_doctor_tooltip("NOT_READY")
 
 
+    def test_footer_text_verb_owns_the_whole_footer_row(self):
+        import base64
+        from unittest.mock import patch
+        from ui import Ui
+
+        expected = bytes(128 * 64 * 4)
+
+        def frame(*pixels):
+            actual = bytearray(expected)
+            for x, y in pixels:
+                actual[(y * 128 + x) * 4] = 9
+            return {"frame": {"pixels_base64": base64.b64encode(actual).decode("ascii")}}
+
+        with patch("frame_oracle.render", return_value=expected), \
+                patch("frame_oracle.fit", side_effect=lambda text, width: text):
+            driver = FakeDriver(states=[frame((10, 55))])
+            Ui(driver).expect_footer_text("APPLIED")
+            self.assertEqual(driver.results[-1], dict(kind="footer-text", text="APPLIED", matched=True))
+        for pixel in ((10, 60), (127, 63)):
+            with self.subTest(pixel=pixel), patch("frame_oracle.render", return_value=expected), \
+                    patch("frame_oracle.fit", side_effect=lambda text, width: text), \
+                    self.assertRaises(AssertionError):
+                Ui(FakeDriver(states=[frame(pixel)])).expect_footer_text("APPLIED")
+
     def test_midi_mask_recording_verb_preserves_native_edge_and_timing_recipe(self):
         from ui import Ui
 

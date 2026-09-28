@@ -50,7 +50,7 @@ function context.group_material(group, scale_number, transpose, pentatonic)
   return result
 end
 
-function context.scale_pitch_classes(scale_number, transpose)
+local function compute_scale_pitch_classes(scale_number, transpose)
   local scale = program.get_scale(scale_number)
   if not scale then return {} end
   local result, seen = {}, {}
@@ -61,6 +61,54 @@ function context.scale_pitch_classes(scale_number, transpose)
     seen[value] = true
     result[#result + 1] = value
     if #result == 12 then break end
+  end
+  return result
+end
+context.compute_scale_pitch_classes = compute_scale_pitch_classes
+
+-- The pitch classes of a scale are asked for on every note (step.handle's
+-- structural target context). They are a pure function of what
+-- quantiser.process(degree, 0, transpose, scale_number, false) reads: the
+-- program's root note and chord, and the scale container's root note, chord,
+-- chord-degree rotation, version, scale array and the presence of its
+-- pentatonic array; and of transpose. An entry per (scale number, transpose)
+-- holds a copy of all of them and is used only when every one is equal
+-- (numbers also by subtype), so an in-place edit (for example
+-- program.set_chord_degree_rotation_for_scale) or a replaced container misses.
+-- Callers get their own copy of the list.
+local math_type = math.type
+local pitch_class_memo = {}
+
+local function same_value(left, right)
+  return left == right and math_type(left) == math_type(right)
+end
+
+function context.scale_pitch_classes(scale_number, transpose)
+  if transpose ~= transpose then return compute_scale_pitch_classes(scale_number, transpose) end
+  local scale = program.get_scale(scale_number)
+  if not scale then return {} end
+  local program_data = program.get()
+  local notes = scale.scale
+  local by_transpose = pitch_class_memo[scale_number]
+  local entry = by_transpose and by_transpose[transpose or 0]
+  if entry and same_value(entry.transpose, transpose) and same_value(entry.root, program_data.root_note) and
+    same_value(entry.chord, program_data.chord) and same_value(entry.scale_root, scale.root_note) and
+    same_value(entry.scale_chord, scale.chord) and same_value(entry.rotation, scale.chord_degree_rotation) and
+    same_value(entry.version, scale.version) and entry.has_pentatonic == (type(scale.pentatonic_scale) == "table") and
+    type(notes) == "table" and #notes == #entry.notes then
+    local copy, same = entry.notes, true
+    for index = 1, #copy do
+      if not same_value(notes[index], copy[index]) then same = false; break end
+    end
+    if same then return {table.unpack(entry.result)} end
+  end
+  local result = compute_scale_pitch_classes(scale_number, transpose)
+  if type(notes) == "table" then
+    if not by_transpose then by_transpose = {}; pitch_class_memo[scale_number] = by_transpose end
+    by_transpose[transpose or 0] = {transpose = transpose, root = program_data.root_note, chord = program_data.chord,
+      scale_root = scale.root_note, scale_chord = scale.chord, rotation = scale.chord_degree_rotation,
+      version = scale.version, has_pentatonic = type(scale.pentatonic_scale) == "table",
+      notes = {table.unpack(notes, 1, #notes)}, result = {table.unpack(result)}}
   end
   return result
 end

@@ -1,8 +1,10 @@
--- Canonical live screen proto-code. Input is already formatted, read-only ViewModel.
+-- Live screen renderer (docs/ui-reimplementation code/screen.lua). Input is an already
+-- formatted, read-only ViewModel built by lib/ui_live.lua. The caller clears and
+-- updates the screen, so motion overlays can be drawn on top.
 -- No selectors, clocks, random calls, setters or hardware input belong in this module.
 -- draw(v) returns ok,report. It never raises inside redraw: a value that cannot be shown
 -- whole sets ok=false and paints LAYOUT OVERFLOW; the acceptance harness treats that as a fail.
-local art=include('characters')
+local art=include('mosaic/lib/ui_characters')
 local M={}
 local MORE='...' -- value withheld from a cell; the full value is on the same screen's full-width line
 local function text(value,x,y,size,level)
@@ -79,10 +81,9 @@ function M.draw(v)
  local r={ok=true,reasons={},marked={}}
  phase,cut,next_move=type(v)=='table'and v.marquee or nil,false,nil
  local function fail(why)r.ok=false;r.reasons[#r.reasons+1]=why end
- screen.clear()
  if type(v)~='table' or not(v.screen and v.title and v.scope and type(v.fields)=='table' and v.layout)
   or type(v.selected)~='number' or v.selected<1 or v.selected>math.max(1,#v.fields)then
-  fail('model');text('BAD VIEW MODEL',1,36,8,15);screen.update();return false,r
+  fail('model');text('BAD VIEW MODEL',1,36,8,15);return false,r
  end
  local selected=v.fields[v.selected];local L=v.layout;local status_y=55;local more=false
  -- Selected value on one full-width line: value right-aligned and whole, label shrinks.
@@ -211,7 +212,6 @@ function M.draw(v)
   text(fit(v.footer.left or'',61),1,63,8,7)
   right(fit(v.footer.right or'',61),127,63,10)
  else text(fit(v.footer or'',126),1,63,8,9)end
- screen.update()
  -- Whether any text is cut, and in how many marquee ticks one next moves.
  r.cut,r.next_move=cut,next_move
  return r.ok,r

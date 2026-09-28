@@ -77,3 +77,21 @@ function test_harmony_pattern_same_identity_with_conflicting_upstream_pitch_fail
   luaunit.assert_equals(result.status,"source_conflict")
   luaunit.assert_nil(runtime.pitch_for(result,0,60))
 end
+
+-- docs/musical-merge-extensions-plan.md §4 "Persisted Pattern identity" (a
+-- characterisation of the approved plan; README Voice leading keeps saved maps):
+-- v2 migration and v2 default fields leave the persisted binding key byte-identical.
+function test_harmony_pattern_binding_key_is_byte_identical_through_v2_migration()
+  local merge_config = include("mosaic/lib/musical_merge/config")
+  local v1 = {schema_version=1,mode="foundation",anchor=2,amount=50,accent=70,gap=0,seed=3,ranking_version=1,
+    cycles=1,shape="flat",percentages={100},variation="fixed",keep_anchor_pitch=true,
+    target={kind="degrees",degrees={1,3,5}}}
+  local c = {selected_patterns={[2]=true,[5]=true}, note_merge_mode="up", musical_merge=v1}
+  luaunit.assert_equals(runtime.binding_key(c), "pattern-binding-v1|2,5|up|true,degrees,1,3,5")
+  c.musical_merge = merge_config.canonicalize(v1)
+  luaunit.assert_equals(runtime.binding_key(c), "pattern-binding-v1|2,5|up|true,degrees,1,3,5")
+  c.musical_merge = merge_config.new()
+  luaunit.assert_equals(runtime.binding_key(c), "pattern-binding-v1|2,5|up|off")
+  c.musical_merge = nil
+  luaunit.assert_equals(runtime.binding_key(c), "pattern-binding-v1|2,5|up|off")
+end

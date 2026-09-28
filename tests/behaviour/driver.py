@@ -106,9 +106,10 @@ class Driver:
     def snapshot(self):
         value=self.runtime.observe();self.observations.append(value);return value['state']
     def wait(self,predicate,timeout=3):
-        # Allow up to 6x wall time for slow controlled observe/advance round trips;
-        # logical_end remains the authoritative timeout for controlled time.
-        start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else max(180,timeout*6))
+        # Controlled observe/advance round trips can take 10x logical time on a
+        # loaded CI host. Keep the musical deadline in logical time; this wall
+        # watchdog only prevents a stalled emulator from hanging indefinitely.
+        start=len(self.observations);end=time.monotonic()+(timeout if self.clock_mode=="real-time" else max(180,timeout*12))
         logical_end=self.logical_ns+round(timeout*1e9)
         while time.monotonic()<end:
             state=self.snapshot()

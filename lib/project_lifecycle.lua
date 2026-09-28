@@ -4,9 +4,11 @@ local merge_state=include("mosaic/lib/musical_merge/state")
 local harmony_config_state=include("mosaic/lib/harmony/config_state")
 local harmony_state=include("mosaic/lib/harmony/state")
 local harmony_inspection=include("mosaic/lib/harmony/inspection")
+local merge_timeline=include("mosaic/lib/musical_merge/timeline")
 
 local function reset_optional_feature_transients()
   merge_state.reset();harmony_config_state.reset();harmony_state.reset();harmony_inspection.reset()
+  merge_timeline.stop()
 end
 
 function project_lifecycle.new(as_metro, autosave_timer, param_manager, project_validation, set_splash, capture_guard)
@@ -51,6 +53,10 @@ local function load_project(pth, allow_missing)
   local decoded, saved = pcall(tab.load, pth)
   if not decoded then return reject_project("Invalid project data") end
   local valid, reason = project_validation.check(saved)
+  if not valid then return reject_project(reason) end
+  -- Canonical merge migration on the detached decoded data, also before any
+  -- live mutation.
+  valid, reason = project_validation.migrate(saved)
   if not valid then return reject_project(reason) end
 
   -- Validate first: rejection must leave the live project, transport, pending

@@ -376,12 +376,25 @@ hooks["tasks.open"] = function()
   end
 end
 
+-- The named action a Harmony question confirms (spec confirmation_contracts):
+-- K3 runs it exactly once, never the owner's Apply on a selected read-only row.
+local QUESTION_ACTION = {H04_DELETE = "confirm_delete", TONE_MAP_RESET = "confirm_reset"}
+local function answer_harmony_question(editor, n)
+  if n == 3 then
+    local wanted = QUESTION_ACTION[editor:get_screen()]
+    for index, field in ipairs(editor:get_fields()) do
+      if field.id == wanted then editor.selected = index; break end
+    end
+  end
+  editor:key(n)
+end
+
 -- Modal questions stay with their owners; K3/K2 reach the owner once.
 function ui_live.answer_modal(n)
   local id = router.state.screen
   if id == "H17" or id == "H19" then
     local editor = feature_editor("harmony")
-    editor:key(n)
+    answer_harmony_question(editor, n)
   elseif id == "S05" then
     legacy_key(n)
   elseif id == "R03" or id == "R10" or id == "R16" then
@@ -929,7 +942,7 @@ function ui_live.install()
   ui_adapters.register("confirmation", adapter_factory("confirmation")(ui_adapters, {
     harmony = {
       pending = function(_, contract) return harmony:get_screen() == contract.source_route end,
-      confirm = function() harmony:key(3) end,
+      confirm = function() answer_harmony_question(harmony, 3) end,
       cancel = function() harmony:key(2) end,
       generation = function() return harmony.generation end,
     }

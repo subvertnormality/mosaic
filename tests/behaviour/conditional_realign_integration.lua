@@ -35,6 +35,8 @@ for _,repeat_reset in ipairs({false,true}) do
   if path=='mosaic/lib/harmony/config_state'then return{on_pattern_boundary=function()end,enter_song=function()end}end
   if path=='mosaic/lib/harmony/state'then return{enter_song=function()end}end
   if path=='mosaic/lib/musical_merge/state'then return{on_pattern_boundary=function()return{}end,reset_song=function()end}end
+  if path=='mosaic/lib/musical_merge/structure' then return dofile('lib/musical_merge/structure.lua') end
+  if path=='mosaic/lib/musical_merge/timeline' then return {realign=function() end,resync_all=function() end} end
   if path:match('^mosaic/lib/harmony/') or path:match('^mosaic/lib/musical_merge/') then return {} end
   assert(path=='mosaic/lib/clock/divisions',path);return {note_divisions={}}
  end

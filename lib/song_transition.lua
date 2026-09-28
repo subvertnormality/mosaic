@@ -5,12 +5,14 @@ local song_transition = {}
 local harmony_config_state = include("mosaic/lib/harmony/config_state")
 local harmony_state = include("mosaic/lib/harmony/state")
 local merge_state = include("mosaic/lib/musical_merge/state")
+local merge_timeline = include("mosaic/lib/musical_merge/timeline")
 
 function song_transition.new(program, m_clock, step)
 local transition = {}
 local ipairs = ipairs
 local table = table
-local switch_to_next_song_pattern_func = function() end
+local function no_switch() end
+local switch_to_next_song_pattern_func = no_switch
 local switch_to_next_song_pattern_blink_cancel_func = function() end
 local next_song_pattern_queue = nil
 local pattern_change_queue = {}
@@ -41,6 +43,21 @@ function transition.calculate_next_selected_song_pattern()
   
   -- If we haven't completed all repeats AND not at end of pattern, stay on the current pattern
   if repeat_count < total_repeats and not at_end_of_pattern then
+    return selected_song_pattern_number
+  end
+
+  return transition.next_slot_after_repeats()
+end
+
+-- The slot song mode enters once the current slot's repeats are complete.
+function transition.next_slot_after_repeats()
+  local program_data = program.get()
+  local selected_song_pattern_number = program_data.selected_song_pattern
+  local song_patterns = program_data.song_patterns
+  if next_song_pattern_queue then
+    return next_song_pattern_queue
+  end
+  if params:get("song_mode") ~= 2 then
     return selected_song_pattern_number
   end
 
@@ -124,7 +141,11 @@ function transition.process_song_song_patterns()
      global_step_accumulator % selected_song_pattern.global_pattern_length == 0 then
     harmony_config_state.on_pattern_boundary(selected_song_pattern)
     local merge_affected=merge_state.on_pattern_boundary(selected_song_pattern)
+    -- Plan §1.2.2: a mid-cycle global activation has no cycle-indexed
+    -- schedule; the channel resyncs until the next origin.
+    for channel in pairs(merge_affected)do merge_timeline.set_resync(channel)end
     for channel in pairs(merge_affected)do pattern.update_working_pattern(channel,selected_song_pattern)end
+    local realigned=false
     
     switch_to_next_song_pattern_func()
     local manually_selected_number = program.get().selected_song_pattern
@@ -135,7 +156,7 @@ function transition.process_song_song_patterns()
       merge_state.reset_song(entered)
     end
     switch_to_next_song_pattern_blink_cancel_func()
-    switch_to_next_song_pattern_func = function() end
+    switch_to_next_song_pattern_func = no_switch
     -- With song mode off the queued switch above is the whole manual change;
     -- a retained queue would redirect the first transition after re-enabling.
     if params:get("song_mode") ~= 2 then
@@ -225,6 +246,9 @@ function transition.process_song_song_patterns()
         
         -- Retain channel phase for evolving polyrhythms when resets are off.
         if reset_channels then
+          -- Plan §1.2.1: the realign is a new common origin.
+          merge_timeline.realign(program.get_selected_song_pattern())
+          realigned=true
           m_clock.realign_sprockets()
         end
       end
@@ -235,11 +259,44 @@ function transition.process_song_song_patterns()
         harmony_state.enter_song(selected_song_pattern, selected_song_pattern, true)
       end
     end
+    -- Plan §1.2.1: the new slot's data takes over mid-cycle without a common
+    -- origin, so every channel resyncs until the next one.
+    if not realigned and program.get().selected_song_pattern ~= selected_song_pattern_number then
+      merge_timeline.resync_all()
+    end
   end
+end
+
+-- Plan §1.2.3: the first pattern boundary (counted from the current common
+-- origin, 1-based) that will change the song slot or realign, or nil when
+-- none is pending. Leader onsets at or after it are excluded from a query.
+-- `elapsed` is the number of master onsets since the origin.
+function transition.origin_end_boundary(elapsed)
+  local program_data = program.get()
+  local song = program.get_selected_song_pattern()
+  local length = song.global_pattern_length
+  local current = program_data.selected_song_pattern
+  local next_boundary = elapsed >= 1 and (elapsed - 1) // length + 1 or 1
+  if next_boundary < 1 then next_boundary = 1 end
+  if switch_to_next_song_pattern_func ~= no_switch and next_song_pattern_queue ~= nil and
+    next_song_pattern_queue ~= current then
+    return next_boundary
+  end
+  if params:get("song_mode") ~= 2 then return nil end
+  local next_slot = transition.next_slot_after_repeats()
+  if next_slot == current and params:get("reset_on_end_of_pattern_repeat") ~= 2 then return nil end
+  local repeats = song.repeats or 1
+  if repeats < 1 then repeats = 1 end
+  local boundary = next_boundary
+  while boundary % repeats ~= 0 do boundary = boundary + 1 end
+  return boundary
 end
 
 function transition.queue_switch_to_next_song_pattern_func(func)
   switch_to_next_song_pattern_func = func
+  -- A queued slot change ends the common origin at the next boundary, so
+  -- interlock followers re-plan their horizon (plan §1.2.3).
+  if pattern and pattern.rebuild_followers then pattern.rebuild_followers(program.get_selected_song_pattern()) end
 end
 
 function transition.queue_switch_to_next_song_pattern_blink_cancel_func(func)
@@ -254,7 +311,7 @@ end
 
 function transition.clear_pending()
   next_song_pattern_queue = nil
-  switch_to_next_song_pattern_func = function() end
+  switch_to_next_song_pattern_func = no_switch
   pattern_change_queue = {}
 end
 

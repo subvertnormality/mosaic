@@ -1431,9 +1431,121 @@ pitch. A missing/empty target visibly falls back to the legacy pitch.
 
 Foundation ranking is repeatable for the saved seed and grows as a nested set:
 raising Amount cannot remove an already selected addition while source, gap,
-seed and phrase are unchanged. Interlock, phrase fragments, passing-note freedom
-and silence-aware interlock are later MM-08+ designs and are not part of this
-release.
+seed and phrase are unchanged.
+
+Mode has a third choice, Fragments, and Foundation gains Interlock and
+Structure. Each is part of the same draft: K3 applies it (`NEXT CYCLE` while
+playing), K2 discards it, and one undo step restores it.
+
+#### Fragments
+
+![Merge Shape Fragments settings on Norns](images/merge-shape-fragments.png)
+
+Fragments is a separate mode for building a phrase from pieces of the assigned
+patterns. With Mode set to Fragments, Rhythm opens the Fragments screen: Size (4,
+8 or 16 steps), Keep anchor, Anchor (shown only with Keep anchor) and Seed. The
+channel loop is cut into fragments of Size steps counted from the channel's own
+start step; the last fragment is shorter when the loop does not divide evenly,
+and a loop shorter than Size is one fragment. Fragments never cross the loop end.
+
+Each fragment plays one assigned pattern, chosen repeatably by the Seed: the
+same seed always gives the same choice. The fragment keeps that pattern's own
+trigs, notes, velocities and lengths exactly, so the legacy trig, note,
+velocity and length merge modes and merged-pentatonic do not apply while
+Fragments is on. The Merge modes screen shows each saved mode as, for example,
+`FRAGMENTS (AVERAGE)`, and a merge button's tooltip says Fragments is in use; the
+saved modes apply again when Merge Shape is off. A note longer than the gap to
+the next onset on the loop is shortened to that gap. Keep anchor also plays the
+Anchor pattern's trigs where the fragment's own pattern has none; where both have
+a trig, the fragment's pattern wins. With no assigned pattern the mode falls back
+to legacy merging and Result says `ASSIGN PATTERN`.
+
+Phrase shows only Cycles and Variation in this mode. Fixed repeats the same
+fragment sources every phrase; Per phrase draws new ones for each phrase.
+Shape percentages, Amount, Accent and Gap do not apply, and Pitch offers only the
+Voice leading link. Explicit masks still win and probability can still reject an
+onset. The channel grid shows exactly the trigs the fragments play.
+
+#### Interlock
+
+![Merge Shape Interlock settings on Norns](images/merge-shape-interlock.png)
+
+Interlock makes one channel's Foundation additions leave room for another
+channel's anchors. On the follower's Rhythm screen, Interlock opens Leader (Off
+or any other channel) and Window (0–4 of the follower's steps). An addition is
+removed when a leader anchor falls within Window steps of it; Window 0 removes
+only additions that start exactly with a leader anchor. Anchors of either channel
+are never removed, so an addition removed here simply does not play.
+
+Leader anchors are the anchor pattern's trigs in the leader's loop, planned from
+the song, not what the leader happened to sound: probability, mute and swing do
+not change them, and swing or shuffle never change which additions are removed.
+Channels at different clock divisions or loop lengths are compared in musical
+time from Start. The leader must itself use Foundation for its anchors to count;
+otherwise Status says `LEADER OFF` or `LEADER MISSING` and nothing is removed.
+
+A channel can follow one leader, and a channel that has a leader cannot be one:
+Apply refuses a chain with `LEADER HAS LEADER` or `CHANNEL IS A LEADER` and
+keeps your draft. Where Mosaic cannot plan the leader exactly—after a clock
+division, loop range or song change while playing (`RESYNC`, until the next
+Start or song realign) or beyond its planning budget (`PLAN LIMIT`)—the
+follower plays all of its admitted additions for that loop and shows why.
+Status on the Interlock screen and the Interlock row on Result show `ON` or the
+bypass.
+
+Interlock's planning runs when a follower wraps its loop. On a norns each
+follower that wraps on the same step adds about 0.7 ms to that step, so a few
+followers wrapping together are inaudible, while every channel following one
+leader and wrapping together (15 followers) can make that step land about
+10 ms late. Stagger follower loop lengths or wraps if you need very many.
+
+#### Structure
+
+![Merge Shape Structure settings on Norns](images/merge-shape-structure.png)
+
+Structure snaps chosen moments of a Foundation line to a chord while the notes
+in between keep their own pitch. Pitch opens Structure: Markers (Off, Anchors,
+Every 4 or Every 8) and Chord group, an enabled Harmony Ensemble group. Anchors
+marks every anchor onset; Every 4 and Every 8 mark steps 1, 5, 9… or 1, 9… of the
+channel loop counted from its start step. A note at a marker is converted to the
+scale as usual and then moved to the nearest pitch class of the group's chord,
+taking the lower one on a tie. Notes between markers keep their Addition Target
+(additions) or their own pitch (anchors); Mosaic makes no claim that they
+resolve. Note masks, random shifts and fixed notes still win at a marker.
+
+Apply needs an enabled group while Markers is on. If the group becomes
+unavailable during playback the markers play their ordinary pitch and Result
+says `CHORD MISSING`. Deleting or disabling the group turns Markers Off for every
+channel that uses it in the same change; Delete group lists those channels first.
+During playback that change waits for the next pattern boundary, and a Merge
+Shape edit applied to one of those channels before then waits with it and shows
+`NEXT PATTERN` instead of `NEXT CYCLE`.
+A snapped marker keeps its chord tone when Harmony Revoice or Ensemble would move
+it: Harmony's Result says `MARKER PRIORITY`. With Harmony Pattern, a mapped note
+value that snaps to a different pitch class at a marker than it plays between
+markers has no single mapped pitch, so it is silent at both, whichever fallback
+is chosen; unmapped values keep their own pitch.
+
+#### Result and Reason
+
+Result shows each step's role (anchor, addition or fragment) and decision, and
+Reason shows every reason an addition was left out, in order: `GAP`, then
+`INTERLOCK CH02`; several reasons are named together (`GAP, INTERLOCK`). A
+fragment step names its fragment and source, such as `FRAGMENT 1 P03` or
+`KEPT ANCHOR`; a Structure marker step shows `MARKER CHORD G01` when its pitch
+was snapped (or, before it plays, will be), `CHORD MISSING`, or the instruction
+that kept its own pitch, such as `BYPASS NOTE MASK`, `BYPASS RANDOM`,
+`BYPASS FIXED` or `BYPASS QUANTISED FIXED`. When a leader is set,
+Result adds an Interlock row, and a queued change the loop boundary refused is
+shown as `Rejected`. Reason is one screen of six rows: Step, Role with the
+step's source patterns (`ADDITION P1,2`), Decision, Interlock, Velocity and
+Pitch target. Its Interlock row is kept apart from the reasons: `ON` while
+Interlock filters, `OFF` without a leader, or the bypass in force, such as
+`RESYNC` or `PLAN LIMIT`, in which case gap and Amount still decide the step
+as if Interlock were off.
+
+Silence-aware interlock (Space: leaving room while another channel's notes are
+still sounding) is not part of this release.
 
 ### Harmony
 

@@ -21,6 +21,13 @@ HARDWARE_PERFORMANCE_RECIPES={
         'available_boundaries':['HardwareDriver controls','OutputTrace MIDI timestamps','grid driver trace','screen screenshots'],
         'capability_gaps':['bounded repeatable on-device load generator','CPU/throttling/resource samples bracketing the load','frame/grid revision counters','device-specific threshold calibration'],
     },
+    'merge_workloads.py':{
+        'status':'implemented-unverified','hardware_verified':False,'adaptation':'release-gating-device-acceptance',
+        'cases':['PERF-MERGE-HW-STEADY','PERF-MERGE-HW-WORST','PERF-MERGE-HW-EDIT','PERF-MERGE-HW-DENSE','PERF-MERGE-HW-DENSE-EDIT'],
+        'comparable_metrics':['onset timing on each channel grid with the unchanged thresholds','simultaneous-onset service span','sixteenth step jitter','per-admission Interlock semantics','edit propagation','follower wrap alignment','Start latency against Merge Shape Off in the same session'],
+        'available_boundaries':['HardwareDriver controls','OutputTrace MIDI timestamps','admission/grid-input recorder (util.time)'],
+        'capability_gaps':['No device report yet: the device qualification is OUTSTANDING and release-gating until source-identified reports of all five cases pass (owner: repository maintainer).'],
+    },
     'perf_storage.py':{
         'status':'excluded','adaptation':'not-sequencer-timing',
         'reason':'The current recipe defines no storage-speed threshold or sequencer timing correlation; include only if a measured storage stall affects musical output.',
@@ -107,6 +114,15 @@ class HardwareDriver:
         raise AssertionError('Required observable output did not arrive')
     def tap(self,x,y):
         return self.ui.hardware_tap(x,y)
+    def device_tap(self,x,y,hold=.04):
+        """One grid tap timed on the norns: the key-down now and the key-up
+        scheduled `hold` seconds later by a norns clock, in a single Maiden
+        evaluation. A stalled Maiden reply cannot stretch it into a long
+        press (a host-timed tap whose release waited 30 s became one)."""
+        lower=time.monotonic_ns();d=int(self.grid_device);x=int(x);y=int(y)
+        self.runner.maiden.eval("_norns.grid.key(%d,%d,%d,1); clock.run(function() clock.sleep(%s); _norns.grid.key(%d,%d,%d,0) end)"%(d,x,y,repr(float(hold)),d,x,y))
+        row={'type':'grid-tap','x':x,'y':y,'hold_s':hold,'transport':'norns-grid-key-callback+norns-clock-release','host_monotonic_ns':lower,'host_completion_ns':time.monotonic_ns()}
+        self.recipe.append(row);self.elapse(hold+.12);return row
     def key(self,n):
         self.ui.hardware_key(n)
     def enc(self,n,steps):
