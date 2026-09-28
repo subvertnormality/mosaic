@@ -7,7 +7,7 @@ behaviour run.
 """
 import unittest
 
-from swing_window_oracle import assert_stable, stall_budget
+from swing_window_oracle import assert_cumulative_phase, assert_stable, stall_budget
 
 
 TOLERANCE = .01          # the real-time bound, unchanged
@@ -81,6 +81,38 @@ class ControlledLane(unittest.TestCase):
         with self.assertRaises(AssertionError):
             assert_stable([0.0] * 4708 + [3e-9], 2e-9, 'logical',
                           stalls_allowed=0, ceiling=2e-9)
+
+
+class CumulativePhase(unittest.TestCase):
+    PHASE_LIMIT = 1 / 144 + TOLERANCE
+
+    def test_one_bounded_host_stall_does_not_move_cumulative_phase(self):
+        # CI PR #104, shard 15: 18.516 ms on the first real-time run;
+        # the controlled-time lane and the isolated real-time rerun passed.
+        phases = [0.0] * 4709 + [.01851611433333744]
+        assert_cumulative_phase(phases, self.PHASE_LIMIT, 'phase',
+                                stalls_allowed=stall_budget(len(phases)), ceiling=CEILING)
+
+    def test_sustained_phase_shift_still_fails(self):
+        phases = [0.0] + [.01851611433333744] * 4709
+        with self.assertRaises(AssertionError):
+            assert_cumulative_phase(phases, self.PHASE_LIMIT, 'phase',
+                                    stalls_allowed=stall_budget(len(phases)), ceiling=CEILING)
+
+    def test_outlier_budget_and_hard_ceiling(self):
+        for phases in ([0.0] * 4705 + [.01851611433333744] * 5,
+                       [0.0] * 4709 + [CEILING + .001]):
+            with self.assertRaises(AssertionError):
+                assert_cumulative_phase(phases, self.PHASE_LIMIT, 'phase',
+                                        stalls_allowed=stall_budget(len(phases)), ceiling=CEILING)
+
+    def test_controlled_time_keeps_exact_existing_bound(self):
+        limit = 1 / 144 + 2e-9
+        assert_cumulative_phase([0.0, limit], limit, 'logical',
+                                stalls_allowed=0, ceiling=limit)
+        with self.assertRaises(AssertionError):
+            assert_cumulative_phase([0.0, limit + 1e-9], limit, 'logical',
+                                    stalls_allowed=0, ceiling=limit)
 
 
 if __name__ == '__main__':
