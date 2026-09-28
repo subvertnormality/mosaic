@@ -40,8 +40,8 @@ def setup_pattern_harmony(c):
     c.ui.turn(2, 3); c.ui.press_key(3)
     c.ui.turn(3, 1); c.ui.press_key(3)
     c.ui.expect_header("harmony_tone_map", channel=1, octave=2)
-    # Tone Map is a focused screen: its selected tone row shows the applied role.
-    c.ui.expect_selected_field("focused", "Tone 0", "BASS", art=True)
+    # Tone Map is a vertical list: its selected tone row shows the applied role.
+    c.ui.expect_selected_field("detail", "Tone 0", "BASS")
 def revoice_workflow(c):
     c.configure()
     # Device Config -> Masks; add one scale-degree chord voice.
@@ -62,7 +62,7 @@ def pattern_harmony_persistence_workflow(c):
     from persisted_ranges import serializer_source
     setup_pattern_harmony(c)
     # The footer carries the apply status and neighbour hints; bind the body.
-    documentation_frame(c, 'd10719a8677a82215c280ca12af8334ca9144ce691e0b45d661cdb085890af7b',
+    documentation_frame(c, 'c6d2c5bba8503166a2abeb5f728091e01227f397e6656cee555625433824227b',
                         'images/harmony-tone-map.png', stable_rows=55)
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (86, 117), (88, 107), (89, 97))]
@@ -230,7 +230,7 @@ def setup_no_voicing(c):
     c.ui.turn(2, 1); c.ui.set_value(26)  # Bass Low 50
     c.ui.turn(2, 1); c.ui.set_value(-10) # Bass High 50
     c.ui.turn(2, 1); c.ui.set_value(2)   # Bass Centre 50; valid but excludes pitch class C
-    c.ui.expect_selected_field("focused", "Centre", "50", art=True)
+    c.ui.expect_selected_field("detail", "Centre", "50")
     c.ui.press_key(3)
     # E1 returns to the clean root; each screen remembers its focus, so rows
     # are selected from the first row.

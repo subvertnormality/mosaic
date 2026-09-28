@@ -127,20 +127,20 @@ LIVE_SCREENS = OrderedDict([
     ("scale_source", {"screen": "S04", "title": "SCALE SOURCE", "layout": "dashboard"}),
     ("trig_step_edit", {"screen": "P08", "title": "TRIG STEP EDIT", "layout": "dashboard", "scope": "pattern_step"}),
     # Merge Shape and Harmony child screens (their feature editor's routes).
-    ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "focused", "art": True}),
-    ("merge_phrase", {"screen": "M06", "title": "PHRASE", "layout": "focused"}),
-    ("merge_pitch", {"screen": "M07", "title": "PITCH", "layout": "focused", "art": True}),
+    ("merge_rhythm", {"screen": "M03", "title": "RHYTHM", "layout": "detail"}),
+    ("merge_phrase", {"screen": "M06", "title": "PHRASE", "layout": "detail"}),
+    ("merge_pitch", {"screen": "M07", "title": "PITCH", "layout": "detail"}),
     ("merge_result", {"screen": "M05", "title": "MERGE RESULT", "layout": "detail"}),
     ("merge_reason", {"screen": "M14", "title": "MERGE REASON", "layout": "dashboard"}),
     ("merge_fragments", {"screen": "M15", "title": "FRAGMENTS", "layout": "detail"}),
     ("merge_interlock", {"screen": "M16", "title": "INTERLOCK", "layout": "detail"}),
     ("merge_structure", {"screen": "M18", "title": "STRUCTURE", "layout": "detail"}),
-    ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "focused", "art": True}),
+    ("harmony_register", {"screen": "H02", "title": "REGISTER", "layout": "detail"}),
     ("harmony_ensemble", {"screen": "H04", "title": "ENSEMBLE", "layout": "detail"}),
     ("harmony_result", {"screen": "H05", "title": "VOICE MOVEMENT", "layout": "detail"}),
     ("harmony_members", {"screen": "H07", "title": "MEMBERS", "layout": "detail"}),
     ("harmony_entry", {"screen": "H09", "title": "ENTRY / FAILURE", "layout": "detail"}),
-    ("harmony_tone_map", {"screen": "H11", "title": "TONE MAP", "layout": "focused", "art": True}),
+    ("harmony_tone_map", {"screen": "H11", "title": "TONE MAP", "layout": "detail"}),
     ("harmony_delete_group", {"screen": "H17", "title": "DELETE GROUP?", "layout": "detail"}),
 ])
 
@@ -169,8 +169,8 @@ TASK_ROWS = {
 # The Channel Tasks rows in their spec order (spec.json#/tasks/rows/N01).
 # Mask detail / Trig detail left the list and Merge became Merge modes (usability audit
 # 25 September 2026).
-CHANNEL_TASKS = ["masks", "trig_params", "output", "harmony", "clock", "merge", "device", "history",
-                 "merge_shape"]
+CHANNEL_TASKS = ["masks", "trig_params", "output", "clock", "merge", "merge_shape",
+                 "harmony", "device", "history"]
 
 # Historical page keys used by cases; each is a live screen.
 CHANNEL_PAGES = OrderedDict(

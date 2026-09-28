@@ -162,11 +162,14 @@ function editor.new(kind)
   local function merge_fields()
     local value=self.draft
     local fragments=value.mode=="fragments"
-    if self.screen=="M01"then return{
+    if self.screen=="M01"then local fields={
       editable("Mode",function()return value.mode end,function(v)value.mode=v end,{id="mode",values={"off","foundation","fragments"}}),
       -- Plan §5: in Fragments mode Rhythm opens the Fragments screen.
       fragments and action("Rhythm","FRAGMENTS",{id="fragments"})or action("Rhythm","M02",{id="rhythm"}),
-      action("Phrase","M04",{id="phrase"}),action("Pitch","M05",{id="pitch"}),action("Result","M07",{id="result"})}
+      action("Phrase","M04",{id="phrase"})}
+      if not fragments then fields[#fields+1]=action("Pitch","M05",{id="pitch"}) end
+      fields[#fields+1]=action("Result","M07",{id="result"})
+      return fields
     elseif self.screen=="M02"then return{
       editable("Anchor",function()return value.anchor end,function(v)value.anchor=v end,{id="anchor",values=assigned_patterns(self.channel)}),
       editable("Add amount",function()return value.amount end,function(v)value.amount=v end,{id="add_amount",min=0,max=100}),
@@ -195,14 +198,11 @@ function editor.new(kind)
       fields[#fields+1]=editable("Variation",function()return value.variation end,function(v)value.variation=v end,{id="variation",values={"fixed","per_phrase"}})
       return fields
     elseif self.screen=="M05"then
-      -- Plan §5: in Fragments mode Pitch shows only the Harmony link.
-      if fragments then return{action("Voice leading","HARMONY_LINK",{id="harmony"})}end
       return{
       editable("Keep anchor",function()return value.keep_anchor_pitch end,function(v)value.keep_anchor_pitch=v end,{id="keep_anchor",boolean=true}),
       editable("Add target",function()return value.target.kind end,function(v)value.target={kind=v};if v=="degrees"then value.target.degrees={1}end end,
         {id="add_target",values={"legacy","scale","degrees","chord"}}),
-      action("Target setup","M06",{id="target_setup"}),action("Structure","STRUCTURE",{id="structure"}),
-      action("Voice leading","HARMONY_LINK",{id="harmony"})}
+      action("Target setup","M06",{id="target_setup"}),action("Structure","STRUCTURE",{id="structure"})}
     elseif self.screen=="M06"then
       if value.target.kind=="degrees"then
         local inventory=harmony_context.scale_pitch_classes(self.channel.step_scale_number or program.get().default_scale or 1,0)

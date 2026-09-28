@@ -488,7 +488,7 @@ function test_merge_fragments_mode_routes_rhythm_to_fragments_and_hides_foundati
   luaunit.assert_equals(channel.musical_merge.mode,"fragments")
   luaunit.assert_equals(channel.musical_merge.fragments,{size=16,keep_anchor=true})
   value:encoder_one();open_label(value,"Phrase");luaunit.assert_equals(labels(value),{"Cycles","Variation"})
-  value:encoder_one();open_label(value,"Pitch");luaunit.assert_equals(labels(value),{"Voice leading"})
+  value:encoder_one();luaunit.assert_equals(labels(value),{"Mode","Rhythm","Phrase","Result"})
 end
 
 function test_merge_fragments_keep_anchor_rejects_an_unassigned_anchor()

@@ -829,7 +829,7 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "H02",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "register",
       ["fields"] = {
         "low",
@@ -848,7 +848,7 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "H03",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "register",
       ["fields"] = {
         "mode",
@@ -930,12 +930,12 @@ return {
         "masks",
         "trig_params",
         "output",
-        "harmony",
         "clock",
         "merge",
+        "merge_shape",
+        "harmony",
         "device",
         "history",
-        "merge_shape",
       },
     },
     ["N02"] = {
@@ -1075,7 +1075,7 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "TONE_MAP",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "choir",
       ["fields"] = {
         "value_1",
@@ -1113,7 +1113,7 @@ return {
       ["provider"] = "harmony",
       ["existing_route"] = "H03",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "register",
       ["fields"] = {
         "identity",
@@ -1608,7 +1608,7 @@ return {
       ["provider"] = "merge",
       ["existing_route"] = "M02",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "garden",
       ["fields"] = {
         "anchor",
@@ -1671,7 +1671,7 @@ return {
       ["provider"] = "merge",
       ["existing_route"] = "M04",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = nil,
       ["fields"] = {
         "cycles",
@@ -1693,14 +1693,13 @@ return {
       ["provider"] = "merge",
       ["existing_route"] = "M05",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "garden",
       ["fields"] = {
         "keep_anchor",
         "add_target",
         "target_setup",
         "structure",
-        "harmony",
       },
     },
     ["M08"] = {
@@ -1770,7 +1769,7 @@ return {
       ["provider"] = "merge",
       ["existing_route"] = "M01",
       ["parent"] = "N01",
-      ["layout"] = "focused",
+      ["layout"] = "detail",
       ["art"] = "garden",
       ["fields"] = {
         "mode",
@@ -2104,11 +2103,6 @@ return {
           ["screen"] = "C06",
         },
         {
-          ["id"] = "harmony",
-          ["label"] = "Harmony",
-          ["screen"] = "H01",
-        },
-        {
           ["id"] = "clock",
           ["label"] = "Clock",
           ["screen"] = "C04",
@@ -2119,6 +2113,16 @@ return {
           ["screen"] = "C09",
         },
         {
+          ["id"] = "merge_shape",
+          ["label"] = "Merge Shape",
+          ["screen"] = "M02",
+        },
+        {
+          ["id"] = "harmony",
+          ["label"] = "Harmony",
+          ["screen"] = "H01",
+        },
+        {
           ["id"] = "device",
           ["label"] = "Device",
           ["screen"] = "C05",
@@ -2127,11 +2131,6 @@ return {
           ["id"] = "history",
           ["label"] = "History",
           ["screen"] = "C03",
-        },
-        {
-          ["id"] = "merge_shape",
-          ["label"] = "Merge Shape",
-          ["screen"] = "M02",
         },
       },
       ["N02"] = {
@@ -2958,44 +2957,6 @@ return {
       ["binding_rule"] = "Assign a stable id beside this exact action declaration; label is source evidence, never runtime dispatch key.",
       ["field_id"] = "target_setup",
       ["kind"] = "route",
-    },
-    {
-      ["from"] = "M07",
-      ["field_label_reference"] = "Voice leading",
-      ["old_owner_route"] = "M05",
-      ["old_action_route"] = "HARMONY_LINK",
-      ["to"] = "H01",
-      ["event"] = "K3.down",
-      ["guard"] = {
-        ["field_kind"] = "action",
-        ["descriptor_enabled"] = true,
-      },
-      ["effects"] = {
-        "owner.before_if_present",
-        "owner.cancel_unapplied",
-        "return.invalidate",
-        "owner.enter_root",
-      },
-      ["source"] = "lib/pages/channel_edit_page/channel_feature_editor.lua",
-      ["line"] = 145,
-      ["binding_rule"] = "Cross-owner link, not a route. HARMONY_LINK is never written to the merge screen variable and is absent from source_route_map.merge. The merge draft is discarded silently (reload), Harmony is entered fresh at H01 with an empty stack, and no return frame to M07 exists; K2 on H01 never returns to Merge.",
-      ["field_id"] = "harmony",
-      ["kind"] = "cross_owner_link",
-      ["target_owner"] = "harmony",
-      ["handler"] = {
-        ["source"] = "lib/pages/channel_edit_page/channel_feature_editor.lua",
-        ["line"] = 434,
-        ["code"] = "field.route==\"HARMONY_LINK\" then self:reload(); channel_edit_page_ui.select_harmony_page()",
-      },
-      ["enter"] = {
-        ["source"] = "lib/pages/channel_edit_page/channel_edit_navigation.lua",
-        ["lines"] = {
-          291,
-          296,
-        },
-        ["code"] = "if grid_key_is_held() then return false end; feature_editors.harmony:enter(); select Harmony page",
-      },
-      ["held"] = "unreachable from K3: channel_edit_navigation.lua:112-115 hands held K2/K3 to the legacy workspace before feature:key, so held.K3.down wins; owner.enter_root still refuses (no navigation) if a grid key is held",
     },
     {
       ["from"] = "M05",

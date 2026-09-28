@@ -21,15 +21,15 @@ def setup_foundation(c):
 
 def foundation_workflow(c):
     setup_foundation(c)
-    # Rhythm (M03) is a focused screen: it shows only the selected row, so
-    # select each applied setting to see its exact value.
+    # Rhythm (M03) is a vertical list; select each applied setting to see
+    # its exact value.
     c.ui.select_field("add_amount", offset=1)
-    c.ui.expect_selected_field("focused", "Add amount", "100", art=True)
+    c.ui.expect_selected_field("detail", "Add amount", "100")
     c.ui.select_field("add_accent", offset=2)
-    c.ui.expect_selected_field("focused", "Add accent", "70", art=True)
+    c.ui.expect_selected_field("detail", "Add accent", "70")
     # The footer carries status/transport tooltips that vary by lane. Bind the
     # stable editor body; MIDI below separately proves the active result.
-    documentation_frame(c, '7e00869b95cd393028d1a6371708b36c02b83f2e710aa5b64534d24f3fad9301',
+    documentation_frame(c, '49ddaad6ba1a77775be8ce7e8d32ff61670f25bacd664560166d019787970463',
                         'images/merge-shape-foundation.png', stable_rows=55)
     expected = [(1, [144, note, velocity]) for note, velocity in
                 ((60, 127), (62, 117), (64, 107), (65, 97), (60, 70), (60, 70))]
