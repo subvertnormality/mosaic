@@ -228,7 +228,7 @@ def next_trig_cutoff(c):
     notes=c.playback([(1,[144,n,v]) for n,v in [(60,127),(64,107),(67,100)]],timeout=6)
     assert_durations(c,notes,[2,1,1]*2)
 
-def assert_durations(c,notes,lengths,events=None):
+def assert_durations(c,notes,lengths,events=None,startup_tolerance_ms=None):
     assert lengths and len(notes)>=len(lengths),'Missing duration observations'
     state=c.snapshot();rows=[]
     events=state['midi'] if events is None else events
@@ -240,7 +240,10 @@ def assert_durations(c,notes,lengths,events=None):
     c.results.append(dict(kind='duration',rows=rows))
     # Two nanoseconds cover native integer deadline rounding; no wall jitter in D.
     tolerance_ms=.000002 if c.clock_mode=='controlled-experimental' else 10
-    assert all(abs(row['error_ms'])<=tolerance_ms for row in rows),rows
+    assert all(abs(row['error_ms']) <= (
+        startup_tolerance_ms if i == 0 and startup_tolerance_ms is not None
+        and c.clock_mode != 'controlled-experimental' else tolerance_ms)
+        for i,row in enumerate(rows)),rows
 
 def restore_length(c):
     # The source length must survive temporary interruption by an inserted trig.
