@@ -106,6 +106,21 @@ class CumulativePhase(unittest.TestCase):
                 assert_cumulative_phase(phases, self.PHASE_LIMIT, 'phase',
                                         stalls_allowed=stall_budget(len(phases)), ceiling=CEILING)
 
+    def test_short_shuffle_inheritance_run_allows_only_one_bounded_host_stall(self):
+        # PR #104 CI shard 10: one 26.975 ms timestamp in a 17-onset
+        # maximum-basis run; the other onsets were within 1 ms. The controlled
+        # lane and isolated real-time repeat passed. The shortest planned gap
+        # was 18 pulses, so one third is 41.67 ms.
+        phase = [0.0, .000312665, .026975326222222207] + [.00085] * 14
+        gap_ceiling = 18 / 432
+        assert_cumulative_phase(phase, TOLERANCE, 'inheritance',
+                                stalls_allowed=1, ceiling=gap_ceiling)
+        for bad in (phase + [.026975326222222207],
+                    [0.0, gap_ceiling + .001] + [.00085] * 15):
+            with self.assertRaises(AssertionError):
+                assert_cumulative_phase(bad, TOLERANCE, 'inheritance',
+                                        stalls_allowed=1, ceiling=gap_ceiling)
+
     def test_controlled_time_keeps_exact_existing_bound(self):
         limit = 1 / 144 + 2e-9
         assert_cumulative_phase([0.0, limit], limit, 'logical',
