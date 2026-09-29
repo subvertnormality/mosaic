@@ -79,22 +79,3 @@ def assert_stable(windows, tolerance, label, *, stalls_allowed, ceiling):
         'A window exceeded one inter-onset window, which is a dropped or misplaced '
         'onset rather than delivery jitter. ' + report)
     return stats
-
-
-def assert_cumulative_phase(phases, tolerance, label, *, stalls_allowed, ceiling):
-    """Keep the phase bound for sustained drift and cap isolated host stalls.
-
-    The controlled lane passes zero allowed outliers and the existing exact
-    maximum as its ceiling. Real-time delivery can produce a few isolated
-    late timestamps; a whole inter-onset window remains the hard ceiling.
-    """
-    stats = summarise(phases)
-    over = sum(abs(x) > tolerance for x in phases)
-    report = ('%s: count=%d p99=%.6f max=%.6f over=%d (allowed %d) '
-              'tolerance=%.6f ceiling=%.6f' %
-              (label, stats['count'], stats['p99'], stats['max'], over,
-               stalls_allowed, tolerance, ceiling))
-    assert stats['p99'] <= tolerance, 'Sustained cumulative phase drift. ' + report
-    assert over <= stalls_allowed, 'Too many cumulative phase outliers. ' + report
-    assert stats['max'] <= ceiling, 'Cumulative phase exceeded one inter-onset window. ' + report
-    return stats

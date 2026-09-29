@@ -7,7 +7,7 @@ behaviour run.
 """
 import unittest
 
-from swing_window_oracle import assert_cumulative_phase, assert_stable, stall_budget
+from swing_window_oracle import assert_stable, stall_budget
 
 
 TOLERANCE = .01          # the real-time bound, unchanged
@@ -81,53 +81,6 @@ class ControlledLane(unittest.TestCase):
         with self.assertRaises(AssertionError):
             assert_stable([0.0] * 4708 + [3e-9], 2e-9, 'logical',
                           stalls_allowed=0, ceiling=2e-9)
-
-
-class CumulativePhase(unittest.TestCase):
-    PHASE_LIMIT = 1 / 144 + TOLERANCE
-
-    def test_one_bounded_host_stall_does_not_move_cumulative_phase(self):
-        # CI PR #104, shard 15: 18.516 ms on the first real-time run;
-        # the controlled-time lane and the isolated real-time rerun passed.
-        phases = [0.0] * 4709 + [.01851611433333744]
-        assert_cumulative_phase(phases, self.PHASE_LIMIT, 'phase',
-                                stalls_allowed=stall_budget(len(phases)), ceiling=CEILING)
-
-    def test_sustained_phase_shift_still_fails(self):
-        phases = [0.0] + [.01851611433333744] * 4709
-        with self.assertRaises(AssertionError):
-            assert_cumulative_phase(phases, self.PHASE_LIMIT, 'phase',
-                                    stalls_allowed=stall_budget(len(phases)), ceiling=CEILING)
-
-    def test_outlier_budget_and_hard_ceiling(self):
-        for phases in ([0.0] * 4705 + [.01851611433333744] * 5,
-                       [0.0] * 4709 + [CEILING + .001]):
-            with self.assertRaises(AssertionError):
-                assert_cumulative_phase(phases, self.PHASE_LIMIT, 'phase',
-                                        stalls_allowed=stall_budget(len(phases)), ceiling=CEILING)
-
-    def test_short_shuffle_inheritance_run_allows_only_one_bounded_host_stall(self):
-        # PR #104 CI shard 10: one 26.975 ms timestamp in a 17-onset
-        # maximum-basis run; the other onsets were within 1 ms. The controlled
-        # lane and isolated real-time repeat passed. The shortest planned gap
-        # was 18 pulses, so one third is 41.67 ms.
-        phase = [0.0, .000312665, .026975326222222207] + [.00085] * 14
-        gap_ceiling = 18 / 432
-        assert_cumulative_phase(phase, TOLERANCE, 'inheritance',
-                                stalls_allowed=1, ceiling=gap_ceiling)
-        for bad in (phase + [.026975326222222207],
-                    [0.0, gap_ceiling + .001] + [.00085] * 15):
-            with self.assertRaises(AssertionError):
-                assert_cumulative_phase(bad, TOLERANCE, 'inheritance',
-                                        stalls_allowed=1, ceiling=gap_ceiling)
-
-    def test_controlled_time_keeps_exact_existing_bound(self):
-        limit = 1 / 144 + 2e-9
-        assert_cumulative_phase([0.0, limit], limit, 'logical',
-                                stalls_allowed=0, ceiling=limit)
-        with self.assertRaises(AssertionError):
-            assert_cumulative_phase([0.0, limit + 1e-9], limit, 'logical',
-                                    stalls_allowed=0, ceiling=limit)
 
 
 if __name__ == '__main__':

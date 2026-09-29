@@ -1311,13 +1311,8 @@ def inactive_shuffle_transition(c,basis=False):
         stalls_allowed=0 if controlled else stall_budget(len(windows)),
         ceiling=tolerance if controlled else 3/144)
     phase=[(note[field]-notes[0][field])/1e9-i/96 for i,note in enumerate(notes)]
-    from swing_window_oracle import assert_cumulative_phase
-    phase_limit=1/144+tolerance
-    phase_stats=assert_cumulative_phase(
-        phase,phase_limit,'Cumulative phase',
-        stalls_allowed=0 if controlled else stall_budget(len(phase)),
-        ceiling=phase_limit if controlled else 3/144)
-    c.results.append(dict(kind='inactive-shuffle-transitions',onsets=len(notes),release_pairs=len(pairs),windows=len(windows),max_window_error_seconds=stats['max'],p99_window_error_seconds=stats['p99'],median_window_error_seconds=stats['median'],max_phase_error_seconds=phase_stats['max'],p99_phase_error_seconds=phase_stats['p99'],passed=True))
+    assert max(abs(x) for x in phase)<=1/144+tolerance,('Cumulative phase',max(abs(x) for x in phase))
+    c.results.append(dict(kind='inactive-shuffle-transitions',onsets=len(notes),release_pairs=len(pairs),windows=len(windows),max_window_error_seconds=stats['max'],p99_window_error_seconds=stats['p99'],median_window_error_seconds=stats['median'],passed=True))
 
 
 def length_mask_display(c,label):

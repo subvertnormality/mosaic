@@ -4,7 +4,6 @@
 def shuffle_field_inheritance(c, field):
     from shuffle_matrix import pulse_plan
     from note_accounting import note_pairs
-    from swing_window_oracle import assert_cumulative_phase
 
     assert field in ('feel', 'basis', 'amount')
     ui = c.ui
@@ -54,14 +53,8 @@ def shuffle_field_inheritance(c, field):
         tolerance = 2e-9 if c.clock_mode == 'controlled-experimental' else .01
         pulses = pulse_plan(feel, basis, amount, len(notes))
         errors = [(n[clock_field] - notes[0][clock_field]) / 1e9 - pulse / 144 for n, pulse in zip(notes, pulses)]
-        # Allow one isolated host delay while preserving the musical pulse plan.
-        # A third of the shortest inter-onset gap is the hard real-time ceiling.
-        ceiling = min(b - a for a, b in zip(pulses, pulses[1:])) / 432
-        phase_stats = assert_cumulative_phase(
-            errors, tolerance, "%s %s %s" % (field, label, pulses),
-            stalls_allowed=0 if c.clock_mode == "controlled-experimental" else 1,
-            ceiling=tolerance if c.clock_mode == "controlled-experimental" else ceiling)
+        assert max(map(abs, errors)) <= tolerance, dict(field=field, stage=label, expected=pulses, errors=errors)
         for n, nxt in zip(notes, notes[1:]):
             off = next(e for e in events if e['index'] > n['index'] and e['bytes'] == [128, n['bytes'][1], n['bytes'][2]])
             assert abs(off[clock_field] - nxt[clock_field]) / 1e9 <= tolerance
-        c.results.append(dict(kind='shuffle-field-inheritance', field=field, stage=label, local_value=value, effective_feel=feel, effective_basis=basis, effective_amount=amount, onsets=len(notes), release_pairs=len(pairs), max_phase_error_seconds=phase_stats['max'], passed=True))
+        c.results.append(dict(kind='shuffle-field-inheritance', field=field, stage=label, local_value=value, effective_feel=feel, effective_basis=basis, effective_amount=amount, onsets=len(notes), release_pairs=len(pairs), max_phase_error_seconds=max(map(abs, errors)), passed=True))
