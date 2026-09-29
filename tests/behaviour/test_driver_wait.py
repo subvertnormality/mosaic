@@ -62,3 +62,25 @@ class DriverWaitTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class DriverSnapshotRetentionTests(unittest.TestCase):
+    def test_recorded_snapshots_leave_the_cyclic_collector(self):
+        # Every observation keeps the whole MIDI capture for the evidence
+        # record, so a long real-time case holds millions of Python objects.
+        # A full collection over them paused the harness for 1.1 s between a
+        # step's press and release in CI (M-PAT-003, length 57), turning a
+        # tap into a long press. Recorded snapshots are retained for the run
+        # anyway, so they are frozen out of later collections.
+        import gc
+        d = object.__new__(driver.Driver)
+        d.observations = []
+        state = {"midi": [{"index": i, "bytes": [144, 60, 127]} for i in range(1000)]}
+        d.runtime = type("Runtime", (), {"observe": lambda self: {"state": state}})()
+        gc.unfreeze()
+        try:
+            self.assertIs(d.snapshot(), state)
+            self.assertGreater(gc.get_freeze_count(), 1000)
+            self.assertEqual(d.observations, [{"state": state}])
+        finally:
+            gc.unfreeze()

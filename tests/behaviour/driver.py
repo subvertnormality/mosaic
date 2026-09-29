@@ -1,5 +1,5 @@
 """User-input driver using only the emulator's public external-suite client."""
-import hashlib,json,os,sys,time,uuid,subprocess,shutil
+import gc,hashlib,json,os,sys,time,uuid,subprocess,shutil
 from pathlib import Path
 REPO=Path(__file__).resolve().parents[2]
 EMULATOR_ROOT=Path(os.environ['MONOME_EMULATOR']).resolve() if os.environ.get('MONOME_EMULATOR') else None
@@ -104,7 +104,13 @@ class Driver:
             ns=round(seconds*1e9)
             self.action(type="advance",nanoseconds=ns);self.logical_ns+=ns
     def snapshot(self):
-        value=self.runtime.observe();self.observations.append(value);return value['state']
+        value=self.runtime.observe();self.observations.append(value)
+        # Observations keep every MIDI event for the evidence record and live
+        # for the whole run. Freezing them keeps Python's full collections
+        # small: over millions of retained objects one paused the harness for
+        # 1.1 s between a press and its release (see test_driver_wait).
+        gc.freeze()
+        return value['state']
     def wait(self,predicate,timeout=3):
         # Controlled observe/advance round trips can take 10x logical time on a
         # loaded CI host. Keep the musical deadline in logical time; this wall
