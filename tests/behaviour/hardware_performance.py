@@ -12,6 +12,9 @@ CASES={
     # The gated 16-channel cases play at 130 bpm, a representative working tempo
     # (user, 2026-09-17); the smaller ones calibrate the emulator lane at 90.
     'PERF-002-HW-16':{'workload':'dense','channels':16,'seconds':8,'tempo_bpm':130},
+    # Two minutes of the same workload: long enough for several Lua garbage
+    # collection cycles, which the 8 s windows never contained (lib/gc_pacer.lua).
+    'PERF-GC-HW-16':{'workload':'dense','channels':16,'seconds':120,'tempo_bpm':130},
     'PERF-003-HW-1':{'workload':'slides','channels':1,'seconds':8},
     'PERF-003-HW-8':{'workload':'slides','channels':8,'seconds':8},
     'PERF-003-HW-16':{'workload':'slides','channels':16,'seconds':8,'tempo_bpm':130},

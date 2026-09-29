@@ -20,6 +20,10 @@ sinfonion = include("mosaic/lib/sinfonion_harmonic_sync")
 m_midi = include("mosaic/lib/m_midi")
 memory = include("mosaic/lib/memory")
 recorder = include("mosaic/lib/recorder")
+local gc_pacer = include("mosaic/lib/gc_pacer")
+-- Collection runs from a timer in bounded slices, not inside clock resumes
+-- (see lib/gc_pacer.lua); nil until init starts it.
+local collector = nil
 
 -- Debug
 -- profiler = include("mosaic/lib/helpers/profiler")
@@ -210,6 +214,8 @@ local function blink()
 end
 
 function init()
+  collector = gc_pacer.new()
+  collector:start()
 
   ui_splash_screen_active = true
   math.randomseed(os.time())
@@ -411,6 +417,8 @@ end
 
 -- Restore script-owned vport hooks before norns loads another script.
 function cleanup()
+  -- First, so a failure below cannot leave the next script without collection.
+  if collector then collector:stop(); collector = nil end
   if rhythm_doctor_runtime then rhythm_doctor_runtime:cleanup() end
   m_midi.cleanup()
 end

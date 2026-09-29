@@ -232,10 +232,18 @@ class Tests(unittest.TestCase):
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.time.sleep'):
             with self.assertRaisesRegex(AssertionError,'PERF-002-HW-16 runs at 130 bpm but the norns clock is at 60'):
                 run_hardware_performance(runner,'PERF-002-HW-16',2,'map',runner.out,FakeTrace(),FakeSampler())
+    def test_gc_case_spans_several_collection_cycles(self):
+        # The 8 s windows never contained a collection cycle; on the norns the
+        # dense 16-channel pattern completes one about every 20 s, so the case
+        # measures the same workload for two minutes.
+        self.assertEqual(CASES['PERF-GC-HW-16'],{'workload':'dense','channels':16,'seconds':120,'tempo_bpm':130})
+        self.assertGreaterEqual(CASES['PERF-GC-HW-16']['seconds'],60)
     def test_three_calibration_cases_and_trace_start_boundary(self):
         self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16','PERF-010-HW-16',
                                      # Plan section 1.4 Interlock device acceptance (test_merge_workloads.py).
-                                     'PERF-MERGE-HW-STEADY','PERF-MERGE-HW-WORST','PERF-MERGE-HW-EDIT','PERF-MERGE-HW-DENSE','PERF-MERGE-HW-DENSE-EDIT'})
+                                     'PERF-MERGE-HW-STEADY','PERF-MERGE-HW-WORST','PERF-MERGE-HW-EDIT','PERF-MERGE-HW-DENSE','PERF-MERGE-HW-DENSE-EDIT',
+                                     # Long enough for several garbage collection cycles.
+                                     'PERF-GC-HW-16'})
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':FakeMaiden(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)
