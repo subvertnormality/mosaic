@@ -8053,7 +8053,7 @@
     "M-UIACC-A01-001"
    ],
    "status": "partial-domain-coverage",
-   "domain": "Covered: E1 (one detent either way, and one large single event) from C01 and C02 opens N01 on Masks / Trig params; in N01 large single E1 events move one row each, E1 clamps at Masks (one detent and a large event) and at Merge Shape, the last row since Norns settings was removed (large event and one detent), K3 opens the row; Trig params keeps slot 3 and Masks keeps Velocity when reopened through the list; held step 5 E1 switches C02 <-> C01 clamped; no MIDI during navigation, all 128 grid LEDs and all eight mask values unchanged, and the configure() phrase replays exactly before and after. Not covered: RNG state (the phrase has no random source), other contexts' task lists (M-LIVEUI-DASH-001 covers Scale tasks)."
+   "domain": "Covered: E1 (one detent either way, and one large single event) from C01 and C02 opens N01 on Masks / Trig params; in N01 large single E1 events move one row each, E1 clamps at Masks (one detent and a large event) and at History, the last row (large event and one detent), K3 opens the row; Trig params keeps slot 3 and Masks keeps Velocity when reopened through the list; held step 5 E1 switches C02 <-> C01 clamped; no MIDI during navigation, all 128 grid LEDs and all eight mask values unchanged, and the configure() phrase replays exactly before and after. Not covered: RNG state (the phrase has no random source), other contexts' task lists (M-LIVEUI-DASH-001 covers Scale tasks)."
   },
   {
    "id": "UI-ACCEPT-A02",

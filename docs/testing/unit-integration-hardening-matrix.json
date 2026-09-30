@@ -30,11 +30,11 @@
  "manual": "README.md",
  "manual_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "cb658c89d516283a40b618d8272d2e8142ae75066a65f8cc68bcf45f28ae4a07",
+ "inventory_sha256": "28dcf55ddbc327d74d0303557ccd3a31cfdffba085991f825d98166fbc48c3d7",
  "counts": {
   "requirements": 177,
-  "production_lua_modules": 170,
-  "unit_integration_files": 138,
+  "production_lua_modules": 171,
+  "unit_integration_files": 140,
   "domains": 17
  },
  "coverage_language": {
@@ -1810,6 +1810,7 @@
     "PANIC-GESTURE"
    ],
    "production_modules": [
+    "lib/gc_pacer.lua",
     "lib/clock/m_clock.lua",
     "lib/clock/midi_output_transport.lua",
     "lib/clock/transport_lifecycle.lua",
@@ -1820,6 +1821,8 @@
     "lib/clock/midi_delay_line.lua"
    ],
    "existing_unit_integration_files": [
+    "lib/tests/lib/gc_pacer_tests.lua",
+    "lib/tests/lib/mosaic_gc_pacer_wiring_tests.lua",
     "lib/tests/lib/integration_tests/clock_tests.lua",
     "lib/tests/lib/m_clock_delta_killers_tests.lua",
     "lib/tests/lib/m_clock_mutation_killers_tests.lua",

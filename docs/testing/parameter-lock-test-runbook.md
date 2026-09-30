@@ -80,6 +80,13 @@ Case ids: `PERF-009-HW-16` locks, `PERF-002-HW-16` dense, `PERF-003-HW-16` slide
 `PERF-010-HW-16` extreme. Results land in `<dir>/**/performance.json` under
 `oracle.gates`, `oracle.step_jitter`, `oracle.timing`, `resources`.
 
+The 8 s windows are too short to contain a Lua garbage collection cycle (one
+about every 20 s with a dense 16-channel pattern). `PERF-GC-HW-16` plays the dense
+workload for 120 s; run it after any change to allocation or collection, with
+`--lua-timing-trace` to record slow clock resumes and the Lua heap size. On
+29 September 2026, before `lib/gc_pacer.lua`, it measured a worst note 164 ms late
+(p99 72 ms); with the pacer, 9.3 ms and 9.9 ms (p99 5.9 ms and 7.6 ms).
+
 **A run exiting 0 does not mean the gates passed.** Exit 0 means the run completed.
 Always read `oracle.gates`. (This was misreported once in this project.)
 

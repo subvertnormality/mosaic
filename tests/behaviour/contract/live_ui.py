@@ -63,8 +63,10 @@ def live_ui_tasks(c):
     c.enc(1, 1); ui.expect_header("channel_tasks", channel=1); ui.expect_task_row("Masks")
     c.results.append(dict(kind="e1-opens-tasks", source="masks", passed=True))
     # Both encoders scroll the list, one row per detent, clamped at the ends.
-    for encoder, delta, row in ((1, 1, "Trig params"), (1, 1, "Output"), (2, 1, "Harmony"),
-                                (2, -1, "Output"), (1, -1, "Trig params")):
+    for encoder, delta, row in ((1, 1, "Trig params"), (1, 1, "Output"), (2, 1, "Clock"),
+                                (2, 1, "Merge modes"), (2, 1, "Merge Shape"), (2, 1, "Harmony"),
+                                (2, -1, "Merge Shape"), (2, -1, "Merge modes"),
+                                (2, -1, "Clock"), (2, -1, "Output"), (1, -1, "Trig params")):
         c.enc(encoder, delta); ui.expect_header("channel_tasks", channel=1); ui.expect_task_row(row)
         c.results.append(dict(kind="task-scroll", encoder=encoder, delta=delta, row=row, passed=True))
     c.enc(1, -3); ui.expect_task_row("Masks")

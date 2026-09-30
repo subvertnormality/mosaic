@@ -205,8 +205,8 @@ def _no_notes_while_playing(c, seconds, stage):
 # A01: E1 opens Channel tasks on the row it came from; rows move one per event, clamped; each
 # family keeps its remembered field; held steps still switch families; no music changes.
 
-CHANNEL_TASK_LABELS = ('Masks', 'Trig params', 'Output', 'Harmony', 'Clock', 'Merge modes', 'Device', 'History',
-                       'Merge Shape')
+CHANNEL_TASK_LABELS = ('Masks', 'Trig params', 'Output', 'Clock', 'Merge modes', 'Merge Shape',
+                       'Harmony', 'Device', 'History')
 
 
 def _e1_event(c, delta):
@@ -273,16 +273,16 @@ def ui_accept_a01(c):
     c.key(3)
     ui.expect_header('masks', channel=1)
     _expect_masks(c, x8, 3, 'Velocity', 'X', 'c01-field-kept')
-    # Last row: eight large events reach Merge Shape one row at a time; the next clamps.
+    # Last row: eight large events reach History one row at a time; the next clamps.
     _e1_event(c, 20)
     _task_row(c, 'Masks', 'c01-large-e1-opens-tasks-only')
     for label in CHANNEL_TASK_LABELS[1:]:
         _e1_event(c, 20)
         _task_row(c, label, 'large-positive-to-' + label)
     _e1_event(c, 20)
-    _task_row(c, 'Merge Shape', 'last-row-large-positive-clamped')
+    _task_row(c, 'History', 'last-row-large-positive-clamped')
     c.enc(1, 1)
-    _task_row(c, 'Merge Shape', 'last-row-e1-positive-clamped')
+    _task_row(c, 'History', 'last-row-e1-positive-clamped')
     # Back up with E1 one detent at a time to Trig params; it opens with slot 3 kept.
     for label in reversed(CHANNEL_TASK_LABELS[1:-1]):
         c.enc(1, -1)
