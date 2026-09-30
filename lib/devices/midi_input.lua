@@ -223,7 +223,12 @@ function midi_input.new(m_midi, step, quantiser, divisions)
           end
           page_change_clock = clock.run(function()
             clock.sleep(2)
-            if previous_page then
+            if ui_live and ui_live.installed() then
+              -- The live screen owns the page: it returns from its own visit.
+              ui_live.end_brief_masks()
+              previous_page = nil
+              page_change_clock = nil
+            elseif previous_page then
               channel_edit_page_ui.select_page(previous_page)
               previous_page = nil
               page_change_clock = nil

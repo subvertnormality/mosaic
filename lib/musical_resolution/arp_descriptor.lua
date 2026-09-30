@@ -6,13 +6,15 @@ function arp_descriptor.new(order_index)
     local sequenced_chord_notes = {}
     local has_mask = false
     for i = 1, 4 do
-      local chord_note = chord_notes[order_index(i, 4, chord_strum_pattern)]
+      local source_index = order_index(i, 4, chord_strum_pattern)
+      local chord_note = chord_notes[source_index]
       if chord_note and chord_note ~= 0 then
         has_mask = true
         sequenced_chord_notes[i] = {
           note_value = note_value + chord_note + random_shift,
           octave_mod = octave_mod,
-          transpose = transpose
+          transpose = transpose,
+          source_id = "chord" .. source_index
         }
       else
         sequenced_chord_notes[i] = false
@@ -22,7 +24,8 @@ function arp_descriptor.new(order_index)
     local root = not mute_root and {
       note_value = note_value + random_shift,
       octave_mod = octave_mod,
-      transpose = transpose
+      transpose = transpose,
+      source_id = "root"
     } or false
 
     if not has_mask then

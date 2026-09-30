@@ -1,0 +1,372 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "CC 1"
+  },
+  {
+    "kind": "selected-menu-value",
+    "text": "63"
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "recording-lock-across-song-transition",
+    "live": [
+      [
+        "cc",
+        63
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        96
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        96
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ]
+    ],
+    "replay": [
+      [
+        "cc",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        96
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        64
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        62
+      ],
+      [
+        "cc",
+        96
+      ],
+      [
+        "note",
+        64
+      ],
+      [
+        "cc",
+        65
+      ],
+      [
+        "note",
+        65
+      ],
+      [
+        "cc",
+        24
+      ],
+      [
+        "note",
+        60
+      ]
+    ],
+    "slot1_locks": [
+      24,
+      64,
+      64,
+      64
+    ],
+    "slot2_locks": [
+      24,
+      null,
+      96,
+      null
+    ],
+    "passed": true
+  }
+]

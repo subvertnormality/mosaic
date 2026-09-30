@@ -4,6 +4,13 @@ from pathlib import Path
 from driver import Driver,REPO,EMULATOR_ROOT,write,digest
 from cases import CASES
 
+
+def behaviour_source_hashes(repo):
+    return {
+        path.relative_to(repo).as_posix(): digest(path)
+        for path in sorted((Path(repo) / 'tests/behaviour').rglob('*.py'))
+    }
+
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('--list',action='store_true')
     parser.add_argument('--case',action='append');parser.add_argument('--require-all',action='store_true')
@@ -62,7 +69,7 @@ def main():
             wall_elapsed_seconds=time.monotonic()-started,
             logical_advanced_seconds=(sum(a['nanoseconds'] for p in out.rglob('recipe.json') if not {'code','data'} & set(p.relative_to(out).parts) for a in json.loads(p.read_text()) if a['type']=='advance')/1e9 if args.clock_mode!='real-time' else None),
             manual_sha256=inventory['manual_sha256'],
-            behaviour_source_sha256={p.relative_to(REPO).as_posix():digest(p) for p in sorted((REPO/'tests/behaviour').glob('*.py'))},
+            behaviour_source_sha256=behaviour_source_hashes(REPO),
             platform=platform.platform(),failure=failure,
             artifacts=[dict(path=p.relative_to(out).as_posix(),sha256=digest(p),size=p.stat().st_size) for p in sorted(out.rglob('*')) if p.is_file() and 'code' not in p.relative_to(out).parts and 'data' not in p.relative_to(out).parts])
         write(out/'manifest.json',result);print(json.dumps(dict(case=name,passed=result['passed'],manifest=str(out/'manifest.json'))),flush=True)

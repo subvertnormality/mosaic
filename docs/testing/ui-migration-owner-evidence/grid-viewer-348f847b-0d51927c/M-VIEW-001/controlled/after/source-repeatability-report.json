@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "348f847b12b4b207575fcc93b3fbd98663ede6d4",
+  "after_sha": "0d51927c54d53ea1b5efd3d745983e6ce2af1f89",
+  "tooling_sha": "53fe286efbf5210d5257ef3172f763e3bb6f5737",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-VIEW-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/grid_viewer.py": "M-VIEW-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/grid_viewer.py",
+      "case": "M-VIEW-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-d65a4424e8a940ec8dab8112edc8535a/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-d65a4424e8a940ec8dab8112edc8535a/manifest.json",
+      "manifest_sha256": "c18ad9ddc00b5e17f01f54c13c4e7ac18f4bb3b055e07996139de22358726ac5",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

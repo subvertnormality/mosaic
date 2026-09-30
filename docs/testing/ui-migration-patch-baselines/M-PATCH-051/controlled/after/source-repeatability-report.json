@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "selected_cases": [
+    "M-PATCH-051",
+    "M-PATCH-059"
+  ],
+  "selected_modules": {
+    "tests/behaviour/patch_params.py": "M-PATCH-051"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/patch_params.py",
+      "case": "M-PATCH-051",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-1c64644677c649faa12acca49e2b09e5/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-1c64644677c649faa12acca49e2b09e5/manifest.json",
+      "manifest_sha256": "b7ca20f9f0e7f23d4809e56a54e422117992b73b064b515a84f226d06bf477c4",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

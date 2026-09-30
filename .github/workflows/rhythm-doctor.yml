@@ -1,0 +1,40 @@
+name: Rhythm Doctor components
+on:
+  pull_request:
+    # Stacked release branches are gated too: a pull request into a release
+    # branch is reviewed on the same evidence as one into main, and without
+    # this a stacked PR shows no checks at all rather than showing red.
+    branches: [main, codex/behaviour-validation, codex/1.4.0, codex/rhythm-doctor-phrase]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  components:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      RD_TEMPO_SYSTEM_AUBIO: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install component test dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends gcc lua5.3 luajit jackd2 libjack-jackd2-dev libaubio-dev pkg-config
+          python3 -m pip install -r tools/rhythm_doctor_analysis/requirements.txt
+      - name: Run existing full Lua regression suite
+        run: bash test.sh
+      - name: Record dependency versions
+        run: |
+          mkdir -p /tmp/rd-dependencies
+          python3 -m pip freeze > /tmp/rd-dependencies/python.txt
+          dpkg-query -W > /tmp/rd-dependencies/debian.txt
+      - name: Run component contracts and native PCM tests
+        run: python3 tests/rhythm_doctor/run_components.py --native --detector --output /tmp/rd-component-report
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rhythm-doctor-components
+          path: |
+            /tmp/rd-component-report
+            /tmp/rd-dependencies

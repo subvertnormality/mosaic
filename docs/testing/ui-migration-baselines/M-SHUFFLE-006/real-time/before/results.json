@@ -1,0 +1,476 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "live-shuffle-inheritance",
+    "override": false,
+    "boundary_pulse": 1536,
+    "onsets": 85,
+    "release_pairs": 85,
+    "checks": [
+      {
+        "index": 0,
+        "expected_pulse": 0,
+        "error_seconds": 0.0
+      },
+      {
+        "index": 1,
+        "expected_pulse": 24,
+        "error_seconds": 0.0005054413333333563
+      },
+      {
+        "index": 2,
+        "expected_pulse": 48,
+        "error_seconds": 0.0008859116666666833
+      },
+      {
+        "index": 3,
+        "expected_pulse": 72,
+        "error_seconds": -3.440199999998894e-05
+      },
+      {
+        "index": 4,
+        "expected_pulse": 96,
+        "error_seconds": 0.0005218393333333848
+      },
+      {
+        "index": 5,
+        "expected_pulse": 120,
+        "error_seconds": 0.0009039806666666372
+      },
+      {
+        "index": 6,
+        "expected_pulse": 144,
+        "error_seconds": 0.0011532670000000689
+      },
+      {
+        "index": 7,
+        "expected_pulse": 168,
+        "error_seconds": 5.663033333336287e-05
+      },
+      {
+        "index": 8,
+        "expected_pulse": 192,
+        "error_seconds": 0.0009738516666666364
+      },
+      {
+        "index": 9,
+        "expected_pulse": 216,
+        "error_seconds": 0.0005630279999999654
+      },
+      {
+        "index": 10,
+        "expected_pulse": 240,
+        "error_seconds": 0.0010474683333332457
+      },
+      {
+        "index": 11,
+        "expected_pulse": 264,
+        "error_seconds": 0.0007796356666667226
+      },
+      {
+        "index": 12,
+        "expected_pulse": 288,
+        "error_seconds": 0.0007676069999997814
+      },
+      {
+        "index": 13,
+        "expected_pulse": 312,
+        "error_seconds": 0.0005368593333336946
+      },
+      {
+        "index": 14,
+        "expected_pulse": 336,
+        "error_seconds": 0.00023602666666633354
+      },
+      {
+        "index": 15,
+        "expected_pulse": 360,
+        "error_seconds": 0.00046643300000015486
+      },
+      {
+        "index": 16,
+        "expected_pulse": 384,
+        "error_seconds": 0.0011752283333335
+      },
+      {
+        "index": 17,
+        "expected_pulse": 408,
+        "error_seconds": 8.5393666666711e-05
+      },
+      {
+        "index": 18,
+        "expected_pulse": 432,
+        "error_seconds": 0.0003054709999998906
+      },
+      {
+        "index": 19,
+        "expected_pulse": 456,
+        "error_seconds": 0.0006402683333335268
+      },
+      {
+        "index": 20,
+        "expected_pulse": 480,
+        "error_seconds": 0.0005285096666667322
+      },
+      {
+        "index": 21,
+        "expected_pulse": 504,
+        "error_seconds": 0.0007362880000001404
+      },
+      {
+        "index": 22,
+        "expected_pulse": 528,
+        "error_seconds": 0.0010179353333334973
+      },
+      {
+        "index": 23,
+        "expected_pulse": 552,
+        "error_seconds": 0.0010279386666667278
+      },
+      {
+        "index": 24,
+        "expected_pulse": 576,
+        "error_seconds": 0.000371709999999581
+      },
+      {
+        "index": 25,
+        "expected_pulse": 600,
+        "error_seconds": 0.00016232933333260036
+      },
+      {
+        "index": 26,
+        "expected_pulse": 624,
+        "error_seconds": 0.00014619166666740568
+      },
+      {
+        "index": 27,
+        "expected_pulse": 648,
+        "error_seconds": 0.0004170700000001304
+      },
+      {
+        "index": 28,
+        "expected_pulse": 672,
+        "error_seconds": 0.0010831153333326071
+      },
+      {
+        "index": 29,
+        "expected_pulse": 696,
+        "error_seconds": 0.00019952066666739654
+      },
+      {
+        "index": 30,
+        "expected_pulse": 720,
+        "error_seconds": 0.00027326499999968945
+      },
+      {
+        "index": 31,
+        "expected_pulse": 744,
+        "error_seconds": 5.304533333294614e-05
+      },
+      {
+        "index": 32,
+        "expected_pulse": 768,
+        "error_seconds": 0.00018875166666720844
+      },
+      {
+        "index": 33,
+        "expected_pulse": 792,
+        "error_seconds": 0.0002764969999997646
+      },
+      {
+        "index": 34,
+        "expected_pulse": 816,
+        "error_seconds": 0.0005306433333327476
+      },
+      {
+        "index": 35,
+        "expected_pulse": 840,
+        "error_seconds": -6.294033333276161e-05
+      },
+      {
+        "index": 36,
+        "expected_pulse": 864,
+        "error_seconds": 0.0009847709999997178
+      },
+      {
+        "index": 37,
+        "expected_pulse": 888,
+        "error_seconds": 0.0009218843333327342
+      },
+      {
+        "index": 38,
+        "expected_pulse": 912,
+        "error_seconds": 0.00043378066666655
+      },
+      {
+        "index": 39,
+        "expected_pulse": 936,
+        "error_seconds": 0.0005136260000000448
+      },
+      {
+        "index": 40,
+        "expected_pulse": 960,
+        "error_seconds": 0.001046019333332815
+      },
+      {
+        "index": 41,
+        "expected_pulse": 984,
+        "error_seconds": 0.00036448266666688767
+      },
+      {
+        "index": 42,
+        "expected_pulse": 1008,
+        "error_seconds": 0.0009958269999996716
+      },
+      {
+        "index": 43,
+        "expected_pulse": 1032,
+        "error_seconds": 2.0394333333229042e-05
+      },
+      {
+        "index": 44,
+        "expected_pulse": 1056,
+        "error_seconds": 0.00028056366666717736
+      },
+      {
+        "index": 45,
+        "expected_pulse": 1080,
+        "error_seconds": 0.0005065699999997619
+      },
+      {
+        "index": 46,
+        "expected_pulse": 1104,
+        "error_seconds": 0.0010981043333329055
+      },
+      {
+        "index": 47,
+        "expected_pulse": 1128,
+        "error_seconds": 4.230666666771299e-06
+      },
+      {
+        "index": 48,
+        "expected_pulse": 1152,
+        "error_seconds": 0.0002822800000004122
+      },
+      {
+        "index": 49,
+        "expected_pulse": 1176,
+        "error_seconds": 0.0002147723333347784
+      },
+      {
+        "index": 50,
+        "expected_pulse": 1200,
+        "error_seconds": 0.00018155466666591735
+      },
+      {
+        "index": 51,
+        "expected_pulse": 1224,
+        "error_seconds": 9.075000000002831e-05
+      },
+      {
+        "index": 52,
+        "expected_pulse": 1248,
+        "error_seconds": 0.00022913533333479563
+      },
+      {
+        "index": 53,
+        "expected_pulse": 1272,
+        "error_seconds": 0.00044709366666673134
+      },
+      {
+        "index": 54,
+        "expected_pulse": 1296,
+        "error_seconds": 0.0010334969999998833
+      },
+      {
+        "index": 55,
+        "expected_pulse": 1320,
+        "error_seconds": 0.0006774953333330558
+      },
+      {
+        "index": 56,
+        "expected_pulse": 1344,
+        "error_seconds": 0.0009007826666653784
+      },
+      {
+        "index": 57,
+        "expected_pulse": 1368,
+        "error_seconds": 0.0006170720000007179
+      },
+      {
+        "index": 58,
+        "expected_pulse": 1392,
+        "error_seconds": 0.0008862413333332597
+      },
+      {
+        "index": 59,
+        "expected_pulse": 1416,
+        "error_seconds": 0.000750782666665728
+      },
+      {
+        "index": 60,
+        "expected_pulse": 1440,
+        "error_seconds": 0.0007421179999997918
+      },
+      {
+        "index": 61,
+        "expected_pulse": 1464,
+        "error_seconds": 0.0005526973333331853
+      },
+      {
+        "index": 62,
+        "expected_pulse": 1488,
+        "error_seconds": 0.00016762566666628231
+      },
+      {
+        "index": 63,
+        "expected_pulse": 1512,
+        "error_seconds": 0.00045920600000037837
+      },
+      {
+        "index": 64,
+        "expected_pulse": 1536,
+        "error_seconds": 0.0005681703333344501
+      },
+      {
+        "index": 65,
+        "expected_pulse": 1552,
+        "error_seconds": 0.0004325322222218375
+      },
+      {
+        "index": 66,
+        "expected_pulse": 1568,
+        "error_seconds": 0.0006145691111107965
+      },
+      {
+        "index": 67,
+        "expected_pulse": 1584,
+        "error_seconds": 0.0010034470000004347
+      },
+      {
+        "index": 68,
+        "expected_pulse": 1632,
+        "error_seconds": 0.0001712016666655103
+      },
+      {
+        "index": 69,
+        "expected_pulse": 1648,
+        "error_seconds": 0.0003866775555554369
+      },
+      {
+        "index": 70,
+        "expected_pulse": 1664,
+        "error_seconds": 0.00043066144444381393
+      },
+      {
+        "index": 71,
+        "expected_pulse": 1680,
+        "error_seconds": 0.0005386053333342744
+      },
+      {
+        "index": 72,
+        "expected_pulse": 1728,
+        "error_seconds": 0.0008962029999999288
+      },
+      {
+        "index": 73,
+        "expected_pulse": 1744,
+        "error_seconds": 0.000917982888889668
+      },
+      {
+        "index": 74,
+        "expected_pulse": 1760,
+        "error_seconds": 0.0009868477777779106
+      },
+      {
+        "index": 75,
+        "expected_pulse": 1776,
+        "error_seconds": 0.0010958736666655255
+      },
+      {
+        "index": 76,
+        "expected_pulse": 1824,
+        "error_seconds": 0.0009209393333335925
+      },
+      {
+        "index": 77,
+        "expected_pulse": 1840,
+        "error_seconds": 0.00019711722222126582
+      },
+      {
+        "index": 78,
+        "expected_pulse": 1856,
+        "error_seconds": 0.0005632781111106766
+      },
+      {
+        "index": 79,
+        "expected_pulse": 1872,
+        "error_seconds": 0.001003298000000541
+      },
+      {
+        "index": 80,
+        "expected_pulse": 1920,
+        "error_seconds": 0.0005424686666657408
+      },
+      {
+        "index": 81,
+        "expected_pulse": 1936,
+        "error_seconds": 0.0009931295555549724
+      },
+      {
+        "index": 82,
+        "expected_pulse": 1952,
+        "error_seconds": 0.0004048244444447846
+      },
+      {
+        "index": 83,
+        "expected_pulse": 1968,
+        "error_seconds": 0.0006581663333342647
+      },
+      {
+        "index": 84,
+        "expected_pulse": 2016,
+        "error_seconds": 0.0010786150000008377
+      }
+    ],
+    "passed": true
+  }
+]

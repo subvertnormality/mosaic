@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "959c814f464a004f9eed92295b1bf01452db60cc",
+  "after_sha": "90595bb99717de83f4886ec1acac7bca1a99054a",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-MERGE-PHRASE-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui_migration_allowlist.json"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/harmony_merge_workflow.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-MERGE-PHRASE-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-PHRASE-001/real-time/before/aa518bfa48434c1a92da53ba5262dad2/manifest.json",
+              "manifest_sha256": "91ce617d91e775027afa35d7478f0342ff4eb4ba101093d069c3dc6251ba211c"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-PHRASE-001/real-time/after/e46a8368ff384960b7448c8371aeaacf/manifest.json",
+              "manifest_sha256": "3353aca40abcd31a5c4c039fb6d70334e8a2041350bf3b3e1d5ab83c50163531"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-PHRASE-001/controlled-experimental/before/9783b3bd3f9e4b1abe739b594ccdddff/manifest.json",
+              "manifest_sha256": "b39890af30ff925c236e36ec411e8e7ad0de100b791853eb0e0ac048981b7445"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-PHRASE-001/controlled-experimental/after/a04b530ee4f241e08fb241e805d8d896/manifest.json",
+              "manifest_sha256": "f0d3888a674558d0c7cfe3a8478edfda0513b4b0e58dfcbf3d94a7004cd7151c"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

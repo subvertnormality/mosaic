@@ -1,0 +1,7 @@
+{
+  "source_sha256": "7b0007c99d21c6e641f7f31b0afb269a0b9a8b5acb4e9ac4a04a1629dcd42e1f",
+  "test_sha256": "ec1d943091cabd549af3e49057722a06bab3af97a55f8bbb5ef12d6489b4c195",
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "malformed case 1 not rejected cleanly\nmalformed case 2 not rejected cleanly\nmalformed case 3 not rejected cleanly\nmalformed case 4 not rejected cleanly\nmalformed case 5 not rejected cleanly\nmalformed case 6 not rejected cleanly\nmalformed case 7 not rejected cleanly\nmalformed case 8 not rejected cleanly\nmalformed case 9 not rejected cleanly\nmalformed case 10 not rejected cleanly\nmalformed case 11 not rejected cleanly\nmalformed case 12 not rejected cleanly\nmalformed case 13 not rejected cleanly\nmalformed case 14 not rejected cleanly\nmissing timeline did not reject cleanly\n"
+}

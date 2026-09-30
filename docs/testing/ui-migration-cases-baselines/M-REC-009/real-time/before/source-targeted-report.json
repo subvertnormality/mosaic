@@ -1,0 +1,305 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "4611d9c2992ea90d89f88ec29b33d0513cbe79e8",
+  "after_sha": "e4ad6b9783ef42e0a9b1e30280783c274d6c562d",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-REC-008",
+    "M-REC-009",
+    "M-REC-010",
+    "M-REC-011",
+    "M-REC-012",
+    "M-REC-013",
+    "M-REC-014"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-REC-008",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-008/real-time/before/c5a4ad2882a64da3b980800f39ee285c/manifest.json",
+              "manifest_sha256": "5edf010b881d463b485ef167822722bbb7b5a452a0b5e5ad545d5ba9f926b1a2"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-008/real-time/after/989c3cce3fce4830ad7bbd3b57878e1d/manifest.json",
+              "manifest_sha256": "d13e96cdf7184da85154ed2557fc58dd2d3fe0c21b45dbe74667c4f9c6da0dc2"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-008/controlled-experimental/before/6c2338fa2f1341728cfc129bbec0bfd3/manifest.json",
+              "manifest_sha256": "dbfa4181ec1463757e1d7a4770ae4bf309e585f9e99387b035875c8e9470c797"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-008/controlled-experimental/after/f891ff7badc84b709d21a2c1d9d309ab/manifest.json",
+              "manifest_sha256": "016792ad5bb4821d3bc4718e7be06ceb6f7ce53478afea3714e9fe0ed29aa87d"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-009",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-009/real-time/before/0bdca0e034684efca86dc7e5c77877e5/manifest.json",
+              "manifest_sha256": "71938867979c0b5279d276f4788d24cb91459916ca00133ff19e45bced970216"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-009/real-time/after/6b9c1b89823e4d8abc4b180f2f9d4439/manifest.json",
+              "manifest_sha256": "efec0d943fd97b95a18c4622235ebaf3db756351726d47d91cefb7effd447b79"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-009/controlled-experimental/before/935c7346f82f4699b7fa81154cf3459e/manifest.json",
+              "manifest_sha256": "3f0419fa20549fd513d3c46d64bf530cb8cfd05406677111bd239187420bf952"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-009/controlled-experimental/after/f9c2973d85034cfba9486d2cc43c0cf6/manifest.json",
+              "manifest_sha256": "66fb6b7aa03c2745650bb6c46dd356f1fa6c332da2791abfda0cbb7879e620eb"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-010",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-010/real-time/before/dc0c2789bf6b48b290697157a605a195/manifest.json",
+              "manifest_sha256": "58217ce2d12d8a88f39c55d8d23e82e1015330cec26f2a30e4f790ba93ac9d87"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-010/real-time/after/2d0dd48ebe054fb595d0e1bc9920ccc5/manifest.json",
+              "manifest_sha256": "847a9039c29e082242a5c823eb6931f62136e076ec249eb3e07598787005a365"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-010/controlled-experimental/before/304d3ef4f0c04131aa866e19b9cd606b/manifest.json",
+              "manifest_sha256": "8c04aece6c52cb4749313829c98803a0872ec0909b115091e20efc4cc4417112"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-010/controlled-experimental/after/972e999a8c4c467f8dd910d1726a5526/manifest.json",
+              "manifest_sha256": "0e1325fc5782c9e3d9ea0d76afe8fec3f5332cf7e4d671f6b0024b65d854a34e"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-011",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-011/real-time/before/86024a1f1eb64f389d2a4704fbb49bbd/manifest.json",
+              "manifest_sha256": "9eaf2669b7a7a08061f2c15abbaf93468165c6e0af2520732b23ecb196a113e4"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-011/real-time/after/b37e6f4e19734b949823e653b7c90830/manifest.json",
+              "manifest_sha256": "cbd6506e2205b0a3abe172222c0e5ddb5bd7a3cfcc45c66c8996355588735b86"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-011/controlled-experimental/before/3da4ef95305049669ef4585439429464/manifest.json",
+              "manifest_sha256": "6cec09b4d4c7ee40c2841aa00e57f5825e21aab5ddfa8769e9125d2c91b55687"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-011/controlled-experimental/after/9a9ba71805ff4494b01041ed6baf8c6d/manifest.json",
+              "manifest_sha256": "3b9ca15905ba5cd102eb1de9ef2599aa0d6ff8bdb94eb4b24fdcf8b18cb01ca2"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-012",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-012/real-time/before/8504a5a9099f4f97876da0e17af21177/manifest.json",
+              "manifest_sha256": "35cca2650a95cdbad13b69e6d0177b7a2eef14304401238d939a3a5e9776df2a"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-012/real-time/after/52ceb464aa98480b9a196db716e5efd8/manifest.json",
+              "manifest_sha256": "4b247c47ee137d0607d7e4c6a9af8442517969475e5e8ab132f7a9087594bdf2"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-012/controlled-experimental/before/379e3f186a3748e1b6a2fdf75387e2de/manifest.json",
+              "manifest_sha256": "8c48786743e47b1883e70254a31e38c1a15f20832aafa28f25f9c8779135bbe4"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-012/controlled-experimental/after/35db4b3b6f4e4bc6aa53d276a67601e3/manifest.json",
+              "manifest_sha256": "a3fb62312d57ca9cd897b7ec66fcf76934d9ca859ad40aab0471a7ecf00c16ec"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-013",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-013/real-time/before/eca083b7b2f945138fc8c9c45ce7c43f/manifest.json",
+              "manifest_sha256": "47a6f743e2755dfad7cc51ce07e2c3db6e5159b1c1b219b22e41d685c78ef5b5"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-013/real-time/after/6e943c1b8d374e1c9e154ed7346d32fb/manifest.json",
+              "manifest_sha256": "4ec10d59958ecc17bded05ce5d64aa3e9fe6faf372a69bb1234e856c5983add8"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-013/controlled-experimental/before/4e5b001e1c6a487eab6bd2e80fafb5cb/manifest.json",
+              "manifest_sha256": "ba236bf6f116333de8a5b75d0bcda7c96256c4e078c5de159fdb68f1e4636070"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-013/controlled-experimental/after/0cc53ee071e342ed9e15c83130e7e1b9/manifest.json",
+              "manifest_sha256": "eb428539d1efb100eeae56469240f62bd8b8a6f738eb27fd56ff185bd211dffe"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-REC-014",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-014/real-time/before/6451f436ca8042bfb9ec1c8593134a5a/manifest.json",
+              "manifest_sha256": "17ae88c2fc19da2b8bc8469c00249a5ce96a11f1c643a7c9240bbf74fb557d32"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-014/real-time/after/29949a7ab05b4fbaa3693e1b7780293d/manifest.json",
+              "manifest_sha256": "d7a82f116d0cf419b8b4ae01de60da76ff236e5a2aa099a4e7c9aa343523a5b0"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-REC-014/controlled-experimental/before/41a08e77bb5341c08f0ad9688b799891/manifest.json",
+              "manifest_sha256": "b9e3b02c408497f8b82be84325360fc53cf94fffb22cda1e27ba3f313aa4c820"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-REC-014/controlled-experimental/after/6de27af657614ea58ccdf48d2400be14/manifest.json",
+              "manifest_sha256": "8e3cba073e246981b69f58af9256babe532805999f4a10b7944d847538c6c70a"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

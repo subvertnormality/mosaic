@@ -1,0 +1,16 @@
+{
+  "run_id": "mosaic-rd-capture-d8595f79173f4241be9af7168592ec08",
+  "device": "Linux armv7l",
+  "source_sha256": {
+    "tools/rhythm_doctor/rd_capture.c": "6b613f9e8640c8bbce6a9cab0b6cb376e85204c820288c4d78a8070ed35d3bf3",
+    "tests/rhythm_doctor/test_capture_injector.c": "7fc977c01a0cb47eb1bebb08c4cf93acd8341a9b7c3d60cc94c56ddd5b69a0b9",
+    "tests/behaviour/rhythm_doctor_capture_hardware.py": "33bfb1197fd8430729ecb51a4323dd75c68239c4c80fca4ced7dd94adf607514"
+  },
+  "runner_sha256": "7cb62f8f500a8a43d43166fd8e35b8f766f721946bc385aa6556c6752af3e0e0",
+  "probe": null,
+  "failure": "Command '['ssh', '-S', '/tmp/mosaic-slides-restore.sock', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=5', 'we@10.42.0.1', 'cat /tmp/mosaic-rd-capture-d8595f79173f4241be9af7168592ec08/report.json']' returned non-zero exit status 1.",
+  "cleanup_failure": null,
+  "passed": false,
+  "full_feature_acceptance": false,
+  "scope": "physical Norns owned JACK capture component only"
+}

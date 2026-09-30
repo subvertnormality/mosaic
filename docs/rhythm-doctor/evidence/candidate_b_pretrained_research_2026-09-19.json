@@ -1,0 +1,39 @@
+{
+  "kind": "metadata-only pretrained-model feasibility research",
+  "acceptance_claimed": false,
+  "assets_not_downloaded": true,
+  "candidate": "offline five-lane research worker: ADTOF-PyTorch drums + Open-Unmix UMXHQ bass + Basic-Pitch TFLite bass onset",
+  "drums": {
+    "repository": "https://github.com/xavriley/ADTOF-pytorch",
+    "weight_url": "https://raw.githubusercontent.com/xavriley/ADTOF-pytorch/main/src/adtof_pytorch/data/adtof_frame_rnn_pytorch_weights.pth",
+    "weight_bytes_head": 3617805,
+    "weight_etag": "W/\"58222771d85dc79bcf7e2e5b5d8934fc9994d552fff4b507f06d72857992eb7b\"",
+    "output_midi_notes": [35, 38, 47, 42, 49],
+    "required_lane_mapping": {"BD": 35, "SD": 38, "TOM": 47, "HH": 42},
+    "runtime": ["torch", "librosa", "pretty_midi", "numpy"],
+    "license_status": "The port has no LICENSE file in the inspected repository. Its upstream ADTOF source is CC BY-NC-SA 4.0; do not ship this port or weight until compatible weight/code licensing is recorded."
+  },
+  "bass_separation": {
+    "repository": "https://github.com/sigsep/open-unmix-pytorch",
+    "weight_url": "https://zenodo.org/records/3370489/files/bass-8d85a5bd.pth",
+    "weight_bytes_head": 35637796,
+    "architecture": "one UMXHQ stereo three-layer bidirectional LSTM target with residual; offline only",
+    "runtime": ["torch", "torchaudio"],
+    "license_status": "Open-Unmix code is MIT. The inspected documentation does not state a separate redistributable license for this UMXHQ weight; record it before delivery."
+  },
+  "bass_onset": {
+    "repository": "https://github.com/spotify/basic-pitch",
+    "weight_url": "https://raw.githubusercontent.com/spotify/basic-pitch/main/basic_pitch/saved_models/icassp_2022/nmp.tflite",
+    "weight_bytes_head": 204448,
+    "runtime": "TensorFlow Lite on Linux; the package's code is Apache-2.0",
+    "constraint": "Basic Pitch documents that it works best on one instrument at a time, so it must receive the separated bass signal and is not a mixed-audio bass classifier."
+  },
+  "combined_published_weight_bytes": 39460049,
+  "not_measured": [
+    "model accuracy on any clean held corpus",
+    "incremental RSS or latency",
+    "norns ARMv7 build and inference",
+    "weight redistribution rights"
+  ],
+  "decision": "A concrete desktop research profile exists. It is not a standalone-norns delivery candidate until compatible licenses and a bounded ARM native runtime replace Torch/Python dependencies and the RD-02 corpus gates pass."
+}

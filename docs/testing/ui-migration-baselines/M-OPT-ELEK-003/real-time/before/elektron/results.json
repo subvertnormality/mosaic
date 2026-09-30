@@ -1,0 +1,93 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "device-picker-frame",
+    "label": "Digitakt",
+    "matched": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Elektron program changes",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Elektron program changes",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "elektron-program-change",
+    "stage": "playing-transitions",
+    "global_length": 1,
+    "boundaries": [
+      {
+        "slot": 2,
+        "lead_seconds": 0.167599923
+      },
+      {
+        "slot": 1,
+        "lead_seconds": 0.166761451
+      },
+      {
+        "slot": 2,
+        "lead_seconds": 0.166744338
+      },
+      {
+        "slot": 1,
+        "lead_seconds": 0.165667557
+      },
+      {
+        "slot": 2,
+        "lead_seconds": 0.166910846
+      }
+    ],
+    "passed": true
+  }
+]

@@ -54,3 +54,8 @@ __pycache__/
 # Raw review packets retained locally; publish triage and packet digests only.
 docs/testing/reviews/*-raw.json
 docs/testing/reviews/*-raw.stderr.log
+
+# Analysis server: model weights and venvs are never committed.
+tools/rhythm_doctor_server/larsnet/
+tools/rhythm_doctor_server/*.zip
+tools/rhythm_doctor_server/__pycache__/

@@ -28,14 +28,14 @@
  },
  "base_revision": "7141f50",
  "manual": "README.md",
- "manual_sha256": "eb82167cb3247142f26cdb9a94ccf801e7c13823a5fe7accfb2528cd04721d39",
+ "manual_sha256": "532f08b5fff1d2b90022f02ba418dcbef3b77017e8a1a5c6e057d04a9e41b51c",
  "inventory": "tests/behaviour/manual-inventory.json",
- "inventory_sha256": "45f4fbed186ad04a83be19b6a1f02b8b040799de8da7e1f4cf5586058d662165",
+ "inventory_sha256": "28dcf55ddbc327d74d0303557ccd3a31cfdffba085991f825d98166fbc48c3d7",
  "counts": {
-  "requirements": 140,
-  "production_lua_modules": 100,
-  "unit_integration_files": 78,
-  "domains": 15
+  "requirements": 177,
+  "production_lua_modules": 171,
+  "unit_integration_files": 140,
+  "domains": 17
  },
  "coverage_language": {
   "exhaustive": "Every value in the declared finite axis is checked.",
@@ -53,6 +53,138 @@
   "The approved_final_scope overrides any earlier instruction to expand coverage or obtain another review."
  ],
  "domains": [
+  {
+   "id": "H16",
+   "title": "Musical Merge and deterministic Harmony",
+   "priority": "high",
+   "finite_axes": [
+    {
+     "name": "Harmony modes",
+     "cardinality": 4,
+     "values": [
+      "off",
+      "revoice",
+      "pattern",
+      "ensemble"
+     ],
+     "coverage": "unit, integration and physical behaviour"
+    },
+    {
+     "name": "Foundation phrase sizes",
+     "cardinality": 4,
+     "values": [
+      1,
+      2,
+      4,
+      8
+     ],
+     "coverage": "exact deterministic curves and lifecycle"
+    }
+   ],
+   "interaction_strategy": "Pure exhaustive solver/planner checks feed scheduler integration and physical grid/norns workflows; exact MIDI and active grid projection are independent acceptance oracles.",
+   "residual_gaps": [
+    "MM-12 Space (silence-aware interlock) is deferred as residual MM-12 (docs/musical-merge-extensions-plan.md \u00a76.3, owner: the Mosaic maintainer): no engine, UI or manual claim; the reserved space schema field is validated and inert, and the README states Space is not part of this release. MM-12-AUDIBLE, the proposal's audible-silence entry gate, stays OPEN.",
+    "MM-ACC-PUBLIC (docs/musical-merge-extensions-plan.md \u00a76.4, owner: the Mosaic maintainer, CLOSED for reachable player behaviour): the public Interlock, Structure and Fragments scenarios have controlled-time and real-time emulator cases. Scheduler interleavings, reversed callback order, invalid CHORD MISSING references and retained stale editor drafts require direct state or order control and remain unit/integration acceptance, with no public-input claim for their unselectable intermediate states. The full CI behaviour inventory remains a release gate.",
+    "Fragments, Interlock and Structure (MM-08..MM-11) have public-input emulator behaviour cases in both lanes. Fragments (M-MERGE-FRAGMENTS-001/002/003) covers Size 4 and seed changes on an eight-step loop, a six-step loop shorter than Size 8 with Keep anchor Off/On and source-wins overlap, and an offset 3..10 loop with Size 4, explicit trig-mask suppression and X restoration in exact MIDI and grid. Interlock: M-MERGE-INTERLOCK-001 (Window 0/2, queued Window, chain refusal), M-MERGE-INTERLOCK-002 (plan \u00a71.3: leader and follower grid edits mid-cycle reach the follower in that loop in MIDI and on the grid; a 25 ms lock lead edit withdraws the removed addition's planned lock) and M-MERGE-INTERLOCK-003 (plan \u00a71.2.1: follower and leader Clock retimes landing mid-cycle at the pattern boundary show RESYNC on the Interlock screen, Result and grid and restore additions before the follower's next wrap; a stopped Clock change replans the first loop). M-MERGE-INTERLOCK-005 covers visible PLAN LIMIT and the last-step MIDI fallback at the 65-cycle boundary. M-MERGE-INTERLOCK-006 covers playing loop-range RESYNC in the native screen, grid and exact MIDI. M-MERGE-INTERLOCK-007/008 cover nominal Interlock invariance under local Swing and Shuffle with exact MIDI pulses and native status/grid feedback. M-MERGE-INTERLOCK-009 covers non-resetting song transition RESYNC, released step 7, exact MIDI and native status/grid feedback. Scheduler-only unit/integration evidence for Interlock: reversed callback order and yielding-sweep races (edit between leader and follower rebuilds, stale sweep completion). M-MERGE-INTERLOCK-004 covers unequal 6- and 8-step loops with a leader/follower grid-edit burst in one step. Structure: M-MERGE-STRUCTURE-001 (Anchors snap, Delete group restores), M-MERGE-STRUCTURE-002 (marker root MIDI = note grid = Merge Result and Voice leading Result; reverse-strum delayed root with Harmony Off; mapped marker/non-marker conflict silent under Silence and Legacy fallbacks with the conflict shown) and M-MERGE-STRUCTURE-003 (disable and delete while playing with 6- and 5-step channel loops keep markers paired until the pattern boundary; a Merge Shape edit waiting with the deletion shows NEXT PATTERN). M-MERGE-STRUCTURE-004 covers Every 4/Every 8 markers, Harmony Pattern conflict recovery and Revoice MARKER PRIORITY; M-MERGE-STRUCTURE-005 covers group deletion undo/redo, Stop settlement and save/reload through public input. M-MERGE-STRUCTURE-006 covers MARKER PRIORITY with Ensemble through exact MIDI and visible Result. M-MERGE-STRUCTURE-007 covers delayed snapped arp roots with exact MIDI and Result. Internal-state unit/integration evidence for Structure: CHORD MISSING and stale drafts.",
+    "Off/v1 exactness (docs/musical-merge-extensions-plan.md \u00a70) is judged against an independent base oracle: lib/tests/fixtures/merge_v1_baseline holds v1 projects saved by f908a553's own project save and that revision's observations (working patterns, complete MIDI traces with pulses, RNG draws, lead-25 lock lookahead), captured by capture.sh under the f908a553 harness and pinned by MANIFEST.lua sha256s; merge_v1_baseline_oracle_tests.lua loads them through the candidate's production load (check + migrate via project_lifecycle), saves v2, reloads v2 and compares exactly. The oracle covers five representative projects, not every v1 configuration.",
+    "Interlock device timing (plan \u00a71.4): source-identified norns CM3+ runs on 27 Sept 2026 passed the release timing gate PERF-MERGE-HW-STEADY. WORST, EDIT, DENSE and DENSE-EDIT are characterisation timing loads under the owner's decision; their admission, edit propagation, Start latency and transport checks still gate. The README states the observed follower wrap cost and the plan records the physical measurements."
+   ],
+   "requirement_ids": [
+    "MERGE-FOUNDATION",
+    "MERGE-PHRASE",
+    "MERGE-FRAGMENTS",
+    "MERGE-INTERLOCK",
+    "MERGE-STRUCTURE",
+    "HARMONY-REVOICE",
+    "HARMONY-PATTERN",
+    "HARMONY-ENSEMBLE",
+    "HARMONY-PERSISTENCE",
+    "HARMONY-FAILURE",
+    "HARMONY-HELD-PRECEDENCE"
+   ],
+   "production_modules": [
+    "lib/harmony/config_state.lua",
+    "lib/harmony/config.lua",
+    "lib/harmony/context.lua",
+    "lib/harmony/grid_projection.lua",
+    "lib/harmony/inspection.lua",
+    "lib/harmony/pattern.lua",
+    "lib/harmony/state.lua",
+    "lib/harmony/voicing.lua",
+    "lib/musical_merge/common_time.lua",
+    "lib/musical_merge/config.lua",
+    "lib/musical_merge/dependency.lua",
+    "lib/musical_merge/display.lua",
+    "lib/musical_merge/foundation.lua",
+    "lib/musical_merge/fragments.lua",
+    "lib/musical_merge/interlock.lua",
+    "lib/musical_merge/leader_query.lua",
+    "lib/musical_merge/pitch_target.lua",
+    "lib/musical_merge/state.lua",
+    "lib/musical_merge/structure.lua",
+    "lib/musical_merge/timeline.lua",
+    "lib/musical_resolution/articulation.lua",
+    "lib/optional_config_transaction.lua",
+    "lib/pages/channel_edit_page/channel_feature_editor.lua"
+   ],
+   "existing_unit_integration_files": [
+    "lib/tests/lib/channel_feature_editor_tests.lua",
+    "lib/tests/lib/foundation_planner_tests.lua",
+    "lib/tests/lib/fragments_planner_tests.lua",
+    "lib/tests/lib/harmony_config_state_tests.lua",
+    "lib/tests/lib/harmony_config_tests.lua",
+    "lib/tests/lib/harmony_context_tests.lua",
+    "lib/tests/lib/harmony_grid_projection_tests.lua",
+    "lib/tests/lib/harmony_pattern_tests.lua",
+    "lib/tests/lib/harmony_playback_integration_tests.lua",
+    "lib/tests/lib/harmony_state_tests.lua",
+    "lib/tests/lib/harmony_voicing_tests.lua",
+    "lib/tests/lib/musical_merge_common_time_tests.lua",
+    "lib/tests/lib/musical_merge_config_tests.lua",
+    "lib/tests/lib/musical_merge_dependency_tests.lua",
+    "lib/tests/lib/harmony_inspection_tests.lua",
+    "lib/tests/lib/musical_merge_interlock_tests.lua",
+    "lib/tests/lib/musical_merge_pattern_integration_tests.lua",
+    "lib/tests/lib/musical_merge_pitch_target_tests.lua",
+    "lib/tests/lib/musical_merge_state_tests.lua",
+    "lib/tests/lib/musical_merge_structure_integration_tests.lua",
+    "lib/tests/lib/musical_merge_structure_lifecycle_tests.lua",
+    "lib/tests/lib/musical_merge_structure_tests.lua",
+    "lib/tests/lib/musical_merge_timeline_tests.lua",
+    "lib/tests/lib/optional_config_persistence_tests.lua",
+    "lib/tests/lib/voice_lifetime_tests.lua",
+    "lib/tests/lib/merge_v1_baseline_oracle_tests.lua",
+    "lib/tests/lib/merge_device_workload_tests.lua",
+    "lib/tests/lib/merge_interlock_fastpath_tests.lua",
+    "lib/tests/lib/merge_foundation_rank_prefix_tests.lua",
+    "lib/tests/lib/merge_wrap_fastpath_tests.lua",
+    "lib/tests/lib/merge_wrap_pulse_share_tests.lua",
+    "lib/tests/lib/harmony_scale_pitch_classes_memo_tests.lua"
+   ],
+   "linked_behaviour_cases": [
+    "M-MERGE-FOUNDATION-001",
+    "M-MERGE-PHRASE-001",
+    "M-HARMONY-REVOICE-001",
+    "M-HARMONY-PATTERN-001",
+    "M-HARMONY-PATTERN-CLOCKS-001",
+    "M-HARMONY-PATTERN-BYPASS-001",
+    "M-HARMONY-ENSEMBLE-001",
+    "M-HARMONY-PERSIST-001",
+    "M-HARMONY-FAILURE-001",
+    "M-HARMONY-HELD-001",
+    "M-MERGE-FRAGMENTS-001",
+    "M-MERGE-INTERLOCK-001",
+    "M-MERGE-STRUCTURE-001",
+    "M-MERGE-INTERLOCK-002",
+    "M-MERGE-INTERLOCK-003",
+    "M-MERGE-STRUCTURE-002",
+    "M-MERGE-STRUCTURE-003",
+    "M-MERGE-INTERLOCK-004",
+    "M-MERGE-STRUCTURE-004",
+    "M-MERGE-STRUCTURE-005"
+   ],
+   "status": "implemented"
+  },
   {
    "id": "H01",
    "title": "Pattern editing, algorithms, channel ranges and storage axes",
@@ -243,8 +375,27 @@
     "NAV-CONFIRM",
     "NAV-FINE-K1",
     "NAV-PAGES",
+    "NAV-SCREEN-FOLLOW",
+    "NAV-SPLASH",
+    "NAV-TASKS",
     "NAV-TOOLTIPS",
-    "NAV-TRANSPORT"
+    "NAV-TRANSPORT",
+    "UI-ACCEPT-A01",
+    "UI-ACCEPT-A02",
+    "UI-ACCEPT-A03",
+    "UI-ACCEPT-A10",
+    "UI-ACCEPT-A11",
+    "UI-ACCEPT-A18",
+    "UI-ACCEPT-A19",
+    "UI-FEEDBACK-ALGORITHM",
+    "UI-FEEDBACK-CHANNEL-SELECT",
+    "UI-FEEDBACK-DASHBOARDS",
+    "UI-FEEDBACK-GRID-FOCUS",
+    "UI-FEEDBACK-MERGE-MODES",
+    "UI-FEEDBACK-MERGE-SHAPE-TRIG",
+    "UI-FEEDBACK-NOTE-PAGE-STEP",
+    "UI-FEEDBACK-PAINT",
+    "UI-FEEDBACK-VIEW-CHANNEL"
    ],
    "production_modules": [
     "lib/controls/button.lua",
@@ -278,6 +429,28 @@
     "lib/pages/velocity_edit_page/velocity_edit_page_ui.lua",
     "lib/press.lua",
     "lib/ui.lua",
+    "lib/ui_adapters.lua",
+    "lib/ui_adapters/assignment.lua",
+    "lib/ui_adapters/channel_target.lua",
+    "lib/ui_adapters/clock.lua",
+    "lib/ui_adapters/confirmation.lua",
+    "lib/ui_adapters/device.lua",
+    "lib/ui_adapters/doctor.lua",
+    "lib/ui_adapters/feature_editor.lua",
+    "lib/ui_adapters/harmony.lua",
+    "lib/ui_adapters/history.lua",
+    "lib/ui_adapters/masks.lua",
+    "lib/ui_adapters/merge.lua",
+    "lib/ui_adapters/native.lua",
+    "lib/ui_adapters/parameters.lua",
+    "lib/ui_adapters/read_only.lua",
+    "lib/ui_adapters/scale.lua",
+    "lib/ui_adapters/scale_clock.lua",
+    "lib/ui_adapters/song.lua",
+    "lib/ui_adapters/song_clock.lua",
+    "lib/ui_adapters/tasks.lua",
+    "lib/ui_adapters/trig_options.lua",
+    "lib/ui_characters.lua",
     "lib/ui_components/control_scroll_selector.lua",
     "lib/ui_components/dial.lua",
     "lib/ui_components/grid_viewer.lua",
@@ -288,14 +461,49 @@
     "lib/ui_components/save_confirm.lua",
     "lib/ui_components/tooltip.lua",
     "lib/ui_components/value_selector.lua",
-    "lib/ui_components/vertical_scroll_selector.lua"
+    "lib/ui_components/vertical_scroll_selector.lua",
+    "lib/ui_grid_outcomes.lua",
+    "lib/ui_live.lua",
+    "lib/ui_motion.lua",
+    "lib/ui_render.lua",
+    "lib/ui_router.lua",
+    "lib/ui_spec_data.lua",
+    "lib/ui_splash.lua",
+    "lib/ui_splash_logo.lua"
    ],
    "existing_unit_integration_files": [
     "lib/tests/lib/channel_edit_page_ui_delta_killers_tests.lua",
     "lib/tests/lib/channel_edit_page_ui_mutation_killers_tests.lua",
     "lib/tests/lib/grid_controls_tests.lua",
     "lib/tests/lib/grid_input_tests.lua",
-    "lib/tests/lib/ui_components_tests.lua"
+    "lib/tests/lib/optional_config_equivalence_tests.lua",
+    "lib/tests/lib/ui_adapters_assignment_tests.lua",
+    "lib/tests/lib/ui_adapters_clock_tests.lua",
+    "lib/tests/lib/ui_adapters_confirmation_tests.lua",
+    "lib/tests/lib/ui_adapters_device_tests.lua",
+    "lib/tests/lib/ui_adapters_doctor_tests.lua",
+    "lib/tests/lib/ui_adapters_harmony_tests.lua",
+    "lib/tests/lib/ui_adapters_history_tests.lua",
+    "lib/tests/lib/ui_adapters_masks_tests.lua",
+    "lib/tests/lib/ui_adapters_merge_tests.lua",
+    "lib/tests/lib/ui_adapters_native_tests.lua",
+    "lib/tests/lib/ui_adapters_parameters_tests.lua",
+    "lib/tests/lib/ui_adapters_read_only_tests.lua",
+    "lib/tests/lib/ui_adapters_scale_tests.lua",
+    "lib/tests/lib/ui_adapters_song_tests.lua",
+    "lib/tests/lib/ui_adapters_tasks_tests.lua",
+    "lib/tests/lib/ui_adapters_tests.lua",
+    "lib/tests/lib/ui_adapters_trig_options_tests.lua",
+    "lib/tests/lib/ui_characters_tests.lua",
+    "lib/tests/lib/ui_components_tests.lua",
+    "lib/tests/lib/ui_grid_outcomes_tests.lua",
+    "lib/tests/lib/ui_live_tests.lua",
+    "lib/tests/lib/ui_marquee_tests.lua",
+    "lib/tests/lib/ui_motion_tests.lua",
+    "lib/tests/lib/ui_overview_cells_tests.lua",
+    "lib/tests/lib/ui_render_footer_hints_tests.lua",
+    "lib/tests/lib/ui_router_tests.lua",
+    "lib/tests/lib/ui_splash_tests.lua"
    ],
    "linked_behaviour_cases": [
     "M-CHANNEL-001",
@@ -1038,6 +1246,7 @@
     "lib/clock/m_clock.lua",
     "lib/clock/voice_lifetime.lua",
     "lib/musical_resolution/arp_descriptor.lua",
+    "lib/musical_resolution/articulation.lua",
     "lib/musical_resolution/chord_order.lua",
     "lib/musical_resolution/strum_descriptor.lua",
     "lib/recorder.lua",
@@ -1601,6 +1810,7 @@
     "PANIC-GESTURE"
    ],
    "production_modules": [
+    "lib/gc_pacer.lua",
     "lib/clock/m_clock.lua",
     "lib/clock/midi_output_transport.lua",
     "lib/clock/transport_lifecycle.lua",
@@ -1611,6 +1821,8 @@
     "lib/clock/midi_delay_line.lua"
    ],
    "existing_unit_integration_files": [
+    "lib/tests/lib/gc_pacer_tests.lua",
+    "lib/tests/lib/mosaic_gc_pacer_wiring_tests.lua",
     "lib/tests/lib/integration_tests/clock_tests.lua",
     "lib/tests/lib/m_clock_delta_killers_tests.lua",
     "lib/tests/lib/m_clock_mutation_killers_tests.lua",
@@ -2343,6 +2555,68 @@
     "M-WORKFLOW-001"
    ],
    "status": "moved-to-r01-performance-ledger"
+  },
+  {
+   "id": "H17",
+   "title": "Rhythm Doctor capture, analysis handoff, bank lifecycle and painting",
+   "priority": "high",
+   "finite_axes": [
+    {
+     "name": "lanes",
+     "cardinality": 4,
+     "coverage": "exhaustive single axis"
+    },
+    {
+     "name": "capture states",
+     "cardinality": 8,
+     "coverage": "exhaustive transitions"
+    },
+    {
+     "name": "window cells",
+     "cardinality": 64,
+     "coverage": "exhaustive single axis"
+    }
+   ],
+   "interaction_strategy": "State transitions are driven through the real machine rather than set directly: every capture, analysis, correction and release path is entered by the call the application makes. Identity is exercised at both boundaries - the recorder identity adopted at PREFLIGHT and the advancing analysis lease - and both detector identity shapes are accepted or refused whole. Screen assertions are made on drawn text, not on the model.",
+   "residual_gaps": [
+    "Detector accuracy is measured on corpora and reported separately; no transcription quality is claimed by these tests.",
+    "The behaviour recipes run the four-lane surface, the reload-to-READY path and the refused correction, and are executed manually rather than by CI.",
+    "Capture runs through softcut inside crone rather than a JACK client of its own, so it is covered by a fake softcut asserting the arming call by call and by the real capture controller and state machine driven through the recorder; nothing exercises the actual engine automatically, and the hardware runners that did were removed with the JACK worker."
+   ],
+   "requirement_ids": [
+    "RD-LANES",
+    "RD-CAPTURE-FINISH",
+    "RD-ALIGNMENT",
+    "RD-ALIGNMENT-REFUSED",
+    "RD-BANK-PERSIST",
+    "RD-DETECTOR-IDENTITY",
+    "RD-BACKEND-UNAVAILABLE"
+   ],
+   "production_modules": [
+    "lib/rhythm_doctor/analysis_controller.lua",
+    "lib/rhythm_doctor/analysis_transport.lua",
+    "lib/rhythm_doctor/analysis_worker_host.lua",
+    "lib/rhythm_doctor/assets.lua",
+    "lib/rhythm_doctor/bank.lua",
+    "lib/rhythm_doctor/bank_persistence.lua",
+    "lib/rhythm_doctor/capture_controller.lua",
+    "lib/rhythm_doctor/dancing_doctor.lua",
+    "lib/rhythm_doctor/file_mailbox.lua",
+    "lib/rhythm_doctor/paint.lua",
+    "lib/rhythm_doctor/paint_journal.lua",
+    "lib/rhythm_doctor/paint_transactions.lua",
+    "lib/rhythm_doctor/runtime.lua",
+    "lib/rhythm_doctor/softcut_recorder.lua",
+    "lib/rhythm_doctor/state_machine.lua",
+    "lib/rhythm_doctor/ui_adapter.lua",
+    "lib/source_pattern_revision.lua"
+   ],
+   "existing_unit_integration_files": [
+    "lib/tests/lib/project_load_integration_tests.lua",
+    "lib/tests/lib/source_pattern_revision_tests.lua"
+   ],
+   "linked_behaviour_cases": [],
+   "status": "hardening-complete-generated"
   }
  ]
 }

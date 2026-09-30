@@ -1,0 +1,88 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        14,
+        8
+      ]
+    ],
+    "expected": [
+      8
+    ],
+    "actual": [
+      8
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Note Masks",
+    "matched": true
+  },
+  {
+    "kind": "internal-clock-runtime-stall-phase",
+    "characterization": "emulator-only bounded Lua event-thread fault",
+    "stall_ms": 42,
+    "stall_elapsed_ns": 46070523,
+    "expected_due_ns": 223507770788482,
+    "preceding_onset_ns": 223507645788482,
+    "warm_intervals_ns": [
+      125506927,
+      124544531,
+      125185902
+    ],
+    "stall_lead_ns": 17831646,
+    "stall_overlap_ns": 28238877,
+    "stall_before_ns": 223507752956836,
+    "stall_after_ns": 223507799027359,
+    "blocked_onset_index": 4,
+    "blocked_onset_phase_error_ns": 30268887,
+    "blocked_response_ns": 3008630,
+    "maximum_phase_error_ns": 1477269,
+    "phase_bound_ns": 10000000,
+    "native_ack": {
+      "sequence": 256,
+      "monotonic_ns": 223507797811379
+    },
+    "passed": true
+  }
+]

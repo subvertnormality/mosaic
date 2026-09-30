@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "167b7ceff0927a4c8b499113070b31442d115499",
+  "after_sha": "446a00870f9489cc78d64342288b6fa28b8b1dc3",
+  "tooling_sha": "66a97db89ccd28bf3f99c6eb8e9214423f80590b",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-PARAM-026",
+    "M-PARAM-027",
+    "M-PARAM-028",
+    "M-PARAM-029",
+    "M-PARAM-030",
+    "M-PARAM-031",
+    "M-REC-PARAM-028",
+    "M-REC-PARAM-029"
+  ],
+  "selected_modules": {
+    "tests/behaviour/trig_parameter_interactions.py": "M-PARAM-026"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/trig_parameter_interactions.py",
+      "case": "M-PARAM-026",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-8277bb2e5f0e4102adddab4a18d44694/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-8277bb2e5f0e4102adddab4a18d44694/manifest.json",
+      "manifest_sha256": "ef3445ff3254312248490ba19bdac910b4754005a5ff7f255d5d1a3dfe316cce",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

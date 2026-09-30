@@ -62,6 +62,7 @@ Welcome to _Mosaic_, a powerful rhythm- and harmony-focused sequencer designed t
 - [Dig Deeper](#dig-deeper)
   * [Pattern Editor](#pattern-editor)
       - [Adding Trigs](#adding-trigs)
+        + [Rhythm Doctor](#rhythm-doctor)
       - [Adding Notes](#adding-notes)
       - [Adding Velocity](#adding-velocity)
   * [Channel Editor](#channel-editor)
@@ -344,9 +345,30 @@ The pattern editor button cycles through three pages, accessible by pressing the
 
 ### Norns Menu Navigation
 
-Further configuration happens on Norns. Each _Mosaic_ grid page has a group of pages on the Norns screen. Settings in these pages are typically set once and require minimal adjustments. Navigation through these pages is accomplished by moving left and right with the E1 encoder, the selected setting can be chosen using the E2 encoder, and the value of the settings can be adjusted by moving up and down with the E3 encoder. Some settings require a confirmation before they are set. Press the K3 button to apply any selected changes. If you press K2 or navigate away from the page without applying, the change will be cancelled.
+The Norns screen follows the grid. Press a global menu button and the screen shows that page. Select a channel and the screen shows it. Hold one or more steps and the Channel screen shows the masks or trig params of exactly those steps, then returns to where you were when you let go. Most of the time you play the grid and glance at the screen; you only navigate the screen to reach settings.
 
-In general, the K3 button is used to confirm changes, K2 is used to cancel, and K1 is held to access shift functions.
+<img alt="Norns Note Masks screen" src="images/norns/note-masks.png" width="384" />
+
+Every screen has the same parts. The title row names the screen and its scope: the channel (`CH03`), the song slot when it is not the first (`S02`), and any held steps (`ST05` for one step, `3ST` for several). A Channel screen also shows `MUTE` when the channel is muted, its octave when it is not 0 (`OCT+1`), and a held step's octave lock (`O-1`); the pattern editor names the pattern it edits before the channel it shows (`PAT02 CH01`). The selected field is outlined or marked with `>`, and its whole value is always shown: in its cell on a grid of fields (on the last line instead, beside its full name, when the cell is too narrow and shows `...`), or in large type on a single-field screen. The last line lists the controls for the screen, or shows a tooltip after a grid action. A grid action brings up the screen that shows what it changed, with that value chosen: a merge button or a pattern assignment shows Merge modes (where E2 and E3 also change the trig, note, velocity and length merge modes, including the pattern-priority ones), a channel scale lock shows Scale source, global transposition and scale-track locks show Scale overview, and the song length fader shows Song playback. K2 or E1 then carries on from there. Screens that only show information, such as Scale overview, Song playback and Paint preview, list every value at once with no cursor. The four small tiles at the right of the title row are _Mosaic_'s mark; they light up in turn when something changes.
+
+The controls work the same way on every screen:
+
+- **E1** opens the page's task list from any screen. In a task list, E1 or E2 moves through the rows and K3 opens the chosen one.
+- **E2** chooses a field, or a row in a task list.
+- **E3** changes the chosen value. Hold K1 while turning E3 for fine changes where a value supports them.
+- **K3** opens the chosen task or a row marked `OPEN >`, applies a staged change, or confirms a question. While such a row is chosen, the last line names what K3 opens, for example `K3 OPEN RHYTHM`; when the name would crowd out the screen's other controls it just says `K3 OPEN`.
+- **K2** goes back, or cancels a staged change or a question.
+- A short **K1** tap opens the norns system menu. Holding K1 is the shift key for grid and screen gestures.
+
+Task lists name everything a page can show. Channel tasks: Masks, Trig params, Output, Clock, Merge modes, Merge Shape, Harmony, Device and History. Scale tasks: Scale, Scale clock and Overview. Pattern tasks: Pattern, Options, Algorithm, Channel view and, while the Rhythm Doctor algorithm is chosen, Rhythm Doctor. Song tasks: Playback, Slot setup, Tempo and feel, and Channel view. _Mosaic_'s other settings, such as projects, sequencer options, MIDI mapping and each channel's device parameters, are in the norns PARAMS menu under MOSAIC: tap K1 to open it, as the Channel tasks footer reminds you (`K1 PARAMS`, beside the chosen task's name when it fits).
+
+<img alt="Norns Channel tasks screen" src="images/norns/channel-tasks.png" width="384" />
+
+Some settings are staged before they take effect. Device, clock, scale and song settings show your change straight away but only apply when you press K3. K2, or leaving the screen with E1, cancels a staged change without touching what is already playing. [Merge Shape and Harmony](#musical-merge-and-voice-leading) keep a whole draft in the same way.
+
+When _Mosaic_ starts, the dots and bars of the _Mosaic_ logo lay themselves down across the screen, row by row, then lift away to leave the _mosaic_ wordmark, which fades into the first screen. Any key, encoder or grid press skips it. Screens change instantly, without a transition. The start-up animation and the characters' movement can be turned off with [UI Motion](#ui-motion).
+
+<img alt="Mosaic start-up animation" src="images/norns/splash.png" width="384" />
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -359,7 +381,7 @@ For a detailed reference on the layout of your Norns device, consult the officia
 
 ### Tooltips
 
-Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip.
+Most _Mosaic_ functions are described by tooltips that appear at the bottom of the Norns screen when activated. If you're not sure what a button does, try pressing it and watching out for the tooltip. When no tooltip is showing, the bottom line lists the controls for the current screen.
 
 ### External MIDI Transport
 
@@ -455,14 +477,163 @@ To set your rhythm, simply tap in steps using the sequencer. Bright steps symbol
 <img alt="Pattern editor step edit buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-step-trigger-edit-buttons.svg" width="300" />
 
 
-Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the four algorithm select buttons. From left to right:
+Craft unique rhythms using a variety of built-in algorithms. The algorithm is selected using the five algorithm select buttons. From left to right:
 
 * Button 1: The drum algorithm, drawing from a rich collection of classic drum patterns.
 * Button 2: The tresillo algorithm, utilizing a 3/3/2 ratio for diverse rhythm variations. The tresillo multiplier can be set on the Norns screen for more variations.
 * Button 3: Euclidean, a rhythm tool rooted in mathematical logic.
 * Button 4: NE Numeric Repetitor, another rhythm tool based on mathematical principles.
+* Button 5: Rhythm Doctor, a capture and paint workflow described below. Recording needs the sequencer stopped; an analysed bank can be used while it plays.
 
-<img alt="Pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
+Pressing an algorithm button shows the Trig Algorithm screen on the norns, with the algorithm in use marked SELECTED. You can also choose there: E2 moves through the five algorithms and K3 selects one, exactly as its grid button does. Choosing Rhythm Doctor opens the Doctor. Algorithm, in the pattern task list, opens the same screen.
+
+<img alt="The first four pattern editor algorithm select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/algorithm-select-buttons.svg" width="300" />
+
+##### Rhythm Doctor
+
+Rhythm Doctor is the fifth pattern-editor algorithm, at grid column 16, row 2.
+It keeps one captured bank per project and lets you preview a 64-step window
+from one selected lane before painting it into the selected pattern.
+
+The lanes occupy a block of five columns on each of two rows, starting at
+column 3: lanes one to five on row 2 at columns 3–7, and lanes six to ten on
+row 3 at the same columns. Column 1 of row 2 is Record, column 2 is reserved,
+and columns 12–16 of both rows belong to the algorithm and bank-mask faders and
+are never lanes. A bank analysed on the device declares three lanes — **BD**
+(bass drum), **SD** (snare drum) and **CYM** (hi-hats and cymbals) — so only
+the first three cells light. A remote analysis declares up to ten, which is why
+the block is two rows: a single row would run the later lanes under the
+algorithm fader, where selecting one would also change the algorithm.
+
+Lanes read in kit order rather than alphabetically: kick, snare, hi-hat,
+cymbals and toms fill the top row, and whatever else the analysis separated out
+— bass, guitar, piano, vocals and demucs' residual **OTHER** — follows on the
+bottom row. A lane neither of those names keeps a stable alphabetical place
+after the ones they do, so an unfamiliar backend still puts its columns in the
+same order every time a project loads. A bank saved before this order existed
+is brought forward when it loads, so an older capture does not keep an
+alphabetical grid until it is recorded again.
+
+The lanes describe what can be told apart reliably, not a full drum-kit
+transcription. **CYM** is hats *and* cymbals together because a closed hat and a
+ride are both inharmonic metal with overlapping spectra, and the decay that
+distinguishes them in isolation is buried in a mix; separating them was measured
+and does not work. Bass, open hi-hat and tom have no lane: none could be
+detected reliably enough to paint. Bass was tried and withdrawn — every
+approach either failed to separate a bass note from the kick that hides it, or
+marked the kicks themselves, so the lane only ever restated what BD already
+said.
+
+Recording needs the sequencer stopped, because capture takes over the audio
+input and analysis replaces the bank underneath whatever is on the screen. So
+does Alignment, which re-analyses. Record, capture setup and Alignment do
+nothing while the sequencer runs, and the screen says `STOP SEQUENCER` when
+there is no bank to work on instead.
+
+A bank that has already been analysed stays usable while the sequencer plays.
+Choosing a lane, browsing the recording, changing sensitivity or paint policy,
+and previewing and painting all read a finished bank and write to a pattern,
+which is what the rest of the Trigger Editor already lets you do while playing.
+Starting the sequencer cancels an unfinished capture or analysis and closes a
+capture-setup or alignment draft, but keeps an armed paint preview, so you can
+arm Paint, start the sequencer and commit. Rhythm Doctor does not start or stop
+the sequencer for you.
+
+On an empty bank, press grid column 1, row 2 to begin Record; the press starts
+the action and its release is consumed. Press Record again to stop, or press K3:
+either finishes the capture once the screen says `ENOUGH / REC OR K3`. Until it
+does, the screen says `MORE AUDIO NEEDED`, and pressing Record then asks whether
+to abandon the take instead. Pressing Record on an occupied bank asks whether to
+clear its capture bank. K2 cancels that question and K3 confirms it; clearing keeps patterns that
+were already painted. In a ready bank, use E2 to choose Window bar, Window
+step, selected-lane sensitivity, Paint policy, or Alignment, then use E3 to
+edit the chosen item. Window bar moves by 16 steps and Window step by one; both
+view the same bounded timeline. Alignment shows `OPEN >`: choose it and press
+K3 (or turn E3) to open its tempo, start-beat, and fine-start settings; K2
+cancels and K3 applies the draft.
+
+Before recording, E2/E3 open a draft setup for Auto or Manual tempo, manual BPM
+(40–240), and Stereo/L/R input; K2 discards the draft and K3 keeps it. The
+current build presents these settings but does not pass manual BPM or the input
+selection to the capture or analysis backend, so they are not an audio-routing
+configuration.
+
+To paint a ready lane, select the destination pattern with the top row, press
+Paint (column 16, row 8) to preview, then press it again to commit. Cancel
+(column 14, row 8) discards the preview. Toggle is the default paint policy;
+Add and Replace are selectable on the Rhythm Doctor screen. Painting does not
+alter the captured bank.
+
+**Finding the phrase.** The analysis estimates where the four-bar phrase
+begins and aligns the gates to it, rather than to the moment you pressed
+Record. In this mode columns 10, 11 and 12 of row 8 browse the recording, and
+they do it with the same gestures that shift a previewed pattern everywhere
+else. A press of column 10 or 12 moves the window one step back or forward.
+Holding either of them covers a whole four-bar phrase in that direction, which
+is exactly the width of the displayed window, so every position reached by
+holding stays aligned with the phrase. A press of column 11 returns to the
+calculated phrase start. E3 still moves by a single bar or step. In every
+other algorithm those three buttons continue to shift a previewed pattern's
+position.
+
+Each move names where it landed, as bar.beat.step, so you can read the window
+position off the tooltip rather than counting presses. A move that the
+recording absorbs -- a step forward when the window is already at the last
+whole phrase, or a return to a phrase start you are already sitting on --
+says so instead of reporting a move that did not happen. If you are painting
+while you browse, the preview follows the window: the grid keeps showing the
+gates under the part of the recording you are looking at.
+
+The phrase estimate is a starting point, not a verdict. The bar the detector
+picks is reliable when the playing announces it -- a crash on the one, or a
+fill closing the bar before -- and genuinely undecidable when every bar is
+identical, which the reported confidence says rather than hides. To move it,
+open ALIGNMENT on the Rhythm Doctor screen and step START BEAT through the
+detected beat grid; the editor opens on the beat the detector chose, so
+confirming without editing keeps its answer.
+
+**Analysis server (advanced).** Analysis runs on the norns by default and
+needs nothing configured. If you run the optional analysis server on a computer
+on the same network, Rhythm Doctor can send the capture there instead and get
+back ten lanes rather than three: KICK, SNARE, TOMS, HIHAT and CYMBALS from a
+model that separates a kit into its pieces, and BASS, GUITAR, PIANO, VOCALS and
+OTHER from the rest of the mix. The melodic lanes carry rhythm and velocity,
+not notes.
+
+Set it up in PARAMS > MOSAIC > Rhythm Doctor: put the address in **Analysis
+server** (for example `http://192.168.1.50:8420`) and switch **Use analysis
+server** on. The switch is separate from the address so you can keep a server
+saved while working locally.
+
+The on-device analysis stays the default and the fallback. If the server is
+switched off, unreachable, slower than its timeout, or returns anything Mosaic
+does not accept, the capture is analysed on the norns instead and you still get
+gates. You lose the extra lanes, not the recording.
+
+The server also tracks the beat with a model trained for it, so on the remote
+path the tempo and the phrase start are usually better than the on-device
+estimate.
+
+`tools/rhythm_doctor_server/README.md` has step-by-step setup, including a
+Windows walkthrough that needs no administrator rights, how to find the
+address to type into the setting, and what to check when captures keep coming
+back with three lanes. Three lanes is the on-device fallback: it is what you
+get whenever the server cannot be reached, so it is the symptom to look for
+rather than an error message.
+
+**Availability:** Mosaic starts a local capture helper when this mode opens,
+and analyses captures with a model-free detector it builds from source the
+first time this mode is used. Nothing is downloaded, no Python packages are
+needed, and there is no configuration to do: the build takes about half a
+minute on a Norns and is then reused. Analysis of a 45-second capture takes
+roughly half a minute on the device.
+
+If no C compiler is available, or the build fails, analysis fails closed with
+`ANALYSIS_BACKEND_UNAVAILABLE` and no bank is produced. A delivery profile can
+still point the analysis worker at its own executable that accepts the worker
+request/result protocol and returns the lanes it declares, in which case that
+one is used instead. No detector quality, transcription accuracy, or timing
+performance is claimed here.
 
 The grid is intuitive and adapts to your choices. Each algorithm brings its set of options, and pressing on a grid key typically displays its function on the Norns screen.
 
@@ -487,11 +658,11 @@ Opt out of a prepared pattern by using the cancel button:
 
 <img alt="Pattern editor prime and paint cancel button" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/paint-cancel-button.svg" width="300" />
 
-While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes.
+While previewing a new pattern, use the move controls to shift its position. The first button shifts it left, the third to the right, and the center button resets it. Remember to paint your changes. Pressing prime, cancel or a move button shows the Paint Preview screen on the norns: whether a preview is showing, the algorithm it comes from, the shift, and how many steps it triggers. In Rhythm Doctor these same three buttons browse the recording instead, with the same gestures: a press of the outer two moves the window one step, holding either covers a whole four-bar phrase, and the centre button returns to the calculated start of the phrase.
 
 <img alt="Pattern editor move buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/pattern_editor/trig_editor/pattern-move-buttons.svg" width="300" />
 
-On the Norns screen, you can see the selected channel's grid state on page 1. This is the merged version of the channel and is a useful context for editing your pattern. Use E2 to select channels. On page 2 you can select trig editor options. Currently, this allows you to edit the tresillo multiplier in use. Experiment with different values to get wildly different results with the tresillo algorithm.
+On the Norns screen, Pattern Trig shows the pattern you are editing brightly over the viewed channel's steps, which stay dim as context; the viewed channel is the merged version of the channel. The title row names both (`PAT02 CH01`). Channel view, in the pattern task list, shows the viewed channel on its own. Use E3 to view another channel; it does not change the selected channel. Choose Options from the pattern task list (E1) to edit the tresillo multiplier in use; a new multiplier takes effect the next time you prime the tresillo algorithm. Experiment with different values to get wildly different results with the tresillo algorithm.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -526,7 +697,7 @@ Hint: Even if a step lacks a trig, don't hesitate to assign a note. This data mi
 
 The gentle flicker on the top row indicates the currently chosen pattern.  If you wish to explore a different pattern, press and hold or shift press (holding K1) on the top row.
 
-On the Norns screen, you'll find the channel grid visualizer. Use E2 to select the current channel.
+On the Norns screen, Pattern Note shows the viewed channel's steps as 64 cells. Use E3 to view another channel.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -542,7 +713,7 @@ Now let's look at the velocity editor, which functions similarly to the note pag
 
 The velocity editor spans two vertical pages: the first displays velocities from 127 down to 68, while the second displays values between 58 and 0. Adjust these to fine-tune the dynamics of your sequence. A single press of the two velocity value page buttons steps by a single value. Long press these buttons to skip to the extreme values.
 
-On the Norns screen, you can see the channel grid visualizer. Use E2 to select the current channel.
+On the Norns screen, Pattern Velocity shows the viewed channel's steps as 64 cells. Use E3 to view another channel.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -648,7 +819,7 @@ You can quickly add trig masks to your sequence by shift pressing (hold K1) the 
 
 ##### Adding Melodic Notes over Harmony and Drums
 
-To add a mask to your sequence, start by accessing the mask page on your Norns device. Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
+To add a mask to your sequence, start by accessing the mask page on your Norns device. It shows the eight masks by short name, each above its value: `Trig`, `Note`, `Vel` (velocity), `Len` (length) and `Chd1` to `Chd4` (the four chord notes). Once there, press and hold the step you wish to modify, then input the desired value as a trig lock. Alternatively, you can hold the step while pressing a corresponding key on your MIDI keyboard to set the value. This method allows you to easily and intuitively assign specific musical attributes to any step in your sequence.
 
 You can apply masks to all steps in a channel by setting the mask value without holding down a step. It's possible, for example, to add a chord note to every trigger, or set a fixed velocity for every trigger, or even turn on or off every trigger. The default mask value will apply to all steps that don't have a specific mask lock set.
 
@@ -732,15 +903,15 @@ Length merge modes are set by holding shift (K1) and pressing the velocity merge
 
 #### Note Dashboard
 
-On the Norns first page in the channel mode you can see the last played notes on the currently selected channel.
+Choose Output from Channel tasks to see the last note the selected channel played, all on one screen: **Note** is the note and the chord voices it played, **Vel / Len** its velocity and length, **Step** the step it came from, **Degree** the pattern degree (and what merging made of it, for example `+2 > +3 MERGED`), **Pitch** the pitch in the scale (and the harmony's pitch when Harmony moved it, for example `E4 > G4 HARMONY`), and **Sent** the note actually sent, or why none was (`MUTED`, `REST`). Hold a step to see what that step plays instead, including the stages of a [Harmony](#harmony) event.
 
 #### Clocks, Swing and Shuffle
 
-You can easily adjust the tempo of your entire composition directly from the song editor page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels via the channel editor page in the Norns menu. This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
+You can easily adjust the tempo of your entire composition directly from the song editor page on your Norns screen. Each sequence can have its own tempo, allowing for varied pacing throughout your composition. Furthermore, you can manage clock division and multiplication for individual channels on the Clock screen (Channel tasks, then Clock). This feature enables each channel to operate on independent timings, which is perfect for creating complex polyrhythms and other intricate rhythmic patterns.
 
 Additionally, adding swing to each channel allows you to shift notes off the grid, giving your music a more human, less mechanically precise feel. This can be particularly effective in genres like jazz or funk, where a looser, more organic rhythm is often desirable. There are two modes to choose from: swing, which moves notes closer or further apart depending on the value which ranges from -50 to 50. Shuffle is based on 21echoes' excellent [Cyrene](https://github.com/21echoes/cyrene) and uses more complex patterns and can be set to a "feel" and a "basis". Each channel can have an independent setting, giving endless possibilities. 
 
-Note: If a channel's swing/shuffle settings are not set ("X"), they will take the global setting which is set on the song editor page global settings page. Selecting "X" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.
+Note: If a channel's swing/shuffle settings are not set ("X"), they will take the global setting, which is set on the Song page's Tempo and feel screen. Selecting "X" again after choosing a local Swing or Shuffle mode restores global mode inheritance, just like an untouched channel; choosing either mode explicitly overrides the global mode. While playback is running, confirmed changes on this channel page take effect at the next global song-pattern boundary, including a repeat of the same pattern. They do not take effect immediately or at the next step of a shorter channel loop. While stopped, confirmed changes apply immediately.
 
 <p>
   <svg width="25" height="25" viewBox="0 0 500 500" style="vertical-align: middle;">
@@ -753,10 +924,9 @@ Note: If a channel's swing/shuffle settings are not set ("X"), they will take th
 
 _Mosaic_'s memory retains all masks and trig lock actions, including those recorded using the record function. You can navigate this memory using Norns' encoder.
 
-To access _Mosaic_'s memory, open the channel editor and navigate to the Memory page on the Norns screen. On this page, each remembered action is represented as an icon, with the most recent action displayed on the right.
+To access _Mosaic_'s memory, open the channel editor and choose History from Channel tasks. The Memory screen shows your position in the channel's memory, the selected action, and how many actions you can still undo and redo.
 
-- Notes are shown as icons, while dots indicate the length added to those notes.
-- Use E3 to scroll left and explore past actions or scroll right to move towards more recent actions.
+- Use E3 to step back through past actions or forward towards more recent ones.
 - Press K3 to jump directly to the latest action.
 - Press K2 to return to the beginning of the memory.
 
@@ -806,11 +976,13 @@ To mute a channel on your sequencer, press and hold the select button for the de
 
 Most devices in _Mosaic_ feature a set of trig params that alters either the quality of the sound or the trig in some way. Trig params are unique to a song pattern, allowing drastic transitions when moving from one section to another. Each channel can have up to 10 trig params assigned, and each trig param can be [trig locked](#locks) independently. Trig locking is a powerful sequencer device seen on Elektron synthesizers. Each step can be assigned a unique param value, allowing for endless sound variations. 
 
-In the second user interface page of the channel editor on the Norns screen, you will encounter a variety of parameters. Here's how to navigate and manipulate these settings:
+The Trig params screen of the channel editor shows all ten slots at once. Each slot shows its parameter's two short names from the device definition, the first above the value and the second below, so together they name the parameter (for example `Quan` over `Note` for Quantised Fixed Note). The names stay still; one too long for its slot is cut short. A value too wide for its slot shows `...`, and while that slot is selected its full name and whole value take the last line. Here's how to navigate and manipulate these settings:
 
-* **Page Navigation**: Use E1 to switch between pages.
-* **Changing Parameters**: To select a parameter, turn E2. Once highlighted, adjust the parameter's value by rotating E3. To fine tune, rotate E3 whilst holding K1.
-* **Activating Parameters**: To activate a different parameter within the same slot, press K2.
+<img alt="Norns Trig params screen" src="images/norns/trig-params.png" width="384" />
+
+* **Screen Navigation**: Use E1 to open Channel tasks, then choose Masks, Trig params or another screen with E2 and open it with K3.
+* **Changing Parameters**: To select a slot, turn E2. Adjust its value by rotating E3. To fine tune, rotate E3 whilst holding K1.
+* **Activating Parameters**: To activate a different parameter within the same slot, press K2 to open the parameter list, turn E3 to browse, press K3 to assign, and press K2 to return.
 * **Locking Changes**: As you adjust values, the system automatically saves your changes. You can also create "trig locks" on specific steps by holding down the step and turning E3. This allows you to set values that will override the default parameter for that step.
 * **Default Parameter Values**: A pre-set parameter value is transmitted to your selected device on steps without a trig lock, unless the value is off or a parameter slide is active.
 * **Handling Off Settings**: An explicit MIDI parameter lock set to "off" sends no value for that parameter on that step. It does not resend the previous lock or restore the default, so the device keeps its last received value. An off lock does not itself cancel a parameter slide that is already running; that slide may continue sending values.
@@ -903,7 +1075,7 @@ The Fully Quantise Mask param controls whether note masks on a step are fully qu
 
 Access the scale editor by pressing the second global menu button.
 
-When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Norns interface to adjust the root, scale, degree, and rotation for the selected scale.
+When in the scale editor, a short press of the scale buttons selects one of the 16 scales; the currently selected scale is brightly lit on the grid. A short press on the already applied scale turns the global scale off while retaining that slot for editing; another short press applies it again. With global scale off and no scale lock, pattern degrees play as chromatic semitone offsets. All patterns now default to this scale unless overridden by a global scale trig lock or channel scale trig lock. Use the Scale screen to adjust the root, scale, degree, rotation and transposition for the selected scale: E2 chooses a setting, E3 changes it, K3 applies it and K2 cancels. The title row names the slot being edited.
 
 <img alt="Scale editor scale slot select buttons" src="https://raw.githubusercontent.com/subvertnormality/mosaic/refs/heads/main/images/Grid/scale_editor/scale-slot-select-buttons.svg" width="300" />
 
@@ -983,8 +1155,10 @@ The song sequence's length can be adjusted using the fader located at the lower 
 
 #### Navigating the Norns Display
 
-**Page 1**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.
-**Page 2**: Set the tempo to match the mood you want, from a soothing lullaby to a fast-paced track.
+The Song page opens on **Playback**, which shows on one screen the playing slot, the one that comes next, the pass within its repeats, the global pattern length and whether song mode is advancing. Choose the other screens from Song tasks (E1).
+
+**Slot setup**: Here, you can set the number of repetitions for each Song Sequence. This setting dictates how sequences transition in song mode. When song mode is off, you manually control slot activation, allowing you to dictate the flow of your song.
+**Tempo and feel**: Set the tempo to match the mood you want, from a soothing lullaby to a fast-paced track, and the global swing or shuffle.
 
 ## Locks
 
@@ -999,7 +1173,7 @@ Device parameters can be locked on a per-step basis. To set a param trig lock:
 
 To clear parameter trig locks from a specific step:
 
-1. On the channel editor, navigate to the trig lock page on the Norns screen.
+1. On the channel editor, show Trig params on the Norns screen (Channel tasks, E1).
 2. Hold the step with trig locks and press K2.
 
 To clear all parameter trig locks from a channel:
@@ -1042,7 +1216,7 @@ Masks can also be locked on a per-step basis. To set a mask trig lock:
 
 To clear mask locks from a specific step:
 
-1. On the channel editor, navigate to the Masks page on the Norns screen..
+1. On the channel editor, show Masks on the Norns screen (Channel tasks, E1).
 2. Hold the step with mask locks and press K2.
 
 To clear all mask trig locks from a channel:
@@ -1195,6 +1369,12 @@ Similarly, "Lock merged to pent." is on by default and ensures notes modified by
 
 "Honour scale transpose" is off by default. Enabling this setting means the current scale's transpose option will affect the MIDI keyboard mapping.
 
+#### Screen Options
+
+##### UI Motion
+
+Turns decorative screen motion on or off (**PARAMS > MOSAIC > UI motion**, default On): the start-up animation, the light running round _Mosaic_'s mark, the selection's shadow gliding across the Masks and Trig params grids (diagonally when it changes row), names and values too long for their space scrolling right to left so you can read them in full (the names in the Masks and Trig params grids stay still), values rolling into place, and the characters. The Rhythm Doctor dances to the tempo of the captured bank, the Merge Shape garden sways and the Harmony choir bobs while the sequencer plays, and a metronome swings on the clock and tempo screens. A single numeric value, such as a mask or trig param, also shows a small dial of where it sits in its range, beside the value itself. Motion never delays input, hides a value for more than a moment or changes timing; with it off, every screen is still.
+
 ### Sinfonion Connect
 
 You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device called [norns2sinfonion](https://github.com/subvertnormality/norns2sinfonion).
@@ -1203,6 +1383,239 @@ You can sync up your Eurorack Sinfonion module to Mosaic using a DIY device call
 
 _Mosaic_ works with [matrix mod](https://github.com/sixolet/matrix) and [toolkit](https://github.com/sixolet/toolkit). You can add LFOs and other rhythmic modulators to any device parameter.
 
+
+## Musical Merge and Voice Leading
+
+Mosaic can reshape a channel's merged rhythm and place its notes into stable
+registers without rewriting any source pattern. Both features are optional and
+default to Off, so an older project keeps its original MIDI, timing and random
+behaviour.
+
+Merge modes, Merge Shape and Harmony are consecutive Channel tasks. Open Merge Shape or Harmony there. Their screens use vertical lists, including Rhythm, Phrase, Pitch and the Harmony settings. Their first screens, Merge
+Shape and Voice leading, are lists: each row shows its value or `OPEN >`, and the
+chosen row is marked `>`. E2 selects a row, E3 changes a staged value, K3 on a row marked `OPEN >` opens it (the last line names it, for
+example `K3 OPEN RHYTHM`), and K3 elsewhere validates and applies the whole draft.
+Rows that carry out an action instead, such as Create group, Four-part smooth,
+Delete group and Reset map (the last two ask first), keep a plain `>`. K2 discards the draft, or returns from a
+row you opened to the one it came from. E1 returns to the first screen of the
+feature, discarding an unapplied draft, and from there to Channel tasks. A stopped edit applies immediately. During playback, Merge Shape displays
+`NEXT CYCLE` and activates before the next channel-cycle onset; Harmony displays
+`NEXT PATTERN` and activates at the next global pattern boundary. Stop makes the
+latest applied request active for the next start.
+
+### Merge Shape
+
+![Merge Shape Phrase settings in a vertical list on Norns](images/merge-shape-phrase.png)
+
+![Merge Shape Foundation rhythm settings on Norns](images/merge-shape-foundation.png)
+
+Mode Off uses the saved legacy Skip, Only or All trig merge. While Foundation is on it decides the channel's trigs instead: the Merge modes screen shows the trig mode as `SHAPE (ONLY)` and the grid trig merge button's tooltip says Merge Shape is in use; the saved trig mode applies again when Merge Shape is off. Note, velocity and length merge modes still apply. Foundation selects
+one assigned pattern as the protected Anchor. Other assigned trig patterns offer
+candidate additions at non-anchor steps; overlaps remain one anchor. Amount
+admits a deterministic, seed-ranked subset, Accent scales addition velocity, and
+Gap suppresses additions within 0–8 circular channel steps of an anchor. Anchor
+velocity remains authored. Explicit channel/step masks still win, probability
+can still reject an onset, and source patterns are never flattened or changed.
+
+Phrase Cycles can be 1, 2, 4 or 8. Flat, Build, Answer and Fill are stored as
+visible per-cycle percentages; changing a percentage makes a Custom curve.
+Fixed repeats the same ranked additions. Per phrase changes ranking only after a
+complete phrase. Each channel loop advances its own CYCLE counter—even with
+polymetric ranges, swing or mute—and Stop restarts at cycle 1.
+
+Keep anchor pitch uses the anchor pattern's relative note on anchor steps before
+normal scale conversion. Addition Target can be Legacy, the full effective
+scale, selected effective degree indices, or the immutable material of an enabled
+Harmony Ensemble group. Targets affect admitted additions only. Note masks,
+random shifts and fixed-note operations keep their existing precedence and show
+a bypass rather than being quantised twice. Nearest-note ties choose the lower
+pitch. A missing/empty target visibly falls back to the legacy pitch.
+
+Foundation ranking is repeatable for the saved seed and grows as a nested set:
+raising Amount cannot remove an already selected addition while source, gap,
+seed and phrase are unchanged.
+
+Mode has a third choice, Fragments, and Foundation gains Interlock and
+Structure. Each is part of the same draft: K3 applies it (`NEXT CYCLE` while
+playing), K2 discards it, and one undo step restores it.
+
+#### Fragments
+
+![Merge Shape Fragments settings on Norns](images/merge-shape-fragments.png)
+
+Fragments is a separate mode for building a phrase from pieces of the assigned
+patterns. With Mode set to Fragments, Rhythm opens the Fragments screen: Size (4,
+8 or 16 steps), Keep anchor, Anchor (shown only with Keep anchor) and Seed. The
+channel loop is cut into fragments of Size steps counted from the channel's own
+start step; the last fragment is shorter when the loop does not divide evenly,
+and a loop shorter than Size is one fragment. Fragments never cross the loop end.
+
+Each fragment plays one assigned pattern, chosen repeatably by the Seed: the
+same seed always gives the same choice. The fragment keeps that pattern's own
+trigs, notes, velocities and lengths exactly, so the legacy trig, note,
+velocity and length merge modes and merged-pentatonic do not apply while
+Fragments is on. The Merge modes screen shows each saved mode as, for example,
+`FRAGMENTS (AVERAGE)`, and a merge button's tooltip says Fragments is in use; the
+saved modes apply again when Merge Shape is off. A note longer than the gap to
+the next onset on the loop is shortened to that gap. Keep anchor also plays the
+Anchor pattern's trigs where the fragment's own pattern has none; where both have
+a trig, the fragment's pattern wins. With no assigned pattern the mode falls back
+to legacy merging and Result says `ASSIGN PATTERN`.
+
+Phrase shows only Cycles and Variation in this mode. Fixed repeats the same
+fragment sources every phrase; Per phrase draws new ones for each phrase.
+Shape percentages, Amount, Accent and Gap do not apply. Fragments hides Pitch; choose the adjacent Harmony task directly for voice leading. Explicit masks still win and probability can still reject an
+onset. The channel grid shows exactly the trigs the fragments play.
+
+#### Interlock
+
+![Merge Shape Interlock settings on Norns](images/merge-shape-interlock.png)
+
+Interlock makes one channel's Foundation additions leave room for another
+channel's anchors. On the follower's Rhythm screen, Interlock opens Leader (Off
+or any other channel) and Window (0–4 of the follower's steps). An addition is
+removed when a leader anchor falls within Window steps of it; Window 0 removes
+only additions that start exactly with a leader anchor. Anchors of either channel
+are never removed, so an addition removed here simply does not play.
+
+Leader anchors are the anchor pattern's trigs in the leader's loop, planned from
+the song, not what the leader happened to sound: probability, mute and swing do
+not change them, and swing or shuffle never change which additions are removed.
+Channels at different clock divisions or loop lengths are compared in musical
+time from Start. The leader must itself use Foundation for its anchors to count;
+otherwise Status says `LEADER OFF` or `LEADER MISSING` and nothing is removed.
+
+A channel can follow one leader, and a channel that has a leader cannot be one:
+Apply refuses a chain with `LEADER HAS LEADER` or `CHANNEL IS A LEADER` and
+keeps your draft. Where Mosaic cannot plan the leader exactly—after a clock
+division, loop range or song change while playing (`RESYNC`, until the next
+Start or song realign) or beyond its planning budget (`PLAN LIMIT`)—the
+follower plays all of its admitted additions for that loop and shows why.
+Status on the Interlock screen and the Interlock row on Result show `ON` or the
+bypass.
+
+Interlock's planning runs when a follower wraps its loop. On a norns each
+follower that wraps on the same step adds about 0.7 ms to that step, so a few
+followers wrapping together are inaudible, while every channel following one
+leader and wrapping together (15 followers) can make that step land about
+10 ms late. Stagger follower loop lengths or wraps if you need very many.
+
+#### Structure
+
+![Merge Shape Structure settings on Norns](images/merge-shape-structure.png)
+
+Structure snaps chosen moments of a Foundation line to a chord while the notes
+in between keep their own pitch. Pitch opens Structure: Markers (Off, Anchors,
+Every 4 or Every 8) and Chord group, an enabled Harmony Ensemble group. Anchors
+marks every anchor onset; Every 4 and Every 8 mark steps 1, 5, 9… or 1, 9… of the
+channel loop counted from its start step. A note at a marker is converted to the
+scale as usual and then moved to the nearest pitch class of the group's chord,
+taking the lower one on a tie. Notes between markers keep their Addition Target
+(additions) or their own pitch (anchors); Mosaic makes no claim that they
+resolve. Note masks, random shifts and fixed notes still win at a marker.
+
+Apply needs an enabled group while Markers is on. If the group becomes
+unavailable during playback the markers play their ordinary pitch and Result
+says `CHORD MISSING`. Deleting or disabling the group turns Markers Off for every
+channel that uses it in the same change; Delete group lists those channels first.
+During playback that change waits for the next pattern boundary, and a Merge
+Shape edit applied to one of those channels before then waits with it and shows
+`NEXT PATTERN` instead of `NEXT CYCLE`.
+A snapped marker keeps its chord tone when Harmony Revoice or Ensemble would move
+it: Harmony's Result says `MARKER PRIORITY`. With Harmony Pattern, a mapped note
+value that snaps to a different pitch class at a marker than it plays between
+markers has no single mapped pitch, so it is silent at both, whichever fallback
+is chosen; unmapped values keep their own pitch.
+
+#### Result and Reason
+
+Result shows each step's role (anchor, addition or fragment) and decision, and
+Reason shows every reason an addition was left out, in order: `GAP`, then
+`INTERLOCK CH02`; several reasons are named together (`GAP, INTERLOCK`). A
+fragment step names its fragment and source, such as `FRAGMENT 1 P03` or
+`KEPT ANCHOR`; a Structure marker step shows `MARKER CHORD G01` when its pitch
+was snapped (or, before it plays, will be), `CHORD MISSING`, or the instruction
+that kept its own pitch, such as `BYPASS NOTE MASK`, `BYPASS RANDOM`,
+`BYPASS FIXED` or `BYPASS QUANTISED FIXED`. When a leader is set,
+Result adds an Interlock row, and a queued change the loop boundary refused is
+shown as `Rejected`. Reason is one screen of six rows: Step, Role with the
+step's source patterns (`ADDITION P1,2`), Decision, Interlock, Velocity and
+Pitch target. Its Interlock row is kept apart from the reasons: `ON` while
+Interlock filters, `OFF` without a leader, or the bypass in force, such as
+`RESYNC` or `PLAN LIMIT`, in which case gap and Amount still decide the step
+as if Interlock were off.
+
+Silence-aware interlock (Space: leaving room while another channel's notes are
+still sounding) is not part of this release.
+
+### Harmony
+
+![Harmony Register settings in a vertical list on Norns](images/harmony-register.png)
+
+![Harmony Pattern Tone Map on Norns](images/harmony-tone-map.png)
+
+Harmony offers four mutually exclusive channel modes:
+
+- Off follows the ordinary Mosaic pitch path exactly.
+- Revoice takes the actual root and enabled chord-mask voices after Mosaic's
+  pitch-class decisions, preserving their pitch classes and sounding count while
+  choosing legal octaves and assignments.
+- Pattern maps explicit effective relative values in the current merge binding
+  to Bass, Inner1–3 or Top. Repeated mapped values reuse one pitch for the entire
+  harmonic frame; unmapped values remain Raw. Random, fixed, absolute-mask and
+  chord-mask events visibly bypass Pattern. Conflicting aliases fail closed.
+- Ensemble assigns Bass/Inner/Top roles to one to five explicit monophonic
+  channels. Each member retains its own rhythm, velocity, gate, clock and route,
+  but its pitch is replaced by the shared frame. A conflicting local scale lock
+  temporarily uses the ordinary pitch path (`LOCAL SCALE BYPASS`); a channel or
+  step octave override does the same (`LOCAL OCTAVE BYPASS`).
+
+Register rows set inclusive MIDI Low/High, Centre and Preferred leap for every
+role. Smooth prioritises literal common tones and economical movement; Compact
+prioritises register centre/spacing; Independent prioritises movement without a
+common-tone score. Hard options cover crossing, exact unison, strict leap and
+strict bass direction. Bass can be Root, an explicit Inversion tone, Smooth or
+an exact Pedal. Revoice pedals must already be in its input material; only an
+Ensemble group can explicitly allow a non-chord pedal.
+
+The deterministic solver searches every legal pitch-class placement inside the
+configured ranges (up to five voices) and never clamps an illegal result. A frame
+with no solution silences affected mapped voices by default; Legacy fallback is
+explicit. A bounded search reports `BUDGET EXCEEDED` rather than emitting a
+partial answer. Preparing a frame does not change voice history: the first real
+scheduled onset consumes it, while redraws, rests, failed probability, mute and
+missing output do not. Delayed strums and arpeggios keep the pitch snapshot made
+at their onset, and Note Off always releases the pitch and route actually sent.
+
+![Harmony NO VOICING result on Norns](images/harmony-no-voicing.png)
+
+The Channel grid remains the chronological trig/mask surface. Foundation anchors
+and additions therefore appear as active steps there. After a step plays, the
+Pattern Note grid moves that step's bright note LED to the final effective pitch
+that the native 21-position note range can represent. Switch its upper, centred
+or lower seven-note bank as usual to inspect octave placement. Raw and bypassed
+events use the ordinary pre-Harmony position; turning Harmony Off restores the
+ordinary merged/scale positions immediately. An exact pitch outside that native
+range has no false in-range LED and remains available in Result/Note Dashboard.
+
+This display is read-only: touching the projected Note fader still edits its
+selected source-pattern value. Until the changed step plays again, the edited
+source is displayed rather than a stale output. Final Harmony pitches are also
+shown on Output (its Pitch and Sent rows) and on Harmony's Result screen, one row
+per voice as the planned and sent note (`C3 > C3`). Result uses its Step row to
+select one coherent event chain; on Note
+Dashboard, holding a grid step temporarily inspects that step instead of combining
+it with a later delayed event. A step with no recorded event says `NO EVENT` and
+shows no planned or emitted pitch; it never borrows the latest event from another
+step. This readout occupies the bottom two lines of the Note Dashboard, which is
+the row tooltips use, so while a harmony event is being shown there the page
+clears that row and tooltips are not visible on it. Result status names local scale/octave bypasses, explicit Legacy fallback
+and the specific no-voicing reason. For an Ensemble group, any member bypass or failure is
+surfaced even when another member has a valid voicing. The projection never writes
+back into a shared pattern. Copy/save stores
+versioned configuration, not running solver or phrase history. Missing optional
+configuration loads as Off; unknown schema versions reject the project before it
+replaces the active project.
 
 ## Performance Management
 

@@ -1,0 +1,19 @@
+{
+  "baseline_revision": "7f534cba4d92c9fbef1aeda36d4016e10cb5695c",
+  "evidence": [
+    {
+      "manifest": "/tmp/mosaic-ui-contract-five-before/controlled/3d7c949bc15c4dda88cc38912839bfb8/manifest.json",
+      "manifest_sha256": "a6fbb4b0bdc4fbeed28a8d5cd739fb41dee61aacd34e5e20d60ddb605729ee83",
+      "raw_sha256": "ea8d6bf0cbd76974cc42f55b652ec84113a2f3cde1936f8efda7b4b5d63f27c5",
+      "canonical_sha256": "9043fbed63d84070d654391d7a75df45cd7b0f509cc338bc3d842c5b082d6b55"
+    },
+    {
+      "manifest": "/tmp/mosaic-ui-contract-five-save-repeat-controlled/f81a798a9d744b9fb720e80b9f1cef36/manifest.json",
+      "manifest_sha256": "83d7cec6ba506b51743d24d316d1c65babd950cad14ae12a694179e0f9360a3e",
+      "raw_sha256": "8651ab6cc2fd4dbe56c15eea3144aac1b9c79d6b23cf52aec6cf2b79923171f7",
+      "canonical_sha256": "9043fbed63d84070d654391d7a75df45cd7b0f509cc338bc3d842c5b082d6b55"
+    }
+  ],
+  "assertions": "Characterisation outside README: serialization order is not project content; all save/failure assertions remain unchanged.",
+  "canonicalization": "Decode with pinned tabutil; recursively sort typed keys; retain every scalar value, nested table and entry count. Reject malformed or unsupported content."
+}

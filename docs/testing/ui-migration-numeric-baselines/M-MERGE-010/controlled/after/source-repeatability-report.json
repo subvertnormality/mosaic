@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "c9588d72dd6c25cd41b100bee0f583b72281322a",
+  "selected_cases": [
+    "M-MERGE-010",
+    "M-MERGE-018",
+    "M-MERGE-019",
+    "M-MERGE-020",
+    "M-MERGE-021",
+    "M-MERGE-022"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/numeric_merging.py": "M-MERGE-010",
+    "tests/behaviour/numeric_merging.py": "M-MERGE-018"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/numeric_merging.py",
+      "case": "M-MERGE-010",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-60cfe4e1c3eb4c90836776e257841ee7/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-60cfe4e1c3eb4c90836776e257841ee7/manifest.json",
+      "manifest_sha256": "ceb55f65b044e3d1d9a36129b0077e37d03a748236e1f1acb2c801a13e77fd0d",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/numeric_merging.py",
+      "case": "M-MERGE-018",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-25c3a1799ddb463f889284b2237f7a39/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-25c3a1799ddb463f889284b2237f7a39/manifest.json",
+      "manifest_sha256": "f1730f1c74f665038b6ec85d865cd294c9f2f6db737f41c5601c4aaa09052602",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

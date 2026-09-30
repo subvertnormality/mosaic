@@ -1,0 +1,109 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 1",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 2",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 3",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 4",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 5",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 6",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 7",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 8",
+    "passed": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 9",
+    "passed": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 2 Trig Locks",
+    "matched": true
+  },
+  {
+    "kind": "parameter-list-label",
+    "label": "CC 20",
+    "passed": true
+  },
+  {
+    "kind": "slide-capacity",
+    "slots": 9,
+    "cycles": 149,
+    "last_cycle_seconds": 24.664,
+    "long_slide_last_value": 106,
+    "passed": true
+  }
+]

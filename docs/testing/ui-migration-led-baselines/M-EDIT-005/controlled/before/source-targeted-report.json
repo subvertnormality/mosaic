@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "8767bd1eab3c9958bd9756b91e53edd5cd18ea5e",
+  "after_sha": "bf1e4c1abd8731134213100f40e3119f9a37583a",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-EDIT-005"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-EDIT-005",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-EDIT-005/real-time/before/fa37c664ce9e44eb95c9df01aee92d46/manifest.json",
+              "manifest_sha256": "fe56c9f9c01606b83feacc0a0fd96b724a6f67110cc06a217e686dfffb1e37dd"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-EDIT-005/real-time/after/6bcc15c9b5f24e379456aa92536b3909/manifest.json",
+              "manifest_sha256": "3ae27ba0271453d3219d8de8e29cfe0b5d0e357f4888aa479275a5af27c48000"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-EDIT-005/controlled-experimental/before/920c859ae9ec4a7e926c12467ceabebe/manifest.json",
+              "manifest_sha256": "35b48d9310c05983875bcd641e1881deaa0b5014aa1eea0258a3874368a7d2cb"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-EDIT-005/controlled-experimental/after/ec718dfbe41346c19aac050f0d746b9d/manifest.json",
+              "manifest_sha256": "8033ed291d8ea03dc95568ab1c7d431375f6dd70f10ceee275b41474855d887f"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,566 @@
+{
+  "passed": true,
+  "source_sha256": {
+    "lib/rhythm_doctor/assets.lua": "65a122350c95caaace1834b7a45fd124c2a765aa53beee5fd1b39801db31da55",
+    "lib/rhythm_doctor/bank.lua": "b61ef75b986e146e1643469ee14d05260c70d4563fe09247cdf45f00ffdd4b7d",
+    "lib/rhythm_doctor/capture_controller.lua": "52db3d5badcffe274fb8a88db76e6a8389479ebd750352972c2bcedc6a1dcc71",
+    "lib/rhythm_doctor/native_transport.lua": "4870b1f82fff1bc9db22898851c3747e26018cd656a37f8446447b1132c88f2e",
+    "lib/rhythm_doctor/paint.lua": "1d5a837a909323b8d99f8b860cf3b041b08186930d3f512d25820008d0fe7e4e",
+    "lib/rhythm_doctor/paint_journal.lua": "163f6abc3dbfe70cfe6031a8e08bc66a6450b158710be4fc7833edf381b296fa",
+    "lib/rhythm_doctor/runtime.lua": "ca37df1473415efbd0c40e43c964aa8819b297f39cf207286af48a58af1edd05",
+    "lib/rhythm_doctor/state_machine.lua": "30e0a4bf773f3d0dee9afa7d7fb2b26da253cf73ba9438859454ee667a5d199d",
+    "lib/rhythm_doctor/ui_adapter.lua": "b01a12afb382a3d66275f00bbbd3069f05e4e6b8ea171f5c5558e78db810ac60",
+    "lib/rhythm_doctor/worker_host.lua": "9835d466bbe142ebca2d13b3a5123c1e8de320e39da983133daba28e5a2e1c60",
+    "tests/rhythm_doctor/acquisition_quality.py": "4718d21e529a2fac5dc2c441a8c6f162ffc1c79e2b91101256a351bb67fed622",
+    "tests/rhythm_doctor/audit_rendered_corpus.py": "7274645566950993feb75619a268476e16a1182c97a92dafafbbc41a9e8bbd65",
+    "tests/rhythm_doctor/corpus.py": "c2b5264b03457b737f00d87c238696215e0b7dcc998978195e07b461f079808a",
+    "tests/rhythm_doctor/corpus_avp.py": "3bcaccb6584024c8698ee1784df4fdd9ff81cc206aafcf89b557ebc1d8c2282b",
+    "tests/rhythm_doctor/corpus_enrich.py": "1b73f44f50f3eab9d3a29eb960f456cb62508f1756d17662691bcd3276f46aef",
+    "tests/rhythm_doctor/corpus_materialize.py": "98ce34898d3ee4c813e5927d442276d21aa5838ac4e7cc2ddfcf86cb73fd3940",
+    "tests/rhythm_doctor/corpus_stems.py": "f323703abe6bf7f955dd73869f951451cbb127630cba62f1884310391c1c6668",
+    "tests/rhythm_doctor/grid_quality.py": "a99217107c8a23effac908a107ba515f858794887c7982b17ea98184f8a6f0f3",
+    "tests/rhythm_doctor/performance.py": "ed27e2fd4a6d23c399d054cbd262b69ec58eeaaa2fda4a93312626d33c9e320a",
+    "tests/rhythm_doctor/quality.py": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b",
+    "tests/rhythm_doctor/quality_report.py": "04615145e7eecd646ebddc41f31ac03216b952ea79f246864223da6f37564532",
+    "tests/rhythm_doctor/run_components.py": "6549b570f2b12cd3a6eec0e52580b628a06946166372382355a802cd28a892cf",
+    "tests/rhythm_doctor/run_hardware_capture.py": "fddca26b1e937a87c4c305eeb4b8cec74e4c86077f658c9e2be5935a2a799b7a",
+    "tests/rhythm_doctor/run_hardware_core.py": "9f8b1df47ee72671db1238374acccd1d79d7fed0bae8b13c8187635b4fd6ce9a",
+    "tests/rhythm_doctor/run_hardware_worker.py": "9e36ee99d024925dd9831fb275eb84f225830568820e90889b0a9c3ac8760a24",
+    "tests/rhythm_doctor/test_acquisition_quality.py": "577b4d0ff1ee0f89905704f11a84a59037f719a516514880c6c8665eff7bcbbc",
+    "tests/rhythm_doctor/test_adtof_evaluate.py": "12b687a1c4287b02f513c79f720fef4cdf08bc636dcc4d194c8a35f086239a29",
+    "tests/rhythm_doctor/test_audio_frontend.py": "22e26ff5ee3749fef2dd129512a450c6927abfabc17a31f77a25dd2f8b80436d",
+    "tests/rhythm_doctor/test_basic_pitch_adapter.py": "3615cb2e5ff08a53accdbfb935c5a64ba92bf776ddbcaf3c644fa33e5a0fe18f",
+    "tests/rhythm_doctor/test_bass_calibration.py": "147f0eb5ff6b2d156e82a250353b91d327d6634b121fe4eedcb181b90f6b7bc5",
+    "tests/rhythm_doctor/test_bass_harmonic_rf.py": "70b242e90ad410c58237d17367dfed57755b16ecee60f052a8054a6631887768",
+    "tests/rhythm_doctor/test_capture_contract.py": "dd1f36c0dd0cf194c2cd03cc6f08c8499c8a30d2d641aa7b3345be565bed3736",
+    "tests/rhythm_doctor/test_capture_native.py": "404d706c9991bf31541151bb47a99626bba61e188379a2d4e31f157787a873aa",
+    "tests/rhythm_doctor/test_capture_worker_ipc.py": "5786c59ed552e6f480c9ae31e5e8928bf9057bc4377eeabe16738af4f11a1aaa",
+    "tests/rhythm_doctor/test_corpus.py": "669c1e9db09327075e14f18f385593738a6789ef9470456c70f24b1bb8dd58b3",
+    "tests/rhythm_doctor/test_detector.py": "619e5dbb799bec8d1419c52396e8ee18a45cbadaa40031f66b2f799afab6a59c",
+    "tests/rhythm_doctor/test_grid_quality.py": "e83b7995e71d1b1b421359e91bd737730d2ffd9a6f9780a840bc02c5615a7c53",
+    "tests/rhythm_doctor/test_native_transport.py": "88f797da61afcb2d80746e4d5c6da512cd5c4aaf5b09798628208ed4e587b9b3",
+    "tests/rhythm_doctor/test_nmf_template.py": "69d927b55bc118507f7c958216651e108733959f00f82a820b7dd40370e0b3e3",
+    "tests/rhythm_doctor/test_performance.py": "f8e8a4f9fb575e28bf40904c6d1f4008e0718651fd27aaf20eae3c9d67302ac4",
+    "tests/rhythm_doctor/test_quality.py": "bc7ffcbe632d61b4819933d027ebc0900d1e5103a95f58a59e34ee5a5a8eaf1e",
+    "tests/rhythm_doctor/test_quality_report.py": "073b11e6cdf715f5fe565ce86385f253566fd3159303174b8be3498aab954034",
+    "tests/rhythm_doctor/test_rendered_corpus_audit.py": "fe0b41c007463e4495eb7e93755bbce3a8241b8e4a0bf0d1ff1ccf7c440a3e94",
+    "tests/rhythm_doctor/test_tempo_candidate.py": "080167b209f5a66fc379894e3768b345a50e3dabc8db17881d7be5faf1ab2f58",
+    "tests/rhythm_doctor/test_tempo_corpus.py": "1247615cb1d0cbdedfa2c95ceafd73f95c3fa2db59b9f5a149451a30d356e740",
+    "tests/rhythm_doctor/test_tempo_native.py": "a7f6dd0c3c531c54d7a2f18483c58123a3e9d56cc1fc5d383c649504b75d1b13",
+    "tests/rhythm_doctor/test_v11_priority_rf.py": "5e8265cbbb55ebdf1daac823f6e79896a4834e03445f3c51bededa0240f8e094",
+    "tests/rhythm_doctor/benchmark_bank.lua": "519fa004810a1902857c4034d26914e6ec1aac1682deeb83ca284b680f5e4b33",
+    "tests/rhythm_doctor/test_app_surface.lua": "26753e31dfd2d3f2fd786d0d1bb43f61cedee6605c3da6fbeb5ac02cbf8fb260",
+    "tests/rhythm_doctor/test_assets.lua": "f11d9e7d5032312f2a99d4d115218955609399afb44007eeffa17327cc8fb183",
+    "tests/rhythm_doctor/test_bank_schema.lua": "75eb084b5fc660b267acff61abef60c135a59485c7cf6860fe8042ef4a7b2c37",
+    "tests/rhythm_doctor/test_capture_controller.lua": "8f30b1de35d50f522ec158fa32972dd902097c27c1cce52ac288f3853546715a",
+    "tests/rhythm_doctor/test_capture_stack.lua": "259e9b5681081923f6fef882c0cc3fd2bf4da9c5aaca4a3c6c1200659c11a6fb",
+    "tests/rhythm_doctor/test_capture_transitions.lua": "c3956d04ee16e45d72f4272379661b6e4346ab24542a177bb54f523ffa41211e",
+    "tests/rhythm_doctor/test_core.lua": "da40b08679b7ca207bcb2750750743c377c6b60a32f9ca26e9de96790f2a896e",
+    "tests/rhythm_doctor/test_integration.lua": "82c0b410f893432996db70e28b0b0c9238276f52b7514f87d184781d8df4e1f0",
+    "tests/rhythm_doctor/test_journal.lua": "1ecbdac4dcdeedbb35249189b165b7a16f32b248c1d3579c0fac87fd3304c2a2",
+    "tests/rhythm_doctor/test_lifecycle.lua": "bbfce21ca5938197129ad774014ea8fdbc201d4b44605fdd561c7a4a7cda23d1",
+    "tests/rhythm_doctor/test_paint_boundaries.lua": "f876dab130c7d0a7522ef9e89783cb7843256e80bdfe7a00a9bc237b10008492",
+    "tests/rhythm_doctor/test_project_lifecycle_runtime.lua": "35da34569db81ac290f2016e269afb01a75fd4ab783c6b5f6527d86a7418afd2",
+    "tests/rhythm_doctor/test_runtime.lua": "ffcbd9abf599bef6efda6ae0820140411d9d6fa2397b4e2e09563bff93bee538",
+    "tests/rhythm_doctor/test_ui_adapter.lua": "ec5a878ddb14e1e6ef69f4c7199ebc5ece3e33a96ec26255645c7cef8f6e2657",
+    "tests/rhythm_doctor/test_worker_host.lua": "0a66720e91a3e194a954629bb39855eb2489c4ecb0d74a5ea6cdf8558c7a95d4",
+    "tests/rhythm_doctor/test_capture_injector.c": "7fc977c01a0cb47eb1bebb08c4cf93acd8341a9b7c3d60cc94c56ddd5b69a0b9",
+    "tools/rhythm_doctor/launch_worker.py": "2220589dbc03b0d51627275a6dd8f879fec6f05f3c87a46d60116d2f35b67313",
+    "tools/rhythm_doctor/rd_capture.c": "6b613f9e8640c8bbce6a9cab0b6cb376e85204c820288c4d78a8070ed35d3bf3",
+    "tools/rhythm_doctor/rd_capture_worker.c": "db3163e0ae4308a258b590e61e0783bbecf67967f4581ce38a931a0692ebeab5",
+    "tools/rhythm_doctor_tempo/AUBIO_LOCAL_LOCK.txt": "1453459e1534d519181a9a254f2be544d1e59cf596eb739ba27b51a429341495",
+    "tools/rhythm_doctor_tempo/babyslakh_dev_grid_candidate_2026-09-19.json": "8f438d612f857369212d646353bf93e5a761465468286e542b23c95adc1874c6",
+    "tools/rhythm_doctor_tempo/babyslakh_dev_methods_2026-09-19.json": "369855cad60cdc93e6b64ae693f7ee21a721b34fdb4ca7b7f1133e2f5fcd64fc",
+    "tools/rhythm_doctor_tempo/babyslakh_scan_2026-09-19.json": "6647bceb3a4f35ef3cec3eece691b5d133fec795ef66fdadf1ed7190a9b3ec11",
+    "tools/rhythm_doctor_tempo/bootstrap_local_aubio.sh": "7978544109eb10dc77e485c08fa9741a5f0c89f3c9918d57c951f3b23ee4260d",
+    "tools/rhythm_doctor_tempo/build_local_aubio.sh": "07d04bb93ff6f74a4ff5951698131fba3b4f4a92515b7192a28cd6aef5a9690a",
+    "tools/rhythm_doctor_tempo/rd_tempo.c": "da4cc8512d41e458ab32ace28db272cc30b6007b260ad40f8bf927a5e3bcbe26",
+    "tools/rhythm_doctor_tempo/scan_babyslakh.py": "b01c1cc6fa9cfccc81ff2f098386b4eae17019c25f3f85180d6bbcab6f3cbc4a",
+    "tools/rhythm_doctor_tempo/scan_babyslakh_dev_methods.py": "ae9bf936e021e47d2267c8e095e47c4c810727178beddec333f4ac78f2a89157",
+    "tools/rhythm_doctor_analysis/adtof_evaluate.py": "ad65b983c37b9c926150ab73622cdd3a7e0080611890311b52f3f3d5774125da",
+    "tools/rhythm_doctor_analysis/adtof_tom_audit.py": "99db09d9426d2add0ebb6345bf67815601a23f02a139fa03723081e676f907ea",
+    "tools/rhythm_doctor_analysis/audio_frontend.py": "9cbe7b146bc8e3b965b94a025efd7332e743729cee1881faee8423bf620d3a2b",
+    "tools/rhythm_doctor_analysis/basic_pitch_adapter.py": "b35626c11ec7e8e58cd17373a8d07622d306d68a79fad7db011650b2dcb7264b",
+    "tools/rhythm_doctor_analysis/bass_calibration.py": "bacf110e67e8f7d4ed96320131c5646adc82ec8cb397671bb8a5581c7cf0900a",
+    "tools/rhythm_doctor_analysis/bass_harmonic_rf.py": "0f9e6bb2fa6e92fe956f7a5f2fa8430c0393a855f0af6420eccaced368e7b8f9",
+    "tools/rhythm_doctor_analysis/detector.py": "51e88fc27d926cc7479aea6d9ec0d967a31445782ad38020b9af7031d4387ebf",
+    "tools/rhythm_doctor_analysis/nmf_template.py": "0ab3fe83aacfcbe6c2385d7633970c60e03ed6f558a67d17fb68cb3e75a67808",
+    "tools/rhythm_doctor_analysis/requirements.txt": "ae41552688ef2163b3434e11bf043985806a2ef459cd5442d3b46edca1631b3c",
+    "tools/rhythm_doctor_analysis/v11_priority_rf.py": "6dc9035a0ceac7de156f7c27325ea966448de7269b88d5d814b62050b751e6da"
+  },
+  "changed_during_run": [],
+  "results": [
+    {
+      "name": "core",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_core.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.03279763399041258,
+      "passed": true
+    },
+    {
+      "name": "integration",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_integration.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.02717328700236976,
+      "passed": true
+    },
+    {
+      "name": "lifecycle",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_lifecycle.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.03084665900678374,
+      "passed": true
+    },
+    {
+      "name": "journal",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_journal.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.015296206984203309,
+      "passed": true
+    },
+    {
+      "name": "bank_schema",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_bank_schema.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.015847139002289623,
+      "passed": true
+    },
+    {
+      "name": "paint_boundaries",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_paint_boundaries.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.020905165001749992,
+      "passed": true
+    },
+    {
+      "name": "capture_transitions",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_capture_transitions.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.02089706200058572,
+      "passed": true
+    },
+    {
+      "name": "assets",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_assets.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.0474238799943123,
+      "passed": true
+    },
+    {
+      "name": "capture_controller",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_capture_controller.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.029414917022222653,
+      "passed": true
+    },
+    {
+      "name": "runtime",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_runtime.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.030969275016104802,
+      "passed": true
+    },
+    {
+      "name": "project_lifecycle_runtime",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_project_lifecycle_runtime.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.017775799002265558,
+      "passed": true
+    },
+    {
+      "name": "ui_adapter",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_ui_adapter.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.015765559975989163,
+      "passed": true
+    },
+    {
+      "name": "worker_host",
+      "command": [
+        "lua",
+        "tests/rhythm_doctor/test_worker_host.lua"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.018694102996960282,
+      "passed": true
+    },
+    {
+      "name": "quality",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_quality.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.3042378899990581,
+      "passed": true
+    },
+    {
+      "name": "quality_report",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_quality_report.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.24358084599953145,
+      "passed": true
+    },
+    {
+      "name": "performance",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_performance.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.25738079799339175,
+      "passed": true
+    },
+    {
+      "name": "corpus",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_corpus.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 2.11237178297597,
+      "passed": true
+    },
+    {
+      "name": "rendered_corpus_audit",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_rendered_corpus_audit.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 1.0072087600128725,
+      "passed": true
+    },
+    {
+      "name": "acquisition_quality",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_acquisition_quality.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.29216188899590634,
+      "passed": true
+    },
+    {
+      "name": "grid_quality",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_grid_quality.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.2866984909924213,
+      "passed": true
+    },
+    {
+      "name": "native_transport",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_native_transport.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.40418625000165775,
+      "passed": true
+    },
+    {
+      "name": "capture_contract",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_capture_contract.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 1.2723818169906735,
+      "passed": true
+    },
+    {
+      "name": "capture_native",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_capture_native.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 1.883657490980113,
+      "passed": true
+    },
+    {
+      "name": "tempo_candidate",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_tempo_candidate.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 1.1256524430064019,
+      "passed": true
+    },
+    {
+      "name": "tempo_native",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_tempo_native.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 3.1068148789927363,
+      "passed": true
+    },
+    {
+      "name": "detector",
+      "command": [
+        "/mnt/c/Users/andy/Documents/ChatGPT/mosaic/.worktrees/rhythm-doctor/mosaic/tests/rhythm_doctor/artifacts/detector-venv/Scripts/python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_detector.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 1.857653749990277,
+      "passed": true
+    },
+    {
+      "name": "nmf_template",
+      "command": [
+        "/mnt/c/Users/andy/Documents/ChatGPT/mosaic/.worktrees/rhythm-doctor/mosaic/tests/rhythm_doctor/artifacts/detector-venv/Scripts/python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_nmf_template.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 1.5103446949797217,
+      "passed": true
+    },
+    {
+      "name": "adtof_evaluate",
+      "command": [
+        "/mnt/c/Users/andy/Documents/ChatGPT/mosaic/.worktrees/rhythm-doctor/mosaic/tests/rhythm_doctor/artifacts/detector-venv/Scripts/python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_adtof_evaluate.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.6244616860058159,
+      "passed": true
+    },
+    {
+      "name": "basic_pitch_adapter",
+      "command": [
+        "/mnt/c/Users/andy/Documents/ChatGPT/mosaic/.worktrees/rhythm-doctor/mosaic/tests/rhythm_doctor/artifacts/detector-venv/Scripts/python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_basic_pitch_adapter.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.4529699019913096,
+      "passed": true
+    },
+    {
+      "name": "audio_frontend",
+      "command": [
+        "/mnt/c/Users/andy/Documents/ChatGPT/mosaic/.worktrees/rhythm-doctor/mosaic/tests/rhythm_doctor/artifacts/detector-venv/Scripts/python.exe",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_audio_frontend.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 0.4966637050092686,
+      "passed": true
+    },
+    {
+      "name": "capture_worker_ipc",
+      "command": [
+        "/usr/bin/python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/rhythm_doctor",
+        "-p",
+        "test_capture_worker_ipc.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "skipped": false,
+      "elapsed_seconds": 5.8713646460091695,
+      "passed": true
+    }
+  ],
+  "native_selected": true,
+  "detector_selected": true,
+  "tempo_corpus_selected": false,
+  "full_feature_acceptance": false,
+  "scope": "component tests only"
+}

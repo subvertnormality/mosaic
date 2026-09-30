@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35996134717",
+  "source_run_id": "35996134717",
+  "source_revision": "b8b23640067f14ac9bf3c3bb2451eb06d8858290",
+  "case": "M-PATCH-059",
+  "lane": "real-time",
+  "clock_mode": "real-time",
+  "side": "before",
+  "profile": "base-midi",
+  "targeted_report_sha256": "aab9adddf4352dd8dcfd226e7f38022d6861138ad6e6650cabc0664a67b5c7a7",
+  "repeatability_report_sha256": "2e5b8b928149f4ab7aa5b7770a04d2e29dd569ff8412561b8a2f4d75f2139b16",
+  "manifest": "M-PATCH-059/real-time/before/aaea8e8a0da8412ea1950015167dd2d4/manifest.json",
+  "manifest_sha256": "6b707493965dc23bba17003f40be4dc7f7c7110370212ddd61b4eb851a6b0c3c",
+  "evidence_sha256": {
+    "nrpn-reload-1/recipe.json": "6dce4765c32ed8e7cad2086fa04be083f027e0aede7144d91efa6c640be2604e",
+    "nrpn-reload-1/results.json": "1acaa525199292d86eda211c413da212ddbcd74b7fddf5b893b1b3a0960ccb8e",
+    "nrpn-reload-2/recipe.json": "f36d07e84e1313c2da9300b148a04e55aff4d97d6b3cd84c7e38590499b01d65",
+    "nrpn-reload-2/results.json": "e3942d6c09e16bcf54afe3550e3eefc299045747825bcddc4ee2f6e1baf4287d",
+    "pre-policy-seed/autosave.ptn": "3ec223db73d0c8ed600c9e84530e65bb2687250f2f178fdd6e7bcafc25ced16e",
+    "recipe.json": "52862a957b94b5df5a7173b47ccf6e58f96b856d7fbf6f3ee56065f4d15d0494",
+    "results.json": "792fe897b3799a8c7d86c6c37c157c07f975e4b2874c4e3e7f5e433d1518a323"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI",
+  "historical_source": true,
+  "tooling_revision": "3e6943cd94c70d08fa052a7af9bb652512dfd036",
+  "tooling_sha256": {
+    "tests/behaviour/ui_migration_gate.py": "1112d792cfa99d1f73118348b8be77ade4d66381d1b32fc8fa3733c64629a45e",
+    "tests/behaviour/ci/targeted-ui-migration.py": "b33afab0d2f59ba826968d0aa4f3bfb8fcce2762d8b4365191d612752dd196f9",
+    "tests/behaviour/ci/compare_ptn_graph.lua": "2c5f793815d0bc4a580a34d8849b3713db22aa055391d6a2cd12962eff23b000"
+  }
+}

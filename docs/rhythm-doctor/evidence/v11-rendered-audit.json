@@ -1,0 +1,9 @@
+{
+  "manifest_sha256": "1cd3dc6e86461e78330ea0c885880d3f01131b572183da5a84b3da101a8e5e6b",
+  "held_full_mix": {
+    "count": 42,
+    "unique_pcm": 42
+  },
+  "failures": [],
+  "passed": true
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "446a00870f9489cc78d64342288b6fa28b8b1dc3",
+  "selected_cases": [
+    "M-REC-PARAM-003",
+    "M-REC-PARAM-004",
+    "M-REC-PARAM-005",
+    "M-REC-PARAM-006",
+    "M-REC-PARAM-028",
+    "M-REC-PARAM-029",
+    "M-REC-PARAM-030"
+  ],
+  "selected_modules": {
+    "tests/behaviour/trig_parameter_interactions.py": "M-REC-PARAM-003",
+    "tests/behaviour/contract/trig_parameter_interactions.py": "M-REC-PARAM-004"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/trig_parameter_interactions.py",
+      "case": "M-REC-PARAM-003",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-9841eb917b674b6c98d317f125a989cf/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-9841eb917b674b6c98d317f125a989cf/manifest.json",
+      "manifest_sha256": "4d3b259a2a085734c7c7047b41db084b27949f35854cf60a56ca675e9ad7459a",
+      "passed": true
+    },
+    {
+      "module": "tests/behaviour/contract/trig_parameter_interactions.py",
+      "case": "M-REC-PARAM-004",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-7d2c54ba702b4dab848f7fcc347e87b4/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-7d2c54ba702b4dab848f7fcc347e87b4/manifest.json",
+      "manifest_sha256": "2a7b78293c4d2f49ae7b23960cd9412de12c4a52f2553486024f41e881a853ea",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

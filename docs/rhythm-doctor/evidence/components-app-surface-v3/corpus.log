@@ -1,0 +1,17 @@
+test_acquisition_envelope_is_not_waived (test_corpus.CorpusManifestTests) ... ok
+test_additional_mixture_sources_must_be_distinct_and_known (test_corpus.CorpusManifestTests) ... ok
+test_adjacent_segments_of_one_recording_are_rejected (test_corpus.CorpusManifestTests) ... ok
+test_complete_independent_corpus_proves_every_structural_gate (test_corpus.CorpusManifestTests) ... ok
+test_duplicate_non_silence_held_pcm_cannot_pose_as_distinct_songs (test_corpus.CorpusManifestTests) ... ok
+test_event_at_exact_clip_endpoint_is_rejected (test_corpus.CorpusManifestTests) ... ok
+test_hash_checked_annotations_cannot_be_replaced_after_manifest_freeze (test_corpus.CorpusManifestTests) ... ok
+test_missing_lane_stratum_negative_or_independence_is_rejected (test_corpus.CorpusManifestTests) ... ok
+test_pinned_gpl_source_is_licensed_corpus_evidence (test_corpus.CorpusManifestTests) ... ok
+test_song_and_kit_leakage_is_rejected (test_corpus.CorpusManifestTests) ... ok
+test_timbre_names_require_pinned_matching_source_evidence (test_corpus.CorpusManifestTests) ... ok
+test_windows_absolute_descriptor_cannot_escape_the_corpus_root (test_corpus.CorpusManifestTests) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 1.588s
+
+OK

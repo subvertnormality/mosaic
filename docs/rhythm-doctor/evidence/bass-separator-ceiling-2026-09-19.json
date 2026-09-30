@@ -1,0 +1,26 @@
+{
+  "scope": "Bass lane ceiling probe on the v12 corpus, the only one here carrying BASS annotations. Thresholds selected on the development split and evaluated once on held-out. Some components are non-commercially licensed and were used for EVALUATION ONLY; nothing here is shippable.",
+  "date": "2026-09-19",
+  "question": "Is the BASS lane limited by the onset detector or by the separated stem?",
+  "answer": "Neither, on this corpus. Three detectors on the same stem land within 0.08 of each other, and a dramatically better separator buys about 0.02 on held-out. v12 cannot distinguish them, most likely because its bass is synthesized and sampled while every separator is trained on real recorded music.",
+  "detectors_on_the_same_UMXHQ_stem": [
+    {"detector": "Basic Pitch (Apache-2.0, currently shipped)", "held_out_f1": 0.3866, "recall": 0.314, "precision": 0.502},
+    {"detector": "Abesser walking-bass MLP (MIT, 64 KB, 13k params)", "development_f1": 0.4800, "held_out_f1": 0.3065, "recall": 0.4771, "precision": 0.2258},
+    {"detector": "madmom CNNOnsetProcessor (CC BY-NC-SA, evaluation only)", "development_f1": 0.2879, "note": "Best generic onset detector published, and worst here: it is trained on full-band music and keys on percussive transients a separated bass stem does not have."}
+  ],
+  "separators": [
+    {"separator": "UMXHQ (MIT, 35.6 MB, currently shipped)", "published_bass_sdr": 5.07, "held_out_f1_with_basic_pitch": 0.3866},
+    {"separator": "UMX-L", "published_bass_sdr": 7.26, "licence": "CC BY-NC-SA 4.0, evaluation only", "measured": "NOT RUN", "why_not": "Demucs is better and scores 0.4093 held-out; UMXHQ is worse and scores 0.3866. UMX-L must fall between two numbers that are within noise, so the run carries no decision-relevant information."},
+    {"separator": "Demucs htdemucs (MIT)", "published_bass_sdr": "8.48 to 10.39", "development_f1": 0.6144, "held_out_f1": 0.4093, "held_out_recall": 0.6107, "held_out_precision": 0.3079,
+     "oracle_threshold_bound_held_out": 0.4093, "oracle_note": "DIAGNOSTIC ONLY, thresholds fitted on held-out data. The frozen development threshold was already optimal, so threshold selection is not the limiter."}
+  ],
+  "development_to_held_out_collapse": "Demucs scored 0.6144 on development and 0.4093 on held-out. Forty development clips are too few to select a threshold on, and the development figure must not be quoted as the result.",
+  "why_v12_probably_cannot_answer_this": "v12's bass is sampled and synthesized (FreePats), while Demucs and Open-Unmix are trained on real recorded music. A separator's advantage on real bass need not appear on synthetic bass. This is the same rendered-domain problem that moved BD by +0.10 and CHH by -0.43 when the drum lanes were measured on real music.",
+  "on_device_routes_examined": [
+    {"route": "Demucs in Python", "verdict": "IMPOSSIBLE. PyTorch publishes no ARM32 wheels at all; every Linux wheel tag across all releases is x86_64 or aarch64."},
+    {"route": "demucs.cpp (MIT, ggml)", "verdict": "DOES NOT FIT. Its own published benchmarks show peak RSS of 1.86 to 2.6 GB against roughly 470 MB available. Its stated targets are WebAssembly's 4 GB cap and 6-8 GB Android phones, not a 1 GB device. Also about 10m23s for a four-minute track on a 16-core 5950X."},
+    {"route": "umx.cpp (MIT code, ggml, streaming LSTM)", "verdict": "PLAUSIBLE BUT UNTESTED. Quantizes weights from 425 MB to 45 MB at near-identical SDR. Its quantized target is UMX-L, whose weights are CC BY-NC-SA and cannot ship; with MIT UMXHQ weights it would deliver on-device deployability of the quality we already have, not better quality."},
+    {"route": "quantized Demucs models mdx_q / mdx_extra_q", "verdict": "UNTESTED. Not examined; would still require PyTorch, which has no ARM32 build."}
+  ],
+  "consequence": "The cheap options are exhausted. Detectors are interchangeable, separators barely separate on this corpus, and no available separator both fits the device and improves quality. Establishing whether better separation actually fixes BASS requires real-music bass ground truth, which does not exist and must be created. RWC audio became a free Zenodo download in September 2026 with re-aligned per-instrument bass MIDI, which turns that from annotating in silence into hand-verifying candidates."
+}

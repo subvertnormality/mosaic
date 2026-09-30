@@ -1,0 +1,7 @@
+{
+  "expected_failure": "ModuleNotFoundError: No module named quality_report",
+  "test_sha256": "B70FEF412DB4D599F36A03D9198DF96850EE6E473B69E9A68403A80DC4D04D89",
+  "output": "test_quality_report (unittest.loader._FailedTest) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_quality_report (unittest.loader._FailedTest)\r\n----------------------------------------------------------------------\r\nImportError: Failed to import test module: test_quality_report\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 436, in _find_test_path\r\n    module = self._get_module_from_name(name)\r\n  File \"C:\\Users\\andy\\AppData\\Local\\Programs\\Python\\Python310\\lib\\unittest\\loader.py\", line 377, in _get_module_from_name\r\n    __import__(name)\r\n  File \"C:\\Users\\andy\\Documents\\ChatGPT\\mosaic\\.worktrees\\rhythm-doctor\\mosaic\\tests\\rhythm_doctor\\test_quality_report.py\", line 3, in <module>\r\n    from quality_report import evaluate\r\nModuleNotFoundError: No module named 'quality_report'\r\n\r\n\r\n----------------------------------------------------------------------\r\nRan 1 test in 0.001s\r\n\r\nFAILED (errors=1)\r\n",
+  "source_revision": "8c08cb93d9f5a4cc36488e90517043531446a4f7",
+  "exit_code": 0
+}

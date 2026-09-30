@@ -1,0 +1,11 @@
+# Remote analysis server. Install on a PC, not on the norns.
+#
+# The transport layer is standard library only; everything here belongs to the
+# three models. Versions are floors, not pins: pin them in your own deployment.
+numpy>=1.24
+torch>=2.0
+demucs>=4.0          # htdemucs_6s, MIT
+beat-this>=0.1       # beat and downbeat tracking, MIT code and weights
+# LarsNet is not on PyPI. Install from its repository and check its licence
+# before redistributing anything built on it:
+#   pip install git+https://github.com/polimi-ispl/larsnet

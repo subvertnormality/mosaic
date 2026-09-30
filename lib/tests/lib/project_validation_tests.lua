@@ -92,3 +92,79 @@ function test_saved_range_validation_all_96_song_slots()
     luaunit.assert_nil(range_validation.check(saved))
   end
 end
+
+function test_saved_optional_harmony_and_merge_schemas_are_validated_without_mutation()
+  local harmony=include("mosaic/lib/harmony/config")
+  local merge=include("mosaic/lib/musical_merge/config")
+  local saved=range_saved_fixture();local song=saved[2].song_patterns[1]
+  song.voicing={schema_version=1,groups={[1]=harmony.new_group(2)}}
+  song.channels[2].voicing=harmony.new_channel("ensemble")
+  song.channels[2].voicing.group_id=1
+  song.channels[2].musical_merge=merge.new()
+  luaunit.assert_true(range_validation.check(saved))
+
+  local before=song.channels[2].musical_merge
+  song.channels[2].musical_merge.schema_version=99
+  local valid,reason=range_validation.check(saved)
+  luaunit.assert_nil(valid);luaunit.assert_equals(reason,"Slot 1 merge schema version")
+  luaunit.assert_is(song.channels[2].musical_merge,before)
+
+  song.channels[2].musical_merge=merge.new()
+  song.voicing.schema_version=99
+  valid,reason=range_validation.check(saved)
+  luaunit.assert_nil(valid);luaunit.assert_equals(reason,"Slot 1 voicing schema version")
+end
+
+function test_saved_chord_target_rejects_a_dangling_harmony_material_source()
+  local merge=include("mosaic/lib/musical_merge/config")
+  local saved=range_saved_fixture();local song=saved[2].song_patterns[1]
+  song.channels[1].musical_merge=merge.new()
+  song.channels[1].musical_merge.target={kind="chord",group_id=4}
+  local valid,reason=range_validation.check(saved)
+  luaunit.assert_nil(valid);luaunit.assert_equals(reason,"Slot 1 ch 1 merge target group missing")
+end
+
+-- README "Musical Merge and Voice Leading": unknown schema versions reject the
+-- project before it replaces the active project. The v1 -> v2 canonical
+-- migration on detached decoded data is docs/musical-merge-extensions-plan.md §0
+-- (characterisation of the approved plan).
+local function v1_merge(extra)
+  local value={schema_version=1,mode="foundation",anchor=2,amount=40,accent=90,gap=1,seed=99,ranking_version=1,
+    cycles=2,shape="answer",percentages={100,25},variation="fixed",keep_anchor_pitch=false,target={kind="legacy"}}
+  for key,item in pairs(extra or{})do value[key]=item end
+  return value
+end
+
+function test_saved_v1_merge_validates_and_migrates_detached_data_to_canonical_v2()
+  local merge=include("mosaic/lib/musical_merge/config")
+  local saved=range_saved_fixture();local song=saved[2].song_patterns[1]
+  song.channels[3].musical_merge=v1_merge({interlock="collides",unknown={1},target={kind="legacy",extra=true}})
+  song.channels[4].musical_merge=v1_merge({mode="off"})
+  luaunit.assert_true(range_validation.check(saved))
+  local expected=merge.canonicalize(v1_merge())
+  luaunit.assert_true(range_validation.migrate(saved))
+  luaunit.assert_equals(song.channels[3].musical_merge,expected)
+  local off=merge.new();off.cycles,off.shape,off.percentages=2,"answer",{100,25};off.amount,off.accent,off.gap,off.seed,off.anchor=40,90,1,99,2
+  luaunit.assert_equals(song.channels[4].musical_merge,off)
+  luaunit.assert_nil(song.channels[5].musical_merge)
+  -- Migration is idempotent and the migrated data is valid v2.
+  luaunit.assert_true(range_validation.check(saved))
+  luaunit.assert_true(range_validation.migrate(saved))
+  luaunit.assert_equals(song.channels[3].musical_merge,expected)
+end
+
+function test_saved_v2_merge_rejects_unknown_keys_and_self_leaders_before_migration()
+  local merge=include("mosaic/lib/musical_merge/config")
+  local saved=range_saved_fixture();local song=saved[2].song_patterns[1]
+  song.channels[6].musical_merge=merge.new();song.channels[6].musical_merge.fragments.extra=1
+  local before=song.channels[6].musical_merge
+  luaunit.assert_equals({range_validation.check(saved)},{nil,"Slot 1 merge fragments"})
+  luaunit.assert_is(song.channels[6].musical_merge,before)
+  song.channels[6].musical_merge=merge.new();song.channels[6].musical_merge.interlock.leader=6
+  luaunit.assert_equals({range_validation.check(saved)},{nil,"Slot 1 merge interlock"})
+  song.channels[6].musical_merge.interlock.leader=5
+  luaunit.assert_true(range_validation.check(saved))
+  song.channels[6].musical_merge=v1_merge({amount=101})
+  luaunit.assert_equals({range_validation.check(saved)},{nil,"Slot 1 merge amount"})
+  luaunit.assert_equals({range_validation.migrate(saved)},{nil,"Slot 1 merge amount"})
+end

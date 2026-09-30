@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "kind": "red_regression_before_rhythm_doctor_assets_module",
+  "command": "lua tests/rhythm_doctor/test_assets.lua",
+  "working_directory": "C:/Users/andy/Documents/ChatGPT/mosaic/.worktrees/rhythm-doctor/mosaic",
+  "exit_code": 1,
+  "baseline_condition": "lib/rhythm_doctor/assets.lua was absent",
+  "observed_failure": "module 'rhythm_doctor.assets' not found; no file './lib/rhythm_doctor/assets.lua'",
+  "scope": "The test established the missing standalone asset persistence module before its implementation. It is not a capture, Norns, or durability acceptance result."
+}

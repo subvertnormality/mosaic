@@ -1,0 +1,22 @@
+{
+  "kind": "ADTOF-PyTorch old-BabySlakh diagnostic",
+  "acceptance_claimed": false,
+  "artifact": "tests/rhythm_doctor/artifacts/adtof-pilot-v2/report.json",
+  "report_sha256": "a836dd677a0af6c5f210c15dd75016da2c74310f8431e588e334823d4dddac0b",
+  "weight_sha256": "1bc986e596ec47ba0b44916f87cd4a39f0b2bec23596df3fb5d0e87749217320",
+  "adapter_sha256": "ad65b983c37b9c926150ab73622cdd3a7e0080611890311b52f3f3d5774125da",
+  "environment_sha256": "eecbb3e168febcd632bbee6bf8f2011ef83164dc58940c9eb23aef355813aa96",
+  "tracks": {"development": [3, 4, 5, 7, 10, 12, 13, 17, 18], "held": [1, 2, 6, 8, 9, 11, 14, 15, 16, 19, 20]},
+  "interval_seconds": 60,
+  "onset_metric": "independent source MIDI, one-to-one 50 ms matching",
+  "held_f1": {"BD": 0.7318518518518519, "SD": 0.5766871165644172, "HH": 0.6342663795755152, "TOM": 0.0},
+  "held_tom_counts": {"tp": 0, "fp": 29, "fn": 45},
+  "runtime": {"torch": "1.11.0+cpu", "threads": 1, "wall_seconds": 248.97101749991998},
+  "limitations": [
+    "The upstream frontend processed each full source mix before activation output was limited to the first 60 seconds.",
+    "This is the old preliminary BabySlakh diagnostic, not the clean acceptance corpus.",
+    "No BASS, cymbal, grid F1, ARM latency, incremental RSS, or redistribution claim is made.",
+    "ADTOF-PyTorch port/weight licensing remains unresolved."
+  ],
+  "interpretation": "The frozen ADTOF configuration is executable but misses the held quality gate. A TOM mapping/time/reference audit follows separately; this result must not be relabelled as an acceptance failure for all architectures."
+}

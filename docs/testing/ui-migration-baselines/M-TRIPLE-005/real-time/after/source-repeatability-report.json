@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "bdf2ae9239964faf4012e3d6a5d63ecedabdc4f6",
+  "selected_cases": [
+    "M-TRIPLE-005",
+    "M-PERSIST-COMBINED-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/recording_lock_song.py": "M-TRIPLE-005"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/recording_lock_song.py",
+      "case": "M-TRIPLE-005",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-1b7ae47ef0594c4da3084e2be742922a/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-1b7ae47ef0594c4da3084e2be742922a/manifest.json",
+      "manifest_sha256": "8621eb99ad2c83af63b7135dc6565a994ca4cfffe4b12f217533f02e3928d979",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

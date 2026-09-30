@@ -1,0 +1,80 @@
+{
+  "run_id": "mosaic-rd-capture-4d0dff101e134bfdb4a97fdbc973b96f",
+  "device": "Linux armv7l",
+  "source_sha256": {
+    "tools/rhythm_doctor/rd_capture.c": "6b613f9e8640c8bbce6a9cab0b6cb376e85204c820288c4d78a8070ed35d3bf3",
+    "tests/rhythm_doctor/test_capture_injector.c": "7fc977c01a0cb47eb1bebb08c4cf93acd8341a9b7c3d60cc94c56ddd5b69a0b9",
+    "tests/behaviour/rhythm_doctor_capture_hardware.py": "33bfb1197fd8430729ecb51a4323dd75c68239c4c80fca4ced7dd94adf607514"
+  },
+  "runner_sha256": "fddca26b1e937a87c4c305eeb4b8cec74e4c86077f658c9e2be5935a2a799b7a",
+  "probe": {
+    "schema_version": 1,
+    "scope": "RD-01 native capture spike only",
+    "profile": "physical-norns-owned-JACK-injection",
+    "physical_adc_tested": false,
+    "grid_latency_tested": false,
+    "analysis_performance_tested": false,
+    "library_sha256": "d5049a3d8cf14c22f5afdd30b9384a14022e61758c16956693f65350aa5de8d0",
+    "injector_sha256": "f89e13cfa838a66107365f0b6e9c92f3d2f0504600c0a25e8c960d52f2b590db",
+    "architecture": "armv7l",
+    "trials": [
+      {
+        "trial": 0,
+        "passed": true,
+        "preflight_ms": 152.915573,
+        "native_preflight_ms": 152.828907,
+        "pcm_locked": true,
+        "arm_to_first_observed_pcm_ms": 0.777084,
+        "frames": 12160,
+        "start_frame": 1712640,
+        "end_frame": 1724800,
+        "wav_sha256": "b0c4bbf56ea7e60c6a0048b459846ff218930c5ba1d79416b205e1a9e9b8f63e",
+        "injector_stderr": "",
+        "routing_restored": true
+      },
+      {
+        "trial": 1,
+        "passed": true,
+        "preflight_ms": 172.776354,
+        "native_preflight_ms": 172.690156,
+        "pcm_locked": true,
+        "arm_to_first_observed_pcm_ms": 1.814427,
+        "frames": 12160,
+        "start_frame": 1797504,
+        "end_frame": 1809664,
+        "wav_sha256": "07723eba4666525f4b07d41e740b5a26cc0158dd1618eb39738dafd6bb60f577",
+        "injector_stderr": "",
+        "routing_restored": true
+      },
+      {
+        "trial": 2,
+        "passed": true,
+        "preflight_ms": 157.202656,
+        "native_preflight_ms": 157.057083,
+        "pcm_locked": true,
+        "arm_to_first_observed_pcm_ms": 1.834636,
+        "frames": 12032,
+        "start_frame": 1883392,
+        "end_frame": 1895424,
+        "wav_sha256": "0015230d178f1fe4fb44f20e809877ec3ec51226a3362648f39f7abba7bc1331",
+        "injector_stderr": "",
+        "routing_restored": true
+      }
+    ],
+    "process_peak_rss_kib": 136552,
+    "routing_restored": true,
+    "passed": true,
+    "command_exit_code": 0,
+    "command_stderr": ""
+  },
+  "command_result": {
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "failure": null,
+  "cleanup_failure": null,
+  "passed": true,
+  "full_feature_acceptance": false,
+  "scope": "physical Norns owned JACK capture component only"
+}

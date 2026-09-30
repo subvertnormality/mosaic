@@ -1,19 +1,18 @@
 """Project-dialog lifecycle through native controls and two MIDI routes."""
-from persisted_ranges import select_project_action
 from range_rejection import rejected_range_channel_isolation
 
 def project_dialog_while_playing(c,action):
     from cases import assert_durations
     rejected_range_channel_isolation(c)
     # Place the UI before the decisive gesture without replacing project state.
-    select_project_action(c,{'new':2,'accept-save':0,'cancel-save':0,'cancel-load':1}[action],activate=action!='new')
-    marker=c.snapshot()['midi_count'];c.tap(1,8)
+    c.ui.select_project_action({'new':'new','accept-save':'save','cancel-save':'save','cancel-load':'load'}[action],activate=action!='new')
+    marker=c.snapshot()['midi_count'];c.ui.play()
     def emitted(state):return [m for m in state['midi'] if m['index']>marker and 144<=m['bytes'][0]<=159 and m['bytes'][2]>0]
     state=c.wait(lambda state:all(sum(m['port']==port for m in emitted(state))>=3 for port in [1,2]),3)
     assert state['midi_capture']['outstanding'],'Fixture must exercise active notes'
     before=c.snapshot()['midi_count']
-    c.key(3 if action in ('new','accept-save') else 2)
-    c.key(1)
+    c.ui.press_key(3 if action in ('new','accept-save') else 2)
+    c.ui.press_key(1)
     if action in ('new','accept-save'):
         # New clears the phrase. Existing voices must still receive their
         # original-route releases; no delayed chord voices exist in this setup.
@@ -26,7 +25,7 @@ def project_dialog_while_playing(c,action):
         c.results.append(dict(kind='project-action-pending-releases',action=action,routes=2,no_old_phrase=True,no_outstanding=True,passed=True))
         return
     state=c.wait(lambda state:all(sum(m['port']==port for m in emitted(state))>=17 for port in [1,2]),4)
-    notes=emitted(state);c.tap(1,8);c.wait(lambda state:not state['midi_capture']['outstanding'])
+    notes=emitted(state);c.ui.stop();c.wait(lambda state:not state['midi_capture']['outstanding'])
     phrases={1:[[144,60,127],[144,62,117],[144,64,107],[144,65,97]],2:[[145,79,40],[145,81,60],[145,79,40]]}
     assert all((m['port'],m['bytes'][0]) in [(1,144),(2,145)] for m in notes)
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'

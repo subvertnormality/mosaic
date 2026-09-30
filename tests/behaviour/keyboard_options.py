@@ -17,8 +17,8 @@ def mapped(key,intervals,degree_shift=0,rotation=0,transpose=0):
     return max(0,min(127,60+12*(key//12-5)+pitch+transpose))
 
 def keyboard_options(c):
-    from cases import set_mosaic_options
-    c.configure();velocity=90
+    ui = c.ui
+    ui.configure();velocity=90
     def sweep(label,keys,expected_for):
         marker=c.snapshot()['midi_count'];expected=[]
         for key in keys:
@@ -32,20 +32,20 @@ def keyboard_options(c):
     octave=list(range(60,73))
     # Fresh defaults: white-key mapping Off plays the raw key, the whole range.
     sweep('default-raw',range(128),lambda k:k)
-    set_mosaic_options(c,[('Map scale to white keys',True)])
+    ui.set_mosaic_options([('Map scale to white keys',True)])
     sweep('white-major',range(128),lambda k:mapped(k,MAJOR))
     assert [mapped(k,MAJOR) for k in octave]==[60,62,62,64,64,65,67,67,69,69,71,71,72]
     # The scale page selects the scale track, which takes no keyboard notes;
     # return to channel 1 before each sweep.
-    c.tap(4,8);c.enc(3,2);c.key(3);c.tap(3,8) # Major -> natural minor: mapping follows the scale.
+    ui.scale_editor();ui.set_value(2);ui.press_key(3);ui.tap_control('channel_editor') # Major -> natural minor: mapping follows the scale.
     sweep('white-minor',octave,lambda k:mapped(k,MINOR))
     # Degree II, rotation two and transpose +2 on the scale page and fader.
-    c.tap(4,8)
-    c.enc(2,1);c.enc(3,1);c.key(3);c.enc(2,-1)
-    c.enc(2,3);c.enc(3,2);c.key(3);c.enc(2,-3)
-    c.tap(9,8)
-    for _ in range(14):c.tap(16,8)
-    c.tap(3,8)
+    ui.scale_editor()
+    ui.turn(2,1);ui.set_value(1);ui.press_key(3);ui.turn(2,-1)
+    ui.turn(2,3);ui.set_value(2);ui.press_key(3);ui.turn(2,-3)
+    ui.tap_control('global_transpose_minimum')
+    for _ in range(14):ui.tap_control('global_transpose_increment')
+    ui.tap_control('channel_editor')
     # Honour switches still at their defaults (Off): none of the three applies.
     sweep('honour-defaults-off',octave,lambda k:mapped(k,MINOR))
     for label,options,shift,rotation,transpose in [
@@ -54,7 +54,7 @@ def keyboard_options(c):
         ('honour-all',[('Honour scale transpose',True)],1,2,2),
         ('honour-rotation-transpose',[('Honour scale degree',False)],0,2,2),
         ('honour-transpose',[('Honour scale rotations',False)],0,0,2)]:
-        set_mosaic_options(c,options)
+        ui.set_mosaic_options(options)
         sweep(label,octave,lambda k:mapped(k,MINOR,shift,rotation,transpose))
-    set_mosaic_options(c,[('Map scale to white keys',False)])
+    ui.set_mosaic_options([('Map scale to white keys',False)])
     sweep('white-off-raw',octave,lambda k:k)

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35899411977",
+  "source_run_id": "35899411977",
+  "source_revision": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "case": "M-PATCH-008",
+  "lane": "controlled",
+  "clock_mode": "controlled-experimental",
+  "side": "after",
+  "profile": "base-midi",
+  "targeted_report_sha256": "540876123dc64823eacdb5eb8adb70e1d4772d56ad2e187ac0b5859f5c97869d",
+  "repeatability_report_sha256": "5c654593c21083c97f1ce6d2d2f774b1a5bd5bddf13e9a2bb44047bf52ee5be2",
+  "manifest": "M-PATCH-008/controlled-experimental/after/152806751c184d419de29075b914d4f5/manifest.json",
+  "manifest_sha256": "57effd6711b7a7552f32879180bcaed4e0a93235f23de895bf6eb316ee2bf75b",
+  "evidence_sha256": {
+    "recipe.json": "cec8f18e708b4f2497ab8ffae6f0a7bfda53f1d5a07e601042a37017cf7e6837",
+    "reloaded/recipe.json": "f7a69594dcbd24ad511e37f80ecafeb0ae0051bfd2add5a09fb94df98aeff9e1",
+    "reloaded/results.json": "ec680a43b05a07e39dc003cdcf1e9c4e7173c82fdb219eddb86429033c5c6e0e",
+    "results.json": "b94c440feeab4708016f316d0c03262c5a5d4c5a13f46fd27c425e1132991d09"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI"
+}

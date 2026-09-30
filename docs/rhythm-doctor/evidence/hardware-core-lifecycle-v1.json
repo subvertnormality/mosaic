@@ -1,0 +1,37 @@
+{
+  "run_id": "mosaic-rd-core-0166e6f950de41ccb869d0a412dc889b",
+  "profile": "physical-norns",
+  "device": "Linux armv7l\n",
+  "source_sha256": {
+    "lib/rhythm_doctor/bank.lua": "7b0007c99d21c6e641f7f31b0afb269a0b9a8b5acb4e9ac4a04a1629dcd42e1f",
+    "lib/rhythm_doctor/state_machine.lua": "218c025b13d8968edcff3113c3b1e0dd7361881a8482eb4227f345470ef6adcc",
+    "lib/rhythm_doctor/paint.lua": "0363cf2132e49f68689a2308a726b6732f11fae30ebf24acaa96bd9b6bf29a5f",
+    "lib/rhythm_doctor/paint_journal.lua": "dfc3c0da84ca9dec8eea5563bde64e027f635ea9dd9899e6ae17a23a91ea4edb",
+    "tests/rhythm_doctor/test_core.lua": "2a1aeeb261acff0a40a4df3886f685d73a07e2149387013efcac76417bd39b98",
+    "tests/rhythm_doctor/test_integration.lua": "4c302d5b0ba36cb9793ade3a4e908fd408c90bb3cb1c486a1c960789c7005ce0",
+    "tests/rhythm_doctor/test_lifecycle.lua": "7393c03da977f0ab203edbbc8b0147d3f6f2cc84effa0c64bf2a4870c09e8374"
+  },
+  "tests": [
+    {
+      "test": "tests/rhythm_doctor/test_core.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor core: 68 assertions passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_integration.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor integration: 9 assertions passed\n",
+      "stderr": ""
+    },
+    {
+      "test": "tests/rhythm_doctor/test_lifecycle.lua",
+      "exit_code": 0,
+      "stdout": "rhythm_doctor lifecycle: 4 tests passed\n",
+      "stderr": ""
+    }
+  ],
+  "passed": true,
+  "scope": "pure Lua component tests only",
+  "full_feature_acceptance": false
+}

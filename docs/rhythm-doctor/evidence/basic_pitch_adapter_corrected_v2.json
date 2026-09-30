@@ -1,0 +1,975 @@
+{
+  "adapter_status": "corrected; prior Basic Pitch BASS conclusions are adapter-invalid",
+  "artifact": {
+    "directory": "tests/rhythm_doctor/artifacts/basic-pitch-bass-adapter-corrected-v2-20260919",
+    "results": "tests/rhythm_doctor/artifacts/basic-pitch-bass-adapter-corrected-v2-20260919/results.json",
+    "results_sha256": "4c36e92367348e12bd6c2b62f0bcfd98832dd87c76c79cd42de3b3b9601bbfd0",
+    "runner": "tests/rhythm_doctor/artifacts/basic-pitch-bass-adapter-corrected-v2-20260919/run_corrected_basic_pitch_diagnostic.py"
+  },
+  "excluded_tracks": [
+    {
+      "reason": "missing declared Bass MIDI; not a negative example",
+      "reference_status": "incomplete_missing_declared_bass_midi",
+      "track": "Track00017"
+    }
+  ],
+  "final_after_frozen_selection": {
+    "official_decoder": {
+      "development_full_config_descriptive": {
+        "aggregate": {
+          "f1": 0.3756906077348066,
+          "fn": 135,
+          "fp": 91,
+          "precision": 0.4276729559748428,
+          "recall": 0.33497536945812806,
+          "tp": 68
+        },
+        "per_track_counts": [
+          {
+            "prediction_count": 41,
+            "reference_count": 43,
+            "score_50ms_one_to_one": {
+              "f1": 0.5238095238095238,
+              "fn": 21,
+              "fp": 19,
+              "precision": 0.5365853658536586,
+              "recall": 0.5116279069767442,
+              "tp": 22
+            },
+            "split": "development",
+            "track": "Track00003"
+          },
+          {
+            "prediction_count": 7,
+            "reference_count": 8,
+            "score_50ms_one_to_one": {
+              "f1": 0.4,
+              "fn": 5,
+              "fp": 4,
+              "precision": 0.42857142857142855,
+              "recall": 0.375,
+              "tp": 3
+            },
+            "split": "development",
+            "track": "Track00004"
+          },
+          {
+            "prediction_count": 18,
+            "reference_count": 27,
+            "score_50ms_one_to_one": {
+              "f1": 0.4,
+              "fn": 18,
+              "fp": 9,
+              "precision": 0.5,
+              "recall": 0.3333333333333333,
+              "tp": 9
+            },
+            "split": "development",
+            "track": "Track00005"
+          },
+          {
+            "prediction_count": 12,
+            "reference_count": 16,
+            "score_50ms_one_to_one": {
+              "f1": 0.0,
+              "fn": 16,
+              "fp": 12,
+              "precision": 0.0,
+              "recall": 0.0,
+              "tp": 0
+            },
+            "split": "development",
+            "track": "Track00007"
+          },
+          {
+            "prediction_count": 25,
+            "reference_count": 23,
+            "score_50ms_one_to_one": {
+              "f1": 0.125,
+              "fn": 20,
+              "fp": 22,
+              "precision": 0.12,
+              "recall": 0.13043478260869565,
+              "tp": 3
+            },
+            "split": "development",
+            "track": "Track00010"
+          },
+          {
+            "prediction_count": 0,
+            "reference_count": 18,
+            "score_50ms_one_to_one": {
+              "f1": 0.0,
+              "fn": 18,
+              "fp": 0,
+              "precision": 1.0,
+              "recall": 0.0,
+              "tp": 0
+            },
+            "split": "development",
+            "track": "Track00012"
+          },
+          {
+            "prediction_count": 31,
+            "reference_count": 50,
+            "score_50ms_one_to_one": {
+              "f1": 0.5679012345679012,
+              "fn": 27,
+              "fp": 8,
+              "precision": 0.7419354838709677,
+              "recall": 0.46,
+              "tp": 23
+            },
+            "split": "development",
+            "track": "Track00013"
+          },
+          {
+            "prediction_count": 25,
+            "reference_count": 18,
+            "score_50ms_one_to_one": {
+              "f1": 0.37209302325581395,
+              "fn": 10,
+              "fp": 17,
+              "precision": 0.32,
+              "recall": 0.4444444444444444,
+              "tp": 8
+            },
+            "split": "development",
+            "track": "Track00018"
+          }
+        ]
+      },
+      "diagnostic_held_once": {
+        "aggregate": {
+          "f1": 0.40229885057471265,
+          "fn": 120,
+          "fp": 88,
+          "precision": 0.4430379746835443,
+          "recall": 0.3684210526315789,
+          "tp": 70
+        },
+        "per_track_counts": [
+          {
+            "prediction_count": 25,
+            "reference_count": 24,
+            "score_50ms_one_to_one": {
+              "f1": 0.6122448979591837,
+              "fn": 9,
+              "fp": 10,
+              "precision": 0.6,
+              "recall": 0.625,
+              "tp": 15
+            },
+            "split": "diagnostic_held",
+            "track": "Track00001"
+          },
+          {
+            "prediction_count": 9,
+            "reference_count": 26,
+            "score_50ms_one_to_one": {
+              "f1": 0.22857142857142856,
+              "fn": 22,
+              "fp": 5,
+              "precision": 0.4444444444444444,
+              "recall": 0.15384615384615385,
+              "tp": 4
+            },
+            "split": "diagnostic_held",
+            "track": "Track00002"
+          },
+          {
+            "prediction_count": 7,
+            "reference_count": 5,
+            "score_50ms_one_to_one": {
+              "f1": 0.0,
+              "fn": 5,
+              "fp": 7,
+              "precision": 0.0,
+              "recall": 0.0,
+              "tp": 0
+            },
+            "split": "diagnostic_held",
+            "track": "Track00006"
+          },
+          {
+            "prediction_count": 19,
+            "reference_count": 7,
+            "score_50ms_one_to_one": {
+              "f1": 0.23076923076923078,
+              "fn": 4,
+              "fp": 16,
+              "precision": 0.15789473684210525,
+              "recall": 0.42857142857142855,
+              "tp": 3
+            },
+            "split": "diagnostic_held",
+            "track": "Track00008"
+          },
+          {
+            "prediction_count": 3,
+            "reference_count": 11,
+            "score_50ms_one_to_one": {
+              "f1": 0.42857142857142855,
+              "fn": 8,
+              "fp": 0,
+              "precision": 1.0,
+              "recall": 0.2727272727272727,
+              "tp": 3
+            },
+            "split": "diagnostic_held",
+            "track": "Track00009"
+          },
+          {
+            "prediction_count": 25,
+            "reference_count": 49,
+            "score_50ms_one_to_one": {
+              "f1": 0.3783783783783784,
+              "fn": 35,
+              "fp": 11,
+              "precision": 0.56,
+              "recall": 0.2857142857142857,
+              "tp": 14
+            },
+            "split": "diagnostic_held",
+            "track": "Track00011"
+          },
+          {
+            "prediction_count": 19,
+            "reference_count": 9,
+            "score_50ms_one_to_one": {
+              "f1": 0.2857142857142857,
+              "fn": 5,
+              "fp": 15,
+              "precision": 0.21052631578947367,
+              "recall": 0.4444444444444444,
+              "tp": 4
+            },
+            "split": "diagnostic_held",
+            "track": "Track00014"
+          },
+          {
+            "prediction_count": 17,
+            "reference_count": 21,
+            "score_50ms_one_to_one": {
+              "f1": 0.5263157894736842,
+              "fn": 11,
+              "fp": 7,
+              "precision": 0.5882352941176471,
+              "recall": 0.47619047619047616,
+              "tp": 10
+            },
+            "split": "diagnostic_held",
+            "track": "Track00015"
+          },
+          {
+            "prediction_count": 14,
+            "reference_count": 14,
+            "score_50ms_one_to_one": {
+              "f1": 0.42857142857142855,
+              "fn": 8,
+              "fp": 8,
+              "precision": 0.42857142857142855,
+              "recall": 0.42857142857142855,
+              "tp": 6
+            },
+            "split": "diagnostic_held",
+            "track": "Track00016"
+          },
+          {
+            "prediction_count": 1,
+            "reference_count": 5,
+            "score_50ms_one_to_one": {
+              "f1": 0.0,
+              "fn": 5,
+              "fp": 1,
+              "precision": 0.0,
+              "recall": 0.0,
+              "tp": 0
+            },
+            "split": "diagnostic_held",
+            "track": "Track00019"
+          },
+          {
+            "prediction_count": 19,
+            "reference_count": 19,
+            "score_50ms_one_to_one": {
+              "f1": 0.5789473684210527,
+              "fn": 8,
+              "fp": 8,
+              "precision": 0.5789473684210527,
+              "recall": 0.5789473684210527,
+              "tp": 11
+            },
+            "split": "diagnostic_held",
+            "track": "Track00020"
+          }
+        ]
+      }
+    },
+    "raw_onset": {
+      "development_full_config_descriptive": {
+        "aggregate": {
+          "f1": 0.5265588914549654,
+          "fn": 89,
+          "fp": 116,
+          "precision": 0.4956521739130435,
+          "recall": 0.5615763546798029,
+          "tp": 114
+        },
+        "per_track_counts": [
+          {
+            "prediction_count": 62,
+            "reference_count": 43,
+            "score_50ms_one_to_one": {
+              "f1": 0.6095238095238096,
+              "fn": 11,
+              "fp": 30,
+              "precision": 0.5161290322580645,
+              "recall": 0.7441860465116279,
+              "tp": 32
+            },
+            "split": "development",
+            "track": "Track00003"
+          },
+          {
+            "prediction_count": 12,
+            "reference_count": 8,
+            "score_50ms_one_to_one": {
+              "f1": 0.4,
+              "fn": 4,
+              "fp": 8,
+              "precision": 0.3333333333333333,
+              "recall": 0.5,
+              "tp": 4
+            },
+            "split": "development",
+            "track": "Track00004"
+          },
+          {
+            "prediction_count": 25,
+            "reference_count": 27,
+            "score_50ms_one_to_one": {
+              "f1": 0.6538461538461539,
+              "fn": 10,
+              "fp": 8,
+              "precision": 0.68,
+              "recall": 0.6296296296296297,
+              "tp": 17
+            },
+            "split": "development",
+            "track": "Track00005"
+          },
+          {
+            "prediction_count": 21,
+            "reference_count": 16,
+            "score_50ms_one_to_one": {
+              "f1": 0.21621621621621623,
+              "fn": 12,
+              "fp": 17,
+              "precision": 0.19047619047619047,
+              "recall": 0.25,
+              "tp": 4
+            },
+            "split": "development",
+            "track": "Track00007"
+          },
+          {
+            "prediction_count": 26,
+            "reference_count": 23,
+            "score_50ms_one_to_one": {
+              "f1": 0.4489795918367347,
+              "fn": 12,
+              "fp": 15,
+              "precision": 0.4230769230769231,
+              "recall": 0.4782608695652174,
+              "tp": 11
+            },
+            "split": "development",
+            "track": "Track00010"
+          },
+          {
+            "prediction_count": 0,
+            "reference_count": 18,
+            "score_50ms_one_to_one": {
+              "f1": 0.0,
+              "fn": 18,
+              "fp": 0,
+              "precision": 1.0,
+              "recall": 0.0,
+              "tp": 0
+            },
+            "split": "development",
+            "track": "Track00012"
+          },
+          {
+            "prediction_count": 51,
+            "reference_count": 50,
+            "score_50ms_one_to_one": {
+              "f1": 0.6336633663366337,
+              "fn": 18,
+              "fp": 19,
+              "precision": 0.6274509803921569,
+              "recall": 0.64,
+              "tp": 32
+            },
+            "split": "development",
+            "track": "Track00013"
+          },
+          {
+            "prediction_count": 33,
+            "reference_count": 18,
+            "score_50ms_one_to_one": {
+              "f1": 0.5490196078431373,
+              "fn": 4,
+              "fp": 19,
+              "precision": 0.42424242424242425,
+              "recall": 0.7777777777777778,
+              "tp": 14
+            },
+            "split": "development",
+            "track": "Track00018"
+          }
+        ]
+      },
+      "diagnostic_held_once": {
+        "aggregate": {
+          "f1": 0.4817204301075269,
+          "fn": 78,
+          "fp": 163,
+          "precision": 0.4072727272727273,
+          "recall": 0.5894736842105263,
+          "tp": 112
+        },
+        "per_track_counts": [
+          {
+            "prediction_count": 28,
+            "reference_count": 24,
+            "score_50ms_one_to_one": {
+              "f1": 0.8076923076923077,
+              "fn": 3,
+              "fp": 7,
+              "precision": 0.75,
+              "recall": 0.875,
+              "tp": 21
+            },
+            "split": "diagnostic_held",
+            "track": "Track00001"
+          },
+          {
+            "prediction_count": 16,
+            "reference_count": 26,
+            "score_50ms_one_to_one": {
+              "f1": 0.38095238095238093,
+              "fn": 18,
+              "fp": 8,
+              "precision": 0.5,
+              "recall": 0.3076923076923077,
+              "tp": 8
+            },
+            "split": "diagnostic_held",
+            "track": "Track00002"
+          },
+          {
+            "prediction_count": 18,
+            "reference_count": 5,
+            "score_50ms_one_to_one": {
+              "f1": 0.08695652173913043,
+              "fn": 4,
+              "fp": 17,
+              "precision": 0.05555555555555555,
+              "recall": 0.2,
+              "tp": 1
+            },
+            "split": "diagnostic_held",
+            "track": "Track00006"
+          },
+          {
+            "prediction_count": 17,
+            "reference_count": 7,
+            "score_50ms_one_to_one": {
+              "f1": 0.4166666666666667,
+              "fn": 2,
+              "fp": 12,
+              "precision": 0.29411764705882354,
+              "recall": 0.7142857142857143,
+              "tp": 5
+            },
+            "split": "diagnostic_held",
+            "track": "Track00008"
+          },
+          {
+            "prediction_count": 10,
+            "reference_count": 11,
+            "score_50ms_one_to_one": {
+              "f1": 0.7619047619047619,
+              "fn": 3,
+              "fp": 2,
+              "precision": 0.8,
+              "recall": 0.7272727272727273,
+              "tp": 8
+            },
+            "split": "diagnostic_held",
+            "track": "Track00009"
+          },
+          {
+            "prediction_count": 56,
+            "reference_count": 49,
+            "score_50ms_one_to_one": {
+              "f1": 0.41904761904761906,
+              "fn": 27,
+              "fp": 34,
+              "precision": 0.39285714285714285,
+              "recall": 0.4489795918367347,
+              "tp": 22
+            },
+            "split": "diagnostic_held",
+            "track": "Track00011"
+          },
+          {
+            "prediction_count": 18,
+            "reference_count": 9,
+            "score_50ms_one_to_one": {
+              "f1": 0.5185185185185185,
+              "fn": 2,
+              "fp": 11,
+              "precision": 0.3888888888888889,
+              "recall": 0.7777777777777778,
+              "tp": 7
+            },
+            "split": "diagnostic_held",
+            "track": "Track00014"
+          },
+          {
+            "prediction_count": 40,
+            "reference_count": 21,
+            "score_50ms_one_to_one": {
+              "f1": 0.5245901639344263,
+              "fn": 5,
+              "fp": 24,
+              "precision": 0.4,
+              "recall": 0.7619047619047619,
+              "tp": 16
+            },
+            "split": "diagnostic_held",
+            "track": "Track00015"
+          },
+          {
+            "prediction_count": 39,
+            "reference_count": 14,
+            "score_50ms_one_to_one": {
+              "f1": 0.37735849056603776,
+              "fn": 4,
+              "fp": 29,
+              "precision": 0.2564102564102564,
+              "recall": 0.7142857142857143,
+              "tp": 10
+            },
+            "split": "diagnostic_held",
+            "track": "Track00016"
+          },
+          {
+            "prediction_count": 9,
+            "reference_count": 5,
+            "score_50ms_one_to_one": {
+              "f1": 0.2857142857142857,
+              "fn": 3,
+              "fp": 7,
+              "precision": 0.2222222222222222,
+              "recall": 0.4,
+              "tp": 2
+            },
+            "split": "diagnostic_held",
+            "track": "Track00019"
+          },
+          {
+            "prediction_count": 24,
+            "reference_count": 19,
+            "score_50ms_one_to_one": {
+              "f1": 0.5581395348837209,
+              "fn": 7,
+              "fp": 12,
+              "precision": 0.5,
+              "recall": 0.631578947368421,
+              "tp": 12
+            },
+            "split": "diagnostic_held",
+            "track": "Track00020"
+          }
+        ]
+      }
+    }
+  },
+  "frozen_prior_thresholds_development_only": {
+    "official_decoder_corrected_adapter_development_only": {
+      "corrected_dev_score": {
+        "f1": 0.22354694485842028,
+        "fn": 128,
+        "fp": 393,
+        "precision": 0.16025641025641027,
+        "recall": 0.3694581280788177,
+        "tp": 75
+      },
+      "frozen_prior_config": {
+        "development": {
+          "f1": 0.15201192250372578,
+          "fn": 152,
+          "fp": 417,
+          "precision": 0.10897435897435898,
+          "recall": 0.2512315270935961,
+          "tp": 51
+        },
+        "frame_threshold": 0.2,
+        "onset_threshold": 0.1
+      }
+    },
+    "raw_onset_corrected_adapter_development_only": {
+      "corrected_dev_score": {
+        "f1": 0.4854771784232365,
+        "fn": 86,
+        "fp": 162,
+        "precision": 0.41935483870967744,
+        "recall": 0.5763546798029556,
+        "tp": 117
+      },
+      "frozen_prior_config": {
+        "development": {
+          "f1": 0.297029702970297,
+          "fn": 113,
+          "fp": 313,
+          "precision": 0.22332506203473945,
+          "recall": 0.4433497536945813,
+          "tp": 90
+        },
+        "gap_frames": 8,
+        "threshold": 0.2
+      }
+    }
+  },
+  "kind": "Basic Pitch 0.4.0 corrected cached-posterior BASS diagnostic",
+  "limitations": [
+    "The diagnostic-held split was previously reused and is scored only after DEV-only selection; it is not clean corpus evidence.",
+    "No ARM, latency, real-time, physical-norns, pristine-corpus, or BASS production-readiness claim is made.",
+    "Original pilot-results-raw-onset.json and official-decoder-results.json are preserved unchanged and superseded as adapter-invalid for BASS-specific/timing configuration conclusions."
+  ],
+  "new_development_only_selection": {
+    "comparator": "highest micro-F1, then precision, then lower primary and secondary thresholds",
+    "official_decoder_frozen_choice_before_held": {
+      "development": {
+        "f1": 0.3756906077348066,
+        "fn": 135,
+        "fp": 91,
+        "precision": 0.4276729559748428,
+        "recall": 0.33497536945812806,
+        "tp": 68
+      },
+      "frame_threshold": 0.2,
+      "onset_threshold": 0.4,
+      "threshold_primary": 0.4,
+      "threshold_secondary": 0.2
+    },
+    "official_decoder_grid_count": 35,
+    "raw_grid_count": 65,
+    "raw_onset_frozen_choice_before_held": {
+      "development": {
+        "f1": 0.5265588914549654,
+        "fn": 89,
+        "fp": 116,
+        "precision": 0.4956521739130435,
+        "recall": 0.5615763546798029,
+        "tp": 114
+      },
+      "gap_frames": 12,
+      "threshold": 0.2,
+      "threshold_primary": 0.2,
+      "threshold_secondary": 12
+    },
+    "scorer": "tests/rhythm_doctor/quality.py:onset_score; sorted maximum one-to-one 50ms matching; every complete track is scored even with zero predictions"
+  },
+  "raw_report_and_model_input_hashes": {
+    "per_track_cached_posterior_hashes": {
+      "Track00001": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "0909fca8a979dba87c5e68fe3f9adf43176445e3b616d2aa78ac5e3186abf163",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00001-outputs.npz",
+        "posterior_npz_sha256": "6aece226f981b6fae4d4d03e893dbfc4a89d838f07d150daaf8d159363556ae8"
+      },
+      "Track00002": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "3eed518e5fda74589a6188ecb75600182e5e29858fb8e7cf70055ad79f333772",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00002-outputs.npz",
+        "posterior_npz_sha256": "0cfd2af4accddf842792d31c84b47f63a983f9cf9e3a27225db67b0d9eab263e"
+      },
+      "Track00003": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "d506054c7651172eae9773f8e98ca8ea8eb5a06a53014079bbe08b37ecc79669",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00003-outputs.npz",
+        "posterior_npz_sha256": "aab151a8a9bf2a04aae63b049489a6bd42a21f3f6e0395c1d6963b342aa47419"
+      },
+      "Track00004": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "cd028e708f7376ea1ce8dc1de234b72864c707c5cb12a50fe5c419676bf10013",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00004-outputs.npz",
+        "posterior_npz_sha256": "dfadce8a84be43328d5b7ad6af39e54cb40b308370903f189f936402777f1651"
+      },
+      "Track00005": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "8837fb56dabf43cf77960f118f763793e9ee84cd149c50848b834804fae4faf4",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00005-outputs.npz",
+        "posterior_npz_sha256": "77a7b31b90daada215db198015f161d4f243cb958520b9e6d185ce57e0728bea"
+      },
+      "Track00006": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "aad748eb82f9a206c04a8f07430554dcc82afca97fa574a26a79d559bfec786d",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00006-outputs.npz",
+        "posterior_npz_sha256": "aff073e433db7235af727e11d7b004005d155afb4d6141d35423eeb3e82fa742"
+      },
+      "Track00007": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "cd04139ee029c00400e2fa5ef86e30b009aa895840e8756439c2f09c23645787",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00007-outputs.npz",
+        "posterior_npz_sha256": "496b526c780a4a9916158802ae8c7e28e083528f6fd6c395b7468ef76771ad31"
+      },
+      "Track00008": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "abbb2b0bb4b9b0613364c9788b754f57d9c3e227d1ecc688c815ff84f9355fea",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00008-outputs.npz",
+        "posterior_npz_sha256": "bc940a9704319f5832353e571250b9c44da940f2a7ce5c79e72fc885fc362a36"
+      },
+      "Track00009": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "02636e3bd150810b9b3a4d41a56b5482601b192d3c6c2f9b3dc2a10f02b64f81",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00009-outputs.npz",
+        "posterior_npz_sha256": "f6f094844edd28ec87f64ec3fa04e5b8cc94e583aa71dbebbb390a6842a5671a"
+      },
+      "Track00010": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "23d9508daa166c36cad79fbe96c0da41b607143e39c183f27a65142e5287cb0b",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00010-outputs.npz",
+        "posterior_npz_sha256": "95d434036dbce7dfeb8a6f56e32e2b515d72a324798578cdd9508cdd62517c37"
+      },
+      "Track00011": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "cd84a8bb8407eefc448a2e783da4d02ca59af737f0eb89b77b177dae684b5841",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00011-outputs.npz",
+        "posterior_npz_sha256": "2f254b8dce426b79a7d01475790f47fa92a52f7252a328d3e327ee5e6173bc95"
+      },
+      "Track00012": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "3accc363fcb355e5cb744b4c2e86f26972c22bd3d1d5cd90743850fbe5374f66",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00012-outputs.npz",
+        "posterior_npz_sha256": "7289cfa18dfe2c4bf042596d8bc09e5dd8779dbdd3acf8a5e84baf63c4df7745"
+      },
+      "Track00013": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "8c05799a7630a50979929757f1612a5262492bf576fbf718a26fe87c476c1ac9",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00013-outputs.npz",
+        "posterior_npz_sha256": "619066536f39f86ba081725765eeee814f8e1f23fbe01291602f19decc5b7362"
+      },
+      "Track00014": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "3a38121f667c82bc9cba36840d57e2887742cccd02c20b8b9e40bfe7432a0326",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00014-outputs.npz",
+        "posterior_npz_sha256": "36d34528be9d7500629f2fe0ba43fc2a4b74be23c276d2756530369a8f0ea14c"
+      },
+      "Track00015": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "0be84a6f38ca82b7f2073c947051b4e4d8f3bd85b6a7bd1f5cde52c1b6a15ae8",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00015-outputs.npz",
+        "posterior_npz_sha256": "89ae47512f27716e04d8b65702c84d5f70a0e898e67c5d5d1734bbf211dc84dc"
+      },
+      "Track00016": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "cd8d542b7c052cbf52f6b077e3ffc17cf5a4fc367484c940b63377530255f652",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00016-outputs.npz",
+        "posterior_npz_sha256": "37c30585b413dd6c293bdba98d91eb8b85da457d73c3fe36012fa73d49a62c75"
+      },
+      "Track00017": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "fa540ffee47b81a1ca4c4f62ca9a37bc0f11e88b07dd633615cc6c7ce2344dc0",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00017-outputs.npz",
+        "posterior_npz_sha256": "2c1b0da928a6b251321b00b0d61d54d7ab511761f33fc2c85d826dd3a51ed072"
+      },
+      "Track00018": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "217d460fae8eac2f48eb5620cdb5dc69adddd2fc023df561925d0c9bf1cf63c4",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00018-outputs.npz",
+        "posterior_npz_sha256": "07a6f21d38e328bb3d81cfd62d2451c5297d44c4e58e8eb160b5c47a6284d150"
+      },
+      "Track00019": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "1dadce37289321e6a539bced6d9a66794323b3044902b844dc1ef944ab01b1bf",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00019-outputs.npz",
+        "posterior_npz_sha256": "b7ee07624660b73cc178fa75b72463e9ac98e0308f50281a62ecef055794a6bf"
+      },
+      "Track00020": {
+        "note_shape": [
+          1720,
+          88
+        ],
+        "onset_npy_sha256": "1c82ffd9a853c2b3f17b18c69cee3db301fe3923abd53e827d6d23f9104bafd8",
+        "onset_shape": [
+          1720,
+          88
+        ],
+        "posterior_npz": "Track00020-outputs.npz",
+        "posterior_npz_sha256": "e0508d4e553f9ecd781c0b93262b11c81b116a17449a431f2aacf0580ec3d655"
+      }
+    },
+    "source_hashes": {
+      "adapter_py_sha256": "b35626c11ec7e8e58cd17373a8d07622d306d68a79fad7db011650b2dcb7264b",
+      "old_official_report_sha256": "a6ed959343f725a31e8316dc59049e0081da25136be528cdd7cddb6f3504ad0b",
+      "quality_py_sha256": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b",
+      "raw_report_sha256": "96b66276940dc20a9fb751b6772f05cfc223194e225c86480311fec83adb1e95",
+      "script_sha256": "ec033f9065246a09005d674f106ee721d02aaf8909ffc688a23a0ef91bd84fdb",
+      "wheel_sha256": "738adb503aae7fdfc7d1e1511aa0ce35052315f260a19531ef4c356708425db0"
+    }
+  },
+  "schema_version": 1,
+  "status": "completed_diagnostic_only",
+  "superseded_original_defects": [
+    "raw onset used columns 28:61 even though output column 0 is MIDI21; corrected inclusive MIDI28..60 is columns 7:40",
+    "official decoder timestamps used frame*256/22050 and omitted the upstream cumulative window correction; corrected via basic_pitch_adapter.frame_time",
+    "official decoder max_freq=MIDI60 is exclusive in upstream constrain_frequency and dropped MIDI60; corrected decoder uses max_freq=MIDI61 with named arguments"
+  ],
+  "wheel_api_audit": {
+    "decoder_invocation": "named arguments; min_freq=MIDI28 and max_freq=MIDI61 (exclusive upper constraint) retain MIDI 28..60",
+    "decoder_positional_signature": 19.864616326530612,
+    "midi_output_mapping": "column 0 is MIDI 21; columns 7:40 are inclusive MIDI 28..60",
+    "model_frame_time": "adapter is checked against the wheel source formula and includes the cumulative 172-frame window correction",
+    "padding_and_trimming": "upstream prepends 15 overlap frames, removes 15 output frames at each window edge, and trims to floor(original_samples * 86 / 22050)",
+    "wheel_version": "basic_pitch 0.4.0"
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "artifact": {
+    "development_results": "tests/rhythm_doctor/artifacts/bass-rf-lowgate-fusion-v3-20260919/results-development-only.json",
+    "development_results_sha256": "28925d66ebd8b057ae1823cd9091546d3aeefa56aac5f26d568885d63623e777",
+    "directory": "tests/rhythm_doctor/artifacts/bass-rf-lowgate-fusion-v3-20260919",
+    "held_results": "tests/rhythm_doctor/artifacts/bass-rf-lowgate-fusion-v3-20260919/results-held-once.json",
+    "held_results_sha256": "af7e7c88401b3d87df480cbb41d5df609c41abf692e4c86fce1a120a385772e6",
+    "model": "tests/rhythm_doctor/artifacts/bass-rf-lowgate-fusion-v3-20260919/bass_rf_lowgate_fusion_rf64_depth10.pkl",
+    "model_sha256": "59efac24748736dd7d027f648222f4d542fd6b0bf0f47c1989b9d933119259df"
+  },
+  "decision": "The frozen fusion reduced old-held false positives by 14 versus the prior nearest-frame diagnostic (484 to 470), but held F1 0.7771 remains below the PLAN BASS gate of 0.80. It is not an accuracy acceptance result.",
+  "development_selection": {
+    "aggregate_50ms_one_to_one": {
+      "f1": 0.8842832469775475,
+      "fn": 28,
+      "fp": 39,
+      "macro_track_f1": 0.8575134168157423,
+      "precision": 0.8677966101694915,
+      "recall": 0.9014084507042254,
+      "tp": 256
+    },
+    "candidate_count": 3888,
+    "frozen_choice_before_held": {
+      "delta_scale": 0.45,
+      "min_delta_share": 0.0,
+      "min_low_to_mid": 0.0,
+      "ratio_scale": 0.8,
+      "rf_weight": 0.85,
+      "threshold": 0.17500000000000004
+    },
+    "selection_input_hashes": {
+      "Track00003": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "d564dba9eb33864eae796c736ad45a3f29e4f6db7e099cb4356590ec13713cc5",
+        "mix_wav_sha256": "c628dbf30b818417c30941fccd2fa6ee8a5ad941a45fc8eb85f2d758a1922def",
+        "reference_status": "scorable"
+      },
+      "Track00004": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "b0743aa8f5060c1e92f581447fc864e65313f5dfeeb9a68ec41ebe766b189067",
+        "mix_wav_sha256": "d4c1c15491a38a3e2831880a3bcdbedac0b61c1f5064901b6b246017fc32fabe",
+        "reference_status": "scorable"
+      },
+      "Track00005": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "6c8e5c2a07069c1fb4b1567bd0bc84b987406daf93159953f22bd526545686b8",
+        "mix_wav_sha256": "2ada57d35631b349283bde7e6fa8339091520c956d5cd5f9920651280d63919f",
+        "reference_status": "scorable"
+      },
+      "Track00007": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "6b382b588dcc334f12af3bc618fb7b228601e3dc2e55d88bb4eec311b17841cc",
+        "mix_wav_sha256": "91c0142ad5373c2383499dd323feeb3bac86936c02455446cbaf23f685cf57e8",
+        "reference_status": "scorable"
+      },
+      "Track00010": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "fe5b1959bbf39241ce339ba9b1e7d94b5cfad42e095667c0a7cac848da723501",
+        "mix_wav_sha256": "6cd939f61c3c44895ac6d00e945cb6d0ff07b23c2f77815e346d9c48ff0f28bb",
+        "reference_status": "scorable"
+      },
+      "Track00012": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "4341765e7ced9664f7d297b8db41a20a71083407b0b6d77b871317b80a685bff",
+        "mix_wav_sha256": "2b5d03c3f9795985cfd85002decd28014c10e2a0044042235321262510dcc597",
+        "reference_status": "scorable"
+      },
+      "Track00013": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "da19c192e8caa7b51132c6e19eb5dead2df68004002d4a7f56c7a76f6cb203d5",
+        "mix_wav_sha256": "29e2f1cb9e806077b97e4d39d0cc5c7fb5491276498196021f5e92d57320c5c0",
+        "reference_status": "scorable"
+      },
+      "Track00017": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "43aed91db127a03be6118c80a7778cad16fde013d784e631c125182fb476e195",
+        "mix_wav_sha256": "43b3cabb5dc423894dda1cbd4c33dc40a424b13742ebc4213ca977b99ea8b0b9",
+        "reference_status": "unknown"
+      },
+      "Track00018": {
+        "analysis_frame_count": 2995,
+        "metadata_sha256": "e4861c7c50ab4c0a7ad9417e35c9a9c49dc1f36103c69cdbe2d816b8c60ac2ba",
+        "mix_wav_sha256": "696378bfb0d3abc76ea09485a69661e2a6a86d79f00e67af114e405dd03ad6cb",
+        "reference_status": "scorable"
+      }
+    }
+  },
+  "held_once_after_freeze": {
+    "aggregate_50ms_one_to_one": {
+      "f1": 0.777103209019948,
+      "fn": 44,
+      "fp": 470,
+      "macro_track_f1": 0.8039239190742343,
+      "precision": 0.6559297218155198,
+      "recall": 0.9531914893617022,
+      "tp": 896
+    },
+    "per_track_counts": [
+      {
+        "prediction_count": 77,
+        "reference_count": 77,
+        "score_50ms_one_to_one": {
+          "f1": 0.8831168831168831,
+          "fn": 9,
+          "fp": 9,
+          "tp": 68
+        },
+        "track": "Track00001"
+      },
+      {
+        "prediction_count": 173,
+        "reference_count": 79,
+        "score_50ms_one_to_one": {
+          "f1": 0.6111111111111112,
+          "fn": 2,
+          "fp": 96,
+          "tp": 77
+        },
+        "track": "Track00002"
+      },
+      {
+        "prediction_count": 81,
+        "reference_count": 56,
+        "score_50ms_one_to_one": {
+          "f1": 0.7445255474452555,
+          "fn": 5,
+          "fp": 30,
+          "tp": 51
+        },
+        "track": "Track00006"
+      },
+      {
+        "prediction_count": 63,
+        "reference_count": 42,
+        "score_50ms_one_to_one": {
+          "f1": 0.8,
+          "fn": 0,
+          "fp": 21,
+          "tp": 42
+        },
+        "track": "Track00008"
+      },
+      {
+        "prediction_count": 105,
+        "reference_count": 98,
+        "score_50ms_one_to_one": {
+          "f1": 0.9261083743842364,
+          "fn": 4,
+          "fp": 11,
+          "tp": 94
+        },
+        "track": "Track00009"
+      },
+      {
+        "prediction_count": 316,
+        "reference_count": 155,
+        "score_50ms_one_to_one": {
+          "f1": 0.6539278131634819,
+          "fn": 1,
+          "fp": 162,
+          "tp": 154
+        },
+        "track": "Track00011"
+      },
+      {
+        "prediction_count": 40,
+        "reference_count": 39,
+        "score_50ms_one_to_one": {
+          "f1": 0.9367088607594937,
+          "fn": 2,
+          "fp": 3,
+          "tp": 37
+        },
+        "track": "Track00014"
+      },
+      {
+        "prediction_count": 58,
+        "reference_count": 64,
+        "score_50ms_one_to_one": {
+          "f1": 0.9016393442622951,
+          "fn": 9,
+          "fp": 3,
+          "tp": 55
+        },
+        "track": "Track00015"
+      },
+      {
+        "prediction_count": 190,
+        "reference_count": 99,
+        "score_50ms_one_to_one": {
+          "f1": 0.6851211072664359,
+          "fn": 0,
+          "fp": 91,
+          "tp": 99
+        },
+        "track": "Track00016"
+      },
+      {
+        "prediction_count": 187,
+        "reference_count": 175,
+        "score_50ms_one_to_one": {
+          "f1": 0.9281767955801105,
+          "fn": 7,
+          "fp": 19,
+          "tp": 168
+        },
+        "track": "Track00019"
+      },
+      {
+        "prediction_count": 76,
+        "reference_count": 56,
+        "score_50ms_one_to_one": {
+          "f1": 0.7727272727272727,
+          "fn": 5,
+          "fp": 25,
+          "tp": 51
+        },
+        "track": "Track00020"
+      }
+    ]
+  },
+  "schema_version": 1,
+  "scope": "BASS-only cached 60-second diagnostic. No clean acceptance corpus, Norns, ARM, latency, or product claim.",
+  "source_hashes": {
+    "bass_calibration_py_sha256": "bacf110e67e8f7d4ed96320131c5646adc82ec8cb397671bb8a5581c7cf0900a",
+    "corpus_archive_sha256": "6490dc83d8b59ccbe7e9e0304023af8e585d2065f9a5f5921952a273fac4a9b0",
+    "detector_py_sha256": "51e88fc27d926cc7479aea6d9ec0d967a31445782ad38020b9af7031d4387ebf",
+    "quality_py_sha256": "b8f558b61809260ef54bf3e9e74cd05527fbfb2227df7b2cc02d210fa3796c4b",
+    "script_sha256": "1bc75282eacb262e6fb1eb3c745bfb3df360002c1069c4743496b86dde43fce3"
+  },
+  "split_and_provenance": {
+    "excluded_unknown_bass_missing_declared_midi": [
+      "Track00017"
+    ],
+    "held_once": [
+      "Track00001",
+      "Track00002",
+      "Track00006",
+      "Track00008",
+      "Track00009",
+      "Track00011",
+      "Track00014",
+      "Track00015",
+      "Track00016",
+      "Track00019",
+      "Track00020"
+    ],
+    "scorer": "tests/rhythm_doctor/quality.py onset_score, one-to-one 50ms",
+    "seconds": 60.0,
+    "train": [
+      "Track00003",
+      "Track00004",
+      "Track00007",
+      "Track00010",
+      "Track00012",
+      "Track00018"
+    ],
+    "validation_only": [
+      "Track00005",
+      "Track00013"
+    ]
+  },
+  "status": "diagnostic_rejected_below_plan_held_bass_f1_gate"
+}

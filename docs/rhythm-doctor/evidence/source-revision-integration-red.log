@@ -1,0 +1,46 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+E### MISSING INCLUDE: mosaic/lib/source_pattern_revision
+E### MISSING INCLUDE: mosaic/lib/source_pattern_revision
+E### MISSING INCLUDE: mosaic/lib/source_pattern_revision
+E### MISSING INCLUDE: mosaic/lib/source_pattern_revision
+E### MISSING INCLUDE: mosaic/lib/source_pattern_revision
+E
+Tests with errors:
+------------------
+1) test_source_revision_actual_pattern_mutation_and_song_copy_boundaries
+.///lib/source_pattern_revision_tests.lua:60: attempt to call a nil value (field 'get_source_revision')
+stack traceback:
+	.///lib/source_pattern_revision_tests.lua:60: in upvalue 'test_source_revision_actual_pattern_mutation_and_song_copy_boundaries'
+
+2) test_source_revision_invalid_targets_fail_without_creating_patterns
+.///lib/source_pattern_revision_tests.lua:3: MISSING INCLUDE: mosaic/lib/source_pattern_revision
+stack traceback:
+	.///lib/source_pattern_revision_tests.lua:3: in upvalue 'new_revisions'
+	.///lib/source_pattern_revision_tests.lua:47: in upvalue 'test_source_revision_invalid_targets_fail_without_creating_patterns'
+
+3) test_source_revision_reads_are_stable_and_edits_are_local
+.///lib/source_pattern_revision_tests.lua:3: MISSING INCLUDE: mosaic/lib/source_pattern_revision
+stack traceback:
+	.///lib/source_pattern_revision_tests.lua:3: in upvalue 'new_revisions'
+	.///lib/source_pattern_revision_tests.lua:7: in upvalue 'test_source_revision_reads_are_stable_and_edits_are_local'
+
+4) test_source_revision_repeated_equal_edits_still_invalidate_history
+.///lib/source_pattern_revision_tests.lua:3: MISSING INCLUDE: mosaic/lib/source_pattern_revision
+stack traceback:
+	.///lib/source_pattern_revision_tests.lua:3: in upvalue 'new_revisions'
+	.///lib/source_pattern_revision_tests.lua:27: in upvalue 'test_source_revision_repeated_equal_edits_still_invalidate_history'
+
+5) test_source_revision_replacement_never_reuses_an_old_token
+.///lib/source_pattern_revision_tests.lua:3: MISSING INCLUDE: mosaic/lib/source_pattern_revision
+stack traceback:
+	.///lib/source_pattern_revision_tests.lua:3: in upvalue 'new_revisions'
+	.///lib/source_pattern_revision_tests.lua:17: in upvalue 'test_source_revision_replacement_never_reuses_an_old_token'
+
+6) test_source_revision_tracking_does_not_mutate_serialized_project
+.///lib/source_pattern_revision_tests.lua:3: MISSING INCLUDE: mosaic/lib/source_pattern_revision
+stack traceback:
+	.///lib/source_pattern_revision_tests.lua:3: in upvalue 'new_revisions'
+	.///lib/source_pattern_revision_tests.lua:38: in upvalue 'test_source_revision_tracking_does_not_mutate_serialized_project'
+
+Ran 6 tests in 0.055 seconds, 0 successes, 6 errors, 1701 non-selected

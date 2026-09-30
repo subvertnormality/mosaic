@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35836585495",
+  "source_run_id": "35836585495",
+  "source_revision": "d2b76f8bc15b029c404bd432ba35efdb8e689b3c",
+  "case": "M-REC-SONG-LENGTH-002",
+  "lane": "real-time",
+  "clock_mode": "real-time",
+  "side": "after",
+  "targeted_report_sha256": "6882e819a66ad0aaea20ae6fc2a32cb6cb443dfd4096bd1a4a5aa695c522a2df",
+  "repeatability_report_sha256": "770daa0a8b0b2bf36f94e6edc363e4db437f248e190203e540cc378a185b42f6",
+  "manifest": "M-REC-SONG-LENGTH-002/real-time/after/d378d07733f84e76b30cacda415b07e2/manifest.json",
+  "manifest_sha256": "26de71ee6498d6f5d85426946957dcc623180c373c913a57b570809935247e9f",
+  "evidence_sha256": {
+    "recipe.json": "0239704490f65f9f7dd6a630108287d098506540d9c16f82c7e76837d7a260fb",
+    "results.json": "34268e217218a8795c33f60eb8bb0381b04b8819857379c8bb661494011c45b0"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI"
+}

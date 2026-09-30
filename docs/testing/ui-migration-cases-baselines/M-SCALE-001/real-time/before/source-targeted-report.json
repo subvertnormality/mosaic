@@ -1,0 +1,192 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "232a34a655cfb41a5ae3630172f144249355c863",
+  "after_sha": "4611d9c2992ea90d89f88ec29b33d0513cbe79e8",
+  "emulator_sha": "68ab70903d22500237ce68edc7e31c3b867cf179",
+  "selected_cases": [
+    "M-SCALE-001",
+    "M-SCALE-002",
+    "M-SCALE-003",
+    "M-MERGE-001"
+  ],
+  "source_delta": {
+    "production_tree_unchanged": true,
+    "changed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/scale_memory.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/ui.py"
+    ],
+    "allowed_behaviour_paths": [
+      "tests/behaviour/cases.py",
+      "tests/behaviour/ci/test_targeted_ui_migration.py",
+      "tests/behaviour/contract_cases.json",
+      "tests/behaviour/frame_oracle.py",
+      "tests/behaviour/scale_memory.py",
+      "tests/behaviour/test_ui.py",
+      "tests/behaviour/test_ui_layer.py",
+      "tests/behaviour/ui.py",
+      "tests/behaviour/ui_map.py",
+      "tests/behaviour/ui_migration_allowlist.json",
+      "tests/behaviour/ui_verb_sources.json"
+    ]
+  },
+  "lanes": [
+    "real-time",
+    "controlled-experimental"
+  ],
+  "cases": [
+    {
+      "case": "M-SCALE-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SCALE-001/real-time/before/a4f2c3f0b8d4455cb8cb0183e25f1bda/manifest.json",
+              "manifest_sha256": "50b2065fde1ddff9fb1cbf3f78031e5b614f0e252e7268c0cb9bf4110d7c3b34"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SCALE-001/real-time/after/7544fbb88eb2401d99178ab3945cb2a3/manifest.json",
+              "manifest_sha256": "8a3cfe9cc628ce2f98d5f3985c3c5c54ecc1403a6aefc7cbc4c06cc0bf8cb2f9"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SCALE-001/controlled-experimental/before/6f5e650d043f400a9d66863a19918d9a/manifest.json",
+              "manifest_sha256": "5e3f694aaa708bb5ffab7aa7b01ed3bbb2b118f0468c0e723e3fa7652437c1d8"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SCALE-001/controlled-experimental/after/22d1196fc0504df297c450a8660ec4ba/manifest.json",
+              "manifest_sha256": "5378d8f9942b1d43185976f9429725663e7bc773e9180ed13ac0e955573bd7fc"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-SCALE-002",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SCALE-002/real-time/before/d6d8a683d9b349dab3dee35496863b18/manifest.json",
+              "manifest_sha256": "61b508ebceba0e7d0c67afb40cc59fbca55d2d54422e04794d55cc7836fc172e"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SCALE-002/real-time/after/2a662fec41ec4253b573a68d0d434a28/manifest.json",
+              "manifest_sha256": "dfc53435122fca06f6709714322977ce0de11e794be066c5a7d7aca5dcd7acd1"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SCALE-002/controlled-experimental/before/3bc0240e240649f1976778ded60c521c/manifest.json",
+              "manifest_sha256": "aba8ca089caca483507236c35d96db70121bf21c92959e4ec606a1873ab7ee92"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SCALE-002/controlled-experimental/after/47bc1354359f4ab9835481f80773dce3/manifest.json",
+              "manifest_sha256": "02018a4f6b552ad06eb74fa49ff42c36d1eb8b05994a8eeaaa8e3aa780a4c3ba"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-SCALE-003",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SCALE-003/real-time/before/7fa8d0ccc86047e38a976dc0f9a98285/manifest.json",
+              "manifest_sha256": "fbe596e6df312fa8d4247afa3368c57a591d43cb9266999756b23b5fe7fdc301"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SCALE-003/real-time/after/0a20211e358246f3b6d134c2aab3152f/manifest.json",
+              "manifest_sha256": "2de8eabc176dc392fafa8b5154e949e8d296f0d404bf7ceb938c42f1f936d902"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-SCALE-003/controlled-experimental/before/062b2c40b5d7403c954969eece5b8864/manifest.json",
+              "manifest_sha256": "9f091c8b43ae47d5fabdad4da3fdb899150c266e97e774d8862120d0d6ea1319"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-SCALE-003/controlled-experimental/after/95ea13282500461081265621581315da/manifest.json",
+              "manifest_sha256": "b0d4551f456b9df3748d4f34ee414f527f7469ef0e46e1923679f4165e2aff91"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    },
+    {
+      "case": "M-MERGE-001",
+      "lanes": [
+        {
+          "lane": "real-time",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-001/real-time/before/05790fe452cd43e3b1f045a29d9271a8/manifest.json",
+              "manifest_sha256": "8836016757b6de972977f93ed275b620369e5ab20f9cdcce84f27b7188837d00"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-001/real-time/after/8285d7c437da4f29a4bbb7528c39f599/manifest.json",
+              "manifest_sha256": "d1e9de407e993571779a27f117af1a8a60f0110c78abc3866d91e7fa3a499e49"
+            }
+          },
+          "gate_errors": []
+        },
+        {
+          "lane": "controlled-experimental",
+          "runs": {
+            "before": {
+              "returncode": 0,
+              "manifest": "M-MERGE-001/controlled-experimental/before/6640470e0d8547a8acff7ae987ef6792/manifest.json",
+              "manifest_sha256": "fe0f2ea4e26cf7de28a85db6302c963194bea47de8957f2c608de5bd57e3a63a"
+            },
+            "after": {
+              "returncode": 0,
+              "manifest": "M-MERGE-001/controlled-experimental/after/92a38ffab7f1461fb3223488542ea9a3/manifest.json",
+              "manifest_sha256": "fca661a5540470e9b22b1c6c962fa29592c0c75bebaf45bb5460f139c78e706b"
+            }
+          },
+          "gate_errors": []
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source_run": "https://github.com/subvertnormality/mosaic/actions/runs/35833968713",
+  "source_run_id": "35833968713",
+  "source_revision": "1254e289731d54a06a5eed168bc363e9d8bd6cbf",
+  "case": "M-MAP-002",
+  "lane": "real-time",
+  "clock_mode": "real-time",
+  "side": "after",
+  "targeted_report_sha256": "44339fceda3844d5bd8b28bebae98012f9f3c90f8957eb8b01685087534f9f5e",
+  "repeatability_report_sha256": "a8871e8df8184681dbee9188aad1f012ce11807f1fe6f66e5602364519a5040c",
+  "manifest": "M-MAP-002/real-time/after/e36b2f2605f9434fa2673e069cf2d2b9/manifest.json",
+  "manifest_sha256": "31d513c776af43c8df6cf9697bb0712d21a6d073a6d86d9965178dc98811cc44",
+  "evidence_sha256": {
+    "recipe.json": "97dc7658b35809dfe752c302e715e366cbd42d816e33da866eb7362dc17bbf90",
+    "results.json": "a5d95ba41cd36c111316ddc5b28f1252fa2d0b5149766208353bbc3d7f4bf4ad"
+  },
+  "complete_regression_run": false,
+  "verification_scope": "uploaded recipe/results subset; full inventory validated by CI"
+}

@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 from hardware_performance import CASES,OnDeviceResourceSampler,dense_oracle,resource_metrics,run_hardware_performance,select_fixture_parameter,write_fixture_manifest
 import hardware_performance
+from ui import Ui
 
 def dense_events(channels,steps=32,step_ns=250_000_000):
     rows=[];index=0
@@ -23,7 +24,12 @@ def tearDownModule():
 class TransportChecks(unittest.TestCase):
     def test_a_window_starts_only_stopped_with_no_key_held(self):
         actions=[];taps=[]
-        driver=type('D',(),{'action':lambda self,**k:actions.append(k),'elapse':lambda self,s:None,'tap':lambda self,x,y:taps.append((x,y))})()
+        class Driver:
+            def __init__(self):self.ui=Ui(self)
+            def action(self,**event):actions.append(event)
+            def elapse(self,seconds):pass
+            def tap(self,x,y):taps.append((x,y))
+        driver=Driver()
         states=iter([(True,[(3,5)]),(False,[])])
         with patch('hardware_performance.transport_state',side_effect=lambda runner:next(states)):
             log=[];hardware_performance.ready_to_play(object(),driver,log)
@@ -75,12 +81,14 @@ class FakeMaiden:
 class FakeDriver:
     def __init__(self,*args,**kwargs):
         self.expected_step_seconds=.25;self.tempo_bpm=60;self.finished=0
+        self.results=[];self.ui=Ui(self)
         self.runner=type('R',(),{'maiden':type('M',(),{'eval':lambda self,source:preflight_reply(source)})()})()
     def tap(self,*args):pass
     def key(self,*args):pass
     def enc(self,*args):pass
     def elapse(self,*args):pass
     def led_values(self,*args):pass
+    def action(self,**kwargs):pass
     def snapshot(self):return {'midi':dense_events(1),'grid_writes':4,'grid_refreshes':2}
     def finish(self):self.finished+=1
 
@@ -141,6 +149,7 @@ class Tests(unittest.TestCase):
     def test_hardware_slide_parameter_selection_is_front_panel_only(self):
         calls=[];maiden=type('M',(),{'eval':lambda self,code:calls.append(('query',code)) or '__MOSAIC_PARAM_POSITION__3/9'})()
         driver=type('D',(),{'runner':type('R',(),{'maiden':maiden})(),'key':lambda self,n:calls.append(('key',n)),'enc':lambda self,n,v:calls.append(('enc',n,v))})()
+        driver.ui=Ui(driver)
         select_fixture_parameter(driver,'CC 1');self.assertEqual(calls[0][0],'query');self.assertIn("p.name=='CC 1'",calls[0][1]);self.assertEqual(calls[1:],[('key',2),('enc',3,-11),('enc',3,2),('key',3),('key',2)])
         with self.assertRaises(ValueError):select_fixture_parameter(driver,'not-fixture-parameter')
         with self.assertRaises(ValueError):select_fixture_parameter(driver,'CC 5')
@@ -223,8 +232,18 @@ class Tests(unittest.TestCase):
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project'),patch('hardware_performance.time.sleep'):
             with self.assertRaisesRegex(AssertionError,'PERF-002-HW-16 runs at 130 bpm but the norns clock is at 60'):
                 run_hardware_performance(runner,'PERF-002-HW-16',2,'map',runner.out,FakeTrace(),FakeSampler())
+    def test_gc_case_spans_several_collection_cycles(self):
+        # The 8 s windows never contained a collection cycle; on the norns the
+        # dense 16-channel pattern completes one about every 20 s, so the case
+        # measures the same workload for two minutes.
+        self.assertEqual(CASES['PERF-GC-HW-16'],{'workload':'dense','channels':16,'seconds':120,'tempo_bpm':130})
+        self.assertGreaterEqual(CASES['PERF-GC-HW-16']['seconds'],60)
     def test_three_calibration_cases_and_trace_start_boundary(self):
-        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16','PERF-010-HW-16'})
+        self.assertEqual(set(CASES),{'PERF-002-HW-1','PERF-002-HW-4','PERF-002-HW-8','PERF-002-HW-16','PERF-003-HW-1','PERF-003-HW-8','PERF-003-HW-16','PERF-005-HW-1','PERF-005-HW-4','PERF-008L-HW-4','MIX-HW-8','PERF-009-HW-4','PERF-009-HW-8','PERF-009-HW-16','PERF-EXT-HW-16','PERF-010-HW-16',
+                                     # Plan section 1.4 Interlock device acceptance (test_merge_workloads.py).
+                                     'PERF-MERGE-HW-STEADY','PERF-MERGE-HW-WORST','PERF-MERGE-HW-EDIT','PERF-MERGE-HW-DENSE','PERF-MERGE-HW-DENSE-EDIT',
+                                     # Long enough for several garbage collection cycles.
+                                     'PERF-GC-HW-16'})
         trace=FakeTrace();sampler=FakeSampler();source=Path(tempfile.mkdtemp());runner=type('R',(),{'maiden':FakeMaiden(),'ssh':object(),'out':source})()
         with patch('hardware_performance.HardwareDriver',FakeDriver),patch('hardware_performance.build_project') as build,patch('hardware_performance.source_identity',return_value={'mosaic_revision':'abc','dirty_patch_sha256':None}),patch('hardware_performance.time.sleep'):
             value=run_hardware_performance(runner,'PERF-002-HW-1',2,'map',source,trace,sampler)

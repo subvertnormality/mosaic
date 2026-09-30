@@ -1,0 +1,280 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "expected": [
+      15,
+      5,
+      5
+    ],
+    "actual": [
+      15,
+      5,
+      5
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ]
+    ],
+    "expected": [
+      2,
+      2,
+      2
+    ],
+    "actual": [
+      2,
+      2,
+      2
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166165827,
+        "error_ms": -0.5008396666666692
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.16666666666666666,
+        "actual_seconds": 0.166601047,
+        "error_ms": -0.06561966666665531
+      }
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        16,
+        8
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "midi",
+    "expected": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "actual": [
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ],
+      [
+        1,
+        [
+          144,
+          60,
+          100
+        ]
+      ]
+    ],
+    "complete_cycles": 2
+  },
+  {
+    "kind": "duration",
+    "rows": [
+      {
+        "pitch": 60,
+        "expected_seconds": 0.5,
+        "actual_seconds": 0.500155558,
+        "error_ms": 0.15555800000000009
+      },
+      {
+        "pitch": 60,
+        "expected_seconds": 0.5,
+        "actual_seconds": 0.498636748,
+        "error_ms": -1.3632519999999815
+      }
+    ]
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        16,
+        8
+      ]
+    ],
+    "expected": [
+      2
+    ],
+    "actual": [
+      2
+    ]
+  },
+  {
+    "kind": "priority-field-isolation",
+    "field": "length",
+    "source_slot": 3,
+    "pitch": 60,
+    "velocity": 100,
+    "length_steps": 3,
+    "passed": true
+  }
+]

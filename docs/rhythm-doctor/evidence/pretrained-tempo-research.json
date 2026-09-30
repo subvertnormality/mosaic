@@ -1,0 +1,108 @@
+{
+  "scope": "Primary-source BeatNet/madmom research and one non-held executable BeatNet diagnostic. This is not ARMv7 validation, transcription acceptance evidence, or a held-out evaluation.",
+  "beatnet": {
+    "repository": "https://github.com/mjhydri/BeatNet/tree/81cedd4beeb7235262db80969a0c9ce9a48a0ed4",
+    "revision": "81cedd4beeb7235262db80969a0c9ce9a48a0ed4",
+    "license": "CC BY 4.0, repository LICENSE at the pinned revision",
+    "architecture": {
+      "source": "src/BeatNet/model.py",
+      "source_sha256": "65d38b46a12cfa6f33ad09d0a2cbc2cfb628721816e4cf9bcbc2197adb98c971",
+      "verified": "BDA(272, 150, 2) uses Conv1d(1, 2, kernel_size=10), ReLU, max_pool1d(2), Linear(2*floor((272-10+1)/2), 150), a two-layer unidirectional LSTM with 150 cells, Linear(150, 3), and Softmax(dim=0)."
+    },
+    "weights": {
+      "upstream_default_choice": 1,
+      "official_handler_path": "src/BeatNet/models/model_1_weights.pt",
+      "byte_size": 1612179,
+      "sha256": "619091bc317ca3e83b45591d46f6de3d5a41588bcb39fe9fe7be30cffa6aca84",
+      "other_pinned_blobs": "model-1/2/3.pt are 1614574 bytes each; model_1/2/3_weights.pt are 1612179 bytes each."
+    },
+    "frontend": {
+      "source": "src/BeatNet/log_spect.py",
+      "source_sha256": "e8474d0e5eba0426a5bb0f8993c9c3cad0a9e659d936dd6d91b6aed92370db3a",
+      "verified": "Official BeatNet handler configures mono 22050 Hz audio, 1411-sample (64 ms) windows, 441-sample (20 ms) hops, a 24-band 30\u201317000 Hz filtered log spectrogram and positive spectral differences. The resulting input is 272 features at 50 fps."
+    },
+    "decoder": {
+      "source": "src/BeatNet/particle_filtering_cascade.py",
+      "source_sha256": "1483c53fe972341ffebe4bdc305ce85c913d4ec357fc4aaece2424a9049b9c97",
+      "defaults": "50 fps; 1500 beat particles; 250 downbeat particles; 55\u2013215 BPM; 2\u20134 beats per bar.",
+      "limitation": "The default bounds exclude the plan's 40 and 240 BPM fixtures. This diagnostic did not change those defaults."
+    }
+  },
+  "madmom": {
+    "repository": "https://github.com/CPJKU/madmom/tree/27f032e8947204902c675e5e341a3faf5dc86dae",
+    "revision": "27f032e8947204902c675e5e341a3faf5dc86dae",
+    "source_license": "BSD",
+    "pretrained_model_license": "CC BY-NC-SA 4.0 according to the official madmom model repository/license records.",
+    "frontend": "madmom RNNBeatProcessor source documents mono 44.1 kHz, 2048-sample STFT frames, 12-band 30\u201317000 Hz filtered log spectrograms and 100 fps activations.",
+    "restriction": "CC BY-NC-SA requires attribution, non-commercial use, and share-alike. It does not itself prove that this user's standalone feature is prohibited; distribution/use terms need a product decision."
+  },
+  "executable_diagnostic": {
+    "input": "rd02-scheduled-v10 v10-acquisition-120, acquisition split (not held-out), frozen reference BPM 120, audio SHA-256 cf33acd8309cab3352634c90794064e3c711f07de1d13415fbd4e3ad415ef0e8.",
+    "frontend": "Pinned unchanged log_spect.py ran in isolated WSL CPython 3.8 with numpy 1.23.5/scipy 1.10.1/librosa 0.9.2. It produced 2250x272 float32 features, SHA-256 b83707aac8fcf8a9ff33d8c6ce1e9b2d52ef88189c012f9694bfa994f6e925f1.",
+    "network": "Pinned model_1_weights.pt ran via existing Windows CPython 3.10 Torch 1.11.0+cpu, producing 2250x3 activations, SHA-256 a4d8bd70857ebfa39bc5a28559bbd1cbe43a27e472a5fa85a0390928428ed556, in 0.234 seconds.",
+    "decoder": "The unchanged particle-filter import first required matplotlib and then exposed the unavailable compiled madmom.ml.hmm module. A source-derived NumPy shim for only TransitionModel/ObservationModel let unchanged BeatNet particle_filtering_cascade.py and madmom features/beats_hmm.py run. With seed 1 it emitted 86 beat/downbeat rows in 3.387 seconds; median interval 0.5 seconds (120 BPM).",
+    "artifacts": "WSL frontend/decoder/summary: /home/andy/.cache/rhythm-doctor-diagnostics/beatnet-81cedd4/run-v10-acq120/. Windows CRNN record: C:\\Users\\andy\\.cache\\rhythm-doctor-diagnostics\\beatnet-81cedd4\\run-v10-acq120\\windows-inference-record.json. Both paths were checked during the adaptation audit."
+  },
+  "armv7_path": {
+    "candidate": "Export the pinned BeatNet BDA activation network only, then retain an independently ported deterministic particle filter.",
+    "required_before_selection": [
+      "Export state-dict model_1_weights.pt to an ARMv7-supported runtime and prove PyTorch-versus-target activation parity on frozen audio.",
+      "Implement or port the decoder without relying on a compiled madmom extension unavailable on the target.",
+      "Measure ARMv7 RAM, cold/warm latency, and 45-second capture processing.",
+      "Evaluate frozen 40\u2013240 BPM, octave-error, phase, uncertainty and bar-start controls without changing the 55\u2013215 default constraints during evaluation."
+    ],
+    "status": "The x86 CPU diagnostic proves the pinned frontend and network can execute in split hosts. It does not establish ONNX conversion, ARMv7 support, timing, or required-range quality."
+  },
+  "decision": "BeatNet model 1 is a concrete CC-BY activation-model candidate for a separate ARM portability experiment. Its default decoder range and compiled madmom dependency remain material gaps. madmom pretrained RNN assets remain a comparison option subject to their CC BY-NC-SA terms, not an automatically excluded feature.",
+  "batch_executable_diagnostic": {
+    "scope": "Seven v10 acquisition fixtures only. All seven PCM hashes exactly match their corresponding v11 acquisition fixtures; none matched v11 development or held-out PCM. This is therefore not independent v11 or held-out evidence.",
+    "frozen_record": "/home/andy/.cache/rhythm-doctor-diagnostics/beatnet-81cedd4/batch-v10-acquisition/batch-summary.json",
+    "record_sha256": "3c6441ba46289ae9871cee90b712cb34f8772050f458603ace0033d407539b6c",
+    "input_reference": "Frozen v10 manifest BPM plus frozen recipe intro_seconds + record_phase_seconds; drift additionally uses its frozen 120-to-150 BPM transition at 22.5 seconds. Phase matching is monotonic one-to-one over every retained reference beat at <=50 ms.",
+    "model_loading": "The upstream model=1 handler loads model_1_weights.pt SHA-256 619091bc317ca3e83b45591d46f6de3d5a41588bcb39fe9fe7be30cffa6aca84. The earlier 80e320... value is model-1.pt, a distinct upstream checkpoint blob that was not loaded.",
+    "default_55_215": "120 BPM: 86/86 matched (mean absolute phase error 4.05 ms). 180 BPM: 92/129 matched; 240 BPM: 62/172 matched and median output 120 BPM. 60 BPM produced a 120 BPM median with 43 extra predicted beats; 40 BPM produced 57 predictions for 29 references. Drift matched 84/102 but no uncertainty; the half/double ambiguous control emitted 85 beats and no uncertainty.",
+    "extended_40_240_dev_only": "Predeclared separately, with no held-out tuning. It did not repair the edges: 40 BPM 20/29, 240 BPM 16/172, and it exposes no uncertainty result for drift or ambiguity. It is not an acceptance configuration.",
+    "timing": "Pinned WSL particle-filter replay took 3.50\u20136.74 seconds per 45-second fixture/configuration; all 14 replay arrays were bit-for-bit equal to preserved outputs. Windows Torch CRNN inference was 0.234\u20130.297 seconds per 45-second fixture. No ARMv7 claim follows."
+  },
+  "model23_executable_diagnostic": {
+    "scope": "Same frozen v10 acquisition frontend features as model 1; v10 bytes overlap corresponding v11 acquisition only, so this is not clean held-out evidence.",
+    "summary": "/home/andy/.cache/rhythm-doctor-diagnostics/beatnet-81cedd4/batch-v10-acquisition/model23-decode/model23-summary.json",
+    "summary_sha256": "254e1361901acc0cb558b9e268dde0567b567ca6de590b85d3cdb8c581199e50",
+    "model2": {
+      "official_weight_path": "models/model_2_weights.pt",
+      "sha256": "5878a18c079fa0b0139879b14ed2b5b7595faef8c3d16210aed141fd00fa2d58",
+      "default": "120 BPM 82/86 match, precision .976/recall .953; 180 43/129; 240 63/172. Drift 87/102 and correct local 120/150 median segments, but no uncertainty. Extended 40\u2013240 gives a 40 BPM median but only 21/29 phase matches."
+    },
+    "model3": {
+      "official_weight_path": "models/model_3_weights.pt",
+      "sha256": "0c52a074ea38e8cb4a760ecfa3747c9cf91a1e3cd19f238eed80b0de763989ca",
+      "default": "120 BPM 76/86; 180 10/129; 240 46/172. It estimates about 61.2 BPM on the ambiguous 60 BPM control, where models 1/2 estimate 120, but emits beats with precision .491/recall .600 rather than uncertainty."
+    },
+    "candidate": "Do not implement from this diagnostic. A future fail-closed three-model consensus could emit only when model grids agree within 2% tempo and >=90% bidirectional <=50ms phase correspondence, otherwise returning uncertain. It must inspect model outputs only, never fixture labels. It would expose model-3 disagreement on ambiguity, but all models can agree on the wrong 120 BPM octave at 60 BPM, so an independent confidence/tempo-hypothesis ambiguity test is required first.",
+    "uncertainty": "All runs return timed beat/downbeat rows only. Drift and ambiguous controls cannot pass their required uncertainty behavior."
+  },
+  "model1_fixed_time_stretch_diagnostic": {
+    "scope": "Same v10 acquisition DEV audio only, never clean/held evidence. Fixed pitch-preserving librosa factors .5 and 2 were both run for every fixture; no branch was selected from fixture BPM, branch score, or model confidence.",
+    "summary": "/home/andy/.cache/rhythm-doctor-diagnostics/beatnet-81cedd4/stretch-model1-v10-acquisition/stretch-summary.json",
+    "summary_sha256": "cd9875e227da695afaaa5bd3052dd951d8bfa64738c0ae06412fbf179daa2d6e",
+    "model": "official models/model_1_weights.pt SHA-256 619091bc317ca3e83b45591d46f6de3d5a41588bcb39fe9fe7be30cffa6aca84; unchanged default PF 55\u2013215 BPM, 50 fps, seed 1.",
+    "mapping": "Each decoder timestamp was mapped to original audio seconds as transformed_seconds * rate. Frozen original-time references were retained.",
+    "input_length": "Every .5-rate branch processed the complete 90-second transformed input, never a 45-second truncation. All seven original clips have at least 16 full frozen reference intervals.",
+    "results": "Rate .5 yields 145/172 <=50ms mapped phase matches at 240 BPM, versus original default model-1 62/172, but over-detects 120 BPM (169 predictions for 86 references). Rate 2 yields 29/43 matches at 60 BPM with precision .906, but only 15/86 at 120 BPM. Thus trained range mismatch contributes to octave behavior, but neither fixed branch is a universal correction.",
+    "limits": "Neural confidence and inter-branch grid disagreement were recorded as future evidence only. No forced branch winner or automatic acquisition change was implemented. PF still exposes no uncertainty, so drift and ambiguity cannot pass."
+  },
+  "inference_adaptation_audit": {
+    "scope": "Read-only audit of pinned BeatNet source and external diagnostic runners; no new inference or training.",
+    "source_commit": "81cedd4beeb7235262db80969a0c9ce9a48a0ed4",
+    "source_hashes": {
+      "model.py": "65d38b46a12cfa6f33ad09d0a2cbc2cfb628721816e4cf9bcbc2197adb98c971",
+      "BeatNet.py": "afe04b7e110f901c61293572f63e26730eec72f119137cef5f9fe0d106cca403",
+      "log_spect.py": "e8474d0e5eba0426a5bb0f8993c9c3cad0a9e659d936dd6d91b6aed92370db3a"
+    },
+    "clone_clean": "Yes. Diagnostic-created untracked CPython 3.8 bytecode files were removed; the versioned model.cpython-310.pyc was restored from the pinned clone. git status --short and source diff were empty afterward.",
+    "network_adapter": "All four external runners instantiate a fresh BDA(272,150,2,\"cpu\") for each independent clip or branch. They call model(input)[0] first, obtaining class-by-time for one batch, then call final_pred, whose pinned implementation is Softmax(dim=0), and transpose to time-by-class. Thus class normalization precedes transpose and hidden/cell state does not cross clips.",
+    "frontend_adapter": "Matches pinned BeatNet.py: librosa load/resample mono 22050 Hz, LOG_SPECT win_length 1411 (64 ms), hop_size 441 (20 ms), n_bands [24], mode online, then process_audio(audio).T before one batch dimension. The frontend record showed 2250 frames for each 45-second unscaled fixture.",
+    "artifact_path_correction": "The original single-clip Windows inference record is C:\\Users\\andy\\.cache\\rhythm-doctor-diagnostics\\beatnet-81cedd4\\run-v10-acq120\\windows-inference-record.json. It does not exist under /home/andy/.cache. WSL-side frontend, decoder, and summary artifacts remain at /home/andy/.cache/rhythm-doctor-diagnostics/beatnet-81cedd4/run-v10-acq120/.",
+    "result": "The earlier research entry naming a WSL windows-inference-record.json was corrected to the actual cross-host artifact location."
+  }
+}

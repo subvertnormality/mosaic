@@ -1,0 +1,226 @@
+[
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Lock lead time (ms)",
+    "value": "0",
+    "matched": true
+  },
+  {
+    "kind": "global-lock-lead-setting",
+    "value_ms": 0,
+    "default_checked": null
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "grid",
+    "cells": [
+      [
+        1,
+        2
+      ]
+    ],
+    "expected": [
+      15
+    ],
+    "actual": [
+      15
+    ]
+  },
+  {
+    "kind": "screen-header",
+    "expected": "Ch. 1 Device Config",
+    "matched": true
+  },
+  {
+    "kind": "song-mode-flow",
+    "stage": "default-on-group-1",
+    "slots": [
+      1,
+      2,
+      1,
+      2
+    ],
+    "notes": [
+      60,
+      62,
+      72,
+      74,
+      60,
+      62,
+      72,
+      74
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-mode-flow",
+    "stage": "default-on-group-2",
+    "slots": [
+      4,
+      5,
+      4,
+      5
+    ],
+    "notes": [
+      84,
+      86,
+      48,
+      50,
+      84,
+      86,
+      48,
+      50
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-mode-flow",
+    "stage": "queued-selection",
+    "slots": [
+      4,
+      2,
+      1,
+      2
+    ],
+    "notes": [
+      84,
+      86,
+      72,
+      74,
+      60,
+      62,
+      72,
+      74
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-mode-flow",
+    "stage": "two-queued-selections",
+    "slots": [
+      1,
+      5,
+      4,
+      5
+    ],
+    "notes": [
+      60,
+      62,
+      48,
+      50,
+      84,
+      86,
+      48,
+      50
+    ],
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "Off",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": false
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "song-mode-flow",
+    "stage": "off-holds-slot",
+    "slots": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "notes": [
+      60,
+      62,
+      60,
+      62,
+      60,
+      62,
+      60,
+      62
+    ],
+    "passed": true
+  },
+  {
+    "kind": "song-mode-flow",
+    "stage": "off-manual-selection",
+    "slots": [
+      1,
+      2,
+      2,
+      2
+    ],
+    "notes": [
+      60,
+      62,
+      72,
+      74,
+      72,
+      74,
+      72,
+      74
+    ],
+    "passed": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "selected-menu-option-row",
+    "label": "Song mode",
+    "value": "On",
+    "matched": true
+  },
+  {
+    "kind": "mosaic-option-input",
+    "label": "Song mode",
+    "enabled": true
+  },
+  {
+    "kind": "selected-menu-label",
+    "text": "LEVELS >"
+  },
+  {
+    "kind": "song-mode-flow",
+    "stage": "on-again",
+    "slots": [
+      2,
+      1,
+      2,
+      1
+    ],
+    "notes": [
+      72,
+      74,
+      60,
+      62,
+      72,
+      74,
+      60,
+      62
+    ],
+    "passed": true
+  }
+]

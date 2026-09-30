@@ -6,22 +6,11 @@ existed and are never used to tune the emulator performance profile.
 import time
 
 from perf_overload import FINGERPRINT, assert_recovery, note_groups
+from ui_map import PERFORMANCE_RENDER_PRESSURE_SCHEDULE, performance_gesture_recipe
 
-# Identical to perf_dense.RENDER_PRESSURE_SCHEDULE (copied so the physical lane
-# does not import the emulator runtime): safe, non-musical page, channel and
-# browse controls every 250 ms.
-RENDER_PRESSURE_SCHEDULE = [
-    (.25, 'page-channel', ('grid', 3, 8)), (.50, 'channel-16', ('grid', 16, 1)), (.75, 'browse-forward', ('enc', 1, 2)),
-    (1.00, 'page-trig', ('grid', 5, 8)), (1.25, 'page-song', ('grid', 6, 8)), (1.50, 'page-channel', ('grid', 3, 8)),
-    (1.75, 'channel-1', ('grid', 1, 1)), (2.00, 'browse-back', ('enc', 1, -2)), (2.25, 'page-trig', ('grid', 5, 8)),
-    (2.50, 'page-song', ('grid', 6, 8)), (2.75, 'page-channel', ('grid', 3, 8)), (3.00, 'channel-16', ('grid', 16, 1)),
-    (3.25, 'browse-forward', ('enc', 1, 2)), (3.50, 'page-trig', ('grid', 5, 8)), (3.75, 'page-song', ('grid', 6, 8)),
-    (4.00, 'page-channel', ('grid', 3, 8)), (4.25, 'channel-1', ('grid', 1, 1)), (4.50, 'browse-back', ('enc', 1, -2)),
-    (4.75, 'page-trig', ('grid', 5, 8)), (5.00, 'page-song', ('grid', 6, 8)), (5.25, 'page-channel', ('grid', 3, 8)),
-    (5.50, 'channel-16', ('grid', 16, 1)), (5.75, 'browse-forward', ('enc', 1, 2)), (6.00, 'page-trig', ('grid', 5, 8)),
-    (6.25, 'page-song', ('grid', 6, 8)), (6.50, 'page-channel', ('grid', 3, 8)), (6.75, 'channel-1', ('grid', 1, 1)),
-    (7.00, 'browse-back', ('enc', 1, -2)), (7.25, 'page-trig', ('grid', 5, 8)), (7.50, 'page-song', ('grid', 6, 8)),
-]
+# Shared with perf_dense without importing the emulator runtime: safe,
+# non-musical page, channel and browse controls every 250 ms.
+RENDER_PRESSURE_SCHEDULE = PERFORMANCE_RENDER_PRESSURE_SCHEDULE
 
 # Same chunk as the emulator's runtime_lua_load binding; the device runs it
 # through Maiden so both lanes execute identical Lua work.
@@ -39,7 +28,7 @@ HELDOUT_CASES = {
 def run_window(lane, spec):
     """Dispatch the case's timed gestures and Lua loads during one play window.
 
-    ``lane`` provides ``gesture(kind, a, b)`` and ``lua_load(iterations)``; both
+    ``lane`` provides semantic ``gesture(kind, a, b)`` and ``lua_load(iterations)``; both
     return without waiting for the runtime to finish the work.
     """
     timeline = [(offset, 'render', label, gesture) for offset, label, gesture in (RENDER_PRESSURE_SCHEDULE if spec['render'] else [])]
@@ -60,7 +49,7 @@ def run_window(lane, spec):
             lane.gesture(*value)
         else:
             lane.lua_load(value)
-        rows.append({'offset_seconds': offset, 'kind': kind, 'label': label, 'value': list(value) if kind == 'render' else value,
+        rows.append({'offset_seconds': offset, 'kind': kind, 'label': label, 'value': list(performance_gesture_recipe(value)) if kind == 'render' else value,
                      'target_ns': target, 'dispatch_started_ns': before, 'dispatch_ended_ns': time.monotonic_ns(),
                      'dispatch_lateness_ns': before - target})
     remaining = deadline - time.monotonic_ns()

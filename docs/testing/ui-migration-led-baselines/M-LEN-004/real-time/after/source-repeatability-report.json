@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "612d1802ce461f7557a16380bfa1cc7b6bb11232",
+  "selected_cases": [
+    "M-LEN-001",
+    "M-LEN-002",
+    "M-LEN-003",
+    "M-LEN-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/cases.py": "M-LEN-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/cases.py",
+      "case": "M-LEN-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-a75b8699142e4bfab1138b3e32e8d856/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-a75b8699142e4bfab1138b3e32e8d856/manifest.json",
+      "manifest_sha256": "9186993cb5ff76dceadbd785fd432bd648d29e37e57d44a41e0b7cb131e71375",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

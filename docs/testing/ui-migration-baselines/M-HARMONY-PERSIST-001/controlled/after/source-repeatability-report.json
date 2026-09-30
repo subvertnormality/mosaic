@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "after_sha": "1773f44961147f33cc0d8428280170da56b45f4c",
+  "selected_cases": [
+    "M-HARMONY-PERSIST-001"
+  ],
+  "selected_modules": {
+    "tests/behaviour/harmony_merge_workflow.py": "M-HARMONY-PERSIST-001"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/harmony_merge_workflow.py",
+      "case": "M-HARMONY-PERSIST-001",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-4f6c39d071a14abf825b9d6c9414b118/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-4f6c39d071a14abf825b9d6c9414b118/manifest.json",
+      "manifest_sha256": "8c7edc9e724bea6ee3e551d4347d6aba63996260023bd989fc184ca21aec91a5",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

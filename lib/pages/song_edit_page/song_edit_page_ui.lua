@@ -408,4 +408,22 @@ function song_edit_page_ui.refresh()
   song_edit_page_ui.refresh_shuffle_basis()
 end
 
+-- The existing owner instances, for lib/ui_adapters (UI02). Adapters wrap
+-- these objects; they do not copy their state.
+function song_edit_page_ui.adapter_owners()
+  return {
+    pages = pages,
+    page_to_index = page_to_index,
+    grid_viewer = grid_viewer,
+    tempo_selector = tempo_selector,
+    pattern_repeat_selector = pattern_repeat_selector,
+    song_mode_selector = song_mode_selector,
+    swing_shuffle_type = swing_shuffle_type,
+    swing_selector = swing_selector,
+    shuffle_feel_selector = shuffle_feel_selector,
+    shuffle_basis_selector = shuffle_basis_selector,
+    shuffle_amount_selector = shuffle_amount_selector
+  }
+end
+
 return song_edit_page_ui

@@ -1,0 +1,294 @@
+-- README.md Musical Merge phrase development: counters advance only on channel
+-- wraps; phrase-setting activation starts a fresh epoch before the boundary onset.
+
+local state = include("mosaic/lib/musical_merge/state")
+local config = include("mosaic/lib/musical_merge/config")
+
+local function value(cycles, variation)
+  local result = config.new()
+  result.mode = "foundation"
+  result.anchor = 1
+  result.cycles = cycles or 4
+  result.shape = "build"
+  result.percentages = config.curve("build", result.cycles)
+  result.variation = variation or "fixed"
+  return result
+end
+
+function test_musical_merge_state_wraps_cycles_and_phrase_without_redraw_or_probability_inputs()
+  state.reset()
+  local song = {}
+  local requested = value(4, "per_phrase")
+  local first = state.effective(song, 2, requested)
+  luaunit.assert_equals({first.cycle, first.phrase, first.ranking_phrase}, {1, 0, 0})
+  for cycle = 2, 4 do
+    state.on_cycle_boundary(song, 2, requested)
+    local current = state.effective(song, 2, requested)
+    luaunit.assert_equals({current.cycle, current.phrase}, {cycle, 0})
+  end
+  state.on_cycle_boundary(song, 2, requested)
+  local next_phrase = state.effective(song, 2, requested)
+  luaunit.assert_equals({next_phrase.cycle, next_phrase.phrase, next_phrase.ranking_phrase}, {1, 1, 1})
+  luaunit.assert_equals(state.effective(song, 2, requested), next_phrase)
+end
+
+function test_musical_merge_state_fixed_variation_never_changes_ranking_phrase()
+  state.reset()
+  local song, requested = {}, value(2, "fixed")
+  for _ = 1, 9 do state.on_cycle_boundary(song, 1, requested) end
+  local current = state.effective(song, 1, requested)
+  luaunit.assert_true(current.phrase > 0)
+  luaunit.assert_equals(current.ranking_phrase, 0)
+end
+
+function test_musical_merge_state_queued_phrase_change_restarts_before_boundary_without_double_increment()
+  state.reset()
+  local song, old = {}, value(8, "fixed")
+  for _ = 1, 6 do state.on_cycle_boundary(song, 3, old) end
+  luaunit.assert_equals(state.effective(song, 3, old).cycle, 7)
+  local replacement = value(2, "per_phrase")
+  luaunit.assert_equals(state.request(song, 3, replacement, true), "queued")
+  luaunit.assert_equals(state.effective(song, 3, old).cycle, 7)
+  local activated = state.on_cycle_boundary(song, 3, old)
+  luaunit.assert_true(activated)
+  local current = state.effective(song, 3, old)
+  luaunit.assert_equals({current.cycle, current.phrase, current.config.cycles}, {1, 0, 2})
+  state.on_cycle_boundary(song, 3, old)
+  luaunit.assert_equals(state.effective(song, 3, old).cycle, 2)
+end
+
+function test_musical_merge_state_non_phrase_edits_retain_position_and_latest_queue_wins()
+  state.reset()
+  local song, requested = {}, value(4, "fixed")
+  state.on_cycle_boundary(song, 4, requested)
+  state.on_cycle_boundary(song, 4, requested)
+  luaunit.assert_equals(state.effective(song, 4, requested).cycle, 3)
+  local amount = value(4, "fixed");amount.amount = 25
+  local latest = value(4, "fixed");latest.amount = 75
+  state.request(song, 4, amount, true)
+  state.request(song, 4, latest, true)
+  state.on_cycle_boundary(song, 4, requested)
+  local current = state.effective(song, 4, requested)
+  luaunit.assert_equals(current.cycle, 4)
+  luaunit.assert_equals(current.config.amount, 75)
+end
+
+function test_musical_merge_state_stop_promotes_requested_and_resets_each_channel_epoch()
+  state.reset()
+  local song, requested = {}, value(4, "per_phrase")
+  state.on_cycle_boundary(song, 1, requested)
+  state.on_cycle_boundary(song, 2, requested)
+  local changed = value(2, "fixed")
+  state.request(song, 1, changed, true)
+  state.stop(song)
+  luaunit.assert_equals(state.effective(song, 1, requested).cycle, 1)
+  luaunit.assert_equals(state.effective(song, 1, requested).config.cycles, 2)
+  luaunit.assert_equals(state.effective(song, 2, requested).cycle, 1)
+end
+
+function test_musical_merge_state_is_shared_across_norns_include_callers()
+  local writer=include("mosaic/lib/musical_merge/state")
+  local reader=include("mosaic/lib/musical_merge/state")
+  writer.reset();local song,requested={},value(4,"fixed")
+  reader.effective(song,6,requested)
+  local changed=value(2,"per_phrase")
+  writer.request(song,6,changed,true)
+  luaunit.assert_equals(reader.effective(song,6,requested).config.cycles,4)
+  reader.on_cycle_boundary(song,6,requested)
+  luaunit.assert_equals(writer.effective(song,6,requested).config.cycles,2)
+end
+
+function test_musical_merge_global_transaction_waits_for_pattern_not_channel_boundary()
+  state.reset();local song,old={},value(4,"fixed")
+  state.effective(song,2,old);local replacement=value(2,"per_phrase")
+  state.request_global(song,2,replacement,true)
+  state.on_cycle_boundary(song,2,old)
+  luaunit.assert_equals(state.effective(song,2,old).config.cycles,4)
+  state.on_pattern_boundary(song)
+  local active=state.effective(song,2,old)
+  luaunit.assert_equals({active.config.cycles,active.cycle,active.phrase},{2,1,0})
+end
+
+function test_musical_merge_queued_removal_stays_active_until_cycle_boundary()
+  state.reset();local song,active={},value(2,"fixed")
+  state.effective(song,3,active)
+  local removed=config.new()
+  state.request(song,3,removed,true)
+  luaunit.assert_equals(state.effective(song,3,removed).config.mode,"foundation")
+  state.on_cycle_boundary(song,3,removed)
+  luaunit.assert_equals(state.effective(song,3,removed).config.mode,"off")
+end
+
+-- The pattern merger calls state.effective for EVERY channel, including ones
+-- with no merge configured, and effective creates a record as a side effect.
+-- If a bare record counts as "has merge state", the clock runs cycle-boundary
+-- merge work and invalidates the lookahead on every channel in the song --
+-- and under a lead time that re-emits a step the lookahead already sent, so
+-- the player hears the note at the wrap twice.
+function test_musical_merge_an_untouched_channel_reports_no_state()
+  state.reset()
+  local song = {}
+  luaunit.assert_false(state.has(song, 5) and true or false)
+end
+
+function test_musical_merge_a_default_config_does_not_create_state()
+  state.reset()
+  local song = {}
+  state.effective(song, 5, config.new())
+  luaunit.assert_false(state.has(song, 5) and true or false,
+    "a channel with merge off must not look like a channel with merge on")
+end
+
+function test_musical_merge_a_configured_channel_reports_state()
+  state.reset()
+  local song = {}
+  state.effective(song, 5, value(2, "fixed"))
+  luaunit.assert_true(state.has(song, 5) and true or false)
+end
+
+function test_musical_merge_a_queued_removal_still_reports_state()
+  -- Merge turned off while playing still owes its wind-down at the boundary.
+  state.reset()
+  local song = {}
+  state.effective(song, 6, value(2, "fixed"))
+  state.request(song, 6, config.new(), true)
+  luaunit.assert_true(state.has(song, 6) and true or false,
+    "a channel winding merge down still needs its cycle boundary")
+end
+
+-- docs/musical-merge-extensions-plan.md §0 Activation (characterisation of the
+-- approved plan; README documents only the existing phrase fields): changing
+-- mode, fragments.size or the fragment identity fields (seed, variation,
+-- cycles) starts a new phrase epoch; other v2 fields keep the phrase position.
+local function advanced(song, channel, requested, count)
+  for _ = 1, count do state.on_cycle_boundary(song, channel, requested) end
+end
+
+function test_musical_merge_state_v2_mode_and_fragment_size_changes_start_a_new_epoch()
+  for _, change in ipairs({
+    function(v) v.mode = "fragments" end,
+    function(v) v.mode = "off" end,
+    function(v) v.fragments.size = 16 end,
+    function(v) v.seed = 9 end,
+    function(v) v.variation = "fixed" end
+  }) do
+    state.reset()
+    local song, old = {}, value(4, "per_phrase")
+    advanced(song, 5, old, 5)
+    luaunit.assert_equals({state.effective(song, 5, old).cycle, state.effective(song, 5, old).phrase}, {2, 1})
+    local replacement = value(4, "per_phrase");change(replacement)
+    state.request(song, 5, replacement, true)
+    luaunit.assert_true(state.on_cycle_boundary(song, 5, old))
+    local current = state.effective(song, 5, old)
+    luaunit.assert_equals({current.cycle, current.phrase}, {1, 0})
+  end
+end
+
+function test_musical_merge_state_v2_non_epoch_fields_keep_phrase_position()
+  for _, change in ipairs({
+    function(v) v.fragments.keep_anchor = true end,
+    function(v) v.interlock.window = 2 end,
+    function(v) v.structure.markers = "every_4";v.structure.group_id = 2 end,
+    function(v) v.amount = 10 end
+  }) do
+    state.reset()
+    local song, old = {}, value(4, "per_phrase")
+    advanced(song, 6, old, 5)
+    local replacement = value(4, "per_phrase");change(replacement)
+    state.request(song, 6, replacement, true)
+    luaunit.assert_false(state.on_cycle_boundary(song, 6, old))
+    local current = state.effective(song, 6, old)
+    luaunit.assert_equals({current.cycle, current.phrase}, {3, 1})
+  end
+end
+
+function test_musical_merge_state_migrated_v1_request_is_not_a_new_epoch()
+  state.reset()
+  local song = {}
+  local v1 = {schema_version = 1, mode = "foundation", anchor = 1, amount = 100, accent = 70, gap = 0, seed = 0,
+    ranking_version = 1, cycles = 4, shape = "flat", percentages = {100, 100, 100, 100}, variation = "per_phrase",
+    keep_anchor_pitch = false, target = {kind = "legacy"}}
+  advanced(song, 7, v1, 5)
+  state.request(song, 7, config.canonicalize(v1), false)
+  local current = state.effective(song, 7, v1)
+  luaunit.assert_equals({current.cycle, current.phrase}, {2, 1})
+end
+
+-- Plan §1.2.3 prediction: the incremental walk (one predictor, boundaries
+-- asked for in ascending order) equals a from-scratch per-cycle replay
+-- (state.predict) at every boundary count, for random pending queues,
+-- epoch-restarting and non-epoch queued changes, queued removals, queues
+-- rejected by the dependency graph (retried every boundary), missing records,
+-- saved-but-unrecorded channels and Off leaders.
+function test_musical_merge_state_incremental_predictor_equals_per_cycle_replay()
+  local rng = 20260927
+  local function random(n)
+    rng = (rng * 1103515245 + 12345) % 2147483648
+    return rng % n + 1
+  end
+  local function random_config()
+    local kind = random(6)
+    if kind == 1 then return nil end
+    if kind == 2 then return config.new() end
+    local cycles = ({1, 2, 4, 8})[random(4)]
+    local result = value(cycles, random(2) == 1 and "fixed" or "per_phrase")
+    result.seed = random(3) - 1
+    result.amount = random(100)
+    if kind == 3 then result.mode = "fragments"; result.fragments.size = ({4, 8, 16})[random(3)] end
+    if kind == 4 then result.interlock = {leader = random(2) == 1 and 3 or 4, window = 0} end
+    return result
+  end
+  local LEADER = 4
+  for case = 1, 300 do
+    state.reset()
+    local song = {channels = {}}
+    for number = 1, 16 do song.channels[number] = {} end
+    -- Channel 3 sometimes follows 4, so a queued Interlock edge on 4 is
+    -- rejected (CHANNEL IS A LEADER) at every replayed boundary.
+    if random(2) == 1 then
+      local follower = value(1); follower.interlock = {leader = LEADER, window = 0}
+      state.effective(song, 3, follower)
+    end
+    local saved = random_config()
+    local shape = random(4)
+    if shape > 1 then
+      local initial = random_config() or saved or value(2)
+      state.effective(song, LEADER, initial)
+      for _ = 1, random(11) - 1 do state.on_cycle_boundary(song, LEADER, initial) end
+      if shape >= 3 then
+        local queued = random_config() or config.new()
+        -- Often an edge 4 -> 3, rejected while channel 3 follows 4.
+        if random(3) == 1 then queued = value(2); queued.interlock = {leader = 3, window = 0} end
+        state.request(song, LEADER, queued, true)
+      end
+      if shape == 4 then
+        -- A queue that restores the active configuration (withdrawal) or a
+        -- second, superseding request.
+        state.request(song, LEADER, random(2) == 1 and initial or (random_config() or config.new()), true)
+      end
+    end
+    local before = state.peek(song, LEADER)
+    local snapshot = before and {active = before.active, queued = before.queued, cycle = before.cycle,
+      phrase = before.phrase, rejected = before.rejected}
+    local predictor = state.predictor(song, LEADER, saved)
+    for boundaries = 0, 70 do
+      local label = "case " .. case .. " boundaries " .. boundaries
+      luaunit.assert_equals(predictor.at(boundaries), state.predict(song, LEADER, saved, boundaries), label)
+    end
+    luaunit.assert_equals(predictor.replays, 70)
+    -- Asking again for the same count replays nothing.
+    predictor.at(70)
+    luaunit.assert_equals(predictor.replays, 70)
+    -- Nothing live changed.
+    local after = state.peek(song, LEADER)
+    luaunit.assert_equals(after and {active = after.active, queued = after.queued, cycle = after.cycle,
+      phrase = after.phrase, rejected = after.rejected}, snapshot, "case " .. case)
+  end
+end
+
+function test_musical_merge_state_predictor_rejects_a_decreasing_walk()
+  state.reset()
+  local predictor = state.predictor({}, 1, value(2))
+  predictor.at(3)
+  luaunit.assert_error(function() predictor.at(2) end)
+end

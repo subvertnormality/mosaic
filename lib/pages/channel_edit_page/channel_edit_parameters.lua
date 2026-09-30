@@ -1,5 +1,21 @@
 local channel_edit_parameters = {}
 
+-- Stable UI field ids (docs/ui-reimplementation spec.json). Trig-lock slot n is
+-- channel.trig_lock_params[n] and dial m_params[n]; its field id is slot_<n>
+-- (field_contracts.parameters.identity) and the assigned parameter is metadata.
+channel_edit_parameters.SLOT_COUNT = 10
+function channel_edit_parameters.slot_field_id(n)
+  return "slot_" .. n
+end
+
+-- Device config selectors (screens C05/C11), in E2 order. `control` names the
+-- controls entry update_channel_config reads.
+channel_edit_parameters.device_fields = {
+  {id = "device", label = "Device", control = "device_map_vertical_scroll_selector"},
+  {id = "midi_channel", label = "MIDI channel", control = "midi_channel_vertical_scroll_selector"},
+  {id = "midi_port", label = "MIDI port", control = "midi_device_vertical_scroll_selector"}
+}
+
 function channel_edit_parameters.new(controls, public_ui, refreshers, dependencies)
   local controller = {}
   local function get_value_using_handler_param(channel, dial_index, p, param_id, p_value, delta)
@@ -271,6 +287,13 @@ function channel_edit_parameters.new(controls, public_ui, refreshers, dependenci
 
   function controller.set_trig_lock_page(page)
     controls.trig_lock_page = page
+  end
+
+  -- The live controls table (dials, selectors, trig_lock_page), read by
+  -- lib/ui_adapters (UI02). The device map selector and trig lock page are
+  -- installed after construction, so adapters read them through here.
+  function controller.adapter_controls()
+    return controls
   end
 
   function controller.draw_trig_locks()

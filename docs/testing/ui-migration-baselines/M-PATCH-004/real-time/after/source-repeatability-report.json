@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "after_sha": "c559a74f687152d9c69d9035cf8ac5a7f56d4b96",
+  "selected_cases": [
+    "M-PATCH-004"
+  ],
+  "selected_modules": {
+    "tests/behaviour/contract/patch_matrix.py": "M-PATCH-004"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/contract/patch_matrix.py",
+      "case": "M-PATCH-004",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-216951454b4c407181d72e59c13b1e1d/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-216951454b4c407181d72e59c13b1e1d/manifest.json",
+      "manifest_sha256": "27cbc9dffc1b91890ca3cd9dbb9e25e56b24cf1b44fc5fd12b49cad1f655c6b3",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "complete_regression_run": false,
+  "profile": "base-midi",
+  "before_sha": "b8b23640067f14ac9bf3c3bb2451eb06d8858290",
+  "after_sha": "5a2bff337450e3941141d9c274ec873e51a5c6ec",
+  "tooling_sha": "66a97db89ccd28bf3f99c6eb8e9214423f80590b",
+  "source_hash_schema": "recursive-python-v1",
+  "selected_cases": [
+    "M-PATCH-008",
+    "M-PATCH-010",
+    "M-PATCH-012",
+    "M-PATCH-015",
+    "M-PATCH-017",
+    "M-PATCH-027",
+    "M-PATCH-035",
+    "M-PATCH-040",
+    "M-PATCH-044",
+    "M-PATCH-046",
+    "M-PATCH-048",
+    "M-PATCH-050",
+    "M-PATCH-052",
+    "M-PATCH-057",
+    "M-PATCH-064",
+    "M-PATCH-065"
+  ],
+  "selected_modules": {
+    "tests/behaviour/patch_params.py": "M-PATCH-008"
+  },
+  "repeats": [
+    {
+      "module": "tests/behaviour/patch_params.py",
+      "case": "M-PATCH-008",
+      "returncode": 0,
+      "stdout": "/__w/mosaic/mosaic/mosaic-behaviour-runs/repeat-49eb5b193d65440a958d601a8dc0d0af/manifest.json\n",
+      "stderr": "",
+      "manifest": "mosaic-behaviour-runs/repeat-49eb5b193d65440a958d601a8dc0d0af/manifest.json",
+      "manifest_sha256": "84ad2edd28f03c9fdf52ee3c6b0bc24fcde2ac6b27867e5ae3bef0313935c7ad",
+      "passed": true
+    }
+  ],
+  "passed": true
+}

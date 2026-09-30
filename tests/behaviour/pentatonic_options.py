@@ -18,7 +18,7 @@ def snapped(intervals,selection):
     return [min(available,key=lambda n:(abs(n-p),n)) for p in plain(intervals)]
 
 def lock_all_to_pentatonic(c):
-    from cases import set_mosaic_options,assert_durations
+    from cases import assert_durations
     field='logical_ns' if c.clock_mode=='controlled-experimental' else 'monotonic_ns'
     tolerance=2e-9 if c.clock_mode=='controlled-experimental' else .01
     # Hand-worked anchors for the table above, including both README examples.
@@ -26,17 +26,23 @@ def lock_all_to_pentatonic(c):
     assert snapped(SCALES[2][1],SCALES[2][2])==[60,63,63,65,67,67,70]
     assert snapped(SCALES[7][1],SCALES[7][2])==[59,62,64,67,67,69,71] # README: Lydian C -> B below
     assert snapped(SCALES[4][1],SCALES[4][2])==[60,63,63,65,67,67,71] # README: melodic-minor A -> G on a tie
-    c.configure()
+    ui = c.ui
+    ui.configure()
     # Extend pattern 1 and channel 1 to seven steps holding degrees I..VII.
-    c.tap(5,8);c.tap(1,1)
-    for x in (5,6,7):c.tap(x,4)
-    c.tap(5,8)
-    for x,degree in enumerate(DEGREES,1):c.tap(x,7-degree)
+    ui.tap_control("pattern_editor")
+    ui.tap_control("pattern_select", 1)
+    for step in (5, 6, 7):ui.tap_step(step)
+    ui.tap_control("pattern_editor")
+    for x,degree in enumerate(DEGREES,1):
+        ui.tap_control("pattern_note_degree", (x, degree))
     # Row 1 doubles as the pattern-selector row; degree VII is checked by MIDI.
-    c.led_values([(x,7-d) for x,d in enumerate(DEGREES[:6],1)],[12]*6)
-    c.tap(5,8)
-    for x,y in ((5,1),(6,2),(7,3)):c.tap(x,y)
-    c.tap(3,8);c.hold_tap((1,4),(7,4))
+    ui.expect_leds({("pattern_note_degree", (x, d)): "active"
+                    for x,d in enumerate(DEGREES[:6],1)})
+    ui.tap_control("pattern_editor")
+    for x,degree in ((5,6),(6,5),(7,4)):
+        ui.tap_control("pattern_note_degree", (x, degree))
+    ui.tap_control("channel_editor")
+    ui.set_range(1, 7)
     def verify(label,pitches):
         notes=c.playback([(1,[144,n,v]) for n,v in zip(pitches,VELOCITY)],cycles=2,timeout=6)
         assert_durations(c,notes,[1]*14)
@@ -45,9 +51,13 @@ def lock_all_to_pentatonic(c):
     # No option input yet: the fresh default must leave non-members unsnapped.
     verify('default-off-major',plain(SCALES[0][1]))
     # Random/merged switches off: only Lock all can move these unmodified notes.
-    set_mosaic_options(c,[('Lock all to pentatonic',True),('Lock random to pent.',False),('Lock merged to pent.',False)])
+    ui.set_mosaic_options([('Lock all to pentatonic',True),('Lock random to pent.',False),('Lock merged to pent.',False)])
     for number,(name,intervals,selection) in enumerate(SCALES):
-        if number:c.tap(4,8);c.enc(3,1);c.key(3);c.tap(3,8)
+        if number:
+            ui.tap_control("scale_editor")
+            ui.set_value(1)
+            ui.press_key(3)
+            ui.tap_control("channel_editor")
         verify('on-'+name,snapped(intervals,selection))
-    set_mosaic_options(c,[('Lock all to pentatonic',False)])
+    ui.set_mosaic_options([('Lock all to pentatonic',False)])
     verify('off-'+SCALES[-1][0],plain(SCALES[-1][1]))
