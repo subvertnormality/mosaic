@@ -1,0 +1,960 @@
+schema_version: 1
+feature:
+  id: masks
+  title: Masks
+  audience: all
+  summary: Keep the pattern. Give the melody a mind of its own.
+  prose: Patterns supply the material; a channel merges it; masks give you the last
+    word on individual attributes. Change a note without disturbing its rhythm, tuck
+    in a quiet accent, or add a chord above a bass line.
+  musical_use: Start with a two-note motif. Repeat its contour, then change the last
+    note on every second phrase. Use velocity for emphasis before adding more notes.
+  related:
+  - merge-modes
+  - channel-length
+  - chord-strum
+  - fully-quantise-mask
+  - live-recording
+  sources:
+    readme: README.md#masks
+    behaviour_cases:
+    - M-MASK-007
+    - M-MASK-008
+    - M-MASK-010
+    - M-MASK-005
+    - M-MASK-017
+    - M-MASK-021
+    code:
+    - lib/pages/channel_edit_page/channel_edit_masks.lua
+    - lib/pages/channel_edit_page/channel_edit_navigation.lua
+    - lib/ui_adapters/masks.lua
+  controls:
+  - gesture: Grid (3,8) → E1 tasks → E2 Masks → K3
+    result: Open the eight mask values.
+  - gesture: E2
+    result: Choose Trig, Note, Vel, Len, Chd1–Chd4.
+  - gesture: E3, no step held
+    result: Edit the channel default.
+  - gesture: Hold step + E3
+    result: Edit that step's exception.
+  - gesture: Hold K1 + tap step
+    result: Add or remove a trig mask.
+  - gesture: Hold step + K2
+    result: Clear all mask attributes for the held step.
+  - gesture: K1 + K2, no grid keys held
+    result: Clear channel step overrides; preserve defaults.
+  details:
+  - title: Read X as inherit
+    text: X is an unset attribute, not zero. A step's explicit attribute wins over
+      the channel default; an unset step uses the default; an unset default falls
+      back to merged pattern data. Clearing step overrides does not erase the defaults.
+  - title: Chords need a polyphonic output
+    text: Chd1–Chd4 are four additional scale-relative voices above or below the root.
+      3rd and 5th are intervals, not MIDI note numbers. Start with one added voice;
+      use strum and chord velocity for separation.
+  - title: Scale, degree and rotation
+    text: By default, note masks snap to the chosen scale. They do not follow degree
+      or rotation unless full quantisation is enabled. Snap Note Masks to Scale, Quantise
+      Note Masks and the Fully Quantise Mask trig parameter interact; the existing
+      M-MASK-019–021 cases cover this precedence.
+  - title: MIDI and clearing
+    text: Hold a step and play a MIDI keyboard to enter notes and chords. Live recording
+      is another route. A held step takes precedence over channel-wide clearing even
+      with K1 down. Other channels are unaffected. The existing suite checks steps
+      63/64, multiple chord slots and recorded-chord clearing.
+  - title: If a new note is silent
+    text: Check the selected channel's output, active range and mute state. A trig
+      alone needs an audible note, velocity and length. A mono voice cannot sound
+      all chord voices together. To undo an exception, hold that step and press K2.
+  recipes:
+  - title: A melody that answers itself
+    text: Use C major. Write C5–D5–G5–E5 on steps 1, 4, 7 and 11 of a 16-step lead
+      channel. On the next phrase, replace E5 with D5, then resolve to C5. Keep the
+      first three attacks unchanged so the listener recognises the motif.
+  - title: Ghost notes and syncopation
+    text: Keep the main accent at velocity 90. Add a half-step note just before it
+      at velocity 35. Once the contrast works, use Trig Probability on the quiet note
+      for occasional surprises. Lower velocity makes a ghost note; probability decides
+      whether it happens.
+  - title: A harmony with room to breathe
+    text: Put long C3 notes on a bass channel and C4 roots with 3rd and 5th chord
+      masks on a polyphonic channel. Move one chord voice by the smallest available
+      scale interval for voice leading. A B4 lead note adds tension; resolve it to
+      C5. Keep drum kit note mapping separate from pitched harmony.
+  - title: Let the loop lengths disagree
+    text: Keep drums at 16 steps and try a five-step masked melody. Their starts meet
+      again after 80 steps. Add swing on the channel Clock page for a lilt; compare
+      before combining swing with shuffle. These are adjacent-feature recipes, not
+      new mask controls.
+scenes:
+- id: mask-precedence
+  title: Give one step its own melody
+  behaviour_case: M-MASK-007
+  setup:
+    fixture: four-note-pattern
+    seed: 42
+    voices:
+      '1': Emulator test device
+  steps:
+  - id: route
+    caption: Open Channel tasks with E1. Turn E2 to Masks and press K3. Select Note
+      with E2.
+    inputs:
+    - type: enc
+      n: 1
+      delta: 1
+    - type: enc
+      n: 2
+      delta: -20
+    - type: key
+      n: 3
+    - type: enc
+      n: 2
+      delta: -10
+    - type: enc
+      n: 2
+      delta: 1
+    expect:
+      screen:
+      - - note
+        - X
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: default
+    caption: Turn E3 to G3 with no step held. This is the channel default; the original
+      rhythm and velocities stay.
+    inputs:
+    - type: enc
+      n: 3
+      delta: 68
+    expect:
+      screen:
+      - - note
+        - G3
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 97
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: step-one
+    caption: Hold step 1, then turn E3 five detents. C4 belongs to this step, above
+      the G3 default.
+    inputs:
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: enc
+      n: 3
+      delta: 5
+    expect:
+      screen:
+      - - note
+        - C4
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: release-one
+    caption: Release step 1. The screen returns to the G3 channel default; playback
+      keeps the C4 exception.
+    inputs:
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    expect:
+      screen:
+      - - note
+        - G3
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 72
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 97
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: step-two
+    caption: Give step 2 a D4 exception, then release it. Two different notes now
+      sit on the same default.
+    inputs:
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: enc
+      n: 3
+      delta: 7
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    expect:
+      screen:
+      - - note
+        - G3
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 72
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 74
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 97
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: clear-one
+    caption: Hold step 1 and press K2. Release it. Its exception disappears; step
+      2 still plays D4.
+    inputs:
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: key
+      n: 2
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    expect:
+      screen:
+      - - note
+        - G3
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 74
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 97
+    citation: README.md#removing-masks
+  - id: clear-channel
+    caption: With no grid keys held, hold K1 and press K2. All step exceptions clear;
+      G3 remains the channel default.
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: key
+      n: 2
+    - type: key
+      n: 1
+      state: 0
+    expect:
+      screen:
+      - - note
+        - G3
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 97
+    citation: README.md#removing-masks
+- id: mask-expression
+  title: Make a quiet step speak
+  behaviour_case: M-MASK-008
+  setup:
+    fixture: four-note-pattern
+    seed: 42
+    voices:
+      '1': Emulator test device
+  steps:
+  - id: velocity
+    caption: Open Masks and select Vel. X means inherit the pattern's velocity.
+    inputs:
+    - type: enc
+      n: 1
+      delta: 1
+    - type: enc
+      n: 2
+      delta: -20
+    - type: key
+      n: 3
+    - type: enc
+      n: 2
+      delta: -10
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 2
+      delta: 1
+    expect:
+      screen:
+      - - velocity
+        - X
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: soft-default
+    caption: Set a channel velocity of 50. Every note is softer; pitch and timing
+      are inherited.
+    inputs:
+    - type: enc
+      n: 3
+      delta: 51
+    expect:
+      screen:
+      - - velocity
+        - '50'
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 50
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: accent
+    caption: 'Hold step 1 and raise its velocity to 90. Release it: the accent survives,
+      with no pitch change.'
+    inputs:
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: enc
+      n: 3
+      delta: 40
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    expect:
+      screen:
+      - - velocity
+        - '50'
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 90
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 50
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: zero
+    caption: Hold step 2 and turn E3 down to 0. Zero is a silent velocity, distinct
+      from the X inheritance state.
+    inputs:
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
+    - type: enc
+      n: 3
+      delta: -50
+    expect:
+      screen:
+      - - velocity
+        - '0'
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: restore
+    caption: Clear step 2 with K2 and release it. The channel's velocity 50 returns.
+    inputs:
+    - type: key
+      n: 2
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    expect:
+      screen:
+      - - velocity
+        - '50'
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 90
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 50
+    citation: README.md#removing-masks
+  - id: length
+    caption: Select Len and turn E3 to a half-step gate. The short envelope leaves
+      room between notes.
+    inputs:
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 3
+      delta: 8
+    expect:
+      screen:
+      - - length
+        - 1/2
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 90
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 50
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 50
+      durations:
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+- id: mask-chords
+  title: Turn four notes into a small harmony
+  behaviour_case: M-MASK-010
+  setup:
+    fixture: four-note-pattern
+    seed: 42
+    voices:
+      '1': Emulator test device
+  steps:
+  - id: chord
+    caption: Open Masks and select Chd1. The four chord slots add voices to the root.
+    inputs:
+    - type: enc
+      n: 1
+      delta: 1
+    - type: enc
+      n: 2
+      delta: -20
+    - type: key
+      n: 3
+    - type: enc
+      n: 2
+      delta: -10
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 2
+      delta: 3
+    expect:
+      screen:
+      - - chord_1
+        - X
+    citation: README.md#adding-chords
+  - id: thirds
+    caption: Turn E3 two detents to 3rd. These are scale-relative intervals, not absolute
+      MIDI note numbers.
+    inputs:
+    - type: enc
+      n: 3
+      delta: 2
+    expect:
+      screen:
+      - - chord_1
+        - 3rd
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 97
+      - port: 1
+        bytes:
+        - 144
+        - 69
+        - 97
+    citation: README.md#adding-chords
+  - id: fifth
+    caption: Hold step 1 and move its Chd1 from 3rd to 5th. Only this step opens out
+      to C–G.
+    inputs:
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: enc
+      n: 3
+      delta: 2
+    expect:
+      screen:
+      - - chord_1
+        - 5th
+    citation: README.md#adding-chords
+  - id: release
+    caption: Release step 1. The screen shows the channel 3rd again, while the first
+      chord remains a fifth.
+    inputs:
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    expect:
+      screen:
+      - - chord_1
+        - 3rd
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 97
+      - port: 1
+        bytes:
+        - 144
+        - 69
+        - 97
+    citation: README.md#adding-chords
+  - id: clear
+    caption: Hold step 1 and press K2, then release. The fifth is gone and the default
+      thirds return.
+    inputs:
+    - type: grid
+      x: 1
+      y: 4
+      state: 1
+    - type: key
+      n: 2
+    - type: grid
+      x: 1
+      y: 4
+      state: 0
+    expect:
+      screen:
+      - - chord_1
+        - 3rd
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 127
+      - port: 1
+        bytes:
+        - 144
+        - 62
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 117
+      - port: 1
+        bytes:
+        - 144
+        - 64
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 67
+        - 107
+      - port: 1
+        bytes:
+        - 144
+        - 65
+        - 97
+      - port: 1
+        bytes:
+        - 144
+        - 69
+        - 97
+    citation: README.md#removing-masks
+- id: mask-trigs
+  title: Add a note where the pattern is empty
+  behaviour_case: M-MASK-005
+  setup:
+    fixture: four-note-eight-step
+    seed: 42
+    voices:
+      '1': Emulator test device
+  steps:
+  - id: route
+    caption: Open Masks. Our source has four notes and four empty steps in an eight-step
+      loop.
+    inputs:
+    - type: enc
+      n: 1
+      delta: 1
+    - type: enc
+      n: 2
+      delta: -20
+    - type: key
+      n: 3
+    - type: enc
+      n: 2
+      delta: -10
+    - type: enc
+      n: 2
+      delta: 1
+    expect:
+      screen:
+      - - note
+        - X
+    citation: README.md#adding-melodic-notes-over-harmony-and-drums
+  - id: voice
+    caption: Set Note to C3, Vel to 80 and Len to a half-step. These defaults make
+      a new trig audible.
+    inputs:
+    - type: enc
+      n: 3
+      delta: 61
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 3
+      delta: 81
+    - type: enc
+      n: 2
+      delta: 1
+    - type: enc
+      n: 3
+      delta: 8
+    expect:
+      screen:
+      - - length
+        - 1/2
+    citation: README.md#adding-trig-masks
+  - id: add
+    caption: Hold K1 and tap step 5. A forced-on trig adds an extra C3 after the source's
+      four notes.
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: grid
+      x: 5
+      y: 4
+      state: 1
+    - type: grid
+      x: 5
+      y: 4
+      state: 0
+    - type: key
+      n: 1
+      state: 0
+    expect:
+      screen:
+      - - length
+        - 1/2
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      positions:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      cycle_steps: 8
+    citation: README.md#adding-trig-masks
+  - id: remove
+    caption: Repeat K1 + step 5 to remove that note. The original four-note rhythm
+      continues.
+    inputs:
+    - type: key
+      n: 1
+      state: 1
+    - type: grid
+      x: 5
+      y: 4
+      state: 1
+    - type: grid
+      x: 5
+      y: 4
+      state: 0
+    - type: key
+      n: 1
+      state: 0
+    expect:
+      screen:
+      - - length
+        - 1/2
+      midi_phrase:
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      - port: 1
+        bytes:
+        - 144
+        - 60
+        - 80
+      positions:
+      - 0
+      - 1
+      - 2
+      - 3
+      cycle_steps: 8
+    citation: README.md#adding-trig-masks
+audio:
+  title: Small hours · four bars in C major
+  profile: manual-duo
+  bars: 4
+  bpm: 90
+  files:
+  - audio/masks-small-hours.ogg
+  - audio/masks-small-hours.mp3
+  description: Polyperc carries a repeating bass and upper melody; Doubledecker supplies
+    gentle C-major chord tones. Listen for the last melodic note changing while the
+    chord remains steady.
+  tracks:
+  - channel: 1
+    voice: Plyprc
+    role: bass
+    note: 48
+    velocity: 70
+    length_detents: 8
+    notes:
+    - - 1
+      - 48
+    - - 5
+      - 48
+    - - 9
+      - 43
+    - - 13
+      - 48
+  - channel: 2
+    voice: Doubledecker
+    role: chords
+    note: 60
+    velocity: 45
+    length_detents: 22
+    notes:
+    - - 1
+      - 60
+    - - 9
+      - 60
+    chords:
+    - 2
+    - 4
+  - channel: 3
+    voice: Plyprc
+    role: melody
+    note: 72
+    velocity: 66
+    length_detents: 8
+    notes:
+    - - 1
+      - 72
+    - - 4
+      - 74
+    - - 7
+      - 79
+    - - 11
+      - 76
+    - - 15
+      - 74

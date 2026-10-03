@@ -1,0 +1,18 @@
+{
+  "doubledecker": {
+    "url": "https://github.com/sixolet/doubledecker.git",
+    "commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89"
+  },
+  "oilcan": {
+    "url": "https://github.com/zjb-s/oilcan.git",
+    "commit": "257915f433c7d2c32b2b09c4fe5eed5434a16de5"
+  },
+  "nb_plyprc": {
+    "url": "https://github.com/sonocircuit/nb_plyprc.git",
+    "commit": "eb9ea9219ae3a8002434ca8934d0455bbfd73968"
+  },
+  "emplaitress": {
+    "url": "https://github.com/sixolet/emplaitress.git",
+    "commit": "5ababb191cb66b6d083cb406547f1e956d13746a"
+  }
+}
