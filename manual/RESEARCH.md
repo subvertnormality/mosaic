@@ -1,0 +1,17 @@
+# Design decisions · 3 October 2026
+
+Research is for the review pilot, based on freshly fetched Mosaic 1.4.0 `54d7b871`.
+
+- **Four reader jobs, one feature model.** Follow [Diátaxis](https://diataxis.fr/start-here/): a bounded first-sound tutorial, task-based workflows, dense feature reference, and explanations of musical choices. Avoid empty chapters in the pilot; show the proposed expansion in SITE_MAP.md.
+- **Reveal detail when needed.** Put outcome, route and controls first; tuck inheritance, interactions and evidence into expandable sections. This is our progressive-disclosure decision, rather than a claim that every studied manual uses it.
+- **Name tasks with verbs.** “Give one step a different note” is easier to act on than “note parameters”. Every tutorial ends with a useful experiment and a return path.
+- **Show the hand and the consequence together.** [Digitakt OS 1.51](https://elektron.se/wp-content/uploads/2024/09/Digitakt_User_Manual_ENG_OS1.51_231108.pdf) separates panel controls, quick start, sequencing and parameter reference. [Octatrack OS 1.40A](https://www.elektron.se/wp-content/uploads/2024/09/Octatrack-User-Manual_ENG-OS1.40A_220204.pdf) adds setup examples. Adopt named controls and an action → visible result rhythm; always show norns and grid in the same scene.
+- **Keep orientation visible.** [OP-Z overview](https://teenage.engineering/guides/op-z/interface-overview) maps control groups into linked chapters; [OP-1 guide](https://teenage.engineering/guides/op-1) connects instrument modes to a recording workflow. Adopt persistent navigation, a numbered scene strip, hardware labels, and short welcoming captions.
+- **Pair operations with compact lookup.** [Polyend Tracker](https://polyend.com/downloads/tracker-downloads/) provides its manual alongside firmware. Adopt an explicit Mosaic revision and scannable control/value/result tables. The current download endpoint returned a one-page notice to the research tool; do not claim a detailed review of that PDF.
+- **Offer recipes after mechanics.** [Make Noise MATHS](https://www.makenoisemusic.com/wp-content/uploads/2024/03/MATHSmanual2013.pdf) joins panel descriptions to patch examples. Adopt a small musical recipe with a listening question, then a variation.
+- **Explain the composition model.** [Ableton Live Concepts](https://www.ableton.com/en/manual/live-concepts/) introduces the relationships between musical objects. Adopt an explicit distinction between source patterns, merged channel data and masks before describing a control.
+- **Teach through small experiments.** [norns studies](https://monome.org/docs/norns/studies/), [grid studies](https://monome.org/docs/grid/studies/) and [norns reference](https://monome.org/docs/norns/reference/) separate lessons from lookup. Adopt a reversible experiment, expected musical result, troubleshooting and related feature links.
+- **Make evidence inspectable.** Render actual 128×64 framebuffer values and 128 grid brightness values. Bind frames to semantic behaviour assertions and immutable run identities; animated hardware drawings never substitute for a live result.
+- **Make lookup fast and inclusive.** Stable feature IDs, local search, dense view, theme preference, native buttons, visible keyboard focus, reduced motion, textual scene results and responsive devices. No external fonts or runtime dependencies.
+
+Voice research and exact revisions are in VOICES.md. Existing README and test citations remain authoritative during the review pilot; the migration is proposed separately.
