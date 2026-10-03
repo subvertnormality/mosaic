@@ -17,6 +17,18 @@ from manual_model import ROOT, MANUAL, load, validate, validate_capture, source_
 sys.path.insert(0, str(ROOT / "tests/behaviour"))
 from driver import Driver, digest, write
 
+def tracked_driver(*args, **kwargs):
+    c=Driver(*args, **kwargs)
+    c.manual_transport_on=False
+    action=c.action
+    def tracked(**value):
+        result=action(**value)
+        if value.get("type")=="grid" and (value.get("x"),value.get("y"),value.get("state"))==(1,8,1):
+            c.manual_transport_on=not c.manual_transport_on
+        return result
+    c.action=tracked
+    return c
+
 def rle(values):
     result = []
     for value in values:
@@ -82,6 +94,7 @@ def close(c, held):
     # Release every explicitly held input even on assertion failure.
     for value in list(held.values()):
         c.action(**dict(value, state=0))
+    if c.manual_transport_on: c.tap(1,8)
     c.tap(15,8)  # public panic: bounded outstanding MIDI/audio release
     c.elapse(.2)
     state = c.snapshot()
@@ -90,7 +103,7 @@ def close(c, held):
     c.finish()
 
 def capture_scene(scene, out, options):
-    c = Driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install, app_root=options.app_root)
+    c = tracked_driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install, app_root=options.app_root)
     held = {}
     frames = []
     try:
@@ -112,7 +125,7 @@ def check_cases(data, evidence, options):
     records = []
     for name in dict.fromkeys(s["behaviour_case"] for s in data["scenes"]):
         out = evidence / name;out.mkdir()
-        c = Driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install, app_root=options.app_root)
+        c = tracked_driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install, app_root=options.app_root)
         try: CASES[name]["run"](c)
         finally: c.finish()
         records.append(dict(case=name,passed=True,path=str(out),
@@ -127,7 +140,7 @@ def set_mask_field(c, index, detents):
 
 def audio_capture(data, out, destination, options):
     from pcm_oracle import read_wav
-    c = Driver(out, profile=data["profile"], mod_code_root=options.mod_code_root, app_root=options.app_root)
+    c = tracked_driver(out, profile=data["profile"], mod_code_root=options.mod_code_root, app_root=options.app_root)
     frames=[]
     job=None
     try:
@@ -136,7 +149,7 @@ def audio_capture(data, out, destination, options):
             ch=track["channel"]
             c.ui.select_channel(ch);c.ui.channel_page("midi_config",channel=ch)
             c.ui.pick_device(track["voice"])
-            c.ui.set_range(1,16)
+            c.ui.set_range(1,64)
             c.ui.channel_page("masks",channel=ch)
             set_mask_field(c,0,1)  # default Trig N
             set_mask_field(c,1,track["note"]+1)
@@ -150,6 +163,8 @@ def audio_capture(data, out, destination, options):
                 set_mask_field(c,1,0)
                 if note != track["note"]:
                     with c.ui.hold_step(step): c.enc(3,note-track["note"])
+            c.ui.expect_field_value("note", ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"][track["note"]%12]+str(track["note"]//12-2))
+            c.ui.expect_field_value("velocity",str(track["velocity"]))
             c.results.append(dict(kind="manual-audio-track",citation="README.md#masks",
                                   channel=ch,voice=track["voice"],authored=track,passed=True))
         c.ui.select_channel(3)
@@ -198,6 +213,7 @@ def audio_capture(data, out, destination, options):
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument("--mod-code-root")
+    parser.add_argument("--scene",action="append",help="Development: capture only named scenes")
     parser.add_argument("--visuals-only",action="store_true")
     parser.add_argument("--skip-existing-cases",action="store_true",help="Development only; never complete acceptance")
     parser.add_argument("--clock-mode",choices=["real-time","controlled-experimental"],default="real-time")
@@ -222,6 +238,7 @@ def main():
         report["behaviour_cases"]=[] if options.skip_existing_cases else check_cases(data,evidence,options)
         result=dict(schema_version=1,feature=data["feature"],source_sha256=source_hash(data),scenes=[])
         for scene in data["scenes"]:
+            if options.scene and scene["id"] not in options.scene:continue
             out=evidence/scene["id"];out.mkdir()
             result["scenes"].append(capture_scene(scene,out,options))
             print("Captured",scene["id"],flush=True)
@@ -231,7 +248,7 @@ def main():
                 out=evidence/"audio";out.mkdir()
                 result["audio"]=audio_capture(data["audio"],out,staged/"audio",options)
             report["passed"]=True
-            report["pilot_complete"]=not options.visuals_only and not options.skip_existing_cases and options.clock_mode=="real-time"
+            report["pilot_complete"]=not options.visuals_only and not options.skip_existing_cases and not options.scene and options.clock_mode=="real-time"
             result["validation"]=report
             (staged/"pilot.json").write_text(json.dumps(result,separators=(",",":"))+"\n")
             # No source writes while an emulator session is live.

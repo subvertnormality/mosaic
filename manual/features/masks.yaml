@@ -14,7 +14,7 @@ feature:
   - channel-length
   - chord-strum
   - fully-quantise-mask
-  - live-recording
+  - arm-live-record
   sources:
     readme: README.md#masks
     behaviour_cases:
@@ -446,8 +446,17 @@ scenes:
         - '0'
     citation: README.md#adding-melodic-notes-over-harmony-and-drums
   - id: restore
-    caption: Clear step 2 with K2 and release it. The channel's velocity 50 returns.
+    caption: 'Release step 2, then hold it again and press K2. Release it: the channel
+      velocity 50 returns.'
     inputs:
+    - type: grid
+      x: 2
+      y: 4
+      state: 0
+    - type: grid
+      x: 2
+      y: 4
+      state: 1
     - type: key
       n: 2
     - type: grid
@@ -908,9 +917,9 @@ audio:
   files:
   - audio/masks-small-hours.ogg
   - audio/masks-small-hours.mp3
-  description: Polyperc carries a repeating bass and upper melody; Doubledecker supplies
-    gentle C-major chord tones. Listen for the last melodic note changing while the
-    chord remains steady.
+  description: 'Polyperc carries a repeating bass and a lead motif that changes its
+    ending; Doubledecker holds C-major chord tones. Listen for D, E, B, then C at
+    the ends of the four phrases: a little tension, then home.'
   tracks:
   - channel: 1
     voice: Plyprc
@@ -927,6 +936,30 @@ audio:
       - 43
     - - 13
       - 48
+    - - 17
+      - 48
+    - - 21
+      - 48
+    - - 25
+      - 43
+    - - 29
+      - 48
+    - - 33
+      - 48
+    - - 37
+      - 48
+    - - 41
+      - 43
+    - - 45
+      - 48
+    - - 49
+      - 48
+    - - 53
+      - 48
+    - - 57
+      - 43
+    - - 61
+      - 48
   - channel: 2
     voice: Doubledecker
     role: chords
@@ -937,6 +970,18 @@ audio:
     - - 1
       - 60
     - - 9
+      - 60
+    - - 17
+      - 60
+    - - 25
+      - 60
+    - - 33
+      - 60
+    - - 41
+      - 60
+    - - 49
+      - 60
+    - - 57
       - 60
     chords:
     - 2
@@ -958,3 +1003,33 @@ audio:
       - 76
     - - 15
       - 74
+    - - 17
+      - 72
+    - - 20
+      - 74
+    - - 23
+      - 79
+    - - 27
+      - 76
+    - - 31
+      - 76
+    - - 33
+      - 72
+    - - 36
+      - 74
+    - - 39
+      - 79
+    - - 43
+      - 76
+    - - 47
+      - 71
+    - - 49
+      - 72
+    - - 52
+      - 74
+    - - 55
+      - 79
+    - - 59
+      - 76
+    - - 63
+      - 72
