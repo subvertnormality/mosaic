@@ -41,6 +41,29 @@ const root=path.resolve(__dirname,"../..");
   await page.keyboard.press("ArrowRight");
   assert.equal(await page.locator("#counter").textContent(),"02 / "+String(data.scenes[0].steps.length).padStart(2,"0"));
   report.checks.push("Clickable and keyboard encoder advances");
+  await page.click("#previous");
+  const knob=await page.locator(".encoder[data-n='3']").boundingBox();
+  await page.mouse.move(knob.x+knob.width/2,knob.y+knob.height/2);
+  await page.mouse.down();await page.mouse.move(knob.x+knob.width/2+25,knob.y+knob.height/2);await page.mouse.up();
+  await frameCheck(data.scenes[0].steps[1].output);
+  for(const kind of ["grid","key"]){
+    const si=data.scenes.findIndex(scene=>scene.steps.slice(1).some(step=>step.inputs.some(a=>a.type===kind)));
+    if(si<0)throw Error("Missing control acceptance fixture");
+    const target=data.scenes[si].steps.findIndex((step,i)=>i>0&&step.inputs.some(a=>a.type===kind));
+    await page.selectOption("#scene",String(si));
+    for(let j=0;j<target-1;j++)await page.click("#next");
+    const input=data.scenes[si].steps[target].inputs.find(a=>a.type===kind);
+    if(kind==="key")await page.locator("[data-key='"+input.n+"']").click();
+    else await page.locator("#grid button").nth((input.y-1)*16+input.x-1).click();
+    await frameCheck(data.scenes[si].steps[target].output);
+  }
+  await page.locator("#grid button").first().focus();await page.keyboard.press("ArrowRight");
+  assert.equal(await page.locator("#grid button").nth(1).evaluate(n=>document.activeElement===n),true);
+  await page.selectOption("#scene","0");await page.click("#autoplay");
+  await page.waitForFunction(()=>document.getElementById("counter").textContent.startsWith("02"));
+  await page.click("#autoplay");await frameCheck(data.scenes[0].steps[1].output);
+  report.checks.push("Encoder drag, norns keys, grid pads, grid focus and autoplay");
+
   await page.fill("#search","clear");
   await page.waitForFunction(()=>document.querySelectorAll("#search-results a").length>0);
   assert.match(await page.locator("#search-results").textContent(),/Controls|inherit|Masks/i);
@@ -58,6 +81,15 @@ const root=path.resolve(__dirname,"../..");
   }
   await page.setViewportSize({width:1440,height:1100});
   if(data.audio){
+    await page.waitForFunction(()=>Number.isFinite(document.getElementById("audio").duration));
+    const durations=await page.evaluate(async files=>{
+      const ctx=new AudioContext(), result=[];
+      try{for(const file of files){const bytes=await fetch(file).then(r=>r.arrayBuffer());const decoded=await ctx.decodeAudioData(bytes);result.push(decoded.duration);}}finally{await ctx.close();}
+      return result;
+    },data.audio.files);
+    const expectedDuration=data.audio.bars*4*60/data.audio.bpm+2;
+    for(const duration of durations)assert(Math.abs(duration-expectedDuration)<.06,"Every encoded format must decode the full captured clip");
+    report.checks.push("Both Opus and MP3 decode to the exact four-bar phrase plus tail");
     await page.locator("#audio").evaluate(async a=>{await a.play();a.currentTime=2;});
     await page.waitForFunction(()=>document.getElementById("counter").textContent.startsWith("LISTEN"));
     await page.locator("#audio").evaluate(a=>a.pause());

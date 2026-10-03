@@ -75,10 +75,14 @@ function populate(){
  for(const c of f.controls){const row=node("tr",undefined,$("controls"));node("td",c.gesture,row);node("td",c.result,row);}
  for(const d of f.details){const detail=node("details",undefined,$("details"));node("summary",d.title,detail);node("p",d.text,detail);}
  f.recipes.forEach((r,i)=>{const card=node("article",undefined,$("recipes"),"recipe");node("span","RECIPE "+String(i+1).padStart(2,"0"),card,"recipe-number");node("h3",r.title,card);node("p",r.text,card);});
- const relatedNames={"merge-modes":"Merge modes","channel-length":"Channel length","chord-strum":"Chord strum","fully-quantise-mask":"Fully quantise masks","live-recording":"Live recording"};
+ const relatedNames={"merge-modes":"Merge modes","channel-length":"Channel length","chord-strum":"Chord strum","fully-quantise-mask":"Fully quantise masks","arm-live-record":"Live recording"};
  for(const id of f.related){const a=node("a",relatedNames[id]||id,$("related-links"));a.href="../README.md#"+id;}
  const audio=data.audio;
- if(audio){$("audio-title").textContent=audio.title;$("audio-description").textContent=audio.description;for(const path of audio.files){const source=node("source",undefined,$("audio"));source.src=path;source.type=path.endsWith(".ogg")?"audio/ogg; codecs=opus":"audio/mpeg";}for(const t of audio.tracks)node("span",`CH ${t.channel} / ${t.voice} / ${t.role}`,$("track-list"));$("audio").load();}
+ if(audio){$("audio-title").textContent=audio.title;$("audio-description").textContent=audio.description;for(const path of audio.files){const source=node("source",undefined,$("audio"));source.src=path;source.type=path.endsWith(".ogg")?"audio/ogg; codecs=opus":"audio/mpeg";}for(const t of audio.tracks)node("span",`CH ${t.channel} / ${t.voice} / ${t.role}`,$("track-list"));$("audio").load();
+ // Loading this short clip as a blob gives Opus a finite duration on simple static servers.
+ const preferred=audio.files.find(path=>$("audio").canPlayType(path.endsWith(".ogg")?"audio/ogg; codecs=opus":"audio/mpeg"));
+ if(preferred)fetch(preferred).then(r=>{if(!r.ok)throw Error("Audio unavailable");return r.blob();}).then(blob=>{$("audio").src=URL.createObjectURL(blob);$("audio").load();}).catch(()=>{});
+ }
  else{$("audio").hidden=true;$("audio-description").textContent="Audio has not been captured in this development build. The scene evidence is available; complete pilot acceptance still requires real multi-voice audio.";}
  $("evidence-status").textContent="Source "+data.source_sha256.slice(0,12)+" · "+data.validation.clock_mode+" · "+(data.validation.pilot_complete?"pilot build verified":"development build; full pilot pending")+" · full campaign coverage is separate.";
  render();
