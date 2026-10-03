@@ -55,9 +55,9 @@ def inputs(c, actions, held):
             else: held.pop(identity, None)
             c.elapse(.08)
 
-def verify(c, step):
+def verify(c, step, held):
     from cases import assert_durations
-    c.ui.expect_header("masks", channel=1)
+    c.ui.expect_header("masks", channel=1, held=sorted((a["y"]-4)*16+a["x"] for a in held.values() if a["type"]=="grid" and 4<=a["y"]<=7))
     for field, value in step["expect"].get("screen", []):
         c.ui.expect_field_value(field, str(value))
     expected = step["expect"].get("midi_phrase")
@@ -90,7 +90,7 @@ def close(c, held):
     c.finish()
 
 def capture_scene(scene, out, options):
-    c = Driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install)
+    c = Driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install, app_root=options.app_root)
     held = {}
     frames = []
     try:
@@ -98,7 +98,7 @@ def capture_scene(scene, out, options):
         if scene["setup"]["fixture"] == "four-note-eight-step": c.ui.set_range(1,8)
         for step in scene["steps"]:
             inputs(c, step["inputs"], held)
-            verify(c, step)
+            verify(c, step, held)
             frames.append(dict(step, output=frame(c,scene["behaviour_case"],step["id"])))
     finally:
         try: close(c,held)
@@ -112,7 +112,7 @@ def check_cases(data, evidence, options):
     records = []
     for name in dict.fromkeys(s["behaviour_case"] for s in data["scenes"]):
         out = evidence / name;out.mkdir()
-        c = Driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install)
+        c = Driver(out, clock_mode=options.clock_mode, experimental_install=options.experimental_install, app_root=options.app_root)
         try: CASES[name]["run"](c)
         finally: c.finish()
         records.append(dict(case=name,passed=True,path=str(out),
@@ -127,7 +127,7 @@ def set_mask_field(c, index, detents):
 
 def audio_capture(data, out, destination, options):
     from pcm_oracle import read_wav
-    c = Driver(out, profile=data["profile"], mod_code_root=options.mod_code_root)
+    c = Driver(out, profile=data["profile"], mod_code_root=options.mod_code_root, app_root=options.app_root)
     frames=[]
     job=None
     try:
@@ -209,6 +209,11 @@ def main():
     if not options.visuals_only and not options.mod_code_root:parser.error("Audio requires --mod-code-root")
     run_id=uuid.uuid4().hex
     evidence=ROOT.parent/"mosaic-manual-runs"/run_id;evidence.mkdir(parents=True)
+    app=evidence/"application";app.mkdir()
+    shutil.copyfile(ROOT/"mosaic.lua",app/"mosaic.lua")
+    shutil.copytree(ROOT/"lib",app/"lib",ignore=shutil.ignore_patterns("tests",".git","__pycache__"))
+    shutil.copytree(ROOT/"docs/ui-reimplementation/code",app/"docs/ui-reimplementation/code")
+    options.app_root=app
     report=dict(run_id=run_id,source_sha256=source_hash(data),
                 base_revision="54d7b871358fcc68b7166847603cc9fb1461d0b6",
                 revision=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),

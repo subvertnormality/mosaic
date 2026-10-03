@@ -20,7 +20,7 @@ def main():
     cheat=(ROOT/"cheat_sheet.html").read_text().splitlines()
     code=[ROOT/"mosaic.lua"]+sorted((ROOT/"lib").rglob("*.lua"))
     code=[p for p in code if not any(part in ("tests","nb","test_artefacts") for part in p.relative_to(ROOT).parts)]
-    sections=[(i,re.match(r"^(#{2,6})\\s+(.+)",line)) for i,line in enumerate(lines)]
+    sections=[(i,re.match(r"^(#{2,6})\s+(.+)",line)) for i,line in enumerate(lines)]
     sections=[(i,m) for i,m in sections if m]
     features=[];seen={}
     for pos,(start,match) in enumerate(sections):
@@ -43,10 +43,10 @@ def main():
         features.append(dict(id=identifier,title=title,level=len(match.group(1)),
             readme=dict(path="README.md",start_line=start+1,end_line=end,section_ids=sorted(section_ids),
                         sha256=hashlib.sha256(text.encode()).hexdigest(),excerpt=text),
-            controls=[line for line in text.splitlines() if re.search(r"\\b[KE][123]\\b|hold|press|turn|tap|MIDI keyboard",line,re.I)],
+            controls=[line for line in text.splitlines() if re.search(r"\b[KE][123]\b|hold|press|turn|tap|MIDI keyboard",line,re.I)],
             feedback=[line for line in text.splitlines() if re.search(r"screen|display|LED|lit|flash|grid",line,re.I) and not line.startswith("<")],
             edge_cases=[line for line in text.splitlines() if re.search(r"default|unless|only|preserv|cannot|not |maximum|minimum|bound",line,re.I)],
-            interactions=re.findall(r"\\[[^]]+\\]\\(#([^)]+)\\)",text),
+            interactions=re.findall(r"\[[^]]+\]\(#([^)]+)\)",text),
             requirements=[dict(id=r["id"],statement=r["statement"],oracles=r.get("oracles",[]),status=r.get("status")) for r in req],
             behaviour_cases=[dict(id=i,registered=i in CASES,description=CASES[i]["description"] if i in CASES else "unregistered") for i in ids],
             cheat_sheet=dict(path="cheat_sheet.html",lines=cheat_hits),
