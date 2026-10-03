@@ -53,7 +53,7 @@ def inputs(c, actions, held):
             identity = (kind, action.get("n"), action.get("x"), action.get("y"))
             if action.get("state"): held[identity] = action
             else: held.pop(identity, None)
-            c.elapse(.08)
+            c.elapse(.35 if kind=="key" and action.get("n")==1 and action.get("state")==1 else .08)
 
 def verify(c, step, held):
     from cases import assert_durations
