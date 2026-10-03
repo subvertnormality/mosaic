@@ -230,9 +230,8 @@ function Adapter:set_capture_mode(mode)
   return outcome("OK")
 end
 
--- Tempo and input selection are intentionally local UI configuration.  This
--- adapter does not assert that a capture/analysis backend consumes BPM or
--- input routing; the existing runtime continues to receive only auto/manual.
+-- Confirmed setup is copied into the next capture lease. Draft edits never
+-- change the audio source or musical timing of a capture already in progress.
 -- Capture and re-analysis need a stopped sequencer: capture takes over the
 -- audio input, and analysis rewrites the bank underneath whatever is on the
 -- screen. Reading a bank that has already been analysed needs neither, so
@@ -576,6 +575,7 @@ Adapter.MESSAGES = {
   BAD_STATE = "WRONG STATE",
   INPUT_RESOURCE_BUSY = "INPUT UNAVAILABLE",
   INVALID_DURATION = "BAD LENGTH",
+  INVALID_INPUT_SOURCE = "INVALID INPUT",
   PUBLISH_FAILED = "SAVE FAILED",
   PUBLISH_TIMEOUT = "SAVE TIMED OUT",
   STALE_JOB = "STALE CAPTURE",
@@ -609,7 +609,8 @@ function Adapter:record_pressed()
   local state = state_of(self)
   local value
   if state == "EMPTY" or state == "FAILED" then
-    value = self.runtime:start_capture(self.capture_mode)
+    value = self.runtime:start_capture(self.capture_mode, {
+      manual_bpm = self.manual_bpm, input_source = self.input_source })
   elseif capture_states[state] and self:finish_eligible() == true then
     -- Record started the take, so Record ends it. Crossing to K3 to stop
     -- something the grid began is a split a player has to memorise.

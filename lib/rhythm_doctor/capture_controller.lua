@@ -91,9 +91,13 @@ function Controller:_protocol_error(job) return self:_fail(job, 'CAPTURE_PROTOCO
 
 -- Called by the state-machine on_capture_start callback. It sends one PREFLIGHT
 -- request and returns; readiness is received later through poll/receive.
-function Controller:begin(mode, token, seconds)
+function Controller:begin(mode, token, seconds, configuration)
   if mode ~= 'auto' and mode ~= 'manual' then return result('INVALID_MODE') end
   if not finite_integer(seconds, 1, 45) then return result('INVALID_DURATION') end
+  if configuration ~= nil and type(configuration) ~= 'table' then return result('INVALID_CAPTURE_SETUP') end
+  local source = configuration and configuration.input_source
+  if source == nil then source = 'stereo' end
+  if source ~= 'stereo' and source ~= 'left' and source ~= 'right' then return result('INVALID_INPUT_SOURCE') end
   if not same_token(token, self.machine:job_token()) then return result('STALE_JOB') end
   self.nonce = self.nonce + 1
   local job = { token = { project_id = token.project_id, generation = token.generation, analysis_revision = token.analysis_revision },
@@ -103,7 +107,7 @@ function Controller:begin(mode, token, seconds)
     analysis_dispatched = false, timeout_valid_span = nil, cancel_sent = false, release_sent = false, release_acked = false,
     release_deadline = nil, release_timeout_reported = false }
   self.job = job
-  if not self:_send(job, 'PREFLIGHT', { mode = mode, seconds = seconds }) then return self:_fail(job, 'CAPTURE_PREFLIGHT_SEND_FAILED') end
+  if not self:_send(job, 'PREFLIGHT', { mode = mode, seconds = seconds, input_source = source }) then return self:_fail(job, 'CAPTURE_PREFLIGHT_SEND_FAILED') end
   return result('PREFLIGHTING', { job_id = job.job_id })
 end
 function Controller:cancel(token)

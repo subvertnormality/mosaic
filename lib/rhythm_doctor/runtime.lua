@@ -31,6 +31,20 @@ local function copy(value)
   return out
 end
 
+-- Setup becomes capture-owned at Record, before the recorder can acquire input.
+local function capture_configuration(mode, settings)
+  if mode ~= "auto" and mode ~= "manual" then return nil, "INVALID_MODE" end
+  if settings ~= nil and type(settings) ~= "table" then return nil, "INVALID_CAPTURE_SETUP" end
+  settings = settings or { manual_bpm = Bank.DEFAULT_BPM, input_source = "stereo" }
+  local bpm, source = settings.manual_bpm, settings.input_source
+  if type(bpm) ~= "number" or bpm ~= bpm or bpm % 1 ~= 0 or
+      bpm < Bank.MIN_BPM or bpm > Bank.MAX_BPM then return nil, "INVALID_MANUAL_BPM" end
+  if source ~= "stereo" and source ~= "left" and source ~= "right" then
+    return nil, "INVALID_INPUT_SOURCE"
+  end
+  return { mode = mode, manual_bpm = bpm, input_source = source }
+end
+
 local function valid_transport(value)
   return type(value) == "table" and type(value.send) == "function" and type(value.poll) == "function"
 end
@@ -147,7 +161,7 @@ function Runtime:_open_analysis_transport(transport)
   self.analysis_transport = transport
   self.analysis_controller = AnalysisController.new({ machine=self.machine, transport=transport,
     on_status=function(code, detail) self:_status(code, detail) end,
-    alignment=function() return copy(self.alignment) end })
+    alignment=function() return self:_analysis_alignment() end })
   self:_status("ANALYSIS_WORKER_READY")
   return result("OK")
 end
@@ -177,10 +191,26 @@ function Runtime:enter()
   return value
 end
 
-function Runtime:start_capture(mode)
+function Runtime:start_capture(mode, settings)
+  local configuration, problem = capture_configuration(mode, settings)
+  if not configuration then return result(problem) end
   local opened = self:_open()
   if not opened.ok then return opened end
-  return self.machine:start_capture(mode, self.transport_stopped() == true)
+  local previous = self.capture_configuration
+  self.capture_configuration = configuration
+  local outcome = self.machine:start_capture(mode, self.transport_stopped() == true)
+  if not outcome.ok then self.capture_configuration = previous end
+  return outcome
+end
+
+-- An explicit later correction overrides the original capture's musical timing.
+-- Auto keeps detector estimates; Manual measures from the start of recording.
+function Runtime:_analysis_alignment()
+  if self.alignment then return copy(self.alignment) end
+  local configuration = self.capture_configuration
+  if configuration and configuration.mode == "manual" then
+    return { bpm = configuration.manual_bpm, origin_sample = 0 }
+  end
 end
 
 -- Finish eligibility is observed, not guessed: the capture's elapsed time is
@@ -212,7 +242,7 @@ function Runtime:_capture_start(mode, token)
   -- the previous capture's tempo and origin onto it.
   self.alignment = nil
   self.capture_started_at, self.capture_acquiring_at = self.now(), nil
-  local started = self.controller and self.controller:begin(mode, token, self.seconds)
+  local started = self.controller and self.controller:begin(mode, token, self.seconds, self.capture_configuration)
   if not started or started.code ~= "PREFLIGHTING" then
     self.machine:capture_failed(token, "CAPTURE_PREFLIGHT_UNAVAILABLE")
   end
@@ -244,7 +274,7 @@ function Runtime:_analysis_ready(asset, token)
     end
     return result("OK")
   end
-  if self.on_analysis_ready then self.on_analysis_ready(asset, token, copy(self.alignment)) end
+  if self.on_analysis_ready then self.on_analysis_ready(asset, token, self:_analysis_alignment()) end
   -- No controller yet, and one is expected: the worker builds its backend on
   -- first use, which takes tens of seconds on a device. Hold the publication
   -- rather than drop it, or the bank waits in ANALYSING for a dispatch that
@@ -361,7 +391,7 @@ end
 function Runtime:project_loaded(project_id)
   assert(type(project_id) == "string" and project_id ~= "", "project_id is required")
   local identity = project_identity(project_id)
-  self.alignment = nil
+  self.alignment, self.capture_configuration = nil, nil
   self.machine:replace_project(identity)
   if self.paint_transactions then self.paint_transactions:project_loaded(identity) end
   return result("OK")

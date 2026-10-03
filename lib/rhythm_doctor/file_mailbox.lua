@@ -24,11 +24,13 @@ local function sequence_name(directory, number, suffix)
   return string.format("%s/%09d.msg%s", directory, number, suffix or "")
 end
 
--- The worker owns the root and appends "/c2w/000000001.msg" to it, so a root
--- this long keeps every derived path comfortably inside PATH_MAX.
+-- Linux file paths have a 4096-byte budget including the terminating NUL.
+-- Unlike a Unix socket, a file mailbox can live under a native-session data
+-- directory. Validate the complete temporary message filenames below, rather
+-- than imposing a socket-sized limit on the root.
 local function safe_root(value)
   return type(value) == "string" and value:sub(1, 1) == "/" and value:sub(-1) ~= "/" and
-    #value <= 96 and value:find("[%z\r\n\t]") == nil
+    #value <= 4095 and value:find("[%z\r\n\t]") == nil
 end
 
 local function safe_segment(value)
@@ -46,6 +48,13 @@ function Mailbox.open(root, outbound, inbound, options)
   if not safe_root(root) then return nil, "INVALID_MAILBOX_ROOT" end
   if not safe_segment(outbound) or not safe_segment(inbound) or outbound == inbound then
     return nil, "INVALID_MAILBOX_LAYOUT"
+  end
+  -- Both peers publish a .part before atomically renaming the message. The
+  -- direction names are caller supplied, so include their actual byte lengths.
+  for _, segment in ipairs({outbound, inbound}) do
+    if #sequence_name(root .. "/" .. segment, MAX_SEQUENCE, ".part") > 4095 then
+      return nil, "INVALID_MAILBOX_ROOT"
+    end
   end
   local limit = options.limit
   if type(limit) ~= "number" or limit ~= math.floor(limit) or limit < 1 then return nil, "INVALID_MAILBOX_LIMIT" end

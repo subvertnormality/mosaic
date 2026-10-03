@@ -119,7 +119,7 @@ function Recorder:_emit(message) self.queue[#self.queue + 1] = message end
 -- Every default here is set deliberately, because softcut's own defaults suit
 -- a delay line rather than a capture: it loops inside a one-second window per
 -- voice, and it lowpasses the record path at 16 kHz.
-function Recorder:_arm()
+function Recorder:_arm(source)
   local sc = self.softcut
   self.audio.level_adc_cut(1.0)
   for channel, voice in ipairs({ self.left_voice, self.right_voice }) do
@@ -131,8 +131,9 @@ function Recorder:_arm()
     sc.buffer_clear_channel(channel)
     sc.level(voice, 0)                        -- captured, never monitored back out
     sc.pan(voice, 0)
-    sc.level_input_cut(channel, voice, 1.0)   -- this input, this voice, nothing else
-    sc.level_input_cut(3 - channel, voice, 0)
+    local input = source == 'left' and 1 or source == 'right' and 2 or channel
+    sc.level_input_cut(input, voice, 1.0)     -- selected ADC only; mono uses both buffers
+    sc.level_input_cut(3 - input, voice, 0)
     sc.rec_level(voice, 1.0)
     sc.pre_level(voice, 0)                    -- overwrite rather than layer
     -- A capture that is about to be analysed must not be coloured on the way in.
@@ -189,11 +190,16 @@ function Recorder:_preflight(message, id)
       (message.mode ~= 'auto' and message.mode ~= 'manual') then
     return self:_emit(reply(id, 'PREFLIGHT', 'FAILED', { capture_error = 'INVALID_DURATION' }))
   end
+  local source = message.input_source
+  if source == nil then source = 'stereo' end
+  if source ~= 'stereo' and source ~= 'left' and source ~= 'right' then
+    return self:_emit(reply(id, 'PREFLIGHT', 'FAILED', { capture_error = 'INVALID_INPUT_SOURCE' }))
+  end
   -- The previous take's file goes now, not at release: the analysis worker
   -- reads it after the voices have already been handed back.
   if self.published_path then self.remove(self.published_path); self.published_path = nil end
   self.started_at, self.duration, self.publish = nil, nil, nil
-  local ok = pcall(function() self:_arm() end)
+  local ok = pcall(function() self:_arm(source) end)
   if not ok then return self:_emit(reply(id, 'PREFLIGHT', 'FAILED', { capture_error = 'INPUT_RESOURCE_BUSY' })) end
   self.owner, self.seconds, self.phase = id, seconds, 'READY'
   self:_emit(reply(id, 'PREFLIGHT', 'READY'))

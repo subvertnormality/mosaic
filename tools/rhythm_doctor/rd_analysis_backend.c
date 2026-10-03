@@ -934,7 +934,21 @@ int main(int argc, char **argv) {
     /* A corrected origin IS the phrase start the player chose: the whole point
        of the correction is to say where the phrase begins. */
     phrase_start = origin; phrase_confidence = 1.0;
-    if (nbeats == 0) { beats = xalloc(sizeof(long)); beats[nbeats++] = origin; }
+    /* Manual timing belongs to the player, including the beats Start Beat
+     * can select. Derive a whole-capture grid without detecting a new tempo
+     * or dropping valid beats before the confirmed origin. Round each beat
+     * from that origin (half up), rather than accumulating rounded spacing. */
+    double spacing = source_rate * 60.0 / bpm;
+    long first = -(long)floor(origin / spacing);
+    long stop = (long)ceil(((double)n - origin) / spacing);
+    int cap = (int)((double)n / spacing) + 3;
+    free(beats); beats = xalloc((size_t)cap * sizeof(long)); nbeats = 0;
+    for (long k = first; k < stop; k++) {
+      long sample = lround(origin + k * spacing);
+      if (sample >= 0 && (size_t)sample < n &&
+          (nbeats == 0 || sample != beats[nbeats - 1]))
+        beats[nbeats++] = sample;
+    }
   }
   fprintf(out, "{\"bpm\":%.10g,\"tempo_detected\":%s,\"origin_sample\":%ld,\"tempo_mode\":\"%s\",",
           bpm, detected ? "true" : "false", origin, mode);
