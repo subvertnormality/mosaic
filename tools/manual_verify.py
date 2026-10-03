@@ -58,7 +58,9 @@ def main():
         raise ValueError("Missing PCM oracle")
     for frame in audio["timeline"]:check_frame(frame["output"],"manual-audio",results,observations);frames+=1
     if len({tuple(f["output"]["grid"]) for f in audio["timeline"]})<2:raise ValueError("Static playhead")
+    hashes=json.loads((MANUAL/"evidence/audio-files.json").read_text())
     for filename in audio["files"]:
         if not (MANUAL/filename).is_file():raise ValueError("Missing compressed audio")
+        if digest(MANUAL/filename)!=hashes[filename]:raise ValueError("Changed compressed audio")
     print("Verified",len(data["scenes"]),"scenes,",frames,"native captures and independent audio acceptance.")
 if __name__=="__main__":main()

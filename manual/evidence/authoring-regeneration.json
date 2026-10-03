@@ -1,0 +1,34 @@
+{
+  "characterisation": "YAML drives emulator consequence",
+  "baseline": {
+    "path": "/home/andy/mosaic-manual-runs/fc962cf089eb4b46a4420cd8597902a0/mask-expression/results.json",
+    "sha256": "bda58bd5c39de1039d5bfcef66add8deb944043103ee03e947d9849107984c3a",
+    "velocity": 50,
+    "frame": {
+      "kind": "documentation-frame",
+      "name": "manual/M-MASK-008/soft-default",
+      "sha256": "ff5e095d6273e55c0f9c6f2523f8cb4868ae42cfcf144b1ebf37b834e9d05e55",
+      "stable_rows": 55,
+      "stable_sha256": "f3212bf8db9201f3b22c99f40df81c46e773259f60ff6ecd8c362bd0cb400434",
+      "grid_sha256": "07328c5e487b0069d3415d2626135977a289f0e8c7f5a17c869bb3399abe3eac",
+      "semantic_assertions": 15,
+      "passed": true
+    }
+  },
+  "mutation": {
+    "path": "/home/andy/mosaic-manual-runs/310f7b2301fd474bacf8216a39290279/mask-expression/results.json",
+    "sha256": "4811639bdc614b9bd8e5ca3a043fc37cd8603f1b71d275473399969a5be1147b",
+    "velocity": 51,
+    "frame": {
+      "kind": "documentation-frame",
+      "name": "manual/M-MASK-008/soft-default",
+      "sha256": "0343633027131d604cac041610c0e3ba76d5da0f4c3052934f8271394cc69326",
+      "stable_rows": 55,
+      "stable_sha256": "71f2968253c7d6eeb74074a7c8558f72234e2e4514b25c50aa6a9bf4d9942746",
+      "grid_sha256": "07328c5e487b0069d3415d2626135977a289f0e8c7f5a17c869bb3399abe3eac",
+      "semantic_assertions": 15,
+      "passed": true
+    }
+  },
+  "passed": true
+}

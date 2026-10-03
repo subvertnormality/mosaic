@@ -1,0 +1,97 @@
+find: ‘/home/we/norns/lua/core’: No such file or directory
+The './test_artefacts/norns_test_artefact/lua/core/norns.lua' file already exists. Skipping download.
+.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................E..................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................EEEEEEEEEE.........................E..EEEE........Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/absent.v1.ptn
+Saving project as absent.v2
+Loading project /tmp/lua_QLseHh/absent.v2.ptn
+Loading project /tmp/lua_QLseHh/absent.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/explicit_off.v1.ptn
+Saving project as explicit_off.v2
+Loading project /tmp/lua_Sb7V7g/explicit_off.v2.ptn
+Loading project /tmp/lua_Sb7V7g/explicit_off.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation.v1.ptn
+Saving project as foundation.v2
+Loading project /tmp/lua_Vo0euf/foundation.v2.ptn
+Loading project /tmp/lua_Vo0euf/foundation.v2.ptn
+.Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/foundation_harmony_pattern.v1.ptn
+Saving project as foundation_harmony_pattern.v2
+Loading project /tmp/lua_wbm5ei/foundation_harmony_pattern.v2.ptn
+Loading project /tmp/lua_wbm5ei/foundation_harmony_pattern.v2.ptn
+..Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Loading project ./fixtures/merge_v1_baseline/unknown_keys.v1.ptn
+Saving project as unknown_keys.v2
+Loading project /tmp/lua_BxRm3h/unknown_keys.v2.ptn
+Loading project /tmp/lua_BxRm3h/unknown_keys.v2.ptn
+.......................................................................................................................................................................................................................................................................................................................................................................................................................................ls: cannot access '/tmp/lua_IraSSi/config': No such file or directory
+.......................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................
+Tests with errors:
+------------------
+1) test_hardening_released_and_current_project_fixtures_validate_and_migrate
+.///lib/project_load_integration_tests.lua:218: attempt to index a nil value (local 'saved')
+stack traceback:
+	.///lib/project_load_integration_tests.lua:218: in upvalue 'test_hardening_released_and_current_project_fixtures_validate_and_migrate'
+
+2) test_merge_device_workload_build_rows_carry_build_time_and_heap
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+3) test_merge_device_workload_dense_admission_has_the_maximum_anchors
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+4) test_merge_device_workload_edit_toggles_reach_every_follower_in_its_cycle
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+5) test_merge_device_workload_off_mode_has_no_merge_configuration
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+6) test_merge_device_workload_off_window_plays_the_enabled_notes_throughout
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+7) test_merge_device_workload_off_window_renders_into_spare_slots_without_merge
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+8) test_merge_device_workload_records_grid_tap_edits_with_their_effect
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+9) test_merge_device_workload_steady_admissions_follow_the_plan
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+10) test_merge_device_workload_worst_admission_is_exactly_at_the_budget
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+11) test_merge_device_workload_wrap_and_song_end_sweep_builds_hit_the_memo
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+12) test_merge_plan_sub_tables_are_never_written_by_playback
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+13) test_merge_pulse_share_an_error_inside_a_pulse_does_not_leak_sharing
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+14) test_merge_pulse_share_input_writes_between_pulses_are_seen_at_the_next_wrap
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+15) test_merge_pulse_share_random_followers_and_edits_match_sharing_off
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+16) test_merge_pulse_share_recomputes_equal_and_output_matches_sharing_off
+cannot open ../../tests/behaviour/merge_device_workload.lua: No such file or directory
+stack traceback:
+
+Ran 2398 tests in 70.331 seconds, 2382 successes, 16 errors

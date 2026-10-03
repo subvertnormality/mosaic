@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "passed": true,
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1100
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": [
+    "All scene captions, forward/back frames and 128 LED values",
+    "Clickable and keyboard encoder advances",
+    "Encoder drag, norns keys, grid pads, grid focus and autoplay",
+    "Search, dense reference and theme switching",
+    "Both Opus and MP3 decode to the exact four-bar phrase plus tail",
+    "Real web audio decoding, seek/pause and captured playhead sync"
+  ]
+}
