@@ -48,9 +48,9 @@
           "url": "https://github.com/sixolet/doubledecker.git",
           "commit": "8729b9ceee71d2b07067e89fbef5d8b98d6a0c89"
         },
-        "nb_plyprc": {
-          "url": "https://github.com/sonocircuit/nb_plyprc.git",
-          "commit": "eb9ea9219ae3a8002434ca8934d0455bbfd73968"
+        "nb_polyperc": {
+          "url": "https://github.com/dstroud/nb_polyperc.git",
+          "commit": "714bd0c5b811f7cb21b7a7b8340891ffee4b5670"
         }
       },
       "capabilities": [

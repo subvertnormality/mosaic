@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "cases": {
+    "manual-audio": {
+      "type": "pilot-only native audio acceptance",
+      "implementation": "tools/manual_capture.py:audio_capture",
+      "citations": [
+        "README.md#masks",
+        "characterisation: digital audio integrity"
+      ],
+      "oracles": [
+        "Exact visible note and velocity defaults per channel",
+        "Exact voice picker label before assignment",
+        "Live WAV hash, non-silent PCM and headroom",
+        "Recorded screen/grid timeline"
+      ],
+      "scope": "Two independent channels, four bars. Not part of the exhaustive behaviour campaign; not hardware timing evidence."
+    }
+  }
+}

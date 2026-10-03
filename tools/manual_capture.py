@@ -140,7 +140,7 @@ def set_mask_field(c, index, detents):
 
 def audio_capture(data, out, destination, options):
     from pcm_oracle import read_wav
-    c = tracked_driver(out, profile=data["profile"], mod_code_root=options.mod_code_root, app_root=options.app_root)
+    c = tracked_driver(out, profile=data["profile"], mod_code_root=options.mod_code_root, app_root=options.app_root, experimental_install=getattr(options,"audio_install",None))
     frames=[]
     job=None
     try:
@@ -148,6 +148,7 @@ def audio_capture(data, out, destination, options):
         for track in data["tracks"]:
             ch=track["channel"]
             c.ui.select_channel(ch);c.ui.channel_page("midi_config",channel=ch)
+            c.enc(3,-64)  # Picker clamps; start at its first item on every channel.
             c.ui.pick_device(track["voice"])
             c.ui.set_range(1,64)
             c.ui.channel_page("masks",channel=ch)
@@ -167,7 +168,7 @@ def audio_capture(data, out, destination, options):
             c.ui.expect_field_value("velocity",str(track["velocity"]))
             c.results.append(dict(kind="manual-audio-track",citation="README.md#masks",
                                   channel=ch,voice=track["voice"],authored=track,passed=True))
-        c.ui.select_channel(3)
+        c.ui.select_channel(data["tracks"][-1]["channel"])
         c.elapse(13)  # Upstream Doubledecker startup tone lies outside capture.
         seconds = data["bars"]*4*60/data["bpm"]
         job = c.runtime.capture_start(seconds+2)
@@ -210,9 +211,53 @@ def audio_capture(data, out, destination, options):
         finally:
             if not getattr(c,"finished",False):c.finish()
 
+def reuse_visuals(data, directory):
+    old=json.loads((directory/"report.json").read_text())
+    old_source=subprocess.check_output(["git","show",old["revision"]+":manual/features/masks.yaml"],cwd=ROOT,text=True)
+    import yaml
+    old_data=yaml.safe_load(old_source)
+    if source_hash(old_data)!=old["source_sha256"] or old_data["scenes"]!=data["scenes"]:
+        raise ValueError("Cannot reuse changed or unidentifiable scene authoring data")
+    for case in old["behaviour_cases"]:
+        if not case["passed"] or digest(Path(case["path"])/"results.json") != case["results_sha256"]:
+            raise ValueError("Changed prerequisite evidence")
+    scenes=[]
+    for scene in data["scenes"]:
+        out=directory/scene["id"]
+        results=json.loads((out/"results.json").read_text())
+        observations=json.loads((out/"observations.json").read_text())
+        steps=[]
+        for step in scene["steps"]:
+            assertions=[v for v in results if v.get("kind")=="manual-semantic" and v.get("step")==step["id"] and v.get("passed")]
+            if len(assertions)!=1 or assertions[0]["expected"]!=step["expect"]:
+                raise ValueError("Missing exact scene semantics")
+            name="manual/"+scene["behaviour_case"]+"/"+step["id"]
+            records=[v for v in results if v.get("kind")=="documentation-frame" and v["name"]==name]
+            if len(records)!=1:raise ValueError("Missing frame binding")
+            record=records[0]
+            states=[v["state"] for v in observations if v["state"]["frame"]["sha256"]==record["sha256"]
+                    and hashlib.sha256(bytes(v["state"]["grid"])).hexdigest()==record["grid_sha256"]]
+            if not states:raise ValueError("Missing exact captured frame and grid")
+            state=states[-1]
+            rgba=base64.b64decode(state["frame"]["pixels_base64"])
+            levels=[v//17 for v in rgba[::4]]
+            validate_capture(dict(levels=levels,grid=state["grid"]))
+            steps.append(dict(step,output=dict(screen_rle=rle(levels),grid=state["grid"],binding=record)))
+        scenes.append(dict(scene,steps=steps,evidence=dict(path=str(out),results_sha256=digest(out/"results.json"),
+                           identity_sha256=digest(out/"native/identity.json"))))
+    return scenes,old["behaviour_cases"]
+
 def main():
     parser=argparse.ArgumentParser()
+    parser.add_argument("--source",type=Path,help="Alternate YAML for authoring regression checks")
     parser.add_argument("--mod-code-root")
+    parser.add_argument("--audio-emulator",help="Optional independent emulator checkout for audio")
+    parser.add_argument("--audio-worker",help=argparse.SUPPRESS)
+    parser.add_argument("--application",help=argparse.SUPPRESS)
+    parser.add_argument("--audio-output-dir",help=argparse.SUPPRESS)
+    parser.add_argument("--reuse-visuals",type=Path,help="Reuse unchanged verified scenes; preserve the original report")
+    parser.add_argument("--audio-install",help="Independent WAV-capable native installation")
+    parser.add_argument("--verify-only",action="store_true",help="Preserve evidence without replacing published JSON")
     parser.add_argument("--scene",action="append",help="Development: capture only named scenes")
     parser.add_argument("--visuals-only",action="store_true")
     parser.add_argument("--skip-existing-cases",action="store_true",help="Development only; never complete acceptance")
@@ -220,7 +265,12 @@ def main():
     parser.add_argument("--experimental-install")
     parser.add_argument("--ffmpeg",default="ffmpeg")
     options=parser.parse_args()
-    data=validate(load())
+    data=validate(load(options.source))
+    if options.audio_worker:
+        options.app_root=Path(options.application)
+        result=audio_capture(data["audio"],Path(options.audio_worker),Path(options.audio_output_dir),options)
+        write(Path(options.audio_worker)/"audio-output.json",result)
+        return 0
     if options.clock_mode!="real-time" and not options.experimental_install:parser.error("Controlled lane requires explicit runtime")
     if not options.visuals_only and not options.mod_code_root:parser.error("Audio requires --mod-code-root")
     run_id=uuid.uuid4().hex
@@ -233,11 +283,17 @@ def main():
     report=dict(run_id=run_id,source_sha256=source_hash(data),
                 base_revision="54d7b871358fcc68b7166847603cc9fb1461d0b6",
                 revision=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),
-                clock_mode=options.clock_mode,complete_regression_run=False,passed=False)
+                clock_mode=options.clock_mode,complete_regression_run=False,passed=False,
+                capture_tool_sha256=digest(Path(__file__)),
+                driver_sha256=digest(ROOT/"tests/behaviour/driver.py"),
+                voice_lock_sha256=digest(MANUAL/"voices.lock.json"))
     try:
-        report["behaviour_cases"]=[] if options.skip_existing_cases else check_cases(data,evidence,options)
+        report["behaviour_cases"]=[] if options.skip_existing_cases or options.reuse_visuals else check_cases(data,evidence,options)
         result=dict(schema_version=1,feature=data["feature"],source_sha256=source_hash(data),scenes=[])
-        for scene in data["scenes"]:
+        if options.reuse_visuals:
+            result["scenes"],report["behaviour_cases"]=reuse_visuals(data,options.reuse_visuals.resolve())
+            report["reused_visual_evidence"]=str(options.reuse_visuals.resolve())
+        for scene in ([] if options.reuse_visuals else data["scenes"]):
             if options.scene and scene["id"] not in options.scene:continue
             out=evidence/scene["id"];out.mkdir()
             result["scenes"].append(capture_scene(scene,out,options))
@@ -246,13 +302,22 @@ def main():
             staged=Path(scratch);(staged/"audio").mkdir()
             if not options.visuals_only:
                 out=evidence/"audio";out.mkdir()
-                result["audio"]=audio_capture(data["audio"],out,staged/"audio",options)
+                if options.audio_emulator:
+                    command=[sys.executable,str(Path(__file__).resolve()),"--audio-worker",str(out),
+                             "--application",str(options.app_root),"--audio-output-dir",str(staged/"audio"),
+                             "--mod-code-root",options.mod_code_root,"--ffmpeg",options.ffmpeg]
+                    if options.audio_install:command+=["--audio-install",options.audio_install]
+                    subprocess.run(command,env=dict(os.environ,MONOME_EMULATOR=options.audio_emulator),check=True)
+                    result["audio"]=json.loads((out/"audio-output.json").read_text())
+                else:result["audio"]=audio_capture(data["audio"],out,staged/"audio",options)
             report["passed"]=True
             report["pilot_complete"]=not options.visuals_only and not options.skip_existing_cases and not options.scene and options.clock_mode=="real-time"
             result["validation"]=report
             (staged/"pilot.json").write_text(json.dumps(result,separators=(",",":"))+"\n")
             # No source writes while an emulator session is live.
             (MANUAL/"generated").mkdir(exist_ok=True)
+            write(evidence/"pilot.json",result)
+            if options.verify_only:return 0
             shutil.copyfile(staged/"pilot.json",MANUAL/"generated/pilot.json")
             if not options.visuals_only:
                 (MANUAL/"audio").mkdir(exist_ok=True)

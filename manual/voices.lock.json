@@ -7,12 +7,12 @@
     "url": "https://github.com/zjb-s/oilcan.git",
     "commit": "257915f433c7d2c32b2b09c4fe5eed5434a16de5"
   },
-  "nb_plyprc": {
-    "url": "https://github.com/sonocircuit/nb_plyprc.git",
-    "commit": "eb9ea9219ae3a8002434ca8934d0455bbfd73968"
-  },
   "emplaitress": {
     "url": "https://github.com/sixolet/emplaitress.git",
     "commit": "5ababb191cb66b6d083cb406547f1e956d13746a"
+  },
+  "nb_polyperc": {
+    "url": "https://github.com/dstroud/nb_polyperc.git",
+    "commit": "714bd0c5b811f7cb21b7a7b8340891ffee4b5670"
   }
 }
