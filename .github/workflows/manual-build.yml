@@ -31,11 +31,6 @@ jobs:
       PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
       MANUAL_CI_MODE: audio
     steps:
-      - name: Check out exact PR source or dispatch ref
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          submodules: recursive
       - name: Install native build and font dependencies
         run: |
           apt-get update
@@ -47,6 +42,13 @@ jobs:
             libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev \
             libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
           fc-cache -f
+      - name: Check out exact PR source or dispatch ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          submodules: recursive
+      - name: Trust checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Set up Node for manual browser checks
         uses: actions/setup-node@v4
         with:
@@ -91,11 +93,6 @@ jobs:
       PR_BASE_REF: ${{ github.event.pull_request.base.ref || '' }}
       MANUAL_CI_MODE: build
     steps:
-      - name: Check out exact PR source or dispatch ref
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-          submodules: recursive
       - name: Install native build and font dependencies
         run: |
           apt-get update
@@ -107,6 +104,13 @@ jobs:
             libjack-jackd2-dev liblo-dev liblua5.3-dev libnanomsg-dev libsdl2-dev \
             libsndfile1-dev libudev-dev supercollider-language supercollider-server zstd
           fc-cache -f
+      - name: Check out exact PR source or dispatch ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          submodules: recursive
+      - name: Trust checkout
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Set up Node for manual browser checks
         uses: actions/setup-node@v4
         with:
