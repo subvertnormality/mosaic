@@ -21,10 +21,11 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # in the bare container so checkout makes a real repository with submodules. Both re-pinned again after making
     # the emulator checkout in place under the restored runtime cache and naming the audio artifact per run, and the
     # script once more for a plain fetch (git 2.25 in the container rejects --filter without partial-clone config),
-    # and again to give the builder MONOME_EMULATOR for in-process audio adoption.
+    # and again to give the builder MONOME_EMULATOR for in-process audio adoption. Both re-pinned for reusing a
+    # recorded audio bundle across runs when the audio inputs are byte-identical.
     PRODUCER_TOOLING_POLICY_VERSION: {
-        ".github/workflows/manual-build.yml": "3a47905a013308d4999032c47859c0bdb44bdc124def7a71d59159769cfc9b50",
-        ".github/scripts/manual-build.sh": "a6a10cc523fbeedee1fffc8be96497caf9f87a9c8631e5df375ea2951219eb4c",
+        ".github/workflows/manual-build.yml": "3cfdf93d37fef7d81c66655e77d2fad9f84ba9ef61caa488785bb376f6889a8a",
+        ".github/scripts/manual-build.sh": "f20d7ced85d1324ffb83fbfc32ca4d11cb5dae7e467f56a20b40c2e420a911e2",
         ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
     },
 }

@@ -25,6 +25,9 @@ jobs:
       image: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
       options: --shm-size 256m
     timeout-minutes: 360
+    permissions:
+      contents: read
+      actions: read
     env:
       PR_NUMBER: ${{ github.event.pull_request.number || '' }}
       PR_HEAD_SHA: ${{ github.event.pull_request.head.sha || '' }}
@@ -58,9 +61,58 @@ jobs:
         with:
           path: ${{ runner.temp }}/monome-emulator/.runtime
           key: monome-emulator-ubuntu20-68ab709-qualified-v9
+      # Real-time audio takes about three hours, so reuse a bundle an earlier run recorded from
+      # byte-identical audio inputs. The build job still re-audits it through --adopt-audio-report.
+      - name: Identify the audio recording inputs
+        id: audio-identity
+        shell: bash
+        run: |
+          inputs="$(git ls-files -s -- mosaic.lua lib docs/ui-reimplementation/code tests/behaviour \
+            tools/manual_audio.py tools/manual_audio_setups.py tools/manual_audio_resume.py \
+            tools/manual_audio_origin_audit.py tools/manual_capture.py manual/audio-scenes.yaml \
+            manual/audio.schema.json manual/voices.lock.json .github/scripts/manual_runtime.py)"
+          identity="$(printf '%s\n%s\n%s\n' "$EMULATOR_REVISION" "$CONTAINER_IMAGE" "$inputs" | sha256sum | cut -c1-40)"
+          echo "id=$identity" >> "$GITHUB_OUTPUT"
+          echo "Audio input identity: $identity"
+        env:
+          CONTAINER_IMAGE: ubuntu@sha256:c664f8f86ed5a386b0a340d981b8f81714e21a8b9c73f658c4bea56aa179d54a
+      - name: Find audio already recorded from identical inputs
+        id: audio-reuse
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          AUDIO_IDENTITY: ${{ steps.audio-identity.outputs.id }}
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os, urllib.request
+          url = "https://api.github.com/repos/%s/actions/artifacts?per_page=20&name=manual-audio-src-%s" % (os.environ["GITHUB_REPOSITORY"], os.environ["AUDIO_IDENTITY"])
+          request = urllib.request.Request(url, headers={"Authorization": "Bearer " + os.environ["GITHUB_TOKEN"], "Accept": "application/vnd.github+json"})
+          artifacts = json.load(urllib.request.urlopen(request, timeout=30)).get("artifacts", [])
+          live = [a for a in artifacts if not a.get("expired") and a.get("workflow_run", {}).get("id")]
+          print("run_id=%s" % (live[0]["workflow_run"]["id"] if live else ""))
+          PY
+      - name: Download the reusable audio bundle
+        if: steps.audio-reuse.outputs.run_id != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: manual-audio-src-${{ steps.audio-identity.outputs.id }}
+          run-id: ${{ steps.audio-reuse.outputs.run_id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
       - name: Lint, unit-test and record every audio example
         shell: bash
+        env:
+          AUDIO_REUSED: ${{ steps.audio-reuse.outputs.run_id }}
         run: .github/scripts/manual-build.sh
+      - name: Keep this recording for identical audio inputs
+        if: steps.audio-reuse.outputs.run_id == ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-audio-src-${{ steps.audio-identity.outputs.id }}
+          path: ${{ runner.temp }}/mosaic-manual-ci/audio-bundle
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 1
       - name: Upload the audio report, clips and native evidence
         uses: actions/upload-artifact@v4
         with:

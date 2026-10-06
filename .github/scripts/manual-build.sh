@@ -100,6 +100,12 @@ python3 "$ROOT/tools/manual_plan_lint.py"
 mapfile -t MANUAL_UNIT_TESTS < <(cd "$ROOT" && ls tools/test_*.py tests/behaviour/test_manual_*.py | grep -v parameter_readout)
 (cd "$ROOT" && MONOME_EMULATOR="$EMULATOR_ROOT" MOSAIC_REPO_ROOT="$ROOT" PYTHONPATH=tools:tests/behaviour PYTHONDONTWRITEBYTECODE=1 \
   python3 -m pytest -p no:cacheprovider -q "${MANUAL_UNIT_TESTS[@]}")
+  if [[ -n "${AUDIO_REUSED:-}" ]]; then
+    # Bundle from run $AUDIO_REUSED with identical audio inputs; the build job re-audits it.
+    test -s "$AUDIO_BUNDLE_DIR/audio.tar" && test -s "$AUDIO_BUNDLE_DIR/report.sha256"
+    echo "Reusing audio recorded by run $AUDIO_REUSED: report $(cat "$AUDIO_BUNDLE_DIR/report.sha256")"
+    exit 0
+  fi
 fi
 
 mkdir -p "$VOICE_ROOT" "$MOD_ROOT"
