@@ -19,10 +19,11 @@ PRODUCER_TOOLING_ALLOWLISTS = {
     # scene-plan lint and manual unit suites as a fail-fast preflight. Workflow re-pinned again the same day after
     # moving runner.temp paths out of job-level env (no runner context there), and installing git before checkout
     # in the bare container so checkout makes a real repository with submodules. Both re-pinned again after making
-    # the emulator checkout in place under the restored runtime cache and naming the audio artifact per run.
+    # the emulator checkout in place under the restored runtime cache and naming the audio artifact per run, and the
+    # script once more for a plain fetch (git 2.25 in the container rejects --filter without partial-clone config).
     PRODUCER_TOOLING_POLICY_VERSION: {
         ".github/workflows/manual-build.yml": "3a47905a013308d4999032c47859c0bdb44bdc124def7a71d59159769cfc9b50",
-        ".github/scripts/manual-build.sh": "4216a817234aac74b996b0b4b4e0aaa13647ee3c8bc0cc3c0985a57e94437b70",
+        ".github/scripts/manual-build.sh": "755b1ff30e2dfde2d1ee359b9640e2b19eccc0e410982b23354c4e49a3dcdbd0",
         ".github/scripts/manual_artifact.py": "8d83102f645125d9451a992448cc6a4828567c081ba5a4ef77467a61c423392e",
     },
 }

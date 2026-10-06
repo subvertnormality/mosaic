@@ -81,7 +81,8 @@ if [[ ! -d "$EMULATOR_ROOT/.git" ]]; then
   mkdir -p "$EMULATOR_ROOT"
   git -C "$EMULATOR_ROOT" init -q
   git -C "$EMULATOR_ROOT" remote add origin https://github.com/subvertnormality/monome-emulator.git
-  git -C "$EMULATOR_ROOT" fetch -q --filter=blob:none origin "$EMULATOR_REVISION"
+  # Plain fetch: Ubuntu 20.04's git 2.25 rejects --filter without partial-clone configuration.
+  git -C "$EMULATOR_ROOT" fetch -q origin
 fi
 git -C "$EMULATOR_ROOT" checkout -q --detach "$EMULATOR_REVISION"
 [[ "$(git -C "$EMULATOR_ROOT" rev-parse HEAD)" == "$EMULATOR_REVISION" ]]
