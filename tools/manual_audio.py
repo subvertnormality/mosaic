@@ -763,6 +763,22 @@ def capture(example,tracks,out,options,case):
         finally:
             if not getattr(c,"finished",False):c.finish()
 
+TIMING_MISSES=("Musical onset","Musical gate")
+TIMING_RETAKES=2
+
+def take_with_retakes(run,name,take):
+    """Record one real-time take; retake it (at most TIMING_RETAKES times) only when the strict
+    witness reports a host-timing miss. Other failures fail at once. Failed takes stay as evidence."""
+    retakes=[]
+    for attempt in range(TIMING_RETAKES+1):
+        out=run/(name if not attempt else name+"-retake-"+str(attempt));out.mkdir()
+        try:return take(out),retakes
+        except AssertionError as error:
+            detail=error.args[0] if error.args else None
+            if not (isinstance(detail,tuple) and detail and detail[0] in TIMING_MISSES) or attempt==TIMING_RETAKES:raise
+            retakes.append(dict(path=str(out),error=repr(error)[:2000]))
+            print("Real-time timing miss; retaking",name,detail[0],flush=True)
+
 def course_dry_take(c,example):
     """An unrecorded stand-in for the audio take: the same public Play, a stage's length of time, Stop and panic."""
     c.ui.play();c.elapse(contract_cycle_steps(example)/6);c.ui.stop();c.tap(*course_cells()["panic"])
@@ -908,7 +924,7 @@ def main():
                 if ident in resumed_ids:
                     print("Reused independently audited original captures",ident,flush=True)
                     continue
-                solos=[];musical=[]
+                solos=[];musical=[];retakes=[]
                 if example.get("purpose")=="lesson-comparison":
                     lanes=("controlled-experimental",) if options.controlled_local else ("real-time","controlled-experimental")
                     for lane in lanes:
@@ -918,13 +934,14 @@ def main():
                         musical.append(json.loads((out/"lesson-result.json").read_text()))
                         print("Literal lesson MIDI passed",ident,lane,flush=True)
                 for track in example["tracks"]:
-                    out=run/(ident+"-solo-"+str(track["channel"]));out.mkdir()
-                    result=capture(example,[track],out,options,"MA-AUDIO-"+ident+"-SOLO-"+str(track["channel"]))
+                    result,missed=take_with_retakes(run,ident+"-solo-"+str(track["channel"]),
+                        lambda out,track=track:capture(example,[track],out,options,"MA-AUDIO-"+ident+"-SOLO-"+str(track["channel"])))
+                    retakes.extend(missed)
                     solos.append(dict(channel=track["channel"],voice=track["voice"],metrics=result["metrics"],evidence=result["evidence"],
                         **{key:result[key] for key in ("midi_witness","lesson_pcm","phase_observations","course_before_after") if key in result}))
                     print("Audible independent player",ident,track["voice"],flush=True)
-                out=run/(ident+"-mix");out.mkdir()
-                result=capture(example,example["tracks"],out,options,"MA-AUDIO-"+ident)
+                result,missed=take_with_retakes(run,ident+"-mix",lambda out:capture(example,example["tracks"],out,options,"MA-AUDIO-"+ident))
+                retakes.extend(missed)
                 seconds=example["bars"]*4*60/example["bpm"]
                 files=[]
                 for suffix,codec in (("ogg","libopus"),("mp3","libmp3lame")):
@@ -935,6 +952,7 @@ def main():
                     files.append("audio/"+target.name)
                 result.pop("wav")
                 if musical:result["musical_evidence"]=musical
+                if retakes:result["timing_retakes"]=retakes
                 report["examples"].append(dict(example,**result,files=files,file_sha256={value:digest(destination/Path(value).name) for value in files},solo_contributions=solos,
                        acceptance_case="MA-AUDIO-"+ident,
                        synchronization="Observed framebuffer/grid sampled against host monotonic recording time; not sample-exact or physical-norns calibration."))
